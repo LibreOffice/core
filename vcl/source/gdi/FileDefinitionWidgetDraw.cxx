@@ -17,10 +17,21 @@
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <tools/stream.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapTools.hxx>
+
+#include <vcl/pngwrite.hxx>
+
+#include <comphelper/seqstream.hxx>
+#include <comphelper/processfactory.hxx>
+
+#include <com/sun/star/graphic/SvgTools.hpp>
+#include <basegfx/DrawCommands.hxx>
+
+using namespace css;
 
 namespace vcl
 {
@@ -121,6 +132,111 @@ bool FileDefinitionWidgetDraw::hitTestNativeControl(
 
 namespace
 {
+void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics, long nX, long nY,
+                          long nWidth, long nHeight)
+{
+    basegfx::B2DRectangle aSVGRect = rDrawRoot.maRectangle;
+
+    basegfx::B2DRange aTargetSurface(nX, nY, nX + nWidth + 1, nY + nHeight + 1);
+
+    for (std::shared_ptr<gfx::DrawBase> const& pDrawBase : rDrawRoot.maChildren)
+    {
+        switch (pDrawBase->getType())
+        {
+            case gfx::DrawCommandType::Rectangle:
+            {
+                auto const& rRectangle = static_cast<gfx::DrawRectangle const&>(*pDrawBase);
+
+                basegfx::B2DRange aInputRectangle(rRectangle.maRectangle);
+
+                basegfx::B2DRange aFinalRectangle(
+                    aTargetSurface.getMinX() + aInputRectangle.getMinX(),
+                    aTargetSurface.getMinY() + aInputRectangle.getMinY(),
+                    aTargetSurface.getMaxX() - (aSVGRect.getMaxX() - aInputRectangle.getMaxX()),
+                    aTargetSurface.getMaxY() - (aSVGRect.getMaxY() - aInputRectangle.getMaxY()));
+
+                aInputRectangle.transform(basegfx::utils::createTranslateB2DHomMatrix(
+                    -aInputRectangle.getMinX(), -aInputRectangle.getMinY()));
+                aInputRectangle.transform(basegfx::utils::createScaleB2DHomMatrix(
+                    aFinalRectangle.getWidth() / aInputRectangle.getWidth(),
+                    aFinalRectangle.getHeight() / aInputRectangle.getHeight()));
+                aInputRectangle.transform(basegfx::utils::createTranslateB2DHomMatrix(
+                    aFinalRectangle.getMinX() - 0.5,
+                    aFinalRectangle.getMinY()
+                        - 0.5)); // compensate 0.5 for different interpretation of where the center of a pixel is
+
+                basegfx::B2DPolygon aB2DPolygon = basegfx::utils::createPolygonFromRect(
+                    aInputRectangle, rRectangle.mnRx / aFinalRectangle.getWidth() * 2.0,
+                    rRectangle.mnRy / aFinalRectangle.getHeight() * 2.0);
+
+                if (rRectangle.mpFillColor)
+                {
+                    rGraphics.SetLineColor();
+                    rGraphics.SetFillColor(Color(*rRectangle.mpFillColor));
+                    rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(),
+                                              basegfx::B2DPolyPolygon(aB2DPolygon), 0.0f, nullptr);
+                }
+                if (rRectangle.mpStrokeColor)
+                {
+                    rGraphics.SetLineColor(Color(*rRectangle.mpStrokeColor));
+                    rGraphics.SetFillColor();
+                    rGraphics.DrawPolyLine(
+                        basegfx::B2DHomMatrix(), aB2DPolygon, 0.0f,
+                        basegfx::B2DVector(rRectangle.mnStrokeWidth, rRectangle.mnStrokeWidth),
+                        basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, false,
+                        nullptr);
+                }
+            }
+            break;
+            case gfx::DrawCommandType::Path:
+            {
+                auto const& rPath = static_cast<gfx::DrawPath const&>(*pDrawBase);
+
+                basegfx::B2DRange aPolyPolygonRange(rPath.maPolyPolygon.getB2DRange());
+                basegfx::B2DPolyPolygon aPolyPolygon(rPath.maPolyPolygon);
+
+                basegfx::B2DRange aFinalRectangle(
+                    aTargetSurface.getMinX() + aPolyPolygonRange.getMinX(),
+                    aTargetSurface.getMinY() + aPolyPolygonRange.getMinY(),
+                    aTargetSurface.getMaxX() - (aSVGRect.getMaxX() - aPolyPolygonRange.getMaxX()),
+                    aTargetSurface.getMaxY() - (aSVGRect.getMaxY() - aPolyPolygonRange.getMaxY()));
+
+                aPolyPolygon.transform(basegfx::utils::createTranslateB2DHomMatrix(
+                    -aPolyPolygonRange.getMinX(), -aPolyPolygonRange.getMinY()));
+                aPolyPolygon.transform(basegfx::utils::createScaleB2DHomMatrix(
+                    aFinalRectangle.getWidth() / aPolyPolygonRange.getWidth(),
+                    aFinalRectangle.getHeight() / aPolyPolygonRange.getHeight()));
+                aPolyPolygon.transform(basegfx::utils::createTranslateB2DHomMatrix(
+                    aFinalRectangle.getMinX() - 0.5, aFinalRectangle.getMinY() - 0.5));
+
+                if (rPath.mpFillColor)
+                {
+                    rGraphics.SetLineColor();
+                    rGraphics.SetFillColor(Color(*rPath.mpFillColor));
+                    rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(), aPolyPolygon, 0.0f, nullptr);
+                }
+                if (rPath.mpStrokeColor)
+                {
+                    rGraphics.SetLineColor(Color(*rPath.mpStrokeColor));
+                    rGraphics.SetFillColor();
+                    for (auto const& rPolygon : aPolyPolygon)
+                    {
+                        rGraphics.DrawPolyLine(
+                            basegfx::B2DHomMatrix(), rPolygon, 0.0f,
+                            basegfx::B2DVector(rPath.mnStrokeWidth, rPath.mnStrokeWidth),
+                            basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, false,
+                            nullptr);
+                    }
+                }
+            }
+            break;
+
+            default:
+                break;
+        }
+    }
+}
+
 void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCommands,
                        SalGraphics& rGraphics, long nX, long nY, long nWidth, long nHeight)
 {
@@ -208,6 +324,33 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
                 SalTwoRect aTR(0, 0, nImageWidth, nImageHeight, nX, nY, nImageWidth, nImageHeight);
                 rGraphics.DrawBitmap(aTR, *aBitmap.GetBitmap().ImplGetSalBitmap().get(),
                                      *aBitmap.GetAlpha().ImplGetSalBitmap().get(), nullptr);
+            }
+            break;
+            case DrawCommandType::EXTERNAL:
+            {
+                auto const& rDrawCommand = static_cast<ImageDrawCommand const&>(*pDrawCommand);
+                SvFileStream aFileStream(rDrawCommand.msSource, StreamMode::READ);
+
+                uno::Reference<uno::XComponentContext> xContext(
+                    comphelper::getProcessComponentContext());
+                const uno::Reference<graphic::XSvgParser> xSvgParser
+                    = graphic::SvgTools::create(xContext);
+
+                std::size_t nSize = aFileStream.remainingSize();
+                std::vector<sal_Int8> aBuffer(nSize + 1);
+                aFileStream.ReadBytes(aBuffer.data(), nSize);
+                aBuffer[nSize] = 0;
+
+                uno::Sequence<sal_Int8> aData(aBuffer.data(), nSize + 1);
+                uno::Reference<io::XInputStream> aInputStream(
+                    new comphelper::SequenceInputStream(aData));
+
+                uno::Any aAny = xSvgParser->getDrawCommands(aInputStream, "");
+                if (aAny.has<sal_uInt64>())
+                {
+                    auto* pDrawRoot = reinterpret_cast<gfx::DrawRoot*>(aAny.get<sal_uInt64>());
+                    drawFromDrawCommands(*pDrawRoot, rGraphics, nX, nY, nWidth, nHeight);
+                }
             }
             break;
         }

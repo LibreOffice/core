@@ -132,9 +132,16 @@ void WidgetDefinitionState::addDrawLine(Color aStrokeColor, sal_Int32 nStrokeWid
     mpDrawCommands.push_back(std::move(pCommand));
 }
 
-void WidgetDefinitionState::addDrawImage(OUString sSource)
+void WidgetDefinitionState::addDrawImage(OUString const& sSource)
 {
     auto pCommand(std::make_shared<ImageDrawCommand>());
+    pCommand->msSource = sSource;
+    mpDrawCommands.push_back(std::move(pCommand));
+}
+
+void WidgetDefinitionState::addDrawExternal(OUString const& sSource)
+{
+    auto pCommand(std::make_unique<ExternalSourceDrawCommand>());
     pCommand->msSource = sSource;
     mpDrawCommands.push_back(std::move(pCommand));
 }

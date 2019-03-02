@@ -270,6 +270,12 @@ void WidgetDefinitionReader::readDrawingDefinition(tools::XmlWalker& rWalker,
             rpState->addDrawImage(m_rResourcePath
                                   + OStringToOUString(sSource, RTL_TEXTENCODING_UTF8));
         }
+        else if (rWalker.name() == "external")
+        {
+            OString sSource = rWalker.attribute("source");
+            rpState->addDrawExternal(m_rResourcePath
+                                     + OStringToOUString(sSource, RTL_TEXTENCODING_UTF8));
+        }
         rWalker.next();
     }
     rWalker.parent();

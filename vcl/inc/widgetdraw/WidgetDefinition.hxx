@@ -29,7 +29,8 @@ enum class DrawCommandType
     RECTANGLE,
     CIRCLE,
     LINE,
-    IMAGE
+    IMAGE,
+    EXTERNAL
 };
 
 class VCL_DLLPUBLIC DrawCommand
@@ -114,6 +115,17 @@ public:
     }
 };
 
+class VCL_DLLPUBLIC ExternalSourceDrawCommand : public DrawCommand
+{
+public:
+    OUString msSource;
+
+    ExternalSourceDrawCommand()
+        : DrawCommand(DrawCommandType::EXTERNAL)
+    {
+    }
+};
+
 struct VCL_DLLPUBLIC ControlTypeAndPart
 {
     ControlType const meType;
@@ -175,7 +187,8 @@ public:
     void addDrawLine(Color aStrokeColor, sal_Int32 nStrokeWidth, float fX1, float fY1, float fX2,
                      float fY2);
 
-    void addDrawImage(OUString sSource);
+    void addDrawImage(OUString const& sSource);
+    void addDrawExternal(OUString const& sSource);
 };
 
 class VCL_DLLPUBLIC WidgetDefinitionPart
