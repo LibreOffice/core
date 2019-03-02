@@ -68,6 +68,8 @@ protected:
 
     const ::sw::mark::IMark* GetBookmark() const;
 
+    IDocumentMarkAccess* GetIDocumentMarkAccess();
+
     void registerInMark( SwXBookmark& rXMark, ::sw::mark::IMark* const pMarkBase );
 
     virtual ~SwXBookmark() override;
