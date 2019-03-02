@@ -370,6 +370,8 @@ void SdMiscTest::testFillGradient()
     CPPUNIT_ASSERT(xPropSet2->getPropertyValue("FillGradient") >>= aGradient2);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(Color(255, 0, 0)),aGradient2.StartColor);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(Color(0, 255, 0)),aGradient2.EndColor);
+
+    xDocShRef->DoClose();
 }
 
 void SdMiscTest::testTdf44774()
@@ -397,6 +399,8 @@ void SdMiscTest::testTdf44774()
     CPPUNIT_ASSERT(pStyle);
     // The parent set in StyleB used to reset, because parent style's msApiName was empty
     CPPUNIT_ASSERT_EQUAL(OUString("StyleA"), pStyle->GetParent());
+
+    xDocShRef->DoClose();
 }
 
 void SdMiscTest::testTdf38225()
@@ -429,6 +433,8 @@ void SdMiscTest::testTdf38225()
     CPPUNIT_ASSERT(!pStyle);
     pStyle = pSSPool->Find("StyleWithName2", SfxStyleFamily::Para);
     CPPUNIT_ASSERT(pStyle);
+
+    xDocShRef->DoClose();
 }
 
 void SdMiscTest::testTdf120527()
@@ -471,6 +477,8 @@ void SdMiscTest::testTdf120527()
     uno::Reference<graphic::XGraphic> xGraphic;
     xShapeProperySet->getPropertyValue("Graphic") >>= xGraphic;
     CPPUNIT_ASSERT(xGraphic.is());
+
+    xDocShRef->DoClose();
 }
 
 /// Draw miscellaneous tests.

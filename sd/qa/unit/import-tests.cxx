@@ -1734,6 +1734,8 @@ void SdImportTest::testTdf104201()
             pObj->GetMergedItem(XATTR_FILLCOLOR));
         CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x00FF00), sal_uInt32(rColorItem.GetColorValue()));
     }
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testTdf103477()
@@ -2306,6 +2308,8 @@ void SdImportTest::testTdf114488()
     Graphic aGraphic(xGraphic);
     OUString sMimeType(comphelper::GraphicMimeTypeHelper::GetMimeTypeForXGraphic(xGraphic));
     CPPUNIT_ASSERT_EQUAL(OUString("image/x-wmf"), sMimeType);
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testTdf114913()
@@ -2480,6 +2484,8 @@ void SdImportTest::testTdf116899()
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of key times in the animation node isn't 2.", static_cast<sal_Int32>(2), xNode->getKeyTimes().getLength() );
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "First key time in the animation node isn't 0, key times aren't normalized.", 0., xNode->getKeyTimes()[0] );
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Second key time in the animation node isn't 1, key times aren't normalized.", 1., xNode->getKeyTimes()[1] );
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testTdf77747()
@@ -2504,6 +2510,8 @@ void SdImportTest::testTdf116266()
     sfx2::LinkManager* rLinkManager = pDoc->GetLinkManager();
     // The document contains one SVG stored as a link.
     CPPUNIT_ASSERT_EQUAL(size_t(1), rLinkManager->GetLinks().size());
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testTdf119015()
