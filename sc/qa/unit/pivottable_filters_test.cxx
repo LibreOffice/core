@@ -660,6 +660,8 @@ void ScPivotTableFiltersTest::testPivotTableNoColumnsLayout()
         const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
         CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
     }
+
+    xDocSh->DoClose();
 }
 
 void ScPivotTableFiltersTest::testTdf112501()
@@ -726,6 +728,8 @@ void ScPivotTableFiltersTest::testTdf112501()
             CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
         }
     }
+
+    xDocSh->DoClose();
 }
 
 void ScPivotTableFiltersTest::testPivotTableExportXLSX()
@@ -746,6 +750,8 @@ void ScPivotTableFiltersTest::testPivotTableExportXLSX()
     assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[3]/x:items/x:item", 4);
     assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[3]/x:items/x:item[3]",
                 "h", "1");
+
+    xShell->DoClose();
 }
 
 void ScPivotTableFiltersTest::testPivotCacheExportXLSX()
@@ -996,6 +1002,8 @@ void ScPivotTableFiltersTest::testPivotCacheExportXLSX()
                            "maxValue");
     assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems",
                 "count", "1");
+
+    xShell->DoClose();
 }
 
 void ScPivotTableFiltersTest::testPivotTableXLSX()
@@ -1862,6 +1870,8 @@ void ScPivotTableFiltersTest::testPivotTableFirstHeaderRowXLSX()
     pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable3.xml");
     CPPUNIT_ASSERT(pTable);
     assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstHeaderRow", "1");
+
+    xShell->DoClose();
 }
 
 void ScPivotTableFiltersTest::testPivotTableDoubleFieldFilterXLSX()
@@ -2241,6 +2251,8 @@ void ScPivotTableFiltersTest::testPivotTableOutlineModeXLSX()
     assertXPath(pTable, "/x:pivotTableDefinition", "compact", "0");
     assertXPath(pTable, "/x:pivotTableDefinition", "compactData", "0");
     assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]", "compact", "0");
+
+    xShell->DoClose();
 }
 
 void ScPivotTableFiltersTest::testPivotTableDuplicatedMemberFilterXLSX()
@@ -2259,6 +2271,8 @@ void ScPivotTableFiltersTest::testPivotTableDuplicatedMemberFilterXLSX()
                 "axisPage");
     assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[5]/x:items", "count",
                 "21");
+
+    xShell->DoClose();
 }
 
 void ScPivotTableFiltersTest::testPivotTableTabularModeXLSX()
@@ -2279,6 +2293,8 @@ void ScPivotTableFiltersTest::testPivotTableTabularModeXLSX()
     assertXPath(pTable, "/x:pivotTableDefinition", "compactData", "0");
     assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]", "compact", "0");
     assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]", "outline", "0");
+
+    xShell->DoClose();
 }
 
 void ScPivotTableFiltersTest::testTdf112106()
