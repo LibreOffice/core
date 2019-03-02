@@ -25,12 +25,12 @@
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
-#include <basegfx/color/bcolor.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+
+namespace basegfx { class B3DPolyPolygon; }
+namespace basegfx { class B3DPolygon; }
 
 
 namespace drawinglayer

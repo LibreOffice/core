@@ -24,8 +24,9 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <com/sun/star/awt/XControlModel.hpp>
-#include <com/sun/star/awt/XControl.hpp>
+
+namespace com::sun::star::awt { class XControl; }
+namespace com::sun::star::awt { class XControlModel; }
 
 
 namespace drawinglayer

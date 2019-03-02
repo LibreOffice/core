@@ -10,6 +10,7 @@
 #include "sdmodeltestbase.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>

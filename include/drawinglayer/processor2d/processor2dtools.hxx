@@ -20,9 +20,10 @@
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_PROCESSOR2DTOOLS_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <memory>
+
+namespace drawinglayer { namespace geometry { class ViewInformation2D; } }
+namespace drawinglayer { namespace processor2d { class BaseProcessor2D; } }
 
 class OutputDevice;
 

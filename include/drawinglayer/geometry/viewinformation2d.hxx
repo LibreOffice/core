@@ -23,9 +23,6 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <sal/config.h>
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <o3tl/cow_wrapper.hxx>
 
 
@@ -40,6 +37,10 @@ namespace basegfx {
     class B2DRange;
 }
 
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::drawing { class XDrawPage; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace com::sun::star::uno { template <typename > class Sequence; }
 
 namespace drawinglayer
 {

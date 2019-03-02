@@ -24,6 +24,7 @@
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <drawinglayer/attribute/sdrlightattribute3d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/processor3d/zbufferprocessor3d.hxx>
 #include <drawinglayer/processor3d/shadow3dextractor.hxx>

@@ -23,7 +23,6 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 
