@@ -202,6 +202,20 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> const& x
 
 void FormControlHelper::processField(uno::Reference<text::XFormField> const& xFormField)
 {
+    // Set field type first before adding parameters.
+    if (m_pImpl->m_eFieldId == FIELD_FORMTEXT )
+    {
+        xFormField->setFieldType(ODF_FORMTEXT);
+    }
+    else if (m_pImpl->m_eFieldId == FIELD_FORMCHECKBOX )
+    {
+        xFormField->setFieldType(ODF_FORMCHECKBOX);
+    }
+    else if (m_pImpl->m_eFieldId == FIELD_FORMDROPDOWN )
+    {
+        xFormField->setFieldType(ODF_FORMDROPDOWN);
+    }
+
     uno::Reference<container::XNameContainer> xNameCont = xFormField->getParameters();
     uno::Reference<container::XNamed> xNamed( xFormField, uno::UNO_QUERY );
     if ( m_pFFData && xNamed.is() && xNameCont.is() )
@@ -223,7 +237,6 @@ void FormControlHelper::processField(uno::Reference<text::XFormField> const& xFo
 
         if (m_pImpl->m_eFieldId == FIELD_FORMTEXT )
         {
-            xFormField->setFieldType(ODF_FORMTEXT);
             sTmp = m_pFFData->getName();
             try
             {
@@ -255,7 +268,6 @@ void FormControlHelper::processField(uno::Reference<text::XFormField> const& xFo
         }
         else if (m_pImpl->m_eFieldId == FIELD_FORMCHECKBOX )
         {
-            xFormField->setFieldType(ODF_FORMCHECKBOX);
             uno::Reference<beans::XPropertySet> xPropSet(xFormField, uno::UNO_QUERY);
             uno::Any aAny;
             aAny <<= m_pFFData->getCheckboxChecked();
@@ -264,7 +276,6 @@ void FormControlHelper::processField(uno::Reference<text::XFormField> const& xFo
         }
         else if (m_pImpl->m_eFieldId == FIELD_FORMDROPDOWN )
         {
-            xFormField->setFieldType(ODF_FORMDROPDOWN);
             const FFDataHandler::DropDownEntries_t& rEntries = m_pFFData->getDropDownEntries();
             if (!rEntries.empty())
             {
