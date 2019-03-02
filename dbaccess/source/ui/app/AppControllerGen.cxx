@@ -64,6 +64,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/syswin.hxx>
 #include <vcl/waitobj.hxx>
 #include <osl/mutex.hxx>
 
@@ -108,12 +109,12 @@ void OApplicationController::convertToView(const OUString& _sName)
         const OUString aDefaultName = ::dbaui::createDefaultName(xMeta, xTables, DBA_RES(STR_TBL_TITLE).getToken(0, ' '));
 
         DynamicTableOrQueryNameCheck aNameChecker( xConnection, CommandType::TABLE );
-        ScopedVclPtrInstance< OSaveAsDlg > aDlg( getView(), CommandType::TABLE, getORB(), xConnection, aDefaultName, aNameChecker, SADFlags::NONE );
-        if ( aDlg->Execute() == RET_OK )
+        OSaveAsDlg aDlg(getFrameWeld(), CommandType::TABLE, getORB(), xConnection, aDefaultName, aNameChecker, SADFlags::NONE);
+        if (aDlg.run() == RET_OK)
         {
-            OUString sName = aDlg->getName();
-            OUString sCatalog = aDlg->getCatalog();
-            OUString sSchema  = aDlg->getSchema();
+            OUString sName = aDlg.getName();
+            OUString sCatalog = aDlg.getCatalog();
+            OUString sSchema  = aDlg.getSchema();
             OUString sNewName(
                 ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sName, false, ::dbtools::EComposeRule::InTableDefinitions ) );
             Reference<XPropertySet> xView = ::dbaui::createView(sNewName,xConnection,xSourceObject);
@@ -591,7 +592,7 @@ void OApplicationController::onDocumentOpened( const OUString& _rName, const sal
 bool OApplicationController::insertHierachyElement(ElementType _eType, const OUString& _sParentFolder, bool _bCollection, const Reference<XContent>& _xContent, bool _bMove)
 {
     Reference<XHierarchicalNameContainer> xNames(getElements(_eType), UNO_QUERY);
-    return dbaui::insertHierachyElement(getView()
+    return dbaui::insertHierachyElement(getFrameWeld()
                            ,getORB()
                            ,xNames
                            ,_sParentFolder

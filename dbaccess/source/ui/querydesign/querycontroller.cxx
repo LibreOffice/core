@@ -1207,8 +1207,8 @@ bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElements, b
         }
 
         DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::QUERY );
-        ScopedVclPtrInstance<OSaveAsDlg> aDlg(
-                getView(),
+        OSaveAsDlg aDlg(
+                getFrameWeld(),
                 m_nCommandType,
                 getORB(),
                 getConnection(),
@@ -1216,14 +1216,14 @@ bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElements, b
                 aNameChecker,
                 SADFlags::NONE );
 
-        bRet = ( aDlg->Execute() == RET_OK );
+        bRet = ( aDlg.run() == RET_OK );
         if ( bRet )
         {
-            m_sName = aDlg->getName();
+            m_sName = aDlg.getName();
             if ( editingView() )
             {
-                m_sUpdateCatalogName    = aDlg->getCatalog();
-                m_sUpdateSchemaName     = aDlg->getSchema();
+                m_sUpdateCatalogName    = aDlg.getCatalog();
+                m_sUpdateSchemaName     = aDlg.getSchema();
             }
         }
     }

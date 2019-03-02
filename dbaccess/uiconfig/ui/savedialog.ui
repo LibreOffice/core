@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="dba">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="SaveDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="savedialog|SaveDialog">Save As</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -81,10 +86,10 @@
               <object class="GtkLabel" id="descriptionft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="savedialog|descriptionft">Please enter a name for the object to be created:</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">52</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -96,10 +101,10 @@
               <object class="GtkLabel" id="catalogft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="savedialog|catalogft">_Catalog:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">catalog</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -110,24 +115,13 @@
               <object class="GtkLabel" id="schemaft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="savedialog|schemaft">_Schema:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">schema</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="dbulo-OSQLNameComboBox" id="schema">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
                 <property name="top_attach">2</property>
               </packing>
             </child>
@@ -135,9 +129,9 @@
               <object class="GtkLabel" id="titleft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">title</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -145,10 +139,11 @@
               </packing>
             </child>
             <child>
-              <object class="dbulo-OSQLNameEdit" id="title">
+              <object class="GtkEntry" id="title">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="activates_default">True</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -156,14 +151,39 @@
               </packing>
             </child>
             <child>
-              <object class="dbulo-OSQLNameComboBox" id="catalog">
+              <object class="GtkComboBoxText" id="catalog">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
+                <property name="has_entry">True</property>
+                <child internal-child="entry">
+                  <object class="GtkEntry">
+                    <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="schema">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="has_entry">True</property>
+                <child internal-child="entry">
+                  <object class="GtkEntry">
+                    <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
               </packing>
             </child>
           </object>

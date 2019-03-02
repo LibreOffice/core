@@ -301,13 +301,13 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
             aDefaultName = ::dbtools::createUniqueName(xTables,aDefaultName);
 
             DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::TABLE );
-            ScopedVclPtrInstance< OSaveAsDlg > aDlg( getView(), CommandType::TABLE, getORB(), getConnection(), aDefaultName, aNameChecker, SADFlags::NONE );
-            if ( aDlg->Execute() != RET_OK )
+            OSaveAsDlg aDlg(getFrameWeld(), CommandType::TABLE, getORB(), getConnection(), aDefaultName, aNameChecker, SADFlags::NONE);
+            if (aDlg.run() != RET_OK)
                 return false;
 
-            m_sName = aDlg->getName();
-            sCatalog = aDlg->getCatalog();
-            sSchema  = aDlg->getSchema();
+            m_sName = aDlg.getName();
+            sCatalog = aDlg.getCatalog();
+            sSchema  = aDlg.getSchema();
         }
 
         // did we get a name
