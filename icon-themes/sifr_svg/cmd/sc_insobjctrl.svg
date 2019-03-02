@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
   <path
      style="fill:#555753"
-     d="M 7 2 L 7 10 L 9 10 L 9 2 L 7 2 z M 7 12 L 7 14 L 9 14 L 9 12 L 7 12 z "
+     d="M 2,1 V 15 H 14 V 5 L 10,1 Z m 2,2 h 5 v 3 h 3 v 7 H 4 Z"
      />
 </svg>
