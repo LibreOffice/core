@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 -o sc.ScDataPilotItemObj
--o sc.ScDataPilotItemsObj
 -o sc.ScDatabaseRangeObj
 -o sc.ScDocumentConfiguration
 -o sc.ScDrawPageObj
