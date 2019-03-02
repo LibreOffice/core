@@ -110,6 +110,12 @@ bool AxBinaryPropertyWriter::StringProperty::writeProperty( AxAlignedOutputStrea
     return true;
 }
 
+bool AxBinaryPropertyWriter::PictureProperty::writeProperty(AxAlignedOutputStream& rOutStrm)
+{
+    rOutStrm.writeData( mrPicData, mrPicData.getLength() );
+    return true;
+}
+
 AxBinaryPropertyWriter::AxBinaryPropertyWriter( BinaryOutputStream& rOutStrm, bool b64BitPropFlags ) :
     maOutStrm( rOutStrm ),
     mnPropFlags( 0x0 ),
@@ -148,6 +154,12 @@ void AxBinaryPropertyWriter::writeStringProperty( OUString& orValue )
     setFlag(  nSize, AX_STRING_COMPRESSED );
     maOutStrm.writeAligned< sal_uInt32 >( nSize );
     maLargeProps.push_back( ComplexPropVector::value_type( new StringProperty( orValue, nSize ) ) );
+    startNextProperty();
+}
+
+void AxBinaryPropertyWriter::writePictureProperty( StreamDataSequence& orPicData )
+{
+    maStreamProps.push_back( ComplexPropVector::value_type( new PictureProperty( orPicData ) ) );
     startNextProperty();
 }
 
