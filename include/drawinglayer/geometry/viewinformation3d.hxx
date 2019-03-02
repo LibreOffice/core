@@ -23,8 +23,6 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <sal/config.h>
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <o3tl/cow_wrapper.hxx>
 
 
@@ -38,6 +36,8 @@ namespace basegfx {
     class B3DHomMatrix;
 }
 
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::uno { template <typename > class Sequence; }
 
 namespace drawinglayer
 {

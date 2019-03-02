@@ -20,10 +20,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_ZBUFFERPROCESSOR3D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR3D_ZBUFFERPROCESSOR3D_HXX
 
-#include <drawinglayer/drawinglayerdllapi.h>
-
 #include <drawinglayer/processor3d/defaultprocessor3d.hxx>
-#include <vcl/bitmapex.hxx>
+#include <basegfx/matrix/b3dhommatrix.hxx>
 #include <memory>
 
 namespace basegfx {
@@ -35,9 +33,6 @@ namespace drawinglayer {
         class SdrSceneAttribute;
         class SdrLightingAttribute;
         class MaterialAttribute3D;
-    }
-    namespace geometry {
-        class ViewInformation2D;
     }
 }
 

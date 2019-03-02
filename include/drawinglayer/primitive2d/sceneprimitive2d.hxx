@@ -29,7 +29,6 @@
 #include <vcl/bitmapex.hxx>
 #include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
-#include <drawinglayer/attribute/sdrlightattribute3d.hxx>
 
 
 namespace drawinglayer

@@ -20,10 +20,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_DEFAULTPROCESSOR3D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR3D_DEFAULTPROCESSOR3D_HXX
 
-#include <drawinglayer/drawinglayerdllapi.h>
-
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
-#include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
@@ -31,7 +28,6 @@
 // predefines
 
 namespace basegfx {
-    class BZPixelRaster;
     class B3DPolygon;
     class B3DPolyPolygon;
 }

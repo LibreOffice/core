@@ -25,17 +25,12 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <rtl/ustring.hxx>
-#include <vcl/font.hxx>
+#include <tools/color.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <vector>
 #include <com/sun/star/lang/Locale.hpp>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-
-
-// predefines
-
-class OutputDevice;
 
 
 namespace drawinglayer

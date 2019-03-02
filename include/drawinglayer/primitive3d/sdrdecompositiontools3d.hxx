@@ -30,7 +30,6 @@
 // predefines
 
 namespace basegfx {
-    class B3DPolygon;
     class B3DPolyPolygon;
     class B3DHomMatrix;
     class B2DVector;

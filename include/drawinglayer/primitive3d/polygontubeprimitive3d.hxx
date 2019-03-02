@@ -25,14 +25,6 @@
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 
 
-// predefines
-
-namespace basegfx {
-    class B3DPolyPolygon;
-    class B3DHomMatrix;
-}
-
-
 namespace drawinglayer
 {
     namespace primitive3d

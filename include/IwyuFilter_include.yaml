@@ -670,3 +670,10 @@ blacklist:
     - com/sun/star/container/XNamed.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/sdbcx/XDataDescriptorFactory.hpp
+    include/drawinglayer/primitive2d/baseprimitive2d.hxx:
+    # base class has to be a complete type
+    - com/sun/star/graphic/XPrimitive2D.hpp
+    - com/sun/star/util/XAccounting.hpp
+    include/drawinglayer/primitive3d/baseprimitive3d.hxx:
+    # base class has to be a complete type
+    - com/sun/star/graphic/XPrimitive3D.hpp

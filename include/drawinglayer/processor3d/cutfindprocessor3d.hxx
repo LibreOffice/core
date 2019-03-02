@@ -21,9 +21,9 @@
 #define INCLUDED_DRAWINGLAYER_PROCESSOR3D_CUTFINDPROCESSOR3D_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <drawinglayer/processor3d/baseprocessor3d.hxx>
 
-#include <drawinglayer/processor3d/defaultprocessor3d.hxx>
-
+#include <basegfx/matrix/b3dhommatrix.hxx>
 
 namespace drawinglayer
 {
