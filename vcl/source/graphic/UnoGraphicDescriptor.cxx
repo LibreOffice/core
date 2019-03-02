@@ -211,16 +211,13 @@ uno::Sequence< OUString > SAL_CALL GraphicDescriptor::getSupportedServiceNames()
 
 uno::Sequence< uno::Type > SAL_CALL GraphicDescriptor::getTypes()
 {
-    uno::Sequence< uno::Type >  aTypes( 6 );
-    uno::Type*                  pTypes = aTypes.getArray();
-
-    *pTypes++ = cppu::UnoType<uno::XAggregation>::get();
-    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
-    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
-    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
-    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
-    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
-
+    static const uno::Sequence< uno::Type > aTypes {
+        cppu::UnoType<uno::XAggregation>::get(),
+        cppu::UnoType<lang::XServiceInfo>::get(),
+        cppu::UnoType<lang::XTypeProvider>::get(),
+        cppu::UnoType<beans::XPropertySet>::get(),
+        cppu::UnoType<beans::XPropertyState>::get(),
+        cppu::UnoType<beans::XMultiPropertySet>::get() };
     return aTypes;
 }
 

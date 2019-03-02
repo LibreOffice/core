@@ -30,6 +30,7 @@
 #include <editeng/measfld.hxx>
 #include <editeng/unofield.hxx>
 #include <editeng/unotext.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
@@ -577,16 +578,13 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextField::getTypes()
 {
     if( maTypeSequence.getLength() == 0 )
     {
-        maTypeSequence = OComponentHelper::getTypes();
-        sal_Int32 nOldCount = maTypeSequence.getLength();
-
-        maTypeSequence.realloc( nOldCount + 4 ); // !DANGER! keep this updated
-        uno::Type* pTypes = &maTypeSequence.getArray()[nOldCount];
-
-        *pTypes++ = cppu::UnoType<text::XTextField>::get();
-        *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
-        *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
-        *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
+        maTypeSequence = comphelper::concatSequences(
+            OComponentHelper::getTypes(),
+            uno::Sequence {
+                cppu::UnoType<text::XTextField>::get(),
+                cppu::UnoType<beans::XPropertySet>::get(),
+                cppu::UnoType<lang::XServiceInfo>::get(),
+                cppu::UnoType<lang::XUnoTunnel>::get() });
     }
     return maTypeSequence;
 }

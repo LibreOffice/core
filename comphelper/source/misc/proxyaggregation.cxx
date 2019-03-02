@@ -206,14 +206,10 @@ namespace comphelper
 
     Sequence< Type > SAL_CALL OComponentProxyAggregation::getTypes(  )
     {
-        Sequence< Type > aTypes( OComponentProxyAggregationHelper::getTypes() );
-
-        // append XComponent, coming from WeakComponentImplHelperBase
-        sal_Int32 nLen = aTypes.getLength();
-        aTypes.realloc( nLen + 1 );
-        aTypes[ nLen ] = cppu::UnoType<XComponent>::get();
-
-        return aTypes;
+        return comphelper::concatSequences(
+                OComponentProxyAggregationHelper::getTypes(),
+                // append XComponent, coming from WeakComponentImplHelperBase
+                Sequence { cppu::UnoType<XComponent>::get() });
     }
 
 

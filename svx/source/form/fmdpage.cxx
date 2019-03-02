@@ -58,12 +58,8 @@ Any SAL_CALL SvxFmDrawPage::queryAggregation( const css::uno::Type& _rType )
 
 css::uno::Sequence< css::uno::Type > SAL_CALL SvxFmDrawPage::getTypes(  )
 {
-    css::uno::Sequence< css::uno::Type > aTypes(SvxDrawPage::getTypes());
-    aTypes.realloc(aTypes.getLength() + 1);
-    css::uno::Type* pTypes = aTypes.getArray();
-
-    pTypes[aTypes.getLength()-1] = cppu::UnoType<css::form::XFormsSupplier>::get();
-    return aTypes;
+    return comphelper::concatSequences(SvxDrawPage::getTypes(),
+        css::uno::Sequence { cppu::UnoType<css::form::XFormsSupplier>::get() });
 }
 
 SdrObject *SvxFmDrawPage::CreateSdrObject_( const css::uno::Reference< css::drawing::XShape > & xDescr )

@@ -34,6 +34,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -343,17 +344,12 @@ void SAL_CALL SmModel::release() throw()
 
 uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  )
 {
-    SolarMutexGuard aGuard;
-    uno::Sequence< uno::Type > aTypes = SfxBaseModel::getTypes();
-    sal_Int32 nLen = aTypes.getLength();
-    aTypes.realloc(nLen + 4);
-    uno::Type* pTypes = aTypes.getArray();
-    pTypes[nLen++] = cppu::UnoType<XServiceInfo>::get();
-    pTypes[nLen++] = cppu::UnoType<XPropertySet>::get();
-    pTypes[nLen++] = cppu::UnoType<XMultiPropertySet>::get();
-    pTypes[nLen++] = cppu::UnoType<XRenderable>::get();
-
-    return aTypes;
+    return comphelper::concatSequences(SfxBaseModel::getTypes(),
+        uno::Sequence  {
+            cppu::UnoType<XServiceInfo>::get(),
+            cppu::UnoType<XPropertySet>::get(),
+            cppu::UnoType<XMultiPropertySet>::get(),
+            cppu::UnoType<XRenderable>::get() });
 }
 
 namespace

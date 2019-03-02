@@ -301,24 +301,13 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawingModel::getTypes(  )
 {
     if( maTypeSequence.getLength() == 0 )
     {
-        const uno::Sequence< uno::Type > aBaseTypes( SfxBaseModel::getTypes() );
-        const sal_Int32 nBaseTypes = aBaseTypes.getLength();
-        const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
-
-        const sal_Int32 nOwnTypes = 4;      // !DANGER! Keep this updated!
-
-        maTypeSequence.realloc(  nBaseTypes + nOwnTypes );
-        uno::Type* pTypes = maTypeSequence.getArray();
-
-        *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
-        *pTypes++ = cppu::UnoType<lang::XMultiServiceFactory>::get();
-        *pTypes++ = cppu::UnoType<drawing::XDrawPagesSupplier>::get();
-        *pTypes++ = cppu::UnoType<css::ucb::XAnyCompareFactory>::get();
-
-        for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
-            *pTypes++ = *pBaseTypes++;
+        maTypeSequence = comphelper::concatSequences( SfxBaseModel::getTypes(),
+            uno::Sequence {
+                cppu::UnoType<lang::XServiceInfo>::get(),
+                cppu::UnoType<lang::XMultiServiceFactory>::get(),
+                cppu::UnoType<drawing::XDrawPagesSupplier>::get(),
+                cppu::UnoType<css::ucb::XAnyCompareFactory>::get() });
     }
-
     return maTypeSequence;
 }
 

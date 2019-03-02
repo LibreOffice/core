@@ -143,16 +143,9 @@ OUString SAL_CALL AccessibleComponentBase::getToolTipText()
 uno::Sequence<uno::Type>
     AccessibleComponentBase::getTypes()
 {
-    // Get list of types from the context base implementation...
-    uno::Sequence<uno::Type> aTypeList (2);
-    // ...and add the additional type for the component.
-    const uno::Type aComponentType =
-         cppu::UnoType<XAccessibleComponent>::get();
-    const uno::Type aExtendedComponentType =
-        cppu::UnoType<XAccessibleExtendedComponent>::get();
-    aTypeList[0] = aComponentType;
-    aTypeList[1] = aExtendedComponentType;
-
+    static const uno::Sequence aTypeList {
+         cppu::UnoType<XAccessibleComponent>::get(),
+        cppu::UnoType<XAccessibleExtendedComponent>::get() };
     return aTypeList;
 }
 

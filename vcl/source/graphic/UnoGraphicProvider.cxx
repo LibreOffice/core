@@ -111,13 +111,11 @@ uno::Sequence< OUString > SAL_CALL GraphicProvider::getSupportedServiceNames()
 
 uno::Sequence< uno::Type > SAL_CALL GraphicProvider::getTypes()
 {
-    uno::Sequence< uno::Type >  aTypes( 3 );
-    uno::Type*                  pTypes = aTypes.getArray();
-
-    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
-    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
-    *pTypes++ = cppu::UnoType<graphic::XGraphicProvider>::get();
-
+    static const uno::Sequence< uno::Type > aTypes {
+        cppu::UnoType<lang::XServiceInfo>::get(),
+        cppu::UnoType<lang::XTypeProvider>::get(),
+        cppu::UnoType<graphic::XGraphicProvider>::get()
+    };
     return aTypes;
 }
 

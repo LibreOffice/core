@@ -373,9 +373,6 @@ Reference< XAdapter > SwXTextDocument::queryAdapter(  )
 
 Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes()
 {
-    Sequence< uno::Type > aBaseTypes = SfxBaseModel::getTypes();
-    Sequence< uno::Type > aTextTypes = SwXTextDocumentBaseClass::getTypes();
-
     Sequence< uno::Type > aNumTypes;
     GetNumberFormatter();
     if(xNumFormatAgg.is())
@@ -388,24 +385,13 @@ Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes()
             aNumTypes = xNumProv->getTypes();
         }
     }
-    long nIndex = aBaseTypes.getLength();
-    // don't forget the lang::XMultiServiceFactory and the XTiledRenderable
-    aBaseTypes.realloc(aBaseTypes.getLength() + aTextTypes.getLength() + aNumTypes.getLength() + 2);
-    uno::Type* pBaseTypes = aBaseTypes.getArray();
-    const uno::Type* pTextTypes = aTextTypes.getConstArray();
-    long nPos;
-    for(nPos = 0; nPos < aTextTypes.getLength(); nPos++)
-    {
-        pBaseTypes[nIndex++] = pTextTypes[nPos];
-    }
-    const uno::Type* pNumTypes = aNumTypes.getConstArray();
-    for(nPos = 0; nPos < aNumTypes.getLength(); nPos++)
-    {
-        pBaseTypes[nIndex++] = pNumTypes[nPos];
-    }
-    pBaseTypes[nIndex++] = cppu::UnoType<lang::XMultiServiceFactory>::get();
-    pBaseTypes[nIndex++] = cppu::UnoType<tiledrendering::XTiledRenderable>::get();
-    return aBaseTypes;
+    return comphelper::concatSequences(
+            SfxBaseModel::getTypes(),
+            SwXTextDocumentBaseClass::getTypes(),
+            aNumTypes,
+            Sequence {
+                cppu::UnoType<lang::XMultiServiceFactory>::get(),
+                cppu::UnoType<tiledrendering::XTiledRenderable>::get()});
 }
 
 SwXTextDocument::SwXTextDocument(SwDocShell* pShell)

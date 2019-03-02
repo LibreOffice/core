@@ -1335,7 +1335,7 @@ uno::Sequence<OUString> SAL_CALL ScEditFieldObj::getSupportedServiceNames()
 
 uno::Sequence<uno::Type> SAL_CALL ScEditFieldObj::getTypes()
 {
-    static const uno::Sequence<uno::Type> aTypes = comphelper::concatSequences(
+    return comphelper::concatSequences(
         OComponentHelper::getTypes(),
         uno::Sequence<uno::Type>
         {
@@ -1344,7 +1344,6 @@ uno::Sequence<uno::Type> SAL_CALL ScEditFieldObj::getTypes()
             cppu::UnoType<lang::XUnoTunnel>::get(),
             cppu::UnoType<lang::XServiceInfo>::get()
         } );
-    return aTypes;
 }
 
 uno::Sequence<sal_Int8> SAL_CALL ScEditFieldObj::getImplementationId()

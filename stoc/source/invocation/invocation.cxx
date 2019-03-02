@@ -18,6 +18,7 @@
  */
 
 #include <osl/mutex.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/weak.hxx>
@@ -50,6 +51,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include <memory>
+#include <vector>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 
@@ -971,62 +973,38 @@ void Invocation_Impl::fillInfoForMethod
 Sequence< Type > SAL_CALL Invocation_Impl::getTypes()
 {
     static Sequence<Type> s_types = [this]() {
-        Sequence<Type> types(4 + 10);
-        Type* pTypes = types.getArray();
-        sal_Int32 n = 0;
-
-        pTypes[n++] = cppu::UnoType<XTypeProvider>::get();
-        pTypes[n++] = cppu::UnoType<XWeak>::get();
-        pTypes[n++] = cppu::UnoType<XInvocation>::get();
-        pTypes[n++] = cppu::UnoType<XMaterialHolder>::get();
+        std::vector<Type> tmp {
+            cppu::UnoType<XTypeProvider>::get(),
+            cppu::UnoType<XWeak>::get(),
+            cppu::UnoType<XInvocation>::get(),
+            cppu::UnoType<XMaterialHolder>::get() };
 
         // Invocation does not support XExactName if direct object supports
         // XInvocation, but not XExactName.
         if ((_xDirect.is() && _xENDirect.is()) || (!_xDirect.is() && _xENIntrospection.is()))
-        {
-            pTypes[n++] = cppu::UnoType<XExactName>::get();
-        }
+            tmp.push_back(cppu::UnoType<XExactName>::get());
         if (_xNameContainer.is())
-        {
-            pTypes[n++] = cppu::UnoType<XNameContainer>::get();
-        }
+            tmp.push_back(cppu::UnoType<XNameContainer>::get());
         if (_xNameReplace.is())
-        {
-            pTypes[n++] = cppu::UnoType<XNameReplace>::get();
-        }
+            tmp.push_back(cppu::UnoType<XNameReplace>::get());
         if (_xNameAccess.is())
-        {
-            pTypes[n++] = cppu::UnoType<XNameAccess>::get();
-        }
+            tmp.push_back(cppu::UnoType<XNameAccess>::get());
         if (_xIndexContainer.is())
-        {
-            pTypes[n++] = cppu::UnoType<XIndexContainer>::get();
-        }
+            tmp.push_back(cppu::UnoType<XIndexContainer>::get());
         if (_xIndexReplace.is())
-        {
-            pTypes[n++] = cppu::UnoType<XIndexReplace>::get();
-        }
+            tmp.push_back(cppu::UnoType<XIndexReplace>::get());
         if (_xIndexAccess.is())
-        {
-            pTypes[n++] = cppu::UnoType<XIndexAccess>::get();
-        }
+            tmp.push_back(cppu::UnoType<XIndexAccess>::get());
         if (_xEnumerationAccess.is())
-        {
-            pTypes[n++] = cppu::UnoType<XEnumerationAccess>::get();
-        }
+            tmp.push_back(cppu::UnoType<XEnumerationAccess>::get());
         if (_xElementAccess.is())
-        {
-            pTypes[n++] = cppu::UnoType<XElementAccess>::get();
-        }
+            tmp.push_back(cppu::UnoType<XElementAccess>::get());
         // Invocation does not support XInvocation2, if direct object supports
         // XInvocation, but not XInvocation2.
         if ((_xDirect.is() && _xDirect2.is()) || (!_xDirect.is() && _xIntrospectionAccess.is()))
-        {
-            pTypes[n++] = cppu::UnoType<XInvocation2>::get();
-        }
+            tmp.push_back(cppu::UnoType<XInvocation2>::get());
 
-        types.realloc(n);
-        return types;
+        return comphelper::containerToSequence(tmp);
     }();
     return s_types;
 }

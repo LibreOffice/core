@@ -338,17 +338,14 @@ void SAL_CALL SvUnoImageMapObject::release() throw()
 
 uno::Sequence< uno::Type > SAL_CALL SvUnoImageMapObject::getTypes()
 {
-    uno::Sequence< uno::Type > aTypes( 7 );
-    uno::Type* pTypes = aTypes.getArray();
-
-    *pTypes++ = cppu::UnoType<XAggregation>::get();
-    *pTypes++ = cppu::UnoType<XEventsSupplier>::get();
-    *pTypes++ = cppu::UnoType<XServiceInfo>::get();
-    *pTypes++ = cppu::UnoType<XPropertySet>::get();
-    *pTypes++ = cppu::UnoType<XMultiPropertySet>::get();
-    *pTypes++ = cppu::UnoType<XTypeProvider>::get();
-    *pTypes++ = cppu::UnoType<XUnoTunnel>::get();
-
+    static const uno::Sequence< uno::Type > aTypes {
+        cppu::UnoType<XAggregation>::get(),
+        cppu::UnoType<XEventsSupplier>::get(),
+        cppu::UnoType<XServiceInfo>::get(),
+        cppu::UnoType<XPropertySet>::get(),
+        cppu::UnoType<XMultiPropertySet>::get(),
+        cppu::UnoType<XTypeProvider>::get(),
+        cppu::UnoType<XUnoTunnel>::get() };
     return aTypes;
 }
 

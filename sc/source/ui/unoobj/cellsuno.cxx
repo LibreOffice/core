@@ -8483,10 +8483,9 @@ void SAL_CALL ScTableColumnObj::release() throw()
 
 uno::Sequence<uno::Type> SAL_CALL ScTableColumnObj::getTypes()
 {
-    static const uno::Sequence<uno::Type> aTypes = comphelper::concatSequences(
+    return comphelper::concatSequences(
         ScCellRangeObj::getTypes(),
         uno::Sequence<uno::Type> { cppu::UnoType<container::XNamed>::get() } );
-    return aTypes;
 }
 
 uno::Sequence<sal_Int8> SAL_CALL ScTableColumnObj::getImplementationId()

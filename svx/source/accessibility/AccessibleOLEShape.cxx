@@ -23,6 +23,7 @@
 #include <svx/SvxShapeTypes.hxx>
 #include <svx/svdoole2.hxx>
 
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
 using namespace ::accessibility;
@@ -119,19 +120,11 @@ css::uno::Sequence< OUString> SAL_CALL
 }
 
 // XTypeProvider
-uno::Sequence<uno::Type> SAL_CALL
-    AccessibleOLEShape::getTypes()
+uno::Sequence<uno::Type> SAL_CALL AccessibleOLEShape::getTypes()
 {
     // Get list of types from the context base implementation...
-    uno::Sequence<uno::Type> aTypeList (AccessibleShape::getTypes());
-    // ...and add the additional type for the component.
-    long nTypeCount = aTypeList.getLength();
-    aTypeList.realloc (nTypeCount + 1);
-    const uno::Type aActionType =
-        cppu::UnoType<XAccessibleAction>::get();
-    aTypeList[nTypeCount] = aActionType;
-
-    return aTypeList;
+    return comphelper::concatSequences(AccessibleShape::getTypes(),
+            uno::Sequence { cppu::UnoType<XAccessibleAction>::get() } );
 }
 
 // XAccessibleExtendedAttributes

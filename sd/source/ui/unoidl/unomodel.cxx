@@ -375,35 +375,29 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  )
 
     if( maTypeSequence.getLength() == 0 )
     {
-        const uno::Sequence< uno::Type > aBaseTypes( SfxBaseModel::getTypes() );
-        const sal_Int32 nBaseTypes = aBaseTypes.getLength();
-        const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
-
-        const sal_Int32 nOwnTypes = mbImpressDoc ? 14 : 11;     // !DANGER! Keep this updated!
-
-        maTypeSequence.realloc(  nBaseTypes + nOwnTypes );
-        uno::Type* pTypes = maTypeSequence.getArray();
-
-        *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
-        *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
-        *pTypes++ = cppu::UnoType<lang::XMultiServiceFactory>::get();
-        *pTypes++ = cppu::UnoType<drawing::XDrawPageDuplicator>::get();
-        *pTypes++ = cppu::UnoType<drawing::XLayerSupplier>::get();
-        *pTypes++ = cppu::UnoType<drawing::XMasterPagesSupplier>::get();
-        *pTypes++ = cppu::UnoType<drawing::XDrawPagesSupplier>::get();
-        *pTypes++ = cppu::UnoType<document::XLinkTargetSupplier>::get();
-        *pTypes++ = cppu::UnoType<style::XStyleFamiliesSupplier>::get();
-        *pTypes++ = cppu::UnoType<css::ucb::XAnyCompareFactory>::get();
-        *pTypes++ = cppu::UnoType<view::XRenderable>::get();
+        uno::Sequence< uno::Type > aTypes( SfxBaseModel::getTypes() );
+        aTypes = comphelper::concatSequences(aTypes,
+            uno::Sequence {
+                cppu::UnoType<beans::XPropertySet>::get(),
+                cppu::UnoType<lang::XServiceInfo>::get(),
+                cppu::UnoType<lang::XMultiServiceFactory>::get(),
+                cppu::UnoType<drawing::XDrawPageDuplicator>::get(),
+                cppu::UnoType<drawing::XLayerSupplier>::get(),
+                cppu::UnoType<drawing::XMasterPagesSupplier>::get(),
+                cppu::UnoType<drawing::XDrawPagesSupplier>::get(),
+                cppu::UnoType<document::XLinkTargetSupplier>::get(),
+                cppu::UnoType<style::XStyleFamiliesSupplier>::get(),
+                cppu::UnoType<css::ucb::XAnyCompareFactory>::get(),
+                cppu::UnoType<view::XRenderable>::get() });
         if( mbImpressDoc )
         {
-            *pTypes++ = cppu::UnoType<presentation::XPresentationSupplier>::get();
-            *pTypes++ = cppu::UnoType<presentation::XCustomPresentationSupplier>::get();
-            *pTypes++ = cppu::UnoType<presentation::XHandoutMasterSupplier>::get();
+            aTypes = comphelper::concatSequences(aTypes,
+                uno::Sequence {
+                    cppu::UnoType<presentation::XPresentationSupplier>::get(),
+                    cppu::UnoType<presentation::XCustomPresentationSupplier>::get(),
+                    cppu::UnoType<presentation::XHandoutMasterSupplier>::get() });
         }
-
-        for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
-            *pTypes++ = *pBaseTypes++;
+        maTypeSequence = aTypes;
     }
 
     return maTypeSequence;

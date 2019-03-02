@@ -133,22 +133,17 @@ void SwXTextView::Invalidate()
 
 Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  )
 {
-    uno::Sequence< uno::Type > aBaseTypes = SfxBaseController::getTypes();
-
-    long nIndex = aBaseTypes.getLength();
-    aBaseTypes.realloc(
-        aBaseTypes.getLength() + 8 );
-
-    uno::Type* pBaseTypes = aBaseTypes.getArray();
-    pBaseTypes[nIndex++] = cppu::UnoType<XSelectionSupplier>::get();
-    pBaseTypes[nIndex++] = cppu::UnoType<XServiceInfo>::get();
-    pBaseTypes[nIndex++] = cppu::UnoType<XFormLayerAccess>::get();
-    pBaseTypes[nIndex++] = cppu::UnoType<XTextViewCursorSupplier>::get();
-    pBaseTypes[nIndex++] = cppu::UnoType<XViewSettingsSupplier>::get();
-    pBaseTypes[nIndex++] = cppu::UnoType<XRubySelection>::get();
-    pBaseTypes[nIndex++] = cppu::UnoType<XPropertySet>::get();
-    pBaseTypes[nIndex++] = cppu::UnoType<datatransfer::XTransferableSupplier>::get();
-    return aBaseTypes;
+    return cppu::OTypeCollection(
+            cppu::UnoType<XSelectionSupplier>::get(),
+            cppu::UnoType<XServiceInfo>::get(),
+            cppu::UnoType<XFormLayerAccess>::get(),
+            cppu::UnoType<XTextViewCursorSupplier>::get(),
+            cppu::UnoType<XViewSettingsSupplier>::get(),
+            cppu::UnoType<XRubySelection>::get(),
+            cppu::UnoType<XPropertySet>::get(),
+            cppu::UnoType<datatransfer::XTransferableSupplier>::get(),
+            SfxBaseController::getTypes()
+        ).getTypes();
 }
 
 Sequence< sal_Int8 > SAL_CALL SwXTextView::getImplementationId(  )

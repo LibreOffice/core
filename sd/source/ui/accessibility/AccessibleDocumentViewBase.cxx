@@ -428,40 +428,18 @@ css::uno::Sequence< css::uno::Type> SAL_CALL
 {
     ThrowIfDisposed ();
 
-    // Get list of types from the context base implementation, ...
-    uno::Sequence<uno::Type> aTypeList (AccessibleContextBase::getTypes());
-    // ... get list of types from component base implementation, ...
-    uno::Sequence<uno::Type> aComponentTypeList (AccessibleComponentBase::getTypes());
-
-    // ...and add the additional type for the component, ...
-    const uno::Type aLangEventListenerType =
-         cppu::UnoType<lang::XEventListener>::get();
-    const uno::Type aPropertyChangeListenerType =
-         cppu::UnoType<beans::XPropertyChangeListener>::get();
-    const uno::Type aWindowListenerType =
-         cppu::UnoType<awt::XWindowListener>::get();
-    const uno::Type aFocusListenerType =
-         cppu::UnoType<awt::XFocusListener>::get();
-    const uno::Type aEventBroadcaster =
-         cppu::UnoType<XAccessibleEventBroadcaster>::get();
-
-    // ... and merge them all into one list.
-    sal_Int32 nTypeCount (aTypeList.getLength()),
-        nComponentTypeCount (aComponentTypeList.getLength()),
-        i;
-
-    aTypeList.realloc (nTypeCount + nComponentTypeCount + 5);
-
-    for (i=0; i<nComponentTypeCount; i++)
-        aTypeList[nTypeCount + i] = aComponentTypeList[i];
-
-    aTypeList[nTypeCount + i++ ] = aLangEventListenerType;
-    aTypeList[nTypeCount + i++] = aPropertyChangeListenerType;
-    aTypeList[nTypeCount + i++] = aWindowListenerType;
-    aTypeList[nTypeCount + i++] = aFocusListenerType;
-    aTypeList[nTypeCount + i++] = aEventBroadcaster;
-
-    return aTypeList;
+    return comphelper::concatSequences(
+        // Get list of types from the context base implementation, ...
+        AccessibleContextBase::getTypes(),
+        // ... get list of types from component base implementation, ...
+        AccessibleComponentBase::getTypes(),
+        // ...and add the additional type for the component, ...
+        css::uno::Sequence {
+         cppu::UnoType<lang::XEventListener>::get(),
+         cppu::UnoType<beans::XPropertyChangeListener>::get(),
+         cppu::UnoType<awt::XWindowListener>::get(),
+         cppu::UnoType<awt::XFocusListener>::get(),
+         cppu::UnoType<XAccessibleEventBroadcaster>::get() });
 }
 
 void AccessibleDocumentViewBase::impl_dispose()

@@ -24,6 +24,7 @@
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <o3tl/any.hxx>
@@ -888,14 +889,10 @@ void SAL_CALL Cell::release() throw ()
 
 Sequence< Type > SAL_CALL Cell::getTypes(  )
 {
-    Sequence< Type > aTypes( SvxUnoTextBase::getTypes() );
-
-    sal_Int32 nLen = aTypes.getLength();
-    aTypes.realloc(nLen + 2);
-    aTypes[nLen++] = cppu::UnoType<XMergeableCell>::get();
-    aTypes[nLen++] = cppu::UnoType<XLayoutConstrains>::get();
-
-    return aTypes;
+    return comphelper::concatSequences( SvxUnoTextBase::getTypes(),
+        Sequence {
+            cppu::UnoType<XMergeableCell>::get(),
+            cppu::UnoType<XLayoutConstrains>::get() });
 }
 
 

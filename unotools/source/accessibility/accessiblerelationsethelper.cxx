@@ -210,12 +210,11 @@ void AccessibleRelationSetHelper::AddRelation(const AccessibleRelation& rRelatio
 
 uno::Sequence< css::uno::Type> AccessibleRelationSetHelper::getTypes()
 {
-    osl::MutexGuard aGuard (maMutex);
-    css::uno::Sequence< css::uno::Type> aTypeSequence {
+    static const uno::Sequence< css::uno::Type> aTypes {
         cppu::UnoType<XAccessibleRelationSet>::get(),
         cppu::UnoType<lang::XTypeProvider>::get()
     };
-    return aTypeSequence;
+    return aTypes;
 }
 
 uno::Sequence<sal_Int8> SAL_CALL AccessibleRelationSetHelper::getImplementationId()

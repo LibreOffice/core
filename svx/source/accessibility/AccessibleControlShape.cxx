@@ -403,24 +403,8 @@ Sequence< Type > SAL_CALL AccessibleControlShape::getTypes()
     if ( m_xControlContextTypeAccess.is() )
         aAggregateTypes = m_xControlContextTypeAccess->getTypes();
 
-    Sequence< Type > aAllTypes = comphelper::concatSequences( aShapeTypes, aOwnTypes, aAggregateTypes );
-
     // remove duplicates
-    Type* pBegin = aAllTypes.getArray();
-    Type* pEnd = pBegin + aAllTypes.getLength();
-    while ( pBegin != pEnd )
-    {
-        Type aThisRoundType = *pBegin;
-        if ( ++pBegin != pEnd )
-        {
-            pEnd = ::std::remove( pBegin, pEnd, aThisRoundType );
-            // now all types between begin and (the old) end which equal aThisRoundType
-            // are moved behind the new end
-        }
-    }
-    aAllTypes.realloc( pEnd - aAllTypes.getArray() );
-
-    return aAllTypes;
+    return comphelper::combineSequences(comphelper::concatSequences( aShapeTypes, aOwnTypes), aAggregateTypes );
 }
 
 void SAL_CALL AccessibleControlShape::notifyEvent( const AccessibleEventObject& _rEvent )

@@ -2081,17 +2081,10 @@ Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes()
             aTypes.push_back(cppu::UnoType<XAnimationNodeSupplier>::get());
 
         // Get types of base class.
-        const Sequence< uno::Type > aBaseTypes( SdGenericDrawPage::getTypes() );
-        const sal_Int32 nBaseTypes = aBaseTypes.getLength();
-        const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
-
         // Join those types in a sequence.
-        maTypeSequence.realloc(aTypes.size() + nBaseTypes);
-        uno::Type* pTypes = maTypeSequence.getArray();
-        for (const auto& rType : aTypes)
-            *pTypes++ = rType;
-        for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
-            *pTypes++ = *pBaseTypes++;
+        return comphelper::concatSequences(
+            comphelper::containerToSequence(aTypes),
+            SdGenericDrawPage::getTypes() );
     }
 
     return maTypeSequence;
@@ -2705,17 +2698,10 @@ Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes()
             aTypes.push_back(cppu::UnoType<XAnimationNodeSupplier>::get());
 
         // Get types of base class.
-        const Sequence< uno::Type > aBaseTypes( SdGenericDrawPage::getTypes() );
-        const sal_Int32 nBaseTypes = aBaseTypes.getLength();
-        const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
-
         // Join those types in a sequence.
-        maTypeSequence.realloc(aTypes.size() + nBaseTypes);
-        uno::Type* pTypes = maTypeSequence.getArray();
-        for (const auto& rType : aTypes)
-            *pTypes++ = rType;
-        for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
-            *pTypes++ = *pBaseTypes++;
+        return comphelper::concatSequences(
+            comphelper::containerToSequence(aTypes),
+            SdGenericDrawPage::getTypes() );
     }
 
     return maTypeSequence;
