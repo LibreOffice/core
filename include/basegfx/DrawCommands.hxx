@@ -58,10 +58,19 @@ class DrawRectangle : public DrawBase
 {
 public:
     basegfx::B2DRange maRectangle;
+    double mnRx;
+    double mnRy;
+
+    double mnStrokeWidth;
+    std::shared_ptr<basegfx::BColor> mpFillColor;
+    std::shared_ptr<basegfx::BColor> mpStrokeColor;
 
     DrawRectangle(basegfx::B2DRange const& rRectangle)
         : DrawBase(DrawCommandType::Rectangle)
         , maRectangle(rRectangle)
+        , mnRx(1.0)
+        , mnRy(1.0)
+        , mnStrokeWidth(1.0)
     {
     }
 };
@@ -71,9 +80,14 @@ class DrawPath : public DrawBase
 public:
     basegfx::B2DPolyPolygon maPolyPolygon;
 
+    double mnStrokeWidth;
+    std::shared_ptr<basegfx::BColor> mpFillColor;
+    std::shared_ptr<basegfx::BColor> mpStrokeColor;
+
     DrawPath(basegfx::B2DPolyPolygon const& rPolyPolygon)
         : DrawBase(DrawCommandType::Path)
         , maPolyPolygon(rPolyPolygon)
+        , mnStrokeWidth(1.0)
     {
     }
 };
