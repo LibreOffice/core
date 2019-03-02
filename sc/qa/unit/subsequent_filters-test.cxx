@@ -1678,7 +1678,7 @@ void ScFiltersTest::testControlImport()
 void ScFiltersTest::testActiveXOptionButtonGroup()
 {
     ScDocShellRef xDocSh = loadDoc("tdf111980_radioButtons.", FORMAT_XLSX);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load singlecontrol.xlsx", xDocSh.is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf111980_radioButtons.xlsx", xDocSh.is());
     uno::Reference< frame::XModel > xModel = xDocSh->GetModel();
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(xModel, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIA(xDoc->getSheets(), UNO_QUERY_THROW);
@@ -1746,6 +1746,8 @@ void ScFiltersTest::testActiveXOptionButtonGroup()
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
     xPropertySet->getPropertyValue("GroupName") >>= sGroupName10;
     CPPUNIT_ASSERT_EQUAL( sGroupName, sGroupName10 );
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testChartImportODS()
@@ -2853,6 +2855,8 @@ void ScFiltersTest::testTdf121040()
     {
         CPPUNIT_ASSERT_EQUAL(nHeight, rDoc.GetRowHeight(nRow, nTab, false));
     }
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testPrintRangeODS()
