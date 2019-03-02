@@ -3364,6 +3364,21 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 // table.
                                 rSh.SelTableBox();
                         }
+
+                        SwContentAtPos aContentAtPos(IsAttrAtPos::FormControl);
+                        if( rSh.GetContentAtPos( aDocPos, aContentAtPos ) &&
+                                aContentAtPos.aFnd.pFieldmark != nullptr)
+                        {
+                            IFieldmark *pFieldBM = const_cast< IFieldmark* > ( aContentAtPos.aFnd.pFieldmark );
+                            if ( pFieldBM->GetFieldname( ) == ODF_FORMDROPDOWN )
+                            {
+                                RstMBDownFlags();
+                                rSh.getIDocumentMarkAccess()->ClearFieldActivation();
+                                GetView().GetViewFrame()->GetBindings().Execute(SID_FM_CTL_PROPERTIES);
+                                return;
+                            }
+                        }
+
                         g_bHoldSelection = true;
                         return;
                     }
