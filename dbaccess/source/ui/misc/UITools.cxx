@@ -1292,7 +1292,7 @@ Reference<XPropertySet> createView( const OUString& _rName, const Reference< XCo
     return createView( _rName, _rxConnection, sCommand );
 }
 
-bool insertHierachyElement( vcl::Window* _pParent, const Reference< XComponentContext >& _rxContext,
+bool insertHierachyElement(weld::Window* pParent, const Reference< XComponentContext >& _rxContext,
                            const Reference<XHierarchicalNameContainer>& _xNames,
                            const OUString& _sParentFolder,
                            bool _bForm,
@@ -1337,18 +1337,17 @@ bool insertHierachyElement( vcl::Window* _pParent, const Reference< XComponentCo
             // here we have everything needed to create a new query object ...
             HierarchicalNameCheck aNameChecker( _xNames.get(), _sParentFolder );
             // ... ehm, except a new name
-            ScopedVclPtrInstance<OSaveAsDlg> aAskForName(
-                                   _pParent,
-                                    _rxContext,
-                                    sTargetName,
-                                    sLabel,
-                                    aNameChecker,
-                                    SADFlags::AdditionalDescription | SADFlags::TitlePasteAs );
-            if ( RET_OK != aAskForName->Execute() )
+            OSaveAsDlg aAskForName(pParent,
+                                   _rxContext,
+                                   sTargetName,
+                                   sLabel,
+                                   aNameChecker,
+                                   SADFlags::AdditionalDescription | SADFlags::TitlePasteAs);
+            if ( RET_OK != aAskForName.run() )
                 // cancelled by the user
                 return false;
 
-            sNewName = aAskForName->getName();
+            sNewName = aAskForName.getName();
         }
     }
     else if ( xNameAccess->hasByName(sNewName) )

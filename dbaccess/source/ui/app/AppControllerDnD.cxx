@@ -680,18 +680,17 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
                                                 has a /table/ with that name) */
                 if ( bNeedAskForName )
                 {
-                    ScopedVclPtrInstance<OSaveAsDlg> aAskForName(
-                                            getView(),
-                                            CommandType::QUERY,
-                                            getORB(),
-                                            getConnection(),
-                                            sTargetName,
-                                            aNameChecker,
-                                            SADFlags::AdditionalDescription | SADFlags::TitlePasteAs );
-                    if ( RET_OK != aAskForName->Execute() )
+                    OSaveAsDlg aAskForName(getFrameWeld(),
+                                           CommandType::QUERY,
+                                           getORB(),
+                                           getConnection(),
+                                           sTargetName,
+                                           aNameChecker,
+                                           SADFlags::AdditionalDescription | SADFlags::TitlePasteAs );
+                    if ( RET_OK != aAskForName.run() )
                         // cancelled by the user
                         return false;
-                    sTargetName = aAskForName->getName();
+                    sTargetName = aAskForName.getName();
                 }
 
                 // create a new object
