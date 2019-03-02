@@ -1023,7 +1023,7 @@ void AxCommandButtonModel::exportBinaryModel( BinaryOutputStream& rOutStrm )
     aWriter.skipProperty(); // pict pos
     aWriter.writePairProperty( maSize );
     aWriter.skipProperty(); // mouse pointer
-    aWriter.skipProperty(); // picture data
+    aWriter.writePictureProperty( maPictureData ); // picture data
     aWriter.skipProperty(); // accelerator
     aWriter.writeBoolProperty( mbFocusOnClick ); // binary flag means "do not take focus"
     aWriter.skipProperty(); // mouse icon
