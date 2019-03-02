@@ -150,7 +150,10 @@ bool getControlTypeForXmlString(OString const& rString, ControlType& reType)
             { "tabbody", ControlType::TabBody },
             { "frame", ControlType::Frame },
             { "windowbackground", ControlType::WindowBackground },
-            { "toolbar", ControlType::Toolbar } };
+            { "toolbar", ControlType::Toolbar },
+            { "listnode", ControlType::ListNode },
+            { "listnet", ControlType::ListNet },
+            { "listheader", ControlType::ListHeader } };
 
     auto const& rIterator = aPartMap.find(rString);
     if (rIterator != aPartMap.end())

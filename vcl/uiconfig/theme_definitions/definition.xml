@@ -380,4 +380,13 @@
         </part>
     </toolbar>
 
+    <listnode>
+    </listnode>
+
+    <listnet>
+    </listnet>
+
+    <listheader>
+    </listheader>
+
 </widgets>
