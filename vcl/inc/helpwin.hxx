@@ -63,7 +63,7 @@ public:
     // only remember:
     void                SetHelpArea( const tools::Rectangle& rRect ) { maHelpArea = rRect; }
 
-    void                ShowHelp( sal_uInt16 nDelayMode );
+    void                ShowHelp(bool bNoDelay);
 
     Size                CalcOutSize() const;
     const tools::Rectangle&    GetHelpArea() const { return maHelpArea; }
