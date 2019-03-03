@@ -60,15 +60,11 @@ SvxMacroTabPage_Impl::SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet )
         bIDEDialogMode = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 }
 
-CuiMacroEventListBox::CuiMacroEventListBox(std::unique_ptr<weld::TreeView> xTreeView)
+MacroEventListBox::MacroEventListBox(std::unique_ptr<weld::TreeView> xTreeView)
     : m_xTreeView(std::move(xTreeView))
 {
     m_xTreeView->set_help_id(HID_MACRO_HEADERTABLISTBOX);
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 70, m_xTreeView->get_height_rows(9));
-}
-
-CuiMacroEventListBox::~CuiMacroEventListBox()
-{
 }
 
 // assign button ("Add Command") is enabled only if it is not read only
