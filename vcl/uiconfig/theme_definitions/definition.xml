@@ -42,8 +42,8 @@
         <highlightTextColor value="#FFFFFF"/>
         <activeTabColor value="#FFFFFF"/>
         <inactiveTabColor value="#C0C0C0"/>
-        <tabTextColor value="#000000"/>
-        <tabRolloverTextColor value="#000000"/>
+        <tabTextColor value="#007AFF"/>
+        <tabRolloverTextColor value="#007AFF"/>
         <tabHighlightTextColor value="#FFFFFF"/>
         <disableColor value="#808080"/>
         <helpColor value="#FFFFE0"/>
@@ -272,11 +272,23 @@
 
     <tabitem>
         <part value="Entire">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="true" button-value="any">
-                <rect stroke="#007AFF" fill="#007AFF" stroke-width="1" rx="1" ry="1"/>
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="false" button-value="any" extra="first">
+                <external source="tabitem-first.svgx" />
             </state>
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="false" button-value="any">
-                <rect stroke="#007AFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="false" button-value="any" extra="middle">
+                <external source="tabitem-middle.svgx" />
+            </state>
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="false" button-value="any" extra="last">
+                <external source="tabitem-last.svgx" />
+            </state>
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="true" button-value="any" extra="first">
+                <external source="tabitem-first-selected.svgx" />
+            </state>
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="true" button-value="any" extra="middle">
+                <external source="tabitem-middle-selected.svgx" />
+            </state>
+            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="true" button-value="any" extra="last">
+                <external source="tabitem-last-selected.svgx" />
             </state>
         </part>
     </tabitem>
@@ -284,7 +296,7 @@
     <tabheader>
         <part value="Entire">
             <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
-                <rect stroke="#FF0000" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
+                <rect stroke="#FFFFFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
     </tabheader>
@@ -292,7 +304,7 @@
     <tabpane>
         <part value="Entire">
             <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
-                <rect stroke="#00FF00" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
+                <rect stroke="#FFFFFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
     </tabpane>
