@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -11,25 +11,27 @@
 #include <test/container/xchild.hxx>
 #include <test/sheet/xsheetannotation.hxx>
 #include <test/sheet/xsheetannotationshapesupplier.hxx>
+#include <test/text/xsimpletext.hxx>
 
-#include <com/sun/star/sheet/XSheetAnnotationShapeSupplier.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/XCell.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
 
-#include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 using namespace css;
-using namespace css::uno;
 
-namespace sc_apitest {
-
-class ScAnnontationObj : public CalcUnoApiTest, public apitest::XSheetAnnotation,
-                                                public apitest::XSheetAnnotationShapeSupplier,
-                                                public apitest::XChild
+namespace sc_apitest
+{
+class ScAnnontationObj : public CalcUnoApiTest,
+                         public apitest::XChild,
+                         public apitest::XSheetAnnotation,
+                         public apitest::XSheetAnnotationShapeSupplier,
+                         public apitest::XSimpleText
 {
 public:
     ScAnnontationObj();
@@ -37,8 +39,8 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    virtual uno::Reference< uno::XInterface > init() override;
-    virtual uno::Reference< sheet::XSheetAnnotation> getAnnotation(table::CellAddress&) override;
+    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<sheet::XSheetAnnotation> getAnnotation(table::CellAddress&) override;
 
     CPPUNIT_TEST_SUITE(ScAnnontationObj);
 
@@ -55,36 +57,45 @@ public:
     // XSheetAnnotationShapeSupplier
     CPPUNIT_TEST(testGetAnnotationShape);
 
-    CPPUNIT_TEST_SUITE_END();
-private:
+    // XSimpleText
+    CPPUNIT_TEST(testCreateTextCursor);
+    CPPUNIT_TEST(testCreateTextCursorByRange);
+    CPPUNIT_TEST(testInsertString);
+    CPPUNIT_TEST(testInsertControlCharacter);
 
-    uno::Reference< lang::XComponent > mxComponent;
+    CPPUNIT_TEST_SUITE_END();
+
+private:
+    uno::Reference<lang::XComponent> mxComponent;
 };
 
-
 ScAnnontationObj::ScAnnontationObj()
-       : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
-uno::Reference< sheet::XSheetAnnotation> ScAnnontationObj::getAnnotation(table::CellAddress& xCellAddress)
+uno::Reference<sheet::XSheetAnnotation>
+ScAnnontationObj::getAnnotation(table::CellAddress& xCellAddress)
 {
     // get the sheet
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
-    uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(xCellAddress.Sheet), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(xCellAddress.Sheet),
+                                               uno::UNO_QUERY_THROW);
 
     // get the cell
-    uno::Reference< table::XCell > xCell( xSheet->getCellByPosition(xCellAddress.Column, xCellAddress.Row), UNO_QUERY_THROW);
+    uno::Reference<table::XCell> xCell(
+        xSheet->getCellByPosition(xCellAddress.Column, xCellAddress.Row), uno::UNO_QUERY_THROW);
 
     // get the annotation from cell
-    uno::Reference< sheet::XSheetAnnotationAnchor > xAnnotationAnchor(xCell, UNO_QUERY_THROW);
-    uno::Reference< sheet::XSheetAnnotation > xSheetAnnotation( xAnnotationAnchor->getAnnotation(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetAnnotationAnchor> xAnnotationAnchor(xCell, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetAnnotation> xSheetAnnotation(xAnnotationAnchor->getAnnotation(),
+                                                             uno::UNO_QUERY_THROW);
 
     return xSheetAnnotation;
 }
 
-uno::Reference< uno::XInterface > ScAnnontationObj::init()
+uno::Reference<uno::XInterface> ScAnnontationObj::init()
 {
     // tested annotation is in sheet 0 cell C2
     table::CellAddress aCellAddress;
@@ -113,8 +124,8 @@ void ScAnnontationObj::tearDown()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScAnnontationObj);
 
-}
+} // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

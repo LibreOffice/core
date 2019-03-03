@@ -1,7 +1,3 @@
-"ScAnnotationObj";"com::sun::star::text::XSimpleText";"createTextCursor()"
-"ScAnnotationObj";"com::sun::star::text::XSimpleText";"createTextCursorByRange()"
-"ScAnnotationObj";"com::sun::star::text::XSimpleText";"insertString()"
-"ScAnnotationObj";"com::sun::star::text::XSimpleText";"insertControlCharacter()"
 "ScAnnotationObj";"com::sun::star::text::XTextRange";"getText()"
 "ScAnnotationObj";"com::sun::star::text::XTextRange";"getStart()"
 "ScAnnotationObj";"com::sun::star::text::XTextRange";"getEnd()"
