@@ -726,6 +726,29 @@ bool FileDefinitionWidgetDraw::updateSettings(AllSettings& rSettings)
     aStyleSet.SetToolTextColor(m_aWidgetDefinition.maToolTextColor);
     aStyleSet.SetFontColor(m_aWidgetDefinition.maFontColor);
 
+    vcl::Font aFont(FAMILY_SWISS, Size(0, 12));
+    aFont.SetCharSet(osl_getThreadTextEncoding());
+    aFont.SetWeight(WEIGHT_NORMAL);
+    aFont.SetFamilyName("Liberation Sans");
+    aStyleSet.SetAppFont(aFont);
+    aStyleSet.SetHelpFont(aFont);
+    aStyleSet.SetMenuFont(aFont);
+    aStyleSet.SetToolFont(aFont);
+    aStyleSet.SetGroupFont(aFont);
+    aStyleSet.SetLabelFont(aFont);
+    aStyleSet.SetRadioCheckFont(aFont);
+    aStyleSet.SetPushButtonFont(aFont);
+    aStyleSet.SetFieldFont(aFont);
+    aStyleSet.SetIconFont(aFont);
+    aStyleSet.SetTabFont(aFont);
+
+    aFont.SetWeight(WEIGHT_BOLD);
+    aStyleSet.SetFloatTitleFont(aFont);
+    aStyleSet.SetTitleFont(aFont);
+
+    aStyleSet.SetTitleHeight(16);
+    aStyleSet.SetFloatTitleHeight(12);
+
     rSettings.SetStyleSettings(aStyleSet);
 
     return true;
