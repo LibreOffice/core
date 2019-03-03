@@ -332,14 +332,11 @@ OMultiTypeInterfaceContainerHelper::OMultiTypeInterfaceContainerHelper( Mutex & 
 OMultiTypeInterfaceContainerHelper::~OMultiTypeInterfaceContainerHelper()
 {
     t_type2ptr * pMap = static_cast<t_type2ptr *>(m_pMap);
-    t_type2ptr::iterator iter = pMap->begin();
-    t_type2ptr::iterator end = pMap->end();
 
-    while( iter != end )
+    for (auto& rItem : *pMap)
     {
-        delete static_cast<OInterfaceContainerHelper*>((*iter).second);
-        (*iter).second = nullptr;
-        ++iter;
+        delete static_cast<OInterfaceContainerHelper*>(rItem.second);
+        rItem.second = nullptr;
     }
     delete pMap;
 }
@@ -356,17 +353,13 @@ Sequence< Type > OMultiTypeInterfaceContainerHelper::getContainedTypes() const
         css::uno::Sequence< Type > aInterfaceTypes( nSize );
         Type * pArray = aInterfaceTypes.getArray();
 
-        t_type2ptr::iterator iter = pMap->begin();
-        t_type2ptr::iterator end = pMap->end();
-
         sal_Int32 i = 0;
-        while( iter != end )
+        for (const auto& rItem : *pMap)
         {
             // are interfaces added to this container?
-            if( static_cast<OInterfaceContainerHelper*>((*iter).second)->getLength() )
+            if( static_cast<OInterfaceContainerHelper*>(rItem.second)->getLength() )
                 // yes, put the type in the array
-                pArray[i++] = (*iter).first;
-            ++iter;
+                pArray[i++] = rItem.first;
         }
         if( static_cast<t_type2ptr::size_type>(i) != nSize ) {
             // may be empty container, reduce the sequence to the right size
@@ -379,16 +372,8 @@ Sequence< Type > OMultiTypeInterfaceContainerHelper::getContainedTypes() const
 
 static t_type2ptr::iterator findType(t_type2ptr *pMap, const Type & rKey )
 {
-    t_type2ptr::iterator iter = pMap->begin();
-    t_type2ptr::iterator end = pMap->end();
-
-    while( iter != end )
-    {
-        if (iter->first == rKey)
-            break;
-        ++iter;
-    }
-    return iter;
+    return std::find_if(pMap->begin(), pMap->end(),
+        [&rKey](const t_type2ptr::value_type& rItem) { return rItem.first == rKey; });
 }
 
 OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelper::getContainer( const Type & rKey ) const
@@ -447,14 +432,10 @@ void OMultiTypeInterfaceContainerHelper::disposeAndClear( const EventObject & rE
             ppListenerContainers.reset(new ppp[nSize]);
             //ppListenerContainers = new (ListenerContainer*)[nSize];
 
-            t_type2ptr::iterator iter = pMap->begin();
-            t_type2ptr::iterator end = pMap->end();
-
             t_type2ptr::size_type i = 0;
-            while( iter != end )
+            for (const auto& rItem : *pMap)
             {
-                ppListenerContainers[i++] = static_cast<OInterfaceContainerHelper*>((*iter).second);
-                ++iter;
+                ppListenerContainers[i++] = static_cast<OInterfaceContainerHelper*>(rItem.second);
             }
         }
     }
@@ -472,13 +453,10 @@ void OMultiTypeInterfaceContainerHelper::clear()
 {
     ::osl::MutexGuard aGuard( rMutex );
     t_type2ptr * pMap = static_cast<t_type2ptr *>(m_pMap);
-    t_type2ptr::iterator iter = pMap->begin();
-    t_type2ptr::iterator end = pMap->end();
 
-    while( iter != end )
+    for (auto& rItem : *pMap)
     {
-        static_cast<OInterfaceContainerHelper*>((*iter).second)->clear();
-        ++iter;
+        static_cast<OInterfaceContainerHelper*>(rItem.second)->clear();
     }
 }
 
@@ -488,16 +466,8 @@ typedef std::vector< std::pair < sal_Int32 , void* > > t_long2ptr;
 
 static t_long2ptr::iterator findLong(t_long2ptr *pMap, sal_Int32 nKey )
 {
-    t_long2ptr::iterator iter = pMap->begin();
-    t_long2ptr::iterator end = pMap->end();
-
-    while( iter != end )
-    {
-        if (iter->first == nKey)
-            break;
-        ++iter;
-    }
-    return iter;
+    return std::find_if(pMap->begin(), pMap->end(),
+        [&nKey](const t_long2ptr::value_type& rItem) { return rItem.first == nKey; });
 }
 
 OMultiTypeInterfaceContainerHelperInt32::OMultiTypeInterfaceContainerHelperInt32( Mutex & rMutex_ )
@@ -513,14 +483,11 @@ OMultiTypeInterfaceContainerHelperInt32::~OMultiTypeInterfaceContainerHelperInt3
         return;
 
     t_long2ptr * pMap = static_cast<t_long2ptr *>(m_pMap);
-    t_long2ptr::iterator iter = pMap->begin();
-    t_long2ptr::iterator end = pMap->end();
 
-    while( iter != end )
+    for (auto& rItem : *pMap)
     {
-        delete static_cast<OInterfaceContainerHelper*>((*iter).second);
-        (*iter).second = nullptr;
-        ++iter;
+        delete static_cast<OInterfaceContainerHelper*>(rItem.second);
+        rItem.second = nullptr;
     }
     delete pMap;
 }
@@ -537,17 +504,13 @@ Sequence< sal_Int32 > OMultiTypeInterfaceContainerHelperInt32::getContainedTypes
         css::uno::Sequence< sal_Int32 > aInterfaceTypes( nSize );
         sal_Int32 * pArray = aInterfaceTypes.getArray();
 
-        t_long2ptr::iterator iter = pMap->begin();
-        t_long2ptr::iterator end = pMap->end();
-
         sal_Int32 i = 0;
-        while( iter != end )
+        for (const auto& rItem : *pMap)
         {
             // are interfaces added to this container?
-            if( static_cast<OInterfaceContainerHelper*>((*iter).second)->getLength() )
+            if( static_cast<OInterfaceContainerHelper*>(rItem.second)->getLength() )
                 // yes, put the type in the array
-                pArray[i++] = (*iter).first;
-            ++iter;
+                pArray[i++] = rItem.first;
         }
         if( static_cast<t_long2ptr::size_type>(i) != nSize ) {
             // may be empty container, reduce the sequence to the right size
@@ -622,14 +585,10 @@ void OMultiTypeInterfaceContainerHelperInt32::disposeAndClear( const EventObject
             typedef OInterfaceContainerHelper* ppp;
             ppListenerContainers.reset(new ppp[nSize]);
 
-            t_long2ptr::iterator iter = pMap->begin();
-            t_long2ptr::iterator end = pMap->end();
-
             t_long2ptr::size_type i = 0;
-            while( iter != end )
+            for (const auto& rItem : *pMap)
             {
-                ppListenerContainers[i++] = static_cast<OInterfaceContainerHelper*>((*iter).second);
-                ++iter;
+                ppListenerContainers[i++] = static_cast<OInterfaceContainerHelper*>(rItem.second);
             }
         }
     }
@@ -649,13 +608,10 @@ void OMultiTypeInterfaceContainerHelperInt32::clear()
     if (!m_pMap)
         return;
     t_long2ptr * pMap = static_cast<t_long2ptr *>(m_pMap);
-    t_long2ptr::iterator iter = pMap->begin();
-    t_long2ptr::iterator end = pMap->end();
 
-    while( iter != end )
+    for (auto& rItem : *pMap)
     {
-        static_cast<OInterfaceContainerHelper*>((*iter).second)->clear();
-        ++iter;
+        static_cast<OInterfaceContainerHelper*>(rItem.second)->clear();
     }
 }
 

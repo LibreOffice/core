@@ -291,11 +291,10 @@ css::uno::Sequence< css::beans::Property > Info::getProperties()
     css::uno::Sequence< css::beans::Property > s(
         static_cast< sal_Int32 >(m_data->properties.size()));
     sal_Int32 n = 0;
-    for (Data::PropertyMap::iterator i(m_data->properties.begin());
-         i != m_data->properties.end(); ++i)
+    for (const auto& rEntry : m_data->properties)
     {
-        if (i->second.present) {
-            s[n++] = i->second.property;
+        if (rEntry.second.present) {
+            s[n++] = rEntry.second.property;
         }
     }
     s.realloc(n);
@@ -334,19 +333,16 @@ PropertySetMixinImpl::BoundListeners::~BoundListeners() {
 }
 
 void PropertySetMixinImpl::BoundListeners::notify() const {
-    for (BoundListenerBag::const_iterator i(m_impl->specificListeners.begin());
-         i != m_impl->specificListeners.end(); ++i)
+    for (const auto& rxListener : m_impl->specificListeners)
     {
         try {
-            (*i)->propertyChange(m_impl->event);
+            rxListener->propertyChange(m_impl->event);
         } catch (css::lang::DisposedException &) {}
     }
-    for (BoundListenerBag::const_iterator i(
-             m_impl->unspecificListeners.begin());
-         i != m_impl->unspecificListeners.end(); ++i)
+    for (const auto& rxListener : m_impl->unspecificListeners)
     {
         try {
-            (*i)->propertyChange(m_impl->event);
+            rxListener->propertyChange(m_impl->event);
         } catch (css::lang::DisposedException &) {}
     }
 }
@@ -898,18 +894,16 @@ void PropertySetMixinImpl::prepareSet(
         css::beans::PropertyChangeEvent event(
             static_cast< css::beans::XPropertySet * >(this), propertyName,
             false, it->second.property.Handle, oldValue, newValue);
-        for (Impl::VetoListenerBag::iterator i(specificVeto.begin());
-             i != specificVeto.end(); ++i)
+        for (auto& rxVetoListener : specificVeto)
         {
             try {
-                (*i)->vetoableChange(event);
+                rxVetoListener->vetoableChange(event);
             } catch (css::lang::DisposedException &) {}
         }
-        for (Impl::VetoListenerBag::iterator i(unspecificVeto.begin());
-             i != unspecificVeto.end(); ++i)
+        for (auto& rxVetoListener : unspecificVeto)
         {
             try {
-                (*i)->vetoableChange(event);
+                rxVetoListener->vetoableChange(event);
             } catch (css::lang::DisposedException &) {}
         }
     }
@@ -934,22 +928,18 @@ void PropertySetMixinImpl::dispose() {
     }
     css::lang::EventObject event(
         static_cast< css::beans::XPropertySet * >(this));
-    for (Impl::BoundListenerMap::iterator i(boundListeners.begin());
-         i != boundListeners.end(); ++i)
+    for (auto& rEntry : boundListeners)
     {
-        for (BoundListenerBag::iterator j(i->second.begin());
-             j != i->second.end(); ++j)
+        for (auto& rxBoundListener : rEntry.second)
         {
-            (*j)->disposing(event);
+            rxBoundListener->disposing(event);
         }
     }
-    for (Impl::VetoListenerMap::iterator i(vetoListeners.begin());
-         i != vetoListeners.end(); ++i)
+    for (auto& rEntry : vetoListeners)
     {
-        for (Impl::VetoListenerBag::iterator j(i->second.begin());
-             j != i->second.end(); ++j)
+        for (auto& rxVetoListener : rEntry.second)
         {
-            (*j)->disposing(event);
+            rxVetoListener->disposing(event);
         }
     }
 }
