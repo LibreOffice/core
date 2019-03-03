@@ -315,9 +315,13 @@ void WidgetDefinitionReader::readPart(tools::XmlWalker& rWalker,
             OString sDefault = rWalker.attribute("default");
             OString sSelected = rWalker.attribute("selected");
             OString sButtonValue = rWalker.attribute("button-value");
+            OString sExtra = rWalker.attribute("extra");
+            if (sExtra.isEmpty())
+                sExtra = "any";
 
             std::shared_ptr<WidgetDefinitionState> pState = std::make_shared<WidgetDefinitionState>(
-                sEnabled, sFocused, sPressed, sRollover, sDefault, sSelected, sButtonValue);
+                sEnabled, sFocused, sPressed, sRollover, sDefault, sSelected, sButtonValue, sExtra);
+
             rpPart->maStates.push_back(pState);
             readDrawingDefinition(rWalker, pState);
         }
