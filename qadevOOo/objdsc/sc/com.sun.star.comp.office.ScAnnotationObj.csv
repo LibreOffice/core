@@ -1,5 +1,0 @@
-"ScAnnotationObj";"com::sun::star::text::XTextRange";"getText()"
-"ScAnnotationObj";"com::sun::star::text::XTextRange";"getStart()"
-"ScAnnotationObj";"com::sun::star::text::XTextRange";"getEnd()"
-"ScAnnotationObj";"com::sun::star::text::XTextRange";"getString()"
-"ScAnnotationObj";"com::sun::star::text::XTextRange";"setString()"

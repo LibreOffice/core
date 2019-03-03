@@ -12,6 +12,7 @@
 #include <test/sheet/xsheetannotation.hxx>
 #include <test/sheet/xsheetannotationshapesupplier.hxx>
 #include <test/text/xsimpletext.hxx>
+#include <test/text/xtextrange.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
@@ -31,7 +32,8 @@ class ScAnnontationObj : public CalcUnoApiTest,
                          public apitest::XChild,
                          public apitest::XSheetAnnotation,
                          public apitest::XSheetAnnotationShapeSupplier,
-                         public apitest::XSimpleText
+                         public apitest::XSimpleText,
+                         public apitest::XTextRange
 {
 public:
     ScAnnontationObj();
@@ -62,6 +64,12 @@ public:
     CPPUNIT_TEST(testCreateTextCursorByRange);
     CPPUNIT_TEST(testInsertString);
     CPPUNIT_TEST(testInsertControlCharacter);
+
+    // XTextRange
+    CPPUNIT_TEST(testGetEnd);
+    CPPUNIT_TEST(testGetSetString);
+    CPPUNIT_TEST(testGetStart);
+    CPPUNIT_TEST(testGetText);
 
     CPPUNIT_TEST_SUITE_END();
 
