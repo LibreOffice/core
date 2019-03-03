@@ -41,7 +41,6 @@
 #define HELPTEXTMARGIN_BALLOON  6
 
 #define HELPDELAY_NORMAL        1
-#define HELPDELAY_SHORT         2
 #define HELPDELAY_NONE          3
 
 #define HELPTEXTMAXLEN        150
@@ -436,9 +435,6 @@ void HelpTextWindow::ShowHelp( sal_uInt16 nDelayMode )
             else
                 nTimeout = HelpSettings::GetBalloonDelay();
         }
-
-        if ( nDelayMode == HELPDELAY_SHORT )
-            nTimeout /= 3;
     }
 
     maShowTimer.SetTimeout( nTimeout );
