@@ -552,7 +552,7 @@ SwVbaDocument::getIID()
 OUString SAL_CALL
 SwVbaDocument::GetIIDForClassItselfNotCoclass()
 {
-    return OUString("{82154425-0FBF-11D4-8313-005004526AB4}");
+    return OUString("{82154428-0FBF-11D4-8313-005004526AB4}");
 }
 
 TypeAndIID SAL_CALL
@@ -560,7 +560,7 @@ SwVbaDocument::GetConnectionPoint()
 {
     TypeAndIID aResult =
         { word::XDocumentOutgoing::static_type(),
-          "{82154426-0FBF-11D4-8313-005004526AB4}"
+          "{82154429-0FBF-11D4-8313-005004526AB4}"
         };
 
     return aResult;
