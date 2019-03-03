@@ -106,7 +106,6 @@ typedef std::vector<std::unique_ptr<SfxGroupInfo_Impl> > SfxGroupInfoArr_Impl;
 
 class SfxConfigFunctionListBox : public SvTreeListBox
 {
-    friend class SfxConfigGroupListBox;
     SfxGroupInfoArr_Impl aArr;
 
     virtual void  MouseMove( const MouseEvent& rMEvt ) override;
@@ -142,79 +141,30 @@ public:
     {
         m_xTreeView->insert(nullptr, -1, &rStr, &rId, nullptr, nullptr, &rImage, false, nullptr);
     }
+    void remove(int nPos) { m_xTreeView->remove(nPos); }
     int n_children() const { return m_xTreeView->n_children(); }
-    void select(int pos) { m_xTreeView->select(pos); }
     std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig = nullptr) const { return m_xTreeView->make_iterator(pOrig); }
     bool get_iter_first(weld::TreeIter& rIter) const { return m_xTreeView->get_iter_first(rIter); }
     // set iter to point to next node, depth first, then sibling
     bool iter_next(weld::TreeIter& rIter) const { return m_xTreeView->iter_next(rIter); }
     bool iter_next_sibling(weld::TreeIter& rIter) const { return m_xTreeView->iter_next_sibling(rIter); }
     OUString get_text(const weld::TreeIter& rIter) const { return m_xTreeView->get_text(rIter); }
+    OUString get_text(int nPos) const { return m_xTreeView->get_text(nPos); }
     OUString get_id(const weld::TreeIter& rIter) const { return m_xTreeView->get_id(rIter); }
     bool get_selected(weld::TreeIter* pIter) const { return m_xTreeView->get_selected(pIter); }
-    void scroll_to_row(const weld::TreeIter& rIter) { return m_xTreeView->scroll_to_row(rIter); }
+    void scroll_to_row(int nRow) { return m_xTreeView->scroll_to_row(nRow); }
     void select(const weld::TreeIter& rIter) { m_xTreeView->select(rIter); }
+    void select(int pos) { m_xTreeView->select(pos); }
+    void set_size_request(int nWidth, int nHeight) { m_xTreeView->set_size_request(nWidth, nHeight); }
+    weld::TreeView& get_widget() { return *m_xTreeView; }
 
     ~CuiConfigFunctionListBox();
 
     void          ClearAll();
     OUString      GetSelectedScriptURI();
     OUString      GetHelpText( bool bConsiderParent = true );
-};
-
-struct SvxConfigGroupBoxResource_Impl;
-class SfxConfigGroupListBox : public SvTreeListBox
-{
-    std::unique_ptr<SvxConfigGroupBoxResource_Impl> xImp;
-    VclPtr<SfxConfigFunctionListBox>  pFunctionListBox;
-    SfxGroupInfoArr_Impl            aArr;
-    OUString m_sModuleLongName;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    css::uno::Reference< css::frame::XFrame > m_xFrame;
-    css::uno::Reference< css::container::XNameAccess > m_xGlobalCategoryInfo;
-    css::uno::Reference< css::container::XNameAccess > m_xModuleCategoryInfo;
-    css::uno::Reference< css::container::XNameAccess > m_xUICmdDescription;
-
-    Image GetImage(
-        const css::uno::Reference< css::script::browse::XBrowseNode >& node,
-        css::uno::Reference< css::uno::XComponentContext > const & xCtx,
-        bool bIsRootNode
-    );
-
-    static css::uno::Reference< css::uno::XInterface  > getDocumentModel(
-        css::uno::Reference< css::uno::XComponentContext > const & xCtx,
-        OUString const & docName
-    );
-
-
-    void InitModule();
-    void FillScriptList(const css::uno::Reference< css::script::browse::XBrowseNode >& xRootNode,
-                         SvTreeListEntry* pParentEntry, bool bCheapChildrenOnDemand);
-    void FillFunctionsList(const css::uno::Sequence< css::frame::DispatchInformation >& xCommands);
-    OUString MapCommand2UIName(const OUString& sCommand);
-
-    SfxStylesInfo_Impl* pStylesInfo;
-
-protected:
-    virtual void        RequestingChildren( SvTreeListEntry *pEntry) override;
-    virtual bool        Expand( SvTreeListEntry* pParent ) override;
-
-public:
-    SfxConfigGroupListBox(vcl::Window* pParent, WinBits nStyle);
-    virtual ~SfxConfigGroupListBox() override;
-    virtual void        dispose() override;
-    void                ClearAll();
-
-    void                Init(const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                             const css::uno::Reference< css::frame::XFrame >&          xFrame,
-                             const OUString&                                        sModuleLongName,
-                             bool bEventMode);
-    void                SetFunctionListBox( SfxConfigFunctionListBox *pBox )
-                        { pFunctionListBox = pBox; }
-    void                GroupSelected();
-    void                SelectMacro( const SfxMacroInfoItem* );
-    void                SelectMacro( const OUString&, const OUString& );
-    void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
+    OUString      GetCurCommand();
+    OUString      GetCurLabel();
 };
 
 struct CuiConfigGroupBoxResource_Impl;
@@ -254,7 +204,8 @@ public:
     CuiConfigGroupListBox(std::unique_ptr<weld::TreeView> xTreeView);
     void set_sensitive(bool bSensitive) { m_xTreeView->set_sensitive(bSensitive); }
     void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_changed(rLink); }
-    const weld::TreeView& get_widget() const { return *m_xTreeView; }
+    void set_size_request(int nWidth, int nHeight) { m_xTreeView->set_size_request(nWidth, nHeight); }
+    weld::TreeView& get_widget() { return *m_xTreeView; }
     ~CuiConfigGroupListBox();
     void                ClearAll();
 
@@ -265,6 +216,8 @@ public:
     void                SetFunctionListBox( CuiConfigFunctionListBox *pBox )
                         { m_pFunctionListBox = pBox; }
     void                GroupSelected();
+    void                SelectMacro(const SfxMacroInfoItem*);
+    void                SelectMacro(const OUString&, const OUString&);
     void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 

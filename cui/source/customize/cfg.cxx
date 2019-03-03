@@ -188,7 +188,7 @@ static VclPtr<SfxTabPage> CreateSvxContextMenuConfigPage( TabPageParent pParent,
 
 static VclPtr<SfxTabPage> CreateKeyboardConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
 {
-       return VclPtr<SfxAcceleratorConfigPage>::Create( pParent.pParent, *rSet );
+       return VclPtr<SfxAcceleratorConfigPage>::Create(pParent, *rSet);
 }
 
 static VclPtr<SfxTabPage> CreateSvxToolbarConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
