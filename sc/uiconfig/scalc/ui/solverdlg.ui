@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -8,6 +8,9 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="solverdlg|SolverDialog">Solver</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -29,7 +32,6 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
-                <property name="secondary">True</property>
               </packing>
             </child>
             <child>
@@ -44,20 +46,7 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="close">
-                <property name="label">gtk-close</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
             <child>
@@ -69,6 +58,20 @@
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="close">
+                <property name="label">gtk-close</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -516,8 +519,6 @@
                           <object class="GtkComboBoxText" id="op1list">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="entry_text_column">0</property>
-                            <property name="id_column">1</property>
                             <items>
                               <item translatable="yes" context="solverdlg|op1list">&lt;=</item>
                               <item translatable="yes" context="solverdlg|op1list">=</item>
@@ -540,8 +541,6 @@
                           <object class="GtkComboBoxText" id="op2list">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="entry_text_column">0</property>
-                            <property name="id_column">1</property>
                             <items>
                               <item translatable="yes" context="solverdlg|op2list">&lt;=</item>
                               <item translatable="yes" context="solverdlg|op2list">=</item>
@@ -564,8 +563,6 @@
                           <object class="GtkComboBoxText" id="op3list">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="entry_text_column">0</property>
-                            <property name="id_column">1</property>
                             <items>
                               <item translatable="yes" context="solverdlg|op3list">&lt;=</item>
                               <item translatable="yes" context="solverdlg|op3list">=</item>
@@ -588,8 +585,6 @@
                           <object class="GtkComboBoxText" id="op4list">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="entry_text_column">0</property>
-                            <property name="id_column">1</property>
                             <items>
                               <item translatable="yes" context="solverdlg|op4list">&lt;=</item>
                               <item translatable="yes" context="solverdlg|op4list">=</item>
@@ -822,8 +817,8 @@
     <action-widgets>
       <action-widget response="0">options</action-widget>
       <action-widget response="-11">help</action-widget>
-      <action-widget response="-7">close</action-widget>
       <action-widget response="0">solve</action-widget>
+      <action-widget response="-7">close</action-widget>
     </action-widgets>
   </object>
 </interface>
