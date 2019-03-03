@@ -42,115 +42,101 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::comphelper;
 
-ODatasourceSelectDialog::ODatasourceSelectDialog(vcl::Window* _pParent, const std::set<OUString>& _rDatasources)
-    : ModalDialog(_pParent, "ChooseDataSourceDialog",
-        "dbaccess/ui/choosedatasourcedialog.ui")
+ODatasourceSelectDialog::ODatasourceSelectDialog(weld::Window* _pParent, const std::set<OUString>& _rDatasources)
+    : GenericDialogController(_pParent, "dbaccess/ui/choosedatasourcedialog.ui", "ChooseDataSourceDialog")
+    , m_xDatasource(m_xBuilder->weld_tree_view("treeview"))
+    , m_xOk(m_xBuilder->weld_button("ok"))
+    , m_xCancel(m_xBuilder->weld_button("cancel"))
+    , m_xManageDatasources(m_xBuilder->weld_button("organize"))
 {
-    get(m_pDatasource, "treeview");
-    m_pDatasource->set_height_request(m_pDatasource->GetTextHeight() * 6);
-    get(m_pOk, "ok");
-    get(m_pCancel, "cancel");
+    m_xDatasource->set_size_request(-1, m_xDatasource->get_height_rows(6));
 
     fillListBox(_rDatasources);
 #ifdef HAVE_ODBC_ADMINISTRATION
-    get(m_pManageDatasources, "organize");
-    m_pManageDatasources->Show();
-
     // allow ODBC datasource management
-    m_pManageDatasources->Show();
-    m_pManageDatasources->Enable();
-    m_pManageDatasources->SetClickHdl(LINK(this,ODatasourceSelectDialog,ManageClickHdl));
+    m_xManageDatasources->show();
+    m_xManageDatasources->set_sensitive(true);
+    m_xManageDatasources->connect_clicked(LINK(this,ODatasourceSelectDialog,ManageClickHdl));
 #endif
-    m_pDatasource->SetDoubleClickHdl(LINK(this,ODatasourceSelectDialog,ListDblClickHdl));
+    m_xDatasource->connect_row_activated(LINK(this,ODatasourceSelectDialog,ListDblClickHdl));
 }
 
 ODatasourceSelectDialog::~ODatasourceSelectDialog()
 {
-    disposeOnce();
 }
 
-void ODatasourceSelectDialog::dispose()
+IMPL_LINK(ODatasourceSelectDialog, ListDblClickHdl, weld::TreeView&, rListBox, void)
 {
-    m_pDatasource.clear();
-    m_pOk.clear();
-    m_pCancel.clear();
-#if defined HAVE_ODBC_ADMINISTRATION
-    m_pManageDatasources.clear();
-#endif
-    ModalDialog::dispose();
+    if (rListBox.n_children())
+        m_xDialog->response(RET_OK);
 }
 
-
-IMPL_LINK( ODatasourceSelectDialog, ListDblClickHdl, ListBox&, rListBox, void )
+short ODatasourceSelectDialog::run()
 {
-    if (rListBox.GetSelectedEntryCount())
-        EndDialog(RET_OK);
-}
-
-bool ODatasourceSelectDialog::Close()
-{
+    short nRet = GenericDialogController::run();
 #ifdef HAVE_ODBC_ADMINISTRATION
-    if ( m_pODBCManagement.get() && m_pODBCManagement->isRunning() )
-        return false;
+    if (m_xODBCManagement.get())
+        m_xODBCManagement->disableCallback();
 #endif
-
-    return ModalDialog::Close();
+    return nRet;
 }
 
 #ifdef HAVE_ODBC_ADMINISTRATION
-IMPL_LINK_NOARG(ODatasourceSelectDialog, ManageClickHdl, Button*, void)
+IMPL_LINK_NOARG(ODatasourceSelectDialog, ManageClickHdl, weld::Button&, void)
 {
-    if ( !m_pODBCManagement.get() )
-        m_pODBCManagement.reset( new OOdbcManagement( LINK( this, ODatasourceSelectDialog, ManageProcessFinished ) ) );
+    if ( !m_xODBCManagement.get() )
+        m_xODBCManagement.reset( new OOdbcManagement( LINK( this, ODatasourceSelectDialog, ManageProcessFinished ) ) );
 
-    if ( !m_pODBCManagement->manageDataSources_async() )
+    if ( !m_xODBCManagement->manageDataSources_async() )
     {
         // TODO: error message
-        m_pDatasource->GrabFocus();
-        m_pManageDatasources->Disable();
+        m_xDatasource->grab_focus();
+        m_xManageDatasources->set_sensitive(false);
         return;
     }
 
-    m_pDatasource->Disable();
-    m_pOk->Disable();
-    m_pCancel->Disable();
-    m_pManageDatasources->Disable();
+    m_xDatasource->set_sensitive(false);
+    m_xOk->set_sensitive(false);
+    m_xCancel->set_sensitive(false);
+    m_xManageDatasources->set_sensitive(false);
 
-    SAL_WARN_IF( !m_pODBCManagement->isRunning(), "dbaccess.ui", "ODatasourceSelectDialog::ManageClickHdl: success, but not running - you were *fast*!" );
+    SAL_WARN_IF( !m_xODBCManagement->isRunning(), "dbaccess.ui", "ODatasourceSelectDialog::ManageClickHdl: success, but not running - you were *fast*!" );
 }
 
 IMPL_LINK_NOARG( ODatasourceSelectDialog, ManageProcessFinished, void*, void )
 {
+    m_xODBCManagement->receivedCallback();
+
     std::set<OUString> aOdbcDatasources;
     OOdbcEnumeration aEnumeration;
     aEnumeration.getDatasourceNames( aOdbcDatasources );
     fillListBox( aOdbcDatasources );
 
-    m_pDatasource->Enable();
-    m_pOk->Enable();
-    m_pCancel->Enable();
-    m_pManageDatasources->Enable();
+    m_xDatasource->set_sensitive(true);
+    m_xOk->set_sensitive(true);
+    m_xCancel->set_sensitive(true);
+    m_xManageDatasources->set_sensitive(true);
 }
 
 #endif
 void ODatasourceSelectDialog::fillListBox(const std::set<OUString>& _rDatasources)
 {
     OUString sSelected;
-    if (m_pDatasource->GetEntryCount())
-         sSelected = m_pDatasource->GetSelectedEntry();
-    m_pDatasource->Clear();
+    if (m_xDatasource->n_children())
+         sSelected = m_xDatasource->get_selected_text();
+    m_xDatasource->clear();
     // fill the list
     for (auto const& datasource : _rDatasources)
     {
-        m_pDatasource->InsertEntry(datasource);
+        m_xDatasource->append_text(datasource);
     }
 
-    if (m_pDatasource->GetEntryCount())
+    if (m_xDatasource->n_children())
     {
         if (!sSelected.isEmpty())
-            m_pDatasource->SelectEntry(sSelected);
+            m_xDatasource->select_text(sSelected);
         else        // select the first entry
-            m_pDatasource->SelectEntryPos(0);
+            m_xDatasource->select(0);
     }
 }
 
