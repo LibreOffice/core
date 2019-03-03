@@ -100,18 +100,6 @@ private:
     const SfxMacroInfoItem*         m_pMacroInfoItem;
     std::unique_ptr<sfx2::FileDialogHelper> m_pFileDlg;
 
-    VclPtr<SfxAccCfgTabListBox_Impl>    m_pEntriesBox;
-    VclPtr<RadioButton>                 m_pOfficeButton;
-    VclPtr<RadioButton>                 m_pModuleButton;
-    VclPtr<PushButton>                  m_pChangeButton;
-    VclPtr<PushButton>                  m_pRemoveButton;
-    VclPtr<SfxConfigGroupListBox>       m_pGroupLBox;
-    VclPtr<SfxConfigFunctionListBox>    m_pFunctionBox;
-    VclPtr<SvTreeListBox>               m_pKeyBox;
-    VclPtr<Edit>                        m_pSearchEdit;
-    VclPtr<PushButton>                  m_pLoadButton;
-    VclPtr<PushButton>                  m_pSaveButton;
-    VclPtr<PushButton>                  m_pResetButton;
     OUString                            aLoadAccelConfigStr;
     OUString                            aSaveAccelConfigStr;
     OUString                            aFilterAllStr;
@@ -130,22 +118,40 @@ private:
     OUString m_sModuleUIName;
 
     // For search
+    Timer m_aUpdateDataTimer;
     i18nutil::SearchOptions2 m_options;
 
-    DECL_LINK(ChangeHdl,            Button *,       void);
-    DECL_LINK(RemoveHdl,            Button *,       void);
-    DECL_LINK(SelectHdl,            SvTreeListBox*, void);
-    DECL_LINK(SearchUpdateHdl,      Edit&,          void);
-    DECL_LINK(Save,                 Button *,       void);
-    DECL_LINK(Load,                 Button *,       void);
-    DECL_LINK(Default,              Button *,       void);
-    DECL_LINK(RadioHdl,             Button *,       void);
+    Idle m_aFillGroupIdle;
+
+    std::unique_ptr<weld::TreeView>     m_xEntriesBox;
+    std::unique_ptr<weld::RadioButton>  m_xOfficeButton;
+    std::unique_ptr<weld::RadioButton>  m_xModuleButton;
+    std::unique_ptr<weld::Button>       m_xChangeButton;
+    std::unique_ptr<weld::Button>       m_xRemoveButton;
+    std::unique_ptr<CuiConfigGroupListBox> m_xGroupLBox;
+    std::unique_ptr<CuiConfigFunctionListBox> m_xFunctionBox;
+    std::unique_ptr<weld::TreeView>     m_xKeyBox;
+    std::unique_ptr<weld::Entry>        m_xSearchEdit;
+    std::unique_ptr<weld::Button>       m_xLoadButton;
+    std::unique_ptr<weld::Button>       m_xSaveButton;
+    std::unique_ptr<weld::Button>       m_xResetButton;
+
+    DECL_LINK(ChangeHdl,           weld::Button&,   void);
+    DECL_LINK(RemoveHdl,           weld::Button&,   void);
+    DECL_LINK(SelectHdl,           weld::TreeView&, void);
+    DECL_LINK(SearchUpdateHdl,     weld::Entry&,    void);
+    DECL_LINK(Save,                weld::Button&,   void);
+    DECL_LINK(Load,                weld::Button&,   void);
+    DECL_LINK(Default,             weld::Button&,   void);
+    DECL_LINK(RadioHdl,            weld::Button&,   void);
+    DECL_LINK(ImplUpdateDataHdl,   Timer*,          void);
+    DECL_LINK(TimeOut_Impl,        Timer*,          void);
 
     DECL_LINK(LoadHdl, sfx2::FileDialogHelper *, void);
     DECL_LINK(SaveHdl, sfx2::FileDialogHelper *, void);
 
     OUString                    GetLabel4Command(const OUString& rCommand);
-    SvTreeListEntry*            applySearchFilter(OUString const & rSearchTerm, SvTreeListBox* rListBox);
+    int                         applySearchFilter(OUString const & rSearchTerm);
     void                        InitAccCfg();
     sal_Int32                   MapKeyCodeToPos(const vcl::KeyCode &rCode) const;
     void                        StartFileDialog( StartFileDialogType nType, const OUString& rTitle );
@@ -153,10 +159,8 @@ private:
     void                        Init(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
     void                        ResetConfig();
 
-    static void                 CreateCustomItems( SvTreeListEntry* pEntry, const OUString& aCol1, const OUString& aCol2 );
-
 public:
-                                SfxAcceleratorConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet );
+                                SfxAcceleratorConfigPage(TabPageParent pParent, const SfxItemSet& rItemSet);
     virtual                     ~SfxAcceleratorConfigPage() override;
     virtual void                dispose() override;
 

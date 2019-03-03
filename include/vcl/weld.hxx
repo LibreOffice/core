@@ -576,6 +576,7 @@ public:
     virtual void remove(int pos) = 0;
     virtual OUString get_text(int row, int col = -1) const = 0;
     virtual void set_text(int row, const OUString& rText, int col = -1) = 0;
+    virtual void set_sensitive(int row, bool bSensitive, int col = -1) = 0;
     virtual void set_id(int row, const OUString& rId) = 0;
     virtual void set_toggle(int row, bool bOn, int col) = 0;
     virtual bool get_toggle(int row, int col) const = 0;
@@ -692,6 +693,8 @@ public:
     virtual int count_selected_rows() const = 0;
 
     void set_toggle_columns_as_radio(const std::vector<int>& rCols) { m_aRadioIndexes = rCols; }
+
+    using Widget::set_sensitive;
 };
 
 class VCL_DLLPUBLIC Button : virtual public Container
