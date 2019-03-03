@@ -233,12 +233,31 @@ class ProcessTerminationWait : public ::osl::Thread
 {
     oslProcess       m_hProcessHandle;
     Link<void*,void> m_aFinishHdl;
+    ImplSVEvent* m_nEventId;
 
 public:
     ProcessTerminationWait( oslProcess _hProcessHandle, const Link<void*,void>& _rFinishHdl )
-        :m_hProcessHandle( _hProcessHandle )
-        ,m_aFinishHdl( _rFinishHdl )
+        : m_hProcessHandle( _hProcessHandle )
+        , m_aFinishHdl( _rFinishHdl )
+        , m_nEventId(nullptr)
     {
+    }
+
+    void disableCallback()
+    {
+        // if finished event not posted yet, disable by turning it to a no-op Link
+        m_aFinishHdl = Link<void*, void>();
+        if (m_nEventId)
+        {
+            // already posted, remove it
+            Application::RemoveUserEvent(m_nEventId);
+            m_nEventId = nullptr;
+        }
+    }
+
+    void receivedCallback()
+    {
+        m_nEventId = nullptr;
     }
 
 protected:
@@ -248,7 +267,7 @@ protected:
 
         osl_joinProcess( m_hProcessHandle );
         osl_freeProcessHandle( m_hProcessHandle );
-        Application::PostUserEvent( m_aFinishHdl );
+        m_nEventId = Application::PostUserEvent( m_aFinishHdl );
     }
 };
 
@@ -283,6 +302,18 @@ bool OOdbcManagement::manageDataSources_async()
     m_pProcessWait.reset( new ProcessTerminationWait( hProcessHandle, m_aAsyncFinishCallback ) );
     m_pProcessWait->create();
     return true;
+}
+
+void OOdbcManagement::disableCallback()
+{
+    if (m_pProcessWait.get())
+        m_pProcessWait->disableCallback();
+}
+
+void OOdbcManagement::receivedCallback()
+{
+    if (m_pProcessWait.get())
+        m_pProcessWait->receivedCallback();
 }
 
 bool OOdbcManagement::isRunning() const
