@@ -26,7 +26,8 @@ std::shared_ptr<WidgetDefinitionPart> WidgetDefinition::getDefinition(ControlTyp
 }
 
 std::vector<std::shared_ptr<WidgetDefinitionState>>
-WidgetDefinitionPart::getStates(ControlState eState, ImplControlValue const& rValue)
+WidgetDefinitionPart::getStates(ControlType eType, ControlState eState,
+                                ImplControlValue const& rValue)
 {
     std::vector<std::shared_ptr<WidgetDefinitionState>> aStatesToAdd;
 
@@ -64,7 +65,30 @@ WidgetDefinitionPart::getStates(ControlState eState, ImplControlValue const& rVa
         if (state->msButtonValue != "any"
             && !((state->msButtonValue == "true" && eButtonValue == ButtonValue::On)
                  || (state->msButtonValue == "false" && eButtonValue != ButtonValue::On)))
+        {
             bAdd = false;
+        }
+
+        if (eType == ControlType::TabItem)
+        {
+            OString sExtra;
+
+            auto const& rTabItemValue = static_cast<TabitemValue const&>(rValue);
+
+            if (rTabItemValue.isFirst() && rTabItemValue.isLast())
+                sExtra = "first_last";
+            else if (rTabItemValue.isFirst())
+                sExtra = "first";
+            else if (rTabItemValue.isLast())
+                sExtra = "last";
+            else
+                sExtra = "middle";
+
+            if (state->msExtra != "any" && state->msExtra != sExtra)
+            {
+                bAdd = false;
+            }
+        }
 
         if (bAdd)
             aStatesToAdd.push_back(state);
@@ -76,7 +100,7 @@ WidgetDefinitionPart::getStates(ControlState eState, ImplControlValue const& rVa
 WidgetDefinitionState::WidgetDefinitionState(OString const& sEnabled, OString const& sFocused,
                                              OString const& sPressed, OString const& sRollover,
                                              OString const& sDefault, OString const& sSelected,
-                                             OString const& sButtonValue)
+                                             OString const& sButtonValue, OString const& sExtra)
     : msEnabled(sEnabled)
     , msFocused(sFocused)
     , msPressed(sPressed)
@@ -84,6 +108,7 @@ WidgetDefinitionState::WidgetDefinitionState(OString const& sEnabled, OString co
     , msDefault(sDefault)
     , msSelected(sSelected)
     , msButtonValue(sButtonValue)
+    , msExtra(sExtra)
 {
 }
 
