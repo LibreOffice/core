@@ -90,7 +90,7 @@ class ProcessTerminationWait;
 class OOdbcManagement
 {
     std::unique_ptr< ProcessTerminationWait >   m_pProcessWait;
-    Link<void*,void>                              m_aAsyncFinishCallback;
+    Link<void*,void>                            m_aAsyncFinishCallback;
 
 public:
     explicit OOdbcManagement( const Link<void*,void>& _rAsyncFinishCallback );
@@ -98,6 +98,8 @@ public:
 
     bool    manageDataSources_async();
     bool    isRunning() const;
+    void    disableCallback();
+    void    receivedCallback();
 };
 #endif
 

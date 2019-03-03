@@ -310,16 +310,16 @@ namespace dbaui
                     aProfiles.insert(pArray[index]);
 
                 // execute the select dialog
-                ScopedVclPtrInstance< ODatasourceSelectDialog > aSelector(GetParent(), aProfiles);
+                ODatasourceSelectDialog aSelector(GetFrameWeld(), aProfiles);
                 OUString sOldProfile=getURLNoPrefix();
 
                 if (!sOldProfile.isEmpty())
-                    aSelector->Select(sOldProfile);
+                    aSelector.Select(sOldProfile);
                 else
-                    aSelector->Select(xMozillaBootstrap->getDefaultProfile(profileType));
+                    aSelector.Select(xMozillaBootstrap->getDefaultProfile(profileType));
 
-                if ( RET_OK == aSelector->Execute() )
-                    setURLNoPrefix(aSelector->GetSelected());
+                if (RET_OK == aSelector.run())
+                    setURLNoPrefix(aSelector.GetSelected());
                 break;
             }
             case ::dbaccess::DST_FIREBIRD:
