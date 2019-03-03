@@ -24,11 +24,8 @@
 #include "odbcconfig.hxx"
 #include <commontypes.hxx>
 
-#include <vcl/dialog.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/weld.hxx>
 
 #include <memory>
 
@@ -37,35 +34,33 @@ namespace dbaui
 {
 
 // ODatasourceSelector
-class ODatasourceSelectDialog final : public ModalDialog
+class ODatasourceSelectDialog final : public weld::GenericDialogController
 {
-    VclPtr<ListBox>        m_pDatasource;
-    VclPtr<OKButton>       m_pOk;
-    VclPtr<CancelButton>   m_pCancel;
+    std::unique_ptr<weld::TreeView> m_xDatasource;
+    std::unique_ptr<weld::Button> m_xOk;
+    std::unique_ptr<weld::Button> m_xCancel;
+    std::unique_ptr<weld::Button> m_xManageDatasources;
 #ifdef HAVE_ODBC_ADMINISTRATION
-    VclPtr<PushButton>     m_pManageDatasources;
-    std::unique_ptr< OOdbcManagement >
-    m_pODBCManagement;
+    std::unique_ptr<OOdbcManagement> m_xODBCManagement;
 #endif
 
 public:
-    ODatasourceSelectDialog( vcl::Window* _pParent, const std::set<OUString>& _rDatasources );
+    ODatasourceSelectDialog(weld::Window* pParent, const std::set<OUString>& rDatasources);
     virtual ~ODatasourceSelectDialog() override;
-    virtual void dispose() override;
     OUString GetSelected() const {
-        return m_pDatasource->GetSelectedEntry();
+        return m_xDatasource->get_selected_text();
     }
     void     Select( const OUString& _rEntry ) {
-        m_pDatasource->SelectEntry(_rEntry);
+        m_xDatasource->select_text(_rEntry);
     }
 
-    virtual bool    Close() override;
+    virtual short run() override;
 
 private:
-    DECL_LINK( ListDblClickHdl, ListBox&, void );
+    DECL_LINK( ListDblClickHdl, weld::TreeView&, void );
 #ifdef HAVE_ODBC_ADMINISTRATION
-    DECL_LINK(ManageClickHdl, Button*, void);
-    DECL_LINK( ManageProcessFinished, void*, void );
+    DECL_LINK(ManageClickHdl, weld::Button&, void);
+    DECL_LINK(ManageProcessFinished, void*, void);
 #endif
     void fillListBox(const std::set<OUString>& _rDatasources);
 };
