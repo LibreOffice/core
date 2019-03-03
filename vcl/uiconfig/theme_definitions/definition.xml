@@ -54,12 +54,23 @@
         <fontColor value="#000000"/>
     </style>
 
+    <!--  <state> attributes:
+            enabled="any"
+            focused="any"
+            pressed="any"
+            rollover="any"
+            default="any"
+            selected="any"
+            button-value="any"
+            extra="any"
+    -->
+
     <pushbutton>
         <part value="Entire">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <external source="pushbutton-default.svgx" />
             </state>
-            <state enabled="true" focused="any" pressed="any" rollover="true" default="any" selected="any" button-value="any">
+            <state enabled="true" rollover="true">
                 <external source="pushbutton-rollover.svgx" />
             </state>
         </part>
@@ -67,22 +78,22 @@
 
     <radiobutton>
         <part value="Entire">
-           <state enabled="true" focused="any" pressed="false" rollover="any" default="any" selected="any" button-value="true">
+           <state enabled="true" pressed="false" button-value="true">
                 <image source="tick-on.svgx" />
             </state>
-            <state enabled="true" focused="any" pressed="true" rollover="any" default="any" selected="any" button-value="true">
+            <state enabled="true" pressed="true" button-value="true">
                 <image source="tick-on-pressed.svgx" />
             </state>
-            <state enabled="false" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="true">
+            <state enabled="false" button-value="true">
                 <image source="tick-on-disabled.svgx" />
             </state>
-            <state enabled="true" focused="any" pressed="false" rollover="any" default="any" selected="any" button-value="false">
+            <state enabled="true" pressed="false" button-value="false">
                 <image source="tick-off.svgx" />
             </state>
-            <state enabled="true" focused="any" pressed="true" rollover="any" default="any" selected="any" button-value="false">
+            <state enabled="true" pressed="true" button-value="false">
                 <image source="tick-off-pressed.svgx" />
             </state>
-            <state enabled="false" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="false">
+            <state enabled="false" button-value="false">
                 <image source="tick-on-disabled.svgx" />
             </state>
         </part>
@@ -90,22 +101,22 @@
 
     <checkbox>
         <part value="Entire">
-           <state enabled="true" focused="any" pressed="false" rollover="any" default="any" selected="any" button-value="true">
+           <state enabled="true" pressed="false" button-value="true">
                 <image source="switch-on.svgx" />
             </state>
-            <state enabled="true" focused="any" pressed="true" rollover="any" default="any" selected="any" button-value="true">
+            <state enabled="true" pressed="true" button-value="true">
                 <image source="switch-on-pressed.svgx" />
             </state>
-            <state enabled="false" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="true">
+            <state enabled="false" button-value="true">
                 <image source="switch-on-disabled.svgx" />
             </state>
-            <state enabled="true" focused="any" pressed="false" rollover="any" default="any" selected="any" button-value="false">
+            <state enabled="true" pressed="false" button-value="false">
                 <image source="switch-off.svgx" />
             </state>
-            <state enabled="true" focused="any" pressed="true" rollover="any" default="any" selected="any" button-value="false">
+            <state enabled="true" pressed="true" button-value="false">
                 <image source="switch-off-pressed.svgx" />
             </state>
-            <state enabled="false" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="false">
+            <state enabled="false" button-value="false">
                 <image source="switch-on-disabled.svgx" />
             </state>
         </part>
@@ -113,22 +124,22 @@
 
     <combobox>
         <part value="Entire">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <external source="spinbox-entire.svgx" />
             </state>
         </part>
         <part value="SubEdit">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
             </state>
         </part>
         <part value="ButtonUp">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <line stroke="#C7C7C7" stroke-width="4" x1="0.2" y1="0.6" x2="0.5" y2="0.4"/>
                 <line stroke="#C7C7C7" stroke-width="4" x1="0.5" y1="0.4" x2="0.8" y2="0.6"/>
             </state>
         </part>
         <part value="ButtonDown">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <line stroke="#C7C7C7" stroke-width="4" x1="0.2" y1="0.4" x2="0.5" y2="0.6"/>
                 <line stroke="#C7C7C7" stroke-width="4" x1="0.5" y1="0.6" x2="0.8" y2="0.4"/>
             </state>
@@ -137,7 +148,7 @@
 
     <editbox>
         <part value="Entire">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#FFFFFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1" />
                 <line stroke="#C7C7C7" stroke-width="2" x1="0.0" y1="0.9" x2="1.0" y2="0.9"/>
             </state>
@@ -146,28 +157,28 @@
 
     <listbox>
         <part value="Entire">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#007AFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1" />
             </state>
         </part>
         <part value="ListboxWindow">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#007AFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1" />
             </state>
         </part>
         <part value="Focus">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#007AFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1" />
             </state>
         </part>
         <part value="ButtonUp">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <line stroke="#007AFF" stroke-width="4" x1="0.2" y1="0.6" x2="0.5" y2="0.4"/>
                 <line stroke="#007AFF" stroke-width="4" x1="0.5" y1="0.4" x2="0.8" y2="0.6"/>
             </state>
         </part>
         <part value="ButtonDown">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <line stroke="#007AFF" stroke-width="4" x1="0.2" y1="0.4" x2="0.5" y2="0.6"/>
                 <line stroke="#007AFF" stroke-width="4" x1="0.5" y1="0.6" x2="0.8" y2="0.4"/>
             </state>
@@ -176,17 +187,17 @@
 
     <spinbox>
         <part value="Entire">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <external source="spinbox-entire.svgx" />
             </state>
         </part>
         <part value="ButtonDown">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <external source="spinbox-left.svgx" />
             </state>
         </part>
         <part value="ButtonUp">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <external source="spinbox-right.svgx" />
             </state>
         </part>
@@ -194,13 +205,13 @@
 
     <scrollbar>
         <part value="ThumbHorz">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#C7C7C7" fill="#C7C7C7" stroke-width="1" />
                 <line stroke="#007AFF" stroke-width="5" x1="0.01" y1="0.5" x2="0.99" y2="0.5"/>
             </state>
         </part>
         <part value="ThumbVert">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#C7C7C7" fill="#C7C7C7" stroke-width="1" />
                 <line stroke="#007AFF" stroke-width="5" x1="0.5" y1="0.01" x2="0.5" y2="0.99"/>
             </state>
@@ -214,22 +225,22 @@
         <part value="ButtonRight">
         </part>
         <part value="TrackHorzLeft">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#C7C7C7" fill="#C7C7C7" stroke-width="1" />
             </state>
         </part>
         <part value="TrackHorzRight">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#C7C7C7" fill="#C7C7C7" stroke-width="1" />
             </state>
         </part>
         <part value="TrackVertUpper">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#C7C7C7" fill="#C7C7C7" stroke-width="1" />
             </state>
         </part>
         <part value="TrackVertLower">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#C7C7C7" fill="#C7C7C7" stroke-width="1" />
             </state>
         </part>
@@ -237,17 +248,17 @@
 
     <slider>
         <part value="Button">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <circ stroke="#AAAAAA" fill="#FFFFFF" stroke-width="1" rx="7" ry="7"/>
             </state>
         </part>
         <part value="TrackHorzArea">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <line stroke="#007AFF" fill="#007AFF" stroke-width="10" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
             </state>
         </part>
         <part value="TrackVertArea">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <line stroke="#007AFF" fill="#007AFF" stroke-width="10" x1="0.5" y1="0.0" x2="0.5" y2="1.0"/>
             </state>
         </part>
@@ -255,12 +266,12 @@
 
     <fixedline>
         <part value="SeparatorHorz">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <line stroke="#007AFF" fill="#007AFF" stroke-width="2" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
             </state>
         </part>
         <part value="SeparatorVert">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <line stroke="#007AFF" fill="#007AFF" stroke-width="2" x1="0.5" y1="0.0" x2="0.5" y2="1.0"/>
             </state>
         </part>
@@ -268,7 +279,7 @@
 
     <progress>
         <part value="Entire">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#007AFF" fill="#007AFF" stroke-width="1" rx="7" ry="7"/>
             </state>
         </part>
@@ -276,22 +287,22 @@
 
     <tabitem>
         <part value="Entire">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="false" button-value="any" extra="first">
+            <state selected="false" extra="first">
                 <external source="tabitem-first.svgx" />
             </state>
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="false" button-value="any" extra="middle">
+            <state selected="false" extra="middle">
                 <external source="tabitem-middle.svgx" />
             </state>
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="false" button-value="any" extra="last">
+            <state selected="false" extra="last">
                 <external source="tabitem-last.svgx" />
             </state>
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="true" button-value="any" extra="first">
+            <state selected="true" extra="first">
                 <external source="tabitem-first-selected.svgx" />
             </state>
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="true" button-value="any" extra="middle">
+            <state selected="true" extra="middle">
                 <external source="tabitem-middle-selected.svgx" />
             </state>
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="true" button-value="any" extra="last">
+            <state selected="true" extra="last">
                 <external source="tabitem-last-selected.svgx" />
             </state>
         </part>
@@ -299,7 +310,7 @@
 
     <tabheader>
         <part value="Entire">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#FFFFFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
@@ -307,7 +318,7 @@
 
     <tabpane>
         <part value="Entire">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#FFFFFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
@@ -315,7 +326,7 @@
 
     <tabbody>
         <part value="Entire">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#FFFFFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
@@ -323,12 +334,12 @@
 
     <windowbackground>
         <part value="BackgroundWindow">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#FF0000" fill="#FF0000" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
         <part value="BackgroundDialog">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#0000FF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
@@ -336,12 +347,12 @@
 
     <frame>
         <part value="Entire">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#00FF00" fill="#00FF00" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
         <part value="Border">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#00FF00" fill="#00FF00" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
@@ -349,43 +360,43 @@
 
     <toolbar>
         <part value="DrawBackgroundHorz">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#FFFFFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
 
         <part value="DrawBackgroundVert">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#FFFFFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
 
         <part value="ThumbHorz">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#00FFFF" fill="#00FFFF" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
 
         <part value="ThumbVert">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#00FFFF" fill="#00FFFF" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
 
         <part value="SeparatorVert">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#00FFFF" fill="#00FFFF" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
 
         <part value="SeparatorHorz">
-            <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+            <state>
                 <rect stroke="#00FFFF" fill="#00FFFF" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
 
         <part value="Button">
-             <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
+             <state>
                 <rect stroke="#00FFFF" fill="#00FFFF" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
