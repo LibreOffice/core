@@ -46,7 +46,7 @@ public:
     OUString                               m_aStaticMacroLBLabel;
     std::unique_ptr<weld::Button>          m_xAssignPB;
     std::unique_ptr<weld::Button>          m_xDeletePB;
-    std::unique_ptr<CuiMacroEventListBox>  m_xEventLB;
+    std::unique_ptr<MacroEventListBox>     m_xEventLB;
     std::unique_ptr<weld::Widget>          m_xGroupFrame;
     std::unique_ptr<CuiConfigGroupListBox> m_xGroupLB;
     std::unique_ptr<weld::Frame>           m_xMacroFrame;
@@ -112,7 +112,7 @@ SfxMacroTabPage::SfxMacroTabPage(TabPageParent pParent, const Reference< XFrame 
     mpImpl->m_aFillGroupIdle.SetPriority( TaskPriority::HIGHEST );
     mpImpl->m_aFillGroupIdle.SetDebugName( "SfxMacroTabPage m_aFillGroupIdle" );
 
-    mpImpl->m_xEventLB.reset(new CuiMacroEventListBox(m_xBuilder->weld_tree_view("assignments")));
+    mpImpl->m_xEventLB.reset(new MacroEventListBox(m_xBuilder->weld_tree_view("assignments")));
     mpImpl->m_xAssignPB = m_xBuilder->weld_button("assign");
     mpImpl->m_xDeletePB = m_xBuilder->weld_button("delete");
     mpImpl->m_xGroupFrame = m_xBuilder->weld_widget("groupframe");
