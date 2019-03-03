@@ -55,6 +55,13 @@ bool readColor(OString const& rString, Color& rColor)
     return true;
 }
 
+OString getValueOrAny(OString const& rInputString)
+{
+    if (rInputString.isEmpty())
+        return "any";
+    return rInputString;
+}
+
 ControlPart xmlStringToControlPart(OString const& sPart)
 {
     if (sPart.equalsIgnoreAsciiCase("NONE"))
@@ -308,16 +315,14 @@ void WidgetDefinitionReader::readPart(tools::XmlWalker& rWalker,
     {
         if (rWalker.name() == "state")
         {
-            OString sEnabled = rWalker.attribute("enabled");
-            OString sFocused = rWalker.attribute("focused");
-            OString sPressed = rWalker.attribute("pressed");
-            OString sRollover = rWalker.attribute("rollover");
-            OString sDefault = rWalker.attribute("default");
-            OString sSelected = rWalker.attribute("selected");
-            OString sButtonValue = rWalker.attribute("button-value");
-            OString sExtra = rWalker.attribute("extra");
-            if (sExtra.isEmpty())
-                sExtra = "any";
+            OString sEnabled = getValueOrAny(rWalker.attribute("enabled"));
+            OString sFocused = getValueOrAny(rWalker.attribute("focused"));
+            OString sPressed = getValueOrAny(rWalker.attribute("pressed"));
+            OString sRollover = getValueOrAny(rWalker.attribute("rollover"));
+            OString sDefault = getValueOrAny(rWalker.attribute("default"));
+            OString sSelected = getValueOrAny(rWalker.attribute("selected"));
+            OString sButtonValue = getValueOrAny(rWalker.attribute("button-value"));
+            OString sExtra = getValueOrAny(rWalker.attribute("extra"));
 
             std::shared_ptr<WidgetDefinitionState> pState = std::make_shared<WidgetDefinitionState>(
                 sEnabled, sFocused, sPressed, sRollover, sDefault, sSelected, sButtonValue, sExtra);
