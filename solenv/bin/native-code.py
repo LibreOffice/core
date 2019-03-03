@@ -452,7 +452,6 @@ custom_widgets = [
     'IntellectualPropertyPartEdit',
     'LightButton',
     'LookUpComboBox',
-    'MacroEventListBox',
     'ManagedMenuButton',
     'MultiLineEditSyntaxHighlight',
     'NumFormatListBox',

@@ -808,7 +808,7 @@ namespace pcr
         SvxAbstractDialogFactory* pFactory = SvxAbstractDialogFactory::Create();
 
         ScopedVclPtr<VclAbstractDialog> pDialog( pFactory->CreateSvxMacroAssignDlg(
-            PropertyHandlerHelper::getDialogParentWindow( m_xContext ),
+            PropertyHandlerHelper::getDialogParentFrame( m_xContext ),
             impl_getContextFrame_nothrow(),
             m_bIsDialogElement,
             pEventHolder.get(),

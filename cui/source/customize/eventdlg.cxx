@@ -44,34 +44,29 @@
 #include <headertablistbox.hxx>
 #include "macropg_impl.hxx"
 
+#include <bitmaps.hlst>
 #include <cfgutil.hxx>
 #include <cfg.hxx>
-
 
 using namespace ::com::sun::star;
 
 
-SvxEventConfigPage::SvxEventConfigPage(vcl::Window *pParent, const SfxItemSet& rSet,
+SvxEventConfigPage::SvxEventConfigPage(TabPageParent pParent, const SfxItemSet& rSet,
     SvxEventConfigPage::EarlyInit)
-    : SvxMacroTabPage_(pParent, "EventsConfigPage",
-        "cui/ui/eventsconfigpage.ui", rSet)
+    : SvxMacroTabPage_(pParent, "cui/ui/eventsconfigpage.ui", "EventsConfigPage", rSet)
+    , m_xSaveInListBox(m_xBuilder->weld_combo_box("savein"))
 {
-    get(m_pSaveInListBox, "savein");
+    mpImpl->xEventLB = m_xBuilder->weld_tree_view("events");
+    mpImpl->xAssignPB = m_xBuilder->weld_button("macro");
+    mpImpl->xDeletePB = m_xBuilder->weld_button("delete");
+    mpImpl->xAssignComponentPB = m_xBuilder->weld_button("component");
 
-    mpImpl->sStrEvent = get<FixedText>("eventft")->GetText();
-    mpImpl->sAssignedMacro = get<FixedText>("actionft")->GetText();
-    get(mpImpl->pEventLB, "events");
-    Size aSize(LogicToPixel(Size(205, 229), MapMode(MapUnit::MapAppFont)));
-    mpImpl->pEventLB->set_width_request(aSize.Width());
-    mpImpl->pEventLB->set_height_request(aSize.Height());
-    get(mpImpl->pAssignPB, "macro");
-    get(mpImpl->pDeletePB, "delete");
-    mpImpl->aMacroImg = get<FixedImage>("macroimg")->GetImage();
-    mpImpl->aComponentImg = get<FixedImage>("componentimg")->GetImage();
+    mpImpl->xEventLB->set_size_request(mpImpl->xEventLB->get_approximate_digit_width() * 70,
+                                       mpImpl->xEventLB->get_height_rows(20));
 
     InitResources();
 
-    m_pSaveInListBox->SetSelectHdl( LINK( this, SvxEventConfigPage,
+    m_xSaveInListBox->connect_changed( LINK( this, SvxEventConfigPage,
                 SelectHdl_Impl ) );
 
     uno::Reference< frame::XGlobalEventBroadcaster > xSupplier;
@@ -80,10 +75,8 @@ SvxEventConfigPage::SvxEventConfigPage(vcl::Window *pParent, const SfxItemSet& r
         frame::theGlobalEventBroadcaster::get(::comphelper::getProcessComponentContext());
 
     m_xAppEvents = xSupplier->getEvents();
-    const sal_Int32 nPos = m_pSaveInListBox->InsertEntry(
-        utl::ConfigManager::getProductName() );
-    m_pSaveInListBox->SetEntryData( nPos, new bool(true) );
-    m_pSaveInListBox->SelectEntryPos( nPos );
+    m_xSaveInListBox->append(OUString::boolean(true), utl::ConfigManager::getProductName());
+    m_xSaveInListBox->set_active(0);
 }
 
 void SvxEventConfigPage::LateInit( const uno::Reference< frame::XFrame >& _rxFrame  )
@@ -93,28 +86,12 @@ void SvxEventConfigPage::LateInit( const uno::Reference< frame::XFrame >& _rxFra
 
     InitAndSetHandler( m_xAppEvents, m_xDocumentEvents, m_xDocumentModifiable );
 
-    SelectHdl_Impl( *m_pSaveInListBox );
+    SelectHdl_Impl( *m_xSaveInListBox );
 }
 
 SvxEventConfigPage::~SvxEventConfigPage()
 {
     disposeOnce();
-}
-
-void SvxEventConfigPage::dispose()
-{
-    // need to delete the user data
-    SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
-    SvTreeListEntry* pE = rListBox.GetEntry( 0 );
-    while( pE )
-    {
-        OUString const * pEventName = static_cast<OUString const *>(pE->GetUserData());
-        delete pEventName;
-        pE->SetUserData(nullptr);
-        pE = pE->NextSibling();
-    }
-    m_pSaveInListBox.clear();
-    SvxMacroTabPage_::dispose();
 }
 
 void SvxEventConfigPage::ImplInitDocument()
@@ -149,10 +126,9 @@ void SvxEventConfigPage::ImplInitDocument()
             m_xDocumentModifiable.set(xModel, css::uno::UNO_QUERY);
 
             OUString aTitle = ::comphelper::DocumentInfo::getDocumentTitle( xModel );
-            const sal_Int32 nPos = m_pSaveInListBox->InsertEntry( aTitle );
 
-            m_pSaveInListBox->SetEntryData( nPos, new bool(false) );
-            m_pSaveInListBox->SelectEntryPos( nPos );
+            m_xSaveInListBox->append(OUString::boolean(false), aTitle);
+            m_xSaveInListBox->set_active(m_xSaveInListBox->get_count() - 1);
         }
     }
     catch( const uno::Exception& )
@@ -161,13 +137,12 @@ void SvxEventConfigPage::ImplInitDocument()
     }
 }
 
-IMPL_LINK_NOARG( SvxEventConfigPage, SelectHdl_Impl, ListBox&, void )
+IMPL_LINK_NOARG( SvxEventConfigPage, SelectHdl_Impl, weld::ComboBox&, void )
 {
-    bool* bApp = static_cast<bool*>(m_pSaveInListBox->GetEntryData(
-            m_pSaveInListBox->GetSelectedEntryPos()));
+    bool bApp = m_xSaveInListBox->get_active_id().toBoolean();
 
-    mpImpl->pEventLB->SetUpdateMode( false );
-    if ( *bApp )
+    mpImpl->xEventLB->freeze();
+    if (bApp)
     {
         SetReadOnly( false );
         SvxMacroTabPage_::DisplayAppEvents( true );
@@ -199,7 +174,7 @@ IMPL_LINK_NOARG( SvxEventConfigPage, SelectHdl_Impl, ListBox&, void )
         SvxMacroTabPage_::DisplayAppEvents( false );
     }
 
-    mpImpl->pEventLB->SetUpdateMode( true );
+    mpImpl->xEventLB->thaw();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -198,7 +198,7 @@ static VclPtr<SfxTabPage> CreateSvxToolbarConfigPage( TabPageParent pParent, con
 
 static VclPtr<SfxTabPage> CreateSvxEventConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SvxEventConfigPage>::Create( pParent.pParent, *rSet, SvxEventConfigPage::EarlyInit() );
+    return VclPtr<SvxEventConfigPage>::Create(pParent, *rSet, SvxEventConfigPage::EarlyInit());
 }
 
 /******************************************************************************

@@ -186,9 +186,6 @@
     <glade-widget-class title="SwDBTreeList" name="swlo-SwDBTreeList"
                         generic-name="SwDBTreeList" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Macro EventListBox" name="cuilo-MacroEventListBox"
-                        generic-name="Macro EventListBox" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="ConfigGroup ListBox" name="cuilo-SfxConfigGroupListBox"
                         generic-name="ConfigGroup ListBox" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
