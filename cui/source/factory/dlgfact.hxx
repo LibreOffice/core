@@ -821,7 +821,7 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateScriptErrorDialog(const css::uno::Any& rException) override;
 
     virtual VclPtr<VclAbstractDialog>  CreateSvxMacroAssignDlg(
-                vcl::Window* _pParent,
+                weld::Window* _pParent,
                 const css::uno::Reference< css::frame::XFrame >& _rxDocumentFrame,
                 const bool _bUnoDialogMode,
                 const css::uno::Reference< css::container::XNameReplace >& _rxEvents,

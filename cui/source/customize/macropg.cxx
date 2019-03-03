@@ -30,9 +30,10 @@
 #include <sfx2/objsh.hxx>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <dialmgr.hxx>
-#include <cfgutil.hxx>
+#include <bitmaps.hlst>
 #include <cfg.hxx>
+#include <cfgutil.hxx>
+#include <dialmgr.hxx>
 #include <helpids.h>
 #include <headertablistbox.hxx>
 #include "macropg_impl.hxx"
@@ -51,147 +52,12 @@ using namespace ::com::sun::star::uno;
 static const char aVndSunStarUNO[] = "vnd.sun.star.UNO:";
 
 SvxMacroTabPage_Impl::SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet )
-    : pAssignPB(nullptr)
-    , pAssignComponentPB(nullptr)
-    , pDeletePB(nullptr)
-    , pEventLB(nullptr)
-    , bReadOnly(false)
+    : bReadOnly(false)
     , bIDEDialogMode(false)
 {
     const SfxPoolItem* pItem;
     if ( SfxItemState::SET == rAttrSet.GetItemState( SID_ATTR_MACROITEM, false, &pItem ) )
         bIDEDialogMode = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-}
-
-// attention, this array is indexed directly (0, 1, ...) in the code
-static const long nTabs[] =
-{
-    0, 90
-};
-
-#define TAB_WIDTH_MIN        10
-
-// IDs for items in HeaderBar of EventLB
-#define    ITEMID_EVENT        1
-#define    ITEMID_ASSMACRO        2
-
-
-#define LB_MACROS_ITEMPOS    2
-
-
-IMPL_LINK( MacroEventListBox, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
-{
-    DBG_ASSERT( pBar == maHeaderBar.get(), "*MacroEventListBox::HeaderEndDrag_Impl: something is wrong here..." );
-
-    if( !maHeaderBar->GetCurItemId() )
-        return;
-
-    if( !maHeaderBar->IsItemMode() )
-    {
-        Size    aSz;
-        sal_uInt16    _nTabs = maHeaderBar->GetItemCount();
-        long    nWidth = maHeaderBar->GetItemSize( ITEMID_EVENT );
-        long    nBarWidth = maHeaderBar->GetSizePixel().Width();
-
-        if( nWidth < TAB_WIDTH_MIN )
-            maHeaderBar->SetItemSize( ITEMID_EVENT, TAB_WIDTH_MIN );
-        else if( ( nBarWidth - nWidth ) < TAB_WIDTH_MIN )
-            maHeaderBar->SetItemSize( ITEMID_EVENT, nBarWidth - TAB_WIDTH_MIN );
-
-        {
-            long nTmpSz = 0;
-            for( sal_uInt16 i = 1 ; i < _nTabs ; ++i )
-            {
-                long _nWidth = maHeaderBar->GetItemSize( i );
-                aSz.setWidth(  _nWidth + nTmpSz );
-                nTmpSz += _nWidth;
-                maListBox->SetTab( i, PixelToLogic( aSz, MapMode( MapUnit::MapAppFont ) ).Width() );
-            }
-        }
-    }
-}
-
-bool MacroEventListBox::EventNotify( NotifyEvent& rNEvt )
-{
-    bool bRet = Control::EventNotify(rNEvt);
-
-    if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
-    {
-        if ( rNEvt.GetWindow() != maListBox.get() )
-            if (maListBox)
-                maListBox->GrabFocus();
-    }
-
-    return bRet;
-}
-
-MacroEventListBox::MacroEventListBox( vcl::Window* pParent, WinBits nStyle )
-    : Control( pParent, nStyle )
-    , maHeaderBar( VclPtr<HeaderBar>::Create( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER ) )
-    , maListBox( VclPtr<SvHeaderTabListBox>::Create( this, WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ) )
-{
-    maListBox->SetHelpId( HID_MACRO_HEADERTABLISTBOX );
-
-    // enable the cell focus to show visible focus
-    maListBox->EnableCellFocus();
-}
-
-MacroEventListBox::~MacroEventListBox()
-{
-    disposeOnce();
-}
-
-void MacroEventListBox::dispose()
-{
-    maHeaderBar.disposeAndClear();
-    maListBox.disposeAndClear();
-    Control::dispose();
-}
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(MacroEventListBox, WB_TABSTOP)
-
-Size MacroEventListBox::GetOptimalSize() const
-{
-    return LogicToPixel(Size(192, 72), MapMode(MapUnit::MapAppFont ));
-}
-
-void MacroEventListBox::Resize()
-{
-    Control::Resize();
-
-    // calc pos and size of header bar
-    Point    aPnt( 0, 0 );
-    Size    aSize( maHeaderBar->CalcWindowSizePixel() );
-    Size    aCtrlSize( GetOutputSizePixel() );
-    aSize.setWidth( aCtrlSize.Width() );
-    maHeaderBar->SetPosSizePixel( aPnt, aSize );
-
-    // calc pos and size of ListBox
-    aPnt.AdjustY(aSize.Height() );
-    aSize.setHeight( aCtrlSize.Height() - aSize.Height() );
-    maListBox->SetPosSizePixel( aPnt, aSize );
-}
-
-void MacroEventListBox::ConnectElements()
-{
-    Resize();
-
-    // set handler
-    maHeaderBar->SetEndDragHdl( LINK( this, MacroEventListBox, HeaderEndDrag_Impl ) );
-
-    maListBox->InitHeaderBar( maHeaderBar.get() );
-}
-
-void MacroEventListBox::Show()
-{
-    maListBox->Show();
-    maHeaderBar->Show();
-}
-
-void MacroEventListBox::Enable()
-{
-    maListBox->Enable();
-    maHeaderBar->Enable();
 }
 
 CuiMacroEventListBox::CuiMacroEventListBox(std::unique_ptr<weld::TreeView> xTreeView)
@@ -210,23 +76,22 @@ CuiMacroEventListBox::~CuiMacroEventListBox()
 //     and it is not read only
 void SvxMacroTabPage_::EnableButtons()
 {
-    const SvTreeListEntry* pE = mpImpl->pEventLB->GetListBox().FirstSelected();
-    if ( pE )
+    int nEvent = mpImpl->xEventLB->get_selected_index();
+    if (nEvent != -1)
     {
-        mpImpl->pDeletePB->Enable( !mpImpl->bReadOnly );
-
-        mpImpl->pAssignPB->Enable( !mpImpl->bReadOnly );
-        if( mpImpl->pAssignComponentPB )
-            mpImpl->pAssignComponentPB->Enable( !mpImpl->bReadOnly );
+        mpImpl->xDeletePB->set_sensitive( !mpImpl->bReadOnly );
+        mpImpl->xAssignPB->set_sensitive( !mpImpl->bReadOnly );
+        if( mpImpl->xAssignComponentPB )
+            mpImpl->xAssignComponentPB->set_sensitive( !mpImpl->bReadOnly );
     }
 }
 
-SvxMacroTabPage_::SvxMacroTabPage_(vcl::Window* pParent, const OString& rID,
-    const OUString& rUIXMLDescription, const SfxItemSet& rAttrSet)
-    : SfxTabPage( pParent, rID, rUIXMLDescription, &rAttrSet ),
-    bDocModified(false),
-    bAppEvents(false),
-    bInitialized(false)
+SvxMacroTabPage_::SvxMacroTabPage_(TabPageParent pParent, const OUString& rUIXMLDescription,
+    const OString& rID, const SfxItemSet& rAttrSet)
+    : SfxTabPage(pParent, rUIXMLDescription, rID, &rAttrSet)
+    , bDocModified(false)
+    , bAppEvents(false)
+    , bInitialized(false)
 {
     mpImpl.reset( new SvxMacroTabPage_Impl( rAttrSet ) );
 }
@@ -425,66 +290,44 @@ bool SvxMacroTabPage_::IsReadOnly() const
     return mpImpl->bReadOnly;
 }
 
-
-class IconLBoxString : public SvLBoxString
+namespace
 {
-    Image* m_pMacroImg;
-    Image* m_pComponentImg;
-
-public:
-    IconLBoxString( const OUString& sText, Image* pMacroImg, Image* pComponentImg );
-    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
-};
-
-
-IconLBoxString::IconLBoxString( const OUString& sText,
-    Image* pMacroImg, Image* pComponentImg )
-        : SvLBoxString( sText )
-        , m_pMacroImg( pMacroImg )
-        , m_pComponentImg( pComponentImg )
-{
-}
-
-
-void IconLBoxString::Paint(const Point& aPos, SvTreeListBox& /*aDevice*/, vcl::RenderContext& rRenderContext,
-                           const SvViewDataEntry* /*pView*/, const SvTreeListEntry& /*rEntry*/)
-{
-    OUString aURL(GetText());
-    if (!aURL.isEmpty())
+    OUString GetEventDisplayText(const OUString &rURL)
     {
-        sal_Int32 nIndex = aURL.indexOf(aVndSunStarUNO);
+        if (rURL.isEmpty())
+            return OUString();
+        sal_Int32 nIndex = rURL.indexOf(aVndSunStarUNO);
         bool bUNO = nIndex == 0;
-
-        const Image* pImg = bUNO ? m_pComponentImg : m_pMacroImg;
-        rRenderContext.DrawImage(aPos, *pImg);
-
         OUString aPureMethod;
         if (bUNO)
         {
-            aPureMethod = aURL.copy(strlen(aVndSunStarUNO));
+            aPureMethod = rURL.copy(strlen(aVndSunStarUNO));
         }
         else
         {
-            aPureMethod = aURL.copy(strlen("vnd.sun.star.script:"));
+            aPureMethod = rURL.copy(strlen("vnd.sun.star.script:"));
             aPureMethod = aPureMethod.copy( 0, aPureMethod.indexOf( '?' ) );
         }
+        return aPureMethod;
+    }
 
-        Point aPnt(aPos);
-        aPnt.AdjustX(20 );
-        rRenderContext.DrawText(aPnt, aPureMethod);
+    OUString GetEventDisplayImage(const OUString &rURL)
+    {
+        if (rURL.isEmpty())
+            return OUString();
+        sal_Int32 nIndex = rURL.indexOf(aVndSunStarUNO);
+        bool bUNO = nIndex == 0;
+        return bUNO ? OUString(RID_SVXBMP_COMPONENT) : OUString(RID_SVXBMP_MACRO);
     }
 }
-
 
 // displays the app events if appEvents=true, otherwise displays the doc events
 void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
 {
     bAppEvents = appEvents;
 
-    SvHeaderTabListBox&        rListBox = mpImpl->pEventLB->GetListBox();
-    mpImpl->pEventLB->SetUpdateMode( false );
-    rListBox.Clear();
+    mpImpl->xEventLB->freeze();
+    mpImpl->xEventLB->clear();
     EventsHash* eventsHash;
     Reference< container::XNameReplace> nameReplace;
     if(bAppEvents)
@@ -526,77 +369,68 @@ void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
         OUString eventURL = h_it->second.second;
         OUString displayName(CuiResId(displayableEvent.pEventResourceID));
 
-        displayName += "\t";
-
-        SvTreeListEntry*    _pE = rListBox.InsertEntry( displayName );
-        OUString* pEventName = new OUString( sEventName );
-        _pE->SetUserData( static_cast<void*>(pEventName) );
-        OUString sNew( eventURL );
-        _pE->ReplaceItem(std::make_unique<IconLBoxString>(sNew, &mpImpl->aMacroImg, &mpImpl->aComponentImg),
-            LB_MACROS_ITEMPOS );
-        rListBox.GetModel()->InvalidateEntry( _pE );
-        rListBox.Select( _pE );
-        rListBox.MakeVisible( _pE );
+        int nRow = mpImpl->xEventLB->n_children();
+        mpImpl->xEventLB->append(sEventName, displayName);
+        mpImpl->xEventLB->set_image(nRow, GetEventDisplayImage(eventURL), 1);
+        mpImpl->xEventLB->set_text(nRow, GetEventDisplayText(eventURL), 2);
     }
 
-    SvTreeListEntry* pE = rListBox.GetEntry(0);
-    if( pE )
+    mpImpl->xEventLB->thaw();
+
+    if (mpImpl->xEventLB->n_children())
     {
-        rListBox.Select( pE );
-        rListBox.MakeVisible( pE );
+        mpImpl->xEventLB->select(0);
+        mpImpl->xEventLB->scroll_to_row(0);
     }
 
-    rListBox.SetUpdateMode( true );
     EnableButtons();
 }
 
 // select event handler on the listbox
-IMPL_LINK_NOARG( SvxMacroTabPage_, SelectEvent_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG( SvxMacroTabPage_, SelectEvent_Impl, weld::TreeView&, void)
 {
-    SvHeaderTabListBox&        rListBox = mpImpl->pEventLB->GetListBox();
-    SvTreeListEntry*           pE = rListBox.FirstSelected();
+    int nEntry = mpImpl->xEventLB->get_selected_index();
 
-    if( !pE || LISTBOX_ENTRY_NOTFOUND == rListBox.GetModel()->GetAbsPos( pE ) )
+    if (nEntry == -1)
     {
-        DBG_ASSERT( pE, "Where does the empty entry come from?" );
+        DBG_ASSERT(false, "Where does the empty entry come from?" );
         return;
     }
 
     EnableButtons();
 }
 
-IMPL_LINK( SvxMacroTabPage_, AssignDeleteHdl_Impl, Button*, pBtn, void )
+IMPL_LINK( SvxMacroTabPage_, AssignDeleteHdl_Impl, weld::Button&, rBtn, void )
 {
-    GenericHandler_Impl( this, static_cast<PushButton*>(pBtn) );
+    GenericHandler_Impl(this, &rBtn);
 }
 
-IMPL_LINK_NOARG( SvxMacroTabPage_, DoubleClickHdl_Impl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG( SvxMacroTabPage_, DoubleClickHdl_Impl, weld::TreeView&, void)
 {
-    GenericHandler_Impl( this, nullptr );
-    return false;
+    GenericHandler_Impl(this, nullptr);
 }
 
 // handler for double click on the listbox, and for the assign/delete buttons
-void SvxMacroTabPage_::GenericHandler_Impl( SvxMacroTabPage_* pThis, PushButton* pBtn )
+void SvxMacroTabPage_::GenericHandler_Impl(SvxMacroTabPage_* pThis, weld::Button* pBtn)
 {
     SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl.get();
-    SvHeaderTabListBox& rListBox = pImpl->pEventLB->GetListBox();
-    SvTreeListEntry* pE = rListBox.FirstSelected();
-    if( !pE || LISTBOX_ENTRY_NOTFOUND == rListBox.GetModel()->GetAbsPos( pE ) )
+    weld::TreeView& rListBox = *pImpl->xEventLB;
+    int nEntry = rListBox.get_selected_index();
+    if (nEntry == -1)
     {
-        DBG_ASSERT( pE, "Where does the empty entry come from?" );
+        DBG_ASSERT(false, "Where does the empty entry come from?");
         return;
     }
 
-    const bool bAssEnabled = pBtn != pImpl->pDeletePB && pImpl->pAssignPB->IsEnabled();
+    const bool bAssEnabled = pBtn != pImpl->xDeletePB.get() && pImpl->xAssignPB->get_sensitive();
 
-    OUString* pEventName = static_cast<OUString*>(pE->GetUserData());
+    OUString sEventName = rListBox.get_id(nEntry);
 
     OUString sEventURL;
     OUString sEventType;
     if(pThis->bAppEvents)
     {
-        EventsHash::iterator h_it = pThis->m_appEventsHash.find( *pEventName );
+        EventsHash::iterator h_it = pThis->m_appEventsHash.find(sEventName);
         if(h_it != pThis->m_appEventsHash.end() )
         {
             sEventType = h_it->second.first;
@@ -605,7 +439,7 @@ void SvxMacroTabPage_::GenericHandler_Impl( SvxMacroTabPage_* pThis, PushButton*
     }
     else
     {
-        EventsHash::iterator h_it = pThis->m_docEventsHash.find( *pEventName );
+        EventsHash::iterator h_it = pThis->m_docEventsHash.find(sEventName);
         if(h_it != pThis->m_docEventsHash.end() )
         {
             sEventType = h_it->second.first;
@@ -615,7 +449,7 @@ void SvxMacroTabPage_::GenericHandler_Impl( SvxMacroTabPage_* pThis, PushButton*
 
     bool bDoubleClick = (pBtn == nullptr);
     bool bUNOAssigned = sEventURL.startsWith( aVndSunStarUNO );
-    if( pBtn == pImpl->pDeletePB )
+    if( pBtn == pImpl->xDeletePB.get() )
     {
         // delete pressed
         sEventType =  "Script" ;
@@ -624,7 +458,7 @@ void SvxMacroTabPage_::GenericHandler_Impl( SvxMacroTabPage_* pThis, PushButton*
             pThis->bDocModified = true;
     }
     else if (   (   ( pBtn != nullptr )
-                &&  ( pBtn == pImpl->pAssignComponentPB )
+                &&  ( pBtn == pImpl->xAssignComponentPB.get() )
                 )
             ||  (   bDoubleClick
                 &&  bUNOAssigned
@@ -659,26 +493,22 @@ void SvxMacroTabPage_::GenericHandler_Impl( SvxMacroTabPage_* pThis, PushButton*
     // update the hashes
     if(pThis->bAppEvents)
     {
-        EventsHash::iterator h_it = pThis->m_appEventsHash.find( *pEventName );
+        EventsHash::iterator h_it = pThis->m_appEventsHash.find(sEventName);
         h_it->second.first = sEventType;
         h_it->second.second = sEventURL;
     }
     else
     {
-        EventsHash::iterator h_it = pThis->m_docEventsHash.find( *pEventName );
+        EventsHash::iterator h_it = pThis->m_docEventsHash.find(sEventName);
         h_it->second.first = sEventType;
         h_it->second.second = sEventURL;
     }
 
-    // update the listbox entry
-    pImpl->pEventLB->SetUpdateMode( false );
-    pE->ReplaceItem(std::make_unique<IconLBoxString>(sEventURL, &pImpl->aMacroImg, &pImpl->aComponentImg),
-        LB_MACROS_ITEMPOS );
+    rListBox.set_image(nEntry, GetEventDisplayImage(sEventURL), 1);
+    rListBox.set_text(nEntry, GetEventDisplayText(sEventURL), 2);
 
-    rListBox.GetModel()->InvalidateEntry( pE );
-    rListBox.Select( pE );
-    rListBox.MakeVisible( pE );
-    rListBox.SetUpdateMode( true );
+    rListBox.select(nEntry );
+    rListBox.scroll_to_row(nEntry);
 
     pThis->EnableButtons();
 }
@@ -690,34 +520,21 @@ void SvxMacroTabPage_::InitAndSetHandler( const Reference< container::XNameRepla
     m_xAppEvents = xAppEvents;
     m_xDocEvents = xDocEvents;
     m_xModifiable = xModifiable;
-    SvHeaderTabListBox&    rListBox = mpImpl->pEventLB->GetListBox();
-    HeaderBar&             rHeaderBar = mpImpl->pEventLB->GetHeaderBar();
-    Link<Button*,void>     aLnk(LINK(this, SvxMacroTabPage_, AssignDeleteHdl_Impl ));
-    mpImpl->pDeletePB->SetClickHdl(    aLnk );
-    mpImpl->pAssignPB->SetClickHdl(    aLnk );
-    if( mpImpl->pAssignComponentPB )
-        mpImpl->pAssignComponentPB->SetClickHdl( aLnk );
-    rListBox.SetDoubleClickHdl( LINK(this, SvxMacroTabPage_, DoubleClickHdl_Impl ) );
+    Link<weld::Button&,void>     aLnk(LINK(this, SvxMacroTabPage_, AssignDeleteHdl_Impl ));
+    mpImpl->xDeletePB->connect_clicked(aLnk);
+    mpImpl->xAssignPB->connect_clicked(aLnk);
+    if( mpImpl->xAssignComponentPB )
+        mpImpl->xAssignComponentPB->connect_clicked( aLnk );
+    mpImpl->xEventLB->connect_row_activated( LINK(this, SvxMacroTabPage_, DoubleClickHdl_Impl ) );
+    mpImpl->xEventLB->connect_changed( LINK( this, SvxMacroTabPage_, SelectEvent_Impl ));
 
-    rListBox.SetSelectHdl( LINK( this, SvxMacroTabPage_, SelectEvent_Impl ));
+    std::vector<int> aWidths;
+    aWidths.push_back(mpImpl->xEventLB->get_approximate_digit_width() * 32);
+    aWidths.push_back(mpImpl->xEventLB->get_checkbox_column_width());
+    mpImpl->xEventLB->set_column_fixed_widths(aWidths);
 
-    rListBox.SetSelectionMode( SelectionMode::Single );
-    rListBox.SetTabs( SAL_N_ELEMENTS(nTabs), nTabs );
-    Size aSize( nTabs[ 1 ], 0 );
-    rHeaderBar.InsertItem( ITEMID_EVENT, mpImpl->sStrEvent, LogicToPixel( aSize, MapMode( MapUnit::MapAppFont ) ).Width() );
-    aSize.setWidth( 1764 );        // don't know what, so 42^2 is best to use...
-    rHeaderBar.InsertItem( ITEMID_ASSMACRO, mpImpl->sAssignedMacro, LogicToPixel( aSize, MapMode( MapUnit::MapAppFont ) ).Width() );
-    rListBox.SetSpaceBetweenEntries( 0 );
-
-    mpImpl->pEventLB->Show();
-    mpImpl->pEventLB->ConnectElements();
-
-    long nMinLineHeight = mpImpl->aMacroImg.GetSizePixel().Height() + 2;
-    if( nMinLineHeight > mpImpl->pEventLB->GetListBox().GetEntryHeight() )
-        mpImpl->pEventLB->GetListBox().SetEntryHeight(
-            sal::static_int_cast< short >(nMinLineHeight) );
-
-    mpImpl->pEventLB->Enable();
+    mpImpl->xEventLB->show();
+    mpImpl->xEventLB->set_sensitive(true);
 
     if(!m_xAppEvents.is())
     {
@@ -785,45 +602,42 @@ std::pair< OUString, OUString  > SvxMacroTabPage_::GetPairFromAny( const Any& aA
     return std::make_pair( type, url );
 }
 
-SvxMacroTabPage::SvxMacroTabPage(vcl::Window* pParent,
+SvxMacroTabPage::SvxMacroTabPage(TabPageParent pParent,
     const Reference< frame::XFrame >& _rxDocumentFrame,
     const SfxItemSet& rSet,
     Reference< container::XNameReplace > const & xNameReplace,
     sal_uInt16 nSelectedIndex)
-    : SvxMacroTabPage_(pParent, "MacroAssignPage", "cui/ui/macroassignpage.ui", rSet)
+    : SvxMacroTabPage_(pParent, "cui/ui/macroassignpage.ui", "MacroAssignPage", rSet)
 {
-    mpImpl->sStrEvent = get<FixedText>("eventft")->GetText();
-    mpImpl->sAssignedMacro = get<FixedText>("assignft")->GetText();
-    get(mpImpl->pEventLB, "assignments");
-    get(mpImpl->pAssignPB, "assign");
-    get(mpImpl->pDeletePB, "delete");
-    get(mpImpl->pAssignComponentPB, "component");
-    mpImpl->aMacroImg = get<FixedImage>("macroimg")->GetImage();
-    mpImpl->aComponentImg = get<FixedImage>("componentimg")->GetImage();
+    mpImpl->xEventLB = m_xBuilder->weld_tree_view("assignments");
+    mpImpl->xEventLB->set_size_request(mpImpl->xEventLB->get_approximate_digit_width() * 70,
+                                       mpImpl->xEventLB->get_height_rows(9));
+    mpImpl->xAssignPB = m_xBuilder->weld_button("assign");
+    mpImpl->xDeletePB = m_xBuilder->weld_button("delete");
+    mpImpl->xAssignComponentPB = m_xBuilder->weld_button("component");
 
     SetFrame( _rxDocumentFrame );
 
     if( !mpImpl->bIDEDialogMode )
     {
-        mpImpl->pAssignComponentPB->Hide();
-        mpImpl->pAssignComponentPB->Disable();
+        mpImpl->xAssignComponentPB->hide();
+        mpImpl->xAssignComponentPB->set_sensitive(false);
     }
 
     InitResources();
 
     InitAndSetHandler( xNameReplace, Reference< container::XNameReplace>(nullptr), Reference< util::XModifiable >(nullptr));
     DisplayAppEvents(true);
-    SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
-    SvTreeListEntry* pE = rListBox.GetEntry( static_cast<sal_uLong>(nSelectedIndex) );
-    if( pE )
-        rListBox.Select(pE);
+    mpImpl->xEventLB->select(nSelectedIndex);
 }
 
-SvxMacroAssignDlg::SvxMacroAssignDlg( vcl::Window* pParent, const Reference< frame::XFrame >& _rxDocumentFrame, const SfxItemSet& rSet,
-    const Reference< container::XNameReplace >& xNameReplace, sal_uInt16 nSelectedIndex )
+SvxMacroAssignDlg::SvxMacroAssignDlg(weld::Window* pParent, const Reference< frame::XFrame >& _rxDocumentFrame, const SfxItemSet& rSet,
+    const Reference< container::XNameReplace >& xNameReplace, sal_uInt16 nSelectedIndex)
         : SvxMacroAssignSingleTabDialog(pParent, rSet)
 {
-    SetTabPage(VclPtr<SvxMacroTabPage>::Create(get_content_area(), _rxDocumentFrame, rSet, xNameReplace, nSelectedIndex));
+    TabPageParent pPageParent(get_content_area(), this);
+    auto pPage = VclPtr<SvxMacroTabPage>::Create(pPageParent, _rxDocumentFrame, rSet, xNameReplace, nSelectedIndex);
+    SetTabPage(pPage);
 }
 
 IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler, weld::Button&, void)
@@ -859,18 +673,17 @@ AssignComponentDialog::~AssignComponentDialog()
 {
 }
 
-IMPL_LINK_NOARG( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, void )
+IMPL_LINK_NOARG(SvxMacroAssignSingleTabDialog, OKHdl_Impl, weld::Button&, void)
 {
-    GetTabPage()->FillItemSet( nullptr );
-    EndDialog( RET_OK );
+    m_xSfxPage->FillItemSet(nullptr);
+    m_xDialog->response(RET_OK);
 }
 
-
-SvxMacroAssignSingleTabDialog::SvxMacroAssignSingleTabDialog(vcl::Window *pParent,
+SvxMacroAssignSingleTabDialog::SvxMacroAssignSingleTabDialog(weld::Window *pParent,
     const SfxItemSet& rSet)
-    : SfxSingleTabDialog(pParent, rSet, "MacroAssignDialog", "cui/ui/macroassigndialog.ui")
+    : SfxSingleTabDialogController(pParent, rSet, "cui/ui/macroassigndialog.ui", "MacroAssignDialog")
 {
-    GetOKButton()->SetClickHdl( LINK( this, SvxMacroAssignSingleTabDialog, OKHdl_Impl ) );
+    GetOKButton().connect_clicked(LINK(this, SvxMacroAssignSingleTabDialog, OKHdl_Impl));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
