@@ -28,6 +28,12 @@ $(eval $(call gb_Package_add_files,vcl_theme_definitions,$(LIBO_SHARE_FOLDER)/th
 	spinbox-entire.svgx \
 	pushbutton-default.svgx \
 	pushbutton-rollover.svgx \
+	tabitem-first.svgx \
+	tabitem-middle.svgx \
+	tabitem-last.svgx \
+	tabitem-first-selected.svgx \
+	tabitem-middle-selected.svgx \
+	tabitem-last-selected.svgx \
 ))
 
 # vim: set noet sw=4 ts=4:
