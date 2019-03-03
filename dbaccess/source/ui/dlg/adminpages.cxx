@@ -168,11 +168,11 @@ namespace dbaui
         {
             aEnumeration.getDatasourceNames(aOdbcDatasources);
             // execute the select dialog
-            ScopedVclPtrInstance< ODatasourceSelectDialog > aSelector(GetParent(), aOdbcDatasources);
+            ODatasourceSelectDialog aSelector(GetFrameWeld(), aOdbcDatasources);
             if (!_sCurr.isEmpty())
-                aSelector->Select(_sCurr);
-            if ( RET_OK == aSelector->Execute() )
-                _sReturn = aSelector->GetSelected();
+                aSelector.Select(_sCurr);
+            if (RET_OK == aSelector.run())
+                _sReturn = aSelector.GetSelected();
         }
         return true;
     }
