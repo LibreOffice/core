@@ -23,15 +23,14 @@
 #include <vcl/headbar.hxx>
 #include <vcl/svtabbx.hxx>
 
-class CuiMacroEventListBox final
+class MacroEventListBox final
 {
 private:
     std::unique_ptr<weld::TreeView> m_xTreeView;
 public:
-    CuiMacroEventListBox(std::unique_ptr<weld::TreeView> xTreeView);
+    MacroEventListBox(std::unique_ptr<weld::TreeView> xTreeView);
     void set_sensitive(bool bSensitive) { m_xTreeView->set_sensitive(bSensitive); }
     void show() { m_xTreeView->show(); }
-    ~CuiMacroEventListBox();
 
     weld::TreeView& GetListBox()
     {
