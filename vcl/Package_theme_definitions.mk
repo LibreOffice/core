@@ -26,6 +26,8 @@ $(eval $(call gb_Package_add_files,vcl_theme_definitions,$(LIBO_SHARE_FOLDER)/th
 	spinbox-left.svgx \
 	spinbox-right.svgx \
 	spinbox-entire.svgx \
+	pushbutton-default.svgx \
+	pushbutton-rollover.svgx \
 ))
 
 # vim: set noet sw=4 ts=4:
