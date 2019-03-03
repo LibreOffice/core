@@ -173,11 +173,11 @@ bool SvLBoxButtonData::IsRadio() {
 
 
 SvLBoxString::SvLBoxString(const OUString& rStr)
+    : maText(rStr)
 {
-    SetText(rStr);
 }
 
-SvLBoxString::SvLBoxString() : SvLBoxItem()
+SvLBoxString::SvLBoxString()
 {
 }
 
@@ -195,7 +195,7 @@ void SvLBoxString::Paint(
     const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
     Size aSize = GetSize(&rDev, &rEntry);
-    DrawTextFlags nStyle = rDev.IsEnabled() ? DrawTextFlags::NONE : DrawTextFlags::Disable;
+    DrawTextFlags nStyle = (rDev.IsEnabled() && !mbDisabled) ? DrawTextFlags::NONE : DrawTextFlags::Disable;
     if (rDev.IsEntryMnemonicsEnabled())
         nStyle |= DrawTextFlags::Mnemonic;
     if (rDev.TextCenterAndClipEnabled())

@@ -263,7 +263,6 @@ cui/uiconfig/ui/linestyletabpage.ui://GtkSpinButton[@id='NUM_FLD_2'] no-labelled
 cui/uiconfig/ui/linestyletabpage.ui://GtkSpinButton[@id='MTR_FLD_LENGTH_2'] no-labelled-by
 cui/uiconfig/ui/macroselectordialog.ui://GtkLabel[@id='helpmacro'] orphan-label
 cui/uiconfig/ui/macroselectordialog.ui://GtkLabel[@id='helptoolbar'] orphan-label
-cui/uiconfig/ui/macroselectordialog.ui://cuilo-SfxConfigGroupListBox[@id='categories:border'] no-labelled-by
 cui/uiconfig/ui/macroselectordialog.ui://GtkLabel[@id='libraryft'] orphan-label
 cui/uiconfig/ui/macroselectordialog.ui://GtkLabel[@id='categoryft'] orphan-label
 cui/uiconfig/ui/macroselectordialog.ui://cuilo-SfxConfigFunctionListBox[@id='commands:border'] no-labelled-by
