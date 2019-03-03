@@ -368,7 +368,7 @@ bool FileDefinitionWidgetDraw::resolveDefinition(ControlType eType, ControlPart 
     auto const& pPart = m_aWidgetDefinition.getDefinition(eType, ePart);
     if (pPart)
     {
-        auto const& aStates = pPart->getStates(eState, rValue);
+        auto const& aStates = pPart->getStates(eType, eState, rValue);
         if (!aStates.empty())
         {
             // use last defined state

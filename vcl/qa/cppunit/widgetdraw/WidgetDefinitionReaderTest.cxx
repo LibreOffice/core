@@ -56,11 +56,11 @@ void WidgetDefinitionReaderTest::testRead()
 
     // Pushbutton
     {
+        ControlState eState
+            = ControlState::DEFAULT | ControlState::ENABLED | ControlState::ROLLOVER;
         std::vector<std::shared_ptr<vcl::WidgetDefinitionState>> aStates
             = aDefinition.getDefinition(ControlType::Pushbutton, ControlPart::Entire)
-                  ->getStates(ControlState::DEFAULT | ControlState::ENABLED
-                                  | ControlState::ROLLOVER,
-                              ImplControlValue());
+                  ->getStates(ControlType::Pushbutton, eState, ImplControlValue());
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), aStates.size());
 
@@ -74,7 +74,8 @@ void WidgetDefinitionReaderTest::testRead()
     {
         std::vector<std::shared_ptr<vcl::WidgetDefinitionState>> aStates
             = aDefinition.getDefinition(ControlType::Radiobutton, ControlPart::Entire)
-                  ->getStates(ControlState::NONE, ImplControlValue(ButtonValue::On));
+                  ->getStates(ControlType::Radiobutton, ControlState::NONE,
+                              ImplControlValue(ButtonValue::On));
         CPPUNIT_ASSERT_EQUAL(size_t(1), aStates.size());
         CPPUNIT_ASSERT_EQUAL(size_t(2), aStates[0]->mpDrawCommands.size());
     }
@@ -82,7 +83,8 @@ void WidgetDefinitionReaderTest::testRead()
     {
         std::vector<std::shared_ptr<vcl::WidgetDefinitionState>> aStates
             = aDefinition.getDefinition(ControlType::Radiobutton, ControlPart::Entire)
-                  ->getStates(ControlState::NONE, ImplControlValue(ButtonValue::Off));
+                  ->getStates(ControlType::Radiobutton, ControlState::NONE,
+                              ImplControlValue(ButtonValue::Off));
         CPPUNIT_ASSERT_EQUAL(size_t(1), aStates.size());
         CPPUNIT_ASSERT_EQUAL(size_t(1), aStates[0]->mpDrawCommands.size());
     }
