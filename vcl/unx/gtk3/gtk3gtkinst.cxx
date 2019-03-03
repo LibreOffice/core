@@ -6000,7 +6000,7 @@ public:
             col = m_nTextCol;
         else
             col = get_model_col(col);
-        return set(pos, col, rText);
+        set(pos, col, rText);
     }
 
     virtual bool get_toggle(int pos, int col) const override
@@ -6013,7 +6013,17 @@ public:
         col = get_model_col(col);
         // checkbuttons are invisible until toggled on or off
         set(pos, m_aToggleVisMap[col], true);
-        return set(pos, col, bOn);
+        set(pos, col, bOn);
+    }
+
+    using GtkInstanceWidget::set_sensitive;
+
+    virtual void set_sensitive(int pos, bool bSensitive, int col) override
+    {
+        col = get_model_col(col);
+        ++col; // skip over id column
+        col += m_aToggleVisMap.size(); // skip over toggle columns
+        set(pos, col, bSensitive);
     }
 
     virtual void set_image(int pos, const OUString& rImage, int col) override

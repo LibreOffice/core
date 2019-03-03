@@ -2344,8 +2344,10 @@ public:
 
     virtual void remove(int pos) override
     {
+        disable_notify_events();
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
         m_xTreeView->RemoveEntry(pEntry);
+        enable_notify_events();
     }
 
     virtual int find_text(const OUString& rText) const override
@@ -2500,6 +2502,41 @@ public:
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
         set_text(pEntry, rText, col);
+    }
+
+    void set_sensitive(SvTreeListEntry* pEntry, bool bSensitive, int col)
+    {
+        if (col == -1)
+        {
+            const sal_uInt16 nCount = pEntry->ItemCount();
+            for (sal_uInt16 nCur = 0; nCur < nCount; ++nCur)
+            {
+                SvLBoxItem& rItem = pEntry->GetItem(nCur);
+                if (rItem.GetType() == SvLBoxItemType::String)
+                {
+                    rItem.Enable(bSensitive);
+                    m_xTreeView->ModelHasEntryInvalidated(pEntry);
+                    break;
+                }
+            }
+            return;
+        }
+
+        ++col; //skip dummy/expander column
+
+        assert(col >= 0 && static_cast<size_t>(col) < pEntry->ItemCount());
+        SvLBoxItem& rItem = pEntry->GetItem(col);
+        rItem.Enable(bSensitive);
+
+        m_xTreeView->ModelHasEntryInvalidated(pEntry);
+    }
+
+    using SalInstanceWidget::set_sensitive;
+
+    virtual void set_sensitive(int pos, bool bSensitive, int col) override
+    {
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+        set_sensitive(pEntry, bSensitive, col);
     }
 
     virtual bool get_toggle(int pos, int col) const override
@@ -2693,8 +2730,10 @@ public:
 
     virtual void remove(const weld::TreeIter& rIter) override
     {
+        disable_notify_events();
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
         m_xTreeView->RemoveEntry(rVclIter.iter);
+        enable_notify_events();
     }
 
     virtual void select(const weld::TreeIter& rIter) override

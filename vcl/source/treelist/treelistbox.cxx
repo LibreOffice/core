@@ -295,6 +295,7 @@ long SvLBoxTab::CalcOffset( long nItemWidth, long nTabWidth )
 
 
 SvLBoxItem::SvLBoxItem()
+    : mbDisabled(false)
 {
 }
 
