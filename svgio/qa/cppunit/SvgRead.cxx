@@ -40,23 +40,26 @@
 #include <svggnode.hxx>
 
 #include <basegfx/DrawCommands.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 namespace
 {
 using namespace css;
 
-class Test : public test::BootstrapFixture
+class TestParsing : public test::BootstrapFixture
 {
-    void test();
+    void testSimpleRectangle();
+    void testPath();
     uno::Reference<io::XInputStream> parseSvg(const OUString& aSource);
 
 public:
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(test);
+    CPPUNIT_TEST_SUITE(TestParsing);
+    CPPUNIT_TEST(testSimpleRectangle);
+    CPPUNIT_TEST(testPath);
     CPPUNIT_TEST_SUITE_END();
 };
 
-uno::Reference<io::XInputStream> Test::parseSvg(const OUString& aSource)
+uno::Reference<io::XInputStream> TestParsing::parseSvg(const OUString& aSource)
 {
     SvFileStream aFileStream(aSource, StreamMode::READ);
     std::size_t nSize = aFileStream.remainingSize();
@@ -70,7 +73,7 @@ uno::Reference<io::XInputStream> Test::parseSvg(const OUString& aSource)
     return aInputStream;
 }
 
-void Test::test()
+void TestParsing::testSimpleRectangle()
 {
     OUString aSvgFile = "/svgio/qa/cppunit/data/Rect.svg";
     OUString aUrl = m_directories.getURLFromSrc(aSvgFile);
@@ -84,18 +87,56 @@ void Test::test()
 
     uno::Any aAny = xSvgParser->getDrawCommands(xStream, aPath);
     CPPUNIT_ASSERT(aAny.has<sal_uInt64>());
-    gfx::DrawRoot* pDrawRoot = reinterpret_cast<gfx::DrawRoot*>(aAny.get<sal_uInt64>());
+    auto* pDrawRoot = reinterpret_cast<gfx::DrawRoot*>(aAny.get<sal_uInt64>());
+
+    basegfx::B2DRange aSurfaceRectangle(0, 0, 120, 120);
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDrawRoot->maChildren.size());
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(0, 0, 120, 120), pDrawRoot->maRectangle);
+    CPPUNIT_ASSERT_EQUAL(aSurfaceRectangle, pDrawRoot->maRectangle);
 
+    auto* pDrawBase = pDrawRoot->maChildren[0].get();
     CPPUNIT_ASSERT_EQUAL(gfx::DrawCommandType::Rectangle, pDrawRoot->maChildren[0]->getType());
-    CPPUNIT_ASSERT_EQUAL(
-        basegfx::B2DRange(10, 10, 110, 110),
-        static_cast<gfx::DrawRectangle*>(pDrawRoot->maChildren[0].get())->maRectangle);
+    auto* pDrawRect = static_cast<gfx::DrawRectangle*>(pDrawBase);
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(10, 10, 110, 110), pDrawRect->maRectangle);
+    CPPUNIT_ASSERT_EQUAL(3.0, pDrawRect->mnStrokeWidth);
+    CPPUNIT_ASSERT(bool(pDrawRect->mpStrokeColor));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xff0000), sal_Int32(Color(*pDrawRect->mpStrokeColor)));
+    CPPUNIT_ASSERT(bool(pDrawRect->mpFillColor));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00cc00), sal_Int32(Color(*pDrawRect->mpFillColor)));
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
+void TestParsing::testPath()
+{
+    OUString aSvgFile = "/svgio/qa/cppunit/data/path.svg";
+    OUString aUrl = m_directories.getURLFromSrc(aSvgFile);
+    OUString aPath = m_directories.getPathFromSrc(aSvgFile);
+
+    uno::Reference<io::XInputStream> xStream = parseSvg(aUrl);
+    CPPUNIT_ASSERT(xStream.is());
+
+    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    const uno::Reference<graphic::XSvgParser> xSvgParser = graphic::SvgTools::create(xContext);
+
+    uno::Any aAny = xSvgParser->getDrawCommands(xStream, aPath);
+    CPPUNIT_ASSERT(aAny.has<sal_uInt64>());
+    auto* pDrawRoot = reinterpret_cast<gfx::DrawRoot*>(aAny.get<sal_uInt64>());
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDrawRoot->maChildren.size());
+
+    auto* pDrawBase = pDrawRoot->maChildren[0].get();
+    CPPUNIT_ASSERT_EQUAL(gfx::DrawCommandType::Path, pDrawBase->getType());
+    auto* pDrawPath = static_cast<gfx::DrawPath*>(pDrawBase);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("m1 1h42v24h-42v-24z"),
+                         basegfx::utils::exportToSvgD(pDrawPath->maPolyPolygon, true, true, false));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDrawPath->mnStrokeWidth);
+    CPPUNIT_ASSERT(bool(pDrawPath->mpStrokeColor));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), sal_Int32(Color(*pDrawPath->mpStrokeColor)));
+    CPPUNIT_ASSERT(bool(pDrawPath->mpFillColor));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x007aff), sal_Int32(Color(*pDrawPath->mpFillColor)));
+}
+
+CPPUNIT_TEST_SUITE_REGISTRATION(TestParsing);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
