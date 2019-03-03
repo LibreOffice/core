@@ -71,6 +71,9 @@
 #define RID_SVXBMP_LEGTYP2              "svx/res/legtyp2.png"
 #define RID_SVXBMP_LEGTYP3              "svx/res/legtyp3.png"
 
+#define RID_SVXBMP_COMPONENT            "res/component_16.png"
+#define RID_SVXBMP_MACRO                "svx/res/id018.png"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

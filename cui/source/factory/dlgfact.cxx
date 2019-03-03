@@ -1372,41 +1372,28 @@ VclPtr<AbstractSvxPostItDialog> AbstractDialogFactory_Impl::CreateSvxPostItDialo
 class SvxMacroAssignDialog : public VclAbstractDialog
 {
 public:
-    SvxMacroAssignDialog( vcl::Window* _pParent, const Reference< XFrame >& _rxDocumentFrame, const bool _bUnoDialogMode,
+    SvxMacroAssignDialog( weld::Window* _pParent, const Reference< XFrame >& _rxDocumentFrame, const bool _bUnoDialogMode,
             const Reference< XNameReplace >& _rxEvents, const sal_uInt16 _nInitiallySelectedEvent )
         :m_aItems( SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM>{} )
     {
         m_aItems.Put( SfxBoolItem( SID_ATTR_MACROITEM, _bUnoDialogMode ) );
-        m_pDialog.reset( VclPtr<SvxMacroAssignDlg>::Create( _pParent, _rxDocumentFrame, m_aItems, _rxEvents, _nInitiallySelectedEvent ) );
+        m_xDialog.reset(new SvxMacroAssignDlg(_pParent, _rxDocumentFrame, m_aItems, _rxEvents, _nInitiallySelectedEvent));
     }
 
     virtual short Execute() override;
-    virtual ~SvxMacroAssignDialog() override;
-    virtual void dispose() override;
 
 private:
     SfxItemSet                              m_aItems;
-    VclPtr<SvxMacroAssignDlg >              m_pDialog;
+    std::unique_ptr<SvxMacroAssignDlg>      m_xDialog;
 };
 
 short SvxMacroAssignDialog::Execute()
 {
-    return m_pDialog->Execute();
-}
-
-SvxMacroAssignDialog::~SvxMacroAssignDialog()
-{
-    disposeOnce();
-}
-
-void SvxMacroAssignDialog::dispose()
-{
-    m_pDialog.clear();
-    VclAbstractDialog::dispose();
+    return m_xDialog->run();
 }
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxMacroAssignDlg(
-    vcl::Window* _pParent, const Reference< XFrame >& _rxDocumentFrame, const bool _bUnoDialogMode,
+    weld::Window* _pParent, const Reference< XFrame >& _rxDocumentFrame, const bool _bUnoDialogMode,
     const Reference< XNameReplace >& _rxEvents, const sal_uInt16 _nInitiallySelectedEvent )
 {
     return VclPtr<SvxMacroAssignDialog>::Create( _pParent, _rxDocumentFrame, _bUnoDialogMode, _rxEvents, _nInitiallySelectedEvent );

@@ -25,14 +25,10 @@ class SvxMacroTabPage_Impl
 public:
     explicit SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet );
 
-    VclPtr<PushButton>                     pAssignPB;
-    VclPtr<PushButton>                     pAssignComponentPB;
-    VclPtr<PushButton>                     pDeletePB;
-    Image                           aMacroImg;
-    Image                           aComponentImg;
-    OUString                        sStrEvent;
-    OUString                        sAssignedMacro;
-    VclPtr<MacroEventListBox>              pEventLB;
+    std::unique_ptr<weld::Button> xAssignPB;
+    std::unique_ptr<weld::Button> xAssignComponentPB;
+    std::unique_ptr<weld::Button> xDeletePB;
+    std::unique_ptr<weld::TreeView> xEventLB;
     bool                        bReadOnly;
     bool                        bIDEDialogMode;
 };

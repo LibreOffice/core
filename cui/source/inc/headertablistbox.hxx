@@ -23,37 +23,6 @@
 #include <vcl/headbar.hxx>
 #include <vcl/svtabbx.hxx>
 
-class MacroEventListBox final : public Control
-{
-private:
-    VclPtr<HeaderBar>               maHeaderBar;
-    VclPtr<SvHeaderTabListBox>      maListBox;
-    DECL_LINK( HeaderEndDrag_Impl, HeaderBar*, void );
-    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
-public:
-    MacroEventListBox( vcl::Window* pParent, WinBits nStyle );
-    virtual ~MacroEventListBox() override;
-    virtual void dispose() override;
-
-    virtual void Resize() override;
-    virtual Size GetOptimalSize() const override;
-
-    SvHeaderTabListBox& GetListBox()
-    {
-        return *maListBox;
-    }
-
-    HeaderBar& GetHeaderBar()
-    {
-        return *maHeaderBar;
-    }
-
-    void                        ConnectElements();/**< should be called after all manipulations on elements are done
-                                                             calcs real sizes depending on sizes of this */
-    void                        Show();    ///< same meaning as Windows::Show()
-    void                        Enable();  ///< same meaning as Windows::Enable()
-};
-
 class CuiMacroEventListBox final
 {
 private:
