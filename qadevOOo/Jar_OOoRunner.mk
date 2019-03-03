@@ -948,7 +948,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScAccessiblePreviewHeaderCell \
     qadevOOo/tests/java/mod/_sc/ScAccessiblePreviewTable \
     qadevOOo/tests/java/mod/_sc/ScAccessibleSpreadsheet \
-    qadevOOo/tests/java/mod/_sc/ScAnnotationObj \
     qadevOOo/tests/java/mod/_sc/ScAnnotationShapeObj \
     qadevOOo/tests/java/mod/_sc/ScAnnotationTextCursor \
     qadevOOo/tests/java/mod/_sc/ScAreaLinkObj \
