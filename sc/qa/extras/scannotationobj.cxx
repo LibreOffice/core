@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xchild.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <test/sheet/xsheetannotation.hxx>
 #include <test/sheet/xsheetannotationshapesupplier.hxx>
 #include <test/text/xsimpletext.hxx>
@@ -30,6 +31,7 @@ namespace sc_apitest
 {
 class ScAnnontationObj : public CalcUnoApiTest,
                          public apitest::XChild,
+                         public apitest::XServiceInfo,
                          public apitest::XSheetAnnotation,
                          public apitest::XSheetAnnotationShapeSupplier,
                          public apitest::XSimpleText,
@@ -48,6 +50,11 @@ public:
 
     // XChild
     CPPUNIT_TEST(testGetSetParent);
+
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
 
     // XSheetAnnotation
     CPPUNIT_TEST(testGetPosition);
@@ -79,6 +86,7 @@ private:
 
 ScAnnontationObj::ScAnnontationObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XServiceInfo("ScAnnotationObj", "com.sun.star.sheet.CellAnnotation")
 {
 }
 
