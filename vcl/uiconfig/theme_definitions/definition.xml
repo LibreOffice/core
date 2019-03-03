@@ -57,10 +57,10 @@
     <pushbutton>
         <part value="Entire">
             <state enabled="any" focused="any" pressed="any" rollover="any" default="any" selected="any" button-value="any">
-                <rect stroke="#007AFF" fill="#FFFFFF" stroke-width="1" rx="7" ry="7" />
+                <external source="pushbutton-default.svgx" />
             </state>
             <state enabled="true" focused="any" pressed="any" rollover="true" default="any" selected="any" button-value="any">
-                <rect stroke="#007AFF" fill="#007AFF" stroke-width="1" rx="7" ry="7" />
+                <external source="pushbutton-rollover.svgx" />
             </state>
         </part>
     </pushbutton>
