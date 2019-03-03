@@ -495,12 +495,9 @@ static void defenv_getRegisteredInterfaces(
     sal_Int32 nPos = 0;
     void ** ppInterfaces = static_cast<void **>((*memAlloc)( nLen * sizeof (void *) ));
 
-    Ptr2ObjectMap::const_iterator iPos( that->aPtr2ObjectMap.begin() );
-    Ptr2ObjectMap::const_iterator const iEnd( that->aPtr2ObjectMap.end() );
-    while (iPos != iEnd)
+    for (const auto& rEntry : that->aPtr2ObjectMap)
     {
-        (*pEnv->acquireInterface)( pEnv, ppInterfaces[nPos++] = (*iPos).first );
-        ++iPos;
+        (*pEnv->acquireInterface)( pEnv, ppInterfaces[nPos++] = rEntry.first );
     }
 
     *pppInterfaces = ppInterfaces;
@@ -711,10 +708,9 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
     ::osl::MutexGuard guard( that->mutex );
 
     Ptr2ObjectMap ptr2obj( that->aPtr2ObjectMap );
-    OId2ObjectMap::const_iterator iPos( that->aOId2ObjectMap.begin() );
-    while (iPos != that->aOId2ObjectMap.end())
+    for (const auto& rEntry : that->aOId2ObjectMap)
     {
-        ObjectEntry * pOEntry = iPos->second;
+        ObjectEntry * pOEntry = rEntry.second;
 
         buf.append( "+ " );
         if (pOEntry->mixedObject)
@@ -757,7 +753,6 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
             }
             writeLine( stream, buf.makeStringAndClear(), pFilter );
         }
-        ++iPos;
     }
     if (! ptr2obj.empty())
         writeLine( stream, "ptr map inconsistency!!!", pFilter );
@@ -893,10 +888,9 @@ EnvironmentsData::~EnvironmentsData()
     ::osl::MutexGuard guard( mutex );
     isDisposing = true;
 
-    for ( OUString2EnvironmentMap::const_iterator iPos( aName2EnvMap.begin() );
-          iPos != aName2EnvMap.end(); ++iPos )
+    for ( const auto& rEntry : aName2EnvMap )
     {
-        uno_Environment * pWeak = iPos->second;
+        uno_Environment * pWeak = rEntry.second;
         uno_Environment * pHard = nullptr;
         (*pWeak->harden)( &pHard, pWeak );
         (*pWeak->releaseWeak)( pWeak );
@@ -982,10 +976,9 @@ void EnvironmentsData::getRegisteredEnvironments(
     sal_Int32 nSize = 0;
 
     // find matching environment
-    for ( OUString2EnvironmentMap::const_iterator iPos( aName2EnvMap.begin() );
-          iPos != aName2EnvMap.end(); ++iPos )
+    for ( const auto& rEntry : aName2EnvMap )
     {
-        uno_Environment * pWeak = iPos->second;
+        uno_Environment * pWeak = rEntry.second;
         if (rEnvDcp.isEmpty() ||
             rEnvDcp == pWeak->pTypeName )
         {
