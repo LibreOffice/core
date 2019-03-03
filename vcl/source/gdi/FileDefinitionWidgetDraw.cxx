@@ -60,6 +60,7 @@ FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
     pSVData->maNWFData.mbCenteredTabs = true;
     pSVData->maNWFData.mbProgressNeedsErase = true;
     pSVData->maNWFData.mnStatusBarLowerRightOffset = 10;
+    pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
 }
 
 bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, ControlPart ePart)
@@ -107,8 +108,8 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
         case ControlType::MenuPopup:
             return false;
         case ControlType::Progress:
-        case ControlType::IntroProgress:
             return true;
+        case ControlType::IntroProgress:
         case ControlType::Tooltip:
             return false;
         case ControlType::WindowBackground:
@@ -399,10 +400,6 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
 
     switch (eType)
     {
-        case ControlType::Generic:
-        {
-        }
-        break;
         case ControlType::Pushbutton:
         {
             /*bool bIsAction = false;
@@ -530,11 +527,11 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         case ControlType::MenuPopup:
             break;
         case ControlType::Progress:
-        case ControlType::IntroProgress:
         {
             bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
         }
         break;
+        case ControlType::IntroProgress:
         case ControlType::Tooltip:
             break;
         case ControlType::WindowBackground:
@@ -693,6 +690,15 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
             rNativeContentRegion = rNativeBoundingRegion;
             return true;
         }
+        case ControlType::Editbox:
+        case ControlType::EditboxNoBorder:
+        case ControlType::MultilineEditbox:
+        {
+            rNativeBoundingRegion = rBoundingControlRegion;
+            rNativeContentRegion = rBoundingControlRegion;
+            return true;
+        }
+
         default:
             break;
     }
