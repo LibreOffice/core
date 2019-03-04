@@ -294,20 +294,13 @@ static bool parseDateTime(const OUString& aString, DateTime& aDateTime)
     if (aDateTimeString.getLength() < 19 || aDateTimeString.getLength() > 20)
         return false;
 
-    sal_Int32 nDateLength = 10;
-    sal_Int32 const nTimeLength = 8;
-
-    OUString aDateString = aDateTimeString.copy(0, nDateLength);
-    OUString aTimeString = aDateTimeString.copy(nDateLength+1, nTimeLength);
-
     sal_Int32 nIndex = 0;
-    sal_Int32 nYear = aDateString.getToken(0, '-', nIndex).toInt32();
-    sal_Int32 nMonth = aDateString.getToken(0, '-', nIndex).toInt32();
-    sal_Int32 nDay = aDateString.getToken(0, '-', nIndex).toInt32();
-    nIndex = 0;
-    sal_Int32 nHour = aTimeString.getToken(0, ':', nIndex).toInt32();
-    sal_Int32 nMinute = aTimeString.getToken(0, ':', nIndex).toInt32();
-    sal_Int32 nSecond = aTimeString.getToken(0, ':', nIndex).toInt32();
+    sal_Int32 nYear = aDateTimeString.getToken(0, '-', nIndex).toInt32();
+    sal_Int32 nMonth = aDateTimeString.getToken(0, '-', nIndex).toInt32();
+    sal_Int32 nDay = aDateTimeString.getToken(0, 'T', nIndex).toInt32();
+    sal_Int32 nHour = aDateTimeString.getToken(0, ':', nIndex).toInt32();
+    sal_Int32 nMinute = aDateTimeString.getToken(0, ':', nIndex).toInt32();
+    sal_Int32 nSecond = aDateTimeString.getToken(0, 'Z', nIndex).toInt32();
 
     Date tmpDate(static_cast<sal_uInt16>(nDay), static_cast<sal_uInt16>(nMonth), static_cast<sal_uInt16>(nYear));
     tools::Time tmpTime(nHour, nMinute, nSecond);
