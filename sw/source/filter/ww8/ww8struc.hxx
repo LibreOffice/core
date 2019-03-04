@@ -592,7 +592,7 @@ public:
 
     sal_uInt16 GetValue() const { return maBits; }
 
-    void SetWWValue(SVBT16 const nVal) { maBits = SVBT16ToShort(nVal); }
+    void SetWWValue(SVBT16 const nVal) { maBits = SVBT16ToUInt16(nVal); }
 
     void SetFore(sal_uInt8 nVal)
     {

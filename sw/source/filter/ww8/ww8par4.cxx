@@ -522,7 +522,7 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
     else
     {
         // start of new revision mark, if not there default to first entry
-        sal_uInt16 nWWAutNo = pSprmCIbstRMark ? SVBT16ToShort(pSprmCIbstRMark) : 0;
+        sal_uInt16 nWWAutNo = pSprmCIbstRMark ? SVBT16ToUInt16(pSprmCIbstRMark) : 0;
         sal_uInt32 nWWDate = pSprmCDttmRMark ? SVBT32ToUInt32(pSprmCDttmRMark): 0;
         DateTime aStamp(msfilter::util::DTTM2DateTime(nWWDate));
         std::size_t nAuthorNo = m_aAuthorInfos[nWWAutNo];

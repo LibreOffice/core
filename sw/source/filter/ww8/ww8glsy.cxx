@@ -144,7 +144,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
             // sttbfglsystyle list that this entry belongs to. Unused at the
             // moment
             const ww::bytes &rData = rExtra[nGlosEntry];
-            sal_uInt16 n = SVBT16ToShort( &(rData[2]) );
+            sal_uInt16 n = SVBT16ToUInt16( &(rData[2]) );
             if(n != 0xFFFF)
             {
                 rBlocks.ClearDoc();

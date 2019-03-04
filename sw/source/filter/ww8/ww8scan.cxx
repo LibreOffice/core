@@ -846,7 +846,7 @@ static sal_uInt8 Get_Byte( sal_uInt8 *& p )
 
 static sal_uInt16 Get_UShort( sal_uInt8 *& p )
 {
-    const sal_uInt16 n = SVBT16ToShort( *reinterpret_cast<SVBT16*>(p) );
+    const sal_uInt16 n = SVBT16ToUInt16( *reinterpret_cast<SVBT16*>(p) );
     p += 2;
     return n;
 }
@@ -986,7 +986,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
         return;
     }
 
-    const sal_uInt16 nPrm = SVBT16ToShort( static_cast<WW8_PCD*>(pData)->prm );
+    const sal_uInt16 nPrm = SVBT16ToUInt16( static_cast<WW8_PCD*>(pData)->prm );
     if ( nPrm & 1 )
     {
         // PRM Variant 2
@@ -1002,7 +1002,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
         }
         const sal_uInt8* pSprms = mrGrpprls[ nSprmIdx ].get();
 
-        p->nSprmsLen = SVBT16ToShort( pSprms ); // Length
+        p->nSprmsLen = SVBT16ToUInt16( pSprms ); // Length
         pSprms += 2;
         p->pMemPos = pSprms;                    // Position
     }
@@ -2728,7 +2728,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
                                 //len byte + optional extra len byte
                                 std::size_t nDataOffset = nOfs + 1 + nDelta;
                                 aEntry.mnIStd = nDataOffset <= sizeof(maRawData)-sizeof(aEntry.mnIStd) ?
-                                    SVBT16ToShort(maRawData+nDataOffset) : 0;
+                                    SVBT16ToUInt16(maRawData+nDataOffset) : 0;
                                 aEntry.mnLen-=2; //istd
                                 if (aEntry.mnLen)
                                 {
@@ -3063,7 +3063,7 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
         return false;                           // PLCF completely processed
     }
     pPLCF->advance();
-    long nPo = SVBT16ToShort( static_cast<sal_uInt8 *>(pPage) );
+    long nPo = SVBT16ToUInt16( static_cast<sal_uInt8 *>(pPage) );
     nPo <<= 9;                                  // shift as LONG
 
     long nCurrentFkpFilePos = pFkp ? pFkp->GetFilePos() : -1;
@@ -3165,7 +3165,7 @@ bool WW8PLCFx_Fc_FKP::SeekPos(WW8_FC nFcPos)
     void* pPage;
     if( pFkp && pPLCF->Get( nPLCFStart, nPLCFEnd, pPage ) )
     {
-        long nPo = SVBT16ToShort( static_cast<sal_uInt8 *>(pPage) );
+        long nPo = SVBT16ToUInt16( static_cast<sal_uInt8 *>(pPage) );
         nPo <<= 9;                                          // shift as LONG
         if (nPo != pFkp->GetFilePos())
             pFkp = nullptr;
@@ -4358,7 +4358,7 @@ void WW8PLCFx_Book::advance()
         else
         {
             const void * p = pBook[0]->GetData(pBook[0]->GetIdx());
-            long nPairFor = (p == nullptr) ? 0 : SVBT16ToShort(*static_cast<SVBT16 const *>(p));
+            long nPairFor = (p == nullptr) ? 0 : SVBT16ToUInt16(*static_cast<SVBT16 const *>(p));
             if (nPairFor == pBook[1]->GetIdx())
                 nIsEnd = 0;
             else
@@ -4381,7 +4381,7 @@ long WW8PLCFx_Book::GetLen() const
         OSL_ENSURE( false, "Incorrect call (2) of PLCF_Book::GetLen()" );
         return 0;
     }
-    const sal_uInt16 nEndIdx = SVBT16ToShort( *static_cast<SVBT16*>(p) );
+    const sal_uInt16 nEndIdx = SVBT16ToUInt16( *static_cast<SVBT16*>(p) );
     long nNum = pBook[1]->GetPos( nEndIdx );
     nNum -= nStartPos;
     return nNum;
@@ -4413,7 +4413,7 @@ long WW8PLCFx_Book::GetHandle() const
     else
     {
         if (const void* p = pBook[0]->GetData(pBook[0]->GetIdx()))
-            return SVBT16ToShort( *static_cast<SVBT16 const *>(p) );
+            return SVBT16ToUInt16( *static_cast<SVBT16 const *>(p) );
         else
             return LONG_MAX;
     }
@@ -4432,7 +4432,7 @@ OUString WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex)
             sal_uInt16 nEndIdx;
 
             if( pBook[0]->GetData( i, nStartCurrent, p ) && p )
-                nEndIdx = SVBT16ToShort( *static_cast<SVBT16*>(p) );
+                nEndIdx = SVBT16ToUInt16( *static_cast<SVBT16*>(p) );
             else
             {
                 OSL_ENSURE( false, "Bookmark-EndIdx not readable" );
@@ -4598,7 +4598,7 @@ void WW8PLCFx_AtnBook::advance()
         else
         {
             const void * p = m_pBook[0]->GetData(m_pBook[0]->GetIdx());
-            long nPairFor = (p == nullptr) ? 0 : SVBT16ToShort(*static_cast<SVBT16 const *>(p));
+            long nPairFor = (p == nullptr) ? 0 : SVBT16ToUInt16(*static_cast<SVBT16 const *>(p));
             if (nPairFor == m_pBook[1]->GetIdx())
                 m_bIsEnd = false;
             else
@@ -4617,7 +4617,7 @@ long WW8PLCFx_AtnBook::getHandle() const
     else
     {
         if (const void* p = m_pBook[0]->GetData(m_pBook[0]->GetIdx()))
-            return SVBT16ToShort(*static_cast<const SVBT16*>(p));
+            return SVBT16ToUInt16(*static_cast<const SVBT16*>(p));
         else
             return LONG_MAX;
     }
@@ -4727,7 +4727,7 @@ void WW8PLCFx_FactoidBook::advance()
         else
         {
             const void * p = m_pBook[0]->GetData(m_pBook[0]->GetIdx());
-            long nPairFor = (p == nullptr) ? 0 : SVBT16ToShort(*static_cast<SVBT16 const *>(p));
+            long nPairFor = (p == nullptr) ? 0 : SVBT16ToUInt16(*static_cast<SVBT16 const *>(p));
             if (nPairFor == m_pBook[1]->GetIdx())
                 m_bIsEnd = false;
             else
@@ -4746,7 +4746,7 @@ long WW8PLCFx_FactoidBook::getHandle() const
     else
     {
         if (const void* p = m_pBook[0]->GetData(m_pBook[0]->GetIdx()))
-            return SVBT16ToShort(*static_cast<const SVBT16*>(p));
+            return SVBT16ToUInt16(*static_cast<const SVBT16*>(p));
         else
             return LONG_MAX;
     }
@@ -7357,7 +7357,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
                 // skip a reserve bit
                 p->aFFNBase.ff = (c2 & 0x70) >> 4;
 
-                p->aFFNBase.wWeight = SVBT16ToShort(*reinterpret_cast<SVBT16*>(pVer8));
+                p->aFFNBase.wWeight = SVBT16ToUInt16(*reinterpret_cast<SVBT16*>(pVer8));
                 pVer8+=2;
                 cbFfnM1-=2;
 
@@ -8369,7 +8369,7 @@ sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm, 
                 nL = 0;
             }
             else
-                nL = SVBT16ToShort(&pSprm[nIndex]);
+                nL = SVBT16ToUInt16(&pSprm[nIndex]);
             break;
         }
         default:
@@ -8395,7 +8395,7 @@ sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm, 
                         nCount = 0;
                     }
                     else
-                        nCount = SVBT16ToShort(&pSprm[nIndex]);
+                        nCount = SVBT16ToUInt16(&pSprm[nIndex]);
                     nL = static_cast< sal_uInt16 >(nCount + aSprm.nLen - 1);
                     break;
                 }
@@ -8423,7 +8423,7 @@ sal_uInt16 wwSprmParser::GetSprmId(const sal_uInt8* pSp) const
     }
     else
     {
-        nId = SVBT16ToShort(pSp);
+        nId = SVBT16ToUInt16(pSp);
         if (0x0800 > nId)
             nId = 0;
     }

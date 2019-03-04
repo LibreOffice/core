@@ -264,13 +264,13 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                  nSystem == JOBSET_FILE605_SYSTEM )
             {
                 Impl364JobSetupData* pOldJobData    = reinterpret_cast<Impl364JobSetupData*>(pTempBuf.get() + sizeof( ImplOldJobSetupData ));
-                sal_uInt16 nOldJobDataSize          = SVBT16ToShort( pOldJobData->nSize );
-                rJobData.SetSystem( SVBT16ToShort( pOldJobData->nSystem ) );
+                sal_uInt16 nOldJobDataSize          = SVBT16ToUInt16( pOldJobData->nSize );
+                rJobData.SetSystem( SVBT16ToUInt16( pOldJobData->nSystem ) );
                 rJobData.SetDriverDataLen( SVBT32ToUInt32( pOldJobData->nDriverDataLen ) );
-                rJobData.SetOrientation( static_cast<Orientation>(SVBT16ToShort( pOldJobData->nOrientation )) );
+                rJobData.SetOrientation( static_cast<Orientation>(SVBT16ToUInt16( pOldJobData->nOrientation )) );
                 rJobData.SetDuplexMode( DuplexMode::Unknown );
-                rJobData.SetPaperBin( SVBT16ToShort( pOldJobData->nPaperBin ) );
-                rJobData.SetPaperFormat( static_cast<Paper>(SVBT16ToShort( pOldJobData->nPaperFormat )) );
+                rJobData.SetPaperBin( SVBT16ToUInt16( pOldJobData->nPaperBin ) );
+                rJobData.SetPaperFormat( static_cast<Paper>(SVBT16ToUInt16( pOldJobData->nPaperFormat )) );
                 rJobData.SetPaperWidth( static_cast<long>(SVBT32ToUInt32( pOldJobData->nPaperWidth )) );
                 rJobData.SetPaperHeight( static_cast<long>(SVBT32ToUInt32( pOldJobData->nPaperHeight )) );
                 if ( rJobData.GetDriverDataLen() )

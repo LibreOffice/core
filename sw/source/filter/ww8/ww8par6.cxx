@@ -144,7 +144,7 @@ static short ReadSprm( const WW8PLCFx_SEPX* pSep, sal_uInt16 nId, short nDefault
 {
     SprmResult aRes = pSep->HasSprm(nId);          // sprm here?
     const sal_uInt8* pS = aRes.pSprm;
-    short nVal = (pS && aRes.nRemainingData >= 2) ? SVBT16ToShort(pS) : nDefaultVal;
+    short nVal = (pS && aRes.nRemainingData >= 2) ? SVBT16ToUInt16(pS) : nDefaultVal;
     return nVal;
 }
 
@@ -152,7 +152,7 @@ static sal_uInt16 ReadUSprm( const WW8PLCFx_SEPX* pSep, sal_uInt16 nId, short nD
 {
     SprmResult aRes = pSep->HasSprm(nId);          // sprm here?
     const sal_uInt8* pS = aRes.pSprm;
-    sal_uInt16 nVal = (pS && aRes.nRemainingData >= 2) ? SVBT16ToShort(pS) : nDefaultVal;
+    sal_uInt16 nVal = (pS && aRes.nRemainingData >= 2) ? SVBT16ToUInt16(pS) : nDefaultVal;
     return nVal;
 }
 
@@ -875,7 +875,7 @@ void wwSectionManager::CreateSep(const long nTextPos)
         bool bSuccess = pWkb->Get(nTest, pData);
         if (!bSuccess)
             return;
-        OUString sSectionName = mrReader.m_aLinkStringMap[SVBT16ToShort( static_cast<WW8_WKB*>(pData)->nLinkId) ];
+        OUString sSectionName = mrReader.m_aLinkStringMap[SVBT16ToUInt16( static_cast<WW8_WKB*>(pData)->nLinkId) ];
         sSectionName = mrReader.ConvertFFileName(sSectionName);
         SwSectionData aSection(FILE_LINK_SECTION, sSectionName);
         aSection.SetLinkFileName( sSectionName );
@@ -990,7 +990,7 @@ void wwSectionManager::CreateSep(const long nTextPos)
                 const sal_uInt8* pSW = aSWRes.pSprm;
 
                 OSL_ENSURE( pSW, "+Sprm 136 (resp. 0xF203) (ColWidth) missing" );
-                sal_uInt16 nWidth = (pSW && aSWRes.nRemainingData >= 3) ? SVBT16ToShort(pSW + 1) : 1440;
+                sal_uInt16 nWidth = (pSW && aSWRes.nRemainingData >= 3) ? SVBT16ToUInt16(pSW + 1) : 1440;
 
                 aNewSection.maSep.rgdxaColumnWidthSpacing[++nColumnDataIdx] = nWidth;
 
@@ -1003,7 +1003,7 @@ void wwSectionManager::CreateSep(const long nTextPos)
                     OSL_ENSURE( pSD, "+Sprm 137 (resp. 0xF204) (Colspacing) missing" );
                     if (pSD && aSDRes.nRemainingData >= 3)
                     {
-                        nWidth = SVBT16ToShort(pSD + 1);
+                        nWidth = SVBT16ToUInt16(pSD + 1);
                         aNewSection.maSep.rgdxaColumnWidthSpacing[++nColumnDataIdx] = nWidth;
                     }
                 }
@@ -1191,7 +1191,7 @@ void wwSectionManager::CreateSep(const long nTextPos)
 
     SprmResult aSprmSDxaLnn = pSep->HasSprm(pIds[6]);
     if (aSprmSDxaLnn.pSprm && aSprmSDxaLnn.nRemainingData >= 2)
-        aNewSection.maSep.dxaLnn = SVBT16ToShort(aSprmSDxaLnn.pSprm);
+        aNewSection.maSep.dxaLnn = SVBT16ToUInt16(aSprmSDxaLnn.pSprm);
 
     SprmResult aSprmSLnnMin = pSep->HasSprm(pIds[7]);
     if (aSprmSLnnMin.pSprm && aSprmSLnnMin.nRemainingData >= 1)
@@ -1597,7 +1597,7 @@ static bool SetValSprm( sal_Int16* pVar, WW8PLCFx_Cp_FKP* pPap, sal_uInt16 nId )
 {
     SprmResult aS = pPap->HasSprm(nId);
     if (aS.pSprm && aS.nRemainingData >= 2)
-        *pVar = static_cast<sal_Int16>(SVBT16ToShort(aS.pSprm));
+        *pVar = static_cast<sal_Int16>(SVBT16ToUInt16(aS.pSprm));
     return aS.pSprm != nullptr;
 }
 
@@ -1605,7 +1605,7 @@ static bool SetValSprm( sal_Int16* pVar, const WW8RStyle* pStyle, sal_uInt16 nId
 {
     SprmResult aS = pStyle->HasParaSprm(nId);
     if (aS.pSprm && aS.nRemainingData >= 2)
-        *pVar = static_cast<sal_Int16>(SVBT16ToShort(aS.pSprm));
+        *pVar = static_cast<sal_Int16>(SVBT16ToUInt16(aS.pSprm));
     return aS.pSprm != nullptr;
 }
 
@@ -2404,7 +2404,7 @@ bool SwWW8ImplReader::IsDropCap()
                                          1 normal drop cap
                                          2 drop cap in margin
             */
-            short nDCS = SVBT16ToShort(aDCS.pSprm);
+            short nDCS = SVBT16ToUInt16(aDCS.pSprm);
             if (nDCS & 7)
                 return true;
         }
@@ -2919,10 +2919,10 @@ void SwWW8ImplReader::Read_Symbol(sal_uInt16, const sal_uInt8* pData, short nLen
             //font setting will be put in as the styles charset, and for plain
             //text encoding for symbols is moot. Drawing boxes will check bSymbol
             //themselves so they don't need to add it to the stack either.
-            if (SetNewFontAttr(SVBT16ToShort( pData ), false, RES_CHRATR_FONT))
+            if (SetNewFontAttr(SVBT16ToUInt16( pData ), false, RES_CHRATR_FONT))
             {
-                SetNewFontAttr(SVBT16ToShort( pData ), false, RES_CHRATR_CJK_FONT);
-                SetNewFontAttr(SVBT16ToShort( pData ), false, RES_CHRATR_CTL_FONT);
+                SetNewFontAttr(SVBT16ToUInt16( pData ), false, RES_CHRATR_CJK_FONT);
+                SetNewFontAttr(SVBT16ToUInt16( pData ), false, RES_CHRATR_CTL_FONT);
                 if( m_bVer67 )
                 {
                     //convert single byte from MS1252 to Unicode
@@ -2933,7 +2933,7 @@ void SwWW8ImplReader::Read_Symbol(sal_uInt16, const sal_uInt8* pData, short nLen
                 else
                 {
                     //already is Unicode
-                    m_cSymbol = SVBT16ToShort( pData+2 );
+                    m_cSymbol = SVBT16ToUInt16( pData+2 );
                 }
                 m_bSymbol = true;
             }
@@ -3014,7 +3014,7 @@ void SwWW8ImplReader::Read_BoldUsw( sal_uInt16 nId, const sal_uInt8* pData, shor
         SprmResult aCharIstd =
             m_xPlcxMan->GetChpPLCF()->HasSprm(m_bVer67 ? NS_sprm::v6::sprmCIstd : NS_sprm::sprmCIstd);
         if (aCharIstd.pSprm && aCharIstd.nRemainingData >= 2)
-            pSI = GetStyle(SVBT16ToShort(aCharIstd.pSprm));
+            pSI = GetStyle(SVBT16ToUInt16(aCharIstd.pSprm));
     }
 
     if( m_pCurrentColl )                          // StyleDef -> remember flags
@@ -3181,7 +3181,7 @@ void SwWW8ImplReader::Read_BoldBiDiUsw(sal_uInt16 nId, const sal_uInt8* pData,
         SprmResult aCharIstd =
             m_xPlcxMan->GetChpPLCF()->HasSprm(m_bVer67 ? NS_sprm::v6::sprmCIstd : NS_sprm::sprmCIstd);
         if (aCharIstd.pSprm && aCharIstd.nRemainingData >= 2)
-            pSI = GetStyle(SVBT16ToShort(aCharIstd.pSprm));
+            pSI = GetStyle(SVBT16ToUInt16(aCharIstd.pSprm));
     }
 
     if (m_pCurrentColl && eVersion > ww::eWW2)        // StyleDef -> remember flags
@@ -3439,7 +3439,7 @@ void SwWW8ImplReader::Read_SubSuperProp( sal_uInt16, const sal_uInt8* pData, sho
     }
 
     // font position in HalfPoints
-    short nPos = eVersion <= ww::eWW2 ? static_cast< sal_Int8 >( *pData ) : SVBT16ToShort( pData );
+    short nPos = eVersion <= ww::eWW2 ? static_cast< sal_Int8 >( *pData ) : SVBT16ToUInt16( pData );
     sal_Int32 nPos2 = nPos * ( 10 * 100 );      // HalfPoints in 100 * tw
     const SvxFontHeightItem* pF
         = static_cast<const SvxFontHeightItem*>(GetFormatAttr(RES_CHRATR_FONTSIZE));
@@ -3528,7 +3528,7 @@ void SwWW8ImplReader::Read_DoubleLine_Rotate( sal_uInt16, const sal_uInt8* pData
         case 2:                     // double line
             {
                 sal_Unicode cStt = 0, cEnd = 0;
-                switch( SVBT16ToShort( pData+1 ) )
+                switch( SVBT16ToUInt16( pData+1 ) )
                 {
                 case 1: cStt = '('; cEnd = ')'; break;
                 case 2: cStt = '['; cEnd = ']'; break;
@@ -3858,7 +3858,7 @@ void SwWW8ImplReader::Read_FontCode( sal_uInt16 nId, const sal_uInt8* pData, sho
         }
         else
         {
-            sal_uInt16 nFCode = SVBT16ToShort( pData );     // font number
+            sal_uInt16 nFCode = SVBT16ToUInt16( pData );     // font number
             openFont(nFCode, nId);
             if (eVersion <= ww::eWW6)
             {
@@ -3900,7 +3900,7 @@ void SwWW8ImplReader::Read_FontSize( sal_uInt16 nId, const sal_uInt8* pData, sho
     else
     {
         // Font-Size in half points e.g. 10 = 1440 / ( 72 * 2 )
-        sal_uLong nFSize = eVersion <= ww::eWW2 ? *pData : SVBT16ToShort(pData);
+        sal_uLong nFSize = eVersion <= ww::eWW2 ? *pData : SVBT16ToUInt16(pData);
         nFSize*= 10;
 
         SvxFontHeightItem aSz( nFSize, 100, nId );
@@ -3971,7 +3971,7 @@ void SwWW8ImplReader::Read_Language( sal_uInt16 nId, const sal_uInt8* pData, sho
         m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), nId );
     else
     {
-        sal_uInt16 nLang = SVBT16ToShort( pData );  // Language-Id
+        sal_uInt16 nLang = SVBT16ToUInt16( pData );  // Language-Id
         NewAttr(SvxLanguageItem(LanguageType(nLang), nId));
     }
 }
@@ -3987,7 +3987,7 @@ void SwWW8ImplReader::Read_CColl( sal_uInt16, const sal_uInt8* pData, short nLen
         m_nCharFormat = -1;
         return;
     }
-    sal_uInt16 nId = SVBT16ToShort( pData );    // Style-Id (NOT Sprm-Id!)
+    sal_uInt16 nId = SVBT16ToUInt16( pData );    // Style-Id (NOT Sprm-Id!)
 
     if( nId >= m_vColl.size() || !m_vColl[nId].m_pFormat  // invalid Id?
         || m_vColl[nId].m_bColl )              // or paragraph style?
@@ -4016,7 +4016,7 @@ void SwWW8ImplReader::Read_Kern( sal_uInt16, const sal_uInt8* pData, short nLen 
         m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_KERNING );
         return;
     }
-    sal_Int16 nKern = SVBT16ToShort( pData );    // Kerning in Twips
+    sal_Int16 nKern = SVBT16ToUInt16( pData );    // Kerning in Twips
     NewAttr( SvxKerningItem( nKern, RES_CHRATR_KERNING ) );
 }
 
@@ -4027,7 +4027,7 @@ void SwWW8ImplReader::Read_FontKern( sal_uInt16, const sal_uInt8* pData, short n
         m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_AUTOKERN );
         return;
     }
-    sal_Int16 nAutoKern = SVBT16ToShort( pData );    // Kerning in Twips
+    sal_Int16 nAutoKern = SVBT16ToUInt16( pData );    // Kerning in Twips
     NewAttr(SvxAutoKernItem(static_cast<bool>(nAutoKern), RES_CHRATR_AUTOKERN));
 }
 
@@ -4137,7 +4137,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         return;
     }
 
-    short nPara = SVBT16ToShort( pData );
+    short nPara = SVBT16ToUInt16( pData );
 
     SvxLRSpaceItem aLR( RES_LR_SPACE );
     const SfxPoolItem* pLR = GetFormatAttr(RES_LR_SPACE);
@@ -4292,8 +4292,8 @@ void SwWW8ImplReader::Read_LineSpace( sal_uInt16, const sal_uInt8* pData, short 
         return;
     }
 
-    short nSpace = SVBT16ToShort( pData );
-    short nMulti = (eVersion <= ww::eWW2) ? 1 : SVBT16ToShort( pData + 2 );
+    short nSpace = SVBT16ToUInt16( pData );
+    short nMulti = (eVersion <= ww::eWW2) ? 1 : SVBT16ToUInt16( pData + 2 );
 
     SvxLineSpaceRule eLnSpc;
     if( 0 > nSpace )
@@ -4423,7 +4423,7 @@ void SwWW8ImplReader::Read_UL( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_UL_SPACE );
         return;
     }
-    short nPara = SVBT16ToShort( pData );
+    short nPara = SVBT16ToUInt16( pData );
     if( nPara < 0 )
         nPara = -nPara;
 
@@ -4621,7 +4621,7 @@ void SwWW8ImplReader::Read_Emphasis( sal_uInt16, const sal_uInt8* pData, short n
             aLang = m_xPlcxMan->GetChpPLCF()->HasSprm(NS_sprm::sprmCRgLid1_80);
 
         if (aLang.pSprm && aLang.nRemainingData >= 2)
-            nLang = LanguageType(SVBT16ToShort(aLang.pSprm));
+            nLang = LanguageType(SVBT16ToUInt16(aLang.pSprm));
         else
         {
             nLang = static_cast<const SvxLanguageItem *>(
@@ -4669,7 +4669,7 @@ void SwWW8ImplReader::Read_ScaleWidth( sal_uInt16, const sal_uInt8* pData, short
         m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_SCALEW );
     else
     {
-        sal_uInt16 nVal = SVBT16ToShort( pData );
+        sal_uInt16 nVal = SVBT16ToUInt16( pData );
         //The number must be between 1 and 600
         if (nVal < 1 || nVal > 600)
             nVal = 100;
@@ -4907,7 +4907,7 @@ Color SwWW8ImplReader::ExtractColour(const sal_uInt8* &rpData, bool bVer67)
     rpData+=4;
     Color nBack = msfilter::util::BGRToRGB(SVBT32ToUInt32(rpData));
     rpData+=4;
-    sal_uInt16 nIndex = SVBT16ToShort(rpData);
+    sal_uInt16 nIndex = SVBT16ToUInt16(rpData);
     rpData+=2;
     //Being a transparent background colour doesn't actually show the page
     //background through, it merely acts like white
@@ -5119,7 +5119,7 @@ void SwWW8ImplReader::Read_AlignFont( sal_uInt16, const sal_uInt8* pData, short 
         m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_VERTALIGN);
     else
     {
-        sal_uInt16 nVal = SVBT16ToShort( pData );
+        sal_uInt16 nVal = SVBT16ToUInt16( pData );
         SvxParaVertAlignItem::Align nAlign;
         switch (nVal)
         {
@@ -5200,22 +5200,22 @@ bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
         pTabPos->nSp37 = 2;     //Possible fail area, always parallel wrap
         aRes = pPap->HasSprm(NS_sprm::sprmTDxaAbs);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
-            pTabPos->nSp26 = SVBT16ToShort(aRes.pSprm);
+            pTabPos->nSp26 = SVBT16ToUInt16(aRes.pSprm);
         aRes = pPap->HasSprm(NS_sprm::sprmTDyaAbs);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
-            pTabPos->nSp27 = SVBT16ToShort(aRes.pSprm);
+            pTabPos->nSp27 = SVBT16ToUInt16(aRes.pSprm);
         aRes = pPap->HasSprm(NS_sprm::sprmTDxaFromText);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
-            pTabPos->nLeMgn = SVBT16ToShort(aRes.pSprm);
+            pTabPos->nLeMgn = SVBT16ToUInt16(aRes.pSprm);
         aRes = pPap->HasSprm(NS_sprm::sprmTDxaFromTextRight);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
-            pTabPos->nRiMgn = SVBT16ToShort(aRes.pSprm);
+            pTabPos->nRiMgn = SVBT16ToUInt16(aRes.pSprm);
         aRes = pPap->HasSprm(NS_sprm::sprmTDyaFromText);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
-            pTabPos->nUpMgn = SVBT16ToShort(aRes.pSprm);
+            pTabPos->nUpMgn = SVBT16ToUInt16(aRes.pSprm);
         aRes = pPap->HasSprm(NS_sprm::sprmTDyaFromTextBottom);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
-            pTabPos->nLoMgn = SVBT16ToShort(aRes.pSprm);
+            pTabPos->nLoMgn = SVBT16ToUInt16(aRes.pSprm);
         pTabPos->bNoFly = !FloatingTableConversion(pPap);
         bRet = true;
     }

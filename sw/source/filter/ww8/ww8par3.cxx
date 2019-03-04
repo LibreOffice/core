@@ -586,7 +586,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
             const sal_uInt8 *pBegin = aSprm.pSprm - 2;
             for(int i=0;i<4;++i)
                 rParaSprms.push_back(*pBegin++);
-            short nDxaLeft = SVBT16ToShort(aSprm.pSprm);
+            short nDxaLeft = SVBT16ToUInt16(aSprm.pSprm);
             aLVL.nDxaLeft = (0 < nDxaLeft) ? static_cast<sal_uInt16>(nDxaLeft)
                             : static_cast<sal_uInt16>(-nDxaLeft);
         }
@@ -601,7 +601,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
             const sal_uInt8 *pBegin = aSprm.pSprm - 2;
             for(int i=0;i<4;++i)
                 rParaSprms.push_back(*pBegin++);
-            aLVL.nDxaLeft1 = SVBT16ToShort(aSprm.pSprm);
+            aLVL.nDxaLeft1 = SVBT16ToUInt16(aSprm.pSprm);
         }
 
         // #i86652# - read tab setting
@@ -616,7 +616,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
                 {
                     if (*pSprm++ == 1) //nIns
                     {
-                        nTabPos = SVBT16ToShort(pSprm);
+                        nTabPos = SVBT16ToUInt16(pSprm);
                         pSprm+=2;
                         if (*pSprm == 6) //type
                         {
@@ -1959,7 +1959,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
         if( !pData )
             return;
 
-        short nData = SVBT16ToShort( pData );
+        short nData = SVBT16ToUInt16( pData );
         if( 0 >= nData )
         {
             // disable the numbering/list style apply to the paragraph or the style
