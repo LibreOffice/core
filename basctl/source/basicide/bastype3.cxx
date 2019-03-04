@@ -130,7 +130,7 @@ void TreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
     }
 }
 
-IMPL_LINK(SbTreeListBox, RequestingChildrenHdl, weld::TreeIter&, rEntry, bool)
+IMPL_LINK(SbTreeListBox, RequestingChildrenHdl, const weld::TreeIter&, rEntry, bool)
 {
     EntryDescriptor aDesc = GetEntryDescriptor(&rEntry);
     const ScriptDocument& aDocument = aDesc.GetDocument();

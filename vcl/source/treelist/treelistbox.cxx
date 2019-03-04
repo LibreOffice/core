@@ -3658,7 +3658,7 @@ bool SvTreeListBox::set_property(const OString &rKey, const OUString &rValue)
     else if (rKey == "reorderable")
     {
         if (toBool(rValue))
-            SetDragDropMode(DragDropMode::CTRL_MOVE);
+            SetDragDropMode(DragDropMode::CTRL_MOVE | DragDropMode::ENABLE_TOP);
     }
     else
         return Control::set_property(rKey, rValue);

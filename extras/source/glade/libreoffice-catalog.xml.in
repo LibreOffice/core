@@ -186,9 +186,6 @@
     <glade-widget-class title="SwDBTreeList" name="swlo-SwDBTreeList"
                         generic-name="SwDBTreeList" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="ConfigGroupFunction ListBox" name="cuilo-SfxConfigFunctionListBox"
-                        generic-name="ConfigGroupFunction ListBox" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Table Preview" name="swuilo-AutoFmtPreview"
                         generic-name="Table Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
@@ -538,9 +535,6 @@
     <glade-widget-class title="Category ListBox" name="sdlo-CategoryListBox"
                         generic-name="Category ListBox" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Command Category ListBox" name="cuilo-CommandCategoryListBox"
-                        generic-name="Command Category ListBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Color Config Control" name="cuilo-ColorConfigCtrl"
                         generic-name="ColorConfigCtrl" parent="GtkBox"
                         icon-name="widget-gtk-box"/>

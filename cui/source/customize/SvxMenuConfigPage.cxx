@@ -96,66 +96,88 @@
 
 #include <dlgname.hxx>
 
-SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSet, bool bIsMenuBar)
+SvxMenuConfigPage::SvxMenuConfigPage(TabPageParent pParent, const SfxItemSet& rSet, bool bIsMenuBar)
     : SvxConfigPage(pParent, rSet)
-    , m_bIsMenuBar( bIsMenuBar )
+    , m_bIsMenuBar(bIsMenuBar)
 {
-    m_pContentsListBox = VclPtr<SvxMenuEntriesListBox>::Create(m_pEntries, this);
-    m_pContentsListBox->set_grid_left_attach(0);
-    m_pContentsListBox->set_grid_top_attach(0);
-    m_pContentsListBox->set_hexpand(true);
-    m_pContentsListBox->set_vexpand(true);
-    m_pContentsListBox->Show();
+    m_xContentsListBox.reset(new SvxMenuEntriesListBox(m_xBuilder->weld_tree_view("menucontents"), this));
+    weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
+    rTreeView.connect_size_allocate(LINK(this, SvxMenuConfigPage, MenuEntriesSizeAllocHdl));
+    Size aSize(m_xFunctions->get_size_request());
+    rTreeView.set_size_request(aSize.Width(), aSize.Height());
+    MenuEntriesSizeAllocHdl(aSize);
+    rTreeView.set_grid_left_attach(0);
+    rTreeView.set_grid_top_attach(0);
+    rTreeView.set_hexpand(true);
+    rTreeView.set_vexpand(true);
+    rTreeView.show();
 
-    m_pTopLevelListBox->SetSelectHdl(
-        LINK( this, SvxMenuConfigPage, SelectMenu ) );
-
-    m_pContentsListBox->SetSelectHdl(
+    rTreeView.connect_changed(
         LINK( this, SvxMenuConfigPage, SelectMenuEntry ) );
 
-    m_pGearBtn->SetSelectHdl(
-        LINK( this, SvxMenuConfigPage, GearHdl ) );
+    rTreeView.connect_model_changed(LINK(this, SvxMenuConfigPage, ListModifiedHdl));
 
-    m_pCommandCategoryListBox->SetSelectHdl(
-        LINK( this, SvxMenuConfigPage, SelectCategory ) );
+    m_xGearBtn->connect_selected(LINK(this, SvxMenuConfigPage, GearHdl));
 
-    m_pMoveUpButton->SetClickHdl ( LINK( this, SvxConfigPage, MoveHdl) );
-    m_pMoveDownButton->SetClickHdl ( LINK( this, SvxConfigPage, MoveHdl) );
+    m_xCommandCategoryListBox->connect_changed(LINK(this, SvxMenuConfigPage, SelectCategory));
 
-    m_pAddCommandButton->SetClickHdl( LINK( this, SvxMenuConfigPage, AddCommandHdl ) );
-    m_pRemoveCommandButton->SetClickHdl( LINK( this, SvxMenuConfigPage, RemoveCommandHdl ) );
+    m_xMoveUpButton->connect_clicked( LINK( this, SvxConfigPage, MoveHdl) );
+    m_xMoveDownButton->connect_clicked( LINK( this, SvxConfigPage, MoveHdl) );
 
-    m_pInsertBtn->SetSelectHdl(
+    m_xAddCommandButton->connect_clicked( LINK( this, SvxMenuConfigPage, AddCommandHdl ) );
+    m_xRemoveCommandButton->connect_clicked( LINK( this, SvxMenuConfigPage, RemoveCommandHdl ) );
+
+    m_xInsertBtn->connect_selected(
         LINK( this, SvxMenuConfigPage, InsertHdl ) );
-    m_pModifyBtn->SetSelectHdl(
+    m_xModifyBtn->connect_selected(
         LINK( this, SvxMenuConfigPage, ModifyItemHdl ) );
-    m_pResetBtn->SetClickHdl(
+    m_xResetBtn->connect_clicked(
         LINK( this, SvxMenuConfigPage, ResetMenuHdl ) );
 
-    PopupMenu* pPopup = m_pModifyBtn->GetPopupMenu();
     // These operations are not possible on menus/context menus yet
-    pPopup->EnableItem( pPopup->GetItemId("changeIcon"), false );
-    pPopup->EnableItem( pPopup->GetItemId("resetIcon"), false );
-    pPopup->EnableItem( pPopup->GetItemId("restoreItem"), false );
-    pPopup->RemoveDisabledEntries();
+    m_xModifyBtn->remove_item("changeIcon");
+    m_xModifyBtn->remove_item("resetIcon");
+    m_xModifyBtn->remove_item("restoreItem");
 
-    PopupMenu* pGearMenu = m_pGearBtn->GetPopupMenu();
-    pGearMenu->EnableItem( pGearMenu->GetItemId("gear_iconAndText"), false );
-    pGearMenu->EnableItem( pGearMenu->GetItemId("gear_iconOnly"), false );
-    pGearMenu->EnableItem( pGearMenu->GetItemId("gear_textOnly"), false );
-    pGearMenu->RemoveDisabledEntries();
+    m_xGearBtn->remove_item("gear_iconAndText");
+    m_xGearBtn->remove_item("gear_iconOnly");
+    m_xGearBtn->remove_item("gear_textOnly");
 
     if ( !bIsMenuBar )
     {
         //TODO: Remove this when the gear button is implemented for context menus
-        m_pGearBtn->Disable();
-        m_pGearBtn->Hide();
+        m_xGearBtn->set_sensitive(false);
+        m_xGearBtn->hide();
     }
     else
     {
         // TODO: Remove this when it is possible to reset menubar menus individually
-        m_pResetBtn->Disable();
+        m_xResetBtn->set_sensitive(false);
     }
+}
+
+IMPL_LINK_NOARG(SvxMenuConfigPage, ListModifiedHdl, weld::TreeView&, void)
+{
+    // regenerate with the current ordering within the list
+    SvxEntries* pEntries = GetTopLevelSelection()->GetEntries();
+    pEntries->clear();
+
+    for (int i = 0; i < m_xContentsListBox->n_children(); ++i)
+        pEntries->push_back(reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(i).toInt64()));
+
+    GetSaveInData()->SetModified();
+    GetTopLevelSelection()->SetModified();
+    UpdateButtonStates();
+}
+
+IMPL_LINK(SvxMenuConfigPage, MenuEntriesSizeAllocHdl, const Size&, rSize, void)
+{
+    weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
+    std::vector<int> aWidths;
+    int nImageColWidth = rTreeView.get_checkbox_column_width();
+    aWidths.push_back(nImageColWidth);
+    aWidths.push_back(rSize.Width() - 2 * nImageColWidth);
+    rTreeView.set_column_fixed_widths(aWidths);
 }
 
 SvxMenuConfigPage::~SvxMenuConfigPage()
@@ -167,33 +189,31 @@ SvxMenuConfigPage::~SvxMenuConfigPage()
 void SvxMenuConfigPage::Init()
 {
     // ensure that the UI is cleared before populating it
-    m_pTopLevelListBox->Clear();
-    m_pContentsListBox->Clear();
+    m_xTopLevelListBox->clear();
+    m_xContentsListBox->clear();
 
     ReloadTopLevelListBox();
 
-    m_pTopLevelListBox->SelectEntryPos(0);
-    m_pTopLevelListBox->GetSelectHdl().Call(*m_pTopLevelListBox);
+    m_xTopLevelListBox->set_active(0);
+    SelectElement();
 
-    m_pCommandCategoryListBox->Init(
+    m_xCommandCategoryListBox->Init(
         comphelper::getProcessComponentContext(),
         m_xFrame,
         vcl::CommandInfoProvider::GetModuleIdentifier(m_xFrame));
-    m_pCommandCategoryListBox->categorySelected( m_pFunctions, OUString(), GetSaveInData() );
+    m_xCommandCategoryListBox->categorySelected(m_xFunctions.get(), OUString(), GetSaveInData());
 }
 
 void SvxMenuConfigPage::dispose()
 {
-    for ( sal_Int32 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
-    {
-        delete static_cast<SaveInData*>(m_pSaveInListBox->GetEntryData( i ));
-    }
-    m_pSaveInListBox->Clear();
+    for (int i = 0, nCount = m_xSaveInListBox->get_count(); i < nCount; ++i)
+        delete reinterpret_cast<SaveInData*>(m_xSaveInListBox->get_id(i).toInt64());
+    m_xSaveInListBox->clear();
 
     SvxConfigPage::dispose();
 }
 
-IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenuEntry, SvTreeListBox *, void )
+IMPL_LINK_NOARG(SvxMenuConfigPage, SelectMenuEntry, weld::TreeView&, void)
 {
     UpdateButtonStates();
 }
@@ -201,31 +221,30 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenuEntry, SvTreeListBox *, void )
 void SvxMenuConfigPage::UpdateButtonStates()
 {
     // Disable Up and Down buttons depending on current selection
-    SvTreeListEntry* selection = m_pContentsListBox->GetCurEntry();
+    int selection = m_xContentsListBox->get_selected_index();
 
     bool  bIsSeparator =
-        selection && static_cast<SvxConfigEntry*>(selection->GetUserData())->IsSeparator();
+        selection != -1 && reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(selection).toInt64())->IsSeparator();
     bool bIsValidSelection =
-        !(m_pContentsListBox->GetEntryCount() == 0 || selection == nullptr);
+        !(m_xContentsListBox->n_children() == 0 || selection == -1);
 
-    m_pMoveUpButton->Enable(
-        bIsValidSelection &&  selection != m_pContentsListBox->First() );
-    m_pMoveDownButton->Enable(
-        bIsValidSelection && selection != m_pContentsListBox->Last() );
+    m_xMoveUpButton->set_sensitive(
+        bIsValidSelection &&  selection != 0 );
+    m_xMoveDownButton->set_sensitive(
+        bIsValidSelection && selection != m_xContentsListBox->n_children() - 1);
 
-    m_pRemoveCommandButton->Enable( bIsValidSelection );
+    m_xRemoveCommandButton->set_sensitive( bIsValidSelection );
 
-    m_pModifyBtn->Enable( bIsValidSelection && !bIsSeparator);
+    m_xModifyBtn->set_sensitive( bIsValidSelection && !bIsSeparator);
 
     //Handle the gear button
     if (m_bIsMenuBar)
     {
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
-        PopupMenu* pGearPopup = m_pGearBtn->GetPopupMenu();
         // Add option (gear_add) will always be enabled
-        pGearPopup->EnableItem( "gear_delete", pMenuData->IsDeletable() );
-        pGearPopup->EnableItem( "gear_rename", pMenuData->IsRenamable() );
-        pGearPopup->EnableItem( "gear_move", pMenuData->IsMovable() );
+        m_xGearBtn->set_item_sensitive( "gear_delete", pMenuData->IsDeletable() );
+        m_xGearBtn->set_item_sensitive( "gear_rename", pMenuData->IsRenamable() );
+        m_xGearBtn->set_item_sensitive( "gear_move", pMenuData->IsMovable() );
     }
 }
 
@@ -246,13 +265,13 @@ void SvxMenuConfigPage::DeleteSelectedTopLevel()
 
 void SvxMenuConfigPage::DeleteSelectedContent()
 {
-    SvTreeListEntry *pActEntry = m_pContentsListBox->FirstSelected();
+    int nActEntry = m_xContentsListBox->get_selected_index();
 
-    if ( pActEntry != nullptr )
+    if (nActEntry != -1)
     {
         // get currently selected menu entry
         SvxConfigEntry* pMenuEntry =
-            static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
+            reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry).toInt64());
 
         // get currently selected menu
         SvxConfigEntry* pMenu = GetTopLevelSelection();
@@ -261,7 +280,7 @@ void SvxMenuConfigPage::DeleteSelectedContent()
         SvxConfigPageHelper::RemoveEntry( pMenu->GetEntries(), pMenuEntry );
 
         // remove menu entry from UI
-        m_pContentsListBox->GetModel()->Remove( pActEntry );
+        m_xContentsListBox->remove(nActEntry);
 
         // if this is a submenu entry, redraw the menus list box
         if ( pMenuEntry->IsPopup() )
@@ -281,20 +300,19 @@ short SvxMenuConfigPage::QueryReset()
 {
     OUString msg = CuiResId( RID_SVXSTR_CONFIRM_MENU_RESET );
 
-    OUString saveInName = m_pSaveInListBox->GetEntry(
-        m_pSaveInListBox->GetSelectedEntryPos() );
+    OUString saveInName = m_xSaveInListBox->get_active_text();
 
     OUString label = SvxConfigPageHelper::replaceSaveInName( msg, saveInName );
 
-    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
                                                    VclMessageType::Question, VclButtonsType::YesNo,
                                                    label));
     return xQueryBox->run();
 }
 
-IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenu, ListBox&, void )
+void SvxMenuConfigPage::SelectElement()
 {
-    m_pContentsListBox->Clear();
+    m_xContentsListBox->clear();
 
     SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
@@ -302,22 +320,24 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenu, ListBox&, void )
     {
         SvxEntries* pEntries = pMenuData->GetEntries();
 
+        int i = 0;
         for (auto const& entry : *pEntries)
         {
-            InsertEntryIntoUI(entry);
+            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(entry)));
+            m_xContentsListBox->insert(i, sId);
+            InsertEntryIntoUI(entry, i, 0);
+            ++i;
         }
     }
 
     UpdateButtonStates();
 }
 
-IMPL_LINK( SvxMenuConfigPage, GearHdl, MenuButton *, pButton, void )
+IMPL_LINK(SvxMenuConfigPage, GearHdl, const OString&, rIdent, void)
 {
-    OString sIdent = pButton->GetCurItemIdent();
-
-    if (sIdent == "gear_add")
+    if (rIdent == "gear_add")
     {
-        SvxMainMenuOrganizerDialog aDialog(GetFrameWeld(),
+        SvxMainMenuOrganizerDialog aDialog(GetDialogFrameWeld(),
             GetSaveInData()->GetEntries(), nullptr, true );
 
         if (aDialog.run() == RET_OK)
@@ -327,20 +347,20 @@ IMPL_LINK( SvxMenuConfigPage, GearHdl, MenuButton *, pButton, void )
             GetSaveInData()->SetModified();
         }
     }
-    else if (sIdent == "gear_delete")
+    else if (rIdent == "gear_delete")
     {
         DeleteSelectedTopLevel();
     }
-    else if (sIdent == "gear_rename")
+    else if (rIdent == "gear_rename")
     {
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
         OUString sCurrentName( SvxConfigPageHelper::stripHotKey( pMenuData->GetName() ) );
         OUString sDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
 
-        SvxNameDialog aNameDialog( GetFrameWeld(), sCurrentName, sDesc );
-        aNameDialog.set_help_id( HID_SVX_CONFIG_RENAME_MENU );
-        aNameDialog.set_title( CuiResId( RID_SVXSTR_RENAME_MENU ) );
+        SvxNameDialog aNameDialog(GetDialogFrameWeld(), sCurrentName, sDesc);
+        aNameDialog.set_help_id(HID_SVX_CONFIG_RENAME_MENU);
+        aNameDialog.set_title(CuiResId(RID_SVXSTR_RENAME_MENU));
 
         if ( aNameDialog.run() == RET_OK )
         {
@@ -356,11 +376,11 @@ IMPL_LINK( SvxMenuConfigPage, GearHdl, MenuButton *, pButton, void )
             GetSaveInData()->SetModified();
         }
     }
-    else if (sIdent == "gear_move")
+    else if (rIdent == "gear_move")
     {
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
-        SvxMainMenuOrganizerDialog aDialog(GetFrameWeld(), GetSaveInData()->GetEntries(),
+        SvxMainMenuOrganizerDialog aDialog(GetDialogFrameWeld(), GetSaveInData()->GetEntries(),
                 pMenuData, false );
         if (aDialog.run() == RET_OK)
         {
@@ -374,26 +394,31 @@ IMPL_LINK( SvxMenuConfigPage, GearHdl, MenuButton *, pButton, void )
     else
     {
         //This block should never be reached
-        SAL_WARN("cui.customize", "Unknown gear menu option: " << sIdent);
+        SAL_WARN("cui.customize", "Unknown gear menu option: " << rIdent);
         return;
     }
 
     UpdateButtonStates();
 }
 
-IMPL_LINK_NOARG( SvxMenuConfigPage, SelectCategory, ListBox&, void )
+IMPL_LINK_NOARG(SvxMenuConfigPage, SelectCategory, weld::ComboBox&, void)
 {
-    OUString aSearchTerm( m_pSearchEdit->GetText() );
+    OUString aSearchTerm( m_xSearchEdit->get_text() );
 
-    m_pCommandCategoryListBox->categorySelected( m_pFunctions, aSearchTerm, GetSaveInData() );
+    m_xCommandCategoryListBox->categorySelected(m_xFunctions.get(), aSearchTerm, GetSaveInData());
 }
 
-IMPL_LINK_NOARG( SvxMenuConfigPage, AddCommandHdl, Button *, void )
+IMPL_LINK_NOARG( SvxMenuConfigPage, AddCommandHdl, weld::Button&, void )
 {
-    AddFunction();
+    int nPos = AddFunction();
+    if (nPos == -1)
+        return;
+    SvxConfigEntry* pEntry =
+        reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nPos).toInt64());
+    InsertEntryIntoUI(pEntry, nPos, 0);
 }
 
-IMPL_LINK_NOARG( SvxMenuConfigPage, RemoveCommandHdl, Button *, void )
+IMPL_LINK_NOARG( SvxMenuConfigPage, RemoveCommandHdl, weld::Button&, void )
 {
     DeleteSelectedContent();
     if ( GetSaveInData()->IsModified() )
@@ -402,22 +427,21 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, RemoveCommandHdl, Button *, void )
     }
 }
 
-IMPL_LINK( SvxMenuConfigPage, InsertHdl, MenuButton *, pButton, void )
+IMPL_LINK(SvxMenuConfigPage, InsertHdl, const OString&, rIdent, void)
 {
-    OString sIdent = pButton->GetCurItemIdent();
-
-    if (sIdent == "insertseparator")
+    if (rIdent == "insertseparator")
     {
         SvxConfigEntry* pNewEntryData = new SvxConfigEntry;
         pNewEntryData->SetUserDefined();
-        InsertEntry( pNewEntryData );
+        int nPos = InsertEntry(pNewEntryData, -1);
+        InsertEntryIntoUI(pNewEntryData, nPos, 0);
     }
-    else if (sIdent == "insertsubmenu")
+    else if (rIdent == "insertsubmenu")
     {
         OUString aNewName;
         OUString aDesc = CuiResId( RID_SVXSTR_SUBMENU_NAME );
 
-        SvxNameDialog aNameDialog(GetFrameWeld(), aNewName, aDesc);
+        SvxNameDialog aNameDialog(GetDialogFrameWeld(), aNewName, aDesc);
         aNameDialog.set_help_id(HID_SVX_CONFIG_NAME_SUBMENU);
         aNameDialog.set_title(CuiResId( RID_SVXSTR_ADD_SUBMENU));
 
@@ -430,9 +454,13 @@ IMPL_LINK( SvxMenuConfigPage, InsertHdl, MenuButton *, pButton, void )
             pNewEntryData->SetName( aNewName );
             pNewEntryData->SetUserDefined();
 
-            InsertEntry( pNewEntryData );
+            int nPos = InsertEntry(pNewEntryData, -1);
+            InsertEntryIntoUI(pNewEntryData, nPos, 0);
 
             ReloadTopLevelListBox();
+
+            m_xContentsListBox->scroll_to_row(nPos);
+            m_xContentsListBox->select(nPos);
 
             GetSaveInData()->SetModified();
         }
@@ -441,7 +469,7 @@ IMPL_LINK( SvxMenuConfigPage, InsertHdl, MenuButton *, pButton, void )
     else
     {
         //This block should never be reached
-        SAL_WARN("cui.customize", "Unknown insert option: " << sIdent);
+        SAL_WARN("cui.customize", "Unknown insert option: " << rIdent);
         return;
     }
 
@@ -451,22 +479,18 @@ IMPL_LINK( SvxMenuConfigPage, InsertHdl, MenuButton *, pButton, void )
     }
 }
 
-IMPL_LINK( SvxMenuConfigPage, ModifyItemHdl, MenuButton *, pButton, void )
+IMPL_LINK(SvxMenuConfigPage, ModifyItemHdl, const OString&, rIdent, void)
 {
-    OString sIdent = pButton->GetCurItemIdent();
-
-    SAL_WARN("cui.customize", "sIdent: " << sIdent);
-
-    if (sIdent == "renameItem")
+    if (rIdent == "renameItem")
     {
-        SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
+        int nActEntry = m_xContentsListBox->get_selected_index();
         SvxConfigEntry* pEntry =
-            static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
+            reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry).toInt64());
 
         OUString aNewName( SvxConfigPageHelper::stripHotKey( pEntry->GetName() ) );
         OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
 
-        SvxNameDialog aNameDialog(GetFrameWeld(), aNewName, aDesc);
+        SvxNameDialog aNameDialog(GetDialogFrameWeld(), aNewName, aDesc);
         aNameDialog.set_help_id(HID_SVX_CONFIG_RENAME_MENU_ITEM);
         aNameDialog.set_title(CuiResId(RID_SVXSTR_RENAME_MENU));
 
@@ -475,7 +499,7 @@ IMPL_LINK( SvxMenuConfigPage, ModifyItemHdl, MenuButton *, pButton, void )
             aNewName = aNameDialog.GetName();
 
             pEntry->SetName( aNewName );
-            m_pContentsListBox->SetEntryText( pActEntry, aNewName );
+            m_xContentsListBox->set_text(nActEntry, aNewName, 1);
 
             GetSaveInData()->SetModified();
             GetTopLevelSelection()->SetModified();
@@ -484,7 +508,7 @@ IMPL_LINK( SvxMenuConfigPage, ModifyItemHdl, MenuButton *, pButton, void )
     else
     {
         //This block should never be reached
-        SAL_WARN("cui.customize", "Unknown insert option: " << sIdent);
+        SAL_WARN("cui.customize", "Unknown insert option: " << rIdent);
         return;
     }
 
@@ -494,7 +518,7 @@ IMPL_LINK( SvxMenuConfigPage, ModifyItemHdl, MenuButton *, pButton, void )
     }
 }
 
-IMPL_LINK_NOARG( SvxMenuConfigPage, ResetMenuHdl, Button *, void )
+IMPL_LINK_NOARG(SvxMenuConfigPage, ResetMenuHdl, weld::Button&, void)
 {
     SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
@@ -504,7 +528,7 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, ResetMenuHdl, Button *, void )
         return;
     }
 
-    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
                                                    VclMessageType::Question, VclButtonsType::YesNo,
                                                    CuiResId(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT_MENU)));
 
@@ -512,20 +536,20 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, ResetMenuHdl, Button *, void )
     // So we are resetting only if it is a context menu
     if (!m_bIsMenuBar && xQueryBox->run() == RET_YES)
     {
-        sal_Int32 nPos = m_pTopLevelListBox->GetSelectedEntryPos();
+        sal_Int32 nPos = m_xTopLevelListBox->get_active();
         ContextMenuSaveInData* pSaveInData = static_cast< ContextMenuSaveInData* >(GetSaveInData());
 
         pSaveInData->ResetContextMenu(pMenuData);
 
         // ensure that the UI is cleared before populating it
-        m_pTopLevelListBox->Clear();
-        m_pContentsListBox->Clear();
+        m_xTopLevelListBox->clear();
+        m_xContentsListBox->clear();
 
         ReloadTopLevelListBox();
 
         // Reselect the resetted menu
-        m_pTopLevelListBox->SelectEntryPos(nPos);
-        m_pTopLevelListBox->GetSelectHdl().Call(*m_pTopLevelListBox);
+        m_xTopLevelListBox->set_active(nPos);
+        SelectElement();
     }
 }
 
