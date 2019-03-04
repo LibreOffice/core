@@ -3953,7 +3953,8 @@ void WW8PLCFx_SubDoc::advance()
 WW8PLCFx_FLD::WW8PLCFx_FLD( SvStream* pSt, const WW8Fib& rMyFib, short nType)
     : WW8PLCFx(rMyFib, true), rFib(rMyFib)
 {
-    long nFc, nLen;
+    WW8_FC nFc;
+    sal_Int32 nLen;
 
     switch( nType )
     {
