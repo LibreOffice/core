@@ -29,6 +29,8 @@
 #include <osl/diagnose.h>
 #include <IMark.hxx>
 #include <swserv.hxx>
+#include <swrect.hxx>
+#include "DropDownFormFieldButton.hxx"
 
 namespace com {
     namespace sun {
@@ -42,6 +44,7 @@ namespace com {
 
 struct SwPosition;  // fwd Decl. wg. UI
 class SwDoc;
+class SwEditWin;
 
 namespace sw {
     namespace mark {
@@ -267,6 +270,17 @@ namespace sw {
             virtual ~DropDownFieldmark() override;
             virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode) override;
             virtual void ReleaseDoc(SwDoc* const pDoc) override;
+
+            // This method should be called only by the portion so we can now the portion's painting area
+            void SetPortionPaintArea(const SwRect& rPortionPaintArea);
+
+            void ShowButton(SwEditWin* pEditWin);
+            void HideButton();
+            void RemoveButton();
+
+        private:
+            SwRect m_aPortionPaintArea;
+            VclPtr<DropDownFormFieldButton> m_pButton;
         };
     }
 }
