@@ -187,7 +187,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReaderPtr& rpRdr,
         return nullptr;
     }
     OUString aFileName( rMedium.GetName() );
-    SwRead pRead = SwReaderWriter::GetReader( pFlt->GetUserData() );
+    Reader* pRead = SwReaderWriter::GetReader( pFlt->GetUserData() );
     if( !pRead )
         return nullptr;
 
@@ -232,7 +232,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReaderPtr& rpRdr,
 bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     SwReaderPtr pRdr;
-    SwRead pRead = StartConvertFrom(rMedium, pRdr);
+    Reader* pRead = StartConvertFrom(rMedium, pRdr);
     if (!pRead)
       return false; // #129881# return if no reader is found
     tools::SvRef<SotStorage> pStg=pRead->getSotStorageRef(); // #i45333# save sot storage ref in case of recursive calls

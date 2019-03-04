@@ -1785,7 +1785,7 @@ bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
 
     tools::SvRef<SotStorageStream> xStrm;
     SvStream* pStream = nullptr;
-    SwRead pRead = nullptr;
+    Reader* pRead = nullptr;
     OUString sData;
     switch( nFormat )
     {
