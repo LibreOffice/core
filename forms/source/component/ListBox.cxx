@@ -42,6 +42,7 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
@@ -637,19 +638,12 @@ namespace frm
             OUString sListSource;
             _rxInStream >> sListSource;
 
-            sal_Int32 nTokens = 1;
-            const sal_Unicode* pStr = sListSource.getStr();
-            while ( *pStr )
-            {
-                if ( *pStr == ';' )
-                    nTokens++;
-                pStr++;
-            }
+            const sal_Int32 nTokens{ comphelper::string::getTokenCount(sListSource, ';') };
             aListSourceSeq.realloc( nTokens );
+            sal_Int32 nIdx{ 0 };
             for (sal_Int32 i=0; i<nTokens; ++i)
             {
-                sal_Int32 nTmp = 0;
-                aListSourceSeq.getArray()[i] = sListSource.getToken(i,';',nTmp);
+                aListSourceSeq.getArray()[i] = sListSource.getToken(0, ';', nIdx);
             }
         }
         else
