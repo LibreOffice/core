@@ -10,13 +10,11 @@ from uitest.uihelper.common import select_pos
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-# import org.libreoffice.unotest
-# import pathlib
-from uitest.path import get_srcdir_url
+import org.libreoffice.unotest
+import pathlib
 #Bug 113979 - Paste unformatted text does not ignore empty cells
 def get_url_for_data_file(file_name):
-#    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
-    return get_srcdir_url() + "/sc/qa/uitest/calc_tests/data/" + file_name
+    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 class standardFilter(UITestCase):
     def test_standard_filter(self):
