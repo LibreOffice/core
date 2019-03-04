@@ -23,7 +23,7 @@
 #include <i18nutil/searchopt.hxx>
 #include "cfgutil.hxx"
 
-class CommandCategoryListBox : public ListBox
+class CommandCategoryListBox
 {
     SfxGroupInfoArr_Impl m_aGroupInfo;
     OUString m_sModuleLongName;
@@ -39,10 +39,11 @@ class CommandCategoryListBox : public ListBox
     SfxStylesInfo_Impl* pStylesInfo;
     SfxStylesInfo_Impl m_aStylesInfo;
 
+    std::unique_ptr<weld::ComboBox> m_xControl;
+
 public:
-    CommandCategoryListBox( vcl::Window* pParent );
-    virtual ~CommandCategoryListBox() override;
-    virtual void dispose() override;
+    CommandCategoryListBox(std::unique_ptr<weld::ComboBox> xControl);
+    ~CommandCategoryListBox();
     void ClearAll();
 
     void        Init(
@@ -51,25 +52,27 @@ public:
                     const OUString& sModuleLongName);
     void        FillFunctionsList(
                     const css::uno::Sequence< css::frame::DispatchInformation >& xCommands,
-                    const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox,
+                    CuiConfigFunctionListBox*  pFunctionListBox,
                     const OUString& filterTerm,
                     SaveInData *pCurrentSaveInData );
     OUString    getCommandName(const OUString& sCommand);
+
+    void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xControl->connect_changed(rLink); }
 
     /**
         Signals that a command category has been selected.
         And updates the functions list box to include
         the commands in the selected category.
     */
-    void categorySelected(  const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox,
-                            const OUString& filterTerm, SaveInData* pCurrentSaveInData = nullptr );
+    void categorySelected(CuiConfigFunctionListBox* pFunctionListBox,
+                          const OUString& filterTerm, SaveInData* pCurrentSaveInData = nullptr);
 
     void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 
     // Adds children of the given macro group to the functions list
     void addChildren(
-        SvTreeListEntry* parentEntry, const css::uno::Reference<com::sun::star::script::browse::XBrowseNode> &parentNode,
-        const VclPtr<SfxConfigFunctionListBox> &pFunctionListBox, const OUString &filterTerm , SaveInData *pCurrentSaveInData );
+        weld::TreeIter* parentEntry, const css::uno::Reference<com::sun::star::script::browse::XBrowseNode> &parentNode,
+        CuiConfigFunctionListBox* pFunctionListBox, const OUString &filterTerm , SaveInData *pCurrentSaveInData );
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_COMMANDCATEGORYLISTBOX_HXX
