@@ -43,6 +43,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/lang.h>
 #include <svl/zforlist.hxx>
+#include <tools/urlobj.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -1810,13 +1811,18 @@ bool SVGFilter::implExportShape( const Reference< XShape >& rxShape, bool bMaste
 
                         if( !aBookmark.isEmpty() )
                         {
-                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xlink:href", aBookmark);
-                            SvXMLElementExport alinkA( *mpSVGExport, XML_NAMESPACE_NONE, "a", true, true );
-                            mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
-                                                        0xffffffff,
-                                                        pElementId,
-                                                        &rxShape,
-                                                        pEmbeddedBitmapsMtf );
+                            INetURLObject aINetURLObject(aBookmark);
+                            if (!aINetURLObject.HasError()
+                                && aINetURLObject.GetProtocol() != INetProtocol::Javascript)
+                            {
+                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xlink:href", aBookmark);
+                                SvXMLElementExport alinkA( *mpSVGExport, XML_NAMESPACE_NONE, "a", true, true );
+                                mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
+                                                            0xffffffff,
+                                                            pElementId,
+                                                            &rxShape,
+                                                            pEmbeddedBitmapsMtf );
+                            }
                         }
                         else
                         {
