@@ -93,10 +93,12 @@ namespace xmloff
     OPropertyExport::exportRemainingPropertiesSequence(
         Any const & value, token::XMLTokenEnum eValueAttName)
     {
-        OSequenceIterator< T > i(value);
-        while (i.hasMoreElements())
+        css::uno::Sequence<T> anySeq;
+        bool bSuccess = value >>= anySeq;
+        assert(bSuccess); (void)bSuccess;
+        for (T const & i : anySeq)
         {
-            OUString sValue(implConvertAny(i.nextElement()));
+            OUString sValue(implConvertAny(makeAny(i)));
             AddAttribute(XML_NAMESPACE_OFFICE, eValueAttName, sValue );
             SvXMLElementExport aValueTag(
                 m_rContext.getGlobalContext(), XML_NAMESPACE_FORM,

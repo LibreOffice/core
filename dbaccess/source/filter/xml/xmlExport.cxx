@@ -644,12 +644,14 @@ void ODBExport::exportConnectionData()
 template< typename T > void ODBExport::exportDataSourceSettingsSequence(
     std::vector< TypedPropertyValue >::iterator const & in)
 {
-    OSequenceIterator< T > i( in->Value );
-    while (i.hasMoreElements())
+    css::uno::Sequence<T> anySeq;
+    bool bSuccess = in->Value >>= anySeq;
+    assert(bSuccess); (void)bSuccess;
+    for (T const & i : anySeq )
     {
         SvXMLElementExport aDataValue(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, true, false);
         // (no whitespace inside the tag)
-        Characters(implConvertAny(i.nextElement()));
+        Characters(implConvertAny(css::uno::Any(i)));
     }
 }
 
