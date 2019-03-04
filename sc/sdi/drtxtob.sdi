@@ -147,7 +147,7 @@ interface TableDrawText
     SID_TRANSLITERATE_HALFWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
     SID_TRANSLITERATE_FULLWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
     SID_TRANSLITERATE_HIRAGANA  [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
-    SID_TRANSLITERATE_KATAGANA  [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
+    SID_TRANSLITERATE_KATAKANA  [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
 
     SID_TABLE_VERT_NONE [ExecMethod = ExecuteAttr ;StateMethod = GetStatePropPanelAttr ;]
     SID_TABLE_VERT_CENTER [ExecMethod = ExecuteAttr ;StateMethod = GetStatePropPanelAttr ;]

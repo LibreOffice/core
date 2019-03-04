@@ -126,7 +126,7 @@ TransliterationFlags ScViewUtil::GetTransliterationType( sal_uInt16 nSlotID )
         case SID_TRANSLITERATE_HIRAGANA:
             nType = TransliterationFlags::KATAKANA_HIRAGANA;
             break;
-        case SID_TRANSLITERATE_KATAGANA:
+        case SID_TRANSLITERATE_KATAKANA:
             nType = TransliterationFlags::HIRAGANA_KATAKANA;
             break;
     }
@@ -304,7 +304,7 @@ void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, sal
         case SID_TRANSLITERATE_HALFWIDTH:
         case SID_TRANSLITERATE_FULLWIDTH:
         case SID_TRANSLITERATE_HIRAGANA:
-        case SID_TRANSLITERATE_KATAGANA:
+        case SID_TRANSLITERATE_KATAKANA:
             bEnabled = aCJKOptions.IsChangeCaseMapEnabled();
         break;
 

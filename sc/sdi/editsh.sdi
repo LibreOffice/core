@@ -88,7 +88,7 @@ interface TableText
     SID_TRANSLITERATE_HALFWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
     SID_TRANSLITERATE_FULLWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
     SID_TRANSLITERATE_HIRAGANA  [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
-    SID_TRANSLITERATE_KATAGANA  [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
+    SID_TRANSLITERATE_KATAKANA  [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
 
     FN_INSERT_SOFT_HYPHEN       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     FN_INSERT_HARDHYPHEN        [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]

@@ -741,7 +741,7 @@ public:
         const bool bNegative = false,
         const bool bDelete = false ) override;
 
-    /// change text to Upper/Lower/Hiragana/Katagana/...
+    /// change text to Upper/Lower/Hiragana/Katakana/...
     void TransliterateText( utl::TransliterationWrapper& rTrans,
                             sal_Int32 nStart, sal_Int32 nEnd,
                             SwUndoTransliterate* pUndo );

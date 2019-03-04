@@ -416,8 +416,8 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         ScViewUtil::HideDisabledSlot( rSet, pViewFrm->GetBindings(), SID_TRANSLITERATE_FULLWIDTH );
     if( rSet.GetItemState( SID_TRANSLITERATE_HIRAGANA ) != SfxItemState::UNKNOWN )
         ScViewUtil::HideDisabledSlot( rSet, pViewFrm->GetBindings(), SID_TRANSLITERATE_HIRAGANA );
-    if( rSet.GetItemState( SID_TRANSLITERATE_KATAGANA ) != SfxItemState::UNKNOWN )
-        ScViewUtil::HideDisabledSlot( rSet, pViewFrm->GetBindings(), SID_TRANSLITERATE_KATAGANA );
+    if( rSet.GetItemState( SID_TRANSLITERATE_KATAKANA ) != SfxItemState::UNKNOWN )
+        ScViewUtil::HideDisabledSlot( rSet, pViewFrm->GetBindings(), SID_TRANSLITERATE_KATAKANA );
 
     if ( rSet.GetItemState( SID_ENABLE_HYPHENATION ) != SfxItemState::UNKNOWN )
     {
