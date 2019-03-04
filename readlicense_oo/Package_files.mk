@@ -9,26 +9,12 @@
 
 $(eval $(call gb_Package_Package,readlicense_oo_files,$(SRCDIR)/readlicense_oo/license))
 
-# LICENSE (upper case) is copied without EOL conversion
-# license.txt is converted, prior to copy, see Package_license.mk
-ifneq ($(OS),WNT)
-ifneq ($(OS),MACOSX)
-$(eval $(call gb_Package_add_file,readlicense_oo_files,LICENSE,LICENSE))
-else
-$(eval $(call gb_Package_add_file,readlicense_oo_files,Resources/LICENSE,LICENSE))
-endif
-endif
-
 ifneq ($(OS),MACOSX)
 $(eval $(call gb_Package_add_file,readlicense_oo_files,NOTICE,NOTICE))
-$(eval $(call gb_Package_add_file,readlicense_oo_files,LICENSE.fodt,LICENSE.fodt))
 $(eval $(call gb_Package_add_file,readlicense_oo_files,CREDITS.fodt,CREDITS.fodt))
-$(eval $(call gb_Package_add_file,readlicense_oo_files,LICENSE.html,LICENSE.html))
 else
 $(eval $(call gb_Package_add_file,readlicense_oo_files,Resources/NOTICE,NOTICE))
-$(eval $(call gb_Package_add_file,readlicense_oo_files,Resources/LICENSE.fodt,LICENSE.fodt))
 $(eval $(call gb_Package_add_file,readlicense_oo_files,Resources/CREDITS.fodt,CREDITS.fodt))
-$(eval $(call gb_Package_add_file,readlicense_oo_files,Resources/LICENSE.html,LICENSE.html))
 endif
 
 # vim: set noet sw=4 ts=4:
