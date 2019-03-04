@@ -1030,7 +1030,7 @@ $(eval $(call gb_Helper_register_packages_for_install,brand,\
 		) \
 	) \
 	readlicense_oo_files \
-	$(if $(filter WNT,$(OS)),readlicense_oo_license) \
+	readlicense_oo_license \
 	$(call gb_Helper_optional,DESKTOP,setup_native_packinfo) \
 ))
 
