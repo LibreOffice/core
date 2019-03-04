@@ -273,11 +273,11 @@ void GtkSalDisplay::monitorsChanged( GdkScreen const * pScreen )
 
 GdkCursor* GtkSalDisplay::getFromSvg(OUString const & name, int nXHot, int nYHot)
 {
-    guint nDefaultCursorSize = gdk_display_get_default_cursor_size( m_pGdkDisplay );
-    //BitmapEx aBitmapEx = vcl::bitmap::loadFromName(name, ImageLoadFlags::IgnoreScalingFactor);
     GdkPixbuf* pPixBuf = load_icon_by_name(name);
+    assert(pPixBuf && "missing image?");
     if (!pPixBuf)
         return nullptr;
+    guint nDefaultCursorSize = gdk_display_get_default_cursor_size( m_pGdkDisplay );
     GdkPixbuf* pScaledPixBuf = gdk_pixbuf_scale_simple(pPixBuf, nDefaultCursorSize, nDefaultCursorSize, GDK_INTERP_HYPER);
     g_object_unref(pPixBuf);
     GdkCursor* pCursor = gdk_cursor_new_from_pixbuf( m_pGdkDisplay, pScaledPixBuf, nXHot, nYHot);
