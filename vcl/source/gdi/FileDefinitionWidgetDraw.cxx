@@ -113,7 +113,6 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
             return false;
         case ControlType::WindowBackground:
         case ControlType::Frame:
-            return true;
         case ControlType::ListNode:
         case ControlType::ListNet:
         case ControlType::ListHeader:
@@ -571,40 +570,52 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
     {
         case ControlType::Spinbox:
         {
-            Size aButtonSize(44, 26);
+            auto const& pButtonUpPart
+                = m_aWidgetDefinition.getDefinition(eType, ControlPart::ButtonUp);
+            if (!pButtonUpPart)
+                return false;
+            Size aButtonSizeUp(pButtonUpPart->mnWidth, pButtonUpPart->mnHeight);
+
+            auto const& pButtonDownPart
+                = m_aWidgetDefinition.getDefinition(eType, ControlPart::ButtonDown);
+            if (!pButtonDownPart)
+                return false;
+            Size aButtonSizeDown(pButtonDownPart->mnWidth, pButtonDownPart->mnHeight);
+
             OString sOrientation = "decrease-edit-increase";
 
             if (sOrientation == "decrease-edit-increase")
             {
                 if (ePart == ControlPart::ButtonUp)
                 {
-                    rNativeContentRegion
-                        = tools::Rectangle(Point(aLocation.X() + rBoundingControlRegion.GetWidth()
-                                                     - aButtonSize.Width(),
-                                                 aLocation.Y()),
-                                           aButtonSize);
+                    Point aPoint(aLocation.X() + rBoundingControlRegion.GetWidth()
+                                     - aButtonSizeUp.Width(),
+                                 aLocation.Y());
+                    rNativeContentRegion = tools::Rectangle(aPoint, aButtonSizeUp);
                     rNativeBoundingRegion = rNativeContentRegion;
                     return true;
                 }
                 else if (ePart == ControlPart::ButtonDown)
                 {
-                    rNativeContentRegion = tools::Rectangle(aLocation, aButtonSize);
+                    rNativeContentRegion = tools::Rectangle(aLocation, aButtonSizeDown);
                     rNativeBoundingRegion = rNativeContentRegion;
                     return true;
                 }
                 else if (ePart == ControlPart::SubEdit)
                 {
-                    Point aPoint(aLocation.X() + aButtonSize.getWidth(), aLocation.Y());
-                    Size aSize(rBoundingControlRegion.GetWidth() - (2 * aButtonSize.Width()),
-                               aButtonSize.Height());
+                    Point aPoint(aLocation.X() + aButtonSizeDown.Width(), aLocation.Y());
+                    Size aSize(rBoundingControlRegion.GetWidth()
+                                   - (aButtonSizeDown.Width() + aButtonSizeUp.Width()),
+                               std::max(aButtonSizeUp.Height(), aButtonSizeDown.Height()));
                     rNativeContentRegion = tools::Rectangle(aPoint, aSize);
                     rNativeBoundingRegion = rNativeContentRegion;
                     return true;
                 }
                 else if (ePart == ControlPart::Entire)
                 {
-                    rNativeContentRegion = tools::Rectangle(
-                        aLocation, Size(rBoundingControlRegion.GetWidth(), aButtonSize.Height()));
+                    Size aSize(rBoundingControlRegion.GetWidth(),
+                               std::max(aButtonSizeUp.Height(), aButtonSizeDown.Height()));
+                    rNativeContentRegion = tools::Rectangle(aLocation, aSize);
                     rNativeBoundingRegion = rNativeContentRegion;
                     return true;
                 }
@@ -613,37 +624,36 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
             {
                 if (ePart == ControlPart::ButtonUp)
                 {
-                    rNativeContentRegion
-                        = tools::Rectangle(Point(aLocation.X() + rBoundingControlRegion.GetWidth()
-                                                     - aButtonSize.Width(),
-                                                 aLocation.Y()),
-                                           aButtonSize);
+                    Point aPoint(aLocation.X() + rBoundingControlRegion.GetWidth()
+                                     - aButtonSizeUp.Width(),
+                                 aLocation.Y());
+                    rNativeContentRegion = tools::Rectangle(aPoint, aButtonSizeUp);
                     rNativeBoundingRegion = rNativeContentRegion;
                     return true;
                 }
                 else if (ePart == ControlPart::ButtonDown)
                 {
-                    rNativeContentRegion
-                        = tools::Rectangle(Point(aLocation.X() + rBoundingControlRegion.GetWidth()
-                                                     - (2 * aButtonSize.Width()),
-                                                 aLocation.Y()),
-                                           aButtonSize);
+                    Point aPoint(aLocation.X() + rBoundingControlRegion.GetWidth()
+                                     - (aButtonSizeDown.Width() + aButtonSizeUp.Width()),
+                                 aLocation.Y());
+                    rNativeContentRegion = tools::Rectangle(aPoint, aButtonSizeDown);
                     rNativeBoundingRegion = rNativeContentRegion;
                     return true;
                 }
                 else if (ePart == ControlPart::SubEdit)
                 {
-                    rNativeContentRegion
-                        = tools::Rectangle(aLocation, Size(rBoundingControlRegion.GetWidth()
-                                                               - (2 * aButtonSize.Width()),
-                                                           aButtonSize.Height()));
+                    Size aSize(rBoundingControlRegion.GetWidth()
+                                   - (aButtonSizeDown.Width() + aButtonSizeUp.Width()),
+                               std::max(aButtonSizeUp.Height(), aButtonSizeDown.Height()));
+                    rNativeContentRegion = tools::Rectangle(aLocation, aSize);
                     rNativeBoundingRegion = rNativeContentRegion;
                     return true;
                 }
                 else if (ePart == ControlPart::Entire)
                 {
-                    rNativeContentRegion = tools::Rectangle(
-                        aLocation, Size(rBoundingControlRegion.GetWidth(), aButtonSize.Height()));
+                    Size aSize(rBoundingControlRegion.GetWidth(),
+                               std::max(aButtonSizeUp.Height(), aButtonSizeDown.Height()));
+                    rNativeContentRegion = tools::Rectangle(aLocation, aSize);
                     rNativeBoundingRegion = rNativeContentRegion;
                     return true;
                 }
@@ -651,16 +661,35 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
         }
         break;
         case ControlType::Checkbox:
-            rNativeContentRegion = tools::Rectangle(Point(), Size(44, 26));
+        {
+            auto const& pPart = m_aWidgetDefinition.getDefinition(eType, ControlPart::Entire);
+            if (!pPart)
+                return false;
+
+            Size aSize(pPart->mnWidth, pPart->mnHeight);
+            rNativeContentRegion = tools::Rectangle(Point(), aSize);
             return true;
+        }
         case ControlType::Radiobutton:
-            rNativeContentRegion = tools::Rectangle(Point(), Size(32, 32));
+        {
+            auto const& pPart = m_aWidgetDefinition.getDefinition(eType, ControlPart::Entire);
+            if (!pPart)
+                return false;
+
+            Size aSize(pPart->mnWidth, pPart->mnHeight);
+            rNativeContentRegion = tools::Rectangle(Point(), aSize);
             return true;
+        }
         case ControlType::TabItem:
         {
-            rNativeBoundingRegion = tools::Rectangle(rBoundingControlRegion.TopLeft(),
-                                                     Size(rBoundingControlRegion.GetWidth() + 20,
-                                                          rBoundingControlRegion.GetHeight() + 6));
+            auto const& pPart = m_aWidgetDefinition.getDefinition(eType, ControlPart::Entire);
+            if (!pPart)
+                return false;
+
+            rNativeBoundingRegion = tools::Rectangle(
+                rBoundingControlRegion.TopLeft(),
+                Size(rBoundingControlRegion.GetWidth() + pPart->mnMarginWidth,
+                     rBoundingControlRegion.GetHeight() + pPart->mnMarginHeight));
             rNativeContentRegion = rNativeBoundingRegion;
             return true;
         }
