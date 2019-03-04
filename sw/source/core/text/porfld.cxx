@@ -43,6 +43,7 @@
 #include <accessibilityoptions.hxx>
 #include <editeng/lrspitem.hxx>
 #include <unicode/ubidi.h>
+#include <bookmrk.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1310,7 +1311,20 @@ sal_uInt16 SwCombinedPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
 
 SwFieldPortion *SwFieldFormDropDownPortion::Clone(const OUString &rExpand) const
 {
-    return new SwFieldFormDropDownPortion(rExpand);
+    return new SwFieldFormDropDownPortion(m_pFieldMark, rExpand);
+}
+
+void SwFieldFormDropDownPortion::Paint( const SwTextPaintInfo &rInf ) const
+{
+    SwFieldPortion::Paint( rInf );
+
+    ::sw::mark::DropDownFieldmark* pDropDownField = dynamic_cast< ::sw::mark::DropDownFieldmark* >(m_pFieldMark);
+    if(pDropDownField)
+    {
+        SwRect aPaintArea;
+        rInf.CalcRect( *this, &aPaintArea );
+        pDropDownField->SetPortionPaintArea(aPaintArea);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
