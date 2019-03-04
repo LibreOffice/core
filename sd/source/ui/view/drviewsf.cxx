@@ -224,14 +224,14 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
             GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, false );
             GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, false );
             GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, false );
-            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, false );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAKANA, false );
         }
         else
         {
             GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, true );
             GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, true );
             GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, true );
-            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, true );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAKANA, true );
         }
 
         rSet.DisableItem( SID_TRANSLITERATE_SENTENCE_CASE );
@@ -242,7 +242,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
         rSet.DisableItem( SID_TRANSLITERATE_HALFWIDTH );
         rSet.DisableItem( SID_TRANSLITERATE_FULLWIDTH );
         rSet.DisableItem( SID_TRANSLITERATE_HIRAGANA );
-        rSet.DisableItem( SID_TRANSLITERATE_KATAGANA );
+        rSet.DisableItem( SID_TRANSLITERATE_KATAKANA );
     }
     else
     {
@@ -252,18 +252,18 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
             GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, false );
             GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, false );
             GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, false );
-            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, false );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAKANA, false );
             rSet.DisableItem( SID_TRANSLITERATE_HALFWIDTH );
             rSet.DisableItem( SID_TRANSLITERATE_FULLWIDTH );
             rSet.DisableItem( SID_TRANSLITERATE_HIRAGANA );
-            rSet.DisableItem( SID_TRANSLITERATE_KATAGANA );
+            rSet.DisableItem( SID_TRANSLITERATE_KATAKANA );
         }
         else
         {
             GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, true );
             GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, true );
             GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, true );
-            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, true );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAKANA, true );
         }
     }
 }

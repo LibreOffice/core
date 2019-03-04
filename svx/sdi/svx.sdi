@@ -1045,7 +1045,7 @@ SfxVoidItem ChangeCaseToHiragana SID_TRANSLITERATE_HIRAGANA
 ]
 
 
-SfxVoidItem ChangeCaseToKatakana SID_TRANSLITERATE_KATAGANA
+SfxVoidItem ChangeCaseToKatakana SID_TRANSLITERATE_KATAKANA
 ()
 [
     AutoUpdate = TRUE,

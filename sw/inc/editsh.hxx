@@ -179,7 +179,7 @@ public:
     /// Remove a complete paragraph.
     bool DelFullPara();
 
-    /// Change text to Upper/Lower/Hiragana/Katagana/...
+    /// Change text to Upper/Lower/Hiragana/Katakana/...
     void TransliterateText( TransliterationFlags nType );
 
     /// Count words in current selection.

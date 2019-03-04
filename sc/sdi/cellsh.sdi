@@ -245,7 +245,7 @@ interface CellSelection
     SID_TRANSLITERATE_HALFWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
     SID_TRANSLITERATE_FULLWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
     SID_TRANSLITERATE_HIRAGANA  [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
-    SID_TRANSLITERATE_KATAGANA  [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
+    SID_TRANSLITERATE_KATAKANA  [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
     SID_AUTO_SUM  [ ExecMethod = ExecuteEdit; ]
 }
 

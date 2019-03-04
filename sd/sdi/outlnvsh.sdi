@@ -493,7 +493,7 @@ interface OutlineView
         ExecMethod = FuSupport ;
         StateMethod = GetCtrlState ;
     ]
-    SID_TRANSLITERATE_KATAGANA // ole : no, status : ?
+    SID_TRANSLITERATE_KATAKANA // ole : no, status : ?
     [
         ExecMethod = FuSupport ;
         StateMethod = GetCtrlState ;

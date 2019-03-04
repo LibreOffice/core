@@ -1777,7 +1777,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             case SID_TRANSLITERATE_HALFWIDTH:
             case SID_TRANSLITERATE_FULLWIDTH:
             case SID_TRANSLITERATE_HIRAGANA:
-            case SID_TRANSLITERATE_KATAGANA:
+            case SID_TRANSLITERATE_KATAKANA:
             {
                 SvtCJKOptions aCJKOptions;
                 if(!aCJKOptions.IsChangeCaseMapEnabled())
