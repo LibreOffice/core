@@ -166,7 +166,7 @@ public:
     css::uno::Sequence
         < css::beans::PropertyValue > m_aSeparatorSeq;
 
-    Image GetImage( const OUString& rCommandURL );
+    css::uno::Reference<css::graphic::XGraphic> GetImage(const OUString& rCommandURL);
 
     virtual bool HasURL( const OUString& aURL ) = 0;
     virtual bool HasSettings() = 0;
@@ -331,90 +331,106 @@ public:
     void        SetStyle( sal_Int32 style ) { nStyle = style; }
 };
 
-class SvxMenuEntriesListBox : public SvTreeListBox
+class SvxMenuEntriesListBox
 {
-private:
-    VclPtr<SvxConfigPage>      pPage;
-
 protected:
-    bool                m_bIsInternalDrag;
+    std::unique_ptr<weld::TreeView> m_xControl;
+    ScopedVclPtr<VirtualDevice> m_xDropDown;
+    VclPtr<SvxConfigPage> pPage;
+    bool m_bIsInternalDrag;
 
 public:
-    SvxMenuEntriesListBox(vcl::Window*, SvxConfigPage*);
-    virtual ~SvxMenuEntriesListBox() override;
-    virtual void dispose() override;
+    SvxMenuEntriesListBox(std::unique_ptr<weld::TreeView> xControl, SvxConfigPage* pPage);
+    virtual ~SvxMenuEntriesListBox();
 
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    int get_selected_index() const { return m_xControl->get_selected_index(); }
+    OUString get_id(int nPos) const { return m_xControl->get_id(nPos); }
+    void remove(int nPos) { m_xControl->remove(nPos); }
+    int n_children() const { return m_xControl->n_children(); }
+    void set_text(int row, const OUString& rText, int col) { m_xControl->set_text(row, rText, col); }
+    void set_image(int row, const css::uno::Reference<css::graphic::XGraphic>& rImage, int col) { m_xControl->set_image(row, rImage, col); }
+    void set_dropdown(int row, int col) { m_xControl->set_image(row, *m_xDropDown, col); }
+    void set_id(int row, const OUString& rId) { m_xControl->set_id(row, rId); }
+    void clear() { m_xControl->clear(); } //need frees ?
+    void set_toggle(int row, bool bOn, int col) { m_xControl->set_toggle(row, bOn, col); }
+    void scroll_to_row(int pos) { m_xControl->scroll_to_row(pos); }
+    void select(int pos) { m_xControl->select(pos); }
 
-    virtual bool        NotifyAcceptDrop( SvTreeListEntry* pEntry ) override;
+    weld::TreeView& get_widget() { return *m_xControl; }
 
-    virtual TriState    NotifyMoving( SvTreeListEntry*, SvTreeListEntry*,
-                                      SvTreeListEntry*&, sal_uLong& ) override;
+    void insert(int pos, const OUString& rId)
+    {
+        m_xControl->insert(nullptr, pos, nullptr, &rId,
+                           nullptr, nullptr, nullptr, false, nullptr);
+    }
 
-    virtual TriState    NotifyCopying( SvTreeListEntry*, SvTreeListEntry*,
-                                       SvTreeListEntry*&, sal_uLong&) override;
+    void insert(int pos, const OUString& rId, const OUString& rStr, const OUString* pImage = nullptr)
+    {
+        m_xControl->insert(pos, rStr, &rId, pImage, nullptr);
+    }
 
-    virtual DragDropMode    NotifyStartDrag(
-        TransferDataContainer&, SvTreeListEntry* ) override;
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
-    virtual void        DragFinished( sal_Int8 ) override;
-
-    void                KeyInput( const KeyEvent& rKeyEvent ) override;
+    void CreateDropDown();
 };
 
 class SvxConfigPage : public SfxTabPage
 {
 private:
 
+    Timer                               m_aUpdateDataTimer;
     bool                                bInitialised;
     SaveInData*                         pCurrentSaveInData;
 
-    DECL_LINK(  SelectSaveInLocation, ListBox&, void );
-    DECL_LINK( SearchUpdateHdl, Edit&, void );
+    DECL_LINK(SearchUpdateHdl, weld::Entry&, void);
 
 protected:
-
-    // Left side of the dialog where command categories and the available
-    // commands in them are displayed as a searchable list
-    VclPtr<Edit>                               m_pSearchEdit;
-    VclPtr<CommandCategoryListBox>             m_pCommandCategoryListBox;
-    VclPtr<SfxConfigFunctionListBox>           m_pFunctions;
-
-    VclPtr<FixedText>                          m_pDescriptionFieldLb;
-    VclPtr<VclMultiLineEdit>                   m_pDescriptionField;
-
-    // Right side of the dialog where the contents of the selected
-    // menu or toolbar are displayed
-    VclPtr<ListBox>                            m_pTopLevelListBox;
-    // Used to add and remove toolbars/menus
-    VclPtr<MenuButton>                         m_pGearBtn;
-    VclPtr<VclContainer>                       m_pEntries;
-    VclPtr<SvTreeListBox>                      m_pContentsListBox;
-
-    VclPtr<PushButton>                         m_pMoveUpButton;
-    VclPtr<PushButton>                         m_pMoveDownButton;
-
-    VclPtr<ListBox>                            m_pSaveInListBox;
-
-    VclPtr<MenuButton>                         m_pInsertBtn;
-    VclPtr<MenuButton>                         m_pModifyBtn;
-    // Used to reset the selected toolbar/menu/context menu
-    VclPtr<PushButton>                         m_pResetBtn;
-
-    // Middle buttons
-    VclPtr<PushButton>                         m_pAddCommandButton;
-    VclPtr<PushButton>                         m_pRemoveCommandButton;
 
     /// the ResourceURL to select when opening the dialog
     OUString                                   m_aURLToSelect;
 
     css::uno::Reference< css::frame::XFrame >  m_xFrame;
 
-    SvxConfigPage( vcl::Window*, const SfxItemSet& );
+    // Left side of the dialog where command categories and the available
+    // commands in them are displayed as a searchable list
+    std::unique_ptr<weld::Entry>               m_xSearchEdit;
+    std::unique_ptr<CommandCategoryListBox>    m_xCommandCategoryListBox;
+    std::unique_ptr<CuiConfigFunctionListBox>  m_xFunctions;
 
-    DECL_LINK( MoveHdl, Button *, void );
-    DECL_LINK( SelectFunctionHdl, SvTreeListBox *, void );
-    DECL_LINK( FunctionDoubleClickHdl, SvTreeListBox *, bool );
+    std::unique_ptr<weld::Label>               m_xDescriptionFieldLb;
+    std::unique_ptr<weld::TextView>            m_xDescriptionField;
+
+    // Right side of the dialog where the contents of the selected
+    // menu or toolbar are displayed
+    std::unique_ptr<weld::ComboBox>            m_xTopLevelListBox;
+    // Used to add and remove toolbars/menus
+    std::unique_ptr<weld::MenuButton>          m_xGearBtn;
+    std::unique_ptr<SvxMenuEntriesListBox>     m_xContentsListBox;
+
+    std::unique_ptr<weld::Button>              m_xMoveUpButton;
+    std::unique_ptr<weld::Button>              m_xMoveDownButton;
+
+    std::unique_ptr<weld::ComboBox>            m_xSaveInListBox;
+
+    std::unique_ptr<weld::MenuButton>          m_xInsertBtn;
+    std::unique_ptr<weld::MenuButton>          m_xModifyBtn;
+    // Used to reset the selected toolbar/menu/context menu
+    std::unique_ptr<weld::Button>              m_xResetBtn;
+
+    // Middle buttons
+    std::unique_ptr<weld::Button>              m_xAddCommandButton;
+    std::unique_ptr<weld::Button>              m_xRemoveCommandButton;
+
+
+    SvxConfigPage(TabPageParent, const SfxItemSet&);
+
+    DECL_LINK(MoveHdl, weld::Button&, void);
+    DECL_LINK(SelectFunctionHdl, weld::TreeView&, void);
+    DECL_LINK(FunctionDoubleClickHdl, weld::TreeView&, void);
+    DECL_LINK(SelectSaveInLocation, weld::ComboBox&, void);
+    DECL_LINK(SelectElementHdl, weld::ComboBox&, void);
+    DECL_LINK(ImplUpdateDataHdl, Timer*, void);
+    DECL_LINK(FocusOut_Impl, weld::Widget&, void);
 
     virtual SaveInData* CreateSaveInData(
         const css::uno::Reference< css::ui::XUIConfigurationManager >&,
@@ -426,15 +442,17 @@ protected:
     virtual void            UpdateButtonStates() = 0;
     virtual short           QueryReset() = 0;
 
-    SvTreeListEntry*    InsertEntry(        SvxConfigEntry* pNewEntryData,
-                                        SvTreeListEntry* pTarget = nullptr,
-                                        bool bFront = false );
+    virtual void            SelectElement() = 0;
+
+    int                 InsertEntry(SvxConfigEntry* pNewEntryData,
+                                    int nTarget,
+                                    bool bFront = false);
 
     void                AddSubMenusToUI(    const OUString& rBaseTitle,
                                         SvxConfigEntry const * pParentData );
 
-    SvTreeListEntry*    InsertEntryIntoUI ( SvxConfigEntry* pNewEntryData,
-                                        sal_uLong nPos = TREELIST_APPEND );
+    void                InsertEntryIntoUI(SvxConfigEntry* pNewEntryData,
+                                          int nPos, int nStartCol);
 
     SvxEntries*     FindParentForChild( SvxEntries* pParentEntries,
                                         SvxConfigEntry* pChildData );
@@ -444,20 +462,18 @@ protected:
 public:
 
     virtual ~SvxConfigPage() override;
-    virtual void dispose() override;
 
     static bool     CanConfig( const OUString& rModuleId );
 
     SaveInData*     GetSaveInData() { return pCurrentSaveInData; }
 
-    SvTreeListEntry*    AddFunction( SvTreeListEntry* pTarget = nullptr,
-                                 bool bFront = false,
-                                 bool bAllowDuplicates = false );
+    int             AddFunction(int nTarget = -1,
+                                bool bFront = false,
+                                bool bAllowDuplicates = false);
 
     virtual void    MoveEntry( bool bMoveUp );
 
-    bool            MoveEntryData(  SvTreeListEntry const * pSourceEntry,
-                                    SvTreeListEntry const * pTargetEntry );
+    bool            MoveEntryData(int SourceEntry, int nTargetEntry);
 
     bool            FillItemSet( SfxItemSet* ) override;
     void            Reset( const SfxItemSet* ) override;
@@ -467,8 +483,7 @@ public:
 
     SvxConfigEntry* GetTopLevelSelection()
     {
-        return static_cast<SvxConfigEntry*>(m_pTopLevelListBox->GetEntryData(
-            m_pTopLevelListBox->GetSelectedEntryPos() ));
+        return reinterpret_cast<SvxConfigEntry*>(m_xTopLevelListBox->get_active_id().toInt64());
     }
 
     /** identifies the module in the given frame. If the frame is <NULL/>, a default

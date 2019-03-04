@@ -48,19 +48,24 @@ class SvxMenuConfigPage : public SvxConfigPage
 {
 private:
     bool m_bIsMenuBar;
-    DECL_LINK( SelectMenu, ListBox&, void );
-    DECL_LINK( SelectMenuEntry, SvTreeListBox *, void );
 
-    DECL_LINK( GearHdl, MenuButton *, void );
+    DECL_LINK( SelectMenu, weld::ComboBox&, void );
+    DECL_LINK( SelectMenuEntry, weld::TreeView&, void );
 
-    DECL_LINK( SelectCategory, ListBox&, void );
+    DECL_LINK( GearHdl, const OString&, void );
 
-    DECL_LINK( AddCommandHdl, Button *, void );
-    DECL_LINK( RemoveCommandHdl, Button *, void );
+    DECL_LINK( SelectCategory, weld::ComboBox&, void );
 
-    DECL_LINK( InsertHdl, MenuButton *, void );
-    DECL_LINK( ModifyItemHdl, MenuButton *, void );
-    DECL_LINK( ResetMenuHdl, Button *, void );
+    DECL_LINK( AddCommandHdl, weld::Button&, void );
+    DECL_LINK( RemoveCommandHdl, weld::Button&, void );
+
+    DECL_LINK( InsertHdl, const OString&, void );
+    DECL_LINK( ModifyItemHdl, const OString&, void );
+    DECL_LINK( ResetMenuHdl, weld::Button&, void );
+
+    DECL_LINK( MenuEntriesSizeAllocHdl, const Size&, void );
+
+    DECL_LINK( ListModifiedHdl, weld::TreeView&, void );
 
     void            Init() override;
     void            UpdateButtonStates() override;
@@ -68,8 +73,10 @@ private:
     void            DeleteSelectedContent() override;
     void            DeleteSelectedTopLevel() override;
 
+    virtual void    SelectElement() override;
+
 public:
-    SvxMenuConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet, bool bIsMenuBar = true );
+    SvxMenuConfigPage(TabPageParent pParent, const SfxItemSet& rItemSet, bool bIsMenuBar = true);
     virtual ~SvxMenuConfigPage() override;
     virtual void dispose() override;
 

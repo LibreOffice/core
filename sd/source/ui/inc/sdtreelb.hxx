@@ -318,7 +318,7 @@ private:
 
     void CloseBookmarkDoc();
 
-    DECL_LINK(RequestingChildrenHdl, weld::TreeIter&, bool);
+    DECL_LINK(RequestingChildrenHdl, const weld::TreeIter&, bool);
     DECL_LINK(SelectHdl, weld::TreeView&, void);
 
 public:
