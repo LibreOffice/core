@@ -77,7 +77,7 @@
     </pushbutton>
 
     <radiobutton>
-        <part value="Entire">
+        <part value="Entire" width="32" height="32">
            <state enabled="true" pressed="false" button-value="true">
                 <image source="tick-on.svgx" />
             </state>
@@ -100,7 +100,7 @@
     </radiobutton>
 
     <checkbox>
-        <part value="Entire">
+        <part value="Entire" width="44" height="26">
            <state enabled="true" pressed="false" button-value="true">
                 <image source="switch-on.svgx" />
             </state>
@@ -191,12 +191,12 @@
                 <external source="spinbox-entire.svgx" />
             </state>
         </part>
-        <part value="ButtonDown">
+        <part value="ButtonDown" width="44" height="26">
             <state>
                 <external source="spinbox-left.svgx" />
             </state>
         </part>
-        <part value="ButtonUp">
+        <part value="ButtonUp" width="44" height="26">
             <state>
                 <external source="spinbox-right.svgx" />
             </state>
@@ -286,7 +286,7 @@
     </progress>
 
     <tabitem>
-        <part value="Entire">
+        <part value="Entire" margin-width="20" margin-height="6">
             <state selected="false" extra="first">
                 <external source="tabitem-first.svgx" />
             </state>

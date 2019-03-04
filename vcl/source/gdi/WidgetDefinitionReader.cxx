@@ -298,7 +298,37 @@ void WidgetDefinitionReader::readDefinition(tools::XmlWalker& rWalker,
         {
             OString sPart = rWalker.attribute("value");
             ControlPart ePart = xmlStringToControlPart(sPart);
+
             std::shared_ptr<WidgetDefinitionPart> pPart = std::make_shared<WidgetDefinitionPart>();
+
+            OString sWidth = rWalker.attribute("width");
+            if (!sWidth.isEmpty())
+            {
+                sal_Int32 nWidth = sWidth.isEmpty() ? 0 : sWidth.toInt32();
+                pPart->mnWidth = nWidth;
+            }
+
+            OString sHeight = rWalker.attribute("height");
+            if (!sHeight.isEmpty())
+            {
+                sal_Int32 nHeight = sHeight.isEmpty() ? 0 : sHeight.toInt32();
+                pPart->mnHeight = nHeight;
+            }
+
+            OString sMarginHeight = rWalker.attribute("margin-height");
+            if (!sMarginHeight.isEmpty())
+            {
+                sal_Int32 nMarginHeight = sMarginHeight.isEmpty() ? 0 : sMarginHeight.toInt32();
+                pPart->mnMarginHeight = nMarginHeight;
+            }
+
+            OString sMarginWidth = rWalker.attribute("margin-width");
+            if (!sMarginWidth.isEmpty())
+            {
+                sal_Int32 nMarginWidth = sMarginWidth.isEmpty() ? 0 : sMarginWidth.toInt32();
+                pPart->mnMarginWidth = nMarginWidth;
+            }
+
             rWidgetDefinition.maDefinitions.emplace(ControlTypeAndPart(eType, ePart), pPart);
             readPart(rWalker, pPart);
         }
