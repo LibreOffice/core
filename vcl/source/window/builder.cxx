@@ -59,6 +59,7 @@
 #include <desktop/crashreport.hxx>
 #include <salinst.hxx>
 #include <strings.hrc>
+#include <treeglue.hxx>
 #include <tools/svlibrary.h>
 #include <tools/diagnose_ex.h>
 
@@ -1595,42 +1596,6 @@ void VclBuilder::preload()
 extern "C" VclBuilder::customMakeWidget lo_get_custom_widget_func(const char* name);
 #endif
 
-namespace
-{
-    //the default NotifyStartDrag is weird to me, and defaults to enabling all
-    //possibilities when drag starts, while restricting it to some subset of
-    //the configured drag drop mode would make more sense to me, but I'm not
-    //going to change the baseclass
-
-    class LclHeaderTabListBox : public SvHeaderTabListBox
-    {
-    public:
-        LclHeaderTabListBox(vcl::Window* pParent, WinBits nWinStyle)
-            : SvHeaderTabListBox(pParent, nWinStyle)
-        {
-        }
-
-        virtual DragDropMode NotifyStartDrag(TransferDataContainer&, SvTreeListEntry*) override
-        {
-            return GetDragDropMode();
-        }
-    };
-
-    class LclTabListBox : public SvTabListBox
-    {
-    public:
-        LclTabListBox(vcl::Window* pParent, WinBits nWinStyle)
-            : SvTabListBox(pParent, nWinStyle)
-        {
-        }
-
-        virtual DragDropMode NotifyStartDrag(TransferDataContainer&, SvTreeListEntry*) override
-        {
-            return GetDragDropMode();
-        }
-    };
-}
-
 VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &name, const OString &id,
     stringmap &rMap)
 {
@@ -1973,7 +1938,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         //   everything over to SvHeaderTabListBox/SvTabListBox
         //c) remove the users of makeSvTabListBox and makeSvTreeListBox
         extractModel(id, rMap);
-        WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
+        WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_HIDESELECTION;
         if (m_bLegacy)
         {
             OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
@@ -2022,6 +1987,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             xWindow = xBox;
             xBox->SetNoAutoCurEntry(true);
             xBox->SetQuickSearch(true);
+            xBox->SetSpaceBetweenEntries(3);
+            xBox->SetEntryHeight(16);
             xBox->SetHighlightRange(); // select over the whole width
         }
         if (pRealParent != pParent)
@@ -2124,11 +2091,16 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         extractBuffer(id, rMap);
 
         WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_NOHIDESELECTION;
-        OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-        if (!sBorder.isEmpty())
-            nWinStyle |= WB_BORDER;
+        if (m_bLegacy)
+        {
+            OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
+            if (!sBorder.isEmpty())
+                nWinStyle |= WB_BORDER;
+        }
         //VclMultiLineEdit manages its own scrolling,
         vcl::Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
+        if (pRealParent != pParent)
+            nWinStyle |= WB_BORDER;
         xWindow = VclPtr<VclMultiLineEdit>::Create(pRealParent, nWinStyle);
         if (pRealParent != pParent)
             cleanupWidgetOwnScrolling(pParent, xWindow, rMap);
