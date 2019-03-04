@@ -606,7 +606,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="comments">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|comments">_Export comments</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage|comments">_Comments as PDF annotations</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
