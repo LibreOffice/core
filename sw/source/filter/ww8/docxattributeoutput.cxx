@@ -6541,7 +6541,7 @@ void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, FontFam
         fontKey[ 0 ] = fontKey[ 15 ] = m_nextFontId % 256;
         fontKeyStr[ 1 ] = fontKeyStr[ 35 ] = toHexChar(( m_nextFontId % 256 ) / 16 );
         fontKeyStr[ 2 ] = fontKeyStr[ 36 ] = toHexChar(( m_nextFontId % 256 ) % 16 );
-        char buffer[ 4096 ];
+        unsigned char buffer[ 4096 ];
         sal_uInt64 readSize;
         file.read( buffer, 32, readSize );
         if( readSize < 32 )
