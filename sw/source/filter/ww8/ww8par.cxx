@@ -1144,7 +1144,7 @@ void SwWW8ImplReader::Read_StyleCode( sal_uInt16, const sal_uInt8* pData, short 
     if (m_xWwFib->GetFIBVersion() <= ww::eWW2)
         nColl = *pData;
     else
-        nColl = SVBT16ToShort(pData);
+        nColl = SVBT16ToUInt16(pData);
     if (nColl < m_vColl.size())
     {
         SetTextFormatCollAndListLevel( *m_pPaM, m_vColl[nColl] );
@@ -1717,14 +1717,14 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
     SvxTabStop aTabStop;
     for (short i=0; i < nDel; ++i)
     {
-        sal_uInt16 nPos = aAttr.GetPos(SVBT16ToShort(pDel + i*2));
+        sal_uInt16 nPos = aAttr.GetPos(SVBT16ToUInt16(pDel + i*2));
         if( nPos != SVX_TAB_NOTFOUND )
             aAttr.Remove( nPos );
     }
 
     for (short i=0; i < nIns; ++i)
     {
-        short nPos = SVBT16ToShort(pIns + i*2);
+        short nPos = SVBT16ToUInt16(pIns + i*2);
         aTabStop.GetTabPos() = nPos;
         switch( pTyp[i].aBits1 & 0x7 ) // pTyp[i].jc
         {
@@ -2108,7 +2108,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     if( m_bVer67 )
     {
         const WW67_ATRD* pDescri = static_cast<const WW67_ATRD*>(pData);
-        const OUString* pA = GetAnnotationAuthor(SVBT16ToShort(pDescri->ibst));
+        const OUString* pA = GetAnnotationAuthor(SVBT16ToUInt16(pDescri->ibst));
         if (pA)
             sAuthor = *pA;
         else
@@ -2122,16 +2122,16 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     {
         const WW8_ATRD* pDescri = static_cast<const WW8_ATRD*>(pData);
         {
-            const sal_uInt16 nLen = std::min<sal_uInt16>(SVBT16ToShort(pDescri->xstUsrInitl[0]),
+            const sal_uInt16 nLen = std::min<sal_uInt16>(SVBT16ToUInt16(pDescri->xstUsrInitl[0]),
                                                          SAL_N_ELEMENTS(pDescri->xstUsrInitl)-1);
             OUStringBuffer aBuf;
             aBuf.setLength(nLen);
             for(sal_uInt16 nIdx = 1; nIdx <= nLen; ++nIdx)
-                aBuf[nIdx-1] = SVBT16ToShort(pDescri->xstUsrInitl[nIdx]);
+                aBuf[nIdx-1] = SVBT16ToUInt16(pDescri->xstUsrInitl[nIdx]);
             sInitials = aBuf.makeStringAndClear();
         }
 
-        if (const OUString* pA = GetAnnotationAuthor(SVBT16ToShort(pDescri->ibst)))
+        if (const OUString* pA = GetAnnotationAuthor(SVBT16ToUInt16(pDescri->ibst)))
             sAuthor = *pA;
         else
             sAuthor = sInitials;
@@ -4111,7 +4111,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
 
             SprmResult aDistance = m_xPlcxMan->GetPapPLCF()->HasSprm(0x842F);
             if (aDistance.pSprm && aDistance.nRemainingData >= 2)
-                nDistance = SVBT16ToShort(aDistance.pSprm);
+                nDistance = SVBT16ToUInt16(aDistance.pSprm);
             else
                 nDistance = 0;
 
@@ -5041,7 +5041,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
             continue;
         }
         const WW8_STRINGID *stringIdStruct = reinterpret_cast<const WW8_STRINGID*>(stringId.data());
-        m_aLinkStringMap[SVBT16ToShort(stringIdStruct->nStringId)] = aLinkStrings[i];
+        m_aLinkStringMap[SVBT16ToUInt16(stringIdStruct->nStringId)] = aLinkStrings[i];
     }
 
     ReadDocVars(); // import document variables as meta information.

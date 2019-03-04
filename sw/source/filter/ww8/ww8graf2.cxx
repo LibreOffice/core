@@ -730,21 +730,21 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
 void WW8PicShadowToReal( WW8_PIC_SHADOW const * pPicS, WW8_PIC * pPic )
 {
     pPic->lcb = SVBT32ToUInt32( pPicS->lcb );
-    pPic->cbHeader = SVBT16ToShort( pPicS->cbHeader );
-    pPic->MFP.mm = SVBT16ToShort( pPicS->MFP.mm );
-    pPic->MFP.xExt = SVBT16ToShort( pPicS->MFP.xExt );
-    pPic->MFP.yExt = SVBT16ToShort( pPicS->MFP.yExt );
-    pPic->MFP.hMF = SVBT16ToShort( pPicS->MFP.hMF );
+    pPic->cbHeader = SVBT16ToUInt16( pPicS->cbHeader );
+    pPic->MFP.mm = SVBT16ToUInt16( pPicS->MFP.mm );
+    pPic->MFP.xExt = SVBT16ToUInt16( pPicS->MFP.xExt );
+    pPic->MFP.yExt = SVBT16ToUInt16( pPicS->MFP.yExt );
+    pPic->MFP.hMF = SVBT16ToUInt16( pPicS->MFP.hMF );
     for( sal_uInt16 i = 0; i < 14 ; i++ )
         pPic->rcWinMF[i] = pPicS->rcWinMF[i];
-    pPic->dxaGoal = SVBT16ToShort( pPicS->dxaGoal );
-    pPic->dyaGoal = SVBT16ToShort( pPicS->dyaGoal );
-    pPic->mx = SVBT16ToShort( pPicS->mx );
-    pPic->my = SVBT16ToShort( pPicS->my );
-    pPic->dxaCropLeft = SVBT16ToShort( pPicS->dxaCropLeft );
-    pPic->dyaCropTop = SVBT16ToShort( pPicS->dyaCropTop );
-    pPic->dxaCropRight = SVBT16ToShort( pPicS->dxaCropRight );
-    pPic->dyaCropBottom = SVBT16ToShort( pPicS->dyaCropBottom );
+    pPic->dxaGoal = SVBT16ToUInt16( pPicS->dxaGoal );
+    pPic->dyaGoal = SVBT16ToUInt16( pPicS->dyaGoal );
+    pPic->mx = SVBT16ToUInt16( pPicS->mx );
+    pPic->my = SVBT16ToUInt16( pPicS->my );
+    pPic->dxaCropLeft = SVBT16ToUInt16( pPicS->dxaCropLeft );
+    pPic->dyaCropTop = SVBT16ToUInt16( pPicS->dyaCropTop );
+    pPic->dxaCropRight = SVBT16ToUInt16( pPicS->dxaCropRight );
+    pPic->dyaCropBottom = SVBT16ToUInt16( pPicS->dyaCropBottom );
     pPic->brcl = pPicS->aBits1 & 0x0f;
     pPic->fFrameEmpty = (pPicS->aBits1 & 0x10) >> 4;
     pPic->fBitmap = (pPicS->aBits1 & 0x20) >> 5;
@@ -761,7 +761,7 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW const * pFSPAS, WW8_FSPA * pFSPA )
     pFSPA->nXaRight     = SVBT32ToUInt32( pFSPAS->nXaRight );
     pFSPA->nYaBottom    = SVBT32ToUInt32( pFSPAS->nYaBottom );
 
-    sal_uInt16 nBits        = SVBT16ToShort( pFSPAS->aBits1 );
+    sal_uInt16 nBits        = SVBT16ToUInt16( pFSPAS->aBits1 );
 
     pFSPA->bHdr         = sal_uInt16(0 !=  ( nBits & 0x0001 ));
     pFSPA->nbx          =       ( nBits & 0x0006 ) >> 1;
