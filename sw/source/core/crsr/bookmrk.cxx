@@ -37,6 +37,7 @@
 #include <comphelper/random.hxx>
 #include <comphelper/anytostring.hxx>
 #include <sal/log.hxx>
+#include <edtwin.hxx>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
@@ -481,11 +482,13 @@ namespace sw { namespace mark
 
     DropDownFieldmark::DropDownFieldmark(const SwPaM& rPaM)
         : Fieldmark(rPaM)
+        , m_pButton(nullptr)
     {
     }
 
     DropDownFieldmark::~DropDownFieldmark()
     {
+        m_pButton.disposeAndClear();
     }
 
     void DropDownFieldmark::InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode const eMode)
@@ -510,6 +513,44 @@ namespace sw { namespace mark
     {
         lcl_RemoveFieldMarks(this, pDoc,
                 CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
+    }
+
+    void DropDownFieldmark::SetPortionPaintArea(const SwRect& rPortionPaintArea)
+    {
+        if(m_aPortionPaintArea == rPortionPaintArea &&
+           m_pButton && m_pButton->IsVisible())
+            return;
+
+        m_aPortionPaintArea = rPortionPaintArea;
+        if(m_pButton)
+        {
+            m_pButton->Show();
+            m_pButton->CalcPosAndSize(m_aPortionPaintArea);
+            m_pButton->Invalidate();
+        }
+    }
+
+    void DropDownFieldmark::ShowButton(SwEditWin* pEditWin)
+    {
+        if(pEditWin)
+        {
+            if(!m_pButton)
+                m_pButton = VclPtr<DropDownFormFieldButton>::Create(pEditWin, *this);
+            m_pButton->CalcPosAndSize(m_aPortionPaintArea);
+            m_pButton->Show();
+        }
+    }
+
+    void DropDownFieldmark::HideButton()
+    {
+        if(m_pButton)
+            m_pButton->Show(false);
+    }
+
+    void DropDownFieldmark::RemoveButton()
+    {
+        if(m_pButton)
+            m_pButton.disposeAndClear();
     }
 }}
 
