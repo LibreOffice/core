@@ -26,7 +26,7 @@ SwBlockCursor::~SwBlockCursor()
 
 SwShellCursor& SwBlockCursor::getShellCursor()
 {
-    return aCursor;
+    return maCursor;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
