@@ -47,6 +47,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/lang.h>
 #include <svl/zforlist.hxx>
+#include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -1949,15 +1950,20 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
                             SvXMLElementExport aBB( *mpSVGExport, XML_NAMESPACE_NONE, "rect", true, true );
                         }
 
-                        if( !aBookmark.isEmpty() )
+                        if (!aBookmark.isEmpty())
                         {
-                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xlink:href", aBookmark);
-                            SvXMLElementExport alinkA( *mpSVGExport, XML_NAMESPACE_NONE, "a", true, true );
-                            mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
-                                                        0xffffffff,
-                                                        pElementId,
-                                                        &rxShape,
-                                                        pEmbeddedBitmapsMtf );
+                            INetURLObject aINetURLObject(aBookmark);
+                            if (!aINetURLObject.HasError()
+                                && aINetURLObject.GetProtocol() != INetProtocol::Javascript)
+                            {
+                                mpSVGExport->AddAttribute(XML_NAMESPACE_NONE, "xlink:href",
+                                                          aBookmark);
+                                SvXMLElementExport alinkA(*mpSVGExport, XML_NAMESPACE_NONE, "a",
+                                                          true, true);
+                                mpSVGWriter->WriteMetaFile(aTopLeft, aSize, rMtf, 0xffffffff,
+                                                           pElementId, &rxShape,
+                                                           pEmbeddedBitmapsMtf);
+                            }
                         }
                         else
                         {
