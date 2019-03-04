@@ -44,6 +44,9 @@ class ConfigureDialog(UITestCase):
 
         xSearch.executeAction("CLEAR", tuple())
 
+        # Wait for the search/filter op to be completed
+        time.sleep(1)
+
         finalEntryCount = get_state_as_dict(xfunc)["Children"]
         self.assertEqual(initialEntryCount, finalEntryCount)
 

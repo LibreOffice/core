@@ -104,28 +104,13 @@ struct SfxGroupInfo_Impl
 
 typedef std::vector<std::unique_ptr<SfxGroupInfo_Impl> > SfxGroupInfoArr_Impl;
 
-class SfxConfigFunctionListBox : public SvTreeListBox
-{
-    SfxGroupInfoArr_Impl aArr;
-
-    virtual void  MouseMove( const MouseEvent& rMEvt ) override;
-
-public:
-    SfxConfigFunctionListBox(vcl::Window*, WinBits nStyle);
-    virtual ~SfxConfigFunctionListBox() override;
-    virtual void  dispose() override;
-
-    void          ClearAll();
-    using Window::GetHelpText;
-    OUString      GetHelpText( bool bConsiderParent = true );
-};
-
 class CuiConfigFunctionListBox
 {
     friend class CuiConfigGroupListBox;
     SfxGroupInfoArr_Impl aArr;
 
     std::unique_ptr<weld::TreeView> m_xTreeView;
+    std::unique_ptr<weld::TreeIter> m_xScratchIter;
 
 public:
     CuiConfigFunctionListBox(std::unique_ptr<weld::TreeView> xTreeView);
@@ -134,26 +119,47 @@ public:
     void connect_row_activated(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_row_activated(rLink); }
     void freeze() { m_xTreeView->freeze(); }
     void thaw() { m_xTreeView->thaw(); }
-    void append(const OUString& rId, const OUString& rStr) { m_xTreeView->append(rId, rStr); }
-    void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
+    void append(const OUString& rId, const OUString& rStr, weld::TreeIter* pParent = nullptr)
     {
-        m_xTreeView->insert(nullptr, -1, &rStr, &rId, nullptr, nullptr, &rImage, false, nullptr);
+        m_xTreeView->insert(pParent, -1, &rStr, &rId, nullptr, nullptr, nullptr, false, nullptr);
+    }
+    std::unique_ptr<weld::TreeIter> append_ondemand(const OUString& rId, const OUString& rStr, weld::TreeIter* pParent = nullptr)
+    {
+        std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
+        m_xTreeView->insert(pParent, -1, &rStr, &rId, nullptr, nullptr, nullptr, true, xIter.get());
+        return xIter;
+    }
+    void append(const OUString& rId, const OUString& rStr, const OUString& rImage, weld::TreeIter* pParent = nullptr)
+    {
+        m_xTreeView->insert(pParent, -1, &rStr, &rId, nullptr, nullptr, &rImage, false, nullptr);
+    }
+    void append(const OUString& rId, const OUString& rStr, const css::uno::Reference<css::graphic::XGraphic>& rImage, weld::TreeIter* pParent = nullptr)
+    {
+        m_xTreeView->insert(pParent, -1, &rStr, &rId, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
+        m_xTreeView->set_image(*m_xScratchIter, rImage, -1);
     }
     void remove(int nPos) { m_xTreeView->remove(nPos); }
+    void remove(weld::TreeIter& rIter) { m_xTreeView->remove(rIter); }
+    void expand_row(weld::TreeIter& rIter) { m_xTreeView->expand_row(rIter); }
     int n_children() const { return m_xTreeView->n_children(); }
     std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig = nullptr) const { return m_xTreeView->make_iterator(pOrig); }
     bool get_iter_first(weld::TreeIter& rIter) const { return m_xTreeView->get_iter_first(rIter); }
     // set iter to point to next node, depth first, then sibling
     bool iter_next(weld::TreeIter& rIter) const { return m_xTreeView->iter_next(rIter); }
     bool iter_next_sibling(weld::TreeIter& rIter) const { return m_xTreeView->iter_next_sibling(rIter); }
+    bool iter_has_child(const weld::TreeIter& rIter) const { return m_xTreeView->iter_has_child(rIter); }
     OUString get_text(const weld::TreeIter& rIter) const { return m_xTreeView->get_text(rIter); }
     OUString get_text(int nPos) const { return m_xTreeView->get_text(nPos); }
     OUString get_id(const weld::TreeIter& rIter) const { return m_xTreeView->get_id(rIter); }
+    OUString get_id(int nPos) const { return m_xTreeView->get_id(nPos); }
     bool get_selected(weld::TreeIter* pIter) const { return m_xTreeView->get_selected(pIter); }
+    OUString get_selected_text() const { return m_xTreeView->get_selected_text(); }
+    int get_selected_index() const { return m_xTreeView->get_selected_index(); }
     void scroll_to_row(int nRow) { return m_xTreeView->scroll_to_row(nRow); }
     void select(const weld::TreeIter& rIter) { m_xTreeView->select(rIter); }
     void select(int pos) { m_xTreeView->select(pos); }
     void set_size_request(int nWidth, int nHeight) { m_xTreeView->set_size_request(nWidth, nHeight); }
+    Size get_size_request() const { return m_xTreeView->get_size_request(); }
     weld::TreeView& get_widget() { return *m_xTreeView; }
 
     ~CuiConfigFunctionListBox();
@@ -191,11 +197,11 @@ class CuiConfigGroupListBox
 
     void InitModule();
     void FillScriptList(const css::uno::Reference< css::script::browse::XBrowseNode >& xRootNode,
-                        weld::TreeIter* pParentEntry, bool bCheapChildrenOnDemand);
+                        const weld::TreeIter* pParentEntry, bool bCheapChildrenOnDemand);
     void FillFunctionsList(const css::uno::Sequence< css::frame::DispatchInformation >& xCommands);
     OUString MapCommand2UIName(const OUString& sCommand);
 
-    DECL_LINK(ExpandingHdl, weld::TreeIter&, bool);
+    DECL_LINK(ExpandingHdl, const weld::TreeIter&, bool);
     DECL_LINK(OpenCurrentHdl, weld::TreeView&, void);
 
 public:

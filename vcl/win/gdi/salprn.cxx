@@ -31,6 +31,8 @@
 
 #include <tools/urlobj.hxx>
 
+#include <vcl/weld.hxx>
+
 #include <win/wincomp.hxx>
 #include <win/saldata.hxx>
 #include <win/salinst.h>

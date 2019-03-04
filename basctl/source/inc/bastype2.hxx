@@ -259,12 +259,12 @@ private:
     void            SetEntryBitmaps(const weld::TreeIter& rIter, const OUString& rImage);
 
 protected:
-    DECL_LINK(RequestingChildrenHdl, weld::TreeIter&, bool);
+    DECL_LINK(RequestingChildrenHdl, const weld::TreeIter&, bool);
     DECL_LINK(OpenCurrentHdl, weld::TreeView&, void);
-    void                    ImpCreateLibEntries(weld::TreeIter& rShellRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation);
-    void                    ImpCreateLibSubEntries(weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName);
-    void                    ImpCreateLibSubEntriesInVBAMode(weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
-    void                    ImpCreateLibSubSubEntriesInVBAMode(weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName);
+    void                    ImpCreateLibEntries(const weld::TreeIter& rShellRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation);
+    void                    ImpCreateLibSubEntries(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName);
+    void                    ImpCreateLibSubEntriesInVBAMode(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
+    void                    ImpCreateLibSubSubEntriesInVBAMode(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName);
     bool                    ImpFindEntry(weld::TreeIter& rIter, const OUString& rText);
 
     // DocumentEventListener
@@ -300,7 +300,7 @@ public:
     static ItemType ConvertType (EntryType eType);
     bool            IsValidEntry(weld::TreeIter& rEntry);
     void AddEntry(const OUString& rText, const OUString& rImage,
-                  weld::TreeIter* pIter, bool bChildrenOnDemand, std::unique_ptr<Entry>&& rUserData);
+                  const weld::TreeIter* pIter, bool bChildrenOnDemand, std::unique_ptr<Entry>&& rUserData);
 
     void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_changed(rLink); }
     std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pIter = nullptr) const { return m_xControl->make_iterator(pIter); }
