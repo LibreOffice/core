@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_c546cc50",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1955,
+      "author": {
+        "id": 1002071
+      },
+      "writtenOn": "2019-03-04T10:21:18Z",
+      "side": 1,
+      "message": "I suggest we combine this scheme validation approach with an  HTML escaping one that escapes all angle brackets, quotes, and ampersands before inserting the URL into the markup (see stackoverflow accepted answer here: https://security.stackexchange.com/questions/11985/will-javascript-be-executed-which-is-in-an-href ).\n\nThe HTML escaping approach will also help with situations as described by the OWASP Bypass XSS filters category here: https://www.owasp.org/index.php/Testing_for_Reflected_Cross_site_scripting_(OTG-INPVAL-001) (examples 3-5).\n\nLastly, we need to make sure that this applies to all \"xlink:href\" attributes. I know that there are links inside a \u0027.UrlLink\u0027 class and links inside TextBoxes as well. At a quick glance I can also see it used in images:\n\n    AddAttribute( XML_NAMESPACE_NONE, \"xmlns\", constSvgNamespace );\n    // For \u003cimage xlink:href\u003d\"...\"\u003e.\n\nhttps://gerrit.libreoffice.org/plugins/gitiles/core/+/refs/changes/68/68668/3/filter/source/svg/svgexport.cxx#2494",
+      "revId": "0bba217d7a39df0ff354410c4aeb34d8974c5a5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
