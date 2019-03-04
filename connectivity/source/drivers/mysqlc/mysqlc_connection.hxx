@@ -60,7 +60,6 @@ namespace mysqlc
 using ::com::sun::star::sdbc::SQLException;
 using ::com::sun::star::sdbc::SQLWarning;
 using ::com::sun::star::uno::RuntimeException;
-typedef css::uno::Reference<css::container::XNameAccess> my_XNameAccessRef;
 
 typedef ::cppu::WeakComponentImplHelper3<css::sdbc::XConnection, css::sdbc::XWarningsSupplier,
                                          css::lang::XServiceInfo>
@@ -161,9 +160,10 @@ public:
 
     sal_Int32 SAL_CALL getTransactionIsolation() override;
 
-    my_XNameAccessRef SAL_CALL getTypeMap() override;
+    css::uno::Reference<css::container::XNameAccess> SAL_CALL getTypeMap() override;
 
-    void SAL_CALL setTypeMap(const my_XNameAccessRef& typeMap) override;
+    void SAL_CALL
+    setTypeMap(const css::uno::Reference<css::container::XNameAccess>& typeMap) override;
     // XCloseable
     void SAL_CALL close() override;
     // XWarningsSupplier

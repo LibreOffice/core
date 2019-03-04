@@ -52,6 +52,7 @@ namespace basegfx
     class B2DVector;
     class B2IVector;
     class B2DHomMatrix;
+    typedef B2IVector B2ISize;
 }
 namespace cppcanvas{ class Canvas; }
 
@@ -65,8 +66,8 @@ namespace slideshow
         class UnoView;
         class Shape;
         class ShapeAttributeLayer;
-
-        typedef ::std::shared_ptr< GDIMetaFile > GDIMetaFileSharedPtr;
+        typedef std::shared_ptr< UnoView > UnoViewSharedPtr;
+        typedef std::shared_ptr< GDIMetaFile > GDIMetaFileSharedPtr;
 
         template <typename T>
         inline ::std::size_t hash_value( T const * p )
@@ -111,49 +112,49 @@ namespace slideshow
         /// extract unary double value from Any
         bool extractValue( double&                              o_rValue,
                            const css::uno::Any&                rSourceAny,
-                           const std::shared_ptr<Shape>&      rShape,
+                           const ShapeSharedPtr&                rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract int from Any
         bool extractValue( sal_Int32&                           o_rValue,
                            const css::uno::Any&                 rSourceAny,
-                           const std::shared_ptr<Shape>&      rShape,
+                           const ShapeSharedPtr&                rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract enum/constant group value from Any
         bool extractValue( sal_Int16&                           o_rValue,
                            const css::uno::Any&                 rSourceAny,
-                           const std::shared_ptr<Shape>&      rShape,
+                           const ShapeSharedPtr&                rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract color value from Any
         bool extractValue( RGBColor&                            o_rValue,
                            const css::uno::Any&                 rSourceAny,
-                           const std::shared_ptr<Shape>&      rShape,
+                           const ShapeSharedPtr&                rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract color value from Any
         bool extractValue( HSLColor&                            o_rValue,
                            const css::uno::Any&                 rSourceAny,
-                           const std::shared_ptr<Shape>&      rShape,
+                           const ShapeSharedPtr&                rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract plain string from Any
         bool extractValue( OUString&                            o_rValue,
                            const css::uno::Any&                 rSourceAny,
-                           const std::shared_ptr<Shape>&      rShape,
+                           const ShapeSharedPtr&                rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract bool value from Any
         bool extractValue( bool&                                o_rValue,
                            const css::uno::Any&    rSourceAny,
-                           const std::shared_ptr<Shape>&      rShape,
+                           const ShapeSharedPtr&                rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract double 2-tuple from Any
         bool extractValue( basegfx::B2DTuple&                   o_rPair,
                            const css::uno::Any&                 rSourceAny,
-                           const std::shared_ptr<Shape>&      rShape,
+                           const ShapeSharedPtr&                rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /** Search a sequence of NamedValues for a given element.
@@ -178,8 +179,8 @@ namespace slideshow
             a simple scale and translate of the unit rect to rBounds).
         */
         basegfx::B2DHomMatrix getShapeTransformation(
-            const basegfx::B2DRange&                      rBounds,
-            const std::shared_ptr<ShapeAttributeLayer>& pAttr );
+            const basegfx::B2DRectangle&         rBounds,
+            const ShapeAttributeLayerSharedPtr&  pAttr );
 
         /** Get a shape's sprite transformation from the attribute set
 
@@ -197,9 +198,9 @@ namespace slideshow
             @return the transformation to be applied to the sprite.
         */
         basegfx::B2DHomMatrix getSpriteTransformation(
-            const basegfx::B2DVector&                     rPixelSize,
-            const basegfx::B2DVector&                     rOrigSize,
-            const std::shared_ptr<ShapeAttributeLayer>& pAttr );
+            const basegfx::B2DVector&           rPixelSize,
+            const basegfx::B2DVector&           rOrigSize,
+            const ShapeAttributeLayerSharedPtr& pAttr );
 
         /** Calc update area for a shape.
 
@@ -219,10 +220,10 @@ namespace slideshow
             @param pAttr
             Current shape attributes
          */
-        basegfx::B2DRange getShapeUpdateArea(
-            const basegfx::B2DRange&                      rUnitBounds,
-            const basegfx::B2DHomMatrix&                  rShapeTransform,
-            const std::shared_ptr<ShapeAttributeLayer>& pAttr );
+        basegfx::B2DRectangle getShapeUpdateArea(
+            const basegfx::B2DRectangle&          rUnitBounds,
+            const basegfx::B2DHomMatrix&          rShapeTransform,
+            const ShapeAttributeLayerSharedPtr&   pAttr );
 
         /** Calc update area for a shape.
 
@@ -253,9 +254,9 @@ namespace slideshow
             it as if aBounds.getMinimum() is the output position and
             aBounds.getRange() the scaling of the shape.
          */
-        basegfx::B2DRange getShapePosSize(
-            const basegfx::B2DRange&                      rOrigBounds,
-            const std::shared_ptr<ShapeAttributeLayer>& pAttr );
+        basegfx::B2DRectangle getShapePosSize(
+            const basegfx::B2DRectangle&        rOrigBounds,
+            const ShapeAttributeLayerSharedPtr& pAttr );
 
         /** Convert a plain UNO API 32 bit int to RGBColor
          */
@@ -266,14 +267,14 @@ namespace slideshow
 
         /** Fill a plain rectangle on the given canvas with the given color
          */
-        void fillRect( const std::shared_ptr< cppcanvas::Canvas >& rCanvas,
-                       const basegfx::B2DRange&                      rRect,
-                       cppcanvas::IntSRGBA                    aFillColor );
+        void fillRect( const cppcanvas::CanvasSharedPtr&       rCanvas,
+                       const basegfx::B2DRectangle& rRect,
+                       cppcanvas::IntSRGBA          aFillColor );
 
         /** Init canvas with default background (white)
          */
-        void initSlideBackground( const std::shared_ptr< cppcanvas::Canvas >& rCanvas,
-                                  const basegfx::B2IVector&                     rSize );
+        void initSlideBackground( const cppcanvas::CanvasSharedPtr&    rCanvas,
+                                  const basegfx::B2ISize&   rSize );
 
         /// Gets a random ordinal [0,n)
         inline ::std::size_t getRandomOrdinal( const ::std::size_t n )
@@ -339,7 +340,7 @@ namespace slideshow
         }
 
         /// Get the content of the BoundRect shape property
-        basegfx::B2DRange getAPIShapeBounds( const css::uno::Reference< css::drawing::XShape >& xShape );
+        basegfx::B2DRectangle getAPIShapeBounds( const css::uno::Reference< css::drawing::XShape >& xShape );
 
 /*
         TODO(F1): When ZOrder someday becomes usable enable this
@@ -348,8 +349,8 @@ namespace slideshow
         double getAPIShapePrio( const css::uno::Reference< css::drawing::XShape >& xShape );
 */
 
-        basegfx::B2IVector getSlideSizePixel( const basegfx::B2DVector&         rSize,
-                                              const std::shared_ptr<UnoView>& pView );
+        basegfx::B2IVector getSlideSizePixel( const basegfx::B2DVector&  rSize,
+                                              const UnoViewSharedPtr&    pView );
     }
 
     // TODO(Q1): this could possibly be implemented with a somewhat

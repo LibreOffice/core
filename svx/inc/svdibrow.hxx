@@ -55,7 +55,7 @@ friend class ImpItemEdit;
 
     virtual long GetRowCount() const override;
     virtual bool SeekRow(long nRow) override;
-    virtual void PaintField(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId) const override;
+    virtual void PaintField(vcl::RenderContext& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId) const override;
     virtual void DoubleClick(const BrowserMouseEvent&) override;
     virtual void KeyInput(const KeyEvent& rEvt) override;
     virtual void Select() override;

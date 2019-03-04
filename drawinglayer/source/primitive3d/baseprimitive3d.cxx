@@ -54,7 +54,7 @@ namespace drawinglayer
             return Primitive3DContainer();
         }
 
-        Primitive3DSequence SAL_CALL BasePrimitive3D::getDecomposition( const uno::Sequence< beans::PropertyValue >& rViewParameters )
+        css::uno::Sequence< ::css::uno::Reference< ::css::graphic::XPrimitive3D > > SAL_CALL BasePrimitive3D::getDecomposition( const uno::Sequence< beans::PropertyValue >& rViewParameters )
         {
             const geometry::ViewInformation3D aViewInformation(rViewParameters);
             return comphelper::containerToSequence(get3DDecomposition(aViewInformation));

@@ -48,7 +48,7 @@ namespace slideshow
                 values will be clipped to the permissible range
                 internally.
              */
-            virtual bool operator()( ValueType x ) = 0;
+            virtual bool operator()( double x ) = 0;
 
             /** Request the underlying value for this animation.
 
@@ -60,7 +60,7 @@ namespace slideshow
                 for the underlying value, if the animation has actually
                 been started (via start() call).
              */
-            virtual ValueType getUnderlyingValue() const = 0;
+            virtual double getUnderlyingValue() const = 0;
         };
 
         typedef ::std::shared_ptr< NumberAnimation > NumberAnimationSharedPtr;

@@ -97,7 +97,7 @@ namespace slideshow
 
                 This value is retrieved from the XDrawPage properties.
              */
-            virtual basegfx::B2IVector getSlideSize() const = 0;
+            virtual basegfx::B2ISize getSlideSize() const = 0;
 
             /// Gets the underlying API page
             virtual css::uno::Reference< css::drawing::XDrawPage > getXDrawPage() const = 0;

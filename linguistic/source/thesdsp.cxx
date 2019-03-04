@@ -106,7 +106,7 @@ sal_Bool SAL_CALL
 Sequence< Reference< XMeaning > > SAL_CALL
     ThesaurusDispatcher::queryMeanings(
             const OUString& rTerm, const Locale& rLocale,
-            const PropertyValues& rProperties )
+            const css::uno::Sequence< ::css::beans::PropertyValue >& rProperties )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 

@@ -586,7 +586,7 @@ public:
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
-    bool notifyAnimationStart( const std::shared_ptr<AnimationNode>& rNode );
+    bool notifyAnimationStart( const AnimationNodeSharedPtr& rNode );
 
     /** Notify that the given node leaves its active duration.
 
@@ -602,7 +602,7 @@ public:
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
-    bool notifyAnimationEnd( const std::shared_ptr<AnimationNode>& rNode );
+    bool notifyAnimationEnd( const AnimationNodeSharedPtr& rNode );
 
     /** Notify that the slide animations sequence leaves its
         active duration.
@@ -627,7 +627,7 @@ public:
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
-    bool notifyAudioStopped( const std::shared_ptr<AnimationNode>& rNode );
+    bool notifyAudioStopped( const AnimationNodeSharedPtr& rNode );
 
     /** Notify that the show has entered or exited pause mode
 
@@ -648,7 +648,7 @@ public:
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
-    bool notifyCommandStopAudio( const std::shared_ptr<AnimationNode>& rNode );
+    bool notifyCommandStopAudio( const AnimationNodeSharedPtr& rNode );
 
     /** Notifies that a hyperlink has been clicked.
     */

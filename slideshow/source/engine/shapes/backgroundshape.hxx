@@ -33,6 +33,7 @@ namespace slideshow
     {
         class  Shape;
         struct SlideShowContext;
+        typedef ::std::shared_ptr< Shape > ShapeSharedPtr;
 
         /** Representation of a draw document's background shape.
 
@@ -41,7 +42,7 @@ namespace slideshow
             nor attributable, those more specialized derivations of
             the Shape interface are not implemented here.
          */
-        std::shared_ptr<Shape> createBackgroundShape(
+        ShapeSharedPtr createBackgroundShape(
             const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
             const css::uno::Reference< css::drawing::XDrawPage >& xMasterPage,
             const SlideShowContext&                       rContext ); // throw ShapeLoadFailedException;

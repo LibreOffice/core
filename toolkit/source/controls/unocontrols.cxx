@@ -1466,14 +1466,14 @@ void UnoCheckBoxControl::setLabel( const OUString&  rLabel )
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), uno::Any(rLabel), true );
 }
 
-void UnoCheckBoxControl::setState( short n )
+void UnoCheckBoxControl::setState( sal_Int16 n )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any(static_cast<sal_Int16>(n)), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any(n), true );
 }
 
-short UnoCheckBoxControl::getState()
+sal_Int16 UnoCheckBoxControl::getState()
 {
-    short nState = 0;
+    sal_Int16 nState = 0;
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ) );
     aVal >>= nState;
     return nState;
@@ -1646,14 +1646,14 @@ OUString UnoFixedHyperlinkControl::getURL(  )
     return ImplGetPropertyValue_UString( BASEPROPERTY_URL );
 }
 
-void UnoFixedHyperlinkControl::setAlignment( short nAlign )
+void UnoFixedHyperlinkControl::setAlignment( sal_Int16 nAlign )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), uno::Any(static_cast<sal_Int16>(nAlign)), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), uno::Any(nAlign), true );
 }
 
-short UnoFixedHyperlinkControl::getAlignment()
+sal_Int16 UnoFixedHyperlinkControl::getAlignment()
 {
-    short nAlign = 0;
+    sal_Int16 nAlign = 0;
     if ( mxModel.is() )
     {
         uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ) );
@@ -1839,14 +1839,14 @@ OUString UnoFixedTextControl::getText()
     return ImplGetPropertyValue_UString( BASEPROPERTY_LABEL );
 }
 
-void UnoFixedTextControl::setAlignment( short nAlign )
+void UnoFixedTextControl::setAlignment( sal_Int16 nAlign )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), uno::Any(static_cast<sal_Int16>(nAlign)), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), uno::Any(nAlign), true );
 }
 
-short UnoFixedTextControl::getAlignment()
+sal_Int16 UnoFixedTextControl::getAlignment()
 {
-    short nAlign = 0;
+    sal_Int16 nAlign = 0;
     if ( mxModel.is() )
     {
         uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ) );

@@ -546,7 +546,7 @@ namespace slideshow
                 {
                 }
 
-                virtual bool isOnView(std::shared_ptr<View> const& /*rView*/) const override
+                virtual bool isOnView(ViewSharedPtr const& /*rView*/) const override
                 {
                     return true; // visible on all views
                 }

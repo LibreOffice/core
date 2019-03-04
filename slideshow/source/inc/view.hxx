@@ -68,7 +68,7 @@ namespace slideshow
                 underlying view transformation, returned by the
                 getTransformation() method.
             */
-            virtual void setViewSize( const ::basegfx::B2DVector& ) = 0;
+            virtual void setViewSize( const ::basegfx::B2DSize& ) = 0;
 
             /** Change the view's mouse cursor.
 

@@ -247,7 +247,7 @@ Size const & MasterPageContainer::GetPreviewSizePixel() const
 }
 
 MasterPageContainer::Token MasterPageContainer::PutMasterPage (
-    const SharedMasterPageDescriptor& rDescriptor)
+    const std::shared_ptr<MasterPageDescriptor>& rDescriptor)
 {
     return mpImpl->PutMasterPage(rDescriptor);
 }
@@ -448,7 +448,7 @@ sal_Int32 MasterPageContainer::GetTemplateIndexForToken (Token aToken)
         return -1;
 }
 
-SharedMasterPageDescriptor MasterPageContainer::GetDescriptorForToken (
+std::shared_ptr<MasterPageDescriptor> MasterPageContainer::GetDescriptorForToken (
     MasterPageContainer::Token aToken)
 {
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);

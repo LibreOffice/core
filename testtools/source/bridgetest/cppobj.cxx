@@ -178,9 +178,9 @@ public:
                                      const css::uno::Reference< css::uno::XInterface >& xTest,
                                      const css::uno::Any& rAny,
                                      const css::uno::Sequence<TestElement >& rSequence,
-                                     const TestData& rStruct ) override;
+                                     const ::test::testtools::bridgetest::TestDataElements& rStruct ) override;
 
-    virtual TestData SAL_CALL setValues2( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte,
+    virtual ::test::testtools::bridgetest::TestDataElements SAL_CALL setValues2( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte,
                                                 sal_Int16& nShort, sal_uInt16& nUShort,
                                                 sal_Int32& nLong, sal_uInt32& nULong,
                                                 sal_Int64& nHyper, sal_uInt64& nUHyper,
@@ -189,9 +189,9 @@ public:
                                                 css::uno::Reference< css::uno::XInterface >& xTest,
                                                 css::uno::Any& rAny,
                                                 css::uno::Sequence<TestElement >& rSequence,
-                                                TestData& rStruct ) override;
+                                                ::test::testtools::bridgetest::TestDataElements& rStruct ) override;
 
-    virtual TestData SAL_CALL getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte,
+    virtual ::test::testtools::bridgetest::TestDataElements SAL_CALL getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte,
                                                sal_Int16& nShort, sal_uInt16& nUShort,
                                                sal_Int32& nLong, sal_uInt32& nULong,
                                                sal_Int64& nHyper, sal_uInt64& nUHyper,
@@ -200,7 +200,7 @@ public:
                                                css::uno::Reference< css::uno::XInterface >& xTest,
                                                css::uno::Any& rAny,
                                                css::uno::Sequence< TestElement >& rSequence,
-                                               TestData& rStruct ) override;
+                                               ::test::testtools::bridgetest::TestDataElements& rStruct ) override;
 
     virtual SmallStruct SAL_CALL echoSmallStruct(const SmallStruct& rStruct) override
         { return rStruct; }
@@ -254,7 +254,7 @@ public:
         { return _aData.Any; }
     virtual css::uno::Sequence< TestElement > SAL_CALL getSequence() override
         { return _aData.Sequence; }
-    virtual TestData SAL_CALL getStruct() override
+    virtual ::test::testtools::bridgetest::TestDataElements SAL_CALL getStruct() override
         { return _aStructData; }
 
     virtual void SAL_CALL setBool( sal_Bool _bool ) override
@@ -289,7 +289,7 @@ public:
         { _aData.Any = _any; }
     virtual void SAL_CALL setSequence( const css::uno::Sequence<TestElement >& _sequence ) override
         { _aData.Sequence = _sequence; }
-    virtual void SAL_CALL setStruct( const TestData& _struct ) override
+    virtual void SAL_CALL setStruct( const ::test::testtools::bridgetest::TestDataElements& _struct ) override
         { _aStructData = _struct; }
 
     virtual sal_Int32 SAL_CALL getRaiseAttr1() override
@@ -359,7 +359,7 @@ public:
     virtual OUString SAL_CALL testMulti(Reference< XMulti > const & multi) override;
 
 public: // XBridgeTest
-    virtual TestData SAL_CALL raiseException( sal_Int16 nArgumentPos, const OUString & rMsg, const Reference< XInterface > & xCOntext ) override;
+    virtual ::test::testtools::bridgetest::TestDataElements SAL_CALL raiseException( sal_Int16 nArgumentPos, const OUString & rMsg, const Reference< XInterface > & xCOntext ) override;
 
     virtual void SAL_CALL raiseRuntimeExceptionOneway(
         const OUString& Message, const css::uno::Reference< css::uno::XInterface >& Context ) override;
@@ -543,7 +543,7 @@ void Test_Impl::setValues( sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
                            const css::uno::Reference< css::uno::XInterface >& xTest,
                            const css::uno::Any& rAny,
                            const css::uno::Sequence<TestElement >& rSequence,
-                           const TestData& rStruct )
+                           const ::test::testtools::bridgetest::TestDataElements& rStruct )
 {
     assign( _aData,
             bBool, cChar, nByte, nShort, nUShort, nLong, nULong, nHyper, nUHyper, fFloat, fDouble,
@@ -551,7 +551,7 @@ void Test_Impl::setValues( sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
     _aStructData = rStruct;
 }
 
-TestData Test_Impl::setValues2( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte,
+::test::testtools::bridgetest::TestDataElements Test_Impl::setValues2( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte,
                                 sal_Int16& nShort, sal_uInt16& nUShort,
                                 sal_Int32& nLong, sal_uInt32& nULong,
                                 sal_Int64& nHyper, sal_uInt64& nUHyper,
@@ -560,7 +560,7 @@ TestData Test_Impl::setValues2( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& n
                                 css::uno::Reference< css::uno::XInterface >& xTest,
                                 css::uno::Any& rAny,
                                 css::uno::Sequence<TestElement >& rSequence,
-                                TestData& rStruct )
+                                ::test::testtools::bridgetest::TestDataElements& rStruct )
 {
     assign( _aData,
             bBool, cChar, nByte, nShort, nUShort, nLong, nULong, nHyper, nUHyper, fFloat, fDouble,
@@ -574,7 +574,7 @@ TestData Test_Impl::setValues2( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& n
     return _aStructData;
 }
 
-TestData Test_Impl::getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte,
+::test::testtools::bridgetest::TestDataElements Test_Impl::getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte,
                                sal_Int16& nShort, sal_uInt16& nUShort,
                                sal_Int32& nLong, sal_uInt32& nULong,
                                sal_Int64& nHyper, sal_uInt64& nUHyper,
@@ -583,7 +583,7 @@ TestData Test_Impl::getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nB
                                css::uno::Reference< css::uno::XInterface >& xTest,
                                css::uno::Any& rAny,
                                css::uno::Sequence<TestElement >& rSequence,
-                               TestData& rStruct )
+                               ::test::testtools::bridgetest::TestDataElements& rStruct )
 {
     bBool = _aData.Bool;
     cChar = _aData.Char;
@@ -605,7 +605,7 @@ TestData Test_Impl::getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nB
     return _aStructData;
 }
 
-TestData Test_Impl::raiseException( sal_Int16 nArgumentPos, const OUString & rMsg, const Reference< XInterface > & xContext )
+::test::testtools::bridgetest::TestDataElements Test_Impl::raiseException( sal_Int16 nArgumentPos, const OUString & rMsg, const Reference< XInterface > & xContext )
 {
     IllegalArgumentException aExc;
     aExc.ArgumentPosition = nArgumentPos;

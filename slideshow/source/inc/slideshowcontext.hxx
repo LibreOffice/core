@@ -43,6 +43,7 @@ namespace slideshow
         class CursorManager;
         class MediaFileManager;
         class SubsettableShapeManager;
+        typedef ::std::shared_ptr< SubsettableShapeManager > SubsettableShapeManagerSharedPtr;
 
         /** Common arguments for slideshow objects.
 
@@ -85,7 +86,7 @@ namespace slideshow
                 @param rComponentContext
                 To create UNO services from
             */
-            SlideShowContext( std::shared_ptr<SubsettableShapeManager>&       rSubsettableShapeManager,
+            SlideShowContext( SubsettableShapeManagerSharedPtr&                 rSubsettableShapeManager,
                               EventQueue&                                       rEventQueue,
                               EventMultiplexer&                                 rEventMultiplexer,
                               ScreenUpdater&                                    rScreenUpdater,

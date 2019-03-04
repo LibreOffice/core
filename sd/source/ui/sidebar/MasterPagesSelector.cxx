@@ -392,7 +392,7 @@ void MasterPagesSelector::AssignMasterPageToSelectedSlides (
 
 void MasterPagesSelector::AssignMasterPageToPageList (
     SdPage* pMasterPage,
-    const ::sd::slidesorter::SharedPageSelection& rPageList)
+    const std::shared_ptr<std::vector<SdPage*>>& rPageList)
 {
     DocumentHelper::AssignMasterPageToPageList(mrDocument, pMasterPage, rPageList);
 }

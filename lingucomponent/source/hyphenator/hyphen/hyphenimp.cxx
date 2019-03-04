@@ -265,7 +265,7 @@ bool LoadDictionary(HDInfo& rDict)
 Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWord,
        const css::lang::Locale& aLocale,
        sal_Int16 nMaxLeading,
-       const css::beans::PropertyValues& aProperties )
+       const css::uno::Sequence< css::beans::PropertyValue >& aProperties )
 {
     PropertyHelper_Hyphenation& rHelper = GetPropHelper();
     rHelper.SetTmpPropVals(aProperties);
@@ -491,7 +491,7 @@ Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
         const OUString& aWord,
         const css::lang::Locale& aLocale,
         sal_Int16 nIndex,
-        const css::beans::PropertyValues& aProperties )
+        const css::uno::Sequence< css::beans::PropertyValue >& aProperties )
 {
     // Firstly we allow only one plus character before the hyphen to avoid to miss the right break point:
     for (int extrachar = 1; extrachar <= 2; extrachar++)
@@ -505,7 +505,7 @@ Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
 
 Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const OUString& aWord,
         const css::lang::Locale& aLocale,
-        const css::beans::PropertyValues& aProperties )
+        const css::uno::Sequence< css::beans::PropertyValue >& aProperties )
 {
     PropertyHelper_Hyphenation& rHelper = GetPropHelper();
     rHelper.SetTmpPropVals(aProperties);

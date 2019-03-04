@@ -68,6 +68,11 @@ struct NodeContext
 };
 
 class BaseContainerNode;
+typedef ::std::shared_ptr< BaseContainerNode > BaseContainerNodeSharedPtr;
+
+class BaseNode;
+typedef ::std::shared_ptr< BaseNode > BaseNodeSharedPtr;
+
 
 /** This interface extends AnimationNode with some
     file-private accessor methods.
@@ -77,7 +82,7 @@ class BaseNode : public AnimationNode,
 {
 public:
     BaseNode( css::uno::Reference<css::animations::XAnimationNode> const& xNode,
-              ::std::shared_ptr<BaseContainerNode> const&        pParent,
+              BaseContainerNodeSharedPtr const&                    pParent,
               NodeContext const&                                   rContext );
     BaseNode(const BaseNode&) = delete;
     BaseNode& operator=(const BaseNode&) = delete;
@@ -89,7 +94,7 @@ public:
         retrieve a shared_ptr to itself internally, have to
         set that from the outside.
     */
-    void setSelf( const ::std::shared_ptr< BaseNode >& rSelf );
+    void setSelf( const BaseNodeSharedPtr& rSelf );
 
 
 #if defined(DBG_UTIL)
@@ -197,8 +202,6 @@ private:
     EventSharedPtr                                     mpCurrentEvent;
     const bool                                         mbIsMainSequenceRootNode;
 };
-
-typedef ::std::shared_ptr< BaseNode > BaseNodeSharedPtr;
 
 } // namespace internal
 } // namespace slideshow

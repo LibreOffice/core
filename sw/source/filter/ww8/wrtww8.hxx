@@ -134,6 +134,7 @@ namespace mark
 class IFieldmark;
 }
 }
+typedef std::set< sal_Int32 > SwSoftPageBreakList;
 
 #define GRF_MAGIC_1 0x12    // 3 magic bytes for PicLocFc attribute
 #define GRF_MAGIC_2 0x34
@@ -883,7 +884,7 @@ protected:
     void BulletDefinitions();
 
     bool NeedSectionBreak( const SwNode& rNd ) const;
-    bool NeedTextNodeSplit( const SwTextNode& rNd, std::set< sal_Int32 >& pList ) const;
+    bool NeedTextNodeSplit( const SwTextNode& rNd, SwSoftPageBreakList& pList ) const;
 
     std::vector<const Graphic*> m_vecBulletPic; ///< Vector to record all the graphics of bullets
 

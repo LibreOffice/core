@@ -359,7 +359,7 @@ bool SlideChangeBase::operator()( double nValue )
 
 void SlideChangeBase::prepareForRun(
     const ViewEntry& /* rViewEntry */,
-    const std::shared_ptr<cppcanvas::Canvas>& /* rDestinationCanvas */ )
+    const cppcanvas::CanvasSharedPtr& /* rDestinationCanvas */ )
 {
 }
 

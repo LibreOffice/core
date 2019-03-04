@@ -33,8 +33,8 @@ namespace frm
     class IFeatureDispatcher;
     class ICommandImageProvider;
     class ICommandDescriptionProvider;
-
     class ImplNavToolBar;
+    typedef std::shared_ptr< const ICommandImageProvider >  PCommandImageProvider;
 
     class NavigationToolBar final : public vcl::Window
     {
@@ -66,7 +66,7 @@ namespace frm
         NavigationToolBar(
             vcl::Window* _pParent,
             WinBits _nStyle,
-            const std::shared_ptr< const ICommandImageProvider >& _pImageProvider,
+            const PCommandImageProvider& _pImageProvider,
             const OUString & sModuleId
         );
         virtual ~NavigationToolBar( ) override;

@@ -92,8 +92,8 @@ public:
     virtual sal_Bool SAL_CALL hasLocale( const css::lang::Locale& aLocale ) override;
 
     // XSpellChecker
-    virtual sal_Bool SAL_CALL isValid( const OUString& aWord, const css::lang::Locale& aLocale, const css::beans::PropertyValues& aProperties ) override;
-    virtual css::uno::Reference< css::linguistic2::XSpellAlternatives > SAL_CALL spell( const OUString& aWord, const css::lang::Locale& aLocale, const css::beans::PropertyValues& aProperties ) override;
+    virtual sal_Bool SAL_CALL isValid( const OUString& aWord, const css::lang::Locale& aLocale, const css::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
+    virtual css::uno::Reference< css::linguistic2::XSpellAlternatives > SAL_CALL spell( const OUString& aWord, const css::lang::Locale& aLocale, const css::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
 
     // XSupportedLanguages
     virtual css::uno::Sequence< ::sal_Int16 > SAL_CALL getLanguages(  ) override;

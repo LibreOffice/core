@@ -452,7 +452,7 @@ public:
     virtual sal_uInt32 GetIdx() const override;
     virtual void SetIdx(sal_uInt32 nI) override;
     virtual bool SeekPos(WW8_CP nCpPos) override;
-    virtual WW8_FC Where() override;
+    virtual WW8_CP Where() override;
     virtual void GetSprms( WW8PLCFxDesc* p ) override;
     virtual void advance() override;
 
@@ -477,7 +477,7 @@ public:
     virtual sal_uInt32 GetIdx() const override;
     virtual void SetIdx(sal_uInt32 nI) override;
     virtual bool SeekPos(WW8_CP nCpPos) override;
-    virtual WW8_FC Where() override;
+    virtual WW8_CP Where() override;
     virtual long GetNoSprms( WW8_CP& rStart, WW8_CP&, sal_Int32& rLen ) override;
     virtual void advance() override;
     WW8_CP CurrentPieceStartFc2Cp( WW8_FC nStartPos );
@@ -680,7 +680,7 @@ public:
     virtual sal_uInt32 GetIdx() const override;
     virtual void SetIdx(sal_uInt32 nIdx) override;
     virtual bool SeekPos(WW8_CP nCpPos) override;
-    virtual WW8_FC Where() override;
+    virtual WW8_CP Where() override;
     virtual void GetSprms( WW8PLCFxDesc* p ) override;
     virtual void advance() override;
     SprmResult HasSprm( sal_uInt16 nId ) const;
@@ -708,7 +708,7 @@ public:
     virtual sal_uInt32 GetIdx() const override;
     virtual void SetIdx(sal_uInt32 nIdx) override;
     virtual bool SeekPos(WW8_CP nCpPos) override;
-    virtual WW8_FC Where() override;
+    virtual WW8_CP Where() override;
 
     // returns reference descriptors
     const void* GetData() const
@@ -736,7 +736,7 @@ public:
     virtual sal_uInt32 GetIdx() const override;
     virtual void SetIdx(sal_uInt32 nIdx) override;
     virtual bool SeekPos(WW8_CP nCpPos) override;
-    virtual WW8_FC Where() override;
+    virtual WW8_CP Where() override;
     virtual void GetSprms(WW8PLCFxDesc* p) override;
     virtual void advance() override;
     bool StartPosIsFieldStart();
@@ -769,7 +769,7 @@ public:
     virtual sal_uInt32 GetIdx2() const override;
     virtual void SetIdx2(sal_uInt32 nIdx) override;
     virtual bool SeekPos(WW8_CP nCpPos) override;
-    virtual WW8_FC Where() override;
+    virtual WW8_CP Where() override;
     virtual long GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen ) override;
     virtual void advance() override;
     const OUString* GetName() const;
@@ -806,7 +806,7 @@ public:
     virtual sal_uInt32 GetIdx2() const override;
     virtual void SetIdx2(sal_uInt32 nIdx) override;
     virtual bool SeekPos(WW8_CP nCpPos) override;
-    virtual WW8_FC Where() override;
+    virtual WW8_CP Where() override;
     virtual long GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen ) override;
     virtual void advance() override;
 
@@ -836,7 +836,7 @@ public:
     virtual sal_uInt32 GetIdx2() const override;
     virtual void SetIdx2(sal_uInt32 nIdx) override;
     virtual bool SeekPos(WW8_CP nCpPos) override;
-    virtual WW8_FC Where() override;
+    virtual WW8_CP Where() override;
     virtual long GetNoSprms(WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen) override;
     virtual void advance() override;
 

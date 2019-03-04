@@ -211,7 +211,7 @@ namespace drawinglayer
             /** The getDecomposition implementation for UNO API will use getDecomposition from this implementation. It
                 will construct a ViewInformation2D from the ViewParameters for that purpose
              */
-            virtual Primitive2DSequence SAL_CALL getDecomposition( const css::uno::Sequence< css::beans::PropertyValue >& rViewParameters ) override;
+            virtual css::uno::Sequence< ::css::uno::Reference< ::css::graphic::XPrimitive2D > > SAL_CALL getDecomposition( const css::uno::Sequence< css::beans::PropertyValue >& rViewParameters ) override;
 
             /** The getRange implementation for UNO API will use getRange from this implementation. It
                 will construct a ViewInformation2D from the ViewParameters for that purpose

@@ -175,7 +175,7 @@ public:
                             const WorkbookHelper& rHelper,
                             const ISegmentProgressBarRef& rxProgressBar,
                             WorksheetType eSheetType,
-                            sal_Int16 nSheet );
+                            SCTAB nSheet );
 
     // horrible accessor for hidden WorksheetGlobals ...
     static IWorksheetProgress *getWorksheetInterface( const WorksheetGlobalsRef &xRef );

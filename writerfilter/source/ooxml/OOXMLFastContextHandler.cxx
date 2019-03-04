@@ -143,7 +143,7 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
 
 // xml::sax::XFastContextHandler:
 void SAL_CALL OOXMLFastContextHandler::startFastElement
-(Token_t Element,
+(sal_Int32 Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
     if (oox::getNamespace(Element) == NMSP_mce)
@@ -162,7 +162,7 @@ void SAL_CALL OOXMLFastContextHandler::startUnknownElement
 {
 }
 
-void SAL_CALL OOXMLFastContextHandler::endFastElement(Token_t Element)
+void SAL_CALL OOXMLFastContextHandler::endFastElement(sal_Int32 Element)
 {
     if (Element == (NMSP_mce | XML_Choice) || Element == (NMSP_mce | XML_Fallback))
         m_bDiscardChildren = false;
@@ -202,7 +202,7 @@ void SAL_CALL OOXMLFastContextHandler::endUnknownElement
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
  OOXMLFastContextHandler::createFastChildContext
-(Token_t Element,
+(sal_Int32 Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
     uno::Reference< xml::sax::XFastContextHandler > xResult;
@@ -1249,7 +1249,7 @@ OOXMLFastContextHandlerTable::~OOXMLFastContextHandlerTable()
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 OOXMLFastContextHandlerTable::createFastChildContext
-(Token_t Element,
+(sal_Int32 Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
     addCurrentChild();

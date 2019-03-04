@@ -185,7 +185,7 @@ private:
 #endif
 
         virtual void prepend( const Int8Sequence &rWhat );
-        virtual void append( const Int8Sequence &rWhat ) override;
+        virtual void append( const css::uno::Sequence<sal_Int8> &rWhat ) override;
         void postpone( const Int8Sequence &rWhat );
 
     protected:
@@ -216,7 +216,7 @@ private:
 #endif
 
         virtual void prepend( const Int8Sequence &rWhat ) override;
-        virtual void append( const Int8Sequence &rWhat ) override;
+        virtual void append( const css::uno::Sequence<sal_Int8> &rWhat ) override;
     private:
         void sort();
     };

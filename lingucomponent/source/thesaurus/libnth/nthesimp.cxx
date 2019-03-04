@@ -237,7 +237,7 @@ sal_Bool SAL_CALL Thesaurus::hasLocale(const Locale& rLocale)
 
 Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryMeanings(
     const OUString& qTerm, const Locale& rLocale,
-    const PropertyValues& rProperties)
+    const css::uno::Sequence< css::beans::PropertyValue >& rProperties)
 {
     MutexGuard      aGuard( GetLinguMutex() );
 

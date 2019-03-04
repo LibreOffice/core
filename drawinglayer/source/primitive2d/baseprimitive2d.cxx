@@ -80,7 +80,7 @@ namespace drawinglayer
         {
         }
 
-        Primitive2DSequence SAL_CALL BasePrimitive2D::getDecomposition( const uno::Sequence< beans::PropertyValue >& rViewParameters )
+        css::uno::Sequence< ::css::uno::Reference< ::css::graphic::XPrimitive2D > > SAL_CALL BasePrimitive2D::getDecomposition( const uno::Sequence< beans::PropertyValue >& rViewParameters )
         {
             const geometry::ViewInformation2D aViewInformation(rViewParameters);
             Primitive2DContainer aContainer;
