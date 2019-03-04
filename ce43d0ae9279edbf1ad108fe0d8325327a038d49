@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "ff82abbf_c28ec2cf",
+        "filename": "external/neon/configs/config.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-04T08:39:55Z",
+      "side": 1,
+      "message": "addressed now with \u003chttps://gerrit.libreoffice.org/#/c/68580/\u003e \"Some more WIN32 -\u003e _WIN32\"",
+      "parentUuid": "1f485f77_1168341f",
+      "revId": "ce43d0ae9279edbf1ad108fe0d8325327a038d49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f485f77_5186acdd",
         "filename": "external/neon/configs/config.h",
         "patchSetId": 2
