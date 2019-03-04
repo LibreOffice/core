@@ -292,6 +292,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf115719, "tdf115719.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf123243, "tdf123243.docx")
+{
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 1; Actual:
+    // 2'; i.e. unexpected paragraph margin created 2 pages.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf116410, "tdf116410.docx")
 {
     // Opposite of the above, was 2 pages, should be 1 page.
