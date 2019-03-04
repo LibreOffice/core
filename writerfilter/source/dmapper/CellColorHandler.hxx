@@ -20,7 +20,6 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_CELLCOLORHANDLER_HXX
 
 #include "LoggedResources.hxx"
-#include "PropertyMap.hxx"
 #include <memory>
 #include <vector>
 
@@ -55,7 +54,7 @@ public:
     CellColorHandler( );
     virtual ~CellColorHandler() override;
 
-    TablePropertyMapPtr getProperties();
+    ::tools::SvRef<TablePropertyMap>            getProperties();
 
     void setOutputFormat( OutputFormat format ) { m_OutputFormat = format; }
 

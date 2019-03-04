@@ -167,7 +167,7 @@ void SchemaParser::parseSchema()
     }
 }
 
-std::vector<ColumnDefinition> SchemaParser::getTableColumnTypes(const OUString& sTableName) const
+ColumnTypeVector SchemaParser::getTableColumnTypes(const OUString& sTableName) const
 {
     return m_ColumnTypes.at(sTableName);
 }

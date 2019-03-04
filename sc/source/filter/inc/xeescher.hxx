@@ -365,13 +365,16 @@ private:
 class XclExpComments : public XclExpRecord
 {
 public:
-                        XclExpComments( SCTAB nTab, XclExpRecordList< XclExpNote >& rNotes );
+    typedef XclExpRecordList< XclExpNote >
+                        XclExpNoteList;
+
+                        XclExpComments( SCTAB nTab, XclExpNoteList& rNotes );
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
     SCTAB const         mnTab;
-    XclExpRecordList< XclExpNote >& mrNotes;
+    XclExpNoteList&     mrNotes;
 };
 
 // object manager =============================================================

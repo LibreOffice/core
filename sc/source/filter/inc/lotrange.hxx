@@ -94,9 +94,9 @@ private:
 public:
     LotusRangeList();
     ~LotusRangeList();
-    inline LR_ID        GetIndex( SCCOL nCol, SCROW nRow );
-    inline LR_ID        GetIndex( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE );
-    LR_ID               GetIndex( const LotusRange& );
+    inline sal_uInt16       GetIndex( SCCOL nCol, SCROW nRow );
+    inline sal_uInt16       GetIndex( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE );
+    sal_uInt16              GetIndex( const LotusRange& );
     void                Append( std::unique_ptr<LotusRange> pLR );
 };
 

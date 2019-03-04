@@ -2401,7 +2401,7 @@ void FileDialogHelper::StartExecuteModal( const Link<FileDialogHelper*,void>& rE
         mpImpl->implStartExecute();
 }
 
-sal_Int16 FileDialogHelper::GetDialogType() const { return mpImpl ? mpImpl->m_nDialogType : 0; }
+short FileDialogHelper::GetDialogType() const { return mpImpl ? mpImpl->m_nDialogType : 0; }
 
 bool FileDialogHelper::IsPasswordEnabled() const
 {

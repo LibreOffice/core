@@ -622,7 +622,7 @@ namespace svt
         void    implCreateActiveAccessible( );
 
     private:
-        virtual void PaintField(vcl::RenderContext& rDev, const tools::Rectangle& rRect,
+        virtual void PaintField(OutputDevice& rDev, const tools::Rectangle& rRect,
                                 sal_uInt16 nColumnId ) const override;
         using Control::ImplInitSettings;
         SVT_DLLPRIVATE void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );

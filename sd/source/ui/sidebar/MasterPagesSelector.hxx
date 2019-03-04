@@ -107,7 +107,7 @@ protected:
 
     virtual void AssignMasterPageToPageList (
         SdPage* pMasterPage,
-        const std::shared_ptr<std::vector<SdPage*>>& rPageList);
+        const ::sd::slidesorter::SharedPageSelection& rPageList);
 
     virtual void NotifyContainerChangeEvent (const MasterPageContainerChangeEvent& rEvent);
 

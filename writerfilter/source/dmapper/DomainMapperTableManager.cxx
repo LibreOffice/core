@@ -389,7 +389,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
     return bRet;
 }
 
-DomainMapperTableManager::IntVectorPtr const & DomainMapperTableManager::getCurrentGrid( )
+std::shared_ptr< vector<sal_Int32> > const & DomainMapperTableManager::getCurrentGrid( )
 {
     return m_aTableGrid.back( );
 }
@@ -399,12 +399,12 @@ bool DomainMapperTableManager::hasCurrentSpans() const
     return !m_aGridSpans.empty();
 }
 
-DomainMapperTableManager::IntVectorPtr const & DomainMapperTableManager::getCurrentSpans( )
+std::shared_ptr< vector< sal_Int32 > > const & DomainMapperTableManager::getCurrentSpans( )
 {
     return m_aGridSpans.back( );
 }
 
-DomainMapperTableManager::IntVectorPtr const & DomainMapperTableManager::getCurrentCellWidths( )
+std::shared_ptr< vector< sal_Int32 > > const & DomainMapperTableManager::getCurrentCellWidths( )
 {
     return m_aCellWidths.back( );
 }

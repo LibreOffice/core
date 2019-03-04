@@ -35,7 +35,7 @@ using namespace ::com::sun::star::presentation;
 using ::com::sun::star::drawing::XShape;
 
 /** returns a helper class to manipulate effects inside the main sequence */
-std::shared_ptr< sd::MainSequence >  const & SdPage::getMainSequence()
+sd::MainSequencePtr const & SdPage::getMainSequence()
 {
     if (nullptr == mpMainSequence)
         mpMainSequence.reset( new sd::MainSequence( getAnimationNode() ) );

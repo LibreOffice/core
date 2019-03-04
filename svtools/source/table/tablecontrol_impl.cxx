@@ -1727,7 +1727,7 @@ namespace svt { namespace table
     }
 
 
-    ColPos TableControl_Impl::getCurrentColumn() const
+    RowPos TableControl_Impl::getCurrentColumn() const
     {
         return m_nCurColumn;
     }

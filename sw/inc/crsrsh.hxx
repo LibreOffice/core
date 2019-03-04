@@ -802,7 +802,7 @@ public:
     void SetAutoUpdateCells( bool bFlag )       { m_bAutoUpdateCells = bFlag; }
 
     bool GetShadowCursorPos( const Point& rPt, SwFillMode eFillMode,
-                            SwRect& rRect, sal_Int16& rOrient );
+                            SwRect& rRect, short& rOrient );
     bool SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode );
 
     const SwRangeRedline* SelNextRedline();

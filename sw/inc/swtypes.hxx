@@ -26,7 +26,6 @@
 #include "swdllapi.h"
 #include <o3tl/typed_flags_set.hxx>
 #include <i18nlangtag/lang.h>
-#include <vcl/outdev.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace linguistic2{
@@ -131,7 +130,7 @@ css::uno::Reference< css::linguistic2::XThesaurus >     GetThesaurus();
 css::uno::Reference< css::linguistic2::XLinguProperties > GetLinguPropertySet();
 
 // Returns the twip size of this graphic.
-SW_DLLPUBLIC Size GetGraphicSizeTwip( const Graphic&, vcl::RenderContext* pOutDev );
+SW_DLLPUBLIC Size GetGraphicSizeTwip( const Graphic&, OutputDevice* pOutDev );
 
 // Separator for jumps to different content types in document.
 const sal_Unicode cMarkSeparator = '|';

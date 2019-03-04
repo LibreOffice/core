@@ -1151,7 +1151,7 @@ public:
     */
     const SwTable* InsertTable( const SwInsertTableOptions& rInsTableOpts,  // HeadlineNoBorder
                                 const SwPosition& rPos, sal_uInt16 nRows,
-                                sal_uInt16 nCols, sal_Int16 eAdjust,
+                                sal_uInt16 nCols, short eAdjust,
                                 const SwTableAutoFormat* pTAFormat = nullptr,
                                 const std::vector<sal_uInt16> *pColArr = nullptr,
                                 bool bCalledFromShell = false,
@@ -1164,7 +1164,7 @@ public:
     // Create a balanced table out of the selected range.
     const SwTable* TextToTable( const SwInsertTableOptions& rInsTableOpts, // HeadlineNoBorder,
                                 const SwPaM& rRange, sal_Unicode cCh,
-                                sal_Int16 eAdjust,
+                                short eAdjust,
                                 const SwTableAutoFormat* );
 
     // text to table conversion - API support

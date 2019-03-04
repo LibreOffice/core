@@ -328,7 +328,7 @@ OUString SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) cons
     return sRet;
 }
 
-void SdrItemBrowserControl::PaintField(vcl::RenderContext& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId) const
+void SdrItemBrowserControl::PaintField(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId) const
 {
     if (nCurrentPaintRow<0 || static_cast<std::size_t>(nCurrentPaintRow)>=aList.size()) {
         return;

@@ -184,7 +184,7 @@ void GetWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& x
         }
 }
 
-Reader* GetReader( const OUString& rFltName )
+SwRead GetReader( const OUString& rFltName )
 {
     SwRead pRead = nullptr;
     for( int n = 0; n < MAXFILTER; ++n )

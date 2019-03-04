@@ -19,10 +19,9 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_BORDERHANDLER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_BORDERHANDLER_HXX
 
-#include <memory>
 #include <vector>
 #include "LoggedResources.hxx"
-#include "PropertyMap.hxx"
+#include <memory>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <o3tl/enumarray.hxx>
@@ -68,7 +67,7 @@ public:
     explicit BorderHandler( bool bOOXML );
     virtual ~BorderHandler() override;
 
-    PropertyMapPtr          getProperties();
+    ::tools::SvRef<PropertyMap>            getProperties();
     css::table::BorderLine2 getBorderLine();
     sal_Int32                                   getLineDistance() const { return m_nLineDistance;}
     bool                                        getShadow() { return m_bShadow;}

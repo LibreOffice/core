@@ -32,9 +32,6 @@ namespace vcl { class Window; }
 
 class OutputDevice;
 class StyleSettings;
-namespace vcl {
-    typedef OutputDevice RenderContext;
-};
 
 
 namespace svt { namespace table
@@ -92,7 +89,7 @@ namespace svt { namespace table
                 the style to be used for drawing
         */
         virtual void    PaintHeaderArea(
-                            vcl::RenderContext& _rDevice, const tools::Rectangle& _rArea,
+                            OutputDevice& _rDevice, const tools::Rectangle& _rArea,
                             bool _bIsColHeaderArea, bool _bIsRowHeaderArea,
                             const StyleSettings& _rStyle ) = 0;
 
@@ -111,7 +108,7 @@ namespace svt { namespace table
                 the style to be used for drawing
         */
         virtual void    PaintColumnHeader( ColPos _nCol, bool _bActive,
-                            vcl::RenderContext& _rDevice, const tools::Rectangle& _rArea,
+                            OutputDevice& _rDevice, const tools::Rectangle& _rArea,
                             const StyleSettings& _rStyle ) = 0;
 
         /** prepares a row for painting
@@ -146,7 +143,7 @@ namespace svt { namespace table
                 the style to be used for drawing
         */
         virtual void    PrepareRow( RowPos _nRow, bool i_hasControlFocus, bool _bSelected,
-                            vcl::RenderContext& _rDevice, const tools::Rectangle& _rRowArea,
+                            OutputDevice& _rDevice, const tools::Rectangle& _rRowArea,
                             const StyleSettings& _rStyle ) = 0;
 
         /** paints the header of a row
@@ -175,7 +172,7 @@ namespace svt { namespace table
                 the style to be used for drawing
         */
         virtual void    PaintRowHeader( bool i_hasControlFocus, bool _bSelected,
-                            vcl::RenderContext& _rDevice, tools::Rectangle const & _rArea,
+                            OutputDevice& _rDevice, tools::Rectangle const & _rArea,
                             StyleSettings const & _rStyle ) = 0;
 
         /** paints a certain cell
@@ -206,7 +203,7 @@ namespace svt { namespace table
         */
         virtual void    PaintCell( ColPos const i_col,
                             bool i_hasControlFocus, bool _bSelected,
-                            vcl::RenderContext& _rDevice, const tools::Rectangle& _rArea,
+                            OutputDevice& _rDevice, const tools::Rectangle& _rArea,
                             const StyleSettings& _rStyle ) = 0;
 
         /** draws a cell cursor in the given rectangle

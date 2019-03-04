@@ -167,8 +167,7 @@ public:
     css::uno::Reference<css::io::XInputStream>
         SAL_CALL getCharacterStream(sal_Int32 column) override;
 
-    Any SAL_CALL getObject(
-        sal_Int32 column, const css::uno::Reference<css::container::XNameAccess>& typeMap) override;
+    Any SAL_CALL getObject(sal_Int32 column, const my_XNameAccessRef& typeMap) override;
 
     css::uno::Reference<css::sdbc::XRef> SAL_CALL getRef(sal_Int32 column) override;
     css::uno::Reference<css::sdbc::XBlob> SAL_CALL getBlob(sal_Int32 column) override;

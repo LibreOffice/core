@@ -2463,7 +2463,7 @@ void XMLTextParagraphExport::exportSoftPageBreak()
 void XMLTextParagraphExport::exportTextMark(
     const Reference<XPropertySet> & rPropSet,
     const OUString& rProperty,
-    const ::xmloff::token::XMLTokenEnum pElements[],
+    const enum XMLTokenEnum pElements[],
     bool bAutoStyles)
 {
     // mib said: "Hau wech!"

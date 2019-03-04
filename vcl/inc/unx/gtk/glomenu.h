@@ -39,7 +39,7 @@ gint       g_lo_menu_get_n_items_from_section                           (GLOMenu
 
 void        g_lo_menu_insert                                            (GLOMenu     *menu,
                                                                          gint         position,
-                                                                         const gchar *label);
+                                                                         const char  *label);
 
 void        g_lo_menu_insert_in_section                                 (GLOMenu     *menu,
                                                                          gint         section,

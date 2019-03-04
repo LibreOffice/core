@@ -48,8 +48,12 @@ using namespace css::io;
 using namespace css::uno;
 using namespace css::sdbc;
 
-void lcl_setParams(const std::vector<Any>& row, Reference<XParameters> const& xParam,
-                   const std::vector<dbahsql::ColumnDefinition>& rColTypes)
+using ColumnTypeVector = std::vector<dbahsql::ColumnDefinition>;
+using RowVector = std::vector<Any>;
+using IndexVector = std::vector<sal_Int32>;
+
+void lcl_setParams(const RowVector& row, Reference<XParameters> const& xParam,
+                   const ColumnTypeVector& rColTypes)
 {
     assert(row.size() == rColTypes.size());
     size_t nColIndex = 0;
@@ -178,8 +182,7 @@ void lcl_setParams(const std::vector<Any>& row, Reference<XParameters> const& xP
     }
 }
 
-OUString lcl_createInsertStatement(const OUString& sTableName,
-                                   const std::vector<dbahsql::ColumnDefinition>& rColTypes)
+OUString lcl_createInsertStatement(const OUString& sTableName, const ColumnTypeVector& rColTypes)
 {
     assert(rColTypes.size() > 0);
     OUStringBuffer sql("INSERT INTO ");
@@ -218,8 +221,8 @@ HsqlImporter::HsqlImporter(Reference<XConnection>& rConnection, const Reference<
     m_xStorage.set(rStorage);
 }
 
-void HsqlImporter::insertRow(const std::vector<css::uno::Any>& xRows, const OUString& sTableName,
-                             const std::vector<ColumnDefinition>& rColTypes)
+void HsqlImporter::insertRow(const RowVector& xRows, const OUString& sTableName,
+                             const ColumnTypeVector& rColTypes)
 {
     OUString sStatement = lcl_createInsertStatement(sTableName, rColTypes);
     Reference<XPreparedStatement> xStatement = m_rConnection->prepareStatement(sStatement);
@@ -233,8 +236,8 @@ void HsqlImporter::insertRow(const std::vector<css::uno::Any>& xRows, const OUSt
 }
 
 void HsqlImporter::processTree(HsqlBinaryNode& rNode, HsqlRowInputStream& rStream,
-                               const std::vector<ColumnDefinition>& rColTypes,
-                               const OUString& sTableName, sal_Int32 nIndexCount)
+                               const ColumnTypeVector& rColTypes, const OUString& sTableName,
+                               sal_Int32 nIndexCount)
 {
     rNode.readChildren(rStream);
     sal_Int32 nNext = rNode.getLeft();
@@ -264,7 +267,7 @@ void HsqlImporter::processTree(HsqlBinaryNode& rNode, HsqlRowInputStream& rStrea
  * Balance: ?
  * Left/Right/Parent: File position of the Left/Right/Parent child
  */
-void HsqlImporter::parseTableRows(const std::vector<sal_Int32>& rIndexes,
+void HsqlImporter::parseTableRows(const IndexVector& rIndexes,
                                   const std::vector<ColumnDefinition>& rColTypes,
                                   const OUString& sTableName)
 {

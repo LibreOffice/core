@@ -220,7 +220,7 @@ void VCLXGraphicControl::ImplSetNewImage()
     pButton->SetModeImage( GetImage() );
 }
 
-void VCLXGraphicControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags )
+void VCLXGraphicControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, short Flags )
 {
     SolarMutexGuard aGuard;
 
@@ -863,7 +863,7 @@ void VCLXCheckBox::setLabel( const OUString& rLabel )
         pWindow->SetText( rLabel );
 }
 
-void VCLXCheckBox::setState( sal_Int16 n )
+void VCLXCheckBox::setState( short n )
 {
     SolarMutexGuard aGuard;
 
@@ -891,11 +891,11 @@ void VCLXCheckBox::setState( sal_Int16 n )
     }
 }
 
-sal_Int16 VCLXCheckBox::getState()
+short VCLXCheckBox::getState()
 {
     SolarMutexGuard aGuard;
 
-    sal_Int16 nState = -1;
+    short nState = -1;
     VclPtr< CheckBox > pCheckBox = GetAs< CheckBox >();
     if ( pCheckBox )
     {
@@ -2956,7 +2956,7 @@ OUString VCLXFixedHyperlink::getURL(  )
     return aText;
 }
 
-void VCLXFixedHyperlink::setAlignment( sal_Int16 nAlign )
+void VCLXFixedHyperlink::setAlignment( short nAlign )
 {
     SolarMutexGuard aGuard;
 
@@ -2977,11 +2977,11 @@ void VCLXFixedHyperlink::setAlignment( sal_Int16 nAlign )
     }
 }
 
-sal_Int16 VCLXFixedHyperlink::getAlignment()
+short VCLXFixedHyperlink::getAlignment()
 {
     SolarMutexGuard aGuard;
 
-    sal_Int16 nAlign = 0;
+    short nAlign = 0;
     VclPtr< vcl::Window > pWindow = GetWindow();
     if ( pWindow )
     {
@@ -3204,7 +3204,7 @@ OUString VCLXFixedText::getText()
     return aText;
 }
 
-void VCLXFixedText::setAlignment( sal_Int16 nAlign )
+void VCLXFixedText::setAlignment( short nAlign )
 {
     SolarMutexGuard aGuard;
 
@@ -3225,11 +3225,11 @@ void VCLXFixedText::setAlignment( sal_Int16 nAlign )
     }
 }
 
-sal_Int16 VCLXFixedText::getAlignment()
+short VCLXFixedText::getAlignment()
 {
     SolarMutexGuard aGuard;
 
-    sal_Int16 nAlign = 0;
+    short nAlign = 0;
     VclPtr< vcl::Window > pWindow = GetWindow();
     if ( pWindow )
     {

@@ -594,7 +594,7 @@ namespace svxform
     }
 
 
-    SvTreeListEntry* NavigatorTree::Insert( FmEntryData* pEntryData, sal_uLong nRelPos )
+    SvTreeListEntry* NavigatorTree::Insert( FmEntryData* pEntryData, sal_uIntPtr nRelPos )
     {
 
         // insert current entry

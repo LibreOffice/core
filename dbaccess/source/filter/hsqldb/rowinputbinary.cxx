@@ -134,6 +134,8 @@ using namespace css::io;
 using namespace boost::posix_time;
 using namespace boost::gregorian;
 
+typedef std::vector<ColumnDefinition> ColumnTypeVector;
+
 HsqlRowInputStream::HsqlRowInputStream() {}
 
 void HsqlRowInputStream::setInputStream(Reference<XInputStream> const& rStream)
@@ -237,7 +239,7 @@ bool HsqlRowInputStream::checkNull()
     return nNull == 0;
 }
 
-std::vector<Any> HsqlRowInputStream::readOneRow(const std::vector<ColumnDefinition>& nColTypes)
+std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColTypes)
 {
     auto nLen = nColTypes.size();
     std::vector<Any> aData;
