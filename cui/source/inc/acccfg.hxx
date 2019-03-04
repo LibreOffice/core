@@ -41,7 +41,6 @@
 #include "cfgutil.hxx"
 
 class SfxMacroInfoItem;
-class SfxConfigGroupListBox;
 class SfxConfigFunctionListBox;
 class SfxAcceleratorConfigPage;
 class SfxStringItem;
