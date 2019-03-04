@@ -1755,7 +1755,7 @@ void ORowSet::impl_initializeColumnSettings_nothrow( const Reference< XPropertyS
         return;
 
     // the template column could not provide *any* setting. Okay, probably it's a parser column, which
-    // does not offer those. However, perhaps the template column referes to a table column, which we
+    // does not offer those. However, perhaps the template column refers to a table column, which we
     // can use as new template column
     try
     {
