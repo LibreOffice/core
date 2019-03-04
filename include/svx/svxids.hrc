@@ -696,7 +696,7 @@ class SfxStringItem;
 #define SID_TRANSLITERATE_HALFWIDTH                     ( SID_SVX_START + 914 )
 #define SID_TRANSLITERATE_FULLWIDTH                     ( SID_SVX_START + 915 )
 #define SID_TRANSLITERATE_HIRAGANA                      ( SID_SVX_START + 916 )
-#define SID_TRANSLITERATE_KATAGANA                      ( SID_SVX_START + 917 )
+#define SID_TRANSLITERATE_KATAKANA                      ( SID_SVX_START + 917 )
 
 // CAUTION! Range <919 .. 920> used by EditEngine (!)
 

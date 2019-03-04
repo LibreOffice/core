@@ -302,7 +302,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case SID_TRANSLITERATE_HALFWIDTH:
             case SID_TRANSLITERATE_FULLWIDTH:
             case SID_TRANSLITERATE_HIRAGANA:
-            case SID_TRANSLITERATE_KATAGANA:
+            case SID_TRANSLITERATE_KATAKANA:
                 ScViewUtil::HideDisabledSlot( rSet, GetViewData()->GetBindings(), nWhich );
             break;
             case SID_CONVERT_FORMULA_TO_VALUE:

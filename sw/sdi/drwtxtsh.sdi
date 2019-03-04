@@ -600,7 +600,7 @@ interface TextDrawText
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
-    SID_TRANSLITERATE_KATAGANA
+    SID_TRANSLITERATE_KATAKANA
     [
         ExecMethod = ExecTransliteration;
         StateMethod = GetState ;

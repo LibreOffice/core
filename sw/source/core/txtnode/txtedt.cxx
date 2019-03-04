@@ -1730,7 +1730,7 @@ namespace
     };
 }
 
-// change text to Upper/Lower/Hiragana/Katagana/...
+// change text to Upper/Lower/Hiragana/Katakana/...
 void SwTextNode::TransliterateText(
     utl::TransliterationWrapper& rTrans,
     sal_Int32 nStt, sal_Int32 nEnd,

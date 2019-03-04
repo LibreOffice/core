@@ -1368,7 +1368,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_TRANSLITERATE_HALFWIDTH:
         case SID_TRANSLITERATE_FULLWIDTH:
         case SID_TRANSLITERATE_HIRAGANA:
-        case SID_TRANSLITERATE_KATAGANA:
+        case SID_TRANSLITERATE_KATAKANA:
         {
             OutlinerView* pOLV = GetView()->GetTextEditOutlinerView();
             if( pOLV )
@@ -1401,7 +1401,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     case SID_TRANSLITERATE_HIRAGANA:
                         nType = TransliterationFlags::KATAKANA_HIRAGANA;
                         break;
-                    case SID_TRANSLITERATE_KATAGANA:
+                    case SID_TRANSLITERATE_KATAKANA:
                         nType = TransliterationFlags::HIRAGANA_KATAKANA;
                         break;
                 }

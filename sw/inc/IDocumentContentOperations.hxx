@@ -148,7 +148,7 @@ public:
     virtual bool InsertString(const SwPaM &rRg, const OUString&,
               const SwInsertFlags nInsertMode = SwInsertFlags::EMPTYEXPAND ) = 0;
 
-    /** change text to Upper/Lower/Hiragana/Katagana/...
+    /** change text to Upper/Lower/Hiragana/Katakana/...
      */
     virtual void TransliterateText(const SwPaM& rPaM, utl::TransliterationWrapper&) = 0;
 

@@ -383,7 +383,7 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
     if ( !(SfxItemState::DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_HALFWIDTH) ||
          SfxItemState::DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_FULLWIDTH) ||
          SfxItemState::DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_HIRAGANA) ||
-         SfxItemState::DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_KATAGANA)) )
+         SfxItemState::DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_KATAKANA)) )
         return;
 
     SvtCJKOptions aCJKOptions;
@@ -392,18 +392,18 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
         GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, false );
         GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, false );
         GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, false );
-        GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, false );
+        GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAKANA, false );
         rSet.DisableItem( SID_TRANSLITERATE_HALFWIDTH );
         rSet.DisableItem( SID_TRANSLITERATE_FULLWIDTH );
         rSet.DisableItem( SID_TRANSLITERATE_HIRAGANA );
-        rSet.DisableItem( SID_TRANSLITERATE_KATAGANA );
+        rSet.DisableItem( SID_TRANSLITERATE_KATAKANA );
     }
     else
     {
         GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, true );
         GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, true );
         GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, true );
-        GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, true );
+        GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAKANA, true );
     }
 }
 
@@ -428,7 +428,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         (nSlot == SID_TRANSLITERATE_HALFWIDTH) ||
         (nSlot == SID_TRANSLITERATE_FULLWIDTH) ||
         (nSlot == SID_TRANSLITERATE_HIRAGANA) ||
-        (nSlot == SID_TRANSLITERATE_KATAGANA) ||
+        (nSlot == SID_TRANSLITERATE_KATAKANA) ||
         (nSlot == SID_CUT) ||
         (nSlot == SID_PASTE) ||
         (nSlot == SID_PASTE_UNFORMATTED) ||
@@ -587,7 +587,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         case SID_TRANSLITERATE_HALFWIDTH:
         case SID_TRANSLITERATE_FULLWIDTH:
         case SID_TRANSLITERATE_HIRAGANA:
-        case SID_TRANSLITERATE_KATAGANA:
+        case SID_TRANSLITERATE_KATAKANA:
         {
             OutlinerView* pOLV = pOlView ? pOlView->GetViewByWindow( GetActiveWindow() ) : nullptr;
             if( pOLV )
@@ -620,7 +620,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
                     case SID_TRANSLITERATE_HIRAGANA:
                         nType = TransliterationFlags::KATAKANA_HIRAGANA;
                         break;
-                    case SID_TRANSLITERATE_KATAGANA:
+                    case SID_TRANSLITERATE_KATAKANA:
                         nType = TransliterationFlags::HIRAGANA_KATAKANA;
                         break;
                 }

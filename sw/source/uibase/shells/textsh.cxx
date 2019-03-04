@@ -805,7 +805,7 @@ void SwTextShell::ExecTransliteration( SfxRequest const & rReq )
     case SID_TRANSLITERATE_HIRAGANA:
         nMode = TransliterationFlags::KATAKANA_HIRAGANA;
         break;
-    case SID_TRANSLITERATE_KATAGANA:
+    case SID_TRANSLITERATE_KATAKANA:
         nMode = TransliterationFlags::HIRAGANA_KATAKANA;
         break;
 
