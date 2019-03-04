@@ -253,11 +253,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
                 const OUString& aUString )
 {
     sal_uInt16 nHash = GetXLHashAsUINT16( aUString );
-    Sequence< sal_Int8 > aResult( 2 );
-    aResult[0] = ( nHash >> 8 );
-    aResult[1] = ( nHash & 0xFF );
-
-    return aResult;
+    return {sal_Int8(nHash >> 8), sal_Int8(nHash & 0xFF)};
 }
 
 
