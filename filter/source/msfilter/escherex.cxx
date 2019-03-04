@@ -2932,7 +2932,10 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         std::clamp(
                                             equation.nPara[ 0 ], sal_Int32(SAL_MIN_INT16),
                                             sal_Int32(SAL_MAX_INT16)) )
-                                    .WriteInt16( equation.nPara[ 1 ] )
+                                    .WriteInt16(
+                                        std::clamp(
+                                            equation.nPara[ 1 ], sal_Int32(SAL_MIN_INT16),
+                                            sal_Int32(SAL_MAX_INT16)) )
                                     .WriteInt16(
                                         std::clamp(
                                             equation.nPara[ 2 ], sal_Int32(SAL_MIN_INT16),
