@@ -981,11 +981,9 @@ bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
         {
             rStream.ReadUInt16( m_nStrResId );
             // start from 3d because default is added via constructor
-            sal_uInt16 nId = RES_POOLTABLESTYLE_3D + m_nStrResId;
-            if( RES_POOLTABLESTYLE_3D <= nId &&
-                nId < RES_POOLTABSTYLE_END )
+            if( m_nStrResId < RES_POOLTABSTYLE_END - RES_POOLTABLESTYLE_3D )
             {
-                m_aName = SwStyleNameMapper::GetUIName(nId, m_aName);
+                m_aName = SwStyleNameMapper::GetUIName(RES_POOLTABLESTYLE_3D + m_nStrResId, m_aName);
             }
             else
                 m_nStrResId = USHRT_MAX;
