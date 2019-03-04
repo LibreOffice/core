@@ -6316,7 +6316,7 @@
           <!-- UIHints: setup -->
           <info>
             <desc>Specifies whether case mapping to half and full width,
-            hiragana and katagana are available (true) or not (false).</desc>
+            hiragana and katakana are available (true) or not (false).</desc>
           </info>
           <value>false</value>
         </prop>

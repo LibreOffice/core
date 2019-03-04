@@ -63,7 +63,7 @@ interface StarCalc
     SID_TRANSLITERATE_HALFWIDTH [ StateMethod = HideDisabledSlots; Export = FALSE; ]
     SID_TRANSLITERATE_FULLWIDTH [ StateMethod = HideDisabledSlots; Export = FALSE; ]
     SID_TRANSLITERATE_HIRAGANA  [ StateMethod = HideDisabledSlots; Export = FALSE; ]
-    SID_TRANSLITERATE_KATAGANA  [ StateMethod = HideDisabledSlots; Export = FALSE; ]
+    SID_TRANSLITERATE_KATAKANA  [ StateMethod = HideDisabledSlots; Export = FALSE; ]
 
     SID_INSERT_RLM              [ StateMethod = HideDisabledSlots; Export = FALSE; ]
     SID_INSERT_LRM              [ StateMethod = HideDisabledSlots; Export = FALSE; ]
