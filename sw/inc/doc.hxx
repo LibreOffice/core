@@ -139,6 +139,7 @@ namespace sw { namespace mark {
     class MarkManager;
 }}
 namespace sw {
+    enum class RedlineMode;
     class MetaFieldManager;
     class UndoManager;
     class IShellCursorSupplier;
@@ -1315,7 +1316,7 @@ public:
 
     // insert section (the ODF kind of section, not the nodesarray kind)
     SwSection * InsertSwSection(SwPaM const& rRange, SwSectionData &,
-            SwTOXBase const*const pTOXBase,
+            std::pair<SwTOXBase const*, sw::RedlineMode> const* pTOXBase,
             SfxItemSet const*const pAttr, bool const bUpdate = true);
     static sal_uInt16 IsInsRegionAvailable( const SwPaM& rRange,
                                 const SwNode** ppSttNd = nullptr );
