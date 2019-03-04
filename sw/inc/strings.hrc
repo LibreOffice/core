@@ -1328,6 +1328,9 @@
 #define STR_MENU_UP                             NC_("STR_MENU_UP", "~Upwards")
 #define STR_MENU_DOWN                           NC_("STR_MENU_DOWN", "Do~wnwards")
 
+
+#define STR_DROP_DOWN_EMPTY_LIST                NC_("STR_DROP_DOWN_EMPTY_LIST", "No Item specified")
+
 /*--------------------------------------------------------------------
     Description: Classification strings
  --------------------------------------------------------------------*/

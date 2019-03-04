@@ -54,6 +54,7 @@
 #include <viscrs.hxx>
 #include <edimp.hxx>
 #include <tools/datetimeutils.hxx>
+#include <view.hxx>
 
 using namespace ::sw::mark;
 
@@ -372,6 +373,7 @@ namespace sw { namespace mark
         , m_vFieldmarks()
         , m_vAnnotationMarks()
         , m_pDoc(&rDoc)
+        , m_pLastActiveFieldmark(nullptr)
     { }
 
     ::sw::mark::IMark* MarkManager::makeMark(const SwPaM& rPaM,
@@ -956,6 +958,9 @@ namespace sw { namespace mark
                     IDocumentMarkAccess::iterator_t ppFieldmark = lcl_FindMark(m_vFieldmarks, *ppMark);
                     if ( ppFieldmark != m_vFieldmarks.end() )
                     {
+                        if(m_pLastActiveFieldmark == ppFieldmark->get())
+                            ClearFieldActivation();
+
                         m_vFieldmarks.erase(ppFieldmark);
                         ret.reset(new LazyFieldmarkDeleter(*ppMark, m_pDoc));
                     }
@@ -1031,6 +1036,7 @@ namespace sw { namespace mark
 
     void MarkManager::clearAllMarks()
     {
+        ClearFieldActivation();
         m_vFieldmarks.clear();
         m_vBookmarks.clear();
 
@@ -1117,10 +1123,61 @@ namespace sw { namespace mark
         SwPaM aPaM(pFieldmark->GetMarkPos());
 
         // Remove the old fieldmark and create a new one with the new type
-        deleteFieldmarkAt(*aPaM.GetPoint());
-        return makeNoTextFieldBookmark(aPaM, sName, rNewType);
+        if(aPaM.GetPoint()->nContent > 0)
+        {
+            --aPaM.GetPoint()->nContent;
+            SwPosition aNewPos (aPaM.GetPoint()->nNode, aPaM.GetPoint()->nContent);
+            deleteFieldmarkAt(aNewPos);
+            return makeNoTextFieldBookmark(aPaM, sName, rNewType);
+        }
+        return nullptr;
     }
 
+    void MarkManager::NotifyCursorUpdate(const SwCursorShell& rCursorShell)
+    {
+        SwView* pSwView = dynamic_cast<SwView *>(rCursorShell.GetSfxViewShell());
+        if(!pSwView)
+            return;
+
+        SwEditWin& rEditWin = pSwView->GetEditWin();
+        SwPosition aPos(*rCursorShell.GetCursor()->GetPoint());
+        IFieldmark* pFieldBM = getFieldmarkFor(aPos);
+        DropDownFieldmark* pNewActiveFieldmark = nullptr;
+        if ((!pFieldBM || pFieldBM->GetFieldname() != ODF_FORMDROPDOWN)
+            && aPos.nContent.GetIndex() > 0 )
+        {
+            --aPos.nContent;
+            pFieldBM = getFieldmarkFor(aPos);
+        }
+
+        if ( pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDROPDOWN )
+        {
+            if (m_pLastActiveFieldmark != pFieldBM)
+            {
+                DropDownFieldmark* pDropDownFm = dynamic_cast<DropDownFieldmark*>(pFieldBM);
+                pDropDownFm->ShowButton(&rEditWin);
+                pNewActiveFieldmark = pDropDownFm;
+            }
+            else
+            {
+                pNewActiveFieldmark = m_pLastActiveFieldmark;
+            }
+        }
+
+        if(pNewActiveFieldmark != m_pLastActiveFieldmark)
+        {
+            ClearFieldActivation();
+            m_pLastActiveFieldmark = pNewActiveFieldmark;
+        }
+    }
+
+    void MarkManager::ClearFieldActivation()
+    {
+        if(m_pLastActiveFieldmark)
+            m_pLastActiveFieldmark->RemoveButton();
+
+        m_pLastActiveFieldmark = nullptr;
+    }
 
     IFieldmark* MarkManager::getDropDownFor(const SwPosition& rPos) const
     {
