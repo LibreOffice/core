@@ -789,16 +789,12 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     if (nInsertPos > 0)
     {
         sal_uInt16 nSdPageStart = (nInsertPos - 1) / 2;
-        sal_uInt16 nSdPageEnd = GetSdPageCount(PageKind::Standard) - nSdPageCount +
-                            nSdPageStart - 1;
+        sal_uInt16 nSdPageEnd = bReplace
+            ? nSdPageStart + nReplacedStandardPages - 1
+            : GetSdPageCount(PageKind::Standard) - nSdPageCount + nSdPageStart - 1;
         const bool bRemoveEmptyPresObj =
                 (pBookmarkDoc->GetDocumentType() == DocumentType::Impress) &&
                 (GetDocumentType() == DocumentType::Draw);
-
-        if( bReplace )
-        {
-            nSdPageEnd = nSdPageStart + nReplacedStandardPages - 1;
-        }
 
         std::vector<OUString>::iterator pExchangeIter;
 
