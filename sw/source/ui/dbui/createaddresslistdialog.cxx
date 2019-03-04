@@ -76,7 +76,6 @@ class SwAddressControl_Impl
     std::map<weld::Entry*, sal_Int32> m_aEditLines;
 
     SwCSVData*                      m_pData;
-    Size                            m_aWinOutputSize;
     sal_uInt32                      m_nCurrentDataSet;
 
     bool                            m_bNoDataSet;
