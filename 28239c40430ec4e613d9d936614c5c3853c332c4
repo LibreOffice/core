@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_62301609",
+        "filename": "svx/source/accessibility/AccessibleControlShape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-03-04T09:27:30Z",
+      "side": 1,
+      "message": "I don\u0027t know if aShapeTypes, aOwnTypes are guaranteed to not have common entries - so my question might be irrelevant:\n\n*if* there\u0027s a possibility that aShapeTypes, aOwnTypes might have common entries, then isn\u0027t a proper operation\n\n    comphelper::combineSequences(aShapeTypes, comphelper::concatSequences(aOwnTypes, aAggregateTypes ))\n\n?",
+      "range": {
+        "startLine": 407,
+        "startChar": 11,
+        "endLine": 407,
+        "endChar": 111
+      },
+      "revId": "28239c40430ec4e613d9d936614c5c3853c332c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
