@@ -168,17 +168,18 @@ namespace
 
     void SetFsysExtension_Impl( OUString& rFile, const OUString& rExtension )
     {
-        const sal_Unicode* p0 = rFile.getStr();
-        const sal_Unicode* p1 = p0 + rFile.getLength() - 1;
-        while ( p1 >= p0 && *p1 != '.' )
-            p1--;
-        if ( p1 >= p0 )
-            // remove old extension
-            rFile = rFile.copy( 0, p1 - p0 + 1 - ( rExtension.getLength() > 0 ? 0 : 1 ) );
-        else if ( !rExtension.isEmpty() )
-            // no old extension
-            rFile += ".";
-        rFile += rExtension;
+        const sal_Int32 nDotPos{ rFile.lastIndexOf('.') };
+        if (nDotPos>=0)
+        {
+            if (!rExtension.isEmpty())
+                rFile = rFile.copy(0, nDotPos) + rExtension; // replace old extension with new (not empty) one
+            else if (nDotPos)
+                rFile = rFile.copy(0, nDotPos-1); // truncate extension (new one is empty)
+            else
+                rFile.clear(); // Filename was just an extension
+        }
+        else if (!rExtension.isEmpty())
+            rFile += "." + rExtension; // no extension was present, append new one if not empty
     }
 
     void lcl_autoUpdateFileExtension( SvtFileDialog* _pDialog, const OUString& _rLastFilterExt )
@@ -1309,14 +1310,13 @@ SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
     {
         SvtFileDialogFilter_Impl* pFilter = rList[ nFilter ].get();
         const OUString& rType = pFilter->GetType();
-        OUString aSingleType = rType;
 
         if ( _bMultiExt )
         {
             sal_Int32 nIdx = 0;
             while ( !pFoundFilter && nIdx != -1 )
             {
-                aSingleType = rType.getToken( 0, FILEDIALOG_DEF_EXTSEP, nIdx );
+                const OUString aSingleType = rType.getToken( 0, FILEDIALOG_DEF_EXTSEP, nIdx );
 #ifdef UNX
                 if ( aSingleType == _rFilter )
 #else
