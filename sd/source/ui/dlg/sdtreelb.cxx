@@ -1518,7 +1518,7 @@ SdDrawDocument* SdPageObjsTLV::GetBookmarkDoc(SfxMedium* pMed)
 /**
  * Entries are inserted only by request (double click)
  */
-IMPL_LINK(SdPageObjsTLV, RequestingChildrenHdl, weld::TreeIter&, rFileEntry, bool)
+IMPL_LINK(SdPageObjsTLV, RequestingChildrenHdl, const weld::TreeIter&, rFileEntry, bool)
 {
     if (!m_xTreeView->iter_has_child(rFileEntry))
     {
@@ -1583,7 +1583,7 @@ IMPL_LINK(SdPageObjsTLV, RequestingChildrenHdl, weld::TreeIter&, rFileEntry, boo
                     }
                     if (m_xTreeView->iter_has_child(*xPageEntry))
                     {
-                        m_xTreeView->set_expander_image(*xPageEntry, sImgPageObjs);
+                        m_xTreeView->set_image(*xPageEntry, sImgPageObjs);
                     }
                 }
                 nPage++;

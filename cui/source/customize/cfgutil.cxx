@@ -247,86 +247,6 @@ std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const OUString& s
     return lStyles;
 }
 
-SfxConfigFunctionListBox::SfxConfigFunctionListBox(vcl::Window* pParent, WinBits nStyle)
-    : SvTreeListBox( pParent, nStyle )
-{
-    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
-    GetModel()->SetSortMode( SortAscending );
-    SetQuickSearch( true );
-}
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(SfxConfigFunctionListBox, WB_TABSTOP)
-
-SfxConfigFunctionListBox::~SfxConfigFunctionListBox()
-{
-    disposeOnce();
-}
-
-void SfxConfigFunctionListBox::dispose()
-{
-    ClearAll();
-    SvTreeListBox::dispose();
-}
-
-void SfxConfigFunctionListBox::MouseMove( const MouseEvent& )
-{
-}
-
-void SfxConfigFunctionListBox::ClearAll()
-/*  Description
-    Deletes all entries in the FunctionListBox, all UserData and all
-    possibly existing MacroInfo.
-*/
-{
-    sal_uInt16 nCount = aArr.size();
-    for ( sal_uInt16 i=0; i<nCount; ++i )
-    {
-        SfxGroupInfo_Impl *pData = aArr[i].get();
-
-        if ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
-        {
-            OUString* pScriptURI = static_cast<OUString*>(pData->pObject);
-            delete pScriptURI;
-        }
-
-        if ( pData->nKind == SfxCfgKind::GROUP_SCRIPTCONTAINER )
-        {
-            XInterface* xi = static_cast<XInterface *>(pData->pObject);
-            if (xi != nullptr)
-            {
-                xi->release();
-            }
-        }
-    }
-
-    aArr.clear();
-    Clear();
-}
-
-OUString SfxConfigFunctionListBox::GetHelpText( bool bConsiderParent )
-{
-    SvTreeListEntry *pEntry = FirstSelected();
-    if ( pEntry )
-    {
-        SfxGroupInfo_Impl *pData = static_cast<SfxGroupInfo_Impl*>(pEntry->GetUserData());
-        if ( pData )
-        {
-            if ( pData->nKind == SfxCfgKind::FUNCTION_SLOT )
-            {
-                if (bConsiderParent)
-                    return Application::GetHelp()->GetHelpText( pData->sCommand, this );
-                else
-                    return Application::GetHelp()->GetHelpText( pData->sCommand, static_cast<weld::Widget*>(nullptr) );
-            }
-            else if ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
-            {
-                return pData->sHelpText;
-            }
-        }
-    }
-    return OUString();
-}
-
 OUString CuiConfigFunctionListBox::GetHelpText( bool bConsiderParent )
 {
     int nSelected = m_xTreeView->get_selected_index();
@@ -377,6 +297,7 @@ OUString CuiConfigFunctionListBox::GetCurLabel()
 
 CuiConfigFunctionListBox::CuiConfigFunctionListBox(std::unique_ptr<weld::TreeView> xTreeView)
     : m_xTreeView(std::move(xTreeView))
+    , m_xScratchIter(m_xTreeView->make_iterator())
 {
     m_xTreeView->make_sorted();
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 35, m_xTreeView->get_height_rows(9));
@@ -599,7 +520,7 @@ void CuiConfigGroupListBox::InitModule()
 }
 
 void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::script::browse::XBrowseNode >& xRootNode,
-                                           weld::TreeIter* pParentEntry, bool bCheapChildrenOnDemand)
+                                           const weld::TreeIter* pParentEntry, bool bCheapChildrenOnDemand)
 {
     try {
         if ( xRootNode->hasChildNodes() )
@@ -1046,7 +967,7 @@ void CuiConfigGroupListBox::GroupSelected()
 /*  Description
     A basic or a library is opened.
 */
-IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, weld::TreeIter&, rIter, bool)
+IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, const weld::TreeIter&, rIter, bool)
 {
     SfxGroupInfo_Impl *pInfo = reinterpret_cast<SfxGroupInfo_Impl*>(m_xTreeView->get_id(rIter).toInt64());
     switch ( pInfo->nKind )
