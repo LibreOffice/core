@@ -144,7 +144,7 @@ static short ReadSprm( const WW8PLCFx_SEPX* pSep, sal_uInt16 nId, short nDefault
 {
     SprmResult aRes = pSep->HasSprm(nId);          // sprm here?
     const sal_uInt8* pS = aRes.pSprm;
-    short nVal = (pS && aRes.nRemainingData >= 2) ? SVBT16ToUInt16(pS) : nDefaultVal;
+    short nVal = (pS && aRes.nRemainingData >= 2) ? SVBT16ToInt16(pS) : nDefaultVal;
     return nVal;
 }
 
@@ -3439,7 +3439,7 @@ void SwWW8ImplReader::Read_SubSuperProp( sal_uInt16, const sal_uInt8* pData, sho
     }
 
     // font position in HalfPoints
-    short nPos = eVersion <= ww::eWW2 ? static_cast< sal_Int8 >( *pData ) : SVBT16ToUInt16( pData );
+    short nPos = eVersion <= ww::eWW2 ? static_cast< sal_Int8 >( *pData ) : SVBT16ToInt16( pData );
     sal_Int32 nPos2 = nPos * ( 10 * 100 );      // HalfPoints in 100 * tw
     const SvxFontHeightItem* pF
         = static_cast<const SvxFontHeightItem*>(GetFormatAttr(RES_CHRATR_FONTSIZE));
