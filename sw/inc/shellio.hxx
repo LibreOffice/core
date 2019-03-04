@@ -102,8 +102,6 @@ public:
 
 // Base class of possible options for a special reader.
 class Reader;
-// SwRead is pointer to the read-options base class.
-typedef Reader *SwRead;
 
 class SwgReaderOption
 {
@@ -356,9 +354,9 @@ public:
 
 // BEGIN source/filter/basflt/fltini.cxx
 
-extern SwRead ReadAscii, /*ReadSwg, ReadSw3, */ReadHTML, ReadXML;
+extern Reader *ReadAscii, *ReadHTML, *ReadXML;
 
-SW_DLLPUBLIC SwRead SwGetReaderXML();
+SW_DLLPUBLIC Reader* SwGetReaderXML();
 
 // END source/filter/basflt/fltini.cxx
 

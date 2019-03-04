@@ -62,7 +62,7 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
-SwRead ReadAscii = nullptr, ReadHTML = nullptr, ReadXML = nullptr;
+Reader *ReadAscii = nullptr, *ReadHTML = nullptr, *ReadXML = nullptr;
 
 static Reader* GetRTFReader();
 static Reader* GetWW8Reader();
@@ -105,12 +105,12 @@ void SwReaderWriterEntry::GetWriter( const OUString& rNm, const OUString& rBaseU
         xWrt = WriterRef(nullptr);
 }
 
-SwRead SwGetReaderXML() // SW_DLLPUBLIC
+Reader* SwGetReaderXML() // SW_DLLPUBLIC
 {
         return ReadXML;
 }
 
-static void SetFltPtr( sal_uInt16 rPos, SwRead pReader )
+static void SetFltPtr( sal_uInt16 rPos, Reader* pReader )
 {
         aReaderWriter[ rPos ].pReader = pReader;
 }
@@ -184,9 +184,9 @@ void GetWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& x
         }
 }
 
-SwRead GetReader( const OUString& rFltName )
+Reader* GetReader( const OUString& rFltName )
 {
-    SwRead pRead = nullptr;
+    Reader* pRead = nullptr;
     for( int n = 0; n < MAXFILTER; ++n )
     {
         if ( aFilterDetect[n].IsFilter( rFltName ) )
