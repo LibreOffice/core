@@ -11,15 +11,10 @@ $(eval $(call gb_Module_Module,readlicense_oo))
 
 $(eval $(call gb_Module_add_targets,readlicense_oo,\
     CustomTarget_readme \
+    CustomTarget_license \
     Package_files \
+    Package_license \
     Package_readlicense_oo_readmes \
 ))
-
-ifeq (WNT,$(OS))
-$(eval $(call gb_Module_add_targets,readlicense_oo,\
-    CustomTarget_license \
-    Package_license \
-))
-endif
 
 # vim:set noet sw=4 ts=4:
