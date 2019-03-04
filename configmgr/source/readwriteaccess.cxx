@@ -88,7 +88,7 @@ private:
     virtual sal_Bool SAL_CALL hasPendingChanges() override
     { return getRoot()->hasPendingChanges(); }
 
-    virtual css::util::ChangesSet SAL_CALL getPendingChanges() override
+    virtual css::uno::Sequence< ::css::util::ElementChange > SAL_CALL getPendingChanges() override
     { return getRoot()->getPendingChanges(); }
 
     css::beans::Property SAL_CALL getPropertyByHierarchicalName(

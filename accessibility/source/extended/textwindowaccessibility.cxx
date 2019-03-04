@@ -275,13 +275,13 @@ void SAL_CALL Paragraph::grabFocus()
 }
 
 // virtual
-css::util::Color SAL_CALL Paragraph::getForeground()
+sal_Int32 SAL_CALL Paragraph::getForeground()
 {
     return 0; // TODO
 }
 
 // virtual
-css::util::Color SAL_CALL Paragraph::getBackground()
+sal_Int32 SAL_CALL Paragraph::getBackground()
 {
     return 0; // TODO
 }

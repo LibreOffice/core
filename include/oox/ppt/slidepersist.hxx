@@ -96,7 +96,7 @@ public:
     bool isNotesPage() const { return mbNotes; }
 
     void setLayoutValueToken( sal_Int32 nLayoutValueToken ) { mnLayoutValueToken = nLayoutValueToken; }
-    short getLayoutFromValueToken();
+    sal_Int16 getLayoutFromValueToken();
 
 
     const oox::drawingml::TextListStylePtr& getDefaultTextStyle() const { return maDefaultTextStylePtr; }

@@ -1011,13 +1011,13 @@ ScColorScaleEntry* ScColorScaleEntryObj::getCoreObject()
     return pFormat->GetEntry(mnPos);
 }
 
-util::Color ScColorScaleEntryObj::getColor()
+sal_Int32 ScColorScaleEntryObj::getColor()
 {
     Color aColor = getCoreObject()->GetColor();
     return sal_Int32(aColor);
 }
 
-void ScColorScaleEntryObj::setColor(util::Color aColor)
+void ScColorScaleEntryObj::setColor(sal_Int32 aColor)
 {
     getCoreObject()->SetColor(Color(aColor));
 }

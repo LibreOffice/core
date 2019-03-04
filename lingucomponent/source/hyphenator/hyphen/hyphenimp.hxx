@@ -90,9 +90,9 @@ public:
     virtual sal_Bool SAL_CALL hasLocale( const Locale& rLocale ) override;
 
     // XHyphenator
-    virtual css::uno::Reference< css::linguistic2::XHyphenatedWord > SAL_CALL hyphenate( const OUString& aWord, const css::lang::Locale& aLocale, sal_Int16 nMaxLeading, const css::beans::PropertyValues& aProperties ) override;
-    virtual css::uno::Reference< css::linguistic2::XHyphenatedWord > SAL_CALL queryAlternativeSpelling( const OUString& aWord, const css::lang::Locale& aLocale, sal_Int16 nIndex, const css::beans::PropertyValues& aProperties ) override;
-    virtual css::uno::Reference< css::linguistic2::XPossibleHyphens > SAL_CALL createPossibleHyphens( const OUString& aWord, const css::lang::Locale& aLocale, const css::beans::PropertyValues& aProperties ) override;
+    virtual css::uno::Reference< css::linguistic2::XHyphenatedWord > SAL_CALL hyphenate( const OUString& aWord, const css::lang::Locale& aLocale, sal_Int16 nMaxLeading, const css::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
+    virtual css::uno::Reference< css::linguistic2::XHyphenatedWord > SAL_CALL queryAlternativeSpelling( const OUString& aWord, const css::lang::Locale& aLocale, sal_Int16 nIndex, const css::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
+    virtual css::uno::Reference< css::linguistic2::XPossibleHyphens > SAL_CALL createPossibleHyphens( const OUString& aWord, const css::lang::Locale& aLocale, const css::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
 
     // XLinguServiceEventBroadcaster
     virtual sal_Bool SAL_CALL addLinguServiceEventListener( const Reference< XLinguServiceEventListener >& rxLstnr ) override;

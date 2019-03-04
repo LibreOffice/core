@@ -188,9 +188,9 @@ OUString SAL_CALL SvNumberFormatterServiceObj::convertNumberToString( sal_Int32 
     return aRet;
 }
 
-util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForNumber( sal_Int32 nKey,
+sal_Int32 SAL_CALL SvNumberFormatterServiceObj::queryColorForNumber( sal_Int32 nKey,
                                                                        double fValue,
-                                                                       util::Color aDefaultColor )
+                                                                       sal_Int32 aDefaultColor )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -227,9 +227,9 @@ OUString SAL_CALL SvNumberFormatterServiceObj::formatString( sal_Int32 nKey,
     return aRet;
 }
 
-util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForString( sal_Int32 nKey,
+sal_Int32 SAL_CALL SvNumberFormatterServiceObj::queryColorForString( sal_Int32 nKey,
                                                                        const OUString& aString,
-                                                                       util::Color aDefaultColor )
+                                                                       sal_Int32 aDefaultColor )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -295,11 +295,11 @@ OUString SAL_CALL SvNumberFormatterServiceObj::convertNumberToPreviewString( con
     return aRet;
 }
 
-util::Color SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber( const OUString& aFormat,
+sal_Int32 SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber( const OUString& aFormat,
                                                                               double fValue,
                                                                               const lang::Locale& nLocale,
                                                                               sal_Bool bAllowEnglish,
-                                                                              util::Color aDefaultColor )
+                                                                              sal_Int32 aDefaultColor )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

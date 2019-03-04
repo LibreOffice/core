@@ -73,7 +73,7 @@ public:
     virtual OUString    GetEntryText( SCCOLROW nEntryNo ) const override;
 
     virtual bool        IsMirrored() const override;
-    virtual SCROW       GetHiddenCount( SCROW nEntryNo ) const override;
+    virtual SCCOLROW    GetHiddenCount( SCCOLROW nEntryNo ) const override;
 
     virtual void        SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize ) override;
     virtual void        HideEntries( SCCOLROW nStart, SCCOLROW nEnd ) override;

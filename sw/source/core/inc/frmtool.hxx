@@ -75,7 +75,7 @@ void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib);
 // transparency, saved in the color of the brush item.
 void DrawGraphic(
     const SvxBrushItem *,
-    OutputDevice *,
+    vcl::RenderContext *,
     const SwRect &rOrg,
     const SwRect &rOut,
     const sal_uInt8 nGrfNum = GRFNUM_NO,
@@ -85,11 +85,11 @@ bool DrawFillAttributes(
     const SwRect& rOriginalLayoutRect,
     const SwRegionRects& rPaintRegion,
     const basegfx::utils::B2DClipState& rClipState,
-    OutputDevice& rOut);
+    vcl::RenderContext& rOut);
 
 // RotGrfFlyFrame: Adapted to rotation
 void paintGraphicUsingPrimitivesHelper(
-    OutputDevice & rOutputDevice,
+    vcl::RenderContext & rOutputDevice,
     GraphicObject const& rGraphicObj,
     GraphicAttr const& rGraphicAttr,
     const basegfx::B2DHomMatrix& rGraphicTransform,
@@ -103,7 +103,7 @@ void SwAlignRect( SwRect &rRect, const SwViewShell *pSh, const vcl::RenderContex
 
 // method to align graphic rectangle
 // Created declaration here to avoid <extern> declarations
-void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut );
+void SwAlignGrfRect( SwRect *pGrfRect, const vcl::RenderContext &rOut );
 
 /**
  * Paint border around a run of characters using frame painting code.
@@ -144,7 +144,7 @@ extern bool bDontCreateObjects;
 extern bool bSetCompletePaintOnInvalidate;
 
 // for table settings via keyboard
-long CalcRowRstHeight( SwLayoutFrame *pRow );
+SwTwips CalcRowRstHeight( SwLayoutFrame *pRow );
 long CalcHeightWithFlys( const SwFrame *pFrame );
 
 SwPageFrame *InsertNewPage( SwPageDesc &rDesc, SwFrame *pUpper,

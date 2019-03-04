@@ -197,7 +197,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromWindowsCharset( sal_uInt8 nWinC
 
 /* ----------------------------------------------------------------------- */
 
-rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixCharset )
+rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pUnixCharset )
 {
     /* See <ftp://ftp.x.org/pub/DOCS/registry>, section 14 ("Font Charset
      * (Registry and Encoding) Names").
@@ -468,7 +468,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
 
 /* ----------------------------------------------------------------------- */
 
-rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const char* pMimeCharset )
+rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pMimeCharset )
 {
     /* All Identifiers are in lower case and contain only alphanumeric */
     /* characters. The function search for the first equal string in */
@@ -788,7 +788,7 @@ sal_uInt8 SAL_CALL rtl_getBestWindowsCharsetFromTextEncoding( rtl_TextEncoding e
 
 /* ----------------------------------------------------------------------- */
 
-const char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding  )
+const sal_Char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding  )
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )
@@ -808,7 +808,7 @@ char const * SAL_CALL rtl_getMimeCharsetFromTextEncoding(rtl_TextEncoding
                p->mpBestMimeCharset : nullptr;
 }
 
-const char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding )
+const sal_Char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding )
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )

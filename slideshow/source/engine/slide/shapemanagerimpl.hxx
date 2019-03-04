@@ -119,18 +119,18 @@ private:
     virtual void notifyShapeUpdate( const ShapeSharedPtr& rShape ) override;
     virtual ShapeSharedPtr lookupShape(
         css::uno::Reference< css::drawing::XShape > const & xShape ) const override;
-    virtual void addHyperlinkArea( const std::shared_ptr<HyperlinkArea>& rArea ) override;
+    virtual void addHyperlinkArea( const HyperlinkAreaSharedPtr& rArea ) override;
 
 
     // SubsettableShapeManager interface
 
 
-    virtual std::shared_ptr<AttributableShape> getSubsetShape(
-        const std::shared_ptr<AttributableShape>& rOrigShape,
-        const DocTreeNode&                          rTreeNode ) override;
+    virtual AttributableShapeSharedPtr getSubsetShape(
+        const AttributableShapeSharedPtr& rOrigShape,
+        const DocTreeNode&                rTreeNode ) override;
     virtual void revokeSubset(
-        const std::shared_ptr<AttributableShape>& rOrigShape,
-        const std::shared_ptr<AttributableShape>& rSubsetShape ) override;
+        const AttributableShapeSharedPtr& rOrigShape,
+        const AttributableShapeSharedPtr& rSubsetShape ) override;
 
     virtual void addIntrinsicAnimationHandler(
         const IntrinsicAnimationEventHandlerSharedPtr& rHandler ) override;

@@ -267,7 +267,6 @@ typedef ::cppu::ImplHelper2<
 class ScAccessibleCsvGrid : public ScAccessibleCsvControl, public ScAccessibleCsvGridImpl
 {
 protected:
-    typedef css::uno::Reference< css::accessibility::XAccessibleTable > XAccessibleTableRef;
     typedef std::map< sal_Int32, rtl::Reference<ScAccessibleCsvControl> > XAccessibleSet;
 
 private:
@@ -325,10 +324,10 @@ public:
     virtual sal_Int32 SAL_CALL getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     /** Returns the row headers as an AccessibleTable. */
-    virtual XAccessibleTableRef SAL_CALL getAccessibleRowHeaders() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL getAccessibleRowHeaders() override;
 
     /** Returns the column headers as an AccessibleTable. */
-    virtual XAccessibleTableRef SAL_CALL getAccessibleColumnHeaders() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL getAccessibleColumnHeaders() override;
 
     /** Returns the selected rows as a sequence. */
     virtual css::uno::Sequence< sal_Int32 > SAL_CALL getSelectedAccessibleRows() override;

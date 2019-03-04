@@ -35,8 +35,9 @@ namespace slideshow
     {
         struct SlideShowContext;
         class  Shape;
+        typedef ::std::shared_ptr< Shape > ShapeSharedPtr;
 
-        std::shared_ptr<Shape> createMediaShape(
+        ShapeSharedPtr createMediaShape(
             const css::uno::Reference<css::drawing::XShape >& xShape,
             double                                     nPrio,
             const SlideShowContext&                    rContext);

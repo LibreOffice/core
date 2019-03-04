@@ -67,7 +67,7 @@ using namespace com::sun::star::xml::xpath;
 // implement XFormsUIHelper1
 
 
-OUString Model::getDefaultServiceNameForNode( const XNode_t& xNode )
+OUString Model::getDefaultServiceNameForNode( const css::uno::Reference<css::xml::dom::XNode>& xNode )
 {
     // determine service for control. string/text field is default.
     OUString sService = "com.sun.star.form.component.TextField";
@@ -248,7 +248,7 @@ OUString Model::getDefaultBindingExpressionForNode(
 }
 
 
-OUString Model::getDefaultBindingExpressionForNode( const XNode_t& xNode )
+OUString Model::getDefaultBindingExpressionForNode( const css::uno::Reference<css::xml::dom::XNode>& xNode )
 {
     return getDefaultBindingExpressionForNode( xNode, getEvaluationContext() );
 }
@@ -270,7 +270,7 @@ static bool lcl_isWhitespace( const OUString& rString )
     return bWhitespace;
 }
 
-OUString Model::getNodeDisplayName( const XNode_t& xNode,
+OUString Model::getNodeDisplayName( const css::uno::Reference<css::xml::dom::XNode>& xNode,
                                     sal_Bool bDetail )
 {
     OUStringBuffer aBuffer;
@@ -312,7 +312,7 @@ OUString Model::getNodeDisplayName( const XNode_t& xNode,
     return aBuffer.makeStringAndClear();
 }
 
-OUString Model::getNodeName( const XNode_t& xNode )
+OUString Model::getNodeName( const css::uno::Reference<css::xml::dom::XNode>& xNode )
 {
     OUStringBuffer aBuffer;
 
@@ -334,7 +334,7 @@ OUString Model::getNodeName( const XNode_t& xNode )
     return aBuffer.makeStringAndClear();
 }
 
-OUString Model::getBindingName( const XPropertySet_t& xBinding,
+OUString Model::getBindingName( const css::uno::Reference< ::css::beans::XPropertySet >& xBinding,
                                 sal_Bool /*bDetail*/ )
 {
     OUString sID;
@@ -353,7 +353,7 @@ OUString Model::getBindingName( const XPropertySet_t& xBinding,
     return sRet;
 }
 
-OUString Model::getSubmissionName( const XPropertySet_t& xSubmission,
+OUString Model::getSubmissionName( const css::uno::Reference< ::css::beans::XPropertySet >& xSubmission,
                                    sal_Bool /*bDetail*/ )
 {
     OUString sID;
@@ -361,7 +361,7 @@ OUString Model::getSubmissionName( const XPropertySet_t& xSubmission,
     return sID;
 }
 
-Model::XPropertySet_t Model::cloneBindingAsGhost( const XPropertySet_t &xBinding )
+css::uno::Reference< ::css::beans::XPropertySet > Model::cloneBindingAsGhost( const css::uno::Reference< ::css::beans::XPropertySet > &xBinding )
 {
     // Create a new binding instance first...
     Binding *pBinding = new Binding();
@@ -377,7 +377,7 @@ Model::XPropertySet_t Model::cloneBindingAsGhost( const XPropertySet_t &xBinding
     return xNewBinding;
 }
 
-void Model::removeBindingIfUseless( const XPropertySet_t& xBinding )
+void Model::removeBindingIfUseless( const css::uno::Reference< ::css::beans::XPropertySet >& xBinding )
 {
     Binding* pBinding = Binding::getBinding( xBinding );
     if( pBinding != nullptr )
@@ -542,7 +542,7 @@ void Model::removeModel( const Reference<css::frame::XModel>& xCmp,
     }
 }
 
-Model::XNode_t Model::createElement( const XNode_t& xParent,
+css::uno::Reference<css::xml::dom::XNode> Model::createElement( const css::uno::Reference<css::xml::dom::XNode>& xParent,
                                      const OUString& sName )
 {
     Reference<XNode> xNode;
@@ -556,7 +556,7 @@ Model::XNode_t Model::createElement( const XNode_t& xParent,
     return xNode;
 }
 
-Model::XNode_t Model::createAttribute( const XNode_t& xParent,
+css::uno::Reference<css::xml::dom::XNode> Model::createAttribute( const css::uno::Reference<css::xml::dom::XNode>& xParent,
                                        const OUString& sName )
 {
     Reference<XNode> xNode;
@@ -581,7 +581,7 @@ Model::XNode_t Model::createAttribute( const XNode_t& xParent,
     return xNode;
 }
 
-Model::XNode_t Model::renameNode( const XNode_t& xNode,
+css::uno::Reference<css::xml::dom::XNode> Model::renameNode( const css::uno::Reference<css::xml::dom::XNode>& xNode,
                                   const OUString& sName )
 {
     // early out if we don't have to change the name
@@ -664,7 +664,7 @@ Model::XNode_t Model::renameNode( const XNode_t& xNode,
     return xNew.is() ? xNew : xNode;
 }
 
-Model::XPropertySet_t Model::getBindingForNode( const XNode_t& xNode,
+css::uno::Reference< ::css::beans::XPropertySet > Model::getBindingForNode( const css::uno::Reference<css::xml::dom::XNode>& xNode,
                                                 sal_Bool bCreate )
 {
     OSL_ENSURE( xNode.is(), "no node?" );
@@ -720,7 +720,7 @@ Model::XPropertySet_t Model::getBindingForNode( const XNode_t& xNode,
     return pBestBinding;
 }
 
-void Model::removeBindingForNode( const XNode_t& )
+void Model::removeBindingForNode( const css::uno::Reference<css::xml::dom::XNode>& )
 {
     // determine whether suitable binding is still used
 }
@@ -857,7 +857,7 @@ static OUString lcl_serializeForDisplay( const Reference<XXPathObject>& xResult 
 }
 
 OUString Model::getResultForExpression(
-    const XPropertySet_t& xBinding,
+    const css::uno::Reference< ::css::beans::XPropertySet >& xBinding,
     sal_Bool bIsBindingExpression,
     const OUString& sExpression )
 {
@@ -901,7 +901,7 @@ sal_Bool Model::isValidPrefixName( const OUString& sName )
 }
 
 void Model::setNodeValue(
-    const XNode_t& xNode,
+    const css::uno::Reference< ::css::xml::dom::XNode >& xNode,
     const OUString& sValue )
 {
     setSimpleContent( xNode, sValue );

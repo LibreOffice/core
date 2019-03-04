@@ -90,7 +90,7 @@ public:
 
     virtual sal_Bool SAL_CALL hasPendingChanges() override;
 
-    virtual css::util::ChangesSet SAL_CALL getPendingChanges() override;
+    virtual css::uno::Sequence< ::css::util::ElementChange > SAL_CALL getPendingChanges() override;
 
 private:
     virtual ~RootAccess() override;

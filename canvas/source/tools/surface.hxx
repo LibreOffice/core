@@ -87,7 +87,7 @@ namespace canvas
         bool drawRectangularArea(
             double                         fAlpha,
             const ::basegfx::B2DPoint&     rPos,
-            const ::basegfx::B2DRange&     rArea,
+            const ::basegfx::B2DRectangle& rArea,
             const ::basegfx::B2DHomMatrix& rTransform );
 
         /** Render the surface content to screen.

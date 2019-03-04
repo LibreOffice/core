@@ -2076,7 +2076,7 @@ SwRootFrame *SwViewShell::GetLayout() const
     return mpLayout.get();
 }
 
-OutputDevice& SwViewShell::GetRefDev() const
+vcl::RenderContext& SwViewShell::GetRefDev() const
 {
     OutputDevice* pTmpOut = nullptr;
     if (  GetWin() &&

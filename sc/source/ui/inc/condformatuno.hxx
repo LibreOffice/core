@@ -203,9 +203,9 @@ public:
 
     virtual ~ScColorScaleEntryObj() override;
 
-    virtual css::util::Color SAL_CALL getColor() override;
+    virtual sal_Int32 SAL_CALL getColor() override;
 
-    virtual void SAL_CALL setColor(css::util::Color aColor) override;
+    virtual void SAL_CALL setColor(sal_Int32 aColor) override;
 
     virtual sal_Int32 SAL_CALL getType() override;
 

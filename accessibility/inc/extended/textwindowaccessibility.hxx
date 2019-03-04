@@ -211,9 +211,9 @@ private:
 
     virtual void SAL_CALL grabFocus() override;
 
-    virtual css::util::Color SAL_CALL getForeground() override;
+    virtual sal_Int32 SAL_CALL getForeground() override;
 
-    virtual css::util::Color SAL_CALL getBackground() override;
+    virtual sal_Int32 SAL_CALL getBackground() override;
 
     virtual ::sal_Int32 SAL_CALL getCaretPosition() override;
 

@@ -57,22 +57,22 @@ public:
     virtual sal_Int32 SAL_CALL detectNumberFormat( sal_Int32 nKey, const OUString& aString ) override;
     virtual double SAL_CALL convertStringToNumber( sal_Int32 nKey, const OUString& aString ) override;
     virtual OUString SAL_CALL convertNumberToString( sal_Int32 nKey, double fValue ) override;
-    virtual css::util::Color SAL_CALL queryColorForNumber( sal_Int32 nKey,
-                            double fValue, css::util::Color aDefaultColor ) override;
+    virtual sal_Int32 SAL_CALL queryColorForNumber( sal_Int32 nKey,
+                            double fValue, sal_Int32 aDefaultColor ) override;
     virtual OUString SAL_CALL formatString( sal_Int32 nKey, const OUString& aString ) override;
-    virtual css::util::Color SAL_CALL queryColorForString( sal_Int32 nKey,
-                            const OUString& aString,
-                                css::util::Color aDefaultColor ) override;
+    virtual sal_Int32 SAL_CALL queryColorForString( sal_Int32 nKey,
+                                const OUString& aString,
+                                sal_Int32 aDefaultColor ) override;
     virtual OUString SAL_CALL getInputString( sal_Int32 nKey, double fValue ) override;
 
     // XNumberFormatPreviewer
     virtual OUString SAL_CALL convertNumberToPreviewString(
                             const OUString& aFormat, double fValue,
                             const css::lang::Locale& nLocale, sal_Bool bAllowEnglish ) override;
-    virtual css::util::Color SAL_CALL queryPreviewColorForNumber(
+    virtual sal_Int32 SAL_CALL queryPreviewColorForNumber(
                             const OUString& aFormat, double fValue,
                             const css::lang::Locale& nLocale, sal_Bool bAllowEnglish,
-                            css::util::Color aDefaultColor ) override;
+                            sal_Int32 aDefaultColor ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;

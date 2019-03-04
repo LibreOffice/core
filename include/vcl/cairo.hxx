@@ -33,6 +33,8 @@ namespace cairo {
 
     typedef std::shared_ptr<cairo_surface_t> CairoSurfaceSharedPtr;
     typedef std::shared_ptr<cairo_t>         CairoSharedPtr;
+    struct Surface;
+    typedef std::shared_ptr<Surface>         SurfaceSharedPtr;
 
     /** Cairo surface interface
 
@@ -47,7 +49,7 @@ namespace cairo {
         // Query methods
         virtual CairoSharedPtr getCairo() const = 0;
         virtual CairoSurfaceSharedPtr getCairoSurface() const = 0;
-        virtual std::shared_ptr<Surface> getSimilar(int cairo_content_type, int width, int height) const = 0;
+        virtual SurfaceSharedPtr getSimilar(int cairo_content_type, int width, int height) const = 0;
 
         /// factory for VirDev on this surface
         virtual VclPtr<VirtualDevice> createVirtualDevice() const = 0;
@@ -60,7 +62,6 @@ namespace cairo {
         virtual void flush() const = 0;
     };
 
-    typedef std::shared_ptr<Surface> SurfaceSharedPtr;
 }
 
 #endif

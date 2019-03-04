@@ -507,13 +507,13 @@ css::uno::Reference<css::xml::dom::XDocument> SAL_CALL Model::getDefaultInstance
 // bindings management
 
 
-Model::XPropertySet_t SAL_CALL Model::createBinding()
+css::uno::Reference<css::beans::XPropertySet> SAL_CALL Model::createBinding()
 {
     DBG_INVARIANT();
     return new Binding();
 }
 
-Model::XPropertySet_t Model::cloneBinding( const XPropertySet_t& xBinding )
+css::uno::Reference<css::beans::XPropertySet> Model::cloneBinding( const css::uno::Reference<css::beans::XPropertySet>& xBinding )
 {
     DBG_INVARIANT();
     XPropertySet_t xNewBinding = createBinding();
@@ -521,7 +521,7 @@ Model::XPropertySet_t Model::cloneBinding( const XPropertySet_t& xBinding )
     return xNewBinding;
 }
 
-Model::XPropertySet_t Model::getBinding( const OUString& sId )
+css::uno::Reference<css::beans::XPropertySet> Model::getBinding( const OUString& sId )
 {
     DBG_INVARIANT();
     return mxBindings->hasItem( sId ) ? mxBindings->getItem( sId ) : nullptr;
@@ -543,7 +543,7 @@ css::uno::Reference<css::xforms::XSubmission> Model::createSubmission()
     return new Submission();
 }
 
-css::uno::Reference<css::xforms::XSubmission> Model::cloneSubmission(const XPropertySet_t& xSubmission)
+css::uno::Reference<css::xforms::XSubmission> Model::cloneSubmission(const css::uno::Reference<css::beans::XPropertySet>& xSubmission)
 {
     DBG_INVARIANT();
     css::uno::Reference<css::xforms::XSubmission> xNewSubmission = createSubmission();

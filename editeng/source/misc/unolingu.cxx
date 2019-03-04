@@ -99,7 +99,7 @@ public:
             css::uno::Reference< css::linguistic2::XMeaning > > SAL_CALL
         queryMeanings( const OUString& rTerm,
                 const css::lang::Locale& rLocale,
-                const css::beans::PropertyValues& rProperties ) override;
+                const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
 };
 
 
@@ -175,7 +175,7 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL
         ThesDummy_Impl::queryMeanings(
                 const OUString& rTerm,
                 const lang::Locale& rLocale,
-                const beans::PropertyValues& rProperties )
+                const css::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
     GetThes_Impl();
     uno::Sequence< uno::Reference< linguistic2::XMeaning > > aRes;
@@ -207,10 +207,10 @@ public:
     // XSpellChecker1 (same as XSpellChecker but sal_Int16 for language)
     virtual sal_Bool SAL_CALL
         isValid( const OUString& rWord, sal_Int16 nLanguage,
-                const css::beans::PropertyValues& rProperties ) override;
+                const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
     virtual css::uno::Reference< css::linguistic2::XSpellAlternatives > SAL_CALL
         spell( const OUString& rWord, sal_Int16 nLanguage,
-                const css::beans::PropertyValues& rProperties ) override;
+                const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
 };
 
 
@@ -248,7 +248,7 @@ sal_Bool SAL_CALL
 
 sal_Bool SAL_CALL
     SpellDummy_Impl::isValid( const OUString& rWord, sal_Int16 nLanguage,
-            const beans::PropertyValues& rProperties )
+            const css::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
     GetSpell_Impl();
     bool bRes = true;
@@ -260,7 +260,7 @@ sal_Bool SAL_CALL
 
 uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL
     SpellDummy_Impl::spell( const OUString& rWord, sal_Int16 nLanguage,
-            const beans::PropertyValues& rProperties )
+            const css::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
     GetSpell_Impl();
     uno::Reference< linguistic2::XSpellAlternatives > xRes;
@@ -295,19 +295,19 @@ public:
         hyphenate( const OUString& rWord,
                 const css::lang::Locale& rLocale,
                 sal_Int16 nMaxLeading,
-                const css::beans::PropertyValues& rProperties ) override;
+                const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
     virtual css::uno::Reference<
             css::linguistic2::XHyphenatedWord > SAL_CALL
         queryAlternativeSpelling( const OUString& rWord,
                 const css::lang::Locale& rLocale,
                 sal_Int16 nIndex,
-                const css::beans::PropertyValues& rProperties ) override;
+                const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
     virtual css::uno::Reference<
             css::linguistic2::XPossibleHyphens > SAL_CALL
         createPossibleHyphens(
                 const OUString& rWord,
                 const css::lang::Locale& rLocale,
-                const css::beans::PropertyValues& rProperties ) override;
+                const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
 };
 
 
@@ -348,7 +348,7 @@ uno::Reference< linguistic2::XHyphenatedWord > SAL_CALL
             const OUString& rWord,
             const lang::Locale& rLocale,
             sal_Int16 nMaxLeading,
-            const beans::PropertyValues& rProperties )
+            const css::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
     GetHyph_Impl();
     uno::Reference< linguistic2::XHyphenatedWord > xRes;
@@ -363,7 +363,7 @@ uno::Reference< linguistic2::XHyphenatedWord > SAL_CALL
             const OUString& rWord,
             const lang::Locale& rLocale,
             sal_Int16 nIndex,
-            const PropertyValues& rProperties )
+            const css::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
     GetHyph_Impl();
     uno::Reference< linguistic2::XHyphenatedWord > xRes;
@@ -377,7 +377,7 @@ uno::Reference< linguistic2::XPossibleHyphens > SAL_CALL
     HyphDummy_Impl::createPossibleHyphens(
             const OUString& rWord,
             const lang::Locale& rLocale,
-            const beans::PropertyValues& rProperties )
+            const css::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
     GetHyph_Impl();
     uno::Reference< linguistic2::XPossibleHyphens > xRes;

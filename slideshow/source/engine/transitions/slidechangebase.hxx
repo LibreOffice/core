@@ -119,8 +119,8 @@ protected:
 
     ::basegfx::B2ISize getEnteringSlideSizePixel( const UnoViewSharedPtr& pView ) const;
 
-    static void renderBitmap( SlideBitmapSharedPtr const&                 pSlideBitmap,
-                       std::shared_ptr<cppcanvas::Canvas> const& pCanvas );
+    static void renderBitmap( SlideBitmapSharedPtr const&       pSlideBitmap,
+                              cppcanvas::CanvasSharedPtr const& pCanvas );
 
     /** Called on derived classes to perform actions before first run.
 
@@ -146,10 +146,10 @@ protected:
         Current parameter value
     */
     virtual void performIn(
-        const std::shared_ptr<cppcanvas::CustomSprite>&   rSprite,
-        const ViewEntry&                                    rViewEntry,
-        const std::shared_ptr<cppcanvas::Canvas>&         rDestinationCanvas,
-        double                                              t );
+        const cppcanvas::CustomSpriteSharedPtr&   rSprite,
+        const ViewEntry&                          rViewEntry,
+        const cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
+        double                                    t );
 
     /** Called on derived classes to implement actual slide change.
 
@@ -163,16 +163,16 @@ protected:
         Current parameter value
     */
     virtual void performOut(
-        const std::shared_ptr<cppcanvas::CustomSprite>& rSprite,
-        const ViewEntry&                                  rViewEntry,
-        const std::shared_ptr<cppcanvas::Canvas>&       rDestinationCanvas,
-        double                                            t );
+        const cppcanvas::CustomSpriteSharedPtr&   rSprite,
+        const ViewEntry&                          rViewEntry,
+        const cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
+        double                                    t );
 
     ScreenUpdater& getScreenUpdater() const { return mrScreenUpdater; }
 
 private:
 
-    std::shared_ptr<cppcanvas::CustomSprite> createSprite(
+    cppcanvas::CustomSpriteSharedPtr createSprite(
         UnoViewSharedPtr const &   pView,
         ::basegfx::B2DSize const & rSpriteSize,
         double                     nPrio ) const;

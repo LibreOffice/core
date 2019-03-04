@@ -40,7 +40,7 @@ class AnimationBaseNode : public BaseNode
 public:
     AnimationBaseNode(
         css::uno::Reference<css::animations::XAnimationNode> const& xNode,
-        ::std::shared_ptr<BaseContainerNode> const& pParent,
+        BaseContainerNodeSharedPtr const& pParent,
         NodeContext const& rContext );
 
 #if defined(DBG_UTIL)

@@ -360,7 +360,7 @@ OUString ScRowBar::GetDragHelp( long nVal )
     return lcl_MetricString( nTwips, ScResId(STR_TIP_HEIGHT) );
 }
 
-SCROW ScRowBar::GetHiddenCount( SCROW nEntryNo ) const // override only for rows
+SCCOLROW ScRowBar::GetHiddenCount( SCCOLROW nEntryNo ) const // override only for rows
 {
     const ScViewData& rViewData = pTabView->GetViewData();
     ScDocument* pDoc = rViewData.GetDocument();

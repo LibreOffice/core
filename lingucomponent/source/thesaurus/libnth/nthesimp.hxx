@@ -101,7 +101,7 @@ public:
     virtual sal_Bool SAL_CALL hasLocale( const Locale& rLocale ) override;
 
     // XThesaurus
-    virtual Sequence< Reference < css::linguistic2::XMeaning > > SAL_CALL queryMeanings( const OUString& rTerm, const Locale& rLocale, const PropertyValues& rProperties ) override;
+    virtual Sequence< Reference < css::linguistic2::XMeaning > > SAL_CALL queryMeanings( const OUString& rTerm, const Locale& rLocale, const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
 
     // XServiceDisplayName
     virtual OUString SAL_CALL getServiceDisplayName( const Locale& rLocale ) override;

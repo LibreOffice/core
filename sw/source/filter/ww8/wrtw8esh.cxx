@@ -2948,7 +2948,7 @@ void SwEscherEx::WriteOCXControl( const SwFrameFormat& rFormat, sal_uInt32 nShap
 }
 
 void SwEscherEx::MakeZOrderArrAndFollowIds(
-    std::vector<DrawObj>& rSrcArr, std::vector<DrawObj*>&rDstArr)
+    std::vector<DrawObj>& rSrcArr, DrawObjPointerVector&rDstArr)
 {
     ::lcl_makeZOrderArray(rWrt, rSrcArr, rDstArr);
 

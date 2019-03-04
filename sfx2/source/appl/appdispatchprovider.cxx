@@ -78,7 +78,7 @@ public:
 
     virtual css::uno::Reference < css::frame::XDispatch > SAL_CALL queryDispatch(
             const css::util::URL& aURL, const OUString& sTargetFrameName,
-            FrameSearchFlags eSearchFlags ) override;
+            sal_Int32 eSearchFlags ) override;
 
     virtual css::uno::Sequence< css::uno::Reference < css::frame::XDispatch > > SAL_CALL queryDispatches(
             const css::uno::Sequence < css::frame::DispatchDescriptor >& seqDescriptor ) override;
@@ -121,7 +121,7 @@ css::uno::Sequence< OUString > SAL_CALL SfxAppDispatchProvider::getSupportedServ
 Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
     const util::URL& aURL,
     const OUString& /*sTargetFrameName*/,
-    FrameSearchFlags /*eSearchFlags*/ )
+    sal_Int32 /*eSearchFlags*/ )
 {
     SolarMutexGuard guard;
 

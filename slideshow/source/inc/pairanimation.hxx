@@ -47,7 +47,7 @@ namespace slideshow
                 @param rValue
                 Current animation value.
              */
-            virtual bool operator()( const ValueType& rValue ) = 0;
+            virtual bool operator()( const ::basegfx::B2DTuple& rValue ) = 0;
 
             /** Request the underlying value for this animation.
 
@@ -59,7 +59,7 @@ namespace slideshow
                 for the underlying value, if the animation has actually
                 been started (via start() call).
              */
-            virtual ValueType getUnderlyingValue() const = 0;
+            virtual ::basegfx::B2DTuple getUnderlyingValue() const = 0;
         };
 
         typedef ::std::shared_ptr< PairAnimation > PairAnimationSharedPtr;

@@ -140,7 +140,7 @@ private:
 
     // BrowseBox
     virtual bool        SeekRow( long nRow ) override;
-    virtual void        PaintField( OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId ) const override;
+    virtual void        PaintField( vcl::RenderContext& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId ) const override;
     virtual void        DoubleClick( const BrowserMouseEvent& rEvt ) override;
     virtual void        Select() override;
     virtual sal_Int8    AcceptDrop( const BrowserAcceptDropEvent& rEvt ) override;

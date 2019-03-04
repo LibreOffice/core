@@ -91,18 +91,18 @@ public:
         hyphenate( const OUString& aWord,
                 const css::lang::Locale& aLocale,
                 sal_Int16 nMaxLeading,
-                const css::beans::PropertyValues& aProperties ) override;
+                const css::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
     virtual css::uno::Reference< css::linguistic2::XHyphenatedWord > SAL_CALL
         queryAlternativeSpelling( const OUString& aWord,
                 const css::lang::Locale& aLocale,
                 sal_Int16 nIndex,
-                const css::beans::PropertyValues& aProperties ) override;
+                const css::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
     virtual css::uno::Reference<
             css::linguistic2::XPossibleHyphens > SAL_CALL
         createPossibleHyphens(
                 const OUString& aWord,
                 const css::lang::Locale& aLocale,
-                const css::beans::PropertyValues& aProperties ) override;
+                const css::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
 
     // LinguDispatcher
     virtual void

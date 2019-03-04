@@ -180,7 +180,7 @@ sal_Bool RootAccess::hasPendingChanges() {
     return !changes.empty();
 }
 
-css::util::ChangesSet RootAccess::getPendingChanges()
+css::uno::Sequence< ::css::util::ElementChange > RootAccess::getPendingChanges()
 {
     assert(thisIs(IS_UPDATE));
     osl::MutexGuard g(*lock_);

@@ -566,7 +566,7 @@ private:
                   basegfx::B2IRange(0,0,rSpriteSize.getX(),rSpriteSize.getY()));
     }
 
-    virtual bool isOnView(std::shared_ptr<View> const& rView) const override
+    virtual bool isOnView(ViewSharedPtr const& rView) const override
     {
         return rView.get() == mpParentView;
     }
@@ -686,7 +686,7 @@ private:
     virtual void setCursorShape( sal_Int16 nPointerShape ) override;
 
     // ViewLayer interface
-    virtual bool isOnView(std::shared_ptr<View> const& rView) const override;
+    virtual bool isOnView(ViewSharedPtr const& rView) const override;
     virtual void clear() const override;
     virtual void clearAll() const override;
     virtual cppcanvas::CanvasSharedPtr getCanvas() const override;
@@ -906,7 +906,7 @@ void SlideView::setCursorShape( sal_Int16 nPointerShape )
         mxView->setMouseCursor( nPointerShape );
 }
 
-bool SlideView::isOnView(std::shared_ptr<View> const& rView) const
+bool SlideView::isOnView(ViewSharedPtr const& rView) const
 {
     return rView.get() == this;
 }

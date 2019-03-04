@@ -152,7 +152,7 @@ namespace slideshow
                 shape as-is from the document, assuming a rotation
                 angle of 0).
              */
-            virtual ::basegfx::B2DRange getBounds() const = 0;
+            virtual ::basegfx::B2DRectangle getBounds() const = 0;
 
             /** Get the DOM position and size of the shape.
 
@@ -165,7 +165,7 @@ namespace slideshow
                 currently take the shape as-is from the document,
                 assuming a rotation angle of 0).
              */
-            virtual ::basegfx::B2DRange getDomBounds() const = 0;
+            virtual ::basegfx::B2DRectangle getDomBounds() const = 0;
 
             /** Get the current shape update area.
 
@@ -175,7 +175,7 @@ namespace slideshow
                 the (possibly rotated and sheared) area returned by
                 getBounds().
              */
-            virtual ::basegfx::B2DRange getUpdateArea() const = 0;
+            virtual ::basegfx::B2DRectangle getUpdateArea() const = 0;
 
             /** Query whether the shape is visible at all.
 
@@ -250,8 +250,6 @@ namespace slideshow
 
             };
         };
-
-        typedef ::std::shared_ptr< Shape > ShapeSharedPtr;
 
         /** A set which contains all shapes in an ordered fashion.
          */

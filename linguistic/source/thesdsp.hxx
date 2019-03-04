@@ -73,7 +73,7 @@ public:
     virtual css::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > > SAL_CALL
         queryMeanings( const OUString& aTerm,
                 const css::lang::Locale& aLocale,
-                const css::beans::PropertyValues& aProperties ) override;
+                const css::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
 
     // LinguDispatcher
     virtual void

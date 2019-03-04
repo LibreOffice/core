@@ -669,7 +669,7 @@ namespace sax_fastparser {
         merge( maData, rWhat, false );
     }
 
-    void FastSaxSerializer::ForMerge::append( const Int8Sequence &rWhat )
+    void FastSaxSerializer::ForMerge::append( const css::uno::Sequence<sal_Int8> &rWhat )
     {
         merge( maData, rWhat, true );
     }
@@ -722,7 +722,7 @@ namespace sax_fastparser {
         append( rWhat );
     }
 
-    void FastSaxSerializer::ForSort::append( const Int8Sequence &rWhat )
+    void FastSaxSerializer::ForSort::append( const css::uno::Sequence<sal_Int8> &rWhat )
     {
         merge( maData[mnCurrentElement], rWhat, true );
     }

@@ -24,8 +24,12 @@
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <memory>
 
+
 namespace slideshow {
 namespace internal {
+
+class AnimationNode;
+typedef ::std::shared_ptr< AnimationNode > AnimationNodeSharedPtr;
 
 /** This interface is used to mirror every XAnimateNode object
     in the presentation core.
@@ -123,14 +127,14 @@ public:
         @param rNotifee AnimationNode to notify
     */
     virtual bool registerDeactivatingListener(
-        const ::std::shared_ptr< AnimationNode >& rNotifee ) = 0;
+        const AnimationNodeSharedPtr& rNotifee ) = 0;
 
     /** Called to notify another AnimationNode's deactivation
 
         @param rNotifier The instance who calls this method.
     */
     virtual void notifyDeactivating(
-        const ::std::shared_ptr< AnimationNode >& rNotifier ) = 0;
+        const AnimationNodeSharedPtr& rNotifier ) = 0;
 
     /** Query node whether it has an animation pending.
 
@@ -140,8 +144,6 @@ public:
     */
     virtual bool hasPendingAnimation() const = 0;
 };
-
-typedef ::std::shared_ptr< AnimationNode > AnimationNodeSharedPtr;
 
 } // namespace internal
 } // namespace presentation

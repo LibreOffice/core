@@ -25,6 +25,7 @@
 
 
 class GDIMetaFile;
+typedef ::std::shared_ptr< GDIMetaFile > GDIMetaFileSharedPtr;
 
 namespace slideshow
 {
@@ -58,8 +59,8 @@ namespace slideshow
                 Metafile to retrieve subset info from (must have been
                 generated with verbose text comments switched on).
              */
-            DrawShapeSubsetting( const DocTreeNode&                         rShapeSubset,
-                                 ::std::shared_ptr< GDIMetaFile >   rMtf );
+            DrawShapeSubsetting( const DocTreeNode&     rShapeSubset,
+                                 GDIMetaFileSharedPtr   rMtf );
 
             /// Forbid copy construction
             DrawShapeSubsetting(const DrawShapeSubsetting&) = delete;

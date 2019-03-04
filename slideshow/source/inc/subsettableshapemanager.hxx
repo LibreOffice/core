@@ -32,6 +32,7 @@ namespace slideshow
     {
         class DocTreeNode;
         class AttributableShape;
+        typedef ::std::shared_ptr< AttributableShape > AttributableShapeSharedPtr;
 
         /** SubsettableShapeManager interface
 
@@ -62,9 +63,9 @@ namespace slideshow
                 @param rSubsetShape
                 The subset to display in the generated shape.
              */
-            virtual std::shared_ptr<AttributableShape> getSubsetShape(
-                const std::shared_ptr<AttributableShape>& rOrigShape,
-                const DocTreeNode&                          rTreeNode ) = 0;
+            virtual AttributableShapeSharedPtr getSubsetShape(
+                const AttributableShapeSharedPtr& rOrigShape,
+                const DocTreeNode&                rTreeNode ) = 0;
 
             /** Revoke a previously queried subset shape.
 
@@ -80,8 +81,8 @@ namespace slideshow
                 The subset created from rOrigShape
              */
             virtual void revokeSubset(
-                const std::shared_ptr<AttributableShape>& rOrigShape,
-                const std::shared_ptr<AttributableShape>& rSubsetShape ) = 0;
+                const AttributableShapeSharedPtr& rOrigShape,
+                const AttributableShapeSharedPtr& rSubsetShape ) = 0;
 
             // Evil hackish way of getting intrinsic animation slide-wise
 

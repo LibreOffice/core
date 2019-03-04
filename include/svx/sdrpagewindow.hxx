@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SDRPAGEWINDOW_HXX
 #define INCLUDED_SVX_SDRPAGEWINDOW_HXX
 
+#include <basegfx/range/b2irectangle.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
@@ -74,7 +75,7 @@ public:
     void PrePaint();
     void PrepareRedraw(const vcl::Region& rReg);
     void RedrawAll( sdr::contact::ViewObjectContactRedirector* pRedirector );
-    void RedrawLayer( const SdrLayerID* pId, sdr::contact::ViewObjectContactRedirector* pRedirector, basegfx::B2IRange const*);
+    void RedrawLayer( const SdrLayerID* pId, sdr::contact::ViewObjectContactRedirector* pRedirector, basegfx::B2IRectangle const*);
 
     // Invalidate call, used from ObjectContact(OfPageView) in InvalidatePartOfView(...)
     void InvalidatePageWindow(const basegfx::B2DRange& rRange);
