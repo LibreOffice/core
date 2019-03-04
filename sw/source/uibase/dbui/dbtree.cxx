@@ -546,7 +546,7 @@ void DBTreeList::AddDataSource(const OUString& rSource)
     m_xTreeView->select(*xIter);
 }
 
-IMPL_LINK(DBTreeList, RequestingChildrenHdl, weld::TreeIter&, rParent, bool)
+IMPL_LINK(DBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, bool)
 {
     if (!m_xTreeView->iter_has_child(rParent))
     {

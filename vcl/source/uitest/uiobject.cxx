@@ -679,7 +679,7 @@ void EditUIObject::execute(const OUString& rAction,
     else if (rAction == "CLEAR")
     {
         mxEdit->SetText("");
-        mxEdit->UpdateData();
+        mxEdit->Modify();
         bHandled = true;
     }
     else

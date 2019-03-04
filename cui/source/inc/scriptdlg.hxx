@@ -105,7 +105,7 @@ protected:
     std::unique_ptr<weld::Button> m_xDelButton;
 
     DECL_LINK( ScriptSelectHdl, weld::TreeView&, void );
-    DECL_LINK( ExpandingHdl, weld::TreeIter&, bool );
+    DECL_LINK( ExpandingHdl, const weld::TreeIter&, bool );
     DECL_LINK( ButtonHdl, weld::Button&, void );
     static bool         getBoolProperty( css::uno::Reference< css::beans::XPropertySet > const & xProps, OUString const & propName );
     void                CheckButtons(  css::uno::Reference< css::script::browse::XBrowseNode > const & node );
@@ -124,17 +124,17 @@ protected:
     void        deleteTree(weld::TreeIter& rIter);
     void        deleteAllTree();
     void        insertEntry(OUString const & rText, OUString const & rBitmap,
-                              weld::TreeIter* pParent,
+                              const weld::TreeIter* pParent,
                               bool bChildrenOnDemand,
                               std::unique_ptr< SFEntry > && aUserData,
                               const OUString& factoryURL, bool bSelect);
     void        insertEntry(OUString const & rText, OUString const & rBitmap,
-                              weld::TreeIter* pParent,
+                              const weld::TreeIter* pParent,
                               bool bChildrenOnDemand,
                               std::unique_ptr< SFEntry > && aUserData,
                               bool bSelect);
 
-    void        RequestSubEntries(weld::TreeIter& rRootEntry,
+    void        RequestSubEntries(const weld::TreeIter& rRootEntry,
                                   css::uno::Reference< css::script::browse::XBrowseNode > const & node,
                                   css::uno::Reference< css::frame::XModel>& model);
 

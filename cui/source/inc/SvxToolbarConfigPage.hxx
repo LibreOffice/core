@@ -48,34 +48,36 @@ class SvxToolbarConfigPage : public SvxConfigPage
 {
 private:
 
-    DECL_LINK( SelectToolbar, ListBox&, void );
-    DECL_LINK( SelectToolbarEntry, SvTreeListBox*, void );
-    DECL_LINK( MoveHdl, Button *, void );
+    DECL_LINK( SelectToolbar, weld::ComboBox&, void );
+    DECL_LINK( SelectToolbarEntry, weld::TreeView&, void );
+    DECL_LINK( MoveHdl, weld::Button&, void );
 
-    DECL_LINK( GearHdl, MenuButton *, void );
+    DECL_LINK( GearHdl, const OString&, void );
 
-    DECL_LINK( SelectCategory, ListBox&, void );
+    DECL_LINK( SelectCategory, weld::ComboBox&, void );
 
-    DECL_LINK( AddCommandHdl, Button *, void );
-    DECL_LINK( RemoveCommandHdl, Button *, void );
+    DECL_LINK( AddCommandHdl, weld::Button&, void );
+    DECL_LINK( RemoveCommandHdl, weld::Button&, void );
 
-    DECL_LINK( InsertHdl, MenuButton *, void );
-    DECL_LINK( ModifyItemHdl, MenuButton *, void );
-    DECL_LINK( ResetToolbarHdl, Button *, void );
+    DECL_LINK( InsertHdl, const OString&, void );
+    DECL_LINK( ModifyItemHdl, const OString&, void );
+    DECL_LINK( ResetToolbarHdl, weld::Button&, void );
+
+    DECL_LINK( ListModifiedHdl, weld::TreeView&, void );
 
     void            UpdateButtonStates() override;
     short           QueryReset() override;
     void            Init() override;
     void            DeleteSelectedContent() override;
     void            DeleteSelectedTopLevel() override;
+    virtual void    SelectElement() override;
 
 public:
-    SvxToolbarConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet );
+    SvxToolbarConfigPage(TabPageParent pParent, const SfxItemSet& rItemSet);
     virtual ~SvxToolbarConfigPage() override;
     virtual void dispose() override;
 
-    void            AddFunction( SvTreeListEntry* pTarget = nullptr,
-                                             bool bFront = false );
+    void            AddFunction(int nTarget = -1, bool bFront = false);
 
     void            MoveEntry( bool bMoveUp ) override;
 
@@ -90,30 +92,16 @@ public:
 
 class SvxToolbarEntriesListBox final : public SvxMenuEntriesListBox
 {
-    std::unique_ptr<SvLBoxButtonData> m_pButtonData;
-    VclPtr<SvxConfigPage>  pPage;
+    void ChangedVisibility(int nRow);
 
-    void            ChangeVisibility( SvTreeListEntry* pEntry );
-
-    virtual void    CheckButtonHdl() override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-    void            BuildCheckBoxButtonImages( SvLBoxButtonData* );
-    Image           GetSizedImage(
-        VirtualDevice& aDev, const Size& aNewSize, const Image& aImage );
+    typedef std::pair<int, int> row_col;
+    DECL_LINK(CheckButtonHdl, const row_col&, void);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
 public:
 
-    SvxToolbarEntriesListBox(vcl::Window* pParent, SvxToolbarConfigPage* pPg);
+    SvxToolbarEntriesListBox(std::unique_ptr<weld::TreeView> xControl, SvxToolbarConfigPage* pPg);
     virtual ~SvxToolbarEntriesListBox() override;
-    virtual void dispose() override;
-
-    virtual TriState NotifyMoving(
-        SvTreeListEntry*, SvTreeListEntry*, SvTreeListEntry*&, sal_uLong& ) override;
-
-    virtual TriState NotifyCopying(
-        SvTreeListEntry*, SvTreeListEntry*, SvTreeListEntry*&, sal_uLong&) override;
-
-    void            KeyInput( const KeyEvent& rKeyEvent ) override;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_SVXTOOLBARCONFIGPAGE_HXX
