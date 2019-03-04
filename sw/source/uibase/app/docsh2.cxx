@@ -1614,7 +1614,7 @@ ErrCode SwDocShell::LoadStylesFromFile( const OUString& rURL,
     }
     if ( bImport )
     {
-        SwRead pRead =  ReadXML;
+        Reader* pRead =  ReadXML;
         SwReaderPtr pReader;
         std::unique_ptr<SwPaM> pPam;
         // the SW3IO - Reader need the pam/wrtshell, because only then he
