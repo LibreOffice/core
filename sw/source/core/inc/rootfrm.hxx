@@ -41,6 +41,13 @@ class SwSelectionList;
 struct SwPosition;
 struct SwCursorMoveState;
 
+namespace sw {
+    enum class RedlineMode
+    {
+        Shown, Hidden
+    };
+};
+
 enum class SwInvalidateFlags
 {
     Size      = 0x01,

@@ -20,12 +20,15 @@
 #include <memory>
 #include <UndoSection.hxx>
 
+#include <o3tl/make_unique.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <fmtcntnt.hxx>
 #include <doc.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
@@ -36,6 +39,7 @@
 #include <redline.hxx>
 #include <doctxm.hxx>
 #include <ftnidx.hxx>
+#include <rootfrm.hxx>
 #include <editsh.hxx>
 /// OD 04.10.2002 #102894#
 /// class Calc needed for calculation of the hidden condition of a section.
@@ -70,10 +74,14 @@ static SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
 
 SwUndoInsSection::SwUndoInsSection(
         SwPaM const& rPam, SwSectionData const& rNewData,
-        SfxItemSet const*const pSet, SwTOXBase const*const pTOXBase)
+        SfxItemSet const*const pSet,
+        std::pair<SwTOXBase const*, sw::RedlineMode> const*const pTOXBase)
     : SwUndo( SwUndoId::INSSECTION, rPam.GetDoc() ), SwUndRng( rPam )
     , m_pSectionData(new SwSectionData(rNewData))
-    , m_pTOXBase( pTOXBase ? new SwTOXBase(*pTOXBase) : nullptr )
+    , m_pTOXBase( pTOXBase
+        ? o3tl::make_unique<std::pair<SwTOXBase *, sw::RedlineMode>>(
+            new SwTOXBase(*pTOXBase->first), pTOXBase->second)
+        : nullptr )
     , m_pAttrSet( (pSet && pSet->Count()) ? new SfxItemSet( *pSet ) : nullptr )
     , m_nSectionNodePos(0)
     , m_bSplitAtStart(false)
@@ -172,8 +180,32 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
     const SwTOXBaseSection* pUpdateTOX = nullptr;
     if (m_pTOXBase.get())
     {
+        SwRootFrame const* pLayout(nullptr);
+        SwRootFrame * pLayoutToReset(nullptr);
+        comphelper::ScopeGuard g([&]() {
+                if (pLayoutToReset)
+                {
+                    pLayoutToReset->SetHideRedlines(m_pTOXBase->second == sw::RedlineMode::Shown);
+                }
+            });
+        std::set<SwRootFrame *> layouts(rDoc.GetAllLayouts());
+        for (SwRootFrame const*const p : layouts)
+        {
+            if ((m_pTOXBase->second == sw::RedlineMode::Hidden) == p->IsHideRedlines())
+            {
+                pLayout = p;
+                break;
+            }
+        }
+        if (!pLayout)
+        {
+            assert(!layouts.empty()); // must have one layout
+            pLayoutToReset = *layouts.begin();
+            pLayoutToReset->SetHideRedlines(m_pTOXBase->second == sw::RedlineMode::Hidden);
+            pLayout = pLayoutToReset;
+        }
         pUpdateTOX = rDoc.InsertTableOf( *rPam.GetPoint(),
-                                        *m_pTOXBase, m_pAttrSet.get(), true);
+            *m_pTOXBase->first, m_pAttrSet.get(), true, pLayout);
     }
     else
     {
@@ -222,7 +254,8 @@ void SwUndoInsSection::RepeatImpl(::sw::RepeatContext & rContext)
     if (m_pTOXBase.get())
     {
         rDoc.InsertTableOf(*rContext.GetRepeatPaM().GetPoint(),
-                                        *m_pTOXBase, m_pAttrSet.get(), true);
+            *m_pTOXBase->first, m_pAttrSet.get(), true,
+            rDoc.getIDocumentLayoutAccess().GetCurrentLayout()); // TODO add shell to RepeatContext?
     }
     else
     {
@@ -320,6 +353,7 @@ void SwUndoDelSection::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if (m_pTOXBase.get())
     {
+        // sw_redlinehide: this should work as-is; there will be another undo for the update
         rDoc.InsertTableOf(m_nStartNode, m_nEndNode-2, *m_pTOXBase,
                 m_pAttrSet.get());
     }

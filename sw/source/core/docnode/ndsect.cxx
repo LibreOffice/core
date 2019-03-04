@@ -151,7 +151,7 @@ static void lcl_CheckEmptyLayFrame( SwNodes const & rNds, SwSectionData& rSectio
 
 SwSection *
 SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
-                       SwTOXBase const*const pTOXBase,
+       std::pair<SwTOXBase const*, sw::RedlineMode> const*const pTOXBaseAndMode,
                        SfxItemSet const*const pAttr, bool const bUpdate)
 {
     const SwNode* pPrvNd = nullptr;
@@ -184,7 +184,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     bool const bUndo(GetIDocumentUndoRedo().DoesUndo());
     if (bUndo)
     {
-        pUndoInsSect = new SwUndoInsSection(rRange, rNewData, pAttr, pTOXBase);
+        pUndoInsSect = new SwUndoInsSection(rRange, rNewData, pAttr, pTOXBaseAndMode);
         GetIDocumentUndoRedo().AppendUndo( pUndoInsSect );
         GetIDocumentUndoRedo().DoUndo(false);
     }
@@ -195,6 +195,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
         pFormat->SetFormatAttr( *pAttr );
     }
 
+    SwTOXBase const*const pTOXBase(pTOXBaseAndMode ? pTOXBaseAndMode->first : nullptr);
     SwSectionNode* pNewSectNode = nullptr;
 
     RedlineFlags eOld = getIDocumentRedlineAccess().GetRedlineFlags();
