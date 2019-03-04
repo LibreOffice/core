@@ -49,6 +49,7 @@ typedef sal_uInt8   SVBT64[8];
 inline sal_uInt16 SVBT16ToUInt16( const SVBT16 p ) { return static_cast<sal_uInt16>
                                                      (static_cast<sal_uInt16>(p[0])
                                                    + (static_cast<sal_uInt16>(p[1]) <<  8)); }
+inline sal_Int16 SVBT16ToInt16( const SVBT16 p ) { return sal_Int16(SVBT16ToUInt16(p)); }
 inline sal_uInt32 SVBT32ToUInt32 ( const SVBT32 p ) { return static_cast<sal_uInt32>
                                                      (static_cast<sal_uInt32>(p[0])
                                                    + (static_cast<sal_uInt32>(p[1]) <<  8)
