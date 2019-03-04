@@ -267,10 +267,10 @@ SvxScriptOrgDialog::getLangNodeFromRootNode( Reference< browse::XBrowseNode > co
     return langNode;
 }
 
-void SvxScriptOrgDialog::RequestSubEntries(weld::TreeIter& rRootEntry, Reference< css::script::browse::XBrowseNode > const & node,
+void SvxScriptOrgDialog::RequestSubEntries(const weld::TreeIter& rRootEntry, Reference< css::script::browse::XBrowseNode > const & node,
                                            Reference< XModel >& model)
 {
-    if (! node.is() )
+    if (!node.is())
     {
         return;
     }
@@ -300,7 +300,7 @@ void SvxScriptOrgDialog::RequestSubEntries(weld::TreeIter& rRootEntry, Reference
 }
 
 void SvxScriptOrgDialog::insertEntry(const OUString& rText, const OUString& rBitmap,
-    weld::TreeIter* pParent, bool bChildrenOnDemand, std::unique_ptr<SFEntry> && aUserData,
+    const weld::TreeIter* pParent, bool bChildrenOnDemand, std::unique_ptr<SFEntry> && aUserData,
     const OUString& factoryURL, bool bSelect)
 {
     if (rBitmap == RID_CUIBMP_DOC && !factoryURL.isEmpty())
@@ -313,7 +313,7 @@ void SvxScriptOrgDialog::insertEntry(const OUString& rText, const OUString& rBit
 }
 
 void SvxScriptOrgDialog::insertEntry(
-    const OUString& rText, const OUString& rBitmap, weld::TreeIter* pParent,
+    const OUString& rText, const OUString& rBitmap, const weld::TreeIter* pParent,
     bool bChildrenOnDemand, std::unique_ptr<SFEntry> && aUserData, bool bSelect)
 {
     std::unique_ptr<weld::TreeIter> xRetIter;
@@ -329,7 +329,7 @@ void SvxScriptOrgDialog::insertEntry(
     }
 }
 
-IMPL_LINK(SvxScriptOrgDialog, ExpandingHdl, weld::TreeIter&, rIter, bool)
+IMPL_LINK(SvxScriptOrgDialog, ExpandingHdl, const weld::TreeIter&, rIter, bool)
 {
     SFEntry* userData = reinterpret_cast<SFEntry*>(m_xScriptsBox->get_id(rIter).toInt64());
 

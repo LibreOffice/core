@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkMenu" id="gearmenu">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -83,16 +82,84 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-go-forward</property>
+    <property name="icon_size">3</property>
   </object>
   <object class="GtkImage" id="image4">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-go-back</property>
+    <property name="icon_size">3</property>
   </object>
   <object class="GtkImage" id="image7">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sfx2/res/actionaction013.png</property>
+    <property name="icon_name">sfx2/res/actionaction013.png</property>
+  </object>
+  <object class="GtkMenu" id="insertmenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="insertseparator">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="menuassignpage|insertseparator">Insert Separator</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="insertsubmenu">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="menuassignpage|insertsubmenu">Insert Submenu</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name expander -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkMenu" id="modifymenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="renameItem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="menuassignpage|renameItem">Rename...</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="changeIcon">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="menuassignpage|changeIcon">Change Icon...</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="resetIcon">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="menuassignpage|resetIcon">Reset Icon</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="restoreItem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="menuassignpage|restoreItem">Restore Default Command</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
   </object>
   <object class="GtkBox" id="MenuAssignPage">
     <property name="visible">True</property>
@@ -130,7 +197,7 @@
             <property name="can_focus">True</property>
             <property name="shadow_type">in</property>
             <child>
-              <object class="GtkTextView" id="desc:border">
+              <object class="GtkTextView" id="desc">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="menuassignpage|desc">Local help is not installed.</property>
@@ -156,9 +223,9 @@
             <property name="valign">start</property>
             <property name="label" translatable="yes" context="menuassignpage|label33">D_escription</property>
             <property name="use_underline">True</property>
-            <property name="mnemonic_widget">desc:border</property>
+            <property name="mnemonic_widget">desc</property>
             <accessibility>
-              <relation type="label-for" target="desc:border"/>
+              <relation type="label-for" target="desc"/>
             </accessibility>
           </object>
           <packing>
@@ -167,14 +234,45 @@
           </packing>
         </child>
         <child>
-          <object class="cuilo-SfxConfigFunctionListBox" id="functions:border">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="margin_bottom">4</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <child internal-child="selection">
-              <object class="GtkTreeSelection"/>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkTreeView" id="functions">
+                <property name="width_request">-1</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="model">liststore1</property>
+                <property name="headers_visible">False</property>
+                <property name="search_column">1</property>
+                <property name="enable_tree_lines">True</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
+                      <attributes>
+                        <attribute name="pixbuf">0</attribute>
+                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                      <attributes>
+                        <attribute name="text">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+              </object>
             </child>
           </object>
           <packing>
@@ -197,7 +295,7 @@
           </packing>
         </child>
         <child>
-          <object class="cuilo-CommandCategoryListBox" id="commandcategorylist">
+          <object class="GtkComboBoxText" id="commandcategorylist">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="margin_bottom">4</property>
@@ -216,6 +314,7 @@
             <property name="valign">center</property>
             <property name="label" translatable="yes" context="menuassignpage|contentslabel">Categor_y</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">commandcategorylist</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -279,6 +378,7 @@
             <property name="margin_bottom">4</property>
             <child>
               <object class="GtkComboBoxText" id="toplevellist">
+                <property name="width_request">1</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
@@ -289,7 +389,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="gearbtn:gearmenu">
+              <object class="GtkMenuButton" id="gearbtn">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -297,8 +397,10 @@
                 <property name="margin_left">1</property>
                 <property name="image">image7</property>
                 <property name="always_show_image">True</property>
+                <property name="popup">gearmenu</property>
+                <property name="use_popover">False</property>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="gearbtn:gearmenu-atkobject">
+                  <object class="AtkObject" id="gearbtn-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="menuassignpage|gearbtn">Gear Menu</property>
                     <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|gearbtn">Contains commands to modify or delete the selected toolbar or the top level menu, and the command to add new toolbars or top level menus.</property>
                   </object>
@@ -323,31 +425,98 @@
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <child>
-              <placeholder/>
+              <object class="GtkScrolledWindow">
+                <property name="can_focus">True</property>
+                <property name="no_show_all">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="toolcontents">
+                    <property name="width_request">-1</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore1</property>
+                    <property name="headers_visible">False</property>
+                    <property name="reorderable">True</property>
+                    <property name="search_column">1</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkCellRendererPixbuf" id="cellrenderertext1"/>
+                          <attributes>
+                            <attribute name="pixbuf">0</attribute>
+                          </attributes>
+                        </child>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext3"/>
+                          <attributes>
+                            <attribute name="text">1</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
+              <object class="GtkScrolledWindow">
+                <property name="can_focus">True</property>
+                <property name="no_show_all">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="menucontents">
+                    <property name="width_request">-1</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore1</property>
+                    <property name="headers_visible">False</property>
+                    <property name="reorderable">True</property>
+                    <property name="search_column">1</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkCellRendererPixbuf" id="cellrenderertext5"/>
+                          <attributes>
+                            <attribute name="pixbuf">0</attribute>
+                          </attributes>
+                        </child>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext6"/>
+                          <attributes>
+                            <attribute name="text">1</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
             </child>
           </object>
           <packing>
@@ -366,7 +535,7 @@
             <property name="hexpand">True</property>
             <property name="layout_style">start</property>
             <child>
-              <object class="GtkButton" id="insert:insertmenu">
+              <object class="GtkMenuButton" id="insert">
                 <property name="label" translatable="yes" context="menuassignpage|insert">_Insert</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -376,6 +545,12 @@
                 <property name="margin_top">5</property>
                 <property name="margin_bottom">5</property>
                 <property name="use_underline">True</property>
+                <property name="draw_indicator">True</property>
+                <property name="popup">insertmenu</property>
+                <property name="use_popover">False</property>
+                <child>
+                  <placeholder/>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -384,7 +559,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="modify:modifymenu">
+              <object class="GtkMenuButton" id="modify">
                 <property name="label" translatable="yes" context="menuassignpage|modify">_Modify</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -394,6 +569,12 @@
                 <property name="margin_top">5</property>
                 <property name="margin_bottom">5</property>
                 <property name="use_underline">True</property>
+                <property name="draw_indicator">True</property>
+                <property name="popup">modifymenu</property>
+                <property name="use_popover">False</property>
+                <child>
+                  <placeholder/>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -647,7 +828,7 @@
   <object class="GtkSizeGroup" id="sizegrp1">
     <widgets>
       <widget name="grid6"/>
-      <widget name="functions:border"/>
+      <widget name="functions"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegrp2">
@@ -655,66 +836,9 @@
     <widgets>
       <widget name="commandcategorylist"/>
       <widget name="toplevellist"/>
-      <widget name="gearbtn:gearmenu"/>
       <widget name="searchEntry"/>
       <widget name="savein"/>
       <widget name="functionbtn"/>
     </widgets>
-  </object>
-  <object class="GtkMenu" id="insertmenu">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="insertseparator">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="menuassignpage|insertseparator">Insert Separator</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="insertsubmenu">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="menuassignpage|insertsubmenu">Insert Submenu</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkMenu" id="modifymenu">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="renameItem">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="menuassignpage|renameItem">Rename...</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="changeIcon">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="menuassignpage|changeIcon">Change Icon...</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="resetIcon">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="menuassignpage|resetIcon">Reset Icon</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="restoreItem">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="menuassignpage|restoreItem">Restore Default Command</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
   </object>
 </interface>

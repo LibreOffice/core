@@ -28,7 +28,6 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <vcl/window.hxx>
-#include <vcl/weld.hxx>
     // complete vcl::Window for SalFrame::CallCallback under -fsanitize=function
 
 class AllSettings;
@@ -51,6 +50,15 @@ enum class SalFrameToTop {
 namespace o3tl {
     template<> struct typed_flags<SalFrameToTop> : is_typed_flags<SalFrameToTop, 0x0f> {};
 };
+
+namespace vcl { class KeyCode; }
+
+namespace weld
+{
+    class Window;
+}
+
+enum class FloatWinPopupFlags;
 
 // SalFrame styles
 enum class SalFrameStyleFlags
@@ -81,6 +89,7 @@ enum class SalFrameStyleFlags
     // toolwindows should be painted with a smaller decoration
     TOOLWINDOW          = 0x40000000,
 };
+
 namespace o3tl {
     template<> struct typed_flags<SalFrameStyleFlags> : is_typed_flags<SalFrameStyleFlags, 0x788001ff> {};
 };
