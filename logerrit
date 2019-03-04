@@ -103,7 +103,7 @@ case "$1" in
 	fi
         echo
         echo "Note that you need to register additional email addresses, if you want to"
-        echo "commit from them. Additional emails must be confirmed with repling to the"
+        echo "commit from them. Additional emails must be confirmed by replying to the"
         echo "invitation mail it sends you."
         echo
         read -p 'Which user name did you choose? ' GERRITUSER
