@@ -365,8 +365,13 @@ SwTOXBaseSection* SwDoc::InsertTableOf( const SwPaM& aPam,
 
     OUString sSectNm = GetUniqueTOXBaseName( *rTOX.GetTOXType(), rTOX.GetTOXName() );
     SwSectionData aSectionData( TOX_CONTENT_SECTION, sSectNm );
+
+    std::pair<SwTOXBase const*, sw::RedlineMode> const tmp(&rTOX,
+        pLayout && pLayout->IsHideRedlines()
+            ? sw::RedlineMode::Hidden
+            : sw::RedlineMode::Shown);
     SwTOXBaseSection *const pNewSection = dynamic_cast<SwTOXBaseSection *>(
-        InsertSwSection( aPam, aSectionData, & rTOX, pSet, false ));
+        InsertSwSection(aPam, aSectionData, & tmp, pSet, false));
     if (pNewSection)
     {
         SwSectionNode *const pSectNd = pNewSection->GetFormat()->GetSectionNode();
