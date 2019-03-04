@@ -37,13 +37,13 @@ class Point;
 */
 class SwBlockCursor
 {
-    SwShellCursor aCursor;
+    SwShellCursor maCursor;
     boost::optional<Point> maStartPt;
     boost::optional<Point> maEndPt;
 
 public:
     SwBlockCursor( const SwCursorShell& rCursorSh, const SwPosition &rPos ) :
-        aCursor( rCursorSh, rPos ) {}
+        maCursor( rCursorSh, rPos ) {}
     /** Access to the shell cursor
 
         @return SwShellCursor& which represents the start and end position of the

@@ -798,22 +798,22 @@ namespace
     class TransWrp
     {
     private:
-        std::unique_ptr<utl::TransliterationWrapper> xTransWrp;
+        std::unique_ptr<utl::TransliterationWrapper> m_xTransWrp;
     public:
         TransWrp()
         {
             uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
-            xTransWrp.reset(new ::utl::TransliterationWrapper( xContext,
+            m_xTransWrp.reset(new ::utl::TransliterationWrapper( xContext,
                     TransliterationFlags::IGNORE_CASE |
                     TransliterationFlags::IGNORE_KANA |
                     TransliterationFlags::IGNORE_WIDTH ));
 
-            xTransWrp->loadModuleIfNeeded( GetAppLanguage() );
+            m_xTransWrp->loadModuleIfNeeded( GetAppLanguage() );
         }
         const ::utl::TransliterationWrapper& getTransliterationWrapper() const
         {
-            return *xTransWrp;
+            return *m_xTransWrp;
         }
     };
 
