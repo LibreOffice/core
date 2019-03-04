@@ -430,7 +430,7 @@ OUString CuiConfigFunctionListBox::GetSelectedScriptURI()
     return OUString();
 }
 
-struct CuiConfigGroupBoxResource_Impl
+struct SvxConfigGroupBoxResource_Impl
 {
     OUString m_sMyMacros;
     OUString m_sProdMacros;
@@ -438,10 +438,10 @@ struct CuiConfigGroupBoxResource_Impl
     OUString m_sDlgMacros;
     OUString m_aStrGroupStyles;
 
-    CuiConfigGroupBoxResource_Impl();
+    SvxConfigGroupBoxResource_Impl();
 };
 
-CuiConfigGroupBoxResource_Impl::CuiConfigGroupBoxResource_Impl() :
+SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
     m_sMyMacros(CuiResId(RID_SVXSTR_MYMACROS)),
     m_sProdMacros(CuiResId(RID_SVXSTR_PRODMACROS)),
     m_sMacros(CuiResId(RID_SVXSTR_BASICMACROS)),
@@ -508,7 +508,7 @@ namespace
 }
 
 CuiConfigGroupListBox::CuiConfigGroupListBox(std::unique_ptr<weld::TreeView> xTreeView)
-    : xImp(new CuiConfigGroupBoxResource_Impl())
+    : xImp(new SvxConfigGroupBoxResource_Impl())
     , m_pFunctionListBox(nullptr)
     , m_pStylesInfo(nullptr)
     , m_xTreeView(std::move(xTreeView))
