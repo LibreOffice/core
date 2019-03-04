@@ -521,6 +521,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
             static const char* aCompressiblePics[] =
             {
                 "image/svg+xml",
+                "image/x-emf",
                 "image/x-wmf",
                 "image/tiff",
                 "image/x-eps",
