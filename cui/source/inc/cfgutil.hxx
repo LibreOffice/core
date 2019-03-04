@@ -167,10 +167,10 @@ public:
     OUString      GetCurLabel();
 };
 
-struct CuiConfigGroupBoxResource_Impl;
+struct SvxConfigGroupBoxResource_Impl;
 class CuiConfigGroupListBox
 {
-    std::unique_ptr<CuiConfigGroupBoxResource_Impl> xImp;
+    std::unique_ptr<SvxConfigGroupBoxResource_Impl> xImp;
     CuiConfigFunctionListBox* m_pFunctionListBox;
     SfxGroupInfoArr_Impl aArr;
     OUString m_sModuleLongName;
