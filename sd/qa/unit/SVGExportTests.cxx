@@ -110,8 +110,23 @@ public:
         assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT/SVG_TSPAN ), "text-decoration", "line-through");
     }
 
+    void testSVGExportJavascriptURL()
+    {
+        executeExport("textbox-link-javascript.odp");
+
+        xmlDocPtr svgDoc = parseXml(maTempFile);
+        CPPUNIT_ASSERT(svgDoc);
+
+        // There should be only one child (no link to javascript url)
+        assertXPathChildren(svgDoc,
+                            MAKE_PATH_STRING(/ SVG_SVG / SVG_G[2] / SVG_G / SVG_G / SVG_G / SVG_G
+                                             / SVG_G[4] / SVG_G),
+                            1);
+    }
+
     CPPUNIT_TEST_SUITE(SdSVGFilterTest);
     CPPUNIT_TEST(testSVGExportTextDecorations);
+    CPPUNIT_TEST(testSVGExportJavascriptURL);
     CPPUNIT_TEST_SUITE_END();
 };
 
