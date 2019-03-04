@@ -74,7 +74,7 @@ class SW_DLLPUBLIC DBTreeList
 
     DECL_DLLPRIVATE_LINK( DBCompare, const SvSortData&, sal_Int32 );
 #endif
-    DECL_DLLPRIVATE_LINK(RequestingChildrenHdl, weld::TreeIter&, bool);
+    DECL_DLLPRIVATE_LINK(RequestingChildrenHdl, const weld::TreeIter&, bool);
     SAL_DLLPRIVATE void          InitTreeList();
 
 public:

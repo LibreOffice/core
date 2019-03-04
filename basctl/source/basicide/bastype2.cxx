@@ -917,7 +917,7 @@ void SbTreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocation 
     m_xControl->thaw();
 }
 
-void SbTreeListBox::ImpCreateLibEntries(weld::TreeIter& rIter, const ScriptDocument& rDocument, LibraryLocation eLocation)
+void SbTreeListBox::ImpCreateLibEntries(const weld::TreeIter& rIter, const ScriptDocument& rDocument, LibraryLocation eLocation)
 {
     // get a sorted list of library names
     Sequence< OUString > aLibNames( rDocument.getLibraryNames() );
@@ -976,7 +976,7 @@ void SbTreeListBox::ImpCreateLibEntries(weld::TreeIter& rIter, const ScriptDocum
     }
 }
 
-void SbTreeListBox::ImpCreateLibSubEntries(weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName)
+void SbTreeListBox::ImpCreateLibSubEntries(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName)
 {
     // modules
     if ( nMode & BrowseMode::Modules )
@@ -1075,7 +1075,7 @@ void SbTreeListBox::ImpCreateLibSubEntries(weld::TreeIter& rLibRootEntry, const 
     }
 }
 
-void SbTreeListBox::ImpCreateLibSubEntriesInVBAMode(weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
+void SbTreeListBox::ImpCreateLibSubEntriesInVBAMode(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
 {
     auto const aEntries = {
         std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, IDEResId(RID_STR_DOCUMENT_OBJECTS) ),
@@ -1102,7 +1102,7 @@ void SbTreeListBox::ImpCreateLibSubEntriesInVBAMode(weld::TreeIter& rLibRootEntr
     }
 }
 
-void SbTreeListBox::ImpCreateLibSubSubEntriesInVBAMode(weld::TreeIter& rLibSubRootEntry, const ScriptDocument& rDocument, const OUString& rLibName)
+void SbTreeListBox::ImpCreateLibSubSubEntriesInVBAMode(const weld::TreeIter& rLibSubRootEntry, const ScriptDocument& rDocument, const OUString& rLibName)
 {
     uno::Reference< container::XNameContainer > xLib = rDocument.getOrCreateLibrary( E_SCRIPTS, rLibName );
     if( !xLib.is() )
@@ -1347,7 +1347,7 @@ bool SbTreeListBox::IsEntryProtected(const weld::TreeIter* pEntry)
 void SbTreeListBox::AddEntry(
     const OUString& rText,
     const OUString& rImage,
-    weld::TreeIter* pParent,
+    const weld::TreeIter* pParent,
     bool bChildrenOnDemand,
     std::unique_ptr<Entry>&& rUserData)
 {
@@ -1357,7 +1357,7 @@ void SbTreeListBox::AddEntry(
 
 void SbTreeListBox::SetEntryBitmaps(const weld::TreeIter& rIter, const OUString& rImage)
 {
-    m_xControl->set_expander_image(rIter, rImage);
+    m_xControl->set_image(rIter, rImage, -1);
 }
 
 LibraryType SbTreeListBox::GetLibraryType() const

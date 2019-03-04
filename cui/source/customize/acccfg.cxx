@@ -887,6 +887,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(TabPageParent pParent, const 
     m_xOfficeButton->connect_clicked( LINK( this, SfxAcceleratorConfigPage, RadioHdl  ));
     m_xModuleButton->connect_clicked( LINK( this, SfxAcceleratorConfigPage, RadioHdl  ));
     m_xSearchEdit->connect_changed( LINK( this, SfxAcceleratorConfigPage, SearchUpdateHdl ));
+    m_xSearchEdit->connect_focus_out(LINK(this, SfxAcceleratorConfigPage, FocusOut_Impl));
 
     // detect max keyname width
     int nMaxWidth  = 0;
@@ -1119,6 +1120,15 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ImplUpdateDataHdl, Timer*, void)
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SearchUpdateHdl, weld::Entry&, void)
 {
     m_aUpdateDataTimer.Start();
+}
+
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, FocusOut_Impl, weld::Widget&, void)
+{
+    if (m_aUpdateDataTimer.IsActive())
+    {
+        m_aUpdateDataTimer.Stop();
+        m_aUpdateDataTimer.Invoke();
+    }
 }
 
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Load, weld::Button&, void)
