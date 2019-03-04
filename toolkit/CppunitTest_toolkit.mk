@@ -10,6 +10,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,toolkit))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,toolkit, \
+	toolkit/qa/cppunit/Dialog \
 	toolkit/qa/cppunit/UnitConversion \
 ))
 
@@ -30,6 +31,10 @@ $(eval $(call gb_CppunitTest_use_libraries,toolkit, \
 $(eval $(call gb_CppunitTest_use_api,toolkit,\
 	offapi \
 	udkapi \
+))
+
+$(eval $(call gb_CppunitTest_use_externals,toolkit,\
+    boost_headers \
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,toolkit))
