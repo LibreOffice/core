@@ -462,19 +462,15 @@ void RemoteFilesDialog::InitSize()
         OUString sCfgStr;
         if( aUserData >>= sCfgStr )
         {
-            int nPos = sCfgStr.indexOf( "|" );
-            if( nPos != -1 )
-            {
-                nPos = sCfgStr.indexOf( "|", nPos + 1 );
-                if( nPos != -1 )
-                {
-                    sal_Int32 nIdx = 0;
-                    m_nWidth = sCfgStr.getToken( 0, '|', nIdx ).toInt32();
-                    m_nHeight = sCfgStr.getToken( 0, '|', nIdx ).toInt32();
-
-                    m_pFileView->SetConfigString( sCfgStr.copy( nPos + 1) );
-                }
-            }
+            sal_Int32 nPos1{ sCfgStr.indexOf('|') };
+            if (nPos1<0)
+                return;
+            sal_Int32 nPos2{ sCfgStr.indexOf('|', nPos1+1 ) };
+            if (nPos2<0)
+                return;
+            m_nWidth = sCfgStr.copy(0, nPos1++).toInt32();
+            m_nHeight = sCfgStr.copy(nPos1, nPos2-nPos1).toInt32();
+            m_pFileView->SetConfigString( sCfgStr.copy(nPos2+1) );
         }
     }
     else
