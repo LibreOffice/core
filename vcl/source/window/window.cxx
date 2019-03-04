@@ -1822,6 +1822,9 @@ void Window::LoseFocus()
 
 void Window::SetHelpHdl(const Link<vcl::Window&, bool>& rLink)
 {
+    if (IsDisposed())
+        return;
+
     mpWindowImpl->maHelpRequestHdl = rLink;
 }
 
