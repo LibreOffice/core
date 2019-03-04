@@ -1067,6 +1067,9 @@ SwView::~SwView()
     SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "");
     SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY");
 
+    // Need to remove activated field's button before disposing EditWin.
+    GetWrtShell().getIDocumentMarkAccess()->ClearFieldActivation();
+
     GetViewFrame()->GetWindow().RemoveChildEventListener( LINK( this, SwView, WindowChildEventListener ) );
     m_pPostItMgr.reset();
 
