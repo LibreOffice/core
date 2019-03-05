@@ -404,7 +404,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(call gb_Helper_optional,SCRIPTING,msforms) \
 	mtfrenderer \
 	$(if $(ENABLE_JAVA),mysql_jdbc) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,mysqlc) \
+	$(call gb_Helper_optional,MARIADBC,$(call gb_Helper_optional,DBCONNECTIVITY,mysqlc)) \
 	numbertext \
 	odbc \
 	odfflatxml \
