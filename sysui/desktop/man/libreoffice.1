@@ -48,8 +48,11 @@ sbase, scalc, sdraw, simpress, smath, sofficerc, swriter
 .SH OPTIONS
 .TP
 \fB\-\-accept=\fIaccept\-string\fR
-Specify a UNO connect-string to create a UNO acceptor through which other
-programs can connect to access the API.
+Specifies an UNO-URL connect-string to create a UNO acceptor through which other
+programs can connect to access the API. Note that API access allows execution
+of arbitrary commands.
+The syntax of an UNO-URL connect-string is:
+\fIuno:connection-type,params;protocol-name,params;ObjectName\fR
 
 .TP
 \fB\-\-base\fR
