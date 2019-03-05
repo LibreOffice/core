@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/underlyingenumvalue.hxx>
 #include <tools/stream.hxx>
 #include <rtl/crc.h>
 #include <sal/log.hxx>
@@ -38,25 +41,25 @@ BitmapChecksum AnimationBitmap::GetChecksum() const
     BitmapChecksum  nCrc = aBmpEx.GetChecksum();
     SVBT32      aBT32;
 
-    UInt32ToSVBT32( aPosPix.X(), aBT32 );
+    Int32ToSVBT32( aPosPix.X(), aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
-    UInt32ToSVBT32( aPosPix.Y(), aBT32 );
+    Int32ToSVBT32( aPosPix.Y(), aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
-    UInt32ToSVBT32( aSizePix.Width(), aBT32 );
+    Int32ToSVBT32( aSizePix.Width(), aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
-    UInt32ToSVBT32( aSizePix.Height(), aBT32 );
+    Int32ToSVBT32( aSizePix.Height(), aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
-    UInt32ToSVBT32( nWait, aBT32 );
+    Int32ToSVBT32( nWait, aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
-    UInt32ToSVBT32( static_cast<long>(eDisposal), aBT32 );
+    UInt32ToSVBT32( o3tl::underlyingEnumValue(eDisposal), aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
-    UInt32ToSVBT32( static_cast<long>(bUserInput), aBT32 );
+    UInt32ToSVBT32( sal_uInt32(bUserInput), aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
     return nCrc;
@@ -195,10 +198,10 @@ BitmapChecksum Animation::GetChecksum() const
     UInt32ToSVBT32( maList.size(), aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
-    UInt32ToSVBT32( maGlobalSize.Width(), aBT32 );
+    Int32ToSVBT32( maGlobalSize.Width(), aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
-    UInt32ToSVBT32( maGlobalSize.Height(), aBT32 );
+    Int32ToSVBT32( maGlobalSize.Height(), aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
     for(auto const & i : maList)
