@@ -719,6 +719,9 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     mpAutoFilterPopup->setConfig(aConfig);
     mpAutoFilterPopup->launch(aCellRect);
 
+    // remember filter rules before modification
+    mpAutoFilterPopup->getResult(aSaveAutoFilterResult);
+
     collectUIInformation(OUString::number(nRow), OUString::number(nCol));
 }
 
@@ -792,6 +795,18 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
         pViewData->GetView()->SetCursor(rPos.Col(), rPos.Row());
         pViewData->GetDispatcher().Execute(SID_FILTER, SfxCallMode::SLOT|SfxCallMode::RECORD);
         return;
+    }
+
+    // do not recreate auto-filter rules if there is no any changes from the user
+    {
+        ScCheckListMenuWindow::ResultType aResult;
+        mpAutoFilterPopup->getResult(aResult);
+
+        if (aResult == aSaveAutoFilterResult)
+        {
+            SAL_INFO("sc.ui", "nothing to do when autofilter entries are the same");
+            return;
+        }
     }
 
     ScQueryParam aParam;
