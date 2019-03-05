@@ -1,7 +1,0 @@
-"ScDataPilotFieldObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
-"ScDataPilotFieldObj";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
-"ScDataPilotFieldObj";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
-"ScDataPilotFieldObj";"com::sun::star::beans::XPropertySet";"addPropertyChangeListener()"
-"ScDataPilotFieldObj";"com::sun::star::beans::XPropertySet";"removePropertyChangeListener()"
-"ScDataPilotFieldObj";"com::sun::star::beans::XPropertySet";"addVetoableChangeListener()"
-"ScDataPilotFieldObj";"com::sun::star::beans::XPropertySet";"removeVetoableChangeListener()"
