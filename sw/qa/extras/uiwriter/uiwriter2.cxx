@@ -62,6 +62,10 @@ public:
     void testTdf52391();
     void testTdf101873();
     void testTableWidth();
+    void testTextFormFieldInsertion();
+    void testCheckboxFormFieldInsertion();
+    void testDropDownFormFieldInsertion();
+    void testMixedFormFieldInsertion();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
