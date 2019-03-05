@@ -48,11 +48,9 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static sal_Int32 nMaxFieldIndex;
+    static const int nMaxFieldIndex = 6;
     uno::Reference< lang::XComponent > mxComponent;
 };
-
-sal_Int32 ScDataPilotItemObj::nMaxFieldIndex = 6;
 
 ScDataPilotItemObj::ScDataPilotItemObj()
      : CalcUnoApiTest("/sc/qa/extras/testdocuments")
