@@ -306,6 +306,13 @@ public:
         {
             return aName < rhs.aName;
         }
+
+        bool operator == (const ResultEntry& rhs) const
+        {
+            return aName == rhs.aName &&
+                   bValid == rhs.bValid &&
+                   bDate == rhs.bDate;
+        }
     };
     typedef std::set<ResultEntry> ResultType;
 
