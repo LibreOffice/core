@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xnamed.hxx>
 #include <test/sheet/datapilotfield.hxx>
 #include <test/sheet/xdatapilotfield.hxx>
 #include <test/sheet/xdatapilotfieldgrouping.hxx>
@@ -29,7 +30,8 @@ namespace sc_apitest
 class ScDataPilotFieldObj : public CalcUnoApiTest,
                             public apitest::DataPilotField,
                             public apitest::XDataPilotField,
-                            public apitest::XDataPilotFieldGrouping
+                            public apitest::XDataPilotFieldGrouping,
+                            public apitest::XNamed
 {
 public:
     virtual void setUp() override;
@@ -55,6 +57,10 @@ public:
     // see fdo#
     //CPPUNIT_TEST(testCreateDateGroup);
 
+    // XNamed
+    CPPUNIT_TEST(testGetName);
+    CPPUNIT_TEST(testSetName);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -63,6 +69,7 @@ private:
 
 ScDataPilotFieldObj::ScDataPilotFieldObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XNamed("Col1")
 {
 }
 
