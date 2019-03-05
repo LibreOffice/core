@@ -16,17 +16,17 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
- -->
+-->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
  <toolbar:toolbaritem xlink:href=".uno:AddDirect" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:NewDoc" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Open" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Save" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Save"/>
  <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF"/>
+ <toolbar:toolbaritem xlink:href=".uno:Print"/>
  <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Print" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Cut" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Copy" toolbar:visible="false"/>

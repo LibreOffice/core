@@ -11,7 +11,19 @@
   <menu:menuitem menu:id=".uno:Cut"/>
   <menu:menuitem menu:id=".uno:Copy"/>
   <menu:menuitem menu:id=".uno:Paste"/>
+  <menu:menu menu:id=".uno:PasteSpecialMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:PasteUnformatted"/>
+      <menu:menuitem menu:id=".uno:PasteSpecial"/>
+    </menu:menupopup>
+  </menu:menu>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:TextAttributes"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FontDialog"/>
   <menu:menuitem menu:id=".uno:ParagraphDialog"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:ThesaurusFromContext"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:ResetAttributes"/>
 </menu:menupopup>
