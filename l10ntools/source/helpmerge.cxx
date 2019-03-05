@@ -154,11 +154,10 @@ bool HelpParser::Merge( const OString &rDestinationFile,
         SAL_WARN("l10ntools", "could not parse " << sHelpFile);
         return false;
     }
-    MergeSingleFile( xmlfile.get() , pMergeDataFile , rLanguage , rDestinationFile );
-    return true;
+    return MergeSingleFile( xmlfile.get() , pMergeDataFile , rLanguage , rDestinationFile );
 }
 
-void HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile , const OString& sLanguage ,
+bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile , const OString& sLanguage ,
                                   OString const & sPath )
 {
     file->Extract();
@@ -182,14 +181,18 @@ void HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile 
         s_ResData.sGId      =  posm->first;
         s_ResData.sFilename  =  sHelpFile;
 
-        ProcessHelp( aLangHM , sLanguage, &s_ResData , pMergeDataFile );
+        if (!ProcessHelp( aLangHM , sLanguage, &s_ResData , pMergeDataFile ))
+        {
+            return false;
+        }
      }
 
     file->Write(sPath);
+    return true;
 }
 
 /* ProcessHelp method: search for en-US entry and replace it with the current language*/
-void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResData *pResData , MergeDataFile* pMergeDataFile ){
+bool HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResData *pResData , MergeDataFile* pMergeDataFile ){
 
     XMLElement*   pXMLElement = nullptr;
     MergeEntrys   *pEntrys    = nullptr;
@@ -231,10 +234,16 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
                 if( pEntrys != nullptr)
                 {
                     pEntrys->GetText( sNewText, sCur, true );
-                    if (helper::isWellFormedXML(XMLUtil::QuotHTML(sNewText)))
+                    if (!helper::isWellFormedXML(XMLUtil::QuotHTML(sNewText)))
                     {
-                        sNewdata = sSourceText.copy(0,nPreSpaces) + sNewText;
+                        SAL_WARN(
+                            "l10ntools",
+                            "error processing (" << pResData->sResTyp << ", " << pResData->sId
+                            << ", " << pResData->sGId << ", " << pResData->sFilename << ") for "
+                            << sCur);
+                        return false;
                     }
+                    sNewdata = sSourceText.copy(0,nPreSpaces) + sNewText;
                 }
             }
             if (!sNewdata.isEmpty())
@@ -257,6 +266,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
         }
 
     }
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

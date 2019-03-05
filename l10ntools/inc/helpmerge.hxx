@@ -52,9 +52,9 @@ public:
         const OString& sLanguage , MergeDataFile* pMergeDataFile );
 
 private:
-    void MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile , const OString& sLanguage , OString const & sPath );
+    bool MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile , const OString& sLanguage , OString const & sPath );
 
-    static void ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResData *pResData , MergeDataFile* pMergeDataFile );
+    static bool ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResData *pResData , MergeDataFile* pMergeDataFile );
 };
 
 #endif // INCLUDED_L10NTOOLS_INC_HELPMERGE_HXX
