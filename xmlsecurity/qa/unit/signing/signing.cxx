@@ -520,8 +520,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFGood)
     // We expect NOTVALIDATED in case the root CA is not imported on the system, and OK otherwise, so accept both.
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
     CPPUNIT_ASSERT_MESSAGE(
-        (OString::number(static_cast<std::underlying_type<SignatureState>::type>(nActual))
-             .getStr()),
+        (OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
 }
 
@@ -561,11 +560,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLPartial)
     // We expect NOTVALIDATED_PARTIAL_OK in case the root CA is not imported on the system, and PARTIAL_OK otherwise, so accept both.
     // But reject NOTVALIDATED, hiding incompleteness is not OK.
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
-    CPPUNIT_ASSERT_MESSAGE(
-        (OString::number(static_cast<std::underlying_type<SignatureState>::type>(nActual))
-             .getStr()),
-        (nActual == SignatureState::NOTVALIDATED_PARTIAL_OK
-         || nActual == SignatureState::PARTIAL_OK));
+    CPPUNIT_ASSERT_MESSAGE((OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+                           (nActual == SignatureState::NOTVALIDATED_PARTIAL_OK
+                            || nActual == SignatureState::PARTIAL_OK));
 }
 
 /// Test a typical broken OOXML signature where one stream is corrupted.
@@ -594,8 +591,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFGood)
     // We expect NOTVALIDATED in case the root CA is not imported on the system, and OK otherwise, so accept both.
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
     CPPUNIT_ASSERT_MESSAGE(
-        (OString::number(static_cast<std::underlying_type<SignatureState>::type>(nActual))
-             .getStr()),
+        (OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
 }
 
@@ -635,11 +631,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Calc)
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pObjectShell);
 
     SignatureState nActual = pObjectShell->GetScriptingSignatureState();
-    CPPUNIT_ASSERT_MESSAGE(
-        (OString::number(static_cast<std::underlying_type<SignatureState>::type>(nActual))
-             .getStr()),
-        (nActual == SignatureState::OK || nActual == SignatureState::NOTVALIDATED
-         || nActual == SignatureState::INVALID));
+    CPPUNIT_ASSERT_MESSAGE((OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+                           (nActual == SignatureState::OK || nActual == SignatureState::NOTVALIDATED
+                            || nActual == SignatureState::INVALID));
 
     uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY_THROW);
 
@@ -674,11 +668,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Doc)
     CPPUNIT_ASSERT(pObjectShell);
 
     SignatureState nActual = pObjectShell->GetScriptingSignatureState();
-    CPPUNIT_ASSERT_MESSAGE(
-        (OString::number(static_cast<std::underlying_type<SignatureState>::type>(nActual))
-             .getStr()),
-        (nActual == SignatureState::OK || nActual == SignatureState::NOTVALIDATED
-         || nActual == SignatureState::INVALID));
+    CPPUNIT_ASSERT_MESSAGE((OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+                           (nActual == SignatureState::OK || nActual == SignatureState::NOTVALIDATED
+                            || nActual == SignatureState::INVALID));
 
     uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY_THROW);
 
@@ -778,8 +770,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESGood)
     // We expect NOTVALIDATED in case the root CA is not imported on the system, and OK otherwise, so accept both.
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
     CPPUNIT_ASSERT_MESSAGE(
-        (OString::number(static_cast<std::underlying_type<SignatureState>::type>(nActual))
-             .getStr()),
+        (OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
 }
 
@@ -840,10 +831,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFGoodGPG)
     // Our local gpg config fully trusts the signing cert, so in
     // contrast to the X509 test we can fail on NOTVALIDATED here
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        (OString::number(static_cast<std::underlying_type<SignatureState>::type>(nActual))
-             .getStr()),
-        SignatureState::OK, nActual);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE((OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+                                 SignatureState::OK, nActual);
 }
 
 /// Test a typical ODF where all streams are GPG-signed, but we don't trust the signature.
@@ -858,10 +847,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFUntrustedGoodGPG)
     // contrast to the X509 test we can fail everything but
     // NOTVALIDATED here
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        (OString::number(static_cast<std::underlying_type<SignatureState>::type>(nActual))
-             .getStr()),
-        SignatureState::NOTVALIDATED, nActual);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE((OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+                                 SignatureState::NOTVALIDATED, nActual);
 }
 
 /// Test a typical broken ODF signature where one stream is corrupted.
