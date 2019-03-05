@@ -62,8 +62,6 @@ bool TypedefParam::VisitFunctionDecl(FunctionDecl const* functionDecl)
             report(DiagnosticsEngine::Note, "declaration site here",
                    compat::getBeginLoc(canonicalDecl))
                 << canonicalDecl->getSourceRange();
-            thisParam->getType()->dump();
-            canonicalParam->getType()->dump();
         }
     }
 
@@ -77,8 +75,6 @@ bool TypedefParam::VisitFunctionDecl(FunctionDecl const* functionDecl)
             << functionDecl->getSourceRange();
         report(DiagnosticsEngine::Note, "declaration site here", compat::getBeginLoc(canonicalDecl))
             << canonicalDecl->getSourceRange();
-        functionDecl->getReturnType()->dump();
-        canonicalDecl->getReturnType()->dump();
     }
     return true;
 }
@@ -122,8 +118,6 @@ bool TypedefParam::VisitCXXMethodDecl(CXXMethodDecl const* methodDecl)
                 report(DiagnosticsEngine::Note, "super-class method here",
                        compat::getBeginLoc(superMethodDecl))
                     << superMethodDecl->getSourceRange();
-                parmVarDecl->getType()->dump();
-                superParmVarDecl->getType()->dump();
             }
             ++i;
         }
@@ -142,8 +136,6 @@ bool TypedefParam::VisitCXXMethodDecl(CXXMethodDecl const* methodDecl)
                 report(DiagnosticsEngine::Note, "super-class method here",
                        compat::getBeginLoc(superMethodDecl))
                     << superMethodDecl->getSourceRange();
-                returnType->dump();
-                superMethodDecl->getReturnType()->dump();
             }
     }
     return true;
