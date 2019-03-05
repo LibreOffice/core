@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -8,30 +8,33 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
-
 #include <test/sheet/datapilotfield.hxx>
 #include <test/sheet/xdatapilotfield.hxx>
 #include <test/sheet/xdatapilotfieldgrouping.hxx>
 
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #include <com/sun/star/sheet/XDataPilotTables.hpp>
 #include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+
+#include <com/sun/star/uno/Reference.hxx>
 
 using namespace css;
-using namespace css::uno;
 
-namespace sc_apitest {
-
-class ScDataPilotFieldObj : public CalcUnoApiTest, public apitest::DataPilotField,
-                                                   public apitest::XDataPilotField,
-                                                   public apitest::XDataPilotFieldGrouping
+namespace sc_apitest
+{
+class ScDataPilotFieldObj : public CalcUnoApiTest,
+                            public apitest::DataPilotField,
+                            public apitest::XDataPilotField,
+                            public apitest::XDataPilotFieldGrouping
 {
 public:
     virtual void setUp() override;
     virtual void tearDown() override;
-    virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference<uno::XInterface> init() override;
 
     ScDataPilotFieldObj();
 
@@ -55,31 +58,29 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScDataPilotFieldObj::ScDataPilotFieldObj()
-     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
-uno::Reference< uno::XInterface > ScDataPilotFieldObj::init()
+uno::Reference<uno::XInterface> ScDataPilotFieldObj::init()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(1), uno::UNO_QUERY_THROW);
 
-    uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(1), UNO_QUERY_THROW);
-
-    CPPUNIT_ASSERT_MESSAGE("Could not create interface of type XSpreadsheet", xSheet.is());
-    uno::Reference< sheet::XDataPilotTablesSupplier > xDPTS(xSheet, UNO_QUERY_THROW);
-    uno::Reference< sheet::XDataPilotTables > xDPT = xDPTS->getDataPilotTables();
-    CPPUNIT_ASSERT(xDPT.is());
+    uno::Reference<sheet::XDataPilotTablesSupplier> xDPTS(xSheet, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XDataPilotTables> xDPT(xDPTS->getDataPilotTables(), uno::UNO_QUERY_THROW);
     uno::Sequence<OUString> aElementNames = xDPT->getElementNames();
-    (void) aElementNames;
+    (void)aElementNames;
 
-    uno::Reference< sheet::XDataPilotDescriptor > xDPDsc(xDPT->getByName("DataPilot1"),UNO_QUERY_THROW);
-    uno::Reference< container::XIndexAccess > xIA( xDPDsc->getDataPilotFields(), UNO_QUERY_THROW);
-    uno::Reference< uno::XInterface > xReturnValue( xIA->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference<sheet::XDataPilotDescriptor> xDPDsc(xDPT->getByName("DataPilot1"),
+                                                       uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIA(xDPDsc->getDataPilotFields(), uno::UNO_QUERY_THROW);
+    uno::Reference<uno::XInterface> xReturnValue(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
     return xReturnValue;
 }
 
@@ -90,7 +91,6 @@ void ScDataPilotFieldObj::setUp()
     OUString aFileURL;
     createFileURL("scdatapilotfieldobj.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-
 }
 
 void ScDataPilotFieldObj::tearDown()
@@ -101,8 +101,8 @@ void ScDataPilotFieldObj::tearDown()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotFieldObj);
 
-}
+} // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
