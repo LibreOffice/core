@@ -24,6 +24,7 @@
 #include "viewutil.hxx"
 #include "viewdata.hxx"
 #include "cbutton.hxx"
+#include "checklistmenu.hxx"
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <o3tl/deleter.hxx>
 
@@ -43,7 +44,6 @@ namespace sdr { namespace overlay { class OverlayManager; } }
 class FmFormView;
 struct ScTableInfo;
 class ScDPObject;
-class ScCheckListMenuWindow;
 class ScDPFieldButton;
 class ScOutputData;
 class ScFilterListBox;
@@ -145,6 +145,8 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     VclPtr<ScCheckListMenuWindow>    mpAutoFilterPopup;
     VclPtr<ScCheckListMenuWindow>    mpDPFieldPopup;
     std::unique_ptr<ScDPFieldButton> mpFilterButton;
+
+    ScCheckListMenuWindow::ResultType aSaveAutoFilterResult;
 
     sal_uInt16              nCursorHideCount;
 
