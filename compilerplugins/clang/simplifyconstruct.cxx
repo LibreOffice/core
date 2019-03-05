@@ -18,11 +18,11 @@
 
 namespace
 {
-class SimplifyConstruct : public RecursiveASTVisitor<SimplifyConstruct>, public loplugin::Plugin
+class SimplifyConstruct : public loplugin::FilteringPlugin<SimplifyConstruct>
 {
 public:
     explicit SimplifyConstruct(loplugin::InstantiationData const& data)
-        : Plugin(data)
+        : FilteringPlugin(data)
     {
     }
 

@@ -79,11 +79,11 @@ StringRef vis(Visibility v) {
 }
 
 class DynCastVisibility final:
-    public RecursiveASTVisitor<DynCastVisibility>, public loplugin::Plugin
+    public loplugin::FilteringPlugin<DynCastVisibility>
 {
 public:
     explicit DynCastVisibility(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+        FilteringPlugin(data) {}
 
     bool shouldVisitTemplateInstantiations() const { return true; }
 

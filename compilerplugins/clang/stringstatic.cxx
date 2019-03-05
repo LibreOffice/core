@@ -22,13 +22,12 @@
 namespace {
 
 class StringStatic
-    : public clang::RecursiveASTVisitor<StringStatic>
-    , public loplugin::Plugin
+    : public loplugin::FilteringPlugin<StringStatic>
 {
 
 public:
     explicit StringStatic(loplugin::InstantiationData const& rData):
-        Plugin(rData) {}
+        FilteringPlugin(rData) {}
 
     void run() override;
     bool VisitVarDecl(VarDecl const*);

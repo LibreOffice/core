@@ -19,12 +19,11 @@
 namespace {
 
 class WeakObject
-    : public clang::RecursiveASTVisitor<WeakObject>
-    , public loplugin::Plugin
+    : public loplugin::FilteringPlugin<WeakObject>
 {
 
 public:
-    explicit WeakObject(loplugin::InstantiationData const& rData): Plugin(rData)
+    explicit WeakObject(loplugin::InstantiationData const& rData): FilteringPlugin(rData)
     {}
 
     void run() override {
