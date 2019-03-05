@@ -71,16 +71,6 @@ PositionHolder::~PositionHolder()
 
 } // anonymous namespace
 
-typedef struct
-{
-    tools::SvRef<SotStorage> ref;
-} SotStorageRefWrapper;
-
-typedef struct
-{
-    tools::SvRef<SotStorageStream> ref;
-} SotStorageStreamRefWrapper;
-
 namespace
 {
 OUString lcl_normalizeSubStreamPath(const OUString& rPath)
@@ -106,7 +96,7 @@ struct OLEStreamData
 {
     OLEStreamData(const OString& rName, const OString& rvngName);
 
-    SotStorageStreamRefWrapper stream;
+    tools::SvRef<SotStorageStream> stream;
 
     /** Name of the stream.
       *
@@ -123,7 +113,7 @@ struct OLEStreamData
 };
 
 typedef std::unordered_map<OUString, std::size_t> NameMap_t;
-typedef std::unordered_map<OUString, SotStorageRefWrapper> OLEStorageMap_t;
+typedef std::unordered_map<OUString, tools::SvRef<SotStorage>> OLEStorageMap_t;
 
 /** Representation of an OLE2 storage.
   *
@@ -156,7 +146,7 @@ private:
     tools::SvRef<SotStorageStream> createStream(const OUString& rPath);
 
 public:
-    SotStorageRefWrapper mxRootStorage; //< root storage of the OLE2
+    tools::SvRef<SotStorage> mxRootStorage; //< root storage of the OLE2
     OLEStorageMap_t maStorageMap; //< map of all sub storages by name
     ::std::vector<OLEStreamData> maStreams; //< list of streams and their names
     NameMap_t maNameMap; //< map of stream names to indexes (into @c maStreams)
@@ -184,9 +174,9 @@ void OLEStorageImpl::initialize(std::unique_ptr<SvStream> pStream)
     if (!pStream)
         return;
 
-    mxRootStorage.ref = new SotStorage(pStream.release(), true);
+    mxRootStorage = new SotStorage(pStream.release(), true);
 
-    traverse(mxRootStorage.ref, "");
+    traverse(mxRootStorage, "");
 
     mbInitialized = true;
 }
@@ -202,20 +192,20 @@ tools::SvRef<SotStorageStream> OLEStorageImpl::getStream(const OUString& rPath)
     if (maNameMap.end() == aIt)
         return tools::SvRef<SotStorageStream>();
 
-    if (!maStreams[aIt->second].stream.ref.is())
-        maStreams[aIt->second].stream.ref
+    if (!maStreams[aIt->second].stream.is())
+        maStreams[aIt->second].stream
             = createStream(OStringToOUString(maStreams[aIt->second].name, RTL_TEXTENCODING_UTF8));
 
-    return maStreams[aIt->second].stream.ref;
+    return maStreams[aIt->second].stream;
 }
 
 tools::SvRef<SotStorageStream> const& OLEStorageImpl::getStream(const std::size_t nId)
 {
-    if (!maStreams[nId].stream.ref.is())
-        maStreams[nId].stream.ref
+    if (!maStreams[nId].stream.is())
+        maStreams[nId].stream
             = createStream(OStringToOUString(maStreams[nId].name, RTL_TEXTENCODING_UTF8));
 
-    return maStreams[nId].stream.ref;
+    return maStreams[nId].stream;
 }
 
 void OLEStorageImpl::traverse(const tools::SvRef<SotStorage>& rStorage, const OUString& rPath)
@@ -240,12 +230,12 @@ void OLEStorageImpl::traverse(const tools::SvRef<SotStorage>& rStorage, const OU
         else if (info.IsStorage())
         {
             const OUString aPath = concatPath(rPath, info.GetName());
-            SotStorageRefWrapper aStorage;
-            aStorage.ref = rStorage->OpenSotStorage(info.GetName(), StreamMode::STD_READ);
+            tools::SvRef<SotStorage> aStorage
+                = rStorage->OpenSotStorage(info.GetName(), StreamMode::STD_READ);
             maStorageMap[aPath] = aStorage;
 
             // deep-first traversal
-            traverse(aStorage.ref, aPath);
+            traverse(aStorage, aPath);
         }
         else
         {
@@ -260,7 +250,7 @@ tools::SvRef<SotStorageStream> OLEStorageImpl::createStream(const OUString& rPat
     const sal_Int32 nDelim = rPath.lastIndexOf(u'/');
 
     if (-1 == nDelim)
-        return mxRootStorage.ref->OpenSotStream(rPath, StreamMode::STD_READ);
+        return mxRootStorage->OpenSotStream(rPath, StreamMode::STD_READ);
 
     const OUString aDir = rPath.copy(0, nDelim);
     const OUString aName = rPath.copy(nDelim + 1);
@@ -270,7 +260,7 @@ tools::SvRef<SotStorageStream> OLEStorageImpl::createStream(const OUString& rPat
     if (maStorageMap.end() == aIt)
         return nullptr;
 
-    return aIt->second.ref->OpenSotStream(aName, StreamMode::STD_READ);
+    return aIt->second->OpenSotStream(aName, StreamMode::STD_READ);
 }
 }
 

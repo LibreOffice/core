@@ -158,11 +158,11 @@ static bool sal_GetVisualInfo( Display *pDisplay, XID nVID, XVisualInfo &rVI )
 extern "C" srv_vendor_t
 sal_GetServerVendor( Display *p_display )
 {
-    typedef struct {
+    struct vendor_t {
         srv_vendor_t  e_vendor; // vendor as enum
         const char*   p_name;   // vendor name as returned by VendorString()
         unsigned int  n_len;    // number of chars to compare
-    } vendor_t;
+    };
 
     static const vendor_t vendorlist[] = {
         { vendor_sun,         "Sun Microsystems, Inc.",          10 },

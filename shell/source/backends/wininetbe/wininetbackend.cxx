@@ -48,11 +48,11 @@ struct Library {
 
 }
 
-typedef struct
+struct ProxyEntry
 {
     OUString Server;
     OUString Port;
-} ProxyEntry;
+};
 
 
 namespace

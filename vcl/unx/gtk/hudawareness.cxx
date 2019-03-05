@@ -15,13 +15,13 @@
 
 #include <unx/gtk/hudawareness.h>
 
-typedef struct
+struct HudAwarenessHandle
 {
   GDBusConnection *connection;
   HudAwarenessCallback callback;
   gpointer user_data;
   GDestroyNotify notify;
-} HudAwarenessHandle;
+};
 
 static void
 hud_awareness_method_call (GDBusConnection       * /* connection */,

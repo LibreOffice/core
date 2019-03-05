@@ -36,13 +36,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
-typedef struct {
+struct Number {
     sal_Int16 number;
     const sal_Unicode *multiplierChar;
     sal_Int16 numberFlag;
     sal_Int16 exponentCount;
     const sal_Int16 *multiplierExponent;
-} Number;
+};
 
 
 #define NUMBER_OMIT_ZERO (1 << 0)

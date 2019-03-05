@@ -114,11 +114,11 @@ void SalData::ensureThreadAutoreleasePool()
     }
 }
 
-typedef struct
+struct curs_ent
 {
     const char*         pBaseName;
     const NSPoint       aHotSpot;
-} curs_ent;
+};
 
 const o3tl::enumarray<PointerStyle, curs_ent> aCursorTab =
 {

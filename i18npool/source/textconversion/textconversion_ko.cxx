@@ -81,11 +81,11 @@ TextConversion_ko::TextConversion_ko( const Reference < XComponentContext >& xCo
 
 static sal_Int16 checkScriptType(sal_Unicode c)
 {
-    typedef struct {
+    struct UBlock2Script {
         UBlockCode from;
         UBlockCode to;
         sal_Int16 script;
-    } UBlock2Script;
+    };
 
     static const UBlock2Script scriptList[] = {
         {UBLOCK_HANGUL_JAMO, UBLOCK_HANGUL_JAMO, SCRIPT_HANGUL},

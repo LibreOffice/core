@@ -154,11 +154,11 @@ static LibLibreOffice_Impl *gImpl = nullptr;
 static std::weak_ptr< LibreOfficeKitClass > gOfficeClass;
 static std::weak_ptr< LibreOfficeKitDocumentClass > gDocumentClass;
 
-typedef struct
+struct ExtensionMap
 {
     const char *extn;
     const char *filterName;
-} ExtensionMap;
+};
 
 static const ExtensionMap aWriterExtensionMap[] =
 {

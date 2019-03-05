@@ -107,10 +107,10 @@ MessageImprint ::= SEQUENCE  {
     hashedMessage OCTET STRING  }
 */
 
-typedef struct {
+struct MessageImprint {
     SECAlgorithmID hashAlgorithm;
     SECItem hashedMessage;
-} MessageImprint;
+};
 
 /*
 Extension  ::=  SEQUENCE  {
@@ -119,11 +119,11 @@ Extension  ::=  SEQUENCE  {
     extnValue OCTET STRING  }
 */
 
-typedef struct {
+struct Extension {
     SECItem const extnID;
     SECItem const critical;
     SECItem const extnValue;
-} Extension;
+};
 
 /*
 Extensions ::= SEQUENCE SIZE (1..MAX) OF Extension
@@ -143,14 +143,14 @@ TimeStampReq ::= SEQUENCE  {
     extensions     [0] IMPLICIT Extensions OPTIONAL  }
 */
 
-typedef struct {
+struct TimeStampReq {
     SECItem version;
     MessageImprint messageImprint;
     SECItem reqPolicy;
     SECItem nonce;
     SECItem certReq;
     Extension *extensions;
-} TimeStampReq;
+};
 
 /**
  * General name, defined by RFC 3280.
@@ -278,11 +278,11 @@ const SEC_ASN1Template SigningCertificateV2Template[] =
     {0, 0, nullptr, 0}
 };
 
-typedef struct {
+struct PKIStatusInfo {
     SECItem status;
     SECItem statusString;
     SECItem failInfo;
-} PKIStatusInfo;
+};
 
 const SEC_ASN1Template PKIStatusInfo_Template[] =
 {
@@ -298,10 +298,10 @@ const SEC_ASN1Template Any_Template[] =
     { SEC_ASN1_ANY, 0, nullptr, sizeof(SECItem) }
 };
 
-typedef struct {
+struct TimeStampResp {
     PKIStatusInfo status;
     SECItem timeStampToken;
-} TimeStampResp;
+};
 
 const SEC_ASN1Template TimeStampResp_Template[] =
 {
