@@ -1393,6 +1393,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bPropLineSpacingShrinksFirstLine = false;
     bool bSubtractFlysAnchoredAtFlys = false;
     bool bDisableOffPagePositioning = false;
+    bool bCollapseEmptyCellPara = false;
 
     const PropertyValue* currentDatabaseDataSource = nullptr;
     const PropertyValue* currentDatabaseCommand = nullptr;
@@ -1487,6 +1488,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bSubtractFlysAnchoredAtFlys = true;
                 else if (pValues->Name == "DisableOffPagePositioning")
                     bDisableOffPagePositioning = true;
+                else if (pValues->Name == "CollapseEmptyCellPara")
+                    bCollapseEmptyCellPara = true;
             }
             catch( Exception& )
             {
@@ -1649,6 +1652,9 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     if ( bDisableOffPagePositioning )
         xProps->setPropertyValue("DisableOffPagePositioning", makeAny(true));
+
+    if (!bCollapseEmptyCellPara)
+        xProps->setPropertyValue("CollapseEmptyCellPara", makeAny(false));
 
     SwDoc *pDoc = getDoc();
     SfxPrinter *pPrinter = pDoc->getIDocumentDeviceAccess().getPrinter( false );
