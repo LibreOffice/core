@@ -8814,11 +8814,17 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
             done
         fi
         AC_PATH_PROG(PGCONFIG, pg_config, ,$PATH$pg_supp_path)
-        if test -z "$PGCONFIG"; then
-            AC_MSG_ERROR([pg_config needed; set PGCONFIG if not in PATH])
+        if test -n "$PGCONFIG"; then
+            POSTGRESQL_INC=-I$(${PGCONFIG} --includedir)
+            POSTGRESQL_LIB="-L$(${PGCONFIG} --libdir)"
+        else
+            PKG_CHECK_MODULES(POSTGRESQL, libpq, [
+              POSTGRESQL_INC=$POSTGRESQL_CFLAGS
+              POSTGRESQL_LIB=$POSTGRESQL_LIBS
+            ],[
+              AC_MSG_ERROR([pg_config or 'pkg-config libpq' needed; set PGCONFIG if not in PATH])
+            ])
         fi
-        POSTGRESQL_INC=-I$(${PGCONFIG} --includedir)
-        POSTGRESQL_LIB="-L$(${PGCONFIG} --libdir)"
         FilterLibs "${POSTGRESQL_LIB}"
         POSTGRESQL_LIB="${filteredlibs}"
     else
