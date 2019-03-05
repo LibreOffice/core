@@ -23,6 +23,7 @@
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 
+#include <IDocumentSettingAccess.hxx>
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
 #include <swdtflvr.hxx>
@@ -914,6 +915,16 @@ DECLARE_ODFIMPORT_TEST(testTdf116195, "tdf116195.odt")
 DECLARE_ODFIMPORT_TEST(testTdf120677, "tdf120677.fodt")
 {
     // The document used to hang the layout, consuming memory until OOM
+}
+
+DECLARE_ODFIMPORT_TEST(testTdf123829, "tdf123829.odt")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Compatibility: collapse cell paras should not be set", false,
+        pDoc->getIDocumentSettingAccess().get(DocumentSettingId::COLLAPSE_EMPTY_CELL_PARA));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
