@@ -50,8 +50,11 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };
 
+enum class MSFltrPg2_CheckBoxEntries;
+
 class OfaMSFilterTabPage2 : public SfxTabPage
 {
+
     class MSFltrSimpleTable : public SvSimpleTable
     {
         using SvTreeListBox::GetCheckButtonState;
@@ -89,10 +92,10 @@ class OfaMSFilterTabPage2 : public SfxTabPage
     virtual ~OfaMSFilterTabPage2() override;
     virtual void dispose() override;
 
-    void                InsertEntry( const OUString& _rTxt, sal_IntPtr _nType );
-    void                InsertEntry( const OUString& _rTxt, sal_IntPtr _nType,
+    void                InsertEntry( const OUString& _rTxt, MSFltrPg2_CheckBoxEntries _nType );
+    void                InsertEntry( const OUString& _rTxt, MSFltrPg2_CheckBoxEntries _nType,
                                      bool saveEnabled );
-    SvTreeListEntry*    GetEntry4Type( sal_IntPtr _nType ) const;
+    SvTreeListEntry*    GetEntry4Type( MSFltrPg2_CheckBoxEntries _nType ) const;
 
 public:
     OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet& rSet );

@@ -26,7 +26,7 @@
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
 
-enum MSFltrPg2_CheckBoxEntries {
+enum class MSFltrPg2_CheckBoxEntries {
     Math,
     Writer,
     Calc,
@@ -202,33 +202,33 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
         bool (SvtFilterOptions:: *FnIs)() const;
         void (SvtFilterOptions:: *FnSet)( bool bFlag );
     } const aChkArr[] = {
-        { Math,     &SvtFilterOptions::IsMathType2Math,
+        { MSFltrPg2_CheckBoxEntries::Math,     &SvtFilterOptions::IsMathType2Math,
                         &SvtFilterOptions::SetMathType2Math },
-        { Math,     &SvtFilterOptions::IsMath2MathType,
+        { MSFltrPg2_CheckBoxEntries::Math,     &SvtFilterOptions::IsMath2MathType,
                         &SvtFilterOptions::SetMath2MathType },
-        { Writer,   &SvtFilterOptions::IsWinWord2Writer,
+        { MSFltrPg2_CheckBoxEntries::Writer,   &SvtFilterOptions::IsWinWord2Writer,
                         &SvtFilterOptions::SetWinWord2Writer },
-        { Writer,   &SvtFilterOptions::IsWriter2WinWord,
+        { MSFltrPg2_CheckBoxEntries::Writer,   &SvtFilterOptions::IsWriter2WinWord,
                         &SvtFilterOptions::SetWriter2WinWord },
-        { Calc,     &SvtFilterOptions::IsExcel2Calc,
+        { MSFltrPg2_CheckBoxEntries::Calc,     &SvtFilterOptions::IsExcel2Calc,
                         &SvtFilterOptions::SetExcel2Calc },
-        { Calc,     &SvtFilterOptions::IsCalc2Excel,
+        { MSFltrPg2_CheckBoxEntries::Calc,     &SvtFilterOptions::IsCalc2Excel,
                         &SvtFilterOptions::SetCalc2Excel },
-        { Impress,  &SvtFilterOptions::IsPowerPoint2Impress,
+        { MSFltrPg2_CheckBoxEntries::Impress,  &SvtFilterOptions::IsPowerPoint2Impress,
                         &SvtFilterOptions::SetPowerPoint2Impress },
-        { Impress,  &SvtFilterOptions::IsImpress2PowerPoint,
+        { MSFltrPg2_CheckBoxEntries::Impress,  &SvtFilterOptions::IsImpress2PowerPoint,
                         &SvtFilterOptions::SetImpress2PowerPoint },
-        { SmartArt,  &SvtFilterOptions::IsSmartArt2Shape,
+        { MSFltrPg2_CheckBoxEntries::SmartArt,  &SvtFilterOptions::IsSmartArt2Shape,
                         &SvtFilterOptions::SetSmartArt2Shape },
-        { InvalidCBEntry, nullptr, nullptr }
     };
 
     bool bCheck, bFirst = true;
-    for( const ChkCBoxEntries* pArr = aChkArr;
-            InvalidCBEntry != pArr->eType; ++pArr, bFirst = !bFirst )
+    for( const ChkCBoxEntries & rEntry : aChkArr )
     {
         sal_uInt16 nCol = bFirst ? 1 : 2;
-        SvTreeListEntry* pEntry = GetEntry4Type( pArr->eType );
+        if (bFirst)
+            bFirst = false;
+        SvTreeListEntry* pEntry = GetEntry4Type( rEntry.eType );
         if( pEntry )
         {
             SvLBoxButton& rItem = static_cast<SvLBoxButton&>(pEntry->GetItem( nCol ));
@@ -238,8 +238,8 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
                 bCheck = SvButtonState::Checked ==
                         SvLBoxButtonData::ConvertToButtonState( nButtonFlags );
 
-                if( bCheck != (rOpt.*pArr->FnIs)() )
-                    (rOpt.*pArr->FnSet)( bCheck );
+                if( bCheck != (rOpt.*rEntry.FnIs)() )
+                    (rOpt.*rEntry.FnSet)( bCheck );
             }
         }
     }
@@ -266,43 +266,43 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
 
     // int the same sequence as the enums of MSFltrPg2_CheckBoxEntries
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::MATH ) )
-        InsertEntry( sChgToFromMath, static_cast< sal_IntPtr >( Math ) );
+        InsertEntry( sChgToFromMath, MSFltrPg2_CheckBoxEntries::Math );
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
-        InsertEntry( sChgToFromWriter, static_cast< sal_IntPtr >( Writer ) );
+        InsertEntry( sChgToFromWriter, MSFltrPg2_CheckBoxEntries::Writer );
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) )
-        InsertEntry( sChgToFromCalc, static_cast< sal_IntPtr >( Calc ) );
+        InsertEntry( sChgToFromCalc, MSFltrPg2_CheckBoxEntries::Calc );
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
-        InsertEntry( sChgToFromImpress, static_cast< sal_IntPtr >( Impress ) );
-    InsertEntry( sChgToFromSmartArt, static_cast< sal_IntPtr >( SmartArt ), false );
+        InsertEntry( sChgToFromImpress, MSFltrPg2_CheckBoxEntries::Impress );
+    InsertEntry( sChgToFromSmartArt, MSFltrPg2_CheckBoxEntries::SmartArt, false );
 
     static struct ChkCBoxEntries{
         MSFltrPg2_CheckBoxEntries eType;
         bool (SvtFilterOptions:: *FnIs)() const;
     } const aChkArr[] = {
-        { Math,     &SvtFilterOptions::IsMathType2Math },
-        { Math,     &SvtFilterOptions::IsMath2MathType },
-        { Writer,   &SvtFilterOptions::IsWinWord2Writer },
-        { Writer,   &SvtFilterOptions::IsWriter2WinWord },
-        { Calc,     &SvtFilterOptions::IsExcel2Calc },
-        { Calc,     &SvtFilterOptions::IsCalc2Excel },
-        { Impress,  &SvtFilterOptions::IsPowerPoint2Impress },
-        { Impress,  &SvtFilterOptions::IsImpress2PowerPoint },
-        { SmartArt, &SvtFilterOptions::IsSmartArt2Shape },
-        { InvalidCBEntry, nullptr }
+        { MSFltrPg2_CheckBoxEntries::Math,     &SvtFilterOptions::IsMathType2Math },
+        { MSFltrPg2_CheckBoxEntries::Math,     &SvtFilterOptions::IsMath2MathType },
+        { MSFltrPg2_CheckBoxEntries::Writer,   &SvtFilterOptions::IsWinWord2Writer },
+        { MSFltrPg2_CheckBoxEntries::Writer,   &SvtFilterOptions::IsWriter2WinWord },
+        { MSFltrPg2_CheckBoxEntries::Calc,     &SvtFilterOptions::IsExcel2Calc },
+        { MSFltrPg2_CheckBoxEntries::Calc,     &SvtFilterOptions::IsCalc2Excel },
+        { MSFltrPg2_CheckBoxEntries::Impress,  &SvtFilterOptions::IsPowerPoint2Impress },
+        { MSFltrPg2_CheckBoxEntries::Impress,  &SvtFilterOptions::IsImpress2PowerPoint },
+        { MSFltrPg2_CheckBoxEntries::SmartArt, &SvtFilterOptions::IsSmartArt2Shape },
     };
 
     bool bFirst = true;
-    for( const ChkCBoxEntries* pArr = aChkArr;
-            InvalidCBEntry != pArr->eType; ++pArr, bFirst = !bFirst )
+    for( const ChkCBoxEntries & rArr : aChkArr )
     {
         sal_uInt16 nCol = bFirst ? 1 : 2;
-        SvTreeListEntry* pEntry = GetEntry4Type( static_cast< sal_IntPtr >( pArr->eType ) );
+        if (bFirst)
+            bFirst = false;
+        SvTreeListEntry* pEntry = GetEntry4Type( rArr.eType );
         if( pEntry )
         {
             SvLBoxButton& rItem = static_cast<SvLBoxButton&>(pEntry->GetItem( nCol ));
             if (rItem.GetType() == SvLBoxItemType::Button)
             {
-                if( (rOpt.*pArr->FnIs)() )
+                if( (rOpt.*rArr.FnIs)() )
                     rItem.SetStateChecked();
                 else
                     rItem.SetStateUnchecked();
@@ -320,12 +320,12 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
     aHighlightingRB->SaveValue();
 }
 
-void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType )
+void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, MSFltrPg2_CheckBoxEntries _nType )
 {
     InsertEntry( _rTxt, _nType, true );
 }
 
-void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType,
+void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, MSFltrPg2_CheckBoxEntries _nType,
                                        bool saveEnabled )
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
@@ -348,12 +348,12 @@ void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType,
     m_pCheckLB->Insert( pEntry );
 }
 
-SvTreeListEntry* OfaMSFilterTabPage2::GetEntry4Type( sal_IntPtr _nType ) const
+SvTreeListEntry* OfaMSFilterTabPage2::GetEntry4Type( MSFltrPg2_CheckBoxEntries _nType ) const
 {
     SvTreeListEntry* pEntry = m_pCheckLB->First();
     while ( pEntry )
     {
-        if ( _nType == sal_IntPtr( pEntry->GetUserData() ) )
+        if ( _nType == static_cast<MSFltrPg2_CheckBoxEntries>( reinterpret_cast<sal_IntPtr>( pEntry->GetUserData() ) ) )
             return pEntry;
         pEntry = m_pCheckLB->Next( pEntry );
     }
