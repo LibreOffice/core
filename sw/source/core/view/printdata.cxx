@@ -275,27 +275,34 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     // create a choice for the content to create
     const OUString aPrintRangeName( "PrintContent" );
-    uno::Sequence< OUString > aChoices( 4 );
-    uno::Sequence< OUString > aHelpIds( 1 );
-
-    aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:ListBox";
-
+    uno::Sequence< OUString > aChoices( 5 );
+    uno::Sequence< sal_Bool > aChoicesDisabled( 5 );
+    uno::Sequence< OUString > aHelpIds( 5 );
+    uno::Sequence< OUString > aWidgetIds( 5 );
     aChoices[0] = SwResId( STR_PRINTOPTUI_PRINTALLPAGES );
+    aChoicesDisabled[0] = false;
+    aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0";
+    aWidgetIds[0] = "rbAllPages";
     aChoices[1] = SwResId( STR_PRINTOPTUI_PRINTPAGES );
+    aChoicesDisabled[1] = false;
+    aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1";
+    aWidgetIds[1] = "rbRangePages";
     aChoices[2] = SwResId( STR_PRINTOPTUI_PRINTEVENPAGES );
+    aChoicesDisabled[2] = false; //better disable for 1 page only
+    aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2";
+    aWidgetIds[2] = "rbEvenPages";
     aChoices[3] = SwResId( STR_PRINTOPTUI_PRINTODDPAGES );
-    if ( bHasSelection )
-    {
-        aChoices.realloc( 5 );
-        aChoices[4] = SwResId( STR_PRINTOPTUI_PRINTSELECTION );
-    }
-
-    m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt( "printpagesbox",
-                                                        OUString(),
-                                                        aHelpIds,
-                                                        aPrintRangeName,
-                                                        aChoices,
-                                                        0 /* always default to 'All pages' */ );
+    aChoicesDisabled[3] = false; //better disable for 1 page only
+    aHelpIds[3] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:3";
+    aWidgetIds[3] = "rbOddPages";
+    aChoices[4] = SwResId( STR_PRINTOPTUI_PRINTSELECTION );
+    aChoicesDisabled[4] = !bHasSelection;
+    aHelpIds[4] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:4";
+    aWidgetIds[4] = "rbRangeSelection";
+    m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
+                                                        aHelpIds, aPrintRangeName,
+                                                        aChoices, 0 /* always default to 'All pages' */,
+                                                        aChoicesDisabled);
 
     // show an Edit dependent on "Pages" selected
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, true );
