@@ -919,7 +919,7 @@ void Connection::disposing()
 
     if (m_pDatabaseFileDir)
     {
-        ::utl::removeTree((m_pDatabaseFileDir)->GetURL());
+        ::utl::removeTree(m_pDatabaseFileDir->GetURL());
         m_pDatabaseFileDir.reset();
     }
 }

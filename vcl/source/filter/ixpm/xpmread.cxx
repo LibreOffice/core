@@ -557,7 +557,7 @@ bool XPMReader::ImplGetPara ( sal_uLong nNumb )
         nSize++;
         pPtr++;
     }
-    return ( ( nCount == nNumb ) && ( mpPara ) );
+    return ( ( nCount == nNumb ) && mpPara );
 }
 
 // The next string is read and stored in mpStringBuf (terminated with 0);

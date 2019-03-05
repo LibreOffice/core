@@ -38,7 +38,7 @@ SvXMLAttrContainerData::~SvXMLAttrContainerData()
 
 bool SvXMLAttrContainerData::operator ==( const SvXMLAttrContainerData& rCmp ) const
 {
-    return ( *(rCmp.pimpl) == *(pimpl) );
+    return ( *(rCmp.pimpl) == *pimpl );
 }
 
 bool SvXMLAttrContainerData::AddAttr( const OUString& rLName,

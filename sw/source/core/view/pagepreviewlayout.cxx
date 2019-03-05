@@ -597,7 +597,7 @@ void SwPagePreviewLayout::CalcPreviewPages()
                 /// check whether RTL interface or not
                 if(!AllSettings::GetLayoutRTL())
                     aCurrPaintOffset.AdjustX(mnColWidth );
-                else aCurrPaintOffset.AdjustX( -(mnColWidth) );
+                else aCurrPaintOffset.AdjustX( -mnColWidth );
                 ++nCurrCol;
                 continue;
             }
@@ -623,7 +623,7 @@ void SwPagePreviewLayout::CalcPreviewPages()
         /// check whether RTL interface or not
         if(!AllSettings::GetLayoutRTL())
             aCurrPaintOffset.AdjustX(mnColWidth );
-        else aCurrPaintOffset.AdjustX( -(mnColWidth) );
+        else aCurrPaintOffset.AdjustX( -mnColWidth );
         ++nCurrCol;
         if ( nCurrCol > mnCols )
         {

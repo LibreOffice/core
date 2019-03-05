@@ -75,10 +75,7 @@ void SAL_CALL AcceleratorConfigurationReader::endDocument()
     // The xml file seems to be corrupted.
     // Because we found no end-tags ... at least for
     // one list or item.
-    if (
-        (m_bInsideAcceleratorList) ||
-        (m_bInsideAcceleratorItem)
-       )
+    if (m_bInsideAcceleratorList || m_bInsideAcceleratorItem)
     {
         THROW_PARSEEXCEPTION("No matching start or end element 'acceleratorlist' found!")
     }

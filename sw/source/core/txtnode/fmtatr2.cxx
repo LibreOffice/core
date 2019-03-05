@@ -647,7 +647,7 @@ Meta::~Meta()
 
 SwTextMeta * Meta::GetTextAttr() const
 {
-    return (m_pFormat) ? m_pFormat->GetTextAttr() : nullptr;
+    return m_pFormat ? m_pFormat->GetTextAttr() : nullptr;
 }
 
 

@@ -2130,7 +2130,7 @@ void SwCursorShell::Push()
     // fdo#60513: if we have a table cursor, copy that; else copy current.
     // This seems to work because UpdateCursor() will fix this up on Pop(),
     // then MakeBoxSels() will re-create the current m_pCurrentCursor cell ring.
-    SwShellCursor *const pCurrent((m_pTableCursor) ? m_pTableCursor : m_pCurrentCursor);
+    SwShellCursor *const pCurrent(m_pTableCursor ? m_pTableCursor : m_pCurrentCursor);
     m_pStackCursor = new SwShellCursor( *this, *pCurrent->GetPoint(),
                                     pCurrent->GetPtPos(), m_pStackCursor );
 
@@ -2935,7 +2935,7 @@ size_t SwCursorShell::UpdateTableSelBoxes()
     {
          GetLayout()->MakeTableCursors( *m_pTableCursor );
     }
-    return (m_pTableCursor) ? m_pTableCursor->GetSelectedBoxesCount() : 0;
+    return m_pTableCursor ? m_pTableCursor->GetSelectedBoxesCount() : 0;
 }
 
 /// show the current selected "object"

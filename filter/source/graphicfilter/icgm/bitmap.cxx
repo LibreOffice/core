@@ -355,7 +355,7 @@ std::unique_ptr<CGMBitmap> CGMBitmap::GetNext()
             ( ( xCGMTempBitmap->pCGMBitmapDescriptor->mnQ.X == pCGMBitmapDescriptor->mnR.X ) &&
                     ( xCGMTempBitmap->pCGMBitmapDescriptor->mnQ.Y == pCGMBitmapDescriptor->mnR.Y ) ) ) )
         {
-            ImplInsert( *(xCGMTempBitmap->pCGMBitmapDescriptor), *(pCGMBitmapDescriptor) );
+            ImplInsert( *(xCGMTempBitmap->pCGMBitmapDescriptor), *pCGMBitmapDescriptor );
             xCGMTempBitmap.reset();
             return xCGMTempBitmap;
         }

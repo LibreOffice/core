@@ -842,7 +842,7 @@ void BubbleWindow::Show( bool bVisible, ShowFlags nFlags )
     if ( aScreenPos.X() < 0 )
     {
         mnTipOffset = aScreenPos.X();
-        aPos.AdjustX( -(mnTipOffset) );
+        aPos.AdjustX( -mnTipOffset );
     }
     SetPosSizePixel( aPos, aWindowSize );
 

@@ -1110,14 +1110,14 @@ void SvxIconChoiceCtrl_Impl::PositionScrollBars( long nRealWidth, long nRealHeig
 {
     // horizontal scrollbar
     Point aPos( 0, nRealHeight );
-    aPos.AdjustY( -(nHorSBarHeight) );
+    aPos.AdjustY( -nHorSBarHeight );
 
     if( aHorSBar->GetPosPixel() != aPos )
         aHorSBar->SetPosPixel( aPos );
 
     // vertical scrollbar
     aPos.setX( nRealWidth ); aPos.setY( 0 );
-    aPos.AdjustX( -(nVerSBarWidth) );
+    aPos.AdjustX( -nVerSBarWidth );
     aPos.AdjustX( 1 );
     aPos.AdjustY( -1 );
 

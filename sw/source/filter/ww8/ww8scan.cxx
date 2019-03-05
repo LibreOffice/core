@@ -969,7 +969,7 @@ void WW8PLCFx_PCDAttrs::advance()
 
 WW8_CP WW8PLCFx_PCDAttrs::Where()
 {
-    return ( pPcd ) ? pPcd->Where() : WW8_CP_MAX;
+    return pPcd ? pPcd->Where() : WW8_CP_MAX;
 }
 
 void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
@@ -4286,7 +4286,7 @@ void WW8PLCFx_Book::SetIdx(sal_uInt32 nI)
 
 sal_uInt32 WW8PLCFx_Book::GetIdx2() const
 {
-    return nIMax ? ( pBook[1]->GetIdx() | ( ( nIsEnd ) ? 0x80000000 : 0 ) ) : 0;
+    return nIMax ? ( pBook[1]->GetIdx() | ( nIsEnd ? 0x80000000 : 0 ) ) : 0;
 }
 
 void WW8PLCFx_Book::SetIdx2(sal_uInt32 nI)
@@ -4363,7 +4363,7 @@ void WW8PLCFx_Book::advance()
             if (nPairFor == pBook[1]->GetIdx())
                 nIsEnd = 0;
             else
-                nIsEnd = ( nIsEnd ) ? 0 : 1;
+                nIsEnd = nIsEnd ? 0 : 1;
         }
     }
 }

@@ -1712,7 +1712,7 @@ public:
         }
         // set kernel arg
         SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem2);
-        err = clSetKernelArg(k, argno, sizeof(cl_mem), &(mpClmem2));
+        err = clSetKernelArg(k, argno, sizeof(cl_mem), &mpClmem2);
         if (CL_SUCCESS != err)
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
         return 1;

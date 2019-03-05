@@ -870,7 +870,7 @@ void OQueryController::impl_initialize()
 
         ClearUndoManager();
 
-        if  (  ( m_bGraphicalDesign )
+        if  (  m_bGraphicalDesign
             && (  ( m_sName.isEmpty() && !editingCommand() )
                || ( m_sStatement.isEmpty() && editingCommand() )
                )

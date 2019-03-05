@@ -427,7 +427,7 @@ void SdrHdl::CreateB2dIAObject()
         {
             case SdrHdlKind::Move:
             {
-                eKindOfMarker = (b1PixMore) ? BitmapMarkerKind::Rect_9x9 : BitmapMarkerKind::Rect_7x7;
+                eKindOfMarker = b1PixMore ? BitmapMarkerKind::Rect_9x9 : BitmapMarkerKind::Rect_7x7;
                 break;
             }
             case SdrHdlKind::UpperLeft:

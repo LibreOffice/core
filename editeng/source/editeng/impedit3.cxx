@@ -2746,7 +2746,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         {
             if ( nStretchY != 100 )
             {
-                aRealSz.setHeight( aRealSz.Height() * ( nStretchY) );
+                aRealSz.setHeight( aRealSz.Height() * nStretchY );
                 aRealSz.setHeight( aRealSz.Height() / 100 );
             }
             if ( nStretchX != 100 )
@@ -2758,7 +2758,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
                 }
                 else
                 {
-                    aRealSz.setWidth( aRealSz.Width() * ( nStretchX) );
+                    aRealSz.setWidth( aRealSz.Width() * nStretchX );
                     aRealSz.setWidth( aRealSz.Width() / 100 );
 
                     // Also the Kerning: (long due to handle Interim results)

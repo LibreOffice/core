@@ -83,7 +83,7 @@ namespace osl_Module
                     &osl_Module::testClass::myFunc),
                 aFileURL);
 
-            if ( !( bRes ) )
+            if ( !bRes )
             {
                 CPPUNIT_ASSERT_MESSAGE("Cannot locate current module.", false );
             }
@@ -117,7 +117,7 @@ namespace osl_Module
                 reinterpret_cast<oslGenericFunction>(
                     &osl_Module::testClass::myFunc),
                 aFileURL);
-            if ( !( bRes ) )
+            if ( !bRes )
             {
                 CPPUNIT_ASSERT_MESSAGE("Cannot locate current module.", false );
             }
@@ -138,7 +138,7 @@ namespace osl_Module
             OUString aFileURL;
             bRes = osl::Module::getUrlFromAddress(
                 reinterpret_cast<oslGenericFunction>(pFunc), aFileURL);
-            if ( !( bRes  ) )
+            if ( !bRes )
             {
                 CPPUNIT_ASSERT_MESSAGE("Cannot locate current module.", false );
             }
@@ -228,7 +228,7 @@ namespace osl_Module
                 reinterpret_cast<oslGenericFunction>(
                     osl_Module::testClass::myFunc),
                 aFileURL);
-            if ( !( bRes  ) )
+            if ( !bRes )
             {
                 CPPUNIT_ASSERT_MESSAGE("Cannot locate current module - using executable instead", false );
             }
