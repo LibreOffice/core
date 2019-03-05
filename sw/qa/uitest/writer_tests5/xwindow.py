@@ -128,7 +128,7 @@ class XWindow(UITestCase):
         xToolkitRobot.keyPress(xKeyEvent)
         xToolkitRobot.keyRelease(xKeyEvent)
 
-        # remove moue listener
+        # remove mouse listener
         xWindow.removeMouseListener(xMouseListener)
         self.assertEqual(1, mouseListenerCount)
         del xMouseListener
