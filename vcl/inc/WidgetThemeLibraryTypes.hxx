@@ -12,7 +12,8 @@
 #define INCLUDED_VCL_INC_WIDGETTHEMETYPES_HXX
 
 #include <cstdint>
-#include <type_traits> // Used for enum operator
+
+#include <o3tl/typed_flags_set.hxx>
 
 /**
  * These types are all based on the supported variants
@@ -216,11 +217,7 @@ enum class ControlState {
     CACHING_ALLOWED = 0x8000,  ///< Set when the control is completely visible (i.e. not clipped).
 };
 
-inline bool operator& (const ControlState& lhs, const ControlState& rhs)
-{
-    return static_cast<std::underlying_type<ControlState>::type>(lhs)
-           & static_cast<std::underlying_type<ControlState>::type>(rhs);
-}
+template<> struct o3tl::typed_flags<ControlState>: o3tl::is_typed_flags<ControlState, 0xC06F> {};
 
 /* ButtonValue:
  *
