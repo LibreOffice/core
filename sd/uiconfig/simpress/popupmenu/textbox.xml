@@ -58,7 +58,8 @@
     </menu:menupopup>
   </menu:menu>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:AnimationEffects"/>
   <menu:menuitem menu:id=".uno:SetDefault"/>
   <menu:menuitem menu:id=".uno:EditStyle"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:AnimationEffects"/>
 </menu:menupopup>

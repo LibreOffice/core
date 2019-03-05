@@ -76,4 +76,6 @@
   <menu:menuitem menu:id=".uno:FormatGroup"/>
   <menu:menuitem menu:id=".uno:FormatUngroup"/>
   <menu:menuitem menu:id=".uno:LeaveGroup"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:AnimationEffects"/>
 </menu:menupopup>

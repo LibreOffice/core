@@ -26,8 +26,8 @@
  <toolbar:toolbaritem xlink:href=".uno:LineArrowStart"/>
  <toolbar:toolbaritem xlink:href=".uno:LineArrowCircle"/>
  <toolbar:toolbaritem xlink:href=".uno:LineArrowSquare"/>
- <toolbar:toolbaritem xlink:href=".uno:MeasureLine"/>
- <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:Line_Diagonal"/>
  <toolbar:toolbaritem xlink:href=".uno:Line"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:MeasureLine"/>
+ <toolbar:toolbaritem xlink:href=".uno:Line_Diagonal"/>
 </toolbar:toolbar>

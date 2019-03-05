@@ -61,7 +61,7 @@
     </menu:menupopup>
   </menu:menu>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
   <menu:menuitem menu:id=".uno:NameGroup"/>
+  <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
   <menu:menuseparator/>
 </menu:menupopup>

@@ -23,7 +23,7 @@
  <toolbar:toolbaritem xlink:href=".uno:FontworkShapeType"/>
  <toolbar:toolbaritem xlink:href=".uno:FontworkSameLetterHeights"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontworkAlignmentFloater"  />
+ <toolbar:toolbaritem xlink:href=".uno:FontworkAlignmentFloater"/>
  <toolbar:toolbaritem xlink:href=".uno:FontworkCharacterSpacingFloater"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle"/>
