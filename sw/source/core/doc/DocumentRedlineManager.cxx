@@ -1475,8 +1475,10 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                             }
                             if( !bCallDelete && *pEnd == *pREnd )
                                 pRedl->SetEnd( *pStt, pREnd );
-                            else
+                            else if (!(!bCallDelete && bDec))
                             {
+                                // delete new redline, except in some cases of fallthrough from previous
+                                // case ::Equal (eg. same portion w:del in w:ins in OOXML import)
                                 delete pNewRedl;
                                 pNewRedl = nullptr;
                             }
