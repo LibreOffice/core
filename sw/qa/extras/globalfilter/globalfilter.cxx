@@ -25,6 +25,10 @@
 #include <ndindex.hxx>
 #include <pam.hxx>
 #include <unotools/fltrcfg.hxx>
+#include <xmloff/odffields.hxx>
+#include <IDocumentMarkAccess.hxx>
+#include <IMark.hxx>
+#include <bookmrk.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -45,6 +49,9 @@ public:
 #endif
     void testRedlineFlags();
     void testBulletAsImage();
+    void testTextFormField();
+    void testCheckBoxFormField();
+    void testDropDownFormField();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testEmbeddedGraphicRoundtrip);
@@ -60,6 +67,9 @@ public:
 #endif
     CPPUNIT_TEST(testRedlineFlags);
     CPPUNIT_TEST(testBulletAsImage);
+    CPPUNIT_TEST(testTextFormField);
+    CPPUNIT_TEST(testCheckBoxFormField);
+    CPPUNIT_TEST(testDropDownFormField);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1020,6 +1030,213 @@ void Test::testBulletAsImage()
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(296), aSize.Height);
             }
         }
+    }
+}
+
+void Test::testTextFormField()
+{
+    const OUString aFilterNames[] = {
+        "writer8",
+        "MS Word 97",
+        "Office Open XML Text",
+    };
+
+    for (const OUString& rFilterName : aFilterNames)
+    {
+        if (mxComponent.is())
+            mxComponent->dispose();
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/text_form_field.odt"), "com.sun.star.text.TextDocument");
+
+        const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+
+        // Export the document and import again for a check
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= rFilterName;
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
+        xComponent->dispose();
+        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+        // Check the document after round trip
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTextDoc);
+        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+
+        // We have two text form fields
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(2), pMarkAccess->getAllMarksCount());
+
+        // Check whether all fieldmarks are text form fields
+        for(auto aIter = pMarkAccess->getAllMarksBegin(); aIter != pMarkAccess->getAllMarksEnd(); ++aIter)
+        {
+            ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(aIter->get());
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(ODF_FORMTEXT), pFieldmark->GetFieldname());
+        }
+
+        // In the first paragraph we have an empty text form field with the placeholder spaces
+        const uno::Reference< text::XTextRange > xPara = getParagraph(1);
+        sal_Unicode vEnSpaces[5] = {8194, 8194, 8194, 8194, 8194};
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(vEnSpaces, 5), xPara->getString());
+
+        // In the second paragraph we have a set text
+        const uno::Reference< text::XTextRange > xPara2 = getParagraph(2);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("xxxxx"), xPara2->getString());
+    }
+}
+
+void Test::testCheckBoxFormField()
+{
+    const OUString aFilterNames[] = {
+        "writer8",
+        "MS Word 97",
+        "Office Open XML Text",
+    };
+
+    for (const OUString& rFilterName : aFilterNames)
+    {
+        if (mxComponent.is())
+            mxComponent->dispose();
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/checkbox_form_field.odt"), "com.sun.star.text.TextDocument");
+
+        const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+
+        // Export the document and import again for a check
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= rFilterName;
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
+        xComponent->dispose();
+        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+        // Check the document after round trip
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTextDoc);
+        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+
+        // We have two check box form fields
+        if(rFilterName == "Office Open XML Text")
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(4), pMarkAccess->getAllMarksCount());
+        else
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(2), pMarkAccess->getAllMarksCount());
+
+        int nIndex = 0;
+        for(auto aIter = pMarkAccess->getAllMarksBegin(); aIter != pMarkAccess->getAllMarksEnd(); ++aIter)
+        {
+            ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(aIter->get());
+
+            if(rFilterName == "Office Open XML Text") // OOXML import also generates bookmarks
+            {
+                if(!pFieldmark)
+                    continue;
+            }
+
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(ODF_FORMCHECKBOX), pFieldmark->GetFieldname());
+            ::sw::mark::ICheckboxFieldmark* pCheckBox = dynamic_cast< ::sw::mark::ICheckboxFieldmark* >(pFieldmark);
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pCheckBox);
+
+            // The first one is unchecked, the other one is checked
+            if(nIndex == 0)
+                CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), !pCheckBox->IsChecked());
+            else
+                CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pCheckBox->IsChecked());
+            ++nIndex;
+        }
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), int(2), nIndex);
+    }
+}
+
+void Test::testDropDownFormField()
+{
+    const OUString aFilterNames[] = {
+        "writer8",
+        "MS Word 97",
+        "Office Open XML Text",
+    };
+
+    for (const OUString& rFilterName : aFilterNames)
+    {
+        if (mxComponent.is())
+            mxComponent->dispose();
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/dropdown_form_field.odt"), "com.sun.star.text.TextDocument");
+
+        const OString sFailedMessage = OString("Failed on filter: ") + rFilterName.toUtf8();
+
+        // Export the document and import again for a check
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= rFilterName;
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
+        xComponent->dispose();
+        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+        // Check the document after round trip
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTextDoc);
+        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(2), pMarkAccess->getAllMarksCount());
+
+        int nIndex = 0;
+        for(auto aIter = pMarkAccess->getAllMarksBegin(); aIter != pMarkAccess->getAllMarksEnd(); ++aIter)
+        {
+            ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(aIter->get());
+
+            if(!pFieldmark)
+                continue;
+
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(ODF_FORMDROPDOWN), pFieldmark->GetFieldname());
+
+            // Check drop down field's parameters.
+            const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
+            css::uno::Sequence<OUString> vListEntries;
+            sal_Int32 nSelection = -1;
+            auto pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
+            if (pListEntries != pParameters->end())
+            {
+                pListEntries->second >>= vListEntries;
+
+                if(vListEntries.getLength())
+                {
+                    auto pResult = pParameters->find(ODF_FORMDROPDOWN_RESULT);
+                    if (pResult != pParameters->end())
+                    {
+                        pResult->second >>= nSelection;
+                    }
+                }
+            }
+
+            // The first one is empty
+            if(nIndex == 0)
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(0), vListEntries.getLength());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(-1), nSelection);
+            }
+            else
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(4), vListEntries.getLength());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(1), nSelection);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("1000"), vListEntries[0]);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("2000"), vListEntries[1]);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("3000"), vListEntries[2]);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("4000"), vListEntries[3]);
+            }
+            ++nIndex;
+        }
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), int(2), nIndex);
     }
 }
 
