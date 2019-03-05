@@ -49,7 +49,7 @@ HyphenatedWord::HyphenatedWord(const OUString &rWord, LanguageType nLang, sal_In
     nLanguage       (nLang)
 {
     OUString aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
-    DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpectend length of quotation mark" );
+    DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpected length of quotation mark" );
     if (!aSingleQuote.isEmpty())
     {
         // ignore typographical apostrophes (which got replaced in original

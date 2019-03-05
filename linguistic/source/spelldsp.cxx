@@ -285,7 +285,7 @@ bool SpellCheckerDispatcher::isValid_Impl(
 
         // replace typographical apostroph by ascii apostroph
         OUString aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
-        DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpectend length of quotation mark" );
+        DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpected length of quotation mark" );
         if (!aSingleQuote.isEmpty())
             aChkWord = aChkWord.replace( aSingleQuote[0], '\'' );
 
@@ -448,7 +448,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
 
         // replace typographical apostroph by ascii apostroph
         OUString aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
-        DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpectend length of quotation mark" );
+        DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpected length of quotation mark" );
         if (!aSingleQuote.isEmpty())
             aChkWord = aChkWord.replace( aSingleQuote[0], '\'' );
 

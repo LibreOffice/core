@@ -299,7 +299,7 @@ Reference< XHyphenatedWord > SAL_CALL
 
         // replace typographical apostroph by ascii apostroph
         OUString aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
-        DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpectend length of quotation mark" );
+        DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpected length of quotation mark" );
         if (!aSingleQuote.isEmpty())
             aChkWord = aChkWord.replace( aSingleQuote[0], '\'' );
 
@@ -434,7 +434,7 @@ Reference< XHyphenatedWord > SAL_CALL
 
         // replace typographical apostroph by ascii apostroph
         OUString aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
-        DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpectend length of quotation mark" );
+        DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpected length of quotation mark" );
         if (!aSingleQuote.isEmpty())
             aChkWord = aChkWord.replace( aSingleQuote[0], '\'' );
 
@@ -559,7 +559,7 @@ Reference< XPossibleHyphens > SAL_CALL
 
         // replace typographical apostroph by ascii apostroph
         OUString aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
-        DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpectend length of quotation mark" );
+        DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpected length of quotation mark" );
         if (!aSingleQuote.isEmpty())
             aChkWord = aChkWord.replace( aSingleQuote[0], '\'' );
 
