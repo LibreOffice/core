@@ -79,7 +79,7 @@ struct PSPathElement
 
 /*- In horizontal writing mode right sidebearing is calculated using this formula
  *- rsb = aw - (lsb + xMax - xMin) -*/
-typedef struct {
+struct TTGlyphMetrics {
     sal_Int16  xMin;
     sal_Int16  yMin;
     sal_Int16  xMax;
@@ -87,21 +87,21 @@ typedef struct {
     sal_uInt16 aw;                /*- Advance Width (horizontal writing mode)    */
     sal_Int16  lsb;               /*- Left sidebearing (horizontal writing mode) */
     sal_uInt16 ah;                /*- advance height (vertical writing mode)     */
-} TTGlyphMetrics;
+};
 
 #define HFORMAT_LINELEN 64
 
-typedef struct {
+struct HexFmt {
     FILE *o;
     char buffer[HFORMAT_LINELEN];
     size_t bufpos;
     int total;
-} HexFmt;
+};
 
-typedef struct {
+struct GlyphOffsets {
     sal_uInt32 nGlyphs;           /* number of glyphs in the font + 1 */
     sal_uInt32 *offs;             /* array of nGlyphs offsets */
-} GlyphOffsets;
+};
 
 static const sal_uInt32 T_true = 0x74727565;        /* 'true' */
 static const sal_uInt32 T_ttcf = 0x74746366;        /* 'ttcf' */
@@ -1044,12 +1044,12 @@ static sal_uInt32 getGlyph0(const sal_uInt8* cmap, sal_uInt32, sal_uInt32 c) {
     }
 }
 
-typedef struct _subHeader2 {
+struct subHeader2 {
     sal_uInt16 const firstCode;
     sal_uInt16 const entryCount;
     sal_uInt16 const idDelta;
     sal_uInt16 idRangeOffset;
-} subHeader2;
+};
 
 static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize, sal_uInt32 c) {
     sal_uInt16 const *CMAP2 = reinterpret_cast<sal_uInt16 const *>(cmap);

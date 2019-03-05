@@ -24,10 +24,10 @@
 
 // Transform table for token operators and opcodes
 
-typedef struct {
+struct OpTable {
         SbiToken  eTok;                 // Token
         SbiOpcode eOp;                  // Opcode
-} OpTable;
+};
 
 static const OpTable aOpTable [] = {
     { EXPON,SbiOpcode::EXP_ },

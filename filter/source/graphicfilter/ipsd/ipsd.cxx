@@ -40,7 +40,7 @@ class FilterConfigItem;
 #define PSD_DUOTONE         8
 #define PSD_LAB             9
 
-typedef struct
+struct PSDFileHeader
 {
     sal_uInt32  nSignature;
     sal_uInt16  nVersion;
@@ -51,8 +51,7 @@ typedef struct
     sal_uInt32  nColumns;
     sal_uInt16  nDepth;
     sal_uInt16  nMode;
-
-} PSDFileHeader;
+};
 
 class PSDReader {
 

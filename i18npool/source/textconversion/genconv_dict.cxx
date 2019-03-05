@@ -321,11 +321,11 @@ void make_stc_char(FILE *sfp, FILE *cfp)
 }
 
 
-typedef struct {
+struct Index {
     sal_uInt16 address;
     sal_Int32 len;
     sal_Unicode *data;
-} Index;
+};
 
 extern "C" {
 static int Index_comp(const void* s1, const void* s2)

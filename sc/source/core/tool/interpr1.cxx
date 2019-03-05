@@ -8931,10 +8931,10 @@ void ScInterpreter::ScLeft()
     }
 }
 
-typedef struct {
+struct UBlockScript {
     UBlockCode const from;
     UBlockCode const to;
-} UBlockScript;
+};
 
 static const UBlockScript scriptList[] = {
     {UBLOCK_HANGUL_JAMO, UBLOCK_HANGUL_JAMO},

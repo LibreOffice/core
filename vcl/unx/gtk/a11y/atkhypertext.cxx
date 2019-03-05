@@ -25,11 +25,11 @@ using namespace ::com::sun::star;
 
 // ---------------------- AtkHyperlink ----------------------
 
-typedef struct {
+struct HyperLink {
     AtkHyperlink const atk_hyper_link;
 
     uno::Reference< accessibility::XAccessibleHyperlink > xLink;
-} HyperLink;
+};
 
 static uno::Reference< accessibility::XAccessibleHyperlink > const &
     getHyperlink( AtkHyperlink *pHyperlink )

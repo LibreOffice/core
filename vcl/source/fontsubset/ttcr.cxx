@@ -50,11 +50,11 @@ namespace vcl
 #define T_cmap  0x636D6170
 #define T_post  0x706F7374
 
-typedef struct {
+struct TableEntry {
     sal_uInt32 tag;
     sal_uInt32 length;
     sal_uInt8  *data;
-} TableEntry;
+};
 
 /*- Data access macros for data stored in big-endian or little-endian format */
 static sal_Int16 GetInt16( const sal_uInt8* ptr, sal_uInt32 offset)
@@ -322,39 +322,39 @@ SFErrCodes StreamToFile(TrueTypeCreator *_this, const char* fname)
 #define CMAP_PAIR_INIT 500
 #define CMAP_PAIR_INCR 500
 
-typedef struct {
+struct CmapSubTable {
     sal_uInt32  id;                         /* subtable ID (platform/encoding ID)    */
     sal_uInt32  n;                          /* number of used translation pairs      */
     sal_uInt32  m;                          /* number of allocated translation pairs */
     sal_uInt32 *xc;                         /* character array                       */
     sal_uInt32 *xg;                         /* glyph array                           */
-} CmapSubTable;
+};
 
-typedef struct {
+struct table_cmap {
     sal_uInt32 n;                           /* number of used CMAP sub-tables       */
     sal_uInt32 m;                           /* number of allocated CMAP sub-tables  */
     CmapSubTable *s;                    /* sorted array of sub-tables           */
-} table_cmap;
+};
 
-typedef struct {
+struct tdata_generic {
     sal_uInt32 tag;
     sal_uInt32 nbytes;
     sal_uInt8 *ptr;
-} tdata_generic;
+};
 
-typedef struct {
+struct tdata_loca {
     sal_uInt32 nbytes;                      /* number of bytes in loca table */
     sal_uInt8 *ptr;                          /* pointer to the data */
-} tdata_loca;
+};
 
-typedef struct {
+struct tdata_post {
     sal_uInt32 format;
     sal_uInt32 italicAngle;
     sal_Int16  underlinePosition;
     sal_Int16  underlineThickness;
     sal_uInt32 isFixedPitch;
     void   *ptr;                        /* format-specific pointer */
-} tdata_post;
+};
 
 /* allocate memory for a TT table */
 static sal_uInt8 *ttmalloc(sal_uInt32 nbytes)

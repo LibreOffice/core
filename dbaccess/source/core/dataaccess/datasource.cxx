@@ -272,11 +272,11 @@ class OSharedConnectionManager : public ::cppu::WeakImplHelper< XEventListener >
 {
 
      // contains the currently used master connections
-    typedef struct
+    struct TConnectionHolder
     {
         Reference< XConnection >    xMasterConnection;
         oslInterlockedCount         nALiveCount;
-    } TConnectionHolder;
+    };
 
     // the less-compare functor, used for the stl::map
     struct TDigestLess

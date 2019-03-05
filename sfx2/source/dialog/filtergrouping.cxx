@@ -134,11 +134,11 @@ namespace sfx2
     typedef ::std::map< OUString, FilterGroup::iterator >    FilterGroupEntryReferrer;
 
     /// a descriptor for a filter class (which in the final dialog is represented by one filter entry)
-    typedef struct _tagFilterClass
+    struct FilterClass
     {
         OUString             sDisplayName;       // the display name
         Sequence< FilterName >      aSubFilters;        // the (logical) names of the filter which belong to the class
-    } FilterClass;
+    };
 
     typedef ::std::list< FilterClass >                                  FilterClassList;
     typedef ::std::map< OUString, FilterClassList::iterator >    FilterClassReferrer;
