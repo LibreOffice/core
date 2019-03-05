@@ -608,7 +608,11 @@ public:
     //by id
     virtual OUString get_id(int pos) const = 0;
     virtual int find_id(const OUString& rId) const = 0;
-    OUString get_selected_id() const { return get_id(get_selected_index()); }
+    OUString get_selected_id() const
+    {
+        int pos = get_selected_index();
+        return pos == -1 ? OUString() : get_id(pos);
+    }
     void select_id(const OUString& rId) { select(find_id(rId)); }
 
     //via iter
