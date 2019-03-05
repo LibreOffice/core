@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_16470c20",
+        "filename": "sw/source/filter/xml/xmlimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1666,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-03-05T15:20:25Z",
+      "side": 1,
+      "message": "Don\u0027t you need an if(!bCollapseEmptyCellPar) around this?\n\nSo if it\u0027s missing we set it to false, otherwise the set value is good. Same how e.g. bPropLineSpacingShrinksFirstLine is done.",
+      "revId": "853b2ac78111769b175a5170e66615e6bf4bac39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
