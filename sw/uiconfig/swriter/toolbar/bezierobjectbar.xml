@@ -33,6 +33,5 @@
  <toolbar:toolbaritem xlink:href=".uno:BezierSmooth"/>
  <toolbar:toolbaritem xlink:href=".uno:BezierSymmetric"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BezierEliminatePoints"/>
 </toolbar:toolbar>

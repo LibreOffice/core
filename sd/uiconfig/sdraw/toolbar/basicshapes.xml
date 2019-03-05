@@ -39,10 +39,10 @@
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.hexagon"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.octagon"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.cross"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.can"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.cube"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.paper"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.cross"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.frame"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ring"/>
 </toolbar:toolbar>

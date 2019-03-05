@@ -66,8 +66,8 @@
   <menu:menuitem menu:id=".uno:Dismantle"/>
   <menu:menuitem menu:id=".uno:Break"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
   <menu:menuitem menu:id=".uno:NameGroup"/>
+  <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:EditStyle"/>
 </menu:menupopup>

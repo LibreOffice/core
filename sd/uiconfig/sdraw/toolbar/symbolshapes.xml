@@ -19,23 +19,23 @@
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.smiley"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.heart"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.sun"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.moon"/>
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.lightning"/>
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.heart"/>
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.flower"/>
- <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.cloud"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.lightning"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.flower"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.forbidden"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.puzzle"/>
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.bracket-pair"/>
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.left-bracket"/>
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.right-bracket"/>
- <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.brace-pair"/>
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.left-brace"/>
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.right-brace"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.quad-bevel"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.octagon-bevel"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.diamond-bevel"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.bracket-pair"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.left-bracket"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.right-bracket"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.brace-pair"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.left-brace"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.right-brace"/>
 </toolbar:toolbar>

@@ -18,14 +18,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:Freeline_Unfilled"/>
- <toolbar:toolbaritem xlink:href=".uno:Bezier_Unfilled"/>
- <toolbar:toolbaritem xlink:href=".uno:Polygon_Unfilled"/>
- <toolbar:toolbaritem xlink:href=".uno:Polygon_Diagonal_Unfilled"/>
- <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:Freeline"/>
  <toolbar:toolbaritem xlink:href=".uno:BezierFill"/>
  <toolbar:toolbaritem xlink:href=".uno:Polygon"/>
  <toolbar:toolbaritem xlink:href=".uno:Polygon_Diagonal"/>
+ <toolbar:toolbaritem xlink:href=".uno:Freeline"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:Bezier_Unfilled"/>
+ <toolbar:toolbaritem xlink:href=".uno:Polygon_Unfilled"/>
+ <toolbar:toolbaritem xlink:href=".uno:Polygon_Diagonal_Unfilled"/>
+ <toolbar:toolbaritem xlink:href=".uno:Freeline_Unfilled"/>
 </toolbar:toolbar>
-

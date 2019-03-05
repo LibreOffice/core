@@ -58,6 +58,7 @@
       <menu:menuitem menu:id=".uno:ConvertIntoMetaFile"/>
     </menu:menupopup>
   </menu:menu>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:LeaveGroup"/>
   <menu:menuitem menu:id=".uno:Dismantle"/>
   <menu:menuseparator/>

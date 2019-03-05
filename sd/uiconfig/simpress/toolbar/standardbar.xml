@@ -38,6 +38,7 @@
  <toolbar:toolbaritem xlink:href=".uno:Paste"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FormatPaintbrush"/>
+ <toolbar:toolbaritem xlink:href=".uno:SetDefault" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Undo"/>
  <toolbar:toolbaritem xlink:href=".uno:Redo"/>

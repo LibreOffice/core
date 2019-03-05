@@ -18,18 +18,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:InsertTable" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertTable"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:FrameLineColor"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:FillStyle"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:MergeCells"/>
  <toolbar:toolbaritem xlink:href=".uno:SplitCell"/>
  <toolbar:toolbaritem xlink:href=".uno:OptimizeTable"/>
- <toolbar:toolbarseparator/>
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertTop"/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertCenter"/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertBottom"/>
@@ -45,6 +45,6 @@
  <toolbar:toolbaritem xlink:href=".uno:EntireColumn" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:EntireRow" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:TableDesign" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:TableDesign"/>
  <toolbar:toolbaritem xlink:href=".uno:TableDialog"/>
 </toolbar:toolbar>
