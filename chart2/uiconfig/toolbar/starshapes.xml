@@ -16,19 +16,19 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
- -->
+-->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:StarShapes.bang"/>
  <toolbar:toolbaritem xlink:href=".uno:StarShapes.star4"/>
  <toolbar:toolbaritem xlink:href=".uno:StarShapes.star5"/>
  <toolbar:toolbaritem xlink:href=".uno:StarShapes.star6"/>
  <toolbar:toolbaritem xlink:href=".uno:StarShapes.star8"/>
  <toolbar:toolbaritem xlink:href=".uno:StarShapes.star12"/>
- <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:StarShapes.star24"/>
- <toolbar:toolbaritem xlink:href=".uno:StarShapes.concave-star6"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:StarShapes.bang"/>
  <toolbar:toolbaritem xlink:href=".uno:StarShapes.vertical-scroll"/>
  <toolbar:toolbaritem xlink:href=".uno:StarShapes.horizontal-scroll"/>
  <toolbar:toolbaritem xlink:href=".uno:StarShapes.signet"/>
  <toolbar:toolbaritem xlink:href=".uno:StarShapes.doorplate"/>
+ <toolbar:toolbaritem xlink:href=".uno:StarShapes.concave-star6"/>
 </toolbar:toolbar>
