@@ -1668,15 +1668,6 @@ SfxInPlaceClient* SwDocShell::GetIPClient( const ::svt::EmbeddedObjectRef& xObjR
     return pResult;
 }
 
-static bool lcl_MergePortions(SwNode *const& pNode, void *)
-{
-    if (pNode->IsTextNode())
-    {
-        pNode->GetTextNode()->FileLoadedInitHints();
-    }
-    return true;
-}
-
 int SwFindDocShell( SfxObjectShellRef& xDocSh,
                     SfxObjectShellLock& xLockRef,
                     const OUString& rFileName,
@@ -1767,8 +1758,6 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
             xDocSh = static_cast<SfxObjectShell*>(xLockRef);
             if (xDocSh->DoLoad(xMed.release()))
             {
-                SwDoc const& rDoc(*pNew->GetDoc());
-                const_cast<SwDoc&>(rDoc).GetNodes().ForEach(&lcl_MergePortions);
                 return 2;
             }
         }

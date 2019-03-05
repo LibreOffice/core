@@ -56,12 +56,22 @@
 #include <poolfmt.hxx>
 #include <fltini.hxx>
 #include <docsh.hxx>
+#include <ndtxt.hxx>
 #include <redline.hxx>
 #include <swerror.h>
 #include <paratr.hxx>
 #include <pausethreadstarting.hxx>
 
 using namespace ::com::sun::star;
+
+static bool sw_MergePortions(SwNode *const& pNode, void *)
+{
+    if (pNode->IsTextNode())
+    {
+        pNode->GetTextNode()->FileLoadedInitHints();
+    }
+    return true;
+}
 
 ErrCode SwReader::Read( const Reader& rOptions )
 {
@@ -337,6 +347,13 @@ ErrCode SwReader::Read( const Reader& rOptions )
             pStrm->ResetError();
         }
     }
+
+    // fdo#52028: ODF file import does not result in MergePortions being called
+    // for every attribute, since that would be inefficient.  So call it here.
+    // This is only necessary for formats that may contain RSIDs (ODF,MSO).
+    // It's too hard to figure out which nodes were inserted in Insert->File
+    // case (redlines, flys, footnotes, header/footer) so just do every node.
+    mxDoc->GetNodes().ForEach(&sw_MergePortions);
 
     mxDoc->SetInReading( false );
     mxDoc->SetInXMLImport( false );
