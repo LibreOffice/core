@@ -1660,6 +1660,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if ( bDisableOffPagePositioning )
         xProps->setPropertyValue("DisableOffPagePositioning", makeAny(true));
 
+    // tdf#123829 Documents not created by LO should disable this feature.
+    if (!(getGeneratorVersion() & LO_flag))
+        xProps->setPropertyValue("CollapseEmptyCellPara", makeAny(false));
+
     SwDoc *pDoc = getDoc();
     SfxPrinter *pPrinter = pDoc->getIDocumentDeviceAccess().getPrinter( false );
     if( pPrinter )
