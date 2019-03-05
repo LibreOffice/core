@@ -20,11 +20,11 @@
 namespace {
 
 class BlockBlock:
-    public loplugin::FilteringRewritePlugin<BlockBlock>
+    public loplugin::FilteringPlugin<BlockBlock>
 {
 public:
     explicit BlockBlock(loplugin::InstantiationData const & data):
-        FilteringRewritePlugin(data) {}
+        FilteringPlugin(data) {}
 
     virtual void run() override
     {
