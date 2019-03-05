@@ -236,7 +236,7 @@ bool SdGRFFilter::Export()
                     beans::PropertyValues aArgs;
                     TransformItems( SID_SAVEASDOC, *pSet, aArgs );
 
-                    OUString sFilterName( "FilterName" );
+                    const OUString sFilterName( "FilterName" );
                     OUString sShortName( rGraphicFilter.GetExportFormatShortName( nFilter ) );
 
                     bool    bFilterNameFound = false;
@@ -247,7 +247,6 @@ bool SdGRFFilter::Export()
                         if ( rStr == sFilterName )
                         {
                             bFilterNameFound = true;
-                            aArgs[ i ].Name = sFilterName;
                             aArgs[ i ].Value <<= sShortName;
                         }
                         else if ( rStr == "InteractionHandler" )
