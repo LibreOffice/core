@@ -47,4 +47,6 @@
  <toolbar:toolbaritem xlink:href=".uno:DSBFormLetter"/>
  <toolbar:toolbaritem xlink:href=".uno:DSBDocumentDataSource"/>
  <toolbar:toolbaritem xlink:href=".uno:DSBrowserExplorer"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:CloseDoc"/>
 </toolbar:toolbar>

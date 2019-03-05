@@ -18,8 +18,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <toolbar:toolbaritem xlink:href=".uno:DBNewForm"/>
  <toolbar:toolbaritem xlink:href=".uno:DBFormOpen"/>
  <toolbar:toolbaritem xlink:href=".uno:DBFormEdit"/>
+ <menu:menuseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DBFormDelete"/>
  <toolbar:toolbaritem xlink:href=".uno:DBFormRename"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:DBNewFormAutoPilotWithPreSelection" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:DBNewReportWithPreSelection" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:DBNewReportAutoPilotWithPreSelection" toolbar:visible="false"/>
 </toolbar:toolbar>

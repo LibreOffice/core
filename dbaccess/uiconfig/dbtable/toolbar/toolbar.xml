@@ -20,10 +20,7 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
  <toolbar:toolbaritem xlink:href=".uno:Save"/>
  <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:visible="false"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:EditDoc" toolbar:visible="false"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DBIndexDesign"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Cut"/>
  <toolbar:toolbaritem xlink:href=".uno:Copy"/>
@@ -31,4 +28,8 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Undo"/>
  <toolbar:toolbaritem xlink:href=".uno:Redo"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:DBIndexDesign"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:CloseDoc"/>
 </toolbar:toolbar>
