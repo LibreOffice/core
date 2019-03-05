@@ -241,7 +241,7 @@ void SwEndNoteOptionPage::SelectNumbering(SwFootnoteNum const eNum)
 SwFootnoteNum SwEndNoteOptionPage::GetNumbering() const
 {
     const int nPos = m_xNumCountBox->get_active();
-    return static_cast<SwFootnoteNum>((bPosDoc) ? nPos + 2 : nPos);
+    return static_cast<SwFootnoteNum>(bPosDoc ? nPos + 2 : nPos);
 }
 
 void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )

@@ -2071,8 +2071,8 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
             SdrPageView* pPV=pM->GetPageView();
             SdrObject* pObj=pM->GetMarkedSdrObj();
             tools::Rectangle aRect(pObj->GetCurrentBoundRect());
-            aRect.AdjustLeft( -(mnHitTolLog) );
-            aRect.AdjustTop( -(mnHitTolLog) );
+            aRect.AdjustLeft( -mnHitTolLog );
+            aRect.AdjustTop( -mnHitTolLog );
             aRect.AdjustRight(mnHitTolLog );
             aRect.AdjustBottom(mnHitTolLog );
             if (aRect.IsInside(rPnt)) {

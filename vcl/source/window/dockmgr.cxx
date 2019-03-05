@@ -584,8 +584,8 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
             {
                 if ( bFloatMode )
                 {
-                    aTrackRect.AdjustLeft( -(mnDockLeft) );
-                    aTrackRect.AdjustTop( -(mnDockTop) );
+                    aTrackRect.AdjustLeft( -mnDockLeft );
+                    aTrackRect.AdjustTop( -mnDockTop );
                     aTrackRect.AdjustRight(mnDockRight );
                     aTrackRect.AdjustBottom(mnDockBottom );
                 }
@@ -595,8 +595,8 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
                     {
                         aTrackRect.AdjustLeft(mnDockLeft );
                         aTrackRect.AdjustTop(mnDockTop );
-                        aTrackRect.AdjustRight( -(mnDockRight) );
-                        aTrackRect.AdjustBottom( -(mnDockBottom) );
+                        aTrackRect.AdjustRight( -mnDockRight );
+                        aTrackRect.AdjustBottom( -mnDockBottom );
                     }
                 }
                 mbLastFloatMode = bFloatMode;

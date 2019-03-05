@@ -1469,7 +1469,7 @@ void SwAnnotationWin::ChangeSidebarItem( SwSidebarItem const & rSidebarItem )
     const bool bAnchorChanged = mpAnchorFrame != rSidebarItem.maLayoutInfo.mpAnchorFrame;
     if ( bAnchorChanged )
     {
-        mrMgr.DisconnectSidebarWinFromFrame( *(mpAnchorFrame), *this );
+        mrMgr.DisconnectSidebarWinFromFrame( *mpAnchorFrame, *this );
     }
 
     mrSidebarItem = rSidebarItem;

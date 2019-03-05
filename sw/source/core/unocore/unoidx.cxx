@@ -337,7 +337,7 @@ public:
         , m_eTOXType(eType)
         , m_bIsDescriptor(nullptr == pBaseSection)
         , m_pDoc(&rDoc)
-        , m_pProps((m_bIsDescriptor)
+        , m_pProps(m_bIsDescriptor
             ? new SwDocIndexDescriptorProperties_Impl(rDoc.GetTOXType(eType, 0))
             : nullptr)
     {
@@ -351,7 +351,7 @@ public:
     SwTOXBase & GetTOXSectionOrThrow() const
     {
         SwSectionFormat *const pSectionFormat(GetSectionFormat());
-        SwTOXBase *const pTOXSection( (m_bIsDescriptor)
+        SwTOXBase *const pTOXSection( m_bIsDescriptor
             ?  &m_pProps->GetTOXBase()
             : (pSectionFormat
                 ? static_cast<SwTOXBaseSection*>(pSectionFormat->GetSection())
@@ -367,7 +367,7 @@ public:
     sal_Int32 GetFormMax() const
     {
         SwTOXBase & rSection( GetTOXSectionOrThrow() );
-        return (m_bIsDescriptor)
+        return m_bIsDescriptor
             ? SwForm::GetFormMaxLevel(m_eTOXType)
             : rSection.GetTOXForm().GetFormMax();
     }

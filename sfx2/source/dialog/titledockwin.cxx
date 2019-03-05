@@ -122,7 +122,7 @@ namespace sfx2
         // Place the content window.
         if ( m_nTitleBarHeight < aToolBoxSize.Height() )
             m_nTitleBarHeight = aToolBoxSize.Height();
-        aWindowSize.AdjustHeight( -(m_nTitleBarHeight) );
+        aWindowSize.AdjustHeight( -m_nTitleBarHeight );
         m_aContentWindow->SetPosSizePixel(
             Point( m_aBorder.Left(), m_nTitleBarHeight + m_aBorder.Top() ),
             Size(

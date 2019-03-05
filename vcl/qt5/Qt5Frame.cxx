@@ -389,7 +389,7 @@ void Qt5Frame::Center()
     if (m_pParent)
     {
         QWidget* pWindow = m_pParent->GetQWidget()->window();
-        QWidget* const pWidget = (m_pTopLevel) ? m_pTopLevel : m_pQWidget;
+        QWidget* const pWidget = m_pTopLevel ? m_pTopLevel : m_pQWidget;
         pWidget->move(pWindow->frameGeometry().topLeft() + pWindow->rect().center()
                       - pWidget->rect().center());
     }
@@ -431,7 +431,7 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
         m_bDefaultSize = false;
         if (isChild(false) || !m_pQWidget->isMaximized())
         {
-            QWidget* const pWidget = (m_pTopLevel) ? m_pTopLevel : m_pQWidget;
+            QWidget* const pWidget = m_pTopLevel ? m_pTopLevel : m_pQWidget;
 
             if (m_nStyle & SalFrameStyleFlags::SIZEABLE)
                 pWidget->resize(nWidth, nHeight);

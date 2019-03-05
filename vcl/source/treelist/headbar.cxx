@@ -309,7 +309,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
     {
         // do not draw border
         aRect.AdjustTop(mnBorderOff1 );
-        aRect.AdjustBottom( -(mnBorderOff2) );
+        aRect.AdjustBottom( -mnBorderOff2 );
 
         // delete background
         if ( !pRect )
@@ -593,7 +593,7 @@ void HeaderBar::ImplUpdate(sal_uInt16 nPos, bool bEnd)
     if (bEnd)
         aRect.SetRight( mnDX - 1 );
     aRect.AdjustTop(mnBorderOff1 );
-    aRect.AdjustBottom( -(mnBorderOff2) );
+    aRect.AdjustBottom( -mnBorderOff2 );
     Invalidate(aRect);
 }
 

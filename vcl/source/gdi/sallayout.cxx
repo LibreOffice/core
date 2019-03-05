@@ -922,8 +922,8 @@ bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
     // calculate absolute position in pixel units
     Point aRelativePos = pGlyphIter->m_aLinearPos;
 
-    aRelativePos.setX( aRelativePos.X() / ( mnUnitsPerPixel) );
-    aRelativePos.setY( aRelativePos.Y() / ( mnUnitsPerPixel) );
+    aRelativePos.setX( aRelativePos.X() / mnUnitsPerPixel );
+    aRelativePos.setY( aRelativePos.Y() / mnUnitsPerPixel );
     rPos = GetDrawPosition( aRelativePos );
 
     return true;

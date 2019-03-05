@@ -1662,7 +1662,7 @@ const SfxPoolItem* SfxAllItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhi
     if ( !pOld )
     {
         bIncrementCount = true;
-        pOld = (m_pParent)
+        pOld = m_pParent
             ? &m_pParent->Get( nWhich )
             : (SfxItemPool::IsWhich(nWhich)
                     ? &m_pPool->GetDefaultItem(nWhich)

@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <memory>
 #include <string>
 #include <rtl/ustring.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -112,6 +113,16 @@ int main()
 
     BrowseMode nBits = ( BrowseMode::Modules | BrowseMode::Top ); // expected-error {{parentheses immediately inside vardecl statement [loplugin:unnecessaryparen]}}
     (void)nBits;
+};
+
+class Foo2
+{
+    int* p;
+
+    int foo2()
+    {
+        return (p) ? 1 : 0; // expected-error {{unnecessary parentheses around member expr [loplugin:unnecessaryparen]}}
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

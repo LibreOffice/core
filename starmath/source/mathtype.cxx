@@ -3051,7 +3051,7 @@ void MathType::HandleMath(SmNode *pNode)
         {
             pS->WriteUChar( CHAR|0x20 );
         }
-        else if ((nPendingAttributes) &&
+        else if (nPendingAttributes &&
                 (i == ((pTemp->GetText().getLength()+1)/2)-1))
             {
                 pS->WriteUChar( 0x22 );
@@ -3269,7 +3269,7 @@ void MathType::HandleText(SmNode *pNode)
     SmTextNode *pTemp = static_cast<SmTextNode *>(pNode);
     for(sal_Int32 i=0;i<pTemp->GetText().getLength();i++)
     {
-        if ((nPendingAttributes) &&
+        if (nPendingAttributes &&
             (i == ((pTemp->GetText().getLength()+1)/2)-1))
         {
             pS->WriteUChar( 0x22 );     //char, with attributes right
@@ -3299,7 +3299,7 @@ void MathType::HandleText(SmNode *pNode)
         //possible for starmath to place character attributes on
         //entities which cannot occur in mathtype e.g. a Summation
         //symbol so these attributes may be lost
-        if ((nPendingAttributes) &&
+        if (nPendingAttributes &&
             (i == ((pTemp->GetText().getLength()+1)/2)-1))
         {
             pS->WriteUChar( EMBEL );

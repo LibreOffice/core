@@ -222,7 +222,7 @@ public:
     bool IsCovered() const { return mbCovered; }
     bool HasStringValue() const { return m_bHasStringValue; }
     OUString const* GetStringValue() const {
-        return (m_bHasStringValue) ? &m_StringValue : nullptr;
+        return m_bHasStringValue ? &m_StringValue : nullptr;
     }
 
     const SwStartNode *GetStartNode() const { return pStartNode; }

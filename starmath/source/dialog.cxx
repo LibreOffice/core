@@ -1009,8 +1009,8 @@ bool SmShowSymbolSet::MouseButtonDown(const MouseEvent& rMEvt)
     aOutputSize.AdjustWidth(nXOffset );
     aOutputSize.AdjustHeight(nYOffset );
     Point aPoint(rMEvt.GetPosPixel());
-    aPoint.AdjustX( -(nXOffset) );
-    aPoint.AdjustY( -(nYOffset) );
+    aPoint.AdjustX( -nXOffset );
+    aPoint.AdjustY( -nYOffset );
 
     if (rMEvt.IsLeft() && tools::Rectangle(Point(0, 0), aOutputSize).IsInside(rMEvt.GetPosPixel()))
     {

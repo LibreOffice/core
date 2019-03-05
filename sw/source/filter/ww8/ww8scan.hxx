@@ -774,7 +774,7 @@ public:
     virtual void advance() override;
     const OUString* GetName() const;
     WW8_CP GetStartPos() const
-        { return ( nIsEnd ) ? WW8_CP_MAX : pBook[0]->Where(); }
+        { return nIsEnd ? WW8_CP_MAX : pBook[0]->Where(); }
     long GetLen() const;
     bool GetIsEnd() const { return nIsEnd != 0; }
     long GetHandle() const;

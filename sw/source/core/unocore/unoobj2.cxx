@@ -668,7 +668,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
 
         SwPosition* pStart = rUnoCursor.Start();
         const sal_Int32 nFirstContent =
-            (m_bFirstParagraph) ? m_nFirstParaStart : -1;
+            m_bFirstParagraph ? m_nFirstParaStart : -1;
         const sal_Int32 nLastContent =
             (m_nEndIndex == pStart->nNode.GetIndex()) ? m_nLastParaEnd : -1;
 

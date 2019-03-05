@@ -57,7 +57,7 @@ SwScriptIterator::SwScriptIterator(
         }
     }
 
-    m_nChgPos = (bForward)
+    m_nChgPos = bForward
         ?  g_pBreakIt->GetBreakIter()->endOfScript(
                 m_rText, nStt, nCurScript)
         :  g_pBreakIt->GetBreakIter()->beginOfScript(

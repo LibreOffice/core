@@ -1302,7 +1302,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
         SwStyleNameMapper::FillProgName(sValue, aUString, SwGetPoolIdFromName::TxtColl);
     }
 
-    return GetPropertiesForNumFormat(rFormat, CharStyleName, (m_pDocShell) ? & aUString : nullptr);
+    return GetPropertiesForNumFormat(rFormat, CharStyleName, m_pDocShell ? & aUString : nullptr);
 
 }
 

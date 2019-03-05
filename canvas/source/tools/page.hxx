@@ -108,7 +108,7 @@ namespace canvas
             // request was made to select this fragment,
             // but this fragment has not been located on any
             // of the available pages, we need to hurry now.
-            if(!(mpPage))
+            if(!mpPage)
                 return false;
 
             std::shared_ptr<ISurface> pSurface(mpPage->getSurface());
@@ -125,7 +125,7 @@ namespace canvas
 
         bool refresh()
         {
-            if(!(mpPage))
+            if(!mpPage)
                 return false;
 
             std::shared_ptr<ISurface> pSurface(mpPage->getSurface());

@@ -3762,13 +3762,13 @@ void OReportController::switchReportSection(const sal_Int16 _nId)
             const OUString sUndoAction(RptResId(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER));
             pUndoContext.reset( new UndoContext( getUndoManager(), sUndoAction ) );
 
-            addUndoAction(std::make_unique<OReportSectionUndo>(*(m_aReportModel),SID_REPORTHEADER_WITHOUT_UNDO
+            addUndoAction(std::make_unique<OReportSectionUndo>(*m_aReportModel,SID_REPORTHEADER_WITHOUT_UNDO
                                                             ,::std::mem_fn(&OReportHelper::getReportHeader)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
                                                             ));
 
-            addUndoAction(std::make_unique<OReportSectionUndo>(*(m_aReportModel),SID_REPORTFOOTER_WITHOUT_UNDO
+            addUndoAction(std::make_unique<OReportSectionUndo>(*m_aReportModel,SID_REPORTFOOTER_WITHOUT_UNDO
                                                             ,::std::mem_fn(&OReportHelper::getReportFooter)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
