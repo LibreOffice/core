@@ -113,7 +113,7 @@ SfxFormalArgument const aFormalArgs[] = {
     { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "RedactionStyle", SID_REDACTION_STYLE },
 };
 
-static sal_uInt16 nMediaArgsCount = SAL_N_ELEMENTS(aFormalArgs);
+static sal_uInt16 const nMediaArgsCount = SAL_N_ELEMENTS(aFormalArgs);
 
 static char const sTemplateRegionName[] = "TemplateRegionName";
 static char const sTemplateName[] = "TemplateName";
