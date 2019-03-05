@@ -288,7 +288,7 @@ ScPrintUIOptions::ScPrintUIOptions()
         ScResId( SCSTR_PRINTOPT_SELECTEDCELLS )};
     uno::Sequence< OUString > aHelpIds{
         ".HelpID:vcl:PrintDialog:PrintContent:ListBox"};
-    m_aUIProperties[nIdx++].Value = setChoiceListControlOpt( "printpagesbox", OUString(),
+    m_aUIProperties[nIdx++].Value = setChoiceListControlOpt( "printextrabox", OUString(),
                                                     aHelpIds, "PrintContent",
                                                     aChoices, nContent );
 
@@ -301,13 +301,21 @@ ScPrintUIOptions::ScPrintUIOptions()
     // create a choice for the range to print
     OUString aPrintRangeName( "PrintRange" );
     aChoices.realloc( 4 );
-    aHelpIds.realloc( 1 );
+    aHelpIds.realloc( 4 );
+    uno::Sequence< OUString > aWidgetIds( 4 );
     aChoices[0] = ScResId( SCSTR_PRINTOPT_PRINTALLPAGES );
+    aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:0";
+    aWidgetIds[0] = "rbAllPages";
     aChoices[1] = ScResId( SCSTR_PRINTOPT_PRINTPAGES );
+    aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:1";
+    aWidgetIds[1] = "rbRangePages";
     aChoices[2] = ScResId( SCSTR_PRINTOPT_PRINTEVENPAGES );
+    aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:2";
+    aWidgetIds[2] = "rbEvenPages";
     aChoices[3] = ScResId( SCSTR_PRINTOPT_PRINTODDPAGES );
-    aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintRange:ListBox";
-    m_aUIProperties[nIdx++].Value = setChoiceListControlOpt( "printextrabox", OUString(),
+    aHelpIds[3] = ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:3";
+    aWidgetIds[3] = "rbOddPages";
+    m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                     aHelpIds,
                                                     aPrintRangeName,
                                                     aChoices,

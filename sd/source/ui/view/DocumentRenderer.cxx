@@ -597,7 +597,7 @@ namespace {
                     nPrintRange = 1;
                 }
             }
-
+/*
             OUString aPrintRangeName( "PrintContent" );
             aHelpIds.realloc( 1 );
             aHelpIds[0] = ".HelpID:vcl:PrintDialog:PageContentType:ListBox";
@@ -606,7 +606,27 @@ namespace {
                                 mbImpress ? CreateChoice( STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE ) ) :
                                             CreateChoice( STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE ) ),
                                 nPrintRange ) );
+*/
+            OUString aPrintRangeName( "PrintContent" );
+            aHelpIds.realloc( 5 );
+            aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ;
+            aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ;
+            aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2" ;
+            aHelpIds[3] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:3" ;
+            aHelpIds[4] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:4" ;
+            aWidgetIds.realloc( 5 );
+            aWidgetIds[0] = "rbAllPages";
+            aWidgetIds[1] = "rbRangePages";
+            aWidgetIds[2] = "rbEvenPages";
+            aWidgetIds[3] = "rbOddPages";
+            aWidgetIds[4] = "rbRangeSelection";
 
+            AddDialogControl( vcl::PrinterOptionsHelper::setChoiceRadiosControlOpt(aWidgetIds, OUString(),
+                                aHelpIds, aPrintRangeName,
+                                mbImpress ? CreateChoice(STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE)) :
+                                            CreateChoice(STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE)),
+                                nPrintRange )
+                            );
             // create a an Edit dependent on "Pages" selected
             vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, true );
             AddDialogControl(vcl::PrinterOptionsHelper::setEditControlOpt("pagerange", "",

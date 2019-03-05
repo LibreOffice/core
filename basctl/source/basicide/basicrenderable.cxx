@@ -42,6 +42,7 @@ Renderable::Renderable (BaseWindow* pWin)
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = "PrintRange" ;
     aPrintRangeOpt.mbInternalOnly = true;
+
     m_aUIProperties[0].Value = setSubgroupControlOpt("printrange",
         IDEResId( RID_STR_PRINTDLG_PAGES ), OUString(), aPrintRangeOpt);
 
@@ -51,10 +52,17 @@ Renderable::Renderable (BaseWindow* pWin)
                                       IDEResId(RID_STR_PRINTDLG_PRINTPAGES),
                                       IDEResId(RID_STR_PRINTDLG_PRINTEVENPAGES),
                                       IDEResId(RID_STR_PRINTDLG_PRINTODDPAGES)};
-    const Sequence<OUString> aHelpIds{".HelpID:vcl:PrintDialog:PrintContent:ListBox"};
-    m_aUIProperties[1].Value = setChoiceListControlOpt( "printpagesbox", OUString(),
+    const Sequence<OUString> aHelpIds{".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0",
+                                      ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1",
+                                      ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2",
+                                      ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:3"};
+    const Sequence<OUString> aWidgetIds{"rbAllPages",
+                                        "rbRangePages",
+                                        "rbEvenPages",
+                                        "rbOddPages"};
+    m_aUIProperties[1].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                    aHelpIds, aPrintContentName,
-                                                   aChoices, 0 );
+                                                   aChoices, 0);
 
     // create a an Edit dependent on "Pages" selected
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt(aPrintContentName, 1, true);
