@@ -959,7 +959,13 @@ DECLARE_OOXMLIMPORT_TEST(testTdf116084, "tdf116084.docx")
     CPPUNIT_ASSERT_EQUAL( OUString( "must" ), getRun( getParagraph( 1 ), 5 )->getString());
 }
 
-
+DECLARE_OOXMLIMPORT_TEST(testTdf121176, "tdf121176.docx")
+{
+    // w:del is imported correctly when it is in a same size w:ins
+    CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 1 ), 1 )->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(1), 1), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL( OUString( "must" ), getRun( getParagraph( 1 ), 2 )->getString());
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
