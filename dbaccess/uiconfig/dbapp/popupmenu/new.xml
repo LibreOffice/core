@@ -17,4 +17,6 @@
   <menu:menuitem menu:id=".uno:DBNewTable"/>
   <menu:menuitem menu:id=".uno:DBNewView"/>
   <menu:menuitem menu:id=".uno:DBNewViewSQL"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:DBNewFolder"/>
 </menu:menupopup>
