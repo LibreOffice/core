@@ -195,7 +195,7 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
         {
             // show headers if possible
             aHdRect.AdjustLeft(nHdLeft );
-            aHdRect.AdjustRight( -(nHdRight) );
+            aHdRect.AdjustRight( -nHdRight );
             aHdRect.SetBottom( aRect.Top() + nHdHeight );
             aRect.AdjustTop(nHdHeight + nHdDist );
 
@@ -207,7 +207,7 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
         {
             // show footer if possible
             aFtRect.AdjustLeft(nFtLeft );
-            aFtRect.AdjustRight( -(nFtRight) );
+            aFtRect.AdjustRight( -nFtRight );
             aFtRect.SetTop( aRect.Bottom() - nFtHeight );
             aRect.AdjustBottom( -(nFtHeight + nFtDist) );
 

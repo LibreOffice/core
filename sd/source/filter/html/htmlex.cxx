@@ -721,7 +721,7 @@ void HtmlExport::ExportHtml()
     nProgrCount += mbImpress?mnSdPageCount:0;
     nProgrCount += mbContentsPage?1:0;
     nProgrCount += (mbFrames && mbNotes)?mnSdPageCount:0;
-    nProgrCount += (mbFrames)?8:0;
+    nProgrCount += mbFrames ? 8 : 0;
     InitProgress( nProgrCount );
 
     mpDocSh->SetWaitCursor( true );

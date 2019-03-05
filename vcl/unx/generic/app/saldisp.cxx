@@ -1439,7 +1439,7 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
     *pStatusReturn = 0;
 
     SalI18N_InputMethod* const pInputMethod =
-        ( pXLib_ ) ? pXLib_->GetInputMethod() : nullptr;
+        pXLib_ ? pXLib_->GetInputMethod() : nullptr;
 
     // first get the printable of the possibly modified KeySym
     if (   (aInputContext == nullptr)
@@ -1946,7 +1946,7 @@ void SalX11Display::Yield()
 bool SalX11Display::Dispatch( XEvent *pEvent )
 {
     SalI18N_InputMethod* const pInputMethod =
-        ( pXLib_ ) ? pXLib_->GetInputMethod() : nullptr;
+        pXLib_ ? pXLib_->GetInputMethod() : nullptr;
 
     if( pInputMethod )
     {

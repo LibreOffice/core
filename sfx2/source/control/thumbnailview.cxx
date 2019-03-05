@@ -278,7 +278,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
         nScrBarWidth = mpScrBar->GetSizePixel().Width();
 
     // calculate maximum number of visible columns
-    mnCols = static_cast<sal_uInt16>((aWinSize.Width()-nScrBarWidth) / (mnItemWidth));
+    mnCols = static_cast<sal_uInt16>((aWinSize.Width()-nScrBarWidth) / mnItemWidth);
 
     if (!mnCols)
         mnCols = 1;

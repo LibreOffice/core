@@ -389,7 +389,7 @@ oslFileError FileHandle_Impl::readFileAt(
         return osl_File_E_None;
     }
 
-    if (m_kind == KIND_MEM || !(m_buffer))
+    if (m_kind == KIND_MEM || !m_buffer)
     {
         // not buffered
         return readAt(nOffset, pBuffer, nBytesRequested, pBytesRead);

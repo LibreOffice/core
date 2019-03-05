@@ -855,7 +855,7 @@ OUString SwSetExpField::GetFieldName() const
 {
     SwFieldTypesEnum const nStrType( (IsSequenceField())
                             ? TYP_SEQFLD
-                            : (mbInput)
+                            : mbInput
                                 ? TYP_SETINPFLD
                                 : TYP_SETFLD   );
 

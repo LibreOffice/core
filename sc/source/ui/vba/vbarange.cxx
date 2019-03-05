@@ -678,7 +678,7 @@ public:
     {
         if ( !hasMoreElements() )
             throw container::NoSuchElementException();
-        CellPos aPos = *(m_it)++;
+        CellPos aPos = *m_it++;
 
         uno::Reference< table::XCellRange > xRangeArea = getArea( aPos.m_nArea );
         uno::Reference< table::XCellRange > xCellRange( xRangeArea->getCellByPosition(  aPos.m_nCol, aPos.m_nRow ), uno::UNO_QUERY_THROW );

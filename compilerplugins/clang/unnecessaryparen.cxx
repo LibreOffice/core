@@ -219,6 +219,14 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
                 << parenExpr->getSourceRange();
         }
         handled_.insert(parenExpr);
+    } else if (auto memberExpr = dyn_cast<MemberExpr>(subExpr)) {
+        if (isa<CXXThisExpr>(ignoreAllImplicit(memberExpr->getBase()))) {
+            report(
+                DiagnosticsEngine::Warning, "unnecessary parentheses around member expr",
+                compat::getBeginLoc(parenExpr))
+                << parenExpr->getSourceRange();
+            handled_.insert(parenExpr);
+        }
     }
 
     return true;

@@ -2158,19 +2158,13 @@ void AutoRecovery::implts_stopListening()
     xGlobalEventBroadcaster.set(m_xNewDocBroadcaster, css::uno::UNO_QUERY);
     } /* SAFE */
 
-    if (
-        (xGlobalEventBroadcaster.is()) &&
-        (m_bListenForDocEvents       )
-       )
+    if (xGlobalEventBroadcaster.is() && m_bListenForDocEvents)
     {
         xGlobalEventBroadcaster->removeDocumentEventListener(m_xNewDocBroadcasterListener);
         m_bListenForDocEvents = false;
     }
 
-    if (
-        (xCFG.is()                ) &&
-        (m_bListenForConfigChanges)
-       )
+    if (xCFG.is() && m_bListenForConfigChanges)
     {
         xCFG->removeChangesListener(m_xRecoveryCFGListener);
         m_bListenForConfigChanges = false;

@@ -359,7 +359,7 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
 
         // The char is held in the first position
         // Unconditionally after format!
-        SetLen( (m_bNoLength) ? TextFrameIndex(0) : nFollow );
+        SetLen( m_bNoLength ? TextFrameIndex(0) : nFollow );
 
         if( nRest )
         {

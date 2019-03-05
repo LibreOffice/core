@@ -972,7 +972,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
         {
             case WID_SECT_CONDITION:
             {
-                const OUString uTmp( (m_bIsDescriptor)
+                const OUString uTmp( m_bIsDescriptor
                     ? m_pProps->m_sCondition
                     : pSect->GetCondition());
                 pRet[nProperty] <<= uTmp;
@@ -1049,28 +1049,28 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
             break;
             case WID_SECT_VISIBLE   :
             {
-                const bool bTemp = (m_bIsDescriptor)
+                const bool bTemp = m_bIsDescriptor
                     ? !m_pProps->m_bHidden : !pSect->IsHidden();
                 pRet[nProperty] <<= bTemp;
             }
             break;
             case WID_SECT_CURRENTLY_VISIBLE:
             {
-                const bool bTemp = (m_bIsDescriptor)
+                const bool bTemp = m_bIsDescriptor
                     ? !m_pProps->m_bCondHidden : !pSect->IsCondHidden();
                 pRet[nProperty] <<= bTemp;
             }
             break;
             case WID_SECT_PROTECTED:
             {
-                const bool bTemp = (m_bIsDescriptor)
+                const bool bTemp = m_bIsDescriptor
                     ? m_pProps->m_bProtect : pSect->IsProtect();
                 pRet[nProperty] <<= bTemp;
             }
             break;
             case WID_SECT_EDIT_IN_READONLY:
             {
-                const bool bTemp = (m_bIsDescriptor)
+                const bool bTemp = m_bIsDescriptor
                     ? m_pProps->m_bEditInReadonly : pSect->IsEditInReadonly();
                 pRet[nProperty] <<= bTemp;
             }
@@ -1151,7 +1151,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
             break;
             case WID_SECT_PASSWORD:
             {
-                pRet[nProperty] <<= (m_bIsDescriptor)
+                pRet[nProperty] <<= m_bIsDescriptor
                     ? m_pProps->m_Password : pSect->GetPassword();
             }
             break;

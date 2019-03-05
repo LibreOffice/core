@@ -77,7 +77,7 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
 
     if(pViewShell || pDrawView)
     {
-        SdrView* pLocalDrawView = (pDrawView) ? pDrawView : pViewShell->GetSdrView();
+        SdrView* pLocalDrawView = pDrawView ? pDrawView : pViewShell->GetSdrView();
 
         if(pLocalDrawView)
         {
@@ -115,7 +115,7 @@ void ScOutputData::PostPrintDrawingLayer(const Point& rMMOffset) // #i74768#
 
     if(pViewShell || pDrawView)
     {
-        SdrView* pLocalDrawView = (pDrawView) ? pDrawView : pViewShell->GetSdrView();
+        SdrView* pLocalDrawView = pDrawView ? pDrawView : pViewShell->GetSdrView();
 
         if(pLocalDrawView)
         {
@@ -139,7 +139,7 @@ void ScOutputData::PrintDrawingLayer(SdrLayerID nLayer, const Point& rMMOffset)
 
     if(pViewShell || pDrawView)
     {
-        SdrView* pLocalDrawView = (pDrawView) ? pDrawView : pViewShell->GetSdrView();
+        SdrView* pLocalDrawView = pDrawView ? pDrawView : pViewShell->GetSdrView();
 
         if(pLocalDrawView)
         {
@@ -197,7 +197,7 @@ void ScOutputData::DrawSelectiveObjects(SdrLayerID nLayer)
 
     if(pViewShell || pDrawView)
     {
-        SdrView* pLocalDrawView = (pDrawView) ? pDrawView : pViewShell->GetSdrView();
+        SdrView* pLocalDrawView = pDrawView ? pDrawView : pViewShell->GetSdrView();
 
         if(pLocalDrawView)
         {

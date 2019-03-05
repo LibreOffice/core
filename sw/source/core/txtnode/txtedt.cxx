@@ -2294,7 +2294,7 @@ void SwTextNode::SetWrongDirty(WrongState eNew) const
 
 auto SwTextNode::GetWrongDirty() const -> WrongState
 {
-    return (m_pParaIdleData_Impl) ? m_pParaIdleData_Impl->eWrongDirty : WrongState::DONE;
+    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->eWrongDirty : WrongState::DONE;
 }
 
 bool SwTextNode::IsWrongDirty() const

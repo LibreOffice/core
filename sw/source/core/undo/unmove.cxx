@@ -224,7 +224,7 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
                 static_cast<SwTextNode*>(pCNd)->ClearSwpHintsArr( false );
 
             // first delete all attributes at InsertPos
-            const bool bSuccess = pDoc->getIDocumentContentOperations().MoveRange( aPam, aPos, (m_bMoveRedlines)
+            const bool bSuccess = pDoc->getIDocumentContentOperations().MoveRange( aPam, aPos, m_bMoveRedlines
                         ? SwMoveFlags::REDLINES
                         : SwMoveFlags::DEFAULT );
             if (!bSuccess)
@@ -288,7 +288,7 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         // only a move with SwRange
         SwNodeRange aRg( rNds, nSttNode, rNds, nEndNode );
-        rDoc.getIDocumentContentOperations().MoveNodeRange( aRg, aIdx, (m_bMoveRedlines)
+        rDoc.getIDocumentContentOperations().MoveNodeRange( aRg, aIdx, m_bMoveRedlines
                 ? SwMoveFlags::REDLINES
                 : SwMoveFlags::DEFAULT );
     }

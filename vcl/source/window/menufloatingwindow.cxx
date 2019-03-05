@@ -191,7 +191,7 @@ vcl::Region MenuFloatingWindow::ImplCalcClipRegion() const
     Size aOutSz = GetOutputSizePixel();
     tools::Rectangle aRect( Point(), aOutSz );
     aRect.AdjustTop(nScrollerHeight );
-    aRect.AdjustBottom( -(nScrollerHeight) );
+    aRect.AdjustBottom( -nScrollerHeight );
 
     vcl::Region aRegion(aRect);
 

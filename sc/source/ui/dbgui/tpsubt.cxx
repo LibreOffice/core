@@ -100,7 +100,7 @@ void ScTpSubTotalGroup::Init()
                                           GetItemSet().Get( nWhichSubTotals ));
 
     pViewData   = rSubTotalItem.GetViewData();
-    pDoc        = ( pViewData ) ? pViewData->GetDocument() : nullptr;
+    pDoc        = pViewData ? pViewData->GetDocument() : nullptr;
 
     OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found :-(" );
 
@@ -473,7 +473,7 @@ void ScTpSubTotalOptions::Init()
                                           GetItemSet().Get( nWhichSubTotals ));
 
     pViewData   = rSubTotalItem.GetViewData();
-    pDoc        = ( pViewData ) ? pViewData->GetDocument() : nullptr;
+    pDoc        = pViewData ? pViewData->GetDocument() : nullptr;
 
     OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found!" );
 

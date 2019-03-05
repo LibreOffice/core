@@ -151,7 +151,7 @@ bool HStreamIODev::setCompressed(bool flag)
 
 bool HStreamIODev::read1b(unsigned char &out)
 {
-    size_t res = (compressed) ? GZREAD(rBuf, 1) : _stream->readBytes(rBuf, 1);
+    size_t res = compressed ? GZREAD(rBuf, 1) : _stream->readBytes(rBuf, 1);
 
     if (res < 1)
         return false;
@@ -171,7 +171,7 @@ bool HStreamIODev::read1b(char &out)
 
 bool HStreamIODev::read2b(unsigned short &out)
 {
-    size_t res = (compressed) ? GZREAD(rBuf, 2) : _stream->readBytes(rBuf, 2);
+    size_t res = compressed ? GZREAD(rBuf, 2) : _stream->readBytes(rBuf, 2);
 
     if (res < 2)
         return false;
@@ -182,7 +182,7 @@ bool HStreamIODev::read2b(unsigned short &out)
 
 bool HStreamIODev::read4b(unsigned int &out)
 {
-    size_t res = (compressed) ? GZREAD(rBuf, 4) : _stream->readBytes(rBuf, 4);
+    size_t res = compressed ? GZREAD(rBuf, 4) : _stream->readBytes(rBuf, 4);
 
     if (res < 4)
         return false;
@@ -204,9 +204,9 @@ bool HStreamIODev::read4b(int &out)
 size_t HStreamIODev::readBlock(void *ptr, size_t size)
 {
     size_t count =
-        (compressed) ? GZREAD(ptr, size) : _stream->readBytes(static_cast<byte *>(ptr),
-
-        size);
+        compressed
+        ? GZREAD(ptr, size)
+        : _stream->readBytes(static_cast<byte *>(ptr), size);
 
     return count;
 }

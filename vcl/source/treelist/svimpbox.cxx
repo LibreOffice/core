@@ -1134,9 +1134,9 @@ void SvImpLBox::PositionScrollBars( Size& rSize, sal_uInt16 nMask )
     Size aHorSize( rSize.Width(), nHorSBarHeight );
 
     if( nMask & 0x0001 )
-        aHorSize.AdjustWidth( -(nVerSBarWidth) );
+        aHorSize.AdjustWidth( -nVerSBarWidth );
     if( nMask & 0x0002 )
-        aVerSize.AdjustHeight( -(nHorSBarHeight) );
+        aVerSize.AdjustHeight( -nHorSBarHeight );
 
     aVerSize.AdjustHeight(2 * nOverlap );
     Point aVerPos( rSize.Width() - aVerSize.Width() + nOverlap, -nOverlap );
