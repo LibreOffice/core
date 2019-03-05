@@ -15,6 +15,8 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,harfbuzz))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,0))
 
+# * external/harfbuzz/msvc.patch sent upstream as <https://github.com/harfbuzz/harfbuzz/pull/1605>
+#   "Fix hb_atomic_* variants based on C++11 atomics":
 $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
     external/harfbuzz/msvc.patch \
 ))
