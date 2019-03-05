@@ -44,8 +44,6 @@ using namespace css;
 
 namespace sc_apitest
 {
-const auto nMaxFieldIndex = 6;
-
 class ScDataPilotFieldGroupsObj : public CalcUnoApiTest,
                                   public apitest::XElementAccess,
                                   public apitest::XEnumerationAccess,
@@ -94,6 +92,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
+    static const int nMaxFieldIndex = 6;
     uno::Reference<lang::XComponent> m_xComponent;
 };
 
