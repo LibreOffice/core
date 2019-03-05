@@ -94,6 +94,7 @@ inline void     UInt32ToSVBT32 ( sal_uInt32  n, SVBT32 p )
     p[2] = static_cast<sal_uInt8>(n >> 16);
     p[3] = static_cast<sal_uInt8>(n >> 24);
 }
+inline void     Int32ToSVBT32 ( sal_Int32  n, SVBT32 p ) { UInt32ToSVBT32(sal_uInt32(n), p); }
 #if defined OSL_LITENDIAN
 inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = reinterpret_cast<sal_uInt8*>(&n)[0];
                                                        p[1] = reinterpret_cast<sal_uInt8*>(&n)[1];
