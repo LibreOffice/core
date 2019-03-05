@@ -191,7 +191,7 @@ void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
         pParamSet = nullptr;
     }
 
-    if (!bState)
+    if (!bFromPrintState)
         nZoom = 100;
     nManualZoom = 100;
     bClearWin = false;
@@ -214,13 +214,14 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTa
         nPageStart          ( nPage ),
         nDocPages           ( nDocP ),
         pUserArea           ( pArea ),
-        bState              ( false ),
+        bFromPrintState     ( false ),
         bSourceRangeValid   ( false ),
         bPrintCurrentTable  ( false ),
         bMultiArea          ( false ),
         mbHasPrintRange(true),
         nTabPages           ( 0 ),
         nTotalPages         ( 0 ),
+        bPrintAreaValid     ( false ),
         pPageData           ( pData )
 {
     pDev = pPrinter.get();
@@ -247,6 +248,7 @@ ScPrintFunc::ScPrintFunc(ScDocShell* pShell, SfxPrinter* pNewPrinter,
     nStartRow   = rState.nStartRow;
     nEndCol     = rState.nEndCol;
     nEndRow     = rState.nEndRow;
+    bPrintAreaValid = rState.bPrintAreaValid;
     nZoom       = rState.nZoom;
     m_aRanges.m_nPagesX = rState.nPagesX;
     m_aRanges.m_nPagesY = rState.nPagesY;
@@ -254,7 +256,7 @@ ScPrintFunc::ScPrintFunc(ScDocShell* pShell, SfxPrinter* pNewPrinter,
     nTotalPages = rState.nTotalPages;
     nPageStart  = rState.nPageStart;
     nDocPages   = rState.nDocPages;
-    bState      = true;
+    bFromPrintState = true;
 
     if (rState.bSavedStateRanges)
     {
@@ -279,13 +281,14 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, SCTAB nTab,
         nPageStart          ( nPage ),
         nDocPages           ( nDocP ),
         pUserArea           ( pArea ),
-        bState              ( false ),
+        bFromPrintState     ( false ),
         bSourceRangeValid   ( false ),
         bPrintCurrentTable  ( false ),
         bMultiArea          ( false ),
         mbHasPrintRange(true),
         nTabPages           ( 0 ),
         nTotalPages         ( 0 ),
+        bPrintAreaValid     ( false ),
         pPageData           ( nullptr )
 {
     pDev = pOutDev;
@@ -311,6 +314,7 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
     nStartRow   = rState.nStartRow;
     nEndCol     = rState.nEndCol;
     nEndRow     = rState.nEndRow;
+    bPrintAreaValid = rState.bPrintAreaValid;
     nZoom       = rState.nZoom;
     m_aRanges.m_nPagesX = rState.nPagesX;
     m_aRanges.m_nPagesY = rState.nPagesY;
@@ -318,7 +322,7 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
     nTotalPages = rState.nTotalPages;
     nPageStart  = rState.nPageStart;
     nDocPages   = rState.nDocPages;
-    bState      = true;
+    bFromPrintState = true;
 
     if (rState.bSavedStateRanges)
     {
@@ -339,6 +343,7 @@ void ScPrintFunc::GetPrintState(ScPrintState& rState,  bool bSavePageRanges)
     rState.nStartRow    = nStartRow;
     rState.nEndCol      = nEndCol;
     rState.nEndRow      = nEndRow;
+    rState.bPrintAreaValid = bPrintAreaValid;
     rState.nZoom        = nZoom;
     rState.nPagesX      = m_aRanges.m_nPagesX;
     rState.nPagesY      = m_aRanges.m_nPagesY;
@@ -370,6 +375,7 @@ void ScPrintFunc::FillPageData()
         sal_uInt16 nCount = sal::static_int_cast<sal_uInt16>( pPageData->GetCount() );
         ScPrintRangeData& rData = pPageData->GetData(nCount);       // count up
 
+        assert( bPrintAreaValid );
         rData.SetPrintRange( ScRange( nStartCol, nStartRow, nPrintTab,
                                         nEndCol, nEndRow, nPrintTab ) );
         // #i123672#
@@ -696,6 +702,7 @@ bool ScPrintFunc::AdjustPrintArea( bool bNew )
         nStartRow = 0;
         if (!pDoc->GetPrintArea( nPrintTab, nEndCol, nEndRow, bNotes ))
             return false;   // nothing
+        bPrintAreaValid = true;
     }
     else
     {
@@ -734,10 +741,12 @@ bool ScPrintFunc::AdjustPrintArea( bool bNew )
         if (!bFound)
             return false;   // empty
 
+        bPrintAreaValid = true;
         if (bForcedChangeRow)
             bChangeRow = true;
     }
 
+    assert( bPrintAreaValid );
     pDoc->ExtendMerge( nStartCol,nStartRow, nEndCol,nEndRow, nPrintTab );  // no Refresh, incl. Attrs
 
     if ( bChangeCol )
@@ -1055,7 +1064,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
             //  Split pages
 
-    if (!bState)
+    if (!bPrintAreaValid)
     {
         nTabPages = CountPages();                                   // also calculates zoom
         nTotalPages = nTabPages;
@@ -2541,6 +2550,7 @@ long ScPrintFunc::CountNotePages()
 
         if (bDoThis)
         {
+            assert( bPrintAreaValid );
             for ( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
             {
                 if (pDoc->HasColNotes(nCol, nPrintTab))
@@ -3000,6 +3010,7 @@ static void lcl_SetHidden( const ScDocument* pDoc, SCTAB nPrintTab, ScPageRowEnt
 
 void ScPrintFunc::CalcPages()               // calculates aPageRect and pages from nZoom
 {
+    assert( bPrintAreaValid );
     m_aRanges.calculate(pDoc, aTableParam.bSkipEmpty, aAreaParam.bPrintArea, nStartRow, nEndRow, nStartCol, nEndCol, nPrintTab, GetDocPageSize());
 }
 
