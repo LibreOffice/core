@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/beans/xpropertyset.hxx>
 #include <test/container/xnamed.hxx>
 #include <test/sheet/datapilotfield.hxx>
 #include <test/sheet/xdatapilotfield.hxx>
@@ -31,7 +32,8 @@ class ScDataPilotFieldObj : public CalcUnoApiTest,
                             public apitest::DataPilotField,
                             public apitest::XDataPilotField,
                             public apitest::XDataPilotFieldGrouping,
-                            public apitest::XNamed
+                            public apitest::XNamed,
+                            public apitest::XPropertySet
 {
 public:
     virtual void setUp() override;
@@ -61,6 +63,13 @@ public:
     CPPUNIT_TEST(testGetName);
     CPPUNIT_TEST(testSetName);
 
+    // XPropertySet
+    CPPUNIT_TEST(testGetPropertySetInfo);
+    CPPUNIT_TEST(testGetPropertyValue);
+    CPPUNIT_TEST(testSetPropertyValue);
+    CPPUNIT_TEST(testPropertyChangeListener);
+    CPPUNIT_TEST(testVetoableChangeListener);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -70,6 +79,8 @@ private:
 ScDataPilotFieldObj::ScDataPilotFieldObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XNamed("Col1")
+    , XPropertySet({ "Function", "HasAutoShowInfo", "HasLayoutInfo", "HasSortInfo", "Subtotals",
+                     "Subtotals2" })
 {
 }
 
