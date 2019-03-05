@@ -3475,8 +3475,6 @@ void RTFDocumentImpl::bufferProperties(RTFBuffer_t& rBuffer, const RTFValue::Poi
     rBuffer.emplace_back(Buf_t(BUFFER_PROPS, pValue, pTableProperties));
 }
 
-RTFPicture::RTFPicture() = default;
-
 RTFShape::RTFShape() = default;
 
 RTFDrawingObject::RTFDrawingObject() = default;

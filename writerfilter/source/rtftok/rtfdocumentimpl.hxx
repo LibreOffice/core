@@ -357,7 +357,6 @@ private:
 class RTFPicture : public virtual SvRefBase
 {
 public:
-    RTFPicture();
     sal_Int32 nWidth = 0;
     sal_Int32 nHeight = 0;
     sal_Int32 nGoalWidth = 0;

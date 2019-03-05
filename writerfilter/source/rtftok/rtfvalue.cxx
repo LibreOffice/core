@@ -38,7 +38,7 @@ RTFValue::RTFValue()
     : m_pAttributes(new RTFSprms())
     , m_pSprms(new RTFSprms())
     , m_pShape(new RTFShape())
-    , m_pPicture(new RTFPicture())
+    , m_pPicture(new RTFPicture)
 {
 }
 
@@ -47,7 +47,7 @@ RTFValue::RTFValue(int nValue)
     , m_pAttributes(new RTFSprms())
     , m_pSprms(new RTFSprms())
     , m_pShape(new RTFShape())
-    , m_pPicture(new RTFPicture())
+    , m_pPicture(new RTFPicture)
 {
 }
 
@@ -57,7 +57,7 @@ RTFValue::RTFValue(OUString sValue, bool bForce)
     , m_pSprms(new RTFSprms())
     , m_bForceString(bForce)
     , m_pShape(new RTFShape())
-    , m_pPicture(new RTFPicture())
+    , m_pPicture(new RTFPicture)
 {
 }
 
@@ -65,7 +65,7 @@ RTFValue::RTFValue(const RTFSprms& rAttributes)
     : m_pAttributes(new RTFSprms(rAttributes))
     , m_pSprms(new RTFSprms())
     , m_pShape(new RTFShape())
-    , m_pPicture(new RTFPicture())
+    , m_pPicture(new RTFPicture)
 {
 }
 
@@ -73,7 +73,7 @@ RTFValue::RTFValue(const RTFSprms& rAttributes, const RTFSprms& rSprms)
     : m_pAttributes(new RTFSprms(rAttributes))
     , m_pSprms(new RTFSprms(rSprms))
     , m_pShape(new RTFShape())
-    , m_pPicture(new RTFPicture())
+    , m_pPicture(new RTFPicture)
 {
 }
 
@@ -82,7 +82,7 @@ RTFValue::RTFValue(uno::Reference<drawing::XShape> xShape)
     , m_pSprms(new RTFSprms())
     , m_xShape(std::move(xShape))
     , m_pShape(new RTFShape())
-    , m_pPicture(new RTFPicture())
+    , m_pPicture(new RTFPicture)
 {
 }
 
@@ -91,7 +91,7 @@ RTFValue::RTFValue(uno::Reference<io::XInputStream> xStream)
     , m_pSprms(new RTFSprms())
     , m_xStream(std::move(xStream))
     , m_pShape(new RTFShape())
-    , m_pPicture(new RTFPicture())
+    , m_pPicture(new RTFPicture)
 {
 }
 
@@ -100,7 +100,7 @@ RTFValue::RTFValue(uno::Reference<embed::XEmbeddedObject> xObject)
     , m_pSprms(new RTFSprms())
     , m_xObject(std::move(xObject))
     , m_pShape(new RTFShape())
-    , m_pPicture(new RTFPicture())
+    , m_pPicture(new RTFPicture)
 {
 }
 
@@ -108,7 +108,7 @@ RTFValue::RTFValue(const RTFShape& aShape)
     : m_pAttributes(new RTFSprms())
     , m_pSprms(new RTFSprms())
     , m_pShape(new RTFShape(aShape))
-    , m_pPicture(new RTFPicture())
+    , m_pPicture(new RTFPicture)
 {
 }
 
