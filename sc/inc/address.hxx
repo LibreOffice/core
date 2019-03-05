@@ -32,6 +32,7 @@
 #include <formula/grammar.hxx>
 
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/underlyingenumvalue.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace sheet {
@@ -178,11 +179,11 @@ namespace o3tl
 }
 inline void applyStartToEndFlags(ScRefFlags &target,const ScRefFlags source)
 {
-    target |= ScRefFlags(static_cast<std::underlying_type<ScRefFlags>::type>(source) << 4);
+    target |= ScRefFlags(o3tl::underlyingEnumValue(source) << 4);
 }
 inline void applyStartToEndFlags(ScRefFlags &target)
 {
-    target |= ScRefFlags(static_cast<std::underlying_type<ScRefFlags>::type>(target) << 4);
+    target |= ScRefFlags(o3tl::underlyingEnumValue(target) << 4);
 }
 
 //  ScAddress
