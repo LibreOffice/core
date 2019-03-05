@@ -51,6 +51,9 @@ public:
 
     // for UpdateRef:
     void                SetPos(const ScAddress& rNew)   { aPos=rNew; }
+
+    bool operator==     ( const ScDetOpData& r ) const
+                        { return eOperation == r.eOperation && aPos == r.aPos; }
 };
 
 //  list of operators

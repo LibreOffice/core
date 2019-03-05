@@ -79,7 +79,7 @@ bool ScDetOpList::operator==( const ScDetOpList& r ) const
     size_t nCount = Count();
     bool bEqual = ( nCount == r.Count() );
     for (size_t i=0; i<nCount && bEqual; i++)       // order has to be the same
-        if ( aDetOpDataVector[i] != r.aDetOpDataVector[i] )    // entries are different ?
+        if ( !(*aDetOpDataVector[i] == *r.aDetOpDataVector[i]) )    // entries are different ?
             bEqual = false;
 
     return bEqual;
