@@ -277,9 +277,6 @@ void SwTextNode::FileLoadedInitHints()
 
 SwContentFrame *SwTextNode::MakeFrame( SwFrame* pSib )
 {
-    // fdo#52028: ODF file import does not result in MergePortions being called
-    // for every attribute, since that would be inefficient.  So call it here.
-    FileLoadedInitHints();
     SwContentFrame *pFrame = new SwTextFrame( this, pSib );
     return pFrame;
 }
