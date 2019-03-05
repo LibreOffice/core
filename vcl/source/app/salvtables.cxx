@@ -3677,7 +3677,12 @@ public:
 
     virtual OUString get_active_id() const override
     {
-        const OUString* pRet = getEntryData(m_xComboBox->GetSelectedEntryPos());
+        sal_Int32 nPos = m_xComboBox->GetSelectedEntryPos();
+        const OUString* pRet;
+        if (nPos != LISTBOX_ENTRY_NOTFOUND)
+            pRet = getEntryData(m_xComboBox->GetSelectedEntryPos());
+        else
+            pRet = nullptr;
         if (!pRet)
             return OUString();
         return *pRet;
