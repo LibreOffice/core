@@ -232,7 +232,7 @@ static bool areTypesEqual(QualType lhs, QualType rhs)
         auto rhsTypedef = dyn_cast<TypedefType>(rhsType);
         if (!rhsTypedef)
             return false;
-        // comparing the underlying Decl's here doesn't work, they are not uniqued
+        // comparing the underlying Decl's here doesn't work, they are not unique
         if (lhsTypedef->getDecl()->getName() != rhsTypedef->getDecl()->getName())
             return false;
         return areTypesEqual(lhsTypedef->desugar(), rhsTypedef->desugar());
