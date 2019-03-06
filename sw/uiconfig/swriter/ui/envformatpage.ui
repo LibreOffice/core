@@ -230,6 +230,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="popup">editmenu1</property>
+                                <property name="draw_indicator">True</property>
                                 <child>
                                   <placeholder/>
                                 </child>
@@ -427,6 +428,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="popup">editmenu2</property>
+                                <property name="draw_indicator">True</property>
                                 <child>
                                   <placeholder/>
                                 </child>

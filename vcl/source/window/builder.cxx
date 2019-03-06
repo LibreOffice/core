@@ -1209,13 +1209,13 @@ namespace
         return xWindow;
     }
 
-    VclPtr<Button> extractStockAndBuildMenuButton(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+    VclPtr<MenuButton> extractStockAndBuildMenuButton(vcl::Window *pParent, VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_3DLOOK;
 
         nBits |= extractRelief(rMap);
 
-        VclPtr<Button> xWindow = VclPtr<MenuButton>::Create(pParent, nBits);
+        VclPtr<MenuButton> xWindow = VclPtr<MenuButton>::Create(pParent, nBits);
 
         if (extractStock(rMap))
         {
@@ -1430,6 +1430,18 @@ namespace
             return sAdjustment;
         }
         return sAdjustment;
+    }
+
+    bool extractDrawIndicator(VclBuilder::stringmap &rMap)
+    {
+        bool bDrawIndicator = false;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("draw-indicator"));
+        if (aFind != rMap.end())
+        {
+            bDrawIndicator = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+        return bDrawIndicator;
     }
 }
 
@@ -1708,13 +1720,16 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "GtkMenuButton")
     {
-        VclPtr<Button> xButton;
-        xButton = extractStockAndBuildMenuButton(pParent, rMap);
+        VclPtr<MenuButton> xButton = extractStockAndBuildMenuButton(pParent, rMap);
         OUString sMenu = extractPopupMenu(rMap);
         if (!sMenu.isEmpty())
             m_pParserState->m_aButtonMenuMaps.emplace_back(id, sMenu);
         xButton->SetImageAlign(ImageAlign::Left); //default to left
         xButton->SetAccessibleRole(css::accessibility::AccessibleRole::BUTTON_MENU);
+
+        if (!extractDrawIndicator(rMap))
+            xButton->SetDropDown(PushButtonDropdownStyle::NONE);
+
         setupFromActionName(xButton, rMap, m_xFrame);
         xWindow = xButton;
     }

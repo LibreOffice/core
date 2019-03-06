@@ -242,6 +242,7 @@
         <property name="no_show_all">True</property>
         <property name="hexpand">True</property>
         <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
         <child>
           <placeholder/>
         </child>
@@ -288,6 +289,7 @@
         <property name="receives_default">True</property>
         <property name="no_show_all">True</property>
         <property name="popup">menu</property>
+        <property name="draw_indicator">True</property>
         <child>
           <placeholder/>
         </child>
@@ -316,6 +318,7 @@
         <property name="receives_default">True</property>
         <property name="no_show_all">True</property>
         <property name="popup">menu1</property>
+        <property name="draw_indicator">True</property>
         <child>
           <placeholder/>
         </child>
@@ -344,6 +347,7 @@
         <property name="receives_default">True</property>
         <property name="no_show_all">True</property>
         <property name="popup">menu2</property>
+        <property name="draw_indicator">True</property>
         <child>
           <placeholder/>
         </child>
@@ -372,6 +376,7 @@
         <property name="receives_default">True</property>
         <property name="no_show_all">True</property>
         <property name="popup">menu3</property>
+        <property name="draw_indicator">True</property>
         <child>
           <placeholder/>
         </child>
@@ -401,6 +406,7 @@
         <property name="receives_default">True</property>
         <property name="no_show_all">True</property>
         <property name="popup">menu4</property>
+        <property name="draw_indicator">True</property>
         <child>
           <placeholder/>
         </child>

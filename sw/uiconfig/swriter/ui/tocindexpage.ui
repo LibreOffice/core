@@ -971,6 +971,7 @@
                         <property name="use_underline">True</property>
                         <property name="popup">filemenu</property>
                         <property name="use_popover">False</property>
+                        <property name="draw_indicator">True</property>
                         <child>
                           <placeholder/>
                         </child>

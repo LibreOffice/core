@@ -246,6 +246,7 @@
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_FILE|tooltip_text">Title</property>
                 <property name="image">imageBTN_FILE</property>
+                <property name="draw_indicator">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>

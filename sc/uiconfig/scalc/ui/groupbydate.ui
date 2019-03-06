@@ -155,6 +155,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="draw_indicator">True</property>
                             <child>
                               <placeholder/>
                             </child>
@@ -246,6 +247,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="draw_indicator">True</property>
                             <child>
                               <placeholder/>
                             </child>
