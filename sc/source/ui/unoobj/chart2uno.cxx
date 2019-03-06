@@ -2920,7 +2920,9 @@ uno::Sequence< double > SAL_CALL ScChart2DataSequence::getNumericalData()
     double* pArr = aSeq.getArray();
     for (const Item& rItem : m_aDataArray)
     {
-        *pArr = rItem.mbIsValue ? rItem.mfValue : fNAN;
+        //treat strings in cells as zero values in line charts like MSO does
+        //empty cells are interpreted as NaN (no value) in a line chart, they won't be drawed as datapoints
+        *pArr = rItem.mbIsValue ? rItem.mfValue : (!rItem.maString.isEmpty() ? 0.0 : fNAN);
         ++pArr;
     }
 
