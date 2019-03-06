@@ -17,17 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/accessibility/XAccessible.hpp>
-
 #include <starmath.hrc>
 #include <helpids.h>
 
-#include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
-#include <editeng/editstat.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/viewfrm.hxx>

@@ -13,8 +13,7 @@
 #include <memory>
 #include <vcl/uitest/uiobject.hxx>
 
-class SmElementsControl;
-class SmElement;
+#include <ElementsDockingWindow.hxx>
 
 class ElementUIObject : public UIObject
 {

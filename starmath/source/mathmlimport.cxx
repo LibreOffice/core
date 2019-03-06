@@ -26,7 +26,6 @@ one go*/
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
@@ -46,6 +45,7 @@ one go*/
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/sfxmodelfactory.hxx>
 #include <osl/diagnose.h>
 #include <sot/storage.hxx>
 #include <svtools/sfxecode.hxx>
@@ -67,7 +67,6 @@ one go*/
 
 #include "mathmlattr.hxx"
 #include "mathmlimport.hxx"
-#include "register.hxx"
 #include <document.hxx>
 #include <smdll.hxx>
 #include <unomodel.hxx>

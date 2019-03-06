@@ -18,8 +18,6 @@
 
 #include <document.hxx>
 #include <smdll.hxx>
-#include <node.hxx>
-#include <parse.hxx>
 
 #include <memory>
 
