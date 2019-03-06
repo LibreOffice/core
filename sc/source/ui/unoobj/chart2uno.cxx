@@ -2505,7 +2505,13 @@ void ScChart2DataSequence::BuildDataCache()
                                 {
                                     aItem.mfValue = pFCell->GetValue();
                                     aItem.mbIsValue = true;
+#ifdef OOXML_INTEROPERABILITY_CHART_TREAT_BLANK_CELLS_AS_ZERO
+                                } else {
+                                    aItem.mfValue = 0.0;
+                                    aItem.mbIsValue = true;
+#endif
                                 }
+
                             }
                             break;
                             case CELLTYPE_EDIT:
@@ -2920,7 +2926,11 @@ uno::Sequence< double > SAL_CALL ScChart2DataSequence::getNumericalData()
     double* pArr = aSeq.getArray();
     for (const Item& rItem : m_aDataArray)
     {
+#ifdef OOXML_INTEROPERABILITY_CHART_TREAT_BLANK_CELLS_AS_ZERO
+        *pArr = rItem.mbIsValue ? rItem.mfValue : (!rItem.maString.isEmpty() ? 0.0 : fNAN);
+#else
         *pArr = rItem.mbIsValue ? rItem.mfValue : fNAN;
+#endif
         ++pArr;
     }
 
