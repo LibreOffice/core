@@ -1299,9 +1299,7 @@ void XclImpDocProtectBuffer::Apply() const
     if (mnPassHash)
     {
         // 16-bit password hash.
-        Sequence<sal_Int8> aPass(2);
-        aPass[0] = (mnPassHash >> 8) & 0xFF;
-        aPass[1] = mnPassHash & 0xFF;
+        Sequence<sal_Int8> aPass{sal_Int8(mnPassHash >> 8), sal_Int8(mnPassHash & 0xFF)};
         pProtect->setPasswordHash(aPass, PASSHASH_XL);
     }
 
@@ -1395,9 +1393,7 @@ void XclImpSheetProtectBuffer::Apply() const
         const sal_uInt16 nHash = rSheet.mnPasswordHash;
         if (nHash)
         {
-            Sequence<sal_Int8> aPass(2);
-            aPass[0] = (nHash >> 8) & 0xFF;
-            aPass[1] = nHash & 0xFF;
+            Sequence<sal_Int8> aPass{sal_Int8(nHash >> 8), sal_Int8(nHash & 0xFF)};
             pProtect->setPasswordHash(aPass, PASSHASH_XL);
         }
 
