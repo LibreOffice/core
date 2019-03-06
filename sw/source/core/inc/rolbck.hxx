@@ -262,6 +262,8 @@ class SwHistoryBookmark : public SwHistoryHint
         std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndo;
 };
 
+/// History object containing all information used during undo / redo
+/// of checkbox and drop-down form field insertion.
 class SwHistoryNoTextFieldmark : public SwHistoryHint
 {
     public:
@@ -275,6 +277,8 @@ class SwHistoryNoTextFieldmark : public SwHistoryHint
         const sal_Int32 m_nContent;
 };
 
+/// History object containing all information used during undo / redo
+/// of text form field insertion.
 class SwHistoryTextFieldmark : public SwHistoryHint
 {
     public:
