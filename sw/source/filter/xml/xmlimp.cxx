@@ -1358,7 +1358,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     aExcludeWhenNotLoadingUserSettings.insert("TabOverMargin");
     aExcludeWhenNotLoadingUserSettings.insert("PropLineSpacingShrinksFirstLine");
     aExcludeWhenNotLoadingUserSettings.insert("SubtractFlysAnchoredAtFlys");
-    aExcludeWhenNotLoadingUserSettings.insert("DisableOffPagePositioning");
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
@@ -1392,7 +1391,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bTabOverMargin = false;
     bool bPropLineSpacingShrinksFirstLine = false;
     bool bSubtractFlysAnchoredAtFlys = false;
-    bool bDisableOffPagePositioning = false;
     bool bCollapseEmptyCellPara = false;
 
     const PropertyValue* currentDatabaseDataSource = nullptr;
@@ -1486,8 +1484,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bPropLineSpacingShrinksFirstLine = true;
                 else if (pValues->Name == "SubtractFlysAnchoredAtFlys")
                     bSubtractFlysAnchoredAtFlys = true;
-                else if (pValues->Name == "DisableOffPagePositioning")
-                    bDisableOffPagePositioning = true;
                 else if (pValues->Name == "CollapseEmptyCellPara")
                     bCollapseEmptyCellPara = true;
             }
@@ -1649,9 +1645,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     if (!bSubtractFlysAnchoredAtFlys)
         xProps->setPropertyValue("SubtractFlysAnchoredAtFlys", makeAny(true));
-
-    if ( bDisableOffPagePositioning )
-        xProps->setPropertyValue("DisableOffPagePositioning", makeAny(true));
 
     if (!bCollapseEmptyCellPara)
         xProps->setPropertyValue("CollapseEmptyCellPara", makeAny(false));
