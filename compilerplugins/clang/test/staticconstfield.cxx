@@ -15,7 +15,7 @@
 class Class1
 {
     OUString const
-        m_field1; // expected-error {{field can be static const [loplugin:staticconstfield]}}
+        m_field1; // expected-error {{const field can be static [loplugin:staticconstfield]}}
     Class1()
         : m_field1("xxxx")
     // expected-note@-1 {{init here [loplugin:staticconstfield]}}
@@ -27,7 +27,7 @@ class Class1
 class Class2
 {
     OString const
-        m_field2; // expected-error {{field can be static const [loplugin:staticconstfield]}}
+        m_field2; // expected-error {{const field can be static [loplugin:staticconstfield]}}
     Class2()
         : m_field2("yyyy")
     // expected-note@-1 {{init here [loplugin:staticconstfield]}}
@@ -54,12 +54,12 @@ class Class5
         ONE
     };
     float const
-        m_fielda1; // expected-error {{field can be static const [loplugin:staticconstfield]}}
-    int const m_fielda2; // expected-error {{field can be static const [loplugin:staticconstfield]}}
+        m_fielda1; // expected-error {{const field can be static [loplugin:staticconstfield]}}
+    int const m_fielda2; // expected-error {{const field can be static [loplugin:staticconstfield]}}
     bool const
-        m_fielda3; // expected-error {{field can be static const [loplugin:staticconstfield]}}
+        m_fielda3; // expected-error {{const field can be static [loplugin:staticconstfield]}}
     Enum const
-        m_fielda4; // expected-error {{field can be static const [loplugin:staticconstfield]}}
+        m_fielda4; // expected-error {{const field can be static [loplugin:staticconstfield]}}
     Class5()
         : m_fielda1(1.0)
         // expected-note@-1 {{init here [loplugin:staticconstfield]}}
