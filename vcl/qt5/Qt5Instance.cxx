@@ -219,6 +219,12 @@ Qt5Instance::Qt5Instance(bool bUseCairo)
             Qt::BlockingQueuedConnection);
     connect(this, &Qt5Instance::ImplRunInMainSignal, this, &Qt5Instance::ImplRunInMain,
             Qt::QueuedConnection); // no Blocking!
+
+    // this one needs to be queued non-blocking
+    // in order to have this event arriving to correct event processing loop
+    connect(this, &Qt5Instance::deleteObjectLaterSignal, this,
+            [](QObject* pObject) { Qt5Instance::deleteObjectLater(pObject); },
+            Qt::QueuedConnection);
 }
 
 Qt5Instance::~Qt5Instance()
@@ -229,6 +235,8 @@ Qt5Instance::~Qt5Instance()
     for (int i = 0; i < *m_pFakeArgc; i++)
         free(m_pFakeArgvFreeable[i]);
 }
+
+void Qt5Instance::deleteObjectLater(QObject* pObject) { pObject->deleteLater(); }
 
 SalFrame* Qt5Instance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle)
 {
@@ -246,7 +254,7 @@ void Qt5Instance::DestroyFrame(SalFrame* pFrame)
     if (pFrame)
     {
         assert(dynamic_cast<Qt5Frame*>(pFrame));
-        static_cast<Qt5Frame*>(pFrame)->deleteLater();
+        Q_EMIT deleteObjectLaterSignal(static_cast<Qt5Frame*>(pFrame));
     }
 }
 
@@ -261,7 +269,7 @@ void Qt5Instance::DestroyObject(SalObject* pObject)
     if (pObject)
     {
         assert(dynamic_cast<Qt5Object*>(pObject));
-        static_cast<Qt5Object*>(pObject)->deleteLater();
+        Q_EMIT deleteObjectLaterSignal(static_cast<Qt5Object*>(pObject));
     }
 }
 

@@ -53,10 +53,12 @@ public:
 private Q_SLOTS:
     bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
     void ImplRunInMain();
+    static void deleteObjectLater(QObject* pObject);
 
 Q_SIGNALS:
     bool ImplYieldSignal(bool bWait, bool bHandleAllCurrentEvents);
     void ImplRunInMainSignal();
+    void deleteObjectLaterSignal(QObject* pObject);
 
 public:
     explicit Qt5Instance(bool bUseCairo = false);
