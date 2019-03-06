@@ -163,6 +163,7 @@
                 <property name="use_underline">True</property>
                 <property name="popup">menu</property>
                 <property name="use_popover">False</property>
+                <property name="draw_indicator">True</property>
                 <child>
                   <placeholder/>
                 </child>
