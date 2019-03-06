@@ -10,6 +10,7 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include <unotest/bootstrapfixturebase.hxx>
 #include <svtools/parhtml.hxx>
 #include <tools/ref.hxx>
 #include <tools/stream.hxx>
@@ -45,17 +46,9 @@ void TestHTMLParser::NextToken(HtmlTokenId nToken)
 /// Tests HTMLParser.
 class Test : public CppUnit::TestFixture
 {
-public:
-    void testTdf114428();
-    void testLineBreak();
-
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testTdf114428);
-    CPPUNIT_TEST(testLineBreak);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void Test::testTdf114428()
+CPPUNIT_TEST_FIXTURE(Test, testTdf114428)
 {
     SvMemoryStream aStream;
     OString aDocument("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<html>hello</html>");
@@ -70,7 +63,7 @@ void Test::testTdf114428()
     CPPUNIT_ASSERT_EQUAL(OUString("hello"), xParser->m_aDocument.trim());
 }
 
-void Test::testLineBreak()
+CPPUNIT_TEST_FIXTURE(Test, testLineBreak)
 {
     SvMemoryStream aStream;
     OString aDocument("aaa<br></br>bbb");
@@ -84,8 +77,6 @@ void Test::testLineBreak()
     // This was 2, <br></br> was interpreted as 2 line breaks in XHTML mode.
     CPPUNIT_ASSERT_EQUAL(1, xParser->m_nLineBreakCount);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -14,6 +14,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
+#include <unotest/bootstrapfixturebase.hxx>
 #include <tools/stream.hxx>
 #include <svtools/HtmlWriter.hxx>
 
@@ -32,31 +33,9 @@ OString extractFromStream(SvMemoryStream& rStream)
 
 class Test: public CppUnit::TestFixture
 {
-
-public:
-    void testSingleElement();
-    void testSingleElementWithAttributes();
-    void testSingleElementWithContent();
-    void testSingleElementWithContentAndAttributes();
-    void testNested();
-    void testNamespace();
-    void testAttributeValues();
-    void testCharacters();
-
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testSingleElement);
-    CPPUNIT_TEST(testSingleElementWithAttributes);
-    CPPUNIT_TEST(testSingleElementWithContent);
-    CPPUNIT_TEST(testSingleElementWithContentAndAttributes);
-    CPPUNIT_TEST(testNested);
-    CPPUNIT_TEST(testNamespace);
-    CPPUNIT_TEST(testAttributeValues);
-    CPPUNIT_TEST(testCharacters);
-
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void Test::testSingleElement()
+CPPUNIT_TEST_FIXTURE(Test, testSingleElement)
 {
     {
         SvMemoryStream aStream;
@@ -83,7 +62,7 @@ void Test::testSingleElement()
     }
 }
 
-void Test::testSingleElementWithAttributes()
+CPPUNIT_TEST_FIXTURE(Test, testSingleElementWithAttributes)
 {
     {
         SvMemoryStream aStream;
@@ -115,7 +94,7 @@ void Test::testSingleElementWithAttributes()
     }
 }
 
-void Test::testSingleElementWithContent()
+CPPUNIT_TEST_FIXTURE(Test, testSingleElementWithContent)
 {
     SvMemoryStream aStream;
 
@@ -129,7 +108,7 @@ void Test::testSingleElementWithContent()
     CPPUNIT_ASSERT_EQUAL(OString("<abc/>"), aString);
 }
 
-void Test::testSingleElementWithContentAndAttributes()
+CPPUNIT_TEST_FIXTURE(Test, testSingleElementWithContentAndAttributes)
 {
     SvMemoryStream aStream;
 
@@ -145,7 +124,7 @@ void Test::testSingleElementWithContentAndAttributes()
     CPPUNIT_ASSERT_EQUAL(OString("<abc x=\"y\" q=\"w\"/>"), aString);
 }
 
-void Test::testNested()
+CPPUNIT_TEST_FIXTURE(Test, testNested)
 {
     SvMemoryStream aStream;
 
@@ -161,7 +140,7 @@ void Test::testNested()
     CPPUNIT_ASSERT_EQUAL(OString("<abc><xyz/></abc>"), aString);
 }
 
-void Test::testNamespace()
+CPPUNIT_TEST_FIXTURE(Test, testNamespace)
 {
     SvMemoryStream aStream;
 
@@ -175,7 +154,7 @@ void Test::testNamespace()
     CPPUNIT_ASSERT_EQUAL(OString("<reqif-xhtml:br/>"), aString);
 }
 
-void Test::testAttributeValues()
+CPPUNIT_TEST_FIXTURE(Test, testAttributeValues)
 {
     SvMemoryStream aStream;
 
@@ -192,7 +171,7 @@ void Test::testAttributeValues()
     CPPUNIT_ASSERT_EQUAL(OString("<abc one=\"one\" two=\"two\" three=\"12\"/>"), aString);
 }
 
-void Test::testCharacters()
+CPPUNIT_TEST_FIXTURE(Test, testCharacters)
 {
     SvMemoryStream aStream;
 
@@ -207,7 +186,6 @@ void Test::testCharacters()
     CPPUNIT_ASSERT_EQUAL(OString("<abc>hello</abc>"), aString);
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
