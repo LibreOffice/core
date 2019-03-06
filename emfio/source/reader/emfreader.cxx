@@ -1371,7 +1371,7 @@ namespace emfio
                                     }
 
     #ifdef DBG_UTIL
-                                    static bool bDoSaveForVisualControl(false);
+                                    static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
 
                                     if(bDoSaveForVisualControl)
                                     {

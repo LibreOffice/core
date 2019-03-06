@@ -79,7 +79,7 @@ namespace
                                 if(pLast)
                                 {
                                     bool bAddGap(true);
-                                    static bool bNoGapsForBaselineShift(true);
+                                    static bool bNoGapsForBaselineShift(true); // loplugin:constvars:ignore
 
                                     if(bNoGapsForBaselineShift)
                                     {

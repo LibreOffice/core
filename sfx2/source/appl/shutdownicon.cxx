@@ -123,7 +123,7 @@ extern "C" {
 
 namespace {
 
-boost::logic::tribool loaded(boost::logic::indeterminate);
+boost::logic::tribool loaded(boost::logic::indeterminate); // loplugin:constvars:ignore
 oslGenericFunction pInitSystray = disabled_initSystray;
 oslGenericFunction pDeInitSystray = disabled_deInitSystray;
 

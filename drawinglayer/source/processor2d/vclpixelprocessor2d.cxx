@@ -422,37 +422,24 @@ namespace drawinglayer
 
         void VclPixelProcessor2D::processWrongSpellPrimitive2D(const primitive2d::WrongSpellPrimitive2D& rWrongSpellPrimitive)
         {
-            // directdraw of wrong spell primitive; added test possibility to check wrong spell decompose
-            static bool bHandleWrongSpellDirectly(true);
-
-            if(bHandleWrongSpellDirectly)
+            if(!renderWrongSpellPrimitive2D(
+                rWrongSpellPrimitive,
+                *mpOutputDevice,
+                maCurrentTransformation,
+                maBColorModifierStack))
             {
-                if(!renderWrongSpellPrimitive2D(
-                    rWrongSpellPrimitive,
-                    *mpOutputDevice,
-                    maCurrentTransformation,
-                    maBColorModifierStack))
-                {
-                    // fallback to decomposition (MetaFile)
-                    process(rWrongSpellPrimitive);
-                }
-            }
-            else
-            {
+                // fallback to decomposition (MetaFile)
                 process(rWrongSpellPrimitive);
             }
         }
 
         void VclPixelProcessor2D::processTextSimplePortionPrimitive2D(const primitive2d::TextSimplePortionPrimitive2D& rCandidate)
         {
-            // directdraw of text simple portion; added test possibility to check text decompose
-            static bool bForceSimpleTextDecomposition(false);
-
             // Adapt evtl. used special DrawMode
             const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
             adaptTextToFillDrawMode();
 
-            if(!bForceSimpleTextDecomposition && getOptionsDrawinglayer().IsRenderSimpleTextDirect())
+            if(getOptionsDrawinglayer().IsRenderSimpleTextDirect())
             {
                 RenderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate);
             }
@@ -467,14 +454,11 @@ namespace drawinglayer
 
         void VclPixelProcessor2D::processTextDecoratedPortionPrimitive2D(const primitive2d::TextSimplePortionPrimitive2D& rCandidate)
         {
-            // directdraw of decorated text portion; added test possibility to check text decompose
-            static bool bForceComplexTextDecomposition(false);
-
             // Adapt evtl. used special DrawMode
             const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
             adaptTextToFillDrawMode();
 
-            if(!bForceComplexTextDecomposition && getOptionsDrawinglayer().IsRenderDecoratedTextDirect())
+            if(getOptionsDrawinglayer().IsRenderDecoratedTextDirect())
             {
                 RenderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate);
             }
@@ -489,10 +473,7 @@ namespace drawinglayer
 
         void VclPixelProcessor2D::processPolygonHairlinePrimitive2D(const primitive2d::PolygonHairlinePrimitive2D& rPolygonHairlinePrimitive2D)
         {
-            // try to use directly
-            static bool bAllowed(true);
-
-            if(bAllowed && tryDrawPolygonHairlinePrimitive2DDirect(rPolygonHairlinePrimitive2D, 0.0))
+            if(tryDrawPolygonHairlinePrimitive2DDirect(rPolygonHairlinePrimitive2D, 0.0))
             {
                 return;
             }
@@ -554,24 +535,9 @@ namespace drawinglayer
         {
             // try to use directly
             basegfx::B2DPolyPolygon aLocalPolyPolygon;
-            static bool bAllowed(true);
 
-            if(bAllowed)
-            {
-                tryDrawPolyPolygonColorPrimitive2DDirect(rPolyPolygonColorPrimitive2D, 0.0);
-                // okay, done. In this case no gaps should have to be repaired, too
-            }
-            else
-            {
-                // direct draw of tools::PolyPolygon with color
-                const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPolyPolygonColorPrimitive2D.getBColor()));
-
-                mpOutputDevice->SetFillColor(Color(aPolygonColor));
-                mpOutputDevice->SetLineColor();
-                aLocalPolyPolygon = rPolyPolygonColorPrimitive2D.getB2DPolyPolygon();
-                aLocalPolyPolygon.transform(maCurrentTransformation);
-                mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
-            }
+            tryDrawPolyPolygonColorPrimitive2DDirect(rPolyPolygonColorPrimitive2D, 0.0);
+            // okay, done. In this case no gaps should have to be repaired, too
 
             // when AA is on and this filled polygons are the result of stroked line geometry,
             // draw the geometry once extra as lines to avoid AA 'gaps' between partial polygons
@@ -617,11 +583,7 @@ namespace drawinglayer
                 {
                     bool bDrawTransparentUsed(false);
 
-                    // since DEV300 m33 DrawTransparent is supported in VCL (for some targets
-                    // natively), so i am now enabling this shortcut
-                    static bool bAllowUsingDrawTransparent(true);
-
-                    if(bAllowUsingDrawTransparent && 1 == rContent.size())
+                    if(1 == rContent.size())
                     {
                         const primitive2d::Primitive2DReference xReference(rContent[0]);
                         const primitive2d::BasePrimitive2D* pBasePrimitive = dynamic_cast< const primitive2d::BasePrimitive2D* >(xReference.get());
@@ -648,11 +610,9 @@ namespace drawinglayer
                                     // do no tallow by default - problem is that self-overlapping parts of this geometry will
                                     // not be in a all-same transparency but will already alpha-cover themselves with blending.
                                     // This is not what the UnifiedTransparencePrimitive2D defines: It requires all its
-                                    // content to be uniformely transparent.
+                                    // content to be uniformly transparent.
                                     // For hairline the effect is pretty minimal, but still not correct.
-                                    static bool bAllowed(false);
-
-                                    bDrawTransparentUsed = bAllowed && tryDrawPolygonHairlinePrimitive2DDirect(*pPoHair, rUniTransparenceCandidate.getTransparence());
+                                    bDrawTransparentUsed = false;
                                     break;
                                 }
                                 case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D:
@@ -664,11 +624,9 @@ namespace drawinglayer
                                     // do no tallow by default - problem is that self-overlapping parts of this geometry will
                                     // not be in a all-same transparency but will already alpha-cover themselves with blending.
                                     // This is not what the UnifiedTransparencePrimitive2D defines: It requires all its
-                                    // content to be uniformely transparent.
+                                    // content to be uniformly transparent.
                                     // To check, activate and draw a wide transparent self-crossing line/curve
-                                    static bool bAllowed(false);
-
-                                    bDrawTransparentUsed = bAllowed && tryDrawPolygonStrokePrimitive2DDirect(*pPoStroke, rUniTransparenceCandidate.getTransparence());
+                                    bDrawTransparentUsed = false;
                                     break;
                                 }
                             default:
@@ -754,28 +712,12 @@ namespace drawinglayer
             adaptLineToFillDrawMode();
 
             // polygon stroke primitive
-            static bool bSuppressFatToHairlineCorrection(false);
 
-            if(bSuppressFatToHairlineCorrection)
-            {
-                // remember that we enter a PolygonStrokePrimitive2D decomposition,
-                // used for AA thick line drawing
-                mnPolygonStrokePrimitive2D++;
-
-                // with AA there is no need to handle thin lines special
-                process(rPolygonStrokePrimitive2D);
-
-                // leave PolygonStrokePrimitive2D
-                mnPolygonStrokePrimitive2D--;
-            }
-            else
-            {
-                // Lines with 1 and 2 pixel width without AA need special treatment since their vsiualisation
-                // as filled polygons is geometrically correct but looks wrong since polygon filling avoids
-                // the right and bottom pixels. The used method evaluates that and takes the correct action,
-                // including calling recursively with decomposition if line is wide enough
-                RenderPolygonStrokePrimitive2D(rPolygonStrokePrimitive2D);
-            }
+            // Lines with 1 and 2 pixel width without AA need special treatment since their vsiualisation
+            // as filled polygons is geometrically correct but looks wrong since polygon filling avoids
+            // the right and bottom pixels. The used method evaluates that and takes the correct action,
+            // including calling recursively with decomposition if line is wide enough
+            RenderPolygonStrokePrimitive2D(rPolygonStrokePrimitive2D);
 
             // restore DrawMode
             mpOutputDevice->SetDrawMode(nOriginalDrawMode);
@@ -783,72 +725,61 @@ namespace drawinglayer
 
         void VclPixelProcessor2D::processFillHatchPrimitive2D(const primitive2d::FillHatchPrimitive2D& rFillHatchPrimitive)
         {
-            static bool bForceIgnoreHatchSmoothing(false);
+            // without AA, use VCL to draw the hatch. It snaps hatch distances to the next pixel
+            // and forces hatch distance to be >= 3 pixels to make the hatch display look smoother.
+            // This is wrong in principle, but looks nicer. This could also be done here directly
+            // without VCL usage if needed
+            const attribute::FillHatchAttribute& rFillHatchAttributes = rFillHatchPrimitive.getFillHatch();
 
-            if(bForceIgnoreHatchSmoothing || getOptionsDrawinglayer().IsAntiAliasing())
+            // create hatch polygon in range size and discrete coordinates
+            basegfx::B2DRange aHatchRange(rFillHatchPrimitive.getOutputRange());
+            aHatchRange.transform(maCurrentTransformation);
+            const basegfx::B2DPolygon aHatchPolygon(basegfx::utils::createPolygonFromRect(aHatchRange));
+
+            if(rFillHatchAttributes.isFillBackground())
             {
-                // if AA is used (or ignore smoothing is on), there is no need to smooth
-                // hatch painting, use decomposition
-                process(rFillHatchPrimitive);
+                // #i111846# background fill is active; draw fill polygon
+                const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rFillHatchPrimitive.getBColor()));
+
+                mpOutputDevice->SetFillColor(Color(aPolygonColor));
+                mpOutputDevice->SetLineColor();
+                mpOutputDevice->DrawPolygon(aHatchPolygon);
             }
-            else
+
+            // set hatch line color
+            const basegfx::BColor aHatchColor(maBColorModifierStack.getModifiedColor(rFillHatchPrimitive.getBColor()));
+            mpOutputDevice->SetFillColor();
+            mpOutputDevice->SetLineColor(Color(aHatchColor));
+
+            // get hatch style
+            HatchStyle eHatchStyle(HatchStyle::Single);
+
+            switch(rFillHatchAttributes.getStyle())
             {
-                // without AA, use VCL to draw the hatch. It snaps hatch distances to the next pixel
-                // and forces hatch distance to be >= 3 pixels to make the hatch display look smoother.
-                // This is wrong in principle, but looks nicer. This could also be done here directly
-                // without VCL usage if needed
-                const attribute::FillHatchAttribute& rFillHatchAttributes = rFillHatchPrimitive.getFillHatch();
-
-                // create hatch polygon in range size and discrete coordinates
-                basegfx::B2DRange aHatchRange(rFillHatchPrimitive.getOutputRange());
-                aHatchRange.transform(maCurrentTransformation);
-                const basegfx::B2DPolygon aHatchPolygon(basegfx::utils::createPolygonFromRect(aHatchRange));
-
-                if(rFillHatchAttributes.isFillBackground())
+                default : // HatchStyle::Single
                 {
-                    // #i111846# background fill is active; draw fill polygon
-                    const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rFillHatchPrimitive.getBColor()));
-
-                    mpOutputDevice->SetFillColor(Color(aPolygonColor));
-                    mpOutputDevice->SetLineColor();
-                    mpOutputDevice->DrawPolygon(aHatchPolygon);
+                    break;
                 }
-
-                // set hatch line color
-                const basegfx::BColor aHatchColor(maBColorModifierStack.getModifiedColor(rFillHatchPrimitive.getBColor()));
-                mpOutputDevice->SetFillColor();
-                mpOutputDevice->SetLineColor(Color(aHatchColor));
-
-                // get hatch style
-                HatchStyle eHatchStyle(HatchStyle::Single);
-
-                switch(rFillHatchAttributes.getStyle())
+                case attribute::HatchStyle::Double :
                 {
-                    default : // HatchStyle::Single
-                    {
-                        break;
-                    }
-                    case attribute::HatchStyle::Double :
-                    {
-                        eHatchStyle = HatchStyle::Double;
-                        break;
-                    }
-                    case attribute::HatchStyle::Triple :
-                    {
-                        eHatchStyle = HatchStyle::Triple;
-                        break;
-                    }
+                    eHatchStyle = HatchStyle::Double;
+                    break;
                 }
-
-                // create hatch
-                const basegfx::B2DVector aDiscreteDistance(maCurrentTransformation * basegfx::B2DVector(rFillHatchAttributes.getDistance(), 0.0));
-                const sal_uInt32 nDistance(basegfx::fround(aDiscreteDistance.getLength()));
-                const sal_uInt16 nAngle10(static_cast<sal_uInt16>(basegfx::fround(rFillHatchAttributes.getAngle() / F_PI1800)));
-                ::Hatch aVCLHatch(eHatchStyle, Color(rFillHatchAttributes.getColor()), nDistance, nAngle10);
-
-                // draw hatch using VCL
-                mpOutputDevice->DrawHatch(::tools::PolyPolygon(::tools::Polygon(aHatchPolygon)), aVCLHatch);
+                case attribute::HatchStyle::Triple :
+                {
+                    eHatchStyle = HatchStyle::Triple;
+                    break;
+                }
             }
+
+            // create hatch
+            const basegfx::B2DVector aDiscreteDistance(maCurrentTransformation * basegfx::B2DVector(rFillHatchAttributes.getDistance(), 0.0));
+            const sal_uInt32 nDistance(basegfx::fround(aDiscreteDistance.getLength()));
+            const sal_uInt16 nAngle10(static_cast<sal_uInt16>(basegfx::fround(rFillHatchAttributes.getAngle() / F_PI1800)));
+            ::Hatch aVCLHatch(eHatchStyle, Color(rFillHatchAttributes.getColor()), nDistance, nAngle10);
+
+            // draw hatch using VCL
+            mpOutputDevice->DrawHatch(::tools::PolyPolygon(::tools::Polygon(aHatchPolygon)), aVCLHatch);
         }
 
         void VclPixelProcessor2D::processBackgroundColorPrimitive2D(const primitive2d::BackgroundColorPrimitive2D& rPrimitive)

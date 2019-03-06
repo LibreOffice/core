@@ -87,7 +87,7 @@ namespace drawinglayer
             if(pContentProcessor)
             {
 #ifdef DBG_UTIL
-                static bool bDoSaveForVisualControl(false);
+                static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
 #endif
                 // render content
                 pContentProcessor->process(aSequence);

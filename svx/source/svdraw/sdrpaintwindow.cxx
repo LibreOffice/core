@@ -162,23 +162,6 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegio
             aTopLeft, aSize,
             aTopLeft, aSize,
             *mpPreRenderDevice);
-
-#ifdef DBG_UTIL
-        // #i74769#
-        static bool bDoPaintForVisualControlRegion(false);
-
-        if(bDoPaintForVisualControlRegion)
-        {
-            int nR = comphelper::rng::uniform_int_distribution(0, 0x7F-1);
-            int nG = comphelper::rng::uniform_int_distribution(0, 0x7F-1);
-            int nB = comphelper::rng::uniform_int_distribution(0, 0x7F-1);
-            const Color aColor(((((nR|0x80)<<8)|(nG|0x80))<<8)|(nB|0x80));
-
-            mpOutputDevice->SetLineColor(aColor);
-            mpOutputDevice->SetFillColor();
-            mpOutputDevice->DrawRect(rRect);
-        }
-#endif
     }
 
     mpOutputDevice->EnableMapMode(bMapModeWasEnabledDest);

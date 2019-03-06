@@ -123,18 +123,6 @@ namespace sdr
 
             for(const auto& rRect : aRectangles)
             {
-#ifdef DBG_UTIL
-                // #i72754# possible graphical region test only with non-pro
-                static bool bDoPaintForVisualControl(false);
-
-                if(bDoPaintForVisualControl)
-                {
-                    getOutputDevice().SetLineColor(COL_LIGHTGREEN);
-                    getOutputDevice().SetFillColor();
-                    getOutputDevice().DrawRect(rRect);
-                }
-#endif
-
                 // restore the area
                 const Point aTopLeft(rRect.TopLeft());
                 const Size aSize(rRect.GetSize());

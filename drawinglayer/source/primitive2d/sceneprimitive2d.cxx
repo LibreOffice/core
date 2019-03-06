@@ -365,7 +365,7 @@ namespace drawinglayer
                         nOversampleValue ? nRasterHeight * nOversampleValue : nRasterHeight);
 
                     // check for parallel execution possibilities
-                    static bool bMultithreadAllowed = true;
+                    static bool bMultithreadAllowed = true; // loplugin:constvars:ignore
                     sal_Int32 nThreadCount(0);
                     comphelper::ThreadPool& rThreadPool(comphelper::ThreadPool::getSharedOptimalPool());
 
@@ -469,7 +469,7 @@ namespace drawinglayer
                         rContainer.push_back(new BitmapPrimitive2D(maOldRenderedBitmap, aNew2DTransform));
 
                         // test: Allow to add an outline in the debugger when tests are needed
-                        static bool bAddOutlineToCreated3DSceneRepresentation(false);
+                        static bool bAddOutlineToCreated3DSceneRepresentation(false); // loplugin:constvars:ignore
 
                         if(bAddOutlineToCreated3DSceneRepresentation)
                         {

@@ -1051,7 +1051,7 @@ template<class Function>
 static ScMatrixRef lcl_MatrixCalculation(
     const ScMatrix& rMat1, const ScMatrix& rMat2, ScInterpreter* pInterpreter)
 {
-    static Function Op;
+    static const Function Op;
 
     SCSIZE nC1, nC2, nMinC;
     SCSIZE nR1, nR2, nMinR;

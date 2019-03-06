@@ -516,20 +516,9 @@ namespace drawinglayer
                 }
                 case PRIMITIVE3D_ID_HATCHTEXTUREPRIMITIVE3D :
                 {
-                    // HatchTexturePrimitive3D
-                    static bool bDoHatchDecomposition(false);
-
-                    if(bDoHatchDecomposition)
-                    {
-                        // let break down
-                        process(rBasePrimitive.get3DDecomposition(getViewInformation3D()));
-                    }
-                    else
-                    {
-                        // hatchTexturePrimitive3D
-                        const primitive3d::HatchTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::HatchTexturePrimitive3D& >(rBasePrimitive);
-                        impRenderHatchTexturePrimitive3D(rPrimitive);
-                    }
+                    // hatchTexturePrimitive3D
+                    const primitive3d::HatchTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::HatchTexturePrimitive3D& >(rBasePrimitive);
+                    impRenderHatchTexturePrimitive3D(rPrimitive);
                     break;
                 }
                 case PRIMITIVE3D_ID_BITMAPTEXTUREPRIMITIVE3D :

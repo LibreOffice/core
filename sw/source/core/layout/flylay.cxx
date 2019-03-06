@@ -301,7 +301,7 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
 bool SwFlyFreeFrame::supportsAutoContour() const
 {
-    static bool bOverrideHandleContourToAlwaysOff(true);
+    static bool bOverrideHandleContourToAlwaysOff(true); // loplugin:constvars:ignore
 
     // RotateFlyFrameFix: For LO6.0 we need to deactivate the AutoContour feature again, it is simply
     // not clear how/if to use and save/load it in ODF. This has to be discussed.

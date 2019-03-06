@@ -1408,9 +1408,6 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
     }
     else // no palette => truecolor
     {
-        // #i122985# Added fast-lane implementations using CopyScanline with direct supported mem formats
-        static bool bCkeckDirectScanline(true);
-
         if( mbAlphaChannel )
         {
             // has RGB + alpha
@@ -1419,7 +1416,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 // ScanlineFormat::N32BitTcRgba
                 // only use DirectScanline when we have no preview shifting stuff and accesses to content and alpha
                 const bool bDoDirectScanline(
-                    bCkeckDirectScanline && !nXStart && 1 == nXAdd && !mnPreviewShift && mpMaskAcc);
+                    !nXStart && 1 == nXAdd && !mnPreviewShift && mpMaskAcc);
                 const bool bCustomColorTable(mpColorTable != mpDefaultColorTable);
 
                 if(bDoDirectScanline)
@@ -1566,7 +1563,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
             // ScanlineFormat::N24BitTcRgb
             // only use DirectScanline when we have no preview shifting stuff and access to content
             const bool bDoDirectScanline(
-                bCkeckDirectScanline && !nXStart && 1 == nXAdd && !mnPreviewShift);
+                !nXStart && 1 == nXAdd && !mnPreviewShift);
             const bool bCustomColorTable(mpColorTable != mpDefaultColorTable);
 
             if(bDoDirectScanline && !mpScanline)

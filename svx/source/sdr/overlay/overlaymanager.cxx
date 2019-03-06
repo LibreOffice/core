@@ -128,15 +128,10 @@ namespace sdr
         {
             // set Property 'ReducedDisplayQuality' to true to allow simpler interaction
             // visualisations
-            static bool bUseReducedDisplayQualityForDrag(true);
-
-            if(bUseReducedDisplayQualityForDrag)
-            {
-                uno::Sequence< beans::PropertyValue > xProperties(1);
-                xProperties[0].Name = "ReducedDisplayQuality";
-                xProperties[0].Value <<= true;
-                maViewInformation2D = drawinglayer::geometry::ViewInformation2D(xProperties);
-            }
+            uno::Sequence< beans::PropertyValue > xProperties(1);
+            xProperties[0].Name = "ReducedDisplayQuality";
+            xProperties[0].Value <<= true;
+            maViewInformation2D = drawinglayer::geometry::ViewInformation2D(xProperties);
         }
 
         rtl::Reference<OverlayManager> OverlayManager::create(OutputDevice& rOutputDevice)

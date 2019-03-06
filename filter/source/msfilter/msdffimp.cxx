@@ -2619,7 +2619,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
     }
     if ( bHasShadow )
     {
-        static bool bCheckShadow(false);
+        static bool bCheckShadow(false); // loplugin:constvars:ignore
 
         // #i124477# Found no reason not to set shadow, esp. since it is applied to evtl. existing text
         // and will lead to an error if in PPT someone used text and added the object shadow to the

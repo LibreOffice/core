@@ -172,7 +172,7 @@ static GDIMetaFile writeAndRead(GDIMetaFile& rMetaFile, const OUString& sUrl)
     // Turn on to output the SVM bitstreams to files (using the input URL)
     // to inspect the content or to create a reference file, otherwise leave
     // disabled for normal test runs.
-    static bool bOutputToFile = false;
+    static const bool bOutputToFile = false;
 
     if (bOutputToFile)
     {

@@ -134,8 +134,6 @@ static const sal_uInt16 SidArray[] = {
                             0 };
 
 
-static bool bTestText = false;
-
 /**
  * base class for text functions
  */
@@ -1242,8 +1240,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
     if (nSlotId == SID_TEXTEDIT)
     {
         // are we currently editing?
-        if(!bTestText)
-            mxTextObj.reset( mpView->GetTextEditObject() );
+        mxTextObj.reset( mpView->GetTextEditObject() );
 
         if (!mxTextObj.is())
         {

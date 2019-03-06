@@ -101,7 +101,7 @@ ViewObjectContact& ViewContactOfPageShadow::CreateObjectSpecificViewObjectContac
 
 drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageShadow::createViewIndependentPrimitive2DSequence() const
 {
-    static bool bUseOldPageShadow(false);
+    static bool bUseOldPageShadow(false); // loplugin:constvars:ignore
     const SdrPage& rPage = getPage();
     basegfx::B2DHomMatrix aPageMatrix;
     aPageMatrix.set(0, 0, static_cast<double>(rPage.GetWidth()));

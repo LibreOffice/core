@@ -1179,10 +1179,9 @@ void OutputDevice::DrawTransformedBitmapEx(
     const bool bMirroredX(basegfx::fTools::less(aScale.getX(), 0.0));
     const bool bMirroredY(basegfx::fTools::less(aScale.getY(), 0.0));
 
-    static bool bForceToOwnTransformer(false);
     const bool bMetafile = mpMetaFile != nullptr;
 
-    if(!bForceToOwnTransformer && !bRotated && !bSheared && !bMirroredX && !bMirroredY)
+    if(!bRotated && !bSheared && !bMirroredX && !bMirroredY)
     {
         // with no rotation, shear or mirroring it can be mapped to DrawBitmapEx
         // do *not* execute the mirroring here, it's done in the fallback
@@ -1215,7 +1214,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     const basegfx::B2DHomMatrix aFullTransform(GetViewTransformation() * rTransformation);
     const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !bMetafile );
 
-    if(!bForceToOwnTransformer && bTryDirectPaint)
+    if(bTryDirectPaint)
     {
         bDone = DrawTransformBitmapExDirect(aFullTransform, rBitmapEx);
     }
@@ -1223,7 +1222,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     if(!bDone)
     {
         // take the fallback when no rotate and shear, but mirror (else we would have done this above)
-        if(!bForceToOwnTransformer && !bRotated && !bSheared)
+        if(!bRotated && !bSheared)
         {
             // with no rotation or shear it can be mapped to DrawBitmapEx
             // do *not* execute the mirroring here, it's done in the fallback
@@ -1258,7 +1257,6 @@ void OutputDevice::DrawTransformedBitmapEx(
 
         if(!aVisibleRange.isEmpty())
         {
-            static bool bDoSmoothAtAll(true);
             BitmapEx aTransformed(rBitmapEx);
 
             // #122923# when the result needs an alpha channel due to being rotated or sheared
@@ -1279,7 +1277,7 @@ void OutputDevice::DrawTransformedBitmapEx(
                 aFullTransform,
                 aVisibleRange,
                 fMaximumArea,
-                bDoSmoothAtAll);
+                /*bDoSmoothAtAll*/true);
             basegfx::B2DRange aTargetRange(0.0, 0.0, 1.0, 1.0);
 
             // get logic object target range

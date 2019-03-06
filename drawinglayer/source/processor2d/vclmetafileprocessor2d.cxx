@@ -922,7 +922,7 @@ namespace drawinglayer
         {
             bool bUsingPDFExtOutDevData(false);
             basegfx::B2DVector aTranslate, aScale;
-            static bool bSuppressPDFExtOutDevDataSupport(false);
+            static bool bSuppressPDFExtOutDevDataSupport(false); // loplugin:constvars:ignore
 
             if(mpPDFExtOutDevData && !bSuppressPDFExtOutDevDataSupport)
             {
@@ -1247,7 +1247,7 @@ namespace drawinglayer
         void VclMetafileProcessor2D::processTextHierarchyParagraphPrimitive2D(const primitive2d::TextHierarchyParagraphPrimitive2D& rParagraphPrimitive)
         {
             const OString aCommentString("XTEXT_EOP");
-            static bool bSuppressPDFExtOutDevDataSupport(false);
+            static bool bSuppressPDFExtOutDevDataSupport(false); // loplugin:constvars:ignore
 
             if(nullptr == mpPDFExtOutDevData || bSuppressPDFExtOutDevDataSupport)
             {
@@ -1995,7 +1995,7 @@ namespace drawinglayer
                     // try to identify a single PolyPolygonColorPrimitive2D in the
                     // content part of the transparence primitive
                     const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = nullptr;
-                    static bool bForceToMetafile(false);
+                    static bool bForceToMetafile(false); // loplugin:constvars:ignore
 
                     if(!bForceToMetafile && 1 == rContent.size())
                     {
@@ -2089,7 +2089,7 @@ namespace drawinglayer
                 // try to identify a single FillGradientPrimitive2D in the
                 // transparence part of the primitive
                 const primitive2d::FillGradientPrimitive2D* pFiGradient = nullptr;
-                static bool bForceToBigTransparentVDev(false);
+                static bool bForceToBigTransparentVDev(false); // loplugin:constvars:ignore
 
                 if(!bForceToBigTransparentVDev && 1 == rTransparence.size())
                 {
