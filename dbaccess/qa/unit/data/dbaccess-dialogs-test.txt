@@ -33,6 +33,22 @@
 # currently deactivated, leads to problems and the test to not work
 # This is typically a hint that these should be hard-coded in the
 # test case since they need some document and model data to work
+# dbaccess/ui/joindialog.ui <- not calling ORelationControl::lateInit for
+#   DlgQryJoin::m_pTableControl member OTableListBoxControl::m_pRC_Tables leaves its
+#   BrowseBox::mvCols empty, causing "implicit conversion from type 'int' of value -1 (32-bit,
+#   signed) to type 'sal_uInt16' (aka 'unsigned short') changed the value to 65535 (16-bit,
+#   unsigned)" when calling
+#     GetColumnId( static_cast<sal_uInt16>(mvCols.size()) - 1 );
+#   in BrowseBox::AutoSizeLastColumn (svtools/source/brwbox/brwbox1.cxx) with Clang
+#   -fsanitize=implicit-signed-integer-truncation
+# dbaccess/ui/relationdialog.ui <- not calling ORelationControl::lateInit for
+#   ORelationDialog::m_xTableControl member OTableListBoxControl::m_pRC_Tables leaves its
+#   BrowseBox::mvCols empty, causing "implicit conversion from type 'int' of value -1 (32-bit,
+#   signed) to type 'sal_uInt16' (aka 'unsigned short') changed the value to 65535 (16-bit,
+#   unsigned)" when calling
+#     GetColumnId( static_cast<sal_uInt16>(mvCols.size()) - 1 );
+#   in BrowseBox::AutoSizeLastColumn (svtools/source/brwbox/brwbox1.cxx) with Clang
+#   -fsanitize=implicit-signed-integer-truncation
 # dbaccess/ui/rtfcopytabledialog.ui -> hangs execution, seems to wait for interaction somehow (?)
 
 dbaccess/ui/advancedsettingsdialog.ui
@@ -88,11 +104,9 @@ dbaccess/ui/parametersdialog.ui
 dbaccess/ui/queryfilterdialog.ui
 dbaccess/ui/sortdialog.ui
 dbaccess/ui/querypropertiesdialog.ui
-dbaccess/ui/relationdialog.ui
 dbaccess/ui/sqlexception.ui
 dbaccess/ui/textconnectionsettings.ui
 dbaccess/ui/password.ui
-dbaccess/ui/joindialog.ui
 dbaccess/ui/tablesfilterdialog.ui
 dbaccess/ui/tablesjoindialog.ui
 dbaccess/ui/savemodifieddialog.ui
