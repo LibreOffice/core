@@ -2213,20 +2213,31 @@ namespace drawinglayer
         {
             // structured tag primitive
             const vcl::PDFWriter::StructElement& rTagElement(rStructureTagCandidate.getStructureElement());
-            const bool bTagUsed(vcl::PDFWriter::NonStructElement != rTagElement);
-            const bool bIsBackground(rStructureTagCandidate.isBackground());
+            bool bTagUsed((vcl::PDFWriter::NonStructElement != rTagElement));
 
             if(mpPDFExtOutDevData && bTagUsed)
             {
-                // Write start tag. For background elements use NonStructElement instead of real element type (e.g. Figure)
-                // to guarantee it gets exported as artifact (tagged PDF)
-                mpPDFExtOutDevData->BeginStructureElement(bIsBackground ? vcl::PDFWriter::NonStructElement : rTagElement);
+                // foreground object: tag as regular structure element
+                if (!rStructureTagCandidate.isBackground())
+                {
+                    mpPDFExtOutDevData->BeginStructureElement(rTagElement);
+                }
+                // background object
+                else
+                {
+                    // background image: tag as artifact
+                    if (rStructureTagCandidate.isImage())
+                        mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::NonStructElement);
+                    // any other background object: do not tag
+                    else
+                        bTagUsed = false;
+                }
             }
 
             // process children normally
             process(rStructureTagCandidate.getChildren());
 
-            if(mpPDFExtOutDevData &&  bTagUsed)
+            if(mpPDFExtOutDevData && bTagUsed)
             {
                 // write end tag
                 mpPDFExtOutDevData->EndStructureElement();
