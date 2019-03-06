@@ -98,6 +98,7 @@ private:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
 
+/// Handling undo / redo of checkbox and drop-down form field insertion
 class SwUndoInsNoTextFieldmark : public SwUndo
 {
 private:
@@ -110,6 +111,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
 
+/// Handling undo / redo of text form field insertion
 class SwUndoInsTextFieldmark : public SwUndo
 {
 private:
