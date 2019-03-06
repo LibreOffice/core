@@ -29,4 +29,8 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,zlib,\
 	UnpackedTarball/zlib/zutil \
 ))
 
+ifeq ($(ENABLE_DEBUG),TRUE)
+$(eval $(call gb_StaticLibrary_add_cflags,zlib,-DZLIB_DEBUG))
+endif
+
 # vim: set noet sw=4 ts=4:
