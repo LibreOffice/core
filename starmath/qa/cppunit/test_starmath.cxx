@@ -20,7 +20,6 @@
 #include <sfx2/dispatch.hxx>
 
 #include <editeng/editeng.hxx>
-#include <editeng/editview.hxx>
 
 #include <sfx2/zoomitem.hxx>
 #include <starmath.hrc>

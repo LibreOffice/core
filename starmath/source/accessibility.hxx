@@ -33,9 +33,9 @@
 #include <editeng/editeng.hxx>
 #include <editeng/unoedsrc.hxx>
 #include <edit.hxx>
+#include <view.hxx>
 #include <memory>
 
-class SmGraphicWindow;
 class SmDocShell;
 
 namespace accessibility { class AccessibleTextHelper; }

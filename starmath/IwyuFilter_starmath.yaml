@@ -13,3 +13,19 @@ blacklist:
     # Base class needs complete type
     - com/sun/star/document/XExtendedFilterDetection.hpp
     - com/sun/star/lang/XServiceInfo.hpp
+    starmath/source/accessibility.cxx:
+    # Needed for implicit dtor
+    - editeng/editobj.hxx
+    starmath/source/smdll.cxx:
+    # Needed to inherit linker visibility
+    - smdll.hxx
+    starmath/source/typemap.cxx:
+    # Needed for smslots.hxx to build
+    - config_options.h
+    - sfx2/msg.hxx
+    - sfx2/zoomitem.hxx
+    - svx/zoomslideritem.hxx
+    - svl/slstitm.hxx
+    starmath/source/unodoc.cxx:
+    # Avoid loplugin:unreffun error
+    - register.hxx

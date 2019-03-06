@@ -10,7 +10,6 @@
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
 
-#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <smdll.hxx>

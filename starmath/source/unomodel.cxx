@@ -32,7 +32,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/formula/SymbolDescriptor.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>

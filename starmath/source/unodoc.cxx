@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/sfxmodelfactory.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include "register.hxx"
 #include <smdll.hxx>

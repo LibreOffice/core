@@ -9,7 +9,6 @@
 
 #include "mathmlattr.hxx"
 
-#include <cassert>
 #include <unordered_map>
 
 static sal_Int32 ParseMathMLUnsignedNumber(const OUString &rStr, Fraction& rUN)
