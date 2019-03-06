@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_11695624",
+        "filename": "chart2/source/controller/chartapiwrapper/DataSeriesPointWrapper.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-03-06T09:08:02Z",
+      "side": 1,
+      "message": "It would be better to move back these into the block of the condition \"if( rPropertyName \u003d\u003d \"FillColor\" )\".",
+      "range": {
+        "startLine": 819,
+        "startChar": 1,
+        "endLine": 825,
+        "endChar": 31
+      },
+      "revId": "dab213528c27826224cb4bca9fc066b1d5920b01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
