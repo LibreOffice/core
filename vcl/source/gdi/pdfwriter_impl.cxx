@@ -10750,7 +10750,7 @@ void PDFWriterImpl::beginStructureElementMCSeq()
              )
     {
         OStringBuffer aLine( 128 );
-        aLine.append( "/Artifact BMC\n" );
+        aLine.append( "/Artifact <<>>BDC\n" );
         writeBuffer( aLine.getStr(), aLine.getLength() );
         // mark element MC sequence as open
         m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq = true;
