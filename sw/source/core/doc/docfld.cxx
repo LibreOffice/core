@@ -244,6 +244,14 @@ bool SetGetExpField::operator<( const SetGetExpField& rField ) const
             if( pFirst->IsTextNode() && pNext->IsTextNode() &&
                 ( pFirst->FindFlyStartNode() || pNext->FindFlyStartNode() ))
             {
+                // FIXME: in NewFieldPortion(), SwGetExpField are expanded via
+                // DocumentFieldsManager::FieldsToExpand() calling
+                // std::upper_bound binary search function - the sort order
+                // depends on the fly positions in the layout, but the fly
+                // positions depend on the expansion of the SwGetExpField!
+                // This circular dep will cause trouble, it would be better to
+                // use only model positions (anchor), but then how to compare
+                // at-page anchored flys which don't have a model anchor?
                 return ::IsFrameBehind( *pNext->GetTextNode(), m_nContent, *pFirst->GetTextNode(), m_nContent );
             }
             return pFirstStt->GetIndex() < pNextStt->GetIndex();
