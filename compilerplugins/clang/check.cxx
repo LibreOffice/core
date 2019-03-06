@@ -280,6 +280,35 @@ bool isOkToRemoveArithmeticCast(
     return true;
 }
 
+
+static bool BaseCheckNotSubclass(const clang::CXXRecordDecl *BaseDefinition, void *p) {
+    if (!BaseDefinition)
+        return true;
+    auto const & base = *static_cast<const DeclChecker *>(p);
+    if (base(BaseDefinition)) {
+        return false;
+    }
+    return true;
+}
+
+bool isDerivedFrom(const clang::CXXRecordDecl *decl, DeclChecker base) {
+    if (!decl)
+        return false;
+    if (base(decl))
+        return true;
+    if (!decl->hasDefinition()) {
+        return false;
+    }
+    if (!decl->forallBases(
+            [&base](const clang::CXXRecordDecl *BaseDefinition) -> bool
+                { return BaseCheckNotSubclass(BaseDefinition, &base); },
+            true))
+    {
+        return true;
+    }
+    return false;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

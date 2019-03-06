@@ -140,6 +140,12 @@ private:
     bool const satisfied_;
 };
 
+
+typedef std::function<bool(clang::Decl const *)> DeclChecker;
+// Returns true if the class has a base matching the checker, or if the class itself matches.
+bool isDerivedFrom(const clang::CXXRecordDecl *decl, DeclChecker base);
+
+
 namespace detail {
 
 ContextCheck checkRecordDecl(

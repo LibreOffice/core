@@ -35,7 +35,7 @@ not delete on last 'release'.
 
 */
 
-namespace {
+namespace loplugin {
 
 class RefCounting:
     public loplugin::FilteringPlugin<RefCounting>
@@ -71,37 +71,6 @@ private:
 
     bool visitTemporaryObjectExpr(Expr const * expr);
 };
-
-typedef std::function<bool(Decl const *)> DeclChecker;
-
-bool BaseCheckNotSubclass(const CXXRecordDecl *BaseDefinition, void *p) {
-    if (!BaseDefinition)
-        return true;
-    auto const & base = *static_cast<const DeclChecker *>(p);
-    if (base(BaseDefinition)) {
-        return false;
-    }
-    return true;
-}
-
-bool isDerivedFrom(const CXXRecordDecl *decl, DeclChecker base) {
-    if (!decl)
-        return false;
-    if (base(decl))
-        return true;
-    if (!decl->hasDefinition()) {
-        return false;
-    }
-    if (!decl->forallBases(
-            [&base](const CXXRecordDecl *BaseDefinition) -> bool
-                { return BaseCheckNotSubclass(BaseDefinition, &base); },
-            true))
-    {
-        return true;
-    }
-    return false;
-}
-
 
 bool containsXInterfaceSubclass(const clang::Type* pType0);
 
