@@ -1409,7 +1409,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
     else // no palette => truecolor
     {
         // #i122985# Added fast-lane implementations using CopyScanline with direct supported mem formats
-        static bool bCkeckDirectScanline(true);
+        static bool bCkeckDirectScanline(true); // loplugin:constvars:ignore
 
         if( mbAlphaChannel )
         {

@@ -128,7 +128,7 @@ namespace sdr
         {
             // set Property 'ReducedDisplayQuality' to true to allow simpler interaction
             // visualisations
-            static bool bUseReducedDisplayQualityForDrag(true);
+            static bool bUseReducedDisplayQualityForDrag(true); // loplugin:constvars:ignore
 
             if(bUseReducedDisplayQualityForDrag)
             {

@@ -165,7 +165,7 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegio
 
 #ifdef DBG_UTIL
         // #i74769#
-        static bool bDoPaintForVisualControlRegion(false);
+        static bool bDoPaintForVisualControlRegion(false); // loplugin:constvars:ignore
 
         if(bDoPaintForVisualControlRegion)
         {

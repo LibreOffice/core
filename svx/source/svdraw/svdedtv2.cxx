@@ -1089,7 +1089,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
         case SdrMergeMode::Merge:
         {
             // merge all contained parts (OR)
-            static bool bTestXOR(false);
+            static bool bTestXOR(false); // loplugin:constvars:ignore
             if(bTestXOR)
             {
                 aMergePolyPolygonA = basegfx::utils::solvePolygonOperationXor(aMergePolyPolygonA, aMergePolyPolygonB);

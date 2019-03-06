@@ -1179,7 +1179,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     const bool bMirroredX(basegfx::fTools::less(aScale.getX(), 0.0));
     const bool bMirroredY(basegfx::fTools::less(aScale.getY(), 0.0));
 
-    static bool bForceToOwnTransformer(false);
+    static bool bForceToOwnTransformer(false); // loplugin:constvars:ignore
     const bool bMetafile = mpMetaFile != nullptr;
 
     if(!bForceToOwnTransformer && !bRotated && !bSheared && !bMirroredX && !bMirroredY)
@@ -1258,7 +1258,7 @@ void OutputDevice::DrawTransformedBitmapEx(
 
         if(!aVisibleRange.isEmpty())
         {
-            static bool bDoSmoothAtAll(true);
+            static bool bDoSmoothAtAll(true); // loplugin:constvars:ignore
             BitmapEx aTransformed(rBitmapEx);
 
             // #122923# when the result needs an alpha channel due to being rotated or sheared

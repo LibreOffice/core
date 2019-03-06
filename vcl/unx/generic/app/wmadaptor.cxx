@@ -976,7 +976,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
         aWMLocale = pLang ? pLang : "C";
     }
 
-    static bool bTrustXmb = true;
+    static bool bTrustXmb = true; // loplugin:constvars:ignore
 
     char* pT = const_cast<char*>(aTitle.getStr());
     XTextProperty aProp = { nullptr, None, 0, 0 };

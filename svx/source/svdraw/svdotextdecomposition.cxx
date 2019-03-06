@@ -221,7 +221,7 @@ namespace
         // prepare DXArray content. To make it independent from font size (and such from
         // the text transformation), scale it to unit coordinates
         ::std::vector< double > aDXArray;
-        static bool bDisableTextArray(false);
+        static bool bDisableTextArray(false); // loplugin:constvars:ignore
 
         if(!bDisableTextArray && rInfo.mpDXArray && rInfo.mnTextLen)
         {

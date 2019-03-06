@@ -95,7 +95,7 @@ void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
             pOut->SetClipRegion( aClipRegion );
         }
 #ifdef DBG_UTIL
-        static bool bDbg = false;
+        static bool bDbg = false; // loplugin:constvars:ignore
         if( bDbg )
         {
             DbgBackColor aDbg( pOut, bDbg );

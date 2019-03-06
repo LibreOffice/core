@@ -517,7 +517,7 @@ namespace drawinglayer
                 case PRIMITIVE3D_ID_HATCHTEXTUREPRIMITIVE3D :
                 {
                     // HatchTexturePrimitive3D
-                    static bool bDoHatchDecomposition(false);
+                    static bool bDoHatchDecomposition(false); // loplugin:constvars:ignore
 
                     if(bDoHatchDecomposition)
                     {

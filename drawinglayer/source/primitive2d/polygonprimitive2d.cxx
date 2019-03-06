@@ -267,7 +267,7 @@ namespace drawinglayer
                         // to be painted as a single tools::PolyPolygon (XORed as fill rule). Alternatively, a
                         // melting process may be used here one day.
                         const basegfx::B2DPolyPolygon aNewPolyPolygon(aAreaPolyPolygon.getB2DPolygon(b));
-                        static bool bTestByUsingRandomColor(false);
+                        static bool bTestByUsingRandomColor(false); // loplugin:constvars:ignore
                         const basegfx::BColor aColor(bTestByUsingRandomColor
                             ? basegfx::BColor(getRandomColorRange(), getRandomColorRange(), getRandomColorRange())
                             : getLineAttribute().getColor());

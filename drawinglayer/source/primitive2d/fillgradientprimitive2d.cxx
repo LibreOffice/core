@@ -283,7 +283,7 @@ namespace drawinglayer
 
             if(!getFillGradient().isDefault())
             {
-                static bool bOverlapping(true); // allow to test non-overlapping in the debugger
+                static bool bOverlapping(true); // loplugin:constvars:ignore allow to test non-overlapping in the debugger
 
                 createFill(rContainer, bOverlapping);
             }

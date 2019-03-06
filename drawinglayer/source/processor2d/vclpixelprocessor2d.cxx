@@ -423,7 +423,7 @@ namespace drawinglayer
         void VclPixelProcessor2D::processWrongSpellPrimitive2D(const primitive2d::WrongSpellPrimitive2D& rWrongSpellPrimitive)
         {
             // directdraw of wrong spell primitive; added test possibility to check wrong spell decompose
-            static bool bHandleWrongSpellDirectly(true);
+            static bool bHandleWrongSpellDirectly(true); // loplugin:constvars:ignore
 
             if(bHandleWrongSpellDirectly)
             {
@@ -446,7 +446,7 @@ namespace drawinglayer
         void VclPixelProcessor2D::processTextSimplePortionPrimitive2D(const primitive2d::TextSimplePortionPrimitive2D& rCandidate)
         {
             // directdraw of text simple portion; added test possibility to check text decompose
-            static bool bForceSimpleTextDecomposition(false);
+            static bool bForceSimpleTextDecomposition(false); // loplugin:constvars:ignore
 
             // Adapt evtl. used special DrawMode
             const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
@@ -468,7 +468,7 @@ namespace drawinglayer
         void VclPixelProcessor2D::processTextDecoratedPortionPrimitive2D(const primitive2d::TextSimplePortionPrimitive2D& rCandidate)
         {
             // directdraw of decorated text portion; added test possibility to check text decompose
-            static bool bForceComplexTextDecomposition(false);
+            static bool bForceComplexTextDecomposition(false); // loplugin:constvars:ignore
 
             // Adapt evtl. used special DrawMode
             const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
@@ -490,7 +490,7 @@ namespace drawinglayer
         void VclPixelProcessor2D::processPolygonHairlinePrimitive2D(const primitive2d::PolygonHairlinePrimitive2D& rPolygonHairlinePrimitive2D)
         {
             // try to use directly
-            static bool bAllowed(true);
+            static bool bAllowed(true); // loplugin:constvars:ignore
 
             if(bAllowed && tryDrawPolygonHairlinePrimitive2DDirect(rPolygonHairlinePrimitive2D, 0.0))
             {
@@ -554,7 +554,7 @@ namespace drawinglayer
         {
             // try to use directly
             basegfx::B2DPolyPolygon aLocalPolyPolygon;
-            static bool bAllowed(true);
+            static bool bAllowed(true); // loplugin:constvars:ignore
 
             if(bAllowed)
             {
@@ -619,7 +619,7 @@ namespace drawinglayer
 
                     // since DEV300 m33 DrawTransparent is supported in VCL (for some targets
                     // natively), so i am now enabling this shortcut
-                    static bool bAllowUsingDrawTransparent(true);
+                    static bool bAllowUsingDrawTransparent(true); // loplugin:constvars:ignore
 
                     if(bAllowUsingDrawTransparent && 1 == rContent.size())
                     {
@@ -650,7 +650,7 @@ namespace drawinglayer
                                     // This is not what the UnifiedTransparencePrimitive2D defines: It requires all its
                                     // content to be uniformely transparent.
                                     // For hairline the effect is pretty minimal, but still not correct.
-                                    static bool bAllowed(false);
+                                    static bool bAllowed(false); // loplugin:constvars:ignore
 
                                     bDrawTransparentUsed = bAllowed && tryDrawPolygonHairlinePrimitive2DDirect(*pPoHair, rUniTransparenceCandidate.getTransparence());
                                     break;
@@ -666,7 +666,7 @@ namespace drawinglayer
                                     // This is not what the UnifiedTransparencePrimitive2D defines: It requires all its
                                     // content to be uniformely transparent.
                                     // To check, activate and draw a wide transparent self-crossing line/curve
-                                    static bool bAllowed(false);
+                                    static bool bAllowed(false); // loplugin:constvars:ignore
 
                                     bDrawTransparentUsed = bAllowed && tryDrawPolygonStrokePrimitive2DDirect(*pPoStroke, rUniTransparenceCandidate.getTransparence());
                                     break;
@@ -754,7 +754,7 @@ namespace drawinglayer
             adaptLineToFillDrawMode();
 
             // polygon stroke primitive
-            static bool bSuppressFatToHairlineCorrection(false);
+            static bool bSuppressFatToHairlineCorrection(false); // loplugin:constvars:ignore
 
             if(bSuppressFatToHairlineCorrection)
             {
@@ -783,7 +783,7 @@ namespace drawinglayer
 
         void VclPixelProcessor2D::processFillHatchPrimitive2D(const primitive2d::FillHatchPrimitive2D& rFillHatchPrimitive)
         {
-            static bool bForceIgnoreHatchSmoothing(false);
+            static bool bForceIgnoreHatchSmoothing(false); // loplugin:constvars:ignore
 
             if(bForceIgnoreHatchSmoothing || getOptionsDrawinglayer().IsAntiAliasing())
             {

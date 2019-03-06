@@ -556,7 +556,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, s
 
 #ifdef DBG_UTIL
                 // #i74769# test-paint repaint region
-                static bool bDoPaintForVisualControl(false);
+                static bool bDoPaintForVisualControl(false); // loplugin:constvars:ignore
 
                 if(bDoPaintForVisualControl)
                 {

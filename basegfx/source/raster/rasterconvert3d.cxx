@@ -214,7 +214,7 @@ namespace basegfx
         B3DPoint aStart(rLine.getB3DPoint(nA));
         B3DPoint aEnd(rLine.getB3DPoint(nB));
         const double fZBufferLineAdd(0x00ff);
-        static bool bForceToPolygon(false);
+        static bool bForceToPolygon(false); // loplugin:constvars:ignore
 
         if(nLineWidth > 1 || bForceToPolygon)
         {

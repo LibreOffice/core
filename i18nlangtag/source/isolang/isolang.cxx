@@ -779,7 +779,7 @@ static Bcp47CountryEntry const aImplBcp47CountryEntries[] =
     { LANGUAGE_DONTKNOW,                    "", "", "", k0 }    // marks end of table
 };
 
-static IsoLanguageCountryEntry aLastResortFallbackEntry =
+static const IsoLanguageCountryEntry aLastResortFallbackEntry =
 { LANGUAGE_ENGLISH_US, "en", "US", k0 };
 
 OUString IsoLanguageCountryEntry::getTagString() const

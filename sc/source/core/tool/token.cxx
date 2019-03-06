@@ -1721,7 +1721,7 @@ size_t HashSingleRef( const ScSingleRefData& rRef )
 
 void ScTokenArray::GenHash()
 {
-    static OUStringHash aHasher;
+    static const OUStringHash aHasher;
 
     size_t nHash = 1;
     OpCode eOp;

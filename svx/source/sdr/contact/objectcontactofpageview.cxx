@@ -86,7 +86,7 @@ namespace sdr
         {
             if(IsActive())
             {
-                static bool bInvalidateDuringPaint(true);
+                static bool bInvalidateDuringPaint(true); // loplugin:constvars:ignore
 
                 if(bInvalidateDuringPaint)
                 {

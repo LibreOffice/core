@@ -125,7 +125,7 @@ namespace sdr
             {
 #ifdef DBG_UTIL
                 // #i72754# possible graphical region test only with non-pro
-                static bool bDoPaintForVisualControl(false);
+                static bool bDoPaintForVisualControl(false); // loplugin:constvars:ignore
 
                 if(bDoPaintForVisualControl)
                 {

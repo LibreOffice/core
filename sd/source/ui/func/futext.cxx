@@ -134,7 +134,7 @@ static const sal_uInt16 SidArray[] = {
                             0 };
 
 
-static bool bTestText = false;
+static bool bTestText = false; // loplugin:constvars:ignore
 
 /**
  * base class for text functions

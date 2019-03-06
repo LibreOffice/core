@@ -505,7 +505,7 @@ void Desktop::Init()
         // of loading the office configuration initially. To use,
         // either set to true and compile, or set a breakpoint
         // in debugger and change the local bool
-        static bool bTryHardOfficeconfigBroken(false);
+        static bool bTryHardOfficeconfigBroken(false); // loplugin:constvars:ignore
 
         if (bTryHardOfficeconfigBroken)
         {
