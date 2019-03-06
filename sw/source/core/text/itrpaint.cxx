@@ -408,7 +408,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         bFirst &= !pPor->GetLen();
         if( pNext || !pPor->IsMarginPortion() )
             pPor->Move( GetInfo() );
-        if( pPor->IsArrowPortion() && GetInfo().OnWin() && !pArrow )
+        if( pPor->IsArrowPortion() && GetInfo().OnWin() )
             pArrow = static_cast<SwArrowPortion*>(pPor);
 
         pPor = bDrawInWindow || GetInfo().X() <= nMaxRight ||
