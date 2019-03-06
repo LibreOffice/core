@@ -1211,10 +1211,7 @@ void VCartesianAxis::get2DAxisMainLine(
 
     if( m_nDimensionIndex==0 ) //x-axis
     {
-        if( fCrossesOtherAxis < fMinY )
-            fCrossesOtherAxis = fMinY;
-        else if( fCrossesOtherAxis > fMaxY )
-            fCrossesOtherAxis = fMaxY;
+        fCrossesOtherAxis = fMinY;
 
         fYStart = fYEnd = fCrossesOtherAxis;
         fXEnd=m_pPosHelper->getLogicMaxX();
