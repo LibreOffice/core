@@ -251,9 +251,9 @@ void WorksheetSettings::finalizeImport()
         // document again.
         if (maSheetProt.mnPasswordHash)
         {
-            Sequence<sal_Int8> aPass(2);
-            aPass[0] = ( maSheetProt.mnPasswordHash>> 8) & 0xFF;
-            aPass[1] = maSheetProt.mnPasswordHash & 0xFF;
+            Sequence<sal_Int8> aPass{
+                sal_Int8(maSheetProt.mnPasswordHash >> 8),
+                sal_Int8(maSheetProt.mnPasswordHash & 0xFF)};
             aProtect.setPasswordHash(aPass, PASSHASH_XL);
         }
         aProtect.setOption( ScTableProtection::OBJECTS, !maSheetProt.mbObjects);
