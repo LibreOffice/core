@@ -1097,6 +1097,8 @@ void Dialog::EndDialog( long nResult )
 
     const bool bModal = GetType() != WindowType::MODELESSDIALOG;
 
+    Hide();
+
     if (bModal)
     {
         SetModalInputMode(false);
@@ -1120,8 +1122,6 @@ void Dialog::EndDialog( long nResult )
             }
         }
     }
-
-    Hide();
 
     if (bModal && GetParent())
     {
