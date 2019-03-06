@@ -1033,13 +1033,13 @@ bool SwCursorShell::GotoNextOutline()
 
     do
     {
-        if (nPos == rNds.GetOutLineNds().size())
-        {
-            nPos = 0;
-        }
-        else if (!bUseFirst)
+        if (!bUseFirst)
         {
             ++nPos;
+        }
+        if (rNds.GetOutLineNds().size() <= nPos)
+        {
+            nPos = 0;
         }
 
         if (bUseFirst)
