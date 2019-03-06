@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_5c74d599",
+        "filename": "oox/source/ole/axcontrol.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-03-06T13:53:17Z",
+      "side": 1,
+      "message": "I just cannot figure out how to get the picture data from API so that it can finally be converted into binary..",
+      "revId": "0d8d42816b02666e04f910271aba3a5689d07e60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
