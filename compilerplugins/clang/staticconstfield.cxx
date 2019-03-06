@@ -15,6 +15,9 @@
 #include <unordered_set>
 #include <vector>
 
+/**
+ Look for fields which are const, which can be made static const
+*/
 namespace
 {
 class StaticConstField : public loplugin::FilteringPlugin<StaticConstField>
@@ -56,7 +59,7 @@ void StaticConstField::run()
 
     for (auto const& pair : m_potentials)
     {
-        report(DiagnosticsEngine::Error, "field can be static const", pair.first->getLocation())
+        report(DiagnosticsEngine::Error, "const field can be static", pair.first->getLocation())
             << pair.first->getSourceRange();
         for (CXXCtorInitializer const* init : pair.second.inits)
             if (pair.first->getLocation() != init->getSourceLocation())
