@@ -664,6 +664,11 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
                 case 1:
                     pTarget->SetSmallSymbol();
                     break;
+                case 3:
+                    // large toolbar, make bigger than normal (4)
+                    pTarget->set_width_request(pTarget->GetOptimalSize().Width() * 1.5);
+                    pTarget->set_height_request(pTarget->GetOptimalSize().Height() * 1.5);
+                    break;
                 case 4:
                     break;
                 default:
