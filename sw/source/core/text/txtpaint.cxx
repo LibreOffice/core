@@ -94,14 +94,6 @@ void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
             const vcl::Region aClipRegion( aRect );
             pOut->SetClipRegion( aClipRegion );
         }
-#ifdef DBG_UTIL
-        static bool bDbg = false;
-        if( bDbg )
-        {
-            DbgBackColor aDbg( pOut, bDbg );
-            pOut->DrawRect( aRect );
-        }
-#endif
     }
     bChg = true;
 

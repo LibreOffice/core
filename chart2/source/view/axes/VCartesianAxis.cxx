@@ -1802,7 +1802,7 @@ void VCartesianAxis::createShapes()
             hideIdenticalScreenValues( aComplexTickInfos );
 
             std::vector<TickmarkProperties> aTickmarkPropertiesList;
-            static bool bIncludeSpaceBetweenTickAndText = false;
+            static const bool bIncludeSpaceBetweenTickAndText = false;
             sal_Int32 nOffset = static_cast<sal_Int32>(pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties, false, bIncludeSpaceBetweenTickAndText ).getLength());
             sal_Int32 nTextLevelCount = getTextLevelCount();
             for( sal_Int32 nTextLevel=0; nTextLevel<nTextLevelCount; nTextLevel++ )

@@ -222,8 +222,8 @@ void VclContainer::Command(const CommandEvent& rCEvt)
 
             if (bVisibleChildren)
             {
-                static bool bAddButtonsToMenu(true);
-                static bool bAddScreenshotButtonToMenu(true);
+                static bool bAddButtonsToMenu(true); // loplugin:constvars:ignore
+                static bool bAddScreenshotButtonToMenu(true); // loplugin:constvars:ignore
 
                 if (bAddButtonsToMenu || bAddScreenshotButtonToMenu)
                 {

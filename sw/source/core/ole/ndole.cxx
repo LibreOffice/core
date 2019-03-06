@@ -1055,7 +1055,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & SwOLEObj::tryToGetChartC
         if(aXModel.is())
         {
             // disabled for now, need to check deeper
-            static bool bAsynchronousLoadingAllowed = false;
+            static bool bAsynchronousLoadingAllowed = false; // loplugin:constvars:ignore
 
             if(bSynchron ||
                 !bAsynchronousLoadingAllowed)

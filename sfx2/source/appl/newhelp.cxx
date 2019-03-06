@@ -2588,7 +2588,7 @@ void SfxHelpWindow_Impl::Resize()
 void SfxHelpWindow_Impl::Split()
 {
     static const long nMinSplitSize = 5;
-    static long nMaxSplitSize = 99 - nMinSplitSize;
+    static const long nMaxSplitSize = 99 - nMinSplitSize;
 
     SplitWindow::Split();
 

@@ -553,37 +553,6 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, s
             if(!pWindow->GetPaintRegion().IsEmpty())
             {
                 aOptimizedRepaintRegion.Intersect(pWindow->GetPaintRegion());
-
-#ifdef DBG_UTIL
-                // #i74769# test-paint repaint region
-                static bool bDoPaintForVisualControl(false);
-
-                if(bDoPaintForVisualControl)
-                {
-                    RectangleVector aRectangles;
-                    aOptimizedRepaintRegion.GetRegionRectangles(aRectangles);
-
-                    pWindow->SetLineColor(COL_LIGHTGREEN);
-                    pWindow->SetFillColor();
-
-                    for(const auto& rRect : aRectangles)
-                    {
-                        pWindow->DrawRect(rRect);
-                    }
-
-                    //RegionHandle aRegionHandle(aOptimizedRepaintRegion.BeginEnumRects());
-                    //Rectangle aRegionRectangle;
-
-                    //while(aOptimizedRepaintRegion.GetEnumRects(aRegionHandle, aRegionRectangle))
-                    //{
-                    //  pWindow->SetLineCOL_LIGHTGREEN);
-                    //  pWindow->SetFillColor();
-                    //  pWindow->DrawRect(aRegionRectangle);
-                    //}
-
-                    //aOptimizedRepaintRegion.EndEnumRects(aRegionHandle);
-                }
-#endif
             }
         }
     }

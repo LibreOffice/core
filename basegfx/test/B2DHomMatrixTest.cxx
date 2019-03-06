@@ -331,10 +331,10 @@ public:
         // using the decompose result should be the same as before. Test
         // with all ranges of values. Translations are not tested since these
         // are just the two rightmost values and uncritical
-        static double fSX(10.0);
-        static double fSY(12.0);
-        static double fR(F_PI4);
-        static double fS(deg2rad(15.0));
+        static const double fSX(10.0);
+        static const double fSY(12.0);
+        static const double fR(F_PI4);
+        static const double fS(deg2rad(15.0));
 
         // check all possible scaling combinations
         CPPUNIT_ASSERT_MESSAGE("decompose: error test A1",

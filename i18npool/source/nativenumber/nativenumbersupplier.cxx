@@ -472,7 +472,7 @@ const sal_Char *natnum1Locales[] = {
     "fa",
     "cu"
 };
-sal_Int16 nbOfLocale = SAL_N_ELEMENTS(natnum1Locales);
+const sal_Int16 nbOfLocale = SAL_N_ELEMENTS(natnum1Locales);
 
 //! ATTENTION: Do not change order of elements!
 //! Number and order must match elements of natnum1Locales!

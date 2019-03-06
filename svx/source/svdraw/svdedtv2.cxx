@@ -1089,15 +1089,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
         case SdrMergeMode::Merge:
         {
             // merge all contained parts (OR)
-            static bool bTestXOR(false);
-            if(bTestXOR)
-            {
-                aMergePolyPolygonA = basegfx::utils::solvePolygonOperationXor(aMergePolyPolygonA, aMergePolyPolygonB);
-            }
-            else
-            {
-                aMergePolyPolygonA = basegfx::utils::solvePolygonOperationOr(aMergePolyPolygonA, aMergePolyPolygonB);
-            }
+            aMergePolyPolygonA = basegfx::utils::solvePolygonOperationOr(aMergePolyPolygonA, aMergePolyPolygonB);
             break;
         }
         case SdrMergeMode::Subtract:

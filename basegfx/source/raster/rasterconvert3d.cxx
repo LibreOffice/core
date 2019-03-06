@@ -214,9 +214,8 @@ namespace basegfx
         B3DPoint aStart(rLine.getB3DPoint(nA));
         B3DPoint aEnd(rLine.getB3DPoint(nB));
         const double fZBufferLineAdd(0x00ff);
-        static bool bForceToPolygon(false);
 
-        if(nLineWidth > 1 || bForceToPolygon)
+        if(nLineWidth > 1)
         {
             // this is not a hairline anymore, in most cases since it's an oversampled
             // hairline to get e.g. AA for Z-Buffering. Create fill geometry.

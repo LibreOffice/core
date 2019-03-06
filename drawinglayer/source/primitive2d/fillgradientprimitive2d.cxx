@@ -283,9 +283,7 @@ namespace drawinglayer
 
             if(!getFillGradient().isDefault())
             {
-                static bool bOverlapping(true); // allow to test non-overlapping in the debugger
-
-                createFill(rContainer, bOverlapping);
+                createFill(rContainer, /*bOverlapping*/true);
             }
         }
 

@@ -71,17 +71,14 @@ namespace drawinglayer
         {
             // to take care of getSdrLFSTAttribute() later, the same as in SdrGrafPrimitive2D::create2DDecomposition
             // should happen. For the moment we only need the OLE itself
-            // Added complete primitive preparation using getSdrLFSTAttribute() now. To not do stuff which is not needed now, it
-            // may be suppressed by using a static bool. The paint version only supported text.
-            static bool bBehaveCompatibleToPaintVersion(false);
+            // Added complete primitive preparation using getSdrLFSTAttribute() now.
             Primitive2DContainer  aRetval;
 
             // create unit outline polygon
             const basegfx::B2DPolygon& aUnitOutline(basegfx::utils::createUnitPolygon());
 
             // add fill
-            if(!bBehaveCompatibleToPaintVersion
-                && !getSdrLFSTAttribute().getFill().isDefault())
+            if(!getSdrLFSTAttribute().getFill().isDefault())
             {
                 basegfx::B2DPolyPolygon aTransformed(aUnitOutline);
 
@@ -96,8 +93,7 @@ namespace drawinglayer
             // add line
             // #i97981# condition was inverse to purpose. When being compatible to paint version,
             // border needs to be suppressed
-            if(!bBehaveCompatibleToPaintVersion
-                && !getSdrLFSTAttribute().getLine().isDefault())
+            if(!getSdrLFSTAttribute().getLine().isDefault())
             {
                 // if line width is given, polygon needs to be grown by half of it to make the
                 // outline to be outside of the bitmap
@@ -162,8 +158,7 @@ namespace drawinglayer
             }
 
             // add shadow
-            if(!bBehaveCompatibleToPaintVersion
-                && !getSdrLFSTAttribute().getShadow().isDefault())
+            if(!getSdrLFSTAttribute().getShadow().isDefault())
             {
                 aRetval = createEmbeddedShadowPrimitive(
                     aRetval,

@@ -44,7 +44,7 @@ OString toByteString(rtl_uString const * str) {
 
 }
 
-static sal_Unicode NULL_WSTRING[1] = { 0 };
+static const sal_Unicode NULL_WSTRING[1] = { 0 };
 
 #define BLOP_OFFSET_MAGIC       0
 #define BLOP_OFFSET_SIZE        (BLOP_OFFSET_MAGIC + sizeof(sal_uInt32))

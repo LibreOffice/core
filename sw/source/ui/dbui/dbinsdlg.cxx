@@ -953,13 +953,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     Reference< XColumnsSupplier > xColsSupp( xResultSet, UNO_QUERY );
     Reference <XNameAccess> xCols = xColsSupp->getColumns();
 
-    static bool isSelectionBookmarks = true; // TODO is this always true here?
-    uno::Reference<sdbcx::XRowLocate> xRowLocate;
-    if (isSelectionBookmarks)
-    {
-        xRowLocate.set(xResultSet, uno::UNO_QUERY);
-        assert(xRowLocate.is());
-    }
+    uno::Reference<sdbcx::XRowLocate> xRowLocate(xResultSet, uno::UNO_QUERY_THROW);
 
     do{                                 // middle checked loop!!
     if( bAsTable )                      // fill in data as table
@@ -1038,16 +1032,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             {
                 if(pSelection)
                 {
-                    if (isSelectionBookmarks)
-                    {
-                        bBreak = !xRowLocate->moveToBookmark(pSelection[i]);
-                    }
-                    else
-                    {
-                        sal_Int32 nPos = 0;
-                        pSelection[i] >>= nPos;
-                        bBreak = !xResultSet->absolute(nPos);
-                    }
+                    bBreak = !xRowLocate->moveToBookmark(pSelection[i]);
                 }
                 else if(!i)
                     bBreak = !xResultSet->first();
@@ -1237,16 +1222,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 {
                     if(pSelection)
                     {
-                        if (isSelectionBookmarks)
-                        {
-                            bBreak = !xRowLocate->moveToBookmark(pSelection[i]);
-                        }
-                        else
-                        {
-                            sal_Int32 nPos = 0;
-                            pSelection[i] >>= nPos;
-                            bBreak = !xResultSet->absolute(nPos);
-                        }
+                        bBreak = !xRowLocate->moveToBookmark(pSelection[i]);
                     }
                     else if(!i)
                         bBreak = !xResultSet->first();

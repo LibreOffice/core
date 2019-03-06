@@ -324,16 +324,15 @@ struct SortByPriority
         // All things being equal, sort them alphabetically.
         return r1.sType > r2.sType;
     }
-} objSortByPriority;
+};
 
 struct SortByType
-
 {
     bool operator() (const FlatDetectionInfo& r1, const FlatDetectionInfo& r2) const
     {
         return r1.sType > r2.sType;
     }
-} objSortByType;
+};
 
 struct EqualByType
 {
@@ -341,7 +340,7 @@ struct EqualByType
     {
         return r1.sType == r2.sType;
     }
-} objEqualByType;
+};
 
 class FindByType
 {
@@ -412,8 +411,8 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
         // <- SAFE ----------------------------------
 
         // Properly prioritize all candidate types.
-        std::stable_sort(lFlatTypes.begin(), lFlatTypes.end(), objSortByPriority);
-        auto last = std::unique(lFlatTypes.begin(), lFlatTypes.end(), objEqualByType);
+        std::stable_sort(lFlatTypes.begin(), lFlatTypes.end(), SortByPriority());
+        auto last = std::unique(lFlatTypes.begin(), lFlatTypes.end(), EqualByType());
         lFlatTypes.erase(last, lFlatTypes.end());
 
         OUString sLastChance;
@@ -843,8 +842,8 @@ void TypeDetection::impl_getAllFormatTypes(
     }
 
     // Remove duplicates.
-    std::stable_sort(rFlatTypes.begin(), rFlatTypes.end(), objSortByType);
-    auto last = std::unique(rFlatTypes.begin(), rFlatTypes.end(), objEqualByType);
+    std::stable_sort(rFlatTypes.begin(), rFlatTypes.end(), SortByType());
+    auto last = std::unique(rFlatTypes.begin(), rFlatTypes.end(), EqualByType());
     rFlatTypes.erase(last, rFlatTypes.end());
 
     // Mark pre-selected type (if any) to have it prioritized.

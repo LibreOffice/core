@@ -329,7 +329,7 @@ namespace drawinglayer
             const Size aSizePixel(maDestPixel.GetSize());
             const bool bWasEnabledDst(mrOutDev.IsMapModeEnabled());
 #ifdef DBG_UTIL
-            static bool bDoSaveForVisualControl(false);
+            static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
 #endif
 
             mrOutDev.EnableMapMode(false);

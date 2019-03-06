@@ -901,7 +901,7 @@ const ClsId& Storage::GetClassId() const
     if ( pEntry )
         return pEntry->m_aEntry.GetClassId();
 
-    static ClsId aDummyId = {0,0,0,{0,0,0,0,0,0,0,0}};
+    static const ClsId aDummyId = {0,0,0,{0,0,0,0,0,0,0,0}};
     return aDummyId;
 }
 

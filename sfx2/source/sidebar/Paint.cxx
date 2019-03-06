@@ -59,7 +59,7 @@ const Color& Paint::GetColor() const
     if (meType != ColorPaint)
     {
         assert(meType==ColorPaint);
-        static Color aErrorColor;
+        static const Color aErrorColor;
         return aErrorColor;
     }
     else

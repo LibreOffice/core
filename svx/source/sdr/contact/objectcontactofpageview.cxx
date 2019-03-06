@@ -85,15 +85,8 @@ namespace sdr
         void ObjectContactOfPageView::PrepareProcessDisplay()
         {
             if(IsActive())
-            {
-                static bool bInvalidateDuringPaint(true);
-
-                if(bInvalidateDuringPaint)
-                {
-                    // there are still non-triggered LazyInvalidate events, trigger these
-                    Invoke();
-                }
-            }
+                // there are still non-triggered LazyInvalidate events, trigger these
+                Invoke();
         }
 
         // From baseclass Timer, the timeout call triggered by the LazyInvalidate mechanism

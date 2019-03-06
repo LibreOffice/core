@@ -2006,7 +2006,7 @@ public:
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
         using namespace mdds::mtv;
-        static Op op;
+        static const Op op;
 
         switch (node.type)
         {

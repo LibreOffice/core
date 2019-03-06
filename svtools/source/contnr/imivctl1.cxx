@@ -1405,8 +1405,6 @@ void SvxIconChoiceCtrl_Impl::SetUpdateMode( bool bUpdate )
 void SvxIconChoiceCtrl_Impl::PaintEmphasis(const tools::Rectangle& rTextRect, bool bSelected,
                                            vcl::RenderContext& rRenderContext)
 {
-    static Color aTransparent(COL_TRANSPARENT);
-
     Color aOldFillColor(rRenderContext.GetFillColor());
 
     bool bSolidTextRect = false;
@@ -1415,7 +1413,7 @@ void SvxIconChoiceCtrl_Impl::PaintEmphasis(const tools::Rectangle& rTextRect, bo
     {
         const Color& rFillColor = rRenderContext.GetFont().GetFillColor();
         rRenderContext.SetFillColor(rFillColor);
-        if (rFillColor != aTransparent)
+        if (rFillColor != COL_TRANSPARENT)
             bSolidTextRect = true;
     }
 
