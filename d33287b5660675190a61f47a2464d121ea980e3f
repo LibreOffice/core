@@ -16,6 +16,24 @@
       "revId": "d33287b5660675190a61f47a2464d121ea980e3f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_d12a0e8f",
+        "filename": "sw/source/filter/xml/xmlimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1653,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-03-06T11:32:54Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/#/c/68801/",
+      "parentUuid": "ff82abbf_f175d2cd",
+      "revId": "d33287b5660675190a61f47a2464d121ea980e3f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
