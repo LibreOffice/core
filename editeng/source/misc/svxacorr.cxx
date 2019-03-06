@@ -544,7 +544,8 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
         sal_Unicode cCh = rTxt[ nSttPos ];
         if( '-' == cCh )
         {
-            if( ' ' == rTxt[ nSttPos-1 ] &&
+            if( 1 < nEndPos - nSttPos &&
+                ' ' == rTxt[ nSttPos-1 ] &&
                 '-' == rTxt[ nSttPos+1 ])
             {
                 sal_Int32 n;
