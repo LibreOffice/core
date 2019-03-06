@@ -2,7 +2,7 @@ avmedia/res/av02048.png cmd/sc_open.png
 avmedia/res/av02049.png cmd/sc_datastreamsplay.png
 avmedia/res/av02050.png cmd/sc_mediapause.png
 avmedia/res/av02051.png cmd/sc_datastreamsstop.png
-avmedia/res/av02052.png cmd/sc_mediarepeat.png 
+avmedia/res/av02052.png cmd/sc_mediarepeat.png
 avmedia/res/av02053.png cmd/sc_ok.png
 avmedia/res/av02054.png cmd/sc_mediamute.png
 avmedia/res/avl02048.png cmd/lc_open.png
@@ -13,7 +13,7 @@ avmedia/res/avl02052.png cmd/lc_mediarepeat.png
 avmedia/res/avl02053.png cmd/lc_ok.png
 avmedia/res/avl02054.png cmd/lc_mediamute.png
 cmd/32/acceptchanges.png cmd/32/accepttrackedchanges.png
-cmd/32/accepttracedchange.png cmd/32/accepttrackedchange.png 
+cmd/32/accepttracedchange.png cmd/32/accepttrackedchange.png
 cmd/32/adddatefield.png cmd/32/datefield.png
 cmd/32/addtextbox.png cmd/32/insertfixedtext.png
 cmd/32/adjust.png cmd/32/zoomoptimal.png
@@ -359,7 +359,7 @@ cmd/sl/sc_underlinesimple.png cmd/sl/sc_underline.png
 cmd/tr/lc_underlinesimple.png cmd/tr/lc_underline.png
 cmd/tr/sc_underlinesimple.png cmd/tr/sc_underline.png
 cmd/lc_acceptchanges.png cmd/lc_accepttrackedchanges.png
-cmd/lc_accepttracedchange.png cmd/lc_accepttrackedchange.png 
+cmd/lc_accepttracedchange.png cmd/lc_accepttrackedchange.png
 cmd/lc_adddatefield.png cmd/lc_datefield.png
 cmd/lc_addtextbox.png cmd/lc_insertfixedtext.png
 cmd/lc_adjust.png cmd/lc_zoomoptimal.png
@@ -654,7 +654,7 @@ cmd/lc_zoomtoolbox.png cmd/lc_zoom.png
 cmd/nl/lc_underlinesimple.png cmd/nl/lc_underline.png
 cmd/nl/sc_underlinesimple.png cmd/nl/sc_underline.png
 cmd/sc_acceptchanges.png cmd/sc_accepttrackedchanges.png
-cmd/sc_accepttracedchange.png cmd/sc_accepttrackedchange.png 
+cmd/sc_accepttracedchange.png cmd/sc_accepttrackedchange.png
 cmd/sc_adddatefield.png cmd/sc_datefield.png
 cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
 cmd/sc_adjust.png cmd/sc_zoomoptimal.png
@@ -1008,7 +1008,7 @@ res/lx03163.png res/ott_32_8.png
 res/lx03165.png cmd/32/save.png
 res/lx03189.png cmd/32/open.png
 res/lx03218.png res/lx03217.png
-res/lx03219.png res/lx03217.png 
+res/lx03219.png res/lx03217.png
 res/lx03220.png res/lx03217.png
 res/lx03221.png res/lx03217.png
 res/lx03222.png res/lx03217.png
@@ -1126,6 +1126,8 @@ res/sx10599.png cmd/sc_edit.png
 res/sx10600.png cmd/sc_listbox.png
 res/sx10601.png cmd/sc_combobox.png
 res/sx10603.png cmd/sc_grid.png
+cmd/sc_insertgridcontrol.png cmd/sc_grid.png
+cmd/lc_insertgridcontrol.png cmd/lc_grid.png
 res/sx10604.png cmd/sc_imagebutton.png
 res/sx10605.png cmd/sc_filecontrol.png
 res/sx10607.png cmd/sc_navigationbar.png
