@@ -50,10 +50,12 @@ public:
 
 private Q_SLOTS:
     bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
+    void deleteObjectLater(QObject* pObject);
 
 Q_SIGNALS:
     bool ImplYieldSignal(bool bWait, bool bHandleAllCurrentEvents);
     std::unique_ptr<SalMenu> createMenuSignal(bool, Menu*);
+    void deleteObjectLaterSignal(QObject* pObject);
 
 public:
     explicit Qt5Instance(bool bUseCairo = false);
