@@ -292,15 +292,15 @@ cmd/sc_optionstreedialog.png cmd/sc_controlproperties.png
 
 # Track Change
 cmd/32/acceptchanges.png cmd/32/accepttrackedchanges.png
-cmd/32/accepttracedchange.png cmd/32/accepttrackedchange.png 
+cmd/32/accepttracedchange.png cmd/32/accepttrackedchange.png
 cmd/32/commentchange.png cmd/32/commentchangetracking.png
 
 cmd/lc_acceptchanges.png cmd/lc_accepttrackedchanges.png
-cmd/lc_accepttracedchange.png cmd/lc_accepttrackedchange.png 
+cmd/lc_accepttracedchange.png cmd/lc_accepttrackedchange.png
 cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
 
 cmd/sc_acceptchanges.png cmd/sc_accepttrackedchanges.png
-cmd/sc_accepttracedchange.png cmd/sc_accepttrackedchange.png 
+cmd/sc_accepttracedchange.png cmd/sc_accepttrackedchange.png
 cmd/sc_commentchange.png cmd/sc_commentchangetracking.png
 
 # Formatmenu
@@ -1174,6 +1174,9 @@ cmd/32/gridmenu.png cmd/32/gridvisible.png
 cmd/lc_gridmenu.png cmd/lc_gridvisible.png
 
 cmd/sc_gridmenu.png cmd/sc_gridvisible.png
+
+cmd/sc_insertgridcontrol.png cmd/sc_gridvisible.png
+cmd/lc_insertgridcontrol.png cmd/lc_gridvisible.png
 
 # Crop
 cmd/32/grafattrcrop.png cmd/32/crop.png

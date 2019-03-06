@@ -238,3 +238,7 @@ cmd/sc_commonalignbottom.png cmd/sc_alignbottom.png
 cmd/lc_commonaligntop.png cmd/lc_aligntop.png
 cmd/lc_commonalignverticalcenter.png cmd/lc_alignverticalcenter.png
 cmd/lc_commonalignbottom.png cmd/lc_alignbottom.png
+
+# Grid
+cmd/sc_insertgridcontrol.png cmd/sc_gridvisible.png
+cmd/lc_insertgridcontrol.png cmd/lc_gridvisible.png

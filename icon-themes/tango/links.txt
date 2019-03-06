@@ -634,3 +634,7 @@ cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
 cmd/sc_charactermenu.png cmd/sc_fontdialog.png
 cmd/sc_paragraphmenu.png cmd/sc_paragraphdialog.png
 cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png
+
+# Grid
+cmd/sc_insertgridcontrol.png cmd/sc_gridvisible.png
+cmd/lc_insertgridcontrol.png cmd/lc_gridvisible.png
