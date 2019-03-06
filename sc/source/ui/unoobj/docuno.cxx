@@ -2026,7 +2026,8 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
 
     std::unique_ptr<ScPrintFunc, o3tl::default_delete<ScPrintFunc>> pPrintFunc;
-    if (m_pPrintState && m_pPrintState->nPrintTab == nTab)
+    if (m_pPrintState && m_pPrintState->nPrintTab == nTab
+        && ! pSelRange) // tdf#120161 use selection to set required printed area
         pPrintFunc.reset(new ScPrintFunc(pDev, pDocShell, *m_pPrintState, &aStatus.GetOptions()));
     else
         pPrintFunc.reset(new ScPrintFunc(pDev, pDocShell, nTab, pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions()));
