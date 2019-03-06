@@ -133,7 +133,7 @@ VclPtr<ModulWindow> Shell::CreateBasWin( const ScriptDocument& rDocument, const 
 {
     bCreatingWindow = true;
 
-    sal_uLong nKey = 0;
+    sal_uInt32 nKey = 0;
     VclPtr<ModulWindow> pWin;
 
     OUString aLibName( rLibName );

@@ -164,7 +164,7 @@ DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
 
 void DbRegistrationOptionsPage::dispose()
 {
-    for ( sal_uLong i = 0; i < m_pPathBox->GetEntryCount(); ++i )
+    for ( sal_uInt32 i = 0; i < m_pPathBox->GetEntryCount(); ++i )
         delete static_cast< DatabaseRegistration* >( m_pPathBox->GetEntry(i)->GetUserData() );
     m_pPathBox.disposeAndClear();
     m_pPathCtrl.clear();
@@ -187,8 +187,8 @@ bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet* rCoreSet )
     // the settings for the single drivers
     bool bModified = false;
     DatabaseRegistrations aRegistrations;
-    sal_uLong nCount = m_pPathBox->GetEntryCount();
-    for ( sal_uLong i = 0; i < nCount; ++i )
+    sal_uInt32 nCount = m_pPathBox->GetEntryCount();
+    for ( sal_uInt32 i = 0; i < nCount; ++i )
     {
         SvTreeListEntry* pEntry = m_pPathBox->GetEntry(i);
         DatabaseRegistration* pRegistration = static_cast< DatabaseRegistration* >( pEntry->GetUserData() );
@@ -427,8 +427,8 @@ void DbRegistrationOptionsPage::openLinkDialog(const OUString& _sOldName,const O
 
 IMPL_LINK( DbRegistrationOptionsPage, NameValidator, const OUString&, _rName, bool )
 {
-    sal_uLong nCount = m_pPathBox->GetEntryCount();
-    for ( sal_uLong i = 0; i < nCount; ++i )
+    sal_uInt32 nCount = m_pPathBox->GetEntryCount();
+    for ( sal_uInt32 i = 0; i < nCount; ++i )
     {
         SvTreeListEntry* pEntry = m_pPathBox->GetEntry(i);
         if ( (!m_pCurEntry || m_pCurEntry != pEntry) && SvTabListBox::GetEntryText(pEntry,0) == _rName )
