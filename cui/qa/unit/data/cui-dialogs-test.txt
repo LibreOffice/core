@@ -35,6 +35,13 @@
 # test case since they need some document and model data to work
 #
 # cui/ui/bitmaptabpage.ui
+# cui/ui/connpooloptions.ui <- not calling DriverListControl::Init for
+#   ConnectionPoolOptionsPage::m_pDriverList leaves its BrowseBox::mvCols empty, causing "implicit
+#   conversion from type 'int' of value -1 (32-bit, signed) to type 'sal_uInt16' (aka 'unsigned
+#   short') changed the value to 65535 (16-bit, unsigned)" when calling
+#     GetColumnId( static_cast<sal_uInt16>(mvCols.size()) - 1 );
+#   in BrowseBox::AutoSizeLastColumn (svtools/source/brwbox/brwbox1.cxx) with Clang
+#   -fsanitize=implicit-signed-integer-truncation
 # cui/ui/thesaurus.ui <- problems under Linux
 
 # this is part 1. in order to help the build time when building all
@@ -76,7 +83,6 @@ cui/ui/colorpage.ui
 cui/ui/colorpickerdialog.ui
 cui/ui/comment.ui
 cui/ui/connectortabpage.ui
-cui/ui/connpooloptions.ui
 cui/ui/croppage.ui
 cui/ui/cuiimapdlg.ui
 cui/ui/customizedialog.ui
