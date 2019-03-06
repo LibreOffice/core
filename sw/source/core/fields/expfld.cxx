@@ -331,6 +331,7 @@ std::unique_ptr<SwField> SwGetExpField::Copy() const
     pTmp->m_fValueRLHidden = m_fValueRLHidden;
     pTmp->SwValueField::SetValue(GetValue());
     pTmp->m_sExpand       = m_sExpand;
+    pTmp->m_sExpandRLHidden = m_sExpandRLHidden;
     pTmp->m_bIsInBodyText  = m_bIsInBodyText;
     pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
     if( m_bLateInitialization )
