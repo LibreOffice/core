@@ -1325,8 +1325,8 @@ namespace drawinglayer
                 mpPDFExtOutDevData->EndStructureElement(); // end ListItem
                 mbInListItem = false;
             }
-
-            mpPDFExtOutDevData->EndStructureElement();
+            else
+                mpPDFExtOutDevData->EndStructureElement(); // end Paragraph
         }
 
         void VclMetafileProcessor2D::processTextHierarchyBlockPrimitive2D(const primitive2d::TextHierarchyBlockPrimitive2D& rBlockPrimitive)
