@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_1cabadd6",
+        "filename": "basegfx/source/raster/rasterconvert3d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-06T14:36:14Z",
+      "side": 1,
+      "message": "wouldn\u0027t it rather be better to remove that odd wart that was there ever since the code\u0027s introduction with c451e601e36205990faae54e20e91869c0e3a1eb \"INTEGRATION: CWS aw033\" for no apparent purpose (unless I\u0027m missing something)?",
+      "revId": "7db72819c938f1b3dd8b3df0010c1a3a1ae77b3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_3ca47108",
+        "filename": "sd/source/ui/func/futext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-06T14:36:14Z",
+      "side": 1,
+      "message": "wouldn\u0027t it rather be better to remove that odd wart that was there ever since at least f47a9d9db3d06927380bb79b04bb6d4721a92d2b \"initial import\" for no apparent purpose (unless I\u0027m missing something)?",
+      "revId": "7db72819c938f1b3dd8b3df0010c1a3a1ae77b3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
