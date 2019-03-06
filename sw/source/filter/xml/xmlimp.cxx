@@ -1323,6 +1323,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     std::unordered_set< OUString > aExcludeAlways;
     aExcludeAlways.insert("LinkUpdateMode");
+    // this should contain things that are actually user-settable, via Tools->Options
     std::unordered_set< OUString > aExcludeWhenNotLoadingUserSettings;
     aExcludeWhenNotLoadingUserSettings.insert("ForbiddenCharacters");
     aExcludeWhenNotLoadingUserSettings.insert("IsKernAsianPunctuation");
@@ -1348,14 +1349,12 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     aExcludeWhenNotLoadingUserSettings.insert("UpdateFromTemplate");
     aExcludeWhenNotLoadingUserSettings.insert("PrinterIndependentLayout");
     aExcludeWhenNotLoadingUserSettings.insert("PrintEmptyPages");
-    aExcludeWhenNotLoadingUserSettings.insert("SmallCapsPercentage66");
-    aExcludeWhenNotLoadingUserSettings.insert("TabOverflow");
-    aExcludeWhenNotLoadingUserSettings.insert("UnbreakableNumberings");
-    aExcludeWhenNotLoadingUserSettings.insert("ClippedPictures");
-    aExcludeWhenNotLoadingUserSettings.insert("BackgroundParaOverDrawings");
-    aExcludeWhenNotLoadingUserSettings.insert("TabOverMargin");
-    aExcludeWhenNotLoadingUserSettings.insert("PropLineSpacingShrinksFirstLine");
+    aExcludeWhenNotLoadingUserSettings.insert("ConsiderTextWrapOnObjPos");
+    aExcludeWhenNotLoadingUserSettings.insert("DoNotJustifyLinesWithManualBreak");
+    aExcludeWhenNotLoadingUserSettings.insert("ProtectForm");
+    aExcludeWhenNotLoadingUserSettings.insert("MsWordCompTrailingBlanks");
     aExcludeWhenNotLoadingUserSettings.insert("SubtractFlysAnchoredAtFlys");
+    aExcludeWhenNotLoadingUserSettings.insert("EmptyDbFieldHidesPara");
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
