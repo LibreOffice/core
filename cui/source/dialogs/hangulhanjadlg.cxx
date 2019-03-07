@@ -227,10 +227,9 @@ namespace svx
     };
 
     RubyRadioButton::RubyRadioButton(std::unique_ptr<weld::RadioButton> xControl)
-        : m_xVirDev(VclPtr<VirtualDevice>::Create())
+        : m_xVirDev(VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT))
         , m_xControl(std::move(xControl))
     {
-        m_xVirDev->SetBackground(m_xControl->get_wallpaper());
         // expand the point size of the desired font to the equivalent pixel size
         if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
             pDefaultDevice->SetPointFont(*m_xVirDev, m_xControl->get_font());

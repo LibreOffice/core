@@ -387,11 +387,6 @@ public:
         return m_xWidget->GetPointFont(*m_xWidget);
     }
 
-    virtual Wallpaper get_wallpaper() const override
-    {
-        return Wallpaper(Application::GetSettings().GetStyleSettings().GetDialogColor());
-    }
-
     virtual OString get_buildable_name() const override
     {
         return m_xWidget->get_id().toUtf8();
