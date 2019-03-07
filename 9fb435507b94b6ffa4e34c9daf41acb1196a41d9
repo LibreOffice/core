@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_d74bdead",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 10064,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2019-03-07T13:31:10Z",
+      "side": 1,
+      "message": "--with-system-poppler we don\u0027t build poppler just use it form the system. Original \"enable poppler\" message was better.",
+      "range": {
+        "startLine": 10064,
+        "startChar": 25,
+        "endLine": 10064,
+        "endChar": 27
+      },
+      "revId": "9fb435507b94b6ffa4e34c9daf41acb1196a41d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
