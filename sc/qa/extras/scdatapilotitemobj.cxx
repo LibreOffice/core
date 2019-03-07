@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xnamed.hxx>
 #include <test/sheet/datapilotitem.hxx>
 #include <rtl/string.hxx>
 
@@ -31,7 +32,9 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScDataPilotItemObj : public CalcUnoApiTest, public apitest::DataPilotItem
+class ScDataPilotItemObj : public CalcUnoApiTest,
+                           public apitest::DataPilotItem,
+                           public apitest::XNamed
 {
 public:
     virtual void setUp() override;
@@ -45,6 +48,9 @@ public:
     // DataPilotItem
     CPPUNIT_TEST(testProperties);
 
+    // XNamed
+    CPPUNIT_TEST(testGetName);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -54,6 +60,7 @@ private:
 
 ScDataPilotItemObj::ScDataPilotItemObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XNamed("2")
 {
 }
 
