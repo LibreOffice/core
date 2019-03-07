@@ -892,7 +892,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetDocumentation(MEMBERID memid,
         }
         else
         {
-            *pBstrName = SysAllocString(L"Unknown");
+            *pBstrName = SysAllocString(o3tl::toW(OUString(OUString("UnknownNameOfMember#") + OUString::number(memid)).getStr()));
         }
     }
     if (pBstrDocString)
