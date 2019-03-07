@@ -32,7 +32,6 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <comphelper/sequence.hxx>
 
 #include <svgdocumenthandler.hxx>
 #include <svgrectnode.hxx>
