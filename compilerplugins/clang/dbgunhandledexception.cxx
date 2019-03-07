@@ -9,6 +9,8 @@
  *
  */
 
+#ifndef LO_CLANG_SHARED_PLUGINS
+
 #include "check.hxx"
 #include "plugin.hxx"
 #include <clang/Lex/Lexer.h>
@@ -31,9 +33,11 @@ public:
     virtual void run() override;
     bool VisitCallExpr(CallExpr const* call);
     bool TraverseCXXCatchStmt(CXXCatchStmt*);
+    bool PreTraverseCXXCatchStmt(CXXCatchStmt*);
+    bool PostTraverseCXXCatchStmt(CXXCatchStmt*, bool traverseOk);
 
 private:
-    CXXCatchStmt const* currCatchStmt = nullptr;
+    std::stack<CXXCatchStmt const*> currCatchStmt;
 };
 
 DbgUnhandledException::DbgUnhandledException(const InstantiationData& data)
@@ -46,13 +50,27 @@ void DbgUnhandledException::run()
     TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 }
 
+bool DbgUnhandledException::PreTraverseCXXCatchStmt(CXXCatchStmt* catchStmt)
+{
+    currCatchStmt.push(catchStmt);
+    return true;
+}
+
+bool DbgUnhandledException::PostTraverseCXXCatchStmt(CXXCatchStmt* catchStmt, bool)
+{
+    assert(currCatchStmt.top() == catchStmt);
+    currCatchStmt.pop();
+    return true;
+}
+
 bool DbgUnhandledException::TraverseCXXCatchStmt(CXXCatchStmt* catchStmt)
 {
-    auto prevCatchStmt = currCatchStmt;
-    currCatchStmt = catchStmt;
-    auto rv = RecursiveASTVisitor::TraverseCXXCatchStmt(catchStmt);
-    currCatchStmt = prevCatchStmt;
-    return rv;
+    if (!PreTraverseCXXCatchStmt(catchStmt))
+        return false;
+    bool ret = RecursiveASTVisitor::TraverseCXXCatchStmt(catchStmt);
+    if (!PostTraverseCXXCatchStmt(catchStmt, ret))
+        return false;
+    return ret;
 }
 
 bool DbgUnhandledException::VisitCallExpr(const CallExpr* call)
@@ -66,13 +84,13 @@ bool DbgUnhandledException::VisitCallExpr(const CallExpr* call)
     if (!func->getIdentifier() || func->getName() != "DbgUnhandledException")
         return true;
 
-    if (!currCatchStmt)
+    if (currCatchStmt.empty())
     {
         report(DiagnosticsEngine::Warning, "DBG_UNHANDLED_EXCEPTION outside catch block",
                compat::getBeginLoc(call));
         return true;
     }
-    auto catchBlock = dyn_cast<CompoundStmt>(currCatchStmt->getHandlerBlock());
+    auto catchBlock = dyn_cast<CompoundStmt>(currCatchStmt.top()->getHandlerBlock());
     if (!catchBlock)
     {
         report(DiagnosticsEngine::Warning,
@@ -100,8 +118,10 @@ bool DbgUnhandledException::VisitCallExpr(const CallExpr* call)
     return true;
 }
 
-static Plugin::Registration<DbgUnhandledException> X("dbgunhandledexception");
+static Plugin::Registration<DbgUnhandledException> dbgunhandledexception("dbgunhandledexception");
 
 } // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

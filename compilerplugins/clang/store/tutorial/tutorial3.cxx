@@ -70,7 +70,7 @@ void Tutorial3::modifyReturnFalse( const Stmt* stmt )
     }
 
 // Register the plugin action with the LO plugin handling.
-static Plugin::Registration< Tutorial3 > X( "tutorial3" );
+static Plugin::Registration< Tutorial3 > tutorial3( "tutorial3" );
 
 } // namespace
 

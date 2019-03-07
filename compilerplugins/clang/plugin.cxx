@@ -154,9 +154,10 @@ void normalizeDotDotInFilePath( std::string & s )
     }
 }
 
-void Plugin::registerPlugin( Plugin* (*create)( const InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault )
+void Plugin::registerPlugin( Plugin* (*create)( const InstantiationData& ), const char* optionName,
+    bool isPPCallback, bool isSharedPlugin, bool byDefault )
 {
-    PluginHandler::registerPlugin( create, optionName, isPPCallback, byDefault );
+    PluginHandler::registerPlugin( create, optionName, isPPCallback, isSharedPlugin, byDefault );
 }
 
 bool Plugin::evaluate(const Expr* expr, APSInt& x)
