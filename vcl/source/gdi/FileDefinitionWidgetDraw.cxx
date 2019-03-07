@@ -723,6 +723,40 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
             }
         }
         break;
+        case ControlType::Combobox:
+        case ControlType::Listbox:
+        {
+            auto const& pPart = m_aWidgetDefinition.getDefinition(eType, ControlPart::ButtonDown);
+            Size aComboButtonSize(pPart->mnWidth, pPart->mnHeight);
+
+            if (ePart == ControlPart::ButtonDown)
+            {
+                Point aPoint(aLocation.X() + rBoundingControlRegion.GetWidth()
+                                 - aComboButtonSize.Width(),
+                             aLocation.Y());
+                rNativeContentRegion = tools::Rectangle(aPoint, aComboButtonSize);
+                rNativeBoundingRegion = rNativeContentRegion;
+                return true;
+            }
+            else if (ePart == ControlPart::SubEdit)
+            {
+                Size aSize(rBoundingControlRegion.GetWidth() - aComboButtonSize.Width(),
+                           aComboButtonSize.Height());
+                rNativeContentRegion = tools::Rectangle(aLocation, aSize);
+                rNativeContentRegion.expand(1);
+                rNativeBoundingRegion = rNativeContentRegion;
+                return true;
+            }
+            else if (ePart == ControlPart::Entire)
+            {
+                Size aSize(rBoundingControlRegion.GetWidth(), aComboButtonSize.Height());
+                rNativeContentRegion = tools::Rectangle(aLocation, aSize);
+                rNativeBoundingRegion = rNativeContentRegion;
+                rNativeBoundingRegion.expand(1);
+                return true;
+            }
+        }
+        break;
 
         default:
             break;
