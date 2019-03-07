@@ -9,6 +9,8 @@
  *
 */
 
+#ifndef LO_CLANG_SHARED_PLUGINS
+
 #include <algorithm>
 #include <cassert>
 #include <list>
@@ -234,8 +236,10 @@ void LoopVarTooSmall::checkExpr(Expr const * expr) {
     }
 }
 
-loplugin::Plugin::Registration< LoopVarTooSmall > X("loopvartoosmall");
+loplugin::Plugin::Registration< LoopVarTooSmall > loopvartoosmall("loopvartoosmall");
 
 }
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

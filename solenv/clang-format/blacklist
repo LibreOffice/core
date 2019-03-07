@@ -1753,6 +1753,8 @@ compilerplugins/clang/sallogareas.cxx
 compilerplugins/clang/sallogareas.hxx
 compilerplugins/clang/salunicodeliteral.cxx
 compilerplugins/clang/sfxpoolitem.cxx
+compilerplugins/clang/sharedvisitor/generator.cxx
+compilerplugins/clang/sharedvisitor/sharedvisitor.cxx
 compilerplugins/clang/simplifybool.cxx
 compilerplugins/clang/singlevalfields.cxx
 compilerplugins/clang/staticaccess.cxx

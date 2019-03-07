@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef LO_CLANG_SHARED_PLUGINS
+
 #include <cassert>
 #include <string>
 #include <iostream>
@@ -26,13 +28,18 @@ public:
     explicit BlockBlock(loplugin::InstantiationData const & data):
         FilteringPlugin(data) {}
 
-    virtual void run() override
+    virtual bool preRun() override
     {
         StringRef fn(handler.getMainFileName());
         if (loplugin::isSamePathname(fn, SRCDIR "/sal/osl/unx/file_misc.cxx"))
-             return;
+             return false;
+        return true;
+    }
 
-        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+    void run() override {
+        if (preRun()) {
+            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+        }
     }
 
     bool VisitCompoundStmt(CompoundStmt const * );
@@ -67,8 +74,10 @@ bool BlockBlock::VisitCompoundStmt(CompoundStmt const * compound)
     return true;
 }
 
-loplugin::Plugin::Registration< BlockBlock > X("blockblock", true);
+loplugin::Plugin::Registration< BlockBlock > blockblock("blockblock", true);
 
 }
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

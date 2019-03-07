@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef LO_CLANG_SHARED_PLUGINS
+
 #include <set>
 
 #include "check.hxx"
@@ -30,6 +32,8 @@ public:
         FilteringPlugin(rData) {}
 
     void run() override;
+    bool preRun() override;
+    void postRun() override;
     bool VisitVarDecl(VarDecl const*);
     bool VisitReturnStmt(ReturnStmt const*);
 private:
@@ -39,16 +43,25 @@ private:
 
 void StringStatic::run()
 {
+    if( preRun())
+        if( TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()))
+            postRun();
+}
+
+bool StringStatic::preRun()
+{
     StringRef fn(handler.getMainFileName());
     // passing around pointers to global OUString
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/filter/source/svg/"))
-         return;
+         return false;
     // has a mix of literals and refs to external OUStrings
     if (loplugin::isSamePathname(fn, SRCDIR "/ucb/source/ucp/webdav-neon/ContentProperties.cxx"))
-         return;
+         return false;
+    return true;
+}
 
-    TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
-
+void StringStatic::postRun()
+{
     for (auto const & pVarDecl : excludeVars) {
         potentialVars.erase(pVarDecl);
     }
@@ -128,8 +141,10 @@ bool StringStatic::VisitReturnStmt(ReturnStmt const * returnStmt)
     return true;
 }
 
-loplugin::Plugin::Registration<StringStatic> X("stringstatic");
+loplugin::Plugin::Registration<StringStatic> stringstatic("stringstatic");
 
 } // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
