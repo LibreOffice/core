@@ -5743,6 +5743,7 @@ void ScInterpreter::ScCountIf()
                 }
                 break;
                 default:
+                    PopError(); // Propagate it further
                     PushIllegalParameter();
                     return ;
             }
