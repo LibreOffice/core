@@ -22,6 +22,10 @@ else
 CLANGCXXFLAGS=-O2 -Wall -Wextra -Wundef -g
 endif
 
+# Whether to make plugins use one shared ASTRecursiveVisitor (plugins run faster).
+# By default enabled, disable if you work on an affected plugin (re-generating takes time).
+LO_CLANG_SHARED_PLUGINS=1
+
 # The uninteresting rest.
 
 include $(SRCDIR)/solenv/gbuild/gbuild.mk
@@ -50,6 +54,8 @@ else
 CLANGINCLUDES=$(if $(filter /usr,$(CLANGDIR)),,-isystem $(CLANGDIR)/include)
 endif
 
+LLVMCONFIG=$(CLANGDIR)/bin/llvm-config
+
 # Clang/LLVM libraries are intentionally not linked in, they are usually built as static libraries, which means the resulting
 # plugin would be big (even though the clang binary already includes it all) and it'd be necessary to explicitly specify
 # also all the dependency libraries.
@@ -58,6 +64,10 @@ CLANGINDIR=$(SRCDIR)/compilerplugins/clang
 # Cannot use $(WORKDIR), the plugin should survive even 'make clean', otherwise the rebuilt
 # plugin will cause cache misses with ccache.
 CLANGOUTDIR=$(BUILDDIR)/compilerplugins/obj
+
+ifdef LO_CLANG_SHARED_PLUGINS
+CLANGCXXFLAGS+=-DLO_CLANG_SHARED_PLUGINS
+endif
 
 QUIET=$(if $(verbose),,@)
 
@@ -72,8 +82,13 @@ endif
 
 compilerplugins: compilerplugins-build
 
+ifdef LO_CLANG_SHARED_PLUGINS
+# The shared source, intentionally put first in the list because it takes the longest to build.
+CLANGSRC=sharedvisitor/sharedvisitor.cxx
+endif
 # The list of source files, generated automatically (all files in clang/, but not subdirs).
-CLANGSRC=$(foreach src,$(wildcard $(CLANGINDIR)/*.cxx), $(notdir $(src)))
+CLANGSRC+=$(foreach src,$(wildcard $(CLANGINDIR)/*.cxx), $(notdir $(src)))
+
 # Remember the sources and if they have changed, force plugin relinking.
 CLANGSRCCHANGED= \
     $(shell mkdir -p $(CLANGOUTDIR) ; \
@@ -151,5 +166,36 @@ endif
 # Clang most probably doesn't maintain binary compatibility, so rebuild when clang changes.
 $(CLANGOUTDIR)/clang-timestamp: $(CLANGDIR)/bin/clang$(CLANG_EXE_EXT)
 	$(QUIET)touch $@
+
+
+ifdef LO_CLANG_SHARED_PLUGINS
+# Update the shared visitor source if needed. It is intentionally included in the sources and generated only when
+# needed, because the generating takes a while.
+# If you want to remake the source with LO_CLANG_SHARED_PLUGINS disabled, run 'make LO_CLANG_SHARED_PLUGINS=1'.
+$(CLANGINDIR)/sharedvisitor/sharedvisitor.cxx: $(shell grep -l "LO_CLANG_SHARED_PLUGINS" $(CLANGINDIR)/*.cxx)
+$(CLANGINDIR)/sharedvisitor/sharedvisitor.cxx: $(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT)
+	$(call gb_Output_announce,$(subst $(SRCDIR)/,,$@),$(true),GEN,1)
+	$(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT) $(shell grep -l "LO_CLANG_SHARED_PLUGINS" $(CLANGINDIR)/*.cxx) \
+        > $(CLANGINDIR)/sharedvisitor/sharedvisitor.cxx
+
+CLANGTOOLLIBS = -lclangTooling -lclangDriver -lclangFrontend -lclangParse -lclangSema -lclangEdit -lclangAnalysis \
+        -lclangAST -lclangLex -lclangSerialization -lclangBasic $(shell $(LLVMCONFIG) --ldflags --libs --system-libs)
+# Path to the clang system headers (no idea if there's a better way to get it).
+CLANGTOOLDEFS = -DCLANGSYSINCLUDE=$(shell $(LLVMCONFIG) --libdir)/clang/$(shell $(LLVMCONFIG) --version | sed 's/svn//')/include
+
+$(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT): $(CLANGINDIR)/sharedvisitor/generator.cxx
+	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,1)
+	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) $(CLANGTOOLDEFS) $(CLANGINCLUDES) \
+        -DCLANGDIR=$(CLANGDIR) -DBUILDDIR=$(BUILDDIR) -I$(BUILDDIR)/config_host \
+        $< -o $@ -MMD -MT $@ -MP -MF $(CLANGOUTDIR)/sharedvisitor/generator.d $(CLANGTOOLLIBS)
+
+compilerplugins-build: $(CLANGOUTDIR)/sharedvisitor
+
+$(CLANGOUTDIR)/sharedvisitor:
+	mkdir -p $(CLANGOUTDIR)/sharedvisitor
+
+-include $(CLANGOUTDIR)/sharedvisitor/generator.d
+# TODO WNT version
+endif
 
 # vim: set noet sw=4 ts=4:

@@ -115,6 +115,8 @@ public:
 
     inline ContextCheck Struct(llvm::StringRef id) const;
 
+    explicit ContextCheck(const clang::NamespaceDecl * decl ) : context_( decl ) {}
+
 private:
     friend DeclCheck;
     friend TypeCheck;

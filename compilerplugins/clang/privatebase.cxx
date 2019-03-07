@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef LO_CLANG_SHARED_PLUGINS
+
 #include "plugin.hxx"
 
 namespace {
@@ -48,8 +50,10 @@ bool PrivateBase::VisitCXXRecordDecl(CXXRecordDecl const * decl) {
     return true;
 }
 
-loplugin::Plugin::Registration<PrivateBase> X("privatebase");
+loplugin::Plugin::Registration<PrivateBase> privatebase("privatebase");
 
 }
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

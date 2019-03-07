@@ -7,7 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef LO_CLANG_SHARED_PLUGINS
+
 #include <cassert>
+#include <stack>
 #include <string>
 
 #include "clang/AST/Attr.h"
@@ -71,18 +74,25 @@ public:
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
+    bool PreTraverseFriendDecl(FriendDecl * decl) {
+        friendFunction.push( dyn_cast_or_null<FunctionDecl>(decl->getFriendDecl()));
+        return true;
+    }
+    bool PostTraverseFriendDecl(FriendDecl *, bool ) {
+        friendFunction.pop();
+        return true;
+    }
     bool TraverseFriendDecl(FriendDecl * decl) {
-        auto const old = friendFunction_;
-        friendFunction_ = dyn_cast_or_null<FunctionDecl>(decl->getFriendDecl());
+        PreTraverseFriendDecl(decl);
         auto const ret = RecursiveASTVisitor::TraverseFriendDecl(decl);
-        friendFunction_ = old;
+        PostTraverseFriendDecl(decl, ret);
         return ret;
     }
 
     bool VisitFunctionDecl(FunctionDecl const * decl);
 
 private:
-    FunctionDecl const * friendFunction_ = nullptr;
+    std::stack<FunctionDecl const *> friendFunction;
 };
 
 bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
@@ -98,7 +108,7 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
     {
         return true;
     }
-    if (decl == friendFunction_) {
+    if (!friendFunction.empty() && decl == friendFunction.top()) {
         if (auto const lex = dyn_cast<CXXRecordDecl>(decl->getLexicalDeclContext())) {
             if (lex->isDependentContext()) {
                 return true;
@@ -200,8 +210,10 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
     return true;
 }
 
-loplugin::Plugin::Registration<UnrefFun> X("unreffun");
+loplugin::Plugin::Registration<UnrefFun> unreffun("unreffun");
 
 }
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
