@@ -496,18 +496,21 @@ static tools::Rectangle GetMenuPopupMarkRegion(const ImplControlValue& rValue)
 {
     tools::Rectangle aRet;
 
-    const MenupopupValue& rMVal(static_cast<const MenupopupValue&>(rValue));
-    aRet.SetTop(rMVal.maItemRect.Top());
-    aRet.SetBottom(rMVal.maItemRect.Bottom() + 1); // see below in drawNativeControl
+    auto pMVal = dynamic_cast<const MenupopupValue*>(&rValue);
+    if (!pMVal)
+        return aRet;
+
+    aRet.SetTop(pMVal->maItemRect.Top());
+    aRet.SetBottom(pMVal->maItemRect.Bottom() + 1); // see below in drawNativeControl
     if (AllSettings::GetLayoutRTL())
     {
-        aRet.SetRight(rMVal.maItemRect.Right() + 1);
-        aRet.SetLeft(aRet.Right() - (rMVal.getNumericVal() - rMVal.maItemRect.Left()));
+        aRet.SetRight(pMVal->maItemRect.Right() + 1);
+        aRet.SetLeft(aRet.Right() - (pMVal->getNumericVal() - pMVal->maItemRect.Left()));
     }
     else
     {
-        aRet.SetRight(rMVal.getNumericVal());
-        aRet.SetLeft(rMVal.maItemRect.Left());
+        aRet.SetRight(pMVal->getNumericVal());
+        aRet.SetLeft(pMVal->maItemRect.Left());
     }
 
     return aRet;
@@ -1173,9 +1176,13 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
 
     if (pImpl && nType == ControlType::MenuPopup && (nPart == ControlPart::MenuItemCheckMark || nPart == ControlPart::MenuItemRadioMark))
     {
-        cacheRect = GetMenuPopupMarkRegion(aValue);
-        buttonRect = cacheRect;
-        keySize = cacheRect.GetSize();
+        tools::Rectangle aRectangle = GetMenuPopupMarkRegion(aValue);
+        if (!aRectangle.IsEmpty())
+        {
+            cacheRect = GetMenuPopupMarkRegion(aValue);
+            buttonRect = cacheRect;
+            keySize = cacheRect.GetSize();
+        }
     }
 
 
