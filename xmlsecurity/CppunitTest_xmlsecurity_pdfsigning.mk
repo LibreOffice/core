@@ -48,7 +48,7 @@ $(eval $(call gb_CppunitTest_use_rdb,xmlsecurity_pdfsigning,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,xmlsecurity_pdfsigning))
 
-ifeq ($(ENABLE_PDFIMPORT),TRUE)
+ifeq ($(ENABLE_POPPLER),TRUE)
 $(eval $(call gb_CppunitTest_use_executable,xmlsecurity_pdfsigning,xpdfimport))
 endif
 

@@ -89,7 +89,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_activex_controls_tests,\
     sd/util/sd \
     sd/util/sdfilt \
     sd/util/sdd \
-    $(if $(ENABLE_PDFIMPORT),sdext/source/pdfimport/pdfimport) \
+    $(if $(ENABLE_POPPLER),sdext/source/pdfimport/pdfimport) \
     sfx2/util/sfx \
     sot/util/sot \
     svl/source/fsstor/fsstorage \
