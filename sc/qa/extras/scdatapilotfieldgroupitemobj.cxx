@@ -65,7 +65,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static const int nMaxFieldIndex = 6;
+    static const int m_nMaxFieldIndex = 6;
     uno::Reference<lang::XComponent> m_xComponent;
 };
 
@@ -78,7 +78,7 @@ ScDataPilotFieldGroupItemObj::ScDataPilotFieldGroupItemObj()
 
 uno::Reference<uno::XInterface> ScDataPilotFieldGroupItemObj::init()
 {
-    table::CellRangeAddress aCellRangeAddress(0, 1, 0, nMaxFieldIndex - 1, nMaxFieldIndex - 1);
+    table::CellRangeAddress aCellRangeAddress(0, 1, 0, m_nMaxFieldIndex - 1, m_nMaxFieldIndex - 1);
     table::CellAddress aCellAddress(0, 7, 8);
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
@@ -89,7 +89,7 @@ uno::Reference<uno::XInterface> ScDataPilotFieldGroupItemObj::init()
     uno::Reference<sheet::XSpreadsheet> xSheet0(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet1(xIA->getByIndex(1), uno::UNO_QUERY_THROW);
 
-    for (auto i = 1; i < nMaxFieldIndex; ++i)
+    for (auto i = 1; i < m_nMaxFieldIndex; ++i)
     {
         xSheet0->getCellByPosition(i, 0)->setFormula("Col" + OUString::number(i));
         xSheet0->getCellByPosition(0, i)->setFormula("Row" + OUString::number(i));
@@ -97,9 +97,9 @@ uno::Reference<uno::XInterface> ScDataPilotFieldGroupItemObj::init()
         xSheet1->getCellByPosition(0, i)->setFormula("Row" + OUString::number(i));
     }
 
-    for (auto i = 1; i < nMaxFieldIndex; ++i)
+    for (auto i = 1; i < m_nMaxFieldIndex; ++i)
     {
-        for (auto j = 1; j < nMaxFieldIndex; ++j)
+        for (auto j = 1; j < m_nMaxFieldIndex; ++j)
         {
             xSheet0->getCellByPosition(i, j)->setValue(i * (j + 1));
             xSheet1->getCellByPosition(i, j)->setValue(i * (j + 2));
