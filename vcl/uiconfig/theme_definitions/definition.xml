@@ -188,17 +188,38 @@
     <spinbox>
         <part value="Entire">
             <state>
-                <external source="spinbox-entire.svgx" />
+            </state>
+        </part>
+        <part value="SubEdit">
+            <state>
             </state>
         </part>
         <part value="ButtonDown" width="44" height="26">
-            <state>
+            <state enabled="true">
                 <external source="spinbox-left.svgx" />
+            </state>
+            <state enabled="true" pressed="true">
+                <external source="spinbox-left-pressed.svgx" />
+            </state>
+            <state enabled="true" rollover="true">
+                <external source="spinbox-left-rollover.svgx" />
+            </state>
+            <state enabled="false">
+                <external source="spinbox-left-disabled.svgx" />
             </state>
         </part>
         <part value="ButtonUp" width="44" height="26">
-            <state>
+            <state enabled="true">
                 <external source="spinbox-right.svgx" />
+            </state>
+            <state enabled="true" pressed="true">
+                <external source="spinbox-right-pressed.svgx" />
+            </state>
+            <state enabled="true" rollover="true">
+                <external source="spinbox-right-rollover.svgx" />
+            </state>
+            <state enabled="false">
+                <external source="spinbox-right-disabled.svgx" />
             </state>
         </part>
     </spinbox>

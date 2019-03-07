@@ -24,7 +24,13 @@ $(eval $(call gb_Package_add_files,vcl_theme_definitions,$(LIBO_SHARE_FOLDER)/th
 	tick-on-pressed.svgx \
 	tick-on-disabled.svgx \
 	spinbox-left.svgx \
+	spinbox-left-pressed.svgx \
+	spinbox-left-rollover.svgx \
+	spinbox-left-disabled.svgx \
 	spinbox-right.svgx \
+	spinbox-right-pressed.svgx \
+	spinbox-right-rollover.svgx \
+	spinbox-right-disabled.svgx \
 	spinbox-entire.svgx \
 	pushbutton-default.svgx \
 	pushbutton-rollover.svgx \
