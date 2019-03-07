@@ -721,11 +721,21 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         {
             // Experimental PDF importing using PDFium. This is currently enabled for LOK only and
             // we handle it not via XmlFilterAdaptor but a new SdPdfFiler.
-            const bool bPdfiumImport = (comphelper::LibreOfficeKit::isActive() || getenv("LO_IMPORT_USE_PDFIUM")) && pMedium->GetFilter() &&
-                                       (pMedium->GetFilter()->GetFilterName() == "draw_pdf_import");
+#if !HAVE_FEATURE_POPPLER
+            constexpr bool bUsePdfium = true;
+#else
+            const bool bUsePdfium
+                = comphelper::LibreOfficeKit::isActive() || getenv("LO_IMPORT_USE_PDFIUM");
+#endif
+            const bool bPdfiumImport
+                = bUsePdfium && pMedium->GetFilter()
+                  && (pMedium->GetFilter()->GetFilterName() == "draw_pdf_import");
+
             pImpl->nLoadedFlags = SfxLoadedFlags::NONE;
             pImpl->bModelInitialized = false;
-            if ( pMedium->GetFilter() && ( pMedium->GetFilter()->GetFilterFlags() & SfxFilterFlags::STARONEFILTER ) && !bPdfiumImport )
+            if (pMedium->GetFilter()
+                && (pMedium->GetFilter()->GetFilterFlags() & SfxFilterFlags::STARONEFILTER)
+                && !bPdfiumImport)
             {
                 uno::Reference < beans::XPropertySet > xSet( GetModel(), uno::UNO_QUERY );
                 const OUString sLockUpdates("LockUpdates");

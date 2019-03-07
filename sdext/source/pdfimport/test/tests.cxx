@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 #include <zlib.h>
 
 #include "outputwrap.hxx"
@@ -453,6 +454,7 @@ namespace
     public:
         void testXPDFParser()
         {
+#if HAVE_FEATURE_POPPLER
             std::shared_ptr<TestSink> pSink( new TestSink() );
             CPPUNIT_ASSERT(
                 pdfi::xpdf_ImportFromFile(
@@ -462,10 +464,12 @@ namespace
                     OUString(),
                     getComponentContext(), "" ) );
             pSink->check();
+#endif
         }
 
         void testOdfDrawExport()
         {
+#if HAVE_FEATURE_POPPLER
             rtl::Reference<pdfi::PDFIRawAdaptor> xAdaptor( new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()) );
             xAdaptor->setTreeVisitorFactory( createDrawTreeVisitorFactory() );
 
@@ -477,10 +481,12 @@ namespace
                                                         new OutputWrap(tempFileURL),
                                                         nullptr ));
             osl::File::remove( tempFileURL );
+#endif
         }
 
         void testOdfWriterExport()
         {
+#if HAVE_FEATURE_POPPLER
             rtl::Reference<pdfi::PDFIRawAdaptor> xAdaptor( new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()) );
             xAdaptor->setTreeVisitorFactory( createWriterTreeVisitorFactory() );
 
@@ -492,10 +498,12 @@ namespace
                                                         new OutputWrap(tempFileURL),
                                                         nullptr ));
             osl::File::remove( tempFileURL );
+#endif
         }
 
         void testTdf96993()
         {
+#if HAVE_FEATURE_POPPLER
             rtl::Reference<pdfi::PDFIRawAdaptor> xAdaptor(new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()));
             xAdaptor->setTreeVisitorFactory(createDrawTreeVisitorFactory());
 
@@ -506,10 +514,12 @@ namespace
                 nullptr));
             // This ensures that the imported image arrives properly flipped
             CPPUNIT_ASSERT(aOutput.indexOf("draw:transform=\"matrix(18520.8333333333 0 0 26281.9444444444 0 0)\"") != -1);
+#endif
         }
 
         void testTdf98421()
         {
+#if HAVE_FEATURE_POPPLER
             rtl::Reference<pdfi::PDFIRawAdaptor> xAdaptor(new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()));
             xAdaptor->setTreeVisitorFactory(createWriterTreeVisitorFactory());
 
@@ -521,10 +531,12 @@ namespace
             // This ensures that the imported image arrives properly flipped
             CPPUNIT_ASSERT(aOutput.indexOf("draw:transform=\"scale( 1.0 -1.0 ) translate( 0mm 0mm )\"") != -1);
             CPPUNIT_ASSERT(aOutput.indexOf("svg:height=\"-262.82mm\"") != -1);
+#endif
         }
 
         void testTdf105536()
         {
+#if HAVE_FEATURE_POPPLER
             rtl::Reference<pdfi::PDFIRawAdaptor> xAdaptor(new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()));
             xAdaptor->setTreeVisitorFactory(createDrawTreeVisitorFactory());
 
@@ -535,6 +547,7 @@ namespace
                 nullptr));
             // This ensures that the imported image arrives properly flipped
             CPPUNIT_ASSERT(aOutput.indexOf("draw:transform=\"matrix(-21488.4 0 0 -27978.1 21488.4 27978.1)\"") != -1);
+#endif
         }
 
         CPPUNIT_TEST_SUITE(PDFITest);

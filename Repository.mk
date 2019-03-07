@@ -231,7 +231,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,gnome, \
 ))
 endif
 
-ifneq ($(ENABLE_PDFIMPORT),)
+ifneq ($(ENABLE_POPPLER),)
 $(eval $(call gb_Helper_register_executables_for_install,OOO,pdfimport, \
 	xpdfimport \
 ))
@@ -1004,7 +1004,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ogltrans,\
 	slideshow_opengl_shader \
 ))
 
-ifneq ($(ENABLE_PDFIMPORT),)
+ifneq ($(ENABLE_POPPLER),)
 $(eval $(call gb_Helper_register_packages_for_install,pdfimport, \
 	sdext_pdfimport_pdf \
 ))
