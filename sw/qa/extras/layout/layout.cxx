@@ -2840,6 +2840,9 @@ void SwLayoutWriter::testBtlrCell()
     CPPUNIT_ASSERT_GREATER(nFirstParaMiddle, rCharRect.Top());
     CPPUNIT_ASSERT_LESS(nFirstParaBottom, rCharRect.Top());
 
+    // Save initial cursor position.
+    SwPosition aCellStart = *pWrtShell->GetCursor()->Start();
+
     // Test that pressing "up" at the start of the cell goes to the next character position.
     sal_uLong nNodeIndex = pWrtShell->GetCursor()->Start()->nNode.GetIndex();
     sal_Int32 nIndex = pWrtShell->GetCursor()->Start()->nContent.GetIndex();
@@ -2852,12 +2855,43 @@ void SwLayoutWriter::testBtlrCell()
     CPPUNIT_ASSERT_EQUAL(nIndex + 1, pWrtShell->GetCursor()->Start()->nContent.GetIndex());
 
     // Test that pressing "right" goes to the next paragraph (logical "down").
+    sal_Int32 nContentIndex = pWrtShell->GetCursor()->Start()->nContent.GetIndex();
     aKeyEvent = KeyEvent(0, KEY_RIGHT);
     rEditWin.KeyInput(aKeyEvent);
     Scheduler::ProcessEventsToIdle();
     // Without the accompanying fix in place, this test would have failed: the cursor went to the
     // paragraph after the table.
     CPPUNIT_ASSERT_EQUAL(nNodeIndex + 1, pWrtShell->GetCursor()->Start()->nNode.GetIndex());
+
+    // Test that we have the correct character index after traveling to the next paragraph.
+    // Without the accompanying fix in place, this test would have failed: char position was 5, i.e.
+    // the cursor jumped to the end of the paragraph for no reason.
+    CPPUNIT_ASSERT_EQUAL(nContentIndex, pWrtShell->GetCursor()->Start()->nContent.GetIndex());
+
+    // Test that clicking "below" the second paragraph positions the cursor at the start of the
+    // second paragraph.
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwPosition aPosition(aCellStart);
+    SwTwips nSecondParaLeft
+        = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/txt[2]/infos/bounds", "left")
+              .toInt32();
+    SwTwips nSecondParaWidth
+        = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/txt[2]/infos/bounds", "width")
+              .toInt32();
+    SwTwips nSecondParaTop
+        = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/txt[2]/infos/bounds", "top").toInt32();
+    SwTwips nSecondParaHeight
+        = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/txt[2]/infos/bounds", "height")
+              .toInt32();
+    Point aPoint;
+    aPoint.setX(nSecondParaLeft + nSecondParaWidth / 2);
+    aPoint.setY(nSecondParaTop + nSecondParaHeight - 100);
+    SwCursorMoveState aState(MV_NONE);
+    pLayout->GetCursorOfst(&aPosition, aPoint, &aState);
+    CPPUNIT_ASSERT_EQUAL(aCellStart.nNode.GetIndex() + 1, aPosition.nNode.GetIndex());
+    // Without the accompanying fix in place, this test would have failed: character position was 5,
+    // i.e. cursor was at the end of the paragraph.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aPosition.nContent.GetIndex());
 #endif
 }
 
