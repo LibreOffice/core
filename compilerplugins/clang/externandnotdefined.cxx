@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef LO_CLANG_SHARED_PLUGINS
+
 #include <string>
 
 #include "plugin.hxx"
@@ -71,8 +73,10 @@ bool ExternAndNotDefined::VisitFunctionDecl(const FunctionDecl * functionDecl) {
 }
 
 
-loplugin::Plugin::Registration< ExternAndNotDefined > X("externandnotdefined");
+loplugin::Plugin::Registration< ExternAndNotDefined > externandnotdefined("externandnotdefined");
 
 }
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
