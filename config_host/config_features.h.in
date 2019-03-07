@@ -159,6 +159,11 @@
 #define HAVE_FEATURE_PDFIUM 0
 
 /*
+ * Whether poppler is available
+ */
+#define HAVE_FEATURE_POPPLER 0
+
+/*
  * Whether extra fonts are available
  */
 #define HAVE_MORE_FONTS 0
