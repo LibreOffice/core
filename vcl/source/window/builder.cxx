@@ -1595,6 +1595,42 @@ void VclBuilder::preload()
 extern "C" VclBuilder::customMakeWidget lo_get_custom_widget_func(const char* name);
 #endif
 
+namespace
+{
+    //the default NotifyStartDrag is weird to me, and defaults to enabling all
+    //possibilities when drag starts, while restricting it to some subset of
+    //the configured drag drop mode would make more sense to me, but I'm not
+    //going to change the baseclass
+
+    class LclHeaderTabListBox : public SvHeaderTabListBox
+    {
+    public:
+        LclHeaderTabListBox(vcl::Window* pParent, WinBits nWinStyle)
+            : SvHeaderTabListBox(pParent, nWinStyle)
+        {
+        }
+
+        virtual DragDropMode NotifyStartDrag(TransferDataContainer&, SvTreeListEntry*) override
+        {
+            return GetDragDropMode();
+        }
+    };
+
+    class LclTabListBox : public SvTabListBox
+    {
+    public:
+        LclTabListBox(vcl::Window* pParent, WinBits nWinStyle)
+            : SvTabListBox(pParent, nWinStyle)
+        {
+        }
+
+        virtual DragDropMode NotifyStartDrag(TransferDataContainer&, SvTreeListEntry*) override
+        {
+            return GetDragDropMode();
+        }
+    };
+}
+
 VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &name, const OString &id,
     stringmap &rMap)
 {
@@ -1970,7 +2006,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                 xHeader->SetHelpId(m_sHelpRoot + headerid);
                 m_aChildren.emplace_back(headerid, xHeader, true);
 
-                VclPtr<SvHeaderTabListBox> xHeaderBox = VclPtr<SvHeaderTabListBox>::Create(xContainer, nWinStyle);
+                VclPtr<LclHeaderTabListBox> xHeaderBox = VclPtr<LclHeaderTabListBox>::Create(xContainer, nWinStyle);
                 xHeaderBox->InitHeaderBar(xHeader);
                 xContainer->set_expand(true);
                 xHeader->Show();
@@ -1980,7 +2016,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             }
             else
             {
-                xBox = VclPtr<SvTabListBox>::Create(pRealParent, nWinStyle);
+                xBox = VclPtr<LclTabListBox>::Create(pRealParent, nWinStyle);
                 xWindowForPackingProps = xBox;
             }
             xWindow = xBox;
