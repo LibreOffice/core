@@ -614,16 +614,29 @@ void SwTextFrame::SwitchVerticalToHorizontal( Point& rPoint ) const
 
     // calc offset inside frame
     if ( IsVertLR() )
+        // X offset is Y - left.
         nOfstX = rPoint.X() - getFrameArea().Left();
     else
     {
+        // X offset is right - X.
         if ( mbIsSwapped )
             nOfstX = getFrameArea().Left() + getFrameArea().Height() - rPoint.X();
         else
             nOfstX = getFrameArea().Left() + getFrameArea().Width() - rPoint.X();
     }
 
-    const long nOfstY = rPoint.Y() - getFrameArea().Top();
+    long nOfstY;
+    if (IsVertLRBT())
+    {
+        // Y offset is bottom - Y.
+        if (mbIsSwapped)
+            nOfstY = getFrameArea().Top() + getFrameArea().Width() - rPoint.Y();
+        else
+            nOfstY = getFrameArea().Top() + getFrameArea().Height() - rPoint.Y();
+    }
+    else
+        // Y offset is Y - top.
+        nOfstY = rPoint.Y() - getFrameArea().Top();
 
     // calc rotated coords
     rPoint.setX( getFrameArea().Left() + nOfstY );
