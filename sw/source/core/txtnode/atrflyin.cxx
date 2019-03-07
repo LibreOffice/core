@@ -34,6 +34,7 @@
 #include <flyfrms.hxx>
 #include <objectformatter.hxx>
 #include <calbck.hxx>
+#include <dcontact.hxx>
 
 SwFormatFlyCnt::SwFormatFlyCnt( SwFrameFormat *pFrameFormat )
     : SfxPoolItem( RES_TXTATR_FLYCNT ),
@@ -193,6 +194,13 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
     else
     {
         assert(!pFormat->IsModifyLocked()); // need to notify anchor node
+        if (RES_DRAWFRMFMT == pFormat->Which())
+        {
+            if (SdrObject const*const pObj = pFormat->FindSdrObject())
+            {   // tdf#123259 disconnect with *old* anchor position
+                static_cast<SwDrawContact*>(::GetUserCall(pObj))->DisconnectFromLayout();
+            }
+        }
         pFormat->SetFormatAttr( aAnchor );  // only set the anchor
     }
 
