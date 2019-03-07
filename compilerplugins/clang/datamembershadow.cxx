@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef LO_CLANG_SHARED_PLUGINS
+
 #include <string>
 #include <iostream>
 #include <map>
@@ -114,8 +116,10 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
     return true;
 }
 
-loplugin::Plugin::Registration< DataMemberShadow > X("datamembershadow", true);
+loplugin::Plugin::Registration< DataMemberShadow > datamembershadow("datamembershadow", true);
 
 }
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
