@@ -892,6 +892,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetDocumentation(MEMBERID memid,
         }
         else
         {
+            // FIXME: Shouldn't we be able to know the names of the members of UNO interfaces?
             *pBstrName = SysAllocString(o3tl::toW(OUString(OUString("UnknownNameOfMember#") + OUString::number(memid)).getStr()));
         }
     }
