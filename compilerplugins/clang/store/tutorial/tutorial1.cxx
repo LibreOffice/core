@@ -61,7 +61,7 @@ bool Tutorial1::VisitReturnStmt( const ReturnStmt* returnstmt )
     }
 
 // Register the plugin action with the LO plugin handling.
-static Plugin::Registration< Tutorial1 > X( "tutorial1" );
+static Plugin::Registration< Tutorial1 > tutorial1( "tutorial1" );
 
 } // namespace
 
