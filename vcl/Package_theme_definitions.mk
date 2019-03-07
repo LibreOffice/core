@@ -40,6 +40,8 @@ $(eval $(call gb_Package_add_files,vcl_theme_definitions,$(LIBO_SHARE_FOLDER)/th
 	tabitem-first-selected.svgx \
 	tabitem-middle-selected.svgx \
 	tabitem-last-selected.svgx \
+	scrollbar-horizontal.svgx \
+	scrollbar-vertical.svgx \
 ))
 
 # vim: set noet sw=4 ts=4:
