@@ -14,7 +14,6 @@
 #include <datatransformation.hxx>
 #include <datamapper.hxx>
 #include <dbdata.hxx>
-#include <docsh.hxx>
 
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
@@ -24,6 +23,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
+#include <vcl/layout.hxx>
 
 constexpr int MENU_START = 0;
 constexpr int MENU_COLUMN = 1;

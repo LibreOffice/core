@@ -21,7 +21,6 @@
 #include <sfx2/dialoghelper.hxx>
 #include <svl/sharecontrolfile.hxx>
 #include <unotools/useroptions.hxx>
-#include <svtools/simptabl.hxx>
 
 #include <docsh.hxx>
 

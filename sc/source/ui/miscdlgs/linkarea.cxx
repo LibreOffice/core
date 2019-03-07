@@ -19,7 +19,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docinsert.hxx>
@@ -28,10 +27,8 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/inettbc.hxx>
 #include <svtools/sfxecode.hxx>
-#include <vcl/waitobj.hxx>
 
 #include <linkarea.hxx>
-#include <sc.hrc>
 #include <rangeutl.hxx>
 #include <docsh.hxx>
 #include <tablink.hxx>

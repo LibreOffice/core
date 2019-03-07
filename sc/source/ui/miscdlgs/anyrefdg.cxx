@@ -22,7 +22,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/viewsh.hxx>
 #include <vcl/accel.hxx>
-#include <vcl/wrkwin.hxx>
 #include <vcl/mnemonic.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -36,8 +35,6 @@
 #include <docsh.hxx>
 #include <rfindlst.hxx>
 #include <compiler.hxx>
-#include <formulacell.hxx>
-#include <global.hxx>
 #include <inputopt.hxx>
 #include <rangeutl.hxx>
 #include <tokenarray.hxx>

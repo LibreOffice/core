@@ -22,9 +22,10 @@
 #include <chgtrack.hxx>
 #include <redcom.hxx>
 #include <docsh.hxx>
-#include <tabvwsh.hxx>
+#include <dbfunc.hxx>
+#include <tabview.hxx>
+#include <viewutil.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 
 ScRedComDialog::ScRedComDialog( weld::Window* pParent, const SfxItemSet& rCoreSet,
                     ScDocShell *pShell, ScChangeAction *pAction, bool bPrevNext)

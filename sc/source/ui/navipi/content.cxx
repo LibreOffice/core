@@ -19,20 +19,15 @@
 
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
-#include <svx/svdxcgv.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
-#include <svl/urlbmk.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
-#include <stdlib.h>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 
@@ -48,8 +43,6 @@
 #include <transobj.hxx>
 #include <drwtrans.hxx>
 #include <lnktrans.hxx>
-#include <formulacell.hxx>
-#include <dociter.hxx>
 #include <strings.hrc>
 #include <scresid.hxx>
 #include <bitmaps.hlst>

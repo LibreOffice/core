@@ -24,17 +24,13 @@
 #include <sfx2/objsh.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/treelistbox.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/mnemonic.hxx>
-#include <unotools/charclass.hxx>
 #include <tools/urlobj.hxx>
 #include <formula/formulahelper.hxx>
 #include <formula/IFunctionDescription.hxx>
 #include <formula/errorcodes.hxx>
 
-#include <tokenuno.hxx>
+#include <compiler.hxx>
 #include <formula.hxx>
 #include <formdata.hxx>
 #include <reffact.hxx>
@@ -43,10 +39,8 @@
 #include <scmod.hxx>
 #include <inputhdl.hxx>
 #include <tabvwsh.hxx>
-#include <appoptio.hxx>
 #include <docsh.hxx>
 #include <funcdesc.hxx>
-#include <formula/token.hxx>
 #include <tokenarray.hxx>
 #include <sc.hrc>
 #include <servuno.hxx>
@@ -54,6 +48,8 @@
 #include <externalrefmgr.hxx>
 
 #include <com/sun/star/table/CellAddress.hpp>
+#include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
+#include <com/sun/star/sheet/XFormulaParser.hpp>
 
 using namespace formula;
 using namespace com::sun::star;

@@ -21,7 +21,6 @@
 #include <unotools/textsearch.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/basedlgs.hxx>
 
@@ -32,7 +31,6 @@
 #include <docsh.hxx>
 #include <scresid.hxx>
 #include <strings.hrc>
-#include <simpref.hxx>
 #include <scmod.hxx>
 #include <tabvwsh.hxx>
 

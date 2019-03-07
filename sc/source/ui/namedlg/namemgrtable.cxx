@@ -10,17 +10,17 @@
 //ScRangeManagerTable
 #include <memory>
 #include <global.hxx>
-#include <reffact.hxx>
-#include <document.hxx>
-#include <docfunc.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <namedlg.hxx>
-#include <viewdata.hxx>
 #include <globalnames.hxx>
+#include <namemgrtable.hxx>
+#include <rangenam.hxx>
 
-#include <sfx2/app.hxx>
 #include <unotools/charclass.hxx>
+#include <svtools/simptabl.hxx>
+#include <vcl/weld.hxx>
+#include <vcl/layout.hxx>
+#include <tools/link.hxx>
 
 #define ITEMID_NAME 1
 #define ITEMID_RANGE 2

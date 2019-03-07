@@ -24,7 +24,6 @@
 #include <undorangename.hxx>
 #include <tabvwsh.hxx>
 #include <tokenarray.hxx>
-#include <sc.hrc>
 
 ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
         const ScViewData* pViewData, const std::map<OUString, ScRangeName*>& aRangeMap,

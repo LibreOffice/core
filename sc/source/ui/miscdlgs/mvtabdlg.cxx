@@ -22,7 +22,6 @@
 #include <mvtabdlg.hxx>
 #include <document.hxx>
 #include <docsh.hxx>
-#include <global.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 

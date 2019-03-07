@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rangelst.hxx>
 #include <scitems.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/zforlist.hxx>
