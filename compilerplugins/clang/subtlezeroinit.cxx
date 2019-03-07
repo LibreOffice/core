@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef LO_CLANG_SHARED_PLUGINS
+
 #include "plugin.hxx"
 
 // Find occurrences of 'new T()' where the instance is zero-initialized upfront
@@ -45,16 +47,21 @@ public:
         return true;
     }
 
-private:
-    void run() override {
-        if (compiler.getLangOpts().CPlusPlus) {
+    virtual bool preRun() override {
+        return compiler.getLangOpts().CPlusPlus;
+    }
+
+    virtual void run() override {
+        if (preRun()) {
             TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         }
     }
 };
 
-static loplugin::Plugin::Registration<SubtleZeroInit> reg("subtlezeroinit");
+static loplugin::Plugin::Registration<SubtleZeroInit> subtlezeroinit("subtlezeroinit");
 
 }
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
