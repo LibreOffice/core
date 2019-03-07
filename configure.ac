@@ -10061,7 +10061,7 @@ dnl ===================================================================
 dnl Check for poppler
 dnl ===================================================================
 ENABLE_POPPLER=
-AC_MSG_CHECKING([enable poppler])
+AC_MSG_CHECKING([whether to build Poppler])
 if test -z "$enable_poppler" -o "$enable_poppler" = yes; then
     AC_MSG_RESULT([yes])
     ENABLE_POPPLER=TRUE
@@ -10074,7 +10074,8 @@ AC_SUBST(ENABLE_POPPLER)
 # pdf import?
 AC_MSG_CHECKING([whether to build the PDF import feature])
 ENABLE_PDFIMPORT=
-if test $_os != Android -a $_os != iOS -a \( -z "$enable_pdfimport" -o "$enable_pdfimport" = yes \); then
+if test \( $_os != Android -a $_os != iOS -a \( -z "$enable_pdfimport" -o "$enable_pdfimport" = yes \) \) -o \
+        \( "$ENABLE_POPPLER" == "TRUE" -o "$ENABLE_PDFIUM" == "TRUE" \); then
     AC_MSG_RESULT([yes])
     ENABLE_PDFIMPORT=TRUE
     AC_DEFINE(HAVE_FEATURE_PDFIMPORT)
@@ -10082,7 +10083,11 @@ else
     AC_MSG_RESULT([no])
 fi
 
-if test $ENABLE_PDFIMPORT == TRUE -a $ENABLE_POPPLER == TRUE; then
+if test "$ENABLE_PDFIMPORT" == "TRUE" -a "$ENABLE_POPPLER" != "TRUE" -a "$ENABLE_PDFIUM" != "TRUE"; then
+    AC_MSG_ERROR([Cannot import PDF without either Pdfium or Poppler; please enable either of them.])
+fi
+
+if test "$ENABLE_PDFIMPORT" == "TRUE" -a "$ENABLE_POPPLER" == "TRUE"; then
     dnl ===================================================================
     dnl Check for system poppler
     dnl ===================================================================
