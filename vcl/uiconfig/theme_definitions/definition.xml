@@ -227,14 +227,12 @@
     <scrollbar>
         <part value="ThumbHorz">
             <state>
-                <rect stroke="#C7C7C7" fill="#C7C7C7" stroke-width="1" />
-                <line stroke="#007AFF" stroke-width="5" x1="0.01" y1="0.5" x2="0.99" y2="0.5"/>
+                <external source="scrollbar-horizontal.svgx" />
             </state>
         </part>
         <part value="ThumbVert">
             <state>
-                <rect stroke="#C7C7C7" fill="#C7C7C7" stroke-width="1" />
-                <line stroke="#007AFF" stroke-width="5" x1="0.5" y1="0.01" x2="0.5" y2="0.99"/>
+                <external source="scrollbar-vertical.svgx" />
             </state>
         </part>
         <part value="ButtonUp">
@@ -247,22 +245,22 @@
         </part>
         <part value="TrackHorzLeft">
             <state>
-                <rect stroke="#C7C7C7" fill="#C7C7C7" stroke-width="1" />
+                <rect stroke="#8e8e93" fill="#ffffff" stroke-width="0" />
             </state>
         </part>
         <part value="TrackHorzRight">
             <state>
-                <rect stroke="#C7C7C7" fill="#C7C7C7" stroke-width="1" />
+                <rect stroke="#8e8e93" fill="#ffffff" stroke-width="0" />
             </state>
         </part>
         <part value="TrackVertUpper">
             <state>
-                <rect stroke="#C7C7C7" fill="#C7C7C7" stroke-width="1" />
+                <rect stroke="#8e8e93" fill="#ffffff" stroke-width="0" />
             </state>
         </part>
         <part value="TrackVertLower">
             <state>
-                <rect stroke="#C7C7C7" fill="#C7C7C7" stroke-width="1" />
+                <rect stroke="#8e8e93" fill="#ffffff" stroke-width="0" />
             </state>
         </part>
     </scrollbar>
