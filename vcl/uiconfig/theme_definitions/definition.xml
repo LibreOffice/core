@@ -148,9 +148,11 @@
 
     <editbox>
         <part value="Entire">
-            <state>
-                <rect stroke="#FFFFFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1" />
-                <line stroke="#C7C7C7" stroke-width="2" x1="0.0" y1="0.9" x2="1.0" y2="0.9"/>
+            <state enabled="true">
+                <external source="common-rect.svgx" />
+            </state>
+            <state enabled="false">
+                <external source="common-rect-disabled.svgx" />
             </state>
         </part>
     </editbox>
