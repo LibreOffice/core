@@ -124,7 +124,6 @@
 #include <svtools/apearcfg.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/window.hxx>
-#include <tools/diagnose_ex.h>
 #include "langselect.hxx"
 
 #if HAVE_FEATURE_BREAKPAD
