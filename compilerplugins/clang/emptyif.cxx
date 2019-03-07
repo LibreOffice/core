@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef LO_CLANG_SHARED_PLUGINS
+
 #include <cassert>
 #include <string>
 #include <iostream>
@@ -84,7 +86,9 @@ bool EmptyIf::VisitIfStmt(IfStmt const* ifStmt)
     return true;
 }
 
-loplugin::Plugin::Registration<EmptyIf> X("emptyif", true);
+loplugin::Plugin::Registration<EmptyIf> emptyif("emptyif", true);
 }
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
