@@ -11,7 +11,6 @@
 
 #include <tpdefaults.hxx>
 #include <sc.hrc>
-#include <scmod.hxx>
 #include <defaultsoptions.hxx>
 #include <document.hxx>
 

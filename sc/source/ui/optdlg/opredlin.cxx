@@ -20,20 +20,11 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <svx/colorbox.hxx>
-#include <svx/dlgutil.hxx>
-#include <svx/drawitem.hxx>
-#include <svx/xtable.hxx>
 
 #include <appoptio.hxx>
 #include <scmod.hxx>
-#include <scitems.hxx>
-#include <tpview.hxx>
-#include <global.hxx>
-#include <viewopti.hxx>
-#include <tabvwsh.hxx>
-#include <uiitems.hxx>
 #include <docsh.hxx>
-#include <sc.hrc>
+#include <svx/svxids.hrc>
 
 #include <opredlin.hxx>
 

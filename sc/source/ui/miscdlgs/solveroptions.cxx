@@ -26,16 +26,12 @@
 #include <rtl/math.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <vcl/svlbitm.hxx>
-#include <vcl/treelistentry.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>
 
-#include <com/sun/star/sheet/Solver.hpp>
 #include <com/sun/star/sheet/XSolverDescription.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace com::sun::star;
 

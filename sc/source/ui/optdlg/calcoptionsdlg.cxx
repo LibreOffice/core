@@ -9,25 +9,8 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
-#include <cmath>
-
 #include <calcconfig.hxx>
 #include "calcoptionsdlg.hxx"
-#include <docfunc.hxx>
-#include <docsh.hxx>
-#include <interpre.hxx>
-#include <sc.hrc>
-#include <scopetools.hxx>
-#include <viewdata.hxx>
-
-#include <vcl/svlbitm.hxx>
-#include <vcl/treelistentry.hxx>
-
-#if HAVE_FEATURE_OPENCL
-#include <formulagroup.hxx>
-#include <globalnames.hxx>
-#endif
 
 namespace {
 

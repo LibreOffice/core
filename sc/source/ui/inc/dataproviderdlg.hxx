@@ -15,12 +15,12 @@
 #include <vcl/dialog.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/listctrl.hxx>
+#include <vcl/menu.hxx>
 
 #include "datatableview.hxx"
 
 #include <memory>
 
-class Menu;
 class ScDocument;
 class ScDataProviderBaseControl;
 class ScDBData;

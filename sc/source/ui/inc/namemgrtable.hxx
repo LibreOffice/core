@@ -11,6 +11,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_NAMEMGRTABLE_HXX
 
 #include <svtools/simptabl.hxx>
+#include <vcl/weld.hxx>
 
 #include <address.hxx>
 

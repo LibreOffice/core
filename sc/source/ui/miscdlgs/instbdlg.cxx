@@ -19,7 +19,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docinsert.hxx>
 #include <sfx2/filedlghelper.hxx>

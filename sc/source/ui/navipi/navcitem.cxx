@@ -22,7 +22,6 @@
 #include <osl/diagnose.h>
 
 #include <navcitem.hxx>
-#include <global.hxx>
 #include <navipi.hxx>
 #include <sc.hrc>
 

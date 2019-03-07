@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <scitems.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/weld.hxx>
 
 #include <uiitems.hxx>
-#include <global.hxx>
 #include <document.hxx>
 #include <scresid.hxx>
 #include <sc.hrc>

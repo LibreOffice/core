@@ -22,7 +22,6 @@
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <limits.h>
 
 #include <scresid.hxx>
 #include <document.hxx>

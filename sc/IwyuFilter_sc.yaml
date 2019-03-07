@@ -521,6 +521,9 @@ blacklist:
     sc/source/ui/inc/StatisticsTwoVariableDialog.hxx:
     # base class has to be a complete type
     - viewdata.hxx
+    sc/source/ui/inc/tpview.hxx:
+    # Needed for VclPtr type
+    - svx/colorbox.hxx
     sc/source/ui/unoobj/exceldetect.hxx:
     # base class has to be a complete type
     - com/sun/star/document/XExtendedFilterDetection.hpp
@@ -860,3 +863,7 @@ blacklist:
     sc/source/ui/drawfunc/futext3.cxx:
     # Needed for direct member access
     - svx/svdocapt.hxx
+    sc/source/ui/formdlg/formula.cxx:
+    # Complete type is needed
+    - com/sun/star/sheet/XFormulaParser.hpp
+    - com/sun/star/sheet/XFormulaOpCodeMapper.hpp

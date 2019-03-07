@@ -19,35 +19,20 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include <scitems.hxx>
-#include <svx/algitem.hxx>
-#include <editeng/boxitem.hxx>
-#include <editeng/brushitem.hxx>
-#include <editeng/contouritem.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/crossedoutitem.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/shdditem.hxx>
-#include <editeng/udlnitem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <svl/zforlist.hxx>
+#include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <strings.hrc>
-#include <scmod.hxx>
-#include <attrib.hxx>
-#include <zforauto.hxx>
 #include <global.hxx>
 #include <globstr.hrc>
 #include <autoform.hxx>
 #include <strindlg.hxx>
 #include <scuiautofmt.hxx>
 #include <scresid.hxx>
-#include <document.hxx>
 #include <helpids.h>
 
 // AutoFormat-Dialog:

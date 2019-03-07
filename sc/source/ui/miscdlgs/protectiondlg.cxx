@@ -19,9 +19,7 @@
 
 #include <protectiondlg.hxx>
 #include <tabprotection.hxx>
-#include <vcl/fixed.hxx>
 
-#include <sal/macros.h>
 #include <vector>
 
 namespace {

@@ -21,7 +21,6 @@
 
 #include <scmod.hxx>
 #include <inputopt.hxx>
-#include <helpids.h>
 
 ScReplaceWarnBox::ScReplaceWarnBox(weld::Window* pParent)
     : MessageDialogController(pParent, "modules/scalc/ui/checkwarningdialog.ui",

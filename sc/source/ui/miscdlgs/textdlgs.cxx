@@ -27,7 +27,6 @@
 #include <svl/cjkoptions.hxx>
 
 #include <textdlgs.hxx>
-#include <sc.hrc>
 #include <svl/intitem.hxx>
 #include <svx/flagsdef.hxx>
 

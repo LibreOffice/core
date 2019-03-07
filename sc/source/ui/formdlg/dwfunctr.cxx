@@ -19,23 +19,14 @@
 
 #include <comphelper/string.hxx>
 #include <editeng/editview.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <formula/funcvarargs.h>
 #include <vcl/fixed.hxx>
 
-#include <sc.hrc>
 #include <global.hxx>
-#include <reffact.hxx>
-#include <document.hxx>
-#include <formulacell.hxx>
 #include <scmod.hxx>
 #include <inputhdl.hxx>
 #include <tabvwsh.hxx>
-#include <appoptio.hxx>
-#include <compiler.hxx>
 #include <funcdesc.hxx>
 
 #include <dwfunctr.hxx>

@@ -21,11 +21,11 @@
 #define INCLUDED_SC_SOURCE_UI_INC_TPVIEW_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <svx/colorbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 
 class ScViewOptions;
-class SvxColorListBox;
 
 class ScTpContentOptions : public SfxTabPage
 {

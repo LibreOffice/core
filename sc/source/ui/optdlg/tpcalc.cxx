@@ -19,22 +19,16 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include <scitems.hxx>
 #include <vcl/weld.hxx>
+#include <svl/zforlist.hxx>
 
-#include <global.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <uiitems.hxx>
-#include <docsh.hxx>
-#include <document.hxx>
 #include <docoptio.hxx>
 #include <sc.hrc>
 #include <officecfg/Office/Calc.hxx>
 
 #include <tpcalc.hxx>
-
-#include <math.h>
 
 ScTpCalcOptions::ScTpCalcOptions(vcl::Window* pParent, const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "OptCalculatePage",

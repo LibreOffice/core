@@ -32,8 +32,6 @@
 #include <globalnames.hxx>
 #include <tokenarray.hxx>
 
-#include <sfx2/app.hxx>
-
 #include <vcl/settings.hxx>
 #include <formula/errorcodes.hxx>
 #include <unotools/charclass.hxx>

@@ -10,7 +10,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_OPTDLG_CALCOPTIONSDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_OPTDLG_CALCOPTIONSDLG_HXX
 
-#include <config_features.h>
 #include <vcl/weld.hxx>
 #include <calcconfig.hxx>
 

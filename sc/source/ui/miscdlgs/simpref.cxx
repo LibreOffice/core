@@ -17,13 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
-
 #include <reffact.hxx>
 #include <document.hxx>
-#include <rangenam.hxx>
 #include <simpref.hxx>
-#include <scmod.hxx>
 
 ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent)
     : ScAnyRefDlg(pB, pCW, pParent, "SimpleRefDialog", "modules/scalc/ui/simplerefdialog.ui")

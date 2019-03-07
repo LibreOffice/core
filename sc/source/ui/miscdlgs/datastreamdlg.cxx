@@ -11,7 +11,6 @@
 
 #include <sfx2/filedlghelper.hxx>
 #include <svtools/inettbc.hxx>
-#include <vcl/layout.hxx>
 #include <address.hxx>
 #include <docsh.hxx>
 #include <datastream.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <rangelst.hxx>
-#include <scitems.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/builderfactory.hxx>
@@ -26,11 +25,9 @@
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 
-#include <uiitems.hxx>
 #include <reffact.hxx>
 #include <docsh.hxx>
 #include <docfunc.hxx>
-#include <formulacell.hxx>
 #include <rangeutl.hxx>
 #include <convuno.hxx>
 #include <unonames.hxx>
@@ -41,8 +38,10 @@
 
 #include <optsolver.hxx>
 
-#include <com/sun/star/sheet/Solver.hpp>
+#include <com/sun/star/sheet/SolverConstraint.hpp>
+#include <com/sun/star/sheet/SolverConstraintOperator.hpp>
 #include <com/sun/star/sheet/XSolverDescription.hpp>
+#include <com/sun/star/sheet/XSolver.hpp>
 
 using namespace com::sun::star;
 

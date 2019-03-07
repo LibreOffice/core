@@ -18,7 +18,6 @@
  */
 
 #include <scitems.hxx>
-#include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/contouritem.hxx>
@@ -29,27 +28,21 @@
 #include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
-#include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/scriptedtext.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/virdev.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <comphelper/processfactory.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 
 #include <strings.hrc>
-#include <scmod.hxx>
-#include <attrib.hxx>
 #include <zforauto.hxx>
 #include <global.hxx>
 #include <autoform.hxx>
 #include <autofmt.hxx>
 #include <scresid.hxx>
 #include <document.hxx>
-#include <docsh.hxx>
-#include <tabvwsh.hxx>
 #include <viewdata.hxx>
 
 #define FRAME_OFFSET 4

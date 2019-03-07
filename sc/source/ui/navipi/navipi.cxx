@@ -17,25 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rangelst.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/navigat.hxx>
 #include <svl/stritem.hxx>
-#include <svl/urlbmk.hxx>
 #include <vcl/builderfactory.hxx>
-#include <vcl/settings.hxx>
 #include <unotools/charclass.hxx>
-#include <stdlib.h>
 
 #include <viewdata.hxx>
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
-#include <dbdata.hxx>
-#include <rangenam.hxx>
 #include <rangeutl.hxx>
 #include <sc.hrc>
 #include <strings.hrc>
@@ -47,8 +41,6 @@
 #include <navipi.hxx>
 #include <navsett.hxx>
 #include <markdata.hxx>
-
-#include <algorithm>
 
 #include <com/sun/star/uno/Reference.hxx>
 
