@@ -31,7 +31,6 @@ $(eval $(call gb_Package_add_files,vcl_theme_definitions,$(LIBO_SHARE_FOLDER)/th
 	spinbox-right-pressed.svgx \
 	spinbox-right-rollover.svgx \
 	spinbox-right-disabled.svgx \
-	spinbox-entire.svgx \
 	common-rect.svgx \
 	common-rect-disabled.svgx \
 	pushbutton-default.svgx \
