@@ -22,6 +22,29 @@
       "revId": "9972587b04541dede07b0ef307006657d338bd51",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_9c357dfa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-07T06:49:34Z",
+      "side": 1,
+      "message": "This text is redundant, the bug report has all the details.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 41
+      },
+      "revId": "9972587b04541dede07b0ef307006657d338bd51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
