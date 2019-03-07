@@ -1258,7 +1258,16 @@ CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsm, gid_Module_Prg_Calc_MSO_Reg, xlsm, XLS
 CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsb, gid_Module_Prg_Calc_MSO_Reg, xlsb, XLSB, MS_EXCEL_WORKSHEET, 3, scalc.exe, open, Calc )
 CONDITIONAL_REGISTER_DOC_OPEN_EXTENSION( Iqy, gid_Module_Prg_Calc_MSO_Reg, iqy, IQY, MS_EXCEL_WEBQUERY, 0, scalc.exe, open, Calc )
 CONDITIONAL_REGISTRY_ENTRY_EXT_MEDIATYPE( Iqy, IQY, iqy, text/x-ms-iqy )
-CONDITIONAL_REGISTRY_ENTRY_MEDIATYPE_DEF_EXT( Iqy, IQY, iqy, text/x-ms-iqy )
+
+RegistryItem gid_Regitem__MediaType_DefExt_Iqy
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root_Reg_Iqy;
+    Subkey = "MIME\Database\Content Type\text/x-ms-iqy";
+    Name = "Extension";
+    Value = ".iqy";
+    ComponentCondition = "REGISTER_IQY=1";
+End
+
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xlt,  gid_Module_Prg_Calc_MSO_Reg, xlt,  XLT,  MS_EXCEL_TEMPLATE_OLD, 4, scalc.exe, new, Calc )
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xltx, gid_Module_Prg_Calc_MSO_Reg, xltx, XLTX, MS_EXCEL_TEMPLATE, 4, scalc.exe, new, Calc )
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xltm, gid_Module_Prg_Calc_MSO_Reg, xltm, XLTM, MS_EXCEL_TEMPLATE, 4, scalc.exe, new, Calc )
