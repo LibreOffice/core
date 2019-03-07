@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef LO_CLANG_SHARED_PLUGINS
+
 #include <cassert>
 #include <string>
 #include <iostream>
@@ -69,31 +71,36 @@ class UnnecessaryOverride:
 public:
     explicit UnnecessaryOverride(loplugin::InstantiationData const & data): FilteringPlugin(data) {}
 
-    virtual void run() override
+    virtual bool preRun() override
     {
         // ignore some files with problematic macros
         StringRef fn(handler.getMainFileName());
         if (loplugin::isSamePathname(fn, SRCDIR "/sd/source/ui/framework/factories/ChildWindowPane.cxx"))
-             return;
+            return false;
         if (loplugin::isSamePathname(fn, SRCDIR "/forms/source/component/Date.cxx"))
-             return;
+            return false;
         if (loplugin::isSamePathname(fn, SRCDIR "/forms/source/component/Time.cxx"))
-            return;
+            return false;
         if (loplugin::isSamePathname(fn, SRCDIR "/svx/source/dialog/hyperdlg.cxx"))
-            return;
+            return false;
         if (loplugin::isSamePathname(fn, SRCDIR "/svx/source/dialog/rubydialog.cxx"))
-            return;
+            return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/canvas/"))
-            return;
+            return false;
         if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/ui/view/spelldialog.cxx"))
-            return;
+            return false;
         if (loplugin::isSamePathname(fn, SRCDIR "/sd/source/ui/dlg/SpellDialogChildWindow.cxx"))
-            return;
+            return false;
         // HAVE_ODBC_ADMINISTRATION
         if (loplugin::isSamePathname(fn, SRCDIR "/dbaccess/source/ui/dlg/dsselect.cxx"))
-            return;
+            return false;
+        return true;
+    }
 
-        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+    virtual void run() override
+    {
+        if( preRun())
+            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
     bool VisitCXXMethodDecl(const CXXMethodDecl *);
@@ -515,8 +522,10 @@ CXXMemberCallExpr const * UnnecessaryOverride::extractCallExpr(Expr const *retur
     return dyn_cast<CXXMemberCallExpr>(returnExpr->IgnoreParenImpCasts());
 }
 
-loplugin::Plugin::Registration< UnnecessaryOverride > X("unnecessaryoverride", true);
+loplugin::Plugin::Registration< UnnecessaryOverride > unnecessaryoverride("unnecessaryoverride", true);
 
 }
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
