@@ -519,7 +519,7 @@ public:
     const std::shared_ptr<SalBitmap>& ImplGetSalBitmap() const { return mxSalBmp; }
     SAL_DLLPRIVATE void     ImplSetSalBitmap( const std::shared_ptr<SalBitmap>& xImpBmp );
 
-    SAL_DLLPRIVATE bool     ImplMakeGreyscales( sal_uInt16 nGreyscales );
+    SAL_DLLPRIVATE bool     ImplMakeGreyscales( const sal_uInt16 nGreyscales );
 
 public:
 

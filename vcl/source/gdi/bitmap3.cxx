@@ -318,7 +318,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
     return bRet;
 }
 
-bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
+bool Bitmap::ImplMakeGreyscales( const sal_uInt16 nGreys )
 {
     SAL_WARN_IF( nGreys != 16 && nGreys != 256, "vcl", "Only 16 or 256 greyscales are supported!" );
 
@@ -328,7 +328,7 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
     if( pReadAcc )
     {
         const BitmapPalette& rPal = GetGreyPalette( nGreys );
-        sal_uLong nShift = ( ( nGreys == 16 ) ? 4UL : 0UL );
+        const sal_uLong nShift = ( ( nGreys == 16 ) ? 4UL : 0UL );
         bool bPalDiffers = !pReadAcc->HasPalette() || ( rPal.GetEntryCount() != pReadAcc->GetPaletteEntryCount() );
 
         if( !bPalDiffers )
@@ -361,8 +361,6 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
                 else if( pReadAcc->GetScanlineFormat() == ScanlineFormat::N24BitTcBgr &&
                          pWriteAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal )
                 {
-                    nShift += 8;
-
                     for( long nY = 0; nY < nHeight; nY++ )
                     {
                         Scanline pReadScan = pReadAcc->GetScanline( nY );
@@ -374,15 +372,13 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
                             const sal_uLong nG = *pReadScan++;
                             const sal_uLong nR = *pReadScan++;
 
-                            *pWriteScan++ = static_cast<sal_uInt8>( ( nB * 28UL + nG * 151UL + nR * 77UL ) >> nShift );
+                            *pWriteScan++ = static_cast<sal_uInt8>( ( nB * 28UL + nG * 151UL + nR * 77UL ) >> (nShift + 8) );
                         }
                     }
                 }
                 else if( pReadAcc->GetScanlineFormat() == ScanlineFormat::N24BitTcRgb &&
                          pWriteAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal )
                 {
-                    nShift += 8;
-
                     for( long nY = 0; nY < nHeight; nY++ )
                     {
                         Scanline pReadScan = pReadAcc->GetScanline( nY );
@@ -394,7 +390,7 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
                             const sal_uLong nG = *pReadScan++;
                             const sal_uLong nB = *pReadScan++;
 
-                            *pWriteScan++ = static_cast<sal_uInt8>( ( nB * 28UL + nG * 151UL + nR * 77UL ) >> nShift );
+                            *pWriteScan++ = static_cast<sal_uInt8>( ( nB * 28UL + nG * 151UL + nR * 77UL ) >> (nShift + 8) );
                         }
                     }
                 }
