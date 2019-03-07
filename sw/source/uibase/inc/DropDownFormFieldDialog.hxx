@@ -41,7 +41,7 @@ private:
 
     DECL_LINK(ListChangedHdl, weld::TreeView&, void);
     DECL_LINK(KeyPressedHdl, const KeyEvent&, bool);
-    DECL_LINK(KeyReleasedHdl, const KeyEvent&, bool);
+    DECL_LINK(EntryChangedHdl, weld::Entry&, void);
     DECL_LINK(ButtonPushedHdl, weld::Button&, void);
 
     void InitControls();
