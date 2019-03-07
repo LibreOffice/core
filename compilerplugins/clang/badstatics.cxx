@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef LO_CLANG_SHARED_PLUGINS
+
 #include <cassert>
 
 #include "check.hxx"
@@ -22,8 +24,12 @@ public:
     explicit BadStatics(loplugin::InstantiationData const& rData):
         FilteringPlugin(rData) {}
 
+    bool preRun() override {
+        return compiler.getLangOpts().CPlusPlus; // no non-trivial dtors in C
+    }
+
     void run() override {
-        if (compiler.getLangOpts().CPlusPlus) { // no non-trivial dtors in C
+        if (preRun()) {
             TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         }
     }
@@ -244,8 +250,10 @@ public:
 
 };
 
-loplugin::Plugin::Registration<BadStatics> X("badstatics");
+loplugin::Plugin::Registration<BadStatics> badstatics("badstatics");
 
 } // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
