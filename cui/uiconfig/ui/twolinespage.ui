@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -21,6 +21,8 @@
   <object class="GtkBox" id="TwoLinesPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
@@ -70,18 +72,24 @@
       <object class="GtkFrame" id="enclosing">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
           <object class="GtkAlignment" id="alignment9">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
                 <property name="column_spacing">6</property>
                 <property name="column_homogeneous">True</property>
                 <child>
@@ -146,7 +154,7 @@
                   </packing>
                 </child>
                 <child>
-                   <object class="GtkScrolledWindow">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
