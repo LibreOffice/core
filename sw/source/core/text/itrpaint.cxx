@@ -134,7 +134,7 @@ SwLinePortion *SwTextPainter::CalcPaintOfst( const SwRect &rPaint )
 //    (objectively slow, subjectively fast)
 // Since the user usually judges subjectively the second method is set as default.
 void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
-                                 const bool bUnderSz )
+                                 const bool bUnderSized )
 {
 #if OSL_DEBUG_LEVEL > 1
 //    sal_uInt16 nFntHeight = GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), GetInfo().GetOut() );
@@ -200,7 +200,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     // bClip decides if there's a need to clip
     // The whole thing must be done before retouching
 
-    bool bClip = ( bDrawInWindow || bUnderSz ) && !rClip.IsChg();
+    bool bClip = ( bDrawInWindow || bUnderSized ) && !rClip.IsChg();
     if( bClip && pPor )
     {
         // If TopLeft or BottomLeft of the line are outside, the we must clip.
@@ -456,7 +456,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                   GetTextFrame()->GetNext()->IsTextFrame() &&
                   static_cast<SwTextFrame*>(GetTextFrame()->GetNext())->IsUndersized() ) ;
 
-            if( bUnderSz || bNextUndersized )
+            if( bUnderSized || bNextUndersized )
             {
                 if ( bAdjustBaseLine )
                     GetInfo().Y( GetInfo().GetPos().Y() + m_pCurr->GetAscent() );
