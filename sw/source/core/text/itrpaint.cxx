@@ -461,6 +461,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                 if ( bAdjustBaseLine )
                     GetInfo().Y( GetInfo().GetPos().Y() + m_pCurr->GetAscent() );
 
+                // Left arrow (text overflowing)
                 if( pArrow )
                     GetInfo().DrawRedArrow( *pArrow );
 
@@ -472,6 +473,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                     (nDiff >= 0 && bNextUndersized) )
 
                 {
+                    // Right arrow (text overflowing)
                     SwArrowPortion aArrow( GetInfo() );
                     GetInfo().DrawRedArrow( aArrow );
                 }
