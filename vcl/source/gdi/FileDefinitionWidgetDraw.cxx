@@ -203,9 +203,16 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
 
                 aPolyPolygon.transform(basegfx::utils::createTranslateB2DHomMatrix(
                     -aPolyPolygonRange.getMinX(), -aPolyPolygonRange.getMinY()));
-                aPolyPolygon.transform(basegfx::utils::createScaleB2DHomMatrix(
-                    aFinalRectangle.getWidth() / aPolyPolygonRange.getWidth(),
-                    aFinalRectangle.getHeight() / aPolyPolygonRange.getHeight()));
+
+                double fScaleX = 1.0;
+                double fScaleY = 1.0;
+                if (aPolyPolygonRange.getWidth() > 0.0)
+                    fScaleX = aFinalRectangle.getWidth() / aPolyPolygonRange.getWidth();
+                if (aPolyPolygonRange.getHeight() > 0.0)
+                    fScaleY = aFinalRectangle.getHeight() / aPolyPolygonRange.getHeight();
+
+                aPolyPolygon.transform(basegfx::utils::createScaleB2DHomMatrix(fScaleX, fScaleY));
+
                 aPolyPolygon.transform(basegfx::utils::createTranslateB2DHomMatrix(
                     aFinalRectangle.getMinX() - 0.5, aFinalRectangle.getMinY() - 0.5));
 
@@ -698,6 +705,24 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
             rNativeContentRegion = rBoundingControlRegion;
             return true;
         }
+        break;
+        case ControlType::Scrollbar:
+        {
+            if (ePart == ControlPart::ButtonUp || ePart == ControlPart::ButtonDown
+                || ePart == ControlPart::ButtonLeft || ePart == ControlPart::ButtonRight)
+            {
+                rNativeContentRegion = tools::Rectangle(aLocation, Size(0, 0));
+                rNativeBoundingRegion = rNativeContentRegion;
+                return true;
+            }
+            else
+            {
+                rNativeBoundingRegion = rBoundingControlRegion;
+                rNativeContentRegion = rNativeBoundingRegion;
+                return true;
+            }
+        }
+        break;
 
         default:
             break;
