@@ -22,10 +22,17 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
+#include <swdll.hxx>
+
 using namespace sw;
 
 class ToxTextGeneratorTest : public CppUnit::TestFixture {
 public:
+    virtual void setUp() override
+    {
+        SwGlobals::ensure();
+    }
+
     void EmptyStringIsReturnedForPageNumberPlaceholderOfZeroItems();
     void OneAtSignIsReturnedForPageNumberPlaceholderOfOneItem();
     void TwoAtSignsAreReturnedForPageNumberPlaceholderOfOneItem();
