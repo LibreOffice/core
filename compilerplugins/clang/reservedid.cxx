@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef LO_CLANG_SHARED_PLUGINS
+
 #include <algorithm>
 #include <cassert>
 #include <limits>
@@ -40,6 +42,7 @@ public:
     {}
 
     void run() override;
+    void postRun() override;
 
     bool VisitNamedDecl(NamedDecl const * decl);
 
@@ -56,8 +59,12 @@ private:
 
 void ReservedId::run() {
     //TODO: Rules for C?
-    if (TraverseDecl(compiler.getASTContext().getTranslationUnitDecl())
-        && compiler.hasPreprocessor())
+    if (TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()))
+        postRun();
+}
+
+void ReservedId::postRun() {
+    if( compiler.hasPreprocessor())
     {
         auto & prep = compiler.getPreprocessor();
         for (auto const & m: prep.macros(false)) {
@@ -302,8 +309,10 @@ bool ReservedId::isApi(NamedDecl const * decl) {
     return false;
 }
 
-loplugin::Plugin::Registration<ReservedId> X("reservedid");
+loplugin::Plugin::Registration<ReservedId> reservedid("reservedid");
 
 }
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

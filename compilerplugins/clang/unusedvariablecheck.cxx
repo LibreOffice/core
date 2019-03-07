@@ -9,6 +9,8 @@
  *
  */
 
+#ifndef LO_CLANG_SHARED_PLUGINS
+
 #include <config_global.h>
 
 #include "compat.hxx"
@@ -72,8 +74,10 @@ bool UnusedVariableCheck::VisitVarDecl( const VarDecl* var )
     return true;
     }
 
-static Plugin::Registration< UnusedVariableCheck > X( "unusedvariablecheck" );
+static Plugin::Registration< UnusedVariableCheck > unusedvariablecheck( "unusedvariablecheck" );
 
 } // namespace
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
