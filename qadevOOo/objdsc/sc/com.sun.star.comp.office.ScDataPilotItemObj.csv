@@ -1,5 +1,3 @@
-"ScDataPilotItemObj";"com::sun::star::container::XNamed";"getName()"
-"ScDataPilotItemObj";"com::sun::star::container::XNamed";"setName()"
 "ScDataPilotItemObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "ScDataPilotItemObj";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "ScDataPilotItemObj";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
