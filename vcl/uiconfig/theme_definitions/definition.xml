@@ -124,24 +124,24 @@
 
     <combobox>
         <part value="Entire">
-            <state>
-                <external source="spinbox-entire.svgx" />
+            <state enabled="true">
+                <external source="common-rect.svgx" />
+            </state>
+            <state enabled="false">
+                <external source="common-rect-disabled.svgx" />
             </state>
         </part>
         <part value="SubEdit">
             <state>
             </state>
         </part>
-        <part value="ButtonUp">
-            <state>
-                <line stroke="#C7C7C7" stroke-width="4" x1="0.2" y1="0.6" x2="0.5" y2="0.4"/>
-                <line stroke="#C7C7C7" stroke-width="4" x1="0.5" y1="0.4" x2="0.8" y2="0.6"/>
+
+        <part value="ButtonDown" width="35" height="36">
+            <state enabled="true">
+                <image source="combobox.svgx" />
             </state>
-        </part>
-        <part value="ButtonDown">
-            <state>
-                <line stroke="#C7C7C7" stroke-width="4" x1="0.2" y1="0.4" x2="0.5" y2="0.6"/>
-                <line stroke="#C7C7C7" stroke-width="4" x1="0.5" y1="0.6" x2="0.8" y2="0.4"/>
+            <state enabled="false">
+                <image source="combobox-disabled.svgx" />
             </state>
         </part>
     </combobox>
@@ -157,8 +157,11 @@
 
     <listbox>
         <part value="Entire">
-            <state>
-                <rect stroke="#007AFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1" />
+            <state enabled="true">
+                <external source="common-rect.svgx" />
+            </state>
+            <state enabled="false">
+                <external source="common-rect-disabled.svgx" />
             </state>
         </part>
         <part value="ListboxWindow">
@@ -166,21 +169,20 @@
                 <rect stroke="#007AFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1" />
             </state>
         </part>
+        <part value="SubEdit">
+            <state>
+            </state>
+        </part>
+        <part value="ButtonDown" width="35" height="36">
+            <state enabled="true">
+                <image source="combo.svgx" />
+            </state>
+            <state enabled="false">
+                <image source="combo-disabled.svgx" />
+            </state>
+        </part>
         <part value="Focus">
             <state>
-                <rect stroke="#007AFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1" />
-            </state>
-        </part>
-        <part value="ButtonUp">
-            <state>
-                <line stroke="#007AFF" stroke-width="4" x1="0.2" y1="0.6" x2="0.5" y2="0.4"/>
-                <line stroke="#007AFF" stroke-width="4" x1="0.5" y1="0.4" x2="0.8" y2="0.6"/>
-            </state>
-        </part>
-        <part value="ButtonDown">
-            <state>
-                <line stroke="#007AFF" stroke-width="4" x1="0.2" y1="0.4" x2="0.5" y2="0.6"/>
-                <line stroke="#007AFF" stroke-width="4" x1="0.5" y1="0.6" x2="0.8" y2="0.4"/>
             </state>
         </part>
     </listbox>

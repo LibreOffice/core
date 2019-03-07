@@ -32,6 +32,8 @@ $(eval $(call gb_Package_add_files,vcl_theme_definitions,$(LIBO_SHARE_FOLDER)/th
 	spinbox-right-rollover.svgx \
 	spinbox-right-disabled.svgx \
 	spinbox-entire.svgx \
+	common-rect.svgx \
+	common-rect-disabled.svgx \
 	pushbutton-default.svgx \
 	pushbutton-rollover.svgx \
 	tabitem-first.svgx \
@@ -42,6 +44,8 @@ $(eval $(call gb_Package_add_files,vcl_theme_definitions,$(LIBO_SHARE_FOLDER)/th
 	tabitem-last-selected.svgx \
 	scrollbar-horizontal.svgx \
 	scrollbar-vertical.svgx \
+	combobox.svgx \
+	combobox-disabled.svgx \
 ))
 
 # vim: set noet sw=4 ts=4:
