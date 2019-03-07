@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_09e60a18",
+        "filename": "qadevOOo/tests/java/ifc/sheet/_XCellRangesQuery.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2019-03-07T21:42:10Z",
+      "side": 1,
+      "message": "This file can\u0027t be delete, because it is still used by other tests. A quick git grep -l XCellRangesQuery qadevOOo/objdsc/ revealed several files:\n\nqadevOOo/objdsc/sc/com.sun.star.comp.office.ScCellCursorObj.csv\nqadevOOo/objdsc/sc/com.sun.star.comp.office.ScCellObj.csv\nqadevOOo/objdsc/sc/com.sun.star.comp.office.ScCellRangeObj.csv\nqadevOOo/objdsc/sc/com.sun.star.comp.office.ScCellRangesObj.csv\nqadevOOo/objdsc/sc/com.sun.star.comp.office.ScTableSheetObj.csv",
+      "revId": "92581a147fa02eac35e561319b9a1280bdb3f621",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
