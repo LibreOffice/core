@@ -11,6 +11,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <cppunit/extensions/HelperMacros.h>
@@ -22,8 +23,7 @@ namespace apitest {
 
 void DataPilotItem::testProperties()
 {
-    uno::Reference< container::XIndexAccess > xIA(init(), UNO_QUERY_THROW);
-    uno::Reference< beans::XPropertySet > xItem(xIA->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xItem(init(), UNO_QUERY_THROW);
 
 
     const OUString propNameIS("IsHidden");
