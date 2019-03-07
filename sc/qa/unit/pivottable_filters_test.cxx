@@ -81,6 +81,7 @@ public:
     void testPivotTableDuplicatedMemberFilterXLSX();
     void testPivotTableTabularModeXLSX();
     void testTdf112106();
+    void testTdf123923();
 
     CPPUNIT_TEST_SUITE(ScPivotTableFiltersTest);
 
@@ -119,6 +120,7 @@ public:
     CPPUNIT_TEST(testPivotTableDuplicatedMemberFilterXLSX);
     CPPUNIT_TEST(testPivotTableTabularModeXLSX);
     CPPUNIT_TEST(testTdf112106);
+    CPPUNIT_TEST(testTdf123923);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2324,6 +2326,23 @@ void ScPivotTableFiltersTest::testTdf112106()
     CPPUNIT_ASSERT_EQUAL(ScResId(STR_PIVOT_DATA), (*pLayoutName));
 
     xDocSh->DoClose();
+}
+
+void ScPivotTableFiltersTest::testTdf123923()
+{
+    // tdf#123923: Excel fails when it finds "Err:504" instead of "#REF!" in pivot table cache
+
+    ScDocShellRef xShell = loadDoc("pivot-table-err-in-cache.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory,
+                                                "xl/pivotCache/pivotCacheDefinition1.xml");
+    CPPUNIT_ASSERT(pTable);
+
+    assertXPath(pTable, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems/x:e",
+                "v", "#REF!");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPivotTableFiltersTest);
