@@ -701,8 +701,12 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
         case ControlType::EditboxNoBorder:
         case ControlType::MultilineEditbox:
         {
-            rNativeBoundingRegion = rBoundingControlRegion;
-            rNativeContentRegion = rBoundingControlRegion;
+            //auto const& pPart = m_aWidgetDefinition.getDefinition(eType, ControlPart::Entire);
+
+            Size aSize(rBoundingControlRegion.GetWidth(),
+                       std::max(rBoundingControlRegion.GetHeight(), 32L));
+            rNativeContentRegion = tools::Rectangle(aLocation, aSize);
+            rNativeBoundingRegion = rNativeContentRegion;
             return true;
         }
         break;
