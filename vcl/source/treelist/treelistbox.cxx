@@ -3655,6 +3655,11 @@ bool SvTreeListBox::set_property(const OString &rKey, const OUString &rValue)
     {
         SetQuickSearch(toBool(rValue));
     }
+    else if (rKey == "reorderable")
+    {
+        if (toBool(rValue))
+            SetDragDropMode(DragDropMode::CTRL_MOVE);
+    }
     else
         return Control::set_property(rKey, rValue);
     return true;
