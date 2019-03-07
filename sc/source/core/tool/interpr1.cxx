@@ -5737,6 +5737,9 @@ void ScInterpreter::ScCountIf()
                     nTab2 = 0;
                 }
                 break;
+                case svError:
+                    PopError(); // Propagate it further
+                    [[fallthrough]];
                 default:
                     PushIllegalParameter();
                     return ;
