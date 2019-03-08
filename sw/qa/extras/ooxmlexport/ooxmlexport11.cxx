@@ -922,6 +922,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121597TrackedDeletionOfMultipleParagraphs, "tdf1
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:pPr/w:rPr/w:del");
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf123054, "tdf123054.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("No Spacing"),
+                         getProperty<OUString>(getParagraph(20), "ParaStyleName"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
