@@ -25,6 +25,7 @@
 #include <editeng/numitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/postitem.hxx>
+#include <editeng/unoprnms.hxx>
 #include <svl/style.hxx>
 
 #include <sfx2/sfxsids.hrc>
@@ -195,6 +196,7 @@ public:
     void testDescriptionImport();
     void testTdf83247();
     void testTdf47365();
+    void testTdf122899();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -282,6 +284,7 @@ public:
     CPPUNIT_TEST(testDescriptionImport);
     CPPUNIT_TEST(testTdf83247);
     CPPUNIT_TEST(testTdf47365);
+    CPPUNIT_TEST(testTdf122899);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2692,6 +2695,32 @@ void SdImportTest::testTdf47365()
     // Check that we import "loop" attribute of the presentation, and don't introduce any pauses
     CPPUNIT_ASSERT(bEndlessVal);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nPauseVal);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf122899()
+{
+    // tdf122899 FILEOPEN: ppt: old kind arc from MS Office 97 is broken
+    // Error was, that the path coordinates of a mso_sptArc shape were read as sal_Int16
+    // although they are unsigned 16 bit. This leads to wrong positions of start and end
+    // point and results to a huge shape width in the test document.
+    OUString aSrc="sd/qa/unit/data/ppt/tdf122899_Arc_90_to_91_clockwise.ppt";
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(aSrc), PPT);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("Could not get XDrawPagesSupplier", xDrawPagesSupplier.is());
+    uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("Could not get xDrawPage", xDrawPage.is());
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get xShape", xShape.is());
+    awt::Rectangle aFrameRect;
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRect;
+    // original width is 9cm, add some tolerance
+    CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(9020), aFrameRect.Width);
 
     xDocShRef->DoClose();
 }
