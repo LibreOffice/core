@@ -75,11 +75,12 @@ WidgetDefinitionPart::getStates(ControlType eType, ControlState eState,
 
             auto const& rTabItemValue = static_cast<TabitemValue const&>(rValue);
 
-            if (rTabItemValue.isFirst() && rTabItemValue.isLast())
+            if (rTabItemValue.isLeftAligned() && rTabItemValue.isRightAligned()
+                && rTabItemValue.isFirst() && rTabItemValue.isLast())
                 sExtra = "first_last";
-            else if (rTabItemValue.isFirst())
+            else if (rTabItemValue.isLeftAligned() || rTabItemValue.isFirst())
                 sExtra = "first";
-            else if (rTabItemValue.isLast())
+            else if (rTabItemValue.isRightAligned() || rTabItemValue.isLast())
                 sExtra = "last";
             else
                 sExtra = "middle";
