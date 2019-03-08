@@ -663,9 +663,6 @@ RecoveryDialog::RecoveryDialog(weld::Window* pParent, RecoveryCore* pCore)
     , m_eRecoveryState(RecoveryDialog::E_RECOVERY_PREPARED)
     , m_bWaitForCore(false)
     , m_bWasRecoveryStarted(false)
-    , m_aGreenCheckImg(RID_SVXBMP_GREENCHECK)
-    , m_aYellowCheckImg(RID_SVXBMP_YELLOWCHECK)
-    , m_aRedCrossImg(RID_SVXBMP_REDCROSS)
     , m_aSuccessRecovStr(SvxResId(RID_SVXSTR_SUCCESSRECOV))
     , m_aOrigDocRecovStr(SvxResId(RID_SVXSTR_ORIGDOCRECOV))
     , m_aRecovFailedStr(SvxResId(RID_SVXSTR_RECOVFAILED))
@@ -992,19 +989,19 @@ OUString RecoveryDialog::impl_getStatusString( const TURLInfo& rInfo ) const
     return sStatus;
 }
 
-OUString RecoveryDialog::impl_getStatusImage( const TURLInfo& rInfo ) const
+OUString RecoveryDialog::impl_getStatusImage( const TURLInfo& rInfo )
 {
     OUString sStatus;
     switch ( rInfo.RecoveryState )
     {
         case E_SUCCESSFULLY_RECOVERED :
-            sStatus = m_aGreenCheckImg;
+            sStatus = RID_SVXBMP_GREENCHECK;
             break;
         case E_ORIGINAL_DOCUMENT_RECOVERED :
-            sStatus = m_aYellowCheckImg;
+            sStatus = RID_SVXBMP_YELLOWCHECK;
             break;
         case E_RECOVERY_FAILED :
-            sStatus = m_aRedCrossImg;
+            sStatus = RID_SVXBMP_REDCROSS;
             break;
         default:
             break;

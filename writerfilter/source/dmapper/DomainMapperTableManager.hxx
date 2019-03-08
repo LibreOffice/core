@@ -61,10 +61,6 @@ class DomainMapperTableManager : public TableManager
     bool            m_bPushCurrentWidth;
     /// Individual table cell width values, used only in case the number of cells doesn't match the table grid.
     ::std::vector< IntVectorPtr >  m_aCellWidths;
-    /// Remember if a cell already set this, then it should not be set at a row level.
-    bool m_bRowSizeTypeInserted;
-    /// At least one cell in the current row has the btLr text direction.
-    bool m_bHasBtlrCell;
     /// Remember if table width was already set, when we lack a w:tblW, it should be set manually at the end.
     bool m_bTableSizeTypeInserted;
     /// Table layout algorithm, IOW if we should consider fixed column width or not.
@@ -126,16 +122,6 @@ public:
         else
             m_aTmpTableProperties.back()->InsertProps(pProps.get());
     };
-
-    bool IsRowSizeTypeInserted() const
-    {
-        return m_bRowSizeTypeInserted;
-    }
-
-    bool HasBtlrCell() const
-    {
-        return m_bHasBtlrCell;
-    }
 
     void SetLayoutType(sal_uInt32 nLayoutType)
     {
