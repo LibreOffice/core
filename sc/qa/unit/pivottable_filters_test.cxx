@@ -88,6 +88,7 @@ public:
     void testPivotTableDuplicateFields();
     void testTdf112106();
     void testTdf123923();
+    void testTdf123939();
 
     CPPUNIT_TEST_SUITE(ScPivotTableFiltersTest);
 
@@ -130,6 +131,7 @@ public:
     CPPUNIT_TEST(testPivotTableDuplicateFields);
     CPPUNIT_TEST(testTdf112106);
     CPPUNIT_TEST(testTdf123923);
+    CPPUNIT_TEST(testTdf123939);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2412,6 +2414,33 @@ void ScPivotTableFiltersTest::testTdf123923()
 
     assertXPath(pTable, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems/x:e",
                 "v", "#REF!");
+}
+
+void ScPivotTableFiltersTest::testTdf123939()
+{
+    // tdf#123939: Excel warns on containsMixedTypes="1" if sharedItems has only strings and errors
+
+    ScDocShellRef xShell = loadDoc("pivot-table-str-and-err-in-data.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory,
+                                                "xl/pivotCache/pivotCacheDefinition1.xml");
+    CPPUNIT_ASSERT(pTable);
+
+    assertXPathNoAttribute(pTable,
+                           "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
+                           "containsMixedTypes");
+
+    // But we must emit containsMixedTypes="1" for a mix of errors and non-string types!
+
+    pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory,
+                                      "xl/pivotCache/pivotCacheDefinition2.xml");
+    CPPUNIT_ASSERT(pTable);
+
+    assertXPath(pTable, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
+                "containsMixedTypes", "1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPivotTableFiltersTest);
