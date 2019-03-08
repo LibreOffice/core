@@ -1,0 +1,13 @@
+--- configure
++++ configure
+@@ -18959,9 +18959,7 @@
+ 	# No threadsafe statics in C++ as we do it ourselves.
+ 	# We don't use these features, so it's safe to disable them
+ 	# even in the cases where we DO link to libstdc++.
+-	# Put -fno-rtti before $CXXFLAGS such that users can re-enable it
+-	# by overriding CXXFLAGS.
+-	CXXFLAGS="-fno-rtti $CXXFLAGS -fno-exceptions -fno-threadsafe-statics"
++	CXXFLAGS="$CXXFLAGS -fno-exceptions -fno-threadsafe-statics"
+ 
+ 	case "$host" in
+ 		*-*-mingw*)
