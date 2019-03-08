@@ -128,7 +128,7 @@ public:
     static SfxAbstractDialogFactory*    Create();
     virtual VclPtr<VclAbstractDialog>          CreateFrameDialog(vcl::Window* pParent, const css::uno::Reference< css::frame::XFrame >& rFrame, sal_uInt32 nResId, const OUString& rParameter ) = 0;
     virtual VclPtr<SfxAbstractTabDialog>       CreateAutoCorrTabDialog(weld::Window* pParent, const SfxItemSet* pAttrSet) = 0;
-    virtual VclPtr<SfxAbstractTabDialog>       CreateCustomizeTabDialog(
+    virtual VclPtr<SfxAbstractTabDialog>       CreateCustomizeTabDialog(weld::Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             const css::uno::Reference< css::frame::XFrame >& xViewFrame ) = 0;
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;

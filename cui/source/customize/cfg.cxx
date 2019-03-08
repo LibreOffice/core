@@ -206,22 +206,16 @@ static VclPtr<SfxTabPage> CreateSvxEventConfigPage( TabPageParent pParent, const
  * key bindings.
  *
  *****************************************************************************/
-SvxConfigDialog::SvxConfigDialog(vcl::Window * pParent, const SfxItemSet* pInSet)
-    : SfxTabDialog(pParent, "CustomizeDialog",
-        "cui/ui/customizedialog.ui", pInSet)
-    , m_nMenusPageId(0)
-    , m_nToolbarsPageId(0)
-    , m_nContextMenusPageId(0)
-    , m_nKeyboardPageId(0)
-    , m_nEventsPageId(0)
+SvxConfigDialog::SvxConfigDialog(weld::Window * pParent, const SfxItemSet* pInSet)
+    : SfxTabDialogController(pParent, "cui/ui/customizedialog.ui", "CustomizeDialog", pInSet)
 {
     SvxConfigPageHelper::InitImageType();
 
-    m_nMenusPageId = AddTabPage("menus", CreateSvxMenuConfigPage);
-    m_nToolbarsPageId = AddTabPage("toolbars", CreateSvxToolbarConfigPage);
-    m_nContextMenusPageId = AddTabPage("contextmenus", CreateSvxContextMenuConfigPage);
-    m_nKeyboardPageId = AddTabPage("keyboard", CreateKeyboardConfigPage);
-    m_nEventsPageId = AddTabPage("events", CreateSvxEventConfigPage);
+    AddTabPage("menus", CreateSvxMenuConfigPage, nullptr);
+    AddTabPage("toolbars", CreateSvxToolbarConfigPage, nullptr);
+    AddTabPage("contextmenus", CreateSvxContextMenuConfigPage, nullptr);
+    AddTabPage("keyboard", CreateKeyboardConfigPage, nullptr);
+    AddTabPage("events", CreateSvxEventConfigPage, nullptr);
 
     const SfxPoolItem* pItem =
         pInSet->GetItem( pInSet->GetPool()->GetWhich( SID_CONFIG ) );
@@ -232,7 +226,7 @@ SvxConfigDialog::SvxConfigDialog(vcl::Window * pParent, const SfxItemSet* pInSet
 
         if (text.startsWith( ITEM_TOOLBAR_URL ) )
         {
-            SetCurPageId(m_nToolbarsPageId);
+            SetCurPageId("toolbars");
         }
     }
 }
@@ -242,17 +236,17 @@ void SvxConfigDialog::SetFrame(const css::uno::Reference< css::frame::XFrame >& 
     m_xFrame = xFrame;
 
     if (!SvxConfigPageHelper::showKeyConfigTabPage( xFrame ))
-        RemoveTabPage(m_nKeyboardPageId);
+        RemoveTabPage("keyboard");
 }
 
-void SvxConfigDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
+void SvxConfigDialog::PageCreated(const OString &rId, SfxTabPage& rPage)
 {
-    if (nId == m_nMenusPageId || nId == m_nKeyboardPageId ||
-        nId == m_nToolbarsPageId || nId == m_nContextMenusPageId)
+    if (rId == "menus" || rId == "keyboard" ||
+        rId == "toolbars" || rId == "contextmenus")
     {
         rPage.SetFrame(m_xFrame);
     }
-    else if (nId == m_nEventsPageId)
+    else if (rId == "events")
     {
         dynamic_cast< SvxEventConfigPage& >( rPage ).LateInit( m_xFrame );
     }
@@ -911,22 +905,12 @@ void ContextMenuSaveInData::ResetContextMenu( const SvxConfigEntry* pEntry )
 
 void SvxMenuEntriesListBox::CreateDropDown()
 {
-    int nWidth = m_xControl->get_text_height();
+    int nWidth = m_xControl->get_text_height() / 2;
     m_xDropDown->SetOutputSizePixel(Size(nWidth, nWidth));
-
-    int nSize = nWidth / 2;
-    int nHalfSize = nSize / 2;
-    int nY = nHalfSize;
-    int nX = 0;
-
-    m_xDropDown->SetFillColor(COL_BLACK);
-
-    int n = 0;
-    while (n <= nHalfSize)
-    {
-        m_xDropDown->DrawRect(::tools::Rectangle(nX + n, nY + n, nX + n, nY + nSize - n));
-        ++n;
-    }
+    DecorationView aDecoView(m_xDropDown.get());
+    aDecoView.DrawSymbol(tools::Rectangle(Point(0, 0), Size(nWidth, nWidth)),
+                         SymbolType::SPIN_RIGHT, m_xDropDown->GetTextColor(),
+                         DrawSymbolFlags::NONE);
 }
 
 /******************************************************************************
@@ -939,7 +923,7 @@ void SvxMenuEntriesListBox::CreateDropDown()
  *****************************************************************************/
 SvxMenuEntriesListBox::SvxMenuEntriesListBox(std::unique_ptr<weld::TreeView> xControl, SvxConfigPage* pPg)
     : m_xControl(std::move(xControl))
-    , m_xDropDown(VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT))
+    , m_xDropDown(m_xControl->create_virtual_device())
     , pPage(pPg)
     , m_bIsInternalDrag( false )
 {
@@ -994,7 +978,6 @@ SvxConfigPage::SvxConfigPage(TabPageParent pParent, const SfxItemSet& rSet)
     , m_xDescriptionFieldLb(m_xBuilder->weld_label("descriptionlabel"))
     , m_xDescriptionField(m_xBuilder->weld_text_view("desc"))
     , m_xTopLevelListBox(m_xBuilder->weld_combo_box("toplevellist"))
-    , m_xGearBtn(m_xBuilder->weld_menu_button("gearbtn"))
     , m_xMoveUpButton(m_xBuilder->weld_button("up"))
     , m_xMoveDownButton(m_xBuilder->weld_button("down"))
     , m_xSaveInListBox(m_xBuilder->weld_combo_box("savein"))
@@ -1301,10 +1284,9 @@ OUString SvxConfigPage::GetScriptURL() const
 {
     OUString result;
 
-    int nEntry = m_xFunctions->get_selected_index();
-    if (nEntry != -1)
+    SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(m_xFunctions->get_selected_id().toInt64());
+    if (pData)
     {
-        SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(m_xFunctions->get_id(nEntry).toInt64());
         if  (   ( pData->nKind == SfxCfgKind::FUNCTION_SLOT ) ||
                 ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT ) ||
                 ( pData->nKind == SfxCfgKind::GROUP_STYLES )    )
