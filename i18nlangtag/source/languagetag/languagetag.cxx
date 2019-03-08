@@ -561,6 +561,8 @@ LanguageTag::LanguageTag( const rtl_Locale & rLocale )
     convertFromRtlLocale();
 }
 
+LanguageTag::~LanguageTag() {}
+
 LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly( LanguageType nRegisterID )
 {
     LanguageTag::ImplPtr pImpl;
