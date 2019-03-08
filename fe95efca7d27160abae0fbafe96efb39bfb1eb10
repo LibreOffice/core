@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_6ce1e4fe",
+        "filename": "vcl/opengl/gdiimpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-03-08T13:44:16Z",
+      "side": 0,
+      "message": "Would have been simpler to swap Stop() and SetPriority(). I didn\u0027t test, but it should be fine to change the priority, after the task is not scheduled anymore.\n\nIf there is still a warning when swapped, then I have to look at the scheduler.",
+      "revId": "fe95efca7d27160abae0fbafe96efb39bfb1eb10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
