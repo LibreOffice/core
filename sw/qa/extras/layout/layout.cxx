@@ -71,6 +71,7 @@ public:
     void testTdf115094();
     void testTdf122607();
     void testBtlrCell();
+    void testTdf123898();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testRedlineFootnotes);
@@ -112,6 +113,7 @@ public:
     CPPUNIT_TEST(testTdf115094);
     CPPUNIT_TEST(testTdf122607);
     CPPUNIT_TEST(testBtlrCell);
+    CPPUNIT_TEST(testTdf123898);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2893,6 +2895,18 @@ void SwLayoutWriter::testBtlrCell()
     // i.e. cursor was at the end of the paragraph.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aPosition.nContent.GetIndex());
 #endif
+}
+
+void SwLayoutWriter::testTdf123898()
+{
+    createDoc("tdf123898.odt");
+
+    // Make sure spellchecker has done its job already
+    Scheduler::ProcessEventsToIdle();
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // Make sure that the arrow on the left is not there (there are 43 children if it's there)
+    assertXPathChildren(pXmlDoc, "/root/page/body/txt/anchored/fly/txt", 42);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
