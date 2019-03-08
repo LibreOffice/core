@@ -33,6 +33,7 @@
 #include <sal/log.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #include <oox/token/tokens.hxx>
+#include <unotools/fltrcfg.hxx>
 
 using namespace ::oox::core;
 using namespace ::oox::drawingml;
@@ -397,6 +398,9 @@ void PPTShape::addShape(
             Reference<XShapes> xShapes(xShape, UNO_QUERY);
             if (xShapes.is())
                 addChildren( rFilterBase, *this, pTheme, xShapes, pShapeMap, aTransformation );
+
+            if (meFrameType == FRAMETYPE_DIAGRAM)
+                keepDiagramCompatibilityInfo();
         }
     }
     catch (const Exception&)
