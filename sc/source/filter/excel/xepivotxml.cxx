@@ -279,8 +279,6 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
             }
         }
 
-        auto aDPTypeEnd = aDPTypes.cend();
-
         auto pAttList = sax_fastparser::FastSerializerHelper::createAttrList();
         // TODO In same cases, disable listing of items, as it is done in MS Excel.
         // Exporting savePivotCacheRecordsXml method needs to be updated accordingly
@@ -289,10 +287,10 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         std::set<ScDPItemData::Type> aDPTypesWithoutBlank = aDPTypes;
         aDPTypesWithoutBlank.erase(ScDPItemData::Empty);
 
-        const bool isContainsString
-            = aDPTypesWithoutBlank.find(ScDPItemData::String) != aDPTypesWithoutBlank.end();
-        bool isContainsBlank = aDPTypes.find(ScDPItemData::Empty) != aDPTypeEnd;
-        bool isContainsNumber = !isContainsDate && aDPTypesWithoutBlank.find(ScDPItemData::Value) != aDPTypesWithoutBlank.end();
+        const bool isContainsString = aDPTypesWithoutBlank.count(ScDPItemData::String) > 0;
+        const bool isContainsBlank = aDPTypes.count(ScDPItemData::Empty) > 0;
+        const bool isContainsNumber
+            = !isContainsDate && aDPTypesWithoutBlank.count(ScDPItemData::Value) > 0;
         bool isContainsNonDate = !(isContainsDate && aDPTypesWithoutBlank.size() <= 1);
 
         // XML_containsSemiMixedTypes possible values:
