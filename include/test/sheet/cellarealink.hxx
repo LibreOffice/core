@@ -11,15 +11,22 @@
 #define INCLUDED_TEST_SHEET_CELLAREALINK_HXX
 
 #include <com/sun/star/uno/XInterface.hpp>
+
 #include <com/sun/star/uno/Reference.hxx>
+
 #include <test/testdllapi.hxx>
+#include <rtl/string.hxx>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST CellAreaLink
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+    CellAreaLink(const OUString& rFileURL)
+        : m_aFileURL(rFileURL)
+    {
+    }
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
     void testUrl();
     void testFilter();
@@ -29,9 +36,12 @@ public:
 
 protected:
     ~CellAreaLink() {}
+
+private:
+    OUString const m_aFileURL;
 };
 
-}
+} // namespace apitest
 
 #endif // INCLUDED_TEST_SHEET_CELLAREALINK_HXX
 
