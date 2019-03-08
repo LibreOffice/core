@@ -53,7 +53,6 @@ private:
 
 public:
     SvxCheckListBox( vcl::Window* pParent, WinBits nWinStyle = 0 );
-    void SetNormalStaticImage(const Image& rNormalStaticImage);
     virtual ~SvxCheckListBox() override;
     virtual void dispose() override;
 
@@ -65,7 +64,6 @@ public:
 
     void            SelectEntryPos      ( sal_uLong  nPos );
     sal_uLong       GetSelectedEntryPos   () const;
-    void*           GetSelectedEntryData  () const { return GetEntryData(GetSelectedEntryPos()); }
 
     OUString        GetText             ( sal_uLong  nPos ) const;
     sal_uLong       GetCheckedEntryCount() const;

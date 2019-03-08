@@ -59,7 +59,6 @@ namespace dbaui
         OpenDocumentListBox( vcl::Window* _pParent, const sal_Char* _pAsciiModuleName );
 
         OUString  GetSelectedDocumentURL() const;
-        OUString  GetSelectedDocumentFilter() const;
 
     private:
         virtual void        RequestHelp( const HelpEvent& _rHEvt ) override;

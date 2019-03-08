@@ -186,11 +186,6 @@ ImageAlign Button::GetImageAlign() const
     return mpButtonData->meImageAlign;
 }
 
-void Button::SetFocusRect( const tools::Rectangle& rFocusRect )
-{
-    ImplSetFocusRect( rFocusRect );
-}
-
 long Button::ImplGetSeparatorX() const
 {
     return mpButtonData->mnSeparatorX;
@@ -1881,11 +1876,6 @@ void RadioButton::ImplInitSettings( bool bBackground )
                 SetBackground( pParent->GetBackground() );
         }
     }
-}
-
-void RadioButton::DrawRadioButtonState(vcl::RenderContext& rRenderContext)
-{
-    ImplDrawRadioButtonState(rRenderContext);
 }
 
 void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)

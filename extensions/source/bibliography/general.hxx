@@ -157,8 +157,6 @@ public:
 
     virtual bool                HandleShortCutKey( const KeyEvent& rKeyEvent ) override; // returns true, if key was handled
 
-    const rtl::Reference<BibGeneralPageFocusListener>& GetFocusListener() { return mxBibGeneralPageFocusListener; }
-
     /// @throws css::uno::RuntimeException
     void focusGained(const css::awt::FocusEvent& rEvent);
     /// @throws css::uno::RuntimeException

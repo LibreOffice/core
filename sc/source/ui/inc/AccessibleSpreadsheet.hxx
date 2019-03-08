@@ -232,8 +232,6 @@ private:
     void SelectCell(sal_Int32 nRow, sal_Int32 nCol, bool bDeselect);
 
     static ScDocument* GetDocument(ScTabViewShell* pViewShell);
-    static tools::Rectangle   GetVisArea(ScTabViewShell* pViewShell, ScSplitPos eSplitPos);
-    tools::Rectangle   GetVisCells(const tools::Rectangle& rVisArea);
     typedef std::vector<ScMyAddress> VEC_MYADDR;
 
     typedef std::map<ScMyAddress,css::uno::Reference< css::accessibility::XAccessible > >

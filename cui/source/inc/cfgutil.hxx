@@ -117,8 +117,6 @@ public:
 
     void          ClearAll();
     using Window::GetHelpText;
-    OUString      GetCurCommand();
-    OUString      GetCurLabel();
     OUString      GetHelpText( bool bConsiderParent = true );
 };
 

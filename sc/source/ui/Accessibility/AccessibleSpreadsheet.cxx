@@ -1367,37 +1367,6 @@ ScDocument* ScAccessibleSpreadsheet::GetDocument(ScTabViewShell* pViewShell)
     return pDoc;
 }
 
-tools::Rectangle ScAccessibleSpreadsheet::GetVisArea(ScTabViewShell* pViewShell, ScSplitPos eSplitPos)
-{
-    tools::Rectangle aVisArea;
-    if (pViewShell)
-    {
-        vcl::Window* pWindow = pViewShell->GetWindowByPos(eSplitPos);
-        if (pWindow)
-        {
-            aVisArea.SetPos(pViewShell->GetViewData().GetPixPos(eSplitPos));
-            aVisArea.SetSize(pWindow->GetSizePixel());
-        }
-    }
-    return aVisArea;
-}
-
-tools::Rectangle ScAccessibleSpreadsheet::GetVisCells(const tools::Rectangle& rVisArea)
-{
-    if (mpViewShell)
-    {
-        SCCOL nStartX, nEndX;
-        SCROW nStartY, nEndY;
-
-        mpViewShell->GetViewData().GetPosFromPixel( 1, 1, meSplitPos, nStartX, nStartY);
-        mpViewShell->GetViewData().GetPosFromPixel( rVisArea.GetWidth(), rVisArea.GetHeight(), meSplitPos, nEndX, nEndY);
-
-        return tools::Rectangle(nStartX, nStartY, nEndX, nEndY);
-    }
-    else
-        return tools::Rectangle();
-}
-
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectRow( sal_Int32 row )
 {
     SolarMutexGuard g;

@@ -57,8 +57,6 @@ public:
 
     using PresenterPaneBase::disposing;
 
-    const std::shared_ptr<PresenterSprite>& GetSprite();
-
     // XPane
 
     virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow() override;

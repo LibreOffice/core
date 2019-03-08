@@ -343,9 +343,6 @@ public:
     void                SetLineCount( ImplToolItems::size_type nNewLines );
     void                ShowLine( bool bNext );
 
-    // Used to enable/disable scrolling one page at a time for toolbar
-    void                SetPageScroll( bool b );
-
     ImplToolItems::size_type GetItemCount() const;
     ToolBoxItemType     GetItemType( ImplToolItems::size_type nPos ) const;
     ImplToolItems::size_type GetItemPos( sal_uInt16 nItemId ) const;

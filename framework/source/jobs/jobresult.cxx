@@ -30,19 +30,6 @@
 namespace framework{
 
 /**
-    @short      standard dtor
-    @descr      It does nothing else ...
-                but it marks this new instance as non valid!
-*/
-JobResult::JobResult()
-{
-    // reset the flag mask!
-    // It will reset the accessible state of this object.
-    // That can be useful if something will fail here ...
-    m_eParts = E_NOPART;
-}
-
-/**
     @short      special ctor
     @descr      It initialize this new instance with a pure job execution result
                 and analyze it. Doing so, we update our other members.

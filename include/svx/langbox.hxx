@@ -87,7 +87,6 @@ protected:
     SVX_DLLPRIVATE sal_Int32            ImplTypeToPos( LanguageType eType ) const;
 
     SVX_DLLPRIVATE virtual sal_Int32    ImplInsertImgEntry( const OUString& rEntry, sal_Int32  nPos, bool bChecked ) = 0;
-    SVX_DLLPRIVATE virtual void         ImplRemoveEntryAt( sal_Int32 nPos ) = 0;
 
     SVX_DLLPRIVATE virtual void         ImplClear() = 0;
     SVX_DLLPRIVATE virtual sal_Int32    ImplInsertEntry( const OUString& rEntry, sal_Int32 nPos ) = 0;
@@ -107,7 +106,6 @@ public:
 
 private:
     SVX_DLLPRIVATE virtual sal_Int32    ImplInsertImgEntry( const OUString& rEntry, sal_Int32  nPos, bool bChecked ) override;
-    SVX_DLLPRIVATE virtual void         ImplRemoveEntryAt( sal_Int32 nPos ) override;
 
     SVX_DLLPRIVATE virtual void         ImplClear() override;
     SVX_DLLPRIVATE virtual sal_Int32    ImplInsertEntry( const OUString& rEntry, sal_Int32 nPos ) override;
@@ -199,7 +197,6 @@ private:
     EditedAndValid  meEditedAndValid;
 
     SVX_DLLPRIVATE virtual sal_Int32    ImplInsertImgEntry( const OUString& rEntry, sal_Int32  nPos, bool bChecked ) override;
-    SVX_DLLPRIVATE virtual void         ImplRemoveEntryAt( sal_Int32 nPos ) override;
 
     SVX_DLLPRIVATE virtual void         ImplClear() override;
     SVX_DLLPRIVATE virtual sal_Int32    ImplInsertEntry( const OUString& rEntry, sal_Int32 nPos ) override;
