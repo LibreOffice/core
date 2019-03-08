@@ -1012,15 +1012,13 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateAutoCorrTabDialog
     return VclPtr<CuiAbstractTabController_Impl>::Create(std::make_unique<OfaAutoCorrDlg>(pParent, pAttrSet));
 }
 
-VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateCustomizeTabDialog(
+VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateCustomizeTabDialog(weld::Window* pParent,
                                                 const SfxItemSet* pAttrSet,
                                                 const Reference< frame::XFrame >& xViewFrame )
 {
-    VclPtr<SfxTabDialog> pDlg;
-    VclPtrInstance<SvxConfigDialog> pDlg1( nullptr, pAttrSet );
-    pDlg1->SetFrame(xViewFrame);
-    pDlg.reset(pDlg1);
-    return VclPtr<CuiAbstractTabDialog_Impl>::Create( pDlg );
+    std::unique_ptr<SvxConfigDialog> xDlg1(new SvxConfigDialog(pParent, pAttrSet));
+    xDlg1->SetFrame(xViewFrame);
+    return VclPtr<CuiAbstractTabController_Impl>::Create(std::move(xDlg1));
 }
 
 // TabDialog that use functionality of the drawing layer

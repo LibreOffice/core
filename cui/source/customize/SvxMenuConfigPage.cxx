@@ -100,14 +100,14 @@ SvxMenuConfigPage::SvxMenuConfigPage(TabPageParent pParent, const SfxItemSet& rS
     : SvxConfigPage(pParent, rSet)
     , m_bIsMenuBar(bIsMenuBar)
 {
+    m_xGearBtn = m_xBuilder->weld_menu_button("menugearbtn");
+    m_xGearBtn->show();
     m_xContentsListBox.reset(new SvxMenuEntriesListBox(m_xBuilder->weld_tree_view("menucontents"), this));
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
     rTreeView.connect_size_allocate(LINK(this, SvxMenuConfigPage, MenuEntriesSizeAllocHdl));
     Size aSize(m_xFunctions->get_size_request());
     rTreeView.set_size_request(aSize.Width(), aSize.Height());
     MenuEntriesSizeAllocHdl(aSize);
-    rTreeView.set_grid_left_attach(0);
-    rTreeView.set_grid_top_attach(0);
     rTreeView.set_hexpand(true);
     rTreeView.set_vexpand(true);
     rTreeView.show();
@@ -138,10 +138,6 @@ SvxMenuConfigPage::SvxMenuConfigPage(TabPageParent pParent, const SfxItemSet& rS
     m_xModifyBtn->remove_item("changeIcon");
     m_xModifyBtn->remove_item("resetIcon");
     m_xModifyBtn->remove_item("restoreItem");
-
-    m_xGearBtn->remove_item("gear_iconAndText");
-    m_xGearBtn->remove_item("gear_iconOnly");
-    m_xGearBtn->remove_item("gear_textOnly");
 
     if ( !bIsMenuBar )
     {
@@ -242,9 +238,9 @@ void SvxMenuConfigPage::UpdateButtonStates()
     {
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
         // Add option (gear_add) will always be enabled
-        m_xGearBtn->set_item_sensitive( "gear_delete", pMenuData->IsDeletable() );
-        m_xGearBtn->set_item_sensitive( "gear_rename", pMenuData->IsRenamable() );
-        m_xGearBtn->set_item_sensitive( "gear_move", pMenuData->IsMovable() );
+        m_xGearBtn->set_item_sensitive( "menu_gear_delete", pMenuData->IsDeletable() );
+        m_xGearBtn->set_item_sensitive( "menu_gear_rename", pMenuData->IsRenamable() );
+        m_xGearBtn->set_item_sensitive( "menu_gear_move", pMenuData->IsMovable() );
     }
 }
 
@@ -335,7 +331,7 @@ void SvxMenuConfigPage::SelectElement()
 
 IMPL_LINK(SvxMenuConfigPage, GearHdl, const OString&, rIdent, void)
 {
-    if (rIdent == "gear_add")
+    if (rIdent == "menu_gear_add")
     {
         SvxMainMenuOrganizerDialog aDialog(GetDialogFrameWeld(),
             GetSaveInData()->GetEntries(), nullptr, true );
@@ -347,11 +343,11 @@ IMPL_LINK(SvxMenuConfigPage, GearHdl, const OString&, rIdent, void)
             GetSaveInData()->SetModified();
         }
     }
-    else if (rIdent == "gear_delete")
+    else if (rIdent == "menu_gear_delete")
     {
         DeleteSelectedTopLevel();
     }
-    else if (rIdent == "gear_rename")
+    else if (rIdent == "menu_gear_rename")
     {
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
@@ -376,7 +372,7 @@ IMPL_LINK(SvxMenuConfigPage, GearHdl, const OString&, rIdent, void)
             GetSaveInData()->SetModified();
         }
     }
-    else if (rIdent == "gear_move")
+    else if (rIdent == "menu_gear_move")
     {
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
 

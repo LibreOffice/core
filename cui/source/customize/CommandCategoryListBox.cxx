@@ -273,9 +273,10 @@ OUString CommandCategoryListBox::getCommandName(const OUString& sCommand)
 }
 
 void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctionListBox,
-                                              const OUString& filterTerm , SaveInData *pCurrentSaveInData)
+                                              const OUString& filterTerm, SaveInData *pCurrentSaveInData)
 {
     SfxGroupInfo_Impl *pInfo = reinterpret_cast<SfxGroupInfo_Impl*>(m_xControl->get_active_id().toInt64());
+    std::vector<std::unique_ptr<weld::TreeIter>> aNodesToExpand;
     pFunctionListBox->freeze();
     pFunctionListBox->ClearAll();
 
@@ -291,6 +292,9 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
             {
                 SfxGroupInfo_Impl *pCurrentInfo =
                     reinterpret_cast<SfxGroupInfo_Impl*>(m_xControl->get_id(nCurPos).toInt64());
+
+                if (!pCurrentInfo) //seperator
+                    continue;
 
                 if (pCurrentInfo->nKind == SfxCfgKind::GROUP_FUNCTION)
                 {
@@ -376,10 +380,10 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                         m_aGroupInfo.push_back(
                             std::make_unique<SfxGroupInfo_Impl>(
                                 SfxCfgKind::GROUP_SCRIPTCONTAINER, 0 ) );
-                        std::unique_ptr<weld::TreeIter> xMacroGroup(pFunctionListBox->append_ondemand(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), sUIName));
+                        std::unique_ptr<weld::TreeIter> xMacroGroup(pFunctionListBox->tree_append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), sUIName));
 
                         //Add the children and the grand children
-                        addChildren(xMacroGroup.get(), childGroup, pFunctionListBox, filterTerm, pCurrentSaveInData);
+                        addChildren(xMacroGroup.get(), childGroup, pFunctionListBox, filterTerm, pCurrentSaveInData, aNodesToExpand);
 
                         // Remove the main group if empty
                         if (!pFunctionListBox->iter_has_child(*xMacroGroup))
@@ -388,7 +392,7 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                         }
                         else if (!filterTerm.isEmpty())
                         {
-                            pFunctionListBox->expand_row(*xMacroGroup);
+                            aNodesToExpand.emplace_back(std::move(xMacroGroup));
                         }
                     }
                 }
@@ -410,7 +414,7 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
 
                 m_aGroupInfo.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0 ) );
                 // pIt.sLabel is Name of the style family
-                std::unique_ptr<weld::TreeIter> xFuncEntry(pFunctionListBox->append_ondemand(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), pIt.sLabel));
+                std::unique_ptr<weld::TreeIter> xFuncEntry(pFunctionListBox->tree_append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), pIt.sLabel));
 
                 const std::vector< SfxStyleInfo_Impl > lStyles = pStylesInfo->getStyles(pIt.sFamily);
 
@@ -451,7 +455,7 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                 }
                 else if (!filterTerm.isEmpty())
                 {
-                    pFunctionListBox->expand_row(*xFuncEntry);
+                    aNodesToExpand.emplace_back(std::move(xFuncEntry));
                 }
             }
 
@@ -467,6 +471,10 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
 
     if (pFunctionListBox->n_children())
         pFunctionListBox->select(0);
+
+    //post freeze
+    for (const auto& it : aNodesToExpand)
+        pFunctionListBox->expand_row(*it);
 }
 
 void CommandCategoryListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
@@ -476,7 +484,8 @@ void CommandCategoryListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
 
 void CommandCategoryListBox::addChildren(
     weld::TreeIter* parentEntry, const css::uno::Reference< css::script::browse::XBrowseNode > &parentNode,
-    CuiConfigFunctionListBox* pFunctionListBox, const OUString& filterTerm , SaveInData *pCurrentSaveInData)
+    CuiConfigFunctionListBox* pFunctionListBox, const OUString& filterTerm , SaveInData *pCurrentSaveInData,
+    std::vector<std::unique_ptr<weld::TreeIter>> &rNodesToExpand)
 {
     // Setup search filter parameters
     m_searchOptions.searchString = filterTerm;
@@ -493,15 +502,15 @@ void CommandCategoryListBox::addChildren(
 
             m_aGroupInfo.push_back( std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER,
                                                                          0, static_cast<void *>( child.get())));
-            std::unique_ptr<weld::TreeIter> xNewEntry(pFunctionListBox->append_ondemand(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), sUIName, parentEntry));
+            std::unique_ptr<weld::TreeIter> xNewEntry(pFunctionListBox->tree_append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), sUIName, parentEntry));
 
-            addChildren(xNewEntry.get(), child, pFunctionListBox, filterTerm, pCurrentSaveInData);
+            addChildren(xNewEntry.get(), child, pFunctionListBox, filterTerm, pCurrentSaveInData, rNodesToExpand);
 
             // Remove the group if empty
             if (!pFunctionListBox->iter_has_child(*xNewEntry))
                 pFunctionListBox->remove(*xNewEntry);
             else
-                pFunctionListBox->expand_row(*xNewEntry);
+                rNodesToExpand.emplace_back(std::move(xNewEntry));
         }
         else if ( child.get()->getType() == css::script::browse::BrowseNodeTypes::SCRIPT )
         {

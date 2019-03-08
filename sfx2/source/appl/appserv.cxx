@@ -459,7 +459,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             }
 
             Reference <XFrame> xFrame(GetRequestFrame(rReq));
-            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateCustomizeTabDialog(
+            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateCustomizeTabDialog(rReq.GetFrameWeld(),
                 &aSet, xFrame ));
 
             const short nRet = pDlg->Execute();
