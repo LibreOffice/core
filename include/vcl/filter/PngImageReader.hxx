@@ -26,8 +26,6 @@ class VCL_DLLPUBLIC PngImageReader
 public:
     PngImageReader(SvStream& rStream);
 
-    virtual ~PngImageReader() {}
-
     bool read(BitmapEx& rBitmap);
 };
 

@@ -512,7 +512,7 @@ bool SvXMLStylesContext::InsertStyleFamily( sal_uInt16 ) const
     return true;
 }
 
-sal_uInt16 SvXMLStylesContext::GetFamily( const OUString& rValue ) const
+sal_uInt16 SvXMLStylesContext::GetFamily( const OUString& rValue )
 {
     sal_uInt16 nFamily = 0U;
     if( IsXMLToken( rValue, XML_PARAGRAPH ) )

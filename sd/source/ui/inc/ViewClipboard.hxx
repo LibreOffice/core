@@ -74,7 +74,7 @@ protected:
         @return
             Returns the number of inserted slides.
     */
-    virtual sal_uInt16 InsertSlides (
+    sal_uInt16 InsertSlides (
         const SdTransferable& rTransferable,
         sal_uInt16 nInsertPosition);
 };

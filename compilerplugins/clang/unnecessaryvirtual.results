@@ -1,22 +1,22 @@
-basic/source/comp/codegen.cxx:462
-    void OffSetAccumulator::start(const unsigned char *,)
-basic/source/comp/codegen.cxx:463
-    void OffSetAccumulator::processOpCode0(enum SbiOpcode,)
 basic/source/comp/codegen.cxx:464
-    void OffSetAccumulator::processOpCode1(enum SbiOpcode,type-parameter-0-0,)
+    void OffSetAccumulator::start(const unsigned char *,)
 basic/source/comp/codegen.cxx:465
+    void OffSetAccumulator::processOpCode0(enum SbiOpcode,)
+basic/source/comp/codegen.cxx:466
+    void OffSetAccumulator::processOpCode1(enum SbiOpcode,type-parameter-0-0,)
+basic/source/comp/codegen.cxx:467
     void OffSetAccumulator::processOpCode2(enum SbiOpcode,type-parameter-0-0,type-parameter-0-0,)
-basic/source/comp/codegen.cxx:474
+basic/source/comp/codegen.cxx:476
     _Bool OffSetAccumulator::processParams()
-basic/source/comp/codegen.cxx:485
+basic/source/comp/codegen.cxx:487
     void BufferTransformer::start(const unsigned char *,)
-basic/source/comp/codegen.cxx:486
+basic/source/comp/codegen.cxx:488
     void BufferTransformer::processOpCode0(enum SbiOpcode,)
-basic/source/comp/codegen.cxx:490
+basic/source/comp/codegen.cxx:492
     void BufferTransformer::processOpCode1(enum SbiOpcode,type-parameter-0-0,)
-basic/source/comp/codegen.cxx:515
+basic/source/comp/codegen.cxx:517
     void BufferTransformer::processOpCode2(enum SbiOpcode,type-parameter-0-0,type-parameter-0-0,)
-basic/source/comp/codegen.cxx:524
+basic/source/comp/codegen.cxx:526
     _Bool BufferTransformer::processParams()
 chart2/source/inc/WeakListenerAdapter.hxx:57
     void chart::WeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
@@ -42,15 +42,15 @@ forms/source/xforms/datatypes.hxx:237
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySetInfo> xforms::ODerivedDataType::getPropertySetInfo()
 forms/source/xforms/datatypes.hxx:238
     class cppu::IPropertyArrayHelper & xforms::ODerivedDataType::getInfoHelper()
-forms/source/xforms/namedcollection.hxx:87
+forms/source/xforms/namedcollection.hxx:80
     class com::sun::star::uno::Type NamedCollection::getElementType()
-forms/source/xforms/namedcollection.hxx:92
+forms/source/xforms/namedcollection.hxx:85
     unsigned char NamedCollection::hasElements()
-forms/source/xforms/namedcollection.hxx:98
+forms/source/xforms/namedcollection.hxx:91
     class com::sun::star::uno::Any NamedCollection::getByName(const class rtl::OUString &,)
-forms/source/xforms/namedcollection.hxx:106
+forms/source/xforms/namedcollection.hxx:99
     class com::sun::star::uno::Sequence<class rtl::OUString> NamedCollection::getElementNames()
-forms/source/xforms/namedcollection.hxx:111
+forms/source/xforms/namedcollection.hxx:104
     unsigned char NamedCollection::hasByName(const class rtl::OUString &,)
 include/basegfx/utils/systemdependentdata.hxx:122
     unsigned int basegfx::SystemDependentData::getHoldCyclesInSeconds()const
@@ -68,12 +68,10 @@ include/comphelper/servicedecl.hxx:171
     class com::sun::star::uno::Sequence<class rtl::OUString> comphelper::service_decl::detail::OwnServiceImpl::getSupportedServiceNames()
 include/comphelper/solarmutex.hxx:57
     _Bool comphelper::SolarMutex::tryToAcquire()
-include/comphelper/unique_disposing_ptr.hxx:170
+include/comphelper/unique_disposing_ptr.hxx:169
     void comphelper::unique_disposing_solar_mutex_reset_ptr::reset(type-parameter-0-0 *,)
 include/comphelper/weakeventlistener.hxx:120
     void comphelper::OWeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
-include/cppcanvas/font.hxx:38
-    void cppcanvas::Font::~Font()
 include/svl/svdde.hxx:237
     class DdeData * DdeTopic::Get(enum SotClipboardFormatId,)
 include/svl/svdde.hxx:238
@@ -86,7 +84,7 @@ include/svl/svdde.hxx:244
     _Bool DdeTopic::StartAdviseLoop()
 include/svl/svdde.hxx:300
     void DdeService::~DdeService()
-include/toolkit/controls/geometrycontrolmodel.hxx:191
+include/toolkit/controls/geometrycontrolmodel.hxx:184
     void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
 include/vbahelper/vbacollectionimpl.hxx:290
     int ScVbaCollectionBase::getCount()
@@ -110,19 +108,19 @@ include/vbahelper/vbareturntypes.hxx:40
     void ooo::vba::DefaultReturnHelper::setValue(type-parameter-0-0,)
 include/vbahelper/vbareturntypes.hxx:41
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
-include/vcl/combobox.hxx:86
-    int ComboBox::InsertEntry(const class rtl::OUString &,int,)
-include/vcl/combobox.hxx:90
-    void ComboBox::RemoveEntryAt(int,)
-sc/source/core/opencl/formulagroupcl.cxx:1051
+include/vcl/filter/PngImageReader.hxx:29
+    void vcl::PngImageReader::~PngImageReader()
+include/xmloff/xmlstyle.hxx:217
+    unsigned short SvXMLStylesContext::GetFamily(const class rtl::OUString &,)const
+sc/source/core/opencl/formulagroupcl.cxx:1053
     _Bool sc::opencl::DynamicKernelSlidingArgument::NeedParallelReduction()const
-sc/source/core/opencl/formulagroupcl.cxx:1059
+sc/source/core/opencl/formulagroupcl.cxx:1061
     void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
-sc/source/core/opencl/formulagroupcl.cxx:1338
+sc/source/core/opencl/formulagroupcl.cxx:1340
     void sc::opencl::ParallelReductionVectorRef::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
-sc/source/core/opencl/formulagroupcl.cxx:1518
+sc/source/core/opencl/formulagroupcl.cxx:1520
     class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > sc::opencl::ParallelReductionVectorRef::GenSlidingWindowDeclRef(_Bool,)const
-sc/source/core/opencl/formulagroupcl.cxx:1553
+sc/source/core/opencl/formulagroupcl.cxx:1555
     unsigned long sc::opencl::ParallelReductionVectorRef::Marshal(struct _cl_kernel *,int,int,struct _cl_program *,)
 sc/source/ui/inc/anyrefdg.hxx:208
     void ScRefHdlrImpl::dispose()
@@ -190,6 +188,8 @@ sc/source/ui/vba/vbapagebreak.hxx:48
     void ScVbaPageBreak::Delete()
 sc/source/ui/vba/vbapagebreak.hxx:49
     class com::sun::star::uno::Reference<class ooo::vba::excel::XRange> ScVbaPageBreak::Location()
+sd/source/ui/inc/ViewClipboard.hxx:77
+    unsigned short sd::ViewClipboard::InsertSlides(const class SdTransferable &,unsigned short,)
 slideshow/source/engine/activities/activitiesfactory.cxx:173
     void slideshow::internal::(anonymous namespace)::FromToByActivity::startAnimation()
 slideshow/source/engine/activities/activitiesfactory.cxx:242
@@ -210,15 +210,21 @@ slideshow/source/engine/animationfactory.cxx:447
     void slideshow::internal::(anonymous namespace)::GenericAnimation::start(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
 sw/inc/flypos.hxx:37
     void SwPosFlyFrame::~SwPosFlyFrame()
+sw/source/uibase/inc/drawbase.hxx:53
+    _Bool SwDrawBase::MouseMove(const class MouseEvent &,)
 vcl/inc/salframe.hxx:135
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
 vcl/inc/salframe.hxx:180
     void SalFrame::Flush(const class tools::Rectangle &,)
-vcl/inc/salmenu.hxx:79
-    _Bool SalMenu::AddMenuBarButton(const struct SalMenuButtonItem &,)
+vcl/inc/salinst.hxx:92
+    _Bool SalInstance::SVMainHook(int *,)
+vcl/inc/salmenu.hxx:71
+    void SalMenu::SetItemBits(unsigned int,enum MenuItemBits,)
 vcl/inc/salmenu.hxx:80
+    _Bool SalMenu::AddMenuBarButton(const struct SalMenuButtonItem &,)
+vcl/inc/salmenu.hxx:81
     void SalMenu::RemoveMenuBarButton(unsigned short,)
-vcl/inc/salmenu.hxx:92
+vcl/inc/salmenu.hxx:93
     class tools::Rectangle SalMenu::GetMenuBarButtonRectPixel(unsigned short,class SalFrame *,)
 vcl/inc/salobj.hxx:48
     void SalObject::Enable(_Bool,)
@@ -226,7 +232,7 @@ vcl/inc/salprn.hxx:116
     enum SalPrinterError SalPrinter::GetErrorCode()
 vcl/inc/unx/glyphcache.hxx:57
     void GlyphCache::~GlyphCache()
-vcl/inc/unx/gtk/gtkdata.hxx:164
+vcl/inc/unx/gtk/gtkdata.hxx:165
     int GtkSalDisplay::CaptureMouse(class SalFrame *,)
 vcl/inc/unx/saldata.hxx:65
     void X11SalData::Init()
@@ -272,6 +278,6 @@ xmloff/source/forms/elementimport.hxx:578
     void xmloff::OContainerImport::EndElement()
 xmloff/source/forms/elementimport.hxx:583
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> xmloff::OContainerImport::createElement()
-xmloff/source/forms/elementimport.hxx:611
+xmloff/source/forms/elementimport.hxx:610
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> xmloff::OColumnImport::createElement()
 
