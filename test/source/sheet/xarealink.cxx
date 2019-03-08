@@ -26,8 +26,13 @@ void XAreaLink::testSetDestArea()
     uno::Reference< sheet::XAreaLink > xAreaLink(init(), UNO_QUERY_THROW);
 
     xAreaLink->setDestArea(table::CellRangeAddress(1,3,4,5,8));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Couldn't set new dest area",
-                                 table::CellRangeAddress(1,3,4,5,8), xAreaLink->getDestArea());
+    // After setting the the destination area, the link is refreshed and the area
+    // is adjusted to the size of the source data.
+    // Only test the 'Sheet', 'StartCol', and 'StartRow'
+    table::CellRangeAddress aDestArea = xAreaLink->getDestArea();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Couldn't set new DestArea (Sheet)", sal_Int16(1), aDestArea.Sheet);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Couldn't set new DestArea (StartCol)", sal_Int32(3), aDestArea.StartColumn);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Couldn't set new DestArea (StartRow)", sal_Int32(4), aDestArea.StartRow);
 }
 
 void XAreaLink::testSetSourceArea()
@@ -44,7 +49,7 @@ void XAreaLink::testGetDestArea()
     uno::Reference< sheet::XAreaLink > xAreaLink(init(), UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Couldn't get dest area",
-                                 table::CellRangeAddress(1,2,3,2,3), xAreaLink->getDestArea());
+                                 table::CellRangeAddress(1,2,3,3,6), xAreaLink->getDestArea());
 }
 
 void XAreaLink::testGetSourceArea()
@@ -52,7 +57,7 @@ void XAreaLink::testGetSourceArea()
     uno::Reference< sheet::XAreaLink > xAreaLink(init(), UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Couldn't get source area",
-                                 OUString("a1:c1"), xAreaLink->getSourceArea());
+                                 OUString("a2:b5"), xAreaLink->getSourceArea());
 }
 
 }
