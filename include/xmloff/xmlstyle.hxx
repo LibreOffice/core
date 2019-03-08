@@ -214,7 +214,7 @@ public:
                                       sal_uInt16 nFamily,
                                       const OUString& rName,
                                       bool bCreateIndex = false ) const;
-    virtual sal_uInt16 GetFamily( const OUString& rFamily ) const;
+    static sal_uInt16 GetFamily( const OUString& rFamily );
     virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
                         sal_uInt16 nFamily ) const;
 
