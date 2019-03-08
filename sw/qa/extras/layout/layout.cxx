@@ -33,6 +33,7 @@ public:
     void testTdf119875();
     void testTdf116989();
     void testTdf122607();
+    void testTdf123898();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -51,6 +52,7 @@ public:
     CPPUNIT_TEST(testTdf119875);
     CPPUNIT_TEST(testTdf116989);
     CPPUNIT_TEST(testTdf122607);
+    CPPUNIT_TEST(testTdf123898);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -318,6 +320,18 @@ void SwLayoutWriter::testTdf122607()
                 "/root/page[1]/anchored/fly/txt[1]/anchored/fly/tab/row[2]/cell/txt[7]/anchored/"
                 "fly/txt/Text[1]",
                 "nWidth", "428");
+}
+
+void SwLayoutWriter::testTdf123898()
+{
+    createDoc("tdf123898.odt");
+
+    // Make sure spellchecker has done its job already
+    Scheduler::ProcessEventsToIdle();
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // Make sure that the arrow on the left is not there (there are 43 children if it's there)
+    assertXPathChildren(pXmlDoc, "/root/page/body/txt/anchored/fly/txt", 42);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);

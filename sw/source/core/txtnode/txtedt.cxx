@@ -204,70 +204,20 @@ static SwRect lcl_CalculateRepaintRect(
         SwTextFrame & rTextFrame, SwTextNode & rNode,
         sal_Int32 const nChgStart, sal_Int32 const nChgEnd)
 {
-    SwRect aRect;
-
     TextFrameIndex const iChgStart(rTextFrame.MapModelToView(&rNode, nChgStart));
     TextFrameIndex const iChgEnd(rTextFrame.MapModelToView(&rNode, nChgEnd));
 
-    SwPosition aPos( rNode, nChgEnd );
-    SwCursorMoveState aTmpState( MV_NONE );
-    aTmpState.m_b2Lines = true;
-    rTextFrame.GetCharRect( aRect, aPos, &aTmpState );
-    // information about end of repaint area
-    Sw2LinesPos* pEnd2Pos = aTmpState.m_p2Lines;
+    SwRect aRect = rTextFrame.GetPaintArea();
+    SwRect aTmp = rTextFrame.GetPaintArea();
 
-    const SwTextFrame *pEndFrame = &rTextFrame;
-
-    while( pEndFrame->HasFollow() &&
-           iChgEnd >= pEndFrame->GetFollow()->GetOfst())
-        pEndFrame = pEndFrame->GetFollow();
-
-    if ( pEnd2Pos )
-    {
-        // we are inside a special portion, take left border
-        SwRectFnSet aRectFnSet(pEndFrame);
-        aRectFnSet.SetTop( aRect, aRectFnSet.GetTop(pEnd2Pos->aLine) );
-        if ( pEndFrame->IsRightToLeft() )
-            aRectFnSet.SetLeft( aRect, aRectFnSet.GetLeft(pEnd2Pos->aPortion) );
-        else
-            aRectFnSet.SetLeft( aRect, aRectFnSet.GetRight(pEnd2Pos->aPortion) );
-        aRectFnSet.SetWidth( aRect, 1 );
-        aRectFnSet.SetHeight( aRect, aRectFnSet.GetHeight(pEnd2Pos->aLine) );
-        delete pEnd2Pos;
-    }
-
-    aTmpState.m_p2Lines = nullptr;
-    SwRect aTmp;
-    aPos = SwPosition( rNode, nChgStart );
-    rTextFrame.GetCharRect( aTmp, aPos, &aTmpState );
-
-    // i63141: GetCharRect(..) could cause a formatting,
-    // during the formatting SwTextFrames could be joined, deleted, created...
-    // => we have to reinit pStartFrame and pEndFrame after the formatting
     const SwTextFrame* pStartFrame = &rTextFrame;
     while( pStartFrame->HasFollow() &&
            iChgStart >= pStartFrame->GetFollow()->GetOfst())
         pStartFrame = pStartFrame->GetFollow();
-    pEndFrame = pStartFrame;
+    const SwTextFrame* pEndFrame = pStartFrame;
     while( pEndFrame->HasFollow() &&
            iChgEnd >= pEndFrame->GetFollow()->GetOfst())
         pEndFrame = pEndFrame->GetFollow();
-
-    // information about start of repaint area
-    Sw2LinesPos* pSt2Pos = aTmpState.m_p2Lines;
-    if ( pSt2Pos )
-    {
-        // we are inside a special portion, take right border
-        SwRectFnSet aRectFnSet(pStartFrame);
-        aRectFnSet.SetTop( aTmp, aRectFnSet.GetTop(pSt2Pos->aLine) );
-        if ( pStartFrame->IsRightToLeft() )
-            aRectFnSet.SetLeft( aTmp, aRectFnSet.GetRight(pSt2Pos->aPortion) );
-        else
-            aRectFnSet.SetLeft( aTmp, aRectFnSet.GetLeft(pSt2Pos->aPortion) );
-        aRectFnSet.SetWidth( aTmp, 1 );
-        aRectFnSet.SetHeight( aTmp, aRectFnSet.GetHeight(pSt2Pos->aLine) );
-        delete pSt2Pos;
-    }
 
     bool bSameFrame = true;
 
