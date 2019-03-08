@@ -202,6 +202,10 @@ public:
     //parents
     virtual void help_hierarchy_foreach(const std::function<bool(const OString&)>& func) = 0;
 
+    virtual OUString strip_mnemonic(const OUString& rLabel) const = 0;
+
+    virtual VclPtr<VirtualDevice> create_virtual_device() const = 0;
+
     virtual ~Widget() {}
 };
 
