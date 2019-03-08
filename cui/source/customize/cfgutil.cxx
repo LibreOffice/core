@@ -249,23 +249,19 @@ std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const OUString& s
 
 OUString CuiConfigFunctionListBox::GetHelpText( bool bConsiderParent )
 {
-    int nSelected = m_xTreeView->get_selected_index();
-    if (nSelected != -1)
+    SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(get_selected_id().toInt64());
+    if (pData)
     {
-        SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(m_xTreeView->get_id(nSelected).toInt64());
-        if (pData)
+        if ( pData->nKind == SfxCfgKind::FUNCTION_SLOT )
         {
-            if ( pData->nKind == SfxCfgKind::FUNCTION_SLOT )
-            {
-                if (bConsiderParent)
-                    return Application::GetHelp()->GetHelpText(pData->sCommand, m_xTreeView.get());
-                else
-                    return Application::GetHelp()->GetHelpText(pData->sCommand, static_cast<weld::Widget*>(nullptr));
-            }
-            else if ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
-            {
-                return pData->sHelpText;
-            }
+            if (bConsiderParent)
+                return Application::GetHelp()->GetHelpText(pData->sCommand, m_xTreeView.get());
+            else
+                return Application::GetHelp()->GetHelpText(pData->sCommand, static_cast<weld::Widget*>(nullptr));
+        }
+        else if ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
+        {
+            return pData->sHelpText;
         }
     }
     return OUString();
@@ -273,22 +269,16 @@ OUString CuiConfigFunctionListBox::GetHelpText( bool bConsiderParent )
 
 OUString CuiConfigFunctionListBox::GetCurCommand()
 {
-    int nSelected = m_xTreeView->get_selected_index();
-    if (nSelected == -1)
-        return OUString();
-    SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(m_xTreeView->get_id(nSelected).toInt64());
-    if (!pData)
+    SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(get_selected_id().toInt64());
+    if (pData)
         return OUString();
     return pData->sCommand;
 }
 
 OUString CuiConfigFunctionListBox::GetCurLabel()
 {
-    int nSelected = m_xTreeView->get_selected_index();
-    if (nSelected == -1)
-        return OUString();
-    SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(m_xTreeView->get_id(nSelected).toInt64());
-    if (!pData)
+    SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(get_selected_id().toInt64());
+    if (pData)
         return OUString();
     if (!pData->sLabel.isEmpty())
         return pData->sLabel;
@@ -341,13 +331,9 @@ void CuiConfigFunctionListBox::ClearAll()
 
 OUString CuiConfigFunctionListBox::GetSelectedScriptURI()
 {
-    int nSelected = m_xTreeView->get_selected_index();
-    if (nSelected != -1)
-    {
-        SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(m_xTreeView->get_id(nSelected).toInt64());
-        if (pData && pData->nKind == SfxCfgKind::FUNCTION_SCRIPT)
-            return *static_cast<OUString*>(pData->pObject);
-    }
+    SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(get_selected_id().toInt64());
+    if (pData && pData->nKind == SfxCfgKind::FUNCTION_SCRIPT)
+        return *static_cast<OUString*>(pData->pObject);
     return OUString();
 }
 
