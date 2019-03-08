@@ -192,8 +192,6 @@ SAL_DLLPUBLIC void SAL_CALL osl_yieldThread(void);
 
     @param name  the name of the thread; must not be null; on Linux, only the
     first 16 characters are used
-
-    @param name     Thread name
 */
 SAL_DLLPUBLIC void SAL_CALL osl_setThreadName(char const * name);
 
