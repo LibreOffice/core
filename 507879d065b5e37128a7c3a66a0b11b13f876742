@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_cc1a7016",
+        "filename": "basctl/source/inc/dlgeddef.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-03-08T13:37:32Z",
+      "side": 1,
+      "message": "the nIdent value in https://opengrok.libreoffice.org/xref/core/svx/source/svdraw/svdcrtv.cxx?r\u003d191f85df#355 is the value taken from here. For the value 33 for OBJ_DLG_GRIDCONTROL, pObj value was none. And now it miracly the bug is fixed.",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 23
+      },
+      "revId": "507879d065b5e37128a7c3a66a0b11b13f876742",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
