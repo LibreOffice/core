@@ -22,7 +22,6 @@
 # fdo#45337 -o sc.ScAccessibleSpreadsheet
 # FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
 # -o sc.ScAnnotationShapeObj
--o sc.ScAreaLinkObj
 -o sc.ScAutoFormatFieldObj
 -o sc.ScAutoFormatObj
 -o sc.ScAutoFormatsObj
