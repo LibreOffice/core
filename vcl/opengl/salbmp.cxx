@@ -496,13 +496,6 @@ GLuint OpenGLSalBitmap::CreateTexture()
 
             determineTextureFormat(mnBits, nFormat, nType);
         }
-        else if( mnBits == 8 && maPalette.IsGreyPalette() )
-        {
-            // no conversion needed for grayscale
-            pData = mpUserBuffer.get();
-            nFormat = GL_LUMINANCE;
-            nType = GL_UNSIGNED_BYTE;
-        }
         else
         {
             VCL_GL_INFO( "::CreateTexture - convert from " << mnBits << " to 24 bits" );
