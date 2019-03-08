@@ -433,8 +433,6 @@ void AssignmentPersistentData::ImplCommit()
                         m_xTransientDataSource;
         /// current scroll pos in the field list
         sal_Int32       nFieldScrollPos;
-        /// the index within m_pFields of the last visible list box. This is redundant, it could be extracted from other members
-        sal_Int32       nLastVisibleListIndex;
         /// indicates that we've an odd field number. This member is for efficiency only, it's redundant.
         bool        bOddFieldNumber : 1;
         /// indicates that we're working with the real persistent configuration
@@ -454,7 +452,6 @@ void AssignmentPersistentData::ImplCommit()
             :pFieldLabels{{nullptr}}
             ,pFields{{nullptr}}
             ,nFieldScrollPos(0)
-            ,nLastVisibleListIndex(0)
             ,bOddFieldNumber(false)
             ,bWorkingPersistent( true )
             ,pConfigData( new AssignmentPersistentData )
@@ -467,7 +464,6 @@ void AssignmentPersistentData::ImplCommit()
             ,pFields{{nullptr}}
             ,m_xTransientDataSource( _rxTransientDS )
             ,nFieldScrollPos(0)
-            ,nLastVisibleListIndex(0)
             ,bOddFieldNumber(false)
             ,bWorkingPersistent( false )
             ,pConfigData( new AssigmentTransientData( _rDataSourceName, _rTableName, _rFields ) )
@@ -954,7 +950,6 @@ void AssignmentPersistentData::ImplCommit()
         auto pLeftAssignment = m_pImpl->aFieldAssignments.cbegin() + 2 * _nPos;
         auto pRightAssignment = pLeftAssignment + 1;
 
-        m_pImpl->nLastVisibleListIndex = -1;
         // loop
         for (sal_Int32 i=0; i<FIELD_PAIRS_VISIBLE; ++i)
         {
@@ -985,11 +980,6 @@ void AssignmentPersistentData::ImplCommit()
             // the new selections of the listboxes
             implSelectField(pLeftListControl->get(), *pLeftAssignment);
             implSelectField(pRightListControl->get(), *pRightAssignment);
-
-            // the index of the last visible list box
-            ++m_pImpl->nLastVisibleListIndex;   // the left hand side box is always visible
-            if (!bHideRightColumn)
-                ++m_pImpl->nLastVisibleListIndex;
 
             // increment ...
             if ( i < FIELD_PAIRS_VISIBLE - 1 )

@@ -50,7 +50,7 @@ using namespace ::com::sun::star::task;
 struct SfxProgress_Impl
 {
     Reference < XStatusIndicator > xStatusInd;
-    OUString                aText, aStateText;
+    OUString                aText;
     sal_uIntPtr             nMax;
     clock_t                 nCreate;
     bool                    bWaitMode;

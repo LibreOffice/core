@@ -379,7 +379,6 @@ class SwXMLTableCellContext_Impl : public SvXMLImportContext
     OUString m_aStyleName;
     OUString m_sFormula;
     OUString m_sSaveParaDefault;
-    OUString mXmlId;
     OUString m_StringValue;
 
     SvXMLImportContextRef const   m_xMyTable;
@@ -452,9 +451,6 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             GetSwImport().GetTableCellAttrTokenMap();
         switch( rTokenMap.Get( nPrefix, aLocalName ) )
         {
-        case XML_TOK_TABLE_XMLID:
-            mXmlId = rValue;
-            break;
         case XML_TOK_TABLE_STYLE_NAME:
             m_aStyleName = rValue;
             GetImport().GetTextImport()->SetCellParaStyleDefault(rValue);

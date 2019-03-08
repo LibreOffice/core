@@ -1533,7 +1533,6 @@ public:
     OUString m_sPrimaryKeyReading;
     OUString m_sSecondaryKeyReading;
     OUString m_sUserIndexName;
-    OUString m_sCitaitonText;
 
     Impl(SwXDocumentIndexMark& rThis,
             SwDoc* const pDoc,
@@ -2205,13 +2204,7 @@ SwXDocumentIndexMark::setPropertyValue(
                 m_pImpl->m_bMainEntry = lcl_AnyToBool(rValue);
             break;
             case PROPERTY_MAP_INDEX_OBJECTS:
-            {
-                uno::Sequence<css::beans::PropertyValue> aValues(1);
-                css::beans::PropertyValue propertyVal;
-                rValue >>= aValues;
-                propertyVal = aValues[0];
-                m_pImpl->m_sCitaitonText = lcl_AnyToString(propertyVal.Value);
-            }
+                // unsupported
             break;
         }
     }

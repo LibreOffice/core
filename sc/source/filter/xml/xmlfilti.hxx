@@ -154,16 +154,12 @@ class ScXMLDPFilterContext : public ScXMLImportContext
     ScXMLDataPilotTableContext* pDataPilotTable;
 
     ScQueryParam    aFilterFields;
-    ScAddress       aOutputPosition;
-    ScRange         aConditionSourceRangeAddress;
     utl::SearchParam::SearchType eSearchType;
     sal_uInt8   nFilterFieldCount;
     bool        bSkipDuplicates:1;
-    bool        bCopyOutputData:1;
     bool        bIsCaseSensitive:1;
     bool        bConnectionOr:1;
     bool        bNextConnectionOr:1;
-    bool        bConditionSourceRange:1;
     ::std::stack<bool>  aConnectionOrStack;
 
 public:
