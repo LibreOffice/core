@@ -1859,6 +1859,19 @@ public:
     }
 
     virtual void help_hierarchy_foreach(const std::function<bool(const OString&)>& func) override;
+
+    virtual OUString strip_mnemonic(const OUString &rLabel) const override
+    {
+        return rLabel.replaceFirst("_", "");
+    }
+
+    virtual VclPtr<VirtualDevice> create_virtual_device() const override
+    {
+        // create with no seperate alpha layer like everything sane does
+        auto xRet = VclPtr<VirtualDevice>::Create();
+        xRet->SetBackground(COL_TRANSPARENT);
+        return xRet;
+    }
 };
 
 namespace
@@ -5548,6 +5561,7 @@ private:
 
     bool signal_test_expand_row(GtkTreeIter& iter)
     {
+        disable_notify_events();
         GtkInstanceTreeIter aIter(nullptr);
 
         // if there's a preexisting placeholder child, required to make this
@@ -5576,6 +5590,7 @@ private:
             insert_row(subiter, &iter, -1, nullptr, &sDummy, nullptr, nullptr, nullptr);
         }
 
+        enable_notify_events();
         return bRet;
     }
 
@@ -5642,7 +5657,7 @@ private:
         return m_aModelColToViewCol[modelcol];
     }
 
-    static void signalRowDeleted(GtkTreeModel*, GtkTreePath*, GtkTreeIter*, gpointer widget)
+    static void signalRowDeleted(GtkTreeModel*, GtkTreePath*, gpointer widget)
     {
         GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
         pThis->signal_model_changed();
@@ -5855,7 +5870,8 @@ public:
         m_xSorter.reset(new comphelper::string::NaturalStringSorter(
                             ::comphelper::getProcessComponentContext(),
                             Application::GetSettings().GetUILanguageTag().getLocale()));
-        set_sort_order(true);
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
+        gtk_tree_sortable_set_sort_column_id(pSortable, m_nTextCol, GTK_SORT_ASCENDING);
     }
 
     virtual void set_sort_order(bool bAscending) override
@@ -6084,8 +6100,11 @@ public:
 
     virtual void set_sensitive(int pos, bool bSensitive, int col) override
     {
-        col = get_model_col(col);
-        ++col; // skip over id column
+        if (col == -1)
+            col = m_nTextCol;
+        else
+            col = get_model_col(col);
+        col += m_nIdCol + 1; // skip over id column
         col += m_aToggleVisMap.size(); // skip over toggle columns
         set(pos, col, bSensitive);
     }
@@ -6349,12 +6368,15 @@ public:
 
     virtual void expand_row(const weld::TreeIter& rIter) override
     {
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't expand when frozen");
+
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
         if (!gtk_tree_view_row_expanded(m_pTreeView, path))
             gtk_tree_view_expand_to_path(m_pTreeView, path);
         gtk_tree_path_free(path);
+
     }
 
     virtual void collapse_row(const weld::TreeIter& rIter) override
