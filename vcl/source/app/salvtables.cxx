@@ -610,6 +610,17 @@ public:
 
     virtual void help_hierarchy_foreach(const std::function<bool(const OString&)>& func) override;
 
+    virtual OUString strip_mnemonic(const OUString &rLabel) const override
+    {
+        return rLabel.replaceFirst("~", "");
+    }
+
+    virtual VclPtr<VirtualDevice> create_virtual_device() const override
+    {
+        // create with (annoying) seperate alpha layer that LibreOffice itself uses
+        return VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+    }
+
     SystemWindow* getSystemWindow()
     {
         return m_xWidget->GetSystemWindow();
@@ -2846,6 +2857,7 @@ public:
 
     virtual void expand_row(const weld::TreeIter& rIter) override
     {
+        assert(m_xTreeView->IsUpdateMode() && "don't expand when frozen");
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
         if (!m_xTreeView->IsExpanded(rVclIter.iter) && signal_expanding(rIter))
             m_xTreeView->Expand(rVclIter.iter);

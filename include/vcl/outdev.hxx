@@ -294,6 +294,8 @@ namespace vcl {
 
 VCL_DLLPUBLIC void DrawFocusRect(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
 
+typedef struct _cairo_surface cairo_surface_t;
+
 /**
 * Some things multiple-inherit from VclAbstractDialog and OutputDevice,
 * so we need to use virtual inheritance to keep the referencing counting
@@ -306,6 +308,8 @@ class VCL_DLLPUBLIC OutputDevice : public virtual VclReferenceBase
     friend class vcl::Window;
     friend class WorkWindow;
     friend void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight );
+
+    friend cairo_surface_t* get_underlying_alpha_cairo_surface(const VirtualDevice&);
 
 private:
     OutputDevice(const OutputDevice&) = delete;
