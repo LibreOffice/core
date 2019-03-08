@@ -10122,17 +10122,13 @@ sc/qa/extras/macros-test.cxx
 sc/qa/extras/new_cond_format.cxx
 sc/qa/extras/recordchanges-test.cxx
 sc/qa/extras/regression-test.cxx
-sc/qa/extras/scannotationobj.cxx
 sc/qa/extras/scannotationshapeobj.cxx
 sc/qa/extras/scannotationsobj.cxx
-sc/qa/extras/scarealinkobj.cxx
 sc/qa/extras/sccellcursorobj.cxx
 sc/qa/extras/sccellobj.cxx
 sc/qa/extras/sccellrangeobj.cxx
 sc/qa/extras/sccellrangesobj.cxx
 sc/qa/extras/scdatabaserangeobj.cxx
-sc/qa/extras/scdatapilotfieldobj.cxx
-sc/qa/extras/scdatapilotitemobj.cxx
 sc/qa/extras/scdatapilottableobj.cxx
 sc/qa/extras/sceditfieldobj-cell.cxx
 sc/qa/extras/sceditfieldobj-header.cxx
