@@ -68,6 +68,7 @@ public:
     void testOrgChart();
     void testCycleMatrix();
     void testPictureStrip();
+    void testInteropGrabBag();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -100,6 +101,7 @@ public:
     CPPUNIT_TEST(testOrgChart);
     CPPUNIT_TEST(testCycleMatrix);
     CPPUNIT_TEST(testPictureStrip);
+    CPPUNIT_TEST(testInteropGrabBag);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -895,6 +897,25 @@ void SdImportTestSmartArt::testPictureStrip()
     // Without the accompanying fix in place, this test would have failed: bad width was 16932, good
     // width is 12540, but let's accept 12541 as well.
     CPPUNIT_ASSERT_LESSEQUAL(aFirstPairSize.Height * 3 + 1, aFirstPairSize.Width);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testInteropGrabBag()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-interopgrabbag.pptx"), PPTX);
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xGroup, uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aGrabBagSeq;
+    xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBagSeq;
+    comphelper::SequenceAsHashMap aGrabBag(aGrabBagSeq);
+    CPPUNIT_ASSERT(aGrabBag.find("OOXData") != aGrabBag.end());
+    CPPUNIT_ASSERT(aGrabBag.find("OOXLayout") != aGrabBag.end());
+    CPPUNIT_ASSERT(aGrabBag.find("OOXStyle") != aGrabBag.end());
+    CPPUNIT_ASSERT(aGrabBag.find("OOXColor") != aGrabBag.end());
 
     xDocShRef->DoClose();
 }
