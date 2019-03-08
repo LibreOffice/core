@@ -52,44 +52,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_odfimport,\
 $(eval $(call gb_CppunitTest_use_ure,sw_odfimport))
 $(eval $(call gb_CppunitTest_use_vcl,sw_odfimport))
 
-$(eval $(call gb_CppunitTest_use_components,sw_odfimport,\
-	basic/util/sb \
-    comphelper/util/comphelp \
-    configmgr/source/configmgr \
-	embeddedobj/util/embobj \
-    filter/source/config/cache/filterconfig1 \
-    filter/source/storagefilterdetect/storagefd \
-	filter/source/odfflatxml/odfflatxml \
-	filter/source/xmlfilterdetect/xmlfd \
-	filter/source/xmlfilteradaptor/xmlfa \
-    framework/util/fwk \
-    i18npool/util/i18npool \
-	lingucomponent/source/languageguessing/guesslang \
-    linguistic/source/lng \
-    package/util/package2 \
-    package/source/xstor/xstor \
-    sw/util/sw \
-    sw/util/swd \
-    sax/source/expatwrap/expwrap \
-    sfx2/util/sfx \
-    svl/source/fsstor/fsstorage \
-    svtools/util/svt \
-    toolkit/util/tk \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-    unotools/util/utl \
-    unoxml/source/service/unoxml \
-    uui/util/uui \
-    $(if $(filter-out MACOSX WNT,$(OS)), \
-		$(if $(DISABLE_GUI),, \
-			vcl/vcl.unx \
-		) \
-    ) \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
-	vcl/vcl.common \
-    xmloff/util/xo \
-    svgio/svgio \
-))
+$(eval $(call gb_CppunitTest_use_rdb,sw_odfimport,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_odfimport))
 

@@ -25,60 +25,6 @@ define sw_ooxmlexport_libraries
 	svxcore
 endef
 
-define sw_ooxmlexport_components
-	basic/util/sb \
-	canvas/source/factory/canvasfactory \
-	chart2/source/chartcore \
-	chart2/source/controller/chartcontroller \
-	comphelper/util/comphelp \
-	configmgr/source/configmgr \
-	dbaccess/util/dba \
-	drawinglayer/drawinglayer \
-	embeddedobj/util/embobj \
-	emfio/emfio \
-	$(if $(filter WNT,$(OS)), \
-		embeddedobj/source/msole/emboleobj.windows, \
-		embeddedobj/source/msole/emboleobj \
-	) \
-	filter/source/config/cache/filterconfig1 \
-	filter/source/odfflatxml/odfflatxml \
-	filter/source/xmlfilterdetect/xmlfd \
-	filter/source/xmlfilteradaptor/xmlfa \
-	forms/util/frm \
-	framework/util/fwk \
-	i18npool/util/i18npool \
-	linguistic/source/lng \
-	oox/util/oox \
-	package/source/xstor/xstor \
-	package/util/package2 \
-	sax/source/expatwrap/expwrap \
-	sc/util/sc \
-	sc/util/scd \
-	sc/util/scfilt \
-	sw/util/sw \
-	sw/util/swd \
-	sw/util/msword \
-	sfx2/util/sfx \
-	sot/util/sot \
-	starmath/util/sm \
-	svl/source/fsstor/fsstorage \
-	svl/util/svl \
-	svtools/util/svt \
-	svx/util/svx \
-	svx/util/svxcore \
-	toolkit/util/tk \
-	ucb/source/core/ucb1 \
-	ucb/source/ucp/file/ucpfile1 \
-	ucb/source/ucp/tdoc/ucptdoc1 \
-	unotools/util/utl \
-	unoxml/source/rdf/unordf \
-	unoxml/source/service/unoxml \
-	uui/util/uui \
-	vcl/vcl.common \
-	writerfilter/util/writerfilter \
-	xmloff/util/xo
-endef
-
 # template for ooxmlexport tests (there are several so that they can be run in parallel)
 define sw_ooxmlexport_test
 
@@ -113,10 +59,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_ooxmlexport$(1),\
 $(eval $(call gb_CppunitTest_use_ure,sw_ooxmlexport$(1)))
 $(eval $(call gb_CppunitTest_use_vcl,sw_ooxmlexport$(1)))
 
-$(eval $(call gb_CppunitTest_use_components,sw_ooxmlexport$(1),\
-	$(sw_ooxmlexport_components) \
-	filter/source/storagefilterdetect/storagefd \
-))
+$(eval $(call gb_CppunitTest_use_rdb,sw_ooxmlexport$(1),services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_ooxmlexport$(1)))
 
