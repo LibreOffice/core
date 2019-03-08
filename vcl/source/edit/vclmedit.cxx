@@ -1492,12 +1492,6 @@ void VclMultiLineEdit::EnableFocusSelectionHide( bool bHide )
     pImpVclMEdit->GetTextWindow()->SetAutoFocusHide( bHide );
 }
 
-void VclMultiLineEdit::SetLeftMargin( sal_uInt16 n )
-{
-    if ( GetTextEngine() )
-        GetTextEngine()->SetLeftMargin( n );
-}
-
 void VclMultiLineEdit::SetRightToLeft( bool bRightToLeft )
 {
     if ( GetTextEngine() )

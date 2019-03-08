@@ -32,11 +32,6 @@ SvxCheckListBox::SvxCheckListBox( vcl::Window* pParent, WinBits nWinStyle ) :
 
 VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxCheckListBox, WB_TABSTOP)
 
-void SvxCheckListBox::SetNormalStaticImage(const Image& rNormalStaticImage)
-{
-    pCheckButton->SetImage(SvBmp::STATICIMAGE, rNormalStaticImage);
-}
-
 SvxCheckListBox::~SvxCheckListBox()
 {
     disposeOnce();

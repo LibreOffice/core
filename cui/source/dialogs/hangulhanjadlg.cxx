@@ -301,14 +301,6 @@ namespace svx
         pDev->DrawText( aRect, sText, DrawTextFlags::Center | DrawTextFlags::VCenter );
     }
 
-    void SuggestionSet::ClearSet()
-    {
-        sal_uInt16 i, nCount = GetItemCount();
-        for ( i = 0; i < nCount; ++i )
-            delete static_cast< OUString* >( GetItemData(i) );
-        Clear();
-    }
-
     SuggestionDisplay::SuggestionDisplay(weld::Builder& rBuilder)
         : m_bDisplayListBox( true )
         , m_bInSelectionUpdate( false )
@@ -340,11 +332,6 @@ namespace svx
             m_xValueSetWin->show();
         else
             m_xValueSetWin->hide();
-    }
-
-    bool SuggestionDisplay::hasCurrentControl()
-    {
-        return m_bDisplayListBox || m_xValueSet;
     }
 
     weld::Widget& SuggestionDisplay::implGetCurrentControl()

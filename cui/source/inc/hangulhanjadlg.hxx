@@ -46,7 +46,6 @@ namespace svx
         SuggestionSet(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
 
         virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
-        void            ClearSet();
     };
 
     class SuggestionDisplay
@@ -81,7 +80,6 @@ namespace svx
 
     private:
         void implUpdateDisplay();
-        bool hasCurrentControl();
         weld::Widget& implGetCurrentControl();
 
     private:

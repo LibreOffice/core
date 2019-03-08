@@ -132,11 +132,6 @@ void SAL_CALL PresenterSpritePane::windowPaint (const awt::PaintEvent&)
 }
 
 
-const std::shared_ptr<PresenterSprite>& PresenterSpritePane::GetSprite()
-{
-    return mpSprite;
-}
-
 void PresenterSpritePane::UpdateCanvases()
 {
     Reference<XComponent> xContentCanvasComponent (mxContentCanvas, UNO_QUERY);

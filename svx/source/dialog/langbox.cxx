@@ -816,17 +816,6 @@ sal_Int32 SvxLanguageComboBox::ImplInsertImgEntry( const OUString& rEntry, sal_I
 }
 
 
-void SvxLanguageBox::ImplRemoveEntryAt( sal_Int32 nPos )
-{
-    RemoveEntry( nPos);
-}
-
-void SvxLanguageComboBox::ImplRemoveEntryAt( sal_Int32 nPos )
-{
-    RemoveEntryAt( nPos);
-}
-
-
 void SvxLanguageBox::ImplClear()
 {
     Clear();

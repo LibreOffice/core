@@ -87,7 +87,6 @@ public:
     void                EnableImageDisplay( bool bEnable );
     void                EnableTextDisplay( bool bEnable );
 
-    void                SetFocusRect( const tools::Rectangle& rFocusRect );
     bool                IsSmallSymbol() const;
     void                SetSmallSymbol();
     virtual bool        set_property(const OString &rKey, const OUString &rValue) override;
@@ -319,13 +318,6 @@ protected:
     virtual const Color&
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
 
-    void     SetMouseRect( const tools::Rectangle& _rMouseRect )    { maMouseRect = _rMouseRect; }
-    void     SetStateRect( const tools::Rectangle& _rStateRect )    { maStateRect = _rStateRect; }
-
-    // draws the radio button (the knob image), in its current state (pressed/checked)
-    // at the usual location, which can be overridden with SetStateRect
-    void            DrawRadioButtonState(vcl::RenderContext& rRenderContext);
-
 public:
     explicit        RadioButton( vcl::Window* pParent, WinBits nWinStyle = 0 );
     virtual         ~RadioButton() override;
@@ -352,7 +344,6 @@ public:
     bool            IsRadioCheckEnabled() const { return mbRadioCheck; }
 
     void            SetModeRadioImage( const Image& rImage );
-    const Image&    GetModeRadioImage( ) const { return maImage;}
 
     void            SetState( bool bCheck );
     void            Check( bool bCheck = true );

@@ -689,11 +689,6 @@ void ToolBox::SetLineCount( ImplToolItems::size_type nNewLines )
     }
 }
 
-void ToolBox::SetPageScroll( bool b )
-{
-    mpData->mbPageScroll = b;
-}
-
 ToolBox::ImplToolItems::size_type ToolBox::GetItemCount() const
 {
     return mpData ? mpData->m_aItems.size() : 0;

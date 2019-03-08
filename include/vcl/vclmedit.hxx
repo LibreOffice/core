@@ -163,8 +163,6 @@ public:
 
     void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
 
-    void            SetLeftMargin( sal_uInt16 n );
-
     void            DisableSelectionOnFocus();
 
     void            EnableCursor( bool bEnable );

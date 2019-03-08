@@ -196,15 +196,6 @@ namespace dbaui
         return sURL;
     }
 
-    OUString OpenDocumentListBox::GetSelectedDocumentFilter() const
-    {
-        OUString sFilter;
-        sal_Int32 nSelected = GetSelectedEntryPos();
-        if ( LISTBOX_ENTRY_NOTFOUND != GetSelectedEntryPos() )
-            sFilter = impl_getDocumentAtIndex( nSelected ).second;
-        return sFilter;
-    }
-
     OpenDocumentListBox::StringPair OpenDocumentListBox::impl_getDocumentAtIndex( sal_uInt16 _nListIndex, bool _bSystemNotation ) const
     {
         MapIndexToStringPair::const_iterator pos = m_aURLs.find( _nListIndex );

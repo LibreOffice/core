@@ -942,53 +942,6 @@ bool UpdateDialog::isIgnoredUpdate( UpdateDialog::Index * index )
 }
 
 
-void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index const *pIndex, bool bIgnore, bool bIgnoreAll )
-{
-    OUString aExtensionID;
-    OUString aVersion;
-
-    m_bModified = true;
-
-    if ( pIndex->m_eKind == ENABLED_UPDATE )
-    {
-        dp_gui::UpdateData aUpdData = m_enabledUpdates[ pIndex->m_nIndex ];
-        aExtensionID = dp_misc::getIdentifier( aUpdData.aInstalledPackage );
-        if ( !bIgnoreAll )
-            aVersion = aUpdData.updateVersion;
-    }
-    else if ( pIndex->m_eKind == DISABLED_UPDATE )
-    {
-        DisabledUpdate &rData = m_disabledUpdates[ pIndex->m_nIndex ];
-        dp_misc::DescriptionInfoset aInfoset( m_context, rData.aUpdateInfo );
-        ::boost::optional< OUString > aID( aInfoset.getIdentifier() );
-        if ( aID )
-            aExtensionID = *aID;
-        if ( !bIgnoreAll )
-            aVersion = aInfoset.getVersion();
-    }
-
-    if ( !aExtensionID.isEmpty() )
-    {
-        bool bFound = false;
-        for (auto const& ignoredUpdate : m_ignoredUpdates)
-        {
-            if ( ignoredUpdate->sExtensionID == aExtensionID )
-            {
-                ignoredUpdate->sVersion = aVersion;
-                ignoredUpdate->bRemoved = !bIgnore;
-                bFound = true;
-                break;
-            }
-        }
-        if ( bIgnore && !bFound )
-        {
-            IgnoredUpdate *pData = new IgnoredUpdate( aExtensionID, aVersion );
-            m_ignoredUpdates.emplace_back( pData );
-        }
-    }
-}
-
-
 IMPL_LINK_NOARG(UpdateDialog, selectionHandler, weld::TreeView&, void)
 {
     OUStringBuffer b;

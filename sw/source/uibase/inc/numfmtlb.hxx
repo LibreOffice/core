@@ -91,20 +91,9 @@ public:
 
     void            clear();
 
-    void            SetOneArea(bool bOnlyOne) { bOneArea = bOnlyOne; }
-
     void            SetFormatType(const SvNumFormatType nFormatType);
-    SvNumFormatType GetFormatType() const { return nCurrFormatType; }
     void            SetDefFormat(const sal_uInt32 nDefFormat);
     sal_uInt32      GetFormat() const;
-
-    LanguageType    GetCurLanguage() const { return eCurLanguage;}
-    void            SetLanguage(LanguageType eSet)  { eCurLanguage = eSet;}
-
-    void            SetAutomaticLanguage(bool bSet){bUseAutomaticLanguage = bSet;}
-    bool            IsAutomaticLanguage()const {return bUseAutomaticLanguage;}
-
-    void            SetShowLanguageControl(bool bSet){bShowLanguageControl = bSet;}
 
     void            CallSelectHdl();
 
