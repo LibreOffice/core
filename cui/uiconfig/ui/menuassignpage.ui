@@ -2,6 +2,42 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name expander -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="liststore2">
+    <columns>
+      <!-- column-name check1 -->
+      <column type="gboolean"/>
+      <!-- column-name expander -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name checkvis1 -->
+      <column type="gboolean"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="liststore3">
+    <columns>
+      <!-- column-name expander -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name image1 -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkMenu" id="gearmenu">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -114,16 +150,6 @@
         <property name="use_underline">True</property>
       </object>
     </child>
-  </object>
-  <object class="GtkTreeStore" id="liststore1">
-    <columns>
-      <!-- column-name expander -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-      <!-- column-name id -->
-      <column type="gchararray"/>
-    </columns>
   </object>
   <object class="GtkMenu" id="modifymenu">
     <property name="visible">True</property>
@@ -439,7 +465,7 @@
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="model">liststore1</property>
+                    <property name="model">liststore2</property>
                     <property name="headers_visible">False</property>
                     <property name="reorderable">True</property>
                     <property name="search_column">1</property>
@@ -447,16 +473,35 @@
                       <object class="GtkTreeSelection"/>
                     </child>
                     <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                        <property name="resizable">True</property>
+                        <property name="spacing">6</property>
+                        <property name="alignment">0.5</property>
+                        <child>
+                          <object class="GtkCellRendererToggle" id="cellrenderer5"/>
+                          <attributes>
+                            <attribute name="visible">3</attribute>
+                            <attribute name="active">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn9">
                         <property name="spacing">6</property>
                         <child>
-                          <object class="GtkCellRendererPixbuf" id="cellrenderertext1"/>
+                          <object class="GtkCellRendererPixbuf" id="cellrenderertext9"/>
                           <attributes>
                             <attribute name="pixbuf">0</attribute>
                           </attributes>
                         </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn10">
+                        <property name="spacing">6</property>
                         <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext3"/>
+                          <object class="GtkCellRendererText" id="cellrenderertext10"/>
                           <attributes>
                             <attribute name="text">1</attribute>
                           </attributes>
@@ -481,31 +526,47 @@
                 <child>
                   <object class="GtkTreeView" id="menucontents">
                     <property name="width_request">-1</property>
+                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="model">liststore1</property>
+                    <property name="model">liststore3</property>
                     <property name="headers_visible">False</property>
-                    <property name="reorderable">True</property>
                     <property name="search_column">1</property>
+                    <property name="show_expanders">True</property>
+                    <property name="reorderable">True</property>
+                    <property name="enable_tree_lines">True</property>
                     <child internal-child="selection">
-                      <object class="GtkTreeSelection"/>
+                      <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
                     </child>
                     <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn22">
                         <property name="spacing">6</property>
                         <child>
-                          <object class="GtkCellRendererPixbuf" id="cellrenderertext5"/>
+                          <object class="GtkCellRendererPixbuf" id="cellrenderertext44"/>
                           <attributes>
                             <attribute name="pixbuf">0</attribute>
                           </attributes>
                         </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn33">
                         <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext6"/>
+                          <object class="GtkCellRendererText" id="cellrenderertext22"/>
                           <attributes>
                             <attribute name="text">1</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn44">
+                        <child>
+                          <object class="GtkCellRendererPixbuf" id="cellrenderertext55"/>
+                          <attributes>
+                            <attribute name="pixbuf">2</attribute>
                           </attributes>
                         </child>
                       </object>

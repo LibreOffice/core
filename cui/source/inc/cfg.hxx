@@ -73,20 +73,15 @@ class SvxConfigPage;
 
 typedef std::vector< SvxConfigEntry* > SvxEntries;
 
-class SvxConfigDialog : public SfxTabDialog
+class SvxConfigDialog : public SfxTabDialogController
 {
 private:
     css::uno::Reference< css::frame::XFrame > m_xFrame;
-    sal_uInt16 m_nMenusPageId;
-    sal_uInt16 m_nToolbarsPageId;
-    sal_uInt16 m_nContextMenusPageId;
-    sal_uInt16 m_nKeyboardPageId;
-    sal_uInt16 m_nEventsPageId;
 
 public:
-    SvxConfigDialog( vcl::Window*, const SfxItemSet* );
+    SvxConfigDialog(weld::Window*, const SfxItemSet*);
 
-    virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
     void SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame);
 };
 

@@ -106,8 +106,6 @@ SvxMenuConfigPage::SvxMenuConfigPage(TabPageParent pParent, const SfxItemSet& rS
     Size aSize(m_xFunctions->get_size_request());
     rTreeView.set_size_request(aSize.Width(), aSize.Height());
     MenuEntriesSizeAllocHdl(aSize);
-    rTreeView.set_grid_left_attach(0);
-    rTreeView.set_grid_top_attach(0);
     rTreeView.set_hexpand(true);
     rTreeView.set_vexpand(true);
     rTreeView.show();

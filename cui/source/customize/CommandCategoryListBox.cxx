@@ -292,6 +292,9 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                 SfxGroupInfo_Impl *pCurrentInfo =
                     reinterpret_cast<SfxGroupInfo_Impl*>(m_xControl->get_id(nCurPos).toInt64());
 
+                if (!pCurrentInfo) //seperator
+                    continue;
+
                 if (pCurrentInfo->nKind == SfxCfgKind::GROUP_FUNCTION)
                 {
                     css::uno::Sequence< css::frame::DispatchInformation > lCommands;

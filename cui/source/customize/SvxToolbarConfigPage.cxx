@@ -109,8 +109,6 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(TabPageParent pParent, const SfxItemS
     aWidths.push_back(rTreeView.get_checkbox_column_width());
     aWidths.push_back(rTreeView.get_checkbox_column_width());
     rTreeView.set_column_fixed_widths(aWidths);
-    rTreeView.set_grid_left_attach(0);
-    rTreeView.set_grid_top_attach(0);
     rTreeView.set_hexpand(true);
     rTreeView.set_vexpand(true);
     rTreeView.set_help_id( HID_SVX_CONFIG_TOOLBAR_CONTENTS );
