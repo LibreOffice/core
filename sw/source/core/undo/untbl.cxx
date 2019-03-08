@@ -1473,7 +1473,6 @@ SwUndoTableNdsChg::SwUndoTableNdsChg( SwUndoId nAction,
     m_nMin( nMn ), m_nMax( nMx ),
     m_nSttNode( rTableNd.GetIndex() ),
     m_nCount( nCnt ),
-    m_nSetColType( TableChgWidthHeightType::InvalidPos ),
     m_bFlag( bFlg ),
     m_bSameHeight( bSmHght )
 {
@@ -1804,27 +1803,11 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
     switch( GetId() )
     {
     case SwUndoId::TABLE_INSCOL:
-        if( TableChgWidthHeightType::InvalidPos == extractPosition(m_nSetColType) )
-            rDoc.InsertCol( aSelBoxes, m_nCount, m_bFlag );
-        else
-        {
-            SwTableBox* pBox = pTableNd->GetTable().GetTableBox( 0 );
-            rDoc.SetColRowWidthHeight( *pBox, m_nSetColType, 0, 0 );
-        }
+        rDoc.InsertCol( aSelBoxes, m_nCount, m_bFlag );
         break;
 
     case SwUndoId::TABLE_INSROW:
-        if( TableChgWidthHeightType::InvalidPos == extractPosition(m_nSetColType) )
-            rDoc.InsertRow( aSelBoxes, m_nCount, m_bFlag );
-        else
-        {
-            SwTable& rTable = pTableNd->GetTable();
-            SwTableBox* pBox = rTable.GetTableBox( 0 );
-            TableChgMode eOldMode = rTable.GetTableChgMode();
-            rTable.SetTableChgMode( static_cast<TableChgMode>(m_nCount) );
-            rDoc.SetColRowWidthHeight( *pBox, m_nSetColType, 0, 0 );
-            rTable.SetTableChgMode( eOldMode );
-        }
+        rDoc.InsertRow( aSelBoxes, m_nCount, m_bFlag );
         break;
 
     case SwUndoId::TABLE_SPLIT:
@@ -1833,7 +1816,6 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
     case SwUndoId::TABLE_DELBOX:
     case SwUndoId::ROW_DELETE:
     case SwUndoId::COL_DELETE:
-        if( TableChgWidthHeightType::InvalidPos == extractPosition(m_nSetColType) )
         {
             SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
             aMsgHint.m_eFlags = TBL_BOXPTR;
@@ -1842,55 +1824,8 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
             if( m_nMax > m_nMin && rTable.IsNewModel() )
                 rTable.PrepareDeleteCol( m_nMin, m_nMax );
             rTable.DeleteSel( &rDoc, aSelBoxes, nullptr, this, true, true );
+            m_nSttNode = pTableNd->GetIndex();
         }
-        else
-        {
-            SwTable& rTable = pTableNd->GetTable();
-
-            SwTableFormulaUpdate aMsgHint( &rTable );
-            aMsgHint.m_eFlags = TBL_BOXPTR;
-            rDoc.getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
-
-            SwTableBox* pBox = rTable.GetTableBox( 0 );
-            TableChgMode eOldMode = rTable.GetTableChgMode();
-            rTable.SetTableChgMode( static_cast<TableChgMode>(m_nCount) );
-
-            // need the SaveSections!
-            rDoc.GetIDocumentUndoRedo().DoUndo( true );
-            std::unique_ptr<SwUndo> pUndo;
-
-            switch( extractPosition(m_nSetColType) )
-            {
-            case TableChgWidthHeightType::ColLeft:
-            case TableChgWidthHeightType::ColRight:
-            case TableChgWidthHeightType::CellLeft:
-            case TableChgWidthHeightType::CellRight:
-                 rTable.SetColWidth( *pBox, m_nSetColType, 0, 0, &pUndo );
-                break;
-            case TableChgWidthHeightType::RowBottom:
-            case TableChgWidthHeightType::CellTop:
-            case TableChgWidthHeightType::CellBottom:
-                rTable.SetRowHeight( *pBox, m_nSetColType, 0, 0, &pUndo );
-                break;
-            default: break;
-            }
-
-            if( pUndo )
-            {
-                auto pSwUndoTableNdsChg = static_cast<SwUndoTableNdsChg *>(pUndo.get());
-                m_pDelSects->insert(m_pDelSects->begin(),
-                    std::make_move_iterator(
-                        pSwUndoTableNdsChg->m_pDelSects->begin()),
-                    std::make_move_iterator(
-                        pSwUndoTableNdsChg->m_pDelSects->end()));
-                pSwUndoTableNdsChg->m_pDelSects->clear();
-                pUndo.reset();
-            }
-            rDoc.GetIDocumentUndoRedo().DoUndo( false );
-
-            rTable.SetTableChgMode( eOldMode );
-        }
-        m_nSttNode = pTableNd->GetIndex();
         break;
     default:
         ;

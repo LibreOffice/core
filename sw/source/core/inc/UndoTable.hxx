@@ -180,7 +180,6 @@ class SwUndoTableNdsChg : public SwUndo
     long m_nMin, m_nMax;        // for redo of delete column
     sal_uLong m_nSttNode;
     sal_uInt16 m_nCount;
-    TableChgWidthHeightType m_nSetColType;
     bool const m_bFlag;
     bool const m_bSameHeight;                   // only used for SplitRow
 

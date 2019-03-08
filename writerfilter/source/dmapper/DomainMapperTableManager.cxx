@@ -55,8 +55,6 @@ DomainMapperTableManager::DomainMapperTableManager() :
     m_aTmpPosition(),
     m_aTmpTableProperties(),
     m_bPushCurrentWidth(false),
-    m_bRowSizeTypeInserted(false),
-    m_bHasBtlrCell(false),
     m_bTableSizeTypeInserted(false),
     m_nLayoutType(0),
     m_pTablePropsHandler(new TablePropertiesHandler())
@@ -745,8 +743,6 @@ void DomainMapperTableManager::endOfRowAction()
     pCellWidths->clear();
 
     m_nGridBefore = m_nGridAfter = 0;
-    m_bRowSizeTypeInserted = false;
-    m_bHasBtlrCell = false;
     m_bTableSizeTypeInserted = false;
 
 #ifdef DEBUG_WRITERFILTER

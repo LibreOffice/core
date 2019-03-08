@@ -3584,7 +3584,6 @@ void DocxAttributeOutput::EndTableCell(sal_uInt32 nCell)
 
     m_pSerializer->endElementNS( XML_w, XML_tc );
 
-    m_bBtLr = false;
     m_tableReference->m_bTableCellOpen = false;
     m_tableReference->m_bTableCellParaSdtOpen = false;
 }
@@ -7171,7 +7170,7 @@ void DocxAttributeOutput::CharIdctHint( const SfxPoolItem& )
 void DocxAttributeOutput::CharRotate( const SvxCharRotateItem& rRotate)
 {
     // Not rotated or we the rotation already handled?
-    if ( !rRotate.GetValue() || m_bBtLr || m_rExport.SdrExporter().getFrameBtLr())
+    if ( !rRotate.GetValue() || m_rExport.SdrExporter().getFrameBtLr())
         return;
 
     AddToAttrList( m_pEastAsianLayoutAttrList, FSNS( XML_w, XML_vert ), "true" );
@@ -9305,7 +9304,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_nextFontId( 1 ),
       m_tableReference(new TableReference()),
       m_bIgnoreNextFill(false),
-      m_bBtLr(false),
       m_pTableStyleExport(new DocxTableStyleExport(rExport.m_pDoc, pSerializer)),
       m_bParaBeforeAutoSpacing(false),
       m_bParaAfterAutoSpacing(false),
