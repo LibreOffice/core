@@ -270,17 +270,7 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
 
 hb_font_t* CoreTextStyle::ImplInitHbFont()
 {
-    // On macOS we use HarfBuzz for AAT shaping, but HarfBuzz will then
-    // need a CGFont (as it offloads the actual AAT shaping to Core Text),
-    // if we have one we use it to create the hb_face_t.
-    hb_face_t* pHbFace;
-    CTFontRef pCTFont = static_cast<CTFontRef>(CFDictionaryGetValue(GetStyleDict(), kCTFontAttributeName));
-    CGFontRef pCGFont = CTFontCopyGraphicsFont(pCTFont, nullptr);
-    if (pCGFont)
-        pHbFace = hb_coretext_face_create(pCGFont);
-    else
-        pHbFace = hb_face_create_for_tables(getFontTable, const_cast<PhysicalFontFace*>(GetFontFace()), nullptr);
-    CGFontRelease(pCGFont);
+    hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, const_cast<PhysicalFontFace*>(GetFontFace()), nullptr);
 
     return InitHbFont(pHbFace);
 }
