@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_2ccd1c5d",
+        "filename": "sw/source/core/txtnode/txtedt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-08T15:58:57Z",
+      "side": 0,
+      "message": "Not sure what this code was supposed to do.",
+      "revId": "9031da9a86500c1bc8a5b5b1a4b46ad4778fc777",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
