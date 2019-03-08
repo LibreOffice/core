@@ -116,6 +116,7 @@ public:
     void testFdo70807();
     void testImportRTF();
     void testExportRTF();
+    void testTdf123898();
     void testTdf67238();
     void testFdo75110();
     void testFdo75898();
@@ -232,6 +233,7 @@ public:
     CPPUNIT_TEST(testFdo70807);
     CPPUNIT_TEST(testImportRTF);
     CPPUNIT_TEST(testExportRTF);
+    CPPUNIT_TEST(testTdf123898);
     CPPUNIT_TEST(testTdf67238);
     CPPUNIT_TEST(testFdo75110);
     CPPUNIT_TEST(testFdo75898);
@@ -489,6 +491,18 @@ void SwUiWriterTest::testBookmarkCopy()
         OUString markText(SwPaM((*it)->GetMarkPos(), (*it)->GetOtherMarkPos()).GetText());
         CPPUNIT_ASSERT_EQUAL(OUString("bar"), markText);
     }
+}
+
+void SwUiWriterTest::testTdf123898()
+{
+    load("sw/qa/extras/layout/data/", "tdf123898.odt");
+
+    // Make sure spellchecker has done its job already
+    Scheduler::ProcessEventsToIdle();
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // Make sure that the arrow on the left is not there (there are 43 children if it's there)
+    assertXPathChildren(pXmlDoc, "/root/page/body/txt/anchored/fly/txt", 42);
 }
 
 void SwUiWriterTest::testTdf67238()
