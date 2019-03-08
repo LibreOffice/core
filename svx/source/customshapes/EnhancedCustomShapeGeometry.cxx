@@ -95,8 +95,8 @@ static const SvxMSDffVertPair mso_sptArcVert[] =
 };
 static const sal_uInt16 mso_sptArcSegm[] =
 {
-    0xa504, 0xab00, 0x0001, 0x6001, 0x8000,
-    0xa504, 0xaa00, 0x8000
+    0xa604, 0xab00, 0x0001, 0x6001, 0x8000,
+    0xa604, 0xaa00, 0x8000
 };
 static const SvxMSDffCalculationData mso_sptArcCalc[] =
 {
