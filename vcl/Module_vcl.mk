@@ -247,4 +247,10 @@ $(eval $(call gb_Module_add_screenshot_targets,vcl,\
     CppunitTest_vcl_dialogs_test \
 ))
 
+ifneq ($(DISPLAY),)
+$(eval $(call gb_Module_add_slowcheck_targets,vcl,\
+    CppunitTest_vcl_gen \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
