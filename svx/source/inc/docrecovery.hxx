@@ -409,10 +409,6 @@ class RecoveryDialog : public weld::GenericDialogController
         bool  m_bWaitForCore;
         bool  m_bWasRecoveryStarted;
 
-        OUString m_aGreenCheckImg;
-        OUString m_aYellowCheckImg;
-        OUString m_aRedCrossImg;
-
         OUString m_aSuccessRecovStr;
         OUString m_aOrigDocRecovStr;
         OUString m_aRecovFailedStr;
@@ -447,7 +443,7 @@ class RecoveryDialog : public weld::GenericDialogController
         DECL_LINK(CancelButtonHdl, weld::Button&, void);
 
         OUString impl_getStatusString( const TURLInfo& rInfo ) const;
-        OUString impl_getStatusImage( const TURLInfo& rInfo ) const;
+        static OUString impl_getStatusImage( const TURLInfo& rInfo );
 };
 
 

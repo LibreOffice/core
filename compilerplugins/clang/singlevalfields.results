@@ -4,55 +4,16 @@ avmedia/inc/mediacontrol.hxx:74
 avmedia/source/framework/soundhandler.hxx:123
     avmedia::SoundHandler m_aUpdateIdle
     avmedia SoundHandler Update
-basctl/source/basicide/baside2.hxx:87
+basctl/source/basicide/baside2.hxx:88
     basctl::EditorWindow aHighlighter
     0
-basctl/source/basicide/baside2b.cxx:69
-    basctl::(anonymous) nHeaderBarHeight
-    16
 basctl/source/inc/dlged.hxx:132
     basctl::DlgEditor aMarkIdle
     basctl DlgEditor Mark
-basegfx/source/curve/b2dcubicbezier.cxx:33
-    /media/noel/disk2/libo5/basegfx/source/curve/b2dcubicbezier.cxx fMultFactUnsharpen
-    1.6000000000000001
-basegfx/source/polygon/b2dpolygontools.cxx:44
-    /media/noel/disk2/libo5/basegfx/source/polygon/b2dpolygontools.cxx fAngleBoundStartValue
-    2.25
-basegfx/source/raster/rasterconvert3d.cxx:217
-    basegfx::RasterConverter3D::rasterconvertB3DEdge bForceToPolygon
-    0
-basegfx/test/basegfx2d.cxx:408
-    basegfx::b2dhommatrix::decompose fSX
-    10
-basegfx/test/basegfx2d.cxx:409
-    basegfx::b2dhommatrix::decompose fSY
-    12
-basegfx/test/basegfx2d.cxx:410
-    basegfx::b2dhommatrix::decompose fR
-    0.78539816339744828
-basegfx/test/basegfx2d.cxx:411
-    basegfx::b2dhommatrix::decompose fS
-    0.26179938779914941
-basic/source/classes/sbunoobj.cxx:3660
-    /media/noel/disk2/libo5/basic/source/classes/sbunoobj.cxx pFirstCtor
-    0
-basic/source/runtime/methods.cxx:2511
-    implSetupWildcard cDelim1
-    47
-basic/source/runtime/methods.cxx:2512
-    implSetupWildcard cDelim2
-    92
-basic/source/runtime/methods.cxx:2513
-    implSetupWildcard cWild1
-    42
-basic/source/runtime/methods.cxx:2514
-    implSetupWildcard cWild2
-    63
-basic/source/runtime/methods.cxx:3439
+basic/source/runtime/methods.cxx:3438
     (anonymous namespace)::RandomNumberGenerator global_rng
     5489
-binaryurp/source/proxy.hxx:83
+binaryurp/source/proxy.hxx:81
     binaryurp::Proxy references_
     1
 binaryurp/source/writerstate.hxx:41
@@ -79,7 +40,7 @@ bridges/source/jni_uno/jni_bridge.h:53
 bridges/source/jni_uno/jni_uno2java.cxx:389
     jni_uno::UNO_proxy m_ref
     1
-chart2/source/controller/inc/ChartController.hxx:378
+chart2/source/controller/inc/ChartController.hxx:377
     chart::ChartController m_aLifeTimeManager
     0
 chart2/source/controller/inc/TitleDialogData.hxx:34
@@ -94,24 +55,27 @@ chart2/source/controller/inc/TitleDialogData.hxx:36
 chart2/source/model/main/DataPoint.hxx:108
     chart::DataPoint m_bNoParentPropAllowed
     0
-chart2/source/view/axes/VCartesianAxis.cxx:1785
-    chart::VCartesianAxis::createShapes bIncludeSpaceBetweenTickAndText
-    0
 comphelper/source/misc/random.cxx:42
     comphelper::rng::RandomNumberGenerator global_rng
     5489
 comphelper/source/misc/threadpool.cxx:27
     comphelper gbIsWorkerThread
     1
-connectivity/source/commontools/dbconversion.cxx:409
-    dbtools::DBTypeConversion::toDate sDateSep
-    45
-connectivity/source/commontools/filtermanager.cxx:78
-    dbtools::FilterManager::getFilterComponent sErr
-    #FilterManager::getFilterComponent unknown component#
-connectivity/source/drivers/hsqldb/HStorageAccess.cxx:363
-    Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_seek BUFFER_SIZE
-    9192
+connectivity/source/drivers/mysqlc/mysqlc_resultsetmetadata.hxx:43
+    connectivity::mysqlc::MySqlFieldInfo length
+    0
+connectivity/source/drivers/mysqlc/mysqlc_resultsetmetadata.hxx:44
+    connectivity::mysqlc::MySqlFieldInfo type
+    0
+connectivity/source/drivers/mysqlc/mysqlc_resultsetmetadata.hxx:45
+    connectivity::mysqlc::MySqlFieldInfo mysql_type
+    0
+connectivity/source/drivers/mysqlc/mysqlc_resultsetmetadata.hxx:46
+    connectivity::mysqlc::MySqlFieldInfo charsetNumber
+    0
+connectivity/source/drivers/mysqlc/mysqlc_resultsetmetadata.hxx:47
+    connectivity::mysqlc::MySqlFieldInfo flags
+    0
 connectivity/source/inc/dbase/DIndexIter.hxx:36
     connectivity::dbase::OIndexIterator m_pOperator
     0
@@ -142,40 +106,19 @@ connectivity/source/inc/OColumn.hxx:47
 connectivity/source/inc/OColumn.hxx:48
     connectivity::OColumn m_DefinitelyWritable
     0
-connectivity/source/inc/writer/WTable.hxx:69
+connectivity/source/inc/writer/WTable.hxx:65
     connectivity::writer::OWriterTable m_nStartCol
     0
-cppu/source/typelib/static_types.cxx:70
-    extern nMaxAlignment
-    8
-cppu/source/typelib/typelib.cxx:75
-    /media/noel/disk2/libo5/cppu/source/typelib/typelib.cxx nMaxAlignment
-    8
-cui/source/dialogs/screenshotannotationdlg.cxx:441
-    ScreenshotAnnotationDlg_Impl::PaintControlDataEntry fGrowTopLeft
-    1.5
-cui/source/dialogs/screenshotannotationdlg.cxx:442
-    ScreenshotAnnotationDlg_Impl::PaintControlDataEntry fGrowBottomRight
-    0.5
-cui/source/dialogs/screenshotannotationdlg.cxx:448
-    ScreenshotAnnotationDlg_Impl::PaintControlDataEntry fEdgeRoundPixel
-    8
-cui/source/dialogs/screenshotannotationdlg.cxx:513
-    ScreenshotAnnotationDlg_Impl::RepaintToBuffer fLineWidthEntries
-    5
-cui/source/dialogs/screenshotannotationdlg.cxx:520
-    ScreenshotAnnotationDlg_Impl::RepaintToBuffer fLineWidthHilight
-    7
-cui/source/inc/cfgutil.hxx:228
-    CuiConfigGroupListBox m_pStylesInfo
-    0
-cui/source/inc/linkdlg.hxx:63
+cui/source/inc/acccfg.hxx:120
+    SfxAcceleratorConfigPage m_aUpdateDataTimer
+    UpdateDataTimer
+cui/source/inc/linkdlg.hxx:46
     SvBaseLinksDlg aUpdateIdle
     cui SvBaseLinksDlg UpdateIdle
 cui/source/inc/thesdlg.hxx:38
     LookUpComboBox m_aModifyIdle
     cui LookUpComboBox Modify
-cui/source/options/optgdlg.cxx:1102
+cui/source/options/optgdlg.cxx:1103
     LanguageConfig_Impl aLanguageOptions
     0
 cui/source/options/optjava.hxx:78
@@ -184,100 +127,37 @@ cui/source/options/optjava.hxx:78
 cui/source/options/treeopt.cxx:456
     OptionsPageInfo m_pPage
     0
-desktop/source/app/app.cxx:505
+desktop/source/app/app.cxx:507
     desktop::Desktop::Init bTryHardOfficeconfigBroken
     0
 desktop/source/app/cmdlineargs.hxx:137
     desktop::CommandLineArgs m_quickstart
     0
-drawinglayer/source/primitive2d/controlprimitive2d.cxx:177
-    drawinglayer::primitive2d::ControlPrimitive2D::createBitmapDecomposition fZoomScale
-    28
-drawinglayer/source/primitive2d/fillgradientprimitive2d.cxx:286
-    drawinglayer::primitive2d::FillGradientPrimitive2D::create2DDecomposition bOverlapping
-    1
-drawinglayer/source/primitive2d/patternfillprimitive2d.cxx:72
-    drawinglayer::primitive2d::PatternFillPrimitive2D::calculateNeededDiscreteBufferSize fMaximumSquare
-    34596
-drawinglayer/source/primitive2d/patternfillprimitive2d.cxx:79
-    drawinglayer::primitive2d::PatternFillPrimitive2D::calculateNeededDiscreteBufferSize nMinimumTiles
-    9
-drawinglayer/source/primitive2d/patternfillprimitive2d.cxx:85
-    drawinglayer::primitive2d::PatternFillPrimitive2D::calculateNeededDiscreteBufferSize fMinimumSquare
-    256
-drawinglayer/source/primitive2d/polygonprimitive2d.cxx:270
-    drawinglayer::primitive2d::PolygonStrokePrimitive2D::create2DDecomposition bTestByUsingRandomColor
-    0
-drawinglayer/source/primitive2d/sceneprimitive2d.cxx:283
-    drawinglayer::primitive2d::ScenePrimitive2D::create2DDecomposition nDefaultOversampleValue
-    3
 drawinglayer/source/primitive2d/sceneprimitive2d.cxx:368
     drawinglayer::primitive2d::ScenePrimitive2D::create2DDecomposition bMultithreadAllowed
     1
 drawinglayer/source/primitive2d/sceneprimitive2d.cxx:472
     drawinglayer::primitive2d::ScenePrimitive2D::create2DDecomposition bAddOutlineToCreated3DSceneRepresentation
     0
-drawinglayer/source/primitive2d/textdecoratedprimitive2d.cxx:231
-    drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D::create2DDecomposition fFactor
-    0.041666666666666664
-drawinglayer/source/primitive2d/texteffectprimitive2d.cxx:32
-    drawinglayer::primitive2d fDiscreteSize
-    1.1000000000000001
-drawinglayer/source/primitive2d/textprimitive2d.cxx:49
-    (anonymous namespace)::getCorrectedScaleAndFontScale fDefaultFontScale
-    100
-drawinglayer/source/primitive2d/wrongspellprimitive2d.cxx:50
-    drawinglayer::primitive2d::WrongSpellPrimitive2D::create2DDecomposition fDefaultDistance
-    0.029999999999999999
-drawinglayer/source/primitive3d/polygontubeprimitive3d.cxx:551
-    drawinglayer::primitive3d::PolygonTubePrimitive3D::impCreate3DDecomposition nSegments
-    8
 drawinglayer/source/processor2d/vclhelperbufferdevice.cxx:332
     drawinglayer::impBufferDevice::paint bDoSaveForVisualControl
     0
-drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:914
+drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:925
     drawinglayer::processor2d::VclMetafileProcessor2D::processGraphicPrimitive2D bSuppressPDFExtOutDevDataSupport
     0
-drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:1869
+drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:1250
+    drawinglayer::processor2d::VclMetafileProcessor2D::processTextHierarchyParagraphPrimitive2D bSuppressPDFExtOutDevDataSupport
+    0
+drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:1998
     drawinglayer::processor2d::VclMetafileProcessor2D::processUnifiedTransparencePrimitive2D bForceToMetafile
     0
-drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:1963
+drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:2092
     drawinglayer::processor2d::VclMetafileProcessor2D::processTransparencePrimitive2D bForceToBigTransparentVDev
-    0
-drawinglayer/source/processor2d/vclpixelprocessor2d.cxx:426
-    drawinglayer::processor2d::VclPixelProcessor2D::processWrongSpellPrimitive2D bHandleWrongSpellDirectly
-    1
-drawinglayer/source/processor2d/vclpixelprocessor2d.cxx:449
-    drawinglayer::processor2d::VclPixelProcessor2D::processTextSimplePortionPrimitive2D bForceSimpleTextDecomposition
-    0
-drawinglayer/source/processor2d/vclpixelprocessor2d.cxx:471
-    drawinglayer::processor2d::VclPixelProcessor2D::processTextDecoratedPortionPrimitive2D bForceComplexTextDecomposition
-    0
-drawinglayer/source/processor2d/vclpixelprocessor2d.cxx:493
-    drawinglayer::processor2d::VclPixelProcessor2D::processPolygonHairlinePrimitive2D bAllowed
-    1
-drawinglayer/source/processor2d/vclpixelprocessor2d.cxx:557
-    drawinglayer::processor2d::VclPixelProcessor2D::processPolyPolygonColorPrimitive2D bAllowed
-    1
-drawinglayer/source/processor2d/vclpixelprocessor2d.cxx:622
-    drawinglayer::processor2d::VclPixelProcessor2D::processUnifiedTransparencePrimitive2D bAllowUsingDrawTransparent
-    1
-drawinglayer/source/processor2d/vclpixelprocessor2d.cxx:653
-    drawinglayer::processor2d::VclPixelProcessor2D::processUnifiedTransparencePrimitive2D bAllowed
-    0
-drawinglayer/source/processor2d/vclpixelprocessor2d.cxx:757
-    drawinglayer::processor2d::VclPixelProcessor2D::processPolygonStrokePrimitive2D bSuppressFatToHairlineCorrection
-    0
-drawinglayer/source/processor2d/vclpixelprocessor2d.cxx:786
-    drawinglayer::processor2d::VclPixelProcessor2D::processFillHatchPrimitive2D bForceIgnoreHatchSmoothing
-    0
-drawinglayer/source/processor3d/defaultprocessor3d.cxx:520
-    drawinglayer::processor3d::DefaultProcessor3D::processBasePrimitive3D bDoHatchDecomposition
     0
 drawinglayer/source/tools/converters.cxx:90
     drawinglayer::convertToBitmapEx bDoSaveForVisualControl
     0
-editeng/source/editeng/impedit.hxx:472
+editeng/source/editeng/impedit.hxx:474
     ImpEditEngine nBigTextObjectStart
     20
 emfio/source/reader/emfreader.cxx:1374
@@ -286,43 +166,13 @@ emfio/source/reader/emfreader.cxx:1374
 extensions/source/bibliography/bibcont.hxx:70
     BibBookContainer aIdle
     extensions BibBookContainer Split Idle
-extensions/source/bibliography/bibprop.hxx:22
-    /media/noel/disk2/libo5/extensions/source/bibliography/bibmod.cxx FM_PROP_LABEL
-    Label
-extensions/source/bibliography/bibprop.hxx:23
-    /media/noel/disk2/libo5/extensions/source/bibliography/bibmod.cxx FM_PROP_NAME
-    Name
-extensions/source/bibliography/bibprop.hxx:24
-    /media/noel/disk2/libo5/extensions/source/bibliography/bibmod.cxx FM_PROP_CONTROLSOURCE
-    DataField
-extensions/source/bibliography/bibprop.hxx:25
-    /media/noel/disk2/libo5/extensions/source/bibliography/bibmod.cxx FM_PROP_FORMATKEY
-    FormatKey
-extensions/source/bibliography/bibprop.hxx:26
-    /media/noel/disk2/libo5/extensions/source/bibliography/bibmod.cxx FM_PROP_VALUE
-    Value
-extensions/source/bibliography/bibprop.hxx:27
-    /media/noel/disk2/libo5/extensions/source/bibliography/bibmod.cxx FM_PROP_EDITMODE
-    RecordMode
-extensions/source/bibliography/bibprop.hxx:28
-    /media/noel/disk2/libo5/extensions/source/bibliography/bibmod.cxx FM_PROP_DATASOURCE
-    DataSource
-extensions/source/bibliography/bibprop.hxx:29
-    /media/noel/disk2/libo5/extensions/source/bibliography/bibmod.cxx FM_PROP_CURSORSOURCE
-    DataSelection
-extensions/source/bibliography/bibprop.hxx:30
-    /media/noel/disk2/libo5/extensions/source/bibliography/bibmod.cxx FM_PROP_CURSORSOURCETYPE
-    DataSelectionType
-extensions/source/bibliography/bibprop.hxx:31
-    /media/noel/disk2/libo5/extensions/source/bibliography/bibmod.cxx FM_PROP_TEXT
-    Text
 extensions/source/propctrlr/browserline.hxx:60
     pcr::OBrowserLine m_pBrowseButton
     0
 extensions/source/propctrlr/browserline.hxx:61
     pcr::OBrowserLine m_pAdditionalBrowseButton
     0
-filter/source/msfilter/msdffimp.cxx:2628
+filter/source/msfilter/msdffimp.cxx:2622
     DffPropertyReader::ApplyAttributes bCheckShadow
     0
 filter/source/msfilter/viscache.hxx:31
@@ -331,9 +181,6 @@ filter/source/msfilter/viscache.hxx:31
 fpicker/source/office/commonpicker.hxx:66
     svt::OCommonPicker m_pDlg
     0
-framework/source/loadenv/loadenv.cxx:717
-    framework::LoadEnv::impl_detectTypeAndFilter FILTERFLAG_TEMPLATEPATH
-    16
 framework/source/services/autorecovery.cxx:391
     (anonymous namespace)::AutoRecovery m_aTimer
     Auto save timer
@@ -344,31 +191,19 @@ helpcompiler/inc/BasCodeTagger.hxx:35
     BasicCodeTagger m_Highlighter
     0
 i18npool/source/localedata/localedata.cxx:48
-    /media/noel/disk2/libo5/i18npool/source/localedata/localedata.cxx lcl_DATA_EN
+    /media/noel/disk2/libo4/i18npool/source/localedata/localedata.cxx lcl_DATA_EN
     localedata_en
 i18npool/source/localedata/localedata.cxx:49
-    /media/noel/disk2/libo5/i18npool/source/localedata/localedata.cxx lcl_DATA_ES
+    /media/noel/disk2/libo4/i18npool/source/localedata/localedata.cxx lcl_DATA_ES
     localedata_es
 i18npool/source/localedata/localedata.cxx:50
-    /media/noel/disk2/libo5/i18npool/source/localedata/localedata.cxx lcl_DATA_EURO
+    /media/noel/disk2/libo4/i18npool/source/localedata/localedata.cxx lcl_DATA_EURO
     localedata_euro
 i18npool/source/localedata/localedata.cxx:51
-    /media/noel/disk2/libo5/i18npool/source/localedata/localedata.cxx lcl_DATA_OTHERS
+    /media/noel/disk2/libo4/i18npool/source/localedata/localedata.cxx lcl_DATA_OTHERS
     localedata_others
-i18npool/source/nativenumber/nativenumbersupplier.cxx:1085
-    i18npool cyrillicThousandsMark
-    1154
-i18npool/source/nativenumber/nativenumbersupplier.cxx:1086
-    i18npool cyrillicTitlo
-    1155
-i18npool/source/nativenumber/nativenumbersupplier.cxx:1087
-    i18npool cyrillicTen
-    1110
-idlc/source/astdeclaration.cxx:25
-    /media/noel/disk2/libo5/idlc/source/astdeclaration.cxx sGlobal
-    ::
 idlc/source/idlccompile.cxx:50
-    /media/noel/disk2/libo5/idlc/source/idlccompile.cxx yydebug
+    /media/noel/disk2/libo4/idlc/source/idlccompile.cxx yydebug
     0
 include/basegfx/pixel/bpixel.hxx:43
     basegfx::BPixel::(anonymous union)::(anonymous) mnValue
@@ -376,23 +211,20 @@ include/basegfx/pixel/bpixel.hxx:43
 include/basegfx/pixel/bpixel.hxx:44
     basegfx::BPixel::(anonymous) maCombinedRGBO
     0
-include/basic/sbxvar.hxx:70
+include/basic/sbxvar.hxx:73
     SbxValues::(anonymous) pData
     0
-include/canvas/rendering/irendermodule.hxx:40
+include/canvas/rendering/irendermodule.hxx:36
     canvas::Vertex g
     1
-include/canvas/rendering/irendermodule.hxx:40
+include/canvas/rendering/irendermodule.hxx:36
     canvas::Vertex r
     1
-include/canvas/rendering/irendermodule.hxx:40
+include/canvas/rendering/irendermodule.hxx:36
     canvas::Vertex b
     1
-include/canvas/rendering/irendermodule.hxx:42
+include/canvas/rendering/irendermodule.hxx:38
     canvas::Vertex z
-    0
-include/connectivity/sqlparse.hxx:139
-    connectivity::OSQLParser m_pParseTree
     0
 include/editeng/swafopt.hxx:58
     editeng::SortedAutoCompleteStrings owning_
@@ -418,37 +250,37 @@ include/o3tl/vector_pool.hxx:93
 include/oox/core/contexthandler2.hxx:220
     oox::core::ContextHandler2Helper mnRootStackSize
     0
-include/oox/dump/dumperbase.hxx:1683
+include/oox/dump/dumperbase.hxx:1682
     oox::dump::RecordObjectBase mbBinaryOnly
     0
-include/sfx2/msg.hxx:187
+include/sfx2/msg.hxx:190
     SfxSlot nGroupId
     0
-include/sfx2/msg.hxx:191
+include/sfx2/msg.hxx:194
     SfxSlot nValue
     0
-include/sfx2/msg.hxx:196
+include/sfx2/msg.hxx:199
     SfxSlot pType
     0
-include/sfx2/msg.hxx:200
+include/sfx2/msg.hxx:203
     SfxSlot pFirstArgDef
     0
-include/sfx2/msg.hxx:201
+include/sfx2/msg.hxx:204
     SfxSlot nArgDefCount
     0
-include/svtools/filechangedchecker.hxx:29
+include/svtools/filechangedchecker.hxx:31
     FileChangedChecker mIdle
     SVTools FileChangedChecker Idle
-include/svtools/svparser.hxx:56
+include/svtools/svparser.hxx:55
     SvParser pImplData
     0
-include/svtools/svparser.hxx:74
+include/svtools/svparser.hxx:73
     SvParser::TokenStackType nTokenValue
     0
-include/svtools/svparser.hxx:75
+include/svtools/svparser.hxx:74
     SvParser::TokenStackType bTokenHasValue
     0
-include/svtools/tabbar.hxx:325
+include/svtools/tabbar.hxx:323
     TabBar mnOffY
     0
 include/svx/ctredlin.hxx:122
@@ -478,13 +310,13 @@ include/svx/deflt3d.hxx:54
 include/svx/deflt3d.hxx:55
     E3dDefaultAttributes bDefaultExtrudeSmoothFrontBack
     0
-include/svx/dialcontrol.hxx:110
+include/svx/dialcontrol.hxx:112
     svx::DialControl::DialControl_Impl mpLinkField
     0
-include/svx/dialcontrol.hxx:111
+include/svx/dialcontrol.hxx:113
     svx::DialControl::DialControl_Impl mnLinkedFieldValueMultiplyer
     0
-include/svx/dialcontrol.hxx:118
+include/svx/dialcontrol.hxx:120
     svx::DialControl::DialControl_Impl mbNoRot
     0
 include/svx/fillctrl.hxx:54
@@ -511,16 +343,13 @@ include/svx/svdmark.hxx:144
 include/svx/svdmark.hxx:145
     SdrMarkList mbGluePointNameOk
     0
-include/svx/svdmrkv.hxx:111
+include/svx/svdmrkv.hxx:110
     SdrMarkView mnFrameHandlesLimit
     50
-include/test/beans/xpropertyset.hxx:56
-    apitest::XPropertySet maPropsToTest
-    1
-include/vcl/ITiledRenderable.hxx:88
+include/vcl/ITiledRenderable.hxx:89
     vcl::ITiledRenderable mnTilePixelWidth
     256
-include/vcl/ITiledRenderable.hxx:88
+include/vcl/ITiledRenderable.hxx:89
     vcl::ITiledRenderable mnTilePixelHeight
     256
 include/vcl/opengl/OpenGLContext.hxx:51
@@ -556,14 +385,11 @@ pyuno/source/module/pyuno_impl.hxx:312
 sal/osl/unx/signal.cxx:82
     (anonymous namespace)::SignalAction Action
     1
-sal/osl/unx/socket.cxx:904
-    osl_psz_getLocalHostname LocalHostname
-    
-sal/osl/unx/sockimpl.hxx:37
+sal/osl/unx/sockimpl.hxx:39
     oslSocketImpl m_bIsInShutdown
     1
 sal/qa/osl/condition/osl_Condition_Const.h:41
-    /media/noel/disk2/libo5/sal/qa/osl/condition/osl_Condition.cxx aTestCon
+    /media/noel/disk2/libo4/sal/qa/osl/condition/osl_Condition.cxx aTestCon
     testcondition
 sal/qa/osl/file/osl_File_Const.h:114
     extern aCanURL3
@@ -635,25 +461,25 @@ sal/qa/rtl/process/rtl_Process_Const.h:33
     extern suParam3
     -process
 sal/qa/rtl/strings/test_ostring_stringliterals.cxx:22
-    /media/noel/disk2/libo5/sal/qa/rtl/strings/test_ostring_stringliterals.cxx rtl_string_unittest_non_const_literal_function
+    /media/noel/disk2/libo4/sal/qa/rtl/strings/test_ostring_stringliterals.cxx rtl_string_unittest_non_const_literal_function
     0
-sc/inc/compiler.hxx:111
+sc/inc/compiler.hxx:110
     ScRawToken::(anonymous union)::(anonymous) eInForceArray
     0
 sc/inc/dpfilteredcache.hxx:93
     ScDPFilteredCache::Criterion mpFilter
     0
 sc/inc/drwlayer.hxx:229
-    /media/noel/disk2/libo5/sc/source/core/data/drwlayer.cxx bDrawIsInUndo
-    0
-sc/inc/global.hxx:909
-    /media/noel/disk2/libo5/sc/source/core/data/global.cxx pScActiveViewShell
+    /media/noel/disk2/libo4/sc/source/core/data/drwlayer.cxx bDrawIsInUndo
     0
 sc/inc/global.hxx:910
-    /media/noel/disk2/libo5/sc/source/core/data/global.cxx nScClickMouseModifier
+    /media/noel/disk2/libo4/sc/source/core/data/global.cxx pScActiveViewShell
     0
 sc/inc/global.hxx:911
-    /media/noel/disk2/libo5/sc/source/core/data/global.cxx nScFillModeMouseModifier
+    /media/noel/disk2/libo4/sc/source/core/data/global.cxx nScClickMouseModifier
+    0
+sc/inc/global.hxx:912
+    /media/noel/disk2/libo4/sc/source/core/data/global.cxx nScFillModeMouseModifier
     0
 sc/inc/listenercontext.hxx:46
     sc::EndListeningContext maSet
@@ -676,17 +502,17 @@ sc/inc/table.hxx:178
 sc/qa/unit/ucalc.hxx:42
     Test::RangeNameDef mnIndex
     1
-sc/source/core/data/column.cxx:3377
+sc/source/core/data/column.cxx:3384
     (anonymous namespace)::RemoveEmptyBroadcasterHandler maSet
     0
-sc/source/core/data/documentimport.cxx:598
+sc/source/core/data/documentimport.cxx:597
     (anonymous namespace)::CellStoreInitializer::Impl maAttrs
     1048576
 sc/source/core/inc/parclass.hxx:94
     ScParameterClassification::RunData bHasForceArray
     1
 sc/source/core/tool/scmatrix.cxx:346
-    /media/noel/disk2/libo5/sc/source/core/tool/scmatrix.cxx bElementsMaxFetched
+    /media/noel/disk2/libo4/sc/source/core/tool/scmatrix.cxx bElementsMaxFetched
     1
 sc/source/filter/inc/orcusinterface.hxx:179
     ScOrcusConditionalFormat meEntryType
@@ -722,42 +548,24 @@ sc/source/ui/inc/viewdata.hxx:289
     ScViewData aLogicMode
     0
 sc/source/ui/inc/viewfunc.hxx:366
-    /media/noel/disk2/libo5/sc/source/ui/view/viewfun4.cxx bPasteIsDrop
+    /media/noel/disk2/libo4/sc/source/ui/view/viewfun4.cxx bPasteIsDrop
     0
 sc/source/ui/inc/viewfunc.hxx:367
-    /media/noel/disk2/libo5/sc/source/ui/view/viewfun7.cxx bPasteIsMove
+    /media/noel/disk2/libo4/sc/source/ui/view/viewfun7.cxx bPasteIsMove
     0
-sc/source/ui/view/formatsh.cxx:2548
-    ScFormatShell::GetNumFormatState sBreak
-    ,
 sc/source/ui/view/reffact.cxx:130
-    /media/noel/disk2/libo5/sc/source/ui/view/reffact.cxx bScSimpleRefFlag
+    /media/noel/disk2/libo4/sc/source/ui/view/reffact.cxx bScSimpleRefFlag
     1
-scripting/source/stringresource/stringresource.cxx:1987
-    stringresource::implWriteStringWithEncoding cLineFeed
-    10
 sd/inc/sdpptwrp.hxx:42
     SdPPTFilter pBas
     0
 sd/source/filter/html/htmlex.hxx:114
     HtmlExport mbAutoSlide
     1
-sd/source/ui/accessibility/AccessibleSlideSorterObject.cxx:160
-    accessibility::AccessibleSlideSorterObject::getAccessibleRole nRole
-    52
-sd/source/ui/accessibility/AccessibleSlideSorterView.cxx:256
-    accessibility::AccessibleSlideSorterView::getAccessibleRole nRole
-    13
-sd/source/ui/dlg/headerfooterdlg.cxx:766
-    sd::PresLayoutPreview::Paint fFactor
-    1
 sd/source/ui/framework/module/ShellStackGuard.hxx:82
     sd::framework::ShellStackGuard maPrinterPollingIdle
     sd ShellStackGuard PrinterPollingIdle
-sd/source/ui/func/futext.cxx:137
-    sd bTestText
-    0
-sd/source/ui/inc/DrawController.hxx:289
+sd/source/ui/inc/DrawController.hxx:290
     sd::DrawController mpCurrentPage
     0
 sd/source/ui/inc/pubdlg.hxx:151
@@ -778,19 +586,16 @@ sd/source/ui/inc/WindowUpdater.hxx:96
 sd/source/ui/presenter/SlideRenderer.hxx:82
     sd::presenter::SlideRenderer maPreviewRenderer
     1
-sd/source/ui/sidebar/PanelBase.hxx:56
+sd/source/ui/sidebar/PanelBase.hxx:54
     sd::sidebar::PanelBase mpWrappedControl
     0
-sd/source/ui/slidesorter/cache/SlsBitmapFactory.hxx:46
+sd/source/ui/slidesorter/cache/SlsBitmapFactory.hxx:45
     sd::slidesorter::cache::BitmapFactory maRenderer
     0
 sd/source/ui/slidesorter/inc/controller/SlsAnimator.hxx:92
     sd::slidesorter::controller::Animator maIdle
     sd slidesorter controller Animator
-sd/source/ui/view/sdview.cxx:371
-    sd::ViewRedirector::createRedirectedPrimitive2DSequence nTextSizeFactor
-    100
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:60
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:59
     StringEmitContext m_aBuf
     256
 sfx2/source/appl/lnkbase2.cxx:77
@@ -799,9 +604,6 @@ sfx2/source/appl/lnkbase2.cxx:77
 sfx2/source/appl/lnkbase2.cxx:82
     sfx2::ImplBaseLinkData::(anonymous) DDEType
     0
-sfx2/source/appl/newhelp.cxx:2585
-    SfxHelpWindow_Impl::Split nMinSplitSize
-    5
 sfx2/source/appl/newhelp.hxx:291
     SfxHelpIndexWindow_Impl aIdle
     sfx2 appl SfxHelpIndexWindow_Impl
@@ -811,44 +613,11 @@ sfx2/source/appl/newhelp.hxx:423
 sfx2/source/control/itemdel.cxx:31
     SfxItemDisruptor_Impl m_Idle
     sfx SfxItemDisruptor_Impl::Delete
-sfx2/source/view/classificationhelper.cxx:50
-    (anonymous namespace)::PROP_BACNAME sProp
-    BusinessAuthorizationCategory:Name
-sfx2/source/view/classificationhelper.cxx:56
-    (anonymous namespace)::PROP_STARTVALIDITY sProp
-    Authorization:StartValidity
-sfx2/source/view/classificationhelper.cxx:62
-    (anonymous namespace)::PROP_NONE sProp
-    None
-sfx2/source/view/classificationhelper.cxx:68
-    (anonymous namespace)::PROP_IMPACTSCALE sProp
-    Impact:Scale
-sfx2/source/view/classificationhelper.cxx:74
-    (anonymous namespace)::PROP_IMPACTLEVEL sProp
-    Impact:Level:Confidentiality
-sfx2/source/view/classificationhelper.cxx:80
-    (anonymous namespace)::PROP_PREFIX_EXPORTCONTROL sProp
-    urn:bails:ExportControl:
-sfx2/source/view/classificationhelper.cxx:86
-    (anonymous namespace)::PROP_PREFIX_NATIONALSECURITY sProp
-    urn:bails:NationalSecurity:
-sfx2/source/view/classificationhelper.cxx:922
-    SfxClassificationHelper::PROP_DOCHEADER sProp
-    Marking:document-header
-sfx2/source/view/classificationhelper.cxx:928
-    SfxClassificationHelper::PROP_DOCFOOTER sProp
-    Marking:document-footer
-sfx2/source/view/classificationhelper.cxx:934
-    SfxClassificationHelper::PROP_DOCWATERMARK sProp
-    Marking:document-watermark
-sfx2/source/view/classificationhelper.cxx:940
-    SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY sProp
-    urn:bails:IntellectualProperty:
-slideshow/source/engine/slideshowimpl.cxx:479
+slideshow/source/engine/slideshowimpl.cxx:486
     (anonymous namespace)::SlideShowImpl maFrameSynchronization
     0.02
 soltools/cpp/_cpp.c:31
-    /media/noel/disk2/libo5/soltools/cpp/_cpp.c nerrs
+    /media/noel/disk2/libo4/soltools/cpp/_cpp.c nerrs
     1
 soltools/cpp/_eval.c:734
     tokval cvlen
@@ -866,13 +635,13 @@ soltools/mkdepend/def.h:118
     inclist i_searched
     1
 soltools/mkdepend/def.h:185
-    /media/noel/disk2/libo5/soltools/mkdepend/pr.c printed
-    1
-soltools/mkdepend/def.h:185
-    /media/noel/disk2/libo5/soltools/mkdepend/main.c printed
+    /media/noel/disk2/libo4/soltools/mkdepend/main.c printed
     0
+soltools/mkdepend/def.h:185
+    /media/noel/disk2/libo4/soltools/mkdepend/pr.c printed
+    1
 soltools/mkdepend/def.h:189
-    /media/noel/disk2/libo5/soltools/mkdepend/main.c show_where_not
+    /media/noel/disk2/libo4/soltools/mkdepend/main.c show_where_not
     0
 starmath/inc/edit.hxx:54
     SmEditWindow aModifyIdle
@@ -883,7 +652,7 @@ starmath/source/cfgitem.hxx:102
 stoc/source/corereflection/lrucache.hxx:51
     LRU_Cache _pBlock
     0
-stoc/source/inspect/introspection.cxx:1528
+stoc/source/inspect/introspection.cxx:1526
     (anonymous namespace)::Cache::Data hits
     1
 stoc/source/security/access_controller.cxx:68
@@ -899,23 +668,20 @@ svgio/source/svgreader/svgdocumenthandler.cxx:82
     (anonymous namespace)::whiteSpaceHandling bNoGapsForBaselineShift
     1
 svl/source/crypto/cryptosign.cxx:152
-    (anonymous namespace)::(anonymous) extensions
+    (anonymous namespace)::TimeStampReq extensions
     0
-svtools/source/contnr/imivctl.hxx:158
+svtools/source/contnr/imivctl.hxx:118
     SvxIconChoiceCtrl_Impl aAutoArrangeIdle
     svtools contnr SvxIconChoiceCtrl_Impl AutoArrange
-svtools/source/contnr/imivctl.hxx:159
+svtools/source/contnr/imivctl.hxx:119
     SvxIconChoiceCtrl_Impl aDocRectChangedIdle
     svtools contnr SvxIconChoiceCtrl_Impl DocRectChanged
-svtools/source/contnr/imivctl.hxx:160
+svtools/source/contnr/imivctl.hxx:120
     SvxIconChoiceCtrl_Impl aVisRectChangedIdle
     svtools contnr SvxIconChoiceCtrl_Impl VisRectChanged
-svtools/source/contnr/imivctl.hxx:161
+svtools/source/contnr/imivctl.hxx:121
     SvxIconChoiceCtrl_Impl aCallSelectHdlIdle
     svtools contnr SvxIconChoiceCtrl_Impl CallSelectHdl
-svtools/source/control/filectrl.cxx:148
-    FileControl::Resize ButtonBorder
-    10
 svtools/source/dialogs/roadmapwizard.cxx:55
     svt::RoadmapWizardImpl pRoadmap
     0
@@ -931,64 +697,43 @@ svx/source/dialog/contimp.hxx:52
 svx/source/dialog/contimp.hxx:53
     SvxSuperContourDlg aCreateIdle
     SvxSuperContourDlg CreateIdle
-svx/source/sdr/contact/objectcontactofpageview.cxx:89
-    sdr::contact::ObjectContactOfPageView::PrepareProcessDisplay bInvalidateDuringPaint
-    1
+svx/source/inc/docrecovery.hxx:412
+    svx::DocRecovery::RecoveryDialog m_aGreenCheckImg
+    svx/res/nu01.png
+svx/source/inc/docrecovery.hxx:413
+    svx::DocRecovery::RecoveryDialog m_aYellowCheckImg
+    svx/res/nu04.png
+svx/source/inc/docrecovery.hxx:414
+    svx::DocRecovery::RecoveryDialog m_aRedCrossImg
+    svx/res/nu02.png
 svx/source/sdr/contact/viewcontactofsdrpage.cxx:104
     sdr::contact::ViewContactOfPageShadow::createViewIndependentPrimitive2DSequence bUseOldPageShadow
-    0
-svx/source/sdr/overlay/overlaymanager.cxx:131
-    sdr::overlay::OverlayManager::OverlayManager bUseReducedDisplayQualityForDrag
-    1
-svx/source/sdr/overlay/overlaymanagerbuffered.cxx:128
-    sdr::overlay::OverlayManagerBuffered::ImpRestoreBackground bDoPaintForVisualControl
-    0
-svx/source/sdr/overlay/overlayrectangle.cxx:40
-    sdr::overlay::OverlayRectangle::createOverlayObjectPrimitive2DSequence fChange
-    0.10000000000000001
-svx/source/sdr/primitive2d/sdrframeborderprimitive2d.cxx:601
-    (anonymous namespace)::CreateBorderPrimitives fPatScFact
-    10
-svx/source/sdr/primitive2d/sdrole2primitive2d.cxx:76
-    drawinglayer::primitive2d::SdrOle2Primitive2D::get2DDecomposition bBehaveCompatibleToPaintVersion
     0
 svx/source/sidebar/media/MediaPlaybackPanel.hxx:66
     svx::sidebar::MediaPlaybackPanel maIdle
     MediaPlaybackPanel
-svx/source/svdraw/sdrpaintwindow.cxx:168
-    SdrPreRenderDevice::OutputPreRenderDevice bDoPaintForVisualControlRegion
+svx/source/unodraw/recoveryui.cxx:68
+    (anonymous namespace)::RecoveryUI m_pParentWindow
     0
-svx/source/svdraw/svdedtv2.cxx:1097
-    SdrEditView::MergeMarkedObjects bTestXOR
-    0
-svx/source/svdraw/svdotextdecomposition.cxx:224
-    (anonymous namespace)::impTextBreakupHandler::impCreateTextPortionPrimitive bDisableTextArray
-    0
-svx/source/svdraw/svdpntv.cxx:568
-    SdrPaintView::CompleteRedraw bDoPaintForVisualControl
-    0
-svx/source/xoutdev/xattr.cxx:408
-    /media/noel/disk2/libo5/svx/source/xoutdev/xattr.cxx SMALLEST_DASH_WIDTH
-    26.949999999999999
-sw/inc/authfld.hxx:158
+sw/inc/authfld.hxx:151
     SwAuthorityField m_nTempSequencePos
     -1
-sw/inc/authfld.hxx:159
+sw/inc/authfld.hxx:152
     SwAuthorityField m_nTempSequencePosRLHidden
     -1
 sw/inc/checkit.hxx:36
-    /media/noel/disk2/libo5/sw/source/core/bastyp/init.cxx pCheckIt
+    /media/noel/disk2/libo4/sw/source/core/bastyp/init.cxx pCheckIt
     0
 sw/inc/dbgoutsw.hxx:50
-    /media/noel/disk2/libo5/sw/source/core/doc/dbgoutsw.cxx bDbgOutStdErr
+    /media/noel/disk2/libo4/sw/source/core/doc/dbgoutsw.cxx bDbgOutStdErr
     0
 sw/inc/dbgoutsw.hxx:51
-    /media/noel/disk2/libo5/sw/source/core/doc/dbgoutsw.cxx bDbgOutPrintAttrSet
+    /media/noel/disk2/libo4/sw/source/core/doc/dbgoutsw.cxx bDbgOutPrintAttrSet
     0
 sw/inc/ftninfo.hxx:46
     SwEndNoteInfo aFormat
     4
-sw/inc/hints.hxx:223
+sw/inc/hints.hxx:230
     SwAttrSetChg m_bDelSet
     0
 sw/inc/modcfg.hxx:206
@@ -998,16 +743,16 @@ sw/inc/modcfg.hxx:209
     SwModuleOptions m_aWebTableConfig
     1
 sw/inc/swmodule.hxx:262
-    /media/noel/disk2/libo5/sw/source/uibase/app/swmodule.cxx g_bNoInterrupt
-    0
-sw/inc/swmodule.hxx:262
-    /media/noel/disk2/libo5/sw/source/uibase/ribbar/conform.cxx g_bNoInterrupt
+    /media/noel/disk2/libo4/sw/source/uibase/ribbar/conform.cxx g_bNoInterrupt
     1
 sw/inc/swmodule.hxx:262
-    /media/noel/disk2/libo5/sw/source/uibase/docvw/edtdd.cxx g_bNoInterrupt
+    /media/noel/disk2/libo4/sw/source/uibase/docvw/edtdd.cxx g_bNoInterrupt
     0
 sw/inc/swmodule.hxx:262
-    /media/noel/disk2/libo5/sw/source/core/frmedt/feshview.cxx g_bNoInterrupt
+    /media/noel/disk2/libo4/sw/source/uibase/app/swmodule.cxx g_bNoInterrupt
+    0
+sw/inc/swmodule.hxx:262
+    /media/noel/disk2/libo4/sw/source/core/frmedt/feshview.cxx g_bNoInterrupt
     0
 sw/inc/view.hxx:189
     SwView m_pHScrollbar
@@ -1016,15 +761,15 @@ sw/inc/view.hxx:190
     SwView m_pVScrollbar
     0
 sw/inc/view.hxx:698
-    /media/noel/disk2/libo5/sw/source/uibase/uiview/view.cxx bDocSzUpdated
+    /media/noel/disk2/libo4/sw/source/uibase/uiview/view.cxx bDocSzUpdated
     1
 sw/inc/view.hxx:698
-    /media/noel/disk2/libo5/sw/source/uibase/uiview/viewport.cxx bDocSzUpdated
+    /media/noel/disk2/libo4/sw/source/uibase/uiview/viewport.cxx bDocSzUpdated
     0
-sw/inc/viewopt.hxx:188
+sw/inc/viewopt.hxx:187
     SwViewOption m_bTest10
     0
-sw/source/core/bastyp/calc.cxx:95
+sw/source/core/bastyp/calc.cxx:96
     CalcOp eOp
     0
 sw/source/core/doc/docredln.cxx:71
@@ -1033,491 +778,485 @@ sw/source/core/doc/docredln.cxx:71
 sw/source/core/docnode/threadmanager.hxx:125
     ThreadManager maStartNewThreadIdle
     SW ThreadManager StartNewThreadIdle
-sw/source/core/fields/reffld.cxx:280
-    lcl_formatReferenceLanguage sLettersStartingWithVowels
-    aefilmnorsuxyAEFILMNORSUXY
 sw/source/core/inc/blink.hxx:89
-    /media/noel/disk2/libo5/sw/source/core/text/blink.cxx pBlink
+    /media/noel/disk2/libo4/sw/source/core/text/blink.cxx pBlink
     0
 sw/source/core/inc/DocumentTimerManager.hxx:77
     sw::DocumentTimerManager m_aFireIdleJobsTimer
     sw::DocumentTimerManager m_aFireIdleJobsTimer
 sw/source/core/inc/fntcache.hxx:59
-    /media/noel/disk2/libo5/sw/source/core/txtnode/fntcache.cxx pFntCache
+    /media/noel/disk2/libo4/sw/source/core/txtnode/fntcache.cxx pFntCache
     0
 sw/source/core/inc/fntcache.hxx:60
-    /media/noel/disk2/libo5/sw/source/core/txtnode/fntcache.cxx pLastFont
+    /media/noel/disk2/libo4/sw/source/core/txtnode/fntcache.cxx pLastFont
     0
-sw/source/core/inc/frmtool.hxx:137
-    /media/noel/disk2/libo5/sw/source/core/layout/frmtool.cxx bDontCreateObjects
+sw/source/core/inc/frmtool.hxx:141
+    /media/noel/disk2/libo4/sw/source/core/layout/frmtool.cxx bDontCreateObjects
     0
-sw/source/core/inc/frmtool.hxx:140
-    /media/noel/disk2/libo5/sw/source/core/layout/frmtool.cxx bSetCompletePaintOnInvalidate
+sw/source/core/inc/frmtool.hxx:144
+    /media/noel/disk2/libo4/sw/source/core/layout/frmtool.cxx bSetCompletePaintOnInvalidate
     0
 sw/source/core/inc/noteurl.hxx:28
-    /media/noel/disk2/libo5/sw/source/core/text/noteurl.cxx pNoteURL
+    /media/noel/disk2/libo4/sw/source/core/text/noteurl.cxx pNoteURL
     0
 sw/source/core/inc/swfntcch.hxx:43
-    /media/noel/disk2/libo5/sw/source/core/txtnode/swfntcch.cxx pSwFontCache
+    /media/noel/disk2/libo4/sw/source/core/txtnode/swfntcch.cxx pSwFontCache
     0
 sw/source/core/inc/txtfly.hxx:45
-    /media/noel/disk2/libo5/sw/source/core/text/txtinit.cxx pContourCache
+    /media/noel/disk2/libo4/sw/source/core/text/txtinit.cxx pContourCache
     0
 sw/source/core/inc/UndoSort.hxx:38
     SwSortUndoElement::(anonymous union)::(anonymous) nID
     4294967295
+sw/source/core/inc/UndoTable.hxx:183
+    SwUndoTableNdsChg m_nSetColType
+    15
 sw/source/core/layout/flylay.cxx:304
     SwFlyFreeFrame::supportsAutoContour bOverrideHandleContourToAlwaysOff
     1
-sw/source/core/layout/paintfrm.cxx:1717
-    DrawFillAttributes fExpandX
-    0.55000000000000004
-sw/source/core/layout/paintfrm.cxx:1718
-    DrawFillAttributes fExpandY
-    0.69999999999999996
 sw/source/core/ole/ndole.cxx:1058
     SwOLEObj::tryToGetChartContentAsPrimitive2DSequence bAsynchronousLoadingAllowed
     0
 sw/source/core/text/pordrop.hxx:30
-    /media/noel/disk2/libo5/sw/source/core/text/txtinit.cxx pDropCapCache
-    0
-sw/source/core/text/txtpaint.cxx:98
-    SwSaveClip::ChgClip_ bDbg
+    /media/noel/disk2/libo4/sw/source/core/text/txtinit.cxx pDropCapCache
     0
 sw/source/filter/html/css1kywd.hxx:25
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS_mimetype
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS_mimetype
     text/css
 sw/source/filter/html/css1kywd.hxx:27
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_import
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_import
     import
 sw/source/filter/html/css1kywd.hxx:29
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_page
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_page
     page
 sw/source/filter/html/css1kywd.hxx:31
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_important
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_important
     important
 sw/source/filter/html/css1kywd.hxx:33
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_link
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_link
     link
 sw/source/filter/html/css1kywd.hxx:34
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_visited
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_visited
     visited
 sw/source/filter/html/css1kywd.hxx:35
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_first_letter
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_first_letter
     first-letter
 sw/source/filter/html/css1kywd.hxx:37
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_left
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_left
     left
 sw/source/filter/html/css1kywd.hxx:38
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_right
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_right
     right
 sw/source/filter/html/css1kywd.hxx:39
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_first
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_first
     first
 sw/source/filter/html/css1kywd.hxx:41
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_url
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_url
     url
 sw/source/filter/html/css1kywd.hxx:42
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_rgb
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_rgb
     rgb
 sw/source/filter/html/css1kywd.hxx:44
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_UNIT_pt
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_UNIT_pt
     pt
 sw/source/filter/html/css1kywd.hxx:45
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_UNIT_mm
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_UNIT_mm
     mm
 sw/source/filter/html/css1kywd.hxx:46
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_UNIT_cm
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_UNIT_cm
     cm
 sw/source/filter/html/css1kywd.hxx:47
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_UNIT_pc
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_UNIT_pc
     pc
 sw/source/filter/html/css1kywd.hxx:48
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_UNIT_inch
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_UNIT_inch
     in
 sw/source/filter/html/css1kywd.hxx:49
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_UNIT_px
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_UNIT_px
     px
 sw/source/filter/html/css1kywd.hxx:50
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_UNIT_em
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_UNIT_em
     em
 sw/source/filter/html/css1kywd.hxx:51
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_UNIT_ex
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_UNIT_ex
     ex
 sw/source/filter/html/css1kywd.hxx:55
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_font_family
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_font_family
     font-family
 sw/source/filter/html/css1kywd.hxx:57
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_serif
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_serif
     serif
 sw/source/filter/html/css1kywd.hxx:58
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_sans_serif
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_sans_serif
     sans-serif
 sw/source/filter/html/css1kywd.hxx:59
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_cursive
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_cursive
     cursive
 sw/source/filter/html/css1kywd.hxx:60
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_fantasy
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_fantasy
     fantasy
 sw/source/filter/html/css1kywd.hxx:61
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_monospace
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_monospace
     monospace
 sw/source/filter/html/css1kywd.hxx:63
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_font_style
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_font_style
     font-style
 sw/source/filter/html/css1kywd.hxx:65
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_normal
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_normal
     normal
 sw/source/filter/html/css1kywd.hxx:66
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_italic
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_italic
     italic
 sw/source/filter/html/css1kywd.hxx:67
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_oblique
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_oblique
     oblique
 sw/source/filter/html/css1kywd.hxx:69
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_font_variant
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_font_variant
     font-variant
 sw/source/filter/html/css1kywd.hxx:72
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_small_caps
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_small_caps
     small-caps
 sw/source/filter/html/css1kywd.hxx:74
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_text_transform
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_text_transform
     text-transform
 sw/source/filter/html/css1kywd.hxx:76
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_capitalize
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_capitalize
     capitalize
 sw/source/filter/html/css1kywd.hxx:77
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_uppercase
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_uppercase
     uppercase
 sw/source/filter/html/css1kywd.hxx:78
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_lowercase
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_lowercase
     lowercase
 sw/source/filter/html/css1kywd.hxx:80
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_font_weight
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_font_weight
     font-weight
 sw/source/filter/html/css1kywd.hxx:82
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_extra_light
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_extra_light
     extra-light
 sw/source/filter/html/css1kywd.hxx:83
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_light
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_light
     light
 sw/source/filter/html/css1kywd.hxx:84
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_demi_light
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_demi_light
     demi-light
 sw/source/filter/html/css1kywd.hxx:86
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_demi_bold
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_demi_bold
     demi-bold
 sw/source/filter/html/css1kywd.hxx:87
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_bold
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_bold
     bold
 sw/source/filter/html/css1kywd.hxx:88
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_extra_bold
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_extra_bold
     extra-bold
 sw/source/filter/html/css1kywd.hxx:89
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_lighter
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_lighter
     lighter
 sw/source/filter/html/css1kywd.hxx:90
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_bolder
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_bolder
     bolder
 sw/source/filter/html/css1kywd.hxx:92
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_font_size
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_font_size
     font-size
 sw/source/filter/html/css1kywd.hxx:94
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_xx_small
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_xx_small
     xx-small
 sw/source/filter/html/css1kywd.hxx:95
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_x_small
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_x_small
     x-small
 sw/source/filter/html/css1kywd.hxx:96
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_small
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_small
     small
 sw/source/filter/html/css1kywd.hxx:97
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_medium
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_medium
     medium
 sw/source/filter/html/css1kywd.hxx:98
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_large
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_large
     large
 sw/source/filter/html/css1kywd.hxx:99
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_x_large
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_x_large
     x-large
 sw/source/filter/html/css1kywd.hxx:100
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_xx_large
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_xx_large
     xx-large
 sw/source/filter/html/css1kywd.hxx:102
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_larger
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_larger
     larger
 sw/source/filter/html/css1kywd.hxx:103
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_smaller
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_smaller
     smaller
 sw/source/filter/html/css1kywd.hxx:105
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_font
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_font
     font
 sw/source/filter/html/css1kywd.hxx:109
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_color
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_color
     color
 sw/source/filter/html/css1kywd.hxx:111
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_background
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_background
     background
 sw/source/filter/html/css1kywd.hxx:112
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_background_color
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_background_color
     background-color
 sw/source/filter/html/css1kywd.hxx:114
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_transparent
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_transparent
     transparent
 sw/source/filter/html/css1kywd.hxx:116
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_repeat
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_repeat
     repeat
 sw/source/filter/html/css1kywd.hxx:117
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_repeat_x
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_repeat_x
     repeat-x
 sw/source/filter/html/css1kywd.hxx:118
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_repeat_y
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_repeat_y
     repeat-y
 sw/source/filter/html/css1kywd.hxx:119
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_no_repeat
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_no_repeat
     no-repeat
 sw/source/filter/html/css1kywd.hxx:121
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_top
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_top
     top
 sw/source/filter/html/css1kywd.hxx:122
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_middle
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_middle
     middle
 sw/source/filter/html/css1kywd.hxx:123
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_bottom
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_bottom
     bottom
 sw/source/filter/html/css1kywd.hxx:125
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_scroll
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_scroll
     scroll
 sw/source/filter/html/css1kywd.hxx:129
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_letter_spacing
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_letter_spacing
     letter-spacing
 sw/source/filter/html/css1kywd.hxx:131
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_text_decoration
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_text_decoration
     text-decoration
 sw/source/filter/html/css1kywd.hxx:133
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_none
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_none
     none
 sw/source/filter/html/css1kywd.hxx:134
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_underline
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_underline
     underline
 sw/source/filter/html/css1kywd.hxx:135
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_overline
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_overline
     overline
 sw/source/filter/html/css1kywd.hxx:136
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_line_through
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_line_through
     line-through
 sw/source/filter/html/css1kywd.hxx:137
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_blink
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_blink
     blink
 sw/source/filter/html/css1kywd.hxx:139
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_text_align
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_text_align
     text-align
 sw/source/filter/html/css1kywd.hxx:141
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_left
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_left
     left
 sw/source/filter/html/css1kywd.hxx:142
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_center
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_center
     center
 sw/source/filter/html/css1kywd.hxx:143
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_right
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_right
     right
 sw/source/filter/html/css1kywd.hxx:144
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_justify
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_justify
     justify
 sw/source/filter/html/css1kywd.hxx:146
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_text_indent
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_text_indent
     text-indent
 sw/source/filter/html/css1kywd.hxx:148
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_line_height
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_line_height
     line-height
 sw/source/filter/html/css1kywd.hxx:150
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_list_style_type
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_list_style_type
     list-style-type
 sw/source/filter/html/css1kywd.hxx:154
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_margin_left
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_margin_left
     margin-left
 sw/source/filter/html/css1kywd.hxx:155
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_margin_right
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_margin_right
     margin-right
 sw/source/filter/html/css1kywd.hxx:156
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_margin_top
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_margin_top
     margin-top
 sw/source/filter/html/css1kywd.hxx:157
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_margin_bottom
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_margin_bottom
     margin-bottom
 sw/source/filter/html/css1kywd.hxx:158
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_margin
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_margin
     margin
 sw/source/filter/html/css1kywd.hxx:160
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_padding_top
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_padding_top
     padding-top
 sw/source/filter/html/css1kywd.hxx:161
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_padding_bottom
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_padding_bottom
     padding-bottom
 sw/source/filter/html/css1kywd.hxx:162
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_padding_left
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_padding_left
     padding-left
 sw/source/filter/html/css1kywd.hxx:163
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_padding_right
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_padding_right
     padding-right
 sw/source/filter/html/css1kywd.hxx:164
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_padding
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_padding
     padding
 sw/source/filter/html/css1kywd.hxx:166
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_auto
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_auto
     auto
 sw/source/filter/html/css1kywd.hxx:168
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_left_width
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_left_width
     border-left-width
 sw/source/filter/html/css1kywd.hxx:169
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_right_width
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_right_width
     border-right-width
 sw/source/filter/html/css1kywd.hxx:170
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_top_width
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_top_width
     border-top-width
 sw/source/filter/html/css1kywd.hxx:171
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_bottom_width
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_bottom_width
     border-bottom-width
 sw/source/filter/html/css1kywd.hxx:172
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_width
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_width
     border-width
 sw/source/filter/html/css1kywd.hxx:173
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_color
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_color
     border-color
 sw/source/filter/html/css1kywd.hxx:174
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_style
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_style
     border-style
 sw/source/filter/html/css1kywd.hxx:175
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_left
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_left
     border-left
 sw/source/filter/html/css1kywd.hxx:176
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_right
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_right
     border-right
 sw/source/filter/html/css1kywd.hxx:177
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_top
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_top
     border-top
 sw/source/filter/html/css1kywd.hxx:178
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_bottom
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_border_bottom
     border-bottom
 sw/source/filter/html/css1kywd.hxx:179
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_border
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_border
     border
 sw/source/filter/html/css1kywd.hxx:181
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_thin
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_thin
     thin
 sw/source/filter/html/css1kywd.hxx:183
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_thick
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_thick
     thick
 sw/source/filter/html/css1kywd.hxx:186
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_dotted
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_dotted
     dotted
 sw/source/filter/html/css1kywd.hxx:187
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_dashed
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_dashed
     dashed
 sw/source/filter/html/css1kywd.hxx:188
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_solid
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_solid
     solid
 sw/source/filter/html/css1kywd.hxx:189
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_double
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_double
     double
 sw/source/filter/html/css1kywd.hxx:190
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_groove
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_groove
     groove
 sw/source/filter/html/css1kywd.hxx:191
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_ridge
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_ridge
     ridge
 sw/source/filter/html/css1kywd.hxx:192
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_inset
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_inset
     inset
 sw/source/filter/html/css1kywd.hxx:193
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_outset
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_outset
     outset
 sw/source/filter/html/css1kywd.hxx:195
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_width
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_width
     width
 sw/source/filter/html/css1kywd.hxx:196
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_max_width
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_max_width
     max-width
 sw/source/filter/html/css1kywd.hxx:198
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_height
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_height
     height
 sw/source/filter/html/css1kywd.hxx:200
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_float
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_float
     float
 sw/source/filter/html/css1kywd.hxx:202
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_column_count
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_column_count
     column-count
 sw/source/filter/html/css1kywd.hxx:206
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_position
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_position
     position
 sw/source/filter/html/css1kywd.hxx:208
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_absolute
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_absolute
     absolute
 sw/source/filter/html/css1kywd.hxx:209
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_relative
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_relative
     relative
 sw/source/filter/html/css1kywd.hxx:210
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_static
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_static
     static
 sw/source/filter/html/css1kywd.hxx:212
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_left
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_left
     left
 sw/source/filter/html/css1kywd.hxx:214
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_top
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_top
     top
 sw/source/filter/html/css1kywd.hxx:218
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_page_break_before
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_page_break_before
     page-break-before
 sw/source/filter/html/css1kywd.hxx:219
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_page_break_after
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_page_break_after
     page-break-after
 sw/source/filter/html/css1kywd.hxx:220
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_page_break_inside
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_page_break_inside
     page-break-inside
 sw/source/filter/html/css1kywd.hxx:221
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_size
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_size
     size
 sw/source/filter/html/css1kywd.hxx:222
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_widows
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_widows
     widows
 sw/source/filter/html/css1kywd.hxx:223
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_orphans
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_orphans
     orphans
 sw/source/filter/html/css1kywd.hxx:226
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_always
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_always
     always
 sw/source/filter/html/css1kywd.hxx:227
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_avoid
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_avoid
     avoid
 sw/source/filter/html/css1kywd.hxx:229
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_portrait
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_portrait
     portrait
 sw/source/filter/html/css1kywd.hxx:230
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_landscape
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_landscape
     landscape
 sw/source/filter/html/css1kywd.hxx:236
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_class_abs_pos
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_class_abs_pos
     sd-abs-pos
 sw/source/filter/html/css1kywd.hxx:238
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_so_language
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_so_language
     so-language
 sw/source/filter/html/css1kywd.hxx:239
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_direction
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_direction
     direction
 sw/source/filter/html/css1kywd.hxx:240
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_ltr
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_ltr
     ltr
 sw/source/filter/html/css1kywd.hxx:241
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_rtl
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_rtl
     rtl
 sw/source/filter/html/css1kywd.hxx:242
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_PV_inherit
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_PV_inherit
     inherit
 sw/source/filter/html/css1kywd.hxx:244
-    /media/noel/disk2/libo5/sw/source/filter/html/css1kywd.cxx sCSS1_P_display
+    /media/noel/disk2/libo4/sw/source/filter/html/css1kywd.cxx sCSS1_P_display
     display
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk
+    0
+sw/source/filter/ww8/docxattributeoutput.hxx:915
+    DocxAttributeOutput m_bBtLr
     0
 sw/source/filter/ww8/ww8par3.cxx:335
     WW8LST bSimpleList
@@ -1536,7 +1275,7 @@ sw/source/filter/ww8/ww8par3.cxx:370
     1
 sw/source/filter/ww8/ww8par5.cxx:1539
     SwWW8ImplReader::Read_F_DocInfo aName10
-
+    
 sw/source/filter/ww8/ww8par5.cxx:1540
     SwWW8ImplReader::Read_F_DocInfo aName11
     TITEL
@@ -1551,13 +1290,13 @@ sw/source/filter/ww8/ww8par5.cxx:1546
     TITRO
 sw/source/filter/ww8/ww8par5.cxx:1548
     SwWW8ImplReader::Read_F_DocInfo aName20
-
+    
 sw/source/filter/ww8/ww8par5.cxx:1549
     SwWW8ImplReader::Read_F_DocInfo aName21
     ERSTELLDATUM
 sw/source/filter/ww8/ww8par5.cxx:1551
     SwWW8ImplReader::Read_F_DocInfo aName22
-    CRÃ‰Ã‰
+    CRÉÉ
 sw/source/filter/ww8/ww8par5.cxx:1553
     SwWW8ImplReader::Read_F_DocInfo aName23
     CREATED
@@ -1566,7 +1305,7 @@ sw/source/filter/ww8/ww8par5.cxx:1555
     CREADO
 sw/source/filter/ww8/ww8par5.cxx:1557
     SwWW8ImplReader::Read_F_DocInfo aName30
-
+    
 sw/source/filter/ww8/ww8par5.cxx:1558
     SwWW8ImplReader::Read_F_DocInfo aName31
     ZULETZTGESPEICHERTZEIT
@@ -1581,13 +1320,13 @@ sw/source/filter/ww8/ww8par5.cxx:1564
     MODIFICADO
 sw/source/filter/ww8/ww8par5.cxx:1566
     SwWW8ImplReader::Read_F_DocInfo aName40
-
+    
 sw/source/filter/ww8/ww8par5.cxx:1567
     SwWW8ImplReader::Read_F_DocInfo aName41
     ZULETZTGEDRUCKT
 sw/source/filter/ww8/ww8par5.cxx:1569
     SwWW8ImplReader::Read_F_DocInfo aName42
-    DERNIÃˆREIMPRESSION
+    DERNIÈREIMPRESSION
 sw/source/filter/ww8/ww8par5.cxx:1571
     SwWW8ImplReader::Read_F_DocInfo aName43
     LASTPRINTED
@@ -1596,63 +1335,63 @@ sw/source/filter/ww8/ww8par5.cxx:1573
     HUPS PUPS
 sw/source/filter/ww8/ww8par5.cxx:1575
     SwWW8ImplReader::Read_F_DocInfo aName50
-
+    
 sw/source/filter/ww8/ww8par5.cxx:1576
     SwWW8ImplReader::Read_F_DocInfo aName51
-    ÃœBERARBEITUNGSNUMMER
+    ÜBERARBEITUNGSNUMMER
 sw/source/filter/ww8/ww8par5.cxx:1578
     SwWW8ImplReader::Read_F_DocInfo aName52
-    NUMÃ‰RODEREVISION
+    NUMÉRODEREVISION
 sw/source/filter/ww8/ww8par5.cxx:1580
     SwWW8ImplReader::Read_F_DocInfo aName53
     REVISIONNUMBER
 sw/source/filter/ww8/ww8par5.cxx:1582
     SwWW8ImplReader::Read_F_DocInfo aName54
     SNUBBEL BUBBEL
-sw/source/filter/ww8/ww8par.hxx:660
+sw/source/filter/ww8/ww8par.hxx:662
     WW8FormulaControl mfUnknown
     0
-sw/source/filter/ww8/ww8par.hxx:667
+sw/source/filter/ww8/ww8par.hxx:669
     WW8FormulaControl mhpsCheckBox
     20
-sw/source/filter/ww8/ww8par.hxx:1013
-    WW8TabBandDesc mbHasSpacing
-    1
-sw/source/filter/ww8/ww8scan.hxx:1166
+sw/source/filter/ww8/ww8par.hxx:1026
+    WW8TabBandDesc bCantSplit90
+    0
+sw/source/filter/ww8/ww8scan.hxx:1168
     WW8Fib m_fObfuscated
     0
-sw/source/filter/ww8/ww8scan.hxx:1516
-    WW8Fib m_fcHplxsdr
-    16842754
-sw/source/filter/ww8/ww8scan.hxx:1517
+sw/source/filter/ww8/ww8scan.hxx:1512
+    WW8Fib m_fcPlcffactoid
+    0
+sw/source/filter/ww8/ww8scan.hxx:1514
+    WW8Fib m_lcbPlcffactoid
+    0
+sw/source/filter/ww8/ww8scan.hxx:1519
     WW8Fib m_lcbHplxsdr
     0
 sw/source/filter/ww8/ww8struc.hxx:893
     WW8_TablePos nSp37
     2
-sw/source/ui/dbui/dbinsdlg.cxx:984
-    SwInsertDBColAutoPilot::DataToDoc isSelectionBookmarks
-    1
 sw/source/ui/envelp/labfmt.hxx:67
     SwLabFormatPage aPreviewIdle
     SwLabFormatPage Preview
-sw/source/uibase/docvw/AnchorOverlayObject.cxx:277
-    sw::sidebarwindows::AnchorOverlayObject::createOverlayObjectPrimitive2DSequence aDiscreteLineWidth
-    1.6000000000000001
-sw/source/uibase/inc/edtdd.hxx:15
-    /media/noel/disk2/libo5/sw/source/uibase/docvw/edtwin.cxx g_bExecuteDrag
+sw/source/uibase/inc/dbtree.hxx:69
+    DBTreeList bShowColumns
     0
-sw/source/uibase/inc/edtwin.hxx:292
-    /media/noel/disk2/libo5/sw/source/uibase/docvw/edtdd.cxx g_bFrameDrag
+sw/source/uibase/inc/edtdd.hxx:15
+    /media/noel/disk2/libo4/sw/source/uibase/docvw/edtwin.cxx g_bExecuteDrag
     0
 sw/source/uibase/inc/edtwin.hxx:293
-    /media/noel/disk2/libo5/sw/source/uibase/docvw/edtwin.cxx g_bDDTimerStarted
+    /media/noel/disk2/libo4/sw/source/uibase/docvw/edtdd.cxx g_bFrameDrag
     0
-sw/source/uibase/inc/edtwin.hxx:295
-    /media/noel/disk2/libo5/sw/source/uibase/docvw/edtwin.cxx g_bDDINetAttr
+sw/source/uibase/inc/edtwin.hxx:294
+    /media/noel/disk2/libo4/sw/source/uibase/docvw/edtwin.cxx g_bDDTimerStarted
     0
-sw/source/uibase/inc/edtwin.hxx:295
-    /media/noel/disk2/libo5/sw/source/uibase/dochdl/swdtflvr.cxx g_bDDINetAttr
+sw/source/uibase/inc/edtwin.hxx:296
+    /media/noel/disk2/libo4/sw/source/uibase/docvw/edtwin.cxx g_bDDINetAttr
+    0
+sw/source/uibase/inc/edtwin.hxx:296
+    /media/noel/disk2/libo4/sw/source/uibase/dochdl/swdtflvr.cxx g_bDDINetAttr
     1
 sw/source/uibase/inc/instable.hxx:48
     SwInsTableDlg minTableIndexInLb
@@ -1669,14 +1408,8 @@ sw/source/uibase/inc/srcedtw.hxx:87
 sw/source/uibase/inc/unotools.hxx:63
     SwOneExampleFrame m_aLoadedIdle
     sw uibase SwOneExampleFrame Loaded
-ucb/source/ucp/file/filglob.cxx:157
-    fileaccess::isChild slash
-    47
 unotools/source/config/saveopt.cxx:77
     SvtSaveOptions_Impl bROUserAutoSave
-    0
-unotools/source/misc/mediadescriptor.cxx:347
-    utl::MediaDescriptor::isStreamReadOnly READONLY_FALLBACK
     0
 vcl/inc/graphic/Manager.hxx:42
     vcl::graphic::Manager maSwapOutTimer
@@ -1693,30 +1426,18 @@ vcl/inc/salprn.hxx:44
 vcl/inc/salwtype.hxx:154
     SalWheelMouseEvent mbDeltaIsPixel
     0
-vcl/inc/svdata.hxx:273
-    ImplSVNWFData mnStatusBarLowerRightOffset
-    0
-vcl/inc/svdata.hxx:279
+vcl/inc/svdata.hxx:281
     ImplSVNWFData mbMenuBarDockingAreaCommonBG
     0
-vcl/inc/svdata.hxx:289
-    ImplSVNWFData mbCenteredTabs
-    0
-vcl/inc/svdata.hxx:290
-    ImplSVNWFData mbNoActiveTabTextRaise
-    0
-vcl/inc/svdata.hxx:292
-    ImplSVNWFData mbProgressNeedsErase
-    0
-vcl/inc/svdata.hxx:301
+vcl/inc/svdata.hxx:303
     ImplSVNWFData mbRolloverMenubar
     0
-vcl/qa/cppunit/svm/svmtest.cxx:172
-    writeAndRead bOutputToFile
-    0
-vcl/source/app/svapp.cxx:1530
-    Application::GetDesktopEnvironment aNone
-    none
+vcl/source/bitmap/BitmapTools.cxx:1056
+    vcl::bitmap::get_unpremultiply_table inited
+    1
+vcl/source/bitmap/BitmapTools.cxx:1072
+    vcl::bitmap::get_premultiply_table inited
+    1
 vcl/source/filter/jpeg/transupp.h:128
     (anonymous) perfect
     0
@@ -1738,103 +1459,82 @@ vcl/source/filter/jpeg/transupp.h:149
 vcl/source/font/font.cxx:539
     (anonymous namespace)::WeightSearchEntry weight
     5
-vcl/source/gdi/dibtools.cxx:51
-    (anonymous namespace)::CIEXYZ aXyzX
-    0
-vcl/source/gdi/dibtools.cxx:52
-    (anonymous namespace)::CIEXYZ aXyzY
+vcl/source/fontsubset/ttcr.cxx:356
+    vcl::tdata_post ptr
     0
 vcl/source/gdi/dibtools.cxx:53
+    (anonymous namespace)::CIEXYZ aXyzX
+    0
+vcl/source/gdi/dibtools.cxx:54
+    (anonymous namespace)::CIEXYZ aXyzY
+    0
+vcl/source/gdi/dibtools.cxx:55
     (anonymous namespace)::CIEXYZ aXyzZ
     0
-vcl/source/gdi/dibtools.cxx:106
+vcl/source/gdi/dibtools.cxx:108
     (anonymous namespace)::DIBV5Header nV5RedMask
     0
-vcl/source/gdi/dibtools.cxx:107
+vcl/source/gdi/dibtools.cxx:109
     (anonymous namespace)::DIBV5Header nV5GreenMask
     0
-vcl/source/gdi/dibtools.cxx:108
+vcl/source/gdi/dibtools.cxx:110
     (anonymous namespace)::DIBV5Header nV5BlueMask
     0
-vcl/source/gdi/dibtools.cxx:109
+vcl/source/gdi/dibtools.cxx:111
     (anonymous namespace)::DIBV5Header nV5AlphaMask
     0
-vcl/source/gdi/dibtools.cxx:112
+vcl/source/gdi/dibtools.cxx:114
     (anonymous namespace)::DIBV5Header nV5GammaRed
     0
-vcl/source/gdi/dibtools.cxx:113
+vcl/source/gdi/dibtools.cxx:115
     (anonymous namespace)::DIBV5Header nV5GammaGreen
     0
-vcl/source/gdi/dibtools.cxx:114
+vcl/source/gdi/dibtools.cxx:116
     (anonymous namespace)::DIBV5Header nV5GammaBlue
     0
-vcl/source/gdi/dibtools.cxx:116
+vcl/source/gdi/dibtools.cxx:118
     (anonymous namespace)::DIBV5Header nV5ProfileData
     0
-vcl/source/gdi/dibtools.cxx:117
+vcl/source/gdi/dibtools.cxx:119
     (anonymous namespace)::DIBV5Header nV5ProfileSize
     0
-vcl/source/gdi/dibtools.cxx:118
+vcl/source/gdi/dibtools.cxx:120
     (anonymous namespace)::DIBV5Header nV5Reserved
     0
 vcl/source/gdi/pdfwriter_impl.hxx:741
     vcl::PDFWriterImpl m_DocDigest
     0
-vcl/source/gdi/pngread.cxx:1401
-    vcl::PNGReaderImpl::ImplDrawScanline bCkeckDirectScanline
-    1
-vcl/source/outdev/bitmap.cxx:1174
-    OutputDevice::DrawTransformedBitmapEx bForceToOwnTransformer
-    0
-vcl/source/outdev/bitmap.cxx:1253
-    OutputDevice::DrawTransformedBitmapEx bDoSmoothAtAll
-    1
 vcl/source/window/layout.cxx:225
     VclContainer::Command bAddButtonsToMenu
     1
 vcl/source/window/layout.cxx:226
     VclContainer::Command bAddScreenshotButtonToMenu
     1
-vcl/source/window/printdlg.cxx:349
-    vcl::PrintDialog::PrintPreviewWindow::preparePreviewBitmap fPreventAwkwardFactor
-    1.3500000000000001
-vcl/source/window/printdlg.cxx:369
-    vcl::PrintDialog::PrintPreviewWindow::preparePreviewBitmap fExtraSpaceFactor
-    1.6499999999999999
-vcl/unx/generic/app/wmadaptor.cxx:978
-    vcl_sal::WMAdaptor::setWMName bTrustXmb
-    1
-vcl/unx/generic/window/FWS.cxx:48
-    /media/noel/disk2/libo5/vcl/unx/generic/window/FWS.cxx fwsStackUnder
-    1
-vcl/unx/generic/window/FWS.cxx:49
-    /media/noel/disk2/libo5/vcl/unx/generic/window/FWS.cxx fwsParkIcons
-    1
-vcl/unx/generic/window/FWS.cxx:50
-    /media/noel/disk2/libo5/vcl/unx/generic/window/FWS.cxx fwsPassesInput
-    1
-vcl/unx/generic/window/FWS.cxx:51
-    /media/noel/disk2/libo5/vcl/unx/generic/window/FWS.cxx fwsHandlesFocus
-    1
-vcl/unx/gtk3/gtk3gtkinst.cxx:6789
+vcl/unx/gtk3/gtk3gtkinst.cxx:8303
     (anonymous namespace)::ensure_intercept_drawing_area_accessibility bDone
     1
-vcl/unx/gtk/a11y/atkutil.cxx:745
+vcl/unx/gtk/a11y/atkutil.cxx:746
     ooo_atk_util_ensure_event_listener bInited
     1
-workdir/LexTarget/l10ntools/source/xrmlex.cxx:717
-    /media/noel/disk2/libo5/workdir/LexTarget/l10ntools/source/xrmlex.cxx bText
+workdir/LexTarget/l10ntools/source/xrmlex.cxx:715
+    /media/noel/disk2/libo4/workdir/LexTarget/l10ntools/source/xrmlex.cxx bText
     0
-writerfilter/source/dmapper/SettingsTable.cxx:239
+writerfilter/source/dmapper/DomainMapperTableManager.hxx:65
+    writerfilter::dmapper::DomainMapperTableManager m_bRowSizeTypeInserted
+    0
+writerfilter/source/dmapper/DomainMapperTableManager.hxx:67
+    writerfilter::dmapper::DomainMapperTableManager m_bHasBtlrCell
+    0
+writerfilter/source/dmapper/SettingsTable.cxx:255
     writerfilter::dmapper::SettingsTable_Impl m_pThemeFontLangProps
     3
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:619
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:756
     writerfilter::rtftok::RTFDocumentImpl m_nNestedTRLeft
     0
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:620
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:757
     writerfilter::rtftok::RTFDocumentImpl m_nTopLevelTRLeft
     0
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:623
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:760
     writerfilter::rtftok::RTFDocumentImpl m_nNestedCurrentCellX
     0
 writerfilter/source/rtftok/rtftokenizer.hxx:71
@@ -1844,5 +1544,5 @@ writerfilter/source/rtftok/rtftokenizer.hxx:74
     writerfilter::rtftok::RTFTokenizer s_bMathControlWordsSorted
     1
 xmloff/source/text/XMLIndexTemplateContext.hxx:57
-    /media/noel/disk2/libo5/xmloff/source/text/XMLIndexTemplateContext.cxx aLevelNameTableMap
+    /media/noel/disk2/libo4/xmloff/source/text/XMLIndexTemplateContext.cxx aLevelNameTableMap
     0

@@ -4,25 +4,25 @@ chart2/source/view/inc/PlottingPositionHelper.hxx:206
 connectivity/source/inc/dbase/dindexnode.hxx:125
     connectivity::dbase::ONDXPage bNoDelete
     unsigned int
-cui/source/inc/cfg.hxx:248
+cui/source/inc/cfg.hxx:249
     SvxConfigEntry nId
     sal_uInt16
 desktop/source/app/main.c:29
-    /media/noel/disk2/libo5/desktop/source/app/main.c g_Exiting
+    /media/noel/disk2/libo4/desktop/source/app/main.c g_Exiting
     int
-editeng/source/misc/hangulhanja.cxx:79
+editeng/source/misc/hangulhanja.cxx:80
     editeng::HangulHanjaConversion_Impl m_eConvType
     class HangulHanjaConversion::ConversionType
-editeng/source/misc/svxacorr.cxx:229
+editeng/source/misc/svxacorr.cxx:231
     GetIgnoreTranslWrapper bIsInit
     int
-filter/source/graphicfilter/eps/eps.cxx:141
+filter/source/graphicfilter/eps/eps.cxx:142
     PSWriter nNextChrSetId
     sal_uInt8
 include/opencl/openclwrapper.hxx:46
     openclwrapper::GPUEnv mnIsUserCreated
     int
-include/svtools/ruler.hxx:625
+include/svtools/ruler.hxx:621
     Ruler mnBorderWidth
     long
 include/tools/ref.hxx:126
@@ -55,26 +55,26 @@ sc/source/filter/inc/stylesbuffer.hxx:290
 sc/source/filter/inc/stylesbuffer.hxx:292
     oox::xls::ApiAlignmentData mnVerJustifyMethod
     sal_Int32
-sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1099
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1080
     ScPagePreviewCountData nHeaders
     long
-sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1100
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1081
     ScPagePreviewCountData nTables
     long
-sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1102
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1083
     ScPagePreviewCountData nFooters
     long
 sc/source/ui/vba/vbahyperlink.hxx:83
     ScVbaHyperlink mnType
     long
-sd/qa/unit/tiledrendering/tiledrendering.cxx:968
+sd/qa/unit/tiledrendering/tiledrendering.cxx:966
     ViewCallback m_nPart
     int
 soltools/cpp/_tokens.c:34
-    /media/noel/disk2/libo5/soltools/cpp/_tokens.c EBCDIC_ExternTokenDetected
+    /media/noel/disk2/libo4/soltools/cpp/_tokens.c EBCDIC_ExternTokenDetected
     int
 soltools/cpp/_tokens.c:35
-    /media/noel/disk2/libo5/soltools/cpp/_tokens.c EBCDIC_StartTokenDetected
+    /media/noel/disk2/libo4/soltools/cpp/_tokens.c EBCDIC_StartTokenDetected
     int
 soltools/cpp/cpp.h:121
     includelist always
@@ -110,16 +110,13 @@ vcl/unx/generic/app/saldata.cxx:519
     X11SalData::XError bOnce
     int
 vcl/unx/generic/app/sm.cxx:186
-    /media/noel/disk2/libo5/vcl/unx/generic/app/sm.cxx nSmDel
-    int
-vcl/unx/generic/window/FWS.cxx:174
-    extern badWindowFound
+    /media/noel/disk2/libo4/vcl/unx/generic/app/sm.cxx nSmDel
     int
 vcl/workben/icontest.cxx:145
     IconTestApp nRet
     int
-workdir/LexTarget/l10ntools/source/cfglex.cxx:2301
-    /media/noel/disk2/libo5/workdir/LexTarget/l10ntools/source/cfglex.cxx bText
+workdir/LexTarget/l10ntools/source/cfglex.cxx:2302
+    /media/noel/disk2/libo4/workdir/LexTarget/l10ntools/source/cfglex.cxx bText
     int
 writerfilter/source/dmapper/PageBordersHandler.hxx:54
     writerfilter::dmapper::PageBordersHandler m_eOffsetFrom
