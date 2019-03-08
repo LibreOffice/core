@@ -16,8 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_CORE_TEXT_ITRPAINT_HXX
-#define INCLUDED_SW_SOURCE_CORE_TEXT_ITRPAINT_HXX
+
+#pragma once
+
 #include "itrtxt.hxx"
 
 class SwSaveClip;          // SwTextPainter
@@ -60,7 +61,5 @@ public:
 };
 
 bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
