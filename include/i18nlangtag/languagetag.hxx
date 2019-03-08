@@ -107,6 +107,8 @@ public:
      */
     explicit LanguageTag( const rtl_Locale & rLocale );
 
+    ~LanguageTag();
+
     /** Obtain BCP 47 language tag.
 
         @param bResolveSystem
