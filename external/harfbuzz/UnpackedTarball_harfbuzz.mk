@@ -21,10 +21,4 @@ $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
     external/harfbuzz/msvc.patch \
 ))
 
-ifneq ($(ENABLE_RUNTIME_OPTIMIZATIONS),TRUE)
-$(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
-    external/harfbuzz/harfbuzz-rtti.patch \
-))
-endif
-
 # vim: set noet sw=4 ts=4:
