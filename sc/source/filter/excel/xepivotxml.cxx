@@ -286,8 +286,15 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         std::set<ScDPItemData::Type> aDPTypesWithoutBlank = aDPTypes;
         aDPTypesWithoutBlank.erase(ScDPItemData::Empty);
 
-        bool isContainsString = aDPTypesWithoutBlank.find(ScDPItemData::String) != aDPTypesWithoutBlank.end() ||
-                                aDPTypesWithoutBlank.find(ScDPItemData::Error) != aDPTypesWithoutBlank.end();
+        // tdf#123939 : error and string are the same for cache; if both are present, keep only one
+        if (aDPTypesWithoutBlank.find(ScDPItemData::Error) != aDPTypesWithoutBlank.end())
+        {
+            aDPTypesWithoutBlank.erase(ScDPItemData::Error);
+            aDPTypesWithoutBlank.insert(ScDPItemData::String);
+        }
+
+        const bool isContainsString
+            = aDPTypesWithoutBlank.find(ScDPItemData::String) != aDPTypesWithoutBlank.end();
         bool isContainsBlank = aDPTypes.find(ScDPItemData::Empty) != aDPTypeEnd;
         bool isContainsNumber = !isContainsDate && aDPTypesWithoutBlank.find(ScDPItemData::Value) != aDPTypesWithoutBlank.end();
         bool isContainsNonDate = !(isContainsDate && aDPTypesWithoutBlank.size() <= 1);
