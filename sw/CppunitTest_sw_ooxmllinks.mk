@@ -40,9 +40,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_ooxmllinks,\
 $(eval $(call gb_CppunitTest_use_ure,sw_ooxmllinks))
 $(eval $(call gb_CppunitTest_use_vcl,sw_ooxmllinks))
 
-$(eval $(call gb_CppunitTest_use_components,sw_ooxmllinks,\
-    $(sw_ooxmlexport_components) \
-))
+$(eval $(call gb_CppunitTest_use_rdb,sw_ooxmllinks,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_ooxmllinks))
 

@@ -40,10 +40,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_ooxmlfieldexport,\
 $(eval $(call gb_CppunitTest_use_ure,sw_ooxmlfieldexport))
 $(eval $(call gb_CppunitTest_use_vcl,sw_ooxmlfieldexport))
 
-$(eval $(call gb_CppunitTest_use_components,sw_ooxmlfieldexport,\
-	$(sw_ooxmlexport_components) \
-	filter/source/storagefilterdetect/storagefd \
-))
+$(eval $(call gb_CppunitTest_use_rdb,sw_ooxmlfieldexport,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_ooxmlfieldexport))
 

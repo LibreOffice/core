@@ -53,43 +53,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_filters_test,\
 $(eval $(call gb_CppunitTest_use_ure,sw_filters_test))
 $(eval $(call gb_CppunitTest_use_vcl,sw_filters_test))
 
-$(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
-	basic/util/sb \
-    comphelper/util/comphelp \
-    configmgr/source/configmgr \
-    dbaccess/util/dba \
-    embeddedobj/util/embobj \
-    emfio/emfio \
-    filter/source/config/cache/filterconfig1 \
-    filter/source/t602/t602filter \
-    forms/util/frm \
-    framework/util/fwk \
-    i18npool/util/i18npool \
-	linguistic/source/lng \
-    oox/util/oox \
-    package/source/xstor/xstor \
-    package/util/package2 \
-    sax/source/expatwrap/expwrap \
-    sfx2/util/sfx \
-	starmath/util/sm \
-    svl/source/fsstor/fsstorage \
-    svtools/util/svt \
-    sw/util/msword \
-    sw/util/sw \
-	sw/util/swd \
-	uui/util/uui \
-    toolkit/util/tk \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-    unotools/util/utl \
-    unoxml/source/rdf/unordf \
-    unoxml/source/service/unoxml \
-    writerfilter/util/writerfilter \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
-    vcl/vcl.common \
-	xmloff/source/transform/xof \
-    xmloff/util/xo \
-))
+$(eval $(call gb_CppunitTest_use_rdb,sw_filters_test,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_filters_test))
 
