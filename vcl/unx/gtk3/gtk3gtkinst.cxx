@@ -4149,7 +4149,7 @@ private:
     GtkMenuButton* m_pMenuButton;
     GtkBox* m_pBox;
     GtkImage* m_pImage;
-    GtkLabel* m_pLabel;
+    GtkWidget* m_pLabel;
     //popover cannot escape dialog under X so stick up own window instead
     GtkWindow* m_pMenuHack;
     GtkWidget* m_pPopover;
@@ -4327,19 +4327,20 @@ public:
         , m_pPopover(nullptr)
         , m_nSignalId(0)
     {
+        m_pLabel = gtk_bin_get_child(GTK_BIN(m_pMenuButton));
         //do it "manually" so we can have the dropdown image in GtkMenuButtons shown
         //on the right at the same time as this image is shown on the left
-        OString sLabel(gtk_button_get_label(GTK_BUTTON(m_pMenuButton)));
-        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pMenuButton));
-        gtk_container_remove(GTK_CONTAINER(m_pMenuButton), pChild);
+        g_object_ref(m_pLabel);
+        gtk_container_remove(GTK_CONTAINER(m_pMenuButton), m_pLabel);
 
         m_pBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
 
-        m_pLabel = GTK_LABEL(gtk_label_new_with_mnemonic(sLabel.getStr()));
-        gtk_label_set_mnemonic_widget(m_pLabel, GTK_WIDGET(m_pMenuButton));
-        gtk_box_pack_start(m_pBox, GTK_WIDGET(m_pLabel), false, false, 0);
+        gtk_box_pack_start(m_pBox, m_pLabel, false, false, 0);
+        g_object_unref(m_pLabel);
 
-        gtk_box_pack_end(m_pBox, gtk_image_new_from_icon_name("pan-down-symbolic", GTK_ICON_SIZE_BUTTON), false, false, 0);
+        if (gtk_toggle_button_get_mode(GTK_TOGGLE_BUTTON(m_pMenuButton)))
+            gtk_box_pack_end(m_pBox, gtk_image_new_from_icon_name("pan-down-symbolic", GTK_ICON_SIZE_BUTTON), false, false, 0);
+
         gtk_container_add(GTK_CONTAINER(m_pMenuButton), GTK_WIDGET(m_pBox));
         gtk_widget_show_all(GTK_WIDGET(m_pBox));
     }
@@ -4347,13 +4348,14 @@ public:
     virtual void set_size_request(int nWidth, int nHeight) override
     {
         // tweak the label to get a narrower size to stick
-        gtk_label_set_ellipsize(m_pLabel, PANGO_ELLIPSIZE_MIDDLE);
+        if (GTK_IS_LABEL(m_pLabel))
+            gtk_label_set_ellipsize(GTK_LABEL(m_pLabel), PANGO_ELLIPSIZE_MIDDLE);
         gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
 
     virtual void set_label(const OUString& rText) override
     {
-        ::set_label(m_pLabel, rText);
+        ::set_label(GTK_LABEL(m_pLabel), rText);
     }
 
     virtual void set_image(VirtualDevice* pDevice) override
