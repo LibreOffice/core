@@ -33,6 +33,7 @@
 #include <basegfx/numeric/ftools.hxx> //for F_PI180
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <FileDefinitionWidgetDraw.hxx>
 
 // The only common SalFrame method
 
@@ -60,6 +61,18 @@ SalGraphics::SalGraphics()
     // read global RTL settings
     if( AllSettings::GetLayoutRTL() )
         m_nLayout = SalLayoutFlags::BiDiRtl;
+}
+
+bool SalGraphics::initWidgetDrawBackends(bool bForce)
+{
+    bool bFileDefinitionsWidgetDraw = !!getenv("VCL_DRAW_WIDGETS_FROM_FILE");
+
+    if (bFileDefinitionsWidgetDraw || bForce)
+    {
+        m_pWidgetDraw.reset(new vcl::FileDefinitionWidgetDraw(*this));
+        return true;
+    }
+    return false;
 }
 
 SalGraphics::~SalGraphics()
@@ -745,6 +758,22 @@ bool SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pP
     return drawEPS( nX, nY, nWidth, nHeight,  pPtr, nSize );
 }
 
+bool SalGraphics::IsSupported(ControlType eType, ControlPart ePart)
+{
+    if (m_pWidgetDraw)
+        return m_pWidgetDraw->isNativeControlSupported(eType, ePart);
+    else
+        return IsNativeControlSupported(eType, ePart);
+}
+
+bool SalGraphics::callHitTestNativeControl(ControlType eType, ControlPart nPart, const tools::Rectangle& rControlRegion, const Point& aPos, bool& rIsInside)
+{
+    if (m_pWidgetDraw)
+        return m_pWidgetDraw->hitTestNativeControl(eType, nPart, rControlRegion, aPos, rIsInside);
+    else
+        return hitTestNativeControl(eType, nPart, rControlRegion, aPos, rIsInside);
+}
+
 bool SalGraphics::HitTestNativeScrollbar( ControlPart nPart, const tools::Rectangle& rControlRegion,
                                                 const Point& aPos, bool& rIsInside, const OutputDevice *pOutDev )
 {
@@ -754,10 +783,10 @@ bool SalGraphics::HitTestNativeScrollbar( ControlPart nPart, const tools::Rectan
         tools::Rectangle rgn( rControlRegion );
         pt.setX( mirror2( pt.X(), pOutDev ) );
         mirror( rgn, pOutDev );
-        return hitTestNativeControl( ControlType::Scrollbar, nPart, rgn, pt, rIsInside );
+        return callHitTestNativeControl( ControlType::Scrollbar, nPart, rgn, pt, rIsInside );
     }
     else
-        return hitTestNativeControl( ControlType::Scrollbar, nPart, rControlRegion, aPos, rIsInside );
+        return callHitTestNativeControl( ControlType::Scrollbar, nPart, rControlRegion, aPos, rIsInside );
 }
 
 void SalGraphics::mirror( ImplControlValue& rVal, const OutputDevice* pOutDev ) const
@@ -796,9 +825,17 @@ void SalGraphics::mirror( ImplControlValue& rVal, const OutputDevice* pOutDev ) 
     }
 }
 
+bool SalGraphics::callDrawNativeControl(ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion, ControlState nState, const ImplControlValue& aValue, const OUString& rCaption)
+{
+    if (m_pWidgetDraw)
+        return m_pWidgetDraw->drawNativeControl(nType, nPart, rControlRegion, nState, aValue, rCaption);
+    else
+        return drawNativeControl(nType, nPart, rControlRegion, nState, aValue, rCaption);
+}
+
 bool SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
                                                 ControlState nState, const ImplControlValue& aValue,
-                                                const OUString& aCaption, const OutputDevice *pOutDev )
+                                                const OUString& aCaption, const OutputDevice *pOutDev)
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
@@ -807,11 +844,19 @@ bool SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, const
             mirror(rgn, pOutDev);
         std::unique_ptr< ImplControlValue > mirrorValue( aValue.clone());
         mirror( *mirrorValue, pOutDev );
-        bool bRet = drawNativeControl( nType, nPart, rgn, nState, *mirrorValue, aCaption );
+        bool bRet = callDrawNativeControl(nType, nPart, rgn, nState, *mirrorValue, aCaption);
         return bRet;
     }
     else
-        return drawNativeControl( nType, nPart, rControlRegion, nState, aValue, aCaption );
+        return callDrawNativeControl(nType, nPart, rControlRegion, nState, aValue, aCaption);
+}
+
+bool SalGraphics::callGetNativeControlRegion(ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion, ControlState nState, const ImplControlValue& aValue, tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion)
+{
+    if (m_pWidgetDraw)
+        return m_pWidgetDraw->getNativeControlRegion(nType, nPart, rControlRegion, nState, aValue, OUString(), rNativeBoundingRegion, rNativeContentRegion);
+    else
+        return getNativeControlRegion(nType, nPart, rControlRegion, nState, aValue, OUString(), rNativeBoundingRegion, rNativeContentRegion);
 }
 
 bool SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion, ControlState nState,
@@ -824,8 +869,7 @@ bool SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, 
         mirror( rgn, pOutDev );
         std::unique_ptr< ImplControlValue > mirrorValue( aValue.clone());
         mirror( *mirrorValue, pOutDev );
-        if( getNativeControlRegion( nType, nPart, rgn, nState, *mirrorValue, OUString(),
-                                                rNativeBoundingRegion, rNativeContentRegion ) )
+        if (callGetNativeControlRegion(nType, nPart, rgn, nState, *mirrorValue, rNativeBoundingRegion, rNativeContentRegion))
         {
             mirror( rNativeBoundingRegion, pOutDev, true );
             mirror( rNativeContentRegion, pOutDev, true );
@@ -834,8 +878,7 @@ bool SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, 
         return false;
     }
     else
-        return getNativeControlRegion( nType, nPart, rControlRegion, nState, aValue, OUString(),
-                                                rNativeBoundingRegion, rNativeContentRegion );
+        return callGetNativeControlRegion(nType, nPart, rControlRegion, nState, aValue, rNativeBoundingRegion, rNativeContentRegion);
 }
 
 bool SalGraphics::BlendBitmap( const SalTwoRect& rPosAry,

@@ -30,6 +30,7 @@
 #include <osl/process.h>
 #include <rtl/bootstrap.h>
 #include <rtl/strbuf.hxx>
+#include <comphelper/lok.hxx>
 
 #include <vcl/metric.hxx>
 #include <vcl/fontcharmap.hxx>
@@ -212,6 +213,9 @@ AquaSalGraphics::AquaSalGraphics()
 
     for (int i = 0; i < MAX_FALLBACK; ++i)
         mpTextStyle[i] = nullptr;
+
+    if (comphelper::LibreOfficeKit::isActive())
+        initWidgetDrawBackends(true);
 }
 
 AquaSalGraphics::~AquaSalGraphics()
