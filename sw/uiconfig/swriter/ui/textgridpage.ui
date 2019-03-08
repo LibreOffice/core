@@ -496,6 +496,7 @@
                     <property name="halign">start</property>
                     <property name="valign">center</property>
                     <property name="draw_indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
