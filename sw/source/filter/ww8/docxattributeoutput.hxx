@@ -911,9 +911,6 @@ private:
     /// If FormatBox() already handled fill style / gradient.
     bool m_bIgnoreNextFill;
 
-    /// Is fake rotation detected, so rotation with 90 degrees should be ignored in this cell?
-    bool m_bBtLr;
-
     editeng::WordPageMargins m_pageMargins;
 
     std::shared_ptr<DocxTableStyleExport> m_pTableStyleExport;
