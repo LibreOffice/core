@@ -99,6 +99,8 @@
 SvxToolbarConfigPage::SvxToolbarConfigPage(TabPageParent pParent, const SfxItemSet& rSet)
     : SvxConfigPage(pParent, rSet)
 {
+    m_xGearBtn = m_xBuilder->weld_menu_button("toolbargearbtn");
+    m_xGearBtn->show();
     m_xContainer->set_help_id(HID_SVX_CONFIG_TOOLBAR);
 
     m_xContentsListBox.reset(new SvxToolbarEntriesListBox(m_xBuilder->weld_tree_view("toolcontents"), this));
@@ -109,8 +111,6 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(TabPageParent pParent, const SfxItemS
     aWidths.push_back(rTreeView.get_checkbox_column_width());
     aWidths.push_back(rTreeView.get_checkbox_column_width());
     rTreeView.set_column_fixed_widths(aWidths);
-    rTreeView.set_grid_left_attach(0);
-    rTreeView.set_grid_top_attach(0);
     rTreeView.set_hexpand(true);
     rTreeView.set_vexpand(true);
     rTreeView.set_help_id( HID_SVX_CONFIG_TOOLBAR_CONTENTS );
@@ -154,7 +154,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(TabPageParent pParent, const SfxItemS
     m_xInsertBtn->remove_item("insertsubmenu");
 
     // Gear menu's "Move" action is irrelevant to the toolbars
-    m_xGearBtn->set_item_sensitive("gear_move", false);
+    m_xGearBtn->set_item_sensitive("toolbar_gear_move", false);
 
     // default toolbar to select is standardbar unless a different one
     // has been passed in
@@ -358,7 +358,7 @@ IMPL_LINK( SvxToolbarConfigPage, GearHdl, const OString&, rIdent, void )
 {
     SvxConfigEntry* pCurrentToolbar = GetTopLevelSelection();
 
-    if (rIdent == "gear_add")
+    if (rIdent == "toolbar_gear_add")
     {
         OUString prefix = CuiResId( RID_SVXSTR_NEW_TOOLBAR );
 
@@ -409,7 +409,7 @@ IMPL_LINK( SvxToolbarConfigPage, GearHdl, const OString&, rIdent, void )
             pData->SetModified();
         }
     }
-    else if (rIdent == "gear_delete")
+    else if (rIdent == "toolbar_gear_delete")
     {
         if ( pCurrentToolbar && pCurrentToolbar->IsDeletable() )
         {
@@ -417,7 +417,7 @@ IMPL_LINK( SvxToolbarConfigPage, GearHdl, const OString&, rIdent, void )
             UpdateButtonStates();
         }
     }
-    else if (rIdent == "gear_rename")
+    else if (rIdent == "toolbar_gear_rename")
     {
         sal_Int32 nSelectionPos = m_xTopLevelListBox->get_active();
         SvxConfigEntry* pToolbar =
@@ -449,7 +449,7 @@ IMPL_LINK( SvxToolbarConfigPage, GearHdl, const OString&, rIdent, void )
             m_xTopLevelListBox->set_active_id(sId);
         }
     }
-    else if (rIdent == "gear_iconOnly" || rIdent == "gear_textOnly" || rIdent == "gear_iconAndText")
+    else if (rIdent == "toolbar_gear_iconOnly" || rIdent == "toolbar_gear_textOnly" || rIdent == "toolbar_gear_iconAndText")
     {
         ToolbarSaveInData* pSaveInData = static_cast<ToolbarSaveInData*>( GetSaveInData() );
 
@@ -460,11 +460,11 @@ IMPL_LINK( SvxToolbarConfigPage, GearHdl, const OString&, rIdent, void )
         }
 
         sal_Int32 nStyle = 0;
-        if (rIdent == "gear_iconOnly")
+        if (rIdent == "toolbar_gear_iconOnly")
             nStyle = 0;
-        else if (rIdent == "gear_textOnly")
+        else if (rIdent == "toolbar_gear_textOnly")
             nStyle = 1;
-        else if (rIdent == "gear_iconAndText")
+        else if (rIdent == "toolbar_gear_iconAndText")
             nStyle = 2;
 
         pCurrentToolbar->SetStyle( nStyle );
@@ -768,9 +768,9 @@ void SvxToolbarConfigPage::UpdateButtonStates()
     m_xModifyBtn->set_sensitive( bIsValidSelection && !bIsSeparator );
 
     // Handle the gear button
-    // "gear_add" option is always enabled
-    m_xGearBtn->set_item_sensitive("gear_delete", pToolbar && pToolbar->IsDeletable());
-    m_xGearBtn->set_item_sensitive("gear_rename", pToolbar && pToolbar->IsRenamable());
+    // "toolbar_gear_add" option is always enabled
+    m_xGearBtn->set_item_sensitive("toolbar_gear_delete", pToolbar && pToolbar->IsDeletable());
+    m_xGearBtn->set_item_sensitive("toolbar_gear_rename", pToolbar && pToolbar->IsRenamable());
 }
 
 short SvxToolbarConfigPage::QueryReset()
@@ -812,17 +812,17 @@ void SvxToolbarConfigPage::SelectElement()
     {
         case 0:
         {
-            m_xGearBtn->set_item_active("gear_iconOnly", true);
+            m_xGearBtn->set_item_active("toolbar_gear_iconOnly", true);
             break;
         }
         case 1:
         {
-            m_xGearBtn->set_item_active("gear_textOnly", true);
+            m_xGearBtn->set_item_active("toolbar_gear_textOnly", true);
             break;
         }
         case 2:
         {
-            m_xGearBtn->set_item_active("gear_iconAndText", true);
+            m_xGearBtn->set_item_active("toolbar_gear_iconAndText", true);
             break;
         }
     }

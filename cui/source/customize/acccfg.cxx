@@ -1024,7 +1024,9 @@ void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfigu
             continue;
         TAccInfo*    pEntry   = new TAccInfo(i1, 0/*nListPos*/, aKey);
         m_xEntriesBox->append(OUString::number(reinterpret_cast<sal_Int64>(pEntry)), sKey);
-        m_xEntriesBox->set_text(m_xEntriesBox->n_children() - 1, OUString(), 1);
+        int nPos = m_xEntriesBox->n_children() - 1;
+        m_xEntriesBox->set_text(nPos, OUString(), 1);
+        m_xEntriesBox->set_sensitive(nPos, true);
     }
 
     // Assign all commands to its shortcuts - reading the accelerator config.
@@ -1315,8 +1317,6 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, TimeOut_Impl, Timer*, void)
 
     weld::TreeView& rTreeView = m_xGroupLBox->get_widget();
     SelectHdl(rTreeView);
-
-    SelectHdl(m_xFunctionBox->get_widget());
 }
 
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, void)
@@ -1522,7 +1522,7 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet* rSet )
     // change the description of the radio button, which switch to the module
     // dependent accelerator configuration
     OUString sButtonText = m_xModuleButton->get_label();
-    sButtonText = sButtonText.replaceFirst("$(MODULE)", m_sModuleUIName);
+    sButtonText = m_xModuleButton->strip_mnemonic(sButtonText).replaceFirst("$(MODULE)", m_sModuleUIName);
     m_xModuleButton->set_label(sButtonText);
 
     if (m_xModule.is())
