@@ -562,12 +562,11 @@ SvpSalGraphics::SvpSalGraphics()
     , m_ePaintMode(PaintMode::Over)
     , m_aTextRenderImpl(*this)
 {
-    bool bFileDefinitionsWidgetDraw = !!getenv("VCL_DRAW_WIDGETS_FROM_FILE");
-
-    if (bFileDefinitionsWidgetDraw)
-        m_pWidgetDraw.reset(new vcl::FileDefinitionWidgetDraw(*this));
-    else if (comphelper::LibreOfficeKit::isActive())
-        m_pWidgetDraw.reset(new vcl::CustomWidgetDraw(*this));
+    if (!initWidgetDrawBackends())
+    {
+        if (comphelper::LibreOfficeKit::isActive())
+            m_pWidgetDraw.reset(new vcl::CustomWidgetDraw(*this));
+    }
 }
 
 SvpSalGraphics::~SvpSalGraphics()

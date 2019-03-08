@@ -29,6 +29,7 @@
 #include <osl/process.h>
 #include <rtl/bootstrap.h>
 #include <rtl/strbuf.hxx>
+#include <comphelper/lok.hxx>
 
 #include <vcl/metric.hxx>
 #include <vcl/fontcharmap.hxx>
@@ -227,6 +228,9 @@ AquaSalGraphics::AquaSalGraphics()
         mpTextStyle[i] = nullptr;
         mpFontData[i] = nullptr;
     }
+
+    if (comphelper::LibreOfficeKit::isActive())
+        initWidgetDrawBackends(true);
 }
 
 AquaSalGraphics::~AquaSalGraphics()

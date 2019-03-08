@@ -343,8 +343,7 @@ public:
      * @param [in] ePart The part of the widget.
      * @return true if the platform supports native drawing of the widget type defined by part.
      */
-    virtual bool                IsNativeControlSupported(
-                                    ControlType eType, ControlPart ePart );
+    bool IsSupported(ControlType eType, ControlPart ePart);
 
 
     /**
@@ -438,6 +437,11 @@ public:
 
 #endif // ENABLE_CAIRO_CANVAS
 
+private:
+    bool callGetNativeControlRegion(ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion, ControlState nState, const ImplControlValue& aValue, tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion);
+    bool callDrawNativeControl(ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion, ControlState nState, const ImplControlValue& aValue, const OUString& rCaption);
+    bool callHitTestNativeControl(ControlType eType, ControlPart nPart, const tools::Rectangle& rControlRegion, const Point& aPos, bool& rIsInside);
+
 protected:
     virtual bool                setClipRegion( const vcl::Region& ) = 0;
 
@@ -526,6 +530,15 @@ protected:
                                     sal_uLong nSize ) = 0;
 
     /**
+     * Query the platform layer for native control support.
+     *
+     * @param [in] eType The widget type.
+     * @param [in] ePart The part of the widget.
+     * @return true if the platform supports native drawing of the widget type defined by part.
+     */
+    virtual bool IsNativeControlSupported(ControlType eType, ControlPart ePart);
+
+    /**
      * Query if a position is inside the native widget part.
      *
      * Mainly used for scrollbars.
@@ -590,6 +603,7 @@ protected:
                                     tools::Rectangle &rNativeBoundingRegion,
                                     tools::Rectangle &rNativeContentRegion );
 
+
     /** Blend the bitmap with the current buffer */
     virtual bool                blendBitmap(
                                     const SalTwoRect&,
@@ -648,6 +662,9 @@ private:
 protected:
     /// flags which hold the SetAntialiasing() value from OutputDevice
     bool                        m_bAntiAliasB2DDraw : 1;
+
+    // native controls
+    bool initWidgetDrawBackends(bool bForce = false);
 
     bool hasWidgetDraw()
     {
