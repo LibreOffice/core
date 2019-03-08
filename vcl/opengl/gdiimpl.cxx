@@ -63,7 +63,8 @@ public:
     virtual void Invoke() override
     {
         m_pImpl->doFlush();
-        SetPriority( TaskPriority::HIGHEST );
+        if (GetPriority() != TaskPriority::HIGHEST)
+            SetPriority(TaskPriority::HIGHEST);
         Stop();
     }
 };
