@@ -967,6 +967,12 @@ DECLARE_OOXMLIMPORT_TEST(testTdf121176, "tdf121176.docx")
     CPPUNIT_ASSERT_EQUAL( OUString( "must" ), getRun( getParagraph( 1 ), 2 )->getString());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf123054, "tdf123054.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("No Spacing"),
+                         getProperty<OUString>(getParagraph(20), "ParaStyleName"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
