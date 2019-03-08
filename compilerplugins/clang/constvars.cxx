@@ -168,7 +168,6 @@ void ConstVars::run()
         if (sourceString.contains("loplugin:constvars:ignore"))
             continue;
         report(DiagnosticsEngine::Warning, "static var can be const", compat::getBeginLoc(v));
-        v->getType().dump();
     }
 }
 
