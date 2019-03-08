@@ -158,6 +158,7 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
         case SymbolType::SPIN_LEFT:
         case SymbolType::FIRST:
         case SymbolType::PREV:
+        {
             nRect.AdjustLeft(n4 );
             if ( eType==SymbolType::FIRST )
             {
@@ -165,21 +166,25 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
                                 Point( nRect.Left(), nRect.Bottom() ) );
                 nRect.AdjustLeft( 1 );
             }
-            pDev->DrawPixel( Point( nRect.Left(), aCenter.Y() ) );
-            for ( long i=1; i <= n2; ++i )
-            {
-                nRect.AdjustLeft( 1 );
-                pDev->DrawLine( Point( nRect.Left(), aCenter.Y()-i ),
-                                Point( nRect.Left(), aCenter.Y()+i ) );
-                pDev->DrawPixel( Point( nRect.Left(), aCenter.Y()-i ) );
-                pDev->DrawPixel( Point( nRect.Left(), aCenter.Y()+i ) );
-            }
+
+            tools::Polygon aTriangle(3);
+            aTriangle.SetPoint(Point(nRect.Left() + n2,  aCenter.Y() - n2), 0);
+            aTriangle.SetPoint(Point(nRect.Left(), aCenter.Y()), 1);
+            aTriangle.SetPoint(Point(nRect.Left() + n2, aCenter.Y() + n2), 2);
+
+            pDev->Push(PushFlags::LINECOLOR);
+            pDev->SetLineColor();
+            pDev->DrawPolygon(aTriangle);
+            pDev->Pop();
+
             break;
+        }
 
         case SymbolType::SPIN_RIGHT:
         case SymbolType::LAST:
         case SymbolType::NEXT:
         case SymbolType::PLAY:
+        {
             nRect.AdjustRight( -n4 );
             if ( eType==SymbolType::LAST )
             {
@@ -187,16 +192,18 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
                                 Point( nRect.Right(), nRect.Bottom() ) );
                 nRect.AdjustRight( -1 );
             }
-            pDev->DrawPixel( Point( nRect.Right(), aCenter.Y() ) );
-            for ( long i=1; i <= n2; ++i )
-            {
-                nRect.AdjustRight( -1 );
-                pDev->DrawLine( Point( nRect.Right(), aCenter.Y()-i ),
-                                Point( nRect.Right(), aCenter.Y()+i ) );
-                pDev->DrawPixel( Point( nRect.Right(), aCenter.Y()-i ) );
-                pDev->DrawPixel( Point( nRect.Right(), aCenter.Y()+i ) );
-            }
+
+            tools::Polygon aTriangle(3);
+            aTriangle.SetPoint(Point(nRect.Right() - n2,  aCenter.Y() - n2), 0);
+            aTriangle.SetPoint(Point(nRect.Right(), aCenter.Y()), 1);
+            aTriangle.SetPoint(Point(nRect.Right() - n2, aCenter.Y() + n2), 2);
+
+            pDev->Push(PushFlags::LINECOLOR);
+            pDev->SetLineColor();
+            pDev->DrawPolygon(aTriangle);
+            pDev->Pop();
             break;
+        }
 
         case SymbolType::PAGEUP:
             pDev->DrawPixel( Point( aCenter.X(), nRect.Top() ) );
