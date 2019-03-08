@@ -30,7 +30,7 @@
 #include <IMark.hxx>
 #include <swserv.hxx>
 #include <swrect.hxx>
-#include <DropDownFormFieldButton.hxx>
+#include "DropDownFormFieldButton.hxx"
 
 namespace com {
     namespace sun {
