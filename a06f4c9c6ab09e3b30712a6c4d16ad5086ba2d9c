@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_ec1734ed",
+        "filename": "external/harfbuzz/harfbuzz-rtti.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2019-03-08T13:37:36Z",
+      "side": 1,
+      "message": "This patch keeps getting removed with HarfBuzz updates then re-added again. Can’t we just do as recommended in the removed comment and e.g. set CXXFLAGS\u003d\"-frtti\" when needed\u003e",
+      "revId": "a06f4c9c6ab09e3b30712a6c4d16ad5086ba2d9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
