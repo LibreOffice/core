@@ -229,6 +229,15 @@ public:
 
 protected:
 
+    enum FrameType
+    {
+        FRAMETYPE_GENERIC, ///< Generic shape, no special type.
+        FRAMETYPE_OLEOBJECT, ///< OLE object embedded in a shape.
+        FRAMETYPE_CHART, ///< Chart embedded in a shape.
+        FRAMETYPE_DIAGRAM, ///< Complex diagram drawing shape.
+        FRAMETYPE_TABLE ///< A table embedded in a shape.
+    };
+
     css::uno::Reference< css::drawing::XShape > const &
                         createAndInsert(
                             ::oox::core::XmlFilterBase& rFilterBase,
@@ -250,7 +259,8 @@ protected:
                             ShapeIdMap* pShapeMap,
                             const basegfx::B2DHomMatrix& aTransformation );
 
-    void                keepDiagramCompatibilityInfo( ::oox::core::XmlFilterBase const & rFilterBase );
+    void                keepDiagramCompatibilityInfo();
+    void                convertSmartArtToMetafile( ::oox::core::XmlFilterBase const& rFilterBase );
 
     css::uno::Reference< css::drawing::XShape >
                         renderDiagramToGraphic( ::oox::core::XmlFilterBase const & rFilterBase );
@@ -310,20 +320,13 @@ protected:
     ::std::vector<OUString>     maExtDrawings;
     Color                       maFontRefColorForNodes;
 
+    FrameType                   meFrameType; ///< Type for graphic frame shapes.
+
 private:
-    enum FrameType
-    {
-        FRAMETYPE_GENERIC,          ///< Generic shape, no special type.
-        FRAMETYPE_OLEOBJECT,        ///< OLE object embedded in a shape.
-        FRAMETYPE_CHART,            ///< Chart embedded in a shape.
-        FRAMETYPE_DIAGRAM,          ///< Complex diagram drawing shape.
-        FRAMETYPE_TABLE             ///< A table embedded in a shape.
-    };
 
     typedef std::shared_ptr< ::oox::vml::OleObjectInfo >    OleObjectInfoRef;
     typedef std::shared_ptr< ChartShapeInfo >               ChartShapeInfoRef;
 
-    FrameType           meFrameType;        ///< Type for graphic frame shapes.
     OleObjectInfoRef    mxOleObjectInfo;    ///< Additional data for OLE objects.
     ChartShapeInfoRef   mxChartShapeInfo;   ///< Additional data for chart shapes.
 

@@ -283,8 +283,9 @@ void Shape::addShape(
 
             if( meFrameType == FRAMETYPE_DIAGRAM )
             {
+                keepDiagramCompatibilityInfo();
                 if( !SvtFilterOptions::Get().IsSmartArt2Shape() )
-                    keepDiagramCompatibilityInfo( rFilterBase );
+                    convertSmartArtToMetafile( rFilterBase );
             }
         }
     }
@@ -1387,7 +1388,7 @@ Reference< XShape > const & Shape::createAndInsert(
     return mxShape;
 }
 
-void Shape::keepDiagramCompatibilityInfo( XmlFilterBase const & rFilterBase )
+void Shape::keepDiagramCompatibilityInfo()
 {
     try
     {
@@ -1418,21 +1419,33 @@ void Shape::keepDiagramCompatibilityInfo( XmlFilterBase const & rFilterBase )
             xSet->setPropertyValue( aGrabBagPropName, Any( aGrabBag ) );
         } else
             xSet->setPropertyValue( aGrabBagPropName, Any( maDiagramDoms ) );
-
-        xSet->setPropertyValue( "MoveProtect", Any( true ) );
-        xSet->setPropertyValue( "SizeProtect", Any( true ) );
-
-        // Replace existing shapes with a new Graphic Object rendered
-        // from them
-        Reference < XShape > xShape( renderDiagramToGraphic( rFilterBase ) );
-        Reference < XShapes > xShapes( mxShape, UNO_QUERY_THROW );
-        while( xShapes->hasElements() )
-            xShapes->remove( Reference < XShape > ( xShapes->getByIndex( 0 ),  UNO_QUERY_THROW ) );
-        xShapes->add( xShape );
     }
     catch( const Exception& e )
     {
         SAL_WARN( "oox.drawingml", "Shape::keepDiagramCompatibilityInfo: " << e );
+    }
+}
+
+void Shape::convertSmartArtToMetafile(XmlFilterBase const & rFilterBase)
+{
+    try
+    {
+        Reference<XPropertySet> xSet(mxShape, UNO_QUERY_THROW);
+
+        xSet->setPropertyValue("MoveProtect", Any(true));
+        xSet->setPropertyValue("SizeProtect", Any(true));
+
+        // Replace existing shapes with a new Graphic Object rendered
+        // from them
+        Reference<XShape> xShape(renderDiagramToGraphic(rFilterBase));
+        Reference<XShapes> xShapes(mxShape, UNO_QUERY_THROW);
+        while (xShapes->hasElements())
+            xShapes->remove(Reference<XShape>(xShapes->getByIndex(0), UNO_QUERY_THROW));
+        xShapes->add(xShape);
+    }
+    catch (const Exception& e)
+    {
+        SAL_WARN("oox.drawingml", "Shape::convertSmartArtToMetafile: " << e);
     }
 }
 
