@@ -281,11 +281,8 @@ void Shape::addShape(
             if ( xShapes.is() )
                 addChildren( rFilterBase, *this, pTheme, xShapes, pShapeMap, aMatrix );
 
-            if( meFrameType == FRAMETYPE_DIAGRAM )
-            {
-                if( !SvtFilterOptions::Get().IsSmartArt2Shape() )
-                    keepDiagramCompatibilityInfo( rFilterBase );
-            }
+            if( meFrameType == FRAMETYPE_DIAGRAM && !SvtFilterOptions::Get().IsSmartArt2Shape() )
+                keepDiagramCompatibilityInfo( rFilterBase );
         }
     }
     catch( const Exception& e )
