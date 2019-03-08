@@ -16,6 +16,24 @@
       "revId": "fe95efca7d27160abae0fbafe96efb39bfb1eb10",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_6c88041f",
+        "filename": "vcl/opengl/gdiimpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-03-08T14:31:24Z",
+      "side": 0,
+      "message": "Oh, I see. Thanks, I\u0027ll try that.",
+      "parentUuid": "ff82abbf_6ce1e4fe",
+      "revId": "fe95efca7d27160abae0fbafe96efb39bfb1eb10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
