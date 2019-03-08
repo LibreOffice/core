@@ -11,6 +11,8 @@
 #include <test/beans/xpropertyset.hxx>
 #include <test/sheet/cellarealink.hxx>
 #include <test/sheet/xarealink.hxx>
+#include <test/util/xrefreshable.hxx>
+#include <sfx2/app.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -29,7 +31,8 @@ namespace sc_apitest
 class ScAreaLinkObj : public CalcUnoApiTest,
                       public apitest::CellAreaLink,
                       public apitest::XAreaLink,
-                      public apitest::XPropertySet
+                      public apitest::XPropertySet,
+                      public apitest::XRefreshable
 {
 public:
     ScAreaLinkObj();
@@ -60,6 +63,9 @@ public:
     CPPUNIT_TEST(testPropertyChangeListener);
     CPPUNIT_TEST(testVetoableChangeListener);
 
+    // XRefreshable
+    CPPUNIT_TEST(testRefreshListener);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -68,6 +74,7 @@ private:
 
 ScAreaLinkObj::ScAreaLinkObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , CellAreaLink(m_directories.getURLFromSrc("/sc/qa/extras/testdocuments/scarealinkobj.ods"))
 {
 }
 
@@ -80,7 +87,7 @@ uno::Reference<uno::XInterface> ScAreaLinkObj::init()
                                              uno::UNO_QUERY_THROW);
 
     table::CellAddress aCellAddress(1, 2, 3);
-    xLinks->insertAtPosition(aCellAddress, "", "a1:c1", "", "");
+    xLinks->insertAtPosition(aCellAddress, m_directories.getURLFromSrc("/sc/qa/extras/testdocuments/scarealinkobj.ods"), "a2:b5", "", "");
 
     uno::Reference<sheet::XAreaLink> xLink(xLinks->getByIndex(0), uno::UNO_QUERY_THROW);
     return xLink;
