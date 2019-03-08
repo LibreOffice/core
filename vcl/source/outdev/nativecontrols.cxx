@@ -166,7 +166,7 @@ bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPar
     if ( !mpGraphics && !AcquireGraphics() )
         return false;
 
-    return mpGraphics->IsNativeControlSupported(nType, nPart);
+    return mpGraphics->IsSupported(nType, nPart);
 }
 
 bool OutputDevice::HitTestNativeScrollbar(
