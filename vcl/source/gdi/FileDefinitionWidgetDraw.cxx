@@ -329,8 +329,21 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
                 long nImageWidth = aBitmap.GetSizePixel().Width();
                 long nImageHeight = aBitmap.GetSizePixel().Height();
                 SalTwoRect aTR(0, 0, nImageWidth, nImageHeight, nX, nY, nImageWidth, nImageHeight);
-                rGraphics.DrawBitmap(aTR, *aBitmap.GetBitmap().ImplGetSalBitmap().get(),
-                                     *aBitmap.GetAlpha().ImplGetSalBitmap().get(), nullptr);
+                if (!!aBitmap)
+                {
+                    const std::shared_ptr<SalBitmap> pSalBitmap
+                        = aBitmap.GetBitmap().ImplGetSalBitmap();
+                    if (aBitmap.IsAlpha())
+                    {
+                        const std::shared_ptr<SalBitmap> pSalBitmapAlpha
+                            = aBitmap.GetAlpha().ImplGetSalBitmap();
+                        rGraphics.DrawBitmap(aTR, *pSalBitmap, *pSalBitmapAlpha, nullptr);
+                    }
+                    else
+                    {
+                        rGraphics.DrawBitmap(aTR, *pSalBitmap, nullptr);
+                    }
+                }
             }
             break;
             case DrawCommandType::EXTERNAL:
