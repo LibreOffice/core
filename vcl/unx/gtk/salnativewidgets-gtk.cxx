@@ -70,6 +70,8 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow,
       m_aClipRegion(true)
 {
     Init( pFrame, GDK_WINDOW_XID( widget_get_window( pWindow ) ), nXScreen );
+
+    initWidgetDrawBackends();
 }
 
 GtkSalGraphics::~GtkSalGraphics()
