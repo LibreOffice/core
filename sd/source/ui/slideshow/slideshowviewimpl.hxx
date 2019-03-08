@@ -216,7 +216,6 @@ private:
                                             mpMouseMotionListeners;
     SdDrawDocument* const                   mpDoc;
     bool                                    mbIsMouseMotionListener;
-    ::tools::Rectangle                      maPresentationArea;
     AnimationMode const                     meAnimationMode;
     bool                                    mbFirstPaint;
     bool const                              mbFullScreen;

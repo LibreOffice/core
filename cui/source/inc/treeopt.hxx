@@ -81,7 +81,6 @@ struct OptionsNode
 {
     OUString                m_sId;
     OUString                m_sLabel;
-    OUString                m_sPageURL;
     bool                    m_bAllModules;
     std::vector< std::unique_ptr<OptionsLeaf> > m_aLeaves;
     std::vector< std::vector< std::unique_ptr<OptionsLeaf> > >
@@ -89,11 +88,9 @@ struct OptionsNode
 
     OptionsNode(    const OUString& rId,
                     const OUString& rLabel,
-                    const OUString& rPageURL,
                     bool bAllModules ) :
         m_sId( rId ),
         m_sLabel( rLabel ),
-        m_sPageURL( rPageURL ),
         m_bAllModules( bAllModules ) {}
 };
 

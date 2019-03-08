@@ -22,6 +22,8 @@ canvas/source/vcl/impltools.hxx:117
     vclcanvas::tools::LocalGuard aSolarGuard class SolarMutexGuard
 canvas/workben/canvasdemo.cxx:82
     DemoRenderer maColorWhite uno::Sequence<double>
+chart2/source/controller/chartapiwrapper/DataSeriesPointWrapper.cxx:392
+    (anonymous namespace)::WrappedLineStyleProperty m_aDefaultValue class com::sun::star::uno::Any
 chart2/source/controller/dialogs/res_DataLabel.hxx:86
     chart::DataLabelResources m_xDC_Dial std::unique_ptr<weld::CustomWeld>
 chart2/source/controller/dialogs/tp_AxisLabel.hxx:60
@@ -48,16 +50,18 @@ connectivity/source/drivers/mork/MDatabaseMetaData.hxx:29
     connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
 cppu/source/threadpool/threadpool.cxx:354
     _uno_ThreadPool dummy sal_Int32
-cppu/source/typelib/typelib.cxx:56
+cppu/source/typelib/typelib.cxx:57
     AlignSize_Impl nInt16 sal_Int16
-cui/source/dialogs/colorpicker.cxx:715
+cui/source/dialogs/colorpicker.cxx:721
     cui::ColorPickerDialog m_xColorField std::unique_ptr<weld::CustomWeld>
-cui/source/dialogs/colorpicker.cxx:717
+cui/source/dialogs/colorpicker.cxx:723
     cui::ColorPickerDialog m_xColorPreview std::unique_ptr<weld::CustomWeld>
 cui/source/inc/align.hxx:92
     svx::AlignmentTabPage m_xBoxDirection std::unique_ptr<weld::Widget>
-cui/source/inc/cfg.hxx:573
+cui/source/inc/cfg.hxx:574
     SvxNewToolbarDialog m_xBtnOK std::unique_ptr<weld::Button>
+cui/source/inc/cfg.hxx:607
+    SvxIconSelectorDialog m_xTbSymbolWin std::unique_ptr<weld::CustomWeld>
 cui/source/inc/cuicharmap.hxx:100
     SvxCharacterMap m_xShowChar std::unique_ptr<weld::CustomWeld>
 cui/source/inc/cuicharmap.hxx:101
@@ -70,13 +74,13 @@ cui/source/inc/cuicharmap.hxx:106
     SvxCharacterMap m_xSearchSetArea std::unique_ptr<weld::CustomWeld>
 cui/source/inc/cuigaldlg.hxx:251
     TPGalleryThemeProperties m_xWndPreview std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuigrfflt.hxx:79
+cui/source/inc/cuigrfflt.hxx:78
     GraphicFilterDialog mxPreview std::unique_ptr<weld::CustomWeld>
 cui/source/inc/cuigrfflt.hxx:175
     GraphicFilterEmboss mxCtlLight std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuitabarea.hxx:707
+cui/source/inc/cuitabarea.hxx:712
     SvxColorTabPage m_xCtlPreviewOld std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuitabarea.hxx:708
+cui/source/inc/cuitabarea.hxx:713
     SvxColorTabPage m_xCtlPreviewNew std::unique_ptr<weld::CustomWeld>
 cui/source/inc/FontFeaturesDialog.hxx:51
     cui::FontFeaturesDialog m_xContentWindow std::unique_ptr<weld::ScrolledWindow>
@@ -104,24 +108,30 @@ cui/source/inc/transfrm.hxx:187
     SvxAngleTabPage m_xCtlRect std::unique_ptr<weld::CustomWeld>
 cui/source/inc/transfrm.hxx:190
     SvxAngleTabPage m_xCtlAngle std::unique_ptr<weld::CustomWeld>
-dbaccess/source/inc/dsntypes.hxx:107
-    dbaccess::ODsnTypeCollection m_xContext css::uno::Reference<css::uno::XComponentContext>
+cui/source/inc/treeopt.hxx:84
+    OptionsNode m_sPageURL class rtl::OUString
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:116
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
 dbaccess/source/ui/dlg/advancedsettings.hxx:95
     dbaui::GeneratedValuesPage m_xAutoIncrementLabel std::unique_ptr<weld::Label>
 dbaccess/source/ui/dlg/advancedsettings.hxx:97
     dbaui::GeneratedValuesPage m_xAutoRetrievingLabel std::unique_ptr<weld::Label>
-dbaccess/source/ui/dlg/detailpages.hxx:65
+dbaccess/source/ui/dlg/detailpages.hxx:63
     dbaui::OCommonBehaviourTabPage m_xAutoRetrievingEnabled std::unique_ptr<weld::CheckButton>
-dbaccess/source/ui/dlg/detailpages.hxx:66
+dbaccess/source/ui/dlg/detailpages.hxx:64
     dbaui::OCommonBehaviourTabPage m_xAutoIncrementLabel std::unique_ptr<weld::Label>
-dbaccess/source/ui/dlg/detailpages.hxx:67
+dbaccess/source/ui/dlg/detailpages.hxx:65
     dbaui::OCommonBehaviourTabPage m_xAutoIncrement std::unique_ptr<weld::Entry>
-dbaccess/source/ui/dlg/detailpages.hxx:68
+dbaccess/source/ui/dlg/detailpages.hxx:66
     dbaui::OCommonBehaviourTabPage m_xAutoRetrievingLabel std::unique_ptr<weld::Label>
-dbaccess/source/ui/dlg/detailpages.hxx:69
+dbaccess/source/ui/dlg/detailpages.hxx:67
     dbaui::OCommonBehaviourTabPage m_xAutoRetrieving std::unique_ptr<weld::Entry>
+dbaccess/source/ui/dlg/dsselect.hxx:40
+    dbaui::ODatasourceSelectDialog m_xOk std::unique_ptr<weld::Button>
+dbaccess/source/ui/dlg/dsselect.hxx:41
+    dbaui::ODatasourceSelectDialog m_xCancel std::unique_ptr<weld::Button>
+dbaccess/source/ui/dlg/dsselect.hxx:42
+    dbaui::ODatasourceSelectDialog m_xManageDatasources std::unique_ptr<weld::Button>
 emfio/source/emfuno/xemfparser.cxx:61
     emfio::emfreader::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:44
@@ -132,7 +142,7 @@ filter/source/xsltdialog/xmlfiltertabpagebasic.hxx:36
     XMLFilterTabPageBasic m_xContainer std::unique_ptr<weld::Widget>
 filter/source/xsltdialog/xmlfiltertabpagexslt.hxx:48
     XMLFilterTabPageXSLT m_xContainer std::unique_ptr<weld::Widget>
-helpcompiler/inc/HelpCompiler.hxx:230
+helpcompiler/inc/HelpCompiler.hxx:229
     HelpCompiler lang const std::string
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:61
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
@@ -148,130 +158,130 @@ include/registry/registry.hxx:35
     Registry_Api acquire void (*)(RegHandle)
 include/sfx2/mgetempl.hxx:60
     SfxManageStyleSheetPage m_xNameFt std::unique_ptr<weld::Label>
-include/sfx2/msg.hxx:117
+include/sfx2/msg.hxx:120
     SfxType0 createSfxPoolItemFunc const std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:119
+include/sfx2/msg.hxx:122
     SfxType0 nAttribs const sal_uInt16
-include/sfx2/msg.hxx:132
-    SfxType1 pType const std::type_info *
-include/sfx2/msg.hxx:132
-    SfxType1 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:132
+include/sfx2/msg.hxx:135
     SfxType1 nAttribs sal_uInt16
-include/sfx2/msg.hxx:132
+include/sfx2/msg.hxx:135
+    SfxType1 pType const std::type_info *
+include/sfx2/msg.hxx:135
     SfxType1 aAttrib struct SfxTypeAttrib [1]
-include/sfx2/msg.hxx:133
+include/sfx2/msg.hxx:135
+    SfxType1 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:136
     SfxType2 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:133
+include/sfx2/msg.hxx:136
     SfxType2 pType const std::type_info *
-include/sfx2/msg.hxx:133
-    SfxType2 nAttribs sal_uInt16
-include/sfx2/msg.hxx:133
+include/sfx2/msg.hxx:136
     SfxType2 aAttrib struct SfxTypeAttrib [2]
-include/sfx2/msg.hxx:134
-    SfxType3 pType const std::type_info *
-include/sfx2/msg.hxx:134
-    SfxType3 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:134
+include/sfx2/msg.hxx:136
+    SfxType2 nAttribs sal_uInt16
+include/sfx2/msg.hxx:137
     SfxType3 nAttribs sal_uInt16
-include/sfx2/msg.hxx:134
+include/sfx2/msg.hxx:137
+    SfxType3 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:137
+    SfxType3 pType const std::type_info *
+include/sfx2/msg.hxx:137
     SfxType3 aAttrib struct SfxTypeAttrib [3]
-include/sfx2/msg.hxx:135
+include/sfx2/msg.hxx:138
     SfxType4 aAttrib struct SfxTypeAttrib [4]
-include/sfx2/msg.hxx:135
-    SfxType4 nAttribs sal_uInt16
-include/sfx2/msg.hxx:135
+include/sfx2/msg.hxx:138
     SfxType4 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:135
+include/sfx2/msg.hxx:138
     SfxType4 pType const std::type_info *
-include/sfx2/msg.hxx:136
-    SfxType5 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:136
-    SfxType5 aAttrib struct SfxTypeAttrib [5]
-include/sfx2/msg.hxx:136
+include/sfx2/msg.hxx:138
+    SfxType4 nAttribs sal_uInt16
+include/sfx2/msg.hxx:139
     SfxType5 pType const std::type_info *
-include/sfx2/msg.hxx:136
+include/sfx2/msg.hxx:139
+    SfxType5 aAttrib struct SfxTypeAttrib [5]
+include/sfx2/msg.hxx:139
     SfxType5 nAttribs sal_uInt16
-include/sfx2/msg.hxx:137
-    SfxType6 nAttribs sal_uInt16
-include/sfx2/msg.hxx:137
+include/sfx2/msg.hxx:139
+    SfxType5 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:140
     SfxType6 pType const std::type_info *
-include/sfx2/msg.hxx:137
+include/sfx2/msg.hxx:140
     SfxType6 aAttrib struct SfxTypeAttrib [6]
-include/sfx2/msg.hxx:137
+include/sfx2/msg.hxx:140
     SfxType6 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:138
-    SfxType7 nAttribs sal_uInt16
-include/sfx2/msg.hxx:138
-    SfxType7 aAttrib struct SfxTypeAttrib [7]
-include/sfx2/msg.hxx:138
+include/sfx2/msg.hxx:140
+    SfxType6 nAttribs sal_uInt16
+include/sfx2/msg.hxx:141
     SfxType7 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:138
+include/sfx2/msg.hxx:141
+    SfxType7 aAttrib struct SfxTypeAttrib [7]
+include/sfx2/msg.hxx:141
+    SfxType7 nAttribs sal_uInt16
+include/sfx2/msg.hxx:141
     SfxType7 pType const std::type_info *
-include/sfx2/msg.hxx:139
-    SfxType8 aAttrib struct SfxTypeAttrib [8]
-include/sfx2/msg.hxx:139
+include/sfx2/msg.hxx:142
     SfxType8 pType const std::type_info *
-include/sfx2/msg.hxx:139
-    SfxType8 nAttribs sal_uInt16
-include/sfx2/msg.hxx:139
+include/sfx2/msg.hxx:142
+    SfxType8 aAttrib struct SfxTypeAttrib [8]
+include/sfx2/msg.hxx:142
     SfxType8 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:140
-    SfxType10 pType const std::type_info *
-include/sfx2/msg.hxx:140
+include/sfx2/msg.hxx:142
+    SfxType8 nAttribs sal_uInt16
+include/sfx2/msg.hxx:143
     SfxType10 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:140
-    SfxType10 nAttribs sal_uInt16
-include/sfx2/msg.hxx:140
+include/sfx2/msg.hxx:143
     SfxType10 aAttrib struct SfxTypeAttrib [10]
-include/sfx2/msg.hxx:141
-    SfxType11 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:141
-    SfxType11 nAttribs sal_uInt16
-include/sfx2/msg.hxx:141
-    SfxType11 pType const std::type_info *
-include/sfx2/msg.hxx:141
+include/sfx2/msg.hxx:143
+    SfxType10 nAttribs sal_uInt16
+include/sfx2/msg.hxx:143
+    SfxType10 pType const std::type_info *
+include/sfx2/msg.hxx:144
     SfxType11 aAttrib struct SfxTypeAttrib [11]
-include/sfx2/msg.hxx:143
-    SfxType13 aAttrib struct SfxTypeAttrib [13]
-include/sfx2/msg.hxx:143
-    SfxType13 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:143
-    SfxType13 nAttribs sal_uInt16
-include/sfx2/msg.hxx:143
+include/sfx2/msg.hxx:144
+    SfxType11 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:144
+    SfxType11 nAttribs sal_uInt16
+include/sfx2/msg.hxx:144
+    SfxType11 pType const std::type_info *
+include/sfx2/msg.hxx:146
     SfxType13 pType const std::type_info *
-include/sfx2/msg.hxx:144
+include/sfx2/msg.hxx:146
+    SfxType13 aAttrib struct SfxTypeAttrib [13]
+include/sfx2/msg.hxx:146
+    SfxType13 nAttribs sal_uInt16
+include/sfx2/msg.hxx:146
+    SfxType13 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:147
     SfxType14 pType const std::type_info *
-include/sfx2/msg.hxx:144
-    SfxType14 aAttrib struct SfxTypeAttrib [14]
-include/sfx2/msg.hxx:144
-    SfxType14 nAttribs sal_uInt16
-include/sfx2/msg.hxx:144
+include/sfx2/msg.hxx:147
     SfxType14 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:145
+include/sfx2/msg.hxx:147
+    SfxType14 aAttrib struct SfxTypeAttrib [14]
+include/sfx2/msg.hxx:147
+    SfxType14 nAttribs sal_uInt16
+include/sfx2/msg.hxx:148
     SfxType16 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:145
-    SfxType16 pType const std::type_info *
-include/sfx2/msg.hxx:145
+include/sfx2/msg.hxx:148
     SfxType16 nAttribs sal_uInt16
-include/sfx2/msg.hxx:145
+include/sfx2/msg.hxx:148
     SfxType16 aAttrib struct SfxTypeAttrib [16]
-include/sfx2/msg.hxx:146
-    SfxType17 nAttribs sal_uInt16
-include/sfx2/msg.hxx:146
-    SfxType17 pType const std::type_info *
-include/sfx2/msg.hxx:146
+include/sfx2/msg.hxx:148
+    SfxType16 pType const std::type_info *
+include/sfx2/msg.hxx:149
     SfxType17 aAttrib struct SfxTypeAttrib [17]
-include/sfx2/msg.hxx:146
+include/sfx2/msg.hxx:149
+    SfxType17 pType const std::type_info *
+include/sfx2/msg.hxx:149
+    SfxType17 nAttribs sal_uInt16
+include/sfx2/msg.hxx:149
     SfxType17 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:147
-    SfxType23 nAttribs sal_uInt16
-include/sfx2/msg.hxx:147
-    SfxType23 aAttrib struct SfxTypeAttrib [23]
-include/sfx2/msg.hxx:147
-    SfxType23 pType const std::type_info *
-include/sfx2/msg.hxx:147
+include/sfx2/msg.hxx:150
     SfxType23 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:150
+    SfxType23 aAttrib struct SfxTypeAttrib [23]
+include/sfx2/msg.hxx:150
+    SfxType23 pType const std::type_info *
+include/sfx2/msg.hxx:150
+    SfxType23 nAttribs sal_uInt16
 include/svtools/ctrlbox.hxx:300
     SvtLineListBox m_xLineSetWin std::unique_ptr<weld::CustomWeld>
 include/svtools/genericunodialog.hxx:216
@@ -328,6 +338,8 @@ lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char [2]
 opencl/source/openclwrapper.cxx:304
     openclwrapper::(anonymous namespace)::OpenCLEnv mpOclCmdQueue cl_command_queue [1]
+pyuno/source/module/pyuno_callable.cxx:42
+    pyuno::PyUNO_callable ob_base PyObject
 pyuno/source/module/pyuno_impl.hxx:224
     pyuno::(anonymous) ob_base PyObject
 pyuno/source/module/pyuno_impl.hxx:324
@@ -387,9 +399,9 @@ sal/qa/osl/pipe/osl_Pipe.cxx:524
 sal/qa/osl/pipe/osl_Pipe.cxx:562
     osl_Pipe::getHandle bRes1 _Bool
 sal/qa/osl/pipe/osl_Pipe.cxx:846
-    osl_StreamPipe::recv bRes1 _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:846
     osl_StreamPipe::recv bRes _Bool
+sal/qa/osl/pipe/osl_Pipe.cxx:846
+    osl_StreamPipe::recv bRes1 _Bool
 sal/qa/osl/security/osl_Security.cxx:61
     osl_Security::ctors bRes _Bool
 sal/qa/osl/security/osl_Security.cxx:61
@@ -412,13 +424,13 @@ sc/source/filter/html/htmlpars.cxx:3003
     (anonymous namespace)::CSSHandler::MemStr mn size_t
 sc/source/filter/inc/sheetdatacontext.hxx:62
     oox::xls::SheetDataContext aReleaser const class SolarMutexReleaser
-sc/source/ui/inc/colorformat.hxx:33
+sc/source/ui/inc/colorformat.hxx:32
     ScDataBarSettingsDlg mxBtnCancel std::unique_ptr<weld::Button>
 sc/source/ui/inc/crdlg.hxx:32
     ScColOrRowDlg m_xBtnRows std::unique_ptr<weld::RadioButton>
 sc/source/ui/inc/delcodlg.hxx:39
     ScDeleteContentsDlg m_xBtnOk std::unique_ptr<weld::Button>
-sc/source/ui/inc/docsh.hxx:454
+sc/source/ui/inc/docsh.hxx:452
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sc/source/ui/inc/instbdlg.hxx:66
     ScInsertTableDlg m_xBtnBehind std::unique_ptr<weld::RadioButton>
@@ -426,23 +438,23 @@ sc/source/ui/inc/pvfundlg.hxx:83
     ScDPFunctionDlg mxBtnOk std::unique_ptr<weld::Button>
 sc/source/ui/inc/pvfundlg.hxx:123
     ScDPSubtotalDlg mxBtnOk std::unique_ptr<weld::Button>
-sc/source/ui/inc/scuiimoptdlg.hxx:62
+sc/source/ui/inc/scuiimoptdlg.hxx:63
     ScImportOptionsDlg m_xBtnOk std::unique_ptr<weld::Button>
-sd/source/ui/animations/CustomAnimationDialog.cxx:1746
+sd/source/ui/animations/CustomAnimationDialog.cxx:1736
     sd::CustomAnimationEffectTabPage mxContainer std::unique_ptr<weld::Container>
-sd/source/ui/animations/CustomAnimationDialog.cxx:1752
+sd/source/ui/animations/CustomAnimationDialog.cxx:1742
     sd::CustomAnimationEffectTabPage mxFTSound std::unique_ptr<weld::Label>
-sd/source/ui/animations/CustomAnimationDialog.cxx:1755
+sd/source/ui/animations/CustomAnimationDialog.cxx:1745
     sd::CustomAnimationEffectTabPage mxFTAfterEffect std::unique_ptr<weld::Label>
-sd/source/ui/animations/CustomAnimationDialog.cxx:2276
+sd/source/ui/animations/CustomAnimationDialog.cxx:2266
     sd::CustomAnimationDurationTabPage mxContainer std::unique_ptr<weld::Container>
-sd/source/ui/animations/CustomAnimationDialog.cxx:2277
+sd/source/ui/animations/CustomAnimationDialog.cxx:2267
     sd::CustomAnimationDurationTabPage mxFTStart std::unique_ptr<weld::Label>
-sd/source/ui/animations/CustomAnimationDialog.cxx:2279
+sd/source/ui/animations/CustomAnimationDialog.cxx:2269
     sd::CustomAnimationDurationTabPage mxFTStartDelay std::unique_ptr<weld::Label>
-sd/source/ui/animations/CustomAnimationDialog.cxx:2642
+sd/source/ui/animations/CustomAnimationDialog.cxx:2632
     sd::CustomAnimationTextAnimTabPage mxContainer std::unique_ptr<weld::Container>
-sd/source/ui/animations/CustomAnimationDialog.cxx:2643
+sd/source/ui/animations/CustomAnimationDialog.cxx:2633
     sd::CustomAnimationTextAnimTabPage mxFTGroupText std::unique_ptr<weld::Label>
 sd/source/ui/animations/CustomAnimationDialog.hxx:141
     sd::SdPropertySubControl mxContainer std::unique_ptr<weld::Container>
@@ -464,21 +476,23 @@ sd/source/ui/table/TableDesignPane.hxx:100
     sd::TableDesignPane aImpl const class sd::TableDesignWidget
 sd/source/ui/view/DocumentRenderer.cxx:1297
     sd::DocumentRenderer::Implementation mxObjectShell const SfxObjectShellRef
-sd/source/ui/view/viewshel.cxx:1201
+sd/source/ui/view/viewshel.cxx:1208
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock const sd::slidesorter::view::class SlideSorterView::DrawLock
-sd/source/ui/view/viewshel.cxx:1202
+sd/source/ui/view/viewshel.cxx:1209
     sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock const sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
-sd/source/ui/view/viewshel.cxx:1203
+sd/source/ui/view/viewshel.cxx:1210
     sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock const sd::slidesorter::controller::class PageSelector::UpdateLock
-sd/source/ui/view/viewshel.cxx:1204
+sd/source/ui/view/viewshel.cxx:1211
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext const sd::slidesorter::controller::class SelectionObserver::Context
 sd/source/ui/view/ViewShellBase.cxx:194
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
-    PDFGrammar::definition value rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     PDFGrammar::definition array rule<ScannerT>
-sfx2/source/doc/doctempl.cxx:116
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
+    PDFGrammar::definition value rule<ScannerT>
+sfx2/source/bastyp/progress.cxx:53
+    SfxProgress_Impl aStateText class rtl::OUString
+sfx2/source/doc/doctempl.cxx:117
     DocTempl::DocTempl_EntryData_Impl mxObjShell const class SfxObjectShellLock
 sfx2/source/inc/sfxpicklist.hxx:33
     SfxPickList mxImpl std::unique_ptr<SfxPickListImpl>
@@ -497,9 +511,9 @@ sfx2/source/view/viewfrm.cxx:165
 slideshow/source/engine/opengl/TransitionImpl.cxx:1990
     (anonymous namespace)::ThreeFloats z GLfloat
 slideshow/source/engine/opengl/TransitionImpl.cxx:1990
-    (anonymous namespace)::ThreeFloats y GLfloat
-slideshow/source/engine/opengl/TransitionImpl.cxx:1990
     (anonymous namespace)::ThreeFloats x GLfloat
+slideshow/source/engine/opengl/TransitionImpl.cxx:1990
+    (anonymous namespace)::ThreeFloats y GLfloat
 starmath/inc/dialog.hxx:90
     SmFontDialog m_xShowFont std::unique_ptr<weld::CustomWeld>
 starmath/inc/dialog.hxx:330
@@ -519,26 +533,26 @@ starmath/inc/view.hxx:217
 starmath/source/accessibility.hxx:268
     SmEditSource rEditAcc class SmEditAccessible &
 svl/source/crypto/cryptosign.cxx:123
-    (anonymous namespace)::(anonymous) extnID const SECItem
+    (anonymous namespace)::Extension extnID const SECItem
 svl/source/crypto/cryptosign.cxx:124
-    (anonymous namespace)::(anonymous) critical const SECItem
+    (anonymous namespace)::Extension critical const SECItem
 svl/source/crypto/cryptosign.cxx:125
-    (anonymous namespace)::(anonymous) extnValue const SECItem
+    (anonymous namespace)::Extension extnValue const SECItem
 svl/source/crypto/cryptosign.cxx:283
-    (anonymous namespace)::(anonymous) statusString SECItem
+    (anonymous namespace)::PKIStatusInfo statusString SECItem
 svl/source/crypto/cryptosign.cxx:284
-    (anonymous namespace)::(anonymous) failInfo SECItem
-svtools/source/filter/exportdialog.hxx:125
+    (anonymous namespace)::PKIStatusInfo failInfo SECItem
+svtools/source/filter/exportdialog.hxx:124
     ExportDialog mxEncoding std::unique_ptr<weld::Widget>
 svx/source/inc/datanavi.hxx:408
     svxform::AddDataItemDialog m_xDataTypeFT std::unique_ptr<weld::Label>
 svx/source/inc/datanavi.hxx:591
     svxform::AddInstanceDialog m_xURLFT std::unique_ptr<weld::Label>
-svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.hxx:156
+svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.hxx:151
     textconversiondlgs::ChineseDictionaryDialog m_xFT_Term std::unique_ptr<weld::Label>
-svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.hxx:159
+svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.hxx:154
     textconversiondlgs::ChineseDictionaryDialog m_xFT_Mapping std::unique_ptr<weld::Label>
-svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.hxx:162
+svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.hxx:157
     textconversiondlgs::ChineseDictionaryDialog m_xFT_Property std::unique_ptr<weld::Label>
 sw/source/core/crsr/crbm.cxx:66
     (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
@@ -550,6 +564,8 @@ sw/source/ui/config/mailconfigpage.cxx:57
     SwTestAccountSettingsDialog m_xEstablish std::unique_ptr<weld::Label>
 sw/source/ui/config/mailconfigpage.cxx:58
     SwTestAccountSettingsDialog m_xFind std::unique_ptr<weld::Label>
+sw/source/ui/dbui/createaddresslistdialog.cxx:57
+    SwAddressFragment m_xOrigContainer std::unique_ptr<weld::Container>
 sw/source/ui/dbui/mmgreetingspage.hxx:114
     SwMailBodyDialog m_xBodyFT std::unique_ptr<weld::Label>
 sw/source/ui/envelp/labfmt.hxx:75
@@ -616,6 +632,8 @@ vcl/inc/opengl/zone.hxx:46
     OpenGLVCLContextZone aZone const class OpenGLZone
 vcl/inc/salprn.hxx:45
     SalPrinterQueueInfo mpPortName std::unique_ptr<OUString>
+vcl/inc/widgetdraw/WidgetDefinition.hxx:203
+    vcl::WidgetDefinitionPart msOrientation class rtl::OString
 vcl/inc/WidgetThemeLibrary.hxx:87
     vcl::ControlDrawParameters nSize uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:88
@@ -626,7 +644,7 @@ vcl/inc/WidgetThemeLibrary.hxx:90
     vcl::ControlDrawParameters eState enum ControlState
 vcl/inc/WidgetThemeLibrary.hxx:106
     vcl::WidgetThemeLibrary_t nSize uint32_t
-vcl/source/app/salvtables.cxx:744
+vcl/source/app/salvtables.cxx:779
     SalInstanceContainer m_xContainer VclPtr<vcl::Window>
 vcl/source/gdi/jobset.cxx:36
     ImplOldJobSetupData cDeviceName char [32]
@@ -638,10 +656,10 @@ vcl/unx/generic/print/prtsetup.hxx:73
     RTSPaperPage m_xContainer std::unique_ptr<weld::Widget>
 vcl/unx/generic/print/prtsetup.hxx:108
     RTSDevicePage m_xContainer std::unique_ptr<weld::Widget>
-vcl/unx/gtk3/gtk3gtkinst.cxx:2668
+vcl/unx/gtk3/gtk3gtkinst.cxx:2853
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
-    (anonymous) atk_hyper_link const AtkHyperlink
+    HyperLink atk_hyper_link const AtkHyperlink
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:43
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
 writerperfect/inc/WPFTEncodingDialog.hxx:37

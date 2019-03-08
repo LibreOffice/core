@@ -28,6 +28,8 @@ canvas/workben/canvasdemo.cxx:82
     DemoRenderer maColorWhite uno::Sequence<double>
 chart2/source/controller/accessibility/AccessibleChartShape.hxx:79
     chart::AccessibleChartShape m_aShapeTreeInfo ::accessibility::AccessibleShapeTreeInfo
+chart2/source/controller/chartapiwrapper/DataSeriesPointWrapper.cxx:392
+    (anonymous namespace)::WrappedLineStyleProperty m_aDefaultValue class com::sun::star::uno::Any
 chart2/source/controller/inc/dlg_View3D.hxx:53
     chart::View3DDialog m_aControllerLocker class chart::ControllerLockHelper
 chart2/source/controller/inc/RangeSelectionListener.hxx:63
@@ -82,7 +84,7 @@ cppcanvas/source/mtfrenderer/textaction.cxx:1638
     cppcanvas::internal::(anonymous namespace)::OutlineAction maTextLineInfo const tools::TextLineInfo
 cppu/source/threadpool/threadpool.cxx:354
     _uno_ThreadPool dummy sal_Int32
-cppu/source/typelib/typelib.cxx:56
+cppu/source/typelib/typelib.cxx:57
     AlignSize_Impl nInt16 sal_Int16
 cppu/source/uno/check.cxx:38
     (anonymous namespace)::C1 n1 sal_Int16
@@ -128,24 +130,26 @@ cppu/source/uno/check.cxx:134
     (anonymous namespace)::Char3 c3 char
 cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
-cui/source/dialogs/colorpicker.cxx:713
+cui/source/dialogs/colorpicker.cxx:719
     cui::ColorPickerDialog m_aColorPrevious class cui::ColorPreviewControl
 cui/source/factory/dlgfact.cxx:1386
     SvxMacroAssignDialog m_aItems class SfxItemSet
-cui/source/inc/cfgutil.hxx:274
+cui/source/inc/cfgutil.hxx:227
     SvxScriptSelectorDialog m_aStylesInfo struct SfxStylesInfo_Impl
 cui/source/inc/cuitabarea.hxx:230
     SvxAreaTabPage maFixed_ChangeType enum ChangeType
 cui/source/inc/cuitabarea.hxx:238
     SvxAreaTabPage m_aXFillAttr class XFillAttrSetItem
-cui/source/inc/tabstpge.hxx:92
+cui/source/inc/tabstpge.hxx:88
     SvxTabulatorTabPage m_aLeftWin class TabWin_Impl
-cui/source/inc/tabstpge.hxx:93
+cui/source/inc/tabstpge.hxx:89
     SvxTabulatorTabPage m_aRightWin class TabWin_Impl
-cui/source/inc/tabstpge.hxx:94
+cui/source/inc/tabstpge.hxx:90
     SvxTabulatorTabPage m_aCenterWin class TabWin_Impl
-cui/source/inc/tabstpge.hxx:95
+cui/source/inc/tabstpge.hxx:91
     SvxTabulatorTabPage m_aDezWin class TabWin_Impl
+cui/source/inc/treeopt.hxx:84
+    OptionsNode m_sPageURL class rtl::OUString
 dbaccess/source/core/api/RowSet.hxx:111
     dbaccess::ORowSet m_aURL class rtl::OUString
 dbaccess/source/core/api/RowSet.hxx:125
@@ -158,11 +162,11 @@ dbaccess/source/core/api/RowSet.hxx:141
     dbaccess::ORowSet m_bIsBookmarkable _Bool
 dbaccess/source/core/api/RowSet.hxx:143
     dbaccess::ORowSet m_bCanUpdateInsertedRows _Bool
-dbaccess/source/core/api/RowSet.hxx:460
+dbaccess/source/core/api/RowSet.hxx:459
     dbaccess::ORowSetClone m_nFetchDirection sal_Int32
-dbaccess/source/core/api/RowSet.hxx:461
+dbaccess/source/core/api/RowSet.hxx:460
     dbaccess::ORowSetClone m_nFetchSize sal_Int32
-dbaccess/source/core/api/RowSet.hxx:462
+dbaccess/source/core/api/RowSet.hxx:461
     dbaccess::ORowSetClone m_bIsBookmarkable _Bool
 dbaccess/source/core/dataaccess/connection.hxx:101
     dbaccess::OConnection m_nInAppend std::atomic<std::size_t>
@@ -184,9 +188,9 @@ filter/source/graphicfilter/icgm/chart.hxx:46
     DataNode nBoxX2 sal_Int16
 filter/source/graphicfilter/icgm/chart.hxx:47
     DataNode nBoxY2 sal_Int16
-helpcompiler/inc/HelpCompiler.hxx:230
+helpcompiler/inc/HelpCompiler.hxx:229
     HelpCompiler lang const std::string
-include/basic/basmgr.hxx:52
+include/basic/basmgr.hxx:56
     BasicError nReason enum BasicErrorReason
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:61
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
@@ -194,148 +198,146 @@ include/drawinglayer/texture/texture3d.hxx:62
     drawinglayer::texture::GeoTexSvxBitmapEx maBitmap class Bitmap
 include/drawinglayer/texture/texture3d.hxx:64
     drawinglayer::texture::GeoTexSvxBitmapEx maTransparence class Bitmap
-include/filter/msfilter/svdfppt.hxx:881
-    ImplPPTParaPropSet nDontKnow1 sal_uInt32
 include/filter/msfilter/svdfppt.hxx:882
-    ImplPPTParaPropSet nDontKnow2 sal_uInt32
+    ImplPPTParaPropSet nDontKnow1 sal_uInt32
 include/filter/msfilter/svdfppt.hxx:883
+    ImplPPTParaPropSet nDontKnow2 sal_uInt32
+include/filter/msfilter/svdfppt.hxx:884
     ImplPPTParaPropSet nDontKnow2bit06 sal_uInt16
 include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
 include/LibreOfficeKit/LibreOfficeKitGtk.h:38
     _LOKDocViewClass parent_class GtkDrawingAreaClass
-include/oox/drawingml/shapegroupcontext.hxx:43
-    oox::drawingml::ShapeGroupContext mpMasterShapePtr oox::drawingml::ShapePtr
 include/oox/export/shapes.hxx:123
     oox::drawingml::ShapeExport maShapeMap oox::drawingml::ShapeExport::ShapeHashMap
 include/registry/registry.hxx:35
     Registry_Api acquire void (*)(RegHandle)
 include/sfx2/classificationhelper.hxx:127
     sfx::ClassificationKeyCreator m_ePolicyType const enum SfxClassificationPolicyType
-include/sfx2/msg.hxx:117
+include/sfx2/msg.hxx:120
     SfxType0 createSfxPoolItemFunc const std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:119
+include/sfx2/msg.hxx:122
     SfxType0 nAttribs const sal_uInt16
-include/sfx2/msg.hxx:132
+include/sfx2/msg.hxx:135
     SfxType1 aAttrib struct SfxTypeAttrib [1]
-include/sfx2/msg.hxx:132
+include/sfx2/msg.hxx:135
     SfxType1 nAttribs sal_uInt16
-include/sfx2/msg.hxx:132
-    SfxType1 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:132
+include/sfx2/msg.hxx:135
     SfxType1 pType const std::type_info *
-include/sfx2/msg.hxx:133
-    SfxType2 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:133
-    SfxType2 pType const std::type_info *
-include/sfx2/msg.hxx:133
+include/sfx2/msg.hxx:135
+    SfxType1 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:136
     SfxType2 aAttrib struct SfxTypeAttrib [2]
-include/sfx2/msg.hxx:133
+include/sfx2/msg.hxx:136
     SfxType2 nAttribs sal_uInt16
-include/sfx2/msg.hxx:134
-    SfxType3 aAttrib struct SfxTypeAttrib [3]
-include/sfx2/msg.hxx:134
-    SfxType3 pType const std::type_info *
-include/sfx2/msg.hxx:134
-    SfxType3 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:134
+include/sfx2/msg.hxx:136
+    SfxType2 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:136
+    SfxType2 pType const std::type_info *
+include/sfx2/msg.hxx:137
     SfxType3 nAttribs sal_uInt16
-include/sfx2/msg.hxx:135
-    SfxType4 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:135
-    SfxType4 pType const std::type_info *
-include/sfx2/msg.hxx:135
-    SfxType4 aAttrib struct SfxTypeAttrib [4]
-include/sfx2/msg.hxx:135
+include/sfx2/msg.hxx:137
+    SfxType3 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:137
+    SfxType3 pType const std::type_info *
+include/sfx2/msg.hxx:137
+    SfxType3 aAttrib struct SfxTypeAttrib [3]
+include/sfx2/msg.hxx:138
     SfxType4 nAttribs sal_uInt16
-include/sfx2/msg.hxx:136
-    SfxType5 pType const std::type_info *
-include/sfx2/msg.hxx:136
-    SfxType5 nAttribs sal_uInt16
-include/sfx2/msg.hxx:136
+include/sfx2/msg.hxx:138
+    SfxType4 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:138
+    SfxType4 aAttrib struct SfxTypeAttrib [4]
+include/sfx2/msg.hxx:138
+    SfxType4 pType const std::type_info *
+include/sfx2/msg.hxx:139
     SfxType5 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:136
+include/sfx2/msg.hxx:139
+    SfxType5 pType const std::type_info *
+include/sfx2/msg.hxx:139
     SfxType5 aAttrib struct SfxTypeAttrib [5]
-include/sfx2/msg.hxx:137
-    SfxType6 nAttribs sal_uInt16
-include/sfx2/msg.hxx:137
-    SfxType6 pType const std::type_info *
-include/sfx2/msg.hxx:137
-    SfxType6 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:137
+include/sfx2/msg.hxx:139
+    SfxType5 nAttribs sal_uInt16
+include/sfx2/msg.hxx:140
     SfxType6 aAttrib struct SfxTypeAttrib [6]
-include/sfx2/msg.hxx:138
-    SfxType7 pType const std::type_info *
-include/sfx2/msg.hxx:138
-    SfxType7 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:138
+include/sfx2/msg.hxx:140
+    SfxType6 nAttribs sal_uInt16
+include/sfx2/msg.hxx:140
+    SfxType6 pType const std::type_info *
+include/sfx2/msg.hxx:140
+    SfxType6 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:141
     SfxType7 nAttribs sal_uInt16
-include/sfx2/msg.hxx:138
+include/sfx2/msg.hxx:141
+    SfxType7 pType const std::type_info *
+include/sfx2/msg.hxx:141
+    SfxType7 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:141
     SfxType7 aAttrib struct SfxTypeAttrib [7]
-include/sfx2/msg.hxx:139
+include/sfx2/msg.hxx:142
     SfxType8 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:139
-    SfxType8 aAttrib struct SfxTypeAttrib [8]
-include/sfx2/msg.hxx:139
-    SfxType8 pType const std::type_info *
-include/sfx2/msg.hxx:139
+include/sfx2/msg.hxx:142
     SfxType8 nAttribs sal_uInt16
-include/sfx2/msg.hxx:140
-    SfxType10 pType const std::type_info *
-include/sfx2/msg.hxx:140
-    SfxType10 nAttribs sal_uInt16
-include/sfx2/msg.hxx:140
+include/sfx2/msg.hxx:142
+    SfxType8 pType const std::type_info *
+include/sfx2/msg.hxx:142
+    SfxType8 aAttrib struct SfxTypeAttrib [8]
+include/sfx2/msg.hxx:143
     SfxType10 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:140
+include/sfx2/msg.hxx:143
+    SfxType10 nAttribs sal_uInt16
+include/sfx2/msg.hxx:143
     SfxType10 aAttrib struct SfxTypeAttrib [10]
-include/sfx2/msg.hxx:141
-    SfxType11 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:141
-    SfxType11 pType const std::type_info *
-include/sfx2/msg.hxx:141
-    SfxType11 aAttrib struct SfxTypeAttrib [11]
-include/sfx2/msg.hxx:141
+include/sfx2/msg.hxx:143
+    SfxType10 pType const std::type_info *
+include/sfx2/msg.hxx:144
     SfxType11 nAttribs sal_uInt16
-include/sfx2/msg.hxx:143
-    SfxType13 pType const std::type_info *
-include/sfx2/msg.hxx:143
-    SfxType13 nAttribs sal_uInt16
-include/sfx2/msg.hxx:143
-    SfxType13 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:143
+include/sfx2/msg.hxx:144
+    SfxType11 pType const std::type_info *
+include/sfx2/msg.hxx:144
+    SfxType11 aAttrib struct SfxTypeAttrib [11]
+include/sfx2/msg.hxx:144
+    SfxType11 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:146
     SfxType13 aAttrib struct SfxTypeAttrib [13]
-include/sfx2/msg.hxx:144
-    SfxType14 aAttrib struct SfxTypeAttrib [14]
-include/sfx2/msg.hxx:144
-    SfxType14 nAttribs sal_uInt16
-include/sfx2/msg.hxx:144
+include/sfx2/msg.hxx:146
+    SfxType13 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:146
+    SfxType13 nAttribs sal_uInt16
+include/sfx2/msg.hxx:146
+    SfxType13 pType const std::type_info *
+include/sfx2/msg.hxx:147
     SfxType14 pType const std::type_info *
-include/sfx2/msg.hxx:144
+include/sfx2/msg.hxx:147
+    SfxType14 nAttribs sal_uInt16
+include/sfx2/msg.hxx:147
     SfxType14 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:145
+include/sfx2/msg.hxx:147
+    SfxType14 aAttrib struct SfxTypeAttrib [14]
+include/sfx2/msg.hxx:148
     SfxType16 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:145
+include/sfx2/msg.hxx:148
     SfxType16 aAttrib struct SfxTypeAttrib [16]
-include/sfx2/msg.hxx:145
-    SfxType16 nAttribs sal_uInt16
-include/sfx2/msg.hxx:145
+include/sfx2/msg.hxx:148
     SfxType16 pType const std::type_info *
-include/sfx2/msg.hxx:146
-    SfxType17 pType const std::type_info *
-include/sfx2/msg.hxx:146
-    SfxType17 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:146
+include/sfx2/msg.hxx:148
+    SfxType16 nAttribs sal_uInt16
+include/sfx2/msg.hxx:149
     SfxType17 nAttribs sal_uInt16
-include/sfx2/msg.hxx:146
+include/sfx2/msg.hxx:149
     SfxType17 aAttrib struct SfxTypeAttrib [17]
-include/sfx2/msg.hxx:147
+include/sfx2/msg.hxx:149
+    SfxType17 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:149
+    SfxType17 pType const std::type_info *
+include/sfx2/msg.hxx:150
     SfxType23 nAttribs sal_uInt16
-include/sfx2/msg.hxx:147
-    SfxType23 pType const std::type_info *
-include/sfx2/msg.hxx:147
-    SfxType23 aAttrib struct SfxTypeAttrib [23]
-include/sfx2/msg.hxx:147
+include/sfx2/msg.hxx:150
     SfxType23 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:150
+    SfxType23 pType const std::type_info *
+include/sfx2/msg.hxx:150
+    SfxType23 aAttrib struct SfxTypeAttrib [23]
 include/svl/ondemand.hxx:55
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
 include/svx/ClassificationDialog.hxx:59
@@ -348,8 +350,6 @@ include/vcl/svimpbox.hxx:126
     SvImpLBox aFctSet class ImpLBSelEng
 include/xmloff/shapeimport.hxx:140
     SdXML3DLightContext mbSpecular _Bool
-jvmfwk/plugins/sunmajor/pluginlib/sunversion.hxx:102
-    jfw_plugin::SunVersion usVersion class rtl::OUString
 libreofficekit/qa/gtktiledviewer/gtv-application-window.cxx:35
     GtvApplicationWindowPrivate lokDialog GtkWidget *
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:50
@@ -386,7 +386,7 @@ lotuswordpro/source/filter/bento.hxx:353
     OpenStormBento::CBenNamedObject cNameListElmt class OpenStormBento::CBenNamedObjectListElmt
 lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char [2]
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:212
+oox/source/drawingml/diagram/diagramlayoutatoms.hxx:214
     oox::drawingml::ConditionAtom maIter struct oox::drawingml::IteratorAttr
 oox/source/drawingml/diagram/layoutnodecontext.cxx:92
     oox::drawingml::AlgorithmContext mnRevision sal_Int32
@@ -416,6 +416,8 @@ oox/source/ppt/timenodelistcontext.cxx:855
     oox::ppt::AnimMotionContext mnAngle sal_Int32
 opencl/source/openclwrapper.cxx:304
     openclwrapper::(anonymous namespace)::OpenCLEnv mpOclCmdQueue cl_command_queue [1]
+pyuno/source/module/pyuno_callable.cxx:42
+    pyuno::PyUNO_callable ob_base PyObject
 pyuno/source/module/pyuno_impl.hxx:224
     pyuno::(anonymous) ob_base PyObject
 pyuno/source/module/pyuno_impl.hxx:324
@@ -530,6 +532,14 @@ sc/source/filter/xml/xmldrani.hxx:72
     ScXMLDatabaseRangeContext bIsSelection _Bool
 sc/source/filter/xml/xmlexternaltabi.hxx:113
     ScXMLExternalRefCellContext mnCellType sal_Int16
+sc/source/filter/xml/xmlfilti.hxx:157
+    ScXMLDPFilterContext aOutputPosition class ScAddress
+sc/source/filter/xml/xmlfilti.hxx:158
+    ScXMLDPFilterContext aConditionSourceRangeAddress class ScRange
+sc/source/filter/xml/xmlfilti.hxx:162
+    ScXMLDPFilterContext bCopyOutputData _Bool
+sc/source/filter/xml/xmlfilti.hxx:166
+    ScXMLDPFilterContext bConditionSourceRange _Bool
 sc/source/filter/xml/xmltransformationi.hxx:155
     ScXMLDateTimeContext aType class rtl::OUString
 sc/source/ui/inc/acredlin.hxx:51
@@ -566,9 +576,9 @@ sd/inc/anminfo.hxx:52
     SdAnimationInfo maSecondSoundFile const class rtl::OUString
 sd/source/filter/eppt/epptbase.hxx:349
     PPTWriterBase maFraction const class Fraction
-sd/source/filter/ppt/pptin.hxx:82
+sd/source/filter/ppt/pptin.hxx:81
     SdPPTImport maParam struct PowerPointImportParam
-sd/source/ui/inc/AccessibleDocumentViewBase.hxx:262
+sd/source/ui/inc/AccessibleDocumentViewBase.hxx:263
     accessibility::AccessibleDocumentViewBase maViewForwarder class accessibility::AccessibleViewForwarder
 sd/source/ui/remotecontrol/Receiver.hxx:35
     sd::Receiver pTransmitter class sd::Transmitter *
@@ -578,13 +588,13 @@ sd/source/ui/table/TableDesignPane.hxx:100
     sd::TableDesignPane aImpl const class sd::TableDesignWidget
 sd/source/ui/view/DocumentRenderer.cxx:1297
     sd::DocumentRenderer::Implementation mxObjectShell const SfxObjectShellRef
-sd/source/ui/view/viewshel.cxx:1201
+sd/source/ui/view/viewshel.cxx:1208
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock const sd::slidesorter::view::class SlideSorterView::DrawLock
-sd/source/ui/view/viewshel.cxx:1202
+sd/source/ui/view/viewshel.cxx:1209
     sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock const sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
-sd/source/ui/view/viewshel.cxx:1203
+sd/source/ui/view/viewshel.cxx:1210
     sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock const sd::slidesorter::controller::class PageSelector::UpdateLock
-sd/source/ui/view/viewshel.cxx:1204
+sd/source/ui/view/viewshel.cxx:1211
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext const sd::slidesorter::controller::class SelectionObserver::Context
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition comment rule<ScannerT>
@@ -613,27 +623,29 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     PDFGrammar::definition value rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
-    PDFGrammar::definition array_end rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
-    PDFGrammar::definition array_begin rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
     PDFGrammar::definition object rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
     PDFGrammar::definition object_end rule<ScannerT>
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
+    PDFGrammar::definition array_end rule<ScannerT>
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
+    PDFGrammar::definition array_begin rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
     PDFGrammar::definition object_begin rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:265
     PDFGrammar::definition trailer rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:265
     PDFGrammar::definition xref rule<ScannerT>
-sfx2/source/doc/doctempl.cxx:116
+sfx2/source/bastyp/progress.cxx:53
+    SfxProgress_Impl aStateText class rtl::OUString
+sfx2/source/doc/doctempl.cxx:117
     DocTempl::DocTempl_EntryData_Impl mxObjShell const class SfxObjectShellLock
 slideshow/source/engine/animationnodes/animationbasenode.hxx:89
     slideshow::internal::AnimationBaseNode mpSubsetManager const slideshow::internal::SubsettableShapeManagerSharedPtr
 slideshow/source/engine/opengl/TransitionImpl.cxx:1990
-    (anonymous namespace)::ThreeFloats y GLfloat
-slideshow/source/engine/opengl/TransitionImpl.cxx:1990
     (anonymous namespace)::ThreeFloats z GLfloat
+slideshow/source/engine/opengl/TransitionImpl.cxx:1990
+    (anonymous namespace)::ThreeFloats y GLfloat
 slideshow/source/engine/opengl/TransitionImpl.cxx:1990
     (anonymous namespace)::ThreeFloats x GLfloat
 slideshow/source/engine/opengl/TransitionImpl.hxx:296
@@ -659,15 +671,15 @@ starmath/source/accessibility.hxx:268
 svgio/inc/svgcharacternode.hxx:89
     svgio::svgreader::SvgTextPosition maY ::std::vector<double>
 svl/source/crypto/cryptosign.cxx:123
-    (anonymous namespace)::(anonymous) extnID const SECItem
+    (anonymous namespace)::Extension extnID const SECItem
 svl/source/crypto/cryptosign.cxx:124
-    (anonymous namespace)::(anonymous) critical const SECItem
+    (anonymous namespace)::Extension critical const SECItem
 svl/source/crypto/cryptosign.cxx:125
-    (anonymous namespace)::(anonymous) extnValue const SECItem
+    (anonymous namespace)::Extension extnValue const SECItem
 svl/source/crypto/cryptosign.cxx:283
-    (anonymous namespace)::(anonymous) statusString SECItem
+    (anonymous namespace)::PKIStatusInfo statusString SECItem
 svl/source/crypto/cryptosign.cxx:284
-    (anonymous namespace)::(anonymous) failInfo SECItem
+    (anonymous namespace)::PKIStatusInfo failInfo SECItem
 svx/inc/GalleryControl.hxx:47
     svx::sidebar::GalleryControl mpGallery class Gallery *
 svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1082
@@ -710,13 +722,13 @@ svx/source/xml/xmleohlp.cxx:72
     OutputStorageWrapper_Impl aTempFile class utl::TempFile
 sw/inc/unosett.hxx:145
     SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
-sw/qa/core/test_ToxTextGenerator.cxx:134
+sw/qa/core/test_ToxTextGenerator.cxx:141
     ToxTextGeneratorWithMockedChapterField mChapterFieldType class SwChapterFieldType
 sw/qa/extras/uiwriter/uiwriter.cxx:4017
     IdleTask maIdle class Idle
 sw/source/core/crsr/crbm.cxx:66
     (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
-sw/source/core/inc/swfont.hxx:986
+sw/source/core/inc/swfont.hxx:985
     SvStatistics nGetStretchTextSize sal_uInt16
 sw/source/core/layout/dbg_lay.cxx:170
     SwImplEnterLeave nAction const enum DbgAction
@@ -724,6 +736,8 @@ sw/source/core/text/inftxt.hxx:686
     SwTextSlot aText class rtl::OUString
 sw/source/core/text/porfld.cxx:140
     SwFieldSlot aText class rtl::OUString
+sw/source/filter/xml/xmltbli.cxx:382
+    SwXMLTableCellContext_Impl mXmlId class rtl::OUString
 sw/source/ui/dbui/mmaddressblockpage.hxx:208
     SwCustomizeAddressBlockDialog m_aTextFilter class TextFilter
 sw/source/uibase/docvw/romenu.hxx:35
@@ -754,8 +768,6 @@ ucb/source/ucp/gio/gio_mount.hxx:51
     OOoMountOperationClass _gtk_reserved3 void (*)(void)
 ucb/source/ucp/gio/gio_mount.hxx:52
     OOoMountOperationClass _gtk_reserved4 void (*)(void)
-unotools/source/config/defaultoptions.cxx:94
-    SvtDefaultOptions_Impl m_aUserDictionaryPath class rtl::OUString
 vcl/headless/svpgdi.cxx:310
     (anonymous namespace)::SourceHelper aTmpBmp class SvpSalBitmap
 vcl/inc/canvasbitmap.hxx:44
@@ -788,6 +800,8 @@ vcl/inc/unx/i18n_ic.hxx:46
     SalI18N_InputContext maSwitchIMCallback XIMCallback
 vcl/inc/unx/i18n_ic.hxx:47
     SalI18N_InputContext maDestroyCallback XIMCallback
+vcl/inc/widgetdraw/WidgetDefinition.hxx:203
+    vcl::WidgetDefinitionPart msOrientation class rtl::OString
 vcl/inc/WidgetThemeLibrary.hxx:87
     vcl::ControlDrawParameters nSize uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:88
@@ -798,18 +812,18 @@ vcl/inc/WidgetThemeLibrary.hxx:90
     vcl::ControlDrawParameters eState enum ControlState
 vcl/inc/WidgetThemeLibrary.hxx:106
     vcl::WidgetThemeLibrary_t nSize uint32_t
-vcl/source/app/salvtables.cxx:1926
+vcl/source/app/salvtables.cxx:2018
     SalInstanceEntry m_aTextFilter class (anonymous namespace)::WeldTextFilter
-vcl/source/app/salvtables.cxx:3708
+vcl/source/app/salvtables.cxx:3924
     SalInstanceComboBoxWithEdit m_aTextFilter class (anonymous namespace)::WeldTextFilter
 vcl/source/gdi/jobset.cxx:36
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:37
     ImplOldJobSetupData cPortName char [32]
-vcl/unx/gtk3/gtk3gtkinst.cxx:2668
+vcl/unx/gtk3/gtk3gtkinst.cxx:2853
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
-    (anonymous) atk_hyper_link const AtkHyperlink
+    HyperLink atk_hyper_link const AtkHyperlink
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent const AtkObject
 vcl/unx/gtk/a11y/atkwrapper.hxx:80
@@ -818,7 +832,7 @@ vcl/unx/gtk/gloactiongroup.cxx:30
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20
     GLOMenu parent_instance const GMenuModel
-writerfilter/source/dmapper/PropertyMap.hxx:197
+writerfilter/source/dmapper/PropertyMap.hxx:198
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
 xmloff/source/text/XMLTextListBlockContext.hxx:35
     XMLTextListBlockContext msListStyleName class rtl::OUString

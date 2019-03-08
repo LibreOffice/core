@@ -1859,7 +1859,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
             OUString sTemp = getGroupName( sLabel, !rExtensionId.isEmpty() );
             if ( !sTemp.isEmpty() )
                 sLabel = sTemp;
-            std::unique_ptr<OptionsNode> pNode(new OptionsNode(sNodeId, sLabel, sPageURL, bAllModules));
+            std::unique_ptr<OptionsNode> pNode(new OptionsNode(sNodeId, sLabel, bAllModules));
 
             if ( rExtensionId.isEmpty() && !isNodeActive( pNode.get(), pModule ) )
             {

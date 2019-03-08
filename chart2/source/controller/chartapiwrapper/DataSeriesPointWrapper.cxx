@@ -389,14 +389,12 @@ public:
 
 protected:
     DataSeriesPointWrapper* m_pDataSeriesPointWrapper;
-    mutable Any             m_aDefaultValue;
 };
 
 WrappedLineStyleProperty::WrappedLineStyleProperty(
                 DataSeriesPointWrapper* pDataSeriesPointWrapper )
                 : WrappedSeriesAreaOrLineProperty("LineStyle","BorderStyle", "LineStyle", pDataSeriesPointWrapper )
                 , m_pDataSeriesPointWrapper( pDataSeriesPointWrapper )
-                , m_aDefaultValue(uno::Any(drawing::LineStyle_SOLID))
 {
 }
 

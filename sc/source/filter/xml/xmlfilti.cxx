@@ -487,14 +487,10 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
     eSearchType(utl::SearchParam::SearchType::Normal),
     nFilterFieldCount(0),
     bSkipDuplicates(false),
-    bCopyOutputData(false),
     bIsCaseSensitive(false),
     bConnectionOr(true),
-    bNextConnectionOr(true),
-    bConditionSourceRange(false)
+    bNextConnectionOr(true)
 {
-    ScDocument* pDoc(GetScImport().GetDocument());
-
     if ( rAttrList.is() )
     {
         for (auto &aIter : *rAttrList)
@@ -503,20 +499,12 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
             {
                 case XML_ELEMENT( TABLE, XML_TARGET_RANGE_ADDRESS ):
                 {
-                    ScRange aScRange;
-                    sal_Int32 nOffset(0);
-                    if (ScRangeStringConverter::GetRangeFromString( aScRange, aIter.toString(), pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
-                    {
-                        aOutputPosition = aScRange.aStart;
-                        bCopyOutputData = true;
-                    }
+                    // not supported
                 }
                 break;
                 case XML_ELEMENT( TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS ):
                 {
-                    sal_Int32 nOffset(0);
-                    if(ScRangeStringConverter::GetRangeFromString( aConditionSourceRangeAddress, aIter.toString(), pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
-                        bConditionSourceRange = true;
+                    // not supported
                 }
                 break;
                 case XML_ELEMENT( TABLE, XML_CONDITION_SOURCE ):
