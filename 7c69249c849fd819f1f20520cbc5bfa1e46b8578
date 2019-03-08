@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_acd60c4f",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5742,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-03-08T11:55:29Z",
+      "side": 1,
+      "message": "This doesn\u0027t even need an extra case and fallthrough, as PopError() pops just any value and if it was an error sets the error. Using PopError() in the default case before the PushIllegalParameter() is enough.",
+      "revId": "7c69249c849fd819f1f20520cbc5bfa1e46b8578",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
