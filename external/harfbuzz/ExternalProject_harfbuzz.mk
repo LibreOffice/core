@@ -46,6 +46,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 				$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS)) \
 				$(if $(ENABLE_OPTIMIZED), \
 					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
+				$(if $(ENABLE_RUNTIME_OPTIMIZATIONS),,-frtti) \
 				$(CXXFLAGS) $(CXXFLAGS_CXX11) \
 				$(ICU_UCHAR_TYPE) \
 				$(if $(filter LINUX,$(OS)),-fvisibility=hidden)' \
