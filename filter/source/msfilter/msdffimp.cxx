@@ -4520,6 +4520,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         Point aStartPt( 0,0 );
                         if ( pAny && ( *pAny >>= seqCoordinates ) && ( seqCoordinates.getLength() >= 4 ) )
                         {
+                            // The coordinates are unsigned 16Bit integer but were read as sal_Int16
+                            // Correct it here.
                             sal_Int32 nPtNum, nNumElemVert = seqCoordinates.getLength();
                             XPolygon aXP( static_cast<sal_uInt16>(nNumElemVert) );
                             for ( nPtNum = 0; nPtNum < nNumElemVert; nPtNum++ )
@@ -4528,8 +4530,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 sal_Int32 nX = 0, nY = 0;
                                 seqCoordinates[ nPtNum ].First.Value >>= nX;
                                 seqCoordinates[ nPtNum ].Second.Value >>= nY;
-                                aP.setX( nX );
-                                aP.setY( nY );
+                                aP.setX(nX < 0 ? nX + 65536 : nX);
+                                aP.setY(nY < 0 ? nY + 65536 : nY);
                                 aXP[ static_cast<sal_uInt16>(nPtNum) ] = aP;
                             }
                             aPolyBoundRect = aXP.GetBoundRect();
