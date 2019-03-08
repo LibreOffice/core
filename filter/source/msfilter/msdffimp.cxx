@@ -2169,12 +2169,25 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     }
                     else
                     {
-                        sal_Int16 nTmpA(0), nTmpB(0);
-                        rIn.ReadInt16( nTmpA )
-                           .ReadInt16( nTmpB );
-
-                        nX = nTmpA;
-                        nY = nTmpB;
+                        // The mso-spt19 (arc) uses this. But it needs unsigned integer. I don't
+                        // know if other shape types also need it. They can be added as necessary.
+                        bool bNeedsUnsigned = rObjData.eShapeType == mso_sptArc;
+                        if (bNeedsUnsigned)
+                        {
+                            sal_uInt16 nTmpA(0), nTmpB(0);
+                            rIn.ReadUInt16(nTmpA)
+                               .ReadUInt16(nTmpB);
+                            nX = nTmpA;
+                            nY = nTmpB;
+                        }
+                        else
+                        {
+                            sal_Int16 nTmpA(0), nTmpB(0);
+                            rIn.ReadInt16( nTmpA )
+                               .ReadInt16( nTmpB );
+                            nX = nTmpA;
+                            nY = nTmpB;
+                        }
                     }
                     EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aCoordinates[ i ].First, nX );
                     EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aCoordinates[ i ].Second, nY );
@@ -4528,8 +4541,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 sal_Int32 nX = 0, nY = 0;
                                 seqCoordinates[ nPtNum ].First.Value >>= nX;
                                 seqCoordinates[ nPtNum ].Second.Value >>= nY;
-                                aP.setX( nX );
-                                aP.setY( nY );
+                                aP.setX(nX);
+                                aP.setY(nY);
                                 aXP[ static_cast<sal_uInt16>(nPtNum) ] = aP;
                             }
                             aPolyBoundRect = aXP.GetBoundRect();
