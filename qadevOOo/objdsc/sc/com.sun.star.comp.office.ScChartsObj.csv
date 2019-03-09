@@ -7,4 +7,3 @@
 "ScChartsObj";"com::sun::star::table::XTableCharts";"removeByName()"
 "ScChartsObj";"com::sun::star::container::XElementAccess";"getElementType()"
 "ScChartsObj";"com::sun::star::container::XElementAccess";"hasElements()"
-"ScChartsObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"

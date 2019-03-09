@@ -118,6 +118,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_cellsenumeration \
 	CppunitTest_sc_chart2dataprovider \
 	CppunitTest_sc_chartobj \
+	CppunitTest_sc_chartsobj \
 	CppunitTest_sc_check_data_pilot_field \
 	CppunitTest_sc_check_data_pilot_table \
 	CppunitTest_sc_check_xcell_ranges_query \
