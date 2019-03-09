@@ -23,36 +23,25 @@
 #include <subtdlg.hxx>
 #include <scui_def.hxx>
 
-ScSubTotalDlg::ScSubTotalDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
-    : SfxTabDialog(pParent, "SubTotalDialog",
-        "modules/scalc/ui/subtotaldialog.ui", pArgSet)
+ScSubTotalDlg::ScSubTotalDlg(weld::Window* pParent, const SfxItemSet* pArgSet)
+    : SfxTabDialogController(pParent, "modules/scalc/ui/subtotaldialog.ui", "SubTotalDialog", pArgSet)
+    , m_xBtnRemove(m_xBuilder->weld_button("remove"))
 {
-    get(m_pBtnRemove, "remove");
 
-    AddTabPage("1stgroup",  ScTpSubTotalGroup1::Create);
-    AddTabPage("2ndgroup",  ScTpSubTotalGroup2::Create);
-    AddTabPage("3rdgroup",  ScTpSubTotalGroup3::Create);
-    AddTabPage("options", ScTpSubTotalOptions::Create);
-    m_pBtnRemove->SetClickHdl( LINK( this, ScSubTotalDlg, RemoveHdl ) );
+    AddTabPage("1stgroup",  ScTpSubTotalGroup1::Create, nullptr);
+    AddTabPage("2ndgroup",  ScTpSubTotalGroup2::Create, nullptr);
+    AddTabPage("3rdgroup",  ScTpSubTotalGroup3::Create, nullptr);
+    AddTabPage("options", ScTpSubTotalOptions::Create, nullptr);
+    m_xBtnRemove->connect_clicked( LINK( this, ScSubTotalDlg, RemoveHdl ) );
 }
 
 ScSubTotalDlg::~ScSubTotalDlg()
 {
-    disposeOnce();
 }
 
-void ScSubTotalDlg::dispose()
+IMPL_LINK_NOARG(ScSubTotalDlg, RemoveHdl, weld::Button&, void)
 {
-    m_pBtnRemove.clear();
-    SfxTabDialog::dispose();
-}
-
-IMPL_LINK( ScSubTotalDlg, RemoveHdl, Button *, pBtn, void )
-{
-    if (pBtn == m_pBtnRemove)
-    {
-        EndDialog( SCRET_REMOVE );
-    }
+    m_xDialog->response(SCRET_REMOVE);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

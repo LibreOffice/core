@@ -22,15 +22,14 @@
 
 #include <sfx2/tabdlg.hxx>
 
-class ScSubTotalDlg : public SfxTabDialog
+class ScSubTotalDlg : public SfxTabDialogController
 {
 public:
-    ScSubTotalDlg(vcl::Window* pParent, const SfxItemSet* pArgSet);
+    ScSubTotalDlg(weld::Window* pParent, const SfxItemSet* pArgSet);
     virtual ~ScSubTotalDlg() override;
-    virtual void dispose() override;
 private:
-    VclPtr<PushButton> m_pBtnRemove;
-    DECL_LINK( RemoveHdl, Button *, void );
+    std::unique_ptr<weld::Button> m_xBtnRemove;
+    DECL_LINK(RemoveHdl, weld::Button&, void);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_SUBTDLG_HXX
