@@ -43,7 +43,6 @@ MacabResultSetMetaData::~MacabResultSetMetaData()
 
 void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns)
 {
-    OSQLColumns::Vector::const_iterator aIter;
     static const char aName[] = "Name";
     MacabRecords *aRecords;
     MacabHeader *aHeader;
@@ -58,12 +57,12 @@ void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity:
 
     aHeader = aRecords->getHeader();
 
-    for (aIter = xColumns->get().begin(); aIter != xColumns->get().end(); ++aIter)
+    for (const auto& rxColumn : xColumns->get())
     {
         OUString aFieldName;
         sal_uInt32 nFieldNumber;
 
-        (*aIter)->getPropertyValue(aName) >>= aFieldName;
+        rxColumn->getPropertyValue(aName) >>= aFieldName;
         nFieldNumber = aHeader->getColumnNumber(aFieldName);
         m_aMacabFields.push_back(nFieldNumber);
     }

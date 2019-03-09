@@ -203,9 +203,9 @@ namespace param
 
                 if ( m_xValueDestination.is() )
                 {
-                    for ( std::vector< sal_Int32 >::const_iterator aIter = m_aIndexes.begin(); aIter != m_aIndexes.end(); ++aIter )
+                    for ( const auto& rIndex : m_aIndexes )
                     {
-                        m_xValueDestination->setObjectWithInfo( *aIter + 1, rValue, nParamType, nScale );
+                        m_xValueDestination->setObjectWithInfo( rIndex + 1, rValue, nParamType, nScale );
                             // (the index of the parameters is one-based)
                     }
                 }
@@ -338,12 +338,9 @@ namespace param
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_checkDisposed_throw();
 
-        for (   Parameters::const_iterator param = m_aParameters.begin();
-                param != m_aParameters.end();
-                ++param
-            )
+        for (const auto& rxParam : m_aParameters)
         {
-            (*param)->dispose();
+            rxParam->dispose();
         }
 
         Parameters aEmpty;

@@ -149,15 +149,13 @@ OUString DriversConfig::getDriverFactoryName(const OUString& _sURL) const
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
     OUString sRet;
     OUString sOldPattern;
-    TInstalledDrivers::const_iterator aIter = rDrivers.begin();
-    TInstalledDrivers::const_iterator aEnd = rDrivers.end();
-    for(;aIter != aEnd;++aIter)
+    for(const auto& [rPattern, rDriver] : rDrivers)
     {
-        WildCard aWildCard(aIter->first);
-        if ( sOldPattern.getLength() < aIter->first.getLength() && aWildCard.Matches(_sURL) )
+        WildCard aWildCard(rPattern);
+        if ( sOldPattern.getLength() < rPattern.getLength() && aWildCard.Matches(_sURL) )
         {
-            sRet = aIter->second.sDriverFactory;
-            sOldPattern = aIter->first;
+            sRet = rDriver.sDriverFactory;
+            sOldPattern = rPattern;
         }
     }
 
@@ -169,15 +167,13 @@ OUString DriversConfig::getDriverTypeDisplayName(const OUString& _sURL) const
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
     OUString sRet;
     OUString sOldPattern;
-    TInstalledDrivers::const_iterator aIter = rDrivers.begin();
-    TInstalledDrivers::const_iterator aEnd = rDrivers.end();
-    for(;aIter != aEnd;++aIter)
+    for(const auto& [rPattern, rDriver] : rDrivers)
     {
-        WildCard aWildCard(aIter->first);
-        if ( sOldPattern.getLength() < aIter->first.getLength() && aWildCard.Matches(_sURL) )
+        WildCard aWildCard(rPattern);
+        if ( sOldPattern.getLength() < rPattern.getLength() && aWildCard.Matches(_sURL) )
         {
-            sRet = aIter->second.sDriverTypeDisplayName;
-            sOldPattern = aIter->first;
+            sRet = rDriver.sDriverTypeDisplayName;
+            sOldPattern = rPattern;
         }
     }
 
@@ -204,26 +200,24 @@ const ::comphelper::NamedValueCollection& DriversConfig::impl_get(const OUString
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
     const ::comphelper::NamedValueCollection* pRet = nullptr;
     OUString sOldPattern;
-    TInstalledDrivers::const_iterator aIter = rDrivers.begin();
-    TInstalledDrivers::const_iterator aEnd = rDrivers.end();
-    for(;aIter != aEnd;++aIter)
+    for(const auto& [rPattern, rDriver] : rDrivers)
     {
-        WildCard aWildCard(aIter->first);
-        if ( sOldPattern.getLength() < aIter->first.getLength() && aWildCard.Matches(_sURL) )
+        WildCard aWildCard(rPattern);
+        if ( sOldPattern.getLength() < rPattern.getLength() && aWildCard.Matches(_sURL) )
         {
             switch(_nProps)
             {
                 case 0:
-                    pRet = &aIter->second.aFeatures;
+                    pRet = &rDriver.aFeatures;
                     break;
                 case 1:
-                    pRet = &aIter->second.aProperties;
+                    pRet = &rDriver.aProperties;
                     break;
                 case 2:
-                    pRet = &aIter->second.aMetaData;
+                    pRet = &rDriver.aMetaData;
                     break;
             }
-            sOldPattern = aIter->first;
+            sOldPattern = rPattern;
         }
     } // for(;aIter != aEnd;++aIter)
     if ( pRet == nullptr )

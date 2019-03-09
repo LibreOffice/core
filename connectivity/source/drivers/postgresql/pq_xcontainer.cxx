@@ -162,13 +162,10 @@ Any Container::getByName( const OUString& aName )
 Sequence< OUString > Container::getElementNames(  )
 {
     Sequence< OUString > ret( m_values.size() );
-    for( String2IntMap::const_iterator ii = m_name2index.begin();
-         ii != m_name2index.end() ;
-         ++ ii )
+    for( const auto& [rName, rIndex] : m_name2index )
     {
         // give element names in index order !
-        ret[ii->second] = ii->first;
-//         ret[i] = ii->first;
+        ret[rIndex] = rName;
     }
     return ret;
 }
@@ -308,16 +305,12 @@ void Container::dropByIndex( sal_Int32 index )
     }
 
     OUString name;
-    for( String2IntMap::iterator ii = m_name2index.begin() ;
-         ii != m_name2index.end() ;
-         ++ ii )
+    String2IntMap::iterator ii = std::find_if(m_name2index.begin(), m_name2index.end(),
+        [&index](const String2IntMap::value_type& rEntry) { return rEntry.second == index; });
+    if (ii != m_name2index.end())
     {
-        if( ii->second == index )
-        {
-            name = ii->first;
-            m_name2index.erase( ii );
-            break;
-        }
+        name = ii->first;
+        m_name2index.erase( ii );
     }
 
     for( int i = index +1 ; i < static_cast<int>(m_values.size()) ; i ++ )
@@ -325,15 +318,11 @@ void Container::dropByIndex( sal_Int32 index )
         m_values[i-1] = m_values[i];
 
         // I know, this is expensive, but don't want to maintain another map ...
-        for( String2IntMap::iterator ii = m_name2index.begin() ;
-             ii != m_name2index.end() ;
-             ++ ii )
+        ii = std::find_if(m_name2index.begin(), m_name2index.end(),
+            [&i](const String2IntMap::value_type& rEntry) { return rEntry.second == i; });
+        if (ii != m_name2index.end())
         {
-            if( ii->second == i )
-            {
-                ii->second = i-1;
-                break;
-            }
+            ii->second = i-1;
         }
     }
     m_values.resize( m_values.size() - 1 );

@@ -135,7 +135,7 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql 
 
             // at this moment we support only one table per select statement
 
-            OSL_ENSURE( rTabs.begin() != rTabs.end(), "Need a Table");
+            OSL_ENSURE( !rTabs.empty(), "Need a Table");
 
             m_pTable = static_cast< OTable* > (rTabs.begin()->second.get());
             m_xColNames     = m_pTable->getColumns();

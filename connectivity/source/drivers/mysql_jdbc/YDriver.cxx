@@ -70,10 +70,8 @@ ODriverDelegator::~ODriverDelegator()
     {
         ::comphelper::disposeComponent(m_xODBCDriver);
         ::comphelper::disposeComponent(m_xNativeDriver);
-        TJDBCDrivers::iterator aIter = m_aJdbcDrivers.begin();
-        TJDBCDrivers::const_iterator aEnd = m_aJdbcDrivers.end();
-        for (; aIter != aEnd; ++aIter)
-            ::comphelper::disposeComponent(aIter->second);
+        for (auto& rEntry : m_aJdbcDrivers)
+            ::comphelper::disposeComponent(rEntry.second);
     }
     catch (const Exception&)
     {
@@ -350,29 +348,12 @@ ODriverDelegator::getDataDefinitionByConnection(const Reference<XConnection>& co
             xTunnel->getSomething(OMetaConnection::getUnoTunnelImplementationId()));
         if (pConnection)
         {
-            TWeakPairVector::const_iterator aEnd = m_aConnections.end();
-            for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
-            {
-                if (i->second.second == pConnection)
-                {
-                    xTab.set(i->second.first.get().get(), UNO_QUERY);
-                    if (!xTab.is())
-                    {
-                        xTab = new OMySQLCatalog(connection);
-                        i->second.first = WeakReferenceHelper(xTab);
-                    }
-                    break;
-                }
-            }
-        }
-    } // if ( xTunnel.is() )
-    if (!xTab.is())
-    {
-        TWeakPairVector::const_iterator aEnd = m_aConnections.end();
-        for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
-        {
-            Reference<XConnection> xTemp(i->first.get(), UNO_QUERY);
-            if (xTemp == connection)
+            TWeakPairVector::iterator i
+                = std::find_if(m_aConnections.begin(), m_aConnections.end(),
+                               [&pConnection](const TWeakPairVector::value_type& rConnection) {
+                                   return rConnection.second.second == pConnection;
+                               });
+            if (i != m_aConnections.end())
             {
                 xTab.set(i->second.first.get().get(), UNO_QUERY);
                 if (!xTab.is())
@@ -380,7 +361,24 @@ ODriverDelegator::getDataDefinitionByConnection(const Reference<XConnection>& co
                     xTab = new OMySQLCatalog(connection);
                     i->second.first = WeakReferenceHelper(xTab);
                 }
-                break;
+            }
+        }
+    } // if ( xTunnel.is() )
+    if (!xTab.is())
+    {
+        TWeakPairVector::iterator i
+            = std::find_if(m_aConnections.begin(), m_aConnections.end(),
+                           [&connection](const TWeakPairVector::value_type& rConnection) {
+                               Reference<XConnection> xTemp(rConnection.first.get(), UNO_QUERY);
+                               return xTemp == connection;
+                           });
+        if (i != m_aConnections.end())
+        {
+            xTab.set(i->second.first.get().get(), UNO_QUERY);
+            if (!xTab.is())
+            {
+                xTab = new OMySQLCatalog(connection);
+                i->second.first = WeakReferenceHelper(xTab);
             }
         }
     }

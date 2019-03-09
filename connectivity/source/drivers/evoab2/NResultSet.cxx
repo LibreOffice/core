@@ -313,12 +313,9 @@ static int CompareContacts( gconstpointer _lhs, gconstpointer _rhs, gpointer _us
     bool bLhs(false), bRhs(false);
 
     const ComparisonData& rCompData = *static_cast< const ComparisonData* >( _userData );
-    for (   SortDescriptor::const_iterator sortCol = rCompData.rSortOrder.begin();
-            sortCol != rCompData.rSortOrder.end();
-            ++sortCol
-        )
+    for ( const auto& sortCol : rCompData.rSortOrder )
     {
-        sal_Int32 nField = sortCol->nField;
+        sal_Int32 nField = sortCol.nField;
         GType eFieldType = evoab::getGFieldType( nField );
 
         bool success =  getValue( lhs, nField, eFieldType, &aLhsValue, bLhsNull )

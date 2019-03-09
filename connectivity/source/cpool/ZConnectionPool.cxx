@@ -237,13 +237,9 @@ void OConnectionPool::invalidatePooledConnections()
             aIter->second.aConnections.clear();
 
             // look if the iterator aIter is still present in the active connection map
-            TActiveConnectionMap::const_iterator aActIter = m_aActiveConnections.begin();
-            for (; aActIter != m_aActiveConnections.end(); ++aActIter)
-            {
-                if(aIter == aActIter->second.aPos)
-                    break;
-            }
-            if(aActIter == m_aActiveConnections.end())
+            bool isPresent = std::any_of(m_aActiveConnections.begin(), m_aActiveConnections.end(),
+                [&aIter](const TActiveConnectionMap::value_type& rEntry) { return rEntry.second.aPos == aIter; });
+            if(!isPresent)
             {// he isn't so we can delete him
                 aIter = m_aPool.erase(aIter);
             }

@@ -403,12 +403,13 @@ public:
     ~cstr_vector ()
     {
         OSL_ENSURE(values.size() == acquired.size(), "pq_connection: cstr_vector values and acquired size mismatch");
-        std::vector<char*>::iterator pv = values.begin();
         std::vector<bool>::const_iterator pa = acquired.begin();
-        const std::vector<char*>::const_iterator pve = values.end();
-        for( ; pv != pve ; ++pv, ++pa )
+        for( const auto& v : values )
+        {
             if (*pa)
-                free(*pv);
+                free(v);
+            ++pa;
+        }
     }
     void push_back(const char* s, __sal_NoAcquire)
     {

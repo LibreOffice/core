@@ -943,14 +943,15 @@ void OResultSet::fillRowData()
 
     OSL_ENSURE(m_xColumns.is(), "Need the Columns!!");
 
-    OSQLColumns::Vector::const_iterator aIter = m_xColumns->get().begin();
     const OUString sPropertyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
     OUString sName;
-    for (sal_Int32 i = 1; aIter != m_xColumns->get().end();++aIter, i++)
+    sal_Int32 i = 1;
+    for (const auto& rxColumn : m_xColumns->get())
     {
-        (*aIter)->getPropertyValue(sPropertyName) >>= sName;
+        rxColumn->getPropertyValue(sPropertyName) >>= sName;
         SAL_INFO(
             "connectivity.mork", "Query Columns : (" << i << ") " << sName);
+        i++;
     }
 
     // Generate Match Conditions for Query
@@ -992,21 +993,9 @@ void OResultSet::fillRowData()
 
 static bool matchRow( OValueRow const & row1, OValueRow const & row2 )
 {
-    OValueVector::Vector::const_iterator row1Iter = row1->get().begin();
-    OValueVector::Vector::const_iterator row2Iter = row2->get().begin();
-    for ( ++row1Iter,++row2Iter; // the first column is the bookmark column
-          row1Iter != row1->get().end(); ++row1Iter,++row2Iter)
-    {
-        if ( row1Iter->isBound())
-        {
-            // Compare values, if at anytime there's a mismatch return false
-            if ( *row1Iter != *row2Iter )
-                return false;
-        }
-    }
-
-    // If we get to here the rows match
-    return true;
+    // the first column is the bookmark column
+    return std::equal(std::next(row1->get().begin()), row1->get().end(), std::next(row2->get().begin()),
+        [](const ORowSetValue& a, const ORowSetValue& b) { return !a.isBound() || a == b; });
 }
 
 sal_Int32 OResultSet::getRowForCardNumber(sal_Int32 nCardNum)
@@ -1077,15 +1066,15 @@ void OResultSet::executeQuery()
                 }
 
                 OSortIndex::TKeyTypeVector eKeyType(m_aOrderbyColumnNumber.size());
-                std::vector<sal_Int32>::const_iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
-                for ( std::vector<sal_Int16>::size_type i = 0; aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
+                std::vector<sal_Int16>::size_type index = 0;
+                for (const auto& rColIndex : m_aOrderbyColumnNumber)
                 {
-                    OSL_ENSURE(static_cast<sal_Int32>(m_aRow->get().size()) > *aOrderByIter,"Invalid Index");
-                    switch ((m_aRow->get().begin()+*aOrderByIter)->getTypeKind())
+                    OSL_ENSURE(static_cast<sal_Int32>(m_aRow->get().size()) > rColIndex,"Invalid Index");
+                    switch ((m_aRow->get().begin()+rColIndex)->getTypeKind())
                     {
                     case DataType::CHAR:
                         case DataType::VARCHAR:
-                            eKeyType[i] = OKeyType::String;
+                            eKeyType[index] = OKeyType::String;
                             break;
 
                         case DataType::OTHER:
@@ -1100,15 +1089,16 @@ void OResultSet::executeQuery()
                         case DataType::TIME:
                         case DataType::TIMESTAMP:
                         case DataType::BIT:
-                            eKeyType[i] = OKeyType::Double;
+                            eKeyType[index] = OKeyType::Double;
                             break;
 
                     // Other types aren't implemented (so they are always FALSE)
                         default:
-                            eKeyType[i] = OKeyType::NONE;
+                            eKeyType[index] = OKeyType::NONE;
                             OSL_FAIL("MResultSet::executeQuery: Order By Data Type not implemented");
                             break;
                     }
+                    ++index;
                 }
 
                 if (IsSorted())
@@ -1131,14 +1121,13 @@ void OResultSet::executeQuery()
 
                         std::unique_ptr<OKeyValue> pKeyValue = OKeyValue::createKeyValue(nRow);
 
-                        std::vector<sal_Int32>::const_iterator aIter = m_aOrderbyColumnNumber.begin();
-                        for (;aIter != m_aOrderbyColumnNumber.end(); ++aIter)
+                        for (const auto& rColIndex : m_aOrderbyColumnNumber)
                         {
-                            const ORowSetValue& value = getValue(nRow, *aIter);
+                            const ORowSetValue& value = getValue(nRow, rColIndex);
 
                             SAL_INFO(
                                 "connectivity.mork",
-                                "Adding Value: (" << nRow << "," << *aIter
+                                "Adding Value: (" << nRow << "," << rColIndex
                                     << ") : " << value.getString());
 
                             pKeyValue->pushKey(new ORowSetValueDecorator(value));
@@ -1235,19 +1224,16 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
             // look if we have such a select column
             // TODO: would like to have a O(log n) search here ...
             sal_Int32 nColumnPos = 0;
-            for (   OSQLColumns::Vector::const_iterator aIter = _rxColumns->get().begin();
-                    aIter != _rxColumns->get().end();
-                    ++aIter,++nColumnPos
-                )
+            for (const auto& rxColumn : _rxColumns->get())
             {
                 if ( nColumnPos < static_cast<sal_Int32>(aColumnNames.size()) )
                     sSelectColumnRealName = aColumnNames[nColumnPos];
                 else
                 {
-                    if((*aIter)->getPropertySetInfo()->hasPropertyByName(sRealName))
-                        (*aIter)->getPropertyValue(sRealName) >>= sSelectColumnRealName;
+                    if(rxColumn->getPropertySetInfo()->hasPropertyByName(sRealName))
+                        rxColumn->getPropertyValue(sRealName) >>= sSelectColumnRealName;
                     else
-                        (*aIter)->getPropertyValue(sName) >>= sSelectColumnRealName;
+                        rxColumn->getPropertyValue(sName) >>= sSelectColumnRealName;
                     aColumnNames.push_back(sSelectColumnRealName);
                 }
 
@@ -1255,7 +1241,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                 {
                     if(_bSetColumnMapping)
                     {
-                        sal_Int32 nSelectColumnPos = static_cast<sal_Int32>(aIter - _rxColumns->get().begin() + 1);
+                        sal_Int32 nSelectColumnPos = nColumnPos + 1;
                             // the getXXX methods are 1-based ...
                         sal_Int32 nTableColumnPos = i + 1;
                             // get first table column is the bookmark column
@@ -1270,6 +1256,8 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                     aRowIter->setBound(true);
                     aRowIter->setTypeKind(DataType::VARCHAR);
                 }
+
+                ++nColumnPos;
             }
         }
         catch (Exception&)

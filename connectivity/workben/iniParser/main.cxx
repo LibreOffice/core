@@ -133,18 +133,13 @@ public:
 #if OSL_DEBUG_LEVEL > 1
     void Dump()
     {
-        IniSectionMap::iterator iBegin = mAllSection.begin();
-        IniSectionMap::iterator iEnd = mAllSection.end();
-        for(;iBegin != iEnd;iBegin++)
+        for(auto& rEntry : mAllSection)
         {
-            ini_Section *aSection = &(*iBegin).second;
-            for(NameValueVector::iterator itor=aSection->vVector.begin();
-                itor != aSection->vVector.end();
-                itor++)
+            ini_Section *aSection = &rEntry.second;
+            for(const auto& rValue : aSection->vVector)
             {
-                    struct ini_NameValue * aValue = &(*itor);
-                    SAL_WARN("connectivity",
-                        " section=" << aSection->sName << " name=" << aValue->sName << " value=" << aValue->sValue );
+                SAL_WARN("connectivity",
+                    " section=" << aSection->sName << " name=" << rValue.sName << " value=" << rValue.sValue );
 
             }
         }

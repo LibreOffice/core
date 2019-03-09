@@ -2401,13 +2401,13 @@ OSQLParseNode* OSQLParseNode::replace(OSQLParseNode* pOldSubNode, OSQLParseNode*
 
     pOldSubNode->setParent( nullptr );
     pNewSubNode->setParent( this );
-    for (auto it = m_aChildren.begin(); it != m_aChildren.end(); ++it)
-        if (it->get() == pOldSubNode)
-        {
-            it->release();
-            it->reset(pNewSubNode);
-            break;
-        }
+    auto it = std::find_if(m_aChildren.begin(), m_aChildren.end(),
+        [&pOldSubNode](const std::unique_ptr<OSQLParseNode>& rxChild) { return rxChild.get() == pOldSubNode; });
+    if (it != m_aChildren.end())
+    {
+        it->release();
+        it->reset(pNewSubNode);
+    }
     return pOldSubNode;
 }
 

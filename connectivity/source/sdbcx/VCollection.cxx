@@ -139,9 +139,11 @@ namespace
             Sequence< OUString > aNameList(m_aElements.size());
 
             OUString* pStringArray = aNameList.getArray();
-            typename std::vector< ObjectIter >::const_iterator aEnd = m_aElements.end();
-            for(typename std::vector< ObjectIter >::const_iterator aIter = m_aElements.begin(); aIter != aEnd;++aIter,++pStringArray)
-                *pStringArray = (*aIter)->first;
+            for(const auto& rIter : m_aElements)
+            {
+                *pStringArray = rIter->first;
+                ++pStringArray;
+            }
 
             return aNameList;
         }

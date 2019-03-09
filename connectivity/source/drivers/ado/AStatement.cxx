@@ -34,6 +34,7 @@
 #undef max
 
 #include <algorithm>
+#include <numeric>
 
 using namespace ::comphelper;
 
@@ -348,10 +349,9 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  )
 
     reset();
 
-    OUString aBatchSql;
-    sal_Int32 nLen = 0;
-    for(std::vector< OUString>::const_iterator i=m_aBatchVector.begin();i != m_aBatchVector.end();++i,++nLen)
-        aBatchSql = aBatchSql + *i + ";";
+    OUString aBatchSql = std::accumulate(m_aBatchVector.begin(), m_aBatchVector.end(), OUString(),
+        [](const OUString& rRes, const OUString& rStr) { return rRes + rStr + ";"; });
+    sal_Int32 nLen = m_aBatchVector.size();
 
 
     if ( m_RecordSet.IsValid() )
