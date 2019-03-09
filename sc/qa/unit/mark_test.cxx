@@ -10,6 +10,7 @@
 #include <sal/config.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include <unotest/bootstrapfixturebase.hxx>
 #include <cppunit/TestAssert.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
@@ -86,35 +87,8 @@ public:
     void testSimpleMark( const ScRange& rRange, const ScRange& rSelectionCover,
                          const ScRangeList& rLeftEnvelope, const ScRangeList& rRightEnvelope,
                          const ScRangeList& rTopEnvelope, const ScRangeList& rBottomEnvelope );
-    void testSimpleMark_Simple();
-    void testSimpleMark_Column();
-    void testSimpleMark_Row();
 
     void testMultiMark( const MultiMarkTestData& rData );
-    void testMultiMark_FourRanges();
-    void testMultiMark_NegativeMarking();
-
-    void testInsertTabBeforeSelected();
-    void testInsertTabAfterSelected();
-    void testDeleteTabBeforeSelected();
-    void testDeleteTabAfterSelected();
-
-    void testScMarkArraySearch();
-
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testSimpleMark_Simple);
-    CPPUNIT_TEST(testSimpleMark_Column);
-    CPPUNIT_TEST(testSimpleMark_Row);
-    CPPUNIT_TEST(testMultiMark_FourRanges);
-    CPPUNIT_TEST(testMultiMark_NegativeMarking);
-    CPPUNIT_TEST(testInsertTabBeforeSelected);
-    CPPUNIT_TEST(testInsertTabAfterSelected);
-    CPPUNIT_TEST(testDeleteTabBeforeSelected);
-    CPPUNIT_TEST(testDeleteTabAfterSelected);
-    CPPUNIT_TEST(testScMarkArraySearch);
-    CPPUNIT_TEST_SUITE_END();
-
-private:
     void testScMarkArraySearch_check(const ScMarkArray & ar, SCROW nRow, bool expectStatus, SCSIZE nIndexExpect);
 };
 
@@ -189,7 +163,7 @@ void Test::testSimpleMark( const ScRange& rRange, const ScRange& rSelectionCover
     CPPUNIT_ASSERT_EQUAL( rBottomEnvelope, aMark.GetBottomEnvelope() );
 }
 
-void Test::testSimpleMark_Simple()
+CPPUNIT_TEST_FIXTURE(Test, testSimpleMark_Simple)
 {
     testSimpleMark( ScRange( 10, 15, 0, 20, 30, 0 ),                  // Simple range
                     ScRange( 9, 14, 0, 21, 31, 0 ),                   // Cover
@@ -199,7 +173,7 @@ void Test::testSimpleMark_Simple()
                     ScRangeList( ScRange( 10, 31, 0, 20, 31, 0 ) ) ); // Bottom envelope
 }
 
-void Test::testSimpleMark_Column()
+CPPUNIT_TEST_FIXTURE(Test, testSimpleMark_Column)
 {
     // Column 10, rows from 15 to 30
     testSimpleMark( ScRange( 10, 15, 0, 10, 30, 0 ),                  // Simple range
@@ -218,7 +192,7 @@ void Test::testSimpleMark_Column()
                     ScRangeList());                                     // Bottom envelope
 }
 
-void Test::testSimpleMark_Row()
+CPPUNIT_TEST_FIXTURE(Test, testSimpleMark_Row)
 {
     // Row 15, cols from 10 to 20
     testSimpleMark( ScRange( 10, 15, 0, 20, 15, 0 ),                  // Simple range
@@ -396,7 +370,7 @@ void Test::testMultiMark( const MultiMarkTestData& rMarksData )
     CPPUNIT_ASSERT( !aMultiSel.HasAnyMarks() );
 }
 
-void Test::testMultiMark_FourRanges()
+CPPUNIT_TEST_FIXTURE(Test, testMultiMark_FourRanges)
 {
     MultiMarkTestData aData;
     MarkTestData aSingle1;
@@ -657,7 +631,7 @@ void Test::testMultiMark_FourRanges()
     testMultiMark( aData );
 }
 
-void Test::testMultiMark_NegativeMarking()
+CPPUNIT_TEST_FIXTURE(Test, testMultiMark_NegativeMarking)
 {
     MultiMarkTestData aData;
 
@@ -815,7 +789,7 @@ void Test::testMultiMark_NegativeMarking()
     testMultiMark( aData );
 }
 
-void Test::testInsertTabBeforeSelected()
+CPPUNIT_TEST_FIXTURE(Test, testInsertTabBeforeSelected)
 {
     ScMarkData aMark;
     aMark.SelectOneTable(0);
@@ -824,7 +798,7 @@ void Test::testInsertTabBeforeSelected()
     CPPUNIT_ASSERT_EQUAL(SCTAB(1), aMark.GetFirstSelected());
 }
 
-void Test::testInsertTabAfterSelected()
+CPPUNIT_TEST_FIXTURE(Test, testInsertTabAfterSelected)
 {
     ScMarkData aMark;
     aMark.SelectOneTable(0);
@@ -833,7 +807,7 @@ void Test::testInsertTabAfterSelected()
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), aMark.GetFirstSelected());
 }
 
-void Test::testDeleteTabBeforeSelected()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteTabBeforeSelected)
 {
     ScMarkData aMark;
     aMark.SelectOneTable(1);
@@ -842,7 +816,7 @@ void Test::testDeleteTabBeforeSelected()
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), aMark.GetFirstSelected());
 }
 
-void Test::testDeleteTabAfterSelected()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteTabAfterSelected)
 {
     ScMarkData aMark;
     aMark.SelectOneTable(0);
@@ -859,7 +833,7 @@ void Test::testScMarkArraySearch_check(const ScMarkArray & ar, SCROW nRow, bool 
     CPPUNIT_ASSERT_EQUAL(nIndexExpect, nIndex);
 }
 
-void Test::testScMarkArraySearch()
+CPPUNIT_TEST_FIXTURE(Test, testScMarkArraySearch)
 {
     // empty
     {
@@ -950,8 +924,6 @@ void Test::testScMarkArraySearch()
         testScMarkArraySearch_check(ar, MAXROW, true, 1);
     }
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

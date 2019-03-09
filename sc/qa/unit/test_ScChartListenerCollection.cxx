@@ -10,6 +10,7 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include <unotest/bootstrapfixturebase.hxx>
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <address.hxx>
@@ -25,22 +26,6 @@ const ScRange RANGE_INTERSECTING_1_AND_2(10, 10, 0, 29, 10, 0);
 
 class ChartListenerCollectionTest : public CppUnit::TestFixture {
 
-    void ListenerGetsNotifiedWhenItsRangeIsSetDirty();
-    void ListenerGetsNotifiedTwiceWhenRegisteredTwoTimes();
-    void ListenerDoesNotGetNotifiedWhenListeningStops();
-    void ListenerStopsListeningForAllRanges();
-    void ListenersStopListeningIdependently();
-
-    CPPUNIT_TEST_SUITE(ChartListenerCollectionTest);
-
-    CPPUNIT_TEST(ListenerGetsNotifiedWhenItsRangeIsSetDirty);
-    CPPUNIT_TEST(ListenerGetsNotifiedTwiceWhenRegisteredTwoTimes);
-    CPPUNIT_TEST(ListenerDoesNotGetNotifiedWhenListeningStops);
-    CPPUNIT_TEST(ListenerStopsListeningForAllRanges);
-    CPPUNIT_TEST(ListenersStopListeningIdependently);
-
-    CPPUNIT_TEST_SUITE_END();
-
 };
 
 struct MockedHiddenRangeListener : public ScChartHiddenRangeListener {
@@ -54,7 +39,7 @@ struct MockedHiddenRangeListener : public ScChartHiddenRangeListener {
     }
 };
 
-void ChartListenerCollectionTest::ListenerGetsNotifiedWhenItsRangeIsSetDirty() {
+CPPUNIT_TEST_FIXTURE(ChartListenerCollectionTest, ListenerGetsNotifiedWhenItsRangeIsSetDirty) {
     MockedHiddenRangeListener listener;
     ScChartListenerCollection sut(nullptr);
 
@@ -64,7 +49,7 @@ void ChartListenerCollectionTest::ListenerGetsNotifiedWhenItsRangeIsSetDirty() {
     CPPUNIT_ASSERT_EQUAL(1u, listener.mNotifyCount);
 }
 
-void ChartListenerCollectionTest::ListenerGetsNotifiedTwiceWhenRegisteredTwoTimes() {
+CPPUNIT_TEST_FIXTURE(ChartListenerCollectionTest, ListenerGetsNotifiedTwiceWhenRegisteredTwoTimes) {
     MockedHiddenRangeListener listener;
     ScChartListenerCollection sut(nullptr);
 
@@ -75,7 +60,7 @@ void ChartListenerCollectionTest::ListenerGetsNotifiedTwiceWhenRegisteredTwoTime
     CPPUNIT_ASSERT_EQUAL(2u, listener.mNotifyCount);
 }
 
-void ChartListenerCollectionTest::ListenerDoesNotGetNotifiedWhenListeningStops() {
+CPPUNIT_TEST_FIXTURE(ChartListenerCollectionTest, ListenerDoesNotGetNotifiedWhenListeningStops) {
     MockedHiddenRangeListener listener;
     ScChartListenerCollection sut(nullptr);
     sut.StartListeningHiddenRange(RANGE_1, &listener);
@@ -87,7 +72,7 @@ void ChartListenerCollectionTest::ListenerDoesNotGetNotifiedWhenListeningStops()
 
 }
 
-void ChartListenerCollectionTest::ListenerStopsListeningForAllRanges() {
+CPPUNIT_TEST_FIXTURE(ChartListenerCollectionTest, ListenerStopsListeningForAllRanges) {
     MockedHiddenRangeListener listener;
     ScChartListenerCollection sut(nullptr);
     sut.StartListeningHiddenRange(RANGE_1, &listener);
@@ -99,7 +84,7 @@ void ChartListenerCollectionTest::ListenerStopsListeningForAllRanges() {
     CPPUNIT_ASSERT_EQUAL(0u, listener.mNotifyCount);
 }
 
-void ChartListenerCollectionTest::ListenersStopListeningIdependently() {
+CPPUNIT_TEST_FIXTURE(ChartListenerCollectionTest, ListenersStopListeningIdependently) {
     MockedHiddenRangeListener listener1;
     MockedHiddenRangeListener listener2;
 
@@ -115,9 +100,6 @@ void ChartListenerCollectionTest::ListenersStopListeningIdependently() {
 }
 
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ChartListenerCollectionTest);
-
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

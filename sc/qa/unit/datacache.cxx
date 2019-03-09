@@ -20,18 +20,6 @@
 class ScCacheTest : public CppUnit::TestFixture
 {
 public:
-
-    void testCacheSimple();
-    void testCacheString();
-    void testCacheFormula();
-
-    CPPUNIT_TEST_SUITE(ScCacheTest);
-    CPPUNIT_TEST(testCacheSimple);
-    CPPUNIT_TEST(testCacheString);
-    CPPUNIT_TEST(testCacheFormula);
-    CPPUNIT_TEST_SUITE_END();
-
-public:
     virtual void setUp() override
     {
         utl::ConfigManager::EnableFuzzing();
@@ -40,7 +28,7 @@ public:
     }
 };
 
-void ScCacheTest::testCacheSimple()
+CPPUNIT_TEST_FIXTURE(ScCacheTest, testCacheSimple)
 {
     ScDocument aDoc;
     aDoc.InsertTab(0, "test");
@@ -62,7 +50,7 @@ void ScCacheTest::testCacheSimple()
         ASSERT_DOUBLES_EQUAL(nRow, aNewDoc.GetValue(0, nRow, 0));
 }
 
-void ScCacheTest::testCacheString()
+CPPUNIT_TEST_FIXTURE(ScCacheTest, testCacheString)
 {
     ScDocument aDoc;
     aDoc.InsertTab(0, "test");
@@ -85,7 +73,7 @@ void ScCacheTest::testCacheString()
     CPPUNIT_ASSERT_EQUAL(OUString("da"), aNewDoc.GetString(0, 2, 0));
 }
 
-void ScCacheTest::testCacheFormula()
+CPPUNIT_TEST_FIXTURE(ScCacheTest, testCacheFormula)
 {
     ScDocument aDoc;
     aDoc.InsertTab(0, "test");
@@ -114,8 +102,6 @@ void ScCacheTest::testCacheFormula()
         CPPUNIT_ASSERT_EQUAL(aFormulas[nRow], aFormula);
     }
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScCacheTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
