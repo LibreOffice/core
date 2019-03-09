@@ -528,8 +528,8 @@ public:
                                                           SfxStyleSheetBase&  rStyleBase,
                                                           bool bPage /*true : page, false: para*/) = 0;
 
-    virtual VclPtr<SfxAbstractTabDialog> CreateScSubTotalDlg( vcl::Window*             pParent,
-                                                        const SfxItemSet*   pArgSet ) = 0;
+    virtual VclPtr<SfxAbstractTabDialog> CreateScSubTotalDlg(weld::Window* pParent,
+                                                             const SfxItemSet* pArgSet) = 0;
 
     virtual VclPtr<SfxAbstractTabDialog> CreateScCharDlg(weld::Window* pParent,
         const SfxItemSet* pAttr, const SfxObjectShell* pDocShell) = 0;
