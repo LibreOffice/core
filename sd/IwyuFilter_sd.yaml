@@ -88,6 +88,13 @@ blacklist:
     sd/source/ui/app/sdmod.cxx:
     # Needed to inherit linker visibility from SdResId declaration
     - sdresid.hxx
+    sd/source/ui/dlg/headerfooterdlg.cxx:
+    # Needed for unique_ptr type
+    - editeng/outlobj.hxx
+    sd/source/ui/dlg/prntopts.cxx:
+    # Needed on MACOSX
+    - svl/intitem.hxx
+    - app.hrc
     sd/source/ui/framework/configuration/ConfigurationTracer.hxx:
     # Needed for css shortcut
     - sal/types.h

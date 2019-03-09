@@ -25,10 +25,6 @@
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 
-#include <cppuhelper/implbase.hxx>
-
-#include <com/sun/star/lang/XEventListener.hpp>
-
 #include <memory>
 
 namespace sd {
@@ -58,7 +54,6 @@ struct ClientBoxEntry
 };
 
 // class ExtensionBox_Impl
-class ClientBox;
 
 class ClientBox : public Control
 {

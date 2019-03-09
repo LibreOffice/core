@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/xoutbmp.hxx>
 #include <time.h>
 #include <svl/eitem.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
-#include <sfx2/basedlgs.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/svapp.hxx>
@@ -44,7 +42,6 @@
 
 #include <EffectMigration.hxx>
 
-#include <string>
 #include <algorithm>
 
 using namespace ::com::sun::star;

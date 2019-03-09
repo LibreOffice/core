@@ -20,24 +20,16 @@
 #include <Window.hxx>
 #include <DrawDocShell.hxx>
 
-#include <app.hrc>
-
 #include <svx/svxids.hrc>
-#include <svx/dialogs.hrc>
 
 #include <svx/ofaitem.hxx>
-#include <svx/svxerr.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/langtab.hxx>
-#include <svx/srchdlg.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <vcl/abstdlg.hxx>
-#include <vcl/window.hxx>
-#include <svl/style.hxx>
 #include <svx/drawitem.hxx>
-#include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
@@ -45,11 +37,8 @@
 
 #include <sdmod.hxx>
 #include <drawdoc.hxx>
-#include <sdpage.hxx>
-#include <sdattr.hxx>
 #include <fusearch.hxx>
 #include <ViewShell.hxx>
-#include <View.hxx>
 #include <slideshow.hxx>
 #include <fuhhconv.hxx>
 #include <memory>

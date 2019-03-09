@@ -17,12 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sdattr.hxx>
+#include <sdattr.hrc>
 #include <optsitem.hxx>
 #include <prntopts.hxx>
 #include <app.hrc>
 #include <svl/intitem.hxx>
-#include <sfx2/request.hxx>
 
 /**
  *  dialog to adjust print options

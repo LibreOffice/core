@@ -19,19 +19,13 @@
 
 #include <copydlg.hxx>
 #include <svx/colorbox.hxx>
-#include <svx/dlgutil.hxx>
 #include <sfx2/module.hxx>
 #include <svx/xcolit.hxx>
-#include <svx/xflclit.hxx>
-#include <svx/xdef.hxx>
-#include <svx/xfillit0.hxx>
-#include <svx/xenum.hxx>
 
-#include <sfx2/app.hxx>
 #include <unotools/viewoptions.hxx>
+#include <svtools/unitconv.hxx>
 
-#include <sdattr.hxx>
-
+#include <sdattr.hrc>
 #include <View.hxx>
 #include <drawdoc.hxx>
 

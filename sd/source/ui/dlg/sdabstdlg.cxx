@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #include <sdabstdlg.hxx>
 
 #include <osl/module.hxx>
