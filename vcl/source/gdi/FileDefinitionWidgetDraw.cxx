@@ -44,14 +44,28 @@ OUString lcl_getThemeDefinitionPath()
     return sPath;
 }
 
+void setWidgetDefinition(OUString const& rDefinitionFile, OUString const& rDefinitionResourcesPath,
+                         WidgetDefinition& rDefinition)
+{
+    static std::shared_ptr<WidgetDefinition> spDefinition;
+    if (!spDefinition)
+    {
+        spDefinition = std::make_unique<WidgetDefinition>();
+        WidgetDefinitionReader aReader(rDefinitionFile, rDefinitionResourcesPath);
+        aReader.read(*spDefinition);
+    }
+    rDefinition = *spDefinition;
+}
+
 } // end anonymous namespace
 
 FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
     : m_rGraphics(rGraphics)
 {
     OUString sDefinitionBasePath = lcl_getThemeDefinitionPath();
-    WidgetDefinitionReader aReader(sDefinitionBasePath + "definition.xml", sDefinitionBasePath);
-    aReader.read(m_aWidgetDefinition);
+
+    setWidgetDefinition(sDefinitionBasePath + "definition.xml", sDefinitionBasePath,
+                        m_aWidgetDefinition);
 
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maNWFData.mbNoFocusRects = true;
