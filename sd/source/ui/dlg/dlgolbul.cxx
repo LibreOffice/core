@@ -21,15 +21,11 @@
 #include <OutlineBulletDlg.hxx>
 
 #include <svx/svxids.hrc>
-#include <sfx2/objsh.hxx>
-#include <svx/drawitem.hxx>
-#include <editeng/bulletitem.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <editeng/numitem.hxx>
 
 #include <svx/dialogs.hrc>
-#include <svl/intitem.hxx>
 #include <svx/svdmark.hxx>
 #include <View.hxx>
 #include <svx/svdobj.hxx>

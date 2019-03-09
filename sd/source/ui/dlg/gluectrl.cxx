@@ -17,15 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string>
-
-#include <svx/dialogs.hrc>
 #include <svx/svdglue.hxx>
 #include <svl/intitem.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/dispatch.hxx>
 #include <vcl/toolbox.hxx>
-#include <sfx2/viewfrm.hxx>
 
 #include <strings.hrc>
 #include <gluectrl.hxx>
