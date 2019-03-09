@@ -21,9 +21,10 @@
 #define INCLUDED_SD_SOURCE_UI_INC_INSPAGOB_HXX
 
 #include <vcl/weld.hxx>
-#include "sdtreelb.hxx"
 
 class SdDrawDocument;
+class SdPageObjsTLV;
+class SfxMedium;
 
 class SdInsertPagesObjsDlg : public weld::GenericDialogController
 {
