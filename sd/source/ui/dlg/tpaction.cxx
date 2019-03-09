@@ -26,27 +26,18 @@
 #include <com/sun/star/embed/VerbAttributes.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
-#include <sdattr.hxx>
+#include <sdattr.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
 
 #include <vcl/waitobj.hxx>
-#include <osl/file.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/svdpagv.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <svl/aeitem.hxx>
-#include <editeng/colritem.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/docfile.hxx>
-#include <sot/storage.hxx>
-#include <basic/sbmeth.hxx>
-#include <basic/sbmod.hxx>
-#include <basic/sbstar.hxx>
 #include <svx/xtable.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/lstbox.hxx>
 #include <svl/urihelper.hxx>

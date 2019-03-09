@@ -17,33 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/outliner.hxx>
-
 #include <sal/log.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/svxdlg.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
 #include <svl/style.hxx>
-#include <svx/tabline.hxx>
-#include <editeng/bulletitem.hxx>
+#include <svx/svdobj.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/brushitem.hxx>
-#include <vcl/graph.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/colritem.hxx>
 #include <svl/cjkoptions.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/sfxdlg.hxx>
 
-#include <DrawDocShell.hxx>
 #include <strings.hrc>
 #include <sdresid.hxx>
 #include <prltempl.hxx>
 #include <bulmaper.hxx>
 #include <svl/intitem.hxx>
-#include <svx/svxgrahicitem.hxx>
 #include <svx/flagsdef.hxx>
-#include <drawdoc.hxx>
+
 #define IS_OUTLINE(x) (x >= PO_OUTLINE_1 && x <= PO_OUTLINE_9)
 
 /**

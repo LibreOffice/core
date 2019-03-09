@@ -18,19 +18,13 @@
  */
 
 #include <svl/intitem.hxx>
-#include <svx/dialogs.hrc>
 
-#include <sdattr.hxx>
 #include <strings.hrc>
 
 #include <diactrl.hxx>
 
 #include <sdresid.hxx>
 #include <app.hrc>
-
-#include <sfx2/dispatch.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/app.hxx>
 
 using namespace ::com::sun::star;
 

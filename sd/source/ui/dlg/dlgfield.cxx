@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
-#include <svl/zforlist.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/itemset.hxx>
@@ -29,11 +27,9 @@
 #include <unotools/useroptions.hxx>
 
 #include <strings.hrc>
-#include <sdattr.hxx>
 #include <sdresid.hxx>
 #include <sdmod.hxx>
 #include <dlgfield.hxx>
-#include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
 
 /**

@@ -27,6 +27,7 @@ class SvxZoomItem;
 class SfxUInt16Item;
 class SvxHyperlinkItem;
 class SfxDocumentInfoItem;
+class SvxSearchItem;
 
 // Please be careful:
 // Changing just one part here doesn't add new

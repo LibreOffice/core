@@ -17,22 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <svl/itemset.hxx>
 #include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
 
-#include <sdattr.hxx>
+#include <sdattr.hrc>
 #include <present.hxx>
 #include <cusshow.hxx>
 #include <customshowlist.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::beans;
 
 SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs,
                                   const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList)
