@@ -86,6 +86,7 @@ namespace sw {
             virtual std::vector< ::sw::mark::IFieldmark* > getDropDownsFor(const SwPaM &rPaM) const override;
 
             virtual void deleteFieldmarkAt(const SwPosition& rPos) override;
+            virtual ::sw::mark::IFieldmark* changeNonTextFieldmarkType(::sw::mark::IFieldmark* pFieldmark, const OUString& rNewType) override;
 
             void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
