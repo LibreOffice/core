@@ -908,7 +908,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                     }
                     else if (pBM->GetFieldname( ) == ODF_FORMDROPDOWN)
                     {
-                        pPor = new SwFieldFormDropDownPortion(sw::mark::ExpandFieldmark(pBM));
+                        pPor = new SwFieldFormDropDownPortion(pBM, sw::mark::ExpandFieldmark(pBM));
                     }
                     /* we need to check for ODF_FORMTEXT for scenario having FormFields inside FORMTEXT.
                      * Otherwise file will crash on open.

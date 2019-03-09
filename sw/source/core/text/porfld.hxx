@@ -217,12 +217,18 @@ namespace sw { namespace mark {
 class SwFieldFormDropDownPortion : public SwFieldPortion
 {
 public:
-    explicit SwFieldFormDropDownPortion(const OUString &rExpand)
+    explicit SwFieldFormDropDownPortion(sw::mark::IFieldmark *pFieldMark, const OUString &rExpand)
         : SwFieldPortion(rExpand)
+        , m_pFieldMark(pFieldMark)
     {
     }
     // Field cloner for SplitGlue
     virtual SwFieldPortion *Clone( const OUString &rExpand ) const override;
+
+    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+
+private:
+    sw::mark::IFieldmark* m_pFieldMark;
 };
 
 #endif
