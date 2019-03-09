@@ -17,28 +17,28 @@
 
 namespace sc {
 
-void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type& aPos, sc::EndListeningContext* pCxt)
+bool SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type& aPos, sc::EndListeningContext* pCxt)
 {
     SCROW nRow = aPos.first->position + aPos.second;
 
     if (aPos.first->type != sc::element_type_formula)
         // Not a formula cell block.
-        return;
+        return false;
 
     if (aPos.second == 0)
         // Split position coincides with the block border. Nothing to do.
-        return;
+        return false;
 
     sc::formula_block::iterator it = sc::formula_block::begin(*aPos.first->data);
     std::advance(it, aPos.second);
     ScFormulaCell& rTop = **it;
     if (!rTop.IsShared())
         // Not a shared formula.
-        return;
+        return false;
 
     if (nRow == rTop.GetSharedTopRow())
         // Already the top cell of a shared group.
-        return;
+        return false;
 
     ScFormulaCellGroupRef xGroup = rTop.GetCellGroup();
 
@@ -97,12 +97,14 @@ void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
         ScFormulaCell& rCell = **it;
         rCell.SetCellGroup(xGroup2);
     }
+
+    return true;
 }
 
-void SharedFormulaUtil::splitFormulaCellGroups(CellStoreType& rCells, std::vector<SCROW>& rBounds)
+bool SharedFormulaUtil::splitFormulaCellGroups(CellStoreType& rCells, std::vector<SCROW>& rBounds)
 {
     if (rBounds.empty())
-        return;
+        return false;
 
     // Sort and remove duplicates.
     std::sort(rBounds.begin(), rBounds.end());
@@ -113,9 +115,9 @@ void SharedFormulaUtil::splitFormulaCellGroups(CellStoreType& rCells, std::vecto
     SCROW nRow = *it;
     CellStoreType::position_type aPos = rCells.position(nRow);
     if (aPos.first == rCells.end())
-        return;
+        return false;
 
-    splitFormulaCellGroup(aPos, nullptr);
+    bool bSplit = splitFormulaCellGroup(aPos, nullptr);
     std::vector<SCROW>::iterator itEnd = rBounds.end();
     for (++it; it != itEnd; ++it)
     {
@@ -124,10 +126,11 @@ void SharedFormulaUtil::splitFormulaCellGroups(CellStoreType& rCells, std::vecto
         {
             aPos = rCells.position(aPos.first, nRow);
             if (aPos.first == rCells.end())
-                return;
-            splitFormulaCellGroup(aPos, nullptr);
+                return bSplit;
+            bSplit |= splitFormulaCellGroup(aPos, nullptr);
         }
     }
+    return bSplit;
 }
 
 bool SharedFormulaUtil::joinFormulaCells(
