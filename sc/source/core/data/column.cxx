@@ -2481,7 +2481,7 @@ bool ScColumn::UpdateReference( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc
     }
 
     // Do the actual splitting.
-    sc::SharedFormulaUtil::splitFormulaCellGroups(maCells, aBounds);
+    const bool bSplit = sc::SharedFormulaUtil::splitFormulaCellGroups(maCells, aBounds);
 
     // Collect all formula groups.
     std::vector<sc::FormulaGroupEntry> aGroups = GetFormulaGroupEntries();
@@ -2489,7 +2489,7 @@ bool ScColumn::UpdateReference( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc
     // Process all collected formula groups.
     UpdateRefOnNonCopy aHandler(nCol, nTab, &rCxt, pUndoDoc);
     aHandler = std::for_each(aGroups.begin(), aGroups.end(), aHandler);
-    if (aHandler.isUpdated())
+    if (bSplit || aHandler.isUpdated())
         rCxt.maRegroupCols.set(nTab, nCol);
 
     return aHandler.isUpdated();
