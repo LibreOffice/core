@@ -636,13 +636,23 @@ public:
     /**
      * Detach a formula cell that's about to be deleted, or removed from
      * document storage (if that ever happens).
+     *
+     * @param rNewSharedRows collects possible new shared row ranges (top and
+     *        bottom of shared or remaining single twice) resulting from
+     *        unsharing to reestablish listeners on.
      */
-    void DetachFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell );
+    void DetachFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell,
+                            std::vector<SCROW>& rNewSharedRows );
 
-    void DetachFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength );
+    /** Re-establish listeners on unshared formula groups */
+    void StartListeningUnshared( const std::vector<SCROW>& rNewSharedRows );
+
+    void DetachFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength,
+                             std::vector<SCROW>* pNewSharedRows );
 
     void AttachFormulaCells( sc::StartListeningContext& rCxt, SCROW nRow1, SCROW nRow2 );
-    void DetachFormulaCells( sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2 );
+    void DetachFormulaCells( sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2,
+                             std::vector<SCROW>* pNewSharedRows );
 
     /**
      * Regroup formula cells for the entire column.
@@ -692,18 +702,23 @@ public:
     bool        ReservePatternCount( SCSIZE nReserve );
 private:
 
-    sc::CellStoreType::iterator GetPositionToInsert( SCROW nRow );
-    sc::CellStoreType::iterator GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow );
+    sc::CellStoreType::iterator GetPositionToInsert( SCROW nRow, std::vector<SCROW>& rNewSharedRows );
+    sc::CellStoreType::iterator GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow,
+                                                     std::vector<SCROW>& rNewSharedRows );
 
     void AttachNewFormulaCell(
         const sc::CellStoreType::iterator& itPos, SCROW nRow, ScFormulaCell& rCell,
+        const std::vector<SCROW>& rNewSharedRows,
         bool bJoin = true, sc::StartListeningType eListenType = sc::SingleCellListening );
 
     void AttachNewFormulaCell(
         const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell,
+        const std::vector<SCROW>& rNewSharedRows,
         bool bJoin = true, sc::StartListeningType eListenType = sc::SingleCellListening );
 
-    void AttachNewFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength );
+    void AttachNewFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength,
+                                std::vector<SCROW>& rNewSharedRows );
+
     void BroadcastNewCell( SCROW nRow );
     bool UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, sc::CellStoreType::iterator& itr );
 
