@@ -19,17 +19,16 @@
 #ifndef INCLUDED_JVMFWK_SOURCE_FWKUTIL_HXX
 #define INCLUDED_JVMFWK_SOURCE_FWKUTIL_HXX
 
-#include <config_features.h>
 #include <config_folders.h>
 
 #include <sal/config.h>
 #include <sal/log.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/byteseq.hxx>
-#include <osl/thread.hxx>
+
+namespace osl { class Mutex; }
 
 namespace jfw
 {

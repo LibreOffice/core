@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
 #define JFW_ENSURE(c, m) SAL_WARN_IF(!(c), "jfw", m)

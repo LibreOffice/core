@@ -19,13 +19,10 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/uri.hxx>
 #include <sal/log.hxx>
-#include <osl/thread.hxx>
-#include <osl/process.h>
 #include <libxml/xpathInternals.h>
 #include <osl/file.hxx>
-#include <osl/module.hxx>
+#include <osl/thread.hxx>
 #include "framework.hxx"
 #include <fwkutil.hxx>
 #include <elements.hxx>
