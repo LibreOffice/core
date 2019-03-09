@@ -36,6 +36,7 @@
 #define RID_STR_CLASS_TREECONTROL       "TreeControl"
 #define RID_STR_CLASS_GRIDCONTROL       "GridControl"
 #define RID_STR_CLASS_SPINCONTROL       "SpinButton"
+#define RID_STR_CLASS_HYPERLINKCONTROL  "HyperlinkControl"
 
 #endif
 

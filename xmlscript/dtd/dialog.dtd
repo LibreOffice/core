@@ -60,7 +60,8 @@
                      dlg:fixedline|
                      dlg:progressmeter|
                      dlg:scrollbar|
-                     dlg:table
+                     dlg:table|
+                     dlg:linklabel
                     )">
 
 <!ELEMENT dlg:window (dlg:styles*, (%event;)*, dlg:bulletinboard*)>
@@ -217,6 +218,17 @@
 <!ELEMENT dlg:text ((%event;)*)>
 <!ATTLIST dlg:text %default-attributes;
                    dlg:value CDATA #IMPLIED
+                   dlg:align (left|center|right) #IMPLIED
+                   dlg:valign (top|center|bottom) #IMPLIED
+                   dlg:multiline %boolean; #IMPLIED
+                   dlg:tabstop %boolean; #IMPLIED
+                   >
+
+
+<!ELEMENT dlg:linklabel ((%event;)*)>
+<!ATTLIST dlg:linklabel %default-attributes;
+                   dlg:value CDATA #IMPLIED
+                   dlg:url CDATA #IMPLIED
                    dlg:align (left|center|right) #IMPLIED
                    dlg:valign (top|center|bottom) #IMPLIED
                    dlg:multiline %boolean; #IMPLIED

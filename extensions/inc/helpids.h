@@ -246,6 +246,7 @@
 #define HID_PROP_XSD_CALCULATION                        "EXTENSIONS_HID_PROP_XSD_CALCULATION"
 #define HID_PROP_XSD_DATA_TYPE                          "EXTENSIONS_HID_PROP_XSD_DATA_TYPE"
 #define HID_PROP_XSD_WHITESPACES                        "EXTENSIONS_HID_PROP_XSD_WHITESPACES"
+#define HID_PROP_URL                                    "EXTENSIONS_HID_PROP_URL"
 #define HID_PROP_XSD_PATTERN                            "EXTENSIONS_HID_PROP_XSD_PATTERN"
 #define HID_PROP_XSD_LENGTH                             "EXTENSIONS_HID_PROP_XSD_LENGTH"
 #define HID_PROP_XSD_MIN_LENGTH                         "EXTENSIONS_HID_PROP_XSD_MIN_LENGTH"

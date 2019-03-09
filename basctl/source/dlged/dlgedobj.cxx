@@ -723,6 +723,10 @@ OUString DlgEdObj::GetDefaultName() const
     {
         sResId = RID_STR_CLASS_GRIDCONTROL;
     }
+    else if ( supportsService( "com.sun.star.awt.UnoControlFixedHyperlinkModel" ) )
+    {
+        sResId = RID_STR_CLASS_HYPERLINKCONTROL;
+    }
     else if ( supportsService( "com.sun.star.awt.UnoControlSpinButtonModel" ) )
     {
         sResId = RID_STR_CLASS_SPINCONTROL;
@@ -851,6 +855,10 @@ sal_uInt16 DlgEdObj::GetObjIdentifier() const
     else if ( supportsService( "com.sun.star.awt.grid.UnoControlGridModel" ))
     {
         return OBJ_DLG_GRIDCONTROL;
+    }
+    else if ( supportsService( "com.sun.star.awt.UnoControlFixedHyperlinkModel" ))
+    {
+        return OBJ_DLG_HYPERLINKCONTROL;
     }
     else
     {

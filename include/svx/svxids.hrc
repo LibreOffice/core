@@ -820,7 +820,7 @@ class SfxStringItem;
 #define SID_FLAG_TYPE                                   ( SID_SVX_START + 1034 )
 #define SID_SWMODE_TYPE                                 ( SID_SVX_START + 1035 )
 #define SID_DISABLE_CTL                                 ( SID_SVX_START + 1036 )
-//FREE
+#define SID_INSERT_HYPERLINKCONTROL                     ( SID_SVX_START + 1037 )
 #define SID_ENUM_PAGE_MODE                              ( SID_SVX_START + 1038 )
 #define SID_PAPER_START                                 ( SID_SVX_START + 1039 )
 #define SID_PAPER_END                                   ( SID_SVX_START + 1040 )

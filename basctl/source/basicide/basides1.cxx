@@ -898,6 +898,7 @@ void Shell::GetState(SfxItemSet &rSet)
             case SID_INSERT_FILECONTROL:
             case SID_INSERT_SPINBUTTON:
             case SID_INSERT_GRIDCONTROL:
+            case SID_INSERT_HYPERLINKCONTROL:
             case SID_INSERT_TREECONTROL:
             case SID_INSERT_FORM_RADIO:
             case SID_INSERT_FORM_CHECK:

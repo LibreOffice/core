@@ -407,6 +407,10 @@ OUString PropBrw::GetHeadlineName( const Reference< XPropertySet >& _rxObject )
         {
             sResId = RID_STR_CLASS_GRIDCONTROL;
         }
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlFixedHyperlinkModel" ) )
+        {
+            sResId = RID_STR_CLASS_HYPERLINKCONTROL;
+        }
         else
         {
             sResId = RID_STR_CLASS_CONTROL;

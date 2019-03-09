@@ -2572,7 +2572,24 @@ SfxBoolItem InsertTreeControl SID_INSERT_TREECONTROL
     GroupId = SfxGroupId::Controls;
 ]
 
+SfxBoolItem InsertHyperlinkControl SID_INSERT_HYPERLINKCONTROL
+()
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
 
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Controls;
+]
 
 XFillBitmapItem FillBitmap SID_ATTR_FILL_BITMAP
 

@@ -424,6 +424,7 @@ Sequence< OUString > ControlModelContainerBase::getAvailableServiceNames()
             "com.sun.star.awt.UnoControlRoadmapModel",
             "com.sun.star.awt.tree.TreeControlModel",
             "com.sun.star.awt.grid.UnoControlGridModel",
+            "com.sun.star.awt.UnoControlFixedHyperlinkModel",
             "com.sun.star.awt.tab.UnoControlTabPageContainerModel",
             "com.sun.star.awt.tab.UnoControlTabPageModel",
             "com.sun.star.awt.UnoMultiPageModel",
