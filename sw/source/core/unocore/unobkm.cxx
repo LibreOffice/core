@@ -124,6 +124,11 @@ const ::sw::mark::IMark* SwXBookmark::GetBookmark() const
     return m_pImpl->m_pRegisteredBookmark;
 }
 
+IDocumentMarkAccess* SwXBookmark::GetIDocumentMarkAccess()
+{
+    return m_pImpl->m_pDoc->getIDocumentMarkAccess();
+}
+
 SwXBookmark::SwXBookmark(SwDoc *const pDoc)
     : m_pImpl( new SwXBookmark::Impl(pDoc) )
 {
@@ -551,7 +556,21 @@ void SwXFieldmark::setFieldType(const OUString & fieldType)
         dynamic_cast<const IFieldmark*>(GetBookmark()));
     if(!pBkm)
         throw uno::RuntimeException();
-    pBkm->SetFieldname(fieldType);
+    if(fieldType != getFieldType())
+    {
+        if(fieldType == ODF_FORMDROPDOWN || fieldType == ODF_FORMCHECKBOX)
+        {
+            ::sw::mark::IFieldmark* pNewFieldmark = GetIDocumentMarkAccess()->changeNonTextFieldmarkType(pBkm, fieldType);
+            if (pNewFieldmark)
+            {
+                registerInMark(*this, pNewFieldmark);
+                return;
+            }
+        }
+
+        // We did not generate a new fieldmark, so set the type ID
+        pBkm->SetFieldname(fieldType);
+    }
 }
 
 uno::Reference<container::XNameContainer> SwXFieldmark::getParameters()
@@ -584,6 +603,8 @@ SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark *const pMark,
         if (dynamic_cast< ::sw::mark::TextFieldmark* >(pMark))
             pXBkmk = new SwXFieldmark(false, &rDoc);
         else if (dynamic_cast< ::sw::mark::CheckboxFieldmark* >(pMark))
+            pXBkmk = new SwXFieldmark(true, &rDoc);
+        else if (dynamic_cast< ::sw::mark::DropDownFieldmark* >(pMark))
             pXBkmk = new SwXFieldmark(true, &rDoc);
         else
             pXBkmk = new SwXFieldmark(isReplacementObject, &rDoc);
