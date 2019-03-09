@@ -734,6 +734,7 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
                        std::max(rBoundingControlRegion.GetHeight(), 32L));
             rNativeContentRegion = tools::Rectangle(aLocation, aSize);
             rNativeBoundingRegion = rNativeContentRegion;
+            rNativeBoundingRegion.expand(2);
             return true;
         }
         break;
@@ -764,7 +765,7 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
             {
                 Point aPoint(aLocation.X() + rBoundingControlRegion.GetWidth()
                                  - aComboButtonSize.Width(),
-                             aLocation.Y());
+                             aLocation.Y() + 1);
                 rNativeContentRegion = tools::Rectangle(aPoint, aComboButtonSize);
                 rNativeBoundingRegion = rNativeContentRegion;
                 return true;
@@ -773,8 +774,7 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
             {
                 Size aSize(rBoundingControlRegion.GetWidth() - aComboButtonSize.Width(),
                            aComboButtonSize.Height());
-                rNativeContentRegion = tools::Rectangle(aLocation, aSize);
-                rNativeContentRegion.expand(1);
+                rNativeContentRegion = tools::Rectangle(aLocation + Point(1, 1), aSize);
                 rNativeBoundingRegion = rNativeContentRegion;
                 return true;
             }
