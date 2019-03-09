@@ -6882,9 +6882,11 @@ if test "$COM_IS_CLANG" = "TRUE"; then
         AC_LANG_PUSH([C++])
         save_CPPFLAGS=$CPPFLAGS
         save_CXX=$CXX
+        save_CPP=$CPP
         # compiler plugins must be built with "native" compiler that was used to build Clang itself:
         : "${COMPILER_PLUGINS_CXX=g++ -std=c++11}"
         CXX=$COMPILER_PLUGINS_CXX
+        CPP=$COMPILER_PLUGINS_CXX
         CPPFLAGS="$CPPFLAGS -I$CLANGDIR/include -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS"
         AC_CHECK_HEADER(clang/AST/RecursiveASTVisitor.h,
             [COMPILER_PLUGINS=TRUE],
@@ -12865,5 +12867,11 @@ if test -f warn; then
     cat warn
     rm warn
 fi
+
+echo CLANGDIR/include:
+ls $CLANGDIR/include
+echo CLANGDIR/include/clang:
+ls $CLANGDIR/include/clang
+cat config.log
 
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
