@@ -1323,17 +1323,12 @@ void OResultSet::OpenImpl()
                             nKey = (m_pFileSet->get())[j-1];
                             ExecuteRow(IResultSetHelper::BOOKMARK,nKey,false);
                             m_pSQLAnalyzer->setSelectionEvaluationResult(m_aSelectRow,m_aColMapping);
-                            OValueRefVector::Vector::const_iterator loopInRow = m_aSelectRow->get().begin();
-                            OValueVector::Vector::const_iterator existentInSearchRow = aSearchRow->get().begin();
-                            for (   ++loopInRow,++existentInSearchRow;  // the first column is the bookmark column
-                                    loopInRow != m_aSelectRow->get().end();
-                                    ++loopInRow,++existentInSearchRow)
-                            {
-                                if ( (*loopInRow)->isBound() && !( *(*loopInRow) == *existentInSearchRow) )
-                                    break;
-                            }
+                            auto rowsMismatchIters = std::mismatch(std::next(m_aSelectRow->get().begin()), m_aSelectRow->get().end(),
+                                std::next(aSearchRow->get().begin()),  // the first column is the bookmark column
+                                [](const OValueRefVector::Vector::value_type& a, const OValueVector::Vector::value_type& b) {
+                                    return !a->isBound() || (*a == b); });
 
-                            if(loopInRow == m_aSelectRow->get().end())
+                            if(rowsMismatchIters.first == m_aSelectRow->get().end())
                                 (m_pFileSet->get())[j] = 0; // Rows match -- Mark for deletion by setting key to 0
     #if OSL_DEBUG_LEVEL > 1
                             else
@@ -1341,8 +1336,7 @@ void OResultSet::OpenImpl()
     #endif
                         }
 
-                        m_pFileSet->get().erase(std::remove_if(m_pFileSet->get().begin(),m_pFileSet->get().end(),
-                                                            [](sal_Int32 n) { return n == 0; })
+                        m_pFileSet->get().erase(std::remove(m_pFileSet->get().begin(),m_pFileSet->get().end(),0)
                                           ,m_pFileSet->get().end());
                     }
                 }
@@ -1551,18 +1545,17 @@ void OResultSet::doTableSpecials(const OSQLTable& _xTable)
 void OResultSet::clearInsertRow()
 {
     m_aRow->setDeleted(false); // set to false here because this is the new row
-    OValueRefVector::Vector::iterator aIter = m_aInsertRow->get().begin();
-    const OValueRefVector::Vector::const_iterator aEnd = m_aInsertRow->get().end();
-    for(sal_Int32 nPos = 0;aIter != aEnd;++aIter,++nPos)
+    sal_Int32 nPos = 0;
+    for(ORowSetValueDecoratorRef& rValue : m_aInsertRow->get())
     {
-        ORowSetValueDecoratorRef& rValue = *aIter;
         if ( rValue->isBound() )
         {
-            (m_aRow->get())[nPos]->setValue( (*aIter)->getValue() );
+            (m_aRow->get())[nPos]->setValue( rValue->getValue() );
         }
         rValue->setBound(nPos == 0);
         rValue->setModified(false);
         rValue->setNull();
+        ++nPos;
     }
 }
 

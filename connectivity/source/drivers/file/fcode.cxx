@@ -355,12 +355,10 @@ void ONthOperator::Exec(OCodeStack& rCodeStack)
 
     rCodeStack.push(new OOperandResult(operate(aValues)));
 
-    std::vector<OOperand*>::iterator aIter = aOperands.begin();
-    std::vector<OOperand*>::const_iterator aEnd = aOperands.end();
-    for (; aIter != aEnd; ++aIter)
+    for (auto& rpOperand : aOperands)
     {
-        if (typeid(OOperandResult) == typeid(*(*aIter)))
-            delete *aIter;
+        if (typeid(OOperandResult) == typeid(*rpOperand))
+            delete rpOperand;
     }
 }
 

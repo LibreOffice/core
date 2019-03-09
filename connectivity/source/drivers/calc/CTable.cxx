@@ -645,11 +645,8 @@ bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
 
     // fields
 
-    OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
-    OSQLColumns::Vector::const_iterator aEnd = _rCols.get().end();
-    const OValueRefVector::Vector::size_type nCount = _rRow->get().size();
-    for (OValueRefVector::Vector::size_type i = 1; aIter != aEnd && i < nCount;
-         ++aIter, i++)
+    const OValueRefVector::Vector::size_type nCount = std::min(_rRow->get().size(), _rCols.get().size() + 1);
+    for (OValueRefVector::Vector::size_type i = 1; i < nCount; i++)
     {
         if ( (_rRow->get())[i]->isBound() )
         {

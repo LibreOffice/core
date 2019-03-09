@@ -739,7 +739,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
                 // check, if a column of the primary key was not inserted explicitly,
                 if( !bColumnMatchNamedValue )
                 {
-                    if( autoValues.begin() == autoValues.end() )
+                    if( autoValues.empty() )
                     {
                         getAutoValues( autoValues, connection, schemaName, tableName );
                     }

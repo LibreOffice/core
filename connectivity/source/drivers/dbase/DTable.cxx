@@ -1568,16 +1568,13 @@ bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
                 ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId()) );
                 OSL_ENSURE(pIndex,"ODbaseTable::DeleteRow: No Index returned!");
 
-                OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
-                sal_Int32 nPos = 1;
-                for(;aIter != _rCols.get().end();++aIter,++nPos)
-                {
-                    if(aCase(getString((*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME))),aColName))
-                        break;
-                }
+                OSQLColumns::Vector::const_iterator aIter = std::find_if(_rCols.get().begin(), _rCols.get().end(),
+                    [&aCase, &aColName](const OSQLColumns::Vector::value_type& rxCol) {
+                        return aCase(getString(rxCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME))), aColName); });
                 if (aIter == _rCols.get().end())
                     continue;
 
+                auto nPos = static_cast<sal_Int32>(std::distance(_rCols.get().begin(), aIter)) + 1;
                 pIndex->Delete(m_nFilePos,*(aRow->get())[nPos]);
             }
         }

@@ -109,9 +109,9 @@ namespace connectivity
 
         try
         {
-            for (TWeakPairVector::iterator i = m_aConnections.begin(); m_aConnections.end() != i; ++i)
+            for (auto& rConnection : m_aConnections)
             {
-                Reference<XInterface > xTemp = i->first.get();
+                Reference<XInterface > xTemp = rConnection.first.get();
                 ::comphelper::disposeComponent(xTemp);
             }
         }
@@ -451,18 +451,16 @@ namespace connectivity
 
         Reference< XTablesSupplier > xTab;
 
-        TWeakPairVector::const_iterator aEnd = m_aConnections.end();
-        for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
+        TWeakPairVector::iterator i = std::find_if(m_aConnections.begin(), m_aConnections.end(),
+            [&connection](const TWeakPairVector::value_type& rConnection) {
+                return rConnection.second.second.first.get() == connection.get(); });
+        if (i != m_aConnections.end())
         {
-            if ( i->second.second.first.get() == connection.get() )
+            xTab.set(i->second.second.second.get().get(),UNO_QUERY);
+            if ( !xTab.is() )
             {
-                xTab.set(i->second.second.second.get().get(),UNO_QUERY);
-                if ( !xTab.is() )
-                {
-                    xTab = new OHCatalog(connection);
-                    i->second.second.second = WeakReferenceHelper(xTab);
-                }
-                break;
+                xTab = new OHCatalog(connection);
+                i->second.second.second = WeakReferenceHelper(xTab);
             }
         }
 
@@ -559,15 +557,11 @@ namespace connectivity
         Reference<XConnection> xCon(Source.Source,UNO_QUERY);
         if ( xCon.is() )
         {
-            TWeakPairVector::iterator i = m_aConnections.begin();
-            for (; m_aConnections.end() != i; ++i)
-            {
-                if ( i->first.get() == xCon.get() )
-                {
-                    shutdownConnection(i);
-                    break;
-                }
-            }
+            TWeakPairVector::iterator i = std::find_if(m_aConnections.begin(), m_aConnections.end(),
+                [&xCon](const TWeakPairVector::value_type& rConnection) { return rConnection.first.get() == xCon.get(); });
+
+            if (i != m_aConnections.end())
+                shutdownConnection(i);
         }
         else
         {
@@ -589,12 +583,11 @@ namespace connectivity
     void ODriverDelegator::shutdownConnections()
     {
         m_bInShutDownConnections = true;
-        TWeakPairVector::const_iterator aEnd = m_aConnections.end();
-        for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
+        for (auto& rConnection : m_aConnections)
         {
             try
             {
-                Reference<XConnection> xCon(i->first,UNO_QUERY);
+                Reference<XConnection> xCon(rConnection.first,UNO_QUERY);
                 ::comphelper::disposeComponent(xCon);
             }
             catch(Exception&)
@@ -607,12 +600,11 @@ namespace connectivity
 
     void ODriverDelegator::flushConnections()
     {
-        TWeakPairVector::const_iterator aEnd = m_aConnections.end();
-        for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
+        for (auto& rConnection : m_aConnections)
         {
             try
             {
-                Reference<XFlushable> xCon(i->second.second.first.get(),UNO_QUERY);
+                Reference<XFlushable> xCon(rConnection.second.second.first.get(),UNO_QUERY);
                 if (xCon.is())
                     xCon->flush();
             }

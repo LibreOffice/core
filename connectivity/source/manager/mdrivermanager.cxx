@@ -349,18 +349,18 @@ void OSDBCDriverManager::initializeDriverPrecedence()
         // sort our bootstrapped drivers
         std::sort( m_aDriversBS.begin(), m_aDriversBS.end(), CompareDriverAccessByName() );
 
-        // loop through the names in the precedence order
-        const OUString* pDriverOrder     =                   aDriverOrder.getConstArray();
-        const OUString* pDriverOrderEnd  =   pDriverOrder +  aDriverOrder.getLength();
-
         // the first driver for which there is no preference
         DriverAccessArray::iterator aNoPrefDriversStart = m_aDriversBS.begin();
             // at the moment this is the first of all drivers we know
 
-        for ( ; ( pDriverOrder < pDriverOrderEnd ) && ( aNoPrefDriversStart != m_aDriversBS.end() ); ++pDriverOrder )
+        // loop through the names in the precedence order
+        for ( const OUString& rDriverOrder : aDriverOrder )
         {
+            if (aNoPrefDriversStart == m_aDriversBS.end())
+                break;
+
             DriverAccess driver_order;
-            driver_order.sImplementationName = *pDriverOrder;
+            driver_order.sImplementationName = rDriverOrder;
 
             // look for the impl name in the DriverAccess array
             std::pair< DriverAccessArray::iterator, DriverAccessArray::iterator > aPos =

@@ -92,32 +92,30 @@ void OColumnAlias::initialize( const css::uno::Reference< css::lang::XMultiServi
             comphelper::getComponentContext(_rxORB)),
         UNO_QUERY_THROW);
     Sequence< OUString > aProgrammaticNames(xAliasesNode->getElementNames());
-    for (sal_Int32 i = 0; i != aProgrammaticNames.getLength(); ++i) {
+    for (const auto& rProgrammaticName : aProgrammaticNames) {
         OString sAsciiProgrammaticName(
             OUStringToOString(
-                aProgrammaticNames[i], RTL_TEXTENCODING_ASCII_US));
-        bool bFound = false;
-        for (AliasMap::const_iterator j(m_aAliasMap.begin()); j != m_aAliasMap.end();
-             ++j)
-        {
-            if (j->second.programmaticAsciiName == sAsciiProgrammaticName) {
-                OUString sAssignedAlias;
-                xAliasesNode->getByName(aProgrammaticNames[i]) >>=
-                    sAssignedAlias;
-                if (sAssignedAlias.isEmpty()) {
-                    sAssignedAlias = aProgrammaticNames[i];
-                }
-                AliasEntry entry(j->second);
-                m_aAliasMap.erase(j);
-                m_aAliasMap[sAssignedAlias] = entry;
-                bFound = true;
-                break;
+                rProgrammaticName, RTL_TEXTENCODING_ASCII_US));
+        auto j = std::find_if(m_aAliasMap.begin(), m_aAliasMap.end(),
+            [&sAsciiProgrammaticName](const AliasMap::value_type& rEntry) {
+                return rEntry.second.programmaticAsciiName == sAsciiProgrammaticName; });
+        if (j != m_aAliasMap.end()) {
+            OUString sAssignedAlias;
+            xAliasesNode->getByName(rProgrammaticName) >>=
+                sAssignedAlias;
+            if (sAssignedAlias.isEmpty()) {
+                sAssignedAlias = rProgrammaticName;
             }
+            AliasEntry entry(j->second);
+            m_aAliasMap.erase(j);
+            m_aAliasMap[sAssignedAlias] = entry;
         }
-        SAL_WARN_IF(
-            !bFound, "connectivity.mork",
-            "unknown programmatic name " << aProgrammaticNames[i]
-                <<" from configuration");
+        else {
+            SAL_WARN(
+                "connectivity.mork",
+                "unknown programmatic name " << rProgrammaticName
+                    <<" from configuration");
+        }
     }
 }
 

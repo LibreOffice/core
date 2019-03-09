@@ -1640,15 +1640,14 @@ namespace
             std::vector<bool, std::allocator<bool> >::const_iterator aIter = m_aSet.begin();
             std::vector<bool, std::allocator<bool> >::const_iterator aEnd = m_aSet.end();
             sal_Int32 i = 0;
-            sal_Int32 nParamPos = -1;
             for(; aIter != aEnd && i <= Index; ++aIter)
             {
-                ++nParamPos;
                 if ( !*aIter )
                 {
                     ++i;
                 }
             }
+            auto nParamPos = static_cast<sal_Int32>(std::distance(m_aSet.cbegin(), aIter)) - 1;
             return m_xSource->getByIndex(nParamPos);
         }
     };
@@ -1735,13 +1734,11 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
                     xParamColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)) >>= nScale;
                     // (the index of the parameters is one-based)
                 TParameterPositions::const_iterator aFind = aParameterNames.find(pFinalValues->Name);
-                std::vector<sal_Int32>::const_iterator aIterPos = aFind->second.begin();
-                std::vector<sal_Int32>::const_iterator aEndPos = aFind->second.end();
-                for(;aIterPos != aEndPos;++aIterPos)
+                for(const auto& rItem : aFind->second)
                 {
-                    if ( _aParametersSet.empty() || !_aParametersSet[(*aIterPos)-1] )
+                    if ( _aParametersSet.empty() || !_aParametersSet[rItem-1] )
                     {
-                        _xParameters->setObjectWithInfo(*aIterPos, pFinalValues->Value, nParamType, nScale);
+                        _xParameters->setObjectWithInfo(rItem, pFinalValues->Value, nParamType, nScale);
                     }
                 }
             }

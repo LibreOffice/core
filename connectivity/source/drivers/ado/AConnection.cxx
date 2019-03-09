@@ -476,9 +476,8 @@ void OConnection::disposing()
 
     m_pAdoConnection->Close();
 
-    OTypeInfoMap::iterator aIter = m_aTypeInfo.begin();
-    for (; aIter != m_aTypeInfo.end(); ++aIter)
-        delete aIter->second;
+    for (auto& rEntry : m_aTypeInfo)
+        delete rEntry.second;
 
     m_aTypeInfo.clear();
 

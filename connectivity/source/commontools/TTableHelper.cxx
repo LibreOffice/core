@@ -221,11 +221,8 @@ namespace
 
         // collect all used ordinals
         std::set< OrdinalPosition > aUsedOrdinals;
-        for (   std::vector< ColumnDesc >::const_iterator collect = _rColumns.begin();
-                collect != _rColumns.end();
-                ++collect
-            )
-            aUsedOrdinals.insert( collect->nOrdinalPosition );
+        for ( const auto& collect : _rColumns )
+            aUsedOrdinals.insert( collect.nOrdinalPosition );
 
         // we need to have as much different ordinals as we have different columns
         bool bDuplicates = aUsedOrdinals.size() != _rColumns.size();
@@ -239,22 +236,16 @@ namespace
             OSL_FAIL( "lcl_sanitizeColumnDescs: database did provide invalid ORDINAL_POSITION values!" );
 
             OrdinalPosition nNormalizedPosition = 1;
-            for (   std::vector< ColumnDesc >::iterator normalize = _rColumns.begin();
-                    normalize != _rColumns.end();
-                    ++normalize
-                )
-                normalize->nOrdinalPosition = nNormalizedPosition++;
+            for ( auto& normalize : _rColumns )
+                normalize.nOrdinalPosition = nNormalizedPosition++;
             return;
         }
 
         // what's left is that the range might not be from 1 to <column count>, but for instance
         // 0 to <column count>-1.
         size_t nOffset = *aUsedOrdinals.begin() - 1;
-        for (   std::vector< ColumnDesc >::iterator offset = _rColumns.begin();
-                offset != _rColumns.end();
-                ++offset
-            )
-            offset->nOrdinalPosition -= nOffset;
+        for ( auto& offset : _rColumns )
+            offset.nOrdinalPosition -= nOffset;
     }
 }
 
@@ -284,11 +275,8 @@ void OTableHelper::refreshColumns()
 
         // sort by ordinal position
         std::map< OrdinalPosition, OUString > aSortedColumns;
-        for (   std::vector< ColumnDesc >::const_iterator copy = m_pImpl->m_aColumnDesc.begin();
-                copy != m_pImpl->m_aColumnDesc.end();
-                ++copy
-            )
-            aSortedColumns[ copy->nOrdinalPosition ] = copy->sName;
+        for (const auto& copy : m_pImpl->m_aColumnDesc)
+            aSortedColumns[ copy.nOrdinalPosition ] = copy.sName;
 
         // copy them to aVector, now that we have the proper ordering
         std::transform(
@@ -308,15 +296,10 @@ void OTableHelper::refreshColumns()
 const ColumnDesc* OTableHelper::getColumnDescription(const OUString& _sName) const
 {
     const ColumnDesc* pRet = nullptr;
-    std::vector< ColumnDesc >::const_iterator aEnd = m_pImpl->m_aColumnDesc.end();
-    for (std::vector< ColumnDesc >::const_iterator aIter = m_pImpl->m_aColumnDesc.begin();aIter != aEnd;++aIter)
-    {
-        if ( aIter->sName == _sName )
-        {
-            pRet = &*aIter;
-            break;
-        }
-    } // for (std::vector< ColumnDesc >::const_iterator aIter = m_pImpl->m_aColumnDesc.begin();aIter != aEnd;++aIter)
+    auto aIter = std::find_if(m_pImpl->m_aColumnDesc.begin(), m_pImpl->m_aColumnDesc.end(),
+        [&_sName](const ColumnDesc& rColumnDesc) { return rColumnDesc.sName == _sName; });
+    if (aIter != m_pImpl->m_aColumnDesc.end())
+        pRet = &*aIter;
     return pRet;
 }
 

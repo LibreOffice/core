@@ -259,9 +259,9 @@ void MacabConnection::disposing()
     // we noticed that we should be destroyed in near future so we have to dispose our statements
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
+    for (auto& rxStatement : m_aStatements)
     {
-        Reference< XComponent > xComp(i->get(), UNO_QUERY);
+        Reference< XComponent > xComp(rxStatement.get(), UNO_QUERY);
         if (xComp.is())
             xComp->dispose();
     }

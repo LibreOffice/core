@@ -66,9 +66,9 @@ void ODriver::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
 
 
-    for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
+    for (auto& rxConnection : m_xConnections)
     {
-        Reference< XComponent > xComp(i->get(), UNO_QUERY);
+        Reference< XComponent > xComp(rxConnection.get(), UNO_QUERY);
         if (xComp.is())
             xComp->dispose();
     }
@@ -204,15 +204,11 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
     {
         OConnection* pSearchConnection = reinterpret_cast< OConnection* >( xTunnel->getSomething(OConnection::getUnoTunnelImplementationId()) );
 
-        for (OWeakRefArray::const_iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
-        {
-            if (static_cast<OConnection*>(Reference< XConnection >::query(i->get().get()).get()) == pSearchConnection)
-            {
-                pConnection = pSearchConnection;
-                break;
-            }
-        }
-
+        auto foundConnection = std::any_of(m_xConnections.begin(), m_xConnections.end(),
+            [&pSearchConnection](const css::uno::WeakReferenceHelper& rxConnection) {
+                return static_cast<OConnection*>(Reference< XConnection >::query(rxConnection.get().get()).get()) == pSearchConnection; });
+        if (foundConnection)
+            pConnection = pSearchConnection;
     }
 
     Reference< XTablesSupplier > xTab;

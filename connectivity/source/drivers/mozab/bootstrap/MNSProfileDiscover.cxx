@@ -75,37 +75,33 @@ namespace connectivity
             IniParser parser( profilesIni );
             IniSectionMap &rAllSection = parser.getAllSection();
 
-            IniSectionMap::iterator iBegin = rAllSection.begin();
-            IniSectionMap::const_iterator iEnd = rAllSection.end();
-            for(;iBegin != iEnd;++iBegin)
+            for(auto& rSection : rAllSection)
             {
-                ini_Section *aSection = &(*iBegin).second;
+                ini_Section *aSection = &rSection.second;
                 OUString profileName;
                 OUString profilePath;
                 OUString sIsRelative;
                 OUString sIsDefault;
 
-                for(NameValueVector::iterator itor=aSection->vVector.begin();
-                    itor != aSection->vVector.end();
-                    ++itor)
+                for(auto& rValue : aSection->vVector)
                 {
-                        struct ini_NameValue * aValue = &(*itor);
-                        if ( aValue->sName == "Name" )
-                        {
-                            profileName = aValue->sValue;
-                        }
-                        else if ( aValue->sName == "IsRelative" )
-                        {
-                            sIsRelative = aValue->sValue;
-                        }
-                        else if ( aValue->sName == "Path" )
-                        {
-                            profilePath = aValue->sValue;
-                        }
-                        else if ( aValue->sName == "Default" )
-                        {
-                            sIsDefault = aValue->sValue;
-                        }
+                    struct ini_NameValue * aValue = &rValue;
+                    if ( aValue->sName == "Name" )
+                    {
+                        profileName = aValue->sValue;
+                    }
+                    else if ( aValue->sName == "IsRelative" )
+                    {
+                        sIsRelative = aValue->sValue;
+                    }
+                    else if ( aValue->sName == "Path" )
+                    {
+                        profilePath = aValue->sValue;
+                    }
+                    else if ( aValue->sName == "Default" )
+                    {
+                        sIsDefault = aValue->sValue;
+                    }
                 }
                 if (!(profileName.isEmpty() && profilePath.isEmpty()))
                 {
@@ -165,11 +161,9 @@ namespace connectivity
             ProductStruct &rProduct = m_ProductProfileList[index];
             list.realloc(static_cast<sal_Int32>(rProduct.mProfileList.size()));
             sal_Int32 i=0;
-            for(ProfileList::const_iterator itor=rProduct.mProfileList.begin();
-                itor != rProduct.mProfileList.end();
-                ++itor)
+            for(const auto& rEntry : rProduct.mProfileList)
             {
-                const ProfileStruct& rProfile = (*itor).second;
+                const ProfileStruct& rProfile = rEntry.second;
                 list[i] = rProfile.getProfileName();
                 i++;
             }

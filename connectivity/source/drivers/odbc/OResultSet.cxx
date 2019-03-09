@@ -192,60 +192,58 @@ SQLRETURN OResultSet::unbind(bool _bUnbindHandle)
 
     if ( !m_aBindVector.empty() )
     {
-        TVoidVector::iterator pValue = m_aBindVector.begin();
-        TVoidVector::const_iterator pEnd = m_aBindVector.end();
-        for(; pValue != pEnd; ++pValue)
+        for(auto& [rPtrAddr, rType] : m_aBindVector)
         {
-            switch (pValue->second)
+            switch (rType)
             {
                 case DataType::CHAR:
                 case DataType::VARCHAR:
-                    delete static_cast< OString* >(reinterpret_cast< void * >(pValue->first));
+                    delete static_cast< OString* >(reinterpret_cast< void * >(rPtrAddr));
                     break;
                 case DataType::BIGINT:
-                    delete static_cast< sal_Int64* >(reinterpret_cast< void * >(pValue->first));
+                    delete static_cast< sal_Int64* >(reinterpret_cast< void * >(rPtrAddr));
                     break;
                 case DataType::DECIMAL:
                 case DataType::NUMERIC:
-                    delete static_cast< OString* >(reinterpret_cast< void * >(pValue->first));
+                    delete static_cast< OString* >(reinterpret_cast< void * >(rPtrAddr));
                     break;
                 case DataType::REAL:
                 case DataType::DOUBLE:
-                    delete static_cast< double* >(reinterpret_cast< void * >(pValue->first));
+                    delete static_cast< double* >(reinterpret_cast< void * >(rPtrAddr));
                     break;
                 case DataType::LONGVARCHAR:
                 case DataType::CLOB:
-                    delete [] static_cast< char* >(reinterpret_cast< void * >(pValue->first));
+                    delete [] static_cast< char* >(reinterpret_cast< void * >(rPtrAddr));
                     break;
                 case DataType::LONGVARBINARY:
                 case DataType::BLOB:
-                    delete [] static_cast< char* >(reinterpret_cast< void * >(pValue->first));
+                    delete [] static_cast< char* >(reinterpret_cast< void * >(rPtrAddr));
                     break;
                 case DataType::DATE:
-                    delete static_cast< DATE_STRUCT* >(reinterpret_cast< void * >(pValue->first));
+                    delete static_cast< DATE_STRUCT* >(reinterpret_cast< void * >(rPtrAddr));
                     break;
                 case DataType::TIME:
-                    delete static_cast< TIME_STRUCT* >(reinterpret_cast< void * >(pValue->first));
+                    delete static_cast< TIME_STRUCT* >(reinterpret_cast< void * >(rPtrAddr));
                     break;
                 case DataType::TIMESTAMP:
-                    delete static_cast< TIMESTAMP_STRUCT* >(reinterpret_cast< void * >(pValue->first));
+                    delete static_cast< TIMESTAMP_STRUCT* >(reinterpret_cast< void * >(rPtrAddr));
                     break;
                 case DataType::BIT:
                 case DataType::TINYINT:
-                    delete static_cast< sal_Int8* >(reinterpret_cast< void * >(pValue->first));
+                    delete static_cast< sal_Int8* >(reinterpret_cast< void * >(rPtrAddr));
                     break;
                 case DataType::SMALLINT:
-                    delete static_cast< sal_Int16* >(reinterpret_cast< void * >(pValue->first));
+                    delete static_cast< sal_Int16* >(reinterpret_cast< void * >(rPtrAddr));
                     break;
                 case DataType::INTEGER:
-                    delete static_cast< sal_Int32* >(reinterpret_cast< void * >(pValue->first));
+                    delete static_cast< sal_Int32* >(reinterpret_cast< void * >(rPtrAddr));
                     break;
                 case DataType::FLOAT:
-                    delete static_cast< float* >(reinterpret_cast< void * >(pValue->first));
+                    delete static_cast< float* >(reinterpret_cast< void * >(rPtrAddr));
                     break;
                 case DataType::BINARY:
                 case DataType::VARBINARY:
-                    delete static_cast< sal_Int8* >(reinterpret_cast< void * >(pValue->first));
+                    delete static_cast< sal_Int8* >(reinterpret_cast< void * >(rPtrAddr));
                     break;
             }
         }
@@ -402,10 +400,9 @@ void OResultSet::ensureCacheForColumn(sal_Int32 columnIndex)
 }
 void OResultSet::invalidateCache()
 {
-    const TDataRow::const_iterator end = m_aRow.end();
-    for(TDataRow::iterator i=m_aRow.begin(); i!=end; ++i)
+    for(auto& rItem : m_aRow)
     {
-        i->setBound(false);
+        rItem.setBound(false);
     }
 }
 
@@ -953,16 +950,10 @@ void SAL_CALL OResultSet::deleteRow(  )
     m_bRowDeleted = ( m_pRowStatusArray[0] == SQL_ROW_DELETED );
     if ( m_bRowDeleted )
     {
-        TBookmarkPosMap::iterator aIter = m_aPosToBookmarks.begin();
-        TBookmarkPosMap::const_iterator aEnd = m_aPosToBookmarks.end();
-        for (; aIter != aEnd; ++aIter)
-        {
-            if ( aIter->second == nPos )
-            {
-                m_aPosToBookmarks.erase(aIter);
-                break;
-            }
-        }
+        TBookmarkPosMap::iterator aIter = std::find_if(m_aPosToBookmarks.begin(), m_aPosToBookmarks.end(),
+            [&nPos](const TBookmarkPosMap::value_type& rEntry) { return rEntry.second == nPos; });
+        if (aIter != m_aPosToBookmarks.end())
+            m_aPosToBookmarks.erase(aIter);
     }
     if ( m_pSkipDeletedSet )
         m_pSkipDeletedSet->deletePosition(nPos);
@@ -1652,13 +1643,10 @@ bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nO
             break;
         case IResultSetHelper::BOOKMARK: // special case here because we are only called with position numbers
         {
-            TBookmarkPosMap::const_iterator aIter = m_aPosToBookmarks.begin();
-            TBookmarkPosMap::const_iterator aEnd = m_aPosToBookmarks.end();
-            for (; aIter != aEnd; ++aIter)
-            {
-                if ( aIter->second == _nOffset )
-                    return moveToBookmark(makeAny(aIter->first));
-            }
+            TBookmarkPosMap::const_iterator aIter = std::find_if(m_aPosToBookmarks.begin(), m_aPosToBookmarks.end(),
+                [&_nOffset](const TBookmarkPosMap::value_type& rEntry) { return rEntry.second == _nOffset; });
+            if (aIter != m_aPosToBookmarks.end())
+                return moveToBookmark(makeAny(aIter->first));
             SAL_WARN( "connectivity.odbc", "Bookmark not found!");
         }
         return false;

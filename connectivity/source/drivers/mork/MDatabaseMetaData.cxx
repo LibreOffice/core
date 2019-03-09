@@ -110,19 +110,16 @@ ODatabaseMetaDataResultSet::ORows ODatabaseMetaData::getColumnRows(
 
             SAL_INFO("connectivity.mork", "\tTableName = : " << table);
             // Iterate over all columns in the table.
-            for (   OColumnAlias::AliasMap::const_iterator compare = colNames.begin();
-                    compare != colNames.end();
-                    ++compare
-                )
+            for (const auto& [rName, rAlias] : colNames)
             {
-                if ( match( columnNamePattern, compare->first, '\0' ) )
+                if ( match( columnNamePattern, rName, '\0' ) )
                 {
-                    SAL_INFO("connectivity.mork", "\t\tColumnNam : " << compare->first);
+                    SAL_INFO("connectivity.mork", "\t\tColumnNam : " << rName);
 
                     // COLUMN_NAME
-                    aRow[4] = new ORowSetValueDecorator( compare->first );
+                    aRow[4] = new ORowSetValueDecorator( rName );
                     // ORDINAL_POSITION
-                    aRow[17] = new ORowSetValueDecorator( static_cast< sal_Int32 >( compare->second.columnPosition ) + 1 );
+                    aRow[17] = new ORowSetValueDecorator( static_cast< sal_Int32 >( rAlias.columnPosition ) + 1 );
                     aRows.push_back(aRow);
                 }
             }

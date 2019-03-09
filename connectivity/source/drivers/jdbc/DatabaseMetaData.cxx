@@ -466,15 +466,13 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
                 ODatabaseMetaDataResultSet::ORow aRow(8);
                 while ( xRow.is() && xTemp->next() )
                 {
-                    std::map<sal_Int32,sal_Int32>::const_iterator aIter = aColumnMatching.begin();
-                    std::map<sal_Int32,sal_Int32>::const_iterator aEnd  = aColumnMatching.end();
-                    for (;aIter != aEnd ; ++aIter)
+                    for (const auto& [nCol, nPriv] : aColumnMatching)
                     {
-                        sValue = xRow->getString(aIter->first);
+                        sValue = xRow->getString(nCol);
                         if ( xRow->wasNull() )
-                            aRow[aIter->second] = ODatabaseMetaDataResultSet::getEmptyValue();
+                            aRow[nPriv] = ODatabaseMetaDataResultSet::getEmptyValue();
                         else
-                            aRow[aIter->second] = new ORowSetValueDecorator(sValue);
+                            aRow[nPriv] = new ORowSetValueDecorator(sValue);
                     }
 
                     aRows.push_back(aRow);

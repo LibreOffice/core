@@ -83,9 +83,8 @@ void OComponentTable::refreshColumns()
 
     ::std::vector< OUString> aVector;
 
-    OSQLColumns::Vector::const_iterator aEnd = m_aColumns->get().end();
-    for(OSQLColumns::Vector::const_iterator aIter = m_aColumns->get().begin();aIter != aEnd;++aIter)
-        aVector.push_back(Reference< XNamed>(*aIter,UNO_QUERY)->getName());
+    for(const auto& rxColumn : m_aColumns->get())
+        aVector.push_back(Reference< XNamed>(rxColumn,UNO_QUERY)->getName());
 
     if(m_xColumns)
         m_xColumns->reFill(aVector);

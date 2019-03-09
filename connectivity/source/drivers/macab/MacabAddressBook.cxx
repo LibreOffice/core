@@ -93,14 +93,8 @@ MacabAddressBook::~MacabAddressBook()
         m_xMacabRecords = nullptr;
     }
 
-    if(!m_xMacabGroups.empty())
-    {
-        std::vector<MacabGroup *>::iterator iter, end;
-        iter = m_xMacabGroups.begin();
-        end = m_xMacabGroups.end();
-        for( ; iter != end; ++iter)
-            delete *iter;
-    }
+    for(MacabGroup* pMacabGroup : m_xMacabGroups)
+        delete pMacabGroup;
 
     m_bRetrievedGroups = false;
 }

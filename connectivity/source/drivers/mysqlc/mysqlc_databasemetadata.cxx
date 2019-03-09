@@ -28,6 +28,7 @@
 #include <com/sun/star/sdbc/BestRowScope.hpp>
 #include <com/sun/star/sdbc/ColumnType.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <comphelper/sequence.hxx>
 
 #include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -56,16 +57,14 @@ static void lcl_setRows_throw(const Reference<XResultSet>& _xResultSet, sal_Int3
 
     Sequence<Sequence<Any>> aRows(_rRows.size());
 
-    std::vector<std::vector<Any>>::const_iterator aIter = _rRows.begin();
     Sequence<Any>* pRowsIter = aRows.getArray();
-    Sequence<Any>* pRowsEnd = pRowsIter + aRows.getLength();
-    for (; pRowsIter != pRowsEnd; ++pRowsIter, ++aIter)
+    for (const auto& rRow : _rRows)
     {
-        if (!aIter->empty())
+        if (!rRow.empty())
         {
-            Sequence<Any> aSeq(&(*aIter->begin()), aIter->size());
-            (*pRowsIter) = aSeq;
+            (*pRowsIter) = comphelper::containerToSequence(rRow);
         }
+        ++pRowsIter;
     }
     aArgs[1] <<= aRows;
     xIni->initialize(aArgs);

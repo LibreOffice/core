@@ -136,14 +136,13 @@ void OConnection::construct(const OUString& url)
 
     // check that we can retrieve the tables:
     MorkTableMap *Tables = m_pBook->getTables( defaultScope );
-    MorkTableMap::Map::const_iterator tableIter;
     if (Tables)
     {
         // Iterate all tables
-        for ( tableIter = Tables->map.begin(); tableIter != Tables->map.end(); ++tableIter )
+        for ( const auto& rEntry : Tables->map )
         {
-            if ( 0 == tableIter->first ) continue;
-            SAL_INFO("connectivity.mork", "table->first : " << tableIter->first);
+            if ( 0 == rEntry.first ) continue;
+            SAL_INFO("connectivity.mork", "table->first : " << rEntry.first);
         }
     }
     // check that we can retrieve the history tables:
@@ -151,10 +150,10 @@ void OConnection::construct(const OUString& url)
     if (Tables_hist)
     {
         // Iterate all tables
-        for ( tableIter = Tables_hist->map.begin(); tableIter != Tables_hist->map.end(); ++tableIter )
+        for ( const auto& rEntry : Tables_hist->map )
         {
-            if ( 0 == tableIter->first ) continue;
-            SAL_INFO("connectivity.mork", "table->first : " << tableIter->first);
+            if ( 0 == rEntry.first ) continue;
+            SAL_INFO("connectivity.mork", "table->first : " << rEntry.first);
         }
     }
 }

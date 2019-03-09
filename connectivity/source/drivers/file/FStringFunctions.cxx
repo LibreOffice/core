@@ -99,13 +99,9 @@ ORowSetValue OOp_Concat::operate(const std::vector<ORowSetValue>& lhs) const
 
 ORowSetValue OOp_Locate::operate(const std::vector<ORowSetValue>& lhs) const
 {
-    std::vector<ORowSetValue>::const_iterator aIter = lhs.begin();
-    std::vector<ORowSetValue>::const_iterator aEnd = lhs.end();
-    for (; aIter != aEnd; ++aIter)
-    {
-        if ( aIter->isNull() )
-            return ORowSetValue();
-    }
+    if (std::any_of(lhs.begin(), lhs.end(), [](const ORowSetValue& rValue) { return rValue.isNull(); }))
+        return ORowSetValue();
+
     if ( lhs.size() == 2 )
         return OUString::number(lhs[0].getString().indexOf(lhs[1].getString())+1);
 
@@ -117,13 +113,9 @@ ORowSetValue OOp_Locate::operate(const std::vector<ORowSetValue>& lhs) const
 
 ORowSetValue OOp_SubString::operate(const std::vector<ORowSetValue>& lhs) const
 {
-    std::vector<ORowSetValue>::const_iterator aIter = lhs.begin();
-    std::vector<ORowSetValue>::const_iterator aEnd = lhs.end();
-    for (; aIter != aEnd; ++aIter)
-    {
-        if ( aIter->isNull() )
-            return ORowSetValue();
-    }
+    if (std::any_of(lhs.begin(), lhs.end(), [](const ORowSetValue& rValue) { return rValue.isNull(); }))
+        return ORowSetValue();
+
     if ( lhs.size() == 2 && static_cast<sal_Int32>(lhs[0]) >= sal_Int32(0) )
         return lhs[1].getString().copy(static_cast<sal_Int32>(lhs[0])-1);
 
