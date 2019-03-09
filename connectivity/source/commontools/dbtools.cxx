@@ -847,7 +847,7 @@ void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaDa
     OUString sSeparator = _rxConnMetaData->getCatalogSeparator();
 
     OUString sName(_rQualifiedName);
-    // do we have catalogs ?
+    // do we have catalogs?
     if ( aNameComps.bCatalogs )
     {
         if (_rxConnMetaData->isCatalogAtStart())
@@ -862,7 +862,7 @@ void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaDa
         }
         else
         {
-            // Catalogue name at the end
+            // Catalog name at the end
             sal_Int32 nIndex = sName.lastIndexOf(sSeparator);
             if (-1 != nIndex)
             {
@@ -875,7 +875,7 @@ void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaDa
     if ( aNameComps.bSchemas )
     {
         sal_Int32 nIndex = sName.indexOf('.');
-        //  OSL_ENSURE(-1 != nIndex, "QualifiedNameComponents : no schema separator!");
+        //  OSL_ENSURE(-1 != nIndex, "QualifiedNameComponents: no schema separator!");
         if ( nIndex != -1 )
             _rSchema = sName.copy(0, nIndex);
         sName = sName.copy(nIndex + 1);
