@@ -524,7 +524,6 @@ void ElementDescriptor::readFixedHyperLinkModel( StyleBag * all_styles )
     readDefaults();
     readStringAttr( "Label",XMLNS_DIALOGS_PREFIX ":value" );
     readStringAttr( "URL", XMLNS_DIALOGS_PREFIX ":url" );
-    readStringAttr( "Description", XMLNS_DIALOGS_PREFIX ":description" );
     readAlignAttr( "Align", XMLNS_DIALOGS_PREFIX ":align" );
     readVerticalAlignAttr( "VerticalAlign", XMLNS_DIALOGS_PREFIX ":valign" );
     readBoolAttr( "MultiLine", XMLNS_DIALOGS_PREFIX ":multiline" );

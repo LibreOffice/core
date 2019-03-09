@@ -241,6 +241,7 @@
 // To translators: That's the 'Bold' as used for a font style, so please use a consistent translation."
 #define RID_STR_FONTSTYLE_BOLD                  NC_("RID_STR_FONTSTYLE_BOLD", "Bold")
 #define RID_STR_FONT_DEFAULT                    NC_("RID_STR_FONT_DEFAULT", "(Default)")
+#define RID_STR_URL                             NC_("RID_STR_URL", "URL")
 #define RID_STR_SELECTIONMODEL                  NC_("RID_STR_SELECTIONMODEL", "Selection Type")
 #define RID_STR_USEGRIDLINE                     NC_("RID_STR_USEGRIDLINE", "Use grid line")
 #define RID_STR_GRIDLINECOLOR                   NC_("RID_STR_GRIDLINECOLOR", "Grid line color")

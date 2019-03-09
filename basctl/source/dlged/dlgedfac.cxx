@@ -219,6 +219,9 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
             case OBJ_DLG_GRIDCONTROL:
                  pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.grid.UnoControlGridModel", xDialogSFact );
                  break;
+            case OBJ_DLG_HYPERLINKCONTROL:
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlFixedHyperlinkModel", xDialogSFact );
+                 break;
 
         }
     }

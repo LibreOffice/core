@@ -547,6 +547,12 @@ shell basctl_Shell
         StateMethod     = GetState;
     ]
 
+    SID_INSERT_HYPERLINKCONTROL
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
     SID_EXPORT_DIALOG
     [
         ExecMethod      = ExecuteDialog;
