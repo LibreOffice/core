@@ -23,12 +23,9 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 
-#include <editeng/editdata.hxx>
 #include <svx/dialogs.hrc>
-#include <editeng/eeitem.hxx>
 #include <svx/flagsdef.hxx>
 
-#include <editeng/outliner.hxx>
 #include <paragr.hxx>
 #include <sdattr.hrc>
 

@@ -23,19 +23,14 @@
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/svxids.hrc>
 
 #include <vcl/menu.hxx>
-#include <vcl/settings.hxx>
 
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/dockwin.hxx>
 
 #include <pres.hxx>
 #include <navigatr.hxx>
@@ -49,7 +44,6 @@
 #include <sdresid.hxx>
 #include <ViewShell.hxx>
 #include <ViewShellBase.hxx>
-#include <DrawViewShell.hxx>
 #include <slideshow.hxx>
 #include <FrameView.hxx>
 #include <helpids.h>

@@ -20,13 +20,10 @@
 #include <DrawDocShell.hxx>
 
 #include <officecfg/Office/Common.hxx>
-#include <unotools/moduleoptions.hxx>
 #include <unotools/configmgr.hxx>
 
-#include <vcl/svapp.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/request.hxx>
 #include <svx/svxids.hrc>
 #include <svl/srchitem.hxx>
 #include <svx/srchdlg.hxx>
@@ -36,36 +33,25 @@
 #include <editeng/eeitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <svl/slstitm.hxx>
 #include <sfx2/printer.hxx>
-#include <sfx2/docfile.hxx>
 #include <svx/drawitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itempool.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <comphelper/classids.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/visitem.hxx>
 
-#include <sfx2/fcontnr.hxx>
-
 #include <app.hrc>
 #include <sdmod.hxx>
-#include <strmname.h>
-#include <stlpool.hxx>
 #include <View.hxx>
 #include <drawdoc.hxx>
-#include <sdpage.hxx>
 
 #include <fupoor.hxx>
 #include <fusearch.hxx>
 #include <ViewShell.hxx>
-#include <slideshow.hxx>
-#include <drawview.hxx>
-#include <FrameView.hxx>
 #include <unomodel.hxx>
 #include <undo/undomanager.hxx>
 #include <undo/undofactory.hxx>

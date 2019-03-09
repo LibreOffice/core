@@ -21,9 +21,7 @@
 
 #include <app.hrc>
 #include <animobjs.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/childwin.hxx>
-#include <sfx2/dockwin.hxx>
 
 namespace sd {
 

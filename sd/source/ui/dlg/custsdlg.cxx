@@ -25,11 +25,9 @@
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <cusshow.hxx>
-#include <sdmod.hxx>
 #include <customshowlist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/treelistentry.hxx>
 #include <unotools/charclass.hxx>
 #include <tools/debug.hxx>
 

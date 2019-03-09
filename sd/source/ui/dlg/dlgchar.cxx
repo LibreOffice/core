@@ -21,7 +21,7 @@
 #include <editeng/flstitem.hxx>
 #include <svx/flagsdef.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/svxdlg.hxx>
+#include <sfx2/sfxdlg.hxx>
 
 #include <dlg_char.hxx>
 #include <svx/svxids.hrc>
