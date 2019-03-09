@@ -268,7 +268,7 @@ gb_CxxObject_get_source = $(1)/$(2).cxx
 # compiled with different flags and link that in rather than mixing different
 # flags in one linktarget.
 define gb_CxxObject__set_pchflags
-ifeq ($(gb_ENABLE_PCH),$(true))
+ifneq ($(gb_ENABLE_PCH),)
 ifneq ($(strip $$(PCH_NAME)),)
 ifeq ($$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)),$$(sort $$(T_CXXFLAGS) $$(T_CXXFLAGS_APPEND) $$(DEFS)))
 $$@ : PCHFLAGS := $$(call gb_PrecompiledHeader_get_enableflags,$$(PCH_NAME),$$(PCH_LINKTARGETMAKEFILENAME))
@@ -1121,7 +1121,7 @@ $(call gb_CxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target
 $(call gb_CxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
 $(call gb_CxxObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
-ifeq ($(gb_ENABLE_PCH),$(true))
+ifneq ($(gb_ENABLE_PCH),)
 $(call gb_CxxObject_get_target,$(2)) : $(call gb_PrecompiledHeader_get_timestamp,$(4))
 endif
 
@@ -1258,7 +1258,7 @@ $(call gb_GenCxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
 $(call gb_GenCxxObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
 $(call gb_GenCxxObject_get_target,$(2)) : GEN_CXX_SOURCE := $(call gb_GenCxxObject_get_source,$(2),$(1))
-ifeq ($(gb_ENABLE_PCH),$(true))
+ifneq ($(gb_ENABLE_PCH),)
 $(call gb_GenCxxObject_get_target,$(2)) : $(call gb_PrecompiledHeader_get_timestamp,$(4))
 endif
 
@@ -1517,6 +1517,9 @@ $(call gb_LinkTarget_get_target,$(1)) : PCHOBJS = $$(PCHOBJEX)
 $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS := $$(DEFS)
 $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(T_CXXFLAGS) $(call gb_LinkTarget__get_cxxflags,$(4))
 
+$(call gb_LinkTarget_get_target,$(1)) : DEFS += -DPCH_LEVEL=$(gb_ENABLE_PCH)
+$(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS += -DPCH_LEVEL=$(gb_ENABLE_PCH)
+
 $(call gb_PrecompiledHeader_get_target,$(3),$(4)) : VISIBILITY :=
 
 $(call gb_PrecompiledHeader_get_timestamp,$(4)) : $(call gb_PrecompiledHeader_get_target,$(3),$(4))
@@ -1529,7 +1532,7 @@ endef
 
 # call gb_LinkTarget_set_precompiled_header,linktarget,pchcxxfile,,linktargetmakefilename
 define gb_LinkTarget_set_precompiled_header
-ifeq ($(gb_ENABLE_PCH),$(true))
+ifneq ($(gb_ENABLE_PCH),)
 $(call gb_LinkTarget__set_precompiled_header_impl,$(1),$(2),$(notdir $(2)),$(4))
 $(call gb_PrecompiledHeader_generate_rules,$(notdir $(2)),$(4))
 endif
@@ -1593,7 +1596,7 @@ gb_LinkTarget_use_externals = \
 # call gb_LinkTarget_set_visibility_default,linktarget
 define gb_LinkTarget_set_visibility_default
 $(call gb_LinkTarget_get_target,$(1)) : VISIBILITY := default
-ifeq ($(gb_ENABLE_PCH),$(true))
+ifneq ($(gb_ENABLE_PCH),)
 ifneq ($(strip $$(PCH_NAME)),)
 $(call gb_PrecompiledHeader_get_target,$$(PCH_NAME),$$(PCH_LINKTARGETMAKEFILENAME)) : VISIBILITY := default
 endif
