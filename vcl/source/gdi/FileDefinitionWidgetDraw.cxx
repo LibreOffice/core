@@ -44,14 +44,28 @@ OUString lcl_getThemeDefinitionPath()
     return sPath;
 }
 
+std::shared_ptr<WidgetDefinition> setWidgetDefinition(OUString const& rDefinitionFile,
+                                                      OUString const& rDefinitionResourcesPath)
+{
+    static std::shared_ptr<WidgetDefinition> spDefinition;
+    if (!spDefinition)
+    {
+        spDefinition = std::make_shared<WidgetDefinition>();
+        WidgetDefinitionReader aReader(rDefinitionFile, rDefinitionResourcesPath);
+        aReader.read(*spDefinition);
+    }
+    return spDefinition;
+}
+
 } // end anonymous namespace
 
 FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
     : m_rGraphics(rGraphics)
 {
     OUString sDefinitionBasePath = lcl_getThemeDefinitionPath();
-    WidgetDefinitionReader aReader(sDefinitionBasePath + "definition.xml", sDefinitionBasePath);
-    aReader.read(m_aWidgetDefinition);
+
+    m_pWidgetDefinition
+        = setWidgetDefinition(sDefinitionBasePath + "definition.xml", sDefinitionBasePath);
 
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maNWFData.mbNoFocusRects = true;
@@ -385,7 +399,7 @@ bool FileDefinitionWidgetDraw::resolveDefinition(ControlType eType, ControlPart 
                                                  long nWidth, long nHeight)
 {
     bool bOK = false;
-    auto const& pPart = m_aWidgetDefinition.getDefinition(eType, ePart);
+    auto const& pPart = m_pWidgetDefinition->getDefinition(eType, ePart);
     if (pPart)
     {
         auto const& aStates = pPart->getStates(eType, eState, rValue);
@@ -588,13 +602,13 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
         case ControlType::Spinbox:
         {
             auto const& pButtonUpPart
-                = m_aWidgetDefinition.getDefinition(eType, ControlPart::ButtonUp);
+                = m_pWidgetDefinition->getDefinition(eType, ControlPart::ButtonUp);
             if (!pButtonUpPart)
                 return false;
             Size aButtonSizeUp(pButtonUpPart->mnWidth, pButtonUpPart->mnHeight);
 
             auto const& pButtonDownPart
-                = m_aWidgetDefinition.getDefinition(eType, ControlPart::ButtonDown);
+                = m_pWidgetDefinition->getDefinition(eType, ControlPart::ButtonDown);
             if (!pButtonDownPart)
                 return false;
             Size aButtonSizeDown(pButtonDownPart->mnWidth, pButtonDownPart->mnHeight);
@@ -679,7 +693,7 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
         break;
         case ControlType::Checkbox:
         {
-            auto const& pPart = m_aWidgetDefinition.getDefinition(eType, ControlPart::Entire);
+            auto const& pPart = m_pWidgetDefinition->getDefinition(eType, ControlPart::Entire);
             if (!pPart)
                 return false;
 
@@ -689,7 +703,7 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
         }
         case ControlType::Radiobutton:
         {
-            auto const& pPart = m_aWidgetDefinition.getDefinition(eType, ControlPart::Entire);
+            auto const& pPart = m_pWidgetDefinition->getDefinition(eType, ControlPart::Entire);
             if (!pPart)
                 return false;
 
@@ -699,7 +713,7 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
         }
         case ControlType::TabItem:
         {
-            auto const& pPart = m_aWidgetDefinition.getDefinition(eType, ControlPart::Entire);
+            auto const& pPart = m_pWidgetDefinition->getDefinition(eType, ControlPart::Entire);
             if (!pPart)
                 return false;
 
@@ -743,7 +757,7 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
         case ControlType::Combobox:
         case ControlType::Listbox:
         {
-            auto const& pPart = m_aWidgetDefinition.getDefinition(eType, ControlPart::ButtonDown);
+            auto const& pPart = m_pWidgetDefinition->getDefinition(eType, ControlPart::ButtonDown);
             Size aComboButtonSize(pPart->mnWidth, pPart->mnHeight);
 
             if (ePart == ControlPart::ButtonDown)
@@ -786,7 +800,7 @@ bool FileDefinitionWidgetDraw::updateSettings(AllSettings& rSettings)
 {
     StyleSettings aStyleSet = rSettings.GetStyleSettings();
 
-    auto pDefinitionStyle = m_aWidgetDefinition.mpStyle;
+    auto pDefinitionStyle = m_pWidgetDefinition->mpStyle;
 
     aStyleSet.SetFaceColor(pDefinitionStyle->maFaceColor);
     aStyleSet.SetCheckedColor(pDefinitionStyle->maCheckedColor);
