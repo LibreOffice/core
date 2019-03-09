@@ -488,17 +488,28 @@ def sort_by_category(list, root, module, filter_local):
             boo.append(i)
         elif '<osl' in i or '<rtl' in i or '<sal' in i or '<vcl' in i:
             cor.append(i)
-        elif prefix in i:
+        elif prefix in i or not '/' in i:
+            mod.append(i)
+        # Headers from another module that is closely tied to the module.
+        elif module == 'sc' and '<formula' in i:
             mod.append(i)
         else:
             rst.append(i)
 
     out = []
+    out += [ "#if PCH_LEVEL >= 1" ]
     out += sorted(sys)
     out += sorted(boo)
+    out += [ "#endif // PCH_LEVEL >= 1" ]
+    out += [ "#if PCH_LEVEL >= 2" ]
     out += sorted(cor)
+    out += [ "#endif // PCH_LEVEL >= 2" ]
+    out += [ "#if PCH_LEVEL >= 3" ]
     out += sorted(rst)
+    out += [ "#endif // PCH_LEVEL >= 3" ]
+    out += [ "#if PCH_LEVEL >= 4" ]
     out += sorted(mod)
+    out += [ "#endif // PCH_LEVEL >= 4" ]
     return out
 
 def parse_makefile(groups, lines, lineno, lastif, ifstack):
@@ -964,7 +975,7 @@ def main():
         # Find the first include in the old pch.
         start = -1
         for i in xrange(len(old_pch_lines)):
-            if old_pch_lines[i].startswith('#include'):
+            if old_pch_lines[i].startswith('#include') or old_pch_lines[i].startswith('#if PCH_LEVEL'):
                 start = i
                 break
         # Clobber if there is a mismatch.

@@ -137,7 +137,7 @@ gb_CXXFLAGS_COMMON += -fstack-protector-strong
 gb_LinkTarget_LDFLAGS += -fstack-protector-strong
 endif
 
-ifeq ($(ENABLE_PCH),TRUE)
+ifneq ($(ENABLE_PCH),)
 ifeq ($(COM_IS_CLANG),TRUE)
 # Clang by default includes in the PCH timestamps of the files it was
 # generated from, which would make the PCH be a "new" file for ccache
