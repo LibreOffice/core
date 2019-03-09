@@ -20,7 +20,7 @@
 
 # PrecompiledHeader class
 
-ifeq ($(gb_ENABLE_PCH),$(true))
+ifneq ($(gb_ENABLE_PCH),)
 
 # Use different PCH file depending on whether we use debugging symbols.
 gb_PrecompiledHeader__get_debugdir = $(if $(call gb_LinkTarget__symbols_enabled,$(1)),debug,nodebug)

@@ -1075,8 +1075,11 @@ AC_ARG_ENABLE(fuzzers,
 )
 
 libo_FUZZ_ARG_ENABLE(pch,
-    AS_HELP_STRING([--enable-pch],
-        [Enables precompiled header support for C++. Forced default on Windows/VC build])
+    AS_HELP_STRING([--enable-pch=<yes/no/system/base/normal/full>],
+        [Enables precompiled header support for C++. Forced default on Windows/VC build.
+         Using 'system' will include only external headers, 'basic' will add also headers
+         from base modules, 'normal' will also add all headers except from the module built,
+         'full' will use all suitable headers even from a module itself.])
 )
 
 libo_FUZZ_ARG_ENABLE(epm,
@@ -5020,24 +5023,61 @@ AC_SUBST(HYPH_SYSTEM_DIR)
 AC_SUBST(THES_SYSTEM_DIR)
 
 dnl ===================================================================
-dnl enable pch by default on windows
-dnl enable it explicitly otherwise
+dnl Precompiled headers.
 ENABLE_PCH=""
 AC_MSG_CHECKING([whether to enable pch feature])
-if test "$enable_pch" != "no"; then
+if test -z "$enable_pch"; then
     if test "$_os" = "WINNT"; then
-        ENABLE_PCH="TRUE"
-        AC_MSG_RESULT([yes])
-    elif test -n "$enable_pch" && test "$GCC" = "yes"; then
-        ENABLE_PCH="TRUE"
-        AC_MSG_RESULT([yes])
-    elif test -n "$enable_pch"; then
-        AC_MSG_ERROR([Precompiled header not yet supported for your platform/compiler])
+        # Enabled by default on Windows.
+        enable_pch=yes
     else
-        AC_MSG_RESULT([no])
+        enable_pch=no
     fi
-else
+fi
+if test "$enable_pch" != "no" -a "$_os" != "WINNT" -a "$GCC" != "yes" ; then
+    AC_MSG_ERROR([Precompiled header not yet supported for your platform/compiler])
+fi
+if test "$enable_pch" = "system"; then
+    ENABLE_PCH="1"
+    AC_MSG_RESULT([yes (system headers)])
+elif test "$enable_pch" = "base"; then
+    ENABLE_PCH="2"
+    AC_MSG_RESULT([yes (system and base headers)])
+elif test "$enable_pch" = "normal"; then
+    ENABLE_PCH="3"
+    AC_MSG_RESULT([yes (normal)])
+elif test "$enable_pch" = "full"; then
+    ENABLE_PCH="4"
+    AC_MSG_RESULT([yes (full)])
+elif test "$enable_pch" = "yes"; then
+    # Pick a suitable default.
+    if test "$GCC" = "yes"; then
+        # With Clang and GCC higher levels do not seem to make a noticeable improvement,
+        # while making the PCHs larger and rebuilds more likely.
+        ENABLE_PCH="2"
+        AC_MSG_RESULT([yes (system and base headers)])
+    else
+        # With MSVC the highest level makes a significant difference,
+        # and it was the default when there used to be no PCH levels.
+        ENABLE_PCH="4"
+        AC_MSG_RESULT([yes (full)])
+    fi
+elif test "$enable_pch" = "no"; then
     AC_MSG_RESULT([no])
+else
+    AC_MSG_ERROR([Unknown value for --enable-pch])
+fi
+if test -n "$ENABLE_PCH"; then
+    if test -n "$CCACHE"; then
+        if ! echo "$CCACHE_SLOPPINESS" | grep -q pch_defines | grep -q time_macros; then
+            AC_MSG_WARN([PCH with ccache requires CCACHE_SLOPPINESS to include 'pch_defines,time_macros'])
+            add_warning "PCH with ccache requires CCACHE_SLOPPINESS to include 'pch_defines,time_macros'"
+        fi
+        if test -z "$CCACHE_PCH_EXTSUM"; then
+            AC_MSG_WARN([It is recommended to set CCACHE_PCH_EXTSUM=1 for PCH with ccache.])
+            add_warning "It is recommended to set CCACHE_PCH_EXTSUM=1 for PCH with ccache."
+        fi
+    fi
 fi
 AC_SUBST(ENABLE_PCH)
 
