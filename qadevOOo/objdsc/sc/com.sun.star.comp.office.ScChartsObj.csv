@@ -5,5 +5,3 @@
 "ScChartsObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
 "ScChartsObj";"com::sun::star::table::XTableCharts";"addNewByName()"
 "ScChartsObj";"com::sun::star::table::XTableCharts";"removeByName()"
-"ScChartsObj";"com::sun::star::container::XElementAccess";"getElementType()"
-"ScChartsObj";"com::sun::star::container::XElementAccess";"hasElements()"

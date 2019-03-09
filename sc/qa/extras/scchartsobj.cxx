@@ -8,7 +8,9 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <cppu/unotype.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -20,6 +22,7 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/table/XTableChart.hpp>
 #include <com/sun/star/table/XTableCharts.hpp>
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -31,7 +34,9 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScChartsObj : public CalcUnoApiTest, public apitest::XEnumerationAccess
+class ScChartsObj : public CalcUnoApiTest,
+                    public apitest::XEnumerationAccess,
+                    public apitest::XElementAccess
 {
 public:
     ScChartsObj();
@@ -45,6 +50,10 @@ public:
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
 
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -53,6 +62,7 @@ private:
 
 ScChartsObj::ScChartsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XElementAccess(cppu::UnoType<table::XTableChart>::get())
 {
 }
 
