@@ -12561,7 +12561,7 @@ if test "$enable_mpl_subset" = "yes"; then
     if test "$WITH_WEBDAV" = "neon"; then
         AC_MSG_ERROR([need --with-webdav=serf or --without-webdav - webdav support.])
     fi
-    if test -n "$ENABLE_PDFIMPORT"; then
+    if test -n "$ENABLE_POPPLER"; then
         if test "x$SYSTEM_POPPLER" = "x"; then
             AC_MSG_ERROR([need to disable PDF import via poppler or use system library])
         fi
