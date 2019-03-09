@@ -292,7 +292,7 @@ void SpellDialog::Init_Impl()
     m_pLanguageLB->SetSelectHdl(LINK( this, SpellDialog, LanguageSelectHdl ) );
 
     // initialize language ListBox
-    m_pLanguageLB->SetLanguageList( SvxLanguageListFlags::SPELL_USED, false, false, true );
+    m_pLanguageLB->SetLanguageList( SvxLanguageListFlags::SPELL_USED, false, true );
 
     m_pSentenceED->ClearModifyFlag();
     LinguMgr::GetChangeAllList()->clear();

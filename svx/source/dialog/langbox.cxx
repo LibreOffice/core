@@ -216,12 +216,12 @@ void SvxLanguageBoxBase::AddLanguages( const std::vector< LanguageType >& rLangu
 }
 
 void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
-        bool bHasLangNone, bool bLangNoneIsLangAll, bool bCheckSpellAvail )
+        bool bHasLangNone, bool bCheckSpellAvail )
 {
     ImplClear();
 
     m_bHasLangNone          = bHasLangNone;
-    m_bLangNoneIsLangAll    = bLangNoneIsLangAll;
+    m_bLangNoneIsLangAll    = false;
     m_bWithCheckmark        = bCheckSpellAvail;
 
     if ( SvxLanguageListFlags::EMPTY == nLangList )

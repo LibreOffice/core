@@ -1462,42 +1462,19 @@ std::vector<OUString> SdPageObjsTLV::GetSelectEntryList(const int nDepth) const
  * Checks if it is a draw file and opens the BookmarkDoc depending of
  * the provided Docs
  */
-SdDrawDocument* SdPageObjsTLV::GetBookmarkDoc(SfxMedium* pMed)
+SdDrawDocument* SdPageObjsTLV::GetBookmarkDoc()
 {
-    if (
-       !m_pBookmarkDoc ||
-         (pMed && (!m_pOwnMedium || m_pOwnMedium->GetName() != pMed->GetName()))
-      )
+    if (!m_pBookmarkDoc)
     {
         // create a new BookmarkDoc if now one exists or if a new Medium is provided
-        if (m_pOwnMedium != pMed)
+        if (m_pOwnMedium != nullptr)
         {
             CloseBookmarkDoc();
         }
 
-        if (pMed)
-        {
-            // it looks that it is undefined if a Medium was set by Fill() already
-            DBG_ASSERT( !m_pMedium, "SfxMedium confusion!" );
-            delete m_pMedium;
-            m_pMedium = nullptr;
+        DBG_ASSERT( m_pMedium, "No SfxMedium provided!" );
 
-            // take over this Medium (currently used only be Navigator)
-            m_pOwnMedium = pMed;
-        }
-
-        DBG_ASSERT( m_pMedium || pMed, "No SfxMedium provided!" );
-
-        if( pMed )
-        {
-            // in this mode the document is also owned and controlled by this instance
-            m_xBookmarkDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::STANDARD, true, DocumentType::Impress);
-            if (m_xBookmarkDocShRef->DoLoad(pMed))
-                m_pBookmarkDoc = m_xBookmarkDocShRef->GetDoc();
-            else
-                m_pBookmarkDoc = nullptr;
-        }
-        else if ( m_pMedium )
+        if ( m_pMedium )
             // in this mode the document is owned and controlled by the SdDrawDocument
             // it can be released by calling the corresponding CloseBookmarkDoc method
             // successful creation of a document makes this the owner of the medium

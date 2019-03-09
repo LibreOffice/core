@@ -898,8 +898,7 @@ BitmapEx BitmapEx::TransformBitmapEx(
 BitmapEx BitmapEx::getTransformed(
     const basegfx::B2DHomMatrix& rTransformation,
     const basegfx::B2DRange& rVisibleRange,
-    double fMaximumArea,
-    bool bSmooth) const
+    double fMaximumArea) const
 {
     BitmapEx aRetval;
 
@@ -972,7 +971,7 @@ BitmapEx BitmapEx::getTransformed(
     aTransform.invert();
 
     // create bitmap using source, destination and linear back-transformation
-    aRetval = TransformBitmapEx(fWidth, fHeight, aTransform, bSmooth);
+    aRetval = TransformBitmapEx(fWidth, fHeight, aTransform, /*bSmooth*/true);
 
     return aRetval;
 }

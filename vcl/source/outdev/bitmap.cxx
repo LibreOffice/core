@@ -1276,8 +1276,7 @@ void OutputDevice::DrawTransformedBitmapEx(
             aTransformed = aTransformed.getTransformed(
                 aFullTransform,
                 aVisibleRange,
-                fMaximumArea,
-                /*bDoSmoothAtAll*/true);
+                fMaximumArea);
             basegfx::B2DRange aTargetRange(0.0, 0.0, 1.0, 1.0);
 
             // get logic object target range

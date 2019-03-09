@@ -4,22 +4,19 @@ codemaker/source/javamaker/classfile.hxx:153
 codemaker/source/javamaker/classfile.hxx:168
     void codemaker::javamaker::ClassFile::addField(enum codemaker::javamaker::ClassFile::AccessFlags,const class rtl::OString &,const class rtl::OString &,unsigned short,const class rtl::OString &)
     enum codemaker::javamaker::ClassFile::AccessFlags accessFlags setBits=0x1
-cui/source/options/webconninfo.hxx:35
-    void svx::PasswordTable::InsertHeaderItem(unsigned short,const class rtl::OUString &,enum HeaderBarItemBits)
-    enum HeaderBarItemBits nBits setBits=0x201 clearBits=0x1fe
-dbaccess/source/filter/xml/xmlExport.hxx:171
+dbaccess/source/filter/xml/xmlExport.hxx:172
     void dbaxml::ODBExport::ODBExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
     enum SvXMLExportFlags nExportFlag setBits=0x400 clearBits=0x200
 include/basegfx/polygon/b2dpolygontools.hxx:144
     enum CutFlagValue findCut(const class basegfx::B2DPoint &,const class basegfx::B2DVector &,const class basegfx::B2DPoint &,const class basegfx::B2DVector &,enum CutFlagValue,double *,double *)
     enum CutFlagValue aCutFlags setBits=0x1
-include/framework/framelistanalyzer.hxx:181
+include/framework/framelistanalyzer.hxx:184
     void framework::FrameListAnalyzer::FrameListAnalyzer(const class com::sun::star::uno::Reference<class com::sun::star::frame::XFramesSupplier> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,enum FrameAnalyzerFlags)
     enum FrameAnalyzerFlags eDetectMode setBits=0x4
 include/sfx2/objsh.hxx:457
     void SfxObjectShell::FinishedLoading(enum SfxLoadedFlags)
     enum SfxLoadedFlags nWhich setBits=0x1
-include/svtools/brwbox.hxx:433
+include/svtools/brwbox.hxx:431
     void BrowseBox::InsertDataColumn(unsigned short,const class rtl::OUString &,long,enum HeaderBarItemBits,unsigned short)
     enum HeaderBarItemBits nBits setBits=0x400 clearBits=0x3ec
 include/svtools/wizardmachine.hxx:178
@@ -37,13 +34,13 @@ sc/inc/rangeutl.hxx:162
 sc/inc/xmlwrap.hxx:89
     _Bool ScXMLImportWrapper::Import(enum ImportFlags,class ErrCode &)
     enum ImportFlags nMode setBits=0x1
-sc/source/ui/view/cellsh1.cxx:115
+sc/source/ui/view/cellsh1.cxx:114
     enum InsertDeleteFlags FlagsFromString(const class rtl::OUString &,enum InsertDeleteFlags)
     enum InsertDeleteFlags nFlagsMask setBits=0x87f clearBits=0x700
-sc/source/ui/view/cellsh1.cxx:138
+sc/source/ui/view/cellsh1.cxx:137
     class rtl::OUString FlagsToString(enum InsertDeleteFlags,enum InsertDeleteFlags)
     enum InsertDeleteFlags nFlagsMask setBits=0x87f clearBits=0x700
-sw/source/core/view/viewsh.cxx:733
+sw/source/core/view/viewsh.cxx:728
     void lcl_InvalidateAllContent(class SwViewShell &,enum SwInvalidateFlags)
     enum SwInvalidateFlags nInv setBits=0x2
 sw/source/filter/html/swhtml.hxx:671
