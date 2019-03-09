@@ -68,7 +68,8 @@
         </node>
         <node oor:name="EnableSQL92Check" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
-            <value>true</value>
+            <!-- must be synchronized with ODatabaseModelImpl::getDefaultDataSourceSettings -->
+            <value>false</value>
           </prop>
         </node>
         <node oor:name="AppendTableAliasInSelect" oor:op="replace">
@@ -118,7 +119,8 @@
         </node>
         <node oor:name="PreferDosLikeLineEnds" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
-            <value>true</value>
+            <!-- must be synchronized with ODatabaseModelImpl::getDefaultDataSourceSettings -->
+            <value>false</value>
           </prop>
         </node>
         <node oor:name="BooleanComparisonMode" oor:op="replace">
@@ -143,7 +145,8 @@
         </node>
         <node oor:name="RespectDriverResultSetType" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
-            <value>true</value>
+            <!-- must be synchronized with ODatabaseModelImpl::getDefaultDataSourceSettings -->
+            <value>false</value>
           </prop>
         </node>
       </node>
