@@ -39,6 +39,7 @@ $(call gb_PrecompiledHeader_get_dep_target,%) :
 $(call gb_PrecompiledHeader_get_target,%) :
 	rm -f $@
 	$(call gb_PrecompiledHeader__command,$@,$*,$<,$(PCH_DEFS),$(PCH_CXXFLAGS) $(gb_PrecompiledHeader_EXCEPTIONFLAGS),$(INCLUDE))
+	$(SHA256SUM) $@ >$@.sum
 ifeq ($(gb_FULLDEPS),$(true))
 	$(call gb_Helper_abbreviate_dirs,\
 		RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,$(call gb_PrecompiledHeader_get_dep_target_tmp,$*)) && \
@@ -54,6 +55,7 @@ $(call gb_PrecompiledHeader_get_clean_target,%) :
 		rm -f $(call gb_PrecompiledHeader_get_target,$*) \
 			$(call gb_PrecompiledHeader_get_target,$*).obj \
 			$(call gb_PrecompiledHeader_get_target,$*).pdb \
+			$(call gb_PrecompiledHeader_get_target,$*).sum \
 			$(call gb_PrecompiledHeader_get_timestamp,$*) \
 			$(call gb_PrecompiledHeader_get_dep_target,$*))
 
