@@ -208,7 +208,7 @@ public:
     std::vector<std::shared_ptr<WidgetDefinitionState>> maStates;
 };
 
-class VCL_DLLPUBLIC WidgetDefinition
+class VCL_DLLPUBLIC WidgetDefinitionStyle
 {
 public:
     Color maFaceColor;
@@ -261,7 +261,12 @@ public:
     Color maVisitedLinkColor;
     Color maToolTextColor;
     Color maFontColor;
+};
 
+class VCL_DLLPUBLIC WidgetDefinition
+{
+public:
+    std::shared_ptr<WidgetDefinitionStyle> mpStyle;
     std::unordered_map<ControlTypeAndPart, std::shared_ptr<WidgetDefinitionPart>> maDefinitions;
     std::shared_ptr<WidgetDefinitionPart> getDefinition(ControlType eType, ControlPart ePart);
 };
