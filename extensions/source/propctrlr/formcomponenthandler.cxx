@@ -1036,6 +1036,7 @@ namespace pcr
             break;
 
         case PROPERTY_ID_LABEL:
+        case PROPERTY_ID_URL:
             nControlType = PropertyControlType::MultiLineTextField;
             break;
 

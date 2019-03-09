@@ -981,7 +981,8 @@ void FixedHyperLinkElement::endElement()
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
     ctx.importStringProperty( "Label", "value", _xAttributes );
     ctx.importStringProperty( "URL", "url", _xAttributes );
-    ctx.importStringProperty( "Description", "description", _xAttributes );
+    //no description defined in IDL and not implemented by imple
+    //ctx.importStringProperty( "Description", "description", _xAttributes );
 
     ctx.importAlignProperty( "Align", "align" ,_xAttributes );
     ctx.importVerticalAlignProperty( "VerticalAlign", "valign", _xAttributes );

@@ -337,6 +337,7 @@ namespace pcr
     #define PROPERTY_ID_ACTIVESELECTIONTEXTCOLOR    216
     #define PROPERTY_ID_INACTIVESELECTIONBACKGROUNDCOLOR 217
     #define PROPERTY_ID_INACTIVESELECTIONTEXTCOLOR  218
+    #define PROPERTY_ID_URL                         219
 
 
 } // namespace pcr

@@ -199,6 +199,7 @@ namespace pcr
     #define PROPERTY_LINEEND_FORMAT         "LineEndFormat"
     #define PROPERTY_DECORATION             "Decoration"
     #define PROPERTY_NOLABEL                "NoLabel"
+    #define PROPERTY_URL                    "URL"
 
     #define PROPERTY_SELECTION_TYPE         "SelectionType"
     #define PROPERTY_ROOT_DISPLAYED         "RootDisplayed"
