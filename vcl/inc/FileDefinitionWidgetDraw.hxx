@@ -22,7 +22,7 @@ class FileDefinitionWidgetDraw : public vcl::WidgetDrawInterface
 {
 private:
     SalGraphics& m_rGraphics;
-    WidgetDefinition m_aWidgetDefinition;
+    std::shared_ptr<WidgetDefinition> m_pWidgetDefinition;
 
     bool resolveDefinition(ControlType eType, ControlPart ePart, ControlState eState,
                            const ImplControlValue& rValue, long nX, long nY, long nWidth,
