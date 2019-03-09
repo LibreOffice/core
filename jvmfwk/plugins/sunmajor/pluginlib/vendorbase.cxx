@@ -22,7 +22,6 @@
 
 #include <vendorbase.hxx>
 #include "util.hxx"
-#include "sunjre.hxx"
 
 using namespace std;
 using namespace osl;

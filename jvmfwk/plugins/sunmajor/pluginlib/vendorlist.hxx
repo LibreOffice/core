@@ -20,7 +20,8 @@
 #define INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_VENDORLIST_HXX
 
 #include <rtl/ref.hxx>
-#include <vendorbase.hxx>
+
+namespace jfw_plugin { class VendorBase; }
 
 namespace jfw_plugin
 {

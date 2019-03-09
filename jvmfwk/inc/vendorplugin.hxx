@@ -21,14 +21,16 @@
 #ifndef INCLUDED_JVMFWK_INC_VENDORPLUGIN_HXX
 #define INCLUDED_JVMFWK_INC_VENDORPLUGIN_HXX
 
-#include <jvmfwk/framework.hxx>
-#include <rtl/ref.hxx>
-#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
 #include <jni.h>
 
 #include <memory>
 #include <vector>
-#include "vendorbase.hxx"
+
+namespace jfw_plugin { class VendorBase; }
+namespace rtl { template <class reference_type> class Reference; }
+
+struct JavaInfo;
 
 namespace jfw { class VendorSettings; }
 

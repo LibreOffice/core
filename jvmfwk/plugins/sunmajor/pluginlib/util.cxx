@@ -17,18 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
 #include <config_folders.h>
 
 #include "util.hxx"
 
 #include <osl/process.h>
-#include <osl/security.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <osl/diagnose.h>
 #include <osl/getglobalmutex.hxx>
-#include <rtl/byteseq.hxx>
+#include <rtl/bootstrap.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
 #include <sal/log.hxx>
