@@ -394,9 +394,6 @@ public:
         @param fMaximumArea
         A limitation for the maximum size of pixels to use for the result
 
-        @param bSmooth
-        Defines if pixel interpolation is to be used to create the result
-
         The traget size of the result bitmap is defined by transforming the given
         rTargetRange with the given rTransformation; the area of the result is
         linearly scaled to not exceed the given fMaximumArea
@@ -407,8 +404,7 @@ public:
     BitmapEx            getTransformed(
                             const basegfx::B2DHomMatrix& rTransformation,
                             const basegfx::B2DRange& rVisibleRange,
-                            double fMaximumArea,
-                            bool bSmooth) const;
+                            double fMaximumArea) const;
 
     /** Create ColorStack-modified version of this BitmapEx
 

@@ -118,7 +118,7 @@ public:
 
     int n_children() const { return m_xTreeView->n_children(); }
 
-    void addEntry(const ScRangeNameLine& rLine, bool bSetCurEntry);
+    void addEntry(const ScRangeNameLine& rLine);
     std::vector<ScRangeNameLine> GetSelectedEntries();
 };
 

@@ -58,8 +58,8 @@ public:
     virtual ~SvxLanguageBoxBase();
 
     void            SetLanguageList( SvxLanguageListFlags nLangList,
-                            bool bHasLangNone, bool bLangNoneIsLangAll = false,
-                            bool bCheckSpellAvail = false );
+                            bool bHasLangNone,
+                            bool bCheckSpellAvail );
 
     void            AddLanguages( const std::vector< LanguageType >& rLanguageTypes, SvxLanguageListFlags nLangList );
 

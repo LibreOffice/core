@@ -366,7 +366,7 @@ IMPL_LINK_NOARG(RangeManagerTable, SizeAllocHdl, const Size&, void)
     CheckForFormulaString();
 }
 
-void RangeManagerTable::addEntry(const ScRangeNameLine& rLine, bool bSetCurEntry)
+void RangeManagerTable::addEntry(const ScRangeNameLine& rLine)
 {
     int nRow = m_xTreeView->n_children();
     m_xTreeView->append();
@@ -375,8 +375,6 @@ void RangeManagerTable::addEntry(const ScRangeNameLine& rLine, bool bSetCurEntry
     m_xTreeView->set_text(nRow, rLine.aScope, 2);
     // just unique to track which one has been cached by maCalculatedFormulaEntries
     m_xTreeView->set_id(nRow, OUString::number(m_nId++));
-    if (bSetCurEntry)
-        m_xTreeView->set_cursor(nRow);
 }
 
 void RangeManagerTable::GetLine(ScRangeNameLine& rLine, weld::TreeIter& rEntry)
@@ -403,7 +401,7 @@ void RangeManagerTable::Init()
             if (!rEntry.second->HasType(ScRangeData::Type::Database))
             {
                 aLine.aName = rEntry.second->GetName();
-                addEntry(aLine, false);
+                addEntry(aLine);
             }
         }
     }

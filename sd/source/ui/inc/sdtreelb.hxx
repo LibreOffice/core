@@ -381,7 +381,7 @@ public:
 
     std::vector<OUString> GetSelectEntryList(const int nDepth) const;
 
-    SdDrawDocument* GetBookmarkDoc(SfxMedium* pMedium = nullptr);
+    SdDrawDocument* GetBookmarkDoc();
 
     bool IsLinkableSelected() const { return m_bLinkableSelected; }
 

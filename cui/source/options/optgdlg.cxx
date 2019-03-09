@@ -1232,14 +1232,14 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
         SAL_WARN("cui.options", "ignoring " << e);
     }
 
-    m_pWesternLanguageLB->SetLanguageList( SvxLanguageListFlags::WESTERN | SvxLanguageListFlags::ONLY_KNOWN, true, false, true );
+    m_pWesternLanguageLB->SetLanguageList( SvxLanguageListFlags::WESTERN | SvxLanguageListFlags::ONLY_KNOWN, true, true );
     m_pWesternLanguageLB->InsertDefaultLanguage( css::i18n::ScriptType::LATIN );
-    m_pAsianLanguageLB->SetLanguageList( SvxLanguageListFlags::CJK     | SvxLanguageListFlags::ONLY_KNOWN, true, false, true );
+    m_pAsianLanguageLB->SetLanguageList( SvxLanguageListFlags::CJK     | SvxLanguageListFlags::ONLY_KNOWN, true, true );
     m_pAsianLanguageLB->InsertDefaultLanguage( css::i18n::ScriptType::ASIAN );
-    m_pComplexLanguageLB->SetLanguageList( SvxLanguageListFlags::CTL     | SvxLanguageListFlags::ONLY_KNOWN, true, false, true );
+    m_pComplexLanguageLB->SetLanguageList( SvxLanguageListFlags::CTL     | SvxLanguageListFlags::ONLY_KNOWN, true, true );
     m_pComplexLanguageLB->InsertDefaultLanguage( css::i18n::ScriptType::COMPLEX );
 
-    m_pLocaleSettingLB->SetLanguageList( SvxLanguageListFlags::ALL     | SvxLanguageListFlags::ONLY_KNOWN, false );
+    m_pLocaleSettingLB->SetLanguageList( SvxLanguageListFlags::ALL     | SvxLanguageListFlags::ONLY_KNOWN, false, false );
     m_pLocaleSettingLB->InsertSystemLanguage( );
 
     const NfCurrencyTable& rCurrTab = SvNumberFormatter::GetTheCurrencyTable();
