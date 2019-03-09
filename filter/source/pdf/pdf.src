@@ -21,42 +21,11 @@
 
 
 
-
 #include "pdf.hrc"
 
 String PDF_PROGRESS_BAR
 {
-    Text [ en-US ] = "Export as PDF";
+    Text [ en-US ] = "Export as PDF" ;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// ********************************************************************** EOF
