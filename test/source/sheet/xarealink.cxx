@@ -26,7 +26,7 @@ void XAreaLink::testSetDestArea()
     uno::Reference< sheet::XAreaLink > xAreaLink(init(), UNO_QUERY_THROW);
 
     xAreaLink->setDestArea(table::CellRangeAddress(1,3,4,5,8));
-    // After setting the the destination area, the link is refreshed and the area
+    // After setting the destination area, the link is refreshed and the area
     // is adjusted to the size of the source data.
     // Only test the 'Sheet', 'StartCol', and 'StartRow'
     table::CellRangeAddress aDestArea = xAreaLink->getDestArea();
