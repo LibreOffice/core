@@ -12866,4 +12866,10 @@ if test -f warn; then
     rm warn
 fi
 
+echo CLANGDIR/include:
+ls $CLANGDIR/include
+echo CLANGDIR/include/clang:
+ls $CLANGDIR/include/clang
+cat config.log
+
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
