@@ -56,12 +56,26 @@ namespace dbaui
     // SpecialSettingsPage
     SpecialSettingsPage::SpecialSettingsPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta)
         : OGenericAdministrationPage(pParent, "dbaccess/ui/specialsettingspage.ui", "SpecialSettingsPage", _rCoreAttrs)
-        , m_aBooleanSettings()
+        , m_aBooleanSettings {
+            { m_xIsSQL92Check,               "usesql92",        DSID_SQL92CHECK,            false, false },
+            { m_xAppendTableAlias,           "append",          DSID_APPEND_TABLE_ALIAS,    false, false },
+            { m_xAsBeforeCorrelationName,    "useas",           DSID_AS_BEFORE_CORRNAME,    false, false },
+            { m_xEnableOuterJoin,            "useoj",           DSID_ENABLEOUTERJOIN,       false, false },
+            { m_xIgnoreDriverPrivileges,     "ignoreprivs",     DSID_IGNOREDRIVER_PRIV,     false, false },
+            { m_xParameterSubstitution,      "replaceparams",   DSID_PARAMETERNAMESUBST,    false, false },
+            { m_xSuppressVersionColumn,      "displayver",      DSID_SUPPRESSVERSIONCL,     true,  false },
+            { m_xCatalog,                    "usecatalogname",  DSID_CATALOG,               false, false },
+            { m_xSchema,                     "useschemaname",   DSID_SCHEMA,                false, false },
+            { m_xIndexAppendix,              "createindex",     DSID_INDEXAPPENDIX,         false, false },
+            { m_xDosLineEnds,                "eol",             DSID_DOSLINEENDS,           false, false },
+            { m_xCheckRequiredFields,        "ignorecurrency",  DSID_CHECK_REQUIRED_FIELDS, false, false },
+            { m_xIgnoreCurrency,             "inputchecks",     DSID_IGNORECURRENCY,        false, false },
+            { m_xEscapeDateTime,             "useodbcliterals", DSID_ESCAPE_DATETIME,       false, false },
+            { m_xPrimaryKeySupport,          "primarykeys",     DSID_PRIMARY_KEY_SUPPORT,   false, false },
+            { m_xRespectDriverResultSetType, "resulttype",      DSID_RESPECTRESULTSETTYPE,  false, false } }
         , m_bHasBooleanComparisonMode( _rDSMeta.getFeatureSet().has( DSID_BOOLEANCOMPARISON ) )
         , m_bHasMaxRowScan( _rDSMeta.getFeatureSet().has( DSID_MAX_ROW_SCAN ) )
     {
-        impl_initBooleanSettings();
-
         const FeatureSet& rFeatures( _rDSMeta.getFeatureSet() );
         // create all the check boxes for the boolean settings
         for (auto & booleanSetting : m_aBooleanSettings)
@@ -116,36 +130,6 @@ namespace dbaui
     SpecialSettingsPage::~SpecialSettingsPage()
     {
         disposeOnce();
-    }
-
-    void SpecialSettingsPage::impl_initBooleanSettings()
-    {
-        OSL_PRECOND( m_aBooleanSettings.empty(), "SpecialSettingsPage::impl_initBooleanSettings: called twice!" );
-
-        // for easier maintenance, write the table in this form, then copy it to m_aBooleanSettings
-        BooleanSettingDesc aSettings[] = {
-            { m_xIsSQL92Check,                 "usesql92",        DSID_SQL92CHECK,            false, false },
-            { m_xAppendTableAlias,             "append",          DSID_APPEND_TABLE_ALIAS,    false, false },
-            { m_xAsBeforeCorrelationName,      "useas",           DSID_AS_BEFORE_CORRNAME,    false, false },
-            { m_xEnableOuterJoin,              "useoj",           DSID_ENABLEOUTERJOIN,       false, false },
-            { m_xIgnoreDriverPrivileges,       "ignoreprivs",     DSID_IGNOREDRIVER_PRIV,     false, false },
-            { m_xParameterSubstitution,        "replaceparams",   DSID_PARAMETERNAMESUBST,    false, false },
-            { m_xSuppressVersionColumn,        "displayver",      DSID_SUPPRESSVERSIONCL,     true, false  },
-            { m_xCatalog,                      "usecatalogname",  DSID_CATALOG,               false, false },
-            { m_xSchema,                       "useschemaname",   DSID_SCHEMA,                false, false },
-            { m_xIndexAppendix,                "createindex",     DSID_INDEXAPPENDIX,         false, false },
-            { m_xDosLineEnds,                  "eol",             DSID_DOSLINEENDS,           false, false },
-            { m_xCheckRequiredFields,          "ignorecurrency",  DSID_CHECK_REQUIRED_FIELDS, false, false },
-            { m_xIgnoreCurrency,               "inputchecks",     DSID_IGNORECURRENCY,        false, false },
-            { m_xEscapeDateTime,               "useodbcliterals", DSID_ESCAPE_DATETIME,       false, false },
-            { m_xPrimaryKeySupport,            "primarykeys",     DSID_PRIMARY_KEY_SUPPORT,   false, false },
-            { m_xRespectDriverResultSetType,   "resulttype",      DSID_RESPECTRESULTSETTYPE,  false, false }
-        };
-
-        for ( const BooleanSettingDesc& rDesc : aSettings )
-        {
-            m_aBooleanSettings.push_back( rDesc );
-        }
     }
 
     void SpecialSettingsPage::fillWindows( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList )

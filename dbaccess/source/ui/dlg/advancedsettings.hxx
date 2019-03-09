@@ -83,7 +83,6 @@ namespace dbaui
         // <method>OGenericAdministrationPage::fillWindows</method>
         virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
 
-        void    impl_initBooleanSettings();
         DECL_LINK(BooleanComparisonSelectHdl, weld::ComboBox&, void);
     };
 
