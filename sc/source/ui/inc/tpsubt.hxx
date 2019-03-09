@@ -35,21 +35,16 @@ struct ScSubTotalParam;
 class ScTpSubTotalGroup : public SfxTabPage
 {
 protected:
-    ScTpSubTotalGroup( vcl::Window* pParent,
-                       const SfxItemSet& rArgSet );
+    ScTpSubTotalGroup(TabPageParent pParent, const SfxItemSet& rArgSet);
 
 public:
     virtual ~ScTpSubTotalGroup() override;
-    virtual void dispose() override;
 
     bool            DoReset         ( sal_uInt16            nGroupNo,
                                       const SfxItemSet& rArgSet  );
     bool            DoFillItemSet   ( sal_uInt16        nGroupNo,
                                       SfxItemSet&   rArgSet  );
 protected:
-    VclPtr<ListBox>        mpLbGroup;
-    VclPtr<SvxCheckListBox> mpLbColumns;
-    VclPtr<ListBox>         mpLbFunctions;
     const OUString    aStrNone;
     const OUString    aStrColumn;
 
@@ -61,6 +56,10 @@ protected:
     SCCOL                   nFieldArr[SC_MAXFIELDS];
     sal_uInt16              nFieldCount;
 
+    std::unique_ptr<weld::ComboBox> mxLbGroup;
+    std::unique_ptr<weld::TreeView> mxLbColumns;
+    std::unique_ptr<weld::TreeView> mxLbFunctions;
+
 private:
     void            Init            ();
     void            FillListBoxes   ();
@@ -69,16 +68,17 @@ private:
     sal_uInt16          GetFieldSelPos  ( SCCOL nField );
 
     // Handler ------------------------
-    DECL_LINK( SelectListBoxHdl, ListBox&, void );
-    DECL_LINK( SelectTreeListBoxHdl, SvTreeListBox*, void );
-    DECL_LINK( CheckHdl, SvTreeListBox*, void );
-    void SelectHdl(const void *);
+    DECL_LINK( SelectListBoxHdl, weld::ComboBox&, void );
+    DECL_LINK( SelectTreeListBoxHdl, weld::TreeView&, void );
+    typedef std::pair<int, int> row_col;
+    DECL_LINK(CheckHdl, const row_col&, void);
+    void SelectHdl(const weld::Widget*);
 };
 
 class ScTpSubTotalGroup1 final : public ScTpSubTotalGroup
 {
     friend class VclPtr<ScTpSubTotalGroup1>;
-    ScTpSubTotalGroup1( vcl::Window*              pParent,
+    ScTpSubTotalGroup1( TabPageParent pParent,
                         const SfxItemSet&    rArgSet );
 
 public:
@@ -93,7 +93,7 @@ public:
 class ScTpSubTotalGroup2 final : public ScTpSubTotalGroup
 {
     friend class VclPtr<ScTpSubTotalGroup2>;
-    ScTpSubTotalGroup2( vcl::Window*              pParent,
+    ScTpSubTotalGroup2( TabPageParent pParent,
                         const SfxItemSet&    rArgSet );
 
 public:
@@ -108,7 +108,7 @@ public:
 class ScTpSubTotalGroup3 final : public ScTpSubTotalGroup
 {
     friend class VclPtr<ScTpSubTotalGroup3>;
-    ScTpSubTotalGroup3( vcl::Window*              pParent,
+    ScTpSubTotalGroup3( TabPageParent pParent,
                         const SfxItemSet&    rArgSet );
 
 public:

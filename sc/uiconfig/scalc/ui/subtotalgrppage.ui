@@ -2,9 +2,23 @@
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkTreeStore" id="liststore2">
+    <columns>
+      <!-- column-name check1 -->
+      <column type="gboolean"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name checkvis1 -->
+      <column type="gboolean"/>
+    </columns>
+  </object>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
-      <!-- column-name gchararray1 -->
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -35,7 +49,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkComboBox" id="group_by">
+          <object class="GtkComboBoxText" id="group_by">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
@@ -67,7 +81,7 @@
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="subtotalgrppage|label2">Calculate subtotals for:</property>
             <property name="use_underline">True</property>
-            <property name="mnemonic_widget">columns:border</property>
+            <property name="mnemonic_widget">columns</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -83,7 +97,7 @@
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="subtotalgrppage|label3">Use function:</property>
             <property name="use_underline">True</property>
-            <property name="mnemonic_widget">functions:border</property>
+            <property name="mnemonic_widget">functions</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -93,13 +107,53 @@
           </packing>
         </child>
         <child>
-          <object class="svxcorelo-SvxCheckListBox" id="columns:border">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <child internal-child="selection">
-              <object class="GtkTreeSelection" id="Check List Box-selection1"/>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkTreeView" id="columns">
+                <property name="width_request">-1</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="model">liststore2</property>
+                <property name="headers_visible">False</property>
+                <property name="search_column">1</property>
+                <property name="show_expanders">False</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                    <property name="resizable">True</property>
+                    <property name="spacing">6</property>
+                    <property name="alignment">0.5</property>
+                    <child>
+                      <object class="GtkCellRendererToggle" id="cellrenderer5"/>
+                      <attributes>
+                        <attribute name="visible">3</attribute>
+                        <attribute name="active">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                      <attributes>
+                        <attribute name="text">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+              </object>
             </child>
           </object>
           <packing>
@@ -110,16 +164,39 @@
           </packing>
         </child>
         <child>
-          <object class="GtkTreeView" id="functions:border">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="model">liststore1</property>
-            <property name="search_column">0</property>
-            <property name="show_expanders">False</property>
-            <child internal-child="selection">
-              <object class="GtkTreeSelection" id="treeview-selection2"/>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkTreeView" id="functions">
+                <property name="width_request">-1</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="model">liststore1</property>
+                <property name="headers_visible">False</property>
+                <property name="search_column">0</property>
+                <property name="show_expanders">False</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext3"/>
+                      <attributes>
+                        <attribute name="text">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+              </object>
             </child>
           </object>
           <packing>
