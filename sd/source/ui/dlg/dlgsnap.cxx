@@ -18,11 +18,11 @@
  */
 
 #include <svx/svxids.hrc>
-#include <svx/dlgutil.hxx>
 #include <svl/itempool.hxx>
 #include <svl/aeitem.hxx>
+#include <svtools/unitconv.hxx>
 
-#include <sdattr.hxx>
+#include <sdattr.hrc>
 #include <View.hxx>
 #include <drawdoc.hxx>
 #include <dlgsnap.hxx>

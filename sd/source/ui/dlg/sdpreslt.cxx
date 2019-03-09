@@ -18,14 +18,17 @@
  */
 
 #include <svl/itemset.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/new.hxx>
 #include <svtools/valueset.hxx>
+#include <tools/debug.hxx>
 
 #include <strings.hrc>
 
 #include <bitmaps.hlst>
 #include <sdpreslt.hxx>
-#include <sdattr.hxx>
+#include <sdattr.hrc>
 #include <sdresid.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>

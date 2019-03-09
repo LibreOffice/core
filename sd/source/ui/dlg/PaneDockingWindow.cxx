@@ -18,15 +18,11 @@
  */
 
 #include <PaneDockingWindow.hxx>
-#include <Window.hxx>
 #include <ViewShellBase.hxx>
 #include <framework/FrameworkHelper.hxx>
 
 #include <sfx2/dispatch.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/taskpanelist.hxx>
 #include <vcl/splitwin.hxx>
-#include <vcl/svapp.hxx>
 #include <tools/wintypes.hxx>
 
 using namespace ::com::sun::star;

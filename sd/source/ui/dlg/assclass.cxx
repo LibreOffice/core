@@ -18,7 +18,7 @@
  */
 
 #include <tools/debug.hxx>
-#include <vcl/ctrl.hxx>
+#include <vcl/window.hxx>
 
 #include <assclass.hxx>
 

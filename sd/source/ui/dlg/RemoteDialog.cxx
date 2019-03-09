@@ -7,9 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sdattr.hxx>
-#include <cusshow.hxx>
-
 #include "RemoteDialog.hxx"
 #include <RemoteServer.hxx>
 

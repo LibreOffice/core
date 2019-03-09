@@ -21,14 +21,13 @@
 #include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
 #include <i18nutil/paper.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/sfxdlg.hxx>
 
 #include <dlgpage.hxx>
 
-#include <DrawDocShell.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/flagsdef.hxx>
-#include <svx/svxdlg.hxx>
-#include <editeng/svxenum.hxx>
 
 /**
  * Constructor of tab dialog: appends pages to the dialog

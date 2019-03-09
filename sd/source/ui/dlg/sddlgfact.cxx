@@ -17,18 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/objsh.hxx>
 #include "sddlgfact.hxx"
 #include <BreakDlg.hxx>
 #include <copydlg.hxx>
-#include <svx/xtable.hxx>
 #include <custsdlg.hxx>
 #include <dlg_char.hxx>
 #include <dlgpage.hxx>
 #include <dlgfield.hxx>
 #include <dlgsnap.hxx>
 #include <layeroptionsdlg.hxx>
-#include <ins_paste.hxx>
 #include <inspagob.hxx>
 #include <morphdlg.hxx>
 #include <OutlineBulletDlg.hxx>

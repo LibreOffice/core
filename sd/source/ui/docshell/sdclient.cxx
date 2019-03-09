@@ -18,15 +18,10 @@
  */
 
 #include <Client.hxx>
-#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <svx/svdoole2.hxx>
-#include <svx/svdograf.hxx>
-#include <svx/svdpagv.hxx>
 
 #include <ViewShell.hxx>
-#include <DrawViewShell.hxx>
 #include <View.hxx>
-#include <Window.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;

@@ -20,20 +20,16 @@
 #include <sal/types.h>
 #include <sal/log.hxx>
 #include <sot/formats.hxx>
-#include <sot/storage.hxx>
 #include <vcl/weld.hxx>
-#include <svl/urihelper.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/svdoole2.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
 #include <cusshow.hxx>
-#include <sfx2/childwin.hxx>
 
 #include <sfx2/viewfrm.hxx>
 
-#include <strmname.h>
 #include <sdtreelb.hxx>
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>

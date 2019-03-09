@@ -23,6 +23,22 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/sfxdlg.hxx>
 
+#include <morphdlg.hxx>
+#include <copydlg.hxx>
+#include <BreakDlg.hxx>
+#include <headerfooterdlg.hxx>
+#include <masterlayoutdlg.hxx>
+#include <custsdlg.hxx>
+#include <layeroptionsdlg.hxx>
+#include <inspagob.hxx>
+#include <dlgfield.hxx>
+#include <sdpreslt.hxx>
+#include <prltempl.hxx>
+#include <pubdlg.hxx>
+#include <dlgsnap.hxx>
+#include <present.hxx>
+#include <vectdlg.hxx>
+
 #define DECL_ABSTDLG_BASE(Class,DialogClass)            \
     ScopedVclPtr<DialogClass> pDlg;                     \
 public:                                                 \
@@ -55,13 +71,13 @@ bool Class::StartExecuteAsync(AsyncContext &ctx) \
     return pDlg->StartExecuteAsync(ctx);            \
 }
 
-namespace sd {
-    class MorphDlg;
-    class CopyDlg;
-    class BreakDlg;
-    class HeaderFooterDialog;
-    class MasterLayoutDialog;
-}
+//namespace sd {
+//    class MorphDlg;
+//    class CopyDlg;
+//    class BreakDlg;
+//    class HeaderFooterDialog;
+//    class MasterLayoutDialog;
+//}
 
 class SdVclAbstractDialog_Impl : public VclAbstractDialog
 {
@@ -110,7 +126,6 @@ public:
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) override;
 };
 
-class SdCustomShowDlg;
 class AbstractSdCustomShowDlg_Impl : public AbstractSdCustomShowDlg
 {
 private:
@@ -161,7 +176,6 @@ public:
     virtual void        SetText( const OUString& rStr ) override;
 };
 
-class SdPresLayoutTemplateDlg;
 class SdPresLayoutTemplateDlg_Impl : public SfxAbstractTabDialog
 {
     std::shared_ptr<SdPresLayoutTemplateDlg> m_xDlg;
@@ -180,7 +194,6 @@ public:
     virtual void        SetText( const OUString& rStr ) override;
 };
 
-class SdModifyFieldDlg;
 class AbstractSdModifyFieldDlg_Impl : public AbstractSdModifyFieldDlg
 {
 private:
@@ -195,7 +208,6 @@ public:
     virtual SfxItemSet          GetItemSet() override;
 };
 
-class SdSnapLineDlg;
 class AbstractSdSnapLineDlg_Impl : public AbstractSdSnapLineDlg
 {
 private:
@@ -214,7 +226,6 @@ public:
     virtual void    SetText( const OUString& rStr ) override;
 };
 
-class SdInsertLayerDlg;
 class AbstractSdInsertLayerDlg_Impl : public AbstractSdInsertLayerDlg
 {
 private:
@@ -230,7 +241,6 @@ public:
     virtual void    SetHelpId( const OString& rHelpId ) override ;
 };
 
-class SdInsertPagesObjsDlg;
 class AbstractSdInsertPagesObjsDlg_Impl : public AbstractSdInsertPagesObjsDlg
 {
 private:
@@ -262,7 +272,6 @@ public:
     virtual bool            IsOrientationFade() const override ;
 };
 
-class SdStartPresentationDlg;
 class AbstractSdStartPresDlg_Impl : public AbstractSdStartPresDlg
 {
 private:
@@ -276,7 +285,6 @@ public:
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) override;
 };
 
-class SdPresLayoutDlg;
 class AbstractSdPresLayoutDlg_Impl : public AbstractSdPresLayoutDlg
 {
 private:
@@ -304,7 +312,6 @@ public:
     virtual void    SetText( const OUString& rStr ) override;
 };
 
-class SdVectorizeDlg;
 class AbstractSdVectorizeDlg_Impl :public AbstractSdVectorizeDlg
 {
 private:
@@ -318,7 +325,6 @@ public:
     virtual const GDIMetaFile&  GetGDIMetaFile() const override ;
 };
 
-class SdPublishingDlg;
 class AbstractSdPublishingDlg_Impl :public AbstractSdPublishingDlg
 {
     DECL_ABSTDLG_BASE(AbstractSdPublishingDlg_Impl,SdPublishingDlg)

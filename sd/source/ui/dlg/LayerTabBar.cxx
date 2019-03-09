@@ -24,14 +24,11 @@
 #include <vcl/weld.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include <sdattr.hxx>
-#include <sdmod.hxx>
 #include <helpids.h>
 #include <app.hrc>
 #include <strings.hrc>
 
 #include <DrawViewShell.hxx>
-#include <Window.hxx>
 #include <View.hxx>
 #include <drawdoc.hxx>
 #include <sdresid.hxx>
