@@ -57,6 +57,9 @@ public:
         }
     }
 
+    /** Get shared formula top cell from position, if any, else nullptr. */
+    static const ScFormulaCell* getSharedTopFormulaCell(const CellStoreType::position_type& aPos);
+
     /**
      * Split existing shared formula range at specified position. The cell at
      * specified position becomes the top cell of the lower shared formula
@@ -65,8 +68,11 @@ public:
      *
      * @param aPos position of cell to examine.
      * @param pCxt context to be used, if any, may be nullptr.
+     *
+     * @return TRUE if there indeed was a split, else FALSE (e.g. split
+     *         position was top or bottom cell or no formula group).
      */
-    static void splitFormulaCellGroup(const CellStoreType::position_type& aPos, sc::EndListeningContext* pCxt);
+    static bool splitFormulaCellGroup(const CellStoreType::position_type& aPos, sc::EndListeningContext* pCxt);
 
     /**
      * Split existing shared formula ranges at specified row positions.
@@ -75,8 +81,11 @@ public:
      * @param rBounds row positions at which to split existing shared formula
      *                ranges. Note that this method will directly modify this
      *                parameter to sort and remove duplicates.
+     *
+     * @return TRUE if there indeed was a split, else FALSE (e.g. split
+     *         positions were only top or bottom cells or no formula group).
      */
-    static void splitFormulaCellGroups(CellStoreType& rCells, std::vector<SCROW>& rBounds);
+    static bool splitFormulaCellGroups(CellStoreType& rCells, std::vector<SCROW>& rBounds);
 
     /**
      * See if two specified adjacent formula cells can be merged, and if they
