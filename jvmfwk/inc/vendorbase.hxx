@@ -20,8 +20,6 @@
 #ifndef INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_VENDORBASE_HXX
 #define INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_VENDORBASE_HXX
 
-#include <config_java.h>
-
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <osl/endian.h>

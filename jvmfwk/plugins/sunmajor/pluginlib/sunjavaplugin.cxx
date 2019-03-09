@@ -49,19 +49,19 @@
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
 #include <sal/log.hxx>
-#include <osl/getglobalmutex.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <setjmp.h>
 #include <signal.h>
-#include <stack>
 
 #include <jni.h>
 #include <rtl/byteseq.hxx>
 #include <fwkbase.hxx>
+#include <elements.hxx>
+#include <vendorbase.hxx>
 #include <vendorplugin.hxx>
+#include <jvmfwk/framework.hxx>
 #include "util.hxx"
 #include "sunversion.hxx"
-#include "vendorlist.hxx"
 #include "diagnostics.h"
 
 #ifdef MACOSX

@@ -19,7 +19,6 @@
 
 
 #include <osl/file.hxx>
-#include <osl/thread.h>
 #include "gnujre.hxx"
 #include "util.hxx"
 

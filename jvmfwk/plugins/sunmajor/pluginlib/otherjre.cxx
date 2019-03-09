@@ -18,7 +18,6 @@
  */
 
 
-#include <osl/thread.h>
 #include "otherjre.hxx"
 
 using namespace std;

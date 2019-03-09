@@ -27,8 +27,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrlReference.hpp>
@@ -38,6 +36,8 @@
 #include <sal/types.h>
 
 #include <jni.h>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 jobjectArray jvmaccess::ClassPath::translateToUrls(
     css::uno::Reference< css::uno::XComponentContext > const & context,
