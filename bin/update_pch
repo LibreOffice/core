@@ -185,24 +185,31 @@ def get_filename(line):
         return line
     return re.sub(r'(.*#include\s*)<(.*)>(.*)', r'\2', line)
 
-def is_c_runtime(inc):
+def is_c_runtime(inc, root, module):
     """ Heuristic-based detection of C/C++
         runtime headers.
         They are all-lowercase, with .h or
         no extension, filename only.
+        Try to check that they are not LO headers.
     """
     inc = get_filename(inc)
 
     if inc.endswith('.hxx') or inc.endswith('.hpp'):
         return False
 
+    if inc.endswith('.h') and inc.startswith( 'config_' ):
+        return False
+
     for c in inc:
         if c == '/':
             return False
-        if c == '.':
-            return inc.endswith('.h')
+        if c == '.' and not inc.endswith('.h'):
+            return False
         if c.isupper():
             return False
+
+    if os.path.isfile( os.path.join(root, module, 'inc', inc)):
+        return False
 
     return True
 
@@ -242,12 +249,12 @@ class Filter_Local(object):
         self.public_prefix = '<' + self.module + '/'
 
         all = find_files(os.path.join(root, module))
-        self.module = []
+        self.module_includes = []
         self.locals = []
         mod_prefix = module + '/inc/'
         for i in all:
             if mod_prefix in i:
-                self.module.append(i)
+                self.module_includes.append(i)
             else:
                 self.locals.append(i)
 
@@ -257,7 +264,7 @@ class Filter_Local(object):
     def is_module(self, line):
         """ Returns True if in module/inc/... """
         filename = get_filename(line)
-        for i in self.module:
+        for i in self.module_includes:
             if i.endswith(filename):
                 return True
         return False
@@ -271,7 +278,7 @@ class Filter_Local(object):
         return False
 
     def is_external(self, line):
-        return is_c_runtime(line) and \
+        return is_c_runtime(line, self.root, self.module) and \
                not self.is_public(line) and \
                not self.is_module(line) and \
                not self.is_local(line)
@@ -284,7 +291,7 @@ class Filter_Local(object):
         for i in self.locals:
             if i.endswith(filename):
                 return i
-        for i in self.module:
+        for i in self.module_includes:
             if i.endswith(filename):
                 return i
         return None
@@ -461,7 +468,7 @@ def fixup(includes, module):
     #        append('sfx2/msg.hxx')
     return fixes
 
-def sort_by_category(list, module, filter_local):
+def sort_by_category(list, root, module, filter_local):
     """ Move all 'system' headers first.
         Core files of osl, rtl, sal, next.
         Everything non-module-specific third.
@@ -475,7 +482,7 @@ def sort_by_category(list, module, filter_local):
 
     prefix = '<' + module + '/'
     for i in list:
-        if is_c_runtime(i):
+        if is_c_runtime(i, root, module):
             sys.append(i)
         elif '<boost/' in i:
             boo.append(i)
@@ -936,7 +943,7 @@ def main():
         fixes = map(lambda x: '#include <' + x + '>', fixes)
 
         includes = map(lambda x: '#include <' + x + '>', includes)
-        sorted = sort_by_category(includes, module, filter_local)
+        sorted = sort_by_category(includes, root, module, filter_local)
         includes = fixes + sorted
 
         if len(osname):
