@@ -18,21 +18,8 @@
  */
 
 #include "sddlgfact.hxx"
-#include <morphdlg.hxx>
-#include <present.hxx>
-#include <inspagob.hxx>
-#include <vectdlg.hxx>
-#include <sdpreslt.hxx>
-#include <headerfooterdlg.hxx>
-#include <pubdlg.hxx>
-#include <ins_paste.hxx>
-#include <layeroptionsdlg.hxx>
-#include <dlgsnap.hxx>
-#include <dlgfield.hxx>
-#include <prltempl.hxx>
-#include <custsdlg.hxx>
-#include <copydlg.hxx>
 #include <sal/types.h>
+
 class SdAbstractDialogFactory;
 
 extern "C"

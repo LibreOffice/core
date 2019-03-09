@@ -18,6 +18,7 @@
  */
 
 #include <inspagob.hxx>
+#include <sdtreelb.hxx>
 
 #include <strings.hrc>
 
