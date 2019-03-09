@@ -39,20 +39,17 @@ void WidgetDefinitionReaderTest::testRead()
 {
     vcl::WidgetDefinition aDefinition;
 
-    CPPUNIT_ASSERT_EQUAL(OUString("000000"), aDefinition.maFaceColor.AsRGBHexString());
-    CPPUNIT_ASSERT_EQUAL(OUString("000000"), aDefinition.maCheckedColor.AsRGBHexString());
-    CPPUNIT_ASSERT_EQUAL(OUString("000000"), aDefinition.maLightColor.AsRGBHexString());
-
     vcl::WidgetDefinitionReader aReader(getFullUrl("definition1.xml"), getFullUrl(""));
     aReader.read(aDefinition);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("123456"), aDefinition.maFaceColor.AsRGBHexString());
-    CPPUNIT_ASSERT_EQUAL(OUString("234567"), aDefinition.maCheckedColor.AsRGBHexString());
-    CPPUNIT_ASSERT_EQUAL(OUString("345678"), aDefinition.maLightColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(OUString("123456"), aDefinition.mpStyle->maFaceColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(OUString("234567"), aDefinition.mpStyle->maCheckedColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(OUString("345678"), aDefinition.mpStyle->maLightColor.AsRGBHexString());
 
-    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aDefinition.maVisitedLinkColor.AsRGBHexString());
-    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aDefinition.maToolTextColor.AsRGBHexString());
-    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aDefinition.maFontColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"),
+                         aDefinition.mpStyle->maVisitedLinkColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aDefinition.mpStyle->maToolTextColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aDefinition.mpStyle->maFontColor.AsRGBHexString());
 
     // Pushbutton
     {
