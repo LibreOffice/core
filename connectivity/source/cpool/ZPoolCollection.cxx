@@ -437,11 +437,7 @@ void SAL_CALL OPoolCollection::propertyChange( const css::beans::PropertyChangeE
         {
             m_aDriverProxies.clear();
             m_aDriverProxies = MapDriver2DriverRef();
-            for(auto& rEntry : m_aPools)
-            {
-                rEntry.second->clear(false);
-            }
-            m_aPools.clear();
+            clearConnectionPools(false);
         }
     }
     else if(evt.Source.is())
