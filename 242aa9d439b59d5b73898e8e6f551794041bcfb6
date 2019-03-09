@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_df03f40e",
+        "filename": "connectivity/registry/odbc/org/openoffice/Office/DataAccess/Drivers.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-03-09T17:30:36Z",
+      "side": 1,
+      "message": "I\u0027m not sure what difference is there with Properties vs Features here, but isn\u0027t that so that the latter tell which properties are supported? If so, is that correct to set both to false?",
+      "range": {
+        "startLine": 233,
+        "startChar": 19,
+        "endLine": 233,
+        "endChar": 24
+      },
+      "revId": "242aa9d439b59d5b73898e8e6f551794041bcfb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
