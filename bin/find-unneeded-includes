@@ -46,6 +46,7 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules):
         "list": "debug/list",
         "map": "debug/map.h",
         "set": "debug/set.h",
+        "set": "debug/multiset.h",
         "unordered_map": "debug/unordered_map",
         "unordered_set": "debug/unordered_set",
         "vector": "debug/vector",
