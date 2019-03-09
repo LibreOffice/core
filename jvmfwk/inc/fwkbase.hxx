@@ -24,11 +24,12 @@
 #include <boost/optional.hpp>
 
 #include <rtl/ustring.hxx>
-#include "elements.hxx"
 #include "libxmlutil.hxx"
 
 namespace jfw
 {
+
+struct VersionInfo;
 
 class VendorSettings
 {

@@ -23,12 +23,13 @@
 
 #include <memory>
 #include <vector>
-#include <jvmfwk/framework.hxx>
 #include "fwkutil.hxx"
 #include <rtl/ustring.hxx>
 #include <rtl/byteseq.hxx>
 #include <libxml/parser.h>
 #include <boost/optional.hpp>
+
+struct JavaInfo;
 
 #define NS_JAVA_FRAMEWORK "http://openoffice.org/2004/java/framework/1.0"
 #define NS_SCHEMA_INSTANCE "http://www.w3.org/2001/XMLSchema-instance"

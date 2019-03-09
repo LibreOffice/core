@@ -22,13 +22,13 @@
 
 #include <cassert>
 #include <memory>
-#include <utility>
 
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/bootstrap.hxx>
+#include <osl/diagnose.h>
 #include <osl/thread.hxx>
-#include <osl/file.hxx>
 #include <jvmfwk/framework.hxx>
+#include <vendorbase.hxx>
 #include <vendorplugin.hxx>
 #include <vector>
 #include <algorithm>

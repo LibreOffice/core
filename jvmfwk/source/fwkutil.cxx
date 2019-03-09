@@ -23,23 +23,14 @@
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
+#include <algorithm>
 #endif
 
-#include <string>
-#include <string.h>
 #include <osl/module.hxx>
-#include <osl/thread.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
-#include <osl/process.h>
-#include <rtl/instance.hxx>
-#include <rtl/uri.hxx>
 #include <sal/log.hxx>
-#include <osl/getglobalmutex.hxx>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <cppuhelper/bootstrap.hxx>
 
 #include "framework.hxx"
 #include <fwkutil.hxx>

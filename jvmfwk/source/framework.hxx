@@ -19,10 +19,7 @@
 #ifndef INCLUDED_JVMFWK_SOURCE_FRAMEWORK_HXX
 #define INCLUDED_JVMFWK_SOURCE_FRAMEWORK_HXX
 
-#include <rtl/ustring.hxx>
-#include <rtl/byteseq.hxx>
 #include <jvmfwk/framework.hxx>
-#include <vendorplugin.hxx>
 
 namespace jfw
 {
