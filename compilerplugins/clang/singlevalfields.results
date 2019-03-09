@@ -1272,7 +1272,6 @@ sw/source/filter/ww8/ww8par3.cxx:370
     1
 sw/source/filter/ww8/ww8par5.cxx:1539
     SwWW8ImplReader::Read_F_DocInfo aName10
-    
 sw/source/filter/ww8/ww8par5.cxx:1540
     SwWW8ImplReader::Read_F_DocInfo aName11
     TITEL
@@ -1287,13 +1286,12 @@ sw/source/filter/ww8/ww8par5.cxx:1546
     TITRO
 sw/source/filter/ww8/ww8par5.cxx:1548
     SwWW8ImplReader::Read_F_DocInfo aName20
-    
 sw/source/filter/ww8/ww8par5.cxx:1549
     SwWW8ImplReader::Read_F_DocInfo aName21
     ERSTELLDATUM
 sw/source/filter/ww8/ww8par5.cxx:1551
     SwWW8ImplReader::Read_F_DocInfo aName22
-    CRÉÉ
+    CRÃ‰Ã‰
 sw/source/filter/ww8/ww8par5.cxx:1553
     SwWW8ImplReader::Read_F_DocInfo aName23
     CREATED
@@ -1302,7 +1300,6 @@ sw/source/filter/ww8/ww8par5.cxx:1555
     CREADO
 sw/source/filter/ww8/ww8par5.cxx:1557
     SwWW8ImplReader::Read_F_DocInfo aName30
-    
 sw/source/filter/ww8/ww8par5.cxx:1558
     SwWW8ImplReader::Read_F_DocInfo aName31
     ZULETZTGESPEICHERTZEIT
@@ -1317,13 +1314,12 @@ sw/source/filter/ww8/ww8par5.cxx:1564
     MODIFICADO
 sw/source/filter/ww8/ww8par5.cxx:1566
     SwWW8ImplReader::Read_F_DocInfo aName40
-    
 sw/source/filter/ww8/ww8par5.cxx:1567
     SwWW8ImplReader::Read_F_DocInfo aName41
     ZULETZTGEDRUCKT
 sw/source/filter/ww8/ww8par5.cxx:1569
     SwWW8ImplReader::Read_F_DocInfo aName42
-    DERNIÈREIMPRESSION
+    DERNIÃˆREIMPRESSION
 sw/source/filter/ww8/ww8par5.cxx:1571
     SwWW8ImplReader::Read_F_DocInfo aName43
     LASTPRINTED
@@ -1332,13 +1328,12 @@ sw/source/filter/ww8/ww8par5.cxx:1573
     HUPS PUPS
 sw/source/filter/ww8/ww8par5.cxx:1575
     SwWW8ImplReader::Read_F_DocInfo aName50
-    
 sw/source/filter/ww8/ww8par5.cxx:1576
     SwWW8ImplReader::Read_F_DocInfo aName51
-    ÜBERARBEITUNGSNUMMER
+    ÃœBERARBEITUNGSNUMMER
 sw/source/filter/ww8/ww8par5.cxx:1578
     SwWW8ImplReader::Read_F_DocInfo aName52
-    NUMÉRODEREVISION
+    NUMÃ‰RODEREVISION
 sw/source/filter/ww8/ww8par5.cxx:1580
     SwWW8ImplReader::Read_F_DocInfo aName53
     REVISIONNUMBER
