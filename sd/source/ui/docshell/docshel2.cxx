@@ -21,21 +21,17 @@
 #include <DrawDocShell.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 
 #include <helpids.h>
 #include <ViewShell.hxx>
-#include <drawview.hxx>
 #include <FrameView.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
-#include <View.hxx>
 #include <ClientView.hxx>
 #include <Window.hxx>
 #include <strings.hrc>
 
 #include <sdresid.hxx>
-#include <strmname.h>
 #include <fupoor.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>

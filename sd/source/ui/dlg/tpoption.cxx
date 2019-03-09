@@ -18,30 +18,25 @@
  */
 
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <sfx2/module.hxx>
-#include <sfx2/app.hxx>
 #include <svx/svxids.hrc>
-#include <svx/dialogs.hrc>
 #include <svx/strarray.hxx>
-#include <svx/dlgutil.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <svtools/unitconv.hxx>
 
-#include <sdattr.hxx>
+#include <sdattr.hrc>
 #include <sdresid.hxx>
 #include <optsitem.hxx>
 #include <tpoption.hxx>
 #include <strings.hrc>
 #include <app.hrc>
 #include <svl/intitem.hxx>
-#include <sfx2/request.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

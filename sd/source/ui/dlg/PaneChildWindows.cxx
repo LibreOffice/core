@@ -25,11 +25,9 @@
 #include <strings.hrc>
 #include <sdresid.hxx>
 
-#include <sfx2/app.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <tools/diagnose_ex.h>
 
 namespace sd {
 

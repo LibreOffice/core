@@ -22,13 +22,9 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
 
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <sfx2/doctempl.hxx>
 #include <com/sun/star/frame/DocumentTemplates.hpp>
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>

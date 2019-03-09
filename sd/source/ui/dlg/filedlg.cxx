@@ -20,19 +20,11 @@
 #include <config_features.h>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
-#include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/FilePickerEvent.hpp>
 #include <vcl/idle.hxx>
-#include <sal/types.h>
-#include <osl/thread.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -40,7 +32,6 @@
 #include <filedlg.hxx>
 #include <sdresid.hxx>
 #include <strings.hrc>
-#include <vcl/graphicfilter.hxx>
 #include <officecfg/Office/Impress.hxx>
 
 // -----------      SdFileDialog_Imp        ---------------------------

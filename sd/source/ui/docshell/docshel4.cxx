@@ -27,14 +27,11 @@
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <editeng/outlobj.hxx>
 #include <tools/urlobj.hxx>
-#include <sfx2/progress.hxx>
 #include <vcl/waitobj.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/editeng.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/flstitem.hxx>
-#include <editeng/eeitem.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/flagitem.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/dinfdlg.hxx>
@@ -42,17 +39,11 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdotext.hxx>
-#include <svl/style.hxx>
 #include <sfx2/printer.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/sfxecode.hxx>
 #include <comphelper/classids.hxx>
 #include <sot/formats.hxx>
-#include <sfx2/request.hxx>
-#include <unotools/fltrcfg.hxx>
-#include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <unotools/saveopt.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 
@@ -62,7 +53,7 @@
 #include <FrameView.hxx>
 #include <optsitem.hxx>
 #include <Outliner.hxx>
-#include <sdattr.hxx>
+#include <sdattr.hrc>
 #include <drawdoc.hxx>
 #include <ViewShell.hxx>
 #include <sdmod.hxx>
@@ -83,8 +74,6 @@
 #include <sdhtmlfilter.hxx>
 #include <sdpdffilter.hxx>
 #include <framework/FrameworkHelper.hxx>
-
-#include <SdUnoDrawView.hxx>
 
 #include <sfx2/zoomitem.hxx>
 

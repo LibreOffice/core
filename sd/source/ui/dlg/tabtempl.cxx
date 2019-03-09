@@ -24,23 +24,13 @@
 #include <svx/drawitem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/ofaitem.hxx>
-#include <svx/svdmark.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/svdview.hxx>
-#include <svx/svxgrahicitem.hxx>
 #include <svl/cjkoptions.hxx>
-
+#include <sfx2/objsh.hxx>
 #include <svx/dialogs.hrc>
-
-#include <svx/svxdlg.hxx>
-#include <svx/tabline.hxx>
 #include <svl/style.hxx>
-#include <svx/xtable.hxx>
 
-#include <DrawDocShell.hxx>
 #include <tabtempl.hxx>
-#include <dlg_char.hxx>
-#include <paragr.hxx>
 #include <svx/flagsdef.hxx>
 
 /**

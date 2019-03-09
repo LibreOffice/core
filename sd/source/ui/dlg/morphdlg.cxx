@@ -23,10 +23,8 @@
 #include <sdiocmpt.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
-#include <svx/xenum.hxx>
 #include <svx/svdobj.hxx>
 #include <svl/itemset.hxx>
-#include <svl/itempool.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
 using namespace com::sun::star;

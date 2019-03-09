@@ -20,7 +20,6 @@
 #include <NavigatorChildWindow.hxx>
 #include <navigatr.hxx>
 #include <app.hrc>
-#include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/navigat.hxx>

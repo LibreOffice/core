@@ -17,14 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/dialogs.hrc>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/outlobj.hxx>
 #include <svx/langbox.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/outlobj.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <vcl/button.hxx>
@@ -44,9 +43,6 @@
 #include <tools/color.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/xlndsit.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/xlnclit.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/builderfactory.hxx>
 

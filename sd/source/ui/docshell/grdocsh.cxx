@@ -18,19 +18,14 @@
  */
 
 #include <svx/svxids.hrc>
-#include <sfx2/app.hxx>
-#include <sfx2/request.hxx>
-#include <svl/srchitem.hxx>
 #include <tools/globname.hxx>
 
 #include <comphelper/classids.hxx>
 
 #include <sfx2/objface.hxx>
 
-#include <app.hrc>
 #include <GraphicDocShell.hxx>
 #include <DrawDocShell.hxx>
-#include <drawdoc.hxx>
 
 using namespace sd;
 #define ShellClass_GraphicDocShell

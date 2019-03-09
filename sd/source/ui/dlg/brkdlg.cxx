@@ -20,14 +20,11 @@
 #include <BreakDlg.hxx>
 #include <sfx2/progress.hxx>
 
-#include <svx/svdedtv.hxx>
 #include <svx/svdetc.hxx>
-#include <sfx2/app.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/svapp.hxx>
 
-#include <sdattr.hxx>
 #include <sdresid.hxx>
-#include <View.hxx>
 #include <drawview.hxx>
 #include <strings.hrc>
 #include <DrawDocShell.hxx>
