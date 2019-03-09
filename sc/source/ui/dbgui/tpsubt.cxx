@@ -35,63 +35,36 @@
 
 // Subtotals group tabpage:
 
-ScTpSubTotalGroup::ScTpSubTotalGroup( vcl::Window* pParent,
-                                      const SfxItemSet& rArgSet )
-        :   SfxTabPage      ( pParent,
-                              "SubTotalGrpPage", "modules/scalc/ui/subtotalgrppage.ui",
-                              &rArgSet ),
-            aStrNone        ( ScResId( SCSTR_NONE ) ),
-            aStrColumn      ( ScResId( SCSTR_COLUMN ) ),
-            pViewData       ( nullptr ),
-            pDoc            ( nullptr ),
-            nWhichSubTotals ( rArgSet.GetPool()->GetWhich( SID_SUBTOTALS ) ),
-            rSubTotalData   ( static_cast<const ScSubTotalItem&>(
-                              rArgSet.Get( nWhichSubTotals )).
-                                GetSubTotalData() ),
-            nFieldCount     ( 0 )
+ScTpSubTotalGroup::ScTpSubTotalGroup(TabPageParent pParent, const SfxItemSet& rArgSet)
+    : SfxTabPage(pParent, "modules/scalc/ui/subtotalgrppage.ui", "SubTotalGrpPage", &rArgSet)
+    , aStrNone(ScResId(SCSTR_NONE))
+    , aStrColumn(ScResId(SCSTR_COLUMN))
+    , pViewData(nullptr)
+    , pDoc(nullptr)
+    , nWhichSubTotals(rArgSet.GetPool()->GetWhich(SID_SUBTOTALS))
+    , rSubTotalData(static_cast<const ScSubTotalItem&>(rArgSet.Get(nWhichSubTotals)).GetSubTotalData())
+    , nFieldCount(0)
+    , mxLbGroup(m_xBuilder->weld_combo_box("group_by"))
+    , mxLbColumns(m_xBuilder->weld_tree_view("columns"))
+    , mxLbFunctions(m_xBuilder->weld_tree_view("functions"))
 {
-    get(mpLbGroup, "group_by");
-    get(mpLbColumns, "columns");
-    get(mpLbFunctions, "functions");
-
     for (size_t i = 0; i < SAL_N_ELEMENTS(SCSTR_SUBTOTALS); ++i)
-        mpLbFunctions->InsertEntry(ScResId(SCSTR_SUBTOTALS[i]));
+        mxLbFunctions->append_text(ScResId(SCSTR_SUBTOTALS[i]));
 
-    long nHeight = mpLbColumns->GetTextHeight() * 14;
-    mpLbColumns->set_height_request(nHeight);
-    mpLbFunctions->set_height_request(nHeight);
+    auto nHeight = mxLbColumns->get_height_rows(14);
+    mxLbColumns->set_size_request(-1, nHeight);
+    mxLbFunctions->set_size_request(-1, nHeight);
 
-    // Font is correctly initialized by SvTreeListBox ctor
-    mpLbColumns->SetSelectionMode( SelectionMode::Single );
-    mpLbColumns->SetDragDropMode( DragDropMode::NONE );
-    mpLbColumns->SetSpaceBetweenEntries( 0 );
+    std::vector<int> aWidths;
+    aWidths.push_back(mxLbColumns->get_checkbox_column_width());
+    mxLbColumns->set_column_fixed_widths(aWidths);
 
-    Init ();
+    Init();
 }
 
 ScTpSubTotalGroup::~ScTpSubTotalGroup()
 {
     disposeOnce();
-}
-
-void ScTpSubTotalGroup::dispose()
-{
-    sal_uLong  nCount = mpLbColumns->GetEntryCount();
-
-    if ( nCount > 0 )
-    {
-        for ( sal_uLong i=0; i<nCount; i++ )
-        {
-            sal_uInt16* pData = static_cast<sal_uInt16*>(mpLbColumns->GetEntryData( i ));
-            OSL_ENSURE( pData, "EntryData not found" );
-
-            delete pData;
-        }
-    }
-    mpLbGroup.clear();
-    mpLbColumns.clear();
-    mpLbFunctions.clear();
-    SfxTabPage::dispose();
 }
 
 void ScTpSubTotalGroup::Init()
@@ -104,10 +77,10 @@ void ScTpSubTotalGroup::Init()
 
     OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found :-(" );
 
-    mpLbGroup->SetSelectHdl       ( LINK( this, ScTpSubTotalGroup, SelectListBoxHdl ) );
-    mpLbColumns->SetSelectHdl     ( LINK( this, ScTpSubTotalGroup, SelectTreeListBoxHdl ) );
-    mpLbColumns->SetCheckButtonHdl( LINK( this, ScTpSubTotalGroup, CheckHdl ) );
-    mpLbFunctions->SetSelectHdl   ( LINK( this, ScTpSubTotalGroup, SelectListBoxHdl ) );
+    mxLbGroup->connect_changed( LINK( this, ScTpSubTotalGroup, SelectListBoxHdl ) );
+    mxLbColumns->connect_changed( LINK( this, ScTpSubTotalGroup, SelectTreeListBoxHdl ) );
+    mxLbColumns->connect_toggled( LINK( this, ScTpSubTotalGroup, CheckHdl ) );
+    mxLbFunctions->connect_changed( LINK( this, ScTpSubTotalGroup, SelectTreeListBoxHdl) );
 
     nFieldArr[0] = 0;
     FillListBoxes();
@@ -126,12 +99,12 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
         nGroupIdx = nGroupNo-1;
 
     // first we have to clear the listboxes...
-    for ( sal_uLong nLbEntry = 0; nLbEntry < mpLbColumns->GetEntryCount(); ++nLbEntry )
+    for (int nLbEntry = 0, nCount = mxLbColumns->n_children(); nLbEntry < nCount; ++nLbEntry)
     {
-        mpLbColumns->CheckEntryPos( nLbEntry, false );
-        *static_cast<sal_uInt16*>(mpLbColumns->GetEntryData( nLbEntry )) = 0;
+        mxLbColumns->set_toggle(nLbEntry, false, 0);
+        mxLbColumns->set_id(nLbEntry, "0");
     }
-    mpLbFunctions->SelectEntryPos( 0 );
+    mxLbFunctions->select(0);
 
     ScSubTotalParam theSubTotalData( static_cast<const ScSubTotalItem&>(
                                       rArgSet.Get( nWhichSubTotals )).
@@ -144,31 +117,44 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
         SCCOL*          pSubTotals  = theSubTotalData.pSubTotals[nGroupIdx];
         ScSubTotalFunc* pFunctions  = theSubTotalData.pFunctions[nGroupIdx];
 
-        mpLbGroup->SelectEntryPos( GetFieldSelPos( nField )+1 );
+        mxLbGroup->set_active( GetFieldSelPos( nField )+1 );
 
         sal_uInt16 nFirstChecked = 0;
         for ( sal_uInt16 i=0; i<nSubTotals; i++ )
         {
             sal_uInt16  nCheckPos = GetFieldSelPos( pSubTotals[i] );
-            sal_uInt16* pFunction = static_cast<sal_uInt16*>(mpLbColumns->GetEntryData( nCheckPos ));
 
-            mpLbColumns->CheckEntryPos( nCheckPos );
-            *pFunction = FuncToLbPos( pFunctions[i] );
+            mxLbColumns->set_toggle(nCheckPos, true, 0);
+            mxLbColumns->set_id(nCheckPos, OUString::number(FuncToLbPos(pFunctions[i])));
 
             if (i == 0 || nCheckPos < nFirstChecked)
                 nFirstChecked = nCheckPos;
         }
         // Select the first checked field from the top.
-        mpLbColumns->SelectEntryPos(nFirstChecked);
+        mxLbColumns->select(nFirstChecked);
     }
     else
     {
-        mpLbGroup->SelectEntryPos( (nGroupNo == 1) ? 1 : 0 );
-        mpLbColumns->SelectEntryPos( 0 );
-        mpLbFunctions->SelectEntryPos( 0 );
+        mxLbGroup->set_active( (nGroupNo == 1) ? 1 : 0 );
+        mxLbColumns->select( 0 );
+        mxLbFunctions->select( 0 );
     }
 
     return true;
+}
+
+namespace
+{
+    int GetCheckedEntryCount(weld::TreeView& rTreeView)
+    {
+        int nRet = 0;
+        for (sal_Int32 i=0, nEntryCount = rTreeView.n_children(); i < nEntryCount; ++i)
+        {
+            if (rTreeView.get_toggle(i, 0))
+                ++nRet;
+        }
+        return nRet;
+    }
 }
 
 bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
@@ -177,15 +163,15 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
     sal_uInt16 nGroupIdx = 0;
 
     OSL_ENSURE( (nGroupNo<=3) && (nGroupNo>0), "Invalid group" );
-    OSL_ENSURE(    (mpLbGroup->GetEntryCount() > 0)
-                && (mpLbColumns->GetEntryCount() > 0)
-                && (mpLbFunctions->GetEntryCount() > 0),
+    OSL_ENSURE(    (mxLbGroup->get_count() > 0)
+                && (mxLbColumns->n_children() > 0)
+                && (mxLbFunctions->n_children() > 0),
                 "Non-initialized Lists" );
 
     if (  (nGroupNo > 3) || (nGroupNo == 0)
-        || (mpLbGroup->GetEntryCount() == 0)
-        || (mpLbColumns->GetEntryCount() == 0)
-        || (mpLbFunctions->GetEntryCount() == 0)
+        || (mxLbGroup->get_count() == 0)
+        || (mxLbColumns->n_children() == 0)
+        || (mxLbFunctions->n_children() == 0)
        )
         return false;
     else
@@ -202,9 +188,9 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
 
     std::unique_ptr<ScSubTotalFunc[]> pFunctions;
     std::unique_ptr<SCCOL[]>          pSubTotals;
-    const sal_Int32 nGroup      = mpLbGroup->GetSelectedEntryPos();
-    const sal_Int32 nEntryCount = mpLbColumns->GetEntryCount();
-    const sal_Int32 nCheckCount = mpLbColumns->GetCheckedEntryCount();
+    const sal_Int32 nGroup      = mxLbGroup->get_active();
+    const sal_Int32 nEntryCount = mxLbColumns->n_children();
+    const sal_Int32 nCheckCount = GetCheckedEntryCount(*mxLbColumns);
 
     theSubTotalData.nCol1                   = rSubTotalData.nCol1;
     theSubTotalData.nRow1                   = rSubTotalData.nRow1;
@@ -224,11 +210,11 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
 
         for ( sal_Int32 i=0, nCheck=0; i<nEntryCount; i++ )
         {
-            if ( mpLbColumns->IsChecked( i ) )
+            if (mxLbColumns->get_toggle(i, 0))
             {
                 OSL_ENSURE( nCheck <= nCheckCount,
                             "Range error :-(" );
-                nFunction = *static_cast<sal_uInt16*>(mpLbColumns->GetEntryData( i ));
+                nFunction = mxLbColumns->get_id(i).toUInt32();
                 pSubTotals[nCheck] = nFieldArr[i];
                 pFunctions[nCheck] = LbPosToFunc( nFunction );
                 nCheck++;
@@ -259,9 +245,9 @@ void ScTpSubTotalGroup::FillListBoxes()
         SCCOL   col;
         OUString  aFieldName;
 
-        mpLbGroup->Clear();
-        mpLbColumns->Clear();
-        mpLbGroup->InsertEntry( aStrNone, 0 );
+        mxLbGroup->clear();
+        mxLbColumns->clear();
+        mxLbGroup->insert_text(0, aStrNone );
 
         sal_uInt16 i=0;
         for ( col=nFirstCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
@@ -272,9 +258,11 @@ void ScTpSubTotalGroup::FillListBoxes()
                 aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, "%1", ScColToAlpha( col ));
             }
             nFieldArr[i] = col;
-            mpLbGroup->InsertEntry( aFieldName, i+1 );
-            mpLbColumns->InsertEntry( aFieldName, i );
-            mpLbColumns->SetEntryData( i, new sal_uInt16(0) );
+            mxLbGroup->insert_text(i+1, aFieldName);
+            mxLbColumns->insert(i);
+            mxLbColumns->set_toggle(i, false, 0);
+            mxLbColumns->set_text(i, aFieldName, 1);
+            mxLbColumns->set_id(i, "0");
             i++;
         }
         // subsequent initialization of the constant:
@@ -345,51 +333,40 @@ sal_uInt16 ScTpSubTotalGroup::FuncToLbPos( ScSubTotalFunc eFunc )
 
 // Handler:
 
-IMPL_LINK( ScTpSubTotalGroup, SelectTreeListBoxHdl, SvTreeListBox*, pLb, void )
-{
-    SelectHdl(pLb);
-}
-IMPL_LINK( ScTpSubTotalGroup, SelectListBoxHdl, ListBox&, rLb, void )
+IMPL_LINK(ScTpSubTotalGroup, SelectTreeListBoxHdl, weld::TreeView&, rLb, void)
 {
     SelectHdl(&rLb);
 }
-void ScTpSubTotalGroup::SelectHdl(const void *pLb)
+
+IMPL_LINK(ScTpSubTotalGroup, SelectListBoxHdl, weld::ComboBox&, rLb, void)
 {
-    if (   (mpLbColumns->GetEntryCount() > 0)
-        && (mpLbColumns->GetSelectionCount() > 0) )
+    SelectHdl(&rLb);
+}
+
+void ScTpSubTotalGroup::SelectHdl(const weld::Widget *pLb)
+{
+    const sal_Int32 nColumn = mxLbColumns->get_selected_index();
+    if (nColumn != -1)
     {
-        const sal_Int32 nFunction   = mpLbFunctions->GetSelectedEntryPos();
-        const sal_Int32 nColumn     = mpLbColumns->GetSelectedEntryPos();
-        sal_uInt16*     pFunction   = static_cast<sal_uInt16*>(mpLbColumns->GetEntryData( nColumn ));
+        const sal_Int32 nFunction   = mxLbFunctions->get_selected_index();
+        sal_uInt16      nOldFunction  = mxLbColumns->get_id(nColumn).toUInt32();
 
-        OSL_ENSURE( pFunction, "EntryData not found!" );
-        if ( !pFunction )
-            return;
-
-        if ( pLb == mpLbColumns )
+        if ( pLb == mxLbColumns.get() )
         {
-            mpLbFunctions->SelectEntryPos( *pFunction );
+            mxLbFunctions->select(nOldFunction);
         }
-        else if ( pLb == mpLbFunctions )
+        else if ( pLb == mxLbFunctions.get() )
         {
-            *pFunction = static_cast<sal_uInt16>(nFunction);
-            mpLbColumns->CheckEntryPos( nColumn );
+            mxLbColumns->set_id(nColumn, OUString::number(nFunction));
+            mxLbColumns->set_toggle(nColumn, true, 0);
         }
     }
 }
 
-IMPL_LINK( ScTpSubTotalGroup, CheckHdl, SvTreeListBox*, pLb, void )
+IMPL_LINK( ScTpSubTotalGroup, CheckHdl, const row_col&, rRowCol, void )
 {
-    if ( pLb == mpLbColumns )
-    {
-        SvTreeListEntry* pEntry = mpLbColumns->GetHdlEntry();
-
-        if ( pEntry )
-        {
-            mpLbColumns->SelectEntryPos( static_cast<sal_uInt16>(mpLbColumns->GetModel()->GetAbsPos( pEntry )) );
-            SelectHdl( pLb );
-        }
-    }
+    mxLbColumns->select(rRowCol.first);
+    SelectHdl(mxLbColumns.get());
 }
 
 // Derived Group TabPages:
@@ -397,30 +374,30 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, SvTreeListBox*, pLb, void )
 VclPtr<SfxTabPage> ScTpSubTotalGroup1::Create( TabPageParent pParent,
                                                  const SfxItemSet*  rArgSet )
 {
-    return VclPtr<ScTpSubTotalGroup1>::Create( pParent.pParent, *rArgSet );
+    return VclPtr<ScTpSubTotalGroup1>::Create( pParent, *rArgSet );
 }
 
 VclPtr<SfxTabPage> ScTpSubTotalGroup2::Create( TabPageParent pParent,
                                        const SfxItemSet*    rArgSet )
 {
-    return VclPtr<ScTpSubTotalGroup2>::Create( pParent.pParent, *rArgSet );
+    return VclPtr<ScTpSubTotalGroup2>::Create( pParent, *rArgSet );
 }
 
 VclPtr<SfxTabPage> ScTpSubTotalGroup3::Create( TabPageParent pParent,
                                        const SfxItemSet*    rArgSet )
 {
-    return VclPtr<ScTpSubTotalGroup3>::Create( pParent.pParent, *rArgSet );
+    return VclPtr<ScTpSubTotalGroup3>::Create( pParent, *rArgSet );
 }
 
-ScTpSubTotalGroup1::ScTpSubTotalGroup1( vcl::Window* pParent, const SfxItemSet& rArgSet ) :
+ScTpSubTotalGroup1::ScTpSubTotalGroup1( TabPageParent pParent, const SfxItemSet& rArgSet ) :
     ScTpSubTotalGroup( pParent, rArgSet )
 {}
 
-ScTpSubTotalGroup2::ScTpSubTotalGroup2( vcl::Window* pParent, const SfxItemSet& rArgSet ) :
+ScTpSubTotalGroup2::ScTpSubTotalGroup2( TabPageParent pParent, const SfxItemSet& rArgSet ) :
     ScTpSubTotalGroup( pParent, rArgSet )
 {}
 
-ScTpSubTotalGroup3::ScTpSubTotalGroup3( vcl::Window* pParent, const SfxItemSet& rArgSet ) :
+ScTpSubTotalGroup3::ScTpSubTotalGroup3( TabPageParent pParent, const SfxItemSet& rArgSet ) :
     ScTpSubTotalGroup( pParent, rArgSet )
 {}
 

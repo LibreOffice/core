@@ -8,8 +8,10 @@
  */
 
 #include <memory>
+#include <vcl/svlbitm.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/treelistbox.hxx>
+#include <vcl/treelistentry.hxx>
 
 TreeListUIObject::TreeListUIObject(const VclPtr<SvTreeListBox>& xTreeList):
     WindowUIObject(xTreeList),
@@ -128,12 +130,10 @@ void TreeListEntryUIObject::execute(const OUString& rAction, const StringMap& /*
     }
     else if (rAction == "CLICK")
     {
-        if (!isCheckBoxList(mxTreeList))
+        SvLBoxButton* pItem = static_cast<SvLBoxButton*>(mpEntry->GetFirstItem(SvLBoxItemType::Button));
+        if (!pItem)
             return;
-        SvButtonState eState = mxTreeList->GetCheckButtonState(mpEntry);
-        eState = eState == SvButtonState::Checked ? SvButtonState::Unchecked : SvButtonState::Checked;
-        mxTreeList->SetCheckButtonState(mpEntry, eState);
-        mxTreeList->CheckButtonHdl();
+        pItem->ClickHdl(mpEntry);
     }
 }
 
