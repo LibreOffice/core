@@ -112,24 +112,9 @@ public:
         ScDLL::Init();
         ScGlobal::Init();
     }
-    void testUpdateInsertTabBeforePos();
-    void testUpdateInsertTabAtPos();
-    void testUpdateInsertTabAfterPos();
-    void testUpdateDeleteTabBeforePos();
-    void testUpdateDeleteTabAtPos();
-    void testUpdateDeleteTabAfterPos();
-
-    CPPUNIT_TEST_SUITE(ScRangeUpdaterTest);
-    CPPUNIT_TEST(testUpdateInsertTabBeforePos);
-    CPPUNIT_TEST(testUpdateInsertTabAtPos);
-    CPPUNIT_TEST(testUpdateInsertTabAfterPos);
-    CPPUNIT_TEST(testUpdateDeleteTabBeforePos);
-    CPPUNIT_TEST(testUpdateDeleteTabAtPos);
-    CPPUNIT_TEST(testUpdateDeleteTabAfterPos);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void ScRangeUpdaterTest::testUpdateInsertTabBeforePos()
+CPPUNIT_TEST_FIXTURE(ScRangeUpdaterTest, testUpdateInsertTabBeforePos)
 {
     ScDocument aDoc;
     ScAddress aAddr(1, 1, 1);
@@ -138,7 +123,7 @@ void ScRangeUpdaterTest::testUpdateInsertTabBeforePos()
     CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 2), aAddr);
 }
 
-void ScRangeUpdaterTest::testUpdateInsertTabAtPos()
+CPPUNIT_TEST_FIXTURE(ScRangeUpdaterTest, testUpdateInsertTabAtPos)
 {
     ScDocument aDoc;
     ScAddress aAddr(1, 1, 1);
@@ -147,7 +132,7 @@ void ScRangeUpdaterTest::testUpdateInsertTabAtPos()
     CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 2), aAddr);
 }
 
-void ScRangeUpdaterTest::testUpdateInsertTabAfterPos()
+CPPUNIT_TEST_FIXTURE(ScRangeUpdaterTest, testUpdateInsertTabAfterPos)
 {
     ScDocument aDoc;
     ScAddress aAddr(1, 1, 1);
@@ -156,7 +141,7 @@ void ScRangeUpdaterTest::testUpdateInsertTabAfterPos()
     CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 1), aAddr);
 }
 
-void ScRangeUpdaterTest::testUpdateDeleteTabBeforePos()
+CPPUNIT_TEST_FIXTURE(ScRangeUpdaterTest, testUpdateDeleteTabBeforePos)
 {
     ScDocument aDoc;
     ScAddress aAddr(1, 1, 1);
@@ -165,7 +150,7 @@ void ScRangeUpdaterTest::testUpdateDeleteTabBeforePos()
     CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 0), aAddr);
 }
 
-void ScRangeUpdaterTest::testUpdateDeleteTabAtPos()
+CPPUNIT_TEST_FIXTURE(ScRangeUpdaterTest, testUpdateDeleteTabAtPos)
 {
     ScDocument aDoc;
     ScAddress aAddr(1, 1, 1);
@@ -174,7 +159,7 @@ void ScRangeUpdaterTest::testUpdateDeleteTabAtPos()
     CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 0), aAddr);
 }
 
-void ScRangeUpdaterTest::testUpdateDeleteTabAfterPos()
+CPPUNIT_TEST_FIXTURE(ScRangeUpdaterTest, testUpdateDeleteTabAfterPos)
 {
     ScDocument aDoc;
     ScAddress aAddr(1, 1, 1);
@@ -185,7 +170,6 @@ void ScRangeUpdaterTest::testUpdateDeleteTabAfterPos()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScAddressTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(ScRangeTest);
-CPPUNIT_TEST_SUITE_REGISTRATION(ScRangeUpdaterTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
