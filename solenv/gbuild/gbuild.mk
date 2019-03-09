@@ -142,11 +142,7 @@ ifeq ($(gb_ENABLE_SYMBOLS_FOR),no)
 gb_ENABLE_SYMBOLS_FOR :=
 endif
 
-ifneq ($(strip $(ENABLE_PCH)),)
-gb_ENABLE_PCH := $(true)
-else
-gb_ENABLE_PCH := $(false)
-endif
+gb_ENABLE_PCH := $(ENABLE_PCH)
 
 ifneq ($(nodep)$(ENABLE_PRINT_DEPS),)
 gb_FULLDEPS := $(false)
