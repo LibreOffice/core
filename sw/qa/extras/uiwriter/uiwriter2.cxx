@@ -853,7 +853,7 @@ void SwUiWriterTest2::testTdf122942()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats.size());
 
     // Without the accompanying fix in place, this test would have failed with
-    // 'Expected less than: 0; Actual  : 1030', i.e. the shape was below the
+    // 'Expected less than: 0; Actual: 1030', i.e. the shape was below the
     // paragraph mark, not above it.
     const SwFormatVertOrient& rVert = rFormats[1]->GetVertOrient();
     CPPUNIT_ASSERT_LESS(static_cast<SwTwips>(0), rVert.GetPos());
@@ -870,7 +870,7 @@ void SwUiWriterTest2::testTdf122942()
 
     const tools::Rectangle& rOutRect = pObject->GetLastBoundRect();
     // Without the accompanying fix in place, this test would have failed with
-    // 'Expected greater than: 5000; Actual  : 2817', i.e. the shape moved up
+    // 'Expected greater than: 5000; Actual: 2817', i.e. the shape moved up
     // after a reload(), while it's expected to not change its position (5773).
     CPPUNIT_ASSERT_GREATER(static_cast<SwTwips>(5000), rOutRect.Top());
 }
@@ -962,7 +962,7 @@ void SwUiWriterTest2::testTextFormFieldInsertion()
     CPPUNIT_ASSERT(pFieldmark);
     CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMTEXT), pFieldmark->GetFieldname());
 
-    // The text form field has the placholder text in it
+    // The text form field has the placeholder text in it
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
     sal_Unicode vEnSpaces[5] = { 8194, 8194, 8194, 8194, 8194 };
     CPPUNIT_ASSERT_EQUAL(OUString(vEnSpaces, 5), xPara->getString());
