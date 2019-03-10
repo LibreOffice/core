@@ -2988,7 +2988,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     else
         bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector));
 
-    if (!bResult)
+    if (!bResult && gImpl)
     {
         gImpl->maLastExceptionMsg = "Failed to dispatch the .uno: command";
     }
