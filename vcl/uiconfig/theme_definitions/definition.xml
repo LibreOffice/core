@@ -191,12 +191,10 @@
 
     <spinbox>
         <part value="Entire">
-            <state>
-            </state>
+            <state/> <!-- Intentional empty - don't draw anything -->
         </part>
         <part value="SubEdit">
-            <state>
-            </state>
+            <state/> <!-- Intentional empty - don't draw anything -->
         </part>
         <part value="ButtonDown" width="44" height="26">
             <state enabled="true">
@@ -395,32 +393,34 @@
         </part>
 
         <part value="ThumbHorz">
-            <state>
-                <rect stroke="#00FFFF" fill="#00FFFF" stroke-width="1" rx="1" ry="1"/>
-            </state>
+            <state/> <!-- Intentional empty - don't draw anything -->
         </part>
 
         <part value="ThumbVert">
-            <state>
-                <rect stroke="#00FFFF" fill="#00FFFF" stroke-width="1" rx="1" ry="1"/>
-            </state>
+            <state/> <!-- Intentional empty - don't draw anything -->
         </part>
 
         <part value="SeparatorVert">
             <state>
-                <rect stroke="#00FFFF" fill="#00FFFF" stroke-width="1" rx="1" ry="1"/>
+                <line stroke="#007AFF" fill="#007AFF" stroke-width="2" x1="0.5" y1="0.0" x2="0.5" y2="1.0"/>
             </state>
         </part>
 
         <part value="SeparatorHorz">
             <state>
-                <rect stroke="#00FFFF" fill="#00FFFF" stroke-width="1" rx="1" ry="1"/>
+                <line stroke="#007AFF" fill="#007AFF" stroke-width="2" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
             </state>
         </part>
 
         <part value="Button">
-             <state>
-                <rect stroke="#00FFFF" fill="#00FFFF" stroke-width="1" rx="1" ry="1"/>
+            <state enabled="true" button-value="true">
+                <rect stroke="#c0c0c0" fill="#c0c0c0" stroke-width="1" rx="4" ry="4"/>
+            </state>
+            <state enabled="true" button-value="false">
+                <rect stroke="#f4f5f5" fill="#f4f5f5" stroke-width="1" rx="4" ry="4"/>
+            </state>
+            <state enabled="false">
+                <rect stroke="#007AFF" fill="#00FF00" stroke-width="1" rx="4" ry="4"/>
             </state>
         </part>
     </toolbar>
