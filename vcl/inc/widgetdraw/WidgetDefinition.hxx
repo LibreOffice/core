@@ -202,8 +202,10 @@ public:
     sal_Int32 mnMarginHeight;
     OString msOrientation;
 
-    std::vector<std::shared_ptr<WidgetDefinitionState>>
-    getStates(ControlType eType, ControlState eState, ImplControlValue const& rValue);
+    std::vector<std::shared_ptr<WidgetDefinitionState>> getStates(ControlType eType,
+                                                                  ControlPart ePart,
+                                                                  ControlState eState,
+                                                                  ImplControlValue const& rValue);
 
     std::vector<std::shared_ptr<WidgetDefinitionState>> maStates;
 };
