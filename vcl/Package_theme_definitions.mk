@@ -35,6 +35,7 @@ $(eval $(call gb_Package_add_files,vcl_theme_definitions,$(LIBO_SHARE_FOLDER)/th
 	common-rect-disabled.svgx \
 	pushbutton-default.svgx \
 	pushbutton-rollover.svgx \
+	pushbutton-disabled.svgx \
 	tabitem-first.svgx \
 	tabitem-middle.svgx \
 	tabitem-last.svgx \

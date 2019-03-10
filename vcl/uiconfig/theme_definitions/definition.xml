@@ -67,11 +67,14 @@
 
     <pushbutton>
         <part value="Entire">
-            <state>
+            <state enabled="true">
                 <external source="pushbutton-default.svgx" />
             </state>
             <state enabled="true" rollover="true">
                 <external source="pushbutton-rollover.svgx" />
+            </state>
+            <state enabled="false">
+                <external source="pushbutton-disabled.svgx" />
             </state>
         </part>
     </pushbutton>
