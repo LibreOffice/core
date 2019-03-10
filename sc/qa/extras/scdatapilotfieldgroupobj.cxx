@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/container/xnamed.hxx>
 #include <comphelper/types.hxx>
 #include <rtl/string.hxx>
 
@@ -37,7 +38,9 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScDataPilotFieldGroupObj : public CalcUnoApiTest, public apitest::XEnumerationAccess
+class ScDataPilotFieldGroupObj : public CalcUnoApiTest,
+                                 public apitest::XEnumerationAccess,
+                                 public apitest::XNamed
 {
 public:
     ScDataPilotFieldGroupObj();
@@ -51,6 +54,10 @@ public:
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
 
+    // XNamed
+    CPPUNIT_TEST(testGetName);
+    CPPUNIT_TEST(testSetName);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -60,6 +67,7 @@ private:
 
 ScDataPilotFieldGroupObj::ScDataPilotFieldGroupObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XNamed("Group1")
 {
 }
 

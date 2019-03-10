@@ -5,5 +5,3 @@
 "ScDataPilotFieldGroupObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
 "ScDataPilotFieldGroupObj";"com::sun::star::container::XElementAccess";"getElementType()"
 "ScDataPilotFieldGroupObj";"com::sun::star::container::XElementAccess";"hasElements()"
-"ScDataPilotFieldGroupObj";"com::sun::star::container::XNamed";"getName()"
-"ScDataPilotFieldGroupObj";"com::sun::star::container::XNamed";"setName()"
