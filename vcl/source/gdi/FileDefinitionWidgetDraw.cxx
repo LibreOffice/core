@@ -121,12 +121,13 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
             return true;
         case ControlType::Menubar:
         case ControlType::MenuPopup:
-            return false;
+            return true;
         case ControlType::Progress:
             return true;
         case ControlType::IntroProgress:
-        case ControlType::Tooltip:
             return false;
+        case ControlType::Tooltip:
+            return true;
         case ControlType::WindowBackground:
         case ControlType::Frame:
         case ControlType::ListNode:
@@ -581,17 +582,23 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         }
         break;
         case ControlType::Menubar:
-            break;
         case ControlType::MenuPopup:
-            break;
+        {
+            bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
+        }
+        break;
         case ControlType::Progress:
         {
             bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
         }
         break;
         case ControlType::IntroProgress:
-        case ControlType::Tooltip:
             break;
+        case ControlType::Tooltip:
+        {
+            bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
+        }
+        break;
         case ControlType::WindowBackground:
         case ControlType::Frame:
         {

@@ -139,28 +139,32 @@ ControlPart xmlStringToControlPart(OString const& sPart)
 
 bool getControlTypeForXmlString(OString const& rString, ControlType& reType)
 {
-    static std::unordered_map<OString, ControlType> aPartMap
-        = { { "pushbutton", ControlType::Pushbutton },
-            { "radiobutton", ControlType::Radiobutton },
-            { "checkbox", ControlType::Checkbox },
-            { "combobox", ControlType::Combobox },
-            { "editbox", ControlType::Editbox },
-            { "listbox", ControlType::Listbox },
-            { "scrollbar", ControlType::Scrollbar },
-            { "spinbox", ControlType::Spinbox },
-            { "slider", ControlType::Slider },
-            { "fixedline", ControlType::Fixedline },
-            { "progress", ControlType::Progress },
-            { "tabitem", ControlType::TabItem },
-            { "tabheader", ControlType::TabHeader },
-            { "tabpane", ControlType::TabPane },
-            { "tabbody", ControlType::TabBody },
-            { "frame", ControlType::Frame },
-            { "windowbackground", ControlType::WindowBackground },
-            { "toolbar", ControlType::Toolbar },
-            { "listnode", ControlType::ListNode },
-            { "listnet", ControlType::ListNet },
-            { "listheader", ControlType::ListHeader } };
+    static std::unordered_map<OString, ControlType> aPartMap = {
+        { "pushbutton", ControlType::Pushbutton },
+        { "radiobutton", ControlType::Radiobutton },
+        { "checkbox", ControlType::Checkbox },
+        { "combobox", ControlType::Combobox },
+        { "editbox", ControlType::Editbox },
+        { "listbox", ControlType::Listbox },
+        { "scrollbar", ControlType::Scrollbar },
+        { "spinbox", ControlType::Spinbox },
+        { "slider", ControlType::Slider },
+        { "fixedline", ControlType::Fixedline },
+        { "progress", ControlType::Progress },
+        { "tabitem", ControlType::TabItem },
+        { "tabheader", ControlType::TabHeader },
+        { "tabpane", ControlType::TabPane },
+        { "tabbody", ControlType::TabBody },
+        { "frame", ControlType::Frame },
+        { "windowbackground", ControlType::WindowBackground },
+        { "toolbar", ControlType::Toolbar },
+        { "listnode", ControlType::ListNode },
+        { "listnet", ControlType::ListNet },
+        { "listheader", ControlType::ListHeader },
+        { "menubar", ControlType::Menubar },
+        { "menupopup", ControlType::MenuPopup },
+        { "tooltip", ControlType::Tooltip },
+    };
 
     auto const& rIterator = aPartMap.find(rString);
     if (rIterator != aPartMap.end())

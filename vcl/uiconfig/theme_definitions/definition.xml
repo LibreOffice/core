@@ -452,4 +452,12 @@
         </part>
     </listheader>
 
+    <menubar>
+    </menubar>
+
+    <menupopup>
+    </menupopup>
+
+    <tooltip>
+    </tooltip>
 </widgets>
