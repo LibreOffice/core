@@ -7,4 +7,3 @@
 "ScDataPilotFieldGroupObj";"com::sun::star::container::XElementAccess";"hasElements()"
 "ScDataPilotFieldGroupObj";"com::sun::star::container::XNamed";"getName()"
 "ScDataPilotFieldGroupObj";"com::sun::star::container::XNamed";"setName()"
-"ScDataPilotFieldGroupObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"
