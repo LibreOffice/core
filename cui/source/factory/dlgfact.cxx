@@ -110,7 +110,6 @@ short CuiAbstractSingleTabController_Impl::Execute()
 }
 
 IMPL_ABSTDLG_BASE(CuiVclAbstractDialog_Impl)
-IMPL_ABSTDLG_BASE(CuiAbstractTabDialog_Impl);
 
 short AbstractSvxDistributeDialog_Impl::Execute()
 {
@@ -297,32 +296,6 @@ short AbstractSignSignatureLineDialog_Impl::Execute()
 }
 
 IMPL_ABSTDLG_BASE(AbstractScreenshotAnnotationDlg_Impl);
-
-
-void CuiAbstractTabDialog_Impl::SetCurPageId( const OString& rName )
-{
-    pDlg->SetCurPageId( rName );
-}
-
-const SfxItemSet* CuiAbstractTabDialog_Impl::GetOutputItemSet() const
-{
-    return pDlg->GetOutputItemSet();
-}
-
-const sal_uInt16* CuiAbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
-{
-    return pDlg->GetInputRanges( pItem );
-}
-
-void CuiAbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
-{
-     pDlg->SetInputSet( pInSet );
-}
-//From class Window.
-void CuiAbstractTabDialog_Impl::SetText( const OUString& rStr )
-{
-    pDlg->SetText( rStr );
-}
 
 short CuiAbstractTabController_Impl::Execute()
 {
