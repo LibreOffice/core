@@ -3896,7 +3896,7 @@ void SwUiWriterTest::testShapeAnchorUndo()
     CPPUNIT_ASSERT_EQUAL(pObject->GetLogicRect(), aOrigLogicRect);
 }
 
-void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand, const uno::Sequence<beans::PropertyValue>& rPropertyValues)
+static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand, const uno::Sequence<beans::PropertyValue>& rPropertyValues)
 {
     uno::Reference<frame::XController> xController = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY)->getCurrentController();
     CPPUNIT_ASSERT(xController.is());
