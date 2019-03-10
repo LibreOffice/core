@@ -587,7 +587,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/table/_XAutoFormattable \
     qadevOOo/tests/java/ifc/table/_XCellRange \
     qadevOOo/tests/java/ifc/table/_XTableChart \
-    qadevOOo/tests/java/ifc/table/_XTableCharts \
     qadevOOo/tests/java/ifc/table/_XTableColumns \
     qadevOOo/tests/java/ifc/table/_XTableRows \
     qadevOOo/tests/java/ifc/task/_XInteractionHandler \
@@ -960,7 +959,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScCellRangesObj \
     qadevOOo/tests/java/mod/_sc/ScCellSearchObj \
     qadevOOo/tests/java/mod/_sc/ScCellTextCursor \
-    qadevOOo/tests/java/mod/_sc/ScChartsObj \
     qadevOOo/tests/java/mod/_sc/ScDatabaseRangeObj \
     qadevOOo/tests/java/mod/_sc/ScDataPilotFieldGroupObj \
     qadevOOo/tests/java/mod/_sc/ScDataPilotItemObj \
