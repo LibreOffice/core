@@ -34,6 +34,9 @@ CGMElements::~CGMElements()
 
 CGMElements& CGMElements::operator=( const CGMElements& rSource )
 {
+    if (this == &rSource)
+        return *this;
+
     sal_uInt32 nIndex;
 
     nVDCIntegerPrecision = rSource.nVDCIntegerPrecision;
@@ -125,7 +128,7 @@ CGMElements& CGMElements::operator=( const CGMElements& rSource )
 
     maHatchMap = rSource.maHatchMap;
     bSegmentCount = rSource.bSegmentCount;
-    return (*this);
+    return *this;
 }
 
 
