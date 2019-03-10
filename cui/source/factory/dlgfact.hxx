@@ -120,17 +120,6 @@ public:
     virtual void          SetText( const OUString& rStr ) override;
 };
 
-class CuiAbstractTabDialog_Impl : public SfxAbstractTabDialog
-{
-    DECL_ABSTDLG_BASE(CuiAbstractTabDialog_Impl,SfxTabDialog)
-    virtual void                SetCurPageId( const OString& rName ) override;
-    virtual const SfxItemSet*   GetOutputItemSet() const override;
-    virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem ) override;
-    virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
-        //From class Window.
-    virtual void        SetText( const OUString& rStr ) override;
-};
-
 class CuiAbstractTabController_Impl : public SfxAbstractTabDialog
 {
     std::shared_ptr<SfxTabDialogController> m_xDlg;
