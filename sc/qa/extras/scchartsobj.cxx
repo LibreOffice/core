@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/container/xindexaccess.hxx>
 #include <cppu/unotype.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -36,7 +37,8 @@ namespace sc_apitest
 {
 class ScChartsObj : public CalcUnoApiTest,
                     public apitest::XEnumerationAccess,
-                    public apitest::XElementAccess
+                    public apitest::XElementAccess,
+                    public apitest::XIndexAccess
 {
 public:
     ScChartsObj();
@@ -54,6 +56,10 @@ public:
     CPPUNIT_TEST(testGetElementType);
     CPPUNIT_TEST(testHasElements);
 
+    // XIndexAccess
+    CPPUNIT_TEST(testGetByIndex);
+    CPPUNIT_TEST(testGetCount);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -63,6 +69,7 @@ private:
 ScChartsObj::ScChartsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<table::XTableChart>::get())
+    , XIndexAccess(1)
 {
 }
 
