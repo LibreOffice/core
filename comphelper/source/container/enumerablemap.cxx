@@ -124,16 +124,11 @@ namespace comphelper
 
     static void lcl_revokeMapModificationListener( MapData& _mapData, MapEnumerator& _listener )
     {
-        for (   std::vector< MapEnumerator* >::iterator lookup = _mapData.m_aModListeners.begin();
-                lookup != _mapData.m_aModListeners.end();
-                ++lookup
-             )
+        auto lookup = std::find(_mapData.m_aModListeners.begin(), _mapData.m_aModListeners.end(), &_listener);
+        if (lookup != _mapData.m_aModListeners.end())
         {
-            if ( *lookup == &_listener )
-            {
-                _mapData.m_aModListeners.erase( lookup );
-                return;
-            }
+            _mapData.m_aModListeners.erase( lookup );
+            return;
         }
         OSL_FAIL( "lcl_revokeMapModificationListener: the listener is not registered!" );
     }

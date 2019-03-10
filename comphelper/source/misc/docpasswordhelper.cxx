@@ -431,14 +431,16 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
         *pbIsDefaultPassword = false;
     if( pDefaultPasswords )
     {
-        for( std::vector< OUString >::const_iterator aIt = pDefaultPasswords->begin(), aEnd = pDefaultPasswords->end(); (eResult == DocPasswordVerifierResult::WrongPassword) && (aIt != aEnd); ++aIt )
+        for( const auto& rPassword : *pDefaultPasswords )
         {
-            OSL_ENSURE( !aIt->isEmpty(), "DocPasswordHelper::requestAndVerifyDocPassword - unexpected empty default password" );
-            if( !aIt->isEmpty() )
+            OSL_ENSURE( !rPassword.isEmpty(), "DocPasswordHelper::requestAndVerifyDocPassword - unexpected empty default password" );
+            if( !rPassword.isEmpty() )
             {
-                eResult = rVerifier.verifyPassword( *aIt, aEncData );
+                eResult = rVerifier.verifyPassword( rPassword, aEncData );
                 if( pbIsDefaultPassword )
                     *pbIsDefaultPassword = eResult == DocPasswordVerifierResult::OK;
+                if( eResult != DocPasswordVerifierResult::WrongPassword )
+                    break;
             }
         }
     }

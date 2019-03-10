@@ -1453,10 +1453,8 @@ long VSeriesPlotter::calculateTimeResolutionOnXAxis()
         if( !rDateCategories.empty() )
         {
             std::vector< double >::const_iterator aIt = rDateCategories.begin(), aEnd = rDateCategories.end();
-            while (rtl::math::isNan(*aIt) && aIt != aEnd)
-            {
-                ++aIt;
-            }
+            aIt = std::find_if(aIt, aEnd, [](const double& rDateCategory) { return !rtl::math::isNan(rDateCategory); });
+
             Date aPrevious(aNullDate); aPrevious.AddDays(rtl::math::approxFloor(*aIt));
             ++aIt;
             for(;aIt!=aEnd;++aIt)

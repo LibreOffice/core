@@ -464,19 +464,14 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
     if (nLastDot != -1)
         aLstType = aLstType.copy(nLastDot+1);
 
-    std::deque< ScriptEventDescriptor >::const_iterator aEvtEnd = aIt->aEventList.end();
-    for( std::deque< ScriptEventDescriptor >::iterator aEvtIt =  aIt->aEventList.begin();
-         aEvtIt != aEvtEnd;
-         ++aEvtIt )
-    {
-        if( aLstType              == aEvtIt->ListenerType &&
-            EventMethod           == aEvtIt->EventMethod &&
-            ToRemoveListenerParam == aEvtIt->AddListenerParam )
-        {
-            aIt->aEventList.erase( aEvtIt );
-            break;
-        }
-    }
+    auto aEvtIt = std::find_if(aIt->aEventList.begin(), aIt->aEventList.end(),
+        [&aLstType, &EventMethod, &ToRemoveListenerParam](const ScriptEventDescriptor& rEvent) {
+            return aLstType              == rEvent.ListenerType
+                && EventMethod           == rEvent.EventMethod
+                && ToRemoveListenerParam == rEvent.AddListenerParam;
+        });
+    if (aEvtIt != aIt->aEventList.end())
+        aIt->aEventList.erase( aEvtIt );
 
     for( const auto& rObj : aList )
         attach( nIndex, rObj.xTarget, rObj.aHelper );
@@ -562,19 +557,17 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
         return;
 
     Sequence<css::script::EventListener> aEvents(aCurrentPosition->aEventList.size());
-    std::deque<ScriptEventDescriptor>::iterator itr = aCurrentPosition->aEventList.begin();
-    std::deque<ScriptEventDescriptor>::iterator itrEnd = aCurrentPosition->aEventList.end();
     css::script::EventListener* p = aEvents.getArray();
     size_t i = 0;
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rEvent : aCurrentPosition->aEventList)
     {
         css::script::EventListener aListener;
         aListener.AllListener =
-            new AttacherAllListener_Impl(this, itr->ScriptType, itr->ScriptCode);
+            new AttacherAllListener_Impl(this, rEvent.ScriptType, rEvent.ScriptCode);
         aListener.Helper = rCurObj.aHelper;
-        aListener.ListenerType = itr->ListenerType;
-        aListener.EventMethod = itr->EventMethod;
-        aListener.AddListenerParam = itr->AddListenerParam;
+        aListener.ListenerType = rEvent.ListenerType;
+        aListener.EventMethod = rEvent.EventMethod;
+        aListener.AddListenerParam = rEvent.AddListenerParam;
         p[i++] = aListener;
     }
 
@@ -598,32 +591,27 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
         throw IllegalArgumentException();
 
     std::deque< AttacherIndex_Impl >::iterator aCurrentPosition = aIndex.begin() + nIndex;
-    std::deque< AttachedObject_Impl >::iterator aObjEnd = aCurrentPosition->aObjList.end();
-    for( std::deque< AttachedObject_Impl >::iterator aObjIt =  aCurrentPosition->aObjList.begin();
-         aObjIt != aObjEnd;
-         ++aObjIt )
+    auto aObjIt = std::find_if(aCurrentPosition->aObjList.begin(), aCurrentPosition->aObjList.end(),
+        [&xObject](const AttachedObject_Impl& rObj) { return rObj.xTarget == xObject; });
+    if (aObjIt != aCurrentPosition->aObjList.end())
     {
-        if( aObjIt->xTarget == xObject )
+        sal_Int32 i = 0;
+        for( const auto& rEvt : aCurrentPosition->aEventList )
         {
-            sal_Int32 i = 0;
-            for( const auto& rEvt : aCurrentPosition->aEventList )
+            if( aObjIt->aAttachedListenerSeq[i].is() )
             {
-                if( aObjIt->aAttachedListenerSeq[i].is() )
+                try
                 {
-                    try
-                    {
-                        xAttacher->removeListener( aObjIt->xTarget, rEvt.ListenerType,
-                                               rEvt.AddListenerParam, aObjIt->aAttachedListenerSeq[i] );
-                    }
-                    catch( Exception& )
-                    {
-                    }
+                    xAttacher->removeListener( aObjIt->xTarget, rEvt.ListenerType,
+                                           rEvt.AddListenerParam, aObjIt->aAttachedListenerSeq[i] );
                 }
-                ++i;
+                catch( Exception& )
+                {
+                }
             }
-            aCurrentPosition->aObjList.erase( aObjIt );
-            break;
+            ++i;
         }
+        aCurrentPosition->aObjList.erase( aObjIt );
     }
 }
 
