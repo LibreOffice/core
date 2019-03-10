@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
+#include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 #include <cppu/unotype.hxx>
 
@@ -30,6 +31,7 @@ namespace sc_apitest
 {
 class ScStyleFamilyObj : public CalcUnoApiTest,
                          public apitest::XElementAccess,
+                         public apitest::XIndexAccess,
                          public apitest::XNameAccess
 {
 public:
@@ -45,6 +47,10 @@ public:
     CPPUNIT_TEST(testGetElementType);
     CPPUNIT_TEST(testHasElements);
 
+    // XIndexAccess
+    CPPUNIT_TEST(testGetByIndex);
+    CPPUNIT_TEST(testGetCount);
+
     // XNameAccess
     CPPUNIT_TEST(testGetByName);
     CPPUNIT_TEST(testGetElementNames);
@@ -59,6 +65,7 @@ private:
 ScStyleFamilyObj::ScStyleFamilyObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuemts")
     , XElementAccess(cppu::UnoType<style::XStyle>::get())
+    , XIndexAccess(19)
     , XNameAccess("Default")
 {
 }

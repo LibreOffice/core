@@ -1,5 +1,3 @@
 "ScStyleFamilyObj";"com::sun::star::container::XNameReplace#optional";"replaceByName()"
 "ScStyleFamilyObj";"com::sun::star::container::XNameContainer#optional";"insertByName()"
 "ScStyleFamilyObj";"com::sun::star::container::XNameContainer#optional";"removeByName()"
-"ScStyleFamilyObj";"com::sun::star::container::XIndexAccess#optional";"getCount()"
-"ScStyleFamilyObj";"com::sun::star::container::XIndexAccess#optional";"getByIndex()"
