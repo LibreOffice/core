@@ -26,7 +26,7 @@ std::shared_ptr<WidgetDefinitionPart> WidgetDefinition::getDefinition(ControlTyp
 }
 
 std::vector<std::shared_ptr<WidgetDefinitionState>>
-WidgetDefinitionPart::getStates(ControlType eType, ControlState eState,
+WidgetDefinitionPart::getStates(ControlType eType, ControlPart ePart, ControlState eState,
                                 ImplControlValue const& rValue)
 {
     std::vector<std::shared_ptr<WidgetDefinitionState>> aStatesToAdd;
@@ -69,26 +69,43 @@ WidgetDefinitionPart::getStates(ControlType eType, ControlState eState,
             bAdd = false;
         }
 
-        if (eType == ControlType::TabItem)
+        OString sExtra = "any";
+
+        switch (eType)
         {
-            OString sExtra;
-
-            auto const& rTabItemValue = static_cast<TabitemValue const&>(rValue);
-
-            if (rTabItemValue.isLeftAligned() && rTabItemValue.isRightAligned()
-                && rTabItemValue.isFirst() && rTabItemValue.isLast())
-                sExtra = "first_last";
-            else if (rTabItemValue.isLeftAligned() || rTabItemValue.isFirst())
-                sExtra = "first";
-            else if (rTabItemValue.isRightAligned() || rTabItemValue.isLast())
-                sExtra = "last";
-            else
-                sExtra = "middle";
-
-            if (state->msExtra != "any" && state->msExtra != sExtra)
+            case ControlType::TabItem:
             {
-                bAdd = false;
+                auto const& rTabItemValue = static_cast<TabitemValue const&>(rValue);
+
+                if (rTabItemValue.isLeftAligned() && rTabItemValue.isRightAligned()
+                    && rTabItemValue.isFirst() && rTabItemValue.isLast())
+                    sExtra = "first_last";
+                else if (rTabItemValue.isLeftAligned() || rTabItemValue.isFirst())
+                    sExtra = "first";
+                else if (rTabItemValue.isRightAligned() || rTabItemValue.isLast())
+                    sExtra = "last";
+                else
+                    sExtra = "middle";
             }
+            break;
+            case ControlType::ListHeader:
+            {
+                if (ePart == ControlPart::Arrow)
+                {
+                    if (rValue.getNumericVal() == 1)
+                        sExtra = "down";
+                    else
+                        sExtra = "up";
+                }
+            }
+            break;
+            default:
+                break;
+        }
+
+        if (state->msExtra != "any" && state->msExtra != sExtra)
+        {
+            bAdd = false;
         }
 
         if (bAdd)

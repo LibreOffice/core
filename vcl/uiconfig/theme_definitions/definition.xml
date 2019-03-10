@@ -432,6 +432,19 @@
     </listnet>
 
     <listheader>
+         <part value="Button">
+            <state>
+                <rect stroke="#8e8e93" fill="#f4f5f5" stroke-width="1" rx="1" ry="1"/>
+            </state>
+        </part>
+        <part value="Arrow">
+            <state extra="up">
+                <image source="arrow-up.svgx"/>
+            </state>
+            <state extra="down">
+                <image source="arrow-down.svgx"/>
+            </state>
+        </part>
     </listheader>
 
 </widgets>
