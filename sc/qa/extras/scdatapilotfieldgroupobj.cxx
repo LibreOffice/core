@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/container/xindexaccess.hxx>
 #include <test/container/xnamed.hxx>
 #include <comphelper/types.hxx>
 #include <rtl/string.hxx>
@@ -42,6 +43,7 @@ namespace sc_apitest
 class ScDataPilotFieldGroupObj : public CalcUnoApiTest,
                                  public apitest::XElementAccess,
                                  public apitest::XEnumerationAccess,
+                                 public apitest::XIndexAccess,
                                  public apitest::XNamed
 {
 public:
@@ -60,6 +62,10 @@ public:
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
 
+    // XIndexAccess
+    CPPUNIT_TEST(testGetByIndex);
+    CPPUNIT_TEST(testGetCount);
+
     // XNamed
     CPPUNIT_TEST(testGetName);
     CPPUNIT_TEST(testSetName);
@@ -74,6 +80,7 @@ private:
 ScDataPilotFieldGroupObj::ScDataPilotFieldGroupObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<container::XNamed>::get())
+    , XIndexAccess(2)
     , XNamed("Group1")
 {
 }
