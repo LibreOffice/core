@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
 #include <config_folders.h>
 
 #include "pyuno_impl.hxx"
@@ -27,7 +26,6 @@
 #include <osl/thread.h>
 #include <osl/module.h>
 #include <osl/process.h>
-#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 
@@ -36,9 +34,11 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/beans/theIntrospection.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/InvocationAdapterFactory.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 

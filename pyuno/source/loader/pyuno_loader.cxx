@@ -29,11 +29,12 @@
 #include <osl/thread.h>
 
 #include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
 
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
+
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 // apparently PATH_MAX is not standard and not defined by MSVC
 #ifndef PATH_MAX
@@ -47,7 +48,6 @@
 #endif
 #endif
 #endif
-
 
 using pyuno::PyRef;
 using pyuno::NOT_NULL;

@@ -51,24 +51,23 @@ typedef long Py_hash_t;
 #include <unordered_map>
 #include <unordered_set>
 
-#include <com/sun/star/beans/XIntrospection.hpp>
-#include <com/sun/star/script/XTypeConverter.hpp>
-#include <com/sun/star/script/XInvocation2.hpp>
-#include <com/sun/star/script/XInvocationAdapterFactory2.hpp>
-
-#include <com/sun/star/reflection/XIdlReflection.hpp>
-
-#include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/script/XInvocation.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <osl/module.hxx>
+
+namespace com::sun::star::beans { class XIntrospection; }
+namespace com::sun::star::container { class XEnumeration; }
+namespace com::sun::star::container { class XHierarchicalNameAccess; }
+namespace com::sun::star::lang { class XSingleServiceFactory; }
+namespace com::sun::star::reflection { class XIdlReflection; }
+namespace com::sun::star::script { class XInvocation2; }
+namespace com::sun::star::script { class XInvocationAdapterFactory2; }
+namespace com::sun::star::script { class XTypeConverter; }
 
 // In Python 3, the PyString_* functions have been replaced by PyBytes_*
 // and PyUnicode_* functions.

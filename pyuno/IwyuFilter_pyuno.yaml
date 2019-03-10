@@ -1,0 +1,33 @@
+---
+assumeFilename: pyuno/source/module/pyuno.cxx
+blacklist:
+    pyuno/inc/pyuno.hxx:
+    # Used in #ifdef
+    - Python.h
+    pyuno/source/module/pyuno_impl.hxx:
+    # Used in #ifdef
+    - Python.h
+    # Base class needs complete type
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/script/XInvocation.hpp
+    # Needed for typedef
+    - com/sun/star/container/XIndexAccess.hpp
+    - cppuhelper/weakref.hxx
+    pyuno/source/loader/pyuno_loader.cxx:
+    # Don't replace with URE impl. detail
+    - osl/file.hxx
+    # Needed for direct memmber access
+    - com/sun/star/uno/XComponentContext.hpp
+    pyuno/source/module/pyuno_module.cxx:
+    # Needed on MACOSX
+    - config_folders.h
+    # Don't replace with URE impl. detail
+    - rtl/bootstrap.hxx
+    pyuno/source/module/pyuno_runtime.cxx:
+    # Needed on MACOSX
+    - config_folders.h
+    # Needed for direct member access
+    - com/sun/star/container/XHierarchicalNameAccess.hpp
+    pyuno/zipcore/python.cxx:
+    # Needed on WIN32
+    - tools/pathutils.hxx

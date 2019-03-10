@@ -23,9 +23,11 @@
 #ifndef Py_PYTHON_H
 #include <Python.h>
 #endif // #ifdef Py_PYTHON_H
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/script/CannotConvertException.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
+#include <com/sun/star/uno/Any.hxx>
+
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 /**
    External interface of the Python UNO bridge.
@@ -151,7 +153,7 @@ public:
     };
 };
 
-struct stRuntimeImpl;
+//struct stRuntimeImpl;
 typedef struct stRuntimeImpl RuntimeImpl;
 
 enum ConversionMode { ACCEPT_UNO_ANY, REJECT_UNO_ANY };

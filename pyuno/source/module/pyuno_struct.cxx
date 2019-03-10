@@ -19,16 +19,13 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
-#include <cassert>
-
 #include <rtl/strbuf.hxx>
-
-
-#include <typelib/typedescription.hxx>
 
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
+#include <com/sun/star/script/CannotConvertException.hpp>
+#include <com/sun/star/script/XInvocation2.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include "pyuno_impl.hxx"
 
