@@ -53,14 +53,15 @@ SwFieldDialog::SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM, l
         OUString sListKey = ODF_FORMDROPDOWN_LISTENTRY;
         sw::mark::IFieldmark::parameter_map_t::const_iterator pListEntries
             = pParameters->find(sListKey);
+        css::uno::Sequence<OUString> vListEntries;
         if (pListEntries != pParameters->end())
         {
-            css::uno::Sequence<OUString> vListEntries;
             pListEntries->second >>= vListEntries;
             for (OUString const& i : vListEntries)
                 aListBox->InsertEntry(i);
         }
-        else
+
+        if (vListEntries.getLength() == 0)
         {
             aListBox->InsertEntry(SwResId(STR_DROP_DOWN_EMPTY_LIST));
         }
