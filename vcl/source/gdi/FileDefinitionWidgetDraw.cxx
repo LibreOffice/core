@@ -830,7 +830,6 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
                 return true;
             }
             break;
-
         default:
             break;
     }
@@ -895,7 +894,7 @@ bool FileDefinitionWidgetDraw::updateSettings(AllSettings& rSettings)
     aStyleSet.SetToolTextColor(pDefinitionStyle->maToolTextColor);
     aStyleSet.SetFontColor(pDefinitionStyle->maFontColor);
 
-    vcl::Font aFont(FAMILY_SWISS, Size(0, 12));
+    vcl::Font aFont(FAMILY_SWISS, Size(0, 10));
     aFont.SetCharSet(osl_getThreadTextEncoding());
     aFont.SetWeight(WEIGHT_NORMAL);
     aFont.SetFamilyName("Liberation Sans");
