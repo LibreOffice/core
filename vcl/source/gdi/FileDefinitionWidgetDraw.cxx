@@ -27,6 +27,7 @@
 
 #include <comphelper/seqstream.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/lok.hxx>
 
 #include <com/sun/star/graphic/SvgTools.hpp>
 #include <basegfx/DrawCommands.hxx>
@@ -336,13 +337,18 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
             break;
             case DrawCommandType::IMAGE:
             {
+                double nScaleFactor = 1.0;
+                if (comphelper::LibreOfficeKit::isActive())
+                    nScaleFactor = comphelper::LibreOfficeKit::getDPIScale();
+
                 auto const& rDrawCommand = static_cast<ImageDrawCommand const&>(*pDrawCommand);
                 SvFileStream aFileStream(rDrawCommand.msSource, StreamMode::READ);
                 BitmapEx aBitmap;
-                vcl::bitmap::loadFromSvg(aFileStream, "", aBitmap, 1.0);
+                vcl::bitmap::loadFromSvg(aFileStream, "", aBitmap, nScaleFactor);
                 long nImageWidth = aBitmap.GetSizePixel().Width();
                 long nImageHeight = aBitmap.GetSizePixel().Height();
-                SalTwoRect aTR(0, 0, nImageWidth, nImageHeight, nX, nY, nImageWidth, nImageHeight);
+                SalTwoRect aTR(0, 0, nImageWidth, nImageHeight, nX, nY, nImageWidth / nScaleFactor,
+                               nImageHeight / nScaleFactor);
                 if (!!aBitmap)
                 {
                     const std::shared_ptr<SalBitmap> pSalBitmap
