@@ -117,7 +117,7 @@ namespace dbaui
         if (&rBtn == m_xAppendTableAlias.get() && m_xAsBeforeCorrelationName)
         {
             // make m_xAsBeforeCorrelationName depend on m_xAppendTableAlias
-            m_xAsBeforeCorrelationName->set_active(m_xAppendTableAlias->get_active());
+            m_xAsBeforeCorrelationName->set_sensitive(m_xAppendTableAlias->get_active());
         }
         OnControlModifiedButtonClick(rBtn);
     }
@@ -203,6 +203,12 @@ namespace dbaui
                     bValue = !bValue;
                 booleanSetting.xControl->set_active(bValue);
             }
+        }
+
+        if (m_xAppendTableAlias && m_xAsBeforeCorrelationName)
+        {
+            // make m_xAsBeforeCorrelationName depend on m_xAppendTableAlias
+            m_xAsBeforeCorrelationName->set_sensitive(m_xAppendTableAlias->get_active());
         }
 
         // the non-boolean items
