@@ -529,17 +529,35 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         break;
         case ControlType::Slider:
         {
-            bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
+            const SliderValue* pSliderValue = static_cast<const SliderValue*>(&rValue);
+            long nThumbX = pSliderValue->maThumbRect.Left();
+            long nThumbY = pSliderValue->maThumbRect.Top();
+            long nThumbWidth = pSliderValue->maThumbRect.GetWidth() - 1;
+            long nThumbHeight = pSliderValue->maThumbRect.GetHeight() - 1;
+
+            if (ePart == ControlPart::TrackHorzArea)
+            {
+                long nCenterX = nThumbX + nThumbWidth / 2;
+
+                bOK = resolveDefinition(eType, ControlPart::TrackHorzLeft, eState, rValue, nX, nY,
+                                        nCenterX - nX, nHeight);
+                if (bOK)
+                    bOK = resolveDefinition(eType, ControlPart::TrackHorzRight, eState, rValue,
+                                            nCenterX, nY, nX + nWidth - nCenterX, nHeight);
+            }
+            else if (ePart == ControlPart::TrackVertArea)
+            {
+                long nCenterY = nThumbY + nThumbHeight / 2;
+
+                bOK = resolveDefinition(eType, ControlPart::TrackVertUpper, eState, rValue, nX, nY,
+                                        nWidth, nCenterY - nY);
+                if (bOK)
+                    bOK = resolveDefinition(eType, ControlPart::TrackVertLower, eState, rValue, nY,
+                                            nCenterY, nWidth, nY + nHeight - nCenterY);
+            }
 
             if (bOK)
             {
-                const SliderValue* pSliderValue = static_cast<const SliderValue*>(&rValue);
-
-                long nThumbX = pSliderValue->maThumbRect.Left();
-                long nThumbY = pSliderValue->maThumbRect.Top();
-                long nThumbWidth = pSliderValue->maThumbRect.GetWidth() - 1;
-                long nThumbHeight = pSliderValue->maThumbRect.GetHeight() - 1;
-
                 bOK = resolveDefinition(eType, ControlPart::Button,
                                         eState | pSliderValue->mnThumbState, rValue, nThumbX,
                                         nThumbY, nThumbWidth, nThumbHeight);
@@ -791,6 +809,14 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
             }
         }
         break;
+        case ControlType::Slider:
+            if (ePart == ControlPart::ThumbHorz || ePart == ControlPart::ThumbVert)
+            {
+                rNativeContentRegion = tools::Rectangle(aLocation, Size(28, 28));
+                rNativeBoundingRegion = rNativeContentRegion;
+                return true;
+            }
+            break;
 
         default:
             break;
