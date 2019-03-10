@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_e2f97b4d",
+        "filename": "vcl/source/gdi/FileDefinitionWidgetDraw.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-03-10T08:54:10Z",
+      "side": 1,
+      "message": "Probably something like https://gerrit.libreoffice.org/#/c/63645/12/xmloff/source/forms/propertyimport.cxx ?",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 22
+      },
+      "revId": "e9393e392e95ec8fcab77662790482aa0adf0f78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
