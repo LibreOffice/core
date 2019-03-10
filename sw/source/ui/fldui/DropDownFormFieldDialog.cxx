@@ -112,7 +112,8 @@ void DropDownFormFieldDialog::InitControls()
             {
                 sal_Int32 nSelection = -1;
                 pResult->second >>= nSelection;
-                m_xListItemsTreeView->SelectEntry(vListEntries[nSelection]);
+                if (vListEntries.getLength() > nSelection)
+                    m_xListItemsTreeView->SelectEntry(vListEntries[nSelection]);
             }
         }
     }
