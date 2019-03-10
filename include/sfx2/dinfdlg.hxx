@@ -171,50 +171,49 @@ public:
 class SfxDocumentPage : public SfxTabPage
 {
 private:
-    VclPtr<FixedImage>            m_pBmp;
-    VclPtr<SelectableFixedText>   m_pNameED;
-    VclPtr<PushButton>            m_pChangePassBtn;
-
-    VclPtr<SelectableFixedText>   m_pShowTypeFT;
-    VclPtr<SelectableFixedText>   m_pFileValEd;
-    VclPtr<SelectableFixedText>   m_pShowSizeFT;
-
-    VclPtr<SelectableFixedText>   m_pCreateValFt;
-    VclPtr<SelectableFixedText>   m_pChangeValFt;
-    VclPtr<SelectableFixedText>   m_pSignedValFt;
-    VclPtr<PushButton>            m_pSignatureBtn;
-    VclPtr<SelectableFixedText>   m_pPrintValFt;
-    VclPtr<SelectableFixedText>   m_pTimeLogValFt;
-    VclPtr<SelectableFixedText>   m_pDocNoValFt;
-
-    VclPtr<CheckBox>              m_pUseUserDataCB;
-    VclPtr<PushButton>            m_pDeleteBtn;
-    VclPtr<CheckBox>              m_pUseThumbnailSaveCB;
-
-    VclPtr<FixedText>             m_pTemplFt;
-    VclPtr<SelectableFixedText>   m_pTemplValFt;
-
     OUString                    m_aUnknownSize;
     OUString                    m_aMultiSignedStr;
 
     bool                        bEnableUseUserData  : 1,
                                 bHandleDelete       : 1;
 
-    DECL_LINK(DeleteHdl, Button*, void);
-    DECL_LINK(SignatureHdl, Button*, void);
-    DECL_LINK(ChangePassHdl, Button*, void);
+    std::unique_ptr<weld::Image> m_xBmp;
+    std::unique_ptr<weld::Label> m_xNameED;
+    std::unique_ptr<weld::Button> m_xChangePassBtn;
+
+    std::unique_ptr<weld::Label> m_xShowTypeFT;
+    std::unique_ptr<weld::Label> m_xFileValEd;
+    std::unique_ptr<weld::Label> m_xShowSizeFT;
+
+    std::unique_ptr<weld::Label> m_xCreateValFt;
+    std::unique_ptr<weld::Label> m_xChangeValFt;
+    std::unique_ptr<weld::Label> m_xSignedValFt;
+    std::unique_ptr<weld::Button> m_xSignatureBtn;
+    std::unique_ptr<weld::Label> m_xPrintValFt;
+    std::unique_ptr<weld::Label> m_xTimeLogValFt;
+    std::unique_ptr<weld::Label> m_xDocNoValFt;
+
+    std::unique_ptr<weld::CheckButton> m_xUseUserDataCB;
+    std::unique_ptr<weld::Button> m_xDeleteBtn;
+    std::unique_ptr<weld::CheckButton> m_xUseThumbnailSaveCB;
+
+    std::unique_ptr<weld::Label> m_xTemplFt;
+    std::unique_ptr<weld::Label> m_xTemplValFt;
+
+    DECL_LINK(DeleteHdl, weld::Button&, void);
+    DECL_LINK(SignatureHdl, weld::Button&, void);
+    DECL_LINK(ChangePassHdl, weld::Button&, void);
     void                ImplUpdateSignatures();
     void                ImplCheckPasswordState();
 
 protected:
     virtual ~SfxDocumentPage() override;
-    virtual void dispose() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
 
 public:
-    SfxDocumentPage( vcl::Window* pParent, const SfxItemSet& );
+    SfxDocumentPage(TabPageParent pParent, const SfxItemSet&);
     static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* );
 
     void                EnableUseUserData();
