@@ -20,6 +20,9 @@
 #include <anchoredobject.hxx>
 #include <swtypes.hxx>
 #include <vcl/scheduler.hxx>
+#include <fmtornt.hxx>
+#include <xmloff/odffields.hxx>
+#include <com/sun/star/frame/DispatchHelper.hpp>
 
 namespace
 {
@@ -36,6 +39,10 @@ public:
     void testUnfloatButton();
     void testUnfloatButtonReadOnlyMode();
     void testUnfloating();
+    void testTextFormFieldInsertion();
+    void testCheckboxFormFieldInsertion();
+    void testDropDownFormFieldInsertion();
+    void testMixedFormFieldInsertion();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testTdf101534);
@@ -43,8 +50,41 @@ public:
     CPPUNIT_TEST(testUnfloatButton);
     CPPUNIT_TEST(testUnfloatButtonReadOnlyMode);
     CPPUNIT_TEST(testUnfloating);
+    CPPUNIT_TEST(testTextFormFieldInsertion);
+    CPPUNIT_TEST(testCheckboxFormFieldInsertion);
+    CPPUNIT_TEST(testDropDownFormFieldInsertion);
+    CPPUNIT_TEST(testMixedFormFieldInsertion);
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    SwDoc* createDoc(const char* pName = nullptr);
 };
+
+SwDoc* SwUiWriterTest2::createDoc(const char* pName)
+{
+    if (!pName)
+        loadURL("private:factory/swriter", nullptr);
+    else
+        load(DATA_DIRECTORY, pName);
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    return pTextDoc->GetDocShell()->GetDoc();
+}
+
+static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand, const uno::Sequence<beans::PropertyValue>& rPropertyValues)
+{
+    uno::Reference<frame::XController> xController = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY)->getCurrentController();
+    CPPUNIT_ASSERT(xController.is());
+    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFrame.is());
+
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
+    CPPUNIT_ASSERT(xDispatchHelper.is());
+
+    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
+}
 
 void SwUiWriterTest2::testTdf101534()
 {
@@ -239,6 +279,150 @@ void SwUiWriterTest2::testUnfloating()
             sFailureMessage.getStr(), SwFrameType::Tab,
             pWrtShell->GetLayout()->GetLower()->GetNext()->GetLower()->GetLower()->GetType());
     }
+}
+
+void SwUiWriterTest2::testTextFormFieldInsertion()
+{
+    SwDoc* pDoc = createDoc();
+    CPPUNIT_ASSERT(pDoc);
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT(pMarkAccess);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+
+    // Insert a text form field
+    lcl_dispatchCommand(mxComponent, ".uno:TextFormField", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+
+    // Check whether the fieldmark is created
+    auto aIter = pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
+    ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(aIter->get());
+    CPPUNIT_ASSERT(pFieldmark);
+    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMTEXT), pFieldmark->GetFieldname());
+
+    // The text form field has the placholder text in it
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    sal_Unicode vEnSpaces[5] = { 8194, 8194, 8194, 8194, 8194 };
+    CPPUNIT_ASSERT_EQUAL(OUString(vEnSpaces, 5), xPara->getString());
+
+    // Undo insertion
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+    xPara.set(getParagraph(1));
+    CPPUNIT_ASSERT(xPara->getString().isEmpty());
+
+    // Redo insertion
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    xPara.set(getParagraph(1));
+    CPPUNIT_ASSERT_EQUAL(OUString(vEnSpaces, 5), xPara->getString());
+}
+
+void SwUiWriterTest2::testCheckboxFormFieldInsertion()
+{
+    SwDoc* pDoc = createDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT(pMarkAccess);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+
+    // Insert a checkbox form field
+    lcl_dispatchCommand(mxComponent, ".uno:CheckBoxFormField", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+
+    // Check whether the fieldmark is created
+    auto aIter = pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
+    ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(aIter->get());
+    CPPUNIT_ASSERT(pFieldmark);
+    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMCHECKBOX), pFieldmark->GetFieldname());
+    // The checkbox is not checked by default
+    ::sw::mark::ICheckboxFieldmark* pCheckBox
+        = dynamic_cast<::sw::mark::ICheckboxFieldmark*>(pFieldmark);
+    CPPUNIT_ASSERT(pCheckBox);
+    CPPUNIT_ASSERT(!pCheckBox->IsChecked());
+
+    // Undo insertion
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+
+    // Redo insertion
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    aIter = pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
+    pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(aIter->get());
+    CPPUNIT_ASSERT(pFieldmark);
+    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMCHECKBOX), pFieldmark->GetFieldname());
+}
+
+void SwUiWriterTest2::testDropDownFormFieldInsertion()
+{
+    SwDoc* pDoc = createDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT(pMarkAccess);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+
+    // Insert a drop-down form field
+    lcl_dispatchCommand(mxComponent, ".uno:DropDownFormField", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+
+    // Check whether the fieldmark is created
+    auto aIter = pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
+    ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(aIter->get());
+    CPPUNIT_ASSERT(pFieldmark);
+    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDROPDOWN), pFieldmark->GetFieldname());
+    // Check drop down field's parameters. By default these params are not set
+    const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
+    auto pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
+    CPPUNIT_ASSERT(bool(pListEntries == pParameters->end()));
+    auto pResult = pParameters->find(ODF_FORMDROPDOWN_RESULT);
+    CPPUNIT_ASSERT(bool(pResult == pParameters->end()));
+
+    // Undo insertion
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+
+    // Redo insertion
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    aIter = pMarkAccess->getAllMarksBegin();
+    CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
+    pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(aIter->get());
+    CPPUNIT_ASSERT(pFieldmark);
+    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDROPDOWN), pFieldmark->GetFieldname());
+}
+
+void SwUiWriterTest2::testMixedFormFieldInsertion()
+{
+    SwDoc* pDoc = createDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT(pMarkAccess);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+
+    // Insert fields
+    lcl_dispatchCommand(mxComponent, ".uno:TextFormField", {});
+    lcl_dispatchCommand(mxComponent, ".uno:CheckBoxFormField", {});
+    lcl_dispatchCommand(mxComponent, ".uno:DropDownFormField", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pMarkAccess->getAllMarksCount());
+
+    // Undo insertion
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+
+    // Redo insertion
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pMarkAccess->getAllMarksCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
