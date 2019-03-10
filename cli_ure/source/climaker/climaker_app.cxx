@@ -393,17 +393,15 @@ SAL_IMPLEMENT_MAIN()
         css::uno::Reference< container::XSet > xSet( xTDmgr, UNO_QUERY_THROW );
         rtl::Reference unoidlMgr(new unoidl::Manager);
         std::vector< rtl::Reference< unoidl::Provider > > unoidlMandatoryProvs;
-        for (vector< OUString >::iterator i(extra_registries.begin());
-             i != extra_registries.end(); ++i)
+        for (auto& rRegistry : extra_registries)
         {
-            xSet->insert(makeAny(*i));
-            unoidlMgr->addProvider(*i);
+            xSet->insert(makeAny(rRegistry));
+            unoidlMgr->addProvider(rRegistry);
         }
-        for (vector< OUString >::iterator i(mandatory_registries.begin());
-             i != mandatory_registries.end(); ++i)
+        for (auto& rRegistry : mandatory_registries)
         {
-            xSet->insert(makeAny(*i));
-            rtl::Reference< unoidl::Provider > prov(unoidlMgr->addProvider(*i));
+            xSet->insert(makeAny(rRegistry));
+            rtl::Reference< unoidl::Provider > prov(unoidlMgr->addProvider(rRegistry));
             unoidlMandatoryProvs.push_back(prov);
         }
 
@@ -586,16 +584,8 @@ SAL_IMPLEMENT_MAIN()
                 css::uno::Reference< reflection::XTypeDescription > td(
                     xTD_enum->nextTypeDescription());
                 OUString name(td->getName());
-                bool bEmit = false;
-                for (std::vector< rtl::Reference< unoidl::Provider > >::iterator
-                         i(unoidlMandatoryProvs.begin());
-                     i != unoidlMandatoryProvs.end(); ++i)
-                {
-                    if ((*i)->findEntity(name).is()) {
-                        bEmit = true;
-                        break;
-                    }
-                }
+                bool bEmit = std::any_of(unoidlMandatoryProvs.begin(), unoidlMandatoryProvs.end(),
+                    [&name](rtl::Reference<unoidl::Provider>& rProv) { return rProv->findEntity(name).is(); });
                 if (bEmit) {
                     type_emitter->get_type(td);
                 }

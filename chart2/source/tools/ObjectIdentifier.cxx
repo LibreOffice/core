@@ -1436,15 +1436,10 @@ TitleHelper::eTitleType ObjectIdentifier::getTitleTypeForCID( const OUString& rC
 
     OUString aParentParticle = ObjectIdentifier::getFullParentParticle( rCID );
     const tTitleMap& rMap = lcl_getTitleMap();
-    tTitleMap::const_iterator aIt( rMap.begin() );
-    for( ;aIt != rMap.end(); ++aIt )
-    {
-        if( aParentParticle == (*aIt).second )
-        {
-            eRet = (*aIt).first;
-            break;
-        }
-    }
+    tTitleMap::const_iterator aIt = std::find_if(rMap.begin(), rMap.end(),
+        [&aParentParticle](tTitleMap::const_reference rEntry) { return aParentParticle == rEntry.second; });
+    if (aIt != rMap.end())
+        eRet = (*aIt).first;
 
     return eRet;
 }

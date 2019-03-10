@@ -1844,12 +1844,16 @@ void VCartesianAxis::createShapes()
             if (rAllTickInfos.empty())
                 return;
 
-            TickInfoArraysType::iterator aDepthIter             = rAllTickInfos.begin();
-            const TickInfoArraysType::const_iterator aDepthEnd  = rAllTickInfos.end();
-
+            sal_Int32 nDepth = 0;
             sal_Int32 nTickmarkPropertiesCount = m_aAxisProperties.m_aTickmarkPropertiesList.size();
-            for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd && nDepth < nTickmarkPropertiesCount; ++aDepthIter, nDepth++ )
-                createTickMarkLineShapes( *aDepthIter, m_aAxisProperties.m_aTickmarkPropertiesList[nDepth], *pTickFactory2D, false /*bOnlyAtLabels*/ );
+            for( auto& rTickInfos : rAllTickInfos )
+            {
+                if (nDepth == nTickmarkPropertiesCount)
+                    break;
+
+                createTickMarkLineShapes( rTickInfos, m_aAxisProperties.m_aTickmarkPropertiesList[nDepth], *pTickFactory2D, false /*bOnlyAtLabels*/ );
+                nDepth++;
+            }
         }
         //create axis main lines
         //it serves also as the handle shape for the axis selection

@@ -210,30 +210,17 @@ sal_Int32 OInterfaceContainerHelper2::removeInterface( const Reference<XInterfac
 
     if( bIsList )
     {
-        sal_Int32 nLen = aData.pAsVector->size();
-        sal_Int32 i;
-        for( i = 0; i < nLen; i++ )
-        {
-            // It is not valid to compare the pointer directly, but it's faster.
-            if( (*aData.pAsVector)[i].get() == rListener.get() )
-            {
-                aData.pAsVector->erase(aData.pAsVector->begin()+i);
-                break;
-            }
-        }
+        // It is not valid to compare the pointer directly, but it's faster.
+        auto it = std::find_if(aData.pAsVector->begin(), aData.pAsVector->end(),
+            [&rListener](const css::uno::Reference<css::uno::XInterface>& rItem) {
+                return rItem.get() == rListener.get(); });
 
         // interface not found, use the correct compare method
-        if( i == nLen )
-        {
-            for( i = 0; i < nLen; i++ )
-            {
-                if( (*aData.pAsVector)[i] == rListener )
-                {
-                    aData.pAsVector->erase(aData.pAsVector->begin()+i);
-                    break;
-                }
-            }
-        }
+        if (it == aData.pAsVector->end())
+            it = std::find(aData.pAsVector->begin(), aData.pAsVector->end(), rListener);
+
+        if (it != aData.pAsVector->end())
+            aData.pAsVector->erase(it);
 
         if( aData.pAsVector->size() == 1 )
         {

@@ -198,18 +198,14 @@ OUString SAL_CALL NumberedCollection::getUntitledPrefix()
     ::osl::ResettableMutexGuard aLock(m_aMutex);
     {
         TDeadItemList                     lDeadItems;
-        TNumberedItemHash::const_iterator pComponent;
 
-        for (  pComponent  = m_lComponents.begin ();
-               pComponent != m_lComponents.end   ();
-             ++pComponent                          )
+        for (const auto& [rComponent, rItem] : m_lComponents)
         {
-            const TNumberedItem&                              rItem = pComponent->second;
             const css::uno::Reference< css::uno::XInterface > xItem = rItem.xItem.get();
 
             if ( ! xItem.is ())
             {
-                lDeadItems.push_back(pComponent->first);
+                lDeadItems.push_back(rComponent);
                 continue;
             }
 
@@ -233,13 +229,8 @@ OUString SAL_CALL NumberedCollection::getUntitledPrefix()
 void NumberedCollection::impl_cleanUpDeadItems (      TNumberedItemHash& lItems    ,
                                                 const TDeadItemList&     lDeadItems)
 {
-    TDeadItemList::const_iterator pIt;
-
-    for (  pIt  = lDeadItems.begin ();
-           pIt != lDeadItems.end   ();
-         ++pIt                       )
+    for (const long& rDeadItem : lDeadItems)
     {
-        const long& rDeadItem = *pIt;
         lItems.erase(rDeadItem);
     }
 }

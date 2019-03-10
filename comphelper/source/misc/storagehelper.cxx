@@ -632,16 +632,14 @@ LifecycleProxy::~LifecycleProxy() { }
 
 void LifecycleProxy::commitStorages()
 {
-    for (Impl::reverse_iterator iter = m_xBadness->rbegin();
-            iter != m_xBadness->rend(); ++iter) // reverse order (outwards)
-    {
-        uno::Reference<embed::XTransactedObject> const xTransaction(*iter,
-                uno::UNO_QUERY);
-        if (xTransaction.is())
-        {
-            xTransaction->commit();
-        }
-    }
+    std::for_each(m_xBadness->rbegin(), m_xBadness->rend(), // reverse order (outwards)
+        [](Impl::reference rxItem) {
+            uno::Reference<embed::XTransactedObject> const xTransaction(rxItem, uno::UNO_QUERY);
+            if (xTransaction.is())
+            {
+                xTransaction->commit();
+            }
+        });
 }
 
 static void splitPath( std::vector<OUString> &rElems,

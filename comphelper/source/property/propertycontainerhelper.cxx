@@ -178,13 +178,10 @@ namespace
 void OPropertyContainerHelper::implPushBackProperty(const PropertyDescription& _rProp)
 {
 #ifdef DBG_UTIL
-    for (   PropertiesIterator checkConflicts = m_aProperties.begin();
-            checkConflicts != m_aProperties.end();
-            ++checkConflicts
-        )
+    for (auto& checkConflicts : m_aProperties)
     {
-        OSL_ENSURE(checkConflicts->aProperty.Name != _rProp.aProperty.Name, "OPropertyContainerHelper::implPushBackProperty: name already exists!");
-        OSL_ENSURE(checkConflicts->aProperty.Handle != _rProp.aProperty.Handle, "OPropertyContainerHelper::implPushBackProperty: handle already exists!");
+        OSL_ENSURE(checkConflicts.aProperty.Name != _rProp.aProperty.Name, "OPropertyContainerHelper::implPushBackProperty: name already exists!");
+        OSL_ENSURE(checkConflicts.aProperty.Handle != _rProp.aProperty.Handle, "OPropertyContainerHelper::implPushBackProperty: handle already exists!");
     }
 #endif
 
@@ -464,15 +461,13 @@ void OPropertyContainerHelper::describeProperties(Sequence< Property >& _rProps)
     Sequence< Property > aOwnProps(m_aProperties.size());
     Property* pOwnProps = aOwnProps.getArray();
 
-    for (   ConstPropertiesIterator aLoop = m_aProperties.begin();
-            aLoop != m_aProperties.end();
-            ++aLoop, ++pOwnProps
-        )
+    for (const auto& rProp : m_aProperties)
     {
-        pOwnProps->Name = aLoop->aProperty.Name;
-        pOwnProps->Handle = aLoop->aProperty.Handle;
-        pOwnProps->Attributes = static_cast<sal_Int16>(aLoop->aProperty.Attributes);
-        pOwnProps->Type = aLoop->aProperty.Type;
+        pOwnProps->Name = rProp.aProperty.Name;
+        pOwnProps->Handle = rProp.aProperty.Handle;
+        pOwnProps->Attributes = static_cast<sal_Int16>(rProp.aProperty.Attributes);
+        pOwnProps->Type = rProp.aProperty.Type;
+        ++pOwnProps;
     }
 
     // as our property vector is sorted by handles, not by name, we have to sort aOwnProps

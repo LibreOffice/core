@@ -434,41 +434,37 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const css::uno::Reference < css
     // look for object in temporary container
     if ( pImpl->mpTempObjectContainer )
     {
-        EmbeddedObjectContainerNameMap::iterator aEnd = pImpl->mpTempObjectContainer->pImpl->maObjectContainer.end();
-        for( EmbeddedObjectContainerNameMap::iterator aIter = pImpl->mpTempObjectContainer->pImpl->maObjectContainer.begin();
-             aIter != aEnd;
-             ++aIter )
+        auto& rObjectContainer = pImpl->mpTempObjectContainer->pImpl->maObjectContainer;
+        auto aIter = std::find_if(rObjectContainer.begin(), rObjectContainer.end(),
+            [&xObj](const EmbeddedObjectContainerNameMap::value_type& rEntry) { return rEntry.second == xObj; });
+        if (aIter != rObjectContainer.end())
         {
-            if ( aIter->second == xObj )
+            // copy replacement image from temporary container (if there is any)
+            OUString aTempName = aIter->first;
+            OUString aMediaType;
+            uno::Reference < io::XInputStream > xStream = pImpl->mpTempObjectContainer->GetGraphicStream( xObj, &aMediaType );
+            if ( xStream.is() )
             {
-                // copy replacement image from temporary container (if there is any)
-                OUString aTempName = aIter->first;
-                OUString aMediaType;
-                uno::Reference < io::XInputStream > xStream = pImpl->mpTempObjectContainer->GetGraphicStream( xObj, &aMediaType );
-                if ( xStream.is() )
-                {
-                    InsertGraphicStream( xStream, rName, aMediaType );
-                    xStream = nullptr;
-                    pImpl->mpTempObjectContainer->RemoveGraphicStream( aTempName );
-                }
-
-                // remove object from storage of temporary container
-                uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
-                if ( xPersist.is() )
-                {
-                    try
-                    {
-                        pImpl->mpTempObjectContainer->pImpl->mxStorage->removeElement( aTempName );
-                    }
-                    catch (const uno::Exception&)
-                    {
-                    }
-                }
-
-                // temp. container needs to forget the object
-                pImpl->mpTempObjectContainer->pImpl->maObjectContainer.erase( aIter );
-                break;
+                InsertGraphicStream( xStream, rName, aMediaType );
+                xStream = nullptr;
+                pImpl->mpTempObjectContainer->RemoveGraphicStream( aTempName );
             }
+
+            // remove object from storage of temporary container
+            uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+            if ( xPersist.is() )
+            {
+                try
+                {
+                    pImpl->mpTempObjectContainer->pImpl->mxStorage->removeElement( aTempName );
+                }
+                catch (const uno::Exception&)
+                {
+                }
+            }
+
+            // temp. container needs to forget the object
+            pImpl->mpTempObjectContainer->pImpl->maObjectContainer.erase( aIter );
         }
     }
 }
@@ -960,24 +956,18 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
         return false;
     }
 
-    bool bFound = false;
-    EmbeddedObjectContainerNameMap::iterator aEnd = pImpl->maObjectContainer.end();
-    for( EmbeddedObjectContainerNameMap::iterator aIter = pImpl->maObjectContainer.begin();
-         aIter != aEnd;
-         ++aIter )
+    auto aIter = std::find_if(pImpl->maObjectContainer.begin(), pImpl->maObjectContainer.end(),
+        [&xObj](const EmbeddedObjectContainerNameMap::value_type& rEntry) { return rEntry.second == xObj; });
+    if (aIter != pImpl->maObjectContainer.end())
     {
-        if ( aIter->second == xObj )
-        {
-            pImpl->maObjectContainer.erase( aIter );
-            bFound = true;
-            uno::Reference < container::XChild > xChild( xObj, uno::UNO_QUERY );
-            if ( xChild.is() )
-                xChild->setParent( uno::Reference < uno::XInterface >() );
-            break;
-        }
+        pImpl->maObjectContainer.erase( aIter );
+        uno::Reference < container::XChild > xChild( xObj, uno::UNO_QUERY );
+        if ( xChild.is() )
+            xChild->setParent( uno::Reference < uno::XInterface >() );
     }
+    else
+        SAL_WARN( "comphelper.container", "Object not found for removal!" );
 
-    SAL_WARN_IF( !bFound,"comphelper.container", "Object not found for removal!" );
     if ( xPersist.is() && bKeepToTempStorage )  // #i119941#
     {
         // remove replacement image (if there is one)
@@ -1007,22 +997,12 @@ void EmbeddedObjectContainer::CloseEmbeddedObject( const uno::Reference < embed:
 {
     // disconnect the object from the container and close it if possible
 
-    bool bFound = false;
-    EmbeddedObjectContainerNameMap::iterator aEnd = pImpl->maObjectContainer.end();
-    for( EmbeddedObjectContainerNameMap::iterator aIter = pImpl->maObjectContainer.begin();
-         aIter != aEnd;
-         ++aIter )
+    auto aIter = std::find_if(pImpl->maObjectContainer.begin(), pImpl->maObjectContainer.end(),
+        [&xObj](const EmbeddedObjectContainerNameMap::value_type& rEntry) { return rEntry.second == xObj; });
+    if (aIter != pImpl->maObjectContainer.end())
     {
-        if ( aIter->second == xObj )
-        {
-            pImpl->maObjectContainer.erase( aIter );
-            bFound = true;
-            break;
-        }
-    }
+        pImpl->maObjectContainer.erase( aIter );
 
-    if ( bFound )
-    {
         uno::Reference < ::util::XCloseable > xClose( xObj, uno::UNO_QUERY );
         try
         {

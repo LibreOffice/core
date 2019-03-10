@@ -82,17 +82,14 @@ namespace comphelper
     {
         Reference< XInterface > xReturn;
 
-        for (   ComponentDescriptions::const_iterator component = m_pImpl->m_aRegisteredComponents.begin();
-                component != m_pImpl->m_aRegisteredComponents.end();
-                ++component
-            )
+        for (const auto& rComponent : m_pImpl->m_aRegisteredComponents)
         {
-            if ( component->sImplementationName == _rImplementationName )
+            if ( rComponent.sImplementationName == _rImplementationName )
             {
-                xReturn = component->pFactoryCreationFunc(
-                    component->pComponentCreationFunc,
-                    component->sImplementationName,
-                    component->aSupportedServices,
+                xReturn = rComponent.pFactoryCreationFunc(
+                    rComponent.pComponentCreationFunc,
+                    rComponent.sImplementationName,
+                    rComponent.aSupportedServices,
                     nullptr
                 );
                 if ( xReturn.is() )
