@@ -21,6 +21,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <typelib/typedescription.hxx>
+#include <com/sun/star/script/CannotConvertException.hpp>
 
 
 using com::sun::star::uno::RuntimeException;
