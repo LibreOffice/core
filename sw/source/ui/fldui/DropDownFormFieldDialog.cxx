@@ -28,7 +28,7 @@ DropDownFormFieldDialog::DropDownFormFieldDialog(weld::Window* pParent,
     , m_xListDownButton(m_xBuilder->weld_button("down_button"))
 {
     m_xListItemEntry->connect_key_press(LINK(this, DropDownFormFieldDialog, KeyPressedHdl));
-    m_xListItemEntry->connect_key_release(LINK(this, DropDownFormFieldDialog, KeyReleasedHdl));
+    m_xListItemEntry->connect_changed(LINK(this, DropDownFormFieldDialog, EntryChangedHdl));
 
     m_xListItemsTreeView->set_size_request(m_xListItemEntry->get_preferred_size().Width(),
                                            m_xListItemEntry->get_preferred_size().Height() * 5);
@@ -57,11 +57,7 @@ IMPL_LINK(DropDownFormFieldDialog, KeyPressedHdl, const KeyEvent&, rEvent, bool)
     return false;
 }
 
-IMPL_LINK_NOARG(DropDownFormFieldDialog, KeyReleasedHdl, const KeyEvent&, bool)
-{
-    UpdateButtons();
-    return false;
-}
+IMPL_LINK_NOARG(DropDownFormFieldDialog, EntryChangedHdl, weld::Entry&, void) { UpdateButtons(); }
 
 IMPL_LINK(DropDownFormFieldDialog, ButtonPushedHdl, weld::Button&, rButton, void)
 {
