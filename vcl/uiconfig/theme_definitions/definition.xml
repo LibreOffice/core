@@ -147,7 +147,7 @@
     </combobox>
 
     <editbox>
-        <part value="Entire">
+        <part value="Entire" height="32">
             <state enabled="true">
                 <external source="common-rect.svgx" />
             </state>
