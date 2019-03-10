@@ -45,6 +45,8 @@ $(eval $(call gb_Package_add_files,vcl_theme_definitions,$(LIBO_SHARE_FOLDER)/th
 	scrollbar-vertical.svgx \
 	combobox.svgx \
 	combobox-disabled.svgx \
+	arrow-up.svgx \
+	arrow-down.svgx \
 ))
 
 # vim: set noet sw=4 ts=4:
