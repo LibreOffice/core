@@ -13,6 +13,7 @@
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 #include <test/container/xnamed.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <comphelper/types.hxx>
 #include <rtl/string.hxx>
 
@@ -46,7 +47,8 @@ class ScDataPilotFieldGroupObj : public CalcUnoApiTest,
                                  public apitest::XEnumerationAccess,
                                  public apitest::XIndexAccess,
                                  public apitest::XNameAccess,
-                                 public apitest::XNamed
+                                 public apitest::XNamed,
+                                 public apitest::XServiceInfo
 {
 public:
     ScDataPilotFieldGroupObj();
@@ -77,6 +79,11 @@ public:
     CPPUNIT_TEST(testGetName);
     CPPUNIT_TEST(testSetName);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -90,6 +97,7 @@ ScDataPilotFieldGroupObj::ScDataPilotFieldGroupObj()
     , XIndexAccess(2)
     , XNameAccess("aName")
     , XNamed("Group1")
+    , XServiceInfo("ScDataPilotFieldGroupObj", "com.sun.star.sheet.DataPilotFieldGroup")
 {
 }
 
