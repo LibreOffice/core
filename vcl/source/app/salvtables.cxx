@@ -3302,9 +3302,12 @@ public:
 class SalInstanceLabel : public SalInstanceWidget, public virtual weld::Label
 {
 private:
-    VclPtr<FixedText> m_xLabel;
+    // Control instead of FixedText so we can also use this for
+    // SelectableFixedText which is derived from Edit. We just typically need
+    // [G|S]etText which exists in their shared basesclass
+    VclPtr<Control> m_xLabel;
 public:
-    SalInstanceLabel(FixedText* pLabel, SalInstanceBuilder *pBuilder, bool bTakeOwnership)
+    SalInstanceLabel(Control* pLabel, SalInstanceBuilder *pBuilder, bool bTakeOwnership)
         : SalInstanceWidget(pLabel, pBuilder, bTakeOwnership)
         , m_xLabel(pLabel)
     {
@@ -3322,8 +3325,10 @@ public:
 
     virtual void set_mnemonic_widget(Widget* pTarget) override
     {
+        FixedText* pLabel = dynamic_cast<FixedText*>(m_xLabel.get());
+        assert(pLabel && "can't use set_mnemonic_widget on SelectableFixedText");
         SalInstanceWidget* pTargetWidget = dynamic_cast<SalInstanceWidget*>(pTarget);
-        m_xLabel->set_mnemonic_widget(pTargetWidget ? pTargetWidget->getWidget() : nullptr);
+        pLabel->set_mnemonic_widget(pTargetWidget ? pTargetWidget->getWidget() : nullptr);
     }
 };
 
@@ -4356,7 +4361,7 @@ public:
 
     virtual std::unique_ptr<weld::Label> weld_label(const OString &id, bool bTakeOwnership) override
     {
-        FixedText* pLabel = m_xBuilder->get<FixedText>(id);
+        Control* pLabel = m_xBuilder->get<Control>(id);
         return pLabel ? std::make_unique<SalInstanceLabel>(pLabel, this, bTakeOwnership) : nullptr;
     }
 
