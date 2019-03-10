@@ -17,13 +17,6 @@
  */
 package com.sun.star.script.framework.provider.beanshell;
 
-public interface ScriptSourceView {
-    void clear();
-    void update();
-    boolean isModified();
-    void setModified(boolean value);
-    String getText();
-    void undo();
-    void redo();
-    void addListener(UnsavedChangesListener toAdd);
+public interface UnsavedChangesListener {
+    void onUnsavedChanges(boolean isModified);
 }
