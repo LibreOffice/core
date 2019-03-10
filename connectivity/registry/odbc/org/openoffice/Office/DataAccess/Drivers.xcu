@@ -77,7 +77,8 @@
             <value>true</value>
           </prop>
         </node>
-        <node oor:name="UseKeywordAsBeforeAlias" oor:op="replace">
+        <node oor:name="GenerateASBeforeCorrelationName" oor:op="replace">
+        <!-- Corresponds to UseKeywordAsBeforeAlias in Features - see connectivity/registry/README -->
           <prop oor:name="Value" oor:type="xs:boolean">
             <value>false</value>
           </prop>
@@ -167,6 +168,7 @@
           </prop>
         </node>
         <node oor:name="UseKeywordAsBeforeAlias" oor:op="replace">
+        <!-- Corresponds to GenerateASBeforeCorrelationName in Properties - see connectivity/registry/README -->
           <prop oor:name="Value" oor:type="xs:boolean">
             <value>true</value>
           </prop>

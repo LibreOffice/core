@@ -326,7 +326,7 @@ void ODbAdminDialog::createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, SfxItemP
     *pCounter++ = new SfxStringItem(DSID_DOCUMENT_URL, OUString());
     *pCounter++ = new SfxBoolItem(DSID_DOSLINEENDS, false);
     *pCounter++ = new SfxStringItem(DSID_DATABASENAME, OUString());
-    *pCounter++ = new SfxBoolItem(DSID_AS_BEFORE_CORRNAME, true);
+    *pCounter++ = new SfxBoolItem(DSID_AS_BEFORE_CORRNAME, false);
     *pCounter++ = new SfxBoolItem(DSID_CHECK_REQUIRED_FIELDS, true);
     *pCounter++ = new SfxBoolItem(DSID_IGNORECURRENCY, false);
     *pCounter++ = new SfxStringItem(DSID_CONN_SOCKET, OUString());
