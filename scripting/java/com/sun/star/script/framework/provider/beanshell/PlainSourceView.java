@@ -42,6 +42,8 @@ import javax.swing.event.UndoableEditListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoManager;
+import java.util.List;
+import java.util.ArrayList;
 
 public class PlainSourceView extends JScrollPane implements
     ScriptSourceView, DocumentListener {
@@ -56,6 +58,7 @@ public class PlainSourceView extends JScrollPane implements
     private CompoundEdit compoundEdit = null;
     private static final int noLimit = -1;
     UndoManager undoManager;
+    private List<UnsavedChangesListener> unsavedListener = new ArrayList<UnsavedChangesListener>();
 
     public PlainSourceView(ScriptSourceModel model) {
         this.model = model;
@@ -71,6 +74,10 @@ public class PlainSourceView extends JScrollPane implements
         }
         if(undoManager.canUndo()){
             undoManager.undo();
+        }
+        // check if it's the last undoable change
+        if(undoManager.canUndo() == false){
+            setModified(false);
         }
     }
     public void redo(){
@@ -119,8 +126,17 @@ public class PlainSourceView extends JScrollPane implements
         return isModified;
     }
 
+    private void notifyListeners (boolean isUnsaved) {
+        for (UnsavedChangesListener listener : unsavedListener) {
+            listener.onUnsavedChanges(isUnsaved);
+        }
+    }
+
     public void setModified(boolean value) {
-        isModified = value;
+        if(value != isModified) {
+            notifyListeners(value);
+            isModified = value;
+        }
     }
 
     private void initUI() {
@@ -203,7 +219,7 @@ public class PlainSourceView extends JScrollPane implements
     /* If the number of lines in the JTextArea has changed then update the
        GlyphGutter */
     private void doChanged() {
-        isModified = true;
+        setModified(true);
 
         if (linecount != ta.getLineCount()) {
             gg.update();
@@ -221,6 +237,10 @@ public class PlainSourceView extends JScrollPane implements
 
     public int getCurrentPosition() {
         return model.getCurrentPosition();
+    }
+
+    public void addListener(UnsavedChangesListener toAdd) {
+        unsavedListener.add(toAdd);
     }
 }
 

@@ -25,4 +25,5 @@ public interface ScriptSourceView {
     String getText();
     void undo();
     void redo();
+    void addListener(UnsavedChangesListener toAdd);
 }
