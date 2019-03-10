@@ -3,5 +3,3 @@
 "ScStyleFamilyObj";"com::sun::star::container::XNameContainer#optional";"removeByName()"
 "ScStyleFamilyObj";"com::sun::star::container::XIndexAccess#optional";"getCount()"
 "ScStyleFamilyObj";"com::sun::star::container::XIndexAccess#optional";"getByIndex()"
-"ScStyleFamilyObj";"com::sun::star::container::XElementAccess";"getElementType()"
-"ScStyleFamilyObj";"com::sun::star::container::XElementAccess";"hasElements()"

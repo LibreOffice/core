@@ -8,7 +8,9 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/container/xnameaccess.hxx>
+#include <cppu/unotype.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -16,6 +18,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
@@ -25,7 +28,9 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScStyleFamilyObj : public CalcUnoApiTest, public apitest::XNameAccess
+class ScStyleFamilyObj : public CalcUnoApiTest,
+                         public apitest::XElementAccess,
+                         public apitest::XNameAccess
 {
 public:
     ScStyleFamilyObj();
@@ -35,6 +40,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScStyleFamilyObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XNameAccess
     CPPUNIT_TEST(testGetByName);
@@ -49,6 +58,7 @@ private:
 
 ScStyleFamilyObj::ScStyleFamilyObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuemts")
+    , XElementAccess(cppu::UnoType<style::XStyle>::get())
     , XNameAccess("Default")
 {
 }
