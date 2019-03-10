@@ -164,6 +164,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/table/xcellcursor \
 	test/source/table/xcolumnrowrange \
 	test/source/table/xtablechart \
+	test/source/table/xtablecharts \
 	test/source/table/xtablechartssupplier \
 	test/source/table/xtablerows \
 	test/source/text/xsimpletext \

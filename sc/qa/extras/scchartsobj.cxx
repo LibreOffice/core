@@ -13,6 +13,7 @@
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 #include <test/lang/xserviceinfo.hxx>
+#include <test/table/xtablecharts.hxx>
 #include <cppu/unotype.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -42,7 +43,8 @@ class ScChartsObj : public CalcUnoApiTest,
                     public apitest::XElementAccess,
                     public apitest::XIndexAccess,
                     public apitest::XNameAccess,
-                    public apitest::XServiceInfo
+                    public apitest::XServiceInfo,
+                    public apitest::XTableCharts
 {
 public:
     ScChartsObj();
@@ -73,6 +75,9 @@ public:
     CPPUNIT_TEST(testGetImplementationName);
     CPPUNIT_TEST(testGetSupportedServiceNames);
     CPPUNIT_TEST(testSupportsService);
+
+    // XTableCharts
+    CPPUNIT_TEST(testAddNewRemoveByName);
 
     CPPUNIT_TEST_SUITE_END();
 
