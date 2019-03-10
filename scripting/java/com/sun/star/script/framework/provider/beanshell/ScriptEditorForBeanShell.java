@@ -59,6 +59,7 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
     private XScriptContext context;
     private URL scriptURL = null;
     private ClassLoader  cl = null;
+    private JButton saveBtn;
 
     // global ScriptEditorForBeanShell returned for getEditor() calls
     private static ScriptEditorForBeanShell theScriptEditorForBeanShell;
@@ -251,6 +252,15 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
 
         this.model.setView(this.view);
         initUI();
+        this.view.addListener(new UnsavedChangesListener() {
+            @Override
+            public void onUnsavedChanges(boolean isUnsaved) {
+                if(filename != null) {
+                    // enable or disable save button depending on unsaved changes
+                    saveBtn.setEnabled(isUnsaved);
+                }
+            }
+        });
         frame.setVisible(true);
     }
 
@@ -281,8 +291,11 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
             b.addActionListener(this);
             toolbar.add(b);
             toolbar.addSeparator();
-            if (label.equals("Save") && filename == null) {
+
+            // disable save button on start
+            if (label.equals("Save")) {
                 b.setEnabled(false);
+                saveBtn = b;
             }
         }
 
