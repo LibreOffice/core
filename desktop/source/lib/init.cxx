@@ -3824,7 +3824,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     else
         bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector));
 
-    if (!bResult)
+    if (!bResult && gImpl)
     {
         SetLastExceptionMsg("Failed to dispatch " + aCommand);
     }
