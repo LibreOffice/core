@@ -270,17 +270,27 @@
     <slider>
         <part value="Button">
             <state>
-                <circ stroke="#AAAAAA" fill="#FFFFFF" stroke-width="1" rx="7" ry="7"/>
+                <image source="slider-button.svgx" />
             </state>
         </part>
-        <part value="TrackHorzArea">
+        <part value="TrackHorzLeft">
             <state>
-                <line stroke="#007AFF" fill="#007AFF" stroke-width="10" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
+                <line stroke="#007AFF" stroke-width="6" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
             </state>
         </part>
-        <part value="TrackVertArea">
+        <part value="TrackHorzRight">
             <state>
-                <line stroke="#007AFF" fill="#007AFF" stroke-width="10" x1="0.5" y1="0.0" x2="0.5" y2="1.0"/>
+                <line stroke="#8e8e93" stroke-width="6" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
+            </state>
+        </part>
+        <part value="TrackVertUpper">
+            <state>
+                <line stroke="#007AFF" stroke-width="6" x1="0.5" y1="0.0" x2="0.5" y2="1.0"/>
+            </state>
+        </part>
+        <part value="TrackVertLower">
+            <state>
+                <line stroke="#8e8e93" stroke-width="6" x1="0.5" y1="0.0" x2="0.5" y2="1.0"/>
             </state>
         </part>
     </slider>
