@@ -361,7 +361,7 @@
     <tabbody>
         <part value="Entire">
             <state>
-                <rect stroke="#FFFFFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
+                <rect stroke="#f4f5f5" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
     </tabbody>
@@ -369,12 +369,12 @@
     <windowbackground>
         <part value="BackgroundWindow">
             <state>
-                <rect stroke="#FFFFFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
+                <rect stroke="#f4f5f5" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
         <part value="BackgroundDialog">
             <state>
-                <rect stroke="#FFFFFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
+                <rect stroke="#f4f5f5" fill="#FFFFFF" stroke-width="1" rx="1" ry="1"/>
             </state>
         </part>
     </windowbackground>
