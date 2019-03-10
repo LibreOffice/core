@@ -178,8 +178,7 @@ namespace dbaui
             if (!booleanSetting.xControl)
                 continue;
 
-            ::boost::optional< bool > aValue(false);
-            aValue.reset();
+            boost::optional<bool> aValue;
 
             const SfxPoolItem* pItem = _rSet.GetItem<SfxPoolItem>(booleanSetting.nItemId);
             if (const SfxBoolItem *pBoolItem = dynamic_cast<const SfxBoolItem*>( pItem) )
