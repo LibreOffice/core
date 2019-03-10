@@ -1,5 +1,5 @@
 #**************************************************************
-#  
+#
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
 #  distributed with this work for additional information
@@ -7,16 +7,16 @@
 #  to you under the Apache License, Version 2.0 (the
 #  "License"); you may not use this file except in compliance
 #  with the License.  You may obtain a copy of the License at
-#  
+#
 #    http://www.apache.org/licenses/LICENSE-2.0
-#  
+#
 #  Unless required by applicable law or agreed to in writing,
 #  software distributed under the License is distributed on an
 #  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 #  KIND, either express or implied.  See the License for the
 #  specific language governing permissions and limitations
 #  under the License.
-#  
+#
 #**************************************************************
 
 
@@ -27,13 +27,13 @@ PRJNAME=desktop
 TARGET=zipintro
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :  settings.mk
+.INCLUDE : settings.mk
 
 DEFAULT_FLAVOURS=dev dev_nologo nologo intro beta
 
 ZIP1LIST= \
     $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/dev$/introabout$/intro.png $(INTRO_BITMAPS)) \
-    $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/introabout$/about.png $(ABOUT_BITMAPS)) \
+    $(null,$(ABOUT_BITMAPS) $(MISC)$/ooo_custom_images$/dev$/introabout$/about.png $(ABOUT_BITMAPS)) \
     $(MISC)$/$(RSCDEFIMG)$/introabout$/logo.png
 ZIP2LIST= \
     $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/dev_nologo$/introabout$/intro.png $(INTRO_BITMAPS)) \
@@ -67,7 +67,7 @@ ZIP4DEPS=$(ZIP4LIST)
 ZIP5TARGET=beta_intro
 ZIP5DEPS=$(ZIP5LIST)
 
-.INCLUDE :  target.mk
+.INCLUDE : target.mk
 
 ALLTAR : $(foreach,i,$(DEFAULT_FLAVOURS) $(COMMONBIN)$/$i$/intro.zip)
 
@@ -103,3 +103,5 @@ $(MISC)$/%.bmp : $(SOLARSRC)$/%.bmp
 $(MISC)$/%.png : $(SOLARSRC)$/%.png
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
+
+# vim: set noet ts=4 sw=4:
