@@ -1422,6 +1422,12 @@ void SdOutliner::EnterEditMode (bool bGrabFocus)
     pViewShell->GetDispatcher()->ExecuteList(SID_TEXTEDIT,
             SfxCallMode::SYNCHRON | SfxCallMode::RECORD, { &aItem });
 
+    if (mpView->IsTextEdit())
+    {
+        // end text edition before starting it again
+        mpView->SdrEndTextEdit();
+    }
+
     // To be consistent with the usual behaviour in the Office the text
     // object that is put into edit mode would have also to be selected.
     // Starting the text edit mode is not enough so we do it here by
