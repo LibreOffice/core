@@ -19,13 +19,9 @@
 
 #include "pyuno_impl.hxx"
 
-#include <time.h>
 #include <osl/thread.h>
 #include <osl/thread.hxx>
 
-#include <typelib/typedescription.hxx>
-
-#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/time.h>
 

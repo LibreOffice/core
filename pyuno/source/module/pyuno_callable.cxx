@@ -19,8 +19,9 @@
 #include "pyuno_impl.hxx"
 
 #include <osl/diagnose.h>
-#include <osl/thread.h>
-#include <rtl/ustrbuf.hxx>
+
+#include <com/sun/star/script/CannotConvertException.hpp>
+#include <com/sun/star/script/XInvocation2.hpp>
 
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;

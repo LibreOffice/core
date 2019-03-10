@@ -20,7 +20,6 @@
 
 #include <o3tl/any.hxx>
 
-#include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 
 #include <typelib/typedescription.hxx>

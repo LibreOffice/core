@@ -19,14 +19,13 @@
 
 #include <sal/config.h>
 
-#include <cassert>
-
 #include "pyuno_impl.hxx"
 
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
+#include <com/sun/star/script/CannotConvertException.hpp>
 
 using com::sun::star::container::XEnumeration;
 using com::sun::star::container::XIndexAccess;
