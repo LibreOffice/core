@@ -22,7 +22,7 @@
 
 #include <svx/framelinkarray.hxx>
 #include <scdllapi.h>
-#include <vcl/window.hxx>
+#include <vcl/customweld.hxx>
 
 namespace com { namespace sun { namespace star { namespace i18n { class XBreakIterator; } } } }
 
@@ -33,13 +33,13 @@ class SvNumberFormatter;
 class VirtualDevice;
 class ScViewData;
 
-class SC_DLLPUBLIC ScAutoFmtPreview : public vcl::Window
+class SC_DLLPUBLIC ScAutoFmtPreview : public weld::CustomWidgetController
 {
 public:
-    ScAutoFmtPreview(vcl::Window* pParent);
+    ScAutoFmtPreview();
     void DetectRTL(const ScViewData *pViewData);
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual ~ScAutoFmtPreview() override;
-    virtual void dispose() override;
 
     void NotifyChange( ScAutoFormatData* pNewData );
 
@@ -85,8 +85,8 @@ private:
     SAL_DLLPRIVATE void DrawString(vcl::RenderContext& rRenderContext, size_t nCol, size_t nRow);
     SAL_DLLPRIVATE void DrawBackground(vcl::RenderContext& rRenderContext);
 
-    SAL_DLLPRIVATE void MakeFonts(sal_uInt16 nIndex, vcl::Font& rFont,
-                                  vcl::Font& rCJKFont, vcl::Font& rCTLFont );
+    SAL_DLLPRIVATE void MakeFonts(vcl::RenderContext const& rRenderContext, sal_uInt16 nIndex,
+                                  vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_AUTOFMT_HXX
