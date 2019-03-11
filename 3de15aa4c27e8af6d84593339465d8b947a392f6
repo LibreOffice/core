@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "ff82abbf_53211b9f",
+        "filename": "compilerplugins/clang/simplifyconstruct.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-03-11T17:24:14Z",
+      "side": 1,
+      "message": "I don\u0027t understand your reason here (or in the other case). As I understanding it, the only thing FilteringPlugin really does[*] is that it skips namespaces that are for sure not LO code. How should that have any relation with the FilteringPlugin?\n\n[*] There probably shouldn\u0027t even be a separate class for that, given how pretty much any plugin would want that by default. I think that it would be better/enough to have Plugin::setSkipForeignNamespaces(bool) that\u0027d disable the VisitNamespaceDecl functionality if wanted.",
+      "parentUuid": "ff82abbf_982d8248",
+      "revId": "3de15aa4c27e8af6d84593339465d8b947a392f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff82abbf_b832c6a6",
         "filename": "compilerplugins/clang/stringstatic.cxx",
         "patchSetId": 1
