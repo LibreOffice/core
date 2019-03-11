@@ -320,7 +320,7 @@ private:
     //       Thus, certain adjustment needed during formatting for these kind of anchored objects.
     bool mbContainsAtPageObjWithContentAnchor : 1;
 
-    static SwAutoCompleteWord *mpACmpltWords;  //< List of all words for AutoComplete
+    static SwAutoCompleteWord *s_pAutoCompleteWords;  //< List of all words for AutoComplete
 
     // private methods
     SwFlyFrameFormat* MakeFlySection_( const SwPosition& rAnchPos,
@@ -1516,7 +1516,7 @@ public:
     SwExtTextInput* GetExtTextInput() const;
 
     // Interface for access to AutoComplete-List.
-    static SwAutoCompleteWord& GetAutoCompleteWords() { return *mpACmpltWords; }
+    static SwAutoCompleteWord& GetAutoCompleteWords() { return *s_pAutoCompleteWords; }
 
     bool ContainsMSVBasic() const          { return mbContains_MSVBasic; }
     void SetContainsMSVBasic( bool bFlag )  { mbContains_MSVBasic = bFlag; }
