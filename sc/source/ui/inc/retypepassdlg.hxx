@@ -20,31 +20,33 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_RETYPEPASSDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_RETYPEPASSDLG_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
-
 #include <tabprotection.hxx>
-
 #include <memory>
 
-namespace vcl { class Window; }
 class ScDocument;
 
-class ScRetypePassDlg : public ModalDialog
+struct PassFragment
+{
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xSheetsBox;
+    std::unique_ptr<weld::Label> m_xName;
+    std::unique_ptr<weld::Label> m_xStatus;
+    std::unique_ptr<weld::Button> m_xButton;
+
+    PassFragment(weld::Widget* pParent);
+};
+
+class ScRetypePassDlg : public weld::GenericDialogController
 {
 public:
     typedef std::shared_ptr<ScDocProtection>    DocProtectionPtr;
     typedef std::shared_ptr<ScTableProtection>  TabProtectionPtr;
 
-    ScRetypePassDlg() = delete;
-    explicit ScRetypePassDlg(vcl::Window* pParent);
+    explicit ScRetypePassDlg(weld::Window* pParent);
     virtual ~ScRetypePassDlg() override;
-    virtual void dispose() override;
 
-    virtual short Execute() override;
+    virtual short run() override;
 
     void SetDataFromDocument(const ScDocument& rDoc);
     void SetDesiredHash(ScPasswordHash eHash);
@@ -66,20 +68,13 @@ private:
     void DeleteSheets();
 
 private:
-    VclPtr<OKButton>       mpBtnOk;
-    VclPtr<FixedText>      mpTextDocStatus;
-    VclPtr<PushButton>     mpBtnRetypeDoc;
-    VclPtr<VclVBox>        mpSheetsBox;
-
-    std::vector<VclPtr<VclHBox>> maSheets;
-
     OUString const        maTextNotProtected;
     OUString const        maTextNotPassProtected;
     OUString const        maTextHashBad;
     OUString const        maTextHashGood;
 
-    DECL_LINK( OKHdl, Button*, void );
-    DECL_LINK( RetypeBtnHdl, Button*, void );
+    DECL_LINK(OKHdl, weld::Button&, void);
+    DECL_LINK(RetypeBtnHdl, weld::Button&, void);
 
     struct TableItem
     {
@@ -90,6 +85,13 @@ private:
 
     DocProtectionPtr    mpDocItem;
     ScPasswordHash      meDesiredHash;
+
+    std::unique_ptr<weld::Button> mxBtnOk;
+    std::unique_ptr<weld::Label> mxTextDocStatus;
+    std::unique_ptr<weld::Button> mxBtnRetypeDoc;
+    std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
+    std::unique_ptr<weld::Container> mxSheetsBox;
+    std::vector<std::unique_ptr<PassFragment>> maSheets;
 };
 
 class ScRetypePassInputDlg : public weld::GenericDialogController

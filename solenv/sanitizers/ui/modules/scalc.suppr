@@ -126,6 +126,7 @@ sc/uiconfig/scalc/ui/movingaveragedialog.ui://GtkLabel[@id='interval-label'] orp
 sc/uiconfig/scalc/ui/movingaveragedialog.ui://GtkSpinButton[@id='interval-spin'] no-labelled-by
 sc/uiconfig/scalc/ui/nosolutiondialog.ui://GtkLabel[@id='label1'] orphan-label
 sc/uiconfig/scalc/ui/nosolutiondialog.ui://GtkLabel[@id='error'] orphan-label
+sc/uiconfig/scalc/ui/passfragment.ui://GtkButton[@id='button'] button-no-label
 sc/uiconfig/scalc/ui/pivotfielddialog.ui://GtkLabel[@id='label2'] orphan-label
 sc/uiconfig/scalc/ui/pivotfielddialog.ui://GtkLabel[@id='name'] orphan-label
 sc/uiconfig/scalc/ui/pivotfilterdialog.ui://GtkComboBoxText[@id='connect1'] missing-label-for

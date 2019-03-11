@@ -248,13 +248,13 @@ bool ScTabViewShell::ExecuteRetypePassDlg(ScPasswordHash eDesiredHash)
 {
     ScDocument* pDoc = GetViewData().GetDocument();
 
-    VclPtrInstance< ScRetypePassDlg > pDlg(GetDialogParent());
-    pDlg->SetDataFromDocument(*pDoc);
-    pDlg->SetDesiredHash(eDesiredHash);
-    if (pDlg->Execute() != RET_OK)
+    ScRetypePassDlg aDlg(GetFrameWeld());
+    aDlg.SetDataFromDocument(*pDoc);
+    aDlg.SetDesiredHash(eDesiredHash);
+    if (aDlg.run() != RET_OK)
         return false;
 
-    pDlg->WriteNewDataToDocument(*pDoc);
+    aDlg.WriteNewDataToDocument(*pDoc);
     return true;
 }
 

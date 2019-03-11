@@ -180,6 +180,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/pastespecial \
 	sc/uiconfig/scalc/ui/paradialog \
 	sc/uiconfig/scalc/ui/paratemplatedialog \
+	sc/uiconfig/scalc/ui/passfragment \
 	sc/uiconfig/scalc/ui/pivotfielddialog \
 	sc/uiconfig/scalc/ui/pivotfilterdialog \
 	sc/uiconfig/scalc/ui/pivottablelayoutdialog \
