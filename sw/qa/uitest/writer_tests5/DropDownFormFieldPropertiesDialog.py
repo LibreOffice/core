@@ -146,7 +146,7 @@ class dropDownFormFieldDialog(UITestCase):
         removeButton.executeAction("CLICK", tuple())
 
         self.assertEqual(get_state_as_dict(removeButton)["Enabled"], "false")
-        self.assertEqual(get_state_as_dict(itemsList)["Children"], "1")
+        self.assertEqual(get_state_as_dict(itemsList)["Children"], "0")
 
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)

@@ -71,7 +71,8 @@ IMPL_LINK(DropDownFormFieldDialog, ButtonPushedHdl, weld::Button&, rButton, void
         if (&rButton == m_xListRemoveButton.get())
         {
             m_xListItemsTreeView->remove(nSelPos);
-            m_xListItemsTreeView->select(nSelPos - 1);
+            if (m_xListItemsTreeView->n_children() > 0)
+                m_xListItemsTreeView->select(nSelPos ? nSelPos - 1 : 0);
         }
         else if (&rButton == m_xListUpButton.get())
         {
