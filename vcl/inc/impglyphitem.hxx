@@ -92,33 +92,23 @@ VCL_DLLPUBLIC bool GlyphItem::GetGlyphOutline(basegfx::B2DPolyPolygon& rPoly) co
 
 class SalLayoutGlyphsImpl : public std::vector<GlyphItem>
 {
-protected:
-    void SetPImpl(SalLayoutGlyphs* pFacade) { pFacade->m_pImpl = this; }
-
-public:
-    virtual ~SalLayoutGlyphsImpl();
-    virtual SalLayoutGlyphsImpl* clone(SalLayoutGlyphs&) const = 0;
-    virtual bool IsValid() const = 0;
-    virtual void Invalidate() = 0;
-};
-
-class SalGenericLayoutGlyphsImpl : public SalLayoutGlyphsImpl
-{
     friend class GenericSalLayout;
 
+public:
+    ~SalLayoutGlyphsImpl();
+    SalLayoutGlyphsImpl* clone(SalLayoutGlyphs& rGlyphs) const;
+    LogicalFontInstance& GetFont() const { return *m_rFontInstance; }
+    bool IsValid() const;
+    void Invalidate();
+
+private:
     mutable rtl::Reference<LogicalFontInstance> m_rFontInstance;
 
-    SalGenericLayoutGlyphsImpl(SalLayoutGlyphs& rGlyphs, LogicalFontInstance& rFontInstance)
+    SalLayoutGlyphsImpl(SalLayoutGlyphs& rGlyphs, LogicalFontInstance& rFontInstance)
         : m_rFontInstance(&rFontInstance)
     {
-        SetPImpl(&rGlyphs);
+        rGlyphs.m_pImpl = this;
     }
-
-public:
-    SalLayoutGlyphsImpl* clone(SalLayoutGlyphs& rGlyphs) const override;
-    LogicalFontInstance& GetFont() const { return *m_rFontInstance; }
-    bool IsValid() const override;
-    void Invalidate() override;
 };
 
 #endif // INCLUDED_VCL_IMPGLYPHITEM_HXX

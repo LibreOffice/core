@@ -182,7 +182,7 @@ public:
 
     // used by display layers
     LogicalFontInstance& GetFont() const
-        { return static_cast<SalGenericLayoutGlyphsImpl*>(m_GlyphItems.Impl())->GetFont(); }
+        { return m_GlyphItems.Impl()->GetFont(); }
 
     bool            GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
                                  const PhysicalFontFace** pFallbackFont = nullptr,

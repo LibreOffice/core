@@ -55,14 +55,14 @@ void SalLayoutGlyphs::Invalidate()
 
 SalLayoutGlyphsImpl::~SalLayoutGlyphsImpl() {}
 
-SalLayoutGlyphsImpl* SalGenericLayoutGlyphsImpl::clone(SalLayoutGlyphs& rGlyphs) const
+SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::clone(SalLayoutGlyphs& rGlyphs) const
 {
-    SalLayoutGlyphsImpl* pNew = new SalGenericLayoutGlyphsImpl(rGlyphs, *m_rFontInstance);
+    SalLayoutGlyphsImpl* pNew = new SalLayoutGlyphsImpl(rGlyphs, *m_rFontInstance);
     *pNew = *this;
     return pNew;
 }
 
-bool SalGenericLayoutGlyphsImpl::IsValid() const
+bool SalLayoutGlyphsImpl::IsValid() const
 {
     if (!m_rFontInstance.is())
         return false;
@@ -79,7 +79,7 @@ bool SalGenericLayoutGlyphsImpl::IsValid() const
     return true;
 }
 
-void SalGenericLayoutGlyphsImpl::Invalidate()
+void SalLayoutGlyphsImpl::Invalidate()
 {
     m_rFontInstance.clear();
     clear();

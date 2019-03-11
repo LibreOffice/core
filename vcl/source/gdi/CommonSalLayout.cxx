@@ -60,7 +60,7 @@ GenericSalLayout::GenericSalLayout(LogicalFontInstance &rFont)
     : mpVertGlyphs(nullptr)
     , mbFuzzing(utl::ConfigManager::IsFuzzing())
 {
-    new SalGenericLayoutGlyphsImpl(m_GlyphItems, rFont);
+    new SalLayoutGlyphsImpl(m_GlyphItems, rFont);
 }
 
 GenericSalLayout::~GenericSalLayout()
