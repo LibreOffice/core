@@ -71,6 +71,9 @@ bool SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
         else
             rPrevTop.EndListeningTo( rPrevTop.GetDocument(), nullptr, ScAddress( ScAddress::UNINITIALIZED));
         rPrevTop.SetNeedsListening(true);
+
+        // The new group or remaining single cell needs a new listening.
+        rTop.SetNeedsListening(true);
     }
 #endif
 
