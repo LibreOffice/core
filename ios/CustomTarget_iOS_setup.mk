@@ -65,6 +65,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	cp -R $(INSTDIR)/share/registry $(IOSRES)
 	cp $(INSTDIR)/share/config/*zip $(IOSRES)/share/config
 	cp -R $(INSTDIR)/share/liblangtag $(IOSRES)/share
+	cp -R $(INSTDIR)/share/theme_definitions $(IOSRES)/share
 	mkdir -p $(IOSRES)/share/fonts/truetype
 	cp -R $(INSTDIR)/share/fonts/truetype $(IOSRES)/share/fonts
 	cp $(SRCDIR)/ios/welcome.odt $(IOSRES)
