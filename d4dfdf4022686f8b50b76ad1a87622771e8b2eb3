@@ -1,0 +1,180 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_f8728e11",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-11T14:12:16Z",
+      "side": 1,
+      "message": "can you use your real name?",
+      "range": {
+        "startLine": 2,
+        "startChar": 12,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "d4dfdf4022686f8b50b76ad1a87622771e8b2eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_3869d624",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-11T14:12:16Z",
+      "side": 1,
+      "message": "please add some line breaks here",
+      "revId": "d4dfdf4022686f8b50b76ad1a87622771e8b2eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_3824760d",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/PlainSourceView.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-11T14:12:16Z",
+      "side": 1,
+      "message": "no trailing whitespace please.",
+      "revId": "d4dfdf4022686f8b50b76ad1a87622771e8b2eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_d820eafa",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/PlainSourceView.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-11T14:12:16Z",
+      "side": 1,
+      "message": "use spaces instead of tabs for indentation.",
+      "revId": "d4dfdf4022686f8b50b76ad1a87622771e8b2eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_f81daebd",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/PlainSourceView.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-11T14:12:16Z",
+      "side": 1,
+      "message": "no trailing whitespace",
+      "revId": "d4dfdf4022686f8b50b76ad1a87622771e8b2eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_987822f9",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/ScriptEditorForBeanShell.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-11T14:12:16Z",
+      "side": 1,
+      "message": "trailing whitespace",
+      "revId": "d4dfdf4022686f8b50b76ad1a87622771e8b2eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_58829aca",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/ScriptEditorForBeanShell.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-11T14:12:16Z",
+      "side": 1,
+      "message": "use spaces instead of tabs",
+      "revId": "d4dfdf4022686f8b50b76ad1a87622771e8b2eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_b87de6e8",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/ScriptEditorForBeanShell.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-11T14:12:16Z",
+      "side": 1,
+      "message": "trailing whitespace",
+      "revId": "d4dfdf4022686f8b50b76ad1a87622771e8b2eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_78875ed9",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/ScriptEditorForBeanShell.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-11T14:12:16Z",
+      "side": 1,
+      "message": "trailing whitespace",
+      "revId": "d4dfdf4022686f8b50b76ad1a87622771e8b2eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_186c1235",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/UnsavedChangesListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-11T14:12:16Z",
+      "side": 1,
+      "message": "Please use the MPL-only header, see file TEMPLATE.SOURCECODE.HEADER",
+      "revId": "d4dfdf4022686f8b50b76ad1a87622771e8b2eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
