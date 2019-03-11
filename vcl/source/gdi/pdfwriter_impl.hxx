@@ -976,6 +976,8 @@ i12626
 
     /* true if PDF/A-1a or PDF/A-1b is output */
     bool            m_bIsPDF_A1;
+    /* true if PDF/A-2a is output */
+    bool            m_bIsPDF_A2;
     PDFWriter&      m_rOuterFace;
 
     /*

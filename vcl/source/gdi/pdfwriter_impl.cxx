@@ -1699,6 +1699,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         m_bEncryptThisStream( false ),
         m_nAccessPermissions(0),
         m_bIsPDF_A1( false ),
+        m_bIsPDF_A2( false ),
         m_rOuterFace( i_rOuterFace )
 {
 #ifdef DO_TEST_PDF
@@ -1792,6 +1793,10 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
     m_bIsPDF_A1 = (m_aContext.Version == PDFWriter::PDFVersion::PDF_A_1);
     if( m_bIsPDF_A1 )
         m_aContext.Version = PDFWriter::PDFVersion::PDF_1_4; //meaning we need PDF 1.4, PDF/A flavour
+
+    m_bIsPDF_A2 = (m_aContext.Version == PDFWriter::PDFVersion::PDF_A_2);
+    if( m_bIsPDF_A2 )
+        m_aContext.Version = PDFWriter::PDFVersion::PDF_1_6; //we could even use 1.7 features
 
     if( m_aContext.DPIx == 0 || m_aContext.DPIy == 0 )
         SetReferenceDevice( VirtualDevice::RefDevMode::PDF1 );
@@ -3734,7 +3739,7 @@ bool PDFWriterImpl::emitLinkAnnotations()
 // i59651: key /F set bits Print to 1 rest to 0. We don't set NoZoom NoRotate to 1, since it's a 'should'
 // see PDF 8.4.2 and ISO 19005-1:2005 6.5.3
         aLine.append( "<</Type/Annot" );
-        if( m_bIsPDF_A1 )
+        if( m_bIsPDF_A1 || m_bIsPDF_A2 )
             aLine.append( "/F 4" );
         aLine.append( "/Subtype/Link/Border[0 0 0]/Rect[" );
 
@@ -3956,7 +3961,7 @@ bool PDFWriterImpl::emitNoteAnnotations()
 // i59651: key /F set bits Print to 1 rest to 0. We don't set NoZoom NoRotate to 1, since it's a 'should'
 // see PDF 8.4.2 and ISO 19005-1:2005 6.5.3
         aLine.append( "<</Type/Annot" );
-        if( m_bIsPDF_A1 )
+        if( m_bIsPDF_A1 || m_bIsPDF_A2 )
             aLine.append( "/F 4" );
         aLine.append( "/Subtype/Text/Rect[" );
 
@@ -4756,8 +4761,11 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                 }
                 else if( rWidget.m_aListEntries.empty() )
                 {
-                    // create a reset form action
-                    aLine.append( "/AA<</D<</Type/Action/S/ResetForm>>>>\n" );
+                    if( !m_bIsPDF_A2 )
+                    {
+                        // create a reset form action
+                        aLine.append( "/AA<</D<</Type/Action/S/ResetForm>>>>\n" );
+                    }
                 }
                 else if( rWidget.m_bSubmit )
                 {
@@ -5176,7 +5184,7 @@ bool PDFWriterImpl::emitCatalog()
         aLine.append( getResourceDictObj() );
         aLine.append( " 0 R" );
         // NeedAppearances must not be used if PDF is signed
-        if( m_bIsPDF_A1
+        if( m_bIsPDF_A1 || m_bIsPDF_A2
 #if HAVE_FEATURE_NSS
             || ( m_nSignatureObject != -1 )
 #endif
@@ -5490,7 +5498,7 @@ sal_Int32 PDFWriterImpl::emitNamedDestinations()
 // emits the output intent dictionary
 sal_Int32 PDFWriterImpl::emitOutputIntent()
 {
-    if( !m_bIsPDF_A1 )
+    if( !m_bIsPDF_A1 && !m_bIsPDF_A2 )
         return 0;
 
     //emit the sRGB standard profile, in ICC format, in a stream, per IEC61966-2.1
@@ -5597,7 +5605,7 @@ static void escapeStringXML( const OUString& rStr, OUString &rValue)
 // emits the document metadata
 sal_Int32 PDFWriterImpl::emitDocumentMetadata()
 {
-    if( !m_bIsPDF_A1 )
+    if( !m_bIsPDF_A1 && !m_bIsPDF_A2 )
         return 0;
 
     //get the object number for all the destinations
@@ -5618,8 +5626,14 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
         //PDF/A part ( ISO 19005-1:2005 - 6.7.11 )
         aMetadataStream.append( "  <rdf:Description rdf:about=\"\"\n" );
         aMetadataStream.append( "      xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">\n" );
-        aMetadataStream.append( "   <pdfaid:part>1</pdfaid:part>\n" );
-        aMetadataStream.append( "   <pdfaid:conformance>A</pdfaid:conformance>\n" );
+        if( m_bIsPDF_A2 )
+            aMetadataStream.append( "   <pdfaid:part>2</pdfaid:part>\n" );
+        else
+            aMetadataStream.append( "   <pdfaid:part>1</pdfaid:part>\n" );
+        if( m_bIsPDF_A2 )
+            aMetadataStream.append( "   <pdfaid:conformance>B</pdfaid:conformance>\n" );
+        else
+            aMetadataStream.append( "   <pdfaid:conformance>A</pdfaid:conformance>\n" );
         aMetadataStream.append( "  </rdf:Description>\n" );
         //... Dublin Core properties go here
         if( !m_aContext.DocumentInfo.Title.isEmpty() ||
