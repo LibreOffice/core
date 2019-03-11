@@ -11,6 +11,7 @@
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
+#include <test/container/xnamecontainer.hxx>
 #include <cppu/unotype.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -32,7 +33,8 @@ namespace sc_apitest
 class ScStyleFamilyObj : public CalcUnoApiTest,
                          public apitest::XElementAccess,
                          public apitest::XIndexAccess,
-                         public apitest::XNameAccess
+                         public apitest::XNameAccess,
+                         public apitest::XNameContainer
 {
 public:
     ScStyleFamilyObj();
@@ -56,6 +58,13 @@ public:
     CPPUNIT_TEST(testGetElementNames);
     CPPUNIT_TEST(testHasByName);
 
+    // XNameContainer
+    CPPUNIT_TEST(testInsertByName);
+    CPPUNIT_TEST(testInsertByNameDuplicate);
+    CPPUNIT_TEST(testInsertByNameEmptyName);
+    CPPUNIT_TEST(testRemoveByName);
+    CPPUNIT_TEST(testRemoveByNameNoneExistingElement);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -67,6 +76,7 @@ ScStyleFamilyObj::ScStyleFamilyObj()
     , XElementAccess(cppu::UnoType<style::XStyle>::get())
     , XIndexAccess(19)
     , XNameAccess("Default")
+    , XNameContainer("Default")
 {
 }
 
@@ -82,6 +92,8 @@ uno::Reference<uno::XInterface> ScStyleFamilyObj::init()
     uno::Reference<lang::XMultiServiceFactory> xMSF(m_xComponent, uno::UNO_QUERY_THROW);
     uno::Reference<uno::XInterface> xCS(xMSF->createInstance("com.sun.star.style.CellStyle"),
                                         uno::UNO_QUERY_THROW);
+    // XNameContainer
+    setElement(uno::makeAny(xMSF->createInstance("com.sun.star.style.CellStyle")));
 
     uno::Reference<container::XNameContainer> xNC(xNA_SF, uno::UNO_QUERY_THROW);
     xNC->insertByName("ScStyleFamilyObj", uno::makeAny(xCS));

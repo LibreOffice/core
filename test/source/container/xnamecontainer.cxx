@@ -56,13 +56,24 @@ void XNameContainer::testInsertByNameDuplicate()
 {
     uno::Reference<container::XNameContainer> xNameContainer(init(), uno::UNO_QUERY_THROW);
 
-    uno::Any aAny;
-    CPPUNIT_ASSERT(!xNameContainer->hasByName(m_aName));
-    xNameContainer->insertByName(m_aName, aAny);
-    CPPUNIT_ASSERT(xNameContainer->hasByName(m_aName));
+    CPPUNIT_ASSERT(!xNameContainer->hasByName(m_aName + "Duplicate"));
+    xNameContainer->insertByName(m_aName + "Duplicate", m_aElement);
+    CPPUNIT_ASSERT(xNameContainer->hasByName(m_aName + "Duplicate"));
 
-    CPPUNIT_ASSERT_THROW(xNameContainer->insertByName(m_aName, aAny),
-                         container::ElementExistException);
+    bool bExceptionThrown = false;
+    try
+    {
+        xNameContainer->insertByName(m_aName + "Duplicate", m_aElement);
+    }
+    catch (const container::ElementExistException&)
+    {
+        bExceptionThrown = true;
+    }
+    catch (const lang::IllegalArgumentException&)
+    {
+        bExceptionThrown = true;
+    }
+    CPPUNIT_ASSERT(bExceptionThrown);
 }
 
 void XNameContainer::testRemoveByName()
