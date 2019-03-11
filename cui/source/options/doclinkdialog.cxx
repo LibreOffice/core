@@ -33,80 +33,60 @@
 
 namespace svx
 {
-
-
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::ucb;
     using namespace ::svt;
 
-    ODocumentLinkDialog::ODocumentLinkDialog( vcl::Window* _pParent, bool _bCreateNew )
-        : ModalDialog(_pParent, "DatabaseLinkDialog",
-            "cui/ui/databaselinkdialog.ui")
+    ODocumentLinkDialog::ODocumentLinkDialog(weld::Window* pParent, bool _bCreateNew)
+        : GenericDialogController(pParent, "cui/ui/databaselinkdialog.ui", "DatabaseLinkDialog")
+        , m_xBrowseFile(m_xBuilder->weld_button("browse"))
+        , m_xName(m_xBuilder->weld_entry("name"))
+        , m_xOK(m_xBuilder->weld_button("ok"))
+        , m_xAltTitle(m_xBuilder->weld_label("alttitle"))
+        , m_xURL(new URLBox(m_xBuilder->weld_combo_box("url")))
     {
-        get(m_pURL, "url");
-        get(m_pOK, "ok");
-        get(m_pName, "name");
-        get(m_pBrowseFile, "browse");
-
         if (!_bCreateNew)
-            SetText(get<FixedText>("alttitle")->GetText());
+            m_xDialog->set_title(m_xAltTitle->get_label());
 
-        m_pURL->SetFilter("*.odb");
+        m_xURL->SetSmartProtocol(INetProtocol::File);
+        m_xURL->DisableHistory();
+        m_xURL->SetFilter("*.odb");
 
-        m_pName->SetModifyHdl( LINK(this, ODocumentLinkDialog, OnTextModified) );
-        m_pURL->SetModifyHdl( LINK(this, ODocumentLinkDialog, OnTextModified) );
-        m_pBrowseFile->SetClickHdl( LINK(this, ODocumentLinkDialog, OnBrowseFile) );
-        m_pOK->SetClickHdl( LINK(this, ODocumentLinkDialog, OnOk) );
-
-        m_pURL->SetDropDownLineCount(10);
+        m_xName->connect_changed( LINK(this, ODocumentLinkDialog, OnEntryModified) );
+        m_xURL->connect_changed( LINK(this, ODocumentLinkDialog, OnComboBoxModified) );
+        m_xBrowseFile->connect_clicked( LINK(this, ODocumentLinkDialog, OnBrowseFile) );
+        m_xOK->connect_clicked( LINK(this, ODocumentLinkDialog, OnOk) );
 
         validate();
-
-        m_pURL->SetDropDownLineCount( 5 );
     }
 
     ODocumentLinkDialog::~ODocumentLinkDialog()
     {
-        disposeOnce();
     }
 
-    void ODocumentLinkDialog::dispose()
+    void ODocumentLinkDialog::setLink(const OUString& rName, const OUString& rURL)
     {
-        m_pURL.clear();
-        m_pBrowseFile.clear();
-        m_pName.clear();
-        m_pOK.clear();
-        ModalDialog::dispose();
-    }
-
-
-    void ODocumentLinkDialog::setLink( const OUString& _rName, const OUString& _rURL )
-    {
-        m_pName->SetText(_rName);
-        m_pURL->SetText(_rURL);
+        m_xName->set_text(rName);
+        m_xURL->set_entry_text(rURL);
         validate();
     }
 
-
-    void ODocumentLinkDialog::getLink( OUString& _rName, OUString& _rURL ) const
+    void ODocumentLinkDialog::getLink(OUString& rName, OUString& rURL) const
     {
-        _rName = m_pName->GetText();
-        _rURL = m_pURL->GetText();
+        rName = m_xName->get_text();
+        rURL = m_xURL->get_active_text();
     }
-
 
     void ODocumentLinkDialog::validate( )
     {
-
-        m_pOK->Enable( ( !m_pName->GetText().isEmpty()) && ( !m_pURL->GetText().isEmpty() ) );
+        m_xOK->set_sensitive((!m_xName->get_text().isEmpty()) && (!m_xURL->get_active_text().isEmpty()));
     }
 
-
-    IMPL_LINK_NOARG(ODocumentLinkDialog, OnOk, Button*, void)
+    IMPL_LINK_NOARG(ODocumentLinkDialog, OnOk, weld::Button&, void)
     {
         // get the current URL
-        OUString sURL = m_pURL->GetText();
+        OUString sURL = m_xURL->get_active_text();
         OFileNotation aTransformer(sURL);
         sURL = aTransformer.get(OFileNotation::N_URL);
 
@@ -125,8 +105,8 @@ namespace svx
         if (!bFileExists)
         {
             OUString sMsg = CuiResId(STR_LINKEDDOC_DOESNOTEXIST);
-            sMsg = sMsg.replaceFirst("$file$", m_pURL->GetText());
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+            sMsg = sMsg.replaceFirst("$file$", m_xURL->get_active_text());
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                            VclMessageType::Warning, VclButtonsType::Ok, sMsg));
             xErrorBox->run();
             return;
@@ -135,37 +115,37 @@ namespace svx
         if ( aURL.GetProtocol() != INetProtocol::File )
         {
             OUString sMsg = CuiResId(STR_LINKEDDOC_NO_SYSTEM_FILE);
-            sMsg = sMsg.replaceFirst("$file$", m_pURL->GetText());
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+            sMsg = sMsg.replaceFirst("$file$", m_xURL->get_active_text());
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                            VclMessageType::Warning, VclButtonsType::Ok, sMsg));
             xErrorBox->run();
             return;
         }
 
-        OUString sCurrentText = m_pName->GetText();
+        OUString sCurrentText = m_xName->get_text();
         if ( m_aNameValidator.IsSet() )
         {
             if ( !m_aNameValidator.Call( sCurrentText ) )
             {
                 OUString sMsg = CuiResId(STR_NAME_CONFLICT);
                 sMsg = sMsg.replaceFirst("$file$", sCurrentText);
-                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                                VclMessageType::Info, VclButtonsType::Ok, sMsg));
                 xErrorBox->run();
 
-                m_pName->SetSelection(Selection(0,sCurrentText.getLength()));
-                m_pName->GrabFocus();
+                m_xName->select_region(0, -1);
+                m_xName->grab_focus();
                 return;
             }
         }
 
-        EndDialog(RET_OK);
+        m_xDialog->response(RET_OK);
     }
 
-    IMPL_LINK_NOARG(ODocumentLinkDialog, OnBrowseFile, Button*, void)
+    IMPL_LINK_NOARG(ODocumentLinkDialog, OnBrowseFile, weld::Button&, void)
     {
         ::sfx2::FileDialogHelper aFileDlg(
-                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, FileDialogFlags::NONE, GetFrameWeld());
+                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, FileDialogFlags::NONE, m_xDialog.get());
         std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");
         if ( pFilter )
         {
@@ -173,7 +153,7 @@ namespace svx
             aFileDlg.SetCurrentFilter(pFilter->GetUIName());
         }
 
-        OUString sPath = m_pURL->GetText();
+        OUString sPath = m_xURL->get_active_text();
         if (!sPath.isEmpty())
         {
             OFileNotation aTransformer( sPath, OFileNotation::N_SYSTEM );
@@ -183,35 +163,37 @@ namespace svx
         if (ERRCODE_NONE != aFileDlg.Execute())
             return;
 
-        if (m_pName->GetText().isEmpty())
+        if (m_xName->get_text().isEmpty())
         {   // default the name to the base of the chosen URL
             INetURLObject aParser;
 
             aParser.SetSmartProtocol(INetProtocol::File);
             aParser.SetSmartURL(aFileDlg.GetPath());
 
-            m_pName->SetText(aParser.getBase(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset));
+            m_xName->set_text(aParser.getBase(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset));
 
-            m_pName->SetSelection(Selection(0,m_pName->GetText().getLength()));
-            m_pName->GrabFocus();
+            m_xName->select_region(0, -1);
+            m_xName->grab_focus();
         }
         else
-            m_pURL->GrabFocus();
+            m_xURL->grab_focus();
 
         // get the path in system notation
         OFileNotation aTransformer(aFileDlg.GetPath(), OFileNotation::N_URL);
-        m_pURL->SetText(aTransformer.get(OFileNotation::N_SYSTEM));
+        m_xURL->set_entry_text(aTransformer.get(OFileNotation::N_SYSTEM));
 
         validate();
     }
 
-    IMPL_LINK_NOARG(ODocumentLinkDialog, OnTextModified, Edit&, void)
+    IMPL_LINK_NOARG(ODocumentLinkDialog, OnEntryModified, weld::Entry&, void)
     {
-        validate( );
+        validate();
     }
 
-
+    IMPL_LINK_NOARG(ODocumentLinkDialog, OnComboBoxModified, weld::ComboBox&, void)
+    {
+        validate();
+    }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

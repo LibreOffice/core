@@ -601,11 +601,11 @@ namespace svxform
         virtual ~AddInstanceDialog() override;
 
         OUString         GetName() const { return m_xNameED->get_text(); }
-        void             SetName( const OUString& _rName ) { m_xNameED->set_text( _rName );}
+        void             SetName( const OUString& rName ) { m_xNameED->set_text( rName );}
         OUString         GetURL() const { return m_xURLED->get_active_text(); }
-        void             SetURL( const OUString& _rURL ) { m_xURLED->SetText( _rURL );}
+        void             SetURL( const OUString& rURL ) { m_xURLED->set_entry_text( rURL );}
         bool             IsLinkInstance() const { return m_xLinkInstanceCB->get_active(); }
-        void             SetLinkInstance( bool _bLink ) { m_xLinkInstanceCB->set_active(_bLink); }
+        void             SetLinkInstance( bool bLink ) { m_xLinkInstanceCB->set_active(bLink); }
     };
 
     class LinkedInstanceWarningBox : public weld::MessageDialogController

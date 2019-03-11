@@ -403,15 +403,15 @@ void DbRegistrationOptionsPage::insertNewEntry( const OUString& _sName,const OUS
 
 void DbRegistrationOptionsPage::openLinkDialog(const OUString& _sOldName,const OUString& _sOldLocation,SvTreeListEntry const * _pEntry)
 {
-    ScopedVclPtrInstance< ODocumentLinkDialog > aDlg(this,_pEntry == nullptr);
+    ODocumentLinkDialog aDlg(GetDialogFrameWeld(), _pEntry == nullptr);
 
-    aDlg->setLink(_sOldName,_sOldLocation);
-    aDlg->setNameValidator(LINK( this, DbRegistrationOptionsPage, NameValidator ) );
+    aDlg.setLink(_sOldName,_sOldLocation);
+    aDlg.setNameValidator(LINK( this, DbRegistrationOptionsPage, NameValidator ) );
 
-    if ( aDlg->Execute() == RET_OK )
+    if (aDlg.run() == RET_OK)
     {
         OUString sNewName,sNewLocation;
-        aDlg->getLink(sNewName,sNewLocation);
+        aDlg.getLink(sNewName,sNewLocation);
         if ( _pEntry == nullptr || sNewName != _sOldName || sNewLocation != _sOldLocation )
         {
             if ( _pEntry )

@@ -141,10 +141,10 @@ void ScLinkedAreaDlg::InitFromOldLink( const OUString& rFile, const OUString& rF
     if (m_pSourceShell)
     {
         SfxMedium* pMed = m_pSourceShell->GetMedium();
-        m_xCbUrl->SetText(pMed->GetName());
+        m_xCbUrl->set_entry_text(pMed->GetName());
     }
     else
-        m_xCbUrl->SetText(EMPTY_OUSTRING);
+        m_xCbUrl->set_entry_text(EMPTY_OUSTRING);
 
     UpdateSourceRanges();
 
@@ -217,7 +217,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg,
 
         if (!m_pSourceShell->GetError())                    // only errors
         {
-            m_xCbUrl->SetText(pMed->GetName());
+            m_xCbUrl->set_entry_text(pMed->GetName());
         }
         else
         {
@@ -225,7 +225,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg,
             m_pSourceShell = nullptr;
             aSourceRef.clear();
 
-            m_xCbUrl->SetText(EMPTY_OUSTRING);
+            m_xCbUrl->set_entry_text(EMPTY_OUSTRING);
         }
         pMed.release(); // DoLoad takes ownership
     }
