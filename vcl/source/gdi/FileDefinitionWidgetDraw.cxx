@@ -165,24 +165,18 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
 
                 basegfx::B2DRange aInputRectangle(rRectangle.maRectangle);
 
-                basegfx::B2DRange aFinalRectangle(
-                    aTargetSurface.getMinX() + aInputRectangle.getMinX(),
-                    aTargetSurface.getMinY() + aInputRectangle.getMinY(),
-                    aTargetSurface.getMaxX() - (aSVGRect.getMaxX() - aInputRectangle.getMaxX()),
-                    aTargetSurface.getMaxY() - (aSVGRect.getMaxY() - aInputRectangle.getMaxY()));
+                double fDeltaX = aTargetSurface.getWidth() - aSVGRect.getWidth();
+                double fDeltaY = aTargetSurface.getHeight() - aSVGRect.getHeight();
 
-                aInputRectangle.transform(basegfx::utils::createTranslateB2DHomMatrix(
-                    -aInputRectangle.getMinX(), -aInputRectangle.getMinY()));
-                aInputRectangle.transform(basegfx::utils::createScaleB2DHomMatrix(
-                    aFinalRectangle.getWidth() / aInputRectangle.getWidth(),
-                    aFinalRectangle.getHeight() / aInputRectangle.getHeight()));
-                aInputRectangle.transform(basegfx::utils::createTranslateB2DHomMatrix(
-                    aFinalRectangle.getMinX() - 0.5,
-                    aFinalRectangle.getMinY()
-                        - 0.5)); // compensate 0.5 for different interpretation of where the center of a pixel is
+                basegfx::B2DRange aFinalRectangle(
+                    aInputRectangle.getMinX(), aInputRectangle.getMinY(),
+                    aInputRectangle.getMaxX() + fDeltaX, aInputRectangle.getMaxY() + fDeltaY);
+
+                aFinalRectangle.transform(basegfx::utils::createTranslateB2DHomMatrix(
+                    aTargetSurface.getMinX() - 0.5, aTargetSurface.getMinY() - 0.5));
 
                 basegfx::B2DPolygon aB2DPolygon = basegfx::utils::createPolygonFromRect(
-                    aInputRectangle, rRectangle.mnRx / aFinalRectangle.getWidth() * 2.0,
+                    aFinalRectangle, rRectangle.mnRx / aFinalRectangle.getWidth() * 2.0,
                     rRectangle.mnRy / aFinalRectangle.getHeight() * 2.0);
 
                 if (rRectangle.mpFillColor)
@@ -208,29 +202,27 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
             {
                 auto const& rPath = static_cast<gfx::DrawPath const&>(*pDrawBase);
 
-                basegfx::B2DRange aPolyPolygonRange(rPath.maPolyPolygon.getB2DRange());
+                double fDeltaX = aTargetSurface.getWidth() - aSVGRect.getWidth();
+                double fDeltaY = aTargetSurface.getHeight() - aSVGRect.getHeight();
+
                 basegfx::B2DPolyPolygon aPolyPolygon(rPath.maPolyPolygon);
+                for (auto& rPolygon : aPolyPolygon)
+                {
+                    for (size_t i = 0; i < rPolygon.count(); ++i)
+                    {
+                        auto& rPoint = rPolygon.getB2DPoint(i);
+                        double x = rPoint.getX();
+                        double y = rPoint.getY();
 
-                basegfx::B2DRange aFinalRectangle(
-                    aTargetSurface.getMinX() + aPolyPolygonRange.getMinX(),
-                    aTargetSurface.getMinY() + aPolyPolygonRange.getMinY(),
-                    aTargetSurface.getMaxX() - (aSVGRect.getMaxX() - aPolyPolygonRange.getMaxX()),
-                    aTargetSurface.getMaxY() - (aSVGRect.getMaxY() - aPolyPolygonRange.getMaxY()));
-
+                        if (x > aSVGRect.getCenterX())
+                            x = x + fDeltaX;
+                        if (y > aSVGRect.getCenterY())
+                            y = y + fDeltaY;
+                        rPolygon.setB2DPoint(i, basegfx::B2DPoint(x, y));
+                    }
+                }
                 aPolyPolygon.transform(basegfx::utils::createTranslateB2DHomMatrix(
-                    -aPolyPolygonRange.getMinX(), -aPolyPolygonRange.getMinY()));
-
-                double fScaleX = 1.0;
-                double fScaleY = 1.0;
-                if (aPolyPolygonRange.getWidth() > 0.0)
-                    fScaleX = aFinalRectangle.getWidth() / aPolyPolygonRange.getWidth();
-                if (aPolyPolygonRange.getHeight() > 0.0)
-                    fScaleY = aFinalRectangle.getHeight() / aPolyPolygonRange.getHeight();
-
-                aPolyPolygon.transform(basegfx::utils::createScaleB2DHomMatrix(fScaleX, fScaleY));
-
-                aPolyPolygon.transform(basegfx::utils::createTranslateB2DHomMatrix(
-                    aFinalRectangle.getMinX() - 0.5, aFinalRectangle.getMinY() - 0.5));
+                    aTargetSurface.getMinX() - 0.5, aTargetSurface.getMinY() - 0.5));
 
                 if (rPath.mpFillColor)
                 {
