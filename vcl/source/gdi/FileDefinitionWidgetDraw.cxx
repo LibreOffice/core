@@ -343,9 +343,26 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
                     nScaleFactor = comphelper::LibreOfficeKit::getDPIScale();
 
                 auto const& rDrawCommand = static_cast<ImageDrawCommand const&>(*pDrawCommand);
-                SvFileStream aFileStream(rDrawCommand.msSource, StreamMode::READ);
+                auto& rCacheImages = ImplGetSVData()->maGDIData.maThemeImageCache;
+                OUString rCacheKey = rDrawCommand.msSource + "@" + OUString::number(nScaleFactor);
+                auto& aIterator = rCacheImages.find(rCacheKey);
+
                 BitmapEx aBitmap;
-                vcl::bitmap::loadFromSvg(aFileStream, "", aBitmap, nScaleFactor);
+                if (aIterator == rCacheImages.end())
+                {
+                    SvFileStream aFileStream(rDrawCommand.msSource, StreamMode::READ);
+
+                    vcl::bitmap::loadFromSvg(aFileStream, "", aBitmap, nScaleFactor);
+                    if (!!aBitmap)
+                    {
+                        rCacheImages.insert(std::make_pair(rCacheKey, aBitmap));
+                    }
+                }
+                else
+                {
+                    aBitmap = aIterator->second;
+                }
+
                 long nImageWidth = aBitmap.GetSizePixel().Width();
                 long nImageHeight = aBitmap.GetSizePixel().Height();
                 SalTwoRect aTR(0, 0, nImageWidth, nImageHeight, nX, nY, nImageWidth / nScaleFactor,
@@ -370,27 +387,46 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
             case DrawCommandType::EXTERNAL:
             {
                 auto const& rDrawCommand = static_cast<ImageDrawCommand const&>(*pDrawCommand);
-                SvFileStream aFileStream(rDrawCommand.msSource, StreamMode::READ);
 
-                uno::Reference<uno::XComponentContext> xContext(
-                    comphelper::getProcessComponentContext());
-                const uno::Reference<graphic::XSvgParser> xSvgParser
-                    = graphic::SvgTools::create(xContext);
+                auto& rCacheDrawCommands = ImplGetSVData()->maGDIData.maThemeDrawCommandsCache;
 
-                std::size_t nSize = aFileStream.remainingSize();
-                std::vector<sal_Int8> aBuffer(nSize + 1);
-                aFileStream.ReadBytes(aBuffer.data(), nSize);
-                aBuffer[nSize] = 0;
+                auto& aIterator = rCacheDrawCommands.find(rDrawCommand.msSource);
 
-                uno::Sequence<sal_Int8> aData(aBuffer.data(), nSize + 1);
-                uno::Reference<io::XInputStream> aInputStream(
-                    new comphelper::SequenceInputStream(aData));
+                gfx::DrawRoot aDrawRoot;
 
-                uno::Any aAny = xSvgParser->getDrawCommands(aInputStream, "");
-                if (aAny.has<sal_uInt64>())
+                if (aIterator == rCacheDrawCommands.end())
                 {
-                    auto* pDrawRoot = reinterpret_cast<gfx::DrawRoot*>(aAny.get<sal_uInt64>());
-                    drawFromDrawCommands(*pDrawRoot, rGraphics, nX, nY, nWidth, nHeight);
+                    SvFileStream aFileStream(rDrawCommand.msSource, StreamMode::READ);
+
+                    uno::Reference<uno::XComponentContext> xContext(
+                        comphelper::getProcessComponentContext());
+                    const uno::Reference<graphic::XSvgParser> xSvgParser
+                        = graphic::SvgTools::create(xContext);
+
+                    std::size_t nSize = aFileStream.remainingSize();
+                    std::vector<sal_Int8> aBuffer(nSize + 1);
+                    aFileStream.ReadBytes(aBuffer.data(), nSize);
+                    aBuffer[nSize] = 0;
+
+                    uno::Sequence<sal_Int8> aData(aBuffer.data(), nSize + 1);
+                    uno::Reference<io::XInputStream> aInputStream(
+                        new comphelper::SequenceInputStream(aData));
+
+                    uno::Any aAny = xSvgParser->getDrawCommands(aInputStream, "");
+                    if (aAny.has<sal_uInt64>())
+                    {
+                        auto* pDrawRoot = reinterpret_cast<gfx::DrawRoot*>(aAny.get<sal_uInt64>());
+                        if (pDrawRoot)
+                        {
+                            rCacheDrawCommands.insert(
+                                std::make_pair(rDrawCommand.msSource, *pDrawRoot));
+                            drawFromDrawCommands(*pDrawRoot, rGraphics, nX, nY, nWidth, nHeight);
+                        }
+                    }
+                }
+                else
+                {
+                    drawFromDrawCommands(aIterator->second, rGraphics, nX, nY, nWidth, nHeight);
                 }
             }
             break;

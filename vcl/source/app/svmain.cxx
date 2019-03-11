@@ -575,6 +575,9 @@ void DeInitVCL()
     pSVData->maGDIData.maScaleCache.remove_if([](const o3tl::lru_map<SalBitmap*, BitmapEx>::key_value_pair_t&)
                                                 { return true; });
 
+    pSVData->maGDIData.maThemeDrawCommandsCache.clear();
+    pSVData->maGDIData.maThemeImageCache.clear();
+
     // Deinit Sal
     if (pSVData->mpDefInst)
     {
