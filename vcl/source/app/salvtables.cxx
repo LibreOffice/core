@@ -3376,7 +3376,7 @@ class SalInstanceLabel : public SalInstanceWidget, public virtual weld::Label
 private:
     // Control instead of FixedText so we can also use this for
     // SelectableFixedText which is derived from Edit. We just typically need
-    // [G|S]etText which exists in their shared basesclass
+    // [G|S]etText which exists in their shared baseclass
     VclPtr<Control> m_xLabel;
 public:
     SalInstanceLabel(Control* pLabel, SalInstanceBuilder *pBuilder, bool bTakeOwnership)
