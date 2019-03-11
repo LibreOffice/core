@@ -74,9 +74,9 @@ void GenericSalLayout::ParseFeatures(const OUString& aName)
     if (!sLanguage.isEmpty())
         msLanguage = OUStringToOString(sLanguage, RTL_TEXTENCODING_ASCII_US);
 
-    for (std::pair<sal_uInt32, sal_uInt32> const & rPair : aParser.getFeatures())
+    for (auto const &rFeat : aParser.getFeatures())
     {
-        hb_feature_t aFeature { rPair.first, rPair.second, 0, SAL_MAX_UINT32 };
+        hb_feature_t aFeature { rFeat.m_nTag, rFeat.m_nValue, rFeat.m_nStart, rFeat.m_nEnd };
         maFeatures.push_back(aFeature);
     }
 }

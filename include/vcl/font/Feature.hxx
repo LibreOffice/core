@@ -18,13 +18,13 @@ namespace vcl
 {
 namespace font
 {
-constexpr sal_uInt32 featureCode(const char sFeature[4])
+constexpr uint32_t featureCode(const char sFeature[4])
 {
-    return static_cast<sal_uInt32>(sFeature[0]) << 24U | static_cast<sal_uInt32>(sFeature[1]) << 16U
-           | static_cast<sal_uInt32>(sFeature[2]) << 8U | static_cast<sal_uInt32>(sFeature[3]);
+    return static_cast<uint32_t>(sFeature[0]) << 24U | static_cast<uint32_t>(sFeature[1]) << 16U
+           | static_cast<uint32_t>(sFeature[2]) << 8U | static_cast<uint32_t>(sFeature[3]);
 }
 
-VCL_DLLPUBLIC OUString featureCodeAsString(sal_uInt32 nFeature);
+VCL_DLLPUBLIC OUString featureCodeAsString(uint32_t nFeature);
 
 enum class FeatureParameterType
 {
@@ -41,22 +41,22 @@ enum class FeatureType
 struct VCL_DLLPUBLIC FeatureParameter
 {
 private:
-    sal_uInt32 m_nCode;
+    uint32_t m_nCode;
     OUString m_sDescription;
     const char* m_pDescriptionID;
 
 public:
-    FeatureParameter(sal_uInt32 nCode, OUString aDescription);
-    FeatureParameter(sal_uInt32 nCode, const char* pDescriptionID);
+    FeatureParameter(uint32_t nCode, OUString aDescription);
+    FeatureParameter(uint32_t nCode, const char* pDescriptionID);
 
-    sal_uInt32 getCode() const;
+    uint32_t getCode() const;
     OUString getDescription() const;
 };
 
 class VCL_DLLPUBLIC FeatureDefinition
 {
 private:
-    sal_uInt32 m_nCode;
+    uint32_t m_nCode;
     OUString m_sDescription;
     const char* m_pDescriptionID;
     OUString m_sNumericPart;
@@ -66,18 +66,18 @@ private:
 
 public:
     FeatureDefinition();
-    FeatureDefinition(sal_uInt32 nCode, OUString const& rDescription,
+    FeatureDefinition(uint32_t nCode, OUString const& rDescription,
                       FeatureParameterType eType = FeatureParameterType::BOOL,
                       std::vector<FeatureParameter> const& rEnumParameters
                       = std::vector<FeatureParameter>{});
-    FeatureDefinition(sal_uInt32 nCode, const char* pDescriptionID,
+    FeatureDefinition(uint32_t nCode, const char* pDescriptionID,
                       OUString const& rNumericPart = OUString());
-    FeatureDefinition(sal_uInt32 nCode, const char* pDescriptionID,
+    FeatureDefinition(uint32_t nCode, const char* pDescriptionID,
                       std::vector<FeatureParameter> aEnumParameters);
 
     const std::vector<FeatureParameter>& getEnumParameters() const;
     OUString getDescription() const;
-    sal_uInt32 getCode() const;
+    uint32_t getCode() const;
     FeatureParameterType getType() const;
 
     operator bool() const;
@@ -85,9 +85,9 @@ public:
 
 struct VCL_DLLPUBLIC FeatureID
 {
-    sal_uInt32 m_aFeatureCode;
-    sal_uInt32 m_aScriptCode;
-    sal_uInt32 m_aLanguageCode;
+    uint32_t m_aFeatureCode;
+    uint32_t m_aScriptCode;
+    uint32_t m_aLanguageCode;
 };
 
 struct VCL_DLLPUBLIC Feature
@@ -98,6 +98,18 @@ struct VCL_DLLPUBLIC Feature
     FeatureID m_aID;
     FeatureType const m_eType;
     FeatureDefinition m_aDefinition;
+};
+
+// This is basically duplicates hb_feature_t to avoid including HarfBuzz
+// headers here, so the member types should remain compatible.
+struct VCL_DLLPUBLIC FeatureSetting
+{
+    FeatureSetting(OString feature);
+
+    uint32_t m_nTag;
+    uint32_t m_nValue;
+    unsigned int m_nStart;
+    unsigned int m_nEnd;
 };
 
 } // end font namespace
