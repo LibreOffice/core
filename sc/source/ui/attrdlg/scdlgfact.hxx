@@ -105,7 +105,13 @@ class AbstractScImportAsciiDlg_Impl : public AbstractScImportAsciiDlg
 
 class AbstractScAutoFormatDlg_Impl : public AbstractScAutoFormatDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScAutoFormatDlg_Impl, ScAutoFormatDlg)
+    std::unique_ptr<ScAutoFormatDlg> m_xDlg;
+public:
+    explicit AbstractScAutoFormatDlg_Impl(std::unique_ptr<ScAutoFormatDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
     virtual sal_uInt16 GetIndex() const override;
     virtual OUString GetCurrFormatName() override;
 };
@@ -586,7 +592,7 @@ public:
 
     virtual VclPtr<AbstractScTextImportOptionsDlg> CreateScTextImportOptionsDlg(weld::Window* pParent) override;
 
-    virtual VclPtr<AbstractScAutoFormatDlg> CreateScAutoFormatDlg(vcl::Window* pParent,
+    virtual VclPtr<AbstractScAutoFormatDlg> CreateScAutoFormatDlg(weld::Window* pParent,
                                                                 ScAutoFormat* pAutoFormat,
                                                                 const ScAutoFormatData* pSelFormatData,
                                                                 ScViewData *pViewData) override;
