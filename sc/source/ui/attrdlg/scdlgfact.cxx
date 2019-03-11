@@ -71,7 +71,11 @@
 #include <conditio.hxx>
 
 IMPL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScAutoFormatDlg_Impl);
+
+short AbstractScAutoFormatDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractScColRowLabelDlg_Impl::Execute()
 {
@@ -269,15 +273,15 @@ void AbstractScImportAsciiDlg_Impl::SaveParameters()
 
 sal_uInt16 AbstractScAutoFormatDlg_Impl::GetIndex() const
 {
-    return pDlg->GetIndex();
+    return m_xDlg->GetIndex();
 }
 
 OUString AbstractScAutoFormatDlg_Impl::GetCurrFormatName()
 {
-    return pDlg->GetCurrFormatName();
+    return m_xDlg->GetCurrFormatName();
 }
 
-bool  AbstractScColRowLabelDlg_Impl::IsCol()
+bool AbstractScColRowLabelDlg_Impl::IsCol()
 {
     return m_xDlg->IsCol();
 }
@@ -763,13 +767,12 @@ VclPtr<AbstractScTextImportOptionsDlg> ScAbstractDialogFactory_Impl::CreateScTex
     return VclPtr<AbstractScTextImportOptionsDlg_Impl>::Create(std::make_unique<ScTextImportOptionsDlg>(pParent));
 }
 
-VclPtr<AbstractScAutoFormatDlg> ScAbstractDialogFactory_Impl::CreateScAutoFormatDlg(vcl::Window* pParent,
+VclPtr<AbstractScAutoFormatDlg> ScAbstractDialogFactory_Impl::CreateScAutoFormatDlg(weld::Window* pParent,
                                                                 ScAutoFormat* pAutoFormat,
                                                                 const ScAutoFormatData* pSelFormatData,
                                                                 ScViewData *pViewData)
 {
-    VclPtr<ScAutoFormatDlg> pDlg = VclPtr<ScAutoFormatDlg>::Create(pParent, pAutoFormat, pSelFormatData, pViewData);
-    return VclPtr<AbstractScAutoFormatDlg_Impl>::Create(pDlg);
+    return VclPtr<AbstractScAutoFormatDlg_Impl>::Create(std::make_unique<ScAutoFormatDlg>(pParent, pAutoFormat, pSelFormatData, pViewData));
 }
 
 VclPtr<AbstractScColRowLabelDlg>  ScAbstractDialogFactory_Impl::CreateScColRowLabelDlg(weld::Window* pParent,
