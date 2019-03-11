@@ -270,7 +270,7 @@ void ODatabaseImportExport::initialize()
             {
                 m_xRow.set( m_xResultSet, UNO_QUERY );
                 m_xRowLocate.set( m_xResultSet, UNO_QUERY );
-                m_xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xRow,UNO_QUERY)->getMetaData();
+                m_xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xRow,UNO_QUERY_THROW)->getMetaData();
                 Reference<XColumnsSupplier> xSup(m_xResultSet,UNO_QUERY_THROW);
                 m_xRowSetColumns.set(xSup->getColumns(),UNO_QUERY_THROW);
             }

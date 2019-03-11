@@ -90,7 +90,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                            const OUString& i_sRowSetFilter,
                            sal_Int32 i_nMaxRows)
     :m_xSet(_xRs)
-    ,m_xMetaData(Reference< XResultSetMetaDataSupplier >(_xRs,UNO_QUERY)->getMetaData())
+    ,m_xMetaData(Reference< XResultSetMetaDataSupplier >(_xRs,UNO_QUERY_THROW)->getMetaData())
     ,m_aContext( _rContext )
     ,m_nFetchSize(0)
     ,m_nRowCount(0)
@@ -1693,7 +1693,7 @@ bool ORowSetCache::isResultSetChanged() const
 void ORowSetCache::reset(const Reference< XResultSet>& _xDriverSet)
 {
     m_xSet = _xDriverSet;
-    m_xMetaData.set(Reference< XResultSetMetaDataSupplier >(_xDriverSet,UNO_QUERY)->getMetaData());
+    m_xMetaData.set(Reference< XResultSetMetaDataSupplier >(_xDriverSet,UNO_QUERY_THROW)->getMetaData());
     m_xCacheSet->reset(_xDriverSet);
 
     m_bRowCountFinal = false;

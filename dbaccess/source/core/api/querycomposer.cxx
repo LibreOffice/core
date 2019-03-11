@@ -247,7 +247,7 @@ Reference< XNameAccess > SAL_CALL OQueryComposer::getTables(  )
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aMutex );
-    return Reference<XTablesSupplier>(m_xComposer,UNO_QUERY)->getTables();
+    return Reference<XTablesSupplier>(m_xComposer,UNO_QUERY_THROW)->getTables();
 }
 
 // XColumnsSupplier
@@ -256,7 +256,7 @@ Reference< XNameAccess > SAL_CALL OQueryComposer::getColumns(  )
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aMutex );
-    return Reference<XColumnsSupplier>(m_xComposer,UNO_QUERY)->getColumns();
+    return Reference<XColumnsSupplier>(m_xComposer,UNO_QUERY_THROW)->getColumns();
 }
 
 Reference< XIndexAccess > SAL_CALL OQueryComposer::getParameters(  )
@@ -264,7 +264,7 @@ Reference< XIndexAccess > SAL_CALL OQueryComposer::getParameters(  )
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aMutex );
-    return Reference<XParametersSupplier>(m_xComposer,UNO_QUERY)->getParameters();
+    return Reference<XParametersSupplier>(m_xComposer,UNO_QUERY_THROW)->getParameters();
 }
 
 void SAL_CALL OQueryComposer::acquire() throw()

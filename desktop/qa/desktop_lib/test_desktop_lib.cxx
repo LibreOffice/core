@@ -597,7 +597,7 @@ void DesktopLOKTest::testPasteWriterJPEG()
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, xShape->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
 
     // Delete the pasted picture, and paste again with a custom anchor type.
-    uno::Reference<lang::XComponent>(xShape, uno::UNO_QUERY)->dispose();
+    uno::Reference<lang::XComponent>(xShape, uno::UNO_QUERY_THROW)->dispose();
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"AnchorType", uno::makeAny(static_cast<sal_uInt16>(text::TextContentAnchorType_AT_CHARACTER))},

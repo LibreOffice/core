@@ -1419,7 +1419,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, DbGridCo
     // is the new cursor valid ?
     // the cursor is only valid if it contains some columns
     // if there is no cursor or the cursor is not valid we have to clean up an leave
-    if (!_xCursor.is() || !Reference< XColumnsSupplier > (_xCursor, UNO_QUERY)->getColumns()->hasElements())
+    if (!_xCursor.is() || !Reference< XColumnsSupplier > (_xCursor, UNO_QUERY_THROW)->getColumns()->hasElements())
     {
         RemoveRows();
         return;

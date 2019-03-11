@@ -123,7 +123,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, Sequence< PropertyValue 
     // check for selection
     try
     {
-        Reference< frame::XController > xController( Reference< frame::XModel >( rxDoc, UNO_QUERY )->getCurrentController() );
+        Reference< frame::XController > xController( Reference< frame::XModel >( rxDoc, UNO_QUERY_THROW )->getCurrentController() );
         if( xController.is() )
         {
             Reference< view::XSelectionSupplier > xView( xController, UNO_QUERY );

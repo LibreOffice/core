@@ -150,9 +150,11 @@ DECLARE_RTFEXPORT_TEST(testFdo45187, "fdo45187.rtf")
     uno::Reference<text::XTextRangeCompare> xTextRangeCompare(xTextDocument->getText(),
                                                               uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xAnchor0
-        = uno::Reference<text::XTextContent>(xDraws->getByIndex(0), uno::UNO_QUERY)->getAnchor();
+        = uno::Reference<text::XTextContent>(xDraws->getByIndex(0), uno::UNO_QUERY_THROW)
+              ->getAnchor();
     uno::Reference<text::XTextRange> xAnchor1
-        = uno::Reference<text::XTextContent>(xDraws->getByIndex(1), uno::UNO_QUERY)->getAnchor();
+        = uno::Reference<text::XTextContent>(xDraws->getByIndex(1), uno::UNO_QUERY_THROW)
+              ->getAnchor();
     // Was 0 ("starts at the same position"), should be 1 ("starts before")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xTextRangeCompare->compareRegionStarts(xAnchor0, xAnchor1));
 }

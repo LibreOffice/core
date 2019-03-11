@@ -2042,7 +2042,7 @@ void OApplicationController::renameEntry()
                                     if ( xParent.is() )
                                     {
                                         xHNames = xParent;
-                                        Reference<XPropertySet>(xRename,UNO_QUERY)->getPropertyValue(PROPERTY_NAME) >>= sName;
+                                        Reference<XPropertySet>(xRename,UNO_QUERY_THROW)->getPropertyValue(PROPERTY_NAME) >>= sName;
                                     }
                                 }
                                 pNameChecker.reset( new HierarchicalNameCheck( xHNames.get(), OUString() ) );

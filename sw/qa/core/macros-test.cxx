@@ -376,7 +376,7 @@ void SwMacrosTest::testFdo55289()
     uno::Reference<drawing::XShapes> const xShapes(xDPS->getDrawPage(),
             UNO_QUERY);
     uno::Reference<beans::XPropertySet> const xShape(
-        uno::Reference<lang::XMultiServiceFactory>(xModel, UNO_QUERY)->
+        uno::Reference<lang::XMultiServiceFactory>(xModel, UNO_QUERY_THROW)->
             createInstance("com.sun.star.drawing.GraphicObjectShape"),
         UNO_QUERY);
     xShape->setPropertyValue("AnchorType",
@@ -391,7 +391,7 @@ void SwMacrosTest::testFdo55289()
     xShape->setPropertyValue("AnchorType",
             makeAny(text::TextContentAnchorType_AS_CHARACTER));
     uno::Reference<text::XTextRange> const xEnd =
-        uno::Reference<text::XTextDocument>(xModel, UNO_QUERY)->getText()->getEnd();
+        uno::Reference<text::XTextDocument>(xModel, UNO_QUERY_THROW)->getText()->getEnd();
     uno::Reference<text::XTextContent> const xShapeContent(xShape, UNO_QUERY);
     xShapeContent->attach(xEnd);
 }

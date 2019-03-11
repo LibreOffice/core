@@ -642,12 +642,12 @@ DECLARE_RTFEXPORT_TEST(testTextframeTable, "textframe-table.rtf")
     uno::Reference<text::XText> xText = xTextRange->getText();
     CPPUNIT_ASSERT_EQUAL(OUString("First para."), getParagraphOfText(1, xText)->getString());
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2, xText), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(
-        OUString("A"),
-        uno::Reference<text::XTextRange>(xTable->getCellByName("A1"), uno::UNO_QUERY)->getString());
-    CPPUNIT_ASSERT_EQUAL(
-        OUString("B"),
-        uno::Reference<text::XTextRange>(xTable->getCellByName("B1"), uno::UNO_QUERY)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("A"), uno::Reference<text::XTextRange>(
+                                            xTable->getCellByName("A1"), uno::UNO_QUERY_THROW)
+                                            ->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("B"), uno::Reference<text::XTextRange>(
+                                            xTable->getCellByName("B1"), uno::UNO_QUERY_THROW)
+                                            ->getString());
     CPPUNIT_ASSERT_EQUAL(OUString("Last para."), getParagraphOfText(3, xText)->getString());
 }
 

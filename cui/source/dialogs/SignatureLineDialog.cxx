@@ -138,7 +138,7 @@ void SignatureLineDialog::Apply()
     if (bIsExistingSignatureLine)
         xShapeProps = m_xExistingShapeProperties;
     else
-        xShapeProps.set(Reference<lang::XMultiServiceFactory>(m_xModel, UNO_QUERY)
+        xShapeProps.set(Reference<lang::XMultiServiceFactory>(m_xModel, UNO_QUERY_THROW)
                             ->createInstance("com.sun.star.drawing.GraphicObjectShape"),
                         UNO_QUERY);
 
