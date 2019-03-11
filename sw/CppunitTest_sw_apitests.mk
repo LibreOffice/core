@@ -16,6 +16,7 @@ $(eval $(call gb_CppunitTest_use_external,sw_apitests,boost_headers))
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_apitests, \
     sw/qa/api/SwXDocumentIndex \
     sw/qa/api/DocumentSettings \
+    sw/qa/api/SwXTextTable \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sw_apitests, \
@@ -41,6 +42,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_apitests, \
     svt \
     svx \
     svxcore \
+    subsequenttest \
     test \
     tl \
     tk \
