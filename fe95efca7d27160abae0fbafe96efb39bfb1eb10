@@ -34,6 +34,24 @@
       "revId": "fe95efca7d27160abae0fbafe96efb39bfb1eb10",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_d8beaafe",
+        "filename": "vcl/opengl/gdiimpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-03-11T09:37:31Z",
+      "side": 0,
+      "message": "I tried this and the warning is still there after the swap so I leave this unchanged. Feel free to undo it after you have some other preferred way in place.",
+      "parentUuid": "ff82abbf_6c88041f",
+      "revId": "fe95efca7d27160abae0fbafe96efb39bfb1eb10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
