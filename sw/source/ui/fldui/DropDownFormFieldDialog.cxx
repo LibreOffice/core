@@ -68,7 +68,8 @@ IMPL_LINK(DropDownFormFieldDialog, ButtonPushedHdl, Button*, pButton, void)
         if (pButton == m_xListRemoveButton)
         {
             m_xListItemsTreeView->RemoveEntry(nSelPos);
-            m_xListItemsTreeView->SelectEntryPos(nSelPos > 0 ? nSelPos - 1 : 0);
+            if (m_xListItemsTreeView->GetEntryCount() > 0)
+                m_xListItemsTreeView->SelectEntryPos(nSelPos > 0 ? nSelPos - 1 : 0);
         }
         else if (pButton == m_xListUpButton)
         {
