@@ -32,7 +32,7 @@ FeatureParser::FeatureParser(OUString const& rFontName)
     if (nPrefixIdx < 0)
         return;
 
-    OUString sName = rFontName.getToken(0, vcl::font::FeaturePrefix, ++nPrefixIdx);
+    OUString sName = rFontName.copy(++nPrefixIdx);
     sal_Int32 nIndex = 0;
     do
     {
@@ -40,33 +40,28 @@ FeatureParser::FeatureParser(OUString const& rFontName)
 
         sal_Int32 nInnerIdx{ 0 };
         OUString sID = sToken.getToken(0, '=', nInnerIdx);
-        OUString sValue = sToken.getToken(0, '=', nInnerIdx);
 
-        if (sID.getLength() == 4 && sValue != "0")
+        if (sID == "lang")
         {
-            if (sID == "lang")
-            {
-                m_sLanguage = sValue;
-            }
-            else
-            {
-                OString sFeatureCodeAscii = OUStringToOString(sID, RTL_TEXTENCODING_ASCII_US);
-                sal_uInt32 nCode = vcl::font::featureCode(sFeatureCodeAscii.getStr());
-                sal_uInt32 nValue = sValue.isEmpty() ? 1 : sValue.toUInt32();
-
-                if (nValue != 0)
-                    m_aFeatures.emplace_back(nCode, nValue);
-            }
+            m_sLanguage = sToken.getToken(0, '=', nInnerIdx);
+        }
+        else
+        {
+            OString sFeature = OUStringToOString(sToken, RTL_TEXTENCODING_ASCII_US);
+            FeatureSetting aFeature(sFeature);
+            if (aFeature.m_nTag != 0)
+                m_aFeatures.push_back(aFeature);
         }
     } while (nIndex >= 0);
 }
 
-std::unordered_map<sal_uInt32, sal_uInt32> FeatureParser::getFeaturesMap() const
+std::unordered_map<uint32_t, uint32_t> FeatureParser::getFeaturesMap() const
 {
-    std::unordered_map<sal_uInt32, sal_uInt32> aResultMap;
-    for (auto const& rPair : m_aFeatures)
+    std::unordered_map<uint32_t, uint32_t> aResultMap;
+    for (auto const& rFeat : m_aFeatures)
     {
-        aResultMap.emplace(rPair);
+        if (rFeat.m_nValue != 0)
+            aResultMap.emplace(rFeat.m_nTag, rFeat.m_nValue);
     }
     return aResultMap;
 }
