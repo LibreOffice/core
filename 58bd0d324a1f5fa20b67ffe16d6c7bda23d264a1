@@ -52,6 +52,24 @@
       "revId": "58bd0d324a1f5fa20b67ffe16d6c7bda23d264a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_58aa9a85",
+        "filename": "dbaccess/source/filter/xml/xmlExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2019-03-11T11:21:21Z",
+      "side": 1,
+      "message": "\u003e Mike, shouldn\u0027t we have an else clause? Something like if\n \u003e hasPropertyByName has returned true, then we should read from\n \u003e xDataSourceSettings instead of from xProp? I\u0027m getting confused.\n\nAh no, that happens lower in the patch. OK.",
+      "parentUuid": "ff82abbf_98a022a8",
+      "revId": "58bd0d324a1f5fa20b67ffe16d6c7bda23d264a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
