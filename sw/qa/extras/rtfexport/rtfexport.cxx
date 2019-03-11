@@ -1353,7 +1353,7 @@ DECLARE_RTFEXPORT_TEST(testTdf112507, "tdf112507.rtf")
     // First table's second row had 3 cells (so 2 separators).
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aSeparators.getLength());
     // This was 3333, i.e. the B2 cell was too narrow and the text needed 2 lines.
-    CPPUNIT_ASSERT_GREATER(5000, aSeparators[1].Position - aSeparators[0].Position);
+    CPPUNIT_ASSERT_GREATEREQUAL(5000, aSeparators[1].Position - aSeparators[0].Position);
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf107480, "tdf107480.rtf")
