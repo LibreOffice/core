@@ -72,7 +72,7 @@ private:
 };
 
 ScStyleFamilyObj::ScStyleFamilyObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuemts")
+    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<style::XStyle>::get())
     , XIndexAccess(19)
     , XNameAccess("Default")
