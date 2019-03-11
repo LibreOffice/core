@@ -746,10 +746,16 @@ DECLARE_OOXMLEXPORT_TEST(testBnc891663, "bnc891663.docx")
     CPPUNIT_ASSERT( textNextRowTop >= imageTop + imageHeight );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTcwRounding, "tcw-rounding.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf123104, "tdf123104.docx")
 {
-    // Width of the A1 cell in twips was 3200, due to a rounding error.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3201),  parseDump("/root/page/body/tab/row/cell[1]/infos/bounds", "width").toInt32());
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XCell> xCell = xTable->getCellByName("E1");
+    // See SwXCell::getPropertyValue(), we really put 'long' into an Any there.
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 3;Actual :
+    // 2', i.e. the vertical merge covered one less cell, resulting in a cell with white background.
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(3), getProperty<long>(xCell, "RowSpan"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo85542, "fdo85542.docx")
