@@ -133,11 +133,6 @@
             <value>true</value>
           </prop>
         </node>
-        <node oor:name="PrimaryKeySupport" oor:op="replace">
-          <prop oor:name="Value" oor:type="xs:boolean">
-            <value>true</value>
-          </prop>
-        </node>
         <node oor:name="RespectDriverResultSetType" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
             <value>true</value>
