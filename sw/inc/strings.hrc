@@ -621,6 +621,7 @@
 #define STR_ACCESS_TL_CONTENT                   NC_("STR_ACCESS_TL_CONTENT", "Content Navigation View")
 #define STR_OUTLINE_LEVEL                       NC_("STR_OUTLINE_LEVEL", "Outline Level")
 #define STR_DRAGMODE                            NC_("STR_DRAGMODE", "Drag Mode")
+#define STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY     NC_("STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY", "Send Outline to Clipboard")
 #define STR_HYPERLINK                           NC_("STR_HYPERLINK", "Insert as Hyperlink")
 #define STR_LINK_REGION                         NC_("STR_LINK_REGION", "Insert as Link")
 #define STR_COPY_REGION                         NC_("STR_COPY_REGION", "Insert as Copy")

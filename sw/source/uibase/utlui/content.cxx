@@ -828,7 +828,8 @@ enum STR_CONTEXT_IDX
     IDX_STR_ACTIVE = 8,
     IDX_STR_INACTIVE = 9,
     IDX_STR_EDIT_ENTRY = 10,
-    IDX_STR_DELETE_ENTRY = 11
+    IDX_STR_DELETE_ENTRY = 11,
+    IDX_STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY = 12
 };
 
 static const char* STR_CONTEXT_ARY[] =
@@ -844,7 +845,8 @@ static const char* STR_CONTEXT_ARY[] =
     STR_ACTIVE,
     STR_INACTIVE,
     STR_EDIT_ENTRY,
-    STR_DELETE_ENTRY
+    STR_DELETE_ENTRY,
+    STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY
 };
 
 SwContentTree::SwContentTree(vcl::Window* pParent, SwNavigationPI* pDialog)
@@ -1316,6 +1318,10 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
     {
         assert(dynamic_cast<SwContentType*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
         SwContentType* pType = static_cast<SwContentType*>(pEntry->GetUserData());
+        if(ContentTypeId::OUTLINE == pType->GetType())
+        {
+            pPop->InsertItem(700, m_aContextStrings[IDX_STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY]);
+        }
         if ( (pType->GetType() == ContentTypeId::POSTIT) &&  (!m_pActiveShell->GetView().GetDocShell()->IsReadOnly()) && ( pType->GetMemberCount() > 0) )
         {
             bSubPop4 = true;
@@ -3114,6 +3120,11 @@ void SwContentTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
             {
                 m_pActiveShell->GetView().GetPostItMgr()->SetActiveSidebarWin(nullptr);
                 m_pActiveShell->GetView().GetPostItMgr()->Delete();
+                break;
+            }
+        case 700:
+            {
+                m_pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_OUTLINE_TO_CLIPBOARD);
                 break;
             }
         //Display
