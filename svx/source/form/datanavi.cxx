@@ -3319,7 +3319,7 @@ namespace svxform
         aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
         if (aDlg.Execute() == ERRCODE_NONE)
-            m_xURLED->SetText( aDlg.GetPath() );
+            m_xURLED->set_entry_text(aDlg.GetPath());
     }
 
     LinkedInstanceWarningBox::LinkedInstanceWarningBox(weld::Widget* pParent)

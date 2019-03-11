@@ -27,7 +27,6 @@
 namespace svt
 {
 
-
     //= OFileURLControl
 
     class SVT_DLLPUBLIC OFileURLControl : public SvtURLBox
@@ -42,7 +41,6 @@ namespace svt
         virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
         virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
     };
-
 
 }   // namespace svt
 

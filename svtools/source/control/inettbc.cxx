@@ -1151,11 +1151,12 @@ void MatchContext_Impl::doExecute()
     INetProtocol eBaseProt = INetURLObject::CompareProtocolScheme( pBox->aBaseURL );
     if ( pBox->aBaseURL.isEmpty() )
         eBaseProt = INetURLObject::CompareProtocolScheme( SvtPathOptions().GetWorkPath() );
+    INetProtocol eSmartProt = pBox->GetSmartProtocol();
 
     // if the user input is a valid URL, go on with it
     // otherwise it could be parsed smart with a predefined smart protocol
     // ( or if this is not set with the protocol of a predefined base URL )
-    if (eProt == INetProtocol::NotValid || eProt == eBaseProt)
+    if( eProt == INetProtocol::NotValid || eProt == eSmartProt || (eSmartProt == INetProtocol::NotValid && eProt == eBaseProt) )
     {
         // not stopped yet ?
         if( schedule() )
@@ -1264,7 +1265,7 @@ void MatchContext_Impl::doExecute()
     INetURLObject aCurObj;
     OUString aCurString, aCurMainURL;
     INetURLObject aObj;
-    aObj.SetSmartProtocol(INetProtocol::Http);
+    aObj.SetSmartProtocol( eSmartProt == INetProtocol::NotValid ? INetProtocol::Http : eSmartProt );
     for( ;; )
     {
         for(const auto& rPick : aPickList)
@@ -1277,6 +1278,9 @@ void MatchContext_Impl::doExecute()
             aCurMainURL = aCurObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
             if( eProt != INetProtocol::NotValid && aCurObj.GetProtocol() != eProt )
+                continue;
+
+            if( eSmartProt != INetProtocol::NotValid && aCurObj.GetProtocol() != eSmartProt )
                 continue;
 
             switch( aCurObj.GetProtocol() )
@@ -2013,7 +2017,8 @@ IMPL_LINK_NOARG(URLBox, TryAutoComplete, Timer *, void)
 }
 
 URLBox::URLBox(std::unique_ptr<weld::ComboBox> pWidget)
-    : bHistoryDisabled(false)
+    : eSmartProtocol(INetProtocol::NotValid)
+    , bHistoryDisabled(false)
     , m_xWidget(std::move(pWidget))
 {
     Init();
@@ -2044,9 +2049,20 @@ URLBox::~URLBox()
     }
 }
 
+void URLBox::SetSmartProtocol(INetProtocol eProt)
+{
+    if ( eSmartProtocol != eProt )
+    {
+        eSmartProtocol = eProt;
+        UpdatePicklistForSmartProtocol_Impl();
+    }
+}
+
 void URLBox::UpdatePicklistForSmartProtocol_Impl()
 {
     m_xWidget->clear();
+    if ( bHistoryDisabled )
+        return;
 
     if (bHistoryDisabled)
         return;
@@ -2070,6 +2086,12 @@ void URLBox::UpdatePicklistForSmartProtocol_Impl()
             {
                 seqPropertySet[nProperty].Value >>= sURL;
                 aCurObj.SetURL( sURL );
+
+                if ( !sURL.isEmpty() && ( eSmartProtocol != INetProtocol::NotValid ) )
+                {
+                    if( aCurObj.GetProtocol() != eSmartProtocol )
+                        break;
+                }
 
                 OUString aURL( aCurObj.GetMainURL( INetURLObject::DecodeMechanism::WithCharset ) );
 
@@ -2102,6 +2124,7 @@ void URLBox::UpdatePicklistForSmartProtocol_Impl()
 
 IMPL_LINK_NOARG(URLBox, ChangedHdl, weld::ComboBox&, void)
 {
+    aChangeHdl.Call(*m_xWidget);
     aChangedIdle.Start(); //launch this to happen on idle after cursor position will have been set
 }
 
@@ -2152,6 +2175,8 @@ OUString URLBox::GetURL()
     {
         // no autocompletion for wildcards
         INetURLObject aTempObj;
+        if ( eSmartProtocol != INetProtocol::NotValid )
+            aTempObj.SetSmartProtocol( eSmartProtocol );
         if ( aTempObj.SetSmartURL( aText ) )
             return aTempObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         else
@@ -2213,6 +2238,12 @@ void URLBox::DisableHistory()
 {
     bHistoryDisabled = true;
     UpdatePicklistForSmartProtocol_Impl();
+}
+
+void URLBox::SetFilter(const OUString& _sFilter)
+{
+    pImpl->m_aFilters.clear();
+    FilterMatch::createWildCardFilterList(_sFilter,pImpl->m_aFilters);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
