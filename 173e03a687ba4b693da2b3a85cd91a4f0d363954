@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ff82abbf_586ffac4",
+        "filename": "xmlscript/source/xmldlg_imexp/xmldlg_expmodels.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-03-11T08:51:40Z",
+      "side": 1,
+      "message": "No, It will prevent exporting the description of HyperlinkModal only.\nNo element uses this function to expect support service as HyperlinkModal. look at https://opengrok.libreoffice.org/xref/core/xmlscript/source/xmldlg_imexp/xmldlg_expmodels.cxx?r\u003d732d630c#1188.\n\nI also debugged and the function is entered only for Hyperlink and not another element.\n\nI commented it because it was said in the patch. and have not looked deeply into it.",
+      "parentUuid": "ff82abbf_fd2a808e",
+      "revId": "173e03a687ba4b693da2b3a85cd91a4f0d363954",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff82abbf_9d19f489",
         "filename": "xmlscript/source/xmldlg_imexp/xmldlg_impmodels.cxx",
         "patchSetId": 1
