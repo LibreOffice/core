@@ -5592,11 +5592,15 @@ SwTwips SwTabFrame::CalcHeightOfFirstContentLine() const
             // just return the height of the first line. Basically we need to get the height of the
             // line as it would be on the last page. Since this is quite complicated to calculate,
             // we only calculate the height of the first line.
+            SwFormatFrameSize const& rFrameSize(pFirstRow->GetAttrSet()->GetFrameSize());
             if ( pFirstRow->GetPrev() &&
-                 static_cast<const SwRowFrame*>(pFirstRow->GetPrev())->IsRowSpanLine() )
+                 static_cast<const SwRowFrame*>(pFirstRow->GetPrev())->IsRowSpanLine()
+                && rFrameSize.GetHeightSizeType() != ATT_FIX_SIZE)
             {
                 // Calculate maximum height of all cells with rowspan = 1:
-                SwTwips nMaxHeight = 0;
+                SwTwips nMaxHeight = rFrameSize.GetHeightSizeType() == ATT_MIN_SIZE
+                    ? rFrameSize.GetHeight()
+                    : 0;
                 const SwCellFrame* pLower2 = static_cast<const SwCellFrame*>(pFirstRow->Lower());
                 while ( pLower2 )
                 {
