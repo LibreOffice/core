@@ -12,10 +12,11 @@ There are two kinds of properties named "Value":
 
 Each node in Feature section must have an equivalent in Property section
 Most of the time the node name of both sections should be equal,
-however there are 4 known exceptions (more?):
+however there are 5 known exceptions (more?):
 - "UseBracketedOuterJoinSyntax" feature => "EnableOuterJoinEscape" property
 - "UseDOSLineEnds" feature => "PreferDosLikeLineEnds" property
 - "UseSQL92NamingConstraints" feature => "EnableSQL92Check" property
+- "AppendTableAliasInSelect" feature => "AppendTableAliasName" property
 - "UseKeywordAsBeforeAlias" feature => "GenerateASBeforeCorrelationName"
 
 See dbaccess/source/ui/dlg/DbAdminImpl.cxx, ODbDataSourceAdministrationHelper constructor, eg:

@@ -72,9 +72,10 @@
             <value>false</value>
           </prop>
         </node>
-        <node oor:name="AppendTableAliasInSelect" oor:op="replace">
+        <node oor:name="AppendTableAliasName" oor:op="replace">
+        <!-- Corresponds to AppendTableAliasInSelect in Features - see connectivity/registry/README -->
           <prop oor:name="Value" oor:type="xs:boolean">
-            <value>true</value>
+            <value>false</value>
           </prop>
         </node>
         <node oor:name="GenerateASBeforeCorrelationName" oor:op="replace">
@@ -163,6 +164,7 @@
           </prop>
         </node>
         <node oor:name="AppendTableAliasInSelect" oor:op="replace">
+        <!-- Corresponds to AppendTableAliasName in Properties - see connectivity/registry/README -->
           <prop oor:name="Value" oor:type="xs:boolean">
             <value>true</value>
           </prop>
