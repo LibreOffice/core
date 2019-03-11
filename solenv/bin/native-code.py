@@ -470,7 +470,6 @@ custom_widgets = [
     'RubyEdit',
     'RubyPreview',
     'SameContentListBox',
-    'ScAutoFmtPreview',
     'ScCondFormatList',
     'ScCsvTableBox',
     'ScCursorRefEdit',
