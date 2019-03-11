@@ -18,6 +18,8 @@
 #include <unordered_map>
 #include <vcl/font/Feature.hxx>
 
+#include <vcl/font/Feature.hxx>
+
 namespace vcl
 {
 namespace font
@@ -32,19 +34,16 @@ class VCL_DLLPUBLIC FeatureParser
 {
 private:
     OUString m_sLanguage;
-    std::vector<std::pair<sal_uInt32, sal_uInt32>> m_aFeatures;
+    std::vector<FeatureSetting> m_aFeatures;
 
 public:
     FeatureParser(OUString const& sFontName);
 
     OUString const& getLanguage() const { return m_sLanguage; }
 
-    std::vector<std::pair<sal_uInt32, sal_uInt32>> const& getFeatures() const
-    {
-        return m_aFeatures;
-    }
+    std::vector<FeatureSetting> const& getFeatures() const { return m_aFeatures; }
 
-    std::unordered_map<sal_uInt32, sal_uInt32> getFeaturesMap() const;
+    std::unordered_map<uint32_t, uint32_t> getFeaturesMap() const;
 };
 
 } // end font namespace
