@@ -432,7 +432,7 @@ SfxItemInfo aSlotTab[] =
 
 std::vector<SvGlobalName> *pGlobalOLEExcludeList = nullptr;
 
-SwAutoCompleteWord* SwDoc::mpACmpltWords = nullptr;
+SwAutoCompleteWord* SwDoc::s_pAutoCompleteWords = nullptr;
 
 SwCheckIt* pCheckIt = nullptr;
 static CharClass* pAppCharClass = nullptr;
@@ -653,12 +653,12 @@ void InitCore()
     if (!utl::ConfigManager::IsFuzzing())
     {
         const SvxSwAutoFormatFlags& rAFlags = SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
-        SwDoc::mpACmpltWords = new SwAutoCompleteWord( rAFlags.nAutoCmpltListLen,
+        SwDoc::s_pAutoCompleteWords = new SwAutoCompleteWord( rAFlags.nAutoCmpltListLen,
                                             rAFlags.nAutoCmpltWordLen );
     }
     else
     {
-        SwDoc::mpACmpltWords = new SwAutoCompleteWord( 0, 0 );
+        SwDoc::s_pAutoCompleteWords = new SwAutoCompleteWord( 0, 0 );
     }
 }
 
@@ -687,7 +687,7 @@ void FinitCore()
     if ( aAttrTab[0]->GetRefCount() )
         SfxItemPool::ReleaseDefaults( &aAttrTab );
 #endif
-    delete SwDoc::mpACmpltWords;
+    delete SwDoc::s_pAutoCompleteWords;
 
     delete SwStyleNameMapper::s_pTextUINameArray;
     delete SwStyleNameMapper::s_pListsUINameArray;
@@ -750,10 +750,10 @@ CharClass& GetAppCharClass()
 
 void SwCalendarWrapper::LoadDefaultCalendar( LanguageType eLang )
 {
-    if( eLang != nLang )
+    if( eLang != m_nLang )
     {
-        nLang = eLang;
-        loadDefaultCalendar( LanguageTag::convertToLocale( nLang ));
+        m_nLang = eLang;
+        loadDefaultCalendar( LanguageTag::convertToLocale( m_nLang ));
     }
 }
 

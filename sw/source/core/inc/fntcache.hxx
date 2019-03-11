@@ -148,7 +148,7 @@ SwFntObj *SwFntCache::Next( SwFntObj *pFntObj)
 
 class SwFntAccess : public SwCacheAccess
 {
-    SwViewShell const *pShell;
+    SwViewShell const *m_pShell;
 protected:
     virtual SwCacheObj *NewObj( ) override;
 

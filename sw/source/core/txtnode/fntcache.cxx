@@ -2263,7 +2263,7 @@ SwFntAccess::SwFntAccess( const void* & rnFontCacheId,
                 sal_uInt16 &rIndex, const void *pOwn, SwViewShell const *pSh,
                 bool bCheck ) :
   SwCacheAccess( *pFntCache, rnFontCacheId, rIndex ),
-  pShell( pSh )
+  m_pShell( pSh )
 {
     // the used ctor of SwCacheAccess searches for rnFontCacheId+rIndex in the cache
     if ( IsAvail() )
@@ -2366,7 +2366,7 @@ SwFntAccess::SwFntAccess( const void* & rnFontCacheId,
 SwCacheObj *SwFntAccess::NewObj( )
 {
     // a new Font, a new "MagicNumber".
-    return new SwFntObj( *static_cast<SwSubFont const *>(m_pOwner), ++mnFontCacheIdCounter, pShell );
+    return new SwFntObj( *static_cast<SwSubFont const *>(m_pOwner), ++mnFontCacheIdCounter, m_pShell );
 }
 
 TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, long nTextWidth)
