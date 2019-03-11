@@ -16,6 +16,24 @@
       "revId": "58bd0d324a1f5fa20b67ffe16d6c7bda23d264a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_18cf3280",
+        "filename": "dbaccess/source/filter/xml/xmlExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-03-11T11:12:51Z",
+      "side": 1,
+      "message": "No, we haven\u0027t got a hasPropertyByName approval for xProp - only got it *absent* for xDataSourceSettings; and I suppose I don\u0027t want to query if xProp also provides XPropertySetInfo, to only add complexity (I don\u0027t know if it will, so I\u0027d add this try block anyway)",
+      "parentUuid": "ff82abbf_d8ef8ae7",
+      "revId": "58bd0d324a1f5fa20b67ffe16d6c7bda23d264a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
