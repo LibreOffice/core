@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "ff82abbf_b8ede626",
+        "filename": "xmlscript/dtd/dialog.dtd",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-11T09:07:31Z",
+      "side": 1,
+      "message": "trailing whitespace here",
+      "revId": "173e03a687ba4b693da2b3a85cd91a4f0d363954",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff82abbf_fd2a808e",
         "filename": "xmlscript/source/xmldlg_imexp/xmldlg_expmodels.cxx",
         "patchSetId": 1
@@ -31,6 +48,24 @@
       "side": 1,
       "message": "No, It will prevent exporting the description of HyperlinkModal only.\nNo element uses this function to expect support service as HyperlinkModal. look at https://opengrok.libreoffice.org/xref/core/xmlscript/source/xmldlg_imexp/xmldlg_expmodels.cxx?r\u003d732d630c#1188.\n\nI also debugged and the function is entered only for Hyperlink and not another element.\n\nI commented it because it was said in the patch. and have not looked deeply into it.",
       "parentUuid": "ff82abbf_fd2a808e",
+      "revId": "173e03a687ba4b693da2b3a85cd91a4f0d363954",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_58f29a08",
+        "filename": "xmlscript/source/xmldlg_imexp/xmldlg_expmodels.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-11T09:07:31Z",
+      "side": 1,
+      "message": "Hm the patch from hanya says, there is no description for this model (which might make sense for a hyperlink).\nSo you can just remove the line instead of commenting out.",
+      "parentUuid": "ff82abbf_586ffac4",
       "revId": "173e03a687ba4b693da2b3a85cd91a4f0d363954",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
