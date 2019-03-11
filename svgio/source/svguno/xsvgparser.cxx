@@ -192,7 +192,7 @@ namespace svgio
             parseSvgXML(xSvgStream, xSvgDocHdl);
 
             // decompose to primitives
-            for (std::unique_ptr<SvgNode> const & pCandidate : pSvgDocHdl->getSvgDocument().getSvgNodeVector())
+            for (SvgNode* const & pCandidate : pSvgDocHdl->getSvgDocument().getSvgNodeVector())
             {
                 if (Display_none != pCandidate->getDisplay())
                 {

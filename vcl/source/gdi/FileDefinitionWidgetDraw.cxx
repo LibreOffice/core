@@ -23,6 +23,9 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapTools.hxx>
 
+#include <outdata.hxx>
+#include <impbmp.hxx>
+
 #include <vcl/pngwrite.hxx>
 
 #include <comphelper/seqstream.hxx>
@@ -188,19 +191,17 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                 if (rRectangle.mpFillColor)
                 {
                     rGraphics.SetLineColor();
-                    rGraphics.SetFillColor(Color(*rRectangle.mpFillColor));
-                    rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(),
-                                              basegfx::B2DPolyPolygon(aB2DPolygon), 0.0f, nullptr);
+                    rGraphics.SetFillColor(ImplColorToSal(Color(*rRectangle.mpFillColor)));
+                    rGraphics.DrawPolyPolygon(basegfx::B2DPolyPolygon(aB2DPolygon), 0.0f, nullptr);
                 }
                 if (rRectangle.mpStrokeColor)
                 {
-                    rGraphics.SetLineColor(Color(*rRectangle.mpStrokeColor));
+                    rGraphics.SetLineColor(ImplColorToSal(Color(*rRectangle.mpStrokeColor)));
                     rGraphics.SetFillColor();
                     rGraphics.DrawPolyLine(
-                        basegfx::B2DHomMatrix(), aB2DPolygon, 0.0f,
+                        aB2DPolygon, 0.0f,
                         basegfx::B2DVector(rRectangle.mnStrokeWidth, rRectangle.mnStrokeWidth),
-                        basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, false,
-                        nullptr);
+                        basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, nullptr);
                 }
             }
             break;
@@ -235,19 +236,19 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                 if (rPath.mpFillColor)
                 {
                     rGraphics.SetLineColor();
-                    rGraphics.SetFillColor(Color(*rPath.mpFillColor));
-                    rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(), aPolyPolygon, 0.0f, nullptr);
+                    rGraphics.SetFillColor(ImplColorToSal(Color(*rPath.mpFillColor)));
+                    rGraphics.DrawPolyPolygon(aPolyPolygon, 0.0f, nullptr);
                 }
                 if (rPath.mpStrokeColor)
                 {
-                    rGraphics.SetLineColor(Color(*rPath.mpStrokeColor));
+                    rGraphics.SetLineColor(ImplColorToSal(Color(*rPath.mpStrokeColor)));
                     rGraphics.SetFillColor();
                     for (auto const& rPolygon : aPolyPolygon)
                     {
                         rGraphics.DrawPolyLine(
-                            basegfx::B2DHomMatrix(), rPolygon, 0.0f,
+                            rPolygon, 0.0f,
                             basegfx::B2DVector(rPath.mnStrokeWidth, rPath.mnStrokeWidth),
-                            basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, false,
+                            basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f,
                             nullptr);
                     }
                 }
@@ -281,16 +282,15 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
                     rRectDrawCommand.mnRy / rRect.getHeight() * 2.0);
 
                 rGraphics.SetLineColor();
-                rGraphics.SetFillColor(rRectDrawCommand.maFillColor);
-                rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(),
-                                          basegfx::B2DPolyPolygon(aB2DPolygon), 0.0f, nullptr);
-                rGraphics.SetLineColor(rRectDrawCommand.maStrokeColor);
+                rGraphics.SetFillColor(ImplColorToSal(rRectDrawCommand.maFillColor));
+                rGraphics.DrawPolyPolygon(basegfx::B2DPolyPolygon(aB2DPolygon), 0.0f, nullptr);
+                rGraphics.SetLineColor(ImplColorToSal(rRectDrawCommand.maStrokeColor));
                 rGraphics.SetFillColor();
-                rGraphics.DrawPolyLine(basegfx::B2DHomMatrix(), aB2DPolygon, 0.0f,
+                rGraphics.DrawPolyLine(aB2DPolygon, 0.0f,
                                        basegfx::B2DVector(rRectDrawCommand.mnStrokeWidth,
                                                           rRectDrawCommand.mnStrokeWidth),
                                        basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND,
-                                       0.0f, false, nullptr);
+                                       0.0f, nullptr);
             }
             break;
             case DrawCommandType::CIRCLE:
@@ -306,10 +306,9 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
                 basegfx::B2DPolygon aB2DPolygon = basegfx::utils::createPolygonFromEllipse(
                     rRect.getCenter(), rRect.getWidth() / 2.0, rRect.getHeight() / 2.0);
 
-                rGraphics.SetLineColor(rCircleDrawCommand.maStrokeColor);
-                rGraphics.SetFillColor(rCircleDrawCommand.maFillColor);
-                rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(),
-                                          basegfx::B2DPolyPolygon(aB2DPolygon), 0.0f, nullptr);
+                rGraphics.SetLineColor(ImplColorToSal(rCircleDrawCommand.maStrokeColor));
+                rGraphics.SetFillColor(ImplColorToSal(rCircleDrawCommand.maFillColor));
+                rGraphics.DrawPolyPolygon(basegfx::B2DPolyPolygon(aB2DPolygon), 0.0f, nullptr);
             }
             break;
             case DrawCommandType::LINE:
@@ -320,7 +319,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
                 Size aRectSize(nWidth - 1, nHeight - 1);
 
                 rGraphics.SetFillColor();
-                rGraphics.SetLineColor(rLineDrawCommand.maStrokeColor);
+                rGraphics.SetLineColor(ImplColorToSal(rLineDrawCommand.maStrokeColor));
 
                 basegfx::B2DPolygon aB2DPolygon{
                     { aRectPoint.X() + (aRectSize.Width() * rLineDrawCommand.mfX1),
@@ -329,11 +328,11 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
                       aRectPoint.Y() + (aRectSize.Height() * rLineDrawCommand.mfY2) },
                 };
 
-                rGraphics.DrawPolyLine(basegfx::B2DHomMatrix(), aB2DPolygon, 0.0f,
+                rGraphics.DrawPolyLine(aB2DPolygon, 0.0f,
                                        basegfx::B2DVector(rLineDrawCommand.mnStrokeWidth,
                                                           rLineDrawCommand.mnStrokeWidth),
                                        basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND,
-                                       0.0f, false, nullptr);
+                                       0.0f, nullptr);
             }
             break;
             case DrawCommandType::IMAGE:
@@ -352,12 +351,12 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
                                nImageHeight / nScaleFactor);
                 if (!!aBitmap)
                 {
-                    const std::shared_ptr<SalBitmap> pSalBitmap
-                        = aBitmap.GetBitmap().ImplGetSalBitmap();
+                    SalBitmap* pSalBitmap
+                        = aBitmap.GetBitmap().ImplGetImpBitmap()->ImplGetSalBitmap();
                     if (aBitmap.IsAlpha())
                     {
-                        const std::shared_ptr<SalBitmap> pSalBitmapAlpha
-                            = aBitmap.GetAlpha().ImplGetSalBitmap();
+                        SalBitmap* pSalBitmapAlpha
+                            = aBitmap.GetAlpha().ImplGetImpBitmap()->ImplGetSalBitmap();
                         rGraphics.DrawBitmap(aTR, *pSalBitmap, *pSalBitmapAlpha, nullptr);
                     }
                     else
