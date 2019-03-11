@@ -320,7 +320,7 @@
     </progress>
 
     <tabitem>
-        <part value="Entire" margin-width="20" margin-height="6">
+        <part value="Entire" margin-width="8" height="32">
             <state selected="false" extra="first">
                 <external source="tabitem-first.svgx" />
             </state>

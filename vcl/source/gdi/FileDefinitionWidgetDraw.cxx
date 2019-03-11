@@ -776,10 +776,12 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
             if (!pPart)
                 return false;
 
-            rNativeBoundingRegion = tools::Rectangle(
-                rBoundingControlRegion.TopLeft(),
-                Size(rBoundingControlRegion.GetWidth() + pPart->mnMarginWidth,
-                     rBoundingControlRegion.GetHeight() + pPart->mnMarginHeight));
+            long nWidth = std::max(rBoundingControlRegion.GetWidth() + pPart->mnMarginWidth,
+                                   long(pPart->mnWidth));
+            long nHeight = std::max(rBoundingControlRegion.GetHeight() + pPart->mnMarginHeight,
+                                    long(pPart->mnHeight));
+
+            rNativeBoundingRegion = tools::Rectangle(aLocation, Size(nWidth, nHeight));
             rNativeContentRegion = rNativeBoundingRegion;
             return true;
         }
