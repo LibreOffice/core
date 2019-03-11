@@ -42,6 +42,7 @@
 #include <boost/functional/hash.hpp>
 #include "ControlCacheKey.hxx"
 #include "schedulerimpl.hxx"
+#include <basegfx/DrawCommands.hxx>
 
 struct ImplPostEventData;
 struct ImplTimerData;
@@ -199,6 +200,9 @@ struct ImplSVGDIData
     long                    mnAppFontX = 0;                 // AppFont X-Numenator for 40/tel Width
     long                    mnAppFontY = 0;                 // AppFont Y-Numenator for 80/tel Height
     bool                    mbFontSubChanged = false;       // true: FontSubstitution was changed between Begin/End
+
+    o3tl::lru_map<OUString, BitmapEx> maThemeImageCache = o3tl::lru_map<OUString, BitmapEx>(10);
+    o3tl::lru_map<OUString, gfx::DrawRoot> maThemeDrawCommandsCache = o3tl::lru_map<OUString, gfx::DrawRoot>(50);
 };
 
 struct ImplSVWinData
