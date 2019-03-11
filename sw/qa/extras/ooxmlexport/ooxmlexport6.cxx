@@ -378,7 +378,7 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeParaSpacing, "dml-groupshape-paraspaci
 {
     // Paragraph spacing (top/bottom margin and line spacing) inside a group shape was not imported
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY)->getText();
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY_THROW)->getText();
 
     // 1st paragraph has 1.5x line spacing but it has no spacing before/after.
     uno::Reference<text::XTextRange> xRun = getRun(getParagraphOfText(1, xText),1);

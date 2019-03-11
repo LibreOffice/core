@@ -130,7 +130,7 @@ DlgFilterCrit::DlgFilterCrit(weld::Window * pParent,
         m_xLB_WHEREFIELD3->append_text( *pIter );
     }
 
-    Reference<XNameAccess> xSelectColumns = Reference<XColumnsSupplier>(m_xQueryComposer,UNO_QUERY)->getColumns();
+    Reference<XNameAccess> xSelectColumns = Reference<XColumnsSupplier>(m_xQueryComposer,UNO_QUERY_THROW)->getColumns();
     aNames = xSelectColumns->getElementNames();
     pIter = aNames.getConstArray();
     pEnd   = pIter + aNames.getLength();
@@ -357,7 +357,7 @@ Reference< XPropertySet > DlgFilterCrit::getColumn( const OUString& _rFieldName 
         if ( m_xColumns.is() && m_xColumns->hasByName( _rFieldName ) )
             m_xColumns->getByName( _rFieldName ) >>= xColumn;
 
-        Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryComposer,UNO_QUERY)->getColumns();
+        Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryComposer,UNO_QUERY_THROW)->getColumns();
         if ( xColumns.is() && !xColumn.is() )
         {
             Sequence< OUString> aSeq = xColumns->getElementNames();
@@ -393,7 +393,7 @@ Reference< XPropertySet > DlgFilterCrit::getQueryColumn( const OUString& _rField
     Reference< XPropertySet > xColumn;
     try
     {
-        Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryComposer,UNO_QUERY)->getColumns();
+        Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryComposer,UNO_QUERY_THROW)->getColumns();
         if ( xColumns.is() && xColumns->hasByName( _rFieldName ) )
             xColumns->getByName( _rFieldName ) >>= xColumn;
     }

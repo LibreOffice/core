@@ -2084,7 +2084,7 @@ static void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLT
     aURL.Complete = aURLStr;
     xTransformer->parseStrict(aURL);
 
-    Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY)->queryDispatch(aURL, aTargetName,
+    Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY_THROW)->queryDispatch(aURL, aTargetName,
         FrameSearchFlag::SELF | FrameSearchFlag::PARENT | FrameSearchFlag::CHILDREN |
         FrameSearchFlag::SIBLINGS | FrameSearchFlag::CREATE | FrameSearchFlag::TASKS);
 
@@ -2175,7 +2175,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const css::a
             if (xTransformer.is())
                 xTransformer->parseStrict(aURL);
 
-            Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY)->queryDispatch(aURL, aTargetName,
+            Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY_THROW)->queryDispatch(aURL, aTargetName,
                     FrameSearchFlag::SELF | FrameSearchFlag::PARENT | FrameSearchFlag::CHILDREN |
                     FrameSearchFlag::SIBLINGS | FrameSearchFlag::CREATE | FrameSearchFlag::TASKS);
 
@@ -2199,7 +2199,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const css::a
         aURL.Complete = aURLStr;
         xTransformer->parseStrict(aURL);
 
-        Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY)->queryDispatch(aURL, aTargetName,
+        Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY_THROW)->queryDispatch(aURL, aTargetName,
                 FrameSearchFlag::SELF | FrameSearchFlag::PARENT | FrameSearchFlag::CHILDREN |
                 FrameSearchFlag::SIBLINGS | FrameSearchFlag::CREATE | FrameSearchFlag::TASKS);
 

@@ -81,6 +81,7 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::UNO_QUERY;
+using com::sun::star::uno::UNO_QUERY_THROW;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::Any;
 
@@ -607,7 +608,7 @@ Reference< XNameAccess > Connection::getTables()
         m_settings.tables = Tables::create( m_xMutex, this, &m_settings , &m_settings.pTablesImpl);
     else
         // TODO: how to overcome the performance problem ?
-        Reference< css::util::XRefreshable > ( m_settings.tables, UNO_QUERY )->refresh();
+        Reference< css::util::XRefreshable > ( m_settings.tables, UNO_QUERY_THROW )->refresh();
     return m_settings.tables;
 }
 
@@ -622,7 +623,7 @@ Reference< XNameAccess > Connection::getViews()
         m_settings.views = Views::create( m_xMutex, this, &m_settings, &(m_settings.pViewsImpl) );
     else
         // TODO: how to overcome the performance problem ?
-        Reference< css::util::XRefreshable > ( m_settings.views, UNO_QUERY )->refresh();
+        Reference< css::util::XRefreshable > ( m_settings.views, UNO_QUERY_THROW )->refresh();
     return m_settings.views;
 }
 

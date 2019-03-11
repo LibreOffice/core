@@ -147,7 +147,7 @@ void OStatementBase::disposing()
     {
         try
         {
-            Reference< XCloseable > (m_xAggregateAsSet, UNO_QUERY)->close();
+            Reference< XCloseable > (m_xAggregateAsSet, UNO_QUERY_THROW)->close();
         }
         catch(RuntimeException& )
         {// don't care for anymore
@@ -292,7 +292,7 @@ Any OStatementBase::getWarnings()
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
-    return Reference< XWarningsSupplier >(m_xAggregateAsSet, UNO_QUERY)->getWarnings();
+    return Reference< XWarningsSupplier >(m_xAggregateAsSet, UNO_QUERY_THROW)->getWarnings();
 }
 
 void OStatementBase::clearWarnings()
@@ -300,7 +300,7 @@ void OStatementBase::clearWarnings()
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
-    Reference< XWarningsSupplier >(m_xAggregateAsSet, UNO_QUERY)->clearWarnings();
+    Reference< XWarningsSupplier >(m_xAggregateAsSet, UNO_QUERY_THROW)->clearWarnings();
 }
 
 // css::util::XCancellable
@@ -320,11 +320,11 @@ Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  )
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
-    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY_THROW)->getMetaData();
     if (!xMeta.is() || !xMeta->supportsMultipleResultSets())
         throwFunctionSequenceException(*this);
 
-    return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY)->getResultSet();
+    return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY_THROW)->getResultSet();
 }
 
 sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  )
@@ -333,11 +333,11 @@ sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  )
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
-    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY_THROW)->getMetaData();
     if (!xMeta.is() || !xMeta->supportsMultipleResultSets())
         throwFunctionSequenceException(*this);
 
-    return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY)->getUpdateCount();
+    return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY_THROW)->getUpdateCount();
 }
 
 sal_Bool SAL_CALL OStatementBase::getMoreResults(  )
@@ -346,14 +346,14 @@ sal_Bool SAL_CALL OStatementBase::getMoreResults(  )
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
-    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY_THROW)->getMetaData();
     if (!xMeta.is() || !xMeta->supportsMultipleResultSets())
         throwFunctionSequenceException(*this);
 
     // free the previous results
     disposeResultSet();
 
-    return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY)->getMoreResults();
+    return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY_THROW)->getMoreResults();
 }
 
 // XPreparedBatchExecution
@@ -363,11 +363,11 @@ void SAL_CALL OStatementBase::addBatch(  )
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
-    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY_THROW)->getMetaData();
     if (!xMeta.is() || !xMeta->supportsBatchUpdates())
         throwFunctionSequenceException(*this);
 
-    Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->addBatch();
+    Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY_THROW)->addBatch();
 }
 
 void SAL_CALL OStatementBase::clearBatch(  )
@@ -376,11 +376,11 @@ void SAL_CALL OStatementBase::clearBatch(  )
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
-    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY_THROW)->getMetaData();
     if (!xMeta.is() || !xMeta->supportsBatchUpdates())
         throwFunctionSequenceException(*this);
 
-    Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->clearBatch();
+    Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY_THROW)->clearBatch();
 }
 
 Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  )
@@ -389,14 +389,14 @@ Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  )
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
-    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY_THROW)->getMetaData();
     if (!xMeta.is() || !xMeta->supportsBatchUpdates())
         throwFunctionSequenceException(*this);
 
     // free the previous results
     disposeResultSet();
 
-    return Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->executeBatch();
+    return Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY_THROW)->executeBatch();
 }
 
 Reference< XResultSet > SAL_CALL OStatementBase::getGeneratedValues(  )
@@ -495,12 +495,12 @@ void OStatement::addBatch( const OUString& _rSQL )
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
     // first check the meta data
-    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY_THROW)->getMetaData();
     if (!xMeta.is() || !xMeta->supportsBatchUpdates())
         throwFunctionSequenceException(*this);
 
     OUString sSQL( impl_doEscapeProcessing_nothrow( _rSQL ) );
-    Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->addBatch( sSQL );
+    Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY_THROW)->addBatch( sSQL );
 }
 
 void OStatement::clearBatch( )
@@ -508,11 +508,11 @@ void OStatement::clearBatch( )
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     // first check the meta data
-    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY_THROW)->getMetaData();
     if (!xMeta.is() || !xMeta->supportsBatchUpdates())
         throwFunctionSequenceException(*this);
 
-    Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->clearBatch();
+    Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY_THROW)->clearBatch();
 }
 
 Sequence< sal_Int32 > OStatement::executeBatch( )
@@ -520,10 +520,10 @@ Sequence< sal_Int32 > OStatement::executeBatch( )
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     // first check the meta data
-    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY_THROW)->getMetaData();
     if (!xMeta.is() || !xMeta->supportsBatchUpdates())
         throwFunctionSequenceException(*this);
-    return Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->executeBatch( );
+    return Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY_THROW)->executeBatch( );
 }
 
 
