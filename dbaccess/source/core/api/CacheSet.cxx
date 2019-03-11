@@ -84,7 +84,7 @@ void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet,const OUSt
     {
         m_xDriverSet = _xDriverSet;
         m_xDriverRow.set(_xDriverSet,UNO_QUERY);
-        m_xSetMetaData = Reference<XResultSetMetaDataSupplier>(_xDriverSet,UNO_QUERY)->getMetaData();
+        m_xSetMetaData = Reference<XResultSetMetaDataSupplier>(_xDriverSet,UNO_QUERY_THROW)->getMetaData();
         if ( m_xSetMetaData.is() )
         {
             const sal_Int32 nCount = m_xSetMetaData->getColumnCount();
@@ -217,7 +217,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
                 && comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
                 && !comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
               )
-                aAllIndexColumns.push_back(Reference<XColumnsSupplier>(xIndexColsSup,UNO_QUERY)->getColumns());
+                aAllIndexColumns.push_back(Reference<XColumnsSupplier>(xIndexColsSup,UNO_QUERY_THROW)->getColumns());
         }
     }
 
@@ -341,7 +341,7 @@ void OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connectivity::OSQ
                 && comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
                 && !comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
               )
-                aAllIndexColumns.push_back(Reference<XColumnsSupplier>(xIndexColsSup,UNO_QUERY)->getColumns());
+                aAllIndexColumns.push_back(Reference<XColumnsSupplier>(xIndexColsSup,UNO_QUERY_THROW)->getColumns());
         }
     }
 

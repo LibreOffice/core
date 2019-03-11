@@ -430,7 +430,7 @@ void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
     // Information for a single SQL type
     if(xRs.is())
     {
-        Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xRs,UNO_QUERY)->getMetaData();
+        Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xRs,UNO_QUERY_THROW)->getMetaData();
         ::connectivity::ORowSetValue aValue;
         std::vector<sal_Int32> aTypes;
         std::vector<bool> aNullable;

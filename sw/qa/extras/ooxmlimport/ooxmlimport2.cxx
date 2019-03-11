@@ -90,7 +90,7 @@ DECLARE_OOXMLIMPORT_TEST(testGroupShapeFontName, "groupshape-fontname.docx")
     // Font names inside a group shape were not imported
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XText> xText
-        = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY)->getText();
+        = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY_THROW)->getText();
 
     CPPUNIT_ASSERT_EQUAL(
         OUString("Calibri"),
