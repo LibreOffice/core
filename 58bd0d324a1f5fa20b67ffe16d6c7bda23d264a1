@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_d8ef8ae7",
+        "filename": "dbaccess/source/filter/xml/xmlExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-03-11T11:10:09Z",
+      "side": 1,
+      "message": "no point in catching this exception here - is hasPropertyByName returns true, and then getPropertyValue throws, we have seriously defective code elsewhere",
+      "revId": "58bd0d324a1f5fa20b67ffe16d6c7bda23d264a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
