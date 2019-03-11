@@ -18,35 +18,23 @@
  */
 #ifndef INCLUDED_SC_SOURCE_UI_INC_SCUIAUTOFMT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_SCUIAUTOFMT_HXX
+
+#include <vcl/customweld.hxx>
 #include "autofmt.hxx"
 
-class ScAutoFormatDlg : public ModalDialog
+class ScAutoFormatDlg : public weld::GenericDialogController
 {
 public:
-    ScAutoFormatDlg(vcl::Window* pParent,
+    ScAutoFormatDlg(weld::Window* pParent,
                     ScAutoFormat* pAutoFormat,
                     const ScAutoFormatData* pSelFormatData,
                     const ScViewData *pViewData);
     virtual ~ScAutoFormatDlg() override;
-    virtual void dispose() override;
 
     sal_uInt16 GetIndex() const { return nIndex; }
     OUString GetCurrFormatName();
 
 private:
-    VclPtr<ListBox>        m_pLbFormat;
-    VclPtr<ScAutoFmtPreview> m_pWndPreview;
-    VclPtr<OKButton>       m_pBtnOk;
-    VclPtr<CancelButton>   m_pBtnCancel;
-    VclPtr<PushButton>     m_pBtnAdd;
-    VclPtr<PushButton>     m_pBtnRemove;
-    VclPtr<PushButton>     m_pBtnRename;
-    VclPtr<CheckBox>       m_pBtnNumFormat;
-    VclPtr<CheckBox>       m_pBtnBorder;
-    VclPtr<CheckBox>       m_pBtnFont;
-    VclPtr<CheckBox>       m_pBtnPattern;
-    VclPtr<CheckBox>       m_pBtnAlignment;
-    VclPtr<CheckBox>       m_pBtnAdjust;
     OUString const        aStrTitle;
     OUString const        aStrLabel;
     OUString const        aStrClose;
@@ -59,16 +47,31 @@ private:
     bool                    bCoreDataChanged;
     bool                    bFmtInserted;
 
+    ScAutoFmtPreview m_aWndPreview;
+    std::unique_ptr<weld::TreeView> m_xLbFormat;
+    std::unique_ptr<weld::Button> m_xBtnOk;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
+    std::unique_ptr<weld::Button> m_xBtnAdd;
+    std::unique_ptr<weld::Button> m_xBtnRemove;
+    std::unique_ptr<weld::Button> m_xBtnRename;
+    std::unique_ptr<weld::CheckButton> m_xBtnNumFormat;
+    std::unique_ptr<weld::CheckButton> m_xBtnBorder;
+    std::unique_ptr<weld::CheckButton> m_xBtnFont;
+    std::unique_ptr<weld::CheckButton> m_xBtnPattern;
+    std::unique_ptr<weld::CheckButton> m_xBtnAlignment;
+    std::unique_ptr<weld::CheckButton> m_xBtnAdjust;
+    std::unique_ptr<weld::CustomWeld> m_xWndPreview;
+
     void Init           ();
     void UpdateChecks   ();
 
-    DECL_LINK( CheckHdl, Button*, void );
-    DECL_LINK( AddHdl, Button*, void );
-    DECL_LINK( RemoveHdl, Button*, void );
-    DECL_LINK( SelFmtHdl, ListBox&, void );
-    DECL_LINK( CloseHdl, Button *, void );
-    DECL_LINK( DblClkHdl, ListBox&, void );
-    DECL_LINK( RenameHdl, Button*, void );
+    DECL_LINK( CheckHdl, weld::ToggleButton&, void );
+    DECL_LINK( AddHdl, weld::Button&, void );
+    DECL_LINK( RemoveHdl, weld::Button&, void );
+    DECL_LINK( SelFmtHdl, weld::TreeView&, void );
+    DECL_LINK( CloseHdl, weld::Button&, void );
+    DECL_LINK( DblClkHdl, weld::TreeView&, void );
+    DECL_LINK( RenameHdl, weld::Button&, void );
 
 };
 #endif
