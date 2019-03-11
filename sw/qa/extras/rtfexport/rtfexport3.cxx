@@ -124,10 +124,10 @@ DECLARE_RTFEXPORT_TEST(testTdf115180, "tdf115180.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Row width", sal_Int32(9360), rowWidth);
     sal_Int32 cell1Width
         = parseDump("/root/page/body/tab/row/cell[1]/infos/bounds", "width").toInt32();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("First cell width", sal_Int32(9142), cell1Width);
+    CPPUNIT_ASSERT_MESSAGE("First cell width", cell1Width >= 9140 && cell1Width <= 9142);
     sal_Int32 cell2Width
         = parseDump("/root/page/body/tab/row/cell[2]/infos/bounds", "width").toInt32();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("First cell width", sal_Int32(218), cell2Width);
+    CPPUNIT_ASSERT_MESSAGE("Second cell width", cell2Width >= 218 && cell2Width <= 220);
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf116841, "tdf116841.rtf")
