@@ -147,7 +147,7 @@ void OResultSet::disposing()
     m_pColumns->disposing();
 
     // close the pending result set
-    Reference< XCloseable > (m_xDelegatorResultSet, UNO_QUERY)->close();
+    Reference< XCloseable > (m_xDelegatorResultSet, UNO_QUERY_THROW)->close();
 
     m_xDelegatorResultSet = nullptr;
     m_xDelegatorRow = nullptr;
@@ -253,7 +253,7 @@ void OResultSet::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
             OSL_ENSURE(!aPropName.isEmpty(), "property not found?");
 
             // now read the value
-            rValue = Reference< XPropertySet >(m_xDelegatorResultSet, UNO_QUERY)->getPropertyValue(aPropName);
+            rValue = Reference< XPropertySet >(m_xDelegatorResultSet, UNO_QUERY_THROW)->getPropertyValue(aPropName);
         }
     }
 }
@@ -279,7 +279,7 @@ Reference< XResultSetMetaData > OResultSet::getMetaData()
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return Reference< XResultSetMetaDataSupplier >(m_xDelegatorResultSet, UNO_QUERY)->getMetaData();
+    return Reference< XResultSetMetaDataSupplier >(m_xDelegatorResultSet, UNO_QUERY_THROW)->getMetaData();
 }
 
 // css::sdbc::XColumnLocate
@@ -288,7 +288,7 @@ sal_Int32 OResultSet::findColumn(const OUString& columnName)
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return Reference< XColumnLocate >(m_xDelegatorResultSet, UNO_QUERY)->findColumn(columnName);
+    return Reference< XColumnLocate >(m_xDelegatorResultSet, UNO_QUERY_THROW)->findColumn(columnName);
 }
 
 namespace
@@ -326,7 +326,7 @@ Reference< css::container::XNameAccess > OResultSet::getColumns()
     if (!m_pColumns->isInitialized())
     {
         // get the metadata
-        Reference< XResultSetMetaData > xMetaData = Reference< XResultSetMetaDataSupplier >(m_xDelegatorResultSet, UNO_QUERY)->getMetaData();
+        Reference< XResultSetMetaData > xMetaData = Reference< XResultSetMetaDataSupplier >(m_xDelegatorResultSet, UNO_QUERY_THROW)->getMetaData();
 
         sal_Int32 nColCount = 0;
         // do we have columns
@@ -868,7 +868,7 @@ Any OResultSet::getBookmark()
 
     checkBookmarkable();
 
-    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->getBookmark();
+    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY_THROW)->getBookmark();
 }
 
 sal_Bool OResultSet::moveToBookmark(const Any& bookmark)
@@ -878,7 +878,7 @@ sal_Bool OResultSet::moveToBookmark(const Any& bookmark)
 
     checkBookmarkable();
 
-    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->moveToBookmark(bookmark);
+    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY_THROW)->moveToBookmark(bookmark);
 }
 
 sal_Bool OResultSet::moveRelativeToBookmark(const Any& bookmark, sal_Int32 rows)
@@ -888,7 +888,7 @@ sal_Bool OResultSet::moveRelativeToBookmark(const Any& bookmark, sal_Int32 rows)
 
     checkBookmarkable();
 
-    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->moveRelativeToBookmark(bookmark, rows);
+    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY_THROW)->moveRelativeToBookmark(bookmark, rows);
 }
 
 sal_Int32 OResultSet::compareBookmarks(const Any& _first, const Any& _second)
@@ -898,7 +898,7 @@ sal_Int32 OResultSet::compareBookmarks(const Any& _first, const Any& _second)
 
     checkBookmarkable();
 
-    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->compareBookmarks(_first, _second);
+    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY_THROW)->compareBookmarks(_first, _second);
 }
 
 sal_Bool OResultSet::hasOrderedBookmarks()
@@ -908,7 +908,7 @@ sal_Bool OResultSet::hasOrderedBookmarks()
 
     checkBookmarkable();
 
-    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->hasOrderedBookmarks();
+    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY_THROW)->hasOrderedBookmarks();
 }
 
 sal_Int32 OResultSet::hashBookmark(const Any& bookmark)
@@ -918,7 +918,7 @@ sal_Int32 OResultSet::hashBookmark(const Any& bookmark)
 
     checkBookmarkable();
 
-    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->hashBookmark(bookmark);
+    return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY_THROW)->hashBookmark(bookmark);
 }
 
 // css::sdbc::XResultSetUpdate

@@ -126,7 +126,7 @@ static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xCompone
                                 const uno::Sequence<beans::PropertyValue>& rPropertyValues)
 {
     uno::Reference<frame::XController> xController
-        = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY)->getCurrentController();
+        = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY_THROW)->getCurrentController();
     CPPUNIT_ASSERT(xController.is());
     uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xFrame.is());

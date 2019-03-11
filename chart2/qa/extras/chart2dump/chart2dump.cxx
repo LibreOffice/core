@@ -479,7 +479,7 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
 
             if (sShapeType == "com.sun.star.drawing.TextShape")
             {
-                uno::Reference<text::XText> xLegendEntryText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+                uno::Reference<text::XText> xLegendEntryText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
                 CPPUNIT_DUMP_ASSERT_STRINGS_EQUAL(xLegendEntryText->getString());
             }
         }

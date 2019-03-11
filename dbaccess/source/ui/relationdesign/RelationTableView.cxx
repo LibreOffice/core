@@ -189,7 +189,7 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
 
     // the number of PKey-Fields in the source
     const Reference< XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(pSourceWin->GetData()->getTable());
-    bool bAskUser = xPrimaryKeyColumns.is() && Reference< XIndexAccess>(xPrimaryKeyColumns,UNO_QUERY)->getCount() > 1;
+    bool bAskUser = xPrimaryKeyColumns.is() && Reference< XIndexAccess>(xPrimaryKeyColumns,UNO_QUERY_THROW)->getCount() > 1;
 
     pTabConnData->SetConnLine( 0, sSourceFieldName, sDestFieldName );
 

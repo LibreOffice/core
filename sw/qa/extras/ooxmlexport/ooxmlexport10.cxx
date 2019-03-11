@@ -212,7 +212,7 @@ DECLARE_OOXMLEXPORT_TEST(textboxWpgOnly, "textbox-wpg-only.docx")
 
     // Character escapement was enabled by default, this was 58.
     uno::Reference<container::XIndexAccess> xGroup(xShape, uno::UNO_QUERY);
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(0), uno::UNO_QUERY)->getText();
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(0), uno::UNO_QUERY_THROW)->getText();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xText), 1), "CharEscapementHeight"));
 }
 
@@ -220,7 +220,7 @@ DECLARE_OOXMLEXPORT_TEST(testMceWpg, "mce-wpg.docx")
 {
     // Make sure that we read the primary branch, if wpg is requested as a feature.
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(0), uno::UNO_QUERY)->getText();
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(0), uno::UNO_QUERY_THROW)->getText();
     // This was VML1.
     getParagraphOfText(1, xText, "DML1");
 }
@@ -240,7 +240,7 @@ DECLARE_OOXMLEXPORT_TEST(testMceNested, "mce-nested.docx")
 
     // Now check the top right textbox.
     uno::Reference<container::XIndexAccess> xGroup(getShape(2), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY)->getText();
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY_THROW)->getText();
     uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText, "[Year]");
     CPPUNIT_ASSERT_EQUAL(48.f, getProperty<float>(getRun(xParagraph, 1), "CharHeight"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(getRun(xParagraph, 1), "CharColor"));
@@ -372,7 +372,7 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupshapeSdt, "dml-groupshape-sdt.docx")
 {
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
     // The text in the groupshape was missing due to the w:sdt and w:sdtContent wrapper around it.
-    CPPUNIT_ASSERT_EQUAL(OUString("sdt and sdtContent inside groupshape"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(1), uno::UNO_QUERY)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("sdt and sdtContent inside groupshape"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW)->getString());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDmlCharheightDefault, "dml-charheight-default.docx")
@@ -387,7 +387,7 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeCapitalization, "dml-groupshape-capita
 {
     // Capitalization inside a group shape was not imported
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY)->getText();
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY_THROW)->getText();
     // 2nd line is written with uppercase letters
     CPPUNIT_ASSERT_EQUAL(style::CaseMap::UPPERCASE, getProperty<sal_Int16>(getRun(getParagraphOfText(2, xText), 1), "CharCaseMap"));
     // 3rd line has no capitalization
@@ -450,7 +450,7 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeRunFonts, "dml-groupshape-runfonts.doc
 {
     // Fonts defined by w:rFonts was not imported and so the font specified by a:fontRef was used.
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText    = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY)->getText();
+    uno::Reference<text::XText> xText    = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY_THROW)->getText();
     uno::Reference<text::XTextRange> xRun = getRun(getParagraphOfText(1, xText),1);
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun, "CharFontName"));
     CPPUNIT_ASSERT_EQUAL(OUString("Arial Unicode MS"), getProperty<OUString>(xRun, "CharFontNameComplex"));

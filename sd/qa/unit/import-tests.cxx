@@ -1791,7 +1791,7 @@ void SdImportTest::testTdf104445()
     // First shape should not have bullet
     {
         uno::Reference< beans::XPropertySet > xShape(getShapeFromPage(0, 0, xDocShRef));
-        uno::Reference< text::XText > xText = uno::Reference< text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+        uno::Reference< text::XText > xText = uno::Reference< text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
         CPPUNIT_ASSERT_MESSAGE("Not a text shape", xText.is());
         uno::Reference< beans::XPropertySet > xPropSet(xText, uno::UNO_QUERY_THROW);
 
@@ -1812,7 +1812,7 @@ void SdImportTest::testTdf104445()
     // Second shape should have bullet set
     {
         uno::Reference< beans::XPropertySet > xShape(getShapeFromPage(1, 0, xDocShRef));
-        uno::Reference< text::XText > xText = uno::Reference< text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+        uno::Reference< text::XText > xText = uno::Reference< text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
         CPPUNIT_ASSERT_MESSAGE("Not a text shape", xText.is());
         uno::Reference< beans::XPropertySet > xPropSet(xText, uno::UNO_QUERY_THROW);
 

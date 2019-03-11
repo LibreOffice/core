@@ -516,7 +516,7 @@ DECLARE_WW8EXPORT_TEST(testTdf95321, "tdf95321.doc")
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Second Column"), uno::Reference<text::XTextRange>(xTable->getCellByName("B1"), uno::UNO_QUERY)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Second Column"), uno::Reference<text::XTextRange>(xTable->getCellByName("B1"), uno::UNO_QUERY_THROW)->getString());
 }
 
 DECLARE_WW8EXPORT_TEST(testFdo77844, "fdo77844.doc")

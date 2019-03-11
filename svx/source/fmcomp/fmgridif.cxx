@@ -559,10 +559,10 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
                     Reference< css::sdbcx::XColumnsSupplier >  xColumnsSupplier(xForm, UNO_QUERY);
                     if (xColumnsSupplier.is())
                     {
-                        if (Reference< XIndexAccess > (xColumnsSupplier->getColumns(),UNO_QUERY)->getCount())
+                        if (Reference< XIndexAccess > (xColumnsSupplier->getColumns(),UNO_QUERY_THROW)->getCount())
                         {
                             // we get only a new bookmark if the resultset is not forwardonly
-                            if (::comphelper::getINT32(Reference< XPropertySet > (xForm, UNO_QUERY)->getPropertyValue(FM_PROP_RESULTSET_TYPE)) != ResultSetType::FORWARD_ONLY)
+                            if (::comphelper::getINT32(Reference< XPropertySet > (xForm, UNO_QUERY_THROW)->getPropertyValue(FM_PROP_RESULTSET_TYPE)) != ResultSetType::FORWARD_ONLY)
                             {
                                 // as the FmGridControl touches the data source it is connected to we have to remember the current
                                 // cursor position (and restore afterwards)
@@ -572,7 +572,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
                                 {
                                     try
                                     {
-                                        aOldCursorBookmark = Reference< css::sdbcx::XRowLocate > (xForm, UNO_QUERY)->getBookmark();
+                                        aOldCursorBookmark = Reference< css::sdbcx::XRowLocate > (xForm, UNO_QUERY_THROW)->getBookmark();
                                     }
                                     catch( const Exception& )
                                     {
@@ -1512,7 +1512,7 @@ void FmXGridPeer::cursorMoved(const EventObject& _rEvent)
     VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
     // we are not interested in move to insert row only in the resetted event
     // which is fired after positioning an the insert row
-    if (pGrid && pGrid->IsOpen() && !::comphelper::getBOOL(Reference< XPropertySet > (_rEvent.Source, UNO_QUERY)->getPropertyValue(FM_PROP_ISNEW)))
+    if (pGrid && pGrid->IsOpen() && !::comphelper::getBOOL(Reference< XPropertySet > (_rEvent.Source, UNO_QUERY_THROW)->getPropertyValue(FM_PROP_ISNEW)))
         pGrid->positioned();
 }
 

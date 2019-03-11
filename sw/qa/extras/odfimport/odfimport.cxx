@@ -56,7 +56,7 @@ DECLARE_ODFIMPORT_TEST(testHideAllSections, "fdo53210.odt")
     uno::Reference<beans::XPropertySet> xMaster(xMasters->getByName("com.sun.star.text.fieldmaster.User._CS_Allgemein"), uno::UNO_QUERY);
     xMaster->setPropertyValue("Content", uno::makeAny(OUString("0")));
     // This used to crash
-    uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY)->refresh();
+    uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY_THROW)->refresh();
 }
 
 DECLARE_ODFIMPORT_TEST(testOdtBorders, "borders_ooo33.odt")
@@ -482,7 +482,7 @@ DECLARE_ODFIMPORT_TEST(testFdo55814, "fdo55814.odt")
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
     xField->setPropertyValue("Content", uno::makeAny(OUString("Yes")));
-    uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY)->refresh();
+    uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY_THROW)->refresh();
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
     // This was "0".

@@ -179,7 +179,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
             }
             else if (aFile.isDocument())
             {
-                Reference<XContent> xParent(Reference<XChild>(aFile.get(),UNO_QUERY)->getParent(),UNO_QUERY);
+                Reference<XContent> xParent(Reference<XChild>(aFile.get(),UNO_QUERY_THROW)->getParent(),UNO_QUERY_THROW);
                 Reference<XContentIdentifier> xIdent = xParent->getIdentifier();
                 m_xContent = xParent;
 

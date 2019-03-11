@@ -3710,7 +3710,7 @@ SwXCellRange::setData(const uno::Sequence< uno::Sequence<double> >& rData)
             throw uno::RuntimeException("Column count mismatch. expected: " + OUString::number(nColCount) + " got: " + OUString::number(rRow.getLength()), static_cast<cppu::OWeakObject*>(this));
         for(const auto& rValue : rRow)
         {
-            uno::Reference<table::XCell>(*pCurrentCell, uno::UNO_QUERY)->setValue(rValue);
+            uno::Reference<table::XCell>(*pCurrentCell, uno::UNO_QUERY_THROW)->setValue(rValue);
             ++pCurrentCell;
         }
     }

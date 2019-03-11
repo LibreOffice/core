@@ -478,7 +478,7 @@ void OStatement_Base::GetAssignValues()
         // Create Row for the values to be set (Reference through new)
         if(m_aAssignValues.is())
             m_aAssignValues->get().clear();
-        sal_Int32 nCount = Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount();
+        sal_Int32 nCount = Reference<XIndexAccess>(m_xColNames,UNO_QUERY_THROW)->getCount();
         m_aAssignValues = new OAssignValues(nCount);
         // unbound all
         std::for_each(m_aAssignValues->get().begin()+1,m_aAssignValues->get().end(),TSetRefBound(false));
@@ -565,7 +565,7 @@ void OStatement_Base::GetAssignValues()
     {
         if(m_aAssignValues.is())
             m_aAssignValues->get().clear();
-        sal_Int32 nCount = Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount();
+        sal_Int32 nCount = Reference<XIndexAccess>(m_xColNames,UNO_QUERY_THROW)->getCount();
         m_aAssignValues = new OAssignValues(nCount);
         // unbound all
         std::for_each(m_aAssignValues->get().begin()+1,m_aAssignValues->get().end(),TSetRefBound(false));
@@ -642,7 +642,7 @@ void OStatement_Base::SetAssignValue(const OUString& aColumnName,
 {
     Reference<XPropertySet> xCol;
     m_xColNames->getByName(aColumnName) >>= xCol;
-    sal_Int32 nId = Reference<XColumnLocate>(m_xColNames,UNO_QUERY)->findColumn(aColumnName);
+    sal_Int32 nId = Reference<XColumnLocate>(m_xColNames,UNO_QUERY_THROW)->findColumn(aColumnName);
     // does this column actually exist in the file?
 
     if (!xCol.is())

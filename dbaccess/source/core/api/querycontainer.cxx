@@ -221,7 +221,7 @@ void SAL_CALL OQueryContainer::dropByIndex( sal_Int32 _nIndex )
         throw DisposedException( OUString(), *this );
 
     OUString sName;
-    Reference<XPropertySet> xProp(Reference<XIndexAccess>(m_xCommandDefinitions,UNO_QUERY)->getByIndex(_nIndex),UNO_QUERY);
+    Reference<XPropertySet> xProp(Reference<XIndexAccess>(m_xCommandDefinitions,UNO_QUERY_THROW)->getByIndex(_nIndex),UNO_QUERY);
     if ( xProp.is() )
         xProp->getPropertyValue(PROPERTY_NAME) >>= sName;
 
@@ -401,7 +401,7 @@ sal_Bool SAL_CALL OQueryContainer::hasElements( )
 sal_Int32 SAL_CALL OQueryContainer::getCount(  )
 {
     MutexGuard aGuard(m_aMutex);
-    return Reference<XIndexAccess>(m_xCommandDefinitions,UNO_QUERY)->getCount();
+    return Reference<XIndexAccess>(m_xCommandDefinitions,UNO_QUERY_THROW)->getCount();
 }
 
 Sequence< OUString > SAL_CALL OQueryContainer::getElementNames(  )
