@@ -122,6 +122,11 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
             pWhich = "meta";
             break;
         }
+    case RES_TXTATR_FIELD:
+        {
+            pWhich = "field";
+            break;
+        }
     default:
         break;
     }
@@ -129,8 +134,17 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
         xmlTextWriterWriteAttribute(pWriter, BAD_CAST("which"), BAD_CAST(pWhich));
     if (oValue)
         xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(oValue->getStr()));
-    if (Which() == RES_TXTATR_AUTOFMT)
-        GetAutoFormat().dumpAsXml(pWriter);
+    switch (Which())
+    {
+        case RES_TXTATR_AUTOFMT:
+            GetAutoFormat().dumpAsXml(pWriter);
+            break;
+        case RES_TXTATR_FIELD:
+            GetFormatField().dumpAsXml(pWriter);
+            break;
+        default:
+            break;
+    }
 
     xmlTextWriterEndElement(pWriter);
 }
