@@ -73,7 +73,10 @@ namespace dbaui
                 const SfxPoolItem& rItem = _rCoreAttrs.Get(nItemId);
                 booleanSetting.bOptionalBool = dynamic_cast<const OptionalBoolItem*>(&rItem) != nullptr;
                 booleanSetting.xControl = m_xBuilder->weld_check_button(booleanSetting.sControlId);
-                booleanSetting.xControl->connect_toggled(LINK(this, SpecialSettingsPage, OnToggleHdl));
+                if (booleanSetting.bOptionalBool)
+                    booleanSetting.xControl->connect_toggled(LINK(this, SpecialSettingsPage, OnTriStateToggleHdl));
+                else
+                    booleanSetting.xControl->connect_toggled(LINK(this, SpecialSettingsPage, OnToggleHdl));
                 booleanSetting.xControl->show();
             }
         }
@@ -96,6 +99,25 @@ namespace dbaui
             m_xMaxRowScanLabel->show();
             m_xMaxRowScan->show();
         }
+    }
+
+    IMPL_LINK(SpecialSettingsPage, OnTriStateToggleHdl, weld::ToggleButton&, rToggle, void)
+    {
+        auto eOldState = m_aTriStates[&rToggle];
+        switch (eOldState)
+        {
+            case TRISTATE_INDET:
+                rToggle.set_state(TRISTATE_FALSE);
+                break;
+            case TRISTATE_TRUE:
+                rToggle.set_state(TRISTATE_INDET);
+                break;
+            case TRISTATE_FALSE:
+                rToggle.set_state(TRISTATE_TRUE);
+                break;
+        }
+        m_aTriStates[&rToggle] = rToggle.get_state();
+        OnToggleHdl(rToggle);
     }
 
     IMPL_LINK(SpecialSettingsPage, OnToggleHdl, weld::ToggleButton&, rBtn, void)
@@ -188,14 +210,17 @@ namespace dbaui
             return;
         }
 
+        m_aTriStates.clear();
+
         // the boolean items
         for (auto const& booleanSetting : m_aBooleanSettings)
         {
             if (!booleanSetting.xControl)
                 continue;
 
-            ::boost::optional< bool > aValue(false);
-            aValue.reset();
+            bool bTriState = false;
+
+            boost::optional<bool> aValue;
 
             const SfxPoolItem* pItem = _rSet.GetItem<SfxPoolItem>(booleanSetting.nItemId);
             if (const SfxBoolItem *pBoolItem = dynamic_cast<const SfxBoolItem*>( pItem) )
@@ -205,6 +230,7 @@ namespace dbaui
             else if (const OptionalBoolItem *pOptionalItem = dynamic_cast<const OptionalBoolItem*>( pItem) )
             {
                 aValue = pOptionalItem->GetFullValue();
+                bTriState = true;
             }
             else
                 OSL_FAIL( "SpecialSettingsPage::implInitControls: unknown boolean item type!" );
@@ -220,6 +246,8 @@ namespace dbaui
                     bValue = !bValue;
                 booleanSetting.xControl->set_active(bValue);
             }
+            if (bTriState)
+                m_aTriStates[booleanSetting.xControl.get()] = booleanSetting.xControl->get_state();
         }
 
         // the non-boolean items
