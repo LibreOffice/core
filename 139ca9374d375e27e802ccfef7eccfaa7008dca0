@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_18dad2e8",
+        "filename": "sw/PythonTest_sw_python.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1002061
+      },
+      "writtenOn": "2019-03-11T14:46:05Z",
+      "side": 1,
+      "message": "Here, I only added `check_xsortable` and ordered the targets alphabetically",
+      "range": {
+        "startLine": 17,
+        "startChar": 1,
+        "endLine": 47,
+        "endChar": 13
+      },
+      "revId": "139ca9374d375e27e802ccfef7eccfaa7008dca0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
