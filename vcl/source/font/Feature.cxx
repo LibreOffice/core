@@ -13,11 +13,13 @@
 #include <strings.hrc>
 #include <svdata.hxx>
 
+#include <hb.h>
+
 namespace vcl
 {
 namespace font
 {
-OUString featureCodeAsString(sal_uInt32 nFeature)
+OUString featureCodeAsString(uint32_t nFeature)
 {
     std::vector<sal_Char> aString(5, 0);
     aString[0] = sal_Char(nFeature >> 24 & 0xff);
@@ -41,16 +43,33 @@ Feature::Feature(FeatureID const& rID, FeatureType eType)
 {
 }
 
+// FeatureSetting
+FeatureSetting::FeatureSetting(OString feature)
+    : m_nTag(0)
+    , m_nValue(0)
+    , m_nStart(0)
+    , m_nEnd(0)
+{
+    hb_feature_t aFeat;
+    if (hb_feature_from_string(feature.getStr(), feature.getLength(), &aFeat))
+    {
+        m_nTag = aFeat.tag;
+        m_nValue = aFeat.value;
+        m_nStart = aFeat.start;
+        m_nEnd = aFeat.end;
+    }
+}
+
 // FeatureParameter
 
-FeatureParameter::FeatureParameter(sal_uInt32 nCode, OUString aDescription)
+FeatureParameter::FeatureParameter(uint32_t nCode, OUString aDescription)
     : m_nCode(nCode)
     , m_sDescription(std::move(aDescription))
     , m_pDescriptionID(nullptr)
 {
 }
 
-FeatureParameter::FeatureParameter(sal_uInt32 nCode, const char* pDescriptionID)
+FeatureParameter::FeatureParameter(uint32_t nCode, const char* pDescriptionID)
     : m_nCode(nCode)
     , m_pDescriptionID(pDescriptionID)
 {
@@ -68,7 +87,7 @@ OUString FeatureParameter::getDescription() const
     return aReturnString;
 }
 
-sal_uInt32 FeatureParameter::getCode() const { return m_nCode; }
+uint32_t FeatureParameter::getCode() const { return m_nCode; }
 
 // FeatureDefinition
 
@@ -79,7 +98,7 @@ FeatureDefinition::FeatureDefinition()
 {
 }
 
-FeatureDefinition::FeatureDefinition(sal_uInt32 nCode, OUString const& rDescription,
+FeatureDefinition::FeatureDefinition(uint32_t nCode, OUString const& rDescription,
                                      FeatureParameterType eType,
                                      std::vector<FeatureParameter> const& rEnumParameters)
     : m_nCode(nCode)
@@ -90,7 +109,7 @@ FeatureDefinition::FeatureDefinition(sal_uInt32 nCode, OUString const& rDescript
 {
 }
 
-FeatureDefinition::FeatureDefinition(sal_uInt32 nCode, const char* pDescriptionID,
+FeatureDefinition::FeatureDefinition(uint32_t nCode, const char* pDescriptionID,
                                      OUString const& rNumericPart)
     : m_nCode(nCode)
     , m_pDescriptionID(pDescriptionID)
@@ -99,7 +118,7 @@ FeatureDefinition::FeatureDefinition(sal_uInt32 nCode, const char* pDescriptionI
 {
 }
 
-FeatureDefinition::FeatureDefinition(sal_uInt32 nCode, const char* pDescriptionID,
+FeatureDefinition::FeatureDefinition(uint32_t nCode, const char* pDescriptionID,
                                      std::vector<FeatureParameter> aEnumParameters)
     : m_nCode(nCode)
     , m_pDescriptionID(pDescriptionID)
@@ -132,7 +151,7 @@ OUString FeatureDefinition::getDescription() const
     }
 }
 
-sal_uInt32 FeatureDefinition::getCode() const { return m_nCode; }
+uint32_t FeatureDefinition::getCode() const { return m_nCode; }
 
 FeatureParameterType FeatureDefinition::getType() const { return m_eType; }
 
