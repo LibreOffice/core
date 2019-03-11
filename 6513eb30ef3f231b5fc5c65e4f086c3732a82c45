@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_186972bd",
+        "filename": "oox/source/ppt/pptshape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-03-11T08:54:18Z",
+      "side": 1,
+      "message": "I see this is done in the DOCX filter, but as a first step, I think we want to ignore this setting. The setting is about \"lock down the smartart: convert the group shape to an un-editable metafile + preserve smart-art markup\". We only want the \"preserve the smart-art markup\" half of this behavior change in PPTX. If you do this, that\u0027ll fix the test failures as well.\n\nAnd then in a separate change, we may want to enable the \"smart art to shapes\" setting by default, and then we can put this check back.\n\nSo the point is: make sure \"keep diagram compat info\" only means \"keep the DOMs in the shape interop grab-bag\", not \"covert group shape to metafile\", as that later part is not wanted.",
+      "revId": "6513eb30ef3f231b5fc5c65e4f086c3732a82c45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
