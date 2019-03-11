@@ -701,6 +701,9 @@ void DeInitVCL()
     delete pSVData->maGDIData.mpScreenFontCache;
     pSVData->maGDIData.mpScreenFontCache = nullptr;
 
+    pSVData->maGDIData.maThemeDrawCommandsCache.clear();
+    pSVData->maGDIData.maThemeImageCache.clear();
+
     // Deinit Sal
     if (pSVData->mpDefInst)
     {
