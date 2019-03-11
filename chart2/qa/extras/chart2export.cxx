@@ -128,6 +128,7 @@ public:
     void testTdf108022();
     void testTdf121744();
     void testTdf122031();
+    void testTdf115012();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -219,6 +220,7 @@ public:
     CPPUNIT_TEST(testTdf108022);
     CPPUNIT_TEST(testTdf121744);
     CPPUNIT_TEST(testTdf122031);
+    CPPUNIT_TEST(testTdf115012);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -2044,6 +2046,15 @@ void Chart2ExportTest::testTdf122031()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[1]/c:numFmt", "formatCode", "0.000%");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[2]/c:numFmt", "formatCode", "0.000%");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[3]/c:numFmt", "formatCode", "0.000%");
+}
+
+void Chart2ExportTest::testTdf115012()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf115012.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart","Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // workaround: use-zero instead of leave-gap to show the original line chart
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:dispBlanksAs", "val", "zero");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
