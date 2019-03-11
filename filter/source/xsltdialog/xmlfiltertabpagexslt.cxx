@@ -90,14 +90,14 @@ void XMLFilterTabPageXSLT::SetURL( URLBox& rURLBox, const OUString& rURL )
         osl::FileBase::getSystemPathFromFileURL( rURL, aPath );
 
         rURLBox.SetBaseURL( rURL );
-        rURLBox.SetText( aPath );
+        rURLBox.set_entry_text( aPath );
     }
     else if( rURL.matchIgnoreAsciiCase( "http://" ) ||
              rURL.matchIgnoreAsciiCase( "https://" ) ||
              rURL.matchIgnoreAsciiCase( "ftp://" ) )
     {
         rURLBox.SetBaseURL( rURL );
-        rURLBox.SetText( rURL );
+        rURLBox.set_entry_text( rURL );
     }
     else if( !rURL.isEmpty() )
     {
@@ -106,12 +106,12 @@ void XMLFilterTabPageXSLT::SetURL( URLBox& rURLBox, const OUString& rURL )
         osl::FileBase::getSystemPathFromFileURL( aURL, aPath );
 
         rURLBox.SetBaseURL( aURL );
-        rURLBox.SetText( aPath );
+        rURLBox.set_entry_text( aPath );
     }
     else
     {
         rURLBox.SetBaseURL( sInstPath );
-        rURLBox.SetText( "" );
+        rURLBox.set_entry_text( "" );
     }
 }
 

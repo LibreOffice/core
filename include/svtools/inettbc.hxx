@@ -100,7 +100,10 @@ class SVT_DLLPUBLIC URLBox
     OUString                        aBaseURL;
     rtl::Reference< MatchContext_Impl > pCtx;
     std::unique_ptr<SvtURLBox_Impl> pImpl;
+    INetProtocol                    eSmartProtocol;
     bool                            bHistoryDisabled    : 1;
+
+    Link<weld::ComboBox&, void>     aChangeHdl;
 
     std::unique_ptr<weld::ComboBox> m_xWidget;
 
@@ -115,21 +118,26 @@ public:
     URLBox(std::unique_ptr<weld::ComboBox> pWidget);
     ~URLBox();
 
-    void                            SetText(const OUString& rStr) { m_xWidget->set_entry_text(rStr); }
+    void                            set_entry_text(const OUString& rStr) { m_xWidget->set_entry_text(rStr); }
     void                            Clear() { m_xWidget->clear(); }
     void connect_entry_activate(const Link<weld::ComboBox&, bool>& rLink) { m_xWidget->connect_entry_activate(rLink); }
-    void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xWidget->connect_changed(rLink); }
+    void connect_changed(const Link<weld::ComboBox&, void>& rLink) { aChangeHdl = rLink; }
     void                            append_text(const OUString& rStr) { m_xWidget->append_text(rStr); }
     OUString                        get_active_text() const { return m_xWidget->get_active_text(); }
+    void                            grab_focus() { m_xWidget->grab_focus(); }
     void                            EnableAutocomplete() { m_xWidget->set_entry_completion(true); }
 
     void                            SetBaseURL( const OUString& rURL );
+    void                            SetSmartProtocol( INetProtocol eProt );
+    INetProtocol                    GetSmartProtocol() const { return eSmartProtocol; }
     OUString                        GetURL();
     void                            DisableHistory();
 
     weld::Widget*                   getWidget() { return m_xWidget.get(); }
 
     static OUString                 ParseSmart( const OUString& aText, const OUString& aBaseURL );
+
+    void                            SetFilter(const OUString& _sFilter);
 };
 
 #endif
