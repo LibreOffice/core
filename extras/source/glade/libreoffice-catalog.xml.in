@@ -189,9 +189,6 @@
     <glade-widget-class title="Table Preview" name="swuilo-AutoFmtPreview"
                         generic-name="Table Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Calc Table Preview" name="sclo-ScAutoFmtPreview"
-                        generic-name="Calc Table Preview Window" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Extension List" name="deploymentgui-ExtensionBox"
                         generic-name="Extensions List" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

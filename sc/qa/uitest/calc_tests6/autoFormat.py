@@ -32,9 +32,8 @@ class autoFormat(UITestCase):
         alignmentcb = xDialog.getChild("alignmentcb")
         autofitcb = xDialog.getChild("autofitcb")
 
-        props = {"TEXT": "Financial"}
-        actionProps = mkPropertyValues(props)
-        formatlb.executeAction("SELECT", actionProps)
+        entry = formatlb.getChild("7") #Financial
+        entry.executeAction("SELECT", tuple())
         numformatcb.executeAction("CLICK", tuple())
         bordercb.executeAction("CLICK", tuple())
         fontcb.executeAction("CLICK", tuple())
@@ -57,9 +56,8 @@ class autoFormat(UITestCase):
         alignmentcb = xDialog.getChild("alignmentcb")
         autofitcb = xDialog.getChild("autofitcb")
 
-        props = {"TEXT": "Financial"}
-        actionProps = mkPropertyValues(props)
-        formatlb.executeAction("SELECT", actionProps)
+        entry = formatlb.getChild("7") #Financial
+        entry.executeAction("SELECT", tuple())
         self.assertEqual(get_state_as_dict(numformatcb)["Selected"], "false")
         self.assertEqual(get_state_as_dict(bordercb)["Selected"], "false")
         self.assertEqual(get_state_as_dict(fontcb)["Selected"], "false")
