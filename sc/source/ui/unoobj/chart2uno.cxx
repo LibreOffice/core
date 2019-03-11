@@ -2894,6 +2894,14 @@ uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
         {
             if (rItem.mbIsValue)
                 *pArr <<= rItem.mfValue;
+            else if (rItem.maString.isEmpty())
+            {
+                ScRefCellValue aCell(*m_pDocument, rItem.mAddress);
+                if (aCell.isEmpty())
+                   *pArr = uno::Any();
+                else
+                   *pArr <<= rItem.maString;
+            }
             else
                 *pArr <<= rItem.maString;
             ++pArr;
