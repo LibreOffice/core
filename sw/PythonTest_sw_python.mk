@@ -16,34 +16,35 @@ $(eval $(call gb_PythonTest_set_defs,sw_python,\
 $(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
 	check_bookmarks \
 	check_change_color \
-	check_index \
-	check_flies \
-	check_fields \
-	check_xcloseable \
 	check_cross_references \
-	check_named_property_values \
+	check_fields \
+	check_flies \
+	check_index \
 	check_indexed_property_values \
+	check_named_property_values \
 	check_styles \
-	check_xtexttable \
 	check_table \
 	check_xautotextcontainer \
 	check_xautotextgroup \
-	check_xmodifiable2 \
+	check_xcloseable \
 	check_xmodel \
+	check_xmodifiable2 \
 	check_xnamedgraph \
 	check_xrefreshable \
+	check_xsortable \
 	check_xtextrangecompare \
+	check_xtexttable \
 	get_expression \
 	set_expression \
 	text_portion_enumeration_test \
 	var_fields \
-	xscriptprovider \
-	xtextfieldssupplier \
 	xcontrolshape \
-	xtextcontent \
-	xtextrange \
+	xscriptprovider \
 	xtext \
+	xtextcontent \
 	xtextcursor \
+	xtextfieldssupplier \
+	xtextrange \
 ))
 
 # vim: set noet sw=4 ts=4:
