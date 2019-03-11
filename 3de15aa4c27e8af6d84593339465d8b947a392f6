@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_f8fe0ead",
+        "filename": "compilerplugins/clang/dyncastvisibility.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-03-11T10:58:26Z",
+      "side": 1,
+      "message": "this",
+      "revId": "3de15aa4c27e8af6d84593339465d8b947a392f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_982d8248",
+        "filename": "compilerplugins/clang/simplifyconstruct.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-03-11T10:58:26Z",
+      "side": 1,
+      "message": "and these are why these are not FilteringPlugin derived",
+      "revId": "3de15aa4c27e8af6d84593339465d8b947a392f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_b832c6a6",
+        "filename": "compilerplugins/clang/stringstatic.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-03-11T10:58:26Z",
+      "side": 1,
+      "message": "this one looks ok",
+      "revId": "3de15aa4c27e8af6d84593339465d8b947a392f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_5827fa65",
+        "filename": "compilerplugins/clang/weakobject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-03-11T10:58:26Z",
+      "side": 1,
+      "message": "this one is also ok",
+      "revId": "3de15aa4c27e8af6d84593339465d8b947a392f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
