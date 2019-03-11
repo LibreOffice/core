@@ -70,6 +70,24 @@
       "revId": "58bd0d324a1f5fa20b67ffe16d6c7bda23d264a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_18941244",
+        "filename": "dbaccess/source/filter/xml/xmlExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-03-11T11:21:33Z",
+      "side": 1,
+      "message": "It it returned true, then it will put relevant entry to aProperties \u003d xSettingsInfo-\u003egetProperties() below; and since in this case aSuppressVersionClFromDS will be unset, it would perform usual read from xDataSourceSettings-\u003egetPropertyValue(pProperties-\u003eName)",
+      "parentUuid": "ff82abbf_98a022a8",
+      "revId": "58bd0d324a1f5fa20b67ffe16d6c7bda23d264a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
