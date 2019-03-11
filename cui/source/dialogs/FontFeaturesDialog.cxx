@@ -76,7 +76,7 @@ void FontFeaturesDialog::initialize()
 void FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFeatures)
 {
     vcl::font::FeatureParser aParser(m_sFontName);
-    std::unordered_map<sal_uInt32, sal_uInt32> aExistingFeatures = aParser.getFeaturesMap();
+    auto aExistingFeatures = aParser.getFeaturesMap();
 
     sal_Int32 i = 0;
     for (vcl::font::Feature const& rFontFeature : rFontFeatures)
@@ -91,7 +91,7 @@ void FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFe
 
         m_aFeatureItems.emplace_back(m_xContentGrid.get());
 
-        sal_uInt32 nValue = 0;
+        uint32_t nValue = 0;
         if (aExistingFeatures.find(nFontFeatureCode) != aExistingFeatures.end())
             nValue = aExistingFeatures.at(nFontFeatureCode);
 
