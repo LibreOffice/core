@@ -22,6 +22,98 @@
       "revId": "139ca9374d375e27e802ccfef7eccfaa7008dca0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_b8996620",
+        "filename": "sw/qa/python/check_xsortable.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002061
+      },
+      "writtenOn": "2019-03-11T15:13:40Z",
+      "side": 1,
+      "message": "Is this a good idea? I think that doing this would make the test run a bit faster, but I have no experience with python :)",
+      "range": {
+        "startLine": 27,
+        "startChar": 8,
+        "endLine": 32,
+        "endChar": 79
+      },
+      "revId": "139ca9374d375e27e802ccfef7eccfaa7008dca0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_d891caf3",
+        "filename": "sw/qa/python/check_xsortable.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1002061
+      },
+      "writtenOn": "2019-03-11T15:13:40Z",
+      "side": 1,
+      "message": "Isn\u0027t there a better way to access \"SortFields\" ?",
+      "range": {
+        "startLine": 53,
+        "startChar": 12,
+        "endLine": 53,
+        "endChar": 51
+      },
+      "revId": "139ca9374d375e27e802ccfef7eccfaa7008dca0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_9894a2ea",
+        "filename": "sw/qa/python/check_xsortable.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1002061
+      },
+      "writtenOn": "2019-03-11T15:13:40Z",
+      "side": 1,
+      "message": "This is almost the same as in the original test, but without first and last line breaks (to simplify the checkSortXTextCursor() function). Wouldn\u0027t it be better to do just xDoc.Text.setString(\u00274\\nb\\n3\\na\\n23\\nab\u0027) ?",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 56
+      },
+      "revId": "139ca9374d375e27e802ccfef7eccfaa7008dca0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_589e1a08",
+        "filename": "sw/qa/python/check_xsortable.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1002061
+      },
+      "writtenOn": "2019-03-11T15:13:40Z",
+      "side": 1,
+      "message": "Here, instead of modifying the sort descriptor as in the original test, I create a new one only with what\u0027s necessary",
+      "range": {
+        "startLine": 210,
+        "startChar": 4,
+        "endLine": 232,
+        "endChar": 29
+      },
+      "revId": "139ca9374d375e27e802ccfef7eccfaa7008dca0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
