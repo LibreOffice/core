@@ -280,6 +280,17 @@ void ODBExport::exportDataSource()
         OSL_VERIFY( xProp->getPropertyValue( PROPERTY_SETTINGS ) >>= xDataSourceSettings );
         Reference< XPropertyState > xSettingsState( xDataSourceSettings, UNO_QUERY_THROW );
         Reference< XPropertySetInfo > xSettingsInfo( xDataSourceSettings->getPropertySetInfo(), UNO_SET_THROW );
+        boost::optional<Any> aSuppressVersionClFromDS;
+        if (!xSettingsInfo->hasPropertyByName(PROPERTY_SUPPRESSVERSIONCL))
+        {
+            // Don't try to get XPropertySetInfo from xProp, simply wrap the attempt into try block
+            try
+            {
+                aSuppressVersionClFromDS = xProp->getPropertyValue(PROPERTY_SUPPRESSVERSIONCL);
+            }
+            catch (const UnknownPropertyException&)
+            { }
+        }
 
         TDelimiter aDelimiter;
         xSettingsState->getPropertyDefault( INFO_TEXTDELIMITER ) >>= aDelimiter.sText;
@@ -296,12 +307,25 @@ void ODBExport::exportDataSource()
         // loop through the properties, and export only those which are not defaulted
         TSettingsMap aSettingsMap;
         Sequence< Property > aProperties = xSettingsInfo->getProperties();
+        if (aSuppressVersionClFromDS)
+        {
+            // In case when "SuppressVersionColumns" property is only available from data source
+            // itself, not from its "Settings" interface, we add a dummy property to the end of the
+            // sequence. Its members other than Name will not be used anyway.
+            const sal_Int32 nNewPos = aProperties.getLength();
+            aProperties.realloc(nNewPos + 1);
+            aProperties[nNewPos] = Property(PROPERTY_SUPPRESSVERSIONCL, -1, Type(), 0);
+        }
         const Property* pProperties = aProperties.getConstArray();
         const Property* pPropertiesEnd = pProperties + aProperties.getLength();
         for ( ; pProperties != pPropertiesEnd; ++pProperties )
         {
             OUString sValue;
-            Any aValue = xDataSourceSettings->getPropertyValue( pProperties->Name );
+            Any aValue;
+            if (aSuppressVersionClFromDS && pProperties->Name == PROPERTY_SUPPRESSVERSIONCL)
+                aValue = *aSuppressVersionClFromDS;
+            else
+                aValue = xDataSourceSettings->getPropertyValue(pProperties->Name);
             switch ( aValue.getValueTypeClass() )
             {
                 case TypeClass_STRING:
