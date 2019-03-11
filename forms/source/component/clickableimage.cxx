@@ -298,7 +298,7 @@ namespace frm
                     OUString aTargetFrame;
                     xSet->getPropertyValue(PROPERTY_TARGET_FRAME) >>= aTargetFrame;
 
-                    Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY)->queryDispatch( aURL, aTargetFrame,
+                    Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY_THROW)->queryDispatch( aURL, aTargetFrame,
                             FrameSearchFlag::SELF | FrameSearchFlag::PARENT |
                             FrameSearchFlag::SIBLINGS | FrameSearchFlag::CREATE );
 
@@ -314,7 +314,7 @@ namespace frm
                 {
                     URL aHyperLink = m_pFeatureInterception->getTransformer().getStrictURLFromAscii( ".uno:OpenHyperlink" );
 
-                    Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY)->queryDispatch(aHyperLink, OUString() , 0);
+                    Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY_THROW)->queryDispatch(aHyperLink, OUString() , 0);
 
                     if ( xDisp.is() )
                     {

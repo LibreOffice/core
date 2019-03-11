@@ -1954,7 +1954,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
 
         xParent->getPropertyValue("InteropGrabBag") >>= grabBag;
 
-        entryName = uno::Reference<embed::XEmbedPersist>(xObj, uno::UNO_QUERY)->getEntryName();
+        entryName = uno::Reference<embed::XEmbedPersist>(xObj, uno::UNO_QUERY_THROW)->getEntryName();
     }
     catch (uno::Exception const& e)
     {

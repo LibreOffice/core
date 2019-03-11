@@ -352,7 +352,7 @@ namespace frm
             case FormComponentType::RADIOBUTTON:
             {
                 if ( rEvent.Selected == TRISTATE_TRUE )
-                    aText.append( ::comphelper::getString( Reference< XPropertySet >( getModel(), UNO_QUERY )->getPropertyValue( PROPERTY_REFVALUE ) ) );
+                    aText.append( ::comphelper::getString( Reference< XPropertySet >( getModel(), UNO_QUERY_THROW )->getPropertyValue( PROPERTY_REFVALUE ) ) );
             }
             break;
         }
@@ -598,7 +598,7 @@ namespace frm
                 Reference< XVclWindowPeer >  xVclWindow( getPeer(), UNO_QUERY );
                 if (xVclWindow.is())
                 {
-                    OUString aRefText = ::comphelper::getString(css::uno::Reference< XPropertySet > (getModel(), UNO_QUERY)->getPropertyValue(PROPERTY_REFVALUE));
+                    OUString aRefText = ::comphelper::getString(css::uno::Reference< XPropertySet > (getModel(), UNO_QUERY_THROW)->getPropertyValue(PROPERTY_REFVALUE));
                     Any aValue;
                     if (aText == aRefText)
                         aValue <<= sal_Int32(TRISTATE_TRUE);

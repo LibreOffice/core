@@ -501,7 +501,7 @@ void OFlatTable::refreshColumns()
     aVector.reserve(m_aColumns->get().size());
 
     for (auto const& column : m_aColumns->get())
-        aVector.push_back(Reference< XNamed>(column,UNO_QUERY)->getName());
+        aVector.push_back(Reference< XNamed>(column,UNO_QUERY_THROW)->getName());
 
     if(m_xColumns)
         m_xColumns->reFill(aVector);

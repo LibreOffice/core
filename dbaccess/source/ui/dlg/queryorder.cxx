@@ -196,7 +196,7 @@ OUString DlgOrderCrit::GetOrderList( ) const
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
     OUString sQuote  = xMetaData.is() ? xMetaData->getIdentifierQuoteString() : OUString();
 
-    Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryComposer,UNO_QUERY)->getColumns();
+    Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryComposer,UNO_QUERY_THROW)->getColumns();
 
     OUStringBuffer sOrder;
     for( sal_uInt16 i=0 ; i<DOG_ROWS; i++ )

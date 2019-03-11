@@ -641,7 +641,7 @@ void ODbaseTable::refreshColumns()
     aVector.reserve(m_aColumns->get().size());
 
     for (auto const& column : m_aColumns->get())
-        aVector.push_back(Reference< XNamed>(column,UNO_QUERY)->getName());
+        aVector.push_back(Reference< XNamed>(column,UNO_QUERY_THROW)->getName());
 
     if(m_xColumns)
         m_xColumns->reFill(aVector);
@@ -1605,7 +1605,7 @@ Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(sal_Int32 _nColumnPos)
             xIndex.set(m_xIndexes->getByIndex(i), css::uno::UNO_QUERY);
             if(xIndex.is() && getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))
             {
-                Reference<XNameAccess> xCols(Reference<XColumnsSupplier>(xIndex,UNO_QUERY)->getColumns());
+                Reference<XNameAccess> xCols(Reference<XColumnsSupplier>(xIndex,UNO_QUERY_THROW)->getColumns());
                 if(xCols->hasByName(sColName))
                     return xIndex;
 

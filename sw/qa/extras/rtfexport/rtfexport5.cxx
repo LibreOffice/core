@@ -206,9 +206,9 @@ DECLARE_RTFEXPORT_TEST(testFdo66040, "fdo66040.rtf")
     uno::Reference<text::XTextRange> xTextRange(xDraws->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextRange->getText();
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2, xText), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(
-        OUString("A"),
-        uno::Reference<text::XTextRange>(xTable->getCellByName("A1"), uno::UNO_QUERY)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("A"), uno::Reference<text::XTextRange>(
+                                            xTable->getCellByName("A1"), uno::UNO_QUERY_THROW)
+                                            ->getString());
 
     // Make sure the second shape has the correct position and size.
     uno::Reference<drawing::XShape> xShape(xDraws->getByIndex(1), uno::UNO_QUERY);
@@ -401,8 +401,9 @@ DECLARE_RTFEXPORT_TEST(testFooterPara, "footer-para.rtf")
     uno::Reference<text::XText> xFooterText = getProperty<uno::Reference<text::XText>>(
         getStyles("PageStyles")->getByName("First Page"), "FooterText");
     uno::Reference<text::XTextContent> xParagraph = getParagraphOrTable(1, xFooterText);
-    CPPUNIT_ASSERT_EQUAL(OUString("All Rights Reserved."),
-                         uno::Reference<text::XTextRange>(xParagraph, uno::UNO_QUERY)->getString());
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("All Rights Reserved."),
+        uno::Reference<text::XTextRange>(xParagraph, uno::UNO_QUERY_THROW)->getString());
     CPPUNIT_ASSERT_EQUAL(
         sal_Int16(style::ParagraphAdjust_CENTER),
         getProperty</*style::ParagraphAdjust*/ sal_Int16>(xParagraph, "ParaAdjust"));

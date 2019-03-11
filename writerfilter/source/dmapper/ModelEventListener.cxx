@@ -56,8 +56,8 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent )
         try
         {
             //remove listener
-            uno::Reference<document::XEventBroadcaster>(rEvent.Source, uno::UNO_QUERY )->removeEventListener(
-            uno::Reference<document::XEventListener>(this));
+            uno::Reference<document::XEventBroadcaster>(rEvent.Source, uno::UNO_QUERY_THROW )->removeEventListener(
+                uno::Reference<document::XEventListener>(this));
 
             // If we have PAGEREF fields, update fields as well.
             uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(rEvent.Source, uno::UNO_QUERY);
@@ -107,7 +107,7 @@ void ModelEventListener::disposing( const lang::EventObject& rEvent )
 {
     try
     {
-        uno::Reference<document::XEventBroadcaster>(rEvent.Source, uno::UNO_QUERY )->removeEventListener(
+        uno::Reference<document::XEventBroadcaster>(rEvent.Source, uno::UNO_QUERY_THROW )->removeEventListener(
             uno::Reference<document::XEventListener>(this));
     }
     catch( const uno::Exception& )

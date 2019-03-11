@@ -1156,7 +1156,7 @@ void FormController::disposing()
             }
         }
 
-        Reference< XComponent > (rpChild, UNO_QUERY)->dispose();
+        Reference< XComponent > (rpChild, UNO_QUERY_THROW)->dispose();
     }
     m_aChildren.clear();
 
