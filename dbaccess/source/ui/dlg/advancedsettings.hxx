@@ -59,6 +59,8 @@ namespace dbaui
         std::unique_ptr<weld::Label> m_xMaxRowScanLabel;
         std::unique_ptr<weld::SpinButton> m_xMaxRowScan;
 
+        std::map<weld::ToggleButton*, TriState> m_aTriStates;
+
         BooleanSettingDescs m_aBooleanSettings;
 
         bool                m_bHasBooleanComparisonMode;
@@ -66,6 +68,7 @@ namespace dbaui
 
     public:
         DECL_LINK(OnToggleHdl, weld::ToggleButton&, void);
+        DECL_LINK(OnTriStateToggleHdl, weld::ToggleButton&, void);
 
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
 
