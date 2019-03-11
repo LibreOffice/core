@@ -138,9 +138,18 @@ gb_LinkTarget_LDFLAGS += -fstack-protector-strong
 endif
 
 ifeq ($(ENABLE_PCH),TRUE)
-ifneq ($(COM_IS_CLANG),TRUE)
+ifeq ($(COM_IS_CLANG),TRUE)
+# Clang by default includes in the PCH timestamps of the files it was
+# generated from, which would make the PCH be a "new" file for ccache
+# even if the file has not actually changed. Disabling the timestamp
+# prevents this at the cost of risking using an outdated PCH (which
+# should be unlikely, given that gbuild has dependencies set up
+# for our includes and system includes are unlikely to change).
+gb_NO_PCH_TIMESTAMP := -Xclang -fno-pch-timestamp
+else
 gb_CFLAGS_COMMON += -fpch-preprocess -Winvalid-pch
 gb_CXXFLAGS_COMMON += -fpch-preprocess -Winvalid-pch
+gb_NO_PCH_TIMESTAMP :=
 endif
 endif
 

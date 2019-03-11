@@ -98,6 +98,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(gb_COMPILERDEPFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
+		$(gb_NO_PCH_TIMESTAMP) \
 		$(6) \
 		$(call gb_cxx_dep_generation_options,$(1),$(call gb_PrecompiledHeader_get_dep_target_tmp,$(2),$(7))) \
 		-c $(patsubst %.cxx,%.hxx,$(3)) \
