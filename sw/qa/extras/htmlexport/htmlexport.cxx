@@ -674,6 +674,22 @@ DECLARE_HTMLEXPORT_TEST(testNoLangReqIf, "reqif-no-lang.odt")
     assertXPathNoAttribute(pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:h1", "lang");
 }
 
+DECLARE_HTMLEXPORT_TEST(testFieldShade, "field-shade.odt")
+{
+    htmlDocPtr pDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 1; Actual:
+    // 0', i.e. shading for the field was lost.
+    assertXPath(pDoc, "/html/body/p[1]/span", "style", "background: #c0c0c0");
+
+    // Check that field shading is written only in case there is no user-defined span background.
+    assertXPath(pDoc, "/html/body/p[2]/span", "style", "background: #ff0000");
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 0; Actual:
+    // 1', i.e there was an inner span hiding the wanted background color.
+    assertXPath(pDoc, "/html/body/p[2]/span/span", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

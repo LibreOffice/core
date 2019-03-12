@@ -22,6 +22,7 @@
 #include <memory>
 #include <vector>
 #include <set>
+#include <map>
 
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/form/XForm.hpp>
@@ -397,6 +398,9 @@ public:
     bool m_bCfgPrintLayout : 1;       // PrintLayout option for TOC dot leaders
     bool m_bParaDotLeaders : 1;       // for TOC dot leaders
     // 25
+
+    /// Tracks which text portion attributes are currently open: a which id -> open count map.
+    std::map<sal_uInt16, int> maStartedAttributes;
 
     explicit SwHTMLWriter( const OUString& rBaseURL );
     virtual ~SwHTMLWriter() override;
