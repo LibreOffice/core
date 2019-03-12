@@ -128,7 +128,9 @@ private:
     SvNumFormatType nFormatType      : 16;
     ScFormulaResult aResult;
     formula::FormulaGrammar::Grammar  eTempGrammar;   // used between string (creation) and (re)compilation
-    ScTokenArray*   pCode;              // The (new) token array
+    // If this cell is in a cell group (mxGroup!=nullptr), then this pCode is a not-owning pointer
+    // to the mxGroup's mpCode, which owns the array. If the cell is not in a group, this is an owning pointer.
+    ScTokenArray*   pCode;              // The token array
     ScDocument*     pDocument;
     ScFormulaCell*  pPrevious;
     ScFormulaCell*  pNext;

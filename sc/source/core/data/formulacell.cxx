@@ -1124,6 +1124,7 @@ void ScFormulaCell::Compile( const OUString& rFormula, bool bNoListening,
     ScTokenArray* pCodeOld = pCode;
     ScCompiler aComp( pDocument, aPos, eGrammar);
     pCode = aComp.CompileString( rFormula ).release();
+    assert(!mxGroup);
     delete pCodeOld;
     if( pCode->GetCodeError() == FormulaError::NONE )
     {
@@ -1158,6 +1159,7 @@ void ScFormulaCell::Compile(
     ScTokenArray* pCodeOld = pCode;
     ScCompiler aComp(rCxt, aPos);
     pCode = aComp.CompileString( rFormula ).release();
+    assert(!mxGroup);
     delete pCodeOld;
     if( pCode->GetCodeError() == FormulaError::NONE )
     {
@@ -1334,6 +1336,7 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
     {
         ScTokenArray* pCodeOld = pCode;
         pCode = aComp.CompileString( aFormula, aFormulaNmsp ).release();
+        assert(!mxGroup);
         delete pCodeOld;
 
         if( pCode->GetCodeError() == FormulaError::NONE )
