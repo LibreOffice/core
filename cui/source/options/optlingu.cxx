@@ -1192,6 +1192,11 @@ void SvxLinguTabPage::UpdateDicBox_Impl()
     }
 
     m_xLinguDicsCLB->thaw();
+    if (m_xLinguDicsCLB->n_children())
+    {
+        m_xLinguDicsCLB->select(0);
+        SelectHdl_Impl(*m_xLinguDicsCLB);
+    }
 }
 
 void SvxLinguTabPage::UpdateModulesBox_Impl()
@@ -1210,6 +1215,11 @@ void SvxLinguTabPage::UpdateModulesBox_Impl()
             m_xLinguModulesCLB->set_id(i, OUString::number(reinterpret_cast<sal_Int64>(&rInfo)));
             m_xLinguModulesCLB->set_toggle(i, rInfo.bConfigured, 0);
             m_xLinguModulesCLB->set_text(i, rInfo.sDisplayName, 1);
+        }
+        if (nDispSrvcCount)
+        {
+            m_xLinguModulesCLB->select(0);
+            SelectHdl_Impl(*m_xLinguModulesCLB);
         }
         m_xLinguModulesEditPB->set_sensitive( nDispSrvcCount > 0 );
     }
@@ -1339,6 +1349,9 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
 
     m_xLinguOptionsCLB->thaw();
+
+    m_xLinguOptionsCLB->select(0);
+    SelectHdl_Impl(*m_xLinguOptionsCLB);
 
     m_xLinguModulesCLB->set_size_request(m_xLinguModulesCLB->get_preferred_size().Width(),
                                          m_xLinguModulesCLB->get_height_rows(3));
