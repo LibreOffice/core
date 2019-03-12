@@ -192,7 +192,7 @@ void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColum
             if (bBoolean)
             {
                 // Check if this formula cell is a boolean cell, and if so, go ahead and paste it.
-                ScTokenArray* pCode = rSrcCell.mpFormula->GetCode();
+                const ScTokenArray* pCode = rSrcCell.mpFormula->GetCode();
                 if (pCode && pCode->GetLen() == 1)
                 {
                     const formula::FormulaToken* p = pCode->FirstToken();
