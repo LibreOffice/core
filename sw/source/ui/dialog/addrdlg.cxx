@@ -18,19 +18,19 @@
  */
 
 #include <addrdlg.hxx>
-#include <svx/svxdlg.hxx>
 #include <sfx2/pageids.hxx>
-#include <vcl/layout.hxx>
+#include <svx/svxdlg.hxx>
 
-SwAddrDlg::SwAddrDlg(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxSingleTabDialog(pParent, rSet)
+SwAddrDlg::SwAddrDlg(weld::Window* pParent, const SfxItemSet& rSet)
+    : SfxSingleTabDialogController(pParent, rSet)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SFXPAGE_GENERAL );
     if ( fnCreatePage )
     {
-        VclPtr<SfxTabPage> pPage2 = (*fnCreatePage)(TabPageParent(get_content_area()), &rSet);
-        SetTabPage(pPage2);
+        // create TabPage
+        TabPageParent aParent(get_content_area(), this);
+        SetTabPage(fnCreatePage(aParent, &rSet));
     }
 }
 

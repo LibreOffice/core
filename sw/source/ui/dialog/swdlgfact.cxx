@@ -749,11 +749,10 @@ VclPtr<AbstractSwInsertAbstractDlg> SwAbstractDialogFactory_Impl::CreateSwInsert
     return VclPtr<AbstractSwInsertAbstractDlg_Impl>::Create(std::make_unique<SwInsertAbstractDlg>(pParent));
 }
 
-VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwAddressAbstractDlg(vcl::Window* pParent,
+VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwAddressAbstractDlg(weld::Window* pParent,
                                                                   const SfxItemSet& rSet)
 {
-    VclPtr<SfxModalDialog> pDlg = VclPtr<SwAddrDlg>::Create( pParent, rSet );
-    return VclPtr<SwAbstractSfxDialog_Impl>::Create(pDlg);
+    return VclPtr<SwAbstractSfxController_Impl>::Create(std::make_unique<SwAddrDlg>(pParent, rSet));
 }
 
 VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwDropCapsDialog(weld::Window* pParent,
