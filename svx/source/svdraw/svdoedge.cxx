@@ -266,7 +266,7 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
 {
     const SfxItemSet& rSet = GetObjectItemSet();
     SdrEdgeKind eKind = rSet.Get(SDRATTR_EDGEKIND).GetValue();
-    sal_Int32 nValAnz = rSet.Get(SDRATTR_EDGELINEDELTACOUNT).GetValue();
+    sal_Int32 nValCnt = rSet.Get(SDRATTR_EDGELINEDELTACOUNT).GetValue();
     sal_Int32 nVal1 = rSet.Get(SDRATTR_EDGELINE1DELTA).GetValue();
     sal_Int32 nVal2 = rSet.Get(SDRATTR_EDGELINE2DELTA).GetValue();
     sal_Int32 nVal3 = rSet.Get(SDRATTR_EDGELINE3DELTA).GetValue();
@@ -315,10 +315,10 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
         nVals[1] = bHor2 ? aEdgeInfo.aObj2Line2.X() : aEdgeInfo.aObj2Line2.Y();
     }
 
-    if(n != nValAnz || nVals[0] != nVal1 || nVals[1] != nVal2 || nVals[2] != nVal3)
+    if(n != nValCnt || nVals[0] != nVal1 || nVals[1] != nVal2 || nVals[2] != nVal3)
     {
         // Here no more notifying is necessary, just local changes are OK.
-        if(n != nValAnz)
+        if(n != nValCnt)
         {
             GetProperties().SetObjectItemDirect(SdrEdgeLineDeltaCountItem(n));
         }
@@ -501,17 +501,17 @@ bool SdrEdgeObj::CheckNodeConnection(bool bTail1) const
     if(nullptr != rCon.pObj && rCon.pObj->getSdrPageFromSdrObject() == getSdrPageFromSdrObject() && 0 != nPointCount)
     {
         const SdrGluePointList* pGPL=rCon.pObj->GetGluePointList();
-        sal_uInt16 nConAnz=pGPL==nullptr ? 0 : pGPL->GetCount();
-        sal_uInt16 nGesAnz=nConAnz+8;
+        sal_uInt16 nGluePointCnt=pGPL==nullptr ? 0 : pGPL->GetCount();
+        sal_uInt16 nGesAnz=nGluePointCnt+8;
         Point aTail(bTail1 ? (*pEdgeTrack)[0] : (*pEdgeTrack)[sal_uInt16(nPointCount-1)]);
         for (sal_uInt16 i=0; i<nGesAnz && !bRet; i++) {
-            if (i<nConAnz) { // UserDefined
+            if (i<nGluePointCnt) { // UserDefined
                 bRet=aTail==(*pGPL)[i].GetAbsolutePos(*rCon.pObj);
-            } else if (i<nConAnz+4) { // Vertex
-                SdrGluePoint aPt(rCon.pObj->GetVertexGluePoint(i-nConAnz));
+            } else if (i<nGluePointCnt+4) { // Vertex
+                SdrGluePoint aPt(rCon.pObj->GetVertexGluePoint(i-nGluePointCnt));
                 bRet=aTail==aPt.GetAbsolutePos(*rCon.pObj);
             } else {                  // Corner
-                SdrGluePoint aPt(rCon.pObj->GetCornerGluePoint(i-nConAnz-4));
+                SdrGluePoint aPt(rCon.pObj->GetCornerGluePoint(i-nGluePointCnt-4));
                 bRet=aTail==aPt.GetAbsolutePos(*rCon.pObj);
             }
         }
@@ -2173,16 +2173,16 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                 // After those come Vertex, Corner and center (Best), all prioritized equally.
                 // Finally, a HitTest for the object.
                 const SdrGluePointList* pGPL=pObj->GetGluePointList();
-                sal_uInt16 nConAnz=pGPL==nullptr ? 0 : pGPL->GetCount();
-                sal_uInt16 nGesAnz=nConAnz+9;
+                sal_uInt16 nGluePointCnt=pGPL==nullptr ? 0 : pGPL->GetCount();
+                sal_uInt16 nGesAnz=nGluePointCnt+9;
                 bool bUserFnd = false;
                 sal_uIntPtr nBestDist=0xFFFFFFFF;
                 for (sal_uInt16 i=0; i<nGesAnz; i++)
                 {
-                    bool bUser=i<nConAnz;
-                    bool bVertex=i>=nConAnz+0 && i<nConAnz+4;
-                    bool bCorner=i>=nConAnz+4 && i<nConAnz+8;
-                    bool bCenter=i==nConAnz+8;
+                    bool bUser=i<nGluePointCnt;
+                    bool bVertex=i>=nGluePointCnt+0 && i<nGluePointCnt+4;
+                    bool bCorner=i>=nGluePointCnt+4 && i<nGluePointCnt+8;
+                    bool bCenter=i==nGluePointCnt+8;
                     bool bOk = false;
                     Point aConPos;
                     sal_uInt16 nConNum=i;
@@ -2192,12 +2192,12 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                         nConNum=rGP.GetId();
                         bOk = true;
                     } else if (bVertex && !bUserFnd) {
-                        nConNum=nConNum-nConAnz;
+                        nConNum=nConNum-nGluePointCnt;
                         SdrGluePoint aPt(pObj->GetVertexGluePoint(nConNum));
                         aConPos=aPt.GetAbsolutePos(*pObj);
                         bOk = true;
                     } else if (bCorner && !bUserFnd) {
-                        nConNum-=nConAnz+4;
+                        nConNum-=nGluePointCnt+4;
                         i+=3;
                     }
                     else if (bCenter && !bUserFnd && !bEdge)

@@ -1085,7 +1085,7 @@ struct PPTStyleTextPropReader
                 PPTCharPropSet& aCharPropSet,
                 const OUString& aString,
                 sal_uInt32& nCharCount,
-                sal_uInt32 nCharAnzRead,
+                sal_uInt32 nCharReadCnt,
                 bool& bTextPropAtom,
                 sal_uInt32 nExtParaPos,
                 const std::vector< StyleTextProp9 >& aStyleTextProp9,

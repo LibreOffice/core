@@ -201,7 +201,7 @@ private:
 
         std::unique_ptr<sal_uInt16[]>   pElement;   // Array with Indices for elements
         std::unique_ptr<E_TYPE[]>       pType;      // ...with Type-Info
-        std::unique_ptr<sal_uInt16[]>   pSize;      // ...with size (Anz. sal_uInt16)
+        std::unique_ptr<sal_uInt16[]>   pSize;      // ...with size
         sal_uInt16                      nElement;
         sal_uInt16                      nElementCurrent;
 

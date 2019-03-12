@@ -410,8 +410,8 @@ bool SdrMarkView::MarkGluePoints(const tools::Rectangle* pRect, bool bUnmark)
             }
         } else {
             if (pGPL!=nullptr) {
-                sal_uInt16 nGPAnz=pGPL->GetCount();
-                for (sal_uInt16 nGPNum=0; nGPNum<nGPAnz; nGPNum++) {
+                sal_uInt16 nGluePointCnt=pGPL->GetCount();
+                for (sal_uInt16 nGPNum=0; nGPNum<nGluePointCnt; nGPNum++) {
                     const SdrGluePoint& rGP=(*pGPL)[nGPNum];
 
                     // #i38892#
