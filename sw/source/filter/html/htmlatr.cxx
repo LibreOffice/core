@@ -1931,6 +1931,7 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
                 pContext = nullptr; // one time only
             }
             Out( aHTMLAttrFnTab, *pPos->GetItem(), rHWrt );
+            rHWrt.maStartedAttributes[pPos->GetItem()->Which()]++;
             rHWrt.m_nCSS1Script = nCSS1Script;
         }
     }
@@ -1981,6 +1982,7 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
             if( !bSkipOut )
             {
                 Out( aHTMLAttrFnTab, *pPos->GetItem(), rHWrt );
+                rHWrt.maStartedAttributes[pPos->GetItem()->Which()]--;
             }
             RemoveItem_( i );
         }
