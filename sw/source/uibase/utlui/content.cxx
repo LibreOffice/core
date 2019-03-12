@@ -1320,6 +1320,7 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
         SwContentType* pType = static_cast<SwContentType*>(pEntry->GetUserData());
         if(ContentTypeId::OUTLINE == pType->GetType())
         {
+            pPop->InsertSeparator();
             pPop->InsertItem(700, m_aContextStrings[IDX_STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY]);
         }
         if ( (pType->GetType() == ContentTypeId::POSTIT) &&  (!m_pActiveShell->GetView().GetDocShell()->IsReadOnly()) && ( pType->GetMemberCount() > 0) )
