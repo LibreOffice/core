@@ -846,7 +846,7 @@ IMPL_STATIC_LINK_NOARG(SfxDialogController, InstallLOKNotifierHdl, void*, vcl::I
 
 SfxSingleTabDialogController::SfxSingleTabDialogController(weld::Widget *pParent, const SfxItemSet& rSet,
     const OUString& rUIXMLDescription, const OString& rID)
-    : SfxDialogController(pParent, rUIXMLDescription, rID)
+    : SfxOkDialogController(pParent, rUIXMLDescription, rID)
     , m_pInputSet(&rSet)
     , m_xContainer(m_xDialog->weld_content_area())
     , m_xOKBtn(m_xBuilder->weld_button("ok"))

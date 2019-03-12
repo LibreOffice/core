@@ -223,7 +223,20 @@ private:
     std::unique_ptr<SingleTabDlgImpl>   pImpl;
 };
 
-class SFX2_DLLPUBLIC SfxSingleTabDialogController : public SfxDialogController
+class SFX2_DLLPUBLIC SfxOkDialogController : public SfxDialogController
+{
+public:
+    SfxOkDialogController(weld::Widget* pParent, const OUString& rUIXMLDescription,
+                          const OString& rID)
+        : SfxDialogController(pParent, rUIXMLDescription, rID)
+    {
+    }
+
+    virtual weld::Button&       GetOKButton() const = 0;
+    virtual const SfxItemSet* GetExampleSet() const = 0;
+};
+
+class SFX2_DLLPUBLIC SfxSingleTabDialogController : public SfxOkDialogController
 {
 private:
     std::unique_ptr<SfxItemSet> m_xOutputSet;
@@ -239,7 +252,9 @@ public:
     virtual             ~SfxSingleTabDialogController() override;
 
     void                SetTabPage(SfxTabPage* pTabPage);
-    weld::Button&       GetOKButton() const { return *m_xOKBtn; }
+
+    virtual weld::Button& GetOKButton() const override { return *m_xOKBtn; }
+    virtual const SfxItemSet* GetExampleSet() const override { return nullptr; }
 
     const SfxItemSet*   GetOutputItemSet() const { return m_xOutputSet.get(); }
     const SfxItemSet*   GetInputItemSet() const { return m_pInputSet; }
