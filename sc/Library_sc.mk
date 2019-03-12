@@ -520,6 +520,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/StatisticsDialogs/ChiSquareTestDialog \
     sc/source/ui/StatisticsDialogs/DescriptiveStatisticsDialog \
     sc/source/ui/StatisticsDialogs/ExponentialSmoothingDialog \
+    sc/source/ui/StatisticsDialogs/FourierAnalysisDialog \
     sc/source/ui/StatisticsDialogs/FTestDialog \
     sc/source/ui/StatisticsDialogs/MatrixComparisonGenerator \
     sc/source/ui/StatisticsDialogs/MovingAverageDialog \

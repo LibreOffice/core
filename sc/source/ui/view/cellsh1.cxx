@@ -1037,7 +1037,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
             }
             break;
+        case SID_FOURIER_ANALYSIS_DIALOG:
+            {
+                sal_uInt16 nId  = ScFourierAnalysisDialogWrapper::GetChildWindowId();
+                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
+
+            }
+            break;
         case SID_SEARCH_RESULTS_DIALOG:
         {
             const SfxPoolItem* pItem = nullptr;
