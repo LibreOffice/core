@@ -1,8 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkTreeStore" id="liststore2">
+    <columns>
+      <!-- column-name check1 -->
+      <column type="gboolean"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name checkvis1 -->
+      <column type="gboolean"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="liststore3">
+    <columns>
+      <!-- column-name check1 -->
+      <column type="gboolean"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name checkvis1 -->
+      <column type="gboolean"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="liststore4">
+    <columns>
+      <!-- column-name check1 -->
+      <column type="gboolean"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name checkvis1 -->
+      <column type="gboolean"/>
+    </columns>
+  </object>
   <object class="GtkGrid" id="OptLinguPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -46,7 +81,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="optlingupage|lingumodulesft">_Available language modules:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">lingumodules:border</property>
+                        <property name="mnemonic_widget">lingumodules</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -55,13 +90,53 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxcorelo-SvxCheckListBox" id="lingumodules:border">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="Check List Box-selection"/>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkTreeView" id="lingumodules">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="model">liststore2</property>
+                            <property name="headers_visible">False</property>
+                            <property name="search_column">1</property>
+                            <property name="show_expanders">False</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <property name="alignment">0.5</property>
+                                <child>
+                                  <object class="GtkCellRendererToggle" id="cellrenderer5"/>
+                                  <attributes>
+                                    <attribute name="visible">3</attribute>
+                                    <attribute name="active">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn5">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer4"/>
+                                  <attributes>
+                                    <attribute name="text">1</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
                         </child>
                       </object>
                       <packing>
@@ -111,7 +186,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="optlingupage|lingudictsft">_User-defined dictionaries:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">lingudicts:border</property>
+                        <property name="mnemonic_widget">lingudicts</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -120,13 +195,53 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxcorelo-SvxCheckListBox" id="lingudicts:border">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="Check List Box-selection1"/>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkTreeView" id="lingudicts">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="model">liststore3</property>
+                            <property name="headers_visible">False</property>
+                            <property name="search_column">1</property>
+                            <property name="show_expanders">False</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn44">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <property name="alignment">0.5</property>
+                                <child>
+                                  <object class="GtkCellRendererToggle" id="cellrenderer55"/>
+                                  <attributes>
+                                    <attribute name="visible">3</attribute>
+                                    <attribute name="active">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn55">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer44"/>
+                                  <attributes>
+                                    <attribute name="text">1</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
                         </child>
                       </object>
                       <packing>
@@ -217,7 +332,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="optlingupage|label4">_Options:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">linguoptions:border</property>
+                        <property name="mnemonic_widget">linguoptions</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -243,13 +358,53 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxcorelo-SvxCheckListBox" id="linguoptions:border">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="Check List Box-selection2"/>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkTreeView" id="linguoptions">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="model">liststore4</property>
+                            <property name="headers_visible">False</property>
+                            <property name="search_column">1</property>
+                            <property name="show_expanders">False</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="Macro Library List-selection3"/>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn444">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <property name="alignment">0.5</property>
+                                <child>
+                                  <object class="GtkCellRendererToggle" id="cellrenderer555"/>
+                                  <attributes>
+                                    <attribute name="visible">3</attribute>
+                                    <attribute name="active">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn555">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer444"/>
+                                  <attributes>
+                                    <attribute name="text">1</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
                         </child>
                       </object>
                       <packing>
