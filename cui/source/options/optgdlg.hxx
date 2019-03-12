@@ -40,35 +40,30 @@ class OfaMiscTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;
 private:
-    VclPtr<CheckBox>     m_pPopUpNoHelpCB;
-    VclPtr<CheckBox>     m_pExtHelpCB;
-
-    VclPtr<FixedImage>   m_pFileDlgROImage;
-    VclPtr<CheckBox>     m_pFileDlgCB;
-
-    VclPtr<CheckBox>     m_pPrintDlgCB;
-
-    VclPtr<CheckBox>     m_pDocStatusCB;
-
-    VclPtr<VclContainer> m_pYearFrame;
-    VclPtr<NumericField> m_pYearValueField;
-    VclPtr<FixedText>    m_pToYearFT;
-
     OUString             m_aStrDateInfo;
 
-    VclPtr<CheckBox>     m_pCollectUsageInfo;
+    std::unique_ptr<weld::CheckButton> m_xExtHelpCB;
+    std::unique_ptr<weld::CheckButton> m_xPopUpNoHelpCB;
+    std::unique_ptr<weld::Widget> m_xFileDlgFrame;
+    std::unique_ptr<weld::Widget> m_xPrintDlgFrame;
+    std::unique_ptr<weld::Widget> m_xFileDlgROImage;
+    std::unique_ptr<weld::CheckButton> m_xFileDlgCB;
+    std::unique_ptr<weld::CheckButton> m_xPrintDlgCB;
+    std::unique_ptr<weld::CheckButton> m_xDocStatusCB;
+    std::unique_ptr<weld::Widget> m_xYearFrame;
+    std::unique_ptr<weld::SpinButton> m_xYearValueField;
+    std::unique_ptr<weld::Label> m_xToYearFT;
+    std::unique_ptr<weld::CheckButton> m_xCollectUsageInfo;
+    std::unique_ptr<weld::Widget> m_xQuickStarterFrame;
+    std::unique_ptr<weld::CheckButton> m_xQuickLaunchCB;
 
-    VclPtr<VclContainer> m_pQuickStarterFrame;
-    VclPtr<CheckBox>     m_pQuickLaunchCB;
-
-    DECL_LINK( TwoFigureHdl, Edit&, void );
+    DECL_LINK(TwoFigureHdl, weld::SpinButton&, void);
 protected:
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    OfaMiscTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    OfaMiscTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~OfaMiscTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 
