@@ -554,7 +554,7 @@ static sal_Bool isHiDPI(struct splash* splash)
     double nDPI;
 
     /*
-     * GNOME currently enables hi-dpi support when the screen resolution is at least 192 dpi
+     * GNOME currently enables HiDPI support when the screen resolution is at least 192 dpi
      * and the screen height (in device pixels) is at least 1200.
      */
 

@@ -2332,7 +2332,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 
 #if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
 
-    // Painting of zoomed or hi-dpi spreadsheets is special, we actually draw everything at 100%,
+    // Painting of zoomed or HiDPI spreadsheets is special, we actually draw everything at 100%,
     // and only set cairo's (or CoreGraphic's, in the iOS case) scale factor accordingly, so that
     // everything is painted bigger or smaller. This is different to what Calc's internal scaling
     // would do - because that one is trying to fit the lines between cells to integer multiples of

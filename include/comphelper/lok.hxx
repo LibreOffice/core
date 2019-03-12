@@ -59,9 +59,9 @@ COMPHELPER_DLLPUBLIC void setTiledPainting(bool bTiledPainting);
 COMPHELPER_DLLPUBLIC bool isDialogPainting();
 /// Set if we are painting the dialog.
 COMPHELPER_DLLPUBLIC void setDialogPainting(bool bDialogPainting);
-/// Set the DPI scale for rendering for hi-dpi displays.  Used also for zoom in Calc.
+/// Set the DPI scale for rendering for HiDPI displays.  Used also for zoom in Calc.
 COMPHELPER_DLLPUBLIC void setDPIScale(double fDPIScale);
-/// Get the DPI scale for rendering for hi-dpi displays.  Used also for zoom in Calc.
+/// Get the DPI scale for rendering for HiDPI displays.  Used also for zoom in Calc.
 COMPHELPER_DLLPUBLIC double getDPIScale();
 /// Set if we want no annotations rendering
 COMPHELPER_DLLPUBLIC void setTiledAnnotations(bool bTiledAnnotations);

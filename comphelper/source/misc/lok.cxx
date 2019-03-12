@@ -38,7 +38,7 @@ static bool g_bLocalRendering(false);
 
 static LanguageTag g_aLanguageTag("en-US", true);
 
-/// Scaling of the cairo or CoreGraphics canvas painting for hi-dpi or zooming in Calc.
+/// Scaling of the cairo or CoreGraphics canvas painting for HiDPI or zooming in Calc.
 static double g_fDPIScale(1.0);
 
 void setActive(bool bActive)

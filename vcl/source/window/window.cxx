@@ -917,7 +917,7 @@ static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
     // insult to an injury, the system is constantly lying to us about
     // the DPI and whatnot
     // eg. fdo#77059 - set the value from which we do consider the
-    // screen hi-dpi to greater than 168
+    // screen HiDPI to greater than 168
     if (nDPI > 216)      // 96 * 2   + 96 / 4
         return 250;
     else if (nDPI > 168) // 96 * 2   - 96 / 4
@@ -1129,7 +1129,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
 
     }
 
-    // setup the scale factor for Hi-DPI displays
+    // setup the scale factor for HiDPI displays
     mnDPIScalePercentage = CountDPIScaleFactor(mpWindowImpl->mpFrameData->mnDPIY);
     mnDPIX = mpWindowImpl->mpFrameData->mnDPIX;
     mnDPIY = mpWindowImpl->mpFrameData->mnDPIY;
@@ -1312,7 +1312,7 @@ void Window::ImplInitResolutionSettings()
         mnDPIX = mpWindowImpl->mpFrameData->mnDPIX;
         mnDPIY = mpWindowImpl->mpFrameData->mnDPIY;
 
-        // setup the scale factor for Hi-DPI displays
+        // setup the scale factor for HiDPI displays
         mnDPIScalePercentage = CountDPIScaleFactor(mpWindowImpl->mpFrameData->mnDPIY);
         const StyleSettings& rStyleSettings = mxSettings->GetStyleSettings();
         SetPointFont(*this, rStyleSettings.GetAppFont());
