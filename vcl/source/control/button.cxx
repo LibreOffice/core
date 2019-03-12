@@ -45,6 +45,7 @@
 #include <o3tl/make_unique.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
+#include <comphelper/lok.hxx>
 
 
 using namespace css;
@@ -1809,6 +1810,16 @@ void HelpButton::Click()
         pFocusWin->RequestHelp( aEvt );
     }
     PushButton::Click();
+}
+
+void HelpButton::StateChanged( StateChangedType nStateChange )
+{
+    // Hide when we have no help URL.
+    if (comphelper::LibreOfficeKit::isActive() &&
+        Application::GetSettings().GetHelpSettings().GetHelpURL().isEmpty())
+        Hide();
+    else
+        PushButton::StateChanged(nStateChange);
 }
 
 void RadioButton::ImplInitRadioButtonData()
