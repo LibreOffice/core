@@ -409,17 +409,19 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             aComp.SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_BREAK );
         }
         OUString aFormula( rString );
-        ScTokenArray* pArr;
+        std::unique_ptr< ScTokenArray > pArr;
         bool bAgain;
         do
         {
             bAgain = false;
             bool bAddEqual = false;
-            ScTokenArray* pArrFirst = pArr = aComp.CompileString( aFormula ).release();
+            pArr = aComp.CompileString( aFormula );
             bool bCorrected = aComp.IsCorrected();
+            std::unique_ptr< ScTokenArray > pArrFirst;
             if ( bCorrected )
             {   // try to parse with first parser-correction
-                pArr = aComp.CompileString( aComp.GetCorrectedFormula() ).release();
+                pArrFirst = std::move( pArr );
+                pArr = aComp.CompileString( aComp.GetCorrectedFormula() );
             }
             if ( pArr->GetCodeError() == FormulaError::NONE )
             {
@@ -454,17 +456,12 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 if ( nResult == RET_YES )
                 {
                     aFormula = aCorrectedFormula;
-                    if ( pArr != pArrFirst )
-                        delete pArrFirst;
                     bAgain = true;
                 }
                 else
                 {
-                    if ( pArr != pArrFirst )
-                    {
-                        delete pArr;
-                        pArr = pArrFirst;
-                    }
+                    if ( pArrFirst )
+                        pArr = std::move( pArrFirst );
                 }
             }
         } while ( bAgain );
@@ -507,8 +504,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             }
         }
 
-        ScFormulaCell aCell(pDoc, aPos, *pArr, formula::FormulaGrammar::GRAM_DEFAULT, ScMatrixMode::NONE);
-        delete pArr;
+        ScFormulaCell aCell(pDoc, aPos, std::move( pArr ), formula::FormulaGrammar::GRAM_DEFAULT, ScMatrixMode::NONE);
 
         SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
         for (const auto& rTab : rMark)
