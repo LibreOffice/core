@@ -228,6 +228,7 @@ struct ImplHelpData
     sal_uLong                           mnTipDelay;
     sal_uLong                           mnTipTimeout;
     sal_uLong                           mnBalloonDelay;
+    OUString                            msHelpURL;
 };
 
 struct ImplAllSettingsData
@@ -2590,6 +2591,7 @@ ImplHelpData::ImplHelpData( const ImplHelpData& rData )
     mnTipDelay                  = rData.mnTipDelay;
     mnTipTimeout                = rData.mnTipTimeout;
     mnBalloonDelay              = rData.mnBalloonDelay;
+    msHelpURL                   = rData.msHelpURL;
 }
 
 HelpSettings::HelpSettings()
@@ -2608,7 +2610,8 @@ bool HelpSettings::operator ==( const HelpSettings& rSet ) const
 
     return (mxData->mnTipDelay        == rSet.mxData->mnTipDelay ) &&
          (mxData->mnTipTimeout      == rSet.mxData->mnTipTimeout ) &&
-         (mxData->mnBalloonDelay    == rSet.mxData->mnBalloonDelay );
+         (mxData->mnBalloonDelay    == rSet.mxData->mnBalloonDelay ) &&
+         (mxData->msHelpURL == rSet.mxData->msHelpURL);
 }
 
 sal_uLong
@@ -2637,6 +2640,21 @@ sal_uLong
 HelpSettings::GetBalloonDelay() const
 {
     return mxData->mnBalloonDelay;
+}
+
+OUString
+HelpSettings::GetHelpURL() const
+{
+    return mxData->msHelpURL;
+}
+
+void HelpSettings::SetHelpURL(const OUString& rsHelpURL)
+{
+    // copy if other references exist
+    if ( ! mxData.unique() ) {
+        mxData = std::make_shared<ImplHelpData>(*mxData);
+    }
+    mxData->msHelpURL = rsHelpURL;
 }
 
 bool
