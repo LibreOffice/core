@@ -255,53 +255,53 @@ bool lcl_HasSystemFilePicker()
 }
 }
 
-OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "OptGeneralPage", "cui/ui/optgeneralpage.ui", &rSet)
+OfaMiscTabPage::OfaMiscTabPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "cui/ui/optgeneralpage.ui", "OptGeneralPage", &rSet)
+    , m_xExtHelpCB(m_xBuilder->weld_check_button("exthelp"))
+    , m_xPopUpNoHelpCB(m_xBuilder->weld_check_button("popupnohelp"))
+    , m_xFileDlgFrame(m_xBuilder->weld_widget("filedlgframe"))
+    , m_xPrintDlgFrame(m_xBuilder->weld_widget("printdlgframe"))
+    , m_xFileDlgROImage(m_xBuilder->weld_widget("lockimage"))
+    , m_xFileDlgCB(m_xBuilder->weld_check_button("filedlg"))
+    , m_xPrintDlgCB(m_xBuilder->weld_check_button("printdlg"))
+    , m_xDocStatusCB(m_xBuilder->weld_check_button("docstatus"))
+    , m_xYearFrame(m_xBuilder->weld_widget("yearframe"))
+    , m_xYearValueField(m_xBuilder->weld_spin_button("year"))
+    , m_xToYearFT(m_xBuilder->weld_label("toyear"))
+    , m_xCollectUsageInfo(m_xBuilder->weld_check_button("collectusageinfo"))
+    , m_xQuickStarterFrame(m_xBuilder->weld_widget("quickstarter"))
+#if defined(UNX)
+    , m_xQuickLaunchCB(m_xBuilder->weld_check_button("systray"))
+#else
+    , m_xQuickLaunchCB(m_xBuilder->weld_check_button("quicklaunch"))
+#endif
 {
-    get(m_pExtHelpCB, "exthelp");
-    get(m_pPopUpNoHelpCB,"popupnohelp");
     if (!lcl_HasSystemFilePicker())
-        get<VclContainer>("filedlgframe")->Hide();
+        m_xFileDlgFrame->hide();
 #if ! ENABLE_GTK
-    get<VclContainer>("printdlgframe")->Hide();
+    m_xFileDlgFrame->hide();
 #else
     if (!SvtMiscOptions().IsExperimentalMode())
     {
-        get<VclContainer>("printdlgframe")->Hide();
+        m_xFileDlgFrame->hide();
     }
 #endif
-    get(m_pFileDlgCB, "filedlg");
-    get(m_pFileDlgROImage, "lockimage");
-    get(m_pPrintDlgCB, "printdlg");
-    get(m_pDocStatusCB, "docstatus");
-    get(m_pYearFrame, "yearframe");
-    get(m_pYearValueField, "year");
-    get(m_pToYearFT, "toyear");
-    get(m_pCollectUsageInfo, "collectusageinfo");
-    get(m_pQuickStarterFrame, "quickstarter");
 
-#if defined(UNX)
-    get(m_pQuickLaunchCB, "systray");
-#else
-    get(m_pQuickLaunchCB, "quicklaunch");
-#endif
-
-    if (m_pFileDlgCB->IsVisible() && SvtMiscOptions().IsUseSystemFileDialogReadOnly())
+    if (m_xFileDlgCB->get_visible() && SvtMiscOptions().IsUseSystemFileDialogReadOnly())
     {
-        m_pFileDlgROImage->Show();
-        m_pFileDlgCB->Disable();
+        m_xFileDlgROImage->show();
+        m_xFileDlgCB->set_sensitive(false);
     }
 
-    m_pQuickLaunchCB->Show();
+    m_xQuickLaunchCB->show();
 
     //Only available in Win or if building the gtk systray
 #if !defined(_WIN32) && ! ENABLE_GTK
-    m_pQuickStarterFrame->Hide();
+    m_xQuickStarterFrame->hide();
 #endif
 
-    m_aStrDateInfo = m_pToYearFT->GetText();
-    m_pYearValueField->SetUseThousandSep(false);
-    m_pYearValueField->SetModifyHdl( LINK( this, OfaMiscTabPage, TwoFigureHdl ) );
+    m_aStrDateInfo = m_xToYearFT->get_label();
+    m_xYearValueField->connect_value_changed( LINK( this, OfaMiscTabPage, TwoFigureHdl ) );
 
     SetExchangeSupport();
 }
@@ -311,26 +311,9 @@ OfaMiscTabPage::~OfaMiscTabPage()
     disposeOnce();
 }
 
-void OfaMiscTabPage::dispose()
-{
-    m_pExtHelpCB.clear();
-    m_pFileDlgROImage.clear();
-    m_pFileDlgCB.clear();
-    m_pPrintDlgCB.clear();
-    m_pDocStatusCB.clear();
-    m_pYearFrame.clear();
-    m_pYearValueField.clear();
-    m_pToYearFT.clear();
-    m_pCollectUsageInfo.clear();
-    m_pQuickStarterFrame.clear();
-    m_pQuickLaunchCB.clear();
-    m_pPopUpNoHelpCB.clear();
-    SfxTabPage::dispose();
-}
-
 VclPtr<SfxTabPage> OfaMiscTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
 {
-    return VclPtr<OfaMiscTabPage>::Create( pParent.pParent, *rAttrSet );
+    return VclPtr<OfaMiscTabPage>::Create( pParent, *rAttrSet );
 }
 
 bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
@@ -339,52 +322,52 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
     SvtHelpOptions aHelpOptions;
-    if ( m_pPopUpNoHelpCB->IsValueChangedFromSaved() )
-        aHelpOptions.SetOfflineHelpPopUp( m_pPopUpNoHelpCB->IsChecked() );
+    if ( m_xPopUpNoHelpCB->get_state_changed_from_saved() )
+        aHelpOptions.SetOfflineHelpPopUp( m_xPopUpNoHelpCB->get_active() );
 
-    if ( m_pExtHelpCB->IsValueChangedFromSaved() )
-        aHelpOptions.SetExtendedHelp( m_pExtHelpCB->IsChecked() );
+    if ( m_xExtHelpCB->get_state_changed_from_saved() )
+        aHelpOptions.SetExtendedHelp( m_xExtHelpCB->get_active() );
 
-    if ( m_pFileDlgCB->IsValueChangedFromSaved() )
+    if ( m_xFileDlgCB->get_state_changed_from_saved() )
     {
         SvtMiscOptions aMiscOpt;
-        aMiscOpt.SetUseSystemFileDialog( !m_pFileDlgCB->IsChecked() );
+        aMiscOpt.SetUseSystemFileDialog( !m_xFileDlgCB->get_active() );
         bModified = true;
     }
 
-    if ( m_pPrintDlgCB->IsValueChangedFromSaved() )
+    if ( m_xPrintDlgCB->get_state_changed_from_saved() )
     {
         SvtMiscOptions aMiscOpt;
-        aMiscOpt.SetUseSystemPrintDialog( !m_pPrintDlgCB->IsChecked() );
+        aMiscOpt.SetUseSystemPrintDialog( !m_xPrintDlgCB->get_active() );
         bModified = true;
     }
 
-    if ( m_pDocStatusCB->IsValueChangedFromSaved() )
+    if ( m_xDocStatusCB->get_state_changed_from_saved() )
     {
         SvtPrintWarningOptions aPrintOptions;
-        aPrintOptions.SetModifyDocumentOnPrintingAllowed( m_pDocStatusCB->IsChecked() );
+        aPrintOptions.SetModifyDocumentOnPrintingAllowed( m_xDocStatusCB->get_active() );
         bModified = true;
     }
 
     const SfxUInt16Item* pUInt16Item = dynamic_cast< const SfxUInt16Item* >( GetOldItem( *rSet, SID_ATTR_YEAR2000 ) );
-    sal_uInt16 nNum = static_cast<sal_uInt16>(m_pYearValueField->GetText().toInt32());
+    sal_uInt16 nNum = static_cast<sal_uInt16>(m_xYearValueField->get_text().toInt32());
     if ( pUInt16Item && pUInt16Item->GetValue() != nNum )
     {
         bModified = true;
         rSet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, nNum ) );
     }
 
-    if (m_pCollectUsageInfo->IsValueChangedFromSaved())
+    if (m_xCollectUsageInfo->get_state_changed_from_saved())
     {
-        officecfg::Office::Common::Misc::CollectUsageInformation::set(m_pCollectUsageInfo->IsChecked(), batch);
+        officecfg::Office::Common::Misc::CollectUsageInformation::set(m_xCollectUsageInfo->get_active(), batch);
         bModified = true;
     }
 
     batch->commit();
 
-    if( m_pQuickLaunchCB->IsValueChangedFromSaved())
+    if( m_xQuickLaunchCB->get_state_changed_from_saved())
     {
-        rSet->Put(SfxBoolItem(SID_ATTR_QUICKLAUNCHER, m_pQuickLaunchCB->IsChecked()));
+        rSet->Put(SfxBoolItem(SID_ATTR_QUICKLAUNCHER, m_xQuickLaunchCB->get_active()));
         bModified = true;
     }
 
@@ -394,58 +377,58 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
 void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
 {
     SvtHelpOptions aHelpOptions;
-    m_pExtHelpCB->Check( aHelpOptions.IsHelpTips() && aHelpOptions.IsExtendedHelp() );
-    m_pExtHelpCB->SaveValue();
-    m_pPopUpNoHelpCB->Check( aHelpOptions.IsOfflineHelpPopUp() );
-    m_pPopUpNoHelpCB->SaveValue();
+    m_xExtHelpCB->set_active( aHelpOptions.IsHelpTips() && aHelpOptions.IsExtendedHelp() );
+    m_xExtHelpCB->save_state();
+    m_xPopUpNoHelpCB->set_active( aHelpOptions.IsOfflineHelpPopUp() );
+    m_xPopUpNoHelpCB->save_state();
     SvtMiscOptions aMiscOpt;
-    m_pFileDlgCB->Check( !aMiscOpt.UseSystemFileDialog() );
-    m_pFileDlgCB->SaveValue();
-    m_pPrintDlgCB->Check( !aMiscOpt.UseSystemPrintDialog() );
-    m_pPrintDlgCB->SaveValue();
+    m_xFileDlgCB->set_active( !aMiscOpt.UseSystemFileDialog() );
+    m_xFileDlgCB->save_state();
+    m_xPrintDlgCB->set_active( !aMiscOpt.UseSystemPrintDialog() );
+    m_xPrintDlgCB->save_state();
 
     SvtPrintWarningOptions aPrintOptions;
-    m_pDocStatusCB->Check(aPrintOptions.IsModifyDocumentOnPrintingAllowed());
-    m_pDocStatusCB->SaveValue();
+    m_xDocStatusCB->set_active(aPrintOptions.IsModifyDocumentOnPrintingAllowed());
+    m_xDocStatusCB->save_state();
 
     const SfxPoolItem* pItem = nullptr;
     if ( SfxItemState::SET == rSet->GetItemState( SID_ATTR_YEAR2000, false, &pItem ) )
     {
-        m_pYearValueField->SetValue( static_cast<const SfxUInt16Item*>(pItem)->GetValue() );
-        TwoFigureHdl(*m_pYearValueField);
+        m_xYearValueField->set_value( static_cast<const SfxUInt16Item*>(pItem)->GetValue() );
+        TwoFigureHdl(*m_xYearValueField);
     }
     else
-        m_pYearFrame->Enable(false);
+        m_xYearFrame->set_sensitive(false);
 
-    m_pCollectUsageInfo->Check(officecfg::Office::Common::Misc::CollectUsageInformation::get());
-    m_pCollectUsageInfo->Enable(!officecfg::Office::Common::Misc::CollectUsageInformation::isReadOnly());
-    m_pCollectUsageInfo->SaveValue();
+    m_xCollectUsageInfo->set_active(officecfg::Office::Common::Misc::CollectUsageInformation::get());
+    m_xCollectUsageInfo->set_sensitive(!officecfg::Office::Common::Misc::CollectUsageInformation::isReadOnly());
+    m_xCollectUsageInfo->save_state();
 
     SfxItemState eState = rSet->GetItemState( SID_ATTR_QUICKLAUNCHER, false, &pItem );
     if ( SfxItemState::SET == eState )
-        m_pQuickLaunchCB->Check( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        m_xQuickLaunchCB->set_active( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
     else if ( SfxItemState::DISABLED == eState )
     {
         // quickstart not installed
-        m_pQuickStarterFrame->Hide();
+        m_xQuickStarterFrame->hide();
     }
 
-    m_pQuickLaunchCB->SaveValue();
+    m_xQuickLaunchCB->save_state();
 }
 
-IMPL_LINK_NOARG( OfaMiscTabPage, TwoFigureHdl, Edit&, void )
+IMPL_LINK_NOARG( OfaMiscTabPage, TwoFigureHdl, weld::SpinButton&, void )
 {
     OUString aOutput( m_aStrDateInfo );
-    OUString aStr( m_pYearValueField->GetText() );
+    OUString aStr( m_xYearValueField->get_text() );
     sal_Int32 nNum = aStr.toInt32();
-    if ( aStr.getLength() != 4 || nNum < m_pYearValueField->GetMin() || nNum > m_pYearValueField->GetMax() )
+    if ( aStr.getLength() != 4 || nNum < m_xYearValueField->get_min() || nNum > m_xYearValueField->get_max() )
         aOutput += "????";
     else
     {
         nNum += 99;
         aOutput += OUString::number( nNum );
     }
-    m_pToYearFT->SetText( aOutput );
+    m_xToYearFT->set_label( aOutput );
 }
 
 class CanvasSettings
