@@ -930,10 +930,6 @@ SvxLinguTabPage::SvxLinguTabPage(TabPageParent pParent, const SfxItemSet& rSet)
     m_xLinguDicsCLB->set_column_fixed_widths(aWidths);
     m_xLinguOptionsCLB->set_column_fixed_widths(aWidths);
 
-    m_xLinguModulesCLB->set_size_request(-1, m_xLinguModulesCLB->get_height_rows(3));
-    m_xLinguDicsCLB->set_size_request(-1, m_xLinguDicsCLB->get_height_rows(5));
-    m_xLinguOptionsCLB->set_size_request(-1, m_xLinguOptionsCLB->get_height_rows(5));
-
     m_xLinguModulesCLB->connect_changed( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
     m_xLinguModulesCLB->connect_row_activated(LINK(this, SvxLinguTabPage, BoxDoubleClickHdl_Impl));
     m_xLinguModulesCLB->connect_toggled(LINK(this, SvxLinguTabPage, ModulesBoxCheckButtonHdl_Impl));
@@ -1343,6 +1339,13 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
 
     m_xLinguOptionsCLB->thaw();
+
+    m_xLinguModulesCLB->set_size_request(m_xLinguModulesCLB->get_preferred_size().Width(),
+                                         m_xLinguModulesCLB->get_height_rows(3));
+    m_xLinguDicsCLB->set_size_request(m_xLinguDicsCLB->get_preferred_size().Width(),
+                                      m_xLinguDicsCLB->get_height_rows(5));
+    m_xLinguOptionsCLB->set_size_request(m_xLinguOptionsCLB->get_preferred_size().Width(),
+                                         m_xLinguOptionsCLB->get_height_rows(5));
 }
 
 IMPL_LINK(SvxLinguTabPage, BoxDoubleClickHdl_Impl, weld::TreeView&, rBox, void)

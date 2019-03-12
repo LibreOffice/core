@@ -491,16 +491,16 @@ IMPL_LINK( SpellDialog, CheckGrammarHdl, Button*, pBox, void )
 void SpellDialog::StartSpellOptDlg_Impl()
 {
     SfxItemSet aSet( SfxGetpApp()->GetPool(), svl::Items<SID_AUTOSPELL_CHECK,SID_AUTOSPELL_CHECK>{});
-    ScopedVclPtr<SfxSingleTabDialog> pDlg(
-        VclPtr<SfxSingleTabDialog>::Create(
-            this, aSet, "SpellOptionsDialog", "cui/ui/spelloptionsdialog.ui"));
-    VclPtr<SfxTabPage> pPage = SvxLinguTabPage::Create( pDlg->get_content_area(), &aSet );
-    static_cast<SvxLinguTabPage*>(pPage.get())->HideGroups( GROUP_MODULES );
-    pDlg->SetTabPage( pPage );
-    if(RET_OK == pDlg->Execute())
+    SfxSingleTabDialogController aDlg(GetFrameWeld(), aSet, "cui/ui/spelloptionsdialog.ui", "SpellOptionsDialog");
+
+    TabPageParent aParent(aDlg.get_content_area(), &aDlg);
+    VclPtr<SfxTabPage> xPage = SvxLinguTabPage::Create(aParent, &aSet);
+    static_cast<SvxLinguTabPage*>(xPage.get())->HideGroups( GROUP_MODULES );
+    aDlg.SetTabPage(xPage);
+    if (RET_OK == aDlg.run())
     {
         InitUserDicts();
-        const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+        const SfxItemSet* pOutSet = aDlg.GetOutputItemSet();
         if(pOutSet)
             OfaTreeOptionsDialog::ApplyLanguageOptions(*pOutSet);
     }
