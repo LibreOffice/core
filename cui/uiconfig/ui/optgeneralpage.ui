@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -116,7 +116,7 @@
                     <property name="no_show_all">True</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="pixbuf">res/lock.png</property>
+                    <property name="icon_name">res/lock.png</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -260,6 +260,7 @@
                   <object class="GtkSpinButton" id="year">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>
@@ -361,8 +362,8 @@
                     <property name="label" translatable="yes" context="optgeneralpage|quicklaunch">Load %PRODUCTNAME during system start-up</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -376,8 +377,8 @@
                     <property name="label" translatable="yes" context="optgeneralpage|systray">Enable systray Quickstarter</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
