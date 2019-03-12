@@ -233,7 +233,7 @@
       <style:text-properties fo:font-size="20pt"/>
     </style:style>
     <style:style style:name="Alizarin-subtitle" style:display-name="Alizarin-subtitle" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" draw:auto-grow-height="false">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="top" draw:auto-grow-height="false">
         <text:list-style style:name="Alizarin-subtitle" style:display-name="Alizarin-subtitle">
           <text:list-level-style-number text:level="1" style:num-format="">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -283,7 +283,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#1c1c1c" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Light2" fo:font-family="'Source Sans Pro Light'" style:font-style-name="細字" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="26pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="200" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Alizarin-title" style:display-name="Alizarin-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:wrap-option="wrap">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:wrap-option="wrap">
         <text:list-style style:name="Alizarin-title" style:display-name="Alizarin-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -429,7 +429,7 @@
       <style:text-properties fo:font-size="20pt"/>
     </style:style>
     <style:style style:name="Alizarin0-subtitle" style:display-name="Alizarin0-subtitle" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" draw:auto-grow-height="false">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="top" draw:auto-grow-height="false">
         <text:list-style style:name="Alizarin0-subtitle" style:display-name="Alizarin0-subtitle">
           <text:list-level-style-number text:level="1" style:num-format="">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -479,7 +479,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#1c1c1c" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Light2" fo:font-family="'Source Sans Pro Light'" style:font-style-name="細字" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="22pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="200" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Alizarin0-title" style:display-name="Alizarin0-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:wrap-option="wrap">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:wrap-option="wrap">
         <text:list-style style:name="Alizarin0-title" style:display-name="Alizarin0-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -578,7 +578,7 @@
       <style:graphic-properties draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
     </style:style>
     <style:style style:name="Mpr6" style:family="presentation" style:parent-style-name="Alizarin-backgroundobjects">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
     </style:style>
     <style:style style:name="Mpr7" style:family="presentation" style:parent-style-name="Alizarin-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#e74c3c" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
@@ -593,7 +593,7 @@
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="right" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
     </style:style>
     <style:style style:name="Mpr11" style:family="presentation" style:parent-style-name="Alizarin0-backgroundobjects">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
     </style:style>
     <style:style style:name="Mpr12" style:family="presentation" style:parent-style-name="Alizarin0-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" fo:min-height="1.501cm"/>

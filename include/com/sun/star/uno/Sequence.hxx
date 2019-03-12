@@ -257,7 +257,7 @@ struct negation : std::integral_constant<bool, !bool(B::value)> { };
    @since LibreOffice 6.1
 */
 template< typename value_t, typename charT, typename traits >
-inline typename std::enable_if<uno_detail::negation<std::is_same<sal_Int8, value_t>>::value, std::basic_ostream<charT, traits>>::type &operator<<(std::basic_ostream<charT, traits> &os, css::uno::Sequence < value_t > &v)
+inline typename std::enable_if<uno_detail::negation<std::is_same<sal_Int8, value_t>>::value, std::basic_ostream<charT, traits>>::type &operator<<(std::basic_ostream<charT, traits> &os, css::uno::Sequence<value_t> const& v)
 {
     const value_t *pAry = v.getConstArray();
     sal_Int32 nLen = v.getLength();
@@ -266,7 +266,7 @@ inline typename std::enable_if<uno_detail::negation<std::is_same<sal_Int8, value
 }
 
 template< typename value_t, typename charT, typename traits >
-inline typename std::enable_if<std::is_same<sal_Int8, value_t>::value, std::basic_ostream<charT, traits>>::type &operator<<(std::basic_ostream<charT, traits> &os, css::uno::Sequence < value_t > &v)
+inline typename std::enable_if<std::is_same<sal_Int8, value_t>::value, std::basic_ostream<charT, traits>>::type &operator<<(std::basic_ostream<charT, traits> &os, css::uno::Sequence<value_t> const& v)
 {
     // specialisation for signed bytes
     const sal_Int8 *pAry = v.getConstArray();

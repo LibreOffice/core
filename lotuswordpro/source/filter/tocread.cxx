@@ -296,7 +296,9 @@ CBenTOCReader::ReadTOC()
                         return Err;
                     }
 
-                    OString sName(sBuffer, Length);
+                    OString sName;
+                    if (Length)
+                        sName = OString(sBuffer, Length - 1);
 
                     CUtListElmt * pPrevNamedObjectListElmt;
                     if (FindNamedObject(&cpContainer->GetNamedObjects(),

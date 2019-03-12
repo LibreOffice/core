@@ -279,7 +279,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#2c3e50" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-style-name="標準" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="源ノ角ゴシック Normal" style:font-family-asian="'源ノ角ゴシック Normal'" style:font-style-name-asian="Normal" style:font-pitch-asian="variable" style:font-size-asian="28pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="FreeSans" style:font-family-complex="FreeSans" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Midnightblue-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:wrap-option="wrap">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:wrap-option="wrap">
         <text:list-style style:name="Midnightblue-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -323,7 +323,7 @@
           </text:list-level-style-bullet>
         </text:list-style>
       </style:graphic-properties>
-      <style:paragraph-properties fo:text-align="center" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging">
+      <style:paragraph-properties fo:text-align="start" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging">
         <style:tab-stops/>
       </style:paragraph-properties>
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Black" fo:font-family="'Source Sans Pro Black'" style:font-style-name="黒" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="36pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="900" style:letter-kerning="true" style:font-name-asian="源ノ角ゴシック Heavy" style:font-family-asian="'源ノ角ゴシック Heavy'" style:font-style-name-asian="Heavy" style:font-pitch-asian="variable" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="900" style:font-name-complex="FreeSans" style:font-family-complex="FreeSans" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="44pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>

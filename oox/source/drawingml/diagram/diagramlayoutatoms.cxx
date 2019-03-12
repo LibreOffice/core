@@ -65,6 +65,24 @@ bool isFontUnit(sal_Int32 nUnit)
     return nUnit == oox::XML_primFontSz || nUnit == oox::XML_secFontSz;
 }
 
+/// Determines which UNO property should be set for a given constraint type.
+sal_Int32 getPropertyFromConstraint(sal_Int32 nConstraint)
+{
+    switch (nConstraint)
+    {
+        case oox::XML_lMarg:
+            return oox::PROP_TextLeftDistance;
+        case oox::XML_rMarg:
+            return oox::PROP_TextRightDistance;
+        case oox::XML_tMarg:
+            return oox::PROP_TextUpperDistance;
+        case oox::XML_bMarg:
+            return oox::PROP_TextLowerDistance;
+    }
+
+    return 0;
+}
+
 /// Determines the connector shape type from a linear alg.
 sal_Int32 getConnectorType(const oox::drawingml::LayoutNode* pNode)
 {
@@ -246,7 +264,7 @@ void LayoutAtom::dump(int level)
         pAtom->dump(level + 1);
 }
 
-ForEachAtom::ForEachAtom(const LayoutNode& rLayoutNode, const Reference< XFastAttributeList >& xAttributes) :
+ForEachAtom::ForEachAtom(LayoutNode& rLayoutNode, const Reference< XFastAttributeList >& xAttributes) :
     LayoutAtom(rLayoutNode)
 {
     maIter.loadFromXAttr(xAttributes);
@@ -273,7 +291,7 @@ const std::vector<LayoutAtomPtr>& ChooseAtom::getChildren() const
     return maEmptyChildren;
 }
 
-ConditionAtom::ConditionAtom(const LayoutNode& rLayoutNode, bool isElse, const Reference< XFastAttributeList >& xAttributes) :
+ConditionAtom::ConditionAtom(LayoutNode& rLayoutNode, bool isElse, const Reference< XFastAttributeList >& xAttributes) :
     LayoutAtom(rLayoutNode),
     mIsElse(isElse)
 {
@@ -369,6 +387,14 @@ sal_Int32 ConditionAtom::getNodeCount() const
                 if (aCxn.mnType == XML_parOf && aCxn.msSourceId == sNodeId)
                     nCount++;
         }
+        else
+        {
+            // No presentation child is a presentation of a model node: just
+            // count presentation children.
+            for (const auto& aCxn : mrLayoutNode.getDiagram().getData()->getConnections())
+                if (aCxn.mnType == XML_presParOf && aCxn.msSourceId == pPoint->msModelId)
+                    nCount++;
+        }
     }
     return nCount;
 }
@@ -439,6 +465,21 @@ void ConstraintAtom::accept( LayoutAtomVisitor& rVisitor )
 void ConstraintAtom::parseConstraint(std::vector<Constraint>& rConstraints,
                                      bool bRequireForName) const
 {
+    // Whitelist for cases where empty forName is handled.
+    if (bRequireForName)
+    {
+        switch (maConstraint.mnType)
+        {
+            case XML_sp:
+            case XML_lMarg:
+            case XML_rMarg:
+            case XML_tMarg:
+            case XML_bMarg:
+                bRequireForName = false;
+                break;
+        }
+    }
+
     if (bRequireForName && maConstraint.msForName.isEmpty())
         return;
 
@@ -456,7 +497,7 @@ void AlgAtom::accept( LayoutAtomVisitor& rVisitor )
 }
 
 void AlgAtom::layoutShape( const ShapePtr& rShape,
-                           const std::vector<Constraint>& rOwnConstraints ) const
+                           const std::vector<Constraint>& rOwnConstraints )
 {
     // Algorithm result may depend on the parent constraints as well.
     std::vector<Constraint> aMergedConstraints;
@@ -482,12 +523,29 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
             LayoutPropertyMap aProperties;
             LayoutProperty& rParent = aProperties[""];
-            rParent[XML_w] = rShape->getSize().Width;
-            rParent[XML_h] = rShape->getSize().Height;
-            rParent[XML_l] = 0;
-            rParent[XML_t] = 0;
-            rParent[XML_r] = rShape->getSize().Width;
-            rParent[XML_b] = rShape->getSize().Height;
+
+            sal_Int32 nParentXOffset = 0;
+            if (mfAspectRatio != 1.0)
+            {
+                rParent[XML_w] = rShape->getSize().Width;
+                rParent[XML_h] = rShape->getSize().Height;
+                rParent[XML_l] = 0;
+                rParent[XML_t] = 0;
+                rParent[XML_r] = rShape->getSize().Width;
+                rParent[XML_b] = rShape->getSize().Height;
+            }
+            else
+            {
+                // Shrink width to be only as large as height.
+                rParent[XML_w] = std::min(rShape->getSize().Width, rShape->getSize().Height);
+                rParent[XML_h] = rShape->getSize().Height;
+                if (rParent[XML_w] < rShape->getSize().Width)
+                    nParentXOffset = (rShape->getSize().Width - rParent[XML_w]) / 2;
+                rParent[XML_l] = nParentXOffset;
+                rParent[XML_t] = 0;
+                rParent[XML_r] = rShape->getSize().Width - rParent[XML_l];
+                rParent[XML_b] = rShape->getSize().Height;
+            }
 
             for (const auto & rConstr : rConstraints)
             {
@@ -526,25 +584,30 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     LayoutProperty::const_iterator it, it2;
 
                     if ( (it = rProp.find(XML_w)) != rProp.end() )
-                        aSize.Width = it->second;
+                        aSize.Width = std::min(it->second, rShape->getSize().Width);
                     if ( (it = rProp.find(XML_h)) != rProp.end() )
-                        aSize.Height = it->second;
+                        aSize.Height = std::min(it->second, rShape->getSize().Height);
 
                     if ( (it = rProp.find(XML_l)) != rProp.end() )
                         aPos.X = it->second;
                     else if ( (it = rProp.find(XML_ctrX)) != rProp.end() )
                         aPos.X = it->second - aSize.Width/2;
+                    else if ((it = rProp.find(XML_r)) != rProp.end())
+                        aPos.X = it->second - aSize.Width;
 
                     if ( (it = rProp.find(XML_t)) != rProp.end())
                         aPos.Y = it->second;
                     else if ( (it = rProp.find(XML_ctrY)) != rProp.end() )
                         aPos.Y = it->second - aSize.Height/2;
+                    else if ((it = rProp.find(XML_b)) != rProp.end())
+                        aPos.Y = it->second - aSize.Height;
 
                     if ( (it = rProp.find(XML_l)) != rProp.end() && (it2 = rProp.find(XML_r)) != rProp.end() )
                         aSize.Width = it2->second - it->second;
                     if ( (it = rProp.find(XML_t)) != rProp.end() && (it2 = rProp.find(XML_b)) != rProp.end() )
                         aSize.Height = it2->second - it->second;
 
+                    aPos.X += nParentXOffset;
                     aSize.Width = std::min(aSize.Width, rShape->getSize().Width - aPos.X);
                     aSize.Height = std::min(aSize.Height, rShape->getSize().Height - aPos.Y);
                 }
@@ -861,6 +924,18 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             if (rShape->getChildren().empty() || rShape->getSize().Width == 0 || rShape->getSize().Height == 0)
                 break;
 
+            // Parse constraints, only self spacing from height as a start.
+            double fSpaceFromConstraint = 0;
+            for (const auto& rConstr : rConstraints)
+            {
+                if (rConstr.mnRefType == XML_h)
+                {
+                    if (rConstr.mnType == XML_sp && rConstr.msForName.isEmpty())
+                        fSpaceFromConstraint = rConstr.mfFactor;
+                }
+            }
+            bool bSpaceFromConstraints = fSpaceFromConstraint != 0;
+
             const sal_Int32 nDir = maMap.count(XML_grDir) ? maMap.find(XML_grDir)->second : XML_tL;
             sal_Int32 nIncX = 1;
             sal_Int32 nIncY = 1;
@@ -872,37 +947,66 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 case XML_bR: nIncX = -1; nIncY = -1; break;
             }
 
-            // TODO: get values from constraints
             sal_Int32 nCount = rShape->getChildren().size();
-            double fSpace = 0.3;
+            // Defaults in case not provided by constraints.
+            double fSpace = bSpaceFromConstraints ? fSpaceFromConstraint : 0.3;
             double fAspectRatio = 0.54; // diagram should not spill outside, earlier it was 0.6
 
             sal_Int32 nCol = 1;
             sal_Int32 nRow = 1;
-            for ( ; nRow<nCount; nRow++)
+            double fChildAspectRatio = rShape->getChildren()[0]->getAspectRatio();
+            if (nCount <= fChildAspectRatio)
+                // Child aspect ratio request (width/height) is N, and we have at most N shapes.
+                // This means we don't need multiple columns.
+                nRow = nCount;
+            else
             {
-                nCol = (nCount+nRow-1) / nRow;
-                const double fShapeHeight = rShape->getSize().Height;
-                const double fShapeWidth = rShape->getSize().Width;
-                if ((fShapeHeight / nCol) / (fShapeWidth / nRow) >= fAspectRatio)
-                    break;
+                for ( ; nRow<nCount; nRow++)
+                {
+                    nCol = (nCount+nRow-1) / nRow;
+                    const double fShapeHeight = rShape->getSize().Height;
+                    const double fShapeWidth = rShape->getSize().Width;
+                    if ((fShapeHeight / nCol) / (fShapeWidth / nRow) >= fAspectRatio)
+                        break;
+                }
             }
 
             SAL_INFO("oox.drawingml", "Snake layout grid: " << nCol << "x" << nRow);
 
             sal_Int32 nWidth = rShape->getSize().Width / (nCol + (nCol-1)*fSpace);
-            const awt::Size aChildSize(nWidth, nWidth * fAspectRatio);
+            awt::Size aChildSize(nWidth, nWidth * fAspectRatio);
+            if (nCol == 1 && nRow > 1)
+            {
+                // We have a single column, so count the height based on the parent height, not
+                // based on width.
+                // Space occurs inside children; also double amount of space is needed outside (on
+                // both sides), if the factor comes from a constraint.
+                sal_Int32 nNumSpaces = -1;
+                if (bSpaceFromConstraints)
+                    nNumSpaces += 4;
+                sal_Int32 nHeight
+                    = rShape->getSize().Height / (nRow + (nRow + nNumSpaces) * fSpace);
+
+                if (fChildAspectRatio > 1)
+                {
+                    // Shrink width if the aspect ratio requires it.
+                    nWidth = std::min(rShape->getSize().Width,
+                                      static_cast<sal_Int32>(nHeight * fChildAspectRatio));
+                    aChildSize = awt::Size(nWidth, nHeight);
+                }
+            }
 
             awt::Point aCurrPos(0, 0);
             if (nIncX == -1)
                 aCurrPos.X = rShape->getSize().Width - aChildSize.Width;
             if (nIncY == -1)
                 aCurrPos.Y = rShape->getSize().Height - aChildSize.Height;
+            else if (bSpaceFromConstraints)
+                // Initial vertical offset to have upper spacing (outside, so double amount).
+                aCurrPos.Y = aChildSize.Height * fSpace * 2;
 
             sal_Int32 nStartX = aCurrPos.X;
             sal_Int32 nColIdx = 0,index = 0;
-
-            sal_Int32 num = rShape->getChildren().size();
 
             const sal_Int32 aContDir = maMap.count(XML_contDir) ? maMap.find(XML_contDir)->second : XML_sameDir;
 
@@ -923,7 +1027,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     if(++nColIdx == nCol) // condition for next row
                     {
                         // if last row, then position children according to number of shapes.
-                        if((index+1)%nCol!=0 && (index+1)>=3 && ((index+1)/nCol+1)==nRow && num!=nRow*nCol)
+                        if((index+1)%nCol!=0 && (index+1)>=3 && ((index+1)/nCol+1)==nRow && nCount!=nRow*nCol)
                             // position first child of last row
                             aCurrPos.X = nStartX + (nIncX * (aChildSize.Width + fSpace*aChildSize.Width))/2;
                         else
@@ -962,10 +1066,10 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     if(++nColIdx == nCol) // condition for next row
                     {
                         // if last row, then position children according to number of shapes.
-                        if((index+1)%nCol!=0 && (index+1)>=4 && ((index+1)/nCol+1)==nRow && num!=nRow*nCol && ((index/nCol)+1)%2==0)
+                        if((index+1)%nCol!=0 && (index+1)>=4 && ((index+1)/nCol+1)==nRow && nCount!=nRow*nCol && ((index/nCol)+1)%2==0)
                             // position first child of last row
                             aCurrPos.X -= aChildSize.Width*3/2;
-                        else if((index+1)%nCol!=0 && (index+1)>=4 && ((index+1)/nCol+1)==nRow && num!=nRow*nCol && ((index/nCol)+1)%2!=0)
+                        else if((index+1)%nCol!=0 && (index+1)>=4 && ((index+1)/nCol+1)==nRow && nCount!=nRow*nCol && ((index/nCol)+1)%2!=0)
                             aCurrPos.X = nStartX + (nIncX * (aChildSize.Width + fSpace*aChildSize.Width))/2;
                         else if(((index/nCol)+1)%2!=0)
                             aCurrPos.X = nStartX;
@@ -998,6 +1102,29 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
         case XML_tx:
         {
             // adjust text alignment
+
+            // Parse constraints, only self margins as a start.
+            for (const auto& rConstr : rConstraints)
+            {
+                if (rConstr.mnRefType == XML_w)
+                {
+                    if (!rConstr.msForName.isEmpty())
+                        continue;
+
+                    sal_Int32 nProperty = getPropertyFromConstraint(rConstr.mnType);
+                    if (!nProperty)
+                        continue;
+
+                    // PowerPoint takes size as points, but gives margin as MMs.
+                    double fFactor = convertPointToMms(rConstr.mfFactor);
+
+                    // DrawingML works in EMUs, UNO API works in MM100s.
+                    sal_Int32 nValue = rShape->getSize().Width * fFactor / EMU_PER_HMM;
+
+                    rShape->getShapeProperties().setProperty(nProperty, nValue);
+                }
+            }
+
             // TODO: adjust text size to fit shape
             TextBodyPtr pTextBody = rShape->getTextBody();
             if (!pTextBody ||
@@ -1141,11 +1268,21 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
     {
         DiagramData::StringMap::value_type::second_type::const_iterator aVecIter=aNodeName->second.begin();
         const DiagramData::StringMap::value_type::second_type::const_iterator aVecEnd=aNodeName->second.end();
+        // Calculate the depth of what is effectively the topmost element.
+        sal_Int32 nMinDepth = std::numeric_limits<sal_Int32>::max();
+        for (const auto& rPair : aNodeName->second)
+        {
+            if (rPair.second.mnDepth < nMinDepth)
+                nMinDepth = rPair.second.mnDepth;
+        }
+
         while( aVecIter != aVecEnd )
         {
+            const auto& rPair = *aVecIter;
+            const DiagramData::SourceIdAndDepth& rItem = rPair.second;
             DiagramData::PointNameMap& rMap = mrDgm.getData()->getPointNameMap();
             // pPresNode is the presentation node of the aDataNode2 data node.
-            DiagramData::PointNameMap::const_iterator aDataNode2 = rMap.find(aVecIter->first);
+            DiagramData::PointNameMap::const_iterator aDataNode2 = rMap.find(rItem.msSourceId);
             if (aDataNode2 == rMap.end())
             {
                 //busted, skip it
@@ -1155,7 +1292,7 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
 
             rShape->setDataNodeType(aDataNode2->second->mnType);
 
-            if( aVecIter->second == 0 )
+            if( rItem.mnDepth == 0 )
             {
                 // grab shape attr from topmost element(s)
                 rShape->getShapeProperties() = aDataNode2->second->mpShape->getShapeProperties();
@@ -1171,6 +1308,13 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                             ->getShapePresetType())
                         << " added for layout node named \"" << msName
                         << "\"");
+            }
+            else if (rItem.mnDepth == nMinDepth)
+            {
+                // If no real topmost element, then take properties from the one that's the closest
+                // to topmost.
+                rShape->getLineProperties() = aDataNode2->second->mpShape->getLineProperties();
+                rShape->getFillProperties() = aDataNode2->second->mpShape->getFillProperties();
             }
 
             // append text with right outline level
@@ -1197,8 +1341,8 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                 for (const auto& pSourceParagraph : rSourceParagraphs)
                 {
                     TextParagraph& rPara = pTextBody->addParagraph();
-                    if (aVecIter->second != -1)
-                        rPara.getProperties().setLevel(aVecIter->second);
+                    if (rItem.mnDepth != -1)
+                        rPara.getProperties().setLevel(rItem.mnDepth);
 
                     for (const auto& pRun : pSourceParagraph->getRuns())
                         rPara.addRun(pRun);
@@ -1218,6 +1362,8 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                 " processing shape type "
                 << rShape->getCustomShapeProperties()->getShapePresetType()
                 << " for layout node named \"" << msName << "\"");
+        if (pPresNode->mpShape)
+            rShape->getFillProperties().assignUsed(pPresNode->mpShape->getFillProperties());
     }
 
     // TODO(Q1): apply styling & coloring - take presentation

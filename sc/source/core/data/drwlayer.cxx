@@ -1446,11 +1446,18 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
                     if (!IsNoteCaption( pObject ))
                     {
                         tools::Rectangle aObjRect = pObject->GetCurrentBoundRect();
-                        if ( aMarkBound.IsInside( aObjRect ) )
+                        ScRange aRange = pDoc->GetRange(nTab, aObjRect);
+                        bool bObjectInMarkArea
+                            = aMarkBound.IsInside(aObjRect) && rMark.IsAllMarked(aRange);
+                        const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObject);
+                        ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType(*pObject);
+                        bool bObjectAnchoredToMarkedCell
+                            = ((aAnchorType == SCA_CELL || aAnchorType == SCA_CELL_RESIZE)
+                               && rMark.IsCellMarked(pObjData->maStart.Col(),
+                                                     pObjData->maStart.Row()));
+                        if (bObjectInMarkArea || bObjectAnchoredToMarkedCell)
                         {
-                            ScRange aRange = pDoc->GetRange( nTab, aObjRect );
-                            if (rMark.IsAllMarked(aRange))
-                                ppObj[nDelCount++] = pObject;
+                            ppObj[nDelCount++] = pObject;
                         }
                     }
 

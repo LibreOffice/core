@@ -190,6 +190,13 @@ inline float convertEmuToPoints( sal_Int64 nValue )
     return static_cast<float>(nValue) / EMU_PER_PT;
 }
 
+/** Converts the passed double value from points to mm. */
+inline double convertPointToMms(double fValue)
+{
+    constexpr double fFactor = static_cast<double>(EMU_PER_PT) / (EMU_PER_HMM * 100);
+    return fValue * fFactor;
+}
+
 /** A structure for a point with 64-bit integer components. */
 struct EmuPoint
 {

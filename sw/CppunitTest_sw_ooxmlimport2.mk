@@ -39,6 +39,7 @@ $(eval $(call gb_CppunitTest_use_externals,sw_ooxmlimport2,\
 $(eval $(call gb_CppunitTest_set_include,sw_ooxmlimport2,\
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
+    -I$(SRCDIR)/sw/source/uibase/inc \
     -I$(SRCDIR)/sw/qa/extras/inc \
     $$(INCLUDE) \
 ))

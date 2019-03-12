@@ -1168,6 +1168,16 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
             aDescr.WindowAttributes |= WindowAttribute::MOVEABLE;
     }
 
+    // Sizeable
+    aPropName = GetPropertyName( BASEPROPERTY_SIZEABLE );
+    if ( xInfo->hasPropertyByName( aPropName ) )
+    {
+        aVal = xPSet->getPropertyValue( aPropName );
+        bool b = bool();
+        if ( ( aVal >>= b ) && b)
+            aDescr.WindowAttributes |= WindowAttribute::SIZEABLE;
+    }
+
     // Closeable
     aPropName = GetPropertyName( BASEPROPERTY_CLOSEABLE );
     if ( xInfo->hasPropertyByName( aPropName ) )
