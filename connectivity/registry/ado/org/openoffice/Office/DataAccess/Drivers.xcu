@@ -38,13 +38,13 @@
         </node>
         <node oor:name="EnableSQL92Check" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
-            <value>true</value>
+            <value>false</value>
           </prop>
         </node>
         <node oor:name="AppendTableAliasName" oor:op="replace">
         <!-- Corresponds to AppendTableAliasInSelect in Features - see connectivity/registry/README -->
           <prop oor:name="Value" oor:type="xs:boolean">
-            <value>true</value>
+            <value>false</value>
           </prop>
         </node>
         <node oor:name="GenerateASBeforeCorrelationName" oor:op="replace">
@@ -55,7 +55,7 @@
         </node>
         <node oor:name="PreferDosLikeLineEnds" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
-            <value>true</value>
+            <value>false</value>
           </prop>
         </node>
         <node oor:name="IgnoreDriverPrivileges" oor:op="replace">
@@ -103,7 +103,7 @@
         </node>
         <node oor:name="RespectDriverResultSetType" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
-            <value>true</value>
+            <value>false</value>
           </prop>
         </node>
       </node>
@@ -244,13 +244,13 @@
         </node>
         <node oor:name="EnableSQL92Check" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
-            <value>true</value>
+            <value>false</value>
           </prop>
         </node>
         <node oor:name="AppendTableAliasName" oor:op="replace">
         <!-- Corresponds to AppendTableAliasInSelect in Features - see connectivity/registry/README -->
           <prop oor:name="Value" oor:type="xs:boolean">
-            <value>true</value>
+            <value>false</value>
           </prop>
         </node>
         <node oor:name="EnableOuterJoinEscape" oor:op="replace">
@@ -260,7 +260,7 @@
         </node>
         <node oor:name="PreferDosLikeLineEnds" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
-            <value>true</value>
+            <value>false</value>
           </prop>
         </node>
         <node oor:name="FormsCheckRequiredFields" oor:op="replace">

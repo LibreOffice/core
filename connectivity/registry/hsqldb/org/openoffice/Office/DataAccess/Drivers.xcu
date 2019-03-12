@@ -28,7 +28,7 @@
       <node oor:name="Properties">
         <node oor:name="PreferDosLikeLineEnds" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
-            <value>true</value>
+            <value>false</value>
           </prop>
         </node>
         <node oor:name="FormsCheckRequiredFields" oor:op="replace">
