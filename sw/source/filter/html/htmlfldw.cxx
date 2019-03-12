@@ -539,7 +539,16 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
         if( pTextField )
         {
             SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-            if (SwViewOption::IsFieldShadings())
+            bool bFieldShadings = SwViewOption::IsFieldShadings();
+            if (bFieldShadings)
+            {
+                // If there is a text portion background started already, that should have priority.
+                auto it = rHTMLWrt.maStartedAttributes.find(RES_CHRATR_BACKGROUND);
+                if (it != rHTMLWrt.maStartedAttributes.end())
+                    bFieldShadings = it->second <= 0;
+            }
+
+            if (bFieldShadings)
             {
                 OStringBuffer sOut;
                 sOut.append("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span);
@@ -556,7 +565,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
             OutHTML_SwField( rWrt, pField, pTextField->GetTextNode(),
                              pTextField->GetStart()  );
 
-            if (SwViewOption::IsFieldShadings())
+            if (bFieldShadings)
                 HTMLOutFuncs::Out_AsciiTag(
                     rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span, false);
         }
