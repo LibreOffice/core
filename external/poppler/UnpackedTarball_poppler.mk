@@ -13,6 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,poppler,$(POPPLER_TARBALL),,poppler
 
 $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	external/poppler/poppler-config.patch.1 \
+	external/poppler/0001-ImageStream-getLine-fix-crash-on-broken-files.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
