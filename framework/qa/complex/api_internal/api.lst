@@ -80,7 +80,6 @@ job88=sc.ScDatabaseRangeObj
 job98=sc.ScHeaderFieldObj
 job99=sc.ScHeaderFieldsObj
 job126=sc.ScSheetLinkObj
-job131=sc.ScStyleFamilyObj
 job132=sc.ScStyleObj
 job134=sc.ScTableColumnObj
 job135=sc.ScTableColumnsObj
