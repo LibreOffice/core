@@ -32,10 +32,12 @@
 #include <fldbas.hxx>
 #include <docufld.hxx>
 #include <flddat.hxx>
+#include <viewopt.hxx>
 #include "htmlfld.hxx"
 #include "wrthtml.hxx"
 #include <rtl/strbuf.hxx>
 #include "css1atr.hxx"
+#include "css1kywd.hxx"
 
 using namespace nsSwDocInfoSubType;
 
@@ -535,8 +537,38 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
         const SwTextField *pTextField = rField.GetTextField();
         OSL_ENSURE( pTextField, "Where is the txt fld?" );
         if( pTextField )
+        {
+            SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
+            bool bFieldShadings = SwViewOption::IsFieldShadings();
+            if (bFieldShadings)
+            {
+                // If there is a text portion background started already, that should have priority.
+                auto it = rHTMLWrt.maStartedAttributes.find(RES_CHRATR_BACKGROUND);
+                if (it != rHTMLWrt.maStartedAttributes.end())
+                    bFieldShadings = it->second <= 0;
+            }
+
+            if (bFieldShadings)
+            {
+                OStringBuffer sOut;
+                sOut.append("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span);
+                sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_style "=\"");
+                sOut.append(sCSS1_P_background);
+                sOut.append(": ");
+
+                Color& rColor = SwViewOption::GetFieldShadingsColor();
+                sOut.append(GetCSS1_Color(rColor));
+                sOut.append("\">");
+                rWrt.Strm().WriteCharPtr(sOut.getStr());
+            }
+
             OutHTML_SwField( rWrt, pField, pTextField->GetTextNode(),
                              pTextField->GetStart()  );
+
+            if (bFieldShadings)
+                HTMLOutFuncs::Out_AsciiTag(
+                    rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span, false);
+        }
     }
     return rWrt;
 }
