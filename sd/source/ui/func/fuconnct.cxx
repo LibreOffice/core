@@ -56,7 +56,7 @@ void FuConnectionDlg::DoExecute( SfxRequest& rReq )
     if( !pArgs )
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog(rReq.GetFrameWindow(), aNewAttr, mpView, RID_SVXPAGE_CONNECTION));
+        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog(rReq.GetFrameWeld(), aNewAttr, mpView, RID_SVXPAGE_CONNECTION));
 
         if( pDlg->Execute() == RET_OK )
         {

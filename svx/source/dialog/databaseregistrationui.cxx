@@ -28,14 +28,14 @@
 
 namespace svx
 {
-    sal_uInt16 administrateDatabaseRegistration( vcl::Window* _parentWindow )
+    sal_uInt16 administrateDatabaseRegistration(weld::Window* parentWindow)
     {
         sal_uInt16 nResult = RET_CANCEL;
 
         SfxItemSet aRegistrationItems( SfxGetpApp()->GetPool(), svl::Items<SID_SB_DB_REGISTER, SID_SB_DB_REGISTER>{} );
 
         SvxAbstractDialogFactory* pDialogFactory = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractDialog> pDialog( pDialogFactory->CreateSfxDialog( _parentWindow, aRegistrationItems, nullptr, RID_SFXPAGE_DBREGISTER ) );
+        ScopedVclPtr<SfxAbstractDialog> pDialog(pDialogFactory->CreateSfxDialog(parentWindow, aRegistrationItems, nullptr, RID_SFXPAGE_DBREGISTER));
         nResult = pDialog->Execute();
 
         return nResult;

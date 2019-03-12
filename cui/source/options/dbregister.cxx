@@ -71,19 +71,19 @@ RegistrationItemSetHolder::~RegistrationItemSetHolder()
 
 // class DatabaseRegistrationDialog  ------------------------------------------------
 
-DatabaseRegistrationDialog::DatabaseRegistrationDialog( vcl::Window* pParent, const SfxItemSet& rInAttrs )
+DatabaseRegistrationDialog::DatabaseRegistrationDialog(weld::Window* pParent, const SfxItemSet& rInAttrs)
     : RegistrationItemSetHolder(rInAttrs)
-    , SfxSingleTabDialog(pParent, getRegistrationItems())
+    , SfxSingleTabDialogController(pParent, getRegistrationItems())
 {
-    VclPtr<SfxTabPage> page = DbRegistrationOptionsPage::Create(get_content_area(), &getRegistrationItems());
-    SetTabPage(page);
-    SetText(page->get<VclFrame>("frame1")->get_label());
+    TabPageParent aParent(get_content_area(), this);
+    SetTabPage(DbRegistrationOptionsPage::Create(aParent, &getRegistrationItems()));
+    m_xDialog->set_title(CuiResId(RID_SVXSTR_REGISTERED_DATABASES));
 }
 
-short DatabaseRegistrationDialog::Execute()
+short DatabaseRegistrationDialog::run()
 {
-    short result = SfxSingleTabDialog::Execute();
-    if ( result == RET_OK )
+    short result = SfxSingleTabDialogController::run();
+    if (result == RET_OK)
     {
         DBG_ASSERT( GetOutputItemSet(), "DatabaseRegistrationDialog::Execute: no output items!" );
         if ( GetOutputItemSet() )

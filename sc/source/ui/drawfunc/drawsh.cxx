@@ -462,7 +462,7 @@ void ScDrawShell::ExecuteMeasureDlg( SfxRequest& rReq )
         pView->MergeAttrFromMarked( aNewAttr, false );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    vcl::Window* pWin = pViewData->GetDialogParent();
+    weld::Window* pWin = pViewData->GetFrameWeld();
     ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog(pWin, aNewAttr, pView, RID_SVXPAGE_MEASURE));
 
     sal_uInt16 nResult = pDlg->Execute();

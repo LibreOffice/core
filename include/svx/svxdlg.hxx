@@ -420,7 +420,7 @@ public:
                                                                  SdrModel* pModel,
                                                                  const SdrObject* pObj,
                                                                  bool bHasObj )=0;
-    virtual VclPtr<SfxAbstractDialog>       CreateSfxDialog( vcl::Window* pParent,
+    virtual VclPtr<SfxAbstractDialog>       CreateSfxDialog( weld::Window* pParent,
                                                                         const SfxItemSet& rAttr,
                                                                         const SdrView* pView,
                                                                         sal_uInt32 nResId )=0;
