@@ -188,7 +188,7 @@ public:
     virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override;
 };
 
-class SFX2_DLLPUBLIC SfxTabDialogController : public SfxDialogController
+class SFX2_DLLPUBLIC SfxTabDialogController : public SfxOkDialogController
 {
 protected:
     std::unique_ptr<weld::Notebook> m_xTabCtrl;
@@ -269,13 +269,9 @@ public:
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return m_pOutSet.get(); }
 
-    const weld::Button& GetOKButton() const { return *m_xOKBtn; }
-    weld::Button&       GetOKButton() { return *m_xOKBtn; }
-    const weld::Button& GetCancelButton() const { return *m_xCancelBtn; }
-    weld::Button&       GetCancelButton() { return *m_xCancelBtn; }
-
-    const weld::Button* GetUserButton() const { return m_xUserBtn.get(); }
-    weld::Button*       GetUserButton() { return m_xUserBtn.get(); }
+    virtual weld::Button& GetOKButton() const override { return *m_xOKBtn; }
+    weld::Button&       GetCancelButton() const { return *m_xCancelBtn; }
+    weld::Button*       GetUserButton() const { return m_xUserBtn.get(); }
     void                RemoveResetButton();
     void                RemoveStandardButton();
 
@@ -283,7 +279,7 @@ public:
     static bool runAsync(const std::shared_ptr<SfxTabDialogController>& rController,
                          const std::function<void(sal_Int32)>&);
 
-    const SfxItemSet*   GetExampleSet() const { return m_xExampleSet.get(); }
+    virtual const SfxItemSet* GetExampleSet() const override { return m_xExampleSet.get(); }
 
     void                SetApplyHandler(const Link<weld::Button&,void>& _rHdl);
 
@@ -333,10 +329,10 @@ protected:
     }
 
     SfxTabDialog*       GetTabDialog() const;
-    SfxTabDialogController* GetDialogController() const;
+    SfxOkDialogController* GetDialogController() const;
 public:
     void                SetTabDialog(SfxTabDialog* pDialog);
-    void                SetDialogController(SfxTabDialogController* pDialog);
+    void                SetDialogController(SfxOkDialogController* pDialog);
 public:
     virtual             ~SfxTabPage() override;
     virtual void        dispose() override;

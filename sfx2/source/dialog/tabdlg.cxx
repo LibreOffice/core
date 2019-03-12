@@ -51,11 +51,10 @@ struct TabPageImpl
 {
     bool                        mbStandard;
     VclPtr<SfxTabDialog>        mxDialog;
-    weld::DialogController*     mpDialogController;
-    SfxTabDialogController*     mpTabDialogController;
+    SfxOkDialogController*      mpDialogController;
     css::uno::Reference< css::frame::XFrame > mxFrame;
 
-    TabPageImpl() : mbStandard(false), mpDialogController(nullptr), mpTabDialogController(nullptr) {}
+    TabPageImpl() : mbStandard(false), mpDialogController(nullptr) {}
 };
 
 struct Data_Impl
@@ -191,7 +190,7 @@ SfxTabPage::SfxTabPage(TabPageParent pParent, const OUString& rUIXMLDescription,
                                : Application::CreateInterimBuilder(this, rUIXMLDescription))
     , m_xContainer(m_xBuilder->weld_container(rID))
 {
-    pImpl->mpDialogController = pParent.pController;
+    pImpl->mpDialogController = dynamic_cast<SfxOkDialogController*>(pParent.pController);
 }
 
 SfxTabPage::~SfxTabPage()
@@ -335,15 +334,14 @@ SfxTabDialog* SfxTabPage::GetTabDialog() const
     return pImpl->mxDialog;
 }
 
-void SfxTabPage::SetDialogController(SfxTabDialogController* pDialog)
+void SfxTabPage::SetDialogController(SfxOkDialogController* pDialog)
 {
-    pImpl->mpTabDialogController = pDialog;
-    pImpl->mpDialogController = pImpl->mpTabDialogController;
+    pImpl->mpDialogController = pDialog;
 }
 
-SfxTabDialogController* SfxTabPage::GetDialogController() const
+SfxOkDialogController* SfxTabPage::GetDialogController() const
 {
-    return pImpl->mpTabDialogController;
+    return pImpl->mpDialogController;
 }
 
 OString SfxTabPage::GetConfigId() const
@@ -359,17 +357,14 @@ OString SfxTabPage::GetConfigId() const
 weld::Window* SfxTabPage::GetDialogFrameWeld() const
 {
     if (pImpl->mpDialogController)
-    {
-        assert(pImpl->mpTabDialogController == pImpl->mpDialogController || !pImpl->mpTabDialogController);
         return pImpl->mpDialogController->getDialog();
-    }
     return GetFrameWeld();
 }
 
 const SfxItemSet* SfxTabPage::GetDialogExampleSet() const
 {
-    if (pImpl->mpTabDialogController)
-        return pImpl->mpTabDialogController->GetExampleSet();
+    if (pImpl->mpDialogController)
+        return pImpl->mpDialogController->GetExampleSet();
     if (pImpl->mxDialog)
         return pImpl->mxDialog->GetExampleSet();
     return nullptr;
@@ -1371,7 +1366,7 @@ SfxTabDialogController::SfxTabDialogController
                                   // can be NULL, when Pages are onDemand
     bool bEditFmt                 // when yes -> additional Button for standard
 )
-    : SfxDialogController(pParent, rUIXMLDescription, rID)
+    : SfxOkDialogController(pParent, rUIXMLDescription, rID)
     , m_xTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
     , m_xApplyBtn(m_xBuilder->weld_button("apply"))
