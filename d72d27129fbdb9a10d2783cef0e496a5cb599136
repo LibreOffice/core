@@ -22,6 +22,30 @@
       "revId": "d72d27129fbdb9a10d2783cef0e496a5cb599136",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_ce582058",
+        "filename": "extensions/source/activex/so_activex.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-12T17:42:45Z",
+      "side": 1,
+      "message": "this one has no vnd. prefix according to the list at IANA",
+      "parentUuid": "ff82abbf_0e5fe841",
+      "range": {
+        "startLine": 579,
+        "startChar": 49,
+        "endLine": 579,
+        "endChar": 51
+      },
+      "revId": "d72d27129fbdb9a10d2783cef0e496a5cb599136",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
