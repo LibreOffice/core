@@ -46,6 +46,30 @@
       "revId": "d72d27129fbdb9a10d2783cef0e496a5cb599136",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_ae359cf9",
+        "filename": "extensions/source/activex/so_activex.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-03-12T17:44:41Z",
+      "side": 1,
+      "message": "nah, that one is actually \"msword\"...\n\nif you look at the IANA page, you\u0027ll notice that excel/powerpoint were registered in 1997 by somebody from Microsoft, whereas word was registered in 1993 by somebody from a university.... if you look further you\u0027ll conclude that the same person had a Mac in 1993 and bought a lot of programs for it and sent an email to IANA for every program that he had bought... those were the days... :)",
+      "parentUuid": "ff82abbf_0e5fe841",
+      "range": {
+        "startLine": 579,
+        "startChar": 49,
+        "endLine": 579,
+        "endChar": 51
+      },
+      "revId": "d72d27129fbdb9a10d2783cef0e496a5cb599136",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
