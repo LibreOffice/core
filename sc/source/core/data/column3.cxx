@@ -974,7 +974,7 @@ public:
                     if (bBoolean)
                     {
                         // See if the formula consists of =TRUE() or =FALSE().
-                        ScTokenArray* pCode = rSrcCell.GetCode();
+                        const ScTokenArray* pCode = rSrcCell.GetCode();
                         if (pCode && pCode->GetLen() == 1)
                         {
                             const formula::FormulaToken* p = pCode->FirstToken();
@@ -1225,7 +1225,7 @@ void lcl_AddCode( ScTokenArray& rArr, const ScFormulaCell* pCell )
 {
     rArr.AddOpCode(ocOpen);
 
-    ScTokenArray* pCode = const_cast<ScFormulaCell*>(pCell)->GetCode();
+    const ScTokenArray* pCode = pCell->GetCode();
     if (pCode)
     {
         FormulaTokenArrayPlainIterator aIter(*pCode);

@@ -1409,7 +1409,7 @@ class CopyByCloneHandler
         if (bCloneSpecialBoolean)
         {
             // See if the formula consists of =TRUE() or =FALSE().
-            ScTokenArray* pCode = rSrcCell.GetCode();
+            const ScTokenArray* pCode = rSrcCell.GetCode();
             if (pCode && pCode->GetLen() == 1)
             {
                 const formula::FormulaToken* p = pCode->FirstToken();
