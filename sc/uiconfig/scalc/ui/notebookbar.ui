@@ -1701,6 +1701,13 @@
         <property name="action_name">.uno:ChiSquareTestDialog</property>
       </object>
     </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuStatistic-FourierAnalysisDialog">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:FourierAnalysisDialog</property>
+      </object>
+    </child>
   </object>
   <object class="GtkMenu" id="MenuTools">
     <property name="visible">True</property>

@@ -289,6 +289,8 @@
 #define STR_CHI_SQUARE_TEST                         NC_("STR_CHI_SQUARE_TEST", "Test of Independence (Chi-Square)")
 #define STR_REGRESSION_UNDO_NAME                    NC_("STR_REGRESSION_UNDO_NAME", "Regression")
 #define STR_REGRESSION                              NC_("STR_REGRESSION", "Regression")
+#define STR_FOURIER_ANALYSIS_UNDO_NAME              NC_("STR_FOURIER_ANALYSIS_UNDO_NAME", "Fourier Analysis")
+#define STR_FOURIER_ANALYSIS                        NC_("STR_FOURIER_ANALYSIS", "Fourier Analysis")
 /* Common */
 #define STR_COLUMN_LABEL_TEMPLATE                   NC_("STR_COLUMN_LABEL_TEMPLATE", "Column %NUMBER%")
 #define STR_ROW_LABEL_TEMPLATE                      NC_("STR_ROW_LABEL_TEMPLATE", "Row %NUMBER%")
@@ -307,13 +309,14 @@
 #define STR_TEST_STATISTIC_LABEL                    NC_("STR_TEST_STATISTIC_LABEL", "Test Statistic")
 #define STR_LABEL_LOWER                             NC_("STR_LABEL_LOWER", "Lower")
 #define STR_LABEL_UPPER                             NC_("STR_LABEL_Upper", "Upper")
+#define STR_MESSAGE_INVALID_INPUT_RANGE             NC_("STR_MESSAGE_INVALID_INPUT_RANGE", "Input range is invalid.")
+#define STR_MESSAGE_INVALID_OUTPUT_ADDR             NC_("STR_MESSAGE_INVALID_OUTPUT_ADDR", "Output address is not valid.")
 /* RegressionDialog */
 #define STR_LABEL_LINEAR                            NC_("STR_LABEL_LINEAR", "Linear")
 #define STR_LABEL_LOGARITHMIC                       NC_("STR_LABEL_LOGARITHMIC", "Logarithmic")
 #define STR_LABEL_POWER                             NC_("STR_LABEL_POWER", "Power")
 #define STR_MESSAGE_XINVALID_RANGE                  NC_("STR_MESSAGE_XINVALID_RANGE", "Independent variable(s) range is not valid.")
 #define STR_MESSAGE_YINVALID_RANGE                  NC_("STR_MESSAGE_YINVALID_RANGE", "Dependent variable(s) range is not valid.")
-#define STR_MESSAGE_INVALID_OUTPUT_ADDR             NC_("STR_MESSAGE_INVALID_OUTPUT_ADDR", "Output range is not valid.")
 #define STR_MESSAGE_INVALID_CONFIDENCE_LEVEL        NC_("STR_MESSAGE_INVALID_CONFIDENCE_LEVEL", "Confidence level must be in the interval (0, 1).")
 #define STR_MESSAGE_YVARIABLE_MULTI_COLUMN          NC_("STR_MESSAGE_YVARIABLE_MULTI_COLUMN", "Y variable range cannot have more than 1 column.")
 #define STR_MESSAGE_YVARIABLE_MULTI_ROW             NC_("STR_MESSAGE_YVARIABLE_MULTI_ROW", "Y variable range cannot have more than 1 row.")
@@ -350,6 +353,18 @@
 #define STR_ZTEST_Z_CRITICAL_ONE_TAIL               NC_("STR_ZTEST_Z_CRITICAL_ONE_TAIL", "z Critical one-tail")
 #define STR_ZTEST_P_TWO_TAIL                        NC_("STR_ZTEST_P_TWO_TAIL", "P (Z<=z) two-tail")
 #define STR_ZTEST_Z_CRITICAL_TWO_TAIL               NC_("STR_ZTEST_Z_CRITICAL_TWO_TAIL", "z Critical two-tail")
+/*Fourier Analysis*/
+#define STR_FOURIER_TRANSFORM                       NC_("STR_FOURIER_TRANSFORM", "Fourier Transform")
+#define STR_INVERSE_FOURIER_TRANSFORM               NC_("STR_INVERSE_FOURIER_TRANSFORM", "Inverse Fourier Transform")
+#define STR_REAL_PART                               NC_("STR_REAL_PART", "Real")
+#define STR_IMAGINARY_PART                          NC_("STR_IMAGINARY_PART", "Imaginary")
+#define STR_MAGNITUDE_PART                          NC_("STR_MAGNITUDE_PART", "Magnitude")
+#define STR_PHASE_PART                              NC_("STR_PHASE_PART", "Phase")
+#define STR_MESSAGE_INVALID_NUMCOLS                 NC_("STR_MESSAGE_INVALID_NUMCOLS", "More than two columns selected in grouped by column mode.")
+#define STR_MESSAGE_INVALID_NUMROWS                 NC_("STR_MESSAGE_INVALID_NUMROWS", "More than two rows selected in grouped by row mode.")
+#define STR_MESSAGE_NODATA_IN_RANGE                 NC_("STR_MESSAGE_NODATA_IN_RANGE", "No data in input range.")
+#define STR_MESSAGE_OUTPUT_TOO_LONG                 NC_("STR_MESSAGE_OUTPUT_TOO_LONG", "Output is too long to write into the sheet.")
+#define STR_INPUT_DATA_RANGE                        NC_("STR_INPUT_DATA_RANGE", "Input data range")
 /*infobar for allowing links to update or not*/
 #define STR_ENABLE_CONTENT                          NC_("STR_ENABLE_CONTENT", "Enable Content")
 /*Insert image dialog*/

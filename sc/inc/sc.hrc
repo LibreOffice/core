@@ -237,6 +237,7 @@
 #define SID_WINDOW_FIX_COL                  (SC_MESSAGE_START + 85)
 #define SID_COLUMN_OPERATIONS               (SC_MESSAGE_START + 86)
 #define SID_ROW_OPERATIONS                  (SC_MESSAGE_START + 87)
+#define SID_FOURIER_ANALYSIS_DIALOG         (SC_MESSAGE_START + 88)
 
 // functions
 
