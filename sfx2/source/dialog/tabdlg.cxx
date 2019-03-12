@@ -51,10 +51,11 @@ struct TabPageImpl
 {
     bool                        mbStandard;
     VclPtr<SfxTabDialog>        mxDialog;
-    SfxTabDialogController*     mpDialogController;
+    weld::DialogController*     mpDialogController;
+    SfxTabDialogController*     mpTabDialogController;
     css::uno::Reference< css::frame::XFrame > mxFrame;
 
-    TabPageImpl() : mbStandard( false ), mpDialogController(nullptr) {}
+    TabPageImpl() : mbStandard(false), mpDialogController(nullptr), mpTabDialogController(nullptr) {}
 };
 
 struct Data_Impl
@@ -190,6 +191,7 @@ SfxTabPage::SfxTabPage(TabPageParent pParent, const OUString& rUIXMLDescription,
                                : Application::CreateInterimBuilder(this, rUIXMLDescription))
     , m_xContainer(m_xBuilder->weld_container(rID))
 {
+    pImpl->mpDialogController = pParent.pController;
 }
 
 SfxTabPage::~SfxTabPage()
@@ -335,12 +337,13 @@ SfxTabDialog* SfxTabPage::GetTabDialog() const
 
 void SfxTabPage::SetDialogController(SfxTabDialogController* pDialog)
 {
-    pImpl->mpDialogController = pDialog;
+    pImpl->mpTabDialogController = pDialog;
+    pImpl->mpDialogController = pImpl->mpTabDialogController;
 }
 
 SfxTabDialogController* SfxTabPage::GetDialogController() const
 {
-    return pImpl->mpDialogController;
+    return pImpl->mpTabDialogController;
 }
 
 OString SfxTabPage::GetConfigId() const
@@ -356,14 +359,17 @@ OString SfxTabPage::GetConfigId() const
 weld::Window* SfxTabPage::GetDialogFrameWeld() const
 {
     if (pImpl->mpDialogController)
+    {
+        assert(pImpl->mpTabDialogController == pImpl->mpDialogController || !pImpl->mpTabDialogController);
         return pImpl->mpDialogController->getDialog();
+    }
     return GetFrameWeld();
 }
 
 const SfxItemSet* SfxTabPage::GetDialogExampleSet() const
 {
-    if (pImpl->mpDialogController)
-        return pImpl->mpDialogController->GetExampleSet();
+    if (pImpl->mpTabDialogController)
+        return pImpl->mpTabDialogController->GetExampleSet();
     if (pImpl->mxDialog)
         return pImpl->mxDialog->GetExampleSet();
     return nullptr;
