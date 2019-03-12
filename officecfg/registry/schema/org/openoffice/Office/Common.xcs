@@ -3592,6 +3592,13 @@
         </info>
         <value>Default</value>
       </prop>
+      <prop oor:name="HelpRootURL" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the root URL to the Office help pages. Blank disables
+          Help buttons on dialogs in LibreOffice Online.</desc>
+        </info>
+        <value>https://help.libreoffice.com/help.html?</value>
+      </prop>
       <group oor:name="StartCenter">
         <info>
           <desc>Contains settings for the start center.</desc>

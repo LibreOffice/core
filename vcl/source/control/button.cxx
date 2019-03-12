@@ -46,6 +46,8 @@
 #include <osl/diagnose.h>
 
 #include <comphelper/dispatchcommand.hxx>
+#include <comphelper/lok.hxx>
+#include <officecfg/Office/Common.hxx>
 
 
 using namespace css;
@@ -1809,6 +1811,16 @@ void HelpButton::Click()
         pFocusWin->RequestHelp( aEvt );
     }
     PushButton::Click();
+}
+
+void HelpButton::StateChanged( StateChangedType nStateChange )
+{
+    // Hide when we have no help URL.
+    if (comphelper::LibreOfficeKit::isActive() &&
+        officecfg::Office::Common::Help::HelpRootURL::get().isEmpty())
+        Hide();
+    else
+        PushButton::StateChanged(nStateChange);
 }
 
 void RadioButton::ImplInitRadioButtonData()
