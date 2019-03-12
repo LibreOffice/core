@@ -2020,7 +2020,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
         SdrPageView* pPV=pM->GetPageView();
         SdrObjList*  pOL=pObj->getParentSdrObjListFromSdrObject();
         const size_t nInsPos=pObj->GetOrdNum()+1;
-        sal_uIntPtr        nInsAnz=0;
+        sal_uIntPtr      nInsCnt=0;
         tools::Rectangle aLogicRect;
 
         SdrGrafObj*  pGraf = dynamic_cast<SdrGrafObj*>( pObj );
@@ -2033,7 +2033,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
                 {
                     aLogicRect = pGraf->GetLogicRect();
                     ImpSdrGDIMetaFileImport aFilter(*mpModel, pObj->GetLayer(), aLogicRect);
-                    nInsAnz = aFilter.DoImport(aMetaFile, *pOL, nInsPos, pProgrInfo);
+                    nInsCnt = aFilter.DoImport(aMetaFile, *pOL, nInsPos, pProgrInfo);
                 }
             }
             else if (pGraf->isEmbeddedPdfData())
@@ -2043,7 +2043,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
                 ImpSdrPdfImport aFilter(*mpModel, pObj->GetLayer(), aLogicRect, pGraf->getEmbeddedPdfData());
                 if (pGraf->getEmbeddedPageNumber() < aFilter.GetPageCount())
                 {
-                    nInsAnz = aFilter.DoImport(*pOL, nInsPos, pGraf->getEmbeddedPageNumber(), pProgrInfo);
+                    nInsCnt = aFilter.DoImport(*pOL, nInsPos, pGraf->getEmbeddedPageNumber(), pProgrInfo);
                 }
 #endif // HAVE_FEATURE_PDFIUM
             }
@@ -2054,10 +2054,10 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
         {
             aLogicRect = pOle2->GetLogicRect();
             ImpSdrGDIMetaFileImport aFilter(*mpModel, pObj->GetLayer(), aLogicRect);
-            nInsAnz = aFilter.DoImport(pOle2->GetGraphic()->GetGDIMetaFile(), *pOL, nInsPos, pProgrInfo);
+            nInsCnt = aFilter.DoImport(pOle2->GetGraphic()->GetGDIMetaFile(), *pOL, nInsPos, pProgrInfo);
         }
 
-        if (nInsAnz != 0)
+        if (nInsCnt != 0)
         {
             // transformation
             GeoStat aGeoStat(pGraf ? pGraf->GetGeoStat() : pOle2->GetGeoStat());
@@ -2069,7 +2069,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
             if (aGeoStat.nRotationAngle)
                 aGeoStat.RecalcSinCos();
 
-            for (sal_uIntPtr i = 0; i < nInsAnz; i++)
+            for (sal_uIntPtr i = 0; i < nInsCnt; i++)
             {
                 if (bUndo)
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pOL->GetObj(nObj)));

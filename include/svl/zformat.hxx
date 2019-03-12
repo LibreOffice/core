@@ -57,7 +57,7 @@ struct ImpSvNumberformatInfo            // Struct for FormatInfo
     SvNumFormatType eScannedType;       // Type determined by scan
     bool bThousand;                     // Has group (AKA thousand) separator
 
-    void Copy( const ImpSvNumberformatInfo& rNumFor, sal_uInt16 nAnz );
+    void Copy( const ImpSvNumberformatInfo& rNumFor, sal_uInt16 nCount );
 };
 
 // NativeNumber, represent numbers using CJK or other digits if nNum>0,
@@ -103,7 +103,7 @@ public:
     ImpSvNumFor();                      // Ctor without filling the Info
     ~ImpSvNumFor();
 
-    void Enlarge(sal_uInt16 nAnz);      // Init of arrays to the right size
+    void Enlarge(sal_uInt16 nCount);    // Init of arrays to the right size
 
     // if pSc is set, it is used to get the Color pointer
     void Copy( const ImpSvNumFor& rNumFor, ImpSvNumberformatScan* pSc );
@@ -310,7 +310,7 @@ public:
                 // First try a simple approach. Note that this is called only
                 // if all MidStrings did match so far, to verify that all
                 // strings of the format were matched and not just the starting
-                // sequence, so we don't have to check if GetnAnz() includes
+                // sequence, so we don't have to check if GetCount() includes
                 // [modifiers] or anything else if both counts are equal.
                 sal_uInt16 nCnt = NumFor[nNumFor].GetCount();
                 if ( nAllCount == nCnt )

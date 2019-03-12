@@ -43,7 +43,7 @@ namespace {
 // 0x8000: recognition finished
 
 #define M_DC        0x0100
-#define M_ALT(ANZ)  (0x0200+(ANZ))
+#define M_ALT(CNT)  (0x0200+(CNT))
 #define M_ENDE      0x8000
 
 const sal_uInt16 pLotus[] =      // Lotus 1/1A/2
@@ -115,14 +115,14 @@ bool detectThisFormat(SvStream& rStr, const sal_uInt16* pSearch)
         }
         else if( nMuster & M_ALT(0) )
         { // alternative Bytes
-            sal_uInt8 nAnzAlt = static_cast<sal_uInt8>(nMuster);
+            sal_uInt8 nCntAlt = static_cast<sal_uInt8>(nMuster);
             bSync = false;          // first unsynchron
-            while( nAnzAlt > 0 )
+            while( nCntAlt > 0 )
             {
                 pSearch++;
                 if( static_cast<sal_uInt8>(*pSearch) == nByte )
                     bSync = true;   // only now synchronization
-                nAnzAlt--;
+                nCntAlt--;
             }
         }
         else if( nMuster & M_ENDE )

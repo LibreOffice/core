@@ -752,9 +752,9 @@ namespace sdr
 
                         if(pBC)
                         {
-                            const size_t nLstAnz(pBC->GetSizeOfVector());
+                            const size_t nLstCnt(pBC->GetSizeOfVector());
 
-                            for(size_t nl=0; nl < nLstAnz; ++nl)
+                            for(size_t nl=0; nl < nLstCnt; ++nl)
                             {
                                 SfxListener* pLst = pBC->GetListener(nl);
                                 SdrEdgeObj* pEdge = dynamic_cast<SdrEdgeObj*>( pLst );
