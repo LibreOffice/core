@@ -578,8 +578,8 @@ STDAPI DllUnregisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
 const char* const aMSFileExt[] = { ".dot", ".doc", ".xlt", ".xls", ".pot", ".ppt", ".pps" };
 const char* const aMSMimeType[] = { "application/msword",
                           "application/msword",
-                          "application/msexcel",
-                          "application/msexcel",
+                          "application/msexcell",
+                          "application/msexcell",
                           "application/mspowerpoint",
                           "application/mspowerpoint",
                           "application/mspowerpoint" };
