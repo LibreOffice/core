@@ -330,7 +330,7 @@ IMPL_LINK_NOARG(SwFieldEditDlg, AddressHdl, Button*, void)
     aSet.Put(SfxUInt16Item(SID_FIELD_GRABFOCUS, static_cast<sal_uInt16>(nEditPos)));
     SwAbstractDialogFactory& rFact = swui::GetFactory();
 
-    ScopedVclPtr<SfxAbstractDialog> pDlg(rFact.CreateSwAddressAbstractDlg(this, aSet));
+    ScopedVclPtr<SfxAbstractDialog> pDlg(rFact.CreateSwAddressAbstractDlg(GetFrameWeld(), aSet));
     if (RET_OK == pDlg->Execute())
     {
         pSh->UpdateOneField(*pCurField);
