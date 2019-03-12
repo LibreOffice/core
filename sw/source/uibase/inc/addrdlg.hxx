@@ -21,10 +21,10 @@
 
 #include <sfx2/basedlgs.hxx>
 
-class SwAddrDlg : public SfxSingleTabDialog
+class SwAddrDlg : public SfxSingleTabDialogController
 {
 public:
-    SwAddrDlg(vcl::Window* pParent, const SfxItemSet& rSet);
+    SwAddrDlg(weld::Window* pParent, const SfxItemSet& rSet);
 };
 
 #endif
