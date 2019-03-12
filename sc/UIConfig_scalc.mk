@@ -128,6 +128,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/footerdialog \
 	sc/uiconfig/scalc/ui/formatcellsdialog \
 	sc/uiconfig/scalc/ui/formulacalculationoptions \
+	sc/uiconfig/scalc/ui/fourieranalysisdialog \
 	sc/uiconfig/scalc/ui/floatingborderstyle \
 	sc/uiconfig/scalc/ui/floatinglinestyle \
 	sc/uiconfig/scalc/ui/functionpanel \

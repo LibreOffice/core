@@ -141,6 +141,13 @@ private:
     ScChiSquareTestDialogWrapper() = delete;
 };
 
+class ScFourierAnalysisDialogWrapper :
+    public ChildWindowWrapper<SID_FOURIER_ANALYSIS_DIALOG>
+{
+private:
+    ScFourierAnalysisDialogWrapper() = delete;
+};
+
 class ScAcceptChgDlgWrapper: public SfxChildWindow
 {
     public:

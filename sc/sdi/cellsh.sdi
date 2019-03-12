@@ -163,6 +163,7 @@ interface CellSelection
     SID_FTEST_DIALOG                    [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_ZTEST_DIALOG                    [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_CHI_SQUARE_TEST_DIALOG          [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    SID_FOURIER_ANALYSIS_DIALOG         [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_SEARCH_RESULTS_DIALOG [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_MARKDATAAREA    [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
     SID_MARKARRAYFORMULA [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]

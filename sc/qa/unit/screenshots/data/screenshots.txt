@@ -99,6 +99,7 @@ modules/scalc/ui/correlationdialog.ui
 modules/scalc/ui/ttestdialog.ui
 modules/scalc/ui/ztestdialog.ui
 modules/scalc/ui/chisquaretestdialog.ui
+modules/scalc/ui/fourieranalysisdialog.ui
 modules/scalc/ui/regressiondialog.ui
 modules/scalc/ui/exponentialsmoothingdialog.ui
 modules/scalc/ui/descriptivestatisticsdialog.ui

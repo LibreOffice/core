@@ -180,11 +180,7 @@ void ScStatisticsInputOutputDialog::SetReference( const ScRange& rReferenceRange
         }
     }
 
-    // Enable OK if both, input range and output address are set.
-    if (mInputRange.IsValid() && mOutputAddress.IsValid())
-        mpButtonOk->Enable();
-    else
-        mpButtonOk->Disable();
+    ValidateDialogInput();
 }
 
 IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, OkClicked, Button*, void )
@@ -217,6 +213,8 @@ IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, GroupByChanged, RadioButton&, vo
         mGroupedBy = BY_COLUMN;
     else if (mpGroupByRowsRadio->IsChecked())
         mGroupedBy = BY_ROW;
+
+    ValidateDialogInput();
 }
 
 IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, RefInputModifyHandler, Edit&, void )
@@ -268,11 +266,7 @@ IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, RefInputModifyHandler, Edit&, vo
         }
     }
 
-    // Enable OK if both, input range and output address are set.
-    if (mInputRange.IsValid() && mOutputAddress.IsValid())
-        mpButtonOk->Enable();
-    else
-        mpButtonOk->Disable();
+    ValidateDialogInput();
 }
 
 void ScStatisticsInputOutputDialog::CalculateInputAndWriteToOutput()
@@ -286,6 +280,20 @@ void ScStatisticsInputOutputDialog::CalculateInputAndWriteToOutput()
 
     pUndoManager->LeaveListAction();
     pDocShell->PostPaint( aOutputRange, PaintPartFlags::Grid );
+}
+
+bool ScStatisticsInputOutputDialog::InputRangesValid()
+{
+    return mInputRange.IsValid() && mOutputAddress.IsValid();
+}
+
+void ScStatisticsInputOutputDialog::ValidateDialogInput()
+{
+    // Enable OK button if all inputs are ok.
+    if (InputRangesValid())
+        mpButtonOk->Enable();
+    else
+        mpButtonOk->Disable();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
