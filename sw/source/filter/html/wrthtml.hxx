@@ -691,6 +691,8 @@ Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
 
 Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt );
 
+OString GetCSS1_Color(const Color& rColor);
+
 #endif // INCLUDED_SW_SOURCE_FILTER_HTML_WRTHTML_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
