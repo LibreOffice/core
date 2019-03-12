@@ -2266,6 +2266,9 @@ public:
 
     virtual int get_column_width(int nColumn) const override
     {
+        LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
+        if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
+            return pHeaderBar->GetItemSize(pHeaderBar->GetItemId(nColumn));
         // GetTab(0) gives the position of the bitmap which is automatically inserted by the TabListBox.
         // So the first text column's width is Tab(2)-Tab(1).
         auto nWidthPixel = m_xTreeView->GetLogicTab(nColumn + 2) - m_xTreeView->GetLogicTab(nColumn + 1);
