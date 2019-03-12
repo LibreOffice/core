@@ -191,6 +191,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_stylefamilyobj \
 	CppunitTest_sc_subtotaldescriptorbaseobj \
 	CppunitTest_sc_subtotalfieldobj \
+	CppunitTest_sc_tablecolumnsobj \
 	CppunitTest_sc_tableconditionalentryobj \
 	CppunitTest_sc_tableconditionalformat \
 	CppunitTest_sc_tablerowsobj \
