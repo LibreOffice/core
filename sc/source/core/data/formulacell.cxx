@@ -4876,7 +4876,7 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
             xGroup->mpTopCell->aPos.IncRow(nOffset);
             xGroup->mbInvariant = mxGroup->mbInvariant;
             xGroup->mnLength = nCurChunkSize;
-            xGroup->mpCode.reset( mxGroup->mpCode.get() );
+            xGroup->mpCode = std::move(mxGroup->mpCode); // temporarily transfer
         }
 
         ScTokenArray aCode;
@@ -4908,7 +4908,7 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
             {
                 mxGroup->mpTopCell->aPos = aOrigPos;
                 xGroup->mpTopCell = nullptr;
-                xGroup->mpCode.release();
+                mxGroup->mpCode = std::move(xGroup->mpCode);
             }
 
             aScope.addMessage("group token conversion failed");
@@ -4932,7 +4932,7 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
             {
                 mxGroup->mpTopCell->aPos = aOrigPos;
                 xGroup->mpTopCell = nullptr;
-                xGroup->mpCode = nullptr;
+                mxGroup->mpCode = std::move(xGroup->mpCode);
             }
 
             aScope.addMessage("group interpretation unsuccessful");
@@ -4944,7 +4944,7 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
         if (nNumParts > 1)
         {
             xGroup->mpTopCell = nullptr;
-            xGroup->mpCode = nullptr;
+            mxGroup->mpCode = std::move(xGroup->mpCode);
         }
     }
 
