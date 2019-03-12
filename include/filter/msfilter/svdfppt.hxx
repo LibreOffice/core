@@ -281,7 +281,6 @@ struct PptFontEntityAtom
     friend SvStream& ReadPptFontEntityAtom(SvStream& rIn, PptFontEntityAtom& rAtom);
 };
 
-class PptFontCollection;
 enum class PptViewTypeEnum : sal_uInt16
 {
     NONE = 0,
@@ -463,7 +462,7 @@ protected:
 
     ::std::vector< PPTOleEntry > aOleObjectList;
 
-    std::unique_ptr<PptFontCollection> m_pFonts;
+    std::unique_ptr<std::vector<std::unique_ptr<PptFontEntityAtom>>> m_pFonts;
 
     sal_uInt32          nStreamLen;
 

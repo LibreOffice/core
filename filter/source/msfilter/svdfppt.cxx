@@ -460,10 +460,6 @@ SvStream& ReadPptFontEntityAtom( SvStream& rIn, PptFontEntityAtom& rAtom )
     return rIn;
 }
 
-class PptFontCollection : public std::vector<std::unique_ptr<PptFontEntityAtom>>
-{
-};
-
 SvStream& ReadPptUserEditAtom( SvStream& rIn, PptUserEditAtom& rAtom )
 {
     sal_Int16 lastViewType = 0;
@@ -2162,7 +2158,7 @@ bool SdrPowerPointImport::ReadFontCollection()
             {
                 bRet = true;
                 if (!m_pFonts)
-                    m_pFonts.reset( new PptFontCollection );
+                    m_pFonts.reset( new std::vector<std::unique_ptr<PptFontEntityAtom>> );
                 std::unique_ptr<PptFontEntityAtom> pFont(new PptFontEntityAtom);
                 ReadPptFontEntityAtom( rStCtrl, *pFont );
 
