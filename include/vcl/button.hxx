@@ -267,6 +267,8 @@ private:
                         HelpButton( const HelpButton & ) = delete;
                         HelpButton & operator= ( const HelpButton & ) = delete;
 
+    virtual void    StateChanged( StateChangedType nStateChange ) override;
+
 public:
     explicit        HelpButton( vcl::Window* pParent, WinBits nStyle = 0 );
 
