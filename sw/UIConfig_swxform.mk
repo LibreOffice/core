@@ -62,7 +62,6 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/swxform,\
 	sw/uiconfig/swxform/toolbar/insertobjectbar \
 	sw/uiconfig/swxform/toolbar/mailmerge \
 	sw/uiconfig/swxform/toolbar/mediaobjectbar \
-	sw/uiconfig/swxform/toolbar/moreformcontrols \
 	sw/uiconfig/swxform/toolbar/numobjectbar \
 	sw/uiconfig/swxform/toolbar/oleobjectbar \
 	sw/uiconfig/swxform/toolbar/optimizetablebar \

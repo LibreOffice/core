@@ -83,7 +83,6 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/simpress,\
 	sd/uiconfig/simpress/toolbar/linesbar \
 	sd/uiconfig/simpress/toolbar/masterviewtoolbar \
 	sd/uiconfig/simpress/toolbar/mediaobjectbar \
-	sd/uiconfig/simpress/toolbar/moreformcontrols \
 	sd/uiconfig/simpress/toolbar/notebookbarshortcuts \
 	sd/uiconfig/simpress/toolbar/optimizetablebar \
 	sd/uiconfig/simpress/toolbar/optionsbar \
