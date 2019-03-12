@@ -1,5 +1,3 @@
-"ScTableColumnsObj";"com::sun::star::container::XIndexAccess";"getCount()"
-"ScTableColumnsObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
 "ScTableColumnsObj";"com::sun::star::table::XTableColumns";"insertByIndex()"
 "ScTableColumnsObj";"com::sun::star::table::XTableColumns";"removeByIndex()"
 "ScTableColumnsObj";"com::sun::star::container::XElementAccess";"getElementType()"
