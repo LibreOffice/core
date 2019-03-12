@@ -143,6 +143,8 @@ jboolean libreofficekit_initialize(JNIEnv* env,
     }
 
     LOGI("LibreOfficeKit: libreofficekit_initialize finished");
+
+    return JNI_TRUE;
 }
 
 /// Initialize the LibreOfficeKit.
