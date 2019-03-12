@@ -23,10 +23,6 @@ $(eval $(call gb_CppunitTest_use_externals,svgio_read,\
     libxml2 \
 ))
 
-$(eval $(call gb_CppunitTest_use_library_objects,svgio_read,\
-    svgio \
-))
-
 $(eval $(call gb_CppunitTest_use_libraries,svgio_read, \
 	basegfx \
 	comphelper \
