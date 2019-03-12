@@ -330,9 +330,14 @@ public:
     WaitObject(weld::Window* pWindow)
         : m_pWindow(pWindow)
     {
-        m_pWindow->set_busy_cursor(true);
+        if (m_pWindow)
+            m_pWindow->set_busy_cursor(true);
     }
-    ~WaitObject() { m_pWindow->set_busy_cursor(false); }
+    ~WaitObject()
+    {
+        if (m_pWindow)
+            m_pWindow->set_busy_cursor(false);
+    }
 };
 
 class Button;

@@ -2307,7 +2307,7 @@ namespace pcr
         clearContainer( _rFieldNames );
         try
         {
-            WaitCursor aWaitCursor( impl_getDefaultDialogParent_nothrow() );
+            weld::WaitObject aWaitCursor(impl_getDefaultDialogFrame_nothrow());
 
             // get the form of the control we're inspecting
             Reference< XPropertySet > xFormSet( impl_getRowSet_throw(), UNO_QUERY );
@@ -2363,7 +2363,7 @@ namespace pcr
         {
             if ( xRowSetProps.is() )
             {
-                WaitCursor aWaitCursor( impl_getDefaultDialogParent_nothrow() );
+                weld::WaitObject aWaitCursor(impl_getDefaultDialogFrame_nothrow());
                 m_xRowSetConnection = ::dbtools::ensureRowSetConnection( xRowSet, m_xContext );
             }
         }
@@ -2403,7 +2403,7 @@ namespace pcr
     {
         try
         {
-            WaitCursor aWaitCursor( impl_getDefaultDialogParent_nothrow() );
+            weld::WaitObject aWaitCursor(impl_getDefaultDialogFrame_nothrow());
 
 
             // Set the UI data
@@ -2716,10 +2716,10 @@ namespace pcr
         bool bIsLink = true;// reflect the legacy behavior
         OUString aStrTrans = m_pInfoService->getPropertyTranslation( PROPERTY_ID_IMAGE_URL );
 
-        vcl::Window* pWin = impl_getDefaultDialogParent_nothrow();
+        weld::Window* pWin = impl_getDefaultDialogFrame_nothrow();
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
-                FileDialogFlags::Graphic, pWin ? pWin->GetFrameWeld() : nullptr);
+                FileDialogFlags::Graphic, pWin);
 
         aFileDlg.SetTitle(aStrTrans);
         // non-linked images ( e.g. those located in the document
@@ -2783,10 +2783,10 @@ namespace pcr
 
     bool FormComponentPropertyHandler::impl_browseForTargetURL_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
-        vcl::Window* pWin = impl_getDefaultDialogParent_nothrow();
+        weld::Window* pWin = impl_getDefaultDialogFrame_nothrow();
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                FileDialogFlags::NONE, pWin ? pWin->GetFrameWeld() : nullptr);
+                FileDialogFlags::NONE, pWin);
 
         OUString sURL;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_TARGET_URL ) >>= sURL );
@@ -2838,10 +2838,10 @@ namespace pcr
 
     bool FormComponentPropertyHandler::impl_browseForDatabaseDocument_throw( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
-        vcl::Window* pWin = impl_getDefaultDialogParent_nothrow();
+        weld::Window* pWin = impl_getDefaultDialogFrame_nothrow();
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, FileDialogFlags::NONE,
-                "sdatabase", SfxFilterFlags::NONE, SfxFilterFlags::NONE, pWin ? pWin->GetFrameWeld() : nullptr);
+                "sdatabase", SfxFilterFlags::NONE, SfxFilterFlags::NONE, pWin);
 
         OUString sDataSource;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_DATASOURCE ) >>= sDataSource );
@@ -2866,7 +2866,6 @@ namespace pcr
         return bSuccess;
     }
 
-
     bool FormComponentPropertyHandler::impl_dialogColorChooser_throw( sal_Int32 _nColorPropertyId, Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
         ::Color aColor;
@@ -2875,19 +2874,18 @@ namespace pcr
         aColorDlg.SetColor( aColor );
 
         _rClearBeforeDialog.clear();
-        vcl::Window* pParent = impl_getDefaultDialogParent_nothrow();
-        if (!aColorDlg.Execute(pParent ? pParent->GetFrameWeld() : nullptr))
+        weld::Window* pParent = impl_getDefaultDialogFrame_nothrow();
+        if (!aColorDlg.Execute(pParent))
             return false;
 
         _out_rNewValue <<= aColorDlg.GetColor();
         return true;
     }
 
-
     bool FormComponentPropertyHandler::impl_dialogChooseLabelControl_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
-        vcl::Window* pParent = impl_getDefaultDialogParent_nothrow();
-        OSelectLabelDialog dlgSelectLabel(pParent ? pParent->GetFrameWeld() : nullptr, m_xComponent);
+        weld::Window* pParent = impl_getDefaultDialogFrame_nothrow();
+        OSelectLabelDialog dlgSelectLabel(pParent, m_xComponent);
         _rClearBeforeDialog.clear();
         bool bSuccess = (RET_OK == dlgSelectLabel.run());
         if ( bSuccess )
