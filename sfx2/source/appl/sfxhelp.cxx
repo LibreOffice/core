@@ -59,6 +59,7 @@
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/viewsh.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include "newhelp.hxx"
 #include <sfx2/objsh.hxx>
@@ -539,7 +540,7 @@ static bool impl_showOnlineHelp( const OUString& rURL )
     if ( rURL.getLength() <= aInternal.getLength() || !rURL.startsWith(aInternal) )
         return false;
 
-    OUString aHelpLink = Application::GetSettings().GetHelpSettings().GetHelpURL();
+    OUString aHelpLink = officecfg::Office::Common::Help::HelpRootURL::get();
     OUString aTarget = "Target=" + rURL.copy(aInternal.getLength());
     aTarget = aTarget.replaceAll("%2F", "/").replaceAll("?", "&");
     aHelpLink += aTarget;
