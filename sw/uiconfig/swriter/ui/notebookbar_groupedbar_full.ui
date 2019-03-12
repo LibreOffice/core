@@ -2755,7 +2755,7 @@
       <object class="GtkMenuItem" id="MenuStyles-TextBody">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Text body&amp;FamilyName:string=ParagraphStyles</property>
+        <property name="action_name">.uno:TextBodyParaStyle</property>
       </object>
     </child>
     <child>
@@ -2768,42 +2768,42 @@
       <object class="GtkMenuItem" id="MenuStyles-Title">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Title&amp;FamilyName:string=ParagraphStyles</property>
+        <property name="action_name">.uno:TitleParaStyle</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuStyles-Subtitle">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Subtitle&amp;FamilyName:string=ParagraphStyles</property>
+        <property name="action_name">.uno:SubtitleParaStyle</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuStyles-Heading1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=ParagraphStyles</property>
+        <property name="action_name">.uno:Heading1ParaStyle</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuStyles-Heading2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=ParagraphStyles</property>
+        <property name="action_name">.uno:Heading2ParaStyle</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuStyles-Heading3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Heading 3&amp;FamilyName:string=ParagraphStyles</property>
+        <property name="action_name">.uno:Heading3ParaStyle</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuStyles-Heading4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Heading 4&amp;FamilyName:string=ParagraphStyles</property>
+        <property name="action_name">.uno:Heading4ParaStyle</property>
       </object>
     </child>
     <child>
@@ -2816,35 +2816,35 @@
       <object class="GtkMenuItem" id="MenuStyles-DefaultStyle">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Standard&amp;FamilyName:string=CharacterStyles</property>
+        <property name="action_name">.uno:DefaultCharStyle</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuStyles-Emphasis">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Emphasis&amp;FamilyName:string=CharacterStyles</property>
+        <property name="action_name">.uno:EmphasisCharStyle</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuStyles-EmphasisStrong">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Strong Emphasis&amp;FamilyName:string=CharacterStyles</property>
+        <property name="action_name">.uno:StrongEmphasisCharStyle</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuStyles-Citation">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Citation&amp;FamilyName:string=CharacterStyles</property>
+        <property name="action_name">.uno:QuoteCharStyle</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuStyles-SourceCode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Source Text&amp;FamilyName:string=CharacterStyles</property>
+        <property name="action_name">.uno:SourceCharStyle</property>
       </object>
     </child>
     <child>
@@ -2857,28 +2857,42 @@
       <object class="GtkMenuItem" id="MenuStyles-ListStyle">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=List 1&amp;FamilyName:string=NumberingStyles</property>
+        <property name="action_name">.uno:BulletListStyle</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuStyles-Numbering_123">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Numbering 123&amp;FamilyName:string=NumberingStyles</property>
+        <property name="action_name">.uno:NumberListStyle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-Numbering_abc">
+      <object class="GtkMenuItem" id="MenuStyles-AlphaListStyle">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Numbering abc&amp;FamilyName:string=NumberingStyles</property>
+        <property name="action_name">.uno:AlphaListStyle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuStyles-Numbering_IVX">
+      <object class="GtkMenuItem" id="MenuStyles-AlphaLowListStyle">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Numbering IVX&amp;FamilyName:string=NumberingStyles</property>
+        <property name="action_name">.uno:AlphaLowListStyle</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuStyles-RomanListStyle">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RomanListStyle</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuStyles-RomanLowListStyle">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RomanLowListStyle</property>
       </object>
     </child>
     <child>
