@@ -279,7 +279,14 @@ void LocaleConfigurationListener::ConfigurationChanged( utl::ConfigurationBroadc
 
 ImplSVData::~ImplSVData() {}
 ImplSVAppData::~ImplSVAppData() {}
+
+ImplSVGDIData::ImplSVGDIData()
+    : maThemeImageCache(10)
+    , maThemeDrawCommandsCache(50)
+{}
+
 ImplSVGDIData::~ImplSVGDIData() {}
+
 ImplSVWinData::~ImplSVWinData() {}
 ImplSVHelpData::~ImplSVHelpData() {}
 

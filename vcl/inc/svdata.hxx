@@ -172,6 +172,7 @@ struct ImplSVAppData
 
 struct ImplSVGDIData
 {
+    ImplSVGDIData();
     ~ImplSVGDIData();
 
     VclPtr<OutputDevice>    mpFirstWinGraphics;             // First OutputDevice with a Frame Graphics
@@ -194,8 +195,8 @@ struct ImplSVGDIData
     long                    mnAppFontY = 0;                 // AppFont Y-Numenator for 80/tel Height
     bool                    mbFontSubChanged = false;       // true: FontSubstitution was changed between Begin/End
 
-    o3tl::lru_map<OUString, BitmapEx> maThemeImageCache = o3tl::lru_map<OUString, BitmapEx>(10);
-    o3tl::lru_map<OUString, gfx::DrawRoot> maThemeDrawCommandsCache = o3tl::lru_map<OUString, gfx::DrawRoot>(50);
+    o3tl::lru_map<OUString, BitmapEx> maThemeImageCache;
+    o3tl::lru_map<OUString, gfx::DrawRoot> maThemeDrawCommandsCache;
 };
 
 struct ImplSVWinData
