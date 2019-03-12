@@ -2671,20 +2671,21 @@ namespace pcr
             aCoreSet.Put( aFormatter );
 
             // a tab dialog with a single page
-            ScopedVclPtrInstance< SfxSingleTabDialog > xDialog( impl_getDefaultDialogParent_nothrow(), aCoreSet,
-                "FormatNumberDialog", "cui/ui/formatnumberdialog.ui");
+            SfxSingleTabDialogController aDialog(impl_getDefaultDialogFrame_nothrow(), aCoreSet,
+                "cui/ui/formatnumberdialog.ui", "FormatNumberDialog");
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT );
             if ( !fnCreatePage )
                 throw RuntimeException();   // caught below
 
-            VclPtr<SfxTabPage> pPage = (*fnCreatePage)( xDialog->get_content_area(), &aCoreSet );
-            xDialog->SetTabPage( pPage );
+            TabPageParent aParent(aDialog.get_content_area(), &aDialog);
+            VclPtr<SfxTabPage> xPage = (*fnCreatePage)(aParent, &aCoreSet);
+            aDialog.SetTabPage(xPage);
 
             _rClearBeforeDialog.clear();
-            if ( RET_OK == xDialog->Execute() )
+            if ( RET_OK == aDialog.run() )
             {
-                const SfxItemSet* pResult = xDialog->GetOutputItemSet();
+                const SfxItemSet* pResult = aDialog.GetOutputItemSet();
 
                 const SfxPoolItem* pItem = pResult->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
                 const SvxNumberInfoItem* pInfoItem = dynamic_cast< const SvxNumberInfoItem* >( pItem );
