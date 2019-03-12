@@ -68,8 +68,8 @@ namespace dbaui
             { m_xSchema,                     "useschemaname",   DSID_SCHEMA,                false, false },
             { m_xIndexAppendix,              "createindex",     DSID_INDEXAPPENDIX,         false, false },
             { m_xDosLineEnds,                "eol",             DSID_DOSLINEENDS,           false, false },
-            { m_xCheckRequiredFields,        "ignorecurrency",  DSID_CHECK_REQUIRED_FIELDS, false, false },
-            { m_xIgnoreCurrency,             "inputchecks",     DSID_IGNORECURRENCY,        false, false },
+            { m_xCheckRequiredFields,        "inputchecks",     DSID_CHECK_REQUIRED_FIELDS, false, false },
+            { m_xIgnoreCurrency,             "ignorecurrency",  DSID_IGNORECURRENCY,        false, false },
             { m_xEscapeDateTime,             "useodbcliterals", DSID_ESCAPE_DATETIME,       false, false },
             { m_xPrimaryKeySupport,          "primarykeys",     DSID_PRIMARY_KEY_SUPPORT,   false, false },
             { m_xRespectDriverResultSetType, "resulttype",      DSID_RESPECTRESULTSETTYPE,  false, false } }
