@@ -75,6 +75,7 @@
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/viewsh.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include "newhelp.hxx"
 #include <sfx2/objsh.hxx>
@@ -707,12 +708,11 @@ bool SfxHelp::Start(const OUString& rURL, weld::Widget* pWidget)
 /// Redirect the vnd.sun.star.help:// urls to http://help.libreoffice.org
 static bool impl_showOnlineHelp( const OUString& rURL )
 {
-    OUString aInternal( "vnd.sun.star.help://"  );
+    static const OUString aInternal("vnd.sun.star.help://");
     if ( rURL.getLength() <= aInternal.getLength() || !rURL.startsWith(aInternal) )
         return false;
 
-    OUString aHelpLink( "https://help.libreoffice.org/help.html?"  );
-
+    OUString aHelpLink = officecfg::Office::Common::Help::HelpRootURL::get();
     OUString aTarget = "Target=" + rURL.copy(aInternal.getLength());
     aTarget = aTarget.replaceAll("%2F", "/").replaceAll("?", "&");
     aHelpLink += aTarget;
