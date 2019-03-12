@@ -1903,7 +1903,7 @@ def __compil__(s):
     # compile to Python
     subroutines = re.compile(r"(?iu)(?<!def )(?<![_\w])\b(%s)\b(?![\w(])" % "|".join(subnames + functions + defaultfunc))
     operators = re.compile(r"(?iu)(%s)" % "(?:[ ]*([+*/<>]|//|==|<=|>=|<>|!=)[ ]*|[ ]*-[ ]+|(?<! )-[ ]*|[ ]*[*][*][ ]*)") # operators, eg. " - ", "-", "- "
-    atoms = re.compile(r"(?iu)(%s)" % "[0-9]+([.,][0-9]+)?|\w+([.]\w)?")
+    atoms = re.compile(r"(?iu)(%s)" % "[0-9]+([.,][0-9]+)?|:?\w+([.]\w)?")
 
     # store argument numbers of all subroutines in dictionary "names"
     names = {key: 1 for key in functions + defaultfunc}

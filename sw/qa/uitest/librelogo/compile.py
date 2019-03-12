@@ -81,6 +81,7 @@ class LibreLogoCompileTest(UITestCase):
                 # PROCEDURE WITH ARGUMENTS
                 ("TO x y\nLABEL y\nEND\nx 25", "global x\ndef x(y):\n __checkhalt__()\n %s\n label(y)\n %s\n%s\nx(25)" % (((self.LS),)*3)),
                 ("TO x :y :z\nLABEL :y + :z\nEND\nx 25 26", "global x\ndef x(_y, _z):\n __checkhalt__()\n %s\n label(_y + _z)\n %s\n%s\nx(25, 26)" % (((self.LS),)*3)),
+                ("TO x :y :z\nLABEL :y + :z\nEND\nx 25 :w", "global x\ndef x(_y, _z):\n __checkhalt__()\n %s\n label(_y + _z)\n %s\n%s\nx(25, _w)" % (((self.LS),)*3)),
                 # UNICODE VARIABLE NAMES
                 ("Erdős=1", "Erd__u__0151s=1"),
                 # STRING CONSTANTS
