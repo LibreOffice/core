@@ -1,0 +1,27 @@
+From f4136a6353162db249f63ddb0f20611622ab61b4 Mon Sep 17 00:00:00 2001
+From: Albert Astals Cid <aacid@kde.org>
+Date: Wed, 27 Feb 2019 19:43:22 +0100
+Subject: [PATCH] ImageStream::getLine: fix crash on broken files
+
+Fixes #728
+---
+ poppler/Stream.cc | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/poppler/Stream.cc b/poppler/Stream.cc
+index 33537b0e..a41435ab 100644
+--- a/poppler/Stream.cc
++++ b/poppler/Stream.cc
+@@ -496,6 +496,9 @@ unsigned char *ImageStream::getLine() {
+   }
+  
+   int readChars = str->doGetChars(inputLineSize, inputLine);
++  if (unlikely(readChars == -1)) {
++      readChars = 0;
++  }
+   for ( ; readChars < inputLineSize; readChars++) inputLine[readChars] = EOF;
+   if (nBits == 1) {
+     unsigned char *p = inputLine;
+-- 
+2.20.1
+
