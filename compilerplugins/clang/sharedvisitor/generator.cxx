@@ -393,6 +393,8 @@ static TraverseFunctionInfo findOrCreateTraverseFunctionInfo( PluginInfo& plugin
     return info;
 }
 
+static bool foundSomething;
+
 bool CheckFileVisitor::VisitCXXRecordDecl( CXXRecordDecl* decl )
 {
     if( !isDerivedFrom( decl, inheritsPluginClassCheck ))
@@ -477,6 +479,8 @@ bool CheckFileVisitor::VisitCXXRecordDecl( CXXRecordDecl* decl )
         plugins[ PluginVisitImplicit ].push_back( move( pluginInfo ));
     else
         plugins[ PluginBasic ].push_back( move( pluginInfo ));
+
+    foundSomething = true;
     return true;
 }
 
@@ -547,9 +551,16 @@ int main(int argc, char** argv)
             "-D__STDC_FORMAT_MACROS",
             "-D__STDC_LIMIT_MACROS",
         };
+        foundSomething = false;
         if( !clang::tooling::runToolOnCodeWithArgs( new FindNamedClassAction, contents, args, argv[ i ] ))
         {
             cerr << "Failed to analyze: " << argv[ i ] << endl;
+            return 2;
+        }
+        if( !foundSomething )
+        {
+            // there's #ifndef LO_CLANG_SHARED_PLUGINS in the source, but no class matched
+            cerr << "Failed to find code: " << argv[ i ] << endl;
             return 2;
         }
     }
