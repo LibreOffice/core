@@ -26,7 +26,6 @@
 #include <com/sun/star/sdbc/IndexType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <connectivity/dbtools.hxx>
-#include <connectivity/TTableHelper.hxx>
 #include <TConnection.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
