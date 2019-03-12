@@ -46,6 +46,7 @@
 
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/lok.hxx>
+#include <officecfg/Office/Common.hxx>
 
 
 using namespace css;
@@ -1816,7 +1817,7 @@ void HelpButton::StateChanged( StateChangedType nStateChange )
 {
     // Hide when we have no help URL.
     if (comphelper::LibreOfficeKit::isActive() &&
-        Application::GetSettings().GetHelpSettings().GetHelpURL().isEmpty())
+        officecfg::Office::Common::Help::StartCenter::HelpRootURL::get().isEmpty())
         Hide();
     else
         PushButton::StateChanged(nStateChange);
