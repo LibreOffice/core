@@ -143,8 +143,8 @@ export PDFIUM_TARBALL := cfcb6b4f3b5b6097edc5df7903ef00ea-pdfium-3021.tar.bz2
 export PIXMAN_TARBALL := e80ebae4da01e77f68744319f01d52a3-pixman-0.34.0.tar.gz
 export PNG_MD5SUM := 897ccec1ebfb0922e83c2bfaa1be8748
 export PNG_TARBALL := libpng-1.6.28.tar.gz
-export POPPLER_MD5SUM := 9e057ed8eee1f9979fa75d8f044783b8
-export POPPLER_TARBALL := poppler-0.49.0.tar.xz
+export POPPLER_MD5SUM := 1ce581bde2f23fa55bee13d8c61ac0df
+export POPPLER_TARBALL := poppler-0.74.0.tar.xz
 export POSTGRESQL_TARBALL := c0b4799ea9850eae3ead14f0a60e9418-postgresql-9.2.1.tar.bz2
 
 ifeq ($(PYTHON_VERSION_MINOR),3)

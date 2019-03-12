@@ -12,12 +12,19 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,poppler))
 $(eval $(call gb_UnpackedTarball_set_tarball,poppler,$(POPPLER_TARBALL),,poppler))
 
 $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
-	external/poppler/poppler-notests.patch.1 \
-	$(if $(filter MSC-120,$(COM)-$(VCVER)),external/poppler/poppler-snprintf.patch.1) \
-	external/poppler/poppler-mac-fake.patch.1 \
-	external/poppler/ubsan.patch.0 \
-	external/poppler/poppler-libjpeg.patch.1 \
-	external/poppler/0001-really-disable-JPEG2000-import.patch.1 \
+	external/poppler/poppler-config.patch.1 \
+	external/poppler/poppler-c++11.patch.1 \
+	external/poppler/0001-ImageStream-getLine-fix-crash-on-broken-files.patch.1 \
 ))
+
+# std::make_unique is only available in C++14
+# use "env -i" to avoid Cygwin "environment is too large for exec"
+# Mac OS X sed says "sed: RE error: illegal byte sequence"; Apple clang should
+# be happy with std::make_unique so just skip it
+ifneq ($(OS_FOR_BUILD),MACOSX)
+$(eval $(call gb_UnpackedTarball_set_post_action,poppler,\
+	env -i PATH="$(PATH)" $(FIND) . -name '*.cc' -exec sed -i -e 's/std::make_unique/o3tl::make_unique/' {} \\; \
+))
+endif
 
 # vim: set noet sw=4 ts=4:
