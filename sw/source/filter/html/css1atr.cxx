@@ -186,11 +186,6 @@ OString lclConvToHex(sal_uInt16 nHex)
     return OString(aNToABuf, 2);
 }
 
-OString lclGetCSS1Color(const Color& rColor)
-{
-    return "#" + lclConvToHex(rColor.GetRed()) + lclConvToHex(rColor.GetGreen()) + lclConvToHex(rColor.GetBlue());
-}
-
 /// Determines if rProperty has to be suppressed due to ReqIF mode.
 bool IgnorePropertyForReqIF(bool bReqIF, const OString& rProperty)
 {
@@ -206,6 +201,11 @@ bool IgnorePropertyForReqIF(bool bReqIF, const OString& rProperty)
 
     return true;
 }
+}
+
+OString GetCSS1_Color(const Color& rColor)
+{
+    return "#" + lclConvToHex(rColor.GetRed()) + lclConvToHex(rColor.GetGreen()) + lclConvToHex(rColor.GetBlue());
 }
 
 class SwCSS1OutMode
@@ -2239,7 +2239,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFor
                 aColor = pVSh->GetViewOptions()->GetRetoucheColor().GetColor();
         }
 
-        OutCSS1_PropertyAscii(sCSS1_P_background, lclGetCSS1Color(aColor));
+        OutCSS1_PropertyAscii(sCSS1_P_background, GetCSS1_Color(aColor));
     }
 }
 
@@ -2414,7 +2414,7 @@ static Writer& OutCSS1_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
     if( COL_AUTO == aColor.GetColor() )
         aColor.SetColor( COL_BLACK );
 
-    rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_color, lclGetCSS1Color(aColor));
+    rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_color, GetCSS1_Color(aColor));
 
     return rWrt;
 }
@@ -3275,7 +3275,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     {
         if( bColor )
         {
-            OString sTmp(lclGetCSS1Color(aColor));
+            OString sTmp(GetCSS1_Color(aColor));
             sOut += OStringToOUString(sTmp, RTL_TEXTENCODING_ASCII_US);
         }
 
@@ -3390,7 +3390,7 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
     sOut.append(' ');
 
     // and also the color
-    sOut.append(lclGetCSS1Color(pLine->GetColor()));
+    sOut.append(GetCSS1_Color(pLine->GetColor()));
 
     rHTMLWrt.OutCSS1_PropertyAscii(pProperty, sOut.makeStringAndClear());
 }
