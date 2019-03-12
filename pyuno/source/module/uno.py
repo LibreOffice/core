@@ -170,6 +170,9 @@ class Enum:
 
         return (self.typeName == that.typeName) and (self.value == that.value)
 
+    def __ne__(self,other):
+        return not self.__eq__(other)
+
 
 class Type:
     """Represents a UNO type.
@@ -193,6 +196,9 @@ class Type:
             return False
 
         return self.typeClass == that.typeClass and self.typeName == that.typeName
+
+    def __ne__(self,other):
+        return not self.__eq__(other)
 
     def __hash__(self):
         return self.typeName.__hash__()
@@ -258,6 +264,9 @@ class Char:
             return self.value == that.value
 
         return False
+
+    def __ne__(self,other):
+        return not self.__eq__(other)
 
 
 class ByteSequence:
@@ -527,6 +536,8 @@ def _uno_struct__str__(self):
 
     return str(self.__dict__["value"])
 
+def _uno_struct__ne__(self, other):
+    return not self.__eq__(other)
 
 def _uno_struct__eq__(self, that):
     """Compares two UNO structs.

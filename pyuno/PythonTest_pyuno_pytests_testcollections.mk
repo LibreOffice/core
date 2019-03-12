@@ -21,6 +21,7 @@ $(eval $(call gb_PythonTest_add_modules,pyuno_pytests_testcollections,$(SRCDIR)/
     testcollections_XCellRange \
     testcollections_mixednameindex \
     testcollections_misc \
+    testcollections_misc2 \
 ))
 
 # vim: set noet sw=4 ts=4:
