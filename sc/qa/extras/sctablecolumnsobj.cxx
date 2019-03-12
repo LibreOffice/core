@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -26,7 +27,9 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScTableColumnsObj : public CalcUnoApiTest, public apitest::XNameAccess
+class ScTableColumnsObj : public CalcUnoApiTest,
+                          public apitest::XIndexAccess,
+                          public apitest::XNameAccess
 {
 public:
     ScTableColumnsObj();
@@ -36,6 +39,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScTableColumnsObj);
+
+    // XIndexAccess
+    CPPUNIT_TEST(testGetByIndex);
+    CPPUNIT_TEST(testGetCount);
 
     // XNameAccess
     CPPUNIT_TEST(testGetByName);
@@ -50,6 +57,7 @@ private:
 
 ScTableColumnsObj::ScTableColumnsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XIndexAccess(1024)
     , XNameAccess("ABC")
 {
 }
