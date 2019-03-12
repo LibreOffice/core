@@ -1823,7 +1823,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
             break;
 
         case ID_TREE_ADMINISTRATE:
-            svx::administrateDatabaseRegistration( getView() );
+            svx::administrateDatabaseRegistration( getFrameWeld() );
             break;
 
         case ID_BROWSER_REFRESH:

@@ -1304,34 +1304,23 @@ VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateEventConfigDialog(we
     return VclPtr<CuiAbstractSingleTabController_Impl>::Create(std::make_unique<SfxMacroAssignDlg>(pParent, _rxDocumentFrame, rAttr));
 }
 
-VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog(vcl::Window* pParent,
+VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog(weld::Window* pParent,
                                                                       const SfxItemSet& rAttr,
                                                                       const SdrView* pView,
                                                                       sal_uInt32 nResId)
 {
-    SfxSingleTabDialog* pDlg=nullptr;
     switch ( nResId )
     {
-        case RID_SVXPAGE_MEASURE :
-        {
-            return VclPtr<CuiAbstractSingleTabController_Impl>::Create(std::make_unique<SvxMeasureDialog>(pParent ? pParent->GetFrameWeld() : nullptr, rAttr, pView));
-        }
-        case RID_SVXPAGE_CONNECTION :
-            return VclPtr<CuiAbstractSingleTabController_Impl>::Create(std::make_unique<SvxConnectionDialog>(pParent ? pParent->GetFrameWeld() : nullptr, rAttr, pView));
-
-        case RID_SFXPAGE_DBREGISTER :
-            pDlg = VclPtr<DatabaseRegistrationDialog>::Create( pParent, rAttr );
-            break;
-        default:
-            break;
+        case RID_SVXPAGE_MEASURE:
+            return VclPtr<CuiAbstractSingleTabController_Impl>::Create(std::make_unique<SvxMeasureDialog>(pParent, rAttr, pView));
+        case RID_SVXPAGE_CONNECTION:
+            return VclPtr<CuiAbstractSingleTabController_Impl>::Create(std::make_unique<SvxConnectionDialog>(pParent, rAttr, pView));
+        case RID_SFXPAGE_DBREGISTER:
+            return VclPtr<CuiAbstractSingleTabController_Impl>::Create(std::make_unique<DatabaseRegistrationDialog>(pParent, rAttr));
     }
-
-    if ( pDlg )
-        return VclPtr<CuiAbstractSfxDialog_Impl>::Create( pDlg );
 
     return nullptr;
 }
-
 
 VclPtr<AbstractSvxPostItDialog> AbstractDialogFactory_Impl::CreateSvxPostItDialog( weld::Window* pParent,
                                                                         const SfxItemSet& rCoreSet,

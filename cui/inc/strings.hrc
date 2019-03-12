@@ -390,6 +390,8 @@
 
 #define RID_SVXSTR_FILTER_ALL                       NC_("RID_SVXSTR_FILTER_ALL", "All files")
 
+#define RID_SVXSTR_REGISTERED_DATABASES             NC_("RID_SVXSTR_REGISTERED_DATABASES", "Registered Databases")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

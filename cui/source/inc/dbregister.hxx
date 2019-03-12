@@ -106,17 +106,14 @@ namespace svx
     };
 
     class DatabaseRegistrationDialog    :public RegistrationItemSetHolder
-                                        ,public SfxSingleTabDialog
+                                        ,public SfxSingleTabDialogController
     {
     public:
-        DatabaseRegistrationDialog( vcl::Window* pParent, const SfxItemSet& rAttr );
+        DatabaseRegistrationDialog(weld::Window* pParent, const SfxItemSet& rAttr);
 
-        virtual short   Execute() override;
+        virtual short   run() override;
     };
-
-
 }
-
 
 #endif // INCLUDED_CUI_SOURCE_INC_DBREGISTER_HXX
 
