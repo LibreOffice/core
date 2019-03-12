@@ -13,6 +13,7 @@
 #include <test/container/xnameaccess.hxx>
 #include <test/container/xnamecontainer.hxx>
 #include <test/container/xnamereplace.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <cppu/unotype.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -36,7 +37,8 @@ class ScStyleFamilyObj : public CalcUnoApiTest,
                          public apitest::XIndexAccess,
                          public apitest::XNameAccess,
                          public apitest::XNameContainer,
-                         public apitest::XNameReplace
+                         public apitest::XNameReplace,
+                         public apitest::XServiceInfo
 {
 public:
     ScStyleFamilyObj();
@@ -70,6 +72,11 @@ public:
     // XNameReplace
     CPPUNIT_TEST(testReplaceByName);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -83,6 +90,7 @@ ScStyleFamilyObj::ScStyleFamilyObj()
     , XNameAccess("Default")
     , XNameContainer("Default")
     , XNameReplace("Default")
+    , XServiceInfo("ScStyleFamilyObj", "com.sun.star.style.StyleFamily")
 {
 }
 
