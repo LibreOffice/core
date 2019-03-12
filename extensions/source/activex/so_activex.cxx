@@ -578,11 +578,11 @@ STDAPI DllUnregisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
 const char* const aMSFileExt[] = { ".dot", ".doc", ".xlt", ".xls", ".pot", ".ppt", ".pps" };
 const char* const aMSMimeType[] = { "application/msword",
                           "application/msword",
-                          "application/msexcel",
-                          "application/msexcel",
-                          "application/mspowerpoint",
-                          "application/mspowerpoint",
-                          "application/mspowerpoint" };
+                          "application/vnd.ms-excel",
+                          "application/vnd.ms-excel",
+                          "application/vnd.ms-powerpoint",
+                          "application/vnd.ms-powerpoint",
+                          "application/vnd.ms-powerpoint" };
 const int nForMSModes[] = { 1, 1, 2, 2, 4, 4, 4 };
 
 EXTERN_C __declspec(dllexport) HRESULT STDAPICALLTYPE DllUnregisterServerDoc( int nMode, BOOL bForAllUsers, BOOL bFor64Bit );
