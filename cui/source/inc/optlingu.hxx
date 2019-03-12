@@ -94,18 +94,6 @@ class SvxLinguTabPage : public SfxTabPage
 {
     friend class VclPtr<SvxLinguTabPage>;
 private:
-    VclPtr<FixedText>          m_pLinguModulesFT;
-    VclPtr<SvxCheckListBox>    m_pLinguModulesCLB;
-    VclPtr<PushButton>         m_pLinguModulesEditPB;
-    VclPtr<FixedText>          m_pLinguDicsFT;
-    VclPtr<SvxCheckListBox>    m_pLinguDicsCLB;
-    VclPtr<PushButton>         m_pLinguDicsNewPB;
-    VclPtr<PushButton>         m_pLinguDicsEditPB;
-    VclPtr<PushButton>         m_pLinguDicsDelPB;
-    VclPtr<SvxCheckListBox>    m_pLinguOptionsCLB;
-    VclPtr<PushButton>         m_pLinguOptionsEditPB;
-    VclPtr<FixedHyperlink>     m_pMoreDictsLink;
-
     OUString            sCapitalWords;
     OUString            sWordsWithDigits;
     OUString            sSpellSpecial;
@@ -117,6 +105,10 @@ private:
     OUString            sHyphAuto;
     OUString            sHyphSpecial;
 
+    int nUPN_HYPH_MIN_WORD_LENGTH;
+    int nUPN_HYPH_MIN_LEADING;
+    int nUPN_HYPH_MIN_TRAILING;
+
     css::uno::Reference<
         css::linguistic2::XLinguProperties >     xProp;
 
@@ -126,20 +118,31 @@ private:
         css::uno::Reference<
             css::linguistic2::XDictionary > >    aDics;
 
-    std::unique_ptr<SvLBoxButtonData>   m_xCheckButtonData;
-
     std::unique_ptr<SvxLinguData_Impl>  pLinguData;
 
-    SvxLinguTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet );
-    SvTreeListEntry*    CreateEntry(OUString& rTxt, sal_uInt16 nCol);
+    std::unique_ptr<weld::Label> m_xLinguModulesFT;
+    std::unique_ptr<weld::TreeView> m_xLinguModulesCLB;
+    std::unique_ptr<weld::Button> m_xLinguModulesEditPB;
+    std::unique_ptr<weld::Label> m_xLinguDicsFT;
+    std::unique_ptr<weld::TreeView> m_xLinguDicsCLB;
+    std::unique_ptr<weld::Button> m_xLinguDicsNewPB;
+    std::unique_ptr<weld::Button> m_xLinguDicsEditPB;
+    std::unique_ptr<weld::Button> m_xLinguDicsDelPB;
+    std::unique_ptr<weld::TreeView> m_xLinguOptionsCLB;
+    std::unique_ptr<weld::Button> m_xLinguOptionsEditPB;
+    std::unique_ptr<weld::LinkButton> m_xMoreDictsLink;
+
+    SvxLinguTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet);
 
     void    AddDicBoxEntry( const css::uno::Reference< css::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
-    static sal_uLong GetDicUserData( const css::uno::Reference< css::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
+    static sal_uInt32 GetDicUserData( const css::uno::Reference< css::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
 
-    DECL_LINK( SelectHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK( ClickHdl_Impl, Button *, void );
-    DECL_LINK( BoxDoubleClickHdl_Impl, SvTreeListBox*, bool );
-    DECL_LINK( BoxCheckButtonHdl_Impl, SvTreeListBox*, void );
+    DECL_LINK( SelectHdl_Impl, weld::TreeView&, void );
+    DECL_LINK( ClickHdl_Impl, weld::Button&, void );
+    DECL_LINK( BoxDoubleClickHdl_Impl, weld::TreeView&, void );
+    typedef std::pair<int, int> row_col;
+    DECL_LINK( ModulesBoxCheckButtonHdl_Impl, const row_col&, void );
+    DECL_LINK( DicsBoxCheckButtonHdl_Impl, const row_col&, void );
     DECL_LINK( PostDblClickHdl_Impl, void *, void);
 
     void                UpdateModulesBox_Impl();
