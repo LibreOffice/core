@@ -6495,15 +6495,20 @@ public:
 
     virtual Size get_preferred_size() const override
     {
+        Size aRet(-1, -1);
         GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
         if (GTK_IS_SCROLLED_WINDOW(pParent))
         {
-            return Size(gtk_scrolled_window_get_min_content_width(GTK_SCROLLED_WINDOW(pParent)),
+            aRet = Size(gtk_scrolled_window_get_min_content_width(GTK_SCROLLED_WINDOW(pParent)),
                         gtk_scrolled_window_get_min_content_height(GTK_SCROLLED_WINDOW(pParent)));
         }
         GtkRequisition size;
         gtk_widget_get_preferred_size(m_pWidget, nullptr, &size);
-        return Size(size.width, size.height);
+        if (aRet.Width() == -1)
+            aRet.setWidth(size.width);
+        if (aRet.Height() == -1)
+            aRet.setHeight(size.height);
+        return aRet;
     }
 
     virtual void set_visible(bool visible) override
