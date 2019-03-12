@@ -211,7 +211,7 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                 {
                     for (size_t i = 0; i < rPolygon.count(); ++i)
                     {
-                        auto& rPoint = rPolygon.getB2DPoint(i);
+                        auto const& rPoint = rPolygon.getB2DPoint(i);
                         double x = rPoint.getX();
                         double y = rPoint.getY();
 

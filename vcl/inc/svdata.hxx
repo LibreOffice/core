@@ -41,6 +41,7 @@
 #include "ControlCacheKey.hxx"
 #include "schedulerimpl.hxx"
 #include <basegfx/DrawCommands.hxx>
+#include <o3tl/lru_map.hxx>
 
 struct ImplPostEventData;
 struct ImplTimerData;

@@ -184,7 +184,7 @@ void WidgetDefinitionState::addDrawImage(OUString const& sSource)
 
 void WidgetDefinitionState::addDrawExternal(OUString const& sSource)
 {
-    auto pCommand(std::make_unique<ExternalSourceDrawCommand>());
+    auto pCommand(std::make_shared<ExternalSourceDrawCommand>());
     pCommand->msSource = sSource;
     mpDrawCommands.push_back(std::move(pCommand));
 }

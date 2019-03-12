@@ -132,6 +132,12 @@ public:
     {
         return mLruList.size();
     }
+
+    void clear()
+    {
+        mLruMap.clear();
+        mLruList.clear();
+    }
 };
 
 }
