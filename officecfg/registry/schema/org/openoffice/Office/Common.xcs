@@ -6043,6 +6043,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="HelpURL" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the URL to the Office help page. Blank disables help buttons.</desc>
+        </info>
+        <value>https://help.collaboraoffice.com/help.html?</value>
+      </prop>
       <prop oor:name="HelpTipSeconds" oor:type="xs:short" oor:nillable="false">
         <info>
           <desc>Enables or disables the automatic time out of help tips. You

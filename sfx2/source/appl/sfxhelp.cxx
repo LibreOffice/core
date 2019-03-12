@@ -535,12 +535,11 @@ bool SfxHelp::Start( const OUString& rURL, const vcl::Window* pWindow )
 /// Redirect the vnd.sun.star.help:// urls to http://help.libreoffice.org
 static bool impl_showOnlineHelp( const OUString& rURL )
 {
-    OUString aInternal( "vnd.sun.star.help://"  );
+    static const OUString aInternal("vnd.sun.star.help://");
     if ( rURL.getLength() <= aInternal.getLength() || !rURL.startsWith(aInternal) )
         return false;
 
-    OUString aHelpLink("https://help.collaboraoffice.com/help.html?");
-
+    OUString aHelpLink = Application::GetSettings().GetHelpSettings().GetHelpURL();
     OUString aTarget = "Target=" + rURL.copy(aInternal.getLength());
     aTarget = aTarget.replaceAll("%2F", "/").replaceAll("?", "&");
     aHelpLink += aTarget;

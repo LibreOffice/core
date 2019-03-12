@@ -65,6 +65,7 @@ public:
     sal_Int16   GetListBoxMaximumLineCount() const;
     sal_Int16   GetColorValueSetColumnCount() const;
     bool        GetPreviewUsesCheckeredBackground() const;
+    OUString    GetHelpURL() const;
 };
 
 // initialization of static members --------------------------------------
@@ -132,6 +133,24 @@ bool SvtAccessibilityOptions_Impl::GetIsHelpTipsDisappear() const
     }
 
     return bRet;
+}
+
+OUString SvtAccessibilityOptions_Impl::GetHelpURL() const
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+    OUString sRet;
+
+    try
+    {
+        if(xNode.is())
+            xNode->getPropertyValue("HelpURL") >>= sRet;
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex);
+    }
+
+    return sRet;
 }
 
 bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedGraphics() const
@@ -304,6 +323,7 @@ void SvtAccessibilityOptions_Impl::SetVCLSettings()
     bool StyleSettingsChanged(false);
 
     aHelpSettings.SetTipTimeout( GetIsHelpTipsDisappear() ? GetHelpTipSeconds() * 1000 : HELP_TIP_TIMEOUT);
+    aHelpSettings.SetHelpURL(GetHelpURL());
     aAllSettings.SetHelpSettings(aHelpSettings);
 
     const sal_Int16 nEdgeBlendingCountA(GetEdgeBlending());
