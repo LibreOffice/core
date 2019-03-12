@@ -3656,9 +3656,11 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 if( !bOverSelect )
                     bOverURLGrf = bOverSelect = nullptr != rSh.IsURLGrfAtPos( aDocPos );
 
-                MoveCursor( rSh, aDocPos, bOnlyText, bLockView );
-                bCallBase = false;
-
+                if ( !bOverSelect )
+                {
+                    MoveCursor( rSh, aDocPos, bOnlyText, bLockView );
+                    bCallBase = false;
+                }
                 if (!bOverURLGrf && !bExecDrawTextLink && !bOnlyText)
                 {
                     const SelectionType nSelType = rSh.GetSelectionType();
