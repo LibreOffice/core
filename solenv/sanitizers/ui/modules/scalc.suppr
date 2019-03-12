@@ -69,6 +69,7 @@ sc/uiconfig/scalc/ui/doubledialog.ui://GtkEntry[@id='value'] no-labelled-by
 sc/uiconfig/scalc/ui/externaldata.ui://GtkTreeView[@id='ranges'] no-labelled-by
 sc/uiconfig/scalc/ui/externaldata.ui://GtkTreeViewColumn[@id='treeviewcolumn1'] no-labelled-by
 sc/uiconfig/scalc/ui/externaldata.ui://GtkLabel[@id='secondsft'] orphan-label
+sc/uiconfig/scalc/ui/fourieranalysisdialog.ui://GtkLabel[@id='error-message'] orphan-label
 sc/uiconfig/scalc/ui/functionpanel.ui://GtkComboBoxText[@id='category'] no-labelled-by
 sc/uiconfig/scalc/ui/functionpanel.ui://GtkTreeView[@id='funclist:border'] no-labelled-by
 sc/uiconfig/scalc/ui/functionpanel.ui://GtkLabel[@id='funcdesc:border'] orphan-label

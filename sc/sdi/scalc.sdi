@@ -2253,6 +2253,23 @@ SfxVoidItem ChiSquareTestDialog SID_CHI_SQUARE_TEST_DIALOG
     GroupId = SfxGroupId::Options;
 ]
 
+SfxVoidItem FourierAnalysisDialog SID_FOURIER_ANALYSIS_DIALOG
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Options;
+]
+
 SfxVoidItem SolverDialog SID_OPENDLG_OPTSOLVER
 ()
 [
