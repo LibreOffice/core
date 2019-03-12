@@ -45,13 +45,13 @@ void ScSimpleFormulaCalculator::Calculate()
         return;
 
     mbCalculated = true;
-    ScInterpreter aInt(nullptr, mpDoc, mpDoc->GetNonThreadedContext(), maAddr, *mpCode);
+
+    ScInterpreter aInt(mpDoc->GetFormulaCell( maAddr ), mpDoc, mpDoc->GetNonThreadedContext(), maAddr, *mpCode);
+    if (mbMatrixFormula)
+        aInt.AssertFormulaMatrix();
 
     std::unique_ptr<sfx2::LinkManager> pNewLinkMgr( new sfx2::LinkManager(mpDoc->GetDocumentShell()) );
     aInt.SetLinkManager( pNewLinkMgr.get() );
-
-    if (mbMatrixFormula)
-        aInt.AssertFormulaMatrix();
 
     formula::StackVar aIntType = aInt.Interpret();
     if ( aIntType == formula::svMatrixCell )
@@ -94,6 +94,8 @@ bool ScSimpleFormulaCalculator::IsValue()
 
 bool ScSimpleFormulaCalculator::IsMatrix()
 {
+    Calculate();
+
     return mbMatrixResult;
 }
 
