@@ -650,8 +650,6 @@ public:
     void                            SetTipTimeout( sal_uLong nTipTimeout );
     sal_uLong                       GetTipTimeout() const;
     sal_uLong                       GetBalloonDelay() const;
-    OUString                        GetHelpURL() const;
-    void                            SetHelpURL(const OUString& rsHelpURL);
 
     bool                            operator ==( const HelpSettings& rSet ) const;
     bool                            operator !=( const HelpSettings& rSet ) const;

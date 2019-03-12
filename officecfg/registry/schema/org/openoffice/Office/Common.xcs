@@ -3608,6 +3608,12 @@
           </info>
           <value>3355443</value>
         </prop>
+        <prop oor:name="HelpRootURL" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>Specifies the root URL to the Office help pages. Blank disables help buttons.</desc>
+          </info>
+          <value>https://help.collaboraoffice.com/help.html?</value>
+        </prop>
       </group>
     </group>
     <group oor:name="Vectorize">
@@ -6042,12 +6048,6 @@
           <label>Help tips disappear after</label>
         </info>
         <value>true</value>
-      </prop>
-      <prop oor:name="HelpURL" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>Specifies the URL to the Office help page. Blank disables help buttons.</desc>
-        </info>
-        <value>https://help.collaboraoffice.com/help.html?</value>
       </prop>
       <prop oor:name="HelpTipSeconds" oor:type="xs:short" oor:nillable="false">
         <info>
