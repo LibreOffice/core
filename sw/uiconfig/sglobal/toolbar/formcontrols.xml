@@ -20,6 +20,8 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
  <toolbar:toolbaritem xlink:href=".uno:SelectObject"/>
  <toolbar:toolbaritem xlink:href=".uno:SwitchControlDesignMode"/>
+ <toolbar:toolbaritem xlink:href=".uno:UseWizards"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormDesignTools"/>
  <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:ControlProperties" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:FormProperties" toolbar:visible="false"/>
@@ -42,8 +44,15 @@
  <toolbar:toolbaritem xlink:href=".uno:NumericField"/>
  <toolbar:toolbaritem xlink:href=".uno:GroupBox"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:MoreControls"/>
- <toolbar:toolbaritem xlink:href=".uno:FormDesignTools"/>
+ <toolbar:toolbaritem xlink:href=".uno:TimeField"/>
+ <toolbar:toolbaritem xlink:href=".uno:CurrencyField"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:UseWizards"/>
+ <toolbar:toolbaritem xlink:href=".uno:PatternField"/>
+ <toolbar:toolbaritem xlink:href=".uno:NavigationBar"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:ImageControl"/>
+ <toolbar:toolbaritem xlink:href=".uno:FileControl"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:SpinButton" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ScrollBar" toolbar:visible="false"/>
 </toolbar:toolbar>

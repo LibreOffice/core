@@ -61,7 +61,6 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/sglobal,\
 	sw/uiconfig/sglobal/toolbar/insertbar \
 	sw/uiconfig/sglobal/toolbar/insertobjectbar \
 	sw/uiconfig/sglobal/toolbar/mediaobjectbar \
-	sw/uiconfig/sglobal/toolbar/moreformcontrols \
 	sw/uiconfig/sglobal/toolbar/numobjectbar \
 	sw/uiconfig/sglobal/toolbar/oleobjectbar \
 	sw/uiconfig/sglobal/toolbar/optimizetablebar \
