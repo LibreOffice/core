@@ -2292,18 +2292,31 @@ namespace drawinglayer
         {
             // structured tag primitive
             const vcl::PDFWriter::StructElement& rTagElement(rStructureTagCandidate.getStructureElement());
-            bool bTagUsed((vcl::PDFWriter::NonStructElement != rTagElement) && !rStructureTagCandidate.isBackground());
+            bool bTagUsed((vcl::PDFWriter::NonStructElement != rTagElement));
 
             if(mpPDFExtOutDevData && bTagUsed)
             {
-                // write start tag
-                mpPDFExtOutDevData->BeginStructureElement(rTagElement);
+                // foreground object: tag as regular structure element
+                if (!rStructureTagCandidate.isBackground())
+                {
+                    mpPDFExtOutDevData->BeginStructureElement(rTagElement);
+                }
+                // background object
+                else
+                {
+                    // background image: tag as artifact
+                    if (rStructureTagCandidate.isImage())
+                        mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::NonStructElement);
+                    // any other background object: do not tag
+                    else
+                        bTagUsed = false;
+                }
             }
 
             // process children normally
             process(rStructureTagCandidate.getChildren());
 
-            if(mpPDFExtOutDevData &&  bTagUsed)
+            if(mpPDFExtOutDevData && bTagUsed)
             {
                 // write end tag
                 mpPDFExtOutDevData->EndStructureElement();

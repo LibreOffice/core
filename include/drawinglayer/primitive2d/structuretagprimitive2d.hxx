@@ -48,20 +48,23 @@ namespace drawinglayer
             /// the PDF structure element this grouping represents
             vcl::PDFWriter::StructElement           maStructureElement;
 
-            ///Z flag for background contenht that may be handled as
-            /// Tagged PDF '/Artifact'
+            /// flag for background object
             bool                                    mbBackground;
+            /// flag for image (OBJ_GRAF)
+            bool                                    mbIsImage;
 
         public:
             /// constructor
             StructureTagPrimitive2D(
                 const vcl::PDFWriter::StructElement& rStructureElement,
                 bool bBackground,
+                bool bIsImage,
                 const Primitive2DContainer& rChildren);
 
             /// data read access
             const vcl::PDFWriter::StructElement& getStructureElement() const { return maStructureElement; }
             bool isBackground() const { return mbBackground; }
+            bool isImage() const { return mbIsImage; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
