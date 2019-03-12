@@ -4902,12 +4902,14 @@ class ScComplexFFT2
 public:
     // rfArray.size() would always be even and a power of 2. (asserted in prepare())
     // rfArray's first half contains the real parts and the later half contains the imaginary parts.
-    ScComplexFFT2(std::vector<double>& raArray, bool bInverse, bool bPolar, ScTwiddleFactors& rTF, bool bSubSampleTFs = false, bool bDisableNormalize = false) :
+    ScComplexFFT2(std::vector<double>& raArray, bool bInverse, bool bPolar, double fMinMag,
+                  ScTwiddleFactors& rTF, bool bSubSampleTFs = false, bool bDisableNormalize = false) :
         mrArray(raArray),
         mfWReal(rTF.mfWReal),
         mfWImag(rTF.mfWImag),
         mnPoints(raArray.size()/2),
         mnStages(0),
+        mfMinMag(fMinMag),
         mbInverse(bInverse),
         mbPolar(bPolar),
         mbDisableNormalize(bDisableNormalize),
@@ -4977,6 +4979,7 @@ private:
     std::vector<double>& mfWImag;
     SCSIZE mnPoints;
     SCSIZE mnStages;
+    double mfMinMag;
     bool mbInverse:1;
     bool mbPolar:1;
     bool mbDisableNormalize:1;
@@ -5023,7 +5026,7 @@ static void lcl_normalize(std::vector<double>& rCmplxArray, bool bScaleOnlyReal)
     }
 }
 
-static void lcl_convertToPolar(std::vector<double>& rCmplxArray)
+static void lcl_convertToPolar(std::vector<double>& rCmplxArray, double fMinMag)
 {
     const SCSIZE nPoints = rCmplxArray.size()/2;
     double fMag, fPhase, fR, fI;
@@ -5031,8 +5034,16 @@ static void lcl_convertToPolar(std::vector<double>& rCmplxArray)
     {
         fR = rCmplxArray[nIdx];
         fI = rCmplxArray[nPoints+nIdx];
-        fPhase = atan2(fI, fR);
         fMag = sqrt(fR*fR + fI*fI);
+        if (fMag < fMinMag)
+        {
+            fMag = 0.0;
+            fPhase = 0.0;
+        }
+        else
+        {
+            fPhase = atan2(fI, fR);
+        }
 
         rCmplxArray[nIdx] = fMag;
         rCmplxArray[nPoints+nIdx] = fPhase;
@@ -5066,7 +5077,7 @@ void ScComplexFFT2::Compute()
     }
 
     if (mbPolar)
-        lcl_convertToPolar(mrArray);
+        lcl_convertToPolar(mrArray, mfMinMag);
 
     // Normalize after converting to polar, so we have a chance to
     // save O(mnPoints) flops.
@@ -5080,9 +5091,11 @@ class ScComplexBluesteinFFT
 {
 public:
 
-    ScComplexBluesteinFFT(std::vector<double>& rArray, bool bReal, bool bInverse, bool bPolar, bool bDisableNormalize = false) :
+    ScComplexBluesteinFFT(std::vector<double>& rArray, bool bReal, bool bInverse,
+                          bool bPolar, double fMinMag, bool bDisableNormalize = false) :
         mrArray(rArray),
         mnPoints(rArray.size()/2), // rArray should have space for imaginary parts even if real input.
+        mfMinMag(fMinMag),
         mbReal(bReal),
         mbInverse(bInverse),
         mbPolar(bPolar),
@@ -5094,6 +5107,7 @@ public:
 private:
     std::vector<double>& mrArray;
     const SCSIZE mnPoints;
+    double mfMinMag;
     bool mbReal:1;
     bool mbInverse:1;
     bool mbPolar:1;
@@ -5144,10 +5158,12 @@ void ScComplexBluesteinFFT::Compute()
         aTF.Compute();
 
         // Do complex-FFT2 of both A and B signal.
-        ScComplexFFT2 aFFT2A(aASignal, false /*not inverse*/, false /*no polar*/, aTF, false /*no subsample*/, true /* disable normalize */);
+        ScComplexFFT2 aFFT2A(aASignal, false /*not inverse*/, false /*no polar*/, 0.0 /* no clipping */,
+                             aTF, false /*no subsample*/, true /* disable normalize */);
         aFFT2A.Compute();
 
-        ScComplexFFT2 aFFT2B(aBSignal, false /*not inverse*/, false /*no polar*/, aTF, false /*no subsample*/, true /* disable normalize */);
+        ScComplexFFT2 aFFT2B(aBSignal, false /*not inverse*/, false /*no polar*/, 0.0 /* no clipping */,
+                             aTF, false /*no subsample*/, true /* disable normalize */);
         aFFT2B.Compute();
 
         double fAR, fAI, fBR, fBI;
@@ -5165,7 +5181,7 @@ void ScComplexBluesteinFFT::Compute()
 
         // Do complex-inverse-FFT2 of aASignal.
         aTF.Conjugate();
-        ScComplexFFT2 aFFT2AI(aASignal, true /*inverse*/, false /*no polar*/, aTF); // Need normalization here.
+        ScComplexFFT2 aFFT2AI(aASignal, true /*inverse*/, false /*no polar*/, 0.0 /* no clipping */, aTF); // Need normalization here.
         aFFT2AI.Compute();
     }
 
@@ -5180,7 +5196,7 @@ void ScComplexBluesteinFFT::Compute()
 
     // Normalize/Polar operations
     if (mbPolar)
-        lcl_convertToPolar(mrArray);
+        lcl_convertToPolar(mrArray, mfMinMag);
 
     // Normalize after converting to polar, so we have a chance to
     // save O(mnPoints) flops.
@@ -5195,9 +5211,11 @@ class ScRealFFT
 {
 public:
 
-    ScRealFFT(std::vector<double>& rInArray, std::vector<double>& rOutArray, bool bInverse, bool bPolar) :
+    ScRealFFT(std::vector<double>& rInArray, std::vector<double>& rOutArray, bool bInverse,
+              bool bPolar, double fMinMag) :
         mrInArray(rInArray),
         mrOutArray(rOutArray),
+        mfMinMag(fMinMag),
         mbInverse(bInverse),
         mbPolar(bPolar)
     {}
@@ -5207,6 +5225,7 @@ public:
 private:
     std::vector<double>& mrInArray;
     std::vector<double>& mrOutArray;
+    double mfMinMag;
     bool mbInverse:1;
     bool mbPolar:1;
 };
@@ -5244,14 +5263,14 @@ void ScRealFFT::Compute()
 
     if (nNextPow2 == nN)
     {
-        ScComplexFFT2 aFFT2(aWorkArray, mbInverse, false /*disable polar*/,
+        ScComplexFFT2 aFFT2(aWorkArray, mbInverse, false /*disable polar*/, 0.0 /* no clipping */,
                             aTFs, true /*subsample tf*/, true /*disable normalize*/);
         aFFT2.Compute();
     }
     else
     {
         ScComplexBluesteinFFT aFFT(aWorkArray, false /*complex input*/, mbInverse, false /*disable polar*/,
-                                   true /*disable normalize*/);
+                                   0.0 /* no clipping */, true /*disable normalize*/);
         aFFT.Compute();
     }
 
@@ -5300,7 +5319,7 @@ void ScRealFFT::Compute()
 
     // Normalize/Polar operations
     if (mbPolar)
-        lcl_convertToPolar(mrOutArray);
+        lcl_convertToPolar(mrOutArray, mfMinMag);
 
     // Normalize after converting to polar, so we have a chance to
     // save O(mnPoints) flops.
@@ -5315,8 +5334,9 @@ class ScFFT
 {
 public:
 
-    ScFFT(ScMatrixRef& pMat, bool bReal, bool bInverse, bool bPolar) :
+    ScFFT(ScMatrixRef& pMat, bool bReal, bool bInverse, bool bPolar, double fMinMag) :
         mpInputMat(pMat),
+        mfMinMag(fMinMag),
         mbReal(bReal),
         mbInverse(bInverse),
         mbPolar(bPolar)
@@ -5326,6 +5346,7 @@ public:
 
 private:
     ScMatrixRef& mpInputMat;
+    double mfMinMag;
     bool mbReal:1;
     bool mbInverse:1;
     bool mbPolar:1;
@@ -5345,7 +5366,7 @@ ScMatrixRef ScFFT::Compute(std::function<ScMatrixGenerator>& rMatGenFunc)
     if (mbReal && (nPoints % 2) == 0)
     {
         std::vector<double> aOutArray(nPoints*2);
-        ScRealFFT aFFT(aArray, aOutArray, mbInverse, mbPolar);
+        ScRealFFT aFFT(aArray, aOutArray, mbInverse, mbPolar, mfMinMag);
         aFFT.Compute();
         return rMatGenFunc(2, nPoints, aOutArray);
     }
@@ -5356,14 +5377,14 @@ ScMatrixRef ScFFT::Compute(std::function<ScMatrixGenerator>& rMatGenFunc)
     {
         ScTwiddleFactors aTF(nPoints, mbInverse);
         aTF.Compute();
-        ScComplexFFT2 aFFT2(aArray, mbInverse, mbPolar, aTF);
+        ScComplexFFT2 aFFT2(aArray, mbInverse, mbPolar, mfMinMag, aTF);
         aFFT2.Compute();
         return rMatGenFunc(2, nPoints, aArray);
     }
 
     if (mbReal)
         aArray.resize(nPoints*2, 0.0);
-    ScComplexBluesteinFFT aFFT(aArray, mbReal, mbInverse, mbPolar);
+    ScComplexBluesteinFFT aFFT(aArray, mbReal, mbInverse, mbPolar, mfMinMag);
     aFFT.Compute();
     return rMatGenFunc(2, nPoints, aArray);
 }
@@ -5371,16 +5392,30 @@ ScMatrixRef ScFFT::Compute(std::function<ScMatrixGenerator>& rMatGenFunc)
 void ScInterpreter::ScFourier()
 {
     sal_uInt8 nParamCount = GetByte();
-    if ( !MustHaveParamCount( nParamCount, 2, 4 ) )
+    if ( !MustHaveParamCount( nParamCount, 2, 5 ) )
         return;
 
     bool bInverse = false;
     bool bPolar = false;
+    double fMinMag = 0.0;
 
-    if (nParamCount == 4)
-        bPolar = GetBool();
+    if (nParamCount == 5)
+    {
+        if (IsMissing())
+            Pop();
+        else
+            fMinMag = GetDouble();
+    }
 
-    if (nParamCount > 2)
+    if (nParamCount >= 4)
+    {
+        if (IsMissing())
+            Pop();
+        else
+            bPolar = GetBool();
+    }
+
+    if (nParamCount >= 3)
     {
         if (IsMissing())
             Pop();
@@ -5425,7 +5460,7 @@ void ScInterpreter::ScFourier()
         bRealInput = (nC == 1);
     }
 
-    ScFFT aFFT(pInputMat, bRealInput, bInverse, bPolar);
+    ScFFT aFFT(pInputMat, bRealInput, bInverse, bPolar, fMinMag);
     std::function<ScMatrixGenerator> aFunc = [this](SCSIZE nCol, SCSIZE nRow, std::vector<double>& rVec) -> ScMatrixRef
     {
         return this->GetNewMat(nCol, nRow, rVec);
