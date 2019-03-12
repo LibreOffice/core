@@ -4553,6 +4553,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Versions...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:AutoPilotMemo" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -4957,6 +4960,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Email as P~DF...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:SendViaBluetooth" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -4969,6 +4975,9 @@
       <node oor:name=".uno:ExportAsMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Export As</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ExportToPDF" oor:op="replace">
@@ -5137,7 +5146,7 @@
           <value xml:lang="en-US">Status ~Bar</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
-          <value>8</value>
+          <value>9</value>
         </prop>
       </node>
       <node oor:name=".uno:MacroBarVisible" oor:op="replace">
@@ -6334,6 +6343,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Paste ~Special</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:StyleMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -6441,6 +6453,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Sen~d</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:TableMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -6450,6 +6465,9 @@
       <node oor:name=".uno:SignaturesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Digital Signatures</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:MacrosMenu" oor:op="replace">
@@ -6474,6 +6492,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Track Chan~ges</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:EditLinksMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -6483,6 +6504,9 @@
       <node oor:name=".uno:EditCommentsMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Comme~nt</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:FormatImageFilterMenu" oor:op="replace">
