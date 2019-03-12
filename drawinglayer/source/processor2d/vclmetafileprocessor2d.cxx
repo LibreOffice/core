@@ -1338,6 +1338,14 @@ namespace drawinglayer
             // add MetaFile comment, process recursively and add MetaFile comment
             mpMetaFile->AddAction(new MetaCommentAction(aCommentStringA));
             process(rBlockPrimitive);
+
+            if (mnCurrentOutlineLevel >= 0 )
+            {
+                // end any opened List structure elements
+                for(sal_Int16 i(0); i <= mnCurrentOutlineLevel; ++i)
+                    mpPDFExtOutDevData->EndStructureElement();
+            }
+
             mpMetaFile->AddAction(new MetaCommentAction(aCommentStringB));
         }
 
