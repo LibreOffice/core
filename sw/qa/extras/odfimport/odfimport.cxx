@@ -14,6 +14,7 @@
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
+#include <com/sun/star/style/FootnoteLineStyle.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
@@ -926,6 +927,14 @@ DECLARE_ODFIMPORT_TEST(testTdf123829, "tdf123829.odt")
         "Compatibility: collapse cell paras should not be set", false,
         pDoc->getIDocumentSettingAccess().get(DocumentSettingId::COLLAPSE_EMPTY_CELL_PARA));
 }
+
+DECLARE_ODFIMPORT_TEST(testTdf113289, "tdf113289.odt")
+{
+    uno::Any aPageStyle = getStyles("PageStyles")->getByName("Standard");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int8>(style::FootnoteLineStyle::SOLID),
+                         getProperty<sal_Int8>(aPageStyle, "FootnoteLineStyle"));
+}
+
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
