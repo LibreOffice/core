@@ -25,6 +25,10 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_import,\
 	wpftqahelper \
 ))
 
+$(eval $(call gb_CppunitTest_use_components,writerperfect_import,\
+    uui/util/uui \
+))
+
 $(eval $(call gb_CppunitTest_use_ure,writerperfect_import))
 $(eval $(call gb_CppunitTest_use_vcl,writerperfect_import))
 
