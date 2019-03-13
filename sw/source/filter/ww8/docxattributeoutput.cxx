@@ -5683,7 +5683,10 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
                 const SdrObject* pSdrObj = rFrame.GetFrameFormat().FindRealSdrObject();
                 if ( pSdrObj )
                 {
-                    if ( IsDiagram( pSdrObj ) )
+                    uno::Reference<drawing::XShape> xShape(
+                        const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY);
+
+                    if (xShape.is() && oox::drawingml::DrawingML::IsDiagram(xShape))
                     {
                         if ( !m_pPostponedDiagrams )
                         {
@@ -5790,35 +5793,6 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
     }
 
     m_pSerializer->mergeTopMarks(Tag_OutputFlyFrame, sax_fastparser::MergeMarks::POSTPONE);
-}
-
-bool DocxAttributeOutput::IsDiagram( const SdrObject* sdrObject )
-{
-    uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(sdrObject)->getUnoShape(), uno::UNO_QUERY );
-    if ( !xShape.is() )
-        return false;
-
-    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-    if ( !xPropSet.is() )
-        return false;
-
-    // if the shape doesn't have the InteropGrabBag property, it's not a diagram
-    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-    OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-    if ( !xPropSetInfo->hasPropertyByName( aName ) )
-        return false;
-
-    uno::Sequence< beans::PropertyValue > propList;
-    xPropSet->getPropertyValue( aName ) >>= propList;
-    for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
-    {
-        // if we find any of the diagram components, it's a diagram
-        OUString propName = propList[nProp].Name;
-        if ( propName == "OOXData" || propName == "OOXLayout" || propName == "OOXStyle" ||
-             propName == "OOXColor" || propName == "OOXDrawing")
-            return true;
-    }
-    return false;
 }
 
 void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
