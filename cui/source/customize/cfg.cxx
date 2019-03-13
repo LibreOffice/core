@@ -2643,7 +2643,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
 
     m_nExpectedSize = 16;
     if (SvxConfigPageHelper::GetImageType() & css::ui::ImageType::SIZE_LARGE)
-        m_nExpectedSize = 26;
+        m_nExpectedSize = 24;
     else if (SvxConfigPageHelper::GetImageType() & css::ui::ImageType::SIZE_32)
         m_nExpectedSize = 32;
 
