@@ -21,6 +21,7 @@
 #include <fmtclds.hxx>
 #include <fmtfordr.hxx>
 #include <frmfmt.hxx>
+#include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <colfrm.hxx>
 #include <pagefrm.hxx>

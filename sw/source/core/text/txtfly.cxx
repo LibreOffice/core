@@ -27,6 +27,7 @@
 #include <swregion.hxx>
 #include <dflyobj.hxx>
 #include <flyfrm.hxx>
+#include <frmatr.hxx>
 #include <frmtool.hxx>
 #include "porfly.hxx"
 #include "porfld.hxx"

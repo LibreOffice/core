@@ -45,6 +45,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/dialmgr.hxx>
 #include <tools/globname.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentState.hxx>
@@ -54,6 +55,7 @@
 #include <textboxhelper.hxx>
 #include <frmfmt.hxx>
 #include <frmatr.hxx>
+#include <frmtool.hxx>
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>

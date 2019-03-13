@@ -23,7 +23,6 @@
 #include "frame.hxx"
 #include "flowfrm.hxx"
 #include <cshtyp.hxx>
-#include <node.hxx>
 
 class SwLayoutFrame;
 class SwContentNode;

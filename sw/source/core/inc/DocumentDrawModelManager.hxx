@@ -20,12 +20,11 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTDRAWMODELMANAGER_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTDRAWMODELMANAGER_HXX
 
-#include <sal/types.h>
 #include <IDocumentDrawModelAccess.hxx>
 #include <svx/svdtypes.hxx>
 #include <memory>
+#include <drawdoc.hxx>
 
-class SwDrawModel;
 class SdrPageView;
 class SwDoc;
 

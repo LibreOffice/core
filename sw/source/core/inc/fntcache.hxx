@@ -25,18 +25,16 @@
 #include <vcl/font.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vcllayout.hxx>
-#include <swtypes.hxx>
+#include <vcl/outdev.hxx>
 #include "swcache.hxx"
 #include "TextFrameIndex.hxx"
 
-class OutputDevice;
 class FontMetric;
 class SwFntObj;
 class SwDrawTextInfo;
 class SwViewShell;
 class SwSubFont;
 class MapMode;
-class Point;
 
 class SwFntCache : public SwCache
 {

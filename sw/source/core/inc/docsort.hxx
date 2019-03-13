@@ -30,7 +30,6 @@ class SwTableBox;
 class SwUndoSort;
 class FlatFndBox;
 struct SwSortOptions;
-struct SwSortElement;
 class FndBox_;
 class FndLine_;
 class CollatorWrapper;

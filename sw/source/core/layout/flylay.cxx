@@ -23,6 +23,7 @@
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
 #include <ftnfrm.hxx>
+#include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <hints.hxx>
 #include <sectfrm.hxx>

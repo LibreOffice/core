@@ -47,6 +47,7 @@
 #include <dflyobj.hxx>
 #include <flyfrm.hxx>
 #include <tabfrm.hxx>
+#include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <pagedesc.hxx>
 #include <tgrditem.hxx>

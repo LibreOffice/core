@@ -58,10 +58,6 @@ enum class DbgAction {
 
 #ifdef DBG_UTIL
 
-#include <tools/solar.h>
-
-#include <swtypes.hxx>
-
 class SwImplProtocol;
 class SwFrame;
 class SwImplEnterLeave;

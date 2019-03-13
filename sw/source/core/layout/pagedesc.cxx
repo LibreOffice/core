@@ -29,6 +29,7 @@
 #include <pagefrm.hxx>
 #include <pagedesc.hxx>
 #include <swtable.hxx>
+#include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <doc.hxx>
 #include <node.hxx>

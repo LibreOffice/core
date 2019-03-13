@@ -23,7 +23,6 @@
 #include <IDocumentTimerAccess.hxx>
 #include <SwDocIdle.hxx>
 
-#include <vcl/idle.hxx>
 #include <sal/types.h>
 #include <tools/link.hxx>
 
