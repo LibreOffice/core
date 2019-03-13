@@ -41,8 +41,9 @@ namespace
 {
 void lcl_enableRangeChoosing(bool bEnable, TabPageParent pParent)
 {
-    if (weld::Window* pWeldDialog = dynamic_cast<weld::Window*>(pParent.pPage))
+    if (weld::DialogController* pController = pParent.pController)
     {
+        weld::Window* pWeldDialog = pController->getDialog();
         pWeldDialog->set_modal(!bEnable);
         pWeldDialog->show(!bEnable);
     }
