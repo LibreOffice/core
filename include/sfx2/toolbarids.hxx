@@ -26,7 +26,6 @@ enum class ToolbarId : sal_uInt32
     SvxTbx_Form_Filter = 18002,
     SvxTbx_Text_Control_Attributes = 18003,
     SvxTbx_Controls = 18004,
-    SvxTbx_MoreControls = 18005,
     SvxTbx_FormDesign = 18006,
     Math_Toolbox = 20050,
     Webtools_Toolbox = 20402,

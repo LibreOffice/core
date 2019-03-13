@@ -5324,14 +5324,6 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:MoreControls" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">More Controls</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>9</value>
-        </prop>
-      </node>
       <node oor:name=".uno:FormDesignTools" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Form Design</value>

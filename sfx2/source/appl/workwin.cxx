@@ -74,7 +74,6 @@ static const ResIdToResName pToolBarResToName[] =
     { ToolbarId::SvxTbx_Form_Filter,      "formsfilterbar"       },
     { ToolbarId::SvxTbx_Text_Control_Attributes, "formtextobjectbar"    },
     { ToolbarId::SvxTbx_Controls,         "formcontrols"         },
-    { ToolbarId::SvxTbx_MoreControls,     "moreformcontrols"     },
     { ToolbarId::SvxTbx_FormDesign,       "formdesign"           },
     { ToolbarId::Math_Toolbox,            "toolbar"              },      //math
     { ToolbarId::Text_Toolbox_Sc,         "textobjectbar"        },      //calc
