@@ -48,6 +48,7 @@ $(eval $(call gb_CppunitTest_use_components,writerperfect_stream,\
 	ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     unotools/util/utl \
+    uui/util/uui \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,writerperfect_stream,\
