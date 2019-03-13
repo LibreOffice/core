@@ -59,6 +59,8 @@ enum PlaceholderType
     Subtitle
 };
 
+class PowerPointShapeExport;
+
 class PowerPointExport final : public XmlFilterBase, public PPTWriterBase
 {
     friend class PowerPointShapeExport;
@@ -121,6 +123,8 @@ private:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
+    static void WriteDiagram(const FSHelperPtr& pFS, PowerPointShapeExport& rDML, const css::uno::Reference<css::drawing::XShape>& rXShape, int nDiagramId);
+
     /// Should we export as .pptm, ie. do we contain macros?
     bool mbPptm;
 
@@ -133,6 +137,8 @@ private:
     sal_uInt32 mnSlideIdMax;
     sal_uInt32 mnSlideMasterIdMax;
     sal_uInt32 mnAnimationNodeIdMax;
+
+    sal_uInt32 mnDiagramId;
 
     bool mbCreateNotes;
 
