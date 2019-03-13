@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_93b6c0d9",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2826,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-03-13T15:02:12Z",
+      "side": 1,
+      "message": "I’m gonna be frivolous: it\u0027s → its\nJust to avoid having someone else correct the spelling later…",
+      "range": {
+        "startLine": 2826,
+        "startChar": 55,
+        "endLine": 2826,
+        "endChar": 59
+      },
+      "revId": "9088e4a8558e07c313dc0022d3c78e9ecf281c46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
