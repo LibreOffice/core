@@ -111,7 +111,6 @@ modules/scalc/toolbar/graphicobjectbar.xml
 modules/scalc/toolbar/insertbar.xml
 modules/scalc/toolbar/insertcellsbar.xml
 modules/scalc/toolbar/mediaobjectbar.xml
-modules/scalc/toolbar/moreformcontrols.xml
 modules/scalc/toolbar/previewbar.xml
 modules/scalc/toolbar/standardbar.xml
 modules/scalc/toolbar/starshapes.xml
@@ -148,7 +147,6 @@ modules/sdraw/toolbar/insertbar.xml
 modules/sdraw/toolbar/linesbar.xml
 modules/sdraw/toolbar/masterviewtoolbar.xml
 modules/sdraw/toolbar/mediaobjectbar.xml
-modules/sdraw/toolbar/moreformcontrols.xml
 modules/sdraw/toolbar/optionsbar.xml
 modules/sdraw/toolbar/positionbar.xml
 modules/sdraw/toolbar/standardbar.xml
@@ -189,7 +187,6 @@ modules/simpress/toolbar/insertbar.xml
 modules/simpress/toolbar/linesbar.xml
 modules/simpress/toolbar/masterviewtoolbar.xml
 modules/simpress/toolbar/mediaobjectbar.xml
-modules/simpress/toolbar/moreformcontrols.xml
 modules/simpress/toolbar/optionsbar.xml
 modules/simpress/toolbar/outlinetoolbar.xml
 modules/simpress/toolbar/positionbar.xml
@@ -230,7 +227,6 @@ modules/sglobal/toolbar/graffilterbar.xml
 modules/sglobal/toolbar/graphicobjectbar.xml
 modules/sglobal/toolbar/insertbar.xml
 modules/sglobal/toolbar/mediaobjectbar.xml
-modules/sglobal/toolbar/moreformcontrols.xml
 modules/sglobal/toolbar/numobjectbar.xml
 modules/sglobal/toolbar/oleobjectbar.xml
 modules/sglobal/toolbar/optimizetablebar.xml
@@ -299,7 +295,6 @@ modules/swriter/toolbar/graffilterbar.xml
 modules/swriter/toolbar/graphicobjectbar.xml
 modules/swriter/toolbar/insertbar.xml
 modules/swriter/toolbar/mediaobjectbar.xml
-modules/swriter/toolbar/moreformcontrols.xml
 modules/swriter/toolbar/navigationobjectbar.xml
 modules/swriter/toolbar/numobjectbar.xml
 modules/swriter/toolbar/oleobjectbar.xml

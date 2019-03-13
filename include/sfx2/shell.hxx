@@ -94,7 +94,6 @@ enum class SfxShellFeature
     FormShowFilterNavigator = 0x0100,
     FormShowTextControlBar  = 0x0200,
     FormTBControls          = 0x0400,
-    FormTBMoreControls      = 0x0800,
     FormTBDesign            = 0x1000,
     FormShowDataNavigator   = 0x2000,
     // masks to make sure modules don't use flags from another
