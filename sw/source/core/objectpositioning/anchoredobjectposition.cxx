@@ -24,6 +24,7 @@
 #include <flyfrms.hxx>
 #include <txtfrm.hxx>
 #include <pagefrm.hxx>
+#include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <svx/svdobj.hxx>
 #include <dflyobj.hxx>

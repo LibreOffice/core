@@ -21,25 +21,25 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_FRMTOOL_HXX
 
 #include <swtypes.hxx>
-#include "layfrm.hxx"
-#include <frmatr.hxx>
+#include "frame.hxx"
 #include "swcache.hxx"
 #include <editeng/lrspitem.hxx>
-#include "swfont.hxx"
-#include "flyfrm.hxx"
-#include <basegfx/utils/b2dclipstate.hxx>
+#include <swatrset.hxx>
 
+class SwLayoutFrame;
+class SwFont;
+class SwTextFrame;
+class SwFormatAnchor;
+class SwViewShell;
 class SwPageFrame;
 class SwFlyFrame;
 class SwContentFrame;
 class SwRootFrame;
 class SwDoc;
-class SwAttrSet;
 class SdrObject;
 class SvxBrushItem;
 class SdrMarkList;
 class SwNodeIndex;
-class OutputDevice;
 class GraphicObject;
 class GraphicAttr;
 class SwPageDesc;
@@ -47,6 +47,7 @@ class SwFrameFormats;
 class SwRegionRects;
 class SwTextNode;
 namespace sw { struct Extent; }
+namespace basegfx { namespace utils { class B2DClipState; } }
 
 #define FAR_AWAY (SAL_MAX_INT32 - 20000)  // initial position of a Fly
 #define BROWSE_HEIGHT (56700L * 10L) // 10 Meters

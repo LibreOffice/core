@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_NOTXTFRM_HXX
 
 #include "cntfrm.hxx"
+#include <node.hxx>
 
 class SwNoTextNode;
 class OutputDevice;

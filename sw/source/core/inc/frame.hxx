@@ -21,19 +21,19 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_FRAME_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <editeng/borderline.hxx>
 #include <swtypes.hxx>
 #include <swrect.hxx>
 #include <calbck.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <IDocumentDrawModelAccess.hxx>
 #include <com/sun/star/style/TabStop.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/outdev.hxx>
 
 #include <memory>
+
+namespace drawinglayer::processor2d { class BaseProcessor2D; }
 
 class SwLayoutFrame;
 class SwRootFrame;
@@ -45,9 +45,7 @@ class SwFootnoteFrame;
 class SwFootnoteBossFrame;
 class SwTabFrame;
 class SwRowFrame;
-class SwFlowFrame;
 class SwContentFrame;
-class SfxPoolItem;
 class SwAttrSet;
 class Color;
 class SwBorderAttrs;
@@ -63,6 +61,7 @@ class SwPrintData;
 class SwSortedObjs;
 class SwAnchoredObject;
 enum class SvxFrameDirection;
+class IDocumentDrawModelAccess;
 
 // Each FrameType is represented here as a bit.
 // The bits must be set in a way that it can be determined with masking of

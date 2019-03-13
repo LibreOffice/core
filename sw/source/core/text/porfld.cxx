@@ -31,6 +31,7 @@
 #include "porfld.hxx"
 #include "inftxt.hxx"
 #include <blink.hxx>
+#include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <viewsh.hxx>
 #include <docsh.hxx>

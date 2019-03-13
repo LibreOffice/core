@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_ASCHARANCHOREDOBJECTPOSITION_HXX
 
 #include "anchoredobjectposition.hxx"
-#include <sal/types.h>
 #include <swtypes.hxx>
 #include <swrect.hxx>
 #include <o3tl/typed_flags_set.hxx>

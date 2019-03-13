@@ -64,6 +64,7 @@
 #include <txatbase.hxx>
 #include <ftnidx.hxx>
 #include <txtftn.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
 #include <unofldmid.h>

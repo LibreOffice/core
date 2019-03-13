@@ -250,3 +250,15 @@ blacklist:
     - com/sun/star/text/XRedline.hpp
     # sw::UnoImplPtr typedef
     - unobaseclass.hxx
+    sw/source/core/inc/acorrect.hxx:
+    # Needed for implicit dtor
+    - svl/itemset.hxx
+    sw/source/core/inc/dumpfilter.hxx:
+    # Base class needs complete type
+    - com/sun/star/document/XExporter.hpp
+    - com/sun/star/document/XFilter.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sw/source/core/inc/frame.hxx:
+    # Needed for direct member access
+    - com/sun/star/style/TabStop.hpp
