@@ -329,9 +329,9 @@ namespace /* private */
     bool is_batch_file(const OUString& file_name)
     {
         OUString ext = get_file_extension(file_name);
-        return (ext.equalsIgnoreAsciiCase("bat") ||
-                ext.equalsIgnoreAsciiCase("cmd") ||
-                ext.equalsIgnoreAsciiCase("btm"));
+        return (ext.equalsIgnoreAsciiCase("bat") || ext.equalsIgnoreAsciiCase("bat\"") ||
+                ext.equalsIgnoreAsciiCase("cmd") || ext.equalsIgnoreAsciiCase("cmd\"") ||
+                ext.equalsIgnoreAsciiCase("btm") || ext.equalsIgnoreAsciiCase("btm\""));
     }
 
     const OUString ENV_COMSPEC ("COMSPEC");
