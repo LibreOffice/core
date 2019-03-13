@@ -160,8 +160,6 @@ include/svl/macitem.hxx:92
     class SvStream & SvxMacroTableDtor::Write(class SvStream &) const
 include/svl/poolitem.hxx:170
     class SvStream & SfxPoolItem::Store(class SvStream &,unsigned short) const
-include/svx/checklbx.hxx:76
-    void * SvxCheckListBox::SetEntryData(unsigned long,void *)
 include/svx/dlgctrl.hxx:106
     class Point SvxRectCtl::SetActualRPWithoutInvalidate(enum RectPoint)
 include/svx/framelink.hxx:195
@@ -192,7 +190,7 @@ include/vcl/bitmap.hxx:171
     _Bool Bitmap::Dither()
 include/vcl/bitmapex.hxx:241
     _Bool BitmapEx::Rotate(long,const class Color &)
-include/vcl/filter/PngImageReader.hxx:31
+include/vcl/filter/PngImageReader.hxx:29
     _Bool vcl::PngImageReader::read(class BitmapEx &)
 include/vcl/fontcharmap.hxx:49
     class tools::SvRef<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)
@@ -208,13 +206,13 @@ include/vcl/menu.hxx:389
     _Bool Menu::HandleMenuDeActivateEvent(class Menu *) const
 include/vcl/texteng.hxx:275
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
-include/vcl/toolbox.hxx:513
+include/vcl/toolbox.hxx:510
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:342
+include/vcl/weld.hxx:356
     _Bool weld::Dialog::runAsync(const class std::function<void (int)> &)
-include/vcl/weld.hxx:628
+include/vcl/weld.hxx:656
     _Bool weld::TreeView::iter_nth_child(class weld::TreeIter &,int) const
-include/vcl/weld.hxx:1366
+include/vcl/weld.hxx:1396
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
@@ -330,7 +328,7 @@ vcl/inc/opengl/salbmp.hxx:103
     _Bool OpenGLSalBitmap::ImplScaleArea(const class rtl::Reference<class OpenGLContext> &,double,double)
 vcl/inc/opengl/texture.hxx:112
     _Bool OpenGLTexture::CopyData(int,int,int,int,const unsigned char *)
-vcl/inc/salframe.hxx:222
+vcl/inc/salframe.hxx:231
     _Bool SalFrame::SetPluginParent(struct SystemParentData *)
 vcl/inc/salgdi.hxx:213
     class basegfx::B2DPoint SalGraphics::mirror(const class basegfx::B2DPoint &,const class OutputDevice *) const

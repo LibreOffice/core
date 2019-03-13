@@ -309,8 +309,6 @@ class VCL_DLLPUBLIC OutputDevice : public virtual VclReferenceBase
     friend class WorkWindow;
     friend void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight );
 
-    friend cairo_surface_t* get_underlying_alpha_cairo_surface(const VirtualDevice&);
-
 private:
     OutputDevice(const OutputDevice&) = delete;
     OutputDevice& operator=(const OutputDevice&) = delete;

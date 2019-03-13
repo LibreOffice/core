@@ -436,24 +436,6 @@ namespace pcr
     };
 
 
-    //= WaitCursor
-
-    /** wrapper around a ->WaitObject which can cope with a NULL window
-    */
-    class WaitCursor
-    {
-    private:
-        std::unique_ptr< WaitObject >       m_aWaitObject;
-
-    public:
-        explicit WaitCursor( vcl::Window* _pWindow )
-        {
-            if ( _pWindow )
-                m_aWaitObject.reset( new WaitObject( _pWindow ) );
-        }
-    };
-
-
 } // namespace pcr
 
 
