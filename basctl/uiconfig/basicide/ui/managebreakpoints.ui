@@ -202,7 +202,6 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
-                            <property name="completion">entrycompletion1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
