@@ -1782,7 +1782,8 @@ bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_ESC:
         {
             sal_Int16 nVal = sal_Int16();
-            if( (rVal >>= nVal) && (std::abs(nVal) <= 101))
+            // tdf#120412 up to 14400% (eg. 1584 pt with 11 pt letters)
+            if( (rVal >>= nVal) && (std::abs(nVal) <= 14400))
                 nEsc = nVal;
             else
                 return false;

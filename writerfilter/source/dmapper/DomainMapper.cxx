@@ -2839,6 +2839,8 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
                     nEscapement = ( nIntValue > 0 ) ? 58: -58;
                 }
             }
+            // tdf#120412 up to 14400% (eg. 1584 pt with 11 pt letters)
+            if( nEscapement > 14400 ) nEscapement = 14400;
             rContext->Insert(PROP_CHAR_ESCAPEMENT,         uno::makeAny( nEscapement ) );
             rContext->Insert(PROP_CHAR_ESCAPEMENT_HEIGHT,  uno::makeAny( nProp ) );
         }
