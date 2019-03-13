@@ -36,6 +36,7 @@ $(eval $(call gb_CppunitTest_use_components,vcl_bitmap_render_test,\
     configmgr/source/configmgr \
     i18npool/util/i18npool \
     ucb/source/core/ucb1 \
+    uui/util/uui \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_bitmap_render_test))
