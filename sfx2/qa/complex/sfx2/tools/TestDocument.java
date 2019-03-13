@@ -26,6 +26,9 @@ public final class TestDocument {
     public static String getUrl(String name) {
         return OfficeFileUrl.getAbsolute(new File(Argument.get("tdoc"), name));
     }
+    public static String getPath(String name) {
+        return new File(Argument.get("tdoc"), name).toString();
+    }
 
     private TestDocument() {}
 }
