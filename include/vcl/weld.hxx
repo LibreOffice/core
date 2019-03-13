@@ -582,6 +582,9 @@ public:
     void connect_column_clicked(const Link<int, void>& rLink) { m_aColumnClickedHdl = rLink; }
     void connect_model_changed(const Link<TreeView&, void>& rLink) { m_aModelChangedHdl = rLink; }
 
+    virtual OUString get_selected_text() const = 0;
+    virtual OUString get_selected_id() const = 0;
+
     //by index
     virtual int get_selected_index() const = 0;
     virtual void select(int pos) = 0;
@@ -607,11 +610,6 @@ public:
 
     //by text
     virtual int find_text(const OUString& rText) const = 0;
-    OUString get_selected_text() const
-    {
-        int index = get_selected_index();
-        return index != -1 ? get_text(index) : OUString();
-    }
     void select_text(const OUString& rText) { select(find_text(rText)); }
     void remove_text(const OUString& rText) { remove(find_text(rText)); }
     std::vector<OUString> get_selected_rows_text() const
@@ -627,11 +625,6 @@ public:
     //by id
     virtual OUString get_id(int pos) const = 0;
     virtual int find_id(const OUString& rId) const = 0;
-    OUString get_selected_id() const
-    {
-        int pos = get_selected_index();
-        return pos == -1 ? OUString() : get_id(pos);
-    }
     void select_id(const OUString& rId) { select(find_id(rId)); }
 
     //via iter
