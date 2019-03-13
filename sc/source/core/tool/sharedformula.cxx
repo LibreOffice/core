@@ -248,9 +248,9 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
         {
             // Move the top cell to the next formula cell down.
             ScFormulaCell& rNext = *sc::formula_block::at(*it->data, aPos.second+1);
-            --xGroup->mnLength;
             xGroup->mpTopCell = &rNext;
         }
+        --xGroup->mnLength;
     }
     else if (rCell.aPos.Row() == rCell.GetSharedTopRow() + rCell.GetSharedLength() - 1)
     {
