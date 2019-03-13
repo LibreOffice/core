@@ -19,6 +19,10 @@ package util;
 
 import helper.ConfigHelper;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import lib.StatusException;
@@ -35,9 +39,11 @@ import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
+import com.sun.star.io.XInputStream;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
+import com.sun.star.lib.uno.adapter.ByteArrayToXInputStreamAdapter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
@@ -249,6 +255,48 @@ public class DesktopTools
         }
 
         bringWindowToFront(oDoc);
+        return oDoc;
+    }
+
+    /**
+     * loads a document of from a given path using an input stream
+     *
+     * @param xMSF the MultiServiceFactory
+     * @param filePath the path of the document to load.
+     * @return the XComponent Interface of the document
+     */
+    public static XComponent loadDocUsingStream(XMultiServiceFactory xMSF, String filePath)
+    {
+        XInputStream inputStream = null;
+        try {
+            final InputStream inputFile = new BufferedInputStream(
+                    new FileInputStream(filePath));
+            final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            final byte[] byteBuffer = new byte[4096];
+            int byteBufferLength = 0;
+            while ((byteBufferLength = inputFile.read(byteBuffer)) > 0)
+                bytes.write(byteBuffer, 0, byteBufferLength);
+            inputFile.close();
+            inputStream = new ByteArrayToXInputStreamAdapter(
+                    bytes.toByteArray());
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+
+        PropertyValue[] loadProps = new PropertyValue[1];
+        loadProps[0] = new PropertyValue();
+        loadProps[0].Name = "InputStream";
+        loadProps[0].Value = inputStream;
+
+        XComponent oDoc = null;
+        try
+        {
+            oDoc = getCLoader(xMSF).loadComponentFromURL("private:stream", "_blank", 0, loadProps);
+        }
+        catch (com.sun.star.uno.Exception e)
+        {
+            throw new IllegalArgumentException("Document could not be loaded", e);
+        }
         return oDoc;
     }
 
