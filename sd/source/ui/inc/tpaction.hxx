@@ -51,22 +51,6 @@ public:
 class SdTPAction : public SfxTabPage
 {
 private:
-    VclPtr<ListBox>                m_pLbAction;
-
-    VclPtr<FixedText>              m_pFtTree;                // jump destination controls
-    VclPtr<SdPageObjsTLB>          m_pLbTree;
-    VclPtr<SdPageObjsTLB>          m_pLbTreeDocument;
-    VclPtr<ListBox>                m_pLbOLEAction;
-
-    VclPtr<VclFrame>               m_pFrame;
-    VclPtr<Edit>                   m_pEdtSound;
-    VclPtr<Edit>                   m_pEdtBookmark;
-    VclPtr<Edit>                   m_pEdtDocument;
-    VclPtr<Edit>                   m_pEdtProgram;
-    VclPtr<Edit>                   m_pEdtMacro;
-    VclPtr<PushButton>             m_pBtnSearch;
-    VclPtr<PushButton>             m_pBtnSeek;
-
     const ::sd::View*       mpView;
     SdDrawDocument*         mpDoc;
     XColorListRef           pColList;
@@ -76,10 +60,24 @@ private:
     OUString                aLastFile;
     ::std::vector< long >   aVerbVector;
 
-    DECL_LINK( ClickSearchHdl, Button*, void );
-    DECL_LINK( ClickActionHdl, ListBox&, void );
-    DECL_LINK( SelectTreeHdl, SvTreeListBox*, void );
-    DECL_LINK( CheckFileHdl, Control&, void );
+    std::unique_ptr<weld::ComboBox> m_xLbAction;
+    std::unique_ptr<weld::Label> m_xFtTree;                // jump destination controls
+    std::unique_ptr<SdPageObjsTLV> m_xLbTree;
+    std::unique_ptr<SdPageObjsTLV> m_xLbTreeDocument;
+    std::unique_ptr<weld::TreeView> m_xLbOLEAction;
+    std::unique_ptr<weld::Frame> m_xFrame;
+    std::unique_ptr<weld::Entry> m_xEdtSound;
+    std::unique_ptr<weld::Entry> m_xEdtBookmark;
+    std::unique_ptr<weld::Entry> m_xEdtDocument;
+    std::unique_ptr<weld::Entry> m_xEdtProgram;
+    std::unique_ptr<weld::Entry> m_xEdtMacro;
+    std::unique_ptr<weld::Button> m_xBtnSearch;
+    std::unique_ptr<weld::Button> m_xBtnSeek;
+
+    DECL_LINK( ClickSearchHdl, weld::Button&, void );
+    DECL_LINK( ClickActionHdl, weld::ComboBox&, void );
+    DECL_LINK( SelectTreeHdl, weld::TreeView&, void );
+    DECL_LINK( CheckFileHdl, weld::Widget&, void );
 
     void                    UpdateTree();
     void                    OpenFileDialog();
@@ -90,9 +88,8 @@ private:
     static const char*      GetClickActionSdResId(css::presentation::ClickAction eCA);
 
 public:
-            SdTPAction( vcl::Window* pParent, const SfxItemSet& rInAttrs );
-            virtual ~SdTPAction() override;
-    virtual void dispose() override;
+    SdTPAction(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    virtual ~SdTPAction() override;
 
     static  VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet& );
 
