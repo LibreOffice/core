@@ -661,7 +661,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/text/_XTextRangeMover \
     qadevOOo/tests/java/ifc/text/_XTextSection \
     qadevOOo/tests/java/ifc/text/_XTextSectionsSupplier \
-    qadevOOo/tests/java/ifc/text/_XTextTable \
     qadevOOo/tests/java/ifc/text/_XTextTableCursor \
     qadevOOo/tests/java/ifc/text/_XTextTablesSupplier \
     qadevOOo/tests/java/ifc/text/_XTextViewCursorSupplier \

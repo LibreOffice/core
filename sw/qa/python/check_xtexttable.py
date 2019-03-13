@@ -31,7 +31,7 @@ class XTextTable(unittest.TestCase):
         xDoc.Text.insertTextContent(xCursor, xTable, False)
         xTable.Data = ((1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12))
 
-        self.checkTable(xTable)
+        self.checkTable(xTable,4,3)
         xDoc.close(True)
 
     def test_tableFromOdt(self):
@@ -55,24 +55,31 @@ class XTextTable(unittest.TestCase):
         self.assertTrue(hasNestedTable)
         xDoc.close(True)
 
-    def checkTable(self, xTable):
+    def checkTable(self, xTable, nRow, nCol):
         # in order
         xNames = xTable.getCellNames()
         for xName in xNames:
             xCell = xTable.getCellByName(xName)
+            xCursor = xTable.createCursorByCellName(xCursor)
             self.assertIsNotNone(xCell)
+            self.assertIsNotNone(xCursor)
 
         # random access
         xNames = xTable.getCellNames()
         for i in random.sample(range(0, len(xNames)), len(xNames)):
             xName = xNames[i]
             xCell = xTable.getCellByName(xName)
+            xCursor = xTable.createCursorByCellName(xCursor)
             self.assertIsNotNone(xCell)
+            self.assertIsNotNone(xCursor)
 
         # wrong name
         xCell = xTable.getCellByName('WRONG CELL NAME')
         self.assertIsNone(xCell)
 
+        # correct number of rows and columns
+        self.assertEqual(xTable.getRows().getCount(), nRow)
+        self.assertEqual(xTable.getColumns().getCount(), nCol)
 
 if __name__ == '__main__':
     unittest.main()
