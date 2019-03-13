@@ -4405,14 +4405,8 @@ static DisposeItemVector GaDisposeItemVector;
 
 static DisposeItemVector::iterator lcl_findItemForBasic( StarBASIC const * pBasic )
 {
-    DisposeItemVector::iterator it;
-    for( it = GaDisposeItemVector.begin() ; it != GaDisposeItemVector.end() ; ++it )
-    {
-        StarBasicDisposeItem* pItem = *it;
-        if( pItem->m_pBasic == pBasic )
-            return it;
-    }
-    return GaDisposeItemVector.end();
+    return std::find_if(GaDisposeItemVector.begin(), GaDisposeItemVector.end(),
+        [&pBasic](StarBasicDisposeItem* pItem) { return pItem->m_pBasic == pBasic; });
 }
 
 static StarBasicDisposeItem* lcl_getOrCreateItemForBasic( StarBASIC* pBasic )

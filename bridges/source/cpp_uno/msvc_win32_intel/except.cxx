@@ -157,10 +157,9 @@ RTTInfos::~RTTInfos() throw ()
     SAL_INFO("bridges", "> freeing generated RTTI infos... <");
 
     MutexGuard aGuard( _aMutex );
-    for ( t_string2PtrMap::const_iterator iPos( _allRTTI.begin() );
-          iPos != _allRTTI.end(); ++iPos )
+    for ( auto& rEntry : _allRTTI )
     {
-        __type_info * pType = reinterpret_cast<__type_info*>(iPos->second);
+        __type_info * pType = reinterpret_cast<__type_info*>(rEntry.second);
         pType->~__type_info(); // obsolete, but good style...
         std::free( pType );
     }
@@ -375,10 +374,9 @@ ExceptionInfos::~ExceptionInfos() throw ()
     SAL_INFO("bridges", "> freeing exception infos... <");
 
     MutexGuard aGuard( _aMutex );
-    for ( t_string2PtrMap::const_iterator iPos( _allRaiseInfos.begin() );
-          iPos != _allRaiseInfos.end(); ++iPos )
+    for ( auto& rEntry : _allRaiseInfos )
     {
-        delete reinterpret_cast<RaiseInfo*>(iPos->second);
+        delete reinterpret_cast<RaiseInfo*>(rEntry.second);
     }
 }
 

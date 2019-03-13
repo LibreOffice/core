@@ -555,16 +555,13 @@ namespace basic
 
         Reference< XInterface > xNormalizedSource( _rSource.Source, UNO_QUERY );
 
-        for (   BasicManagerStore::iterator loop = m_aStore.begin();
-                loop != m_aStore.end();
-                ++loop
-            )
+        BasicManagerStore::iterator it = std::find_if(m_aStore.begin(), m_aStore.end(),
+            [&xNormalizedSource](BasicManagerStore::reference rEntry) {
+                return rEntry.first.get() == xNormalizedSource.get(); });
+        if (it != m_aStore.end())
         {
-            if ( loop->first.get() == xNormalizedSource.get() )
-            {
-                impl_removeFromRepository( loop );
-                return;
-            }
+            impl_removeFromRepository( it );
+            return;
         }
 
         OSL_FAIL( "ImplRepository::_disposing: where does this come from?" );
@@ -580,20 +577,15 @@ namespace basic
         BasicManager* pManager = dynamic_cast< BasicManager* >( &_rBC );
         OSL_ENSURE( pManager, "ImplRepository::Notify: where does this come from?" );
 
-        for (   BasicManagerStore::iterator loop = m_aStore.begin();
-                loop != m_aStore.end();
-                ++loop
-            )
+        BasicManagerStore::iterator it = std::find_if(m_aStore.begin(), m_aStore.end(),
+            [&pManager](BasicManagerStore::reference rEntry) { return rEntry.second.get() == pManager; });
+        if (it != m_aStore.end())
         {
-            if ( loop->second.get() == pManager )
-            {
-                // a BasicManager which is still in our repository is being deleted.
-                // That's bad, since by definition, we *own* all instances in our
-                // repository.
-                OSL_FAIL( "ImplRepository::Notify: nobody should tamper with the managers, except ourself!" );
-                m_aStore.erase( loop );
-                break;
-            }
+            // a BasicManager which is still in our repository is being deleted.
+            // That's bad, since by definition, we *own* all instances in our
+            // repository.
+            OSL_FAIL( "ImplRepository::Notify: nobody should tamper with the managers, except ourself!" );
+            m_aStore.erase( it );
         }
     }
 

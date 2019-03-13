@@ -664,10 +664,8 @@ void LibInfo::InsertInfo (
 
 void LibInfo::RemoveInfoFor (ScriptDocument const& rDocument)
 {
-    Map::iterator it;
-    for (it = m_aMap.begin(); it != m_aMap.end(); ++it)
-        if (it->first.GetDocument() == rDocument)
-            break;
+    Map::iterator it = std::find_if(m_aMap.begin(), m_aMap.end(),
+        [&rDocument](Map::reference rEntry) { return rEntry.first.GetDocument() == rDocument; });
     if (it != m_aMap.end())
         m_aMap.erase(it);
 }
