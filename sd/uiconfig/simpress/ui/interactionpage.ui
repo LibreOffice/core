@@ -1,8 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name expander -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="liststore2">
+    <columns>
+      <!-- column-name expander -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="liststore3">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkGrid" id="InteractionPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -36,10 +63,10 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="interactionpage|label2">Action at mouse click:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">listbox</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -60,11 +87,11 @@
                   <object class="GtkLabel" id="fttree">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">0</property>
                     <property name="label" translatable="yes" context="interactionpage|fttree">Target:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">box3</property>
+                    <property name="xalign">0</property>
+                    <property name="yalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -79,13 +106,46 @@
                     <property name="vexpand">True</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="sdlo-SdPageObjsTLB" id="tree:border">
-                        <property name="can_focus">False</property>
+                      <object class="GtkScrolledWindow">
+                        <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="SdPageObjsTLB-selection1"/>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkTreeView" id="tree">
+                            <property name="width_request">-1</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="no_show_all">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="model">liststore1</property>
+                            <property name="headers_visible">False</property>
+                            <property name="search_column">1</property>
+                            <property name="show_expanders">True</property>
+                            <property name="enable_tree_lines">True</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
+                                  <attributes>
+                                    <attribute name="pixbuf">0</attribute>
+                                  </attributes>
+                                </child>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                                  <attributes>
+                                    <attribute name="text">1</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
                         </child>
                       </object>
                       <packing>
@@ -95,13 +155,46 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sdlo-SdPageObjsTLB" id="treedoc:border">
-                        <property name="can_focus">False</property>
+                      <object class="GtkScrolledWindow">
+                        <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="SdPageObjsTLB-selection2"/>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkTreeView" id="treedoc">
+                            <property name="width_request">-1</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="no_show_all">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="model">liststore2</property>
+                            <property name="headers_visible">False</property>
+                            <property name="search_column">1</property>
+                            <property name="show_expanders">True</property>
+                            <property name="enable_tree_lines">True</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="Macro Library List-selection11"/>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn21">
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkCellRendererPixbuf" id="cellrenderertext44"/>
+                                  <attributes>
+                                    <attribute name="pixbuf">0</attribute>
+                                  </attributes>
+                                </child>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext22"/>
+                                  <attributes>
+                                    <attribute name="text">1</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
                         </child>
                       </object>
                       <packing>
@@ -111,14 +204,38 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkTreeView" id="oleaction:border">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <property name="show_expanders">False</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="treeview-selection1"/>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkTreeView" id="oleaction">
+                            <property name="width_request">-1</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="model">liststore3</property>
+                            <property name="headers_visible">False</property>
+                            <property name="search_column">1</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="Macro Library List-selection111"/>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn211">
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext222"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
                         </child>
                       </object>
                       <packing>
@@ -224,6 +341,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="sound-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="interactionpage|sound-atkobject">Path Name</property>
@@ -241,6 +359,7 @@
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -253,6 +372,7 @@
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -265,6 +385,7 @@
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -277,6 +398,7 @@
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -313,9 +435,9 @@
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="mode">both</property>
     <widgets>
-      <widget name="tree:border"/>
-      <widget name="treedoc:border"/>
-      <widget name="oleaction:border"/>
+      <widget name="tree"/>
+      <widget name="treedoc"/>
+      <widget name="oleaction"/>
     </widgets>
   </object>
 </interface>

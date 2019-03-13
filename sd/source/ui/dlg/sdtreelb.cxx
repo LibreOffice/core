@@ -1413,6 +1413,7 @@ SdPageObjsTLV::SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeView)
     , m_pMedium(nullptr)
     , m_pOwnMedium(nullptr)
     , m_bLinkableSelected(false)
+    , m_bShowAllPages(false)
 {
     m_xTreeView->connect_expanding(LINK(this, SdPageObjsTLV, RequestingChildrenHdl));
     m_xTreeView->connect_changed(LINK(this, SdPageObjsTLV, SelectHdl));
@@ -1610,6 +1611,157 @@ void SdPageObjsTLV::CloseBookmarkDoc()
     m_pBookmarkDoc = nullptr;
 }
 
+bool SdPageObjsTLV::PageBelongsToCurrentShow(const SdPage* pPage) const
+{
+    // Return <TRUE/> as default when there is no custom show or when none
+    // is used.  The page does then belong to the standard show.
+    bool bBelongsToShow = true;
+
+    if (m_pDoc->getPresentationSettings().mbCustomShow)
+    {
+        // Get the current custom show.
+        SdCustomShow* pCustomShow = nullptr;
+        SdCustomShowList* pShowList = const_cast<SdDrawDocument*>(m_pDoc)->GetCustomShowList();
+        if (pShowList != nullptr)
+        {
+            sal_uLong nCurrentShowIndex = pShowList->GetCurPos();
+            pCustomShow = (*pShowList)[nCurrentShowIndex].get();
+        }
+
+        // Check whether the given page is part of that custom show.
+        if (pCustomShow != nullptr)
+        {
+            bBelongsToShow = false;
+            size_t nPageCount = pCustomShow->PagesVector().size();
+            for (size_t i=0; i<nPageCount && !bBelongsToShow; i++)
+                if (pPage == pCustomShow->PagesVector()[i])
+                    bBelongsToShow = true;
+        }
+    }
+
+    return bBelongsToShow;
+}
+
+void SdPageObjsTLV::AddShapeList (
+    const SdrObjList& rList,
+    SdrObject* pShape,
+    const OUString& rsName,
+    const bool bIsExcluded,
+    weld::TreeIter* pParentEntry)
+{
+    OUString aIcon(BMP_PAGE);
+    if (bIsExcluded)
+        aIcon = BMP_PAGE_EXCLUDED;
+    else if (pShape != nullptr)
+        aIcon = BMP_GROUP;
+
+    OUString aUserData("1");
+    if (pShape != nullptr)
+        aUserData = OUString::number(reinterpret_cast<sal_Int64>(pShape));
+
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
+    InsertEntry(pParentEntry, aUserData, rsName, aIcon, xEntry.get());
+
+    SdrObjListIter aIter(
+        &rList,
+        !rList.HasObjectNavigationOrder() /* use navigation order, if available */,
+        SdrIterMode::Flat);
+
+    while( aIter.IsMore() )
+    {
+        SdrObject* pObj = aIter.Next();
+        OSL_ASSERT(pObj!=nullptr);
+
+        // Get the shape name.
+        OUString aStr (GetObjectName( pObj ) );
+        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pObj)));
+
+        if( !aStr.isEmpty() )
+        {
+            if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_OLE2 )
+            {
+                InsertEntry(xEntry.get(), sId, aStr, BMP_OLE);
+            }
+            else if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_GRAF )
+            {
+                InsertEntry(xEntry.get(), sId, aStr, BMP_GRAPHIC);
+            }
+            else if (pObj->IsGroupObject())
+            {
+                AddShapeList(
+                    *pObj->GetSubList(),
+                    pObj,
+                    aStr,
+                    false,
+                    xEntry.get());
+            }
+            else
+            {
+                InsertEntry(xEntry.get(), sId, aStr, BMP_OBJECTS);
+            }
+        }
+    }
+
+    if (!m_xTreeView->iter_has_child(*xEntry))
+        return;
+
+    if (bIsExcluded)
+        m_xTreeView->set_image(*xEntry, BMP_PAGEOBJS_EXCLUDED);
+    else
+        m_xTreeView->set_image(*xEntry, BMP_PAGEOBJS);
+    m_xTreeView->expand_row(*xEntry);
+}
+
+/**
+ * Fill TreeLB with pages and objects
+ */
+void SdPageObjsTLV::Fill(const SdDrawDocument* pInDoc, bool bAllPages, const OUString& rDocName)
+{
+    OUString aSelection = m_xTreeView->get_selected_text();
+    clear();
+
+    m_pDoc = pInDoc;
+    m_aDocName = rDocName;
+    m_bShowAllPages = bAllPages;
+    m_pMedium = nullptr;
+
+    // first insert all pages including objects
+    sal_uInt16 nPage = 0;
+    const sal_uInt16 nMaxPages = m_pDoc->GetPageCount();
+
+    while( nPage < nMaxPages )
+    {
+        const SdPage* pPage = static_cast<const SdPage*>( m_pDoc->GetPage( nPage ) );
+        if(  (m_bShowAllPages || pPage->GetPageKind() == PageKind::Standard)
+             && (pPage->GetPageKind() != PageKind::Handout)   ) //#94954# never list the normal handout page ( handout-masterpage is used instead )
+        {
+            bool bPageExluded = pPage->IsExcluded();
+
+            bool bPageBelongsToShow = PageBelongsToCurrentShow (pPage);
+            bPageExluded |= !bPageBelongsToShow;
+
+            AddShapeList(*pPage, nullptr, pPage->GetName(), bPageExluded, nullptr);
+        }
+        nPage++;
+    }
+
+    // then insert all master pages including objects
+    if( m_bShowAllPages )
+    {
+        nPage = 0;
+        const sal_uInt16 nMaxMasterPages = m_pDoc->GetMasterPageCount();
+
+        while( nPage < nMaxMasterPages )
+        {
+            const SdPage* pPage = static_cast<const SdPage*>( m_pDoc->GetMasterPage( nPage ) );
+            AddShapeList(*pPage, nullptr, pPage->GetName(), false, nullptr);
+            nPage++;
+        }
+    }
+    if (!aSelection.isEmpty())
+        m_xTreeView->select_text(aSelection);
+}
+
 /**
  * We insert only the first entry. Children are created on demand.
  */
@@ -1629,13 +1781,45 @@ void SdPageObjsTLV::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
     m_xTreeView->insert(nullptr, -1, &m_aDocName, &sId, nullptr, nullptr, &sImgDoc, true, nullptr);
 }
 
+/**
+ * select a entry in TreeLB
+ */
+bool SdPageObjsTLV::SelectEntry( const OUString& rName )
+{
+    bool bFound = false;
+
+    if (!rName.isEmpty())
+    {
+        std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+        OUString aTmp;
+
+        if (m_xTreeView->get_iter_first(*xEntry))
+        {
+            do
+            {
+                aTmp = m_xTreeView->get_text(*xEntry);
+                if (aTmp == rName)
+                {
+                    m_xTreeView->set_cursor(*xEntry);
+                    m_xTreeView->select(*xEntry);
+                    bFound = true;
+                    break;
+                }
+            }
+            while (m_xTreeView->iter_next(*xEntry));
+        }
+    }
+
+    return bFound;
+}
+
 SdPageObjsTLV::~SdPageObjsTLV()
 {
     if (m_pBookmarkDoc)
         CloseBookmarkDoc();
     else
     {
-        // no document was created from mpMedium, so this object is still the owner of it
+        // no document was created from m_pMedium, so this object is still the owner of it
         delete m_pMedium;
     }
     m_xAccel.reset();
