@@ -109,7 +109,10 @@ short AbstractSdPresLayoutDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(SdAbstractSfxDialog_Impl);
+short SdAbstractSfxDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractSdVectorizeDlg_Impl::Execute()
 {
@@ -342,12 +345,12 @@ void AbstractSdPresLayoutDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
 
 const SfxItemSet* SdAbstractSfxDialog_Impl::GetOutputItemSet() const
 {
-    return pDlg->GetOutputItemSet();
+    return m_xDlg->GetOutputItemSet();
 }
 
 void SdAbstractSfxDialog_Impl::SetText( const OUString& rStr )
 {
-    pDlg->SetText( rStr );
+    m_xDlg->set_title(rStr);
 }
 
 const GDIMetaFile& AbstractSdVectorizeDlg_Impl::GetGDIMetaFile() const
@@ -455,9 +458,9 @@ VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdTabTemplateD
     return VclPtr<SdAbstractTabController_Impl>::Create(std::make_unique<SdTabTemplateDlg>(pParent, pDocShell, rStyleBase, pModel, pView));
 }
 
-VclPtr<SfxAbstractDialog> SdAbstractDialogFactory_Impl::CreatSdActionDialog(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView )
+VclPtr<SfxAbstractDialog> SdAbstractDialogFactory_Impl::CreatSdActionDialog(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView )
 {
-    return VclPtr<SdAbstractSfxDialog_Impl>::Create( VclPtr<SdActionDlg>::Create( pParent, pAttr, pView ) );
+    return VclPtr<SdAbstractSfxDialog_Impl>::Create(std::make_unique<SdActionDlg>(pParent, pAttr, pView));
 }
 
 VclPtr<AbstractSdVectorizeDlg>  SdAbstractDialogFactory_Impl::CreateSdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell)

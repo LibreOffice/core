@@ -532,7 +532,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             aSet.Put(SfxBoolItem(ATTR_ACTION_SOUNDON, false));
             aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, false));
             pRetval = getSdAbstractDialogFactory()->CreatSdActionDialog(
-                getViewShell()->GetActiveWindow(),
+                getViewShell()->GetFrameWeld(),
                 &aSet,
                 getDrawView());
             break;
