@@ -625,11 +625,6 @@ shell FmFormShell
 
     SID_FM_CONFIG // ole : no, status : ?
     []
-    SID_FM_MORE_CONTROLS
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
     SID_FM_FORM_DESIGN_TOOLS
     [
         ExecMethod = Execute ;

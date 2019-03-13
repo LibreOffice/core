@@ -174,10 +174,6 @@ void FmFormShell::InitInterface_Impl()
                                             SfxShellFeature::FormTBControls);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Standard,
-                                            ToolbarId::SvxTbx_MoreControls,
-                                            SfxShellFeature::FormTBMoreControls);
-
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Standard,
                                             ToolbarId::SvxTbx_FormDesign,
                                             SfxShellFeature::FormTBDesign);
 }
@@ -331,7 +327,6 @@ bool FmFormShell::HasUIFeature(SfxShellFeature nFeature) const
         bResult = GetImpl()->isEnhancedForm_Lock();
     }
     else if (  (nFeature & SfxShellFeature::FormTBControls)
-            || (nFeature & SfxShellFeature::FormTBMoreControls)
             || (nFeature & SfxShellFeature::FormTBDesign)
             )
     {
@@ -512,7 +507,6 @@ void FmFormShell::Execute(SfxRequest &rReq)
     // individual actions
     switch( nSlot )
     {
-        case SID_FM_MORE_CONTROLS:
         case SID_FM_FORM_DESIGN_TOOLS:
         {
             FormToolboxes aToolboxAccess(GetImpl()->getHostFrame_Lock());
@@ -809,7 +803,6 @@ void FmFormShell::GetState(SfxItemSet &rSet)
     {
         switch( nWhich )
         {
-            case SID_FM_MORE_CONTROLS:
             case SID_FM_FORM_DESIGN_TOOLS:
             {
                 FormToolboxes aToolboxAccess(GetImpl()->getHostFrame_Lock());
