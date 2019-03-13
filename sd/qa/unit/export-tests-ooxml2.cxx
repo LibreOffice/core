@@ -199,6 +199,7 @@ public:
     void testTdf99213();
     void testPotxExport();
     void testTdf44223();
+    void testSmartArtPreserve();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -280,6 +281,7 @@ public:
     CPPUNIT_TEST(testTdf99213);
     CPPUNIT_TEST(testPotxExport);
     CPPUNIT_TEST(testTdf44223);
+    CPPUNIT_TEST(testSmartArtPreserve);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -304,6 +306,7 @@ public:
             { "a14", "http://schemas.microsoft.com/office/drawing/2010/main" },
             { "wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape" },
             { "wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" },
+            { "dgm", "http://schemas.openxmlformats.org/drawingml/2006/diagram" },
         };
         for (size_t i = 0; i < SAL_N_ELEMENTS(namespaces); ++i)
         {
@@ -1413,10 +1416,10 @@ void SdOOXMLExportTest2::testGroupsPosition()
     xDocShRef->DoClose();
 
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp[1]/p:sp[1]/p:spPr/a:xfrm/a:off", "x", "4040640");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp[1]/p:sp[1]/p:spPr/a:xfrm/a:off", "y", "4273920");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp[1]/p:sp[3]/p:spPr/a:xfrm/a:off", "x", "6796800");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp[1]/p:sp[3]/p:spPr/a:xfrm/a:off", "y", "4273920");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp[1]/p:sp[1]/p:spPr/a:xfrm/a:off", "x", "5004000");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp[1]/p:sp[1]/p:spPr/a:xfrm/a:off", "y", "3310560");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp[1]/p:sp[3]/p:spPr/a:xfrm/a:off", "x", "7760160");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp[1]/p:sp[3]/p:spPr/a:xfrm/a:off", "y", "3310560");
 }
 
 void SdOOXMLExportTest2::testGroupsRotatedPosition()
@@ -2099,6 +2102,31 @@ void SdOOXMLExportTest2::testTdf44223()
 
     xmlDocPtr pDoc2 = parseExport(tempFile, "ppt/slides/slide2.xml");
     assertXPath(pDoc2 , "//p:transition/p:sndAc/p:stSnd/p:snd[@r:embed]", 2);
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testSmartArtPreserve()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-preserve.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDoc, "//p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/dgm:relIds");
+    assertXPath(pXmlDoc, "//p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:nvPr/p:extLst/p:ext",
+                "uri", "{D42A27DB-BD31-4B8C-83A1-F6EECF244321}");
+
+    xmlDocPtr pXmlDocRels = parseExport(tempFile, "ppt/slides/_rels/slide1.xml.rels");
+    assertXPath(pXmlDocRels,
+                "(/rels:Relationships/rels:Relationship[@Target='../diagrams/layout1.xml'])[1]", "Type",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramLayout");
+
+    xmlDocPtr pXmlContentType = parseExport(tempFile, "[Content_Types].xml");
+    assertXPath(pXmlContentType,
+                "/ContentType:Types/ContentType:Override[@PartName='/ppt/diagrams/layout1.xml']",
+                "ContentType", "application/vnd.openxmlformats-officedocument.drawingml.diagramLayout+xml");
 
     xDocShRef->DoClose();
 }

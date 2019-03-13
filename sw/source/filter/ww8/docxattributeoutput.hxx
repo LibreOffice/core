@@ -400,9 +400,6 @@ private:
     void WriteActiveXControl(const SdrObject* pObject, const SwFrameFormat& rFrameFormat, bool bInsideRun);
     bool ExportAsActiveXControl(const SdrObject* pObject) const;
 
-    /// checks whether the current component is a diagram
-    static bool IsDiagram (const SdrObject* sdrObject);
-
     void InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner );
     void StartTable( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner );
     void StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner );
