@@ -2894,6 +2894,30 @@ void SwLayoutWriter::testBtlrCell()
     // Without the accompanying fix in place, this test would have failed: character position was 5,
     // i.e. cursor was at the end of the paragraph.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aPosition.nContent.GetIndex());
+
+    // Test that the selection rectangles are inside the cell frame if we select all the cell
+    // content.
+    SwTwips nCellLeft
+        = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/infos/bounds", "left").toInt32();
+    SwTwips nCellWidth
+        = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/infos/bounds", "width").toInt32();
+    SwTwips nCellTop
+        = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/infos/bounds", "top").toInt32();
+    SwTwips nCellHeight
+        = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/infos/bounds", "height").toInt32();
+    SwRect aCellRect(Point(nCellLeft, nCellTop), Size(nCellWidth, nCellHeight));
+    pWrtShell->SelAll();
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(/*bBlock=*/false);
+    CPPUNIT_ASSERT(!pShellCursor->empty());
+    // Without the accompanying fix in place, this test would have failed with:
+    // selection rectangle 269x2573@(1970,2172) is not inside cell rectangle 3207x1134@(1593,1701)
+    // i.e. the selection went past the bottom border of the cell frame.
+    for (const auto& rRect : *pShellCursor)
+    {
+        std::stringstream ss;
+        ss << "selection rectangle " << rRect << " is not inside cell rectangle " << aCellRect;
+        CPPUNIT_ASSERT_MESSAGE(ss.str(), aCellRect.IsInside(rRect));
+    }
 #endif
 }
 
