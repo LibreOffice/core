@@ -22,7 +22,6 @@
 #include <cassert>
 #include <cstring>
 
-#include <comphelper/lok.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <osl/endian.h>
 #include <osl/file.hxx>
@@ -37,7 +36,6 @@
 #endif
 #include <quartz/utils.h>
 #ifdef IOS
-#include <UIKit/UIKit.h>
 #include "saldatabasic.hxx"
 #endif
 #include <sft.hxx>
@@ -1388,15 +1386,6 @@ void AquaSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
     rDPIY = mnRealDPIY;
 #else
     rDPIX = rDPIY = 96;
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        // Horrible, ugly hack. This is the WRONG way to get the dialogs in the iOS app to look
-        // sane. (But I could not figure out the RIGHT way...) This hack does help in the sense that
-        // it makes the widgets in the dialogs sanely sized and not overlapping, but the text in the
-        // dialogs ends up quite fuzzy.
-        rDPIX /= [[UIScreen mainScreen] scale];
-        rDPIY /= [[UIScreen mainScreen] scale];
-    }
 #endif
 }
 
