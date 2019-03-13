@@ -371,10 +371,10 @@ void SwDLL::RegisterControls()
 
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_LEFT_TO_RIGHT, pMod);
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_RIGHT_TO_LEFT, pMod);
-
+#if HAVE_FEATURE_AVMEDIA
     ::avmedia::MediaToolBoxControl::RegisterControl(SID_AVMEDIA_TOOLBOX, pMod);
     ::avmedia::MediaPlayer::RegisterChildWindow(false, pMod);
-
+#endif
     ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);
 
     SwJumpToSpecificPageControl::RegisterControl(SID_JUMP_TO_SPECIFIC_PAGE, pMod);
