@@ -33,11 +33,10 @@ namespace writer
 {
 sdbcx::ObjectType OWriterTables::createObject(const OUString& rName)
 {
-    OWriterTable* pTable
-        = new OWriterTable(this,
-                           static_cast<OWriterConnection*>(
-                               static_cast<file::OFileCatalog&>(m_rParent).getConnection()),
-                           rName, "TABLE");
+    auto pTable = new OWriterTable(this,
+                                   static_cast<OWriterConnection*>(
+                                       static_cast<file::OFileCatalog&>(m_rParent).getConnection()),
+                                   rName, "TABLE");
     sdbcx::ObjectType xRet = pTable;
     pTable->construct();
     return xRet;
