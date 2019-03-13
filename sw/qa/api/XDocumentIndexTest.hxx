@@ -33,19 +33,7 @@ namespace apitest
 class XDocumentIndexTest : public ApiTestBase
 {
 public:
-    /**
-     * Has <b>OK</b> status if the returned service name
-     * is equal to 'com.sun.star.text.DocumentIndex'.
-     */
-    void testGetServiceName()
-    {
-        auto inputMap = init();
-
-        css::uno::Reference<css::text::XDocumentIndex> xDocumentIndex(
-            inputMap["text::XDocumentIndex"], css::uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.text.DocumentIndex"),
-                             xDocumentIndex->getServiceName());
-    }
+    virtual css::uno::Reference<css::text::XTextDocument> getTextDocument() = 0;
 
     /**
      * Gets the document from relation and insert a new index mark.
@@ -57,21 +45,17 @@ public:
      */
     void testUpdate()
     {
-        auto inputMap = init();
-
-        css::uno::Reference<css::text::XDocumentIndex> xDocumentIndex(
-            inputMap["text::XDocumentIndex"], css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::text::XTextDocument> xTextDocument(inputMap["text::XTextDocument"],
-                                                                    css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::text::XDocumentIndex> xDocumentIndex(init(),
+                                                                      css::uno::UNO_QUERY_THROW);
 
         bool bOK = true;
         try
         {
-            css::uno::Reference<css::text::XText> xText = xTextDocument->getText();
-            css::uno::Reference<css::text::XTextRange> xTextRange = xText->getEnd();
+            auto xText = getTextDocument()->getText();
+            auto xTextRange = xText->getEnd();
             xTextRange->setString("IndexMark");
             css::uno::Reference<css::lang::XMultiServiceFactory> xFactory(
-                xTextDocument, css::uno::UNO_QUERY_THROW);
+                getTextDocument(), css::uno::UNO_QUERY_THROW);
             css::uno::Reference<css::text::XTextContent> xTextContentMark(
                 xFactory->createInstance("com.sun.star.text.DocumentIndexMark"),
                 css::uno::UNO_QUERY_THROW);

@@ -24,9 +24,7 @@ class DocumentIndexTest : public ApiTestBase
 public:
     void testDocumentIndexProperties()
     {
-        auto map = init();
-
-        css::uno::Reference<css::beans::XPropertySet> xDocumnetIndex(map["text::DocumentIndex"],
+        css::uno::Reference<css::beans::XPropertySet> xDocumnetIndex(init(),
                                                                      css::uno::UNO_QUERY_THROW);
 
         testBooleanProperty(xDocumnetIndex, "UseAlphabeticalSeparators");
