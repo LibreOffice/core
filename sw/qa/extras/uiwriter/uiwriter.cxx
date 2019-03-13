@@ -1024,7 +1024,15 @@ void SwUiWriterTest::testDOCXAutoTextMultiple()
 
     // first line
     SwNode& rNode = aStart.GetNode();
-    CPPUNIT_ASSERT_EQUAL(OUString("Another "), rNode.GetTextNode()->GetText());
+    CPPUNIT_ASSERT(rNode.IsTextNode());
+    SwTextNode& rTextNode = *rNode.GetTextNode();
+    CPPUNIT_ASSERT_EQUAL(OUString("Another "), rTextNode.GetText());
+
+    // Make sure that autotext does not set a custom page style, leading to an unexpected page break
+    // on insertion.
+    // Without the accompanying fix in place, this test would have failed: the text node had an
+    // attribute set containing a page style item.
+    CPPUNIT_ASSERT(!rTextNode.HasSwAttrSet() || !rTextNode.GetSwAttrSet().HasItem(RES_PAGEDESC));
 
     // last line
     SwNodeIndex aLast(*aDocEnd.GetNode().EndOfSectionNode(), -1);

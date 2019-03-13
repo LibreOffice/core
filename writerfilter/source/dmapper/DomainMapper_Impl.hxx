@@ -548,6 +548,7 @@ public:
     css::uno::Reference<css::text::XTextRange> m_xInsertTextRange;
 private:
     bool const m_bIsNewDoc;
+    bool const m_bIsReadGlossaries;
 public:
     DomainMapper_Impl(
             DomainMapper& rDMapper,
@@ -915,6 +916,9 @@ public:
 
     /// If we're importing into a new document, or just pasting to an existing one.
     bool IsNewDoc() { return m_bIsNewDoc;}
+
+    /// If we're importing autotext.
+    bool IsReadGlossaries() { return m_bIsReadGlossaries;}
 
     /// If we're inside <w:rPr>, inside <w:style w:type="table">
     bool m_bInTableStyleRunProps;
