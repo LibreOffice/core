@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_b3d2e433",
+        "filename": "sw/qa/extras/odfimport/odfimport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-13T14:22:28Z",
+      "side": 1,
+      "message": "See https://opengrok.libreoffice.org/xref/core/sw/qa/extras/ooxmlexport/ooxmlexport9.cxx?r\u003d9f401076#677\n\nSimiliar to FootnoteLineAdjust there is FootnoteLineStyle.",
+      "revId": "3de76ffef0e04841095adf0fd57f3e4fb2e02d76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
