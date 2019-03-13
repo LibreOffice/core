@@ -316,7 +316,10 @@ static void AppendSchedulerData( ImplSchedulerContext &rSchedCtx,
                                         ImplSchedulerData * const pSchedulerData)
 {
     assert(pSchedulerData->mpTask);
-    const int nTaskPriority = static_cast<int>(pSchedulerData->mpTask->GetPriority());
+    pSchedulerData->mePriority = pSchedulerData->mpTask->GetPriority();
+    pSchedulerData->mpNext = nullptr;
+
+    const int nTaskPriority = static_cast<int>(pSchedulerData->mePriority);
     if (!rSchedCtx.mpLastSchedulerData[nTaskPriority])
     {
         rSchedCtx.mpFirstSchedulerData[nTaskPriority] = pSchedulerData;
@@ -327,7 +330,6 @@ static void AppendSchedulerData( ImplSchedulerContext &rSchedCtx,
         rSchedCtx.mpLastSchedulerData[nTaskPriority]->mpNext = pSchedulerData;
         rSchedCtx.mpLastSchedulerData[nTaskPriority] = pSchedulerData;
     }
-    pSchedulerData->mpNext = nullptr;
 }
 
 static ImplSchedulerData* DropSchedulerData(
@@ -555,7 +557,17 @@ void Task::Start()
     if ( !rSchedCtx.mbActive )
         return;
 
-    // Mark timer active
+    // is the task scheduled in the correct priority queue?
+    // if not we have to get a new data object, as we don't want to traverse
+    // the whole list to move the data to the correct list, as the task list
+    // is just single linked.
+    // Task priority doesn't change that often AFAIK, or we might need to
+    // start caching ImplSchedulerData objects.
+    if (mpSchedulerData && mpSchedulerData->mePriority != mePriority)
+    {
+        mpSchedulerData->mpTask = nullptr;
+        mpSchedulerData = nullptr;
+    }
     mbActive = true;
 
     if ( !mpSchedulerData )
@@ -564,6 +576,7 @@ void Task::Start()
         ImplSchedulerData* pSchedulerData = new ImplSchedulerData;
         pSchedulerData->mpTask            = this;
         pSchedulerData->mbInScheduler     = false;
+        // mePriority is set in AppendSchedulerData
         mpSchedulerData = pSchedulerData;
 
         AppendSchedulerData( rSchedCtx, pSchedulerData );
@@ -582,6 +595,16 @@ void Task::Stop()
     SAL_INFO_IF( mbActive, "vcl.schedule", tools::Time::GetSystemTicks()
                   << " " << mpSchedulerData << "  stopped    " << *this );
     mbActive = false;
+}
+
+void Task::SetPriority(TaskPriority ePriority)
+{
+    // you don't actually need to call Stop() before but Start() after, but we
+    // can't check that and don't know when Start() should be called.
+    SAL_WARN_IF(mpSchedulerData && mbActive, "vcl.schedule",
+                "Stop the task before changing the priority, as it will just "
+                "change after the task was scheduled with the old prio!");
+    mePriority = ePriority;
 }
 
 Task& Task::operator=( const Task& rTask )

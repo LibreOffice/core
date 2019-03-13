@@ -77,7 +77,7 @@ public:
     virtual ~Task() COVERITY_NOEXCEPT_FALSE;
     Task& operator=( const Task& rTask );
 
-    inline void     SetPriority(TaskPriority ePriority);
+    void            SetPriority(TaskPriority ePriority);
     TaskPriority    GetPriority() const { return mePriority; }
 
     void            SetDebugName( const sal_Char *pDebugName ) { mpDebugName = pDebugName; }
@@ -100,13 +100,6 @@ public:
     void            SetStatic() { mbStatic = true; }
     bool            IsStatic() const { return mbStatic; }
 };
-
-inline void Task::SetPriority(TaskPriority ePriority)
-{
-    SAL_WARN_IF(mpSchedulerData, "vcl.schedule",
-                "Priority will just change after next schedule!");
-    mePriority = ePriority;
-}
 
 #endif // INCLUDED_VCL_TASK_HXX
 
