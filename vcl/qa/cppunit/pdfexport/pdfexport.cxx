@@ -21,6 +21,7 @@
 #include <unotest/macros_test.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <tools/zcodec.hxx>
 #include <fpdf_edit.h>
@@ -28,6 +29,15 @@
 #include <fpdfview.h>
 
 using namespace ::com::sun::star;
+
+static std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
+{
+    rStrm << "Color: R:" << static_cast<int>(rColor.GetRed())
+          << " G:" << static_cast<int>(rColor.GetGreen())
+          << " B:" << static_cast<int>(rColor.GetBlue())
+          << " A:" << static_cast<int>(rColor.GetTransparency());
+    return rStrm;
+}
 
 namespace
 {
@@ -90,6 +100,7 @@ public:
     void testTdf105954();
     void testTdf106702();
     void testTdf113143();
+    void testTdf121615();
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
     CPPUNIT_TEST(testTdf106059);
@@ -120,6 +131,7 @@ public:
     CPPUNIT_TEST(testTdf105954);
     CPPUNIT_TEST(testTdf106702);
     CPPUNIT_TEST(testTdf113143);
+    CPPUNIT_TEST(testTdf121615);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1463,6 +1475,52 @@ void PdfExportTest::testForcePoint71()
 {
     // I just care it doesn't crash
     topdf("forcepoint71.key");
+}
+
+void PdfExportTest::testTdf121615()
+{
+    vcl::filter::PDFDocument aDocument;
+    load("tdf121615.odt", aDocument);
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    // Get access to the only image on the only page.
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+    CPPUNIT_ASSERT(pResources);
+    auto pXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"));
+    CPPUNIT_ASSERT(pXObjects);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pXObjects->GetItems().size());
+    vcl::filter::PDFObjectElement* pXObject = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pXObject);
+    vcl::filter::PDFStreamElement* pStream = pXObject->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+
+    // Load the embedded image.
+    rObjectStream.Seek( 0 );
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic;
+    sal_uInt16 format;
+    ErrCode bResult = rFilter.ImportGraphic(aGraphic, OUString( "import" ), rObjectStream,
+        GRFILTER_FORMAT_DONTKNOW, &format);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
+
+    // The image should be grayscale 8bit JPEG.
+    sal_uInt16 jpegFormat = rFilter.GetImportFormatNumberForShortName( JPG_SHORTNAME );
+    CPPUNIT_ASSERT( jpegFormat != GRFILTER_FORMAT_NOTFOUND );
+    CPPUNIT_ASSERT_EQUAL( jpegFormat, format );
+    BitmapEx aBitmap = aGraphic.GetBitmapEx();
+    CPPUNIT_ASSERT_EQUAL( 200L, aBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL( 300L, aBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL( 8, int(aBitmap.GetBitCount()));
+    // tdf#121615 was caused by broken handling of data width with 8bit color,
+    // so the test image has some black in the bottomright corner, check it's there
+    CPPUNIT_ASSERT_EQUAL( COL_WHITE, aBitmap.GetPixelColor( 0, 0 ));
+    CPPUNIT_ASSERT_EQUAL( COL_WHITE, aBitmap.GetPixelColor( 0, 299 ));
+    CPPUNIT_ASSERT_EQUAL( COL_WHITE, aBitmap.GetPixelColor( 199, 0 ));
+    CPPUNIT_ASSERT_EQUAL( COL_BLACK, aBitmap.GetPixelColor( 199, 299 ));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
