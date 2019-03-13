@@ -2047,7 +2047,11 @@ bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_ESC:
         {
             sal_Int16 nVal = sal_Int16();
-            if( (rVal >>= nVal) && (std::abs(nVal) <= 101))
+            /* Because the nEscapement uses percentage it's Value has to be between 0 and 100,
+             but when we open a docx file that has a Raised text by 100points and with 11 Font Height.
+             That will be 909% and this method sends 'false' back. But changing the Value to a higher
+             number solves the problem */
+            if( (rVal >>= nVal) && (std::abs(nVal) <= 1001))
                 nEsc = nVal;
             else
                 return false;
