@@ -90,56 +90,6 @@ protected:
     int mnTilePixelWidth, mnTilePixelHeight;
     int mnTileTwipWidth, mnTileTwipHeight;
 public:
-    struct LOKAsyncEventData
-    {
-        VclPtr<vcl::Window> mpWindow;
-        sal_uLong mnEvent;
-        MouseEvent maMouseEvent;
-        KeyEvent maKeyEvent;
-    };
-
-    static void LOKPostAsyncEvent(void* pEv, void*)
-    {
-        LOKAsyncEventData* pLOKEv = static_cast<LOKAsyncEventData*>(pEv);
-        if (pLOKEv->mpWindow->IsDisposed())
-            return;
-
-        switch (pLOKEv->mnEvent)
-        {
-        case VCLEVENT_WINDOW_KEYINPUT:
-            pLOKEv->mpWindow->KeyInput(pLOKEv->maKeyEvent);
-            break;
-        case VCLEVENT_WINDOW_KEYUP:
-            pLOKEv->mpWindow->KeyUp(pLOKEv->maKeyEvent);
-            break;
-        case VCLEVENT_WINDOW_MOUSEBUTTONDOWN:
-            pLOKEv->mpWindow->LogicMouseButtonDown(pLOKEv->maMouseEvent);
-            // Invoke the context menu
-            if (pLOKEv->maMouseEvent.GetButtons() & MOUSE_RIGHT)
-            {
-                const CommandEvent aCEvt(pLOKEv->maMouseEvent.GetPosPixel(), CommandEventId::ContextMenu, true, nullptr);
-                pLOKEv->mpWindow->Command(aCEvt);
-            }
-            break;
-        case VCLEVENT_WINDOW_MOUSEBUTTONUP:
-            pLOKEv->mpWindow->LogicMouseButtonUp(pLOKEv->maMouseEvent);
-
-            // sometimes MouseButtonDown captures mouse and starts tracking, and VCL
-            // will not take care of releasing that with tiled rendering
-            if (pLOKEv->mpWindow->IsTracking())
-                pLOKEv->mpWindow->EndTracking();
-
-            break;
-        case VCLEVENT_WINDOW_MOUSEMOVE:
-            pLOKEv->mpWindow->LogicMouseMove(pLOKEv->maMouseEvent);
-            break;
-        default:
-            assert(false);
-            break;
-        }
-
-        delete pLOKEv;
-    }
 
     virtual ~ITiledRenderable();
 
@@ -381,8 +331,6 @@ public:
     {
         return OUString();
     }
-
-
 };
 } // namespace vcl
 
