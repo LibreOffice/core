@@ -57,6 +57,16 @@ public:
     /// Notify about the editing context change.
     static void notifyContextChange(SfxViewShell const* pViewShell, const OUString& aApplication, const OUString& aContext);
 
+    /// Helper for posting async key event
+    static void postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,
+                                  int nType, int nCharCode, int nKeyCode);
+
+    /// Helper for posting async mouse event
+    static void postMouseEventAsync(const VclPtr<vcl::Window> &xWindow,
+                                    int nType, const Point &rPos,
+                                    int nCount, MouseEventModifiers aModifiers,
+                                    int nButtons, int nModifier);
+
     /// A special value to signify 'infinity'.
     /// This value is chosen such that sal_Int32 will not overflow when manipulated.
     static const long MaxTwips = 1e9;

@@ -644,27 +644,7 @@ Size ScModelObj::getDocumentSize()
 void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
-
-    VclPtr<vcl::Window> pWindow = getDocWindow();
-    if (!pWindow)
-        return;
-
-    LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
-    pLOKEv->mpWindow = pWindow;
-    switch (nType)
-    {
-    case LOK_KEYEVENT_KEYINPUT:
-        pLOKEv->mnEvent = VclEventId::WindowKeyInput;
-        break;
-    case LOK_KEYEVENT_KEYUP:
-        pLOKEv->mnEvent = VclEventId::WindowKeyUp;
-        break;
-    default:
-        assert(false);
-    }
-
-    pLOKEv->maKeyEvent = KeyEvent(nCharCode, nKeyCode, 0);
-    Application::PostUserEvent(Link<void*, void>(pLOKEv, ITiledRenderable::LOKPostAsyncEvent));
+    SfxLokHelper::postKeyEventAsync(getDocWindow(), nType, nCharCode, nKeyCode);
 }
 
 void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
@@ -699,29 +679,11 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
             return;
     }
 
-    LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
-    pLOKEv->mpWindow = pGridWindow;
-    switch (nType)
-    {
-    case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
-        pLOKEv->mnEvent = VclEventId::WindowMouseButtonDown;
-        break;
-    case LOK_MOUSEEVENT_MOUSEBUTTONUP:
-        pLOKEv->mnEvent = VclEventId::WindowMouseButtonUp;
-        break;
-    case LOK_MOUSEEVENT_MOUSEMOVE:
-        pLOKEv->mnEvent = VclEventId::WindowMouseMove;
-        break;
-    default:
-        assert(false);
-    }
-
     // Calc operates in pixels...
     const Point aPos(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY());
-    pLOKEv->maMouseEvent = MouseEvent(aPos, nCount,
+    SfxLokHelper::postMouseEventAsync(pGridWindow, nType, aPos, nCount,
                                       MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
-    Application::PostUserEvent(Link<void*, void>(pLOKEv, ITiledRenderable::LOKPostAsyncEvent));
 }
 
 void ScModelObj::setTextSelection(int nType, int nX, int nY)
