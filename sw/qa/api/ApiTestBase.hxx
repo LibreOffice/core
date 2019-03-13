@@ -15,8 +15,6 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#include <unordered_map>
-
 namespace apitest
 {
 class ApiTestBase
@@ -50,7 +48,7 @@ protected:
 
     virtual ~ApiTestBase() {}
 
-    virtual std::unordered_map<OUString, css::uno::Reference<css::uno::XInterface>> init() = 0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 };
 }
 
