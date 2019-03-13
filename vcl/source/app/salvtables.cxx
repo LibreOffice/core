@@ -2722,6 +2722,25 @@ public:
         return m_xTreeView->GetAbsPos(pEntry);
     }
 
+    virtual OUString get_selected_text() const override
+    {
+        assert(m_xTreeView->IsUpdateMode() && "don't request selection when frozen");
+        if (SvTreeListEntry* pEntry = m_xTreeView->FirstSelected())
+            return m_xTreeView->GetEntryText(pEntry);
+        return OUString();
+    }
+
+    virtual OUString get_selected_id() const override
+    {
+        assert(m_xTreeView->IsUpdateMode() && "don't request selection when frozen");
+        if (SvTreeListEntry* pEntry = m_xTreeView->FirstSelected())
+        {
+            if (const OUString* pStr = static_cast<const OUString*>(pEntry->GetUserData()))
+                return *pStr;
+        }
+        return OUString();
+    }
+
     virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig) const override
     {
         return std::unique_ptr<weld::TreeIter>(new SalInstanceTreeIter(static_cast<const SalInstanceTreeIter*>(pOrig)));
