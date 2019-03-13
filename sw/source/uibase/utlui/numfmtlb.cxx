@@ -458,9 +458,7 @@ SwNumFormatListBox::SwNumFormatListBox(std::unique_ptr<weld::ComboBox> xControl)
     : nCurrFormatType(SvNumFormatType::ALL)
     , mbCurrFormatTypeNeedsInit(true)
     , nStdEntry(0)
-    , bOneArea(false)
     , nDefFormat(0)
-    , bShowLanguageControl(false)
     , bUseAutomaticLanguage(true)
     , mxControl(std::move(xControl))
 {
@@ -716,9 +714,9 @@ void SwNumFormatListBox::CallSelectHdl()
                                         SID_ATTR_NUMBERFORMAT_INFO ) );
 
     if( (SvNumFormatType::DATE | SvNumFormatType::TIME) & nCurrFormatType )
-        aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, bOneArea));
+        aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, false));
 
-    aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_NOLANGUAGE, !bShowLanguageControl));
+    aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_NOLANGUAGE, true));
     aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ADD_AUTO, bUseAutomaticLanguage));
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -747,11 +745,7 @@ void SwNumFormatListBox::CallSelectHdl()
             // SetDefFormat uses eCurLanguage to look for if this format already in the list
             SetDefFormat(nNumberFormat);
         }
-        if( bShowLanguageControl && SfxItemState::SET == pOutSet->GetItemState(
-            SID_ATTR_NUMBERFORMAT_ADD_AUTO, false, &pItem ))
-        {
-            bUseAutomaticLanguage = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-        }
+
     }
     else
         SetDefFormat(nFormat);

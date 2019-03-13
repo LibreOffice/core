@@ -31,18 +31,20 @@ namespace apphelper
 
 MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
                         beans::PropertyValue > & rMediaDescriptor )
-    : m_aRegularProperties(rMediaDescriptor.getLength())
-    , m_aDeprecatedProperties(rMediaDescriptor.getLength())
-    , m_aModelProperties(rMediaDescriptor.getLength())
+    : m_aModelProperties(rMediaDescriptor.getLength())
 {
+    css::uno::Sequence< css::beans::PropertyValue >
+                        aRegularProperties(rMediaDescriptor.getLength()); //these are the properties which are described in service com.sun.star.document.MediaDescriptor and not marked as deprecated
+    css::uno::Sequence< css::beans::PropertyValue >
+                        aDeprecatedProperties(rMediaDescriptor.getLength()); //these are properties which are described in service com.sun.star.document.MediaDescriptor but are marked as deprecated
     impl_init();
     sal_Int32 nRegularCount = 0;
     sal_Int32 nDeprecatedCount = 0;
     sal_Int32 nModelCount = 0;
 
-    auto addRegularProp = [this, &nRegularCount](const beans::PropertyValue& rRegularProp)
+    auto addRegularProp = [&aRegularProperties, &nRegularCount](const beans::PropertyValue& rRegularProp)
     {
-        m_aRegularProperties[nRegularCount] = rRegularProp;
+        aRegularProperties[nRegularCount] = rRegularProp;
         ++nRegularCount;
     };
     auto addModelProp = [this, &nModelCount, &addRegularProp](const beans::PropertyValue& rModelProp)
@@ -51,9 +53,9 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         m_aModelProperties[nModelCount] = rModelProp;
         ++nModelCount;
     };
-    auto addDepreciatedProp = [this, &nDeprecatedCount](const beans::PropertyValue& rDeprecatedProp)
+    auto addDepreciatedProp = [&aDeprecatedProperties, &nDeprecatedCount](const beans::PropertyValue& rDeprecatedProp)
     {
-        m_aDeprecatedProperties[nDeprecatedCount] = rDeprecatedProp;
+        aDeprecatedProperties[nDeprecatedCount] = rDeprecatedProp;
         ++nDeprecatedCount;
     };
 
@@ -236,8 +238,8 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
     }
 
-    m_aRegularProperties.realloc(nRegularCount);
-    m_aDeprecatedProperties.realloc(nDeprecatedCount);
+    aRegularProperties.realloc(nRegularCount);
+    aDeprecatedProperties.realloc(nDeprecatedCount);
     m_aModelProperties.realloc(nModelCount);
 }
 

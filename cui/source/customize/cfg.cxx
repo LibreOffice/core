@@ -925,7 +925,6 @@ SvxMenuEntriesListBox::SvxMenuEntriesListBox(std::unique_ptr<weld::TreeView> xCo
     : m_xControl(std::move(xControl))
     , m_xDropDown(m_xControl->create_virtual_device())
     , pPage(pPg)
-    , m_bIsInternalDrag( false )
 {
     CreateDropDown();
     m_xControl->connect_key_press(LINK(this, SvxMenuEntriesListBox, KeyInputHdl));

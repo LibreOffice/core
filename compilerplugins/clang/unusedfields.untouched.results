@@ -5,9 +5,9 @@ avmedia/source/vlc/wrapper/Types.hxx:44
 avmedia/source/vlc/wrapper/Types.hxx:45
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:43:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:43:7)
 avmedia/source/vlc/wrapper/Types.hxx:47
-    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:41:5)
+    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
 basctl/source/inc/dlged.hxx:122
@@ -22,8 +22,6 @@ canvas/source/vcl/impltools.hxx:117
     vclcanvas::tools::LocalGuard aSolarGuard class SolarMutexGuard
 canvas/workben/canvasdemo.cxx:82
     DemoRenderer maColorWhite uno::Sequence<double>
-chart2/source/controller/chartapiwrapper/DataSeriesPointWrapper.cxx:392
-    (anonymous namespace)::WrappedLineStyleProperty m_aDefaultValue class com::sun::star::uno::Any
 chart2/source/controller/dialogs/res_DataLabel.hxx:86
     chart::DataLabelResources m_xDC_Dial std::unique_ptr<weld::CustomWeld>
 chart2/source/controller/dialogs/tp_AxisLabel.hxx:60
@@ -38,7 +36,7 @@ chart2/source/controller/dialogs/tp_TitleRotation.hxx:44
     chart::SchAlignmentTabPage m_xFtTextDirection std::unique_ptr<weld::Label>
 chart2/source/controller/inc/RangeSelectionListener.hxx:63
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
-comphelper/source/container/enumerablemap.cxx:298
+comphelper/source/container/enumerablemap.cxx:293
     comphelper::MapEnumeration m_xKeepMapAlive Reference<class com::sun::star::uno::XInterface>
 connectivity/source/drivers/evoab2/EApi.h:122
     (anonymous) address_format char *
@@ -58,9 +56,11 @@ cui/source/dialogs/colorpicker.cxx:723
     cui::ColorPickerDialog m_xColorPreview std::unique_ptr<weld::CustomWeld>
 cui/source/inc/align.hxx:92
     svx::AlignmentTabPage m_xBoxDirection std::unique_ptr<weld::Widget>
-cui/source/inc/cfg.hxx:574
+cui/source/inc/cfg.hxx:335
+    SvxMenuEntriesListBox m_bIsInternalDrag _Bool
+cui/source/inc/cfg.hxx:584
     SvxNewToolbarDialog m_xBtnOK std::unique_ptr<weld::Button>
-cui/source/inc/cfg.hxx:607
+cui/source/inc/cfg.hxx:617
     SvxIconSelectorDialog m_xTbSymbolWin std::unique_ptr<weld::CustomWeld>
 cui/source/inc/cuicharmap.hxx:100
     SvxCharacterMap m_xShowChar std::unique_ptr<weld::CustomWeld>
@@ -108,13 +108,13 @@ cui/source/inc/transfrm.hxx:187
     SvxAngleTabPage m_xCtlRect std::unique_ptr<weld::CustomWeld>
 cui/source/inc/transfrm.hxx:190
     SvxAngleTabPage m_xCtlAngle std::unique_ptr<weld::CustomWeld>
-cui/source/inc/treeopt.hxx:84
-    OptionsNode m_sPageURL class rtl::OUString
+cui/source/options/optgdlg.hxx:48
+    OfaMiscTabPage m_xPrintDlgFrame std::unique_ptr<weld::Widget>
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:116
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
-dbaccess/source/ui/dlg/advancedsettings.hxx:95
-    dbaui::GeneratedValuesPage m_xAutoIncrementLabel std::unique_ptr<weld::Label>
 dbaccess/source/ui/dlg/advancedsettings.hxx:97
+    dbaui::GeneratedValuesPage m_xAutoIncrementLabel std::unique_ptr<weld::Label>
+dbaccess/source/ui/dlg/advancedsettings.hxx:99
     dbaui::GeneratedValuesPage m_xAutoRetrievingLabel std::unique_ptr<weld::Label>
 dbaccess/source/ui/dlg/detailpages.hxx:63
     dbaui::OCommonBehaviourTabPage m_xAutoRetrievingEnabled std::unique_ptr<weld::CheckButton>
@@ -175,9 +175,9 @@ include/sfx2/msg.hxx:136
 include/sfx2/msg.hxx:136
     SfxType2 pType const std::type_info *
 include/sfx2/msg.hxx:136
-    SfxType2 aAttrib struct SfxTypeAttrib [2]
-include/sfx2/msg.hxx:136
     SfxType2 nAttribs sal_uInt16
+include/sfx2/msg.hxx:136
+    SfxType2 aAttrib struct SfxTypeAttrib [2]
 include/sfx2/msg.hxx:137
     SfxType3 nAttribs sal_uInt16
 include/sfx2/msg.hxx:137
@@ -205,9 +205,9 @@ include/sfx2/msg.hxx:139
 include/sfx2/msg.hxx:140
     SfxType6 pType const std::type_info *
 include/sfx2/msg.hxx:140
-    SfxType6 aAttrib struct SfxTypeAttrib [6]
-include/sfx2/msg.hxx:140
     SfxType6 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:140
+    SfxType6 aAttrib struct SfxTypeAttrib [6]
 include/sfx2/msg.hxx:140
     SfxType6 nAttribs sal_uInt16
 include/sfx2/msg.hxx:141
@@ -247,9 +247,9 @@ include/sfx2/msg.hxx:146
 include/sfx2/msg.hxx:146
     SfxType13 aAttrib struct SfxTypeAttrib [13]
 include/sfx2/msg.hxx:146
-    SfxType13 nAttribs sal_uInt16
-include/sfx2/msg.hxx:146
     SfxType13 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:146
+    SfxType13 nAttribs sal_uInt16
 include/sfx2/msg.hxx:147
     SfxType14 pType const std::type_info *
 include/sfx2/msg.hxx:147
@@ -259,11 +259,11 @@ include/sfx2/msg.hxx:147
 include/sfx2/msg.hxx:147
     SfxType14 nAttribs sal_uInt16
 include/sfx2/msg.hxx:148
+    SfxType16 aAttrib struct SfxTypeAttrib [16]
+include/sfx2/msg.hxx:148
     SfxType16 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:148
     SfxType16 nAttribs sal_uInt16
-include/sfx2/msg.hxx:148
-    SfxType16 aAttrib struct SfxTypeAttrib [16]
 include/sfx2/msg.hxx:148
     SfxType16 pType const std::type_info *
 include/sfx2/msg.hxx:149
@@ -414,6 +414,8 @@ sal/qa/osl/security/osl_Security.cxx:191
     osl_Security::getConfigDir bRes1 _Bool
 sc/qa/unit/ucalc_column.cxx:104
     aInputs aName const char *
+sc/qa/unit/ucalc_formula.cxx:3011
+      class Test *
 sc/source/core/data/document.cxx:1239
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch const sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1240
@@ -438,6 +440,8 @@ sc/source/ui/inc/pvfundlg.hxx:83
     ScDPFunctionDlg mxBtnOk std::unique_ptr<weld::Button>
 sc/source/ui/inc/pvfundlg.hxx:123
     ScDPSubtotalDlg mxBtnOk std::unique_ptr<weld::Button>
+sc/source/ui/inc/retypepassdlg.hxx:32
+    PassFragment m_xSheetsBox std::unique_ptr<weld::Container>
 sc/source/ui/inc/scuiimoptdlg.hxx:63
     ScImportOptionsDlg m_xBtnOk std::unique_ptr<weld::Button>
 sd/source/ui/animations/CustomAnimationDialog.cxx:1736
@@ -490,8 +494,6 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     PDFGrammar::definition array rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     PDFGrammar::definition value rule<ScannerT>
-sfx2/source/bastyp/progress.cxx:53
-    SfxProgress_Impl aStateText class rtl::OUString
 sfx2/source/doc/doctempl.cxx:117
     DocTempl::DocTempl_EntryData_Impl mxObjShell const class SfxObjectShellLock
 sfx2/source/inc/sfxpicklist.hxx:33
@@ -511,9 +513,9 @@ sfx2/source/view/viewfrm.cxx:165
 slideshow/source/engine/opengl/TransitionImpl.cxx:1990
     (anonymous namespace)::ThreeFloats z GLfloat
 slideshow/source/engine/opengl/TransitionImpl.cxx:1990
-    (anonymous namespace)::ThreeFloats x GLfloat
-slideshow/source/engine/opengl/TransitionImpl.cxx:1990
     (anonymous namespace)::ThreeFloats y GLfloat
+slideshow/source/engine/opengl/TransitionImpl.cxx:1990
+    (anonymous namespace)::ThreeFloats x GLfloat
 starmath/inc/dialog.hxx:90
     SmFontDialog m_xShowFont std::unique_ptr<weld::CustomWeld>
 starmath/inc/dialog.hxx:330
@@ -644,7 +646,7 @@ vcl/inc/WidgetThemeLibrary.hxx:90
     vcl::ControlDrawParameters eState enum ControlState
 vcl/inc/WidgetThemeLibrary.hxx:106
     vcl::WidgetThemeLibrary_t nSize uint32_t
-vcl/source/app/salvtables.cxx:779
+vcl/source/app/salvtables.cxx:796
     SalInstanceContainer m_xContainer VclPtr<vcl::Window>
 vcl/source/gdi/jobset.cxx:36
     ImplOldJobSetupData cDeviceName char [32]
@@ -656,7 +658,7 @@ vcl/unx/generic/print/prtsetup.hxx:73
     RTSPaperPage m_xContainer std::unique_ptr<weld::Widget>
 vcl/unx/generic/print/prtsetup.hxx:108
     RTSDevicePage m_xContainer std::unique_ptr<weld::Widget>
-vcl/unx/gtk3/gtk3gtkinst.cxx:2853
+vcl/unx/gtk3/gtk3gtkinst.cxx:2882
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     HyperLink atk_hyper_link const AtkHyperlink

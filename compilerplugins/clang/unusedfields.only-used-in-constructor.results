@@ -9,9 +9,9 @@ avmedia/source/vlc/wrapper/Types.hxx:44
 avmedia/source/vlc/wrapper/Types.hxx:45
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:43:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:43:7)
 avmedia/source/vlc/wrapper/Types.hxx:47
-    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:41:5)
+    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
 basegfx/source/polygon/b2dtrapezoid.cxx:202
@@ -28,12 +28,14 @@ canvas/workben/canvasdemo.cxx:82
     DemoRenderer maColorWhite uno::Sequence<double>
 chart2/source/controller/accessibility/AccessibleChartShape.hxx:79
     chart::AccessibleChartShape m_aShapeTreeInfo ::accessibility::AccessibleShapeTreeInfo
-chart2/source/controller/chartapiwrapper/DataSeriesPointWrapper.cxx:392
-    (anonymous namespace)::WrappedLineStyleProperty m_aDefaultValue class com::sun::star::uno::Any
 chart2/source/controller/inc/dlg_View3D.hxx:53
     chart::View3DDialog m_aControllerLocker class chart::ControllerLockHelper
 chart2/source/controller/inc/RangeSelectionListener.hxx:63
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
+chart2/source/inc/MediaDescriptorHelper.hxx:56
+    apphelper::MediaDescriptorHelper m_aRegularProperties css::uno::Sequence<css::beans::PropertyValue>
+chart2/source/inc/MediaDescriptorHelper.hxx:59
+    apphelper::MediaDescriptorHelper m_aDeprecatedProperties css::uno::Sequence<css::beans::PropertyValue>
 connectivity/source/commontools/RowFunctionParser.cxx:374
     connectivity::(anonymous namespace)::ExpressionGrammar::definition unaryFunction ::boost::spirit::rule<ScannerT>
 connectivity/source/commontools/RowFunctionParser.cxx:375
@@ -132,9 +134,11 @@ cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
 cui/source/dialogs/colorpicker.cxx:719
     cui::ColorPickerDialog m_aColorPrevious class cui::ColorPreviewControl
-cui/source/factory/dlgfact.cxx:1386
+cui/source/factory/dlgfact.cxx:1357
     SvxMacroAssignDialog m_aItems class SfxItemSet
-cui/source/inc/cfgutil.hxx:227
+cui/source/inc/cfg.hxx:335
+    SvxMenuEntriesListBox m_bIsInternalDrag _Bool
+cui/source/inc/cfgutil.hxx:242
     SvxScriptSelectorDialog m_aStylesInfo struct SfxStylesInfo_Impl
 cui/source/inc/cuitabarea.hxx:230
     SvxAreaTabPage maFixed_ChangeType enum ChangeType
@@ -148,8 +152,6 @@ cui/source/inc/tabstpge.hxx:90
     SvxTabulatorTabPage m_aCenterWin class TabWin_Impl
 cui/source/inc/tabstpge.hxx:91
     SvxTabulatorTabPage m_aDezWin class TabWin_Impl
-cui/source/inc/treeopt.hxx:84
-    OptionsNode m_sPageURL class rtl::OUString
 dbaccess/source/core/api/RowSet.hxx:111
     dbaccess::ORowSet m_aURL class rtl::OUString
 dbaccess/source/core/api/RowSet.hxx:125
@@ -168,7 +170,7 @@ dbaccess/source/core/api/RowSet.hxx:460
     dbaccess::ORowSetClone m_nFetchSize sal_Int32
 dbaccess/source/core/api/RowSet.hxx:461
     dbaccess::ORowSetClone m_bIsBookmarkable _Bool
-dbaccess/source/core/dataaccess/connection.hxx:101
+dbaccess/source/core/dataaccess/connection.hxx:102
     dbaccess::OConnection m_nInAppend std::atomic<std::size_t>
 drawinglayer/source/tools/emfphelperdata.hxx:153
     emfplushelper::EmfPlusHelperData mnFrameRight sal_Int32
@@ -502,6 +504,8 @@ sc/inc/token.hxx:400
     SingleDoubleRefModifier aDub struct ScComplexRefData
 sc/qa/unit/ucalc_column.cxx:104
     aInputs aName const char *
+sc/qa/unit/ucalc_formula.cxx:3011
+      class Test *
 sc/source/core/data/document.cxx:1239
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch const sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1240
@@ -532,14 +536,6 @@ sc/source/filter/xml/xmldrani.hxx:72
     ScXMLDatabaseRangeContext bIsSelection _Bool
 sc/source/filter/xml/xmlexternaltabi.hxx:113
     ScXMLExternalRefCellContext mnCellType sal_Int16
-sc/source/filter/xml/xmlfilti.hxx:157
-    ScXMLDPFilterContext aOutputPosition class ScAddress
-sc/source/filter/xml/xmlfilti.hxx:158
-    ScXMLDPFilterContext aConditionSourceRangeAddress class ScRange
-sc/source/filter/xml/xmlfilti.hxx:162
-    ScXMLDPFilterContext bCopyOutputData _Bool
-sc/source/filter/xml/xmlfilti.hxx:166
-    ScXMLDPFilterContext bConditionSourceRange _Bool
 sc/source/filter/xml/xmltransformationi.hxx:155
     ScXMLDateTimeContext aType class rtl::OUString
 sc/source/ui/inc/acredlin.hxx:51
@@ -601,11 +597,11 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition simple_type rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
-    PDFGrammar::definition null_object rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition stringtype rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition boolean rule<ScannerT>
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
+    PDFGrammar::definition null_object rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition name rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
@@ -636,8 +632,6 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:265
     PDFGrammar::definition trailer rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:265
     PDFGrammar::definition xref rule<ScannerT>
-sfx2/source/bastyp/progress.cxx:53
-    SfxProgress_Impl aStateText class rtl::OUString
 sfx2/source/doc/doctempl.cxx:117
     DocTempl::DocTempl_EntryData_Impl mxObjShell const class SfxObjectShellLock
 slideshow/source/engine/animationnodes/animationbasenode.hxx:89
@@ -734,10 +728,8 @@ sw/source/core/layout/dbg_lay.cxx:170
     SwImplEnterLeave nAction const enum DbgAction
 sw/source/core/text/inftxt.hxx:686
     SwTextSlot aText class rtl::OUString
-sw/source/core/text/porfld.cxx:140
+sw/source/core/text/porfld.cxx:141
     SwFieldSlot aText class rtl::OUString
-sw/source/filter/xml/xmltbli.cxx:382
-    SwXMLTableCellContext_Impl mXmlId class rtl::OUString
 sw/source/ui/dbui/mmaddressblockpage.hxx:208
     SwCustomizeAddressBlockDialog m_aTextFilter class TextFilter
 sw/source/uibase/docvw/romenu.hxx:35
@@ -812,15 +804,15 @@ vcl/inc/WidgetThemeLibrary.hxx:90
     vcl::ControlDrawParameters eState enum ControlState
 vcl/inc/WidgetThemeLibrary.hxx:106
     vcl::WidgetThemeLibrary_t nSize uint32_t
-vcl/source/app/salvtables.cxx:2018
+vcl/source/app/salvtables.cxx:2041
     SalInstanceEntry m_aTextFilter class (anonymous namespace)::WeldTextFilter
-vcl/source/app/salvtables.cxx:3924
+vcl/source/app/salvtables.cxx:4013
     SalInstanceComboBoxWithEdit m_aTextFilter class (anonymous namespace)::WeldTextFilter
 vcl/source/gdi/jobset.cxx:36
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:37
     ImplOldJobSetupData cPortName char [32]
-vcl/unx/gtk3/gtk3gtkinst.cxx:2853
+vcl/unx/gtk3/gtk3gtkinst.cxx:2882
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     HyperLink atk_hyper_link const AtkHyperlink
