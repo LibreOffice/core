@@ -10,10 +10,6 @@
 $(eval $(call gb_Package_Package,extras_tplwizbitmap,$(SRCDIR)/extras/source/templates/wizard/bitmap))
 
 $(eval $(call gb_Package_add_files,extras_tplwizbitmap,$(LIBO_SHARE_FOLDER)/template/wizard/bitmap,\
-	cancel_down.bmp \
-	cancel_up.bmp \
-	down.bmp \
-	end.bmp \
 	euro_1.png \
 	euro_2.png \
 	euro_3.png \
@@ -24,16 +20,12 @@ $(eval $(call gb_Package_add_files,extras_tplwizbitmap,$(LIBO_SHARE_FOLDER)/temp
 	Import_1.png \
 	Import_3.png \
 	Import_4.png \
-	maximize.bmp \
-	minimize.bmp \
+	maximize.png \
+	minimize.png \
 	MS-Import_2-1.png \
 	MS-Import_2-2.png \
 	MS-Import_2-3.png \
-	okay_down.bmp \
-	okay_up.bmp \
-	report.bmp \
 	tutorial_background.gif \
-	up.bmp \
 	XML-Import_2-1.png \
 	XML-Import_2-2.png \
 	XML-Import_2-3.png \

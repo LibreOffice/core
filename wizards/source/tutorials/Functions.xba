@@ -95,15 +95,15 @@ Sub setMaxMinImage(param As String)
 		iPos = InStr(templatePath,&quot;/&quot;)
 		If(iPos &gt; 0) Then
 			If(param = &quot;MAX&quot;) Then
-				bitmapPath = templatePath &amp; &quot;../wizard/bitmap/maximize.bmp&quot;
+				bitmapPath = templatePath &amp; &quot;../wizard/bitmap/maximize.png&quot;
 			ElseIf(param = &quot;MIN&quot;) Then	
-				bitmapPath = templatePath &amp; &quot;../wizard/bitmap/minimize.bmp&quot;
+				bitmapPath = templatePath &amp; &quot;../wizard/bitmap/minimize.png&quot;
 			End If
 		Else
 			If(param = &quot;MAX&quot;) Then
-				bitmapPath = templatePath &amp; &quot;..\wizard\bitmap\maximize.bmp&quot;
+				bitmapPath = templatePath &amp; &quot;..\wizard\bitmap\maximize.png&quot;
 			ElseIf(param = &quot;MIN&quot;) Then	
-				bitmapPath = templatePath &amp; &quot;..\wizard\bitmap\minimize.bmp&quot;
+				bitmapPath = templatePath &amp; &quot;..\wizard\bitmap\minimize.png&quot;
 			End If		
 		End If
 		&apos;printdbgInfo oCommandButton.Model
