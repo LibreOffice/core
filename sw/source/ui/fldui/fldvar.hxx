@@ -65,9 +65,8 @@ class SwFieldVarPage : public SwFieldPage
     VclPtr<CheckBox>           m_pInvisibleCB;
     VclPtr<FixedText>          m_pSeparatorFT;
     VclPtr<Edit>               m_pSeparatorED;
-    VclPtr<ToolBox>            m_pNewDelTBX;
-    sal_uInt16          m_nApplyId;
-    sal_uInt16          m_nDeleteId;
+    VclPtr<PushButton>         m_pNewPB;
+    VclPtr<PushButton>         m_pDelPB;
 
     OUString            sOldValueFT;
     OUString            sOldNameFT;
@@ -78,7 +77,7 @@ class SwFieldVarPage : public SwFieldPage
     DECL_LINK( TypeHdl, ListBox&, void );
     DECL_LINK( SubTypeListBoxHdl, ListBox&, void );
     DECL_LINK( ModifyHdl, Edit&, void );
-    DECL_LINK( TBClickHdl, ToolBox *, void );
+    DECL_LINK( TBClickHdl, Button*, void );
     DECL_LINK( ChapterHdl, ListBox&, void );
     DECL_LINK( SeparatorHdl, Edit&, void );
     void SubTypeHdl(ListBox const *);
