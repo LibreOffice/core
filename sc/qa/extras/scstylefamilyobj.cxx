@@ -87,9 +87,9 @@ ScStyleFamilyObj::ScStyleFamilyObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<style::XStyle>::get())
     , XIndexAccess(19)
-    , XNameAccess("Default")
-    , XNameContainer("Default")
-    , XNameReplace("Default")
+    , XNameAccess("ScStyleFamilyObj")
+    , XNameContainer("ScStyleFamilyObj")
+    , XNameReplace("ScStyleFamilyObj")
     , XServiceInfo("ScStyleFamilyObj", "com.sun.star.style.StyleFamily")
 {
 }
