@@ -1099,16 +1099,34 @@ int CffSubsetterContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const 
     mpReadEnd = pT2Ops + nT2Len;
     // prepend "hsbw" or "sbw"
     // TODO: only emit hsbw when charwidth is known
-    // TODO: remove charwidth from T2 stack
-    writeType1Val( 0); // TODO: aSubsetterContext.getLeftSideBearing();
-    writeType1Val( 1000/*###getCharWidth()###*/);
-    writeTypeOp( TYPE1OP::HSBW);
+    writeType1Val(0); // TODO: aSubsetterContext.getLeftSideBearing();
+    U8* pCharWidthPtr=mpWritePtr; // need to overwrite that later
+    // pad out 5 bytes for the char width with default val 1000 (to be
+    // filled with the actual value below)
+    *(mpWritePtr++) = 255;
+    *(mpWritePtr++) = static_cast<U8>(0);
+    *(mpWritePtr++) = static_cast<U8>(0);
+    *(mpWritePtr++) = static_cast<U8>(250);
+    *(mpWritePtr++) = static_cast<U8>(124);
+    writeTypeOp(TYPE1OP::HSBW);
     mbNeedClose = false;
     mbIgnoreHints = false;
     mnHintSize=mnHorzHintSize=mnStackIdx=0; maCharWidth=-1;//#######
     mnCntrMask = 0;
     while( mpReadPtr < mpReadEnd)
         convertOneTypeOp();
+    if( maCharWidth != -1 )
+    {
+        // overwrite earlier charWidth value, which we only now have
+        // parsed out of mpReadPtr buffer (by way of
+        // convertOneTypeOp()s above)
+        const int nInt = static_cast<int>(maCharWidth);
+        *(pCharWidthPtr++) = 255;
+        *(pCharWidthPtr++) = static_cast<U8>(nInt >> 24);
+        *(pCharWidthPtr++) = static_cast<U8>(nInt >> 16);
+        *(pCharWidthPtr++) = static_cast<U8>(nInt >> 8);
+        *(pCharWidthPtr++) = static_cast<U8>(nInt);
+    }
 
     const int nType1Len = mpWritePtr - pT1Ops;
 
