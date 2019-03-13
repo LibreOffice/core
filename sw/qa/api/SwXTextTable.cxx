@@ -7,14 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "XTextContentTest.hxx"
-
 #include <test/bootstrapfixture.hxx>
 #include <test/lang/xcomponent.hxx>
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
-//#include <com/sun/star/frame/DispatchHelper.hpp>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 

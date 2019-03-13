@@ -58,10 +58,7 @@ class BaseIndexTest : public ApiTestBase
 public:
     void testBaseIndexProperties()
     {
-        auto map = init();
-
-        css::uno::Reference<css::beans::XPropertySet> xBaseIndex(map["text::BaseIndex"],
-                                                                 css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::beans::XPropertySet> xBaseIndex(init(), css::uno::UNO_QUERY_THROW);
         testStringProperty(xBaseIndex, "Title", "Value");
         testBooleanProperty(xBaseIndex, "IsProtected");
 

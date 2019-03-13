@@ -1394,7 +1394,7 @@ void SwXDocumentSettings::_postGetValues ()
 // XServiceInfo
 OUString SAL_CALL SwXDocumentSettings::getImplementationName(  )
 {
-    return OUString("com.sun.star.comp.Writer.DocumentSettings");
+    return OUString("SwXDocumentSettings");
 }
 
 sal_Bool SAL_CALL SwXDocumentSettings::supportsService( const OUString& ServiceName )
