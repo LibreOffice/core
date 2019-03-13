@@ -33,6 +33,7 @@ struct ImplSchedulerData final
     Task*              mpTask;        ///< Pointer to VCL Task instance
     bool               mbInScheduler; ///< Task currently processed?
     sal_uInt64         mnUpdateTime;  ///< Last Update Time
+    TaskPriority       mePriority;    ///< Task priority
 
     const char *GetDebugName() const;
 };
