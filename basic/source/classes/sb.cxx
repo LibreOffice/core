@@ -200,10 +200,9 @@ void lclRemoveDocBasicItem( StarBASIC& rDocBasic )
         it->second->stopListening();
         GaDocBasicItems::get().erase( it );
     }
-    auto it_end = GaDocBasicItems::get().end();
-    for( it = GaDocBasicItems::get().begin(); it != it_end; ++it )
+    for( auto& rEntry : GaDocBasicItems::get() )
     {
-        it->second->clearDependingVarsOnDelete( rDocBasic );
+        rEntry.second->clearDependingVarsOnDelete( rDocBasic );
     }
 }
 

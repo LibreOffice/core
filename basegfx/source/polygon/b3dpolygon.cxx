@@ -335,11 +335,8 @@ public:
             BColorDataVector::const_iterator aEnd(rSource.maVector.end());
             maVector.insert(aIndex, aStart, aEnd);
 
-            for(; aStart != aEnd; ++aStart)
-            {
-                if(!aStart->equalZero())
-                    mnUsedEntries++;
-            }
+            mnUsedEntries += std::count_if(aStart, aEnd,
+                [](BColorDataVector::const_reference rData) { return !rData.equalZero(); });
         }
     }
 
@@ -349,13 +346,10 @@ public:
         {
             const BColorDataVector::iterator aDeleteStart(maVector.begin() + nIndex);
             const BColorDataVector::iterator aDeleteEnd(aDeleteStart + nCount);
-            BColorDataVector::const_iterator aStart(aDeleteStart);
 
-            for(; mnUsedEntries && aStart != aDeleteEnd; ++aStart)
-            {
-                if(!aStart->equalZero())
-                    mnUsedEntries--;
-            }
+            auto nDeleteUsed = std::count_if(aDeleteStart, aDeleteEnd,
+                [](BColorDataVector::const_reference rData) { return !rData.equalZero(); });
+            mnUsedEntries -= std::min(mnUsedEntries, static_cast<sal_uInt32>(nDeleteUsed));
 
             // remove point data
             maVector.erase(aDeleteStart, aDeleteEnd);
@@ -482,11 +476,8 @@ public:
             NormalsData3DVector::const_iterator aEnd(rSource.maVector.end());
             maVector.insert(aIndex, aStart, aEnd);
 
-            for(; aStart != aEnd; ++aStart)
-            {
-                if(!aStart->equalZero())
-                    mnUsedEntries++;
-            }
+            mnUsedEntries += std::count_if(aStart, aEnd,
+                [](NormalsData3DVector::const_reference rData) { return !rData.equalZero(); });
         }
     }
 
@@ -496,13 +487,10 @@ public:
         {
             const NormalsData3DVector::iterator aDeleteStart(maVector.begin() + nIndex);
             const NormalsData3DVector::iterator aDeleteEnd(aDeleteStart + nCount);
-            NormalsData3DVector::const_iterator aStart(aDeleteStart);
 
-            for(; mnUsedEntries && aStart != aDeleteEnd; ++aStart)
-            {
-                if(!aStart->equalZero())
-                    mnUsedEntries--;
-            }
+            auto nDeleteUsed = std::count_if(aDeleteStart, aDeleteEnd,
+                [](NormalsData3DVector::const_reference rData) { return !rData.equalZero(); });
+            mnUsedEntries -= std::min(mnUsedEntries, static_cast<sal_uInt32>(nDeleteUsed));
 
             // remove point data
             maVector.erase(aDeleteStart, aDeleteEnd);
@@ -637,11 +625,8 @@ public:
             TextureData2DVector::const_iterator aEnd(rSource.maVector.end());
             maVector.insert(aIndex, aStart, aEnd);
 
-            for(; aStart != aEnd; ++aStart)
-            {
-                if(!aStart->equalZero())
-                    mnUsedEntries++;
-            }
+            mnUsedEntries += std::count_if(aStart, aEnd,
+                [](TextureData2DVector::const_reference rData) { return !rData.equalZero(); });
         }
     }
 
@@ -651,13 +636,10 @@ public:
         {
             const TextureData2DVector::iterator aDeleteStart(maVector.begin() + nIndex);
             const TextureData2DVector::iterator aDeleteEnd(aDeleteStart + nCount);
-            TextureData2DVector::const_iterator aStart(aDeleteStart);
 
-            for(; mnUsedEntries && aStart != aDeleteEnd; ++aStart)
-            {
-                if(!aStart->equalZero())
-                    mnUsedEntries--;
-            }
+            auto nDeleteUsed = std::count_if(aDeleteStart, aDeleteEnd,
+                [](TextureData2DVector::const_reference rData) { return !rData.equalZero(); });
+            mnUsedEntries -= std::min(mnUsedEntries, static_cast<sal_uInt32>(nDeleteUsed));
 
             // remove point data
             maVector.erase(aDeleteStart, aDeleteEnd);

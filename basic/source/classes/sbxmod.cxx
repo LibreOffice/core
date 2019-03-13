@@ -1495,16 +1495,11 @@ bool SbModule::SetBP( sal_uInt16 nLine )
         return false;
     if( !pBreaks )
         pBreaks.reset( new SbiBreakpoints );
-    size_t i;
-    for( i = 0; i < pBreaks->size(); i++ )
-    {
-        sal_uInt16 b = pBreaks->operator[]( i );
-        if( b == nLine )
-            return true;
-        if( b < nLine )
-            break;
-    }
-    pBreaks->insert( pBreaks->begin() + i, nLine );
+    auto it = std::find_if(pBreaks->begin(), pBreaks->end(),
+        [&nLine](const sal_uInt16 b) { return b <= nLine; });
+    if (it != pBreaks->end() && *it == nLine)
+        return true;
+    pBreaks->insert( it, nLine );
 
     // #38568: Set during runtime as well here BasicDebugFlags::Break
     if( GetSbData()->pInst && GetSbData()->pInst->pRun )
@@ -1518,17 +1513,12 @@ bool SbModule::ClearBP( sal_uInt16 nLine )
     bool bRes = false;
     if( pBreaks )
     {
-        for( size_t i = 0; i < pBreaks->size(); i++ )
+        auto it = std::find_if(pBreaks->begin(), pBreaks->end(),
+            [&nLine](const sal_uInt16 b) { return b <= nLine; });
+        bRes = (it != pBreaks->end()) && (*it == nLine);
+        if (bRes)
         {
-            sal_uInt16 b = pBreaks->operator[]( i );
-            if( b == nLine )
-            {
-                pBreaks->erase( pBreaks->begin() + i );
-                bRes = true;
-                break;
-            }
-            if( b < nLine )
-                break;
+            pBreaks->erase(it);
         }
         if( pBreaks->empty() )
         {
