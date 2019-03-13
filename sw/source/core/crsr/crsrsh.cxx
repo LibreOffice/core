@@ -1876,6 +1876,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 
     if( m_bSVCursorVis )
         m_pVisibleCursor->Show(); // show again
+
+    getIDocumentMarkAccess()->NotifyCursorUpdate(*this);
 }
 
 void SwCursorShell::RefreshBlockCursor()

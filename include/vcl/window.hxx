@@ -624,7 +624,7 @@ protected:
 
     SAL_DLLPRIVATE void                 ImplInvalidate( const vcl::Region* rRegion, InvalidateFlags nFlags );
 
-    SAL_DLLPRIVATE WindowHitTest        ImplHitTest( const Point& rFramePos );
+    virtual WindowHitTest               ImplHitTest( const Point& rFramePos );
 
     SAL_DLLPRIVATE void                 ImplSetMouseTransparent( bool bTransparent );
 

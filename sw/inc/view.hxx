@@ -210,7 +210,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SwPostItMgr         *m_pPostItMgr;
 
     SelectionType       m_nSelectionType;
-    VclPtr<FloatingWindow> m_pFieldPopup;
     sal_uInt16          m_nPageCnt;
 
     // current draw mode
@@ -266,8 +265,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SAL_DLLPRIVATE bool          IsTextTool() const;
 
     DECL_DLLPRIVATE_LINK( TimeoutHdl, Timer*, void );
-
-    DECL_DLLPRIVATE_LINK( FieldPopupModeEndHdl, FloatingWindow*, void );
 
     inline long                  GetXScroll() const;
     inline long                  GetYScroll() const;
@@ -425,7 +422,6 @@ public:
 
     void            SpellError(LanguageType eLang);
     bool            ExecSpellPopup( const Point& rPt );
-    void                ExecFieldPopup( const Point& rPt, sw::mark::IFieldmark *fieldBM );
     void            ExecSmartTagPopup( const Point& rPt );
 
     DECL_LINK( OnlineSpellCallback, SpellCallbackInfo&, void );
