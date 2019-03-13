@@ -23,7 +23,9 @@ $(eval $(call gb_CustomTarget_register_targets,postprocess/images,\
 $(packimages_DIR)/images.zip : DEFAULT_THEME := $(true)
 $(packimages_DIR)/images_%.zip : DEFAULT_THEME :=
 
-$(packimages_DIR)/%_links.txt :
+# tdf#124023 make links.txt depend on phony sorted.lst depend
+# so this is evaluated every time
+$(packimages_DIR)/%_links.txt : $(packimages_DIR)/sorted.lst
 	@if test -f "$(SRCDIR)/icon-themes/$*/links.txt"; then \
 		cp "$(SRCDIR)/icon-themes/$*/links.txt" $@.tmp ; \
 	else \
