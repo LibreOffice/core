@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_PythonTest_PythonTest,pyuno_pytests_ssl))
+$(eval $(call gb_PythonTest_PythonTest,pyuno_pytests_testssl))
 
-$(eval $(call gb_PythonTest_add_modules,pyuno_pytests_ssl,$(SRCDIR)/pyuno/qa/pytests,\
+$(eval $(call gb_PythonTest_add_modules,pyuno_pytests_testssl,$(SRCDIR)/pyuno/qa/pytests,\
     testssl \
 ))
 
