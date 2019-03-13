@@ -927,5 +927,14 @@ DECLARE_ODFIMPORT_TEST(testTdf123829, "tdf123829.odt")
         pDoc->getIDocumentSettingAccess().get(DocumentSettingId::COLLAPSE_EMPTY_CELL_PARA));
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf113289, "tdf113289.odt")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    // Hmm. Now how do I access the separator style?
+}
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
