@@ -301,6 +301,9 @@ private:
     SfxMedium* m_pMedium;
     SfxMedium* m_pOwnMedium;
     bool m_bLinkableSelected;
+    /** This flag controls whether to show all pages.
+    */
+    bool m_bShowAllPages;
     OUString m_aDocName;
     ::sd::DrawDocShellRef m_xBookmarkDocShRef; ///< for the loading of bookmarks
     Link<weld::TreeView&, void> m_aChangeHdl;
@@ -321,10 +324,31 @@ private:
     DECL_LINK(RequestingChildrenHdl, const weld::TreeIter&, bool);
     DECL_LINK(SelectHdl, weld::TreeView&, void);
 
+    /** Determine whether the specified page belongs to the current show
+        which is either the standard show or a custom show.
+        @param pPage
+            Pointer to the page for which to check whether it belongs to the
+            show.
+        @return
+            Returns <FALSE/> if there is no custom show or if the current
+            show does not contain the specified page at least once.
+    */
+    bool PageBelongsToCurrentShow (const SdPage* pPage) const;
+
 public:
 
     SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeview);
     ~SdPageObjsTLV();
+
+    void hide()
+    {
+        m_xTreeView->hide();
+    }
+
+    void show()
+    {
+        m_xTreeView->show();
+    }
 
     void set_size_request(int nWidth, int nHeight)
     {
@@ -346,9 +370,16 @@ public:
         m_xTreeView->set_selection_mode(eMode);
     }
 
-    std::vector<int> get_selected_rows() const
+    bool SelectEntry(const OUString& rName);
+
+    OUString get_selected_text() const
     {
-        return m_xTreeView->get_selected_rows();
+        return m_xTreeView->get_selected_text();
+    }
+
+    bool get_selected() const
+    {
+        return m_xTreeView->get_selected(nullptr);
     }
 
     void connect_changed(const Link<weld::TreeView&, void>& rLink)
@@ -371,9 +402,40 @@ public:
         return m_xTreeView->make_iterator();
     }
 
+    bool get_visible() const
+    {
+        return m_xTreeView->get_visible();
+    }
+
+    void unselect_all()
+    {
+        m_xTreeView->unselect_all();
+    }
+
     void SetViewFrame(const SfxViewFrame* pViewFrame);
 
+    void Fill(const SdDrawDocument*, bool bAllPages, const OUString& rDocName);
     void Fill(const SdDrawDocument*, SfxMedium* pSfxMedium, const OUString& rDocName);
+
+    /** Add one list box entry for the parent of the given shapes and one child entry for
+        each of the given shapes.
+        @param rList
+            The container of shapes that are to be inserted.
+        @param pShape
+            The parent shape or NULL when the parent is a page.
+        @param rsName
+            The name to be displayed for the new parent node.
+        @param bIsExcluded
+            Some pages can be excluded (from the show?).
+        @param pParentEntry
+            The parent entry of the new parent entry.
+    */
+    void AddShapeList (
+        const SdrObjList& rList,
+        SdrObject* pShape,
+        const OUString& rsName,
+        const bool bIsExcluded,
+        weld::TreeIter* pParentEntry);
 
     /** return selected entries
           nDepth == 0 -> pages
@@ -388,6 +450,16 @@ public:
     void InsertEntry(const OUString &rName, const OUString &rExpander)
     {
         m_xTreeView->insert(nullptr, -1, &rName, nullptr, nullptr, nullptr, &rExpander, false, nullptr);
+    }
+
+    void InsertEntry(weld::TreeIter* pParent, const OUString& rId, const OUString &rName, const OUString &rExpander, weld::TreeIter* pEntry = nullptr)
+    {
+        m_xTreeView->insert(pParent, -1, &rName, &rId, nullptr, nullptr, &rExpander, false, pEntry);
+    }
+
+    void clear()
+    {
+        m_xTreeView->clear();
     }
 };
 
