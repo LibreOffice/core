@@ -2823,6 +2823,9 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
                     nEscapement = ( nIntValue > 0 ) ? 58: -58;
                 }
             }
+            // Because the nEscapement uses percentage it's Value has to be between 0 and 100,
+            // and if the Value higher, than 100, then the Text isn't elevated.
+            if( nEscapement > 100 ) nEscapement = 100;
             rContext->Insert(PROP_CHAR_ESCAPEMENT,         uno::makeAny( nEscapement ) );
             rContext->Insert(PROP_CHAR_ESCAPEMENT_HEIGHT,  uno::makeAny( nProp ) );
         }
