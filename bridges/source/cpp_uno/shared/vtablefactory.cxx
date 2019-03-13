@@ -181,11 +181,11 @@ VtableFactory::VtableFactory(): m_arena(
 VtableFactory::~VtableFactory() {
     {
         osl::MutexGuard guard(m_mutex);
-        for (Map::iterator i(m_map.begin()); i != m_map.end(); ++i) {
-            for (sal_Int32 j = 0; j < i->second.count; ++j) {
-                freeBlock(i->second.blocks[j]);
+        for (auto& rEntry : m_map) {
+            for (sal_Int32 j = 0; j < rEntry.second.count; ++j) {
+                freeBlock(rEntry.second.blocks[j]);
             }
-            delete[] i->second.blocks;
+            delete[] rEntry.second.blocks;
         }
     }
     rtl_arena_destroy(m_arena);

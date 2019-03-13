@@ -189,8 +189,8 @@ public:
                 std::rotate(aTmp2.begin(),pSmallest,aTmp2.end());
 
             aTmp.clear();
-            for(std::vector<B2DPoint>::iterator pCurr=aTmp2.begin(); pCurr!=aTmp2.end(); ++pCurr)
-                aTmp.append(*pCurr);
+            for(const auto& rCurr : aTmp2)
+                aTmp.append(rCurr);
 
             aRes.append(aTmp);
         }

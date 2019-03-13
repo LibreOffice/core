@@ -123,15 +123,13 @@ void SbxBase::AddFactory( SbxFactory* pFac )
 void SbxBase::RemoveFactory( SbxFactory const * pFac )
 {
     SbxAppData& r = GetSbxData_Impl();
-    for (auto it = r.m_Factories.begin(); it != r.m_Factories.end(); ++it)
+    auto it = std::find_if(r.m_Factories.begin(), r.m_Factories.end(),
+        [&pFac](const std::unique_ptr<SbxFactory>& rxFactory) { return rxFactory.get() == pFac; });
+    if (it != r.m_Factories.end())
     {
-        if ((*it).get() == pFac)
-        {
-            std::unique_ptr<SbxFactory> tmp(std::move(*it));
-            r.m_Factories.erase( it );
-            (void)tmp.release();
-            break;
-        }
+        std::unique_ptr<SbxFactory> tmp(std::move(*it));
+        r.m_Factories.erase( it );
+        (void)tmp.release();
     }
 }
 

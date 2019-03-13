@@ -51,14 +51,13 @@ void BreakPointList::transfer(BreakPointList & rList)
 
 void BreakPointList::InsertSorted(BreakPoint aNewBrk)
 {
-    for ( auto it = maBreakPoints.begin(); it != maBreakPoints.end(); ++it )
+    auto it = std::find_if(maBreakPoints.begin(), maBreakPoints.end(),
+        [&aNewBrk](const BreakPoint& rBreakPoint) { return aNewBrk.nLine <= rBreakPoint.nLine; });
+    if (it != maBreakPoints.end())
     {
-        if ( aNewBrk.nLine <= it->nLine )
-        {
-            DBG_ASSERT( it->nLine != aNewBrk.nLine, "BreakPoint exists already!" );
-            maBreakPoints.insert( it, aNewBrk );
-            return;
-        }
+        DBG_ASSERT( it->nLine != aNewBrk.nLine, "BreakPoint exists already!" );
+        maBreakPoints.insert( it, aNewBrk );
+        return;
     }
     // no insert position found => LIST_APPEND
     maBreakPoints.push_back( aNewBrk );
@@ -127,14 +126,10 @@ void BreakPointList::ResetHitCount()
 
 void BreakPointList::remove(const BreakPoint* ptr)
 {
-    for ( auto i = maBreakPoints.begin(); i != maBreakPoints.end(); ++i )
-    {
-        if ( ptr == &(*i) )
-        {
-            maBreakPoints.erase( i );
-            return;
-        }
-    }
+    auto i = std::find_if(maBreakPoints.begin(), maBreakPoints.end(),
+        [&ptr](const BreakPoint& rBreakPoint) { return ptr == &rBreakPoint; });
+    if (i != maBreakPoints.end())
+        maBreakPoints.erase( i );
     return;
 }
 
