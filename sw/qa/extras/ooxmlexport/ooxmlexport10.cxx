@@ -203,6 +203,17 @@ DECLARE_OOXMLEXPORT_TEST(textboxWpgOnly, "textbox-wpg-only.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xText), 1), "CharEscapementHeight"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFontEsc, "test_tdf120412.docx")
+{
+    xmlDocPtr pXmlDoc =parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // don't lose the run with superscript formatting
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 2);
+    // raising is greater, than 100%
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w:position","val", "24");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testMceWpg, "mce-wpg.docx")
 {
     // Make sure that we read the primary branch, if wpg is requested as a feature.
