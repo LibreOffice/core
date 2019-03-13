@@ -238,7 +238,7 @@ dbaccess/source/ui/browser/dbloader.cxx:69
     DBContentLoader m_xListener Reference<class com::sun::star::frame::XLoadEventListener>
 desktop/qa/desktop_lib/test_desktop_lib.cxx:199
     DesktopLOKTest m_bModified _Bool
-desktop/source/deployment/gui/dp_gui_updatedialog.hxx:154
+desktop/source/deployment/gui/dp_gui_updatedialog.hxx:153
     dp_gui::UpdateDialog m_xExtensionManager css::uno::Reference<css::deployment::XExtensionManager>
 desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:117
     dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
@@ -638,12 +638,6 @@ sc/source/filter/xml/xmldrani.hxx:72
     ScXMLDatabaseRangeContext bIsSelection _Bool
 sc/source/filter/xml/xmlexternaltabi.hxx:113
     ScXMLExternalRefCellContext mnCellType sal_Int16
-sc/source/filter/xml/xmlfilti.hxx:157
-    ScXMLDPFilterContext aOutputPosition class ScAddress
-sc/source/filter/xml/xmlfilti.hxx:162
-    ScXMLDPFilterContext bCopyOutputData _Bool
-sc/source/filter/xml/xmlfilti.hxx:166
-    ScXMLDPFilterContext bConditionSourceRange _Bool
 sc/source/ui/docshell/externalrefmgr.cxx:163
     (anonymous namespace)::RemoveFormulaCell mpCell class ScFormulaCell *const
 sc/source/ui/inc/AccessibleText.hxx:194
@@ -692,8 +686,6 @@ sd/source/ui/sidebar/MasterPageContainerProviders.hxx:136
     sd::sidebar::TemplatePreviewProvider msURL const class rtl::OUString
 sd/source/ui/sidebar/SlideBackground.hxx:93
     sd::sidebar::SlideBackground m_pContainer VclPtr<class VclVBox>
-sd/source/ui/slideshow/slideshowviewimpl.hxx:219
-    sd::SlideShowView maPresentationArea ::tools::Rectangle
 sfx2/source/appl/fileobj.hxx:37
     SvFileObject mxDelMed tools::SvRef<SfxMedium>
 sfx2/source/dialog/filtergrouping.cxx:339
@@ -768,8 +760,6 @@ svl/source/misc/inethist.cxx:48
     INetURLHistory_Impl::head_entry m_nMagic sal_uInt32
 svl/source/undo/undo.cxx:312
     svl::undo::impl::UndoManagerGuard m_aUndoActionsCleanup ::std::vector<std::unique_ptr<SfxUndoAction> >
-svtools/source/dialogs/addresstemplate.cxx:437
-    svt::AddressBookSourceDialogData nLastVisibleListIndex sal_Int32
 svx/inc/sdr/overlay/overlaytools.hxx:41
     drawinglayer::primitive2d::OverlayStaticRectanglePrimitive mfRotation const double
 svx/inc/sdr/primitive2d/sdrolecontentprimitive2d.hxx:46
@@ -848,8 +838,6 @@ sw/source/core/layout/dbg_lay.cxx:131
     SwImplProtocol aVars std::vector<long>
 sw/source/core/text/porfld.hxx:59
     SwFieldPortion m_nAttrFieldType sal_uInt16
-sw/source/core/unocore/unoidx.cxx:1536
-    SwXDocumentIndexMark::Impl m_sCitaitonText class rtl::OUString
 sw/source/filter/html/swhtml.hxx:369
     SwHTMLParser m_aOrphanedTableBoxes std::vector<std::unique_ptr<SwTableBox> >
 sw/source/filter/inc/rtf.hxx:28
@@ -859,9 +847,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk2/libo4/sw/source/filter/inc/rtf.hxx:27:9)
-sw/source/filter/xml/xmltbli.cxx:382
-    SwXMLTableCellContext_Impl mXmlId class rtl::OUString
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk2/libo6/sw/source/filter/inc/rtf.hxx:27:9)
 sw/source/ui/frmdlg/frmpage.cxx:716
     (anonymous namespace)::FrameMaps pMap const struct FrameMap *
 sw/source/ui/frmdlg/frmpage.cxx:775
@@ -988,7 +974,7 @@ vcl/inc/salwtype.hxx:247
     SalSwipeEvent mnVelocityY double
 vcl/inc/sft.hxx:462
     vcl::TrueTypeFont mapper sal_uInt32 (*)(const sal_uInt8 *, sal_uInt32, sal_uInt32)
-vcl/inc/svdata.hxx:411
+vcl/inc/svdata.hxx:415
     ImplSVEvent mpInstanceRef VclPtr<vcl::Window>
 vcl/inc/unx/gtk/gtkframe.hxx:88
     GtkSalFrame::IMHandler::PreviousKeyPress window GdkWindow *

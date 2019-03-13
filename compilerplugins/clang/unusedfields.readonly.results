@@ -158,8 +158,6 @@ cppu/source/uno/check.cxx:134
     (anonymous namespace)::Char3 c3 char
 cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
-cui/source/inc/cfgutil.hxx:109
-    SfxConfigFunctionListBox aArr SfxGroupInfoArr_Impl
 cui/source/options/optcolor.cxx:255
     ColorConfigWindow_Impl aModuleOptions class SvtModuleOptions
 cui/source/options/optpath.cxx:80
@@ -172,7 +170,7 @@ dbaccess/source/core/api/RowSetBase.hxx:96
     dbaccess::ORowSetBase m_aErrors ::connectivity::SQLError
 dbaccess/source/core/dataaccess/documentcontainer.cxx:64
     dbaccess::LocalNameApproval m_aErrors ::connectivity::SQLError
-dbaccess/source/core/inc/ContentHelper.hxx:108
+dbaccess/source/core/inc/ContentHelper.hxx:109
     dbaccess::OContentHelper m_aErrorHelper const ::connectivity::SQLError
 dbaccess/source/filter/hsqldb/parseschema.hxx:36
     dbahsql::SchemaParser m_PrimaryKeys std::map<OUString, std::vector<OUString> >
@@ -292,17 +290,17 @@ include/basic/sbstar.hxx:50
     StarBASIC aErrorHdl Link<class StarBASIC *, _Bool>
 include/basic/sbstar.hxx:51
     StarBASIC aBreakHdl Link<class StarBASIC *, enum BasicDebugFlags>
-include/connectivity/DriversConfig.hxx:76
+include/connectivity/DriversConfig.hxx:75
     connectivity::DriversConfig m_aNode connectivity::DriversConfig::OSharedConfigNode
-include/connectivity/sdbcx/VCatalog.hxx:67
+include/connectivity/sdbcx/VCatalog.hxx:69
     connectivity::sdbcx::OCatalog m_pGroups std::unique_ptr<OCollection>
-include/connectivity/sdbcx/VDescriptor.hxx:56
+include/connectivity/sdbcx/VDescriptor.hxx:53
     connectivity::sdbcx::ODescriptor m_aCase comphelper::UStringMixEqual
-include/connectivity/sdbcx/VGroup.hxx:58
+include/connectivity/sdbcx/VGroup.hxx:54
     connectivity::sdbcx::OGroup m_pUsers rtl::Reference<OUsers>
-include/connectivity/sdbcx/VUser.hxx:56
+include/connectivity/sdbcx/VUser.hxx:54
     connectivity::sdbcx::OUser m_pGroups rtl::Reference<OGroups>
-include/connectivity/sqlparse.hxx:115
+include/connectivity/sqlparse.hxx:109
     connectivity::OSQLParser_Data aErrors ::connectivity::SQLError
 include/drawinglayer/processor3d/defaultprocessor3d.hxx:94
     drawinglayer::processor3d::DefaultProcessor3D maDrawinglayerOpt const class SvtOptionsDrawinglayer
@@ -375,7 +373,7 @@ include/test/sheet/xnamedranges.hxx:49
 include/test/sheet/xspreadsheets2.hxx:46
     apitest::XSpreadsheets2 xDocument css::uno::Reference<css::sheet::XSpreadsheetDocument>
 include/unoidl/unoidl.hxx:443
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/noel/disk2/libo4/include/unoidl/unoidl.hxx:443:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/noel/disk2/libo6/include/unoidl/unoidl.hxx:443:5)
 include/unoidl/unoidl.hxx:444
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:445
@@ -461,7 +459,7 @@ sal/rtl/uuid.cxx:65
 sc/inc/compiler.hxx:126
     ScRawToken::(anonymous union)::(anonymous) eItem const class ScTableRefToken::Item
 sc/inc/compiler.hxx:127
-    ScRawToken::(anonymous) table const struct (anonymous struct at /media/noel/disk2/libo4/sc/inc/compiler.hxx:124:9)
+    ScRawToken::(anonymous) table const struct (anonymous struct at /media/noel/disk2/libo6/sc/inc/compiler.hxx:124:9)
 sc/inc/compiler.hxx:132
     ScRawToken::(anonymous) pMat class ScMatrix *const
 sc/inc/formulagroup.hxx:39
@@ -664,6 +662,10 @@ sw/source/uibase/inc/dbtree.hxx:69
     DBTreeList bShowColumns _Bool
 sw/source/uibase/inc/fldmgr.hxx:79
     SwInsertField_Data m_aDBDataSource const css::uno::Any
+sw/source/uibase/inc/numfmtlb.hxx:74
+    SwNumFormatListBox bOneArea _Bool
+sw/source/uibase/inc/numfmtlb.hxx:77
+    SwNumFormatListBox bShowLanguageControl _Bool
 toolkit/source/awt/vclxtoolkit.cxx:435
     (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
 ucb/source/ucp/gio/gio_mount.hxx:46
@@ -722,9 +724,9 @@ vcl/inc/salwtype.hxx:202
     SalSurroundingTextSelectionChangeEvent mnEnd const sal_uLong
 vcl/inc/salwtype.hxx:208
     SalQueryCharPositionEvent mnCharPos sal_uLong
-vcl/inc/svdata.hxx:281
+vcl/inc/svdata.hxx:285
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
-vcl/inc/svdata.hxx:303
+vcl/inc/svdata.hxx:307
     ImplSVNWFData mbRolloverMenubar _Bool
 vcl/inc/toolbox.h:108
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<sal_uInt16>

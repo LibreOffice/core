@@ -71,11 +71,8 @@ class SW_DLLPUBLIC SwNumFormatListBox
     SvNumFormatType     nCurrFormatType;
     bool                mbCurrFormatTypeNeedsInit;
     sal_Int32           nStdEntry;
-    bool                bOneArea;
     sal_uInt32          nDefFormat;
     LanguageType        eCurLanguage;
-    bool                bShowLanguageControl; //determine whether the language control has
-                                              //to be shown in the number format dialog
     bool                bUseAutomaticLanguage;//determine whether language is automatically assigned
 
     std::unique_ptr<weld::ComboBox> mxControl;

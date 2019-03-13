@@ -52,12 +52,6 @@ public:
 
     //all properties given in the constructor are stored in the following three sequences
 
-    css::uno::Sequence< css::beans::PropertyValue >
-                        m_aRegularProperties; //these are the properties which are described in service com.sun.star.document.MediaDescriptor and not marked as deprecated
-
-    css::uno::Sequence< css::beans::PropertyValue >
-                        m_aDeprecatedProperties; //these are properties which are described in service com.sun.star.document.MediaDescriptor but are marked as deprecated
-
     //properties which should be given to a model are additionally stored in this sequence (not documented properties and deprecated properties are not included!)
     css::uno::Sequence< css::beans::PropertyValue >
                         m_aModelProperties; //these are properties which are not described in service com.sun.star.document.MediaDescriptor
