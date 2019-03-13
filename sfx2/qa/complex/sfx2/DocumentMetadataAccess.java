@@ -615,6 +615,21 @@ public class DocumentMetadataAccess
         }
     }
 
+    @Test
+    public void checkTdf123293() throws Exception
+    {
+        XComponent xComp = null;
+        try {
+            xComp = util.DesktopTools.loadDocUsingStream(xMSF, TestDocument.getPath("TESTRDFA.odt"));
+
+            // Metadata was discarded when loading from stream, make sure it's there now
+            XRepositorySupplier xRepoSupplier = UnoRuntime.queryInterface(XRepositorySupplier.class, xComp);
+            assertNotNull("No metadata loaded", xRepoSupplier);
+        } finally {
+            close(xComp);
+        }
+    }
+
     private void storeRDFa(XComponent xComp, String file) throws com.sun.star.io.IOException
     {
         System.out.println("Storing test document...");
