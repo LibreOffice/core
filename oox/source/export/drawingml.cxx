@@ -25,10 +25,12 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/utils.hxx>
+#include <oox/helper/propertyset.hxx>
 #include <oox/drawingml/color.hxx>
 #include <drawingml/fillproperties.hxx>
 #include <drawingml/textparagraph.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/properties.hxx>
 #include <oox/token/relationship.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
@@ -79,7 +81,13 @@
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
+#include <com/sun/star/xml/dom/XNodeList.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 
+#include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
+#include <comphelper/seqstream.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/xmltools.hxx>
 #include <o3tl/any.hxx>
@@ -97,6 +105,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/unonames.hxx>
+#include <editeng/unoprnms.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <svx/svdoashp.hxx>
@@ -2195,6 +2204,31 @@ bool DrawingML::IsGroupShape( const Reference< XShape >& rXShape )
     return bRet;
 }
 
+bool DrawingML::IsDiagram(const Reference<XShape>& rXShape)
+{
+    uno::Reference<beans::XPropertySet> xPropSet(rXShape, uno::UNO_QUERY);
+    if (!xPropSet.is())
+        return false;
+
+    // if the shape doesn't have the InteropGrabBag property, it's not a diagram
+    uno::Reference<beans::XPropertySetInfo> xPropSetInfo = xPropSet->getPropertySetInfo();
+    OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    if (!xPropSetInfo->hasPropertyByName(aName))
+        return false;
+
+    uno::Sequence<beans::PropertyValue> propList;
+    xPropSet->getPropertyValue(aName) >>= propList;
+    for (sal_Int32 nProp = 0; nProp < propList.getLength(); ++nProp)
+    {
+        // if we find any of the diagram components, it's a diagram
+        OUString propName = propList[nProp].Name;
+        if (propName == "OOXData" || propName == "OOXLayout" || propName == "OOXStyle"
+            || propName == "OOXColor" || propName == "OOXDrawing")
+            return true;
+    }
+    return false;
+}
+
 sal_Int32 DrawingML::getBulletMarginIndentation (const Reference< XPropertySet >& rXPropSet,sal_Int16 nLevel, const OUString& propName)
 {
     if( nLevel < 0 || !GETA( NumberingRules ) )
@@ -3894,6 +3928,292 @@ OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal
 
     maWdpCache[rFileId] = sId;
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
+}
+
+void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape, int nDiagramId)
+{
+    uno::Reference<beans::XPropertySet> xPropSet(rXShape, uno::UNO_QUERY);
+
+    uno::Reference<xml::dom::XDocument> dataDom;
+    uno::Reference<xml::dom::XDocument> layoutDom;
+    uno::Reference<xml::dom::XDocument> styleDom;
+    uno::Reference<xml::dom::XDocument> colorDom;
+    uno::Reference<xml::dom::XDocument> drawingDom;
+    uno::Sequence<uno::Sequence<uno::Any>> xDataRelSeq;
+    uno::Sequence<uno::Any> diagramDrawing;
+
+    // retrieve the doms from the GrabBag
+    uno::Sequence<beans::PropertyValue> propList;
+    xPropSet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= propList;
+    for (sal_Int32 nProp = 0; nProp < propList.getLength(); ++nProp)
+    {
+        OUString propName = propList[nProp].Name;
+        if (propName == "OOXData")
+            propList[nProp].Value >>= dataDom;
+        else if (propName == "OOXLayout")
+            propList[nProp].Value >>= layoutDom;
+        else if (propName == "OOXStyle")
+            propList[nProp].Value >>= styleDom;
+        else if (propName == "OOXColor")
+            propList[nProp].Value >>= colorDom;
+        else if (propName == "OOXDrawing")
+        {
+            propList[nProp].Value >>= diagramDrawing;
+            diagramDrawing[0]
+                >>= drawingDom; // if there is OOXDrawing property then set drawingDom here only.
+        }
+        else if (propName == "OOXDiagramDataRels")
+            propList[nProp].Value >>= xDataRelSeq;
+    }
+
+    // check that we have the 4 mandatory XDocuments
+    // if not, there was an error importing and we won't output anything
+    if (!dataDom.is() || !layoutDom.is() || !styleDom.is() || !colorDom.is())
+        return;
+
+    // generate an unique id
+    sax_fastparser::FastAttributeList* pDocPrAttrList
+        = sax_fastparser::FastSerializerHelper::createAttrList();
+    pDocPrAttrList->add(XML_id, OString::number(nDiagramId).getStr());
+    OUString sName = "Diagram" + OUString::number(nDiagramId);
+    pDocPrAttrList->add(XML_name, OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
+    sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
+
+    if (GetDocumentType() == DOCUMENT_DOCX)
+    {
+        mpFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
+        mpFS->singleElementNS(XML_wp, XML_cNvGraphicFramePr, FSEND);
+
+        mpFS->startElementNS(
+            XML_a, XML_graphic, FSNS(XML_xmlns, XML_a),
+            OUStringToOString(mpFB->getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(),
+            FSEND);
+    }
+    else
+    {
+        mpFS->startElementNS(XML_p, XML_nvGraphicFramePr, FSEND);
+
+        mpFS->singleElementNS(XML_p, XML_cNvPr, xDocPrAttrListRef);
+        mpFS->singleElementNS(XML_p, XML_cNvGraphicFramePr, FSEND);
+
+        mpFS->startElementNS(XML_p, XML_nvPr, FSEND);
+        mpFS->startElementNS(XML_p, XML_extLst, FSEND);
+        // change tracking extension - required in PPTX
+        mpFS->startElementNS(XML_p, XML_ext, XML_uri, "{D42A27DB-BD31-4B8C-83A1-F6EECF244321}",
+                             FSEND);
+        mpFS->singleElementNS(
+            XML_p14, XML_modId, FSNS(XML_xmlns, XML_p14),
+            OUStringToOString(mpFB->getNamespaceURL(OOX_NS(p14)), RTL_TEXTENCODING_UTF8).getStr(),
+            XML_val,
+            OString::number(comphelper::rng::uniform_uint_distribution(1, SAL_MAX_UINT32)).getStr(),
+            FSEND);
+        mpFS->endElementNS(XML_p, XML_ext);
+        mpFS->endElementNS(XML_p, XML_extLst);
+        mpFS->endElementNS(XML_p, XML_nvPr);
+
+        mpFS->endElementNS(XML_p, XML_nvGraphicFramePr);
+
+        awt::Point aPos = rXShape->getPosition();
+        awt::Size aSize = rXShape->getSize();
+        WriteTransformation(tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)),
+            XML_p, false, false, 0, false);
+
+        mpFS->startElementNS(XML_a, XML_graphic, FSEND);
+    }
+
+    mpFS->startElementNS(XML_a, XML_graphicData, XML_uri,
+                         "http://schemas.openxmlformats.org/drawingml/2006/diagram", FSEND);
+
+    OUString sRelationCompPrefix = OUString::createFromAscii(GetRelationCompPrefix());
+
+    // add data relation
+    OUString dataFileName = "diagrams/data" + OUString::number(nDiagramId) + ".xml";
+    OString dataRelId = OUStringToOString(
+        mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::DIAGRAMDATA),
+                          sRelationCompPrefix + dataFileName),
+        RTL_TEXTENCODING_UTF8);
+
+    // add layout relation
+    OUString layoutFileName = "diagrams/layout" + OUString::number(nDiagramId) + ".xml";
+    OString layoutRelId
+        = OUStringToOString(mpFB->addRelation(mpFS->getOutputStream(),
+                                              oox::getRelationship(Relationship::DIAGRAMLAYOUT),
+                                              sRelationCompPrefix + layoutFileName),
+                            RTL_TEXTENCODING_UTF8);
+
+    // add style relation
+    OUString styleFileName = "diagrams/quickStyle" + OUString::number(nDiagramId) + ".xml";
+    OString styleRelId
+        = OUStringToOString(mpFB->addRelation(mpFS->getOutputStream(),
+                                              oox::getRelationship(Relationship::DIAGRAMQUICKSTYLE),
+                                              sRelationCompPrefix + styleFileName),
+                            RTL_TEXTENCODING_UTF8);
+
+    // add color relation
+    OUString colorFileName = "diagrams/colors" + OUString::number(nDiagramId) + ".xml";
+    OString colorRelId
+        = OUStringToOString(mpFB->addRelation(mpFS->getOutputStream(),
+                                              oox::getRelationship(Relationship::DIAGRAMCOLORS),
+                                              sRelationCompPrefix + colorFileName),
+                            RTL_TEXTENCODING_UTF8);
+
+    OUString drawingFileName;
+    if (drawingDom.is())
+    {
+        // add drawing relation
+        drawingFileName = "diagrams/drawing" + OUString::number(nDiagramId) + ".xml";
+        OUString drawingRelId = mpFB->addRelation(
+            mpFS->getOutputStream(), oox::getRelationship(Relationship::DIAGRAMDRAWING),
+            sRelationCompPrefix + drawingFileName);
+
+        // the data dom contains a reference to the drawing relation. We need to update it with the new generated
+        // relation value before writing the dom to a file
+
+        // Get the dsp:damaModelExt node from the dom
+        uno::Reference<xml::dom::XNodeList> nodeList = dataDom->getElementsByTagNameNS(
+            "http://schemas.microsoft.com/office/drawing/2008/diagram", "dataModelExt");
+
+        // There must be one element only so get it
+        uno::Reference<xml::dom::XNode> node = nodeList->item(0);
+
+        // Get the list of attributes of the node
+        uno::Reference<xml::dom::XNamedNodeMap> nodeMap = node->getAttributes();
+
+        // Get the node with the relId attribute and set its new value
+        uno::Reference<xml::dom::XNode> relIdNode = nodeMap->getNamedItem("relId");
+        relIdNode->setNodeValue(drawingRelId);
+    }
+
+    mpFS->singleElementNS(
+        XML_dgm, XML_relIds, FSNS(XML_xmlns, XML_dgm),
+        OUStringToOString(mpFB->getNamespaceURL(OOX_NS(dmlDiagram)), RTL_TEXTENCODING_UTF8)
+            .getStr(),
+        FSNS(XML_xmlns, XML_r),
+        OUStringToOString(mpFB->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(),
+        FSNS(XML_r, XML_dm), dataRelId.getStr(), FSNS(XML_r, XML_lo), layoutRelId.getStr(),
+        FSNS(XML_r, XML_qs), styleRelId.getStr(), FSNS(XML_r, XML_cs), colorRelId.getStr(), FSEND);
+
+    mpFS->endElementNS(XML_a, XML_graphicData);
+    mpFS->endElementNS(XML_a, XML_graphic);
+
+    uno::Reference<xml::sax::XSAXSerializable> serializer;
+    uno::Reference<xml::sax::XWriter> writer
+        = xml::sax::Writer::create(comphelper::getProcessComponentContext());
+
+    OUString sDir = OUString::createFromAscii(GetComponentDir());
+
+    // write data file
+    serializer.set(dataDom, uno::UNO_QUERY);
+    uno::Reference<io::XOutputStream> xDataOutputStream = mpFB->openFragmentStream(
+        sDir + "/" + dataFileName,
+        "application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml");
+    writer->setOutputStream(xDataOutputStream);
+    serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
+                          uno::Sequence<beans::StringPair>());
+
+    // write the associated Images and rels for data file
+    writeDiagramRels(xDataRelSeq, xDataOutputStream, "OOXDiagramDataRels", nDiagramId);
+
+    // write layout file
+    serializer.set(layoutDom, uno::UNO_QUERY);
+    writer->setOutputStream(mpFB->openFragmentStream(
+        sDir + "/" + layoutFileName,
+        "application/vnd.openxmlformats-officedocument.drawingml.diagramLayout+xml"));
+    serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
+                          uno::Sequence<beans::StringPair>());
+
+    // write style file
+    serializer.set(styleDom, uno::UNO_QUERY);
+    writer->setOutputStream(mpFB->openFragmentStream(
+        sDir + "/" + styleFileName,
+        "application/vnd.openxmlformats-officedocument.drawingml.diagramStyle+xml"));
+    serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
+                          uno::Sequence<beans::StringPair>());
+
+    // write color file
+    serializer.set(colorDom, uno::UNO_QUERY);
+    writer->setOutputStream(mpFB->openFragmentStream(
+        sDir + "/" + colorFileName,
+        "application/vnd.openxmlformats-officedocument.drawingml.diagramColors+xml"));
+    serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
+                          uno::Sequence<beans::StringPair>());
+
+    // write drawing file
+    if (drawingDom.is())
+    {
+        serializer.set(drawingDom, uno::UNO_QUERY);
+        uno::Reference<io::XOutputStream> xDrawingOutputStream = mpFB->openFragmentStream(
+            sDir + "/" + drawingFileName, "application/vnd.ms-office.drawingml.diagramDrawing+xml");
+        writer->setOutputStream(xDrawingOutputStream);
+        serializer->serialize(
+            uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
+            uno::Sequence<beans::StringPair>());
+
+        // write the associated Images and rels for drawing file
+        uno::Sequence<uno::Sequence<uno::Any>> xDrawingRelSeq;
+        diagramDrawing[1] >>= xDrawingRelSeq;
+        writeDiagramRels(xDrawingRelSeq, xDrawingOutputStream, "OOXDiagramDrawingRels", nDiagramId);
+    }
+}
+
+void DrawingML::writeDiagramRels(const uno::Sequence<uno::Sequence<uno::Any>>& xRelSeq,
+                                 const uno::Reference<io::XOutputStream>& xOutStream,
+                                 const OUString& sGrabBagProperyName, int nDiagramId)
+{
+    // add image relationships of OOXData, OOXDiagram
+    OUString sType(oox::getRelationship(Relationship::IMAGE));
+    uno::Reference<xml::sax::XWriter> xWriter
+        = xml::sax::Writer::create(comphelper::getProcessComponentContext());
+    xWriter->setOutputStream(xOutStream);
+
+    // retrieve the relationships from Sequence
+    for (sal_Int32 j = 0; j < xRelSeq.getLength(); j++)
+    {
+        // diagramDataRelTuple[0] => RID,
+        // diagramDataRelTuple[1] => xInputStream
+        // diagramDataRelTuple[2] => extension
+        uno::Sequence<uno::Any> diagramDataRelTuple = xRelSeq[j];
+
+        OUString sRelId;
+        OUString sExtension;
+        diagramDataRelTuple[0] >>= sRelId;
+        diagramDataRelTuple[2] >>= sExtension;
+        OUString sContentType;
+        if (sExtension.equalsIgnoreAsciiCase(".WMF"))
+            sContentType = "image/x-wmf";
+        else
+            sContentType = "image/" + sExtension.copy(1);
+        sRelId = sRelId.copy(3);
+
+        StreamDataSequence dataSeq;
+        diagramDataRelTuple[1] >>= dataSeq;
+        uno::Reference<io::XInputStream> dataImagebin(
+            new ::comphelper::SequenceInputStream(dataSeq));
+
+        //nDiagramId is used to make the name unique irrespective of the number of smart arts.
+        OUString sFragment = "media/" + sGrabBagProperyName + OUString::number(nDiagramId) + "_"
+                             + OUString::number(j) + sExtension;
+
+        PropertySet aProps(xOutStream);
+        aProps.setAnyProperty(PROP_RelId, uno::makeAny(sRelId.toInt32()));
+
+        mpFB->addRelation(xOutStream, sType, "../" + sFragment);
+
+        OUString sDir = OUString::createFromAscii(GetComponentDir());
+        uno::Reference<io::XOutputStream> xBinOutStream
+            = mpFB->openFragmentStream(sDir + "/" + sFragment, sContentType);
+
+        try
+        {
+            comphelper::OStorageHelper::CopyInputToOutput(dataImagebin, xBinOutStream);
+        }
+        catch (const uno::Exception& rException)
+        {
+            SAL_WARN("oox.drawingml", "DrawingML::writeDiagramRels Failed to copy grabbaged Image: "
+                     << rException);
+        }
+        dataImagebin->closeInput();
+    }
 }
 
 }
