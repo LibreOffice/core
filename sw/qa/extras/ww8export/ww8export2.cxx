@@ -29,6 +29,7 @@
 #include <pagedesc.hxx>
 #include <svx/svdpage.hxx>
 #include <drawdoc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <editeng/unoprnms.hxx>
 
 class Test : public SwModelTestBase

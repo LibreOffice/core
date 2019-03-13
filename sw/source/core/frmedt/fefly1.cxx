@@ -48,6 +48,7 @@
 #include <viewimp.hxx>
 #include <viscrs.hxx>
 #include <doc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>

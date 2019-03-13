@@ -38,6 +38,7 @@
 #include <hints.hxx>
 #include <viewopt.hxx>
 #include <set>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <DocumentLayoutManager.hxx>

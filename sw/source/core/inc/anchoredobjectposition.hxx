@@ -24,7 +24,6 @@
 #include "frame.hxx"
 
 class SdrObject;
-class SwFrame;
 class SwFlyFrame;
 class SwContact;
 class SwFrameFormat;

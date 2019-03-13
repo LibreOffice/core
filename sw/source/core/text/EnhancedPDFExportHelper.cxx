@@ -19,6 +19,7 @@
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <EnhancedPDFExportHelper.hxx>
 #include <hintids.hxx>
 
@@ -74,6 +75,7 @@
 #include <SwNodeNum.hxx>
 #include <calbck.hxx>
 #include <stack>
+#include <frmtool.hxx>
 
 #include <tools/globname.hxx>
 #include <svx/svdobj.hxx>

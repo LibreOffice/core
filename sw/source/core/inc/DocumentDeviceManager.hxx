@@ -20,7 +20,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTDEVICEMANAGER_HXX
 
 #include <IDocumentDeviceAccess.hxx>
-#include <sal/types.h>
 #include <vcl/vclptr.hxx>
 #include <memory>
 

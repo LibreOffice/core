@@ -34,6 +34,7 @@
 #include <viewsh.hxx>
 #include <viewimp.hxx>
 #include <viewopt.hxx>
+#include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <txtfrm.hxx>
 #include "itrpaint.hxx"

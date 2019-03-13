@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTEXTERNALDATAMANAGER_HXX
 
 #include <IDocumentExternalData.hxx>
-#include <sal/types.h>
 
 namespace sw {
 

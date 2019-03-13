@@ -19,6 +19,7 @@
 
 #include <ndtxt.hxx>
 #include <pam.hxx>
+#include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <viewopt.hxx>
 #include <paratr.hxx>

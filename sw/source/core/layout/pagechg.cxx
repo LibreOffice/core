@@ -28,6 +28,7 @@
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
 #include <ftninfo.hxx>
+#include <frmtool.hxx>
 #include <tgrditem.hxx>
 #include <viewopt.hxx>
 #include <docsh.hxx>
@@ -39,6 +40,7 @@
 #include <viewimp.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <dcontact.hxx>

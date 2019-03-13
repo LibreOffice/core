@@ -45,6 +45,7 @@
 #include <docfunc.hxx>
 #include <drawdoc.hxx>
 #include <MarkManager.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentFieldsAccess.hxx>

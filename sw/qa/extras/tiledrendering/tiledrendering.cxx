@@ -38,6 +38,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <redline.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/vclevent.hxx>

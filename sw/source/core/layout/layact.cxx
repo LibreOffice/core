@@ -25,6 +25,7 @@
 #include <viewimp.hxx>
 #include <crsrsh.hxx>
 #include <dflyobj.hxx>
+#include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <dcontact.hxx>
 #include <viewopt.hxx>
@@ -32,6 +33,7 @@
 #include <layouter.hxx>
 #include <docstat.hxx>
 #include <swevent.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentStatistics.hxx>
 #include <IDocumentLayoutAccess.hxx>
 

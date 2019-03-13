@@ -41,6 +41,7 @@
 #include <viewopt.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
+#include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <tabfrm.hxx>
 #include <rowfrm.hxx>
@@ -64,6 +65,7 @@
 #include <objectformatter.hxx>
 #include <calbck.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentTimerAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>

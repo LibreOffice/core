@@ -27,6 +27,7 @@
 #include <pagefrm.hxx>
 #include <viewimp.hxx>
 #include <viewopt.hxx>
+#include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <dcontact.hxx>

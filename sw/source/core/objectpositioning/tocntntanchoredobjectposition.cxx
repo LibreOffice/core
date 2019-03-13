@@ -38,6 +38,7 @@
 #include <svx/svdobj.hxx>
 #include <pam.hxx>
 #include <environmentofanchoredobject.hxx>
+#include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <ndtxt.hxx>
 #include <dflyobj.hxx>

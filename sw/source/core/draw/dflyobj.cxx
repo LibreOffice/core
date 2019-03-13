@@ -61,6 +61,7 @@
 // AW: For VCOfDrawVirtObj and stuff
 #include <svx/sdr/contact/viewcontactofvirtobj.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <sw_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

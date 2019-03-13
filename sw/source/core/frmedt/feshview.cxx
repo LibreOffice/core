@@ -45,6 +45,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/dialmgr.hxx>
 #include <tools/globname.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentState.hxx>

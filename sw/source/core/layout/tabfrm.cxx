@@ -58,6 +58,8 @@
 #include <DocumentSettingManager.hxx>
 #include <docary.hxx>
 #include <sal/log.hxx>
+#include <frmatr.hxx>
+#include <frmtool.hxx>
 
 using namespace ::com::sun::star;
 

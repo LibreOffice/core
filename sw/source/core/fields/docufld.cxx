@@ -44,6 +44,8 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/syslocale.hxx>
 #include <svl/zforlist.hxx>
+#include <libxml/xmlstring.h>
+#include <libxml/xmlwriter.h>
 
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>

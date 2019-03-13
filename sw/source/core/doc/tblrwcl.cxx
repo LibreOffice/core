@@ -39,6 +39,7 @@
 #include <docsh.hxx>
 #include <fesh.hxx>
 #include <tabfrm.hxx>
+#include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>

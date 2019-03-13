@@ -57,6 +57,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <swtypes.hxx>
 #include <drawdoc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/propertysequence.hxx>

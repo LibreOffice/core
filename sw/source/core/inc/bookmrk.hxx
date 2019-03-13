@@ -24,11 +24,10 @@
 #include <sfx2/Metadatable.hxx>
 #include <vcl/keycod.hxx>
 #include <memory>
-#include <map>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
+#include <tools/ref.hxx>
 #include <IMark.hxx>
-#include <swserv.hxx>
 
 namespace com {
     namespace sun {
@@ -40,8 +39,8 @@ namespace com {
     }
 }
 
-struct SwPosition;  // fwd Decl. wg. UI
 class SwDoc;
+class SwServerObject;
 
 namespace sw {
     namespace mark {

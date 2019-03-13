@@ -20,12 +20,13 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_DFLYOBJ_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_DFLYOBJ_HXX
 
-#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svx/svdovirt.hxx>
+#include <svx/svdobj.hxx>
+
+namespace drawinglayer::geometry { class ViewInformation2D; }
 
 class SwFlyFrame;
 class SwFrameFormat;
-class SdrObjMacroHitRec;
 
 const sal_uInt16 SwFlyDrawObjIdentifier = 0x0001;
 
