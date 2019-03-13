@@ -585,7 +585,7 @@ DECLARE_OOXMLEXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.docx"
     CPPUNIT_ASSERT_EQUAL(58L, aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(320L, aBitmap.GetSizePixel().Height());
     Color aColor(aBitmap.GetPixelColor(20, 30));
-    CPPUNIT_ASSERT_EQUAL(Color( 255, 0xce, 0xce, 0xce ), aColor);
+    CPPUNIT_ASSERT_EQUAL(Color( 0xce, 0xce, 0xce ), aColor);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testChartSize, "chart-size.docx")
