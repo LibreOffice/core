@@ -74,20 +74,19 @@ using namespace com::sun::star::lang;
 /**
  * Constructor of the Tab dialog: appends the pages to the dialog
  */
-SdActionDlg::SdActionDlg (
-    vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View const * pView )
-    : SfxSingleTabDialog(pParent, *pAttr, "InteractionDialog",
-        "modules/simpress/ui/interactiondialog.ui")
+SdActionDlg::SdActionDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View const * pView)
+    : SfxSingleTabDialogController(pParent, *pAttr, "modules/simpress/ui/interactiondialog.ui",
+                                   "InteractionDialog")
     , rOutAttrs(*pAttr)
 {
-    VclPtr<SfxTabPage> pNewPage = SdTPAction::Create(get_content_area(), rOutAttrs);
-    assert(pNewPage); //Unable to create page
+    TabPageParent aParent(get_content_area(), this);
+    VclPtr<SfxTabPage> xNewPage = SdTPAction::Create(aParent, rOutAttrs);
 
     // formerly in PageCreated
-    static_cast<SdTPAction*>( pNewPage.get() )->SetView( pView );
-    static_cast<SdTPAction*>( pNewPage.get() )->Construct();
+    static_cast<SdTPAction*>( xNewPage.get() )->SetView( pView );
+    static_cast<SdTPAction*>( xNewPage.get() )->Construct();
 
-    SetTabPage( pNewPage );
+    SetTabPage(xNewPage);
 }
 
 /**

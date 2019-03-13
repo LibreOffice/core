@@ -37,12 +37,12 @@ class SdDrawDocument;
 /**
  * Effect-SingleTab-Dialog
  */
-class SdActionDlg : public SfxSingleTabDialog
+class SdActionDlg : public SfxSingleTabDialogController
 {
 private:
     const SfxItemSet&   rOutAttrs;
 public:
-    SdActionDlg(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View const * pView);
+    SdActionDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View const * pView);
 };
 
 /**

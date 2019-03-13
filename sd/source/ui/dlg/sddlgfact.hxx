@@ -292,9 +292,16 @@ public:
 
 class SdAbstractSfxDialog_Impl : public SfxAbstractDialog
 {
-    DECL_ABSTDLG_BASE(SdAbstractSfxDialog_Impl,SfxModalDialog)
+private:
+    std::unique_ptr<SfxSingleTabDialogController> m_xDlg;
+public:
+    SdAbstractSfxDialog_Impl(std::unique_ptr<SfxSingleTabDialogController> pDlg)
+        : m_xDlg(std::move(pDlg))
+    {
+    }
+    virtual short   Execute() override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
-    virtual void        SetText( const OUString& rStr ) override;
+    virtual void    SetText( const OUString& rStr ) override;
 };
 
 class SdVectorizeDlg;
@@ -348,7 +355,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdPresLayoutTemplateDlg(SfxObjectShell* pDocSh, weld::Window* pParent, bool bBackgroundDlg, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool) override;
     virtual VclPtr<AbstractSdPresLayoutDlg>    CreateSdPresLayoutDlg(weld::Window* pParent, ::sd::DrawDocShell* pDocShell, const SfxItemSet& rInAttrs) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdTabTemplateDlg(weld::Window* pParent, const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView ) override;
-    virtual VclPtr<SfxAbstractDialog>          CreatSdActionDialog(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView) override;
+    virtual VclPtr<SfxAbstractDialog>          CreatSdActionDialog(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView) override;
     virtual VclPtr<AbstractSdVectorizeDlg>     CreateSdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell) override;
     virtual VclPtr<AbstractSdPublishingDlg>    CreateSdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType) override;
 
