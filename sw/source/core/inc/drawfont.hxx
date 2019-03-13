@@ -20,18 +20,16 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_DRAWFONT_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_DRAWFONT_HXX
 
-#include <tools/solar.h>
 #include <osl/diagnose.h>
 #include <vcl/vclptr.hxx>
 #include <vcl/outdev.hxx>
 #include "TextFrameIndex.hxx"
+#include <swdllapi.h>
 
 class SwTextFrame;
 class SwViewShell;
 class SwScriptInfo;
-class Point;
 namespace sw { class WrongListIterator; }
-class Size;
 class SwFont;
 namespace vcl {
     class Font;

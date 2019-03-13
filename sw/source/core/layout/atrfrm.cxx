@@ -51,6 +51,7 @@
 #include <fmtline.hxx>
 #include <tgrditem.hxx>
 #include <hfspacingitem.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentLayoutAccess.hxx>

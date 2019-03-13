@@ -25,10 +25,6 @@
 #include <rtl/ref.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace frame {
-    class XModel;
-}}}}
-
 class SwTable;
 class SwChartDataProvider;
 class SwChartLockController_Helper;

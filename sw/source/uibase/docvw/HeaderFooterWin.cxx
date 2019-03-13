@@ -25,6 +25,7 @@
 #include <view.hxx>
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -43,6 +44,7 @@
 #include <editeng/brushitem.hxx>
 #include <svx/hdft.hxx>
 #include <sfx2/dispatch.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/gradient.hxx>

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_FNTCAP_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_FNTCAP_HXX
 
-#include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include "TextFrameIndex.hxx"
 

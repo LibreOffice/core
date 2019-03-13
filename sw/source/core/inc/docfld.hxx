@@ -36,7 +36,6 @@ class SwTextTOXMark;
 class SwTableBox;
 class SwTextINetFormat;
 class SwFlyFrameFormat;
-class SwDoc;
 class SwNode;
 struct SwPosition;
 enum class SwFieldIds : sal_uInt16;

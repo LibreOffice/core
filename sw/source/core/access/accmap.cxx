@@ -74,6 +74,7 @@
 #include <prevwpage.hxx>
 #include <calbck.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/debug.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
