@@ -52,9 +52,7 @@ class PrinterSettingsTest : public ApiTestBase
 public:
     void testPrinterSettingsProperties()
     {
-        auto map = init();
-
-        css::uno::Reference<css::beans::XPropertySet> xPrinterSettings(map["text::PrinterSettings"],
+        css::uno::Reference<css::beans::XPropertySet> xPrinterSettings(init(),
                                                                        css::uno::UNO_QUERY_THROW);
 
         testBooleanProperty(xPrinterSettings, "PrintGraphics");

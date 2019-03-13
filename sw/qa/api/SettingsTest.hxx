@@ -93,10 +93,7 @@ class SettingsTest : public ApiTestBase
 public:
     void testSettingsProperties()
     {
-        auto map = init();
-
-        css::uno::Reference<css::beans::XPropertySet> xSettings(map["document::Settings"],
-                                                                css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::beans::XPropertySet> xSettings(init(), css::uno::UNO_QUERY_THROW);
 
         testForbiddenCharacters(xSettings);
         //testShortOptionalProperty(xSettings, "LinkUpdateMode");

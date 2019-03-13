@@ -13,6 +13,8 @@
 #include "XTextContentTest.hxx"
 
 #include <test/bootstrapfixture.hxx>
+#include <test/lang/xserviceinfo.hxx>
+#include <test/lang/xcomponent.hxx>
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -40,24 +42,34 @@ class SwXDocumentIndexTest : public test::BootstrapFixture,
                              public apitest::XDocumentIndexTest,
                              public apitest::BaseIndexTest,
                              public apitest::DocumentIndexTest,
-                             public apitest::XTextContentTest
+                             public apitest::XTextContentTest,
+                             public apitest::XServiceInfo,
+                             public apitest::XComponent
 {
     uno::Reference<uno::XComponentContext> mxComponentContext;
-    uno::Reference<lang::XComponent> mxComponent;
+    uno::Reference<text::XTextDocument> mxTextDocument;
 
 public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    std::unordered_map<OUString, uno::Reference<uno::XInterface>> init() override;
+    SwXDocumentIndexTest()
+        : apitest::XServiceInfo("SwXDocumentIndex", "com.sun.star.text.BaseIndex"){};
+    uno::Reference<uno::XInterface> init() override;
+    uno::Reference<text::XTextDocument> getTextDocument() override { return mxTextDocument; }
+    void triggerDesktopTerminate() override {}
 
     CPPUNIT_TEST_SUITE(SwXDocumentIndexTest);
-    CPPUNIT_TEST(testGetServiceName);
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
     CPPUNIT_TEST(testUpdate);
     CPPUNIT_TEST(testBaseIndexProperties);
     CPPUNIT_TEST(testDocumentIndexProperties);
     CPPUNIT_TEST(testAttach);
     CPPUNIT_TEST(testGetAnchor);
+    CPPUNIT_TEST(testAddEventListener);
+    CPPUNIT_TEST(testRemoveEventListener);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -67,53 +79,31 @@ void SwXDocumentIndexTest::setUp()
 
     mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
+    mxTextDocument = uno::Reference<text::XTextDocument>(
+        loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"),
+        uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(mxTextDocument.is());
 }
 
 void SwXDocumentIndexTest::tearDown()
 {
-    if (mxComponent.is())
-        mxComponent->dispose();
+    if (mxTextDocument.is())
+        mxTextDocument->dispose();
 
     test::BootstrapFixture::tearDown();
 }
 
-std::unordered_map<OUString, uno::Reference<uno::XInterface>> SwXDocumentIndexTest::init()
+uno::Reference<uno::XInterface> SwXDocumentIndexTest::init()
 {
-    std::unordered_map<OUString, uno::Reference<uno::XInterface>> map;
-
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-    CPPUNIT_ASSERT(mxComponent.is());
-
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<lang::XMultiServiceFactory> xFactory(xTextDocument, uno::UNO_QUERY_THROW);
-
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxTextDocument, uno::UNO_QUERY_THROW);
     uno::Reference<text::XDocumentIndex> xDocumentIndex(
-        xFactory->createInstance("com.sun.star.text.DocumentIndex"), uno::UNO_QUERY_THROW);
-
-    uno::Reference<text::XTextContent> xTextContent(xDocumentIndex, uno::UNO_QUERY_THROW);
-
-    uno::Reference<text::XText> xText = xTextDocument->getText();
-    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+        xMSF->createInstance("com.sun.star.text.DocumentIndex"), uno::UNO_QUERY_THROW);
+    auto xText = getTextDocument()->getText();
+    auto xTextCursor = xText->createTextCursor();
     CPPUNIT_ASSERT(xTextCursor.is());
-    xText->insertTextContent(xTextCursor, xTextContent, false);
+    xText->insertTextContent(xTextCursor, xDocumentIndex, false);
     xTextCursor->gotoEnd(false);
-
-    uno::Reference<text::XDocumentIndex> xDocumentIndexInstance(
-        xFactory->createInstance("com.sun.star.text.DocumentIndex"), uno::UNO_QUERY_THROW);
-
-    // XDocumentIndexTest
-    map["text::XDocumentIndex"] = xDocumentIndex;
-    map["text::XTextDocument"] = xTextDocument;
-    // BaseIndexTest
-    map["text::BaseIndex"] = xDocumentIndex;
-    // DocumentIndex
-    map["text::DocumentIndex"] = xDocumentIndex;
-    // XTextContentTest
-    map["text::XTextRange"] = xTextCursor;
-    map["text::XTextContent"] = xDocumentIndex;
-    map["text::XTextContent#Instance"] = xDocumentIndexInstance;
-
-    return map;
+    return xDocumentIndex;
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwXDocumentIndexTest);
