@@ -334,6 +334,7 @@ PowerPointExport::PowerPointExport(const Reference< XComponentContext >& rContex
     , mnSlideMasterIdMax(1U << 31)
     , mnAnimationNodeIdMax(1)
     , mbCreateNotes(false)
+    , mnDiagramId(1)
 {
     comphelper::SequenceAsHashMap aArgumentsMap(rArguments);
     mbPptm = aArgumentsMap.getUnpackedValueOrDefault("IsPPTM", false);
@@ -1434,7 +1435,10 @@ void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType
         if (GetShapeByIndex(GetCurrentGroupIndex(), true))
         {
             SAL_INFO("sd.eppt", "mType: " << mType);
-            aDML.WriteShape(mXShape);
+            if (aDML.IsDiagram(mXShape))
+                WriteDiagram(pFS, aDML, mXShape, mnDiagramId++);
+            else
+                aDML.WriteShape(mXShape);
         }
     }
 
@@ -2029,6 +2033,14 @@ bool PowerPointExport::ImplCreateMainNotes()
 OUString PowerPointExport::getImplementationName()
 {
     return OUString("com.sun.star.comp.Impress.oox.PowerPointExport");
+}
+
+void PowerPointExport::WriteDiagram(const FSHelperPtr& pFS, PowerPointShapeExport& rDML, const css::uno::Reference<css::drawing::XShape>& rXShape, int nDiagramId)
+{
+    SAL_INFO("sd.eppt", "writing Diagram " + OUString::number(nDiagramId));
+    pFS->startElementNS(XML_p, XML_graphicFrame, FSEND);
+    rDML.WriteDiagram(rXShape, nDiagramId);
+    pFS->endElementNS(XML_p, XML_graphicFrame);
 }
 
 // UNO component
