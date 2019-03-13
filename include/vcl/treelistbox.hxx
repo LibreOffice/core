@@ -615,7 +615,6 @@ public:
     void            SetDefaultCollapsedEntryBmp( const Image& rBmp );
 
     void            SetCheckButtonState( SvTreeListEntry*, SvButtonState );
-    void            SetCheckButtonInvisible( SvTreeListEntry* );
     SvButtonState   GetCheckButtonState( SvTreeListEntry* ) const;
 
     void            SetEntryText(SvTreeListEntry*, const OUString& );

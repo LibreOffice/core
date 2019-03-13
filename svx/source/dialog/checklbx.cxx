@@ -49,22 +49,6 @@ void SvxCheckListBox::Init_Impl()
     EnableCheckButton( pCheckButton.get() );
 }
 
-void SvxCheckListBox::InsertEntry( const OUString& rStr, sal_uLong nPos,
-                                   void* pUserData,
-                                   SvLBoxButtonKind eButtonKind )
-{
-    SvTreeListBox::InsertEntry( rStr, nullptr, false, nPos, pUserData,
-                                eButtonKind );
-}
-
-
-void SvxCheckListBox::RemoveEntry( sal_uLong nPos )
-{
-    if ( nPos < GetEntryCount() )
-        SvTreeListBox::GetModel()->Remove( GetEntry( nPos ) );
-}
-
-
 void SvxCheckListBox::SelectEntryPos( sal_uLong nPos )
 {
     if ( nPos < GetEntryCount() )
@@ -82,30 +66,6 @@ sal_uLong SvxCheckListBox::GetSelectedEntryPos() const
 }
 
 
-OUString SvxCheckListBox::GetText( sal_uLong nPos ) const
-{
-    SvTreeListEntry* pEntry = GetEntry( nPos );
-
-    if ( pEntry )
-        return GetEntryText( pEntry );
-    return OUString();
-}
-
-
-sal_uLong SvxCheckListBox::GetCheckedEntryCount() const
-{
-    sal_uLong nCheckCount = 0;
-    sal_uLong nCount = GetEntryCount();
-
-    for ( sal_uLong i = 0; i < nCount; ++i )
-    {
-        if ( IsChecked( i ) )
-            nCheckCount++;
-    }
-    return nCheckCount;
-}
-
-
 void SvxCheckListBox::CheckEntryPos( sal_uLong nPos, bool bCheck )
 {
     if ( nPos < GetEntryCount() )
@@ -119,28 +79,6 @@ bool SvxCheckListBox::IsChecked( sal_uLong nPos ) const
         return GetCheckButtonState( GetEntry( nPos ) ) == SvButtonState::Checked;
     else
         return false;
-}
-
-
-void* SvxCheckListBox::SetEntryData ( sal_uLong nPos, void* pNewData )
-{
-    void* pOld = nullptr;
-
-    if ( nPos < GetEntryCount() )
-    {
-        pOld = GetEntry( nPos )->GetUserData();
-        GetEntry( nPos )->SetUserData( pNewData );
-    }
-    return pOld;
-}
-
-
-void* SvxCheckListBox::GetEntryData( sal_uLong nPos ) const
-{
-    if ( nPos < GetEntryCount() )
-        return GetEntry( nPos )->GetUserData();
-    else
-        return nullptr;
 }
 
 

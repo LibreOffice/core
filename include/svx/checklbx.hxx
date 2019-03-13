@@ -56,23 +56,12 @@ public:
     virtual ~SvxCheckListBox() override;
     virtual void dispose() override;
 
-    void            InsertEntry         ( const OUString& rStr,
-                                          sal_uLong  nPos = TREELIST_APPEND,
-                                          void* pUserData = nullptr,
-                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind::EnabledCheckbox );
-    void            RemoveEntry         ( sal_uLong  nPos );
-
     void            SelectEntryPos      ( sal_uLong  nPos );
     sal_uLong       GetSelectedEntryPos   () const;
 
-    OUString        GetText             ( sal_uLong  nPos ) const;
-    sal_uLong       GetCheckedEntryCount() const;
     void            CheckEntryPos       ( sal_uLong  nPos, bool bCheck = true );
     bool            IsChecked           ( sal_uLong  nPos ) const;
     void            ToggleCheckButton   ( SvTreeListEntry* pEntry );
-
-    void*           SetEntryData        ( sal_uLong  nPos, void* pNewData );
-    void*           GetEntryData        ( sal_uLong  nPos ) const;
 
     virtual void    MouseButtonDown     ( const MouseEvent& rMEvt ) override;
     virtual void    KeyInput            ( const KeyEvent& rKEvt ) override;
