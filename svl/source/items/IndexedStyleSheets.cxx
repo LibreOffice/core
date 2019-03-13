@@ -127,8 +127,8 @@ IndexedStyleSheets::FindPositionsByNameAndPredicate(const OUString& name,
         StyleSheetPredicate& predicate, SearchBehavior behavior) const
 {
     std::vector<unsigned> r;
-    MapType::const_iterator it = mPositionsByName.find(name);
-    for (/**/; it != mPositionsByName.end(); ++it) {
+    auto range = mPositionsByName.equal_range(name);
+    for (auto it = range.first; it != range.second; ++it) {
         unsigned pos = it->second;
         SfxStyleSheetBase *ssheet = mStyleSheets.at(pos).get();
         if (predicate.Check(*ssheet)) {
