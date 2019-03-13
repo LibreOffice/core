@@ -755,10 +755,11 @@ Color BitmapEx::GetPixelColor(sal_Int32 nX, sal_Int32 nY) const
     if( IsAlpha() )
     {
         Bitmap::ScopedReadAccess pAlphaReadAccess( const_cast<Bitmap&>(maMask).AcquireReadAccess(), const_cast<Bitmap&>(maMask) );
-        aColor.SetTransparency( pAlphaReadAccess->GetPixel( nY, nX ).GetIndex() );
+        // Transparency here is the opposite of opacity.
+        aColor.SetTransparency( 255 - pAlphaReadAccess->GetPixel( nY, nX ).GetIndex() );
     }
     else
-        aColor.SetTransparency(255);
+        aColor.SetTransparency( 0 );
     return aColor;
 }
 
