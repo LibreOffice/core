@@ -170,7 +170,7 @@ void OWriterTable::fillColumns()
                                        aCase);
         }
 
-        sdbcx::OColumn* pColumn = new sdbcx::OColumn(
+        auto pColumn = new sdbcx::OColumn(
             aAlias, aTypeName, OUString(), OUString(), sdbc::ColumnValue::NULLABLE, nPrecision,
             nDecimals, eType, false, false, bCurrency, bStoresMixedCaseQuotedIdentifiers,
             m_CatalogName, getSchema(), getName());
