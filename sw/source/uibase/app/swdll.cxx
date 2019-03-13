@@ -18,7 +18,6 @@
  */
 
 #include <memory>
-#include <config_features.h>
 
 #include <svx/svdobj.hxx>
 
@@ -132,10 +131,8 @@ SwDLL::SwDLL()
     // register your shell-interfaces here
     RegisterInterfaces();
 
-#if HAVE_FEATURE_DESKTOP
     // register your controllers here
     RegisterControls();
-#endif
 
     if (!utl::ConfigManager::IsFuzzing())
     {
