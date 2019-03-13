@@ -377,11 +377,10 @@ inline int CffSubsetterContext::popInt()
 
 inline void CffSubsetterContext::updateWidth( bool bUseFirstVal)
 {
-#if 1 // TODO: is this still needed?
     // the first value is not a hint but the charwidth
     if( hasCharWidth())
         return;
-#endif
+
     if( bUseFirstVal) {
         maCharWidth = mpCffLocal->maNominalWidth + mnValStack[0];
         // remove bottom stack entry
@@ -1084,21 +1083,18 @@ int CffSubsetterContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const 
 
     // prepare the charstring conversion
     mpWritePtr = pT1Ops;
-#if 1   // TODO: update caller
     U8 aType1Ops[ MAX_T1OPS_SIZE];
     if( !pT1Ops)
         mpWritePtr = aType1Ops;
     *const_cast<U8**>(&pT1Ops) = mpWritePtr;
-#else
-    assert( pT1Ops);
-#endif
 
     // prepend random seed for T1crypt
     *(mpWritePtr++) = 0x48;
     *(mpWritePtr++) = 0x44;
     *(mpWritePtr++) = 0x55;
     *(mpWritePtr++) = ' ';
-#if 1 // convert the Type2 charstring to Type1
+
+    // convert the Type2 charstring to Type1
     mpReadPtr = pT2Ops;
     mpReadEnd = pT2Ops + nT2Len;
     // prepend "hsbw" or "sbw"
@@ -1113,14 +1109,7 @@ int CffSubsetterContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const 
     mnCntrMask = 0;
     while( mpReadPtr < mpReadEnd)
         convertOneTypeOp();
-//  if( bActivePath)
-//      writeTypeOp( TYPE1OP::CLOSEPATH);
-//  if( bSubRoutine)
-//      writeTypeOp( TYPE1OP::RETURN);
-#else // useful for manually encoding charstrings
-    mpWritePtr = pT1Ops;
-    mpWritePtr += sprintf( (char*)mpWritePtr, "OOo_\x8b\x8c\x0c\x10\x0b");
-#endif
+
     const int nType1Len = mpWritePtr - pT1Ops;
 
     // encrypt the Type1 charstring
