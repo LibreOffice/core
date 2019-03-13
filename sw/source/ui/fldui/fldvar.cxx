@@ -64,7 +64,8 @@ SwFieldVarPage::SwFieldVarPage(vcl::Window* pParent, const SfxItemSet *const pCo
     get(m_pInvisibleCB, "invisible");
     get(m_pSeparatorFT, "separatorft");
     get(m_pSeparatorED, "separator");
-    get(m_pNewDelTBX, "toolbar");
+    get(m_pNewPB, "apply");
+    get(m_pDelPB, "delete");
 
     long nHeight = m_pTypeLB->GetTextHeight() * 20;
     m_pTypeLB->set_height_request(nHeight);
@@ -75,9 +76,6 @@ SwFieldVarPage::SwFieldVarPage(vcl::Window* pParent, const SfxItemSet *const pCo
     m_pTypeLB->set_width_request(nWidth);
     m_pSelectionLB->set_width_request(nWidth);
     m_pFormatLB->set_width_request(nWidth);
-
-    m_nApplyId = m_pNewDelTBX->GetItemId("apply");
-    m_nDeleteId = m_pNewDelTBX->GetItemId("delete");
 
     sOldValueFT = m_pValueFT->GetText();
     sOldNameFT = m_pNameFT->GetText();
@@ -112,7 +110,8 @@ void SwFieldVarPage::dispose()
     m_pInvisibleCB.clear();
     m_pSeparatorFT.clear();
     m_pSeparatorED.clear();
-    m_pNewDelTBX.clear();
+    m_pNewPB.clear();
+    m_pDelPB.clear();
     SwFieldPage::dispose();
 }
 
@@ -172,7 +171,8 @@ void SwFieldVarPage::Reset(const SfxItemSet* )
     m_pNumFormatLB->SetDoubleClickHdl  (LINK(this, SwFieldVarPage, ListBoxInsertHdl));
     m_pNameED->SetModifyHdl            (LINK(this, SwFieldVarPage, ModifyHdl));
     m_pValueED->SetModifyHdl           (LINK(this, SwFieldVarPage, ModifyHdl));
-    m_pNewDelTBX->SetClickHdl          (LINK(this, SwFieldVarPage, TBClickHdl));
+    m_pNewPB->SetClickHdl              (LINK(this, SwFieldVarPage, TBClickHdl));
+    m_pDelPB->SetClickHdl              (LINK(this, SwFieldVarPage, TBClickHdl));
     m_pChapterLevelLB->SetSelectHdl    (LINK(this, SwFieldVarPage, ChapterHdl));
     m_pSeparatorED->SetModifyHdl       (LINK(this, SwFieldVarPage, SeparatorHdl));
 
@@ -952,18 +952,16 @@ IMPL_LINK_NOARG(SwFieldVarPage, ModifyHdl, Edit&, void)
         break;
     }
 
-    m_pNewDelTBX->EnableItem(m_nApplyId, bApply);
-    m_pNewDelTBX->EnableItem(m_nDeleteId, bDelete);
+    m_pNewPB->Enable(bApply);
+    m_pDelPB->Enable(bDelete);
     EnableInsert(bInsert);
 }
 
-IMPL_LINK( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
+IMPL_LINK( SwFieldVarPage, TBClickHdl, Button*, pBox, void )
 {
     const sal_uInt16 nTypeId = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel())));
 
-    const sal_uInt16 nCurId = pBox->GetCurItemId();
-
-    if (nCurId == m_nDeleteId)
+    if (pBox == m_pDelPB)
     {
         if( nTypeId == TYP_USERFLD )
             GetFieldMgr().RemoveFieldType(SwFieldIds::User, m_pSelectionLB->GetSelectedEntry());
@@ -994,7 +992,7 @@ IMPL_LINK( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
             pSh->SetModified();
         }
     }
-    else if (nCurId == m_nApplyId)
+    else if (pBox == m_pNewPB)
     {
         OUString sName(m_pNameED->GetText()), sValue(m_pValueED->GetText());
         SwFieldType* pType = nullptr;
