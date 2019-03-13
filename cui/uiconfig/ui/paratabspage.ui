@@ -89,7 +89,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
-                    <property name="completion">entrycompletion1</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
