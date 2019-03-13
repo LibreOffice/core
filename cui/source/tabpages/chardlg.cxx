@@ -341,6 +341,9 @@ SvxCharNamePage::SvxCharNamePage( vcl::Window* pParent, const SfxItemSet& rInSet
     m_pCTLFrame->Show(bShowCTL);
 
     get(m_pPreviewWin, "preview");
+#ifdef IOS
+    m_pPreviewWin->Hide();
+#endif
 
     m_pWestFontLanguageLB->SetLanguageList(SvxLanguageListFlags::WESTERN, true, false, true);
     m_pEastFontLanguageLB->SetLanguageList(SvxLanguageListFlags::CJK, true, false, true);
@@ -1360,6 +1363,9 @@ SvxCharEffectsPage::SvxCharEffectsPage( vcl::Window* pParent, const SfxItemSet& 
     get(m_pA11yWarningFT, "a11ywarning");
 
     get(m_pPreviewWin, "preview");
+#ifdef IOS
+    m_pPreviewWin->Hide();
+#endif
     Initialize();
 }
 
@@ -2532,6 +2538,9 @@ SvxCharPositionPage::SvxCharPositionPage( vcl::Window* pParent, const SfxItemSet
     get(m_pPairKerningBtn, "pairkerning");
 
     get(m_pPreviewWin, "preview");
+#ifdef IOS
+    m_pPreviewWin->Hide();
+#endif
 
     Initialize();
 }
@@ -3166,6 +3175,9 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage(vcl::Window* pParent, const SfxItemSet&
     get(m_pEndBracketLB, "endbracket");
 
     get(m_pPreviewWin, "preview");
+#ifdef IOS
+    m_pPreviewWin->Hide();
+#endif
 
     Initialize();
 }
