@@ -319,10 +319,20 @@ namespace /* private */
 
     OUString get_file_extension(const OUString& file_name)
     {
-        sal_Int32 index = file_name.lastIndexOf('.');
-        if ((index != -1) && ((index + 1) < file_name.getLength()))
-            return file_name.copy(index + 1);
-
+        // Quoted file name
+        if ((file_name.indexOf(L'"') == 0) && (file_name.lastIndexOf(L'"') == (file_name.getLength() - 1)))
+        {
+            sal_Int32 index = file_name.lastIndexOf('.');
+            if ((index != -1) && ((index + 2) < file_name.getLength()))
+                return file_name.copy(index + 1, file_name.getLength() - (index + 2));
+        }
+        // Unquoted file name
+        else
+        {
+            sal_Int32 index = file_name.lastIndexOf('.');
+            if ((index != -1) && ((index + 1) < file_name.getLength()))
+                return file_name.copy(index + 1);
+        }
         return OUString();
     }
 
