@@ -31,7 +31,7 @@ class XTextTable(unittest.TestCase):
         xDoc.Text.insertTextContent(xCursor, xTable, False)
         xTable.Data = ((1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12))
 
-        self.checkTable(xTable)
+        self.checkTable(xTable,4,3)
         xDoc.close(True)
 
     def test_tableFromOdt(self):
@@ -41,7 +41,7 @@ class XTextTable(unittest.TestCase):
         itr = iter(xDoc.Text.createEnumeration())
         for element in itr:
             if element.supportsService("com.sun.star.text.TextTable"):
-                self.checkTable(element)
+                self.checkTable(element,2,3)
 
                 # in second table, inside B1 cell we have nested table
                 xCellB1 = element.getCellByName("B1")
@@ -49,30 +49,37 @@ class XTextTable(unittest.TestCase):
                 cellContent = iter(xCellB1.Text.createEnumeration())
                 for cellElement in cellContent:
                     if cellElement.supportsService("com.sun.star.text.TextTable"):
-                        self.checkTable(cellElement)
+                        self.checkTable(cellElement,2,3)
                         hasNestedTable = True
 
         self.assertTrue(hasNestedTable)
         xDoc.close(True)
 
-    def checkTable(self, xTable):
+    def checkTable(self, xTable, nRow, nCol):
         # in order
         xNames = xTable.getCellNames()
         for xName in xNames:
             xCell = xTable.getCellByName(xName)
+            xCursor = xTable.createCursorByCellName(xName)
             self.assertIsNotNone(xCell)
+            self.assertIsNotNone(xCursor)
 
         # random access
         xNames = xTable.getCellNames()
         for i in random.sample(range(0, len(xNames)), len(xNames)):
             xName = xNames[i]
             xCell = xTable.getCellByName(xName)
+            xCursor = xTable.createCursorByCellName(xName)
             self.assertIsNotNone(xCell)
+            self.assertIsNotNone(xCursor)
 
         # wrong name
         xCell = xTable.getCellByName('WRONG CELL NAME')
         self.assertIsNone(xCell)
 
+        # correct number of rows and columns
+        self.assertEqual(xTable.getRows().getCount(), nRow)
+        self.assertEqual(xTable.getColumns().getCount(), nCol)
 
 if __name__ == '__main__':
     unittest.main()
