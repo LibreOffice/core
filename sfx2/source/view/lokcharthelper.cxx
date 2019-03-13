@@ -284,33 +284,15 @@ bool LokChartHelper::postMouseEvent(int nType, int nX, int nY,
         tools::Rectangle rChartBBox = GetChartBoundingBox();
         if (rChartBBox.IsInside(aMousePos))
         {
-            vcl::ITiledRenderable::LOKAsyncEventData* pLOKEv = new vcl::ITiledRenderable::LOKAsyncEventData;
-            pLOKEv->mpWindow = pChartWindow;
-            switch (nType)
-            {
-                case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
-                    pLOKEv->mnEvent = VclEventId::WindowMouseButtonDown;
-                    break;
-                case LOK_MOUSEEVENT_MOUSEBUTTONUP:
-                    pLOKEv->mnEvent = VclEventId::WindowMouseButtonUp;
-                    break;
-                case LOK_MOUSEEVENT_MOUSEMOVE:
-                    pLOKEv->mnEvent = VclEventId::WindowMouseMove;
-                    break;
-                default:
-                    assert(false);
-            }
-
             int nChartWinX = nX - rChartBBox.Left();
             int nChartWinY = nY - rChartBBox.Top();
 
             // chart window expects pixels, but the conversion factor
             // can depend on the client zoom
             Point aPos(nChartWinX * fScaleX, nChartWinY * fScaleY);
-            pLOKEv->maMouseEvent = MouseEvent(aPos, nCount,
-                    MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
-
-            Application::PostUserEvent(Link<void*, void>(pLOKEv, vcl::ITiledRenderable::LOKPostAsyncEvent));
+            SfxLokHelper::postMouseEventAsync(pChartWindow, nType, aPos, nCount,
+                                              MouseEventModifiers::SIMPLECLICK,
+                                              nButtons, nModifier);
 
             return true;
         }
