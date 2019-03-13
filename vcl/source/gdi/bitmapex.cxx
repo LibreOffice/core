@@ -762,7 +762,7 @@ Color BitmapEx::GetPixelColor(sal_Int32 nX, sal_Int32 nY) const
             aColor.SetTransparency( pAlphaReadAccess->GetPixel( nY, nX ).GetIndex() );
         }
         else
-            aColor.SetTransparency(255);
+            aColor.SetTransparency(0);
         return aColor;
 }
 
