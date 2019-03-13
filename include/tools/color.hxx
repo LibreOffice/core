@@ -234,6 +234,11 @@ namespace com { namespace sun { namespace star { namespace uno {
     }
 } } } }
 
+inline std::ostream& operator<<(std::ostream& os, const Color& color)
+{
+    return os << color.AsRGBHexString();
+}
+
 // Color types
 
 constexpr ::Color COL_BLACK                   ( 0x00, 0x00, 0x00 );
