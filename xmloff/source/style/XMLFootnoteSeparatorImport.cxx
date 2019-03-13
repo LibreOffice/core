@@ -81,7 +81,10 @@ void XMLFootnoteSeparatorImport::StartElement(
     text::HorizontalAdjust eLineAdjust = text::HorizontalAdjust_LEFT;
     sal_Int32 nLineTextDistance = 0;
     sal_Int32 nLineDistance = 0;
-    sal_Int8 nLineStyle = 0;
+
+    // Default separator line style should be SOLID (used to be default before
+    // the choice selector was available)
+    sal_Int8 nLineStyle = 1;
 
     // iterate over xattribute list and fill values
     sal_Int16 nLength = xAttrList->getLength();
