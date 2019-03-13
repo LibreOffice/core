@@ -24,10 +24,8 @@ class DocumentSettingsTest : public ApiTestBase
 public:
     void testDocumentSettingsProperties()
     {
-        auto map = init();
-
-        css::uno::Reference<css::beans::XPropertySet> xDocumentSettings(
-            map["text::DocumentSettings"], css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::beans::XPropertySet> xDocumentSettings(init(),
+                                                                        css::uno::UNO_QUERY_THROW);
 
         testBooleanOptionalProperty(xDocumentSettings, "ChartAutoUpdate");
         testBooleanOptionalProperty(xDocumentSettings, "AddParaTableSpacing");

@@ -8,6 +8,7 @@
  */
 
 #include <test/bootstrapfixture.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -35,7 +36,8 @@ class DocumentSettingsTest : public test::BootstrapFixture,
                              public unotest::MacrosTest,
                              public apitest::DocumentSettingsTest,
                              public apitest::SettingsTest,
-                             public apitest::PrinterSettingsTest
+                             public apitest::PrinterSettingsTest,
+                             public apitest::XServiceInfo
 {
 private:
     uno::Reference<uno::XComponentContext> mxComponentContext;
@@ -45,9 +47,14 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    std::unordered_map<OUString, uno::Reference<uno::XInterface>> init() override;
+    DocumentSettingsTest()
+        : apitest::XServiceInfo("SwXDocumentSettings", "com.sun.star.text.DocumentSettings"){};
+    uno::Reference<uno::XInterface> init() override;
 
     CPPUNIT_TEST_SUITE(DocumentSettingsTest);
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
     CPPUNIT_TEST(testDocumentSettingsProperties);
     CPPUNIT_TEST(testSettingsProperties);
     CPPUNIT_TEST(testPrinterSettingsProperties);
@@ -70,10 +77,8 @@ void DocumentSettingsTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-std::unordered_map<OUString, uno::Reference<uno::XInterface>> DocumentSettingsTest::init()
+uno::Reference<uno::XInterface> DocumentSettingsTest::init()
 {
-    std::unordered_map<OUString, uno::Reference<uno::XInterface>> map;
-
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
     CPPUNIT_ASSERT(mxComponent.is());
 
@@ -83,13 +88,7 @@ std::unordered_map<OUString, uno::Reference<uno::XInterface>> DocumentSettingsTe
     uno::Reference<uno::XInterface> xDocumentSettings(
         xFactory->createInstance("com.sun.star.text.DocumentSettings"), uno::UNO_QUERY_THROW);
 
-    // DocumentSettings
-    map["text::DocumentSettings"] = xDocumentSettings;
-    // Settings
-    map["document::Settings"] = xDocumentSettings;
-    // Printer Settings
-    map["text::PrinterSettings"] = xDocumentSettings;
-    return map;
+    return xDocumentSettings;
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DocumentSettingsTest);
