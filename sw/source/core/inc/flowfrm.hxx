@@ -20,7 +20,9 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_FLOWFRM_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_FLOWFRM_HXX
 
-#include "frmtool.hxx"
+#include "frame.hxx"
+#include "layfrm.hxx"
+#include <swtypes.hxx>
 
 class SvxFormatKeepItem;
 class SvxFormatBreakItem;
@@ -29,8 +31,6 @@ class SwRect;
 class SwBorderAttrs;
 class SwDoc;
 class SwNodeIndex;
-// #i44049#
-class SwObjectFormatterTextFrame;
 
 /** Base class that provides the general functionalities for frames that are
     allowed at page breaks (flow) and shall continue on the next page (can be

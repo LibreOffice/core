@@ -32,10 +32,8 @@ class SwFormatFrameSize;
 struct SwCursorMoveState;
 class SwBorderAttrs;
 class SwVirtFlyDrawObj;
-class SwFrameFormats;
 class SwAttrSetChg;
 namespace tools { class PolyPolygon; }
-class SwFlyDrawContact;
 class SwFormat;
 class SwViewShell;
 class SwFEShell;

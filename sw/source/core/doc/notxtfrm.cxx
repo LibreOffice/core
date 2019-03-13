@@ -31,6 +31,7 @@
 #include <sfx2/printer.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/boxitem.hxx>
 #include <svx/xoutbmp.hxx>
 #include <fmturl.hxx>
 #include <fmtsrnd.hxx>
@@ -74,6 +75,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/utils/b2dclipstate.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <txtfly.hxx>
 #include <vcl/graphicfilter.hxx>

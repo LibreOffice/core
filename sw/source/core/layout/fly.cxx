@@ -50,6 +50,7 @@
 #include <dcontact.hxx>
 #include <dflyobj.hxx>
 #include <dview.hxx>
+#include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <hints.hxx>
 #include <tabfrm.hxx>
@@ -59,6 +60,7 @@
 #include <sectfrm.hxx>
 #include <vcl/svapp.hxx>
 #include <calbck.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <textboxhelper.hxx>

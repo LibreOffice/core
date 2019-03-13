@@ -21,6 +21,7 @@
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <viewopt.hxx>
+#include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>

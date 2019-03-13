@@ -27,7 +27,6 @@
 #include <vector>
 
 class SwTextFrame;
-class SwPaM;
 class SwTextCursor;
 
 class SwTextFrameInfo

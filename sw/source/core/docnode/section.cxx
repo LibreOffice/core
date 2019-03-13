@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <libxml/xmlstring.h>
+#include <libxml/xmlwriter.h>
 #include <stdlib.h>
 #include <hintids.hxx>
 #include <svl/intitem.hxx>
@@ -42,6 +44,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <node.hxx>
 #include <pam.hxx>
+#include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <editsh.hxx>
 #include <hints.hxx>

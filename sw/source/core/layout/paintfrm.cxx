@@ -39,6 +39,8 @@
 #include <viewimp.hxx>
 #include <dflyobj.hxx>
 #include <flyfrm.hxx>
+#include <frmatr.hxx>
+#include <frmtool.hxx>
 #include <viewopt.hxx>
 #include <dview.hxx>
 #include <dcontact.hxx>
@@ -63,6 +65,7 @@
 #include <hffrm.hxx>
 #include <colfrm.hxx>
 #include <sw_primitivetypes2d.hxx>
+#include <swfont.hxx>
 
 #include <svx/sdr/primitive2d/sdrframeborderprimitive2d.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
@@ -70,6 +73,7 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 
 #include <ndole.hxx>
 #include <PostItMgr.hxx>
@@ -94,6 +98,7 @@
 #include <svx/framelinkarray.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/color/bcolortools.hxx>
+#include <basegfx/utils/b2dclipstate.hxx>
 #include <sal/log.hxx>
 
 #include <memory>
