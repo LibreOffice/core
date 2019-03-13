@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_36e6c218",
+        "filename": "sc/CppunitTest_sc_pdf_export.mk",
+        "patchSetId": 8
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-03-13T21:38:24Z",
+      "side": 1,
+      "message": "this is ~all of office - wonder if that could be written more concisely?",
+      "revId": "705d14d2ab44013a8cad2123ca87d3694ac772cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
