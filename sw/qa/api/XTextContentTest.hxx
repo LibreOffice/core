@@ -26,6 +26,7 @@ namespace apitest
 class XTextContentTest : public ApiTestBase
 {
 public:
+    virtual css::uno::Reference<css::text::XTextDocument> getTextDocument() = 0;
     /**
      * Tries to attach the text content to the test range
      * gotten with getAnchor(). If relations are found
@@ -35,19 +36,20 @@ public:
      */
     void testAttach()
     {
-        auto map = init();
-        css::uno::Reference<css::text::XTextContent> xTextContent(
-            map["text::XTextContent#Instance"], css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::text::XTextRange> xTextRange(map["text::XTextRange"],
-                                                              css::uno::UNO_QUERY_THROW);
-
-        xTextContent->attach(xTextRange);
+        css::uno::Reference<css::text::XTextContent> xTextContent(init(),
+                                                                  css::uno::UNO_QUERY_THROW);
+        auto xTextCursor = getTextDocument()->getText()->createTextCursor();
+        xTextCursor->gotoEnd(false);
+        css::uno::Reference<css::lang::XMultiServiceFactory> xMSF(getTextDocument(),
+                                                                  css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::text::XDocumentIndex> xDocumentIndex(
+            xMSF->createInstance("com.sun.star.text.DocumentIndex"), css::uno::UNO_QUERY_THROW);
+        xDocumentIndex->attach(xTextCursor);
     }
 
     void testGetAnchor()
     {
-        auto map = init();
-        css::uno::Reference<css::text::XTextContent> xTextContent(map["text::XTextContent"],
+        css::uno::Reference<css::text::XTextContent> xTextContent(init(),
                                                                   css::uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(OUString(""), xTextContent->getAnchor()->getString());
     }
