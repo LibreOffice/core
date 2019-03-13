@@ -5999,8 +5999,7 @@ public:
     {
         std::vector<int> aRows;
 
-        GtkTreeModel* pModel;
-        GList* pList = gtk_tree_selection_get_selected_rows(gtk_tree_view_get_selection(m_pTreeView), &pModel);
+        GList* pList = gtk_tree_selection_get_selected_rows(gtk_tree_view_get_selection(m_pTreeView), nullptr);
         for (GList* pItem = g_list_first(pList); pItem; pItem = g_list_next(pItem))
         {
             GtkTreePath* path = static_cast<GtkTreePath*>(pItem->data);
@@ -6193,6 +6192,47 @@ public:
             return vec.empty() ? -1 : vec[0];
         }
         return nRet;
+    }
+
+    bool get_selected_iterator(GtkTreeIter& rIter) const
+    {
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't request selection when frozen");
+        bool bRet = false;
+        GtkTreeSelection *selection = gtk_tree_view_get_selection(m_pTreeView);
+        if (gtk_tree_selection_get_mode(selection) != GTK_SELECTION_MULTIPLE)
+            bRet = gtk_tree_selection_get_selected(gtk_tree_view_get_selection(m_pTreeView), nullptr, &rIter);
+        else
+        {
+            GtkTreeModel* pModel;
+            GList* pList = gtk_tree_selection_get_selected_rows(gtk_tree_view_get_selection(m_pTreeView), &pModel);
+            for (GList* pItem = g_list_first(pList); pItem; pItem = g_list_next(pItem))
+            {
+                GtkTreePath* path = static_cast<GtkTreePath*>(pItem->data);
+                gtk_tree_model_get_iter(pModel, &rIter, path);
+                bRet = true;
+                break;
+            }
+            g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
+        }
+        return bRet;
+    }
+
+    virtual OUString get_selected_text() const override
+    {
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't request selection when frozen");
+        GtkTreeIter iter;
+        if (get_selected_iterator(iter))
+            return get(iter, m_nTextCol);
+        return OUString();
+    }
+
+    virtual OUString get_selected_id() const override
+    {
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't request selection when frozen");
+        GtkTreeIter iter;
+        if (get_selected_iterator(iter))
+            return get(iter, m_nIdCol);
+        return OUString();
     }
 
     virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig) const override
