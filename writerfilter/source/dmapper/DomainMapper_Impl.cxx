@@ -239,6 +239,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_aSmartTagHandler(m_xComponentContext, m_xTextDocument),
         m_xInsertTextRange(rMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>())),
         m_bIsNewDoc(!rMediaDesc.getUnpackedValueOrDefault("InsertMode", false)),
+        m_bIsReadGlossaries(rMediaDesc.getUnpackedValueOrDefault("ReadGlossaries", false)),
         m_bInTableStyleRunProps(false),
         m_nTableDepth(0),
         m_nTableCellDepth(0),
