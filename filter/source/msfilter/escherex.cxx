@@ -932,8 +932,8 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
                 }
                 if ( !bIsMapped && comphelper::string::getTokenCount(aArrowStartName, ' ') == 2 )
                 {
-                    bool b = true;
-                    OUString aArrowName( aArrowStartName.getToken( 0, ' ' ) );
+                    sal_Int32 nIdx{ 0 };
+                    OUString aArrowName( aArrowStartName.getToken( 0, ' ', nIdx ) );
                     if (  aArrowName == "msArrowEnd" )
                         reLineEnd = ESCHER_LineArrowEnd;
                     else if (  aArrowName == "msArrowOpenEnd" )
@@ -945,12 +945,12 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
                     else if ( aArrowName == "msArrowOvalEnd" )
                         reLineEnd = ESCHER_LineArrowOvalEnd;
                     else
-                        b = false;
+                        nIdx = -1;
 
                     // now we have the arrow, and try to determine the arrow size;
-                    if ( b )
+                    if ( nIdx>0 )
                     {
-                        OUString aArrowSize( aArrowStartName.getToken( 1, ' ' ) );
+                        OUString aArrowSize( aArrowStartName.getToken( 0, ' ', nIdx ) );
                         sal_Int32 nArrowSize = aArrowSize.toInt32();
                         rnArrowWidth = ( nArrowSize - 1 ) / 3;
                         rnArrowLength = nArrowSize - ( rnArrowWidth * 3 ) - 1;
