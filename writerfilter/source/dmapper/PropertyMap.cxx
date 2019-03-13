@@ -1642,10 +1642,13 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
             if ( xRangeProperties.is() && rDM_Impl.IsNewDoc() )
             {
-                xRangeProperties->setPropertyValue(
-                    getPropertyName( PROP_PAGE_DESC_NAME ),
-                    uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName
-                        : m_sFollowPageStyleName ) );
+                // Avoid setting page style in case of autotext: so inserting the autotext at the
+                // end of the document does not introduce an unwanted page break.
+                if (!rDM_Impl.IsReadGlossaries())
+                    xRangeProperties->setPropertyValue(
+                        getPropertyName( PROP_PAGE_DESC_NAME ),
+                        uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName
+                            : m_sFollowPageStyleName ) );
 
                 if (0 <= m_nPageNumber)
                 {
