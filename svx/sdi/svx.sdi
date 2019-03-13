@@ -1634,25 +1634,6 @@ SfxVoidItem Config SID_FM_CONFIG
 ]
 
 
-SfxBoolItem MoreControls SID_FM_MORE_CONTROLS
-
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = TRUE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Controls;
-]
-
-
 SfxBoolItem FormDesignTools SID_FM_FORM_DESIGN_TOOLS
 
 [
