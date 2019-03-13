@@ -95,10 +95,7 @@ public:
     /// Write <a:effectLst>, the effect list.
     void writeDMLEffectLst(const SwFrameFormat& rFrameFormat);
     /// Writes a diagram (smartart).
-    void writeDiagram(const SdrObject* sdrObject, const SwFrameFormat& rFrameFormat, int nAnchorId);
-    void writeDiagramRels(const css::uno::Sequence< css::uno::Sequence<css::uno::Any> >& xRelSeq,
-                          const css::uno::Reference<css::io::XOutputStream>& xOutStream, const OUString& sGrabBagProperyName,
-                          int nAnchorId);
+    void writeDiagram(const SdrObject* sdrObject, const SwFrameFormat& rFrameFormat, int nDiagramId);
     /// Writes text frame in DML format.
     void writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAnchorId, bool bTextBoxOnly = false);
     /// Writes text frame in VML format.
