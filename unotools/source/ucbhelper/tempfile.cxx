@@ -25,6 +25,7 @@
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/instance.hxx>
 #include <osl/detail/file.h>
@@ -421,7 +422,7 @@ SvStream* TempFile::GetStream( StreamMode eMode )
     if (!pStream)
     {
         if (!aName.isEmpty())
-            pStream.reset(new SvFileStream(aName, eMode));
+            pStream = utl::UcbStreamHelper::CreateStream(aName, eMode, true /* bFileExists */);
         else
             pStream.reset(new SvMemoryStream(nullptr, 0, eMode));
     }
