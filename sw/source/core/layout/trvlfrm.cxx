@@ -2138,6 +2138,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
     SwRectFnSet aRectFnSet(pStartFrame);
     const bool bR2L = pStartFrame->IsRightToLeft();
     const bool bEndR2L = pEndFrame->IsRightToLeft();
+    const bool bB2T = pStartFrame->IsVertLRBT();
 
     // If there's no doubleline portion involved or start and end are both
     // in the same doubleline portion, all works fine, but otherwise
@@ -2370,7 +2371,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
         {
             Point aTmpSt( aStRect.Pos() );
             Point aTmpEnd( aEndRect.Right(), aEndRect.Bottom() );
-            if( bSameRotatedOrBidi || bR2L )
+            if (bSameRotatedOrBidi || bR2L || bB2T)
             {
                 if( aTmpSt.Y() > aTmpEnd.Y() )
                 {

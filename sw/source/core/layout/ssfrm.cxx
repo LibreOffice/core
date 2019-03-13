@@ -680,14 +680,15 @@ const SwRect SwFrame::UnionFrame( bool bBorder ) const
     long nWidth = (getFrameArea().*fnRect->fnGetWidth)();
     long nPrtLeft = (getFramePrintArea().*fnRect->fnGetLeft)();
     long nPrtWidth = (getFramePrintArea().*fnRect->fnGetWidth)();
-    if( nPrtLeft + nPrtWidth > nWidth )
+    SwRectFnSet aRectFnSet(this);
+    if (aRectFnSet.XInc(nPrtLeft, nPrtWidth) > nWidth)
         nWidth = nPrtLeft + nPrtWidth;
     if( nPrtLeft < 0 )
     {
         nLeft += nPrtLeft;
         nWidth -= nPrtLeft;
     }
-    SwTwips nRight = nLeft + nWidth;
+    SwTwips nRight = aRectFnSet.XInc(nLeft, nWidth);
     long nAdd = 0;
     if( bBorder )
     {
@@ -715,9 +716,9 @@ const SwRect SwFrame::UnionFrame( bool bBorder ) const
         if( nTmp > nAdd )
             nAdd = nTmp;
     }
-    nWidth = nRight + nAdd - nLeft;
+    nWidth = aRectFnSet.XDiff(aRectFnSet.XInc(nRight, nAdd), nLeft);
     SwRect aRet( getFrameArea() );
-    (aRet.*fnRect->fnSetPosX)( nLeft );
+    (aRet.*fnRect->fnSetLeft)(nLeft);
     (aRet.*fnRect->fnSetWidth)( nWidth );
     return aRet;
 }
