@@ -79,16 +79,10 @@ namespace svxform
 
     OUString FormToolboxes::getToolboxResourceName( sal_uInt16 _nSlotId )
     {
-        OSL_ENSURE( ( _nSlotId == SID_FM_MORE_CONTROLS ) || ( _nSlotId == SID_FM_FORM_DESIGN_TOOLS ),
+        OSL_ENSURE( _nSlotId == SID_FM_FORM_DESIGN_TOOLS ,
             "FormToolboxes::getToolboxResourceName: unsupported slot!" );
 
-        const sal_Char* pToolBarName = "moreformcontrols";
-        if ( _nSlotId == SID_FM_FORM_DESIGN_TOOLS )
-            pToolBarName = "formdesign";
-
-        OUString aToolBarResStr( "private:resource/toolbar/" );
-        aToolBarResStr += OUString::createFromAscii( pToolBarName );
-        return aToolBarResStr;
+        return "private:resource/toolbar/formdesign";
     }
 
 

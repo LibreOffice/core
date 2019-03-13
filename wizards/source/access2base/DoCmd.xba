@@ -1672,7 +1672,6 @@ Const cstUnoPrefix = &quot;.uno:&quot;
 		Case UCase(sOOCommand) = &quot;LISTBOX&quot; : sDispatch = &quot;ListBox&quot;
 		Case UCase(sOOCommand) = &quot;MACRODIALOG&quot; : sDispatch = &quot;MacroDialog&quot;
 		Case UCase(sOOCommand) = &quot;MACROORGANIZER&quot; : sDispatch = &quot;MacroOrganizer&quot;
-		Case UCase(sOOCommand) = &quot;MORECONTROLS&quot; : sDispatch = &quot;MoreControls&quot;
 		Case UCase(sOOCommand) = &quot;NAVIGATIONBAR&quot; : sDispatch = &quot;NavigationBar&quot;
 		Case iVBACommand = acCmdObjectBrowser  Or UCase(sOOCommand) = &quot;NAVIGATOR&quot; : sDispatch = &quot;Navigator&quot;
 		Case UCase(sOOCommand) = &quot;NEWDOC&quot; : sDispatch = &quot;NewDoc&quot;
