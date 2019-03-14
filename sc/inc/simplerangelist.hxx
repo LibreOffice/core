@@ -37,10 +37,10 @@ class ScSimpleRangeList
 public:
     struct Range
     {
-        SCCOL mnCol1;
         SCROW mnRow1;
-        SCCOL mnCol2;
         SCROW mnRow2;
+        SCCOL mnCol1;
+        SCCOL mnCol2;
         explicit Range(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     };
     typedef std::shared_ptr< ::std::list<Range> > RangeListRef;
