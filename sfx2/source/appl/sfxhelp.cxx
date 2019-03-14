@@ -71,7 +71,6 @@
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/viewsh.hxx>
-#include <officecfg/Office/Common.hxx>
 
 #include "newhelp.hxx"
 #include <sfx2/objsh.hxx>
