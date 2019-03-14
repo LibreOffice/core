@@ -77,6 +77,7 @@ Image BuildBitmap(bool bProtect, bool bHidden)
 }
 
 static void   lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox );
+static void   lcl_ReadSections( SfxMedium& rMedium, weld::ComboBox& rBox );
 
 static void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAvailNames, const SwSectionFormat* pNewFormat )
 {
@@ -125,6 +126,54 @@ static void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAva
     }
 }
 
+static void lcl_FillList( SwWrtShell& rSh, weld::ComboBox& rSubRegions, weld::ComboBox* pAvailNames, const SwSectionFormat* pNewFormat )
+{
+    if( !pNewFormat )
+    {
+        const size_t nCount = rSh.GetSectionFormatCount();
+        for (size_t i = 0; i<nCount; i++)
+        {
+            SectionType eTmpType;
+            const SwSectionFormat* pFormat = &rSh.GetSectionFormat(i);
+            if( !pFormat->GetParent() &&
+                    pFormat->IsInNodesArr() &&
+                    (eTmpType = pFormat->GetSection()->GetType()) != TOX_CONTENT_SECTION
+                    && TOX_HEADER_SECTION != eTmpType )
+            {
+                    const OUString sString(pFormat->GetSection()->GetSectionName());
+                    if (pAvailNames)
+                        pAvailNames->append_text(sString);
+                    rSubRegions.append_text(sString);
+                    lcl_FillList( rSh, rSubRegions, pAvailNames, pFormat );
+            }
+        }
+    }
+    else
+    {
+        SwSections aTmpArr;
+        pNewFormat->GetChildSections(aTmpArr, SectionSort::Pos);
+        if( !aTmpArr.empty() )
+        {
+            SectionType eTmpType;
+            for( const auto pSect : aTmpArr )
+            {
+                const SwSectionFormat* pFormat = pSect->GetFormat();
+                if( pFormat->IsInNodesArr()&&
+                    (eTmpType = pFormat->GetSection()->GetType()) != TOX_CONTENT_SECTION
+                    && TOX_HEADER_SECTION != eTmpType )
+                {
+                    const OUString sString(pFormat->GetSection()->GetSectionName());
+                    if (pAvailNames)
+                        pAvailNames->append_text(sString);
+                    rSubRegions.append_text(sString);
+                    lcl_FillList( rSh, rSubRegions, pAvailNames, pFormat );
+                }
+            }
+        }
+    }
+}
+
+
 static void lcl_FillSubRegionList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAvailNames )
 {
     lcl_FillList( rSh, rSubRegions, pAvailNames, nullptr );
@@ -136,6 +185,20 @@ static void lcl_FillSubRegionList( SwWrtShell& rSh, ComboBox& rSubRegions, Combo
         const ::sw::mark::IMark* pBkmk = ppMark->get();
         if( pBkmk->IsExpanded() )
             rSubRegions.InsertEntry( pBkmk->GetName() );
+    }
+}
+
+static void lcl_FillSubRegionList( SwWrtShell& rSh, weld::ComboBox& rSubRegions, weld::ComboBox* pAvailNames )
+{
+    lcl_FillList( rSh, rSubRegions, pAvailNames, nullptr );
+    IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
+    for( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
+        ppMark != pMarkAccess->getBookmarksEnd();
+        ++ppMark)
+    {
+        const ::sw::mark::IMark* pBkmk = ppMark->get();
+        if( pBkmk->IsExpanded() )
+            rSubRegions.append_text( pBkmk->GetName() );
     }
 }
 
@@ -1403,6 +1466,26 @@ static void lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox )
     }
 }
 
+// helper function - read section names from medium
+static void lcl_ReadSections( SfxMedium& rMedium, weld::ComboBox& rBox )
+{
+    rBox.clear();
+    uno::Reference < embed::XStorage > xStg;
+    if( rMedium.IsStorage() && (xStg = rMedium.GetStorage()).is() )
+    {
+        std::vector<OUString> aArr;
+        SotClipboardFormatId nFormat = SotStorage::GetFormatID( xStg );
+        if ( nFormat == SotClipboardFormatId::STARWRITER_60 || nFormat == SotClipboardFormatId::STARWRITERGLOB_60 ||
+            nFormat == SotClipboardFormatId::STARWRITER_8 || nFormat == SotClipboardFormatId::STARWRITERGLOB_8)
+            SwGetReaderXML()->GetSectionList( rMedium, aArr );
+
+        for (auto const& it : aArr)
+        {
+            rBox.append_text(it);
+        }
+    }
+}
+
 SwInsertSectionTabDialog::SwInsertSectionTabDialog(
             vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh)
     : SfxTabDialog(pParent, "InsertSectionDialog",
@@ -1500,70 +1583,47 @@ short   SwInsertSectionTabDialog::Ok()
     return nRet;
 }
 
-SwInsertSectionTabPage::SwInsertSectionTabPage(
-                            vcl::Window *pParent, const SfxItemSet &rAttrSet)
-    : SfxTabPage(pParent, "SectionPage",
-        "modules/swriter/ui/sectionpage.ui", &rAttrSet)
+SwInsertSectionTabPage::SwInsertSectionTabPage(TabPageParent pParent, const SfxItemSet &rAttrSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/sectionpage.ui", "SectionPage", &rAttrSet)
     , m_pWrtSh(nullptr)
-{
-    get(m_pCurName, "sectionnames");
-    m_pCurName->SetStyle(m_pCurName->GetStyle() | WB_SORT);
-    m_pCurName->set_height_request(m_pCurName->GetTextHeight() * 12);
-    get(m_pFileCB, "link");
-    get(m_pDDECB, "dde");
-    get(m_pDDECommandFT, "ddelabel");
-    get(m_pFileNameFT, "filelabel");
-    get(m_pFileNameED, "filename");
-    get(m_pFilePB, "selectfile");
-    get(m_pSubRegionFT, "sectionlabel");
-    get(m_pSubRegionED, "sectionname");
-    m_pSubRegionED->SetStyle(m_pSubRegionED->GetStyle() | WB_SORT);
-    get(m_pProtectCB, "protect");
-    get(m_pPasswdCB, "withpassword");
-    get(m_pPasswdPB, "selectpassword");
-    get(m_pHideCB, "hide");
-    get(m_pConditionFT, "condlabel");
-    get(m_pConditionED, "withcond");
+    , m_xCurName(m_xBuilder->weld_entry_tree_view("sectionnames", "sectionnames-entry",
+                                                  "sectionnames-list"))
+    , m_xFileCB(m_xBuilder->weld_check_button("link"))
+    , m_xDDECB(m_xBuilder->weld_check_button("dde"))
+    , m_xDDECommandFT(m_xBuilder->weld_label("ddelabel"))
+    , m_xFileNameFT(m_xBuilder->weld_label("filelabel"))
+    , m_xFileNameED(m_xBuilder->weld_entry("filename"))
+    , m_xFilePB(m_xBuilder->weld_button("selectfile"))
+    , m_xSubRegionFT(m_xBuilder->weld_label("sectionlabel"))
+    , m_xSubRegionED(m_xBuilder->weld_combo_box("sectionname"))
+    , m_xProtectCB(m_xBuilder->weld_check_button("protect"))
+    , m_xPasswdCB(m_xBuilder->weld_check_button("withpassword"))
+    , m_xPasswdPB(m_xBuilder->weld_button("selectpassword"))
+    , m_xHideCB(m_xBuilder->weld_check_button("hide"))
+    , m_xConditionFT(m_xBuilder->weld_label("condlabel"))
+    , m_xConditionED(new SwConditionEdit(m_xBuilder->weld_entry("withcond")))
     // edit in readonly sections
-    get(m_pEditInReadonlyCB, "editable");
+    , m_xEditInReadonlyCB(m_xBuilder->weld_check_button("editable"))
+{
+    m_xCurName->make_sorted();
+    m_xCurName->set_height_request_by_rows(12);
+    m_xSubRegionED->make_sorted();
 
-    m_pProtectCB->SetClickHdl  ( LINK( this, SwInsertSectionTabPage, ChangeProtectHdl));
-    m_pPasswdCB->SetClickHdl   ( LINK( this, SwInsertSectionTabPage, ChangePasswdHdl));
-    m_pPasswdPB->SetClickHdl   ( LINK( this, SwInsertSectionTabPage, ChangePasswdHdl));
-    m_pHideCB->SetClickHdl     ( LINK( this, SwInsertSectionTabPage, ChangeHideHdl));
-    m_pFileCB->SetClickHdl     ( LINK( this, SwInsertSectionTabPage, UseFileHdl ));
-    m_pFilePB->SetClickHdl     ( LINK( this, SwInsertSectionTabPage, FileSearchHdl ));
-    m_pCurName->SetModifyHdl   ( LINK( this, SwInsertSectionTabPage, NameEditHdl));
-    m_pDDECB->SetClickHdl      ( LINK( this, SwInsertSectionTabPage, DDEHdl ));
-    ChangeProtectHdl(m_pProtectCB);
-    m_pSubRegionED->EnableAutocomplete( true, true );
+    m_xProtectCB->connect_toggled( LINK( this, SwInsertSectionTabPage, ChangeProtectHdl));
+    m_xPasswdCB->connect_toggled( LINK( this, SwInsertSectionTabPage, TogglePasswdHdl));
+    m_xPasswdPB->connect_clicked( LINK( this, SwInsertSectionTabPage, ChangePasswdHdl));
+    m_xHideCB->connect_toggled( LINK( this, SwInsertSectionTabPage, ChangeHideHdl));
+    m_xFileCB->connect_toggled( LINK( this, SwInsertSectionTabPage, UseFileHdl ));
+    m_xFilePB->connect_clicked( LINK( this, SwInsertSectionTabPage, FileSearchHdl ));
+    m_xCurName->connect_changed( LINK( this, SwInsertSectionTabPage, NameEditHdl));
+    m_xDDECB->connect_toggled( LINK( this, SwInsertSectionTabPage, DDEHdl ));
+    ChangeProtectHdl(*m_xProtectCB);
+//TODO    m_xSubRegionED->EnableAutocomplete( true, true );
 }
 
 SwInsertSectionTabPage::~SwInsertSectionTabPage()
 {
     disposeOnce();
-}
-
-void SwInsertSectionTabPage::dispose()
-{
-    m_pDocInserter.reset();
-    m_pCurName.clear();
-    m_pFileCB.clear();
-    m_pDDECB.clear();
-    m_pDDECommandFT.clear();
-    m_pFileNameFT.clear();
-    m_pFileNameED.clear();
-    m_pFilePB.clear();
-    m_pSubRegionFT.clear();
-    m_pSubRegionED.clear();
-    m_pProtectCB.clear();
-    m_pPasswdCB.clear();
-    m_pPasswdPB.clear();
-    m_pHideCB.clear();
-    m_pConditionFT.clear();
-    m_pConditionED.clear();
-    m_pEditInReadonlyCB.clear();
-    SfxTabPage::dispose();
 }
 
 void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
@@ -1573,14 +1633,14 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
     bool bWeb = dynamic_cast<SwWebDocShell*>( m_pWrtSh->GetView().GetDocShell() )!= nullptr;
     if(bWeb)
     {
-        m_pHideCB->Hide();
-        m_pConditionED->Hide();
-        m_pConditionFT->Hide();
-        m_pDDECB->Hide();
-        m_pDDECommandFT->Hide();
+        m_xHideCB->hide();
+        m_xConditionED->hide();
+        m_xConditionFT->hide();
+        m_xDDECB->hide();
+        m_xDDECommandFT->hide();
     }
 
-    lcl_FillSubRegionList(*m_pWrtSh, *m_pSubRegionED, m_pCurName);
+    lcl_FillSubRegionList(*m_pWrtSh, *m_xSubRegionED, m_xCurName.get());
 
     SwSectionData *const pSectionData =
         static_cast<SwInsertSectionTabDialog*>(GetTabDialog())
@@ -1588,38 +1648,38 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
     if (pSectionData) // something set?
     {
         const OUString sSectionName(pSectionData->GetSectionName());
-        m_pCurName->SetText(rSh.GetUniqueSectionName(&sSectionName));
-        m_pProtectCB->Check( pSectionData->IsProtectFlag() );
+        m_xCurName->set_entry_text(rSh.GetUniqueSectionName(&sSectionName));
+        m_xProtectCB->set_active( pSectionData->IsProtectFlag() );
         m_sFileName = pSectionData->GetLinkFileName();
         m_sFilePasswd = pSectionData->GetLinkFilePassword();
-        m_pFileCB->Check( !m_sFileName.isEmpty() );
-        m_pFileNameED->SetText( m_sFileName );
-        UseFileHdl(m_pFileCB);
+        m_xFileCB->set_active( !m_sFileName.isEmpty() );
+        m_xFileNameED->set_text( m_sFileName );
+        UseFileHdl(*m_xFileCB);
     }
     else
     {
-        m_pCurName->SetText( rSh.GetUniqueSectionName() );
+        m_xCurName->set_entry_text(rSh.GetUniqueSectionName());
     }
 }
 
 bool SwInsertSectionTabPage::FillItemSet( SfxItemSet* )
 {
-    SwSectionData aSection(CONTENT_SECTION, m_pCurName->GetText());
-    aSection.SetCondition(m_pConditionED->GetText());
-    bool bProtected = m_pProtectCB->IsChecked();
+    SwSectionData aSection(CONTENT_SECTION, m_xCurName->get_active_text());
+    aSection.SetCondition(m_xConditionED->get_text());
+    bool bProtected = m_xProtectCB->get_active();
     aSection.SetProtectFlag(bProtected);
-    aSection.SetHidden(m_pHideCB->IsChecked());
+    aSection.SetHidden(m_xHideCB->get_active());
     // edit in readonly sections
-    aSection.SetEditInReadonlyFlag(m_pEditInReadonlyCB->IsChecked());
+    aSection.SetEditInReadonlyFlag(m_xEditInReadonlyCB->get_active());
 
     if(bProtected)
     {
         aSection.SetPassword(m_aNewPasswd);
     }
-    const OUString sFileName = m_pFileNameED->GetText();
-    const OUString sSubRegion = m_pSubRegionED->GetText();
-    bool bDDe = m_pDDECB->IsChecked();
-    if(m_pFileCB->IsChecked() && (!sFileName.isEmpty() || !sSubRegion.isEmpty() || bDDe))
+    const OUString sFileName = m_xFileNameED->get_text();
+    const OUString sSubRegion = m_xSubRegionED->get_active_text();
+    bool bDDe = m_xDDECB->get_active();
+    if (m_xFileCB->get_active() && (!sFileName.isEmpty() || !sSubRegion.isEmpty() || bDDe))
     {
         OUString aLinkFile;
         if( bDDe )
@@ -1652,7 +1712,7 @@ bool SwInsertSectionTabPage::FillItemSet( SfxItemSet* )
         aSection.SetLinkFileName(aLinkFile);
         if (!aLinkFile.isEmpty())
         {
-            aSection.SetType( m_pDDECB->IsChecked() ?
+            aSection.SetType( m_xDDECB->get_active() ?
                                     DDE_LINK_SECTION :
                                         FILE_LINK_SECTION);
         }
@@ -1665,35 +1725,34 @@ void SwInsertSectionTabPage::Reset( const SfxItemSet* )
 {
 }
 
-VclPtr<SfxTabPage> SwInsertSectionTabPage::Create( TabPageParent pParent,
-                                                   const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SwInsertSectionTabPage::Create(TabPageParent pParent,
+                                                  const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwInsertSectionTabPage>::Create(pParent.pParent, *rAttrSet);
+    return VclPtr<SwInsertSectionTabPage>::Create(pParent, *rAttrSet);
 }
 
-IMPL_LINK( SwInsertSectionTabPage, ChangeHideHdl, Button *, pBox, void )
+IMPL_LINK(SwInsertSectionTabPage, ChangeHideHdl, weld::ToggleButton&, rBox, void)
 {
-    bool bHide = static_cast<CheckBox*>(pBox)->IsChecked();
-    m_pConditionED->Enable(bHide);
-    m_pConditionFT->Enable(bHide);
+    bool bHide = rBox.get_active();
+    m_xConditionED->set_sensitive(bHide);
+    m_xConditionFT->set_sensitive(bHide);
 }
 
-IMPL_LINK( SwInsertSectionTabPage, ChangeProtectHdl, Button *, pBox, void )
+IMPL_LINK(SwInsertSectionTabPage, ChangeProtectHdl, weld::ToggleButton&, rBox, void)
 {
-    bool bCheck = static_cast<CheckBox*>(pBox)->IsChecked();
-    m_pPasswdCB->Enable(bCheck);
-    m_pPasswdPB->Enable(bCheck);
+    bool bCheck = rBox.get_active();
+    m_xPasswdCB->set_sensitive(bCheck);
+    m_xPasswdPB->set_sensitive(bCheck);
 }
 
-IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton, void )
+void SwInsertSectionTabPage::ChangePasswd(bool bChange)
 {
-    bool bChange = pButton == m_pPasswdPB;
-    bool bSet = bChange ? bChange : m_pPasswdCB->IsChecked();
-    if(bSet)
+    bool bSet = bChange ? bChange : m_xPasswdCB->get_active();
+    if (bSet)
     {
         if(!m_aNewPasswd.getLength() || bChange)
         {
-            SfxPasswordDialog aPasswdDlg(GetFrameWeld());
+            SfxPasswordDialog aPasswdDlg(GetDialogFrameWeld());
             aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);
             if (RET_OK == aPasswdDlg.run())
             {
@@ -1704,92 +1763,101 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton, void )
                 }
                 else
                 {
-                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pButton->GetFrameWeld(),
+                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
                                                                   VclMessageType::Info, VclButtonsType::Ok,
                                                                   SwResId(STR_WRONG_PASSWD_REPEAT)));
                     xInfoBox->run();
                 }
             }
             else if(!bChange)
-                m_pPasswdCB->Check(false);
+                m_xPasswdCB->set_active(false);
         }
     }
     else
         m_aNewPasswd.realloc(0);
 }
 
-IMPL_LINK_NOARG(SwInsertSectionTabPage, NameEditHdl, Edit&, void)
+IMPL_LINK_NOARG(SwInsertSectionTabPage, TogglePasswdHdl, weld::ToggleButton&, void)
 {
-    const OUString aName = m_pCurName->GetText();
-    GetTabDialog()->GetOKButton().Enable(!aName.isEmpty() &&
-            m_pCurName->GetEntryPos( aName ) == LISTBOX_ENTRY_NOTFOUND);
+    ChangePasswd(false);
 }
 
-IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, Button *, pButton, void )
+IMPL_LINK_NOARG(SwInsertSectionTabPage, ChangePasswdHdl, weld::Button&, void)
 {
-    CheckBox* pBox = static_cast<CheckBox*>(pButton);
-    if( pBox->IsChecked() )
+    ChangePasswd(true);
+}
+
+
+IMPL_LINK_NOARG(SwInsertSectionTabPage, NameEditHdl, weld::ComboBox&, void)
+{
+    const OUString aName = m_xCurName->get_active_text();
+    GetDialogController()->GetOKButton().set_sensitive(!aName.isEmpty() &&
+            m_xCurName->find_text(aName) == -1);
+}
+
+IMPL_LINK(SwInsertSectionTabPage, UseFileHdl, weld::ToggleButton&, rButton, void)
+{
+    if (rButton.get_active())
     {
         if (m_pWrtSh->HasSelection())
         {
-            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetDialogFrameWeld(),
                                                            VclMessageType::Question, VclButtonsType::YesNo,
                                                            SwResId(STR_QUERY_CONNECT)));
             if (RET_NO == xQueryBox->run())
-                pBox->Check( false );
+                rButton.set_active(false);
         }
     }
 
-    bool bFile = pBox->IsChecked();
-    m_pFileNameFT->Enable(bFile);
-    m_pFileNameED->Enable(bFile);
-    m_pFilePB->Enable(bFile);
-    m_pSubRegionFT->Enable(bFile);
-    m_pSubRegionED->Enable(bFile);
-    m_pDDECommandFT->Enable(bFile);
-    m_pDDECB->Enable(bFile);
-    if( bFile )
+    bool bFile = rButton.get_active();
+    m_xFileNameFT->set_sensitive(bFile);
+    m_xFileNameED->set_sensitive(bFile);
+    m_xFilePB->set_sensitive(bFile);
+    m_xSubRegionFT->set_sensitive(bFile);
+    m_xSubRegionED->set_sensitive(bFile);
+    m_xDDECommandFT->set_sensitive(bFile);
+    m_xDDECB->set_sensitive(bFile);
+    if (bFile)
     {
-        m_pFileNameED->GrabFocus();
-        m_pProtectCB->Check();
+        m_xFileNameED->grab_focus();
+        m_xProtectCB->set_active(true);
     }
     else
     {
-        m_pDDECB->Check(false);
-        DDEHdl(m_pDDECB);
+        m_xDDECB->set_active(false);
+        DDEHdl(*m_xDDECB);
     }
 }
 
-IMPL_LINK_NOARG(SwInsertSectionTabPage, FileSearchHdl, Button*, void)
+IMPL_LINK_NOARG(SwInsertSectionTabPage, FileSearchHdl, weld::Button&, void)
 {
-    m_pDocInserter.reset(new ::sfx2::DocumentInserter(GetFrameWeld(), "swriter"));
+    m_pDocInserter.reset(new ::sfx2::DocumentInserter(GetDialogFrameWeld(), "swriter"));
     m_pDocInserter->StartExecuteModal( LINK( this, SwInsertSectionTabPage, DlgClosedHdl ) );
 }
 
-IMPL_LINK( SwInsertSectionTabPage, DDEHdl, Button*, pButton, void )
+IMPL_LINK( SwInsertSectionTabPage, DDEHdl, weld::ToggleButton&, rButton, void )
 {
-    CheckBox* pBox = static_cast<CheckBox*>(pButton);
-    bool bDDE = pBox->IsChecked();
-    bool bFile = m_pFileCB->IsChecked();
-    m_pFilePB->Enable(!bDDE && bFile);
-    if(bDDE)
+    bool bDDE = rButton.get_active();
+    bool bFile = m_xFileCB->get_active();
+    m_xFilePB->set_sensitive(!bDDE && bFile);
+    if (bDDE)
     {
-        m_pFileNameFT->Hide();
-        m_pDDECommandFT->Enable(bDDE);
-        m_pDDECommandFT->Show();
-        m_pSubRegionFT->Hide();
-        m_pSubRegionED->Hide();
-        m_pFileNameED->SetAccessibleName(m_pDDECommandFT->GetText());
+        m_xFileNameFT->hide();
+        m_xDDECommandFT->set_sensitive(bDDE);
+        m_xDDECommandFT->show();
+        m_xSubRegionFT->hide();
+        m_xSubRegionED->hide();
+        m_xFileNameED->set_accessible_name(m_xDDECommandFT->get_label());
     }
     else
     {
-        m_pDDECommandFT->Hide();
-        m_pFileNameFT->Enable(bFile);
-        m_pFileNameFT->Show();
-        m_pSubRegionFT->Show();
-        m_pSubRegionED->Show();
-        m_pSubRegionED->Enable(bFile);
-        m_pFileNameED->SetAccessibleName(m_pFileNameFT->GetText());
+        m_xDDECommandFT->hide();
+        m_xFileNameFT->set_sensitive(bFile);
+        m_xFileNameFT->show();
+        m_xSubRegionFT->show();
+        m_xSubRegionED->show();
+        m_xSubRegionED->set_sensitive(bFile);
+        m_xFileNameED->set_accessible_name(m_xFileNameFT->get_label());
     }
 }
 
@@ -1805,9 +1873,9 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
             const SfxPoolItem* pItem;
             if ( SfxItemState::SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, false, &pItem ) )
                 m_sFilePasswd = static_cast<const SfxStringItem*>(pItem)->GetValue();
-            m_pFileNameED->SetText( INetURLObject::decode(
+            m_xFileNameED->set_text( INetURLObject::decode(
                 m_sFileName, INetURLObject::DecodeMechanism::Unambiguous ) );
-            ::lcl_ReadSections(*pMedium, *m_pSubRegionED);
+            ::lcl_ReadSections(*pMedium, *m_xSubRegionED);
         }
     }
     else

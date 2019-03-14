@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkGrid" id="SectionPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -27,18 +34,62 @@
             <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
-              <object class="VclComboBoxText" id="sectionnames">
+              <object class="GtkGrid" id="sectionnames">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="has_entry">True</property>
-                <property name="dropdown">False</property>
-                <property name="max_width_chars">18</property>
-                <child internal-child="entry">
-                  <object class="GtkEntry" id="comboboxtext-entry">
+                <property name="row_spacing">3</property>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkTreeView" id="sectionnames-list">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="model">liststore1</property>
+                        <property name="headers_visible">False</property>
+                        <property name="headers_clickable">False</property>
+                        <property name="search_column">0</property>
+                        <property name="show_expanders">False</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="treeview-selection1"/>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                            <child>
+                              <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="sectionnames-entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
                 </child>
               </object>
             </child>
@@ -125,10 +176,10 @@
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="sectionpage|sectionlabel">_Section</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">sectionname</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -149,16 +200,16 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclComboBoxText" id="sectionname">
+                      <object class="GtkComboBoxText" id="sectionname">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="has_entry">True</property>
-                        <property name="max_width_chars">18</property>
                         <child internal-child="entry">
                           <object class="GtkEntry" id="comboboxtext-entry1">
-                            <property name="can_focus">False</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
                           </object>
                         </child>
                       </object>
@@ -177,10 +228,10 @@
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="sectionpage|filelabel">_File name</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">filename</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -192,10 +243,10 @@
                           <object class="GtkLabel" id="ddelabel">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="sectionpage|ddelabel">DDE _command</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">filename</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -355,7 +406,7 @@
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">12</property>
                     <child>
-                      <object class="swlo-ConditionEdit" id="withcond">
+                      <object class="GtkEntry" id="withcond">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
@@ -388,10 +439,10 @@
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="sectionpage|condlabel">_With Condition</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">withcond</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>

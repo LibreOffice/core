@@ -231,6 +231,7 @@ sw/uiconfig/swriter/ui/savemonitordialog.ui://GtkLabel[@id='saving'] orphan-labe
 sw/uiconfig/swriter/ui/savemonitordialog.ui://GtkLabel[@id='printer'] orphan-label
 sw/uiconfig/swriter/ui/savemonitordialog.ui://GtkLabel[@id='printinfo'] orphan-label
 sw/uiconfig/swriter/ui/sectionpage.ui://GtkEntry[@id='filename'] duplicate-mnemonic
+sw/uiconfig/swriter/ui/sectionpage.ui://GtkEntry[@id='sectionnames-entry'] no-labelled-by
 sw/uiconfig/swriter/ui/selectaddressdialog.ui://GtkLabel[@id='desc'] orphan-label
 sw/uiconfig/swriter/ui/selectaddressdialog.ui://GtkLabel[@id='label2'] orphan-label
 sw/uiconfig/swriter/ui/selectaddressdialog.ui://svtlo-SvSimpleTableContainer[@id='sources:border'] no-labelled-by
