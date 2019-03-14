@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_36032245",
+        "filename": "xmloff/source/style/XMLFootnoteSeparatorImport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-14T06:38:27Z",
+      "side": 1,
+      "message": "maybe add a comment here why the default needs to be different?",
+      "range": {
+        "startLine": 84,
+        "startChar": 4,
+        "endLine": 84,
+        "endChar": 28
+      },
+      "revId": "818c2a33b2f03d49b3e64f7684810b280af81fbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
