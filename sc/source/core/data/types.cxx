@@ -23,11 +23,9 @@ bool RangeMatrix::isRangeValid() const
 }
 
 MultiDataCellState::MultiDataCellState() :
-    meState(StateType::Invalid),
-    mnCol1(-1), mnRow1(-1) {}
+    mnRow1(-1), mnCol1(-1), meState(StateType::Invalid) {}
 MultiDataCellState::MultiDataCellState( StateType eState ) :
-    meState(eState),
-    mnCol1(-1), mnRow1(-1) {}
+    mnRow1(-1), mnCol1(-1), meState(eState) {}
 
 }
 

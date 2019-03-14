@@ -1,0 +1,302 @@
+ScMergePatternState sc/inc/attarray.hxx:71
+/*   40     */ struct ScMergePatternState {
+/*   0    8 */    class std::unique_ptr<SfxItemSet, std::default_delete<SfxItemSet> > pItemSet
+/*   8    8 */    const class ScPatternAttr * pOld1
+/*  16    8 */    const class ScPatternAttr * pOld2
+/*  24    1 */    bool mbValidPatternId
+/* XXX 56 bit hole, try to pack */
+/*  32    8 */    unsigned long mnPatternId
+}
+ScAttrEntry sc/inc/attarray.hxx:81
+/*   16     */ struct ScAttrEntry {
+/*   0    4 */    int nEndRow
+/* XXX 32 bit hole, try to pack */
+/*   8    8 */    const class ScPatternAttr * pPattern
+}
+ScAttrArray sc/inc/attarray.hxx:92
+/*   72     */ struct ScAttrArray {
+/*   0    2 */    short nCol
+/*   2    2 */    short nTab
+/* XXX 32 bit hole, try to pack */
+/*   8    8 */    class ScDocument * const pDocument
+/*  16   56 */    class std::__debug::vector<ScAttrEntry, std::allocator<ScAttrEntry> > mvData
+}
+ScRefCellValue sc/inc/cellvalue.hxx:102
+/*   16     */ struct ScRefCellValue {
+/*   0    4 */    enum CellType meType
+/* XXX 32 bit hole, try to pack */
+/*   8    8 */    union {...} None
+}
+ScCellValue sc/inc/cellvalue.hxx:34
+/*   16     */ struct ScCellValue {
+/*   0    4 */    enum CellType meType
+/* XXX 32 bit hole, try to pack */
+/*   8    8 */    union {...} None
+}
+ScChangeTrackMsgInfo sc/inc/chgtrack.hxx:797
+/*   24     */ struct ScChangeTrackMsgInfo {
+/*   0    4 */    enum ScChangeTrackMsgType eMsgType
+/* XXX 32 bit hole, try to pack */
+/*   8    8 */    unsigned long nStartAction
+/*  16    8 */    unsigned long nEndAction
+}
+ScColorScaleEntry sc/inc/colorscale.hxx:46
+/*   48     */ struct ScColorScaleEntry {
+/*   0    8 */    double mnVal
+/*   8    4 */    class Color maColor
+/* XXX 32 bit hole, try to pack */
+/*  16    8 */    class std::unique_ptr<ScFormulaCell, std::default_delete<ScFormulaCell> > mpCell
+/*  24    8 */    class std::unique_ptr<ScFormulaListener, std::default_delete<ScFormulaListener> > mpListener
+/*  32    4 */    enum ScColorScaleEntryType meType
+/* XXX 32 bit hole, try to pack */
+/*  40    8 */    class ScConditionalFormat * mpFormat
+}
+ScRawToken sc/inc/compiler.hxx:103
+/*   88     */ struct ScRawToken {
+/*   0    2 */    enum OpCode eOp
+/*   2    1 */    enum formula::StackVar eType
+/* XXX 40 bit hole, try to pack */
+/*   8   72 */    union {...} None
+/*  80    8 */    class rtl::OUString maExternalName
+}
+ScCompiler::Convention sc/inc/compiler.hxx:244
+/*   24     */ struct ScCompiler::Convention {
+/*   0    8 */    int (**)(void) _vptr$Convention
+/*   8    4 */    const enum formula::FormulaGrammar::AddressConvention meConv
+/* XXX 32 bit hole, try to pack */
+/*  16    8 */    class std::unique_ptr<ScCharFlags [], std::default_delete<ScCharFlags []> > mpCharTable
+}
+ScCondDateFormatEntry sc/inc/conditio.hxx:527
+/*   40     */ struct ScCondDateFormatEntry {
+/*   0   16 */    class ScFormatEntry ScFormatEntry
+/*  16    4 */    enum condformat::ScCondFormatDateType meType
+/* XXX 32 bit hole, try to pack */
+/*  24    8 */    class std::unique_ptr<Date, std::default_delete<Date> > mpCache
+/*  32    8 */    class rtl::OUString maStyleName
+}
+ScDetOpList sc/inc/detdata.hxx:66
+/*   64     */ struct ScDetOpList {
+/*   0    1 */    bool bHasAddError
+/* XXX 56 bit hole, try to pack */
+/*   8   56 */    class std::__debug::vector<std::unique_ptr<ScDetOpData, std::default_delete<ScDetOpData> >, std::allocator<std::unique_ptr<ScDetOpData, std::default_delete<ScDetOpData> > > > aDetOpDataVector
+}
+ScDocStat sc/inc/document.hxx:255
+/*   40     */ struct ScDocStat {
+/*   0    8 */    class rtl::OUString aDocName
+/*   8    2 */    short nTableCount
+/* XXX 48 bit hole, try to pack */
+/*  16    8 */    unsigned long nCellCount
+/*  24    8 */    unsigned long nFormulaCount
+/*  32    2 */    unsigned short nPageCount
+}
+ScDPCollection::DBType sc/inc/dpobject.hxx:327
+/*   24     */ struct ScDPCollection::DBType {
+/*   0    4 */    const int mnSdbType
+/* XXX 32 bit hole, try to pack */
+/*   8    8 */    const class rtl::OUString maDBName
+/*  16    8 */    const class rtl::OUString maCommand
+}
+ScDPParentDimData sc/inc/dptabres.hxx:222
+/*   32     */ struct ScDPParentDimData {
+/*   0    4 */    const int mnOrder
+/* XXX 32 bit hole, try to pack */
+/*   8    8 */    const class ScDPDimension * mpParentDim
+/*  16    8 */    const class ScDPLevel * mpParentLevel
+/*  24    8 */    const class ScDPMember * mpMemberDesc
+}
+ScUndoAnchorData sc/inc/drwlayer.hxx:79
+/*   72     */ struct ScUndoAnchorData {
+/*   0   48 */    class SdrUndoObj SdrUndoObj
+/*  48    1 */    bool mbWasCellAnchored
+/*  49    1 */    bool mbWasResizeWithCell
+/* XXX 48 bit hole, try to pack */
+/*  56    8 */    class ScDocument * const mpDoc
+/*  64    2 */    const short mnTab
+}
+ScExternalRefLink sc/inc/externalrefmgr.hxx:73
+/*   96     */ struct ScExternalRefLink {
+/*   0   72 */    class sfx2::SvBaseLink sfx2::SvBaseLink
+/*  72    2 */    const unsigned short mnFileId
+/* XXX 48 bit hole, try to pack */
+/*  80    8 */    class ScDocument * const mpDoc
+/*  88    1 */    bool mbDoRefresh
+}
+ScExternalRefCache::CellFormat sc/inc/externalrefmgr.hxx:95
+/*   16     */ struct ScExternalRefCache::CellFormat {
+/*   0    1 */    bool mbIsSet
+/* XXX 8 bit hole, try to pack */
+/*   2    2 */    enum SvNumFormatType mnType
+/* XXX 32 bit hole, try to pack */
+/*   8    8 */    unsigned long mnIndex
+}
+ScDataBarInfo sc/inc/fillinfo.hxx:70
+/*   32     */ struct ScDataBarInfo {
+/*   0    8 */    double mnZero
+/*   8    4 */    class Color maColor
+/* XXX 32 bit hole, try to pack */
+/*  16    8 */    double mnLength
+/*  24    1 */    bool mbGradient
+/*  25    1 */    bool mbShowValue
+/* XXX 16 bit hole, try to pack */
+/*  28    4 */    class Color maAxisColor
+}
+sc::FormulaLogger sc/inc/formulalogger.hxx:43
+/*   24     */ struct sc::FormulaLogger {
+/*   0    8 */    class std::unique_ptr<osl::File, std::default_delete<osl::File> > mpLogFile
+/*   8    4 */    int mnNestLevel
+/* XXX 32 bit hole, try to pack */
+/*  16    8 */    const struct ScFormulaCellGroup * mpLastGroup
+}
+sc::FormulaResultValue sc/inc/formularesult.hxx:41
+/*   40     */ struct sc::FormulaResultValue {
+/*   0    4 */    const enum sc::FormulaResultValue::Type meType
+/* XXX 32 bit hole, try to pack */
+/*   8    8 */    double mfValue
+/*  16   16 */    class svl::SharedString maString
+/*  32    2 */    enum FormulaError mnError
+}
+ScAutoStyleHint sc/inc/hints.hxx:105
+/*   56     */ struct ScAutoStyleHint {
+/*   0   16 */    class SfxHint SfxHint
+/*  12   16 */    const class ScRange aRange
+/* XXX 32 bit hole, try to pack */
+/*  32    8 */    const class rtl::OUString aStyle1
+/*  40    8 */    const class rtl::OUString aStyle2
+/*  48    8 */    const unsigned long nTimeout
+}
+ScOutlineEntry sc/inc/olinetab.hxx:36
+/*   24     */ struct ScOutlineEntry {
+/*   0    4 */    int nStart
+/* XXX 32 bit hole, try to pack */
+/*   8    8 */    unsigned long nSize
+/*  16    1 */    bool bHidden
+/*  17    1 */    bool bVisible
+}
+ScPivotField sc/inc/pivot.hxx:122
+/*   56     */ struct ScPivotField {
+/*   0    2 */    short nCol
+/* XXX 48 bit hole, try to pack */
+/*   8    8 */    long mnOriginalDim
+/*  16    4 */    enum PivotFunc nFuncMask
+/*  20    1 */    unsigned char mnDupCount
+/* XXX 24 bit hole, try to pack */
+/*  24   32 */    struct com::sun::star::sheet::DataPilotFieldReference maFieldRef
+}
+ScPivotFuncData sc/inc/pivot.hxx:164
+/*   56     */ struct ScPivotFuncData {
+/*   0    2 */    short mnCol
+/* XXX 48 bit hole, try to pack */
+/*   8    8 */    long mnOriginalDim
+/*  16    4 */    enum PivotFunc mnFuncMask
+/*  20    1 */    unsigned char mnDupCount
+/* XXX 24 bit hole, try to pack */
+/*  24   32 */    struct com::sun::star::sheet::DataPilotFieldReference maFieldRef
+}
+ScPrintRangeSaver sc/inc/prnsave.hxx:53
+/*   16     */ struct ScPrintRangeSaver {
+/*   0    2 */    const short nTabCount
+/* XXX 48 bit hole, try to pack */
+/*   8    8 */    class std::unique_ptr<ScPrintSaverTab [], std::default_delete<ScPrintSaverTab []> > pData
+}
+ScProgress sc/inc/progress.hxx:50
+/*   16     */ struct ScProgress {
+/*   0    1 */    bool bEnabled
+/* XXX 56 bit hole, try to pack */
+/*   8    8 */    class std::unique_ptr<SfxProgress, std::default_delete<SfxProgress> > pProgress
+}
+ScQueryEntry::Item sc/inc/queryentry.hxx:41
+/*   40     */ struct ScQueryEntry::Item {
+/*   0    4 */    enum ScQueryEntry::QueryType meType
+/* XXX 32 bit hole, try to pack */
+/*   8    8 */    double mfVal
+/*  16   16 */    class svl::SharedString maString
+/*  32    1 */    bool mbMatchEmpty
+}
+ScQueryParamTable sc/inc/queryparam.hxx:104
+/*   32     */ struct ScQueryParamTable {
+/*   0    8 */    int (**)(void) _vptr$ScQueryParamTable
+/*   8    2 */    short nCol1
+/* XXX 16 bit hole, try to pack */
+/*  12    4 */    int nRow1
+/*  16    2 */    short nCol2
+/* XXX 16 bit hole, try to pack */
+/*  20    4 */    int nRow2
+/*  24    2 */    short nTab
+}
+ScRefFinder sc/inc/reffind.hxx:29
+/*   48     */ struct ScRefFinder {
+/*   0    8 */    class rtl::OUString maFormula
+/*   8    4 */    const enum formula::FormulaGrammar::AddressConvention meConv
+/* XXX 32 bit hole, try to pack */
+/*  16    8 */    class ScDocument * const mpDoc
+/*  24    8 */    const class ScAddress maPos
+/*  32    4 */    int mnFound
+/*  36    4 */    int mnSelStart
+/*  40    4 */    int mnSelEnd
+}
+ScMatrix sc/inc/scmatrix.hxx:118
+/*   24     */ struct ScMatrix {
+/*   0    8 */    unsigned long nRefCnt
+/*   8    1 */    bool mbCloneIfConst
+/* XXX 56 bit hole, try to pack */
+/*  16    8 */    class std::unique_ptr<ScMatrixImpl, std::default_delete<ScMatrixImpl> > pImpl
+}
+ScSetStringParam sc/inc/stringutil.hxx:101
+/*   32     */ struct ScSetStringParam {
+/*   0    8 */    class SvNumberFormatter * mpNumFormatter
+/*   8    1 */    bool mbDetectNumberFormat
+/* XXX 24 bit hole, try to pack */
+/*  12    4 */    enum ScSetStringParam::TextFormatPolicy meSetTextNumFormat
+/*  16    1 */    bool mbHandleApostrophe
+/* XXX 24 bit hole, try to pack */
+/*  20    4 */    enum sc::StartListeningType meStartListening
+/*  24    1 */    bool mbCheckLinkFormula
+}
+ScInputStringType sc/inc/stringutil.hxx:124
+/*   32     */ struct ScInputStringType {
+/*   0    4 */    enum ScInputStringType::StringType meType
+/* XXX 32 bit hole, try to pack */
+/*   8    8 */    class rtl::OUString maText
+/*  16    8 */    double mfValue
+/*  24    2 */    enum SvNumFormatType mnFormatType
+}
+ScHeaderFooterTextData sc/inc/textuno.hxx:110
+/*   48     */ struct ScHeaderFooterTextData {
+/*   0    8 */    class std::unique_ptr<EditTextObject, std::default_delete<EditTextObject> > mpTextObj
+/*   8    8 */    class com::sun::star::uno::WeakReference<com::sun::star::sheet::XHeaderFooterContent> xContentObj
+/*  16    4 */    const enum ScHeaderFooterPart nPart
+/* XXX 32 bit hole, try to pack */
+/*  24    8 */    class std::unique_ptr<ScEditEngineDefaulter, std::default_delete<ScEditEngineDefaulter> > pEditEngine
+/*  32    8 */    class std::unique_ptr<SvxEditEngineForwarder, std::default_delete<SvxEditEngineForwarder> > pForwarder
+/*  40    1 */    bool bDataValid
+}
+ScExternalSingleRefToken sc/inc/token.hxx:131
+/*   56     */ struct ScExternalSingleRefToken {
+/*   0   16 */    class formula::FormulaToken formula::FormulaToken
+/*  16    2 */    const unsigned short mnFileId
+/* XXX 48 bit hole, try to pack */
+/*  24   16 */    const class svl::SharedString maTabName
+/*  40   12 */    struct ScSingleRefData maSingleRef
+}
+ScExternalDoubleRefToken sc/inc/token.hxx:155
+/*   64     */ struct ScExternalDoubleRefToken {
+/*   0   16 */    class formula::FormulaToken formula::FormulaToken
+/*  16    2 */    const unsigned short mnFileId
+/* XXX 48 bit hole, try to pack */
+/*  24   16 */    const class svl::SharedString maTabName
+/*  40   24 */    struct ScComplexRefData maDoubleRef
+}
+ScExternalNameToken sc/inc/token.hxx:182
+/*   40     */ struct ScExternalNameToken {
+/*   0   16 */    class formula::FormulaToken formula::FormulaToken
+/*  16    2 */    const unsigned short mnFileId
+/* XXX 48 bit hole, try to pack */
+/*  24   16 */    const class svl::SharedString maName
+}
+sc::CompileFormulaContext sc/inc/tokenstringcontext.hxx:53
+/*   72     */ struct sc::CompileFormulaContext {
+/*   0    8 */    class ScDocument * const mpDoc
+/*   8    4 */    enum formula::FormulaGrammar::Grammar meGram
+/* XXX 32 bit hole, try to pack */
+/*  16   56 */    class std::__debug::vector<rtl::OUString, std::allocator<rtl::OUString> > maTabNames
+}
