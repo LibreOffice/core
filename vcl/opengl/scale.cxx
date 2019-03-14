@@ -349,7 +349,7 @@ void OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, B
     {
         ImplScaleFilter( xContext, rScaleX, rScaleY, GL_NEAREST );
     }
-    if( nScaleFlag == BmpScaleFlag::BiLinear )
+    else if( nScaleFlag == BmpScaleFlag::BiLinear )
     {
         ImplScaleFilter( xContext, rScaleX, rScaleY, GL_LINEAR );
     }
@@ -360,7 +360,7 @@ void OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, B
         ImplScaleConvolution( xContext, rScaleX, rScaleY, aKernel );
     }
     else if( nScaleFlag == BmpScaleFlag::BestQuality && rScaleX <= 1 && rScaleY <= 1 )
-    { // Use are scaling for best quality, but only if downscaling.
+    { // Use area scaling for best quality, but only if downscaling.
         ImplScaleArea( xContext, rScaleX, rScaleY );
     }
     else if( nScaleFlag == BmpScaleFlag::Lanczos || nScaleFlag == BmpScaleFlag::BestQuality  )
