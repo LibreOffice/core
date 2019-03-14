@@ -13,48 +13,41 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:52:46 using:
+ Generated on 2019-04-29 21:18:44 using:
  ./bin/update_pch oox oox --cutoff=6 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./oox/inc/pch/precompiled_oox.hxx "make oox.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
-#include <cstdlib>
 #include <exception>
 #include <functional>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
-#include <list>
 #include <map>
 #include <memory>
 #include <new>
 #include <ostream>
 #include <set>
-#include <sstream>
-#include <stdarg.h>
-#include <stdlib.h>
 #include <string.h>
-#include <string>
-#include <unordered_set>
+#include <type_traits>
 #include <utility>
 #include <vector>
 #include <boost/algorithm/string.hpp>
 #include <boost/optional.hpp>
-#include <boost/optional/optional.hpp>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
-#include <osl/mutex.h>
 #include <osl/mutex.hxx>
-#include <osl/process.h>
 #include <osl/thread.h>
-#include <osl/thread.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/character.hxx>
 #include <rtl/cipher.h>
@@ -73,31 +66,34 @@
 #include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/uuid.h>
 #include <sal/config.h>
-#include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
+#include <vcl/GraphicExternalLink.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/animate/Animation.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/errcode.hxx>
-#include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/mapmod.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/vectorgraphicdata.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/vector/b2dsize.hxx>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -105,31 +101,27 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -141,19 +133,15 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/xml/Attribute.hpp>
-#include <com/sun/star/xml/FastAttribute.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
-#include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
-#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
-#include <comphelper/anytostring.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -183,17 +171,18 @@
 #include <drawingml/textspacing.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
 #include <i18nlangtag/lang.h>
+#include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <sax/fastattribs.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/saxdllapi.h>
-#include <svtools/svtdllapi.h>
+#include <svl/poolitem.hxx>
+#include <svl/svldllapi.h>
 #include <svx/msdffdef.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
-#include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
@@ -204,6 +193,8 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/unotoolsdllapi.h>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
 #include <oox/core/contexthandler.hxx>
 #include <oox/core/contexthandler2.hxx>
 #include <oox/core/fragmenthandler.hxx>
@@ -237,6 +228,8 @@
 #include <oox/ole/olestorage.hxx>
 #include <oox/ppt/comments.hxx>
 #include <oox/ppt/headerfooter.hxx>
+#include <oox/ppt/pptfilterhelpers.hxx>
+#include <oox/ppt/pptimport.hxx>
 #include <oox/ppt/pptshape.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #include <oox/token/namespaces.hxx>
@@ -246,5 +239,6 @@
 #include <oox/vml/vmldrawing.hxx>
 #include <oox/vml/vmlshape.hxx>
 #include <oox/vml/vmlshapecontainer.hxx>
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

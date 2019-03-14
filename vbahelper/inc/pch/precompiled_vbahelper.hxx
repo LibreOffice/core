@@ -13,115 +13,95 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:55:39 using:
+ Generated on 2019-04-29 21:19:18 using:
  ./bin/update_pch vbahelper vbahelper --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./vbahelper/inc/pch/precompiled_vbahelper.hxx "make vbahelper.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <cassert>
 #include <cstddef>
 #include <cstring>
 #include <deque>
 #include <exception>
 #include <functional>
+#include <limits>
 #include <memory>
-#include <set>
-#include <unordered_map>
+#include <new>
 #include <utility>
 #include <vector>
-#include <boost/optional.hpp>
+#include <boost/functional/hash.hpp>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
-#include <osl/module.hxx>
 #include <osl/mutex.hxx>
-#include <osl/thread.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/string.h>
 #include <rtl/stringutils.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/types.h>
-#include <vcl/bitmap.hxx>
-#include <vcl/button.hxx>
-#include <vcl/cursor.hxx>
+#include <vcl/IDialogRenderable.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
-#include <vcl/event.hxx>
-#include <vcl/inputctx.hxx>
-#include <vcl/inputtypes.hxx>
 #include <vcl/keycodes.hxx>
-#include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/region.hxx>
-#include <vcl/salnativewidgets.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <basic/basicdllapi.h>
-#include <basic/codecompletecache.hxx>
 #include <basic/sbdef.hxx>
 #include <basic/sberrors.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbxdef.hxx>
-#include <basic/sbxform.hxx>
-#include <basic/sbxmeth.hxx>
 #include <basic/sbxobj.hxx>
-#include <basic/sbxprop.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/document/CmisVersion.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/script/XInvocation.hpp>
-#include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/security/DocumentSignatureInformation.hpp>
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <comphelper/embeddedobjectcontainer.hxx>
+#include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <sfx2/XmlIdRegistry.hxx>
 #include <sfx2/dllapi.h>
-#include <sfx2/objsh.hxx>
 #include <sfx2/shell.hxx>
-#include <sfx2/signaturestate.hxx>
-#include <sot/formats.hxx>
-#include <sot/object.hxx>
 #include <svl/hint.hxx>
 #include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
-#include <svl/style.hxx>
 #include <svl/svldllapi.h>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
@@ -129,11 +109,14 @@
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>
 #include <tools/wintypes.hxx>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
 #include <vbahelper/helperdecl.hxx>
 #include <vbahelper/vbadllapi.h>
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbashape.hxx>
 #include <vbahelper/vbashaperange.hxx>
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

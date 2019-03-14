@@ -13,60 +13,52 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:52:43 using:
+ Generated on 2019-04-29 21:18:41 using:
  ./bin/update_pch hwpfilter hwp --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./hwpfilter/inc/pch/precompiled_hwp.hxx "make hwpfilter.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <assert.h>
 #include <cassert>
-#include <config_global.h>
 #include <cstddef>
-#include <cstdlib>
-#include <cstring>
 #include <errno.h>
+#include <limits>
 #include <math.h>
 #include <memory>
 #include <new>
 #include <ostream>
-#include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string>
 #include <type_traits>
 #include <utility>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
-#include <osl/endian.h>
-#include <osl/file.h>
 #include <osl/interlck.h>
-#include <osl/pipe.h>
-#include <osl/process.h>
-#include <osl/security.h>
-#include <osl/socket.h>
-#include <osl/time.h>
-#include <rtl/alloc.h>
-#include <rtl/byteseq.h>
 #include <rtl/character.hxx>
-#include <rtl/locale.h>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
-#include <rtl/tencinfo.h>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
-#include <sal/detail/log.h>
-#include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
-#include <comphelper/fileformat.h>
+#include <vcl/dllapi.h>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <comphelper/newarray.hxx>
-#include <tools/solar.h>
+#include <o3tl/underlyingenumvalue.hxx>
 #include <tools/toolsdllapi.h>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
