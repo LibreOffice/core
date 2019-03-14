@@ -13,26 +13,34 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:52:44 using:
+ Generated on 2019-04-29 21:18:43 using:
  ./bin/update_pch lotuswordpro lwpft --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./lotuswordpro/inc/pch/precompiled_lwpft.hxx "make lotuswordpro.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
+#include <algorithm>
 #include <assert.h>
 #include <cassert>
 #include <cstddef>
 #include <cstring>
+#include <limits>
 #include <memory>
 #include <new>
 #include <ostream>
+#include <set>
 #include <stddef.h>
 #include <stdexcept>
 #include <stdio.h>
 #include <string.h>
+#include <type_traits>
+#include <utility>
 #include <vector>
 #include <boost/cast.hpp>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.h>
@@ -56,33 +64,23 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <vcl/bitmap.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/svapp.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/ucb/ContentCreationException.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <comphelper/fileformat.h>
-#include <cppu/cppudllapi.h>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/numeric.hxx>
+#include <o3tl/safeint.hxx>
 #include <sfx2/dllapi.h>
 #include <tools/color.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include <ucbhelper/content.hxx>
-#include <ucbhelper/ucbhelperdllapi.h>
 #include <xmloff/attrlist.hxx>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

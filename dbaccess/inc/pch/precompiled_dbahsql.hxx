@@ -13,26 +13,47 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2018-01-22 10:22:30 using:
- bin/update_pch dbaccess dbahsql --cutoff=2 --exclude:system --exclude:module --exclude:local
+ Generated on 2019-04-29 21:18:37 using:
+ ./bin/update_pch dbaccess dbahsql --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./dbaccess/inc/pch/precompiled_dbahsql.hxx "make dbaccess.build" --find-conflicts
 */
 
-#include <cassert>
-#include <cstddef>
-#include <cstring>
-#include <rtl/strbuf.hxx>
-#include <rtl/stringutils.hxx>
-#include <rtl/ustrbuf.h>
+#if PCH_LEVEL >= 1
+#include <vector>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.hxx>
-#include <sal/config.h>
-#include <sal/types.h>
+#include <sal/log.hxx>
+#include <vcl/weld.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
+#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/io/TextInputStream.hpp>
+#include <com/sun/star/io/WrongFormatException.hpp>
+#include <com/sun/star/io/XConnectable.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <comphelper/comphelperdllapi.h>
+#include <com/sun/star/sdbc/SQLException.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/sdbc/XParameters.hpp>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Time.hpp>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
+#include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <tools/stream.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -115,7 +115,7 @@ FontDescriptor  getDefaultFont()
     FontDescriptor aReturn;
     aReturn.Slant = FontSlant_DONTKNOW;
     aReturn.Underline = FontUnderline::DONTKNOW;
-    aReturn.Strikeout = FontStrikeout::DONTKNOW;
+    aReturn.Strikeout = com::sun::star::awt::FontStrikeout::DONTKNOW;
     return aReturn;
 }
 

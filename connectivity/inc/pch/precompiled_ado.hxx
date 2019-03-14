@@ -13,18 +13,25 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:51:49 using:
+ Generated on 2019-04-29 21:18:34 using:
  ./bin/update_pch connectivity ado --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_ado.hxx "make connectivity.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <cstdlib>
+#include <limits>
 #include <memory>
 #include <oledb.h>
+#include <sstream>
+#include <string>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
@@ -35,10 +42,15 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
+#include <sal/detail/log.h>
+#include <sal/log.hxx>
 #include <sal/macros.h>
+#include <sal/saldllapi.h>
+#include <sal/types.h>
 #include <salhelper/singletonref.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
@@ -52,9 +64,8 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/util/Date.hpp>
-#include <comphelper/extract.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
@@ -63,10 +74,13 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
+#endif // PCH_LEVEL >= 4
 
 // Cleanup windows header macro pollution.
 #if defined(_WIN32) && defined(WINAPI)

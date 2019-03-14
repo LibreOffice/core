@@ -13,30 +13,36 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:53:38 using:
+ Generated on 2019-04-29 21:16:41 using:
  ./bin/update_pch sc vbaobj --cutoff=1 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./sc/inc/pch/precompiled_vbaobj.hxx "make sc.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
-#include <helpids.h>
 #include <map>
 #include <memory>
 #include <unordered_map>
 #include <vector>
 #include <boost/optional.hpp>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <sal/macros.h>
+#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
-#include <attrib.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <basic/basmgr.hxx>
 #include <basic/sberrors.hxx>
 #include <basic/sbmeth.hxx>
@@ -45,8 +51,6 @@
 #include <basic/sbuno.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbxobj.hxx>
-#include <cellsuno.hxx>
-#include <columnspanset.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
@@ -62,6 +66,7 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyVetoException.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
@@ -103,6 +108,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -223,43 +229,33 @@
 #include <com/sun/star/view/XControlAccess.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
-#include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <comphelper/unwrapargs.hxx>
-#include <compiler.hxx>
-#include <convuno.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <defaultsoptions.hxx>
-#include <docoptio.hxx>
-#include <document.hxx>
-#include <docuno.hxx>
-#include <drwlayer.hxx>
+#include <editeng/eeitem.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <filter/msfilter/util.hxx>
-#include <global.hxx>
 #include <i18nutil/paper.hxx>
-#include <macromgr.hxx>
-#include <markdata.hxx>
-#include <miscuno.hxx>
-#include <nameuno.hxx>
 #include <o3tl/any.hxx>
-#include <olinetab.hxx>
 #include <ooo/vba/XCommandBarControls.hpp>
+#include <ooo/vba/XCommandBars.hpp>
 #include <ooo/vba/XControlProvider.hpp>
 #include <ooo/vba/XExecutableDialog.hpp>
 #include <ooo/vba/excel/Constants.hpp>
 #include <ooo/vba/excel/Range.hpp>
 #include <ooo/vba/excel/XApplication.hpp>
+#include <ooo/vba/excel/XApplicationOutgoing.hpp>
 #include <ooo/vba/excel/XAxis.hpp>
 #include <ooo/vba/excel/XDialog.hpp>
+#include <ooo/vba/excel/XFont.hpp>
 #include <ooo/vba/excel/XFormatCondition.hpp>
 #include <ooo/vba/excel/XOLEObject.hpp>
 #include <ooo/vba/excel/XPivotTable.hpp>
@@ -328,14 +324,6 @@
 #include <ooo/vba/office/MsoFileDialogType.hpp>
 #include <ooo/vba/office/MsoHyperlinkType.hpp>
 #include <ooo/vba/office/MsoShapeType.hpp>
-#include <patattr.hxx>
-#include <queryentry.hxx>
-#include <rangelst.hxx>
-#include <rangenam.hxx>
-#include <scabstdlg.hxx>
-#include <scextopt.hxx>
-#include <scitems.hxx>
-#include <scmod.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -351,17 +339,12 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svxcommands.h>
 #include <svx/unoshape.hxx>
 #include <svx/xtable.hxx>
-#include <tabprotection.hxx>
-#include <tokenarray.hxx>
-#include <tokenuno.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
-#include <unonames.hxx>
 #include <unotools/eventcfg.hxx>
 #include <vbahelper/helperdecl.hxx>
 #include <vbahelper/vbaaccesshelper.hxx>
@@ -369,5 +352,38 @@
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbashape.hxx>
 #include <vbahelper/vbashapes.hxx>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#include <attrib.hxx>
+#include <cellsuno.hxx>
+#include <columnspanset.hxx>
+#include <compiler.hxx>
+#include <convuno.hxx>
+#include <defaultsoptions.hxx>
+#include <docoptio.hxx>
+#include <document.hxx>
+#include <docuno.hxx>
+#include <drwlayer.hxx>
+#include <global.hxx>
+#include <macromgr.hxx>
+#include <markdata.hxx>
+#include <miscuno.hxx>
+#include <nameuno.hxx>
+#include <olinetab.hxx>
+#include <patattr.hxx>
+#include <queryentry.hxx>
+#include <rangelst.hxx>
+#include <rangenam.hxx>
+#include <scabstdlg.hxx>
+#include <scdll.hxx>
+#include <scextopt.hxx>
+#include <scitems.hxx>
+#include <scmod.hxx>
+#include <sortparam.hxx>
+#include <tabprotection.hxx>
+#include <tokenarray.hxx>
+#include <tokenuno.hxx>
+#include <unonames.hxx>
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

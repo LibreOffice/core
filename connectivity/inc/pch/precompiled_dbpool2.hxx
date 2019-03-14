@@ -13,38 +13,33 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:51:53 using:
+ Generated on 2019-04-29 21:18:34 using:
  ./bin/update_pch connectivity dbpool2 --cutoff=5 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_dbpool2.hxx "make connectivity.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
-#include <config_typesizes.h>
 #include <cstddef>
-#include <cstdlib>
 #include <cstring>
-#include <functional>
 #include <iomanip>
+#include <limits>
 #include <new>
 #include <ostream>
-#include <sstream>
 #include <stddef.h>
-#include <stdlib.h>
 #include <string.h>
-#include <string>
 #include <utility>
 #include <vector>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
-#include <osl/doublecheckedlocking.h>
-#include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <rtl/alloc.h>
-#include <rtl/instance.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
@@ -64,34 +59,26 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
 #include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/genfunc.hxx>
-#include <comphelper/comphelperdllapi.h>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
-#include <cppuhelper/implbase_ex.hxx>
-#include <cppuhelper/implbase_ex_post.hxx>
-#include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
@@ -99,5 +86,8 @@
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -13,23 +13,24 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:51:47 using:
+ Generated on 2019-04-29 21:18:33 using:
  ./bin/update_pch comphelper comphelper --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./comphelper/inc/pch/precompiled_comphelper.hxx "make comphelper.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
-#include <config_global.h>
-#include <config_typesizes.h>
 #include <cstddef>
 #include <cstring>
-#include <exception>
+#include <deque>
+#include <float.h>
 #include <functional>
 #include <initializer_list>
 #include <iomanip>
+#include <limits.h>
 #include <limits>
 #include <map>
 #include <math.h>
@@ -37,16 +38,17 @@
 #include <new>
 #include <ostream>
 #include <stddef.h>
-#include <stdio.h>
 #include <string.h>
 #include <type_traits>
 #include <unordered_map>
 #include <utility>
 #include <vector>
 #include <boost/optional.hpp>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
-#include <osl/file.h>
+#include <osl/endian.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
@@ -54,13 +56,12 @@
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
-#include <rtl/byteseq.h>
-#include <rtl/byteseq.hxx>
 #include <rtl/character.hxx>
 #include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
+#include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
@@ -79,12 +80,46 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
+#include <sal/mathconf.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>
+#include <vcl/GraphicExternalLink.hxx>
+#include <vcl/alpha.hxx>
+#include <vcl/animate/Animation.hxx>
+#include <vcl/animate/AnimationBitmap.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/checksum.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/gfxlink.hxx>
+#include <vcl/mapmod.hxx>
+#include <vcl/region.hxx>
+#include <vcl/scopedbitmapaccess.hxx>
+#include <vcl/task.hxx>
+#include <vcl/timer.hxx>
+#include <vcl/vectorgraphicdata.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
+#include <basegfx/basegfxdllapi.h>
+#include <basegfx/color/bcolor.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/point/b2ipoint.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/b2dtuple.hxx>
+#include <basegfx/tuple/b2ituple.hxx>
+#include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/vector/b2dsize.hxx>
+#include <basegfx/vector/b2dvector.hxx>
+#include <basegfx/vector/b2enums.hxx>
+#include <basegfx/vector/b2ivector.hxx>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
@@ -100,23 +135,18 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertySetOption.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/uno/Any.h>
@@ -129,8 +159,8 @@
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
+#include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
@@ -141,6 +171,7 @@
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -148,14 +179,20 @@
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/underlyingenumvalue.hxx>
+#include <tools/color.hxx>
+#include <tools/gen.hxx>
+#include <tools/link.hxx>
+#include <tools/mapunit.hxx>
+#include <tools/solar.h>
+#include <tools/toolsdllapi.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
@@ -163,17 +200,17 @@
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
-#include <comphelper/PropertyInfoHash.hxx>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
 #include <comphelper/accessiblecontexthelper.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/property.hxx>
 #include <comphelper/propertycontainerhelper.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/solarmutex.hxx>
-#include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

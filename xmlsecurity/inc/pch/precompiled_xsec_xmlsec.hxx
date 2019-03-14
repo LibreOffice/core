@@ -13,31 +13,30 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:55:56 using:
+ Generated on 2019-04-29 21:19:21 using:
  ./bin/update_pch xmlsecurity xsec_xmlsec --cutoff=2 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./xmlsecurity/inc/pch/precompiled_xsec_xmlsec.hxx "make xmlsecurity.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstdlib>
 #include <cstring>
-#include <exception>
 #include <iomanip>
 #include <memory>
 #include <new>
 #include <ostream>
 #include <pk11pub.h>
-#include <sstream>
-#include <stdio.h>
+#include <stddef.h>
 #include <string.h>
-#include <string>
+#include <type_traits>
 #include <utility>
-#include <xmlsec-wrapper.h>
-#include <xsecxmlsecdllapi.h>
+#include <vector>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <osl/file.h>
@@ -51,8 +50,6 @@
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.h>
 #include <rtl/bootstrap.hxx>
-#include <rtl/byteseq.h>
-#include <rtl/byteseq.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/malformeduriexception.hxx>
 #include <rtl/random.h>
@@ -69,26 +66,31 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
-#include <sal/detail/log.h>
 #include <sal/log.hxx>
+#include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
-#include <biginteger.hxx>
+#include <sal/typesizes.h>
+#include <salhelper/singletonref.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/errcode.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
-#include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
@@ -102,33 +104,40 @@
 #include <com/sun/star/xml/csax/XCompressedDocumentHandler.hpp>
 #include <com/sun/star/xml/csax/XMLAttribute.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
-#include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/xml/wrapper/XXMLDocumentWrapper.hpp>
-#include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
+#include <comphelper/comphelperdllapi.h>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakagg.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <libxml/tree.h>
+#include <o3tl/typed_flags_set.hxx>
+#include <o3tl/underlyingenumvalue.hxx>
+#include <svl/svldllapi.h>
+#include <tools/lineend.hxx>
+#include <tools/ref.hxx>
+#include <tools/stream.hxx>
+#include <tools/toolsdllapi.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
+#include <unotools/unotoolsdllapi.h>
 #include <xmloff/dllapi.h>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#include <xmlsec-wrapper.h>
+#include <xsecxmlsecdllapi.h>
+#endif // PCH_LEVEL >= 4
 
 // Cleanup windows header macro pollution.
 #if defined(_WIN32) && defined(WINAPI)
