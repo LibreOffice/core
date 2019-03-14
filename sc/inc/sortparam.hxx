@@ -33,8 +33,8 @@ struct ScQueryParam;
 
 struct ScSortKeyState
 {
-    bool     bDoSort;
     SCCOLROW nField;
+    bool     bDoSort;
     bool     bAscending;
 };
 

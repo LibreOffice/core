@@ -1,0 +1,109 @@
+ScClipParam sc/inc/clipparam.hxx:38
+/*   88     */ struct ScClipParam {
+/*   0   48 */    class ScRangeList maRanges
+/*  48    4 */    enum ScClipParam::Direction meDirection
+/*  52    1 */    bool mbCutMode
+/* XXX 24 bit hole, try to pack */
+/*  56    4 */    unsigned int mnSourceDocID
+/* XXX 32 bit hole, try to pack */
+/*  64   24 */    class std::vector<ScRangeList, std::allocator<ScRangeList> > maProtectedChartRangesVector
+}
+ScIconSetFormatData sc/inc/colorscale.hxx:334
+/*   64     */ struct ScIconSetFormatData {
+/*   0    4 */    enum ScIconSetType eIconSetType
+/*   4    1 */    bool mbShowValue
+/*   5    1 */    bool mbReverse
+/* XXX 16 bit hole, try to pack */
+/*   8   24 */    class std::vector<std::unique_ptr<ScColorScaleEntry, std::default_delete<ScColorScaleEntry> >, std::allocator<std::unique_ptr<ScColorScaleEntry, std::default_delete<ScColorScaleEntry> > > > m_Entries
+/*  32    1 */    bool mbCustom
+/* XXX 56 bit hole, try to pack */
+/*  40   24 */    class std::vector<std::pair<ScIconSetType, int>, std::allocator<std::pair<ScIconSetType, int> > > maCustomVector
+}
+ScColorScaleEntry sc/inc/colorscale.hxx:46
+/*   48     */ struct ScColorScaleEntry {
+/*   0    8 */    double mnVal
+/*   8    4 */    class Color maColor
+/* XXX 32 bit hole, try to pack */
+/*  16    8 */    class std::unique_ptr<ScFormulaCell, std::default_delete<ScFormulaCell> > mpCell
+/*  24    8 */    class std::unique_ptr<ScFormulaListener, std::default_delete<ScFormulaListener> > mpListener
+/*  32    4 */    enum ScColorScaleEntryType meType
+/* XXX 32 bit hole, try to pack */
+/*  40    8 */    class ScConditionalFormat * mpFormat
+}
+ScDetOpList sc/inc/detdata.hxx:66
+/*   32     */ struct ScDetOpList {
+/*   0    1 */    bool bHasAddError
+/* XXX 56 bit hole, try to pack */
+/*   8   24 */    class std::vector<std::unique_ptr<ScDetOpData, std::default_delete<ScDetOpData> >, std::allocator<std::unique_ptr<ScDetOpData, std::default_delete<ScDetOpData> > > > aDetOpDataVector
+}
+ScDocRowHeightUpdater::TabRanges sc/inc/dociter.hxx:569
+/*   24     */ struct ScDocRowHeightUpdater::TabRanges {
+/*   0    2 */    short mnTab
+/* XXX 48 bit hole, try to pack */
+/*   8   16 */    class std::shared_ptr<ScFlatBoolRowSegments> mpRanges
+}
+ScDPFilteredCache::Criterion sc/inc/dpfilteredcache.hxx:92
+/*   24     */ struct ScDPFilteredCache::Criterion {
+/*   0    4 */    int mnFieldIndex
+/* XXX 32 bit hole, try to pack */
+/*   8   16 */    class std::shared_ptr<ScDPFilteredCache::FilterBase> mpFilter
+}
+sc::RefQueryFormulaGroup sc/inc/listenerquery.hxx:46
+/*   88     */ struct sc::RefQueryFormulaGroup {
+/*   0   16 */    class SvtListener::QueryBase SvtListener::QueryBase
+/*  12   16 */    class ScRange maSkipRange
+/* XXX 32 bit hole, try to pack */
+/*  32   56 */    class std::unordered_map<short, std::unordered_map<short, std::vector<int, std::allocator<int> >, std::hash<short>, std::equal_to<short>, std::allocator<std::pair<short const, std::vector<int, std::allocator<int> > > > >, std::hash<short>, std::equal_to<short>, std::allocator<std::pair<short const, std::unordered_map<short, std::vector<int, std::allocator<int> >, std::hash<short>, std::equal_to<short>, std::allocator<std::pair<short const, std::vector<int, std::allocator<int> > > > > > > > maTabs
+}
+ScPivotField sc/inc/pivot.hxx:122
+/*   56     */ struct ScPivotField {
+/*   0    2 */    short nCol
+/* XXX 48 bit hole, try to pack */
+/*   8    8 */    long mnOriginalDim
+/*  16    4 */    enum PivotFunc nFuncMask
+/*  20    1 */    unsigned char mnDupCount
+/* XXX 24 bit hole, try to pack */
+/*  24   32 */    struct com::sun::star::sheet::DataPilotFieldReference maFieldRef
+}
+ScPivotFuncData sc/inc/pivot.hxx:164
+/*   56     */ struct ScPivotFuncData {
+/*   0    2 */    short mnCol
+/* XXX 48 bit hole, try to pack */
+/*   8    8 */    long mnOriginalDim
+/*  16    4 */    enum PivotFunc mnFuncMask
+/*  20    1 */    unsigned char mnDupCount
+/* XXX 24 bit hole, try to pack */
+/*  24   32 */    struct com::sun::star::sheet::DataPilotFieldReference maFieldRef
+}
+ScSimpleRangeList::Range sc/inc/simplerangelist.hxx:40
+/*   16     */ struct ScSimpleRangeList::Range {
+/*   0    2 */    short mnCol1
+/* XXX 16 bit hole, try to pack */
+/*   4    4 */    int mnRow1
+/*   8    2 */    short mnCol2
+/* XXX 16 bit hole, try to pack */
+/*  12    4 */    int mnRow2
+}
+ScExternalSingleRefToken sc/inc/token.hxx:131
+/*   56     */ struct ScExternalSingleRefToken {
+/*   0   16 */    class formula::FormulaToken formula::FormulaToken
+/*  16    2 */    const unsigned short mnFileId
+/* XXX 48 bit hole, try to pack */
+/*  24   16 */    const class svl::SharedString maTabName
+/*  40   12 */    struct ScSingleRefData maSingleRef
+}
+ScExternalDoubleRefToken sc/inc/token.hxx:155
+/*   64     */ struct ScExternalDoubleRefToken {
+/*   0   16 */    class formula::FormulaToken formula::FormulaToken
+/*  16    2 */    const unsigned short mnFileId
+/* XXX 48 bit hole, try to pack */
+/*  24   16 */    const class svl::SharedString maTabName
+/*  40   24 */    struct ScComplexRefData maDoubleRef
+}
+ScExternalNameToken sc/inc/token.hxx:182
+/*   40     */ struct ScExternalNameToken {
+/*   0   16 */    class formula::FormulaToken formula::FormulaToken
+/*  16    2 */    const unsigned short mnFileId
+/* XXX 48 bit hole, try to pack */
+/*  24   16 */    const class svl::SharedString maName
+}
