@@ -71,6 +71,7 @@ public:
     OUString get_text() const { return m_xControl->get_text(); }
     bool get_sensitive() const { return m_xControl->get_sensitive(); }
     void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
+    void hide() { m_xControl->hide(); }
     weld::Entry& get_widget() { return *m_xControl; }
 
     void ShowBrackets(bool bShow) { bBrackets = bShow; }
