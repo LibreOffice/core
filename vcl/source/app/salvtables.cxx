@@ -621,6 +621,11 @@ public:
         return VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
     }
 
+    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override
+    {
+        return m_xWidget->GetDropTarget();
+    }
+
     SystemWindow* getSystemWindow()
     {
         return m_xWidget->GetSystemWindow();

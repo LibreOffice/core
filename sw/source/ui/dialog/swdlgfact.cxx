@@ -778,12 +778,10 @@ VclPtr<AbstractSwAsciiFilterDlg> SwAbstractDialogFactory_Impl::CreateSwAsciiFilt
     return VclPtr<AbstractSwAsciiFilterDlg_Impl>::Create(std::make_unique<SwAsciiFilterDlg>(pParent, rDocSh, pStream));
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwInsertBookmarkDlg( vcl::Window *pParent,
-                                                                           SwWrtShell &rSh,
-                                                                           SfxRequest& rReq )
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwInsertBookmarkDlg(weld::Window *pParent,
+                                                                                  SwWrtShell &rSh, SfxRequest& rReq)
 {
-    VclPtr<SwInsertBookmarkDlg> pDlg = VclPtr<SwInsertBookmarkDlg>::Create( pParent, rSh, rReq );
-    return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_unique<SwInsertBookmarkDlg>(pParent, rSh, rReq));
 }
 
 VclPtr<AbstractSwBreakDlg> SwAbstractDialogFactory_Impl::CreateSwBreakDlg(weld::Window* pParent, SwWrtShell &rSh)

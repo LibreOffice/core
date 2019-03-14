@@ -219,8 +219,6 @@ class GtkSalFrame : public SalFrame
     cairo_region_t*                 m_pRegion;
     GtkDropTarget*                  m_pDropTarget;
     GtkDragSource*                  m_pDragSource;
-    bool                            m_bInDrag;
-    GtkDnDTransferable*             m_pFormatConversionRequest;
     bool                            m_bGeometryIsProvisional;
 #else
     GdkRegion*                      m_pRegion;
@@ -417,11 +415,6 @@ public:
     {
         assert(m_pDragSource == pDragSource); (void)pDragSource;
         m_pDragSource = nullptr;
-    }
-
-    void SetFormatConversionRequest(GtkDnDTransferable *pRequest)
-    {
-        m_pFormatConversionRequest = pRequest;
     }
 
     void startDrag(gint nButton, gint nDragOriginX, gint nDragOriginY,
