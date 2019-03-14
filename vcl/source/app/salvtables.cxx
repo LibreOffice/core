@@ -4016,7 +4016,7 @@ public:
         assert(false);
     }
 
-    virtual void set_entry_completion(bool) override
+    virtual void set_entry_completion(bool, bool) override
     {
         assert(false);
     }
@@ -4109,9 +4109,9 @@ public:
         m_xComboBox->SetMaxTextLen(nChars);
     }
 
-    virtual void set_entry_completion(bool bEnable) override
+    virtual void set_entry_completion(bool bEnable, bool bCaseSensitive) override
     {
-        m_xComboBox->EnableAutocomplete(bEnable);
+        m_xComboBox->EnableAutocomplete(bEnable, bCaseSensitive);
     }
 
     virtual void select_entry_region(int nStartPos, int nEndPos) override
@@ -4178,7 +4178,7 @@ public:
         pTreeView->SetStyle(pTreeView->GetStyle() | WB_SORT);
     }
 
-    virtual void set_entry_completion(bool bEnable) override
+    virtual void set_entry_completion(bool bEnable, bool /*bCaseSensitive*/) override
     {
         assert(!bEnable && "not implemented yet"); (void) bEnable;
         Edit& rEntry = m_pEntry->getEntry();
