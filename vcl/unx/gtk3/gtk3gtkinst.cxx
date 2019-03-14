@@ -5428,7 +5428,7 @@ namespace
         return ret;
     }
 
-    int starts_with(GtkTreeModel* pTreeModel, const OUString& rStr, int col, int nStartRow)
+    int starts_with(GtkTreeModel* pTreeModel, const OUString& rStr, int col, int nStartRow, bool bCaseSensitive)
     {
         GtkTreeIter iter;
         if (!gtk_tree_model_iter_nth_child(pTreeModel, &iter, nullptr, nStartRow))
@@ -5442,7 +5442,7 @@ namespace
             gtk_tree_model_get(pTreeModel, &iter, col, &pStr, -1);
             OUString aStr(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
             g_free(pStr);
-            const bool bMatch = rI18nHelper.MatchString(rStr, aStr);
+            const bool bMatch = !bCaseSensitive ? rI18nHelper.MatchString(rStr, aStr) : aStr.startsWith(rStr);
             if (bMatch)
                 return nRet;
             ++nRet;
@@ -6644,9 +6644,9 @@ public:
         return gtk_tree_selection_count_selected_rows(gtk_tree_view_get_selection(m_pTreeView));
     }
 
-    int starts_with(const OUString& rStr, int col, int nStartRow)
+    int starts_with(const OUString& rStr, int col, int nStartRow, bool bCaseSensitive)
     {
-        return ::starts_with(GTK_TREE_MODEL(m_pTreeStore), rStr, get_model_col(col), nStartRow);
+        return ::starts_with(GTK_TREE_MODEL(m_pTreeStore), rStr, get_model_col(col), nStartRow, bCaseSensitive);
     }
 
     virtual void disable_notify_events() override
@@ -7444,6 +7444,7 @@ private:
     std::vector<int> m_aSeparatorRows;
     gboolean m_bPopupActive;
     bool m_bAutoComplete;
+    bool m_bAutoCompleteCaseSensitive;
     gulong m_nToggleFocusInSignalId;
     gulong m_nToggleFocusOutSignalId;
     gulong m_nChangedSignalId;
@@ -7478,12 +7479,28 @@ private:
         if (nStart == -1)
             nStart = 0;
 
-        // Try match case insensitive from current position
-        int nPos = starts_with(m_pTreeModel, aStartText, 0, nStart);
-        if (nPos == -1 && nStart != 0)
+        int nPos = -1;
+
+        if (!m_bAutoCompleteCaseSensitive)
         {
-            // Try match case insensitive, but from start
-            nPos = starts_with(m_pTreeModel, aStartText, 0, 0);
+            // Try match case insensitive from current position
+            nPos = starts_with(m_pTreeModel, aStartText, 0, nStart, false);
+            if (nPos == -1 && nStart != 0)
+            {
+                // Try match case insensitive, but from start
+                nPos = starts_with(m_pTreeModel, aStartText, 0, 0, false);
+            }
+        }
+
+        if (nPos == -1)
+        {
+            // Try match case sensitive from current position
+            nPos = starts_with(m_pTreeModel, aStartText, 0, nStart, true);
+            if (nPos == -1 && nStart != 0)
+            {
+                // Try match case sensitive, but from start
+                nPos = starts_with(m_pTreeModel, aStartText, 0, 0, true);
+            }
         }
 
         if (nPos != -1)
@@ -7817,6 +7834,7 @@ public:
         , m_aQuickSelectionEngine(*this)
         , m_bPopupActive(false)
         , m_bAutoComplete(false)
+        , m_bAutoCompleteCaseSensitive(false)
         , m_nToggleFocusInSignalId(0)
         , m_nToggleFocusOutSignalId(0)
         , m_nChangedSignalId(g_signal_connect(m_pComboBox, "changed", G_CALLBACK(signalChanged), this))
@@ -8131,9 +8149,10 @@ public:
         return gtk_editable_get_selection_bounds(GTK_EDITABLE(pEntry), &rStartPos, &rEndPos);
     }
 
-    virtual void set_entry_completion(bool bEnable) override
+    virtual void set_entry_completion(bool bEnable, bool bCaseSensitive) override
     {
         m_bAutoComplete = bEnable;
+        m_bAutoCompleteCaseSensitive = bCaseSensitive;
     }
 
     virtual void disable_notify_events() override
@@ -8250,6 +8269,7 @@ private:
     gulong m_nKeyPressSignalId;
     gulong m_nEntryInsertTextSignalId;
     guint m_nAutoCompleteIdleId;
+    bool m_bAutoCompleteCaseSensitive;
 
     gboolean signal_key_press(GdkEventKey* pEvent)
     {
@@ -8311,11 +8331,33 @@ private:
             nStart = 0;
 
         // Try match case insensitive from current position
-        int nPos = m_pTreeView->starts_with(aStartText, 0, nStart);
+        int nPos = m_pTreeView->starts_with(aStartText, 0, nStart, true);
         if (nPos == -1 && nStart != 0)
         {
             // Try match case insensitive, but from start
-            nPos = m_pTreeView->starts_with(aStartText, 0, 0);
+            nPos = m_pTreeView->starts_with(aStartText, 0, 0, true);
+        }
+
+        if (!m_bAutoCompleteCaseSensitive)
+        {
+            // Try match case insensitive from current position
+            nPos = m_pTreeView->starts_with(aStartText, 0, nStart, false);
+            if (nPos == -1 && nStart != 0)
+            {
+                // Try match case insensitive, but from start
+                nPos = m_pTreeView->starts_with(aStartText, 0, 0, false);
+            }
+        }
+
+        if (nPos == -1)
+        {
+            // Try match case sensitive from current position
+            nPos = m_pTreeView->starts_with(aStartText, 0, nStart, true);
+            if (nPos == -1 && nStart != 0)
+            {
+                // Try match case sensitive, but from start
+                nPos = m_pTreeView->starts_with(aStartText, 0, 0, true);
+            }
         }
 
         if (nPos != -1)
@@ -8352,6 +8394,7 @@ public:
         , m_pEntry(dynamic_cast<GtkInstanceEntry*>(m_xEntry.get()))
         , m_pTreeView(dynamic_cast<GtkInstanceTreeView*>(m_xTreeView.get()))
         , m_nAutoCompleteIdleId(0)
+        , m_bAutoCompleteCaseSensitive(false)
     {
         assert(m_pEntry);
         GtkWidget* pWidget = m_pEntry->getWidget();
@@ -8372,9 +8415,10 @@ public:
         gtk_tree_sortable_set_sort_column_id(pSortable, 1, GTK_SORT_ASCENDING);
     }
 
-    virtual void set_entry_completion(bool bEnable) override
+    virtual void set_entry_completion(bool bEnable, bool bCaseSensitive) override
     {
         assert(!bEnable && "not implemented yet"); (void)bEnable;
+        m_bAutoCompleteCaseSensitive = bCaseSensitive;
     }
 
     virtual void grab_focus() override { m_xEntry->grab_focus(); }

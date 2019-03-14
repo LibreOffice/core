@@ -1618,7 +1618,7 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(TabPageParent pParent, const SfxI
     m_xCurName->connect_changed( LINK( this, SwInsertSectionTabPage, NameEditHdl));
     m_xDDECB->connect_toggled( LINK( this, SwInsertSectionTabPage, DDEHdl ));
     ChangeProtectHdl(*m_xProtectCB);
-//TODO    m_xSubRegionED->EnableAutocomplete( true, true );
+    m_xSubRegionED->set_entry_completion(true, true);
 }
 
 SwInsertSectionTabPage::~SwInsertSectionTabPage()

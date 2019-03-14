@@ -478,7 +478,7 @@ public:
     virtual void set_entry_max_length(int nChars) = 0;
     virtual void select_entry_region(int nStartPos, int nEndPos) = 0;
     virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) = 0;
-    virtual void set_entry_completion(bool bEnable) = 0;
+    virtual void set_entry_completion(bool bEnable, bool bCaseSensitive = false) = 0;
 
     virtual bool get_popup_shown() const = 0;
 
