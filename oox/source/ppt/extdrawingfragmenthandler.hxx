@@ -34,7 +34,6 @@ private:
         const oox::ppt::SlidePersistPtr mpSlidePersistPtr;
         const oox::ppt::ShapeLocation   meShapeLocation;
         oox::drawingml::ShapePtr const  mpGroupShapePtr;
-        oox::drawingml::ShapePtr        mpOrgShapePtr;          // Original Shape data, if any
         oox::drawingml::ShapePtr        mpShapePtr;
 };
 
