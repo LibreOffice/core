@@ -13,44 +13,37 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:51:33 using:
+ Generated on 2019-04-29 21:18:33 using:
  ./bin/update_pch basegfx basegfx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./basegfx/inc/pch/precompiled_basegfx.hxx "make basegfx.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstdlib>
-#include <limits>
 #include <memory>
 #include <numeric>
 #include <ostream>
-#include <sstream>
-#include <string>
 #include <vector>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
-#include <rtl/instance.hxx>
+#include <rtl/character.hxx>
 #include <rtl/math.hxx>
 #include <rtl/strbuf.hxx>
-#include <rtl/string.hxx>
-#include <rtl/stringutils.hxx>
-#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
 #include <sal/config.h>
-#include <sal/detail/log.h>
 #include <sal/log.hxx>
-#include <sal/saldllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/genfunc.hxx>
-#include <cppu/unotype.hxx>
-#include <typelib/typedescription.h>
-#include <uno/data.h>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
+#include <o3tl/cow_wrapper.hxx>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
@@ -59,7 +52,6 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
@@ -69,18 +61,15 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
-#include <basegfx/range/b2dpolyrange.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <basegfx/range/b2drangeclipper.hxx>
+#include <basegfx/range/b2irange.hxx>
 #include <basegfx/range/b3drange.hxx>
-#include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
-#include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
-#include <basegfx/tuple/b3ituple.hxx>
+#include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-#include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b3dvector.hxx>
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
