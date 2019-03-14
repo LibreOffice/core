@@ -1487,17 +1487,17 @@ static void lcl_ReadSections( SfxMedium& rMedium, weld::ComboBox& rBox )
 }
 
 SwInsertSectionTabDialog::SwInsertSectionTabDialog(
-            vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh)
-    : SfxTabDialog(pParent, "InsertSectionDialog",
-        "modules/swriter/ui/insertsectiondialog.ui", &rSet)
+            weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh)
+    : SfxTabDialogController(pParent, "modules/swriter/ui/insertsectiondialog.ui",
+                             "InsertSectionDialog",&rSet)
     , rWrtSh(rSh)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    m_nSectionPageId = AddTabPage("section", SwInsertSectionTabPage::Create);
-    m_nColumnPageId = AddTabPage("columns",   SwColumnPage::Create);
-    m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ));
-    m_nNotePageId = AddTabPage("notes", SwSectionFootnoteEndTabPage::Create);
-    m_nIndentPage = AddTabPage("indents", SwSectionIndentTabPage::Create);
+    AddTabPage("section", SwInsertSectionTabPage::Create, nullptr);
+    AddTabPage("columns",   SwColumnPage::Create, nullptr);
+    AddTabPage("background", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
+    AddTabPage("notes", SwSectionFootnoteEndTabPage::Create, nullptr);
+    AddTabPage("indents", SwSectionIndentTabPage::Create, nullptr);
 
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
     long nHtmlMode = rHtmlOpt.GetExportMode();
@@ -1505,36 +1505,36 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     bool bWeb = dynamic_cast<SwWebDocShell*>( rSh.GetView().GetDocShell()  ) != nullptr ;
     if(bWeb)
     {
-        RemoveTabPage(m_nNotePageId);
-        RemoveTabPage(m_nIndentPage);
+        RemoveTabPage("notes");
+        RemoveTabPage("indents");
         if( HTML_CFG_NS40 != nHtmlMode && HTML_CFG_WRITER != nHtmlMode)
-            RemoveTabPage(m_nColumnPageId);
+            RemoveTabPage("columns");
     }
-    SetCurPageId(m_nSectionPageId);
+    SetCurPageId("section");
 }
 
 SwInsertSectionTabDialog::~SwInsertSectionTabDialog()
 {
 }
 
-void SwInsertSectionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SwInsertSectionTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
-    if (nId == m_nSectionPageId)
+    if (rId == "section")
         static_cast<SwInsertSectionTabPage&>(rPage).SetWrtShell(rWrtSh);
-    else if (nId == m_nBackPageId)
+    else if (rId == "background")
     {
-            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_SELECTOR)));
-            rPage.PageCreated(aSet);
+        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_SELECTOR)));
+        rPage.PageCreated(aSet);
     }
-    else if (nId == m_nColumnPageId)
+    else if (rId == "columns")
     {
         const SwFormatFrameSize& rSize = GetInputSetImpl()->Get(RES_FRM_SIZE);
         static_cast<SwColumnPage&>(rPage).SetPageWidth(rSize.GetWidth());
         static_cast<SwColumnPage&>(rPage).ShowBalance(true);
         static_cast<SwColumnPage&>(rPage).SetInSection(true);
     }
-    else if (nId == m_nIndentPage)
+    else if (rId == "indents")
         static_cast<SwSectionIndentTabPage&>(rPage).SetWrtShell(rWrtSh);
 }
 
@@ -1543,9 +1543,9 @@ void SwInsertSectionTabDialog::SetSectionData(SwSectionData const& rSect)
     m_pSectionData.reset( new SwSectionData(rSect) );
 }
 
-short   SwInsertSectionTabDialog::Ok()
+short SwInsertSectionTabDialog::Ok()
 {
-    short nRet = SfxTabDialog::Ok();
+    short nRet = SfxTabDialogController::Ok();
     OSL_ENSURE(m_pSectionData, "SwInsertSectionTabDialog: no SectionData?");
     const SfxItemSet* pOutputItemSet = GetOutputItemSet();
     rWrtSh.InsertSection(*m_pSectionData, pOutputItemSet);
@@ -1643,7 +1643,7 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
     lcl_FillSubRegionList(*m_pWrtSh, *m_xSubRegionED, m_xCurName.get());
 
     SwSectionData *const pSectionData =
-        static_cast<SwInsertSectionTabDialog*>(GetTabDialog())
+        static_cast<SwInsertSectionTabDialog*>(GetDialogController())
             ->GetSectionData();
     if (pSectionData) // something set?
     {
@@ -1717,7 +1717,7 @@ bool SwInsertSectionTabPage::FillItemSet( SfxItemSet* )
                                         FILE_LINK_SECTION);
         }
     }
-    static_cast<SwInsertSectionTabDialog*>(GetTabDialog())->SetSectionData(aSection);
+    static_cast<SwInsertSectionTabDialog*>(GetDialogController())->SetSectionData(aSection);
     return true;
 }
 

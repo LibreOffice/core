@@ -478,8 +478,8 @@ public:
                                                 SwTOXBase* pCurTOX,
                                                 bool bGlobal) = 0;
     virtual VclPtr<AbstractEditRegionDlg>      CreateEditRegionDlg(vcl::Window* pParent, SwWrtShell& rWrtSh) = 0;
-    virtual VclPtr<AbstractInsertSectionTabDialog>     CreateInsertSectionTabDialog(
-        vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh) = 0;
+    virtual VclPtr<AbstractInsertSectionTabDialog> CreateInsertSectionTabDialog(weld::Window* pParent,
+                                                       const SfxItemSet& rSet, SwWrtShell& rSh) = 0;
     virtual VclPtr<AbstractMarkFloatDlg>       CreateIndexMarkFloatDlg(
                                                        SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,

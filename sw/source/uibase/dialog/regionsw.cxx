@@ -80,8 +80,10 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         VclPtr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
-            &GetView().GetViewFrame()->GetWindow(), aSet , rSh));
-        aTabDlg->StartExecuteAsync(nullptr);
+            GetView().GetViewFrame()->GetWindow().GetFrameWeld(), aSet , rSh));
+        aTabDlg->StartExecuteAsync([aTabDlg](sal_Int32 /*nResult*/){
+            aTabDlg->disposeOnce();
+        });
         rReq.Ignore();
     }
     else
@@ -187,7 +189,7 @@ void SwWrtShell::StartInsertRegionDialog(const SwSectionData& rSectionData)
     aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     VclPtr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
-        &GetView().GetViewFrame()->GetWindow(),aSet , *this));
+        GetView().GetViewFrame()->GetWindow().GetFrameWeld(), aSet, *this));
     aTabDlg->SetSectionData(rSectionData);
     aTabDlg->StartExecuteAsync(nullptr);
 }
