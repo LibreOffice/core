@@ -82,7 +82,6 @@ job99=sc.ScHeaderFieldsObj
 job126=sc.ScSheetLinkObj
 job132=sc.ScStyleObj
 job134=sc.ScTableColumnObj
-job135=sc.ScTableColumnsObj
 job138=sc.ScTableRowObj
 job140=sc.XMLContentExporter
 job141=sc.XMLContentImporter
