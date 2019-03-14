@@ -29,7 +29,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 
-// Horrible hack
+// Totally wrong of course but doesn't seem to harm much in the iOS app.
 static int viewWidth = 1, viewHeight = 1;
 
 class IosSalData : public GenericUnixSalData
@@ -108,7 +108,7 @@ public:
     virtual void UpdateSettings( AllSettings &rSettings ) override
     {
         // Clobber the UI fonts
-        vcl::Font aFont( OUString::fromUtf8( [[[UIFont systemFontOfSize:7] familyName] UTF8String] ), Size( 0, 7 ) );
+        vcl::Font aFont( OUString::fromUtf8( [[[UIFont systemFontOfSize:10] familyName] UTF8String] ), Size( 0, 10 ) );
 
         StyleSettings aStyleSet = rSettings.GetStyleSettings();
         aStyleSet.SetAppFont( aFont );
