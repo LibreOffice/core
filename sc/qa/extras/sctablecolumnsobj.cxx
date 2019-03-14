@@ -12,6 +12,7 @@
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
+#include <test/table/xtablecolumns.hxx>
 #include <cppu/unotype.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -22,6 +23,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XTableColumns.hpp>
+#include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -34,7 +36,8 @@ class ScTableColumnsObj : public CalcUnoApiTest,
                           public apitest::XElementAccess,
                           public apitest::XEnumerationAccess,
                           public apitest::XIndexAccess,
-                          public apitest::XNameAccess
+                          public apitest::XNameAccess,
+                          public apitest::XTableColumns
 {
 public:
     ScTableColumnsObj();
@@ -61,6 +64,16 @@ public:
     CPPUNIT_TEST(testGetElementNames);
     CPPUNIT_TEST(testHasByName);
 
+    // XTableColumns
+    CPPUNIT_TEST(testInsertByIndex);
+    CPPUNIT_TEST(testInsertByIndexWithNegativeIndex);
+    CPPUNIT_TEST(testInsertByIndexWithNoColumn);
+    CPPUNIT_TEST(testInsertByIndexWithOutOfBoundIndex);
+    CPPUNIT_TEST(testRemoveByIndex);
+    CPPUNIT_TEST(testRemoveByIndexWithNegativeIndex);
+    CPPUNIT_TEST(testRemoveByIndexWithNoColumn);
+    CPPUNIT_TEST(testRemoveByIndexWithOutOfBoundIndex);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -84,7 +97,23 @@ uno::Reference<uno::XInterface> ScTableColumnsObj::init()
 
     uno::Reference<table::XColumnRowRange> xCRR(xSheet0, uno::UNO_QUERY_THROW);
     uno::Reference<table::XTableColumns> xTC(xCRR->getColumns(), uno::UNO_QUERY_THROW);
+    setXSpreadsheet(xSheet0);
 
+    uno::Reference<table::XCellRange> xCR(xSheet0, uno::UNO_QUERY_THROW);
+    for (auto i = 0; i < xTC->getCount() - 1 && i < 3; ++i)
+    {
+        uno::Reference<text::XSimpleText> xST0(xCR->getCellByPosition(i, 0), uno::UNO_QUERY_THROW);
+        xST0->setString(OUString::number(i) + "a");
+        uno::Reference<text::XSimpleText> xST1(xCR->getCellByPosition(i, 1), uno::UNO_QUERY_THROW);
+        xST1->setString(OUString::number(i) + "b");
+    }
+    for (auto i = 3; i < xTC->getCount() - 1 && i < 10; ++i)
+    {
+        uno::Reference<text::XSimpleText> xST0(xCR->getCellByPosition(i, 0), uno::UNO_QUERY_THROW);
+        xST0->setString("");
+        uno::Reference<text::XSimpleText> xST1(xCR->getCellByPosition(i, 1), uno::UNO_QUERY_THROW);
+        xST1->setString("");
+    }
     return xTC;
 }
 

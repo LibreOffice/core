@@ -19,7 +19,6 @@
 -o sc.ScSubTotalDescriptorBase
 # # i84656 -o sc.ScTabViewObj
 # -o sc.ScTableColumnObj
--o sc.ScTableColumnsObj
 # -o sc.ScTableRowObj
 # -o sc.ScTableSheetObj
 # -o sc.ScTableSheetsObj
