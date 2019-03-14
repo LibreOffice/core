@@ -71,9 +71,12 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
     {
     case PPT_TOKEN( cNvPr ):
     {
+        // don't override SmartArt properties for embedded drawing's spTree
         mpGroupShapePtr->setHidden( rAttribs.getBool( XML_hidden, false ) );
-        mpGroupShapePtr->setId( rAttribs.getString( XML_id ).get() );
-        mpGroupShapePtr->setName( rAttribs.getString( XML_name ).get() );
+        if (mpGroupShapePtr->getId().isEmpty())
+            mpGroupShapePtr->setId(rAttribs.getString(XML_id).get());
+        if (mpGroupShapePtr->getName().isEmpty())
+            mpGroupShapePtr->setName( rAttribs.getString( XML_name ).get() );
         break;
     }
     case PPT_TOKEN( ph ):
