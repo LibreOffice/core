@@ -13,34 +13,43 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:53:55 using:
+ Generated on 2019-04-29 21:18:57 using:
  ./bin/update_pch sdext PresentationMinimizer --cutoff=2 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./sdext/inc/pch/precompiled_PresentationMinimizer.hxx "make sdext.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
+#include <assert.h>
+#include <atomic>
 #include <cassert>
-#include <config_global.h>
-#include <config_typesizes.h>
 #include <cstddef>
-#include <cstdlib>
 #include <cstring>
+#include <float.h>
+#include <functional>
 #include <initializer_list>
 #include <iomanip>
+#include <limits.h>
+#include <limits>
+#include <locale>
+#include <math.h>
 #include <memory>
 #include <new>
 #include <ostream>
-#include <sstream>
+#include <set>
 #include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <string>
+#include <string_view>
 #include <type_traits>
 #include <utility>
+#include <vector>
+#include <boost/optional.hpp>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
+#include <osl/endian.h>
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
@@ -49,8 +58,11 @@
 #include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
-#include <rtl/byteseq.h>
-#include <rtl/byteseq.hxx>
+#include <rtl/math.h>
+#include <rtl/math.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
@@ -64,14 +76,82 @@
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
+#include <sal/mathconf.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/EnumContext.hxx>
+#include <vcl/GestureEvent.hxx>
+#include <vcl/IContext.hxx>
+#include <vcl/IDialogRenderable.hxx>
+#include <vcl/alpha.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/button.hxx>
+#include <vcl/cairo.hxx>
+#include <vcl/checksum.hxx>
+#include <vcl/commandevent.hxx>
+#include <vcl/ctrl.hxx>
+#include <vcl/devicecoordinate.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/errcode.hxx>
+#include <vcl/errinf.hxx>
+#include <vcl/event.hxx>
+#include <vcl/exceptiontypes.hxx>
+#include <vcl/fntstyle.hxx>
+#include <vcl/font.hxx>
+#include <vcl/help.hxx>
+#include <vcl/image.hxx>
+#include <vcl/inputtypes.hxx>
+#include <vcl/keycod.hxx>
+#include <vcl/keycodes.hxx>
+#include <vcl/mapmod.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/metaactiontypes.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/outdevmap.hxx>
+#include <vcl/outdevstate.hxx>
+#include <vcl/region.hxx>
+#include <vcl/salnativewidgets.hxx>
+#include <vcl/scopedbitmapaccess.hxx>
+#include <vcl/scrbar.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/split.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/uitest/factory.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/vclevent.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/vclreferencebase.hxx>
+#include <vcl/wall.hxx>
+#include <vcl/window.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
+#include <basegfx/basegfxdllapi.h>
+#include <basegfx/color/bcolor.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/point/b2ipoint.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/b2dtuple.hxx>
+#include <basegfx/tuple/b2ituple.hxx>
+#include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/vector/b2dvector.hxx>
+#include <basegfx/vector/b2enums.hxx>
+#include <basegfx/vector/b2ivector.hxx>
+#include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
+#include <com/sun/star/awt/Key.hpp>
+#include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
@@ -81,13 +161,11 @@
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/TempFile.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
@@ -99,24 +177,51 @@
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/genfunc.hxx>
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XControlAccess.hpp>
+#include <comphelper/comphelperdllapi.h>
+#include <comphelper/solarmutex.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
+#include <cppuhelper/exc_hlp.hxx>
+#include <i18nlangtag/lang.h>
+#include <o3tl/cow_wrapper.hxx>
+#include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/underlyingenumvalue.hxx>
+#include <svtools/svtdllapi.h>
+#include <svtools/svtresid.hxx>
+#include <tools/color.hxx>
+#include <tools/date.hxx>
+#include <tools/fldunit.hxx>
+#include <tools/fontenum.hxx>
+#include <tools/gen.hxx>
+#include <tools/link.hxx>
+#include <tools/mapunit.hxx>
+#include <tools/poly.hxx>
+#include <tools/ref.hxx>
+#include <tools/solar.h>
+#include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
+#include <tools/wintypes.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
+#include <unotools/fontdefs.hxx>
+#include <unotools/unotoolsdllapi.h>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

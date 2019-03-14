@@ -13,33 +13,33 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:55:45 using:
+ Generated on 2019-04-29 21:19:20 using:
  ./bin/update_pch writerfilter writerfilter --cutoff=5 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./writerfilter/inc/pch/precompiled_writerfilter.hxx "make writerfilter.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <exception>
 #include <iomanip>
 #include <iostream>
-#include <map>
 #include <memory>
 #include <ostream>
-#include <stdlib.h>
 #include <utility>
 #include <vector>
 #include <boost/logic/tribool.hpp>
 #include <boost/optional.hpp>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <osl/file.hxx>
 #include <osl/getglobalmutex.hxx>
 #include <osl/mutex.hxx>
-#include <osl/process.h>
+#include <osl/thread.h>
 #include <rtl/character.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
@@ -49,24 +49,25 @@
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
+#include <rtl/textenc.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
 #include <vcl/svapp.hxx>
-#include <basegfx/color/bcolor.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -80,12 +81,15 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/sequence.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/weak.hxx>
@@ -96,12 +100,16 @@
 #include <ooxml/resourceids.hxx>
 #include <sfx2/dllapi.h>
 #include <tools/color.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
+#include <tools/ref.hxx>
 #include <tools/solar.h>
-#include <tools/toolsdllapi.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/unotoolsdllapi.h>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

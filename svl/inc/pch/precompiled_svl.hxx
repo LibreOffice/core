@@ -13,31 +13,30 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:54:04 using:
+ Generated on 2019-04-29 21:19:01 using:
  ./bin/update_pch svl svl --cutoff=6 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./svl/inc/pch/precompiled_svl.hxx "make svl.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstring>
-#include <exception>
-#include <map>
 #include <memory>
 #include <new>
 #include <ostream>
 #include <stddef.h>
 #include <string.h>
+#include <string_view>
 #include <utility>
 #include <vector>
 #include <boost/optional.hpp>
-#include <boost/optional/optional.hpp>
 #include <boost/property_tree/json_parser.hpp>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
-#include <osl/endian.h>
 #include <osl/file.h>
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
@@ -46,7 +45,6 @@
 #include <osl/socket.hxx>
 #include <osl/thread.h>
 #include <rtl/alloc.h>
-#include <rtl/byteseq.hxx>
 #include <rtl/character.hxx>
 #include <rtl/cipher.h>
 #include <rtl/crc.h>
@@ -55,8 +53,6 @@
 #include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.h>
-#include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
@@ -72,31 +68,29 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <salhelper/linkhelper.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/Type.h>
+#include <com/sun/star/uno/TypeClass.hdl>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/util/Time.hpp>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <cppu/cppudllapi.h>
+#include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/weak.hxx>
-#include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
-#include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <libxml/xmlwriter.h>
 #include <o3tl/strong_int.hxx>
@@ -105,14 +99,20 @@
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
+#include <tools/urlobj.hxx>
+#include <typelib/typedescription.h>
+#include <uno/any2.h>
 #include <unotools/charclass.hxx>
 #include <unotools/options.hxx>
 #include <unotools/unotoolsdllapi.h>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
 #include <svl/hint.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
 #include <svl/zforlist.hxx>
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

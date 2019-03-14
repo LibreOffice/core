@@ -13,27 +13,22 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:51:58 using:
+ Generated on 2019-04-29 21:18:35 using:
  ./bin/update_pch connectivity flat --cutoff=2 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_flat.hxx "make connectivity.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
-#include <config_features.h>
-#include <config_global.h>
-#include <config_typesizes.h>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
-#include <exception>
-#include <float.h>
 #include <functional>
 #include <iomanip>
 #include <limits>
-#include <list>
 #include <map>
 #include <math.h>
 #include <memory>
@@ -42,12 +37,13 @@
 #include <set>
 #include <sstream>
 #include <stddef.h>
-#include <stdlib.h>
 #include <string.h>
 #include <string>
 #include <type_traits>
 #include <utility>
 #include <vector>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
@@ -58,7 +54,6 @@
 #include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
-#include <rtl/character.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <rtl/math.h>
@@ -86,45 +81,34 @@
 #include <sal/typesizes.h>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetOption.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/i18n/Calendar2.hpp>
-#include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/i18n/DirectionProperty.hpp>
+#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
-#include <com/sun/star/i18n/KParseTokens.hpp>
-#include <com/sun/star/i18n/KParseType.hpp>
+#include <com/sun/star/i18n/LanguageCountryInfo.hpp>
+#include <com/sun/star/i18n/LocaleDataItem2.hpp>
 #include <com/sun/star/i18n/LocaleItem.hpp>
-#include <com/sun/star/i18n/NumberFormatCode.hpp>
-#include <com/sun/star/i18n/NumberFormatMapper.hpp>
+#include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 #include <com/sun/star/i18n/ParseResult.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
-#include <com/sun/star/i18n/XCollator.hpp>
-#include <com/sun/star/i18n/XExtendedTransliteration.hpp>
-#include <com/sun/star/i18n/XLocaleData4.hpp>
-#include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -142,7 +126,6 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
 #include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
@@ -151,12 +134,8 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/util/XNumberFormats.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/extract.hxx>
-#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/propertycontainerhelper.hxx>
@@ -168,7 +147,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/compbase_ex.hxx>
-#include <cppuhelper/component.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -176,10 +154,8 @@
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -189,13 +165,13 @@
 #include <i18nutil/transliteration.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/underlyingenumvalue.hxx>
 #include <svl/nfkeytab.hxx>
 #include <svl/ondemand.hxx>
 #include <svl/svldllapi.h>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/link.hxx>
-#include <tools/solar.h>
 #include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <typelib/typeclass.h>
@@ -205,17 +181,18 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/calendarwrapper.hxx>
-#include <unotools/charclass.hxx>
-#include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/nativenumberwrapper.hxx>
 #include <unotools/readwritemutexguard.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/unotoolsdllapi.h>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -13,34 +13,31 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:52:19 using:
+ Generated on 2019-04-29 21:18:38 using:
  ./bin/update_pch dbaccess dbu --cutoff=12 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./dbaccess/inc/pch/precompiled_dbu.hxx "make dbaccess.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstring>
-#include <exception>
-#include <functional>
-#include <list>
+#include <limits>
 #include <map>
 #include <memory>
 #include <new>
 #include <ostream>
-#include <stdlib.h>
-#include <string.h>
 #include <utility>
 #include <vector>
 #include <boost/optional.hpp>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
-#include <osl/module.hxx>
-#include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <osl/thread.hxx>
@@ -48,7 +45,6 @@
 #include <rtl/instance.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
-#include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
@@ -64,20 +60,16 @@
 #include <sal/types.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/singletonref.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/dndhelp.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/event.hxx>
 #include <vcl/font.hxx>
-#include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
@@ -87,29 +79,31 @@
 #include <vcl/settings.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/treelistentry.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/wall.hxx>
+#include <vcl/weld.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
@@ -117,30 +111,24 @@
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
+#include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
-#include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppu/unotype.hxx>
-#include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <sfx2/dllapi.h>
@@ -166,6 +154,8 @@
 #include <uno/data.h>
 #include <unotools/fontdefs.hxx>
 #include <unotools/unotoolsdllapi.h>
-#include <vcl/treelistentry.hxx>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
