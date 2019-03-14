@@ -2087,7 +2087,8 @@ static void doc_iniUnoCommands ()
         OUString(".uno:InsertPageFooter"),
         OUString(".uno:OnlineAutoFormat"),
         OUString(".uno:InsertSymbol"),
-        OUString(".uno:EditRegion")
+        OUString(".uno:EditRegion"),
+        OUString(".uno:ThesaurusDialog")
     };
 
     util::URL aCommandURL;
