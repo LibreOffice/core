@@ -13,38 +13,36 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:52:47 using:
+ Generated on 2019-04-29 21:18:44 using:
  ./bin/update_pch package package2 --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./package/inc/pch/precompiled_package2.hxx "make package.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
-#include <config_global.h>
-#include <config_typesizes.h>
 #include <cstddef>
-#include <cstdlib>
 #include <cstring>
-#include <exception>
-#include <functional>
 #include <iomanip>
+#include <limits>
+#include <math.h>
 #include <memory>
 #include <new>
 #include <ostream>
-#include <sstream>
 #include <stddef.h>
 #include <string.h>
-#include <string>
 #include <type_traits>
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/optional/optional.hpp>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
 #include <osl/doublecheckedlocking.h>
+#include <osl/endian.h>
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.h>
@@ -56,8 +54,12 @@
 #include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
+#include <rtl/math.h>
+#include <rtl/math.hxx>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
@@ -69,27 +71,21 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
-#include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
+#include <sal/mathconf.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include <CRC32.hxx>
-#include <EncryptedDataHeader.hxx>
-#include <EncryptionData.hxx>
-#include <PackageConstants.hxx>
-#include <ZipEntry.hxx>
-#include <ZipEnumeration.hxx>
-#include <ZipFile.hxx>
-#include <ZipOutputEntry.hxx>
-#include <ZipOutputStream.hxx>
-#include <ZipPackage.hxx>
-#include <ZipPackageBuffer.hxx>
-#include <ZipPackageFolder.hxx>
-#include <ZipPackageStream.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
+#include <basegfx/basegfxdllapi.h>
+#include <basegfx/color/bcolor.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/tuple/b3dtuple.hxx>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/io/TempFile.hpp>
@@ -114,8 +110,6 @@
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
-#include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
@@ -138,14 +132,30 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakagg.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <o3tl/underlyingenumvalue.hxx>
+#include <tools/toolsdllapi.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#include <CRC32.hxx>
+#include <EncryptedDataHeader.hxx>
+#include <EncryptionData.hxx>
+#include <PackageConstants.hxx>
+#include <ZipEntry.hxx>
+#include <ZipEnumeration.hxx>
+#include <ZipFile.hxx>
+#include <ZipOutputEntry.hxx>
+#include <ZipOutputStream.hxx>
+#include <ZipPackage.hxx>
+#include <ZipPackageBuffer.hxx>
+#include <ZipPackageFolder.hxx>
+#include <ZipPackageStream.hxx>
 #include <package/packagedllapi.hxx>
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

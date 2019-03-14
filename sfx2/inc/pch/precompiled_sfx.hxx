@@ -13,30 +13,26 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:53:58 using:
+ Generated on 2019-04-29 21:19:01 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./sfx2/inc/pch/precompiled_sfx.hxx "make sfx2.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
-#include <config_features.h>
-#include <config_folders.h>
-#include <config_global.h>
 #include <cstddef>
-#include <cstdlib>
-#include <exception>
+#include <cstring>
+#include <deque>
 #include <functional>
 #include <limits.h>
-#include <list>
+#include <limits>
 #include <map>
 #include <memory>
 #include <new>
 #include <ostream>
-#include <set>
-#include <stack>
 #include <stdlib.h>
 #include <string.h>
 #include <string>
@@ -48,10 +44,12 @@
 #include <boost/logic/tribool.hpp>
 #include <boost/optional.hpp>
 #include <boost/property_tree/json_parser.hpp>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
+#include <osl/endian.h>
 #include <osl/file.hxx>
-#include <osl/module.h>
 #include <osl/module.hxx>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
@@ -62,9 +60,9 @@
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
+#include <rtl/byteseq.hxx>
 #include <rtl/character.hxx>
 #include <rtl/instance.hxx>
-#include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
@@ -78,7 +76,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
-#include <rtl/uuid.h>
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
@@ -86,21 +83,20 @@
 #include <sal/types.h>
 #include <vcl/EnumContext.hxx>
 #include <vcl/NotebookbarContextControl.hxx>
-#include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/button.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/edit.hxx>
 #include <vcl/errcode.hxx>
+#include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/font.hxx>
@@ -111,17 +107,17 @@
 #include <vcl/help.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
+#include <vcl/imapobj.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scrbar.hxx>
@@ -135,11 +131,14 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/waitobj.hxx>
 #include <vcl/wall.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
-#include <basegfx/color/bcolormodifier.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -149,6 +148,7 @@
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/basrdll.hxx>
+#include <basic/sberrors.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
@@ -162,7 +162,7 @@
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XWindow2.hpp>
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyExistException.hpp>
@@ -176,14 +176,15 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
@@ -192,8 +193,8 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -217,23 +218,19 @@
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
-#include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/frame/status/ItemState.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -256,12 +253,12 @@
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
-#include <com/sun/star/task/XInteractionApprove.hpp>
-#include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
+#include <com/sun/star/task/XInteractionRetry.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
@@ -269,7 +266,7 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
-#include <com/sun/star/ui/XContextChangeEventListener.hpp>
+#include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
@@ -288,21 +285,17 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.h>
-#include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XCurrentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/RevisionTag.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
-#include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
@@ -310,6 +303,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/fileformat.h>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/interfacecontainer2.hxx>
@@ -320,10 +314,10 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
-#include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/compbase_ex.hxx>
@@ -348,11 +342,12 @@
 #include <framework/interaction.hxx>
 #include <framework/menuconfiguration.hxx>
 #include <framework/sfxhelperfunctions.hxx>
-#include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Setup.hxx>
 #include <sax/tools/converter.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -386,13 +381,12 @@
 #include <svtools/embedhlp.hxx>
 #include <svtools/helpopt.hxx>
 #include <svtools/imagemgr.hxx>
+#include <svtools/langhelp.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/parhtml.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/soerr.hxx>
 #include <svtools/svtdllapi.h>
-#include <svtools/svtresid.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -410,6 +404,7 @@
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/svborder.hxx>
+#include <tools/svlibrary.h>
 #include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
@@ -444,7 +439,10 @@
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/useroptions.hxx>
 #include <unotools/viewoptions.hxx>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
 #include <sfx2/app.hxx>
+#include <sfx2/asyncfunc.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/classificationhelper.hxx>
@@ -499,6 +497,7 @@
 #include <sfx2/sidebar/DrawHelper.hxx>
 #include <sfx2/sidebar/Paint.hxx>
 #include <sfx2/sidebar/Panel.hxx>
+#include <sfx2/sidebar/PanelDescriptor.hxx>
 #include <sfx2/sidebar/PanelTitleBar.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
@@ -528,7 +527,6 @@
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
-#include <vcl/imapobj.hxx>
-#include <vcl/treelistentry.hxx>
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
