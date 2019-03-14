@@ -77,6 +77,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 			sot \
 			svgio \
 			emfio \
+			item \
 			svl \
 			svtools \
 			svx \
