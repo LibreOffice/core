@@ -76,15 +76,15 @@ protected:
     std::map<OUString, GdkAtom> m_aMimeTypeToAtom;
 
     std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector(GdkAtom *targets, gint n_targets);
+
 public:
-
     virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override = 0;
-
     virtual std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector() = 0;
-
     virtual css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
     virtual sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
 };
+
+class GtkDnDTransferable;
 
 class GtkDropTarget : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDropTarget,
                                                            css::lang::XInitialization,
@@ -92,7 +92,9 @@ class GtkDropTarget : public cppu::WeakComponentImplHelper<css::datatransfer::dn
 {
     osl::Mutex m_aMutex;
     GtkSalFrame* m_pFrame;
+    GtkDnDTransferable* m_pFormatConversionRequest;
     bool m_bActive;
+    bool m_bInDrag;
     sal_Int8 m_nDefaultActions;
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
 public:
@@ -121,6 +123,16 @@ public:
     void fire_dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde);
     void fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde);
     void fire_dragExit(const css::datatransfer::dnd::DropTargetEvent& dte);
+
+    void SetFormatConversionRequest(GtkDnDTransferable *pRequest)
+    {
+        m_pFormatConversionRequest = pRequest;
+    }
+
+    gboolean signalDragDrop(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time);
+    gboolean signalDragMotion(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time);
+    void signalDragDropReceived(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, GtkSelectionData* data, guint ttype, guint time);
+    void signalDragLeave(GtkWidget* pWidget, GdkDragContext* context, guint time);
 };
 
 class GtkDragSource : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSource,
