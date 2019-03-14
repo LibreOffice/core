@@ -1,5 +1,5 @@
 #**************************************************************
-#  
+#
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
 #  distributed with this work for additional information
@@ -7,23 +7,25 @@
 #  to you under the Apache License, Version 2.0 (the
 #  "License"); you may not use this file except in compliance
 #  with the License.  You may obtain a copy of the License at
-#  
+#
 #    http://www.apache.org/licenses/LICENSE-2.0
-#  
+#
 #  Unless required by applicable law or agreed to in writing,
 #  software distributed under the License is distributed on an
 #  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 #  KIND, either express or implied.  See the License for the
 #  specific language governing permissions and limitations
 #  under the License.
-#  
+#
 #**************************************************************
+
+
 
 PRJ=..
 PRJNAME=instsetoo_native
 TARGET=util
 
-.INCLUDE:  settings.mk
+.INCLUDE: settings.mk
 .INCLUDE: $(SOLARINCDIR)$/rtlbootstrap.mk
 #.INCLUDE: $(SOLARENVINC)$/version.mk
 
@@ -77,7 +79,7 @@ help .PHONY :
     @echo "    openoffice             builds the default installation packages for the platform"
     @echo "    aoo_srcrelease         packs the source release package"
     @echo "    updatepack"
-    @echo "    openofficedev          devloper snapshot"
+    @echo "    openofficedev          developer snapshot"
     @echo "    ooolanguagepack"
     @echo "    ooobetalanguagepack"
     @echo "    ooodevlanguagepack"
@@ -113,7 +115,7 @@ xxxx:
     echo $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product OpenOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml
 
 .IF "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
-ALLTAR  : $(LOCALPYFILES)
+ALLTAR : $(LOCALPYFILES)
     @echo "No EPM: do no packaging at this stage"
 .ELSE			# "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
 .IF "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
@@ -129,7 +131,7 @@ ALLTAR : updatepack
 
 
 # Independent of PKGFORMAT, always build a default-language openoffice product
-# also in archive format, so that tests that require an OOo installation (like
+# also in archive format, so that tests that require an AOO installation (like
 # smoketestoo_native) have one available:
 openoffice_$(defaultlangiso) : $$@.archive
 
@@ -197,7 +199,7 @@ MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
 MSISDKOOTEMPLATESOURCE=$(PRJ)$/inc_sdkoo$/windows$/msi_templates
 
 NOLOGOSPLASH:=$(BIN)$/intro.zip
-DEVNOLOGOSPLASH:=$(BIN)$/dev$/intro.zip
+DEVNOLOGOSPLASH:=$(BIN)$/dev$/intro.zip $(BIN)$/dev$/images.zip
 BETA_LOGO_SPLASH:=$(BIN)$/beta$/intro.zip $(BIN)$/beta$/images.zip
 MSIOFFICETEMPLATEDIR=$(MISC)$/openoffice$/msi_templates
 MSILANGPACKTEMPLATEDIR=$(MISC)$/ooolangpack$/msi_templates
@@ -228,9 +230,9 @@ $(foreach,i,$(alllangiso) sdkoo_$i) : adddeps
 $(foreach,i,$(alllangiso) sdkoobeta_$i) : adddeps
 $(foreach,i,$(alllangiso) sdkoodev_$i) : adddeps
 
-# Create targets that take the package formats into account.  Together with language dependency we
+# Create targets that take the package formats into account. Together with language dependency we
 # get this transformation: target -> target_$language -> target_$language.$package
-# where $language ranges over all languages in $(alllangiso) 
+# where $language ranges over all languages in $(alllangiso)
 # and $package ranges over all package formats in $(PKGFORMAT)
 $(foreach,i,$(alllangiso) openoffice_$i) : $$@{$(PKGFORMAT:^".")}
 $(foreach,i,$(alllangiso) openofficedev_$i) : $$@{$(PKGFORMAT:^".")}
@@ -288,6 +290,7 @@ $(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) openofficedev_$L.$P)) .
         $(PRJ)$/util$/update.xml 		\
         > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
 
+#openofficebeta_%{$(PKGFORMAT:^".")} :
 $(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) openofficebeta_$L.$P)) .PHONY :
     $(MAKE_INSTALLER_COMMAND)		\
         -p Apache_OpenOffice_Beta	\
@@ -338,6 +341,18 @@ $(BIN)$/intro.zip : $(SOLARCOMMONPCKDIR)$/intro.zip
 $(BIN)$/dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/openoffice_dev$/intro.zip
     @-$(MKDIR) $(@:d)
     $(COPY) $< $@
+
+# Replace framework/res/*.png with *-dev.png
+$(BIN)$/dev$/images.zip : $(SOLARBINDIR)$/images.zip
+    $(COPY) $< $@
+    $(PERL) $(SOLARENV)$/bin/replace_in_zip.pl	\
+        $@				\
+        framework/res/			\
+        $(SRC_ROOT)/default_images/framework/res/dev/	\
+        backing.png			\
+        backing_hc.png			\
+        backing_rtl_left.png		\
+        backing_rtl_left_hc.png
 
 $(BIN)$/beta$/intro.zip : $(SOLARCOMMONPCKDIR)$/openoffice_beta$/intro.zip
     @-$(MKDIR) $(@:d)
@@ -564,7 +579,7 @@ msi_langpack_template_files .PHONY :				\
     $(MSILANGPACKTEMPLATEDIR)				\
     $(MSILANGPACKTEMPLATEDIR)$/Binary			\
     $(MSILANGPACKTEMPLATEDIR)$/{$(MSI_LANGPACK_TEMPLATE_FILES)}
-$(MSILANGPACKTEMPLATEDIR) $(MSILANGPACKTEMPLATEDIR)$/Binary  :
+$(MSILANGPACKTEMPLATEDIR) $(MSILANGPACKTEMPLATEDIR)$/Binary :
     -$(MKDIRHIER) $@
 $(MSILANGPACKTEMPLATEDIR)$/% : $(MSILANGPACKTEMPLATESOURCE)$/%
     $(GNUCOPY) $< $@
@@ -579,7 +594,4 @@ $(MSISDKOOTEMPLATEDIR) $(MSISDKOOTEMPLATEDIR)$/Binary :
 $(MSISDKOOTEMPLATEDIR)/% : $(MSISDKOOTEMPLATESOURCE)$/%
     $(GNUCOPY) $< $@
 
-
-# Local Variables:
-# tab-width: 8
-# End:
+# vim: set noet ts=4 sw=4:
