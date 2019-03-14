@@ -137,7 +137,14 @@ bool SwDOCXReader::ReadGlossaries( SwTextBlocks& rBlocks, bool /* bSaveRelFiles 
             }));
 
         if( xFilter->filter( aDescriptor ) )
-            return MakeEntries( static_cast<SwDocShell*>( &xDocSh )->GetDoc(), rBlocks );
+        {
+            if (rBlocks.StartPutMuchBlockEntries())
+            {
+                bool bRet = MakeEntries(static_cast<SwDocShell*>(&xDocSh)->GetDoc(), rBlocks);
+                rBlocks.EndPutMuchBlockEntries();
+                return bRet;
+            }
+        }
     }
 
     return false;
