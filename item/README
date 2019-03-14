@@ -1,0 +1,6 @@
+All necessary low-level definitions and tools to work with
+- Item::IBase
+- Item::IAdministrator
+- Item::ModelSpecificIValues
+- Item::ISet
+This is planned/developed to be a replacement for SfxPoolItem/SfxItemSet/SfxItemPool
