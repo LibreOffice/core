@@ -13,20 +13,22 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:52:22 using:
+ Generated on 2019-04-29 21:18:38 using:
  ./bin/update_pch desktop deploymentgui --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./desktop/inc/pch/precompiled_deploymentgui.hxx "make desktop.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstdlib>
 #include <deque>
 #include <iomanip>
 #include <limits.h>
+#include <limits>
+#include <list>
 #include <memory>
 #include <new>
 #include <ostream>
@@ -34,21 +36,23 @@
 #include <utility>
 #include <vector>
 #include <boost/optional.hpp>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/conditn.hxx>
+#include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
-#include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
+#include <rtl/locale.h>
 #include <rtl/ref.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
-#include <sal/detail/log.h>
 #include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
@@ -56,25 +60,33 @@
 #include <salhelper/thread.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/edit.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/keycod.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/mnemonicengine.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/quickselectionengine.hxx>
-#include <vcl/salnativewidgets.hxx>
-#include <vcl/seleng.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/timer.hxx>
+#include <vcl/transfer.hxx>
+#include <vcl/treelist.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/vclevent.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/vclreferencebase.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/window.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/deployment/DependencyException.hpp>
 #include <com/sun/star/deployment/DeploymentException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -91,7 +103,6 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <comphelper/anytostring.hxx>
-#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
@@ -100,7 +111,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <svtools/controldims.hxx>
-#include <svtools/svtdllapi.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
@@ -113,8 +123,8 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/configmgr.hxx>
-#include <vcl/transfer.hxx>
-#include <vcl/treelist.hxx>
-#include <vcl/treelistbox.hxx>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

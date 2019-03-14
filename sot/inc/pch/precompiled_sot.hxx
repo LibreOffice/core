@@ -13,35 +13,31 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:54:01 using:
+ Generated on 2019-04-29 21:19:01 using:
  ./bin/update_pch sot sot --cutoff=5 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./sot/inc/pch/precompiled_sot.hxx "make sot.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <cassert>
 #include <cstddef>
-#include <cstdlib>
 #include <limits>
 #include <memory>
 #include <new>
 #include <ostream>
-#include <sstream>
-#include <stdlib.h>
-#include <string.h>
-#include <string>
 #include <utility>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
-#include <osl/process.h>
 #include <osl/thread.h>
 #include <rtl/alloc.h>
-#include <rtl/character.hxx>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
 #include <rtl/ref.hxx>
@@ -53,13 +49,11 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
-#include <sal/detail/log.h>
 #include <sal/log.hxx>
-#include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/errcode.hxx>
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.h>
@@ -74,8 +68,11 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/unotoolsdllapi.h>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
 #include <sot/exchange.hxx>
 #include <sot/stg.hxx>
 #include <sot/storinfo.hxx>
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

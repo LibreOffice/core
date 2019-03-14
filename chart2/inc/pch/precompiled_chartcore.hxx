@@ -13,44 +13,38 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:51:44 using:
+ Generated on 2019-04-29 21:18:43 using:
  ./bin/update_pch chart2 chartcore --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./chart2/inc/pch/precompiled_chartcore.hxx "make chart2.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
-#include <config_features.h>
 #include <cstddef>
-#include <exception>
-#include <functional>
 #include <iterator>
 #include <limits>
 #include <map>
 #include <memory>
 #include <new>
 #include <ostream>
-#include <set>
-#include <stdlib.h>
-#include <string.h>
 #include <utility>
 #include <vector>
-#include <osl/conditn.hxx>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
-#include <osl/endian.h>
 #include <osl/getglobalmutex.hxx>
-#include <osl/module.hxx>
-#include <osl/mutex.h>
 #include <osl/mutex.hxx>
+#include <rtl/alloc.h>
 #include <rtl/character.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
+#include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textenc.h>
@@ -61,17 +55,14 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
-#include <sal/saldllapi.h>
 #include <sal/types.h>
+#include <vcl/bitmap.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/errcode.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wall.hxx>
-#include <ChartModel.hxx>
-#include <SpecialCharacters.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
-#include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -80,12 +71,10 @@
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
-#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
@@ -104,89 +93,91 @@
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
+#include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#include <com/sun/star/chart2/XTitled.hpp>
+#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
+#include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
+#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/drawing/Hatch.hpp>
-#include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/drawing/NormalsKind.hpp>
-#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
-#include <com/sun/star/drawing/ProjectionMode.hpp>
+#include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
+#include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
-#include <com/sun/star/drawing/ShadeMode.hpp>
-#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
-#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
-#include <com/sun/star/util/NumberFormat.hpp>
+#include <com/sun/star/uno/Type.h>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppu/cppudllapi.h>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/unoprnms.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
-#include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <svl/cenumitm.hxx>
 #include <svl/eitem.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
-#include <svl/zformat.hxx>
+#include <svl/typedwhich.hxx>
+#include <svl/zforlist.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/unoshape.hxx>
-#include <svx/xpoly.hxx>
 #include <tools/color.hxx>
-#include <tools/contnr.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
-#include <tools/link.hxx>
-#include <tools/solar.h>
+#include <tools/helpers.hxx>
 #include <tools/stream.hxx>
-#include <unonames.hxx>
-#include <unotools/configitem.hxx>
 #include <unotools/options.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/unotoolsdllapi.h>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#include <ChartModel.hxx>
+#include <SpecialCharacters.hxx>
+#include <unonames.hxx>
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
