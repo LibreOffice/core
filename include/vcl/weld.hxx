@@ -38,6 +38,13 @@ namespace awt
 {
 class XWindow;
 }
+namespace datatransfer
+{
+namespace dnd
+{
+class XDropTarget;
+}
+}
 namespace graphic
 {
 class XGraphic;
@@ -205,6 +212,8 @@ public:
     virtual OUString strip_mnemonic(const OUString& rLabel) const = 0;
 
     virtual VclPtr<VirtualDevice> create_virtual_device() const = 0;
+
+    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() = 0;
 
     virtual ~Widget() {}
 };
@@ -903,6 +912,7 @@ public:
     // nEndPos can be -1 in order to select all text
     virtual void select_region(int nStartPos, int nEndPos) = 0;
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;
+    // nCursorPos can be -1 to set to the end
     virtual void set_position(int nCursorPos) = 0;
     virtual int get_position() const = 0;
     virtual void set_editable(bool bEditable) = 0;

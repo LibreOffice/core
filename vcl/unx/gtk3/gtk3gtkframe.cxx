@@ -1074,8 +1074,6 @@ void GtkSalFrame::InitCommon()
     m_pRegion           = nullptr;
     m_pDropTarget       = nullptr;
     m_pDragSource       = nullptr;
-    m_bInDrag           = false;
-    m_pFormatConversionRequest = nullptr;
     m_bGeometryIsProvisional = false;
     m_ePointerStyle     = static_cast<PointerStyle>(0xffff);
     m_pSalMenu          = nullptr;
@@ -3468,15 +3466,15 @@ class GtkDnDTransferable : public GtkTransferable
     GdkDragContext *m_pContext;
     guint m_nTime;
     GtkWidget *m_pWidget;
-    GtkSalFrame *m_pFrame;
+    GtkDropTarget* m_pDropTarget;
     GMainLoop *m_pLoop;
     GtkSelectionData *m_pData;
 public:
-    GtkDnDTransferable(GdkDragContext *pContext, guint nTime, GtkWidget *pWidget, GtkSalFrame *pFrame)
+    GtkDnDTransferable(GdkDragContext *pContext, guint nTime, GtkWidget *pWidget, GtkDropTarget *pDropTarget)
         : m_pContext(pContext)
         , m_nTime(nTime)
         , m_pWidget(pWidget)
-        , m_pFrame(pFrame)
+        , m_pDropTarget(pDropTarget)
         , m_pLoop(nullptr)
         , m_pData(nullptr)
     {
@@ -3498,7 +3496,7 @@ public:
          */
         {
             m_pLoop = g_main_loop_new(nullptr, true);
-            m_pFrame->SetFormatConversionRequest(this);
+            m_pDropTarget->SetFormatConversionRequest(this);
 
             gtk_drag_get_data(m_pWidget, m_pContext, it->second, m_nTime);
 
@@ -3511,7 +3509,7 @@ public:
 
             g_main_loop_unref(m_pLoop);
             m_pLoop = nullptr;
-            m_pFrame->SetFormatConversionRequest(nullptr);
+            m_pDropTarget->SetFormatConversionRequest(nullptr);
         }
 
         css::uno::Any aRet;
@@ -3561,12 +3559,15 @@ GtkDragSource* GtkDragSource::g_ActiveDragSource;
 gboolean GtkSalFrame::signalDragDrop(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-
     if (!pThis->m_pDropTarget)
         return false;
+    return pThis->m_pDropTarget->signalDragDrop(pWidget, context, x, y, time);
+}
 
+gboolean GtkDropTarget::signalDragDrop(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time)
+{
     css::datatransfer::dnd::DropTargetDropEvent aEvent;
-    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(pThis->m_pDropTarget);
+    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(this);
     aEvent.Context = new GtkDropTargetDropContext(context, time);
     aEvent.LocationX = x;
     aEvent.LocationY = y;
@@ -3590,13 +3591,14 @@ gboolean GtkSalFrame::signalDragDrop(GtkWidget* pWidget, GdkDragContext* context
     if (GtkDragSource::g_ActiveDragSource)
         xTransferable = GtkDragSource::g_ActiveDragSource->GetTransferrable();
     else
-        xTransferable = new GtkDnDTransferable(context, time, pWidget, pThis);
+        xTransferable = new GtkDnDTransferable(context, time, pWidget, this);
     aEvent.Transferable = xTransferable;
 
-    pThis->m_pDropTarget->fire_drop(aEvent);
+    fire_drop(aEvent);
 
     return true;
 }
+
 
 class GtkDropTargetDragContext : public cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDragContext>
 {
@@ -3620,10 +3622,16 @@ public:
     }
 };
 
-void GtkSalFrame::signalDragDropReceived(GtkWidget* /*pWidget*/, GdkDragContext * /*context*/, gint /*x*/, gint /*y*/, GtkSelectionData* data, guint /*ttype*/, guint /*time*/, gpointer frame)
+void GtkSalFrame::signalDragDropReceived(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, GtkSelectionData* data, guint ttype, guint time, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    if (!pThis->m_pDropTarget)
+        return;
+    pThis->m_pDropTarget->signalDragDropReceived(pWidget, context, x, y, data, ttype, time);
+}
 
+void GtkDropTarget::signalDragDropReceived(GtkWidget* /*pWidget*/, GdkDragContext * /*context*/, gint /*x*/, gint /*y*/, GtkSelectionData* data, guint /*ttype*/, guint /*time*/)
+{
     /*
      * If we get a drop, then we will call like gtk_clipboard_wait_for_contents
      * with a loop inside a loop to get the right format, so if this is the
@@ -3631,24 +3639,28 @@ void GtkSalFrame::signalDragDropReceived(GtkWidget* /*pWidget*/, GdkDragContext 
      *
      * don't look at me like that.
      */
-    if (!pThis->m_pFormatConversionRequest)
+    if (!m_pFormatConversionRequest)
         return;
 
-    pThis->m_pFormatConversionRequest->LoopEnd(gtk_selection_data_copy(data));
+    m_pFormatConversionRequest->LoopEnd(gtk_selection_data_copy(data));
 }
 
 gboolean GtkSalFrame::signalDragMotion(GtkWidget *pWidget, GdkDragContext *context, gint x, gint y, guint time, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-
     if (!pThis->m_pDropTarget)
         return false;
+    return pThis->m_pDropTarget->signalDragMotion(pWidget, context, x, y, time);
+}
 
-    if (!pThis->m_bInDrag)
+
+gboolean GtkDropTarget::signalDragMotion(GtkWidget *pWidget, GdkDragContext *context, gint x, gint y, guint time)
+{
+    if (!m_bInDrag)
         gtk_drag_highlight(pWidget);
 
     css::datatransfer::dnd::DropTargetDragEnterEvent aEvent;
-    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(pThis->m_pDropTarget);
+    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(this);
     GtkDropTargetDragContext* pContext = new GtkDropTargetDragContext(context, time);
     //preliminary accept the Drag and select the preferred action, the fire_* will
     //inform the original caller of our choice and the callsite can decide
@@ -3686,7 +3698,7 @@ gboolean GtkSalFrame::signalDragMotion(GtkWidget *pWidget, GdkDragContext *conte
     aEvent.DropAction = GdkToVcl(eAction);
     aEvent.SourceActions = nSourceActions;
 
-    if (!pThis->m_bInDrag)
+    if (!m_bInDrag)
     {
         css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
         // For LibreOffice internal D&D we provide the Transferable without Gtk
@@ -3694,26 +3706,31 @@ gboolean GtkSalFrame::signalDragMotion(GtkWidget *pWidget, GdkDragContext *conte
         if (GtkDragSource::g_ActiveDragSource)
             xTransferable = GtkDragSource::g_ActiveDragSource->GetTransferrable();
         else
-            xTransferable = new GtkDnDTransferable(context, time, pWidget, pThis);
+            xTransferable = new GtkDnDTransferable(context, time, pWidget, this);
         css::uno::Sequence<css::datatransfer::DataFlavor> aFormats = xTransferable->getTransferDataFlavors();
         aEvent.SupportedDataFlavors = aFormats;
-        pThis->m_pDropTarget->fire_dragEnter(aEvent);
-        pThis->m_bInDrag = true;
+        fire_dragEnter(aEvent);
+        m_bInDrag = true;
     }
     else
     {
-        pThis->m_pDropTarget->fire_dragOver(aEvent);
+        fire_dragOver(aEvent);
     }
 
     return true;
 }
 
-void GtkSalFrame::signalDragLeave(GtkWidget *pWidget, GdkDragContext * /*context*/, guint /*time*/, gpointer frame)
+void GtkSalFrame::signalDragLeave(GtkWidget *pWidget, GdkDragContext *context, guint time, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     if (!pThis->m_pDropTarget)
         return;
-    pThis->m_bInDrag = false;
+    pThis->m_pDropTarget->signalDragLeave(pWidget, context, time);
+}
+
+void GtkDropTarget::signalDragLeave(GtkWidget* pWidget, GdkDragContext* /*context*/, guint /*time*/)
+{
+    m_bInDrag = false;
     gtk_drag_unhighlight(pWidget);
 }
 

@@ -21,6 +21,7 @@
 
 #include <vcl/edit.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/weld.hxx>
 #include <swdllapi.h>
 
 class SW_DLLPUBLIC ConditionEdit : public Edit, public DropTargetHelper
@@ -42,6 +43,40 @@ public:
     {
         bEnableDrop = bFlag;
     }
+};
+
+class SwConditionEdit;
+
+class SW_DLLPUBLIC SwConditionEditDropTarget : public DropTargetHelper
+{
+private:
+    SwConditionEdit& m_rEdit;
+
+    SAL_DLLPRIVATE virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    SAL_DLLPRIVATE virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+
+public:
+    SwConditionEditDropTarget(SwConditionEdit& rEdit);
+};
+
+class SW_DLLPUBLIC SwConditionEdit
+{
+    std::unique_ptr<weld::Entry> m_xControl;
+    SwConditionEditDropTarget m_aDropTargetHelper;
+    bool bBrackets, bEnableDrop;
+
+public:
+    SwConditionEdit(std::unique_ptr<weld::Entry> xControl);
+
+    OUString get_text() const { return m_xControl->get_text(); }
+    bool get_sensitive() const { return m_xControl->get_sensitive(); }
+    void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
+    weld::Entry& get_widget() { return *m_xControl; }
+
+    void ShowBrackets(bool bShow) { bBrackets = bShow; }
+    bool GetBrackets() const { return bBrackets; }
+    void SetDropEnable(bool bFlag) { bEnableDrop = bFlag; }
+    bool GetDropEnable() const { return bEnableDrop; }
 };
 
 #endif

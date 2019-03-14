@@ -721,7 +721,9 @@ Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& argu
 GtkDropTarget::GtkDropTarget()
     : WeakComponentImplHelper(m_aMutex)
     , m_pFrame(nullptr)
+    , m_pFormatConversionRequest(nullptr)
     , m_bActive(false)
+    , m_bInDrag(false)
     , m_nDefaultActions(0)
 {
 }
@@ -860,7 +862,7 @@ void GtkDropTarget::setDefaultActions(sal_Int8 nDefaultActions)
 
 Reference< XInterface > GtkInstance::CreateDropTarget()
 {
-    return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new GtkDropTarget()) );
+    return Reference<XInterface>(static_cast<cppu::OWeakObject*>(new GtkDropTarget));
 }
 
 GtkDragSource::~GtkDragSource()
@@ -1289,6 +1291,12 @@ private:
     gulong m_nButtonPressSignalId;
     gulong m_nMotionSignalId;
     gulong m_nButtonReleaseSignalId;
+    gulong m_nDragMotionSignalId;
+    gulong m_nDragDropSignalId;
+    gulong m_nDragDropReceivedSignalId;
+    gulong m_nDragLeaveSignalId;
+
+    rtl::Reference<GtkDropTarget> m_xDropTarget;
 
     static void signalSizeAllocate(GtkWidget*, GdkRectangle* allocation, gpointer widget)
     {
@@ -1422,6 +1430,30 @@ private:
         return true;
     }
 
+    static gboolean signalDragMotion(GtkWidget *pWidget, GdkDragContext *context, gint x, gint y, guint time, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        return pThis->m_xDropTarget->signalDragMotion(pWidget, context, x, y, time);
+    }
+
+    static gboolean signalDragDrop(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        return pThis->m_xDropTarget->signalDragDrop(pWidget, context, x, y, time);
+    }
+
+    static void signalDragDropReceived(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, GtkSelectionData* data, guint ttype, guint time, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        pThis->m_xDropTarget->signalDragDropReceived(pWidget, context, x, y, data, ttype, time);
+    }
+
+    static void signalDragLeave(GtkWidget *pWidget, GdkDragContext *context, guint time, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        pThis->m_xDropTarget->signalDragLeave(pWidget, context, time);
+    }
+
 public:
     GtkInstanceWidget(GtkWidget* pWidget, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : m_pWidget(pWidget)
@@ -1437,6 +1469,10 @@ public:
         , m_nButtonPressSignalId(0)
         , m_nMotionSignalId(0)
         , m_nButtonReleaseSignalId(0)
+        , m_nDragMotionSignalId(0)
+        , m_nDragDropSignalId(0)
+        , m_nDragDropReceivedSignalId(0)
+        , m_nDragLeaveSignalId(0)
     {
     }
 
@@ -1816,8 +1852,29 @@ public:
 
     bool get_frozen() const { return m_bFrozen; }
 
+    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override
+    {
+        if (!m_xDropTarget)
+        {
+            m_xDropTarget.set(new GtkDropTarget);
+            m_nDragMotionSignalId = g_signal_connect(m_pWidget, "drag-motion", G_CALLBACK(signalDragMotion), this);
+            m_nDragDropSignalId = g_signal_connect(m_pWidget, "drag-drop", G_CALLBACK(signalDragDrop), this);
+            m_nDragDropReceivedSignalId = g_signal_connect(m_pWidget, "drag-data-received", G_CALLBACK(signalDragDropReceived), this);
+            m_nDragLeaveSignalId = g_signal_connect(m_pWidget, "drag-leave", G_CALLBACK(signalDragLeave), this);
+        }
+        return m_xDropTarget.get();
+    }
+
     virtual ~GtkInstanceWidget() override
     {
+        if (m_nDragMotionSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nDragMotionSignalId);
+        if (m_nDragDropSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nDragDropSignalId);
+        if (m_nDragDropReceivedSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nDragDropReceivedSignalId);
+        if (m_nDragLeaveSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nDragLeaveSignalId);
         if (m_nKeyPressSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nKeyPressSignalId);
         if (m_nKeyReleaseSignalId)
