@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_1947314e",
+        "filename": "sd/source/ui/inc/morphdlg.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-03-14T09:27:23Z",
+      "side": 1,
+      "message": "Wow, nice catch. :-)",
+      "revId": "fc3a019ab7e195012483ddd650d71cfe48123017",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
