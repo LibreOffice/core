@@ -634,7 +634,7 @@ bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
             }
         }
         else if ( !aEdges.empty() )
-            aEdges[ aEdges.size() - 1 ]->EvaluateGroup( rDGR );
+            aEdges.back()->EvaluateGroup( rDGR );
         else
             bExecutingGroupCode = false;
     }

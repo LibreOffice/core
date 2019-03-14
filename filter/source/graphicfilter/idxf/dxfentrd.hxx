@@ -23,7 +23,6 @@
 #include "dxfgrprd.hxx"
 #include "dxfvec.hxx"
 
-#include <deque>
 #include <memory>
 #include <vector>
 
@@ -413,7 +412,7 @@ public:
     sal_Int32           nPointIndex;
 
     std::vector<DXFVector> aP;
-    std::deque<std::unique_ptr<DXFEdgeType>> aEdges;
+    std::vector<std::unique_ptr<DXFEdgeType>> aEdges;
 
     DXFBoundaryPathData();
     ~DXFBoundaryPathData();

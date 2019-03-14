@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEITEM_HXX
 #define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEITEM_HXX
 
-#include <deque>
 #include <unordered_map>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
