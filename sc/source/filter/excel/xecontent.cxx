@@ -416,11 +416,14 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     {
         OUString aTextMark( rUrl.copy( 1 ) );
 
-        sal_Int32 nSepPos = aTextMark.lastIndexOf( '.' );
-        if(nSepPos != -1)
-            aTextMark = aTextMark.replaceAt( nSepPos, 1, "!" );
-        else
-            nSepPos = aTextMark.lastIndexOf( '!' );
+        sal_Int32 nSepPos = aTextMark.lastIndexOf( '!' );
+        sal_Int32 nPointPos = aTextMark.lastIndexOf( '.' );
+        // last dot is the separator, if there is no ! after it
+        if(nSepPos < nPointPos)
+        {
+           nSepPos = nPointPos;
+           aTextMark = aTextMark.replaceAt( nSepPos, 1, "!" );
+        }
 
         if(nSepPos != -1)
         {
