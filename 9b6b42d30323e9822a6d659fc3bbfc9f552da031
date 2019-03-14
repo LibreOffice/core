@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_f99dad66",
+        "filename": "oox/source/ole/axcontrol.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2019-03-14T13:42:57Z",
+      "side": 1,
+      "message": "You should not call here the importGraphic method because it reads the graphic from the stream, which is now empty. You need to find the proper export method which does the reverse operation: takes an XGraphic object and writes it into a stream.",
+      "range": {
+        "startLine": 509,
+        "startChar": 65,
+        "endLine": 509,
+        "endChar": 78
+      },
+      "revId": "9b6b42d30323e9822a6d659fc3bbfc9f552da031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_b9896527",
+        "filename": "oox/source/ole/axcontrol.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2019-03-14T13:42:57Z",
+      "side": 1,
+      "message": "You need to get the XGraphic first from the API property (PROP_Graphic) and check the existence after.",
+      "range": {
+        "startLine": 510,
+        "startChar": 9,
+        "endLine": 510,
+        "endChar": 17
+      },
+      "revId": "9b6b42d30323e9822a6d659fc3bbfc9f552da031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_f9760d3f",
+        "filename": "oox/source/ole/axcontrol.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2019-03-14T13:42:57Z",
+      "side": 1,
+      "message": "It would be good if you can spend more time understanding what you are doing. First you set nImagePos in the switch case above and then you overwrite it here by the getProperty code, which does not make any sense. Check other API property -\u003e activeX property converter code pieces to understand how this method should look like.",
+      "range": {
+        "startLine": 531,
+        "startChar": 13,
+        "endLine": 531,
+        "endChar": 24
+      },
+      "revId": "9b6b42d30323e9822a6d659fc3bbfc9f552da031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_b98e4525",
+        "filename": "oox/source/ole/axcontrol.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2019-03-14T13:42:57Z",
+      "side": 1,
+      "message": "This line does not make any sense. PROP_Graphic property has a type of XGraphic. Also in the convertFromAxPicture() method gets the same PROP_Graphic property, why you query it here too?",
+      "range": {
+        "startLine": 1115,
+        "startChar": 31,
+        "endLine": 1115,
+        "endChar": 44
+      },
+      "revId": "9b6b42d30323e9822a6d659fc3bbfc9f552da031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
