@@ -49,7 +49,7 @@ static void SetBold( OptimizerDialog& rOptimizerDialog, const OUString& rControl
     FontDescriptor aFontDescriptor;
     if ( rOptimizerDialog.getControlProperty( rControl, "FontDescriptor" ) >>= aFontDescriptor )
     {
-        aFontDescriptor.Weight = FontWeight::BOLD;
+        aFontDescriptor.Weight = com::sun::star::awt::FontWeight::BOLD;
         rOptimizerDialog.setControlProperty( rControl, "FontDescriptor", Any( aFontDescriptor ) );
     }
 }

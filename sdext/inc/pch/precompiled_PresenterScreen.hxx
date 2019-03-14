@@ -13,34 +13,32 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:53:56 using:
+ Generated on 2019-04-29 21:18:57 using:
  ./bin/update_pch sdext PresenterScreen --cutoff=2 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./sdext/inc/pch/precompiled_PresenterScreen.hxx "make sdext.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
-#include <config_typesizes.h>
 #include <cstddef>
-#include <cstdlib>
-#include <cstring>
-#include <exception>
 #include <initializer_list>
 #include <iomanip>
+#include <limits>
 #include <map>
 #include <math.h>
 #include <memory>
 #include <new>
+#include <numeric>
 #include <ostream>
-#include <sstream>
 #include <stddef.h>
-#include <stdlib.h>
 #include <string.h>
-#include <string>
 #include <utility>
 #include <vector>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/conditn.h>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
@@ -64,7 +62,6 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
-#include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/saldllapi.h>
@@ -72,6 +69,8 @@
 #include <sal/typesizes.h>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -106,12 +105,9 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/FillRule.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
@@ -125,15 +121,12 @@
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
-#include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
@@ -149,13 +142,15 @@
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakagg.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <tools/diagnose_ex.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -13,19 +13,23 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:51:57 using:
+ Generated on 2019-04-29 21:18:35 using:
  ./bin/update_pch connectivity firebird_sdbc --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_firebird_sdbc.hxx "make connectivity.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <cassert>
 #include <cstddef>
 #include <memory>
 #include <stddef.h>
 #include <string.h>
+#include <string_view>
 #include <time.h>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
@@ -46,11 +50,11 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <salhelper/singletonref.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
@@ -58,16 +62,19 @@
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
+#include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <tools/stream.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <unotools/unotoolsdllapi.h>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

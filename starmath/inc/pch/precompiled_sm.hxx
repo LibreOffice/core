@@ -13,42 +13,42 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:54:02 using:
+ Generated on 2019-04-29 21:19:01 using:
  ./bin/update_pch starmath sm --cutoff=5 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./starmath/inc/pch/precompiled_sm.hxx "make starmath.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
-#include <climits>
 #include <cstddef>
-#include <cstdlib>
 #include <cstring>
 #include <functional>
 #include <limits.h>
+#include <limits>
+#include <list>
 #include <map>
 #include <memory>
 #include <new>
 #include <ostream>
-#include <string.h>
-#include <unordered_map>
+#include <utility>
 #include <vector>
 #include <boost/optional.hpp>
-#include <boost/optional/optional.hpp>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
-#include <osl/module.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textenc.h>
-#include <rtl/unload.h>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
@@ -57,17 +57,14 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/types.h>
-#include <salhelper/singletonref.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/cairo.hxx>
-#include <vcl/cursor.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
 #include <vcl/font.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/metaactiontypes.hxx>
-#include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
@@ -75,70 +72,70 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/wall.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakref.hxx>
-#include <document.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/editstat.hxx>
-#include <format.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <rect.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/docfile.hxx>
 #include <sfx2/shell.hxx>
-#include <smmod.hxx>
-#include <sot/formats.hxx>
+#include <sot/storage.hxx>
 #include <svl/SfxBroadcaster.hxx>
-#include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
-#include <svl/style.hxx>
 #include <svl/svldllapi.h>
+#include <svl/typedwhich.hxx>
 #include <svx/svxdllapi.h>
-#include <symbol.hxx>
 #include <tools/color.hxx>
-#include <tools/debug.hxx>
 #include <tools/gen.hxx>
+#include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>
-#include <types.hxx>
-#include <unomodel.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/options.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <xmloff/dllapi.h>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#include <dialog.hxx>
+#include <document.hxx>
+#include <node.hxx>
+#include <smmod.hxx>
+#include <symbol.hxx>
+#include <unomodel.hxx>
 #include <utility.hxx>
 #include <view.hxx>
 #include <visitors.hxx>
-#include <xmloff/dllapi.h>
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

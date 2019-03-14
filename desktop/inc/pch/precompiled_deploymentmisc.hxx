@@ -13,24 +13,25 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:52:23 using:
+ Generated on 2019-04-29 21:18:39 using:
  ./bin/update_pch desktop deploymentmisc --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./desktop/inc/pch/precompiled_deploymentmisc.hxx "make desktop.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <cassert>
-#include <config_folders.h>
 #include <cstddef>
 #include <cstdlib>
-#include <exception>
 #include <memory>
 #include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
 #include <boost/optional.hpp>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
@@ -44,7 +45,6 @@
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
-#include <rtl/byteseq.hxx>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
@@ -61,14 +61,14 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <salhelper/linkhelper.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <comphelper/comphelperdllapi.h>
@@ -81,5 +81,8 @@
 #include <typelib/typedescription.h>
 #include <uno/data.h>
 #include <unotools/unotoolsdllapi.h>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

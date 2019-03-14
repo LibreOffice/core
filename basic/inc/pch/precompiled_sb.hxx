@@ -13,26 +13,26 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:51:34 using:
+ Generated on 2019-04-29 21:18:33 using:
  ./bin/update_pch basic sb --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./basic/inc/pch/precompiled_sb.hxx "make basic.build" --find-conflicts
 */
 
-#include <config_features.h>
+#if PCH_LEVEL >= 1
 #include <cstddef>
-#include <cstdlib>
 #include <math.h>
 #include <memory>
-#include <sstream>
+#include <ostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <string>
+#include <vector>
 #include <boost/optional.hpp>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <osl/time.h>
@@ -44,51 +44,50 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
-#include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
-#include <vcl/mapmod.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/i18n/DirectionProperty.hpp>
-#include <com/sun/star/i18n/KCharacterType.hpp>
-#include <com/sun/star/i18n/KParseTokens.hpp>
-#include <com/sun/star/i18n/KParseType.hpp>
-#include <com/sun/star/i18n/ParseResult.hpp>
-#include <com/sun/star/i18n/UnicodeScript.hpp>
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <vcl/weld.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/util/DateTime.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <i18nlangtag/lang.h>
-#include <i18nlangtag/languagetag.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/cow_wrapper.hxx>
-#include <sbobjmod.hxx>
-#include <sbxbase.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/debug.hxx>
 #include <tools/link.hxx>
-#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/unotoolsdllapi.h>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
 #include <basic/basicdllapi.h>
+#include <basic/sbdef.hxx>
 #include <basic/sberrors.hxx>
+#include <basic/sbmod.hxx>
+#include <basic/sbstar.hxx>
 #include <basic/sbuno.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbxfac.hxx>
 #include <basic/sbxform.hxx>
+#include <basic/sbxmeth.hxx>
 #include <basic/sbxobj.hxx>
+#include <basic/sbxprop.hxx>
 #include <basic/sbxvar.hxx>
+#include <sbobjmod.hxx>
+#include <sbxbase.hxx>
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

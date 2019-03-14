@@ -13,34 +13,35 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:55:34 using:
+ Generated on 2019-04-29 21:19:18 using:
  ./bin/update_pch tools tl --cutoff=5 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./tools/inc/pch/precompiled_tl.hxx "make tools.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstdlib>
-#include <cstring>
-#include <limits.h>
+#include <limits>
+#include <memory>
 #include <new>
 #include <ostream>
 #include <stddef.h>
 #include <string.h>
+#include <utility>
 #include <vector>
-#include <boost/math/common_factor_rt.hpp>
-#include <boost/optional/optional.hpp>
 #include <boost/rational.hpp>
+#include <boost/version.hpp>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
 #include <osl/process.h>
 #include <osl/thread.h>
-#include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/character.hxx>
 #include <rtl/crc.h>
@@ -53,7 +54,6 @@
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/uri.hxx>
-#include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -63,14 +63,18 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
-#include <basegfx/range/b2drange.hxx>
-#include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/vector/b2enums.hxx>
+#include <com/sun/star/uno/Any.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

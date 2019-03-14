@@ -13,44 +13,39 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-07-28 11:13:31 using:
+ Generated on 2019-03-11 18:27:04 using:
  ./bin/update_pch cppuhelper cppuhelper --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./cppuhelper/inc/pch/precompiled_cppuhelper.hxx "make cppuhelper.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdlib>
-#include <exception>
 #include <memory>
 #include <new>
 #include <vector>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
-#include <osl/doublecheckedlocking.h>
-#include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
 #include <osl/module.h>
 #include <osl/module.hxx>
 #include <osl/mutex.hxx>
+#include <osl/process.h>
 #include <osl/security.hxx>
 #include <osl/thread.hxx>
+#include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
-#include <rtl/byteseq.hxx>
-#include <rtl/instance.hxx>
+#include <rtl/character.hxx>
 #include <rtl/malformeduriexception.hxx>
-#include <rtl/process.h>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.hxx>
-#include <rtl/string.h>
-#include <rtl/string.hxx>
-#include <rtl/textcvt.h>
-#include <rtl/textenc.h>
 #include <rtl/unload.h>
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
@@ -58,15 +53,18 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
-#include <sal/alloca.h>
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <salhelper/simplereferenceobject.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -78,17 +76,21 @@
 #include <com/sun/star/reflection/XTypeDescription.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/DeploymentException.hpp>
+#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.h>
+#include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppu/cppudllapi.h>
-#include <cppu/unotype.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
 #include <uno/lbnames.h>
 #include <uno/mapping.hxx>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
@@ -99,7 +101,9 @@
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/weakagg.hxx>
+#include <cppuhelper/weakref.hxx>
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

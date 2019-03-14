@@ -24,8 +24,8 @@ namespace comphelper
 {
 
 
+    using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::accessibility;
 
@@ -39,10 +39,10 @@ namespace comphelper
     }
 
 
-    bool OCommonAccessibleComponent::containsPoint( const Point& _rPoint )
+    bool OCommonAccessibleComponent::containsPoint( const awt::Point& _rPoint )
     {
         OExternalLockGuard aGuard( this );
-        Rectangle aBounds( implGetBounds() );
+        awt::Rectangle aBounds( implGetBounds() );
         return  ( _rPoint.X >= 0 )
             &&  ( _rPoint.Y >= 0 )
             &&  ( _rPoint.X < aBounds.Width )
@@ -50,26 +50,26 @@ namespace comphelper
     }
 
 
-    Point OCommonAccessibleComponent::getLocation(  )
+    awt::Point OCommonAccessibleComponent::getLocation(  )
     {
         OExternalLockGuard aGuard( this );
-        Rectangle aBounds( implGetBounds() );
-        return Point( aBounds.X, aBounds.Y );
+        awt::Rectangle aBounds( implGetBounds() );
+        return awt::Point( aBounds.X, aBounds.Y );
     }
 
 
-    Point OCommonAccessibleComponent::getLocationOnScreen(  )
+    awt::Point OCommonAccessibleComponent::getLocationOnScreen(  )
     {
         OExternalLockGuard aGuard( this );
 
-        Point aScreenLoc( 0, 0 );
+        awt::Point aScreenLoc( 0, 0 );
 
         Reference< XAccessibleComponent > xParentComponent( implGetParentContext(), UNO_QUERY );
         OSL_ENSURE( xParentComponent.is(), "OCommonAccessibleComponent::getLocationOnScreen: no parent component!" );
         if ( xParentComponent.is() )
         {
-            Point aParentScreenLoc( xParentComponent->getLocationOnScreen() );
-            Point aOwnRelativeLoc( getLocation() );
+            awt::Point aParentScreenLoc( xParentComponent->getLocationOnScreen() );
+            awt::Point aOwnRelativeLoc( getLocation() );
             aScreenLoc.X = aParentScreenLoc.X + aOwnRelativeLoc.X;
             aScreenLoc.Y = aParentScreenLoc.Y + aOwnRelativeLoc.Y;
         }
@@ -78,15 +78,15 @@ namespace comphelper
     }
 
 
-    Size OCommonAccessibleComponent::getSize(  )
+    awt::Size OCommonAccessibleComponent::getSize(  )
     {
         OExternalLockGuard aGuard( this );
-        Rectangle aBounds( implGetBounds() );
-        return Size( aBounds.Width, aBounds.Height );
+        awt::Rectangle aBounds( implGetBounds() );
+        return awt::Size( aBounds.Width, aBounds.Height );
     }
 
 
-    Rectangle OCommonAccessibleComponent::getBounds(  )
+    awt::Rectangle OCommonAccessibleComponent::getBounds(  )
     {
         OExternalLockGuard aGuard( this );
         return implGetBounds();
@@ -102,31 +102,31 @@ namespace comphelper
         // (order matters: the first is the class name, the second is the class doing the ref counting)
 
 
-    sal_Bool SAL_CALL OAccessibleComponentHelper::containsPoint( const Point& _rPoint )
+    sal_Bool SAL_CALL OAccessibleComponentHelper::containsPoint( const awt::Point& _rPoint )
     {
         return OCommonAccessibleComponent::containsPoint( _rPoint );
     }
 
 
-    Point SAL_CALL OAccessibleComponentHelper::getLocation(  )
+    awt::Point SAL_CALL OAccessibleComponentHelper::getLocation(  )
     {
         return OCommonAccessibleComponent::getLocation( );
     }
 
 
-    Point SAL_CALL OAccessibleComponentHelper::getLocationOnScreen(  )
+    awt::Point SAL_CALL OAccessibleComponentHelper::getLocationOnScreen(  )
     {
         return OCommonAccessibleComponent::getLocationOnScreen( );
     }
 
 
-    Size SAL_CALL OAccessibleComponentHelper::getSize(  )
+    awt::Size SAL_CALL OAccessibleComponentHelper::getSize(  )
     {
         return OCommonAccessibleComponent::getSize( );
     }
 
 
-    Rectangle SAL_CALL OAccessibleComponentHelper::getBounds(  )
+    awt::Rectangle SAL_CALL OAccessibleComponentHelper::getBounds(  )
     {
         return OCommonAccessibleComponent::getBounds( );
     }
@@ -141,31 +141,31 @@ namespace comphelper
         // (order matters: the first is the class name, the second is the class doing the ref counting)
 
 
-    sal_Bool SAL_CALL OAccessibleExtendedComponentHelper::containsPoint( const Point& _rPoint )
+    sal_Bool SAL_CALL OAccessibleExtendedComponentHelper::containsPoint( const awt::Point& _rPoint )
     {
         return OCommonAccessibleComponent::containsPoint( _rPoint );
     }
 
 
-    Point SAL_CALL OAccessibleExtendedComponentHelper::getLocation(  )
+    awt::Point SAL_CALL OAccessibleExtendedComponentHelper::getLocation(  )
     {
         return OCommonAccessibleComponent::getLocation( );
     }
 
 
-    Point SAL_CALL OAccessibleExtendedComponentHelper::getLocationOnScreen(  )
+    awt::Point SAL_CALL OAccessibleExtendedComponentHelper::getLocationOnScreen(  )
     {
         return OCommonAccessibleComponent::getLocationOnScreen( );
     }
 
 
-    Size SAL_CALL OAccessibleExtendedComponentHelper::getSize(  )
+    awt::Size SAL_CALL OAccessibleExtendedComponentHelper::getSize(  )
     {
         return OCommonAccessibleComponent::getSize( );
     }
 
 
-    Rectangle SAL_CALL OAccessibleExtendedComponentHelper::getBounds(  )
+    awt::Rectangle SAL_CALL OAccessibleExtendedComponentHelper::getBounds(  )
     {
         return OCommonAccessibleComponent::getBounds( );
     }

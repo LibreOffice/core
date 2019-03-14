@@ -13,29 +13,38 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:52:20 using:
+ Generated on 2019-04-29 21:18:38 using:
  ./bin/update_pch dbaccess sdbt --cutoff=1 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./dbaccess/inc/pch/precompiled_sdbt.hxx "make dbaccess.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <memory>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdb/tools/CompositionType.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <comphelper/componentmodule.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <connectivity/statementcomposer.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

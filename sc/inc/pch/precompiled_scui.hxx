@@ -13,46 +13,42 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:53:36 using:
+ Generated on 2019-04-29 21:16:41 using:
  ./bin/update_pch sc scui --cutoff=1 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./sc/inc/pch/precompiled_scui.hxx "make sc.build" --find-conflicts
 */
 
-#include <algorithm>
-#include <cmath>
-#include <helpids.h>
-#include <limits.h>
-#include <math.h>
+#if PCH_LEVEL >= 1
 #include <memory>
 #include <vector>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
+#include <osl/diagnose.h>
 #include <osl/thread.h>
+#include <osl/time.h>
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/config.h>
 #include <sal/types.h>
-#include <vcl/builderfactory.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/event.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
-#include <vcl/window.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/GraphicNativeTransform.hxx>
-#include <vcl/GraphicNativeMetadata.hxx>
-#include <appoptio.hxx>
-#include <attrib.hxx>
-#include <autoform.hxx>
-#include <calcconfig.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
@@ -68,8 +64,59 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/flstitem.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <officecfg/Office/Calc.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <sfx2/basedlgs.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/docinsert.hxx>
+#include <sfx2/fcontnr.hxx>
+#include <sfx2/filedlghelper.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/sfxdlg.hxx>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/tabdlg.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/memberid.h>
+#include <svl/sharedstringpool.hxx>
+#include <svl/style.hxx>
+#include <svl/typedwhich.hxx>
+#include <svl/zforlist.hxx>
+#include <svtools/collatorres.hxx>
+#include <svtools/ctrlbox.hxx>
+#include <svtools/ehdl.hxx>
+#include <svtools/inettbc.hxx>
+#include <svtools/restartdialog.hxx>
+#include <svtools/sfxecode.hxx>
+#include <svtools/unitconv.hxx>
+#include <svx/colorbox.hxx>
+#include <svx/flagsdef.hxx>
+#include <svx/langbox.hxx>
+#include <svx/numinf.hxx>
+#include <svx/pageitem.hxx>
+#include <svx/txencbox.hxx>
+#include <svx/unomid.hxx>
+#include <tools/color.hxx>
+#include <unotools/collatorwrapper.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <unotools/transliterationwrapper.hxx>
+#include <unotools/useroptions.hxx>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#include <appoptio.hxx>
+#include <attrib.hxx>
+#include <autoform.hxx>
+#include <calcconfig.hxx>
+#include <conditio.hxx>
 #include <defaultsoptions.hxx>
 #include <docoptio.hxx>
 #include <document.hxx>
@@ -77,33 +124,14 @@
 #include <dpsave.hxx>
 #include <dpsdbtab.hxx>
 #include <dputil.hxx>
-#include <editeng/boxitem.hxx>
-#include <editeng/brushitem.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/contouritem.hxx>
-#include <editeng/crossedoutitem.hxx>
-#include <editeng/editobj.hxx>
-#include <editeng/editstat.hxx>
-#include <editeng/editview.hxx>
-#include <editeng/eeitem.hxx>
-#include <editeng/eerdll.hxx>
-#include <editeng/flditem.hxx>
-#include <editeng/flstitem.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/shdditem.hxx>
-#include <editeng/udlnitem.hxx>
-#include <editeng/wghtitem.hxx>
 #include <editutil.hxx>
 #include <filterentries.hxx>
-#include <formula/compiler.hxx>
 #include <formula/grammar.hxx>
 #include <formulaopt.hxx>
 #include <global.hxx>
 #include <globalnames.hxx>
-#include <i18nlangtag/languagetag.hxx>
+#include <helpids.h>
 #include <miscuno.hxx>
-#include <officecfg/Office/Calc.hxx>
 #include <optutil.hxx>
 #include <patattr.hxx>
 #include <printopt.hxx>
@@ -113,54 +141,11 @@
 #include <scabstdlg.hxx>
 #include <scitems.hxx>
 #include <scmod.hxx>
-#include <scopetools.hxx>
 #include <scresid.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/basedlgs.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/docinsert.hxx>
-#include <sfx2/fcontnr.hxx>
-#include <sfx2/filedlghelper.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/sfxresid.hxx>
-#include <sfx2/tabdlg.hxx>
 #include <strings.hxx>
-#include <svl/aeitem.hxx>
-#include <svl/cjkoptions.hxx>
-#include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
-#include <svl/memberid.h>
-#include <svl/sharedstringpool.hxx>
-#include <svl/stritem.hxx>
-#include <svl/style.hxx>
-#include <svl/zforlist.hxx>
-#include <svtools/collatorres.hxx>
-#include <svtools/ehdl.hxx>
-#include <svtools/sfxecode.hxx>
-#include <svx/algitem.hxx>
-#include <svx/colorbox.hxx>
-#include <svx/dlgutil.hxx>
-#include <svx/drawitem.hxx>
-#include <svx/flagsdef.hxx>
-#include <svx/numinf.hxx>
-#include <svx/svxcommands.h>
-#include <svx/svxdlg.hxx>
-#include <svx/txencbox.hxx>
-#include <svx/unomid.hxx>
-#include <svx/xtable.hxx>
 #include <tablink.hxx>
-#include <tools/color.hxx>
-#include <tools/urlobj.hxx>
-#include <unotools/collatorwrapper.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <unotools/pathoptions.hxx>
-#include <unotools/transliterationwrapper.hxx>
-#include <unotools/useroptions.hxx>
 #include <userlist.hxx>
-#include <vcl/svlbitm.hxx>
-#include <vcl/treelistentry.hxx>
 #include <viewopti.hxx>
-#include <zforauto.hxx>
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

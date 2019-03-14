@@ -13,18 +13,21 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-09-20 22:55:36 using:
+ Generated on 2019-04-29 21:19:18 using:
  ./bin/update_pch unoxml unoxml --cutoff=1 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./unoxml/inc/pch/precompiled_unoxml.hxx "make unoxml.build" --find-conflicts
 */
 
+#if PCH_LEVEL >= 1
 #include <algorithm>
 #include <memory>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#endif // PCH_LEVEL >= 1
+#if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <rtl/alloc.h>
@@ -32,6 +35,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
+#include <sal/log.hxx>
+#endif // PCH_LEVEL >= 2
+#if PCH_LEVEL >= 3
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -62,7 +68,12 @@
 #include <libxml/xmlstring.h>
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
+#include <sax/fastattribs.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
+#include <xmloff/xmlimp.hxx>
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
