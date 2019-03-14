@@ -2091,7 +2091,8 @@ static void doc_iniUnoCommands ()
         OUString(".uno:InsertPageFooter"),
         OUString(".uno:OnlineAutoFormat"),
         OUString(".uno:InsertSymbol"),
-        OUString(".uno:EditRegion")
+        OUString(".uno:EditRegion"),
+        OUString(".uno:ThesaurusDialog")
     };
 
     util::URL aCommandURL;
@@ -4747,6 +4748,7 @@ static void lo_destroy(LibreOfficeKit* pThis)
     gImpl = nullptr;
 
     SAL_INFO("lok", "LO Destroy");
+    SAL_WARN("SNAKE", "Destroying");
 
     comphelper::LibreOfficeKit::setStatusIndicatorCallback(nullptr, nullptr);
     uno::Reference <frame::XDesktop2> xDesktop = frame::Desktop::create ( ::comphelper::getProcessComponentContext() );
