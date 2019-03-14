@@ -444,6 +444,7 @@ void SdImportTest::testN862510_2()
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
     {
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
         SdrObjGroup *pGrpObj = dynamic_cast<SdrObjGroup *>( pPage->GetObj( 0 ) );
         CPPUNIT_ASSERT( pGrpObj );
         SdrObjCustomShape *pObj = dynamic_cast<SdrObjCustomShape *>( pGrpObj->GetSubList()->GetObj( 0 ) );

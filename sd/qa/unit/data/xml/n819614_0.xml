@@ -14,7 +14,7 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
  </XShape>
- <XShape positionX="182" positionY="2544" sizeX="25125" sizeY="16293" type="com.sun.star.drawing.GroupShape">
+ <XShape positionX="182" positionY="2544" sizeX="25125" sizeY="16293" type="com.sun.star.drawing.GroupShape" name="Content Placeholder 4">
   <XShapes>
    <XShape positionX="10751" positionY="3496" sizeX="1563" sizeY="253" type="com.sun.star.drawing.CustomShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="729fcf" fillTransparence="0" fillTransparenceGradientName="">
     <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
@@ -6821,14 +6821,6 @@
   <Transformation>
    <Line1 column1="25126.000000" column2="0.000000" column3="182.000000"/>
    <Line2 column1="0.000000" column2="16294.000000" column3="2544.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
- </XShape>
- <XShape positionX="0" positionY="0" sizeX="100" sizeY="100" type="com.sun.star.drawing.GroupShape" name="Content Placeholder 4">
-  <XShapes/>
-  <Transformation>
-   <Line1 column1="101.000000" column2="0.000000" column3="0.000000"/>
-   <Line2 column1="0.000000" column2="101.000000" column3="0.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
  </XShape>
