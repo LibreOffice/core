@@ -19,6 +19,12 @@
 
 #include <config_features.h>
 
+#ifdef IOS
+#include <premac.h>
+#include <UIKit/UIKit.h>
+#include <postmac.h>
+#endif
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
@@ -705,6 +711,7 @@ bool Dialog::EventNotify( NotifyEvent& rNEvt )
 //taskbar, menus, etc.
 Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize)
 {
+#ifndef IOS
     long w = rScreenSize.Width();
     if (w <= 800)
         w -= 15;
@@ -721,6 +728,19 @@ Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize)
 
     return Size(std::max<long>(w, 640 - 15),
                 std::max<long>(h, 480 - 50));
+#else
+    // Don't bother with ancient magic numbers of unclear relevance on non-desktop apps anyway. It
+    // seems that at least currently in the iOS app, this function is called just once per dialog,
+    // with a rScreenSize parameter of 1x1 (!). This would lead to always returning 625x430 which is
+    // a bit random and needlessly small on an iPad at least. We want something that closely will
+    // just fit on the display in either orientation.
+
+    // We ignore the rScreenSize as it will be the dummy 1x1 from iosinst.cxx (see "Totally wrong of course").
+    (void) rScreenSize;
+
+    const int n = std::min<CGFloat>([[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height);
+    return Size(n-10, n-10);
+#endif
 }
 
 void Dialog::SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink)
