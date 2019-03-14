@@ -147,6 +147,9 @@ bool SwApplet_Impl::CreateApplet( const OUString& rBaseURL )
     OUString aCode, aName, aCodeBase;
     bool bMayScript = false;
 
+    if (getenv("LO_DISABLE_JRE"))
+        return false;
+
     size_t nArgCount = aCommandList.size();
     for( size_t i = 0; i < nArgCount; i++ )
     {
@@ -186,6 +189,9 @@ void SwApplet_Impl::FinishApplet()
 #if HAVE_FEATURE_JAVA
 void SwApplet_Impl::AppendParam( const OUString& rName, const OUString& rValue )
 {
+    if (getenv("LO_DISABLE_JRE"))
+        return;
+
     aCommandList.Append( rName, rValue );
 }
 #endif

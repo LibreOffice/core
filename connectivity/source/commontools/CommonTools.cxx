@@ -116,6 +116,9 @@ namespace connectivity
     ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const Reference<XComponentContext >& _rxContext)
     {
         ::rtl::Reference< jvmaccess::VirtualMachine > aRet;
+        if (getenv("LO_DISABLE_JRE"))
+            return aRet;
+
         OSL_ENSURE(_rxContext.is(),"No XMultiServiceFactory a.v.!");
         if(!_rxContext.is())
             return aRet;
@@ -147,6 +150,9 @@ namespace connectivity
     bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const OUString& _sClassName )
     {
         bool bRet = false;
+        if (getenv("LO_DISABLE_JRE"))
+            return bRet;
+
         if ( _pJVM.is() )
         {
             jvmaccess::VirtualMachine::AttachGuard aGuard(_pJVM);

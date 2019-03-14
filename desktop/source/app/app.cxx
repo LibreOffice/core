@@ -1605,8 +1605,11 @@ int Desktop::Main()
 #if HAVE_FEATURE_JAVA
             // The JavaContext contains an interaction handler which is used when
             // the creation of a Java Virtual Machine fails
-            css::uno::ContextLayer layer2(
-                new svt::JavaContext( css::uno::getCurrentContext() ) );
+            std::unique_ptr<css::uno::ContextLayer> layer2;
+
+            if (!getenv("LO_DISABLE_JRE"))
+                layer2 =
+                    std::make_unique<css::uno::ContextLayer>(new svt::JavaContext( css::uno::getCurrentContext() ) );
 #endif
             // check whether the shutdown is caused by restart just before entering the Execute
             pExecGlobals->bRestartRequested = pExecGlobals->bRestartRequested ||
