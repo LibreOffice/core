@@ -241,22 +241,16 @@ public:
     void    SetWrtShell(SwWrtShell const & rSh);
 };
 
-class SwInsertSectionTabDialog : public SfxTabDialog
+class SwInsertSectionTabDialog : public SfxTabDialogController
 {
     SwWrtShell&     rWrtSh;
     std::unique_ptr<SwSectionData> m_pSectionData;
 
-    sal_uInt16 m_nSectionPageId;
-    sal_uInt16 m_nColumnPageId;
-    sal_uInt16 m_nBackPageId;
-    sal_uInt16 m_nNotePageId;
-    sal_uInt16 m_nIndentPage;
-
 protected:
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    virtual void    PageCreated(const OString& rId, SfxTabPage &rPage) override;
     virtual short   Ok() override;
 public:
-    SwInsertSectionTabDialog(vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
+    SwInsertSectionTabDialog(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
     virtual ~SwInsertSectionTabDialog() override;
 
     void        SetSectionData(SwSectionData const& rSect);

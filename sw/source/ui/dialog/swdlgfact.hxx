@@ -530,8 +530,15 @@ class AbstractEditRegionDlg_Impl : public AbstractEditRegionDlg
 class SwInsertSectionTabDialog;
 class AbstractInsertSectionTabDialog_Impl : public AbstractInsertSectionTabDialog
 {
-    DECL_ABSTDLG_BASE(AbstractInsertSectionTabDialog_Impl,SwInsertSectionTabDialog)
-    virtual void        SetSectionData(SwSectionData const& rSect) override;
+    std::shared_ptr<SwInsertSectionTabDialog> m_xDlg;
+public:
+    explicit AbstractInsertSectionTabDialog_Impl(std::unique_ptr<SwInsertSectionTabDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
+    virtual void SetSectionData(SwSectionData const& rSect) override;
 };
 
 class SwIndexMarkFloatDlg;
@@ -693,7 +700,7 @@ public:
                                                 bool bGlobal) override;
     virtual VclPtr<AbstractEditRegionDlg>      CreateEditRegionDlg(vcl::Window* pParent, SwWrtShell& rWrtSh) override;
     virtual VclPtr<AbstractInsertSectionTabDialog>     CreateInsertSectionTabDialog(
-        vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh) override;
+        weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh) override;
     virtual VclPtr<AbstractMarkFloatDlg>       CreateIndexMarkFloatDlg(
                                                        SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,

@@ -244,7 +244,16 @@ short AbstractMailMergeFieldConnectionsDlg_Impl::Execute()
 
 IMPL_ABSTDLG_BASE(AbstractMultiTOXTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractEditRegionDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractInsertSectionTabDialog_Impl);
+
+short AbstractInsertSectionTabDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+bool AbstractInsertSectionTabDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return SfxTabDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
 
 short AbstractIndexMarkFloatDlg_Impl::Execute()
 {
@@ -667,7 +676,7 @@ void AbstractEditRegionDlg_Impl::SelectSection(const OUString& rSectionName)
 void
 AbstractInsertSectionTabDialog_Impl::SetSectionData(SwSectionData const& rSect)
 {
-    pDlg->SetSectionData(rSect);
+    m_xDlg->SetSectionData(rSect);
 }
 
 void AbstractIndexMarkFloatDlg_Impl::ReInitDlg(SwWrtShell& rWrtShell)
@@ -1079,11 +1088,10 @@ VclPtr<AbstractEditRegionDlg> SwAbstractDialogFactory_Impl::CreateEditRegionDlg(
     return VclPtr<AbstractEditRegionDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractInsertSectionTabDialog> SwAbstractDialogFactory_Impl::CreateInsertSectionTabDialog(
-                                                    vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh)
+VclPtr<AbstractInsertSectionTabDialog> SwAbstractDialogFactory_Impl::CreateInsertSectionTabDialog(weld::Window* pParent,
+        const SfxItemSet& rSet, SwWrtShell& rSh)
 {
-    VclPtr<SwInsertSectionTabDialog> pDlg = VclPtr<SwInsertSectionTabDialog>::Create(pParent, rSet, rSh);
-    return VclPtr<AbstractInsertSectionTabDialog_Impl>::Create(pDlg);
+    return VclPtr<AbstractInsertSectionTabDialog_Impl>::Create(std::make_unique<SwInsertSectionTabDialog>(pParent, rSet, rSh));
 }
 
 VclPtr<AbstractMarkFloatDlg> SwAbstractDialogFactory_Impl::CreateIndexMarkFloatDlg(
