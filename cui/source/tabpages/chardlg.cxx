@@ -251,7 +251,9 @@ SvxCharNamePage::SvxCharNamePage(TabPageParent pParent, const SfxItemSet& rInSet
     , m_xCTLFontFeaturesButton(m_xBuilder->weld_button("ctl_features_button"))
 {
     m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));
-
+#ifdef IOS
+    m_xPreviewWin->hide();
+#endif
     m_pImpl->m_aNoStyleText = CuiResId( RID_SVXSTR_CHARNAME_NOSTYLE );
 
     SvtLanguageOptions aLanguageOptions;
@@ -1358,6 +1360,9 @@ SvxCharEffectsPage::SvxCharEffectsPage(TabPageParent pParent, const SfxItemSet& 
     , m_xA11yWarningFT(m_xBuilder->weld_label("a11ywarning"))
 {
     m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));
+#ifdef IOS
+    m_xPreviewWin->hide();
+#endif
     m_xFontColorLB->SetSlotId(SID_ATTR_CHAR_COLOR);
     m_xOverlineColorLB->SetSlotId(SID_ATTR_CHAR_COLOR);
     m_xUnderlineColorLB->SetSlotId(SID_ATTR_CHAR_COLOR);
@@ -2479,6 +2484,9 @@ SvxCharPositionPage::SvxCharPositionPage(TabPageParent pParent, const SfxItemSet
     , m_xPairKerningBtn(m_xBuilder->weld_check_button("pairkerning"))
 {
     m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));
+#ifdef IOS
+    m_xPreviewWin->hide();
+#endif
     Initialize();
 }
 
@@ -3073,6 +3081,9 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage(TabPageParent pParent, const SfxItemSet
         m_xEndBracketLB->append(OUString::number(TWOLINE_CLOSE[i].second), CuiResId(TWOLINE_CLOSE[i].first));
 
     m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));
+#ifdef IOS
+    m_xPreviewWin->hide();
+#endif
     Initialize();
 }
 
