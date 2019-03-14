@@ -12,6 +12,7 @@
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <test/table/xtablecolumns.hxx>
 #include <cppu/unotype.hxx>
 
@@ -37,6 +38,7 @@ class ScTableColumnsObj : public CalcUnoApiTest,
                           public apitest::XEnumerationAccess,
                           public apitest::XIndexAccess,
                           public apitest::XNameAccess,
+                          public apitest::XServiceInfo,
                           public apitest::XTableColumns
 {
 public:
@@ -64,6 +66,11 @@ public:
     CPPUNIT_TEST(testGetElementNames);
     CPPUNIT_TEST(testHasByName);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     // XTableColumns
     CPPUNIT_TEST(testInsertByIndex);
     CPPUNIT_TEST(testInsertByIndexWithNegativeIndex);
@@ -85,6 +92,7 @@ ScTableColumnsObj::ScTableColumnsObj()
     , XElementAccess(cppu::UnoType<table::XCellRange>::get())
     , XIndexAccess(1024)
     , XNameAccess("ABC")
+    , XServiceInfo("ScTableColumnsObj", "com.sun.star.table.TableColumns")
 {
 }
 
