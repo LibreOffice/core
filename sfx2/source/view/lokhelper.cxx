@@ -243,6 +243,7 @@ namespace
 {
     struct LOKAsyncEventData
     {
+        int mnView; // Window is not enough.
         VclPtr<vcl::Window> mpWindow;
         VclEventId mnEvent;
         MouseEvent maMouseEvent;
@@ -254,6 +255,13 @@ namespace
         LOKAsyncEventData* pLOKEv = static_cast<LOKAsyncEventData*>(pEv);
         if (pLOKEv->mpWindow->IsDisposed())
             return;
+
+        int nView = SfxLokHelper::getView(nullptr);
+        if (nView != pLOKEv->mnView)
+        {
+            SAL_INFO("sfx.view", "LOK - view mismatch " << nView << " vs. " << pLOKEv->mnView);
+            SfxLokHelper::setView(pLOKEv->mnView);
+        }
 
         switch (pLOKEv->mnEvent)
         {
@@ -301,6 +309,7 @@ namespace
             return;
         }
 
+        pEvent->mnView = SfxLokHelper::getView(nullptr);
         Application::PostUserEvent(Link<void*, void>(pEvent, LOKPostAsyncEvent));
     }
 }
