@@ -469,18 +469,21 @@ namespace dbaui
 
         bool bSuccess = false;
 #if HAVE_FEATURE_JAVA
-        try
+        if (!getenv("LO_DISABLE_JRE"))
         {
-            if (!m_xEDDriverClass->get_text().trim().isEmpty())
+            try
             {
+                if (!m_xEDDriverClass->get_text().trim().isEmpty())
+                {
 // TODO change jvmaccess
-                ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
-                m_xEDDriverClass->set_text(m_xEDDriverClass->get_text().trim()); // fdo#68341
-                bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_xEDDriverClass->get_text());
+                    ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
+                    m_xEDDriverClass->set_text(m_xEDDriverClass->get_text().trim()); // fdo#68341
+                    bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_xEDDriverClass->get_text());
+                }
             }
-        }
-        catch(Exception&)
-        {
+            catch(Exception&)
+            {
+            }
         }
 #endif
         const char* pMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;

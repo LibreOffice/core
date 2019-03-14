@@ -218,7 +218,10 @@ void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const css
     if ( pImpl )
     {
 #if HAVE_FEATURE_JAVA
-        std::unique_ptr< css::uno::ContextLayer > layer(EnsureJavaContext());
+        std::unique_ptr< css::uno::ContextLayer > layer;
+
+        if (!getenv("LO_DISABLE_JRE"))
+            layer = std::move(EnsureJavaContext());
 #endif
         pImpl->dispatch( aURL, aArgs, css::uno::Reference < css::frame::XDispatchResultListener >() );
     }
@@ -232,7 +235,10 @@ void SAL_CALL SfxOfficeDispatch::dispatchWithNotification( const css::util::URL&
     if ( pImpl )
     {
 #if HAVE_FEATURE_JAVA
-        std::unique_ptr< css::uno::ContextLayer > layer(EnsureJavaContext());
+        std::unique_ptr< css::uno::ContextLayer > layer;
+
+        if (!getenv("LO_DISABLE_JRE"))
+            layer = std::move(EnsureJavaContext());
 #endif
         pImpl->dispatch( aURL, aArgs, rListener );
     }

@@ -269,17 +269,20 @@ namespace dbaui
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         bool bSuccess = false;
 #if HAVE_FEATURE_JAVA
-        try
+        if (!getenv("LO_DISABLE_JRE"))
         {
-            if ( !m_xJavaDriver->get_text().trim().isEmpty() )
+            try
             {
-                ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
-                m_xJavaDriver->set_text(m_xJavaDriver->get_text().trim()); // fdo#68341
-                bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_xJavaDriver->get_text().trim());
+                if ( !m_xJavaDriver->get_text().trim().isEmpty() )
+                {
+                    ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
+                    m_xJavaDriver->set_text(m_xJavaDriver->get_text().trim()); // fdo#68341
+                    bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_xJavaDriver->get_text().trim());
+                }
             }
-        }
-        catch(Exception&)
-        {
+            catch(Exception&)
+            {
+            }
         }
 #endif
 

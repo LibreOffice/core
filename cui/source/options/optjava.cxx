@@ -168,6 +168,9 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
     EnableHdl_Impl(m_pJavaEnableCB);
 #if HAVE_FEATURE_JAVA
     jfw_lock();
+
+    if (getenv("LO_DISABLE_JRE"))
+        get<vcl::Window>("javaframe")->Disable();
 #else
     get<vcl::Window>("javaframe")->Disable();
 #endif
@@ -264,6 +267,9 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl, Button*, void)
 IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
 {
 #if HAVE_FEATURE_JAVA
+    if (getenv("LO_DISABLE_JRE"))
+        return;
+
     std::vector< OUString > aParameterList;
     if (!m_xParamDlg)
     {
@@ -303,6 +309,9 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
 IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl, Button*, void)
 {
 #if HAVE_FEATURE_JAVA
+    if (getenv("LO_DISABLE_JRE"))
+        return;
+
     OUString sClassPath;
 
     if ( !m_xPathDlg )
@@ -414,6 +423,9 @@ void SvxJavaOptionsPage::ClearJavaList()
 void SvxJavaOptionsPage::LoadJREs()
 {
 #if HAVE_FEATURE_JAVA
+    if (getenv("LO_DISABLE_JRE"))
+        return;
+
     WaitObject aWaitObj(m_pJavaList);
     javaFrameworkError eErr = jfw_findAllJREs( &m_parJavaInfo );
     if ( JFW_E_NONE == eErr )
@@ -455,6 +467,9 @@ void SvxJavaOptionsPage::LoadJREs()
 void SvxJavaOptionsPage::AddJRE( JavaInfo const * _pInfo )
 {
 #if HAVE_FEATURE_JAVA
+    if (getenv("LO_DISABLE_JRE"))
+        return;
+
     OUString sEntry = "\t" + _pInfo->sVendor + "\t" + _pInfo->sVersion + "\t";
     if ( ( _pInfo->nFeatures & JFW_FEATURE_ACCESSBRIDGE ) == JFW_FEATURE_ACCESSBRIDGE )
         sEntry += m_sAccessibilityText;
@@ -493,6 +508,9 @@ void SvxJavaOptionsPage::HandleCheckEntry( SvTreeListEntry* _pEntry )
 void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 {
 #if HAVE_FEATURE_JAVA
+    if (getenv("LO_DISABLE_JRE"))
+        return;
+
     bool bStartAgain = true;
     std::unique_ptr<JavaInfo> pInfo;
     javaFrameworkError eErr = jfw_getJavaInfoByPath( _rFolder, &pInfo );
@@ -596,67 +614,70 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
     }
 
 #if HAVE_FEATURE_JAVA
-    javaFrameworkError eErr = JFW_E_NONE;
-    if (m_xParamDlg)
+    if (!getenv("LO_DISABLE_JRE"))
     {
-        eErr = jfw_setVMParameters(m_xParamDlg->GetParameters());
-        SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setVMParameters");
-        bModified = true;
-    }
-
-    if (m_xPathDlg)
-    {
-        OUString sPath(m_xPathDlg->GetClassPath());
-        if (m_xPathDlg->GetOldPath() != sPath)
+        javaFrameworkError eErr = JFW_E_NONE;
+        if (m_xParamDlg)
         {
-            eErr = jfw_setUserClassPath( sPath );
-            SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setUserClassPath");
+            eErr = jfw_setVMParameters(m_xParamDlg->GetParameters());
+            SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setVMParameters");
             bModified = true;
         }
-    }
 
-    sal_uLong nCount = m_pJavaList->GetEntryCount();
-    for ( sal_uLong i = 0; i < nCount; ++i )
-    {
-        if ( m_pJavaList->GetCheckButtonState( m_pJavaList->GetEntry(i) ) == SvButtonState::Checked )
+        if (m_xPathDlg)
         {
-            JavaInfo const * pInfo;
-            if ( i < m_parJavaInfo.size() )
-                pInfo = m_parJavaInfo[i].get();
-            else
-                pInfo = m_aAddedInfos[ i - m_parJavaInfo.size() ].get();
-
-            std::unique_ptr<JavaInfo> pSelectedJava;
-            eErr = jfw_getSelectedJRE( &pSelectedJava );
-            if ( JFW_E_NONE == eErr || JFW_E_INVALID_SETTINGS == eErr )
+            OUString sPath(m_xPathDlg->GetClassPath());
+            if (m_xPathDlg->GetOldPath() != sPath)
             {
-                if (!pSelectedJava || !jfw_areEqualJavaInfo( pInfo, pSelectedJava.get() ) )
-                {
-                    if ( jfw_isVMRunning() ||
-                        ( ( pInfo->nRequirements & JFW_REQUIRE_NEEDRESTART ) == JFW_REQUIRE_NEEDRESTART ) )
-                    {
-                        RequestRestart( svtools::RESTART_REASON_JAVA );
-                    }
-
-                    eErr = jfw_setSelectedJRE( pInfo );
-                    SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setSelectedJRE");
-                    bModified = true;
-                }
+                eErr = jfw_setUserClassPath( sPath );
+                SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setUserClassPath");
+                bModified = true;
             }
-            break;
         }
-    }
 
-    bool bEnabled = false;
-    eErr = jfw_getEnabled( &bEnabled );
-    DBG_ASSERT( JFW_E_NONE == eErr,
-                "SvxJavaOptionsPage::FillItemSet(): error in jfw_getEnabled" );
-    if ( bEnabled != m_pJavaEnableCB->IsChecked() )
-    {
-        eErr = jfw_setEnabled( m_pJavaEnableCB->IsChecked() );
+        sal_uLong nCount = m_pJavaList->GetEntryCount();
+        for ( sal_uLong i = 0; i < nCount; ++i )
+        {
+            if ( m_pJavaList->GetCheckButtonState( m_pJavaList->GetEntry(i) ) == SvButtonState::Checked )
+            {
+                JavaInfo const * pInfo;
+                if ( i < m_parJavaInfo.size() )
+                    pInfo = m_parJavaInfo[i].get();
+                else
+                    pInfo = m_aAddedInfos[ i - m_parJavaInfo.size() ].get();
+
+                std::unique_ptr<JavaInfo> pSelectedJava;
+                eErr = jfw_getSelectedJRE( &pSelectedJava );
+                if ( JFW_E_NONE == eErr || JFW_E_INVALID_SETTINGS == eErr )
+                {
+                    if (!pSelectedJava || !jfw_areEqualJavaInfo( pInfo, pSelectedJava.get() ) )
+                    {
+                        if ( jfw_isVMRunning() ||
+                            ( ( pInfo->nRequirements & JFW_REQUIRE_NEEDRESTART ) == JFW_REQUIRE_NEEDRESTART ) )
+                        {
+                            RequestRestart( svtools::RESTART_REASON_JAVA );
+                        }
+
+                        eErr = jfw_setSelectedJRE( pInfo );
+                        SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setSelectedJRE");
+                        bModified = true;
+                    }
+                }
+                break;
+            }
+        }
+
+        bool bEnabled = false;
+        eErr = jfw_getEnabled( &bEnabled );
         DBG_ASSERT( JFW_E_NONE == eErr,
-                    "SvxJavaOptionsPage::FillItemSet(): error in jfw_setEnabled" );
-        bModified = true;
+                    "SvxJavaOptionsPage::FillItemSet(): error in jfw_getEnabled" );
+        if ( bEnabled != m_pJavaEnableCB->IsChecked() )
+        {
+            eErr = jfw_setEnabled( m_pJavaEnableCB->IsChecked() );
+            DBG_ASSERT( JFW_E_NONE == eErr,
+                        "SvxJavaOptionsPage::FillItemSet(): error in jfw_setEnabled" );
+            bModified = true;
+        }
     }
 #endif
 
@@ -672,12 +693,20 @@ void SvxJavaOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
     SvtMiscOptions aMiscOpt;
 
 #if HAVE_FEATURE_JAVA
-    bool bEnabled = false;
-    javaFrameworkError eErr = jfw_getEnabled( &bEnabled );
-    if ( eErr != JFW_E_NONE )
-        bEnabled = false;
-    m_pJavaEnableCB->Check( bEnabled );
-    EnableHdl_Impl(m_pJavaEnableCB);
+    if (!getenv("LO_DISABLE_JRE"))
+    {
+        bool bEnabled = false;
+        javaFrameworkError eErr = jfw_getEnabled( &bEnabled );
+        if ( eErr != JFW_E_NONE )
+            bEnabled = false;
+        m_pJavaEnableCB->Check( bEnabled );
+        EnableHdl_Impl(m_pJavaEnableCB);
+    }
+    else
+    {
+        m_pJavaEnableCB->Check( false );
+        m_pJavaEnableCB->Disable();
+    }
 #else
     m_pJavaEnableCB->Check( false );
     m_pJavaEnableCB->Disable();

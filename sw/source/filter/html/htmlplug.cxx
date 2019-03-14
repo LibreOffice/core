@@ -697,6 +697,9 @@ void SwHTMLParser::NewObject()
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
 
+    if (getenv("LO_DISABLE_JRE"))
+        return;
+
     bool bPrcWidth = false, bPrcHeight = false,
              bDeclare = false;
     // create a new Command list
@@ -825,6 +828,9 @@ void SwHTMLParser::NewObject()
 void SwHTMLParser::EndObject()
 {
 #if HAVE_FEATURE_JAVA
+    if (getenv("LO_DISABLE_JRE"))
+        return;
+
     if( !m_pAppletImpl )
         return;
     if( m_pAppletImpl->CreateApplet( m_sBaseURL ) )
@@ -862,6 +868,9 @@ void SwHTMLParser::InsertApplet()
     bool bPrcWidth = false, bPrcHeight = false, bMayScript = false;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
+
+    if (getenv("LO_DISABLE_JRE"))
+        return;
 
     // create a new Command list
     m_pAppletImpl.reset(new SwApplet_Impl( m_xDoc->GetAttrPool() ));
@@ -955,6 +964,9 @@ void SwHTMLParser::InsertApplet()
 void SwHTMLParser::EndApplet()
 {
 #if HAVE_FEATURE_JAVA
+    if (getenv("LO_DISABLE_JRE"))
+        return;
+
     if( !m_pAppletImpl )
         return;
 
@@ -984,6 +996,9 @@ void SwHTMLParser::EndApplet()
 void SwHTMLParser::InsertParam()
 {
 #if HAVE_FEATURE_JAVA
+    if (getenv("LO_DISABLE_JRE"))
+        return;
+
     if( !m_pAppletImpl )
         return;
 
@@ -1168,7 +1183,8 @@ sal_uInt16 SwHTMLWriter::GuessOLENodeFrameType( const SwNode& rNode )
 #if HAVE_FEATURE_JAVA
     else if( aClass == SvGlobalName( SO3_APPLET_CLASSID ) )
     {
-        eType = HTML_FRMTYPE_APPLET;
+        if (!getenv("LO_DISABLE_JRE"))
+            eType = HTML_FRMTYPE_APPLET;
     }
 #endif
 

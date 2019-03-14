@@ -1416,8 +1416,11 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
             break;
         }
 #if HAVE_FEATURE_JAVA
-        NewObject();
-        m_bCallNextToken = m_pAppletImpl!=nullptr && m_xTable;
+        if (!getenv("LO_DISABLE_JRE"))
+        {
+            NewObject();
+            m_bCallNextToken = m_pAppletImpl!=nullptr && m_xTable;
+        }
 #endif
         break;
 
@@ -1428,8 +1431,11 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
 
     case HtmlTokenId::APPLET_ON:
 #if HAVE_FEATURE_JAVA
-        InsertApplet();
-        m_bCallNextToken = m_pAppletImpl!=nullptr && m_xTable;
+        if (!getenv("LO_DISABLE_JRE"))
+        {
+            InsertApplet();
+            m_bCallNextToken = m_pAppletImpl!=nullptr && m_xTable;
+        }
 #endif
         break;
 

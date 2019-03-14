@@ -809,8 +809,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         /* javaldx */
 #if HAVE_FEATURE_JAVA
-        if (!args->bInhibitJavaLdx)
-            exec_javaldx (args);
+        if (!getenv("LO_DISABLE_JRE"))
+            if (!args->bInhibitJavaLdx)
+                exec_javaldx (args);
 #endif
 
         do
