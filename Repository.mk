@@ -434,6 +434,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(call gb_Helper_optional,SCRIPTING,stringresource) \
 	svgio \
 	emfio \
+	item \
 	svl \
 	svt \
 	svx \
