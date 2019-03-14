@@ -97,12 +97,11 @@ struct RangeMatrix
 
 struct MultiDataCellState
 {
-    enum StateType { Invalid = 0, Empty, HasOneCell, HasMultipleCells };
+    enum StateType : sal_uInt8 { Invalid = 0, Empty, HasOneCell, HasMultipleCells };
 
-    StateType meState;
-
-    SCCOL mnCol1; //< first non-empty column
     SCROW mnRow1; //< first non-empty row
+    SCCOL mnCol1; //< first non-empty column
+    StateType meState;
 
     MultiDataCellState();
     MultiDataCellState( StateType eState );

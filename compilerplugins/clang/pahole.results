@@ -1,0 +1,66 @@
+ScColorScaleEntry sc/inc/colorscale.hxx:46
+/*   48     */ struct ScColorScaleEntry {
+/*   0    8 */    double mnVal
+/*   8    4 */    class Color maColor
+/* XXX 32 bit hole, try to pack */
+/*  16    8 */    class std::unique_ptr<ScFormulaCell, std::default_delete<ScFormulaCell> > mpCell
+/*  24    8 */    class std::unique_ptr<ScFormulaListener, std::default_delete<ScFormulaListener> > mpListener
+/*  32    4 */    enum ScColorScaleEntryType meType
+/* XXX 32 bit hole, try to pack */
+/*  40    8 */    class ScConditionalFormat * mpFormat
+}
+ScDetOpList sc/inc/detdata.hxx:66
+/*   64     */ struct ScDetOpList {
+/*   0    1 */    bool bHasAddError
+/* XXX 56 bit hole, try to pack */
+/*   8   56 */    class std::__debug::vector<std::unique_ptr<ScDetOpData, std::default_delete<ScDetOpData> >, std::allocator<std::unique_ptr<ScDetOpData, std::default_delete<ScDetOpData> > > > aDetOpDataVector
+}
+ScDocRowHeightUpdater::TabRanges sc/inc/dociter.hxx:569
+/*   24     */ struct ScDocRowHeightUpdater::TabRanges {
+/*   0    2 */    short mnTab
+/* XXX 48 bit hole, try to pack */
+/*   8   16 */    class std::shared_ptr<ScFlatBoolRowSegments> mpRanges
+}
+ScPivotField sc/inc/pivot.hxx:122
+/*   56     */ struct ScPivotField {
+/*   0    2 */    short nCol
+/* XXX 48 bit hole, try to pack */
+/*   8    8 */    long mnOriginalDim
+/*  16    4 */    enum PivotFunc nFuncMask
+/*  20    1 */    unsigned char mnDupCount
+/* XXX 24 bit hole, try to pack */
+/*  24   32 */    struct com::sun::star::sheet::DataPilotFieldReference maFieldRef
+}
+ScPivotFuncData sc/inc/pivot.hxx:164
+/*   56     */ struct ScPivotFuncData {
+/*   0    2 */    short mnCol
+/* XXX 48 bit hole, try to pack */
+/*   8    8 */    long mnOriginalDim
+/*  16    4 */    enum PivotFunc mnFuncMask
+/*  20    1 */    unsigned char mnDupCount
+/* XXX 24 bit hole, try to pack */
+/*  24   32 */    struct com::sun::star::sheet::DataPilotFieldReference maFieldRef
+}
+ScExternalSingleRefToken sc/inc/token.hxx:131
+/*   56     */ struct ScExternalSingleRefToken {
+/*   0   16 */    class formula::FormulaToken formula::FormulaToken
+/*  16    2 */    const unsigned short mnFileId
+/* XXX 48 bit hole, try to pack */
+/*  24   16 */    const class svl::SharedString maTabName
+/*  40   12 */    struct ScSingleRefData maSingleRef
+}
+ScExternalDoubleRefToken sc/inc/token.hxx:155
+/*   64     */ struct ScExternalDoubleRefToken {
+/*   0   16 */    class formula::FormulaToken formula::FormulaToken
+/*  16    2 */    const unsigned short mnFileId
+/* XXX 48 bit hole, try to pack */
+/*  24   16 */    const class svl::SharedString maTabName
+/*  40   24 */    struct ScComplexRefData maDoubleRef
+}
+ScExternalNameToken sc/inc/token.hxx:182
+/*   40     */ struct ScExternalNameToken {
+/*   0   16 */    class formula::FormulaToken formula::FormulaToken
+/*  16    2 */    const unsigned short mnFileId
+/* XXX 48 bit hole, try to pack */
+/*  24   16 */    const class svl::SharedString maName
+}
