@@ -87,10 +87,6 @@ osl_setDetailedDebugMessageFunc(pfunc_osl_printDetailedDebugMessage) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL osl_trace(char const *, ...) {
-    std::abort();
-}
-
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_tryToAcquireSemaphore(void *) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }

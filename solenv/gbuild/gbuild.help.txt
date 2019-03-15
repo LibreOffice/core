@@ -115,8 +115,7 @@ INTERACTIVE VARIABLES:
                        features. Use SAL_INFO/SAL_WARN with a specific area for extra debug
                        output in new code.)
                        2 = debugging information + no optimizations + extra
-                           debug output. OSL_TRACE starts being active on this
-                           level.
+                           debug output.
                        3... = debugging information + no optimizations + extra
                               debug output (usually extremely verbose). Levels
                               > 2 are not used very much.

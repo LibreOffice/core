@@ -171,7 +171,6 @@ UDK_3_0_0 {
         osl_suspendThread;
         osl_terminateProcess;
         osl_terminateThread;
-        osl_trace;
         osl_tryToAcquireMutex;
         osl_tryToAcquireSemaphore;
         osl_unloadModule;
