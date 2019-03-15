@@ -83,8 +83,8 @@ IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl, weld::ToggleButton&, void)
 {
     // Envelope from bottom, otherwise Envelope from top
     const bool bLowerActive = m_xBottomButton->get_active();
-    m_xUpper->show(!bLowerActive);
-    m_xLower->show(bLowerActive);
+    m_xUpper->set_visible(!bLowerActive);
+    m_xLower->set_visible(bLowerActive);
 }
 
 IMPL_LINK(SwEnvPrtPage, LowerHdl, weld::ToggleButton&, rButton, void)

@@ -108,7 +108,7 @@ SwFormatTablePage::SwFormatTablePage(TabPageParent pParent, const SfxItemSet& rS
         bHtmlMode = 0 != (static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
 
     bool bCTL = SW_MOD()->GetCTLOptions().IsCTLFontEnabled();
-    m_xProperties->show(!bHtmlMode && bCTL);
+    m_xProperties->set_visible(!bHtmlMode && bCTL);
 
     Init();
 }

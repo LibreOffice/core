@@ -82,16 +82,16 @@ void SwWordCountFloatDlg::SetValues(const SwDocStat& rCurrent, const SwDocStat& 
 
 void SwWordCountFloatDlg::showCJK(bool bShowCJK)
 {
-    m_xCurrentCjkcharsFT->show(bShowCJK);
-    m_xDocCjkcharsFT->show(bShowCJK);
-    m_xCjkcharsLabelFT->show(bShowCJK);
+    m_xCurrentCjkcharsFT->set_visible(bShowCJK);
+    m_xDocCjkcharsFT->set_visible(bShowCJK);
+    m_xCjkcharsLabelFT->set_visible(bShowCJK);
 }
 
 void SwWordCountFloatDlg::showStandardizedPages(bool bShowStandardizedPages)
 {
-    m_xCurrentStandardizedPagesFT->show(bShowStandardizedPages);
-    m_xDocStandardizedPagesFT->show(bShowStandardizedPages);
-    m_xStandardizedPagesLabelFT->show(bShowStandardizedPages);
+    m_xCurrentStandardizedPagesFT->set_visible(bShowStandardizedPages);
+    m_xDocStandardizedPagesFT->set_visible(bShowStandardizedPages);
+    m_xStandardizedPagesLabelFT->set_visible(bShowStandardizedPages);
 }
 
 SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,

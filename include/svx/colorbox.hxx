@@ -138,13 +138,7 @@ public:
     bool get_sensitive() const { return m_xButton->get_sensitive(); }
     void show() { m_xButton->show(); }
     void hide() { m_xButton->hide(); }
-    void show(bool bShow)
-    {
-        if (bShow)
-            show();
-        else
-            hide();
-    }
+    void set_visible(bool bShow) { m_xButton->set_visible(bShow); }
     void set_help_id(const OString& rHelpId) { m_xButton->set_help_id(rHelpId); }
     weld::MenuButton& get_widget() { return *m_xButton; }
 };

@@ -50,7 +50,8 @@ public:
     int get_active() const { return m_xControl->get_active(); }
     void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
     void hide() { m_xControl->hide(); }
-    void show(bool bShow = true) { m_xControl->show(bShow); }
+    void set_visible(bool bVisible) { m_xControl->set_visible(bVisible); }
+    void show() { m_xControl->show(); }
     int get_count() const { return m_xControl->get_count(); }
     /** Inserts a string with corresponding direction enum into the listbox. */
     void append(SvxFrameDirection eDirection, const OUString& rString)

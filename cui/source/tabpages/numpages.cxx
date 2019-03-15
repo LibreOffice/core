@@ -1299,16 +1299,16 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
     }
 
     bool bCharFmt = pActNum->IsFeatureSupported(SvxNumRuleFlags::CHAR_STYLE);
-    m_xCharFmtFT->show(bCharFmt);
-    m_xCharFmtLB->show(bCharFmt);
+    m_xCharFmtFT->set_visible(bCharFmt);
+    m_xCharFmtLB->set_visible(bCharFmt);
 
     bool bContinuous = pActNum->IsFeatureSupported(SvxNumRuleFlags::CONTINUOUS);
 
     bool bAllLevel = bContinuous && !bHTMLMode;
-    m_xAllLevelFT->show(bAllLevel);
-    m_xAllLevelNF->show(bAllLevel);
+    m_xAllLevelFT->set_visible(bAllLevel);
+    m_xAllLevelNF->set_visible(bAllLevel);
 
-    m_xAllLevelsFrame->show(bContinuous);
+    m_xAllLevelsFrame->set_visible(bContinuous);
 
     // again misusage: in Draw there is numeration only until the bitmap
     // without SVX_NUM_NUMBER_NONE
@@ -1538,46 +1538,46 @@ void SvxNumOptionsTabPage::SwitchNumberType( sal_uInt8 nType )
     bool bBitmap = (nType == SHOW_BITMAP);
     bool bEnableBitmap = (nType == SHOW_BITMAP);
     bool bNumeric = !(bBitmap||bBullet);
-    m_xSeparatorFT->show(bNumeric);
-    m_xPrefixFT->show(bNumeric);
-    m_xPrefixED->show(bNumeric);
-    m_xSuffixFT->show(bNumeric);
-    m_xSuffixED->show(bNumeric);
+    m_xSeparatorFT->set_visible(bNumeric);
+    m_xPrefixFT->set_visible(bNumeric);
+    m_xPrefixED->set_visible(bNumeric);
+    m_xSuffixFT->set_visible(bNumeric);
+    m_xSuffixED->set_visible(bNumeric);
 
     bool bCharFmt = pActNum->IsFeatureSupported(SvxNumRuleFlags::CHAR_STYLE);
-    m_xCharFmtFT->show(!bBitmap && bCharFmt);
-    m_xCharFmtLB->show(!bBitmap && bCharFmt);
+    m_xCharFmtFT->set_visible(!bBitmap && bCharFmt);
+    m_xCharFmtLB->set_visible(!bBitmap && bCharFmt);
 
     // this is rather misusage, as there is no own flag
     // for complete numeration
     bool bAllLevelFeature = pActNum->IsFeatureSupported(SvxNumRuleFlags::CONTINUOUS);
     bool bAllLevel = bNumeric && bAllLevelFeature && !bHTMLMode;
-    m_xAllLevelFT->show(bAllLevel);
-    m_xAllLevelNF->show(bAllLevel);
+    m_xAllLevelFT->set_visible(bAllLevel);
+    m_xAllLevelNF->set_visible(bAllLevel);
 
-    m_xStartFT->show(!(bBullet||bBitmap));
-    m_xStartED->show(!(bBullet||bBitmap));
+    m_xStartFT->set_visible(!(bBullet||bBitmap));
+    m_xStartED->set_visible(!(bBullet||bBitmap));
 
-    m_xBulletFT->show(bBullet);
-    m_xBulletPB->show(bBullet);
+    m_xBulletFT->set_visible(bBullet);
+    m_xBulletPB->set_visible(bBullet);
     bool bBullColor = pActNum->IsFeatureSupported(SvxNumRuleFlags::BULLET_COLOR);
-    m_xBulColorFT->show(!bBitmap && bBullColor);
-    m_xBulColLB->show(!bBitmap && bBullColor);
+    m_xBulColorFT->set_visible(!bBitmap && bBullColor);
+    m_xBulColLB->set_visible(!bBitmap && bBullColor);
     bool bBullResSize = pActNum->IsFeatureSupported(SvxNumRuleFlags::BULLET_REL_SIZE);
-    m_xBulRelSizeFT->show(!bBitmap && bBullResSize);
-    m_xBulRelSizeMF->show(!bBitmap && bBullResSize);
+    m_xBulRelSizeFT->set_visible(!bBitmap && bBullResSize);
+    m_xBulRelSizeMF->set_visible(!bBitmap && bBullResSize);
 
-    m_xBitmapFT->show(bBitmap);
-    m_xBitmapMB->show(bBitmap);
+    m_xBitmapFT->set_visible(bBitmap);
+    m_xBitmapMB->set_visible(bBitmap);
 
-    m_xWidthFT->show(bBitmap);
-    m_xWidthMF->show(bBitmap);
-    m_xHeightFT->show(bBitmap);
-    m_xHeightMF->show(bBitmap);
-    m_xRatioCB->show(bBitmap);
+    m_xWidthFT->set_visible(bBitmap);
+    m_xWidthMF->set_visible(bBitmap);
+    m_xHeightFT->set_visible(bBitmap);
+    m_xHeightMF->set_visible(bBitmap);
+    m_xRatioCB->set_visible(bBitmap);
 
-    m_xOrientFT->show(bBitmap && bAllLevelFeature);
-    m_xOrientLB->show(bBitmap && bAllLevelFeature);
+    m_xOrientFT->set_visible(bBitmap && bAllLevelFeature);
+    m_xOrientLB->set_visible(bBitmap && bAllLevelFeature);
 
     m_xWidthFT->set_sensitive(bEnableBitmap);
     m_xWidthMF->set_sensitive(bEnableBitmap);
@@ -2929,28 +2929,28 @@ void SvxNumPositionTabPage::InitPosAndSpaceMode()
 
 void SvxNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
 {
-    m_xDistBorderFT->show( !bLabelAlignmentPosAndSpaceModeActive );
-    m_xDistBorderMF->show( !bLabelAlignmentPosAndSpaceModeActive );
-    m_xRelativeCB->show( !bLabelAlignmentPosAndSpaceModeActive );
-    m_xIndentFT->show( !bLabelAlignmentPosAndSpaceModeActive );
-    m_xIndentMF->show( !bLabelAlignmentPosAndSpaceModeActive );
-    m_xDistNumFT->show( !bLabelAlignmentPosAndSpaceModeActive &&
+    m_xDistBorderFT->set_visible( !bLabelAlignmentPosAndSpaceModeActive );
+    m_xDistBorderMF->set_visible( !bLabelAlignmentPosAndSpaceModeActive );
+    m_xRelativeCB->set_visible( !bLabelAlignmentPosAndSpaceModeActive );
+    m_xIndentFT->set_visible( !bLabelAlignmentPosAndSpaceModeActive );
+    m_xIndentMF->set_visible( !bLabelAlignmentPosAndSpaceModeActive );
+    m_xDistNumFT->set_visible( !bLabelAlignmentPosAndSpaceModeActive &&
                     pActNum->IsFeatureSupported(SvxNumRuleFlags::CONTINUOUS) );
-    m_xDistNumMF->show( !bLabelAlignmentPosAndSpaceModeActive &&
+    m_xDistNumMF->set_visible( !bLabelAlignmentPosAndSpaceModeActive &&
                     pActNum->IsFeatureSupported(SvxNumRuleFlags::CONTINUOUS));
-    m_xAlignFT->show( !bLabelAlignmentPosAndSpaceModeActive );
-    m_xAlignLB->show( !bLabelAlignmentPosAndSpaceModeActive );
+    m_xAlignFT->set_visible( !bLabelAlignmentPosAndSpaceModeActive );
+    m_xAlignLB->set_visible( !bLabelAlignmentPosAndSpaceModeActive );
 
-    m_xLabelFollowedByFT->show( bLabelAlignmentPosAndSpaceModeActive );
-    m_xLabelFollowedByLB->show( bLabelAlignmentPosAndSpaceModeActive );
-    m_xListtabFT->show( bLabelAlignmentPosAndSpaceModeActive );
-    m_xListtabMF->show( bLabelAlignmentPosAndSpaceModeActive );
-    m_xAlign2FT->show( bLabelAlignmentPosAndSpaceModeActive );
-    m_xAlign2LB->show( bLabelAlignmentPosAndSpaceModeActive );
-    m_xAlignedAtFT->show( bLabelAlignmentPosAndSpaceModeActive );
-    m_xAlignedAtMF->show( bLabelAlignmentPosAndSpaceModeActive );
-    m_xIndentAtFT->show( bLabelAlignmentPosAndSpaceModeActive );
-    m_xIndentAtMF->show( bLabelAlignmentPosAndSpaceModeActive );
+    m_xLabelFollowedByFT->set_visible( bLabelAlignmentPosAndSpaceModeActive );
+    m_xLabelFollowedByLB->set_visible( bLabelAlignmentPosAndSpaceModeActive );
+    m_xListtabFT->set_visible( bLabelAlignmentPosAndSpaceModeActive );
+    m_xListtabMF->set_visible( bLabelAlignmentPosAndSpaceModeActive );
+    m_xAlign2FT->set_visible( bLabelAlignmentPosAndSpaceModeActive );
+    m_xAlign2LB->set_visible( bLabelAlignmentPosAndSpaceModeActive );
+    m_xAlignedAtFT->set_visible( bLabelAlignmentPosAndSpaceModeActive );
+    m_xAlignedAtMF->set_visible( bLabelAlignmentPosAndSpaceModeActive );
+    m_xIndentAtFT->set_visible( bLabelAlignmentPosAndSpaceModeActive );
+    m_xIndentAtMF->set_visible( bLabelAlignmentPosAndSpaceModeActive );
 }
 
 VclPtr<SfxTabPage> SvxNumPositionTabPage::Create(TabPageParent pParent,

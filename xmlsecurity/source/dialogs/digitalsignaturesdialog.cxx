@@ -632,23 +632,23 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     bool bAllCertsValid = (nValidCerts == nInfos);
     bool bShowValidState = nInfos && (bAllSigsValid && bAllCertsValid && bAllNewSignatures);
 
-    m_xSigsValidImg->show( bShowValidState);
-    m_xSigsValidFI->show( bShowValidState );
+    m_xSigsValidImg->set_visible( bShowValidState);
+    m_xSigsValidFI->set_visible( bShowValidState );
 
     bool bShowInvalidState = nInfos && !bAllSigsValid;
 
-    m_xSigsInvalidImg->show( bShowInvalidState );
-    m_xSigsInvalidFI->show( bShowInvalidState );
+    m_xSigsInvalidImg->set_visible( bShowInvalidState );
+    m_xSigsInvalidFI->set_visible( bShowInvalidState );
 
     bool bShowNotValidatedState = nInfos && bAllSigsValid && !bAllCertsValid;
 
-    m_xSigsNotvalidatedImg->show(bShowNotValidatedState);
-    m_xSigsNotvalidatedFI->show(bShowNotValidatedState);
+    m_xSigsNotvalidatedImg->set_visible(bShowNotValidatedState);
+    m_xSigsNotvalidatedFI->set_visible(bShowNotValidatedState);
 
     //bAllNewSignatures is always true if we are not in document mode
     bool bShowOldSignature = nInfos && bAllSigsValid && bAllCertsValid && !bAllNewSignatures;
-    m_xSigsOldSignatureImg->show(bShowOldSignature);
-    m_xSigsOldSignatureFI->show(bShowOldSignature);
+    m_xSigsOldSignatureImg->set_visible(bShowOldSignature);
+    m_xSigsOldSignatureFI->set_visible(bShowOldSignature);
 
     SignatureHighlightHdl(*m_xSignaturesLB);
 }

@@ -36,7 +36,7 @@ namespace
     {
         if( rChooserButton.get_visible() != bShow )
         {
-            rChooserButton.show( bShow );
+            rChooserButton.set_visible( bShow );
         }
     }
 
@@ -55,7 +55,7 @@ namespace
             return;
         weld::Dialog* pDlg = pDialog->getDialog();
         pDlg->set_modal(!bEnable);
-        pDlg->show(!bEnable);
+        pDlg->set_visible(!bEnable);
     }
 
 } // anonymous namespace
@@ -96,7 +96,7 @@ RangeChooserTabPage::RangeChooserTabPage(TabPageParent pParent, DialogModel & rD
     , m_xFT_TimeEnd(m_xBuilder->weld_label("label2"))
     , m_xEd_TimeEnd(m_xBuilder->weld_entry("ED_TIME_BASED_END"))
 {
-    m_xFT_Caption->show(!bHideDescription);
+    m_xFT_Caption->set_visible(!bHideDescription);
 
     SetText(m_xFTTitle->get_label());// OH:remove later with dialog
 

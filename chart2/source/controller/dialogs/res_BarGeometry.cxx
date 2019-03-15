@@ -38,10 +38,10 @@ void BarGeometryResources::connect_changed(const Link<weld::TreeView&,void>& rLi
     m_xLB_Geometry->connect_changed(rLink);
 }
 
-void BarGeometryResources::show( bool bShow )
+void BarGeometryResources::set_visible( bool bShow )
 {
-    m_xFT_Geometry->show( bShow );
-    m_xLB_Geometry->show( bShow );
+    m_xFT_Geometry->set_visible( bShow );
+    m_xLB_Geometry->set_visible( bShow );
 }
 
 void BarGeometryResources::set_sensitive( bool bEnable )

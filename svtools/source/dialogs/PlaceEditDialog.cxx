@@ -354,19 +354,19 @@ void PlaceEditDialog::SelectType(bool bSkipSeparator)
     }
 
     if (m_xCurrentDetails.get())
-        m_xCurrentDetails->show(false);
+        m_xCurrentDetails->set_visible(false);
 
     const int nPos = m_xLBServerType->get_active( );
     m_xCurrentDetails = m_aDetailsContainers[nPos];
     m_nCurrentType = nPos;
 
-    m_xCurrentDetails->show();
+    m_xCurrentDetails->set_visible(true);
 
-    m_xCBPassword->show( m_bShowPassword && m_xCurrentDetails->enableUserCredentials() );
-    m_xEDPassword->show( m_bShowPassword && m_xCurrentDetails->enableUserCredentials() );
-    m_xFTPasswordLabel->show( m_bShowPassword && m_xCurrentDetails->enableUserCredentials() );
-    m_xEDUsername->show( m_xCurrentDetails->enableUserCredentials() );
-    m_xFTUsernameLabel->show( m_xCurrentDetails->enableUserCredentials() );
+    m_xCBPassword->set_visible( m_bShowPassword && m_xCurrentDetails->enableUserCredentials() );
+    m_xEDPassword->set_visible( m_bShowPassword && m_xCurrentDetails->enableUserCredentials() );
+    m_xFTPasswordLabel->set_visible( m_bShowPassword && m_xCurrentDetails->enableUserCredentials() );
+    m_xEDUsername->set_visible( m_xCurrentDetails->enableUserCredentials() );
+    m_xFTUsernameLabel->set_visible( m_xCurrentDetails->enableUserCredentials() );
 
     m_xDialog->resize_to_request();
 

@@ -1211,36 +1211,36 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl, weld::ComboBox&, rBox, void)
     CurTOXType eCurType = lcl_UserData2TOXTypes(nType);
     pTOXDlg->SetCurrentTOXType(eCurType);
 
-    m_xAreaLB->show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT)) );
-    m_xLevelFT->show( 0 != (nType & (TO_CONTENT)) );
-    m_xLevelNF->show( 0 != (nType & (TO_CONTENT)) );
-    m_xLevelFromChapterCB->show( 0 != (nType & (TO_USER)) );
-    m_xAreaFrame->show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT)) );
+    m_xAreaLB->set_visible( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT)) );
+    m_xLevelFT->set_visible( 0 != (nType & (TO_CONTENT)) );
+    m_xLevelNF->set_visible( 0 != (nType & (TO_CONTENT)) );
+    m_xLevelFromChapterCB->set_visible( 0 != (nType & (TO_USER)) );
+    m_xAreaFrame->set_visible( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT)) );
 
-    m_xFromHeadingsCB->show( 0 != (nType & (TO_CONTENT)) );
-    m_xAddStylesCB->show( 0 != (nType & (TO_CONTENT|TO_USER)) );
-    m_xAddStylesPB->show( 0 != (nType & (TO_CONTENT|TO_USER)) );
+    m_xFromHeadingsCB->set_visible( 0 != (nType & (TO_CONTENT)) );
+    m_xAddStylesCB->set_visible( 0 != (nType & (TO_CONTENT|TO_USER)) );
+    m_xAddStylesPB->set_visible( 0 != (nType & (TO_CONTENT|TO_USER)) );
 
-    m_xFromTablesCB->show( 0 != (nType & (TO_USER)) );
-    m_xFromFramesCB->show( 0 != (nType & (TO_USER)) );
-    m_xFromGraphicsCB->show( 0 != (nType & (TO_USER)) );
-    m_xFromOLECB->show( 0 != (nType & (TO_USER)) );
+    m_xFromTablesCB->set_visible( 0 != (nType & (TO_USER)) );
+    m_xFromFramesCB->set_visible( 0 != (nType & (TO_USER)) );
+    m_xFromGraphicsCB->set_visible( 0 != (nType & (TO_USER)) );
+    m_xFromOLECB->set_visible( 0 != (nType & (TO_USER)) );
 
-    m_xFromCaptionsRB->show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
-    m_xFromObjectNamesRB->show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
+    m_xFromCaptionsRB->set_visible( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
+    m_xFromObjectNamesRB->set_visible( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
 
-    m_xTOXMarksCB->show( 0 != (nType & (TO_CONTENT|TO_USER)) );
+    m_xTOXMarksCB->set_visible( 0 != (nType & (TO_CONTENT|TO_USER)) );
 
-    m_xCreateFrame->show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_TABLE)) );
-    m_xCaptionSequenceFT->show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
-    m_xCaptionSequenceLB->show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
-    m_xDisplayTypeFT->show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
-    m_xDisplayTypeLB->show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
+    m_xCreateFrame->set_visible( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_TABLE)) );
+    m_xCaptionSequenceFT->set_visible( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
+    m_xCaptionSequenceLB->set_visible( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
+    m_xDisplayTypeFT->set_visible( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
+    m_xDisplayTypeLB->set_visible( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
 
-    m_xAuthorityFrame->show( 0 != (nType & TO_AUTHORITIES) );
+    m_xAuthorityFrame->set_visible( 0 != (nType & TO_AUTHORITIES) );
 
     bool bEnableSortLanguage = 0 != (nType & (TO_INDEX|TO_AUTHORITIES));
-    m_xSortFrame->show(bEnableSortLanguage);
+    m_xSortFrame->set_visible(bEnableSortLanguage);
 
     if( nType & TO_ILLUSTRATION )
     {
@@ -1257,10 +1257,10 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl, weld::ComboBox&, rBox, void)
         m_xAddStylesCB->set_label(sAddStyleUser);
     }
 
-    m_xIdxOptionsFrame->show( 0 != (nType & TO_INDEX) );
+    m_xIdxOptionsFrame->set_visible( 0 != (nType & TO_INDEX) );
 
     //object index
-    m_xFromObjFrame->show( 0 != (nType & TO_OBJECT) );
+    m_xFromObjFrame->set_visible( 0 != (nType & TO_OBJECT) );
 
     //set control values from the proper TOXDescription
     {
@@ -2074,25 +2074,25 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         m_xLevelLB->select(bToxIsIndex ? 1 : 0);
 
         //show or hide controls
-        m_xEntryNoPB->show(bToxIsContent);
-        m_xHyperLinkPB->show(bToxSupportsLinks);
-        m_xRelToStyleCB->show(!bToxIsAuthorities);
-        m_xChapterInfoPB->show(!bToxIsContent && !bToxIsAuthorities);
-        m_xEntryPB->show(!bToxIsAuthorities);
-        m_xPageNoPB->show(!bToxIsAuthorities);
-        m_xAuthFieldsLB->show(bToxIsAuthorities);
-        m_xAuthInsertPB->show(bToxIsAuthorities);
-        m_xAuthRemovePB->show(bToxIsAuthorities);
+        m_xEntryNoPB->set_visible(bToxIsContent);
+        m_xHyperLinkPB->set_visible(bToxSupportsLinks);
+        m_xRelToStyleCB->set_visible(!bToxIsAuthorities);
+        m_xChapterInfoPB->set_visible(!bToxIsContent && !bToxIsAuthorities);
+        m_xEntryPB->set_visible(!bToxIsAuthorities);
+        m_xPageNoPB->set_visible(!bToxIsAuthorities);
+        m_xAuthFieldsLB->set_visible(bToxIsAuthorities);
+        m_xAuthInsertPB->set_visible(bToxIsAuthorities);
+        m_xAuthRemovePB->set_visible(bToxIsAuthorities);
 
-        m_xFormatFrame->show(!bToxIsAuthorities);
+        m_xFormatFrame->set_visible(!bToxIsAuthorities);
 
-        m_xSortingFrame->show(bToxIsAuthorities);
-        m_xSortKeyFrame->show(bToxIsAuthorities);
+        m_xSortingFrame->set_visible(bToxIsAuthorities);
+        m_xSortKeyFrame->set_visible(bToxIsAuthorities);
 
-        m_xMainEntryStyleFT->show(bToxIsIndex);
-        m_xMainEntryStyleLB->show(bToxIsIndex);
-        m_xAlphaDelimCB->show(bToxIsIndex);
-        m_xCommaSeparatedCB->show(bToxIsIndex);
+        m_xMainEntryStyleFT->set_visible(bToxIsIndex);
+        m_xMainEntryStyleLB->set_visible(bToxIsIndex);
+        m_xAlphaDelimCB->set_visible(bToxIsIndex);
+        m_xCommaSeparatedCB->set_visible(bToxIsIndex);
     }
     aLastTOXType = aCurType;
 
@@ -2385,11 +2385,11 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken&, rToken, void)
     }
 
     bool bTabStop = TOKEN_TAB_STOP == rToken.eTokenType;
-    m_xFillCharFT->show(bTabStop);
-    m_xFillCharCB->show(bTabStop);
-    m_xTabPosFT->show(bTabStop);
-    m_xTabPosMF->show(bTabStop);
-    m_xAutoRightCB->show(bTabStop);
+    m_xFillCharFT->set_visible(bTabStop);
+    m_xFillCharCB->set_visible(bTabStop);
+    m_xTabPosFT->set_visible(bTabStop);
+    m_xTabPosMF->set_visible(bTabStop);
+    m_xAutoRightCB->set_visible(bTabStop);
     m_xAutoRightCB->set_sensitive(bTabStop);
     if(bTabStop)
     {
@@ -2406,12 +2406,12 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken&, rToken, void)
 
     bool bIsChapterInfo = rToken.eTokenType == TOKEN_CHAPTER_INFO;
     bool bIsEntryNumber = rToken.eTokenType == TOKEN_ENTRY_NO;
-    m_xChapterEntryFT->show( bIsChapterInfo );
-    m_xChapterEntryLB->show( bIsChapterInfo );
-    m_xEntryOutlineLevelFT->show( bIsChapterInfo || bIsEntryNumber );
-    m_xEntryOutlineLevelNF->show( bIsChapterInfo || bIsEntryNumber );
-    m_xNumberFormatFT->show( bIsEntryNumber );
-    m_xNumberFormatLB->show( bIsEntryNumber );
+    m_xChapterEntryFT->set_visible( bIsChapterInfo );
+    m_xChapterEntryLB->set_visible( bIsChapterInfo );
+    m_xEntryOutlineLevelFT->set_visible( bIsChapterInfo || bIsEntryNumber );
+    m_xEntryOutlineLevelNF->set_visible( bIsChapterInfo || bIsEntryNumber );
+    m_xNumberFormatFT->set_visible( bIsEntryNumber );
+    m_xNumberFormatLB->set_visible( bIsEntryNumber );
 
     //now enable the visible buttons
     //- inserting the same type of control is not allowed

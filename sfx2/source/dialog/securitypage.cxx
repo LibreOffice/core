@@ -306,8 +306,8 @@ void SfxSecurityPage_Impl::Reset_Impl()
             m_xUnProtectPB->set_sensitive(false);
         }
 
-        m_xProtectPB->show(bProtect);
-        m_xUnProtectPB->show(bUnProtect);
+        m_xProtectPB->set_visible(bProtect);
+        m_xUnProtectPB->set_visible(bUnProtect);
     }
 }
 
@@ -396,8 +396,8 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl, weld::Button&, void
 
     m_xRecordChangesCB->set_active(bNewProtection);
 
-    m_xUnProtectPB->show(bNewProtection);
-    m_xProtectPB->show(!bNewProtection);
+    m_xUnProtectPB->set_visible(bNewProtection);
+    m_xProtectPB->set_visible(!bNewProtection);
 }
 
 VclPtr<SfxTabPage> SfxSecurityPage::Create(TabPageParent pParent, const SfxItemSet * rItemSet)

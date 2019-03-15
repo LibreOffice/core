@@ -447,7 +447,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
         bool bInit = false;     // set to sal_True for debug test
         m_xCbSourceFormat->set_active( bInit );
         m_xCbSourceFormat->set_sensitive( bInit );
-        m_xCbSourceFormat->show( bInit );
+        m_xCbSourceFormat->set_visible( bInit );
     }
 
     // pNumItem must have been set from outside!
@@ -660,8 +660,8 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
 
 void SvxNumberFormatTabPage::HideLanguage(bool bFlag)
 {
-    m_xFtLanguage->show(!bFlag);
-    m_xLbLanguage->show(!bFlag);
+    m_xFtLanguage->set_visible(!bFlag);
+    m_xLbLanguage->set_visible(!bFlag);
 }
 
 /*************************************************************************
@@ -1101,8 +1101,8 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
 void SvxNumberFormatTabPage::UpdateThousandEngineeringCheckBox()
 {
     bool bIsScientific = m_xLbCategory->get_selected_index() == CAT_SCIENTIFIC;
-    m_xBtnThousand->show( !bIsScientific );
-    m_xBtnEngineering->show( bIsScientific );
+    m_xBtnThousand->set_visible( !bIsScientific );
+    m_xBtnEngineering->set_visible( bIsScientific );
 }
 
 
@@ -1115,10 +1115,10 @@ void SvxNumberFormatTabPage::UpdateThousandEngineeringCheckBox()
 void SvxNumberFormatTabPage::UpdateDecimalsDenominatorEditBox()
 {
     bool bIsFraction = m_xLbCategory->get_selected_index() == CAT_FRACTION;
-    m_xFtDecimals->show( !bIsFraction );
-    m_xEdDecimals->show( !bIsFraction );
-    m_xFtDenominator->show( bIsFraction );
-    m_xEdDenominator->show( bIsFraction );
+    m_xFtDecimals->set_visible( !bIsFraction );
+    m_xEdDecimals->set_visible( !bIsFraction );
+    m_xFtDenominator->set_visible( bIsFraction );
+    m_xEdDenominator->set_visible( bIsFraction );
 }
 
 

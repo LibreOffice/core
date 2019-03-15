@@ -193,7 +193,7 @@ public:
 
     void ShowBalance(bool bShow)
     {
-        m_xBalanceColsCB->show(bShow);
+        m_xBalanceColsCB->set_visible(bShow);
     }
 
     void SetInSection(bool bSet);

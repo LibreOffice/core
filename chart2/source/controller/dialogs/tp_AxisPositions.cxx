@@ -110,8 +110,8 @@ bool AxisPositionsTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 void AxisPositionsTabPage::Reset(const SfxItemSet* rInAttrs)
 {
     //init and enable controls
-    m_xED_CrossesAt->show( !m_bCrossingAxisIsCategoryAxis );
-    m_xED_CrossesAtCategory->show( m_bCrossingAxisIsCategoryAxis );
+    m_xED_CrossesAt->set_visible( !m_bCrossingAxisIsCategoryAxis );
+    m_xED_CrossesAtCategory->set_visible( m_bCrossingAxisIsCategoryAxis );
     if (m_bCrossingAxisIsCategoryAxis)
     {
         for( sal_Int32 nN=0; nN<m_aCategories.getLength(); nN++ )
@@ -208,21 +208,15 @@ void AxisPositionsTabPage::Reset(const SfxItemSet* rInAttrs)
 
     if( !m_bSupportAxisPositioning )
     {
-        m_xFL_AxisLine->show(false);
-
-        m_xFL_Labels->show(false);
-
-        m_xBxPlaceTicks->show(false);
+        m_xFL_AxisLine->hide();
+        m_xFL_Labels->hide();
+        m_xBxPlaceTicks->hide();
     }
     else if( !AxisHelper::isAxisPositioningEnabled() )
     {
-
         m_xFL_AxisLine->set_sensitive(false);
-
         m_xFL_Labels->set_sensitive(false);
-
         m_xBxPlaceTicks->set_sensitive(false);
-
         //todo: maybe set a special help id to all those controls
     }
 }
@@ -266,8 +260,8 @@ void AxisPositionsTabPage::SupportAxisPositioning( bool bSupportAxisPositioning 
 IMPL_LINK_NOARG(AxisPositionsTabPage, CrossesAtSelectHdl, weld::ComboBox&, void)
 {
     sal_Int32 nPos = m_xLB_CrossesAt->get_active();
-    m_xED_CrossesAt->show( (nPos==2) && !m_bCrossingAxisIsCategoryAxis );
-    m_xED_CrossesAtCategory->show( (nPos==2) && m_bCrossingAxisIsCategoryAxis );
+    m_xED_CrossesAt->set_visible( (nPos==2) && !m_bCrossingAxisIsCategoryAxis );
+    m_xED_CrossesAtCategory->set_visible( (nPos==2) && m_bCrossingAxisIsCategoryAxis );
 
     if (m_xED_CrossesAt->get_text().isEmpty())
         m_xED_CrossesAt->set_value(0.0);

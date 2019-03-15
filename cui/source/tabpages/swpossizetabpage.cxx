@@ -975,10 +975,10 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
 
     if(m_bHtmlMode)
     {
-        m_xHoriMirrorCB->show(false);
+        m_xHoriMirrorCB->hide();
         m_xKeepRatioCB->set_sensitive(false);
         // #i18732# - hide checkbox in HTML mode
-        m_xFollowCB->show(false);
+        m_xFollowCB->hide();
     }
     else
     {

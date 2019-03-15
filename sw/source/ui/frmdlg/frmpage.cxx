@@ -597,8 +597,8 @@ namespace
 {
     void HandleAutoCB(bool _bChecked, weld::Label& _rFT_man, weld::Label& _rFT_auto, weld::MetricSpinButton& _rPF_Edit)
     {
-        _rFT_man.show( !_bChecked );
-        _rFT_auto.show( _bChecked );
+        _rFT_man.set_visible( !_bChecked );
+        _rFT_auto.set_visible( _bChecked );
         OUString accName = _bChecked ? _rFT_auto.get_label() : _rFT_man.get_label();
         _rPF_Edit.set_accessible_name(accName);
     }
@@ -968,11 +968,11 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
     {
         m_xAutoHeightCB->set_sensitive(false);
         m_xAutoWidthCB->set_sensitive(false);
-        m_xMirrorPagesCB->show(false);
+        m_xMirrorPagesCB->hide();
         if (m_sDlgType == "FrameDialog")
             m_xFixedRatioCB->set_sensitive(false);
         // i#18732 hide checkbox in HTML mode
-        m_xFollowTextFlowCB->show(false);
+        m_xFollowTextFlowCB->hide();
     }
     else
     {

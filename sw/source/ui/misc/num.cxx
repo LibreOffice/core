@@ -474,26 +474,26 @@ void SwNumPositionTabPage::InitPosAndSpaceMode()
 
 void SwNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
 {
-    m_xDistBorderFT->show( !bLabelAlignmentPosAndSpaceModeActive );
-    m_xDistBorderMF->show( !bLabelAlignmentPosAndSpaceModeActive );
-    m_xRelativeCB->show( !bLabelAlignmentPosAndSpaceModeActive );
-    m_xIndentFT->show( !bLabelAlignmentPosAndSpaceModeActive );
-    m_xIndentMF->show( !bLabelAlignmentPosAndSpaceModeActive );
-    m_xDistNumFT->show( !bLabelAlignmentPosAndSpaceModeActive );
-    m_xDistNumMF->show( !bLabelAlignmentPosAndSpaceModeActive );
-    m_xAlignFT->show( !bLabelAlignmentPosAndSpaceModeActive );
-    m_xAlignLB->show( !bLabelAlignmentPosAndSpaceModeActive );
+    m_xDistBorderFT->set_visible( !bLabelAlignmentPosAndSpaceModeActive );
+    m_xDistBorderMF->set_visible( !bLabelAlignmentPosAndSpaceModeActive );
+    m_xRelativeCB->set_visible( !bLabelAlignmentPosAndSpaceModeActive );
+    m_xIndentFT->set_visible( !bLabelAlignmentPosAndSpaceModeActive );
+    m_xIndentMF->set_visible( !bLabelAlignmentPosAndSpaceModeActive );
+    m_xDistNumFT->set_visible( !bLabelAlignmentPosAndSpaceModeActive );
+    m_xDistNumMF->set_visible( !bLabelAlignmentPosAndSpaceModeActive );
+    m_xAlignFT->set_visible( !bLabelAlignmentPosAndSpaceModeActive );
+    m_xAlignLB->set_visible( !bLabelAlignmentPosAndSpaceModeActive );
 
-    m_xLabelFollowedByFT->show( bLabelAlignmentPosAndSpaceModeActive );
-    m_xLabelFollowedByLB->show( bLabelAlignmentPosAndSpaceModeActive );
-    m_xListtabFT->show( bLabelAlignmentPosAndSpaceModeActive );
-    m_xListtabMF->show( bLabelAlignmentPosAndSpaceModeActive );
-    m_xAlign2FT->show( bLabelAlignmentPosAndSpaceModeActive );
-    m_xAlign2LB->show( bLabelAlignmentPosAndSpaceModeActive );
-    m_xAlignedAtFT->show( bLabelAlignmentPosAndSpaceModeActive );
-    m_xAlignedAtMF->show( bLabelAlignmentPosAndSpaceModeActive );
-    m_xIndentAtFT->show( bLabelAlignmentPosAndSpaceModeActive );
-    m_xIndentAtMF->show( bLabelAlignmentPosAndSpaceModeActive );
+    m_xLabelFollowedByFT->set_visible( bLabelAlignmentPosAndSpaceModeActive );
+    m_xLabelFollowedByLB->set_visible( bLabelAlignmentPosAndSpaceModeActive );
+    m_xListtabFT->set_visible( bLabelAlignmentPosAndSpaceModeActive );
+    m_xListtabMF->set_visible( bLabelAlignmentPosAndSpaceModeActive );
+    m_xAlign2FT->set_visible( bLabelAlignmentPosAndSpaceModeActive );
+    m_xAlign2LB->set_visible( bLabelAlignmentPosAndSpaceModeActive );
+    m_xAlignedAtFT->set_visible( bLabelAlignmentPosAndSpaceModeActive );
+    m_xAlignedAtMF->set_visible( bLabelAlignmentPosAndSpaceModeActive );
+    m_xIndentAtFT->set_visible( bLabelAlignmentPosAndSpaceModeActive );
+    m_xIndentAtMF->set_visible( bLabelAlignmentPosAndSpaceModeActive );
 }
 
 VclPtr<SfxTabPage> SwNumPositionTabPage::Create( TabPageParent pParent,

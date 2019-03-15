@@ -30,7 +30,7 @@ namespace
     {
         bool bEnable = rOptions.IsOptionEnabled(eOption);
         rCheckBox.set_sensitive(bEnable);
-        rFixedImage.show(!bEnable);
+        rFixedImage.set_visible(!bEnable);
         rCheckBox.set_active(rOptions.IsOptionSet(eOption));
         return bEnable;
     }

@@ -145,7 +145,7 @@ AlignmentTabPage::AlignmentTabPage(TabPageParent pParent, const SfxItemSet& rCor
     m_xCbStacked->connect_toggled(LINK(this, AlignmentTabPage, UpdateEnableClickHdl));
 
     // Asian vertical mode
-    m_xCbAsianMode->show(SvtCJKOptions().IsVerticalTextEnabled());
+    m_xCbAsianMode->set_visible(SvtCJKOptions().IsVerticalTextEnabled());
 
     m_xLbFrameDir->append(SvxFrameDirection::Horizontal_LR_TB, SvxResId(RID_SVXSTR_FRAMEDIR_LTR));
     m_xLbFrameDir->append(SvxFrameDirection::Horizontal_RL_TB, SvxResId(RID_SVXSTR_FRAMEDIR_RTL));
@@ -634,11 +634,11 @@ void AlignmentTabPage::UpdateEnableControls()
     m_xBtnShrink->set_sensitive( (m_xBtnWrap->get_state() == TRISTATE_FALSE) && !bHorBlock && !bHorFill && !bHorDist );
 
     // visibility of frames
-    m_xAlignmentFrame->show(m_xLbHorAlign->get_visible() || m_xEdIndent->get_visible() ||
+    m_xAlignmentFrame->set_visible(m_xLbHorAlign->get_visible() || m_xEdIndent->get_visible() ||
         m_xLbVerAlign->get_visible());
-    m_xOrientFrame->show(m_xCtrlDial->get_visible() || m_xVsRefEdge->get_visible() ||
+    m_xOrientFrame->set_visible(m_xCtrlDial->get_visible() || m_xVsRefEdge->get_visible() ||
         m_xCbStacked->get_visible() || m_xCbAsianMode->get_visible());
-    m_xPropertiesFrame->show(m_xBtnWrap->get_visible() || m_xBtnHyphen->get_visible() ||
+    m_xPropertiesFrame->set_visible(m_xBtnWrap->get_visible() || m_xBtnHyphen->get_visible() ||
         m_xBtnShrink->get_visible() || m_xLbFrameDir->get_visible());
 
     bool bStackedText = m_xCbStacked->get_active();

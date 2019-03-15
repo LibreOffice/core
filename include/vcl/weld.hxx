@@ -88,7 +88,17 @@ protected:
 public:
     virtual void set_sensitive(bool sensitive) = 0;
     virtual bool get_sensitive() const = 0;
-    virtual void set_visible(bool visible) = 0;
+    virtual void show() = 0;
+    virtual void hide() = 0;
+    // This function simply calls show() or hide() but is convenient when the
+    // visibility depends on some condition
+    virtual void set_visible(bool visible)
+    {
+        if (visible)
+            show();
+        else
+            hide();
+    }
     virtual bool get_visible() const = 0; //if this widget visibility is true
     virtual bool is_visible() const = 0; //if this widget visibility and all parents is true
     virtual void set_can_focus(bool bCanFocus) = 0;
@@ -96,15 +106,6 @@ public:
     virtual bool has_focus() const = 0;
     virtual void set_has_default(bool has_default) = 0;
     virtual bool get_has_default() const = 0;
-    virtual void show() = 0;
-    virtual void hide() = 0;
-    void show(bool bShow)
-    {
-        if (bShow)
-            show();
-        else
-            hide();
-    }
     virtual void set_size_request(int nWidth, int nHeight) = 0;
     virtual Size get_size_request() const = 0;
     virtual Size get_preferred_size() const = 0;
@@ -1283,7 +1284,8 @@ public:
     bool get_visible() const { return m_xSpinButton->get_visible(); }
     void grab_focus() { m_xSpinButton->grab_focus(); }
     bool has_focus() const { return m_xSpinButton->has_focus(); }
-    void show(bool bShow = true) { m_xSpinButton->show(bShow); }
+    void show() { m_xSpinButton->show(); }
+    void set_visible(bool bShow) { m_xSpinButton->set_visible(bShow); }
     void hide() { m_xSpinButton->hide(); }
     void set_digits(unsigned int digits);
     void set_accessible_name(const OUString& rName) { m_xSpinButton->set_accessible_name(rName); }
@@ -1361,7 +1363,7 @@ public:
     bool get_visible() const { return m_xSpinButton->get_visible(); }
     void grab_focus() { m_xSpinButton->grab_focus(); }
     bool has_focus() const { return m_xSpinButton->has_focus(); }
-    void show(bool bShow = true) { m_xSpinButton->show(bShow); }
+    void show() { m_xSpinButton->show(); }
     void hide() { m_xSpinButton->hide(); }
     void save_value() { m_xSpinButton->save_value(); }
     bool get_value_changed_from_saved() const

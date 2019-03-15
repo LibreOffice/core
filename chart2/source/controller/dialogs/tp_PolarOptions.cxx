@@ -82,7 +82,7 @@ void PolarOptionsTabPage::Reset(const SfxItemSet* rInAttrs)
     }
     else
     {
-        m_xFL_StartingAngle->show(false);
+        m_xFL_StartingAngle->hide();
     }
     if (rInAttrs->GetItemState(SCHATTR_CLOCKWISE, true, &pPoolItem) == SfxItemState::SET)
     {
@@ -91,7 +91,7 @@ void PolarOptionsTabPage::Reset(const SfxItemSet* rInAttrs)
     }
     else
     {
-        m_xCB_Clockwise->show(false);
+        m_xCB_Clockwise->hide();
     }
     if (rInAttrs->GetItemState(SCHATTR_INCLUDE_HIDDEN_CELLS, true, &pPoolItem) == SfxItemState::SET)
     {
@@ -100,7 +100,7 @@ void PolarOptionsTabPage::Reset(const SfxItemSet* rInAttrs)
     }
     else
     {
-        m_xFL_PlotOptions->show(false);
+        m_xFL_PlotOptions->hide();
     }
 }
 

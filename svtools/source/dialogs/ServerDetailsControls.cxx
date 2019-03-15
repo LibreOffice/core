@@ -51,7 +51,7 @@ DetailsContainer::~DetailsContainer( )
 {
 }
 
-void DetailsContainer::show( bool )
+void DetailsContainer::set_visible( bool )
 {
     m_pDialog->m_xDetailsGrid->set_sensitive(true);
 
@@ -88,17 +88,17 @@ HostDetailsContainer::HostDetailsContainer(PlaceEditDialog* pDialog, sal_uInt16 
     m_nDefaultPort( nPort ),
     m_sScheme( sScheme )
 {
-    show( false );
+    set_visible( false );
 }
 
-void HostDetailsContainer::show( bool bShow )
+void HostDetailsContainer::set_visible( bool bShow )
 {
-    m_pDialog->m_xFTHost->show( bShow );
-    m_pDialog->m_xHostBox->show( bShow );
-    m_pDialog->m_xEDRoot->show( bShow );
-    m_pDialog->m_xFTRoot->show( bShow );
+    m_pDialog->m_xFTHost->set_visible( bShow );
+    m_pDialog->m_xHostBox->set_visible( bShow );
+    m_pDialog->m_xEDRoot->set_visible( bShow );
+    m_pDialog->m_xFTRoot->set_visible( bShow );
 
-    DetailsContainer::show( bShow );
+    DetailsContainer::set_visible( bShow );
 
     if ( bShow )
     {
@@ -156,17 +156,17 @@ DavDetailsContainer::DavDetailsContainer(PlaceEditDialog* pBuilder)
 {
     m_pDialog->m_xCBDavs->connect_toggled(LINK(this, DavDetailsContainer, ToggledDavsHdl));
 
-    show( false );
+    set_visible( false );
 }
 
-void DavDetailsContainer::show( bool bShow )
+void DavDetailsContainer::set_visible( bool bShow )
 {
-    HostDetailsContainer::show( bShow );
+    HostDetailsContainer::set_visible( bShow );
 
     if ( !bShow )
         m_pDialog->m_xCBDavs->set_active(false);
 
-    m_pDialog->m_xCBDavs->show(bShow);
+    m_pDialog->m_xCBDavs->set_visible(bShow);
 }
 
 bool DavDetailsContainer::verifyScheme( const OUString& rScheme )
@@ -207,7 +207,7 @@ SmbDetailsContainer::SmbDetailsContainer(PlaceEditDialog* pDialog)
 {
     m_pDialog->m_xEDShare->connect_changed( LINK( this, DetailsContainer, ValueChangeHdl ) );
 
-    show( false );
+    set_visible( false );
 }
 
 INetURLObject SmbDetailsContainer::getUrl( )
@@ -257,15 +257,15 @@ bool SmbDetailsContainer::setUrl( const INetURLObject& rUrl )
     return bSuccess;
 }
 
-void SmbDetailsContainer::show( bool bShow )
+void SmbDetailsContainer::set_visible( bool bShow )
 {
-    m_pDialog->m_xEDShare->show( bShow );
-    m_pDialog->m_xFTShare->show( bShow );
-    m_pDialog->m_xEDRoot->show( bShow );
-    m_pDialog->m_xFTRoot->show( bShow );
+    m_pDialog->m_xEDShare->set_visible( bShow );
+    m_pDialog->m_xFTShare->set_visible( bShow );
+    m_pDialog->m_xEDRoot->set_visible( bShow );
+    m_pDialog->m_xFTRoot->set_visible( bShow );
 
-    m_pDialog->m_xFTHost->show( bShow );
-    m_pDialog->m_xHostBox->show( bShow );
+    m_pDialog->m_xFTHost->set_visible( bShow );
+    m_pDialog->m_xHostBox->set_visible( bShow );
     m_pDialog->m_xEDPort->set_sensitive( !bShow );
     m_pDialog->m_xFTPort->set_sensitive( !bShow );
 
@@ -287,10 +287,10 @@ CmisDetailsContainer::CmisDetailsContainer(PlaceEditDialog* pParentDialog, OUStr
         InteractionHandler::createWithParent(xContext, m_xParentDialog), UNO_QUERY);
     m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
 
-    show( false );
+    set_visible( false );
 }
 
-void CmisDetailsContainer::show( bool bShow )
+void CmisDetailsContainer::set_visible( bool bShow )
 {
     m_pDialog->m_xLBRepository->connect_changed( LINK( this, CmisDetailsContainer, SelectRepoHdl ) );
     m_pDialog->m_xBTRepoRefresh->connect_clicked( LINK( this, CmisDetailsContainer, RefreshReposHdl ) );
@@ -301,24 +301,24 @@ void CmisDetailsContainer::show( bool bShow )
             || m_sBinding.startsWith( ALFRESCO_CLOUD_BASE_URL )
             || ( m_sBinding == ONEDRIVE_BASE_URL ) )
     {
-        m_pDialog->m_xFTHost->show( false );
-        m_pDialog->m_xHostBox->show( false );
-        m_pDialog->m_xFTRepository->show( false );
-        m_pDialog->m_xRepositoryBox->show( false );
-        m_pDialog->m_xEDRoot->show( false );
-        m_pDialog->m_xFTRoot->show( false );
+        m_pDialog->m_xFTHost->hide();
+        m_pDialog->m_xHostBox->hide();
+        m_pDialog->m_xFTRepository->hide();
+        m_pDialog->m_xRepositoryBox->hide();
+        m_pDialog->m_xEDRoot->hide();
+        m_pDialog->m_xFTRoot->hide();
     }
     else
     {
-        m_pDialog->m_xFTHost->show( bShow );
-        m_pDialog->m_xHostBox->show( bShow );
-        m_pDialog->m_xFTRepository->show( bShow );
-        m_pDialog->m_xRepositoryBox->show( bShow );
-        m_pDialog->m_xEDRoot->show( bShow );
-        m_pDialog->m_xFTRoot->show( bShow );
+        m_pDialog->m_xFTHost->set_visible( bShow );
+        m_pDialog->m_xHostBox->set_visible( bShow );
+        m_pDialog->m_xFTRepository->set_visible( bShow );
+        m_pDialog->m_xRepositoryBox->set_visible( bShow );
+        m_pDialog->m_xEDRoot->set_visible( bShow );
+        m_pDialog->m_xFTRoot->set_visible( bShow );
     }
 
-    DetailsContainer::show( bShow );
+    DetailsContainer::set_visible( bShow );
     m_pDialog->m_xEDPort->set_sensitive( !bShow );
     m_pDialog->m_xFTPort->set_sensitive( !bShow );
 }

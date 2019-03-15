@@ -197,10 +197,10 @@ namespace dbaui
         bool bShowUser = ( eAuthMode == AuthUserPwd );
 
         m_xPB_Connection->set_help_id(HID_DSADMIN_BROWSECONN);
-        m_xFL2->show( bShowUserAuthenfication );
-        m_xUserNameLabel->show( bShowUser && bShowUserAuthenfication );
-        m_xUserName->show( bShowUser && bShowUserAuthenfication );
-        m_xPasswordRequired->show( bShowUserAuthenfication );
+        m_xFL2->set_visible( bShowUserAuthenfication );
+        m_xUserNameLabel->set_visible( bShowUser && bShowUserAuthenfication );
+        m_xUserName->set_visible( bShowUser && bShowUserAuthenfication );
+        m_xPasswordRequired->set_visible( bShowUserAuthenfication );
 
         // collect the items
         const SfxStringItem* pUidItem = _rSet.GetItem<SfxStringItem>(DSID_USER);
@@ -228,11 +228,11 @@ namespace dbaui
             else
                 m_xJavaDriver->set_text(pJdbcDrvItem->GetValue());
 
-            m_xJavaDriverLabel->show(bEnableJDBC);
-            m_xJavaDriver->show(bEnableJDBC);
-            m_xTestJavaDriver->show(bEnableJDBC);
+            m_xJavaDriverLabel->set_visible(bEnableJDBC);
+            m_xJavaDriver->set_visible(bEnableJDBC);
+            m_xTestJavaDriver->set_visible(bEnableJDBC);
             m_xTestJavaDriver->set_sensitive( !m_xJavaDriver->get_text().trim().isEmpty() );
-            m_xFL3->show(bEnableJDBC);
+            m_xFL3->set_visible(bEnableJDBC);
 
             checkTestConnection();
 
