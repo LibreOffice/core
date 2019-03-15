@@ -387,14 +387,59 @@ public:
 }
 
 void ScColumn::DetachFormulaCells(
-    const sc::CellStoreType::position_type& aPos, size_t nLength )
+    const sc::CellStoreType::position_type& aPos, size_t nLength, std::vector<SCROW>* pNewSharedRows )
 {
+    const size_t nRow = aPos.first->position + aPos.second;
+    const size_t nNextTopRow = nRow + nLength; // start row of next formula group.
+
+    bool bLowerSplitOff = false;
+    if (pNewSharedRows && !GetDoc()->IsClipOrUndo())
+    {
+        const ScFormulaCell* pFC = sc::SharedFormulaUtil::getSharedTopFormulaCell(aPos);
+        if (pFC)
+        {
+            const SCROW nTopRow = pFC->GetSharedTopRow();
+            const SCROW nBotRow = nTopRow + pFC->GetSharedLength() - 1;
+            // nTopRow <= nRow <= nBotRow, because otherwise pFC would not exist.
+            if (nTopRow < static_cast<SCROW>(nRow))
+            {
+                // Upper part will be split off.
+                pNewSharedRows->push_back(nTopRow);
+                pNewSharedRows->push_back(nRow - 1);
+            }
+            if (static_cast<SCROW>(nNextTopRow) <= nBotRow)
+            {
+                // Lower part will be split off.
+                pNewSharedRows->push_back(nNextTopRow);
+                pNewSharedRows->push_back(nBotRow);
+                bLowerSplitOff = true;
+            }
+        }
+    }
+
     // Split formula grouping at the top and bottom boundaries.
     sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, nullptr);
-    size_t nRow = aPos.first->position + aPos.second;
-    size_t nNextTopRow = nRow + nLength; // start row of next formula group.
-    if (ValidRow(nNextTopRow))
+
+    if (nLength > 0 && ValidRow(nNextTopRow))
     {
+        if (pNewSharedRows && !bLowerSplitOff && !GetDoc()->IsClipOrUndo())
+        {
+            sc::CellStoreType::position_type aPos2 = maCells.position(aPos.first, nNextTopRow-1);
+            const ScFormulaCell* pFC = sc::SharedFormulaUtil::getSharedTopFormulaCell(aPos2);
+            if (pFC)
+            {
+                const SCROW nTopRow = pFC->GetSharedTopRow();
+                const SCROW nBotRow = nTopRow + pFC->GetSharedLength() - 1;
+                // nRow < nTopRow < nNextTopRow <= nBotRow
+                if (static_cast<SCROW>(nNextTopRow) <= nBotRow)
+                {
+                    // Lower part will be split off.
+                    pNewSharedRows->push_back(nNextTopRow);
+                    pNewSharedRows->push_back(nBotRow);
+                }
+            }
+        }
+
         sc::CellStoreType::position_type aPos2 = maCells.position(aPos.first, nNextTopRow);
         sc::SharedFormulaUtil::splitFormulaCellGroup(aPos2, nullptr);
     }
@@ -425,15 +470,59 @@ void ScColumn::AttachFormulaCells( sc::StartListeningContext& rCxt, SCROW nRow1,
     sc::ProcessFormula(it, maCells, nRow1, nRow2, aFunc);
 }
 
-void ScColumn::DetachFormulaCells( sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2 )
+void ScColumn::DetachFormulaCells( sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2,
+        std::vector<SCROW>* pNewSharedRows )
 {
     sc::CellStoreType::position_type aPos = maCells.position(nRow1);
     sc::CellStoreType::iterator it = aPos.first;
+
+    bool bLowerSplitOff = false;
+    if (pNewSharedRows && !GetDoc()->IsClipOrUndo())
+    {
+        const ScFormulaCell* pFC = sc::SharedFormulaUtil::getSharedTopFormulaCell(aPos);
+        if (pFC)
+        {
+            const SCROW nTopRow = pFC->GetSharedTopRow();
+            const SCROW nBotRow = nTopRow + pFC->GetSharedLength() - 1;
+            // nTopRow <= nRow1 <= nBotRow, because otherwise pFC would not exist.
+            if (nTopRow < nRow1)
+            {
+                // Upper part will be split off.
+                pNewSharedRows->push_back(nTopRow);
+                pNewSharedRows->push_back(nRow1 - 1);
+            }
+            if (nRow2 < nBotRow)
+            {
+                // Lower part will be split off.
+                pNewSharedRows->push_back(nRow2 + 1);
+                pNewSharedRows->push_back(nBotRow);
+                bLowerSplitOff = true;
+            }
+        }
+    }
 
     // Split formula grouping at the top and bottom boundaries.
     sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, &rCxt);
     if (ValidRow(nRow2+1))
     {
+        if (pNewSharedRows && !bLowerSplitOff && !GetDoc()->IsClipOrUndo())
+        {
+            sc::CellStoreType::position_type aPos2 = maCells.position(aPos.first, nRow2);
+            const ScFormulaCell* pFC = sc::SharedFormulaUtil::getSharedTopFormulaCell(aPos2);
+            if (pFC)
+            {
+                const SCROW nTopRow = pFC->GetSharedTopRow();
+                const SCROW nBotRow = nTopRow + pFC->GetSharedLength() - 1;
+                // nRow1 < nTopRow <= nRow2 < nBotRow
+                if (nRow2 < nBotRow)
+                {
+                    // Lower part will be split off.
+                    pNewSharedRows->push_back(nRow2 + 1);
+                    pNewSharedRows->push_back(nBotRow);
+                }
+            }
+        }
+
         aPos = maCells.position(it, nRow2+1);
         sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, &rCxt);
     }
@@ -535,7 +624,8 @@ void ScColumn::AttachNewFormulaCell(
         rCell.SetDirty();
 }
 
-void ScColumn::AttachNewFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength )
+void ScColumn::AttachNewFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength,
+        const std::vector<SCROW>& rNewSharedRows )
 {
     // Make sure the whole length consists of formula cells.
     if (aPos.first->type != sc::element_type_formula)
@@ -557,6 +647,8 @@ void ScColumn::AttachNewFormulaCells( const sc::CellStoreType::position_type& aP
     ScDocument* pDocument = GetDoc();
     if (!pDocument->IsClipOrUndo() && !pDocument->IsInsertingFromOtherDoc())
     {
+        StartListeningUnshared( rNewSharedRows);
+
         sc::StartListeningContext aCxt(*pDocument);
         ScFormulaCell** pp = &sc::formula_block::at(*aPos.first->data, aPos.second);
         ScFormulaCell** ppEnd = pp + nLength;
@@ -1601,7 +1693,7 @@ public:
 
         // Stop all formula cells in the destination range first.
         sc::CellStoreType::position_type aPos = rDestCells.position(mrBlockPos.miCellPos, mnRowOffset);
-        mrDestColumn.DetachFormulaCells(aPos, maNewCells.size());
+        mrDestColumn.DetachFormulaCells(aPos, maNewCells.size(), nullptr);
 
         // Move the new cells to the destination range.
         sc::CellStoreType::iterator& itDestPos = mrBlockPos.miCellPos;
@@ -2104,7 +2196,8 @@ bool ScColumn::SetFormulaCells( SCROW nRow, std::vector<ScFormulaCell*>& rCells 
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
 
     // Detach all formula cells that will be overwritten.
-    DetachFormulaCells(aPos, rCells.size());
+    std::vector<SCROW> aNewSharedRows;
+    DetachFormulaCells(aPos, rCells.size(), &aNewSharedRows);
 
     if (!GetDoc()->IsClipOrUndo())
     {
@@ -2124,7 +2217,7 @@ bool ScColumn::SetFormulaCells( SCROW nRow, std::vector<ScFormulaCell*>& rCells 
 
     CellStorageModified();
 
-    AttachNewFormulaCells(aPos, rCells.size());
+    AttachNewFormulaCells(aPos, rCells.size(), aNewSharedRows);
 
     return true;
 }

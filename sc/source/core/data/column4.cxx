@@ -317,13 +317,16 @@ void ScColumn::SetValues( const SCROW nRow, const std::vector<double>& rVals )
         return;
 
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
-    DetachFormulaCells(aPos, rVals.size());
+    std::vector<SCROW> aNewSharedRows;
+    DetachFormulaCells(aPos, rVals.size(), &aNewSharedRows);
 
     maCells.set(nRow, rVals.begin(), rVals.end());
     std::vector<sc::CellTextAttr> aDefaults(rVals.size());
     maCellTextAttrs.set(nRow, aDefaults.begin(), aDefaults.end());
 
     CellStorageModified();
+
+    StartListeningUnshared( aNewSharedRows);
 
     std::vector<SCROW> aRows;
     aRows.reserve(rVals.size());
@@ -344,7 +347,7 @@ void ScColumn::TransferCellValuesTo( SCROW nRow, size_t nLen, sc::CellValues& rD
         return;
 
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
-    DetachFormulaCells(aPos, nLen);
+    DetachFormulaCells(aPos, nLen, nullptr);
 
     rDest.transferFrom(*this, nRow, nLen);
 
@@ -369,7 +372,7 @@ void ScColumn::CopyCellValuesFrom( SCROW nRow, const sc::CellValues& rSrc )
         return;
 
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
-    DetachFormulaCells(aPos, rSrc.size());
+    DetachFormulaCells(aPos, rSrc.size(), nullptr);
 
     rSrc.copyTo(*this, nRow);
 
@@ -445,7 +448,7 @@ void ScColumn::ConvertFormulaToValue(
         // No formula cells encountered.
         return;
 
-    DetachFormulaCells(rCxt, nRow1, nRow2);
+    DetachFormulaCells(rCxt, nRow1, nRow2, nullptr);
 
     // Undo storage to hold static values which will get swapped to the cell storage later.
     sc::CellValues aUndoCells;

@@ -57,6 +57,9 @@ public:
         }
     }
 
+    /** Get shared formula top cell from position, if any, else nullptr. */
+    static const ScFormulaCell* getSharedTopFormulaCell(const CellStoreType::position_type& aPos);
+
     /**
      * Split existing shared formula range at specified position. The cell at
      * specified position becomes the top cell of the lower shared formula

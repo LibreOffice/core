@@ -647,10 +647,12 @@ public:
     /** Re-establish listeners on unshared formula groups */
     void StartListeningUnshared( const std::vector<SCROW>& rNewSharedRows );
 
-    void DetachFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength );
+    void DetachFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength,
+                             std::vector<SCROW>* pNewSharedRows );
 
     void AttachFormulaCells( sc::StartListeningContext& rCxt, SCROW nRow1, SCROW nRow2 );
-    void DetachFormulaCells( sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2 );
+    void DetachFormulaCells( sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2,
+                             std::vector<SCROW>* pNewSharedRows );
 
     /**
      * Regroup formula cells for the entire column.
@@ -714,7 +716,9 @@ private:
         const std::vector<SCROW>& rNewSharedRows,
         bool bJoin = true, sc::StartListeningType eListenType = sc::SingleCellListening );
 
-    void AttachNewFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength );
+    void AttachNewFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength,
+                                const std::vector<SCROW>& rNewSharedRows );
+
     void BroadcastNewCell( SCROW nRow );
     bool UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, sc::CellStoreType::iterator& itr );
 
