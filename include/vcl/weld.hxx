@@ -414,10 +414,12 @@ private:
 
 protected:
     Link<ComboBox&, void> m_aChangeHdl;
+    Link<ComboBox&, void> m_aPopupToggledHdl;
     Link<ComboBox&, bool> m_aEntryActivateHdl;
     Link<OUString&, bool> m_aEntryInsertTextHdl;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
+    virtual void signal_popup_toggled() { m_aPopupToggledHdl.Call(*this); }
 
 public:
     virtual void insert(int pos, const OUString& rStr, const OUString* pId,
@@ -470,6 +472,10 @@ public:
     void remove_id(const OUString& rId) { remove(find_id(rId)); }
 
     void connect_changed(const Link<ComboBox&, void>& rLink) { m_aChangeHdl = rLink; }
+    virtual void connect_popup_toggled(const Link<ComboBox&, void>& rLink)
+    {
+        m_aPopupToggledHdl = rLink;
+    }
 
     //entry related
     virtual bool has_entry() const = 0;
@@ -664,6 +670,7 @@ public:
     }
     virtual bool iter_parent(TreeIter& rIter) const = 0;
     virtual int get_iter_depth(const TreeIter& rIter) const = 0;
+    virtual int get_iter_index_in_parent(const TreeIter& rIter) const = 0;
     virtual bool iter_has_child(const TreeIter& rIter) const = 0;
     virtual void remove(const TreeIter& rIter) = 0;
     virtual void select(const TreeIter& rIter) = 0;
@@ -682,8 +689,14 @@ public:
     virtual void scroll_to_row(const TreeIter& rIter) = 0;
     virtual bool is_selected(const TreeIter& rIter) const = 0;
 
-    virtual void selected_foreach(const std::function<void(TreeIter&)>& func) = 0;
-    virtual void visible_foreach(const std::function<void(TreeIter&)>& func) = 0;
+    virtual void move_subtree(weld::TreeIter& rNode, const weld::TreeIter* pNewParent,
+                              int nIndexInNewParent)
+        = 0;
+
+    //calling func on each selected element until func returns true or we run out of elements
+    virtual void selected_foreach(const std::function<bool(TreeIter&)>& func) = 0;
+    //calling func on each visible element until func returns true or we run out of elements
+    virtual void visible_foreach(const std::function<bool(TreeIter&)>& func) = 0;
 
     void connect_expanding(const Link<const TreeIter&, bool>& rLink) { m_aExpandingHdl = rLink; }
 

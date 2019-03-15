@@ -246,6 +246,7 @@ uno::Sequence<uno::Reference< css::security::XCertificate > > CertificateChooser
         m_xCertLB->selected_foreach([this, &aRet](weld::TreeIter& rEntry){
             UserData* userData = reinterpret_cast<UserData*>(m_xCertLB->get_id(rEntry).toInt64());
             aRet.push_back( userData->xCertificate );
+            return false;
         });
     }
     else

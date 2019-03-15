@@ -69,8 +69,10 @@ public:
     SwConditionEdit(std::unique_ptr<weld::Entry> xControl);
 
     OUString get_text() const { return m_xControl->get_text(); }
+    void set_text(const OUString& rText) { m_xControl->set_text(rText); }
     bool get_sensitive() const { return m_xControl->get_sensitive(); }
     void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
+    void connect_changed(const Link<weld::Entry&, void>& rLink) { m_xControl->connect_changed(rLink); }
     void hide() { m_xControl->hide(); }
     weld::Entry& get_widget() { return *m_xControl; }
 
