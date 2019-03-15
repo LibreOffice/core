@@ -916,6 +916,7 @@ void SdImportTestSmartArt::testInteropGrabBag()
     CPPUNIT_ASSERT(aGrabBag.find("OOXLayout") != aGrabBag.end());
     CPPUNIT_ASSERT(aGrabBag.find("OOXStyle") != aGrabBag.end());
     CPPUNIT_ASSERT(aGrabBag.find("OOXColor") != aGrabBag.end());
+    CPPUNIT_ASSERT(aGrabBag.find("OOXDrawing") != aGrabBag.end());
 
     xDocShRef->DoClose();
 }

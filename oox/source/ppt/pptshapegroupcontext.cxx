@@ -148,17 +148,20 @@ void PPTShapeGroupContext::importExtDrawings( )
     if( pGraphicShape )
     {
         for (auto const& extDrawing : pGraphicShape->getExtDrawings())
-            {
-                getFilter().importFragment( new ExtDrawingFragmentHandler( getFilter(), getFragmentPathFromRelId(extDrawing),
-                                                                           mpSlidePersistPtr,
-                                                                           meShapeLocation,
-                                                                           mpGroupShapePtr,
-                                                                           pGraphicShape ) );
-                // Apply font color imported from color fragment
-                if( pGraphicShape->getFontRefColorForNodes().isUsed() )
-                    applyFontRefColor(mpGroupShapePtr, pGraphicShape->getFontRefColorForNodes());
-            }
-            pGraphicShape = oox::drawingml::ShapePtr( nullptr );
+        {
+            OUString aFragmentPath = getFragmentPathFromRelId(extDrawing);
+            getFilter().importFragment( new ExtDrawingFragmentHandler( getFilter(), aFragmentPath,
+                                                                       mpSlidePersistPtr,
+                                                                       meShapeLocation,
+                                                                       mpGroupShapePtr,
+                                                                       pGraphicShape ) );
+            pGraphicShape->keepDiagramDrawing(getFilter(), aFragmentPath);
+
+            // Apply font color imported from color fragment
+            if( pGraphicShape->getFontRefColorForNodes().isUsed() )
+                applyFontRefColor(mpGroupShapePtr, pGraphicShape->getFontRefColorForNodes());
+        }
+        pGraphicShape = oox::drawingml::ShapePtr( nullptr );
     }
 }
 

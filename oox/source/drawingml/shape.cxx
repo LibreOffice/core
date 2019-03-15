@@ -64,6 +64,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
@@ -1392,6 +1393,22 @@ Reference< XShape > const & Shape::createAndInsert(
         finalizeXShape( rFilterBase, rxShapes );
 
     return mxShape;
+}
+
+void Shape::keepDiagramDrawing(XmlFilterBase& rFilterBase, const OUString& rFragmentPath)
+{
+    uno::Sequence<uno::Any> diagramDrawing(2);
+    // drawingValue[0] => dom, drawingValue[1] => Sequence of associated relationships
+
+    sal_Int32 length = maDiagramDoms.getLength();
+    maDiagramDoms.realloc(length + 1);
+
+    diagramDrawing[0] <<= rFilterBase.importFragment(rFragmentPath);
+    diagramDrawing[1] <<= resolveRelationshipsOfTypeFromOfficeDoc(rFilterBase, rFragmentPath, "image");
+
+    beans::PropertyValue* pValue = maDiagramDoms.getArray();
+    pValue[length].Name = "OOXDrawing";
+    pValue[length].Value <<= diagramDrawing;
 }
 
 void Shape::keepDiagramCompatibilityInfo()
