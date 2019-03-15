@@ -58,7 +58,7 @@ OUString applicationDirPath()
     const auto utf8Path = applicationSystemPath.toUtf8();
     auto ret = boost::filesystem::path(utf8Path.getStr(), utf8Path.getStr() + utf8Path.getLength());
     ret.remove_filename();
-    return OUString::fromUtf8(OString(ret.c_str(), ret.size()));
+    return OUString::fromUtf8(OString(ret.c_str(), strlen(ret.c_str())));
 }
 
 OUString findPickerExecutable()
