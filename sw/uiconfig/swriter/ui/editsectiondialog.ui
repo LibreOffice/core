@@ -2,11 +2,23 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name expander -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="EditSectionDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="editsectiondialog|EditSectionDialog">Edit Sections</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
@@ -133,7 +145,6 @@
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="row_spacing">6</property>
-                        <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkEntry" id="curname">
                             <property name="visible">True</property>
@@ -146,13 +157,43 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="vcllo-SvTreeListBox" id="tree:border">
+                          <object class="GtkScrolledWindow">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="Tree List-selection1"/>
+                            <property name="shadow_type">in</property>
+                            <child>
+                              <object class="GtkTreeView" id="tree">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                                <property name="model">liststore1</property>
+                                <property name="headers_visible">False</property>
+                                <property name="headers_clickable">False</property>
+                                <property name="search_column">0</property>
+                                <child internal-child="selection">
+                                  <object class="GtkTreeSelection"/>
+                                </child>
+                                <child>
+                                  <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
+                                      <attributes>
+                                        <attribute name="pixbuf">0</attribute>
+                                      </attributes>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                                      <attributes>
+                                        <attribute name="text">1</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
                             </child>
                           </object>
                           <packing>
@@ -274,6 +315,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="hexpand">True</property>
+                                        <property name="activates_default">True</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -302,7 +344,8 @@
                                         <property name="has_entry">True</property>
                                         <child internal-child="entry">
                                           <object class="GtkEntry" id="comboboxtext-entry">
-                                            <property name="can_focus">False</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="activates_default">True</property>
                                           </object>
                                         </child>
                                       </object>
@@ -562,11 +605,12 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="swlo-ConditionEdit" id="condition">
+                                      <object class="GtkEntry" id="condition">
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
                                         <property name="hexpand">True</property>
+                                        <property name="activates_default">True</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -678,8 +722,8 @@
     <action-widgets>
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
-      <action-widget response="0">options</action-widget>
-      <action-widget response="0">remove</action-widget>
+      <action-widget response="101">options</action-widget>
+      <action-widget response="102">remove</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>

@@ -243,7 +243,11 @@ short AbstractMailMergeFieldConnectionsDlg_Impl::Execute()
 }
 
 IMPL_ABSTDLG_BASE(AbstractMultiTOXTabDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractEditRegionDlg_Impl);
+
+short AbstractEditRegionDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractInsertSectionTabDialog_Impl::Execute()
 {
@@ -670,7 +674,7 @@ const SfxItemSet* AbstractMultiTOXTabDialog_Impl::GetOutputItemSet() const
 
 void AbstractEditRegionDlg_Impl::SelectSection(const OUString& rSectionName)
 {
-    pDlg->SelectSection(rSectionName);
+    m_xDlg->SelectSection(rSectionName);
 }
 
 void
@@ -1082,10 +1086,9 @@ VclPtr<AbstractMultiTOXTabDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXTa
     return VclPtr<AbstractMultiTOXTabDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractEditRegionDlg> SwAbstractDialogFactory_Impl::CreateEditRegionDlg(vcl::Window* pParent, SwWrtShell& rWrtSh)
+VclPtr<AbstractEditRegionDlg> SwAbstractDialogFactory_Impl::CreateEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh)
 {
-    VclPtr<SwEditRegionDlg> pDlg = VclPtr<SwEditRegionDlg>::Create( pParent, rWrtSh );
-    return VclPtr<AbstractEditRegionDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractEditRegionDlg_Impl>::Create(std::make_unique<SwEditRegionDlg>(pParent, rWrtSh));
 }
 
 VclPtr<AbstractInsertSectionTabDialog> SwAbstractDialogFactory_Impl::CreateInsertSectionTabDialog(weld::Window* pParent,

@@ -57,36 +57,9 @@ namespace sfx2
 class SectRepr;
 typedef std::map<size_t, std::unique_ptr<SectRepr>> SectReprs_t;
 
-class SwEditRegionDlg : public SfxModalDialog
+class SwEditRegionDlg : public SfxDialogController
 {
-    VclPtr<Edit>           m_pCurName;
-    VclPtr<SvTreeListBox>  m_pTree;
-
-    VclPtr<TriStateBox>    m_pFileCB;
-    VclPtr<CheckBox>       m_pDDECB;
-    VclPtr<VclContainer>   m_pDDEFrame;
-    VclPtr<FixedText>      m_pFileNameFT;
-    VclPtr<FixedText>      m_pDDECommandFT;
-    VclPtr<Edit>           m_pFileNameED;
-    VclPtr<PushButton>     m_pFilePB;
-    VclPtr<FixedText>      m_pSubRegionFT;
-    VclPtr<ComboBox>       m_pSubRegionED;
     bool            m_bSubRegionsFilled;
-
-    VclPtr<TriStateBox>    m_pProtectCB;
-    VclPtr<CheckBox>       m_pPasswdCB;
-    VclPtr<PushButton>     m_pPasswdPB;
-
-    VclPtr<TriStateBox>    m_pHideCB;
-    VclPtr<FixedText>      m_pConditionFT;
-    VclPtr<ConditionEdit>  m_pConditionED;
-
-    // #114856# edit in readonly sections
-    VclPtr<TriStateBox>    m_pEditInReadonlyCB;
-
-    VclPtr<OKButton>       m_pOK;
-    VclPtr<PushButton>     m_pOptionsPB;
-    VclPtr<PushButton>     m_pDismiss;
 
     SwWrtShell&             rSh;
     SectReprs_t             m_SectReprs;
@@ -95,36 +68,62 @@ class SwEditRegionDlg : public SfxModalDialog
 
     bool            bDontCheckPasswd :1;
 
-    void    RecurseList( const SwSectionFormat* pFormat, SvTreeListEntry* pEntry);
+    std::unique_ptr<weld::Entry> m_xCurName;
+    std::unique_ptr<weld::TreeView>  m_xTree;
+    std::unique_ptr<weld::CheckButton> m_xFileCB;
+    std::unique_ptr<weld::CheckButton> m_xDDECB;
+    std::unique_ptr<weld::Widget> m_xDDEFrame;
+    std::unique_ptr<weld::Label> m_xFileNameFT;
+    std::unique_ptr<weld::Label> m_xDDECommandFT;
+    std::unique_ptr<weld::Entry> m_xFileNameED;
+    std::unique_ptr<weld::Button> m_xFilePB;
+    std::unique_ptr<weld::Label> m_xSubRegionFT;
+    std::unique_ptr<weld::ComboBox> m_xSubRegionED;
+    std::unique_ptr<weld::CheckButton> m_xProtectCB;
+    std::unique_ptr<weld::CheckButton> m_xPasswdCB;
+    std::unique_ptr<weld::Button> m_xPasswdPB;
+    std::unique_ptr<weld::CheckButton> m_xHideCB;
+    std::unique_ptr<weld::Label> m_xConditionFT;
+    std::unique_ptr<SwConditionEdit>  m_xConditionED;
+    // #114856# edit in readonly sections
+    std::unique_ptr<weld::CheckButton> m_xEditInReadonlyCB;
+    std::unique_ptr<weld::Button> m_xOK;
+    std::unique_ptr<weld::Button> m_xOptionsPB;
+    std::unique_ptr<weld::Button> m_xDismiss;
+    std::unique_ptr<weld::Widget> m_xHideFrame;
+
+    void    RecurseList(const SwSectionFormat* pFormat, weld::TreeIter* pIter);
     size_t  FindArrPos(const SwSectionFormat* pFormat);
 
-    DECL_LINK( GetFirstEntryHdl, SvTreeListBox *, void );
-    DECL_LINK( DeselectHdl, SvTreeListBox *, void );
+    DECL_LINK( GetFirstEntryHdl, weld::TreeView&, void );
+    DECL_LINK( DeselectHdl, weld::TreeView&, void );
 
-    DECL_LINK( OkHdl, Button*, void );
-    DECL_LINK( NameEditHdl, Edit&, void );
-    DECL_LINK( ConditionEditHdl, Edit&, void );
+    DECL_LINK( OkHdl, weld::Button&, void );
+    DECL_LINK( NameEditHdl, weld::Entry&, void );
+    DECL_LINK( ConditionEditHdl, weld::Entry&, void );
 
-    DECL_LINK( ChangePasswdHdl, Button *, void );
-    DECL_LINK( ChangeProtectHdl, Button *, void );
-    DECL_LINK( ChangeHideHdl, Button *, void );
+    void ChangePasswd(bool bChange);
+    DECL_LINK( TogglePasswdHdl, weld::ToggleButton&, void );
+    DECL_LINK( ChangePasswdHdl, weld::Button&, void );
+    DECL_LINK( ChangeProtectHdl, weld::ToggleButton&, void );
+    DECL_LINK( ChangeHideHdl, weld::ToggleButton&, void );
     // #114856# edit in readonly sections
-    DECL_LINK( ChangeEditInReadonlyHdl, Button *, void );
-    DECL_LINK( ChangeDismissHdl, Button*, void);
-    DECL_LINK( UseFileHdl, Button*, void );
-    DECL_LINK( FileSearchHdl, Button*, void );
-    DECL_LINK( OptionsHdl, Button*, void );
-    DECL_LINK( FileNameHdl, Edit&, void );
-    DECL_LINK( DDEHdl, Button*, void );
+    DECL_LINK( ChangeEditInReadonlyHdl, weld::ToggleButton&, void );
+    DECL_LINK( ChangeDismissHdl, weld::Button&, void);
+    DECL_LINK( UseFileHdl, weld::ToggleButton&, void );
+    DECL_LINK( FileSearchHdl, weld::Button&, void );
+    DECL_LINK( OptionsHdl, weld::Button&, void );
+    DECL_LINK( FileNameComboBoxHdl, weld::ComboBox&, void );
+    DECL_LINK( FileNameEntryHdl, weld::Entry&, void );
+    DECL_LINK( DDEHdl, weld::ToggleButton&, void );
     DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper*, void );
-    DECL_LINK( SubRegionEventHdl, VclWindowEvent&, void );
+    DECL_LINK( SubRegionEventHdl, weld::ComboBox&, void );
 
-    bool CheckPasswd(CheckBox* pBox = nullptr);
+    bool CheckPasswd(weld::ToggleButton* pBox = nullptr);
 
 public:
-    SwEditRegionDlg( vcl::Window* pParent, SwWrtShell& rWrtSh );
+    SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh);
     virtual ~SwEditRegionDlg() override;
-    virtual void dispose() override;
 
     void    SelectSection(const OUString& rSectionName);
 

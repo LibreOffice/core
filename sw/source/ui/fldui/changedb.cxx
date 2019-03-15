@@ -193,6 +193,7 @@ void SwChangeDBDlg::UpdateFields()
                           m_xUsedDBTLB->get_id(rEntry));
             aDBNames.push_back(sTmp);
         }
+        return false;
     });
 
     pSh->StartAllAction();
