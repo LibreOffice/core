@@ -951,6 +951,11 @@ bool AquaSalGraphics::drawPolyLineBezier( sal_uInt32, const SalPoint*, const Pol
 bool AquaSalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly,
                                        double fTransparency )
 {
+#ifdef IOS
+    if (!mrContext)
+        return true;
+#endif
+
     // short circuit if there is nothing to do
     const int nPolyCount = rPolyPoly.count();
     if( nPolyCount <= 0 )
