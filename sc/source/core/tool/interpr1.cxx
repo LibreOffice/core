@@ -9410,7 +9410,8 @@ void ScInterpreter::ScRegex()
     {
         // Find n-th occurrence.
         sal_Int32 nCount = 0;
-        while (aRegexMatcher.find( status) && U_SUCCESS(status) && ++nCount < nOccurrence)
+        int32_t nStartPos = 0;
+        while (aRegexMatcher.find(nStartPos, status) && U_SUCCESS(status) && ++nCount < nOccurrence)
             ;
         if (U_FAILURE(status))
         {
@@ -9450,7 +9451,8 @@ void ScInterpreter::ScRegex()
     {
         // Replace n-th occurrence of match with replacement.
         sal_Int32 nCount = 0;
-        while (aRegexMatcher.find( status) && U_SUCCESS(status))
+        int32_t nStartPos = 0;
+        while (aRegexMatcher.find(nStartPos, status) && U_SUCCESS(status))
         {
             // XXX NOTE: After several RegexMatcher::find() the
             // RegexMatcher::appendReplacement() still starts at the
