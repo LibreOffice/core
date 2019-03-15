@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_e453c0e1",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1740,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2019-03-15T07:42:08Z",
+      "side": 1,
+      "message": "Should we put an assert on pMyFormulaCell, so that we catch such cases and fix them instead of silently ignoring them ?\nSame comment applies to ScColumn() and ScRow().",
+      "revId": "238b95dbd59b089cf278b09b09da50d368c840e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
