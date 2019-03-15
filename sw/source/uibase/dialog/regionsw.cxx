@@ -208,7 +208,7 @@ void SwBaseShell::EditRegionDialog(SfxRequest const & rReq)
         case FN_EDIT_REGION:
         case FN_EDIT_CURRENT_REGION:
         {
-            vcl::Window* pParentWin = &GetView().GetViewFrame()->GetWindow();
+            weld::Window* pParentWin = GetView().GetViewFrame()->GetWindow().GetFrameWeld();
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 ScopedVclPtr<AbstractEditRegionDlg> pEditRegionDlg(pFact->CreateEditRegionDlg(pParentWin, rWrtShell));

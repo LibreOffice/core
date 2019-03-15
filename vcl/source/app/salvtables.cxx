@@ -249,6 +249,7 @@ private:
     bool m_bKeyEventListener;
     int m_nBlockNotify;
 
+protected:
     void ensure_event_listener()
     {
         if (!m_bEventListener)
@@ -270,7 +271,6 @@ private:
         }
     }
 
-protected:
     virtual void HandleEventListener(VclWindowEvent& rEvent);
     virtual bool HandleKeyEventListener(VclWindowEvent& rEvent);
 
@@ -1690,15 +1690,7 @@ public:
     {
         m_xRadioButton->SetImageAlign(ImageAlign::Center);
         if (pDevice)
-        {
-            BitmapEx aBitmap(pDevice->GetBitmapEx(Point(0, 0), pDevice->GetOutputSize()));
-
-            vcl::PNGWriter aWriter(aBitmap);
-            SvFileStream sOutput("file:///tmp/demo.png", StreamMode::WRITE);
-            aWriter.Write(sOutput);
-
             m_xRadioButton->SetModeImage(createImage(*pDevice));
-        }
         else
             m_xRadioButton->SetModeImage(Image());
     }
@@ -2387,7 +2379,7 @@ public:
         for (SvTreeListEntry* pEntry = m_xTreeView->First(); pEntry; pEntry = m_xTreeView->Next(pEntry))
         {
             if (SvTabListBox::GetEntryText(pEntry, 0) == rText)
-                return m_xTreeView->GetAbsPos(pEntry);
+                return SvTreeList::GetRelPos(pEntry);
         }
         return -1;
     }
@@ -2400,7 +2392,7 @@ public:
             if (!pId)
                 continue;
             if (rId == *pId)
-                return m_xTreeView->GetAbsPos(pEntry);
+                return SvTreeList::GetRelPos(pEntry);
         }
         return -1;
     }
@@ -2488,7 +2480,7 @@ public:
 
         aRows.reserve(m_xTreeView->GetSelectionCount());
         for (SvTreeListEntry* pEntry = m_xTreeView->FirstSelected(); pEntry; pEntry = m_xTreeView->NextSelected(pEntry))
-            aRows.push_back(m_xTreeView->GetAbsPos(pEntry));
+            aRows.push_back(SvTreeList::GetRelPos(pEntry));
 
         return aRows;
     }
@@ -2719,7 +2711,7 @@ public:
         SvTreeListEntry* pEntry = m_xTreeView->FirstSelected();
         if (!pEntry)
             return -1;
-        return m_xTreeView->GetAbsPos(pEntry);
+        return SvTreeList::GetRelPos(pEntry);
     }
 
     virtual OUString get_selected_text() const override
@@ -2928,24 +2920,26 @@ public:
         m_xTreeView->SetSelectionMode(eMode);
     }
 
-    virtual void selected_foreach(const std::function<void(weld::TreeIter&)>& func) override
+    virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override
     {
         SalInstanceTreeIter aVclIter(nullptr);
         aVclIter.iter = m_xTreeView->FirstSelected();
         while (aVclIter.iter)
         {
-            func(aVclIter);
+            if (func(aVclIter))
+                return;
             aVclIter.iter = m_xTreeView->NextSelected(aVclIter.iter);
         }
     }
 
-    virtual void visible_foreach(const std::function<void(weld::TreeIter&)>& func) override
+    virtual void visible_foreach(const std::function<bool(weld::TreeIter&)>& func) override
     {
         SalInstanceTreeIter aVclIter(nullptr);
         aVclIter.iter = m_xTreeView->GetFirstEntryInView();
         while (aVclIter.iter)
         {
-            func(aVclIter);
+            if (func(aVclIter))
+                return;
             aVclIter.iter = m_xTreeView->GetNextEntryInView(aVclIter.iter);
         }
     }
@@ -2960,6 +2954,19 @@ public:
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
         return m_xTreeView->IsSelected(rVclIter.iter);
+    }
+
+    virtual int get_iter_index_in_parent(const weld::TreeIter& rIter) const override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        return SvTreeList::GetRelPos(rVclIter.iter);
+    }
+
+    virtual void move_subtree(weld::TreeIter& rNode, const weld::TreeIter* pNewParent, int nIndexInNewParent) override
+    {
+        SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rNode);
+        const SalInstanceTreeIter* pVclParentIter = static_cast<const SalInstanceTreeIter*>(pNewParent);
+        m_xTreeView->GetModel()->Move(rVclIter.iter, pVclParentIter ? pVclParentIter->iter : nullptr, nIndexInNewParent);
     }
 
     virtual int count_selected_rows() const override
@@ -3141,7 +3148,7 @@ IMPL_LINK(SalInstanceTreeView, ToggleHdl, SvLBoxButtonData*, pData, void)
         SvLBoxItem& rItem = pEntry->GetItem(i);
         if (&rItem == pBox)
         {
-            int nRow = m_xTreeView->GetAbsPos(pEntry);
+            int nRow = SvTreeList::GetRelPos(pEntry);
             int nCol = i - 1; // less dummy/expander column
             signal_toggled(std::make_pair(nRow, nCol));
             break;
@@ -3927,6 +3934,23 @@ public:
     virtual bool get_popup_shown() const override
     {
         return m_xComboBox->IsInDropDown();
+    }
+
+    virtual void connect_popup_toggled(const Link<ComboBox&, void>& rLink) override
+    {
+        weld::ComboBox::connect_popup_toggled(rLink);
+        ensure_event_listener();
+    }
+
+    virtual void HandleEventListener(VclWindowEvent& rEvent) override
+    {
+        if (rEvent.GetId() == VclEventId::DropdownPreOpen ||
+            rEvent.GetId() == VclEventId::DropdownClose)
+        {
+            signal_popup_toggled();
+            return;
+        }
+        SalInstanceContainer::HandleEventListener(rEvent);
     }
 };
 

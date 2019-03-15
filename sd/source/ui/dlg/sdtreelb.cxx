@@ -1422,6 +1422,7 @@ IMPL_LINK_NOARG(SdPageObjsTLV, SelectHdl, weld::TreeView&, void)
     m_xTreeView->selected_foreach([this](weld::TreeIter& rEntry){
         if (m_xTreeView->get_id(rEntry).toInt64() == 0)
             m_bLinkableSelected = false;
+        return false;
     });
 
     m_aChangeHdl.Call(*m_xTreeView);
@@ -1450,6 +1451,7 @@ std::vector<OUString> SdPageObjsTLV::GetSelectEntryList(const int nDepth) const
         int nListDepth = m_xTreeView->get_iter_depth(rEntry);
         if (nListDepth == nDepth)
             aEntries.push_back(m_xTreeView->get_text(rEntry));
+        return false;
     });
 
     return aEntries;
