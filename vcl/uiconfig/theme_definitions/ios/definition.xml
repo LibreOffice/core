@@ -77,6 +77,11 @@
                 <external source="pushbutton-disabled.svgx" />
             </state>
         </part>
+        <part value="Focus">
+            <state>
+                <external source="common-rect-focus.svgx" />
+            </state>
+        </part>
     </pushbutton>
 
     <radiobutton>
@@ -100,6 +105,11 @@
                 <image source="tick-on-disabled.svgx" />
             </state>
         </part>
+        <part value="Focus">
+            <state>
+                <external source="common-rect-focus-slim.svgx" />
+            </state>
+        </part>
     </radiobutton>
 
     <checkbox>
@@ -121,6 +131,11 @@
             </state>
             <state enabled="false" button-value="false">
                 <image source="switch-on-disabled.svgx" />
+            </state>
+        </part>
+        <part value="Focus">
+            <state>
+                <external source="common-rect-focus-slim.svgx" />
             </state>
         </part>
     </checkbox>
@@ -147,6 +162,11 @@
                 <image source="combobox-disabled.svgx" />
             </state>
         </part>
+        <part value="Focus">
+            <state>
+                <external source="common-rect-focus.svgx" />
+            </state>
+        </part>
     </combobox>
 
     <editbox>
@@ -156,6 +176,9 @@
             </state>
             <state enabled="false">
                 <external source="common-rect-disabled.svgx" />
+            </state>
+            <state focused="true">
+                <external source="common-rect-focus.svgx" />
             </state>
         </part>
     </editbox>
@@ -188,6 +211,7 @@
         </part>
         <part value="Focus">
             <state>
+                <external source="common-rect-focus.svgx" />
             </state>
         </part>
     </listbox>
@@ -225,6 +249,11 @@
             </state>
             <state enabled="false">
                 <external source="spinbox-right-disabled.svgx" />
+            </state>
+        </part>
+        <part value="Focus">
+            <state>
+                <external source="common-rect-focus-slim.svgx" />
             </state>
         </part>
     </spinbox>

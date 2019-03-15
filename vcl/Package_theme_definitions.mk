@@ -33,6 +33,8 @@ $(eval $(call gb_Package_add_files_with_dir,vcl_theme_definitions,$(LIBO_SHARE_F
 	ios/spinbox-right-disabled.svgx \
 	ios/common-rect.svgx \
 	ios/common-rect-disabled.svgx \
+	ios/common-rect-focus.svgx \
+	ios/common-rect-focus-slim.svgx \
 	ios/pushbutton-default.svgx \
 	ios/pushbutton-rollover.svgx \
 	ios/pushbutton-disabled.svgx \
