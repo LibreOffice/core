@@ -225,6 +225,8 @@ public:
     /// Changes reference semantics to value semantics for fill properties.
     void cloneFillProperties();
 
+    void keepDiagramDrawing(::oox::core::XmlFilterBase& rFilterBase, const OUString& rFragmentPath);
+
 protected:
 
     enum FrameType
