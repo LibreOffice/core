@@ -1422,7 +1422,7 @@ void AquaSalFrame::GetWorkArea( tools::Rectangle& rRect )
     rRect.SetBottom( static_cast<long>(aRect.origin.y + aRect.size.height - 1) );
 }
 
-SalPointerState AquaSalFrame::GetPointerState()
+SalFrame::SalPointerState AquaSalFrame::GetPointerState()
 {
     OSX_SALDATA_RUNINMAIN_UNION( GetPointerState(), state )
 
