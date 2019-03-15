@@ -64,9 +64,10 @@ FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
     : m_rGraphics(rGraphics)
 {
     OUString sDefinitionBasePath = lcl_getThemeDefinitionPath();
+    OUString sThemeName = "ios";
+    OUString sThemeFolder = sDefinitionBasePath + sThemeName + "/";
 
-    m_pWidgetDefinition
-        = setWidgetDefinition(sDefinitionBasePath + "definition.xml", sDefinitionBasePath);
+    m_pWidgetDefinition = setWidgetDefinition(sThemeFolder + "definition.xml", sThemeFolder);
 
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maNWFData.mbNoFocusRects = true;
