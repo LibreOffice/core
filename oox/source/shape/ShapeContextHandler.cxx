@@ -431,23 +431,8 @@ ShapeContextHandler::getShape()
                     oox::drawingml::ShapePtr pShapePtr( new Shape( "com.sun.star.drawing.GroupShape" ) );
                     pShapePtr->setDiagramType();
                     mxFilterBase->importFragment(new ShapeDrawingFragmentHandler(*mxFilterBase, aFragmentPath, pShapePtr));
-
-                    uno::Sequence<beans::PropertyValue> aValue(mpShape->getDiagramDoms());
-                    uno::Sequence < uno::Any > diagramDrawing(2);
-                    // drawingValue[0] => dom, drawingValue[1] => Sequence of associated relationships
-
-                    sal_Int32 length = aValue.getLength();
-                    aValue.realloc(length+1);
-
-                    diagramDrawing[0] <<= mxFilterBase->importFragment( aFragmentPath );
-                    diagramDrawing[1] <<= pShapePtr->resolveRelationshipsOfTypeFromOfficeDoc(
-                                *mxFilterBase, aFragmentPath, "image" );
-
-                    beans::PropertyValue* pValue = aValue.getArray();
-                    pValue[length].Name = "OOXDrawing";
-                    pValue[length].Value <<= diagramDrawing;
-
-                    pShapePtr->setDiagramDoms( aValue );
+                    pShapePtr->setDiagramDoms(mpShape->getDiagramDoms());
+                    pShapePtr->keepDiagramDrawing(*mxFilterBase, aFragmentPath);
 
                     pShapePtr->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShapePtr->getFillProperties() );
                     xResult = pShapePtr->getXShape();
