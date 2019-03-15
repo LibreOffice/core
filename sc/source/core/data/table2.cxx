@@ -1085,7 +1085,7 @@ void ScTable::DetachFormulaCells(
     sc::EndListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-        aCol[nCol].DetachFormulaCells(rCxt, nRow1, nRow2);
+        aCol[nCol].DetachFormulaCells(rCxt, nRow1, nRow2, nullptr);
 }
 
 void ScTable::SetDirtyFromClip(

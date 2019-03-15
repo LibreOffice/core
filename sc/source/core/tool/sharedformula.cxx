@@ -17,6 +17,22 @@
 
 namespace sc {
 
+const ScFormulaCell* SharedFormulaUtil::getSharedTopFormulaCell(const CellStoreType::position_type& aPos)
+{
+    if (aPos.first->type != sc::element_type_formula)
+        // Not a formula cell block.
+        return nullptr;
+
+    sc::formula_block::iterator it = sc::formula_block::begin(*aPos.first->data);
+    std::advance(it, aPos.second);
+    const ScFormulaCell* pCell = *it;
+    if (!pCell->IsShared())
+        // Not a shared formula.
+        return nullptr;
+
+    return pCell->GetCellGroup()->mpTopCell;
+}
+
 bool SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type& aPos, sc::EndListeningContext* pCxt)
 {
     SCROW nRow = aPos.first->position + aPos.second;
