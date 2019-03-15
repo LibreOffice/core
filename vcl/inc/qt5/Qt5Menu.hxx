@@ -71,6 +71,7 @@ public:
     Menu* GetMenu() { return mpVCLMenu; }
     unsigned GetItemCount() { return maItems.size(); }
     Qt5MenuItem* GetItemAtPos(unsigned nPos) { return maItems[nPos]; }
+    virtual void ShowMenuBar(bool bVisible) override;
 
 Q_SIGNALS:
     void setFrameSignal(const SalFrame* pFrame);
