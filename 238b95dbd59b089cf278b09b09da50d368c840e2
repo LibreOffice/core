@@ -16,6 +16,24 @@
       "revId": "238b95dbd59b089cf278b09b09da50d368c840e2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_e46c209e",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1740,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-03-15T08:25:16Z",
+      "side": 1,
+      "message": "No. If you start editing a new formula, there\u0027s no ScFormulaCell for it. So this is not silently ignoring, this is trying to cope with it.",
+      "parentUuid": "ff82abbf_e453c0e1",
+      "revId": "238b95dbd59b089cf278b09b09da50d368c840e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
