@@ -507,13 +507,27 @@ void ScColumn::AttachNewFormulaCell(
         break;
         case sc::SingleCellListening:
             rCell.StartListeningTo(pDocument);
-            [[fallthrough]];
+            StartListeningUnshared( rNewSharedRows);
+        break;
         case sc::NoListening:
         default:
-            // Listeners for changed shared formula groups resulting from
-            // unshareFormulaCell() need to be re-established in all cases
-            // (unless the callers thought of that and take care of it, but..).
-            StartListeningUnshared( rNewSharedRows);
+            if (!rNewSharedRows.empty())
+            {
+                assert(rNewSharedRows.size() == 2 || rNewSharedRows.size() == 4);
+                // Calling SetNeedsListeningGroup() with a top row sets it to
+                // all affected formula cells of that group.
+                const ScFormulaCell* pFC = GetFormulaCell( rNewSharedRows[0]);
+                assert(pFC);    // that *is* supposed to be a top row
+                if (pFC && !pFC->NeedsListening())
+                    SetNeedsListeningGroup( rNewSharedRows[0]);
+                if (rNewSharedRows.size() > 2)
+                {
+                    pFC = GetFormulaCell( rNewSharedRows[2]);
+                    assert(pFC);    // that *is* supposed to be a top row
+                    if (pFC && !pFC->NeedsListening())
+                        SetNeedsListeningGroup( rNewSharedRows[2]);
+                }
+            }
         break;
     }
 
