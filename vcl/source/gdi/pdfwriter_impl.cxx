@@ -4555,6 +4555,19 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
             rAnnotDict.append( "/" );
             rAnnotDict.append( dict_item.first );
             bool bUseSubDict = (dict_item.second.size() > 1);
+
+            // PDF/A requires sub-dicts for /FT/Btn objects (clause
+            // 6.3.3)
+            if( m_bIsPDF_A1 || m_bIsPDF_A2 )
+            {
+                if( rWidget.m_eType == PDFWriter::RadioButton ||
+                    rWidget.m_eType == PDFWriter::CheckBox ||
+                    rWidget.m_eType == PDFWriter::PushButton )
+                {
+                    bUseSubDict = true;
+                }
+            }
+
             rAnnotDict.append( bUseSubDict ? "<<" : " " );
 
             for (auto const& stream_item : dict_item.second)
