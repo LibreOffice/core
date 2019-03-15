@@ -56,10 +56,10 @@ public:
 class VCL_DLLPUBLIC FeatureDefinition
 {
 private:
-    uint32_t m_nCode;
     OUString m_sDescription;
     const char* m_pDescriptionID;
     OUString m_sNumericPart;
+    uint32_t m_nCode;
     FeatureParameterType m_eType;
     // the index of the parameter defines the enum value, string is the description
     std::vector<FeatureParameter> m_aEnumParameters;
