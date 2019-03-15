@@ -3626,7 +3626,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         }
 
         OUString aHeaders = pDoc->getRowColumnHeaders(aRectangle);
-        if (aHeaders == "")
+        if (aHeaders.isEmpty())
             return nullptr;
 
         OString aString = OUStringToOString(aHeaders, RTL_TEXTENCODING_UTF8);
