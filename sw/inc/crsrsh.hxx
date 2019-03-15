@@ -95,8 +95,6 @@ namespace o3tl {
 
 struct SwContentAtPos
 {
-    IsAttrAtPos eContentAtPos;
-
     union {
         const SwField* pField;
         const SfxPoolItem* pAttr;
@@ -104,9 +102,8 @@ struct SwContentAtPos
         SwContentNode * pNode;
         const sw::mark::IFieldmark* pFieldmark;
     } aFnd;
-
+    IsAttrAtPos eContentAtPos;
     int nDist;
-
     OUString sStr;
     const SwTextAttr* pFndTextAttr;
 

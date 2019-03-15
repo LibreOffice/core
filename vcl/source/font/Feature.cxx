@@ -92,8 +92,8 @@ uint32_t FeatureParameter::getCode() const { return m_nCode; }
 // FeatureDefinition
 
 FeatureDefinition::FeatureDefinition()
-    : m_nCode(0)
-    , m_pDescriptionID(nullptr)
+    : m_pDescriptionID(nullptr)
+    , m_nCode(0)
     , m_eType(FeatureParameterType::BOOL)
 {
 }
@@ -101,9 +101,9 @@ FeatureDefinition::FeatureDefinition()
 FeatureDefinition::FeatureDefinition(uint32_t nCode, OUString const& rDescription,
                                      FeatureParameterType eType,
                                      std::vector<FeatureParameter> const& rEnumParameters)
-    : m_nCode(nCode)
-    , m_sDescription(rDescription)
+    : m_sDescription(rDescription)
     , m_pDescriptionID(nullptr)
+    , m_nCode(nCode)
     , m_eType(eType)
     , m_aEnumParameters(rEnumParameters)
 {
@@ -111,17 +111,17 @@ FeatureDefinition::FeatureDefinition(uint32_t nCode, OUString const& rDescriptio
 
 FeatureDefinition::FeatureDefinition(uint32_t nCode, const char* pDescriptionID,
                                      OUString const& rNumericPart)
-    : m_nCode(nCode)
-    , m_pDescriptionID(pDescriptionID)
+    : m_pDescriptionID(pDescriptionID)
     , m_sNumericPart(rNumericPart)
+    , m_nCode(nCode)
     , m_eType(FeatureParameterType::BOOL)
 {
 }
 
 FeatureDefinition::FeatureDefinition(uint32_t nCode, const char* pDescriptionID,
                                      std::vector<FeatureParameter> aEnumParameters)
-    : m_nCode(nCode)
-    , m_pDescriptionID(pDescriptionID)
+    : m_pDescriptionID(pDescriptionID)
+    , m_nCode(nCode)
     , m_eType(FeatureParameterType::ENUM)
     , m_aEnumParameters(std::move(aEnumParameters))
 {
