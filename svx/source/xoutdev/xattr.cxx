@@ -384,8 +384,8 @@ sal_uInt16 XLineStyleItem::GetValueCount() const
 XDash::XDash(css::drawing::DashStyle eTheDash, sal_uInt16 nTheDots, sal_uInt32 nTheDotLen,
              sal_uInt16 nTheDashes, sal_uInt32 nTheDashLen, sal_uInt32 nTheDistance) :
     eDash(eTheDash),
-    nDots(nTheDots),
     nDotLen(nTheDotLen),
+    nDots(nTheDots),
     nDashes(nTheDashes),
     nDashLen(nTheDashLen),
     nDistance(nTheDistance)

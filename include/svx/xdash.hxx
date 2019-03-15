@@ -33,8 +33,8 @@
 class SVX_DLLPUBLIC XDash final
 {
     css::drawing::DashStyle  eDash;
-    sal_uInt16               nDots;
     sal_uInt32               nDotLen;
+    sal_uInt16               nDots;
     sal_uInt16               nDashes;
     sal_uInt32               nDashLen;
     sal_uInt32               nDistance;
