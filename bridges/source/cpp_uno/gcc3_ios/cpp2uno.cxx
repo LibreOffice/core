@@ -365,6 +365,7 @@ namespace
                 pCppI->releaseProxy(); // non virtual call!
                 eRet = typelib_TypeClass_VOID;
                 break;
+#if 0
             case 0: // queryInterface() opt
             {
                 typelib_TypeDescription * pTD = 0;
@@ -393,6 +394,7 @@ namespace
                 }
             } // else perform queryInterface()
             SAL_FALLTHROUGH;
+#endif
             default:
                 eRet = cpp2uno_call(
                     pCppI, aMemberDescr.get(),
