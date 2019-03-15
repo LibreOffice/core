@@ -3626,6 +3626,9 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         }
 
         OUString aHeaders = pDoc->getRowColumnHeaders(aRectangle);
+        if (aHeaders == "")
+            return nullptr;
+
         OString aString = OUStringToOString(aHeaders, RTL_TEXTENCODING_UTF8);
 
         char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
