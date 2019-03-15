@@ -409,24 +409,24 @@ IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, weld::Button&, rButton, void )
 
     m_xHeadFrame->set_label(MnemonicGenerator::EraseAllMnemonicChars(rButton.get_label().replace('_', '~')));
 
-    m_xLbTextDbColumn->show( !bShowTable );
-    m_xIbDbcolToEdit->show( !bShowTable );
-    m_xEdDbText->show( !bShowTable );
-    m_xFtDbParaColl->show( !bShowTable );
-    m_xLbDbParaColl->show( !bShowTable );
+    m_xLbTextDbColumn->set_visible( !bShowTable );
+    m_xIbDbcolToEdit->set_visible( !bShowTable );
+    m_xEdDbText->set_visible( !bShowTable );
+    m_xFtDbParaColl->set_visible( !bShowTable );
+    m_xLbDbParaColl->set_visible( !bShowTable );
 
-    m_xLbTableDbColumn->show( bShowTable );
-    m_xIbDbcolAllTo->show( bShowTable );
-    m_xIbDbcolOneTo->show( bShowTable );
-    m_xIbDbcolOneFrom->show( bShowTable );
-    m_xIbDbcolAllFrom->show( bShowTable );
-    m_xFtTableCol->show( bShowTable );
-    m_xLbTableCol->show( bShowTable );
-    m_xCbTableHeadon->show( bShowTable );
-    m_xRbHeadlColnms->show( bShowTable );
-    m_xRbHeadlEmpty->show( bShowTable );
-    m_xPbTableFormat->show( bShowTable );
-    m_xPbTableAutofmt->show( bShowTable );
+    m_xLbTableDbColumn->set_visible( bShowTable );
+    m_xIbDbcolAllTo->set_visible( bShowTable );
+    m_xIbDbcolOneTo->set_visible( bShowTable );
+    m_xIbDbcolOneFrom->set_visible( bShowTable );
+    m_xIbDbcolAllFrom->set_visible( bShowTable );
+    m_xFtTableCol->set_visible( bShowTable );
+    m_xLbTableCol->set_visible( bShowTable );
+    m_xCbTableHeadon->set_visible( bShowTable );
+    m_xRbHeadlColnms->set_visible( bShowTable );
+    m_xRbHeadlEmpty->set_visible( bShowTable );
+    m_xPbTableFormat->set_visible( bShowTable );
+    m_xPbTableAutofmt->set_visible( bShowTable );
 
     if( bShowTable )
         m_xPbTableFormat->set_sensitive( 0 != m_xLbTableCol->n_children() );

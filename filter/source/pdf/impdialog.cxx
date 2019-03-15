@@ -578,11 +578,11 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     }
     else
     {
-        mxCbExportNotesPages->show(false);
+        mxCbExportNotesPages->hide();
         mxCbExportNotesPages->set_active(false);
-        mxCbExportOnlyNotesPages->show(false);
+        mxCbExportOnlyNotesPages->hide();
         mxCbExportOnlyNotesPages->set_active(false);
-        mxCbExportHiddenSlides->show(false);
+        mxCbExportHiddenSlides->hide();
         mxCbExportHiddenSlides->set_active(false);
     }
 
@@ -593,7 +593,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
         mxRbSelection->set_active(true);
     }
 
-    mxCbExportPlaceholders->show(mbIsWriter);
+    mxCbExportPlaceholders->set_visible(mbIsWriter);
     if( !mbIsWriter )
     {
         mxCbExportPlaceholders->set_active(false);

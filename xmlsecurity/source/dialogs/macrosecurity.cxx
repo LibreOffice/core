@@ -358,14 +358,14 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(weld::Container* pP
 
     m_aTrustedAuthors = m_pDlg->m_aSecOptions.GetTrustedAuthors();
     mbAuthorsReadonly = m_pDlg->m_aSecOptions.IsReadOnly( SvtSecurityOptions::EOption::MacroTrustedAuthors );
-    m_xTrustCertROFI->show(mbAuthorsReadonly);
+    m_xTrustCertROFI->set_visible(mbAuthorsReadonly);
     m_xTrustCertLB->set_sensitive(!mbAuthorsReadonly);
 
     FillCertLB();
 
     css::uno::Sequence< OUString > aSecureURLs = m_pDlg->m_aSecOptions.GetSecureURLs();
     mbURLsReadonly = m_pDlg->m_aSecOptions.IsReadOnly( SvtSecurityOptions::EOption::SecureUrls );
-    m_xTrustFileROFI->show(mbURLsReadonly);
+    m_xTrustFileROFI->set_visible(mbURLsReadonly);
     m_xTrustFileLocLB->set_sensitive(!mbURLsReadonly);
     m_xAddLocPB->set_sensitive(!mbURLsReadonly);
 

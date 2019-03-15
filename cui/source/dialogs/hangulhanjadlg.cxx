@@ -327,7 +327,7 @@ namespace svx
 
     void SuggestionDisplay::implUpdateDisplay()
     {
-        m_xListBox->show(m_bDisplayListBox);
+        m_xListBox->set_visible(m_bDisplayListBox);
         if (!m_bDisplayListBox)
             m_xValueSetWin->show();
         else

@@ -29,7 +29,7 @@ class BarGeometryResources
 public:
     explicit BarGeometryResources(weld::Builder* pParent);
 
-    void show( bool bShow );
+    void set_visible( bool bShow );
     void set_sensitive( bool bEnable );
 
     sal_Int32 get_selected_index() const;

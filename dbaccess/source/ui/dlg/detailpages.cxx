@@ -205,7 +205,7 @@ namespace dbaui
         if ( bValid )
         {
             m_xShowDeleted->set_active(pDeletedItem->GetValue());
-            m_xFT_Message->show(m_xShowDeleted->get_active());
+            m_xFT_Message->set_visible(m_xShowDeleted->get_active());
         }
 
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
@@ -228,7 +228,7 @@ namespace dbaui
         }
         else
         {
-            m_xFT_Message->show(m_xShowDeleted->get_active());
+            m_xFT_Message->set_visible(m_xShowDeleted->get_active());
             // it was one of the checkboxes -> we count as modified from now on
             callModifiedHdl();
         }
@@ -395,13 +395,13 @@ namespace dbaui
         else
         {
             m_bUseClass = false;
-            m_xFTDriverClass->show(false);
-            m_xEDDriverClass->show(false);
-            m_xTestJavaDriver->show(false);
+            m_xFTDriverClass->hide();
+            m_xEDDriverClass->hide();
+            m_xTestJavaDriver->hide();
         }
 
-        m_xFTSocket->show(bShowSocket && !m_bUseClass);
-        m_xEDSocket->show(bShowSocket && !m_bUseClass);
+        m_xFTSocket->set_visible(bShowSocket && !m_bUseClass);
+        m_xEDSocket->set_visible(bShowSocket && !m_bUseClass);
 
         m_xEDHostname->connect_changed(LINK(this,OGenericAdministrationPage,OnControlEntryModifyHdl));
         m_xNFPortNumber->connect_value_changed(LINK(this,OGenericAdministrationPage,OnControlSpinButtonModifyHdl));

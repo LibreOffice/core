@@ -54,8 +54,8 @@ SvxPostItDialog::SvxPostItDialog(weld::Window* pParent, const SfxItemSet& rCoreS
     bool bNew = true;
     sal_uInt16 nWhich = 0;
 
-    m_xPrevBtn->show(bPrevNext);
-    m_xNextBtn->show(bPrevNext);
+    m_xPrevBtn->set_visible(bPrevNext);
+    m_xNextBtn->set_visible(bPrevNext);
 
     nWhich = m_rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_AUTHOR );
     OUString aAuthorStr, aDateStr;

@@ -56,7 +56,7 @@ void OConnectionURLEdit::SetText(const OUString& _rStr)
 
 void OConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNewSelection*/)
 {
-    m_xForcedPrefix->show(m_bShowPrefix);
+    m_xForcedPrefix->set_visible(m_bShowPrefix);
 
     bool bIsEmpty = _rStr.isEmpty();
     // calc the prefix
@@ -85,7 +85,7 @@ OUString OConnectionURLEdit::GetText() const
 void OConnectionURLEdit::ShowPrefix(bool _bShowPrefix)
 {
     m_bShowPrefix = _bShowPrefix;
-    m_xForcedPrefix->show(m_bShowPrefix);
+    m_xForcedPrefix->set_visible(m_bShowPrefix);
 }
 
 }   // namespace dbaui

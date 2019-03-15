@@ -331,7 +331,7 @@ SmFontDialog::SmFontDialog(weld::Window * pParent, OutputDevice *pFntListDevice,
         m_xBoldCheckBox->set_sensitive(false);
         m_xItalicCheckBox->set_active(false);
         m_xItalicCheckBox->set_sensitive(false);
-        m_xAttrFrame->show(false);
+        m_xAttrFrame->hide();
     }
 }
 
@@ -705,9 +705,9 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
         // of an associated HelpID is checked
         bActive = aCatMf2Hid[nCategory][i] != nullptr;
 
-        pFT->show(bActive);
+        pFT->set_visible(bActive);
         pFT->set_sensitive(bActive);
-        pMF->show(bActive);
+        pMF->set_visible(bActive);
         pMF->set_sensitive(bActive);
 
         // set measurement unit and number of decimal places

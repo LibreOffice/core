@@ -1190,7 +1190,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
         m_xExpandCB->hide();
         if(!(nHtmlMode & HTMLMODE_FULL_STYLES) )
             m_xJustify->set_sensitive(false);
-        m_xSnapToGridCB->show(false);
+        m_xSnapToGridCB->hide();
     }
     _nWhich = GetWhich(SID_ATTR_PARA_SNAPTOGRID);
     eItemState = rSet->GetItemState( _nWhich );

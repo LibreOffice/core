@@ -1516,11 +1516,6 @@ public:
         return gtk_widget_get_sensitive(m_pWidget);
     }
 
-    virtual void set_visible(bool visible) override
-    {
-        gtk_widget_set_visible(m_pWidget, visible);
-    }
-
     virtual bool get_visible() const override
     {
         return gtk_widget_get_visible(m_pWidget);
@@ -6606,14 +6601,6 @@ public:
         if (aRet.Height() == -1)
             aRet.setHeight(size.height);
         return aRet;
-    }
-
-    virtual void set_visible(bool visible) override
-    {
-        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
-        if (GTK_IS_SCROLLED_WINDOW(pParent))
-            gtk_widget_set_visible(pParent, visible);
-        gtk_widget_set_visible(m_pWidget, visible);
     }
 
     virtual void show() override

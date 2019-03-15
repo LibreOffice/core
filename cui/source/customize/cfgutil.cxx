@@ -1099,10 +1099,10 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     m_xDialogDescription->show();
     m_xOKButton->show();
 
-    m_xLibraryFT->show(!m_bShowSlots);
-    m_xCategoryFT->show(m_bShowSlots);
-    m_xMacronameFT->show(!m_bShowSlots);
-    m_xCommandsFT->show(m_bShowSlots);
+    m_xLibraryFT->set_visible(!m_bShowSlots);
+    m_xCategoryFT->set_visible(m_bShowSlots);
+    m_xMacronameFT->set_visible(!m_bShowSlots);
+    m_xCommandsFT->set_visible(m_bShowSlots);
 
     const OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
     m_xCategories->SetFunctionListBox(m_xCommands.get());
