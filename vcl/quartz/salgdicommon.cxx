@@ -968,6 +968,11 @@ bool AquaSalGraphics::drawPolyPolygon(
     const basegfx::B2DPolyPolygon& rPolyPolygon,
     double fTransparency)
 {
+#ifdef IOS
+    if (!mrContext)
+        return true;
+#endif
+
     // short circuit if there is nothing to do
     if( rPolyPolygon.count() == 0 )
         return true;
