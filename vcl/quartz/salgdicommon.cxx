@@ -1961,25 +1961,11 @@ void AquaSalGraphics::SetVirDevGraphics(CGLayerHolder const & rLayer, CGContextR
     mbPrinter = false;
     mbVirDev = true;
 
-#ifdef IOS
-    (void) nBitmapDepth;
-
-    if (!xContext)
-    {
-        // We will return early a few lines lower.
-        // Undo the "stack initialization" done at the initial call of
-        // this method, see end.
-        maContextHolder.restoreState();
-    }
-#endif
-
     // set graphics properties
     maLayer = rLayer;
     maContextHolder.set(xContext);
 
-#ifndef IOS
     mnBitmapDepth = nBitmapDepth;
-#endif
 
 #ifdef IOS
     mbForeignContext = xContext != NULL;
