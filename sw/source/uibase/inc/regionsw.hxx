@@ -257,19 +257,14 @@ public:
     SwSectionData * GetSectionData() { return m_pSectionData.get(); }
 };
 
-class SwSectionPropertyTabDialog : public SfxTabDialog
+class SwSectionPropertyTabDialog : public SfxTabDialogController
 {
     SwWrtShell& rWrtSh;
 
-    sal_uInt16 m_nColumnPageId;
-    sal_uInt16 m_nBackPageId;
-    sal_uInt16 m_nNotePageId;
-    sal_uInt16 m_nIndentPage;
-
 protected:
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    virtual void    PageCreated(const OString& rId, SfxTabPage &rPage) override;
 public:
-    SwSectionPropertyTabDialog(vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
+    SwSectionPropertyTabDialog(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
     virtual ~SwSectionPropertyTabDialog() override;
 };
 
