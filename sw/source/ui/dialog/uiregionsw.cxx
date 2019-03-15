@@ -67,64 +67,16 @@ using namespace ::com::sun::star;
 
 namespace {
 
-Image BuildBitmap(bool bProtect, bool bHidden)
+OUString BuildBitmap(bool bProtect, bool bHidden)
 {
     if (bProtect)
-        return Image(StockImage::Yes, bHidden ? OUString(RID_BMP_PROT_HIDE) : OUString(RID_BMP_PROT_NO_HIDE));
-    return Image(StockImage::Yes, bHidden ? OUString(RID_BMP_HIDE) : OUString(RID_BMP_NO_HIDE));
+        return bHidden ? OUString(RID_BMP_PROT_HIDE) : OUString(RID_BMP_PROT_NO_HIDE);
+    return bHidden ? OUString(RID_BMP_HIDE) : OUString(RID_BMP_NO_HIDE);
 }
 
 }
 
-static void   lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox );
 static void   lcl_ReadSections( SfxMedium& rMedium, weld::ComboBox& rBox );
-
-static void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAvailNames, const SwSectionFormat* pNewFormat )
-{
-    if( !pNewFormat )
-    {
-        const size_t nCount = rSh.GetSectionFormatCount();
-        for (size_t i = 0; i<nCount; i++)
-        {
-            SectionType eTmpType;
-            const SwSectionFormat* pFormat = &rSh.GetSectionFormat(i);
-            if( !pFormat->GetParent() &&
-                    pFormat->IsInNodesArr() &&
-                    (eTmpType = pFormat->GetSection()->GetType()) != TOX_CONTENT_SECTION
-                    && TOX_HEADER_SECTION != eTmpType )
-            {
-                    const OUString sString(pFormat->GetSection()->GetSectionName());
-                    if(pAvailNames)
-                        pAvailNames->InsertEntry(sString);
-                    rSubRegions.InsertEntry(sString);
-                    lcl_FillList( rSh, rSubRegions, pAvailNames, pFormat );
-            }
-        }
-    }
-    else
-    {
-        SwSections aTmpArr;
-        pNewFormat->GetChildSections(aTmpArr, SectionSort::Pos);
-        if( !aTmpArr.empty() )
-        {
-            SectionType eTmpType;
-            for( const auto pSect : aTmpArr )
-            {
-                const SwSectionFormat* pFormat = pSect->GetFormat();
-                if( pFormat->IsInNodesArr()&&
-                    (eTmpType = pFormat->GetSection()->GetType()) != TOX_CONTENT_SECTION
-                    && TOX_HEADER_SECTION != eTmpType )
-                {
-                    const OUString sString(pFormat->GetSection()->GetSectionName());
-                    if(pAvailNames)
-                        pAvailNames->InsertEntry(sString);
-                    rSubRegions.InsertEntry(sString);
-                    lcl_FillList( rSh, rSubRegions, pAvailNames, pFormat );
-                }
-            }
-        }
-    }
-}
 
 static void lcl_FillList( SwWrtShell& rSh, weld::ComboBox& rSubRegions, weld::ComboBox* pAvailNames, const SwSectionFormat* pNewFormat )
 {
@@ -173,23 +125,9 @@ static void lcl_FillList( SwWrtShell& rSh, weld::ComboBox& rSubRegions, weld::Co
     }
 }
 
-
-static void lcl_FillSubRegionList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAvailNames )
-{
-    lcl_FillList( rSh, rSubRegions, pAvailNames, nullptr );
-    IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
-    for( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
-        ppMark != pMarkAccess->getBookmarksEnd();
-        ++ppMark)
-    {
-        const ::sw::mark::IMark* pBkmk = ppMark->get();
-        if( pBkmk->IsExpanded() )
-            rSubRegions.InsertEntry( pBkmk->GetName() );
-    }
-}
-
 static void lcl_FillSubRegionList( SwWrtShell& rSh, weld::ComboBox& rSubRegions, weld::ComboBox* pAvailNames )
 {
+    rSubRegions.clear();
     lcl_FillList( rSh, rSubRegions, pAvailNames, nullptr );
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
     for( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
@@ -374,102 +312,106 @@ OUString SectRepr::GetSubRegion() const
 }
 
 // dialog edit regions
-SwEditRegionDlg::SwEditRegionDlg( vcl::Window* pParent, SwWrtShell& rWrtSh )
-    : SfxModalDialog(pParent, "EditSectionDialog",
-        "modules/swriter/ui/editsectiondialog.ui")
+SwEditRegionDlg::SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh)
+    : SfxDialogController(pParent, "modules/swriter/ui/editsectiondialog.ui",
+                          "EditSectionDialog")
     , m_bSubRegionsFilled(false)
     , rSh(rWrtSh)
     , bDontCheckPasswd(true)
+    , m_xCurName(m_xBuilder->weld_entry("curname"))
+    , m_xTree(m_xBuilder->weld_tree_view("tree"))
+    , m_xFileCB(m_xBuilder->weld_check_button("link"))
+    , m_xDDECB(m_xBuilder->weld_check_button("dde"))
+    , m_xDDEFrame(m_xBuilder->weld_widget("ddedepend"))
+    , m_xFileNameFT(m_xBuilder->weld_label("filenameft"))
+    , m_xDDECommandFT(m_xBuilder->weld_label("ddeft"))
+    , m_xFileNameED(m_xBuilder->weld_entry("filename"))
+    , m_xFilePB(m_xBuilder->weld_button("file"))
+    , m_xSubRegionFT(m_xBuilder->weld_label("sectionft"))
+    , m_xSubRegionED(m_xBuilder->weld_combo_box("section"))
+    , m_xProtectCB(m_xBuilder->weld_check_button("protect"))
+    , m_xPasswdCB(m_xBuilder->weld_check_button("withpassword"))
+    , m_xPasswdPB(m_xBuilder->weld_button("password"))
+    , m_xHideCB(m_xBuilder->weld_check_button("hide"))
+    , m_xConditionFT(m_xBuilder->weld_label("conditionft"))
+    , m_xConditionED(new SwConditionEdit(m_xBuilder->weld_entry("condition")))
+    , m_xEditInReadonlyCB(m_xBuilder->weld_check_button("editinro"))
+    , m_xOK(m_xBuilder->weld_button("ok"))
+    , m_xOptionsPB(m_xBuilder->weld_button("options"))
+    , m_xDismiss(m_xBuilder->weld_button("remove"))
+    , m_xHideFrame(m_xBuilder->weld_widget("hideframe"))
 {
-    get(m_pCurName, "curname");
-    get(m_pTree, "tree");
-    m_pTree->set_height_request(m_pTree->GetTextHeight() * 16);
-    get(m_pFileCB, "link");
-    m_pFileCB->SetState(TRISTATE_FALSE);
-    get(m_pDDECB, "dde");
-    get(m_pDDEFrame, "ddedepend");
-    get(m_pFileNameFT, "filenameft");
-    get(m_pDDECommandFT, "ddeft");
-    get(m_pFileNameED, "filename");
-    get(m_pFilePB, "file");
-    get(m_pSubRegionFT, "sectionft");
-    get(m_pSubRegionED, "section");
-    m_pSubRegionED->SetStyle(m_pSubRegionED->GetStyle() | WB_SORT);
-    get(m_pProtectCB, "protect");
-    m_pProtectCB->SetState(TRISTATE_FALSE);
-    get(m_pPasswdCB, "withpassword");
-    get(m_pPasswdPB, "password");
-    get(m_pHideCB, "hide");
-    m_pHideCB->SetState(TRISTATE_FALSE);
-    get(m_pConditionFT, "conditionft");
-    get(m_pConditionED, "condition");
+    m_xTree->set_size_request(-1, m_xTree->get_height_rows(16));
+    m_xFileCB->set_state(TRISTATE_FALSE);
+    m_xSubRegionED->make_sorted();
+    m_xProtectCB->set_state(TRISTATE_FALSE);
+    m_xHideCB->set_state(TRISTATE_FALSE);
     // edit in readonly sections
-    get(m_pEditInReadonlyCB, "editinro");
-    m_pEditInReadonlyCB->SetState(TRISTATE_FALSE);
-    get(m_pOptionsPB, "options");
-    get(m_pDismiss, "remove");
-    get(m_pOK, "ok");
+    m_xEditInReadonlyCB->set_state(TRISTATE_FALSE);
 
     bool bWeb = dynamic_cast<SwWebDocShell*>( rSh.GetView().GetDocShell() ) != nullptr;
 
-    m_pTree->SetSelectHdl(LINK(this, SwEditRegionDlg, GetFirstEntryHdl));
-    m_pTree->SetDeselectHdl(LINK(this, SwEditRegionDlg, DeselectHdl));
-    m_pCurName->SetModifyHdl(LINK(this, SwEditRegionDlg, NameEditHdl));
-    m_pConditionED->SetModifyHdl( LINK( this, SwEditRegionDlg, ConditionEditHdl));
-    m_pOK->SetClickHdl         ( LINK( this, SwEditRegionDlg, OkHdl));
-    m_pPasswdCB->SetClickHdl(LINK(this, SwEditRegionDlg, ChangePasswdHdl));
-    m_pPasswdPB->SetClickHdl(LINK(this, SwEditRegionDlg, ChangePasswdHdl));
-    m_pHideCB->SetClickHdl(LINK(this, SwEditRegionDlg, ChangeHideHdl));
+    m_xTree->connect_changed(LINK(this, SwEditRegionDlg, GetFirstEntryHdl));
+    m_xCurName->connect_changed(LINK(this, SwEditRegionDlg, NameEditHdl));
+    m_xConditionED->connect_changed( LINK( this, SwEditRegionDlg, ConditionEditHdl));
+    m_xOK->connect_clicked( LINK( this, SwEditRegionDlg, OkHdl));
+    m_xPasswdCB->connect_toggled(LINK(this, SwEditRegionDlg, TogglePasswdHdl));
+    m_xPasswdPB->connect_clicked(LINK(this, SwEditRegionDlg, ChangePasswdHdl));
+    m_xHideCB->connect_toggled(LINK(this, SwEditRegionDlg, ChangeHideHdl));
     // edit in readonly sections
-    m_pEditInReadonlyCB->SetClickHdl(LINK(this, SwEditRegionDlg, ChangeEditInReadonlyHdl));
+    m_xEditInReadonlyCB->connect_toggled(LINK(this, SwEditRegionDlg, ChangeEditInReadonlyHdl));
 
-    m_pOptionsPB->SetClickHdl(LINK(this, SwEditRegionDlg, OptionsHdl));
-    m_pProtectCB->SetClickHdl(LINK(this, SwEditRegionDlg, ChangeProtectHdl));
-    m_pDismiss->SetClickHdl    ( LINK( this, SwEditRegionDlg, ChangeDismissHdl));
-    m_pFileCB->SetClickHdl(LINK(this, SwEditRegionDlg, UseFileHdl));
-    m_pFilePB->SetClickHdl(LINK(this, SwEditRegionDlg, FileSearchHdl));
-    m_pFileNameED->SetModifyHdl(LINK(this, SwEditRegionDlg, FileNameHdl));
-    m_pSubRegionED->SetModifyHdl(LINK(this, SwEditRegionDlg, FileNameHdl));
-    m_pSubRegionED->AddEventListener(LINK(this, SwEditRegionDlg, SubRegionEventHdl));
-    m_pSubRegionED->EnableAutocomplete(true, true);
+    m_xOptionsPB->connect_clicked(LINK(this, SwEditRegionDlg, OptionsHdl));
+    m_xProtectCB->connect_toggled(LINK(this, SwEditRegionDlg, ChangeProtectHdl));
+    m_xDismiss->connect_clicked( LINK( this, SwEditRegionDlg, ChangeDismissHdl));
+    m_xFileCB->connect_toggled(LINK(this, SwEditRegionDlg, UseFileHdl));
+    m_xFilePB->connect_clicked(LINK(this, SwEditRegionDlg, FileSearchHdl));
+    m_xFileNameED->connect_changed(LINK(this, SwEditRegionDlg, FileNameEntryHdl));
+    m_xSubRegionED->connect_changed(LINK(this, SwEditRegionDlg, FileNameComboBoxHdl));
+    m_xSubRegionED->connect_popup_toggled(LINK(this, SwEditRegionDlg, SubRegionEventHdl));
+    m_xSubRegionED->set_entry_completion(true, true);
 
-    m_pTree->SetSelectionMode( SelectionMode::Multiple );
-    m_pTree->SetStyle(m_pTree->GetStyle()|WB_HASBUTTONSATROOT|WB_CLIPCHILDREN|WB_HSCROLL);
-    m_pTree->SetSpaceBetweenEntries(0);
-    m_pTree->SetAllEntriesAccessibleRoleType(SvTreeAccRoleType::TREE);
+    m_xTree->set_selection_mode(SelectionMode::Multiple);
 
-    if(bWeb)
+    if (bWeb)
     {
-        m_pDDECB->Hide();
-        get<VclContainer>("hideframe")->Hide();
-        m_pPasswdCB->Hide();
+        m_xDDECB->hide();
+        m_xHideFrame->hide();
+        m_xPasswdCB->hide();
     }
 
-    m_pDDECB->SetClickHdl(LINK(this, SwEditRegionDlg, DDEHdl));
+    m_xDDECB->connect_toggled(LINK(this, SwEditRegionDlg, DDEHdl));
 
     pCurrSect = rSh.GetCurrSection();
     RecurseList( nullptr, nullptr );
-    // if the cursor is not in a region
-    // the first one will always be selected
-    if( !m_pTree->FirstSelected() && m_pTree->First() )
-        m_pTree->Select( m_pTree->First() );
-    m_pTree->Show();
+
+    // if the cursor is not in a region the first one will always be selected
+    if (!m_xTree->get_selected(nullptr))
+    {
+        std::unique_ptr<weld::TreeIter> xIter(m_xTree->make_iterator());
+        if (m_xTree->get_iter_first(*xIter))
+        {
+            m_xTree->select(*xIter);
+            GetFirstEntryHdl(*m_xTree);
+        }
+    }
+
+    m_xTree->show();
     bDontCheckPasswd = false;
 }
 
-bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
+bool SwEditRegionDlg::CheckPasswd(weld::ToggleButton* pBox)
 {
-    if(bDontCheckPasswd)
+    if (bDontCheckPasswd)
         return true;
     bool bRet = true;
-    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
-    while( pEntry )
-    {
-        SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
+
+    m_xTree->selected_foreach([this, &bRet](weld::TreeIter& rEntry){
+        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
         if (!pRepr->GetTempPasswd().getLength()
             && pRepr->GetSectionData().GetPassword().getLength())
         {
-            SfxPasswordDialog aPasswdDlg(GetFrameWeld());
+            SfxPasswordDialog aPasswdDlg(m_xDialog.get());
             bRet = false;
             if (aPasswdDlg.run())
             {
@@ -484,31 +426,29 @@ bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
                 }
                 else
                 {
-                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                                   VclMessageType::Info, VclButtonsType::Ok,
                                                                   SwResId(STR_WRONG_PASSWORD)));
                     xInfoBox->run();
                 }
             }
         }
-        pEntry = m_pTree->NextSelected(pEntry);
-    }
-    if(!bRet && pBox)
+        return false;
+    });
+    if (!bRet && pBox)
     {
         //reset old button state
-        if(pBox->IsTriStateEnabled())
-            pBox->SetState(pBox->IsChecked() ? TRISTATE_FALSE : TRISTATE_INDET);
-        else
-            pBox->Check(!pBox->IsChecked());
+        if (pBox->get_state() != TRISTATE_INDET)
+            pBox->set_active(!pBox->get_active());
     }
 
     return bRet;
 }
 
 // recursively look for child-sections
-void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, SvTreeListEntry* pEntry)
+void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, weld::TreeIter* pEntry)
 {
-    SvTreeListEntry* pSelEntry = nullptr;
+    std::unique_ptr<weld::TreeIter> xIter(m_xTree->make_iterator());
     if (!pFormat)
     {
         const size_t nCount=rSh.GetSectionFormatCount();
@@ -522,21 +462,27 @@ void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, SvTreeListEntr
             {
                 SwSection *pSect = pFormat->GetSection();
                 SectRepr* pSectRepr = new SectRepr( n, *pSect );
-                Image aImg = BuildBitmap( pSect->IsProtect(),pSect->IsHidden());
-                SvTreeListEntry* pNewEntry = m_pTree->InsertEntry(pSect->GetSectionName(), aImg, aImg);
-                pNewEntry->SetUserData(pSectRepr);
-                RecurseList( pFormat, pNewEntry );
-                if (pNewEntry->HasChildren())
-                    m_pTree->Expand(pNewEntry);
+
+                OUString sText(pSect->GetSectionName());
+                OUString sImage(BuildBitmap(pSect->IsProtect(),pSect->IsHidden()));
+                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pSectRepr)));
+                m_xTree->insert(nullptr, -1, &sText, &sId, nullptr, nullptr, &sImage, false, xIter.get());
+
+                RecurseList(pFormat, xIter.get());
+                if (m_xTree->iter_has_child(*xIter))
+                    m_xTree->expand_row(*xIter);
                 if (pCurrSect==pSect)
-                    m_pTree->Select(pNewEntry);
+                {
+                    m_xTree->select(*xIter);
+                    m_xTree->scroll_to_row(*xIter);
+                    GetFirstEntryHdl(*m_xTree);
+                }
             }
         }
     }
     else
     {
         SwSections aTmpArr;
-        SvTreeListEntry* pNEntry;
         pFormat->GetChildSections(aTmpArr, SectionSort::Pos);
         for( const auto pSect : aTmpArr )
         {
@@ -548,23 +494,23 @@ void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, SvTreeListEntr
             {
                 SectRepr* pSectRepr=new SectRepr(
                                 FindArrPos( pSect->GetFormat() ), *pSect );
-                Image aImage = BuildBitmap( pSect->IsProtect(),
-                                        pSect->IsHidden());
-                pNEntry = m_pTree->InsertEntry(
-                    pSect->GetSectionName(), aImage, aImage, pEntry);
-                pNEntry->SetUserData(pSectRepr);
-                RecurseList( pSect->GetFormat(), pNEntry );
-                if( pNEntry->HasChildren())
-                    m_pTree->Expand(pNEntry);
+
+                OUString sText(pSect->GetSectionName());
+                OUString sImage = BuildBitmap(pSect->IsProtect(), pSect->IsHidden());
+                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pSectRepr)));
+                m_xTree->insert(pEntry, -1, &sText, &sId, nullptr, nullptr, &sImage, false, xIter.get());
+
+                RecurseList(pSect->GetFormat(), xIter.get());
+                if (m_xTree->iter_has_child(*xIter))
+                    m_xTree->expand_row(*xIter);
                 if (pCurrSect==pSect)
-                    pSelEntry = pNEntry;
+                {
+                    m_xTree->select(*xIter);
+                    m_xTree->scroll_to_row(*xIter);
+                    GetFirstEntryHdl(*m_xTree);
+                }
             }
         }
-    }
-    if(nullptr != pSelEntry)
-    {
-        m_pTree->MakeVisible(pSelEntry);
-        m_pTree->Select(pSelEntry);
     }
 }
 
@@ -581,82 +527,57 @@ size_t SwEditRegionDlg::FindArrPos(const SwSectionFormat* pFormat )
 
 SwEditRegionDlg::~SwEditRegionDlg( )
 {
-    disposeOnce();
+    std::unique_ptr<weld::TreeIter> xIter(m_xTree->make_iterator());
+    if (m_xTree->get_iter_first(*xIter))
+    {
+        do
+        {
+            delete reinterpret_cast<SectRepr*>(m_xTree->get_id(*xIter).toInt64());
+        } while (m_xTree->iter_next(*xIter));
+    }
 }
 
-void SwEditRegionDlg::dispose()
+void SwEditRegionDlg::SelectSection(const OUString& rSectionName)
 {
-    SvTreeListEntry* pEntry = m_pTree->First();
-    while( pEntry )
+    std::unique_ptr<weld::TreeIter> xIter(m_xTree->make_iterator());
+    if (m_xTree->get_iter_first(*xIter))
     {
-        delete static_cast<SectRepr*>(pEntry->GetUserData());
-        pEntry = m_pTree->Next( pEntry );
-    }
-
-    m_pDocInserter.reset();
-    m_pCurName.clear();
-    m_pTree.clear();
-    m_pFileCB.clear();
-    m_pDDECB.clear();
-    m_pDDEFrame.clear();
-    m_pFileNameFT.clear();
-    m_pDDECommandFT.clear();
-    m_pFileNameED.clear();
-    m_pFilePB.clear();
-    m_pSubRegionFT.clear();
-    m_pSubRegionED.clear();
-    m_pProtectCB.clear();
-    m_pPasswdCB.clear();
-    m_pPasswdPB.clear();
-    m_pHideCB.clear();
-    m_pConditionFT.clear();
-    m_pConditionED.clear();
-    m_pEditInReadonlyCB.clear();
-    m_pOK.clear();
-    m_pOptionsPB.clear();
-    m_pDismiss.clear();
-    SfxModalDialog::dispose();
-}
-
-void    SwEditRegionDlg::SelectSection(const OUString& rSectionName)
-{
-    SvTreeListEntry* pEntry = m_pTree->First();
-    while(pEntry)
-    {
-        SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
-        if (pRepr->GetSectionData().GetSectionName() == rSectionName)
-            break;
-        pEntry = m_pTree->Next(pEntry);
-    }
-    if(pEntry)
-    {
-        m_pTree->SelectAll(false);
-        m_pTree->Select(pEntry);
-        m_pTree->MakeVisible(pEntry);
+        do
+        {
+            SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(*xIter).toInt64());
+            if (pRepr->GetSectionData().GetSectionName() == rSectionName)
+            {
+                m_xTree->unselect_all();
+                m_xTree->select(*xIter);
+                m_xTree->scroll_to_row(*xIter);
+                GetFirstEntryHdl(*m_xTree);
+                break;
+            }
+        } while (m_xTree->iter_next(*xIter));
     }
 }
 
 // selected entry in TreeListBox is showed in Edit window in case of
 // multiselection some controls are disabled
-IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox, void )
+IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
 {
     bDontCheckPasswd = true;
-    SvTreeListEntry* pEntry=pBox->FirstSelected();
-    m_pHideCB->Enable();
+    std::unique_ptr<weld::TreeIter> xIter(rBox.make_iterator());
+    bool bEntry = rBox.get_selected(xIter.get());
+    m_xHideCB->set_sensitive(true);
     // edit in readonly sections
-    m_pEditInReadonlyCB->Enable();
+    m_xEditInReadonlyCB->set_sensitive(true);
 
-    m_pProtectCB->Enable();
-    m_pFileCB->Enable();
+    m_xProtectCB->set_sensitive(true);
+    m_xFileCB->set_sensitive(true);
     css::uno::Sequence <sal_Int8> aCurPasswd;
-    if( 1 < pBox->GetSelectionCount() )
+    if (1 < rBox.count_selected_rows())
     {
-        m_pHideCB->EnableTriState();
-        m_pProtectCB->EnableTriState();
+        m_xHideCB->set_state(TRISTATE_INDET);
+        m_xProtectCB->set_state(TRISTATE_INDET);
         // edit in readonly sections
-        m_pEditInReadonlyCB->EnableTriState();
-
-        m_pFileCB->EnableTriState();
+        m_xEditInReadonlyCB->set_state(TRISTATE_INDET);
+        m_xFileCB->set_state(TRISTATE_INDET);
 
         bool bHiddenValid       = true;
         bool bProtectValid      = true;
@@ -673,9 +594,8 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox, void )
         bool bFile              = true;
         bool bPasswdValid       = true;
 
-        while( pEntry )
-        {
-            SectRepr* pRepr=static_cast<SectRepr*>(pEntry->GetUserData());
+        m_xTree->selected_foreach([&](weld::TreeIter& rEntry){
+            SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
             SwSectionData const& rData( pRepr->GetSectionData() );
             if(bFirst)
             {
@@ -702,127 +622,130 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox, void )
                     (rData.GetType() != CONTENT_SECTION));
                 bPasswdValid      = (aCurPasswd == rData.GetPassword());
             }
-            pEntry = pBox->NextSelected(pEntry);
             bFirst = false;
-        }
+            return false;
+        });
 
-        m_pHideCB->SetState(!bHiddenValid ? TRISTATE_INDET :
+        m_xHideCB->set_state(!bHiddenValid ? TRISTATE_INDET :
                     bHidden ? TRISTATE_TRUE : TRISTATE_FALSE);
-        m_pProtectCB->SetState(!bProtectValid ? TRISTATE_INDET :
+        m_xProtectCB->set_state(!bProtectValid ? TRISTATE_INDET :
                     bProtect ? TRISTATE_TRUE : TRISTATE_FALSE);
         // edit in readonly sections
-        m_pEditInReadonlyCB->SetState(!bEditInReadonlyValid ? TRISTATE_INDET :
+        m_xEditInReadonlyCB->set_state(!bEditInReadonlyValid ? TRISTATE_INDET :
                     bEditInReadonly ? TRISTATE_TRUE : TRISTATE_FALSE);
 
-        m_pFileCB->SetState(!bFileValid ? TRISTATE_INDET :
+        m_xFileCB->set_state(!bFileValid ? TRISTATE_INDET :
                     bFile ? TRISTATE_TRUE : TRISTATE_FALSE);
 
         if (bConditionValid)
-            m_pConditionED->SetText(sCondition);
+            m_xConditionED->set_text(sCondition);
         else
         {
-            m_pConditionFT->Enable(false);
-            m_pConditionED->Enable(false);
+            m_xConditionFT->set_sensitive(false);
+            m_xConditionED->set_sensitive(false);
         }
 
-        m_pCurName->Enable(false);
-        m_pDDECB->Enable(false);
-        m_pDDEFrame->Enable(false);
-        m_pOptionsPB->Enable(false);
-        bool bPasswdEnabled = m_pProtectCB->GetState() == TRISTATE_TRUE;
-        m_pPasswdCB->Enable(bPasswdEnabled);
-        m_pPasswdPB->Enable(bPasswdEnabled);
+        m_xCurName->set_sensitive(false);
+        m_xDDECB->set_sensitive(false);
+        m_xDDEFrame->set_sensitive(false);
+        m_xOptionsPB->set_sensitive(false);
+        bool bPasswdEnabled = m_xProtectCB->get_state() == TRISTATE_TRUE;
+        m_xPasswdCB->set_sensitive(bPasswdEnabled);
+        m_xPasswdPB->set_sensitive(bPasswdEnabled);
         if(!bPasswdValid)
         {
-            pEntry = pBox->FirstSelected();
-            pBox->SelectAll( false );
-            pBox->Select( pEntry );
-            GetFirstEntryHdl(pBox);
+            rBox.get_selected(xIter.get());
+            rBox.unselect_all();
+            rBox.select(*xIter);
+            GetFirstEntryHdl(rBox);
             return;
         }
         else
-            m_pPasswdCB->Check(aCurPasswd.getLength() > 0);
+            m_xPasswdCB->set_active(aCurPasswd.getLength() > 0);
     }
-    else if (pEntry )
+    else if (bEntry )
     {
-        m_pCurName->Enable();
-        m_pOptionsPB->Enable();
-        SectRepr* pRepr=static_cast<SectRepr*>(pEntry->GetUserData());
+        m_xCurName->set_sensitive(true);
+        m_xOptionsPB->set_sensitive(true);
+        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(*xIter).toInt64());
         SwSectionData const& rData( pRepr->GetSectionData() );
-        m_pConditionED->SetText(rData.GetCondition());
-        m_pHideCB->Enable();
-        m_pHideCB->SetState((rData.IsHidden()) ? TRISTATE_TRUE : TRISTATE_FALSE);
-        bool bHide = TRISTATE_TRUE == m_pHideCB->GetState();
-        m_pConditionED->Enable(bHide);
-        m_pConditionFT->Enable(bHide);
-        m_pPasswdCB->Check(rData.GetPassword().getLength() > 0);
+        m_xConditionED->set_text(rData.GetCondition());
+        m_xHideCB->set_sensitive(true);
+        m_xHideCB->set_state((rData.IsHidden()) ? TRISTATE_TRUE : TRISTATE_FALSE);
+        bool bHide = TRISTATE_TRUE == m_xHideCB->get_state();
+        m_xConditionED->set_sensitive(bHide);
+        m_xConditionFT->set_sensitive(bHide);
+        m_xPasswdCB->set_active(rData.GetPassword().getLength() > 0);
 
-        m_pOK->Enable();
-        m_pPasswdCB->Enable();
-        m_pCurName->SetText(pBox->GetEntryText(pEntry));
-        m_pCurName->Enable();
-        m_pDismiss->Enable();
+        m_xOK->set_sensitive(true);
+        m_xPasswdCB->set_sensitive(true);
+        m_xCurName->set_text(rBox.get_text(*xIter));
+        m_xCurName->set_sensitive(true);
+        m_xDismiss->set_sensitive(true);
         const OUString aFile = pRepr->GetFile();
         const OUString sSub = pRepr->GetSubRegion();
+        m_xSubRegionED->clear();
+        m_xSubRegionED->append_text(""); // put in a dummy entry, which is replaced when m_bSubRegionsFilled is set
         m_bSubRegionsFilled = false;
-        m_pSubRegionED->Clear();
         if( !aFile.isEmpty() || !sSub.isEmpty() )
         {
-            m_pFileCB->Check();
-            m_pFileNameED->SetText(aFile);
-            m_pSubRegionED->SetText(sSub);
-            m_pDDECB->Check(rData.GetType() == DDE_LINK_SECTION);
+            m_xFileCB->set_active(true);
+            m_xFileNameED->set_text(aFile);
+            m_xSubRegionED->set_entry_text(sSub);
+            m_xDDECB->set_active(rData.GetType() == DDE_LINK_SECTION);
         }
         else
         {
-            m_pFileCB->Check(false);
-            m_pFileNameED->SetText(aFile);
-            m_pDDECB->Enable(false);
-            m_pDDECB->Check(false);
+            m_xFileCB->set_active(false);
+            m_xFileNameED->set_text(aFile);
+            m_xDDECB->set_sensitive(false);
+            m_xDDECB->set_active(false);
         }
-        UseFileHdl(m_pFileCB);
-        DDEHdl(m_pDDECB);
-        m_pProtectCB->SetState((rData.IsProtectFlag())
+        UseFileHdl(*m_xFileCB);
+        DDEHdl(*m_xDDECB);
+        m_xProtectCB->set_state((rData.IsProtectFlag())
                 ? TRISTATE_TRUE : TRISTATE_FALSE);
-        m_pProtectCB->Enable();
+        m_xProtectCB->set_sensitive(true);
 
         // edit in readonly sections
-        m_pEditInReadonlyCB->SetState((rData.IsEditInReadonlyFlag())
+        m_xEditInReadonlyCB->set_state((rData.IsEditInReadonlyFlag())
                 ? TRISTATE_TRUE : TRISTATE_FALSE);
-        m_pEditInReadonlyCB->Enable();
+        m_xEditInReadonlyCB->set_sensitive(true);
 
-        bool bPasswdEnabled = m_pProtectCB->IsChecked();
-        m_pPasswdCB->Enable(bPasswdEnabled);
-        m_pPasswdPB->Enable(bPasswdEnabled);
+        bool bPasswdEnabled = m_xProtectCB->get_active();
+        m_xPasswdCB->set_sensitive(bPasswdEnabled);
+        m_xPasswdPB->set_sensitive(bPasswdEnabled);
     }
     bDontCheckPasswd = false;
 }
 
+#if 0
 IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox, void )
 {
     if( pBox->GetSelectionCount() )
         return;
 
-    m_pHideCB->Enable(false);
-    m_pProtectCB->Enable(false);
+    m_xHideCB->set_sensitive(false);
+    m_xProtectCB->set_sensitive(false);
     // edit in readonly sections
-    m_pEditInReadonlyCB->Enable(false);
+    m_xEditInReadonlyCB->set_sensitive(false);
 
-    m_pPasswdCB->Enable(false);
-    m_pConditionFT->Enable(false);
-    m_pConditionED->Enable(false);
-    m_pFileCB->Enable(false);
-    m_pDDEFrame->Enable(false);
-    m_pDDECB->Enable(false);
-    m_pCurName->Enable(false);
+    m_xPasswdCB->set_sensitive(false);
+    m_xConditionFT->set_sensitive(false);
+    m_xConditionED->set_sensitive(false);
+    m_xFileCB->set_sensitive(false);
+    m_xDDEFrame->set_sensitive(false);
+    m_xDDECB->set_sensitive(false);
+    m_xCurName->set_sensitive(false);
 
-    UseFileHdl(m_pFileCB);
-    DDEHdl(m_pDDECB);
+    UseFileHdl(*m_xFileCB);
+    DDEHdl(m_xDDECB);
 
 }
+#endif
 
 // in OkHdl the modified settings are being applied and reversed regions are deleted
-IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, Button*, void)
+IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, weld::Button&, void)
 {
     // temp. Array because during changing of a region the position
     // inside of the "Core-Arrays" can be shifted:
@@ -837,46 +760,48 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, Button*, void)
     rSh.StartAllAction();
     rSh.StartUndo();
     rSh.ResetSelect( nullptr,false );
-    SvTreeListEntry* pEntry = m_pTree->First();
 
-    while( pEntry )
+    std::unique_ptr<weld::TreeIter> xIter(m_xTree->make_iterator());
+    if (m_xTree->get_iter_first(*xIter))
     {
-        SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
-        SwSectionFormat* pFormat = aOrigArray[ pRepr->GetArrPos() ];
-        if (!pRepr->GetSectionData().IsProtectFlag())
+        do
         {
-            pRepr->GetSectionData().SetPassword(uno::Sequence<sal_Int8 >());
-        }
-        size_t nNewPos = rDocFormats.GetPos(pFormat);
-        if ( SIZE_MAX != nNewPos )
-        {
-            std::unique_ptr<SfxItemSet> pSet(pFormat->GetAttrSet().Clone( false ));
-            if( pFormat->GetCol() != pRepr->GetCol() )
-                pSet->Put( pRepr->GetCol() );
+            SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(*xIter).toInt64());
+            SwSectionFormat* pFormat = aOrigArray[ pRepr->GetArrPos() ];
+            if (!pRepr->GetSectionData().IsProtectFlag())
+            {
+                pRepr->GetSectionData().SetPassword(uno::Sequence<sal_Int8 >());
+            }
+            size_t nNewPos = rDocFormats.GetPos(pFormat);
+            if ( SIZE_MAX != nNewPos )
+            {
+                std::unique_ptr<SfxItemSet> pSet(pFormat->GetAttrSet().Clone( false ));
+                if( pFormat->GetCol() != pRepr->GetCol() )
+                    pSet->Put( pRepr->GetCol() );
 
-            SvxBrushItem aBrush(pFormat->makeBackgroundBrushItem(false));
-            if( aBrush != pRepr->GetBackground() )
-                pSet->Put( pRepr->GetBackground() );
+                SvxBrushItem aBrush(pFormat->makeBackgroundBrushItem(false));
+                if( aBrush != pRepr->GetBackground() )
+                    pSet->Put( pRepr->GetBackground() );
 
-            if( pFormat->GetFootnoteAtTextEnd(false) != pRepr->GetFootnoteNtAtEnd() )
-                pSet->Put( pRepr->GetFootnoteNtAtEnd() );
+                if( pFormat->GetFootnoteAtTextEnd(false) != pRepr->GetFootnoteNtAtEnd() )
+                    pSet->Put( pRepr->GetFootnoteNtAtEnd() );
 
-            if( pFormat->GetEndAtTextEnd(false) != pRepr->GetEndNtAtEnd() )
-                pSet->Put( pRepr->GetEndNtAtEnd() );
+                if( pFormat->GetEndAtTextEnd(false) != pRepr->GetEndNtAtEnd() )
+                    pSet->Put( pRepr->GetEndNtAtEnd() );
 
-            if( pFormat->GetBalancedColumns() != pRepr->GetBalance() )
-                pSet->Put( pRepr->GetBalance() );
+                if( pFormat->GetBalancedColumns() != pRepr->GetBalance() )
+                    pSet->Put( pRepr->GetBalance() );
 
-            if( pFormat->GetFrameDir() != pRepr->GetFrameDir() )
-                pSet->Put( pRepr->GetFrameDir() );
+                if( pFormat->GetFrameDir() != pRepr->GetFrameDir() )
+                    pSet->Put( pRepr->GetFrameDir() );
 
-            if( pFormat->GetLRSpace() != pRepr->GetLRSpace())
-                pSet->Put( pRepr->GetLRSpace());
+                if( pFormat->GetLRSpace() != pRepr->GetLRSpace())
+                    pSet->Put( pRepr->GetLRSpace());
 
-            rSh.UpdateSection( nNewPos, pRepr->GetSectionData(),
-                               pSet->Count() ? pSet.get() : nullptr );
-        }
-        pEntry = m_pTree->Next( pEntry );
+                rSh.UpdateSection( nNewPos, pRepr->GetSectionData(),
+                                   pSet->Count() ? pSet.get() : nullptr );
+            }
+        } while (m_xTree->iter_next(*xIter));
     }
 
     for (SectReprs_t::reverse_iterator it = m_SectReprs.rbegin(), aEnd = m_SectReprs.rend(); it != aEnd; ++it)
@@ -890,172 +815,154 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, Button*, void)
 
     aOrigArray.clear();
 
-    // EndDialog must be called ahead of EndAction's end,
+    // response must be called ahead of EndAction's end,
     // otherwise ScrollError can occur.
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 
     rSh.EndUndo();
     rSh.EndAllAction();
 }
 
 // Toggle protect
-IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, Button *, pButton, void )
+IMPL_LINK(SwEditRegionDlg, ChangeProtectHdl, weld::ToggleButton&, rButton, void)
 {
-    TriStateBox* pBox = static_cast<TriStateBox*>(pButton);
-    if(!CheckPasswd(pBox))
+    if (!CheckPasswd(&rButton))
         return;
-    pBox->EnableTriState(false);
-    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
-    OSL_ENSURE(pEntry,"no entry found");
-    bool bCheck = TRISTATE_TRUE == pBox->GetState();
-    while( pEntry )
-    {
-        SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
+    bool bCheck = TRISTATE_TRUE == rButton.get_state();
+    m_xTree->selected_foreach([this, bCheck](weld::TreeIter& rEntry){
+        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
         pRepr->GetSectionData().SetProtectFlag(bCheck);
-        Image aImage = BuildBitmap(bCheck,
-                                   TRISTATE_TRUE == m_pHideCB->GetState());
-        m_pTree->SetExpandedEntryBmp(  pEntry, aImage );
-        m_pTree->SetCollapsedEntryBmp( pEntry, aImage );
-        pEntry = m_pTree->NextSelected(pEntry);
-    }
-    m_pPasswdCB->Enable(bCheck);
-    m_pPasswdPB->Enable(bCheck);
+        OUString aImage = BuildBitmap(bCheck, TRISTATE_TRUE == m_xHideCB->get_state());
+        m_xTree->set_image(rEntry, aImage);
+        return false;
+    });
+    m_xPasswdCB->set_sensitive(bCheck);
+    m_xPasswdPB->set_sensitive(bCheck);
 }
 
 // Toggle hide
-IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, Button *, pButton, void )
+IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, weld::ToggleButton&, rButton, void)
 {
-    TriStateBox* pBox = static_cast<TriStateBox*>(pButton);
-    if(!CheckPasswd(pBox))
+    if (!CheckPasswd(&rButton))
         return;
-    pBox->EnableTriState(false);
-    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
-    OSL_ENSURE(pEntry,"no entry found");
-    while( pEntry )
-    {
-        SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
-        pRepr->GetSectionData().SetHidden(TRISTATE_TRUE == pBox->GetState());
-
-        Image aImage = BuildBitmap(TRISTATE_TRUE == m_pProtectCB->GetState(),
-                                    TRISTATE_TRUE == pBox->GetState());
-        m_pTree->SetExpandedEntryBmp(  pEntry, aImage );
-        m_pTree->SetCollapsedEntryBmp( pEntry, aImage );
-
-        pEntry = m_pTree->NextSelected(pEntry);
-    }
-
-    bool bHide = TRISTATE_TRUE == pBox->GetState();
-    m_pConditionED->Enable(bHide);
-    m_pConditionFT->Enable(bHide);
+    m_xTree->selected_foreach([this, &rButton](weld::TreeIter& rEntry){
+        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
+        pRepr->GetSectionData().SetHidden(TRISTATE_TRUE == rButton.get_state());
+        OUString aImage = BuildBitmap(TRISTATE_TRUE == m_xProtectCB->get_state(),
+                                      TRISTATE_TRUE == rButton.get_state());
+        m_xTree->set_image(rEntry, aImage);
+        return false;
+    });
+    bool bHide = TRISTATE_TRUE == rButton.get_state();
+    m_xConditionED->set_sensitive(bHide);
+    m_xConditionFT->set_sensitive(bHide);
 }
 
 // Toggle edit in readonly
-IMPL_LINK( SwEditRegionDlg, ChangeEditInReadonlyHdl, Button *, pButton, void )
+IMPL_LINK(SwEditRegionDlg, ChangeEditInReadonlyHdl, weld::ToggleButton&, rButton, void)
 {
-    TriStateBox* pBox = static_cast<TriStateBox*>(pButton);
-    if(!CheckPasswd(pBox))
+    if (!CheckPasswd(&rButton))
         return;
-    pBox->EnableTriState(false);
-    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
-    OSL_ENSURE(pEntry,"no entry found");
-    while( pEntry )
-    {
-        SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
+    m_xTree->selected_foreach([this, &rButton](weld::TreeIter& rEntry){
+        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
         pRepr->GetSectionData().SetEditInReadonlyFlag(
-                TRISTATE_TRUE == pBox->GetState());
-        pEntry = m_pTree->NextSelected(pEntry);
-    }
+                TRISTATE_TRUE == rButton.get_state());
+        return false;
+    });
 }
 
 // clear selected region
-IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl, Button*, void)
+IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl, weld::Button&, void)
 {
     if(!CheckPasswd())
         return;
-    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
-    SvTreeListEntry* pChild;
-    SvTreeListEntry* pParent;
     // at first mark all selected
-    while(pEntry)
-    {
-        SectRepr* const pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
+    m_xTree->selected_foreach([this](weld::TreeIter& rEntry){
+        SectRepr* const pSectRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
         pSectRepr->SetSelected();
-        pEntry = m_pTree->NextSelected(pEntry);
-    }
-    pEntry = m_pTree->FirstSelected();
+        return false;
+    });
+
+    std::unique_ptr<weld::TreeIter> xEntry(m_xTree->make_iterator());
+    bool bEntry(m_xTree->get_selected(xEntry.get()));
     // then delete
-    while(pEntry)
+    while (bEntry)
     {
-        SectRepr* const pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
-        SvTreeListEntry* pRemove = nullptr;
+        SectRepr* const pSectRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(*xEntry).toInt64());
+        std::unique_ptr<weld::TreeIter> xRemove;
         bool bRestart = false;
-        if(pSectRepr->IsSelected())
+        if (pSectRepr->IsSelected())
         {
             m_SectReprs.insert(std::make_pair(pSectRepr->GetArrPos(),
                         std::unique_ptr<SectRepr>(pSectRepr)));
-            while( (pChild = m_pTree->FirstChild(pEntry) )!= nullptr )
+            if (m_xTree->iter_has_child(*xEntry))
             {
-                // because of the repositioning we have to start at the beginning again
-                bRestart = true;
-                pParent = m_pTree->GetParent(pEntry);
-                m_pTree->GetModel()->Move(pChild, pParent, SvTreeList::GetRelPos(pEntry));
+                std::unique_ptr<weld::TreeIter> xChild(m_xTree->make_iterator(xEntry.get()));
+                m_xTree->iter_children(*xChild);
+                std::unique_ptr<weld::TreeIter> xParent(m_xTree->make_iterator(xEntry.get()));
+                if (!m_xTree->iter_parent(*xParent))
+                    xParent.reset();
+                bool bChild = true;
+                do
+                {
+                    // because of the repositioning we have to start at the beginning again
+                    bRestart = true;
+                    std::unique_ptr<weld::TreeIter> xMove(m_xTree->make_iterator(xChild.get()));
+                    bChild = m_xTree->iter_next_sibling(*xChild);
+                    m_xTree->move_subtree(*xMove, xParent.get(), m_xTree->get_iter_index_in_parent(*xEntry));
+                } while (bChild);
             }
-            pRemove = pEntry;
+            xRemove = m_xTree->make_iterator(xEntry.get());
         }
-        if(bRestart)
-            pEntry = m_pTree->First();
+        if (bRestart)
+            bEntry = m_xTree->get_iter_first(*xEntry);
         else
-            pEntry = m_pTree->Next(pEntry);
-        if(pRemove)
-            m_pTree->GetModel()->Remove( pRemove );
+            bEntry = m_xTree->iter_next(*xEntry);
+        if (xRemove)
+            m_xTree->remove(*xRemove);
     }
 
-    if ( m_pTree->FirstSelected() )
+    if (m_xTree->get_selected(nullptr))
         return;
 
-    m_pConditionFT->Enable(false);
-    m_pConditionED->Enable(false);
-    m_pDismiss->       Enable(false);
-    m_pCurName->Enable(false);
-    m_pProtectCB->Enable(false);
-    m_pPasswdCB->Enable(false);
-    m_pHideCB->Enable(false);
+    m_xConditionFT->set_sensitive(false);
+    m_xConditionED->set_sensitive(false);
+    m_xDismiss->set_sensitive(false);
+    m_xCurName->set_sensitive(false);
+    m_xProtectCB->set_sensitive(false);
+    m_xPasswdCB->set_sensitive(false);
+    m_xHideCB->set_sensitive(false);
     // edit in readonly sections
-    m_pEditInReadonlyCB->Enable(false);
-    m_pEditInReadonlyCB->SetState(TRISTATE_FALSE);
-    m_pProtectCB->SetState(TRISTATE_FALSE);
-    m_pPasswdCB->Check(false);
-    m_pHideCB->SetState(TRISTATE_FALSE);
-    m_pFileCB->Check(false);
+    m_xEditInReadonlyCB->set_sensitive(false);
+    m_xEditInReadonlyCB->set_state(TRISTATE_FALSE);
+    m_xProtectCB->set_state(TRISTATE_FALSE);
+    m_xPasswdCB->set_active(false);
+    m_xHideCB->set_state(TRISTATE_FALSE);
+    m_xFileCB->set_active(false);
     // otherwise the focus would be on HelpButton
-    m_pOK->GrabFocus();
-    UseFileHdl(m_pFileCB);
-
+    m_xOK->grab_focus();
+    UseFileHdl(*m_xFileCB);
 }
 
 // link CheckBox to file?
-IMPL_LINK( SwEditRegionDlg, UseFileHdl, Button *, pButton, void )
+IMPL_LINK(SwEditRegionDlg, UseFileHdl, weld::ToggleButton&, rButton, void)
 {
-    CheckBox* pBox = static_cast<CheckBox*>(pButton);
-    if(!CheckPasswd(pBox))
+    if (!CheckPasswd(&rButton))
         return;
-    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
-    pBox->EnableTriState(false);
-    bool bMulti = 1 < m_pTree->GetSelectionCount();
-    bool bFile = pBox->IsChecked();
-    if(pEntry)
+    bool bMulti = 1 < m_xTree->count_selected_rows();
+    bool bFile = rButton.get_active();
+    if (m_xTree->get_selected(nullptr))
     {
-        while(pEntry)
-        {
-            SectRepr* const pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
+        m_xTree->selected_foreach([&](weld::TreeIter& rEntry){
+            SectRepr* const pSectRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
             bool bContent = pSectRepr->IsContent();
-            if( pBox->IsChecked() && bContent && rSh.HasSelection() )
+            if( rButton.get_active() && bContent && rSh.HasSelection() )
             {
-                std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+                std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                                VclMessageType::Question, VclButtonsType::YesNo,
                                                                SwResId(STR_QUERY_CONNECT)));
                 if (RET_NO == xQueryBox->run())
-                    pBox->Check( false );
+                    rButton.set_active( false );
             }
             if( bFile )
                 pSectRepr->SetContent(false);
@@ -1065,53 +972,51 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, Button *, pButton, void )
                 pSectRepr->SetSubRegion(OUString());
                 pSectRepr->GetSectionData().SetLinkFilePassword(OUString());
             }
-
-            pEntry = m_pTree->NextSelected(pEntry);
-        }
-        m_pDDECB->Enable(bFile && ! bMulti);
-        m_pDDEFrame->Enable(bFile && ! bMulti);
+            return false;
+        });
+        m_xDDECB->set_sensitive(bFile && !bMulti);
+        m_xDDEFrame->set_sensitive(bFile && !bMulti);
         if( bFile )
         {
-            m_pProtectCB->SetState(TRISTATE_TRUE);
-            m_pFileNameED->GrabFocus();
+            m_xProtectCB->set_state(TRISTATE_TRUE);
+            ChangeProtectHdl(*m_xProtectCB);
+            m_xFileNameED->grab_focus();
 
         }
         else
         {
-            m_pDDECB->Check(false);
-            DDEHdl(m_pDDECB);
-            m_pSubRegionED->SetText(OUString());
+            m_xDDECB->set_active(false);
+            m_xSubRegionED->set_entry_text(OUString());
         }
+        DDEHdl(*m_xDDECB);
     }
     else
     {
-        pBox->Check(false);
-        pBox->Enable(false);
-        m_pDDECB->Check(false);
-        m_pDDECB->Enable(false);
-        m_pDDEFrame->Enable(false);
+        rButton.set_active(false);
+        rButton.set_sensitive(false);
+        m_xDDECB->set_active(false);
+        m_xDDECB->set_sensitive(false);
+        m_xDDEFrame->set_sensitive(false);
     }
 }
 
 // call dialog paste file
-IMPL_LINK_NOARG(SwEditRegionDlg, FileSearchHdl, Button*, void)
+IMPL_LINK_NOARG(SwEditRegionDlg, FileSearchHdl, weld::Button&, void)
 {
     if(!CheckPasswd())
         return;
-    m_pDocInserter.reset(new ::sfx2::DocumentInserter(GetFrameWeld(), "swriter"));
+    m_pDocInserter.reset(new ::sfx2::DocumentInserter(m_xDialog.get(), "swriter"));
     m_pDocInserter->StartExecuteModal( LINK( this, SwEditRegionDlg, DlgClosedHdl ) );
 }
 
-IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, Button*, void)
+IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, weld::Button&, void)
 {
     if(!CheckPasswd())
         return;
-    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
-
-    if(!pEntry)
+    SectRepr* pSectRepr = reinterpret_cast<SectRepr*>(m_xTree->get_selected_id().toInt64());
+    if (!pSectRepr)
         return;
 
-    SectRepr* pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
     SfxItemSet aSet(
         rSh.GetView().GetPool(),
         svl::Items<
@@ -1143,7 +1048,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, Button*, void)
     aSet.Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth));
     aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
 
-    SwSectionPropertyTabDialog aTabDlg(GetFrameWeld(), aSet, rSh);
+    SwSectionPropertyTabDialog aTabDlg(m_xDialog.get(), aSet, rSh);
     if (RET_OK == aTabDlg.run())
     {
         const SfxItemSet* pOutSet = aTabDlg.GetOutputItemSet();
@@ -1175,10 +1080,8 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, Button*, void)
                 SfxItemState::SET == eFrameDirState||
                 SfxItemState::SET == eLRState)
             {
-                SvTreeListEntry* pSelEntry = m_pTree->FirstSelected();
-                while( pSelEntry )
-                {
-                    SectRepr* pRepr = static_cast<SectRepr*>(pSelEntry->GetUserData());
+                m_xTree->selected_foreach([&](weld::TreeIter& rEntry){
+                    SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
                     if( SfxItemState::SET == eColState )
                         pRepr->GetCol() = *static_cast<const SwFormatCol*>(pColItem);
                     if( SfxItemState::SET == eBrushState )
@@ -1193,133 +1096,131 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, Button*, void)
                         pRepr->GetFrameDir().SetValue(static_cast<const SvxFrameDirectionItem*>(pFrameDirItem)->GetValue());
                     if( SfxItemState::SET == eLRState )
                         pRepr->GetLRSpace() = *static_cast<const SvxLRSpaceItem*>(pLRSpaceItem);
-
-                    pSelEntry = m_pTree->NextSelected(pSelEntry);
-                }
+                    return false;
+                });
             }
         }
     }
+}
 
+IMPL_LINK(SwEditRegionDlg, FileNameComboBoxHdl, weld::ComboBox&, rEdit, void)
+{
+    int nStartPos, nEndPos;
+    rEdit.get_entry_selection_bounds(nStartPos, nEndPos);
+    if (!CheckPasswd())
+        return;
+    rEdit.select_entry_region(nStartPos, nEndPos);
+    SectRepr* pSectRepr = reinterpret_cast<SectRepr*>(m_xTree->get_selected_id().toInt64());
+    pSectRepr->SetSubRegion( rEdit.get_active_text() );
 }
 
 // Applying of the filename or the linked region
-IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit&, rEdit, void )
+IMPL_LINK(SwEditRegionDlg, FileNameEntryHdl, weld::Entry&, rEdit, void)
 {
-    Selection aSelect = rEdit.GetSelection();
-    if(!CheckPasswd())
+    int nStartPos, nEndPos;
+    rEdit.get_selection_bounds(nStartPos, nEndPos);
+    if (!CheckPasswd())
         return;
-    rEdit.SetSelection(aSelect);
-    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
-    OSL_ENSURE(pEntry,"no entry found");
-    SectRepr* pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
-    if (&rEdit == m_pFileNameED)
+    rEdit.select_region(nStartPos, nEndPos);
+    SectRepr* pSectRepr = reinterpret_cast<SectRepr*>(m_xTree->get_selected_id().toInt64());
+    m_xSubRegionED->clear();
+    m_xSubRegionED->append_text(""); // put in a dummy entry, which is replaced when m_bSubRegionsFilled is set
+    m_bSubRegionsFilled = false;
+    if (m_xDDECB->get_active())
     {
-        m_bSubRegionsFilled = false;
-        m_pSubRegionED->Clear();
-        if (m_pDDECB->IsChecked())
+        OUString sLink( SwSectionData::CollapseWhiteSpaces(rEdit.get_text()) );
+        sal_Int32 nPos = 0;
+        sLink = sLink.replaceFirst( " ", OUStringLiteral1(sfx2::cTokenSeparator), &nPos );
+        if (nPos>=0)
         {
-            OUString sLink( SwSectionData::CollapseWhiteSpaces(rEdit.GetText()) );
-            sal_Int32 nPos = 0;
             sLink = sLink.replaceFirst( " ", OUStringLiteral1(sfx2::cTokenSeparator), &nPos );
-            if (nPos>=0)
-            {
-                sLink = sLink.replaceFirst( " ", OUStringLiteral1(sfx2::cTokenSeparator), &nPos );
-            }
+        }
 
-            pSectRepr->GetSectionData().SetLinkFileName( sLink );
-            pSectRepr->GetSectionData().SetType( DDE_LINK_SECTION );
-        }
-        else
-        {
-            OUString sTmp(rEdit.GetText());
-            if(!sTmp.isEmpty())
-            {
-                SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
-                INetURLObject aAbs;
-                if( pMedium )
-                    aAbs = pMedium->GetURLObject();
-                sTmp = URIHelper::SmartRel2Abs(
-                    aAbs, sTmp, URIHelper::GetMaybeFileHdl() );
-            }
-            pSectRepr->SetFile( sTmp );
-            pSectRepr->GetSectionData().SetLinkFilePassword(OUString());
-        }
+        pSectRepr->GetSectionData().SetLinkFileName( sLink );
+        pSectRepr->GetSectionData().SetType( DDE_LINK_SECTION );
     }
     else
     {
-        pSectRepr->SetSubRegion( rEdit.GetText() );
+        OUString sTmp(rEdit.get_text());
+        if(!sTmp.isEmpty())
+        {
+            SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
+            INetURLObject aAbs;
+            if( pMedium )
+                aAbs = pMedium->GetURLObject();
+            sTmp = URIHelper::SmartRel2Abs(
+                aAbs, sTmp, URIHelper::GetMaybeFileHdl() );
+        }
+        pSectRepr->SetFile( sTmp );
+        pSectRepr->GetSectionData().SetLinkFilePassword(OUString());
     }
 }
 
-IMPL_LINK( SwEditRegionDlg, DDEHdl, Button*, pButton, void )
+IMPL_LINK(SwEditRegionDlg, DDEHdl, weld::ToggleButton&, rButton, void)
 {
-    CheckBox* pBox = static_cast<CheckBox*>(pButton);
-    if(!CheckPasswd(pBox))
+    if (!CheckPasswd(&rButton))
         return;
-    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
-    if(pEntry)
+    SectRepr* pSectRepr = reinterpret_cast<SectRepr*>(m_xTree->get_selected_id().toInt64());
+    if (pSectRepr)
     {
-        bool bFile = m_pFileCB->IsChecked();
-        SectRepr* pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
+        bool bFile = m_xFileCB->get_active();
         SwSectionData & rData( pSectRepr->GetSectionData() );
-        bool bDDE = pBox->IsChecked();
+        bool bDDE = rButton.get_active();
         if(bDDE)
         {
-            m_pFileNameFT->Hide();
-            m_pDDECommandFT->Enable();
-            m_pDDECommandFT->Show();
-            m_pSubRegionFT->Hide();
-            m_pSubRegionED->Hide();
+            m_xFileNameFT->hide();
+            m_xDDECommandFT->set_sensitive(true);
+            m_xDDECommandFT->show();
+            m_xSubRegionFT->hide();
+            m_xSubRegionED->hide();
             if (FILE_LINK_SECTION == rData.GetType())
             {
                 pSectRepr->SetFile(OUString());
-                m_pFileNameED->SetText(OUString());
+                m_xFileNameED->set_text(OUString());
                 rData.SetLinkFilePassword(OUString());
             }
             rData.SetType(DDE_LINK_SECTION);
         }
         else
         {
-            m_pDDECommandFT->Hide();
-            m_pFileNameFT->Enable(bFile);
-            m_pFileNameFT->Show();
-            m_pSubRegionED->Show();
-            m_pSubRegionFT->Show();
-            m_pSubRegionED->Enable(bFile);
-            m_pSubRegionFT->Enable(bFile);
-            m_pSubRegionED->Enable(bFile);
+            m_xDDECommandFT->hide();
+            m_xFileNameFT->set_sensitive(bFile);
+            m_xFileNameFT->show();
+            m_xSubRegionED->show();
+            m_xSubRegionFT->show();
+            m_xSubRegionED->set_sensitive(bFile);
+            m_xSubRegionFT->set_sensitive(bFile);
+            m_xSubRegionED->set_sensitive(bFile);
             if (DDE_LINK_SECTION == rData.GetType())
             {
                 rData.SetType(FILE_LINK_SECTION);
                 pSectRepr->SetFile(OUString());
                 rData.SetLinkFilePassword(OUString());
-                m_pFileNameED->SetText(OUString());
+                m_xFileNameED->set_text(OUString());
             }
         }
-        m_pFilePB->Enable(bFile && !bDDE);
+        m_xFilePB->set_sensitive(bFile && !bDDE);
     }
 }
 
-IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox, void )
+void SwEditRegionDlg::ChangePasswd(bool bChange)
 {
-    bool bChange = pBox == m_pPasswdPB;
-    if(!CheckPasswd())
+    if (!CheckPasswd())
     {
-        if(!bChange)
-            m_pPasswdCB->Check(!m_pPasswdCB->IsChecked());
+        if (!bChange)
+            m_xPasswdCB->set_active(!m_xPasswdCB->get_active());
         return;
     }
-    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
-    bool bSet = bChange ? bChange : m_pPasswdCB->IsChecked();
-    OSL_ENSURE(pEntry,"no entry found");
-    while( pEntry )
-    {
-        SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
+
+    bool bSet = bChange ? bChange : m_xPasswdCB->get_active();
+
+    m_xTree->selected_foreach([this, bChange, bSet](weld::TreeIter& rEntry){
+        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
         if(bSet)
         {
             if(!pRepr->GetTempPasswd().getLength() || bChange)
             {
-                SfxPasswordDialog aPasswdDlg(GetFrameWeld());
+                SfxPasswordDialog aPasswdDlg(m_xDialog.get());
                 aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);
                 if (RET_OK == aPasswdDlg.run())
                 {
@@ -1330,19 +1231,19 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox, void )
                     }
                     else
                     {
-                        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pBox->GetFrameWeld(),
+                        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                                       SwResId(STR_WRONG_PASSWD_REPEAT)));
                         xInfoBox->run();
-                        ChangePasswdHdl(pBox);
-                        break;
+                        ChangePasswd(bChange);
+                        return true;
                     }
                 }
                 else
                 {
                     if(!bChange)
-                        m_pPasswdCB->Check(false);
-                    break;
+                        m_xPasswdCB->set_active(false);
+                    return true;
                 }
             }
             pRepr->GetSectionData().SetPassword(pRepr->GetTempPasswd());
@@ -1351,43 +1252,51 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox, void )
         {
             pRepr->GetSectionData().SetPassword(uno::Sequence<sal_Int8 >());
         }
-        pEntry = m_pTree->NextSelected(pEntry);
-    }
+        return false;
+    });
+}
+
+IMPL_LINK_NOARG(SwEditRegionDlg, TogglePasswdHdl, weld::ToggleButton&, void)
+{
+    ChangePasswd(false);
+}
+
+IMPL_LINK_NOARG(SwEditRegionDlg, ChangePasswdHdl, weld::Button&, void)
+{
+    ChangePasswd(true);
 }
 
 // the current region name is being added to the TreeListBox immediately during
 // editing, with empty string no Ok()
-IMPL_LINK_NOARG(SwEditRegionDlg, NameEditHdl, Edit&, void)
+IMPL_LINK_NOARG(SwEditRegionDlg, NameEditHdl, weld::Entry&, void)
 {
     if(!CheckPasswd())
         return;
-    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
-    OSL_ENSURE(pEntry,"no entry found");
-    if (pEntry)
+    std::unique_ptr<weld::TreeIter> xIter(m_xTree->make_iterator());
+    if (m_xTree->get_selected(xIter.get()))
     {
-        const OUString aName = m_pCurName->GetText();
-        m_pTree->SetEntryText(pEntry,aName);
-        SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
+        const OUString aName = m_xCurName->get_text();
+        m_xTree->set_text(*xIter, aName);
+        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(*xIter).toInt64());
         pRepr->GetSectionData().SetSectionName(aName);
 
-        m_pOK->Enable(!aName.isEmpty());
+        m_xOK->set_sensitive(!aName.isEmpty());
     }
 }
 
-IMPL_LINK( SwEditRegionDlg, ConditionEditHdl, Edit&, rEdit, void )
+IMPL_LINK( SwEditRegionDlg, ConditionEditHdl, weld::Entry&, rEdit, void )
 {
-    Selection aSelect = rEdit.GetSelection();
+    int nStartPos, nEndPos;
+    rEdit.get_selection_bounds(nStartPos, nEndPos);
     if(!CheckPasswd())
         return;
-    rEdit.SetSelection(aSelect);
-    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
-    OSL_ENSURE(pEntry,"no entry found");
-    while( pEntry )
-    {
-        SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
-        pRepr->GetSectionData().SetCondition(rEdit.GetText());
-        pEntry = m_pTree->NextSelected(pEntry);
-    }
+    rEdit.select_region(nStartPos, nEndPos);
+
+    m_xTree->selected_foreach([this, &rEdit](weld::TreeIter& rEntry){
+        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
+        pRepr->GetSectionData().SetCondition(rEdit.get_text());
+        return false;
+    });
 }
 
 IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg, void )
@@ -1403,29 +1312,27 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg, v
             const SfxPoolItem* pItem;
             if ( SfxItemState::SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, false, &pItem ) )
                 sPassword = static_cast<const SfxStringItem*>(pItem )->GetValue();
-            ::lcl_ReadSections(*pMedium, *m_pSubRegionED);
+            ::lcl_ReadSections(*pMedium, *m_xSubRegionED);
         }
     }
 
-    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
-    OSL_ENSURE( pEntry, "no entry found" );
-    if ( pEntry )
+    SectRepr* pSectRepr = reinterpret_cast<SectRepr*>(m_xTree->get_selected_id().toInt64());
+    if (pSectRepr)
     {
-        SectRepr* pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
         pSectRepr->SetFile( sFileName );
         pSectRepr->SetFilter( sFilterName );
         pSectRepr->GetSectionData().SetLinkFilePassword(sPassword);
-        m_pFileNameED->SetText(pSectRepr->GetFile());
+        m_xFileNameED->set_text(pSectRepr->GetFile());
     }
 }
 
-IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent&, rEvent, void )
+IMPL_LINK_NOARG(SwEditRegionDlg, SubRegionEventHdl, weld::ComboBox&, void)
 {
-    if( !m_bSubRegionsFilled && rEvent.GetId() == VclEventId::DropdownPreOpen )
+    if (!m_bSubRegionsFilled)
     {
         //if necessary fill the names bookmarks/sections/tables now
 
-        OUString sFileName = m_pFileNameED->GetText();
+        OUString sFileName = m_xFileNameED->get_text();
         if(!sFileName.isEmpty())
         {
             SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
@@ -1438,31 +1345,11 @@ IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent&, rEvent, void )
             //load file and set the shell
             SfxMedium aMedium( sFileName, StreamMode::STD_READ );
             sFileName = aMedium.GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
-            ::lcl_ReadSections(aMedium, *m_pSubRegionED);
+            ::lcl_ReadSections(aMedium, *m_xSubRegionED);
         }
         else
-            lcl_FillSubRegionList(rSh, *m_pSubRegionED, nullptr);
+            lcl_FillSubRegionList(rSh, *m_xSubRegionED, nullptr);
         m_bSubRegionsFilled = true;
-    }
-}
-
-// helper function - read section names from medium
-static void lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox )
-{
-    rBox.Clear();
-    uno::Reference < embed::XStorage > xStg;
-    if( rMedium.IsStorage() && (xStg = rMedium.GetStorage()).is() )
-    {
-        std::vector<OUString> aArr;
-        SotClipboardFormatId nFormat = SotStorage::GetFormatID( xStg );
-        if ( nFormat == SotClipboardFormatId::STARWRITER_60 || nFormat == SotClipboardFormatId::STARWRITERGLOB_60 ||
-            nFormat == SotClipboardFormatId::STARWRITER_8 || nFormat == SotClipboardFormatId::STARWRITERGLOB_8)
-            SwGetReaderXML()->GetSectionList( rMedium, aArr );
-
-        for (auto const& it : aArr)
-        {
-            rBox.InsertEntry(it);
-        }
     }
 }
 
@@ -1650,6 +1537,7 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
         const OUString sSectionName(pSectionData->GetSectionName());
         m_xCurName->set_entry_text(rSh.GetUniqueSectionName(&sSectionName));
         m_xProtectCB->set_active( pSectionData->IsProtectFlag() );
+        ChangeProtectHdl(*m_xProtectCB);
         m_sFileName = pSectionData->GetLinkFileName();
         m_sFilePasswd = pSectionData->GetLinkFilePassword();
         m_xFileCB->set_active( !m_sFileName.isEmpty() );
@@ -1821,6 +1709,7 @@ IMPL_LINK(SwInsertSectionTabPage, UseFileHdl, weld::ToggleButton&, rButton, void
     {
         m_xFileNameED->grab_focus();
         m_xProtectCB->set_active(true);
+        ChangeProtectHdl(*m_xProtectCB);
     }
     else
     {
@@ -2047,7 +1936,7 @@ void SwSectionFootnoteEndTabPage::ResetState( bool bFootnote,
         [[fallthrough]];
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
-        pNumViewBox->Enable( false );
+        pNumViewBox->set_sensitive( false );
         pPrefixFT->set_sensitive( false );
         pPrefixED->set_sensitive( false );
         pSuffixFT->set_sensitive( false );
@@ -2115,7 +2004,7 @@ IMPL_LINK( SwSectionFootnoteEndTabPage, FootEndHdl, weld::ToggleButton&, rBox, v
     pOffsetText->set_sensitive( bEnableNum );
     pOffsetField->set_sensitive( bEnableNum );
     pNumFormatBox->set_sensitive( bEnableNum );
-    pNumViewBox->Enable( bEnableNumFormat );
+    pNumViewBox->set_sensitive( bEnableNumFormat );
     pPrefixED->set_sensitive( bEnableNumFormat );
     pSuffixED->set_sensitive( bEnableNumFormat );
     pPrefixFT->set_sensitive( bEnableNumFormat );

@@ -523,7 +523,13 @@ class AbstractMultiTOXTabDialog_Impl : public AbstractMultiTOXTabDialog
 class SwEditRegionDlg;
 class AbstractEditRegionDlg_Impl : public AbstractEditRegionDlg
 {
-    DECL_ABSTDLG_BASE(AbstractEditRegionDlg_Impl,SwEditRegionDlg)
+    std::shared_ptr<SwEditRegionDlg> m_xDlg;
+public:
+    explicit AbstractEditRegionDlg_Impl(std::unique_ptr<SwEditRegionDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
     virtual void    SelectSection(const OUString& rSectionName) override;
 };
 
@@ -698,7 +704,7 @@ public:
                                                 SwWrtShell &rShell,
                                                 SwTOXBase* pCurTOX,
                                                 bool bGlobal) override;
-    virtual VclPtr<AbstractEditRegionDlg>      CreateEditRegionDlg(vcl::Window* pParent, SwWrtShell& rWrtSh) override;
+    virtual VclPtr<AbstractEditRegionDlg>      CreateEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh) override;
     virtual VclPtr<AbstractInsertSectionTabDialog>     CreateInsertSectionTabDialog(
         weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh) override;
     virtual VclPtr<AbstractMarkFloatDlg>       CreateIndexMarkFloatDlg(

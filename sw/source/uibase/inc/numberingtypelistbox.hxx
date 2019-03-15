@@ -52,7 +52,7 @@ public:
     SvxNumType    GetSelectedNumberingType();
     bool          SelectNumberingType(SvxNumType nType);
     void          SetNoSelection() { m_xWidget->set_active(-1); }
-    void          Enable(bool bEnable) { m_xWidget->set_sensitive(bEnable); }
+    void          set_sensitive(bool bEnable) { m_xWidget->set_sensitive(bEnable); }
 };
 
 #endif

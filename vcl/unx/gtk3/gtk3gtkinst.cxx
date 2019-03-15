@@ -5310,7 +5310,11 @@ namespace
         gtk_tree_model_get(model, iter, search->col, &pStr, -1);
         bool found = strcmp(pStr, search->str.getStr()) == 0;
         if (found)
-            search->index = gtk_tree_path_get_indices(path)[0];
+        {
+            gint depth;
+            gint* indices = gtk_tree_path_get_indices_with_depth(path, &depth);
+            search->index = indices[depth-1];
+        }
         g_free(pStr);
         return found;
     }
@@ -5666,7 +5670,10 @@ private:
         bRet = !bRet;
         gtk_tree_store_set(m_pTreeStore, &iter, nCol, bRet, -1);
 
-        int nRow = gtk_tree_path_get_indices(tree_path)[0];
+        gint depth;
+        gint* indices = gtk_tree_path_get_indices_with_depth(tree_path, &depth);
+        int nRow = indices[depth-1];
+
         signal_toggled(std::make_pair(nRow, nCol));
 
         gtk_tree_path_free(tree_path);
@@ -6055,14 +6062,19 @@ public:
         for (GList* pItem = g_list_first(pList); pItem; pItem = g_list_next(pItem))
         {
             GtkTreePath* path = static_cast<GtkTreePath*>(pItem->data);
-            aRows.push_back(gtk_tree_path_get_indices(path)[0]);
+
+            gint depth;
+            gint* indices = gtk_tree_path_get_indices_with_depth(path, &depth);
+            int nRow = indices[depth-1];
+
+            aRows.push_back(nRow);
         }
         g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
 
         return aRows;
     }
 
-    virtual void selected_foreach(const std::function<void(weld::TreeIter&)>& func) override
+    virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override
     {
         GtkInstanceTreeIter aGtkIter(nullptr);
 
@@ -6072,12 +6084,13 @@ public:
         {
             GtkTreePath* path = static_cast<GtkTreePath*>(pItem->data);
             gtk_tree_model_get_iter(pModel, &aGtkIter.iter, path);
-            func(aGtkIter);
+            if (func(aGtkIter))
+                break;
         }
         g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
     }
 
-    virtual void visible_foreach(const std::function<void(weld::TreeIter&)>& func) override
+    virtual void visible_foreach(const std::function<bool(weld::TreeIter&)>& func) override
     {
         GtkTreePath* start_path;
         GtkTreePath* end_path;
@@ -6090,7 +6103,8 @@ public:
 
             do
             {
-                func(aGtkIter);
+                if (func(aGtkIter))
+                    break;
                 GtkTreePath* path = gtk_tree_model_get_path(pModel, &aGtkIter.iter);
                 bool bContinue = gtk_tree_path_compare(path, end_path) != 0;
                 gtk_tree_path_free(path);
@@ -6222,6 +6236,61 @@ public:
         return set(pos, m_nIdCol, rId);
     }
 
+    virtual int get_iter_index_in_parent(const weld::TreeIter& rIter) const override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+
+        gint depth;
+        gint* indices = gtk_tree_path_get_indices_with_depth(path, &depth);
+        int nRet = indices[depth-1];
+
+        gtk_tree_path_free(path);
+
+        return nRet;
+    }
+
+    // by copy and delete of old copy
+    void move_subtree(GtkTreeIter& rFromIter, GtkTreeIter* pGtkParentIter, int nIndexInNewParent)
+    {
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+
+        int nCols = gtk_tree_model_get_n_columns(pModel);
+        GValue value;
+
+        GtkTreeIter toiter;
+        gtk_tree_store_insert(m_pTreeStore, &toiter, pGtkParentIter, nIndexInNewParent);
+
+        for (int i = 0; i < nCols; ++i)
+        {
+            memset(&value,  0, sizeof(GValue));
+            gtk_tree_model_get_value(pModel, &rFromIter, i, &value);
+            gtk_tree_store_set_value(m_pTreeStore, &toiter, i, &value);
+            g_value_unset(&value);
+        }
+
+        GtkTreeIter tmpfromiter;
+        if (gtk_tree_model_iter_children(pModel, &tmpfromiter, &rFromIter))
+        {
+            int j = 0;
+            do
+            {
+                move_subtree(tmpfromiter, &toiter, j++);
+            } while (gtk_tree_model_iter_next(pModel, &tmpfromiter));
+        }
+
+        gtk_tree_store_remove(m_pTreeStore, &rFromIter);
+    }
+
+    virtual void move_subtree(weld::TreeIter& rNode, const weld::TreeIter* pNewParent, int nIndexInNewParent) override
+    {
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rNode);
+        const GtkInstanceTreeIter* pGtkParentIter = static_cast<const GtkInstanceTreeIter*>(pNewParent);
+        move_subtree(rGtkIter.iter, pGtkParentIter ? const_cast<GtkTreeIter*>(&pGtkParentIter->iter) : nullptr, nIndexInNewParent);
+    }
+
     virtual int get_selected_index() const override
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't request selection when frozen");
@@ -6234,7 +6303,11 @@ public:
             if (gtk_tree_selection_get_selected(gtk_tree_view_get_selection(m_pTreeView), &pModel, &iter))
             {
                 GtkTreePath* path = gtk_tree_model_get_path(pModel, &iter);
-                nRet = gtk_tree_path_get_indices(path)[0];
+
+                gint depth;
+                gint* indices = gtk_tree_path_get_indices_with_depth(path, &depth);
+                nRet = indices[depth-1];
+
                 gtk_tree_path_free(path);
             }
         }
@@ -6246,21 +6319,24 @@ public:
         return nRet;
     }
 
-    bool get_selected_iterator(GtkTreeIter& rIter) const
+    bool get_selected_iterator(GtkTreeIter* pIter) const
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't request selection when frozen");
         bool bRet = false;
         GtkTreeSelection *selection = gtk_tree_view_get_selection(m_pTreeView);
         if (gtk_tree_selection_get_mode(selection) != GTK_SELECTION_MULTIPLE)
-            bRet = gtk_tree_selection_get_selected(gtk_tree_view_get_selection(m_pTreeView), nullptr, &rIter);
+            bRet = gtk_tree_selection_get_selected(gtk_tree_view_get_selection(m_pTreeView), nullptr, pIter);
         else
         {
             GtkTreeModel* pModel;
             GList* pList = gtk_tree_selection_get_selected_rows(gtk_tree_view_get_selection(m_pTreeView), &pModel);
             for (GList* pItem = g_list_first(pList); pItem; pItem = g_list_next(pItem))
             {
-                GtkTreePath* path = static_cast<GtkTreePath*>(pItem->data);
-                gtk_tree_model_get_iter(pModel, &rIter, path);
+                if (pIter)
+                {
+                    GtkTreePath* path = static_cast<GtkTreePath*>(pItem->data);
+                    gtk_tree_model_get_iter(pModel, pIter, path);
+                }
                 bRet = true;
                 break;
             }
@@ -6273,7 +6349,7 @@ public:
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't request selection when frozen");
         GtkTreeIter iter;
-        if (get_selected_iterator(iter))
+        if (get_selected_iterator(&iter))
             return get(iter, m_nTextCol);
         return OUString();
     }
@@ -6282,7 +6358,7 @@ public:
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't request selection when frozen");
         GtkTreeIter iter;
-        if (get_selected_iterator(iter))
+        if (get_selected_iterator(&iter))
             return get(iter, m_nIdCol);
         return OUString();
     }
@@ -6302,7 +6378,7 @@ public:
     virtual bool get_selected(weld::TreeIter* pIter) const override
     {
         GtkInstanceTreeIter* pGtkIter = static_cast<GtkInstanceTreeIter*>(pIter);
-        return gtk_tree_selection_get_selected(gtk_tree_view_get_selection(m_pTreeView), nullptr, pGtkIter ? &pGtkIter->iter : nullptr);
+        return get_selected_iterator(pGtkIter ? &pGtkIter->iter : nullptr);
     }
 
     virtual bool get_cursor(weld::TreeIter* pIter) const override
@@ -7540,13 +7616,13 @@ private:
         pThis->signal_changed();
     }
 
-    static void signalPopupShown(GtkComboBox*, GParamSpec*, gpointer widget)
+    static void signalPopupToggled(GtkComboBox*, GParamSpec*, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
-        pThis->signal_popup_shown();
+        pThis->signal_popup_toggled();
     }
 
-    void signal_popup_shown()
+    virtual void signal_popup_toggled() override
     {
         m_aQuickSelectionEngine.Reset();
         gboolean bIsShown(false);
@@ -7554,6 +7630,7 @@ private:
         if (m_bPopupActive != bIsShown)
         {
             m_bPopupActive = bIsShown;
+            ComboBox::signal_popup_toggled();
             //restore focus to the entry view when the popup is gone, which
             //is what the vcl case does, to ease the transition a little
             gtk_widget_grab_focus(m_pWidget);
@@ -7658,7 +7735,11 @@ private:
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
         GtkTreePath* path = gtk_tree_model_get_path(pTreeModel, pIter);
-        int nIndex = gtk_tree_path_get_indices(path)[0];
+
+        gint depth;
+        gint* indices = gtk_tree_path_get_indices_with_depth(path, &depth);
+        int nIndex = indices[depth-1];
+
         gtk_tree_path_free(path);
         return pThis->separator_function(nIndex);
     }
@@ -7825,7 +7906,7 @@ public:
         , m_nToggleFocusInSignalId(0)
         , m_nToggleFocusOutSignalId(0)
         , m_nChangedSignalId(g_signal_connect(m_pComboBox, "changed", G_CALLBACK(signalChanged), this))
-        , m_nPopupShownSignalId(g_signal_connect(m_pComboBox, "notify::popup-shown", G_CALLBACK(signalPopupShown), this))
+        , m_nPopupShownSignalId(g_signal_connect(m_pComboBox, "notify::popup-shown", G_CALLBACK(signalPopupToggled), this))
         , m_nAutoCompleteIdleId(0)
     {
         GList* cells = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(m_pComboBox));

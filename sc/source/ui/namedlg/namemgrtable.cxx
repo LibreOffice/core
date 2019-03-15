@@ -358,6 +358,7 @@ void RangeManagerTable::CheckForFormulaString()
             m_xTreeView->set_text(rEntry, aFormulaString, 1);
             maCalculatedFormulaEntries.insert( std::pair<OUString, bool>(sId, true) );
         }
+        return false;
     });
 }
 
@@ -415,6 +416,7 @@ std::vector<ScRangeNameLine> RangeManagerTable::GetSelectedEntries()
         ScRangeNameLine aLine;
         GetLine(aLine, rEntry);
         aSelectedEntries.push_back(aLine);
+        return false;
     });
     return aSelectedEntries;
 }
