@@ -330,8 +330,8 @@ SvxCharNamePage::SvxCharNamePage(TabPageParent pParent, const SfxItemSet& rInSet
     m_xCTLFontStyleFT->set_label(sFontStyleString);
 
     m_xWestFrame->show();
-    m_xEastFrame->show(bShowCJK);
-    m_xCTLFrame->show(bShowCTL);
+    m_xEastFrame->set_visible(bShowCJK);
+    m_xCTLFrame->set_visible(bShowCTL);
 
     m_xWestFontLanguageLB->SetLanguageList(SvxLanguageListFlags::WESTERN, true, false, true);
     m_xEastFontLanguageLB->SetLanguageList(SvxLanguageListFlags::CJK, true, false, true);
@@ -1453,7 +1453,7 @@ void SvxCharEffectsPage::Initialize()
         m_xPositionLB->hide();
     }
 
-    m_xA11yWarningFT->show(officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get());
+    m_xA11yWarningFT->set_visible(officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get());
 }
 
 void SvxCharEffectsPage::UpdatePreview_Impl()

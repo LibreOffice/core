@@ -124,10 +124,10 @@ namespace dbaui
         m_xConnectionURL->ShowPrefix( ::dbaccess::DST_JDBC == m_pCollection->determineType(m_eType) );
 
         bool bEnableBrowseButton = m_pCollection->supportsBrowsing( m_eType );
-        m_xPB_Connection->show( bEnableBrowseButton );
+        m_xPB_Connection->set_visible( bEnableBrowseButton );
 
         bool bEnableCreateButton = m_pCollection->supportsDBCreation( m_eType );
-        m_xPB_CreateDB->show( bEnableCreateButton );
+        m_xPB_CreateDB->set_visible( bEnableCreateButton );
 
         const SfxStringItem* pUrlItem = _rSet.GetItem<SfxStringItem>(DSID_CONNECTURL);
 

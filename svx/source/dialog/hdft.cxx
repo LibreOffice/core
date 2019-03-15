@@ -342,7 +342,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     const SfxPoolItem* pExt2 = GetItem(*rSet, SID_ATTR_PAGE_EXT2);
     if (dynamic_cast<const SfxBoolItem*>(pExt1) && dynamic_cast<const SfxBoolItem*>(pExt2) )
         bIsCalc = true;
-    m_xCntSharedFirstBox->show(!bIsCalc);
+    m_xCntSharedFirstBox->set_visible(!bIsCalc);
 
     // Evaluate header-/footer- attributes
     const SvxSetItem* pSetItem = nullptr;

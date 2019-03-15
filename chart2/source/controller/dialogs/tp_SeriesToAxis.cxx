@@ -161,7 +161,7 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
     }
     else
     {
-        m_xCBAxisSideBySide->show(false);
+        m_xCBAxisSideBySide->hide();
     }
 
     //missing value treatment
@@ -196,7 +196,7 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
         }
         else
         {
-            m_xGridPlotOptions->show(false);
+            m_xGridPlotOptions->hide();
         }
     }
 
@@ -208,12 +208,12 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
     }
     else
     {
-        m_xCBIncludeHiddenCells->show(false);
+        m_xCBIncludeHiddenCells->hide();
         // check if the radiobutton guys above
         // are visible. If they aren't, we can
         // as well hide the whole frame
         if(!m_xGridPlotOptions->get_visible())
-            m_xGrpPlotOptions->show(false);
+            m_xGrpPlotOptions->hide();
     }
 
     if (rInAttrs->GetItemState(SCHATTR_HIDE_LEGEND_ENTRY, true, &pPoolItem) == SfxItemState::SET)
@@ -236,16 +236,12 @@ void SchOptionTabPage::Init( bool bProvidesSecondaryYAxis, bool bProvidesOverlap
 
 void SchOptionTabPage::AdaptControlPositionsAndVisibility()
 {
-    m_xGrpAxis->show(m_bProvidesSecondaryYAxis);
+    m_xGrpAxis->set_visible(m_bProvidesSecondaryYAxis);
+    m_xGrpBar->set_visible(m_bProvidesOverlapAndGapWidth);
+    m_xCBConnect->set_visible(m_bProvidesBarConnectors);
 
-    m_xGrpBar->show(m_bProvidesOverlapAndGapWidth);
-
-    m_xCBConnect->show(m_bProvidesBarConnectors);
-
-    if( !m_xMTGap->get_visible() && !m_xMTOverlap->get_visible() )
-    {
-        m_xGrpBar->show(false);
-    }
+    if (!m_xMTGap->get_visible() && !m_xMTOverlap->get_visible())
+        m_xGrpBar->hide();
 }
 
 } //namespace chart

@@ -471,12 +471,12 @@ void SvxTextAttrPage::Construct()
             break;
     }
 
-    m_xTsbAutoGrowHeight->show( bAutoGrowHeightEnabled );
-    m_xTsbAutoGrowWidth->show( bAutoGrowWidthEnabled );
-    m_xTsbFitToSize->show( bFitToSizeEnabled );
-    m_xTsbContour->show( bContourEnabled );
-    m_xTsbAutoGrowSize->show( bAutoGrowSizeEnabled );
-    m_xTsbWordWrapText->show( bWordWrapTextEnabled );
+    m_xTsbAutoGrowHeight->set_visible( bAutoGrowHeightEnabled );
+    m_xTsbAutoGrowWidth->set_visible( bAutoGrowWidthEnabled );
+    m_xTsbFitToSize->set_visible( bFitToSizeEnabled );
+    m_xTsbContour->set_visible( bContourEnabled );
+    m_xTsbAutoGrowSize->set_visible( bAutoGrowSizeEnabled );
+    m_xTsbWordWrapText->set_visible( bWordWrapTextEnabled );
 }
 
 VclPtr<SfxTabPage> SvxTextAttrPage::Create(TabPageParent pWindow, const SfxItemSet* rAttrs)

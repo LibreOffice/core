@@ -40,7 +40,7 @@ void ImplFillPrnDlgListBox( const Printer* pPrinter,
     }
 
     pBox->set_sensitive(nCount != 0);
-    pPropBtn->show( pPrinter->HasSupport( PrinterSupport::SetupDialog ) );
+    pPropBtn->set_visible( pPrinter->HasSupport( PrinterSupport::SetupDialog ) );
 }
 
 
@@ -244,7 +244,7 @@ PrinterSetupDialog::~PrinterSetupDialog()
 void PrinterSetupDialog::SetOptionsHdl(const Link<weld::Button&, void>& rLink)
 {
     m_xBtnOptions->connect_clicked(rLink);
-    m_xBtnOptions->show(rLink.IsSet());
+    m_xBtnOptions->set_visible(rLink.IsSet());
 }
 
 void PrinterSetupDialog::ImplSetInfo()

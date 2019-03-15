@@ -295,11 +295,6 @@ public:
         return m_xWidget->IsEnabled();
     }
 
-    virtual void set_visible(bool visible) override
-    {
-        m_xWidget->Show(visible);
-    }
-
     virtual bool get_visible() const override
     {
         return m_xWidget->IsVisible();

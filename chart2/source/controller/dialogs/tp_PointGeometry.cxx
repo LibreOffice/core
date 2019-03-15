@@ -76,7 +76,7 @@ void SchLayoutTabPage::Reset(const SfxItemSet* rInAttrs)
         if(m_pGeometryResources)
         {
             m_pGeometryResources->select(static_cast<sal_uInt16>(nVal));
-            m_pGeometryResources->show(true);
+            m_pGeometryResources->set_visible(true);
         }
     }
 }

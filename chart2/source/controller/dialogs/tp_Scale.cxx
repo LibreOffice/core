@@ -120,22 +120,22 @@ void ScaleTabPage::EnableControls()
                    || m_nAxisType == chart2::AxisType::DATE;
     bool bDateAxis = m_nAxisType == chart2::AxisType::DATE;
 
-    m_xBxType->show(m_bAllowDateAxis);
+    m_xBxType->set_visible(m_bAllowDateAxis);
 
-    m_xCbxLogarithm->show( bValueAxis && !bDateAxis );
+    m_xCbxLogarithm->set_visible( bValueAxis && !bDateAxis );
 
-    m_xBxMinMax->show(bValueAxis);
+    m_xBxMinMax->set_visible(bValueAxis);
 
-    m_xTxtMain->show( bValueAxis );
-    m_xCbxAutoStepMain->show( bValueAxis );
+    m_xTxtMain->set_visible( bValueAxis );
+    m_xCbxAutoStepMain->set_visible( bValueAxis );
 
-    m_xTxtHelpCount->show( bValueAxis && !bDateAxis );
-    m_xTxtHelp->show( bDateAxis );
-    m_xMtStepHelp->show( bValueAxis );
-    m_xCbxAutoStepHelp->show( bValueAxis );
+    m_xTxtHelpCount->set_visible( bValueAxis && !bDateAxis );
+    m_xTxtHelp->set_visible( bDateAxis );
+    m_xMtStepHelp->set_visible( bValueAxis );
+    m_xCbxAutoStepHelp->set_visible( bValueAxis );
 
-    m_xBxOrigin->show( m_bShowAxisOrigin && bValueAxis );
-    m_xBxResolution->show( bDateAxis );
+    m_xBxOrigin->set_visible( m_bShowAxisOrigin && bValueAxis );
+    m_xBxResolution->set_visible( bDateAxis );
 
     bool bWasDateAxis = m_xMt_MainDateStep->get_visible();
     if( bWasDateAxis != bDateAxis )
@@ -147,11 +147,11 @@ void ScaleTabPage::EnableControls()
             m_xMt_MainDateStep->set_value(m_xFmtFldStepMain->get_value());
     }
 
-    m_xFmtFldStepMain->show( bValueAxis && !bDateAxis );
-    m_xMt_MainDateStep->show( bDateAxis );
+    m_xFmtFldStepMain->set_visible( bValueAxis && !bDateAxis );
+    m_xMt_MainDateStep->set_visible( bDateAxis );
 
-    m_xLB_MainTimeUnit->show( bDateAxis );
-    m_xLB_HelpTimeUnit->show( bDateAxis );
+    m_xLB_MainTimeUnit->set_visible( bDateAxis );
+    m_xLB_HelpTimeUnit->set_visible( bDateAxis );
 
     EnableValueHdl(*m_xCbxAutoMin);
     EnableValueHdl(*m_xCbxAutoMax);
@@ -397,7 +397,7 @@ DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
     m_nHelpTimeUnit = m_xLB_HelpTimeUnit->get_active();
 
     if( m_nAxisType != chart2::AxisType::REALNUMBER )
-        m_xCbxLogarithm->show( false );
+        m_xCbxLogarithm->hide();
 
     //check which entries need user action
 

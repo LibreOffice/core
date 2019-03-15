@@ -883,7 +883,7 @@ void SfxSingleTabDialogController::SetTabPage(SfxTabPage* pTabPage)
     m_xSfxPage->SetUserData(sUserData);
     m_xSfxPage->Reset(GetInputItemSet());
 
-    m_xHelpBtn->show(Help::IsContextHelpEnabled());
+    m_xHelpBtn->set_visible(Help::IsContextHelpEnabled());
 
     // Set TabPage text in the Dialog if there is any
     OUString sTitle(m_xSfxPage->GetText());

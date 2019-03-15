@@ -191,7 +191,7 @@ void SvxLineTabPage::ShowSymbolControls(bool bOn)
     // Symbols on a line (e.g. StarCharts), symbol-enable controls
 
     m_bSymbols=bOn;
-    m_xFlSymbol->show(bOn);
+    m_xFlSymbol->set_visible(bOn);
     m_aCtlPreview.ShowSymbol(bOn);
 }
 

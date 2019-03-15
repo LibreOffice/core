@@ -1318,8 +1318,8 @@ void SwColumnPage::SetInSection(bool bSet)
     if(!SW_MOD()->GetCTLOptions().IsCTLFontEnabled())
         return;
 
-    m_xTextDirectionFT->show(bSet);
-    m_xTextDirectionLB->show(bSet);
+    m_xTextDirectionFT->set_visible(bSet);
+    m_xTextDirectionLB->set_visible(bSet);
 }
 
 void ColumnValueSet::UserDraw(const UserDrawEvent& rUDEvt)

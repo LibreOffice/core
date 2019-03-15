@@ -40,10 +40,10 @@ TitleResources::TitleResources(weld::Builder& rBuilder, bool bShowSecondaryAxesT
     , m_xEd_SecondaryXAxis(rBuilder.weld_entry("secondaryXaxis"))
     , m_xEd_SecondaryYAxis(rBuilder.weld_entry("secondaryYaxis"))
 {
-    m_xFT_SecondaryXAxis->show( bShowSecondaryAxesTitle );
-    m_xFT_SecondaryYAxis->show( bShowSecondaryAxesTitle );
-    m_xEd_SecondaryXAxis->show( bShowSecondaryAxesTitle );
-    m_xEd_SecondaryYAxis->show( bShowSecondaryAxesTitle );
+    m_xFT_SecondaryXAxis->set_visible( bShowSecondaryAxesTitle );
+    m_xFT_SecondaryYAxis->set_visible( bShowSecondaryAxesTitle );
+    m_xEd_SecondaryXAxis->set_visible( bShowSecondaryAxesTitle );
+    m_xEd_SecondaryYAxis->set_visible( bShowSecondaryAxesTitle );
 }
 
 TitleResources::~TitleResources()

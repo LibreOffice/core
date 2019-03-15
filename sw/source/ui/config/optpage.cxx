@@ -372,7 +372,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(TabPageParent pParent,
     }
     m_xProspectCB_RTL->set_sensitive(false);
     SvtCTLOptions aCTLOptions;
-    m_xProspectCB_RTL->show(aCTLOptions.IsCTLFontEnabled());
+    m_xProspectCB_RTL->set_visible(aCTLOptions.IsCTLFontEnabled());
 }
 
 SwAddPrinterTabPage::~SwAddPrinterTabPage()

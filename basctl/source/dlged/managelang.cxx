@@ -237,13 +237,13 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog(weld::Window* pParent, std::s
     if (m_xLocalizationMgr->isLibraryLocalized())
     {
         // change to "Add Interface Language" mode
-        m_xLanguageLB->set_visible(false);
-        m_xCheckLangLB->set_visible(true);
+        m_xLanguageLB->hide();
+        m_xCheckLangLB->show();
         m_xDialog->set_title(m_xAltTitle->get_label());
-        m_xLanguageFT->set_visible(false);
-        m_xCheckLangFT->set_visible(true);
-        m_xDefinedFT->set_visible(false);
-        m_xAddedFT->set_visible(true);
+        m_xLanguageFT->hide();
+        m_xCheckLangFT->show();
+        m_xDefinedFT->hide();
+        m_xAddedFT->show();
     }
 
     FillLanguageBox();

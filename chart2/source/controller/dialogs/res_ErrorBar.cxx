@@ -45,7 +45,7 @@ void lcl_enableRangeChoosing(bool bEnable, TabPageParent pParent)
     {
         weld::Window* pWeldDialog = pController->getDialog();
         pWeldDialog->set_modal(!bEnable);
-        pWeldDialog->show(!bEnable);
+        pWeldDialog->set_visible(!bEnable);
     }
     else if (::Dialog* pVCLDialog = pParent.pParent ? pParent.pParent->GetParentDialog() : nullptr)
     {
@@ -241,17 +241,17 @@ void ErrorBarResources::UpdateControlStates()
           m_apRangeSelectionHelper.get() &&
           m_apRangeSelectionHelper->hasRangeSelection());
 
-    m_xMfPositive->show( ! bShowRange );
-    m_xMfNegative->show( ! bShowRange );
+    m_xMfPositive->set_visible( ! bShowRange );
+    m_xMfNegative->set_visible( ! bShowRange );
 
     // use range but without range chooser => hide controls
-    m_xEdRangePositive->show( bShowRange && ! m_bHasInternalDataProvider );
-    m_xIbRangePositive->show( bCanChooseRange );
-    m_xEdRangeNegative->show( bShowRange && ! m_bHasInternalDataProvider );
-    m_xIbRangeNegative->show( bCanChooseRange );
+    m_xEdRangePositive->set_visible( bShowRange && ! m_bHasInternalDataProvider );
+    m_xIbRangePositive->set_visible( bCanChooseRange );
+    m_xEdRangeNegative->set_visible( bShowRange && ! m_bHasInternalDataProvider );
+    m_xIbRangeNegative->set_visible( bCanChooseRange );
 
     bool bShowPosNegAndSync = ! (bShowRange && m_bHasInternalDataProvider);
-    m_xFlParameters->show( bShowPosNegAndSync );
+    m_xFlParameters->set_visible( bShowPosNegAndSync );
 
     // unit for metric fields
     bool bIsErrorMargin(

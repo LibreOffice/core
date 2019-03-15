@@ -975,8 +975,8 @@ void AssignmentPersistentData::ImplCommit()
             // an invisible left hand side column, too. But right now, the left hand side controls are always
             // visible)
             bool bHideRightColumn = pRightColumnLabel->isEmpty();
-            (*pRightLabelControl)->show(!bHideRightColumn);
-            (*pRightListControl)->show(!bHideRightColumn);
+            (*pRightLabelControl)->set_visible(!bHideRightColumn);
+            (*pRightListControl)->set_visible(!bHideRightColumn);
             // the new selections of the listboxes
             implSelectField(pLeftListControl->get(), *pLeftAssignment);
             implSelectField(pRightListControl->get(), *pRightAssignment);

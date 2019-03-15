@@ -60,9 +60,9 @@ SwDocStatPage::SwDocStatPage(TabPageParent pParent, const SfxItemSet &rSet)
     SwFEShell* pFEShell = pDocShell->GetFEShell();
     if(!pFEShell)
     {
-        m_xUpdatePB->show(false);
-        m_xLineLbl->show(false);
-        m_xLineNo->show(false);
+        m_xUpdatePB->hide();
+        m_xLineLbl->hide();
+        m_xLineNo->hide();
     }
 }
 

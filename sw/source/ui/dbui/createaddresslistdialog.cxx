@@ -368,7 +368,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, FindHdl_Impl, weld::Button&, void)
         m_xFindDlg->show();
     }
     else
-        m_xFindDlg->show(!m_xFindDlg->get_visible());
+        m_xFindDlg->set_visible(!m_xFindDlg->get_visible());
 }
 
 IMPL_LINK_NOARG(SwCreateAddressListDialog, CustomizeHdl_Impl, weld::Button&, void)
@@ -587,7 +587,7 @@ IMPL_LINK_NOARG(SwFindEntryDialog, FindEnableHdl_Impl, weld::Entry&, void)
 
 IMPL_LINK_NOARG(SwFindEntryDialog, CloseHdl_Impl, weld::Button&, void)
 {
-    m_xDialog->show(false);
+    m_xDialog->hide();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

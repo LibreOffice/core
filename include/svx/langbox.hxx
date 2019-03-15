@@ -162,7 +162,7 @@ public:
     bool get_active_id_changed_from_saved() const { return m_eSavedLanguage != get_active_id(); }
     void show() { m_xControl->show(); }
     void hide() { m_xControl->hide(); }
-    void show(bool bShow) { if (bShow) show(); else hide(); }
+    void set_visible(bool bShow) { m_xControl->set_visible(bShow); }
     void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
     void set_active(int nPos) { m_xControl->set_active(nPos); }
     int get_active() const { return m_xControl->get_active(); }

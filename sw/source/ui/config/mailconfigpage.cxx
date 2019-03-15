@@ -346,12 +346,12 @@ void SwTestAccountSettingsDialog::Test()
     }
 
     m_xResult1->set_label(bIsServer ? m_sCompleted : m_sFailed);
-    m_xImage1->show(!bIsServer);
-    m_xImage3->show(bIsServer);
+    m_xImage1->set_visible(!bIsServer);
+    m_xImage3->set_visible(bIsServer);
 
     m_xResult2->set_label(bIsLoggedIn ? m_sCompleted : m_sFailed);
-    m_xImage2->show(!bIsLoggedIn);
-    m_xImage4->show(bIsLoggedIn);
+    m_xImage2->set_visible(!bIsLoggedIn);
+    m_xImage4->set_visible(bIsLoggedIn);
 
     if (!bIsServer || !bIsLoggedIn)
     {
