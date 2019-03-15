@@ -1121,6 +1121,24 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
 
 void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize )
 {
+    OUString watermark = msTiledWatermark;
+    int watermarkLength = watermark.getLength();
+    // Maximum number of characters in one line.
+    // it is set to 21 to make it look like tiled watermaks as online in secure view
+    const int lineLength = 21;
+    int lnIndex = lineLength;
+    int lnCount = watermarkLength / lineLength;
+
+    while(lnCount)
+    {
+        OUString tempstr = watermark;
+        watermark = watermark.copy(0, lnIndex);
+        watermark += OUString("\n");
+        watermark += tempstr.copy(lnIndex);
+        lnIndex += lineLength;
+        lnCount--;
+    }
+
     vcl::Font aFont( OUString( "Liberation Sans" ), Size( 0, 40 ) );
     aFont.SetItalic( ITALIC_NONE );
     aFont.SetWidthType( WIDTH_NORMAL );
@@ -1134,8 +1152,14 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
     pDev->SetFont(aFont);
     pDev->SetMapMode( MapMode( MapUnit::MapPoint ) );
     int w = 0;
-    long nTextWidth = (rPageSize.Width()-60) / 4;
-    while((w = pDev->GetTextWidth(msTiledWatermark)) > nTextWidth)
+    int watermarkcount = ((rPageSize.Width()) / 200)+1;
+    long nTextWidth = (rPageSize.Width()) / ((watermarkcount)*1.5);
+    OUString oneLineText = watermark;
+
+    if(watermark.getLength() > lineLength)
+        oneLineText = watermark.copy(0, lineLength);
+
+    while((w = pDev->GetTextWidth(oneLineText)) > nTextWidth)
     {
         if(w==0)
             break;
@@ -1144,6 +1168,11 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
         aFont.SetFontHeight(nNewHeight);
         pDev->SetFont( aFont );
     }
+
+    // maximum number of watermark count for the width
+    if(watermarkcount > 8)
+        watermarkcount = 8;
+
     pDev->Pop();
 
     rWriter.Push();
@@ -1152,19 +1181,20 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
     rWriter.SetTextColor( Color(19,20,22) );
     Point aTextPoint;
     tools::Rectangle aTextRect;
-    aTextPoint = Point(70,80);
+    //center watermarks horizontially
+    aTextPoint = Point((rPageSize.Width()/2)-(((nTextWidth*(watermarkcount))+(watermarkcount-1)*(nTextWidth/2))/2),pDev->GetTextHeight());
 
-    for( int i = 0; i < 3; i ++)
+    for( int i = 0; i < watermarkcount; i ++)
     {
-        while(aTextPoint.getY()+pDev->GetTextHeight() <= rPageSize.Height()-40)
+        while(aTextPoint.getY()+pDev->GetTextHeight()*2 <= rPageSize.Height())
         {
-            aTextRect = tools::Rectangle(Point(aTextPoint.getX(), aTextPoint.getY()-pDev->GetTextHeight()), Size(pDev->GetTextWidth(msTiledWatermark),pDev->GetTextHeight()));
+            aTextRect = tools::Rectangle(aTextPoint, Size(nTextWidth,pDev->GetTextHeight()*2));
 
             pDev->Push();
             rWriter.SetClipRegion();
             rWriter.BeginTransparencyGroup();
             rWriter.SetTextColor( Color(19,20,22) );
-            rWriter.DrawText(aTextPoint, msTiledWatermark);
+            rWriter.DrawText(aTextRect, watermark, DrawTextFlags::MultiLine|DrawTextFlags::Center|DrawTextFlags::VCenter);
             rWriter.EndTransparencyGroup( aTextRect, 50 );
             pDev->Pop();
 
@@ -1172,14 +1202,14 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
             rWriter.SetClipRegion();
             rWriter.BeginTransparencyGroup();
             rWriter.SetTextColor( Color(236,235,233) );
-            rWriter.DrawText(aTextPoint, msTiledWatermark);
+            rWriter.DrawText(aTextRect, watermark, DrawTextFlags::MultiLine|DrawTextFlags::Center|DrawTextFlags::VCenter);
             rWriter.EndTransparencyGroup( aTextRect, 50 );
             pDev->Pop();
 
-            aTextPoint.Move(0,(rPageSize.Height()-40)/4);
+            aTextPoint.Move(0, pDev->GetTextHeight()*3);
         }
-        aTextPoint=Point( aTextPoint.getX(), 80 );
-        aTextPoint.Move( (rPageSize.Width()-120)/3, 0 );
+        aTextPoint=Point( aTextPoint.getX(), pDev->GetTextHeight() );
+        aTextPoint.Move( nTextWidth*1.5, 0 );
     }
 
     rWriter.Pop();
