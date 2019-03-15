@@ -180,10 +180,10 @@
         </part>
         <part value="ButtonDown" width="35" height="36">
             <state enabled="true">
-                <image source="combo.svgx" />
+                <image source="combobox.svgx" />
             </state>
             <state enabled="false">
-                <image source="combo-disabled.svgx" />
+                <image source="combobox-disabled.svgx" />
             </state>
         </part>
         <part value="Focus">
