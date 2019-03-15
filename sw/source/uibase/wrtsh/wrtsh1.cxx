@@ -89,6 +89,7 @@
 #include <editeng/acorrcfg.hxx>
 #include <IMark.hxx>
 #include <sfx2/bindings.hxx>
+#include <fchrfmt.hxx>
 
 // -> #111827#
 #include <SwRewriter.hxx>
@@ -188,7 +189,8 @@ void SwWrtShell::Insert( const OUString &rStr )
 
     SfxItemSet aCharAttrSet(
         GetAttrPool(),
-        svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{});
+        svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
+                   RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT>{});
 
     if( bHasSel || ( !m_bIns && SelectHiddenRange() ) )
     {
@@ -235,6 +237,7 @@ void SwWrtShell::Insert( const OUString &rStr )
         for (sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; ++i)
             if (i != sal_uInt16(RES_CHRATR_RSID))
                 aAttribs.insert(aAttribs.end(), i);
+        aAttribs.insert(aAttribs.end(), RES_TXTATR_CHARFMT);
         ResetAttr(aAttribs, &aPaM);
 
         SetAttrSet(aCharAttrSet, SetAttrMode::DEFAULT, &aPaM);
