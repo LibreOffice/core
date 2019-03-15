@@ -1143,10 +1143,10 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, Button*, void)
     aSet.Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth));
     aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
 
-    ScopedVclPtrInstance< SwSectionPropertyTabDialog > aTabDlg(this, aSet, rSh);
-    if(RET_OK == aTabDlg->Execute())
+    SwSectionPropertyTabDialog aTabDlg(GetFrameWeld(), aSet, rSh);
+    if (RET_OK == aTabDlg.run())
     {
-        const SfxItemSet* pOutSet = aTabDlg->GetOutputItemSet();
+        const SfxItemSet* pOutSet = aTabDlg.GetOutputItemSet();
         if( pOutSet && pOutSet->Count() )
         {
             const SfxPoolItem *pColItem, *pBrushItem,
@@ -2123,26 +2123,26 @@ IMPL_LINK( SwSectionFootnoteEndTabPage, FootEndHdl, weld::ToggleButton&, rBox, v
 }
 
 SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
-    vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh)
-    : SfxTabDialog(pParent, "FormatSectionDialog",
-        "modules/swriter/ui/formatsectiondialog.ui", &rSet)
+    weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh)
+    : SfxTabDialogController(pParent, "modules/swriter/ui/formatsectiondialog.ui",
+                             "FormatSectionDialog", &rSet)
     , rWrtSh(rSh)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    m_nColumnPageId = AddTabPage("columns",   SwColumnPage::Create);
-    m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ) );
-    m_nNotePageId = AddTabPage("notes", SwSectionFootnoteEndTabPage::Create);
-    m_nIndentPage = AddTabPage("indents", SwSectionIndentTabPage::Create);
+    AddTabPage("columns",   SwColumnPage::Create, nullptr);
+    AddTabPage("background", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
+    AddTabPage("notes", SwSectionFootnoteEndTabPage::Create, nullptr);
+    AddTabPage("indents", SwSectionIndentTabPage::Create, nullptr);
 
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
     long nHtmlMode = rHtmlOpt.GetExportMode();
     bool bWeb = dynamic_cast<SwWebDocShell*>( rSh.GetView().GetDocShell()  ) != nullptr ;
     if(bWeb)
     {
-        RemoveTabPage(m_nNotePageId);
-        RemoveTabPage(m_nIndentPage);
+        RemoveTabPage("notes");
+        RemoveTabPage("indents");
         if( HTML_CFG_NS40 != nHtmlMode && HTML_CFG_WRITER != nHtmlMode)
-            RemoveTabPage(m_nColumnPageId);
+            RemoveTabPage("columns");
     }
 }
 
@@ -2150,20 +2150,20 @@ SwSectionPropertyTabDialog::~SwSectionPropertyTabDialog()
 {
 }
 
-void SwSectionPropertyTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SwSectionPropertyTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
-    if (nId == m_nBackPageId)
+    if (rId == "background")
     {
-            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_SELECTOR)));
-            rPage.PageCreated(aSet);
+        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_SELECTOR)));
+        rPage.PageCreated(aSet);
     }
-    else if (nId == m_nColumnPageId)
+    else if (rId == "columns")
     {
         static_cast<SwColumnPage&>(rPage).ShowBalance(true);
         static_cast<SwColumnPage&>(rPage).SetInSection(true);
     }
-    else if (nId == m_nIndentPage)
+    else if (rId == "indents")
         static_cast<SwSectionIndentTabPage&>(rPage).SetWrtShell(rWrtSh);
 }
 
