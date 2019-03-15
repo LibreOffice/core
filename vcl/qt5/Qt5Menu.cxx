@@ -544,6 +544,12 @@ Qt5Menu* Qt5Menu::GetTopLevel()
     return pMenu;
 }
 
+void Qt5Menu::ShowMenuBar(bool bVisible)
+{
+    if (mpQMenuBar && (bVisible != mpQMenuBar->isVisible()))
+        bVisible ? mpQMenuBar->show() : mpQMenuBar->hide();
+}
+
 const Qt5Frame* Qt5Menu::GetFrame() const
 {
     SolarMutexGuard aGuard;
