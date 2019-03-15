@@ -143,23 +143,22 @@
     <combobox>
         <part value="Entire">
             <state enabled="true">
-                <external source="common-rect.svgx" />
+                <external source="combobox.svgx" />
             </state>
             <state enabled="false">
-                <external source="common-rect-disabled.svgx" />
+                <external source="combobox-disabled.svgx" />
             </state>
         </part>
         <part value="SubEdit">
             <state>
             </state>
         </part>
-
         <part value="ButtonDown" width="35" height="36">
             <state enabled="true">
-                <image source="combobox.svgx" />
+                <image source="combobox-button.svgx" />
             </state>
             <state enabled="false">
-                <image source="combobox-disabled.svgx" />
+                <image source="combobox-button-disabled.svgx" />
             </state>
         </part>
         <part value="Focus">
@@ -186,15 +185,10 @@
     <listbox>
         <part value="Entire">
             <state enabled="true">
-                <external source="common-rect.svgx" />
+                <external source="combobox.svgx" />
             </state>
             <state enabled="false">
-                <external source="common-rect-disabled.svgx" />
-            </state>
-        </part>
-        <part value="ListboxWindow">
-            <state>
-                <rect stroke="#007AFF" fill="#FFFFFF" stroke-width="1" rx="1" ry="1" />
+                <external source="combobox-disabled.svgx" />
             </state>
         </part>
         <part value="SubEdit">
@@ -203,10 +197,10 @@
         </part>
         <part value="ButtonDown" width="35" height="36">
             <state enabled="true">
-                <image source="combobox.svgx" />
+                <image source="combobox-button.svgx" />
             </state>
             <state enabled="false">
-                <image source="combobox-disabled.svgx" />
+                <image source="combobox-button-disabled.svgx" />
             </state>
         </part>
         <part value="Focus">
