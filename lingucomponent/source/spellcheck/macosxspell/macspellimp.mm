@@ -358,7 +358,7 @@ sal_Int16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale 
 
 sal_Bool SAL_CALL
     MacSpellChecker::isValid( const OUString& rWord, const Locale& rLocale,
-            const PropertyValues& rProperties )
+            const css::uno::Sequence<PropertyValue>& rProperties )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -464,7 +464,7 @@ Reference< XSpellAlternatives >
 
 Reference< XSpellAlternatives > SAL_CALL
     MacSpellChecker::spell( const OUString& rWord, const Locale& rLocale,
-            const PropertyValues& rProperties )
+            const css::uno::Sequence<PropertyValue>& rProperties )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 

@@ -43,9 +43,6 @@ class AquaSalTimer;
 class AquaSalInstance;
 class AquaSalMenu;
 
-typedef struct SalFrame::SalPointerState SalPointerState;
-
-
 class AquaSalFrame : public SalFrame
 {
 public:
