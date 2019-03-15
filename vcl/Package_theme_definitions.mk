@@ -48,6 +48,8 @@ $(eval $(call gb_Package_add_files_with_dir,vcl_theme_definitions,$(LIBO_SHARE_F
 	ios/scrollbar-vertical.svgx \
 	ios/combobox.svgx \
 	ios/combobox-disabled.svgx \
+	ios/combobox-button.svgx \
+	ios/combobox-button-disabled.svgx \
 	ios/arrow-up.svgx \
 	ios/arrow-down.svgx \
 	ios/slider-button.svgx \
