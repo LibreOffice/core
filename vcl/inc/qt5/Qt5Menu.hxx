@@ -54,6 +54,7 @@ public:
     virtual void SetSubMenu(SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos) override;
     virtual void SetFrame(const SalFrame* pFrame) override;
     const Qt5Frame* GetFrame() const;
+    virtual void ShowMenuBar(bool bVisible) override;
     Qt5Menu* GetTopLevel();
     virtual void SetItemBits(unsigned nPos, MenuItemBits nBits) override;
     virtual void CheckItem(unsigned nPos, bool bCheck) override;
