@@ -42,6 +42,7 @@ cmd/32/cellvertbottom.png cmd/32/alignbottom.png
 cmd/32/cellvertcenter.png cmd/32/alignverticalcenter.png
 cmd/32/cellverttop.png cmd/32/aligntop.png
 cmd/32/centerpara.png cmd/32/alignhorizontalcenter.png
+cmd/32/changesmenu.png cmd/32/accepttrackedchange.png
 cmd/32/charactermenu.png cmd/32/fontdialog.png
 cmd/32/charbackcolor.png cmd/32/backcolor.png
 cmd/32/charmapcontrol.png cmd/32/insertsymbol.png
@@ -52,6 +53,10 @@ cmd/32/closedocs.png cmd/32/closedoc.png
 cmd/32/columnoperations.png cmd/32/entirecolumn.png
 cmd/32/commentchange.png cmd/32/commentchangetracking.png
 cmd/32/commonalignbottom.png cmd/32/alignbottom.png
+cmd/32/commonalignhorizontalcenter.png cmd/32/alignhorizontalcenter.png
+cmd/32/commonalignjustified.png cmd/32/alignblock.png
+cmd/32/commonalignleft.png cmd/32/alignleft.png
+cmd/32/commonalignright.png cmd/32/alignright.png
 cmd/32/commonaligntop.png cmd/32/aligntop.png
 cmd/32/commonalignverticalcenter.png cmd/32/alignverticalcenter.png
 cmd/32/commontaskbarvisible.png cmd/32/autopilotmenu.png
@@ -73,6 +78,7 @@ cmd/32/draw.png cmd/32/reload.png
 cmd/32/drawselect.png cmd/32/selectobject.png
 cmd/32/drawtext.png cmd/32/text.png
 cmd/32/dsbeditdoc.png cmd/32/editdoc.png
+cmd/32/editcommentsmenu.png cmd/32/editannotation.png
 cmd/32/editpastespecialmenu.png cmd/32/pastespecial.png
 cmd/32/editshapehyperlink.png cmd/32/inserthyperlink.png
 cmd/32/ellipse.png cmd/32/basicshapes.ellipse.png
@@ -80,6 +86,7 @@ cmd/32/ellipsetoolbox.png cmd/32/basicshapes.ellipse.png
 cmd/32/es/underlinesimple.png cmd/32/es/underline.png
 cmd/32/exitsearch.png cmd/32/closepreview.png
 cmd/32/exportasgraphic.png cmd/32/graphic.png
+cmd/32/exportasmenu.png cmd/32/exportto.png
 cmd/32/fieldmenu.png cmd/32/insertfield.png
 cmd/32/fieldnames.png cmd/32/fields.png
 cmd/32/fillcolor.png cmd/32/formatarea.png
@@ -98,7 +105,6 @@ cmd/32/flowchartshapes.flowchart-process.png cmd/32/basicshapes.quadrat.png
 cmd/32/fontcolor.png cmd/32/color.png
 cmd/32/fontworkalignmentfloater.png cmd/32/alignhorizontalcenter.png
 cmd/32/fontworkcharacterspacingfloater.png cmd/32/spacing.png
-cmd/32/formatallnotes.png cmd/32/editannotation.png
 cmd/32/formatbulletsmenu.png cmd/32/defaultbullet.png
 cmd/32/formatframemenu.png cmd/32/framedialog.png
 cmd/32/formatimagemenu.png cmd/32/graphic.png
@@ -108,6 +114,7 @@ cmd/32/functionbox.png cmd/32/insertformula.png
 cmd/32/functiondialog.png cmd/32/insertformula.png
 cmd/32/gotoendofdoc.png cmd/32/lastpage.png
 cmd/32/gotostartofdoc.png cmd/32/firstpage.png
+cmd/32/graphicmenu.png cmd/32/avmediaplayer.png
 cmd/32/gridmenu.png cmd/32/gridvisible.png
 cmd/32/groupmenu.png cmd/32/formatgroup.png
 cmd/32/headerandfooter.png cmd/32/editheaderandfooter.png
@@ -145,6 +152,7 @@ cmd/32/insertformvscroll.png cmd/32/scrollbar.png
 cmd/32/insertframeinteract.png cmd/32/insertframe.png
 cmd/32/insertframeinteractnocolumns.png cmd/32/insertframe.png
 cmd/32/insertframemenu.png cmd/32/insertframe.png
+cmd/32/insertgridcontrol.png cmd/32/grid.png
 cmd/32/insertheaderfootermenu.png cmd/32/editheaderandfooter.png
 cmd/32/insertimagecontrol.png cmd/32/imagecontrol.png
 cmd/32/insertlistbox.png cmd/32/listbox.png
@@ -217,6 +225,7 @@ cmd/32/objecttitledescription.png cmd/32/insertcaptiondialog.png
 cmd/32/open_h.png cmd/32/open.png
 cmd/32/openfromcalc.png cmd/32/open.png
 cmd/32/openfromwriter.png cmd/32/open.png
+cmd/32/openxmlfiltersettings.png cmd/32/managexmlsource.png
 cmd/32/ordercrit.png cmd/32/datasort.png
 cmd/32/outlinedown.png cmd/32/movedown.png
 cmd/32/outlineleft.png cmd/32/incrementlevel.png
@@ -227,6 +236,7 @@ cmd/32/pageformatdialog.png cmd/32/pagedialog.png
 cmd/32/pagesetup.png cmd/32/pagedialog.png
 cmd/32/pageup.png cmd/32/navigateback.png
 cmd/32/paragraphmenu.png cmd/32/paragraphdialog.png
+cmd/32/pastespecialmenu.png cmd/32/pastespecial.png
 cmd/32/pie.png cmd/32/basicshapes.circle-pie.png
 cmd/32/pl/underlinesimple.png cmd/32/pl/underline.png
 cmd/32/pluginsactive.png cmd/32/addons.png
@@ -293,9 +303,13 @@ cmd/32/starshapes.png cmd/32/starshapes.star5.png
 cmd/32/stylewatercanmode cmd/32/styleapply.png
 cmd/32/symbolcatalogue.png cmd/32/insertsymbol.png
 cmd/32/symbolshapes.png cmd/32/symbolshapes.smiley.png
+cmd/32/tableautofitmenu.png cmd/32/setoptimalrowheight.png 
 cmd/32/tablecellbackgroundcolor.png cmd/32/backgroundcolor.png
+cmd/32/tabledeletemenu.png cmd/32/deletetable.png
 cmd/32/tableevents.png cmd/32/animationeffects.png
+cmd/32/tableinsertmenu.png cmd/32/insertrowsafter.png
 cmd/32/tableselectall.png cmd/32/selecttable.png
+cmd/32/tableselectmenu.png cmd/32/selecttable.png
 cmd/32/tablesort.png cmd/32/datasort.png
 cmd/32/templatemenu.png cmd/32/templatemanager.png
 cmd/32/textalign.png cmd/32/alignblock.png
@@ -319,6 +333,7 @@ cmd/32/viewsidebarstyles.png cmd/32/designerdialog.png
 cmd/32/vscroll.png cmd/32/scrollbar.png
 cmd/32/vscrollbar.png cmd/32/scrollbar.png
 cmd/32/wrapmenu.png cmd/32/wrapon.png
+cmd/32/zoommenu.png cmd/32/zoom.png
 cmd/32/zoomminus.png cmd/32/zoomout.png
 cmd/32/zoomplus.png cmd/32/zoomin.png
 cmd/32/zoomtoolbox.png cmd/32/zoom.png
@@ -387,6 +402,7 @@ cmd/lc_cellvertbottom.png cmd/lc_alignbottom.png
 cmd/lc_cellvertcenter.png cmd/lc_alignverticalcenter.png
 cmd/lc_cellverttop.png cmd/lc_aligntop.png
 cmd/lc_centerpara.png cmd/lc_alignhorizontalcenter.png
+cmd/lc_changesmenu.png cmd/lc_accepttrackedchange.png
 cmd/lc_charactermenu.png cmd/lc_fontdialog.png
 cmd/lc_charbackcolor.png cmd/lc_backcolor.png
 cmd/lc_charmapcontrol.png cmd/lc_insertsymbol.png
@@ -397,6 +413,10 @@ cmd/lc_closedocs.png cmd/lc_closedoc.png
 cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
 cmd/lc_commonalignbottom.png cmd/lc_alignbottom.png
+cmd/lc_commonalignhorizontalcenter.png cmd/lc_alignhorizontalcenter.png
+cmd/lc_commonalignjustified.png cmd/lc_alignblock.png
+cmd/lc_commonalignleft.png cmd/lc_alignleft.png
+cmd/lc_commonalignright.png cmd/lc_alignright.png
 cmd/lc_commonaligntop.png cmd/lc_aligntop.png
 cmd/lc_commonalignverticalcenter.png cmd/lc_alignverticalcenter.png
 cmd/lc_commontaskbarvisible.png cmd/lc_autopilotmenu.png
@@ -418,12 +438,14 @@ cmd/lc_draw.png cmd/lc_reload.png
 cmd/lc_drawselect.png cmd/lc_selectobject.png
 cmd/lc_drawtext.png cmd/lc_text.png
 cmd/lc_dsbeditdoc.png cmd/lc_editdoc.png
+cmd/lc_editcommentsmenu.png cmd/lc_editannotation.png
 cmd/lc_editpastespecialmenu.png cmd/lc_pastespecial.png
 cmd/lc_editshapehyperlink.png cmd/lc_inserthyperlink.png
 cmd/lc_ellipse.png cmd/lc_basicshapes.ellipse.png
 cmd/lc_ellipsetoolbox.png cmd/lc_basicshapes.ellipse.png
 cmd/lc_exitsearch.png cmd/lc_closepreview.png
 cmd/lc_exportasgraphic.png cmd/lc_graphic.png
+cmd/lc_exportasmenu.png cmd/lc_exportto.png
 cmd/lc_fieldmenu.png cmd/lc_insertfield.png
 cmd/lc_fieldnames.png cmd/lc_fields.png
 cmd/lc_fillcolor.png cmd/lc_formatarea.png
@@ -442,7 +464,6 @@ cmd/lc_flowchartshapes.flowchart-process.png cmd/lc_basicshapes.quadrat.png
 cmd/lc_fontcolor.png cmd/lc_color.png
 cmd/lc_fontworkalignmentfloater.png cmd/lc_alignhorizontalcenter.png
 cmd/lc_fontworkcharacterspacingfloater.png cmd/lc_spacing.png
-cmd/lc_formatallnotes.png cmd/lc_editannotation.png
 cmd/lc_formatbulletsmenu.png cmd/lc_defaultbullet.png
 cmd/lc_formatframemenu.png cmd/lc_framedialog.png
 cmd/lc_formatimagemenu.png cmd/lc_graphic.png
@@ -453,6 +474,7 @@ cmd/lc_functiondialog.png cmd/lc_insertformula.png
 cmd/lc_gotoendofdoc.png cmd/lc_lastpage.png
 cmd/lc_gotostartofdoc.png cmd/lc_firstpage.png
 cmd/lc_gridmenu.png cmd/lc_gridvisible.png
+cmd/lc_graphicmenu.png cmd/lc_avmediaplayer.png
 cmd/lc_groupmenu.png cmd/lc_formatgroup.png
 cmd/lc_headerandfooter.png cmd/lc_editheaderandfooter.png
 cmd/lc_hscroll.png cmd/lc_hscrollbar.png
@@ -488,6 +510,7 @@ cmd/lc_insertformvscroll.png cmd/lc_scrollbar.png
 cmd/lc_insertframeinteract.png cmd/lc_insertframe.png
 cmd/lc_insertframeinteractnocolumns.png cmd/lc_insertframe.png
 cmd/lc_insertframemenu.png cmd/lc_insertframe.png
+cmd/lc_insertgridcontrol.png cmd/lc_grid.png
 cmd/lc_insertheaderfootermenu.png cmd/lc_editheaderandfooter.png
 cmd/lc_insertimagecontrol.png cmd/lc_imagecontrol.png
 cmd/lc_insertlistbox.png cmd/lc_listbox.png
@@ -551,6 +574,7 @@ cmd/lc_objecttitledescription.png cmd/lc_insertcaptiondialog.png
 cmd/lc_open_h.png cmd/lc_open.png
 cmd/lc_openfromcalc.png cmd/lc_open.png
 cmd/lc_openfromwriter.png cmd/lc_open.png
+cmd/lc_openxmlfiltersettings.png cmd/lc_managexmlsource.png
 cmd/lc_ordercrit.png cmd/lc_datasort.png
 cmd/lc_outlinedown.png cmd/lc_movedown.png
 cmd/lc_outlineleft.png cmd/lc_incrementlevel.png
@@ -561,6 +585,7 @@ cmd/lc_pageformatdialog.png cmd/lc_pagedialog.png
 cmd/lc_pagesetup.png cmd/lc_pagedialog.png
 cmd/lc_pageup.png cmd/lc_navigateback.png
 cmd/lc_paragraphmenu.png cmd/lc_paragraphdialog.png
+cmd/lc_pastespecialmenu.png cmd/lc_pastespecial.png
 cmd/lc_pie.png cmd/lc_basicshapes.circle-pie.png
 cmd/lc_pluginsactive.png cmd/lc_addons.png
 cmd/lc_printpagepreview.png cmd/lc_printpreview.png
@@ -623,9 +648,13 @@ cmd/lc_starshapes.png cmd/lc_starshapes.star5.png
 cmd/lc_stylewatercanmode cmd/lc_styleapply.png
 cmd/lc_symbolcatalogue.png cmd/lc_insertsymbol.png
 cmd/lc_symbolshapes.png cmd/lc_symbolshapes.smiley.png
+cmd/lc_tableautofitmenu.png cmd/lc_setoptimalrowheight.png 
 cmd/lc_tablecellbackgroundcolor.png cmd/lc_backgroundcolor.png
+cmd/lc_tabledeletemenu.png cmd/lc_deletetable.png
 cmd/lc_tableevents.png cmd/lc_animationeffects.png
+cmd/lc_tableinsertmenu.png cmd/lc_insertrowsafter.png
 cmd/lc_tableselectall.png cmd/lc_selecttable.png
+cmd/lc_tableselectmenu.png cmd/lc_selecttable.png
 cmd/lc_tablesort.png cmd/lc_datasort.png
 cmd/lc_templatemenu.png cmd/lc_templatemanager.png
 cmd/lc_textalign.png cmd/lc_alignblock.png
@@ -648,6 +677,7 @@ cmd/lc_viewsidebarstyles.png cmd/lc_designerdialog.png
 cmd/lc_vscroll.png cmd/lc_scrollbar.png
 cmd/lc_vscrollbar.png cmd/lc_scrollbar.png
 cmd/lc_wrapmenu.png cmd/lc_wrapon.png
+cmd/lc_zoommenu.png cmd/lc_zoom.png
 cmd/lc_zoomminus.png cmd/lc_zoomout.png
 cmd/lc_zoomplus.png cmd/lc_zoomin.png
 cmd/lc_zoomtoolbox.png cmd/lc_zoom.png
@@ -682,6 +712,7 @@ cmd/sc_cellvertbottom.png cmd/sc_alignbottom.png
 cmd/sc_cellvertcenter.png cmd/sc_alignverticalcenter.png
 cmd/sc_cellverttop.png cmd/sc_aligntop.png
 cmd/sc_centerpara.png cmd/sc_alignhorizontalcenter.png
+cmd/sc_changesmenu.png cmd/sc_accepttrackedchange.png
 cmd/sc_charactermenu.png cmd/sc_fontdialog.png
 cmd/sc_charbackcolor.png cmd/sc_backcolor.png
 cmd/sc_charmapcontrol.png cmd/sc_insertsymbol.png
@@ -692,6 +723,10 @@ cmd/sc_closedocs.png cmd/sc_closedoc.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png
 cmd/sc_commentchange.png cmd/sc_commentchangetracking.png
 cmd/sc_commonalignbottom.png cmd/sc_alignbottom.png
+cmd/sc_commonalignhorizontalcenter.png cmd/sc_alignhorizontalcenter.png
+cmd/sc_commonalignjustified.png cmd/sc_alignblock.png
+cmd/sc_commonalignleft.png cmd/sc_alignleft.png
+cmd/sc_commonalignright.png cmd/sc_alignright.png
 cmd/sc_commonaligntop.png cmd/sc_aligntop.png
 cmd/sc_commonalignverticalcenter.png cmd/sc_alignverticalcenter.png
 cmd/sc_commontaskbarvisible.png cmd/sc_autopilotmenu.png
@@ -713,12 +748,14 @@ cmd/sc_draw.png cmd/sc_reload.png
 cmd/sc_drawselect.png cmd/sc_selectobject.png
 cmd/sc_drawtext.png cmd/sc_text.png
 cmd/sc_dsbeditdoc.png cmd/sc_editdoc.png
+cmd/sc_editcommentsmenu.png cmd/sc_editannotation.png
 cmd/sc_editpastespecialmenu.png cmd/sc_pastespecial.png
 cmd/sc_editshapehyperlink.png cmd/sc_inserthyperlink.png
 cmd/sc_ellipse.png cmd/sc_basicshapes.ellipse.png
 cmd/sc_ellipsetoolbox.png cmd/sc_basicshapes.ellipse.png
 cmd/sc_exitsearch.png cmd/sc_closepreview.png
 cmd/sc_exportasgraphic.png cmd/sc_graphic.png
+cmd/sc_exportasmenu.png cmd/sc_exportto.png
 cmd/sc_fieldmenu.png cmd/sc_insertfield.png
 cmd/sc_fieldnames.png cmd/sc_fields.png
 cmd/sc_fillcolor.png cmd/sc_formatarea.png
@@ -737,7 +774,6 @@ cmd/sc_flowchartshapes.flowchart-process.png cmd/sc_basicshapes.quadrat.png
 cmd/sc_fontcolor.png cmd/sc_color.png
 cmd/sc_fontworkalignmentfloater.png cmd/sc_alignhorizontalcenter.png
 cmd/sc_fontworkcharacterspacingfloater.png cmd/sc_spacing.png
-cmd/sc_formatallnotes.png cmd/sc_editannotation.png
 cmd/sc_formatbulletsmenu.png cmd/sc_defaultbullet.png
 cmd/sc_formatframemenu.png cmd/sc_framedialog.png
 cmd/sc_formatimagemenu.png cmd/sc_graphic.png
@@ -747,6 +783,7 @@ cmd/sc_functionbox.png cmd/sc_insertformula.png
 cmd/sc_functiondialog.png cmd/sc_insertformula.png
 cmd/sc_gotoendofdoc.png cmd/sc_lastpage.png
 cmd/sc_gotostartofdoc.png cmd/sc_firstpage.png
+cmd/sc_graphicmenu.png cmd/sc_avmediaplayer.png
 cmd/sc_gridmenu.png cmd/sc_gridvisible.png
 cmd/sc_groupmenu.png cmd/sc_formatgroup.png
 cmd/sc_headerandfooter.png cmd/sc_editheaderandfooter.png
@@ -783,6 +820,7 @@ cmd/sc_insertformvscroll.png cmd/sc_scrollbar.png
 cmd/sc_insertframeinteract.png cmd/sc_insertframe.png
 cmd/sc_insertframeinteractnocolumns.png cmd/sc_insertframe.png
 cmd/sc_insertframemenu.png cmd/sc_insertframe.png
+cmd/sc_insertgridcontrol.png cmd/sc_grid.png
 cmd/sc_insertheaderfootermenu.png cmd/sc_editheaderandfooter.png
 cmd/sc_insertimagecontrol.png cmd/sc_imagecontrol.png
 cmd/sc_insertlistbox.png cmd/sc_listbox.png
@@ -829,6 +867,7 @@ cmd/sc_mirrorhorz.png cmd/sc_fliphorizontal.png
 cmd/sc_mirrormenu.png cmd/sc_fliphorizontal.png
 cmd/sc_mirrorvert.png cmd/sc_flipvertical.png
 cmd/sc_namegroup.png cmd/sc_renameobject.png
+cmd/sc_newglobaldoc.png res/odm_16_8.png
 cmd/sc_no.png cmd/sc_cancel.png
 cmd/sc_numberformatcurrency.png cmd/sc_currencyfield.png
 cmd/sc_numberformatcurrencysimple.png cmd/sc_currencyfield.png
@@ -846,6 +885,7 @@ cmd/sc_objecttitledescription.png cmd/sc_insertcaptiondialog.png
 cmd/sc_open_h.png cmd/sc_open.png
 cmd/sc_openfromcalc.png cmd/sc_open.png
 cmd/sc_openfromwriter.png cmd/sc_open.png
+cmd/sc_openxmlfiltersettings.png cmd/sc_managexmlsource.png
 cmd/sc_ordercrit.png cmd/sc_datasort.png
 cmd/sc_outlinedown.png cmd/sc_movedown.png
 cmd/sc_outlineleft.png cmd/sc_incrementlevel.png
@@ -856,6 +896,7 @@ cmd/sc_pageformatdialog.png cmd/sc_pagedialog.png
 cmd/sc_pagesetup.png cmd/sc_pagedialog.png
 cmd/sc_pageup.png cmd/sc_navigateback.png
 cmd/sc_paragraphmenu.png cmd/sc_paragraphdialog.png
+cmd/sc_pastespecialmenu.png cmd/sc_pastespecial.png
 cmd/sc_pie.png cmd/sc_basicshapes.circle-pie.png
 cmd/sc_pluginsactive.png cmd/sc_addons.png
 cmd/sc_printpagepreview.png cmd/sc_printpreview.png
@@ -918,9 +959,13 @@ cmd/sc_starshapes.png cmd/sc_starshapes.star5.png
 cmd/sc_stylewatercanmode cmd/sc_styleapply.png
 cmd/sc_symbolcatalogue.png cmd/sc_insertsymbol.png
 cmd/sc_symbolshapes.png cmd/sc_symbolshapes.smiley.png
+cmd/sc_tableautofitmenu.png cmd/sc_setoptimalrowheight.png 
 cmd/sc_tablecellbackgroundcolor.png cmd/sc_backgroundcolor.png
+cmd/sc_tabledeletemenu.png cmd/sc_deletetable.png
 cmd/sc_tableevents.png cmd/sc_animationeffects.png
+cmd/sc_tableinsertmenu.png cmd/sc_insertrowsafter.png
 cmd/sc_tableselectall.png cmd/sc_selecttable.png
+cmd/sc_tableselectmenu.png cmd/sc_selecttable.png
 cmd/sc_tablesort.png cmd/sc_datasort.png
 cmd/sc_templatemenu.png cmd/sc_templatemanager.png
 cmd/sc_textalign.png cmd/sc_alignblock.png
@@ -943,6 +988,7 @@ cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
 cmd/sc_vscroll.png cmd/sc_scrollbar.png
 cmd/sc_vscrollbar.png cmd/sc_scrollbar.png
 cmd/sc_wrapmenu.png cmd/sc_wrapon.png
+cmd/sc_zoommenu.png cmd/sc_zoom.png
 cmd/sc_zoomminus.png cmd/sc_zoomout.png
 cmd/sc_zoomplus.png cmd/sc_zoomin.png
 cmd/sc_zoomtoolbox.png cmd/sc_zoom.png
@@ -1080,6 +1126,7 @@ res/sx03130.png res/odp_16_8.png
 res/sx03131.png res/so03126.png
 res/sx03132.png res/sx03126.png
 res/sx03137.png res/sx03125.png
+res/sx03139.png cmd/sc_newhtmldoc.png
 res/sx03140.png res/sx03125.png
 res/sx03141.png formula/res/fapclose.png
 res/sx03144.png res/odf_16_8.png
@@ -1126,8 +1173,6 @@ res/sx10599.png cmd/sc_edit.png
 res/sx10600.png cmd/sc_listbox.png
 res/sx10601.png cmd/sc_combobox.png
 res/sx10603.png cmd/sc_grid.png
-cmd/sc_insertgridcontrol.png cmd/sc_grid.png
-cmd/lc_insertgridcontrol.png cmd/lc_grid.png
 res/sx10604.png cmd/sc_imagebutton.png
 res/sx10605.png cmd/sc_filecontrol.png
 res/sx10607.png cmd/sc_navigationbar.png
