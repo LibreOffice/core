@@ -73,6 +73,12 @@ public:
 
     virtual sal_Int32 getDefaultChartAreaFillStyle() const;
 
+    /** Returns chartspace automatic default border style */
+    virtual sal_Int32 getDefaultChartAreaLineStyle() const;
+
+    /** Returns chartspace automatic default border width in Emu */
+    virtual sal_Int16 getDefaultChartAreaLineWidth() const;
+
     // Device info and device dependent unit conversion -----------------------
 
     /** Returns information about the output device. */
