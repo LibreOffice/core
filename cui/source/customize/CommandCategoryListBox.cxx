@@ -293,7 +293,7 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                 SfxGroupInfo_Impl *pCurrentInfo =
                     reinterpret_cast<SfxGroupInfo_Impl*>(m_xControl->get_id(nCurPos).toInt64());
 
-                if (!pCurrentInfo) //seperator
+                if (!pCurrentInfo) //separator
                     continue;
 
                 if (pCurrentInfo->nKind == SfxCfgKind::GROUP_FUNCTION)
