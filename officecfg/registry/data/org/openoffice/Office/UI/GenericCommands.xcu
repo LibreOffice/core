@@ -1908,6 +1908,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">200%</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:Zoom150Percent" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1930,6 +1933,9 @@
       <node oor:name=".uno:Zoom50Percent" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">50%</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:GrafGamma" oor:op="replace">
@@ -6166,6 +6172,9 @@
       <node oor:name=".uno:CommonAlignLeft" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Left</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:CommonAlignHorizontalCenter" oor:op="replace">
