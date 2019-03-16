@@ -7,49 +7,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_QA_API_PRINTERSETTINGSTEST_HXX
-#define INCLUDED_SW_QA_API_PRINTERSETTINGSTEST_HXX
+#ifndef INCLUDED_TEST_TEXT_TEXTPRINTERSETTINGS_HXX
+#define INCLUDED_TEST_TEXT_TEXTPRINTERSETTINGS_HXX
 
-#include "ApiTestBase.hxx"
-
-#include <cppunit/TestAssert.h>
 #include <test/unoapi_property_testers.hxx>
+#include <test/testdllapi.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/text/NotePrintMode.hpp>
 
 namespace apitest
 {
-class PrinterSettingsTest : public ApiTestBase
+class OOO_DLLPUBLIC_TEST TextPrinterSettings
 {
-    static void
-    testPrintAnnotationMode(css::uno::Reference<css::beans::XPropertySet> const& rxPrinterSettings)
-    {
-        const OUString rPropertyName = "PrintAnnotationMode";
-
-        // This property is not optional but it's not set in some cases
-        if (!extstsProperty(rxPrinterSettings, rPropertyName))
-            return;
-
-        /*css::text::NotePrintMode aNotePrintMode_Get;
-
-        CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue",
-                               rxPrinterSettings->getPropertyValue(rPropertyName)
-                               >>= aNotePrintMode_Get);
-
-        css::text::NotePrintMode aNotePrintMode_Set;
-        css::uno::Any aNewValue;
-        aNewValue <<= css::text::NotePrintMode_ONLY;
-        rxPrinterSettings->setPropertyValue(rPropertyName, aNewValue);
-
-        CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue",
-                               rxPrinterSettings->getPropertyValue(rPropertyName)
-                               >>= aNotePrintMode_Set);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue", css::text::NotePrintMode_ONLY,
-                                     aNotePrintMode_Set);*/
-    }
-
 public:
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
+    virtual ~TextPrinterSettings() {}
     void testPrinterSettingsProperties()
     {
         css::uno::Reference<css::beans::XPropertySet> xPrinterSettings(init(), css::uno::UNO_QUERY_THROW);
@@ -63,8 +35,6 @@ public:
         testBooleanProperty(xPrinterSettings, "PrintReversed");
         testBooleanProperty(xPrinterSettings, "PrintControls");
         testStringProperty(xPrinterSettings, "PrintFaxName", "FaxName");
-        testPrintAnnotationMode(
-            xPrinterSettings); // it's not set in this case but it's not optional - bug?
         testBooleanProperty(xPrinterSettings, "PrintProspect");
         testBooleanProperty(xPrinterSettings, "PrintPageBackground");
         testBooleanProperty(xPrinterSettings, "PrintBlackFonts");
