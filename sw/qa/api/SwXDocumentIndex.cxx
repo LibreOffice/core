@@ -37,14 +37,14 @@ namespace
 /**
  * Test for Java API test of file com.sun.star.comp.office.SwXDocumentIndex.csv
  */
-class SwXDocumentIndexTest : public test::BootstrapFixture,
-                             public unotest::MacrosTest,
-                             public apitest::XDocumentIndexTest,
-                             public apitest::BaseIndexTest,
-                             public apitest::DocumentIndexTest,
-                             public apitest::XTextContentTest,
-                             public apitest::XServiceInfo,
-                             public apitest::XComponent
+class SwXDocumentIndex final : public test::BootstrapFixture,
+                               public unotest::MacrosTest,
+                               public apitest::XDocumentIndexTest,
+                               public apitest::BaseIndexTest,
+                               public apitest::DocumentIndexTest,
+                               public apitest::XTextContentTest,
+                               public apitest::XServiceInfo,
+                               public apitest::XComponent
 {
     uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<text::XTextDocument> mxTextDocument;
@@ -53,13 +53,13 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    SwXDocumentIndexTest() : apitest::XServiceInfo("SwXDocumentIndex", "com.sun.star.text.BaseIndex") {};
+    SwXDocumentIndex() : apitest::XServiceInfo("SwXDocumentIndex", "com.sun.star.text.BaseIndex") {};
     uno::Reference<uno::XInterface> init() override;
     uno::Reference<text::XTextDocument> getTextDocument() override
         { return mxTextDocument; }
     void triggerDesktopTerminate() override {}
 
-    CPPUNIT_TEST_SUITE(SwXDocumentIndexTest);
+    CPPUNIT_TEST_SUITE(SwXDocumentIndex);
     CPPUNIT_TEST(testGetImplementationName);
     CPPUNIT_TEST(testGetSupportedServiceNames);
     CPPUNIT_TEST(testSupportsService);
@@ -73,7 +73,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-void SwXDocumentIndexTest::setUp()
+void SwXDocumentIndex::setUp()
 {
     test::BootstrapFixture::setUp();
 
@@ -83,7 +83,7 @@ void SwXDocumentIndexTest::setUp()
     CPPUNIT_ASSERT(mxTextDocument.is());
 }
 
-void SwXDocumentIndexTest::tearDown()
+void SwXDocumentIndex::tearDown()
 {
     if (mxTextDocument.is())
         mxTextDocument->dispose();
@@ -91,7 +91,7 @@ void SwXDocumentIndexTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-uno::Reference<uno::XInterface> SwXDocumentIndexTest::init()
+uno::Reference<uno::XInterface> SwXDocumentIndex::init()
 {
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxTextDocument, uno::UNO_QUERY_THROW);
     uno::Reference<text::XDocumentIndex> xDocumentIndex(
@@ -104,7 +104,7 @@ uno::Reference<uno::XInterface> SwXDocumentIndexTest::init()
     return xDocumentIndex;
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SwXDocumentIndexTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(SwXDocumentIndex);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
