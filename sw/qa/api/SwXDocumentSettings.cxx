@@ -9,6 +9,9 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <test/lang/xserviceinfo.hxx>
+#include <test/text/textdocumentsettings.hxx>
+#include <test/text/textprintersettings.hxx>
+#include <test/text/textsettings.hxx>
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -21,10 +24,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include "DocumentSettingsTest.hxx"
-#include "SettingsTest.hxx"
-#include "PrinterSettingsTest.hxx"
-
 using namespace css;
 
 namespace
@@ -32,12 +31,12 @@ namespace
 /**
  * Test for Java API test of file com.sun.star.comp.Writer.DocumentSettings.csv
  */
-class DocumentSettingsTest : public test::BootstrapFixture,
-                             public unotest::MacrosTest,
-                             public apitest::DocumentSettingsTest,
-                             public apitest::SettingsTest,
-                             public apitest::PrinterSettingsTest,
-                             public apitest::XServiceInfo
+class SwXDocumentSettings final : public test::BootstrapFixture,
+                                  public unotest::MacrosTest,
+                                  public apitest::TextDocumentSettings,
+                                  public apitest::TextSettings,
+                                  public apitest::TextPrinterSettings,
+                                  public apitest::XServiceInfo
 {
 private:
     uno::Reference<uno::XComponentContext> mxComponentContext;
@@ -47,11 +46,11 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    DocumentSettingsTest()
+    SwXDocumentSettings()
         : apitest::XServiceInfo("SwXDocumentSettings", "com.sun.star.text.DocumentSettings"){};
     uno::Reference<uno::XInterface> init() override;
 
-    CPPUNIT_TEST_SUITE(DocumentSettingsTest);
+    CPPUNIT_TEST_SUITE(SwXDocumentSettings);
     CPPUNIT_TEST(testGetImplementationName);
     CPPUNIT_TEST(testGetSupportedServiceNames);
     CPPUNIT_TEST(testSupportsService);
@@ -61,7 +60,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-void DocumentSettingsTest::setUp()
+void SwXDocumentSettings::setUp()
 {
     test::BootstrapFixture::setUp();
 
@@ -69,7 +68,7 @@ void DocumentSettingsTest::setUp()
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
 }
 
-void DocumentSettingsTest::tearDown()
+void SwXDocumentSettings::tearDown()
 {
     if (mxComponent.is())
         mxComponent->dispose();
@@ -77,7 +76,7 @@ void DocumentSettingsTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-uno::Reference<uno::XInterface> DocumentSettingsTest::init()
+uno::Reference<uno::XInterface> SwXDocumentSettings::init()
 {
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
     CPPUNIT_ASSERT(mxComponent.is());
@@ -91,7 +90,7 @@ uno::Reference<uno::XInterface> DocumentSettingsTest::init()
     return xDocumentSettings;
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(DocumentSettingsTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(SwXDocumentSettings);
 
 } // end anonymous namespace
 

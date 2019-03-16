@@ -7,19 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_QA_API_BASEINDEXTEST_HXX
-#define INCLUDED_SW_QA_API_BASEINDEXTEST_HXX
-
-#include "ApiTestBase.hxx"
-
-#include <cppunit/TestAssert.h>
-#include <test/unoapi_property_testers.hxx>
+#include <cppunit/extensions/HelperMacros.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <vcl/BitmapTools.hxx>
 #include <vcl/graph.hxx>
@@ -27,36 +20,38 @@
 #include <unotools/tempfile.hxx>
 #include <tools/stream.hxx>
 
-namespace apitest
-{
+#include <test/unoapi_property_testers.hxx>
+#include <test/text/baseindex.hxx>
+#include <test/testdllapi.hxx>
+
 namespace
 {
-BitmapEx createExampleBitmap()
-{
-    vcl::bitmap::RawBitmap aRawBitmap(Size(4, 4), 24);
-    aRawBitmap.SetPixel(0, 0, COL_LIGHTBLUE);
-    aRawBitmap.SetPixel(0, 1, COL_LIGHTGREEN);
-    aRawBitmap.SetPixel(1, 0, COL_LIGHTRED);
-    aRawBitmap.SetPixel(1, 1, COL_LIGHTMAGENTA);
-    return vcl::bitmap::CreateFromData(std::move(aRawBitmap));
+    static BitmapEx createExampleBitmap()
+    {
+        vcl::bitmap::RawBitmap aRawBitmap(Size(4, 4), 24);
+        aRawBitmap.SetPixel(0, 0, COL_LIGHTBLUE);
+        aRawBitmap.SetPixel(0, 1, COL_LIGHTGREEN);
+        aRawBitmap.SetPixel(1, 0, COL_LIGHTRED);
+        aRawBitmap.SetPixel(1, 1, COL_LIGHTMAGENTA);
+        return vcl::bitmap::CreateFromData(std::move(aRawBitmap));
+    }
+
+    static void writerFileWithBitmap(OUString const& rURL)
+    {
+        BitmapEx aBitmapEx = createExampleBitmap();
+        SvFileStream aFileStream(rURL, StreamMode::READ | StreamMode::WRITE);
+        vcl::PNGWriter aWriter(aBitmapEx);
+        aWriter.Write(aFileStream);
+        aFileStream.Seek(STREAM_SEEK_TO_BEGIN);
+        aFileStream.Close();
+    }
 }
 
-void writerFileWithBitmap(OUString const& rURL)
+namespace apitest
 {
-    BitmapEx aBitmapEx = createExampleBitmap();
-    SvFileStream aFileStream(rURL, StreamMode::READ | StreamMode::WRITE);
-    vcl::PNGWriter aWriter(aBitmapEx);
-    aWriter.Write(aFileStream);
-    aFileStream.Seek(STREAM_SEEK_TO_BEGIN);
-    aFileStream.Close();
-}
+    BaseIndex::~BaseIndex() {}
 
-} // end anonymous namespace
-
-class BaseIndexTest : public ApiTestBase
-{
-public:
-    void testBaseIndexProperties()
+    void BaseIndex::testBaseIndexProperties()
     {
         css::uno::Reference<css::beans::XPropertySet> xBaseIndex(init(), css::uno::UNO_QUERY_THROW);
         testStringProperty(xBaseIndex, "Title", "Value");
@@ -153,9 +148,6 @@ public:
                                        xBaseIndex->getPropertyValue(name) >>= xGetTextSection);
         }
     }
-};
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
