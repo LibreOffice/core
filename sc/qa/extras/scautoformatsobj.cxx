@@ -9,18 +9,23 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xnameaccess.hxx>
+#include <test/container/xnamereplace.hxx>
 
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
+#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 using namespace css;
 
 namespace sc_apitest
 {
-class ScAutoFormatsObj : public CalcUnoApiTest, public apitest::XNameAccess
+class ScAutoFormatsObj : public CalcUnoApiTest,
+                         public apitest::XNameAccess,
+                         public apitest::XNameReplace
 {
 public:
     ScAutoFormatsObj();
@@ -36,6 +41,9 @@ public:
     CPPUNIT_TEST(testGetElementNames);
     CPPUNIT_TEST(testHasByName);
 
+    // XNameReplace
+    CPPUNIT_TEST(testReplaceByName);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -45,6 +53,7 @@ private:
 ScAutoFormatsObj::ScAutoFormatsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XNameAccess("Default")
+    , XNameReplace("ScAutoFormatsObj")
 {
 }
 
@@ -53,6 +62,15 @@ uno::Reference<uno::XInterface> ScAutoFormatsObj::init()
     uno::Reference<lang::XMultiServiceFactory> xMSF(m_xComponent, uno::UNO_QUERY_THROW);
     uno::Reference<uno::XInterface> xTAF(
         xMSF->createInstance("com.sun.star.sheet.TableAutoFormats"), uno::UNO_QUERY_THROW);
+
+    uno::Reference<container::XNameContainer> xNC(xTAF, uno::UNO_QUERY_THROW);
+    if (!xNC->hasByName("ScAutoFormatsObj"))
+    {
+        xNC->insertByName("ScAutoFormatsObj",
+                          uno::makeAny(xMSF->createInstance("com.sun.star.sheet.TableAutoFormat")));
+    }
+    // XNameReplace
+    setReplacmentElement(uno::makeAny(xMSF->createInstance("com.sun.star.sheet.TableAutoFormat")));
 
     return xTAF;
 }
