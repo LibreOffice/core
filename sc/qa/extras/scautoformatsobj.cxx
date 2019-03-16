@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
+#include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 #include <test/container/xnamecontainer.hxx>
@@ -30,6 +31,7 @@ namespace sc_apitest
 {
 class ScAutoFormatsObj : public CalcUnoApiTest,
                          public apitest::XElementAccess,
+                         public apitest::XEnumerationAccess,
                          public apitest::XIndexAccess,
                          public apitest::XNameAccess,
                          public apitest::XNameContainer,
@@ -47,6 +49,9 @@ public:
     // XElementAccess
     CPPUNIT_TEST(testGetElementType);
     CPPUNIT_TEST(testHasElements);
+
+    // XEnumerationAccess
+    CPPUNIT_TEST(testCreateEnumeration);
 
     // XIndexAccess
     CPPUNIT_TEST(testGetByIndex);
