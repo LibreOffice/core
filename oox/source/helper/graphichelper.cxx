@@ -165,6 +165,16 @@ sal_Int32 GraphicHelper::getDefaultChartAreaFillStyle() const
     return XML_solidFill;
 }
 
+sal_Int32 GraphicHelper::getDefaultChartAreaLineStyle() const
+{
+    return XML_solidFill;
+}
+
+sal_Int16 GraphicHelper::getDefaultChartAreaLineWidth() const
+{
+    return 9360;
+}
+
 // Device info and device dependent unit conversion ---------------------------
 
 sal_Int32 GraphicHelper::convertScreenPixelXToHmm( double fPixelX ) const
