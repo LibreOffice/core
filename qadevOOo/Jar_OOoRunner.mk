@@ -951,7 +951,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScAnnotationTextCursor \
     qadevOOo/tests/java/mod/_sc/ScAutoFormatFieldObj \
     qadevOOo/tests/java/mod/_sc/ScAutoFormatObj \
-    qadevOOo/tests/java/mod/_sc/ScAutoFormatsObj \
     qadevOOo/tests/java/mod/_sc/ScCellCursorObj \
     qadevOOo/tests/java/mod/_sc/ScCellFieldObj \
     qadevOOo/tests/java/mod/_sc/ScCellObj \
