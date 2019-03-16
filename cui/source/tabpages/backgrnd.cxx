@@ -1565,6 +1565,7 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
         }
         if (nFlags & SvxBackgroundTabFlags::SHOW_SELECTOR)
             m_xBtnBitmap->show();
+        SetOptimalSize(GetDialogController());
     }
 
     if ( bCharBackColor )
