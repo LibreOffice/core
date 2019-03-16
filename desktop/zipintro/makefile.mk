@@ -32,8 +32,8 @@ TARGET=zipintro
 DEFAULT_FLAVOURS=dev dev_nologo nologo intro beta
 
 ZIP1LIST= \
-    $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/dev$/introabout$/intro.png $(INTRO_BITMAPS)) \
-    $(null,$(ABOUT_BITMAPS) $(MISC)$/ooo_custom_images$/dev$/introabout$/about.png $(ABOUT_BITMAPS)) \
+    $(null,$(INTRO_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/introabout$/dev$/intro.png $(INTRO_BITMAPS)) \
+    $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/introabout$/dev$/about.png $(ABOUT_BITMAPS)) \
     $(MISC)$/$(RSCDEFIMG)$/introabout$/logo.png
 ZIP2LIST= \
     $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/dev_nologo$/introabout$/intro.png $(INTRO_BITMAPS)) \
