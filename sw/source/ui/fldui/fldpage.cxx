@@ -57,6 +57,21 @@ SwFieldPage::SwFieldPage(vcl::Window *pParent, const OString& rID,
 {
 }
 
+SwFieldPage::SwFieldPage(TabPageParent pParent, const OUString& rUIXMLDescription,
+        const OString& rID, const SfxItemSet *pAttrSet)
+    : SfxTabPage(pParent, rUIXMLDescription, rID, pAttrSet)
+    , m_pCurField(nullptr)
+    , m_pWrtShell(nullptr)
+    , m_nTypeSel(LISTBOX_ENTRY_NOTFOUND)
+    , m_nSelectionSel(LISTBOX_ENTRY_NOTFOUND)
+    , m_bFieldEdit(false)
+    , m_bInsert(true)
+    , m_bFieldDlgHtmlMode(false)
+    , m_bRefresh(false)
+    , m_bFirstHTMLInit(true)
+{
+}
+
 SwFieldPage::~SwFieldPage()
 {
 }
@@ -291,6 +306,16 @@ void SwFieldPage::SavePos( const ListBox* pLst1 )
     m_aLstStrArr[ 2 ].clear();
 }
 
+void SwFieldPage::SavePos( const weld::TreeView& rLst1 )
+{
+    if (rLst1.n_children())
+        m_aLstStrArr[ 0 ] = rLst1.get_selected_text();
+    else
+        m_aLstStrArr[ 0 ].clear();
+    m_aLstStrArr[ 1 ].clear();
+    m_aLstStrArr[ 2 ].clear();
+}
+
 void SwFieldPage::RestorePos(ListBox* pLst1)
 {
     sal_Int32 nPos = 0;
@@ -298,6 +323,14 @@ void SwFieldPage::RestorePos(ListBox* pLst1)
          LISTBOX_ENTRY_NOTFOUND !=
                     ( nPos = pLst1->GetEntryPos(m_aLstStrArr[ 0 ] ) ) )
         pLst1->SelectEntryPos( nPos );
+}
+
+void SwFieldPage::RestorePos(weld::TreeView& rLst1)
+{
+    sal_Int32 nPos = 0;
+    if (rLst1.n_children() && !m_aLstStrArr[ 0 ].isEmpty() &&
+         -1 != ( nPos = rLst1.find_text(m_aLstStrArr[ 0 ] ) ) )
+        rLst1.select( nPos );
 }
 
 // Insert new fields
@@ -308,6 +341,11 @@ IMPL_LINK( SwFieldPage, TreeListBoxInsertHdl, SvTreeListBox*, pBtn, bool )
 }
 
 IMPL_LINK( SwFieldPage, ListBoxInsertHdl, ListBox&, rBox, void )
+{
+    InsertHdl(&rBox);
+}
+
+IMPL_LINK( SwFieldPage, TreeViewInsertHdl, weld::TreeView&, rBox, void )
 {
     InsertHdl(&rBox);
 }

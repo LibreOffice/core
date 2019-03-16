@@ -70,7 +70,11 @@ public:
 
     OUString get_text() const { return m_xControl->get_text(); }
     void set_text(const OUString& rText) { m_xControl->set_text(rText); }
+    void set_visible(bool bVisible) { m_xControl->set_visible(bVisible); }
+    void set_accessible_name(const OUString& rName) { m_xControl->set_accessible_name(rName); }
     bool get_sensitive() const { return m_xControl->get_sensitive(); }
+    void save_value() { m_xControl->save_value(); }
+    bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }
     void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
     void connect_changed(const Link<weld::Entry&, void>& rLink) { m_xControl->connect_changed(rLink); }
     void hide() { m_xControl->hide(); }

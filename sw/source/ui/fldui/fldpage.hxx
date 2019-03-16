@@ -55,13 +55,16 @@ protected:
     SwWrtShell*         GetWrtShell() { return m_pWrtShell;}
 
     DECL_LINK( ListBoxInsertHdl, ListBox&, void );
+    DECL_LINK( TreeViewInsertHdl, weld::TreeView&, void );
     DECL_LINK( TreeListBoxInsertHdl, SvTreeListBox*, bool );
     DECL_LINK( NumFormatHdl, ListBox&, void );
     void                InsertHdl(void *);
 
     void                Init();
     void                SavePos( const ListBox* pLst1);
+    void                SavePos( const weld::TreeView& rLst1);
     void                RestorePos( ListBox* pLst1 );
+    void                RestorePos( weld::TreeView& rLst1 );
     void                EnableInsert(bool bEnable);
     bool         IsFieldEdit() const   { return m_bFieldEdit; }
 
@@ -79,6 +82,8 @@ protected:
 public:
     SwFieldPage(vcl::Window *pParent, const OString& rID,
         const OUString& rUIXMLDescription, const SfxItemSet *pAttrSet);
+    SwFieldPage(TabPageParent pParent, const OUString& rUIXMLDescription,
+        const OString& rID, const SfxItemSet *pAttrSet);
 
     virtual ~SwFieldPage() override;
 

@@ -72,6 +72,7 @@ public:
 };
 
 void FillFieldSelect(ListBox& rListBox);
+void FillFieldSelect(weld::TreeView& rListBox);
 
 #endif
 
