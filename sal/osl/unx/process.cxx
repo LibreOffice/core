@@ -235,9 +235,7 @@ static void ChildStatusProc(void *pData)
             execv(data.m_pszArgs[0], const_cast<char **>(data.m_pszArgs));
         }
 
-        SAL_WARN("sal.osl", "Failed to exec: " << UnixErrnoString(errno));
-
-        SAL_WARN("sal.osl", "ChildStatusProc : starting '" << data.m_pszArgs[0] << "' failed");
+        SAL_WARN("sal.osl", "ChildStatusProc : Failed to exec <" << data.m_pszArgs[0] << ">: " << UnixErrnoString(errno));
 
         /* if we reach here, something went wrong */
         errno_copy = errno;
