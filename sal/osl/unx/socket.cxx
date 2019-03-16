@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <memory>
 #include <utility>
 
 #include "system.hxx"
@@ -91,7 +92,7 @@
 #define OSL_INVALID_SOCKET      -1
 #define OSL_SOCKET_ERROR        -1
 
-/* Buffer size for gethostbyname */
+/* Buffer size for getnameinfo */
 #define MAX_HOSTBUFFER_SIZE 2048
 
 static const unsigned long FamilyMap[]= {
@@ -558,25 +559,33 @@ oslSocketResult SAL_CALL osl_getAddrOfSocketAddr( oslSocketAddr pAddr, sal_Seque
     instead!
  */
 
-/* wrap around different interfaces to reentrant gethostbyname */
-static struct hostent* osl_gethostbyname_r (
-    const char *name, struct hostent *result,
-    char *buffer, int buflen, int *h_errnop)
+struct oslAddrInfo
 {
-#if defined(LINUX) || defined(ANDROID) || defined(FREEBSD) || defined(DRAGONFLY)
-    struct hostent *result_; /* will be the same as result */
-    int e;
-    e = gethostbyname_r (name, result, buffer, buflen,
-                 &result_, h_errnop);
-    return e ? nullptr : result_ ;
-#elif defined(AIX)
-    *h_errnop = gethostbyname_r (name, result, (struct hostent_data *)buffer);
-    (void)buflen;
-    return *h_errnop ? NULL : result ;
-#else
-    return gethostbyname_r( name, result, buffer, buflen, h_errnop);
-#endif
-}
+    addrinfo* pAddrInfoList = nullptr;
+    int nError = 0;
+
+    oslAddrInfo(const char* name, bool isInet = false)
+    {
+        addrinfo aHints;
+        memset(&aHints, 0, sizeof(addrinfo));
+        if (isInet)
+            aHints.ai_family = AF_INET;
+        aHints.ai_flags = AI_CANONNAME;
+
+        nError = getaddrinfo(name, nullptr, &aHints, &pAddrInfoList);
+    }
+
+    ~oslAddrInfo()
+    {
+        if (nError == 0 && pAddrInfoList)
+            freeaddrinfo(pAddrInfoList);
+    }
+
+    const char* getHostName()
+    {
+        return pAddrInfoList ? pAddrInfoList->ai_canonname : nullptr;
+    }
+};
 
 static bool isFullQualifiedDomainName (const sal_Char *pHostName)
 {
@@ -597,19 +606,9 @@ static sal_Char* getFullQualifiedDomainName (const sal_Char *pHostName)
     }
     else
     {
-        struct hostent  aHostByName;
-        struct hostent *pHostByName;
-        sal_Char        pQualifiedHostBuffer[ MAX_HOSTBUFFER_SIZE ];
-        int     nErrorNo;
-
-        pHostByName = osl_gethostbyname_r (
-            pHostName,
-            &aHostByName, pQualifiedHostBuffer,
-            sizeof(pQualifiedHostBuffer), &nErrorNo );
-        if (pHostByName != nullptr)
-        {
-            pFullQualifiedName = strdup(pHostByName->h_name);
-        }
+        oslAddrInfo aAddrInfo(pHostName);
+        if (aAddrInfo.nError == 0)
+            pFullQualifiedName = strdup(aAddrInfo.getHostName());
     }
 
     return pFullQualifiedName;
@@ -621,37 +620,27 @@ struct oslHostAddrImpl
     oslSocketAddr   pSockAddr;
 };
 
-static oslHostAddr hostentToHostAddr (const struct hostent *he)
+static oslHostAddr addrinfoToHostAddr (const addrinfo* ai)
 {
-    oslHostAddr pAddr= nullptr;
-    oslSocketAddr pSockAddr = nullptr;
-
-    sal_Char        *cn;
-
-    if ((he == nullptr) || (he->h_name == nullptr) || (he->h_addr_list[0] == nullptr))
+    if (!ai || !ai->ai_canonname || !ai->ai_addr)
         return nullptr;
 
-    cn = getFullQualifiedDomainName (he->h_name);
+    std::unique_ptr<sal_Char, decltype(&free)> cn(getFullQualifiedDomainName(ai->ai_canonname), &free);
     SAL_WARN_IF( !cn, "sal.osl", "couldn't get full qualified domain name" );
-    if (cn == nullptr)
+    if (!cn)
         return nullptr;
 
-    pSockAddr = createSocketAddr();
+    std::unique_ptr<oslSocketAddrImpl, decltype(&destroySocketAddr)> pSockAddr(createSocketAddr(), &destroySocketAddr);
     SAL_WARN_IF( !pSockAddr, "sal.osl", "insufficient memory" );
-    if (pSockAddr == nullptr)
-    {
-        free(cn);
+    if (!pSockAddr)
         return nullptr;
-    }
 
-    pSockAddr->m_sockaddr.sa_family= he->h_addrtype;
-    if (pSockAddr->m_sockaddr.sa_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
+    if (ai->ai_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
     {
-        struct sockaddr_in *sin= reinterpret_cast<sockaddr_in *>(&pSockAddr->m_sockaddr);
         memcpy (
-            &(sin->sin_addr.s_addr),
-            he->h_addr_list[0],
-            he->h_length);
+            &(pSockAddr->m_sockaddr),
+            ai->ai_addr,
+            ai->ai_addrlen);
     }
     else
     {
@@ -660,22 +649,16 @@ static oslHostAddr hostentToHostAddr (const struct hostent *he)
 
         SAL_WARN( "sal.osl", "unknown address family" );
 
-        destroySocketAddr( pSockAddr );
-        free (cn);
         return nullptr;
     }
 
-    pAddr= static_cast<oslHostAddr>(malloc(sizeof(struct oslHostAddrImpl)));
+    oslHostAddr pAddr = static_cast<oslHostAddr>(malloc(sizeof(struct oslHostAddrImpl)));
     SAL_WARN_IF( !pAddr, "sal.osl", "allocation error" );
     if (pAddr == nullptr)
-    {
-        destroySocketAddr( pSockAddr );
-        free (cn);
         return nullptr;
-    }
 
-    pAddr->pHostName= cn;
-    pAddr->pSockAddr= pSockAddr;
+    pAddr->pHostName = cn.release();
+    pAddr->pSockAddr = pSockAddr.release();
 
     return pAddr;
 }
@@ -767,17 +750,9 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *ustrHostname)
 
 oslHostAddr osl_psz_createHostAddrByName (const sal_Char *pszHostname)
 {
-    struct      hostent  aHe;
-    struct      hostent *pHe;
-    sal_Char    heBuffer[ MAX_HOSTBUFFER_SIZE ];
-    int         nErrorNo;
+    oslAddrInfo aAddrInfo(pszHostname, /* isInet */ true);
 
-    pHe = osl_gethostbyname_r (
-        pszHostname,
-        &aHe, heBuffer,
-        sizeof(heBuffer), &nErrorNo );
-
-    return hostentToHostAddr (pHe);
+    return addrinfoToHostAddr (aAddrInfo.pAddrInfoList);
 }
 
 oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
