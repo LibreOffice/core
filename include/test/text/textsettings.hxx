@@ -7,21 +7,44 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_QA_API_SETTINGSTEST_HXX
-#define INCLUDED_SW_QA_API_SETTINGSTEST_HXX
+#ifndef INCLUDED_TEST_TEXT_TEXTSETTINGS_HXX
+#define INCLUDED_TEST_TEXT_TEXTSETTINGS_HXX
 
-#include "ApiTestBase.hxx"
-
-#include <cppunit/TestAssert.h>
 #include <test/unoapi_property_testers.hxx>
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 
 namespace apitest
 {
-class SettingsTest : public ApiTestBase
+class OOO_DLLPUBLIC_TEST TextSettings
 {
+    static bool extstsProperty(css::uno::Reference<css::beans::XPropertySet> const& rxPropertySet,
+                               OUString const& rPropertyName)
+    {
+        css::uno::Reference<css::beans::XPropertySetInfo> xPropertySetInfo(
+            rxPropertySet->getPropertySetInfo());
+        return xPropertySetInfo->hasPropertyByName(rPropertyName);
+    }
+
+    static bool
+    isPropertyReadOnly(css::uno::Reference<css::beans::XPropertySet> const& rxPropertySet,
+                       OUString const& rPropertyName)
+    {
+        css::uno::Reference<css::beans::XPropertySetInfo> xPropertySetInfo(
+            rxPropertySet->getPropertySetInfo());
+        css::uno::Sequence<css::beans::Property> xProperties = xPropertySetInfo->getProperties();
+
+        for (auto const& rProperty : xProperties)
+        {
+            if (rProperty.Name == rPropertyName)
+                return (rProperty.Attributes & com::sun::star::beans::PropertyAttribute::READONLY)
+                       != 0;
+        }
+
+        return false;
+    }
     // [property] string PrinterName;
     static void testPrinterName(css::uno::Reference<css::beans::XPropertySet> const& rxSettings)
     {
@@ -91,6 +114,8 @@ class SettingsTest : public ApiTestBase
     }
 
 public:
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
+    virtual ~TextSettings() {}
     void testSettingsProperties()
     {
         css::uno::Reference<css::beans::XPropertySet> xSettings(init(), css::uno::UNO_QUERY_THROW);
