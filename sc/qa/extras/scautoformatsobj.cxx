@@ -8,12 +8,15 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 #include <test/container/xnamecontainer.hxx>
 #include <test/container/xnamereplace.hxx>
+#include <cppu/unotype.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -26,6 +29,7 @@ using namespace css;
 namespace sc_apitest
 {
 class ScAutoFormatsObj : public CalcUnoApiTest,
+                         public apitest::XElementAccess,
                          public apitest::XIndexAccess,
                          public apitest::XNameAccess,
                          public apitest::XNameContainer,
@@ -39,6 +43,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScAutoFormatsObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XIndexAccess
     CPPUNIT_TEST(testGetByIndex);
@@ -67,6 +75,7 @@ private:
 
 ScAutoFormatsObj::ScAutoFormatsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XElementAccess(cppu::UnoType<container::XNamed>::get())
     , XIndexAccess(2)
     , XNameAccess("Default")
     , XNameContainer("ScAutoFormatsObj")
