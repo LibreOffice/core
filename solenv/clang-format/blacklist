@@ -7573,11 +7573,9 @@ include/test/bootstrapfixture.hxx
 include/test/calc_unoapi_test.hxx
 include/test/callgrind.hxx
 include/test/container/xnamed.hxx
-include/test/container/xnamereplace.hxx
 include/test/htmltesttools.hxx
 include/test/screenshot_test.hxx
 include/test/setupvcl.hxx
-include/test/sheet/cellarealink.hxx
 include/test/sheet/cellproperties.hxx
 include/test/sheet/databaserange.hxx
 include/test/sheet/datapilotfield.hxx
@@ -16544,13 +16542,11 @@ test/source/bootstrapfixture.cxx
 test/source/calc_unoapi_test.cxx
 test/source/callgrind.cxx
 test/source/container/xnamed.cxx
-test/source/container/xnamereplace.cxx
 test/source/diff/diff.cxx
 test/source/htmltesttools.cxx
 test/source/isheadless.hxx
 test/source/screenshot_test.cxx
 test/source/setupvcl.cxx
-test/source/sheet/cellarealink.cxx
 test/source/sheet/cellproperties.cxx
 test/source/sheet/databaserange.cxx
 test/source/sheet/datapilotfield.cxx
