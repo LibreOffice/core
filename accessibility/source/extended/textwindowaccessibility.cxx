@@ -34,6 +34,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <numeric>
 #include <vector>
 
 namespace accessibility
@@ -775,20 +776,13 @@ Document::retrieveParagraphBounds(Paragraph const * pParagraph,
     // and start at m_aVisibleBegin:
     Paragraphs::iterator aPara(m_xParagraphs->begin()
                                + pParagraph->getNumber());
+    auto lAddHeight = [](const sal_Int32& rSum, const ParagraphInfo& rParagraph) {
+        return rSum + rParagraph.getHeight(); };
     ::sal_Int32 nPos;
-    Paragraphs::iterator aIt;
     if (aPara < m_aVisibleBegin)
-    {
-        nPos = 0;
-        aIt = m_xParagraphs->begin();
-    }
+        nPos = std::accumulate(m_xParagraphs->begin(), aPara, sal_Int32(0), lAddHeight);
     else
-    {
-        nPos = m_nViewOffset - m_nVisibleBeginOffset;
-        aIt = m_aVisibleBegin;
-    }
-    for (; aIt != aPara; ++aIt)
-        nPos += aIt->getHeight();
+        nPos = std::accumulate(m_aVisibleBegin, aPara, m_nViewOffset - m_nVisibleBeginOffset, lAddHeight);
 
     Point aOrig(0, 0);
     if (bAbsolute)

@@ -227,10 +227,10 @@ void MissingPluginInstaller::detach(Player const * source) {
 void MissingPluginInstaller::processQueue() {
     assert(!queued_.empty());
     assert(currentDetails_.empty());
-    for (auto i = queued_.begin(); i != queued_.end(); ++i) {
-        reported_.insert(i->first);
-        currentDetails_.push_back(i->first);
-        currentSources_.insert(i->second.begin(), i->second.end());
+    for (const auto& rEntry : queued_) {
+        reported_.insert(rEntry.first);
+        currentDetails_.push_back(rEntry.first);
+        currentSources_.insert(rEntry.second.begin(), rEntry.second.end());
     }
     queued_.clear();
 }

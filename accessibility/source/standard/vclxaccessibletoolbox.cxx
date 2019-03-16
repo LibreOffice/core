@@ -216,15 +216,14 @@ void VCLXAccessibleToolBox::UpdateFocus_Impl()
     {
         sal_uInt16 nHighlightItemId = pToolBox->GetHighlightItemId();
         sal_uInt16 nFocusCount = 0;
-        for ( ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.begin();
-              aIter != m_aAccessibleChildren.end(); ++aIter )
+        for ( const auto& [rPos, rxChild] : m_aAccessibleChildren )
         {
-            sal_uInt16 nItemId = pToolBox->GetItemId( aIter->first );
+            sal_uInt16 nItemId = pToolBox->GetItemId( rPos );
 
-            if ( aIter->second.is() )
+            if ( rxChild.is() )
             {
                 VCLXAccessibleToolBoxItem* pItem =
-                    static_cast< VCLXAccessibleToolBoxItem* >( aIter->second.get() );
+                    static_cast< VCLXAccessibleToolBoxItem* >( rxChild.get() );
                 if ( pItem->HasFocus() && nItemId != nHighlightItemId )
                 {
                     // reset the old focused item
@@ -270,13 +269,12 @@ void VCLXAccessibleToolBox::UpdateChecked_Impl( ToolBox::ImplToolItems::size_typ
         sal_uInt16 nFocusId = pToolBox->GetItemId( _nPos );
         VCLXAccessibleToolBoxItem* pFocusItem = nullptr;
 
-        for ( ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.begin();
-              aIter != m_aAccessibleChildren.end(); ++aIter )
+        for ( const auto& [rPos, rxChild] : m_aAccessibleChildren )
         {
-                sal_uInt16 nItemId = pToolBox->GetItemId( aIter->first );
+                sal_uInt16 nItemId = pToolBox->GetItemId( rPos );
 
                 VCLXAccessibleToolBoxItem* pItem =
-                    static_cast< VCLXAccessibleToolBoxItem* >( aIter->second.get() );
+                    static_cast< VCLXAccessibleToolBoxItem* >( rxChild.get() );
                 pItem->SetChecked( pToolBox->IsItemChecked( nItemId ) );
                 if ( nItemId == nFocusId )
                     pFocusItem = pItem;
