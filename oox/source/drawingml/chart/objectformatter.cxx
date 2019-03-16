@@ -600,7 +600,8 @@ class LineFormatter : public DetailFormatterBase
 public:
     explicit            LineFormatter(
                             ObjectFormatterData& rData,
-                            const AutoFormatEntry* pAutoFormatEntry );
+                            const AutoFormatEntry* pAutoFormatEntry,
+                            const ObjectType eObjType );
 
     /** Converts line formatting to the passed property set. */
     void                convertFormatting(
@@ -809,8 +810,8 @@ DetailFormatterBase::DetailFormatterBase( ObjectFormatterData& rData, const Auto
     return aColor.getColor( mrData.mrFilter.getGraphicHelper() );
 }
 
-LineFormatter::LineFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry ) :
-    DetailFormatterBase( rData, pAutoFormatEntry )
+LineFormatter::LineFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry, const ObjectType eObjType ) :
+   DetailFormatterBase(rData, pAutoFormatEntry)
 {
     if( pAutoFormatEntry )
     {
@@ -819,6 +820,14 @@ LineFormatter::LineFormatter( ObjectFormatterData& rData, const AutoFormatEntry*
         if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
             if( const LineProperties* pLineProps = pTheme->getLineStyle( pAutoFormatEntry->mnThemedIdx ) )
                 *mxAutoLine = *pLineProps;
+        // set automatic border property for chartarea, because of tdf#81437 and tdf#82217
+        if ( eObjType == OBJECTTYPE_CHARTSPACE )
+        {
+            mxAutoLine->maLineFill.moFillType = rData.mrFilter.getGraphicHelper().getDefaultChartAreaLineStyle();
+            mxAutoLine->moLineWidth = rData.mrFilter.getGraphicHelper().getDefaultChartAreaLineWidth();
+            // this value is what MSO 2016 use as a default color for chartspace border
+            mxAutoLine->maLineFill.maFillColor.setSrgbClr( 0xD9D9D9 );
+        }
         // change line width according to chart auto style
         if( mxAutoLine->moLineWidth.has() )
             mxAutoLine->moLineWidth = mxAutoLine->moLineWidth.get() * pAutoFormatEntry->mnRelLineWidth / 100;
@@ -918,7 +927,7 @@ void TextFormatter::convertFormatting( PropertySet& rPropSet, const ModelRef< Te
 }
 
 ObjectTypeFormatter::ObjectTypeFormatter( ObjectFormatterData& rData, const ObjectTypeFormatEntry& rEntry, const ChartSpaceModel& rChartSpace, const ObjectType eObjType ) :
-    maLineFormatter(   rData, lclGetAutoFormatEntry( rEntry.mpAutoLines,   rChartSpace.mnStyle ) ),
+    maLineFormatter(   rData, lclGetAutoFormatEntry( rEntry.mpAutoLines,   rChartSpace.mnStyle ), eObjType ),
     maFillFormatter(   rData, lclGetAutoFormatEntry( rEntry.mpAutoFills,   rChartSpace.mnStyle ), eObjType ),
     maTextFormatter(   rData, lclGetAutoTextEntry(   rEntry.mpAutoTexts,   rChartSpace.mnStyle ), rChartSpace.mxTextProp ),
     mrModelObjHelper( rData.maModelObjHelper ),

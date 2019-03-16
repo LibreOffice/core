@@ -165,6 +165,17 @@ sal_Int32 GraphicHelper::getDefaultChartAreaFillStyle() const
     return XML_solidFill;
 }
 
+sal_Int32 GraphicHelper::getDefaultChartAreaLineStyle() const
+{
+    return XML_solidFill;
+}
+
+sal_Int16 GraphicHelper::getDefaultChartAreaLineWidth() const
+{
+    // this value is what MSO 2016 writes fixing incomplete MSO 2010 documents (0.75 pt in emu)
+    return 9525;
+}
+
 // Device info and device dependent unit conversion ---------------------------
 
 sal_Int32 GraphicHelper::convertScreenPixelXToHmm( double fPixelX ) const
