@@ -113,7 +113,7 @@ for line in read_generator():
         # re-organising them can make them much less readable.
         if foundHole and len(structLines) < 12 and structSize < 100 and not foundBogusLine:
             # Verify that we have enough hole-space that removing it will result in a structure
-            # that still satifies alignment requirements, otherwise the compiler will just put empty
+            # that still satisfies alignment requirements, otherwise the compiler will just put empty
             # space at the end of the struct.
             # TODO improve detection of the required alignment for a structure
             potentialSpace = (cumulativeHoleBits / 8) + (sizeOfFields - structSize)
