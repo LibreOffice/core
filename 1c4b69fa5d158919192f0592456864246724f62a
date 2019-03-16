@@ -22,6 +22,30 @@
       "revId": "1c4b69fa5d158919192f0592456864246724f62a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_4a6635f0",
+        "filename": "sw/qa/python/xscriptprovider.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001959
+      },
+      "writtenOn": "2019-03-16T14:35:13Z",
+      "side": 1,
+      "message": "Fair enough. There are other unit tests that had changes accepted that changed the variable names, but this one is particularly unwieldy. I\u0027ll change them and add a new changeset.",
+      "parentUuid": "ff82abbf_9751d611",
+      "range": {
+        "startLine": 29,
+        "startChar": 8,
+        "endLine": 29,
+        "endChar": 40
+      },
+      "revId": "1c4b69fa5d158919192f0592456864246724f62a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
