@@ -7,14 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "BaseIndexTest.hxx"
-#include "DocumentIndexTest.hxx"
-#include "XDocumentIndexTest.hxx"
-#include "XTextContentTest.hxx"
-
 #include <test/bootstrapfixture.hxx>
 #include <test/lang/xserviceinfo.hxx>
 #include <test/lang/xcomponent.hxx>
+#include <test/text/baseindex.hxx>
+#include <test/text/textdocumentindex.hxx>
+#include <test/text/xdocumentindex.hxx>
+#include <test/text/xtextcontent.hxx>
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -26,6 +25,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -37,29 +37,34 @@ namespace
 /**
  * Test for Java API test of file com.sun.star.comp.office.SwXDocumentIndex.csv
  */
-class SwXDocumentIndexTest : public test::BootstrapFixture,
-                             public unotest::MacrosTest,
-                             public apitest::XDocumentIndexTest,
-                             public apitest::BaseIndexTest,
-                             public apitest::DocumentIndexTest,
-                             public apitest::XTextContentTest,
-                             public apitest::XServiceInfo,
-                             public apitest::XComponent
+class SwXDocumentIndex final : public test::BootstrapFixture,
+                               public unotest::MacrosTest,
+                               public apitest::XDocumentIndex,
+                               public apitest::BaseIndex,
+                               public apitest::TextDocumentIndex,
+                               public apitest::XTextContent,
+                               public apitest::XServiceInfo,
+                               public apitest::XComponent
 {
     uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<text::XTextDocument> mxTextDocument;
+    uno::Reference<text::XTextRange> mxTextRange;
+    uno::Reference<text::XTextContent> mxTextContent;
 
 public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    SwXDocumentIndexTest()
+    SwXDocumentIndex()
         : apitest::XServiceInfo("SwXDocumentIndex", "com.sun.star.text.BaseIndex"){};
     uno::Reference<uno::XInterface> init() override;
+    uno::Reference<text::XTextRange> getTextRange() override;
+    uno::Reference<text::XTextContent> getTextContent() override;
+    bool isAttachSupported() override { return true; }
     uno::Reference<text::XTextDocument> getTextDocument() override { return mxTextDocument; }
     void triggerDesktopTerminate() override {}
 
-    CPPUNIT_TEST_SUITE(SwXDocumentIndexTest);
+    CPPUNIT_TEST_SUITE(SwXDocumentIndex);
     CPPUNIT_TEST(testGetImplementationName);
     CPPUNIT_TEST(testGetSupportedServiceNames);
     CPPUNIT_TEST(testSupportsService);
@@ -73,7 +78,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-void SwXDocumentIndexTest::setUp()
+void SwXDocumentIndex::setUp()
 {
     test::BootstrapFixture::setUp();
 
@@ -85,7 +90,7 @@ void SwXDocumentIndexTest::setUp()
     CPPUNIT_ASSERT(mxTextDocument.is());
 }
 
-void SwXDocumentIndexTest::tearDown()
+void SwXDocumentIndex::tearDown()
 {
     if (mxTextDocument.is())
         mxTextDocument->dispose();
@@ -93,7 +98,7 @@ void SwXDocumentIndexTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-uno::Reference<uno::XInterface> SwXDocumentIndexTest::init()
+uno::Reference<uno::XInterface> SwXDocumentIndex::init()
 {
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxTextDocument, uno::UNO_QUERY_THROW);
     uno::Reference<text::XDocumentIndex> xDocumentIndex(
@@ -103,10 +108,17 @@ uno::Reference<uno::XInterface> SwXDocumentIndexTest::init()
     CPPUNIT_ASSERT(xTextCursor.is());
     xText->insertTextContent(xTextCursor, xDocumentIndex, false);
     xTextCursor->gotoEnd(false);
+    mxTextRange = uno::Reference<text::XTextRange>(xTextCursor, uno::UNO_QUERY_THROW);
+    mxTextContent = uno::Reference<text::XTextContent>(
+        xMSF->createInstance("com.sun.star.text.DocumentIndex"), uno::UNO_QUERY_THROW);
     return xDocumentIndex;
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SwXDocumentIndexTest);
+uno::Reference<text::XTextRange> SwXDocumentIndex::getTextRange() { return mxTextRange; }
+
+uno::Reference<text::XTextContent> SwXDocumentIndex::getTextContent() { return mxTextContent; }
+
+CPPUNIT_TEST_SUITE_REGISTRATION(SwXDocumentIndex);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
