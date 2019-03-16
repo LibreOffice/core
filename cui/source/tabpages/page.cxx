@@ -826,6 +826,9 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl, weld::Widget&, void)
     }
     m_xPaperTrayBox->set_active_text(aOldName);
     m_xPaperTrayBox->thaw();
+    // tdf#123650 explicitly grab-focus after the modification otherwise gtk loses track
+    // of there the focus should be
+    m_xPaperTrayBox->grab_focus();
 }
 
 IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeSelect_Impl, weld::ComboBox&, void)
