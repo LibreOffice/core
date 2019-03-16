@@ -2217,6 +2217,9 @@ bool ScColumn::SetFormulaCells( SCROW nRow, std::vector<ScFormulaCell*>& rCells 
 
     CellStorageModified();
 
+    // Reget position_type as the type may have changed to formula, block and
+    // block size changed, ...
+    aPos = maCells.position(nRow);
     AttachNewFormulaCells(aPos, rCells.size(), aNewSharedRows);
 
     return true;
