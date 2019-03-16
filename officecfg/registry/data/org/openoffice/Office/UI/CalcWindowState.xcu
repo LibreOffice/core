@@ -129,7 +129,7 @@
           <value>false</value>
         </prop>
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Lines</value>
+          <value xml:lang="en-US">Curves and Polygons</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>false</value>
@@ -713,10 +713,13 @@
           <value>false</value>
         </prop>
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Arrows</value>
+          <value xml:lang="en-US">Lines and Arrows</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>false</value>
+        </prop>
+        <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+          <value>true</value>
         </prop>
       </node>
       <node oor:name="private:resource/toolbar/notebookbarshortcuts" oor:op="replace">

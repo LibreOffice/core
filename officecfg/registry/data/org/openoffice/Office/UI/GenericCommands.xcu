@@ -4760,7 +4760,7 @@
       </node>
       <node oor:name=".uno:LineToolbox" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Curve</value>
+          <value xml:lang="en-US">Curves and Polygons</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
