@@ -8,13 +8,13 @@
  */
 
 #include "BaseIndexTest.hxx"
-#include "XTextContentTest.hxx"
 
 #include <test/bootstrapfixture.hxx>
 #include <test/lang/xserviceinfo.hxx>
 #include <test/lang/xcomponent.hxx>
 #include <test/text/textdocumentindex.hxx>
 #include <test/text/xdocumentindex.hxx>
+#include <test/text/xtextcontent.hxx>
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -26,6 +26,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -42,12 +43,14 @@ class SwXDocumentIndex final : public test::BootstrapFixture,
                                public apitest::XDocumentIndex,
                                public apitest::BaseIndexTest,
                                public apitest::TextDocumentIndex,
-                               public apitest::XTextContentTest,
+                               public apitest::XTextContent,
                                public apitest::XServiceInfo,
                                public apitest::XComponent
 {
     uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<text::XTextDocument> mxTextDocument;
+    uno::Reference<text::XTextRange> mxTextRange;
+    uno::Reference<text::XTextContent> mxTextContent;
 
 public:
     virtual void setUp() override;
@@ -55,6 +58,10 @@ public:
 
     SwXDocumentIndex() : apitest::XServiceInfo("SwXDocumentIndex", "com.sun.star.text.BaseIndex") {};
     uno::Reference<uno::XInterface> init() override;
+    uno::Reference<text::XTextRange> getTextRange() override;
+    uno::Reference<text::XTextContent> getTextContent() override;
+    bool isAttachSupported() override
+        { return true; }
     uno::Reference<text::XTextDocument> getTextDocument() override
         { return mxTextDocument; }
     void triggerDesktopTerminate() override {}
@@ -101,7 +108,20 @@ uno::Reference<uno::XInterface> SwXDocumentIndex::init()
     CPPUNIT_ASSERT(xTextCursor.is());
     xText->insertTextContent(xTextCursor, xDocumentIndex, false);
     xTextCursor->gotoEnd(false);
+    mxTextRange = uno::Reference<text::XTextRange>(xTextCursor, uno::UNO_QUERY_THROW);
+    mxTextContent = uno::Reference<text::XTextContent>(
+        xMSF->createInstance("com.sun.star.text.DocumentIndex"), uno::UNO_QUERY_THROW);
     return xDocumentIndex;
+}
+
+uno::Reference<text::XTextRange> SwXDocumentIndex::getTextRange()
+{
+   return mxTextRange;
+}
+
+uno::Reference<text::XTextContent> SwXDocumentIndex::getTextContent()
+{
+    return mxTextContent;
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwXDocumentIndex);
