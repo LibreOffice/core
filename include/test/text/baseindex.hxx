@@ -7,12 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_QA_API_BASEINDEXTEST_HXX
-#define INCLUDED_SW_QA_API_BASEINDEXTEST_HXX
+#ifndef INCLUDED_TEST_TEXT_BASEINDEXTEST_HXX
+#define INCLUDED_TEST_TEXT_BASEINDEXTEST_HXX
 
-#include "ApiTestBase.hxx"
-
-#include <cppunit/TestAssert.h>
 #include <test/unoapi_property_testers.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -29,33 +26,31 @@
 
 namespace apitest
 {
-namespace
+class OOO_DLLPUBLIC_TEST BaseIndex
 {
-BitmapEx createExampleBitmap()
-{
-    vcl::bitmap::RawBitmap aRawBitmap(Size(4, 4), 24);
-    aRawBitmap.SetPixel(0, 0, COL_LIGHTBLUE);
-    aRawBitmap.SetPixel(0, 1, COL_LIGHTGREEN);
-    aRawBitmap.SetPixel(1, 0, COL_LIGHTRED);
-    aRawBitmap.SetPixel(1, 1, COL_LIGHTMAGENTA);
-    return vcl::bitmap::CreateFromData(std::move(aRawBitmap));
-}
+    static BitmapEx createExampleBitmap()
+    {
+        vcl::bitmap::RawBitmap aRawBitmap(Size(4, 4), 24);
+        aRawBitmap.SetPixel(0, 0, COL_LIGHTBLUE);
+        aRawBitmap.SetPixel(0, 1, COL_LIGHTGREEN);
+        aRawBitmap.SetPixel(1, 0, COL_LIGHTRED);
+        aRawBitmap.SetPixel(1, 1, COL_LIGHTMAGENTA);
+        return vcl::bitmap::CreateFromData(std::move(aRawBitmap));
+    }
 
-void writerFileWithBitmap(OUString const& rURL)
-{
-    BitmapEx aBitmapEx = createExampleBitmap();
-    SvFileStream aFileStream(rURL, StreamMode::READ | StreamMode::WRITE);
-    vcl::PNGWriter aWriter(aBitmapEx);
-    aWriter.Write(aFileStream);
-    aFileStream.Seek(STREAM_SEEK_TO_BEGIN);
-    aFileStream.Close();
-}
+    static void writerFileWithBitmap(OUString const& rURL)
+    {
+        BitmapEx aBitmapEx = createExampleBitmap();
+        SvFileStream aFileStream(rURL, StreamMode::READ | StreamMode::WRITE);
+        vcl::PNGWriter aWriter(aBitmapEx);
+        aWriter.Write(aFileStream);
+        aFileStream.Seek(STREAM_SEEK_TO_BEGIN);
+        aFileStream.Close();
+    }
 
-} // end anonymous namespace
-
-class BaseIndexTest : public ApiTestBase
-{
 public:
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
+    virtual ~BaseIndex() {}
     void testBaseIndexProperties()
     {
         css::uno::Reference<css::beans::XPropertySet> xBaseIndex(init(), css::uno::UNO_QUERY_THROW);
