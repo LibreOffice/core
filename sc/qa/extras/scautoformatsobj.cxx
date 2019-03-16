@@ -70,7 +70,7 @@ uno::Reference<uno::XInterface> ScAutoFormatsObj::init()
                           uno::makeAny(xMSF->createInstance("com.sun.star.sheet.TableAutoFormat")));
     }
     // XNameReplace
-    setReplacmentElement(uno::makeAny(xMSF->createInstance("com.sun.star.sheet.TableAutoFormat")));
+    setReplacementElement(uno::makeAny(xMSF->createInstance("com.sun.star.sheet.TableAutoFormat")));
 
     return xTAF;
 }
