@@ -9,6 +9,7 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <test/lang/xserviceinfo.hxx>
+#include <test/text/textdocumentsettings.hxx>
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -21,7 +22,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include "DocumentSettingsTest.hxx"
 #include "SettingsTest.hxx"
 #include "PrinterSettingsTest.hxx"
 
@@ -34,7 +34,7 @@ namespace
  */
 class SwXDocumentSettings final : public test::BootstrapFixture,
                                   public unotest::MacrosTest,
-                                  public apitest::DocumentSettingsTest,
+                                  public apitest::TextDocumentSettings,
                                   public apitest::SettingsTest,
                                   public apitest::PrinterSettingsTest,
                                   public apitest::XServiceInfo

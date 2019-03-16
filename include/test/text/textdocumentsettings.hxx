@@ -7,21 +7,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_QA_API_DOCUMENTSETTINGSTEST_HXX
-#define INCLUDED_SW_QA_API_DOCUMENTSETTINGSTEST_HXX
+#ifndef INCLUDED_TEST_TEXT_TEXTDOCUMENTSETTINGS_HXX
+#define INCLUDED_TEST_TEXT_TEXTDOCUMENTSETTINGS_HXX
 
-#include "ApiTestBase.hxx"
-
-#include <cppunit/TestAssert.h>
 #include <test/unoapi_property_testers.hxx>
+#include <test/testdllapi.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 namespace apitest
 {
-class DocumentSettingsTest : public ApiTestBase
+class OOO_DLLPUBLIC_TEST TextDocumentSettings
 {
 public:
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
+    virtual ~TextDocumentSettings() {}
     void testDocumentSettingsProperties()
     {
         css::uno::Reference<css::beans::XPropertySet> xDocumentSettings(init(), css::uno::UNO_QUERY_THROW);
