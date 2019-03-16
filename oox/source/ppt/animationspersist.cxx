@@ -27,6 +27,7 @@
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 #include <com/sun/star/animations/Event.hpp>
+#include <com/sun/star/animations/XAnimationNode.hpp>
 
 #include <oox/drawingml/shape.hxx>
 #include <oox/helper/attributelist.hxx>
@@ -181,6 +182,19 @@ namespace oox { namespace ppt {
             sal_Int16 nSubType;
             aAny = mpTarget->convert( pSlide, nSubType );
             aEvent.Source = aAny;
+            aAny <<= aEvent;
+        }
+        else if (mnType == PPT_TOKEN(tn) && (maValue >>= aEvent))
+        {
+            OUString sId;
+            aEvent.Source >>= sId;
+            css::uno::Reference<XAnimationNode> xNode = pSlide->getAnimationNode(sId);
+            if (xNode.is())
+            {
+                aEvent.Source <<= xNode;
+            }
+            else
+                aEvent.Source.clear();
             aAny <<= aEvent;
         }
         else

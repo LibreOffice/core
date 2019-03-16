@@ -318,6 +318,16 @@ void SlidePersist::hideShapesAsMasterShapes()
     }
 }
 
+Reference<XAnimationNode> SlidePersist::getAnimationNode(const OUString& sId) const
+{
+    const auto& pIter = maAnimNodesMap.find(sId);
+    if (pIter != maAnimNodesMap.end())
+        return pIter->second;
+
+    Reference<XAnimationNode> aResult;
+    return aResult;
+}
+
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
