@@ -8,13 +8,13 @@
  */
 
 #include "BaseIndexTest.hxx"
-#include "DocumentIndexTest.hxx"
 #include "XDocumentIndexTest.hxx"
 #include "XTextContentTest.hxx"
 
 #include <test/bootstrapfixture.hxx>
 #include <test/lang/xserviceinfo.hxx>
 #include <test/lang/xcomponent.hxx>
+#include <test/text/textdocumentindex.hxx>
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -41,7 +41,7 @@ class SwXDocumentIndex final : public test::BootstrapFixture,
                                public unotest::MacrosTest,
                                public apitest::XDocumentIndexTest,
                                public apitest::BaseIndexTest,
-                               public apitest::DocumentIndexTest,
+                               public apitest::TextDocumentIndex,
                                public apitest::XTextContentTest,
                                public apitest::XServiceInfo,
                                public apitest::XComponent
