@@ -19,6 +19,7 @@
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/chart/XAxisXSupplier.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
@@ -70,6 +71,7 @@ public:
     void testTdf106217();
     void testTdf108021();
     void testAutoBackgroundXLSX();
+    void testAutoChartAreaBorderPropXLSX();
     void testChartAreaStyleBackgroundXLSX();
     void testChartHatchFillXLSX();
     void testAxisTextRotationXLSX();
@@ -155,6 +157,7 @@ public:
     CPPUNIT_TEST(testTdf106217);
     CPPUNIT_TEST(testTdf108021);
     CPPUNIT_TEST(testAutoBackgroundXLSX);
+    CPPUNIT_TEST(testAutoChartAreaBorderPropXLSX);
     CPPUNIT_TEST(testChartAreaStyleBackgroundXLSX);
     CPPUNIT_TEST(testChartHatchFillXLSX);
     CPPUNIT_TEST(testAxisTextRotationXLSX);
@@ -918,6 +921,26 @@ void Chart2ImportTest::testAutoBackgroundXLSX()
         drawing::FillStyle_SOLID, eStyle);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in xlsx should be loaded as solid white.",
         sal_Int32(0x00FFFFFF), sal_Int32(nColor & 0x00FFFFFF)); // highest 2 bytes are transparency which we ignore here.
+}
+
+void Chart2ImportTest::testAutoChartAreaBorderPropXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "chart-area-style-border.xlsx");
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    // Test "Automatic" chartarea border style/color/width.
+    Reference<beans::XPropertySet> xPropSet = xChartDoc->getPageBackground();
+    CPPUNIT_ASSERT(xPropSet.is());
+    drawing::LineStyle eStyle = xPropSet->getPropertyValue("LineStyle").get<drawing::LineStyle>();
+    sal_Int32 nColor = xPropSet->getPropertyValue("LineColor").get<sal_Int32>();
+    sal_Int32 nWidth = xPropSet->getPropertyValue("LineWidth").get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chartarea border should be loaded as solid style.",
+        drawing::LineStyle_SOLID, eStyle);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chartarea border color should be loaded as light gray.",
+        sal_Int32(0xD9D9D9), nColor);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chartarea border width should be loaded as 0.75 pt (~0.026 cm)",
+        sal_Int32(26), nWidth);
 }
 
 void Chart2ImportTest::testChartAreaStyleBackgroundXLSX()
