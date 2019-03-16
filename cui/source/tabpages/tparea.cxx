@@ -121,6 +121,8 @@ SvxAreaTabPage::SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs
 
 void SvxAreaTabPage::SetOptimalSize(weld::DialogController* pController)
 {
+    m_xFillTab->set_size_request(-1, -1);
+
     TabPageParent aFillTab(m_xFillTab.get(), pController);
     // TEMP
     if (!aFillTab.pController)
