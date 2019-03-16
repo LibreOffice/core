@@ -43,6 +43,8 @@ JavaVM *lo_get_javavm(void);
 
 const char *lo_get_app_data_dir(void);
 
+const char *libreofficekit_get_app_data_dir(void);
+
 AAssetManager *lo_get_native_assetmgr(void);
 
 int setup_cdir(void);
