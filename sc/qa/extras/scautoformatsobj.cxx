@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xnameaccess.hxx>
+#include <test/container/xnamecontainer.hxx>
 #include <test/container/xnamereplace.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -25,6 +26,7 @@ namespace sc_apitest
 {
 class ScAutoFormatsObj : public CalcUnoApiTest,
                          public apitest::XNameAccess,
+                         public apitest::XNameContainer,
                          public apitest::XNameReplace
 {
 public:
@@ -41,6 +43,13 @@ public:
     CPPUNIT_TEST(testGetElementNames);
     CPPUNIT_TEST(testHasByName);
 
+    // XNameContainer
+    CPPUNIT_TEST(testInsertByName);
+    CPPUNIT_TEST(testInsertByNameEmptyName);
+    CPPUNIT_TEST(testInsertByNameDuplicate);
+    CPPUNIT_TEST(testRemoveByName);
+    CPPUNIT_TEST(testRemoveByNameNoneExistingElement);
+
     // XNameReplace
     CPPUNIT_TEST(testReplaceByName);
 
@@ -53,6 +62,7 @@ private:
 ScAutoFormatsObj::ScAutoFormatsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XNameAccess("Default")
+    , XNameContainer("ScAutoFormatsObj")
     , XNameReplace("ScAutoFormatsObj")
 {
 }
@@ -69,6 +79,8 @@ uno::Reference<uno::XInterface> ScAutoFormatsObj::init()
         xNC->insertByName("ScAutoFormatsObj",
                           uno::makeAny(xMSF->createInstance("com.sun.star.sheet.TableAutoFormat")));
     }
+    // XNameContainer
+    setElement(uno::makeAny(xMSF->createInstance("com.sun.star.sheet.TableAutoFormat")));
     // XNameReplace
     setReplacementElement(uno::makeAny(xMSF->createInstance("com.sun.star.sheet.TableAutoFormat")));
 
