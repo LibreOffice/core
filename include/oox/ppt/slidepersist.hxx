@@ -117,6 +117,7 @@ public:
     void applyTextStyles( const oox::core::XmlFilterBase& rFilterBase );
 
     std::map< OUString, css::uno::Reference< css::animations::XAnimationNode > >& getAnimNodesMap() { return maAnimNodesMap; };
+    css::uno::Reference<css::animations::XAnimationNode> getAnimationNode(const OUString& sId) const;
     ::oox::drawingml::ShapePtr getShape( const OUString & id ) { return maShapeMap[ id ]; }
     ::oox::drawingml::ShapeIdMap& getShapeMap() { return maShapeMap; }
 

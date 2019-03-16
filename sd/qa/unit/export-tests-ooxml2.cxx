@@ -2095,7 +2095,9 @@ void SdOOXMLExportTest2::testTdf44223()
                 "audio/x-wav");
 
     xmlDocPtr pDoc1 = parseExport(tempFile, "ppt/slides/slide1.xml");
-    assertXPath(pDoc1 , "//p:audio/p:cMediaNode/p:tgtEl/p:sndTgt[@r:embed]", 1);
+
+    assertXPath(pDoc1 , "//p:audio/p:cMediaNode/p:cTn/p:stCondLst/p:cond", "evt", "begin");
+    assertXPath(pDoc1 , "//p:audio/p:cMediaNode/p:cTn/p:stCondLst/p:cond", "delay", "0");
 
     xmlDocPtr pDoc2 = parseExport(tempFile, "ppt/slides/slide2.xml");
     assertXPath(pDoc2 , "//p:transition/p:sndAc/p:stSnd/p:snd[@r:embed]", 2);
