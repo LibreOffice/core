@@ -558,24 +558,13 @@ oslSocketResult SAL_CALL osl_getAddrOfSocketAddr( oslSocketAddr pAddr, sal_Seque
     instead!
  */
 
-/* wrap around different interfaces to reentrant gethostbyname */
-static struct hostent* osl_gethostbyname_r (
-    const char *name, struct hostent *result,
-    char *buffer, int buflen, int *h_errnop)
+static int osl_getaddrinfo(const char* name, struct addrinfo *result)
 {
-#if defined(LINUX) || defined(ANDROID) || defined(FREEBSD) || defined(DRAGONFLY)
-    struct hostent *result_; /* will be the same as result */
-    int e;
-    e = gethostbyname_r (name, result, buffer, buflen,
-                 &result_, h_errnop);
-    return e ? nullptr : result_ ;
-#elif defined(AIX)
-    *h_errnop = gethostbyname_r (name, result, (struct hostent_data *)buffer);
-    (void)buflen;
-    return *h_errnop ? NULL : result ;
-#else
-    return gethostbyname_r( name, result, buffer, buflen, h_errnop);
-#endif
+    struct addrinfo aHints;
+    memset(&aHints, 0, sizeof(struct addrinfo));
+    aHints.ai_flags = AI_CANONNAME;
+
+    return getaddrinfo(name, nullptr, &aHints, &result);
 }
 
 static bool isFullQualifiedDomainName (const sal_Char *pHostName)
@@ -597,19 +586,11 @@ static sal_Char* getFullQualifiedDomainName (const sal_Char *pHostName)
     }
     else
     {
-        struct hostent  aHostByName;
-        struct hostent *pHostByName;
-        sal_Char        pQualifiedHostBuffer[ MAX_HOSTBUFFER_SIZE ];
-        int     nErrorNo;
-
-        pHostByName = osl_gethostbyname_r (
-            pHostName,
-            &aHostByName, pQualifiedHostBuffer,
-            sizeof(pQualifiedHostBuffer), &nErrorNo );
-        if (pHostByName != nullptr)
-        {
-            pFullQualifiedName = strdup(pHostByName->h_name);
-        }
+        struct addrinfo *pAddrInfoList = nullptr;
+        int nErrorNo = osl_getaddrinfo(pHostName, pAddrInfoList);
+        if (nErrorNo == 0)
+            pFullQualifiedName = strdup(pAddrInfoList->ai_canonname);
+        freeaddrinfo(pAddrInfoList);
     }
 
     return pFullQualifiedName;
@@ -621,22 +602,17 @@ struct oslHostAddrImpl
     oslSocketAddr   pSockAddr;
 };
 
-static oslHostAddr hostentToHostAddr (const struct hostent *he)
+static oslHostAddr addrinfoToHostAddr (const struct addrinfo *ai)
 {
-    oslHostAddr pAddr= nullptr;
-    oslSocketAddr pSockAddr = nullptr;
-
-    sal_Char        *cn;
-
-    if ((he == nullptr) || (he->h_name == nullptr) || (he->h_addr_list[0] == nullptr))
+    if ((ai == nullptr) || (ai->ai_canonname == nullptr) || (ai->ai_addr == nullptr))
         return nullptr;
 
-    cn = getFullQualifiedDomainName (he->h_name);
+    sal_Char *cn = getFullQualifiedDomainName (ai->ai_canonname);
     SAL_WARN_IF( !cn, "sal.osl", "couldn't get full qualified domain name" );
     if (cn == nullptr)
         return nullptr;
 
-    pSockAddr = createSocketAddr();
+    oslSocketAddr pSockAddr = createSocketAddr();
     SAL_WARN_IF( !pSockAddr, "sal.osl", "insufficient memory" );
     if (pSockAddr == nullptr)
     {
@@ -644,14 +620,12 @@ static oslHostAddr hostentToHostAddr (const struct hostent *he)
         return nullptr;
     }
 
-    pSockAddr->m_sockaddr.sa_family= he->h_addrtype;
-    if (pSockAddr->m_sockaddr.sa_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
+    if (ai->ai_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
     {
-        struct sockaddr_in *sin= reinterpret_cast<sockaddr_in *>(&pSockAddr->m_sockaddr);
         memcpy (
-            &(sin->sin_addr.s_addr),
-            he->h_addr_list[0],
-            he->h_length);
+            &(pSockAddr->m_sockaddr),
+            ai->ai_addr,
+            ai->ai_addrlen);
     }
     else
     {
@@ -665,7 +639,7 @@ static oslHostAddr hostentToHostAddr (const struct hostent *he)
         return nullptr;
     }
 
-    pAddr= static_cast<oslHostAddr>(malloc(sizeof(struct oslHostAddrImpl)));
+    oslHostAddr pAddr= static_cast<oslHostAddr>(malloc(sizeof(struct oslHostAddrImpl)));
     SAL_WARN_IF( !pAddr, "sal.osl", "allocation error" );
     if (pAddr == nullptr)
     {
@@ -767,17 +741,13 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *ustrHostname)
 
 oslHostAddr osl_psz_createHostAddrByName (const sal_Char *pszHostname)
 {
-    struct      hostent  aHe;
-    struct      hostent *pHe;
-    sal_Char    heBuffer[ MAX_HOSTBUFFER_SIZE ];
-    int         nErrorNo;
+    struct addrinfo *pAddrInfoList = nullptr;
+    osl_getaddrinfo(pszHostname, pAddrInfoList);
 
-    pHe = osl_gethostbyname_r (
-        pszHostname,
-        &aHe, heBuffer,
-        sizeof(heBuffer), &nErrorNo );
+    auto pAddr = addrinfoToHostAddr (pAddrInfoList);
+    freeaddrinfo(pAddrInfoList);
 
-    return hostentToHostAddr (pHe);
+    return pAddr;
 }
 
 oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
