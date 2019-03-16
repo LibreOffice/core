@@ -31,52 +31,52 @@
 
 class SwFieldFuncPage : public SwFieldPage
 {
-    VclPtr<ListBox>        m_pTypeLB;
-    VclPtr<ListBox>        m_pSelectionLB;
-    VclPtr<VclContainer>   m_pFormat;
-    VclPtr<ListBox>        m_pFormatLB;
-    VclPtr<FixedText>      m_pNameFT;
-    VclPtr<ConditionEdit>  m_pNameED;
-    VclPtr<VclContainer>   m_pValueGroup;
-    VclPtr<FixedText>      m_pValueFT;
-    VclPtr<Edit>           m_pValueED;
-    VclPtr<FixedText>      m_pCond1FT;
-    VclPtr<ConditionEdit>  m_pCond1ED;
-    VclPtr<FixedText>      m_pCond2FT;
-    VclPtr<ConditionEdit>  m_pCond2ED;
-    VclPtr<PushButton>     m_pMacroBT;
-
-    //controls of "Input list"
-    VclPtr<VclContainer>   m_pListGroup;
-    VclPtr<FixedText>      m_pListItemFT;
-    VclPtr<ReturnActionEdit> m_pListItemED;
-    VclPtr<PushButton>     m_pListAddPB;
-    VclPtr<FixedText>      m_pListItemsFT;
-    VclPtr<ListBox>        m_pListItemsLB;
-    VclPtr<PushButton>     m_pListRemovePB;
-    VclPtr<PushButton>     m_pListUpPB;
-    VclPtr<PushButton>     m_pListDownPB;
-    VclPtr<FixedText>      m_pListNameFT;
-    VclPtr<Edit>           m_pListNameED;
-
     OUString        m_sOldValueFT;
     OUString        m_sOldNameFT;
 
     sal_uLong           nOldFormat;
     bool            bDropDownLBChanged;
 
-    DECL_LINK( TypeHdl, ListBox&, void );
-    DECL_LINK( SelectHdl, ListBox&, void );
-    DECL_LINK( InsertMacroHdl, ListBox&, void );
-    DECL_LINK( ModifyHdl, Edit&, void );
-    DECL_LINK( ListModifyReturnActionHdl, ReturnActionEdit&, void );
-    DECL_LINK( ListModifyButtonHdl, Button*, void );
-    DECL_LINK( ListEnableHdl, Edit&, void );
-    DECL_LINK( ListEnableListBoxHdl, ListBox&, void );
-    void ListModifyHdl(Control const *);
+    std::unique_ptr<weld::TreeView> m_xTypeLB;
+    std::unique_ptr<weld::TreeView> m_xSelectionLB;
+    std::unique_ptr<weld::Widget> m_xFormat;
+    std::unique_ptr<weld::TreeView> m_xFormatLB;
+    std::unique_ptr<weld::Label> m_xNameFT;
+    std::unique_ptr<SwConditionEdit> m_xNameED;
+    std::unique_ptr<weld::Widget> m_xValueGroup;
+    std::unique_ptr<weld::Label> m_xValueFT;
+    std::unique_ptr<weld::Entry> m_xValueED;
+    std::unique_ptr<weld::Label> m_xCond1FT;
+    std::unique_ptr<SwConditionEdit> m_xCond1ED;
+    std::unique_ptr<weld::Label> m_xCond2FT;
+    std::unique_ptr<SwConditionEdit> m_xCond2ED;
+    std::unique_ptr<weld::Button> m_xMacroBT;
+
+    //controls of "Input list"
+    std::unique_ptr<weld::Widget> m_xListGroup;
+    std::unique_ptr<weld::Label> m_xListItemFT;
+    std::unique_ptr<weld::Entry> m_xListItemED;
+    std::unique_ptr<weld::Button> m_xListAddPB;
+    std::unique_ptr<weld::Label> m_xListItemsFT;
+    std::unique_ptr<weld::TreeView> m_xListItemsLB;
+    std::unique_ptr<weld::Button> m_xListRemovePB;
+    std::unique_ptr<weld::Button> m_xListUpPB;
+    std::unique_ptr<weld::Button> m_xListDownPB;
+    std::unique_ptr<weld::Label> m_xListNameFT;
+    std::unique_ptr<weld::Entry> m_xListNameED;
+
+    DECL_LINK( TypeHdl, weld::TreeView&, void );
+    DECL_LINK( SelectHdl, weld::TreeView&, void );
+    DECL_LINK( InsertMacroHdl, weld::TreeView&, void );
+    DECL_LINK( ModifyHdl, weld::Entry&, void );
+    DECL_LINK( ListModifyReturnActionHdl, weld::Entry&, bool );
+    DECL_LINK( ListModifyButtonHdl, weld::Button&, void );
+    DECL_LINK( ListEnableHdl, weld::Entry&, void );
+    DECL_LINK( ListEnableListBoxHdl, weld::TreeView&, void );
+    void ListModifyHdl(const weld::Widget*);
 
     // select Macro
-    DECL_LINK( MacroHdl, Button *, void );
+    DECL_LINK( MacroHdl, weld::Button&, void );
 
     void                UpdateSubType();
 
@@ -84,10 +84,8 @@ protected:
     virtual sal_uInt16      GetGroup() override;
 
 public:
-                        SwFieldFuncPage(vcl::Window* pParent, const SfxItemSet* pSet);
-
-                        virtual ~SwFieldFuncPage() override;
-    virtual void        dispose() override;
+    SwFieldFuncPage(TabPageParent pParent, const SfxItemSet* pSet);
+    virtual ~SwFieldFuncPage() override;
 
     static VclPtr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 

@@ -39,21 +39,6 @@ public:
     void        SetActionHdl( const Link<NumEditAction&,void>& rLink ) { aActionLink = rLink;}
 };
 
-// call a link when KEY_RETURN is pressed
-class SW_DLLPUBLIC ReturnActionEdit : public Edit
-{
-    Link<ReturnActionEdit&,void>  aReturnActionLink;
-public:
-    ReturnActionEdit(vcl::Window* pParent, WinBits nStyle)
-        : Edit(pParent, nStyle)
-    {
-    }
-    virtual void KeyInput( const KeyEvent& ) override;
-
-    void SetReturnActionLink(const Link<ReturnActionEdit&,void>& rLink)
-            { aReturnActionLink = rLink;}
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

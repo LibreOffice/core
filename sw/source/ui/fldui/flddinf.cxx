@@ -52,6 +52,12 @@ void FillFieldSelect(ListBox& rListBox)
         rListBox.InsertEntry(SwResId(FLD_SELECT[i]));
 }
 
+void FillFieldSelect(weld::TreeView& rListBox)
+{
+    for (size_t i = 0; i < SAL_N_ELEMENTS(FLD_SELECT); ++i)
+        rListBox.append_text(SwResId(FLD_SELECT[i]));
+}
+
 SwFieldDokInfPage::SwFieldDokInfPage(vcl::Window* pParent, const SfxItemSet *const pCoreSet)
     :  SwFieldPage(pParent, "FieldDocInfoPage",
         "modules/swriter/ui/flddocinfopage.ui", pCoreSet)

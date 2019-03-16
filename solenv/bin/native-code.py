@@ -465,7 +465,6 @@ custom_widgets = [
     'RefButton',
     'RefEdit',
     'ReplaceEdit',
-    'ReturnActionEdit',
     'RowEdit',
     'RubyEdit',
     'RubyPreview',
