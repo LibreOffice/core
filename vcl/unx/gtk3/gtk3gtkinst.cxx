@@ -1255,11 +1255,12 @@ protected:
     GtkWidget* m_pWidget;
     GtkInstanceBuilder* m_pBuilder;
 
-    static void signalFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
+    static gboolean signalFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         SolarMutexGuard aGuard;
         pThis->signal_focus_in();
+        return false;
     }
 
     void signal_focus_in()
@@ -1267,11 +1268,12 @@ protected:
         m_aFocusInHdl.Call(*this);
     }
 
-    static void signalFocusOut(GtkWidget*, GdkEvent*, gpointer widget)
+    static gboolean signalFocusOut(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         SolarMutexGuard aGuard;
         pThis->signal_focus_out();
+        return false;
     }
 
     void signal_focus_out()
