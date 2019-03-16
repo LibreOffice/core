@@ -7,11 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "BaseIndexTest.hxx"
-
 #include <test/bootstrapfixture.hxx>
 #include <test/lang/xserviceinfo.hxx>
 #include <test/lang/xcomponent.hxx>
+#include <test/text/baseindex.hxx>
 #include <test/text/textdocumentindex.hxx>
 #include <test/text/xdocumentindex.hxx>
 #include <test/text/xtextcontent.hxx>
@@ -41,7 +40,7 @@ namespace
 class SwXDocumentIndex final : public test::BootstrapFixture,
                                public unotest::MacrosTest,
                                public apitest::XDocumentIndex,
-                               public apitest::BaseIndexTest,
+                               public apitest::BaseIndex,
                                public apitest::TextDocumentIndex,
                                public apitest::XTextContent,
                                public apitest::XServiceInfo,
