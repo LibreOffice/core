@@ -7,12 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_QA_API_XDOCUMENTINDEXTEST_HXX
-#define INCLUDED_SW_QA_API_XDOCUMENTINDEXTEST_HXX
-
-#include "ApiTestBase.hxx"
-
-#include <cppunit/TestAssert.h>
+#ifndef INCLUDED_TEST_TEST_XDOCUMENTINDEX_HXX
+#define INCLUDED_TEST_TEST_XDOCUMENTINDEX_HXX
 
 #include <test/unoapi_property_testers.hxx>
 
@@ -30,10 +26,12 @@ namespace apitest
  *
  * @see com.sun.star.text.XDocumentIndex
  */
-class XDocumentIndexTest : public ApiTestBase
+class XDocumentIndex
 {
 public:
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
     virtual css::uno::Reference<css::text::XTextDocument> getTextDocument() = 0;
+    virtual ~XDocumentIndex() {}
 
     /**
      * Gets the document from relation and insert a new index mark.
