@@ -205,10 +205,9 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
         {
             sal_Int32 i=0;
             m_nCurSelectedPos = LISTBOX_ENTRY_NOTFOUND;
-            for ( ListItems::iterator aIter = m_aAccessibleChildren.begin();
-                  aIter != m_aAccessibleChildren.end(); ++aIter,++i)
+            for ( auto& rChild : m_aAccessibleChildren )
             {
-                Reference< XAccessible > xHold = *aIter;
+                Reference< XAccessible > xHold = rChild;
                 if ( xHold.is() )
                 {
                     VCLXAccessibleListItem* pItem = static_cast< VCLXAccessibleListItem* >( xHold.get() );
@@ -219,7 +218,7 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
 
                     if ( bNowSelected && !pItem->IsSelected() )
                     {
-                        xNewAcc = *aIter;
+                        xNewAcc = rChild;
                         aNewValue <<= xNewAcc;
                     }
                     else if ( pItem->IsSelected() )
@@ -231,6 +230,7 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
                 { // it could happen that a child was not created before
                     checkEntrySelected(i,aNewValue,xNewAcc);
                 }
+                ++i;
             }
             const sal_Int32 nCount = m_pListBoxHelper->GetEntryCount();
             if ( i < nCount ) // here we have to check the if any other listbox entry is selected
@@ -670,10 +670,9 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_Int32)
         {
             sal_Int32 i=0;
             m_nCurSelectedPos = LISTBOX_ENTRY_NOTFOUND;
-            for ( ListItems::iterator aIter = m_aAccessibleChildren.begin();
-                  aIter != m_aAccessibleChildren.end(); ++aIter,++i)
+            for ( auto& rChild : m_aAccessibleChildren )
             {
-                Reference< XAccessible > xHold = *aIter;
+                Reference< XAccessible > xHold = rChild;
                 if ( xHold.is() )
                 {
                     VCLXAccessibleListItem* pItem = static_cast< VCLXAccessibleListItem* >( xHold.get() );
@@ -684,7 +683,7 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_Int32)
 
                     if ( bNowSelected && !pItem->IsSelected() )
                     {
-                        xNewAcc = *aIter;
+                        xNewAcc = rChild;
                         aNewValue <<= xNewAcc;
                     }
                     else if ( pItem->IsSelected() )
@@ -696,6 +695,7 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_Int32)
                 { // it could happen that a child was not created before
                     checkEntrySelected(i,aNewValue,xNewAcc);
                 }
+                ++i;
             }
             const sal_Int32 nCount = m_pListBoxHelper->GetEntryCount();
             if ( i < nCount ) // here we have to check the if any other listbox entry is selected
