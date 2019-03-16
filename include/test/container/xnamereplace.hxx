@@ -31,7 +31,7 @@ public:
     virtual css::uno::Reference<css::uno::XInterface> init() = 0;
     void testReplaceByName();
 
-    void setReplacmentElement(const css::uno::Any& rElement)
+    void setReplacementElement(const css::uno::Any& rElement)
     {
         m_aReplacementElement = rElement;
     }
