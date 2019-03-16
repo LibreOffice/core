@@ -17,6 +17,8 @@
 #include <test/unoapi_property_testers.hxx>
 
 #include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
