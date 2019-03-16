@@ -14,6 +14,7 @@
 #include <test/container/xnameaccess.hxx>
 #include <test/container/xnamecontainer.hxx>
 #include <test/container/xnamereplace.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <cppu/unotype.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -35,7 +36,8 @@ class ScAutoFormatsObj : public CalcUnoApiTest,
                          public apitest::XIndexAccess,
                          public apitest::XNameAccess,
                          public apitest::XNameContainer,
-                         public apitest::XNameReplace
+                         public apitest::XNameReplace,
+                         public apitest::XServiceInfo
 {
 public:
     ScAutoFormatsObj();
@@ -72,6 +74,11 @@ public:
     // XNameReplace
     CPPUNIT_TEST(testReplaceByName);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -85,6 +92,7 @@ ScAutoFormatsObj::ScAutoFormatsObj()
     , XNameAccess("Default")
     , XNameContainer("ScAutoFormatsObj")
     , XNameReplace("ScAutoFormatsObj")
+    , XServiceInfo("stardiv.StarCalc.ScAutoFormatsObj", "com.sun.star.sheet.TableAutoFormats")
 {
 }
 
