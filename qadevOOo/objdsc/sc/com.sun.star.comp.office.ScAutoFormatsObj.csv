@@ -1,5 +1,3 @@
-"ScAutoFormatsObj";"com::sun::star::container::XIndexAccess";"getCount()"
-"ScAutoFormatsObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
 "ScAutoFormatsObj";"com::sun::star::container::XElementAccess";"getElementType()"
 "ScAutoFormatsObj";"com::sun::star::container::XElementAccess";"hasElements()"
 "ScAutoFormatsObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"
