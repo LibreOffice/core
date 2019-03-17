@@ -515,6 +515,9 @@ public:
 
 class VCL_DLLPUBLIC TreeView : virtual public Container
 {
+private:
+    OUString m_sSavedValue;
+
 protected:
     Link<TreeView&, void> m_aChangeHdl;
     Link<TreeView&, void> m_aRowActivatedHdl;
@@ -713,6 +716,7 @@ public:
     virtual int n_children() const = 0;
 
     virtual void make_sorted() = 0;
+    virtual void make_unsorted() = 0;
     virtual bool get_sort_order() const = 0;
     virtual void set_sort_order(bool bAscending) = 0;
     // TRUE ascending, FALSE, descending, INDET, neither (off)
@@ -735,6 +739,10 @@ public:
     virtual int count_selected_rows() const = 0;
 
     void set_toggle_columns_as_radio(const std::vector<int>& rCols) { m_aRadioIndexes = rCols; }
+
+    void save_value() { m_sSavedValue = get_selected_text(); }
+    OUString const& get_saved_value() const { return m_sSavedValue; }
+    bool get_value_changed_from_saved() const { return m_sSavedValue != get_selected_text(); }
 
     using Widget::set_sensitive;
 };
