@@ -23,6 +23,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
 
+#include <vcl/event.hxx>
 #include <vcl/image.hxx>
 #include <vcl/ptrstyle.hxx>
 

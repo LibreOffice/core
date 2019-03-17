@@ -25,6 +25,7 @@
 #include <editeng/sizeitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <fmtclds.hxx>
 #include <frmfmt.hxx>
 #include <cmdid.h>

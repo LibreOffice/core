@@ -31,6 +31,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/navigat.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 #include <swtypes.hxx>

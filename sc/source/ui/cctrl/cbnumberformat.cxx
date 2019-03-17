@@ -21,6 +21,7 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svl/intitem.hxx>
 #include <sc.hrc>
 

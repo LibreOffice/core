@@ -13,18 +13,14 @@
 #include <memory>
 #include <vector>
 
-#include <com/sun/star/document/XDocumentProperties.hpp>
-
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/infobar.hxx>
 
-class SfxObjectShell;
+namespace com::sun::star::beans { class XPropertyContainer; }
+namespace com::sun::star::document { class XDocumentProperties; }
+
 class SfxViewFrame;
-namespace basegfx
-{
-class BColor;
-}
 
 /// Return code of SfxClassificationHelper::CheckPaste().
 enum class SfxClassificationCheckPasteResult

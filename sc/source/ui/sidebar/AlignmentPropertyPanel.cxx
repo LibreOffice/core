@@ -30,6 +30,7 @@
 #include <vcl/toolbox.hxx>
 #include <svx/sidebar/SidebarDialControl.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace css;
 using namespace css::uno;

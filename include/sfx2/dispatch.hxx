@@ -26,38 +26,18 @@
 #include <sal/types.h>
 
 #include <sfx2/bindings.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <vcl/menu.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/span.hxx>
 
 #include <initializer_list>
 
 class SfxSlotServer;
-class SfxShell;
 class SfxRequest;
-class SfxHintPoster;
 class SfxViewFrame;
-class SfxBindings;
 class SfxItemSet;
-class SfxPopupMenuManager;
 class SfxModule;
+class Point;
 struct SfxDispatcher_Impl;
-
-namespace com
-{
-    namespace sun
-    {
-        namespace star
-        {
-            namespace frame
-            {
-                class XDispatch;
-            }
-        }
-    }
-}
-
 
 enum class SfxDispatcherPopFlags
 {

@@ -44,6 +44,7 @@
 #include <editeng/brushitem.hxx>
 #include <svx/hdft.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <vcl/decoview.hxx>

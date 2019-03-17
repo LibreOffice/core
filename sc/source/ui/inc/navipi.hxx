@@ -23,6 +23,7 @@
 #include <vector>
 #include <vcl/toolbox.hxx>
 #include <vcl/field.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/idle.hxx>
 #include <svl/lstner.hxx>

@@ -29,6 +29,7 @@
 #include <sal/macros.h>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
+#include <vcl/svapp.hxx>
 #include "shutdownicon.hxx"
 
 #include <com/sun/star/util/XStringWidth.hpp>

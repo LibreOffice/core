@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_SPELLDIALOGCHILDWINDOW_HXX
 
 #include <svx/SpellDialogChildWindow.hxx>
+#include <svl/lstner.hxx>
 
 class SdOutliner;
 

@@ -23,8 +23,10 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
+#include <vcl/event.hxx>
 
 using namespace css;
 using namespace css::uno;

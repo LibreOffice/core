@@ -23,12 +23,11 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/tbxctrl.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <sfx2/charwin.hxx>
 #include <vcl/button.hxx>
 #include <deque>
 
-class SvxCharViewControl;
+namespace com::sun::star::frame { class XFrame; }
 
 class SFX2_DLLPUBLIC SfxCharmapCtrl : public SfxPopupWindow
 {

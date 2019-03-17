@@ -19,6 +19,7 @@
 #include "ParaPropertyPanel.hxx"
 #include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <vcl/toolbox.hxx>

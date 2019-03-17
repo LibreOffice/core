@@ -31,6 +31,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svl/itempool.hxx>
 #include <svl/style.hxx>
 #include <svx/svdorect.hxx>

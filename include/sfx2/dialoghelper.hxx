@@ -18,7 +18,6 @@ class DateTime;
 class LocaleDataWrapper;
 namespace vcl { class Window; }
 class OutputDevice;
-class VclBuilderContainer;
 
 //when two tab pages both have the same basic layout with a preview on the
 //right, get both of their non-preview areas to request the same size so that

@@ -27,6 +27,7 @@
 #include <com/sun/star/ucb/InteractiveAppException.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <svx/svxerr.hxx>
+#include <rtl/ref.hxx>
 
 using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Any;

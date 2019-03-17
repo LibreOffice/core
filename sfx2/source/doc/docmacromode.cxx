@@ -28,6 +28,8 @@
 #include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <framework/interaction.hxx>

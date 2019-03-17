@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>

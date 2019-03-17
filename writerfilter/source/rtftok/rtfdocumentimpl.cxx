@@ -15,6 +15,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <i18nlangtag/languagetag.hxx>
@@ -41,6 +42,7 @@
 #include <oox/helper/graphichelper.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/settings.hxx>
 #include "rtfsdrimport.hxx"
 #include "rtfreferenceproperties.hxx"
 #include "rtfskipdestination.hxx"

@@ -35,6 +35,7 @@
 #include <sfx2/app.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/svapp.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;

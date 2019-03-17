@@ -23,7 +23,9 @@
 #include <editeng/kernitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svtools/unitconv.hxx>
+#include <vcl/button.hxx>
 
 #define DEFAULT_LINE_SPACING  200
 #define FIX_DIST_DEF          283

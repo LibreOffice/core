@@ -27,6 +27,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/eitem.hxx>
+#include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/colritem.hxx>

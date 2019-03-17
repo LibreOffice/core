@@ -24,6 +24,7 @@
 #include <svx/ifaceids.hxx>
 #include <vcl/vclptr.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/objsh.hxx>
 #include <memory>
 
 namespace basctl

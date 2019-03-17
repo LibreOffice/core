@@ -23,6 +23,7 @@
 #include <gotodlg.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <cmdid.h>
 
 using namespace com::sun::star;

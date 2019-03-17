@@ -25,37 +25,23 @@
 #include <sal/types.h>
 #include <vcl/errcode.hxx>
 #include <svl/poolitem.hxx>
-#include <vcl/image.hxx>
-#include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-
-// too many files including sfx2/app.hxx use VCL Application class but don't include the
-// header file because in former times SfxApplication was derived from it
-#include <vcl/svapp.hxx>
+#include <vcl/bitmapex.hxx>
+#include <tools/link.hxx>
 
 #include <sfx2/shell.hxx>
 
-class Timer;
-class WorkWindow;
-class ISfxTemplateCommon;
+namespace com::sun::star::script { class XLibraryContainer; }
+
+namespace weld { class Window; }
+
 class BasicManager;
 class DdeService;
-class PrinterDialog;
-class Point;
-namespace tools { class Rectangle; }
-class AppSettings;
 struct SfxChildWinContextFactory;
 class SfxAppData_Impl;
-class SfxBindings;
 class SfxChildWinFactArr_Impl;
-class SfxChildWindow;
 class SfxDispatcher;
-class SfxEventConfiguration;
 class SfxEventHint;
 class SfxItemSet;
-class SfxMedium;
-class SfxMenuCtrlFactArr_Impl;
-class SfxNewFileDialog;
 class SfxObjectShell;
 class SfxObjectShellArr_Impl;
 class SfxObjectShellLock;
@@ -65,7 +51,6 @@ class SfxStbCtrlFactArr_Impl;
 class SfxTbxCtrlFactArr_Impl;
 class SfxViewFrame;
 class SfxViewFrameArr_Impl;
-class SfxViewShell;
 class SfxViewShellArr_Impl;
 class StarBASIC;
 class SfxWorkWindow;
@@ -75,13 +60,11 @@ namespace vcl { class Window; }
 struct SfxChildWinFactory;
 struct SfxStbCtrlFactory;
 struct SfxTbxCtrlFactory;
-class ModalDialog;
 class SbxArray;
 class SbxValue;
 
 namespace sfx2
 {
-    class SvLinkSource;
     namespace sidebar {
         class Theme;
     }
