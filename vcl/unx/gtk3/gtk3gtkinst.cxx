@@ -5935,6 +5935,16 @@ public:
         gtk_tree_sortable_set_sort_column_id(pSortable, m_nTextCol, GTK_SORT_ASCENDING);
     }
 
+    virtual void make_unsorted() override
+    {
+        m_xSorter.reset();
+        int nSortColumn;
+        GtkSortType eSortType;
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
+        gtk_tree_sortable_get_sort_column_id(pSortable, &nSortColumn, &eSortType);
+        gtk_tree_sortable_set_sort_column_id(pSortable, GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, eSortType);
+    }
+
     virtual void set_sort_order(bool bAscending) override
     {
         GtkSortType eSortType = bAscending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING;
