@@ -49,6 +49,7 @@ class SvxHorJustifyItem;
 class SvxVerJustifyItem;
 class SvxBrushItem;
 class SvxBoxItem;
+class ScCondFormatItem;
 
 //  EditEngine is not allowed to define its own ITEMID's
 #define INCLUDED_EDITENG_EEITEMID_HXX

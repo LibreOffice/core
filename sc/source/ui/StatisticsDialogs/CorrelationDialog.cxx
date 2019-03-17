@@ -8,7 +8,6 @@
  *
  */
 
-#include <docsh.hxx>
 #include <reffact.hxx>
 #include <CorrelationDialog.hxx>
 #include <scresid.hxx>

@@ -23,13 +23,11 @@
 #include <svl/eitem.hxx>
 
 #include <hfedtdlg.hxx>
-#include <global.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <scuitphfedit.hxx>
 #include <svx/svxids.hrc>
 #include <svx/pageitem.hxx>
-#include <vcl/menubtn.hxx>
 
 ScHFEditDlg::ScHFEditDlg( vcl::Window*           pParent,
                           const SfxItemSet& rCoreSet,

@@ -20,14 +20,9 @@
 #include <undocell.hxx>
 
 #include <scitems.hxx>
-#include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
-#include <editeng/justifyitem.hxx>
-#include <svl/zforlist.hxx>
-#include <svl/sharedstringpool.hxx>
 #include <sfx2/app.hxx>
 
-#include <attrib.hxx>
 #include <document.hxx>
 #include <docpool.hxx>
 #include <patattr.hxx>
@@ -44,8 +39,6 @@
 #include <printfun.hxx>
 #include <rangenam.hxx>
 #include <chgtrack.hxx>
-#include <sc.hrc>
-#include <docuno.hxx>
 #include <stringutil.hxx>
 
 using std::shared_ptr;

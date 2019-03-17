@@ -25,9 +25,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>
-
-class MetricField;
-class MetricBox;
+#include <vcl/field.hxx>
 
 namespace sc { namespace sidebar {
 

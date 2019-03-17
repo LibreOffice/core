@@ -18,16 +18,14 @@
  */
 
 #include "CellLineStyleControl.hxx"
-#include <sc.hrc>
 #include "CellLineStyleValueSet.hxx"
 #include <vcl/i18nhelp.hxx>
 #include <vcl/settings.hxx>
-#include <editeng/boxitem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/lineitem.hxx>
-#include "CellAppearancePropertyPanel.hxx"
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <svx/svxids.hrc>
 
 namespace sc { namespace sidebar {
 

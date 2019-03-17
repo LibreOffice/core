@@ -20,7 +20,6 @@
 #include <NumberFormatControl.hxx>
 #include <cbnumberformat.hxx>
 #include <svl/intitem.hxx>
-#include <svl/stritem.hxx>
 #include <vcl/toolbox.hxx>
 
 using namespace sc;
