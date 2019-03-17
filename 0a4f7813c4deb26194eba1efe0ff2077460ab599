@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_ea7f09a9",
+        "filename": "vcl/unx/gtk/gtksalframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-03-17T12:16:56Z",
+      "side": 0,
+      "message": "I think we should keep this block as it was",
+      "revId": "0a4f7813c4deb26194eba1efe0ff2077460ab599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_0a7d8db0",
+        "filename": "vcl/unx/gtk/gtksalframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-03-17T12:16:56Z",
+      "side": 0,
+      "message": "and so this one too",
+      "revId": "0a4f7813c4deb26194eba1efe0ff2077460ab599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_aa4b4185",
+        "filename": "vcl/unx/gtk/gtksalframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-03-17T12:16:56Z",
+      "side": 0,
+      "message": "likewise",
+      "revId": "0a4f7813c4deb26194eba1efe0ff2077460ab599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_ca500536",
+        "filename": "vcl/unx/gtk/gtksalframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-03-17T12:16:56Z",
+      "side": 0,
+      "message": "likewise",
+      "revId": "0a4f7813c4deb26194eba1efe0ff2077460ab599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
