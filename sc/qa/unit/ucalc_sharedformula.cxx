@@ -1668,6 +1668,21 @@ void Test::testSharedFormulaAbsCellListener()
     m_pDoc->DeleteTab(0);
 }
 
+static double checkNewValuesNotification( ScDocument* pDoc, const ScAddress& rOrgPos )
+{
+    ScAddress aPos(rOrgPos);
+    aPos.IncCol();
+    pDoc->SetValues( aPos, {1024.0, 2048.0, 4096.0, 8192.0, 16384.0});
+    aPos = rOrgPos;
+    double fVal = 0.0;
+    for (SCROW i=0; i < 5; ++i)
+    {
+        fVal += pDoc->GetValue(aPos);
+        aPos.IncRow();
+    }
+    return fVal;
+}
+
 void Test::testSharedFormulaUnshareAreaListeners()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
@@ -1695,6 +1710,460 @@ void Test::testSharedFormulaUnshareAreaListeners()
     // A1 and A3 should be recalculated.
     CPPUNIT_ASSERT_EQUAL(17.0, m_pDoc->GetValue(ScAddress(0,0,0)));
     CPPUNIT_ASSERT_EQUAL(40.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+
+    clearRange(m_pDoc, ScRange( 0,0,0, 1,3,0));
+
+    for (int nRun = 0; nRun < 7; ++nRun)
+    {
+        // Data in A2:C6
+        const ScAddress aOrgPos(0,1,0);
+        const char* pData2[][3] = {
+            { "=SUM(B2:C2)",   "1",   "2" },
+            { "=SUM(B3:C3)",   "4",   "8" },
+            { "=SUM(B4:C4)",  "16",  "32" },
+            { "=SUM(B5:C5)",  "64", "128" },
+            { "=SUM(B6:C6)", "256", "512" },
+        };
+        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+
+        // Check that A2:A6 is a formula group.
+        pFC = m_pDoc->GetFormulaCell(aOrgPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A2", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aOrgPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(5), pFC->GetSharedLength());
+
+        // Overwrite and thus unshare formula in A3.
+        // Check different code paths with different methods.
+        ScAddress aPos(aOrgPos);
+        aPos.IncRow(2);
+        switch (nRun)
+        {
+            case 0:
+                // Directly set a different formula cell, which bypasses
+                // ScDocument::SetString(), mimicking formula input in view.
+                {
+                    ScFormulaCell* pCell = new ScFormulaCell( m_pDoc, aPos, "=B4");
+                    ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
+                    rDocFunc.SetFormulaCell( aPos, pCell, false);
+                }
+            break;
+            case 1:
+                m_pDoc->SetString( aPos, "=B4");    // set formula
+            break;
+            case 2:
+                m_pDoc->SetString( aPos, "x");      // set string
+            break;
+            case 3:
+                m_pDoc->SetString( aPos, "4096");   // set number/numeric
+            break;
+            case 4:
+                m_pDoc->SetValue( aPos, 4096.0);    // set numeric
+            break;
+            case 5:
+                m_pDoc->SetValues( aPos, {4096.0}); // set numeric vector
+            break;
+            case 6:
+                // Set formula cell vector.
+                {
+                    ScFormulaCell* pCell = new ScFormulaCell( m_pDoc, aPos, "=B4");
+                    std::vector<ScFormulaCell*> aCells;
+                    aCells.push_back(pCell);
+                    m_pDoc->SetFormulaCells( aPos, aCells);
+                }
+            break;
+        }
+
+        // Check that A2:A3 and A5:A6 are two formula groups.
+        aPos = aOrgPos;
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A2", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(2), pFC->GetSharedLength());
+        aPos.IncRow(3);
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A5", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(2), pFC->GetSharedLength());
+
+        // Check that listeners were set up and formulas are updated when B2:B6
+        // get new values input (tdf#123736).
+        aPos = aOrgPos;
+        aPos.IncCol();
+        m_pDoc->SetValues( aPos, {1024.0, 2048.0, 4096.0, 8192.0, 16384.0});
+
+        aPos = aOrgPos;
+        CPPUNIT_ASSERT_EQUAL(1026.0, m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+        CPPUNIT_ASSERT_EQUAL(2056.0, m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+        if (nRun != 2)  // if not string
+            CPPUNIT_ASSERT_EQUAL(4096.0, m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+        CPPUNIT_ASSERT_EQUAL(8320.0, m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+        CPPUNIT_ASSERT_EQUAL(16896.0, m_pDoc->GetValue(aPos));
+
+        clearRange(m_pDoc, ScRange( 0,0,0, 2,5,0));
+    }
+
+    // Check detach/regroup combinations of overlapping when setting formula
+    // cell vectors.
+    {
+        // Fixed data in A3:C7, modified formula range A1:A9
+        const ScAddress aOrgPos(0,2,0);
+        ScAddress aPos( ScAddress::UNINITIALIZED);
+        ScFormulaCell* pCell;
+        std::vector<ScFormulaCell*> aCells;
+        const char* pData2[][3] = {
+            { "=SUM(B3:C3)",   "1",   "2" },
+            { "=SUM(B4:C4)",   "4",   "8" },
+            { "=SUM(B5:C5)",  "16",  "32" },
+            { "=SUM(B6:C6)",  "64", "128" },
+            { "=SUM(B7:C7)", "256", "512" },
+        };
+
+        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+
+        // Add grouping formulas in A1:A2, keep A3:A7
+        aPos = ScAddress(0,0,0);
+        std::vector<ScFormulaCell*>().swap( aCells);
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=SUM(B1:C1)");
+        aCells.push_back(pCell);
+        aPos.IncRow();
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=SUM(B2:C2)");
+        aCells.push_back(pCell);
+        aPos.IncRow(-1);
+        m_pDoc->SetFormulaCells( aPos, aCells);
+
+        // Check it is one formula group.
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A1", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(7), pFC->GetSharedLength());
+
+        // Check notification of setting new values.
+        CPPUNIT_ASSERT_EQUAL(32426.0, checkNewValuesNotification( m_pDoc, aOrgPos));
+
+        clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
+
+        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+
+        // Add formulas in A1:A2, keep A3:A7
+        aPos = ScAddress(0,0,0);
+        std::vector<ScFormulaCell*>().swap( aCells);
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=B1+C1");
+        aCells.push_back(pCell);
+        aPos.IncRow();
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=B2+C2");
+        aCells.push_back(pCell);
+        aPos.IncRow(-1);
+        m_pDoc->SetFormulaCells( aPos, aCells);
+
+        // Check formula groups.
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A1", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(2), pFC->GetSharedLength());
+        aPos.IncRow(2);
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A3", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(5), pFC->GetSharedLength());
+
+        // Check notification of setting new values.
+        CPPUNIT_ASSERT_EQUAL(32426.0, checkNewValuesNotification( m_pDoc, aOrgPos));
+
+        clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
+
+        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+
+        // Add formula in A2, overwrite A3, keep A4:A7
+        aPos = ScAddress(0,1,0);
+        std::vector<ScFormulaCell*>().swap( aCells);
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=B2+C2");
+        aCells.push_back(pCell);
+        aPos.IncRow();
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=B3+C3");
+        aCells.push_back(pCell);
+        aPos.IncRow(-1);
+        m_pDoc->SetFormulaCells( aPos, aCells);
+
+        // Check formula groups.
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A2", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(2), pFC->GetSharedLength());
+        aPos.IncRow(2);
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A4", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(4), pFC->GetSharedLength());
+
+        // Check notification of setting new values.
+        CPPUNIT_ASSERT_EQUAL(32426.0, checkNewValuesNotification( m_pDoc, aOrgPos));
+
+        clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
+
+        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+
+        // Overwrite A3:A4, keep A5:A7
+        aPos = ScAddress(0,2,0);
+        std::vector<ScFormulaCell*>().swap( aCells);
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=B3+C3");
+        aCells.push_back(pCell);
+        aPos.IncRow();
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=B4+C4");
+        aCells.push_back(pCell);
+        aPos.IncRow(-1);
+        m_pDoc->SetFormulaCells( aPos, aCells);
+
+        // Check formula groups.
+        aPos = aOrgPos;
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A3", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(2), pFC->GetSharedLength());
+        aPos.IncRow(2);
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A5", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(3), pFC->GetSharedLength());
+
+        // Check notification of setting new values.
+        CPPUNIT_ASSERT_EQUAL(32426.0, checkNewValuesNotification( m_pDoc, aOrgPos));
+
+        clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
+
+        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+
+        // Keep A3, overwrite A4:A5, keep A6:A7
+        aPos = ScAddress(0,3,0);
+        std::vector<ScFormulaCell*>().swap( aCells);
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=B4+C4");
+        aCells.push_back(pCell);
+        aPos.IncRow();
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=B5+C5");
+        aCells.push_back(pCell);
+        aPos.IncRow(-1);
+        m_pDoc->SetFormulaCells( aPos, aCells);
+
+        // Check formula groups.
+        aPos = aOrgPos;
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A3", !pFC->IsSharedTop());
+        aPos.IncRow(1);
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A4", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(2), pFC->GetSharedLength());
+        aPos.IncRow(2);
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A6", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(2), pFC->GetSharedLength());
+
+        // Check notification of setting new values.
+        CPPUNIT_ASSERT_EQUAL(32426.0, checkNewValuesNotification( m_pDoc, aOrgPos));
+
+        clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
+
+        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+
+        // Keep A3:A4, overwrite A5:A6, keep A7
+        aPos = ScAddress(0,4,0);
+        std::vector<ScFormulaCell*>().swap( aCells);
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=B5+C5");
+        aCells.push_back(pCell);
+        aPos.IncRow();
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=B6+C6");
+        aCells.push_back(pCell);
+        aPos.IncRow(-1);
+        m_pDoc->SetFormulaCells( aPos, aCells);
+
+        // Check formula groups.
+        aPos = aOrgPos;
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A3", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(2), pFC->GetSharedLength());
+        aPos.IncRow(2);
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A5", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(2), pFC->GetSharedLength());
+        aPos.IncRow(2);
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A7", !pFC->IsSharedTop());
+
+        // Check notification of setting new values.
+        CPPUNIT_ASSERT_EQUAL(32426.0, checkNewValuesNotification( m_pDoc, aOrgPos));
+
+        clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
+
+        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+
+        // Keep A3:A5, overwrite A6:A7
+        aPos = ScAddress(0,5,0);
+        std::vector<ScFormulaCell*>().swap( aCells);
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=B6+C6");
+        aCells.push_back(pCell);
+        aPos.IncRow();
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=B7+C7");
+        aCells.push_back(pCell);
+        aPos.IncRow(-1);
+        m_pDoc->SetFormulaCells( aPos, aCells);
+
+        // Check formula groups.
+        aPos = aOrgPos;
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A3", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(3), pFC->GetSharedLength());
+        aPos.IncRow(3);
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A6", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(2), pFC->GetSharedLength());
+
+        // Check notification of setting new values.
+        CPPUNIT_ASSERT_EQUAL(32426.0, checkNewValuesNotification( m_pDoc, aOrgPos));
+
+        clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
+
+        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+
+        // Keep A3:A6, overwrite A7, add A8
+        aPos = ScAddress(0,6,0);
+        std::vector<ScFormulaCell*>().swap( aCells);
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=B7+C7");
+        aCells.push_back(pCell);
+        aPos.IncRow();
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=B8+C8");
+        aCells.push_back(pCell);
+        aPos.IncRow(-1);
+        m_pDoc->SetFormulaCells( aPos, aCells);
+
+        // Check formula groups.
+        aPos = aOrgPos;
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A3", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(4), pFC->GetSharedLength());
+        aPos.IncRow(4);
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A7", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(2), pFC->GetSharedLength());
+
+        // Check notification of setting new values.
+        CPPUNIT_ASSERT_EQUAL(32426.0, checkNewValuesNotification( m_pDoc, aOrgPos));
+
+        clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
+
+        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+
+        // Keep A3:A7, add A8:A9
+        aPos = ScAddress(0,7,0);
+        std::vector<ScFormulaCell*>().swap( aCells);
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=B8+C8");
+        aCells.push_back(pCell);
+        aPos.IncRow();
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=B9+C9");
+        aCells.push_back(pCell);
+        aPos.IncRow(-1);
+        m_pDoc->SetFormulaCells( aPos, aCells);
+
+        // Check formula groups.
+        aPos = aOrgPos;
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A3", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(5), pFC->GetSharedLength());
+        aPos.IncRow(5);
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A7", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(2), pFC->GetSharedLength());
+
+        // Check notification of setting new values.
+        CPPUNIT_ASSERT_EQUAL(32426.0, checkNewValuesNotification( m_pDoc, aOrgPos));
+
+        clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
+
+        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+
+        // Keep A3:A7, add grouping formulas in A8:A9
+        aPos = ScAddress(0,7,0);
+        std::vector<ScFormulaCell*>().swap( aCells);
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=SUM(B8:C8)");
+        aCells.push_back(pCell);
+        aPos.IncRow();
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=SUM(B9:C9)");
+        aCells.push_back(pCell);
+        aPos.IncRow(-1);
+        m_pDoc->SetFormulaCells( aPos, aCells);
+
+        // Check it is one formula group.
+        aPos = aOrgPos;
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A1", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(7), pFC->GetSharedLength());
+
+        // Check notification of setting new values.
+        CPPUNIT_ASSERT_EQUAL(32426.0, checkNewValuesNotification( m_pDoc, aOrgPos));
+
+        clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
+
+        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+
+        // Overwrite grouping formulas in A4:A5
+        aPos = ScAddress(0,3,0);
+        std::vector<ScFormulaCell*>().swap( aCells);
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=SUM(B4:C4)");
+        aCells.push_back(pCell);
+        aPos.IncRow();
+        pCell = new ScFormulaCell( m_pDoc, aPos, "=SUM(B5:C5)");
+        aCells.push_back(pCell);
+        aPos.IncRow(-1);
+        m_pDoc->SetFormulaCells( aPos, aCells);
+
+        // Check it is one formula group.
+        aPos = aOrgPos;
+        pFC = m_pDoc->GetFormulaCell(aPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_MESSAGE("A1", pFC->IsSharedTop());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared top row.", aPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Shared length.", static_cast<SCROW>(5), pFC->GetSharedLength());
+
+        // Check notification of setting new values.
+        CPPUNIT_ASSERT_EQUAL(32426.0, checkNewValuesNotification( m_pDoc, aOrgPos));
+
+        clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
+    }
 
     m_pDoc->DeleteTab(0);
 }
@@ -1940,5 +2409,266 @@ void Test::testSharedFormulaDeleteTopCell()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSharedFormulaCutCopyMoveIntoRef()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    // tdf#123714 case 1
+    {
+        m_pDoc->InsertTab(0, "Test");
+
+        // Data in A1:C3
+        std::vector<std::vector<const char*>> aData = {
+            { "=B1", "", "1" },
+            { "=B2", "", "1" },
+            { "=B3", "", ""  }
+        };
+        const ScAddress aOrgPos(0,0,0);
+        insertRangeData( m_pDoc, aOrgPos, aData);
+
+        ScMarkData aMark;
+        aMark.SelectOneTable(0);
+
+        // Set up clip document.
+        ScDocument aClipDoc(SCDOCMODE_CLIP);
+        aClipDoc.ResetClip(m_pDoc, &aMark);
+        // Cut C1:C2 to clipboard.
+        cutToClip( getDocShell(), ScRange(2,0,0, 2,1,0), &aClipDoc, false);
+
+        // Paste to B1:B2
+        ScRange aPasteRange(1,0,0, 1,1,0);
+        aMark.SetMarkArea(aPasteRange);
+        m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc);
+
+        // Check data in A1:A2 after Paste.
+        ScAddress aPos(aOrgPos);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("A1", 1.0, m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("A2", 1.0, m_pDoc->GetValue(aPos));
+
+        m_pDoc->DeleteTab(0);
+    }
+
+    // tdf#123714 case 2
+    {
+        m_pDoc->InsertTab(0, "Test");
+
+        // Data in A1:C3
+        std::vector<std::vector<const char*>> aData = {
+            {  "1",   "2", "=SUM(A1:B1)" },
+            {  "4",   "8", "=SUM(A2:B2)" },
+            { "16",  "32", "=SUM(A3:B3)" },
+            { "64", "128", "=SUM(A4:B4)" },
+        };
+        const ScAddress aOrgPos(0,0,0);
+        insertRangeData( m_pDoc, aOrgPos, aData);
+
+        ScAddress aPos;
+        // Check results in C1:C4
+        const double fVec0[] = { 3.0, 12.0, 48.0, 192.0 };
+        aPos = ScAddress(2,0,0);
+        for (SCROW i=0; i < 4; ++i)
+        {
+            CPPUNIT_ASSERT_EQUAL( fVec0[i], m_pDoc->GetValue(aPos));
+            aPos.IncRow();
+        }
+
+        ScMarkData aMark;
+        aMark.SelectOneTable(0);
+
+        // Set up clip document.
+        ScDocument aClipDoc(SCDOCMODE_CLIP);
+        aClipDoc.ResetClip(m_pDoc, &aMark);
+        // Cut B1:B2 to clipboard.
+        cutToClip( getDocShell(), ScRange(1,0,0, 1,1,0), &aClipDoc, false);
+
+        // Check results in C1:C4 after Cut.
+        const double fVec1[] = { 1.0, 4.0, 48.0, 192.0 };
+        aPos = ScAddress(2,0,0);
+        for (SCROW i=0; i < 4; ++i)
+        {
+            CPPUNIT_ASSERT_EQUAL( fVec1[i], m_pDoc->GetValue(aPos));
+            aPos.IncRow();
+        }
+
+        // Paste to B3:B4
+        ScRange aPasteRange(1,2,0, 1,3,0);
+        aMark.SetMarkArea(aPasteRange);
+        m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc);
+
+        // Check results in C1:C4 after Paste.
+        const double fVec2[] = { 1.0, 4.0, 18.0, 72.0 };
+        aPos = ScAddress(2,0,0);
+        for (SCROW i=0; i < 4; ++i)
+        {
+            CPPUNIT_ASSERT_EQUAL( fVec2[i], m_pDoc->GetValue(aPos));
+            aPos.IncRow();
+        }
+
+        // Paste to B1:B2
+        aPasteRange = ScRange(1,0,0, 1,1,0);
+        aMark.SetMarkArea(aPasteRange);
+        m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc);
+
+        // Check results in C1:C4 after Paste.
+        const double fVec3[] = { 3.0, 12.0, 18.0, 72.0 };
+        aPos = ScAddress(2,0,0);
+        for (SCROW i=0; i < 4; ++i)
+        {
+            CPPUNIT_ASSERT_EQUAL( fVec3[i], m_pDoc->GetValue(aPos));
+            aPos.IncRow();
+        }
+
+        m_pDoc->DeleteTab(0);
+    }
+}
+
+// tdf#121002
+void Test::testSharedFormulaCutCopyMoveWithRef()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Data in A1:C4
+    std::vector<std::vector<const char*>> aData = {
+        {  "",  "", "=SUM(A1:B1)" },
+        {  "",  "", "=SUM(A2:B2)" },
+        { "1", "2", "=SUM(A3:B3)" },
+        { "4", "8", "=SUM(A4:B4)" }
+    };
+    const ScAddress aOrgPos(0,0,0);
+    insertRangeData( m_pDoc, aOrgPos, aData);
+
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+
+    ScAddress aPos( ScAddress::UNINITIALIZED);
+
+    // Check results in C1:C4
+    const double fVec0[] = { 0.0, 0.0, 3.0, 12.0 };
+    aPos = ScAddress(2,0,0);
+    for (SCROW i=0; i < 4; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL( fVec0[i], m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+    }
+
+    // Set up clip document.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    aClipDoc.ResetClip(m_pDoc, &aMark);
+    // Cut A3:B3 to clipboard.
+    cutToClip( getDocShell(), ScRange(0,2,0, 1,2,0), &aClipDoc, false);
+
+    // Check results in C1:C4 after Cut.
+    const double fVec1[] = { 0.0, 0.0, 0.0, 12.0 };
+    aPos = ScAddress(2,0,0);
+    for (SCROW i=0; i < 4; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL( fVec1[i], m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+    }
+
+    // Paste to A1:B1
+    ScRange aPasteRange(0,0,0, 1,0,0);
+    aMark.SetMarkArea(aPasteRange);
+    m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc);
+
+    // Check results in C1:C4 after Paste.
+    const double fVec2[] = { 3.0, 0.0, 3.0, 12.0 };
+    aPos = ScAddress(2,0,0);
+    for (SCROW i=0; i < 4; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL( fVec2[i], m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+    }
+
+    // Check formulas in C1:C4 after Paste.
+    const OUStringLiteral sForm[] = { "=SUM(A1:B1)", "=SUM(A2:B2)", "=SUM(A1:B1)", "=SUM(A4:B4)" };
+    for (SCROW i=0; i < 4; ++i)
+    {
+        OUString aFormula;
+        m_pDoc->GetFormula( 2,i,0, aFormula);
+        CPPUNIT_ASSERT_EQUAL( OUString(sForm[i]), aFormula);
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+// tdf#120013
+void Test::testSharedFormulaCutCopyMoveWithinRun()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Data in C3:E9
+    const std::vector<std::vector<const char*>> aData = {
+        { "2200",     "", "=SUM(C$3:C3)-SUM(D$3:D3)" },
+        {     "",     "", "=SUM(C$3:C4)-SUM(D$3:D4)" },
+        {     "", "1900", "=SUM(C$3:C5)-SUM(D$3:D5)" },
+        {     "",     "", "=SUM(C$3:C6)-SUM(D$3:D6)" },
+        { "1600",     "", "=SUM(C$3:C7)-SUM(D$3:D7)" },
+        {     "", "1000", "=SUM(C$3:C8)-SUM(D$3:D8)" },
+        {     "",     "", "=SUM(C$3:C9)-SUM(D$3:D9)" }
+    };
+    const ScAddress aOrgPos(2,2,0);
+    insertRangeData( m_pDoc, aOrgPos, aData);
+
+    // Check that E3:E9 is a formula group.
+    const ScAddress aFormulaPos(4,2,0);
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell( aFormulaPos);
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shared formula top row.", aFormulaPos.Row(), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shared formula length.", static_cast<SCROW>(7), pFC->GetSharedLength());
+
+    ScAddress aPos( ScAddress::UNINITIALIZED);
+
+    // Check results in E3:E9
+    const double fVec0[] = { 2200.0, 2200.0, 300.0, 300.0, 1900.0, 900.0, 900.0 };
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of checks mismatch.", SAL_N_ELEMENTS(fVec0), aData.size());
+    aPos = aFormulaPos;
+    for (size_t i=0; i < SAL_N_ELEMENTS(fVec0); ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "E3:E9", fVec0[i], m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+    }
+
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+
+    // Set up clip document.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    aClipDoc.ResetClip(m_pDoc, &aMark);
+    // Cut A8:D8 to clipboard.
+    cutToClip( getDocShell(), ScRange(0,7,0, 3,7,0), &aClipDoc, false);
+
+    // Check results in E3:E9 after Cut.
+    const double fVec1[] = { 2200.0, 2200.0, 300.0, 300.0, 1900.0, 1900.0, 1900.0 };
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of checks mismatch.", SAL_N_ELEMENTS(fVec1), aData.size());
+    aPos = aFormulaPos;
+    for (size_t i=0; i < SAL_N_ELEMENTS(fVec1); ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "E3:E9 after Cut.", fVec1[i], m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+    }
+
+    // Paste to A4:D4
+    ScRange aPasteRange(0,3,0, 3,3,0);
+    aMark.SetMarkArea(aPasteRange);
+    m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc);
+
+    // Check results in E3:E9 after Paste.
+    const double fVec2[] = { 2200.0, 1200.0, -700.0, -700.0, 900.0, 900.0, 900.0 };
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of checks mismatch.", SAL_N_ELEMENTS(fVec2), aData.size());
+    aPos = aFormulaPos;
+    for (size_t i=0; i < SAL_N_ELEMENTS(fVec2); ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "E3:E9 after Paste.", fVec2[i], m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+    }
+
+    m_pDoc->DeleteTab(0);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
