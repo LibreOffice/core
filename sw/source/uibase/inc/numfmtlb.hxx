@@ -87,6 +87,8 @@ public:
     ~SwNumFormatListBox();
 
     void            clear();
+    void            show() { mxControl->show(); }
+    void            hide() { mxControl->hide(); }
 
     void            SetFormatType(const SvNumFormatType nFormatType);
     void            SetDefFormat(const sal_uInt32 nDefFormat);
@@ -96,6 +98,7 @@ public:
 
     void            set_sensitive(bool bSensitive) { mxControl->set_sensitive(bSensitive); }
     void            connect_changed(const Link<weld::ComboBox&, void>& rLink) { mxControl->connect_changed(rLink); }
+    weld::ComboBox& get_widget() const { return *mxControl; }
 };
 
 #endif
