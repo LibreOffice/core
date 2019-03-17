@@ -27,7 +27,6 @@
 
 #include <attrib.hxx>
 #include <tphf.hxx>
-#include <sc.hrc>
 #include <scres.hrc>
 #include <scabstdlg.hxx>
 #include <globstr.hrc>
@@ -35,7 +34,6 @@
 #include <tabvwsh.hxx>
 #include <viewdata.hxx>
 #include <document.hxx>
-#include <hfedtdlg.hxx>
 #include <styledlg.hxx>
 #include <scuitphfedit.hxx>
 #include <memory>

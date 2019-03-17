@@ -23,13 +23,11 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/image.hxx>
-
-class ToolBox;
+#include <vcl/toolbox.hxx>
+#include "CellBorderStyleControl.hxx"
+#include "CellLineStyleControl.hxx"
 
 namespace sc { namespace sidebar {
-
-class CellBorderStylePopup;
-class CellLineStylePopup;
 
 class CellAppearancePropertyPanel
 :   public PanelLayout,

@@ -45,7 +45,6 @@
 // for ScUndoRenameObject - might me moved to another file later
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/svdpage.hxx>
 #include <drwlayer.hxx>
 #include <scresid.hxx>
 #include <sheetevents.hxx>

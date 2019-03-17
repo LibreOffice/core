@@ -23,7 +23,6 @@
 #include <svl/stritem.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/charclass.hxx>
-#include <stdlib.h>
 
 #include <areasdlg.hxx>
 #include <rangenam.hxx>

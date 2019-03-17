@@ -18,13 +18,11 @@
  */
 
 #include "CellBorderStyleControl.hxx"
-#include <sc.hrc>
 #include <editeng/boxitem.hxx>
 #include <editeng/borderline.hxx>
-#include "CellAppearancePropertyPanel.hxx"
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <vcl/svapp.hxx>
+#include <svx/svxids.hrc>
 #include <vcl/settings.hxx>
 #include <editeng/lineitem.hxx>
 #include <memory>

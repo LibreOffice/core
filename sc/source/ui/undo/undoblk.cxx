@@ -21,10 +21,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/justifyitem.hxx>
 #include <sfx2/app.hxx>
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
 
 #include <undoblk.hxx>
 #include <undoutil.hxx>
@@ -34,7 +32,6 @@
 #include <tabvwsh.hxx>
 #include <rangenam.hxx>
 #include <rangeutl.hxx>
-#include <dbdata.hxx>
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
 #include <globstr.hrc>
@@ -50,7 +47,6 @@
 #include <undoolk.hxx>
 #include <clipparam.hxx>
 #include <brdcst.hxx>
-#include <sc.hrc>
 #include <rowheightcontext.hxx>
 #include <refhint.hxx>
 #include <refupdatecontext.hxx>

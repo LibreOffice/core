@@ -18,13 +18,9 @@
  */
 
 #include <refundo.hxx>
-#include <undobase.hxx>
 #include <document.hxx>
 #include <dbdata.hxx>
 #include <rangenam.hxx>
-#include <pivot.hxx>
-#include <chartarr.hxx>
-#include <stlpool.hxx>
 #include <detdata.hxx>
 #include <prnsave.hxx>
 #include <chartlis.hxx>
