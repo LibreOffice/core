@@ -116,6 +116,7 @@ SwFieldRefPage::SwFieldRefPage(vcl::Window* pParent, const SfxItemSet *const pCo
     m_pSelectionToolTipLB->SetStyle( m_pSelectionToolTipLB->GetStyle() | WB_HSCROLL );
     m_pSelectionToolTipLB->SetSpaceBetweenEntries(1);
     m_pSelectionToolTipLB->SetHighlightRange();
+    m_pFilterED->GrabFocus();
 }
 
 SwFieldRefPage::~SwFieldRefPage()
