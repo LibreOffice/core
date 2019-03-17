@@ -36,6 +36,7 @@
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <o3tl/any.hxx>
 #include <vcl/errinf.hxx>

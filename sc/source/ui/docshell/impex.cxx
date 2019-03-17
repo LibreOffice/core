@@ -24,6 +24,7 @@
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
+#include <osl/module.hxx>
 
 #include <global.hxx>
 #include <docsh.hxx>

@@ -13,6 +13,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
 
 #include <sfx2/strings.hrc>

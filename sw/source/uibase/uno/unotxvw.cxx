@@ -22,6 +22,7 @@
 #include <o3tl/any.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <cmdid.h>
 #include <hintids.hxx>
 #include <docsh.hxx>

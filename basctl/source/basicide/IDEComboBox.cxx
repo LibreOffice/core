@@ -25,6 +25,8 @@
 #include <managelang.hxx>
 
 #include <sfx2/dispatch.hxx>
+#include <sfx2/frame.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <svtools/langtab.hxx>
 
 namespace basctl

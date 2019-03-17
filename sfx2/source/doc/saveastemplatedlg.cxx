@@ -16,6 +16,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/docfilt.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sot/storage.hxx>
 

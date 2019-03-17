@@ -57,6 +57,7 @@
 #include <bitmaps.hlst>
 #include <sfx2/bindings.hxx>
 #include <sfx2/htmlmode.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxdlg.hxx>

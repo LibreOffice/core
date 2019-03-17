@@ -22,6 +22,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/borderline.hxx>
 #include "CellAppearancePropertyPanel.hxx"
+#include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/svapp.hxx>

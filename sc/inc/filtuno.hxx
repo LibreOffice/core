@@ -32,6 +32,8 @@ namespace com { namespace sun { namespace star { namespace io {
     class XInputStream;
 } } } }
 
+namespace com::sun::star::awt { class XWindow; }
+
 class ScFilterOptionsObj : public ::cppu::WeakImplHelper<
                             css::beans::XPropertyAccess,
                             css::ui::dialogs::XExecutableDialog,

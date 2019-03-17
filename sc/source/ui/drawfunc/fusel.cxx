@@ -29,6 +29,7 @@
 #include <editeng/outlobj.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/ipclient.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include <fusel.hxx>
 #include <sc.hrc>

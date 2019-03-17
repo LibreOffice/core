@@ -24,6 +24,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/templdlg.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svx/srchdlg.hxx>
 #include <basic/sbxobj.hxx>
 #include <uivwimp.hxx>

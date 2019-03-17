@@ -14,6 +14,8 @@
 #include <sfx2/doctempl.hxx>
 #include <vcl/weld.hxx>
 
+#include <com/sun/star/frame/XModel.hpp>
+
 //  class SfxSaveAsTemplateDialog -------------------------------------------------------------------
 class SfxSaveAsTemplateDialog : public weld::GenericDialogController
 {

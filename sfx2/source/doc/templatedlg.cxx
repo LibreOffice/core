@@ -22,6 +22,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <sfx2/objsh.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/templatelocalview.hxx>
 #include <sfx2/templatecontaineritem.hxx>
@@ -39,6 +40,7 @@
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>

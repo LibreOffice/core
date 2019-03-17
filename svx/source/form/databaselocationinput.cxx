@@ -24,6 +24,7 @@
 #include <svx/strings.hrc>
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <rtl/ustrbuf.hxx>

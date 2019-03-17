@@ -26,20 +26,17 @@
 #include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/window.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
 
-#include <sfx2/shell.hxx>
 #include <sfx2/chalign.hxx>
 
-#include <sfx2/bindings.hxx>
-    // complete SfxBindings for complete SfxChildWinCtor, SfxChildWinContextCtor
-    // under -fsanitize=function
+namespace com::sun::star::frame { class XFrame; }
 
 class SfxWorkWindow;
 class SfxModule;
-class SfxShell;
 class SfxChildWindow;
 class SfxChildWindowContext;
+class SfxBindings;
+class SfxModelessDialogController;
 
 enum class SfxChildWindowFlags
 {

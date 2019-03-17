@@ -30,6 +30,7 @@
 #include <sal/log.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/passwd.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/srchdefs.hxx>

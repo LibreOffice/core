@@ -32,6 +32,7 @@
 #include <svl/stritem.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/textsearch.hxx>
 #include <editeng/scripttypeitem.hxx>

@@ -27,22 +27,24 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <rtl/strbuf.hxx>
 #include <tools/link.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XDispatchRecorder.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <sfx2/viewfrm.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/SfxBroadcaster.hxx>
+#include <sfx2/shell.hxx>
 
-class SystemWindow;
+namespace com::sun::star::frame { class XDispatch; }
+namespace com::sun::star::frame { class XDispatchProvider; }
+namespace com::sun::star::frame { class XDispatchRecorder; }
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::util { struct URL; }
+
 class SfxSlot;
 class SfxSlotServer;
 class SfxControllerItem;
 class SfxStateCache;
 class SfxItemSet;
 class SfxDispatcher;
-class SfxBindings;
 class SfxBindings_Impl;
 class Timer;
 class SfxWorkWindow;

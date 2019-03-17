@@ -90,6 +90,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/svapp.hxx>
 #include <rtl/strbuf.hxx>
 #include <sfx2/app.hxx>
 #include <svl/languageoptions.hxx>
