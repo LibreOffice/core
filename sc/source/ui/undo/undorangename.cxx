@@ -10,9 +10,6 @@
 #include <undorangename.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <global.hxx>
-#include <docfunc.hxx>
-#include <sc.hrc>
 
 #include <sfx2/app.hxx>
 

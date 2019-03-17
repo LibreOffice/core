@@ -25,7 +25,6 @@
 #include <postit.hxx>
 #include <cellvalue.hxx>
 #include <cellvalues.hxx>
-#include <svx/svdundo.hxx>
 #include <editeng/editobj.hxx>
 
 #include <memory>

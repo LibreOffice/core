@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svdundo.hxx>
-
 #include <undodraw.hxx>
 #include <docsh.hxx>
 #include <tabvwsh.hxx>
