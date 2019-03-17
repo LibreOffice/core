@@ -405,13 +405,16 @@ The code below would only be part of the solution.
                     bCloseMessage = false; // no closing message if a wrap around has been denied
             }
         }
+        // bNoDictionaryAvailable returns true if no dictionary is available for any of the user's content 
         bool bNoDictionaryAvailable = pWrtShell->GetDoc()->IsDictionaryMissing();
-        if( aRet.empty() && bCloseMessage && !bNoDictionaryAvailable )
-        {
+        if( aRet.empty() && bCloseMessage )
+        {   
             LockFocusNotification( true );
-            OUString sInfo( SwResId( STR_SPELLING_COMPLETED ) );
+            if( bNoDictionaryAvailable )
+                OUString sInfo( SwResId( STR_DICTIONARY_UNAVAILABLE ) );
+            else
+                OUString sInfo( SwResId( STR_SPELLING_COMPLETED ) );
             vcl::Window* pThisWindow = GetWindow();
-            // #i84610#
             std::unique_ptr<weld::MessageDialog> xBox(
                 Application::CreateMessageDialog( pThisWindow->GetFrameWeld(),
                                                   VclMessageType::Info,
