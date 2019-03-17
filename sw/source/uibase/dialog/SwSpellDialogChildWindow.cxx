@@ -424,6 +424,24 @@ The code below would only be part of the solution.
             if( pThisWindow )
                 pThisWindow->GrabFocus();
         }
+        // bNoDictionaryAvailable returns true if no dictionary is available for any of the user's content 
+        else if( aRet.empty() && bCloseMessage && bNoDictionaryAvailable )
+        {
+            LockFocusNotification( true );
+            OUString sInfo( SwResId( "No dictionary is available" ) );
+            vcl::Window* pThisWindow = GetWindow();
+            std::unique_ptr<weld::MessageDialog> xBox(
+                Application::CreateMessageDialog( pThisWindow->GetFrameWeld(),
+                                                  VclMessageType::Info,
+                                                  VclButtonsType::Ok,
+                                                  sInfo ) );
+            xBox->run();
+            LockFocusNotification( false );
+            // take care that the now valid selection is stored
+            LoseFocus();
+            if( pThisWindow )
+                pThisWindow->GrabFocus();
+        }
     }
     return aRet;
 }
