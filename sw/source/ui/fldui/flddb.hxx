@@ -31,34 +31,31 @@
 
 class SwFieldDBPage : public SwFieldPage
 {
-    VclPtr<ListBox>            m_pTypeLB;
-    VclPtr<SwDBTreeList>       m_pDatabaseTLB;
-
-    VclPtr<PushButton>         m_pAddDBPB;
-
-    VclPtr<VclContainer>       m_pCondition;
-    VclPtr<ConditionEdit>      m_pConditionED;
-    VclPtr<VclContainer>       m_pValue;
-    VclPtr<Edit>               m_pValueED;
-    VclPtr<RadioButton>        m_pDBFormatRB;
-    VclPtr<RadioButton>        m_pNewFormatRB;
-    VclPtr<NumFormatListBox>   m_pNumFormatLB;
-    VclPtr<ListBox>            m_pFormatLB;
-    VclPtr<VclContainer>       m_pFormat;
-
     OUString            m_sOldDBName;
     OUString            m_sOldTableName;
     OUString            m_sOldColumnName;
     sal_uLong           m_nOldFormat;
     sal_uInt16          m_nOldSubType;
-    Link<ListBox&,void> m_aOldNumSelectHdl;
 
-    DECL_LINK( TypeListBoxHdl, ListBox&, void );
-    DECL_LINK( NumSelectHdl, ListBox&, void );
-    DECL_LINK( TreeSelectHdl, SvTreeListBox*, void );
-    DECL_LINK( ModifyHdl, Edit&, void );
-    DECL_LINK( AddDBHdl, Button*, void );
-    void TypeHdl(ListBox const *);
+    std::unique_ptr<weld::TreeView> m_xTypeLB;
+    std::unique_ptr<DBTreeList> m_xDatabaseTLB;
+    std::unique_ptr<weld::Button> m_xAddDBPB;
+    std::unique_ptr<weld::Widget> m_xCondition;
+    std::unique_ptr<SwConditionEdit> m_xConditionED;
+    std::unique_ptr<weld::Widget> m_xValue;
+    std::unique_ptr<weld::Entry> m_xValueED;
+    std::unique_ptr<weld::RadioButton> m_xDBFormatRB;
+    std::unique_ptr<weld::RadioButton> m_xNewFormatRB;
+    std::unique_ptr<SwNumFormatListBox> m_xNumFormatLB;
+    std::unique_ptr<weld::ComboBox> m_xFormatLB;
+    std::unique_ptr<weld::Widget> m_xFormat;
+
+    DECL_LINK( TypeListBoxHdl, weld::TreeView&, void );
+    DECL_LINK( NumSelectHdl, weld::ComboBox&, void );
+    DECL_LINK( TreeSelectHdl, weld::TreeView&, void );
+    DECL_LINK( ModifyHdl, weld::Entry&, void );
+    DECL_LINK( AddDBHdl, weld::Button&, void );
+    void TypeHdl(const weld::TreeView*);
 
     void                CheckInsert();
 
@@ -68,9 +65,9 @@ protected:
     virtual sal_uInt16      GetGroup() override;
 
 public:
-                        SwFieldDBPage(vcl::Window* pParent, const SfxItemSet* rSet);
+    SwFieldDBPage(TabPageParent pParent, const SfxItemSet* rSet);
 
-                        virtual ~SwFieldDBPage() override;
+    virtual ~SwFieldDBPage() override;
     virtual void        dispose() override;
 
     static VclPtr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rAttrSet);

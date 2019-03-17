@@ -87,6 +87,8 @@ public:
     ~SwNumFormatListBox();
 
     void            clear();
+    void            show() { mxControl->show(); }
+    void            hide() { mxControl->hide(); }
 
     void            SetFormatType(const SvNumFormatType nFormatType);
     void            SetDefFormat(const sal_uInt32 nDefFormat);
