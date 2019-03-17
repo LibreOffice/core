@@ -409,7 +409,7 @@ The code below would only be part of the solution.
         if( aRet.empty() && bCloseMessage && !bNoDictionaryAvailable )
         {
             LockFocusNotification( true );
-            OUString sInfo( SwResId( STR_SPELLING_COMPLETED ) );
+            OUString sInfo( SwResId(STR_SPELLING_COMPLETED) );
             vcl::Window* pThisWindow = GetWindow();
             // #i84610#
             std::unique_ptr<weld::MessageDialog> xBox(
@@ -424,10 +424,10 @@ The code below would only be part of the solution.
             if( pThisWindow )
                 pThisWindow->GrabFocus();
         }
-        else if(bNoDictionaryAvailable)
+        else if( aRet.empty() && bCloseMessage && bNoDictionaryAvailable )
         {
             LockFocusNotification( true );
-            OUString sInfo( SwResId("Dictionary Not Found") );
+            OUString sInfo( SwResId("No dictionary currently available") );
             vcl::Window* pThisWindow = GetWindow();
             // #i84610#
             std::unique_ptr<weld::MessageDialog> xBox(
