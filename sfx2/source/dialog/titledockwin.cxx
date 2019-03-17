@@ -27,6 +27,7 @@
 
 #include <svl/eitem.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/event.hxx>
 
 
 namespace sfx2

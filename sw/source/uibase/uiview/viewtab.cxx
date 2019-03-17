@@ -25,6 +25,7 @@
 #include <svx/xfillit0.hxx>
 #include <editeng/tstpitem.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>

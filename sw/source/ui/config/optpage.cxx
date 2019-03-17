@@ -60,6 +60,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/eitem.hxx>

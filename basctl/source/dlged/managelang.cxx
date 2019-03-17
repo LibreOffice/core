@@ -32,6 +32,7 @@
 #include <comphelper/sequence.hxx>
 #include <editeng/unolingu.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <svtools/langtab.hxx>
 #include <svx/langbox.hxx>
 #include <vcl/unohelp.hxx>

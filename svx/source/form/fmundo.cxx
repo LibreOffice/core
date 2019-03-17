@@ -55,6 +55,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;

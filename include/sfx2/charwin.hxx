@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SFX2_INC_CHARWIN_HXX
 #define INCLUDED_SFX2_INC_CHARWIN_HXX
 
-#include <sfx2/tbxctrl.hxx>
 #include <sfx2/dllapi.h>
+#include <vcl/ctrl.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>

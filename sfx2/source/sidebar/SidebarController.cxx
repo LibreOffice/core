@@ -39,6 +39,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
+#include <vcl/svapp.hxx>
 #include <splitwin.hxx>
 #include <tools/link.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

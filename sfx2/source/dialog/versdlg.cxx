@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/document/XCmisDocument.hpp>
+#include <com/sun/star/util/RevisionTag.hpp>
 
 #include <unotools/localedatawrapper.hxx>
 #include <svl/eitem.hxx>

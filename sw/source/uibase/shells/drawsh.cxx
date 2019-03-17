@@ -25,6 +25,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/extrusionbar.hxx>

@@ -75,6 +75,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/file.hxx>
+#include <osl/module.hxx>
 #include <vcl/EnumContext.hxx>
 
 #include <unotools/pathoptions.hxx>

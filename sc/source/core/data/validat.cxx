@@ -32,6 +32,7 @@
 #include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>

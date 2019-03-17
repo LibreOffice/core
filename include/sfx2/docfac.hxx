@@ -23,19 +23,14 @@
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 
-// SFX_IMPL_MODULE_LIB
-#include <osl/module.hxx>
 #include <rtl/ustring.hxx>
-
-#include <sfx2/objsh.hxx>
+#include <sfx2/shell.hxx>
 #include <memory>
 
-class SfxMedium;
 class SfxFilter;
 class SfxViewFactory;
 struct SfxObjectFactory_Impl;
 class SfxFilterContainer;
-class SfxBindings;
 
 typedef void (*SfxVoidFunc)();
 

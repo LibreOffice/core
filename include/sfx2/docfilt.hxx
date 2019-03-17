@@ -19,10 +19,6 @@
 #ifndef INCLUDED_SFX2_DOCFILT_HXX
 #define INCLUDED_SFX2_DOCFILT_HXX
 
-#include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/beans/UnknownPropertyException.hpp>
-#include <com/sun/star/lang/WrappedTargetException.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <comphelper/documentconstants.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
@@ -33,7 +29,9 @@
 
 #include <memory>
 
-class SfxFilterContainer;
+namespace com::sun::star::embed { class XStorage; }
+namespace com::sun::star::uno { template <typename > class Reference; }
+
 class SotStorage;
 
 class SFX2_DLLPUBLIC SfxFilter

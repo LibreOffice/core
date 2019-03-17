@@ -20,6 +20,7 @@
 #include <limits.h>
 #include <hintids.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/charclass.hxx>

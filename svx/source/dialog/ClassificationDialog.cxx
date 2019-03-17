@@ -24,6 +24,7 @@
 #include <tools/XmlWriter.hxx>
 #include <tools/XmlWalker.hxx>
 #include <vcl/builderfactory.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <officecfg/Office/Common.hxx>
 

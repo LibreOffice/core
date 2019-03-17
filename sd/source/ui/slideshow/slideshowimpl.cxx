@@ -51,6 +51,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/templdlg.hxx>

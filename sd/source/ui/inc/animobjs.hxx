@@ -24,6 +24,7 @@
 #include <vcl/fixed.hxx>
 #include <tools/fract.hxx>
 #include <sfx2/ctrlitem.hxx>
+#include <sfx2/progress.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>

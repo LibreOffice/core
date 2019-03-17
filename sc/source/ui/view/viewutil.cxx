@@ -33,6 +33,7 @@
 #include <vcl/settings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 

@@ -29,6 +29,7 @@
 #include <vcl/wrkwin.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/docfile.hxx>
 
 #include <sfx2/docinsert.hxx>
 #include <sfx2/request.hxx>

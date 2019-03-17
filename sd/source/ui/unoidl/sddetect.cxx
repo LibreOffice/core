@@ -25,6 +25,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/graphicfilter.hxx>
 #include <rtl/ustring.h>
 #include <sfx2/docfile.hxx>

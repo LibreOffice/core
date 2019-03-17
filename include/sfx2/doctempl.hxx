@@ -27,8 +27,6 @@
 
 // CLASS -----------------------------------------------------------------
 
-class SfxObjectShell;
-
 class SfxDocTemplate_Impl;
 
 // class SfxDocumentTemplates --------------------------------------------

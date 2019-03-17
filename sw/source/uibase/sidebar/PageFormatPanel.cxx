@@ -33,6 +33,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <pageformatpanel.hrc>
 #include <cmdid.h>
 #include <uitool.hxx>

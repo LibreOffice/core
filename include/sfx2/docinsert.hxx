@@ -22,7 +22,6 @@
 
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
-#include <sfx2/docfile.hxx>
 #include <vcl/errcode.hxx>
 #include <tools/link.hxx>
 #include <memory>
@@ -31,6 +30,7 @@
 namespace sfx2 { class FileDialogHelper; }
 namespace weld { class Window; }
 class SfxItemSet;
+class SfxMedium;
 enum class FileDialogFlags;
 
 typedef ::std::vector< std::unique_ptr<SfxMedium> > SfxMediumList;

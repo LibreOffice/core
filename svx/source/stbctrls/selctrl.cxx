@@ -18,6 +18,7 @@
  */
 
 #include <vcl/builder.hxx>
+#include <vcl/event.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/status.hxx>
 #include <svl/intitem.hxx>

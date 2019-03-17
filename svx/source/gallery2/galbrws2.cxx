@@ -53,6 +53,7 @@
 #include <svx/galleryitem.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>

@@ -44,6 +44,7 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#include <com/sun/star/util/RevisionTag.hpp>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -59,6 +60,7 @@
 #include <osl/thread.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/securityoptions.hxx>
@@ -81,6 +83,7 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfac.hxx>
+#include <sfx2/objsh.hxx>
 #include <openflag.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/sfxresid.hxx>

@@ -17,6 +17,7 @@
 #include <vector>
 #include <sfx2/classificationhelper.hxx>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
+#include <com/sun/star/beans/Property.hpp>
 
 namespace svx
 {

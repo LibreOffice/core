@@ -14,6 +14,7 @@
 #include <wrtsh.hxx>
 #include <navipi.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
+#include <sfx2/viewfrm.hxx>
 
 SwEditWinUIObject::SwEditWinUIObject(const VclPtr<SwEditWin>& xEditWin):
     WindowUIObject(xEditWin),

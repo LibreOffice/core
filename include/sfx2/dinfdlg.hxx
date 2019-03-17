@@ -30,9 +30,6 @@
 #include <svl/zforlist.hxx>
 
 #include <vcl/headbar.hxx>
-#include <svtools/svmedit.hxx>
-
-#include <unotools/syslocale.hxx>
 
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>

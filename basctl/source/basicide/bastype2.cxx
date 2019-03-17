@@ -32,7 +32,9 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <vcl/builderfactory.hxx>
+#include <vcl/event.hxx>
 
 #include <initializer_list>
 #include <memory>

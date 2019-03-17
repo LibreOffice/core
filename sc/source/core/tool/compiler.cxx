@@ -21,6 +21,7 @@
 
 #include <compiler.hxx>
 
+#include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <basic/sbmeth.hxx>

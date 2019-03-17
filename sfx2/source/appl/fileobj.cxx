@@ -38,9 +38,11 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/opengrf.hxx>
 #include <sfx2/sfxresid.hxx>
+#include <sfx2/objsh.hxx>
 #include "fileobj.hxx"
 #include <sfx2/strings.hrc>
 #include <vcl/dibtools.hxx>
+#include <vcl/svapp.hxx>
 
 #define FILETYPE_TEXT       1
 #define FILETYPE_GRF        2

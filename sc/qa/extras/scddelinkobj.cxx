@@ -14,6 +14,7 @@
 
 #include <unotools/tempfile.hxx>
 #include <sfx2/app.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

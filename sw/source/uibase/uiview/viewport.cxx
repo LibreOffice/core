@@ -28,6 +28,7 @@
 #include <editeng/paperinf.hxx>
 #include <editeng/lrspitem.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <swmodule.hxx>

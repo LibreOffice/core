@@ -24,9 +24,7 @@
 
 #include <sfx2/dllapi.h>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
-#include <com/sun/star/rdf/XRepositorySupplier.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
@@ -47,6 +45,9 @@ namespace com { namespace sun { namespace star { namespace embed {
 namespace com { namespace sun { namespace star { namespace frame {
     class XModel;
 } } } }
+
+namespace com::sun::star::uno { class XComponentContext; }
+
 class SfxObjectShell;
 
 namespace sfx2 {

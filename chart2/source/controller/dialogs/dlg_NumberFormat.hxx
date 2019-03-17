@@ -23,6 +23,7 @@
 
 namespace weld { class Window; }
 class SfxItemSet;
+class SfxItemPool;
 
 namespace chart
 {

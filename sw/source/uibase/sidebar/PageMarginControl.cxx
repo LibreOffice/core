@@ -27,6 +27,7 @@
 
 #include <editeng/sizeitem.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svx/svxids.hrc>
 #include <svx/pageitem.hxx>
 #include <svl/itempool.hxx>

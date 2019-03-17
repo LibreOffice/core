@@ -25,6 +25,7 @@
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <vcl/event.hxx>
 #include <vcl/status.hxx>
 #include <vcl/menu.hxx>

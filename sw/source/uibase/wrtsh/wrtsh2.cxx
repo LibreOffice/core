@@ -27,6 +27,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <fmtinfmt.hxx>
 #include <frmatr.hxx>
 #include <swtypes.hxx>

@@ -21,6 +21,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <rtl/ustring.hxx>

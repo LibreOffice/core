@@ -62,6 +62,7 @@
 #include <tools/urlobj.hxx>
 #include <cppuhelper/implbase.hxx>
 
+#include <com/sun/star/document/BrokenPackageRequest.hpp>
 #include <com/sun/star/document/FilterOptionsRequest.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>

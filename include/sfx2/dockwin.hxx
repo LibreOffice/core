@@ -25,13 +25,12 @@
 #include <vcl/dockwin.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 
 #include <sfx2/dllapi.h>
 #include <sfx2/childwin.hxx>
 
-class SfxSplitWindow;
+namespace com::sun::star::frame { class XFrame; }
+
 class SfxDockingWindow_Impl;
 enum class SplitWindowItemFlags;
 

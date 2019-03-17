@@ -77,6 +77,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <ucbhelper/content.hxx>
 
 #include <sfx2/sfxresid.hxx>
 #include <sfxurlrelocator.hxx>

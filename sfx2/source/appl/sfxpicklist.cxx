@@ -51,6 +51,7 @@
 #include <objshimp.hxx>
 #include <openurlhint.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include <rtl/instance.hxx>
 

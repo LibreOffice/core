@@ -44,6 +44,7 @@
 #include <sfx2/minfitem.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svx/svxids.hrc>
 #include <svl/aeitem.hxx>
 #include <svl/intitem.hxx>

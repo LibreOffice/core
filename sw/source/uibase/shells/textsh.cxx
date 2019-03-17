@@ -26,6 +26,7 @@
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/lnkbase.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include <vcl/errinf.hxx>
 #include <svx/svdview.hxx>

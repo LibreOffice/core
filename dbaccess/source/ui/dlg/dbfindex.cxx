@@ -20,6 +20,7 @@
 #include "dbfindex.hxx"
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
+#include <osl/thread.hxx>
 #include <tools/config.hxx>
 #include <sfx2/app.hxx>
 #include <dbu_dlg.hxx>

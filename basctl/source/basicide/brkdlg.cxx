@@ -24,6 +24,7 @@
 #include <basidesh.hxx>
 
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sfxsids.hrc>
 
 namespace basctl
 {

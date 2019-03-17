@@ -36,6 +36,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/newstyle.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svl/macitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/languageoptions.hxx>

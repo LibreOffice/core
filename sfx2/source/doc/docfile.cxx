@@ -130,6 +130,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/io/WrongFormatException.hpp>

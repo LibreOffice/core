@@ -31,6 +31,7 @@
 #include <sfx2/module.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <com/sun/star/awt/XWindow.hpp>

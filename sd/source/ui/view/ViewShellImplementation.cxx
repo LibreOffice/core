@@ -44,6 +44,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/imapdlg.hxx>

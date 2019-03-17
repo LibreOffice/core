@@ -23,12 +23,14 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/signaturestate.hxx>
 
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <memory>
+
+namespace com::sun::star::document { class XEmbeddedScripts; }
+namespace com::sun::star::embed { class XStorage; }
+namespace com::sun::star::script { class XLibraryContainer; }
+namespace com::sun::star::task { class XInteractionHandler; }
 
 
 namespace sfx2

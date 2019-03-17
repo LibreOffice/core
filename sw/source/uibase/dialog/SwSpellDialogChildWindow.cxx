@@ -27,6 +27,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>

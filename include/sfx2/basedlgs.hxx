@@ -23,23 +23,20 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <vcl/builder.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 
-class TabPage;
 class SfxTabPage;
 class SfxBindings;
 class SfxChildWindow;
 struct SfxChildWinInfo;
 class SfxItemSet;
-class SfxItemPool;
 class OKButton;
 class CancelButton;
 class HelpButton;
 class Button;
+class Timer;
 
 // class SfxModalDialog --------------------------------------------------
 

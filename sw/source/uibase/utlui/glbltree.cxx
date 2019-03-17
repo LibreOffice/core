@@ -21,6 +21,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <vcl/help.hxx>

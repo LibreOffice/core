@@ -25,6 +25,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <o3tl/enumrange.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <vcl/help.hxx>

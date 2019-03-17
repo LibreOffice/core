@@ -677,3 +677,21 @@ blacklist:
     include/drawinglayer/primitive3d/baseprimitive3d.hxx:
     # base class has to be a complete type
     - com/sun/star/graphic/XPrimitive3D.hpp
+    include/sfx2/asyncfunc.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XUnoTunnel.hpp
+    include/sfx2/charwin.hxx:
+    # Needed for implicit dtor
+    - vcl/virdev.hxx
+    include/sfx2/dinfdlg.hxx:
+    # Needed for implicit dtor
+    - com/sun/star/document/CmisProperty.hpp
+    include/sfx2/docfile.hxx:
+    # Full type needed for template
+    - tools/link.hxx
+    include/sfx2/docstoragemodifylistener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/util/XModifyListener.hpp
+    include/sfx2/DocumentMetadataAccess.hxx:
+    # base class has to be a complete type
+    - com/sun/star/rdf/XDocumentMetadataAccess.hpp

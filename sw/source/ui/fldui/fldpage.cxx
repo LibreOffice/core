@@ -21,6 +21,7 @@
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/htmlmode.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <dbfld.hxx>
 #include <flddat.hxx>
 #include <fmtfld.hxx>

@@ -30,6 +30,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/intitem.hxx>
+#include <vcl/svapp.hxx>
 
 #include <basic/sbxdef.hxx>
 

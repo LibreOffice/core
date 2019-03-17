@@ -23,7 +23,6 @@
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <vcl/errcode.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 
 
 class GDIMetaFile;
@@ -34,6 +33,9 @@ namespace com { namespace sun { namespace star {
         class XDocumentProperties;
     }
 } } }
+
+namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com::sun::star::uno { template <typename > class Sequence; }
 
 
 namespace sfx2 {

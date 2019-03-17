@@ -31,6 +31,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/viewfrm.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svlbitm.hxx>

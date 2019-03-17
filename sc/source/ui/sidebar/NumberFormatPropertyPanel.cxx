@@ -27,6 +27,7 @@
 #include <vcl/toolbox.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace css;
 using namespace css::uno;
