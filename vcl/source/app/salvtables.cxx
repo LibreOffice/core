@@ -2682,7 +2682,7 @@ public:
     const OUString* getEntryData(int index) const
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, index);
-        return static_cast<const OUString*>(pEntry->GetUserData());
+        return pEntry ? static_cast<const OUString*>(pEntry->GetUserData()) : nullptr;
     }
 
     virtual OUString get_id(int pos) const override
@@ -2984,6 +2984,11 @@ public:
         m_xTreeView->SetStyle(m_xTreeView->GetStyle() | WB_SORT);
         m_xTreeView->GetModel()->SetCompareHdl(LINK(this, SalInstanceTreeView, CompareHdl));
         set_sort_order(true);
+    }
+
+    virtual void make_unsorted() override
+    {
+        m_xTreeView->SetStyle(m_xTreeView->GetStyle() & ~WB_SORT);
     }
 
     virtual void set_sort_order(bool bAscending) override
