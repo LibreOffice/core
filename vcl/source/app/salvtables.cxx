@@ -468,6 +468,18 @@ public:
         return m_xWidget->GetAccessibleDescription();
     }
 
+    virtual void set_accessible_relation_labeled_by(weld::Widget* pLabel) override
+    {
+        vcl::Window* pAtkLabel = pLabel ? dynamic_cast<SalInstanceWidget&>(*pLabel).getWidget() : nullptr;
+        m_xWidget->SetAccessibleRelationLabeledBy(pAtkLabel);
+    }
+
+    virtual void set_accessible_relation_label_for(weld::Widget* pLabeled) override
+    {
+        vcl::Window* pAtkLabeled = pLabeled ? dynamic_cast<SalInstanceWidget&>(*pLabeled).getWidget() : nullptr;
+        m_xWidget->SetAccessibleRelationLabelFor(pAtkLabeled);
+    }
+
     virtual void set_tooltip_text(const OUString& rTip) override
     {
         m_xWidget->SetQuickHelpText(rTip);

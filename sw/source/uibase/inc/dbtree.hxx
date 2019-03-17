@@ -29,40 +29,6 @@
 class SwDBTreeList_Impl;
 class SwWrtShell;
 
-class SW_DLLPUBLIC SwDBTreeList : public SvTreeListBox
-{
-    bool            bInitialized;
-    bool            bShowColumns;
-
-    rtl::Reference<SwDBTreeList_Impl> pImpl;
-
-    DECL_DLLPRIVATE_LINK( DBCompare, const SvSortData&, sal_Int32 );
-
-    SAL_DLLPRIVATE void          InitTreeList();
-    SAL_DLLPRIVATE virtual void  RequestingChildren( SvTreeListEntry* pParent ) override;
-
-    SAL_DLLPRIVATE virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
-    SAL_DLLPRIVATE virtual void  StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
-
-    using SvTreeListBox::Select;
-
-public:
-    SwDBTreeList(vcl::Window* pParent, WinBits nStyle);
-    virtual ~SwDBTreeList() override;
-    virtual void dispose() override;
-    virtual Size GetOptimalSize() const override;
-
-    OUString GetDBName( OUString& rTableName, OUString& rColumnName, sal_Bool* pbIsTable = nullptr);
-
-    void    Select( const OUString& rDBName, const OUString& rTableName,
-                    const OUString& rColumnName );
-
-    void    ShowColumns(bool bShowCol);
-    void    SetWrtShell(SwWrtShell& rSh);
-
-    void    AddDataSource(const OUString& rSource);
-};
-
 class SW_DLLPUBLIC DBTreeList
 {
     bool            bInitialized;
@@ -86,13 +52,17 @@ public:
     void    Select( const OUString& rDBName, const OUString& rTableName,
                     const OUString& rColumnName );
 
+    void    ShowColumns(bool bShowCol);
+
     void    SetWrtShell(SwWrtShell& rSh);
 
     void    AddDataSource(const OUString& rSource);
 
     void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_changed(rLink); }
+    void connect_row_activated(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_row_activated(rLink); }
     std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig = nullptr) const { return m_xTreeView->make_iterator(pOrig); }
     bool get_selected(weld::TreeIter* pIter) const { return m_xTreeView->get_selected(pIter); }
+    bool iter_parent(weld::TreeIter& rIter) const { return m_xTreeView->iter_parent(rIter); }
     int get_iter_depth(const weld::TreeIter& rIter) const { return m_xTreeView->get_iter_depth(rIter); }
     void set_size_request(int nWidth, int nHeight) { m_xTreeView->set_size_request(nWidth, nHeight); }
 };
