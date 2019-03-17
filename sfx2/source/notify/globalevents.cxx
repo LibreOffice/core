@@ -319,9 +319,7 @@ uno::Reference< container::XEnumeration > SAL_CALL SfxGlobalEvents_Impl::createE
     {
         models[i] <<= m_lModels[i];
     }
-    uno::Reference< container::XEnumeration > xEnum(
-        static_cast<container::XEnumeration*>(
-            new ::comphelper::OAnyEnumeration(models)));
+    uno::Reference<container::XEnumeration> xEnum(new ::comphelper::OAnyEnumeration(models));
     aLock.clear();
     // <- SAFE
 
