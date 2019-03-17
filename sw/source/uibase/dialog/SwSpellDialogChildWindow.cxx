@@ -406,12 +406,12 @@ The code below would only be part of the solution.
             }
         }
         bool bNoDictionaryAvailable = pWrtShell->GetDoc()->IsDictionaryMissing();
-        if( aRet.empty() && bCloseMessage && !bNoDictionaryAvailable )
+        if( aRet.empty() && bCloseMessage )
         {
             LockFocusNotification( true );
-            OUString sInfo( SwResId( STR_SPELLING_COMPLETED ) );
+            OUString sInfo( SwResId( bNoDictionaryAvailable ? STR_DICTIONARY_UNAVAILABLE : STR_SPELLING_COMPLETED ) );
             vcl::Window* pThisWindow = GetWindow();
-            // #i84610#
+            // #i84610# for the case when bNoDictionaryAvailable is false
             std::unique_ptr<weld::MessageDialog> xBox(
                 Application::CreateMessageDialog( pThisWindow->GetFrameWeld(),
                                                   VclMessageType::Info,
