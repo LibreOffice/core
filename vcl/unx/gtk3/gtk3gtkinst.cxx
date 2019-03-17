@@ -1718,6 +1718,46 @@ public:
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
 
+    virtual void set_accessible_relation_labeled_by(weld::Widget* pLabel) override
+    {
+        AtkObject* pAtkObject = gtk_widget_get_accessible(m_pWidget);
+        if (!pAtkObject)
+            return;
+        AtkObject *pAtkLabel = pLabel ? gtk_widget_get_accessible(dynamic_cast<GtkInstanceWidget&>(*pLabel).getWidget()) : nullptr;
+        AtkRelationSet *pRelationSet = atk_object_ref_relation_set(pAtkObject);
+        AtkRelation *pRelation = atk_relation_set_get_relation_by_type(pRelationSet, ATK_RELATION_LABELLED_BY);
+        if (pRelation)
+            atk_relation_set_remove(pRelationSet, pRelation);
+        if (pAtkLabel)
+        {
+            AtkObject *obj_array[1];
+            obj_array[0] = pAtkLabel;
+            pRelation = atk_relation_new(obj_array, 1, ATK_RELATION_LABELLED_BY);
+            atk_relation_set_add(pRelationSet, pRelation);
+        }
+        g_object_unref(pRelationSet);
+    }
+
+    virtual void set_accessible_relation_label_for(weld::Widget* pLabeled) override
+    {
+        AtkObject* pAtkObject = gtk_widget_get_accessible(m_pWidget);
+        if (!pAtkObject)
+            return;
+        AtkObject *pAtkLabeled = pLabeled ? gtk_widget_get_accessible(dynamic_cast<GtkInstanceWidget&>(*pLabeled).getWidget()) : nullptr;
+        AtkRelationSet *pRelationSet = atk_object_ref_relation_set(pAtkObject);
+        AtkRelation *pRelation = atk_relation_set_get_relation_by_type(pRelationSet, ATK_RELATION_LABEL_FOR);
+        if (pRelation)
+            atk_relation_set_remove(pRelationSet, pRelation);
+        if (pAtkLabeled)
+        {
+            AtkObject *obj_array[1];
+            obj_array[0] = pAtkLabeled;
+            pRelation = atk_relation_new(obj_array, 1, ATK_RELATION_LABEL_FOR);
+            atk_relation_set_add(pRelationSet, pRelation);
+        }
+        g_object_unref(pRelationSet);
+    }
+
     virtual bool get_extents_relative_to(weld::Widget& rRelative, int& x, int &y, int& width, int &height) override
     {
         //for toplevel windows this is sadly futile under wayland, so we can't tell where a dialog is in order to allow
