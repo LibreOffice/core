@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ff82abbf_8a4afd7d",
+        "filename": "vcl/unx/gtk/gtksalframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-03-17T12:23:06Z",
+      "side": 0,
+      "message": "What about aDBusPath? Is it still \"/window/%lu\" or equals to aDBusWindowPath \"/org/libreoffice/window/%lu\" or \"/org/libreoffice\"?",
+      "parentUuid": "ff82abbf_ea7f09a9",
+      "revId": "0a4f7813c4deb26194eba1efe0ff2077460ab599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff82abbf_0a7d8db0",
         "filename": "vcl/unx/gtk/gtksalframe.cxx",
         "patchSetId": 1
