@@ -625,7 +625,7 @@ void ScColumn::AttachNewFormulaCell(
 }
 
 void ScColumn::AttachNewFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength,
-        const std::vector<SCROW>& rNewSharedRows )
+        std::vector<SCROW>& rNewSharedRows )
 {
     // Make sure the whole length consists of formula cells.
     if (aPos.first->type != sc::element_type_formula)
@@ -636,17 +636,50 @@ void ScColumn::AttachNewFormulaCells( const sc::CellStoreType::position_type& aP
         return;
 
     // Join the top and bottom cells only.
-    ScFormulaCell* pCell = sc::formula_block::at(*aPos.first->data, aPos.second);
-    JoinNewFormulaCell(aPos, *pCell);
+    ScFormulaCell* pCell1 = sc::formula_block::at(*aPos.first->data, aPos.second);
+    JoinNewFormulaCell(aPos, *pCell1);
 
     sc::CellStoreType::position_type aPosLast = aPos;
     aPosLast.second += nLength - 1;
-    pCell = sc::formula_block::at(*aPosLast.first->data, aPosLast.second);
-    JoinNewFormulaCell(aPosLast, *pCell);
+    ScFormulaCell* pCell2 = sc::formula_block::at(*aPosLast.first->data, aPosLast.second);
+    JoinNewFormulaCell(aPosLast, *pCell2);
 
     ScDocument* pDocument = GetDoc();
     if (!pDocument->IsClipOrUndo() && !pDocument->IsInsertingFromOtherDoc())
     {
+        const bool bShared = pCell1->IsShared() || pCell2->IsShared();
+        if (bShared)
+        {
+            const SCROW nTopRow = (pCell1->IsShared() ? pCell1->GetSharedTopRow() : pCell1->aPos.Row());
+            const SCROW nBotRow = (pCell2->IsShared() ?
+                    pCell2->GetSharedTopRow() + pCell2->GetSharedLength() - 1 : pCell2->aPos.Row());
+            if (rNewSharedRows.empty())
+            {
+                rNewSharedRows.push_back( nTopRow);
+                rNewSharedRows.push_back( nBotRow);
+            }
+            else if (rNewSharedRows.size() == 2)
+            {
+                // Combine into one span.
+                if (rNewSharedRows[0] > nTopRow)
+                    rNewSharedRows[0] = nTopRow;
+                if (rNewSharedRows[1] < nBotRow)
+                    rNewSharedRows[1] = nBotRow;
+            }
+            else if (rNewSharedRows.size() == 4)
+            {
+                // Merge into one span.
+                // The original two spans are ordered from top to bottom.
+                std::vector<SCROW> aRows(2);
+                aRows[0] = std::min( rNewSharedRows[0], nTopRow);
+                aRows[1] = std::max( rNewSharedRows[3], nBotRow);
+                rNewSharedRows.swap( aRows);
+            }
+            else
+            {
+                assert(!"rNewSharedRows?");
+            }
+        }
         StartListeningUnshared( rNewSharedRows);
 
         sc::StartListeningContext aCxt(*pDocument);
@@ -654,10 +687,10 @@ void ScColumn::AttachNewFormulaCells( const sc::CellStoreType::position_type& aP
         ScFormulaCell** ppEnd = pp + nLength;
         for (; pp != ppEnd; ++pp)
         {
-            pCell = *pp;
-            pCell->StartListeningTo(aCxt);
+            if (!bShared)
+                (*pp)->StartListeningTo(aCxt);
             if (!pDocument->IsCalcingAfterLoad())
-                pCell->SetDirty();
+                (*pp)->SetDirty();
         }
     }
 }
