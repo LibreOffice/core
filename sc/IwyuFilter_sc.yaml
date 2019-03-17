@@ -867,3 +867,10 @@ blacklist:
     # Complete type is needed
     - com/sun/star/sheet/XFormulaParser.hpp
     - com/sun/star/sheet/XFormulaOpCodeMapper.hpp
+    sc/source/ui/StatisticsDialogs/TableFillingAndNavigationTools.cxx:
+    # Needed for implicit dtor
+    - editeng/editobj.hxx
+    sc/source/ui/undo/undoolk.cxx:
+    # Avoid loplugin:unreffun error
+    - undoolk.hxx
+

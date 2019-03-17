@@ -20,41 +20,32 @@
 #include <sal/config.h>
 
 #include <memory>
-#include <utility>
 
 #include <scitems.hxx>
-#include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svl/srchitem.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <sfx2/bindings.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/app.hxx>
 #include <svx/svdundo.hxx>
 
 #include <undoblk.hxx>
-#include <sc.hrc>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <global.hxx>
-#include <rangenam.hxx>
 #include <arealink.hxx>
 #include <patattr.hxx>
 #include <target.hxx>
 #include <document.hxx>
 #include <docpool.hxx>
-#include <table.hxx>
 #include <docsh.hxx>
 #include <tabvwsh.hxx>
 #include <undoolk.hxx>
 #include <undoutil.hxx>
 #include <chgtrack.hxx>
-#include <dociter.hxx>
-#include <formulacell.hxx>
 #include <paramisc.hxx>
 #include <postit.hxx>
-#include <docuno.hxx>
 #include <progress.hxx>
 #include <editutil.hxx>
 #include <editdataarray.hxx>

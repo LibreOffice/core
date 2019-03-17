@@ -22,10 +22,12 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/field.hxx>
+#include <vcl/button.hxx>
+#include <vcl/toolbox.hxx>
 
-class FixedText;
-class ListBox;
-class NumericField;
 class Edit;
 
 namespace sc { namespace sidebar {

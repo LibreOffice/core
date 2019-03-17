@@ -23,16 +23,11 @@
 #include <editeng/eeitem.hxx>
 
 #include <editeng/editobj.hxx>
-#include <editeng/editstat.hxx>
-#include <editeng/editview.hxx>
 #include <editeng/flditem.hxx>
-#include <sfx2/basedlgs.hxx>
-#include <sfx2/objsh.hxx>
-#include <vcl/svapp.hxx>
+#include <sfx2/tabdlg.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
-#include <sal/log.hxx>
 
 #include <unotools/useroptions.hxx>
 
@@ -40,11 +35,6 @@
 #include <global.hxx>
 #include <attrib.hxx>
 #include <patattr.hxx>
-#include <sc.hrc>
-#include <tabvwsh.hxx>
-#include <prevwsh.hxx>
-#include <textdlgs.hxx>
-#include <AccessibleEditObject.hxx>
 
 #include <scuitphfedit.hxx>
 #include <memory>

@@ -27,7 +27,6 @@
 #include <tptable.hxx>
 #include <global.hxx>
 #include <attrib.hxx>
-#include <sc.hrc>
 #include <bitmaps.hlst>
 
 // Static Data

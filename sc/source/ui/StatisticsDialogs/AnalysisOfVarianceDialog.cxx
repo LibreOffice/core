@@ -9,18 +9,9 @@
  */
 
 #include <memory>
-#include <sfx2/dispatch.hxx>
-#include <svl/zforlist.hxx>
-#include <svl/undo.hxx>
 
-#include <formulacell.hxx>
 #include <rangelst.hxx>
-#include <scitems.hxx>
-#include <docsh.hxx>
-#include <document.hxx>
-#include <uiitems.hxx>
 #include <reffact.hxx>
-#include <docfunc.hxx>
 #include <TableFillingAndNavigationTools.hxx>
 #include <AnalysisOfVarianceDialog.hxx>
 #include <scresid.hxx>

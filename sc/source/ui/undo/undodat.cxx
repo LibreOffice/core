@@ -30,24 +30,19 @@
 #include <olinetab.hxx>
 #include <dbdata.hxx>
 #include <rangenam.hxx>
-#include <pivot.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <global.hxx>
 #include <globalnames.hxx>
 #include <target.hxx>
-#include <chartarr.hxx>
 #include <dbdocfun.hxx>
 #include <olinefun.hxx>
 #include <dpobject.hxx>
 #include <attrib.hxx>
 #include <hints.hxx>
-#include <sc.hrc>
 #include <chgtrack.hxx>
 #include <refundo.hxx>
 #include <markdata.hxx>
-
-#include <sfx2/lokhelper.hxx>
 
 // Show or hide outline groups
 

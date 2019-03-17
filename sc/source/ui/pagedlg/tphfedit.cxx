@@ -23,23 +23,18 @@
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/editview.hxx>
-#include <editeng/flditem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <sfx2/basedlgs.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/builderfactory.hxx>
 
 #include <tphfedit.hxx>
 #include <editutil.hxx>
 #include <global.hxx>
-#include <attrib.hxx>
 #include <patattr.hxx>
 #include <scresid.hxx>
-#include <sc.hrc>
 #include <globstr.hrc>
 #include <strings.hrc>
 #include <tabvwsh.hxx>

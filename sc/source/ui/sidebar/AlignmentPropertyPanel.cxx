@@ -24,11 +24,8 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/intitem.hxx>
-#include <svx/algitem.hxx>
 #include <svx/rotmodit.hxx>
-#include <svx/dlgutil.hxx>
-#include <vcl/toolbox.hxx>
-#include <svx/sidebar/SidebarDialControl.hxx>
+#include <svtools/unitconv.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 using namespace css;
