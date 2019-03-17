@@ -836,6 +836,7 @@
 
 #define STR_QUERY_SPELL_CONTINUE                NC_("STR_QUERY_SPELL_CONTINUE", "Continue checking at beginning of document?")
 #define STR_SPELLING_COMPLETED                  NC_("STR_SPELLING_COMPLETED", "The spellcheck is complete.")
+#define STR_DICTIONARY_UNAVAILABLE              NC_("STR_DICTIONARY_UNAVAILABLE", "No dictionary available")
 
 /*--------------------------------------------------------------------
     Description: strings for the types
