@@ -22,7 +22,6 @@
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkgdi.hxx>
 #include <unx/gtk/gtksalmenu.hxx>
-#include <vcl/help.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/layout.hxx>
 #include <unx/wmadaptor.hxx>
@@ -69,17 +68,11 @@
 #  include <cstdio>
 #endif
 
-#include <comphelper/processfactory.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/util/URLTransformer.hpp>
 
 #include <config_folders.h>
 
@@ -518,73 +511,6 @@ static void hud_activated( gboolean hud_active, gpointer user_data )
     }
 }
 
-static void activate_uno(GSimpleAction *action, GVariant*, gpointer)
-{
-    uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-
-    uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
-
-    uno::Reference < css::frame::XFrame > xFrame(xDesktop->getActiveFrame());
-    if (!xFrame.is())
-        xFrame.set(xDesktop, uno::UNO_QUERY);
-
-    if (!xFrame.is())
-        return;
-
-    uno::Reference< css::frame::XDispatchProvider > xDispatchProvider(xFrame, uno::UNO_QUERY);
-    if (!xDispatchProvider.is())
-        return;
-
-    gchar *strval = nullptr;
-    g_object_get(action, "name", &strval, nullptr);
-    if (!strval)
-        return;
-
-    if (strcmp(strval, "New") == 0)
-    {
-        g_free(strval);
-
-        uno::Reference<frame::XModuleManager2> xModuleManager(frame::ModuleManager::create(xContext));
-        OUString aModuleId(xModuleManager->identify(xFrame));
-        if (aModuleId.isEmpty())
-            return;
-
-        comphelper::SequenceAsHashMap lModuleDescription(xModuleManager->getByName(aModuleId));
-        OUString sFactoryService;
-        lModuleDescription[OUString("ooSetupFactoryEmptyDocumentURL")] >>= sFactoryService;
-        if (sFactoryService.isEmpty())
-            return;
-
-        uno::Sequence < css::beans::PropertyValue > args(0);
-        xDesktop->loadComponentFromURL(sFactoryService, "_blank", 0, args);
-        return;
-    }
-
-    OUString sCommand(".uno:");
-    sCommand += OUString(strval, strlen(strval), RTL_TEXTENCODING_UTF8);
-    g_free(strval);
-
-    css::util::URL aCommand;
-    aCommand.Complete = sCommand;
-    uno::Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(xContext);
-    xParser->parseStrict(aCommand);
-
-    uno::Reference< css::frame::XDispatch > xDisp = xDispatchProvider->queryDispatch(aCommand, OUString(), 0);
-
-    if (!xDisp.is())
-        return;
-
-    xDisp->dispatch(aCommand, css::uno::Sequence< css::beans::PropertyValue >());
-}
-
-static const GActionEntry app_entries[] = {
-  { "OptionsTreeDialog", activate_uno, nullptr, nullptr, nullptr, {0} },
-  { "About", activate_uno, nullptr, nullptr, nullptr, {0} },
-  { "HelpIndex", activate_uno, nullptr, nullptr, nullptr, {0} },
-  { "Quit", activate_uno, nullptr, nullptr, nullptr, {0} },
-  { "New", activate_uno, nullptr, nullptr, nullptr, {0} }
-};
-
 static gboolean ensure_dbus_setup( gpointer data )
 {
     GtkSalFrame* pSalFrame = static_cast< GtkSalFrame* >( data );
@@ -626,83 +552,8 @@ static gboolean ensure_dbus_setup( gpointer data )
         pSalFrame->m_nActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, aDBusWindowPath, pActionGroup, nullptr);
         pSalFrame->m_nHudAwarenessId = hud_awareness_register( pSessionBus, aDBusMenubarPath, hud_activated, pSalFrame, nullptr, nullptr );
 
-        // fdo#70885 we don't want app menu under Unity
-        bool bDesktopIsUnity = (SalGetDesktopEnvironment() == "UNITY");
-
-        if (!bDesktopIsUnity)
-            gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APP_MENU_OBJECT_PATH", "/org/libreoffice/menus/appmenu" );
-
-        //app menu, to-do translations, block normal menus when active, honor use appmenu settings
-        if (!bDesktopIsUnity )
-        {
-            GMenu *menu = g_menu_new ();
-            GMenuItem* item;
-
-            GMenu *firstsubmenu = g_menu_new ();
-
-            OString sNew(OUStringToOString(VclResId(SV_BUTTONTEXT_NEW),
-                RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
-
-            item = g_menu_item_new(sNew.getStr(), "app.New");
-            g_menu_append_item( firstsubmenu, item );
-            g_object_unref(item);
-
-            g_menu_append_section( menu, nullptr, G_MENU_MODEL(firstsubmenu));
-            g_object_unref(firstsubmenu);
-
-            GMenu *secondsubmenu = g_menu_new ();
-
-            OString sPreferences(OUStringToOString(VclResId(SV_STDTEXT_PREFERENCES),
-                RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
-
-            item = g_menu_item_new(sPreferences.getStr(), "app.OptionsTreeDialog");
-            g_menu_append_item( secondsubmenu, item );
-            g_object_unref(item);
-
-            g_menu_append_section( menu, nullptr, G_MENU_MODEL(secondsubmenu));
-            g_object_unref(secondsubmenu);
-
-            GMenu *thirdsubmenu = g_menu_new ();
-
-            OString sHelp(OUStringToOString(VclResId(SV_BUTTONTEXT_HELP),
-                RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
-
-            item = g_menu_item_new(sHelp.getStr(), "app.HelpIndex");
-            g_menu_append_item( thirdsubmenu, item );
-            g_object_unref(item);
-
-            OString sAbout(OUStringToOString(VclResId(SV_STDTEXT_ABOUT),
-                RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
-
-            item = g_menu_item_new(sAbout.getStr(), "app.About");
-            g_menu_append_item( thirdsubmenu, item );
-            g_object_unref(item);
-
-            OString sQuit(OUStringToOString(VclResId(SV_MENU_MAC_QUITAPP),
-                RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
-
-            item = g_menu_item_new(sQuit.getStr(), "app.Quit");
-            g_menu_append_item( thirdsubmenu, item );
-            g_object_unref(item);
-            g_menu_append_section( menu, nullptr, G_MENU_MODEL(thirdsubmenu));
-            g_object_unref(thirdsubmenu);
-
-            GSimpleActionGroup *group = g_simple_action_group_new ();
-#if GLIB_CHECK_VERSION(2,38,0) // g_simple_action_group_add_entries is deprecated since 2.38
-            g_action_map_add_action_entries (G_ACTION_MAP (group), app_entries, G_N_ELEMENTS (app_entries), nullptr);
-#else
-            g_simple_action_group_add_entries (group, app_entries, G_N_ELEMENTS (app_entries), NULL);
-#endif
-            GActionGroup* pAppActionGroup = G_ACTION_GROUP(group);
-
-            pSalFrame->m_nAppActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, "/org/libreoffice", pAppActionGroup, nullptr);
-            g_object_unref(pAppActionGroup);
-            pSalFrame->m_nAppMenuExportId = g_dbus_connection_export_menu_model (pSessionBus, "/org/libreoffice/menus/appmenu", G_MENU_MODEL (menu), nullptr);
-            g_object_unref(menu);
-        }
-
-        g_free( aDBusMenubarPath );
         g_free( aDBusWindowPath );
+        g_free( aDBusMenubarPath );
     }
 
     return FALSE;
@@ -825,12 +676,8 @@ GtkSalFrame::~GtkSalFrame()
                     hud_awareness_unregister( pSessionBus, m_nHudAwarenessId );
                 if ( m_nMenuExportId )
                     g_dbus_connection_unexport_menu_model( pSessionBus, m_nMenuExportId );
-                if ( m_nAppMenuExportId )
-                    g_dbus_connection_unexport_menu_model( pSessionBus, m_nAppMenuExportId );
                 if ( m_nActionGroupExportId )
                     g_dbus_connection_unexport_action_group( pSessionBus, m_nActionGroupExportId );
-                if ( m_nAppActionGroupExportId )
-                    g_dbus_connection_unexport_action_group( pSessionBus, m_nAppActionGroupExportId );
             }
 #endif
             gtk_widget_destroy( m_pWindow );
@@ -971,9 +818,7 @@ void GtkSalFrame::InitCommon()
     m_pSalMenu          = nullptr;
     m_nWatcherId        = 0;
     m_nMenuExportId     = 0;
-    m_nAppMenuExportId  = 0;
     m_nActionGroupExportId = 0;
-    m_nAppActionGroupExportId = 0;
     m_nHudAwarenessId   = 0;
 
     gtk_widget_add_events( m_pWindow,
