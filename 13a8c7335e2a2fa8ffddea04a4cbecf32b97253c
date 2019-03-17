@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_65080a28",
+        "filename": "odk/examples/cpp/custompanel/Makefile",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-17T15:51:25Z",
+      "side": 1,
+      "message": "I don\u0027t see a compelling reason for this change.  OSL_TRACE is (deprecated for LIBO_INTERNAL_ONLY) part of the stable URE interface just the same as OSL_ENSURE is.",
+      "revId": "13a8c7335e2a2fa8ffddea04a4cbecf32b97253c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_850d0e39",
+        "filename": "sal/osl/all/compat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-17T15:51:25Z",
+      "side": 0,
+      "message": "this stub implementation is here for a purpose, to not incompatibly change the set of symbols exported from the sal library",
+      "revId": "3140194a85fe4a6ac69c8cddc4d3b019430cd6e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_2512025a",
+        "filename": "sal/util/sal.map",
+        "patchSetId": 3
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-17T15:51:25Z",
+      "side": 0,
+      "message": "this symbol must not be removed; that would be an incompatible change (requiring changing the SONAME of the sal library on some platforms)",
+      "revId": "3140194a85fe4a6ac69c8cddc4d3b019430cd6e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
