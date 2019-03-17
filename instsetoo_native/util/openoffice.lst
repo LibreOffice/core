@@ -118,13 +118,13 @@ Apache_OpenOffice_Dev
 	{
 		variables
 		{
-			FULLPRODUCTNAME AOO-Developer-Build
-			PRODUCTNAME AOO-Developer-Build
+			FULLPRODUCTNAME Apache OpenOffice Developer Build
+			PRODUCTNAME OpenOffice Developer Build
 			PRODUCTVERSION 4.5.0
 			PRODUCTEXTENSION
 			LONG_PRODUCTEXTENSION
 			SHORT_PRODUCTEXTENSION
-			BASISROOTNAME AOOdev
+			BASISROOTNAME aoodev
 			UNIXBASISROOTNAME aoodev
 			POSTVERSIONEXTENSION
 			POSTVERSIONEXTENSIONUNIX
@@ -149,7 +149,7 @@ Apache_OpenOffice_Dev
 			OPENSOURCE 1
 			SETSTATICPATH 1
 			AOODOWNLOADNAME 1
-			AOODOWNLOADNAMEPREFIX Apache_OpenOffice-Dev
+			AOODOWNLOADNAMEPREFIX Apache_OpenOffice_Dev
 			XPDINSTALLER 0
 			BETAUPGRADECODE
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
@@ -174,8 +174,8 @@ Apache_OpenOffice_Dev
 		active					1
 		compression				5
 		script					setup_osl
-		downloadname			Apache_OpenOffice-dev_{productversion}_{os}_install_{languages}
-		langpackdownloadname	Apache_OpenOffice_{productversion}_languagepack_{os}_install_{languages}
+		downloadname			Apache_OpenOffice_Dev_{productversion}_{os}_install_{languages}
+		langpackdownloadname	Apache_OpenOffice_Dev_{productversion}_languagepack_{os}_install_{languages}
 		include					{solarenvpath}/{os}/loader2,.,{localpath}/bin/dev,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice_dev,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
@@ -233,7 +233,7 @@ Apache_OpenOffice_Beta_SDK
 {
 	Settings
 	{
-		downloadname Apache_OpenOffice-Beta-SDK_{packageversion}_{os}_install_{languages}
+		downloadname Apache_OpenOffice_Beta-SDK_{packageversion}_{os}_install_{languages}
 		variables
 		{
 			FULLPRODUCTNAME Apache OpenOffice Beta
@@ -280,17 +280,18 @@ Apache_OpenOffice_Dev_SDK
 {
 	Settings
 	{
-		downloadname Apache_OpenOffice-Dev-SDK_{packageversion}_{os}_install_{languages}
+		downloadname Apache_OpenOffice_Dev-SDK_{packageversion}_{os}_install_{languages}
 		variables
 		{
-			FULLPRODUCTNAME AOO-Developer-Build
-			PRODUCTNAME AOO-Developer-Build
+			FULLPRODUCTNAME Apache OpenOffice Developer Build
+			PRODUCTNAME OpenOffice Developer Build
+			PRODUCTDIRNAME OpenOffice_SDK_Dev
 			PRODUCTVERSION 4.5.0
 			PRODUCTEXTENSION
 			LONG_PRODUCTEXTENSION
 			SHORT_PRODUCTEXTENSION
-			BASISROOTNAME OOo-dev
-			UNIXBASISROOTNAME ooo-dev
+			BASISROOTNAME aoodev
+			UNIXBASISROOTNAME aoodev
 			POSTVERSIONEXTENSION SDK
 			POSTVERSIONEXTENSIONUNIX sdk
 			BRANDPACKAGEVERSION 4
@@ -316,7 +317,7 @@ Apache_OpenOffice_Dev_SDK
 			DOWNLOADSETUPICO ooosetup.ico
 			DONTUSESTARTMENUFOLDER 1
 			RELATIVE_PATHES_IN_DDF 1
-			AOODOWNLOADNAMEPREFIX Apache_OpenOffice-Dev-SDK
+			AOODOWNLOADNAMEPREFIX Apache_OpenOffice_Dev-SDK
 			STARTCENTER_ADDFEATURE_URL https://extensions.openoffice.org/
 			STARTCENTER_INFO_URL https://www.openoffice.org
 			STARTCENTER_TEMPLREP_URL https://templates.openoffice.org
@@ -341,7 +342,7 @@ Apache_OpenOffice_Beta
 			PRODUCTVERSION 4.5.0
 			PRODUCTEXTENSION
 			SHORT_PRODUCTEXTENSION
-			BASISROOTNAME AOOBeta
+			BASISROOTNAME aoobeta
 			BASISPACKAGEPREFIX aoobeta
 			UREPACKAGEPREFIX aoobeta
 			SOLSUREPACKAGEPREFIX aoobeta
