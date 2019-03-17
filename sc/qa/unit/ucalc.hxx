@@ -398,6 +398,9 @@ public:
     void testSharedFormulaUnshareAreaListeners();
     void testSharedFormulaListenerDeleteArea();
     void testSharedFormulaUpdateOnReplacement();
+    void testSharedFormulaCutCopyMoveIntoRef();
+    void testSharedFormulaCutCopyMoveWithRef();
+    void testSharedFormulaCutCopyMoveWithinRun();
     void testFormulaPosition();
     void testFormulaWizardSubformula();
 
@@ -733,6 +736,9 @@ public:
     CPPUNIT_TEST(testSharedFormulaUnshareAreaListeners);
     CPPUNIT_TEST(testSharedFormulaListenerDeleteArea);
     CPPUNIT_TEST(testSharedFormulaUpdateOnReplacement);
+    CPPUNIT_TEST(testSharedFormulaCutCopyMoveIntoRef);
+    CPPUNIT_TEST(testSharedFormulaCutCopyMoveWithRef);
+    CPPUNIT_TEST(testSharedFormulaCutCopyMoveWithinRun);
     CPPUNIT_TEST(testFormulaPosition);
     CPPUNIT_TEST(testFormulaWizardSubformula);
     CPPUNIT_TEST(testMixData);
