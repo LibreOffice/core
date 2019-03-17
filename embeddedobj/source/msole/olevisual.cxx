@@ -367,8 +367,8 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
             if ( aVisReplSeq.getLength() )
             {
                 m_xCachedVisualRepresentation = GetNewFilledTempStream_Impl(
-                        uno::Reference< io::XInputStream > ( static_cast< io::XInputStream* > (
-                            new ::comphelper::SequenceInputStream( aVisReplSeq ) ) ) );
+                    uno::Reference< io::XInputStream >(
+                        new ::comphelper::SequenceInputStream(aVisReplSeq)));
             }
 
             return aVisualRepr;

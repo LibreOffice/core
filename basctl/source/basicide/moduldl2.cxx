@@ -1194,10 +1194,9 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
         implExportLib( aLibName, aTmpPath, xDummyHandler );
 
         Reference< XCommandEnvironment > xCmdEnv =
-            static_cast<XCommandEnvironment*>(
                 new OLibCommandEnvironment(
                     Reference< task::XInteractionHandler >(
-                        xHandler, UNO_QUERY ) ) );
+                        xHandler, UNO_QUERY));
 
         ::ucbhelper::Content sourceContent( aSourcePath, xCmdEnv, comphelper::getProcessComponentContext() );
 

@@ -248,7 +248,7 @@ void OPropertySetHelper::disposing()
 Reference < XPropertySetInfo > OPropertySetHelper::createPropertySetInfo(
     IPropertyArrayHelper & rProperties )
 {
-    return static_cast< XPropertySetInfo * >( new OPropertySetHelperInfo_Impl( rProperties ) );
+    return new OPropertySetHelperInfo_Impl(rProperties);
 }
 
 // XPropertySet

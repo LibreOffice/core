@@ -806,7 +806,7 @@ void OWriteStream_Impl::Commit()
         uno::Reference< io::XInputStream > xInStream;
         try
         {
-            xInStream.set( static_cast< io::XInputStream* >( new OSelfTerminateFileStream( m_xContext, m_aTempURL ) ), uno::UNO_QUERY );
+            xInStream = new OSelfTerminateFileStream(m_xContext, m_aTempURL);
         }
         catch( const uno::Exception& )
         {

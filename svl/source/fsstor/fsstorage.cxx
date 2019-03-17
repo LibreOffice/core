@@ -369,7 +369,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
 
             ::ucbhelper::Content aResultContent( aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext() );
             uno::Reference< io::XInputStream > xInStream = aResultContent.openStream();
-            xResult = static_cast< io::XStream* >( new OFSInputStreamContainer( xInStream ) );
+            xResult = new OFSInputStreamContainer(xInStream);
         }
     }
     catch( embed::InvalidStorageException& )
@@ -1124,7 +1124,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
                 uno::Reference< io::XStream > xStream =
                     xSimpleFileAccess->openFileReadWrite( aFileURL );
 
-                xResult = static_cast< io::XStream* >( new OFSStreamContainer( xStream ) );
+                xResult = new OFSStreamContainer(xStream);
             }
             else
             {
@@ -1135,7 +1135,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
                 {
                     uno::Reference< io::XStream > xStream =
                         uno::Reference < io::XStream >( new ::utl::OStreamWrapper( std::move(pStream) ) );
-                    xResult = static_cast< io::XStream* >( new OFSStreamContainer( xStream ) );
+                    xResult = new OFSStreamContainer(xStream);
                 }
             }
 
@@ -1156,7 +1156,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
 
             ::ucbhelper::Content aResultContent( aFileURL, xDummyEnv, comphelper::getProcessComponentContext() );
             uno::Reference< io::XInputStream > xInStream = aResultContent.openStream();
-            xResult = static_cast< io::XStream* >( new OFSInputStreamContainer( xInStream ) );
+            xResult = new OFSInputStreamContainer(xInStream);
         }
     }
     catch( embed::InvalidStorageException& )

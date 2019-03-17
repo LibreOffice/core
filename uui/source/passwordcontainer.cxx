@@ -406,8 +406,8 @@ static uno::Reference< uno::XInterface >
 PasswordContainerInteractionHandler_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory> & rSMgr )
 {
-    lang::XServiceInfo * pX = static_cast< lang::XServiceInfo * >(
-        new PasswordContainerInteractionHandler( comphelper::getComponentContext(rSMgr) ) );
+    lang::XServiceInfo* pX
+        = new PasswordContainerInteractionHandler(comphelper::getComponentContext(rSMgr));
     return uno::Reference< uno::XInterface >::query( pX );
 }
 
