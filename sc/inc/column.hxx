@@ -717,7 +717,7 @@ private:
         bool bJoin = true, sc::StartListeningType eListenType = sc::SingleCellListening );
 
     void AttachNewFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength,
-                                const std::vector<SCROW>& rNewSharedRows );
+                                std::vector<SCROW>& rNewSharedRows );
 
     void BroadcastNewCell( SCROW nRow );
     bool UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, sc::CellStoreType::iterator& itr );
