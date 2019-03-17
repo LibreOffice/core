@@ -1037,8 +1037,8 @@ public:
       the strings and return a value indicating their relationship.
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
-      all ASCII characters are in the allowed range between 0 and
-      127. The ASCII string must be NULL-terminated.
+      all ASCII characters are in the allowed range between 0 and 127.
+      The ASCII string must be NULL-terminated.
       This function can't be used for language specific sorting.
 
       @param  asciiStr      the 8-Bit ASCII character string to be compared.
@@ -1058,8 +1058,8 @@ public:
       the strings and return a value indicating their relationship.
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
-      all ASCII characters are in the allowed range between 0 and
-      127. The ASCII string must be NULL-terminated.
+      all ASCII characters are in the allowed range between 0 and 127.
+      The ASCII string must be NULL-terminated.
       This function can't be used for language specific sorting.
 
       @deprecated  This is a confusing overload with unexpectedly different
@@ -1113,8 +1113,8 @@ public:
       represents the same sequence of characters as the first string.
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
-      all ASCII characters are in the allowed range between 0 and
-      127. The ASCII string must be NULL-terminated.
+      all ASCII characters are in the allowed range between 0 and 127.
+      The ASCII string must be NULL-terminated.
       This function can't be used for language specific comparison.
 
       @param    asciiStr        the 8-Bit ASCII character string to be compared.
@@ -1134,8 +1134,8 @@ public:
       represents the same sequence of characters as the first string.
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
-      all ASCII characters are in the allowed range between 0 and
-      127. The ASCII string must be NULL-terminated and must be greater than
+      all ASCII characters are in the allowed range between 0 and 127.
+      The ASCII string must be NULL-terminated and must be greater than
       or equal to asciiStrLength.
       This function can't be used for language specific comparison.
 
@@ -1163,8 +1163,8 @@ public:
       values between 97 and 122 (ASCII a-z).
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
-      all ASCII characters are in the allowed range between 0 and
-      127. The ASCII string must be NULL-terminated.
+      all ASCII characters are in the allowed range between 0 and 127.
+      The ASCII string must be NULL-terminated.
       This function can't be used for language specific comparison.
 
       @param    asciiStr        the 8-Bit ASCII character string to be compared.
@@ -1183,8 +1183,8 @@ public:
       the strings and return a value indicating their relationship.
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
-      all ASCII characters are in the allowed range between 0 and
-      127. The ASCII string must be NULL-terminated.
+      all ASCII characters are in the allowed range between 0 and 127.
+      The ASCII string must be NULL-terminated.
       This function can't be used for language specific sorting.
 
       @param  asciiStr      the 8-Bit ASCII character string to be compared.
@@ -1234,8 +1234,8 @@ public:
       of this string, at the given position.
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
-      all ASCII characters are in the allowed range between 0 and
-      127. The ASCII string must be NULL-terminated and must be greater than or
+      all ASCII characters are in the allowed range between 0 and 127.
+      The ASCII string must be NULL-terminated and must be greater than or
       equal to asciiStrLength.
       This function can't be used for language specific comparison.
 
@@ -1272,8 +1272,8 @@ public:
       values between 97 and 122 (ASCII a-z).
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
-      all ASCII characters are in the allowed range between 0 and
-      127. The ASCII string must be NULL-terminated and must be greater than or
+      all ASCII characters are in the allowed range between 0 and 127.
+      The ASCII string must be NULL-terminated and must be greater than or
       equal to asciiStrLength.
       This function can't be used for language specific comparison.
 
@@ -3544,8 +3544,8 @@ public:
 
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
-      all ASCII characters are in the allowed range between 0 and
-      127. The ASCII string must be NULL-terminated.
+      all ASCII characters are in the allowed range between 0 and 127.
+      The ASCII string must be NULL-terminated.
 
       Note that for string literals it is simpler and more efficient
       to directly use the OUString constructor.
