@@ -21,6 +21,8 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/syswin.hxx>
 #include <sfx2/charwin.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>

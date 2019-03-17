@@ -26,6 +26,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/htmlmode.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <viewopt.hxx>
 #include <docsh.hxx>
 #include <fldwrap.hxx>

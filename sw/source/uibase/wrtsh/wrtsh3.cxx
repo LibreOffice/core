@@ -21,6 +21,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
 #include <svx/fmglob.hxx>

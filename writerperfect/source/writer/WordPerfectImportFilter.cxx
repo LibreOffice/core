@@ -25,6 +25,7 @@
 #include <xmloff/attrlist.hxx>
 #include <sfx2/passwd.hxx>
 #include <ucbhelper/content.hxx>
+#include <vcl/svapp.hxx>
 
 #include <libodfgen/libodfgen.hxx>
 #include <libwpd/libwpd.h>

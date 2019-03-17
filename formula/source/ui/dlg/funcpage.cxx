@@ -22,6 +22,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/event.hxx>
 #include <formula/IFunctionDescription.hxx>
 
 #include "funcpage.hxx"

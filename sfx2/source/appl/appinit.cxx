@@ -38,6 +38,7 @@
 #include <svtools/ehdl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <osl/module.hxx>
 #include <osl/security.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/historyoptions.hxx>

@@ -36,6 +36,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <svl/ctloptions.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 

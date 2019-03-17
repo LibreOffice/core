@@ -27,6 +27,7 @@
 #include <vcl/transfer.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svx/gallery.hxx>
 #include <svx/graphichelper.hxx>
 #include <editeng/brushitem.hxx>

@@ -23,9 +23,10 @@
 #include <sal/config.h>
 #include <rtl/ref.hxx>
 #include <sfx2/dllapi.h>
-#include <com/sun/star/document/BrokenPackageRequest.hpp>
-#include <com/sun/star/task/XInteractionApprove.hpp>
-#include <com/sun/star/task/XInteractionDisapprove.hpp>
+
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com::sun::star::task { class XInteractionRequest; }
 
 class RequestPackageReparation_Impl;
 class SFX2_DLLPUBLIC RequestPackageReparation

@@ -15,6 +15,8 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/objsh.hxx>
+#include <vcl/svapp.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/watermarkitem.hxx>
 #include <svtools/ctrltool.hxx>

@@ -45,6 +45,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/imap.hxx>
 #include <sot/storage.hxx>

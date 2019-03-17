@@ -31,6 +31,7 @@
 #include <editeng/paperinf.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include <vcl/settings.hxx>
 #include <svl/itempool.hxx>

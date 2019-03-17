@@ -13,10 +13,16 @@
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
+#include <rtl/ustring.hxx>
 
-#include <memory>
-
-#include <com/sun/star/security/XCertificate.hpp>
+namespace com::sun::star::security
+{
+class XCertificate;
+}
+namespace com::sun::star::uno
+{
+template <typename> class Reference;
+}
 
 namespace sfx2
 {

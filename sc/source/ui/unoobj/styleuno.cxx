@@ -34,6 +34,7 @@
 #include <editeng/unonrule.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <svx/rotmodit.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/virdev.hxx>

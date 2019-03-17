@@ -20,6 +20,8 @@
 #include "ParaSpacingWindow.hxx"
 #include <editeng/editids.hrc>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svl/itempool.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/builderfactory.hxx>

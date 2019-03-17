@@ -27,6 +27,7 @@
 #include <svx/rotmodit.hxx>
 #include <svtools/unitconv.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace css;
 using namespace css::uno;

@@ -43,6 +43,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>

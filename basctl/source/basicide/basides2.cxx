@@ -30,6 +30,7 @@
 #include <vcl/textview.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/signaturestate.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <com/sun/star/container/XNamed.hpp>
 
 namespace basctl

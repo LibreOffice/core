@@ -34,6 +34,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svtools/htmltokn.h>
 #include <vcl/txtattr.hxx>
 #include <vcl/settings.hxx>

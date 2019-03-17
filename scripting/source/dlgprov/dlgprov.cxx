@@ -51,6 +51,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <util/MiscUtils.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 using namespace ::com::sun::star;
