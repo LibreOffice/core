@@ -70,6 +70,7 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules):
     o3tl = {
         "o3tl/typed_flags_set.hxx" : "namespace o3tl { template <typename T> struct typed_flags; }",
         "o3tl/deleter.hxx" : "namespace o3tl { template <typename T> struct default_delete; }",
+        "o3tl/span.hxx" : "namespace o3tl { template <typename T> class span; }",
     }
     for k, v, in o3tl.items():
         if include == k and v in toAdd:
