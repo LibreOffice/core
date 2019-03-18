@@ -2487,6 +2487,23 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         rDocShell.UpdatePaintExt( nExtFlags, nStartCol, nStartRow, *itr, nEndCol, nEndRow, *itr );
     }
 
+    switch (eCmd)
+    {
+    case DelCellCmd::CellsUp:
+    case DelCellCmd::CellsLeft:
+        rDoc.DeleteObjectsInArea(nStartCol, nStartRow, nEndCol, nEndRow, aMark, true);
+        break;
+    case DelCellCmd::Rows:
+        rDoc.DeleteObjectsInArea(0, nStartRow, MAXCOL, nEndRow, aMark, true);
+        break;
+    case DelCellCmd::Cols:
+        rDoc.DeleteObjectsInArea(nStartCol, 0, nEndCol, MAXROW, aMark, true);
+        break;
+    default:
+        break;
+    }
+
+
     bool bUndoOutline = false;
     switch (eCmd)
     {
