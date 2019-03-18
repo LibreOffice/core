@@ -269,7 +269,7 @@ void ScDocument::DrawCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
 }
 
 void ScDocument::DeleteObjectsInArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                        const ScMarkData& rMark )
+                        const ScMarkData& rMark, bool bAnchored)
 {
     if (!pDrawLayer)
         return;
@@ -278,7 +278,7 @@ void ScDocument::DeleteObjectsInArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
     ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
         if (maTabs[*itr])
-            pDrawLayer->DeleteObjectsInArea( *itr, nCol1, nRow1, nCol2, nRow2 );
+            pDrawLayer->DeleteObjectsInArea( *itr, nCol1, nRow1, nCol2, nRow2, bAnchored);
 }
 
 void ScDocument::DeleteObjectsInSelection( const ScMarkData& rMark )
