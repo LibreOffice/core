@@ -29,6 +29,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.Dimension;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -304,6 +305,7 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
         frame.pack();
         frame.setSize(590, 480);
         frame.setLocation(300, 200);
+        frame.setMinimumSize(new Dimension(500, 300));
     }
 
     private void doClose() {
