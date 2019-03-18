@@ -95,7 +95,8 @@ void DocumentInserter::StartExecuteModal( const Link<sfx2::FileDialogHelper*,voi
     {
         m_pFileDlg.reset( new FileDialogHelper(
                 ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-                m_nDlgFlags, m_sDocFactory, SfxFilterFlags::NONE, SfxFilterFlags::NONE, m_pParent ) );
+                m_nDlgFlags, m_sDocFactory, SfxFilterFlags::OWN, SfxFilterFlags::NONE, m_pParent ) );
+        m_pFileDlg->SetCurrentFilter( "ODF Text Document" );
     }
     m_pFileDlg->StartExecuteModal( LINK( this, DocumentInserter, DialogClosedHdl ) );
 }
