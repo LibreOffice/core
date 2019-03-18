@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_977d4570",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-03-18T17:19:04Z",
+      "side": 1,
+      "message": "In https://gerrit.libreoffice.org/#/c/69368/1//COMMIT_MSG@7, you were asked to ass a colon after the bug number. But here, you omitted the bug number completely.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 40
+      },
+      "revId": "990a795fc61a5b93570f6a01ce98ae573412f4a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_b782c94e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-03-18T17:19:04Z",
+      "side": 1,
+      "message": "Please break the line here into two lines (or more).",
+      "range": {
+        "startLine": 9,
+        "startChar": 71,
+        "endLine": 9,
+        "endChar": 72
+      },
+      "revId": "990a795fc61a5b93570f6a01ce98ae573412f4a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_378eb978",
+        "filename": "sw/source/uibase/dialog/SwSpellDialogChildWindow.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-03-18T17:19:04Z",
+      "side": 1,
+      "message": "What does this mean? https://bz.apache.org/ooo/show_bug.cgi?id\u003d84610 doesn\u0027t seem relevant.",
+      "range": {
+        "startLine": 433,
+        "startChar": 12,
+        "endLine": 433,
+        "endChar": 23
+      },
+      "revId": "990a795fc61a5b93570f6a01ce98ae573412f4a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
