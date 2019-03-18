@@ -108,74 +108,6 @@ OString MergeEntrys::GetQTZText(const ResData& rResData, const OString& rOrigTex
     return sKey + GetDoubleBars() + rOrigText;
 }
 
-
-// class MergeDataHashMap
-
-
-std::pair<MergeDataHashMap::iterator,bool> MergeDataHashMap::insert(const OString& rKey, std::unique_ptr<MergeData> pMergeData)
-{
-    std::pair<iterator,bool> aTemp = m_aHashMap.emplace( rKey, std::move(pMergeData) );
-    if( m_aHashMap.size() == 1 )
-    {
-        // When first insert, set an iterator to the first element
-        aFirstInOrder = aTemp.first;
-    }
-    else
-    {
-        // Define insertion order by setting an iterator to the next element.
-        aLastInsertion->second->m_aNextData = aTemp.first;
-    }
-    aLastInsertion = aTemp.first;
-    return aTemp;
-}
-
-MergeDataHashMap::iterator const & MergeDataHashMap::find(const OString& rKey)
-{
-    iterator aHint = m_aHashMap.end();
-
-    // Add a hint
-    if( bFirstSearch && !m_aHashMap.empty() )
-    {
-        aHint = aFirstInOrder;
-    }
-    else if( aLastFound == aLastInsertion )
-    {
-        // Next to the last element is the first element
-        aHint = aFirstInOrder;
-    }
-    else if( aLastFound != m_aHashMap.end() && aLastFound != aLastInsertion )
-    {
-        aHint = aLastFound->second->m_aNextData;
-    }
-
-    // If hint works than no need for search
-    if( aHint != m_aHashMap.end() && aHint->first == rKey )
-    {
-        aLastFound = aHint;
-    }
-    else
-    {
-        aLastFound = m_aHashMap.find(rKey);
-    }
-
-    bFirstSearch = false;
-    return aLastFound;
-}
-
-
-// class MergeData
-
-
-MergeData::MergeData()
-    : pMergeEntrys( new MergeEntrys() )
-{
-}
-
-MergeData::~MergeData()
-{
-}
-
-
 // class MergeDataFile
 
 
@@ -304,7 +236,7 @@ std::vector<OString> MergeDataFile::GetLanguages() const
     return std::vector<OString>(aLanguageSet.begin(),aLanguageSet.end());
 }
 
-MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive )
+MergeEntrys *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive )
 {
     OString sOldG = pResData->sGId;
     OString sOldL = pResData->sId;
@@ -319,7 +251,7 @@ MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive 
 
     OString sKey = CreateKey( pResData->sResTyp , pResData->sGId , pResData->sId , pResData->sFilename , bCaseSensitive );
 
-    MergeDataHashMap::const_iterator mit = aMap.find( sKey );
+    auto mit = aMap.find( sKey );
     if(mit != aMap.end())
     {
         pResData->sGId = sOldG;
@@ -334,19 +266,13 @@ MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive 
 MergeEntrys *MergeDataFile::GetMergeEntrys( ResData *pResData )
 {
     // search for requested MergeEntrys
-    MergeData *pData = GetMergeData( pResData );
-    if ( pData )
-        return pData->GetMergeEntries();
-    return nullptr;
+    return GetMergeData( pResData );
 }
 
 MergeEntrys *MergeDataFile::GetMergeEntrysCaseSensitive( ResData *pResData )
 {
     // search for requested MergeEntrys
-    MergeData *pData = GetMergeData( pResData , true );
-    if ( pData )
-        return pData->GetMergeEntries();
-    return nullptr;
+    return GetMergeData( pResData , true );
 }
 
 void MergeDataFile::InsertEntry(
@@ -356,28 +282,27 @@ void MergeDataFile::InsertEntry(
     const OString &rTITLE, const OString &rInFilename,
     bool bFirstLang, bool bCaseSensitive )
 {
-    MergeData *pData = nullptr;
+    MergeEntrys *pMergeEntrys = nullptr;
 
     // search for MergeData
     OString sKey = CreateKey(rTYP , rGID , rLID , rInFilename , bCaseSensitive);
 
     if( !bFirstLang )
     {
-        MergeDataHashMap::const_iterator mit = aMap.find( sKey );
+        auto mit = aMap.find( sKey );
         if(mit != aMap.end())
-            pData = mit->second.get();
+            pMergeEntrys = mit->second.get();
 
     }
 
-    if( !pData )
+    if( !pMergeEntrys )
     {
-        pData = new MergeData;
-        aMap.insert( sKey, std::unique_ptr<MergeData>(pData) );
+        pMergeEntrys = new MergeEntrys;
+        aMap.emplace( sKey, std::unique_ptr<MergeEntrys>(pMergeEntrys) );
     }
 
 
     // insert the cur string
-    MergeEntrys *pMergeEntrys = pData->GetMergeEntries();
     if( nLANG =="qtz" )
     {
         const OString sTemp = rInFilename + rGID + rLID + rTYP;
