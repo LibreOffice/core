@@ -1802,12 +1802,3 @@ cmd/lc_macrodialog.png cmd/lc_scriptorganizer.png
 
 cmd/lc_donation.png cmd/lc_currencyfield.png
 cmd/sc_donation.png cmd/sc_currencyfield.png
-
-# Redaction toolbar
-cmd/lc_redactedexportblack.png cmd/lc_exportdirecttopdf.png
-cmd/sc_redactedexportblack.png cmd/sc_exportdirecttopdf.png
-cmd/32/redactedexportblack.png cmd/32/exportdirecttopdf.png
-
-cmd/lc_redactedexportwhite.png cmd/lc_exportdirecttopdf.png
-cmd/sc_redactedexportwhite.png cmd/sc_exportdirecttopdf.png
-cmd/32/redactedexportwhite.png cmd/32/exportdirecttopdf.png
