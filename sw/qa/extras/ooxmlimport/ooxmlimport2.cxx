@@ -103,6 +103,14 @@ DECLARE_OOXMLIMPORT_TEST(testGroupShapeFontName, "groupshape-fontname.docx")
         getProperty<OUString>(getRun(getParagraphOfText(1, xText), 1), "CharFontNameAsian"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf120548, "tdf120548.docx")
+{
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 00ff0000;
+    // Actual: ffffffff', i.e. the numbering portion was black, not red.
+    CPPUNIT_ASSERT_EQUAL(OUString("00ff0000"),
+                         parseDump("//Special[@nType='PortionType::Number']/SwFont", "color"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(test120551, "tdf120551.docx")
 {
     auto nHoriOrientPosition = getProperty<sal_Int32>(getShape(1), "HoriOrientPosition");
