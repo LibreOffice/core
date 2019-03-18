@@ -26,6 +26,7 @@
 #include <tools/link.hxx>
 #include <memory>
 #include <vector>
+#include <comphelper/documentconstants.hxx>
 
 namespace sfx2 { class FileDialogHelper; }
 namespace weld { class Window; }
@@ -65,7 +66,7 @@ public:
     DocumentInserter(weld::Window* pParent, const OUString& rFactory, const Mode mode = Mode::Insert);
     ~DocumentInserter();
 
-    void                    StartExecuteModal( const Link<sfx2::FileDialogHelper*,void>& _rDialogClosedLink );
+    void StartExecuteModal( const Link<sfx2::FileDialogHelper*,void>& _rDialogClosedLink,const SfxFilterFlags eFlags = SfxFilterFlags::NONE);
     std::unique_ptr<SfxMedium> CreateMedium(char const* pFallbackHack = nullptr);
     SfxMediumList CreateMediumList();
 };
