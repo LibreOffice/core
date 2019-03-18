@@ -412,7 +412,9 @@ SwLinePortion *SwTextFormatter::NewExtraPortion( SwTextFormatInfo &rInf )
  * character than can be configured to be shown). However, in practice MSO also uses it as direct formatting
  * for numbering in that paragraph. I don't know if the problem is in the spec or in MSWord.
  */
-static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTextFormatInfo& rInf, const IDocumentSettingAccess* pIDSA )
+static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextFormatInfo& rInf,
+                                                     const IDocumentSettingAccess* pIDSA,
+                                                     const SwAttrSet* pFormat)
 {
     if( !pIDSA->get(DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING ))
         return;
@@ -446,6 +448,8 @@ static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTextFor
                 while (true)
                 {
                     if (SwTextNode::IsIgnoredCharFormatForNumbering(pItem->Which()))
+                        pCleanedSet->ClearItem(pItem->Which());
+                    else if (pFormat && pFormat->HasItem(pItem->Which()))
                         pCleanedSet->ClearItem(pItem->Which());
 
                     if (aIter.IsAtEnd())
@@ -552,7 +556,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                 if( pFormat )
                     pNumFnt->SetDiffFnt( pFormat, pIDSA );
 
-                checkApplyParagraphMarkFormatToNumbering( pNumFnt.get(), rInf, pIDSA );
+                checkApplyParagraphMarkFormatToNumbering(pNumFnt.get(), rInf, pIDSA, pFormat);
 
                 if ( pFormatFnt )
                 {
@@ -608,7 +612,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                     if( pFormat )
                         pNumFnt->SetDiffFnt( pFormat, pIDSA );
 
-                    checkApplyParagraphMarkFormatToNumbering( pNumFnt.get(), rInf, pIDSA );
+                    checkApplyParagraphMarkFormatToNumbering(pNumFnt.get(), rInf, pIDSA, pFormat);
 
                     // we do not allow a vertical font
                     pNumFnt->SetVertical( pNumFnt->GetOrientation(), m_pFrame->IsVertical() );
