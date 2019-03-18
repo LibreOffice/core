@@ -143,7 +143,7 @@ public:
     bool            HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow );
 
     void            DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
-                                            SCCOL nCol2,SCROW nRow2 );
+                                            SCCOL nCol2,SCROW nRow2, bool bAnchored = false );
     void            DeleteObjectsInSelection( const ScMarkData& rMark );
 
     void            CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rectangle& rRange );
