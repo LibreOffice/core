@@ -29,10 +29,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-//imports to fix MinimumDimension Bug
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.Dimension;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -231,10 +227,9 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
         this.scriptURL = url;
         this.model     = new ScriptSourceModel(url);
         this.filename  = url.getFile();
-        /*To get only filename from complete path*/
         int lastIndexOfSlash = this.filename.lastIndexOf('\\');/*for windows*/
         if(lastIndexOfSlash==-1){
-            lastIndexOfSlash = s.lastIndexOf('/');/*for linux*/
+            lastIndexOfSlash = this.filename.lastIndexOf('/');/*for linux*/
         }
         this.filename = this.filename.substring(lastIndexOfSlash+1);
         this.cl = cl;
@@ -315,23 +310,6 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
         frame.pack();
         frame.setSize(590, 480);
         frame.setLocation(300, 200);
-        frame.setMinimumSize(new Dimension(300,100));
-
-        frame.addComponentListener(
-            new ComponentAdapter(){
-                public void componentResized(ComponentEvent e){
-                    Dimension currentDimension = frame.getSize();
-                    Dimension minimumDimenion = frame.getMinimumSize();
-                    if(currentDimension.width < minimumDimenion.width)
-      		        currentDimension.width = minimumDimenion.width;
-       		    if(currentDimension.height < minimumDimenion.height)
-      			currentDimension.height = minimumDimenion.height;
-		    frame.setSize(currentDimension);
-		}
-	    }
-	);
-        
-
     }
 
     private void doClose() {
