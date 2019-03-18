@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_45694623",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-18T10:34:11Z",
+      "side": 1,
+      "message": "please use your real name here.",
+      "range": {
+        "startLine": 2,
+        "startChar": 12,
+        "endLine": 2,
+        "endChar": 29
+      },
+      "revId": "49f4c23c9337dfd2ac3ca7808eac14fb6e1c05a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_85874ed8",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/ScriptEditorForBeanShell.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-18T10:34:11Z",
+      "side": 1,
+      "message": "Is there no method on the URL class to do this?",
+      "revId": "49f4c23c9337dfd2ac3ca7808eac14fb6e1c05a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_256c4235",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/ScriptEditorForBeanShell.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-18T10:34:11Z",
+      "side": 1,
+      "message": "Can\u0027t you use JFrame::setMinimumSize ?",
+      "revId": "49f4c23c9337dfd2ac3ca7808eac14fb6e1c05a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
