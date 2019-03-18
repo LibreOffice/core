@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_85e18e01",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2019-03-18T05:58:56Z",
+      "side": 1,
+      "message": "Please write a more verbose commit message.\n\nThe first line should be in present tense, saying concisely what the patch does. See the first comment in https://stackoverflow.com/questions/3580013/should-i-use-past-or-present-tense-in-git-commit-messages .",
+      "revId": "e92d68db140e08f78a66a016af899e2deeaeaf89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
