@@ -5206,9 +5206,19 @@
                   <desc>PDF 1.5 (default selection).</desc>
                 </info>
               </enumeration>
+              <enumeration oor:value="16">
+                <info>
+                  <desc>PDF 1.6</desc>
+                </info>
+              </enumeration>
               <enumeration oor:value="1">
                 <info>
                   <desc>PDF/A-1 (ISO 19005-1:2005)</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="2">
+                <info>
+                  <desc>PDF/A-2 (ISO 19005-2:2011)</desc>
                 </info>
               </enumeration>
             </constraints>
