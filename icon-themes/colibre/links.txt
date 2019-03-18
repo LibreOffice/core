@@ -119,6 +119,9 @@ cmd/lc_showtrackedchanges.png cmd/lc_addwatch.png
 cmd/sc_tracechangemode.png cmd/sc_trackchanges.png
 cmd/lc_tracechangemode.png cmd/lc_trackchanges.png
 cmd/sc_shapesmenu.png cmd/sc_basicshapes.round-quadrat.png
+cmd/sc_charactermenu.png cmd/sc_fontdialog.png
+cmd/sc_paragraphmenu.png cmd/sc_paragraphdialog.png
+cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png
 
 # Zoom
 cmd/lc_previewzoom.png cmd/lc_zoomprevious.png
@@ -244,7 +247,6 @@ cmd/sc_objectalign.png cmd/sc_objectalignleft.png
 cmd/sc_alignvcenter.png cmd/sc_alignverticalcenter.png
 cmd/sc_sectionaligntop.png cmd/sc_alignup.png
 cmd/sc_sectionalignbottom.png cmd/sc_aligndown.png
-cmd/sc_alignframemenu.png cmd/sc_alignleft.png
 cmd/sc_alignhorizontalceter.png cmd/sc_alignhorizontalcenter.png
 
 # Graphic
@@ -284,6 +286,8 @@ cmd/lc_fontworkshapetype.fontwork-fade-down.png cmd/lc_basicshapes.trapezoid.png
 cmd/lc_flowchartshapes.flowchart-magnetic-disk.png cmd/lc_basicshapes.can.png
 cmd/sc_flowchartshapes.png cmd/lc_flowchartshapes.flowchart-document.png
 
+cmd/lc_measureattributes.png cmd/lc_measureline.png
+cmd/sc_measureattributes.png cmd/sc_measureline.png
 
 cmd/lc_emojicontrol.png cmd/lc_symbolshapes.png
 cmd/sc_emojicontrol.png cmd/sc_symbolshapes.png
@@ -343,6 +347,7 @@ cmd/lc_dbreportdelete.png cmd/lc_delete.png
 cmd/lc_dbquerydelete.png cmd/lc_delete.png
 cmd/lc_dbformdelete.png cmd/lc_delete.png
 cmd/lc_dbclearquery.png cmd/lc_delete.png
+cmd/lc_deletecell.png cmd/lc_delete.png
 cmd/sc_deleteprintarea.png cmd/sc_delete.png
 cmd/sc_deleterecord.png cmd/sc_delete.png
 cmd/sc_dbtabledelete.png cmd/sc_delete.png
@@ -350,6 +355,7 @@ cmd/sc_dbreportdelete.png cmd/sc_delete.png
 cmd/sc_dbquerydelete.png cmd/sc_delete.png
 cmd/sc_dbformdelete.png cmd/sc_delete.png
 cmd/sc_dbclearquery.png cmd/sc_delete.png
+cmd/sc_deletecell.png cmd/sc_delete.png
 
 # Folder
 cmd/lc_dbtableopen.png cmd/lc_open.png
@@ -371,24 +377,22 @@ cmd/lc_importfromfile.png cmd/lc_dataimport.png
 cmd/sc_importfromfile.png cmd/sc_dataimport.png
 
 # Wizard
-cmd/lc_dbnewqueryautopilot.png cmd/lc_autoformat.png
-cmd/lc_usewizards.png cmd/lc_autoformat.png
-cmd/lc_graphicfiltertoolbox.png cmd/lc_autoformat.png
-cmd/lc_dbnewtableautopilot.png cmd/lc_autoformat.png
-cmd/lc_dbnewreportautopilot.png cmd/lc_autoformat.png
-cmd/lc_dbnewformautopilot.png cmd/lc_autoformat.png
-cmd/lc_commontaskbarvisible.png cmd/lc_autoformat.png
-cmd/lc_autopilotmenu.png cmd/lc_autoformat.png
-cmd/lc_newarrangement.png cmd/lc_autoformat.png
-cmd/sc_dbnewqueryautopilot.png cmd/sc_autoformat.png
-cmd/sc_usewizards.png cmd/sc_autoformat.png
-cmd/sc_graphicfiltertoolbox.png cmd/sc_autoformat.png
-cmd/sc_dbnewtableautopilot.png cmd/sc_autoformat.png
-cmd/sc_dbnewreportautopilot.png cmd/sc_autoformat.png
-cmd/sc_dbnewformautopilot.png cmd/sc_autoformat.png
-cmd/sc_commontaskbarvisible.png cmd/sc_autoformat.png
-cmd/sc_autopilotmenu.png cmd/sc_autoformat.png
-cmd/sc_newarrangement.png cmd/sc_autoformat.png
+cmd/lc_dbnewqueryautopilot.png cmd/lc_autopilotmenu.png
+cmd/lc_usewizards.png cmd/lc_autopilotmenu.png
+cmd/lc_graphicfiltertoolbox.png cmd/lc_autopilotmenu.png
+cmd/lc_dbnewtableautopilot.png cmd/lc_autopilotmenu.png
+cmd/lc_dbnewreportautopilot.png cmd/lc_autopilotmenu.png
+cmd/lc_dbnewformautopilot.png cmd/lc_autopilotmenu.png
+cmd/lc_commontaskbarvisible.png cmd/lc_autopilotmenu.png
+cmd/lc_newarrangement.png cmd/lc_autopilotmenu.png
+cmd/sc_dbnewqueryautopilot.png cmd/sc_autopilotmenu.png
+cmd/sc_usewizards.png cmd/sc_autopilotmenu.png
+cmd/sc_graphicfiltertoolbox.png cmd/sc_autopilotmenu.png
+cmd/sc_dbnewtableautopilot.png cmd/sc_autopilotmenu.png
+cmd/sc_dbnewreportautopilot.png cmd/sc_autopilotmenu.png
+cmd/sc_dbnewformautopilot.png cmd/sc_autopilotmenu.png
+cmd/sc_commontaskbarvisible.png cmd/sc_autopilotmenu.png
+cmd/sc_newarrangement.png cmd/sc_autopilotmenu.png
 
 # Filter
 cmd/lc_formfilterexecute.png cmd/lc_datafilterstandardfilter.png
@@ -405,16 +409,13 @@ cmd/sc_removefilter.png cmd/sc_removefiltersort.png
 # Bullets
 cmd/lc_bulletliststyle.png cmd/lc_defaultbullet.png
 cmd/sc_bulletliststyle.png cmd/sc_defaultbullet.png
-cmd/lc_romanliststyle.png cmd/lc_defaultnumbering.png
-cmd/sc_romanliststyle.png cmd/sc_defaultnumbering.png
 cmd/lc_defaultparastyle.png cmd/lc_controlcodes.png
 cmd/sc_defaultparastyle.png cmd/sc_controlcodes.png
 
 # Group
 cmd/lc_leaveallgroups.png cmd/lc_leavegroup.png
 cmd/sc_leaveallgroups.png cmd/sc_leavegroup.png
-cmd/sc_formatungroup.png cmd/sc_ungroup.png
-cmd/sc_groupmenu.png cmd/sc_group.png
+cmd/sc_groupmenu.png cmd/sc_formatgroup.png
 
 # Undo
 cmd/lc_recundo.png cmd/lc_undo.png
@@ -429,8 +430,9 @@ cmd/lc_setborderstyle.png cmd/lc_diagramarea.png
 cmd/sc_setborderstyle.png cmd/sc_diagramarea.png
 
 # Label
-cmd/lc_definename.png cmd/lc_label.png
-cmd/sc_definename.png cmd/sc_label.png
+cmd/32/addname.png cmd/32/label.png
+cmd/lc_addname.png cmd/lc_label.png
+cmd/sc_addname.png cmd/sc_label.png
 
 # Rotate
 cmd/lc_clickchangerotation.png cmd/lc_toggleobjectrotatemode.png
@@ -460,18 +462,14 @@ cmd/sc_quickedit.png cmd/sc_editdoc.png
 cmd/sc_dsbeditdoc.png cmd/sc_editdoc.png
 
 # Quit
-cmd/lc_closemasterview.png cmd/lc_quit.png
-cmd/lc_closewin.png cmd/lc_quit.png
-cmd/sc_closemasterview.png cmd/sc_quit.png
-cmd/sc_closewin.png cmd/sc_quit.png
+cmd/lc_closewin.png cmd/lc_closepreview.png
+cmd/sc_closewin.png cmd/sc_closepreview.png
 
 # Close
 cmd/lc_closedocs.png cmd/lc_closedoc.png
 cmd/lc_exitsearch.png cmd/lc_closedoc.png
-cmd/lc_closepreview.png cmd/lc_closedoc.png
 cmd/sc_closedocs.png cmd/sc_closedoc.png
 cmd/sc_exitsearch.png cmd/sc_closedoc.png
-cmd/sc_closepreview.png cmd/sc_closedoc.png
 
 # Cancel
 cmd/lc_no.png cmd/lc_cancel.png
@@ -567,6 +565,8 @@ cmd/sc_fontcolor.png cmd/sc_color.png
 cmd/sc_characterbackgroundpattern.png cmd/sc_backcolor.png
 cmd/lc_characterbackgroundpattern.png cmd/lc_backcolor.png
 cmd/lc_backgroundpatterncontroller.png cmd/lc_backgroundcolor.png
+cmd/sc_tablecellbackgroundcolor.png cmd/sc_backgroundcolor.png
+cmd/lc_tablecellbackgroundcolor.png cmd/lc_backgroundcolor.png
 
 # Paragraph Alignment
 cmd/lc_leftpara.png cmd/lc_alignleft.png
@@ -724,12 +724,10 @@ cmd/lc_hyphenation.png cmd/lc_hyphenate.png
 cmd/sc_hyphenation.png cmd/sc_hyphenate.png
 
 # Currency
-cmd/lc_currencyfield.png cmd/lc_formattedfield.png
-cmd/sc_currencyfield.png cmd/sc_formattedfield.png
-cmd/lc_numberformatcurrency.png cmd/lc_formattedfield.png
-cmd/sc_numberformatcurrency.png cmd/sc_formattedfield.png
-cmd/lc_numberformatcurrencysimple.png cmd/lc_formattedfield.png
-cmd/sc_numberformatcurrencysimple.png cmd/sc_formattedfield.png
+cmd/lc_numberformatcurrency.png cmd/lc_currencyfield.png
+cmd/sc_numberformatcurrency.png cmd/sc_currencyfield.png
+cmd/lc_numberformatcurrencysimple.png cmd/lc_currencyfield.png
+cmd/sc_numberformatcurrencysimple.png cmd/sc_currencyfield.png
 
 # Fontwork
 cmd/lc_fontworkshapetype.png cmd/lc_fontwork.png
@@ -757,15 +755,14 @@ cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
 cmd/lc_gridvisible.png cmd/lc_grid.png
 cmd/sc_gridvisible.png cmd/sc_grid.png
 cmd/sc_gridmenu.png cmd/sc_grid.png
+cmd/sc_insertgridcontrol.png cmd/sc_grid.png
+cmd/lc_insertgridcontrol.png cmd/lc_grid.png
 
 # Crop
 cmd/lc_grafattrcrop.png cmd/lc_crop.png
 cmd/sc_grafattrcrop.png cmd/sc_crop.png
 
-# Group
-cmd/sc_formatgroup.png cmd/sc_group.png
-
-# Extrusion Rotat
+# Extrusion Rotate
 cmd/lc_rulerrowsvertical.png cmd/lc_extrusiontiltright.png
 cmd/lc_rulerrows.png cmd/lc_extrusiontiltleft.png
 cmd/sc_rulerrowsvertical.png cmd/sc_extrusiontiltright.png
@@ -828,6 +825,11 @@ cmd/sc_fliphorizontal.png cmd/sc_mirror.png
 cmd/lc_flipvertical.png cmd/lc_mirrorvert.png
 cmd/sc_flipvertical.png cmd/sc_mirrorvert.png
 cmd/sc_mirrorhorz.png cmd/sc_mirror.png
+cmd/sc_flipmenu.png cmd/sc_mirror.png
+cmd/lc_objectmirrorhorizontal.png cmd/lc_mirror.png
+cmd/sc_objectmirrorhorizontal.png cmd/sc_mirror.png
+cmd/lc_objectmirrorvertical.png cmd/lc_mirrorvert.png
+cmd/sc_objectmirrorvertical.png cmd/sc_mirrorvert.png
 
 # Connector
 cmd/lc_connectortoolbox.png cmd/lc_connector.png
@@ -855,7 +857,7 @@ cmd/sc_arrangeframemenu.png cmd/sc_bringtofront.png
 cmd/lc_setobjecttobackground.png cmd/lc_sendtoback.png
 cmd/sc_setobjecttobackground.png cmd/sc_sendtoback.png
 
-# Cacl
+# Calc
 cmd/sc_fieldmenu.png cmd/sc_insertfieldctrl.png
 cmd/sc_numberformatmenu.png cmd/sc_numberformatstandard.png
 cmd/sc_mergecellsmenu.png cmd/sc_togglemergecells.png
@@ -900,8 +902,6 @@ cmd/lc_dbnewquerysql.png cmd/lc_sbanativesql.png
 cmd/sc_dbnewquerysql.png cmd/sc_sbanativesql.png
 cmd/lc_dbtableedit.png cmd/lc_tabledialog.png
 cmd/sc_dbtableedit.png cmd/sc_tabledialog.png
-cmd/lc_dataincolumns.png cmd/lc_dbviewtablenames.png
-cmd/sc_dataincolumns.png cmd/sc_dbviewtablenames.png
 cmd/lc_dbdtableedit.png cmd/lc_tabledialog.png
 cmd/sc_dbdtableedit.png cmd/sc_tabledialog.png
 cmd/lc_dbquerypropertiesdialog.png cmd/lc_dbqueryedit.png
@@ -917,6 +917,8 @@ cmd/sc_browseforward.png cmd/sc_nextrecord.png
 
 # Macro
 cmd/sc_macrosmenu.png res/im30821.png
+cmd/sc_macrodialog.png cmd/sc_scriptorganizer.png
+cmd/lc_macrodialog.png cmd/lc_scriptorganizer.png
 
 # Help
 cmd/sc_about.png res/mainapp_16.png
@@ -994,7 +996,7 @@ cmd/sc_sbabrwinsert.png cmd/sc_insertfieldctrl.png
 cmd/lc_savesimple.png cmd/lc_save.png
 cmd/sc_savesimple.png cmd/sc_save.png
 
-# Underline includ language support
+# Underline include language support
 cmd/lc_underlinesimple.png cmd/lc_underline.png
 cmd/sc_underlinesimple.png cmd/sc_underline.png
 cmd/32/underlinesimple.png cmd/32/underline.png
@@ -1114,8 +1116,8 @@ desktop/res/lock_16.png cmd/sc_protect.png
 # extensions
 # ==============================================
 extensions/res/arrow.png cmd/sc_nextrecord.png
-extensions/res/buttonminus.png extensions/source/scanner/minus.png
-extensions/res/buttonplus.png extensions/source/scanner/plus.png
+extensions/res/buttonminus.png extensions/res/scanner/minus.png
+extensions/res/buttonplus.png extensions/res/scanner/plus.png
 
 # formula
 # ==============================================
@@ -1236,7 +1238,7 @@ res/plugin.png cmd/lc_insertplugin.png
 res/sx10144.png cmd/sc_checkbox.png
 res/sx10593.png cmd/sc_switchxformsdesignmode.png
 res/sx10597.png cmd/sc_color.png
-res/sx10598.png cmd/sc_group.png
+res/sx10598.png cmd/sc_formatgroup.png
 
 res/sc05500.png cmd/sc_adddirect.png
 res/sc05678.png cmd/sc_inserthyperlink.png
@@ -1389,7 +1391,7 @@ sd/res/breakplayingblue_16.png cmd/sc_mediapause.png
 sd/res/comments_indicator.png cmd/sc_showannotations.png
 sd/res/get1obj.png cmd/sc_selectobject.png
 sd/res/getallob.png cmd/sc_selectall.png
-sd/res/group.png cmd/sc_group.png
+sd/res/group.png cmd/sc_formatgroup.png
 sd/res/ole.png cmd/lc_insertobject.png
 sd/res/page.png cmd/lc_adddirect.png
 sd/res/pipette.png cmd/lc_bmpmask.png
@@ -1500,7 +1502,7 @@ svx/res/cd017.png cmd/sc_bezierinsert.png
 svx/res/cd018.png cmd/sc_bezierdelete.png
 svx/res/cd020.png cmd/sc_undo.png
 svx/res/cd021.png cmd/sc_redo.png
-svx/res/cd025.png cmd/sc_autoformat.png
+svx/res/cd025.png cmd/sc_autopilotmenu.png
 svx/res/cd026.png cmd/sc_bmpmask.png
 
 svx/res/color.png cmd/sc_bmpmask.png
@@ -1720,3 +1722,105 @@ cmd/sc_rowoperations.png cmd/sc_entirerow.png
 
 cmd/sc_cellprotection.png cmd/sc_protect.png
 cmd/lc_cellprotection.png cmd/lc_protect.png
+cmd/sc_toolprotectiondocument.png cmd/sc_protect.png
+cmd/lc_toolprotectiondocument.png cmd/lc_protect.png
+
+# calc context menu sheettab
+# ==============================================
+cmd/sc_tableselectall.png cmd/sc_selecttable.png
+cmd/sc_tabledeselectall.png cmd/sc_dbviewtablenames.png
+cmd/sc_settabbgcolor.png cmd/sc_backgroundcolor.png
+cmd/sc_sheetrighttoleft.png cmd/sc_pararighttoleft.png
+cmd/sc_tableevents.png cmd/sc_animationeffects.png
+
+cmd/lc_tableselectall.png cmd/lc_selecttable.png
+cmd/lc_tabledeselectall.png cmd/lc_dbviewtablenames.png
+cmd/lc_settabbgcolor.png cmd/lc_backgroundcolor.png
+cmd/lc_sheetrighttoleft.png cmd/lc_pararighttoleft.png
+cmd/lc_tableevents.png cmd/lc_animationeffects.png
+
+# calc context menu rowheader
+# ==============================================
+cmd/sc_rowheight.png cmd/sc_setminimalrowheight.png
+cmd/sc_columnwidth.png cmd/sc_setminimalcolumnwidth.png
+
+cmd/lc_rowheight.png cmd/lc_setminimalrowheight.png
+cmd/lc_columnwidth.png cmd/lc_setminimalcolumnwidth.png
+
+# calc toolbar previewbar
+# ==============================================
+cmd/sc_margins.png cmd/sc_pagemargin.png
+cmd/sc_exportasgraphic.png cmd/sc_insertgraphic.png
+cmd/sc_namegroup.png cmd/sc_definename.png
+cmd/lc_namegroup.png cmd/lc_definename.png
+
+cmd/lc_margins.png cmd/lc_pagemargin.png
+cmd/lc_exportasgraphic.png cmd/lc_insertgraphic.png
+
+# calc toolbar draw
+# ===============================================
+cmd/sc_assignmacro.png cmd/sc_starshapes.vertical-scroll.png
+cmd/sc_editshapehyperlink.png cmd/sc_inserthyperlink.png
+cmd/sc_deleteshapehyperlink.png cmd/sc_removehyperlink.png
+cmd/sc_openhyperlinkoncursor.png cmd/sc_inserthyperlink.png
+
+cmd/lc_assignmacro.png cmd/lc_starshapes.vertical-scroll.png
+cmd/lc_editshapehyperlink.png cmd/lc_inserthyperlink.png
+cmd/lc_deleteshapehyperlink.png cmd/lc_removehyperlink.png
+cmd/lc_openhyperlinkoncursor.png cmd/lc_inserthyperlink.png
+
+cmd/sc_rotateflipmenu.png cmd/sc_rotateleft.png
+cmd/sc_mirrormenu.png cmd/sc_rotateleft.png
+cmd/sc_convertmenu.png cmd/sc_bezierconvert.png
+
+# calc menubar icons
+# ===============================================
+cmd/sc_chartmenu.png cmd/sc_drawchart.png
+cmd/sc_objectmenu.png cmd/sc_insertframe.png
+
+# writer
+# ===============================================
+cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
+cmd/lc_addtextbox.png cmd/lc_insertfixedtext.png
+
+# draw
+# ===============================================
+cmd/sc_masterpage.png cmd/sc_slidemasterpage.png
+cmd/lc_masterpage.png cmd/lc_slidemasterpage.png
+
+cmd/sc_pagemode.png cmd/sc_normalmultipanegui.png
+cmd/lc_pagemode.png cmd/lc_normalmultipanegui.png
+
+# Sheet
+cmd/32/sheetlefttoright.png cmd/32/paralefttoright.png
+cmd/32/sheetrighttoleft.png cmd/32/pararighttoleft.png
+cmd/32/tableevents.png cmd/32/animationeffects.png
+cmd/lc_sheetlefttoright.png cmd/lc_paralefttoright.png
+cmd/lc_sheetrighttoleft.png cmd/lc_pararighttoleft.png
+cmd/lc_tableevents.png cmd/lc_animationeffects.png
+cmd/sc_sheetlefttoright.png cmd/sc_paralefttoright.png
+cmd/sc_sheetrighttoleft.png cmd/sc_pararighttoleft.png
+cmd/sc_tableevents.png cmd/sc_animationeffects.png
+
+
+# Macro
+cmd/32/macrosmenu.png cmd/32/choosemacro.png
+cmd/32/basicideappear.png cmd/32/toolsmacroedit.png
+
+cmd/lc_macrosmenu.png cmd/lc_choosemacro.png
+cmd/lc_basicideappear.png cmd/lc_toolsmacroedit.png
+
+cmd/sc_macrosmenu.png cmd/sc_choosemacro.png
+cmd/sc_basicideappear.png cmd/sc_toolsmacroedit.png
+
+cmd/lc_donation.png cmd/lc_currencyfield.png
+cmd/sc_donation.png cmd/sc_currencyfield.png
+
+# Redaction toolbar
+cmd/lc_redactedexportblack.png cmd/lc_exportdirecttopdf.png
+cmd/sc_redactedexportblack.png cmd/sc_exportdirecttopdf.png
+cmd/32/redactedexportblack.png cmd/32/exportdirecttopdf.png
+
+cmd/lc_redactedexportwhite.png cmd/lc_exportdirecttopdf.png
+cmd/sc_redactedexportwhite.png cmd/sc_exportdirecttopdf.png
+cmd/32/redactedexportwhite.png cmd/32/exportdirecttopdf.png
