@@ -38,6 +38,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Move</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:RenamePage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -362,6 +365,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Grid to ~Front</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:HelplinesVisible" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -374,6 +380,9 @@
       <node oor:name=".uno:HelplinesFront" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Snap Guides to ~Front</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:BeforeObject" oor:op="replace">
@@ -664,15 +673,24 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">To ~Bitmap</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:ConvertIntoMetaFile" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">To ~Metafile</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:convert_to_contour" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">To C~ontour</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:EditHyperlink" oor:op="replace">
@@ -948,6 +966,9 @@
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Modify Layer...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:PageMode" oor:op="replace">
@@ -1731,6 +1752,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Color/Grayscale</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:SlideShowMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1755,6 +1779,9 @@
       <node oor:name=".uno:SnapLinesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Snap Guides</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:MasterPageMenu" oor:op="replace">
@@ -1943,6 +1970,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Rows</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertColumnsAfter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1963,6 +1993,9 @@
       <node oor:name=".uno:InsertColumnDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Columns</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:DeleteRows" oor:op="replace">
