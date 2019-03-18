@@ -2230,6 +2230,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Forms</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+            <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:NewDoc" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -4550,6 +4553,9 @@
       <node oor:name=".uno:AutoCorrectDlg" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~AutoCorrect Options...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:AutoPilotAgenda" oor:op="replace">
@@ -6906,6 +6912,9 @@
       <node oor:name=".uno:NavigateMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Navigate</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:BreaksMenu" oor:op="replace">
