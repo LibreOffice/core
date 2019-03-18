@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_65d00acb",
+        "filename": "sfx2/source/doc/docinsert.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-03-18T11:20:35Z",
+      "side": 1,
+      "message": "but you can insert not only ODF but also RTF, WW8, HTML etc. formats in Writer",
+      "revId": "820a6edf5bab109db1aa7500efefce1e1bd8b663",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
