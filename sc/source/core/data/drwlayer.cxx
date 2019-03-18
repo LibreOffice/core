@@ -1358,7 +1358,7 @@ bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
 }
 
 void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
-                                            SCCOL nCol2,SCROW nRow2 )
+                                            SCCOL nCol2,SCROW nRow2, bool bAnchored )
 {
     OSL_ENSURE( pDoc, "ScDrawLayer::DeleteObjectsInArea without document" );
     if ( !pDoc )
@@ -1388,8 +1388,17 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
             if (!IsNoteCaption( pObject ))
             {
                 tools::Rectangle aObjRect = pObject->GetCurrentBoundRect();
-                if ( aDelRect.IsInside( aObjRect ) )
-                    ppObj[nDelCount++] = pObject;
+                if (aDelRect.IsInside(aObjRect))
+                {
+                    if (bAnchored)
+                    {
+                        ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType(*pObject);
+                        if(aAnchorType == SCA_CELL || aAnchorType == SCA_CELL_RESIZE)
+                            ppObj[nDelCount++] = pObject;
+                    }
+                    else
+                        ppObj[nDelCount++] = pObject;
+                }
             }
 
             pObject = aIter.Next();
@@ -1447,8 +1456,8 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
                     {
                         tools::Rectangle aObjRect = pObject->GetCurrentBoundRect();
                         ScRange aRange = pDoc->GetRange(nTab, aObjRect);
-                        bool bObjectInMarkArea
-                            = aMarkBound.IsInside(aObjRect) && rMark.IsAllMarked(aRange);
+                        bool bObjectInMarkArea =
+                            aMarkBound.IsInside(aObjRect) && rMark.IsAllMarked(aRange);
                         const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObject);
                         ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType(*pObject);
                         bool bObjectAnchoredToMarkedCell
