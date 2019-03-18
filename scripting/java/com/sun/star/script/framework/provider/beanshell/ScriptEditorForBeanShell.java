@@ -29,6 +29,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.Dimension;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -227,9 +228,9 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
         this.scriptURL = url;
         this.model     = new ScriptSourceModel(url);
         this.filename  = url.getFile();
-        int lastIndexOfSlash = this.filename.lastIndexOf('\\');/*for windows*/
+        int lastIndexOfSlash = this.filename.lastIndexOf('\\');
         if(lastIndexOfSlash==-1){
-            lastIndexOfSlash = this.filename.lastIndexOf('/');/*for linux*/
+            lastIndexOfSlash = this.filename.lastIndexOf('/');
         }
         this.filename = this.filename.substring(lastIndexOfSlash+1);
         this.cl = cl;
@@ -309,6 +310,7 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
         frame.add(toolbar, BorderLayout.NORTH);
         frame.pack();
         frame.setSize(590, 480);
+        frame.setMinimumSize(new Dimension(300,100));
         frame.setLocation(300, 200);
     }
 
