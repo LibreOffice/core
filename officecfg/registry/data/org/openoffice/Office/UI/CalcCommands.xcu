@@ -533,6 +533,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Select Column</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:StarChartDataDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -543,10 +546,16 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Select Row</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:SelectUnprotectedCells" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Select Unprotected Cells</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ConditionalFormatMenu" oor:op="replace">
@@ -644,10 +653,16 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Select Data Area</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:SetInputMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Cell Edit Mode</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ClearContents" oor:op="replace">
@@ -674,10 +689,16 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Select to Next Sheet</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:JumpToPrevTableSel" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Select to Previous Sheet</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:WrapText" oor:op="replace">
@@ -2204,15 +2225,24 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Sheet Name</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertFieldDocTitle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Document Title</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertFieldDateVariable" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Date</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:OpenFromCalc" oor:op="replace">
@@ -2301,6 +2331,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Sen~d</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:ProtectMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -2321,10 +2354,16 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Ro~ws</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:ColumnMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Colu~mns</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:SheetMenu" oor:op="replace">

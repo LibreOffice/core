@@ -48,6 +48,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Fo~rm Control</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:WebHtml" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -6470,6 +6473,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Chart</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:EditMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -6622,6 +6628,9 @@
       <node oor:name=".uno:FlipMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">F~lip</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:RotateMenu" oor:op="replace">
@@ -6850,6 +6859,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Select</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:EditPasteSpecialMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -6886,6 +6898,9 @@
       <node oor:name=".uno:SafeMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Restart in Safe Mode...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:NavigateMenu" oor:op="replace">
