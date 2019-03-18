@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_c5d79623",
+        "filename": "sw/source/uibase/dialog/SwSpellDialogChildWindow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2019-03-18T05:55:06Z",
+      "side": 1,
+      "message": "Such gratuitous whitespace changes should not be done.",
+      "revId": "6bbcd82d55456531e4bb13212a39742a2db572c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
