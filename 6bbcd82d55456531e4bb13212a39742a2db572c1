@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "ff82abbf_45e38606",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2019-03-18T06:00:45Z",
+      "side": 1,
+      "message": "No need to the Title Case here. Add a colon after the bug number. Use present tense. (\"Add\", not \"Added\".) (Yes, many contributors do it wrongly, but you don\u0027t want to be one of them.) See first reply in https://stackoverflow.com/questions/3580013/should-i-use-past-or-present-tense-in-git-commit-messages .",
+      "revId": "6bbcd82d55456531e4bb13212a39742a2db572c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff82abbf_c5d79623",
         "filename": "sw/source/uibase/dialog/SwSpellDialogChildWindow.cxx",
         "patchSetId": 1
