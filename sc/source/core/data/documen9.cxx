@@ -260,7 +260,7 @@ bool ScDocument::DrawGetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer )
 }
 
 void ScDocument::DeleteObjectsInArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                        const ScMarkData& rMark )
+                        const ScMarkData& rMark, bool bAnchored)
 {
     if (!mpDrawLayer)
         return;
@@ -269,7 +269,7 @@ void ScDocument::DeleteObjectsInArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
     ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
         if (maTabs[*itr])
-            mpDrawLayer->DeleteObjectsInArea( *itr, nCol1, nRow1, nCol2, nRow2 );
+            mpDrawLayer->DeleteObjectsInArea( *itr, nCol1, nRow1, nCol2, nRow2, bAnchored);
 }
 
 void ScDocument::DeleteObjectsInSelection( const ScMarkData& rMark )
