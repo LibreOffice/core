@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_77c20188",
+        "filename": "framework/source/layoutmanager/toolbarlayoutmanager.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-03-18T18:12:46Z",
+      "side": 1,
+      "message": "Here is why removing this code is equivalent to setting ForceFocusAndToFront to \u0027true\u0027 on all platforms.\n\nIn general, any window that is not minimized in task bar is considered active. In Windows, a newly created window (and that includes a floating toolbar) becomes automatically active because org.openoffice.Office.Common/ForceFocusAndToFront is set to true. \u0027isActive()\u0027 check passes\n\nIn Linux, this is not the case and the responsibility to activate the window is left to the window manager which often has some focus stealing prevention mechanism built in. Anyway \u0027isActive()\u0027 check fails here sometimes.\n\nSo you can just as well replace \u0027xContainerWindow-\u003eisActive()\u0027 with \u0027true\u0027 ... but I have no creative ideas how to make that code less clumsy then",
+      "revId": "4ddf7f1b412fce7ee5a63aa834396dc5cd55fa70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_574a5d27",
+        "filename": "vcl/source/window/floatwin.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 905,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-03-18T18:12:46Z",
+      "side": 1,
+      "message": "can skip \u0027else\u0027 here and just return",
+      "revId": "4ddf7f1b412fce7ee5a63aa834396dc5cd55fa70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
