@@ -3599,6 +3599,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">St~yles</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:FormatFrameMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -6492,6 +6495,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Insert</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:DataMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -6509,6 +6515,9 @@
       <node oor:name=".uno:TableMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">T~able</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:SignaturesMenu" oor:op="replace">
