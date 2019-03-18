@@ -24,7 +24,6 @@ void XSheetAnnotationShapeSupplier::testGetAnnotationShape()
 {
     uno::Reference< sheet::XSheetAnnotationShapeSupplier > xSheetAnnotationShapeSupplier(init(), UNO_QUERY_THROW);
     uno::Reference< drawing::XShape > xShape = xSheetAnnotationShapeSupplier->getAnnotationShape();
-
     CPPUNIT_ASSERT_EQUAL_MESSAGE("getAnnotationShape() wrong X position",
                                  sal_Int32(7373), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("getAnnotationShape() wrong Y position",

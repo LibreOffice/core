@@ -1507,8 +1507,8 @@ public:
     bool                         HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* pTabMark = nullptr );
 
     void                         DeleteObjectsInArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                                      const ScMarkData& rMark );
-    void                         DeleteObjectsInSelection( const ScMarkData& rMark );
+                                                      const ScMarkData& rMark, bool bAnchored = false );
+    void                         DeleteObjectsInSelection( const ScMarkData& rMark, bool bAnchored = false );
 
     void                         DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
                                              InsertDeleteFlags nDelFlag, bool bBroadcast = true,
