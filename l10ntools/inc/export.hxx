@@ -119,74 +119,6 @@ public:
 
 };
 
-
-// class MergeDataHashMap
-
-
-class MergeData;
-
-/** Container for MergeData
-
-  This class is an HashMap with a hidden insertion
-  order. The class can used just like a simple
-  HashMap, but good to know that it's use is
-  more effective if the accessing(find) order
-  match with the insertion order.
-
-  In the most case, this match is good.
-  (e.g. reading PO files of different languages,
-  executables merging)
-*/
-class MergeDataHashMap
-{
-    private:
-        typedef std::unordered_map<OString, std::unique_ptr<MergeData>> HashMap_t;
-
-    public:
-        MergeDataHashMap()
-            : bFirstSearch(true)
-            , aLastInsertion(m_aHashMap.end())
-            , aLastFound(m_aHashMap.end())
-            , aFirstInOrder(m_aHashMap.end())
-        {
-        }
-
-        typedef HashMap_t::iterator iterator;
-        typedef HashMap_t::const_iterator const_iterator;
-
-        std::pair<iterator,bool> insert(const OString& rKey, std::unique_ptr<MergeData> pMergeData);
-        iterator const & find(const OString& rKey);
-
-        iterator end() {return m_aHashMap.end();}
-
-    private:
-        bool bFirstSearch;
-        HashMap_t m_aHashMap;
-        iterator aLastInsertion;
-        iterator aLastFound;
-        iterator aFirstInOrder;
-};
-
-
-// class MergeData
-
-
-/// Purpose: holds information of data to merge (one resource)
-class MergeData
-{
-    friend class MergeDataHashMap;
-
-    std::unique_ptr<MergeEntrys> pMergeEntrys;
-    MergeDataHashMap::iterator m_aNextData;
-
-public:
-    MergeData();
-    ~MergeData();
-    MergeEntrys* GetMergeEntries() { return pMergeEntrys.get();}
-
-};
-
-
 // class MergeDataFile
 
 
@@ -194,10 +126,10 @@ public:
 class MergeDataFile
 {
     private:
-        MergeDataHashMap aMap;
+        std::unordered_map<OString, std::unique_ptr<MergeEntrys>> aMap;
         std::set<OString> aLanguageSet;
 
-        MergeData *GetMergeData( ResData *pResData , bool bCaseSensitive = false );
+        MergeEntrys *GetMergeData( ResData *pResData , bool bCaseSensitive = false );
         void InsertEntry(const OString &rTYP, const OString &rGID,
             const OString &rLID, const OString &nLang,
             const OString &rTEXT, const OString &rQHTEXT,
