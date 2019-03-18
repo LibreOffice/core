@@ -30,8 +30,8 @@ class IntlWrapper;
 /// Connection (text flow) between two FlyFrames.
 class SW_DLLPUBLIC SwFormatChain: public SfxPoolItem
 {
-    SwClient aPrev, ///< Previous SwFlyFrameFormat (if existent).
-             aNext; ///< Next SwFlyFrameFormat (if existent).
+    SwClient m_aPrev, ///< Previous SwFlyFrameFormat (if existent).
+             m_aNext; ///< Next SwFlyFrameFormat (if existent).
 
 public:
     SwFormatChain() : SfxPoolItem( RES_CHAIN ) {}
@@ -50,8 +50,8 @@ public:
 
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
 
-    SwFlyFrameFormat* GetPrev() const { return const_cast<SwFlyFrameFormat*>(static_cast<const SwFlyFrameFormat*>(aPrev.GetRegisteredIn())); }
-    SwFlyFrameFormat* GetNext() const { return const_cast<SwFlyFrameFormat*>(static_cast<const SwFlyFrameFormat*>(aNext.GetRegisteredIn())); }
+    SwFlyFrameFormat* GetPrev() const { return const_cast<SwFlyFrameFormat*>(static_cast<const SwFlyFrameFormat*>(m_aPrev.GetRegisteredIn())); }
+    SwFlyFrameFormat* GetNext() const { return const_cast<SwFlyFrameFormat*>(static_cast<const SwFlyFrameFormat*>(m_aNext.GetRegisteredIn())); }
 
     void SetPrev( SwFlyFrameFormat *pFormat );
     void SetNext( SwFlyFrameFormat *pFormat );

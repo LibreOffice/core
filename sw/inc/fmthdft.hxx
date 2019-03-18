@@ -32,7 +32,7 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFormatHeader: public SfxPoolItem, public SwClient
 {
-    bool const bActive;       ///< Only for controlling (creation of content).
+    bool const m_bActive;       ///< Only for controlling (creation of content).
 
 public:
     SwFormatHeader( bool bOn = false );
@@ -55,7 +55,7 @@ public:
           SwFrameFormat *GetHeaderFormat()       { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
 
     void RegisterToFormat( SwFormat& rFormat );
-    bool IsActive() const { return bActive; }
+    bool IsActive() const { return m_bActive; }
 };
 
  /**Footer, for pageformats
@@ -63,7 +63,7 @@ public:
 
 class SW_DLLPUBLIC SwFormatFooter: public SfxPoolItem, public SwClient
 {
-    bool const bActive;       // Only for controlling (creation of content).
+    bool const m_bActive;       // Only for controlling (creation of content).
 
 public:
     SwFormatFooter( bool bOn = false );
@@ -86,7 +86,7 @@ public:
           SwFrameFormat *GetFooterFormat()       { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
 
     void RegisterToFormat( SwFormat& rFormat );
-    bool IsActive() const { return bActive; }
+    bool IsActive() const { return m_bActive; }
 };
 
 inline const SwFormatHeader &SwAttrSet::GetHeader(bool bInP) const
