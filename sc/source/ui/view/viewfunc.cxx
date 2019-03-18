@@ -1838,15 +1838,22 @@ void ScViewFunc::DeleteMulti( bool bRows )
     }
 
     std::vector<sc::ColRowSpan>::const_reverse_iterator ri = aSpans.rbegin(), riEnd = aSpans.rend();
+    aFuncMark.SelectOneTable(nTab);
     for (; ri != riEnd; ++ri)
     {
         SCCOLROW nEnd = ri->mnEnd;
         SCCOLROW nStart = ri->mnStart;
 
         if (bRows)
-            rDoc.DeleteRow( 0,nTab, MAXCOL,nTab, nStart, static_cast<SCSIZE>(nEnd-nStart+1) );
+        {
+            rDoc.DeleteObjectsInArea(0, nStart, MAXCOL, nEnd, aFuncMark, true);
+            rDoc.DeleteRow(0, nTab, MAXCOL, nTab, nStart, static_cast<SCSIZE>(nEnd - nStart + 1));
+        }
         else
-            rDoc.DeleteCol( 0,nTab, MAXROW,nTab, static_cast<SCCOL>(nStart), static_cast<SCSIZE>(nEnd-nStart+1) );
+        {
+            rDoc.DeleteObjectsInArea(nStart, 0, nEnd, MAXROW, aFuncMark, true);
+            rDoc.DeleteCol(0, nTab, MAXROW, nTab, static_cast<SCCOL>(nStart), static_cast<SCSIZE>(nEnd - nStart + 1));
+        }
     }
 
     if (bNeedRefresh)
