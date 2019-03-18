@@ -16,6 +16,24 @@
       "revId": "820a6edf5bab109db1aa7500efefce1e1bd8b663",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_c5f4765e",
+        "filename": "sfx2/source/doc/docinsert.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-03-18T11:41:08Z",
+      "side": 1,
+      "message": "It\u0027s just the default to not show \"All Files\". But of course the other formats should be as well in the filter list.",
+      "parentUuid": "ff82abbf_65d00acb",
+      "revId": "820a6edf5bab109db1aa7500efefce1e1bd8b663",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
