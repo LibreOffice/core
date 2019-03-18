@@ -257,8 +257,9 @@ void SwView_Impl::StartDocumentInserter(
             break;
     }
 
+    const OUString aOwnFilter("ODF Text Document");
     m_pDocInserter.reset(new ::sfx2::DocumentInserter(pView->GetFrameWeld(), rFactory, mode));
-    m_pDocInserter->StartExecuteModal( rEndDialogHdl );
+    m_pDocInserter->StartExecuteModal( rEndDialogHdl, &aOwnFilter );
 }
 
 std::unique_ptr<SfxMedium> SwView_Impl::CreateMedium()
