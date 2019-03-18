@@ -40,7 +40,7 @@ public:
     using iterator = pointer;
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
     using reverse_iterator = std::reverse_iterator<iterator>;
-    using index_type = std::ptrdiff_t;
+    using index_type = std::size_t;
     using difference_type = std::ptrdiff_t;
 
     constexpr span() noexcept : data_(nullptr), size_(0) {}
@@ -52,7 +52,7 @@ public:
         : data_(a), size_(len)
     {
         // not terribly sure about this, might need to strengthen it
-        assert((a == nullptr && len == 0) || (a != nullptr && len >= 0));
+        assert(a != nullptr || len == 0);
     }
 
     constexpr bool empty() const noexcept { return size_ == 0; }
@@ -75,7 +75,7 @@ public:
     constexpr index_type size() const noexcept { return size_; }
 
     constexpr reference operator [](index_type pos) const {
-        assert(0 <= pos && pos < size());
+        assert(pos < size());
         return data_[pos];
     }
 
