@@ -64,8 +64,8 @@ public:
     };
     DocumentInserter(weld::Window* pParent, const OUString& rFactory, const Mode mode = Mode::Insert);
     ~DocumentInserter();
-
-    void                    StartExecuteModal( const Link<sfx2::FileDialogHelper*,void>& _rDialogClosedLink );
+    //bOwn to filter for SfxFilterFlags::OWN
+    void StartExecuteModal( const Link<sfx2::FileDialogHelper*,void>& _rDialogClosedLink,const bool bOwn = false);
     std::unique_ptr<SfxMedium> CreateMedium(char const* pFallbackHack = nullptr);
     SfxMediumList CreateMediumList();
 };

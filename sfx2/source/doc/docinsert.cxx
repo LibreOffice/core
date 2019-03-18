@@ -87,15 +87,17 @@ DocumentInserter::~DocumentInserter()
 {
 }
 
-void DocumentInserter::StartExecuteModal( const Link<sfx2::FileDialogHelper*,void>& _rDialogClosedLink )
+void DocumentInserter::StartExecuteModal( const Link<sfx2::FileDialogHelper*,void>& _rDialogClosedLink,const bool bOwn)
 {
     m_aDialogClosedLink = _rDialogClosedLink;
     m_nError = ERRCODE_NONE;
     if ( !m_pFileDlg )
     {
+        const SfxFilterFlags aFlags = bOwn? SfxFilterFlags::OWN : SfxFilterFlags::NONE ;
         m_pFileDlg.reset( new FileDialogHelper(
                 ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-                m_nDlgFlags, m_sDocFactory, SfxFilterFlags::NONE, SfxFilterFlags::NONE, m_pParent ) );
+                m_nDlgFlags, m_sDocFactory, aFlags, SfxFilterFlags::NONE, m_pParent ) );
+        if (bOwn) m_pFileDlg->SetCurrentFilter( "ODF Text Document" );
     }
     m_pFileDlg->StartExecuteModal( LINK( this, DocumentInserter, DialogClosedHdl ) );
 }
