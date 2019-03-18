@@ -2570,6 +2570,7 @@ void ScDocRowHeightUpdater::update()
 
             nProgressStart += mrDoc.maTabs[nTab]->GetWeightedCount(aData.mnRow1, aData.mnRow2);
         }
+        mrDoc.maTabs[nTab]->SetDrawPageSize();
     }
 }
 
