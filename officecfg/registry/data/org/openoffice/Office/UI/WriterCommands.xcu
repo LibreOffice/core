@@ -195,6 +195,9 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Indexes and ~Tables</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:UpdateCurIndex" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -299,6 +302,9 @@
       <node oor:name=".uno:UpdateAllLinks" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Links</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:TrackChanges" oor:op="replace">
@@ -2037,6 +2043,9 @@
       <node oor:name=".uno:EditRegion" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Sections...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:EditCurrentRegion" oor:op="replace">
