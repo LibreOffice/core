@@ -449,21 +449,21 @@ sal_uInt16  SwFormatFillOrder::GetValueCount() const
 SwFormatHeader::SwFormatHeader( SwFrameFormat *pHeaderFormat )
     : SfxPoolItem( RES_HEADER ),
     SwClient( pHeaderFormat ),
-    bActive( pHeaderFormat )
+    m_bActive( pHeaderFormat )
 {
 }
 
 SwFormatHeader::SwFormatHeader( const SwFormatHeader &rCpy )
     : SfxPoolItem( RES_HEADER ),
     SwClient( const_cast<SwModify*>(rCpy.GetRegisteredIn()) ),
-    bActive( rCpy.IsActive() )
+    m_bActive( rCpy.IsActive() )
 {
 }
 
 SwFormatHeader::SwFormatHeader( bool bOn )
     : SfxPoolItem( RES_HEADER ),
     SwClient( nullptr ),
-    bActive( bOn )
+    m_bActive( bOn )
 {
 }
 
@@ -477,7 +477,7 @@ bool SwFormatHeader::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
     return ( GetRegisteredIn() == static_cast<const SwFormatHeader&>(rAttr).GetRegisteredIn() &&
-             bActive == static_cast<const SwFormatHeader&>(rAttr).IsActive() );
+             m_bActive == static_cast<const SwFormatHeader&>(rAttr).IsActive() );
 }
 
 SfxPoolItem*  SwFormatHeader::Clone( SfxItemPool* ) const
@@ -494,21 +494,21 @@ void SwFormatHeader::RegisterToFormat( SwFormat& rFormat )
 SwFormatFooter::SwFormatFooter( SwFrameFormat *pFooterFormat )
     : SfxPoolItem( RES_FOOTER ),
     SwClient( pFooterFormat ),
-    bActive( pFooterFormat )
+    m_bActive( pFooterFormat )
 {
 }
 
 SwFormatFooter::SwFormatFooter( const SwFormatFooter &rCpy )
     : SfxPoolItem( RES_FOOTER ),
     SwClient( const_cast<SwModify*>(rCpy.GetRegisteredIn()) ),
-    bActive( rCpy.IsActive() )
+    m_bActive( rCpy.IsActive() )
 {
 }
 
 SwFormatFooter::SwFormatFooter( bool bOn )
     : SfxPoolItem( RES_FOOTER ),
     SwClient( nullptr ),
-    bActive( bOn )
+    m_bActive( bOn )
 {
 }
 
@@ -527,7 +527,7 @@ bool SwFormatFooter::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
     return ( GetRegisteredIn() == static_cast<const SwFormatFooter&>(rAttr).GetRegisteredIn() &&
-             bActive == static_cast<const SwFormatFooter&>(rAttr).IsActive() );
+             m_bActive == static_cast<const SwFormatFooter&>(rAttr).IsActive() );
 }
 
 SfxPoolItem*  SwFormatFooter::Clone( SfxItemPool* ) const
@@ -1916,10 +1916,10 @@ SwFormatFootnoteEndAtTextEnd& SwFormatFootnoteEndAtTextEnd::operator=(
                         const SwFormatFootnoteEndAtTextEnd& rAttr )
 {
     SfxEnumItem::SetValue( rAttr.GetValue() );
-    aFormat = rAttr.aFormat;
-    nOffset = rAttr.nOffset;
-    sPrefix = rAttr.sPrefix;
-    sSuffix = rAttr.sSuffix;
+    m_aFormat = rAttr.m_aFormat;
+    m_nOffset = rAttr.m_nOffset;
+    m_sPrefix = rAttr.m_sPrefix;
+    m_sSuffix = rAttr.m_sSuffix;
     return *this;
 }
 
@@ -1927,10 +1927,10 @@ bool SwFormatFootnoteEndAtTextEnd::operator==( const SfxPoolItem& rItem ) const
 {
     const SwFormatFootnoteEndAtTextEnd& rAttr = static_cast<const SwFormatFootnoteEndAtTextEnd&>(rItem);
     return SfxEnumItem::operator==( rAttr ) &&
-            aFormat.GetNumberingType() == rAttr.aFormat.GetNumberingType() &&
-            nOffset == rAttr.nOffset &&
-            sPrefix == rAttr.sPrefix &&
-            sSuffix == rAttr.sSuffix;
+            m_aFormat.GetNumberingType() == rAttr.m_aFormat.GetNumberingType() &&
+            m_nOffset == rAttr.m_nOffset &&
+            m_sPrefix == rAttr.m_sPrefix &&
+            m_sSuffix == rAttr.m_sSuffix;
 }
 
 bool SwFormatFootnoteEndAtTextEnd::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1944,13 +1944,13 @@ bool SwFormatFootnoteEndAtTextEnd::QueryValue( uno::Any& rVal, sal_uInt8 nMember
         case MID_RESTART_NUM :
             rVal <<= GetValue() >= FTNEND_ATTXTEND_OWNNUMSEQ;
         break;
-        case MID_NUM_START_AT: rVal <<= static_cast<sal_Int16>(nOffset); break;
+        case MID_NUM_START_AT: rVal <<= static_cast<sal_Int16>(m_nOffset); break;
         case MID_OWN_NUM     :
             rVal <<= GetValue() >= FTNEND_ATTXTEND_OWNNUMANDFMT;
         break;
-        case MID_NUM_TYPE    : rVal <<= static_cast<sal_Int16>(aFormat.GetNumberingType()); break;
-        case MID_PREFIX      : rVal <<= sPrefix; break;
-        case MID_SUFFIX      : rVal <<= sSuffix; break;
+        case MID_NUM_TYPE    : rVal <<= static_cast<sal_Int16>(m_aFormat.GetNumberingType()); break;
+        case MID_PREFIX      : rVal <<= m_sPrefix; break;
+        case MID_SUFFIX      : rVal <<= m_sSuffix; break;
         default: return false;
     }
     return true;
@@ -1985,7 +1985,7 @@ bool SwFormatFootnoteEndAtTextEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMe
             sal_Int16 nVal = 0;
             rVal >>= nVal;
             if(nVal >= 0)
-                nOffset = nVal;
+                m_nOffset = nVal;
             else
                 bRet = false;
         }
@@ -2007,7 +2007,7 @@ bool SwFormatFootnoteEndAtTextEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMe
                 (nVal <= SVX_NUM_ARABIC ||
                     SVX_NUM_CHARS_UPPER_LETTER_N == nVal ||
                         SVX_NUM_CHARS_LOWER_LETTER_N == nVal ))
-                aFormat.SetNumberingType(static_cast<SvxNumType>(nVal));
+                m_aFormat.SetNumberingType(static_cast<SvxNumType>(nVal));
             else
                 bRet = false;
         }
@@ -2015,13 +2015,13 @@ bool SwFormatFootnoteEndAtTextEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMe
         case MID_PREFIX      :
         {
             OUString sVal; rVal >>= sVal;
-            sPrefix = sVal;
+            m_sPrefix = sVal;
         }
         break;
         case MID_SUFFIX      :
         {
             OUString sVal; rVal >>= sVal;
-            sSuffix = sVal;
+            m_sSuffix = sVal;
         }
         break;
         default: bRet = false;
@@ -2071,17 +2071,17 @@ SfxPoolItem* SwFormatChain::Clone( SfxItemPool* ) const
 void SwFormatChain::SetPrev( SwFlyFrameFormat *pFormat )
 {
     if ( pFormat )
-        pFormat->Add( &aPrev );
+        pFormat->Add( &m_aPrev );
     else
-        aPrev.EndListeningAll();
+        m_aPrev.EndListeningAll();
 }
 
 void SwFormatChain::SetNext( SwFlyFrameFormat *pFormat )
 {
     if ( pFormat )
-        pFormat->Add( &aNext );
+        pFormat->Add( &m_aNext );
     else
-        aNext.EndListeningAll();
+        m_aNext.EndListeningAll();
 }
 
 bool SwFormatChain::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const

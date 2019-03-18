@@ -36,14 +36,14 @@ enum SwFootnoteEndPosEnum
 
 class SW_DLLPUBLIC SwFormatFootnoteEndAtTextEnd : public SfxEnumItem<SwFootnoteEndPosEnum>
 {
-    OUString sPrefix;
-    OUString sSuffix;
-    SvxNumberType aFormat;
-    sal_uInt16      nOffset;
+    OUString m_sPrefix;
+    OUString m_sSuffix;
+    SvxNumberType m_aFormat;
+    sal_uInt16      m_nOffset;
 
 protected:
     SwFormatFootnoteEndAtTextEnd( sal_uInt16 nWhichL, SwFootnoteEndPosEnum ePos )
-        : SfxEnumItem( nWhichL, ePos ), nOffset( 0 )
+        : SfxEnumItem( nWhichL, ePos ), m_nOffset( 0 )
     {}
 
 public:
@@ -66,19 +66,19 @@ public:
     SwFormatFootnoteEndAtTextEnd(SwFormatFootnoteEndAtTextEnd const &) = default;
         // SfxPoolItem copy function dichotomy
 
-    SvxNumType GetNumType() const        { return aFormat.GetNumberingType(); }
-    void SetNumType( SvxNumType eType )  { aFormat.SetNumberingType(eType); }
+    SvxNumType GetNumType() const        { return m_aFormat.GetNumberingType(); }
+    void SetNumType( SvxNumType eType )  { m_aFormat.SetNumberingType(eType); }
 
-    const SvxNumberType& GetSwNumType() const   { return aFormat; }
+    const SvxNumberType& GetSwNumType() const   { return m_aFormat; }
 
-    sal_uInt16 GetOffset() const                { return nOffset; }
-    void SetOffset( sal_uInt16 nOff )           { nOffset = nOff; }
+    sal_uInt16 GetOffset() const                { return m_nOffset; }
+    void SetOffset( sal_uInt16 nOff )           { m_nOffset = nOff; }
 
-    const OUString& GetPrefix() const      { return sPrefix; }
-    void SetPrefix(const OUString& rSet)   { sPrefix = rSet; }
+    const OUString& GetPrefix() const      { return m_sPrefix; }
+    void SetPrefix(const OUString& rSet)   { m_sPrefix = rSet; }
 
-    const OUString& GetSuffix() const      { return sSuffix; }
-    void SetSuffix(const OUString& rSet)   { sSuffix = rSet; }
+    const OUString& GetSuffix() const      { return m_sSuffix; }
+    void SetSuffix(const OUString& rSet)   { m_sSuffix = rSet; }
 };
 
 class SW_DLLPUBLIC SwFormatFootnoteAtTextEnd : public SwFormatFootnoteEndAtTextEnd
