@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_376a3980",
+        "filename": "sw/source/uibase/dialog/SwSpellDialogChildWindow.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-03-18T18:35:58Z",
+      "side": 1,
+      "message": "For this conditions, static analyzer (PVS) will later give us warning: \"bNoDictionaryAvailable is always true\". That\u0027s because, since you check the same two initial conditions to be the same as in the previous check (aRet.empty() \u0026\u0026 bCloseMessage ...), the only possible way for this to be true is that the last part of the first check was not true.\n\nYou should either omit the last part and mention it in a comment, like this:\n\n    else if (aRet.empty() \u0026\u0026 bCloseMessage) // bNoDictionaryAvailable is true\n\nor restructure the previous check like this:\n\n    if (aRet.empty() \u0026\u0026 bCloseMessage)\n    {\n        if (!bNoDictionaryAvailable)\n        {\n            ....\n        }\n        else\n        {\n            ....\n        }\n    }\n\nThe latter would allow you also to deduplicate some common code, which would go before and after the inner if(), thus that would be a preferred alternative.",
+      "range": {
+        "startLine": 428,
+        "startChar": 50,
+        "endLine": 428,
+        "endChar": 72
+      },
+      "revId": "8815902bf0caab7386edba02e587ccad038eac14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
