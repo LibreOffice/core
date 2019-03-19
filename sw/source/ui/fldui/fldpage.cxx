@@ -42,21 +42,6 @@
 using namespace ::com::sun::star;
 
 // note: pAttrSet may be null if the dialog is restored on startup
-SwFieldPage::SwFieldPage(vcl::Window *pParent, const OString& rID,
-    const OUString& rUIXMLDescription, const SfxItemSet *const pAttrSet)
-    : SfxTabPage(pParent, rID, rUIXMLDescription, pAttrSet)
-    , m_pCurField(nullptr)
-    , m_pWrtShell(nullptr)
-    , m_nTypeSel(LISTBOX_ENTRY_NOTFOUND)
-    , m_nSelectionSel(LISTBOX_ENTRY_NOTFOUND)
-    , m_bFieldEdit(false)
-    , m_bInsert(true)
-    , m_bFieldDlgHtmlMode(false)
-    , m_bRefresh(false)
-    , m_bFirstHTMLInit(true)
-{
-}
-
 SwFieldPage::SwFieldPage(TabPageParent pParent, const OUString& rUIXMLDescription,
         const OString& rID, const SfxItemSet *pAttrSet)
     : SfxTabPage(pParent, rUIXMLDescription, rID, pAttrSet)
