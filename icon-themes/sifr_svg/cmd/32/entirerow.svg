@@ -7,8 +7,4 @@
      style="fill:#555753;opacity:0.35"
      d="M 3 12 L 3 20 L 29 20 L 29 12 L 3 12 z "
      />
- <path
-     style="fill:#ffffff"
-     d="M 7 7 L 7 11 L 12 11 L 12 7 L 7 7 z M 13 7 L 13 11 L 19 11 L 19 7 L 13 7 z M 20 7 L 20 11 L 25 11 L 25 7 L 20 7 z M 7 21 L 7 25 L 12 25 L 12 21 L 7 21 z M 13 21 L 13 25 L 19 25 L 19 21 L 13 21 z M 20 21 L 20 25 L 25 25 L 25 21 L 20 21 z "
-     />
  </svg>
