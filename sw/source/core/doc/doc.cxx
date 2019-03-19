@@ -1830,10 +1830,10 @@ SwDoc::GetVbaEventProcessor()
 
 void SwDoc::SetMissingDictionaries( bool bIsMissing )
 {
-    if( bIsMissing && meDictionaryMissing == MissingDictionary::Undefined )
-        meDictionaryMissing = MissingDictionary::True;
-    else if( !bIsMissing )
+    if (!bIsMissing)
         meDictionaryMissing = MissingDictionary::False;
+    else if (meDictionaryMissing == MissingDictionary::Undefined)
+        meDictionaryMissing = MissingDictionary::True;
 };
 
 
