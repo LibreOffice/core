@@ -28,7 +28,7 @@ $(eval $(call gb_Library_use_sdk_api,writerfilter))
 $(eval $(call gb_Library_set_componentfile,writerfilter,writerfilter/util/writerfilter))
 
 $(eval $(call gb_Library_add_defs,writerfilter,\
-	$(if $(filter-out 0,$(gb_DEBUGLEVEL)), \
+	$(if $(ENABLE_DBGUTIL), \
 		-DDEBUG_WRITERFILTER \
 	) \
 ))

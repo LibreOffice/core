@@ -12,7 +12,7 @@ Import filter for docx and rtf.
 == Source contents ==
  * dmapper: the domain mapper, hiding UNO from the tokenizers, used by DOCX and RTF import
    * The incoming traffic of dmapper can be dumped into an XML file in /tmp in
-     debug builds, start soffice with the `SW_DEBUG_WRITERFILTER=1`
+     dbgutil builds, start soffice with the `SW_DEBUG_WRITERFILTER=1`
      environment variable if you want that.
  * filter: the UNO filter service implementations, invoked by UNO and calling
    the dmapper + one of the tokenizers
