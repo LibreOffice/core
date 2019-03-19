@@ -210,8 +210,15 @@ static GPollFunc old_gpoll = nullptr;
 
 static gint gpoll_wrapper( GPollFD* ufds, guint nfds, gint timeout )
 {
-    SolarMutexReleaser aReleaser;
-    return old_gpoll( ufds, nfds, timeout );
+    if (GetSalData()->m_pInstance->GetYieldMutex()->IsCurrentThread())
+    {
+        SolarMutexReleaser aReleaser;
+        return old_gpoll( ufds, nfds, timeout );
+    }
+    else
+    {
+        return old_gpoll( ufds, nfds, timeout );
+    }
 }
 #endif
 
