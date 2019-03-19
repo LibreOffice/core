@@ -45,7 +45,12 @@ public:
     bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }
     SvxFrameDirection get_active_id() const { return static_cast<SvxFrameDirection>(m_xControl->get_active_id().toUInt32()); }
     void set_active_id(SvxFrameDirection eDir) { m_xControl->set_active_id(OUString::number(static_cast<sal_uInt32>(eDir))); }
-    void remove_id(SvxFrameDirection eDir) { m_xControl->remove_id(OUString::number(static_cast<sal_uInt32>(eDir))); }
+    void remove_id(SvxFrameDirection eDir)
+    {
+        int nPos = m_xControl->find_id(OUString::number(static_cast<sal_uInt32>(eDir)));
+        if (nPos != -1)
+            m_xControl->remove(nPos);
+    }
     void set_active(int pos) { m_xControl->set_active(pos); }
     int get_active() const { return m_xControl->get_active(); }
     void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
