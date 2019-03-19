@@ -281,16 +281,6 @@ void SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
     }
 }
 
-void SwFieldPage::SavePos( const ListBox* pLst1 )
-{
-    if( pLst1 && pLst1->GetEntryCount() )
-        m_aLstStrArr[ 0 ] = pLst1->GetSelectedEntry();
-    else
-        m_aLstStrArr[ 0 ].clear();
-    m_aLstStrArr[ 1 ].clear();
-    m_aLstStrArr[ 2 ].clear();
-}
-
 void SwFieldPage::SavePos( const weld::TreeView& rLst1 )
 {
     if (rLst1.n_children())
@@ -299,15 +289,6 @@ void SwFieldPage::SavePos( const weld::TreeView& rLst1 )
         m_aLstStrArr[ 0 ].clear();
     m_aLstStrArr[ 1 ].clear();
     m_aLstStrArr[ 2 ].clear();
-}
-
-void SwFieldPage::RestorePos(ListBox* pLst1)
-{
-    sal_Int32 nPos = 0;
-    if( pLst1 && pLst1->GetEntryCount() && !m_aLstStrArr[ 0 ].isEmpty() &&
-         LISTBOX_ENTRY_NOTFOUND !=
-                    ( nPos = pLst1->GetEntryPos(m_aLstStrArr[ 0 ] ) ) )
-        pLst1->SelectEntryPos( nPos );
 }
 
 void SwFieldPage::RestorePos(weld::TreeView& rLst1)
@@ -319,17 +300,6 @@ void SwFieldPage::RestorePos(weld::TreeView& rLst1)
 }
 
 // Insert new fields
-IMPL_LINK( SwFieldPage, TreeListBoxInsertHdl, SvTreeListBox*, pBtn, bool )
-{
-    InsertHdl(pBtn);
-    return false;
-}
-
-IMPL_LINK( SwFieldPage, ListBoxInsertHdl, ListBox&, rBox, void )
-{
-    InsertHdl(&rBox);
-}
-
 IMPL_LINK( SwFieldPage, TreeViewInsertHdl, weld::TreeView&, rBox, void )
 {
     InsertHdl(&rBox);
