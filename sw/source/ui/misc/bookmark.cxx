@@ -306,7 +306,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS, 
     , m_xRenameBtn(m_xBuilder->weld_button("rename"))
     , m_xHideCB(m_xBuilder->weld_check_button("hide"))
     , m_xConditionFT(m_xBuilder->weld_label("condlabel"))
-    , m_xConditionED(new SwConditionEdit(m_xBuilder->weld_entry("withcond")))
+    , m_xConditionED(new ConditionEdit(m_xBuilder->weld_entry("withcond")))
     , m_xBookmarksBox(new BookmarkTable(m_xBuilder->weld_tree_view("bookmarks")))
 {
     m_xBookmarksBox->connect_changed(LINK(this, SwInsertBookmarkDlg, SelectionChangedHdl));
