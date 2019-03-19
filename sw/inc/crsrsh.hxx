@@ -701,6 +701,9 @@ public:
     static SwTextField* GetTextFieldAtPos(
         const SwPosition* pPos,
         const bool bIncludeInputFieldAtStart );
+    static SwTextField* GetTextFieldAtCursor(
+        const SwPaM* pCursor,
+        const bool bIncludeInputFieldAtStart );
     static SwField* GetFieldAtCursor(
         const SwPaM* pCursor,
         const bool bIncludeInputFieldAtStart );
