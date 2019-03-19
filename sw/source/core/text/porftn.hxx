@@ -55,6 +55,12 @@ public:
          { SetWhichPor( PortionType::FootnoteNum ); }
 };
 
+/**
+ * Used in footnotes if they break across pages, master has this portion at the end.
+ *
+ * Created only in case Tools -> Footnotes and Endnotes sets the End of footnote to a non-empty
+ * value.
+ */
 class SwQuoVadisPortion : public SwFieldPortion
 {
     OUString   aErgo;
@@ -75,6 +81,12 @@ public:
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
 };
 
+/**
+ * Used in footnotes if they break across pages, follow starts with this portion.
+ *
+ * Created only in case Tools -> Footnotes and Endnotes sets the Start of next page to a non-empty
+ * value.
+ */
 class SwErgoSumPortion : public SwFieldPortion
 {
 public:
