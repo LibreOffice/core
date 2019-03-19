@@ -2422,5 +2422,119 @@ void Test::testSharedFormulaDeleteTopCell()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSharedFormulaCutCopyMoveIntoRef()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    // tdf#123714 case 1
+    {
+        m_pDoc->InsertTab(0, "Test");
+
+        // Data in A1:C3
+        std::vector<std::vector<const char*>> aData = {
+            { "=B1", "", "1" },
+            { "=B2", "", "1" },
+            { "=B3", "", ""  }
+        };
+        const ScAddress aOrgPos(0,0,0);
+        insertRangeData( m_pDoc, aOrgPos, aData);
+
+        ScMarkData aMark;
+        aMark.SelectOneTable(0);
+
+        // Set up clip document.
+        ScDocument aClipDoc(SCDOCMODE_CLIP);
+        aClipDoc.ResetClip(m_pDoc, &aMark);
+        // Cut C1:C2 to clipboard.
+        cutToClip( getDocShell(), ScRange(2,0,0, 2,1,0), &aClipDoc, false);
+
+        // Paste to B1:B2
+        ScRange aPasteRange(1,0,0, 1,1,0);
+        aMark.SetMarkArea(aPasteRange);
+        m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc);
+
+        // Check data in A1:A2 after Paste.
+        ScAddress aPos(aOrgPos);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("A1", 1.0, m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("A2", 1.0, m_pDoc->GetValue(aPos));
+
+        m_pDoc->DeleteTab(0);
+    }
+
+    // tdf#123714 case 2
+    {
+        m_pDoc->InsertTab(0, "Test");
+
+        // Data in A1:C3
+        std::vector<std::vector<const char*>> aData = {
+            {  "1",   "2", "=SUM(A1:B1)" },
+            {  "4",   "8", "=SUM(A2:B2)" },
+            { "16",  "32", "=SUM(A3:B3)" },
+            { "64", "128", "=SUM(A4:B4)" },
+        };
+        const ScAddress aOrgPos(0,0,0);
+        insertRangeData( m_pDoc, aOrgPos, aData);
+
+        ScAddress aPos;
+        // Check results in C1:C4
+        const double fVec0[] = { 3.0, 12.0, 48.0, 192.0 };
+        aPos = ScAddress(2,0,0);
+        for (SCROW i=0; i < 4; ++i)
+        {
+            CPPUNIT_ASSERT_EQUAL( fVec0[i], m_pDoc->GetValue(aPos));
+            aPos.IncRow();
+        }
+
+        ScMarkData aMark;
+        aMark.SelectOneTable(0);
+
+        // Set up clip document.
+        ScDocument aClipDoc(SCDOCMODE_CLIP);
+        aClipDoc.ResetClip(m_pDoc, &aMark);
+        // Cut B1:B2 to clipboard.
+        cutToClip( getDocShell(), ScRange(1,0,0, 1,1,0), &aClipDoc, false);
+
+        // Check results in C1:C4 after Cut.
+        const double fVec1[] = { 1.0, 4.0, 48.0, 192.0 };
+        aPos = ScAddress(2,0,0);
+        for (SCROW i=0; i < 4; ++i)
+        {
+            CPPUNIT_ASSERT_EQUAL( fVec1[i], m_pDoc->GetValue(aPos));
+            aPos.IncRow();
+        }
+
+        // Paste to B3:B4
+        ScRange aPasteRange(1,2,0, 1,3,0);
+        aMark.SetMarkArea(aPasteRange);
+        m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc);
+
+        // Check results in C1:C4 after Paste.
+        const double fVec2[] = { 1.0, 4.0, 18.0, 72.0 };
+        aPos = ScAddress(2,0,0);
+        for (SCROW i=0; i < 4; ++i)
+        {
+            CPPUNIT_ASSERT_EQUAL( fVec2[i], m_pDoc->GetValue(aPos));
+            aPos.IncRow();
+        }
+
+        // Paste to B1:B2
+        aPasteRange = ScRange(1,0,0, 1,1,0);
+        aMark.SetMarkArea(aPasteRange);
+        m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc);
+
+        // Check results in C1:C4 after Paste.
+        const double fVec3[] = { 3.0, 12.0, 18.0, 72.0 };
+        aPos = ScAddress(2,0,0);
+        for (SCROW i=0; i < 4; ++i)
+        {
+            CPPUNIT_ASSERT_EQUAL( fVec3[i], m_pDoc->GetValue(aPos));
+            aPos.IncRow();
+        }
+
+        m_pDoc->DeleteTab(0);
+    }
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
