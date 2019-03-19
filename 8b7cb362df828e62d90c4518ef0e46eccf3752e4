@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_dadc541a",
+        "filename": "sc/source/ui/docshell/docsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1730,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-03-19T13:36:40Z",
+      "side": 1,
+      "message": "sigh, lambda are hard to read",
+      "revId": "8b7cb362df828e62d90c4518ef0e46eccf3752e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
