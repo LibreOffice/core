@@ -50,23 +50,23 @@ class SwFieldVarPage : public SwFieldPage
 {
     friend class SelectionListBox;
 
-    VclPtr<ListBox>            m_pTypeLB;
-    VclPtr<VclContainer>       m_pSelection;
-    VclPtr<SelectionListBox>   m_pSelectionLB;
-    VclPtr<FixedText>          m_pNameFT;
-    VclPtr<Edit>               m_pNameED;
-    VclPtr<FixedText>          m_pValueFT;
-    VclPtr<ConditionEdit>      m_pValueED;
-    VclPtr<VclContainer>       m_pFormat;
-    VclPtr<NumFormatListBox>   m_pNumFormatLB;
-    VclPtr<ListBox>            m_pFormatLB;
-    VclPtr<VclContainer>       m_pChapterFrame;
-    VclPtr<ListBox>            m_pChapterLevelLB;
-    VclPtr<CheckBox>           m_pInvisibleCB;
-    VclPtr<FixedText>          m_pSeparatorFT;
-    VclPtr<Edit>               m_pSeparatorED;
-    VclPtr<PushButton>         m_pNewPB;
-    VclPtr<PushButton>         m_pDelPB;
+    std::unique_ptr<weld::TreeView> m_xTypeLB;
+    std::unique_ptr<weld::Widget> m_xSelection;
+    std::unique_ptr<SelectionListBox> m_xSelectionLB;
+    std::unique_ptr<weld::Label> m_xNameFT;
+    std::unique_ptr<weld::Entry> m_xNameED;
+    std::unique_ptr<weld::Label> m_xValueFT;
+    std::unique_ptr<SwConditionEdit> m_xValueED;
+    std::unique_ptr<weld::Widget> m_xFormat;
+    std::unique_ptr<SwNumFormatViewTree> m_pNumFormatLB;
+    std::unique_ptr<weld::TreeView> m_xFormatLB;
+    std::unique_ptr<weld::Widget> m_xChapterFrame;
+    std::unique_ptr<weld::TreeView> m_xChapterLevelLB;
+    std::unique_ptr<weld::CheckButton> m_xInvisibleCB;
+    std::unique_ptr<weld::Label> m_xSeparatorFT;
+    std::unique_ptr<weld::Entry> m_xSeparatorED;
+    std::unique_ptr<weld::Button> m_xNewPB;
+    std::unique_ptr<weld::Button> m_xDelPB;
 
     OUString            sOldValueFT;
     OUString            sOldNameFT;
@@ -89,10 +89,9 @@ protected:
     virtual sal_uInt16      GetGroup() override;
 
 public:
-                        SwFieldVarPage(vcl::Window* pParent, const SfxItemSet* pSet);
+    SwFieldVarPage(TabPageParent pParent, const SfxItemSet* pSet);
 
-                        virtual ~SwFieldVarPage() override;
-    virtual void        dispose() override;
+    virtual ~SwFieldVarPage() override;
 
     static VclPtr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 

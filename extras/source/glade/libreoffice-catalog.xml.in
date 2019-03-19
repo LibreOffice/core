@@ -300,16 +300,8 @@
                         generic-name="URLBox" parent="svtlo-SvtURLBox"
                         icon-name="widget-gtk-comboboxtext"/>
 
-    <glade-widget-class title="SelectionListBox" name="swuilo-SelectionListBox"
-                        generic-name="SelectionListBox" parent="VclComboBoxText"
-                        icon-name="widget-gtk-comboboxtext"/>
-
     <glade-widget-class title="PropertyControl" name="sdlo-PropertyControl"
                         generic-name="PropertyControl" parent="VclComboBoxText"
-                        icon-name="widget-gtk-comboboxtext"/>
-
-    <glade-widget-class title="NumFormatListBox" name="swlo-NumFormatListBox"
-                        generic-name="NumFormatListBox" parent="VclComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>
 
     <glade-widget-class title="Language ListBox" name="svxcorelo-SvxLanguageBox"

@@ -40,9 +40,8 @@
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
-SwFieldVarPage::SwFieldVarPage(vcl::Window* pParent, const SfxItemSet *const pCoreSet )
-    : SwFieldPage(pParent, "FieldVarPage",
-        "modules/swriter/ui/fldvarpage.ui", pCoreSet)
+SwFieldVarPage::SwFieldVarPage(TabPageParent pParent, const SfxItemSet *const pCoreSet )
+    : SwFieldPage(pParent, "modules/swriter/ui/fldvarpage.ui", "FieldVarPage", pCoreSet)
     , nOldFormat(0)
     , bInit(true)
 {
@@ -91,28 +90,6 @@ SwFieldVarPage::SwFieldVarPage(vcl::Window* pParent, const SfxItemSet *const pCo
 SwFieldVarPage::~SwFieldVarPage()
 {
     disposeOnce();
-}
-
-void SwFieldVarPage::dispose()
-{
-    m_pTypeLB.clear();
-    m_pSelection.clear();
-    m_pSelectionLB.clear();
-    m_pNameFT.clear();
-    m_pNameED.clear();
-    m_pValueFT.clear();
-    m_pValueED.clear();
-    m_pFormat.clear();
-    m_pNumFormatLB.clear();
-    m_pFormatLB.clear();
-    m_pChapterFrame.clear();
-    m_pChapterLevelLB.clear();
-    m_pInvisibleCB.clear();
-    m_pSeparatorFT.clear();
-    m_pSeparatorED.clear();
-    m_pNewPB.clear();
-    m_pDelPB.clear();
-    SwFieldPage::dispose();
 }
 
 void SwFieldVarPage::Reset(const SfxItemSet* )
@@ -1245,7 +1222,7 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
 VclPtr<SfxTabPage> SwFieldVarPage::Create( TabPageParent pParent,
                                          const SfxItemSet *const pAttrSet)
 {
-    return VclPtr<SwFieldVarPage>::Create( pParent.pParent, pAttrSet );
+    return VclPtr<SwFieldVarPage>::Create( pParent, pAttrSet );
 }
 
 sal_uInt16 SwFieldVarPage::GetGroup()
