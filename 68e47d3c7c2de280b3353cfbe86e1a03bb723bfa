@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_4d3bacd0",
+        "filename": "sw/source/core/view/viewsh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-03-19T19:12:00Z",
+      "side": 1,
+      "message": "Just a nitpick (that will likely trigger one of Noel\u0027s loplugins): all added parentheses are redundant :-)",
+      "range": {
+        "startLine": 125,
+        "startChar": 9,
+        "endLine": 125,
+        "endChar": 10
+      },
+      "revId": "68e47d3c7c2de280b3353cfbe86e1a03bb723bfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
