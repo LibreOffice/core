@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_baeb90ae",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-19T14:10:50Z",
+      "side": 1,
+      "message": "* here and elsewhere: there should be no need for \"struct\" type elaboration of \"addrinfo\" in C++ source code (note that the code in this file started out as C code; that explains some of the remaining C-isms)\n\n* the parameter needs to be of type \"addrinfo **\" to actually propagate the new value to the caller",
+      "range": {
+        "startLine": 561,
+        "startChar": 45,
+        "endLine": 561,
+        "endChar": 68
+      },
+      "revId": "bda5bb109fba74f74910c90b928c5b40b5ef414b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_5ad044f8",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-19T14:10:50Z",
+      "side": 1,
+      "message": "here and elsewhere: I don\u0027t think freeaddrinfo may be called (with a nullptr argument) in case getaddrinfo failed",
+      "revId": "bda5bb109fba74f74910c90b928c5b40b5ef414b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_da05347c",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-19T14:10:50Z",
+      "side": 1,
+      "message": "walk the addrinfo chain to find an AF_INET entry?  (or even request AF_INET in the getaddrinfo call?)",
+      "revId": "bda5bb109fba74f74910c90b928c5b40b5ef414b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
