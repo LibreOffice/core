@@ -84,6 +84,7 @@ public:
     void SetAutomaticLanguage(bool bSet) { bUseAutomaticLanguage = bSet; }
     bool IsAutomaticLanguage()const { return bUseAutomaticLanguage; }
     SvNumFormatType GetFormatType() const { return nCurrFormatType; }
+    LanguageType GetCurLanguage() const { return eCurLanguage;}
     void SetLanguage(LanguageType eSet)  { eCurLanguage = eSet; }
     void SetShowLanguageControl(bool bSet) { bShowLanguageControl = bSet; }
     void SetOneArea(bool bOnlyOne) { bOneArea = bOnlyOne; }

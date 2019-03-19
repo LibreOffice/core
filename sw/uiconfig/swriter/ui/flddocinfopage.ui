@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="liststore2">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="liststore3">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkBox" id="FieldDocInfoPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -22,13 +46,37 @@
             <property name="hexpand">True</property>
             <property name="top_padding">6</property>
             <child>
-              <object class="vcllo-SvTreeListBox" id="type:border">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="treeview-selection1"/>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="type">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore1</property>
+                    <property name="headers_visible">False</property>
+                    <property name="headers_clickable">False</property>
+                    <property name="search_column">0</property>
+                    <property name="show_expanders">True</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="treeview-selection1"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
                 </child>
               </object>
             </child>
@@ -38,9 +86,9 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
             <property name="label" translatable="yes" context="flddocinfopage|label1">_Type</property>
             <property name="use_underline">True</property>
+            <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -67,15 +115,37 @@
             <property name="hexpand">True</property>
             <property name="top_padding">6</property>
             <child>
-              <object class="GtkTreeView" id="select:border">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="model">liststore1</property>
-                <property name="show_expanders">False</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="treeview-selection3"/>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="select">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore2</property>
+                    <property name="headers_visible">False</property>
+                    <property name="headers_clickable">False</property>
+                    <property name="search_column">0</property>
+                    <property name="show_expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="treeview-selection2"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
                 </child>
               </object>
             </child>
@@ -85,9 +155,9 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
             <property name="label" translatable="yes" context="flddocinfopage|label2">S_elect</property>
             <property name="use_underline">True</property>
+            <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -121,12 +191,38 @@
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="swlo-NumFormatListBox" id="format:border">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="dropdown">False</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkTreeView" id="format">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="model">liststore3</property>
+                        <property name="headers_visible">False</property>
+                        <property name="headers_clickable">False</property>
+                        <property name="search_column">0</property>
+                        <property name="show_expanders">False</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="treeview-selection3"/>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                            <child>
+                              <object class="GtkCellRendererText" id="cellrenderertext3"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -158,9 +254,9 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
             <property name="label" translatable="yes" context="flddocinfopage|label3">F_ormat</property>
             <property name="use_underline">True</property>
+            <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -174,19 +270,13 @@
       </packing>
     </child>
   </object>
-  <object class="GtkTreeStore" id="liststore1">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="mode">both</property>
     <property name="ignore_hidden">True</property>
     <widgets>
-      <widget name="type:border"/>
-      <widget name="select:border"/>
-      <widget name="format:border"/>
+      <widget name="type"/>
+      <widget name="select"/>
+      <widget name="format"/>
     </widgets>
   </object>
 </interface>
