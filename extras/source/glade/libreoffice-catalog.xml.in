@@ -300,16 +300,8 @@
                         generic-name="URLBox" parent="svtlo-SvtURLBox"
                         icon-name="widget-gtk-comboboxtext"/>
 
-    <glade-widget-class title="SelectionListBox" name="swuilo-SelectionListBox"
-                        generic-name="SelectionListBox" parent="VclComboBoxText"
-                        icon-name="widget-gtk-comboboxtext"/>
-
     <glade-widget-class title="PropertyControl" name="sdlo-PropertyControl"
                         generic-name="PropertyControl" parent="VclComboBoxText"
-                        icon-name="widget-gtk-comboboxtext"/>
-
-    <glade-widget-class title="NumFormatListBox" name="swlo-NumFormatListBox"
-                        generic-name="NumFormatListBox" parent="VclComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>
 
     <glade-widget-class title="Language ListBox" name="svxcorelo-SvxLanguageBox"
@@ -356,10 +348,6 @@
 
     <glade-widget-class title="Cursor Reference Edit" name="sclo-ScCursorRefEdit"
                         generic-name="Cursor Reference Edit" parent="foruilo-RefEdit"
-                        icon-name="widget-gtk-textentry"/>
-
-    <glade-widget-class title="Condition Edit" name="swlo-ConditionEdit"
-                        generic-name="Condition Edit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
 
     <glade-widget-class title="Text View" name="sclo-ScEditWindow"

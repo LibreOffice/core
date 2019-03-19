@@ -2096,6 +2096,11 @@ public:
         return rSelection.Len();
     }
 
+    virtual void replace_selection(const OUString& rText) override
+    {
+        m_xEntry->ReplaceSelected(rText);
+    }
+
     virtual void set_position(int nCursorPos) override
     {
         disable_notify_events();

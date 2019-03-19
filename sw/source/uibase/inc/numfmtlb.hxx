@@ -165,6 +165,10 @@ public:
     virtual void insert_text(int nPos, const OUString& rText) override { mxControl->insert_text(nPos, rText); }
     virtual void set_active(int nPos) override { mxControl->select(nPos); }
     virtual void set_id(int nPos, const OUString& rId) override { mxControl->set_id(nPos, rId); }
+    OUString        get_selected_text() const { return mxControl->get_selected_text(); }
+    bool            get_visible() const { return mxControl->get_visible(); }
+    bool            get_value_changed_from_saved() const { return mxControl->get_value_changed_from_saved(); }
+    void            save_value() { return mxControl->save_value(); }
     void            show() { mxControl->show(); }
     void            hide() { mxControl->hide(); }
     int             get_selected_index() const { return mxControl->get_selected_index(); }
