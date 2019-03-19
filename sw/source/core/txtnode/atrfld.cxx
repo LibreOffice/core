@@ -69,6 +69,7 @@ SwFormatField::SwFormatField( const SwField &rField )
     else if (mpField->GetTyp()->Which() == SwFieldIds::SetExp)
     {
         // see SwWrtShell::StartInputFieldDlg
+        SetWhich( RES_TXTATR_INPUTFIELD );
         static_cast<SwSetExpField *>(mpField.get())->SetFormatField(*this);
     }
     else if ( mpField->GetTyp()->Which() == SwFieldIds::Postit )
@@ -103,6 +104,7 @@ SwFormatField::SwFormatField( const SwFormatField& rAttr )
         }
         else if (mpField->GetTyp()->Which() == SwFieldIds::SetExp)
         {
+            SetWhich( RES_TXTATR_INPUTFIELD );
             // see SwWrtShell::StartInputFieldDlg
             static_cast<SwSetExpField *>(mpField.get())->SetFormatField(*this);
         }
@@ -583,8 +585,16 @@ void SwTextInputField::UpdateFieldContent()
         const OUString aNewFieldContent = GetTextNode().GetExpandText(nullptr, nIdx, nLen);
 
         const SwInputField* pInputField = dynamic_cast<const SwInputField*>(GetFormatField().GetField());
-        assert(pInputField != nullptr);
-        const_cast<SwInputField*>(pInputField)->applyFieldContent( aNewFieldContent );
+        if (pInputField)
+            const_cast<SwInputField*>(pInputField)->applyFieldContent( aNewFieldContent );
+
+        const SwSetExpField* pExpField = dynamic_cast<const SwSetExpField*>(GetFormatField().GetField());
+        if (pExpField)
+        {
+            // FIXME: This doesn't work
+            const_cast<SwSetExpField*>(pExpField)->ChgExpStr(aNewFieldContent, nullptr);
+        }
+
         // trigger update of fields for scenarios in which the Input Field's content is part of e.g. a table formula
         GetTextNode().GetDoc()->getIDocumentFieldsAccess().GetUpdateFields().SetFieldsDirty(true);
     }
