@@ -76,7 +76,7 @@ class SwInsertBookmarkDlg : public SfxDialogController
     std::unique_ptr<weld::Button> m_xRenameBtn;
     std::unique_ptr<weld::CheckButton> m_xHideCB;
     std::unique_ptr<weld::Label> m_xConditionFT;
-    std::unique_ptr<SwConditionEdit> m_xConditionED;
+    std::unique_ptr<ConditionEdit> m_xConditionED;
     std::unique_ptr<BookmarkTable> m_xBookmarksBox;
 
     DECL_LINK(ModifyHdl, weld::Entry&, void);

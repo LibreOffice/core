@@ -40,7 +40,7 @@ class SwFieldVarPage : public SwFieldPage
     std::unique_ptr<weld::Label> m_xNameFT;
     std::unique_ptr<weld::Entry> m_xNameED;
     std::unique_ptr<weld::Label> m_xValueFT;
-    std::unique_ptr<SwConditionEdit> m_xValueED;
+    std::unique_ptr<ConditionEdit> m_xValueED;
     std::unique_ptr<weld::Widget> m_xFormat;
     std::unique_ptr<SwNumFormatTreeView> m_xNumFormatLB;
     std::unique_ptr<weld::TreeView> m_xFormatLB;

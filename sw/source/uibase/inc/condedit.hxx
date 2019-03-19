@@ -24,28 +24,28 @@
 #include <vcl/weld.hxx>
 #include <swdllapi.h>
 
-class SwConditionEdit;
+class ConditionEdit;
 
-class SW_DLLPUBLIC SwConditionEditDropTarget : public DropTargetHelper
+class SW_DLLPUBLIC ConditionEditDropTarget : public DropTargetHelper
 {
 private:
-    SwConditionEdit& m_rEdit;
+    ConditionEdit& m_rEdit;
 
     SAL_DLLPRIVATE virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
     SAL_DLLPRIVATE virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
 public:
-    SwConditionEditDropTarget(SwConditionEdit& rEdit);
+    ConditionEditDropTarget(ConditionEdit& rEdit);
 };
 
-class SW_DLLPUBLIC SwConditionEdit
+class SW_DLLPUBLIC ConditionEdit
 {
     std::unique_ptr<weld::Entry> m_xControl;
-    SwConditionEditDropTarget m_aDropTargetHelper;
+    ConditionEditDropTarget m_aDropTargetHelper;
     bool bBrackets, bEnableDrop;
 
 public:
-    SwConditionEdit(std::unique_ptr<weld::Entry> xControl);
+    ConditionEdit(std::unique_ptr<weld::Entry> xControl);
 
     OUString get_text() const { return m_xControl->get_text(); }
     void set_text(const OUString& rText) { m_xControl->set_text(rText); }

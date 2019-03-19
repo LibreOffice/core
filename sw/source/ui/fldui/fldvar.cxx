@@ -48,7 +48,7 @@ SwFieldVarPage::SwFieldVarPage(TabPageParent pParent, const SfxItemSet *const pC
     , m_xNameFT(m_xBuilder->weld_label("nameft"))
     , m_xNameED(m_xBuilder->weld_entry("name"))
     , m_xValueFT(m_xBuilder->weld_label("valueft"))
-    , m_xValueED(new SwConditionEdit(m_xBuilder->weld_entry("value")))
+    , m_xValueED(new ConditionEdit(m_xBuilder->weld_entry("value")))
     , m_xFormat(m_xBuilder->weld_widget("formatframe"))
     , m_xNumFormatLB(new SwNumFormatTreeView(m_xBuilder->weld_tree_view("numformat")))
     , m_xFormatLB(m_xBuilder->weld_tree_view("format"))

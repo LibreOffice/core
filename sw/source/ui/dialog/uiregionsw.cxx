@@ -334,7 +334,7 @@ SwEditRegionDlg::SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh)
     , m_xPasswdPB(m_xBuilder->weld_button("password"))
     , m_xHideCB(m_xBuilder->weld_check_button("hide"))
     , m_xConditionFT(m_xBuilder->weld_label("conditionft"))
-    , m_xConditionED(new SwConditionEdit(m_xBuilder->weld_entry("condition")))
+    , m_xConditionED(new ConditionEdit(m_xBuilder->weld_entry("condition")))
     , m_xEditInReadonlyCB(m_xBuilder->weld_check_button("editinro"))
     , m_xOK(m_xBuilder->weld_button("ok"))
     , m_xOptionsPB(m_xBuilder->weld_button("options"))
@@ -1488,7 +1488,7 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(TabPageParent pParent, const SfxI
     , m_xPasswdPB(m_xBuilder->weld_button("selectpassword"))
     , m_xHideCB(m_xBuilder->weld_check_button("hide"))
     , m_xConditionFT(m_xBuilder->weld_label("condlabel"))
-    , m_xConditionED(new SwConditionEdit(m_xBuilder->weld_entry("withcond")))
+    , m_xConditionED(new ConditionEdit(m_xBuilder->weld_entry("withcond")))
     // edit in readonly sections
     , m_xEditInReadonlyCB(m_xBuilder->weld_check_button("editable"))
 {
