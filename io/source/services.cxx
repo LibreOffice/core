@@ -20,8 +20,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 
-#include <com/sun/star/registry/XRegistryKey.hpp>
-
 #include "services.hxx"
 
 using namespace ::cppu;

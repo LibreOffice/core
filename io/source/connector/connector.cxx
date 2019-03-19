@@ -20,23 +20,17 @@
 #include <osl/security.hxx>
 #include <sal/log.hxx>
 
-#include <uno/mapping.hxx>
-
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/unourl.hxx>
 #include <rtl/malformeduriexception.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/connection/ConnectionSetupException.hpp>
 #include <com/sun/star/connection/NoConnectException.hpp>
 #include <com/sun/star/connection/XConnector.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <services.hxx>
 #include "connector.hxx"
 
 #define IMPLEMENTATION_NAME "com.sun.star.comp.io.Connector"
@@ -46,7 +40,6 @@ using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::connection;
 
 namespace stoc_connector

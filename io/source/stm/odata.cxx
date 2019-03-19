@@ -22,7 +22,6 @@
 #include <vector>
 
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/endian.h>

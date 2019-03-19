@@ -24,7 +24,9 @@
 #include <osl/socket.hxx>
 #include <osl/mutex.hxx>
 
-#include <com/sun/star/connection/XConnection.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com::sun::star::connection { class XConnection; }
 
 namespace io_acceptor {
 
