@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_3756b92b",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/ScriptEditorForBeanShell.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-19T08:20:31Z",
+      "side": 1,
+      "message": "please no unrelated changes in this patch",
+      "revId": "cc1efe03a26f9b433613064ac93fb58639c9f7f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
