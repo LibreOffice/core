@@ -27,6 +27,7 @@
 #include <editeng/outliner.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <fmtfld.hxx>
+#include <txtfld.hxx>
 #include <svl/itempool.hxx>
 #include <unotools/useroptions.hxx>
 #include <svl/whiter.hxx>
@@ -189,7 +190,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                             bAddSetExpressionFields ) )
                 {
                     rSh.ClearMark();
-                    if ( dynamic_cast<SwInputField*>(rSh.GetCurField( true )) != nullptr )
+                    if (!rSh.IsMultiSelection()
+                        && (nullptr != dynamic_cast<const SwTextInputField*>(
+                               SwCursorShell::GetTextFieldAtCursor(rSh.GetCursor(), true))))
                     {
                         rSh.SttSelect();
                         rSh.SelectText(

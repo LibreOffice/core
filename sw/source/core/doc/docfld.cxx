@@ -442,53 +442,56 @@ void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
         }
     }
 
-    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
-    for (sal_uInt32 n = 0; n < nMaxItems; ++n)
+    for (sal_uInt16 const nWhichHint : { RES_TXTATR_FIELD, RES_TXTATR_INPUTFIELD })
     {
-        const SfxPoolItem* pItem;
-        if( nullptr == (pItem = GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) ))
-            continue;
-
-        const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
-        const SwTextField* pTextField = pFormatField->GetTextField();
-        if( !pTextField || !pTextField->GetTextNode().GetNodes().IsDocNodes() )
-            continue;
-
-        const SwField* pField = pFormatField->GetField();
-        switch( pField->GetTyp()->Which() )
+        sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2(nWhichHint);
+        for (sal_uInt32 n = 0; n < nMaxItems; ++n)
         {
-            case SwFieldIds::Database:
-                AddUsedDBToList( rDBNameList,
+            const SfxPoolItem *const pItem(GetAttrPool().GetItem2(nWhichHint, n));
+            if (nullptr == pItem)
+                continue;
+
+            const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
+            const SwTextField* pTextField = pFormatField->GetTextField();
+            if (!pTextField || !pTextField->GetTextNode().GetNodes().IsDocNodes())
+                continue;
+
+            const SwField* pField = pFormatField->GetField();
+            switch (pField->GetTyp()->Which())
+            {
+                case SwFieldIds::Database:
+                    AddUsedDBToList( rDBNameList,
                                 lcl_DBDataToString(static_cast<const SwDBField*>(pField)->GetDBData() ));
-                break;
+                    break;
 
-            case SwFieldIds::DbSetNumber:
-            case SwFieldIds::DatabaseName:
-                AddUsedDBToList( rDBNameList,
+                case SwFieldIds::DbSetNumber:
+                case SwFieldIds::DatabaseName:
+                    AddUsedDBToList( rDBNameList,
                                 lcl_DBDataToString(static_cast<const SwDBNameInfField*>(pField)->GetRealDBData() ));
-                break;
+                    break;
 
-            case SwFieldIds::DbNumSet:
-            case SwFieldIds::DbNextSet:
-                AddUsedDBToList( rDBNameList,
+                case SwFieldIds::DbNumSet:
+                case SwFieldIds::DbNextSet:
+                    AddUsedDBToList( rDBNameList,
                                 lcl_DBDataToString(static_cast<const SwDBNameInfField*>(pField)->GetRealDBData() ));
                 SAL_FALLTHROUGH; // JP: is that right like that?
 
-            case SwFieldIds::HiddenText:
-            case SwFieldIds::HiddenPara:
-                AddUsedDBToList(rDBNameList, FindUsedDBs( *pAllDBNames,
+                case SwFieldIds::HiddenText:
+                case SwFieldIds::HiddenPara:
+                    AddUsedDBToList(rDBNameList, FindUsedDBs( *pAllDBNames,
                                             pField->GetPar1(), aUsedDBNames ));
-                aUsedDBNames.clear();
-                break;
+                    aUsedDBNames.clear();
+                    break;
 
-            case SwFieldIds::SetExp:
-            case SwFieldIds::GetExp:
-            case SwFieldIds::Table:
-                AddUsedDBToList(rDBNameList, FindUsedDBs( *pAllDBNames,
+                case SwFieldIds::SetExp:
+                case SwFieldIds::GetExp:
+                case SwFieldIds::Table:
+                    AddUsedDBToList(rDBNameList, FindUsedDBs( *pAllDBNames,
                                         pField->GetFormula(), aUsedDBNames ));
-                aUsedDBNames.clear();
-                break;
-            default: break;
+                    aUsedDBNames.clear();
+                    break;
+                default: break;
+            }
         }
     }
 #endif
@@ -598,57 +601,59 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
         }
     }
 
-    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
-
-    for (sal_uInt32 n = 0; n < nMaxItems; ++n )
+    for (sal_uInt16 const nWhichHint : { RES_TXTATR_FIELD, RES_TXTATR_INPUTFIELD })
     {
-        const SfxPoolItem* pItem = GetAttrPool().GetItem2( RES_TXTATR_FIELD, n );
-        if( !pItem )
-            continue;
+        sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2(nWhichHint);
 
-        SwFormatField* pFormatField = const_cast<SwFormatField*>(static_cast<const SwFormatField*>(pItem));
-        SwTextField* pTextField = pFormatField->GetTextField();
-        if( !pTextField || !pTextField->GetTextNode().GetNodes().IsDocNodes() )
-            continue;
-
-        SwField* pField = pFormatField->GetField();
-        bool bExpand = false;
-
-        switch( pField->GetTyp()->Which() )
+        for (sal_uInt32 n = 0; n < nMaxItems; ++n)
         {
-            case SwFieldIds::Database:
-#if HAVE_FEATURE_DBCONNECTIVITY
-                if( IsNameInArray( rOldNames, lcl_DBDataToString(static_cast<SwDBField*>(pField)->GetDBData())))
-                {
-                    SwDBFieldType* pOldTyp = static_cast<SwDBFieldType*>(pField->GetTyp());
+            const SfxPoolItem* pItem = GetAttrPool().GetItem2(nWhichHint, n);
+            if (!pItem)
+                continue;
 
-                    SwDBFieldType* pTyp = static_cast<SwDBFieldType*>(getIDocumentFieldsAccess().InsertFieldType(
+            SwFormatField* pFormatField = const_cast<SwFormatField*>(static_cast<const SwFormatField*>(pItem));
+            SwTextField* pTextField = pFormatField->GetTextField();
+            if (!pTextField || !pTextField->GetTextNode().GetNodes().IsDocNodes())
+                continue;
+
+            SwField* pField = pFormatField->GetField();
+            bool bExpand = false;
+
+            switch( pField->GetTyp()->Which() )
+            {
+                case SwFieldIds::Database:
+#if HAVE_FEATURE_DBCONNECTIVITY
+                    if (IsNameInArray(rOldNames, lcl_DBDataToString(static_cast<SwDBField*>(pField)->GetDBData())))
+                    {
+                        SwDBFieldType* pOldTyp = static_cast<SwDBFieldType*>(pField->GetTyp());
+
+                        SwDBFieldType* pTyp = static_cast<SwDBFieldType*>(getIDocumentFieldsAccess().InsertFieldType(
                             SwDBFieldType(this, pOldTyp->GetColumnName(), aNewDBData)));
 
-                    pFormatField->RegisterToFieldType( *pTyp );
-                    pField->ChgTyp(pTyp);
+                        pFormatField->RegisterToFieldType( *pTyp );
+                        pField->ChgTyp(pTyp);
 
-                    static_cast<SwDBField*>(pField)->ClearInitialized();
-                    static_cast<SwDBField*>(pField)->InitContent();
+                        static_cast<SwDBField*>(pField)->ClearInitialized();
+                        static_cast<SwDBField*>(pField)->InitContent();
 
-                    bExpand = true;
-                }
+                        bExpand = true;
+                    }
 #endif
-                break;
+                    break;
 
-            case SwFieldIds::DbSetNumber:
-            case SwFieldIds::DatabaseName:
-                if( IsNameInArray( rOldNames,
+                case SwFieldIds::DbSetNumber:
+                case SwFieldIds::DatabaseName:
+                    if (IsNameInArray(rOldNames,
                                 lcl_DBDataToString(static_cast<SwDBNameInfField*>(pField)->GetRealDBData())))
-                {
-                    static_cast<SwDBNameInfField*>(pField)->SetDBData(aNewDBData);
-                    bExpand = true;
-                }
-                break;
+                    {
+                        static_cast<SwDBNameInfField*>(pField)->SetDBData(aNewDBData);
+                        bExpand = true;
+                    }
+                    break;
 
-            case SwFieldIds::DbNumSet:
-            case SwFieldIds::DbNextSet:
-                if( IsNameInArray( rOldNames,
+                case SwFieldIds::DbNumSet:
+                case SwFieldIds::DbNextSet:
+                    if (IsNameInArray(rOldNames,
                                 lcl_DBDataToString(static_cast<SwDBNameInfField*>(pField)->GetRealDBData())))
                 {
                     static_cast<SwDBNameInfField*>(pField)->SetDBData(aNewDBData);
@@ -660,17 +665,18 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
                 bExpand = true;
                 break;
 
-            case SwFieldIds::SetExp:
-            case SwFieldIds::GetExp:
-            case SwFieldIds::Table:
-                pField->SetPar2( ReplaceUsedDBs(rOldNames, rNewName, pField->GetFormula()) );
-                bExpand = true;
-                break;
-            default: break;
-        }
+                case SwFieldIds::SetExp:
+                case SwFieldIds::GetExp:
+                case SwFieldIds::Table:
+                    pField->SetPar2( ReplaceUsedDBs(rOldNames, rNewName, pField->GetFormula()) );
+                    bExpand = true;
+                    break;
+                default: break;
+            }
 
-        if (bExpand)
-            pTextField->ExpandTextField( true );
+            if (bExpand)
+                pTextField->ExpandTextField( true );
+        }
     }
     getIDocumentState().SetModified();
 #endif
@@ -882,113 +888,118 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
     bool bIsDBManager = nullptr != rDoc.GetDBManager();
 #endif
 
-    const sal_uInt32 nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
-    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+    for (sal_uInt16 const nWhichHint : { RES_TXTATR_FIELD, RES_TXTATR_INPUTFIELD })
     {
-        const SfxPoolItem* pItem = rDoc.GetAttrPool().GetItem2( RES_TXTATR_FIELD, n );
-        if( !pItem )
-            continue;
-
-        const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
-        const SwTextField* pTextField = pFormatField->GetTextField();
-        if( !pTextField || !pTextField->GetTextNode().GetNodes().IsDocNodes() )
-            continue;
-
-        OUString sFormula;
-        const SwField* pField = pFormatField->GetField();
-        const SwFieldIds nWhich = pField->GetTyp()->Which();
-        switch( nWhich )
+        const sal_uInt32 nMaxItems = rDoc.GetAttrPool().GetItemCount2(nWhichHint);
+        for (sal_uInt32 n = 0; n < nMaxItems; ++n)
         {
-            case SwFieldIds::DbSetNumber:
-            case SwFieldIds::GetExp:
-                if( GETFLD_ALL == eGetMode )
-                    sFormula = sTrue;
-                break;
+            const SfxPoolItem* pItem = rDoc.GetAttrPool().GetItem2(nWhichHint, n);
+            if (!pItem)
+                continue;
 
-            case SwFieldIds::Database:
-                if( GETFLD_EXPAND & eGetMode )
-                    sFormula = sTrue;
-                break;
+            const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
+            const SwTextField* pTextField = pFormatField->GetTextField();
+            if (!pTextField || !pTextField->GetTextNode().GetNodes().IsDocNodes())
+                continue;
 
-            case SwFieldIds::SetExp:
-                if ( (eGetMode != GETFLD_EXPAND) ||
-                     (nsSwGetSetExpType::GSE_STRING & pField->GetSubType()) )
-                {
-                    sFormula = sTrue;
-                }
-                break;
+            OUString sFormula;
+            const SwField* pField = pFormatField->GetField();
+            const SwFieldIds nWhich = pField->GetTyp()->Which();
+            switch (nWhich)
+            {
+                case SwFieldIds::DbSetNumber:
+                case SwFieldIds::GetExp:
+                    if (GETFLD_ALL == eGetMode)
+                        sFormula = sTrue;
+                    break;
 
-            case SwFieldIds::HiddenPara:
-                if( GETFLD_ALL == eGetMode )
-                {
-                    sFormula = pField->GetPar1();
-                    if (sFormula.isEmpty() || sFormula==sFalse)
-                        const_cast<SwHiddenParaField*>(static_cast<const SwHiddenParaField*>(pField))->SetHidden( false );
-                    else if (sFormula==sTrue)
-                        const_cast<SwHiddenParaField*>(static_cast<const SwHiddenParaField*>(pField))->SetHidden( true );
-                    else
-                        break;
+                case SwFieldIds::Database:
+                    if (GETFLD_EXPAND & eGetMode)
+                        sFormula = sTrue;
+                    break;
 
-                    sFormula.clear();
-                    // trigger formatting
-                    const_cast<SwFormatField*>(pFormatField)->ModifyNotification( nullptr, nullptr );
-                }
-                break;
+                case SwFieldIds::SetExp:
+                    if ((eGetMode != GETFLD_EXPAND) ||
+                        (nsSwGetSetExpType::GSE_STRING & pField->GetSubType()))
+                    {
+                        sFormula = sTrue;
+                    }
+                    break;
 
-            case SwFieldIds::HiddenText:
-                if( GETFLD_ALL == eGetMode )
-                {
-                    sFormula = pField->GetPar1();
-                    if (sFormula.isEmpty() || sFormula==sFalse)
-                        const_cast<SwHiddenTextField*>(static_cast<const SwHiddenTextField*>(pField))->SetValue( true );
-                    else if (sFormula==sTrue)
-                        const_cast<SwHiddenTextField*>(static_cast<const SwHiddenTextField*>(pField))->SetValue( false );
-                    else
-                        break;
+                case SwFieldIds::HiddenPara:
+                    if (GETFLD_ALL == eGetMode)
+                    {
+                        sFormula = pField->GetPar1();
+                        if (sFormula.isEmpty() || sFormula==sFalse)
+                            const_cast<SwHiddenParaField*>(static_cast<const SwHiddenParaField*>(pField))->SetHidden( false );
+                        else if (sFormula==sTrue)
+                            const_cast<SwHiddenParaField*>(static_cast<const SwHiddenParaField*>(pField))->SetHidden( true );
+                        else
+                            break;
 
-                    sFormula.clear();
+                        sFormula.clear();
+                        // trigger formatting
+                        const_cast<SwFormatField*>(pFormatField)->ModifyNotification( nullptr, nullptr );
+                    }
+                    break;
 
-                    // evaluate field
-                    const_cast<SwHiddenTextField*>(static_cast<const SwHiddenTextField*>(pField))->Evaluate(&rDoc);
-                    // trigger formatting
-                    const_cast<SwFormatField*>(pFormatField)->ModifyNotification( nullptr, nullptr );
-                }
-                break;
+                case SwFieldIds::HiddenText:
+                    if (GETFLD_ALL == eGetMode)
+                    {
+                        sFormula = pField->GetPar1();
+                        if (sFormula.isEmpty() || sFormula==sFalse)
+                            const_cast<SwHiddenTextField*>(static_cast<const SwHiddenTextField*>(pField))->SetValue( true );
+                        else if (sFormula==sTrue)
+                            const_cast<SwHiddenTextField*>(static_cast<const SwHiddenTextField*>(pField))->SetValue( false );
+                        else
+                            break;
+
+                        sFormula.clear();
+
+                        // evaluate field
+                        const_cast<SwHiddenTextField*>(static_cast<const SwHiddenTextField*>(pField))->Evaluate(&rDoc);
+                        // trigger formatting
+                        const_cast<SwFormatField*>(pFormatField)->ModifyNotification( nullptr, nullptr );
+                    }
+                    break;
 
 #if HAVE_FEATURE_DBCONNECTIVITY
-            case SwFieldIds::DbNumSet:
-            {
-                SwDBData aDBData(const_cast<SwDBNumSetField*>(static_cast<const SwDBNumSetField*>(pField))->GetDBData(&rDoc));
-
-                if (
-                     (bIsDBManager && rDoc.GetDBManager()->OpenDataSource(aDBData.sDataSource, aDBData.sCommand)) &&
-                     (GETFLD_ALL == eGetMode || (GETFLD_CALC & eGetMode && static_cast<const SwDBNumSetField*>(pField)->IsCondValid()))
-                   )
+                case SwFieldIds::DbNumSet:
                 {
-                    sFormula = pField->GetPar1();
-                }
-            }
-            break;
-            case SwFieldIds::DbNextSet:
-            {
-                SwDBData aDBData(const_cast<SwDBNextSetField*>(static_cast<const SwDBNextSetField*>(pField))->GetDBData(&rDoc));
+                    SwDBData aDBData(const_cast<SwDBNumSetField*>(static_cast<const SwDBNumSetField*>(pField))->GetDBData(&rDoc));
 
-                if (
-                     (bIsDBManager && rDoc.GetDBManager()->OpenDataSource(aDBData.sDataSource, aDBData.sCommand)) &&
-                     (GETFLD_ALL == eGetMode || (GETFLD_CALC & eGetMode && static_cast<const SwDBNextSetField*>(pField)->IsCondValid()))
-                   )
-                {
-                    sFormula = pField->GetPar1();
+                    if (   (bIsDBManager && rDoc.GetDBManager()->OpenDataSource(aDBData.sDataSource, aDBData.sCommand))
+                        && (GETFLD_ALL == eGetMode
+                            || (GETFLD_CALC & eGetMode
+                                && static_cast<const SwDBNumSetField*>(pField)->IsCondValid()))
+                       )
+                    {
+                        sFormula = pField->GetPar1();
+                    }
                 }
-            }
-            break;
+                break;
+                case SwFieldIds::DbNextSet:
+                {
+                    SwDBData aDBData(const_cast<SwDBNextSetField*>(static_cast<const SwDBNextSetField*>(pField))->GetDBData(&rDoc));
+
+                    if (   (bIsDBManager && rDoc.GetDBManager()->OpenDataSource(aDBData.sDataSource, aDBData.sCommand))
+                        && (GETFLD_ALL == eGetMode
+                            || (GETFLD_CALC & eGetMode
+                                && static_cast<const SwDBNextSetField*>(pField)->IsCondValid()))
+                       )
+                    {
+                        sFormula = pField->GetPar1();
+                    }
+                }
+                break;
 #endif
-            default: break;
-        }
+                default: break;
+            }
 
-        if (!sFormula.isEmpty())
-        {
-            GetBodyNode( *pTextField, nWhich );
+            if (!sFormula.isEmpty())
+            {
+                GetBodyNode( *pTextField, nWhich );
+            }
         }
     }
     m_nFieldListGetMode = eGetMode;

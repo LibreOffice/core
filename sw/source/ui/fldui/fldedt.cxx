@@ -54,6 +54,19 @@ void SwFieldEditDlg::EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr)
         {
             pSh->GotoField( *(pInputField->GetFormatField()) );
         }
+        else
+        {
+            SwSetExpField *const pSetField(dynamic_cast<SwSetExpField*>(pCurField));
+            if (pSetField)
+            {
+                assert(pSetField->GetFormatField());
+                pSh->GotoField( *(pSetField->GetFormatField()) );
+            }
+            else
+            {
+                assert(!"what input field is this");
+            }
+        }
     }
 
     /* Only create selection if there is none already.
