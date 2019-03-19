@@ -32,7 +32,6 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 
 #include <rtl/math.hxx>
-#include <tools/helpers.hxx>
 
 namespace chart
 {
@@ -417,10 +416,11 @@ double PolarPlottingPositionHelper::getWidthAngleDegree( double& fStartLogicValu
         && !::rtl::math::approxEqual( fStartLogicValueOnAngleAxis, fEndLogicValueOnAngleAxis ) )
         fWidthAngleDegree = 360.0;
 
-    while(fWidthAngleDegree<0.0)
-        fWidthAngleDegree+=360.0;
-    while(fWidthAngleDegree>360.0)
-        fWidthAngleDegree-=360.0;
+    // tdf#123504: both 0 and 360 are valid and different values here!
+    while (fWidthAngleDegree < 0.0)
+        fWidthAngleDegree += 360.0;
+    while (fWidthAngleDegree > 360.0)
+        fWidthAngleDegree -= 360.0;
 
     return fWidthAngleDegree;
 }
@@ -473,7 +473,12 @@ double PolarPlottingPositionHelper::transformToAngleDegree( double fLogicValueOn
     fRet = m_fAngleDegreeOffset
                   + fAxisAngleScaleDirection*(fScaledLogicAngleValue-MinAngleValue)*360.0
                     /fabs(MaxAngleValue-MinAngleValue);
-    return NormAngle360(fRet);
+    // tdf#123504: both 0 and 360 are valid and different values here!
+    while (fRet > 360.0)
+        fRet -= 360.0;
+    while (fRet < 0)
+        fRet += 360.0;
+    return fRet;
 }
 
 /**

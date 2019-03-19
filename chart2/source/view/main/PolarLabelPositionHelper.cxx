@@ -24,8 +24,6 @@
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 
-#include <tools/helpers.hxx>
-
 namespace chart
 {
 using namespace ::com::sun::star;
@@ -123,7 +121,11 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
     //set LabelAlignment
     if( !bCenter )
     {
-        fAngleDegree = NormAngle360(fAngleDegree);
+        // tdf#123504: both 0 and 360 are valid and different values here!
+        while (fAngleDegree > 360.0)
+            fAngleDegree -= 360.0;
+        while (fAngleDegree < 0.0)
+            fAngleDegree += 360.0;
 
         bool bOutside = nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE;
 
