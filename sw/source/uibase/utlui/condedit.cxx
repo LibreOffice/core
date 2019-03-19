@@ -26,67 +26,6 @@
 using namespace ::svx;
 using namespace ::com::sun::star::uno;
 
-ConditionEdit::ConditionEdit(vcl::Window* pParent, WinBits nStyle)
-    : Edit(pParent, nStyle)
-    , DropTargetHelper(this)
-    , bBrackets(true)
-    , bEnableDrop(true)
-{
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeConditionEdit(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    BuilderUtils::ensureDefaultWidthChars(rMap);
-    rRet = VclPtr<ConditionEdit>::Create(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
-}
-
-// Drop possible, respectively format known?
-
-sal_Int8 ConditionEdit::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
-{
-    return OColumnTransferable::canExtractColumnDescriptor
-        ( GetDataFlavorExVector(),
-                                ColumnTransferFormatFlags::COLUMN_DESCRIPTOR )
-                ? DND_ACTION_COPY
-                : DND_ACTION_NONE;
-}
-
-sal_Int8 ConditionEdit::ExecuteDrop( const ExecuteDropEvent& rEvt )
-{
-    sal_Int8 nRet = DND_ACTION_NONE;
-    if( bEnableDrop )
-    {
-        TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
-
-        const DataFlavorExVector& rVector = aData.GetDataFlavorExVector();
-        if(OColumnTransferable::canExtractColumnDescriptor(rVector, ColumnTransferFormatFlags::COLUMN_DESCRIPTOR))
-        {
-                ODataAccessDescriptor aColDesc = OColumnTransferable::extractColumnDescriptor(
-                                                                    aData);
-                OUString sDBName;
-                if (bBrackets)
-                    sDBName += "[";
-                OUString sTmp;
-                sTmp = aColDesc.getDataSource();
-                sDBName += sTmp;
-                sDBName += ".";
-
-                aColDesc[DataAccessDescriptorProperty::Command] >>= sTmp;
-                sDBName += sTmp;
-                sDBName += ".";
-
-                aColDesc[DataAccessDescriptorProperty::ColumnName] >>= sTmp;
-                sDBName += sTmp;
-                if (bBrackets)
-                    sDBName += "]";
-
-                SetText( sDBName );
-                nRet = DND_ACTION_COPY;
-        }
-    }
-    return nRet;
-}
-
 SwConditionEdit::SwConditionEdit(std::unique_ptr<weld::Entry> xControl)
     : m_xControl(std::move(xControl))
     , m_aDropTargetHelper(*this)
