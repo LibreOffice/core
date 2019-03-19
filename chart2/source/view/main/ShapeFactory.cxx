@@ -877,7 +877,11 @@ uno::Reference< drawing::XShape >
     if( !xTarget.is() )
         return nullptr;
 
-    fUnitCircleWidthAngleDegree = NormAngle360(fUnitCircleWidthAngleDegree);
+    // tdf#123504: both 0 and 360 are valid and different values here!
+    while (fUnitCircleWidthAngleDegree > 360)
+        fUnitCircleWidthAngleDegree -= 360.0;
+    while (fUnitCircleWidthAngleDegree < 0)
+        fUnitCircleWidthAngleDegree += 360.0;
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -926,9 +930,10 @@ uno::Reference< drawing::XShape >
     if( !xTarget.is() )
         return nullptr;
 
-    while(fUnitCircleWidthAngleDegree>360)
+    // tdf#123504: both 0 and 360 are valid and different values here!
+    while (fUnitCircleWidthAngleDegree > 360)
         fUnitCircleWidthAngleDegree -= 360.0;
-    while(fUnitCircleWidthAngleDegree<0)
+    while (fUnitCircleWidthAngleDegree < 0)
         fUnitCircleWidthAngleDegree += 360.0;
 
     //create shape
