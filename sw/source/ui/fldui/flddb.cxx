@@ -38,7 +38,7 @@ SwFieldDBPage::SwFieldDBPage(TabPageParent pParent, const SfxItemSet *const pCor
     , m_nOldFormat(0)
     , m_nOldSubType(0)
     , m_xTypeLB(m_xBuilder->weld_tree_view("type"))
-    , m_xDatabaseTLB(new DBTreeList(m_xBuilder->weld_tree_view("select")))
+    , m_xDatabaseTLB(new SwDBTreeList(m_xBuilder->weld_tree_view("select")))
     , m_xAddDBPB(m_xBuilder->weld_button("browse"))
     , m_xCondition(m_xBuilder->weld_widget("condgroup"))
     , m_xConditionED(new SwConditionEdit(m_xBuilder->weld_entry("condition")))

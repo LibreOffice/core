@@ -133,20 +133,20 @@ Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const OUString& rSource
     return xRet;
 }
 
-DBTreeList::DBTreeList(std::unique_ptr<weld::TreeView> xTreeView)
+SwDBTreeList::SwDBTreeList(std::unique_ptr<weld::TreeView> xTreeView)
     : bInitialized(false)
     , bShowColumns(false)
     , pImpl(new SwDBTreeList_Impl)
     , m_xTreeView(std::move(xTreeView))
 {
-    m_xTreeView->connect_expanding(LINK(this, DBTreeList, RequestingChildrenHdl));
+    m_xTreeView->connect_expanding(LINK(this, SwDBTreeList, RequestingChildrenHdl));
 }
 
-DBTreeList::~DBTreeList()
+SwDBTreeList::~SwDBTreeList()
 {
 }
 
-void DBTreeList::InitTreeList()
+void SwDBTreeList::InitTreeList()
 {
     if (!pImpl->HasContext() && pImpl->GetWrtShell())
         return;
@@ -177,7 +177,7 @@ void DBTreeList::InitTreeList()
     bInitialized = true;
 }
 
-void DBTreeList::AddDataSource(const OUString& rSource)
+void SwDBTreeList::AddDataSource(const OUString& rSource)
 {
     OUString aImg(RID_BMP_DB);
     std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
@@ -185,7 +185,7 @@ void DBTreeList::AddDataSource(const OUString& rSource)
     m_xTreeView->select(*xIter);
 }
 
-IMPL_LINK(DBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, bool)
+IMPL_LINK(SwDBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, bool)
 {
     if (!m_xTreeView->iter_has_child(rParent))
     {
@@ -314,7 +314,7 @@ IMPL_LINK(DBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, boo
     return true;
 }
 
-OUString DBTreeList::GetDBName(OUString& rTableName, OUString& rColumnName, sal_Bool* pbIsTable)
+OUString SwDBTreeList::GetDBName(OUString& rTableName, OUString& rColumnName, sal_Bool* pbIsTable)
 {
     OUString sDBName;
     std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
@@ -337,7 +337,7 @@ OUString DBTreeList::GetDBName(OUString& rTableName, OUString& rColumnName, sal_
 }
 
 // Format: database.table
-void DBTreeList::Select(const OUString& rDBName, const OUString& rTableName, const OUString& rColumnName)
+void SwDBTreeList::Select(const OUString& rDBName, const OUString& rTableName, const OUString& rColumnName)
 {
     std::unique_ptr<weld::TreeIter> xParent(m_xTreeView->make_iterator());
     if (!m_xTreeView->get_iter_first(*xParent))
@@ -392,7 +392,7 @@ void DBTreeList::Select(const OUString& rDBName, const OUString& rTableName, con
     } while (m_xTreeView->iter_next_sibling(*xParent));
 }
 
-void DBTreeList::SetWrtShell(SwWrtShell& rSh)
+void SwDBTreeList::SetWrtShell(SwWrtShell& rSh)
 {
     pImpl->SetWrtShell(rSh);
     if (m_xTreeView->get_visible() && !bInitialized)
@@ -408,7 +408,7 @@ namespace
     }
 }
 
-void DBTreeList::ShowColumns(bool bShowCol)
+void SwDBTreeList::ShowColumns(bool bShowCol)
 {
     if (bShowCol != bShowColumns)
     {
