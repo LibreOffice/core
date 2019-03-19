@@ -12,17 +12,13 @@
 #include <algorithm>
 #include <cassert>
 #include <cstring>
-#include <exception>
 
-#include <com/sun/star/io/BufferSizeExceededException.hpp>
-#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/TextInputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XTextInputStream2.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>

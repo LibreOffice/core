@@ -20,8 +20,8 @@
 
 #include <map>
 #include <memory>
-#include <vector>
 
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -32,16 +32,12 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <osl/mutex.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
-
-#include <string.h>
 
 
 using namespace ::std;
