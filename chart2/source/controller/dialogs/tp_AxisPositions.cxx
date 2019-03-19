@@ -54,6 +54,11 @@ AxisPositionsTabPage::AxisPositionsTabPage(TabPageParent pWindow,const SfxItemSe
 {
     m_xLB_CrossesAt->connect_changed(LINK(this, AxisPositionsTabPage, CrossesAtSelectHdl));
     m_xLB_PlaceLabels->connect_changed(LINK(this, AxisPositionsTabPage, PlaceLabelsSelectHdl));
+
+    const double nMin = static_cast<double>(SAL_MIN_INT64);
+    const double nMax = static_cast<double>(SAL_MAX_INT64);
+    m_xED_CrossesAt->set_range(nMin, nMax);
+    m_xED_LabelDistance->set_range(nMin, nMax);
 }
 
 AxisPositionsTabPage::~AxisPositionsTabPage()
