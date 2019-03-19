@@ -26,7 +26,7 @@
 using namespace ::svx;
 using namespace ::com::sun::star::uno;
 
-SwConditionEdit::SwConditionEdit(std::unique_ptr<weld::Entry> xControl)
+ConditionEdit::ConditionEdit(std::unique_ptr<weld::Entry> xControl)
     : m_xControl(std::move(xControl))
     , m_aDropTargetHelper(*this)
     , bBrackets(true)
@@ -34,7 +34,7 @@ SwConditionEdit::SwConditionEdit(std::unique_ptr<weld::Entry> xControl)
 {
 }
 
-sal_Int8 SwConditionEditDropTarget::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
+sal_Int8 ConditionEditDropTarget::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
     return OColumnTransferable::canExtractColumnDescriptor
         ( GetDataFlavorExVector(),
@@ -43,13 +43,13 @@ sal_Int8 SwConditionEditDropTarget::AcceptDrop( const AcceptDropEvent& /*rEvt*/ 
                 : DND_ACTION_NONE;
 }
 
-SwConditionEditDropTarget::SwConditionEditDropTarget(SwConditionEdit& rEdit)
+ConditionEditDropTarget::ConditionEditDropTarget(ConditionEdit& rEdit)
     : DropTargetHelper(rEdit.get_widget().get_drop_target())
     , m_rEdit(rEdit)
 {
 }
 
-sal_Int8 SwConditionEditDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
+sal_Int8 ConditionEditDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
     if (m_rEdit.GetDropEnable())
