@@ -19,11 +19,7 @@
 
 #include <osl/mutex.hxx>
 
-#include <uno/mapping.hxx>
-
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/unourl.hxx>
 #include <rtl/malformeduriexception.hxx>
@@ -46,7 +42,6 @@ using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::connection;
 
 namespace io_acceptor

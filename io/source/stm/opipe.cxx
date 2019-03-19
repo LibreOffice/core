@@ -19,15 +19,13 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XPipe.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XConnectable.hpp>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -46,6 +44,8 @@ using namespace ::com::sun::star::lang;
 
 #include <services.hxx>
 #include "streamhelper.hxx"
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 // Implementation and service names
 #define IMPLEMENTATION_NAME "com.sun.star.comp.io.stm.Pipe"

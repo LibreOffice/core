@@ -20,9 +20,11 @@
 #ifndef INCLUDED_IO_SOURCE_STM_STREAMHELPER_HXX
 #define INCLUDED_IO_SOURCE_STM_STREAMHELPER_HXX
 
-#include <com/sun/star/io/BufferSizeExceededException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include <assert.h>
+
+using namespace com::sun::star::uno;
 
 namespace io_stm
 {

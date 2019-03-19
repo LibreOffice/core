@@ -27,9 +27,9 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
+namespace com::sun::star::uno { class XComponentContext; }
+
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
 
 namespace io_acceptor{
     Reference< XInterface > acceptor_CreateInstance( const Reference< XComponentContext > & xCtx);

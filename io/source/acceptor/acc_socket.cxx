@@ -19,11 +19,11 @@
 
 #include "acceptor.hxx"
 
-#include <exception>
 #include <unordered_set>
 
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/connection/XConnectionBroadcaster.hpp>
 #include <com/sun/star/connection/ConnectionSetupException.hpp>
 #include <com/sun/star/io/IOException.hpp>

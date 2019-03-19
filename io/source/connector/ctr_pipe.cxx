@@ -22,6 +22,7 @@
 #include <com/sun/star/io/IOException.hpp>
 
 #include "connector.hxx"
+#include <osl/pipe.hxx>
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;

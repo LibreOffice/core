@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/alloc.h>
-
 #include <limits>
 #include <string.h>
 
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
 
 using namespace ::com::sun::star::uno;
 

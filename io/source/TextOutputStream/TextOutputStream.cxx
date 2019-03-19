@@ -19,11 +19,7 @@
 
 
 
-#include <uno/mapping.hxx>
-
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <rtl/textenc.h>
@@ -35,6 +31,8 @@
 
 #include <services.hxx>
 
+namespace com::sun::star::uno { class XComponentContext; }
+
 #define IMPLEMENTATION_NAME "com.sun.star.comp.io.TextOutputStream"
 #define SERVICE_NAME "com.sun.star.io.TextOutputStream"
 
@@ -43,7 +41,6 @@ using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::registry;
 
 namespace io_TextOutputStream
 {
