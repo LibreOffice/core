@@ -53,7 +53,7 @@ protected:
 
     DECL_LINK( TreeViewInsertHdl, weld::TreeView&, void );
     DECL_LINK( NumFormatHdl, weld::TreeView&, void );
-    void                InsertHdl(void *);
+    void                InsertHdl(weld::Widget*);
 
     void                Init();
     void                SavePos( const weld::TreeView& rLst1);
