@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_5adcc473",
+        "filename": "filter/source/pdf/pdfexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2019-03-19T10:40:50Z",
+      "side": 1,
+      "message": "Style nitpick - everywhere in the LibreOffice codebase, there is space before and after \u0027\u003d\u0027 - would be great to fix that ;-)",
+      "range": {
+        "startLine": 1124,
+        "startChar": 22,
+        "endLine": 1124,
+        "endChar": 23
+      },
+      "revId": "4161328937dbbc985429d4a2eeef24a16f0c9dd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_dad1b459",
+        "filename": "filter/source/pdf/pdfexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1126,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2019-03-19T10:40:50Z",
+      "side": 1,
+      "message": "Please use a constant / constants: Is the 21 later in the code the same 21 as here?  Should get a nice name then.",
+      "range": {
+        "startLine": 1126,
+        "startChar": 16,
+        "endLine": 1126,
+        "endChar": 18
+      },
+      "revId": "4161328937dbbc985429d4a2eeef24a16f0c9dd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_1ae63c46",
+        "filename": "filter/source/pdf/pdfexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1155,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2019-03-19T10:40:50Z",
+      "side": 1,
+      "message": "Is this the same 21 as above, or a different 21? ;-)",
+      "range": {
+        "startLine": 1155,
+        "startChar": 31,
+        "endLine": 1155,
+        "endChar": 33
+      },
+      "revId": "4161328937dbbc985429d4a2eeef24a16f0c9dd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_3ae30036",
+        "filename": "filter/source/pdf/pdfexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1169,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2019-03-19T10:40:50Z",
+      "side": 1,
+      "message": "Style nitpick: Should be 8 spaces...",
+      "range": {
+        "startLine": 1169,
+        "startChar": 0,
+        "endLine": 1169,
+        "endChar": 5
+      },
+      "revId": "4161328937dbbc985429d4a2eeef24a16f0c9dd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82abbf_fad6f84f",
+        "filename": "filter/source/pdf/pdfexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1204,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2019-03-19T10:40:50Z",
+      "side": 1,
+      "message": "Style nitpick - the rest of the code uses space after comma, let\u0027s be consistent please.",
+      "range": {
+        "startLine": 1204,
+        "startChar": 29,
+        "endLine": 1204,
+        "endChar": 30
+      },
+      "revId": "4161328937dbbc985429d4a2eeef24a16f0c9dd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
