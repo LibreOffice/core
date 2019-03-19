@@ -1726,8 +1726,8 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
 
                                 PageStyleModified( aNewName, false );
                                 pRequest->Done();
-                                pDlg->disposeOnce();
                             }
+                            pDlg->disposeOnce();
                         });
                     }
                 }
