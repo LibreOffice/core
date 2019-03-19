@@ -80,8 +80,6 @@ protected:
     using SfxTabPage::ActivatePage;
 
 public:
-    SwFieldPage(vcl::Window *pParent, const OString& rID,
-        const OUString& rUIXMLDescription, const SfxItemSet *pAttrSet);
     SwFieldPage(TabPageParent pParent, const OUString& rUIXMLDescription,
         const OString& rID, const SfxItemSet *pAttrSet);
 
