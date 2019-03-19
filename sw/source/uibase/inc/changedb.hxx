@@ -34,7 +34,7 @@ class SwChangeDBDlg : public SfxDialogController
     SwWrtShell      *pSh;
 
     std::unique_ptr<weld::TreeView> m_xUsedDBTLB;
-    std::unique_ptr<DBTreeList> m_xAvailDBTLB;
+    std::unique_ptr<SwDBTreeList> m_xAvailDBTLB;
     std::unique_ptr<weld::Button> m_xAddDBPB;
     std::unique_ptr<weld::Label> m_xDocDBNameFT;
     std::unique_ptr<weld::Button> m_xDefineBT;

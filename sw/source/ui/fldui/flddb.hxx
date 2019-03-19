@@ -38,7 +38,7 @@ class SwFieldDBPage : public SwFieldPage
     sal_uInt16          m_nOldSubType;
 
     std::unique_ptr<weld::TreeView> m_xTypeLB;
-    std::unique_ptr<DBTreeList> m_xDatabaseTLB;
+    std::unique_ptr<SwDBTreeList> m_xDatabaseTLB;
     std::unique_ptr<weld::Button> m_xAddDBPB;
     std::unique_ptr<weld::Widget> m_xCondition;
     std::unique_ptr<SwConditionEdit> m_xConditionED;

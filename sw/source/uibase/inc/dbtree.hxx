@@ -29,7 +29,7 @@
 class SwDBTreeList_Impl;
 class SwWrtShell;
 
-class SW_DLLPUBLIC DBTreeList
+class SW_DLLPUBLIC SwDBTreeList
 {
     bool            bInitialized;
     bool            bShowColumns;
@@ -41,8 +41,8 @@ class SW_DLLPUBLIC DBTreeList
     SAL_DLLPRIVATE void          InitTreeList();
 
 public:
-    DBTreeList(std::unique_ptr<weld::TreeView> xTreeView);
-    ~DBTreeList();
+    SwDBTreeList(std::unique_ptr<weld::TreeView> xTreeView);
+    ~SwDBTreeList();
 
     OUString GetDBName(OUString& rTableName, OUString& rColumnName, sal_Bool* pbIsTable = nullptr);
 
