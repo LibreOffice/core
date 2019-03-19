@@ -31,27 +31,27 @@
 
 class SwFieldDokPage : public SwFieldPage
 {
-    VclPtr<ListBox>            m_pTypeLB;
-    VclPtr<VclContainer>       m_pSelection;
-    VclPtr<ListBox>            m_pSelectionLB;
-    VclPtr<FixedText>          m_pValueFT;
-    VclPtr<Edit>               m_pValueED;
-    VclPtr<FixedText>          m_pLevelFT;
-    VclPtr<NumericField>       m_pLevelED;
-    VclPtr<FixedText>          m_pDateFT;
-    VclPtr<FixedText>          m_pTimeFT;
-    VclPtr<NumericField>       m_pDateOffsetED;
-    VclPtr<VclContainer>       m_pFormat;
-    VclPtr<ListBox>            m_pFormatLB;
-    VclPtr<NumFormatListBox>   m_pNumFormatLB;
-    VclPtr<CheckBox>           m_pFixedCB;
-
     sal_Int32               nOldSel;
     sal_uLong               nOldFormat;
 
-    DECL_LINK(TypeHdl, ListBox&, void);
-    DECL_LINK(FormatHdl, ListBox&, void);
-    DECL_LINK(SubTypeHdl, ListBox&, void);
+    std::unique_ptr<weld::TreeView> m_xTypeLB;
+    std::unique_ptr<weld::Widget> m_xSelection;
+    std::unique_ptr<weld::TreeView> m_xSelectionLB;
+    std::unique_ptr<weld::Label> m_xValueFT;
+    std::unique_ptr<weld::Entry> m_xValueED;
+    std::unique_ptr<weld::Label> m_xLevelFT;
+    std::unique_ptr<weld::SpinButton> m_xLevelED;
+    std::unique_ptr<weld::Label> m_xDateFT;
+    std::unique_ptr<weld::Label> m_xTimeFT;
+    std::unique_ptr<weld::SpinButton> m_xDateOffsetED;
+    std::unique_ptr<weld::Widget> m_xFormat;
+    std::unique_ptr<weld::TreeView> m_xFormatLB;
+    std::unique_ptr<SwNumFormatTreeView> m_xNumFormatLB;
+    std::unique_ptr<weld::CheckButton> m_xFixedCB;
+
+    DECL_LINK(TypeHdl, weld::TreeView&, void);
+    DECL_LINK(FormatHdl, weld::TreeView&, void);
+    DECL_LINK(SubTypeHdl, weld::TreeView&, void);
 
     void                AddSubType(sal_uInt16 nTypeId);
     sal_Int32           FillFormatLB(sal_uInt16 nTypeId);
@@ -60,10 +60,9 @@ protected:
     virtual sal_uInt16      GetGroup() override;
 
 public:
-                        SwFieldDokPage(vcl::Window* pWindow, const SfxItemSet * pSet);
+    SwFieldDokPage(TabPageParent pWindow, const SfxItemSet * pSet);
 
-                        virtual ~SwFieldDokPage() override;
-    virtual void        dispose() override;
+    virtual ~SwFieldDokPage() override;
 
     static VclPtr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rAttrSet);
 

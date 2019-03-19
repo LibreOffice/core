@@ -57,7 +57,7 @@ protected:
     DECL_LINK( ListBoxInsertHdl, ListBox&, void );
     DECL_LINK( TreeViewInsertHdl, weld::TreeView&, void );
     DECL_LINK( TreeListBoxInsertHdl, SvTreeListBox*, bool );
-    DECL_LINK( NumFormatHdl, ListBox&, void );
+    DECL_LINK( NumFormatHdl, weld::TreeView&, void );
     void                InsertHdl(void *);
 
     void                Init();
