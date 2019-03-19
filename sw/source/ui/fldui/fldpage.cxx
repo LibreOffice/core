@@ -305,7 +305,7 @@ IMPL_LINK( SwFieldPage, TreeViewInsertHdl, weld::TreeView&, rBox, void )
     InsertHdl(&rBox);
 }
 
-void SwFieldPage::InsertHdl(void* pBtn)
+void SwFieldPage::InsertHdl(weld::Widget* pBtn)
 {
     SwFieldDlg *pDlg = static_cast<SwFieldDlg*>(GetTabDialog());
     if (pDlg)
@@ -313,7 +313,7 @@ void SwFieldPage::InsertHdl(void* pBtn)
         pDlg->InsertHdl();
 
         if (pBtn)
-            static_cast<Button*>(pBtn)->GrabFocus();  // because of InputField-Dlg
+            pBtn->grab_focus();  // because of InputField-Dlg
     }
     else
     {

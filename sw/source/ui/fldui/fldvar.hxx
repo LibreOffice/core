@@ -45,7 +45,7 @@ class SwFieldVarPage : public SwFieldPage
     std::unique_ptr<SwNumFormatTreeView> m_xNumFormatLB;
     std::unique_ptr<weld::TreeView> m_xFormatLB;
     std::unique_ptr<weld::Widget> m_xChapterFrame;
-    std::unique_ptr<weld::TreeView> m_xChapterLevelLB;
+    std::unique_ptr<weld::ComboBox> m_xChapterLevelLB;
     std::unique_ptr<weld::CheckButton> m_xInvisibleCB;
     std::unique_ptr<weld::Label> m_xSeparatorFT;
     std::unique_ptr<weld::Entry> m_xSeparatorED;
@@ -62,7 +62,7 @@ class SwFieldVarPage : public SwFieldPage
     DECL_LINK( SubTypeListBoxHdl, weld::TreeView&, void );
     DECL_LINK( ModifyHdl, weld::Entry&, void );
     DECL_LINK( TBClickHdl, weld::Button&, void );
-    DECL_LINK( ChapterHdl, weld::TreeView&, void );
+    DECL_LINK( ChapterHdl, weld::ComboBox&, void );
     DECL_LINK( SeparatorHdl, weld::Entry&, void );
     DECL_LINK( SubTypeInsertHdl, weld::TreeView&, void );
     void SubTypeHdl(const weld::TreeView*);

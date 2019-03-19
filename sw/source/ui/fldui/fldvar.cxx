@@ -53,7 +53,7 @@ SwFieldVarPage::SwFieldVarPage(TabPageParent pParent, const SfxItemSet *const pC
     , m_xNumFormatLB(new SwNumFormatTreeView(m_xBuilder->weld_tree_view("numformat")))
     , m_xFormatLB(m_xBuilder->weld_tree_view("format"))
     , m_xChapterFrame(m_xBuilder->weld_widget("chapterframe"))
-    , m_xChapterLevelLB(m_xBuilder->weld_tree_view("level"))
+    , m_xChapterLevelLB(m_xBuilder->weld_combo_box("level"))
     , m_xInvisibleCB(m_xBuilder->weld_check_button("invisible"))
     , m_xSeparatorFT(m_xBuilder->weld_label("separatorft"))
     , m_xSeparatorED(m_xBuilder->weld_entry("separator"))
@@ -78,7 +78,7 @@ SwFieldVarPage::SwFieldVarPage(TabPageParent pParent, const SfxItemSet *const pC
     for (sal_uInt16 i = 1; i <= MAXLEVEL; i++)
         m_xChapterLevelLB->append_text(OUString::number(i));
 
-    m_xChapterLevelLB->select(0);
+    m_xChapterLevelLB->set_active(0);
     //enable 'active' language selection
     m_xNumFormatLB->SetShowLanguageControl(true);
 }
@@ -241,7 +241,6 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
     if (m_xValueFT->get_label() != sOldValueFT)
         m_xValueFT->set_label(sOldValueFT);
 
-    m_xFormatLB->freeze();
     FillFormatLB(nTypeId);
 
     sal_Int32 nSize = m_xFormatLB->n_children();
@@ -485,9 +484,9 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
                 {
                     sal_uInt8 nLevel = static_cast<SwSetExpFieldType*>(pFieldTyp)->GetOutlineLvl();
                     if( 0x7f == nLevel )
-                        m_xChapterLevelLB->select( 0 );
+                        m_xChapterLevelLB->set_active(0);
                     else
-                        m_xChapterLevelLB->select( nLevel + 1 );
+                        m_xChapterLevelLB->set_active(nLevel + 1);
                     OUString sDelim = static_cast<SwSetExpFieldType*>(pFieldTyp)->GetDelimiter();
                     m_xSeparatorED->set_text( sDelim );
                     ChapterHdl(*m_xChapterLevelLB);
@@ -535,8 +534,6 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
     m_xInvisibleCB->set_sensitive(bInvisible);
 
     ModifyHdl(*m_xNameED);    // apply/insert/delete status update
-
-    m_xFormatLB->thaw();
 }
 
 IMPL_LINK(SwFieldVarPage, SubTypeInsertHdl, weld::TreeView&, rBox, void)
@@ -684,6 +681,7 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
     }
 
     // fill Format-Listbox
+    m_xFormatLB->freeze();
     m_xFormatLB->clear();
     rWidget.clear();
     bool bSpecialFormat = false;
@@ -764,14 +762,20 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
 
     const sal_uInt16 nSize = GetFieldMgr().GetFormatCount(nTypeId, IsFieldDlgHtmlMode());
 
+    OUString sSelectId;
+
     for (sal_uInt16 i = 0; i < nSize; i++)
     {
         const sal_uInt16 nFieldId = GetFieldMgr().GetFormatId( nTypeId, i );
         OUString sId(OUString::number(nFieldId));
         m_xFormatLB->append(sId, GetFieldMgr().GetFormatStr(nTypeId, i));
         if (IsFieldEdit() && GetCurField() && nFieldId == GetCurField()->GetFormat())
-            m_xFormatLB->select_id(sId);
+            sSelectId = sId;
     }
+
+    m_xFormatLB->thaw();
+    if (!sSelectId.isEmpty())
+        m_xFormatLB->select_id(sSelectId);
 
     if (nSize && (!IsFieldEdit() || m_xFormatLB->get_selected_index() == -1))
     {
@@ -1053,9 +1057,9 @@ IMPL_LINK(SwFieldVarPage, TBClickHdl, weld::Button&, rBox, void)
     }
 }
 
-IMPL_LINK_NOARG(SwFieldVarPage, ChapterHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(SwFieldVarPage, ChapterHdl, weld::ComboBox&, void)
 {
-    bool bEnable = m_xChapterLevelLB->get_selected_index() != 0;
+    bool bEnable = m_xChapterLevelLB->get_active() != 0;
 
     m_xSeparatorED->set_sensitive(bEnable);
     m_xSeparatorFT->set_sensitive(bEnable);
@@ -1065,7 +1069,7 @@ IMPL_LINK_NOARG(SwFieldVarPage, ChapterHdl, weld::TreeView&, void)
 IMPL_LINK_NOARG(SwFieldVarPage, SeparatorHdl, weld::Entry&, void)
 {
     bool bEnable = !m_xSeparatorED->get_text().isEmpty() ||
-                    m_xChapterLevelLB->get_selected_index() == 0;
+                    m_xChapterLevelLB->get_active() == 0;
     EnableInsert(bEnable);
 }
 
@@ -1159,7 +1163,7 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
         }
         case TYP_SEQFLD:
         {
-            nSubType = static_cast< sal_uInt16 >(m_xChapterLevelLB->get_selected_index());
+            nSubType = static_cast< sal_uInt16 >(m_xChapterLevelLB->get_active());
             if (nSubType == 0)
                 nSubType = 0x7f;
             else
