@@ -18,8 +18,6 @@
  */
 
 
-#include <stdio.h>
-
 #include <sal/log.hxx>
 
 #include <com/sun/star/io/IOException.hpp>
@@ -28,15 +26,9 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XConnectable.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 
-#include <uno/dispatcher.h>
-#include <uno/mapping.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
@@ -48,7 +40,6 @@ using namespace std;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::registry;
 using namespace com::sun::star::io;
 
 #include <services.hxx>
