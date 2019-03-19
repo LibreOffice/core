@@ -463,8 +463,4 @@
       </packing>
     </child>
   </object>
-  <object class="GtkSizeGroup" id="sizegroup1">
-    <property name="mode">both</property>
-    <property name="ignore_hidden">True</property>
-  </object>
 </interface>
