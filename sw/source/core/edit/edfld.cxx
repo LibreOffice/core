@@ -173,7 +173,11 @@ static SwTextField* lcl_FindInputField( SwDoc* pDoc, SwField& rField )
 {
     // Search field via its address. For input fields this needs to be done in protected fields.
     SwTextField* pTField = nullptr;
-    if( SwFieldIds::Input == rField.Which() )
+    if (SwFieldIds::Input == rField.Which()
+        || (SwFieldIds::SetExp == rField.Which()
+            && static_cast<SwSetExpField&>(rField).GetInputFlag()
+            && (static_cast<SwSetExpFieldType*>(rField.GetTyp())->GetType()
+                & nsSwGetSetExpType::GSE_STRING)))
     {
         const sal_uInt32 nMaxItems =
             pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INPUTFIELD );

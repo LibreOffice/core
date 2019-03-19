@@ -893,11 +893,11 @@ SwTextField * SwCursorShell::GetTextFieldAtPos(
     return pTextField;
 }
 
-SwField* SwCursorShell::GetFieldAtCursor(
+SwTextField* SwCursorShell::GetTextFieldAtCursor(
     const SwPaM* pCursor,
     const bool bIncludeInputFieldAtStart )
 {
-    SwField* pFieldAtCursor = nullptr;
+    SwTextField* pFieldAtCursor = nullptr;
 
     SwTextField* pTextField = GetTextFieldAtPos( pCursor->Start(), bIncludeInputFieldAtStart );
     if ( pTextField != nullptr
@@ -909,11 +909,21 @@ SwField* SwCursorShell::GetFieldAtCursor(
             : 1;
         if ( ( pCursor->End()->nContent.GetIndex() - pCursor->Start()->nContent.GetIndex() ) <= nTextFieldLength )
         {
-            pFieldAtCursor = const_cast<SwField*>(pTextField->GetFormatField().GetField());
+            pFieldAtCursor = pTextField;
         }
     }
 
     return pFieldAtCursor;
+}
+
+SwField* SwCursorShell::GetFieldAtCursor(
+    const SwPaM *const pCursor,
+    const bool bIncludeInputFieldAtStart)
+{
+    SwTextField *const pField(GetTextFieldAtCursor(pCursor, bIncludeInputFieldAtStart));
+    return pField
+        ? const_cast<SwField*>(pField->GetFormatField().GetField())
+        : nullptr;
 }
 
 SwField* SwCursorShell::GetCurField( const bool bIncludeInputFieldAtStart ) const
@@ -941,7 +951,7 @@ bool SwCursorShell::CursorInsideInputField() const
 {
     for(SwPaM& rCursor : GetCursor()->GetRingContainer())
     {
-        if(dynamic_cast<const SwInputField*>(GetFieldAtCursor( &rCursor, false )))
+        if (dynamic_cast<const SwTextInputField*>(GetTextFieldAtCursor(&rCursor, false)))
             return true;
     }
     return false;

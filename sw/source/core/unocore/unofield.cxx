@@ -1269,6 +1269,66 @@ SwServiceType SwXTextField::GetServiceId() const
     return m_pImpl->m_nServiceId;
 }
 
+/** Convert between SwSetExpField with InputFlag false and InputFlag true.
+    Unfortunately the InputFlag is exposed in the API as "Input" property
+    and is mutable; in the UI and in ODF these are 2 different types of
+    fields, so the API design is very questionable.
+    In order to keep the mutable property, the whole thing has to be
+    reconstructed from scratch, to replace the SwTextField hint with
+    SwTextInputField or vice versa.
+    The SwFormatField will be replaced - it must be, because the Which
+    changes - but the SwXTextField *must not* be disposed in the operation,
+    it has to be disconnected first and at the end connected to the
+    new instance!
+ */
+void SwXTextField::TransmuteLeadToInputField(SwSetExpField & rField)
+{
+    assert(rField.GetFormatField()->Which() == (rField.GetInputFlag() ? RES_TXTATR_INPUTFIELD : RES_TXTATR_FIELD));
+    uno::Reference<text::XTextField> const xField(
+        rField.GetFormatField()->GetXTextField());
+    SwXTextField *const pXField = xField.is()
+        ? reinterpret_cast<SwXTextField*>(
+            sal::static_int_cast<sal_IntPtr>(
+                uno::Reference<lang::XUnoTunnel>(xField, uno::UNO_QUERY_THROW)
+                    ->getSomething(getUnoTunnelId())))
+        : nullptr;
+    if (xField.is())
+    {
+        assert(pXField->m_pImpl->m_pFormatField == rField.GetFormatField());
+        rField.GetFormatField()->Remove(pXField->m_pImpl.get());
+        pXField->m_pImpl->m_pFormatField = nullptr;
+    }
+    SwTextField *const pOldAttr(rField.GetFormatField()->GetTextField());
+    SwSetExpField tempField(rField);
+    tempField.SetInputFlag(!rField.GetInputFlag());
+    SwFormatField tempFormat(tempField);
+    assert(tempFormat.GetField() != &rField);
+    assert(tempFormat.GetField() != &tempField); // this copies it again?
+    assert(tempFormat.Which() == (static_cast<SwSetExpField const*>(tempFormat.GetField())->GetInputFlag() ? RES_TXTATR_INPUTFIELD : RES_TXTATR_FIELD));
+    SwTextNode & rNode(pOldAttr->GetTextNode());
+    std::shared_ptr<SwPaM> pPamForTextField;
+    IDocumentContentOperations & rIDCO(rNode.GetDoc()->getIDocumentContentOperations());
+    SwTextField::GetPamForTextField(*pOldAttr, pPamForTextField);
+    assert(pPamForTextField);
+    sal_Int32 const nStart(pPamForTextField->Start()->nContent.GetIndex());
+    rIDCO.DeleteAndJoin(*pPamForTextField);
+    // ATTENTION: rField is dead now! hope nobody accesses it...
+    bool bSuccess = rIDCO.InsertPoolItem(*pPamForTextField, tempFormat);
+    assert(bSuccess);
+    (void) bSuccess;
+    SwTextField const* pNewAttr(rNode.GetFieldTextAttrAt(nStart, true));
+    assert(pNewAttr);
+    SwFormatField const& rNewFormat(pNewAttr->GetFormatField());
+    assert(rNewFormat.Which() == (static_cast<SwSetExpField const*>(rNewFormat.GetField())->GetInputFlag() ? RES_TXTATR_INPUTFIELD : RES_TXTATR_FIELD));
+    assert(static_cast<SwSetExpField const*>(rNewFormat.GetField())->GetInputFlag() == (dynamic_cast<SwTextInputField const*>(pNewAttr) != nullptr));
+    if (xField.is())
+    {
+        pXField->m_pImpl->m_pFormatField = &rNewFormat;
+        const_cast<SwFormatField&>(rNewFormat).Add(pXField->m_pImpl.get());
+        const_cast<SwFormatField&>(rNewFormat).SetXTextField(xField);
+    }
+}
+
 void SAL_CALL SwXTextField::attachTextFieldMaster(
         const uno::Reference< beans::XPropertySet > & xFieldMaster)
 {
@@ -1965,6 +2025,8 @@ void SAL_CALL SwXTextField::attach(
     assert(m_pImpl->m_pFormatField);
     m_pImpl->m_pDoc = pDoc;
     const_cast<SwFormatField *>(m_pImpl->m_pFormatField)->Add(m_pImpl.get());
+    const_cast<SwFormatField *>(m_pImpl->m_pFormatField)->SetXTextField(this);
+    m_pImpl->m_wThis = *this;
     m_pImpl->m_bIsDescriptor = false;
     m_pImpl->ClearFieldType();
     m_pImpl->m_pProps.reset();
