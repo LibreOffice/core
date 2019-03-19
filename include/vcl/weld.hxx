@@ -937,6 +937,7 @@ public:
     // nEndPos can be -1 in order to select all text
     virtual void select_region(int nStartPos, int nEndPos) = 0;
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;
+    virtual void replace_selection(const OUString& rText) = 0;
     // nCursorPos can be -1 to set to the end
     virtual void set_position(int nCursorPos) = 0;
     virtual int get_position() const = 0;

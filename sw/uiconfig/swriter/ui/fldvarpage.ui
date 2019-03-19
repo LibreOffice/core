@@ -113,7 +113,7 @@
                 <property name="hexpand">True</property>
                 <property name="top_padding">6</property>
                 <child>
-                  <object class="swuilo-SelectionListBox" id="select:border">
+                  <object class="GtkTreeView" id="select:border">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
@@ -187,7 +187,7 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
                         <child>
-                          <object class="swlo-NumFormatListBox" id="numformat:border">
+                          <object class="GtkTreeView" id="numformat:border">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
@@ -416,7 +416,7 @@
           </packing>
         </child>
         <child>
-          <object class="swlo-ConditionEdit" id="value">
+          <object class="GtkEntry" id="value">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="valign">center</property>

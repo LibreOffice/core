@@ -5190,6 +5190,15 @@ public:
         return gtk_editable_get_selection_bounds(GTK_EDITABLE(m_pEntry), &rStartPos, &rEndPos);
     }
 
+    virtual void replace_selection(const OUString& rText) override
+    {
+        gtk_editable_delete_selection(GTK_EDITABLE(m_pEntry));
+        OString sText(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
+        gint position = gtk_editable_get_position(GTK_EDITABLE(m_pEntry));
+        gtk_editable_insert_text(GTK_EDITABLE(m_pEntry), sText.getStr(), sText.getLength(),
+                                 &position);
+    }
+
     virtual void set_position(int nCursorPos) override
     {
         disable_notify_events();
