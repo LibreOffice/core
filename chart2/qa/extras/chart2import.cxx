@@ -118,6 +118,7 @@ public:
     void testTdf121205();
 
     void testTdf114179();
+    void testTdf123504();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -190,6 +191,7 @@ public:
     CPPUNIT_TEST(testTdf121205);
 
     CPPUNIT_TEST(testTdf114179);
+    CPPUNIT_TEST(testTdf123504);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1697,6 +1699,37 @@ void Chart2ImportTest::testTdf114179()
     awt::Size aSize = getSize( xDiagram,aPage );
     CPPUNIT_ASSERT( aSize.Width > 0);
     CPPUNIT_ASSERT( aSize.Height > 0);
+}
+
+void Chart2ImportTest::testTdf123504()
+{
+    load("/chart2/qa/extras/data/ods/", "pie_chart_100_and_0.ods");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+        UNO_QUERY_THROW);
+
+    Reference<chart2::XChartDocument> xChartDoc2(xChartDoc, UNO_QUERY_THROW);
+    Reference<chart2::XChartType> xChartType(getChartTypeFromDoc(xChartDoc2, 0), UNO_SET_THROW);
+    std::vector aDataSeriesYValues = getDataSeriesYValuesFromChartType(xChartType);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aDataSeriesYValues.size());
+
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+    Reference<drawing::XShape> xSeriesSlices(getShapeByName(xShapes, "CID/D=0:CS=0:CT=0:Series=0"),
+        UNO_SET_THROW);
+
+    Reference<container::XIndexAccess> xIndexAccess(xSeriesSlices, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    Reference<drawing::XShape> xSlice(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
+
+    // Check size and position of the only slice in the chart (100%)
+    // In the regressed state, it used to be 0-sized at position 0,0
+    awt::Point aSlicePosition = xSlice->getPosition();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(3000), aSlicePosition.X);
+    CPPUNIT_ASSERT_GREATER(sal_Int32(150), aSlicePosition.Y);
+    awt::Size aSliceSize = xSlice->getSize();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(8500), aSliceSize.Height);
+    CPPUNIT_ASSERT_GREATER(sal_Int32(8500), aSliceSize.Width);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
