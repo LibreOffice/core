@@ -1128,7 +1128,21 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             mnSubType &= (~nsSwExtendedSubType::SUB_CMD);
         break;
     case FIELD_PROP_BOOL1:
-        SetInputFlag(*o3tl::doAccess<bool>(rAny));
+        {
+            bool newInput(*o3tl::doAccess<bool>(rAny));
+            if (newInput != GetInputFlag())
+            {
+                if (static_cast<SwSetExpFieldType*>(GetTyp())->GetType()
+                        & nsSwGetSetExpType::GSE_STRING)
+                {
+                    SwXTextField::TransmuteLeadToInputField(*this);
+                }
+                else
+                {
+                    SetInputFlag(newInput);
+                }
+            }
+        }
         break;
     case FIELD_PROP_PAR4:
         {
