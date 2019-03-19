@@ -157,7 +157,7 @@ void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
 
     bool bRtl = AllSettings::GetLayoutRTL();
 
-    drawinglayer::primitive2d::Primitive2DContainer aSeq(3);
+    drawinglayer::primitive2d::Primitive2DContainer aSeq(4);
     B2DRectangle aBRect(double(aRect.Left()), double(aRect.Top()),
                         double(aRect.Right()), double(aRect.Bottom()));
     B2DPolygon aPolygon = createPolygonFromRect(aBRect, 3.0 / BUTTON_WIDTH, 3.0 / BUTTON_HEIGHT);
@@ -193,8 +193,7 @@ void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
     if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
         aTriangleColor = COL_WHITE.getBColor();
 
-    aSeq.emplace_back();
-    aSeq.back().set( new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+    aSeq[3].set( new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                                         B2DPolyPolygon(aTriangle), aTriangleColor));
 
     drawinglayer::primitive2d::Primitive2DContainer aGhostedSeq(1);

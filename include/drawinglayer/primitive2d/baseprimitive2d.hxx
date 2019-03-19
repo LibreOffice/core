@@ -68,24 +68,52 @@ namespace drawinglayer { namespace primitive2d {
         virtual ~Primitive2DDecompositionVisitor();
     };
 
-    class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive2DContainer : public std::deque< Primitive2DReference >,
-                                                                        public Primitive2DDecompositionVisitor
+    class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive2DContainer : public Primitive2DDecompositionVisitor
     {
+        std::deque<Primitive2DReference> maElements;
+
     public:
+        typedef Primitive2DReference value_type;
+        typedef std::deque<Primitive2DReference>::iterator iterator;
+        typedef std::deque<Primitive2DReference>::const_iterator const_iterator;
+        typedef std::deque<Primitive2DReference>::reference reference;
+        typedef std::deque<Primitive2DReference>::const_reference const_reference;
+        typedef std::deque<Primitive2DReference>::size_type size_type;
+
         explicit Primitive2DContainer() {}
-        explicit Primitive2DContainer( size_type count ) : deque(count) {}
+        explicit Primitive2DContainer( size_type count ) : maElements(count) {}
         virtual ~Primitive2DContainer() override;
-        Primitive2DContainer( const Primitive2DContainer& other ) : deque(other) {}
-        Primitive2DContainer( const Primitive2DContainer&& other ) : deque(other) {}
-        Primitive2DContainer( const std::deque< Primitive2DReference >& other ) : deque(other) {}
-        Primitive2DContainer( std::initializer_list<Primitive2DReference> init ) : deque(init) {}
+        Primitive2DContainer( const Primitive2DContainer& other ) : maElements(other.maElements) {}
+        Primitive2DContainer( const Primitive2DContainer&& other ) : maElements(other.maElements) {}
+        Primitive2DContainer( const std::deque< Primitive2DReference >& other ) : maElements(other) {}
+        Primitive2DContainer( std::initializer_list<Primitive2DReference> init ) : maElements(init) {}
+
+        iterator begin() { return maElements.begin(); }
+        const_iterator begin() const { return maElements.begin(); }
+        iterator end() { return maElements.end(); }
+        const_iterator end() const { return maElements.end(); }
+        void clear() { maElements.clear(); }
+        bool empty() const { return maElements.empty(); }
+        template<class InputIterator>
+        iterator insert(const_iterator it, InputIterator first, InputIterator last) { return maElements.insert(it, first, last); }
+        iterator insert(const_iterator it, const Primitive2DReference& rV) { return maElements.insert(it, rV); }
+        iterator insert(const_iterator it, Primitive2DReference&& rV) { return maElements.insert(it, rV); }
+        void push_back(const Primitive2DReference& rV) { maElements.push_back(rV); }
+        void push_back(Primitive2DReference&& rV) { maElements.push_back(rV); }
+        size_type size() const { return maElements.size(); }
+        void resize(size_type nSize) { maElements.resize(nSize); }
+        void swap(Primitive2DContainer& other) { maElements.swap(other.maElements); }
+        reference operator[](size_type nPos) { return maElements[nPos]; }
+        const_reference operator[](size_type nPos) const { return maElements[nPos]; }
+        operator std::deque<Primitive2DReference>&() { return maElements; }
+        operator std::deque<Primitive2DReference>() const { return maElements; }
 
         virtual void append(const Primitive2DReference&) override;
         virtual void append(const Primitive2DContainer& rSource) override;
         virtual void append(Primitive2DContainer&& rSource) override;
         void append(const Primitive2DSequence& rSource);
-        Primitive2DContainer& operator=(const Primitive2DContainer& r) { deque::operator=(r); return *this; }
-        Primitive2DContainer& operator=(const Primitive2DContainer&& r) { deque::operator=(r); return *this; }
+        Primitive2DContainer& operator=(const Primitive2DContainer& r) { maElements = r.maElements; return *this; }
+        Primitive2DContainer& operator=(const Primitive2DContainer&& r) { maElements = r.maElements; return *this; }
         bool operator==(const Primitive2DContainer& rB) const;
         bool operator!=(const Primitive2DContainer& rB) const { return !operator==(rB); }
         basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& aViewInformation) const;
