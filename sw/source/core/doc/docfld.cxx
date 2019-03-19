@@ -450,11 +450,13 @@ void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
         }
     }
 
-    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
+for (sal_uInt16 const nWhichHint : { RES_TXTATR_FIELD, RES_TXTATR_INPUTFIELD })
+{
+    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2(nWhichHint);
     for (sal_uInt32 n = 0; n < nMaxItems; ++n)
     {
-        const SfxPoolItem* pItem;
-        if( nullptr == (pItem = GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) ))
+        const SfxPoolItem *const pItem(GetAttrPool().GetItem2(nWhichHint, n));
+        if (nullptr == pItem)
             continue;
 
         const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
@@ -499,6 +501,7 @@ void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
             default: break;
         }
     }
+}
 #endif
 }
 
@@ -608,11 +611,13 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
         }
     }
 
-    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
+for (sal_uInt16 const nWhichHint : { RES_TXTATR_FIELD, RES_TXTATR_INPUTFIELD })
+{
+    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2(nWhichHint);
 
     for (sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
-        const SfxPoolItem* pItem = GetAttrPool().GetItem2( RES_TXTATR_FIELD, n );
+        const SfxPoolItem* pItem = GetAttrPool().GetItem2(nWhichHint, n);
         if( !pItem )
             continue;
 
@@ -682,6 +687,7 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
         if (bExpand)
             pTextField->ExpandTextField( true );
     }
+}
     getIDocumentState().SetModified();
 #endif
 }
@@ -891,10 +897,12 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
     bool bIsDBManager = nullptr != rDoc.GetDBManager();
 #endif
 
-    const sal_uInt32 nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
+for (sal_uInt16 const nWhichHint : { RES_TXTATR_FIELD, RES_TXTATR_INPUTFIELD })
+{
+    const sal_uInt32 nMaxItems = rDoc.GetAttrPool().GetItemCount2(nWhichHint);
     for( sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
-        const SfxPoolItem* pItem = rDoc.GetAttrPool().GetItem2( RES_TXTATR_FIELD, n );
+        const SfxPoolItem* pItem = rDoc.GetAttrPool().GetItem2(nWhichHint, n);
         if( !pItem )
             continue;
 
@@ -1000,6 +1008,7 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
             GetBodyNode( *pTextField, nWhich );
         }
     }
+}
     m_nFieldListGetMode = eGetMode;
     m_nNodes = rDoc.GetNodes().Count();
 }

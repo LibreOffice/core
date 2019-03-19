@@ -55,6 +55,7 @@
 #include <pam.hxx>
 #include <o3tl/deleter.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -1265,7 +1266,26 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
         default: break;
         } // switch
 
-        pFormatField->ModifyNotification( nullptr, nullptr );        // trigger formatting
+        {
+            // avoid calling ReplaceText() for input fields, it is pointless
+            // here and moves the cursor if it's inside the field ...
+            SwTextInputField *const pInputField(
+                pUpdateField == pTextField // ... except once, when the dialog
+                    ? nullptr // is used to change content via UpdateOneField()
+                    : dynamic_cast<SwTextInputField *>(pTextField));
+            if (pInputField)
+            {
+                pInputField->LockNotifyContentChange();
+            }
+            ::comphelper::ScopeGuard g([pInputField]()
+                {
+                    if (pInputField)
+                    {
+                        pInputField->UnlockNotifyContentChange();
+                    }
+                });
+            pFormatField->ModifyNotification(nullptr, nullptr); // trigger formatting
+        }
 
         if (pUpdateField == pTextField) // if only this one is updated
         {
