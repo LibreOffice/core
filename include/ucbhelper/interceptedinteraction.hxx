@@ -24,9 +24,10 @@
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
-#include <com/sun/star/task/XInteractionRequest.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
+
+namespace com::sun::star::task { class XInteractionRequest; }
 
 
 namespace ucbhelper{

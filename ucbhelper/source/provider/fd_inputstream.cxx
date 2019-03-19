@@ -20,7 +20,6 @@
 #include <ucbhelper/fd_inputstream.hxx>
 
 #include <com/sun/star/io/IOException.hpp>
-#include <rtl/alloc.h>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <algorithm>

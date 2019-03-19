@@ -26,10 +26,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
-#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-#include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <ucbhelper/interactionrequest.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>

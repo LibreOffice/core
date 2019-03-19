@@ -1,0 +1,23 @@
+---
+assumeFilename: ucbhelper/source/provider/resultset.cxx
+blacklist:
+    ucbhelper/source/client/content.cxx:
+    # Needed for direct member access
+    - com/sun/star/ucb/XCommandInfo.hpp
+    - com/sun/star/beans/XPropertySetInfo.hpp
+    ucbhelper/source/provider/cancelcommandexecution.cxx:
+    # Needed for linker visibility
+    - ucbhelper/cancelcommandexecution.hxx
+    ucbhelper/source/provider/getcomponentcontext.cxx:
+    # Needed to for ucbhelper::getComponentContext
+    - ucbhelper/getcomponentcontext.hxx
+    ucbhelper/source/provider/resultsetmetadata.cxx:
+    # Needed for UnoType types
+    - com/sun/star/io/XInputStream.hpp
+    - com/sun/star/sdbc/XArray.hpp
+    - com/sun/star/sdbc/XBlob.hpp
+    - com/sun/star/sdbc/XClob.hpp
+    - com/sun/star/sdbc/XRef.hpp
+    - com/sun/star/util/Date.hpp
+    - com/sun/star/util/Time.hpp
+    - com/sun/star/util/DateTime.hpp

@@ -23,17 +23,17 @@
  **************************************************************************
 
  *************************************************************************/
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
-#include <com/sun/star/ucb/XContentProviderManager.hpp>
+
 #include <ucbhelper/commandenvironment.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
+
+namespace com::sun::star::task { class XInteractionHandler; }
+namespace com::sun::star::ucb { class XProgressHandler; }
 
 namespace ucbhelper
 {

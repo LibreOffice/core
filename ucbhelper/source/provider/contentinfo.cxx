@@ -22,9 +22,9 @@
  **************************************************************************
 
  *************************************************************************/
-#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>
-#include <com/sun/star/ucb/XPropertySetRegistry.hpp>
+#include <com/sun/star/ucb/XPersistentPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 

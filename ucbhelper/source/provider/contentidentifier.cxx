@@ -23,7 +23,6 @@
  **************************************************************************
 
  *************************************************************************/
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <ucbhelper/contentidentifier.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>

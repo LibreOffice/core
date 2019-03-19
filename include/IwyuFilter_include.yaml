@@ -88,6 +88,18 @@ blacklist:
     include/cppuhelper/interfacecontainer.h:
     #Needed for implicit destructor
     - com/sun/star/uno/Sequence.hxx
+    include/ucbhelper/activedatasink.hxx:
+    # base class has to be a complete type
+    - com/sun/star/io/XActiveDataSink.hpp
+    include/ucbhelper/activedatastreamer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/io/XActiveDataStreamer.hpp
+    include/ucbhelper/commandenvironment.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ucb/XCommandEnvironment.hpp
+    include/ucbhelper/interceptedinteraction.hxx:
+    # base class has to be a complete type
+    - com/sun/star/task/XInteractionHandler.hpp
     include/ucbhelper/fd_inputstream.hxx:
     # Needed for typedef
     - com/sun/star/io/XInputStream.hpp

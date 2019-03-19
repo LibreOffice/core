@@ -21,7 +21,6 @@
 
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/ucb/ContentAction.hpp>
-#include <com/sun/star/ucb/CommandInfoChange.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
