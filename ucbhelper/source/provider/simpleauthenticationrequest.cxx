@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/task/XMasterPasswordHandling.hpp>
 #include <com/sun/star/ucb/URLAuthenticationRequest.hpp>
 #include <ucbhelper/simpleauthenticationrequest.hxx>
 

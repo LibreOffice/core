@@ -35,7 +35,6 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/resultsethelper.hxx>
-#include <ucbhelper/getcomponentcontext.hxx>
 #include <ucbhelper/macros.hxx>
 
 #include <osl/diagnose.h>

@@ -30,7 +30,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/contenthelper.hxx>
-#include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/providerhelper.hxx>
 #include <ucbhelper/macros.hxx>
 

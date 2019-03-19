@@ -33,22 +33,16 @@
 #include <com/sun/star/ucb/ContentCreationError.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ucb/Command.hpp>
-#include <com/sun/star/ucb/CommandInfo.hpp>
 #include <com/sun/star/ucb/ContentAction.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/GlobalTransferCommandArgument2.hpp>
-#include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
 #include <com/sun/star/ucb/XContentEventListener.hpp>
-#include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
-#include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/ucb/SortedDynamicResultSetFactory.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
@@ -56,16 +50,17 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
-#include <ucbhelper/macros.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/activedatasink.hxx>
 #include <ucbhelper/activedatastreamer.hxx>
-#include <ucbhelper/interactionrequest.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
+
+namespace com::sun::star::ucb { class XCommandEnvironment; }
+namespace com::sun::star::ucb { class XContentProvider; }
+namespace com::sun::star::sdbc { class XResultSet; }
 
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
