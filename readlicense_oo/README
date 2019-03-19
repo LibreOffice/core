@@ -4,7 +4,7 @@ directory, and also potentially at run-time.
 Generating licence files
 ------------------------
 
-License files are generated from a single source file (licese/license.xml).
+License files are generated from a single source file (license/license.xml).
 Output file formats are plain text and html.
 
 - The plain text and the html format is generated with xslt. There are two
