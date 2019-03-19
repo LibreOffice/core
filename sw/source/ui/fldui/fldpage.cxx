@@ -385,7 +385,7 @@ void SwFieldPage::EnableInsert(bool bEnable)
     m_bInsert = bEnable;
 }
 
-IMPL_LINK_NOARG(SwFieldPage, NumFormatHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwFieldPage, NumFormatHdl, weld::TreeView&, void)
 {
     InsertHdl(nullptr);
 }
