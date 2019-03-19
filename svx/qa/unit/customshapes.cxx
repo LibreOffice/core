@@ -250,6 +250,32 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf121845_two_commands_U)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("count polygons", static_cast<sal_uInt32>(2),
                                  aPolyPolygon.count());
 }
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124212_handle_position)
+{
+    // tdf124212 Adjustment handle reacts wrongly, if custom shape has a non
+    // default viewBox. Load a document with svg:viewBox="10800 0 10800 21600"
+    // Error was, that moving the controller results in a handle position that
+    // does not reflect the movement.
+    const OUString sFileName("tdf124212_handle_position.odg");
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    // The shape has one, horizontal adjust handle.
+    SdrObjCustomShape& rSdrObjCustomShape(
+        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+    EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
+    Point aInitialPosition;
+    aCustomShape2d.GetHandlePosition(0, aInitialPosition);
+    css::awt::Point aDesiredPosition(aInitialPosition.X() + 1000, aInitialPosition.Y());
+    aCustomShape2d.SetHandleControllerPosition(0, aDesiredPosition);
+    Point aObservedPosition;
+    aCustomShape2d.GetHandlePosition(0, aObservedPosition);
+    sal_Int32 nDesiredX(aDesiredPosition.X); // awt::Point
+    sal_Int32 nObservedX(aObservedPosition.X()); // tools::Point
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("handle X coordinate", nDesiredX, nObservedX);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
