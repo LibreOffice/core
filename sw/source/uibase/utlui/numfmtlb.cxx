@@ -454,18 +454,30 @@ void NumFormatListBox::Clear()
     nCurrFormatType = SvNumFormatType::ALL;
 }
 
-SwNumFormatListBox::SwNumFormatListBox(std::unique_ptr<weld::ComboBox> xControl)
+SwNumFormatBase::SwNumFormatBase()
     : nCurrFormatType(SvNumFormatType::ALL)
     , mbCurrFormatTypeNeedsInit(true)
     , nStdEntry(0)
+    , bOneArea(false)
     , nDefFormat(0)
+    , bShowLanguageControl(false)
     , bUseAutomaticLanguage(true)
-    , mxControl(std::move(xControl))
+{
+}
+
+SwNumFormatListBox::SwNumFormatListBox(std::unique_ptr<weld::ComboBox> xControl)
+    : mxControl(std::move(xControl))
 {
     Init();
 }
 
-void SwNumFormatListBox::Init()
+SwNumFormatTreeView::SwNumFormatTreeView(std::unique_ptr<weld::TreeView> xControl)
+    : mxControl(std::move(xControl))
+{
+    Init();
+}
+
+void SwNumFormatBase::Init()
 {
     SwView *pView = GetActiveView();
 
@@ -476,15 +488,23 @@ void SwNumFormatListBox::Init()
 
     SetFormatType(SvNumFormatType::NUMBER);
     SetDefFormat(nDefFormat);
+}
+
+void SwNumFormatListBox::Init()
+{
+    SwNumFormatBase::Init();
 
     mxControl->connect_changed(LINK(this, SwNumFormatListBox, SelectHdl));
 }
 
-SwNumFormatListBox::~SwNumFormatListBox()
+void SwNumFormatTreeView::Init()
 {
+    SwNumFormatBase::Init();
+
+    mxControl->connect_changed(LINK(this, SwNumFormatTreeView, SelectHdl));
 }
 
-void SwNumFormatListBox::SetFormatType(const SvNumFormatType nFormatType)
+void SwNumFormatBase::SetFormatType(const SvNumFormatType nFormatType)
 {
     if (!mbCurrFormatTypeNeedsInit &&
         (nCurrFormatType & nFormatType))   // there are mixed formats, like for example DateTime
@@ -599,7 +619,7 @@ void SwNumFormatListBox::SetFormatType(const SvNumFormatType nFormatType)
             nFormat != nSysShortDateFormat &&
             nFormat != nSysLongDateFormat)
         {
-            mxControl->append(OUString::number(nFormat), sValue);
+            append(OUString::number(nFormat), sValue);
 
             if( nFormat == pFormatter->GetStandardFormat(
                                     nFormatType, eCurLanguage ) )
@@ -608,16 +628,16 @@ void SwNumFormatListBox::SetFormatType(const SvNumFormatType nFormatType)
         }
     }
 
-    mxControl->append_text(SwResId(STR_DEFINE_NUMBERFORMAT));
+    append_text(SwResId(STR_DEFINE_NUMBERFORMAT));
 
-    mxControl->set_active(nStdEntry);
+    set_active(nStdEntry);
 
     nCurrFormatType = nFormatType;
     mbCurrFormatTypeNeedsInit = false;
 
 }
 
-void SwNumFormatListBox::SetDefFormat(const sal_uInt32 nDefaultFormat)
+void SwNumFormatBase::SetDefFormat(const sal_uInt32 nDefaultFormat)
 {
     if (nDefaultFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
@@ -638,11 +658,11 @@ void SwNumFormatListBox::SetDefFormat(const sal_uInt32 nDefaultFormat)
 
     sal_uInt32 nFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nDefaultFormat, eCurLanguage);
 
-    for (sal_Int32 i = 0, nCount = mxControl->get_count(); i < nCount; ++i)
+    for (sal_Int32 i = 0, nCount = get_count(); i < nCount; ++i)
     {
-        if (nFormat == mxControl->get_id(i).toUInt32())
+        if (nFormat == get_id(i).toUInt32())
         {
-            mxControl->set_active(i);
+            set_active(i);
             nStdEntry = i;
             nDefFormat = GetFormat();
             return;
@@ -663,7 +683,7 @@ void SwNumFormatListBox::SetDefFormat(const sal_uInt32 nDefaultFormat)
     }
 
     sal_Int32 nPos = 0;
-    while (mxControl->get_id(nPos).toUInt32() == NUMBERFORMAT_ENTRY_NOT_FOUND)
+    while (get_id(nPos).toUInt32() == NUMBERFORMAT_ENTRY_NOT_FOUND)
         nPos++;
 
     if ( lcl_isSystemFormat(nDefaultFormat, pFormatter, eCurLanguage) )
@@ -671,9 +691,9 @@ void SwNumFormatListBox::SetDefFormat(const sal_uInt32 nDefaultFormat)
         sValue += SwResId(RID_STR_SYSTEM);
     }
 
-    mxControl->insert_text(nPos, sValue);   // Insert as first numeric entry
-    mxControl->set_id(nPos, OUString::number(nDefaultFormat));
-    mxControl->set_active(nPos);
+    insert_text(nPos, sValue);   // Insert as first numeric entry
+    set_id(nPos, OUString::number(nDefaultFormat));
+    set_active(nPos);
     nDefFormat = GetFormat();
 }
 
@@ -682,14 +702,18 @@ sal_uInt32 SwNumFormatListBox::GetFormat() const
     return mxControl->get_active_id().toUInt32();
 }
 
-void SwNumFormatListBox::CallSelectHdl()
+sal_uInt32 SwNumFormatTreeView::GetFormat() const
 {
-    const sal_Int32 nPos = mxControl->get_active();
+    return mxControl->get_selected_id().toUInt32();
+}
+
+void SwNumFormatBase::CallSelectHdl()
+{
+    const sal_Int32 nPos = get_active();
     OUString sDefine(SwResId( STR_DEFINE_NUMBERFORMAT ));
     SwView *pView = GetActiveView();
 
-    if( !pView || nPos != mxControl->get_count() - 1 ||
-        mxControl->get_text(nPos) != sDefine )
+    if (!pView || nPos != get_count() - 1 || get_text(nPos) != sDefine)
         return;
 
     SwWrtShell &rSh = pView->GetWrtShell();
@@ -714,13 +738,16 @@ void SwNumFormatListBox::CallSelectHdl()
                                         SID_ATTR_NUMBERFORMAT_INFO ) );
 
     if( (SvNumFormatType::DATE | SvNumFormatType::TIME) & nCurrFormatType )
-        aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, false));
+        aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, bOneArea));
 
-    aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_NOLANGUAGE, true));
+    aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_NOLANGUAGE, !bShowLanguageControl));
     aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ADD_AUTO, bUseAutomaticLanguage));
 
+    // force deselect to break mouse lock on selected entry
+    set_active(-1);
+
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateNumFormatDialog(mxControl.get(), aCoreSet));
+    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateNumFormatDialog(&get_widget(), aCoreSet));
 
     if (RET_OK == pDlg->Execute())
     {
@@ -745,7 +772,11 @@ void SwNumFormatListBox::CallSelectHdl()
             // SetDefFormat uses eCurLanguage to look for if this format already in the list
             SetDefFormat(nNumberFormat);
         }
-
+        if( bShowLanguageControl && SfxItemState::SET == pOutSet->GetItemState(
+            SID_ATTR_NUMBERFORMAT_ADD_AUTO, false, &pItem ))
+        {
+            bUseAutomaticLanguage = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+        }
     }
     else
         SetDefFormat(nFormat);
@@ -757,11 +788,27 @@ IMPL_LINK_NOARG(SwNumFormatListBox, SelectHdl, weld::ComboBox&, void)
     CallSelectHdl();
 }
 
+IMPL_LINK_NOARG(SwNumFormatTreeView, SelectHdl, weld::TreeView&, void)
+{
+    CallSelectHdl();
+}
+
+void SwNumFormatBase::clear()
+{
+    mbCurrFormatTypeNeedsInit = true;
+    nCurrFormatType = SvNumFormatType::ALL;
+}
+
 void SwNumFormatListBox::clear()
 {
     mxControl->clear();
-    mbCurrFormatTypeNeedsInit = true;
-    nCurrFormatType = SvNumFormatType::ALL;
+    SwNumFormatBase::clear();
+}
+
+void SwNumFormatTreeView::clear()
+{
+    mxControl->clear();
+    SwNumFormatBase::clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

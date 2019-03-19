@@ -66,39 +66,113 @@ public:
     SAL_DLLPRIVATE static double   GetDefValue(const SvNumFormatType nFormatType);
 };
 
-class SW_DLLPUBLIC SwNumFormatListBox
+class SW_DLLPUBLIC SwNumFormatBase
 {
+protected:
     SvNumFormatType     nCurrFormatType;
     bool                mbCurrFormatTypeNeedsInit;
     sal_Int32           nStdEntry;
+    bool                bOneArea;
     sal_uInt32          nDefFormat;
     LanguageType        eCurLanguage;
+    bool                bShowLanguageControl; //determine whether the language control has
+                                              //to be shown in the number format dialog
     bool                bUseAutomaticLanguage;//determine whether language is automatically assigned
+public:
+    SwNumFormatBase();
 
+    void SetAutomaticLanguage(bool bSet) { bUseAutomaticLanguage = bSet; }
+    bool IsAutomaticLanguage()const { return bUseAutomaticLanguage; }
+    SvNumFormatType GetFormatType() const { return nCurrFormatType; }
+    void SetLanguage(LanguageType eSet)  { eCurLanguage = eSet; }
+    void SetShowLanguageControl(bool bSet) { bShowLanguageControl = bSet; }
+    void SetOneArea(bool bOnlyOne) { bOneArea = bOnlyOne; }
+
+    void SetFormatType(const SvNumFormatType nFormatType);
+    void SetDefFormat(const sal_uInt32 nDefFormat);
+    virtual sal_uInt32 GetFormat() const = 0;
+
+    virtual void Init();
+    void CallSelectHdl();
+
+    virtual void clear();
+    virtual int get_count() const = 0;
+    virtual int get_active() const = 0;
+    virtual OUString get_id(int nPos) const = 0;
+    virtual OUString get_text(int nPos) const = 0;
+    virtual weld::Widget& get_widget() const = 0;
+    virtual void append(const OUString& rId, const OUString& rText) = 0;
+    virtual void append_text(const OUString& rText) = 0;
+    virtual void insert_text(int nPos, const OUString& rText) = 0;
+    virtual void set_active(int nPos) = 0;
+    virtual void set_id(int nPos, const OUString& rId) = 0;
+    virtual ~SwNumFormatBase() {}
+};
+
+class SW_DLLPUBLIC SwNumFormatListBox : public SwNumFormatBase
+{
     std::unique_ptr<weld::ComboBox> mxControl;
 
     DECL_DLLPRIVATE_LINK( SelectHdl, weld::ComboBox&, void );
 
-    SAL_DLLPRIVATE void            Init();
+    virtual void Init() override;
 
 public:
     SwNumFormatListBox(std::unique_ptr<weld::ComboBox> xControl);
 
-    ~SwNumFormatListBox();
+    virtual sal_uInt32 GetFormat() const override;
 
-    void            clear();
+    virtual void clear() override;
+    virtual int get_count() const override { return mxControl->get_count(); }
+    virtual int get_active() const override { return mxControl->get_active(); }
+    virtual OUString get_id(int nPos) const override { return mxControl->get_id(nPos); }
+    virtual OUString get_text(int nPos) const override { return mxControl->get_text(nPos); }
+    virtual weld::Widget& get_widget() const override { return *mxControl; }
+    virtual void append(const OUString& rId, const OUString& rText) override { mxControl->append(rId, rText); }
+    virtual void append_text(const OUString& rText) override { mxControl->append_text(rText); }
+    virtual void insert_text(int nPos, const OUString& rText) override { mxControl->insert_text(nPos, rText); }
+    virtual void set_active(int nPos) override { mxControl->set_active(nPos); }
+    virtual void set_id(int nPos, const OUString& rId) override { mxControl->set_id(nPos, rId); }
     void            show() { mxControl->show(); }
     void            hide() { mxControl->hide(); }
 
-    void            SetFormatType(const SvNumFormatType nFormatType);
-    void            SetDefFormat(const sal_uInt32 nDefFormat);
-    sal_uInt32      GetFormat() const;
-
-    void            CallSelectHdl();
-
     void            set_sensitive(bool bSensitive) { mxControl->set_sensitive(bSensitive); }
     void            connect_changed(const Link<weld::ComboBox&, void>& rLink) { mxControl->connect_changed(rLink); }
-    weld::ComboBox& get_widget() const { return *mxControl; }
+};
+
+class SW_DLLPUBLIC SwNumFormatTreeView : public SwNumFormatBase
+{
+    std::unique_ptr<weld::TreeView> mxControl;
+
+    DECL_DLLPRIVATE_LINK( SelectHdl, weld::TreeView&, void );
+
+    virtual void Init() override;
+
+public:
+    SwNumFormatTreeView(std::unique_ptr<weld::TreeView> xControl);
+
+    virtual sal_uInt32 GetFormat() const override;
+
+    virtual void clear() override;
+    virtual int get_count() const override { return mxControl->n_children(); }
+    virtual int get_active() const override { return mxControl->get_selected_index(); }
+    virtual OUString get_id(int nPos) const override { return mxControl->get_id(nPos); }
+    virtual OUString get_text(int nPos) const override { return mxControl->get_text(nPos); }
+    virtual weld::Widget& get_widget() const override { return *mxControl; }
+    virtual void append(const OUString& rId, const OUString& rText) override { mxControl->append(rId, rText); }
+    virtual void append_text(const OUString& rText) override { mxControl->append_text(rText); }
+    virtual void insert_text(int nPos, const OUString& rText) override { mxControl->insert_text(nPos, rText); }
+    virtual void set_active(int nPos) override { mxControl->select(nPos); }
+    virtual void set_id(int nPos, const OUString& rId) override { mxControl->set_id(nPos, rId); }
+    void            show() { mxControl->show(); }
+    void            hide() { mxControl->hide(); }
+    int             get_selected_index() const { return mxControl->get_selected_index(); }
+    void            set_visible(bool bVisible) { mxControl->set_visible(bVisible); }
+    void            select(int nPos) { mxControl->select(nPos); }
+    void            connect_row_activated(const Link<weld::TreeView&, void>& rLink) { mxControl->connect_row_activated(rLink); }
+
+    void            set_sensitive(bool bSensitive) { mxControl->set_sensitive(bSensitive); }
+    void            connect_changed(const Link<weld::TreeView&, void>& rLink) { mxControl->connect_changed(rLink); }
 };
 
 #endif
