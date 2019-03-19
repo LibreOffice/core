@@ -270,7 +270,7 @@ OUString CuiConfigFunctionListBox::GetHelpText( bool bConsiderParent )
 OUString CuiConfigFunctionListBox::GetCurCommand()
 {
     SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(get_selected_id().toInt64());
-    if (pData)
+    if (!pData)
         return OUString();
     return pData->sCommand;
 }
@@ -278,7 +278,7 @@ OUString CuiConfigFunctionListBox::GetCurCommand()
 OUString CuiConfigFunctionListBox::GetCurLabel()
 {
     SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(get_selected_id().toInt64());
-    if (pData)
+    if (!pData)
         return OUString();
     if (!pData->sLabel.isEmpty())
         return pData->sLabel;
