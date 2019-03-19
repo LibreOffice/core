@@ -122,8 +122,9 @@ void SwViewShell::ToggleHeaderFooterEdit()
     }
 
     // Avoid corner case
-    if ( !IsShowHeaderFooterSeparator( Header ) &&
-         !IsShowHeaderFooterSeparator( Footer ) )
+    if ( ( GetViewOptions()->IsUseHeaderFooterMenu() ) &&
+         ( !IsShowHeaderFooterSeparator( Header ) &&
+           !IsShowHeaderFooterSeparator( Footer ) ) )
     {
         mbHeaderFooterEdit = false;
     }
