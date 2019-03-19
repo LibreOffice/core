@@ -139,6 +139,8 @@ private:
 public:
     SwServiceType GetServiceId() const;
 
+    static void TransmuteLeadToInputField(SwSetExpField & rField);
+
     /// @return an SwXTextField, either an already existing one or a new one
     static css::uno::Reference< css::text::XTextField>
         CreateXTextField(SwDoc * pDoc, SwFormatField const* pFormat,
