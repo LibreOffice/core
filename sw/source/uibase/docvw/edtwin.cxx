@@ -3337,6 +3337,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 break;
                                 case TYP_INPUTFLD:
                                 case TYP_DROPDOWN:
+                                case TYP_SETINPFLD:
                                     pVFrame->GetBindings().Execute(FN_UPDATE_INPUTFIELDS);
                                     break;
                                 default:
