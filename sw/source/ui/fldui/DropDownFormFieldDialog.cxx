@@ -14,7 +14,7 @@
 
 namespace sw
 {
-DropDownFormFieldDialog::DropDownFormFieldDialog(weld::Window* pParent,
+DropDownFormFieldDialog::DropDownFormFieldDialog(weld::Widget* pParent,
                                                  mark::IFieldmark* pDropDownField)
     : GenericDialogController(pParent, "modules/swriter/ui/dropdownformfielddialog.ui",
                               "DropDownFormFieldDialog")

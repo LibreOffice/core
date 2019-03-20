@@ -395,9 +395,9 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void    MoveCursor( bool bWithSelect = false );
 
     // update input fields
-    bool    StartInputFieldDlg(SwField*, bool bPrevButton, bool bNextButton, weld::Window* pParentWin, FieldDialogPressedButton* pPressedButton = nullptr);
+    bool    StartInputFieldDlg(SwField*, bool bPrevButton, bool bNextButton, weld::Widget* pParentWin, FieldDialogPressedButton* pPressedButton = nullptr);
     // update DropDown fields
-    bool    StartDropDownFieldDlg(SwField*, bool bPrevButton, bool bNextButton, weld::Window* pParentWin, FieldDialogPressedButton* pPressedButton = nullptr);
+    bool    StartDropDownFieldDlg(SwField*, bool bPrevButton, bool bNextButton, weld::Widget* pParentWin, FieldDialogPressedButton* pPressedButton = nullptr);
 
     //"Handler" for changes at DrawView - for controls.
     virtual void DrawSelChanged( ) override;

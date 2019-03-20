@@ -293,15 +293,17 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     bRes = aFieldMgr.InsertField( aData );
                 }
                 else
-                        //#i5788# prevent closing of the field dialog while a modal dialog ( Input field dialog ) is active
-                        if(!GetView().GetViewFrame()->IsInModalMode())
                 {
-                    SfxViewFrame* pVFrame = GetView().GetViewFrame();
-                    pVFrame->ToggleChildWindow(FN_INSERT_FIELD);
-                    bRes = pVFrame->GetChildWindow( nSlot ) != nullptr;
-                    Invalidate(rReq.GetSlot());
-                    Invalidate(FN_INSERT_FIELD_CTRL);
-                    rReq.Ignore();
+                    //#i5788# prevent closing of the field dialog while a modal dialog ( Input field dialog ) is active
+                    if(!GetView().GetViewFrame()->IsInModalMode())
+                    {
+                        SfxViewFrame* pVFrame = GetView().GetViewFrame();
+                        pVFrame->ToggleChildWindow(FN_INSERT_FIELD);
+                        bRes = pVFrame->GetChildWindow( nSlot ) != nullptr;
+                        Invalidate(rReq.GetSlot());
+                        Invalidate(FN_INSERT_FIELD_CTRL);
+                        rReq.Ignore();
+                    }
                 }
                 rReq.SetReturnValue(SfxBoolItem( nSlot, bRes ));
             }

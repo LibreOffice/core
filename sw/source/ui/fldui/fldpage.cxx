@@ -67,7 +67,7 @@ void SwFieldPage::Init()
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     bool bNewMode = 0 != (::GetHtmlMode(pDocSh) & HTMLMODE_ON);
 
-    m_bFieldEdit = nullptr == GetTabDialog();
+    m_bFieldEdit = nullptr == dynamic_cast<SwFieldDlg*>(GetDialogController());
 
     // newly initialise FieldManager. important for
     // Dok-Switch (fldtdlg:ReInitTabPage)
@@ -127,7 +127,7 @@ void SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
     {
         SwInsertField_Data aData(nTypeId, nSubType, rPar1, rPar2, nFormatId, nullptr, cSeparator, bIsAutomaticLanguage );
         //#i26566# provide parent for SwWrtShell::StartInputFieldDlg
-        aData.m_pParent = &GetTabDialog()->GetOKButton();
+        aData.m_pParent = &GetDialogController()->GetOKButton();
         m_aMgr.InsertField( aData );
 
         uno::Reference< frame::XDispatchRecorder > xRecorder =
@@ -307,8 +307,7 @@ IMPL_LINK( SwFieldPage, TreeViewInsertHdl, weld::TreeView&, rBox, void )
 
 void SwFieldPage::InsertHdl(weld::Widget* pBtn)
 {
-    SwFieldDlg *pDlg = static_cast<SwFieldDlg*>(GetTabDialog());
-    if (pDlg)
+    if (SwFieldDlg *pDlg = dynamic_cast<SwFieldDlg*>(GetDialogController()))
     {
         pDlg->InsertHdl();
 
@@ -325,8 +324,7 @@ void SwFieldPage::InsertHdl(weld::Widget* pBtn)
 // enable/disable "Insert"-Button
 void SwFieldPage::EnableInsert(bool bEnable)
 {
-    SwFieldDlg *pDlg = static_cast<SwFieldDlg*>(GetTabDialog());
-    if (pDlg)
+    if (SwFieldDlg *pDlg = dynamic_cast<SwFieldDlg*>(GetDialogController()))
     {
         if (pDlg->GetCurTabPage() == this)
             pDlg->EnableInsert(bEnable);

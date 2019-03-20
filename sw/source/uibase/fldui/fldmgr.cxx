@@ -1508,7 +1508,7 @@ bool SwFieldMgr::InsertField(
         // start dialog, not before the field is inserted tdf#99529
         pCurShell->Left(CRSR_SKIP_CHARS,
                 false, (INP_VAR == (nSubType & 0xff)) ? 1 : 2, false );
-        pCurShell->StartInputFieldDlg(pField.get(), false, true, rData.m_pParent ? rData.m_pParent->GetFrameWeld() : nullptr);
+        pCurShell->StartInputFieldDlg(pField.get(), false, true, rData.m_pParent);
 
         pCurShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
