@@ -220,8 +220,22 @@ public:
         }
     }
 
+    // Tries to stop the service, regardless if the guard actually guards anything
+    void StopService()
+    {
+        try
+        {
+            if (auto hService = GetWUServiceHandle(mhInstall))
+                StopService(mhInstall, hService.get());
+        }
+        catch (std::exception& e)
+        {
+            WriteLog(mhInstall, e.what());
+        }
+    }
+
 private:
-    static CloseServiceHandleGuard EnableWUService(MSIHANDLE hInstall)
+    static CloseServiceHandleGuard GetWUServiceHandle(MSIHANDLE hInstall)
     {
         auto hSCM = Guard(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
         if (!hSCM)
@@ -234,6 +248,13 @@ private:
         if (!hService)
             ThrowLastError("OpenServiceW");
         WriteLog(hInstall, "Obtained WU service handle");
+
+        return hService;
+    }
+
+    static CloseServiceHandleGuard EnableWUService(MSIHANDLE hInstall)
+    {
+        auto hService = GetWUServiceHandle(hInstall);
 
         if (ServiceStatus(hInstall, hService.get()) == SERVICE_RUNNING
             || !EnsureServiceEnabled(hInstall, hService.get(), true))
@@ -492,9 +513,49 @@ extern "C" __declspec(dllexport) UINT __stdcall InstallMSU(MSIHANDLE hInstall)
         auto aCloseProcHandleGuard(Guard(pi.hProcess));
         WriteLog(hInstall, "CreateProcessW succeeded");
 
-        DWORD nWaitResult = WaitForSingleObject(pi.hProcess, INFINITE);
-        if (nWaitResult != WAIT_OBJECT_0)
-            ThrowWin32Error("WaitForSingleObject", nWaitResult);
+        {
+            // This block waits when the started wusa.exe process finishes. Since it's possible
+            // for wusa.exe in some circumstances to wait really long (tens of minutes and more;
+            // see https://dennisspan.com/slow-installation-of-msu-files-using-the-wusa-exe/), and
+            // since it resumes installation when Windows Update service is stopped, we use a trick
+            // to stop the service after some time (reasonably long: 120 s is more than enough) in
+            // the hope that it will wake up the process (https://superuser.com/questions/1044528/).
+            // In the wait, it uses MsiProcessMessage to check for user input: it returns IDCANCEL
+            // when user cancels installation.
+            PMSIHANDLE hProgressRec = MsiCreateRecord(3);
+            // Use explicit progress messages
+            MsiRecordSetInteger(hProgressRec, 1, 1);
+            MsiRecordSetInteger(hProgressRec, 2, 1);
+            MsiRecordSetInteger(hProgressRec, 3, 0);
+            int nResult = MsiProcessMessage(hInstall, INSTALLMESSAGE_PROGRESS, hProgressRec);
+            if (nResult == IDCANCEL)
+                return ERROR_INSTALL_USEREXIT;
+            // Prepare the record to following progress update calls
+            MsiRecordSetInteger(hProgressRec, 1, 2);
+            MsiRecordSetInteger(hProgressRec, 2, 0); // step by 0 - don't move progress
+            MsiRecordSetInteger(hProgressRec, 3, 0);
+            for (int nLoop = 0;; ++nLoop)
+            {
+                DWORD nWaitResult = WaitForSingleObject(pi.hProcess, 500);
+                if (nWaitResult == WAIT_OBJECT_0)
+                    break; // wusa.exe finished
+                else if (nWaitResult == WAIT_TIMEOUT)
+                {
+                    // Check if user has cancelled
+                    nResult = MsiProcessMessage(hInstall, INSTALLMESSAGE_PROGRESS, hProgressRec);
+                    if (nResult == IDCANCEL)
+                        return ERROR_INSTALL_USEREXIT;
+                    // After 120 s, try to resume hung wusa.exe by stopping WU service
+                    if (nLoop == 120 * 2)
+                    {
+                        WriteLog(hInstall, "Stopping WU service to wake up hung wusa.exe");
+                        aWUServiceEnabler.StopService();
+                    }
+                }
+                else
+                    ThrowWin32Error("WaitForSingleObject", nWaitResult);
+            }
+        }
 
         DWORD nExitCode = 0;
         if (!GetExitCodeProcess(pi.hProcess, &nExitCode))
