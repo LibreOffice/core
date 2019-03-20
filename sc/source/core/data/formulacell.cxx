@@ -4758,8 +4758,10 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
                                                                 nStartOffset, nEndOffset));
             }
 
-            SAL_INFO("sc.threaded", "Joining threads");
-            rThreadPool.waitUntilDone(aTag);
+            SAL_INFO("sc.threaded", "Waiting for threads to finish work");
+            // Do not join the threads here. They will get joined in ScDocument destructor
+            // if they don't get joined from elsewhere before (via ThreadPool::waitUntilDone).
+            rThreadPool.waitUntilDone(aTag, false);
 
             pDocument->SetThreadedGroupCalcInProgress(false);
 
