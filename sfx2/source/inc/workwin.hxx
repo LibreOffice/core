@@ -85,7 +85,7 @@ namespace o3tl
 struct SfxChild_Impl
 {
     VclPtr<vcl::Window>             pWin;
-    std::shared_ptr<SfxModelessDialogController> xController;
+    std::shared_ptr<SfxDialogController> xController;
     Size                            aSize;
     SfxChildAlignment               eAlign;
     SfxChildVisibility              nVisible;
@@ -100,7 +100,7 @@ struct SfxChild_Impl
         nVisible = bIsVisible ? SfxChildVisibility::VISIBLE : SfxChildVisibility::NOT_VISIBLE;
     }
 
-    SfxChild_Impl(const std::shared_ptr<SfxModelessDialogController>& rChild,
+    SfxChild_Impl(const std::shared_ptr<SfxDialogController>& rChild,
                   SfxChildAlignment eAlignment):
         pWin(nullptr), xController(rChild), eAlign(eAlignment), bResize(false),
         bSetFocus( false )
@@ -249,9 +249,9 @@ public:
     // Methods for all Child windows
     void                    DataChanged_Impl();
     void                    ReleaseChild_Impl( vcl::Window& rWindow );
-    void                    ReleaseChild_Impl(SfxModelessDialogController&);
+    void                    ReleaseChild_Impl(SfxDialogController&);
     SfxChild_Impl*          RegisterChild_Impl( vcl::Window& rWindow, SfxChildAlignment eAlign );
-    SfxChild_Impl*          RegisterChild_Impl(std::shared_ptr<SfxModelessDialogController>& rController, SfxChildAlignment eAlign);
+    SfxChild_Impl*          RegisterChild_Impl(std::shared_ptr<SfxDialogController>& rController, SfxChildAlignment eAlign);
     void                    ShowChildren_Impl();
     void                    HideChildren_Impl();
     bool                    PrepareClose_Impl();

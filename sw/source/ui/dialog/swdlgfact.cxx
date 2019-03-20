@@ -674,7 +674,7 @@ void AbstractIndexMarkFloatDlg_Impl::ReInitDlg(SwWrtShell& rWrtShell)
     m_xDlg->ReInitDlg( rWrtShell);
 }
 
-std::shared_ptr<SfxModelessDialogController> AbstractIndexMarkFloatDlg_Impl::GetController()
+std::shared_ptr<SfxDialogController> AbstractIndexMarkFloatDlg_Impl::GetController()
 {
     return m_xDlg;
 }
@@ -684,12 +684,12 @@ void AbstractAuthMarkFloatDlg_Impl::ReInitDlg(SwWrtShell& rWrtShell)
     m_xDlg->ReInitDlg(rWrtShell);
 }
 
-std::shared_ptr<SfxModelessDialogController> AbstractAuthMarkFloatDlg_Impl::GetController()
+std::shared_ptr<SfxDialogController> AbstractAuthMarkFloatDlg_Impl::GetController()
 {
     return m_xDlg;
 }
 
-std::shared_ptr<SfxModelessDialogController> AbstractSwWordCountFloatDlg_Impl::GetController()
+std::shared_ptr<SfxDialogController> AbstractSwWordCountFloatDlg_Impl::GetController()
 {
     return m_xDlg;
 }
