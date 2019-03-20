@@ -67,7 +67,8 @@ public:
           aAutoParaPool( pIgnorableParagraphItems )
     {}
     virtual std::shared_ptr<SfxItemSet> getAutomaticStyle( const SfxItemSet& rSet,
-                                                               IStyleAccess::SwAutoStyleFamily eFamily ) override;
+                                                               IStyleAccess::SwAutoStyleFamily eFamily,
+                                                               const OUString* pParentName = nullptr ) override;
     virtual std::shared_ptr<SfxItemSet> getByName( const OUString& rName,
                                                                IStyleAccess::SwAutoStyleFamily eFamily ) override;
     virtual void getAllStyles( std::vector<std::shared_ptr<SfxItemSet>> &rStyles,
@@ -89,10 +90,11 @@ void SwStyleManager::clearCaches()
 }
 
 std::shared_ptr<SfxItemSet> SwStyleManager::getAutomaticStyle( const SfxItemSet& rSet,
-                                                                   IStyleAccess::SwAutoStyleFamily eFamily )
+                                                                   IStyleAccess::SwAutoStyleFamily eFamily,
+                                                                   const OUString* pParentName )
 {
     StylePool& rAutoPool = eFamily == IStyleAccess::AUTO_STYLE_CHAR ? aAutoCharPool : aAutoParaPool;
-    return rAutoPool.insertItemSet( rSet );
+    return rAutoPool.insertItemSet( rSet, pParentName );
 }
 
 std::shared_ptr<SfxItemSet> SwStyleManager::cacheAutomaticStyle( const SfxItemSet& rSet,
