@@ -391,7 +391,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, weld::TreeView&, void)
         default:
             if( REFFLDFLAG & nTypeId )
             {
-                const sal_uInt16 nOldId = m_xTypeLB->get_id(nOld).toUInt32();
+                const sal_uInt16 nOldId = nOld != -1 ? m_xTypeLB->get_id(nOld).toUInt32() : 0;
                 if( nOldId & REFFLDFLAG || nOldId == TYP_GETREFFLD )
                     // then the old one stays
                     nFieldDlgFormatSel = m_xFormatLB->get_selected_index();

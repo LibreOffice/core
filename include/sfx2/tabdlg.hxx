@@ -223,6 +223,7 @@ private:
 protected:
     virtual short               Ok();
     virtual void                RefreshInputSet();
+    virtual SfxItemSet*         CreateInputItemSet(const OString& rName);
     virtual void                PageCreated(const OString &rName, SfxTabPage &rPage);
 
     std::unique_ptr<SfxItemSet> m_xExampleSet;
@@ -261,6 +262,7 @@ public:
     void                RemoveTabPage( const OString& rName ); // Name of the label for the page in the notebook .ui
 
     void                SetCurPageId(const OString& rName);
+    void                ShowPage(const OString& rName);  // SetCurPageId + call Activate on it
     OString             GetCurPageId() const;
     SfxTabPage*         GetCurTabPage() const { return GetTabPage(GetCurPageId()); }
 

@@ -54,7 +54,7 @@ class SwFieldInputDlg : public weld::GenericDialogController
     DECL_LINK(PrevHdl, weld::Button&, void);
 
 public:
-    SwFieldInputDlg(weld::Window *pParent, SwWrtShell &rSh,
+    SwFieldInputDlg(weld::Widget *pParent, SwWrtShell &rSh,
                     SwField* pField, bool bPrevButton, bool bNextButton);
     virtual short run() override
     {

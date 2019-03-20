@@ -252,7 +252,7 @@ class FieldDeletionModify : public SwModify
 
 // Start input dialog for a specific field
 bool SwWrtShell::StartInputFieldDlg(SwField* pField, bool bPrevButton, bool bNextButton,
-                                    weld::Window* pParentWin, SwWrtShell::FieldDialogPressedButton* pPressedButton)
+                                    weld::Widget* pParentWin, SwWrtShell::FieldDialogPressedButton* pPressedButton)
 {
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -279,7 +279,7 @@ bool SwWrtShell::StartInputFieldDlg(SwField* pField, bool bPrevButton, bool bNex
 }
 
 bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bPrevButton, bool bNextButton,
-                                       weld::Window* pParentWin, SwWrtShell::FieldDialogPressedButton* pPressedButton)
+                                       weld::Widget* pParentWin, SwWrtShell::FieldDialogPressedButton* pPressedButton)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     ScopedVclPtr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(pParentWin, *this, pField, bPrevButton, bNextButton));

@@ -1938,6 +1938,17 @@ void SfxTabDialogController::AddTabPage(const OString &rName, const OUString& rR
     AddTabPage(rName, nPageCreateId);
 }
 
+/*  [Description]
+
+    Default implementation of the virtual Method.
+    This is called when pages create their sets onDemand.
+*/
+SfxItemSet* SfxTabDialogController::CreateInputItemSet(const OString&)
+{
+    SAL_WARN( "sfx.dialog", "CreateInputItemSet not implemented" );
+    return new SfxAllItemSet(SfxGetpApp()->GetPool());
+}
+
 void SfxTabDialogController::CreatePages()
 {
     for (auto pDataObject : m_pImpl->aData)
@@ -1946,9 +1957,13 @@ void SfxTabDialogController::CreatePages()
            continue;
         weld::Container* pPage = m_xTabCtrl->get_page(pDataObject->sId);
         // TODO eventually pass DialogController as distinct argument instead of bundling into TabPageParent
-        pDataObject->pTabPage = (pDataObject->fnCreatePage)(TabPageParent(pPage, this), m_pSet.get());
-        pDataObject->pTabPage->SetDialogController(this);
 
+        TabPageParent aParent(pPage, this);
+        if (m_pSet)
+            pDataObject->pTabPage = (pDataObject->fnCreatePage)(aParent, m_pSet.get());
+        else
+            pDataObject->pTabPage = (pDataObject->fnCreatePage)(aParent, CreateInputItemSet(pDataObject->sId));
+        pDataObject->pTabPage->SetDialogController(this);
         OUString sConfigId = OStringToOUString(pDataObject->pTabPage->GetConfigId(), RTL_TEXTENCODING_UTF8);
         SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
         OUString sUserData;
@@ -2056,6 +2071,16 @@ void SfxTabDialogController::SetCurPageId(const OString& rIdent)
 {
     m_sAppPageId = rIdent;
     m_xTabCtrl->set_current_page(m_sAppPageId);
+}
+
+/*  [Description]
+
+    The TabPage is activated with the specified Id.
+*/
+void SfxTabDialogController::ShowPage(const OString& rIdent)
+{
+    SetCurPageId(rIdent);
+    ActivatePageHdl(rIdent);
 }
 
 OString SfxTabDialogController::GetCurPageId() const
