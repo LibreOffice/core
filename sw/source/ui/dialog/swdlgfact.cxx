@@ -101,8 +101,6 @@ short AbstractSwInsertAbstractDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(SwAbstractSfxDialog_Impl);
-
 short SwAbstractSfxController_Impl::Execute()
 {
     return m_xDlg->run();
@@ -320,16 +318,6 @@ sal_uInt8 AbstractSwInsertAbstractDlg_Impl::GetLevel() const
 sal_uInt8 AbstractSwInsertAbstractDlg_Impl::GetPara() const
 {
     return m_xDlg->GetPara();
-}
-
-const SfxItemSet* SwAbstractSfxDialog_Impl::GetOutputItemSet() const
-{
-    return pDlg->GetOutputItemSet();
-}
-
-void SwAbstractSfxDialog_Impl::SetText( const OUString& rStr )
-{
-    pDlg->SetText( rStr );
 }
 
 const SfxItemSet* SwAbstractSfxController_Impl::GetOutputItemSet() const
