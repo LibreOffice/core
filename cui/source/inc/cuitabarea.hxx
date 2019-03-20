@@ -238,6 +238,8 @@ private:
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
 
+    bool m_bBtnClicked = false;
+
 protected:
     std::unique_ptr<weld::Container> m_xFillTab;
     std::unique_ptr<weld::ToggleButton> m_xBtnNone;
@@ -251,6 +253,8 @@ protected:
 
     void SelectFillType( weld::ToggleButton& rButton, const SfxItemSet* _pSet = nullptr );
     SfxTabPage* GetFillTabPage() { return m_pFillTabPage; }
+
+    bool IsBtnClicked() { return m_bBtnClicked; }
 
 private:
     DECL_LINK(SelectFillTypeHdl_Impl, weld::ToggleButton&, void);

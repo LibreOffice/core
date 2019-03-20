@@ -1460,15 +1460,18 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
     {
         case drawing::FillStyle_NONE:
         {
-            if ( SID_ATTR_CHAR_BACK_COLOR == nSlot )
+            if ( IsBtnClicked() )
             {
-                maSet.Put( SvxBackgroundColorItem( COL_TRANSPARENT, nWhich ) );
-                rCoreSet->Put( SvxBackgroundColorItem( COL_TRANSPARENT, nWhich ) );
-            }
-            else
-            {
-                maSet.Put( SvxBrushItem( COL_TRANSPARENT, nWhich ) );
-                rCoreSet->Put( SvxBrushItem( COL_TRANSPARENT, nWhich ) );
+                if ( SID_ATTR_CHAR_BACK_COLOR == nSlot )
+                {
+                    maSet.Put( SvxBackgroundColorItem( COL_TRANSPARENT, nWhich ) );
+                    rCoreSet->Put( SvxBackgroundColorItem( COL_TRANSPARENT, nWhich ) );
+                }
+                else
+                {
+                    maSet.Put( SvxBrushItem( COL_TRANSPARENT, nWhich ) );
+                    rCoreSet->Put( SvxBrushItem( COL_TRANSPARENT, nWhich ) );
+                }
             }
             break;
         }

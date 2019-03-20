@@ -187,19 +187,19 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
         default:
         case drawing::FillStyle_NONE:
         {
-            SelectFillTypeHdl_Impl(*m_xBtnNone);
+            SelectFillType(*m_xBtnNone);
             break;
         }
         case drawing::FillStyle_SOLID:
         {
             m_rXFSet.Put( static_cast<const XFillColorItem&>( rSet.Get( GetWhich( XATTR_FILLCOLOR ) ) ) );
-            SelectFillTypeHdl_Impl(*m_xBtnColor);
+            SelectFillType(*m_xBtnColor);
             break;
         }
         case drawing::FillStyle_GRADIENT:
         {
             m_rXFSet.Put( static_cast<const XFillGradientItem&>( rSet.Get( GetWhich( XATTR_FILLGRADIENT ) ) ) );
-            SelectFillTypeHdl_Impl(*m_xBtnGradient);
+            SelectFillType(*m_xBtnGradient);
             break;
         }
         case drawing::FillStyle_HATCH:
@@ -207,7 +207,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
             m_rXFSet.Put( rSet.Get(XATTR_FILLHATCH) );
             m_rXFSet.Put( rSet.Get(XATTR_FILLBACKGROUND) );
             m_rXFSet.Put( rSet.Get(XATTR_FILLCOLOR) );
-            SelectFillTypeHdl_Impl(*m_xBtnHatch);
+            SelectFillType(*m_xBtnHatch);
             break;
         }
         case drawing::FillStyle_BITMAP:
@@ -216,9 +216,9 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
             // pass full item set here, bitmap fill has many attributes (tiling, size, offset etc.)
             m_rXFSet.Put( rSet );
             if(!aItem.isPattern())
-                SelectFillTypeHdl_Impl(*m_xBtnBitmap);
+                SelectFillType(*m_xBtnBitmap);
             else
-                SelectFillTypeHdl_Impl(*m_xBtnPattern);
+                SelectFillType(*m_xBtnPattern);
             break;
         }
     }
@@ -239,8 +239,11 @@ DeactivateRC SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
         {
             // Fill: None doesn't have its own tabpage and thus
             // implementation of FillItemSet, so we supply it here
-            XFillStyleItem aStyleItem( drawing::FillStyle_NONE );
-            _pSet->Put( aStyleItem );
+            if ( m_bBtnClicked )
+            {
+                XFillStyleItem aStyleItem( drawing::FillStyle_NONE );
+                _pSet->Put( aStyleItem );
+            }
             break;
         }
         case SOLID:
@@ -308,6 +311,7 @@ void SvxAreaTabPage::Reset_Impl( const SfxItemSet* rAttrs )
 
 void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
 {
+    m_bBtnClicked = false;
     auto eFillType = maBox.GetCurrentButtonPos();
     switch(eFillType)
     {
@@ -371,6 +375,7 @@ VclPtr<SfxTabPage> lcl_CreateFillStyleTabPage(sal_uInt16 nId, TabPageParent pPar
 IMPL_LINK(SvxAreaTabPage, SelectFillTypeHdl_Impl, weld::ToggleButton&, rButton, void)
 {
     SelectFillType(rButton);
+    m_bBtnClicked = true;
 }
 
 void SvxAreaTabPage::SelectFillType(weld::ToggleButton& rButton, const SfxItemSet* _pSet)
