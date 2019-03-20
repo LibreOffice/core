@@ -111,8 +111,16 @@ class SFX2_DLLPUBLIC SfxDialogController : public weld::GenericDialogController
 {
 private:
     DECL_DLLPRIVATE_STATIC_LINK(SfxDialogController, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
+
+    DECL_DLLPRIVATE_LINK(FocusInHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(FocusOutHdl, weld::Widget&, void);
+
 public:
     SfxDialogController(weld::Widget* pParent, const OUString& rUIFile, const OString& rDialogId);
+    virtual void Close() {}
+    virtual void Activate() {}
+    virtual void DeActivate() {}
+    virtual void EndDialog();
 };
 
 class SfxModelessDialog_Impl;
@@ -126,8 +134,6 @@ class SFX2_DLLPUBLIC SfxModelessDialogController : public SfxDialogController
 
     void Init(SfxBindings *pBindinx, SfxChildWindow *pCW);
 
-    DECL_DLLPRIVATE_LINK(FocusInHdl, weld::Widget&, void);
-    DECL_DLLPRIVATE_LINK(FocusOutHdl, weld::Widget&, void);
 protected:
     SfxModelessDialogController(SfxBindings*, SfxChildWindow* pChildWin,
         weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID);
@@ -135,11 +141,12 @@ protected:
 
 public:
     void                    FillInfo(SfxChildWinInfo&) const;
-    virtual void            Activate() {}
     void                    Initialize (SfxChildWinInfo const * pInfo);
-    void                    Close();
     void                    DeInit();
-    void                    EndDialog();
+    virtual void            Close() override;
+    virtual void            EndDialog() override;
+    virtual void            Activate() override;
+    virtual void            DeActivate() override;
     SfxBindings&            GetBindings() { return *m_pBindings; }
 };
 
