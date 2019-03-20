@@ -60,7 +60,7 @@ const sal_uInt16 SvxMeasurePage::pRanges[] =
 
 SvxMeasureDialog::SvxMeasureDialog(weld::Window* pParent, const SfxItemSet& rInAttrs,
                                 const SdrView* pSdrView)
-    : SfxSingleTabDialogController(pParent, rInAttrs)
+    : SfxSingleTabDialogController(pParent, &rInAttrs)
 {
     TabPageParent pPageParent(get_content_area(), this);
     VclPtrInstance<SvxMeasurePage> pPage(pPageParent, rInAttrs);

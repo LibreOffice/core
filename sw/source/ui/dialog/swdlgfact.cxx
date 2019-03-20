@@ -951,10 +951,9 @@ VclPtr<AbstractSwFieldDlg> SwAbstractDialogFactory_Impl::CreateSwFieldDlg(SfxBin
     return VclPtr<AbstractSwFieldDlg_Impl>::Create(pDlg);
 }
 
-VclPtr<SfxAbstractDialog>   SwAbstractDialogFactory_Impl::CreateSwFieldEditDlg ( SwView& rVw )
+VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwFieldEditDlg(SwView& rVw)
 {
-    VclPtr<SfxModalDialog> pDlg = VclPtr<SwFieldEditDlg>::Create( rVw );
-    return VclPtr<SwAbstractSfxDialog_Impl>::Create( pDlg );
+    return VclPtr<SwAbstractSfxController_Impl>::Create(std::make_unique<SwFieldEditDlg>(rVw));
 }
 
 VclPtr<AbstractSwRenameXNamedDlg> SwAbstractDialogFactory_Impl::CreateSwRenameXNamedDlg(weld::Window* pParent,

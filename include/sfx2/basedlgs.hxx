@@ -243,7 +243,7 @@ private:
     const SfxItemSet* m_pInputSet;
 
 public:
-    SfxSingleTabDialogController(weld::Widget* pParent, const SfxItemSet& rOptionsSet,
+    SfxSingleTabDialogController(weld::Widget* pParent, const SfxItemSet* pOptionsSet,
         const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"),
         const OString& rID = OString("SingleTabDialog"));
 
@@ -252,6 +252,7 @@ public:
     virtual             ~SfxSingleTabDialogController() override;
 
     void                SetTabPage(SfxTabPage* pTabPage);
+    SfxTabPage*         GetTabPage() const { return m_xSfxPage.get(); }
 
     virtual weld::Button& GetOKButton() const override { return *m_xOKBtn; }
     virtual const SfxItemSet* GetExampleSet() const override { return nullptr; }

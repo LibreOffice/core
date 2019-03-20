@@ -317,7 +317,7 @@ void SwFieldPage::InsertHdl(weld::Widget* pBtn)
     }
     else
     {
-        SwFieldEditDlg *pEditDlg = static_cast<SwFieldEditDlg *>(GetParentDialog());
+        SwFieldEditDlg *pEditDlg = static_cast<SwFieldEditDlg*>(GetDialogController());
         pEditDlg->InsertHdl();
     }
 }
@@ -333,7 +333,7 @@ void SwFieldPage::EnableInsert(bool bEnable)
     }
     else
     {
-        SwFieldEditDlg *pEditDlg = static_cast<SwFieldEditDlg *>(GetParentDialog());
+        SwFieldEditDlg *pEditDlg = static_cast<SwFieldEditDlg*>(GetDialogController());
         pEditDlg->EnableInsert(bEnable);
     }
 

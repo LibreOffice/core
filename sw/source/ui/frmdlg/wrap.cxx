@@ -53,7 +53,7 @@ const sal_uInt16 SwWrapTabPage::m_aWrapPageRg[] = {
 };
 
 SwWrapDlg::SwWrapDlg(weld::Window* pParent, SfxItemSet& rSet, SwWrtShell* pWrtShell, bool bDrawMode)
-    : SfxSingleTabDialogController(pParent, rSet, "modules/swriter/ui/wrapdialog.ui", "WrapDialog")
+    : SfxSingleTabDialogController(pParent, &rSet, "modules/swriter/ui/wrapdialog.ui", "WrapDialog")
 {
     // create TabPage
     TabPageParent pPageParent(get_content_area(), this);

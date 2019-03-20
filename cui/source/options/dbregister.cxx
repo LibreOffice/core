@@ -73,7 +73,7 @@ RegistrationItemSetHolder::~RegistrationItemSetHolder()
 
 DatabaseRegistrationDialog::DatabaseRegistrationDialog(weld::Window* pParent, const SfxItemSet& rInAttrs)
     : RegistrationItemSetHolder(rInAttrs)
-    , SfxSingleTabDialogController(pParent, getRegistrationItems())
+    , SfxSingleTabDialogController(pParent, &getRegistrationItems())
 {
     TabPageParent aParent(get_content_area(), this);
     SetTabPage(DbRegistrationOptionsPage::Create(aParent, &getRegistrationItems()));

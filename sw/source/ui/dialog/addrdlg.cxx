@@ -22,7 +22,7 @@
 #include <svx/svxdlg.hxx>
 
 SwAddrDlg::SwAddrDlg(weld::Window* pParent, const SfxItemSet& rSet)
-    : SfxSingleTabDialogController(pParent, rSet)
+    : SfxSingleTabDialogController(pParent, &rSet)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SFXPAGE_GENERAL );

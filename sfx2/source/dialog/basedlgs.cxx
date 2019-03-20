@@ -844,10 +844,10 @@ IMPL_STATIC_LINK_NOARG(SfxDialogController, InstallLOKNotifierHdl, void*, vcl::I
     return SfxViewShell::Current();
 }
 
-SfxSingleTabDialogController::SfxSingleTabDialogController(weld::Widget *pParent, const SfxItemSet& rSet,
+SfxSingleTabDialogController::SfxSingleTabDialogController(weld::Widget *pParent, const SfxItemSet* pSet,
     const OUString& rUIXMLDescription, const OString& rID)
     : SfxOkDialogController(pParent, rUIXMLDescription, rID)
-    , m_pInputSet(&rSet)
+    , m_pInputSet(pSet)
     , m_xContainer(m_xDialog->weld_content_area())
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
     , m_xHelpBtn(m_xBuilder->weld_button("help"))

@@ -50,7 +50,7 @@ const sal_uInt16 SvxConnectionPage::pRanges[] =
 \************************************************************************/
 
 SvxConnectionDialog::SvxConnectionDialog(weld::Window* pParent, const SfxItemSet& rInAttrs, const SdrView* pSdrView)
-    : SfxSingleTabDialogController(pParent, rInAttrs)
+    : SfxSingleTabDialogController(pParent, &rInAttrs)
 {
     TabPageParent pPageParent(get_content_area(), this);
     VclPtrInstance<SvxConnectionPage> pPage(pPageParent, rInAttrs);
