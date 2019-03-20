@@ -1357,40 +1357,42 @@
         Use of any of this software is governed by the terms of the license below:</p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
     </div>
-    <h2>Pixman</h2>
-    <p>The following software may be included in this product: Pixman (libpixman). Use of any of this software is
-    governed by the terms of the license below:</p>
-    <p>The following is the MIT license, agreed upon by most contributors.</p>
-    <p>Copyright holders of new code should use this license statement where possible. They may also add themselves to
-    the list below.</p>
-    <p>Copyright 1987, 1988, 1989, 1998  The Open Group<br />
-    Copyright 1987, 1988, 1989 Digital Equipment Corporation<br />
-    Copyright 1999, 2004, 2008 Keith Packard<br />
-    Copyright 2000 SuSE, Inc.<br />
-    Copyright 2000 Keith Packard, member of The XFree86 Project, Inc.<br />
-    Copyright 2004, 2005, 2007, 2008, 2009, 2010 Red Hat, Inc.<br />
-    Copyright 2004 Nicholas Miell<br />
-    Copyright 2005 Lars Knoll &amp; Zack Rusin, Trolltech<br />
-    Copyright 2005 Trolltech AS<br />
-    Copyright 2007 Luca Barbato<br />
-    Copyright 2008 Aaron Plattner, NVIDIA Corporation<br />
-    Copyright 2008 Rodrigo Kumpera<br />
-    Copyright 2008 André Tupinambá<br />
-    Copyright 2008 Mozilla Corporation<br />
-    Copyright 2008 Frederic Plourde<br />
-    Copyright 2009, Oracle and/or its affiliates. All rights reserved.<br />
-    Copyright 2009, 2010 Nokia Corporation</p>
-    <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
-    documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
-    rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
-    permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright
-    notice and this permission notice (including the next paragraph) shall be included in all copies or substantial
-    portions of the Software.</p>
-    <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-    THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.</p>
+    <div class="CAIRO">
+        <h2>Pixman</h2>
+        <p>The following software may be included in this product: Pixman (libpixman). Use of any of this software is
+        governed by the terms of the license below:</p>
+        <p>The following is the MIT license, agreed upon by most contributors.</p>
+        <p>Copyright holders of new code should use this license statement where possible. They may also add themselves to
+        the list below.</p>
+        <p>Copyright 1987, 1988, 1989, 1998  The Open Group<br />
+        Copyright 1987, 1988, 1989 Digital Equipment Corporation<br />
+        Copyright 1999, 2004, 2008 Keith Packard<br />
+        Copyright 2000 SuSE, Inc.<br />
+        Copyright 2000 Keith Packard, member of The XFree86 Project, Inc.<br />
+        Copyright 2004, 2005, 2007, 2008, 2009, 2010 Red Hat, Inc.<br />
+        Copyright 2004 Nicholas Miell<br />
+        Copyright 2005 Lars Knoll &amp; Zack Rusin, Trolltech<br />
+        Copyright 2005 Trolltech AS<br />
+        Copyright 2007 Luca Barbato<br />
+        Copyright 2008 Aaron Plattner, NVIDIA Corporation<br />
+        Copyright 2008 Rodrigo Kumpera<br />
+        Copyright 2008 André Tupinambá<br />
+        Copyright 2008 Mozilla Corporation<br />
+        Copyright 2008 Frederic Plourde<br />
+        Copyright 2009, Oracle and/or its affiliates. All rights reserved.<br />
+        Copyright 2009, 2010 Nokia Corporation</p>
+        <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+        documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+        rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+        permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright
+        notice and this permission notice (including the next paragraph) shall be included in all copies or substantial
+        portions of the Software.</p>
+        <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+        THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+        TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.</p>
+    </div>
     <div class="POPPLER">
         <h2>poppler</h2>
         <p>The following software may be included in this product: poppler. Use of any of this software is governed by
