@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_c173224d",
+        "filename": "cui/source/inc/cuitabarea.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-03-20T06:51:02Z",
+      "side": 1,
+      "message": "It might be simply\n\n    bool bBtnClicked \u003d false;\n\nand not explicitly inited in ctor :-)\n\nPlease use m_ member prefix.\n\nI\u0027m not a big fan of protected members; it looks like it might be private, with protected getter like IsBtnClicked()?",
+      "range": {
+        "startLine": 255,
+        "startChar": 4,
+        "endLine": 255,
+        "endChar": 21
+      },
+      "revId": "b8d48e709b8f1559126dbf6e288a810f38ef5371",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_e1ce6682",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-03-20T06:51:02Z",
+      "side": 1,
+      "message": "This should go either to initializer list (above, under ln 103) - for consistency, or to the class definition in cuitabarea.hxx as default member initializer - to make constructor simpler.",
+      "range": {
+        "startLine": 119,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 24
+      },
+      "revId": "b8d48e709b8f1559126dbf6e288a810f38ef5371",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
