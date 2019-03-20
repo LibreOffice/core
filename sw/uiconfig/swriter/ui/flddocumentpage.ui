@@ -2,7 +2,6 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">10</property>
@@ -45,6 +44,8 @@
   <object class="GtkBox" id="FieldDocumentPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="spacing">12</property>
     <property name="homogeneous">True</property>
@@ -453,10 +454,5 @@
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="mode">both</property>
     <property name="ignore_hidden">True</property>
-    <widgets>
-      <widget name="type:border"/>
-      <widget name="select:border"/>
-      <widget name="format:border"/>
-    </widgets>
   </object>
 </interface>

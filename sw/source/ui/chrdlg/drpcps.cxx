@@ -449,7 +449,7 @@ void SwDropCapsPict::InitPrinter_()
 }
 
 SwDropCapsDlg::SwDropCapsDlg(weld::Window *pParent, const SfxItemSet &rSet)
-    : SfxSingleTabDialogController(pParent, rSet)
+    : SfxSingleTabDialogController(pParent, &rSet)
 {
     TabPageParent pPageParent(get_content_area(), this);
     VclPtr<SwDropCapsPage> xNewPage(static_cast<SwDropCapsPage*>(SwDropCapsPage::Create(pPageParent, &rSet).get()));

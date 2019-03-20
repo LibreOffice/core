@@ -677,7 +677,7 @@ IMPL_LINK_NOARG(SvxMacroAssignSingleTabDialog, OKHdl_Impl, weld::Button&, void)
 
 SvxMacroAssignSingleTabDialog::SvxMacroAssignSingleTabDialog(weld::Window *pParent,
     const SfxItemSet& rSet)
-    : SfxSingleTabDialogController(pParent, rSet, "cui/ui/macroassigndialog.ui", "MacroAssignDialog")
+    : SfxSingleTabDialogController(pParent, &rSet, "cui/ui/macroassigndialog.ui", "MacroAssignDialog")
 {
     GetOKButton().connect_clicked(LINK(this, SvxMacroAssignSingleTabDialog, OKHdl_Impl));
 }

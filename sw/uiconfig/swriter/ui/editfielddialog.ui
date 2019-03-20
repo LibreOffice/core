@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image3">
@@ -16,7 +16,13 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="editfielddialog|EditFieldDialog">Edit Fields</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -84,6 +90,7 @@
           <object class="GtkGrid" id="grid2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="column_spacing">6</property>
             <child>
               <object class="GtkButton" id="prev">
                 <property name="visible">True</property>
@@ -92,7 +99,6 @@
                 <property name="tooltip_text" translatable="yes" context="editfielddialog|prev_tip">Previous field of same type</property>
                 <property name="valign">center</property>
                 <property name="margin_left">8</property>
-                <property name="vexpand">True</property>
                 <property name="image">image3</property>
                 <property name="image_position">right</property>
               </object>
@@ -108,7 +114,6 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="editfielddialog|next_tip">Next field of same type</property>
                 <property name="valign">center</property>
-                <property name="vexpand">True</property>
                 <property name="image">image4</property>
               </object>
               <packing>
@@ -124,7 +129,7 @@
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
                 <property name="tooltip_text" translatable="yes" context="editfielddialog|edit_tip">Edit variable field content</property>
-                <property name="margin_left">18</property>
+                <property name="margin_left">12</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -135,7 +140,7 @@
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">True</property>
+            <property name="fill">False</property>
             <property name="pack_type">end</property>
             <property name="position">1</property>
           </packing>
@@ -150,8 +155,5 @@
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>
-    <child>
-      <placeholder/>
-    </child>
   </object>
 </interface>

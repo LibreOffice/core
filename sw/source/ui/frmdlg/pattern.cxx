@@ -24,7 +24,7 @@
 #include <strings.hrc>
 
 SwBackgroundDlg::SwBackgroundDlg(weld::Window* pParent, const SfxItemSet& rSet)
-    : SfxSingleTabDialogController(pParent, rSet)
+    : SfxSingleTabDialogController(pParent, &rSet)
 
 {
     m_xDialog->set_title(SwResId(STR_FRMUI_PATTERN));

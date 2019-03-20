@@ -42,7 +42,7 @@
 
 SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(weld::Window *pParent,
     const SfxItemSet& rOptionsSet, TransliterationFlags nInitialFlags)
-    : SfxSingleTabDialogController(pParent, rOptionsSet)
+    : SfxSingleTabDialogController(pParent, &rOptionsSet)
 {
     // m_xPage will be implicitly destroyed by the
     // SfxSingleTabDialog destructor

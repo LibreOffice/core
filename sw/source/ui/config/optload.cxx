@@ -394,7 +394,7 @@ IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl, ListBox&, void)
 }
 
 SwCaptionOptDlg::SwCaptionOptDlg(weld::Window* pParent, const SfxItemSet& rSet)
-    : SfxSingleTabDialogController(pParent, rSet, "modules/swriter/ui/captiondialog.ui",
+    : SfxSingleTabDialogController(pParent, &rSet, "modules/swriter/ui/captiondialog.ui",
                                    "CaptionDialog")
 {
     // create TabPage

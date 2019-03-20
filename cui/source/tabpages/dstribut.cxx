@@ -31,7 +31,7 @@
 SvxDistributeDialog::SvxDistributeDialog(weld::Window* pParent,
     const SfxItemSet& rInAttrs, SvxDistributeHorizontal eHor,
     SvxDistributeVertical eVer)
-    : SfxSingleTabDialogController(pParent, rInAttrs, "cui/ui/distributiondialog.ui",
+    : SfxSingleTabDialogController(pParent, &rInAttrs, "cui/ui/distributiondialog.ui",
                                    "DistributionDialog")
 {
     TabPageParent pPageParent(get_content_area(), this);
