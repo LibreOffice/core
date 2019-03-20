@@ -856,7 +856,6 @@ DECLARE_DUMP_TEST(PieChartTest, Chart2DumpTest, false)
         "exploded_pie_chart.ods",
         "donut_chart.ods",
         "pie_chart_many_slices.ods",
-        "pie_chart_100_and_0.ods",
     };
 
     for (const OUString& sTestFile : aTestFiles)
