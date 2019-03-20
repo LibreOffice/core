@@ -1713,7 +1713,7 @@ void Chart2ImportTest::testTdf121205()
     CPPUNIT_ASSERT_MESSAGE("chart doc does not have title", xTitled.is());
     OUString aTitle = getTitleString(xTitled);
 
-    // We expect title splitted in 3 lines
+    // We expect title split in 3 lines
     CPPUNIT_ASSERT_EQUAL(OUString("Firstline\nSecondline\nThirdline"), aTitle);
 }
 
