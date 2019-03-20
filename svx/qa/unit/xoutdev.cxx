@@ -12,6 +12,7 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include <unotest/bootstrapfixturebase.hxx>
 
 #include <sal/types.h>
 #include <sfx2/app.hxx>
@@ -25,20 +26,14 @@
 class XOutdevTest : public CppUnit::TestFixture
 {
 public:
-    void testPdfGraphicExport();
-
     virtual void setUp() override
     {
         CppUnit::TestFixture::setUp();
         SfxApplication::GetOrCreate();
     }
-
-    CPPUNIT_TEST_SUITE(XOutdevTest);
-    CPPUNIT_TEST(testPdfGraphicExport);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void XOutdevTest::testPdfGraphicExport()
+CPPUNIT_TEST_FIXTURE(XOutdevTest, testPdfGraphicExport)
 {
 #if HAVE_FEATURE_PDFIUM
     // Import the graphic.
@@ -67,7 +62,5 @@ void XOutdevTest::testPdfGraphicExport()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>('-'), sFirstBytes[4]);
 #endif
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(XOutdevTest);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
