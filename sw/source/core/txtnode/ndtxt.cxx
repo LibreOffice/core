@@ -1164,7 +1164,7 @@ void SwTextNode::NewAttrSet( SwAttrPool& rPool )
     aNewAttrSet.Put( aFormatColl );
 
     aNewAttrSet.SetParent( &pAnyFormatColl->GetAttrSet() );
-    mpAttrSet = GetDoc()->GetIStyleAccess().getAutomaticStyle( aNewAttrSet, IStyleAccess::AUTO_STYLE_PARA );
+    mpAttrSet = GetDoc()->GetIStyleAccess().getAutomaticStyle( aNewAttrSet, IStyleAccess::AUTO_STYLE_PARA, &sVal );
 }
 
 // override SwIndexReg::Update => text hints do not need SwIndex for start/end!

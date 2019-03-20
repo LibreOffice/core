@@ -40,9 +40,13 @@ public:
         @param SfxItemSet
         the SfxItemSet to insert
 
+        @param pParentName
+        Name of the parent of rSet. If set, createIterator() can be more deterministic by iterating
+        over item sets ordered by parent names.
+
         @return a shared pointer to the SfxItemSet
     */
-    std::shared_ptr<SfxItemSet> insertItemSet( const SfxItemSet& rSet );
+    std::shared_ptr<SfxItemSet> insertItemSet( const SfxItemSet& rSet, const OUString* pParentName = nullptr );
 
     /** Create an iterator
 

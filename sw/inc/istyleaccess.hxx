@@ -36,7 +36,8 @@ public:
     virtual ~IStyleAccess() {}
 
     virtual std::shared_ptr<SfxItemSet> getAutomaticStyle( const SfxItemSet& rSet,
-                                                               SwAutoStyleFamily eFamily ) = 0;
+                                                               SwAutoStyleFamily eFamily,
+                                                               const OUString* pParentName = nullptr ) = 0;
     virtual void getAllStyles( std::vector<std::shared_ptr<SfxItemSet>> &rStyles,
                                                                SwAutoStyleFamily eFamily ) = 0;
     /** It's slow to iterate through a stylepool looking for a special name, but if
