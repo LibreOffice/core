@@ -29,18 +29,13 @@ char const DATA_DIRECTORY[] = "/svx/qa/unit/data/";
 /// Tests for svx/source/unodraw/ code.
 class UnodrawTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
+protected:
     uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
 
 public:
-    void testWriterGraphicExport();
-
     void setUp() override;
     void tearDown() override;
-
-    CPPUNIT_TEST_SUITE(UnodrawTest);
-    CPPUNIT_TEST(testWriterGraphicExport);
-    CPPUNIT_TEST_SUITE_END();
 };
 
 void UnodrawTest::setUp()
@@ -59,7 +54,7 @@ void UnodrawTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-void UnodrawTest::testWriterGraphicExport()
+CPPUNIT_TEST_FIXTURE(UnodrawTest, testWriterGraphicExport)
 {
     // Load a document with a Writer picture in it.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "unodraw-writer-image.odt";
@@ -82,8 +77,6 @@ void UnodrawTest::testWriterGraphicExport()
                                            { "MediaType", uno::Any(OUString("image/jpeg")) } }));
     CPPUNIT_ASSERT(xExportFilter->filter(aProperties));
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(UnodrawTest);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,9 +34,8 @@ const OUString sDataDirectory("svx/qa/unit/data/");
 /// Tests for svx/source/customshapes/ code.
 class CustomshapesTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
+protected:
     uno::Reference<lang::XComponent> mxComponent;
-
-private:
     // get shape nShapeIndex from page 0
     uno::Reference<drawing::XShape> getShape(sal_uInt8 nShapeIndex);
 
@@ -55,26 +54,6 @@ public:
         }
         test::BootstrapFixture::tearDown();
     }
-
-    void testViewBoxLeftTop();
-    void testAccuracyCommandX();
-    void testToggleCommandXY();
-    void testMultipleMoveTo();
-    void testWidthOrientationCommandU();
-    void testHalfEllipseVML();
-    void testLargeSwingAngleVML();
-    void testTdf121845_two_commands_U();
-
-    CPPUNIT_TEST_SUITE(CustomshapesTest);
-    CPPUNIT_TEST(testViewBoxLeftTop);
-    CPPUNIT_TEST(testAccuracyCommandX);
-    CPPUNIT_TEST(testToggleCommandXY);
-    CPPUNIT_TEST(testMultipleMoveTo);
-    CPPUNIT_TEST(testWidthOrientationCommandU);
-    CPPUNIT_TEST(testHalfEllipseVML);
-    CPPUNIT_TEST(testLargeSwingAngleVML);
-    CPPUNIT_TEST(testTdf121845_two_commands_U);
-    CPPUNIT_TEST_SUITE_END();
 };
 
 uno::Reference<drawing::XShape> CustomshapesTest::getShape(sal_uInt8 nShapeIndex)
@@ -90,7 +69,7 @@ uno::Reference<drawing::XShape> CustomshapesTest::getShape(sal_uInt8 nShapeIndex
     return xShape;
 }
 
-void CustomshapesTest::testViewBoxLeftTop()
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testViewBoxLeftTop)
 {
     // tdf#121890 formula values "left" and "top" are wrongly calculated
     // Load a document with two custom shapes of type "non-primitive"
@@ -123,7 +102,7 @@ void CustomshapesTest::testViewBoxLeftTop()
     CPPUNIT_ASSERT_LESS(static_cast<long>(3), labs(aFrameRectTB.Y - aBoundRectTB.Y));
 }
 
-void CustomshapesTest::testAccuracyCommandX()
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testAccuracyCommandX)
 {
     // 121761 Increase accuracy of quarter circles drawn by command X or Y
     // The loaded document has a quarter circle with radius 10000 (unit 1/100 mm)
@@ -145,7 +124,7 @@ void CustomshapesTest::testAccuracyCommandX()
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("segment height out of tolerance", 2942.0, fHeight, 8.0);
 }
 
-void CustomshapesTest::testToggleCommandXY()
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testToggleCommandXY)
 {
     // 121952 Toggle x- and y-direction if command X has several parameters
     // The loaded document has a shape with command X and two parameter placed on a diagonal.
@@ -168,7 +147,7 @@ void CustomshapesTest::testToggleCommandXY()
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("segment height out of tolerance", 5871.0, fHeight, 16.0);
 }
 
-void CustomshapesTest::testMultipleMoveTo()
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testMultipleMoveTo)
 {
     // tdf122964 Multiple moveTo has to be treated as lineTo in draw:enhanced-path
     // Load a document with path "M 0 0 5 10 10 0 N"
@@ -187,7 +166,7 @@ void CustomshapesTest::testMultipleMoveTo()
     CPPUNIT_ASSERT_MESSAGE("Path is empty", !bIsZero);
 }
 
-void CustomshapesTest::testWidthOrientationCommandU()
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testWidthOrientationCommandU)
 {
     // tdf121845 custom shape with command U (angleellipse) is  wrongly drawn
     // Load a document with path "M 750 0 L 750 500 250 500 250 0 U 500 0 500 500 0 180 N"
@@ -211,7 +190,7 @@ void CustomshapesTest::testWidthOrientationCommandU()
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("wrong orientation", 5000.0, fHeight, 40.0);
 }
 
-void CustomshapesTest::testHalfEllipseVML()
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testHalfEllipseVML)
 {
     // tdf121845 custom shape with command U (angleellipse) is  wrongly drawn
     // Load a document which was converted from VML to doc by Word. It had a VML
@@ -231,7 +210,7 @@ void CustomshapesTest::testHalfEllipseVML()
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("not a half circle", 0.0, fDiff2HmW, 40.0);
 }
 
-void CustomshapesTest::testLargeSwingAngleVML()
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testLargeSwingAngleVML)
 {
     // tdf121845 custom shape with command U (angleellipse) is  wrongly drawn
     // Load a document which was converted from VML to doc by Word. It had a VML
@@ -250,7 +229,7 @@ void CustomshapesTest::testLargeSwingAngleVML()
     // Need some tolerance for line width
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Full circle plus segment expected", 0.0, fDiffWmH, 10.0);
 }
-void CustomshapesTest::testTdf121845_two_commands_U()
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf121845_two_commands_U)
 {
     // tdf121845 custom shape with command U (angleellipse) is  wrongly drawn
     // Load a document with path "U 950 250 200 200 90 180 250 250 200 200 180 270 N"
@@ -271,8 +250,6 @@ void CustomshapesTest::testTdf121845_two_commands_U()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("count polygons", static_cast<sal_uInt32>(2),
                                  aPolyPolygon.count());
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(CustomshapesTest);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
