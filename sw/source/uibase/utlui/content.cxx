@@ -2850,15 +2850,14 @@ void SwContentTree::KeyInput(const KeyEvent& rEvent)
     //and realize multi-selection .
     else if(aCode.GetCode() == KEY_SPACE && 0 == aCode.GetModifier())
     {
-
         SvTreeListEntry* pEntry = GetCurEntry();
-        if( GetChildCount( pEntry ) == 0 )
-            m_bIsKeySpace = true;
-        Point tempPoint = GetEntryPosition( pEntry );//Change from "GetEntryPos" to "GetEntryPosition" for acc migration
-        m_aOldRectangle = GetFocusRect( pEntry,tempPoint.Y() );
-
         if(pEntry)
         {
+            if( GetChildCount( pEntry ) == 0 )
+                m_bIsKeySpace = true;
+            Point tempPoint = GetEntryPosition( pEntry );//Change from "GetEntryPos" to "GetEntryPosition" for acc migration
+            m_aOldRectangle = GetFocusRect(pEntry, tempPoint.Y());
+
             if (State::HIDDEN != m_eState)
             {
                 if (State::CONSTANT == m_eState)
