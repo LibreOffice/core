@@ -25,33 +25,28 @@ class SfxTabPage;
 class SwChildWinWrapper;
 struct SfxChildWinInfo;
 
-class SwFieldDlg: public SfxTabDialog
+class SwFieldDlg : public SfxTabDialogController
 {
     SwChildWinWrapper*  m_pChildWin;
     SfxBindings*        m_pBindings;
-    bool            m_bHtmlMode;
-    bool            m_bDataBaseMode;
-    sal_uInt16          m_nDokId;
-    sal_uInt16          m_nVarId;
-    sal_uInt16          m_nDokInf;
-    sal_uInt16          m_nRefId;
-    sal_uInt16          m_nFuncId;
+    bool                m_bHtmlMode;
+    bool                m_bDataBaseMode;
     sal_uInt16          m_nDbId;
 
-    virtual bool    Close() override;
-    virtual SfxItemSet* CreateInputItemSet( sal_uInt16 nId ) override;
-    virtual void        Activate() override;
-    virtual void        PageCreated(sal_uInt16 nId, SfxTabPage& rPage) override;
+    virtual SfxItemSet* CreateInputItemSet(const OString& rId) override;
+    void                Activate();
+    virtual void        PageCreated(const OString& rId, SfxTabPage& rPage) override;
 
-    void                ReInitTabPage( sal_uInt16 nPageId,
-                                       bool bOnlyActivate = false );
+    void                ReInitTabPage(const OString& rPageId,
+                                      bool bOnlyActivate = false);
 
 public:
-    SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent);
+    SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, weld::Window *pParent);
     virtual ~SwFieldDlg() override;
 
-    DECL_LINK(OKHdl, Button*, void);
-    DECL_LINK(CancelHdl, Button*, void);
+    DECL_LINK(OKHdl, weld::Button&, void);
+    DECL_LINK(CancelHdl, weld::Button&, void);
+    DECL_LINK(FocusInHdl, weld::Widget&, void);
 
     void                Initialize(SfxChildWinInfo const *pInfo);
     void                ReInitDlg();
@@ -59,6 +54,7 @@ public:
     void                InsertHdl();
     void                ActivateDatabasePage();
     void                ShowReferencePage();
+    void                Close();
 };
 
 #endif

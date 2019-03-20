@@ -44,7 +44,7 @@ class SbModule;
 class SvxMacroItem;
 class SvNumberFormatter;
 namespace vcl { class Window; }
-namespace weld { class Window; }
+namespace weld { class Widget; class Window; }
 enum class SwFieldIds : sal_uInt16;
 
 // the groups of fields
@@ -79,7 +79,7 @@ struct SwInsertField_Data
     css::uno::Any const m_aDBDataSource;
     css::uno::Any m_aDBConnection;
     css::uno::Any m_aDBColumn;
-    VclPtr<vcl::Window> m_pParent; // parent dialog used for SwWrtShell::StartInputFieldDlg()
+    weld::Widget* m_pParent; // parent widget used for SwWrtShell::StartInputFieldDlg()
 
     SwInsertField_Data(sal_uInt16 nType, sal_uInt16 nSub, const OUString& rPar1, const OUString& rPar2,
                     sal_uInt32 nFormatId, SwWrtShell* pShell = nullptr, sal_Unicode cSep = ' ', bool bIsAutoLanguage = true) :

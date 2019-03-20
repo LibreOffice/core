@@ -46,7 +46,7 @@ class DropDownFieldDialog : public weld::GenericDialogController
     void    Apply();
     DECL_LINK(DoubleClickHdl, weld::TreeView&, void);
 public:
-    DropDownFieldDialog(weld::Window *pParent, SwWrtShell &rSh,
+    DropDownFieldDialog(weld::Widget *pParent, SwWrtShell &rSh,
                         SwField* pField, bool bPrevButton, bool bNextButton);
     virtual ~DropDownFieldDialog() override;
     bool PrevButtonPressed() const;

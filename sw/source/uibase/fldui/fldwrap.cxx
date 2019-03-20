@@ -77,9 +77,9 @@ SwFieldDlgWrapper::SwFieldDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
     : SwChildWinWrapper( _pParent, nId )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    pDlgInterface = pFact->CreateSwFieldDlg(pB, this, _pParent);
-    SetWindow( pDlgInterface->GetWindow() );
-    pDlgInterface->Start();
+    pDlgInterface = pFact->CreateSwFieldDlg(pB, this, _pParent->GetFrameWeld());
+//    SetWindow( pDlgInterface->GetWindow() );
+    pDlgInterface->StartExecuteAsync(nullptr);
 }
 
 // newly initialise dialog after Doc switch
@@ -116,11 +116,11 @@ SwFieldDataOnlyDlgWrapper::SwFieldDataOnlyDlgWrapper( vcl::Window* _pParent, sal
     : SwChildWinWrapper( _pParent, nId )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    pDlgInterface = pFact->CreateSwFieldDlg(pB, this, _pParent);
+    pDlgInterface = pFact->CreateSwFieldDlg(pB, this, _pParent->GetFrameWeld());
 
-    SetWindow( pDlgInterface->GetWindow() );
+//    SetWindow( pDlgInterface->GetWindow() );
     pDlgInterface->ActivateDatabasePage();
-    pDlgInterface->Start();
+    pDlgInterface->StartExecuteAsync(nullptr);
     pDlgInterface->Initialize( pInfo );
 }
 

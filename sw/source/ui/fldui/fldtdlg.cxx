@@ -46,33 +46,25 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 // carrier of the dialog
-SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent)
-    : SfxTabDialog(pParent, "FieldDialog", "modules/swriter/ui/fielddialog.ui")
+SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, weld::Window *pParent)
+    : SfxTabDialogController(pParent, "modules/swriter/ui/fielddialog.ui", "FieldDialog")
     , m_pChildWin(pCW)
     , m_pBindings(pB)
     , m_bDataBaseMode(false)
-    , m_nDokId(0)
-    , m_nVarId(0)
-    , m_nDokInf(0)
-    , m_nRefId(0)
-    , m_nFuncId(0)
-    , m_nDbId(0)
 {
-    SetStyle(GetStyle()|WB_STDMODELESS);
     m_bHtmlMode = (::GetHtmlMode(static_cast<SwDocShell*>(SfxObjectShell::Current())) & HTMLMODE_ON) != 0;
 
-    GetCancelButton().SetClickHdl(LINK(this, SwFieldDlg, CancelHdl));
+    GetCancelButton().connect_clicked(LINK(this, SwFieldDlg, CancelHdl));
+    GetOKButton().connect_clicked(LINK(this, SwFieldDlg, OKHdl));
 
-    GetOKButton().SetClickHdl(LINK(this, SwFieldDlg, OKHdl));
-
-    m_nDokId = AddTabPage("document", SwFieldDokPage::Create);
-    m_nVarId = AddTabPage("variables", SwFieldVarPage::Create);
-    m_nDokInf = AddTabPage("docinfo", SwFieldDokInfPage::Create);
+    AddTabPage("document", SwFieldDokPage::Create, nullptr);
+    AddTabPage("variables", SwFieldVarPage::Create, nullptr);
+    AddTabPage("docinfo", SwFieldDokInfPage::Create, nullptr);
 
     if (!m_bHtmlMode)
     {
-        m_nRefId = AddTabPage("ref", SwFieldRefPage::Create);
-        m_nFuncId = AddTabPage("functions", SwFieldFuncPage::Create);
+        AddTabPage("ref", SwFieldRefPage::Create, nullptr);
+        AddTabPage("functions", SwFieldFuncPage::Create, nullptr);
 
         utl::OConfigurationTreeRoot aCfgRoot
             = utl::OConfigurationTreeRoot::createWithComponentContext(
@@ -87,7 +79,7 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pPa
             OUString("DatabaseFields")) >>= bDatabaseFields;
 
         if (bDatabaseFields)
-            m_nDbId = AddTabPage("database", SwFieldDBPage::Create);
+            AddTabPage("database", SwFieldDBPage::Create, nullptr);
         else
 #endif
             RemoveTabPage("database");
@@ -98,22 +90,24 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pPa
         RemoveTabPage("functions");
         RemoveTabPage("database");
     }
+
+    m_xDialog->connect_focus_in(LINK(this, SwFieldDlg, FocusInHdl));
 }
 
 SwFieldDlg::~SwFieldDlg()
 {
 }
 
-bool SwFieldDlg::Close()
+void SwFieldDlg::Close()
 {
     m_pBindings->GetDispatcher()->
         Execute(m_bDataBaseMode ? FN_INSERT_FIELD_DATA_ONLY : FN_INSERT_FIELD,
         SfxCallMode::ASYNCHRON|SfxCallMode::RECORD);
-    return true;
 }
 
 void SwFieldDlg::Initialize(SfxChildWinInfo const *pInfo)
 {
+#if 0
     Point aPos;
     Size aSize;
 
@@ -156,12 +150,13 @@ void SwFieldDlg::Initialize(SfxChildWinInfo const *pInfo)
     if ( aPos.Y() < 0 ) aPos.setY( 0 );
 
     SetPosPixel( aPos );
+#endif
 }
 
-SfxItemSet* SwFieldDlg::CreateInputItemSet( sal_uInt16 nID  )
+SfxItemSet* SwFieldDlg::CreateInputItemSet(const OString& rID)
 {
     SwDocShell *const pDocSh(static_cast<SwDocShell*>(SfxObjectShell::Current()));
-    if (nID == m_nDokInf && pDocSh) // might not have a shell if the dialog is restored on startup
+    if (rID == "docinfo" && pDocSh) // might not have a shell if the dialog is restored on startup
     {
         SfxItemSet* pISet = new SfxItemSet( pDocSh->GetPool(), svl::Items<SID_DOCINFO, SID_DOCINFO>{} );
         using namespace ::com::sun::star;
@@ -180,18 +175,18 @@ SfxItemSet* SwFieldDlg::CreateInputItemSet( sal_uInt16 nID  )
 }
 
 // kick off inserting of new fields
-IMPL_LINK_NOARG(SwFieldDlg, OKHdl, Button*, void)
+IMPL_LINK_NOARG(SwFieldDlg, OKHdl, weld::Button&, void)
 {
-    if (GetOKButton().IsEnabled())
+    if (GetOKButton().get_sensitive())
     {
         SfxTabPage* pPage = GetTabPage(GetCurPageId());
         pPage->FillItemSet(nullptr);
 
-        GetOKButton().GrabFocus();  // because of InputField-Dlg
+        GetOKButton().grab_focus();  // because of InputField-Dlg
     }
 }
 
-IMPL_LINK_NOARG(SwFieldDlg, CancelHdl, Button*, void)
+IMPL_LINK_NOARG(SwFieldDlg, CancelHdl, weld::Button&, void)
 {
     Close();
 }
@@ -213,48 +208,55 @@ void SwFieldDlg::ReInitDlg()
     if(!pActiveView)
         return;
     const SwWrtShell& rSh = pActiveView->GetWrtShell();
-    GetOKButton().Enable( !rSh.IsReadOnlyAvailable() ||
-                          !rSh.HasReadonlySel() );
+    GetOKButton().set_sensitive(!rSh.IsReadOnlyAvailable() ||
+                                !rSh.HasReadonlySel());
 
-    ReInitTabPage(m_nDokId);
-    ReInitTabPage(m_nVarId);
-    ReInitTabPage(m_nDokInf);
+    ReInitTabPage("document");
+    ReInitTabPage("variables");
+    ReInitTabPage("docinfo");
 
     if (!m_bHtmlMode)
     {
-        ReInitTabPage(m_nRefId);
-        ReInitTabPage(m_nFuncId);
-        ReInitTabPage(m_nDbId);
+        ReInitTabPage("ref");
+        ReInitTabPage("functions");
+        ReInitTabPage("database");
     }
 
     m_pChildWin->SetOldDocShell(pDocSh);
 }
 
 // newly initialise TabPage after Doc-Switch
-void SwFieldDlg::ReInitTabPage( sal_uInt16 nPageId, bool bOnlyActivate )
+void SwFieldDlg::ReInitTabPage(const OString& rPageId, bool bOnlyActivate)
 {
-    SwFieldPage* pPage = static_cast<SwFieldPage* >(GetTabPage(nPageId));
-    if ( pPage )
+    SwFieldPage* pPage = static_cast<SwFieldPage*>(GetTabPage(rPageId));
+    if (pPage)
         pPage->EditNewField( bOnlyActivate );   // newly initialise TabPage
+}
+
+IMPL_LINK_NOARG(SwFieldDlg, FocusInHdl, weld::Widget&, void)
+{
+    Activate();
 }
 
 // newly initialise after activation of a few TabPages
 void SwFieldDlg::Activate()
 {
+    fprintf(stderr, "SwFieldDlg::Activate()\n");
+
     SwView* pView = ::GetActiveView();
     if( pView )
     {
         bool bHtmlMode = (::GetHtmlMode(static_cast<SwDocShell*>(SfxObjectShell::Current())) & HTMLMODE_ON) != 0;
         const SwWrtShell& rSh = pView->GetWrtShell();
-        GetOKButton().Enable( !rSh.IsReadOnlyAvailable() ||
-                              !rSh.HasReadonlySel() );
+        GetOKButton().set_sensitive(!rSh.IsReadOnlyAvailable() ||
+                                    !rSh.HasReadonlySel());
 
-        ReInitTabPage(m_nVarId, true);
+        ReInitTabPage("variables", true);
 
         if( !bHtmlMode )
         {
-            ReInitTabPage(m_nRefId, true);
-            ReInitTabPage(m_nFuncId, true);
+            ReInitTabPage("ref", true);
+            ReInitTabPage("functions", true);
         }
     }
 }
@@ -270,20 +272,20 @@ void SwFieldDlg::EnableInsert(bool bEnable)
                     pView->GetWrtShell().HasReadonlySel()) )
             bEnable = false;
     }
-    GetOKButton().Enable(bEnable);
+    GetOKButton().set_sensitive(bEnable);
 }
 
 void SwFieldDlg::InsertHdl()
 {
-    GetOKButton().Click();
+    GetOKButton().clicked();
 }
 
 void SwFieldDlg::ActivateDatabasePage()
 {
 #if HAVE_FEATURE_DBCONNECTIVITY
     m_bDataBaseMode = true;
-    ShowPage(m_nDbId);
-    SfxTabPage* pDBPage = GetTabPage(m_nDbId);
+    ShowPage("database");
+    SfxTabPage* pDBPage = GetTabPage("database");
     if( pDBPage )
     {
         static_cast<SwFieldDBPage*>(pDBPage)->ActivateMailMergeAddress();
@@ -299,13 +301,13 @@ void SwFieldDlg::ActivateDatabasePage()
 
 void SwFieldDlg::ShowReferencePage()
 {
-    ShowPage(m_nRefId);
+    ShowPage("ref");
 }
 
-void SwFieldDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
+void SwFieldDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
 {
 #if HAVE_FEATURE_DBCONNECTIVITY
-    if (nId == m_nDbId)
+    if (rId == "database")
     {
         SfxDispatcher* pDispatch = m_pBindings->GetDispatcher();
         SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : nullptr;
