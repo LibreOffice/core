@@ -27,7 +27,7 @@
 #include <fldmgr.hxx>
 
 // edit field-insert
-SwFieldInputDlg::SwFieldInputDlg(weld::Window *pParent, SwWrtShell &rS,
+SwFieldInputDlg::SwFieldInputDlg(weld::Widget *pParent, SwWrtShell &rS,
                                  SwField* pField, bool bPrevButton, bool bNextButton)
     : GenericDialogController(pParent, "modules/swriter/ui/inputfielddialog.ui", "InputFieldDialog")
     , rSh( rS )

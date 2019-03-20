@@ -50,7 +50,7 @@ private:
     void Apply();
 
 public:
-    DropDownFormFieldDialog(weld::Window* pParent, mark::IFieldmark* pDropDownField);
+    DropDownFormFieldDialog(weld::Widget* pParent, mark::IFieldmark* pDropDownField);
     virtual ~DropDownFormFieldDialog() override;
 
     virtual short run() override

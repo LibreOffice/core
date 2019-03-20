@@ -28,7 +28,7 @@
 using namespace ::com::sun::star;
 
 // edit insert-field
-sw::DropDownFieldDialog::DropDownFieldDialog(weld::Window *pParent, SwWrtShell &rS,
+sw::DropDownFieldDialog::DropDownFieldDialog(weld::Widget *pParent, SwWrtShell &rS,
                               SwField* pField, bool bPrevButton, bool bNextButton)
     : GenericDialogController(pParent, "modules/swriter/ui/dropdownfielddialog.ui", "DropdownFieldDialog")
     , m_rSh( rS )
