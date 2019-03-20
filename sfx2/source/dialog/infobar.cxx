@@ -174,7 +174,7 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
     m_sId(sId),
     m_eType(ibType),
     m_pImage(VclPtr<FixedImage>::Create(this, nMessageStyle)),
-    m_pMessage(VclPtr<FixedText>::Create(this, nMessageStyle)),
+    m_pMessage(VclPtr<FixedText>::Create(this, nMessageStyle | WB_WORDBREAK)),
     m_pCloseBtn(VclPtr<SfxCloseButton>::Create(this)),
     m_aActionBtns()
 {
@@ -290,13 +290,23 @@ void SfxInfoBarWindow::Resize()
         nX -= nButtonGap;
     }
 
-    m_pImage->SetPosSizePixel(Point(4,4), Size(32* fScaleFactor, 32* fScaleFactor));
-
     Point aMessagePosition(32 * fScaleFactor + 10 * fScaleFactor, 10 * fScaleFactor);
-    Size aMessageSize(nX - 20 * fScaleFactor, 20 * fScaleFactor);
+    Size aMessageSize(nX - 35 * fScaleFactor, 20 * fScaleFactor);
+    Size aActualSize = m_pMessage->CalcMinimumSize(aMessageSize.getWidth());
+    long aMinimumHeight = m_pMessage->CalcMinimumSize().getHeight();
 
-    m_pMessage->SetPosSizePixel(aMessagePosition, aMessageSize);
+    long aExtraHeight = aActualSize.getHeight() - aMinimumHeight;
 
+    // The message won't be legible and the window will get too high
+    if (aMessageSize.getWidth() < 30)
+    {
+        aExtraHeight = 0;
+    }
+
+    m_pMessage->SetPosSizePixel(aMessagePosition, aActualSize);
+    m_pImage->SetPosSizePixel(Point(4, 4), Size(32 * fScaleFactor, 32 * fScaleFactor));
+
+    SetPosSizePixel(Point(0, 0), Size(nWidth, INFO_BAR_BASE_HEIGHT * fScaleFactor + aExtraHeight * fScaleFactor));
 }
 
 void SfxInfoBarWindow::Update( const OUString &sNewMessage, InfoBarType eType )
@@ -408,6 +418,7 @@ void SfxInfoBarContainerWindow::Resize()
 {
     // Only need to change the width of the infobars
     long nWidth = GetSizePixel().getWidth();
+    long nHeight = GetSizePixel().getHeight();
 
     for (auto& rxInfoBar : m_pInfoBars)
     {
@@ -415,7 +426,15 @@ void SfxInfoBarContainerWindow::Resize()
         aSize.setWidth(nWidth);
         rxInfoBar->SetSizePixel(aSize);
         rxInfoBar->Resize();
+
+        // Stretch to fit the infobar(s)
+        if (aSize.getHeight() > nHeight)
+        {
+            nHeight = aSize.getHeight();
+        }
     }
+
+    SetSizePixel(Size(nWidth, nHeight));
 }
 
 SFX_IMPL_POS_CHILDWINDOW_WITHID(SfxInfoBarContainerChild, SID_INFOBAR, SFX_OBJECTBAR_OBJECT);
