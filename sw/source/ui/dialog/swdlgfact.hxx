@@ -125,11 +125,6 @@ public:
     virtual void FillOptions( SwAsciiOptions& rOptions ) override;
 };
 
-class VclAbstractDialog_Impl : public VclAbstractDialog
-{
-    DECL_ABSTDLG_BASE(VclAbstractDialog_Impl,Dialog)
-};
-
 class AbstractGenericDialog_Impl : public VclAbstractDialog
 {
     std::shared_ptr<weld::GenericDialogController> m_xDlg;

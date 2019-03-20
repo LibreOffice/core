@@ -111,8 +111,6 @@ short AbstractSwAsciiFilterDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl);
-
 short AbstractSplitTableDialog_Impl::Execute()
 {
     return m_xDlg->run();
