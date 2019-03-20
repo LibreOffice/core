@@ -1552,59 +1552,6 @@
     warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</p>
     <p>This file declares SANE application interface. See the SANE standard for a detailed explanation of the
     interface.</p>
-    <h2>STLPort</h2>
-    <p>The following software may be included in this product:STLport. Use of any of this software is governed by the
-    terms of the license below:</p>
-    <h3>License Agreement</h3>
-    <p><span class="T1">Boris Fomitchev</span> grants <span class="T1">Licensee</span> a non-exclusive,
-    non-transferable, royalty-free license to use <span class="T1">STLport</span> and its documentation without
-    fee.</p>
-    <p>By downloading, using, or copying <span class="T1">STLport</span> or any portion thereof, <span class=
-    "T1">Licensee</span> agrees to abide by the intellectual property laws and all other applicable laws of the United
-    States of America, and to all of the terms and conditions of this Agreement.</p>
-    <p><span class="T1">Licensee</span> shall maintain the following copyright and permission notices on <span class=
-    "T1">STLport</span> sources and its documentation unchanged:</p>
-    <p>Copyright 1999,2000 Boris Fomitchev</p>
-    <p>This material is provided "as is", with absolutely no warranty expressed or implied. Any use is at your own
-    risk.</p>
-    <p>Permission to use or copy this software for any purpose is hereby granted without fee, provided the above
-    notices are retained on all copies. Permission to modify the code and to distribute modified code is granted,
-    provided the above notices are retained, and a notice that the code was modified is included with the above
-    copyright notice.</p>
-    <p>The <span class="T1">Licensee</span> may distribute binaries compiled with <span class="T1">STLport</span>
-    (whether original or modified) without any royalties or restrictions.</p>
-    <p>The <span class="T1">Licensee</span> may distribute original or modified <span class="T1">STLport</span>
-    sources, provided that:</p>
-    <ul>
-        <li>
-            <p style="margin-left:0.748cm;"><span class="Bullet_20_Symbols" style=
-            "display:block;float:left;min-width:0.4991cm;">•</span>The conditions indicated in the above permission
-            notice are met; </p>
-        </li>
-        <li>
-            <p style="margin-left:0.748cm;"><span class="Bullet_20_Symbols" style=
-            "display:block;float:left;min-width:0.4991cm;">•</span>The following copyright notices are retained when
-            present, and conditions provided in accompanying permission notices are met: </p>
-        </li>
-    </ul>
-    <p>Copyright 1994 Hewlett-Packard Company</p>
-    <p>Copyright 1996,97 Silicon Graphics Computer Systems, Inc.</p>
-    <p>Copyright 1997 Moscow Center for SPARC Technology.</p>
-    <p>Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose is
-    hereby granted without fee, provided that the above copyright notice appear in all copies and that both that
-    copyright notice and this permission notice appear in supporting documentation. Hewlett-Packard Company makes no
-    representations about the suitability of this software for any purpose. It is provided "as is" without express or
-    implied warranty.</p>
-    <p>Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose is
-    hereby granted without fee, provided that the above copyright notice appear in all copies and that both that
-    copyright notice and this permission notice appear in supporting documentation. Silicon Graphics makes no
-    representations about the suitability of this software for any purpose. It is provided "as is" without express or
-    implied warranty.</p>
-    <p>Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose is
-    hereby granted without fee, provided that the above copyright notice appear in all copies and that both that
-    copyright notice and this permission notice appear in supporting documentation. Moscow Center for SPARC Technology
-    makes no representations about the suitability of this software for any purpose. It is provided "as is" without
-    express or implied warranty.</p>
     <h2>SVGPathSeg polyfill</h2>
     <p>The following software may be included in this product: SVGPathSeg polyfill. Use of any of this software is
     governed by the terms of the license below:</p>
