@@ -20,9 +20,9 @@
   <menu:menu menu:id=".uno:PickList">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:AddDirect"/>
+      <menu:menuitem menu:id=".uno:RecentFileList"/>
       <menu:menuitem menu:id=".uno:Open"/>
       <menu:menuitem menu:id=".uno:OpenRemote"/>
-      <menu:menuitem menu:id=".uno:RecentFileList"/>
       <menu:menuitem menu:id=".uno:CloseDoc"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
@@ -61,8 +61,8 @@
           <menu:menuitem menu:id=".uno:SendMailDocAsPDF"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:WebHtml"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:WebHtml"/>
       <menu:menuitem menu:id=".uno:Print"/>
       <menu:menuitem menu:id=".uno:PrinterSetup"/>
       <menu:menuseparator/>
@@ -91,6 +91,7 @@
           <menu:menuitem menu:id=".uno:PasteSpecial"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:CopyObjects"/>
       <menu:menuitem menu:id=".uno:SelectAll"/>
       <menu:menuseparator/>
@@ -116,10 +117,11 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ToolbarMode"/>
       <menu:menuitem menu:id=".uno:AvailableToolbars"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:StatusBarVisible"/>
-      <menu:menuitem menu:id=".uno:ShowRuler"/>
       <menu:menuitem menu:id=".uno:LeftPaneDraw"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:ShowRuler"/>
       <menu:menu menu:id=".uno:GridMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:GridVisible"/>
@@ -141,6 +143,7 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:ShowAnnotations"/>
       <menu:menu menu:id=".uno:DisplayQualityMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:OutputQualityColor" menu:style="radio"/>
@@ -148,7 +151,6 @@
           <menu:menuitem menu:id=".uno:OutputQualityBlackWhite" menu:style="radio"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:ShowAnnotations"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Sidebar"/>
       <menu:menuitem menu:id=".uno:ViewSidebarStyles"/>
@@ -180,6 +182,8 @@
   <menu:menu menu:id=".uno:InsertMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:InsertGraphic"/>
+      <menu:menuitem menu:id=".uno:InsertObjectChart"/>
+      <menu:menuitem menu:id=".uno:InsertTable"/>
       <menu:menu menu:id=".uno:GraphicMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Gallery"/>
@@ -192,14 +196,12 @@
          <menu:menuitem menu:id=".uno:InsertAVMedia"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:InsertObjectChart"/>
       <menu:menu menu:id=".uno:ObjectMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertMath"/>
           <menu:menuitem menu:id=".uno:InsertObject"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:InsertTable"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:CapturePoint"/>
       <menu:menuitem menu:id=".uno:InsertLayer"/>
@@ -210,7 +212,6 @@
       <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
-      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertSymbol"/>
       <menu:menu menu:id=".uno:FormattingMarkMenu">
         <menu:menupopup>
@@ -345,6 +346,7 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:SetDefault"/>
       <menu:menu menu:id=".uno:FormatStylesMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:EditStyle"/>
@@ -354,11 +356,12 @@
           <menu:menuitem menu:id=".uno:DesignerDialog"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:SetDefault"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FontDialog"/>
       <menu:menuitem menu:id=".uno:ParagraphDialog"/>
       <menu:menuitem menu:id=".uno:OutlineBullet"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:ModifyLayer"/>
       <menu:menu menu:id=".uno:TableMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:SetMinimalRowHeight"/>
@@ -382,13 +385,6 @@
           <menu:menuitem menu:id=".uno:TableDialog"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:ModifyLayer"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:TransformDialog"/>
-      <menu:menuitem menu:id=".uno:FormatLine"/>
-      <menu:menuitem menu:id=".uno:FormatArea"/>
-      <menu:menuitem menu:id=".uno:TextAttributes"/>
-      <menu:menuseparator/>
       <menu:menu menu:id=".uno:FormatImageMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Crop"/>
@@ -419,6 +415,11 @@
           <menu:menuitem menu:id=".uno:GrafAttrCrop"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:TransformDialog"/>
+      <menu:menuitem menu:id=".uno:TextAttributes"/>
+      <menu:menuitem menu:id=".uno:FormatLine"/>
+      <menu:menuitem menu:id=".uno:FormatArea"/>
       <menu:menuitem menu:id=".uno:FillShadow"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:NameGroup"/>
@@ -432,14 +433,14 @@
       <menu:menuitem menu:id=".uno:DuplicatePage"/>
       <menu:menuitem menu:id=".uno:DeletePage"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:InsertMasterPage"/>
-      <menu:menuitem menu:id=".uno:DeleteMasterPage"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:SelectBackground"/>
       <menu:menuitem menu:id=".uno:SaveBackground"/>
+      <menu:menuitem menu:id=".uno:SelectBackground"/>
       <menu:menuitem menu:id=".uno:PageSetup"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:DrawingLayout"/>
+      <menu:menuitem menu:id=".uno:InsertMasterPage"/>
+      <menu:menuitem menu:id=".uno:DeleteMasterPage"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:DisplayMasterBackground"/>
       <menu:menuitem menu:id=".uno:DisplayMasterObjects"/>
       <menu:menuitem menu:id=".uno:MasterLayouts"/>
@@ -466,39 +467,46 @@
   </menu:menu>
   <menu:menu menu:id=".uno:ShapeMenu">
     <menu:menupopup>
+      <menu:menuitem menu:id=".uno:Line"/>
+      <menu:menuitem menu:id=".uno:BasicShapes.rectangle"/>
+      <menu:menuitem menu:id=".uno:BasicShapes.ellipse"/>
       <menu:menu menu:id=".uno:InsertMenu">
         <menu:menupopup>
-          <menu:menu menu:id=".uno:ShapesLineMenu">
+          <menu:menuitem menu:id=".uno:ArrowsToolbox"/>
+          <menu:menuitem menu:id=".uno:LineToolbox"/>
+          <menu:menuitem menu:id=".uno:ConnectorToolbox"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:BasicShapes"/>
+          <menu:menuitem menu:id=".uno:SymbolShapes"/>
+          <menu:menuitem menu:id=".uno:ArrowShapes"/>
+          <menu:menuitem menu:id=".uno:FlowChartShapes"/>
+          <menu:menuitem menu:id=".uno:CalloutShapes"/>
+          <menu:menuitem menu:id=".uno:StarShapes"/>
+          <menu:menu menu:id=".uno:Objects3DToolbox">
             <menu:menupopup>
-              <menu:menuitem menu:id=".uno:Line"/>
-              <menu:menuitem menu:id=".uno:Freeline_Unfilled"/>
-              <menu:menuitem menu:id=".uno:Freeline"/>
-              <menu:menuitem menu:id=".uno:Bezier_Unfilled"/>
-              <menu:menuitem menu:id=".uno:BezierFill"/>
-              <menu:menuitem menu:id=".uno:Polygon_Unfilled"/>
-              <menu:menuitem menu:id=".uno:Polygon_Diagonal_Unfilled"/>
-              <menu:menuitem menu:id=".uno:Polygon_Diagonal"/>
+              <menu:menuitem menu:id=".uno:Cube"/>
+              <menu:menuitem menu:id=".uno:Sphere"/>
+              <menu:menuitem menu:id=".uno:Cylinder"/>
+              <menu:menuitem menu:id=".uno:Cone"/>
+              <menu:menuseparator/>
+              <menu:menuitem menu:id=".uno:Cyramid"/>
+              <menu:menuitem menu:id=".uno:Torus"/>
+              <menu:menuitem menu:id=".uno:Shell3D"/>
+              <menu:menuitem menu:id=".uno:HalfSphere"/>
             </menu:menupopup>
           </menu:menu>
-          <menu:menuitem menu:id=".uno:BasicShapes"/>
-          <menu:menuitem menu:id=".uno:ArrowShapes"/>
-          <menu:menuitem menu:id=".uno:SymbolShapes"/>
-          <menu:menuitem menu:id=".uno:StarShapes"/>
-          <menu:menuitem menu:id=".uno:CalloutShapes"/>
-          <menu:menuitem menu:id=".uno:FlowChartShapes"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:CopyObjects"/>
-      <menu:menuitem menu:id=".uno:Morphing"/>
-      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:DistributeSelection"/>
+      <menu:menuitem menu:id=".uno:ToggleObjectRotateMode"/>
+      <menu:menuitem menu:id=".uno:AdvancedMode"/>
       <menu:menu menu:id=".uno:MirrorMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:MirrorVert"/>
           <menu:menuitem menu:id=".uno:MirrorHorz"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:AdvancedMode"/>
       <menu:menu menu:id=".uno:ConvertMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:ChangeBezier"/>
@@ -511,7 +519,6 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:DistributeSelection"/>
       <menu:menu menu:id=".uno:ObjectAlign">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
@@ -551,6 +558,9 @@
       <menu:menuitem menu:id=".uno:Merge"/>
       <menu:menuitem menu:id=".uno:Substract"/>
       <menu:menuitem menu:id=".uno:Intersect"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:CopyObjects"/>
+      <menu:menuitem menu:id=".uno:Morphing"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EqualizeWidth"/>
       <menu:menuitem menu:id=".uno:EqualizeHeight"/>
@@ -597,7 +607,6 @@
           <menu:menuitem menu:id=".uno:AutoControlFocus"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuseparator/>
       <menu:menu menu:id=".uno:MacrosMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:MacroRecorder"/>
@@ -609,6 +618,7 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
       <menu:menuitem menu:id=".uno:ConfigureDialog"/>
       <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
