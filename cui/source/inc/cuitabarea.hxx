@@ -252,6 +252,8 @@ protected:
     void SelectFillType( weld::ToggleButton& rButton, const SfxItemSet* _pSet = nullptr );
     SfxTabPage* GetFillTabPage() { return m_pFillTabPage; }
 
+    bool bBtnClicked;
+
 private:
     DECL_LINK(SelectFillTypeHdl_Impl, weld::ToggleButton&, void);
 
