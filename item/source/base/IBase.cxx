@@ -12,10 +12,38 @@
 #include <cassert>
 
 ///////////////////////////////////////////////////////////////////////////////
-// export CXXFLAGS=-DENABLE_ITEMS
+// derived items from : public SfxPoolItem -> 123
+// derived from these not yet evaluated. do on demand...
 /*
+
 class SbxItem : public SfxPoolItem
+-> basctl::Item::Sbx
+-> SID_BASICIDE_ARG_SBX
+
 class SvxChartColorTableItem : public SfxPoolItem
+-> only uses SID_SCH_EDITOPTIONS, currently has non-static members, but no need for them
+-> change this in master first
+SID_SCH_EDITOPTIONS uses SfxItemPool from SfxShell::GetPool(), so maybe use
+SfxShell::SetPool and debug/break to check who/how and what kind of pool is to be set/used
+in that cases
+Uses
+    const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
+which sets the item, adds it to the SfxItemPool using
+                    const SfxPoolItem& rNew = m_pPool->Put( rItem, nWhich );
+and does trigger ::Changed broadcasts based on SfxItemPool::IsWhich (nId <= SFX_WHICH_MAX, SFX_WHICH_MAX = 4999)
+Uses
+    const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
+that checks
+    bool bSID = IsSlot(nWhich);
+and if yes - so for all SlotItems - (nId > SFX_WHICH_MAX, , SFX_WHICH_MAX = 4999) just
+- clones the item using SfxPoolItem *pPoolItem = rItem.Clone(pImpl->mpMaster);
+- adds the item using AddRef( *pPoolItem );
+These Items are NOT added to the ItemLists in The SfxItemPool(!), only to the SfxItemSet
+using the SfxItemPool::Put call, only their RefCount keeps them alive.
+Nonetheless these SlotItems STILL depend on the SfxItem-RANGES defined in the SfxItemSet
+-> SLOT ITEMS do NOT get POOLED (IsItemPoolable/IsPooledItem/...)
+-> SLOT ITEMS can be put in *any* ItemPool - due to not using the pooling mechanism
+
 class DriverPoolingSettingsItem final : public SfxPoolItem
 class DatabaseMapItem final : public SfxPoolItem
 class DbuTypeCollectionItem : public SfxPoolItem

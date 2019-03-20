@@ -22,9 +22,9 @@
 #include "scriptdocument.hxx"
 #include <svl/poolitem.hxx>
 
-#ifdef ENABLE_ITEMS
+// ENABLE_ITEMS
 #include <item/base/IBaseStaticHelper.hxx>
-#endif
+// ~ENABLE_ITEMS
 
 namespace basctl
 {
@@ -39,46 +39,50 @@ enum ItemType
     TYPE_METHOD
 };
 
-#ifdef ENABLE_ITEMS
+// ENABLE_ITEMS
 namespace Item
 {
-class Sbx;
-typedef ::Item::IBaseStaticHelper<Sbx, ::Item::IAdministrator_vector> SbxStaticHelper;
+    class Sbx;
+    typedef ::Item::IBaseStaticHelper<Sbx, ::Item::IAdministrator_vector> SbxStaticHelper;
 
-class Sbx final : public SbxStaticHelper
-{
-private:
-    const ScriptDocument    m_aDocument;
-    const OUString          m_aLibName;
-    const OUString          m_aName;
-    const OUString          m_aMethodName;
-    ItemType                m_eType;
+    class Sbx final : public SbxStaticHelper
+    {
+    private:
+        const ScriptDocument    m_aDocument;
+        const OUString          m_aLibName;
+        const OUString          m_aName;
+        const OUString          m_aMethodName;
+        ItemType                m_eType;
 
-protected:
-    friend SbxStaticHelper;
+    protected:
+        friend SbxStaticHelper;
 
-    Sbx(
-        const ScriptDocument* pDocument = nullptr,
-        const OUString& aLibName = OUString(),
-        const OUString& aName = OUString(),
-        const OUString& aMethodName = OUString(),
-        ItemType eType = TYPE_UNKNOWN);
+        Sbx(
+            const ScriptDocument* pDocument = nullptr,
+            const OUString& aLibName = OUString(),
+            const OUString& aName = OUString(),
+            const OUString& aMethodName = OUString(),
+            ItemType eType = TYPE_UNKNOWN);
 
-public:
-    virtual ~Sbx();
+    public:
+        virtual ~Sbx();
 
-    static std::shared_ptr<const Sbx> Create(const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, ItemType);
-    static std::shared_ptr<const Sbx> Create(const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, const OUString& aMethodName, ItemType eType);
-    virtual bool operator==(const IBase& rCandidate) const override;
+        static std::shared_ptr<const Sbx> Create(
+            const ScriptDocument& rDocument,
+            const OUString& aLibName = OUString(),
+            const OUString& aName = OUString(),
+            const OUString& aMethodName = OUString(),
+            ItemType eType = TYPE_UNKNOWN);
+        virtual bool operator==(const IBase& rCandidate) const override;
 
-    ScriptDocument const& GetDocument() const { return m_aDocument; }
-    OUString const& GetLibName() const { return m_aLibName; }
-    OUString const& GetName() const { return m_aName; }
-    OUString const& GetMethodName() const { return m_aMethodName; }
-    ItemType GetType() const { return m_eType; }
-};
+        ScriptDocument const& GetDocument() const { return m_aDocument; }
+        OUString const& GetLibName() const { return m_aLibName; }
+        OUString const& GetName() const { return m_aName; }
+        OUString const& GetMethodName() const { return m_aMethodName; }
+        ItemType GetType() const { return m_eType; }
+    };
 }
-#endif
+// ~ENABLE_ITEMS
 
 class SbxItem : public SfxPoolItem
 {
