@@ -213,7 +213,7 @@ std::unique_ptr<ThreadTask> ThreadPool::popWorkLocked( std::unique_lock< std::mu
     return nullptr;
 }
 
-void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag)
+void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag, bool bJoinAll)
 {
 #if defined DBG_UTIL && (defined LINUX || defined _WIN32)
     assert(!gbIsWorkerThread && "cannot wait for tasks from inside a task");
@@ -232,12 +232,16 @@ void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag)
 
     rTag->waitUntilDone();
 
+    if (bJoinAll)
+        joinAll();
+}
+
+void ThreadPool::joinAll()
+{
+    std::unique_lock< std::mutex > aGuard( maMutex );
+    if (maTasks.empty()) // check if there are still tasks from another tag
     {
-        std::unique_lock< std::mutex > aGuard( maMutex );
-        if (maTasks.empty()) // check if there are still tasks from another tag
-        {
-            shutdownLocked(aGuard);
-        }
+        shutdownLocked(aGuard);
     }
 }
 

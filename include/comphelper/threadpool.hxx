@@ -63,8 +63,13 @@ public:
     /// push a new task onto the work queue
     void        pushTask( std::unique_ptr<ThreadTask> pTask);
 
-    /// wait until all queued tasks associated with the tag are completed
-    void        waitUntilDone(const std::shared_ptr<ThreadTaskTag>&);
+    /** Wait until all queued tasks associated with the tag are completed
+        @param  bJoinAll - if set it joins all threads at the end if no other tasks from other tags.
+    */
+    void        waitUntilDone(const std::shared_ptr<ThreadTaskTag>&, bool bJoinAll = true);
+
+    /// join all threads if there are no tasks presently.
+    void        joinAll();
 
     /// return the number of live worker threads
     sal_Int32   getWorkerCount() const { return mnWorkers; }

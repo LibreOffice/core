@@ -32,6 +32,7 @@
 #include <tools/urlobj.hxx>
 #include <rtl/crc.h>
 #include <basic/basmgr.hxx>
+#include <comphelper/threadpool.hxx>
 #include <sal/log.hxx>
 
 #include <document.hxx>
@@ -306,6 +307,9 @@ void ScDocument::ClosingClipboardSource()
 ScDocument::~ScDocument()
 {
     OSL_PRECOND( !bInLinkUpdate, "bInLinkUpdate in dtor" );
+
+    // Join any pending(recalc) threads in global threadpool
+    comphelper::ThreadPool::getSharedOptimalPool().joinAll();
 
     bInDtorClear = true;
 
