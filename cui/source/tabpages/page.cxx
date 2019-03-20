@@ -308,7 +308,6 @@ void SvxPageDescPage::Init_Impl()
     // adjust the handler
     m_xLayoutBox->connect_changed(LINK(this, SvxPageDescPage, LayoutHdl_Impl));
 
-    m_xPaperTrayBox->connect_focus_in(LINK(this, SvxPageDescPage, PaperBinHdl_Impl));
     m_xPaperSizeBox->connect_changed(LINK(this, SvxPageDescPage, PaperSizeSelect_Impl));
     m_xPaperWidthEdit->connect_value_changed( LINK(this, SvxPageDescPage, PaperSizeModify_Impl));
     m_xPaperHeightEdit->connect_value_changed(LINK(this, SvxPageDescPage, PaperSizeModify_Impl));
@@ -410,6 +409,10 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
 
     m_xPaperTrayBox->append(OUString::number(nPaperBin), aBinName);
     m_xPaperTrayBox->set_active_text(aBinName);
+    // reset focus handler to default first so know none already connected
+    m_xPaperTrayBox->connect_focus_in(Link<weld::Widget&, void>());
+    // update the list when widget gets focus
+    m_xPaperTrayBox->connect_focus_in(LINK(this, SvxPageDescPage, PaperBinHdl_Impl));
 
     Size aPaperSize = SvxPaperInfo::GetPaperSize( mpDefPrinter );
     pItem = GetItem( *rSet, SID_ATTR_PAGE_SIZE );
@@ -804,9 +807,8 @@ IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl, weld::ComboBox&, void)
 
 IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl, weld::Widget&, void)
 {
-    if (m_xPaperTrayBox->get_count() > 1)
-        // already filled
-        return;
+    // tdf#124226 disconnect so not called again, unless Reset occurs
+    m_xPaperTrayBox->connect_focus_in(Link<weld::Widget&, void>());
 
     OUString aOldName = m_xPaperTrayBox->get_active_text();
     m_xPaperTrayBox->freeze();
@@ -826,6 +828,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl, weld::Widget&, void)
     }
     m_xPaperTrayBox->set_active_text(aOldName);
     m_xPaperTrayBox->thaw();
+
     // tdf#123650 explicitly grab-focus after the modification otherwise gtk loses track
     // of there the focus should be
     m_xPaperTrayBox->grab_focus();
