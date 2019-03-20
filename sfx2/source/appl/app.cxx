@@ -102,9 +102,7 @@ using namespace ::com::sun::star;
 
 static SfxApplication* g_pSfxApplication = nullptr;
 
-#if HAVE_FEATURE_SCRIPTING
 static BasicDLL*       pBasic   = nullptr;
-#endif
 
 #if HAVE_FEATURE_DESKTOP
 static SfxHelp*        pSfxHelp = nullptr;
@@ -201,10 +199,12 @@ SfxApplication::SfxApplication()
     pSfxHelp = new SfxHelp;
 #endif
 
-#if HAVE_FEATURE_SCRIPTING
     pBasic   = new BasicDLL;
+
+#if HAVE_FEATURE_SCRIPTING
     StarBASIC::SetGlobalErrorHdl( LINK( this, SfxApplication, GlobalBasicErrorHdl_Impl ) );
 #endif
+
     SAL_INFO( "sfx.appl", "} initialize DDE" );
 }
 
@@ -229,9 +229,7 @@ SfxApplication::~SfxApplication()
     if ( !pImpl->bDowning )
         Deinitialize();
 
-#if HAVE_FEATURE_SCRIPTING
     delete pBasic;
-#endif
 
     g_pSfxApplication = nullptr;
 }
