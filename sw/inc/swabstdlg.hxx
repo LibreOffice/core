@@ -203,7 +203,7 @@ protected:
 public:
     virtual void        UpdateCounts() = 0;
     virtual void        SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat) = 0;
-    virtual std::shared_ptr<SfxModelessDialogController> GetController() = 0;
+    virtual std::shared_ptr<SfxDialogController> GetController() = 0;
 };
 
 class AbstractSwInsertAbstractDlg : public VclAbstractDialog
@@ -338,7 +338,7 @@ protected:
     virtual ~AbstractMarkFloatDlg() override = default;
 public:
     virtual void    ReInitDlg(SwWrtShell& rWrtShell) = 0;
-    virtual std::shared_ptr<SfxModelessDialogController> GetController() = 0;
+    virtual std::shared_ptr<SfxDialogController> GetController() = 0;
 };
 
 #define RET_LOAD_DOC            100

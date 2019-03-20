@@ -111,8 +111,21 @@ class SFX2_DLLPUBLIC SfxDialogController : public weld::GenericDialogController
 {
 private:
     DECL_DLLPRIVATE_STATIC_LINK(SfxDialogController, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
+
+    DECL_DLLPRIVATE_LINK(FocusInHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(FocusOutHdl, weld::Widget&, void);
+
 public:
     SfxDialogController(weld::Widget* pParent, const OUString& rUIFile, const OString& rDialogId);
+    // dialog gets focus
+    virtual void Activate() {}
+    // dialog loses focus
+    virtual void DeActivate() {}
+
+    // when the dialog has an associated SfxChildWin, typically for Modeless interaction
+    virtual void ChildWinDispose() {} // called from the associated SfxChildWin dtor
+    virtual void Close() {} // called by the SfxChildWin when the dialog is closed
+    virtual void EndDialog(); // called by the SfxChildWin to close the dialog
 };
 
 class SfxModelessDialog_Impl;
@@ -126,8 +139,6 @@ class SFX2_DLLPUBLIC SfxModelessDialogController : public SfxDialogController
 
     void Init(SfxBindings *pBindinx, SfxChildWindow *pCW);
 
-    DECL_DLLPRIVATE_LINK(FocusInHdl, weld::Widget&, void);
-    DECL_DLLPRIVATE_LINK(FocusOutHdl, weld::Widget&, void);
 protected:
     SfxModelessDialogController(SfxBindings*, SfxChildWindow* pChildWin,
         weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID);
@@ -135,11 +146,13 @@ protected:
 
 public:
     void                    FillInfo(SfxChildWinInfo&) const;
-    virtual void            Activate() {}
     void                    Initialize (SfxChildWinInfo const * pInfo);
-    void                    Close();
     void                    DeInit();
-    void                    EndDialog();
+    virtual void            Close() override;
+    virtual void            EndDialog() override;
+    virtual void            Activate() override;
+    virtual void            DeActivate() override;
+    virtual void            ChildWinDispose() override;
     SfxBindings&            GetBindings() { return *m_pBindings; }
 };
 
