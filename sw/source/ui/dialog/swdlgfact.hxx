@@ -100,13 +100,6 @@ public:
     virtual sal_uInt8   GetPara() const override ;
 };
 
-class SwAbstractSfxDialog_Impl :public SfxAbstractDialog
-{
-    DECL_ABSTDLG_BASE(SwAbstractSfxDialog_Impl,SfxModalDialog)
-    virtual const SfxItemSet*   GetOutputItemSet() const override;
-    virtual void        SetText( const OUString& rStr ) override;
-};
-
 class SwAbstractSfxController_Impl : public SfxAbstractDialog
 {
     std::unique_ptr<SfxSingleTabDialogController> m_xDlg;
