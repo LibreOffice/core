@@ -24,6 +24,8 @@
 #include <ndtxt.hxx>
 #include "TextFrameIndex.hxx"
 
+#include <boost/version.hpp>
+
 namespace com { namespace sun { namespace star { namespace linguistic2 { class XHyphenatedWord; } } } }
 
 namespace sw { namespace mark { class IMark; } }
@@ -978,8 +980,13 @@ struct MergedPara
 class MergedAttrIterBase
 {
 protected:
+#if BOOST_VERSION < 105600
+    sw::MergedPara const* m_pMerged;
+    SwTextNode const* m_pNode;
+#else
     sw::MergedPara const*const m_pMerged;
     SwTextNode const*const m_pNode;
+#endif
     size_t m_CurrentExtent;
     size_t m_CurrentHint;
     MergedAttrIterBase(SwTextFrame const& rFrame);
