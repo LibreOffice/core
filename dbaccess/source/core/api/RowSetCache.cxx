@@ -1136,7 +1136,7 @@ bool ORowSetCache::absolute( sal_Int32 row )
     if(row < 0)
     {
         // here we have to scroll from the last row to backward so we have to go to last row and
-        // and two the previous
+        // and to the previous
         if(m_bRowCountFinal || last())
         {
             m_nPosition = m_nRowCount + row + 1; // + row because row is negative and +1 because row==-1 means last row
