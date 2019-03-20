@@ -22,6 +22,51 @@
 
 namespace basctl
 {
+
+#ifdef ENABLE_ITEMS
+namespace Item
+{
+Sbx::Sbx(const ScriptDocument* pDocument, const OUString& aLibName, const OUString& aName, const OUString& aMethodName, ItemType eType)
+:   SbxStaticHelper(),
+    m_aDocument(nullptr != pDocument ? *pDocument : ScriptDocument::getApplicationScriptDocument()),
+    m_aLibName(aLibName),
+    m_aName(aName),
+    m_aMethodName(aMethodName),
+    m_eType(eType)
+{
+}
+
+Sbx::~Sbx()
+{
+    if(IsAdministrated())
+    {
+        GetStaticAdmin().HintExpired(this);
+    }
+}
+
+std::shared_ptr<const Sbx> Sbx::Create(const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, ItemType eType)
+{
+    return std::static_pointer_cast<const Sbx>(GetStaticAdmin().Create(new Sbx(&rDocument, aLibName, aName, OUString(), eType)));
+}
+
+std::shared_ptr<const Sbx> Sbx::Create(const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, const OUString& aMethodName, ItemType eType)
+{
+    return std::static_pointer_cast<const Sbx>(GetStaticAdmin().Create(new Sbx(&rDocument, aLibName, aName, aMethodName, eType)));
+}
+
+bool Sbx::operator==(const IBase& rCandidate) const
+{
+    assert(IBase::operator==(rCandidate));
+    const Sbx& rCand(static_cast<const Sbx&>(rCandidate));
+    return (GetDocument() == rCand.GetDocument()
+        && GetLibName() == rCand.GetLibName()
+        && GetName() == rCand.GetName()
+        && GetMethodName() == rCand.GetMethodName()
+        && GetType() == rCand.GetType());
+}
+}
+#endif
+
 SfxPoolItem* SbxItem::CreateDefault() { SAL_WARN( "basctl.basicide", "No SbxItem factory available"); return nullptr; }
 SbxItem::SbxItem (
     sal_uInt16 nWhichItem,

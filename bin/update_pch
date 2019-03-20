@@ -44,6 +44,7 @@ DEFAULTS = \
     'accessibility.acc'                 : ( 4, EXCLUDE, INCLUDE, INCLUDE), #   7.8
     'basctl.basctl'                     : ( 3, EXCLUDE, INCLUDE, EXCLUDE), #  11.9
     'basegfx.basegfx'                   : ( 3, EXCLUDE, EXCLUDE, INCLUDE), #   3.8
+    'item.item'                         : ( 3, EXCLUDE, EXCLUDE, INCLUDE), #   3.8
     'basic.sb'                          : ( 2, EXCLUDE, EXCLUDE, INCLUDE), #  10.7
     'chart2.chartcontroller'            : ( 6, EXCLUDE, INCLUDE, INCLUDE), #  18.4
     'chart2.chartcore'                  : ( 3, EXCLUDE, EXCLUDE, INCLUDE), #  22.5
