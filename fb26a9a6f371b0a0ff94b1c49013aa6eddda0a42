@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_c4fed0ad",
+        "filename": "solenv/bin/test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-20T19:09:10Z",
+      "side": 1,
+      "message": "use the location of this file instead of curdir (which can be anything)",
+      "range": {
+        "startLine": 5,
+        "startChar": 27,
+        "endLine": 5,
+        "endChar": 36
+      },
+      "revId": "fb26a9a6f371b0a0ff94b1c49013aa6eddda0a42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_843208a7",
+        "filename": "solenv/bin/test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-20T19:09:10Z",
+      "side": 1,
+      "message": "please use speaking variable names instead of one letter variables",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 1
+      },
+      "revId": "fb26a9a6f371b0a0ff94b1c49013aa6eddda0a42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_24277c67",
+        "filename": "solenv/bin/test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-20T19:09:10Z",
+      "side": 1,
+      "message": "you should probably use some python function for path creation to be system independent here",
+      "range": {
+        "startLine": 9,
+        "startChar": 6,
+        "endLine": 9,
+        "endChar": 10
+      },
+      "revId": "fb26a9a6f371b0a0ff94b1c49013aa6eddda0a42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_642d8445",
+        "filename": "solenv/bin/test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-20T19:09:10Z",
+      "side": 1,
+      "message": "the task is not to see if there is change. All files in the blacklist will change if formatted.\nPlease read the bug description again for what is expected here.",
+      "range": {
+        "startLine": 22,
+        "startChar": 22,
+        "endLine": 22,
+        "endChar": 40
+      },
+      "revId": "fb26a9a6f371b0a0ff94b1c49013aa6eddda0a42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
