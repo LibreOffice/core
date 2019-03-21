@@ -175,7 +175,9 @@ ifdef LO_CLANG_SHARED_PLUGINS
 $(CLANGINDIR)/sharedvisitor/sharedvisitor.cxx: $(shell grep -l "LO_CLANG_SHARED_PLUGINS" $(CLANGINDIR)/*.cxx)
 $(CLANGINDIR)/sharedvisitor/sharedvisitor.cxx: $(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT)
 	$(call gb_Output_announce,$(subst $(SRCDIR)/,,$@),$(true),GEN,1)
-	$(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT) $(shell grep -l "LO_CLANG_SHARED_PLUGINS" $(CLANGINDIR)/*.cxx) \
+	$(CLANGOUTDIR)/sharedvisitor/generator$(CLANG_EXE_EXT) \
+        $(COMPILER_PLUGINS_TOOLING_ARGS:%=-arg=%) \
+        $(shell grep -l "LO_CLANG_SHARED_PLUGINS" $(CLANGINDIR)/*.cxx) \
         > $(CLANGINDIR)/sharedvisitor/sharedvisitor.cxx
 
 CLANGTOOLLIBS = -lclangTooling -lclangDriver -lclangFrontend -lclangParse -lclangSema -lclangEdit -lclangAnalysis \

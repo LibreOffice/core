@@ -56,6 +56,8 @@ TODO:
 #include "clang/Frontend/FrontendAction.h"
 #include "clang/Tooling/Tooling.h"
 
+#include <cstddef>
+#include <cstring>
 #include <iostream>
 #include <fstream>
 #include <set>
@@ -534,14 +536,21 @@ string readSourceFile( const char* filename )
 
 int main(int argc, char** argv)
 {
-    for( int i = 1; i < argc; ++ i )
+    vector< string > args;
+    int i = 1;
+    for( ; i < argc; ++ i )
     {
-        string contents = readSourceFile(argv[i]);
-        if( contents.empty())
-            continue;
+        constexpr std::size_t prefixlen = 5; // strlen("-arg=");
+        if (std::strncmp(argv[i], "-arg=", prefixlen) != 0)
+        {
+            break;
+        }
+        args.push_back(argv[i] + prefixlen);
+    }
 #define STRINGIFY2(a) #a
 #define STRINGIFY(a) STRINGIFY2(a)
-        vector< string > args =
+    args.insert(
+        args.end(),
         {
             "-I" STRINGIFY(BUILDDIR) "/config_host", // plugin sources use e.g. config_global.h
             "-I" STRINGIFY(CLANGDIR) "/include", // clang's headers
@@ -550,7 +559,12 @@ int main(int argc, char** argv)
             "-D__STDC_CONSTANT_MACROS", // Clang headers require these.
             "-D__STDC_FORMAT_MACROS",
             "-D__STDC_LIMIT_MACROS",
-        };
+        });
+    for( ; i < argc; ++ i )
+    {
+        string contents = readSourceFile(argv[i]);
+        if( contents.empty())
+            continue;
         foundSomething = false;
         if( !clang::tooling::runToolOnCodeWithArgs( new FindNamedClassAction, contents, args, argv[ i ] ))
         {
