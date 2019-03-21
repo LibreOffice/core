@@ -34,7 +34,7 @@ public:
                             mpPattern(pPattern) {}
                         ~FontConfigFontOptions();
 
-    void                SyncPattern(const OString& rFileName, int nFontFace, bool bEmbolden);
+    void                SyncPattern(const OString& rFileName, sal_uInt32 nFontFace, sal_uInt32 nFontVariation, bool bEmbolden);
     FcPattern*          GetPattern() const;
     static void         cairo_font_options_substitute(FcPattern* pPattern);
 private:

@@ -298,7 +298,10 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
 
 hb_font_t* FreetypeFontInstance::ImplInitHbFont()
 {
-    return InitHbFont(hb_face_create_for_tables(getFontTable, this, nullptr));
+    hb_font_t* pRet = InitHbFont(hb_face_create_for_tables(getFontTable, this, nullptr));
+    assert(mpFreetypeFont);
+    mpFreetypeFont->SetFontVariationsOnHBFont(pRet);
+    return pRet;
 }
 
 bool FreetypeFontInstance::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRect, bool bVertical) const

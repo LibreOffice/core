@@ -57,9 +57,9 @@ public:
 
     static GlyphCache&      GetInstance();
 
-    void                    AddFontFile(
-                                const OString& rNormalizedName,
-                                int nFaceNum, sal_IntPtr nFontId,
+    void                    AddFontFile(const OString& rNormalizedName,
+                                int nFaceNum, int nVariantNum,
+                                sal_IntPtr nFontId,
                                 const FontAttributes&);
 
     void                    AnnounceFonts( PhysicalFontCollection* ) const;
@@ -98,6 +98,7 @@ public:
 
     const OString&          GetFontFileName() const;
     int                     GetFontFaceIndex() const;
+    int                     GetFontFaceVariation() const;
     bool                    TestFont() const { return mbFaceOk;}
     FT_Face                 GetFtFace() const;
     int                     GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
@@ -116,6 +117,8 @@ public:
     bool                    GetAntialiasAdvice() const;
 
     FreetypeFontInstance*   GetFontInstance() const { return mpFontInstance.get(); }
+
+    void                    SetFontVariationsOnHBFont(hb_font_t* pHbFace) const;
 
     // tdf#127189 FreeType <= 2.8 will fail to render stretched horizontal brace glyphs
     // in starmath at a fairly low stretch ratio. This appears fixed in 2.9 with

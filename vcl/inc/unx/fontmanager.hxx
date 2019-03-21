@@ -131,6 +131,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         int               m_nDirectory;       // atom containing system dependent path
         OString           m_aFontFile;        // relative to directory
         int               m_nCollectionEntry; // 0 for regular fonts, 0 to ... for fonts stemming from collections
+        int               m_nVariationEntry;  // 0 for regular fonts, 0 to ... for fonts stemming from font variations
 
         explicit PrintFont();
     };
@@ -154,7 +155,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     bool analyzeSfntFile(PrintFont* pFont) const;
     // finds the font id for the nFaceIndex face in this font file
     // There may be multiple font ids for font collections
-    fontID findFontFileID( int nDirID, const OString& rFile, int nFaceIndex ) const;
+    fontID findFontFileID(int nDirID, const OString& rFile, int nFaceIndex, int nVariationIndex) const;
 
     // There may be multiple font ids for font collections
     std::vector<fontID> findFontFileIDs( int nDirID, const OString& rFile ) const;
@@ -241,6 +242,9 @@ public:
 
     // get the ttc face number
     int getFontFaceNumber( fontID nFontID ) const;
+
+    // get the ttc face variation
+    int getFontFaceVariation( fontID nFontID ) const;
 
     // get a specific fonts ascend
     int getFontAscend( fontID nFontID ) const;
