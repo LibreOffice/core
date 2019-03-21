@@ -713,7 +713,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyTileOffsetHdl, weld::MetricSpinButton&, 
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
 {
-    SvxOpenGraphicDialog aDlg("Import", GetDialogFrameWeld());
+    SvxOpenGraphicDialog aDlg(CuiResId(RID_SVXSTR_ADD_IMAGE), GetDialogFrameWeld());
     aDlg.EnableLink(false);
     long nCount = m_pBitmapList->Count();
 
