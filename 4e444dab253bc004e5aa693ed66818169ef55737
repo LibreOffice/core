@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_a7906e97",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport13.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-03-21T13:00:44Z",
+      "side": 1,
+      "message": "Can you either move this to ooxmlexport4?\n\nThe test will fail on Windows if you manage to execute two tests accessing the same files in parallel. Having these tests in the same suite make sure that they will be executed after each other.",
+      "revId": "4e444dab253bc004e5aa693ed66818169ef55737",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
