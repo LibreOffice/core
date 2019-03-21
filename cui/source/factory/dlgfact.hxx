@@ -658,6 +658,20 @@ public:
     virtual short Execute() override;
 };
 
+class TipOfTheDayDialog;
+class AbstractTipOfTheDayDialog_Impl : public AbstractTipOfTheDayDialog
+{
+protected:
+    std::unique_ptr<TipOfTheDayDialog> m_xDlg;
+
+public:
+    explicit AbstractTipOfTheDayDialog_Impl(std::unique_ptr<TipOfTheDayDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+};
+
 //AbstractDialogFactory_Impl implementations
 class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
 {
@@ -836,6 +850,8 @@ public:
     virtual VclPtr<AbstractSignSignatureLineDialog>
     CreateSignSignatureLineDialog(weld::Window* pParent,
                                   const css::uno::Reference<css::frame::XModel> xModel) override;
+
+    virtual VclPtr<AbstractTipOfTheDayDialog> CreateTipOfTheDayDialog(weld::Window* pParent) override;
 };
 
 #endif
