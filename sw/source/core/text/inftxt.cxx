@@ -749,7 +749,7 @@ void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
     else
     {
         aPoint.setX( X() );
-        if ( GetTextFrame()->IsVertLR() )
+        if (GetTextFrame()->IsVertLR() && !GetTextFrame()->IsVertLRBT())
             aPoint.setY( Y() - rPor.Height() + rPor.GetAscent() );
         else
             aPoint.setY( Y() - rPor.GetAscent() );
