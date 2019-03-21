@@ -693,9 +693,10 @@ bool GenPspGraphics::AddTempDevFontHelper( PhysicalFontCollection* pFontCollecti
         aDFA.IncreaseQualityBy( 5800 );
 
         int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
+        int nVariantNum = rMgr.getFontFaceVariation( aInfo.m_nID );
 
         const OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
-        rGC.AddFontFile( rFileName, nFaceNum, aInfo.m_nID, aDFA );
+        rGC.AddFontFile( rFileName, nFaceNum, nVariantNum, aInfo.m_nID, aDFA );
     }
 
     // announce new font to device's font list

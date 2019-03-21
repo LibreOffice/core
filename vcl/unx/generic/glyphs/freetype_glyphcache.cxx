@@ -47,6 +47,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
+#include FT_MULTIPLE_MASTERS_H
 #include FT_OUTLINE_H
 #include FT_SIZES_H
 #include FT_SYNTHESIS_H
@@ -68,6 +69,16 @@
 #include <impfontcache.hxx>
 
 static FT_Library aLibFT = nullptr;
+
+// enable linking with old FT versions
+static int nFTVERSION = 0;
+
+#if (FREETYPE_MAJOR < 2 || (FREETYPE_MAJOR == 2 && FREETYPE_MINOR < 9))
+extern "C"
+{
+    extern void FT_Done_MM_Var(FT_Library library, FT_MM_Var *amaster);
+}
+#endif
 
 typedef std::unordered_map<const char*, std::shared_ptr<FreetypeFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
 
@@ -162,11 +173,12 @@ void FreetypeFontFile::Unmap()
 }
 
 FreetypeFontInfo::FreetypeFontInfo( const FontAttributes& rDevFontAttributes,
-    const OString& rNativeFileName, int nFaceNum, sal_IntPtr nFontId)
+    const OString& rNativeFileName, int nFaceNum, int nFaceVariation, sal_IntPtr nFontId)
 :
     maFaceFT( nullptr ),
     mpFontFile( FreetypeFontFile::FindFontFile( rNativeFileName ) ),
     mnFaceNum( nFaceNum ),
+    mnFaceVariation( nFaceVariation ),
     mnRefCount( 0 ),
     mnFontId( nFontId ),
     maDevFontAttributes( rDevFontAttributes )
@@ -190,10 +202,54 @@ FT_FaceRec_* FreetypeFontInfo::GetFaceFT()
             mpFontFile->GetFileSize(), mnFaceNum, &maFaceFT );
         if( (rc != FT_Err_Ok) || (maFaceFT->num_glyphs <= 0) )
             maFaceFT = nullptr;
+
+        if (maFaceFT && mnFaceVariation)
+        {
+            FT_MM_Var *pFtMMVar;
+            if (FT_Get_MM_Var(maFaceFT, &pFtMMVar) == 0)
+            {
+                if (static_cast<sal_uInt32>(mnFaceVariation) <= pFtMMVar->num_namedstyles)
+                {
+                    FT_Var_Named_Style *instance = &pFtMMVar->namedstyle[mnFaceVariation - 1];
+                    FT_Set_Var_Design_Coordinates(maFaceFT, pFtMMVar->num_axis, instance->coords);
+                }
+                if (nFTVERSION >= 2900)
+                    FT_Done_MM_Var(aLibFT, pFtMMVar);
+                else
+                    free(pFtMMVar);
+            }
+        }
     }
 
     ++mnRefCount;
     return maFaceFT;
+}
+
+void FreetypeFont::SetFontVariationsOnHBFont(hb_font_t* pHbFace) const
+{
+    sal_uInt32 nFaceVariation = mpFontInfo->GetFontFaceVariation();
+    if (maFaceFT && nFaceVariation)
+    {
+        FT_MM_Var *pFtMMVar;
+        if (FT_Get_MM_Var(maFaceFT, &pFtMMVar) == 0)
+        {
+            if (nFaceVariation <= pFtMMVar->num_namedstyles)
+            {
+                FT_Var_Named_Style *instance = &pFtMMVar->namedstyle[nFaceVariation - 1];
+                std::vector<hb_variation_t> aVariations(pFtMMVar->num_axis);
+                for (FT_UInt i = 0; i < pFtMMVar->num_axis; ++i)
+                {
+                    aVariations[i].tag = pFtMMVar->axis[i].tag;
+                    aVariations[i].value = instance->coords[i] / 65536.0;
+                }
+                hb_font_set_variations(pHbFace, aVariations.data(), aVariations.size());
+            }
+            if (nFTVERSION >= 2900)
+                FT_Done_MM_Var(aLibFT, pFtMMVar);
+            else
+                free(pFtMMVar);
+        }
+    }
 }
 
 void FreetypeFontInfo::ReleaseFaceFT()
@@ -261,6 +317,7 @@ void GlyphCache::InitFreetype()
 
     FT_Int nMajor = 0, nMinor = 0, nPatch = 0;
     FT_Library_Version(aLibFT, &nMajor, &nMinor, &nPatch);
+    nFTVERSION = nMajor * 1000 + nMinor * 100 + nPatch;
 
     // TODO: remove when the priorities are selected by UI
     char* pEnv;
@@ -281,8 +338,8 @@ FT_Face FreetypeFont::GetFtFace() const
     return maFaceFT;
 }
 
-void GlyphCache::AddFontFile( const OString& rNormalizedName,
-    int nFaceNum, sal_IntPtr nFontId, const FontAttributes& rDevFontAttr)
+void GlyphCache::AddFontFile(const OString& rNormalizedName,
+    int nFaceNum, int nVariantNum, sal_IntPtr nFontId, const FontAttributes& rDevFontAttr)
 {
     if( rNormalizedName.isEmpty() )
         return;
@@ -291,7 +348,7 @@ void GlyphCache::AddFontFile( const OString& rNormalizedName,
         return;
 
     FreetypeFontInfo* pFontInfo = new FreetypeFontInfo( rDevFontAttr,
-        rNormalizedName, nFaceNum, nFontId);
+        rNormalizedName, nFaceNum, nVariantNum, nFontId);
     m_aFontInfoList[ nFontId ].reset(pFontInfo);
     if( m_nMaxFontId < nFontId )
         m_nMaxFontId = nFontId;
@@ -433,7 +490,7 @@ const FontConfigFontOptions* FreetypeFont::GetFontOptions() const
     if (!mxFontOptions)
     {
         mxFontOptions.reset(GetFCFontOptions(mpFontInfo->GetFontAttributes(), mpFontInstance->GetFontSelectPattern().mnHeight));
-        mxFontOptions->SyncPattern(GetFontFileName(), GetFontFaceIndex(), NeedsArtificialBold());
+        mxFontOptions->SyncPattern(GetFontFileName(), GetFontFaceIndex(), GetFontFaceVariation(), NeedsArtificialBold());
     }
     return mxFontOptions.get();
 }
@@ -451,6 +508,11 @@ const OString& FreetypeFont::GetFontFileName() const
 int FreetypeFont::GetFontFaceIndex() const
 {
     return mpFontInfo->GetFontFaceIndex();
+}
+
+int FreetypeFont::GetFontFaceVariation() const
+{
+    return mpFontInfo->GetFontFaceVariation();
 }
 
 FreetypeFont::~FreetypeFont()
