@@ -44,6 +44,7 @@ private:
 
     std::unique_ptr<weld::CheckButton> m_xExtHelpCB;
     std::unique_ptr<weld::CheckButton> m_xPopUpNoHelpCB;
+    std::unique_ptr<weld::CheckButton> m_xShowTipOfTheDay;
     std::unique_ptr<weld::Widget> m_xFileDlgFrame;
     std::unique_ptr<weld::Widget> m_xPrintDlgFrame;
     std::unique_ptr<weld::Widget> m_xFileDlgROImage;
