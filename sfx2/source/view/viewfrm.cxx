@@ -1218,9 +1218,30 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 rBind.Invalidate( SID_RELOAD );
                 rBind.Invalidate( SID_EDITDOC );
 
+                const auto t0 = std::chrono::system_clock::now().time_since_epoch();
+
+                // show tip-of-the-day dialog
+                const bool bShowTipOfTheDay = officecfg::Office::Common::Misc::ShowTipOfTheDay::get();
+                bool bIsUITest = false; //uitest.uicheck fails when the dialog is open
+                for( sal_uInt16 i = 0; i < Application::GetCommandLineParamCount(); i++ )
+                {
+                    if( Application::GetCommandLineParam(i) == "--nologo" )
+                        bIsUITest = true;
+                }
+                if (bShowTipOfTheDay && !Application::IsHeadlessModeEnabled() && !bIsUITest) {
+                    const sal_Int32 nLastTipOfTheDay = officecfg::Office::Common::Misc::LastTipOfTheDayShown::get();
+                    const sal_Int32 nDay = std::chrono::duration_cast<std::chrono::hours>(t0).count()/24; // days since 1970-01-01
+                    if (nDay-nLastTipOfTheDay > 0) { //only once per day
+                        VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+                        VclPtr<VclAbstractDialog> pDlg =
+                            pFact->CreateTipOfTheDayDialog( GetWindow().GetFrameWeld() );
+                        pDlg->Execute();
+                    }
+                }
+
                 // inform about the community involvement
                 const sal_Int64 nLastGetInvolvedShown = officecfg::Setup::Product::LastTimeGetInvolvedShown::get();
-                const sal_Int64 nNow = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+                const sal_Int64 nNow = std::chrono::duration_cast<std::chrono::seconds>(t0).count();
                 const sal_Int64 nPeriodSec(60 * 60 * 24 * 180); // 180 days in seconds
                 bool bUpdateLastTimeGetInvolvedShown = false;
 
