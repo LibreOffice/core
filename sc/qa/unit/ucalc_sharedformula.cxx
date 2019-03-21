@@ -2536,5 +2536,76 @@ void Test::testSharedFormulaCutCopyMoveIntoRef()
     }
 }
 
+// tdf#121002
+void Test::testSharedFormulaCutCopyMoveWithRef()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Data in A1:C4
+    std::vector<std::vector<const char*>> aData = {
+        {  "",  "", "=SUM(A1:B1)" },
+        {  "",  "", "=SUM(A2:B2)" },
+        { "1", "2", "=SUM(A3:B3)" },
+        { "4", "8", "=SUM(A4:B4)" }
+    };
+    const ScAddress aOrgPos(0,0,0);
+    insertRangeData( m_pDoc, aOrgPos, aData);
+
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+
+    ScAddress aPos( ScAddress::UNINITIALIZED);
+
+    // Check results in C1:C4
+    const double fVec0[] = { 0.0, 0.0, 3.0, 12.0 };
+    aPos = ScAddress(2,0,0);
+    for (SCROW i=0; i < 4; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL( fVec0[i], m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+    }
+
+    // Set up clip document.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    aClipDoc.ResetClip(m_pDoc, &aMark);
+    // Cut A3:B3 to clipboard.
+    cutToClip( getDocShell(), ScRange(0,2,0, 1,2,0), &aClipDoc, false);
+
+    // Check results in C1:C4 after Cut.
+    const double fVec1[] = { 0.0, 0.0, 0.0, 12.0 };
+    aPos = ScAddress(2,0,0);
+    for (SCROW i=0; i < 4; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL( fVec1[i], m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+    }
+
+    // Paste to A1:B1
+    ScRange aPasteRange(0,0,0, 1,0,0);
+    aMark.SetMarkArea(aPasteRange);
+    m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc);
+
+    // Check results in C1:C4 after Paste.
+    const double fVec2[] = { 3.0, 0.0, 3.0, 12.0 };
+    aPos = ScAddress(2,0,0);
+    for (SCROW i=0; i < 4; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL( fVec2[i], m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+    }
+
+    // Check formulas in C1:C4 after Paste.
+    const OUStringLiteral sForm[] = { "=SUM(A1:B1)", "=SUM(A2:B2)", "=SUM(A1:B1)", "=SUM(A4:B4)" };
+    for (SCROW i=0; i < 4; ++i)
+    {
+        OUString aFormula;
+        m_pDoc->GetFormula( 2,i,0, aFormula);
+        CPPUNIT_ASSERT_EQUAL( OUString(sForm[i]), aFormula);
+    }
+
+    m_pDoc->DeleteTab(0);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
