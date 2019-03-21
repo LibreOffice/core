@@ -1957,6 +1957,10 @@ public:
     {
         m_xImage->SetImage(::Image(StockImage::Yes, rIconName));
     }
+    virtual void set_image(VirtualDevice* pDevice) override
+    {
+        m_xImage->SetImage(createImage(*pDevice));
+    }
 };
 
 class SalInstanceCalendar : public SalInstanceWidget, public virtual weld::Calendar

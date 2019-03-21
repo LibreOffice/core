@@ -87,6 +87,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/hyphenate \
 	cui/uiconfig/ui/iconchangedialog \
 	cui/uiconfig/ui/iconselectordialog \
+	cui/uiconfig/ui/infodialog \
 	cui/uiconfig/ui/insertfloatingframe \
 	cui/uiconfig/ui/insertoleobject \
 	cui/uiconfig/ui/insertrowcolumn \

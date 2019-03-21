@@ -244,6 +244,7 @@ cui/uiconfig/ui/hyphenate.ui://GtkButton[@id='right'] button-no-label
 cui/uiconfig/ui/iconchangedialog.ui://GtkTextView[@id='addrTextview'] no-labelled-by
 cui/uiconfig/ui/iconchangedialog.ui://GtkLabel[@id='label1'] orphan-label
 cui/uiconfig/ui/iconselectordialog.ui://GtkLabel[@id='noteLabel'] orphan-label
+cui/uiconfig/ui/infodialog.ui://GtkLabel[@id='lbTitle'] orphan-label
 cui/uiconfig/ui/insertfloatingframe.ui://GtkEntry[@id='edname'] no-labelled-by
 cui/uiconfig/ui/insertfloatingframe.ui://GtkEntry[@id='edurl'] no-labelled-by
 cui/uiconfig/ui/insertfloatingframe.ui://GtkLabel[@id='label6'] orphan-label

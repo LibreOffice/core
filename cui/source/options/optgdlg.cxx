@@ -259,6 +259,7 @@ OfaMiscTabPage::OfaMiscTabPage(TabPageParent pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "cui/ui/optgeneralpage.ui", "OptGeneralPage", &rSet)
     , m_xExtHelpCB(m_xBuilder->weld_check_button("exthelp"))
     , m_xPopUpNoHelpCB(m_xBuilder->weld_check_button("popupnohelp"))
+    , m_xShowTipOfTheDay(m_xBuilder->weld_check_button("cbTipOfTheDay"))
     , m_xFileDlgFrame(m_xBuilder->weld_widget("filedlgframe"))
     , m_xPrintDlgFrame(m_xBuilder->weld_widget("printdlgframe"))
     , m_xFileDlgROImage(m_xBuilder->weld_widget("lockimage"))
@@ -328,6 +329,12 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
     if ( m_xExtHelpCB->get_state_changed_from_saved() )
         aHelpOptions.SetExtendedHelp( m_xExtHelpCB->get_active() );
 
+    if ( m_xShowTipOfTheDay->get_state_changed_from_saved() )
+    {
+        officecfg::Office::Common::Misc::TipOfTheDay::set(m_xShowTipOfTheDay->get_active(), batch);
+        bModified = true;
+    }
+
     if ( m_xFileDlgCB->get_state_changed_from_saved() )
     {
         SvtMiscOptions aMiscOpt;
@@ -381,6 +388,8 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_xExtHelpCB->save_state();
     m_xPopUpNoHelpCB->set_active( aHelpOptions.IsOfflineHelpPopUp() );
     m_xPopUpNoHelpCB->save_state();
+    m_xShowTipOfTheDay->set_active( officecfg::Office::Common::Misc::TipOfTheDay::get() );
+    m_xShowTipOfTheDay->save_state();
     SvtMiscOptions aMiscOpt;
     m_xFileDlgCB->set_active( !aMiscOpt.UseSystemFileDialog() );
     m_xFileDlgCB->save_state();

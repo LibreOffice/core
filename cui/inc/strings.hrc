@@ -392,6 +392,11 @@
 
 #define RID_SVXSTR_REGISTERED_DATABASES             NC_("RID_SVXSTR_REGISTERED_DATABASES", "Registered Databases")
 
+#define RID_SVX_MAX_TIPOFTHEDAY 3;
+#define RID_SVXSTR_TIPOFTHEDAY_0                    NC_("RID_SVXSTR_TIPOFTHEDAY_0","You can easily convert your documents to PDF with one click by clicking the PDF icon in the toolbar")
+#define RID_SVXSTR_TIPOFTHEDAY_1                    NC_("RID_SVXSTR_TIPOFTHEDAY_1","Editable PDFs? Yes, you can create Hybrid PDFs with LibreOffice")
+#define RID_SVXSTR_TIPOFTHEDAY_2                    NC_("RID_SVXSTR_TIPOFTHEDAY_2","You can select the new Sifr icon set from Tools > Options... > LibreOffice > View > User Interface > Icon size and style")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
