@@ -285,16 +285,4 @@ bool SvxChartColorTableItem::operator==( const SfxPoolItem& rAttr ) const
     return false;
 }
 
-void SvxChartColorTableItem::SetOptions( SvxChartOptions* pOpts ) const
-{
-    if ( pOpts )
-        pOpts->SetDefaultColors( m_aColorTable );
-}
-
-
-void SvxChartColorTableItem::ReplaceColorByIndex( size_t _nIndex, const XColorEntry & _rEntry )
-{
-    m_aColorTable.replace( _nIndex, _rEntry );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

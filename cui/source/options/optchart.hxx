@@ -42,8 +42,11 @@ private:
     VclPtr<PushButton>             m_pPBAdd;
     VclPtr<PushButton>             m_pPBRemove;
 
-    std::unique_ptr<SvxChartOptions>        pChartOptions;
-    std::unique_ptr<SvxChartColorTableItem> pColorConfig;
+    std::unique_ptr<SvxChartOptions>        m_SvxChartOptionsUniquePtr;
+    // no reason to use a cloned SfxItem here (SvxChartColorTableItem)
+    // that just leads to non-const SfxItem and potential trouble
+    std::unique_ptr<SvxChartColorTable>     m_SvxChartColorTableUniquePtr;
+
     ImpColorList            aColorList;
     PaletteManager          aPaletteManager;
 
