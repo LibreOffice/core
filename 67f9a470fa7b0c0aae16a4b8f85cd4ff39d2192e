@@ -16,6 +16,24 @@
       "revId": "67f9a470fa7b0c0aae16a4b8f85cd4ff39d2192e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_477162e0",
+        "filename": "sw/source/core/txtnode/fntcache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1821,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2019-03-21T20:27:07Z",
+      "side": 1,
+      "message": "Only this change was meant to be in this commit, the other changes are actually unintentional. Looks like I messed things up, but I’m away from the development machine and can’t fix it.",
+      "parentUuid": "df87a7cf_27821eca",
+      "revId": "67f9a470fa7b0c0aae16a4b8f85cd4ff39d2192e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
