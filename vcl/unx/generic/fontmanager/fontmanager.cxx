@@ -108,6 +108,7 @@ PrintFontManager::PrintFont::PrintFont()
 ,   m_nYMax(0)
 ,   m_nDirectory(0)
 ,   m_nCollectionEntry(0)
+,   m_nVariationEntry(0)
 {
 }
 
@@ -275,7 +276,7 @@ std::vector<std::unique_ptr<PrintFontManager::PrintFont>> PrintFontManager::anal
     return aNewFonts;
 }
 
-fontID PrintFontManager::findFontFileID( int nDirID, const OString& rFontFile, int nFaceIndex ) const
+fontID PrintFontManager::findFontFileID(int nDirID, const OString& rFontFile, int nFaceIndex, int nVariationIndex) const
 {
     fontID nID = 0;
 
@@ -290,7 +291,9 @@ fontID PrintFontManager::findFontFileID( int nDirID, const OString& rFontFile, i
             continue;
         PrintFont* const pFont = (*it).second.get();
         if (pFont->m_nDirectory == nDirID &&
-            pFont->m_aFontFile == rFontFile && pFont->m_nCollectionEntry == nFaceIndex)
+            pFont->m_aFontFile == rFontFile &&
+            pFont->m_nCollectionEntry == nFaceIndex &&
+            pFont->m_nVariationEntry == nVariationIndex)
         {
             nID = it->first;
             if (nID)
@@ -829,6 +832,19 @@ int PrintFontManager::getFontFaceNumber( fontID nFontID ) const
     if (pFont)
     {
         nRet = pFont->m_nCollectionEntry;
+        if (nRet < 0)
+            nRet = 0;
+    }
+    return nRet;
+}
+
+int PrintFontManager::getFontFaceVariation( fontID nFontID ) const
+{
+    int nRet = 0;
+    PrintFont* pFont = getFont( nFontID );
+    if (pFont)
+    {
+        nRet = pFont->m_nVariationEntry;
         if (nRet < 0)
             nRet = 0;
     }
