@@ -555,6 +555,35 @@ namespace drawinglayer
             }
         }
 
+        void VclMetafileProcessor2D::popListItem()
+        {
+            if (!maListElements.empty())
+            {
+                if (maListElements.top() == vcl::PDFWriter::LIBody)
+                {
+                    maListElements.pop();
+                    mpPDFExtOutDevData->EndStructureElement();
+                }
+                if (maListElements.top() == vcl::PDFWriter::ListItem)
+                {
+                    maListElements.pop();
+                    mpPDFExtOutDevData->EndStructureElement();
+                }
+            }
+        }
+
+        void VclMetafileProcessor2D::popList()
+        {
+            if (!maListElements.empty())
+            {
+                if (maListElements.top() == vcl::PDFWriter::List)
+                {
+                    maListElements.pop();
+                    mpPDFExtOutDevData->EndStructureElement();
+                }
+            }
+        }
+
         // init static break iterator
         uno::Reference< css::i18n::XBreakIterator > VclMetafileProcessor2D::mxBreakIterator;
 
@@ -1233,7 +1262,10 @@ namespace drawinglayer
 
             // this is a part of list item, start LILabel ( = bullet)
             if(mbInListItem)
+            {
+                maListElements.push(vcl::PDFWriter::LILabel);
                 mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::LILabel);
+            }
 
             // process recursively and add MetaFile comment
             process(rBulletPrimitive);
@@ -1241,8 +1273,12 @@ namespace drawinglayer
 
             if(mbInListItem)
             {
-                mpPDFExtOutDevData->EndStructureElement(); // end LILabel
-                mbBulletPresent = true;
+                if (maListElements.top() == vcl::PDFWriter::LILabel)
+                {
+                    maListElements.pop();
+                    mpPDFExtOutDevData->EndStructureElement(); // end LILabel
+                    mbBulletPresent = true;
+                }
             }
         }
 
@@ -1286,22 +1322,33 @@ namespace drawinglayer
                 if(nNewOutlineLevel > mnCurrentOutlineLevel)
                 {
                     // increase List level
-                    for(sal_Int16 a(mnCurrentOutlineLevel); a != nNewOutlineLevel; a++)
+                    for(sal_Int16 a(mnCurrentOutlineLevel); a != nNewOutlineLevel; ++a)
                     {
+                        maListElements.push(vcl::PDFWriter::List);
                         mpPDFExtOutDevData->BeginStructureElement( vcl::PDFWriter::List );
                     }
                 }
                 else // if(nNewOutlineLevel < mnCurrentOutlineLevel)
                 {
-                    // decrease List level
-                    for(sal_Int16 a(mnCurrentOutlineLevel); a != nNewOutlineLevel; a--)
+                    // close list levels below nNewOutlineLevel completely by removing
+                    // list items as well as list tag itself
+                    for(sal_Int16 a(nNewOutlineLevel); a < mnCurrentOutlineLevel; ++a)
                     {
-                        mpPDFExtOutDevData->EndStructureElement();
+                        popListItem(); // end LBody and LI
+                        popList(); // end L
                     }
-                }
+
+                    // on nNewOutlineLevel close the previous list item
+                    popListItem();
+                 }
 
                 // Remember new current OutlineLevel
                 mnCurrentOutlineLevel = nNewOutlineLevel;
+            }
+            else // the same list level
+            {
+                // close the previous list item
+                popListItem();
             }
 
             const bool bDumpAsListItem(-1 != mnCurrentOutlineLevel);
@@ -1309,6 +1356,7 @@ namespace drawinglayer
             if(bDumpAsListItem)
             {
                 // Dump as ListItem
+                maListElements.push(vcl::PDFWriter::ListItem);
                 mpPDFExtOutDevData->BeginStructureElement( vcl::PDFWriter::ListItem );
                 mbInListItem = true;
             }
@@ -1323,10 +1371,7 @@ namespace drawinglayer
             mpMetaFile->AddAction(new MetaCommentAction(aCommentString));
 
             if(bDumpAsListItem)
-            {
-                mpPDFExtOutDevData->EndStructureElement(); // end ListItem
                 mbInListItem = false;
-            }
             else
                 mpPDFExtOutDevData->EndStructureElement(); // end Paragraph
         }
@@ -1343,8 +1388,11 @@ namespace drawinglayer
             if (mnCurrentOutlineLevel >= 0 )
             {
                 // end any opened List structure elements
-                for(sal_Int16 i(0); i <= mnCurrentOutlineLevel; ++i)
-                    mpPDFExtOutDevData->EndStructureElement();
+                for(sal_Int16 a(0); a <= mnCurrentOutlineLevel; ++a)
+                {
+                    popListItem();
+                    popList();
+                }
             }
 
             mpMetaFile->AddAction(new MetaCommentAction(aCommentStringB));
@@ -1359,16 +1407,16 @@ namespace drawinglayer
             // this is a 2nd portion of list item
             // bullet has been already processed, start LIBody
             if (mbInListItem && mbBulletPresent)
+            {
+                maListElements.push(vcl::PDFWriter::LIBody);
                 mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::LIBody);
+            }
 
             // directdraw of text simple portion; use default processing
             RenderTextSimpleOrDecoratedPortionPrimitive2D(rTextCandidate);
 
             if (mbInListItem && mbBulletPresent)
-            {
-                mpPDFExtOutDevData->EndStructureElement(); // end LIBody
                 mbBulletPresent = false;
-            }
 
             // restore DrawMode
             mpOutputDevice->SetDrawMode(nOriginalDrawMode);
