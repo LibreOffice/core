@@ -480,9 +480,6 @@
     <glade-widget-class title="Slide Transition Pane" name="sdlo-SlideTransitionBox"
                         generic-name="ShowText" parent="GtkToolButton"
                         icon-name="widget-gtk-toolbutton"/>
-    <glade-widget-class title="Button with small padding" name="vcllo-SmallButton"
-                        generic-name="SmallButton" parent="GtkButton"
-                        icon-name="widget-gtk-button"/>
     <glade-widget-class title="Horizontal box hiding children depending on its priorities" name="sfxlo-PriorityHBox"
                         generic-name="PriorityHBox" parent="GtkBox"
                         icon-name="widget-gtk-box"/>
