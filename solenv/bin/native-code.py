@@ -486,7 +486,6 @@ custom_widgets = [
     'ShowNupOrderWindow',
     'SidebarDialControl',
     'SidebarToolBox',
-    'SmallButton',
     'SpacingListBox',
     'StatusBar',
     'StructListBox',
