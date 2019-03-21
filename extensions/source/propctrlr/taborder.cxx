@@ -45,7 +45,7 @@ namespace pcr
 
     namespace {
 
-    Image GetImage( const Reference< XPropertySet >& _rxSet )
+    OUString GetImage( const Reference< XPropertySet >& _rxSet )
     {
         OUString sImageId = RID_EXTBMP_CONTROL;
         // TODO: classify controls also in Basic propbrw
@@ -79,7 +79,7 @@ namespace pcr
             }
         }
 
-        return Image(StockImage::Yes, sImageId);
+        return sImageId;
     }
 
     }
@@ -107,29 +107,29 @@ namespace pcr
         virtual void SAL_CALL setGroupControl(sal_Bool /*GroupControl*/) override {};
     };
 
-
     //= TabOrderDialog
-
-
-    TabOrderDialog::TabOrderDialog( vcl::Window* _pParent, const Reference< XTabControllerModel >& _rxTabModel,
-                    const Reference< XControlContainer >& _rxControlCont, const Reference< XComponentContext >& _rxORB )
-        :ModalDialog( _pParent, "TabOrderDialog", "modules/spropctrlr/ui/taborder.ui")
-        ,m_xModel( _rxTabModel )
-        ,m_xControlContainer( _rxControlCont )
-        ,m_xORB( _rxORB )
+    TabOrderDialog::TabOrderDialog(weld::Window* _pParent, const Reference< XTabControllerModel >& _rxTabModel,
+                    const Reference< XControlContainer >& _rxControlCont, const Reference< XComponentContext >& _rxORB)
+        : GenericDialogController( _pParent, "modules/spropctrlr/ui/taborder.ui", "TabOrderDialog")
+        , m_xModel( _rxTabModel )
+        , m_xControlContainer( _rxControlCont )
+        , m_xORB( _rxORB )
+        , m_xLB_Controls(m_xBuilder->weld_tree_view("CTRLtree"))
+        , m_xPB_OK(m_xBuilder->weld_button("ok"))
+        , m_xPB_MoveUp(m_xBuilder->weld_button("upB"))
+        , m_xPB_MoveDown(m_xBuilder->weld_button("downB"))
+        , m_xPB_AutoOrder(m_xBuilder->weld_button("autoB"))
     {
-        get(m_pLB_Controls, "CTRLtree");
-        get(m_pPB_OK, "ok");
-        get(m_pPB_MoveUp, "upB");
-        get(m_pPB_MoveDown, "downB");
-        get(m_pPB_AutoOrder, "autoB");
+        m_xLB_Controls->set_size_request(m_xLB_Controls->get_approximate_digit_width() * 60,
+                                         m_xLB_Controls->get_height_rows(10));
+        m_xLB_Controls->set_selection_mode(SelectionMode::Multiple);
 
-
-        m_pPB_MoveUp->SetClickHdl( LINK( this, TabOrderDialog, MoveUpClickHdl ) );
-        m_pPB_MoveDown->SetClickHdl( LINK( this, TabOrderDialog, MoveDownClickHdl ) );
-        m_pPB_AutoOrder->SetClickHdl( LINK( this, TabOrderDialog, AutoOrderClickHdl ) );
-        m_pPB_OK->SetClickHdl( LINK( this, TabOrderDialog, OKClickHdl ) );
-        m_pPB_OK->Disable();
+        m_xLB_Controls->connect_model_changed(LINK(this, TabOrderDialog, ModelHasMoved));
+        m_xPB_MoveUp->connect_clicked( LINK( this, TabOrderDialog, MoveUpClickHdl ) );
+        m_xPB_MoveDown->connect_clicked( LINK( this, TabOrderDialog, MoveDownClickHdl ) );
+        m_xPB_AutoOrder->connect_clicked( LINK( this, TabOrderDialog, AutoOrderClickHdl ) );
+        m_xPB_OK->connect_clicked( LINK( this, TabOrderDialog, OKClickHdl ) );
+        m_xPB_OK->set_sensitive(false);
 
         if ( m_xModel.is() )
             m_xTempModel = new OSimpleTabModel( m_xModel->getControlModels() );
@@ -137,36 +137,22 @@ namespace pcr
         if ( m_xTempModel.is() && m_xControlContainer.is() )
             FillList();
 
-        if ( m_pLB_Controls->GetEntryCount() < 2 )
+        if (m_xLB_Controls->n_children() < 2)
         {
-            m_pPB_MoveUp->Disable();
-            m_pPB_MoveDown->Disable();
-            m_pPB_AutoOrder->Disable();
+            m_xPB_MoveUp->set_sensitive(false);
+            m_xPB_MoveDown->set_sensitive(false);
+            m_xPB_AutoOrder->set_sensitive(false);
         }
 
     }
 
-
     void TabOrderDialog::SetModified()
     {
-        m_pPB_OK->Enable();
+        m_xPB_OK->set_sensitive(true);
     }
-
 
     TabOrderDialog::~TabOrderDialog()
     {
-        disposeOnce();
-    }
-
-    void TabOrderDialog::dispose()
-    {
-        m_pLB_Controls->Hide();
-        m_pLB_Controls.clear();
-        m_pPB_OK.clear();
-        m_pPB_MoveUp.clear();
-        m_pPB_MoveDown.clear();
-        m_pPB_AutoOrder.clear();
-        ModalDialog::dispose();
     }
 
     void TabOrderDialog::FillList()
@@ -175,12 +161,12 @@ namespace pcr
         if ( !m_xTempModel.is() || !m_xControlContainer.is() )
             return;
 
-        m_pLB_Controls->Clear();
+        m_xLB_Controls->clear();
 
         try
         {
             OUString aName;
-            Image aImage;
+            OUString aImage;
 
             for ( auto const& rControlModel : m_xTempModel->getControlModels() )
             {
@@ -196,14 +182,15 @@ namespace pcr
                         aName = ::comphelper::getString( xControl->getPropertyValue( PROPERTY_NAME ) );
                             // TODO: do Basic controls have a name?
                         aImage = GetImage( xControl );
-                        m_pLB_Controls->InsertEntry( aName, aImage, aImage, nullptr, false, TREELIST_APPEND, xControl.get() );
+                        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(xControl.get())));
+                        m_xLB_Controls->append(sId, aName, aImage);
                     }
                 }
                 else
                 {
                     // no property set -> no tab order
                     OSL_FAIL( "TabOrderDialog::FillList: invalid control encountered!" );
-                    m_pLB_Controls->Clear();
+                    m_xLB_Controls->clear();
                     break;
                 }
             }
@@ -214,25 +201,21 @@ namespace pcr
         }
 
         // select first entry
-        SvTreeListEntry* pFirstEntry = m_pLB_Controls->GetEntry( 0 );
-        if ( pFirstEntry )
-            m_pLB_Controls->Select( pFirstEntry );
+        if (m_xLB_Controls->n_children())
+            m_xLB_Controls->select(0);
     }
 
-
-    IMPL_LINK_NOARG( TabOrderDialog, MoveUpClickHdl, Button*, void )
+    IMPL_LINK_NOARG( TabOrderDialog, MoveUpClickHdl, weld::Button&, void )
     {
-        m_pLB_Controls->MoveSelection( -1 );
+        MoveSelection(-1);
     }
 
-
-    IMPL_LINK_NOARG( TabOrderDialog, MoveDownClickHdl, Button*, void )
+    IMPL_LINK_NOARG( TabOrderDialog, MoveDownClickHdl, weld::Button&, void )
     {
-        m_pLB_Controls->MoveSelection( 1 );
+        MoveSelection(1);
     }
 
-
-    IMPL_LINK_NOARG( TabOrderDialog, AutoOrderClickHdl, Button*, void )
+    IMPL_LINK_NOARG( TabOrderDialog, AutoOrderClickHdl, weld::Button&, void )
     {
         try
         {
@@ -253,22 +236,20 @@ namespace pcr
         }
     }
 
-
-    IMPL_LINK_NOARG( TabOrderDialog, OKClickHdl, Button*, void )
+    IMPL_LINK_NOARG( TabOrderDialog, OKClickHdl, weld::Button&, void )
     {
-        sal_uLong nEntryCount = m_pLB_Controls->GetEntryCount();
+        int nEntryCount = m_xLB_Controls->n_children();
         Sequence< Reference< XControlModel > > aSortedControlModelSeq( nEntryCount );
         Sequence< Reference< XControlModel > > aControlModels( m_xTempModel->getControlModels());
         Reference< XControlModel > * pSortedControlModels = aSortedControlModelSeq.getArray();
 
-        for (sal_uLong i=0; i < nEntryCount; i++)
+        for (int i = 0; i < nEntryCount; ++i)
         {
-            SvTreeListEntry* pEntry = m_pLB_Controls->GetEntry(i);
-
+            XPropertySet* pEntry = reinterpret_cast<XPropertySet*>(m_xLB_Controls->get_id(i).toInt64());
             for( auto const& rControlModel : aControlModels )
             {
                 Reference< XPropertySet >  xSet(rControlModel, UNO_QUERY);
-                if (xSet.get() == static_cast<XPropertySet*>(pEntry->GetUserData()))
+                if (xSet.get() == pEntry)
                 {
                     pSortedControlModels[i] = rControlModel;
                     break;
@@ -279,101 +260,57 @@ namespace pcr
         // TODO: UNO action (to bracket all the single actions which are being created)
         m_xModel->setControlModels( aSortedControlModelSeq );
 
-        EndDialog( RET_OK );
+        m_xDialog->response(RET_OK);
     }
 
-
-    //= TabOrderListBox
-
-
-    TabOrderListBox::TabOrderListBox( vcl::Window* pParent, WinBits nBits  )
-        :SvTreeListBox( pParent, nBits  )
+    IMPL_LINK_NOARG(TabOrderDialog, ModelHasMoved, weld::TreeView&, void)
     {
-        SetDragDropMode(DragDropMode::ALL/*DragDropMode::CTRL_MOVE*/);
-            // Hmm. The flag alone is not enough, so to be on the safe side ...
-
-        SetSelectionMode( SelectionMode::Multiple );
+        SetModified();
     }
 
-    VCL_BUILDER_FACTORY_CONSTRUCTOR(TabOrderListBox, WB_TABSTOP)
-
-    TabOrderListBox::~TabOrderListBox()
+    void TabOrderDialog::MoveSelection(int nRelPos)
     {
-    }
+        std::vector<int> aRows(m_xLB_Controls->get_selected_rows());
+        if (aRows.empty())
+            return;
 
-
-    void TabOrderListBox::ModelHasMoved( SvTreeListEntry* _pSource )
-    {
-        SvTreeListBox::ModelHasMoved( _pSource );
-
-        static_cast<TabOrderDialog*>(GetParentDialog())->SetModified();
-    }
-
-
-    void TabOrderListBox::MoveSelection( long nRelPos )
-    {
-        OUString aSelEntryPrevText, aSelEntryNextText;
-        Image  aImage;
-        for (long i=0; i<labs(nRelPos); i++)
+        m_xLB_Controls->unselect_all();
+        for (int i = 0; i < abs(nRelPos); ++i)
         {
-            static_cast<TabOrderDialog*>(GetParentDialog())->SetModified();
-
+            SetModified();
 
             // move entries
-            if( nRelPos < 0 )
+            if (nRelPos < 0)
             {
-                SvTreeListEntry* pFirstSelected = FirstSelected();
-                if( !pFirstSelected ) return;
-                sal_uLong nFirstSelPos = GetModel()->GetAbsPos( pFirstSelected );
-                if( nFirstSelPos == 0 ) return;
+                std::sort(aRows.begin(), aRows.end());
 
-                SvTreeListEntry* pSelEntry = pFirstSelected;
-                while( pSelEntry )
+                int nFirstSelPos = aRows[0];
+                if (nFirstSelPos == 0) return;
+
+                for (auto row : aRows)
                 {
-                    sal_uLong nSelEntryPos = GetModel()->GetAbsPos( pSelEntry );
-                    SvTreeListEntry* pSelEntryPrev = GetEntry( nSelEntryPos-1 );
-                    aSelEntryPrevText = GetEntryText( pSelEntryPrev );
-                    aImage = GetExpandedEntryBmp(pSelEntryPrev);
-                    void*  pData = pSelEntryPrev->GetUserData();
-
-                    GetModel()->Remove( pSelEntryPrev );
-                    InsertEntry( aSelEntryPrevText, aImage, aImage, nullptr, false, nSelEntryPos, pData );
-
-                    pSelEntry = NextSelected( pSelEntry );
+                    int nInsertPos = row - 1;
+                    m_xLB_Controls->swap(nInsertPos, row);
                 }
+
+                for (auto row : aRows)
+                    m_xLB_Controls->select(row - 1);
             }
-
-            else if( nRelPos > 0 )
+            else if (nRelPos > 0)
             {
-                SvTreeListEntry* pLastSelected = LastSelected();
-                if( !pLastSelected ) return;
-                sal_uLong nLastSelPos = GetModel()->GetAbsPos( pLastSelected );
+                std::sort(aRows.rbegin(), aRows.rend());
 
-                if( (nLastSelPos + nRelPos - i) > (GetEntryCount()-1) ) return;
+                int nLastSelPos = aRows[0];
+                if( (nLastSelPos + nRelPos - i) > (m_xLB_Controls->n_children()-1) ) return;
 
-                SvTreeListEntry* pSelEntry = pLastSelected;
-                while( pSelEntry )
+                for (auto row : aRows)
                 {
-                    sal_uLong nSelEntryPos = GetModel()->GetAbsPos( pSelEntry );
-                    SvTreeListEntry* pSelEntryNext = GetEntry( nSelEntryPos+1 );
-                    void* pData = pSelEntryNext->GetUserData();
-
-                    aSelEntryNextText = GetEntryText( pSelEntryNext );
-                    aImage = GetExpandedEntryBmp(pSelEntryNext);
-
-                    GetModel()->Remove( pSelEntryNext );
-                    InsertEntry( aSelEntryNextText, aImage, aImage, nullptr, false, nSelEntryPos, pData );
-
-                    pSelEntry = PrevSelected( pSelEntry );
+                    int nInsertPos = row + 1;
+                    m_xLB_Controls->swap(nInsertPos, row);
                 }
-                long nThumbPos      = GetVScroll()->GetThumbPos();
-                long nVisibleSize   = GetVScroll()->GetVisibleSize();
-                long nFirstVisible = GetModel()->GetAbsPos( FirstVisible());
 
-                if ( ( nThumbPos + nVisibleSize + 1 ) < static_cast<long>( nLastSelPos + 3 ) )
-                    GetVScroll()->DoScrollAction(ScrollType::LineDown);
-                else if((nThumbPos+nVisibleSize+1) >= nFirstVisible)
-                    GetVScroll()->DoScrollAction(ScrollType::LineUp);
+                for (auto row : aRows)
+                    m_xLB_Controls->select(row + 1);
             }
         }
     }

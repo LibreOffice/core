@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/svapp.hxx>
 #include "pcrservices.hxx"
 #include "pcrunodialogs.hxx"
 #include "formstrings.hxx"
@@ -128,7 +129,7 @@ namespace pcr
 
     svt::OGenericUnoDialog::Dialog OTabOrderDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
-        return svt::OGenericUnoDialog::Dialog(VclPtr<TabOrderDialog>::Create(VCLUnoHelper::GetWindow(rParent), m_xTabbingModel, m_xControlContext, m_aContext));
+        return svt::OGenericUnoDialog::Dialog(std::make_unique<TabOrderDialog>(Application::GetFrameWeld(rParent), m_xTabbingModel, m_xControlContext, m_aContext));
     }
 
     void OTabOrderDialog::initialize( const Sequence< Any >& aArguments )
