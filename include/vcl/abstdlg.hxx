@@ -119,6 +119,12 @@ protected:
     virtual ~AbstractSignSignatureLineDialog() override = default;
 };
 
+class VCL_DLLPUBLIC AbstractTipOfTheDayDialog : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractTipOfTheDayDialog() override = default;
+};
+
 class VCL_DLLPUBLIC VclAbstractDialogFactory
 {
 public:
@@ -147,6 +153,10 @@ public:
     virtual VclPtr<AbstractScreenshotAnnotationDlg> CreateScreenshotAnnotationDlg(
         vcl::Window* pParent,
         Dialog& rParentDialog) = 0;
+
+    // create info dialog to show tip-of-the-day
+    virtual VclPtr<AbstractTipOfTheDayDialog>
+    CreateTipOfTheDayDialog(weld::Window* pParent) = 0;
 };
 
 #endif
