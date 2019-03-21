@@ -684,6 +684,12 @@
         otherwise to promote the sale, use or other dealings in this Software without prior written authorization of
         the copyright holder.</p>
     </div>
+    <div class="EBOOK" >
+        <h2>libe-book</h2>
+        <p>The following software may be included in this product: libe-book. Use of any of this software is governed
+        by the terms of the license below:</p>
+        <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
+    </div>
     <div class="LIBEOT" >
         <h2>libeot</h2>
         <p>The following software may be included in this product: libeot. Use of any of this software is governed by
@@ -696,12 +702,6 @@
         by the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
     </div>
-    <h2>libe-book</h2>
-    <p>The following software may be included in this product: libe-book. Use of any of this software is governed by
-    the terms of the license below:</p>
-    <p>LGPL v2.1+ / MPL 2+</p>
-    <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
-    <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
     <div class="ETONYEK">
         <h2>libetonyek</h2>
         <p>The following software may be included in this product: libetonyek. Use of any of this software is governed
