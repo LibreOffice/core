@@ -318,19 +318,20 @@ OUString SwDBTreeList::GetDBName(OUString& rTableName, OUString& rColumnName, sa
 {
     OUString sDBName;
     std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-    if (m_xTreeView->get_selected(xIter.get()) && m_xTreeView->get_iter_depth(*xIter))
+    if (m_xTreeView->get_selected(xIter.get()))
     {
-        if (m_xTreeView->get_iter_depth(*xIter) > 1)
+        if (m_xTreeView->get_iter_depth(*xIter) == 2)
         {
             rColumnName = m_xTreeView->get_text(*xIter);
             m_xTreeView->iter_parent(*xIter); // column name was selected
         }
-        if (pbIsTable)
+        if (m_xTreeView->get_iter_depth(*xIter) == 1)
         {
-            *pbIsTable = m_xTreeView->get_id(*xIter).isEmpty();
+            if (pbIsTable)
+                *pbIsTable = m_xTreeView->get_id(*xIter).isEmpty();
+            rTableName = m_xTreeView->get_text(*xIter);
+            m_xTreeView->iter_parent(*xIter);
         }
-        rTableName = m_xTreeView->get_text(*xIter);
-        m_xTreeView->iter_parent(*xIter);
         sDBName = m_xTreeView->get_text(*xIter);
     }
     return sDBName;
@@ -348,7 +349,10 @@ void SwDBTreeList::Select(const OUString& rDBName, const OUString& rTableName, c
         if (rDBName == m_xTreeView->get_text(*xParent))
         {
             if (!m_xTreeView->iter_has_child(*xParent))
+            {
+                RequestingChildrenHdl(*xParent);
                 m_xTreeView->expand_row(*xParent);
+            }
             std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(xParent.get()));
             if (!m_xTreeView->iter_children(*xChild))
                 continue;
@@ -362,7 +366,10 @@ void SwDBTreeList::Select(const OUString& rDBName, const OUString& rTableName, c
                     if (bShowColumns && !rColumnName.isEmpty())
                     {
                         if (!m_xTreeView->iter_has_child(*xParent))
+                        {
+                            RequestingChildrenHdl(*xParent);
                             m_xTreeView->expand_row(*xParent);
+                        }
 
                         bNoChild = true;
                         if (m_xTreeView->iter_children(*xChild))
