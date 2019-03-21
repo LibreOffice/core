@@ -4392,9 +4392,6 @@ static void preloadData()
     }
     std::cerr << "\n";
 
-    // Set user profile's path back to the original one
-    rtl::Bootstrap::set("UserInstallation", sUserPath);
-
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xGlobalCfg;
     xGlobalCfg = css::ui::GlobalAcceleratorConfiguration::create(
         comphelper::getProcessComponentContext());
@@ -4434,6 +4431,9 @@ static void preloadData()
         nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType(aLocale, false), COMPLEX);
         OutputDevice::GetDefaultFont(DefaultFontType::CTL_SPREADSHEET, nLang, GetDefaultFontFlags::OnlyOne);
     }
+
+    // Set user profile's path back to the original one
+    rtl::Bootstrap::set("UserInstallation", sUserPath);
 }
 
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfileUrl)
