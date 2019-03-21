@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_04527868",
+        "filename": "sc/source/core/data/documen2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2019-03-21T07:52:21Z",
+      "side": 1,
+      "message": "Isn\u0027t that a misleading comment? There might be other threads in the global thread pool than \"recalc\" ones.",
+      "revId": "abe37a92e2fd5755cde4319f7947a603f1260160",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
