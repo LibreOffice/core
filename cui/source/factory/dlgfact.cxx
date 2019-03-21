@@ -88,6 +88,7 @@
 #include <hyphen.hxx>
 #include <thesdlg.hxx>
 #include <about.hxx>
+#include <infodlg.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -1344,6 +1345,11 @@ short SvxMacroAssignDialog::Execute()
     return m_xDialog->run();
 }
 
+short AbstractInfoDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxMacroAssignDlg(
     weld::Window* _pParent, const Reference< XFrame >& _rxDocumentFrame, const bool _bUnoDialogMode,
     const Reference< XNameReplace >& _rxEvents, const sal_uInt16 _nInitiallySelectedEvent )
@@ -1586,6 +1592,12 @@ AbstractDialogFactory_Impl::CreateSignSignatureLineDialog(weld::Window* pParent,
 {
     return VclPtr<AbstractSignSignatureLineDialog_Impl>::Create(
         std::make_unique<SignSignatureLineDialog>(pParent, xModel));
+}
+
+VclPtr<AbstractInfoDialog>
+AbstractDialogFactory_Impl::CreateInfoDialog(weld::Window* pParent)
+{
+    return VclPtr<AbstractInfoDialog_Impl>::Create(std::make_unique<InfoDialog>(pParent));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
