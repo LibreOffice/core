@@ -579,7 +579,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
         // end of a "short" struct by writing the full contents of a "long"
         // register); so create enough space here (assuming that no ABI requires
         // padding larger than 16 byte boundaries):
-        void * pUnoReturn = alloca( multipleOf16(pReturnType->nSize) );
+        void * pUnoReturn = (pReturnType->nSize == 0) ? nullptr : alloca( multipleOf16(pReturnType->nSize) );
         void ** ppUnoArgs = static_cast<void **>(alloca( sizeof(void *) * nParams *2 ));
         typelib_TypeDescription ** ppParamTypes = reinterpret_cast<typelib_TypeDescription **>(ppUnoArgs + nParams);
 
