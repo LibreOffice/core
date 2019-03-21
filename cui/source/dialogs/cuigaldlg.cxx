@@ -927,7 +927,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeHdl, weld::Button&, void)
 
         if (!m_xLbxFound->count_selected_rows() || !bEntriesFound)
         {
-            SvxOpenGraphicDialog aDlg("Gallery", GetDialogFrameWeld());
+            SvxOpenGraphicDialog aDlg(CuiResId(RID_SVXSTR_KEY_GALLERY_DIR), GetDialogFrameWeld());
             aDlg.EnableLink(false);
             aDlg.AsLink(false);
 
