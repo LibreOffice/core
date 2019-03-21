@@ -210,6 +210,7 @@ public:
     void testTdf118990();
     void testTdf121612();
     void testPivotCacheAfterExportXLSX();
+    void testTdf114969XLSX();
 
     void testXltxExport();
 
@@ -327,6 +328,7 @@ public:
     CPPUNIT_TEST(testTdf118990);
     CPPUNIT_TEST(testTdf121612);
     CPPUNIT_TEST(testPivotCacheAfterExportXLSX);
+    CPPUNIT_TEST(testTdf114969XLSX);
 
     CPPUNIT_TEST(testXltxExport);
 
@@ -4157,6 +4159,17 @@ void ScExportTest::testPivotCacheAfterExportXLSX()
     CPPUNIT_ASSERT_MESSAGE("No number group info :(", pInfo);
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf114969XLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("sheet_name_with_dots.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[1]", "location", "'1.1.1.1'!C1");
+    assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[2]", "location", "'1.1.1.1'!C2");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
