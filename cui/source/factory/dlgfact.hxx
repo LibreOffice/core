@@ -659,6 +659,20 @@ public:
     virtual short Execute() override;
 };
 
+class InfoDialog;
+class AbstractInfoDialog_Impl : public AbstractInfoDialog
+{
+protected:
+    std::unique_ptr<InfoDialog> m_xDlg;
+
+public:
+    explicit AbstractInfoDialog_Impl(std::unique_ptr<InfoDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+};
+
 //AbstractDialogFactory_Impl implementations
 class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
 {
@@ -837,6 +851,8 @@ public:
     virtual VclPtr<AbstractSignSignatureLineDialog>
     CreateSignSignatureLineDialog(weld::Window* pParent,
                                   const css::uno::Reference<css::frame::XModel> xModel) override;
+
+    virtual VclPtr<AbstractInfoDialog> CreateInfoDialog(weld::Window* pParent) override;
 };
 
 #endif
