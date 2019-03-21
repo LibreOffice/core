@@ -178,7 +178,7 @@ void PageSelector::DeselectPage (
     const bool bUpdateCurrentPage)
 {
     if (rpDescriptor.get()==nullptr
-        || mrSlideSorter.GetView().SetState(rpDescriptor, PageDescriptor::ST_Selected, false))
+        || !mrSlideSorter.GetView().SetState(rpDescriptor, PageDescriptor::ST_Selected, false))
         return;
 
     --mnSelectedPageCount;
