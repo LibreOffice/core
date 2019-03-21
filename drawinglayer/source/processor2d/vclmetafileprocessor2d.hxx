@@ -20,6 +20,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_VCLMETAFILEPROCESSOR2D_HXX
 #define INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_VCLMETAFILEPROCESSOR2D_HXX
 
+#include <stack>
+
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include "vclprocessor2d.hxx"
@@ -112,6 +114,9 @@ namespace drawinglayer
                 const attribute::LineStartEndAttribute* pEnd);
             void impStartSvtGraphicStroke(SvtGraphicStroke const * pSvtGraphicStroke);
             void impEndSvtGraphicStroke(SvtGraphicStroke const * pSvtGraphicStroke);
+            void popStructureElement(vcl::PDFWriter::StructElement eElem);
+            void popListItem();
+            void popList();
 
             void processGraphicPrimitive2D(const primitive2d::GraphicPrimitive2D& rGraphicPrimitive);
             void processControlPrimitive2D(const primitive2d::ControlPrimitive2D& rControlPrimitive);
@@ -176,6 +181,8 @@ namespace drawinglayer
             sal_Int16                           mnCurrentOutlineLevel;
             bool mbInListItem;
             bool mbBulletPresent;
+
+            std::stack<vcl::PDFWriter::StructElement> maListElements;
 
         protected:
             /*  the local processor for BasePrimitive2D-Implementation based primitives,
