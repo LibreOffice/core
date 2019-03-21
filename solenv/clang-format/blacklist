@@ -12464,7 +12464,6 @@ sd/source/ui/slidesorter/view/SlsTheme.cxx
 sd/source/ui/slidesorter/view/SlsToolTip.cxx
 sd/source/ui/slidesorter/view/SlsViewCacheContext.cxx
 sd/source/ui/slidesorter/view/SlsViewCacheContext.hxx
-sd/source/ui/table/TableDesignBox.cxx
 sd/source/ui/table/TableDesignPane.cxx
 sd/source/ui/table/TableDesignPane.hxx
 sd/source/ui/table/tablefunction.cxx
