@@ -136,6 +136,7 @@ public:
 
 private:
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
+    css::uno::Reference<css::accessibility::XAccessibleContext> getAccessibleContextImpl() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
