@@ -20,37 +20,17 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_TABORDER_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_TABORDER_HXX
 
-#include <vcl/treelistbox.hxx>
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 
 namespace pcr
 {
-
-
-    //= TabOrderListBox
-
-    class TabOrderListBox : public SvTreeListBox
-    {
-    public:
-        TabOrderListBox( vcl::Window* pParent, WinBits nBits  );
-        virtual ~TabOrderListBox() override;
-
-        void            MoveSelection( long nRelPos );
-
-    protected:
-        virtual void    ModelHasMoved(SvTreeListEntry* pSource ) override;
-    };
-
-
     //= TabOrderDialog
-
-    class TabOrderDialog : public ModalDialog
+    class TabOrderDialog : public weld::GenericDialogController
     {
         css::uno::Reference< css::awt::XTabControllerModel >
                                     m_xTempModel;
@@ -61,31 +41,30 @@ namespace pcr
         css::uno::Reference< css::uno::XComponentContext >
                                     m_xORB;
 
-        VclPtr<TabOrderListBox>     m_pLB_Controls;
+        std::unique_ptr<weld::TreeView> m_xLB_Controls;
+        std::unique_ptr<weld::Button> m_xPB_OK;
+        std::unique_ptr<weld::Button> m_xPB_MoveUp;
+        std::unique_ptr<weld::Button> m_xPB_MoveDown;
+        std::unique_ptr<weld::Button> m_xPB_AutoOrder;
 
-        VclPtr<OKButton>            m_pPB_OK;
-
-        VclPtr<PushButton>          m_pPB_MoveUp;
-        VclPtr<PushButton>          m_pPB_MoveDown;
-        VclPtr<PushButton>          m_pPB_AutoOrder;
-
-        DECL_LINK( MoveUpClickHdl, Button*, void );
-        DECL_LINK( MoveDownClickHdl, Button*, void );
-        DECL_LINK( AutoOrderClickHdl, Button*, void );
-        DECL_LINK( OKClickHdl, Button*, void );
+        DECL_LINK( ModelHasMoved, weld::TreeView&, void );
+        DECL_LINK( MoveUpClickHdl, weld::Button&, void );
+        DECL_LINK( MoveDownClickHdl, weld::Button&, void );
+        DECL_LINK( AutoOrderClickHdl, weld::Button&, void );
+        DECL_LINK( OKClickHdl, weld::Button&, void );
 
         void FillList();
+        void MoveSelection(int nRelPos);
 
     public:
         TabOrderDialog(
-            vcl::Window* _pParent,
+            weld::Window* pParent,
             const css::uno::Reference< css::awt::XTabControllerModel >& _rxTabModel,
             const css::uno::Reference< css::awt::XControlContainer >& _rxControlCont,
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
 
         virtual ~TabOrderDialog() override;
-        virtual void dispose() override;
 
         void SetModified();
     };
