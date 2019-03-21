@@ -5023,6 +5023,17 @@ public:
         gtk_image_set_from_pixbuf(m_pImage, pixbuf);
         g_object_unref(pixbuf);
     }
+    virtual void set_image(VirtualDevice* pDevice) override
+    {
+        if (gtk_check_version(3, 20, 0) == nullptr)
+            gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(*pDevice));
+        else
+        {
+            GdkPixbuf* pixbuf = getPixbuf(*pDevice);
+            gtk_image_set_from_pixbuf(m_pImage, pixbuf);
+            g_object_unref(pixbuf);
+        }
+    }
 };
 
 class GtkInstanceCalendar : public GtkInstanceWidget, public virtual weld::Calendar
