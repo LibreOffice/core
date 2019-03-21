@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_678ee628",
+        "filename": "editeng/source/items/textitem.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2054,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-03-21T15:04:01Z",
+      "side": 1,
+      "message": "Is this a standard way for the solution, ie. what about OpenDocument?",
+      "range": {
+        "startLine": 2054,
+        "startChar": 12,
+        "endLine": 2054,
+        "endChar": 60
+      },
+      "revId": "4da1c8bbb2bfb1315a30478fa319406c8f8f8c3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_2798de68",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport10.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-03-21T15:04:01Z",
+      "side": 1,
+      "message": "(I\u0027ve already fixed this in the gerrit (see patchset 5).",
+      "range": {
+        "startLine": 225,
+        "startChar": 4,
+        "endLine": 225,
+        "endChar": 5
+      },
+      "revId": "4da1c8bbb2bfb1315a30478fa319406c8f8f8c3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
