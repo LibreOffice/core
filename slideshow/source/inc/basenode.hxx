@@ -123,6 +123,10 @@ public:
 
     bool isMainSequenceRootNode() const { return mbIsMainSequenceRootNode; }
 
+    /// Get the node's fill mode
+    sal_Int16 getFillMode();
+
+    virtual void removeEffect() override {}
 protected:
     void scheduleDeactivationEvent( EventSharedPtr const& pEvent =
                                     EventSharedPtr() );
@@ -162,9 +166,6 @@ private:
         calls the parent node.
     */
     sal_Int16 getRestartDefaultMode() const;
-
-    /// Get the node's fill mode
-    sal_Int16 getFillMode();
 
     /** Get the default fill mode.
 

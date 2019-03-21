@@ -46,6 +46,7 @@ public:
 #if defined(DBG_UTIL)
     virtual void showState() const override;
 #endif
+    virtual void removeEffect() override;
 
 protected:
     virtual void dispose() override;
@@ -87,6 +88,7 @@ private:
     /// When valid, this is a subsetted target shape
     ShapeSubsetSharedPtr                            mpShapeSubset;
     SubsettableShapeManagerSharedPtr const          mpSubsetManager;
+    bool                                            mbPreservedVisibility;
     bool                                            mbIsIndependentSubset;
 };
 

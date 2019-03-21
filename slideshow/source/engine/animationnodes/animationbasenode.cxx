@@ -24,6 +24,7 @@
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
+#include <com/sun/star/animations/AnimationFill.hpp>
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 
 #include "nodetools.hxx"
@@ -52,6 +53,7 @@ AnimationBaseNode::AnimationBaseNode(
       mpShape(),
       mpShapeSubset(),
       mpSubsetManager(rContext.maContext.mpSubsettableShapeManager),
+      mbPreservedVisibility(true),
       mbIsIndependentSubset( rContext.mbIsIndependentSubset )
 {
     // extract native node targets
@@ -234,8 +236,11 @@ bool AnimationBaseNode::resolve_st()
 
 void AnimationBaseNode::activate_st()
 {
+    AttributableShapeSharedPtr const pShape(getShape());
+    mbPreservedVisibility = pShape->isVisible();
+
     // create new attribute layer
-    maAttributeLayerHolder.createAttributeLayer( getShape() );
+    maAttributeLayerHolder.createAttributeLayer(pShape);
 
     ENSURE_OR_THROW( maAttributeLayerHolder.get(),
                       "Could not generate shape attribute layer" );
@@ -351,6 +356,16 @@ void AnimationBaseNode::deactivate_st( NodeState eDestState )
         // kill activity, if still running
         mpActivity->dispose();
         mpActivity.reset();
+    }
+}
+
+void AnimationBaseNode::removeEffect()
+{
+    if (!isDependentSubsettedShape()) {
+        AttributableShapeSharedPtr const pShape(getShape());
+        pShape->setVisibility(!mbPreservedVisibility);
+        getContext().mpSubsettableShapeManager->notifyShapeUpdate( pShape );
+        pShape->setVisibility(mbPreservedVisibility);
     }
 }
 
