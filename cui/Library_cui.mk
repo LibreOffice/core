@@ -115,6 +115,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/hltpbase \
     cui/source/dialogs/hyphen \
     cui/source/dialogs/iconcdlg \
+    cui/source/dialogs/infodlg \
     cui/source/dialogs/insdlg \
     cui/source/dialogs/insrc \
     cui/source/dialogs/linkdlg \
