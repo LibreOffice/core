@@ -1041,7 +1041,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             aDialog.run();
             break;
         }
-
         default:
             break;
     }
