@@ -50,6 +50,7 @@
 #include <thesdlg.hxx>
 #include <hangulhanjadlg.hxx>
 #include <dstribut.hxx>
+#include <tipofthedaydlg.hxx>
 #include "dlgfact.hxx"
 #include <sal/types.h>
 
