@@ -206,8 +206,7 @@ private:
     ScFormulaCell* pMyFormulaCell;      // the cell of this formula expression
     SvNumberFormatter* pFormatter;
 
-    const formula::FormulaToken*
-                pCur;                   // current token
+    const formula::FormulaToken* pCur;  // current token
     ScTokenStack* pStackObj;            // contains the stacks
     const formula::FormulaToken ** pStack;  // the current stack
     FormulaError nGlobalError;          // global (local to this formula expression) error
@@ -248,12 +247,12 @@ private:
     bool IsTableOpInRange( const ScRange& );
     sal_uInt32 GetCellNumberFormat( const ScAddress& rPos, ScRefCellValue& rCell );
     double ConvertStringToValue( const OUString& );
-    public:
+public:
     static double ScGetGCD(double fx, double fy);
     /** For matrix back calls into the current interpreter.
         Uses rError instead of nGlobalError and rCurFmtType instead of nCurFmtType. */
     double ConvertStringToValue( const OUString&, FormulaError& rError, SvNumFormatType& rCurFmtType );
-    private:
+private:
     double GetCellValue( const ScAddress&, ScRefCellValue& rCell );
     double GetCellValueOrZero( const ScAddress&, ScRefCellValue& rCell );
     double GetValueCellValue( const ScAddress&, double fOrig );
@@ -864,14 +863,14 @@ private:
     static double taylor(const double* pPolynom, sal_uInt16 nMax, double x);
     static double gauss(double x);
 
-    public:
+public:
     static SC_DLLPUBLIC double phi(double x);
     static SC_DLLPUBLIC double integralPhi(double x);
     static SC_DLLPUBLIC double gaussinv(double x);
     static SC_DLLPUBLIC double GetPercentile( ::std::vector<double> & rArray, double fPercentile );
 
 
-    private:
+private:
     double GetBetaDist(double x, double alpha, double beta);  //cumulative distribution function
     double GetBetaDistPDF(double fX, double fA, double fB); //probability density function)
     double GetChiDist(double fChi, double fDF);     // for LEGACY.CHIDIST, returns right tail
