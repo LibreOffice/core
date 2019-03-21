@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_27821eca",
+        "filename": "sw/source/core/txtnode/fntcache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1821,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-03-21T17:13:45Z",
+      "side": 1,
+      "message": "I\u0027ll take a look tomorrow, perhaps there is a way to not  undo this hunk, which re-introduces some of the perf problems which were there previously (I guess).\n\nThe other hunks look easy to me.",
+      "revId": "67f9a470fa7b0c0aae16a4b8f85cd4ff39d2192e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
