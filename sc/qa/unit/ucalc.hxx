@@ -410,6 +410,7 @@ public:
     void testSharedFormulaUpdateOnReplacement();
     void testSharedFormulaDeleteTopCell();
     void testSharedFormulaCutCopyMoveIntoRef();
+    void testSharedFormulaCutCopyMoveWithRef();
     void testFormulaPosition();
     void testFormulaWizardSubformula();
 
@@ -762,6 +763,7 @@ public:
     CPPUNIT_TEST(testSharedFormulaUpdateOnReplacement);
     CPPUNIT_TEST(testSharedFormulaDeleteTopCell);
     CPPUNIT_TEST(testSharedFormulaCutCopyMoveIntoRef);
+    CPPUNIT_TEST(testSharedFormulaCutCopyMoveWithRef);
     CPPUNIT_TEST(testFormulaPosition);
     CPPUNIT_TEST(testFormulaWizardSubformula);
     CPPUNIT_TEST(testMixData);
