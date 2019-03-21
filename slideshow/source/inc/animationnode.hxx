@@ -136,6 +136,13 @@ public:
     virtual void notifyDeactivating(
         const AnimationNodeSharedPtr& rNotifier ) = 0;
 
+    /** Called by the container to remove the animation effect
+        to make the painted shape correct if it restart because
+        of repeat or rewind ( fill mode is AnimationFill::REMOVE )
+        to start state.
+    */
+    virtual void removeEffect() = 0;
+
     /** Query node whether it has an animation pending.
 
         @return true, if this node (or at least one of its children)

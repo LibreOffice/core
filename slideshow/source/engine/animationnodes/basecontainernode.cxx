@@ -20,6 +20,7 @@
 
 #include <basecontainernode.hxx>
 #include <com/sun/star/animations/AnimationRestart.hpp>
+#include <com/sun/star/animations/AnimationFill.hpp>
 #include <eventqueue.hxx>
 #include <tools.hxx>
 #include "nodetools.hxx"
@@ -161,6 +162,11 @@ bool BaseContainerNode::notifyDeactivatedChild(
         }
         if(mnLeftIterations >= 1.0 || mbRestart)
         {
+            // SMIL spec said that "Accumulate" controls whether or not the animation
+            // is cumulative, but XTimeContainer do not have this attribute, so always
+            // remove the effect before next repeat.
+            forEachChildNode(std::mem_fn(&AnimationNode::removeEffect), -1);
+
             if (mnLeftIterations >= 1.0)
                 bFinished = false;
 
@@ -172,6 +178,8 @@ bool BaseContainerNode::notifyDeactivatedChild(
         }
         else if (isDurationIndefinite())
         {
+            if (getFillMode() == animations::AnimationFill::REMOVE)
+                forEachChildNode(std::mem_fn(&AnimationNode::removeEffect), -1);
             deactivate();
         }
     }
