@@ -1217,6 +1217,11 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 rBind.Invalidate( SID_RELOAD );
                 rBind.Invalidate( SID_EDITDOC );
 
+                // show tip-of-the-day dialog
+                VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+                VclPtr<VclAbstractDialog> pDlg =
+                   pFact->CreateInfoDialog( GetWindow().GetFrameWeld() );
+
                 // inform about the community involvement
                 const sal_Int64 nLastGetInvolvedShown = officecfg::Setup::Product::LastTimeGetInvolvedShown::get();
                 const sal_Int64 nNow = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
