@@ -2908,16 +2908,11 @@ namespace pcr
         OSL_PRECOND( impl_getContextControlContainer_nothrow().is(), "FormComponentPropertyHandler::impl_dialogChangeTabOrder_nothrow: invalid control context!" );
 
         Reference< XTabControllerModel > xTabControllerModel( impl_getRowSet_nothrow(), UNO_QUERY );
-        ScopedVclPtrInstance<TabOrderDialog> aDialog(
-            impl_getDefaultDialogParent_nothrow(),
-            xTabControllerModel,
-            impl_getContextControlContainer_nothrow(),
-            m_xContext
-        );
+        TabOrderDialog aDialog(impl_getDefaultDialogFrame_nothrow(), xTabControllerModel,
+                               impl_getContextControlContainer_nothrow(), m_xContext);
         _rClearBeforeDialog.clear();
-        return ( RET_OK == aDialog->Execute() );
+        return RET_OK == aDialog.run();
     }
-
 
     namespace
     {

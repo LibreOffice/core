@@ -254,9 +254,6 @@
     <glade-widget-class title="Tooltip Tree List" name="swuilo-SwFldRefTreeListBox"
                         generic-name="Tooltip Tree List" parent="vcllo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Tab Order ListBox" name="pcrlo-TabOrderListBox"
-                        generic-name="TabOrderListBox" parent="vcllo-SvTreeListBox"
-                        icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Page Objs ListBox" name="sdlo-SdPageObjsTLB"
                         generic-name="SdPageObjsTLB" parent="vcllo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
