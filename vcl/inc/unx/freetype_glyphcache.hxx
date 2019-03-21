@@ -57,10 +57,9 @@ private:
 class FreetypeFontInfo
 {
 public:
-                           FreetypeFontInfo( const FontAttributes&,
-                               const OString& rNativeFileName,
-                               int nFaceNum, sal_IntPtr nFontId);
-                          ~FreetypeFontInfo();
+    FreetypeFontInfo(const FontAttributes&, const OString& rNativeFileName,
+                     int nFaceNum, int nFaceVariation, sal_IntPtr nFontId);
+    ~FreetypeFontInfo();
 
     const unsigned char*  GetTable( const char*, sal_uLong* pLength) const;
 
@@ -69,6 +68,7 @@ public:
 
     const OString&        GetFontFileName() const   { return mpFontFile->GetFileName(); }
     int                   GetFontFaceIndex() const  { return mnFaceNum; }
+    int                   GetFontFaceVariation() const  { return mnFaceVariation; }
     sal_IntPtr            GetFontId() const         { return mnFontId; }
     bool                  IsSymbolFont() const      { return maDevFontAttributes.IsSymbolFont(); }
     const FontAttributes& GetFontAttributes() const { return maDevFontAttributes; }
@@ -82,6 +82,7 @@ private:
     FT_FaceRec_*    maFaceFT;
     FreetypeFontFile* const mpFontFile;
     const int       mnFaceNum;
+    const int       mnFaceVariation;
     int             mnRefCount;
     sal_IntPtr const mnFontId;
     FontAttributes  maDevFontAttributes;
