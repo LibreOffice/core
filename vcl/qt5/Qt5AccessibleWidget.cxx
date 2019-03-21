@@ -71,11 +71,41 @@ Qt5AccessibleWidget::Qt5AccessibleWidget(const Reference<XAccessible> xAccessibl
     }
 }
 
+Reference<XAccessibleContext> Qt5AccessibleWidget::getAccessibleContextImpl() const
+{
+    Reference<XAccessibleContext> xAc;
+
+    if (m_xAccessible.is())
+    {
+        try
+        {
+            xAc = m_xAccessible->getAccessibleContext();
+        }
+        catch (css::lang::DisposedException /*ex*/)
+        {
+            SAL_WARN("vcl.qt5", "Accessible context disposed already");
+        }
+        // sometimes getAccessibleContext throws also RuntimeException if context is no longer alive
+        catch (css::uno::RuntimeException /*ex*/)
+        {
+            // so let's catch it here, cuz otherwise soffice falls flat on its face
+            // with FatalError and nothing else
+            SAL_WARN("vcl.qt5", "Accessible context no longer alive");
+        }
+    }
+
+    return xAc;
+}
+
 QWindow* Qt5AccessibleWidget::window() const { return nullptr; }
 
 int Qt5AccessibleWidget::childCount() const
 {
-    return m_xAccessible->getAccessibleContext()->getAccessibleChildCount();
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return 0;
+
+    return xAc->getAccessibleChildCount();
 }
 
 int Qt5AccessibleWidget::indexOfChild(const QAccessibleInterface* /* child */) const { return 0; }
@@ -144,24 +174,28 @@ QVector<QPair<QAccessibleInterface*, QAccessible::Relation>>
 Qt5AccessibleWidget::relations(QAccessible::Relation match) const
 {
     QVector<QPair<QAccessibleInterface*, QAccessible::Relation>> relations;
-    Reference<XAccessibleRelationSet> xRelationSet
-        = m_xAccessible->getAccessibleContext()->getAccessibleRelationSet();
-    if (!xRelationSet.is())
+
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
         return relations;
 
-    if (match == QAccessible::AllRelations)
+    Reference<XAccessibleRelationSet> xRelationSet = xAc->getAccessibleRelationSet();
+    if (xRelationSet.is())
     {
-        int count = xRelationSet->getRelationCount();
-        for (int i = 0; i < count; i++)
+        if (match == QAccessible::AllRelations)
         {
-            AccessibleRelation aRelation = xRelationSet->getRelation(i);
+            int count = xRelationSet->getRelationCount();
+            for (int i = 0; i < count; i++)
+            {
+                AccessibleRelation aRelation = xRelationSet->getRelation(i);
+                lcl_appendRelation(&relations, aRelation);
+            }
+        }
+        else
+        {
+            AccessibleRelation aRelation = xRelationSet->getRelation(lcl_matchQtRelation(match));
             lcl_appendRelation(&relations, aRelation);
         }
-    }
-    else
-    {
-        AccessibleRelation aRelation = xRelationSet->getRelation(lcl_matchQtRelation(match));
-        lcl_appendRelation(&relations, aRelation);
     }
 
     return relations;
@@ -177,8 +211,11 @@ QAccessibleInterface* Qt5AccessibleWidget::focusChild() const
 
 QRect Qt5AccessibleWidget::rect() const
 {
-    Reference<XAccessibleComponent> xAccessibleComponent(m_xAccessible->getAccessibleContext(),
-                                                         UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return QRect();
+
+    Reference<XAccessibleComponent> xAccessibleComponent(xAc, UNO_QUERY);
     awt::Point aPoint = xAccessibleComponent->getLocation();
     awt::Size aSize = xAccessibleComponent->getSize();
 
@@ -187,24 +224,35 @@ QRect Qt5AccessibleWidget::rect() const
 
 QAccessibleInterface* Qt5AccessibleWidget::parent() const
 {
-    return QAccessible::queryAccessibleInterface(
-        new Qt5XAccessible(m_xAccessible->getAccessibleContext()->getAccessibleParent()));
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return nullptr;
+
+    return QAccessible::queryAccessibleInterface(new Qt5XAccessible(xAc->getAccessibleParent()));
 }
 QAccessibleInterface* Qt5AccessibleWidget::child(int index) const
 {
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return nullptr;
+
     return QAccessible::queryAccessibleInterface(
-        new Qt5XAccessible(m_xAccessible->getAccessibleContext()->getAccessibleChild(index)));
+        new Qt5XAccessible(xAc->getAccessibleChild(index)));
 }
 
 QString Qt5AccessibleWidget::text(QAccessible::Text text) const
 {
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return QString();
+
     switch (text)
     {
         case QAccessible::Name:
-            return toQString(m_xAccessible->getAccessibleContext()->getAccessibleName());
+            return toQString(xAc->getAccessibleName());
         case QAccessible::Description:
         case QAccessible::DebugDescription:
-            return toQString(m_xAccessible->getAccessibleContext()->getAccessibleDescription());
+            return toQString(xAc->getAccessibleDescription());
         case QAccessible::Value:
         case QAccessible::Help:
         case QAccessible::Accelerator:
@@ -215,10 +263,11 @@ QString Qt5AccessibleWidget::text(QAccessible::Text text) const
 }
 QAccessible::Role Qt5AccessibleWidget::role() const
 {
-    if (!m_xAccessible.is())
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
         return QAccessible::NoRole;
 
-    switch (m_xAccessible->getAccessibleContext()->getAccessibleRole())
+    switch (xAc->getAccessibleRole())
     {
         case AccessibleRole::UNKNOWN:
             return QAccessible::NoRole;
@@ -589,10 +638,11 @@ QAccessible::State Qt5AccessibleWidget::state() const
 {
     QAccessible::State state;
 
-    if (!m_xAccessible.is())
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
         return state;
-    Reference<XAccessibleStateSet> xStateSet(
-        m_xAccessible->getAccessibleContext()->getAccessibleStateSet());
+
+    Reference<XAccessibleStateSet> xStateSet(xAc->getAccessibleStateSet());
 
     if (!xStateSet.is())
         return state;
@@ -609,14 +659,21 @@ QAccessible::State Qt5AccessibleWidget::state() const
 
 QColor Qt5AccessibleWidget::foregroundColor() const
 {
-    Reference<XAccessibleComponent> xAccessibleComponent(m_xAccessible->getAccessibleContext(),
-                                                         UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return QColor();
+
+    Reference<XAccessibleComponent> xAccessibleComponent(xAc, UNO_QUERY);
     return toQColor(xAccessibleComponent->getForeground());
 }
+
 QColor Qt5AccessibleWidget::backgroundColor() const
 {
-    Reference<XAccessibleComponent> xAccessibleComponent(m_xAccessible->getAccessibleContext(),
-                                                         UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return QColor();
+
+    Reference<XAccessibleComponent> xAccessibleComponent(xAc, UNO_QUERY);
     return toQColor(xAccessibleComponent->getBackground());
 }
 
@@ -637,22 +694,8 @@ void* Qt5AccessibleWidget::interface_cast(QAccessible::InterfaceType t)
 
 bool Qt5AccessibleWidget::isValid() const
 {
-    if (m_xAccessible.is())
-    {
-        try
-        {
-            // getAccessibleContext throws RuntimeException if context is no longer alive
-            Reference<XAccessibleContext> xAc = m_xAccessible->getAccessibleContext();
-            return xAc.is();
-        }
-        // so let's catch it here, cuz otherwise soffice falls flat on its face
-        // with FatalError and nothing else
-        catch (css::uno::RuntimeException /*ex*/)
-        {
-            return false;
-        }
-    }
-    return false;
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    return xAc.is();
 }
 
 QObject* Qt5AccessibleWidget::object() const { return nullptr; }
@@ -661,18 +704,9 @@ void Qt5AccessibleWidget::setText(QAccessible::Text /* t */, const QString& /* t
 
 QAccessibleInterface* Qt5AccessibleWidget::childAt(int x, int y) const
 {
-    if (!m_xAccessible.is())
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
         return nullptr;
-
-    Reference<XAccessibleContext> xAc;
-    try
-    {
-        xAc = m_xAccessible->getAccessibleContext();
-    }
-    catch (css::lang::DisposedException /*ex*/)
-    {
-        return nullptr;
-    }
 
     Reference<XAccessibleComponent> xAccessibleComponent(xAc, UNO_QUERY);
     return QAccessible::queryAccessibleInterface(
@@ -925,8 +959,11 @@ QString Qt5AccessibleWidget::textBeforeOffset(int /* offset */,
 
 void Qt5AccessibleWidget::deleteText(int startOffset, int endOffset)
 {
-    Reference<XAccessibleEditableText> xEditableText(m_xAccessible->getAccessibleContext(),
-                                                     UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return;
+
+    Reference<XAccessibleEditableText> xEditableText(xAc, UNO_QUERY);
     if (!xEditableText.is())
         return;
     xEditableText->deleteText(startOffset, endOffset);
@@ -934,8 +971,11 @@ void Qt5AccessibleWidget::deleteText(int startOffset, int endOffset)
 
 void Qt5AccessibleWidget::insertText(int offset, const QString& text)
 {
-    Reference<XAccessibleEditableText> xEditableText(m_xAccessible->getAccessibleContext(),
-                                                     UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return;
+
+    Reference<XAccessibleEditableText> xEditableText(xAc, UNO_QUERY);
     if (!xEditableText.is())
         return;
     xEditableText->insertText(toOUString(text), offset);
@@ -943,8 +983,11 @@ void Qt5AccessibleWidget::insertText(int offset, const QString& text)
 
 void Qt5AccessibleWidget::replaceText(int startOffset, int endOffset, const QString& text)
 {
-    Reference<XAccessibleEditableText> xEditableText(m_xAccessible->getAccessibleContext(),
-                                                     UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return;
+
+    Reference<XAccessibleEditableText> xEditableText(xAc, UNO_QUERY);
     if (!xEditableText.is())
         return;
     xEditableText->replaceText(startOffset, endOffset, toOUString(text));
@@ -953,7 +996,11 @@ void Qt5AccessibleWidget::replaceText(int startOffset, int endOffset, const QStr
 // QAccessibleValueInterface
 QVariant Qt5AccessibleWidget::currentValue() const
 {
-    Reference<XAccessibleValue> xValue(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return QVariant();
+
+    Reference<XAccessibleValue> xValue(xAc, UNO_QUERY);
     if (!xValue.is())
         return QVariant();
     double aDouble = 0;
@@ -962,7 +1009,11 @@ QVariant Qt5AccessibleWidget::currentValue() const
 }
 QVariant Qt5AccessibleWidget::maximumValue() const
 {
-    Reference<XAccessibleValue> xValue(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return QVariant();
+
+    Reference<XAccessibleValue> xValue(xAc, UNO_QUERY);
     if (!xValue.is())
         return QVariant();
     double aDouble = 0;
@@ -972,7 +1023,11 @@ QVariant Qt5AccessibleWidget::maximumValue() const
 QVariant Qt5AccessibleWidget::minimumStepSize() const { return QVariant(); }
 QVariant Qt5AccessibleWidget::minimumValue() const
 {
-    Reference<XAccessibleValue> xValue(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return QVariant();
+
+    Reference<XAccessibleValue> xValue(xAc, UNO_QUERY);
     if (!xValue.is())
         return QVariant();
     double aDouble = 0;
@@ -981,7 +1036,11 @@ QVariant Qt5AccessibleWidget::minimumValue() const
 }
 void Qt5AccessibleWidget::setCurrentValue(const QVariant& value)
 {
-    Reference<XAccessibleValue> xValue(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return;
+
+    Reference<XAccessibleValue> xValue(xAc, UNO_QUERY);
     if (!xValue.is())
         return;
     xValue->setCurrentValue(Any(value.toDouble()));
@@ -990,7 +1049,11 @@ void Qt5AccessibleWidget::setCurrentValue(const QVariant& value)
 // QAccessibleTable
 QAccessibleInterface* Qt5AccessibleWidget::caption() const
 {
-    Reference<XAccessibleTable> xTable(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return nullptr;
+
+    Reference<XAccessibleTable> xTable(xAc, UNO_QUERY);
     if (!xTable.is())
         return nullptr;
     return QAccessible::queryAccessibleInterface(
@@ -999,7 +1062,11 @@ QAccessibleInterface* Qt5AccessibleWidget::caption() const
 
 QAccessibleInterface* Qt5AccessibleWidget::cellAt(int row, int column) const
 {
-    Reference<XAccessibleTable> xTable(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return nullptr;
+
+    Reference<XAccessibleTable> xTable(xAc, UNO_QUERY);
     if (!xTable.is())
         return nullptr;
     return QAccessible::queryAccessibleInterface(
@@ -1008,7 +1075,11 @@ QAccessibleInterface* Qt5AccessibleWidget::cellAt(int row, int column) const
 
 int Qt5AccessibleWidget::columnCount() const
 {
-    Reference<XAccessibleTable> xTable(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return 0;
+
+    Reference<XAccessibleTable> xTable(xAc, UNO_QUERY);
     if (!xTable.is())
         return 0;
     return xTable->getAccessibleColumnCount();
@@ -1016,7 +1087,11 @@ int Qt5AccessibleWidget::columnCount() const
 
 QString Qt5AccessibleWidget::columnDescription(int column) const
 {
-    Reference<XAccessibleTable> xTable(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return QString();
+
+    Reference<XAccessibleTable> xTable(xAc, UNO_QUERY);
     if (!xTable.is())
         return QString();
     return toQString(xTable->getAccessibleColumnDescription(column));
@@ -1030,7 +1105,11 @@ void Qt5AccessibleWidget::modelChange(QAccessibleTableModelChangeEvent*) {}
 
 int Qt5AccessibleWidget::rowCount() const
 {
-    Reference<XAccessibleTable> xTable(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return 0;
+
+    Reference<XAccessibleTable> xTable(xAc, UNO_QUERY);
     if (!xTable.is())
         return 0;
     return xTable->getAccessibleRowCount();
@@ -1038,7 +1117,11 @@ int Qt5AccessibleWidget::rowCount() const
 
 QString Qt5AccessibleWidget::rowDescription(int row) const
 {
-    Reference<XAccessibleTable> xTable(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return QString();
+
+    Reference<XAccessibleTable> xTable(xAc, UNO_QUERY);
     if (!xTable.is())
         return QString();
     return toQString(xTable->getAccessibleRowDescription(row));
@@ -1046,8 +1129,11 @@ QString Qt5AccessibleWidget::rowDescription(int row) const
 
 bool Qt5AccessibleWidget::selectColumn(int column)
 {
-    Reference<XAccessibleTableSelection> xTableSelection(m_xAccessible->getAccessibleContext(),
-                                                         UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return false;
+
+    Reference<XAccessibleTableSelection> xTableSelection(xAc, UNO_QUERY);
     if (!xTableSelection.is())
         return false;
     return xTableSelection->selectColumn(column);
@@ -1055,8 +1141,11 @@ bool Qt5AccessibleWidget::selectColumn(int column)
 
 bool Qt5AccessibleWidget::selectRow(int row)
 {
-    Reference<XAccessibleTableSelection> xTableSelection(m_xAccessible->getAccessibleContext(),
-                                                         UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return false;
+
+    Reference<XAccessibleTableSelection> xTableSelection(xAc, UNO_QUERY);
     if (!xTableSelection.is())
         return false;
     return xTableSelection->selectRow(row);
@@ -1076,7 +1165,11 @@ QList<QAccessibleInterface*> Qt5AccessibleWidget::selectedCells() const
 
 int Qt5AccessibleWidget::selectedColumnCount() const
 {
-    Reference<XAccessibleTable> xTable(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return 0;
+
+    Reference<XAccessibleTable> xTable(xAc, UNO_QUERY);
     if (!xTable.is())
         return 0;
     return xTable->getSelectedAccessibleColumns().getLength();
@@ -1084,7 +1177,11 @@ int Qt5AccessibleWidget::selectedColumnCount() const
 
 QList<int> Qt5AccessibleWidget::selectedColumns() const
 {
-    Reference<XAccessibleTable> xTable(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return QList<int>();
+
+    Reference<XAccessibleTable> xTable(xAc, UNO_QUERY);
     if (!xTable.is())
         return QList<int>();
     return toQList(xTable->getSelectedAccessibleColumns());
@@ -1092,7 +1189,11 @@ QList<int> Qt5AccessibleWidget::selectedColumns() const
 
 int Qt5AccessibleWidget::selectedRowCount() const
 {
-    Reference<XAccessibleTable> xTable(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return 0;
+
+    Reference<XAccessibleTable> xTable(xAc, UNO_QUERY);
     if (!xTable.is())
         return 0;
     return xTable->getSelectedAccessibleRows().getLength();
@@ -1100,7 +1201,11 @@ int Qt5AccessibleWidget::selectedRowCount() const
 
 QList<int> Qt5AccessibleWidget::selectedRows() const
 {
-    Reference<XAccessibleTable> xTable(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return QList<int>();
+
+    Reference<XAccessibleTable> xTable(xAc, UNO_QUERY);
     if (!xTable.is())
         return QList<int>();
     return toQList(xTable->getSelectedAccessibleRows());
@@ -1108,7 +1213,11 @@ QList<int> Qt5AccessibleWidget::selectedRows() const
 
 QAccessibleInterface* Qt5AccessibleWidget::summary() const
 {
-    Reference<XAccessibleTable> xTable(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return nullptr;
+
+    Reference<XAccessibleTable> xTable(xAc, UNO_QUERY);
     if (!xTable.is())
         return nullptr;
     return QAccessible::queryAccessibleInterface(
@@ -1117,8 +1226,11 @@ QAccessibleInterface* Qt5AccessibleWidget::summary() const
 
 bool Qt5AccessibleWidget::unselectColumn(int column)
 {
-    Reference<XAccessibleTableSelection> xTableSelection(m_xAccessible->getAccessibleContext(),
-                                                         UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return false;
+
+    Reference<XAccessibleTableSelection> xTableSelection(xAc, UNO_QUERY);
     if (!xTableSelection.is())
         return false;
     return xTableSelection->unselectColumn(column);
@@ -1126,8 +1238,11 @@ bool Qt5AccessibleWidget::unselectColumn(int column)
 
 bool Qt5AccessibleWidget::unselectRow(int row)
 {
-    Reference<XAccessibleTableSelection> xTableSelection(m_xAccessible->getAccessibleContext(),
-                                                         UNO_QUERY);
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return false;
+
+    Reference<XAccessibleTableSelection> xTableSelection(xAc, UNO_QUERY);
     if (!xTableSelection.is())
         return false;
     return xTableSelection->unselectRow(row);
