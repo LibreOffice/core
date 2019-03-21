@@ -5458,6 +5458,19 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="ShowTipOfTheDay" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - General -->
+        <info>
+          <desc>Determines whether the Tip-Of-The-Day dialog is shown on startup.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="LastTipOfTheDayShown" oor:type="xs:int" oor:nillable="false">
+          <info>
+              <desc>The last time when the Tip-of-the-day dialog was shown.</desc>
+          </info>
+          <value>0</value>
+      </prop>
       <prop oor:name="UseOpenCL" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines whether OpenCL can be used, when available, to speed up
