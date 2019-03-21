@@ -113,12 +113,13 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
 
         // normalize face number to the GlyphCache
         int nFaceNum = rMgr.getFontFaceNumber(aInfo.m_nID);
+        int nVariantNum = rMgr.getFontFaceVariation(aInfo.m_nID);
 
         // inform GlyphCache about this font provided by the PsPrint subsystem
         FontAttributes aDFA = GenPspGraphics::Info2FontAttributes(aInfo);
         aDFA.IncreaseQualityBy(4096);
         const OString& rFileName = rMgr.getFontFileSysPath(aInfo.m_nID);
-        rGC.AddFontFile(rFileName, nFaceNum, aInfo.m_nID, aDFA);
+        rGC.AddFontFile(rFileName, nFaceNum, nVariantNum, aInfo.m_nID, aDFA);
 
         // register font files unknown to Qt
         if (bUseFontconfig)
