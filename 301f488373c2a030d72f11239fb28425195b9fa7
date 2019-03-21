@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_2413fc68",
+        "filename": "vcl/source/outdev/text.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-03-21T11:32:28Z",
+      "side": 1,
+      "message": "This is true only for the default values.",
+      "range": {
+        "startLine": 922,
+        "startChar": 7,
+        "endLine": 922,
+        "endChar": 46
+      },
+      "revId": "301f488373c2a030d72f11239fb28425195b9fa7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_c42a508f",
+        "filename": "vcl/source/outdev/textline.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-03-21T11:32:28Z",
+      "side": 1,
+      "message": "Is it sure? Changing to a different font, ie. Linux Libertine G, there is only a very small gap here.",
+      "range": {
+        "startLine": 687,
+        "startChar": 7,
+        "endLine": 687,
+        "endChar": 61
+      },
+      "revId": "301f488373c2a030d72f11239fb28425195b9fa7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
