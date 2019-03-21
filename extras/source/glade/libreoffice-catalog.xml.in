@@ -486,9 +486,6 @@
     <glade-widget-class title="Horizontal box hiding children depending on its priorities" name="sfxlo-PriorityMergedHBox"
                         generic-name="PriorityMergedHBox" parent="GtkBox"
                         icon-name="widget-gtk-box"/>
-    <glade-widget-class title="Table Design Control" name="sdlo-TableDesignBox"
-                        generic-name="TableDesignBox" parent="GtkImage"
-                        icon-name="widget-gtk-image"/>
     <glade-widget-class title="Box which can move own content to the popup" name="sfxlo-DropdownBox"
                         generic-name="DropdownBox" parent="GtkBox"
                         icon-name="widget-gtk-box"/>
