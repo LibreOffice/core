@@ -2174,6 +2174,9 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             }
             pTextEditOutlinerView->SetAttribs(rSet);
 
+            if (mxTextEditObj.is())
+                mxTextEditObj->SetMergedItemSetAndBroadcast(rSet, bReplaceAll);
+
 #ifdef DBG_UTIL
             if (mpItemBrowser!=nullptr)
                 mpItemBrowser->SetDirty();
