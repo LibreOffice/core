@@ -139,7 +139,7 @@ void SwFrameControlsManager::SetPageBreakControl( const SwPageFrame* pPageFrame 
         pControl->ShowAll( true );
 }
 
-void SwFrameControlsManager::SetUnfloatTableButton( const SwFlyFrame* pFlyFrame, bool bShow, Point aBottomRightPixel )
+void SwFrameControlsManager::SetUnfloatTableButton( const SwFlyFrame* pFlyFrame, bool bShow, Point aTopRightPixel )
 {
     if(pFlyFrame == nullptr)
         return;
@@ -168,7 +168,7 @@ void SwFrameControlsManager::SetUnfloatTableButton( const SwFlyFrame* pFlyFrame,
 
     UnfloatTableButton* pButton = dynamic_cast<UnfloatTableButton*>(pControl->GetWindow());
     assert(pButton != nullptr);
-    pButton->SetOffset(aBottomRightPixel);
+    pButton->SetOffset(aTopRightPixel);
     pControl->ShowAll( bShow );
 }
 

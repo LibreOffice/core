@@ -30,7 +30,7 @@ public:
     UnfloatTableButton(SwEditWin* pEditWin, const SwFrame* pFrame);
     virtual ~UnfloatTableButton() override;
 
-    void SetOffset(Point aBottomRightPixel);
+    void SetOffset(Point aTopRightPixel);
 
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;

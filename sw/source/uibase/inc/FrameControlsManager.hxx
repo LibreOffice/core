@@ -47,7 +47,7 @@ class SwFrameControlsManager
         // Helper methods
         void SetHeaderFooterControl( const SwPageFrame* pPageFrame, FrameControlType eType, Point aOffset );
         void SetPageBreakControl( const SwPageFrame* pPageFrame );
-        void SetUnfloatTableButton( const SwFlyFrame* pFlyFrame, bool bShow, Point aTopLeftPixel = Point() );
+        void SetUnfloatTableButton( const SwFlyFrame* pFlyFrame, bool bShow, Point aTopRightPixel = Point() );
 };
 
 #endif
