@@ -253,97 +253,76 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
     }
 }
 
-void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCommands,
+void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDrawActions,
                        SalGraphics& rGraphics, long nX, long nY, long nWidth, long nHeight)
 {
-    for (std::shared_ptr<DrawCommand> const& pDrawCommand : rDrawCommands)
+    for (std::shared_ptr<WidgetDrawAction> const& pDrawAction : rDrawActions)
     {
-        switch (pDrawCommand->maType)
+        switch (pDrawAction->maType)
         {
-            case DrawCommandType::RECTANGLE:
+            case WidgetDrawActionType::RECTANGLE:
             {
-                auto const& rRectDrawCommand
-                    = static_cast<RectangleDrawCommand const&>(*pDrawCommand);
+                auto const& rWidgetDraw
+                    = static_cast<WidgetDrawActionRectangle const&>(*pDrawAction);
 
                 basegfx::B2DRectangle rRect(
-                    nX + (nWidth * rRectDrawCommand.mfX1), nY + (nHeight * rRectDrawCommand.mfY1),
-                    nX + (nWidth * rRectDrawCommand.mfX2), nY + (nHeight * rRectDrawCommand.mfY2));
+                    nX + (nWidth * rWidgetDraw.mfX1), nY + (nHeight * rWidgetDraw.mfY1),
+                    nX + (nWidth * rWidgetDraw.mfX2), nY + (nHeight * rWidgetDraw.mfY2));
 
                 basegfx::B2DPolygon aB2DPolygon = basegfx::utils::createPolygonFromRect(
-                    rRect, rRectDrawCommand.mnRx / rRect.getWidth() * 2.0,
-                    rRectDrawCommand.mnRy / rRect.getHeight() * 2.0);
+                    rRect, rWidgetDraw.mnRx / rRect.getWidth() * 2.0,
+                    rWidgetDraw.mnRy / rRect.getHeight() * 2.0);
 
                 rGraphics.SetLineColor();
-                rGraphics.SetFillColor(rRectDrawCommand.maFillColor);
+                rGraphics.SetFillColor(rWidgetDraw.maFillColor);
                 rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(),
                                           basegfx::B2DPolyPolygon(aB2DPolygon), 0.0f, nullptr);
-                rGraphics.SetLineColor(rRectDrawCommand.maStrokeColor);
+                rGraphics.SetLineColor(rWidgetDraw.maStrokeColor);
                 rGraphics.SetFillColor();
-                rGraphics.DrawPolyLine(basegfx::B2DHomMatrix(), aB2DPolygon, 0.0f,
-                                       basegfx::B2DVector(rRectDrawCommand.mnStrokeWidth,
-                                                          rRectDrawCommand.mnStrokeWidth),
-                                       basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND,
-                                       0.0f, false, nullptr);
+                rGraphics.DrawPolyLine(
+                    basegfx::B2DHomMatrix(), aB2DPolygon, 0.0f,
+                    basegfx::B2DVector(rWidgetDraw.mnStrokeWidth, rWidgetDraw.mnStrokeWidth),
+                    basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, false, nullptr);
             }
             break;
-            case DrawCommandType::CIRCLE:
+            case WidgetDrawActionType::LINE:
             {
-                auto const& rCircleDrawCommand
-                    = static_cast<CircleDrawCommand const&>(*pDrawCommand);
-
-                basegfx::B2DRectangle rRect(nX + (nWidth * rCircleDrawCommand.mfX1),
-                                            nY + (nHeight * rCircleDrawCommand.mfY1),
-                                            nX + (nWidth * rCircleDrawCommand.mfX2),
-                                            nY + (nHeight * rCircleDrawCommand.mfY2));
-
-                basegfx::B2DPolygon aB2DPolygon = basegfx::utils::createPolygonFromEllipse(
-                    rRect.getCenter(), rRect.getWidth() / 2.0, rRect.getHeight() / 2.0);
-
-                rGraphics.SetLineColor(rCircleDrawCommand.maStrokeColor);
-                rGraphics.SetFillColor(rCircleDrawCommand.maFillColor);
-                rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(),
-                                          basegfx::B2DPolyPolygon(aB2DPolygon), 0.0f, nullptr);
-            }
-            break;
-            case DrawCommandType::LINE:
-            {
-                auto const& rLineDrawCommand = static_cast<LineDrawCommand const&>(*pDrawCommand);
+                auto const& rWidgetDraw = static_cast<WidgetDrawActionLine const&>(*pDrawAction);
                 Point aRectPoint(nX + 1, nY + 1);
 
                 Size aRectSize(nWidth - 1, nHeight - 1);
 
                 rGraphics.SetFillColor();
-                rGraphics.SetLineColor(rLineDrawCommand.maStrokeColor);
+                rGraphics.SetLineColor(rWidgetDraw.maStrokeColor);
 
                 basegfx::B2DPolygon aB2DPolygon{
-                    { aRectPoint.X() + (aRectSize.Width() * rLineDrawCommand.mfX1),
-                      aRectPoint.Y() + (aRectSize.Height() * rLineDrawCommand.mfY1) },
-                    { aRectPoint.X() + (aRectSize.Width() * rLineDrawCommand.mfX2),
-                      aRectPoint.Y() + (aRectSize.Height() * rLineDrawCommand.mfY2) },
+                    { aRectPoint.X() + (aRectSize.Width() * rWidgetDraw.mfX1),
+                      aRectPoint.Y() + (aRectSize.Height() * rWidgetDraw.mfY1) },
+                    { aRectPoint.X() + (aRectSize.Width() * rWidgetDraw.mfX2),
+                      aRectPoint.Y() + (aRectSize.Height() * rWidgetDraw.mfY2) },
                 };
 
-                rGraphics.DrawPolyLine(basegfx::B2DHomMatrix(), aB2DPolygon, 0.0f,
-                                       basegfx::B2DVector(rLineDrawCommand.mnStrokeWidth,
-                                                          rLineDrawCommand.mnStrokeWidth),
-                                       basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND,
-                                       0.0f, false, nullptr);
+                rGraphics.DrawPolyLine(
+                    basegfx::B2DHomMatrix(), aB2DPolygon, 0.0f,
+                    basegfx::B2DVector(rWidgetDraw.mnStrokeWidth, rWidgetDraw.mnStrokeWidth),
+                    basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, false, nullptr);
             }
             break;
-            case DrawCommandType::IMAGE:
+            case WidgetDrawActionType::IMAGE:
             {
-                double nScaleFactor = 1.0;
+                double nScaleFactor = 2.0;
                 if (comphelper::LibreOfficeKit::isActive())
                     nScaleFactor = comphelper::LibreOfficeKit::getDPIScale();
 
-                auto const& rDrawCommand = static_cast<ImageDrawCommand const&>(*pDrawCommand);
+                auto const& rWidgetDraw = static_cast<WidgetDrawActionImage const&>(*pDrawAction);
                 auto& rCacheImages = ImplGetSVData()->maGDIData.maThemeImageCache;
-                OUString rCacheKey = rDrawCommand.msSource + "@" + OUString::number(nScaleFactor);
+                OUString rCacheKey = rWidgetDraw.msSource + "@" + OUString::number(nScaleFactor);
                 auto& aIterator = rCacheImages.find(rCacheKey);
 
                 BitmapEx aBitmap;
                 if (aIterator == rCacheImages.end())
                 {
-                    SvFileStream aFileStream(rDrawCommand.msSource, StreamMode::READ);
+                    SvFileStream aFileStream(rWidgetDraw.msSource, StreamMode::READ);
 
                     vcl::bitmap::loadFromSvg(aFileStream, "", aBitmap, nScaleFactor);
                     if (!!aBitmap)
@@ -377,19 +356,20 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
                 }
             }
             break;
-            case DrawCommandType::EXTERNAL:
+            case WidgetDrawActionType::EXTERNAL:
             {
-                auto const& rDrawCommand = static_cast<ImageDrawCommand const&>(*pDrawCommand);
+                auto const& rWidgetDraw
+                    = static_cast<WidgetDrawActionExternal const&>(*pDrawAction);
 
                 auto& rCacheDrawCommands = ImplGetSVData()->maGDIData.maThemeDrawCommandsCache;
 
-                auto& aIterator = rCacheDrawCommands.find(rDrawCommand.msSource);
+                auto& aIterator = rCacheDrawCommands.find(rWidgetDraw.msSource);
 
                 gfx::DrawRoot aDrawRoot;
 
                 if (aIterator == rCacheDrawCommands.end())
                 {
-                    SvFileStream aFileStream(rDrawCommand.msSource, StreamMode::READ);
+                    SvFileStream aFileStream(rWidgetDraw.msSource, StreamMode::READ);
 
                     uno::Reference<uno::XComponentContext> xContext(
                         comphelper::getProcessComponentContext());
@@ -412,7 +392,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<DrawCommand>> const& rDrawCom
                         if (pDrawRoot)
                         {
                             rCacheDrawCommands.insert(
-                                std::make_pair(rDrawCommand.msSource, *pDrawRoot));
+                                std::make_pair(rWidgetDraw.msSource, *pDrawRoot));
                             drawFromDrawCommands(*pDrawRoot, rGraphics, nX, nY, nWidth, nHeight);
                         }
                     }
@@ -444,7 +424,8 @@ bool FileDefinitionWidgetDraw::resolveDefinition(ControlType eType, ControlPart 
             // use last defined state
             auto const& pState = aStates.back();
             {
-                munchDrawCommands(pState->mpDrawCommands, m_rGraphics, nX, nY, nWidth, nHeight);
+                munchDrawCommands(pState->mpWidgetDrawActions, m_rGraphics, nX, nY, nWidth,
+                                  nHeight);
                 bOK = true;
             }
         }
