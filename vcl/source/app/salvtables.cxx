@@ -390,6 +390,30 @@ bool SalInstanceWidget::get_hexpand() const
     return m_xWidget->get_hexpand();
 }
 
+void SalInstanceWidget::set_accessible_relation_labeled_by(weld::Widget* pLabel)
+{
+    vcl::Window* pAtkLabel
+        = pLabel ? dynamic_cast<SalInstanceWidget&>(*pLabel).getWidget() : nullptr;
+    m_xWidget->SetAccessibleRelationLabeledBy(pAtkLabel);
+}
+
+void SalInstanceWidget::set_accessible_relation_label_for(weld::Widget* pLabeled)
+{
+    vcl::Window* pAtkLabeled
+        = pLabeled ? dynamic_cast<SalInstanceWidget&>(*pLabeled).getWidget() : nullptr;
+    m_xWidget->SetAccessibleRelationLabelFor(pAtkLabeled);
+}
+
+void SalInstanceWidget::add_extra_accessible_relation(const css::accessibility::AccessibleRelation &rRelation)
+{
+    m_xWidget->AddExtraAccessibleRelation(rRelation);
+}
+
+void SalInstanceWidget::clear_extra_accessible_relations()
+{
+    m_xWidget->ClearExtraAccessibleRelations();
+}
+
 void SalInstanceWidget::set_vexpand(bool bExpand)
 {
     m_xWidget->set_vexpand(bExpand);

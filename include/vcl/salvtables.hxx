@@ -262,6 +262,14 @@ public:
     virtual OUString strip_mnemonic(const OUString& rLabel) const override;
 
     SystemWindow* getSystemWindow();
+
+    virtual void set_accessible_relation_labeled_by(weld::Widget* pLabel) override;
+
+    virtual void set_accessible_relation_label_for(weld::Widget* pLabeled) override;
+
+    virtual void add_extra_accessible_relation(const css::accessibility::AccessibleRelation &rRelation) override;
+
+    virtual void clear_extra_accessible_relations() override;
 };
 
 class SalInstanceLabel : public SalInstanceWidget, public virtual weld::Label

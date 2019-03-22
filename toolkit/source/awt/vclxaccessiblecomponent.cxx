@@ -374,6 +374,9 @@ void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelation
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence { pMemberOf->GetAccessible() };
             rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
         }
+
+        for (const auto& rExtraRelation : pWindow->GetExtraAccessibleRelations())
+            rRelationSet.AddRelation(rExtraRelation);
     }
 }
 

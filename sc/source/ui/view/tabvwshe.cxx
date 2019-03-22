@@ -250,11 +250,11 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
 
                     ScGlobal::SetSearchItem( *pSearchItem );
                     bool bSuccess = SearchAndReplace( pSearchItem, true, rReq.IsAPI() );
-                    const SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
+                    SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
                             SvxSearchDialogWrapper::GetChildWindowId());
                     if (pChildWindow)
                     {
-                        SvxSearchDialog* pSearchDlg = static_cast<SvxSearchDialog*>(pChildWindow->GetWindow());
+                        SvxSearchDialog* pSearchDlg = static_cast<SvxSearchDialog*>(pChildWindow->GetController().get());
                         if( pSearchDlg )
                         {
                             ScTabView* pTabView = GetViewData().GetView();
@@ -320,11 +320,11 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                             rReq.IsAPI() ? SfxCallMode::API|SfxCallMode::SYNCHRON :
                                             SfxCallMode::RECORD,
                             { &aSearchItem });
-                    const SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
+                    SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
                             SvxSearchDialogWrapper::GetChildWindowId());
                     if (pChildWindow)
                     {
-                        SvxSearchDialog* pSearchDlg = static_cast<SvxSearchDialog*>(pChildWindow->GetWindow());
+                        SvxSearchDialog* pSearchDlg = static_cast<SvxSearchDialog*>(pChildWindow->GetController().get());
                         if( pSearchDlg )
                         {
                             ScTabView* pTabView = GetViewData().GetView();

@@ -97,6 +97,14 @@ public:
 
     virtual OUString get_accessible_description() const = 0;
 
+    virtual void set_accessible_relation_labeled_by(weld::Widget* pLabel) = 0;
+    virtual void set_accessible_relation_label_for(weld::Widget* pLabeled) = 0;
+
+    virtual void
+    add_extra_accessible_relation(const css::accessibility::AccessibleRelation& rRelation)
+        = 0;
+    virtual void clear_extra_accessible_relations() = 0;
+
     virtual void set_tooltip_text(const OUString& rTip) = 0;
 
     virtual void connect_focus_in(const Link<Widget&, void>& rLink)

@@ -496,6 +496,29 @@ wrapper_get_index_in_parent( AtkObject *atk_obj )
 
 /*****************************************************************************/
 
+AtkRelation*
+atk_object_wrapper_relation_new(const accessibility::AccessibleRelation& rRelation)
+{
+    sal_uInt32 nTargetCount = rRelation.TargetSet.getLength();
+
+    std::vector<AtkObject*> aTargets;
+
+    for (sal_uInt32 i = 0; i < nTargetCount; ++i)
+    {
+        uno::Reference< accessibility::XAccessible > xAccessible(
+                rRelation.TargetSet[i], uno::UNO_QUERY );
+        aTargets.push_back(atk_object_wrapper_ref(xAccessible));
+    }
+
+    AtkRelation *pRel =
+        atk_relation_new(
+            aTargets.data(), nTargetCount,
+            mapRelationType( rRelation.RelationType )
+        );
+
+    return pRel;
+}
+
 static AtkRelationSet *
 wrapper_ref_relation_set( AtkObject *atk_obj )
 {
@@ -517,25 +540,9 @@ wrapper_ref_relation_set( AtkObject *atk_obj )
             sal_Int32 nRelations = xRelationSet.is() ? xRelationSet->getRelationCount() : 0;
             for( sal_Int32 n = 0; n < nRelations; n++ )
             {
-                accessibility::AccessibleRelation aRelation = xRelationSet->getRelation( n );
-                sal_uInt32 nTargetCount = aRelation.TargetSet.getLength();
-
-                std::vector<AtkObject*> aTargets;
-
-                for (sal_uInt32 i = 0; i < nTargetCount; ++i)
-                {
-                    uno::Reference< accessibility::XAccessible > xAccessible(
-                            aRelation.TargetSet[i], uno::UNO_QUERY );
-                    aTargets.push_back(atk_object_wrapper_ref(xAccessible));
-                }
-
-                AtkRelation *pRel =
-                    atk_relation_new(
-                        aTargets.data(), nTargetCount,
-                        mapRelationType( aRelation.RelationType )
-                    );
-                atk_relation_set_add( pSet, pRel );
-                g_object_unref( G_OBJECT( pRel ) );
+                AtkRelation *pRel = atk_object_wrapper_relation_new(xRelationSet->getRelation(n));
+                atk_relation_set_add(pSet, pRel);
+                g_object_unref(pRel);
             }
         }
         catch(const uno::Exception &) {
