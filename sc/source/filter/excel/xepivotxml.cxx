@@ -9,6 +9,7 @@
 
 #include <xepivotxml.hxx>
 #include <dpcache.hxx>
+#include <dpdimsave.hxx>
 #include <dpitemdata.hxx>
 #include <dpobject.hxx>
 #include <dpsave.hxx>
@@ -22,6 +23,7 @@
 #include <sax/tools/converter.hxx>
 #include <sax/fastattribs.hxx>
 
+#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
@@ -239,9 +241,80 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
     pDefStrm->endElement(XML_cacheSource);
 
     size_t nCount = rCache.GetFieldCount();
+    const size_t nGroupFieldCount = rCache.GetGroupFieldCount();
     pDefStrm->startElement(XML_cacheFields,
-        XML_count, OString::number(static_cast<long>(nCount)).getStr(),
+        XML_count, OString::number(static_cast<long>(nCount + nGroupFieldCount)).getStr(),
         FSEND);
+
+    auto WriteFieldGroup = [this, &rCache, pDefStrm](size_t i, size_t base) {
+        const sal_Int32 nDatePart = rCache.GetGroupType(i);
+        if (!nDatePart)
+            return;
+        OString sGroupBy;
+        switch (nDatePart)
+        {
+        case sheet::DataPilotFieldGroupBy::SECONDS:
+            sGroupBy = "seconds";
+            break;
+        case sheet::DataPilotFieldGroupBy::MINUTES:
+            sGroupBy = "minutes";
+            break;
+        case sheet::DataPilotFieldGroupBy::HOURS:
+            sGroupBy = "hours";
+            break;
+        case sheet::DataPilotFieldGroupBy::DAYS:
+            sGroupBy = "days";
+            break;
+        case sheet::DataPilotFieldGroupBy::MONTHS:
+            sGroupBy = "months";
+            break;
+        case sheet::DataPilotFieldGroupBy::QUARTERS:
+            sGroupBy = "quarters";
+            break;
+        case sheet::DataPilotFieldGroupBy::YEARS:
+            sGroupBy = "years";
+            break;
+        }
+
+        // fieldGroup element
+        pDefStrm->startElement(XML_fieldGroup, XML_base, OString::number(base), FSEND);
+
+        SvNumberFormatter& rFormatter = GetFormatter();
+
+        // rangePr element
+        const ScDPNumGroupInfo* pGI = rCache.GetNumGroupInfo(i);
+        auto pGroupAttList = sax_fastparser::FastSerializerHelper::createAttrList();
+        pGroupAttList->add(XML_groupBy, sGroupBy);
+        if (nDatePart == sheet::DataPilotFieldGroupBy::YEARS && pGI->mbAutoStart)
+            pGroupAttList->add(XML_autoStart, ToPsz10(true));
+        else
+            pGroupAttList->add(XML_startDate, XclXmlUtils::ToOString(GetExcelFormattedDate(
+                pGI->mfStart, rFormatter)));
+        if (nDatePart == sheet::DataPilotFieldGroupBy::YEARS && pGI->mbAutoEnd)
+            pGroupAttList->add(XML_autoEnd, ToPsz10(true));
+        else
+            pGroupAttList->add(XML_endDate, XclXmlUtils::ToOString(GetExcelFormattedDate(
+                pGI->mfEnd, rFormatter)));
+        if (pGI->mfStep)
+            pGroupAttList->add(XML_groupInterval, OString::number(pGI->mfStep));
+        pDefStrm->singleElement(XML_rangePr, pGroupAttList);
+
+        // groupItems element
+        ScfInt32Vec aGIIds;
+        rCache.GetGroupDimMemberIds(i, aGIIds);
+        pDefStrm->startElement(XML_groupItems, XML_count, OString::number(aGIIds.size()), FSEND);
+        for (auto nGIId : aGIIds)
+        {
+            const ScDPItemData* pGIData = rCache.GetItemDataById(i, nGIId);
+            if (pGIData->GetType() == ScDPItemData::GroupValue)
+            {
+                OUString sVal = rCache.GetFormattedString(i, *pGIData, false);
+                pDefStrm->singleElement(XML_s, XML_v, XclXmlUtils::ToOString(sVal), FSEND);
+            }
+        }
+        pDefStrm->endElement(XML_groupItems);
+        pDefStrm->endElement(XML_fieldGroup);
+    };
 
     for (size_t i = 0; i < nCount; ++i)
     {
@@ -387,7 +460,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
                             XML_v, XclXmlUtils::ToOString(rItem.GetString()),
                             FSEND);
                     break;
-                    case ScDPItemData::GroupValue:
+                    case ScDPItemData::GroupValue: // Should not happen here!
                     case ScDPItemData::RangeStart:
                         // TODO : What do we do with these types?
                         pDefStrm->singleElement(XML_m, FSEND);
@@ -399,6 +472,30 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         }
 
         pDefStrm->endElement(XML_sharedItems);
+
+        WriteFieldGroup(i, i);
+
+        pDefStrm->endElement(XML_cacheField);
+    }
+
+    ScDPObject* pDPObject
+        = rCache.GetAllReferences().empty() ? nullptr : *rCache.GetAllReferences().begin();
+
+    for (size_t i = nCount; pDPObject && i < nCount + nGroupFieldCount; ++i)
+    {
+        const OUString aName = pDPObject->GetDimName(i, o3tl::temporary(bool()));
+        ScDPSaveData* pSaveData = pDPObject->GetSaveData();
+        assert(pSaveData);
+        const ScDPSaveGroupDimension* pDim = pSaveData->GetDimensionData()->GetNamedGroupDim(aName);
+        assert(pDim);
+        const size_t nBase = rCache.GetDimensionIndex(pDim->GetSourceDimName());
+
+        pDefStrm->startElement(XML_cacheField,
+            XML_name, XclXmlUtils::ToOString(aName).getStr(),
+            XML_numFmtId, OString::number(0).getStr(),
+            XML_databaseField, ToPsz10(false),
+            FSEND);
+        WriteFieldGroup(i, nBase);
         pDefStrm->endElement(XML_cacheField);
     }
 
@@ -588,14 +685,14 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
 
     const ScDPSaveData& rSaveData = *rDPObj.GetSaveData();
 
-    size_t nFieldCount = rCache.GetFieldCount();
+    size_t nFieldCount = rCache.GetFieldCount() + rCache.GetGroupFieldCount();
     std::vector<const ScDPSaveDimension*> aCachedDims;
     NameToIdMapType aNameToIdMap;
 
     aCachedDims.reserve(nFieldCount);
     for (size_t i = 0; i < nFieldCount; ++i)
     {
-        OUString aName = rCache.GetDimensionName(i);
+        OUString aName = const_cast<ScDPObject&>(rDPObj).GetDimName(i, o3tl::temporary(bool()));
         aNameToIdMap.emplace(aName, aCachedDims.size());
         const ScDPSaveDimension* pDim = rSaveData.GetExistingDimensionByName(aName);
         aCachedDims.push_back(pDim);
@@ -785,19 +882,30 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             dpo.GetMembers(i, dpo.GetUsedHierarchy(i), aMembers);
         }
 
-        const ScDPCache::ScDPItemDataVec& rCacheFieldItems = rCache.GetDimMemberValues(i);
+        std::vector<const ScDPItemData*> rCacheFieldItems;
+        if (i < rCache.GetFieldCount() && !rCache.GetGroupType(i))
+            for (const auto& it : rCache.GetDimMemberValues(i))
+                rCacheFieldItems.push_back(&it);
+        else
+        {
+            ScfInt32Vec aGIIds;
+            rCache.GetGroupDimMemberIds(i, aGIIds);
+            for (const sal_Int32 id : aGIIds)
+                rCacheFieldItems.push_back(rCache.GetItemDataById(i, id));
+        }
         // The pair contains the member index in cache and if it is hidden
         std::vector< std::pair<size_t, bool> > aMemberSequence;
         std::set<size_t> aUsedCachePositions;
         for (const auto & rMember : aMembers)
         {
             auto it = std::find_if(rCacheFieldItems.begin(), rCacheFieldItems.end(),
-                [&rDPObj, &pDim, &rMember](const ScDPItemData& rItem) {
+                [&rDPObj, &pDim, &rMember](const ScDPItemData* pItem) {
                     OUString sFormattedName;
-                    if (rItem.HasStringData() || rItem.IsEmpty())
-                        sFormattedName = rItem.GetString();
+                    if (pItem->HasStringData() || pItem->IsEmpty())
+                        sFormattedName = pItem->GetString();
                     else
-                        sFormattedName = const_cast<ScDPObject&>(rDPObj).GetFormattedString(pDim->GetName(), rItem.GetValue());
+                        sFormattedName = const_cast<ScDPObject&>(rDPObj).GetFormattedString(
+                            pDim->GetName(), pItem->GetValue());
                     return sFormattedName == rMember.maName;
                 });
             if (it != rCacheFieldItems.end())
