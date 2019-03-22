@@ -165,6 +165,7 @@ public:
     tools::Rectangle GetDeckDragArea() const;
 
     sal_Int32 getMaximumWidth() { return mnMaximumSidebarWidth; }
+    void setMaximumWidth(sal_Int32 nMaximumWidth) { mnMaximumSidebarWidth = nMaximumWidth; }
 
 private:
     SidebarController(
