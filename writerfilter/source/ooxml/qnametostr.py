@@ -26,7 +26,7 @@ namespace writerfilter
 
 void QNameToString::init()
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     /* ooxml */
 """)
 

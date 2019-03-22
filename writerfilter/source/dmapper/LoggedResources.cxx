@@ -26,7 +26,7 @@ using namespace ::com::sun::star;
 namespace writerfilter
 {
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 // class: LoggedResourcesHelper
 
 LoggedResourcesHelper::LoggedResourcesHelper(const std::string & sPrefix)
@@ -73,7 +73,7 @@ void LoggedResourcesHelper::attribute(const std::string & rName, sal_uInt32 nVal
 // class: LoggedStream
 
 LoggedStream::LoggedStream(
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     const std::string & sPrefix
 ) : mHelper(sPrefix)
 #else
@@ -89,7 +89,7 @@ LoggedStream::~LoggedStream()
 
 void LoggedStream::startSectionGroup()
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     mHelper.startElement("section");
 #endif
 
@@ -100,14 +100,14 @@ void LoggedStream::endSectionGroup()
 {
     lcl_endSectionGroup();
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();
 #endif
 }
 
 void LoggedStream::startParagraphGroup()
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     mHelper.startElement("paragraph");
 #endif
 
@@ -118,7 +118,7 @@ void LoggedStream::endParagraphGroup()
 {
     lcl_endParagraphGroup();
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();
 #endif
 }
@@ -126,7 +126,7 @@ void LoggedStream::endParagraphGroup()
 
 void LoggedStream::startCharacterGroup()
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     mHelper.startElement("charactergroup");
 #endif
 
@@ -137,14 +137,14 @@ void LoggedStream::endCharacterGroup()
 {
     lcl_endCharacterGroup();
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();
 #endif
 }
 
 void LoggedStream::startShape(uno::Reference<drawing::XShape> const& xShape)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     mHelper.startElement("shape");
 #endif
 
@@ -155,14 +155,14 @@ void LoggedStream::endShape()
 {
     lcl_endShape();
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();
 #endif
 }
 
 void LoggedStream::text(const sal_uInt8 * data, size_t len)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     mHelper.startElement("text");
 
     OUString sText( reinterpret_cast<const char*>(data), len, RTL_TEXTENCODING_MS_1252 );
@@ -174,14 +174,14 @@ void LoggedStream::text(const sal_uInt8 * data, size_t len)
 
     lcl_text(data, len);
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();
 #endif
 }
 
 void LoggedStream::utext(const sal_uInt8 * data, size_t len)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     mHelper.startElement("utext");
     mHelper.startElement("data");
 
@@ -197,14 +197,14 @@ void LoggedStream::utext(const sal_uInt8 * data, size_t len)
 
     lcl_utext(data, len);
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();
 #endif
 }
 
 void LoggedStream::positionOffset(const OUString& rText, bool bVertical)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     mHelper.startElement("positionOffset");
     LoggedResourcesHelper::attribute("vertical", static_cast<int>(bVertical));
     LoggedResourcesHelper::chars(rText);
@@ -212,14 +212,14 @@ void LoggedStream::positionOffset(const OUString& rText, bool bVertical)
 
     lcl_positionOffset(rText, bVertical);
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();
 #endif
 }
 
 void LoggedStream::align(const OUString& rText, bool bVertical)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     mHelper.startElement("align");
     LoggedResourcesHelper::attribute("vertical", static_cast<int>(bVertical));
     LoggedResourcesHelper::chars(rText);
@@ -227,109 +227,109 @@ void LoggedStream::align(const OUString& rText, bool bVertical)
 
     lcl_align(rText, bVertical);
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();
 #endif
 }
 
 void LoggedStream::positivePercentage(const OUString& rText)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     mHelper.startElement("positivePercentage");
     LoggedResourcesHelper::chars(rText);
 #endif
 
     lcl_positivePercentage(rText);
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();
 #endif
 }
 
 void LoggedStream::props(writerfilter::Reference<Properties>::Pointer_t ref)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     mHelper.startElement("props");
 #endif
 
     lcl_props(ref);
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();
 #endif
 }
 
 void LoggedStream::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     mHelper.startElement("table");
     LoggedResourcesHelper::attribute("name", (*QNameToString::Instance())(name));
 #endif
 
     lcl_table(name, ref);
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();
 #endif
 }
 
 void LoggedStream::substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     mHelper.startElement("substream");
     LoggedResourcesHelper::attribute("name", (*QNameToString::Instance())(name));
 #endif
 
     lcl_substream(name, ref);
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();
 #endif
 }
 
 void LoggedStream::info(const std::string & _info)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     mHelper.startElement("info");
     LoggedResourcesHelper::attribute("text", _info);
 #endif
 
     lcl_info(_info);
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();
 #endif
 }
 
 void LoggedStream::startGlossaryEntry()
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     mHelper.startElement("startGlossaryEntry");
 #endif
 
     lcl_startGlossaryEntry();
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();
 #endif
 }
 
 void LoggedStream::endGlossaryEntry()
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     mHelper.startElement("endGlossaryEntry");
 #endif
 
     lcl_endGlossaryEntry();
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();
 #endif
 }
 
 // class LoggedProperties
 LoggedProperties::LoggedProperties(
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     const std::string & sPrefix
 ) : mHelper(sPrefix)
 #else
@@ -345,7 +345,7 @@ LoggedProperties::~LoggedProperties()
 
 void LoggedProperties::attribute(Id name, Value & val)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     mHelper.startElement("attribute");
     LoggedResourcesHelper::attribute("name", (*QNameToString::Instance())(name));
     LoggedResourcesHelper::attribute("value", val.toString());
@@ -357,7 +357,7 @@ void LoggedProperties::attribute(Id name, Value & val)
 
 void LoggedProperties::sprm(Sprm & rSprm)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     mHelper.startElement("sprm");
     LoggedResourcesHelper::attribute("name", (*QNameToString::Instance())(rSprm.getId()));
     LoggedResourcesHelper::chars(rSprm.toString());
@@ -365,13 +365,13 @@ void LoggedProperties::sprm(Sprm & rSprm)
 
     lcl_sprm(rSprm);
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();
 #endif
 }
 
 LoggedTable::LoggedTable(
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     const std::string & sPrefix
 ) : mHelper(sPrefix)
 #else
@@ -387,14 +387,14 @@ LoggedTable::~LoggedTable()
 
 void LoggedTable::entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     mHelper.startElement("entry");
     LoggedResourcesHelper::attribute("pos", pos);
 #endif
 
     lcl_entry(pos, ref);
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper::endElement();
 #endif
 }

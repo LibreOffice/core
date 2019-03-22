@@ -189,7 +189,7 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues( bool bChar
     return comphelper::containerToSequence( m_aValues );
 }
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 static void lcl_AnyToTag( const uno::Any& rAny )
 {
     try {
@@ -229,7 +229,7 @@ static void lcl_AnyToTag( const uno::Any& rAny )
 
 void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny, bool bOverwrite, GrabBagType i_GrabBagType )
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     const OUString& rInsert = getPropertyName(eId);
 
     TagLogger::getInstance().startElement("propertyMap.insert");
@@ -268,7 +268,7 @@ bool PropertyMap::isSet( PropertyIds eId) const
     return m_vMap.find( eId ) != m_vMap.end();
 }
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 void PropertyMap::dumpXml() const
 {
     TagLogger::getInstance().startElement( "PropertyMap" );
@@ -335,14 +335,14 @@ void PropertyMap::InsertProps( const PropertyMapPtr& rMap, const bool bOverwrite
 
 void PropertyMap::insertTableProperties( const PropertyMap*, const bool )
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().element( "PropertyMap.insertTableProperties" );
 #endif
 }
 
 void PropertyMap::printProperties()
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement( "properties" );
 
     for ( const auto& rPropPair : m_vMap )
@@ -406,7 +406,7 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
     , m_bEvenPageFooterLinkToPrevious( true )
     , m_bFirstPageFooterLinkToPrevious( true )
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     static sal_Int32 nNumber = 0;
     m_nDebugSectionNumber = nNumber++;
 #endif
@@ -1920,7 +1920,7 @@ void TablePropertyMap::setValue( TablePropertyMapTarget eWhich, sal_Int32 nSet )
 
 void TablePropertyMap::insertTableProperties( const PropertyMap* pMap, const bool bOverwrite )
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement( "TablePropertyMap.insertTableProperties" );
     pMap->dumpXml();
 #endif
@@ -1939,7 +1939,7 @@ void TablePropertyMap::insertTableProperties( const PropertyMap* pMap, const boo
         }
     }
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     dumpXml();
     TagLogger::getInstance().endElement();
 #endif

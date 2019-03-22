@@ -34,7 +34,7 @@ QNameToString::Pointer_t const & QNameToString::Instance()
 
 std::string QNameToString::operator()(Id qName)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     Map::const_iterator aIt = mMap.find(qName);
 
     if (aIt != mMap.end())

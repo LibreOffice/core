@@ -113,7 +113,7 @@ def fastTokenToId(model):
 std::string fastTokenToId(sal_uInt32 nToken)
 {
     std::string sResult;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 
     switch (oox::getNamespace(nToken))
     {""")

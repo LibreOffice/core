@@ -924,7 +924,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
             }
             break;
         default:
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
             TagLogger::getInstance().element("unhandled");
 #endif
             break;

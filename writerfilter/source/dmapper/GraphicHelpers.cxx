@@ -125,7 +125,7 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
             }
             break;
         default:
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
             TagLogger::getInstance().element("unhandled");
 #endif
             break;

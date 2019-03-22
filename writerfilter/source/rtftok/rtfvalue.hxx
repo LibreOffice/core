@@ -64,7 +64,7 @@ public:
     css::uno::Any getAny() const override;
     writerfilter::Reference<Properties>::Pointer_t getProperties() override;
     writerfilter::Reference<BinaryObj>::Pointer_t getBinary() override;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     std::string toString() const override;
 #endif
     RTFValue* Clone();

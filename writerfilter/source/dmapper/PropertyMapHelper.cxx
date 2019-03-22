@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 
 void lcl_DumpTableColumnSeparators(const uno::Any & rTableColumnSeparators)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     uno::Sequence<text::TableColumnSeparator> aSeq;
     rTableColumnSeparators >>= aSeq;
 
@@ -50,10 +50,10 @@ void lcl_DumpTableColumnSeparators(const uno::Any & rTableColumnSeparators)
     TagLogger::getInstance().endElement();
 #else
     (void) rTableColumnSeparators;
-#endif // DEBUG_WRITERFILTER
+#endif // DBG_UTIL
 }
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 void lcl_DumpPropertyValues(beans::PropertyValues const & rValues)
 {
     TagLogger::getInstance().startElement("propertyValues");
@@ -95,7 +95,7 @@ void lcl_DumpPropertyValueSeq(css::uno::Sequence<css::beans::PropertyValues> con
 
     TagLogger::getInstance().endElement();
 }
-#endif // DEBUG_WRITERFILTER
+#endif // DBG_UTIL
 
 }
 }

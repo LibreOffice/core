@@ -48,7 +48,7 @@ namespace dmapper {
 
     bool TablePropertiesHandler::sprm(Sprm & rSprm)
     {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
         TagLogger::getInstance().startElement("TablePropertiesHandler.sprm");
         TagLogger::getInstance().attribute("sprm", rSprm.toString());
 #endif
@@ -199,7 +199,7 @@ namespace dmapper {
                     TablePropertyMapPtr pTablePropMap( new TablePropertyMap );
                     pTablePropMap->InsertProps(pBorderHandler->getProperties());
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
                     pTablePropMap->dumpXml();
 #endif
                     insertTableProps( pTablePropMap );
@@ -363,7 +363,7 @@ namespace dmapper {
             break;
         }
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
         TagLogger::getInstance().endElement();
 #endif
 

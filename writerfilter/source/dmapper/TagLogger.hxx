@@ -44,7 +44,7 @@ namespace writerfilter
 
         static TagLogger& getInstance();
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
         void setFileName(const std::string & filename);
         void startDocument();
         void endDocument();
@@ -54,7 +54,7 @@ namespace writerfilter
         void startElement(const std::string & name);
 #endif
         void attribute(const std::string & name, const std::string & value);
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
         void attribute(const std::string & name, const OUString & value);
         void attribute(const std::string & name, sal_uInt32 value);
         void attribute(const std::string & name, const css::uno::Any& aAny);

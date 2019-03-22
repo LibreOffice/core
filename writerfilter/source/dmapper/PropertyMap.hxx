@@ -165,7 +165,7 @@ public:
 
     void printProperties();
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     void dumpXml() const;
 #endif
 
@@ -194,7 +194,7 @@ public:
         Edge = 1,
     };
 private:
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     sal_Int32                                       m_nDebugSectionNumber;
 #endif
 

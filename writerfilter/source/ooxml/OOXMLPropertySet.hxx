@@ -46,7 +46,7 @@ public:
     virtual css::uno::Any getAny() const override;
     virtual writerfilter::Reference<Properties>::Pointer_t getProperties() override;
     virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() override;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
     virtual OOXMLValue * clone() const;
@@ -70,7 +70,7 @@ public:
     sal_uInt32 getId() const override;
     Value::Pointer_t getValue() override;
     writerfilter::Reference<Properties>::Pointer_t getProps() override;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     std::string getName() const override;
     std::string toString() const override;
 #endif
@@ -85,7 +85,7 @@ public:
     virtual ~OOXMLBinaryValue() override;
 
     virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() override;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
     virtual OOXMLValue * clone() const override;
@@ -108,7 +108,7 @@ public:
 
     virtual int getInt() const override;
     virtual css::uno::Any getAny() const override;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
     virtual OOXMLValue * clone() const override;
@@ -128,7 +128,7 @@ public:
 
     virtual css::uno::Any getAny() const override;
     virtual OUString getString() const override;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
     virtual OOXMLValue * clone() const override;
@@ -143,7 +143,7 @@ public:
     virtual ~OOXMLInputStreamValue() override;
 
     virtual css::uno::Any getAny() const override;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
     virtual OOXMLValue * clone() const override;
@@ -176,7 +176,7 @@ public:
     OOXMLProperties_t::const_iterator begin() const;
     OOXMLProperties_t::const_iterator end() const;
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     std::string toString();
 #endif
 };
@@ -216,7 +216,7 @@ public:
     OOXMLPropertySetValue & operator =(OOXMLPropertySetValue &&) = delete; // due to const mpPropertySet
 
     virtual writerfilter::Reference<Properties>::Pointer_t getProperties() override;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
     virtual OOXMLValue * clone() const override;
@@ -237,7 +237,7 @@ public:
 
     virtual int getInt() const override;
     virtual css::uno::Any getAny() const override;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
     virtual OOXMLValue * clone() const override;
@@ -258,7 +258,7 @@ public:
     OOXMLHexValue & operator =(OOXMLHexValue &&) = default;
 
     virtual int getInt() const override;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
     virtual OOXMLValue * clone() const override;
@@ -284,7 +284,7 @@ public:
     OOXMLUniversalMeasureValue & operator =(OOXMLUniversalMeasureValue &&) = default;
 
     virtual int getInt() const override;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
 };
@@ -318,7 +318,7 @@ public:
     {
         return new OOXMLMeasurementOrPercentValue(*this);
     }
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
 };
@@ -331,7 +331,7 @@ public:
     virtual ~OOXMLShapeValue() override;
 
     virtual css::uno::Any getAny() const override;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
     virtual OOXMLValue * clone() const override;
@@ -345,7 +345,7 @@ public:
     virtual ~OOXMLStarMathValue() override;
 
     virtual css::uno::Any getAny() const override;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
     virtual OOXMLValue * clone() const override;

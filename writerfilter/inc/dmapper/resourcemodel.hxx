@@ -352,7 +352,7 @@ public:
     /**
        Returns string representation of this value.
      */
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     virtual std::string toString() const = 0;
 #endif
 };
@@ -385,14 +385,14 @@ public:
     /**
        Returns name of sprm.
     */
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     virtual std::string getName() const = 0;
 #endif
 
     /**
        Returns string representation of sprm.
      */
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     virtual std::string toString() const = 0;
 #endif
 

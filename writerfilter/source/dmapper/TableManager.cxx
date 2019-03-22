@@ -35,7 +35,7 @@ void TableManager::clearData()
 
 void TableManager::openCell(const css::uno::Reference<css::text::XTextRange>& rHandle, const TablePropertyMapPtr& pProps)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("tablemanager.openCell");
     TagLogger::getInstance().chars(XTextRangeToString(rHandle));
     TagLogger::getInstance().endElement();
@@ -64,7 +64,7 @@ void TableManager::endOfCellAction()
 
 void TableManager::insertTableProps(const TablePropertyMapPtr& pProps)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("tablemanager.insertTableProps");
 #endif
 
@@ -73,14 +73,14 @@ void TableManager::insertTableProps(const TablePropertyMapPtr& pProps)
     else
         mState.setTableProps(pProps);
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().endElement();
 #endif
 }
 
 void TableManager::insertRowProps(const TablePropertyMapPtr& pProps)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("tablemanager.insertRowProps");
 #endif
 
@@ -89,14 +89,14 @@ void TableManager::insertRowProps(const TablePropertyMapPtr& pProps)
     else
         mState.setRowProps(pProps);
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().endElement();
 #endif
 }
 
 void TableManager::cellProps(const TablePropertyMapPtr& pProps)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("tablemanager.cellProps");
 #endif
 
@@ -105,7 +105,7 @@ void TableManager::cellProps(const TablePropertyMapPtr& pProps)
     else
         mState.setCellProps(pProps);
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().endElement();
 #endif
 }
@@ -131,7 +131,7 @@ void TableManager::text(const sal_uInt8* data, std::size_t len)
 
 void TableManager::handle0x7()
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("tablemanager.handle0x7");
 #endif
 
@@ -143,7 +143,7 @@ void TableManager::handle0x7()
     else
         endRow();
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().endElement();
 #endif
 }
@@ -177,7 +177,7 @@ bool TableManager::sprm(Sprm& rSprm)
 
 void TableManager::closeCell(const css::uno::Reference<css::text::XTextRange>& rHandle)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("tablemanager.closeCell");
     TagLogger::getInstance().chars(XTextRangeToString(rHandle));
     TagLogger::getInstance().endElement();
@@ -196,7 +196,7 @@ void TableManager::closeCell(const css::uno::Reference<css::text::XTextRange>& r
 
 void TableManager::ensureOpenCell(const TablePropertyMapPtr& pProps)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("tablemanager.ensureOpenCell");
 #endif
 
@@ -212,7 +212,7 @@ void TableManager::ensureOpenCell(const TablePropertyMapPtr& pProps)
                 pTableData->insertCellProperties(pProps);
         }
     }
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().endElement();
 #endif
 }
@@ -270,7 +270,7 @@ void TableManager::startParagraphGroup()
 
 void TableManager::resolveCurrentTable()
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("tablemanager.resolveCurrentTable");
 #endif
 
@@ -312,7 +312,7 @@ void TableManager::resolveCurrentTable()
     mState.resetTableProps();
     clearData();
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().endElement();
 #endif
 }
@@ -328,7 +328,7 @@ void TableManager::endLevel()
     mState.endLevel();
     mTableDataStack.pop();
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TableData::Pointer_t pTableData;
 
     if (!mTableDataStack.empty())
@@ -346,7 +346,7 @@ void TableManager::endLevel()
 
 void TableManager::startLevel()
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TableData::Pointer_t pTableData;
 
     if (!mTableDataStack.empty())
@@ -388,7 +388,7 @@ bool TableManager::isInTable()
 
 void TableManager::handle(const css::uno::Reference<css::text::XTextRange>& rHandle)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("tablemanager.handle");
     TagLogger::getInstance().chars(XTextRangeToString(rHandle));
     TagLogger::getInstance().endElement();
@@ -404,7 +404,7 @@ void TableManager::setHandler(const tools::SvRef<DomainMapperTableHandler>& pTab
 
 void TableManager::endRow()
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().element("tablemanager.endRow");
 #endif
 
@@ -413,7 +413,7 @@ void TableManager::endRow()
 
 void TableManager::endCell()
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().element("tablemanager.endCell");
 #endif
 
@@ -422,7 +422,7 @@ void TableManager::endCell()
 
 void TableManager::inCell()
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().element("tablemanager.inCell");
 #endif
     setInCell(true);
@@ -433,7 +433,7 @@ void TableManager::inCell()
 
 void TableManager::cellDepth(sal_uInt32 nDepth)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("tablemanager.cellDepth");
     TagLogger::getInstance().attribute("depth", nDepth);
     TagLogger::getInstance().endElement();

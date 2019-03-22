@@ -520,7 +520,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         break;
         default:
         {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
             TagLogger::getInstance().element("unhandled");
 #endif
         }
@@ -1121,7 +1121,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         }
                         catch( const lang::WrappedTargetException& rWrapped)
                         {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
                             OUString aMessage("StyleSheetTable::ApplyStyleSheets: Some style properties could not be set");
                             beans::UnknownPropertyException aUnknownPropertyException;
 
