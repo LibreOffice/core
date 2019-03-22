@@ -213,26 +213,26 @@ cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png
 cmd/32/adjust.png cmd/32/zoomoptimal.png
 cmd/32/previewzoom.png cmd/32/zoomprevious.png
 cmd/32/zoomminus.png cmd/32/zoomout.png
+cmd/32/zoommenu.png cmd/32/zoom.png
 cmd/32/zoomtoolbox.png cmd/32/zoomoptimal.png
-cmd/32/zoom.png cmd/32/zoomoptimal.png
 cmd/32/zoomplus.png cmd/32/zoomin.png
 cmd/32/zoommode.png cmd/32/zoomoptimal.png
 cmd/32/zoom100percent.png cmd/32/view100.png
 
 cmd/lc_adjust.png cmd/lc_zoomoptimal.png
 cmd/lc_previewzoom.png cmd/lc_zoomprevious.png
+cmd/lc_zoommenu.png cmd/lc_zoom.png
 cmd/lc_zoomminus.png cmd/lc_zoomout.png
 cmd/lc_zoomtoolbox.png cmd/lc_zoomoptimal.png
-cmd/lc_zoom.png cmd/lc_zoomoptimal.png
 cmd/lc_zoomplus.png cmd/lc_zoomin.png
 cmd/lc_zoommode.png cmd/lc_zoomoptimal.png
 cmd/lc_zoom100percent.png cmd/lc_view100.png
 
 cmd/sc_adjust.png cmd/sc_zoomoptimal.png
 cmd/sc_previewzoom.png cmd/sc_zoomprevious.png
+cmd/sc_zoommenu.png cmd/sc_zoom.png
 cmd/sc_zoomminus.png cmd/sc_zoomout.png
 cmd/sc_zoomtoolbox.png cmd/sc_zoomoptimal.png
-cmd/sc_zoom.png cmd/sc_zoomoptimal.png
 cmd/sc_zoomplus.png cmd/sc_zoomin.png
 cmd/sc_zoommode.png cmd/sc_zoomoptimal.png
 cmd/sc_zoom100percent.png cmd/sc_view100.png
@@ -293,14 +293,18 @@ cmd/sc_optionstreedialog.png cmd/sc_controlproperties.png
 # Track Change
 cmd/32/acceptchanges.png cmd/32/accepttrackedchanges.png
 cmd/32/accepttracedchange.png cmd/32/accepttrackedchange.png
+cmd/32/changesmenu.png cmd/32/accepttrackedchange.png
 cmd/32/commentchange.png cmd/32/commentchangetracking.png
+
 
 cmd/lc_acceptchanges.png cmd/lc_accepttrackedchanges.png
 cmd/lc_accepttracedchange.png cmd/lc_accepttrackedchange.png
+cmd/lc_changesmenu.png cmd/lc_accepttrackedchange.png
 cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
 
 cmd/sc_acceptchanges.png cmd/sc_accepttrackedchanges.png
 cmd/sc_accepttracedchange.png cmd/sc_accepttrackedchange.png
+cmd/sc_changesmenu.png cmd/sc_accepttrackedchange.png
 cmd/sc_commentchange.png cmd/sc_commentchangetracking.png
 
 # Formatmenu
@@ -1097,14 +1101,21 @@ cmd/sc_scrolltoprevious.png cmd/sc_upsearch.png
 
 
 # File Menu
+cmd/32/exportasmenu.png cmd/32/exportto.png
 cmd/32/exporttoepub.png cmd/32/exportdirecttoepub.png
 cmd/32/exporttopdf.png cmd/32/exportdirecttopdf.png
 
+cmd/lc_exportasmenu.png cmd/lc_exportto.png
 cmd/lc_exporttoepub.png cmd/lc_exportdirecttoepub.png
 cmd/lc_exporttopdf.png cmd/lc_exportdirecttopdf.png
 
+cmd/sc_exportasmenu.png cmd/sc_exportto.png
 cmd/sc_exporttoepub.png cmd/sc_exportdirecttoepub.png
 cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
+
+cmd/32/sendtomenu.png cmd/32/sendmail.png
+cmd/lc_sendtomenu.png cmd/lc_sendmail.png
+cmd/sc_sendtomenu.png cmd/sc_sendmail.png
 
 # Square
 cmd/32/square.png cmd/32/basicshapes.quadrat.png
@@ -1174,9 +1185,6 @@ cmd/32/gridmenu.png cmd/32/gridvisible.png
 cmd/lc_gridmenu.png cmd/lc_gridvisible.png
 
 cmd/sc_gridmenu.png cmd/sc_gridvisible.png
-
-cmd/sc_insertgridcontrol.png cmd/sc_gridvisible.png
-cmd/lc_insertgridcontrol.png cmd/lc_gridvisible.png
 
 # Crop
 cmd/32/grafattrcrop.png cmd/32/crop.png
@@ -1399,6 +1407,10 @@ cmd/32/setoptimalcolumnwidthdirect.png cmd/32/setoptimalcolumnwidth.png
 cmd/32/setcolumnwidth.png cmd/32/columnwidth.png
 cmd/32/setrowheight.png cmd/32/rowheight.png
 cmd/32/starchartdialog.png cmd/32/drawchart.png
+cmd/32/tableautofitmenu.png cmd/32/setoptimalrowheight.png
+cmd/32/tabledeletemenu.png cmd/32/deletetable.png
+cmd/32/tableinsertmenu.png cmd/32/insertrowsafter.png
+cmd/32/tableselectmenu.png cmd/32/selecttable.png
 
 cmd/lc_cellprotection.png cmd/lc_protect.png
 cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
@@ -1407,6 +1419,10 @@ cmd/lc_setoptimalcolumnwidthdirect.png cmd/lc_setoptimalcolumnwidth.png
 cmd/lc_setcolumnwidth.png cmd/lc_columnwidth.png
 cmd/lc_setrowheight.png cmd/lc_rowheight.png
 cmd/lc_starchartdialog.png cmd/lc_drawchart.png
+cmd/lc_tableautofitmenu.png cmd/lc_setoptimalrowheight.png
+cmd/lc_tabledeletemenu.png cmd/lc_deletetable.png
+cmd/lc_tableinsertmenu.png cmd/lc_insertrowsafter.png
+cmd/lc_tableselectmenu.png cmd/lc_selecttable.png
 
 cmd/sc_cellprotection.png cmd/sc_protect.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png
@@ -1415,6 +1431,10 @@ cmd/sc_setoptimalcolumnwidthdirect.png cmd/sc_setoptimalcolumnwidth.png
 cmd/sc_setcolumnwidth.png cmd/sc_columnwidth.png
 cmd/sc_setrowheight.png cmd/sc_rowheight.png
 cmd/sc_starchartdialog.png cmd/sc_drawchart.png
+cmd/sc_tableautofitmenu.png cmd/sc_setoptimalrowheight.png
+cmd/sc_tabledeletemenu.png cmd/sc_deletetable.png
+cmd/sc_tableinsertmenu.png cmd/sc_insertrowsafter.png
+cmd/sc_tableselectmenu.png cmd/sc_selecttable.png
 
 # Help
 cmd/32/absoluterecord.png cmd/32/helpindex.png
@@ -2040,18 +2060,21 @@ cmd/sc_toolbarsmenu.png cmd/sc_showtoolbar.png
 cmd/32/deleteallnotes.png cmd/32/deleteallannotation.png
 cmd/32/deletecomment.png cmd/32/deleteannotation.png
 cmd/32/deletenote.png cmd/32/deleteannotation.png
+cmd/32/editcommentsmenu.png cmd/32/editannotation.png
 cmd/32/formatallnotes.png cmd/32/editannotation.png
 cmd/32/showinlinetooltips.png cmd/32/editannotation.png
 
 cmd/lc_deleteallnotes.png cmd/lc_deleteallannotation.png
 cmd/lc_deletecomment.png cmd/lc_deleteannotation.png
 cmd/lc_deletenote.png cmd/lc_deleteannotation.png
+cmd/lc_editcommentsmenu.png cmd/lc_editannotation.png
 cmd/lc_formatallnotes.png cmd/lc_editannotation.png
 cmd/lc_showinlinetooltips.png cmd/lc_editannotation.png
 
 cmd/sc_deleteallnotes.png cmd/sc_deleteallannotation.png
 cmd/sc_deletecomment.png cmd/sc_deleteannotation.png
 cmd/sc_deletenote.png cmd/sc_deleteannotation.png
+cmd/sc_editcommentsmenu.png cmd/sc_editannotation.png
 cmd/sc_formatallnotes.png cmd/sc_editannotation.png
 cmd/sc_showinlinetooltips.png cmd/sc_editannotation.png
 
@@ -2081,3 +2104,31 @@ cmd/sc_renametable.png cmd/sc_name.png
 cmd/32/textattributes.png cmd/32/fontdialog.png
 cmd/lc_textattributes.png cmd/lc_fontdialog.png
 cmd/sc_textattributes.png cmd/sc_fontdialog.png
+
+cmd/32/editpastespecialmenu.png cmd/32/pastespecial.png
+cmd/lc_editpastespecialmenu.png cmd/lc_pastespecial.png
+cmd/sc_editpastespecialmenu.png cmd/sc_pastespecial.png
+
+cmd/32/pastespecialmenu.png cmd/32/pastespecial.png
+cmd/lc_pastespecialmenu.png cmd/lc_pastespecial.png
+cmd/sc_pastespecialmenu.png cmd/sc_pastespecial.png
+
+cmd/32/openxmlfiltersettings.png cmd/32/managexmlsource.png
+cmd/lc_openxmlfiltersettings.png cmd/lc_managexmlsource.png
+cmd/sc_openxmlfiltersettings.png cmd/sc_managexmlsource.png
+
+cmd/32/languagemenu.png cmd/32/managelanguage.png
+cmd/lc_languagemenu.png cmd/lc_managelanguage.png
+cmd/sc_languagemenu.png cmd/sc_managelanguage.png
+
+cmd/32/graphicmenu.png cmd/32/avmediaplayer.png
+cmd/lc_graphicmenu.png cmd/lc_avmediaplayer.png
+cmd/sc_graphicmenu.png cmd/sc_avmediaplayer.png
+
+cmd/32/formatobjectmenu.png cmd/32/basicshapes.rectangle.png
+cmd/lc_formatobjectmenu.png cmd/lc_basicshapes.rectangle.png
+cmd/sc_formatobjectmenu.png cmd/sc_basicshapes.rectangle.png
+
+cmd/32/insertgridcontrol.png cmd/32/grid.png
+cmd/lc_insertgridcontrol.png cmd/lc_grid.png
+cmd/sc_insertgridcontrol.png cmd/sc_grid.png
