@@ -23,6 +23,7 @@
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/glyphitem.hxx>
+#include <vcl/outdev.hxx>
 #include <vector>
 
 #include "fontinstance.hxx"
@@ -103,6 +104,7 @@ public:
 
 private:
     mutable rtl::Reference<LogicalFontInstance> m_rFontInstance;
+    SalLayoutFlags mnFlags = SalLayoutFlags::NONE;
 
     SalLayoutGlyphsImpl(SalLayoutGlyphs& rGlyphs, LogicalFontInstance& rFontInstance)
         : m_rFontInstance(&rFontInstance)

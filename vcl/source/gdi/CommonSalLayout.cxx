@@ -273,6 +273,8 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
     {
         // Work with pre-computed glyph items.
         m_GlyphItems = *pGlyphs;
+        // Some flags are set as a side effect of text layout, restore them here.
+        rArgs.mnFlags |= pGlyphs->Impl()->mnFlags;
         return true;
     }
 
@@ -579,6 +581,10 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
     }
 
     hb_buffer_destroy(pHbBuffer);
+
+    // Some flags are set as a side effect of text layout, save them here.
+    if (rArgs.mnFlags & SalLayoutFlags::GlyphItemsOnly)
+        m_GlyphItems.Impl()->mnFlags = rArgs.mnFlags;
 
     return true;
 }

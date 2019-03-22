@@ -28,6 +28,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_complextext, \
 	comphelper \
 	cppu \
 	cppuhelper \
+	i18nlangtag \
 	sal \
 	svt \
 	test \

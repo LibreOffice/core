@@ -19,8 +19,10 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& 
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/wrkwin.hxx>
+#include <vcl/virdev.hxx>
 // workaround MSVC2015 issue with std::unique_ptr
 #include <sallayout.hxx>
+#include <salgdi.hxx>
 
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -45,6 +47,7 @@ public:
 #if HAVE_MORE_FONTS
     /// Play with font measuring etc.
     void testArabic();
+    void testKashida();
 #endif
 #if defined(_WIN32)
     void testTdf95650(); // Windows-only issue
@@ -53,6 +56,7 @@ public:
     CPPUNIT_TEST_SUITE(VclComplexTextTest);
 #if HAVE_MORE_FONTS
     CPPUNIT_TEST(testArabic);
+    CPPUNIT_TEST(testKashida);
 #endif
 #if defined(_WIN32)
     CPPUNIT_TEST(testTdf95650);
@@ -135,6 +139,29 @@ void VclComplexTextTest::testArabic()
 #else
     (void)aRect; (void)aRectRot;
 #endif
+}
+
+void VclComplexTextTest::testKashida()
+{
+    // Cache the glyph list of some Arabic text.
+    ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
+    auto aText
+        = OUString::fromUtf8(u8"ﻊﻨﺻﺭ ﺎﻠﻓﻮﺴﻓﻭﺭ ﻊﻨﺻﺭ ﻒﻟﺰﻳ ﺺﻠﺑ. ﺖﺘﻛﻮﻧ ﺎﻟﺩﻭﺭﺓ ﺎﻟﺭﺎﺒﻋﺓ ﻢﻧ ١٥ ﻊﻨﺻﺭﺍ.");
+    std::unique_ptr<SalLayout> pLayout = pOutputDevice->ImplLayout(
+        aText, 0, aText.getLength(), Point(0, 0), 0, nullptr, SalLayoutFlags::GlyphItemsOnly);
+    const SalLayoutGlyphs* pGlyphs = pLayout->GetGlyphs();
+    CPPUNIT_ASSERT(pGlyphs);
+    SalLayoutGlyphs aGlyphs = *pGlyphs;
+
+    // Now lay it out using the cached glyph list.
+    ImplLayoutArgs aLayoutArgs(aText, 0, aText.getLength(), SalLayoutFlags::NONE,
+                               pOutputDevice->GetFont().GetLanguageTag(), nullptr);
+    pLayout = pOutputDevice->GetGraphics()->GetTextLayout(0);
+    CPPUNIT_ASSERT(pLayout->LayoutText(aLayoutArgs, &aGlyphs));
+
+    // Without the accompanying fix in place, this test would have failed with 'assertion failed'.
+    // The kashida justification flag was lost when going via the glyph cache.
+    CPPUNIT_ASSERT(aLayoutArgs.mnFlags & SalLayoutFlags::KashidaJustification);
 }
 #endif
 
