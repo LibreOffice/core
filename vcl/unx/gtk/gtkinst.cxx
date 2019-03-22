@@ -313,20 +313,18 @@ void GtkYieldMutex::ThreadsEnter()
     if (!yieldCounts.empty()) {
         auto n = yieldCounts.top();
         yieldCounts.pop();
-        for (; n != 0; --n) {
-            acquire();
-        }
+        assert(n > 0);
+        n--;
+        if (n > 0)
+            acquire(n);
     }
 }
 
 void GtkYieldMutex::ThreadsLeave()
 {
     assert(m_nCount != 0);
-    auto n = m_nCount - 1;
-    yieldCounts.push(n);
-    for (sal_uIntPtr i = 0; i != n + 1; ++i) {
-        release();
-    }
+    yieldCounts.push(m_nCount);
+    release(true);
 }
 
 std::unique_ptr<SalVirtualDevice> GtkInstance::CreateVirtualDevice( SalGraphics *pG,
