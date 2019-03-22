@@ -1253,6 +1253,11 @@ OUString ScDPObject::GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFla
             }
         }
     }
+    else if (ScDPTableData* pData = GetTableData())
+    {
+        aRet = pData->getDimensionName(nDim);
+        rIsDataLayout = pData->getIsDataLayoutDimension(nDim);
+    }
 
     return aRet;
 }
