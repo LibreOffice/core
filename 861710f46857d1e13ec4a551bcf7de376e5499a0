@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_8ac20fe9",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-03-22T15:54:44Z",
+      "side": 1,
+      "message": "why not just return OString\u0027s in these functions and save a conversion/copy ?",
+      "revId": "861710f46857d1e13ec4a551bcf7de376e5499a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
