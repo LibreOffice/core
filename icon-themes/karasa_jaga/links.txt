@@ -201,6 +201,7 @@ cmd/32/mailmergelastentry.png cmd/32/lastrecord.png
 cmd/32/mailmergenextentry.png cmd/32/nextrecord.png
 cmd/32/mailmergepreventry.png cmd/32/prevrecord.png
 cmd/32/mailmergewizard.png cmd/32/dsbformletter.png
+cmd/32/margins.png cmd/32/pagemargin.png
 cmd/32/measureattributes.png cmd/32/measureline.png
 cmd/32/mergecellsmenu.png cmd/32/mergecells.png
 cmd/32/mirrorhorz.png cmd/32/fliphorizontal.png
@@ -551,6 +552,7 @@ cmd/lc_mailmergelastentry.png cmd/lc_lastrecord.png
 cmd/lc_mailmergenextentry.png cmd/lc_nextrecord.png
 cmd/lc_mailmergepreventry.png cmd/lc_prevrecord.png
 cmd/lc_mailmergewizard.png cmd/lc_dsbformletter.png
+cmd/lc_margins.png cmd/lc_pagemargin.png
 cmd/lc_measureattributes.png cmd/lc_measureline.png
 cmd/lc_mergecellsmenu.png cmd/lc_mergecells.png
 cmd/lc_mirrorhorz.png cmd/lc_fliphorizontal.png
@@ -861,6 +863,7 @@ cmd/sc_mailmergelastentry.png cmd/sc_lastrecord.png
 cmd/sc_mailmergenextentry.png cmd/sc_nextrecord.png
 cmd/sc_mailmergepreventry.png cmd/sc_prevrecord.png
 cmd/sc_mailmergewizard.png cmd/sc_dsbformletter.png
+cmd/sc_margins.png cmd/sc_pagemargin.png
 cmd/sc_measureattributes.png cmd/sc_measureline.png
 cmd/sc_mergecellsmenu.png cmd/sc_mergecells.png
 cmd/sc_mirrorhorz.png cmd/sc_fliphorizontal.png
