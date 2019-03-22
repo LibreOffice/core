@@ -480,6 +480,16 @@ public:
         m_xWidget->SetAccessibleRelationLabelFor(pAtkLabeled);
     }
 
+    virtual void add_extra_accessible_relation(const css::accessibility::AccessibleRelation &rRelation) override
+    {
+        m_xWidget->AddExtraAccessibleRelation(rRelation);
+    }
+
+    virtual void clear_extra_accessible_relations() override
+    {
+        m_xWidget->ClearExtraAccessibleRelations();
+    }
+
     virtual void set_tooltip_text(const OUString& rTip) override
     {
         m_xWidget->SetQuickHelpText(rTip);
