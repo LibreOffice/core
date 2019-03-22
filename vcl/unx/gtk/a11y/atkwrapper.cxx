@@ -496,8 +496,8 @@ wrapper_get_index_in_parent( AtkObject *atk_obj )
 
 /*****************************************************************************/
 
-static void
-relation_set_add(AtkRelationSet *pSet, const accessibility::AccessibleRelation& rRelation)
+AtkRelation*
+atk_object_wrapper_relation_new(const accessibility::AccessibleRelation& rRelation)
 {
     sal_uInt32 nTargetCount = rRelation.TargetSet.getLength();
 
@@ -515,8 +515,8 @@ relation_set_add(AtkRelationSet *pSet, const accessibility::AccessibleRelation& 
             aTargets.data(), nTargetCount,
             mapRelationType( rRelation.RelationType )
         );
-    atk_relation_set_add( pSet, pRel );
-    g_object_unref( G_OBJECT( pRel ) );
+
+    return pRel;
 }
 
 static AtkRelationSet *
@@ -540,7 +540,9 @@ wrapper_ref_relation_set( AtkObject *atk_obj )
             sal_Int32 nRelations = xRelationSet.is() ? xRelationSet->getRelationCount() : 0;
             for( sal_Int32 n = 0; n < nRelations; n++ )
             {
-                relation_set_add(pSet, xRelationSet->getRelation(n));
+                AtkRelation *pRel = atk_object_wrapper_relation_new(xRelationSet->getRelation(n));
+                atk_relation_set_add(pSet, pRel);
+                g_object_unref(pRel);
             }
         }
         catch(const uno::Exception &) {
