@@ -204,8 +204,6 @@ void SwFieldDlg::ReInitTabPage(const OString& rPageId, bool bOnlyActivate)
 // newly initialise after activation of a few TabPages
 void SwFieldDlg::Activate()
 {
-    fprintf(stderr, "SwFieldDlg::Activate()\n");
-
     SwView* pView = ::GetActiveView();
     if( pView )
     {

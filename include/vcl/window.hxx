@@ -67,6 +67,7 @@ enum class PointerStyle;
 
 namespace com { namespace sun { namespace star {
 namespace accessibility {
+    struct AccessibleRelation;
     class XAccessible;
 }
 
@@ -1252,6 +1253,9 @@ public:
     void                                SetAccessibleRelationMemberOf( vcl::Window* pMemberOf );
     vcl::Window*                        GetAccessibleRelationMemberOf() const;
 
+    void                                AddExtraAccessibleRelation(const css::accessibility::AccessibleRelation &rRelation);
+    const std::vector<css::accessibility::AccessibleRelation>& GetExtraAccessibleRelations() const;
+    void                                ClearExtraAccessibleRelations();
 
     // to avoid sending accessibility events in cases like closing dialogs
     // by default checks complete parent path
