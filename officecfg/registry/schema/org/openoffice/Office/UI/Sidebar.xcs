@@ -231,6 +231,17 @@
     </group>
   </templates>
   <component>
+    <group oor:name="General">
+      <info>
+        <desc>General Sidebar settings.</desc>
+      </info>
+      <prop oor:name="MaximumWidth" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Maximum width the sidebar can ever have</desc>
+        </info>
+        <value>500</value>
+      </prop>
+    </group>
     <group oor:name="Content">
       <info>
         <desc>Description of the decks and panels that can be displayed in the content area of the sidebar.</desc>

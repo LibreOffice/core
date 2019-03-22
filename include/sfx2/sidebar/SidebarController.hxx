@@ -118,8 +118,6 @@ public:
     const static sal_Int32 SwitchFlag_ForceNewDeck = 0x02;
     const static sal_Int32 SwitchFlag_ForceNewPanels = 0x02;
 
-    const static sal_Int32 gnMaximumSidebarWidth = 400;
-
     void OpenThenSwitchToDeck(const OUString& rsDeckId);
     void OpenThenToggleDeck(const OUString& rsDeckId);
 
@@ -166,6 +164,8 @@ public:
 
     tools::Rectangle GetDeckDragArea() const;
 
+    sal_Int32 getMaximumWidth() { return mnMaximumSidebarWidth; }
+
 private:
     SidebarController(
         SidebarDockingWindow* pParentWindow,
@@ -180,6 +180,7 @@ private:
     css::uno::Reference<css::frame::XController> mxCurrentController;
     /// Use a combination of SwitchFlag_* as value.
     sal_Int32 mnRequestedForceFlags;
+    sal_Int32 mnMaximumSidebarWidth;
     OUString msCurrentDeckId;
     AsynchronousCall maPropertyChangeForwarder;
     AsynchronousCall maContextChangeUpdate;
