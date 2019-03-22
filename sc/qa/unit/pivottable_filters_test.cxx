@@ -53,8 +53,8 @@ public:
     void testPivotTableSharedCacheGroupODS();
     void testGetPivotDataXLS();
     void testPivotTableSharedGroupXLSX();
-    void testPivotTableSharedDateGroupXLSX();
-    void testPivotTableSharedNestedDateGroupXLSX();
+    void testPivotTableSharedDateGroupXLSX(); // + export
+    void testPivotTableSharedNestedDateGroupXLSX(); // + export
     void testPivotTableSharedNumGroupXLSX();
     void testPivotTableNoColumnsLayout();
     void testTdf112501();
@@ -532,86 +532,99 @@ void ScPivotTableFiltersTest::testPivotTableSharedGroupXLSX()
 
 void ScPivotTableFiltersTest::testPivotTableSharedDateGroupXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("pivot-table/shared-dategroup.", FORMAT_XLSX);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
-    ScDocument& rDoc = xDocSh->GetDocument();
+    auto testThis = [](ScDocShellRef& xDocSh) {
+        CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+        ScDocument& rDoc = xDocSh->GetDocument();
 
-    // Check whether right date labels are imported for both tables
-    // First table
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), rDoc.GetString(ScAddress(0, 3, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1965"), rDoc.GetString(ScAddress(0, 4, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1989"), rDoc.GetString(ScAddress(0, 5, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2000"), rDoc.GetString(ScAddress(0, 6, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2004"), rDoc.GetString(ScAddress(0, 7, 1)));
-    // TODO: check why this fails with 2005
-    // CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(0,8,1)));
+        // Check whether right date labels are imported for both tables
+        // First table
+        CPPUNIT_ASSERT_EQUAL(OUString("a"), rDoc.GetString(ScAddress(0, 3, 1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("1965"), rDoc.GetString(ScAddress(0, 4, 1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("1989"), rDoc.GetString(ScAddress(0, 5, 1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("2000"), rDoc.GetString(ScAddress(0, 6, 1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("2004"), rDoc.GetString(ScAddress(0, 7, 1)));
+        // TODO: check why this fails with 2005
+        // CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(0,8,1)));
 
-    // Second table
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), rDoc.GetString(ScAddress(5, 3, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1965"), rDoc.GetString(ScAddress(5, 4, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1989"), rDoc.GetString(ScAddress(5, 5, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2000"), rDoc.GetString(ScAddress(5, 6, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2004"), rDoc.GetString(ScAddress(5, 7, 1)));
-    // TODO: check why this fails with 2005
-    // CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(5,8,1)));
+        // Second table
+        CPPUNIT_ASSERT_EQUAL(OUString("a"), rDoc.GetString(ScAddress(5, 3, 1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("1965"), rDoc.GetString(ScAddress(5, 4, 1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("1989"), rDoc.GetString(ScAddress(5, 5, 1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("2000"), rDoc.GetString(ScAddress(5, 6, 1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("2004"), rDoc.GetString(ScAddress(5, 7, 1)));
+        // TODO: check why this fails with 2005
+        // CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(5,8,1)));
 
-    // There should be exactly 2 pivot tables and 1 cache.
-    ScDPCollection* pDPs = rDoc.GetDPCollection();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pDPs->GetCount());
+        // There should be exactly 2 pivot tables and 1 cache.
+        ScDPCollection* pDPs = rDoc.GetDPCollection();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pDPs->GetCount());
 
-    ScDPCollection::SheetCaches& rSheetCaches = pDPs->GetSheetCaches();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rSheetCaches.size());
+        ScDPCollection::SheetCaches& rSheetCaches = pDPs->GetSheetCaches();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rSheetCaches.size());
 
-    const ScDPCache* pCache = rSheetCaches.getExistingCache(ScRange(0, 0, 0, 9, 24, 0));
-    CPPUNIT_ASSERT_MESSAGE("Pivot cache is expected for A1:J25 on the first sheet.", pCache);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), pCache->GetFieldCount());
-
-    xDocSh->DoClose();
+        const ScDPCache* pCache = rSheetCaches.getExistingCache(ScRange(0, 0, 0, 9, 24, 0));
+        CPPUNIT_ASSERT_MESSAGE("Pivot cache is expected for A1:J25 on the first sheet.", pCache);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), pCache->GetFieldCount());
+    };
+    ScDocShellRef xDocSh1 = loadDoc("pivot-table/shared-dategroup.", FORMAT_XLSX);
+    testThis(xDocSh1);
+    // Now test round-trip of group fields
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh1.get(), FORMAT_XLSX);
+    testThis(xDocSh2);
+    xDocSh2->DoClose();
+    xDocSh1->DoClose();
 }
 
 void ScPivotTableFiltersTest::testPivotTableSharedNestedDateGroupXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("pivot-table/shared-nested-dategroup.", FORMAT_XLSX);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
-    ScDocument& rDoc = xDocSh->GetDocument();
+    auto testThis = [](ScDocShellRef& xDocSh) {
+        CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+        ScDocument& rDoc = xDocSh->GetDocument();
 
-    // Check whether right date groups are imported for both tables
-    // First table
-    CPPUNIT_ASSERT_EQUAL(OUString("Years"), rDoc.GetString(ScAddress(0, 3, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1965"), rDoc.GetString(ScAddress(0, 4, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1989"), rDoc.GetString(ScAddress(0, 11, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2000"), rDoc.GetString(ScAddress(0, 18, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2004"), rDoc.GetString(ScAddress(0, 21, 1)));
-    // TODO: check why this fails with the empty string
-    //CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(0,32,1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Quarters"), rDoc.GetString(ScAddress(1, 3, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), rDoc.GetString(ScAddress(2, 3, 1)));
+        // Check whether right date groups are imported for both tables
+        // First table
+        CPPUNIT_ASSERT_EQUAL(OUString("Years"), rDoc.GetString(ScAddress(0, 3, 1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("1965"), rDoc.GetString(ScAddress(0, 4, 1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("1989"), rDoc.GetString(ScAddress(0, 11, 1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("2000"), rDoc.GetString(ScAddress(0, 18, 1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("2004"), rDoc.GetString(ScAddress(0, 21, 1)));
+        // TODO: check why this fails with the empty string
+        //CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(0,32,1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Quarters"), rDoc.GetString(ScAddress(1, 3, 1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("a"), rDoc.GetString(ScAddress(2, 3, 1)));
 
-    // Second table
-    CPPUNIT_ASSERT_EQUAL(OUString("Years"), rDoc.GetString(ScAddress(6, 3, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1965"), rDoc.GetString(ScAddress(6, 4, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1989"), rDoc.GetString(ScAddress(6, 11, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2000"), rDoc.GetString(ScAddress(6, 18, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2004"), rDoc.GetString(ScAddress(6, 21, 1)));
-    // TODO: check why this fails with the empty string
-    //CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(6,31,1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Quarters"), rDoc.GetString(ScAddress(7, 3, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), rDoc.GetString(ScAddress(8, 3, 1)));
+        // Second table
+        CPPUNIT_ASSERT_EQUAL(OUString("Years"), rDoc.GetString(ScAddress(6, 3, 1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("1965"), rDoc.GetString(ScAddress(6, 4, 1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("1989"), rDoc.GetString(ScAddress(6, 11, 1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("2000"), rDoc.GetString(ScAddress(6, 18, 1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("2004"), rDoc.GetString(ScAddress(6, 21, 1)));
+        // TODO: check why this fails with the empty string
+        //CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(6,31,1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Quarters"), rDoc.GetString(ScAddress(7, 3, 1)));
+        CPPUNIT_ASSERT_EQUAL(OUString("a"), rDoc.GetString(ScAddress(8, 3, 1)));
 
-    // There should be exactly 2 pivot tables and 1 cache.
-    ScDPCollection* pDPs = rDoc.GetDPCollection();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pDPs->GetCount());
+        // There should be exactly 2 pivot tables and 1 cache.
+        ScDPCollection* pDPs = rDoc.GetDPCollection();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pDPs->GetCount());
 
-    ScDPCollection::SheetCaches& rSheetCaches = pDPs->GetSheetCaches();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rSheetCaches.size());
+        ScDPCollection::SheetCaches& rSheetCaches = pDPs->GetSheetCaches();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rSheetCaches.size());
 
-    const ScDPCache* pCache = rSheetCaches.getExistingCache(ScRange(0, 0, 0, 9, 24, 0));
-    CPPUNIT_ASSERT_MESSAGE("Pivot cache is expected for A1:J25 on the first sheet.", pCache);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), pCache->GetFieldCount());
-    // Two new group field is created
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pCache->GetGroupFieldCount());
+        const ScDPCache* pCache = rSheetCaches.getExistingCache(ScRange(0, 0, 0, 9, 24, 0));
+        CPPUNIT_ASSERT_MESSAGE("Pivot cache is expected for A1:J25 on the first sheet.", pCache);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), pCache->GetFieldCount());
+        // Two new group field is created
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pCache->GetGroupFieldCount());
+    };
 
-    xDocSh->DoClose();
+    ScDocShellRef xDocSh1 = loadDoc("pivot-table/shared-nested-dategroup.", FORMAT_XLSX);
+    testThis(xDocSh1);
+    // Now test round-trip of group fields
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh1.get(), FORMAT_XLSX);
+    testThis(xDocSh2);
+    xDocSh2->DoClose();
+    xDocSh1->DoClose();
 }
 
 void ScPivotTableFiltersTest::testPivotTableSharedNumGroupXLSX()
