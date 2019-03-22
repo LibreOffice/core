@@ -66,7 +66,6 @@
 #include <ucbhelper/interactionrequest.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/macros.hxx>
-#include <vcl/svapp.hxx>
 
 #include <osl/conditn.hxx>
 
@@ -343,15 +342,7 @@ void MountOperation::Completed(GObject *source, GAsyncResult *res, gpointer user
 GError *MountOperation::Mount(GFile *pFile)
 {
     g_file_mount_enclosing_volume(pFile, G_MOUNT_MOUNT_NONE, mpAuthentication, nullptr, MountOperation::Completed, this);
-    {
-        //HACK: At least the gdk_threads_set_lock_functions(GdkThreadsEnter,
-        // GdkThreadsLeave) call in vcl/unx/gtk/app/gtkinst.cxx will lead to
-        // GdkThreadsLeave unlock the SolarMutex down to zero at the end of
-        // g_main_loop_run, so we need ~SolarMutexReleaser to raise it back to
-        // the original value again:
-        SolarMutexReleaser rel;
-        g_main_loop_run(mpLoop);
-    }
+    g_main_loop_run(mpLoop);
     return mpError;
 }
 

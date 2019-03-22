@@ -47,15 +47,6 @@ class GtkPrintWrapper;
 vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale& rLocale);
 
 class GenPspGraphics;
-class GtkYieldMutex : public SalYieldMutex
-{
-    thread_local static std::stack<sal_uInt32> yieldCounts;
-
-public:
-         GtkYieldMutex() {}
-    void ThreadsEnter();
-    void ThreadsLeave();
-};
 
 #if GTK_CHECK_VERSION(3,0,0)
 class GtkSalFrame;
