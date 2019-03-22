@@ -170,7 +170,7 @@ public:
     bool                IsDataDescriptionCell(const ScAddress& rPos);
 
     bool                IsDimNameInUse(const OUString& rName) const;
-    OUString GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFlags = nullptr );
+    OUString GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFlags = nullptr ) const;
     bool                IsDuplicated( long nDim );
     long                GetDimCount();
     void                GetHeaderPositionData(const ScAddress& rPos, css::sheet::DataPilotTableHeaderData& rData);
