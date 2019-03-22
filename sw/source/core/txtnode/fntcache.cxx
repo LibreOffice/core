@@ -1487,6 +1487,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
         long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
         bool bNoHalfSpace = false;
+        bool bCacheLayout = true;
 
         if ( rInf.GetFont() && rInf.GetLen() )
         {
@@ -1529,7 +1530,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     if ( pSI && pSI->CountKashida() &&
                          pSI->KashidaJustify( pKernArray.get(), pScrArray.get(), rInf.GetIdx(),
                                               rInf.GetLen(), nSpaceAdd ) != -1 )
+                    {
                         nSpaceAdd = 0;
+                        // Layout can't be reused in this case, it would lead to missing gaps in
+                        // place of kashida.
+                        bCacheLayout = false;
+                    }
                     else
                         bNoHalfSpace = true;
                 }
@@ -1811,8 +1817,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             ? (rInf.GetIdx() ? 1 : 0)
                             : sal_Int32(rInf.GetIdx());
                 aGlyphsKey = SwTextGlyphsKey{ &rInf.GetOut(), *pStr, nTmpIdx, nLen };
+                if (bCacheLayout)
+                    pGlyphs = lcl_CreateLayout(aGlyphsKey, m_aTextGlyphs[aGlyphsKey]);
+                else
+                    pGlyphs = nullptr;
                 rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray.get(),
-                                             nTmpIdx , nLen );
+                                             nTmpIdx , nLen, SalLayoutFlags::NONE, pGlyphs );
                 if (bBullet)
                 {
                     rInf.GetOut().Push();
