@@ -507,7 +507,7 @@ bool SdOutliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
         if (pChildWin)
         {
             SvxSearchDialog* pSearchDlg =
-                static_cast<SvxSearchDialog*>(pChildWin->GetWindow());
+                static_cast<SvxSearchDialog*>(pChildWin->GetController().get());
             pSearchDlg->SetDocWin( pViewShell->GetActiveWindow() );
             pSearchDlg->SetSrchFlag(false);
         }

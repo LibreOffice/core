@@ -39,6 +39,7 @@ VCLXAccessibleSvxFindReplaceDialog::~VCLXAccessibleSvxFindReplaceDialog()
 void VCLXAccessibleSvxFindReplaceDialog::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet )
 {
     VCLXAccessibleComponent::FillAccessibleRelationSet( rRelationSet );
+#if 0
     VclPtr<vcl::Window> pDlg = GetWindow();
     if ( !pDlg )
         return;
@@ -75,6 +76,7 @@ void VCLXAccessibleSvxFindReplaceDialog::FillAccessibleRelationSet( utl::Accessi
         }
         rRelationSet.AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::CONTENT_FLOWS_TO, aSequence ) );
     }
+#endif
 }
 
 // XServiceInfo
