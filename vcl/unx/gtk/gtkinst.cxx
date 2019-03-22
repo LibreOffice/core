@@ -46,18 +46,14 @@
 
 #include <unx/gtk/gtkprintwrapper.hxx>
 
+static GPollFunc nested_gpoll = nullptr;
+
 extern "C"
 {
-    #define GET_YIELD_MUTEX() static_cast<GtkYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())
-    static void GdkThreadsEnter()
+    static gint gpoll_wrapper(GPollFD* ufds, guint nfds, gint timeout)
     {
-        GtkYieldMutex *pYieldMutex = GET_YIELD_MUTEX();
-        pYieldMutex->ThreadsEnter();
-    }
-    static void GdkThreadsLeave()
-    {
-        GtkYieldMutex *pYieldMutex = GET_YIELD_MUTEX();
-        pYieldMutex->ThreadsLeave();
+        SolarMutexReleaser aReleaser;
+        return nested_gpoll(ufds, nfds, timeout);
     }
 
     VCLPLUG_GTK_PUBLIC SalInstance* create_SalInstance()
@@ -106,10 +102,11 @@ extern "C"
         if ( !sup )
             g_thread_init( nullptr );
 
-        gdk_threads_set_lock_functions (GdkThreadsEnter, GdkThreadsLeave);
-        SAL_INFO("vcl.gtk", "Hooked gdk threads locks");
+        nested_gpoll = g_main_context_get_poll_func(nullptr);
+        g_main_context_set_poll_func(nullptr, gpoll_wrapper);
+        SAL_INFO("vcl.gtk", "Hooked glib poll function");
 
-        auto pYieldMutex = std::make_unique<GtkYieldMutex>();
+        auto pYieldMutex = std::make_unique<SalYieldMutex>();
 
         gdk_threads_init();
 
@@ -296,35 +293,6 @@ std::unique_ptr<SalPrinter> GtkInstance::CreatePrinter( SalInfoPrinter* pInfoPri
 #else
     return Superclass_t::CreatePrinter( pInfoPrinter );
 #endif
-}
-
-/*
- * These methods always occur in pairs
- * A ThreadsEnter is followed by a ThreadsLeave
- * We need to queue up the recursive lock count
- * for each pair, so we can accurately restore
- * it later.
- */
-thread_local std::stack<sal_uInt32> GtkYieldMutex::yieldCounts;
-
-void GtkYieldMutex::ThreadsEnter()
-{
-    acquire();
-    if (!yieldCounts.empty()) {
-        auto n = yieldCounts.top();
-        yieldCounts.pop();
-        assert(n > 0);
-        n--;
-        if (n > 0)
-            acquire(n);
-    }
-}
-
-void GtkYieldMutex::ThreadsLeave()
-{
-    assert(m_nCount != 0);
-    yieldCounts.push(m_nCount);
-    release(true);
 }
 
 std::unique_ptr<SalVirtualDevice> GtkInstance::CreateVirtualDevice( SalGraphics *pG,

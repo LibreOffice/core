@@ -23,7 +23,6 @@ $(eval $(call gb_Library_use_libraries,ucpgio1,\
 	sal \
 	salhelper \
 	ucbhelper \
-	vcl \
 ))
 
 $(eval $(call gb_Library_use_externals,ucpgio1,\
