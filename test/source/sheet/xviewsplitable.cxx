@@ -23,12 +23,12 @@ void XViewSplitable::testSplit()
     uno::Reference< sheet::XViewSplitable > xViewSplitable(init(), UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("View is already split", !xViewSplitable->getIsWindowSplit());
 
-    xViewSplitable->splitAtPosition(101, 51);
+    xViewSplitable->splitAtPosition(90, 51);
 
     CPPUNIT_ASSERT_MESSAGE("View wasn't split", xViewSplitable->getIsWindowSplit());
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong horizontal pixel position",
-                                 sal_Int32(101), xViewSplitable->getSplitHorizontal());
+                                 sal_Int32(90), xViewSplitable->getSplitHorizontal());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical pixel position",
                                  sal_Int32(51), xViewSplitable->getSplitVertical());
 

@@ -1216,9 +1216,16 @@ void SidebarController::RestrictWidth (sal_Int32 nWidth)
     {
         const sal_uInt16 nId (pSplitWindow->GetItemId(mpParentWindow.get()));
         const sal_uInt16 nSetId (pSplitWindow->GetSet(nId));
+        const sal_Int32 nRequestedWidth
+            = (TabBar::GetDefaultWidth() + nWidth) * mpTabBar->GetDPIScaleFactor();
+
+        // Make sure the sidebar is wide enough to fit the requested content
+        if (pSplitWindow->GetSizePixel().Width() < nRequestedWidth)
+            SetChildWindowWidth(nRequestedWidth);
+
         pSplitWindow->SetItemSizeRange(
             nSetId,
-            Range(TabBar::GetDefaultWidth() * mpTabBar->GetDPIScaleFactor() + nWidth,
+            Range(nRequestedWidth,
                   getMaximumWidth() * mpTabBar->GetDPIScaleFactor()));
     }
 }
