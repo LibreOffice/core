@@ -1192,7 +1192,7 @@ bool ScDPObject::IsDimNameInUse(const OUString& rName) const
     return false;
 }
 
-OUString ScDPObject::GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFlags )
+OUString ScDPObject::GetDimName(long nDim, bool& rIsDataLayout, sal_Int32* pFlags) const
 {
     rIsDataLayout = false;
     OUString aRet;
