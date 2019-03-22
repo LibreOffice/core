@@ -27,12 +27,6 @@ $(eval $(call gb_Library_use_sdk_api,writerfilter))
 
 $(eval $(call gb_Library_set_componentfile,writerfilter,writerfilter/util/writerfilter))
 
-$(eval $(call gb_Library_add_defs,writerfilter,\
-	$(if $(ENABLE_DBGUTIL), \
-		-DDEBUG_WRITERFILTER \
-	) \
-))
-
 $(eval $(call gb_Library_use_libraries,writerfilter,\
     basegfx \
     comphelper \

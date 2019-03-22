@@ -79,7 +79,7 @@ void ThemeTable::lcl_attribute(Id Name, Value & val)
             break;
         default:
         {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
             TagLogger::getInstance().element("unhandled");
 #endif
         }
@@ -94,7 +94,7 @@ void ThemeTable::lcl_attribute(Id Name, Value & val)
 
 void ThemeTable::lcl_sprm(Sprm& rSprm)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("ThemeTable.sprm");
     TagLogger::getInstance().chars(rSprm.toString());
 #endif
@@ -141,25 +141,25 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
     break;
     default:
         {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
             TagLogger::getInstance().element("unhandled");
 #endif
         }
     }
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().endElement();
 #endif
 }
 
 void ThemeTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("ThemeTable.entry");
 #endif
 
     ref->resolve(*this);
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().endElement();
 #endif
 }

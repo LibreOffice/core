@@ -27,7 +27,7 @@
 namespace writerfilter
 {
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 class LoggedResourcesHelper final
 {
 public:
@@ -94,7 +94,7 @@ protected:
     virtual void lcl_startGlossaryEntry() { }
     virtual void lcl_endGlossaryEntry() { }
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper mHelper;
 #endif
 };
@@ -112,7 +112,7 @@ protected:
     virtual void lcl_attribute(Id name, Value & val) = 0;
     virtual void lcl_sprm(Sprm & sprm) = 0;
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper mHelper;
 #endif
 };
@@ -128,7 +128,7 @@ public:
 protected:
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) = 0;
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     LoggedResourcesHelper mHelper;
 #endif
 };

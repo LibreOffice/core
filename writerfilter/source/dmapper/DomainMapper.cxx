@@ -235,7 +235,7 @@ DomainMapper::~DomainMapper()
     }
     catch( const uno::Exception& ) {}
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().endDocument();
 #endif
 }
@@ -2756,7 +2756,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     break;
     default:
         {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
             TagLogger::getInstance().startElement("unhandled");
             TagLogger::getInstance().attribute("id", nSprmId);
             TagLogger::getInstance().attribute("name", rSprm.getName());
@@ -3048,7 +3048,7 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
 {
     //TODO: Determine the right text encoding (FIB?)
     OUString sText( reinterpret_cast<const char*>(data_), len, RTL_TEXTENCODING_MS_1252 );
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("text");
     TagLogger::getInstance().chars(sText);
     TagLogger::getInstance().endElement();

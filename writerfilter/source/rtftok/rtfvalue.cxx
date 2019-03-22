@@ -164,7 +164,7 @@ writerfilter::Reference<BinaryObj>::Pointer_t RTFValue::getBinary()
     return writerfilter::Reference<BinaryObj>::Pointer_t();
 }
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 std::string RTFValue::toString() const
 {
     if (!m_sValue.isEmpty() || m_bForceString)

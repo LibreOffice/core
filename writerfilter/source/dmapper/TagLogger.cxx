@@ -21,7 +21,7 @@
 #include "TagLogger.hxx"
 #include <ooxml/QNameToString.hxx>
 #include <unordered_map>
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 #include <unotools/pathoptions.hxx>
 #endif
 
@@ -40,7 +40,7 @@ namespace writerfilter
         pName = nullptr;
     }
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     void TagLogger::setFileName( const std::string & filename )
     {
         if ( pWriter )
@@ -103,7 +103,7 @@ struct TheTagLogger:
         return TheTagLogger::get();
     }
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     void TagLogger::element(const std::string & name)
     {
         startElement(name);
@@ -164,7 +164,7 @@ struct TheTagLogger:
         xmlFree( xmlName );
     }
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     void TagLogger::attribute(const std::string & name, const OUString & value)
     {
         attribute( name, OUStringToOString( value, RTL_TEXTENCODING_ASCII_US ).getStr() );

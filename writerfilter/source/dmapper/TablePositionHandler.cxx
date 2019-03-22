@@ -66,7 +66,7 @@ void TablePositionHandler::lcl_attribute(Id nId, Value& rVal)
         m_nBottomFromText = rVal.getInt();
         break;
     default:
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
         TagLogger::getInstance().element("unhandled");
 #endif
         break;

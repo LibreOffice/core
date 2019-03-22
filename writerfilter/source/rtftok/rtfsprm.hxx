@@ -88,7 +88,7 @@ public:
     sal_uInt32 getId() const override;
     Value::Pointer_t getValue() override;
     writerfilter::Reference<Properties>::Pointer_t getProps() override;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     std::string getName() const override;
     std::string toString() const override;
 #endif

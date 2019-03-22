@@ -119,7 +119,7 @@ void TblStylePrHandler::lcl_attribute(Id rName, Value & rVal)
 
 void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("TblStylePrHandler.sprm");
     TagLogger::getInstance().attribute("sprm", rSprm.toString());
 #endif
@@ -177,7 +177,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
             }
     }
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().endElement();
 #endif
 }

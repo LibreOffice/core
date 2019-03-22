@@ -1178,7 +1178,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 {
     if (m_bDiscardHeaderFooter)
         return;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("finishParagraph");
 #endif
 
@@ -1188,7 +1188,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         return;
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
     uno::Reference< text::XTextAppend > xTextAppend(rAppendContext.xTextAppend);
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().attribute("isTextAppend", sal_uInt32(xTextAppend.is()));
 #endif
 
@@ -1602,7 +1602,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
     m_bParaAutoBefore = false;
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().endElement();
 #endif
 
@@ -2304,7 +2304,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             m_aAnchoredStack.push( AnchoredContext(xTxtContent) );
 
             uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
             TagLogger::getInstance().unoPropertySet(xProps);
 #endif
             text::TextContentAnchorType nAnchorType(text::TextContentAnchorType_AT_PARAGRAPH);
@@ -3107,7 +3107,7 @@ void DomainMapper_Impl::PushFieldContext()
     m_bParaHadField = true;
     if(m_bDiscardHeaderFooter)
         return;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().element("pushFieldContext");
 #endif
 
@@ -3231,7 +3231,7 @@ void FieldContext::AppendCommand(const OUString& rPart)
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::AppendFieldCommand(OUString const & rPartOfCommand)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("appendFieldCommand");
     TagLogger::getInstance().chars(rPartOfCommand);
     TagLogger::getInstance().endElement();
@@ -4111,7 +4111,7 @@ void DomainMapper_Impl::CloseFieldCommand()
 {
     if(m_bDiscardHeaderFooter)
         return;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().element("closeFieldCommand");
 #endif
 
@@ -4202,7 +4202,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         sServiceName += OUString::createFromAscii(aIt->second.cFieldServiceName );
                     }
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
                     TagLogger::getInstance().startElement("fieldService");
                     TagLogger::getInstance().chars(sServiceName);
                     TagLogger::getInstance().endElement();
@@ -4921,7 +4921,7 @@ static util::DateTime lcl_dateTimeFromSerial(const double& dSerial)
 
 void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("setFieldResult");
     TagLogger::getInstance().chars(rResult);
 #endif
@@ -5043,7 +5043,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
 
 void DomainMapper_Impl::SetFieldFFData(const FFDataHandler::Pointer_t& pFFDataHandler)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("setFieldFFData");
 #endif
 
@@ -5056,7 +5056,7 @@ void DomainMapper_Impl::SetFieldFFData(const FFDataHandler::Pointer_t& pFFDataHa
         }
     }
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().endElement();
 #endif
 }
@@ -5065,7 +5065,7 @@ void DomainMapper_Impl::PopFieldContext()
 {
     if(m_bDiscardHeaderFooter)
         return;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     TagLogger::getInstance().element("popFieldContext");
 #endif
 

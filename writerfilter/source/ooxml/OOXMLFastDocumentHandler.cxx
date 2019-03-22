@@ -47,12 +47,12 @@ OOXMLFastDocumentHandler::~OOXMLFastDocumentHandler() {}
 // css::xml::sax::XFastContextHandler:
 void SAL_CALL OOXMLFastDocumentHandler::startFastElement
 (::sal_Int32
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 Element
 #endif
 , const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     clog << this << ":start element:"
          << fastTokenToId(Element)
          << endl;
@@ -61,29 +61,29 @@ Element
 
 void SAL_CALL OOXMLFastDocumentHandler::startUnknownElement
 (const OUString &
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 Namespace
 #endif
 , const OUString &
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 Name
 #endif
 ,
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     clog << this << ":start unknown element:"
          << Namespace  << ":" << Name << endl;
 #endif
 }
 
 void SAL_CALL OOXMLFastDocumentHandler::endFastElement(::sal_Int32
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 Element
 #endif
 )
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     clog << this << ":end element:"
          << fastTokenToId(Element)
          << endl;
@@ -92,16 +92,16 @@ Element
 
 void SAL_CALL OOXMLFastDocumentHandler::endUnknownElement
 (const OUString &
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 Namespace
 #endif
 , const OUString &
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 Name
 #endif
 )
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     clog << this << ":end unknown element:"
          << Namespace << ":" << Name
          << endl;
@@ -141,17 +141,17 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 OOXMLFastDocumentHandler::createUnknownChildContext
 (const OUString &
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 Namespace
 #endif
 ,
  const OUString &
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 Name
 #endif
 , const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     clog << this << ":createUnknownChildContext:"
          << Namespace << ":"<< Name
          << endl;

@@ -49,7 +49,7 @@ void LatentStyleHandler::lcl_attribute(Id nId, Value& rVal)
         break;
     default:
         bFound = false;
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
         TagLogger::getInstance().element("unhandled");
 #endif
         break;

@@ -22,7 +22,7 @@ Stream::Pointer_t DomainMapperFactory::createMapper(css::uno::Reference<css::uno
         SourceDocumentType eDocumentType,
         utl::MediaDescriptor const& rMediaDesc)
 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     OUString sURL = rMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL(), OUString());
     ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
 

@@ -29,11 +29,11 @@ namespace dmapper
 {
 
 void lcl_DumpTableColumnSeparators(const css::uno::Any & rTableColumnSeparators);
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 void lcl_DumpPropertyValues(css::beans::PropertyValues const & rValues);
 
 void lcl_DumpPropertyValueSeq(css::uno::Sequence<css::beans::PropertyValues> const & rPropValSeq);
-#endif // DEBUG_WRITERFILTER
+#endif // DBG_UTIL
 }
 }
 

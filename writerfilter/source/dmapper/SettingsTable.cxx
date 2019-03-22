@@ -139,7 +139,7 @@ namespace dmapper
                 case NS_ooxml::LN_Value_doc_ST_DocProtect_forms:            aValue.Value <<= OUString("forms"); break;
                 default:
                 {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
                     TagLogger::getInstance().element("unhandled");
 #endif
                 }
@@ -374,7 +374,7 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
         break;
     default:
     {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
         TagLogger::getInstance().element("unhandled");
 #endif
     }
@@ -491,7 +491,7 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
         break;
     default:
     {
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
         TagLogger::getInstance().element("unhandled");
 #endif
     }

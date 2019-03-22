@@ -32,11 +32,11 @@ writerfilter::Reference<Properties>::Pointer_t RTFSprm::getProps()
     return m_pValue->getProperties();
 }
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 std::string RTFSprm::getName() const { return "RTFSprm"; }
 #endif
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
 std::string RTFSprm::toString() const
 {
     OStringBuffer aBuf("RTFSprm");

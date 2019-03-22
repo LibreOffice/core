@@ -31,7 +31,7 @@ std::string XTextRangeToString(uno::Reference< text::XTextRange > const & textRa
 {
     std::string result;
 
-#ifdef DEBUG_WRITERFILTER
+#ifdef DBG_UTIL
     if (textRange.get())
     {
         OUString aOUStr;
