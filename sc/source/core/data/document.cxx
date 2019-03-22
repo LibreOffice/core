@@ -3376,36 +3376,22 @@ bool ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& 
     if (!pTab)
         return false;
 
-    bool bNumFmtSet = false;
-
     const ScFormulaCell* pCurCellFormula = pTab->GetFormulaCell(nCol, nRow);
     if (pCurCellFormula && pCurCellFormula->IsShared())
     {
-        // In case setting this string affects an existing formula group, record
-        // its above and below position for later listening.
+        // In case setting this string affects an existing formula group, end
+        // its listening to purge then empty cell broadcasters. Affected
+        // remaining split group listeners will be set up again via
+        // ScColumn::DetachFormulaCell() and
+        // ScColumn::StartListeningUnshared().
 
-        std::vector<ScAddress> aGroupPos;
         sc::EndListeningContext aCxt(*this);
         ScAddress aPos(nCol, nRow, nTab);
-        EndListeningIntersectedGroup(aCxt, aPos, &aGroupPos);
+        EndListeningIntersectedGroup(aCxt, aPos, nullptr);
         aCxt.purgeEmptyBroadcasters();
-
-        bNumFmtSet = pTab->SetString(nCol, nRow, nTab, rString, pParam);
-
-        SetNeedsListeningGroups(aGroupPos);
-        StartNeededListeners();
-
-        // Listeners may just have been setup that are affected by the current
-        // position thus were not notified by a ScColumn::BroadcastNewCell()
-        // during ScTable::SetString(), so do it here.
-        Broadcast( ScHint( SfxHintId::ScDataChanged, aPos));
-    }
-    else
-    {
-        bNumFmtSet = pTab->SetString(nCol, nRow, nTab, rString, pParam);
     }
 
-    return bNumFmtSet;
+    return pTab->SetString(nCol, nRow, nTab, rString, pParam);
 }
 
 bool ScDocument::SetString(
@@ -3492,28 +3478,18 @@ void ScDocument::SetValue( const ScAddress& rPos, double fVal )
     const ScFormulaCell* pCurCellFormula = pTab->GetFormulaCell(rPos.Col(), rPos.Row());
     if (pCurCellFormula && pCurCellFormula->IsShared())
     {
-        // In case setting this string affects an existing formula group, record
-        // its above and below position for later listening.
+        // In case setting this value affects an existing formula group, end
+        // its listening to purge then empty cell broadcasters. Affected
+        // remaining split group listeners will be set up again via
+        // ScColumn::DetachFormulaCell() and
+        // ScColumn::StartListeningUnshared().
 
-        std::vector<ScAddress> aGroupPos;
         sc::EndListeningContext aCxt(*this);
-        EndListeningIntersectedGroup(aCxt, rPos, &aGroupPos);
+        EndListeningIntersectedGroup(aCxt, rPos, nullptr);
         aCxt.purgeEmptyBroadcasters();
-
-        pTab->SetValue(rPos.Col(), rPos.Row(), fVal);
-
-        SetNeedsListeningGroups(aGroupPos);
-        StartNeededListeners();
-
-        // Listeners may just have been setup that are affected by the current
-        // position thus were not notified by a ScColumn::BroadcastNewCell()
-        // during ScTable::SetValue(), so do it here.
-        Broadcast( ScHint( SfxHintId::ScDataChanged, rPos));
     }
-    else
-    {
-        pTab->SetValue(rPos.Col(), rPos.Row(), fVal);
-    }
+
+    pTab->SetValue(rPos.Col(), rPos.Row(), fVal);
 }
 
 OUString ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScInterpreterContext* pContext ) const
