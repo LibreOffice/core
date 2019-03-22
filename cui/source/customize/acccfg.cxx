@@ -1311,9 +1311,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, TimeOut_Impl, Timer*, void)
 {
     // activating the selection, typically "all commands", can take a long time
     // -> show wait cursor and disable input
-    weld::Window* pDialog = GetDialogFrameWeld();
-    // perhaps the tabpage is part of a SingleTabDialog then pDialog == nullptr
-    std::unique_ptr<weld::WaitObject> xWait(pDialog ? new weld::WaitObject(pDialog) : nullptr);
+    weld::WaitObject aWaitObject(GetDialogFrameWeld());
 
     weld::TreeView& rTreeView = m_xGroupLBox->get_widget();
     SelectHdl(rTreeView);
@@ -1330,7 +1328,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, void
     if ( sCfgName.isEmpty() )
         return;
 
-    GetTabDialog()->EnterWait();
+    weld::WaitObject aWaitObject(GetDialogFrameWeld());
 
     uno::Reference<ui::XUIConfigurationManager> xCfgMgr;
     uno::Reference<embed::XStorage> xRootStorage; // we must hold the root storage alive, if xCfgMgr is used!
@@ -1387,10 +1385,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, void
     }
     catch(const uno::Exception&)
     {}
-
-    GetTabDialog()->LeaveWait();
 }
-
 
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void)
 {
@@ -1403,7 +1398,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void
     if ( sCfgName.isEmpty() )
         return;
 
-    GetTabDialog()->EnterWait();
+    weld::WaitObject aWaitObject(GetDialogFrameWeld());
 
     uno::Reference<embed::XStorage> xRootStorage;
 
@@ -1469,10 +1464,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void
     }
     catch(const uno::Exception&)
     {}
-
-    GetTabDialog()->LeaveWait();
 }
-
 
 void SfxAcceleratorConfigPage::StartFileDialog( StartFileDialogType nType, const OUString& rTitle )
 {
