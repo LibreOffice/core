@@ -9,6 +9,7 @@
 
 #include <xepivotxml.hxx>
 #include <dpcache.hxx>
+#include <dpdimsave.hxx>
 #include <dpitemdata.hxx>
 #include <dpobject.hxx>
 #include <dpsave.hxx>
@@ -22,6 +23,7 @@
 #include <sax/tools/converter.hxx>
 #include <sax/fastattribs.hxx>
 
+#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
@@ -243,6 +245,97 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         XML_count, OString::number(static_cast<long>(nCount)).getStr(),
         FSEND);
 
+    const size_t nGroupFieldCount = rCache.GetGroupFieldCount();
+    const ScDPObject* pDPObject
+        = rCache.GetAllReferences().empty() ? nullptr : *rCache.GetAllReferences().begin();
+
+    auto WriteFieldGroup = [this, &rCache, pDefStrm, pDPObject](size_t i) {
+        ScDPSaveData* pSaveData = pDPObject->GetSaveData();
+        assert(pSaveData);
+        size_t nBase = i;
+        if (i >= rCache.GetFieldCount()) // Group field -> find its base (source)
+        {
+            OUString aName = pDPObject->GetDimName(i, o3tl::temporary(bool()));
+            auto* pDim = pSaveData->GetDimensionData()->GetNamedGroupDim(aName);
+            assert(pDim);
+            aName = pDim->GetSourceDimName();
+            nBase = rCache.GetDimensionIndex(aName);
+        }
+
+        const sal_Int32 nDatePart = rCache.GetGroupType(i);
+        if (!nDatePart)
+            return;
+        auto GetGroupBy = [](sal_Int32 nGroupType) {
+            OString sRet;
+            switch (nGroupType)
+            {
+            case sheet::DataPilotFieldGroupBy::SECONDS:
+                sRet = "seconds";
+                break;
+            case sheet::DataPilotFieldGroupBy::MINUTES:
+                sRet = "minutes";
+                break;
+            case sheet::DataPilotFieldGroupBy::HOURS:
+                sRet = "hours";
+                break;
+            case sheet::DataPilotFieldGroupBy::DAYS:
+                sRet = "days";
+                break;
+            case sheet::DataPilotFieldGroupBy::MONTHS:
+                sRet = "months";
+                break;
+            case sheet::DataPilotFieldGroupBy::QUARTERS:
+                sRet = "quarters";
+                break;
+            case sheet::DataPilotFieldGroupBy::YEARS:
+                sRet = "years";
+                break;
+            }
+            return sRet;
+        };
+
+        // fieldGroup element
+        pDefStrm->startElement(XML_fieldGroup, XML_base, OString::number(nBase), FSEND);
+
+        SvNumberFormatter& rFormatter = GetFormatter();
+
+        // rangePr element
+        const ScDPNumGroupInfo* pGI = rCache.GetNumGroupInfo(i);
+        auto pGroupAttList = sax_fastparser::FastSerializerHelper::createAttrList();
+        pGroupAttList->add(XML_groupBy, GetGroupBy(nDatePart));
+        if (pGI->mbAutoStart)
+            pGroupAttList->add(XML_autoStart, ToPsz10(true));
+        else
+            pGroupAttList->add(XML_startDate, XclXmlUtils::ToOString(GetExcelFormattedDate(
+                pGI->mfStart, rFormatter)));
+        if (pGI->mbAutoEnd)
+            pGroupAttList->add(XML_autoEnd, ToPsz10(true));
+        else
+            pGroupAttList->add(XML_endDate, XclXmlUtils::ToOString(GetExcelFormattedDate(
+                pGI->mfEnd, rFormatter)));
+        if (pGI->mfStep)
+            pGroupAttList->add(XML_groupInterval, OString::number(pGI->mfStep));
+        pDefStrm->singleElement(XML_rangePr, pGroupAttList);
+
+        // groupItems element
+        ScfInt32Vec aGIIds;
+        rCache.GetGroupDimMemberIds(i, aGIIds);
+        pDefStrm->startElement(XML_groupItems, XML_count, OString::number(aGIIds.size()), FSEND);
+        for (auto nGIId : aGIIds)
+        {
+            const ScDPItemData* pGIData = rCache.GetItemDataById(i, nGIId);
+            if (pGIData->GetType() == ScDPItemData::GroupValue)
+            {
+                auto aVal = pGIData->GetGroupValue();
+                OUString sVal = ScDPUtil::getDateGroupName(nDatePart, aVal.mnValue, &rFormatter,
+                                                           pGI->mfStart, pGI->mfEnd);
+                pDefStrm->singleElement(XML_s, XML_v, sVal.toUtf8(), FSEND);
+            }
+        }
+        pDefStrm->endElement(XML_groupItems);
+        pDefStrm->endElement(XML_fieldGroup);
+    };
+
     for (size_t i = 0; i < nCount; ++i)
     {
         OUString aName = rCache.GetDimensionName(i);
@@ -387,7 +480,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
                             XML_v, XclXmlUtils::ToOString(rItem.GetString()),
                             FSEND);
                     break;
-                    case ScDPItemData::GroupValue:
+                    case ScDPItemData::GroupValue: // Should not happen here!
                     case ScDPItemData::RangeStart:
                         // TODO : What do we do with these types?
                         pDefStrm->singleElement(XML_m, FSEND);
@@ -399,6 +492,24 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         }
 
         pDefStrm->endElement(XML_sharedItems);
+
+        WriteFieldGroup(i);
+
+        pDefStrm->endElement(XML_cacheField);
+    }
+
+    for (size_t i = nCount; i < nCount + nGroupFieldCount; ++i)
+    {
+        if (!pDPObject)
+            break;
+        OUString aName = pDPObject->GetDimName(i, o3tl::temporary(bool()));
+
+        pDefStrm->startElement(XML_cacheField,
+            XML_name, XclXmlUtils::ToOString(aName).getStr(),
+            XML_numFmtId, OString::number(0).getStr(),
+            XML_databaseField, ToPsz10(false),
+            FSEND);
+        WriteFieldGroup(i);
         pDefStrm->endElement(XML_cacheField);
     }
 
