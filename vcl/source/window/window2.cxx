@@ -45,6 +45,7 @@
 #include <salframe.hxx>
 #include <scrwnd.hxx>
 
+#include <com/sun/star/accessibility/AccessibleRelation.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
 using namespace com::sun::star;
@@ -1977,6 +1978,21 @@ void Window::remove_mnemonic_label(FixedText *pLabel)
 const std::vector<VclPtr<FixedText> >& Window::list_mnemonic_labels() const
 {
     return mpWindowImpl->m_aMnemonicLabels;
+}
+
+void Window::AddExtraAccessibleRelation(const css::accessibility::AccessibleRelation &rRelation)
+{
+    mpWindowImpl->m_aExtraAccessibleRelations.push_back(rRelation);
+}
+
+const std::vector<css::accessibility::AccessibleRelation>& Window::GetExtraAccessibleRelations() const
+{
+    return mpWindowImpl->m_aExtraAccessibleRelations;
+}
+
+void Window::ClearExtraAccessibleRelations()
+{
+    mpWindowImpl->m_aExtraAccessibleRelations.clear();
 }
 
 } /* namespace vcl */

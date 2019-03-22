@@ -732,7 +732,7 @@ SwCursor* SwShellCursor::Create( SwPaM* pRing ) const
 short SwShellCursor::MaxReplaceArived()
 {
     short nRet = RET_YES;
-    vcl::Window* pDlg = SwView::GetSearchDialog();
+    SvxSearchDialog* pDlg = SwView::GetSearchDialog();
     if( pDlg )
     {
         // Terminate old actions. The table-frames get constructed and
@@ -748,7 +748,7 @@ short SwShellCursor::MaxReplaceArived()
             }
             vActionCounts.push_back(nActCnt);
         }
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pDlg->GetFrameWeld(), "modules/swriter/ui/asksearchdialog.ui"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pDlg->getDialog(), "modules/swriter/ui/asksearchdialog.ui"));
         std::unique_ptr<weld::MessageDialog> xDialog(xBuilder->weld_message_dialog("AskSearchDialog"));
         nRet = xDialog->run();
         auto pActionCount = vActionCounts.begin();

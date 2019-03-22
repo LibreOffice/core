@@ -273,7 +273,8 @@ public:
     css::uno::Reference< css::awt::XWindowPeer > mxWindowPeer;
     css::uno::Reference< css::accessibility::XAccessible > mxAccessible;
     std::shared_ptr< VclSizeGroup > m_xSizeGroup;
-    std::vector< VclPtr<FixedText> > m_aMnemonicLabels;
+    std::vector<VclPtr<FixedText>> m_aMnemonicLabels;
+    std::vector<css::accessibility::AccessibleRelation> m_aExtraAccessibleRelations;
     std::unique_ptr<ImplAccessibleInfos> mpAccessibleInfos;
     VCLXWindow*         mpVCLXWindow;
     vcl::Region              maWinRegion;            //< region to 'shape' the VCL window (frame coordinates)
