@@ -45,6 +45,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <sal/log.hxx>
+#include <officecfg/Office/UI/Sidebar.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
@@ -118,6 +119,7 @@ SidebarController::SidebarController (
 {
     // Decks and panel collections for this sidebar
     mpResourceManager = std::make_unique<ResourceManager>();
+    mnMaximumSidebarWidth = officecfg::Office::UI::Sidebar::General::MaximumWidth::get();
 }
 
 rtl::Reference<SidebarController> SidebarController::create(
@@ -1216,7 +1218,7 @@ void SidebarController::RestrictWidth (sal_Int32 nWidth)
         pSplitWindow->SetItemSizeRange(
             nSetId,
             Range(TabBar::GetDefaultWidth() * mpTabBar->GetDPIScaleFactor() + nWidth,
-                  gnMaximumSidebarWidth * mpTabBar->GetDPIScaleFactor()));
+                  getMaximumWidth() * mpTabBar->GetDPIScaleFactor()));
     }
 }
 

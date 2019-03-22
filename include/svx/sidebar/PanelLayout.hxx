@@ -27,6 +27,7 @@ class SVX_DLLPUBLIC PanelLayout : public Control, public VclBuilderContainer
 private:
     Idle m_aPanelLayoutIdle;
     bool m_bInClose;
+    css::uno::Reference<css::frame::XFrame> mxFrame;
 
     DECL_DLLPRIVATE_LINK(ImplHandlePanelLayoutTimerHdl, Timer*, void);
 
