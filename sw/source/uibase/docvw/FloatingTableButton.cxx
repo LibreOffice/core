@@ -48,7 +48,7 @@ FloatingTableButton::FloatingTableButton(SwEditWin* pEditWin, const SwFrame* pFr
 
 FloatingTableButton::~FloatingTableButton() { disposeOnce(); }
 
-void FloatingTableButton::SetOffset(Point aBottomRightPixel)
+void FloatingTableButton::SetOffset(Point aTopRightPixel)
 {
     // Compute the text size and get the box position & size from it
     tools::Rectangle aTextRect;
@@ -58,12 +58,11 @@ void FloatingTableButton::SetOffset(Point aBottomRightPixel)
     Size aBoxSize(aTextPxRect.GetWidth() + BUTTON_WIDTH + TEXT_PADDING * 2,
                   aFontMetric.GetLineHeight() + TEXT_PADDING * 2);
 
-    Point aBoxPos(aBottomRightPixel.X() - aBoxSize.Width() - BOX_DISTANCE,
-                  aBottomRightPixel.Y() - aBoxSize.Height());
+    Point aBoxPos(aTopRightPixel.X() - aBoxSize.Width() - BOX_DISTANCE, aTopRightPixel.Y());
 
     if (AllSettings::GetLayoutRTL())
     {
-        aBoxPos.setX(aBottomRightPixel.X() + BOX_DISTANCE);
+        aBoxPos.setX(aTopRightPixel.X() + BOX_DISTANCE);
     }
 
     // Set the position & Size of the window
@@ -113,8 +112,9 @@ void FloatingTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
     // of the text node otherwise LO will create a page break after the table
     if (pTextFrame->GetTextNode())
     {
-        const SwPageDesc* pPageDesc
-            = pTextFrame->GetAttrSet()->GetPageDesc().GetPageDesc(); // First text node of the page has this
+        const SwPageDesc* pPageDesc = pTextFrame->GetAttrSet()
+                                          ->GetPageDesc()
+                                          .GetPageDesc(); // First text node of the page has this
         if (pPageDesc)
         {
             // First set the existing page desc for the table node
@@ -122,14 +122,14 @@ void FloatingTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
                             svl::Items<RES_PAGEDESC, RES_PAGEDESC>{});
             aSet.Put(SwFormatPageDesc(pPageDesc));
             SwPaM aPaMTable(*pTableNode);
-            rDoc.getIDocumentContentOperations().InsertItemSet(
-                aPaMTable, aSet, SetAttrMode::DEFAULT);
+            rDoc.getIDocumentContentOperations().InsertItemSet(aPaMTable, aSet,
+                                                               SetAttrMode::DEFAULT);
 
             // Then remove pagedesc from the attributes of the text node
             aSet.Put(SwFormatPageDesc(nullptr));
             SwPaM aPaMTextNode(*pTextFrame->GetTextNode());
-            rDoc.getIDocumentContentOperations().InsertItemSet(
-                aPaMTextNode, aSet, SetAttrMode::DEFAULT);
+            rDoc.getIDocumentContentOperations().InsertItemSet(aPaMTextNode, aSet,
+                                                               SetAttrMode::DEFAULT);
         }
     }
 
@@ -162,7 +162,7 @@ void FloatingTableButton::Paint(vcl::RenderContext& rRenderContext, const tools:
         ::tools::Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
 
     // Create button
-    SwFrameButtonPainter::PaintButton(aSeq, aRect, false);
+    SwFrameButtonPainter::PaintButton(aSeq, aRect, true);
 
     // Create the text primitive
     basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();

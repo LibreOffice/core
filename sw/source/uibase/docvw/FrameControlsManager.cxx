@@ -155,7 +155,7 @@ void SwFrameControlsManager::SetPageBreakControl( const SwPageFrame* pPageFrame 
         pControl->ShowAll( true );
 }
 
-void SwFrameControlsManager::SetFloatingTableButton( const SwFlyFrame* pFlyFrame, bool bShow, Point aBottomRightPixel )
+void SwFrameControlsManager::SetFloatingTableButton( const SwFlyFrame* pFlyFrame, bool bShow, Point aTopRightPixel )
 {
     if(pFlyFrame == nullptr)
         return;
@@ -184,7 +184,7 @@ void SwFrameControlsManager::SetFloatingTableButton( const SwFlyFrame* pFlyFrame
 
     FloatingTableButton* pButton = dynamic_cast<FloatingTableButton*>(pControl->GetWindow());
     assert(pButton != nullptr);
-    pButton->SetOffset(aBottomRightPixel);
+    pButton->SetOffset(aTopRightPixel);
     pControl->ShowAll( bShow );
 }
 
