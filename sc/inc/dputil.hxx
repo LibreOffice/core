@@ -33,7 +33,7 @@ public:
 
     SC_DLLPUBLIC static OUString createDuplicateDimensionName(const OUString& rOriginal, size_t nDupCount);
 
-    static OUString getDateGroupName(
+    SC_DLLPUBLIC static OUString getDateGroupName(
         sal_Int32 nDatePart, sal_Int32 nValue, SvNumberFormatter* pFormatter,
         double fStart, double fEnd);
 
