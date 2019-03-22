@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="FindReplaceDialog">
@@ -7,7 +7,12 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="findreplacedialog|FindReplaceDialog">Find &amp; Replace</property>
     <property name="resizable">False</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
         <property name="can_focus">False</property>
@@ -91,7 +96,7 @@
                             <property name="margin_right">6</property>
                             <property name="hexpand">True</property>
                             <child>
-                              <object class="GtkComboBox" id="searchterm">
+                              <object class="GtkComboBoxText" id="searchterm">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
@@ -100,6 +105,7 @@
                                 <child internal-child="entry">
                                   <object class="GtkEntry" id="combobox-entry">
                                     <property name="can_focus">True</property>
+                                    <property name="activates_default">True</property>
                                   </object>
                                 </child>
                               </object>
@@ -109,7 +115,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkComboBox" id="searchlist">
+                              <object class="GtkComboBoxText" id="searchlist">
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
                                 <property name="hexpand">True</property>
@@ -151,6 +157,7 @@
                             <property name="no_show_all">True</property>
                             <property name="hexpand">True</property>
                             <property name="wrap">True</property>
+                            <property name="ellipsize">end</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0.55000001192092896</property>
                           </object>
@@ -167,9 +174,11 @@
                             <property name="wrap">True</property>
                             <property name="ellipsize">end</property>
                             <property name="xalign">0</property>
-                            <accessibility>
-                              <role type="static"/>
-                            </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="searchlabel-atkobject">
+                                <property name="AtkObject::accessible-role" translatable="no">static</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -275,6 +284,18 @@
                             <property name="top_attach">3</property>
                           </packing>
                         </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -325,7 +346,7 @@
                             <property name="margin_right">6</property>
                             <property name="hexpand">True</property>
                             <child>
-                              <object class="GtkComboBox" id="replaceterm">
+                              <object class="GtkComboBoxText" id="replaceterm">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
@@ -334,6 +355,7 @@
                                 <child internal-child="entry">
                                   <object class="GtkEntry" id="combobox-entry2">
                                     <property name="can_focus">True</property>
+                                    <property name="activates_default">True</property>
                                   </object>
                                 </child>
                               </object>
@@ -343,7 +365,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkComboBox" id="replacelist">
+                              <object class="GtkComboBoxText" id="replacelist">
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
                                 <property name="hexpand">True</property>
@@ -385,12 +407,19 @@
                             <property name="no_show_all">True</property>
                             <property name="hexpand">True</property>
                             <property name="wrap">True</property>
+                            <property name="ellipsize">end</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">2</property>
                           </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
                         </child>
                       </object>
                     </child>
@@ -1030,6 +1059,7 @@
                                             <property name="use_underline">True</property>
                                             <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
+                                            <property name="group">rows</property>
                                             <accessibility>
                                               <relation type="member-of" target="searchdir"/>
                                             </accessibility>

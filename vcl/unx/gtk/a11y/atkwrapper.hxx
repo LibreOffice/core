@@ -98,6 +98,8 @@ void                   atk_object_wrapper_dispose(AtkObjectWrapper* wrapper);
 
 AtkStateType mapAtkState( sal_Int16 nState );
 
+AtkRelation*           atk_object_wrapper_relation_new(const css::accessibility::AccessibleRelation& rRelation);
+
 void                   actionIfaceInit(AtkActionIface *iface);
 void                   componentIfaceInit(AtkComponentIface *iface);
 void                   editableTextIfaceInit(AtkEditableTextIface *iface);

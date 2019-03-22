@@ -90,7 +90,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/accessibility/AccessibleShape \
     svx/source/accessibility/AccessibleShapeInfo \
     svx/source/accessibility/AccessibleShapeTreeInfo \
-    svx/source/accessibility/AccessibleSvxFindReplaceDialog \
     svx/source/accessibility/AccessibleTextEventQueue \
     svx/source/accessibility/AccessibleTextHelper \
     svx/source/accessibility/ChildrenManager \

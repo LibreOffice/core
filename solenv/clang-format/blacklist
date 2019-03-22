@@ -14014,7 +14014,6 @@ svtools/source/uno/wizard/wizardpagecontroller.cxx
 svtools/source/uno/wizard/wizardpagecontroller.hxx
 svtools/source/uno/wizard/wizardshell.cxx
 svtools/source/uno/wizard/wizardshell.hxx
-svx/inc/AccessibleSvxFindReplaceDialog.hxx
 svx/inc/AccessibleTableShape.hxx
 svx/inc/GalleryControl.hxx
 svx/inc/dragmt3d.hxx
@@ -14134,7 +14133,6 @@ svx/source/accessibility/AccessibleOLEShape.cxx
 svx/source/accessibility/AccessibleShape.cxx
 svx/source/accessibility/AccessibleShapeInfo.cxx
 svx/source/accessibility/AccessibleShapeTreeInfo.cxx
-svx/source/accessibility/AccessibleSvxFindReplaceDialog.cxx
 svx/source/accessibility/AccessibleTextEventQueue.cxx
 svx/source/accessibility/AccessibleTextEventQueue.hxx
 svx/source/accessibility/AccessibleTextHelper.cxx
