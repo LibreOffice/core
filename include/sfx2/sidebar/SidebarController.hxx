@@ -169,6 +169,7 @@ public:
     css::uno::Reference<css::frame::XFrame> getXFrame() {return mxFrame;}
 
     sal_Int32 getMaximumWidth() { return mnMaximumSidebarWidth; }
+    void setMaximumWidth(sal_Int32 nMaximumWidth) { mnMaximumSidebarWidth = nMaximumWidth; }
 
 private:
     SidebarController(

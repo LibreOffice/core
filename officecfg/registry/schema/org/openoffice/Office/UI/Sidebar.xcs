@@ -237,7 +237,8 @@
       </info>
       <prop oor:name="MaximumWidth" oor:type="xs:int" oor:nillable="false">
         <info>
-          <desc>Maximum width the sidebar can ever have</desc>
+          <desc>Maximum width the sidebar can have.
+          Note that this can be overridden by extensions returning a larger value in XSidebarPanel::getMinimalWidth()</desc>
         </info>
         <value>500</value>
       </prop>

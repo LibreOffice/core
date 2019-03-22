@@ -22,9 +22,16 @@
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/PanelTitleBar.hxx>
 #include <sfx2/sidebar/Deck.hxx>
+#include <sfx2/sidebar/SidebarController.hxx>
 
+#include <comphelper/processfactory.hxx>
 #include <vcl/window.hxx>
 #include <vcl/scrbar.hxx>
+
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -369,8 +376,23 @@ void GetRequestedSizes (
                 if (xPanel.is())
                 {
                     aLayoutSize = xPanel->getHeightForWidth(rContentBox.GetWidth());
-
                     sal_Int32 nWidth = xPanel->getMinimalWidth();
+
+                    uno::Reference<frame::XDesktop2> xDesktop
+                        = frame::Desktop::create(comphelper::getProcessComponentContext());
+                    uno::Reference<frame::XFrame> xFrame = xDesktop->getActiveFrame();
+                    if (xFrame.is())
+                    {
+                        SidebarController* pController
+                            = SidebarController::GetSidebarControllerForFrame(xFrame);
+                        if (pController && pController->getMaximumWidth() < nWidth)
+                        {
+                            // Add 100 extra pixels to still have the sidebar resizable
+                            // (See also documentation of XSidebarPanel::getMinimalWidth)
+                            pController->setMaximumWidth(nWidth + 100);
+                        }
+                    }
+
                     if (nWidth > rMinimalWidth)
                         rMinimalWidth = nWidth;
                 }
