@@ -22,6 +22,7 @@
 #include <sax/tools/converter.hxx>
 #include <sax/fastattribs.hxx>
 
+#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
@@ -243,6 +244,8 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         XML_count, OString::number(static_cast<long>(nCount)).getStr(),
         FSEND);
 
+//    const size_t nGroupFieldCount = rCache.GetGroupFieldCount();
+
     for (size_t i = 0; i < nCount; ++i)
     {
         OUString aName = rCache.GetDimensionName(i);
@@ -356,49 +359,137 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
 
         pDefStrm->startElement(XML_sharedItems, xAttributeList);
 
+        auto WriteItemData = [this, &pDefStrm, fMin, fMax](const ScDPItemData& rItem, bool bDate) {
+
+            auto GroupValueStr = [=](const ScDPItemData::GroupValueAttr& val) {
+                OString s;
+                if (val.mnValue == ScDPItemData::DateFirst)
+                    s = "<" + XclXmlUtils::ToOString(GetExcelFormattedDate(fMin, GetFormatter()));
+                else if (val.mnValue == ScDPItemData::DateLast)
+                    s = ">" + XclXmlUtils::ToOString(GetExcelFormattedDate(fMax, GetFormatter()));
+                else
+                    s = OString::number(val.mnValue);
+                // do we need using sheet::DataPilotFieldGroupBy::MONTHS etc?
+                return s;
+            };
+
+            switch (rItem.GetType())
+            {
+                case ScDPItemData::String:
+                    pDefStrm->singleElement(XML_s, XML_v, XclXmlUtils::ToOString(rItem.GetString()),
+                                            FSEND);
+                    break;
+                case ScDPItemData::Value:
+                    if (bDate)
+                    {
+                        pDefStrm->singleElement(XML_d, XML_v,
+                                                XclXmlUtils::ToOString(GetExcelFormattedDate(
+                                                    rItem.GetValue(), GetFormatter())),
+                                                FSEND);
+                    }
+                    else
+                        pDefStrm->singleElement(XML_n, XML_v, OString::number(rItem.GetValue()),
+                                                FSEND);
+                    break;
+                case ScDPItemData::Empty:
+                    pDefStrm->singleElement(XML_m, FSEND);
+                    break;
+                case ScDPItemData::Error:
+                    pDefStrm->singleElement(XML_e, XML_v, XclXmlUtils::ToOString(rItem.GetString()),
+                                            FSEND);
+                    break;
+                case ScDPItemData::GroupValue:
+                    pDefStrm->singleElement(XML_s, XML_v, GroupValueStr(rItem.GetGroupValue()),
+                                            FSEND);
+                    rItem.GetGroupValue();
+                    break;
+                case ScDPItemData::RangeStart:
+                    // TODO : What do we do with these types?
+                    pDefStrm->singleElement(XML_m, FSEND);
+                    break;
+                default:;
+            }
+        };
+
         //if (bListItems) // see TODO above
         {
             for (const ScDPItemData& rItem : rFieldItems)
             {
-                switch (rItem.GetType())
-                {
-                    case ScDPItemData::String:
-                        pDefStrm->singleElement(XML_s,
-                            XML_v, XclXmlUtils::ToOString(rItem.GetString()),
-                            FSEND);
-                    break;
-                    case ScDPItemData::Value:
-                        if (isContainsDate)
-                        {
-                            pDefStrm->singleElement(XML_d,
-                                XML_v, XclXmlUtils::ToOString(GetExcelFormattedDate(rItem.GetValue(), GetFormatter())),
-                                FSEND);
-                        }
-                        else
-                            pDefStrm->singleElement(XML_n,
-                                XML_v, OString::number(rItem.GetValue()),
-                                FSEND);
-                    break;
-                    case ScDPItemData::Empty:
-                        pDefStrm->singleElement(XML_m, FSEND);
-                    break;
-                    case ScDPItemData::Error:
-                        pDefStrm->singleElement(XML_e,
-                            XML_v, XclXmlUtils::ToOString(rItem.GetString()),
-                            FSEND);
-                    break;
-                    case ScDPItemData::GroupValue:
-                    case ScDPItemData::RangeStart:
-                        // TODO : What do we do with these types?
-                        pDefStrm->singleElement(XML_m, FSEND);
-                    break;
-                    default:
-                        ;
-                }
+                WriteItemData(rItem, isContainsDate);
             }
         }
 
         pDefStrm->endElement(XML_sharedItems);
+
+        if (sal_Int32 nGroupType = rCache.GetGroupType(i))
+        {
+            auto GetGroupBy = [](sal_Int32 nGroupType) {
+                OString sRet;
+                switch (nGroupType)
+                {
+                case sheet::DataPilotFieldGroupBy::SECONDS:
+                    sRet = "seconds";
+                    break;
+                case sheet::DataPilotFieldGroupBy::MINUTES:
+                    sRet = "minutes";
+                    break;
+                case sheet::DataPilotFieldGroupBy::HOURS:
+                    sRet = "hours";
+                    break;
+                case sheet::DataPilotFieldGroupBy::DAYS:
+                    sRet = "days";
+                    break;
+                case sheet::DataPilotFieldGroupBy::MONTHS:
+                    sRet = "months";
+                    break;
+                case sheet::DataPilotFieldGroupBy::QUARTERS:
+                    sRet = "quarters";
+                    break;
+                case sheet::DataPilotFieldGroupBy::YEARS:
+                    sRet = "years";
+                    break;
+                }
+                return sRet;
+            };
+
+            // fieldGroup element
+            auto pGroupAttList = sax_fastparser::FastSerializerHelper::createAttrList();
+            pGroupAttList->add(XML_base, OString::number(i));
+            pDefStrm->startElement(XML_fieldGroup, pGroupAttList);
+
+            // rangePr element
+            const ScDPNumGroupInfo* pGI = rCache.GetNumGroupInfo(i);
+            pGroupAttList = sax_fastparser::FastSerializerHelper::createAttrList();
+            pGroupAttList->add(XML_groupBy, GetGroupBy(nGroupType));
+            if (pGI->mbAutoStart)
+                pGroupAttList->add(XML_autoStart, ToPsz10(true));
+            else
+                pGroupAttList->add(XML_startDate, XclXmlUtils::ToOString(GetExcelFormattedDate(
+                                                      pGI->mfStart, GetFormatter())));
+            if (pGI->mbAutoEnd)
+                pGroupAttList->add(XML_autoEnd, ToPsz10(true));
+            else
+                pGroupAttList->add(XML_endDate, XclXmlUtils::ToOString(GetExcelFormattedDate(
+                    pGI->mfEnd, GetFormatter())));
+            if (pGI->mfStep)
+                pGroupAttList->add(XML_groupInterval, OString::number(pGI->mfStep));
+            pDefStrm->singleElement(XML_rangePr, pGroupAttList);
+
+            // groupItems element
+            ScfInt32Vec aGIIds;
+            rCache.GetGroupDimMemberIds(i, aGIIds);
+            pGroupAttList = sax_fastparser::FastSerializerHelper::createAttrList();
+            pGroupAttList->add(XML_count, OString::number(aGIIds.size()));
+            pDefStrm->startElement(XML_groupItems, pGroupAttList);
+            for (auto nGIId : aGIIds)
+            {
+                const ScDPItemData* pGIData = rCache.GetItemDataById(i, nGIId);
+                WriteItemData(*pGIData, isContainsDate);
+            }
+            pDefStrm->endElement(XML_groupItems);
+            pDefStrm->endElement(XML_fieldGroup);
+        }
+
         pDefStrm->endElement(XML_cacheField);
     }
 
