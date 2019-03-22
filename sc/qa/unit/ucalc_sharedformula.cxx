@@ -2608,4 +2608,80 @@ void Test::testSharedFormulaCutCopyMoveWithRef()
     m_pDoc->DeleteTab(0);
 }
 
+// tdf#120013
+void Test::testSharedFormulaCutCopyMoveWithinRun()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Data in C3:E9
+    const std::vector<std::vector<const char*>> aData = {
+        { "2200",     "", "=SUM(C$3:C3)-SUM(D$3:D3)" },
+        {     "",     "", "=SUM(C$3:C4)-SUM(D$3:D4)" },
+        {     "", "1900", "=SUM(C$3:C5)-SUM(D$3:D5)" },
+        {     "",     "", "=SUM(C$3:C6)-SUM(D$3:D6)" },
+        { "1600",     "", "=SUM(C$3:C7)-SUM(D$3:D7)" },
+        {     "", "1000", "=SUM(C$3:C8)-SUM(D$3:D8)" },
+        {     "",     "", "=SUM(C$3:C9)-SUM(D$3:D9)" }
+    };
+    const ScAddress aOrgPos(2,2,0);
+    insertRangeData( m_pDoc, aOrgPos, aData);
+
+    // Check that E3:E9 is a formula group.
+    const ScAddress aFormulaPos(4,2,0);
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell( aFormulaPos);
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shared formula top row.", aFormulaPos.Row(), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shared formula length.", static_cast<SCROW>(7), pFC->GetSharedLength());
+
+    ScAddress aPos( ScAddress::UNINITIALIZED);
+
+    // Check results in E3:E9
+    const double fVec0[] = { 2200.0, 2200.0, 300.0, 300.0, 1900.0, 900.0, 900.0 };
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of checks mismatch.", SAL_N_ELEMENTS(fVec0), aData.size());
+    aPos = aFormulaPos;
+    for (size_t i=0; i < SAL_N_ELEMENTS(fVec0); ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "E3:E9", fVec0[i], m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+    }
+
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+
+    // Set up clip document.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    aClipDoc.ResetClip(m_pDoc, &aMark);
+    // Cut A8:D8 to clipboard.
+    cutToClip( getDocShell(), ScRange(0,7,0, 3,7,0), &aClipDoc, false);
+
+    // Check results in E3:E9 after Cut.
+    const double fVec1[] = { 2200.0, 2200.0, 300.0, 300.0, 1900.0, 1900.0, 1900.0 };
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of checks mismatch.", SAL_N_ELEMENTS(fVec1), aData.size());
+    aPos = aFormulaPos;
+    for (size_t i=0; i < SAL_N_ELEMENTS(fVec1); ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "E3:E9 after Cut.", fVec1[i], m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+    }
+
+    // Paste to A4:D4
+    ScRange aPasteRange(0,3,0, 3,3,0);
+    aMark.SetMarkArea(aPasteRange);
+    m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc);
+
+    // Check results in E3:E9 after Paste.
+    const double fVec2[] = { 2200.0, 1200.0, -700.0, -700.0, 900.0, 900.0, 900.0 };
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of checks mismatch.", SAL_N_ELEMENTS(fVec2), aData.size());
+    aPos = aFormulaPos;
+    for (size_t i=0; i < SAL_N_ELEMENTS(fVec2); ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "E3:E9 after Paste.", fVec2[i], m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
