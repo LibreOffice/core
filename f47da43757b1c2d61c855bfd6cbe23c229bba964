@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_2a98a368",
+        "filename": "sfx2/source/dialog/infobar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-22T10:54:58Z",
+      "side": 1,
+      "message": "is this needed?",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 17
+      },
+      "revId": "f47da43757b1c2d61c855bfd6cbe23c229bba964",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_8a93ef4f",
+        "filename": "sfx2/source/dialog/infobar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-03-22T10:54:58Z",
+      "side": 1,
+      "message": "is this needed?",
+      "revId": "f47da43757b1c2d61c855bfd6cbe23c229bba964",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
