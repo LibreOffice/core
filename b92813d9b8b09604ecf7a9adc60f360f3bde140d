@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_0a211fb5",
+        "filename": "qadevOOo/tests/java/ifc/sheet/_XCellRangesQuery.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2019-03-22T17:25:54Z",
+      "side": 0,
+      "message": "After a closer look at the code makes it clear, that this file only can be deleted when all the tests of ScCellObj, ScCellRangesObj, ScCellRangeObj, ScCellCursorObj and ScTableSheetObj are converted.",
+      "revId": "b92813d9b8b09604ecf7a9adc60f360f3bde140d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
