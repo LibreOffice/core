@@ -83,7 +83,7 @@ public:
 // (1) Preparation for Item refactor
 // (2) Dangerous due to SfxItem may not be what you expect (e.g. when
 //     ::Set in SfxItemSet, not your instance may be used there, no control
-//     about what will happen wothout deep knowledge about SfxItems/SfxItemSets)
+//     about what will happen without deep knowledge about SfxItems/SfxItemSets)
 class SvxChartColorTableItem : public SfxPoolItem
 {
 public:
