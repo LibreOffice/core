@@ -1743,7 +1743,19 @@ void OpenGLSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry, const SalBitm
 
     VCL_GL_INFO( "::drawBitmap" );
     PreDraw();
-    DrawTexture( rTexture, rPosAry );
+    if (rPosAry.mnSrcWidth  != rPosAry.mnDestWidth ||
+        rPosAry.mnSrcHeight != rPosAry.mnDestHeight)
+    {
+        basegfx::B2DPoint aNull(rPosAry.mnDestX,rPosAry.mnDestY);
+        basegfx::B2DPoint aX(rPosAry.mnDestX + rPosAry.mnDestWidth, rPosAry.mnDestY);
+        basegfx::B2DPoint aY(rPosAry.mnDestX, rPosAry.mnDestY + rPosAry.mnDestHeight);
+        OpenGLTexture mask; // no mask set
+        DrawTransformedTexture(rTexture, mask, aNull, aX, aY);
+    }
+    else
+    {
+        DrawTexture( rTexture, rPosAry );
+    }
     PostDraw();
 }
 
