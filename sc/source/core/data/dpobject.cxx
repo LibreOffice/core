@@ -1191,7 +1191,7 @@ bool ScDPObject::IsDimNameInUse(const OUString& rName) const
     return false;
 }
 
-OUString ScDPObject::GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFlags )
+OUString ScDPObject::GetDimName(long nDim, bool& rIsDataLayout, sal_Int32* pFlags) const
 {
     rIsDataLayout = false;
     OUString aRet;
@@ -1230,6 +1230,11 @@ OUString ScDPObject::GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFla
                                 SC_UNO_DP_FLAGS );
             }
         }
+    }
+    else if (ScDPTableData* pData = const_cast<ScDPObject*>(this)->GetTableData())
+    {
+        aRet = pData->getDimensionName(nDim);
+        rIsDataLayout = pData->getIsDataLayoutDimension(nDim);
     }
 
     return aRet;
