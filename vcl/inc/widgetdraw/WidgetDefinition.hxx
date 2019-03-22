@@ -24,32 +24,40 @@
 
 namespace vcl
 {
-enum class DrawCommandType
+enum class WidgetDrawActionType
 {
     RECTANGLE,
-    CIRCLE,
     LINE,
     IMAGE,
     EXTERNAL
 };
 
-class VCL_DLLPUBLIC DrawCommand
+class VCL_DLLPUBLIC WidgetDrawAction
 {
 public:
-    DrawCommand(DrawCommandType aType)
+    WidgetDrawAction(WidgetDrawActionType aType)
         : maType(aType)
-        , mnStrokeWidth(-1)
     {
     }
 
-    DrawCommandType maType;
+    WidgetDrawActionType maType;
+};
+
+class VCL_DLLPUBLIC WidgetDrawActionShape : public WidgetDrawAction
+{
+public:
+    WidgetDrawActionShape(WidgetDrawActionType aType)
+        : WidgetDrawAction(aType)
+        , mnStrokeWidth(-1)
+    {
+    }
 
     Color maStrokeColor;
     Color maFillColor;
     sal_Int32 mnStrokeWidth;
 };
 
-class VCL_DLLPUBLIC RectangleDrawCommand : public DrawCommand
+class VCL_DLLPUBLIC WidgetDrawActionRectangle : public WidgetDrawActionShape
 {
 public:
     sal_Int32 mnRx;
@@ -60,8 +68,8 @@ public:
     float mfX2;
     float mfY2;
 
-    RectangleDrawCommand()
-        : DrawCommand(DrawCommandType::RECTANGLE)
+    WidgetDrawActionRectangle()
+        : WidgetDrawActionShape(WidgetDrawActionType::RECTANGLE)
         , mnRx(0)
         , mnRy(0)
         , mfX1(0.0f)
@@ -72,7 +80,7 @@ public:
     }
 };
 
-class VCL_DLLPUBLIC CircleDrawCommand : public DrawCommand
+class VCL_DLLPUBLIC WidgetDrawActionLine : public WidgetDrawActionShape
 {
 public:
     float mfX1;
@@ -80,48 +88,30 @@ public:
     float mfX2;
     float mfY2;
 
-    CircleDrawCommand()
-        : DrawCommand(DrawCommandType::CIRCLE)
-        , mfX1(0.0f)
-        , mfY1(0.0f)
-        , mfX2(1.0f)
-        , mfY2(1.0f)
+    WidgetDrawActionLine()
+        : WidgetDrawActionShape(WidgetDrawActionType::LINE)
     {
     }
 };
 
-class VCL_DLLPUBLIC LineDrawCommand : public DrawCommand
-{
-public:
-    float mfX1;
-    float mfY1;
-    float mfX2;
-    float mfY2;
-
-    LineDrawCommand()
-        : DrawCommand(DrawCommandType::LINE)
-    {
-    }
-};
-
-class VCL_DLLPUBLIC ImageDrawCommand : public DrawCommand
+class VCL_DLLPUBLIC WidgetDrawActionImage : public WidgetDrawAction
 {
 public:
     OUString msSource;
 
-    ImageDrawCommand()
-        : DrawCommand(DrawCommandType::IMAGE)
+    WidgetDrawActionImage()
+        : WidgetDrawAction(WidgetDrawActionType::IMAGE)
     {
     }
 };
 
-class VCL_DLLPUBLIC ExternalSourceDrawCommand : public DrawCommand
+class VCL_DLLPUBLIC WidgetDrawActionExternal : public WidgetDrawAction
 {
 public:
     OUString msSource;
 
-    ExternalSourceDrawCommand()
-        : DrawCommand(DrawCommandType::EXTERNAL)
+    WidgetDrawActionExternal()
+        : WidgetDrawAction(WidgetDrawActionType::EXTERNAL)
     {
     }
 };
@@ -179,12 +169,10 @@ public:
                           OString const& sSelected, OString const& sButtonValue,
                           OString const& sExtra);
 
-    std::vector<std::shared_ptr<DrawCommand>> mpDrawCommands;
+    std::vector<std::shared_ptr<WidgetDrawAction>> mpWidgetDrawActions;
 
     void addDrawRectangle(Color aStrokeColor, sal_Int32 nStrokeWidth, Color aFillColor, float fX1,
                           float fY1, float fX2, float fY2, sal_Int32 nRx, sal_Int32 nRy);
-    void addDrawCircle(Color aStrokeColor, sal_Int32 nStrokeWidth, Color aFillColor, float fX1,
-                       float fY1, float fX2, float fY2);
 
     void addDrawLine(Color aStrokeColor, sal_Int32 nStrokeWidth, float fX1, float fY1, float fX2,
                      float fY2);

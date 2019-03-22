@@ -134,7 +134,7 @@ void WidgetDefinitionState::addDrawRectangle(Color aStrokeColor, sal_Int32 nStro
                                              Color aFillColor, float fX1, float fY1, float fX2,
                                              float fY2, sal_Int32 nRx, sal_Int32 nRy)
 {
-    auto pCommand(std::make_shared<RectangleDrawCommand>());
+    auto pCommand(std::make_shared<WidgetDrawActionRectangle>());
     pCommand->maStrokeColor = aStrokeColor;
     pCommand->maFillColor = aFillColor;
     pCommand->mnStrokeWidth = nStrokeWidth;
@@ -144,49 +144,34 @@ void WidgetDefinitionState::addDrawRectangle(Color aStrokeColor, sal_Int32 nStro
     pCommand->mfY1 = fY1;
     pCommand->mfX2 = fX2;
     pCommand->mfY2 = fY2;
-    mpDrawCommands.push_back(std::move(pCommand));
-}
-
-void WidgetDefinitionState::addDrawCircle(Color aStrokeColor, sal_Int32 nStrokeWidth,
-                                          Color aFillColor, float fX1, float fY1, float fX2,
-                                          float fY2)
-{
-    auto pCommand(std::make_shared<CircleDrawCommand>());
-    pCommand->maStrokeColor = aStrokeColor;
-    pCommand->maFillColor = aFillColor;
-    pCommand->mnStrokeWidth = nStrokeWidth;
-    pCommand->mfX1 = fX1;
-    pCommand->mfY1 = fY1;
-    pCommand->mfX2 = fX2;
-    pCommand->mfY2 = fY2;
-    mpDrawCommands.push_back(std::move(pCommand));
+    mpWidgetDrawActions.push_back(std::move(pCommand));
 }
 
 void WidgetDefinitionState::addDrawLine(Color aStrokeColor, sal_Int32 nStrokeWidth, float fX1,
                                         float fY1, float fX2, float fY2)
 {
-    auto pCommand(std::make_shared<LineDrawCommand>());
+    auto pCommand(std::make_shared<WidgetDrawActionLine>());
     pCommand->maStrokeColor = aStrokeColor;
     pCommand->mnStrokeWidth = nStrokeWidth;
     pCommand->mfX1 = fX1;
     pCommand->mfY1 = fY1;
     pCommand->mfX2 = fX2;
     pCommand->mfY2 = fY2;
-    mpDrawCommands.push_back(std::move(pCommand));
+    mpWidgetDrawActions.push_back(std::move(pCommand));
 }
 
 void WidgetDefinitionState::addDrawImage(OUString const& sSource)
 {
-    auto pCommand(std::make_shared<ImageDrawCommand>());
+    auto pCommand(std::make_shared<WidgetDrawActionImage>());
     pCommand->msSource = sSource;
-    mpDrawCommands.push_back(std::move(pCommand));
+    mpWidgetDrawActions.push_back(std::move(pCommand));
 }
 
 void WidgetDefinitionState::addDrawExternal(OUString const& sSource)
 {
-    auto pCommand(std::make_unique<ExternalSourceDrawCommand>());
+    auto pCommand(std::make_unique<WidgetDrawActionExternal>());
     pCommand->msSource = sSource;
-    mpDrawCommands.push_back(std::move(pCommand));
+    mpWidgetDrawActions.push_back(std::move(pCommand));
 }
 
 } // end vcl namespace

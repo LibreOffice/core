@@ -226,31 +226,6 @@ void WidgetDefinitionReader::readDrawingDefinition(tools::XmlWalker& rWalker,
             rpState->addDrawRectangle(aStrokeColor, nStrokeWidth, aFillColor, fX1, fY1, fX2, fY2,
                                       nRx, nRy);
         }
-        else if (rWalker.name() == "circ")
-        {
-            Color aStrokeColor;
-            readColor(rWalker.attribute("stroke"), aStrokeColor);
-            Color aFillColor;
-            readColor(rWalker.attribute("fill"), aFillColor);
-            OString sStrokeWidth = rWalker.attribute("stroke-width");
-            sal_Int32 nStrokeWidth = -1;
-            if (!sStrokeWidth.isEmpty())
-                nStrokeWidth = sStrokeWidth.toInt32();
-
-            OString sX1 = rWalker.attribute("x1");
-            float fX1 = sX1.isEmpty() ? 0.0 : sX1.toFloat();
-
-            OString sY1 = rWalker.attribute("y1");
-            float fY1 = sY1.isEmpty() ? 0.0 : sY1.toFloat();
-
-            OString sX2 = rWalker.attribute("x2");
-            float fX2 = sX2.isEmpty() ? 1.0 : sX2.toFloat();
-
-            OString sY2 = rWalker.attribute("y2");
-            float fY2 = sY2.isEmpty() ? 1.0 : sY2.toFloat();
-
-            rpState->addDrawCircle(aStrokeColor, nStrokeWidth, aFillColor, fX1, fY1, fX2, fY2);
-        }
         else if (rWalker.name() == "line")
         {
             Color aStrokeColor;
