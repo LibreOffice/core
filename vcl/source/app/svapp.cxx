@@ -443,6 +443,8 @@ static bool ImplYield(bool i_bWait, bool i_bAllEvents)
 {
     ImplSVData* pSVData = ImplGetSVData();
 
+    DBG_TESTSOLARMUTEX(); // must be locked when entering Yield
+
     SAL_INFO("vcl.schedule", "Enter ImplYield: " << (i_bWait ? "wait" : "no wait") <<
              ": " << (i_bAllEvents ? "all events" : "one event"));
 

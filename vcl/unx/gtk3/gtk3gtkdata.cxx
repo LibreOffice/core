@@ -510,8 +510,7 @@ bool GtkSalData::Yield( bool bWait, bool bHandleAllCurrentEvents )
     bool bDispatchThread = false;
     bool bWasEvent = false;
     {
-        // release YieldMutex (and re-acquire at block end)
-        SolarMutexReleaser aReleaser;
+        // the SolarMutex is released via the nested GPollFunc!
         if( m_aDispatchMutex.tryToAcquire() )
             bDispatchThread = true;
         else if( ! bWait )
