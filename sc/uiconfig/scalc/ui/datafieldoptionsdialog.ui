@@ -60,7 +60,7 @@
             </child>
             <child>
               <object class="GtkButton" id="close">
-                <property name="label">gtk-close</property>
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -585,7 +585,7 @@
     </child>
     <action-widgets>
       <action-widget response="-5">ok</action-widget>
-      <action-widget response="-7">close</action-widget>
+      <action-widget response="-6">close</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>
