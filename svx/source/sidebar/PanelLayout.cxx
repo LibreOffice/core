@@ -20,6 +20,7 @@ using namespace sfx2::sidebar;
 PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
     : Control(pParent)
     , m_bInClose(false)
+    , mxFrame(rFrame)
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
     m_aPanelLayoutIdle.SetPriority(TaskPriority::RESIZE);
@@ -50,8 +51,16 @@ Size PanelLayout::GetOptimalSize() const
     if (isLayoutEnabled(this))
     {
         Size aSize = VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
-        aSize.setWidth( std::min<long>(aSize.Width(),
-            (SidebarController::gnMaximumSidebarWidth - TabBar::GetDefaultWidth()) * GetDPIScaleFactor()) );
+        if (mxFrame)
+        {
+            SidebarController* pController
+                = SidebarController::GetSidebarControllerForFrame(mxFrame);
+            if (pController)
+                aSize.setWidth(std::min<long>(
+                    aSize.Width(), (pController->getMaximumWidth() - TabBar::GetDefaultWidth())
+                                       * GetDPIScaleFactor()));
+        }
+
         return aSize;
     }
 
