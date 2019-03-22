@@ -1835,6 +1835,10 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             }
             pTextEditOutlinerView->SetAttribs(rSet);
 
+            Outliner* pTEOutliner = pTextEditOutlinerView->GetOutliner();
+            if (mpModel && pTEOutliner && pTEOutliner->IsModified())
+                mpModel->SetChanged();
+
 #ifdef DBG_UTIL
             if (mpItemBrowser!=nullptr)
                 mpItemBrowser->SetDirty();
