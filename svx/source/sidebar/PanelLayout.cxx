@@ -20,6 +20,7 @@ PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUStrin
     : Control(pParent)
     , m_aPanelLayoutIdle("svx sidebar PanelLayoutIdle")
     , m_bInClose(false)
+    , mxFrame(rFrame)
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
     m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame));
@@ -48,8 +49,16 @@ Size PanelLayout::GetOptimalSize() const
     if (isLayoutEnabled(this))
     {
         Size aSize = VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
-        aSize.setWidth( std::min<long>(aSize.Width(),
-            (SidebarController::gnMaximumSidebarWidth - TabBar::GetDefaultWidth()) * GetDPIScaleFactor()) );
+        if (mxFrame)
+        {
+            SidebarController* pController
+                = SidebarController::GetSidebarControllerForFrame(mxFrame);
+            if (pController)
+                aSize.setWidth(std::min<long>(
+                    aSize.Width(), (pController->getMaximumWidth() - TabBar::GetDefaultWidth())
+                                       * GetDPIScaleFactor()));
+        }
+
         return aSize;
     }
 
