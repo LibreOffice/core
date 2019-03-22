@@ -1789,6 +1789,22 @@ void cppuhelper::ServiceManager::preloadImplementations() {
 
     std::cerr << "preload:";
     std::vector<OUString> aReported;
+    std::vector<OUString> aDisabled;
+    OUStringBuffer aDisabledMsg("Disabled: ");
+
+    /// Allow external callers & testers to disable certain components
+    const char *pDisable = getenv("UNODISABLELIBRARY");
+    if (pDisable)
+    {
+        OUString aDisable(pDisable, strlen(pDisable), RTL_TEXTENCODING_UTF8);
+        for (sal_Int32 i = 0; i >= 0; )
+        {
+            OUString tok = aDisable.getToken(0, ' ', i);
+            tok = tok.trim();
+            if (!tok.isEmpty())
+                aDisabled.push_back(tok);
+        }
+    }
 
     // loop all implementations
     for (const auto& rEntry : data_.namedImplementations)
@@ -1800,12 +1816,27 @@ void cppuhelper::ServiceManager::preloadImplementations() {
             if (aLibrary.isEmpty())
                 continue;
 
+            OUString simplified = simplifyModule(aLibrary);
+            bool bDisabled =
+                std::find(aDisabled.begin(), aDisabled.end(), simplified) != aDisabled.end();
+
             if (std::find(aReported.begin(), aReported.end(), aLibrary) == aReported.end())
             {
-                std::cerr << " " << simplifyModule(aLibrary);
-                std::cerr.flush();
+                if (bDisabled)
+                {
+                    aDisabledMsg.append(simplified);
+                    aDisabledMsg.append(" ");
+                }
+                else
+                {
+                    std::cerr << " " << simplified;
+                    std::cerr.flush();
+                }
                 aReported.push_back(aLibrary);
             }
+
+            if (bDisabled)
+                continue;
 
             // expand absolute URI implementation component library
             aUri = cppu::bootstrap_expandUri(aLibrary);
@@ -1927,6 +1958,9 @@ void cppuhelper::ServiceManager::preloadImplementations() {
         }
     }
     std::cerr << std::endl;
+
+    std::cerr << aDisabledMsg.makeStringAndClear() << "\n";
+    std::cerr.flush();
 
     // Various rather important uno mappings.
     static struct {
