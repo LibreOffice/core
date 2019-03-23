@@ -218,7 +218,7 @@ cmd/32/numberingmenu.png cmd/32/outlinebullet.png
 cmd/32/numberliststyle.png cmd/32/defaultnumbering.png
 cmd/32/objectbackone.png cmd/32/backward.png
 cmd/32/objectforwardone.png cmd/32/forward.png
-cmd/32/objectmenu.png cmd/32/insertframe.png
+cmd/32/objectmenu.png cmd/32/insertobject.png
 cmd/32/objectmirrorhorizontal.png cmd/32/fliphorizontal.png
 cmd/32/objectmirrorvertical.png cmd/32/flipvertical.png
 cmd/32/objects3dtoolbox.png cmd/32/cube.png
@@ -232,6 +232,7 @@ cmd/32/outlinedown.png cmd/32/movedown.png
 cmd/32/outlineleft.png cmd/32/incrementlevel.png
 cmd/32/outlineright.png cmd/32/decrementlevel.png
 cmd/32/outlineup.png cmd/32/moveup.png
+cmd/32/pagecolumndialog.png cmd/32/formatcolumns.png
 cmd/32/pagedown.png cmd/32/navigateforward.png
 cmd/32/pageformatdialog.png cmd/32/pagedialog.png
 cmd/32/pagesetup.png cmd/32/pagedialog.png
@@ -568,7 +569,7 @@ cmd/lc_numberingmenu.png cmd/lc_outlinebullet.png
 cmd/lc_numberliststyle.png cmd/lc_defaultnumbering.png
 cmd/lc_objectbackone.png cmd/lc_backward.png
 cmd/lc_objectforwardone.png cmd/lc_forward.png
-cmd/lc_objectmenu.png cmd/lc_insertframe.png
+cmd/lc_objectmenu.png cmd/lc_insertobject.png
 cmd/lc_objectmirrorhorizontal.png cmd/lc_fliphorizontal.png
 cmd/lc_objectmirrorvertical.png cmd/lc_flipvertical.png
 cmd/lc_objects3dtoolbox.png cmd/lc_cube.png
@@ -582,6 +583,7 @@ cmd/lc_outlinedown.png cmd/lc_movedown.png
 cmd/lc_outlineleft.png cmd/lc_incrementlevel.png
 cmd/lc_outlineright.png cmd/lc_decrementlevel.png
 cmd/lc_outlineup.png cmd/lc_moveup.png
+cmd/lc_pagecolumndialog.png cmd/lc_formatcolumns.png
 cmd/lc_pagedown.png cmd/lc_navigateforward.png
 cmd/lc_pageformatdialog.png cmd/lc_pagedialog.png
 cmd/lc_pagesetup.png cmd/lc_pagedialog.png
@@ -880,7 +882,7 @@ cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png
 cmd/sc_numberliststyle.png cmd/sc_defaultnumbering.png
 cmd/sc_objectbackone.png cmd/sc_backward.png
 cmd/sc_objectforwardone.png cmd/sc_forward.png
-cmd/sc_objectmenu.png cmd/sc_insertframe.png
+cmd/sc_objectmenu.png cmd/sc_insertobject.png
 cmd/sc_objectmirrorhorizontal.png cmd/sc_fliphorizontal.png
 cmd/sc_objectmirrorvertical.png cmd/sc_flipvertical.png
 cmd/sc_objects3dtoolbox.png cmd/sc_cube.png
@@ -894,6 +896,7 @@ cmd/sc_outlinedown.png cmd/sc_movedown.png
 cmd/sc_outlineleft.png cmd/sc_incrementlevel.png
 cmd/sc_outlineright.png cmd/sc_decrementlevel.png
 cmd/sc_outlineup.png cmd/sc_moveup.png
+cmd/sc_pagecolumndialog.png cmd/sc_formatcolumns.png
 cmd/sc_pagedown.png cmd/sc_navigateforward.png
 cmd/sc_pageformatdialog.png cmd/sc_pagedialog.png
 cmd/sc_pagesetup.png cmd/sc_pagedialog.png
