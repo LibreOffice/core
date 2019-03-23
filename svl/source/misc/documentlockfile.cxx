@@ -54,8 +54,132 @@ using namespace ::com::sun::star;
 
 namespace svt {
 
+GenDocumentLockFile::GenDocumentLockFile( const OUString& aURL )
+: LockFileCommon( aURL )
+{
+}
+
+
+GenDocumentLockFile::GenDocumentLockFile( const OUString& aOrigURL, const OUString& aPrefix )
+: LockFileCommon( aOrigURL, aPrefix )
+{
+}
+
+
+GenDocumentLockFile::~GenDocumentLockFile()
+{
+}
+
+uno::Reference< io::XInputStream > GenDocumentLockFile::OpenStream()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    uno::Reference < css::ucb::XCommandEnvironment > xEnv;
+    ::ucbhelper::Content aSourceContent( GetURL(), xEnv, comphelper::getProcessComponentContext() );
+
+    // the file can be opened readonly, no locking will be done
+    return aSourceContent.openStream();
+}
+
+bool GenDocumentLockFile::CreateOwnLockFile()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    try
+    {
+        uno::Reference< io::XStream > xTempFile(
+            io::TempFile::create( comphelper::getProcessComponentContext() ),
+            uno::UNO_QUERY_THROW );
+        uno::Reference< io::XSeekable > xSeekable( xTempFile, uno::UNO_QUERY_THROW );
+
+        uno::Reference< io::XInputStream > xInput = xTempFile->getInputStream();
+        uno::Reference< io::XOutputStream > xOutput = xTempFile->getOutputStream();
+
+        if ( !xInput.is() || !xOutput.is() )
+            throw uno::RuntimeException();
+
+        LockFileEntry aNewEntry = GenerateOwnEntry();
+        WriteEntryToStream( aNewEntry, xOutput );
+        xOutput->closeOutput();
+
+        xSeekable->seek( 0 );
+
+        uno::Reference < css::ucb::XCommandEnvironment > xEnv;
+        ::ucbhelper::Content aTargetContent( GetURL(), xEnv, comphelper::getProcessComponentContext() );
+
+        ucb::InsertCommandArgument aInsertArg;
+        aInsertArg.Data = xInput;
+        aInsertArg.ReplaceExisting = false;
+        uno::Any aCmdArg;
+        aCmdArg <<= aInsertArg;
+        aTargetContent.executeCommand( "insert", aCmdArg );
+
+        // try to let the file be hidden if possible
+        try {
+            aTargetContent.setPropertyValue("IsHidden", uno::makeAny( true ) );
+        } catch( uno::Exception& ) {}
+    }
+    catch( ucb::NameClashException& )
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool GenDocumentLockFile::OverwriteOwnLockFile()
+{
+    // allows to overwrite the lock file with the current data
+    try
+    {
+        uno::Reference < css::ucb::XCommandEnvironment > xEnv;
+        ::ucbhelper::Content aTargetContent( GetURL(), xEnv, comphelper::getProcessComponentContext() );
+
+        LockFileEntry aNewEntry = GenerateOwnEntry();
+
+        uno::Reference< io::XStream > xStream = aTargetContent.openWriteableStreamNoLock();
+        uno::Reference< io::XOutputStream > xOutput = xStream->getOutputStream();
+        uno::Reference< io::XTruncate > xTruncate( xOutput, uno::UNO_QUERY_THROW );
+
+        xTruncate->truncate();
+        WriteEntryToStream( aNewEntry, xOutput );
+        xOutput->closeOutput();
+    }
+    catch( uno::Exception& )
+    {
+        return false;
+    }
+
+    return true;
+}
+
+void GenDocumentLockFile::RemoveFile()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    // TODO/LATER: the removing is not atomic, is it possible in general to make it atomic?
+    LockFileEntry aNewEntry = GenerateOwnEntry();
+    LockFileEntry aFileData = GetLockData();
+
+    if ( aFileData[LockFileComponent::SYSUSERNAME] != aNewEntry[LockFileComponent::SYSUSERNAME]
+      || aFileData[LockFileComponent::LOCALHOST] != aNewEntry[LockFileComponent::LOCALHOST]
+      || aFileData[LockFileComponent::USERURL] != aNewEntry[LockFileComponent::USERURL] )
+        throw io::IOException(); // not the owner, access denied
+
+    RemoveFileDirectly();
+}
+
+void GenDocumentLockFile::RemoveFileDirectly()
+{
+    uno::Reference < css::ucb::XCommandEnvironment > xEnv;
+    ::ucbhelper::Content aCnt(GetURL(), xEnv, comphelper::getProcessComponentContext());
+    aCnt.executeCommand("delete",
+        uno::makeAny(true));
+}
+
+
 DocumentLockFile::DocumentLockFile( const OUString& aOrigURL )
-: LockFileCommon( aOrigURL, ".~lock." )
+: GenDocumentLockFile( aOrigURL, ".~lock." )
 {
 }
 
@@ -85,54 +209,6 @@ void DocumentLockFile::WriteEntryToStream( const LockFileEntry& aEntry, const un
     xOutput->writeBytes( aData );
 }
 
-
-bool DocumentLockFile::CreateOwnLockFile()
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    try
-    {
-        uno::Reference< io::XStream > xTempFile(
-            io::TempFile::create( comphelper::getProcessComponentContext() ),
-            uno::UNO_QUERY_THROW );
-        uno::Reference< io::XSeekable > xSeekable( xTempFile, uno::UNO_QUERY_THROW );
-
-        uno::Reference< io::XInputStream > xInput = xTempFile->getInputStream();
-        uno::Reference< io::XOutputStream > xOutput = xTempFile->getOutputStream();
-
-        if ( !xInput.is() || !xOutput.is() )
-            throw uno::RuntimeException();
-
-        LockFileEntry aNewEntry = GenerateOwnEntry();
-        WriteEntryToStream( aNewEntry, xOutput );
-        xOutput->closeOutput();
-
-        xSeekable->seek( 0 );
-
-        uno::Reference < css::ucb::XCommandEnvironment > xEnv;
-        ::ucbhelper::Content aTargetContent( m_aURL, xEnv, comphelper::getProcessComponentContext() );
-
-        ucb::InsertCommandArgument aInsertArg;
-        aInsertArg.Data = xInput;
-        aInsertArg.ReplaceExisting = false;
-        uno::Any aCmdArg;
-        aCmdArg <<= aInsertArg;
-        aTargetContent.executeCommand( "insert", aCmdArg );
-
-        // try to let the file be hidden if possible
-        try {
-            aTargetContent.setPropertyValue("IsHidden", uno::makeAny( true ) );
-        } catch( uno::Exception& ) {}
-    }
-    catch( ucb::NameClashException& )
-    {
-        return false;
-    }
-
-    return true;
-}
-
-
 LockFileEntry DocumentLockFile::GetLockData()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -156,69 +232,6 @@ LockFileEntry DocumentLockFile::GetLockData()
     return ParseEntry( aBuffer, nCurPos );
 }
 
-
-uno::Reference< io::XInputStream > DocumentLockFile::OpenStream()
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    uno::Reference < css::ucb::XCommandEnvironment > xEnv;
-    ::ucbhelper::Content aSourceContent( m_aURL, xEnv, comphelper::getProcessComponentContext() );
-
-    // the file can be opened readonly, no locking will be done
-    return aSourceContent.openStream();
-}
-
-
-bool DocumentLockFile::OverwriteOwnLockFile()
-{
-    // allows to overwrite the lock file with the current data
-    try
-    {
-        uno::Reference < css::ucb::XCommandEnvironment > xEnv;
-        ::ucbhelper::Content aTargetContent( m_aURL, xEnv, comphelper::getProcessComponentContext() );
-
-        LockFileEntry aNewEntry = GenerateOwnEntry();
-
-        uno::Reference< io::XStream > xStream = aTargetContent.openWriteableStreamNoLock();
-        uno::Reference< io::XOutputStream > xOutput = xStream->getOutputStream();
-        uno::Reference< io::XTruncate > xTruncate( xOutput, uno::UNO_QUERY_THROW );
-
-        xTruncate->truncate();
-        WriteEntryToStream( aNewEntry, xOutput );
-        xOutput->closeOutput();
-    }
-    catch( uno::Exception& )
-    {
-        return false;
-    }
-
-    return true;
-}
-
-
-void DocumentLockFile::RemoveFile()
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    // TODO/LATER: the removing is not atomic, is it possible in general to make it atomic?
-    LockFileEntry aNewEntry = GenerateOwnEntry();
-    LockFileEntry aFileData = GetLockData();
-
-    if ( aFileData[LockFileComponent::SYSUSERNAME] != aNewEntry[LockFileComponent::SYSUSERNAME]
-      || aFileData[LockFileComponent::LOCALHOST] != aNewEntry[LockFileComponent::LOCALHOST]
-      || aFileData[LockFileComponent::USERURL] != aNewEntry[LockFileComponent::USERURL] )
-        throw io::IOException(); // not the owner, access denied
-
-    RemoveFileDirectly();
-}
-
-void DocumentLockFile::RemoveFileDirectly()
-{
-    uno::Reference < css::ucb::XCommandEnvironment > xEnv;
-    ::ucbhelper::Content aCnt(m_aURL, xEnv, comphelper::getProcessComponentContext());
-    aCnt.executeCommand("delete",
-        uno::makeAny(true));
-}
 
 
 
