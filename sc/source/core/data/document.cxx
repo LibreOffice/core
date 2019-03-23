@@ -4727,7 +4727,7 @@ const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_
             return pTemp;
         else
         {
-            OSL_FAIL( "Attribut Null" );
+            OSL_FAIL( "Attribute Null" );
         }
     }
     return &mxPoolHelper->GetDocPool()->GetDefaultItem( nWhich );
