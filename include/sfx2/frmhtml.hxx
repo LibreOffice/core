@@ -23,11 +23,9 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 
-#include <sfx2/frmdescr.hxx>
 #include <sfx2/sfxhtml.hxx>
 
-class SfxFrameHTMLParser;
-class SfxMedium;
+class SfxFrameDescriptor;
 
 class SFX2_DLLPUBLIC SfxFrameHTMLParser : public SfxHTMLParser
 {

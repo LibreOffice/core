@@ -21,6 +21,7 @@
 #include <libxml/xmlwriter.h>
 #include <stdlib.h>
 #include <hintids.hxx>
+#include <sot/exchange.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/docfile.hxx>

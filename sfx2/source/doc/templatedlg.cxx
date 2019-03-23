@@ -20,6 +20,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfac.hxx>
+#include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/objsh.hxx>

@@ -20,6 +20,7 @@
 #include <sfx2/emojiview.hxx>
 #include <sfx2/emojiviewitem.hxx>
 #include <sfx2/emojicontrol.hxx>
+#include <vcl/tabpage.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <officecfg/Office/Common.hxx>

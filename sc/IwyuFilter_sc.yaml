@@ -298,6 +298,9 @@ blacklist:
     sc/inc/scmatrix.hxx:
     # base class has to be a complete type
     - svl/sharedstringpool.hxx
+    sc/inc/scmod.hxx:
+    # Needed for macro define
+    - sfx2/app.hxx
     sc/inc/shapeuno.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp

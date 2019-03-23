@@ -22,24 +22,22 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <svl/poolitem.hxx>
-#include <vcl/window.hxx>
+#include <rtl/ustring.hxx>
+#include <tools/link.hxx>
+#include <comphelper/documentconstants.hxx>
+#include <sot/formats.hxx>
 
-#include <sfx2/docfilt.hxx>
-
-#include <tools/ref.hxx>
 #include <memory>
 
-namespace vcl { class Window; }
+namespace com::sun::star::beans { struct NamedValue; }
+namespace com::sun::star::container { class XNameAccess; }
+namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace com::sun::star::uno { template <typename > class Reference; }
+
 class ErrCode;
 class SfxFilter;
-class SfxObjectFactory;
 class SfxMedium;
 class SfxFilterContainer_Impl;
-class SfxFrame;
 
 
 class SFX2_DLLPUBLIC SfxFilterContainer
@@ -97,7 +95,6 @@ public:
     std::shared_ptr<const SfxFilter>    GetAnyFilter( SfxFilterFlags nMustg=SfxFilterFlags::NONE, SfxFilterFlags nDont=SFX_FILTER_NOTINSTALLED ) const;
 };
 
-class SfxFilterContainer_Impl;
 class SFX2_DLLPUBLIC SfxFilterMatcherIter
 
 {

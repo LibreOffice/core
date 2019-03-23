@@ -83,6 +83,7 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfac.hxx>
+#include <sfx2/docfilt.hxx>
 #include <sfx2/objsh.hxx>
 #include <openflag.hxx>
 #include <sfx2/passwd.hxx>

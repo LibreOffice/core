@@ -22,15 +22,15 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/embed/Aspects.hpp>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <rtl/ref.hxx>
 
 #include <tools/gen.hxx>
 
-#include <sfx2/objsh.hxx>
 #include <vcl/window.hxx>
+#include <vcl/errcode.hxx>
+
+namespace com::sun::star::embed { class XEmbeddedObject; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 class SfxInPlaceClient_Impl;
 class SfxViewShell;

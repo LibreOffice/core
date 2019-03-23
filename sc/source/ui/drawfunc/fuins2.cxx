@@ -36,6 +36,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/msgpool.hxx>
+#include <sfx2/msg.hxx>
 #include <scmod.hxx>
 #include <sal/log.hxx>
 

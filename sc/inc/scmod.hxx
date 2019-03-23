@@ -24,6 +24,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <svl/lstner.hxx>
+#include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include "global.hxx"
 #include "shellids.hxx"

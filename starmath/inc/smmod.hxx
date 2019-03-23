@@ -21,6 +21,7 @@
 #define INCLUDED_STARMATH_INC_SMMOD_HXX
 
 #include <sfx2/module.hxx>
+#include <sfx2/app.hxx>
 
 #include <unotools/options.hxx>
 #include <memory>

@@ -21,6 +21,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/BitmapSimpleColorQuantizationFilter.hxx>
+#include <vcl/svapp.hxx>
 
 #include <DrawDocShell.hxx>
 #include <sdmod.hxx>

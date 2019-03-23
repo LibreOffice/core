@@ -19,19 +19,21 @@
 #ifndef INCLUDED_SFX2_LNKBASE_HXX
 #define INCLUDED_SFX2_LNKBASE_HXX
 
-#include <com/sun/star/io/XInputStream.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/linksrc.hxx>
-#include <sot/exchange.hxx>
+#include <sot/formats.hxx>
 #include <tools/ref.hxx>
+#include <tools/link.hxx>
 #include <memory>
 
 namespace com { namespace sun { namespace star { namespace uno
 {
     class Any;
 }}}}
+
+namespace com::sun::star::io { class XInputStream; }
 
 enum class SfxLinkUpdateMode {
     NONE   = 0,
@@ -45,7 +47,6 @@ namespace sfx2
 
 struct ImplBaseLinkData;
 class LinkManager;
-class SvLinkSource;
 class FileDialogHelper;
 
 #ifndef OBJECT_DDE_EXTERN

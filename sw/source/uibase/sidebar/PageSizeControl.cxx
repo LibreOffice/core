@@ -29,6 +29,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <rtl/character.hxx>
 #include <editeng/paperinf.hxx>
+#include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>

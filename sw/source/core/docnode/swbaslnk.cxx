@@ -31,6 +31,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/event.hxx>
 #include <svtools/soerr.hxx>
+#include <sot/exchange.hxx>
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
 #include <frmatr.hxx>

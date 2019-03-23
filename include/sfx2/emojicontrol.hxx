@@ -12,13 +12,12 @@
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <vcl/button.hxx>
 #include <vcl/tabctrl.hxx>
-#include <vcl/tabpage.hxx>
 #include <sfx2/tbxctrl.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
 
 #define TAB_FONT_SIZE 15
+
+namespace com::sun::star::frame { class XFrame; }
 
 class EmojiView;
 class ThumbnailViewItem;

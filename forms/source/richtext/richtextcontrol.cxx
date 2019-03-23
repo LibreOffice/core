@@ -38,6 +38,7 @@
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <sfx2/msgpool.hxx>
+#include <sfx2/msg.hxx>
 
 namespace frm
 {

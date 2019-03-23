@@ -18,6 +18,7 @@
  */
 
 #include <sot/storage.hxx>
+#include <sot/exchange.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <doc.hxx>

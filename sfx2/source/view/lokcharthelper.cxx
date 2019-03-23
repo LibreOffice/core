@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 #define TWIPS_PER_PIXEL 15

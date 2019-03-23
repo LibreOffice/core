@@ -22,15 +22,8 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 
-#include <sfx2/frmdescr.hxx>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <svtools/parhtml.hxx>
-#include <svtools/htmlout.hxx>
-#include <svtools/htmlkywd.hxx>
-
-class SfxFrame;
 class SvStream;
 
 namespace com { namespace sun { namespace star {
@@ -38,6 +31,9 @@ namespace com { namespace sun { namespace star {
         class XDocumentProperties;
     }
 } } }
+
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 class SFX2_DLLPUBLIC SfxFrameHTMLWriter
 {

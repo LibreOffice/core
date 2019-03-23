@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 #include <osl/file.hxx>
+#include <sfx2/docfilt.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/classificationhelper.hxx>

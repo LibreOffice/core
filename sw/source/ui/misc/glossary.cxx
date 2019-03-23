@@ -25,10 +25,12 @@
 #include <vcl/help.hxx>
 #include <vcl/builderfactory.hxx>
 #include <svl/stritem.hxx>
+#include <svl/macitem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/lingucfg.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/fcontnr.hxx>
+#include <sfx2/docfilt.hxx>
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>

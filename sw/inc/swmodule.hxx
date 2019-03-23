@@ -27,6 +27,7 @@
 #include <svl/lstner.hxx>
 #include <unotools/options.hxx>
 #include <sfx2/module.hxx>
+#include <sfx2/app.hxx>
 
 #include "swdllapi.h"
 #include "shellid.hxx"

@@ -22,6 +22,7 @@
 #include <sfx2/lnkbase.hxx>
 #include <math.h>
 #include <tools/helpers.hxx>
+#include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <unotools/ucbstreamhelper.hxx>

@@ -103,6 +103,7 @@
 #include <FrameControlsManager.hxx>
 
 #include <sfx2/msgpool.hxx>
+#include <sfx2/msg.hxx>
 #include <svtools/embedhlp.hxx>
 #include <memory>
 

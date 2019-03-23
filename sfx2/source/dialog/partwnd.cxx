@@ -35,6 +35,7 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 
+#include <vcl/event.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <partwnd.hxx>
 #include <sfx2/bindings.hxx>

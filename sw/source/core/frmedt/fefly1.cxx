@@ -27,6 +27,7 @@
 #include <svx/svdouno.hxx>
 #include <svx/fmglob.hxx>
 #include <tools/globname.hxx>
+#include <sot/exchange.hxx>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>

@@ -32,6 +32,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/evntconf.hxx>
+#include <svl/macitem.hxx>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>

@@ -21,6 +21,7 @@
 #include <svtools/htmltokn.h>
 #include <svtools/asynclink.hxx>
 
+#include <sfx2/frmdescr.hxx>
 #include <sfx2/frmhtml.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>

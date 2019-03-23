@@ -14,8 +14,8 @@
 #include <tools/gen.hxx>
 #include <vcl/window.hxx>
 
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
+namespace com::sun::star::frame { class XController; }
+namespace com::sun::star::frame { class XDispatch; }
 
 class SfxViewShell;
 class VirtualDevice;

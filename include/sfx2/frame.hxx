@@ -39,20 +39,10 @@ namespace com
     {
         namespace star
         {
-            namespace awt
-            {
-                class XWindow;
-            }
             namespace frame
             {
                 class XFrame;
-                class XFrameLoader;
                 class XController;
-                class XDispatchProviderInterceptor;
-            }
-            namespace beans
-            {
-                struct PropertyValue;
             }
         }
     }
@@ -61,16 +51,11 @@ namespace com
 class SvBorder;
 class SfxWorkWindow;
 namespace vcl { class Window; }
-class SfxFrame;
 class SfxFrame_Impl;
 class SfxObjectShell;
-class SfxObjectFactory;
 class SfxViewFrame;
 class SfxFrameDescriptor;
-class SfxFrameSetDescriptor;
-class SfxDispatcher;
 namespace tools { class Rectangle; }
-class SfxRequest;
 class SystemWindow;
 
 typedef ::std::vector<OUString> TargetList;

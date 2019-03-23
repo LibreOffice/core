@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <sfx2/linkmgr.hxx>
+#include <sot/exchange.hxx>
 #include <doc.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentState.hxx>

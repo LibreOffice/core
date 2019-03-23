@@ -22,18 +22,16 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <comphelper/documentconstants.hxx>
+#include <tools/link.hxx>
 #include <vcl/errcode.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/weld.hxx>
-#include <sfx2/sfxuno.hxx>
-#include <sfx2/docfilt.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
+#include <vector>
 
 namespace com
 {
@@ -46,7 +44,6 @@ namespace com
                 namespace dialogs
                 {
                     class XFilePicker3;
-                    class XFilePickerListener;
                     struct FilePickerEvent;
                     struct DialogClosedEvent;
                 }
@@ -55,8 +52,13 @@ namespace com
     }
 }
 
+namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::uno { template <typename > class Reference; }
+namespace weld { class Window; }
+
+class Graphic;
+class SfxFilter;
 class SfxItemSet;
-namespace vcl { class Window; }
 
 enum class FileDialogFlags {
     NONE              = 0x00,

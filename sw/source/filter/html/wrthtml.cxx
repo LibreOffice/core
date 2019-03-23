@@ -28,6 +28,7 @@
 
 #include <svtools/htmlcfg.hxx>
 #include <svtools/htmltokn.h>
+#include <svtools/htmlkywd.hxx>
 #include <vcl/svapp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <sfx2/frmhtmlw.hxx>

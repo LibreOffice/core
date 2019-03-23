@@ -13,6 +13,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
+#include <sfx2/app.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
