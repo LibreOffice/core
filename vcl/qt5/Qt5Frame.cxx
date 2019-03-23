@@ -912,6 +912,8 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
     Color aMid = toColor(pal.color(QPalette::Active, QPalette::Mid));
     Color aHigh = toColor(pal.color(QPalette::Active, QPalette::Highlight));
     Color aHighText = toColor(pal.color(QPalette::Active, QPalette::HighlightedText));
+    Color aLink = toColor(pal.color(QPalette::Active, QPalette::Link));
+    Color aVisitedLink = toColor(pal.color(QPalette::Active, QPalette::LinkVisited));
 
     style.SetSkipDisabledInMenus(true);
 
@@ -955,6 +957,10 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
     // Selection
     style.SetHighlightColor(aHigh);
     style.SetHighlightTextColor(aHighText);
+
+    // Links
+    style.SetLinkColor(aLink);
+    style.SetVisitedLinkColor(aVisitedLink);
 
     // Tooltip
     style.SetHelpColor(toColor(QToolTip::palette().color(QPalette::Active, QPalette::ToolTipBase)));
