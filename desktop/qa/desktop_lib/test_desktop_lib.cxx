@@ -24,6 +24,7 @@
 #include <vcl/scheduler.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/uri.hxx>
+#include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <test/unoapi_test.hxx>

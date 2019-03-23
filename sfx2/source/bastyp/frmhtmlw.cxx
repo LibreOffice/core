@@ -28,7 +28,9 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <unotools/resmgr.hxx>
+#include <svtools/htmlout.hxx>
 
+#include <sfx2/frmdescr.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/frame.hxx>

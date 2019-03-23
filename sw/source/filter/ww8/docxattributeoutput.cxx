@@ -99,6 +99,7 @@
 #include <svl/whiter.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
+#include <sot/exchange.hxx>
 
 #include <docufld.hxx>
 #include <authfld.hxx>

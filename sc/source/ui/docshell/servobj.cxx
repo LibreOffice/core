@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/linkmgr.hxx>

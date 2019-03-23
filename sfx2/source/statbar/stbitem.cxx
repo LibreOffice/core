@@ -27,6 +27,8 @@
 #include <com/sun/star/frame/status/ItemState.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
 
+#include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 #include <vcl/status.hxx>
 
 #include <sfx2/app.hxx>

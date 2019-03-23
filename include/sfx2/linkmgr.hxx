@@ -29,7 +29,6 @@
 
 class SfxObjectShell;
 class Graphic;
-class Size;
 
 namespace com { namespace sun { namespace star {
     namespace lang {

@@ -70,6 +70,7 @@
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <sfx2/request.hxx>
 #include <openflag.hxx>
 #include <memory>

@@ -22,16 +22,13 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
 #include <sfx2/event.hxx>
-#include <sfx2/sfxsids.hrc>
-#include <svl/macitem.hxx>
+#include <svl/poolitem.hxx>
 #include <memory>
 #include <vector>
 
 class SfxObjectShell;
-class SvxMacroTableDtor;
+class SvxMacro;
 
 struct SFX2_DLLPUBLIC SfxEventName
 {

@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sfx2/linksrc.hxx>
+#include <tools/link.hxx>
 
 class DdeConnection;
 class DdeData;

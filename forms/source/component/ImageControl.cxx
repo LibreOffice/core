@@ -47,12 +47,14 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <unotools/streamhelper.hxx>
 #include <comphelper/guarding.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/urihelper.hxx>
 

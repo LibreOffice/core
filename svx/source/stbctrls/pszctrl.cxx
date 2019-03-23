@@ -19,11 +19,14 @@
 
 #include <limits.h>
 #include <vcl/builder.hxx>
+#include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 #include <vcl/field.hxx>
 #include <vcl/status.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <svl/stritem.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/itempool.hxx>

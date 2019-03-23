@@ -1,6 +1,9 @@
 ---
 assumeFilename: starmath/source/document.cxx
 blacklist:
+    starmath/inc/smmod.hxx:
+    # Needed for define
+    - sfx2/app.hxx
     starmath/source/accessibility.hxx:
     # Base class needs complete type
     - com/sun/star/accessibility/XAccessible.hpp

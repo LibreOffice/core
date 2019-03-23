@@ -23,6 +23,7 @@
 #include <EnhancedPDFExportHelper.hxx>
 #include <hintids.hxx>
 
+#include <sot/exchange.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <tools/multisel.hxx>

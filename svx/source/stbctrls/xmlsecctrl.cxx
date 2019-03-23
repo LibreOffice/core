@@ -22,6 +22,8 @@
 #include <vcl/builder.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/image.hxx>
+#include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>

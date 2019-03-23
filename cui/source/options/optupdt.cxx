@@ -37,6 +37,7 @@
 #include <com/sun/star/setup/UpdateCheckConfig.hpp>
 #include <com/sun/star/configuration/ReadWriteAccess.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <sal/log.hxx>

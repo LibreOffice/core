@@ -21,29 +21,24 @@
 
 #include <memory>
 #include <sal/config.h>
-#include <sfx2/app.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/shell.hxx>
 #include <sfx2/styfitem.hxx>
-#include <sfx2/tabdlg.hxx>
-#include <svtools/imgdef.hxx>
+#include <vcl/tabpage.hxx>
 #include <sal/types.h>
 #include <tools/fldunit.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-class SfxBindings;
 class SfxObjectFactory;
-class ModalDialog;
-class SfxObjectFactory;
-class SfxModule;
 class SfxModule_Impl;
 class SfxSlotPool;
-struct SfxChildWinContextFactory;
 struct SfxChildWinFactory;
 struct SfxStbCtrlFactory;
 struct SfxTbxCtrlFactory;
 class SfxTabPage;
-namespace vcl { class Window; }
+class SfxTbxCtrlFactArr_Impl;
+class SfxStbCtrlFactArr_Impl;
+class SfxChildWinFactArr_Impl;
 
 namespace com { namespace sun { namespace star { namespace frame {
     class XFrame;

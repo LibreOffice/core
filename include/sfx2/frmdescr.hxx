@@ -23,7 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <sfx2/sfxsids.hrc>
 #include <tools/gen.hxx>
 #include <tools/urlobj.hxx>
 

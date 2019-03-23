@@ -21,16 +21,19 @@
 
 #include <sfx2/styfitem.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <vcl/weld.hxx>
 #include <memory>
+
+namespace weld { class Button; }
+namespace weld { class CheckButton; }
+namespace weld { class ComboBox; }
+namespace weld { class Entry; }
+namespace weld { class Label; }
+namespace weld { class Widget; }
 
 /* expected:
     SID_TEMPLATE_NAME   :   In: StringItem, Name of Template
     SID_TEMPLATE_FAMILY :   In: Family of Template
 */
-
-class SfxStyleFamilyItem;
-class SfxStyleSheetBase;
 
 class SfxManageStyleSheetPage final : public SfxTabPage
 {

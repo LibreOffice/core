@@ -23,12 +23,8 @@
 #include <memory>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
-#include <sal/types.h>
 #include <sfx2/dllapi.h>
-
-class SvStream;
-class SotDataObject;
-class SvData;
+#include <tools/stream.hxx>
 
 class SFX2_DLLPUBLIC MSE40HTMLClipFormatObj
 {

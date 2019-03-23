@@ -21,6 +21,7 @@
 #include <memory>
 
 #include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>
 

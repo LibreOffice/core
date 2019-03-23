@@ -48,6 +48,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/print.hxx>

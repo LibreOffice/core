@@ -31,6 +31,7 @@ using namespace ::com::sun::star;
 #include <sfx2/infobar.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/langtab.hxx>
 #include <basic/sbxcore.hxx>

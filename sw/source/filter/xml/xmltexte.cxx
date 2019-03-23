@@ -44,6 +44,7 @@
 #include <SwAppletImpl.hxx>
 #include <ndindex.hxx>
 
+#include <sot/exchange.hxx>
 #include <svl/urihelper.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <SwStyleNameMapper.hxx>

@@ -24,6 +24,7 @@
 #include "vbadocument.hxx"
 #include <sal/log.hxx>
 #include <osl/file.hxx>
+#include <vcl/svapp.hxx>
 #include <vbahelper/vbahelper.hxx>
 #include "vbawindow.hxx"
 #include "vbasystem.hxx"

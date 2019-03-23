@@ -25,6 +25,7 @@
 #include <sot/exchange.hxx>
 #include <vcl/transfer.hxx>
 #include <unotools/syslocale.hxx>
+#include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <unotools/charclass.hxx>

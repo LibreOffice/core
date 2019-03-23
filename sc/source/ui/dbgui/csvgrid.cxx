@@ -32,6 +32,8 @@
 
 // *** edit engine ***
 #include <editeng/eeitem.hxx>
+#include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 

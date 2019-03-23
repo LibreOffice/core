@@ -24,6 +24,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <vcl/help.hxx>
 #include <sot/filelist.hxx>
 #include <svl/eitem.hxx>

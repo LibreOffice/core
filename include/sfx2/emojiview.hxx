@@ -18,8 +18,6 @@
 #define ITEM_PADDING 5
 #define ITEM_MAX_TEXT_LENGTH 10
 
-class EmojiViewItem;
-
 enum class FILTER_CATEGORY
 {
     PEOPLE,
