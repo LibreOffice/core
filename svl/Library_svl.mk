@@ -158,7 +158,8 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/misc/PasswordHelper \
     svl/source/misc/adrparse \
     $(if $(filter DESKTOP,$(BUILD_TYPE)),\
-        svl/source/misc/documentlockfile) \
+        svl/source/misc/documentlockfile \
+        svl/source/misc/msodocumentlockfile) \
     svl/source/misc/filenotation \
     svl/source/misc/fstathelper \
     svl/source/misc/getstringresource \

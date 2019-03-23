@@ -38,18 +38,27 @@ typedef o3tl::enumarray<LockFileComponent,OUString> LockFileEntry;
 
 namespace svt {
 
-// This is a general implementation that is used in document lock file implementation and in sharing control file implementation
+/// This is a general implementation that is used in document lock file implementation and in sharing control file implementation
 class SVL_DLLPUBLIC LockFileCommon
 {
-protected:
-    ::osl::Mutex m_aMutex;
+private:
     OUString m_aURL;
 
-    INetURLObject ResolveLinks( const INetURLObject& aDocURL ) const;
+protected:
+    ::osl::Mutex m_aMutex;
 
 public:
+    /// Specify the lockfile URL directly
+    LockFileCommon( const OUString& aURL );
+    /// Let the object generate and own URL based on the original file's URL and a prefix
     LockFileCommon( const OUString& aOrigURL, const OUString& aPrefix );
-    ~LockFileCommon();
+    virtual ~LockFileCommon();
+
+    const OUString& GetURL() const;
+    void SetURL(const OUString& aURL);
+
+    /// This method generates the URL of the lock file based on the document URL and the specified prefix.
+    virtual OUString GenerateURL( const OUString& aOrigURL, const OUString& aPrefix );
 
     static void ParseList( const css::uno::Sequence< sal_Int8 >& aBuffer, std::vector< LockFileEntry > &rOutput );
     static LockFileEntry ParseEntry( const css::uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& o_nCurPos );
@@ -58,6 +67,8 @@ public:
     static OUString GetOOOUserName();
     static OUString GetCurrentLocalTime();
     static LockFileEntry GenerateOwnEntry();
+
+    INetURLObject ResolveLinks( const INetURLObject& aDocURL ) const;
 };
 
 }
