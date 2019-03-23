@@ -53,7 +53,7 @@ public:
 
     // The constructor will throw exception in case the stream can not be opened
     ShareControlFile( const OUString& aOrigURL );
-    ~ShareControlFile();
+    virtual ~ShareControlFile() override;
 
     std::vector< LockFileEntry > GetUsersData();
     void SetUsersDataAndStore( const std::vector< LockFileEntry >& aUserNames );
