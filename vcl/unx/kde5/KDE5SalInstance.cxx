@@ -86,8 +86,6 @@ KDE5SalInstance::createFolderPicker(const uno::Reference<uno::XComponentContext>
     return uno::Reference<ui::dialogs::XFolderPicker2>(new KDE5FilePicker(QFileDialog::Directory));
 }
 
-bool KDE5SalInstance::IsMainThread() const { return qApp->thread() == QThread::currentThread(); }
-
 extern "C" {
 VCLPLUG_KDE5_PUBLIC SalInstance* create_SalInstance()
 {

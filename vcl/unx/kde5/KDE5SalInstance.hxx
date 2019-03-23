@@ -40,8 +40,6 @@ public:
     virtual css::uno::Reference<css::ui::dialogs::XFolderPicker2>
     createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>&) override;
 
-    virtual bool IsMainThread() const override;
-
 private:
     virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
 
