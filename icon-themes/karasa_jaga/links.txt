@@ -26,6 +26,7 @@ cmd/32/arrangemenu.png cmd/32/bringtofront.png
 cmd/32/arrowshapes.png cmd/32/arrowshapes.left-right-arrow.png
 cmd/32/arrowstoolbox.png cmd/32/linearrowend.png
 cmd/32/autofilter.png cmd/32/datafilterautofilter.png
+cmd/32/autoformatmenu.png cmd/32/autocorrectdlg.png
 cmd/32/availabletoolbars.png cmd/32/showtoolbar.png
 cmd/32/backgroundpatterncontroller.png cmd/32/backgroundcolor.png
 cmd/32/basicideappear.png cmd/32/toolsmacroedit.png
@@ -218,7 +219,7 @@ cmd/32/numberingmenu.png cmd/32/outlinebullet.png
 cmd/32/numberliststyle.png cmd/32/defaultnumbering.png
 cmd/32/objectbackone.png cmd/32/backward.png
 cmd/32/objectforwardone.png cmd/32/forward.png
-cmd/32/objectmenu.png cmd/32/insertframe.png
+cmd/32/objectmenu.png cmd/32/insertobject.png
 cmd/32/objectmirrorhorizontal.png cmd/32/fliphorizontal.png
 cmd/32/objectmirrorvertical.png cmd/32/flipvertical.png
 cmd/32/objects3dtoolbox.png cmd/32/cube.png
@@ -232,6 +233,7 @@ cmd/32/outlinedown.png cmd/32/movedown.png
 cmd/32/outlineleft.png cmd/32/incrementlevel.png
 cmd/32/outlineright.png cmd/32/decrementlevel.png
 cmd/32/outlineup.png cmd/32/moveup.png
+cmd/32/pagecolumndialog.png cmd/32/formatcolumns.png
 cmd/32/pagedown.png cmd/32/navigateforward.png
 cmd/32/pageformatdialog.png cmd/32/pagedialog.png
 cmd/32/pagesetup.png cmd/32/pagedialog.png
@@ -274,6 +276,7 @@ cmd/32/sectionalignleft.png cmd/32/objectalignleft.png
 cmd/32/sectionalignright.png cmd/32/objectalignright.png
 cmd/32/sectionaligntop.png cmd/32/alignup.png
 cmd/32/selectmode.png cmd/32/selectobject.png
+cmd/32/sendtomenu.png cmd/32/sendto.png
 cmd/32/setcolumnwidth.png cmd/32/columnwidth.png
 cmd/32/setdefault.png cmd/32/resetattributes.png
 cmd/32/setoptimalcolumnwidthdirect.png cmd/32/setoptimalcolumnwidth.png
@@ -388,6 +391,7 @@ cmd/lc_arrangemenu.png cmd/lc_bringtofront.png
 cmd/lc_arrowshapes.png cmd/lc_arrowshapes.left-right-arrow.png
 cmd/lc_arrowstoolbox.png cmd/lc_linearrowend.png
 cmd/lc_autofilter.png cmd/lc_datafilterautofilter.png
+cmd/lc_autoformatmenu.png cmd/lc_autocorrectdlg.png
 cmd/lc_availabletoolbars.png cmd/lc_showtoolbar.png
 cmd/lc_backgroundpatterncontroller.png cmd/lc_backgroundcolor.png
 cmd/lc_basicideappear.png cmd/lc_toolsmacroedit.png
@@ -568,7 +572,7 @@ cmd/lc_numberingmenu.png cmd/lc_outlinebullet.png
 cmd/lc_numberliststyle.png cmd/lc_defaultnumbering.png
 cmd/lc_objectbackone.png cmd/lc_backward.png
 cmd/lc_objectforwardone.png cmd/lc_forward.png
-cmd/lc_objectmenu.png cmd/lc_insertframe.png
+cmd/lc_objectmenu.png cmd/lc_insertobject.png
 cmd/lc_objectmirrorhorizontal.png cmd/lc_fliphorizontal.png
 cmd/lc_objectmirrorvertical.png cmd/lc_flipvertical.png
 cmd/lc_objects3dtoolbox.png cmd/lc_cube.png
@@ -582,6 +586,7 @@ cmd/lc_outlinedown.png cmd/lc_movedown.png
 cmd/lc_outlineleft.png cmd/lc_incrementlevel.png
 cmd/lc_outlineright.png cmd/lc_decrementlevel.png
 cmd/lc_outlineup.png cmd/lc_moveup.png
+cmd/lc_pagecolumndialog.png cmd/lc_formatcolumns.png
 cmd/lc_pagedown.png cmd/lc_navigateforward.png
 cmd/lc_pageformatdialog.png cmd/lc_pagedialog.png
 cmd/lc_pagesetup.png cmd/lc_pagedialog.png
@@ -621,6 +626,7 @@ cmd/lc_sectionalignleft.png cmd/lc_objectalignleft.png
 cmd/lc_sectionalignright.png cmd/lc_objectalignright.png
 cmd/lc_sectionaligntop.png cmd/lc_alignup.png
 cmd/lc_selectmode.png cmd/lc_selectobject.png
+cmd/lc_sendtomenu.png cmd/lc_sendto.png
 cmd/lc_setcolumnwidth.png cmd/lc_columnwidth.png
 cmd/lc_setdefault.png cmd/lc_resetattributes.png
 cmd/lc_setoptimalcolumnwidthdirect.png cmd/lc_setoptimalcolumnwidth.png
@@ -699,6 +705,7 @@ cmd/sc_arrangemenu.png cmd/sc_bringtofront.png
 cmd/sc_arrowshapes.png cmd/sc_arrowshapes.left-right-arrow.png
 cmd/sc_arrowstoolbox.png cmd/sc_linearrowend.png
 cmd/sc_autofilter.png cmd/sc_datafilterautofilter.png
+cmd/sc_autoformatmenu.png cmd/sc_autocorrectdlg.png
 cmd/sc_availabletoolbars.png cmd/sc_showtoolbar.png
 cmd/sc_backgroundpatterncontroller.png cmd/sc_backgroundcolor.png
 cmd/sc_basicideappear.png cmd/sc_toolsmacroedit.png
@@ -880,7 +887,7 @@ cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png
 cmd/sc_numberliststyle.png cmd/sc_defaultnumbering.png
 cmd/sc_objectbackone.png cmd/sc_backward.png
 cmd/sc_objectforwardone.png cmd/sc_forward.png
-cmd/sc_objectmenu.png cmd/sc_insertframe.png
+cmd/sc_objectmenu.png cmd/sc_insertobject.png
 cmd/sc_objectmirrorhorizontal.png cmd/sc_fliphorizontal.png
 cmd/sc_objectmirrorvertical.png cmd/sc_flipvertical.png
 cmd/sc_objects3dtoolbox.png cmd/sc_cube.png
@@ -894,6 +901,7 @@ cmd/sc_outlinedown.png cmd/sc_movedown.png
 cmd/sc_outlineleft.png cmd/sc_incrementlevel.png
 cmd/sc_outlineright.png cmd/sc_decrementlevel.png
 cmd/sc_outlineup.png cmd/sc_moveup.png
+cmd/sc_pagecolumndialog.png cmd/sc_formatcolumns.png
 cmd/sc_pagedown.png cmd/sc_navigateforward.png
 cmd/sc_pageformatdialog.png cmd/sc_pagedialog.png
 cmd/sc_pagesetup.png cmd/sc_pagedialog.png
@@ -933,6 +941,7 @@ cmd/sc_sectionalignleft.png cmd/sc_objectalignleft.png
 cmd/sc_sectionalignright.png cmd/sc_objectalignright.png
 cmd/sc_sectionaligntop.png cmd/sc_alignup.png
 cmd/sc_selectmode.png cmd/sc_selectobject.png
+cmd/sc_sendtomenu.png cmd/sc_sendto.png
 cmd/sc_setcolumnwidth.png cmd/sc_columnwidth.png
 cmd/sc_setdefault.png cmd/sc_resetattributes.png
 cmd/sc_setoptimalcolumnwidthdirect.png cmd/sc_setoptimalcolumnwidth.png
