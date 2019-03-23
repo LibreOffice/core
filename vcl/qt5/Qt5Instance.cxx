@@ -200,10 +200,11 @@ void Qt5Instance::ImplRunInMain()
     (void)this; // suppress unhelpful [loplugin:staticmethods]; can't be static
 }
 
-Qt5Instance::Qt5Instance(bool bUseCairo)
+Qt5Instance::Qt5Instance(QApplication* pQApp, bool bUseCairo)
     : SalGenericInstance(std::make_unique<Qt5YieldMutex>())
     , m_postUserEventId(-1)
     , m_bUseCairo(bUseCairo)
+    , m_pQApplication(pQApp)
 {
     ImplSVData* pSVData = ImplGetSVData();
     if (bUseCairo)
@@ -441,13 +442,11 @@ Reference<XInterface> Qt5Instance::CreateDropTarget()
     return Reference<XInterface>(static_cast<cppu::OWeakObject*>(new Qt5DropTarget()));
 }
 
-extern "C" {
-VCLPLUG_QT5_PUBLIC SalInstance* create_SalInstance()
+void Qt5Instance::AllocFakeCmdlineArgs(char** &rFakeArgv, int* &rFakeArgc, char** &rFakeArgvFreeable)
 {
     OString aVersion(qVersion());
     SAL_INFO("vcl.qt5", "qt version string is " << aVersion);
 
-    QApplication* pQApplication;
     char** pFakeArgvFreeable = nullptr;
 
     int nFakeArgc = 2;
@@ -488,36 +487,65 @@ VCLPLUG_QT5_PUBLIC SalInstance* create_SalInstance()
     for (int i = 0; i < nFakeArgc; i++)
         pFakeArgv[i] = pFakeArgvFreeable[i];
 
+    int* pFakeArgc = new int;
+    *pFakeArgc = nFakeArgc;
+
+    rFakeArgv = pFakeArgv;
+    rFakeArgc = pFakeArgc;
+    rFakeArgvFreeable = pFakeArgvFreeable;
+}
+
+void Qt5Instance::MoveFakeCmdlineArgs(char** pFakeArgv, int* pFakeArgc, char** pFakeArgvFreeable)
+{
+    m_pFakeArgv.reset(pFakeArgv);
+    m_pFakeArgc.reset(pFakeArgc);
+    m_pFakeArgvFreeable.reset(pFakeArgvFreeable);
+}
+
+char* Qt5Instance::UnsetSessionManager()
+{
     char* session_manager = nullptr;
     if (getenv("SESSION_MANAGER") != nullptr)
     {
         session_manager = strdup(getenv("SESSION_MANAGER"));
         unsetenv("SESSION_MANAGER");
     }
+    return session_manager;
+}
 
-    int* pFakeArgc = new int;
-    *pFakeArgc = nFakeArgc;
-    pQApplication = new QApplication(*pFakeArgc, pFakeArgv);
-
+void Qt5Instance::RestoreSessionManager(char* session_manager)
+{
     if (session_manager != nullptr)
     {
         // coverity[tainted_string] - trusted source for setenv
         setenv("SESSION_MANAGER", session_manager, 1);
         free(session_manager);
     }
+}
 
+extern "C" {
+VCLPLUG_QT5_PUBLIC SalInstance* create_SalInstance()
+{
+    static const bool bUseCairo = (nullptr != getenv("SAL_VCL_QT5_USE_CAIRO"));
+
+    char** pFakeArgv;
+    int* pFakeArgc;
+    char** pFakeArgvFreeable;
+    Qt5Instance::AllocFakeCmdlineArgs(pFakeArgv, pFakeArgc, pFakeArgvFreeable);
+
+    QApplication* pQApp;
+    {
+        char* session_manager = Qt5Instance::UnsetSessionManager();
+        pQApp = new QApplication(*pFakeArgc, pFakeArgv);
+        Qt5Instance::RestoreSessionManager(session_manager);
+    }
     QApplication::setQuitOnLastWindowClosed(false);
 
-    static const bool bUseCairo = (nullptr != getenv("SAL_VCL_QT5_USE_CAIRO"));
-    Qt5Instance* pInstance = new Qt5Instance(bUseCairo);
+    Qt5Instance* pInstance = new Qt5Instance(pQApp, bUseCairo);
+    pInstance->MoveFakeCmdlineArgs(pFakeArgv, pFakeArgc, pFakeArgvFreeable);
 
     // initialize SalData
     new Qt5Data(pInstance);
-
-    pInstance->m_pQApplication.reset(pQApplication);
-    pInstance->m_pFakeArgvFreeable.reset(pFakeArgvFreeable);
-    pInstance->m_pFakeArgv.reset(pFakeArgv);
-    pInstance->m_pFakeArgc.reset(pFakeArgc);
 
     return pInstance;
 }
