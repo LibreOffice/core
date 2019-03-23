@@ -200,10 +200,11 @@ void Qt5Instance::ImplRunInMain()
     (void)this; // suppress unhelpful [loplugin:staticmethods]; can't be static
 }
 
-Qt5Instance::Qt5Instance(bool bUseCairo)
+Qt5Instance::Qt5Instance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
     : SalGenericInstance(std::make_unique<Qt5YieldMutex>())
     , m_postUserEventId(-1)
     , m_bUseCairo(bUseCairo)
+    , m_pQApplication(std::move(pQApp))
 {
     ImplSVData* pSVData = ImplGetSVData();
     if (bUseCairo)
@@ -232,8 +233,6 @@ Qt5Instance::~Qt5Instance()
     // force freeing the QApplication before freeing the arguments,
     // as it uses references to the provided arguments!
     m_pQApplication.reset();
-    for (int i = 0; i < *m_pFakeArgc; i++)
-        free(m_pFakeArgvFreeable[i]);
 }
 
 void Qt5Instance::deleteObjectLater(QObject* pObject) { pObject->deleteLater(); }
@@ -441,18 +440,16 @@ Reference<XInterface> Qt5Instance::CreateDropTarget()
     return Reference<XInterface>(static_cast<cppu::OWeakObject*>(new Qt5DropTarget()));
 }
 
-extern "C" {
-VCLPLUG_QT5_PUBLIC SalInstance* create_SalInstance()
+void Qt5Instance::AllocFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
+                                       std::unique_ptr<int>& rFakeArgc,
+                                       std::vector<FreeableArg>& rFakeArgvFreeable)
 {
     OString aVersion(qVersion());
     SAL_INFO("vcl.qt5", "qt version string is " << aVersion);
 
-    QApplication* pQApplication;
-    char** pFakeArgvFreeable = nullptr;
-
-    int nFakeArgc = 2;
     const sal_uInt32 nParams = osl_getCommandArgCount();
     OString aDisplay;
+    sal_uInt32 nDisplayValueIdx = 0;
     OUString aParam, aBin;
 
     for (sal_uInt32 nIdx = 0; nIdx < nParams; ++nIdx)
@@ -460,33 +457,48 @@ VCLPLUG_QT5_PUBLIC SalInstance* create_SalInstance()
         osl_getCommandArg(nIdx, &aParam.pData);
         if (aParam != "-display")
             continue;
-        if (!pFakeArgvFreeable)
-        {
-            pFakeArgvFreeable = new char*[nFakeArgc + 2];
-            pFakeArgvFreeable[nFakeArgc++] = strdup("-display");
-        }
-        else
-            free(pFakeArgvFreeable[nFakeArgc]);
-
         ++nIdx;
-        osl_getCommandArg(nIdx, &aParam.pData);
-        aDisplay = OUStringToOString(aParam, osl_getThreadTextEncoding());
-        pFakeArgvFreeable[nFakeArgc] = strdup(aDisplay.getStr());
+        nDisplayValueIdx = nIdx;
     }
-    if (!pFakeArgvFreeable)
-        pFakeArgvFreeable = new char*[nFakeArgc];
-    else
-        nFakeArgc++;
 
     osl_getExecutableFile(&aParam.pData);
     osl_getSystemPathFromFileURL(aParam.pData, &aBin.pData);
     OString aExec = OUStringToOString(aBin, osl_getThreadTextEncoding());
-    pFakeArgvFreeable[0] = strdup(aExec.getStr());
-    pFakeArgvFreeable[1] = strdup("--nocrashhandler");
 
-    char** pFakeArgv = new char*[nFakeArgc];
+    std::vector<FreeableArg> aFakeArgvFreeable;
+    aFakeArgvFreeable.reserve(4);
+    aFakeArgvFreeable.emplace_back(strdup(aExec.getStr()));
+    aFakeArgvFreeable.emplace_back(strdup("--nocrashhandler"));
+    if (nDisplayValueIdx)
+    {
+        aFakeArgvFreeable.emplace_back(strdup("-display"));
+        osl_getCommandArg(nDisplayValueIdx, &aParam.pData);
+        aDisplay = OUStringToOString(aParam, osl_getThreadTextEncoding());
+        aFakeArgvFreeable.emplace_back(strdup(aDisplay.getStr()));
+    }
+    rFakeArgvFreeable.swap(aFakeArgvFreeable);
+
+    const int nFakeArgc = rFakeArgvFreeable.size();
+    rFakeArgv.reset(new char*[nFakeArgc]);
     for (int i = 0; i < nFakeArgc; i++)
-        pFakeArgv[i] = pFakeArgvFreeable[i];
+        rFakeArgv[i] = rFakeArgvFreeable[i].get();
+
+    rFakeArgc.reset(new int);
+    *rFakeArgc = nFakeArgc;
+}
+
+void Qt5Instance::MoveFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
+                                      std::unique_ptr<int>& rFakeArgc,
+                                      std::vector<FreeableArg>& rFakeArgvFreeable)
+{
+    m_pFakeArgv = std::move(rFakeArgv);
+    m_pFakeArgc = std::move(rFakeArgc);
+    m_pFakeArgvFreeable.swap(rFakeArgvFreeable);
+}
+
+std::unique_ptr<QApplication> Qt5Instance::CreateQApplication(int& nArgc, char** pArgv)
+{
+    QApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
 
     char* session_manager = nullptr;
     if (getenv("SESSION_MANAGER") != nullptr)
@@ -495,11 +507,7 @@ VCLPLUG_QT5_PUBLIC SalInstance* create_SalInstance()
         unsetenv("SESSION_MANAGER");
     }
 
-    QApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
-
-    int* pFakeArgc = new int;
-    *pFakeArgc = nFakeArgc;
-    pQApplication = new QApplication(*pFakeArgc, pFakeArgv);
+    std::unique_ptr<QApplication> pQApp = std::make_unique<QApplication>(nArgc, pArgv);
 
     if (session_manager != nullptr)
     {
@@ -509,17 +517,26 @@ VCLPLUG_QT5_PUBLIC SalInstance* create_SalInstance()
     }
 
     QApplication::setQuitOnLastWindowClosed(false);
+    return pQApp;
+}
 
+extern "C" {
+VCLPLUG_QT5_PUBLIC SalInstance* create_SalInstance()
+{
     static const bool bUseCairo = (nullptr != getenv("SAL_VCL_QT5_USE_CAIRO"));
-    Qt5Instance* pInstance = new Qt5Instance(bUseCairo);
 
-    // initialize SalData
+    std::unique_ptr<char* []> pFakeArgv;
+    std::unique_ptr<int> pFakeArgc;
+    std::vector<FreeableArg> aFakeArgvFreeable;
+    Qt5Instance::AllocFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
+
+    std::unique_ptr<QApplication> pQApp
+        = Qt5Instance::CreateQApplication(*pFakeArgc, pFakeArgv.get());
+
+    Qt5Instance* pInstance = new Qt5Instance(pQApp, bUseCairo);
+    pInstance->MoveFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
+
     new Qt5Data(pInstance);
-
-    pInstance->m_pQApplication.reset(pQApplication);
-    pInstance->m_pFakeArgvFreeable.reset(pFakeArgvFreeable);
-    pInstance->m_pFakeArgv.reset(pFakeArgv);
-    pInstance->m_pFakeArgc.reset(pFakeArgc);
 
     return pInstance;
 }
