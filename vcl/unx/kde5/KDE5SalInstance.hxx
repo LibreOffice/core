@@ -26,14 +26,16 @@
 #include <qt5/Qt5Instance.hxx>
 #include "KDE5SalFrame.hxx"
 
+class QApplication;
 class SalYieldMutex;
 class SalFrame;
 
 class KDE5SalInstance : public Qt5Instance
 {
     Q_OBJECT
+
 public:
-    explicit KDE5SalInstance();
+    explicit KDE5SalInstance(std::unique_ptr<QApplication>& pQApp);
 
     virtual bool hasNativeFileSelection() const override { return true; }
 
