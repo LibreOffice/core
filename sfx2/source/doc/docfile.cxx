@@ -941,7 +941,7 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const OUString& aD
     // show the interaction regarding the document opening
     uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
 
-    if ( ::svt::DocumentLockFile::IsInteractionAllowed() && xHandler.is() && ( bIsLoading || !bHandleSysLocked || bOwnLock ) )
+    if ( xHandler.is() && ( bIsLoading || !bHandleSysLocked || bOwnLock ) )
     {
         OUString aDocumentURL = GetURLObject().GetLastName();
         OUString aInfo;
