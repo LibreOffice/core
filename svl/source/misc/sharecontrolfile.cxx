@@ -55,10 +55,10 @@ namespace svt {
 ShareControlFile::ShareControlFile( const OUString& aOrigURL )
 : LockFileCommon( aOrigURL, ".~sharing." )
 {
-    if ( !m_xStream.is() && !m_aURL.isEmpty() )
+    if ( !m_xStream.is() && !GetURL().isEmpty() )
     {
         uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
-        ::ucbhelper::Content aContent = ::ucbhelper::Content( m_aURL, xDummyEnv, comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aContent = ::ucbhelper::Content( GetURL(), xDummyEnv, comphelper::getProcessComponentContext() );
 
         uno::Reference< ucb::XContentIdentifier > xContId( aContent.get().is() ? aContent.get()->getIdentifier() : nullptr );
         if ( !xContId.is() || xContId->getContentProviderScheme() != "file" )
@@ -329,7 +329,7 @@ void ShareControlFile::RemoveFile()
     Close();
 
     uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext()));
-    xSimpleFileAccess->kill( m_aURL );
+    xSimpleFileAccess->kill( GetURL() );
 }
 
 } // namespace svt
