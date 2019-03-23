@@ -667,7 +667,7 @@ void SalInstanceWidget::HandleEventListener(VclWindowEvent& rEvent)
 bool SalInstanceWidget::HandleKeyEventListener(VclWindowEvent& rEvent)
 {
     // we get all key events here, ignore them unless we have focus
-    if (!m_xWidget->HasFocus())
+    if (!has_focus())
         return false;
     if (rEvent.GetId() == VclEventId::WindowKeyInput)
     {
@@ -3847,6 +3847,13 @@ public:
     const OUString* getEntryData(int index) const
     {
         return static_cast<const OUString*>(m_xComboBox->GetEntryData(index));
+    }
+
+    // ComboBoxes are comprised of multiple subwidgets, consider the lot as
+    // one thing for focus
+    virtual bool has_focus() const override
+    {
+        return m_xWidget->HasChildPathFocus();
     }
 
     virtual OUString get_active_id() const override
