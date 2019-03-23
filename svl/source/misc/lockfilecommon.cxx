@@ -54,7 +54,35 @@ using namespace ::com::sun::star;
 namespace svt {
 
 
+LockFileCommon::LockFileCommon( const OUString& aURL )
+{
+    m_aURL = aURL;
+}
+
 LockFileCommon::LockFileCommon( const OUString& aOrigURL, const OUString& aPrefix )
+{
+    m_aURL = GenerateURL(aOrigURL, aPrefix);
+}
+
+
+LockFileCommon::~LockFileCommon()
+{
+}
+
+
+const OUString& LockFileCommon::GetURL() const
+{
+    return m_aURL;
+}
+
+
+void LockFileCommon::SetURL(const OUString& aURL)
+{
+    m_aURL = aURL;
+}
+
+
+OUString LockFileCommon::GenerateURL( const OUString& aOrigURL, const OUString& aPrefix )
 {
     INetURLObject aDocURL = ResolveLinks( INetURLObject( aOrigURL ) );
 
@@ -62,12 +90,7 @@ LockFileCommon::LockFileCommon( const OUString& aOrigURL, const OUString& aPrefi
     aShareURLString += aPrefix;
     aShareURLString += aDocURL.GetName();
     aShareURLString += "%23"; // '#'
-    m_aURL = INetURLObject( aShareURLString ).GetMainURL( INetURLObject::DecodeMechanism::NONE );
-}
-
-
-LockFileCommon::~LockFileCommon()
-{
+    return INetURLObject( aShareURLString ).GetMainURL( INetURLObject::DecodeMechanism::NONE );
 }
 
 
