@@ -8369,6 +8369,11 @@ public:
         weld::Widget::connect_focus_out(rLink);
     }
 
+    virtual bool has_focus() const override
+    {
+        return gtk_widget_has_focus(m_pToggleButton) || GtkInstanceWidget::has_focus();
+    }
+
     virtual ~GtkInstanceComboBox() override
     {
         if (m_nAutoCompleteIdleId)
