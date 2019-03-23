@@ -2011,7 +2011,11 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
             goto Err;
         }
         rF.nLRes -= rF.nSRes;                       // now: nLRes = length
-        rF.nSRes++;                                 // Endpos including Markers
+        if (o3tl::checked_add<WW8_CP>(rF.nSRes, 1, rF.nSRes)) // Endpos including Markers
+        {
+            rF.nLen = 0;
+            goto Err;
+        }
         rF.nLRes--;
     }else{
         rF.nLRes = 0;                               // no result found
