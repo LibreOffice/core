@@ -124,11 +124,7 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
 
     for (auto& family : aFDB.families())
         for (auto& style : aFDB.styles(family))
-        {
-            // Just get any size - we don't care
-            QList<int> sizes = aFDB.smoothSizes(family, style);
-            pPFC->Add(Qt5FontFace::fromQFont(aFDB.font(family, style, *sizes.begin())));
-        }
+            pPFC->Add(Qt5FontFace::fromQFontDatabase(family, style));
 }
 
 void Qt5Graphics::ClearDevFontCache() {}

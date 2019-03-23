@@ -35,6 +35,7 @@ class Qt5FontFace : public PhysicalFontFace
 {
 public:
     static Qt5FontFace* fromQFont(const QFont& rFont);
+    static Qt5FontFace* fromQFontDatabase(const QString& aFamily, const QString& aStyle);
     static void fillAttributesFromQFont(const QFont& rFont, FontAttributes& rFA);
 
     sal_IntPtr GetFontId() const override;
