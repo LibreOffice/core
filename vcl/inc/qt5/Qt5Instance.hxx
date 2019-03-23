@@ -44,7 +44,6 @@ class VCLPLUG_QT5_PUBLIC Qt5Instance : public QObject,
     const bool m_bUseCairo;
     std::unordered_map<OUString, css::uno::Reference<css::uno::XInterface>> m_aClipboards;
 
-public:
     std::unique_ptr<QApplication> m_pQApplication;
     std::unique_ptr<char* []> m_pFakeArgvFreeable;
     std::unique_ptr<char* []> m_pFakeArgv;
@@ -61,8 +60,14 @@ Q_SIGNALS:
     void deleteObjectLaterSignal(QObject* pObject);
 
 public:
-    explicit Qt5Instance(bool bUseCairo = false);
+    explicit Qt5Instance(QApplication* pQApp, bool bUseCairo = false);
     virtual ~Qt5Instance() override;
+
+    // handle common SalInstance setup
+    static void AllocFakeCmdlineArgs(char**& rFakeArgv, int*& rFakeArgc, char**& rFakeArgvFreeable);
+    void MoveFakeCmdlineArgs(char** pFakeArgv, int* pFakeArgc, char** pFakeArgvFreeable);
+    static char* UnsetSessionManager();
+    static void RestoreSessionManager(char* session_manager);
 
     void RunInMainThread(std::function<void()> func);
 
