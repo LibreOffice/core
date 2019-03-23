@@ -28,6 +28,8 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySetInfo.hpp
     - sot/storage.hxx
+    # Needed for define
+    - sfx2/app.hxx
     sd/inc/sdpage.hxx:
     # base class has to be a complete type
     - com/sun/star/drawing/XDrawPage.hpp

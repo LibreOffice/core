@@ -32,6 +32,7 @@
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <rtl/ref.hxx>
+#include <svtools/htmlout.hxx>
 
 #include <shellio.hxx>
 #include <wrt_fn.hxx>

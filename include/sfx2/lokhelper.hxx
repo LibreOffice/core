@@ -16,8 +16,6 @@
 #include <cstddef>
 #include <rtl/string.hxx>
 
-class SfxViewShell;
-
 class SFX2_DLLPUBLIC SfxLokHelper
 {
 public:

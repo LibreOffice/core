@@ -29,9 +29,10 @@
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/view/PrintableState.hpp>
+
+namespace com::sun::star::beans { struct PropertyValue; }
 
 /**
   these values get stored in streams in a 16-bit value
@@ -229,8 +230,6 @@ public:
     const css::uno::Reference< css::frame::XController2 >& GetController() const
                         { return xViewController; }
 };
-
-class Printer;
 
 class SfxPrintingHint : public SfxViewEventHint
 {

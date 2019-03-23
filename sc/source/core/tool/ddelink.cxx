@@ -20,6 +20,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/string.hxx>
 #include <osl/thread.h>
+#include <sot/exchange.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/zforlist.hxx>

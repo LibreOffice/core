@@ -34,6 +34,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svtools/langtab.hxx>
 #include <vcl/graphicfilter.hxx>

@@ -35,6 +35,7 @@
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <unotools/resmgr.hxx>
 #include <vcl/settings.hxx>
+#include <sfx2/app.hxx>
 
 namespace basctl
 {

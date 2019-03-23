@@ -30,6 +30,7 @@
 #include <DrawDocShell.hxx>
 #include <editeng/eeitem.hxx>
 
+#include <vcl/idle.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 

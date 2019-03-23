@@ -22,9 +22,8 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 
-#include <tools/link.hxx>
 #include <tools/ref.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <memory>
 
 namespace com { namespace sun { namespace star { namespace uno
@@ -32,9 +31,9 @@ namespace com { namespace sun { namespace star { namespace uno
     class Any;
 }}}}
 namespace weld { class Window; }
-namespace rtl {
-    class OUString;
-}
+
+template <typename Arg, typename Ret> class Link;
+namespace com::sun::star::io { class XInputStream; }
 
 #ifndef ADVISEMODE_NODATA
 // Must be the same value as Ole2 ADVF_*

@@ -60,6 +60,7 @@
 #include <svl/eitem.hxx>
 #include <vcl/oldprintadaptor.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/dispatch.hxx>
 #include <cmdid.h>

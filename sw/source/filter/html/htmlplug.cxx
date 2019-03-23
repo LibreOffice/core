@@ -26,11 +26,13 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/frmhtml.hxx>
 #include <sfx2/frmhtmlw.hxx>
+#include <sfx2/frmdescr.hxx>
 #include <vcl/wrkwin.hxx>
 #include <sot/storage.hxx>
 #include <svx/xoutbmp.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 #include <SwAppletImpl.hxx>

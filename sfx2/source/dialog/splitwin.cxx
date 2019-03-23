@@ -27,8 +27,10 @@
 #include <unotools/viewoptions.hxx>
 #include <sal/log.hxx>
 
+#include <vcl/event.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/svapp.hxx>
 
 #include <splitwin.hxx>
 #include <workwin.hxx>

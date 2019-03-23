@@ -13,6 +13,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <sfx2/filedlghelper.hxx>
 #include <tools/urlobj.hxx>

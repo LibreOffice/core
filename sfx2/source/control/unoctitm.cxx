@@ -60,6 +60,7 @@
 #include <sfx2/request.hxx>
 #include <statcach.hxx>
 #include <sfx2/msgpool.hxx>
+#include <sfx2/msg.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <osl/file.hxx>

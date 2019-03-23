@@ -22,6 +22,7 @@
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <sot/exchange.hxx>
 #include <sot/stg.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>

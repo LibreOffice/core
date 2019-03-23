@@ -32,6 +32,7 @@
 #include <rtl/ustring.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/shell.hxx>

@@ -37,6 +37,7 @@
 #include <vcl/wrkwin.hxx>
 #include <svl/lckbitem.hxx>
 #include <svl/eitem.hxx>
+#include <svl/macitem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <unotools/pathoptions.hxx>

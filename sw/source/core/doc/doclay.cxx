@@ -20,6 +20,7 @@
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
 #include <hintids.hxx>
+#include <sot/exchange.hxx>
 #include <sfx2/progress.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>

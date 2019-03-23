@@ -27,6 +27,7 @@
 #include <svx/passwd.hxx>
 #include <ucbhelper/content.hxx>
 #include <rtl/uri.hxx>
+#include <sfx2/app.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/filedlghelper.hxx>

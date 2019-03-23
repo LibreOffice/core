@@ -19,14 +19,18 @@
 #ifndef INCLUDED_SFX2_MAILMODELAPI_HXX
 #define INCLUDED_SFX2_MAILMODELAPI_HXX
 
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
-#include <tools/link.hxx>
 #include <vector>
 #include <memory>
+
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
+namespace com::sun::star::uno { class XInterface; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
 
 // class AddressList_Impl ------------------------------------------------
 typedef ::std::vector< OUString > AddressList_Impl;

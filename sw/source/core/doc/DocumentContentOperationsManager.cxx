@@ -72,6 +72,7 @@
 #include <unotools/charclass.hxx>
 #include <unotools/configmgr.hxx>
 #include <sfx2/Metadatable.hxx>
+#include <sot/exchange.hxx>
 #include <svl/stritem.hxx>
 #include <svl/itemiter.hxx>
 #include <svx/svdobj.hxx>

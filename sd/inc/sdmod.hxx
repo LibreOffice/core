@@ -27,6 +27,7 @@
 #include "sddllapi.h"
 #include <svl/lstner.hxx>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <sal/types.h>
 #include <vcl/virdev.hxx>

@@ -31,9 +31,6 @@
 #include <climits>
 
 class SfxItemPool;
-class SfxItemSet;
-class SfxPoolItem;
-class SfxRequest;
 
 enum class SfxSlotMode {
     NONE            =    0x0000L, // default

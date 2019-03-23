@@ -23,6 +23,7 @@
 #include <bitmaps.hlst>
 #include <strings.hrc>
 #include <tools/urlobj.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/pathoptions.hxx>

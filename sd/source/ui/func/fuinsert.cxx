@@ -37,6 +37,7 @@
 #include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/msgpool.hxx>
+#include <sfx2/msg.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svtools/insdlg.hxx>
 #include <sfx2/request.hxx>

@@ -695,3 +695,6 @@ blacklist:
     include/sfx2/DocumentMetadataAccess.hxx:
     # base class has to be a complete type
     - com/sun/star/rdf/XDocumentMetadataAccess.hpp
+    include/sfx2/mieclip.hxx:
+    # Needed for implicit dtor
+    - tools/stream.hxx

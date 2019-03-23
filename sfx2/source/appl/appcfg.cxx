@@ -48,6 +48,7 @@
 #include <unotools/securityoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
+#include <svtools/imgdef.hxx>
 #include <vcl/toolbox.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>

@@ -34,6 +34,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <tools/datetime.hxx>
 #include <unotools/datetime.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
 #include <svl/fstathelper.hxx>
 #include <config_folders.h>

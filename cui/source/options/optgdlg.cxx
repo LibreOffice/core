@@ -96,6 +96,7 @@
 #include <svtools/apearcfg.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/restartdialog.hxx>
+#include <svtools/imgdef.hxx>
 #include <comphelper/solarmutex.hxx>
 
 #include <config_vclplug.h>

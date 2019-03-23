@@ -39,6 +39,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/msgpool.hxx>
+#include <sfx2/msg.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;

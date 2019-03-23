@@ -25,6 +25,7 @@
 #include <svl/macitem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <poolfmt.hxx>
