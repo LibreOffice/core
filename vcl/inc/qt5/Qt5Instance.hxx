@@ -27,11 +27,20 @@
 
 #include <QtCore/QObject>
 
+#include <cstdlib>
 #include <functional>
+#include <memory>
+#include <vector>
 
 class QApplication;
 class SalYieldMutex;
 class SalFrame;
+
+struct StdFreeCStr
+{
+    void operator()(char* arg) const noexcept { std::free(arg); }
+};
+using FreeableCStr = std::unique_ptr<char[], StdFreeCStr>;
 
 class VCLPLUG_QT5_PUBLIC Qt5Instance : public QObject,
                                        public SalGenericInstance,
@@ -44,9 +53,8 @@ class VCLPLUG_QT5_PUBLIC Qt5Instance : public QObject,
     const bool m_bUseCairo;
     std::unordered_map<OUString, css::uno::Reference<css::uno::XInterface>> m_aClipboards;
 
-public:
     std::unique_ptr<QApplication> m_pQApplication;
-    std::unique_ptr<char* []> m_pFakeArgvFreeable;
+    std::vector<FreeableCStr> m_pFakeArgvFreeable;
     std::unique_ptr<char* []> m_pFakeArgv;
     std::unique_ptr<int> m_pFakeArgc;
 
@@ -61,8 +69,16 @@ Q_SIGNALS:
     void deleteObjectLaterSignal(QObject* pObject);
 
 public:
-    explicit Qt5Instance(bool bUseCairo = false);
+    explicit Qt5Instance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo = false);
     virtual ~Qt5Instance() override;
+
+    // handle common SalInstance setup
+    static void AllocFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
+                                     std::unique_ptr<int>& rFakeArgc,
+                                     std::vector<FreeableCStr>& rFakeArgvFreeable);
+    void MoveFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv, std::unique_ptr<int>& rFakeArgc,
+                             std::vector<FreeableCStr>& rFakeArgvFreeable);
+    static std::unique_ptr<QApplication> CreateQApplication(int& nArgc, char** pArgv);
 
     void RunInMainThread(std::function<void()> func);
 
