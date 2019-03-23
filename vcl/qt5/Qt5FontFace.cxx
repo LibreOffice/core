@@ -32,6 +32,7 @@
 #include <PhysicalFontCollection.hxx>
 
 #include <QtGui/QFont>
+#include <QtGui/QFontDatabase>
 #include <QtGui/QFontInfo>
 #include <QtGui/QRawFont>
 
@@ -45,18 +46,10 @@ Qt5FontFace::Qt5FontFace(const Qt5FontFace& rSrc)
         m_xCharMap = rSrc.m_xCharMap;
 }
 
-void Qt5FontFace::fillAttributesFromQFont(const QFont& rFont, FontAttributes& rFA)
+static FontWeight fromQFontWeight(int nWeight)
 {
-    QFontInfo aFontInfo(rFont);
-
-    rFA.SetFamilyName(toOUString(aFontInfo.family()));
-    if (IsStarSymbol(toOUString(aFontInfo.family())))
-        rFA.SetSymbolFlag(true);
-    rFA.SetStyleName(toOUString(aFontInfo.styleName()));
-    rFA.SetPitch(aFontInfo.fixedPitch() ? PITCH_FIXED : PITCH_VARIABLE);
-
     FontWeight eWeight = WEIGHT_DONTKNOW;
-    switch (aFontInfo.weight())
+    switch (nWeight)
     {
         case QFont::Thin:
             eWeight = WEIGHT_THIN;
@@ -86,7 +79,19 @@ void Qt5FontFace::fillAttributesFromQFont(const QFont& rFont, FontAttributes& rF
             eWeight = WEIGHT_BLACK;
             break;
     }
-    rFA.SetWeight(eWeight);
+    return eWeight;
+}
+
+void Qt5FontFace::fillAttributesFromQFont(const QFont& rFont, FontAttributes& rFA)
+{
+    QFontInfo aFontInfo(rFont);
+
+    rFA.SetFamilyName(toOUString(aFontInfo.family()));
+    if (IsStarSymbol(toOUString(aFontInfo.family())))
+        rFA.SetSymbolFlag(true);
+    rFA.SetStyleName(toOUString(aFontInfo.styleName()));
+    rFA.SetPitch(aFontInfo.fixedPitch() ? PITCH_FIXED : PITCH_VARIABLE);
+    rFA.SetWeight(fromQFontWeight(aFontInfo.weight()));
 
     switch (aFontInfo.style())
     {
@@ -107,6 +112,20 @@ Qt5FontFace* Qt5FontFace::fromQFont(const QFont& rFont)
     FontAttributes aFA;
     fillAttributesFromQFont(rFont, aFA);
     return new Qt5FontFace(aFA, rFont.toString());
+}
+
+Qt5FontFace* Qt5FontFace::fromQFontDatabase(const QString& aFamily, const QString& aStyle)
+{
+    QFontDatabase aFDB;
+    FontAttributes aFA;
+    aFA.SetFamilyName(toOUString(aFamily));
+    if (IsStarSymbol(aFA.GetFamilyName()))
+        aFA.SetSymbolFlag(true);
+    aFA.SetStyleName(toOUString(aStyle));
+    aFA.SetPitch(aFDB.isFixedPitch(aFamily, aStyle) ? PITCH_FIXED : PITCH_VARIABLE);
+    aFA.SetWeight(fromQFontWeight(aFDB.weight(aFamily, aStyle)));
+    aFA.SetItalic(aFDB.italic(aFamily, aStyle) ? ITALIC_NORMAL : ITALIC_NONE);
+    return new Qt5FontFace(aFA, aFamily + "," + aStyle);
 }
 
 Qt5FontFace::Qt5FontFace(const FontAttributes& rFA, const QString& rFontID)
