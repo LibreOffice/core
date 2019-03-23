@@ -122,13 +122,13 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <items>
-                      <item id="1" context="tocindexpage|liststore1">Table of Contents</item>
-                      <item id="2" context="tocindexpage|liststore1">Alphabetical Index</item>
-                      <item id="4" context="tocindexpage|liststore1">Table of Figures</item>
-                      <item id="8" context="tocindexpage|liststore1">Index of Tables</item>
-                      <item id="16" context="tocindexpage|liststore1">User-Defined</item>
-                      <item id="32" context="tocindexpage|liststore1">Table of Objects</item>
-                      <item id="64" context="tocindexpage|liststore1">Bibliography</item>
+                      <item id="1" translatable="yes" context="tocindexpage|liststore1">Table of Contents</item>
+                      <item id="2" translatable="yes" context="tocindexpage|liststore1">Alphabetical Index</item>
+                      <item id="4" translatable="yes" context="tocindexpage|liststore1">Table of Figures</item>
+                      <item id="8" translatable="yes" context="tocindexpage|liststore1">Index of Tables</item>
+                      <item id="16" translatable="yes" context="tocindexpage|liststore1">User-Defined</item>
+                      <item id="32" translatable="yes" context="tocindexpage|liststore1">Table of Objects</item>
+                      <item id="64" translatable="yes" context="tocindexpage|liststore1">Bibliography</item>
                     </items>
                   </object>
                   <packing>
