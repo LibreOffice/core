@@ -97,9 +97,6 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
         return;
 
     QFontDatabase aFDB;
-    QStringList aFontFamilyList;
-    if (bUseFontconfig)
-        aFontFamilyList = aFDB.families();
     GlyphCache& rGC = GlyphCache::GetInstance();
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     ::std::vector<psp::fontID> aList;
@@ -120,18 +117,6 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
         aDFA.IncreaseQualityBy(4096);
         const OString& rFileName = rMgr.getFontFileSysPath(aInfo.m_nID);
         rGC.AddFontFile(rFileName, nFaceNum, nVariantNum, aInfo.m_nID, aDFA);
-
-        // register font files unknown to Qt
-        if (bUseFontconfig)
-        {
-            QString aFilename = toQString(
-                OStringToOUString(rMgr.getFontFileSysPath(aInfo.m_nID), RTL_TEXTENCODING_UTF8));
-            QRawFont aRawFont(aFilename, 0.0);
-            QString aFamilyName = aRawFont.familyName();
-            if (!aFontFamilyList.contains(aFamilyName)
-                || !aFDB.styles(aFamilyName).contains(aRawFont.styleName()))
-                QFontDatabase::addApplicationFont(aFilename);
-        }
     }
 
     if (bUseFontconfig)
