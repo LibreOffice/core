@@ -1000,184 +1000,101 @@
         OTHER DEALINGS IN THE SOFTWARE.</p>
     </div>
     <div class="WNT">
-    <h2>Microsoft Visual C++ 2010 Runtime Libraries</h2>
-    <p>The following software may be included in this product: Microsoft Visual C++ 2010 Runtime Libraries. Use of any
-    of this software is governed by the terms of the license below:</p>
-    <p>MICROSOFT SOFTWARE LICENSE TERMS</p>
-    <p>MICROSOFT VISUAL C++ 2010 RUNTIME LIBRARIES WITH SERVICE PACK 1</p>
-    <p>These license terms are an agreement between Microsoft Corporation (or based on where you live, one of its
-    affiliates) and you. Please read them. They apply to the software named above, which includes the media on which
-    you received it, if any. The terms also apply to any Microsoft</p>
-    <ul>
-        <li>
-            <p style="margin-left:0cm;"><span class="Bullet_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">•</span>updates, </p>
-        </li>
-        <li>
-            <p style="margin-left:0cm;"><span class="Bullet_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">•</span>supplements, </p>
-        </li>
-        <li>
-            <p style="margin-left:0cm;"><span class="Bullet_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">•</span>Internet-based services, and  </p>
-        </li>
-        <li>
-            <p style="margin-left:0cm;"><span class="Bullet_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">•</span>support services </p>
-        </li>
-    </ul>
-    <p>for this software, unless other terms accompany those items. If so, those terms apply.</p>
-    <p>BY USING THE SOFTWARE, YOU ACCEPT THESE TERMS. IF YOU DO NOT ACCEPT THEM, DO NOT USE THE SOFTWARE.</p>
-    <p>If you comply with these license terms, you have the rights below.</p>
-    <ol>
-        <li>
-            <p style="margin-left:0cm;"><span class="Numbering_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">1.</span><span class="T5">INSTALLATION</span> <span class=
-            "T2">AND USE RIGHTS.</span> You may install and use any number of copies of the software on your
-            devices. </p>
-        </li>
-        <li>
-            <p style="margin-left:0cm;"><span class="Numbering_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">2.</span><span class="T2">SCOPE OF LICENSE.</span> The software
-            is licensed, not sold. This agreement only gives you some rights to use the software. Microsoft reserves
-            all other <span class="T4">rights</span>. Unless applicable law gives you more rights despite this
+        <h2>Microsoft Visual C++ 2015 Runtime Libraries</h2>
+        <p>The following software may be included in this product: Microsoft Visual C++ 2015 Runtime Libraries. Use of
+        any of this software is governed by the terms of the license below:</p>
+        <p>MICROSOFT SOFTWARE LICENSE TERMS</p>
+        <p>MICROSOFT VISUAL STUDIO 2015 ADD-ONs, VISUAL STUDIO SHELLS and C++ REDISTRIBUTABLE</p>
+        <p>These license terms are an agreement between Microsoft Corporation (or based on where you live, one of its
+        affiliates) and you. They apply to the software named above. The terms also apply to any Microsoft services or
+        updates for the software, except to the extent those have different terms.</p>
+        <p>IF YOU COMPLY WITH THESE LICENSE TERMS, YOU HAVE THE RIGHTS BELOW.</p>
+        <ol>
+            <li>INSTALLATION AND USE RIGHTS.</li>
+            <ol type="a">
+                <li>You may install and use any number of copies of the software.</li>
+                <li>Backup copy. You may make one backup copy of the software, for reinstalling the software.</li>
+            </ol>
+            <li>TERMS FOR SPECIFIC COMPONENTS.</li>
+            <ol type="a">
+                <li>Utilities. The software may contain some items on the Utilities List at <a href=
+                "http://go.microsoft.com/fwlink/?LinkID=523763&amp;clcid=0x409">&lt;http://go.microsoft.com/fwlink/?LinkID=523763&amp;clcid=0x409&gt;</a>.
+                You may copy and install those items, if included with the software, on your machines or third party
+                machines, to debug and deploy your applications and databases you develop with the software. Please
+                note that Utilities are designed for temporary use, that Microsoft may not be able to patch or update
+                Utilities separately from the rest of the software, and that some Utilities by their nature may make it
+                possible for others to access machines on which they are installed. As a result, you should delete all
+                Utilities you have installed after you finish debugging or deploying your applications and databases.
+                Microsoft is not responsible for any third party use or access of Utilities you install on any
+                machine.</li>
+                <li>Microsoft Platforms. The software may include components from Microsoft Windows; Microsoft Windows
+                Server; Microsoft SQL Server; Microsoft Exchange; Microsoft Office; and Microsoft SharePoint. These
+                components are governed by separate agreements and their own product support policies, as described in
+                the license terms found in the installation directory for that component or in the “Licenses”
+                folder accompanying the software.</li>
+                <li>Third Party Components. The software may include third party components with separate legal notices
+                or governed by other agreements, as may be described in the ThirdPartyNotices file accompanying the
+                software. Even if such components are governed by other agreements, the disclaimers and the limitations
+                on and exclusions of damages below also apply.</li>
+            </ol>
+            <li>DATA. The software may collect information about you and your use of the software, and send that to
+            Microsoft. Microsoft may use this information to provide services and improve our products and services.
+            You may opt-out of many of these scenarios, but not all, as described in the product documentation. There
+            are also some features in the software that may enable you to collect data from users of your applications.
+            If you use these features to enable data collection in your applications, you must comply with applicable
+            law, including providing appropriate notices to users of your applications. You can learn more about data
+            collection and use in the help documentation and the privacy statement at <a href=
+            "http://go.microsoft.com/fwlink/?LinkID=528096&amp;clcid=0x409">&lt;http://go.microsoft.com/fwlink/?LinkID=528096&amp;clcid=0x409&gt;</a>.
+            Your use of the software operates as your consent to these practices.</li>
+            <li>SCOPE OF LICENSE. The software is licensed, not sold. This agreement only gives you some rights to use
+            the software. Microsoft reserves all other rights. Unless applicable law gives you more rights despite this
             limitation, you may use the software only as expressly permitted in this agreement. In doing so, you must
             comply with any technical limitations in the software that only allow you to use it in certain ways. You
-            may not </p>
-        </li>
-    </ol>
-    <ul>
-        <li>
-            <p style="margin-left:2.5009cm;"><span class="Bullet_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">•</span>disclose the results of any benchmark tests of the
-            software to any third party without Microsoft’s prior written approval; </p>
-        </li>
-        <li>
-            <p style="margin-left:2.5009cm;"><span class="Bullet_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">•</span>work around any technical limitations in the
-            software; </p>
-        </li>
-        <li>
-            <p style="margin-left:2.5009cm;"><span class="Bullet_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">•</span>reverse engineer, decompile or disassemble the
-            software, except and only to the extent that applicable law expressly permits, despite this
-            limitation; </p>
-        </li>
-        <li>
-            <p style="margin-left:2.5009cm;"><span class="Bullet_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">•</span>make more copies of the software than specified in
-            this agreement or allowed by applicable law, despite this limitation; </p>
-        </li>
-        <li>
-            <p style="margin-left:2.5009cm;"><span class="Bullet_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">•</span>publish the software for others to copy; </p>
-        </li>
-        <li>
-            <p style="margin-left:2.5009cm;"><span class="Bullet_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">•</span>rent, lease or lend the software; </p>
-        </li>
-        <li>
-            <p style="margin-left:2.5009cm;"><span class="Bullet_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">•</span>transfer the software or this agreement to any third
-            party; or </p>
-        </li>
-        <li>
-            <p style="margin-left:2.5009cm;"><span class="Bullet_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">•</span>use the software for commercial software hosting
-            services. </p>
-        </li>
-    </ul>
-    <ol>
-        <li>
-            <p style="margin-left:0cm;"><span class="Numbering_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">3.</span><span class="T2">BACKUP COPY.</span> You may make one
-            backup copy of the software. You may use it only to reinstall the software. </p>
-        </li>
-        <li>
-            <p style="margin-left:0cm;"><span class="Numbering_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">4.</span><span class="T2">DOCUMENTATION.</span> Any person that
-            has valid access to your computer or internal network may copy and use the documentation for your internal,
-            reference purposes. </p>
-        </li>
-        <li>
-            <p style="margin-left:0cm;"><span class="Numbering_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">5.</span><span class="T2">EXPORT RESTRICTIONS.</span> The
-            software is subject to United States export laws and regulations. You must comply with all domestic and
-            international export laws and regulations that apply to the software. These laws include restrictions on
-            destinations, end users and end use. For additional information, see <a href=
-            "http://www.microsoft.com/exporting">www.microsoft.com/exporting</a>. </p>
-        </li>
-        <li>
-            <p style="margin-left:0cm;"><span class="Numbering_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">6.</span><span class="T2">SUPPORT SERVICES.</span> Because this
-            software is “as is,” we may not provide support services for it. </p>
-        </li>
-        <li>
-            <p style="margin-left:0cm;"><span class="Numbering_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">7.</span><span class="T2">ENTIRE AGREEMENT.</span> This
-            agreement, and the terms for supplements, updates, Internet-based services and support services that you
-            use, are the entire agreement for the software and support services. </p>
-        </li>
-        <li>
-            <p style="margin-left:0cm;"><span class="Numbering_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">8.</span>APPLICABLE LAW. </p>
-        </li>
-    </ol>
-    <ol>
-        <li>
-            <p style="margin-left:0cm;"><span class="Numbering_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">a.</span><span class="T2">United States.</span> If you acquired
-            the software in the United States, Washington state law governs the interpretation of this agreement and
-            applies to claims for breach of it, regardless of conflict of laws principles. The laws of the state where
-            you live govern all other claims, including claims under state consumer protection laws, unfair competition
-            laws, and in tort. </p>
-        </li>
-        <li>
-            <p style="margin-left:0cm;"><span class="Numbering_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">b.</span><span class="T2">Outside the United States.</span> If
-            you acquired the software in any other country, the laws of that country apply. </p>
-        </li>
-    </ol>
-    <ol>
-        <li>
-            <p style="margin-left:0cm;"><span class="Numbering_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">9.</span><span class="T2">LEGAL EFFECT.</span> This agreement
-            describes certain legal rights. You may have other rights under the laws of your country. You may also have
-            rights with respect to the party from whom you acquired the software. This agreement does not change your
-            rights under the laws of your country if the laws of your country do not permit it to do so. </p>
-        </li>
-        <li>
-            <p style="margin-left:0cm;"><span class="Numbering_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">10.</span>DISCLAIMER OF WARRANTY. THE SOFTWARE IS LICENSED
-            “AS-IS.” YOU BEAR THE RISK OF USING IT. MICROSOFT GIVES NO EXPRESS WARRANTIES, GUARANTEES OR
-            CONDITIONS. YOU MAY HAVE ADDITIONAL CONSUMER RIGHTS UNDER YOUR LOCAL LAWS WHICH THIS AGREEMENT CANNOT
-            CHANGE. TO THE EXTENT PERMITTED UNDER YOUR LOCAL LAWS, MICROSOFT EXCLUDES THE IMPLIED WARRANTIES OF
-            MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. </p>
-        </li>
-        <li>
-            <p style="margin-left:0cm;"><span class="Numbering_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">11.</span>LIMITATION ON AND EXCLUSION OF REMEDIES AND DAMAGES.
-            YOU CAN RECOVER FROM MICROSOFT AND ITS SUPPLIERS ONLY DIRECT DAMAGES UP TO U.S. $5.00. YOU CANNOT RECOVER
-            ANY OTHER DAMAGES, INCLUDING CONSEQUENTIAL, LOST PROFITS, SPECIAL, INDIRECT OR INCIDENTAL DAMAGES. </p>
-        </li>
-    </ol>
-    <p>This limitation applies to</p>
-    <ul>
-        <li>
-            <p style="margin-left:2.5009cm;"><span class="Bullet_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">•</span>anything related to the software, services, content
-            (including code) on third party Internet sites, or third party programs; and </p>
-        </li>
-        <li>
-            <p style="margin-left:2.5009cm;"><span class="Bullet_20_Symbols" style=
-            "display:block;float:left;min-width:NaNcm;">•</span>claims for breach of contract, breach of warranty,
-            guarantee or condition, strict liability, negligence, or other tort to the extent permitted by applicable
-            law. </p>
-        </li>
-    </ul>
-    <p>It also applies even if Microsoft knew or should have known about the possibility of the damages. The above
-    limitation or exclusion may not apply to you because your country may not allow the exclusion or limitation of
-    incidental, consequential or other damages.</p>
+            may not</li>
+            <ul>
+                <li>work around any technical limitations in the software;</li>
+                <li>reverse engineer, decompile or disassemble the software, except and only to the extent that
+                applicable law expressly permits, despite this limitation;</li>
+                <li>remove, minimize, block or modify any notices of Microsoft or its suppliers in the software;</li>
+                <li>use the software in any way that is against the law; or</li>
+                <li>share, publish or lend the software, or provide the software as a stand-alone hosted as solution
+                for others to use, or transfer the software or this agreement to any third party.</li>
+            </ul>
+            <li>EXPORT RESTRICTIONS. Microsoft software, online services, professional services and related technology
+            are subject to U.S. export jurisdiction. You must comply with all applicable international and national
+            laws, including the U.S. Export Administration Regulations, the International Traffic in Arms Regulations,
+            Office of Foreign Assets Control sanctions programs, and end-user, end use and destination restrictions by
+            the U.S. and other governments related to Microsoft products, services and technologies. For additional
+            information, see www.microsoft.com/exporting <a href=
+            "http://www.microsoft.com/exporting">&lt;http://www.microsoft.com/exporting&gt;</a>.</li>
+            <li>SUPPORT SERVICES. Because this software is “as is,” we may not provide support services for
+            it.</li>
+            <li>ENTIRE AGREEMENT. This agreement, and the terms for supplements, updates, Internet-based services and
+            support services that you use, are the entire agreement for the software and support services.</li>
+            <li>APPLICABLE LAW. If you acquired the software in the United States, Washington law applies to
+            interpretation of and claims for breach of this agreement, and the laws of the state where you live apply
+            to all other claims. If you acquired the software in any other country, its laws apply.</li>
+            <li>LEGAL EFFECT. This agreement describes certain legal rights. You may have other rights under the laws
+            of your state or country. This agreement does not change your rights under the laws of your state or
+            country if the laws of your state or country do not permit it to do so. Without limitation of the
+            foregoing, for Australia, YOU HAVE STATUTORY GUARANTEES UNDER THE AUSTRALIAN CONSUMER LAW AND NOTHING IN
+            THESE TERMS IS INTENDED TO AFFECT THOSE RIGHTS</li>
+            <li>DISCLAIMER OF WARRANTY. THE SOFTWARE IS LICENSED “AS-IS.” YOU BEAR THE RISK OF USING IT. MICROSOFT
+            GIVES NO EXPRESS WARRANTIES, GUARANTEES OR CONDITIONS. TO THE EXTENT PERMITTED UNDER YOUR LOCAL LAWS,
+            MICROSOFT EXCLUDES THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+            NON-INFRINGEMENT.</li>
+            <li>LIMITATION ON AND EXCLUSION OF DAMAGES. YOU CAN RECOVER FROM MICROSOFT AND ITS SUPPLIERS ONLY DIRECT
+            DAMAGES UP TO U.S. $5.00. YOU CANNOT RECOVER ANY OTHER DAMAGES, INCLUDING CONSEQUENTIAL, LOST PROFITS,
+            SPECIAL, INDIRECT OR INCIDENTAL DAMAGES.<br />
+            This limitation applies to (a) anything related to the software, services, content (including code) on
+            third party Internet sites, or third party applications; and (b) claims for breach of contract, breach of
+            warranty, guarantee or condition, strict liability, negligence, or other tort to the extent permitted by
+            applicable law.<br />
+            It also applies even if Microsoft knew or should have known about the possibility of the damages. The above
+            limitation or exclusion may not apply to you because your country may not allow the exclusion or limitation
+            of incidental, consequential or other damages.</li>
+        </ol>
+        <p>EULAID: VS2015_RTM_ShellsRedist_ENU</p>
     </div>
     <div class="MYTHES">
         <h2>MyThes</h2>
