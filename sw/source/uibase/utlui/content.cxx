@@ -2110,6 +2110,8 @@ bool SwContentTree::HasContentChanged()
         }
         if( !bRepaint && bOutline )
         {
+            const bool bHasFocus = HasFocus();
+
             // find out where the cursor is
             const SwOutlineNodes::size_type nActPos = GetWrtShell()->GetOutlinePos(MAXLEVEL);
             SvTreeListEntry* pFirstEntry = First();
@@ -2126,11 +2128,9 @@ bool SwContentTree::HasContentChanged()
                     }
                 }
                 else
-                    Select(pFirstEntry, false);
+                    Select(pFirstEntry, bHasFocus && IsSelected(pFirstEntry));
             }
-
         }
-
     }
     else
     {
@@ -2393,6 +2393,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
     sal_Int8 nActOutlineLevel = m_nOutlineLevel;
     SwOutlineNodes::size_type nActPos = pShell->GetOutlinePos(nActOutlineLevel);
 
+    std::vector<SwOutlineNodes::size_type> selectedAbsPositions;
     std::vector<SvTreeListEntry*> selected;
     for (SvTreeListEntry * pEntry = FirstSelected(); pEntry; pEntry = NextSelected(pEntry))
     {
@@ -2450,9 +2451,9 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
         pShell->GotoOutline( nActPos); // If text selection != box selection
         pShell->Push();
         pShell->MakeOutlineSel(nActPos, nActPos, bOutlineWithChildren);
+        sal_uLong const nEntryAbsPos(GetModel()->GetAbsPos(pCurrentEntry));
         if (bUpDown)
         {
-            sal_uLong const nEntryAbsPos(GetModel()->GetAbsPos(pCurrentEntry));
             SwOutlineNodes::difference_type nDir = bUp ? -1 : 1;
             if (!bOutlineWithChildren && ((nDir == -1 && nActPos > 0) ||
                        (nDir == 1 && nEntryAbsPos < GetEntryCount() - 2)))
@@ -2460,6 +2461,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                 pShell->MoveOutlinePara( nDir );
                 // Set cursor back to the current position
                 pShell->GotoOutline( nActPos + nDir);
+                selectedAbsPositions.push_back( nEntryAbsPos + nDir );
             }
             else if (bOutlineWithChildren && pCurrentEntry)
             {
@@ -2542,6 +2544,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                     pShell->MoveOutlinePara( nDir );
                     // Set cursor back to the current position
                     pShell->GotoOutline(nActPos + nDir);
+                    selectedAbsPositions.push_back( nEntryAbsPos + nDir );
                 }
             }
         }
@@ -2549,6 +2552,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
         {
             if (!pShell->IsProtectedOutlinePara())
                 pShell->OutlineUpDown(bLeft ? -1 : 1);
+            selectedAbsPositions.push_back( nEntryAbsPos );
         }
 
         pShell->ClearMark();
@@ -2576,6 +2580,15 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                     MakeVisible(pFirst);
                 }
             }
+        }
+        else
+        {
+            for (auto &pEntryAbsPos : selectedAbsPositions)
+                SelectListEntry(GetEntryAtAbsPos(pEntryAbsPos), true);
+            if (bUpDown && !bUp)
+                MakeVisible(LastSelected());
+            MakeVisible(FirstSelected());
+            SvTreeListBox::Invalidate();
         }
     }
 }
