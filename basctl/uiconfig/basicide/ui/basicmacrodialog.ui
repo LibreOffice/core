@@ -360,7 +360,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="delete">
-                        <property name="label">_Delete</property>
+                        <property name="label" translatable="yes" context="basicmacrodialog|delete">_Delete</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -374,7 +374,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="new">
-                        <property name="label">_New</property>
+                        <property name="label" translatable="yes" context="basicmacrodialog|new">_New</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="no_show_all">True</property>
