@@ -68,12 +68,12 @@ class UITest(object):
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
 
-    def execute_dialog_through_command(self, command, printNames=False):
+    def execute_dialog_through_command(self, command, printNames=False, maxWait=MAX_WAIT):
         with EventListener(self._xContext, "DialogExecute", printNames=printNames) as event:
             if not self._xUITest.executeDialog(command):
                 raise DialogNotExecutedException(command)
             time_ = 0
-            while time_ < MAX_WAIT:
+            while time_ < maxWait:
                 if event.executed:
                     time.sleep(DEFAULT_SLEEP)
                     return
