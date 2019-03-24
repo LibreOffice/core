@@ -212,7 +212,7 @@ LockFileEntry MSODocumentLockFile::GetLockData()
             const sal_Int8* pBuf = aBuf.getConstArray() + 54;
             int nUTF16Len = *pBuf; // try Word position
             // If UTF-16 length is 0x20, then ACP length is also less than maximal, which means
-            // that in Word lockfile case, at least two preceeding bytes would be zero. Both
+            // that in Word lockfile case, at least two preceding bytes would be zero. Both
             // Excel and PowerPoint lockfiles would have at least one of those bytes non-zero.
             if (nUTF16Len == 0x20 && (*(pBuf - 1) != 0 || *(pBuf - 2) != 0))
                 nUTF16Len = *++pBuf; // use Excel/PowerPoint position
