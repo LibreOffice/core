@@ -171,10 +171,6 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
     if (aFunctionName == "osl_thread_priority_init_Impl") {
         return true;
     }
-    // a pointer to this function is taken and passed to an underlying API, shell/source/unix/sysshell/recently_used_file_handler.cxx
-    if (aFunctionName == "(anonymous namespace)::recently_used_item::set_nothing") {
-        return true;
-    }
     // a pointer to this function is taken and passed to an underlying API, cppu/source/uno/lbenv.cxx
     if (aFunctionName == "defenv_dispose") {
         return true;

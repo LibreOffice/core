@@ -109,12 +109,6 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     if (cdc.Class("BitmapInfoAccess").GlobalNamespace()) {
         return true;
     }
-    // in this case, the code is taking the address of the member function
-    // shell/source/unix/sysshell/recently_used_file_handler.cxx
-    if (cdc.Struct("recently_used_item").AnonymousNamespace().GlobalNamespace())
-    {
-        return true;
-    }
     // the unotools and svl config code stuff is doing weird stuff with a reference-counted statically allocated pImpl class
     if (loplugin::hasPathnamePrefix(aFilename, SRCDIR "/include/unotools/")) {
         return true;
