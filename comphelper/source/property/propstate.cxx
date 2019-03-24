@@ -27,7 +27,6 @@ namespace comphelper
 
 
     using ::com::sun::star::uno::Type;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::lang::XTypeProvider;
     using ::com::sun::star::uno::Any;

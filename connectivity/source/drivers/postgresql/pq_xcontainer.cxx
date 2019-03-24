@@ -62,8 +62,6 @@ using com::sun::star::container::ContainerEvent;
 using com::sun::star::lang::IndexOutOfBoundsException;
 using com::sun::star::lang::XEventListener;
 
-using com::sun::star::lang::WrappedTargetException;
-
 
 namespace pq_sdbc_driver
 {

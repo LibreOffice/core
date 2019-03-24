@@ -54,17 +54,13 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <connectivity/dbconversion.hxx>
 
-using osl::Mutex;
 using osl::MutexGuard;
 
 
 using com::sun::star::beans::XPropertySetInfo;
 
 using com::sun::star::uno::Any;
-using com::sun::star::uno::makeAny;
 using com::sun::star::uno::Type;
-using com::sun::star::uno::RuntimeException;
-using com::sun::star::uno::Exception;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
@@ -72,8 +68,6 @@ using com::sun::star::uno::XInterface;
 using com::sun::star::lang::IllegalArgumentException;
 
 using com::sun::star::sdbc::SQLException;
-using com::sun::star::sdbc::XRow;
-using com::sun::star::sdbc::XResultSetMetaData;
 
 
 using com::sun::star::beans::Property;

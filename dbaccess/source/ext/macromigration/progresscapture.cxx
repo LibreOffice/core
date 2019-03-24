@@ -26,8 +26,6 @@
 namespace dbmm
 {
 
-    using ::com::sun::star::uno::RuntimeException;
-
     // ProgressCapture_Data
     struct ProgressCapture_Data
     {

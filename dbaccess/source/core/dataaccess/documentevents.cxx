@@ -32,11 +32,9 @@
 namespace dbaccess
 {
 
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::container::NoSuchElementException;
-    using ::com::sun::star::lang::WrappedTargetException;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;

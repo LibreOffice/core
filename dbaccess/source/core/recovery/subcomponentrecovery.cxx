@@ -72,7 +72,6 @@ namespace dbaccess
     using css::container::XHierarchicalNameAccess;
     using css::sdb::XFormDocumentsSupplier;
     using css::sdb::XReportDocumentsSupplier;
-    using css::xml::sax::SAXException;
     using css::xml::sax::XLocator;
     using css::xml::sax::XDocumentHandler;
     using css::xml::sax::XAttributeList;

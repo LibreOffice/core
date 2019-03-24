@@ -41,8 +41,6 @@
 
 using com::sun::star::uno::Any;
 
-using com::sun::star::uno::RuntimeException;
-
 using com::sun::star::sdbc::SQLException;
 
 namespace pq_sdbc_driver

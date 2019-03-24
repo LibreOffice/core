@@ -60,7 +60,6 @@ namespace basic
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::document::XStorageBasedDocument;
-    using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::document::XEmbeddedScripts;
 
     typedef std::map< Reference< XInterface >, std::unique_ptr<BasicManager>, ::comphelper::OInterfaceCompare< XInterface > > BasicManagerStore;

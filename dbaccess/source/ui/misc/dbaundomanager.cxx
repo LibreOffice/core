@@ -31,18 +31,11 @@ namespace dbaui
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::document::XUndoManager;
     using ::com::sun::star::lang::DisposedException;
-    using ::com::sun::star::document::UndoContextNotClosedException;
-    using ::com::sun::star::document::UndoFailedException;
-    using ::com::sun::star::document::EmptyUndoStackException;
-    using ::com::sun::star::util::InvalidStateException;
     using ::com::sun::star::document::XUndoAction;
-    using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::document::XUndoManagerListener;
-    using ::com::sun::star::util::NotLockedException;
     using ::com::sun::star::lang::NoSupportException;
 
     // UndoManager_Impl

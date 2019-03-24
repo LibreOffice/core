@@ -30,10 +30,6 @@ namespace connectivity
 {
 
 
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::uno::Exception;
-
     class SharedResources_Impl
     {
     private:

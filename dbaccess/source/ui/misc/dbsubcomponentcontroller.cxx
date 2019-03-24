@@ -56,7 +56,6 @@ namespace dbaui
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::beans::XPropertySet;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::uno::XComponentContext;
@@ -69,7 +68,6 @@ namespace dbaui
     using ::com::sun::star::util::XNumberFormatsSupplier;
     using ::com::sun::star::frame::XFrame;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::frame::XModel;
@@ -82,7 +80,6 @@ namespace dbaui
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::frame::XUntitledNumbers;
-    using ::com::sun::star::beans::PropertyVetoException;
 
     class DataSourceHolder
     {

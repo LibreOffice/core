@@ -46,7 +46,6 @@ using com::sun::star::uno::Any;
 using com::sun::star::uno::Type;
 
 using com::sun::star::beans::PropertyAttribute::READONLY;
-using com::sun::star::beans::PropertyAttribute::BOUND;
 using com::sun::star::beans::Property;
 
 namespace pq_sdbc_driver

@@ -62,7 +62,6 @@ using ::com::sun::star::graphic::GraphicProvider;
 using ::com::sun::star::graphic::XGraphicProvider;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::lang::IllegalArgumentException;
-using ::com::sun::star::ui::dialogs::XExecutableDialog;
 using ::com::sun::star::sdbc::XResultSet;
 using ::com::sun::star::sdbc::XDatabaseMetaData;
 using ::com::sun::star::sdbc::XDatabaseMetaData2;
