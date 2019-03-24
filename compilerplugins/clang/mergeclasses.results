@@ -240,7 +240,6 @@ merge frm::ITextSelectionListener with frm::ORichTextPeer
 merge frm::OFormComponents with frm::ODatabaseForm
 merge ftp::CurlInput with InsertData
 merge gio::Seekable with gio::OutputStream
-merge i_xml_parser_event_handler with (anonymous namespace)::recently_used_file_filter
 merge oglcanvas::IBufferContext with oglcanvas::(anonymous namespace)::BufferContextImpl
 merge old_SdrDownCompat with SdIOCompat
 merge oox::SequenceSeekableStream with oox::SequenceInputStream
