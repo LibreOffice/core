@@ -2109,7 +2109,7 @@ bool SwContentTree::HasContentChanged()
                 }
             }
         }
-        if( !bRepaint && bOutline )
+        if( !bRepaint && bOutline && !HasFocus() )
         {
             // find out where the cursor is
             const SwOutlineNodes::size_type nActPos = GetWrtShell()->GetOutlinePos(MAXLEVEL);
@@ -2126,9 +2126,12 @@ bool SwContentTree::HasContentChanged()
                         MakeVisible(pFirstEntry);
                     }
                 }
-                else
-                    Select(pFirstEntry, false);
+                else if (IsSelected(pFirstEntry))
+                {
+                    SvTreeListBox::SelectListEntry(pFirstEntry, false);
+                }
             }
+            bInvalidate = true;
 
         }
 
@@ -2355,7 +2358,10 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
     switch (rHint.GetId())
     {
         case SfxHintId::DocChanged:
-            m_bViewHasChanged = true;
+            if (!(m_bIsRoot && m_nRootType == ContentTypeId::OUTLINE && HasFocus()))
+            {
+                m_bViewHasChanged = true;
+            }
             break;
         case SfxHintId::ModeChanged:
             if (SwWrtShell* pShell = GetWrtShell())
@@ -2394,6 +2400,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
     sal_Int8 nActOutlineLevel = m_nOutlineLevel;
     SwOutlineNodes::size_type nActPos = pShell->GetOutlinePos(nActOutlineLevel);
 
+    std::vector<SwTextNode*> selectedOutlineNodes;
     std::vector<SvTreeListEntry*> selected;
     for (SvTreeListEntry * pEntry = FirstSelected(); pEntry; pEntry = NextSelected(pEntry))
     {
@@ -2416,6 +2423,16 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
         if (!bSkip)
         {
             selected.push_back(pEntry);
+            const SwNodes& rNodes = pShell->GetNodes();
+            const sal_uLong nPos = GetAbsPos(pEntry) - 1;
+            if (nPos < rNodes.GetOutLineNds().size())
+            {
+                SwNode* pNode = rNodes.GetOutLineNds()[ nPos ];
+                if (pNode)
+                {
+                    selectedOutlineNodes.push_back(pNode->GetTextNode());
+                }
+            }
         }
     }
     if (bUpDown && !bUp)
@@ -2577,6 +2594,26 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                     MakeVisible(pFirst);
                 }
             }
+        }
+        else
+        {
+            // Reselect entries
+            const SwOutlineNodes& rOutLineNds = pShell->GetNodes().GetOutLineNds();
+            for (SwTextNode* pNode : selectedOutlineNodes)
+            {
+                SwOutlineNodes::const_iterator aFndIt = rOutLineNds.find(pNode);
+                if(aFndIt == rOutLineNds.end())
+                    continue;
+                const size_t nFndPos = aFndIt - rOutLineNds.begin();
+                SvTreeListEntry* pEntry = GetEntryAtAbsPos(nFndPos + 1);
+                if (pEntry)
+                {
+                    SvTreeListBox::SelectListEntry(pEntry, true);
+                    if (!IsExpanded(pEntry->GetParent()))
+                        Expand(pEntry->GetParent());
+                }
+            }
+            SvTreeListBox::Invalidate();
         }
     }
 }
