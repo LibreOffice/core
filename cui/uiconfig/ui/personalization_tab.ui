@@ -208,7 +208,7 @@
                     </child>
                     <child>
                       <object class="GtkLinkButton" id="applied_theme_link">
-                        <property name="label">Applied persona's name and URL</property>
+                        <property name="label" translatable="no">Applied persona's name and URL</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="relief">none</property>

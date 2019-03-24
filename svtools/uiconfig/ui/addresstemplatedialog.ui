@@ -253,7 +253,7 @@
                                           <object class="GtkLabel" id="label0">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label">label</property>
+                                            <property name="label" translatable="no">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box0</property>
                                             <property name="xalign">1</property>
@@ -278,7 +278,7 @@
                                           <object class="GtkLabel" id="label2">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label">label</property>
+                                            <property name="label" translatable="no">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box2</property>
                                             <property name="xalign">1</property>
@@ -292,7 +292,7 @@
                                           <object class="GtkLabel" id="label4">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label">label</property>
+                                            <property name="label" translatable="no">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box4</property>
                                             <property name="xalign">1</property>
@@ -306,7 +306,7 @@
                                           <object class="GtkLabel" id="label6">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label">label</property>
+                                            <property name="label" translatable="no">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box6</property>
                                             <property name="xalign">1</property>
@@ -320,7 +320,7 @@
                                           <object class="GtkLabel" id="label8">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label">label</property>
+                                            <property name="label" translatable="no">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box8</property>
                                             <property name="xalign">1</property>
@@ -392,7 +392,7 @@
                                           <object class="GtkLabel" id="label1">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label">label</property>
+                                            <property name="label" translatable="no">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box1</property>
                                             <property name="xalign">1</property>
@@ -417,7 +417,7 @@
                                           <object class="GtkLabel" id="label3">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label">label</property>
+                                            <property name="label" translatable="no">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box3</property>
                                             <property name="xalign">1</property>
@@ -431,7 +431,7 @@
                                           <object class="GtkLabel" id="label5">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label">label</property>
+                                            <property name="label" translatable="no">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box5</property>
                                             <property name="xalign">1</property>
@@ -445,7 +445,7 @@
                                           <object class="GtkLabel" id="label7">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label">label</property>
+                                            <property name="label" translatable="no">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box7</property>
                                             <property name="xalign">1</property>
@@ -459,7 +459,7 @@
                                           <object class="GtkLabel" id="label9">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label">label</property>
+                                            <property name="label" translatable="no">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box9</property>
                                             <property name="xalign">1</property>
