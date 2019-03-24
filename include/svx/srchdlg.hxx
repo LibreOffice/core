@@ -119,7 +119,6 @@ public:
     SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind );
     virtual ~SvxSearchDialog() override;
 
-    virtual void    EndDialog() override;
     virtual void    Close() override;
 
     // Window
@@ -141,7 +140,6 @@ public:
 
 private:
     bool            mbSuccess;
-    bool            mbClosing;
 
     SfxBindings&    rBindings;
     bool            bWriter;

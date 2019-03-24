@@ -148,6 +148,7 @@ public:
     void                    FillInfo(SfxChildWinInfo&) const;
     void                    Initialize (SfxChildWinInfo const * pInfo);
     void                    DeInit();
+    bool                    IsClosing() const;
     virtual void            Close() override;
     virtual void            EndDialog() override;
     virtual void            Activate() override;

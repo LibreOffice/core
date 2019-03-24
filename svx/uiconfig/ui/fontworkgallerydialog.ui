@@ -99,9 +99,8 @@
             <child>
               <object class="GtkScrolledWindow" id="ctlFavoriteswin">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
                 <property name="hscrollbar_policy">never</property>
                 <property name="vscrollbar_policy">never</property>
                 <property name="shadow_type">in</property>
@@ -112,10 +111,8 @@
                     <child>
                       <object class="GtkDrawingArea" id="ctlFavorites">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                        <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
                       </object>
                     </child>
                   </object>
