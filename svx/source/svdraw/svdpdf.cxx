@@ -29,6 +29,7 @@
 
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/pdfread.hxx>
 
 #include <editeng/editdata.hxx>
 #include <o3tl/make_unique.hxx>
@@ -91,9 +92,12 @@ namespace
 /// Convert from DPI to pixels.
 /// PDFs don't have resolution, rather,
 /// dimensions are in inches, with 72 points / inch.
-/// Here we effectively render at 96 DPI (to match
-/// the image rendered in vcl::ImportPDF in pdfread.cxx).
-inline double lcl_PointToPixel(double fPoint) { return fPoint * 96. / 72.; }
+/// Here we effectively render at our preferred DPI.
+inline double lcl_PointToPixel(double fPoint)
+{
+    return fPoint * vcl::DefaultPDFResolutionDPI / 72.;
+}
+
 /// Convert from pixels to logic (twips).
 inline long lcl_ToLogic(double value)
 {
@@ -258,8 +262,8 @@ void ImpSdrPdfImport::SetupPageScale(const double dPageWidth, const double dPage
     mdPageWidthPts = dPageWidth;
     mdPageHeightPts = dPageHeight;
 
-    Size aPageSize(lcl_ToLogic(lcl_PointToPixel(dPageWidth)),
-                   lcl_ToLogic(lcl_PointToPixel(dPageHeight)));
+    const Size aPageSize(lcl_ToLogic(lcl_PointToPixel(dPageWidth)),
+                         lcl_ToLogic(lcl_PointToPixel(dPageHeight)));
 
     if (aPageSize.Width() && aPageSize.Height() && (!maScaleRect.IsEmpty()))
     {
