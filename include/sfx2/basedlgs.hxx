@@ -143,6 +143,7 @@ protected:
 
 public:
     void                    Initialize (SfxChildWinInfo const * pInfo);
+    bool                    IsClosing() const;
     virtual void            Close() override;
     virtual void            EndDialog() override;
     virtual void            Activate() override;

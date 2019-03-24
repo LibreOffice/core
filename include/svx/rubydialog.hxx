@@ -23,116 +23,99 @@
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/scrbar.hxx>
+#include <vcl/customweld.hxx>
 #include <svx/svxdllapi.h>
 #include <rtl/ref.hxx>
 
-
 class SvxRubyDialog;
-class RubyPreview final : public vcl::Window
+class RubyPreview final : public weld::CustomWidgetController
 {
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-    VclPtr<SvxRubyDialog> m_pParentDlg;
+    SvxRubyDialog* m_pParentDlg;
 
 public:
-    RubyPreview(vcl::Window *pParent);
+    RubyPreview();
     virtual ~RubyPreview() override;
-    virtual void dispose() override;
     void setRubyDialog(SvxRubyDialog* pParentDlg)
     {
         m_pParentDlg = pParentDlg;
     }
-    virtual Size GetOptimalSize() const override;
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 };
 
 class SVX_DLLPUBLIC SvxRubyChildWindow : public SfxChildWindow
 {
- public:
-
-    SvxRubyChildWindow( vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo const * );
-
-    SFX_DECL_CHILDWINDOW( SvxRubyChildWindow );
-
-};
-class SvxRubyData_Impl;
-class RubyEdit  : public Edit
-{
-    Link<sal_Int32,bool>  aScrollHdl;
-    Link<sal_Int32,void>  aJumpHdl;
-    virtual void        GetFocus() override;
-    virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
 public:
-    RubyEdit(vcl::Window* pParent)
-        : Edit(pParent, WB_BORDER)
-    {
-    }
-    void    SetScrollHdl(Link<sal_Int32,bool> const & rLink) {aScrollHdl = rLink;}
-    void    SetJumpHdl(Link<sal_Int32,void> const & rLink) {aJumpHdl = rLink;}
+    SvxRubyChildWindow( vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo const * );
+    SFX_DECL_CHILDWINDOW( SvxRubyChildWindow );
 };
 
+class SvxRubyData_Impl;
 
-class SvxRubyDialog : public SfxModelessDialog
+class SvxRubyDialog : public SfxModelessDialogController
 {
     friend class RubyPreview;
 
-    VclPtr<FixedText>          m_pLeftFT;
-    VclPtr<FixedText>          m_pRightFT;
-    VclPtr<RubyEdit>           m_pLeft1ED;
-    VclPtr<RubyEdit>           m_pRight1ED;
-    VclPtr<RubyEdit>           m_pLeft2ED;
-    VclPtr<RubyEdit>           m_pRight2ED;
-    VclPtr<RubyEdit>           m_pLeft3ED;
-    VclPtr<RubyEdit>           m_pRight3ED;
-    VclPtr<RubyEdit>           m_pLeft4ED;
-    VclPtr<RubyEdit>           m_pRight4ED;
-
-    VclPtr<RubyEdit>           aEditArr[8];
-    VclPtr<VclScrolledWindow>  m_pScrolledWindow;
-    VclPtr<ScrollBar>          m_pScrollSB;
-
-    VclPtr<ListBox>            m_pAdjustLB;
-
-    VclPtr<ListBox>            m_pPositionLB;
-
-    VclPtr<FixedText>          m_pCharStyleFT;
-    VclPtr<ListBox>            m_pCharStyleLB;
-    VclPtr<PushButton>         m_pStylistPB;
-
-    VclPtr<RubyPreview>        m_pPreviewWin;
-
-    VclPtr<PushButton>         m_pApplyPB;
-    VclPtr<PushButton>         m_pClosePB;
 
     long                nLastPos;
     long                nCurrentEdit;
-
     bool                bModified;
-
     SfxBindings*        pBindings;
+    rtl::Reference<SvxRubyData_Impl> m_pImpl;
+    weld::Entry* aEditArr[8];
 
-    DECL_LINK(ApplyHdl_Impl, Button*, void);
-    DECL_LINK(CloseHdl_Impl, Button*, void);
-    DECL_LINK(StylistHdl_Impl, Button*, void);
-    DECL_LINK(ScrollHdl_Impl, ScrollBar*, void);
-    DECL_LINK(PositionHdl_Impl, ListBox&, void);
-    DECL_LINK(AdjustHdl_Impl, ListBox&, void);
-    DECL_LINK(CharStyleHdl_Impl, ListBox&, void);
-    DECL_LINK(EditModifyHdl_Impl, Edit&, void);
-    DECL_LINK(EditScrollHdl_Impl, sal_Int32, bool);
-    DECL_LINK(EditJumpHdl_Impl, sal_Int32, void);
+    std::unique_ptr<weld::Label> m_xLeftFT;
+    std::unique_ptr<weld::Label> m_xRightFT;
+    std::unique_ptr<weld::Entry> m_xLeft1ED;
+    std::unique_ptr<weld::Entry> m_xRight1ED;
+    std::unique_ptr<weld::Entry> m_xLeft2ED;
+    std::unique_ptr<weld::Entry> m_xRight2ED;
+    std::unique_ptr<weld::Entry> m_xLeft3ED;
+    std::unique_ptr<weld::Entry> m_xRight3ED;
+    std::unique_ptr<weld::Entry> m_xLeft4ED;
+    std::unique_ptr<weld::Entry> m_xRight4ED;
 
-    void                SetRubyText(sal_Int32 nPos, Edit& rLeft, Edit& rRight);
+    std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;
+
+    std::unique_ptr<weld::ComboBox> m_xAdjustLB;
+
+    std::unique_ptr<weld::ComboBox> m_xPositionLB;
+
+    std::unique_ptr<weld::Label> m_xCharStyleFT;
+    std::unique_ptr<weld::ComboBox> m_xCharStyleLB;
+    std::unique_ptr<weld::Button> m_xStylistPB;
+
+    std::unique_ptr<weld::Button> m_xApplyPB;
+    std::unique_ptr<weld::Button> m_xClosePB;
+
+    std::unique_ptr<weld::Container> m_xContentArea;
+    std::unique_ptr<weld::Widget> m_xGrid;
+
+    std::unique_ptr<RubyPreview> m_xPreviewWin;
+    std::unique_ptr<weld::CustomWeld> m_xPreview;
+
+    DECL_LINK(ApplyHdl_Impl, weld::Button&, void);
+    DECL_LINK(CloseHdl_Impl, weld::Button&, void);
+    DECL_LINK(StylistHdl_Impl, weld::Button&, void);
+    DECL_LINK(ScrollHdl_Impl, weld::ScrolledWindow&, void);
+    DECL_LINK(PositionHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(AdjustHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(CharStyleHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(EditModifyHdl_Impl, weld::Entry&, void);
+    DECL_LINK(EditFocusHdl_Impl, weld::Widget&, void);
+    DECL_LINK(KeyUpDownHdl_Impl, const KeyEvent&, bool);
+    DECL_LINK(KeyUpDownTabHdl_Impl, const KeyEvent&, bool);
+
+    bool EditScrollHdl_Impl(sal_Int32 nParam);
+    bool EditJumpHdl_Impl(sal_Int32 nParam);
+
+    void                SetRubyText(sal_Int32 nPos, weld::Entry& rLeft, weld::Entry& rRight);
     void                GetRubyText();
     void                ClearCharStyleList();
     void                AssertOneEntry();
 
     void                Update();
-    virtual bool        Close() override;
+    virtual void        Close() override;
 
     long                GetLastPos() const {return nLastPos;}
     void                SetLastPos(long nSet) {nLastPos = nSet;}
@@ -144,21 +127,11 @@ class SvxRubyDialog : public SfxModelessDialog
 
     void                GetCurrentText(OUString& rBase, OUString& rRuby);
 
-    void                UpdateColors();
-
-protected:
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
-
 public:
-                        SvxRubyDialog(SfxBindings *pBindings, SfxChildWindow *pCW,
-                                    vcl::Window* pParent);
-    virtual             ~SvxRubyDialog() override;
-    virtual void        dispose() override;
+    SvxRubyDialog(SfxBindings *pBindings, SfxChildWindow *pCW, weld::Window* pParent);
+    virtual ~SvxRubyDialog() override;
 
     virtual void        Activate() override;
-
-private:
-    rtl::Reference<SvxRubyData_Impl> m_pImpl;
 };
 
 #endif // INCLUDED_SVX_RUBYDIALOG_HXX

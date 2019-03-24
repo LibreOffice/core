@@ -257,7 +257,6 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     : SfxModelessDialogController(&rBind, pChildWin, pParent,
                                   "svx/ui/findreplacedialog.ui", "FindReplaceDialog")
     , mbSuccess(false)
-    , mbClosing(false)
     , rBindings(rBind)
     , bWriter(false)
     , bSearch(true)
@@ -488,13 +487,6 @@ void SvxSearchDialog::Construct_Impl()
     }
 }
 
-void SvxSearchDialog::EndDialog()
-{
-    mbClosing = true;
-    SfxModelessDialogController::EndDialog();
-    mbClosing = false;
-}
-
 void SvxSearchDialog::Close()
 {
     // remember strings
@@ -519,7 +511,7 @@ void SvxSearchDialog::Close()
     aOpt.SetSearchFormatted         ( m_xSearchFormattedCB->get_active() );
     aOpt.Commit();
 
-    if (mbClosing)
+    if (IsClosing())
         return;
 
     const SfxPoolItem* ppArgs[] = { pSearchItem.get(), nullptr };
