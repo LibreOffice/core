@@ -79,6 +79,9 @@ FmSearchDialog::FmSearchDialog(weld::Window* pParent, const OUString& sInitialTe
     , m_prbSearchForNull(m_xBuilder->weld_radio_button("rbSearchForNull"))
     , m_prbSearchForNotNull(m_xBuilder->weld_radio_button("rbSearchForNotNull"))
     , m_pcmbSearchText(m_xBuilder->weld_combo_box("cmbSearchText"))
+    , m_prbReplaceWithText(m_xBuilder->weld_radio_button("rbReplaceWithText"))
+    , m_prbReplaceWithNull(m_xBuilder->weld_radio_button("rbReplaceWithNull"))
+    , m_pcmbReplaceText(m_xBuilder->weld_combo_box("cmbReplaceText"))
     , m_pftForm(m_xBuilder->weld_label("ftForm"))
     , m_plbForm(m_xBuilder->weld_combo_box("lbForm"))
     , m_prbAllFields(m_xBuilder->weld_radio_button("rbAllFields"))
@@ -100,14 +103,16 @@ FmSearchDialog::FmSearchDialog(weld::Window* pParent, const OUString& sInitialTe
     , m_pftRecord(m_xBuilder->weld_label("ftRecord"))
     , m_pftHint(m_xBuilder->weld_label("ftHint"))
     , m_pbSearchAgain(m_xBuilder->weld_button("pbSearchAgain"))
+    , m_pbReplaceAgain(m_xBuilder->weld_button("pbReplaceAgain"))
     , m_pbClose(m_xBuilder->weld_button("close"))
 {
     m_pcmbSearchText->set_size_request(m_pcmbSearchText->get_approximate_digit_width() * 38, -1);
+    m_pcmbReplaceText->set_size_request(m_pcmbReplaceText->get_approximate_digit_width() * 38, -1);
     m_plbForm->set_size_request(m_plbForm->get_approximate_digit_width() * 38, -1);
     m_sSearch = m_pbSearchAgain->get_label();
+    m_sReplace = m_pbReplaceAgain->get_label();
 
     DBG_ASSERT(m_lnkContextSupplier.IsSet(), "FmSearchDialog::FmSearchDialog : have no ContextSupplier !");
-
     FmSearchContext fmscInitial;
     fmscInitial.nContext = nInitialContext;
     m_lnkContextSupplier.Call(fmscInitial);
@@ -169,10 +174,14 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
     m_prbSearchForNull->connect_clicked(LINK(this, FmSearchDialog, OnClickedFieldRadios));
     m_prbSearchForNotNull->connect_clicked(LINK(this, FmSearchDialog, OnClickedFieldRadios));
 
+    m_prbReplaceWithNull->connect_clicked(LINK(this, FmSearchDialog, OnClickedReplaceWithNull));
+    m_prbReplaceWithText->connect_clicked(LINK(this, FmSearchDialog, OnClickedReplaceWithText));
+
     m_prbAllFields->connect_clicked(LINK(this, FmSearchDialog, OnClickedFieldRadios));
     m_prbSingleField->connect_clicked(LINK(this, FmSearchDialog, OnClickedFieldRadios));
 
     m_pbSearchAgain->connect_clicked(LINK(this, FmSearchDialog, OnClickedSearchAgain));
+    m_pbReplaceAgain->connect_clicked(LINK(this, FmSearchDialog, OnClickedReplaceAgain));
     m_ppbApproxSettings->connect_clicked(LINK(this, FmSearchDialog, OnClickedSpecialSettings));
     m_pSoundsLikeCJKSettings->connect_clicked(LINK(this, FmSearchDialog, OnClickedSpecialSettings));
 
@@ -181,7 +190,11 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
 
     m_pcmbSearchText->connect_changed(LINK(this, FmSearchDialog, OnSearchTextModified));
     m_pcmbSearchText->set_entry_completion(false);
-    m_pcmbSearchText->connect_focus_in(LINK(this, FmSearchDialog, OnFocusGrabbed));
+    m_pcmbSearchText->connect_focus_in(LINK(this, FmSearchDialog, OnFocusGrabbedSearch));
+
+    m_pcmbReplaceText->connect_changed(LINK(this, FmSearchDialog, OnReplaceTextModified));
+    m_pcmbReplaceText->set_entry_completion(false);
+    m_pcmbReplaceText->connect_focus_in(LINK(this, FmSearchDialog, OnFocusGrabbedReplace));
 
     m_pcbUseFormat->connect_toggled(LINK(this, FmSearchDialog, OnCheckBoxToggled));
     m_pcbBackwards->connect_toggled(LINK(this, FmSearchDialog, OnCheckBoxToggled));
@@ -262,6 +275,7 @@ IMPL_LINK(FmSearchDialog, OnClickedFieldRadios, weld::Button&, rButton, void)
         }
 }
 
+
 IMPL_LINK_NOARG(FmSearchDialog, OnClickedSearchAgain, weld::Button&, void)
 {
     if (m_pbClose->get_sensitive())
@@ -303,6 +317,27 @@ IMPL_LINK_NOARG(FmSearchDialog, OnClickedSearchAgain, weld::Button&, void)
             // the ProgressHandler is called when it's really finished, here it's only a demand
     }
 }
+IMPL_LINK_NOARG(FmSearchDialog, OnClickedReplaceWithNull, weld::Button&, void)
+{
+    if ((!m_pcmbSearchText->get_active_text().isEmpty()) || !m_prbSearchForText->get_active())
+        m_pbReplaceAgain->set_sensitive(true);
+    else
+        m_pbReplaceAgain->set_sensitive(false);
+}
+
+IMPL_LINK_NOARG(FmSearchDialog, OnClickedReplaceWithText, weld::Button&, void)
+{
+    if((!m_pcmbReplaceText->get_active_text().isEmpty()) &&
+            ((!m_pcmbSearchText->get_active_text().isEmpty()) || !m_prbSearchForText->get_active()))
+        m_pbReplaceAgain->set_sensitive(true);
+     else
+        m_pbReplaceAgain->set_sensitive(false);
+}
+
+IMPL_LINK_NOARG(FmSearchDialog, OnClickedReplaceAgain, weld::Button&, void)
+{
+    //TODO:Not implemented yet, none of the parameters currently got can be used to access database, need to change.
+}
 
 IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, weld::Button&, rButton, void)
 {
@@ -339,16 +374,39 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, weld::Button&, rButton, void
 IMPL_LINK_NOARG(FmSearchDialog, OnSearchTextModified, weld::ComboBox&, void)
 {
     if ((!m_pcmbSearchText->get_active_text().isEmpty()) || !m_prbSearchForText->get_active())
+    {
         m_pbSearchAgain->set_sensitive(true);
+        if ((!m_pcmbReplaceText->get_active_text().isEmpty()) || !m_prbReplaceWithText->get_active())
+            m_pbReplaceAgain->set_sensitive(true);
+        else
+            m_pbReplaceAgain->set_sensitive(false);
+    }
     else
+    {
         m_pbSearchAgain->set_sensitive(false);
+        m_pbReplaceAgain->set_sensitive(false);
 
+    }
     m_pSearchEngine->InvalidatePreviousLoc();
 }
 
-IMPL_LINK_NOARG(FmSearchDialog, OnFocusGrabbed, weld::Widget&, void)
+IMPL_LINK_NOARG(FmSearchDialog, OnReplaceTextModified, weld::ComboBox&, void)
+{
+    if (((!m_pcmbReplaceText->get_active_text().isEmpty()) || !m_prbReplaceWithText->get_active()) &&
+          ((!m_pcmbSearchText->get_active_text().isEmpty()) || !m_prbSearchForText->get_active()))
+        m_pbReplaceAgain->set_sensitive(true);
+    else
+        m_pbReplaceAgain->set_sensitive(false);
+}
+
+IMPL_LINK_NOARG(FmSearchDialog, OnFocusGrabbedSearch, weld::Widget&, void)
 {
     m_pcmbSearchText->select_entry_region(0, -1);
+}
+
+IMPL_LINK_NOARG(FmSearchDialog, OnFocusGrabbedReplace, weld::Widget&, void)
+{
+    m_pcmbReplaceText->select_entry_region(0, -1);
 }
 
 IMPL_LINK_NOARG(FmSearchDialog, OnPositionSelected, weld::ComboBox&, void)
@@ -509,6 +567,10 @@ void FmSearchDialog::EnableSearchUI(bool bEnable)
     m_prbSearchForText->set_sensitive(bEnable);
     m_prbSearchForNull->set_sensitive(bEnable);
     m_prbSearchForNotNull->set_sensitive(bEnable);
+
+    m_prbReplaceWithText->set_sensitive(bEnable);
+    m_prbReplaceWithNull->set_sensitive(bEnable);
+
     m_plbForm->set_sensitive(bEnable);
     m_prbAllFields->set_sensitive(bEnable);
     m_prbSingleField->set_sensitive(bEnable);
@@ -523,6 +585,7 @@ void FmSearchDialog::EnableSearchUI(bool bEnable)
         // In this case, EnableSearchForDependees disabled the search button
         // But as we're about to use it for cancelling the search, we really need to enable it, again
         m_pbSearchAgain->set_sensitive(true);
+        m_pbReplaceAgain->set_sensitive(true);
     }
 }
 
@@ -530,7 +593,6 @@ void FmSearchDialog::EnableSearchForDependees(bool bEnable)
 {
     bool bSearchingForText = m_prbSearchForText->get_active();
     m_pbSearchAgain->set_sensitive(bEnable && (!bSearchingForText || (!m_pcmbSearchText->get_active_text().isEmpty())));
-
     bEnable = bEnable && bSearchingForText;
 
     bool bEnableRedundants = !m_pSoundsLikeCJK->get_active() || !SvtCJKOptions().IsJapaneseFindEnabled();
