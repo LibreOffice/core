@@ -465,8 +465,6 @@ custom_widgets = [
     'RefEdit',
     'ReplaceEdit',
     'RowEdit',
-    'RubyEdit',
-    'RubyPreview',
     'SameContentListBox',
     'ScCondFormatList',
     'ScCsvTableBox',
