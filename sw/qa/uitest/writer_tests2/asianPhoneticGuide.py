@@ -40,10 +40,10 @@ class asianPhoneticGuide(UITestCase):
         actionProps3 = mkPropertyValues(props3)
         xstylelb.executeAction("SELECT", actionProps3)
 
-        xApplyBtn = xDialog.getChild("apply")
+        xApplyBtn = xDialog.getChild("ok")
         xApplyBtn.executeAction("CLICK", tuple())
 
-        xCloseBtn = xDialog.getChild("close")
+        xCloseBtn = xDialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCloseBtn)
 
         self.assertEqual(document.Text.String[0:1], "a")

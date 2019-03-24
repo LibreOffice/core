@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="AsianPhoneticGuideDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="asianphoneticguidedialog|AsianPhoneticGuideDialog">Asian Phonetic Guide</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -18,7 +22,7 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="apply">
+              <object class="GtkButton" id="ok">
                 <property name="label">gtk-apply</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -34,7 +38,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="close">
+              <object class="GtkButton" id="cancel">
                 <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -117,130 +121,142 @@
               <object class="GtkScrolledWindow" id="scrolledwindow">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
                 <property name="hscrollbar_policy">never</property>
+                <property name="vscrollbar_policy">always</property>
                 <property name="shadow_type">in</property>
                 <child>
                   <object class="GtkViewport" id="viewport1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkGrid" id="grid1">
+                      <object class="GtkGrid" id="grid">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_right">3</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="column_spacing">3</property>
                         <child>
-                          <object class="svxlo-RubyEdit" id="Left2ED">
+                          <object class="GtkGrid" id="grid1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="Left2ED-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Left2ED-atkobject">Base text</property>
+                            <property name="row_spacing">6</property>
+                            <property name="column_spacing">12</property>
+                            <property name="border_width">6</property>
+                            <child>
+                              <object class="GtkEntry" id="Left2ED">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="hexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="Left2ED-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Left2ED-atkobject">Base text</property>
+                                  </object>
+                                </child>
                               </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                              </packing>
                             </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="svxlo-RubyEdit" id="Left1ED">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkEntry" id="Left1ED">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="Right1ED">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="hexpand">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="Right2ED">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="Right2ED-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Right2ED-atkobject">Ruby text</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="Left3ED">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="Left3ED-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Left3ED-atkobject">Base text</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="Right3ED">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="Right3ED-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Right3ED-atkobject">Ruby text</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="Right4ED">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="Right4ED-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Right4ED-atkobject">Ruby text</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="Left4ED">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="Left4ED-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Left4ED-atkobject">Base text</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">3</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="svxlo-RubyEdit" id="Right1ED">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="svxlo-RubyEdit" id="Right2ED">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="Right2ED-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Right2ED-atkobject">Ruby text</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="svxlo-RubyEdit" id="Left3ED">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="Left3ED-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Left3ED-atkobject">Base text</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="svxlo-RubyEdit" id="Right3ED">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="Right3ED-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Right3ED-atkobject">Ruby text</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="svxlo-RubyEdit" id="Right4ED">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="Right4ED-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Right4ED-atkobject">Ruby text</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="svxlo-RubyEdit" id="Left4ED">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="Left4ED-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Left4ED-atkobject">Base text</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">3</property>
                           </packing>
                         </child>
                       </object>
@@ -304,7 +320,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="stylelb">
+                  <object class="GtkComboBoxText" id="stylelb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
@@ -386,9 +402,28 @@
               </packing>
             </child>
             <child>
-              <object class="svxlo-RubyPreview" id="preview">
+              <object class="GtkScrolledWindow" id="ctlFavoriteswin">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="vscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="preview">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -406,8 +441,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">apply</action-widget>
-      <action-widget response="-7">close</action-widget>
+      <action-widget response="-5">ok</action-widget>
+      <action-widget response="-7">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>

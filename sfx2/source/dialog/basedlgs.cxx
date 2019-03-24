@@ -469,6 +469,11 @@ void SfxDialogController::EndDialog()
     response(RET_CLOSE);
 }
 
+bool SfxModelessDialogController::IsClosing() const
+{
+    return m_xImpl->bClosing;
+}
+
 void SfxModelessDialogController::EndDialog()
 {
     m_xImpl->bClosing = true;
