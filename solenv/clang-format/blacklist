@@ -12977,9 +12977,6 @@ shell/source/unix/exec/shellexec.cxx
 shell/source/unix/exec/shellexec.hxx
 shell/source/unix/exec/shellexecentry.cxx
 shell/source/unix/misc/uri-encode.c
-shell/source/unix/sysshell/recently_used_file.cxx
-shell/source/unix/sysshell/recently_used_file.hxx
-shell/source/unix/sysshell/recently_used_file_handler.cxx
 shell/source/win32/SysShExec.cxx
 shell/source/win32/SysShExec.hxx
 shell/source/win32/SysShentry.cxx

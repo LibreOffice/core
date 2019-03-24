@@ -91,12 +91,6 @@ $(eval $(call gb_Module_add_targets,shell,\
 	Library_syssh \
 ))
 
-ifeq ($(USING_X11),TRUE)
-$(eval $(call gb_Module_add_targets,shell,\
-	Library_recentfile \
-))
-endif
-
 ifneq ($(OS),WNT)
 
 $(eval $(call gb_Module_add_targets,shell,\
