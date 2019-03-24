@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -27,6 +26,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/viewsh.hxx>
 #include <svl/eitem.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -70,13 +70,9 @@ static const sal_Char cRubyCharStyleName[] = "RubyCharStyleName";
 SvxRubyChildWindow::SvxRubyChildWindow(vcl::Window* _pParent, sal_uInt16 nId,SfxBindings* pBindings, SfxChildWinInfo const * pInfo)
     : SfxChildWindow(_pParent, nId)
 {
-    VclPtr<SvxRubyDialog> pDlg = VclPtr<SvxRubyDialog>::Create(pBindings, this, _pParent);
-    SetWindow(pDlg);
-
-    if (pInfo->nFlags & SfxChildWindowFlags::ZOOMIN)
-        pDlg->RollUp();
-
-    pDlg->Initialize(pInfo);
+    std::shared_ptr<SvxRubyDialog> xDlg(new SvxRubyDialog(pBindings, this, _pParent->GetFrameWeld()));
+    SetController(xDlg);
+    xDlg->Initialize(pInfo);
 }
 
 SfxChildWinInfo SvxRubyChildWindow::GetInfo() const
@@ -200,123 +196,97 @@ void SvxRubyData_Impl::AssertOneEntry()
     }
 }
 
-SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, vcl::Window* _pParent)
-    : SfxModelessDialog(pBind, pCW, _pParent, "AsianPhoneticGuideDialog", "svx/ui/asianphoneticguidedialog.ui")
+SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, weld::Window* pParent)
+    : SfxModelessDialogController(pBind, pCW, pParent,
+                        "svx/ui/asianphoneticguidedialog.ui", "AsianPhoneticGuideDialog")
     , nLastPos(0)
     , nCurrentEdit(0)
     , bModified(false)
     , pBindings(pBind)
     , m_pImpl( new SvxRubyData_Impl )
+    , m_xLeftFT(m_xBuilder->weld_label("basetextft"))
+    , m_xRightFT(m_xBuilder->weld_label("rubytextft"))
+    , m_xLeft1ED(m_xBuilder->weld_entry("Left1ED"))
+    , m_xRight1ED(m_xBuilder->weld_entry("Right1ED"))
+    , m_xLeft2ED(m_xBuilder->weld_entry("Left2ED"))
+    , m_xRight2ED(m_xBuilder->weld_entry("Right2ED"))
+    , m_xLeft3ED(m_xBuilder->weld_entry("Left3ED"))
+    , m_xRight3ED(m_xBuilder->weld_entry("Right3ED"))
+    , m_xLeft4ED(m_xBuilder->weld_entry("Left4ED"))
+    , m_xRight4ED(m_xBuilder->weld_entry("Right4ED"))
+    , m_xScrolledWindow(m_xBuilder->weld_scrolled_window("scrolledwindow"))
+    , m_xAdjustLB(m_xBuilder->weld_combo_box("adjustlb"))
+    , m_xPositionLB(m_xBuilder->weld_combo_box("positionlb"))
+    , m_xCharStyleFT(m_xBuilder->weld_label("styleft"))
+    , m_xCharStyleLB(m_xBuilder->weld_combo_box("stylelb"))
+    , m_xStylistPB(m_xBuilder->weld_button("styles"))
+    , m_xApplyPB(m_xBuilder->weld_button("ok"))
+    , m_xClosePB(m_xBuilder->weld_button("cancel"))
+    , m_xContentArea(m_xDialog->weld_content_area())
+    , m_xGrid(m_xBuilder->weld_widget("grid"))
+    , m_xPreviewWin(new RubyPreview)
+    , m_xPreview(new weld::CustomWeld(*m_xBuilder, "preview", *m_xPreviewWin))
 {
-    get(m_pLeftFT, "basetextft");
-    get(m_pRightFT, "rubytextft");
-    get(m_pAdjustLB, "adjustlb");
-    get(m_pPositionLB, "positionlb");
-    get(m_pCharStyleFT, "styleft");
-    get(m_pCharStyleLB, "stylelb");
-    m_pCharStyleLB->SetStyle(m_pCharStyleLB->GetStyle() | WB_SORT);
-    get(m_pStylistPB, "styles");
-    get(m_pApplyPB, "apply");
-    get(m_pClosePB, "close");
-    get(m_pPreviewWin, "preview");
-    m_pPreviewWin->setRubyDialog(this);
-    get(m_pScrolledWindow, "scrolledwindow");
-    m_pScrolledWindow->setUserManagedScrolling(true);
-    m_pScrollSB = &m_pScrolledWindow->getVertScrollBar();
-    get(m_pLeft1ED, "Left1ED");
-    get(m_pRight1ED, "Right1ED");
-    get(m_pLeft2ED, "Left2ED");
-    get(m_pRight2ED, "Right2ED");
-    get(m_pLeft3ED, "Left3ED");
-    get(m_pRight3ED, "Right3ED");
-    get(m_pLeft4ED, "Left4ED");
-    get(m_pRight4ED, "Right4ED");
-    aEditArr[0] = m_pLeft1ED; aEditArr[1] = m_pRight1ED;
-    aEditArr[2] = m_pLeft2ED; aEditArr[3] = m_pRight2ED;
-    aEditArr[4] = m_pLeft3ED; aEditArr[5] = m_pRight3ED;
-    aEditArr[6] = m_pLeft4ED; aEditArr[7] = m_pRight4ED;
+    m_xCharStyleLB->make_sorted();
+    m_xPreviewWin->setRubyDialog(this);
+    m_xScrolledWindow->set_user_managed_scrolling();
+    m_xScrolledWindow->set_size_request(-1, m_xGrid->get_preferred_size().Height());
+    m_xScrolledWindow->set_vpolicy(VclPolicyType::NEVER);
 
-    m_pApplyPB->SetClickHdl(LINK(this, SvxRubyDialog, ApplyHdl_Impl));
-    m_pClosePB->SetClickHdl(LINK(this, SvxRubyDialog, CloseHdl_Impl));
-    m_pStylistPB->SetClickHdl(LINK(this, SvxRubyDialog, StylistHdl_Impl));
-    m_pAdjustLB->SetSelectHdl(LINK(this, SvxRubyDialog, AdjustHdl_Impl));
-    m_pPositionLB->SetSelectHdl(LINK(this, SvxRubyDialog, PositionHdl_Impl));
-    m_pCharStyleLB->SetSelectHdl(LINK(this, SvxRubyDialog, CharStyleHdl_Impl));
+    aEditArr[0] = m_xLeft1ED.get(); aEditArr[1] = m_xRight1ED.get();
+    aEditArr[2] = m_xLeft2ED.get(); aEditArr[3] = m_xRight2ED.get();
+    aEditArr[4] = m_xLeft3ED.get(); aEditArr[5] = m_xRight3ED.get();
+    aEditArr[6] = m_xLeft4ED.get(); aEditArr[7] = m_xRight4ED.get();
 
-    Link<ScrollBar*,void> aScrLk(LINK(this, SvxRubyDialog, ScrollHdl_Impl));
-    m_pScrollSB->SetScrollHdl(aScrLk);
-    m_pScrollSB->SetEndScrollHdl(aScrLk);
+    m_xApplyPB->connect_clicked(LINK(this, SvxRubyDialog, ApplyHdl_Impl));
+    m_xClosePB->connect_clicked(LINK(this, SvxRubyDialog, CloseHdl_Impl));
+    m_xStylistPB->connect_clicked(LINK(this, SvxRubyDialog, StylistHdl_Impl));
+    m_xAdjustLB->connect_changed(LINK(this, SvxRubyDialog, AdjustHdl_Impl));
+    m_xPositionLB->connect_changed(LINK(this, SvxRubyDialog, PositionHdl_Impl));
+    m_xCharStyleLB->connect_changed(LINK(this, SvxRubyDialog, CharStyleHdl_Impl));
 
-    Link<Edit&,void> aEditLk(LINK(this, SvxRubyDialog, EditModifyHdl_Impl));
-    Link<sal_Int32,bool> aScrollLk(LINK(this, SvxRubyDialog, EditScrollHdl_Impl));
-    Link<sal_Int32,void> aJumpLk(LINK(this, SvxRubyDialog, EditJumpHdl_Impl));
+    Link<weld::ScrolledWindow&, void> aScrLk(LINK(this, SvxRubyDialog, ScrollHdl_Impl));
+    m_xScrolledWindow->connect_vadjustment_changed(aScrLk);
+
+    Link<weld::Entry&,void> aEditLk(LINK(this, SvxRubyDialog, EditModifyHdl_Impl));
+    Link<weld::Widget&,void> aFocusLk(LINK(this, SvxRubyDialog, EditFocusHdl_Impl));
+    Link<const KeyEvent&,bool> aKeyUpDownLk(LINK(this, SvxRubyDialog, KeyUpDownHdl_Impl));
+    Link<const KeyEvent&,bool> aKeyTabUpDownLk(LINK(this, SvxRubyDialog, KeyUpDownTabHdl_Impl));
     for (sal_uInt16 i = 0; i < 8; i++)
     {
-        aEditArr[i]->SetModifyHdl(aEditLk);
-        aEditArr[i]->SetJumpHdl(aJumpLk);
+        aEditArr[i]->connect_changed(aEditLk);
+        aEditArr[i]->connect_focus_in(aFocusLk);
         if (!i || 7 == i)
-            aEditArr[i]->SetScrollHdl(aScrollLk);
+            aEditArr[i]->connect_key_press(aKeyTabUpDownLk);
+        else
+            aEditArr[i]->connect_key_press(aKeyUpDownLk);
     }
-
-    UpdateColors();
 }
 
 SvxRubyDialog::~SvxRubyDialog()
 {
-    disposeOnce();
-}
-
-void SvxRubyDialog::dispose()
-{
     ClearCharStyleList();
     EventObject aEvent;
     m_pImpl->disposing(aEvent);
-    m_pLeftFT.clear();
-    m_pRightFT.clear();
-    m_pLeft1ED.clear();
-    m_pRight1ED.clear();
-    m_pLeft2ED.clear();
-    m_pRight2ED.clear();
-    m_pLeft3ED.clear();
-    m_pRight3ED.clear();
-    m_pLeft4ED.clear();
-    m_pRight4ED.clear();
-    for (int i = 0; i < 7; i++)
-        aEditArr[i].clear();
-    m_pScrolledWindow.clear();
-    m_pScrollSB.clear();
-    m_pAdjustLB.clear();
-    m_pPositionLB.clear();
-    m_pCharStyleFT.clear();
-    m_pCharStyleLB.clear();
-    m_pStylistPB.clear();
-    m_pPreviewWin.clear();
-    m_pApplyPB.clear();
-    m_pClosePB.clear();
-    SfxModelessDialog::dispose();
 }
 
 void SvxRubyDialog::ClearCharStyleList()
 {
-    for (sal_Int32 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)
-    {
-        void* pData = m_pCharStyleLB->GetEntryData(i);
-        delete static_cast<OUString*>(pData);
-    }
-    m_pCharStyleLB->Clear();
+    m_xCharStyleLB->clear();
 }
 
-bool SvxRubyDialog::Close()
+void SvxRubyDialog::Close()
 {
-    pBindings->GetDispatcher()->Execute( SID_RUBY_DIALOG,
-                              SfxCallMode::ASYNCHRON |
-                              SfxCallMode::RECORD);
-    return true;
+    if (IsClosing())
+        return;
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (pViewShell)
+        pViewShell->GetViewFrame()->ToggleChildWindow(SID_RUBY_DIALOG);
 }
 
 void SvxRubyDialog::Activate()
 {
-    SfxModelessDialog::Activate();
+    SfxModelessDialogController::Activate();
     std::unique_ptr<SfxPoolItem> pState;
     //get selection from current view frame
     SfxViewFrame* pCurFrm = SfxViewFrame::Current();
@@ -331,7 +301,7 @@ void SvxRubyDialog::Activate()
         if (xRubySel.is())
         {
             Reference< XModel > xModel = m_pImpl->GetModel();
-            const OUString sCharStyleSelect = m_pCharStyleLB->GetSelectedEntry();
+            const OUString sCharStyleSelect = m_xCharStyleLB->get_active_text();
             ClearCharStyleList();
             Reference<XStyleFamiliesSupplier> xSupplier(xModel, UNO_QUERY);
             if (xSupplier.is())
@@ -370,8 +340,7 @@ void SvxRubyDialog::Activate()
                             }
                             if (!sName.isEmpty())
                             {
-                                const sal_Int32 nPos = m_pCharStyleLB->InsertEntry(sName);
-                                m_pCharStyleLB->SetEntryData( nPos, new OUString(sCoreName) );
+                                m_xCharStyleLB->append(sCoreName, sName);
 
                             }
                         }
@@ -381,18 +350,18 @@ void SvxRubyDialog::Activate()
                 {
                     OSL_FAIL("exception in style access");
                 }
-                if(!sCharStyleSelect.isEmpty())
-                    m_pCharStyleLB->SelectEntry(sCharStyleSelect);
+                if (!sCharStyleSelect.isEmpty())
+                    m_xCharStyleLB->set_active_text(sCharStyleSelect);
             }
-            m_pCharStyleLB->Enable(xSupplier.is());
-            m_pCharStyleFT->Enable(xSupplier.is());
+            m_xCharStyleLB->set_sensitive(xSupplier.is());
+            m_xCharStyleFT->set_sensitive(xSupplier.is());
         }
         Update();
-        m_pPreviewWin->Invalidate();
+        m_xPreviewWin->Invalidate();
     }
 }
 
-void SvxRubyDialog::SetRubyText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
+void SvxRubyDialog::SetRubyText(sal_Int32 nPos, weld::Entry& rLeft, weld::Entry& rRight)
 {
     OUString sLeft, sRight;
     const Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
@@ -413,12 +382,12 @@ void SvxRubyDialog::SetRubyText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
     {
         bEnable = true;
     }
-    rLeft.Enable(bEnable);
-    rRight.Enable(bEnable);
-    rLeft.SetText(sLeft);
-    rRight.SetText(sRight);
-    rLeft.SaveValue();
-    rRight.SaveValue();
+    rLeft.set_sensitive(bEnable);
+    rRight.set_sensitive(bEnable);
+    rLeft.set_text(sLeft);
+    rRight.set_text(sRight);
+    rLeft.save_value();
+    rRight.save_value();
 }
 
 void SvxRubyDialog::GetRubyText()
@@ -426,8 +395,9 @@ void SvxRubyDialog::GetRubyText()
     long nTempLastPos = GetLastPos();
     for (int i = 0; i < 8; i+=2)
     {
-        if (aEditArr[i]->IsEnabled() &&
-            (aEditArr[i]->IsValueChangedFromSaved() || aEditArr[i + 1]->IsValueChangedFromSaved()))
+        if (aEditArr[i]->get_sensitive() &&
+            (aEditArr[i]->get_value_changed_from_saved() ||
+             aEditArr[i + 1]->get_value_changed_from_saved()))
         {
             Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
             DBG_ASSERT(aRubyValues.getLength() > (i / 2 + nTempLastPos), "wrong index" );
@@ -436,9 +406,9 @@ void SvxRubyDialog::GetRubyText()
             for (PropertyValue & propVal : rProps)
             {
                 if (propVal.Name == cRubyBaseText)
-                    propVal.Value <<= aEditArr[i]->GetText();
+                    propVal.Value <<= aEditArr[i]->get_text();
                 else if (propVal.Name == cRubyText)
-                    propVal.Value <<= aEditArr[i + 1]->GetText();
+                    propVal.Value <<= aEditArr[i + 1]->get_text();
             }
         }
     }
@@ -448,9 +418,11 @@ void SvxRubyDialog::Update()
 {
     const Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
     sal_Int32 nLen = aRubyValues.getLength();
-    m_pScrollSB->Enable(nLen > 4);
-    m_pScrollSB->SetRange( Range(0, nLen > 4 ? nLen - 4 : 0));
-    m_pScrollSB->SetThumbPos(0);
+    m_xScrolledWindow->vadjustment_configure(0, 0, !nLen ? 1 : nLen, 1, 4, 4);
+    if (nLen > 4)
+        m_xScrolledWindow->set_vpolicy(VclPolicyType::ALWAYS);
+    else
+        m_xScrolledWindow->set_vpolicy(VclPolicyType::NEVER);
     SetLastPos(0);
     SetModified(false);
 
@@ -499,65 +471,65 @@ void SvxRubyDialog::Update()
         nPosition = 0;
     }
     if (nAdjust > -1)
-        m_pAdjustLB->SelectEntryPos(nAdjust);
+        m_xAdjustLB->set_active(nAdjust);
     else
-        m_pAdjustLB->SetNoSelection();
+        m_xAdjustLB->set_active(-1);
     if (nPosition > -1)
-        m_pPositionLB->SelectEntryPos(nPosition);
+        m_xPositionLB->set_active(nPosition);
     if (!nLen || (bCharStyleEqual && sCharStyleName.isEmpty()))
         sCharStyleName = "Rubies";
     if (!sCharStyleName.isEmpty())
     {
-        for (sal_Int32 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)
+        for (int i = 0, nEntryCount = m_xCharStyleLB->get_count(); i < nEntryCount; i++)
         {
-            const OUString* pCoreName = static_cast<const OUString*>(m_pCharStyleLB->GetEntryData(i));
-            if (pCoreName && sCharStyleName == *pCoreName)
+            OUString sCoreName = m_xCharStyleLB->get_id(i);
+            if (sCharStyleName == sCoreName)
             {
-                m_pCharStyleLB->SelectEntryPos(i);
+                m_xCharStyleLB->set_active(i);
                 break;
             }
         }
     }
     else
-        m_pCharStyleLB->SetNoSelection();
+        m_xCharStyleLB->set_active(-1);
 
-    ScrollHdl_Impl(m_pScrollSB);
+    ScrollHdl_Impl(*m_xScrolledWindow);
 }
 
 void SvxRubyDialog::GetCurrentText(OUString& rBase, OUString& rRuby)
 {
-    rBase = aEditArr[nCurrentEdit * 2]->GetText();
-    rRuby = aEditArr[nCurrentEdit * 2 + 1]->GetText();
+    rBase = aEditArr[nCurrentEdit * 2]->get_text();
+    rRuby = aEditArr[nCurrentEdit * 2 + 1]->get_text();
 }
 
-IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll, void)
+IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, weld::ScrolledWindow&, rScroll, void)
 {
-    long nPos = pScroll->GetThumbPos();
+    int nPos = rScroll.vadjustment_get_value();
     if (GetLastPos() != nPos)
     {
         GetRubyText();
     }
-    SetRubyText(nPos++, *m_pLeft1ED, *m_pRight1ED);
-    SetRubyText(nPos++, *m_pLeft2ED, *m_pRight2ED);
-    SetRubyText(nPos++, *m_pLeft3ED, *m_pRight3ED);
-    SetRubyText(nPos, *m_pLeft4ED, *m_pRight4ED);
+    SetRubyText(nPos++, *m_xLeft1ED, *m_xRight1ED);
+    SetRubyText(nPos++, *m_xLeft2ED, *m_xRight2ED);
+    SetRubyText(nPos++, *m_xLeft3ED, *m_xRight3ED);
+    SetRubyText(nPos, *m_xLeft4ED, *m_xRight4ED);
     SetLastPos(nPos - 3);
-    m_pPreviewWin->Invalidate();
+    m_xPreviewWin->Invalidate();
 }
 
-IMPL_LINK_NOARG(SvxRubyDialog, ApplyHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxRubyDialog, ApplyHdl_Impl, weld::Button&, void)
 {
     const Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
     if (!aRubyValues.getLength())
     {
         AssertOneEntry();
-        PositionHdl_Impl(*m_pPositionLB);
-        AdjustHdl_Impl(*m_pAdjustLB);
-        CharStyleHdl_Impl(*m_pCharStyleLB);
+        PositionHdl_Impl(*m_xPositionLB);
+        AdjustHdl_Impl(*m_xAdjustLB);
+        CharStyleHdl_Impl(*m_xCharStyleLB);
     }
     GetRubyText();
     //reset all edit fields - SaveValue is called
-    ScrollHdl_Impl(m_pScrollSB);
+    ScrollHdl_Impl(*m_xScrolledWindow);
 
     Reference<XRubySelection> xSelection = m_pImpl->GetRubySelection();
     if (IsModified() && xSelection.is())
@@ -573,12 +545,12 @@ IMPL_LINK_NOARG(SvxRubyDialog, ApplyHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxRubyDialog, CloseHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxRubyDialog, CloseHdl_Impl, weld::Button&, void)
 {
     Close();
 }
 
-IMPL_LINK_NOARG(SvxRubyDialog, StylistHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxRubyDialog, StylistHdl_Impl, weld::Button&, void)
 {
     std::unique_ptr<SfxPoolItem> pState;
     SfxItemState eState = pBindings->QueryState(SID_STYLE_DESIGNER, pState);
@@ -589,10 +561,10 @@ IMPL_LINK_NOARG(SvxRubyDialog, StylistHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox&, rBox, void)
+IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, weld::ComboBox&, rBox, void)
 {
     AssertOneEntry();
-    sal_Int16 nAdjust = rBox.GetSelectedEntryPos();
+    sal_Int16 nAdjust = rBox.get_active();
     Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
     for (PropertyValues & rProps : aRubyValues)
     {
@@ -603,13 +575,13 @@ IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox&, rBox, void)
         }
         SetModified(true);
     }
-    m_pPreviewWin->Invalidate();
+    m_xPreviewWin->Invalidate();
 }
 
-IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox&, rBox, void)
+IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, weld::ComboBox&, rBox, void)
 {
     AssertOneEntry();
-    sal_Int16 nPosition = rBox.GetSelectedEntryPos();
+    sal_Int16 nPosition = rBox.get_active();
     Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
     for (PropertyValues & rProps : aRubyValues)
     {
@@ -620,15 +592,15 @@ IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox&, rBox, void)
         }
         SetModified(true);
     }
-    m_pPreviewWin->Invalidate();
+    m_xPreviewWin->Invalidate();
 }
 
-IMPL_LINK_NOARG(SvxRubyDialog, CharStyleHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxRubyDialog, CharStyleHdl_Impl, weld::ComboBox&, void)
 {
     AssertOneEntry();
     OUString sStyleName;
-    if (LISTBOX_ENTRY_NOTFOUND != m_pCharStyleLB->GetSelectedEntryPos())
-        sStyleName = *static_cast<OUString*>(m_pCharStyleLB->GetSelectedEntryData());
+    if (m_xCharStyleLB->get_active() != -1)
+        sStyleName = m_xCharStyleLB->get_active_id();
     Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
     for (PropertyValues & rProps : aRubyValues)
     {
@@ -643,7 +615,7 @@ IMPL_LINK_NOARG(SvxRubyDialog, CharStyleHdl_Impl, ListBox&, void)
     }
 }
 
-IMPL_LINK(SvxRubyDialog, EditModifyHdl_Impl, Edit&, rEdit, void)
+IMPL_LINK(SvxRubyDialog, EditFocusHdl_Impl, weld::Widget&, rEdit, void)
 {
     for (sal_uInt16 i = 0; i < 8; i++)
     {
@@ -653,43 +625,47 @@ IMPL_LINK(SvxRubyDialog, EditModifyHdl_Impl, Edit&, rEdit, void)
             break;
         }
     }
-    m_pPreviewWin->Invalidate();
+    m_xPreviewWin->Invalidate();
 }
 
-IMPL_LINK(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32, nParam, bool)
+IMPL_LINK(SvxRubyDialog, EditModifyHdl_Impl, weld::Entry&, rEdit, void)
+{
+    EditFocusHdl_Impl(rEdit);
+}
+
+bool SvxRubyDialog::EditScrollHdl_Impl(sal_Int32 nParam)
 {
     bool bRet = false;
-    if (m_pScrollSB->IsEnabled())
+    //scroll forward
+    if (nParam > 0 && (aEditArr[7]->has_focus() || aEditArr[6]->has_focus() ))
     {
-        //scroll forward
-        if (nParam > 0 && (aEditArr[7]->HasFocus() || aEditArr[6]->HasFocus() ))
+        if (m_xScrolledWindow->vadjustment_get_upper() >
+            m_xScrolledWindow->vadjustment_get_value() + m_xScrolledWindow->vadjustment_get_page_size())
         {
-            if (m_pScrollSB->GetRangeMax() > m_pScrollSB->GetThumbPos())
-            {
-                m_pScrollSB->SetThumbPos(m_pScrollSB->GetThumbPos() + 1);
-                aEditArr[6]->GrabFocus();
-                bRet = true;
-            }
-        }
-        //scroll backward
-        else if (m_pScrollSB->GetThumbPos() && (aEditArr[0]->HasFocus()||aEditArr[1]->HasFocus()) )
-        {
-            m_pScrollSB->SetThumbPos(m_pScrollSB->GetThumbPos() - 1);
-            aEditArr[1]->GrabFocus();
+            m_xScrolledWindow->vadjustment_set_value(m_xScrolledWindow->vadjustment_get_value() + 1);
+            aEditArr[6]->grab_focus();
             bRet = true;
         }
-        if (bRet)
-            ScrollHdl_Impl(m_pScrollSB);
     }
+    //scroll backward
+    else if (m_xScrolledWindow->vadjustment_get_value() && (aEditArr[0]->has_focus()||aEditArr[1]->has_focus()) )
+    {
+        m_xScrolledWindow->vadjustment_set_value(m_xScrolledWindow->vadjustment_get_value() - 1);
+        aEditArr[1]->grab_focus();
+        bRet = true;
+    }
+    if (bRet)
+        ScrollHdl_Impl(*m_xScrolledWindow);
     return bRet;
 }
 
-IMPL_LINK(SvxRubyDialog, EditJumpHdl_Impl, sal_Int32, nParam, void)
+bool SvxRubyDialog::EditJumpHdl_Impl(sal_Int32 nParam)
 {
+    bool bHandled = false;
     sal_uInt16 nIndex = USHRT_MAX;
     for (sal_uInt16 i = 0; i < 8; i++)
     {
-        if(aEditArr[i]->HasFocus())
+        if(aEditArr[i]->has_focus())
             nIndex = i;
     }
     if (nIndex < 8)
@@ -697,94 +673,65 @@ IMPL_LINK(SvxRubyDialog, EditJumpHdl_Impl, sal_Int32, nParam, void)
         if (nParam > 0)
         {
             if (nIndex < 6)
-                aEditArr[nIndex + 2]->GrabFocus();
+                aEditArr[nIndex + 2]->grab_focus();
             else if( EditScrollHdl_Impl(nParam))
-                aEditArr[nIndex]->GrabFocus();
+                aEditArr[nIndex]->grab_focus();
         }
         else
         {
             if (nIndex > 1)
-                aEditArr[nIndex - 2]->GrabFocus();
+                aEditArr[nIndex - 2]->grab_focus();
             else if( EditScrollHdl_Impl(nParam))
-                aEditArr[nIndex]->GrabFocus();
+                aEditArr[nIndex]->grab_focus();
         }
+        bHandled = true;
     }
-};
+    return bHandled;
+}
 
 void SvxRubyDialog::AssertOneEntry()
 {
     m_pImpl->AssertOneEntry();
 }
 
-void SvxRubyDialog::UpdateColors()
-{
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    svtools::ColorConfig aColorConfig;
-
-    vcl::Font aFont(m_pPreviewWin->GetFont());
-
-    Color aNewTextColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
-    Color aNewFillColor(rStyleSettings.GetWindowColor());
-
-    if (aNewFillColor != aFont.GetFillColor() || aNewTextColor != aFont.GetColor())
-    {
-        aFont.SetFillColor(aNewFillColor);
-        aFont.SetColor(aNewTextColor);
-        m_pPreviewWin->SetFont(aFont);
-    }
-}
-
-void SvxRubyDialog::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    SfxModelessDialog::DataChanged( rDCEvt );
-
-    if ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
-    {
-        UpdateColors();
-    }
-}
-
 void SvxRubyDialog::EnableControls(bool bEnable)
 {
-    get_content_area()->Enable(bEnable);
-    m_pApplyPB->Enable(bEnable);
+    m_xContentArea->set_sensitive(bEnable);
+    m_xApplyPB->set_sensitive(bEnable);
 }
 
-RubyPreview::RubyPreview(vcl::Window *pParent)
-    : Window(pParent, WB_BORDER)
-    , m_pParentDlg(nullptr)
+RubyPreview::RubyPreview()
+    : m_pParentDlg(nullptr)
 {
-    SetBorderStyle(WindowBorderStyle::MONO);
 }
 
 RubyPreview::~RubyPreview()
 {
-    disposeOnce();
 }
-
-void RubyPreview::dispose()
-{
-    m_pParentDlg.clear();
-    vcl::Window::dispose();
-}
-
-VCL_BUILDER_FACTORY(RubyPreview)
 
 void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
-    rRenderContext.Push(PushFlags::MAPMODE);
+    rRenderContext.Push(PushFlags::ALL);
 
     rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
 
     Size aWinSize = rRenderContext.GetOutputSize();
 
-    vcl::Font aSaveFont = rRenderContext.GetFont();
-    aSaveFont.SetFontHeight(aWinSize.Height() / 4);
-    rRenderContext.SetFont(aSaveFont);
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    svtools::ColorConfig aColorConfig;
+
+    Color aNewTextColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
+    Color aNewFillColor(rStyleSettings.GetWindowColor());
+
+    vcl::Font aFont = rRenderContext.GetFont();
+    aFont.SetFontHeight(aWinSize.Height() / 4);
+    aFont.SetFillColor(aNewFillColor);
+    aFont.SetColor(aNewTextColor);
+    rRenderContext.SetFont(aFont);
 
     tools::Rectangle aRect(Point(0, 0), aWinSize);
     rRenderContext.SetLineColor();
-    rRenderContext.SetFillColor(aSaveFont.GetFillColor());
+    rRenderContext.SetFillColor(aFont.GetFillColor());
     rRenderContext.DrawRect(aRect);
 
     OUString sBaseText, sRubyText;
@@ -793,13 +740,13 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     long nTextHeight = rRenderContext.GetTextHeight();
     long nBaseWidth = rRenderContext.GetTextWidth(sBaseText);
 
-    vcl::Font aRubyFont(aSaveFont);
+    vcl::Font aRubyFont(aFont);
     aRubyFont.SetFontHeight(aRubyFont.GetFontHeight() * 70 / 100);
     rRenderContext.SetFont(aRubyFont);
     long nRubyWidth = rRenderContext.GetTextWidth(sRubyText);
-    rRenderContext.SetFont(aSaveFont);
+    rRenderContext.SetFont(aFont);
 
-    RubyAdjust nAdjust = static_cast<RubyAdjust>(m_pParentDlg->m_pAdjustLB->GetSelectedEntryPos());
+    RubyAdjust nAdjust = static_cast<RubyAdjust>(m_pParentDlg->m_xAdjustLB->get_active());
     //use center if no adjustment is available
     if (nAdjust > RubyAdjust_INDENT_BLOCK)
         nAdjust = RubyAdjust_CENTER;
@@ -816,7 +763,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     long nYRuby = aWinSize.Height() / 4 - nTextHeight / 2;
     long nYBase = aWinSize.Height() * 3 / 4 - nTextHeight / 2;
 
-    sal_Int16 nRubyPos = m_pParentDlg->m_pPositionLB->GetSelectedEntryPos();
+    sal_Int16 nRubyPos = m_pParentDlg->m_xPositionLB->get_active();
     if ( nRubyPos == 1 )    // BOTTOM
     {
         long nTmp = nYRuby;
@@ -860,7 +807,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         nYOutput = nYBase;
         sOutputText = sBaseText;
         nOutTextWidth = nBaseWidth;
-        rRenderContext.SetFont(aSaveFont);
+        rRenderContext.SetFont(aFont);
     }
 
     switch (nAdjust)
@@ -873,7 +820,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         break;
         case RubyAdjust_INDENT_BLOCK:
         {
-            long nCharWidth = GetTextWidth("X");
+            long nCharWidth = rRenderContext.GetTextWidth("X");
             if (nOutTextWidth < (nRightEnd - nLeftStart - nCharWidth))
             {
                 nCharWidth /= 2;
@@ -887,12 +834,12 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
             if (sOutputText.getLength() > 1)
             {
                 sal_Int32 nCount = sOutputText.getLength();
-                long nSpace = ((nRightEnd - nLeftStart) - GetTextWidth(sOutputText)) / (nCount - 1);
+                long nSpace = ((nRightEnd - nLeftStart) - rRenderContext.GetTextWidth(sOutputText)) / (nCount - 1);
                 for (sal_Int32 i = 0; i < nCount; i++)
                 {
                     OUString sChar(sOutputText[i]);
                     rRenderContext.DrawText(Point(nLeftStart , nYOutput),  sChar);
-                    long nCharWidth = GetTextWidth(sChar);
+                    long nCharWidth = rRenderContext.GetTextWidth(sChar);
                     nLeftStart += nCharWidth + nSpace;
                 }
                 break;
@@ -904,47 +851,44 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         break;
         default: break;
     }
-    rRenderContext.SetFont(aSaveFont);
     rRenderContext.Pop();
 }
 
-Size RubyPreview::GetOptimalSize() const
+void RubyPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    return LogicToPixel(Size(215, 50), MapMode(MapUnit::MapAppFont));
+    pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 40,
+                                   pDrawingArea->get_text_height() * 7);
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
 }
 
-void RubyEdit::GetFocus()
-{
-    GetModifyHdl().Call(*this);
-    Edit::GetFocus();
-}
-
-bool RubyEdit::PreNotify(NotifyEvent& rNEvt)
+IMPL_LINK(SvxRubyDialog, KeyUpDownHdl_Impl, const KeyEvent&, rKEvt, bool)
 {
     bool bHandled = false;
-    if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
+    const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    sal_uInt16 nCode = rKeyCode.GetCode();
+    if (KEY_UP == nCode || KEY_DOWN == nCode)
     {
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        const vcl::KeyCode& rKeyCode = pKEvt->GetKeyCode();
-        sal_uInt16 nMod = rKeyCode.GetModifier();
-        sal_uInt16 nCode = rKeyCode.GetCode();
-        if (nCode == KEY_TAB && (!nMod || KEY_SHIFT == nMod))
-        {
-            sal_Int32 nParam = KEY_SHIFT == nMod ? -1 : 1;
-            if(aScrollHdl.IsSet() && aScrollHdl.Call(nParam))
-                bHandled = true;
-        }
-        else if (KEY_UP == nCode || KEY_DOWN == nCode)
-        {
-            sal_Int32 nParam = KEY_UP == nCode ? -1 : 1;
-            aJumpHdl.Call(nParam);
-        }
+        sal_Int32 nParam = KEY_UP == nCode ? -1 : 1;
+        bHandled = EditJumpHdl_Impl(nParam);
     }
-    if (!bHandled)
-        bHandled = Edit::PreNotify(rNEvt);
     return bHandled;
 }
 
-VCL_BUILDER_FACTORY(RubyEdit)
+IMPL_LINK(SvxRubyDialog, KeyUpDownTabHdl_Impl, const KeyEvent&, rKEvt, bool)
+{
+    bool bHandled = false;
+    const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    sal_uInt16 nMod = rKeyCode.GetModifier();
+    sal_uInt16 nCode = rKeyCode.GetCode();
+    if (nCode == KEY_TAB && (!nMod || KEY_SHIFT == nMod))
+    {
+        sal_Int32 nParam = KEY_SHIFT == nMod ? -1 : 1;
+        if (EditScrollHdl_Impl(nParam))
+            bHandled = true;
+    }
+    if (!bHandled)
+        bHandled = KeyUpDownHdl_Impl(rKEvt);
+    return bHandled;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
