@@ -284,7 +284,7 @@ void SwFieldDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
         }
     }
 #else
-    (void) nId;
+    (void) rId;
     (void) rPage;
 #endif
 }
