@@ -34,7 +34,6 @@ namespace comphelper
     using ::com::sun::star::logging::XLoggerPool;
     using ::com::sun::star::logging::LoggerPool;
     using ::com::sun::star::logging::XLogger;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Exception;
 
     class EventLogger_Impl

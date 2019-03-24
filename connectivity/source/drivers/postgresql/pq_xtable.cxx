@@ -52,11 +52,9 @@
 #include "pq_statics.hxx"
 
 using osl::MutexGuard;
-using osl::Mutex;
 
 using com::sun::star::container::XNameAccess;
 using com::sun::star::container::XIndexAccess;
-using com::sun::star::container::NoSuchElementException;
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
@@ -64,7 +62,6 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
 using com::sun::star::uno::Type;
-using com::sun::star::uno::RuntimeException;
 
 using com::sun::star::beans::XPropertySet;
 

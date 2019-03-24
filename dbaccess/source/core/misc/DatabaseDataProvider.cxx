@@ -52,9 +52,7 @@
 namespace dbaccess
 {
 using namespace ::com::sun::star;
-using ::com::sun::star::sdbc::SQLException;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
 
 DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContext > const & context) :
     TDatabaseDataProvider(m_aMutex),

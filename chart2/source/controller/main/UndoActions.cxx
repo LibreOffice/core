@@ -33,7 +33,6 @@ namespace chart
 namespace impl
 {
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::lang::DisposedException;
 

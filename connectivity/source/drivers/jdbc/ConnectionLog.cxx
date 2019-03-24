@@ -30,9 +30,6 @@
 namespace connectivity { namespace java { namespace sql {
 
 
-    using ::com::sun::star::uno::XComponentContext;
-
-
     namespace
     {
         sal_Int32 lcl_getFreeID( ConnectionLog::ObjectType _eType )
@@ -70,7 +67,6 @@ namespace comphelper { namespace log { namespace convert
 {
 
 
-    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::util::Date;
     using ::com::sun::star::util::Time;
     using ::com::sun::star::util::DateTime;

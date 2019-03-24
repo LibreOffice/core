@@ -25,7 +25,6 @@ namespace com { namespace sun { namespace star { namespace uno { class XComponen
 
 using namespace ::com::sun::star;
 
-using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 

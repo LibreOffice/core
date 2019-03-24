@@ -60,7 +60,6 @@ using com::sun::star::uno::makeAny;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
-using com::sun::star::uno::RuntimeException;
 
 using com::sun::star::container::XEnumerationAccess;
 using com::sun::star::container::XEnumeration;
@@ -72,7 +71,6 @@ using com::sun::star::sdbc::XRow;
 using com::sun::star::sdbc::XResultSet;
 using com::sun::star::sdbc::XParameters;
 using com::sun::star::sdbc::XPreparedStatement;
-using com::sun::star::sdbc::XDatabaseMetaData;
 
 namespace pq_sdbc_driver
 {

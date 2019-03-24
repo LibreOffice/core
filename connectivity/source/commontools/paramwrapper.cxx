@@ -53,7 +53,6 @@ namespace param
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Any;
-    using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::lang::WrappedTargetException;
     using ::com::sun::star::lang::IndexOutOfBoundsException;

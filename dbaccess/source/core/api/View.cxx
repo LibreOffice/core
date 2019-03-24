@@ -34,7 +34,6 @@ namespace dbaccess
 {
 
     using namespace ::com::sun::star::uno;
-    using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::lang::XMultiServiceFactory;
 

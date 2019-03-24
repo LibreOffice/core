@@ -39,7 +39,6 @@
 #include "pq_xcolumn.hxx"
 
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::RuntimeException;
 
 using com::sun::star::beans::XPropertySet;
 

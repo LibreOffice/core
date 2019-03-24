@@ -41,7 +41,6 @@ namespace dbaccess
     using ::com::sun::star::xml::sax::XWriter;
     using ::com::sun::star::xml::sax::Writer;
     using ::com::sun::star::xml::sax::Parser;
-    using ::com::sun::star::xml::sax::XParser;
     using ::com::sun::star::xml::sax::InputSource;
 
     // StorageXMLOutputStream_Data

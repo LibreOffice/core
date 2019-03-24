@@ -30,8 +30,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 
-using std::vector;
-
 /**********************************************************************
 |
 | Ctor / Dtor
