@@ -165,12 +165,12 @@ sal_Int32 GraphicHelper::getDefaultChartAreaFillStyle() const
     return XML_solidFill;
 }
 
-sal_Int32 GraphicHelper::getDefaultChartAreaLineStyle() const
+sal_Int32 GraphicHelper::getDefaultChartAreaLineStyle()
 {
     return XML_solidFill;
 }
 
-sal_Int16 GraphicHelper::getDefaultChartAreaLineWidth() const
+sal_Int16 GraphicHelper::getDefaultChartAreaLineWidth()
 {
     // this value is what MSO 2016 writes fixing incomplete MSO 2010 documents (0.75 pt in emu)
     return 9525;

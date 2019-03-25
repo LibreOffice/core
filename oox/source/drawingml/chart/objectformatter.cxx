@@ -823,8 +823,8 @@ LineFormatter::LineFormatter( ObjectFormatterData& rData, const AutoFormatEntry*
         // set automatic border property for chartarea, because of tdf#81437 and tdf#82217
         if ( eObjType == OBJECTTYPE_CHARTSPACE )
         {
-            mxAutoLine->maLineFill.moFillType = rData.mrFilter.getGraphicHelper().getDefaultChartAreaLineStyle();
-            mxAutoLine->moLineWidth = rData.mrFilter.getGraphicHelper().getDefaultChartAreaLineWidth();
+            mxAutoLine->maLineFill.moFillType = oox::GraphicHelper::getDefaultChartAreaLineStyle();
+            mxAutoLine->moLineWidth = oox::GraphicHelper::getDefaultChartAreaLineWidth();
             // this value is what MSO 2016 use as a default color for chartspace border
             mxAutoLine->maLineFill.maFillColor.setSrgbClr( 0xD9D9D9 );
         }
