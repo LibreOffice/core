@@ -27,6 +27,7 @@
 #include <vcl/keycodes.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/GestureEvent.hxx>
 
 class CommandExtTextInputData;
 class CommandWheelData;
@@ -37,6 +38,8 @@ class CommandMediaData;
 class CommandSelectionChangeData;
 class CommandSwipeData;
 class CommandLongPressData;
+class CommandGestureData;
+
 enum class CommandEventId;
 
 enum class ExtTextInputAttr {
@@ -86,6 +89,7 @@ public:
     const CommandSelectionChangeData*   GetSelectionChangeData() const;
     const CommandSwipeData*             GetSwipeData() const;
     const CommandLongPressData*         GetLongPressData() const;
+    const CommandGestureData*           GetGestureData() const;
 };
 
 class VCL_DLLPUBLIC CommandExtTextInputData
@@ -300,6 +304,25 @@ public:
     double getY() const { return mnY; }
 };
 
+class VCL_DLLPUBLIC CommandGestureData
+{
+public:
+    double const mfX;
+    double const mfY;
+    GestureEventType const meEventType;
+
+    double const mfOffset;
+    PanningOrientation const meOrientation;
+
+    CommandGestureData(double fX, double fY, GestureEventType eEventType, double fOffset, PanningOrientation eOrientation)
+        : mfX(fX)
+        , mfY(fY)
+        , meEventType(eEventType)
+        , mfOffset(fOffset)
+        , meOrientation(eOrientation)
+    {}
+};
+
 enum class CommandEventId
 {
     NONE                    = 0,
@@ -323,6 +346,7 @@ enum class CommandEventId
     QueryCharPosition       = 20,
     Swipe                   = 21,
     LongPress               = 22,
+    Gesture                 = 23,
 };
 
 #endif // INCLUDED_VCL_COMMANDEVENT_HXX
