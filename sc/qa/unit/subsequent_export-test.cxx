@@ -99,6 +99,7 @@ public:
     void testPasswordExportODS();
     void testConditionalFormatExportODS();
     void testConditionalFormatExportXLSX();
+    void testCondFormatExportCellIs();
     void testTdf99856_dataValidationTest();
     void testProtectionKeyODS_UTF16LErtlSHA1();
     void testProtectionKeyODS_UTF8SHA1();
@@ -227,6 +228,7 @@ public:
     CPPUNIT_TEST(testTdf111876);
     CPPUNIT_TEST(testPasswordExportODS);
     CPPUNIT_TEST(testConditionalFormatExportODS);
+    CPPUNIT_TEST(testCondFormatExportCellIs);
     CPPUNIT_TEST(testConditionalFormatExportXLSX);
     CPPUNIT_TEST(testTdf99856_dataValidationTest);
     CPPUNIT_TEST(testProtectionKeyODS_UTF16LErtlSHA1);
@@ -490,6 +492,42 @@ void ScExportTest::testConditionalFormatExportODS()
     OUString aCSVPath;
     createCSVPath( "new_cond_format_test_export.", aCSVPath );
     testCondFile(aCSVPath, &rDoc, 0);
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testCondFormatExportCellIs()
+{
+    ScDocShellRef xShell = loadDoc("condFormat_cellis.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rDoc.GetCondFormList(0)->size());
+
+    ScConditionalFormat* pFormat = rDoc.GetCondFormat(0, 0, 0);
+    CPPUNIT_ASSERT(pFormat);
+
+    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::ExtCondition, pEntry->GetType());
+
+    const ScCondFormatEntry* pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
+    CPPUNIT_ASSERT_EQUAL( ScConditionMode::Equal,  pCondition->GetOperation());
+
+    OUString aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
+    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$1"), aStr );
+
+    pEntry = pFormat->GetEntry(1);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::ExtCondition, pEntry->GetType());
+
+    pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
+    CPPUNIT_ASSERT_EQUAL( ScConditionMode::Equal,  pCondition->GetOperation());
+
+    aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
+    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$2"), aStr );
 
     xDocSh->DoClose();
 }

@@ -411,6 +411,7 @@ uno::Reference<beans::XPropertySet> createConditionEntry(const ScFormatEntry* pE
     switch (pEntry->GetType())
     {
         case ScFormatEntry::Type::Condition:
+        case ScFormatEntry::Type::ExtCondition:
             return new ScConditionEntryObj(xParent,
                     static_cast<const ScCondFormatEntry*>(pEntry));
         break;

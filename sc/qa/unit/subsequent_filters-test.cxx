@@ -150,6 +150,7 @@ public:
     void testNewCondFormatODS();
     void testNewCondFormatXLSX();
     void testCondFormatThemeColorXLSX();
+    void testCondFormatImportCellIs();
     void testCondFormatThemeColor2XLSX(); // negative bar color and axis color
     void testCondFormatThemeColor3XLSX(); // theme index 2 and 3 are switched
     void testComplexIconSetsXLSX();
@@ -307,6 +308,7 @@ public:
     CPPUNIT_TEST(testNewCondFormatODS);
     CPPUNIT_TEST(testNewCondFormatXLSX);
     CPPUNIT_TEST(testCondFormatThemeColorXLSX);
+    CPPUNIT_TEST(testCondFormatImportCellIs);
     CPPUNIT_TEST(testCondFormatThemeColor2XLSX);
     CPPUNIT_TEST(testCondFormatThemeColor3XLSX);
     CPPUNIT_TEST(testComplexIconSetsXLSX);
@@ -2288,6 +2290,40 @@ void ScFiltersTest::testNewCondFormatXLSX()
     OUString aCSVPath;
     createCSVPath( "new_cond_format_test.", aCSVPath );
     testCondFile(aCSVPath, &rDoc, 0);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testCondFormatImportCellIs()
+{
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc("condFormat_cellis.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load condFormat_cellis.xlsx", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rDoc.GetCondFormList(0)->size());
+
+    ScConditionalFormat* pFormat = rDoc.GetCondFormat(0, 0, 0);
+    CPPUNIT_ASSERT(pFormat);
+
+    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::ExtCondition, pEntry->GetType());
+
+    const ScCondFormatEntry* pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
+    CPPUNIT_ASSERT_EQUAL( ScConditionMode::Equal,  pCondition->GetOperation());
+
+    OUString aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
+    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$1"), aStr );
+
+    pEntry = pFormat->GetEntry(1);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::ExtCondition, pEntry->GetType());
+
+    pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
+    CPPUNIT_ASSERT_EQUAL( ScConditionMode::Equal,  pCondition->GetOperation());
+
+    aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
+    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$2"), aStr );
 
     xDocSh->DoClose();
 }

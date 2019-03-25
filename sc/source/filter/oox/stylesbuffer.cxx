@@ -2754,6 +2754,13 @@ DxfRef StylesBuffer::createDxf()
     return xDxf;
 }
 
+DxfRef StylesBuffer::createExtDxf()
+{
+    DxfRef xDxf( new Dxf( *this ) );
+    maExtDxfs.push_back( xDxf );
+    return xDxf;
+}
+
 void StylesBuffer::importPaletteColor( const AttributeList& rAttribs )
 {
     maPalette.importPaletteColor( rAttribs );
@@ -2893,6 +2900,34 @@ OUString StylesBuffer::createDxfStyle( sal_Int32 nDxfId ) const
     if (Dxf* pDxf = maDxfs.get(nDxfId).get())
     {
         rStyleName = "ConditionalStyle_" + OUString::number(nDxfId + 1);
+
+        // Create a cell style. This may overwrite an existing style if
+        // one with the same name exists.
+        ScStyleSheet& rStyleSheet = ScfTools::MakeCellStyleSheet(
+                *getScDocument().GetStyleSheetPool(), rStyleName, true);
+
+        rStyleSheet.ResetParent();
+        SfxItemSet& rStyleItemSet =
+            rStyleSheet.GetItemSet();
+
+        pDxf->fillToItemSet(rStyleItemSet);
+
+    }
+
+    // on error: fallback to default style
+    if (rStyleName.isEmpty())
+        rStyleName = maCellStyles.getDefaultStyleName();
+
+    return rStyleName;
+}
+
+OUString StylesBuffer::createExtDxfStyle( sal_Int32 nDxfId ) const
+{
+    OUString rStyleName;
+
+    if (Dxf* pDxf = maExtDxfs.get(nDxfId).get())
+    {
+        rStyleName = "ExtConditionalStyle_" + OUString::number(nDxfId + 1);
 
         // Create a cell style. This may overwrite an existing style if
         // one with the same name exists.

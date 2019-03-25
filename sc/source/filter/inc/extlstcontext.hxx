@@ -11,11 +11,16 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_EXTLSTCONTEXT_HXX
 
 #include "excelhandlers.hxx"
-#include <oox/core/contexthandler.hxx>
+#include "worksheetfragment.hxx"
+#include "workbookfragment.hxx"
+#include "conditio.hxx"
 #include "condformatbuffer.hxx"
+#include "stylesfragment.hxx"
 
 #include <vector>
 #include <memory>
+
+extern sal_Int32 rStyleIdx; // Holds index of the <extlst> <cfRule> style (Will be reseted finalize import)
 
 struct ScDataBarFormatData;
 namespace oox { class AttributeList; }
@@ -50,9 +55,13 @@ public:
     virtual void onEndElement() override;
 
 private:
-    OUString aChars;
+    OUString aChars; // Characters of between xml elements.
+    OUString rStyle; // Style of the corresponding condition
+    ScConditionMode eOperator; // Used only when cfRule type is "cellIs"
+    bool isPreviousElementF;   // Used to distinguish alone <sqref> from <f> and <sqref>
     std::vector<std::unique_ptr<ScFormatEntry> > maEntries;
     std::unique_ptr<IconSetRule> mpCurrentRule;
+    std::vector< OUString > rFormulas; // It holds formulas for a range, there can be more formula for same range.
 };
 
 /**
