@@ -462,6 +462,18 @@ DECLARE_OOXMLEXPORT_TEST(testFDO78887, "fdo78887.docx")
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:br[2]", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO78887b, "missing_newline.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[2]/w:br[1]", 1);
+    assertXPathContent(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:t[1]", "Tab and line break");
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[5]/w:br[1]", 1);
+    assertXPathContent(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[6]/w:t[1]", "New line");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFdo78651, "fdo78651.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
