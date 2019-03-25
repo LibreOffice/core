@@ -188,14 +188,14 @@ public:
 
 class SwUndoSetFlyFormat : public SwUndo, public SwClient
 {
-    SwFrameFormat* pFrameFormat;                  // saved FlyFormat
-    SwFrameFormat* const pOldFormat;
-    SwFrameFormat* pNewFormat;
-    std::unique_ptr<SfxItemSet> pItemSet;               // the re-/ set attributes
-    sal_uLong nOldNode, nNewNode;
-    sal_Int32 nOldContent, nNewContent;
-    RndStdIds nOldAnchorTyp, nNewAnchorTyp;
-    bool bAnchorChgd;
+    SwFrameFormat* m_pFrameFormat;                  // saved FlyFormat
+    SwFrameFormat* const m_pOldFormat;
+    SwFrameFormat* m_pNewFormat;
+    std::unique_ptr<SfxItemSet> m_pItemSet;               // the re-/ set attributes
+    sal_uLong m_nOldNode, m_nNewNode;
+    sal_Int32 m_nOldContent, m_nNewContent;
+    RndStdIds m_nOldAnchorType, m_nNewAnchorType;
+    bool m_bAnchorChanged;
 
     void PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem );
     void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
