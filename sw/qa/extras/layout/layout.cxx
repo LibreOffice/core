@@ -72,6 +72,7 @@ public:
     void testTdf122607();
     void testBtlrCell();
     void testTdf123898();
+    void testTdf123651();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testRedlineFootnotes);
@@ -114,6 +115,7 @@ public:
     CPPUNIT_TEST(testTdf122607);
     CPPUNIT_TEST(testBtlrCell);
     CPPUNIT_TEST(testTdf123898);
+    CPPUNIT_TEST(testTdf123651);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2936,6 +2938,15 @@ void SwLayoutWriter::testTdf123898()
     xmlDocPtr pXmlDoc = parseLayoutDump();
     // Make sure that the arrow on the left is not there (there are 43 children if it's there)
     assertXPathChildren(pXmlDoc, "/root/page/body/txt/anchored/fly/txt", 42);
+}
+
+void SwLayoutWriter::testTdf123651()
+{
+    createDoc("tdf123651.docx");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 7639;
+    // Actual: 12926'. The shape was below the second "Lorem ipsum" text, not above it.
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "top", "7639");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
