@@ -1547,34 +1547,25 @@
     <p>The following software may be included in this product: SVGPathSeg polyfill. Use of any of this software is
     governed by the terms of the license below:</p>
     <p>Copyright 2015 The Chromium Authors. All rights reserved.</p>
-    <p>The Chromium Authors can be found at</p>
-    <p>http://src.chromium.org/svn/trunk/src/AUTHORS</p>
-    <p> </p>
-    <p>Redistribution and use in source and binary forms, with or without</p>
-    <p>modification, are permitted provided that the following conditions are</p>
-    <p>met:</p>
-    <p> </p>
-    <p>   * Redistributions of source code must retain the above copyright</p>
-    <p>notice, this list of conditions and the following disclaimer.</p>
-    <p>   * Redistributions in binary form must reproduce the above</p>
-    <p>copyright notice, this list of conditions and the following disclaimer</p>
-    <p>in the documentation and/or other materials provided with the</p>
-    <p>distribution.</p>
-    <p>   * Neither the name of Google Inc. nor the names of its</p>
-    <p>contributors may be used to endorse or promote products derived from</p>
-    <p>this software without specific prior written permission.</p>
-    <p> </p>
-    <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</p>
-    <p>AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</p>
-    <p>LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR</p>
-    <p>A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT</p>
-    <p>OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</p>
-    <p>SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</p>
-    <p>LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,</p>
-    <p>DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY</p>
-    <p>THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</p>
-    <p>(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</p>
-    <p>OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+    <p>The Chromium Authors can be found at <a href=
+    "https://src.chromium.org/viewvc/chrome/trunk/src/AUTHORS">https://src.chromium.org/viewvc/chrome/trunk/src/AUTHORS</a></p>
+    <p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+    following conditions are met:</p>
+    <ul>
+        <li>Redistributions of source code must retain the above copyright notice, this list of conditions and the
+        following disclaimer.</li>
+        <li>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+        following disclaimer in the documentation and/or other materials provided with the distribution.</li>
+        <li>Neither the name of Google Inc. nor the names of its contributors may be used to endorse or promote
+        products derived from this software without specific prior written permission.</li>
+    </ul>
+    <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS AS IS" AND ANY EXPRESS OR IMPLIED
+    WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+    PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+    INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+    GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+    LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+    OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
     <div class="WNT">
         <h2>TWAIN</h2>
         <p>The following software may be included in this product: TWAIN. Use of any of this software is governed by the
