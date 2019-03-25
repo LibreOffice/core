@@ -229,7 +229,7 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
             *mpExpWasGrey = mbGreys;
 
         if ( mbGreys )
-            mbNative = ( mpReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal );
+            mbNative = ( mpReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal && aGraphicBmp.HasGreyPalette());
         else
             mbNative = ( mpReadAccess->GetScanlineFormat() == ScanlineFormat::N24BitTcRgb );
 
