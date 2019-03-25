@@ -190,7 +190,6 @@ public:
     void SetStateUnchecked();
     void SetStateTristate();
     void SetStateHilighted(bool bHilight);
-    void SetStateInvisible();
 
     SvLBoxButtonKind GetKind() const { return eKind; }
 

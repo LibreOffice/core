@@ -496,7 +496,6 @@ public:
     void                EnableCellFocus();
 
                         // For overwriting accessible role for all entries - normally 0, so each entry can be different
-    void                SetAllEntriesAccessibleRoleType( SvTreeAccRoleType n ) { nAllItemAccRoleType = n; }
     SvTreeAccRoleType   GetAllEntriesAccessibleRoleType() const { return nAllItemAccRoleType; }
 
     SvTreeFlags         GetTreeFlags() const {return nTreeFlags;}

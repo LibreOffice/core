@@ -53,15 +53,6 @@ namespace svx
     class SAL_WARN_UNUSED SVX_DLLPUBLIC OColumnTransferable final : public TransferableHelper
     {
     public:
-        /** construct the transferable
-        */
-        OColumnTransferable(
-             const OUString& _rDatasource
-            ,const OUString& _rCommand
-            ,const OUString& _rFieldName
-            ,ColumnTransferFormatFlags  _nFormats
-        );
-
         /** construct the transferable from a data access descriptor
 
             Note that some of the aspects, in particular all which cannot be represented
@@ -134,18 +125,6 @@ namespace svx
         */
         static ODataAccessDescriptor
                         extractColumnDescriptor(const TransferableDataHelper& _rData);
-
-        /** adds the data contained in the object to the given data container
-            <p>This method helps you treating this class as simple container class:<br/>
-            At the moment, it is a data container and a transferable.
-            Using <method>addDataToContainer</method>, you can treat the class as dumb data container,
-            doing the Drag'n'Drop with a TransferDataContainer instance (which may contain
-            additional formats)</p>
-            @TODO
-                split this class into a two separate classes: one for the data container aspect, one for
-                the transfer aspect
-        */
-        void addDataToContainer( TransferDataContainer* _pContainer );
 
     private:
         // TransferableHelper overridables

@@ -134,7 +134,6 @@ public:
                                     CreateTabPage pCreateFunc,      // != 0
                                     sal_uInt16 nPos = TAB_APPEND);
 
-    void                RemoveTabPage( const OString& rName ); // Name of the label for the page in the notebook .ui
     void                RemoveTabPage( sal_uInt16 nId );
 
     void                SetCurPageId(sal_uInt16 nId)
@@ -169,14 +168,8 @@ public:
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return m_pOutSet.get(); }
 
-    const PushButton&   GetOKButton() const { return *m_pOKBtn; }
-    PushButton&         GetOKButton() { return *m_pOKBtn; }
-    const CancelButton& GetCancelButton() const { return *m_pCancelBtn; }
-    CancelButton&       GetCancelButton() { return *m_pCancelBtn; }
-
     short               Execute() override;
     bool                StartExecuteAsync( VclAbstractDialog::AsyncContext &rCtx ) override;
-    void                Start();
 
     const SfxItemSet*   GetExampleSet() const { return m_pExampleSet; }
 

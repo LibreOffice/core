@@ -564,18 +564,6 @@ bool SfxTabDialog::StartExecuteAsync( VclAbstractDialog::AsyncContext &rCtx )
     return TabDialog::StartExecuteAsync( rCtx );
 }
 
-void SfxTabDialog::Start()
-{
-    m_pImpl->bModal = false;
-    Start_Impl();
-
-    Show();
-
-    if ( IsVisible() && ( !HasChildPathFocus() || HasFocus() ) )
-        GrabFocusToFirstControl();
-}
-
-
 void SfxTabDialog::Start_Impl()
 {
     assert(m_pImpl->aData.size() == m_pTabCtrl->GetPageCount()
@@ -684,12 +672,6 @@ void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
         SAL_INFO( "sfx.dialog", "TabPage-Id not known" );
     }
 }
-
-void SfxTabDialog::RemoveTabPage(const OString &rName)
-{
-    RemoveTabPage(m_pTabCtrl->GetPageId(rName));
-}
-
 
 void SfxTabDialog::PageCreated
 

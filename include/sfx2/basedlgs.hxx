@@ -145,9 +145,7 @@ protected:
     virtual ~SfxModelessDialogController() override;
 
 public:
-    void                    FillInfo(SfxChildWinInfo&) const;
     void                    Initialize (SfxChildWinInfo const * pInfo);
-    void                    DeInit();
     virtual void            Close() override;
     virtual void            EndDialog() override;
     virtual void            Activate() override;
@@ -223,8 +221,6 @@ public:
 
     void                SetTabPage(SfxTabPage* pTabPage);
     SfxTabPage*         GetTabPage() const { return pImpl->m_pSfxPage; }
-
-    OKButton*           GetOKButton() const { return pOKBtn; }
 
 private:
     VclPtr<OKButton>      pOKBtn;
