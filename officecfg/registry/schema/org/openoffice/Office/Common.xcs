@@ -1051,20 +1051,20 @@
       <prop oor:name="MaximumPaperWidth" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>Specifies the maximum allowed Paper Width for page definitions
-          in cm. Default is 3m, i.e. 300 cm. When this is changed to higher
+          in cm. Default is 6m, i.e. 600 cm. When this is changed to higher
           values, it is done on own risk.</desc>
           <label>Maximum allowed Paper Width for page definitions</label>
         </info>
-        <value>300</value>
+        <value>600</value>
       </prop>
       <prop oor:name="MaximumPaperHeight" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>Specifies the maximum allowed Paper Height for page definitions
-          in cm. Default is 3m, i.e. 300 cm. When this is changed to higher
+          in cm. Default is 6m, i.e. 600 cm. When this is changed to higher
           values, it is done on own risk.</desc>
           <label>Maximum allowed Paper Height for page definitions</label>
         </info>
-        <value>300</value>
+        <value>600</value>
       </prop>
       <prop oor:name="MaximumPaperLeftMargin" oor:type="xs:int" oor:nillable="false">
         <info>
