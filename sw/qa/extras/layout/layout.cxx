@@ -66,6 +66,7 @@ public:
     void testTdf120287c();
     void testTdf122878();
     void testTdf115094();
+    void testTdf123651();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testRedlineFootnotes);
@@ -104,6 +105,7 @@ public:
     CPPUNIT_TEST(testTdf120287c);
     CPPUNIT_TEST(testTdf122878);
     CPPUNIT_TEST(testTdf115094);
+    CPPUNIT_TEST(testTdf123651);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2699,6 +2701,15 @@ void SwLayoutWriter::testTdf115094()
                                           "top")
                                      .toInt32();
     CPPUNIT_ASSERT_LESS(nTopOfB2Anchored, nTopOfB2);
+}
+
+void SwLayoutWriter::testTdf123651()
+{
+    createDoc("tdf123651.docx");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 7639;
+    // Actual: 12926'. The shape was below the second "Lorem ipsum" text, not above it.
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "top", "7639");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
