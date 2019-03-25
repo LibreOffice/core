@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_901802d4",
+        "filename": "vcl/inc/qt5/Qt5Instance.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2019-03-25T09:31:40Z",
+      "side": 1,
+      "message": "\u0027QApplication *pQApp\u0027 may be replaced with something like \u0027std::unique_ptr\u003cQApplication\u003e pQApp\u0027",
+      "revId": "7cf4fd1ea5a841df3f314cc1a536af62954de0ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_1024f20c",
+        "filename": "vcl/inc/qt5/Qt5Instance.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2019-03-25T09:31:40Z",
+      "side": 1,
+      "message": "Same here, arguments may be references to unique_ptrs.\n\nSome structure to automatically call free for all elements of rFakeArgvFreeable may be useful too, for example a std::list\u003cunique_ptr\u003cchar[], decltype(std::free) *\u003e \u003e. In that case elements have to be created with value and deleter (std::free) passed.",
+      "revId": "7cf4fd1ea5a841df3f314cc1a536af62954de0ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_f06b8e1c",
+        "filename": "vcl/inc/qt5/Qt5Instance.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2019-03-25T09:31:40Z",
+      "side": 1,
+      "message": "Next two functions may use unique_ptr with custom deleter using free, like unique_ptr\u003cchar[], decltype(std::free) *\u003e.",
+      "revId": "7cf4fd1ea5a841df3f314cc1a536af62954de0ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_b04e66bf",
+        "filename": "vcl/qt5/Qt5Instance.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2019-03-25T09:31:40Z",
+      "side": 1,
+      "message": "While this code is not changed, maybe it\u0027s worth to optimize this piece a bit: first look if there is a \u0027-display\u0027 argument, and if there is more than one such argument, save location of last one, and only after that allocate required elements count and fill them.\n\nThis would allow to skip potential (but unlikely) case of strdup/free loop.",
+      "revId": "7cf4fd1ea5a841df3f314cc1a536af62954de0ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_d04beaad",
+        "filename": "vcl/unx/kde5/KDE5SalInstance.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2019-03-25T09:31:40Z",
+      "side": 1,
+      "message": "Same as Qt5Instance:\n\n\u0027QApplication *pQApp\u0027 may be replaced with something like \u0027std::unique_ptr\u003cQApplication\u003e pQApp\u0027.",
+      "revId": "7cf4fd1ea5a841df3f314cc1a536af62954de0ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
