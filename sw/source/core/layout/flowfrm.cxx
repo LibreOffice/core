@@ -2021,19 +2021,14 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
         const SwLayoutFrame* pUpperFrame = m_rThis.GetUpper();
         while ( pUpperFrame )
         {
-            if ( pUpperFrame->IsTabFrame() || pUpperFrame->IsRowFrame() )
+            if ( pUpperFrame->IsTabFrame() )
             {
                 return false;
             }
             // If the text frame is a follow-section-in-table, that can move
             // backward as well.
             bool bIsFollowSection = pUpperFrame->IsSctFrame() && static_cast<const SwSectionFrame*>(pUpperFrame)->GetPrecede();
-
-            // If the text frame is a follow-in-table, that can move
-            // backward as well.
-            bool bIsFollow = const_cast<SwLayoutFrame*>(pUpperFrame)->GetPrevCellLeaf();
-
-            if ( ( pUpperFrame->IsColumnFrame() && pUpperFrame->IsInSct() ) || bIsFollowSection || bIsFollow )
+            if ( ( pUpperFrame->IsColumnFrame() && pUpperFrame->IsInSct() ) || bIsFollowSection )
             {
                 break;
             }

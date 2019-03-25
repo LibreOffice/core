@@ -173,7 +173,7 @@ void SwTabFrame::RegistFlys()
 }
 
 void SwInvalidateAll( SwFrame *pFrame, long nBottom );
-static bool lcl_RecalcRow( SwRowFrame* pRow, long nBottom );
+static void lcl_RecalcRow( SwRowFrame& rRow, long nBottom );
 static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, long lYStart, bool bInva );
 // #i26945# - add parameter <_bOnlyRowsAndCells> to control
 // that only row and cell frames are formatted.
@@ -299,7 +299,7 @@ static void lcl_InvalidateLowerObjs( SwLayoutFrame& _rLayoutFrame,
     }
 }
 
-// Local helper function to shrink all lowers of pRow to 0 height
+// Local helper function to shrink all lowers of rRow to 0 height
 static void lcl_ShrinkCellsAndAllContent( SwRowFrame& rRow )
 {
     SwCellFrame* pCurrMasterCell = static_cast<SwCellFrame*>(rRow.Lower());
@@ -691,7 +691,7 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
     rLastLine.SetInSplit();
 
     // Do the recalculation
-    lcl_RecalcRow( &rLastLine, LONG_MAX );
+    lcl_RecalcRow( rLastLine, LONG_MAX );
     // #115759# - force a format of the last line in order to
     // get the correct height.
     rLastLine.InvalidateSize();
@@ -1565,8 +1565,7 @@ static bool lcl_InnerCalcLayout( SwFrame *pFrame,
     return bRet;
 }
 
-// returns false if pRow is invalid
-static bool lcl_RecalcRow( SwRowFrame* pRow, long nBottom )
+static void lcl_RecalcRow( SwRowFrame& rRow, long nBottom )
 {
     // FME 2007-08-30 #i81146# new loop control
     int nLoopControlRuns_1 = 0;
@@ -1580,14 +1579,14 @@ static bool lcl_RecalcRow( SwRowFrame* pRow, long nBottom )
         int nLoopControlRuns_2 = 0;
         sal_uInt16 nLoopControlStage_2 = 0;
 
-        while( lcl_InnerCalcLayout( pRow, nBottom ) )
+        while( lcl_InnerCalcLayout( &rRow, nBottom ) )
         {
             if ( ++nLoopControlRuns_2 > nLoopControlMax )
             {
                 SAL_WARN_IF(nLoopControlStage_2 == 0, "sw.layout", "LoopControl_2 in lcl_RecalcRow: Stage 1!");
                 SAL_WARN_IF(nLoopControlStage_2 == 1, "sw.layout", "LoopControl_2 in lcl_RecalcRow: Stage 2!!");
                 SAL_WARN_IF(nLoopControlStage_2 >= 2, "sw.layout", "LoopControl_2 in lcl_RecalcRow: Stage 3!!!");
-                pRow->ValidateThisAndAllLowers( nLoopControlStage_2++ );
+                rRow.ValidateThisAndAllLowers( nLoopControlStage_2++ );
                 nLoopControlRuns_2 = 0;
                 if( nLoopControlStage_2 > 2 )
                     break;
@@ -1600,39 +1599,14 @@ static bool lcl_RecalcRow( SwRowFrame* pRow, long nBottom )
         {
             // #115759# - force another format of the
             // lowers, if at least one of it was invalid.
-
-            // tdf#114306 writer may crash because pRow points to a deleted SwRowFrame
-            SwRowFrame* pOriginalRow = pRow;
-            OSL_ENSURE(pOriginalRow->GetUpper() && pOriginalRow->GetUpper()->IsTabFrame(), "No table");
-            SwTabFrame* pOriginalTab = static_cast<SwTabFrame*>(pRow->GetUpper());
-
-            bCheck = SwContentFrame::CalcLowers( pRow, pRow->GetUpper(), nBottom, true );
-
-            bool bRowStillExists = false;
-            SwFrame* pTestRow = pOriginalTab->Lower();
-
-            while (pTestRow)
-            {
-                if (pTestRow == pRow)
-                {
-                    bRowStillExists = true;
-                    break;
-                }
-                pTestRow = pTestRow->GetNext();
-            }
-
-            if (!bRowStillExists)
-            {
-                SAL_WARN("sw.layout", "no row anymore at " << pRow);
-                return false;
-            }
+            bCheck = SwContentFrame::CalcLowers( &rRow, rRow.GetUpper(), nBottom, true );
 
             // NEW TABLES
             // First we calculate the cells with row span of < 1, afterwards
             // all cells with row span of > 1:
             for ( int i = 0; i < 2; ++i )
             {
-                SwCellFrame* pCellFrame = static_cast<SwCellFrame*>(pRow->Lower());
+                SwCellFrame* pCellFrame = static_cast<SwCellFrame*>(rRow.Lower());
                 while ( pCellFrame )
                 {
                     const bool bCalc = 0 == i ?
@@ -1658,7 +1632,7 @@ static bool lcl_RecalcRow( SwRowFrame* pRow, long nBottom )
                     SAL_WARN_IF(nLoopControlStage_1 == 0, "sw.layout", "LoopControl_1 in lcl_RecalcRow: Stage 1!");
                     SAL_WARN_IF(nLoopControlStage_1 == 1, "sw.layout", "LoopControl_1 in lcl_RecalcRow: Stage 2!!");
                     SAL_WARN_IF(nLoopControlStage_1 >= 2, "sw.layout", "LoopControl_1 in lcl_RecalcRow: Stage 3!!!");
-                    pRow->ValidateThisAndAllLowers( nLoopControlStage_1++ );
+                    rRow.ValidateThisAndAllLowers( nLoopControlStage_1++ );
                     nLoopControlRuns_1 = 0;
                     if( nLoopControlStage_1 > 2 )
                         break;
@@ -1668,8 +1642,7 @@ static bool lcl_RecalcRow( SwRowFrame* pRow, long nBottom )
             }
         }
         break;
-    } while (true);
-    return true;
+    } while( true );
 }
 
 static void lcl_RecalcTable( SwTabFrame& rTab,
@@ -1684,7 +1657,7 @@ static void lcl_RecalcTable( SwTabFrame& rTab,
             rNotify.SetLowersComplete( true );
         }
         ::SwInvalidatePositions( pFirstRow, LONG_MAX );
-        lcl_RecalcRow( static_cast<SwRowFrame*>(pFirstRow), LONG_MAX );
+        lcl_RecalcRow( static_cast<SwRowFrame&>(*pFirstRow), LONG_MAX );
     }
 }
 
@@ -2149,7 +2122,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                             {
                                 ::SwInvalidateAll( pLastLine, LONG_MAX );
                                 SetRebuildLastLine( true );
-                                lcl_RecalcRow( static_cast<SwRowFrame*>(pLastLine), LONG_MAX );
+                                lcl_RecalcRow( static_cast<SwRowFrame&>(*pLastLine), LONG_MAX );
                                 SetRebuildLastLine( false );
                             }
 
@@ -2272,7 +2245,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 }
                 else if (m_bONECalcLowers)
                 {
-                    lcl_RecalcRow( static_cast<SwRowFrame*>(Lower()), LONG_MAX );
+                    lcl_RecalcRow( static_cast<SwRowFrame&>(*Lower()), LONG_MAX );
                     m_bONECalcLowers = false;
                 }
             }
@@ -2295,7 +2268,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             }
             else if (m_bONECalcLowers)
             {
-                lcl_RecalcRow( static_cast<SwRowFrame*>(Lower()), LONG_MAX );
+                lcl_RecalcRow( static_cast<SwRowFrame&>(*Lower()), LONG_MAX );
                 m_bONECalcLowers = false;
             }
 
@@ -2352,7 +2325,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
             // 1. Try: bTryToSplit = true  => Try to split the row.
             // 2. Try: bTryToSplit = false => Split the table between the rows.
-            if ((pFirstNonHeadlineRow && pFirstNonHeadlineRow->GetNext()) || bTryToSplit )
+            if ( pFirstNonHeadlineRow->GetNext() || bTryToSplit )
             {
                 SwTwips nDeadLine = aRectFnSet.GetPrtBottom(*GetUpper());
                 if( IsInSct() || GetUpper()->IsInTab() ) // TABLE IN TABLE)
@@ -2361,11 +2334,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
                 {
                     SetInRecalcLowerRow( true );
-                    SwRowFrame* pRow = static_cast<SwRowFrame*>(Lower());
-                    if (!lcl_RecalcRow(pRow, nDeadLine))
-                    {
-                        pFirstNonHeadlineRow = GetFirstNonHeadlineRow();
-                    }
+                    ::lcl_RecalcRow( static_cast<SwRowFrame&>(*Lower()), nDeadLine );
                     SetInRecalcLowerRow( false );
                 }
                 m_bLowersFormatted = true;
@@ -2465,7 +2434,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     // to nDeadLine may not be enough.
                     if ( bSplitError && bTryToSplit ) // no restart if we did not try to split: i72847, i79426
                     {
-                        lcl_RecalcRow( static_cast<SwRowFrame*>(Lower()), LONG_MAX );
+                        lcl_RecalcRow( static_cast<SwRowFrame&>(*Lower()), LONG_MAX );
                         setFrameAreaPositionValid(false);
                         bTryToSplit = false;
                         continue;
@@ -2506,7 +2475,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                             // its content.
                             const bool bOldJoinLock =  GetFollow()->IsJoinLocked();
                             GetFollow()->LockJoin();
-                            ::lcl_RecalcRow( static_cast<SwRowFrame*>(GetFollow()->Lower()),
+                            ::lcl_RecalcRow( static_cast<SwRowFrame&>(*GetFollow()->Lower()),
                                              fnRectX.GetBottom(GetFollow()->GetUpper()->getFrameArea()) );
                             // #i43913#
                             // #i63632# Do not unlock the
