@@ -583,61 +583,6 @@
         the copyright holder.</p>
         <p>All trademarks and registered trademarks mentioned herein are the property of their respective owners.</p>
     </div>
-    <div class="LIBJPEG">
-        <h2>IJG JPEG Library</h2>
-        <p>The following software may be included in this product: IJG JPEG Library. Use of any of this software is
-        governed by the terms of the license below:</p>
-        <p>In plain English:</p>
-        <ol>
-            <li>We don't promise that this software works. (But if you find any bugs, please let us know!) </li>
-            <li>You can use this software for whatever you want. You don't have to pay us.</li>
-            <li>You may not pretend that you wrote this software. If you use it in a program, you must acknowledge
-            somewhere in your documentation that you've used the IJG code.</li>
-        </ol>
-        <p>In legalese:</p>
-        <p>The authors make NO WARRANTY or representation, either express or implied, with respect to this software,
-        its quality, accuracy, merchantability, or fitness for a particular purpose.  This software is provided "AS
-        IS", and you, its user, assume the entire risk as to its quality and accuracy.</p>
-        <p>This software is copyright (C) 1991-1998, Thomas G. Lane. All Rights Reserved except as specified below.</p>
-        <p>Permission is hereby granted to use, copy, modify, and distribute this software (or portions thereof) for
-        any purpose, without fee, subject to these conditions: (1) If any part of the source code for this software is
-        distributed, then this README file must be included, with this copyright and no-warranty notice unaltered; and
-        any additions, deletions, or changes to the original files must be clearly indicated in accompanying
-        documentation. (2) If only executable code is distributed, then the accompanying documentation must state that
-        "this software is based in part on the work of the Independent JPEG Group". (3) Permission for use of this
-        software is granted only if the user accepts full responsibility for any undesirable consequences; the authors
-        accept NO LIABILITY for damages of any kind.</p>
-        <p>These conditions apply to any software derived from or based on the IJG code, not just to the unmodified
-        library.  If you use our work, you ought to acknowledge us.</p>
-        <p>Permission is NOT granted for the use of any IJG author's name or company name in advertising or publicity
-        relating to this software or products derived from it.  This software may be referred to only as "the
-        Independent JPEG Group's software".</p>
-        <p>We specifically permit and encourage the use of this software as the basis of commercial products, provided
-        that all warranty or liability claims are assumed by the product vendor.</p>
-        <p>ansi2knr.c is included in this distribution by permission of L. Peter Deutsch, sole proprietor of its
-        copyright holder, Aladdin Enterprises of Menlo Park, CA. ansi2knr.c is NOT covered by the above copyright and
-        conditions, but instead by the usual distribution terms of the Free Software Foundation; principally, that you
-        must include source code if you redistribute it.  (See the file ansi2knr.c for full details.)  However, since
-        ansi2knr.c is not needed as part of any program generated from the IJG code, this does not limit you more than
-        the foregoing paragraphs do.</p>
-        <p>The Unix configuration script "configure" was produced with GNU Autoconf. It is copyright by the Free
-        Software Foundation but is freely distributable. The same holds for its supporting scripts (config.guess,
-        config.sub, ltconfig, ltmain.sh).  Another support script, install-sh, is copyright by M.I.T. but is also
-        freely distributable.</p>
-        <p>It appears that the arithmetic coding option of the JPEG spec is covered by patents owned by IBM, AT&amp;T,
-        and Mitsubishi.  Hence arithmetic coding cannot legally be used without obtaining one or more licenses.  For
-        this reason, support for arithmetic coding has been removed from the free JPEG software. (Since arithmetic
-        coding provides only a marginal gain over the unpatented Huffman mode, it is unlikely that very many
-        implementations will support it.) So far as we are aware, there are no patent restrictions on the remaining
-        code.</p>
-        <p>The IJG distribution formerly included code to read and write GIF files. To avoid entanglement with the
-        Unisys LZW patent, GIF reading support has been removed altogether, and the GIF writer has been simplified to
-        produce "uncompressed GIFs".  This technique does not use the LZW algorithm; the resulting GIF files are
-        larger than usual, but are readable by all standard GIF decoders.</p>
-        <p>We are required to state that</p>
-        <p>The Graphics Interchange Format(c) is the Copyright property of CompuServe Incorporated.  GIF(sm) is a
-        Service Mark property of CompuServe Incorporated."</p>
-    </div>
     <div class="LIBATOMIC_OPS">
         <h2>libatomic_ops</h2>
         <p>The following software may be included in this product: libatomic_ops. Use of any of this software is
@@ -761,6 +706,201 @@
         <p>The following software may be included in this product: libfreehand. Use of any of this software is governed
         by the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
+    </div>
+    <div class="LIBJPEG_TURBO">
+        <h2>libjpeg-turbo</h2>
+        <p>The following software may be included in this product: libjpeg-turbo. libjpeg-turbo is covered by three
+        compatible BSD-style open source licenses:</p>
+        <ul>
+            <li>
+                <p>The IJG (Independent JPEG Group) License, which is listed <a href="#a__IJG_License">below</a></p>
+                <p>This license applies to the libjpeg API library and associated programs (any code inherited from
+                libjpeg, and any modifications to that code.)</p>
+            </li>
+            <li>
+                <p>The Modified (3-clause) BSD License, which is listed below</p>
+                <p>This license covers the TurboJPEG API library and associated programs, as well as the build
+                system.</p>
+            </li>
+            <li>
+                <p>The <a href="#a__Zlib_license">zlib License</a></p>
+                <p>This license is a subset of the other two, and it covers the libjpeg-turbo SIMD extensions.</p>
+            </li>
+        </ul>
+        <h3>Complying with the libjpeg-turbo Licenses</h3>
+        <p>This section provides a roll-up of the libjpeg-turbo licensing terms, to the best of our understanding.</p>
+        <ol>
+            <li>
+                <p>If you are distributing a modified version of the libjpeg-turbo source, then:</p>
+                <ol type="i">
+                    <li>
+                        <p>You cannot alter or remove any existing copyright or license notices from the source.</p>
+                        <p><strong>Origin</strong></p>
+                        <ul>
+                            <li>Clause 1 of the IJG License</li>
+                            <li>Clause 1 of the Modified BSD License</li>
+                            <li>Clauses 1 and 3 of the zlib License</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <p>You must add your own copyright notice to the header of each source file you modified, so
+                        others can tell that you modified that file (if there is not an existing copyright header in
+                        that file, then you can simply add a notice stating that you modified the file.)</p>
+                        <p><strong>Origin</strong></p>
+                        <ul>
+                            <li>Clause 1 of the IJG License</li>
+                            <li>Clause 2 of the zlib License</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <p>You must include the IJG README file, and you must not alter any of the copyright or license
+                        text in that file.</p>
+                        <p><strong>Origin</strong></p>
+                        <ul>
+                            <li>Clause 1 of the IJG License</li>
+                        </ul>
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <p>If you are distributing only libjpeg-turbo binaries without the source, or if you are distributing
+                an application that statically links with libjpeg-turbo, then:</p>
+                <ol type="i">
+                    <li>
+                        <p>Your product documentation must include a message stating:</p>
+                        <p>This software is based in part on the work of the Independent JPEG Group.</p>
+                        <p><strong>Origin</strong></p>
+                        <ul>
+                            <li>Clause 2 of the IJG license</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <p>If your binary distribution includes or uses the TurboJPEG API, then your product
+                        documentation must include the text of the Modified BSD License (see below.)</p>
+                        <p><strong>Origin</strong></p>
+                        <ul>
+                            <li>Clause 2 of the Modified BSD License</li>
+                        </ul>
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <p>You cannot use the name of the IJG or The libjpeg-turbo Project or the contributors thereof in
+                advertising, publicity, etc.</p>
+                <p><strong>Origin</strong></p>
+                <ul>
+                    <li>IJG License</li>
+                    <li>Clause 3 of the Modified BSD License</li>
+                </ul>
+            </li>
+            <li>
+                <p>The IJG and The libjpeg-turbo Project do not warrant libjpeg-turbo to be free of defects, nor do we
+                accept any liability for undesirable consequences resulting from your use of the software.</p>
+                <p><strong>Origin</strong></p>
+                <ul>
+                    <li>IJG License</li>
+                    <li>Modified BSD License</li>
+                    <li>zlib License</li>
+                </ul>
+            </li>
+        </ol>
+        <h3>The Modified (3-clause) BSD License</h3>
+        <p>Copyright (C)2009-2019 D. R. Commander. All Rights Reserved. Copyright (C)2015 Viktor Szathmáry. All Rights
+        Reserved.</p>
+        <p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that
+        the following conditions are met:</p>
+        <ul>
+            <li>Redistributions of source code must retain the above copyright notice, this list of conditions and the
+            following disclaimer.</li>
+            <li>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and
+            the following disclaimer in the documentation and/or other materials provided with the distribution.</li>
+            <li>Neither the name of the libjpeg-turbo Project nor the names of its contributors may be used to endorse
+            or promote products derived from this software without specific prior written permission.</li>
+        </ul>
+        <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED
+        WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+        PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY
+        DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+        PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+        OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+        DAMAGE.</p>
+        <h3>Why Three Licenses?</h3>
+        <p>The zlib License could have been used instead of the Modified (3-clause) BSD License, and since the IJG
+        License effectively subsumes the distribution conditions of the zlib License, this would have effectively
+        placed libjpeg-turbo binary distributions under the IJG License. However, the IJG License specifically refers
+        to the Independent JPEG Group and does not extend attribution and endorsement protections to other entities.
+        Thus, it was desirable to choose a license that granted us the same protections for new code that were granted
+        to the IJG for code derived from their software.</p>
+        <h3><a name="a__IJG_License" id="a__IJG_License">IJG JPEG Library License</a></h3>
+        <p>In plain English:</p>
+        <ol>
+            <li>We don't promise that this software works. (But if you find any bugs, please let us know!) </li>
+            <li>You can use this software for whatever you want. You don't have to pay us.</li>
+            <li>You may not pretend that you wrote this software. If you use it in a program, you must acknowledge
+            somewhere in your documentation that you've used the IJG code.</li>
+        </ol>
+        <p>In legalese:</p>
+        <p>The authors make NO WARRANTY or representation, either express or implied, with respect to this software,
+        its quality, accuracy, merchantability, or fitness for a particular purpose.  This software is provided "AS
+        IS", and you, its user, assume the entire risk as to its quality and accuracy.</p>
+        <p>This software is copyright (C) 1991-1998, Thomas G. Lane. All Rights Reserved except as specified below.</p>
+        <p>Permission is hereby granted to use, copy, modify, and distribute this software (or portions thereof) for
+        any purpose, without fee, subject to these conditions:</p>
+        <ol>
+            <li>If any part of the source code for this software is distributed, then this README file must be
+            included, with this copyright and no-warranty notice unaltered; and any additions, deletions, or changes to
+            the original files must be clearly indicated in accompanying documentation.</li>
+            <li>If only executable code is distributed, then the accompanying documentation must state that "this
+            software is based in part on the work of the Independent JPEG Group".</li>
+            <li>Permission for use of this software is granted only if the user accepts full responsibility for any
+            undesirable consequences; the authors accept NO LIABILITY for damages of any kind.</li>
+        </ol>
+        <p>These conditions apply to any software derived from or based on the IJG code, not just to the unmodified
+        library.  If you use our work, you ought to acknowledge us.</p>
+        <p>Permission is NOT granted for the use of any IJG author's name or company name in advertising or publicity
+        relating to this software or products derived from it.  This software may be referred to only as "the
+        Independent JPEG Group's software".</p>
+        <p>We specifically permit and encourage the use of this software as the basis of commercial products, provided
+        that all warranty or liability claims are assumed by the product vendor.</p>
+        <p>ansi2knr.c is included in this distribution by permission of L. Peter Deutsch, sole proprietor of its
+        copyright holder, Aladdin Enterprises of Menlo Park, CA. ansi2knr.c is NOT covered by the above copyright and
+        conditions, but instead by the usual distribution terms of the Free Software Foundation; principally, that you
+        must include source code if you redistribute it.  (See the file ansi2knr.c for full details.)  However, since
+        ansi2knr.c is not needed as part of any program generated from the IJG code, this does not limit you more than
+        the foregoing paragraphs do.</p>
+        <p>The Unix configuration script "configure" was produced with GNU Autoconf. It is copyright by the Free
+        Software Foundation but is freely distributable. The same holds for its supporting scripts (config.guess,
+        config.sub, ltconfig, ltmain.sh).  Another support script, install-sh, is copyright by M.I.T. but is also
+        freely distributable.</p>
+        <p>It appears that the arithmetic coding option of the JPEG spec is covered by patents owned by IBM, AT&amp;T,
+        and Mitsubishi.  Hence arithmetic coding cannot legally be used without obtaining one or more licenses.  For
+        this reason, support for arithmetic coding has been removed from the free JPEG software. (Since arithmetic
+        coding provides only a marginal gain over the unpatented Huffman mode, it is unlikely that very many
+        implementations will support it.) So far as we are aware, there are no patent restrictions on the remaining
+        code.</p>
+        <p>The IJG distribution formerly included code to read and write GIF files. To avoid entanglement with the
+        Unisys LZW patent, GIF reading support has been removed altogether, and the GIF writer has been simplified to
+        produce "uncompressed GIFs".  This technique does not use the LZW algorithm; the resulting GIF files are
+        larger than usual, but are readable by all standard GIF decoders.</p>
+        <p>We are required to state that</p>
+        <blockquote>
+            "The Graphics Interchange Format(c) is the Copyright property of CompuServe Incorporated.  GIF(sm) is a
+            Service Mark property of CompuServe Incorporated."
+        </blockquote>
+        <h3><a name="a__Zlib_license" id="a__Zlib_license">The zlib/libpng License (Zlib)</a></h3>
+        <p>This software is provided 'as-is', without any express or implied warranty. In no event will the authors be
+        held liable for any damages arising from the use of this software.</p>
+        <p>Permission is granted to anyone to use this software for any purpose, including commercial applications, and
+        to alter it and redistribute it freely, subject to the following restrictions:</p>
+        <ol>
+            <li>The origin of this software must not be misrepresented; you must not claim that you wrote the original
+            software. If you use this software in a product, an acknowledgment in the product documentation would be
+            appreciated but is not required.</li>
+            <li>Altered source versions must be plainly marked as such, and must not be misrepresented as being the
+            original software.</li>
+            <li>This notice may not be removed or altered from any source distribution.</li>
+        </ol>
     </div>
     <div class="LIBLANGTAG">
         <h2>liblangtag</h2>
