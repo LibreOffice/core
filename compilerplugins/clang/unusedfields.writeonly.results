@@ -72,7 +72,7 @@ chart2/source/controller/dialogs/DialogModel.cxx:233
     (anonymous namespace)::lcl_RolesWithRangeAppend m_rDestCnt (anonymous namespace)::lcl_RolesWithRangeAppend::tContainerType *
 chart2/source/controller/main/ElementSelector.hxx:38
     chart::ListBoxEntryData nHierarchyDepth sal_Int32
-chart2/source/inc/MediaDescriptorHelper.hxx:77
+chart2/source/inc/MediaDescriptorHelper.hxx:71
     apphelper::MediaDescriptorHelper ReadOnly _Bool
 chart2/source/view/charttypes/PieChart.hxx:128
     chart::PieChart::PieLabelInfo fValue double
@@ -428,24 +428,14 @@ include/vcl/vclenum.hxx:199
     ItalicMatrix xy double
 include/vcl/vclenum.hxx:199
     ItalicMatrix xx double
-include/xmloff/AutoStyleEntry.hxx:25
-    xmloff::AutoStyleEntry m_aParentName class rtl::OUString
-include/xmloff/AutoStyleEntry.hxx:26
-    xmloff::AutoStyleEntry m_aName class rtl::OUString
-include/xmloff/shapeexport.hxx:161
-    XMLShapeExport mxSdPropHdlFactory rtl::Reference<XMLPropertyHandlerFactory>
-include/xmloff/shapeexport.hxx:168
-    XMLShapeExport maCurrentInfo ImplXMLShapeExportInfoVector::iterator
+include/xmloff/shapeexport.hxx:166
+    XMLShapeExport maShapeInfos ImplXMLShapeExportInfoVector
 include/xmloff/shapeimport.hxx:180
     SdXML3DSceneAttributesHelper mbVRPUsed _Bool
 include/xmloff/shapeimport.hxx:181
     SdXML3DSceneAttributesHelper mbVPNUsed _Bool
 include/xmloff/shapeimport.hxx:182
     SdXML3DSceneAttributesHelper mbVUPUsed _Bool
-include/xmloff/xmlimp.hxx:211
-    SvXMLImport msPackageProtocol class rtl::OUString
-include/xmloff/xmlimp.hxx:216
-    SvXMLImport mnErrorFlags enum SvXMLErrorFlags
 include/xmlreader/xmlreader.hxx:93
     xmlreader::XmlReader::ElementData inheritedNamespaces const NamespaceList::size_type
 io/source/stm/odata.cxx:241
@@ -540,7 +530,7 @@ sc/source/core/data/cellvalues.cxx:23
     sc::(anonymous namespace)::BlockPos mnEnd size_t
 sc/source/core/data/column2.cxx:3133
     (anonymous namespace)::FindUsedRowsHandler miUsed UsedRowsType::const_iterator
-sc/source/core/data/column4.cxx:1304
+sc/source/core/data/column4.cxx:1307
     (anonymous namespace)::StartListeningFormulaCellsHandler mnStartRow SCROW
 sc/source/core/data/column.cxx:1381
     (anonymous namespace)::CopyByCloneHandler meListenType sc::StartListeningType
@@ -676,7 +666,7 @@ sd/source/filter/ppt/ppt97animations.hxx:50
     Ppt97AnimationInfoAtom nUnknown1 sal_uInt8
 sd/source/filter/ppt/ppt97animations.hxx:51
     Ppt97AnimationInfoAtom nUnknown2 sal_uInt8
-sd/source/ui/inc/inspagob.hxx:32
+sd/source/ui/inc/inspagob.hxx:33
     SdInsertPagesObjsDlg m_pDoc const class SdDrawDocument *
 sd/source/ui/inc/unopage.hxx:277
     SdPageLinkTargets mxPage css::uno::Reference<css::drawing::XDrawPage>
@@ -820,7 +810,7 @@ sw/inc/unoframe.hxx:313
     SwXOLEListener m_xOLEModel css::uno::Reference<css::frame::XModel>
 sw/source/core/doc/tblafmt.cxx:186
     SwAfVersions m_nVerticalAlignmentVersion sal_uInt16
-sw/source/core/inc/docsort.hxx:103
+sw/source/core/inc/docsort.hxx:102
     SwSortTextElement nOrg const sal_uLong
 sw/source/core/inc/swfont.hxx:983
     SvStatistics nGetTextSize sal_uInt16
@@ -834,9 +824,9 @@ sw/source/core/inc/swfont.hxx:987
     SvStatistics nChangeFont sal_uInt16
 sw/source/core/inc/unoflatpara.hxx:140
     SwXFlatParagraphIterator m_aFlatParaList std::set<css::uno::Reference<css::text::XFlatParagraph> >
-sw/source/core/layout/dbg_lay.cxx:131
+sw/source/core/layout/dbg_lay.cxx:132
     SwImplProtocol aVars std::vector<long>
-sw/source/core/text/porfld.hxx:59
+sw/source/core/text/porfld.hxx:61
     SwFieldPortion m_nAttrFieldType sal_uInt16
 sw/source/filter/html/swhtml.hxx:369
     SwHTMLParser m_aOrphanedTableBoxes std::vector<std::unique_ptr<SwTableBox> >
@@ -847,7 +837,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk2/libo6/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk2/libo4/sw/source/filter/inc/rtf.hxx:27:9)
 sw/source/ui/frmdlg/frmpage.cxx:716
     (anonymous namespace)::FrameMaps pMap const struct FrameMap *
 sw/source/ui/frmdlg/frmpage.cxx:775
@@ -1030,7 +1020,7 @@ vcl/unx/generic/gdi/cairotextrender.cxx:55
     (anonymous namespace)::CairoFontsCache::CacheId mbEmbolden _Bool
 vcl/unx/generic/gdi/cairotextrender.cxx:56
     (anonymous namespace)::CairoFontsCache::CacheId mbVerticalMetrics _Bool
-vcl/unx/gtk3/gtk3gtkinst.cxx:1165
+vcl/unx/gtk3/gtk3gtkinst.cxx:1167
      in char *
 vcl/unx/gtk/a11y/atkutil.cxx:142
     DocumentFocusListener m_aRefList std::set<uno::Reference<uno::XInterface> >
@@ -1064,23 +1054,9 @@ xmlhelp/source/cxxhelp/provider/databases.hxx:282
     chelp::Databases m_aCollatorTable chelp::Databases::CollatorTable
 xmloff/inc/XMLElementPropertyContext.hxx:37
     XMLElementPropertyContext aProp struct XMLPropertyState
-xmloff/source/chart/SchXMLExport.cxx:262
-    SchXMLExportHelper_Impl msTableNumberList class rtl::OUString
-xmloff/source/draw/animationexport.cxx:459
-    xmloff::AnimationsExporterImpl mxExport Reference<class com::sun::star::uno::XInterface>
-xmloff/source/draw/animexp.cxx:229
-    AnimExpImpl mxShapeExp rtl::Reference<XMLShapeExport>
-xmloff/source/draw/ximpshap.hxx:77
-    SdXMLShapeContext maShapeTitle class rtl::OUString
-xmloff/source/draw/ximpshap.hxx:78
-    SdXMLShapeContext maShapeDescription class rtl::OUString
 xmloff/source/draw/ximpstyl.hxx:221
     SdXMLMasterStylesContext maMasterPageList std::vector<rtl::Reference<SdXMLMasterPageContext> >
-xmloff/source/forms/formattributes.hxx:279
-    xmloff::OAttribute2Property::AttributeAssignment sAttributeName class rtl::OUString
 xmloff/source/text/txtimp.cxx:523
     XMLTextImportHelper::Impl m_xFrameImpPrMap rtl::Reference<SvXMLImportPropertyMapper>
-xmloff/source/transform/TransformerBase.hxx:59
-    XMLTransformerBase m_xLocator css::uno::Reference<css::xml::sax::XLocator>
 xmlsecurity/inc/certificatechooser.hxx:57
     CertificateChooser mvUserData std::vector<std::shared_ptr<UserData> >

@@ -547,8 +547,6 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             break;
     }
 
-    maShapeInfos.push_back( aShapeInfo );
-
     // check for shape collections (group shape or 3d scene)
     // and collect contained shapes style infos
     const uno::Reference< drawing::XShape >& xCollection = aShapeInfo.xCustomShapeReplacement.is()

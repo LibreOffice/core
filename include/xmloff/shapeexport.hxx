@@ -163,7 +163,6 @@ private:
     ShapesInfos                                 maShapesInfos;
     ShapesInfos::iterator                       maCurrentShapesIter;
     bool                                        mbExportLayer;
-    ImplXMLShapeExportInfoVector                maShapeInfos;
     OUString                                    msPresentationStylePrefix;
 
     // #88546# possibility to switch progress bar handling on/off
