@@ -174,6 +174,7 @@ enum class VclEventId
     WindowShow,
     WindowStartDocking,     // pData = DockingData
     WindowToggleFloating,
+    WindowGestureEvent,
 };
 
 class VCL_DLLPUBLIC VclSimpleEvent
