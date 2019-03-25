@@ -55,9 +55,9 @@ class SVL_DLLPUBLIC MSODocumentLockFile : public GenDocumentLockFile
 private:
     OUString m_sOrigURL;
 
-    bool isWordFormat(const OUString& aOrigURL) const;
-    bool isExcelFormat(const OUString& aOrigURL) const;
-    bool isPowerPointFormat(const OUString& aOrigURL) const;
+    static bool isWordFormat(const OUString& aOrigURL);
+    static bool isExcelFormat(const OUString& aOrigURL);
+    static bool isPowerPointFormat(const OUString& aOrigURL);
 
 protected:
     virtual void
@@ -74,6 +74,8 @@ public:
     virtual LockFileEntry GetLockData() override;
 
     virtual void RemoveFile() override;
+
+    static bool IsMSOSupportedFileFormat(const OUString& aURL);
 };
 }
 
