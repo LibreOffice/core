@@ -340,13 +340,18 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     Construct_Impl();
 }
 
-SvxSearchDialog::~SvxSearchDialog()
+void SvxSearchDialog::ChildWinDispose()
 {
     rBindings.EnterRegistrations();
     pSearchController.reset();
     pOptionsController.reset();
     pFamilyController.reset();
     rBindings.LeaveRegistrations();
+    SfxModelessDialogController::ChildWinDispose();
+}
+
+SvxSearchDialog::~SvxSearchDialog()
+{
 }
 
 void SvxSearchDialog::Construct_Impl()

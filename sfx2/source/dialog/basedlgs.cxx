@@ -63,7 +63,7 @@ public:
 
 void SfxModelessDialog_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if( rHint.GetId() == SfxHintId::Dying) {
+    if (pMgr && rHint.GetId() == SfxHintId::Dying) {
         pMgr->Destroy();
     }
 }
