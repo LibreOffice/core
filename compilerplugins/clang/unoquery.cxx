@@ -33,8 +33,6 @@ bool UnoQuery::VisitCXXMemberCallExpr(CXXMemberCallExpr const* memberCallExpr)
     if (ignoreLocation(memberCallExpr))
         return true;
 
-    memberCallExpr->dump();
-
     auto isXInterface = [](Decl const* decl) -> bool {
         return bool(loplugin::DeclCheck(decl)
                         .Class("XInterface")
