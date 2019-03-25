@@ -484,6 +484,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 		) \
 		fps_aqua \
 		vclplug_osx \
+	) \
+	$(if $(filter iOS MACOSX,$(OS)), \
 		MacOSXSpell \
 	) \
 ))

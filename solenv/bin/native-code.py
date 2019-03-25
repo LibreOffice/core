@@ -62,7 +62,8 @@ core_factory_list = [
     ("libpdffilterlo.a", "pdffilter_component_getFactory"),
     ("libsvgiolo.a", "svgio_component_getFactory"),
     ("libsvtlo.a", "svt_component_getFactory"),
-    ("libctllo.a", "ctl_component_getFactory")
+    ("libctllo.a", "ctl_component_getFactory"),
+    ("libMacOSXSpelllo.a", "MacOSXSpell_component_getFactory", "#ifdef IOS"),
     ]
 
 core_constructor_list = [
