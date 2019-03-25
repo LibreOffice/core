@@ -24,6 +24,7 @@ public:
     void testTdf118058();
     void testTdf117188();
     void testTdf119875();
+    void testTdf123651();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -33,6 +34,7 @@ public:
     CPPUNIT_TEST(testTdf118058);
     CPPUNIT_TEST(testTdf117188);
     CPPUNIT_TEST(testTdf119875);
+    CPPUNIT_TEST(testTdf123651);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -169,6 +171,15 @@ void SwLayoutWriter::testTdf119875()
     // The first section had the same top value as the second one, so they
     // overlapped.
     CPPUNIT_ASSERT_LESS(nSecondTop, nFirstTop);
+}
+
+void SwLayoutWriter::testTdf123651()
+{
+    createDoc("tdf123651.docx");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 7639;
+    // Actual: 12926'. The shape was below the second "Lorem ipsum" text, not above it.
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "top", "7639");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
