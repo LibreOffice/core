@@ -284,13 +284,13 @@ public:
     virtual void        Save( XclExpStream& rStrm ) override;
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
+    OUString            GetFormatCode ( sal_uInt32 nScNumFmt );
+
 private:
     /** Writes the FORMAT record with index nXclIx and format string rFormatStr. */
     void                WriteFormatRecord( XclExpStream& rStrm, sal_uInt16 nXclNumFmt, const OUString& rFormatStr );
     /** Writes the FORMAT record represented by rFormat. */
     void                WriteFormatRecord( XclExpStream& rStrm, const XclExpNumFmt& rFormat );
-
-    OUString            GetFormatCode ( sal_uInt32 nScNumFmt );
 
 private:
     typedef ::std::vector< XclExpNumFmt >           XclExpNumFmtVec;
@@ -700,6 +700,7 @@ public:
     virtual ~XclExpDxf() override;
 
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
+    virtual void SaveXmlExt( XclExpXmlStream& rStrm);
 
 private:
     std::unique_ptr<XclExpCellAlign> mpAlign;

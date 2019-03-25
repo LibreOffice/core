@@ -20,11 +20,16 @@
 #include <document.hxx>
 #include <worksheetfragment.hxx>
 #include <workbookfragment.hxx>
+#include <stylesbuffer.hxx>
+#include <stylesfragment.hxx>
 
 #include <rangeutl.hxx>
 #include <sal/log.hxx>
 
 using ::oox::core::ContextHandlerRef;
+using ::oox::xls::CondFormatBuffer;
+
+sal_Int32 rStyleIdx = 0;
 
 namespace oox {
 namespace xls {
@@ -79,6 +84,7 @@ void ExtCfRuleContext::onStartElement( const AttributeList& rAttribs )
 ExtConditionalFormattingContext::ExtConditionalFormattingContext(WorksheetContextBase& rFragment):
     WorksheetContextBase(rFragment)
 {
+    isPreviousElementF = false;
 }
 
 ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nElement, const AttributeList& rAttribs)
@@ -98,6 +104,7 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
     {
         OUString aType = rAttribs.getString(XML_type, OUString());
         OUString aId = rAttribs.getString(XML_id, OUString());
+
         if (aType == "dataBar")
         {
             // an ext entry does not need to have an existing corresponding entry
@@ -119,12 +126,22 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
             maEntries.push_back(std::make_unique<ScIconSetFormat>(pDoc));
             return new IconSetContext(*this, mpCurrentRule.get());
         }
+        else if (aType == "cellIs")
+        {
+            sal_Int32 aToken = rAttribs.getToken( XML_operator, XML_TOKEN_INVALID );
+            eOperator =  CondFormatBuffer::convertToInternalOperator(aToken);
+            return this;
+        }
         else
         {
             SAL_WARN("sc", "unhandled XLS14_TOKEN(cfRule) with type: " << aType);
         }
     }
-    else if (nElement == XM_TOKEN(sqref))
+    else if (nElement == XLS14_TOKEN( dxf ))
+    {
+        return new DxfContext( *this, getStyles().createExtDxf() );
+    }
+    else if (nElement == XM_TOKEN( sqref ) || nElement == XM_TOKEN( f ))
     {
         return this;
     }
@@ -132,26 +149,43 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
     return nullptr;
 }
 
-void ExtConditionalFormattingContext::onStartElement(const AttributeList& /*rAttribs*/)
+void ExtConditionalFormattingContext::onStartElement(const AttributeList& /*Attribs*/)
 {
-    switch (getCurrentElement())
-    {
-        case XM_TOKEN(sqref):
-        {
-        }
-        break;
-    }
 }
 
 void ExtConditionalFormattingContext::onCharacters(const OUString& rCharacters)
 {
-    aChars = rCharacters;
+    switch (getCurrentElement())
+    {
+        case XM_TOKEN(f):
+        {
+            aChars = rCharacters;
+            isPreviousElementF = true;
+        }
+        break;
+        case XM_TOKEN(sqref):
+        {
+            aChars = rCharacters;
+        }
+        break;
+    }
+
 }
 
 void ExtConditionalFormattingContext::onEndElement()
 {
     switch (getCurrentElement())
     {
+        case XM_TOKEN(f):
+        {
+            rFormulas.push_back(aChars);
+        }
+        break;
+        case XLS14_TOKEN( cfRule ):
+        {
+            getStyles().getExtDxfs().forEachMem( &Dxf::finalizeImport );
+        }
+        break;
         case XM_TOKEN(sqref):
         {
             ScRangeList aRange;
@@ -167,8 +201,26 @@ void ExtConditionalFormattingContext::onEndElement()
                 aRange[i].aEnd.SetTab(nTab);
             }
 
+            if(isPreviousElementF) // sqref can be alone in some cases.
+            {
+                for(const OUString& rFormula : rFormulas)
+                {
+                    ScAddress rPos = aRange.GetTopLeftCorner();
+                    rStyle = getStyles().createExtDxfStyle(rStyleIdx);
+                    ScCondFormatEntry* pEntry = new ScCondFormatEntry(eOperator, rFormula, "", pDoc,
+                                                                      rPos, rStyle, "", "",
+                                                                      formula::FormulaGrammar::GRAM_OOXML ,
+                                                                      formula::FormulaGrammar::GRAM_OOXML,
+                                                                      ScFormatEntry::Type::ExtCondition );
+                    maEntries.push_back(std::unique_ptr<ScFormatEntry>(pEntry));
+                    rStyleIdx++;
+                }
+                rFormulas.clear();
+            }
+
             std::vector< std::unique_ptr<ExtCfCondFormat> >& rExtFormats =  getCondFormats().importExtCondFormat();
             rExtFormats.push_back(std::make_unique<ExtCfCondFormat>(aRange, maEntries));
+            isPreviousElementF = false;
         }
         break;
         default:

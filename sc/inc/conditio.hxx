@@ -27,6 +27,7 @@
 #include <formula/grammar.hxx>
 #include "scdllapi.h"
 #include "rangelst.hxx"
+#include "tokenarray.hxx"
 
 #include <svl/listener.hxx>
 
@@ -231,6 +232,7 @@ public:
     enum class Type
     {
         Condition,
+        ExtCondition,
         Colorscale,
         Databar,
         Iconset,
@@ -264,6 +266,9 @@ inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT,
     {
     case ScFormatEntry::Type::Condition:
         stream << "Condition";
+        break;
+    case ScFormatEntry::Type::ExtCondition:
+        stream << "ExtCondition";
         break;
     case ScFormatEntry::Type::Colorscale:
         stream << "Colorscale";
@@ -322,6 +327,7 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
     bool                bRelRef2;
     bool                bFirstRun;
     std::unique_ptr<ScFormulaListener> mpListener;
+    Type eConditionType;                //It can be Condition or ExtCondition
 
     static void SimplifyCompiledFormula( std::unique_ptr<ScTokenArray>& rFormula,
                                      double& rVal,
@@ -346,7 +352,8 @@ public:
                                 ScDocument* pDocument, const ScAddress& rPos,
                                 const OUString& rExprNmsp1, const OUString& rExprNmsp2,
                                 formula::FormulaGrammar::Grammar eGrammar1,
-                                formula::FormulaGrammar::Grammar eGrammar2 );
+                                formula::FormulaGrammar::Grammar eGrammar2,
+                                Type eType = Type::Condition );
             ScConditionEntry( ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument* pDocument, const ScAddress& rPos );
@@ -391,7 +398,7 @@ public:
 
     bool            MarkUsedExternalReferences() const;
 
-    virtual Type GetType() const override { return Type::Condition; }
+    virtual Type GetType() const override { return eConditionType; }
 
     virtual ScFormatEntry* Clone(ScDocument* pDoc) const override;
 
@@ -442,7 +449,8 @@ private:
 //  single condition entry for conditional formatting
 class SC_DLLPUBLIC ScCondFormatEntry : public ScConditionEntry
 {
-    OUString                  aStyleName;
+    OUString aStyleName;
+    Type eCondFormatType = Type::Condition;
 
 public:
             ScCondFormatEntry( ScConditionMode eOper,
@@ -452,7 +460,8 @@ public:
                                 const OUString& rExprNmsp1 = EMPTY_OUSTRING,
                                 const OUString& rExprNmsp2 = EMPTY_OUSTRING,
                                 formula::FormulaGrammar::Grammar eGrammar1 = formula::FormulaGrammar::GRAM_DEFAULT,
-                                formula::FormulaGrammar::Grammar eGrammar2 = formula::FormulaGrammar::GRAM_DEFAULT );
+                                formula::FormulaGrammar::Grammar eGrammar2 = formula::FormulaGrammar::GRAM_DEFAULT,
+                                Type eType = Type::Condition);
             ScCondFormatEntry( ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
@@ -466,6 +475,7 @@ public:
     const OUString&   GetStyle() const        { return aStyleName; }
     void            UpdateStyleName(const OUString& rNew)  { aStyleName=rNew; }
     virtual ScFormatEntry* Clone(ScDocument* pDoc) const override;
+    virtual Type GetType() const override { return eCondFormatType; }
 
 protected:
     virtual void    DataChanged() const override;
