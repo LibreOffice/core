@@ -97,7 +97,6 @@ using ::com::sun::star::uno::Reference;
 
 using namespace svx;
 // AbstractTabDialog implementations just forwards everything to the dialog
-IMPL_ABSTDLG_BASE(CuiAbstractSfxDialog_Impl)
 
 short CuiAbstractController_Impl::Execute()
 {
@@ -341,16 +340,6 @@ const SfxItemSet* CuiAbstractSingleTabController_Impl::GetOutputItemSet() const
 void CuiAbstractSingleTabController_Impl::SetText(const OUString& rStr)
 {
     m_xDlg->set_title(rStr);
-}
-
-const SfxItemSet* CuiAbstractSfxDialog_Impl::GetOutputItemSet() const
-{
-    return pDlg->GetOutputItemSet();
-}
-
-void CuiAbstractSfxDialog_Impl::SetText( const OUString& rStr )
-{
-    pDlg->SetText( rStr );
 }
 
 SvxDistributeHorizontal AbstractSvxDistributeDialog_Impl::GetDistributeHor()const

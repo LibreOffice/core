@@ -361,11 +361,6 @@ bool SvLBoxButton::CheckModification() const
     return eKind == SvLBoxButtonKind::EnabledCheckbox;
 }
 
-void SvLBoxButton::SetStateInvisible()
-{
-    isVis = false;
-}
-
 // ***************************************************************
 // class SvLBoxContextBmp
 // ***************************************************************

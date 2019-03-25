@@ -506,19 +506,6 @@ void SfxModelessDialogController::Close()
         SfxCallMode::RECORD|SfxCallMode::SYNCHRON, { &aValue } );
 }
 
-/*  [Description]
-
-    Fills a SfxChildWinInfo with specific data from SfxModelessDialog,
-    so that it can be written in the INI file. It is assumed that rinfo
-    receives all other possible relevant data in the ChildWindow class.
-    ModelessDialogs have no specific information, so that the base
-    implementation does nothing and therefore must not be called.
-*/
-void SfxModelessDialogController::FillInfo(SfxChildWinInfo& rInfo) const
-{
-    rInfo.aSize = m_xDialog->get_size();
-}
-
 bool SfxFloatingWindow::EventNotify( NotifyEvent& rEvt )
 
 /*  [Description]

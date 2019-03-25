@@ -96,15 +96,6 @@ public:
     virtual short Execute() override;
 };
 
-class CuiAbstractSfxDialog_Impl : public SfxAbstractDialog
-{
-    DECL_ABSTDLG_BASE(CuiAbstractSfxDialog_Impl,SfxModalDialog)
-    virtual const SfxItemSet*   GetOutputItemSet() const override;
-
-        //From class Window.
-    virtual void          SetText( const OUString& rStr ) override;
-};
-
 class CuiAbstractSingleTabController_Impl : public SfxAbstractDialog
 {
     std::unique_ptr<SfxSingleTabDialogController> m_xDlg;
