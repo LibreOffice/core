@@ -567,7 +567,7 @@ public:
     struct TabRanges
     {
         SCTAB mnTab;
-        std::shared_ptr<ScFlatBoolRowSegments> mpRanges;
+        ScFlatBoolRowSegments maRanges;
 
         TabRanges(SCTAB nTab);
     };

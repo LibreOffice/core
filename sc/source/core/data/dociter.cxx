@@ -2511,7 +2511,7 @@ const ScPatternAttr* ScDocAttrIterator::GetNext( SCCOL& rCol, SCROW& rRow1, SCRO
 }
 
 ScDocRowHeightUpdater::TabRanges::TabRanges(SCTAB nTab) :
-    mnTab(nTab), mpRanges(new ScFlatBoolRowSegments)
+    mnTab(nTab)
 {
 }
 
@@ -2537,7 +2537,7 @@ void ScDocRowHeightUpdater::update()
             continue;
 
         ScFlatBoolRowSegments::RangeData aData;
-        ScFlatBoolRowSegments::RangeIterator aRangeItr(*rTabRanges.mpRanges);
+        ScFlatBoolRowSegments::RangeIterator aRangeItr(rTabRanges.maRanges);
         for (bool bFound = aRangeItr.getFirst(aData); bFound; bFound = aRangeItr.getNext(aData))
         {
             if (!aData.mbValue)
@@ -2559,7 +2559,7 @@ void ScDocRowHeightUpdater::update()
 
         sc::RowHeightContext aCxt(mfPPTX, mfPPTY, aZoom, aZoom, mpOutDev);
         ScFlatBoolRowSegments::RangeData aData;
-        ScFlatBoolRowSegments::RangeIterator aRangeItr(*rTabRanges.mpRanges);
+        ScFlatBoolRowSegments::RangeIterator aRangeItr(rTabRanges.maRanges);
         for (bool bFound = aRangeItr.getFirst(aData); bFound; bFound = aRangeItr.getNext(aData))
         {
             if (!aData.mbValue)

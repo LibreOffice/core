@@ -318,7 +318,7 @@ bool ScFlatBoolRowSegments::ForwardIterator::getValue(SCROW nPos, bool& rVal)
     return true;
 }
 
-ScFlatBoolRowSegments::RangeIterator::RangeIterator(ScFlatBoolRowSegments& rSegs) :
+ScFlatBoolRowSegments::RangeIterator::RangeIterator(ScFlatBoolRowSegments const & rSegs) :
     mrSegs(rSegs)
 {
 }

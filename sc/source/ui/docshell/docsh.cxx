@@ -1361,7 +1361,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
             ScDocRowHeightUpdater::TabRanges aRecalcRanges(0);
             ErrCode eError = DBaseImport( rMedium.GetPhysicalName(),
-                    ScGlobal::GetCharsetValue(sItStr), aColWidthParam, *aRecalcRanges.mpRanges );
+                    ScGlobal::GetCharsetValue(sItStr), aColWidthParam, aRecalcRanges.maRanges );
             aRecalcRowRangesArray.push_back(aRecalcRanges);
 
             if (eError != ERRCODE_NONE)
