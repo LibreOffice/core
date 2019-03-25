@@ -89,7 +89,7 @@ class ShapeUndoElement  :public ShapeUndoElement_MBase
                         ,public ShapeUndoElement_TBase
 {
 public:
-    explicit ShapeUndoElement( SdrUndoAction& i_sdrUndoAction );
+    explicit ShapeUndoElement( std::unique_ptr<SdrUndoAction> xSdrUndoAction );
 
     // XUndoAction
     virtual OUString SAL_CALL getTitle() override;
@@ -103,7 +103,7 @@ protected:
     virtual ~ShapeUndoElement() override;
 
 private:
-    SdrUndoAction*  m_pAction;
+    std::unique_ptr<SdrUndoAction> m_xAction;
 };
 
 } // namespace impl
