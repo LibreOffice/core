@@ -60,6 +60,7 @@ private:
     const char* m_pDescriptionID;
     OUString m_sNumericPart;
     uint32_t m_nCode;
+    uint32_t m_nDefault;
     FeatureParameterType m_eType;
     // the index of the parameter defines the enum value, string is the description
     std::vector<FeatureParameter> m_aEnumParameters;
@@ -69,16 +70,18 @@ public:
     FeatureDefinition(uint32_t nCode, OUString const& rDescription,
                       FeatureParameterType eType = FeatureParameterType::BOOL,
                       std::vector<FeatureParameter> const& rEnumParameters
-                      = std::vector<FeatureParameter>{});
+                      = std::vector<FeatureParameter>{},
+                      uint32_t nDefault = 0);
     FeatureDefinition(uint32_t nCode, const char* pDescriptionID,
                       OUString const& rNumericPart = OUString());
     FeatureDefinition(uint32_t nCode, const char* pDescriptionID,
                       std::vector<FeatureParameter> aEnumParameters);
 
     const std::vector<FeatureParameter>& getEnumParameters() const;
-    OUString getDescription() const;
     uint32_t getCode() const;
+    OUString getDescription() const;
     FeatureParameterType getType() const;
+    uint32_t getDefault() const;
 
     operator bool() const;
 };
