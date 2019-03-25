@@ -891,12 +891,6 @@ void SwUiWriterTest2::testTdf122942()
     const SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats.size());
 
-    // Without the accompanying fix in place, this test would have failed with
-    // 'Expected less than: 0; Actual: 1030', i.e. the shape was below the
-    // paragraph mark, not above it.
-    const SwFormatVertOrient& rVert = rFormats[1]->GetVertOrient();
-    CPPUNIT_ASSERT_LESS(static_cast<SwTwips>(0), rVert.GetPos());
-
     reload("writer8", "tdf122942.odt");
     pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
@@ -904,14 +898,15 @@ void SwUiWriterTest2::testTdf122942()
     const SwFrameFormats& rFormats2 = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats2.size());
 
-    SdrObject* pObject = rFormats2[1]->FindSdrObject();
-    CPPUNIT_ASSERT(pObject);
-
-    const tools::Rectangle& rOutRect = pObject->GetLastBoundRect();
-    // Without the accompanying fix in place, this test would have failed with
-    // 'Expected greater than: 5000; Actual: 2817', i.e. the shape moved up
-    // after a reload(), while it's expected to not change its position (5773).
-    CPPUNIT_ASSERT_GREATER(static_cast<SwTwips>(5000), rOutRect.Top());
+    // Make sure the top of the inserted shape does not move outside the existing shape, even after
+    // reload.
+    SdrObject* pObject1 = rFormats2[0]->FindSdrObject();
+    CPPUNIT_ASSERT(pObject1);
+    const tools::Rectangle& rOutRect1 = pObject1->GetLastBoundRect();
+    SdrObject* pObject2 = rFormats2[1]->FindSdrObject();
+    CPPUNIT_ASSERT(pObject2);
+    const tools::Rectangle& rOutRect2 = pObject2->GetLastBoundRect();
+    CPPUNIT_ASSERT(rOutRect2.Top() > rOutRect1.Top() && rOutRect2.Top() < rOutRect1.Bottom());
 }
 
 void SwUiWriterTest2::testTdf52391()
