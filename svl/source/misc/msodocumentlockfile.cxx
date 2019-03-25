@@ -18,9 +18,9 @@
 
 namespace svt
 {
-bool MSODocumentLockFile::isWordFormat(const OUString& aOrigURL) const
+bool MSODocumentLockFile::isWordFormat(const OUString& aOrigURL)
 {
-    INetURLObject aDocURL = ResolveLinks(INetURLObject(aOrigURL));
+    INetURLObject aDocURL = LockFileCommon::ResolveLinks(INetURLObject(aOrigURL));
 
     return aDocURL.GetFileExtension().compareToIgnoreAsciiCase("DOC") == 0
            || aDocURL.GetFileExtension().compareToIgnoreAsciiCase("DOCX") == 0
@@ -28,18 +28,18 @@ bool MSODocumentLockFile::isWordFormat(const OUString& aOrigURL) const
            || aDocURL.GetFileExtension().compareToIgnoreAsciiCase("ODT") == 0;
 }
 
-bool MSODocumentLockFile::isExcelFormat(const OUString& aOrigURL) const
+bool MSODocumentLockFile::isExcelFormat(const OUString& aOrigURL)
 {
-    INetURLObject aDocURL = ResolveLinks(INetURLObject(aOrigURL));
+    INetURLObject aDocURL = LockFileCommon::ResolveLinks(INetURLObject(aOrigURL));
 
     return //aDocURL.GetFileExtension().compareToIgnoreAsciiCase("XLS") || // MSO does not create lockfile for XLS
         aDocURL.GetFileExtension().compareToIgnoreAsciiCase("XLSX") == 0
         || aDocURL.GetFileExtension().compareToIgnoreAsciiCase("ODS") == 0;
 }
 
-bool MSODocumentLockFile::isPowerPointFormat(const OUString& aOrigURL) const
+bool MSODocumentLockFile::isPowerPointFormat(const OUString& aOrigURL)
 {
-    INetURLObject aDocURL = ResolveLinks(INetURLObject(aOrigURL));
+    INetURLObject aDocURL = LockFileCommon::ResolveLinks(INetURLObject(aOrigURL));
 
     return aDocURL.GetFileExtension().compareToIgnoreAsciiCase("PPTX") == 0
            || aDocURL.GetFileExtension().compareToIgnoreAsciiCase("PPT") == 0
@@ -56,7 +56,7 @@ MSODocumentLockFile::~MSODocumentLockFile() {}
 
 OUString MSODocumentLockFile::GenerateURL(const OUString& aOrigURL, const OUString& aPrefix)
 {
-    INetURLObject aDocURL = ResolveLinks(INetURLObject(aOrigURL));
+    INetURLObject aDocURL = LockFileCommon::ResolveLinks(INetURLObject(aOrigURL));
     OUString aURL = aDocURL.GetPartBeforeLastName();
     aURL += aPrefix;
 
@@ -237,6 +237,11 @@ void MSODocumentLockFile::RemoveFile()
         throw css::io::IOException(); // not the owner, access denied
 
     RemoveFileDirectly();
+}
+
+bool MSODocumentLockFile::IsMSOSupportedFileFormat(const OUString& aURL)
+{
+    return isWordFormat(aURL) || isExcelFormat(aURL) || isPowerPointFormat(aURL);
 }
 
 } // namespace svt

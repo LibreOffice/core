@@ -153,6 +153,7 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet
 
     get( aHighlightingRB, "highlighting");
     get( aShadingRB,      "shading"     );
+    get( aMSOLockFileCB,  "mso_lockfile");
 
     Size aControlSize(248, 55);
     aControlSize = LogicToPixel(aControlSize, MapMode(MapUnit::MapAppFont));
@@ -183,6 +184,7 @@ void OfaMSFilterTabPage2::dispose()
     m_pCheckLBContainer.clear();
     aHighlightingRB.clear();
     aShadingRB.clear();
+    aMSOLockFileCB.clear();
 
     SfxTabPage::dispose();
 }
@@ -252,6 +254,11 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
             rOpt.SetCharBackground2Shading();
     }
 
+    if( aMSOLockFileCB->IsValueChangedFromSaved() )
+    {
+        rOpt.EnableMSOLockFileCreation(aMSOLockFileCB->IsChecked());
+    }
+
     return true;
 }
 
@@ -318,6 +325,9 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
         aShadingRB->Check();
 
     aHighlightingRB->SaveValue();
+
+    aMSOLockFileCB->Check(rOpt.IsMSOLockFileCreationIsEnabled());
+    aMSOLockFileCB->SaveValue();
 }
 
 void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, MSFltrPg2_CheckBoxEntries _nType )
