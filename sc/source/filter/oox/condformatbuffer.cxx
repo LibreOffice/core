@@ -39,6 +39,7 @@
 #include <document.hxx>
 #include <tokenarray.hxx>
 #include <tokenuno.hxx>
+#include <extlstcontext.hxx>
 
 namespace oox {
 namespace xls {
@@ -1096,7 +1097,7 @@ void CondFormatBuffer::finalizeImport()
 {
     for( const auto& rxCondFormat : maCondFormats )
     {
-        if ( rxCondFormat.get() )
+        if ( rxCondFormat.get())
             rxCondFormat.get()->finalizeImport();
     }
     for ( const auto& rxCfRule : maCfRules )
@@ -1128,6 +1129,8 @@ void CondFormatBuffer::finalizeImport()
             pFormat->AddEntry(rxEntry->Clone(pDoc));
         }
     }
+
+    rStyleIdx = 0; // Resets <extlst> <cfRule> style index.
 }
 
 CondFormatRef CondFormatBuffer::importCondFormatting( SequenceInputStream& rStrm )
