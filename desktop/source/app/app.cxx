@@ -106,6 +106,7 @@
 #include <svtools/miscopt.hxx>
 #include <svtools/menuoptions.hxx>
 #include <rtl/bootstrap.hxx>
+#include <vcl/glxtestprocess.hxx>
 #include <vcl/help.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
