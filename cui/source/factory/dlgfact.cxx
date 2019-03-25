@@ -152,7 +152,10 @@ short AbstractGalleryIdDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractURLDlg_Impl);
+short AbstractURLDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractSvxSearchSimilarityDialog_Impl::Execute()
 {
@@ -537,27 +540,27 @@ sal_uInt32 AbstractGalleryIdDialog_Impl::GetId() const
 
 OUString AbstractURLDlg_Impl::GetURL() const
 {
-    return pDlg->GetURL();
+    return m_xDlg->GetURL();
 }
 
 OUString AbstractURLDlg_Impl::GetAltText() const
 {
-    return pDlg->GetAltText();
+    return m_xDlg->GetAltText();
 }
 
 OUString AbstractURLDlg_Impl::GetDesc() const
 {
-    return pDlg->GetDesc();
+    return m_xDlg->GetDesc();
 }
 
 OUString AbstractURLDlg_Impl::GetTarget() const
 {
-    return pDlg->GetTarget();
+    return m_xDlg->GetTarget();
 }
 
 OUString AbstractURLDlg_Impl::GetName() const
 {
-    return pDlg->GetName();
+    return m_xDlg->GetName();
 }
 
 sal_uInt16 AbstractSvxSearchSimilarityDialog_Impl::GetOther()
@@ -1098,14 +1101,14 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateGalleryThemeProperti
                                                          pParent, pData, pItemSet));
 }
 
-VclPtr<AbstractURLDlg> AbstractDialogFactory_Impl::CreateURLDialog( vcl::Window* pParent,
+VclPtr<AbstractURLDlg> AbstractDialogFactory_Impl::CreateURLDialog(weld::Window* pParent,
                                             const OUString& rURL, const OUString& rAltText, const OUString& rDescription,
                                             const OUString& rTarget, const OUString& rName,
                                             TargetList& rTargetList )
 {
-    VclPtrInstance<URLDlg> pDlg( pParent, rURL, rAltText, rDescription,
-                                 rTarget, rName, rTargetList);
-    return VclPtr<AbstractURLDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractURLDlg_Impl>::Create(std::make_unique<URLDlg>(pParent, rURL, rAltText, rDescription,
+                                                                        rTarget, rName, rTargetList));
+
 }
 
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateTabItemDialog(weld::Window* pParent,

@@ -350,7 +350,7 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateGalleryThemePropertiesDialog(weld::Window* pParent,
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet ) = 0;
-    virtual VclPtr<AbstractURLDlg> CreateURLDialog( vcl::Window* pParent,
+    virtual VclPtr<AbstractURLDlg> CreateURLDialog(weld::Window* pParent,
                                             const OUString& rURL, const OUString& rAltText, const OUString& rDescription,
                                             const OUString& rTarget, const OUString& rName,
                                             TargetList& rTargetList ) = 0;
