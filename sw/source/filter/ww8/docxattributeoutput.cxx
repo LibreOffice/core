@@ -2709,7 +2709,7 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
                 break;
             case 0x0b: // line break
                 {
-                    if (impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pIt ) || (prevUnicode == *pIt))
+                    if (impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pIt ) || prevUnicode < 0x0020)
                     {
                         m_pSerializer->singleElementNS( XML_w, XML_br, FSEND );
                         prevUnicode = *pIt;
