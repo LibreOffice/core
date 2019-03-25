@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_3b6c7707",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-25T17:19:52Z",
+      "side": 1,
+      "message": "this type should have internal linkage",
+      "revId": "57465a8faefe1ed63129ae6be5601f450453c5cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_5b713be0",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-25T17:19:52Z",
+      "side": 1,
+      "message": "isn\u0027t the invariant that freeaddrinfo must be called iff nError is zero? (and initializing nError to zero is apparently misleading, it would suffice to only assign to it in the ctor)",
+      "revId": "57465a8faefe1ed63129ae6be5601f450453c5cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_bb7f27aa",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-25T17:19:52Z",
+      "side": 1,
+      "message": "getHostName is only called (as an argument to strdup, which must not be a nullptr) when the condition must hold that pAddrInfoList is not a nullptr; better assert that here instead of the ?:",
+      "revId": "57465a8faefe1ed63129ae6be5601f450453c5cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_db7c6bb7",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-03-25T17:19:52Z",
+      "side": 1,
+      "message": "here and elsewhere: better leave unrelated changes to a different gerrit change",
+      "revId": "57465a8faefe1ed63129ae6be5601f450453c5cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
