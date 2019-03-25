@@ -206,46 +206,48 @@
         ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
         OTHER DEALINGS IN THE SOFTWARE.</p>
     </div>
+    <div class="JFREEREPORT">
     <h2>Flute</h2>
-    <p>The following software may be included in this product: Flute. Use of any of this software is governed by the
-    terms of the license below:</p>
-    <h3>W3C IPR SOFTWARE NOTICE</h3>
-    <p>Copyright © 2002 World Wide Web Consortium, (Massachusetts Institute of Technology, Institut National de
-    Recherche en Informatique et en Automatique, Keio University). All Rights Reserved.</p>
-    <p><span class="T1">Note:</span> The original version of the W3C Software Copyright Notice and License could be
-    found at <a href=
-    "http://www.w3.org/Consortium/Legal/copyright-software-19980720">http://www.w3.org/Consortium/Legal/copyright-software-19980720</a></p>
-    <p>Copyright © 1994-2000 <a href="http://www.w3.org/">World Wide Web Consortium</a>, (<a href=
-    "http://www.lcs.mit.edu/">Massachusetts Institute of Technology</a>, <a href="http://www.inria.fr/">Institut
-    National de Recherche en Informatique et en Automatique</a>, <a href="http://www.keio.ac.jp/">Keio University</a>).
-    All Rights Reserved. <a href="http://www.w3.org/Consortium/Legal/">http://www.w3.org/Consortium/Legal/</a></p>
-    <p>This W3C work (including software, documents, or other related items) is being provided by the copyright holders
-    under the following license. By obtaining, using and/or copying this work, you (the licensee) agree that you have
-    read, understood, and will comply with the following terms and conditions:</p>
-    <p>Permission to use, copy, and modify this software and its documentation, with or without modification, for any
-    purpose and without fee or royalty is hereby granted, provided that you include the following on ALL copies of the
-    software and documentation or portions thereof, including modifications, that you make:</p>
-    <ol>
-        <li>The full text of this NOTICE in a location viewable to users of the redistributed or derivative work.</li>
-        <li>Any pre-existing intellectual property disclaimers, notices, or terms and conditions. If none exist, a
-        short notice of the following form (hypertext is preferred, text is permitted) should be used within the body
-        of any redistributed or derivative code: "Copyright © 2002 <a href="http://www.w3.org/">World Wide Web
-        Consortium</a>, (<a href="http://www.lcs.mit.edu/">Massachusetts Institute of Technology</a>, <a href=
-        "http://www.inria.fr/">Institut National de Recherche en Informatique et en Automatique</a>, <a href=
-        "http://www.keio.ac.jp/">Keio University</a>). All Rights Reserved. <a href=
-        "http://www.w3.org/Consortium/Legal/">http://www.w3.org/Consortium/Legal/</a>" </li>
-        <li>Notice of any changes or modifications to the W3C files, including the date changes were made. (We
-        recommend you provide URIs to the location from which the code is derived.)</li>
-    </ol>
-    <p>THIS SOFTWARE AND DOCUMENTATION IS PROVIDED "AS IS," AND COPYRIGHT HOLDERS MAKE NO REPRESENTATIONS OR
-    WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY OR FITNESS FOR ANY
-    PARTICULAR PURPOSE OR THAT THE USE OF THE SOFTWARE OR DOCUMENTATION WILL NOT INFRINGE ANY THIRD PARTY PATENTS,
-    COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.</p>
-    <p>COPYRIGHT HOLDERS WILL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF
-    ANY USE OF THE SOFTWARE OR DOCUMENTATION.</p>
-    <p>The name and trademarks of copyright holders may NOT be used in advertising or publicity pertaining to the
-    software without specific, written prior permission. Title to copyright in this software and any associated
-    documentation will at all times remain with copyright holders.</p>
+        <p>The following software may be included in this product: Flute. Use of any of this software is governed by the
+        terms of the license below:</p>
+        <h3>W3C IPR SOFTWARE NOTICE</h3>
+        <p>Copyright © 2002 World Wide Web Consortium, (Massachusetts Institute of Technology, Institut National de
+        Recherche en Informatique et en Automatique, Keio University). All Rights Reserved.</p>
+        <p><span class="T1">Note:</span> The original version of the W3C Software Copyright Notice and License could be
+        found at <a href=
+        "http://www.w3.org/Consortium/Legal/copyright-software-19980720">http://www.w3.org/Consortium/Legal/copyright-software-19980720</a></p>
+        <p>Copyright © 1994-2000 <a href="http://www.w3.org/">World Wide Web Consortium</a>, (<a href=
+        "http://www.lcs.mit.edu/">Massachusetts Institute of Technology</a>, <a href="http://www.inria.fr/">Institut
+        National de Recherche en Informatique et en Automatique</a>, <a href="http://www.keio.ac.jp/">Keio University</a>).
+        All Rights Reserved. <a href="http://www.w3.org/Consortium/Legal/">http://www.w3.org/Consortium/Legal/</a></p>
+        <p>This W3C work (including software, documents, or other related items) is being provided by the copyright holders
+        under the following license. By obtaining, using and/or copying this work, you (the licensee) agree that you have
+        read, understood, and will comply with the following terms and conditions:</p>
+        <p>Permission to use, copy, and modify this software and its documentation, with or without modification, for any
+        purpose and without fee or royalty is hereby granted, provided that you include the following on ALL copies of the
+        software and documentation or portions thereof, including modifications, that you make:</p>
+        <ol>
+            <li>The full text of this NOTICE in a location viewable to users of the redistributed or derivative work.</li>
+            <li>Any pre-existing intellectual property disclaimers, notices, or terms and conditions. If none exist, a
+            short notice of the following form (hypertext is preferred, text is permitted) should be used within the body
+            of any redistributed or derivative code: "Copyright © 2002 <a href="http://www.w3.org/">World Wide Web
+            Consortium</a>, (<a href="http://www.lcs.mit.edu/">Massachusetts Institute of Technology</a>, <a href=
+            "http://www.inria.fr/">Institut National de Recherche en Informatique et en Automatique</a>, <a href=
+            "http://www.keio.ac.jp/">Keio University</a>). All Rights Reserved. <a href=
+            "http://www.w3.org/Consortium/Legal/">http://www.w3.org/Consortium/Legal/</a>" </li>
+            <li>Notice of any changes or modifications to the W3C files, including the date changes were made. (We
+            recommend you provide URIs to the location from which the code is derived.)</li>
+        </ol>
+        <p>THIS SOFTWARE AND DOCUMENTATION IS PROVIDED "AS IS," AND COPYRIGHT HOLDERS MAKE NO REPRESENTATIONS OR
+        WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY OR FITNESS FOR ANY
+        PARTICULAR PURPOSE OR THAT THE USE OF THE SOFTWARE OR DOCUMENTATION WILL NOT INFRINGE ANY THIRD PARTY PATENTS,
+        COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.</p>
+        <p>COPYRIGHT HOLDERS WILL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF
+        ANY USE OF THE SOFTWARE OR DOCUMENTATION.</p>
+        <p>The name and trademarks of copyright holders may NOT be used in advertising or publicity pertaining to the
+        software without specific, written prior permission. Title to copyright in this software and any associated
+        documentation will at all times remain with copyright holders.</p>
+    </div>
     <div class="FREETYPE">
         <h2>Freetype Library</h2>
         <p>The following software may be included in this product: Freetype. Use of any of this software is governed by
@@ -1619,61 +1621,63 @@
     <p>The following software may be included in this product: unixODBC. Use of any of this software is governed by the
     terms of the license below:</p>
     <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
-    <h2>W3C Simple API for CSS (SAC)</h2>
-    <p>The following software may be included in this product: W3C Simple API for CSS (SAC). Use of any of this
-    software is governed by the terms of the license below:</p>
-    <h3>W3C IPR SOFTWARE NOTICE</h3>
-    <p>Copyright © 2002 World Wide Web Consortium, (Massachusetts Institute of Technology, Institut National de
-    Recherche en Informatique et en Automatique, Keio University). All Rights Reserved.</p>
-    <p><span class="T1">Note:</span> The original version of the W3C Software Copyright Notice and License could be
-    found at <a href=
-    "http://www.w3.org/Consortium/Legal/copyright-software-19980720">http://www.w3.org/Consortium/Legal/copyright-software-19980720</a></p>
-    <p>Copyright © 1994-2002 <a href="http://www.w3.org/">World Wide Web Consortium</a>, (<a href=
-    "http://www.lcs.mit.edu/">Massachusetts Institute of Technology</a>, <a href="http://www.inria.fr/">Institut
-    National de Recherche en Informatique et en Automatique</a>, <a href="http://www.keio.ac.jp/">Keio University</a>).
-    All Rights Reserved. <a href="http://www.w3.org/Consortium/Legal/">http://www.w3.org/Consortium/Legal/</a></p>
-    <p>This W3C work (including software, documents, or other related items) is being provided by the copyright holders
-    under the following license. By obtaining, using and/or copying this work, you (the licensee) agree that you have
-    read, understood, and will comply with the following terms and conditions:</p>
-    <p>Permission to use, copy, and modify this software and its documentation, with or without modification, for any
-    purpose and without fee or royalty is hereby granted, provided that you include the following on ALL copies of the
-    software and documentation or portions thereof, including modifications, that you make:</p>
-    <ol>
-        <li>The full text of this NOTICE in a location viewable to users of the redistributed or derivative
-        work. </li>
-        <li>Any pre-existing intellectual property disclaimers, notices, or terms and conditions. If none exist, a
-        short notice of the following form (hypertext is preferred, text is permitted) should be used within the body
-        of any redistributed or derivative code: "Copyright © 2002 <a href="http://www.w3.org/">World Wide Web
-        Consortium</a>, (<a href="http://www.lcs.mit.edu/">Massachusetts Institute of Technology</a>, <a href=
-        "http://www.inria.fr/">Institut National de</a> <a href="http://www.inria.fr/">Recherche en Informatique et en
-        Automatique</a>, <a href="http://www.keio.ac.jp/">Keio University</a>). All Rights Reserved. <a href=
-        "http://www.w3.org/Consortium/Legal/">http://www.w3.org/Consortium/Legal/</a>" </li>
-        <li>Notice of any changes or modifications to the W3C files, including the date changes were made. (We
-        recommend you provide URIs to the location from which the code is derived.)</li>
-    </ol>
-    <p>THIS SOFTWARE AND DOCUMENTATION IS PROVIDED "AS IS," AND COPYRIGHT HOLDERS MAKE NO REPRESENTATIONS OR
-    WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY OR FITNESS FOR ANY
-    PARTICULAR PURPOSE OR THAT THE USE OF THE SOFTWARE OR DOCUMENTATION WILL NOT INFRINGE ANY THIRD PARTY PATENTS,
-    COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.</p>
-    <p>COPYRIGHT HOLDERS WILL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF
-    ANY USE OF THE SOFTWARE OR DOCUMENTATION.</p>
-    <p>The name and trademarks of copyright holders may NOT be used in advertising or publicity pertaining to the
-    software without specific, written prior permission. Title to copyright in this software and any associated
-    documentation will at all times remain with copyright holders.</p>
-    <p>X11 XRender Extension</p>
-    <p>The following software may be included in this product: X11 XRender Extension. Use of any of this software is
-    governed by the terms of the license below:</p>
-    <p>Copyright © 2000 SuSE, Inc.</p>
-    <p>Permission to use, copy, modify, distribute, and sell this software and its documentation for any purpose is
-    hereby granted without fee, provided that the above copyright notice appear in all copies and that both that
-    copyright notice and this permission notice appear in supporting documentation, and that the name of SuSE not be
-    used in advertising or publicity pertaining to distribution of the software without specific, written prior
-    permission. SuSE makes no representations about the suitability of this software for any purpose. It is provided
-    "as is" without express or implied warranty.</p>
-    <p>SuSE DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-    AND FITNESS, IN NO EVENT SHALL SuSE BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
-    TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.</p>
+    <div class="JFREEREPORT">
+        <h2>W3C Simple API for CSS (SAC)</h2>
+        <p>The following software may be included in this product: W3C Simple API for CSS (SAC). Use of any of this
+        software is governed by the terms of the license below:</p>
+        <h3>W3C IPR SOFTWARE NOTICE</h3>
+        <p>Copyright © 2002 World Wide Web Consortium, (Massachusetts Institute of Technology, Institut National de
+        Recherche en Informatique et en Automatique, Keio University). All Rights Reserved.</p>
+        <p><span class="T1">Note:</span> The original version of the W3C Software Copyright Notice and License could be
+        found at <a href=
+        "http://www.w3.org/Consortium/Legal/copyright-software-19980720">http://www.w3.org/Consortium/Legal/copyright-software-19980720</a></p>
+        <p>Copyright © 1994-2002 <a href="http://www.w3.org/">World Wide Web Consortium</a>, (<a href=
+        "http://www.lcs.mit.edu/">Massachusetts Institute of Technology</a>, <a href="http://www.inria.fr/">Institut
+        National de Recherche en Informatique et en Automatique</a>, <a href="http://www.keio.ac.jp/">Keio University</a>).
+        All Rights Reserved. <a href="http://www.w3.org/Consortium/Legal/">http://www.w3.org/Consortium/Legal/</a></p>
+        <p>This W3C work (including software, documents, or other related items) is being provided by the copyright holders
+        under the following license. By obtaining, using and/or copying this work, you (the licensee) agree that you have
+        read, understood, and will comply with the following terms and conditions:</p>
+        <p>Permission to use, copy, and modify this software and its documentation, with or without modification, for any
+        purpose and without fee or royalty is hereby granted, provided that you include the following on ALL copies of the
+        software and documentation or portions thereof, including modifications, that you make:</p>
+        <ol>
+            <li>The full text of this NOTICE in a location viewable to users of the redistributed or derivative
+            work. </li>
+            <li>Any pre-existing intellectual property disclaimers, notices, or terms and conditions. If none exist, a
+            short notice of the following form (hypertext is preferred, text is permitted) should be used within the body
+            of any redistributed or derivative code: "Copyright © 2002 <a href="http://www.w3.org/">World Wide Web
+            Consortium</a>, (<a href="http://www.lcs.mit.edu/">Massachusetts Institute of Technology</a>, <a href=
+            "http://www.inria.fr/">Institut National de</a> <a href="http://www.inria.fr/">Recherche en Informatique et en
+            Automatique</a>, <a href="http://www.keio.ac.jp/">Keio University</a>). All Rights Reserved. <a href=
+            "http://www.w3.org/Consortium/Legal/">http://www.w3.org/Consortium/Legal/</a>" </li>
+            <li>Notice of any changes or modifications to the W3C files, including the date changes were made. (We
+            recommend you provide URIs to the location from which the code is derived.)</li>
+        </ol>
+        <p>THIS SOFTWARE AND DOCUMENTATION IS PROVIDED "AS IS," AND COPYRIGHT HOLDERS MAKE NO REPRESENTATIONS OR
+        WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY OR FITNESS FOR ANY
+        PARTICULAR PURPOSE OR THAT THE USE OF THE SOFTWARE OR DOCUMENTATION WILL NOT INFRINGE ANY THIRD PARTY PATENTS,
+        COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.</p>
+        <p>COPYRIGHT HOLDERS WILL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF
+        ANY USE OF THE SOFTWARE OR DOCUMENTATION.</p>
+        <p>The name and trademarks of copyright holders may NOT be used in advertising or publicity pertaining to the
+        software without specific, written prior permission. Title to copyright in this software and any associated
+        documentation will at all times remain with copyright holders.</p>
+        <p>X11 XRender Extension</p>
+        <p>The following software may be included in this product: X11 XRender Extension. Use of any of this software is
+        governed by the terms of the license below:</p>
+        <p>Copyright © 2000 SuSE, Inc.</p>
+        <p>Permission to use, copy, modify, distribute, and sell this software and its documentation for any purpose is
+        hereby granted without fee, provided that the above copyright notice appear in all copies and that both that
+        copyright notice and this permission notice appear in supporting documentation, and that the name of SuSE not be
+        used in advertising or publicity pertaining to distribution of the software without specific, written prior
+        permission. SuSE makes no representations about the suitability of this software for any purpose. It is provided
+        "as is" without express or implied warranty.</p>
+        <p>SuSE DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+        AND FITNESS, IN NO EVENT SHALL SuSE BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+        WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+        TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.</p>
+    </div>
     <div class="XMLSEC">
         <h2>XML Security Library (xmlsec)</h2>
         <p>The following software may be included in this product: XML Security Library (xmlsec). Use of any of this
