@@ -88,6 +88,7 @@ class OfaMSFilterTabPage2 : public SfxTabPage
 
     VclPtr<RadioButton> aHighlightingRB;
     VclPtr<RadioButton> aShadingRB;
+    VclPtr<CheckBox>    aMSOLockFileCB;
 
     virtual ~OfaMSFilterTabPage2() override;
     virtual void dispose() override;
