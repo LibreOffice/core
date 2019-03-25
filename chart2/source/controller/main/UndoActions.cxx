@@ -85,10 +85,10 @@ void SAL_CALL UndoElement::redo(  )
 
 // = ShapeUndoElement
 
-ShapeUndoElement::ShapeUndoElement( SdrUndoAction& i_sdrUndoAction )
+ShapeUndoElement::ShapeUndoElement( std::unique_ptr<SdrUndoAction> xSdrUndoAction )
     :ShapeUndoElement_MBase()
     ,ShapeUndoElement_TBase( m_aMutex )
-    ,m_pAction( &i_sdrUndoAction )
+    ,m_xAction( std::move(xSdrUndoAction) )
 {
 }
 
@@ -98,23 +98,23 @@ ShapeUndoElement::~ShapeUndoElement()
 
 OUString SAL_CALL ShapeUndoElement::getTitle()
 {
-    if ( !m_pAction )
+    if ( !m_xAction )
         throw DisposedException( OUString(), *this );
-    return m_pAction->GetComment();
+    return m_xAction->GetComment();
 }
 
 void SAL_CALL ShapeUndoElement::undo(  )
 {
-    if ( !m_pAction )
+    if ( !m_xAction )
         throw DisposedException( OUString(), *this );
-    m_pAction->Undo();
+    m_xAction->Undo();
 }
 
 void SAL_CALL ShapeUndoElement::redo(  )
 {
-    if ( !m_pAction )
+    if ( !m_xAction )
         throw DisposedException( OUString(), *this );
-    m_pAction->Redo();
+    m_xAction->Redo();
 }
 
 void SAL_CALL ShapeUndoElement::disposing()
