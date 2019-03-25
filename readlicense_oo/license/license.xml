@@ -1530,17 +1530,19 @@
         the terms of the license below:</p>
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
     </div>
-    <h2>SANE</h2>
-    <p>The following software may be included in this product: SANE. Use of any of this software is governed by the
-    terms of the license below:</p>
-    <p>sane - Scanner Access Now Easy. Copyright (C) 1997-1999 David Mosberger-Tang and Andreas Beck</p>
-    <p>This file is part of the SANE package.</p>
-    <p>This file is in the public domain. You may use and modify it as you see fit, as long as this copyright message
-    is included and that there is an indication as to what modifications have been made (if any).</p>
-    <p>SANE is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
-    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</p>
-    <p>This file declares SANE application interface. See the SANE standard for a detailed explanation of the
-    interface.</p>
+    <div class="SANE">
+        <h2>SANE</h2>
+        <p>The following software may be included in this product: SANE. Use of any of this software is governed by the
+        terms of the license below:</p>
+        <p>sane - Scanner Access Now Easy. Copyright (C) 1997-1999 David Mosberger-Tang and Andreas Beck</p>
+        <p>This file is part of the SANE package.</p>
+        <p>This file is in the public domain. You may use and modify it as you see fit, as long as this copyright message
+        is included and that there is an indication as to what modifications have been made (if any).</p>
+        <p>SANE is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+        warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</p>
+        <p>This file declares SANE application interface. See the SANE standard for a detailed explanation of the
+        interface.</p>
+    </div>
     <h2>SVGPathSeg polyfill</h2>
     <p>The following software may be included in this product: SVGPathSeg polyfill. Use of any of this software is
     governed by the terms of the license below:</p>
