@@ -1299,6 +1299,15 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
             {
                 if(pFormatEntry->GetType() == ScFormatEntry::Type::Condition)
                     maCFList.AppendNewRecord( new XclExpCF( GetRoot(), static_cast<const ScCondFormatEntry&>(*pFormatEntry), ++rIndex ) );
+                else if(pFormatEntry->GetType() == ScFormatEntry::Type::ExtCondition)
+                {
+                    const ScCondFormatEntry& rFormat = static_cast<const ScCondFormatEntry&>(*pFormatEntry);
+                    XclExpExtCondFormatData aExtEntry;
+                    aExtEntry.nPriority = ++rIndex;
+                    aExtEntry.aGUID = generateGUIDString();
+                    aExtEntry.pEntry = &rFormat;
+                    aExtEntries.push_back(aExtEntry);
+                }
                 else if(pFormatEntry->GetType() == ScFormatEntry::Type::Colorscale)
                     maCFList.AppendNewRecord( new XclExpColorScale( GetRoot(), static_cast<const ScColorScaleFormat&>(*pFormatEntry), ++rIndex ) );
                 else if(pFormatEntry->GetType() == ScFormatEntry::Type::Databar)

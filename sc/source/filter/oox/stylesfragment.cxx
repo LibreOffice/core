@@ -157,6 +157,19 @@ ContextHandlerRef DxfContext::onCreateContext( sal_Int32 nElement, const Attribu
             }
         break;
     }
+
+    if( mxExtDxf.get() ) switch( getCurrentElement() )
+    {
+        case XLS14_TOKEN( dxf ):
+            switch( nElement )
+            {
+                case XLS_TOKEN( font ):         return new FontContext( *this, mxExtDxf->createFont() );
+                case XLS_TOKEN( border ):       return new BorderContext( *this, mxExtDxf->createBorder() );
+                case XLS_TOKEN( fill ):         return new FillContext( *this, mxExtDxf->createFill() );
+                case XLS_TOKEN( numFmt ):       mxExtDxf->importNumFmt( rAttribs );     break;
+            }
+        break;
+    }
     return nullptr;
 }
 

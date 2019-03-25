@@ -10,13 +10,20 @@
 #include <xeextlst.hxx>
 #include <xeroot.hxx>
 #include <xehelper.hxx>
+#include <stlsheet.hxx>
+#include <ftools.hxx>
 #include <xestyle.hxx>
+#include <stlpool.hxx>
+#include <scitems.hxx>
+#include <svl/itemset.hxx>
+#include <svl/intitem.hxx>
 #include <xename.hxx>
 #include <xecontent.hxx>
 #include <tokenarray.hxx>
 
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace ::oox;
 
@@ -145,6 +152,65 @@ void XclExpExtCfvo::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElementNS(XML_x14, XML_cfvo);
 }
 
+XclExpExtCF::XclExpExtCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormat ):
+    XclExpRoot(rRoot),
+    mrFormat(rFormat)
+{
+}
+
+void XclExpExtCF::SaveXml( XclExpXmlStream& rStrm )
+{
+    OUString aStyleName = mrFormat.GetStyle();
+    SfxStyleSheetBase* pStyle = GetDoc().GetStyleSheetPool()->Find(aStyleName);
+    SfxItemSet& rSet = pStyle->GetItemSet();
+
+    std::unique_ptr<ScTokenArray> pTokenArray(mrFormat.CreateFlatCopiedTokenArray(0));
+    aFormula = XclXmlUtils::ToOUString( GetCompileFormulaContext(), mrFormat.GetValidSrcPos(), pTokenArray.get());
+
+    std::unique_ptr<XclExpColor> pColor(new XclExpColor);
+    if(!pColor->FillFromItemSet( rSet ))
+        pColor.reset();
+
+    std::unique_ptr<XclExpCellBorder> pBorder(new XclExpCellBorder);
+    if (!pBorder->FillFromItemSet( rSet, GetPalette(), GetBiff()) )
+        pBorder.reset();
+
+    std::unique_ptr<XclExpCellAlign> pAlign(new XclExpCellAlign);
+    if (!pAlign->FillFromItemSet( rSet, false, GetBiff()))
+        pAlign.reset();
+
+    std::unique_ptr<XclExpCellProt> pCellProt(new XclExpCellProt);
+    if (!pCellProt->FillFromItemSet( rSet ))
+        pCellProt.reset();
+
+    std::unique_ptr<XclExpDxfFont> pFont(new XclExpDxfFont(GetRoot(), rSet));
+
+    std::unique_ptr<XclExpNumFmt> pNumFormat;
+    const SfxPoolItem *pPoolItem = nullptr;
+    if( rSet.GetItemState( ATTR_VALUE_FORMAT, true, &pPoolItem ) == SfxItemState::SET )
+    {
+        sal_uInt32 nScNumFmt = static_cast< const SfxUInt32Item* >(pPoolItem)->GetValue();
+        XclExpNumFmtBuffer& rNumFmtBuffer = GetRoot().GetNumFmtBuffer();
+        sal_uInt32 nXclNumFmt = rNumFmtBuffer.Insert(nScNumFmt);
+        pNumFormat.reset(new XclExpNumFmt(nScNumFmt, nXclNumFmt, rNumFmtBuffer.GetFormatCode(nScNumFmt)));
+    }
+
+    XclExpDxf rDxf( GetRoot(),
+                    std::move(pAlign),
+                    std::move(pBorder),
+                    std::move(pFont),
+                    std::move(pNumFormat),
+                    std::move(pCellProt),
+                    std::move(pColor) );
+
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+
+    rWorksheet->startElementNS( XML_xm, XML_f, FSEND );
+    rWorksheet->writeEscaped( aFormula );
+    rWorksheet->endElementNS( XML_xm, XML_f );
+    rDxf.SaveXmlExt( rStrm );
+}
+
 XclExpExtDataBar::XclExpExtDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos ):
     XclExpRoot(rRoot)
 {
@@ -177,6 +243,62 @@ const char* getAxisPosition(databar::ScAxisPosition eAxisPosition)
             return "middle";
     }
     return "";
+}
+
+const char* GetOperatorString(ScConditionMode eMode)
+{
+    const char* pRet = nullptr;
+    switch(eMode)
+    {
+        case ScConditionMode::Equal:
+            pRet = "equal";
+            break;
+        case ScConditionMode::Less:
+            pRet = "lessThan";
+            break;
+        case ScConditionMode::Greater:
+            pRet = "greaterThan";
+            break;
+        case ScConditionMode::EqLess:
+            pRet = "lessThanOrEqual";
+            break;
+        case ScConditionMode::EqGreater:
+            pRet = "greaterThanOrEqual";
+            break;
+        case ScConditionMode::NotEqual:
+            pRet = "notEqual";
+            break;
+        case ScConditionMode::Between:
+            pRet = "between";
+            break;
+        case ScConditionMode::NotBetween:
+            pRet = "notBetween";
+            break;
+        case ScConditionMode::Duplicate:
+            pRet = nullptr;
+            break;
+        case ScConditionMode::NotDuplicate:
+            pRet = nullptr;
+            break;
+        case ScConditionMode::BeginsWith:
+            pRet = "beginsWith";
+        break;
+        case ScConditionMode::EndsWith:
+            pRet = "endsWith";
+        break;
+        case ScConditionMode::ContainsText:
+            pRet = "containsText";
+        break;
+        case ScConditionMode::NotContainsText:
+            pRet = "notContains";
+        break;
+        case ScConditionMode::Direct:
+            break;
+        case ScConditionMode::NONE:
+        default:
+            break;
+    }
+    return pRet;
 }
 
 }
@@ -246,7 +368,8 @@ XclExpExtCfRule::XclExpExtCfRule( const XclExpRoot& rRoot, const ScFormatEntry& 
     XclExpRoot(rRoot),
     maId(rId),
     pType(nullptr),
-    mnPriority(nPriority)
+    mnPriority(nPriority),
+    mOperator(nullptr)
 {
     switch (rFormat.GetType())
     {
@@ -264,6 +387,14 @@ XclExpExtCfRule::XclExpExtCfRule( const XclExpRoot& rRoot, const ScFormatEntry& 
             pType = "iconSet";
         }
         break;
+        case ScFormatEntry::Type::ExtCondition:
+        {
+            const ScCondFormatEntry& rCondFormat = static_cast<const ScCondFormatEntry&>(rFormat);
+            mxEntry.reset(new XclExpExtCF(*this, rCondFormat));
+            pType = "cellIs";
+            mOperator = GetOperatorString( rCondFormat.GetOperation() );
+        }
+        break;
         default:
         break;
     }
@@ -278,6 +409,7 @@ void XclExpExtCfRule::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->startElementNS( XML_x14, XML_cfRule,
                                 XML_type, pType,
                                 XML_priority, mnPriority == -1 ? nullptr : OString::number(mnPriority).getStr(),
+                                XML_operator, mOperator,
                                 XML_id, maId.getStr(),
                                 FSEND );
 
@@ -325,6 +457,9 @@ XclExpExtConditionalFormatting::XclExpExtConditionalFormatting( const XclExpRoot
             }
             break;
             case ScFormatEntry::Type::Databar:
+                maCfRules.AppendNewRecord(new XclExpExtCfRule( *this, *pEntry, aAddr, itr->aGUID, itr->nPriority));
+            break;
+            case ScFormatEntry::Type::ExtCondition:
                 maCfRules.AppendNewRecord(new XclExpExtCfRule( *this, *pEntry, aAddr, itr->aGUID, itr->nPriority));
             break;
             default:
@@ -451,5 +586,6 @@ XclExpExtRef XclExtLst::GetItem( XclExpExtType eType )
 
     return XclExpExtRef();
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

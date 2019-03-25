@@ -45,6 +45,7 @@
 #include <docfunc.hxx>
 #include <tokenarray.hxx>
 #include <tokenuno.hxx>
+#include <extlstcontext.hxx>
 
 namespace oox { class AttributeList; }
 
@@ -1139,6 +1140,8 @@ void CondFormatBuffer::finalizeImport()
             pFormat->AddEntry((*i)->Clone(pDoc));
         }
     }
+
+    rStyleIdx = 0; // Resets <extlst> <cfRule> style index.
 }
 
 CondFormatRef CondFormatBuffer::importCondFormatting( SequenceInputStream& rStrm )

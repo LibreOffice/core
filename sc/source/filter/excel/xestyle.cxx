@@ -3150,6 +3150,27 @@ void XclExpDxf::SaveXml( XclExpXmlStream& rStrm )
     rStyleSheet->endElement( XML_dxf );
 }
 
+void XclExpDxf::SaveXmlExt( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+    rStyleSheet->startElementNS( XML_x14, XML_dxf, FSEND );
+
+    if (mpFont)
+        mpFont->SaveXml(rStrm);
+    if (mpNumberFmt)
+        mpNumberFmt->SaveXml(rStrm);
+    if (mpColor)
+        mpColor->SaveXml(rStrm);
+    if (mpAlign)
+        mpAlign->SaveXml(rStrm);
+    if (mpBorder)
+        mpBorder->SaveXml(rStrm);
+    if (mpProt)
+        mpProt->SaveXml(rStrm);
+    rStyleSheet->endElementNS( XML_x14, XML_dxf );;
+}
+
+
 XclExpXmlStyleSheet::XclExpXmlStyleSheet( const XclExpRoot& rRoot )
     : XclExpRoot( rRoot )
 {

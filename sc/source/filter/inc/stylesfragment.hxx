@@ -101,13 +101,14 @@ class DxfContext : public WorkbookContextBase
 public:
     template< typename ParentType >
     explicit     DxfContext( ParentType& rParent, const DxfRef& rxDxf ) :
-                            WorkbookContextBase( rParent ), mxDxf( rxDxf ) {}
+                            WorkbookContextBase( rParent ), mxDxf( rxDxf ), mxExtDxf( rxDxf ) {}
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
 private:
     DxfRef              mxDxf;
+    DxfRef              mxExtDxf;
 };
 
 class StylesFragment : public WorkbookFragmentBase

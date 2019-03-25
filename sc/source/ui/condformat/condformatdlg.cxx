@@ -87,6 +87,7 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
             switch(pEntry->GetType())
             {
                 case ScFormatEntry::Type::Condition:
+                case ScFormatEntry::Type::ExtCondition:
                     {
                         const ScCondFormatEntry* pConditionEntry = static_cast<const ScCondFormatEntry*>( pEntry );
                         if(pConditionEntry->GetOperation() != ScConditionMode::Direct)
