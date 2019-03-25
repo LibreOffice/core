@@ -12,12 +12,11 @@ from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict, type_text
 from uitest.debug import sleep
-# import org.libreoffice.unotest
-# import pathlib
-from uitest.path import get_srcdir_url
+import org.libreoffice.unotest
+import pathlib
+
 def get_url_for_data_file(file_name):
-#    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
-    return get_srcdir_url() + "/sw/qa/uitest/writer_tests/data/" + file_name
+    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 #Find similarities
 
