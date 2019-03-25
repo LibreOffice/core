@@ -112,13 +112,16 @@ connectivity/source/inc/writer/WTable.hxx:65
 cui/source/inc/acccfg.hxx:120
     SfxAcceleratorConfigPage m_aUpdateDataTimer
     UpdateDataTimer
+cui/source/inc/cfg.hxx:375
+    SvxConfigPage m_aUpdateDataTimer
+    UpdateDataTimer
 cui/source/inc/linkdlg.hxx:46
     SvBaseLinksDlg aUpdateIdle
     cui SvBaseLinksDlg UpdateIdle
 cui/source/inc/thesdlg.hxx:38
     LookUpComboBox m_aModifyIdle
     cui LookUpComboBox Modify
-cui/source/options/optgdlg.cxx:1103
+cui/source/options/optgdlg.cxx:1086
     LanguageConfig_Impl aLanguageOptions
     0
 cui/source/options/optjava.hxx:78
@@ -133,28 +136,31 @@ desktop/source/app/app.cxx:507
 desktop/source/app/cmdlineargs.hxx:137
     desktop::CommandLineArgs m_quickstart
     0
-drawinglayer/source/primitive2d/sceneprimitive2d.cxx:368
+desktop/source/deployment/gui/dp_gui_updatedialog.hxx:155
+    dp_gui::UpdateDialog m_bModified
+    0
+drawinglayer/source/primitive2d/sceneprimitive2d.cxx:369
     drawinglayer::primitive2d::ScenePrimitive2D::create2DDecomposition bMultithreadAllowed
     1
-drawinglayer/source/primitive2d/sceneprimitive2d.cxx:472
+drawinglayer/source/primitive2d/sceneprimitive2d.cxx:473
     drawinglayer::primitive2d::ScenePrimitive2D::create2DDecomposition bAddOutlineToCreated3DSceneRepresentation
     0
 drawinglayer/source/processor2d/vclhelperbufferdevice.cxx:332
     drawinglayer::impBufferDevice::paint bDoSaveForVisualControl
     0
-drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:925
+drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:926
     drawinglayer::processor2d::VclMetafileProcessor2D::processGraphicPrimitive2D bSuppressPDFExtOutDevDataSupport
     0
-drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:1250
+drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:1251
     drawinglayer::processor2d::VclMetafileProcessor2D::processTextHierarchyParagraphPrimitive2D bSuppressPDFExtOutDevDataSupport
     0
-drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:1998
+drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:2007
     drawinglayer::processor2d::VclMetafileProcessor2D::processUnifiedTransparencePrimitive2D bForceToMetafile
     0
-drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:2092
+drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:2101
     drawinglayer::processor2d::VclMetafileProcessor2D::processTransparencePrimitive2D bForceToBigTransparentVDev
     0
-drawinglayer/source/tools/converters.cxx:90
+drawinglayer/source/tools/converters.cxx:91
     drawinglayer::convertToBitmapEx bDoSaveForVisualControl
     0
 editeng/source/editeng/impedit.hxx:474
@@ -172,7 +178,7 @@ extensions/source/propctrlr/browserline.hxx:60
 extensions/source/propctrlr/browserline.hxx:61
     pcr::OBrowserLine m_pAdditionalBrowseButton
     0
-filter/source/msfilter/msdffimp.cxx:2622
+filter/source/msfilter/msdffimp.cxx:2635
     DffPropertyReader::ApplyAttributes bCheckShadow
     0
 filter/source/msfilter/viscache.hxx:31
@@ -328,6 +334,9 @@ include/svx/fontwork.hxx:102
 include/svx/graphctl.hxx:54
     GraphCtrl aUpdateIdle
     svx GraphCtrl Update
+include/svx/langbox.hxx:82
+    SvxLanguageBoxBase m_bLangNoneIsLangAll
+    0
 include/svx/numvset.hxx:131
     SvxBmpNumValueSet aFormatIdle
     SvxBmpNumValueSet FormatIdle
@@ -346,10 +355,10 @@ include/svx/svdmark.hxx:145
 include/svx/svdmrkv.hxx:110
     SdrMarkView mnFrameHandlesLimit
     50
-include/vcl/ITiledRenderable.hxx:89
+include/vcl/ITiledRenderable.hxx:40
     vcl::ITiledRenderable mnTilePixelWidth
     256
-include/vcl/ITiledRenderable.hxx:89
+include/vcl/ITiledRenderable.hxx:40
     vcl::ITiledRenderable mnTilePixelHeight
     256
 include/vcl/opengl/OpenGLContext.hxx:51
@@ -541,7 +550,7 @@ sc/source/ui/inc/checklistmenu.hxx:157
 sc/source/ui/inc/conflictsdlg.hxx:134
     ScConflictsDlg maSelectionIdle
     ScConflictsDlg SelectionIdle
-sc/source/ui/inc/retypepassdlg.hxx:91
+sc/source/ui/inc/retypepassdlg.hxx:86
     ScRetypePassDlg mpDocItem
     0
 sc/source/ui/inc/viewdata.hxx:289
@@ -571,6 +580,9 @@ sd/source/ui/inc/DrawController.hxx:290
 sd/source/ui/inc/pubdlg.hxx:151
     SdPublishingDlg aAssistentFunc
     6
+sd/source/ui/inc/sdtreelb.hxx:302
+    SdPageObjsTLV m_pOwnMedium
+    0
 sd/source/ui/inc/View.hxx:240
     sd::View maDropErrorIdle
     sd View DropError
@@ -697,15 +709,6 @@ svx/source/dialog/contimp.hxx:52
 svx/source/dialog/contimp.hxx:53
     SvxSuperContourDlg aCreateIdle
     SvxSuperContourDlg CreateIdle
-svx/source/inc/docrecovery.hxx:412
-    svx::DocRecovery::RecoveryDialog m_aGreenCheckImg
-    svx/res/nu01.png
-svx/source/inc/docrecovery.hxx:413
-    svx::DocRecovery::RecoveryDialog m_aYellowCheckImg
-    svx/res/nu04.png
-svx/source/inc/docrecovery.hxx:414
-    svx::DocRecovery::RecoveryDialog m_aRedCrossImg
-    svx/res/nu02.png
 svx/source/sdr/contact/viewcontactofsdrpage.cxx:104
     sdr::contact::ViewContactOfPageShadow::createViewIndependentPrimitive2DSequence bUseOldPageShadow
     0
@@ -760,10 +763,10 @@ sw/inc/view.hxx:189
 sw/inc/view.hxx:190
     SwView m_pVScrollbar
     0
-sw/inc/view.hxx:698
+sw/inc/view.hxx:694
     /media/noel/disk2/libo4/sw/source/uibase/uiview/view.cxx bDocSzUpdated
     1
-sw/inc/view.hxx:698
+sw/inc/view.hxx:694
     /media/noel/disk2/libo4/sw/source/uibase/uiview/viewport.cxx bDocSzUpdated
     0
 sw/inc/viewopt.hxx:187
@@ -781,19 +784,19 @@ sw/source/core/docnode/threadmanager.hxx:125
 sw/source/core/inc/blink.hxx:89
     /media/noel/disk2/libo4/sw/source/core/text/blink.cxx pBlink
     0
-sw/source/core/inc/DocumentTimerManager.hxx:77
+sw/source/core/inc/DocumentTimerManager.hxx:76
     sw::DocumentTimerManager m_aFireIdleJobsTimer
     sw::DocumentTimerManager m_aFireIdleJobsTimer
-sw/source/core/inc/fntcache.hxx:59
+sw/source/core/inc/fntcache.hxx:57
     /media/noel/disk2/libo4/sw/source/core/txtnode/fntcache.cxx pFntCache
     0
-sw/source/core/inc/fntcache.hxx:60
+sw/source/core/inc/fntcache.hxx:58
     /media/noel/disk2/libo4/sw/source/core/txtnode/fntcache.cxx pLastFont
     0
-sw/source/core/inc/frmtool.hxx:141
+sw/source/core/inc/frmtool.hxx:142
     /media/noel/disk2/libo4/sw/source/core/layout/frmtool.cxx bDontCreateObjects
     0
-sw/source/core/inc/frmtool.hxx:144
+sw/source/core/inc/frmtool.hxx:145
     /media/noel/disk2/libo4/sw/source/core/layout/frmtool.cxx bSetCompletePaintOnInvalidate
     0
 sw/source/core/inc/noteurl.hxx:28
@@ -808,10 +811,7 @@ sw/source/core/inc/txtfly.hxx:45
 sw/source/core/inc/UndoSort.hxx:38
     SwSortUndoElement::(anonymous union)::(anonymous) nID
     4294967295
-sw/source/core/inc/UndoTable.hxx:183
-    SwUndoTableNdsChg m_nSetColType
-    15
-sw/source/core/layout/flylay.cxx:304
+sw/source/core/layout/flylay.cxx:305
     SwFlyFreeFrame::supportsAutoContour bOverrideHandleContourToAlwaysOff
     1
 sw/source/core/ole/ndole.cxx:1058
@@ -1255,9 +1255,6 @@ sw/source/filter/html/css1kywd.hxx:244
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk
     0
-sw/source/filter/ww8/docxattributeoutput.hxx:915
-    DocxAttributeOutput m_bBtLr
-    0
 sw/source/filter/ww8/ww8par3.cxx:335
     WW8LST bSimpleList
     1
@@ -1375,9 +1372,6 @@ sw/source/filter/ww8/ww8struc.hxx:893
 sw/source/ui/envelp/labfmt.hxx:67
     SwLabFormatPage aPreviewIdle
     SwLabFormatPage Preview
-sw/source/uibase/inc/dbtree.hxx:69
-    DBTreeList bShowColumns
-    0
 sw/source/uibase/inc/edtdd.hxx:15
     /media/noel/disk2/libo4/sw/source/uibase/docvw/edtwin.cxx g_bExecuteDrag
     0
@@ -1426,11 +1420,14 @@ vcl/inc/salprn.hxx:44
 vcl/inc/salwtype.hxx:154
     SalWheelMouseEvent mbDeltaIsPixel
     0
-vcl/inc/svdata.hxx:281
+vcl/inc/svdata.hxx:285
     ImplSVNWFData mbMenuBarDockingAreaCommonBG
     0
-vcl/inc/svdata.hxx:303
+vcl/inc/svdata.hxx:307
     ImplSVNWFData mbRolloverMenubar
+    0
+vcl/inc/toolbox.h:150
+    ImplToolBoxPrivateData mbPageScroll
     0
 vcl/source/bitmap/BitmapTools.cxx:1056
     vcl::bitmap::get_unpremultiply_table inited
@@ -1510,7 +1507,7 @@ vcl/source/window/layout.cxx:225
 vcl/source/window/layout.cxx:226
     VclContainer::Command bAddScreenshotButtonToMenu
     1
-vcl/unx/gtk3/gtk3gtkinst.cxx:8303
+vcl/unx/gtk3/gtk3gtkinst.cxx:8741
     (anonymous namespace)::ensure_intercept_drawing_area_accessibility bDone
     1
 vcl/unx/gtk/a11y/atkutil.cxx:746
@@ -1518,12 +1515,6 @@ vcl/unx/gtk/a11y/atkutil.cxx:746
     1
 workdir/LexTarget/l10ntools/source/xrmlex.cxx:715
     /media/noel/disk2/libo4/workdir/LexTarget/l10ntools/source/xrmlex.cxx bText
-    0
-writerfilter/source/dmapper/DomainMapperTableManager.hxx:65
-    writerfilter::dmapper::DomainMapperTableManager m_bRowSizeTypeInserted
-    0
-writerfilter/source/dmapper/DomainMapperTableManager.hxx:67
-    writerfilter::dmapper::DomainMapperTableManager m_bHasBtlrCell
     0
 writerfilter/source/dmapper/SettingsTable.cxx:255
     writerfilter::dmapper::SettingsTable_Impl m_pThemeFontLangProps

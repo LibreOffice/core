@@ -4,7 +4,7 @@ chart2/source/view/inc/PlottingPositionHelper.hxx:206
 connectivity/source/inc/dbase/dindexnode.hxx:125
     connectivity::dbase::ONDXPage bNoDelete
     unsigned int
-cui/source/inc/cfg.hxx:249
+cui/source/inc/cfg.hxx:244
     SvxConfigEntry nId
     sal_uInt16
 desktop/source/app/main.c:29

@@ -299,7 +299,6 @@ private:
     const SdDrawDocument* m_pDoc;
     SdDrawDocument* m_pBookmarkDoc;
     SfxMedium* m_pMedium;
-    SfxMedium* m_pOwnMedium;
     bool m_bLinkableSelected;
     /** This flag controls whether to show all pages.
     */

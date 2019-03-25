@@ -62,7 +62,6 @@ ImplToolBoxPrivateData::ImplToolBoxPrivateData()
     mbAssumeFloating = false;
     mbKeyInputDisabled = false;
     mbMenubuttonSelected = false;
-    mbPageScroll = false;
     mbWillUsePopupMode = false;
     mbDropDownByKeyboard = false;
 }
