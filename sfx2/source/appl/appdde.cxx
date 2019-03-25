@@ -43,6 +43,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <helper.hxx>
 #include <sfx2/docfile.hxx>
+#include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
