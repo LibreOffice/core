@@ -34,11 +34,20 @@ FontFeaturesDialog::FontFeaturesDialog(weld::Window* pParent, OUString const& rF
 
 FontFeaturesDialog::~FontFeaturesDialog() {}
 
-static void makeEnumComboBox(weld::ComboBox& rNameBox,
-                             vcl::font::FeatureDefinition const& rFeatureDefinition)
+static sal_Int32 makeEnumComboBox(weld::ComboBox& rNameBox,
+                                  vcl::font::FeatureDefinition const& rFeatureDefinition,
+                                  uint32_t nDefault)
 {
+    sal_Int32 nRes = 0;
+    int count = 0;
     for (vcl::font::FeatureParameter const& rParameter : rFeatureDefinition.getEnumParameters())
-        rNameBox.append_text(rParameter.getDescription());
+    {
+        rNameBox.append(OUString::number(rParameter.getCode()), rParameter.getDescription());
+        if (rParameter.getCode() == nDefault)
+            nRes = count;
+        ++count;
+    }
+    return nRes;
 }
 
 void FontFeaturesDialog::initialize()
@@ -94,9 +103,12 @@ void FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFe
         uint32_t nValue = 0;
         if (aExistingFeatures.find(nFontFeatureCode) != aExistingFeatures.end())
             nValue = aExistingFeatures.at(nFontFeatureCode);
+        else
+            nValue = aDefinition.getDefault();
 
         FontFeatureItem& aCurrentItem = m_aFeatureItems.back();
         aCurrentItem.m_aFeatureCode = nFontFeatureCode;
+        aCurrentItem.m_nDefault = aDefinition.getDefault();
 
         sal_Int32 nGridPositionX = (i % 2) * 2;
         sal_Int32 nGridPositionY = i / 2;
@@ -113,9 +125,9 @@ void FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFe
             aCurrentItem.m_xText->set_label(aDefinition.getDescription());
             aCurrentItem.m_xText->show();
 
-            makeEnumComboBox(*aCurrentItem.m_xCombo, aDefinition);
+            sal_Int32 nInit = makeEnumComboBox(*aCurrentItem.m_xCombo, aDefinition, nValue);
 
-            aCurrentItem.m_xCombo->set_active(nValue);
+            aCurrentItem.m_xCombo->set_active(nInit);
             aCurrentItem.m_xCombo->connect_changed(aComboBoxSelectHandler);
             aCurrentItem.m_xCombo->show();
         }
@@ -166,7 +178,7 @@ OUString FontFeaturesDialog::createFontNameWithFeatures()
     {
         if (rItem.m_xCheck->get_visible())
         {
-            if (rItem.m_xCheck->get_active())
+            if (sal_uInt32(rItem.m_xCheck->get_active()) != rItem.m_nDefault)
             {
                 if (!bFirst)
                     sNameSuffix.append(OUString(vcl::font::FeatureSeparator));
@@ -174,12 +186,14 @@ OUString FontFeaturesDialog::createFontNameWithFeatures()
                     bFirst = false;
 
                 sNameSuffix.append(vcl::font::featureCodeAsString(rItem.m_aFeatureCode));
+                if (!rItem.m_xCheck->get_active())
+                    sNameSuffix.append("=0");
             }
         }
         else if (rItem.m_xCombo->get_visible() && rItem.m_xText->get_visible())
         {
-            int nSelection = rItem.m_xCombo->get_active();
-            if (nSelection > 0)
+            sal_Int32 nSelection = rItem.m_xCombo->get_active_id().toInt32();
+            if (nSelection != int(rItem.m_nDefault))
             {
                 if (!bFirst)
                     sNameSuffix.append(OUString(vcl::font::FeatureSeparator));

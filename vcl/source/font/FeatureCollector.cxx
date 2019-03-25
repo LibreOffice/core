@@ -27,6 +27,8 @@ bool FeatureCollector::collectGraphite()
     gr_uint16 nUILanguage = gr_uint16(m_eLanguageType);
 
     gr_uint16 nNumberOfFeatures = gr_face_n_fref(grFace);
+    gr_feature_val* pfeatureValues
+        = gr_face_featureval_for_lang(grFace, 0); // shame we don't know which lang
 
     for (gr_uint16 i = 0; i < nNumberOfFeatures; ++i)
     {
@@ -36,6 +38,7 @@ bool FeatureCollector::collectGraphite()
         if (nFeatureCode == 0) // illegal feature code - skip
             continue;
 
+        gr_uint16 nValue = gr_fref_feature_value(pFeatureRef, pfeatureValues);
         gr_uint32 nLabelLength = 0;
         void* pLabel = gr_fref_label(pFeatureRef, &nUILanguage, gr_utf8, &nLabelLength);
         OUString sLabel(OUString::createFromAscii(static_cast<char*>(pLabel)));
@@ -52,7 +55,8 @@ bool FeatureCollector::collectGraphite()
                 void* pValueLabel = gr_fref_value_label(pFeatureRef, j, &nUILanguage, gr_utf8,
                                                         &nValueLabelLength);
                 OUString sValueLabel(OUString::createFromAscii(static_cast<char*>(pValueLabel)));
-                aParameters.emplace_back(sal_uInt32(j), sValueLabel);
+                gr_uint16 nParamValue = gr_fref_value(pFeatureRef, j);
+                aParameters.emplace_back(sal_uInt32(nParamValue), sValueLabel);
                 gr_label_destroy(pValueLabel);
             }
 
@@ -72,7 +76,7 @@ bool FeatureCollector::collectGraphite()
                 vcl::font::FeatureType::Graphite);
             vcl::font::Feature& rFeature = m_rFontFeatures.back();
             rFeature.m_aDefinition = vcl::font::FeatureDefinition(
-                nFeatureCode, sLabel, eFeatureParameterType, aParameters);
+                nFeatureCode, sLabel, eFeatureParameterType, aParameters, sal_uInt32(nValue));
         }
     }
     return true;
