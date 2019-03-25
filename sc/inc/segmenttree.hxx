@@ -56,11 +56,11 @@ public:
     class RangeIterator
     {
     public:
-        explicit RangeIterator(ScFlatBoolRowSegments& rSegs);
+        explicit RangeIterator(ScFlatBoolRowSegments const & rSegs);
         bool getFirst(RangeData& rRange);
         bool getNext(RangeData& rRange);
     private:
-        ScFlatBoolRowSegments& mrSegs;
+        ScFlatBoolRowSegments const & mrSegs;
     };
 
     ScFlatBoolRowSegments();

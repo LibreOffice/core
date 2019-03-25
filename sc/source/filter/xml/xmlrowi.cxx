@@ -210,7 +210,7 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
                             rRecalcRanges.emplace_back(0);
                         }
                         rRecalcRanges.at(nSheet).mnTab = nSheet;
-                        rRecalcRanges.at(nSheet).mpRanges->setTrue(nFirstRow, nCurrentRow);
+                        rRecalcRanges.at(nSheet).maRanges.setTrue(nFirstRow, nCurrentRow);
                     }
                 }
             }
