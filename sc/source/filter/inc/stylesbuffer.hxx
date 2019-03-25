@@ -802,6 +802,7 @@ public:
     XfRef               createStyleXf();
     /** Creates a new empty differential formatting object. */
     DxfRef              createDxf();
+    DxfRef              createExtDxf();
 
     /** Appends a new color to the color palette. */
     void                importPaletteColor( const AttributeList& rAttribs );
@@ -850,6 +851,7 @@ public:
     ::ScStyleSheet*     getCellStyleSheet( sal_Int32 nXfId ) const;
     /** Creates the style sheet described by the DXF with the passed identifier. */
     OUString     createDxfStyle( sal_Int32 nDxfId ) const;
+    OUString     createExtDxfStyle( sal_Int32 nDxfId ) const;
 
     void                writeFontToItemSet( SfxItemSet& rItemSet, sal_Int32 nFontId, bool bSkipPoolDefs ) const;
     sal_uInt32          writeNumFmtToItemSet( SfxItemSet& rItemSet, sal_uInt32 nNumFmtId, bool bSkipPoolDefs ) const;
@@ -860,6 +862,7 @@ public:
 
     /** Writes the cell formatting attributes of the specified XF to the passed property set. */
     void                writeCellXfToDoc( ScDocumentImport& rDoc, const ScRange& rRange, sal_Int32 nXfId ) const;
+    RefVector< Dxf >    getExtDxfs() { return maExtDxfs; }
 
 private:
     typedef RefVector< Font >                           FontVector;
@@ -878,6 +881,7 @@ private:
     XfVector            maStyleXfs;         /// List of cell styles.
     CellStyleBuffer     maCellStyles;       /// All built-in and user defined cell styles.
     DxfVector           maDxfs;             /// List of differential cell styles.
+    DxfVector           maExtDxfs;          /// List of differential extlst cell styles.
     mutable DxfStyleMap maDxfStyles;        /// Maps DXF identifiers to Calc style sheet names.
 };
 

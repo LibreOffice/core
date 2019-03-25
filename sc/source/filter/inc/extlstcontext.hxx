@@ -13,9 +13,12 @@
 #include "excelhandlers.hxx"
 #include "worksheetfragment.hxx"
 #include "workbookfragment.hxx"
+#include "conditio.hxx"
 
 #include <vector>
 #include <memory>
+
+extern sal_Int32 rStyleIdx; // Holds index of the <extlst> <cfRule> style (Will be reseted finalize import)
 
 struct ScDataBarFormatData;
 class ScFormatEntry;
@@ -50,8 +53,12 @@ public:
     virtual void onEndElement() override;
 
 private:
-    OUString aChars;
+    OUString aChars; // Characters of between xml elements.
+    OUString rStyle; // Style of the corresponding condition
+    ScConditionMode eOperator; // Used only when cfRule type is "cellIs"
+    bool isPreviousElementF;   // Used to distinguish alone <sqref> from <f> and <sqref>
     std::vector<std::unique_ptr<ScFormatEntry> > maEntries;
+    std::vector< OUString > rFormulas; // It holds formulas for a range, there can be more formula for same range.
     IconSetRule* mpCurrentRule;
 };
 
