@@ -2762,7 +2762,8 @@ void SwTextFrame::CalcBaseOfstForFly()
     if (!pNode->getIDocumentSettingAccess()->get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS))
         return;
 
-    mnFlyAnchorVertOfstNoWrap = nFlyAnchorVertOfstNoWrap;
+    if (mnFlyAnchorOfstNoWrap > 0)
+        mnFlyAnchorVertOfstNoWrap = nFlyAnchorVertOfstNoWrap;
 }
 
 SwTwips SwTextFrame::GetBaseVertOffsetForFly(bool bIgnoreFlysAnchoredAtThisFrame) const
