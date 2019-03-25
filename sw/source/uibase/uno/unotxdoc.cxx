@@ -2614,22 +2614,24 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             // since printing now also use the API for PDF export this option
             // should be set for printing as well ...
             pViewShell->SetPDFExportOption( true );
-            bool bOrigStatus = pRenderDocShell->IsEnableSetModified();
-            // check configuration: shall update of printing information in DocInfo set the document to "modified"?
-            bool bStateChanged = false;
-            if ( bOrigStatus && !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
-            {
-                pRenderDocShell->EnableSetModified( false );
-                bStateChanged = true;
-            }
-
-            if( bStateChanged )
-                pRenderDocShell->EnableSetModified();
 
             // tdf#122607 Re-layout the doc. Calling CalcLayout here is not enough, as it depends
             // on the currently visible area which is 0 when doing headless conversion.
             pViewShell->Reformat();
             pViewShell->CalcPagesForPrint( pViewShell->GetPageCount() );
+
+
+            // #122919# Force field update before PDF export, but after layout init (tdf#121962)
+            bool bStateChanged = false;
+            // check configuration: shall update of printing information in DocInfo set the document to "modified"?
+            if ( pRenderDocShell->IsEnableSetModified() && !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
+            {
+                pRenderDocShell->EnableSetModified( false );
+                bStateChanged = true;
+            }
+            pViewShell->SwViewShell::UpdateFields(true);
+            if( bStateChanged )
+                pRenderDocShell->EnableSetModified();
 
             pViewShell->SetPDFExportOption( false );
 
