@@ -191,7 +191,8 @@ namespace sw
             , m_pBasePool(pDocShell->GetStyleSheetPool())
             , m_pDocShell(pDocShell)
         {
-            StartListening(*m_pBasePool);
+            if (m_pBasePool) //tdf#124142 html docs can have no styles
+                StartListening(*m_pBasePool);
         }
 
         virtual ~XStyleFamily() {};
