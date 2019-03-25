@@ -1056,6 +1056,18 @@
         ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
         OTHER DEALINGS IN THE SOFTWARE.</p>
     </div>
+    <div class="MDNSRESPONDER">
+        <h2>mDNSResponder</h2>
+        <p>The following software may be included in this product: mDNSResponder. The majority of the source code in
+        the mDNSResponder project is licensed under the terms of the Apache License, Version 2.0.</p>
+        <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
+        <p>To accommodate license compatibility with the widest possible range of client code licenses, the shared
+        library code, which is linked at runtime into the same address space as the client using it, is licensed under
+        the terms of the "Three-Clause BSD License".</p>
+        <p>The Linux Name Service Switch code, contributed by National ICT Australia Ltd (NICTA) is licensed under the
+        terms of the NICTA Public Software Licence (which is substantially similar to the "Three-Clause BSD License",
+        with some additional language pertaining to Australian law).</p>
+    </div>
     <div class="WNT">
         <h2>Microsoft Visual C++ 2015 Runtime Libraries</h2>
         <p>The following software may be included in this product: Microsoft Visual C++ 2015 Runtime Libraries. Use of
