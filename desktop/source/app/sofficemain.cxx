@@ -33,6 +33,7 @@
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
 #include <tools/extendapplicationenvironment.hxx>
+#include <vcl/glxtestprocess.hxx>
 #include <vcl/svmain.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>

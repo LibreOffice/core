@@ -23,14 +23,11 @@
 
 #include <sal/main.h>
 #include <tools/extendapplicationenvironment.hxx>
+#include <vcl/glxtestprocess.hxx>
 #include <vcl/vclmain.hxx>
 #include <vcl/svmain.hxx>
 
 #include <salinst.hxx>
-
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined LIBO_HEADLESS && !defined HAIKU
-#include <opengl/x11/glxtest.hxx>
-#endif
 
 SAL_IMPLEMENT_MAIN() {
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined LIBO_HEADLESS && !defined HAIKU

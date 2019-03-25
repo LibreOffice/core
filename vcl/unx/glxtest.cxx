@@ -39,6 +39,7 @@
 #include <X11/Xutil.h>
 
 #include <sal/log.hxx>
+#include <vcl/glxtestprocess.hxx>
 
 // stuff from glx.h
 typedef struct __GLXcontextRec *GLXContext;
