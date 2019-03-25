@@ -1016,6 +1016,12 @@
         <p>Except as contained in this notice, the name of the authors shall not be used in advertising or otherwise to
         promote the sale, use or other dealings in this Software without prior written authorization from him.</p>
     </div>
+    <div class="ZMF">
+        <h2>libzmf</h2>
+        <p>The following software may be included in this product: libzmf. Use of any of this software is governed by
+        the terms of the license below:</p>
+        <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
+    </div>
     <div class="LCMS2">
         <h2>Little CMS (lcms2)</h2>
         <p>The following software may be included in this product: Little CMS (lcms2). Use of any of this software is
