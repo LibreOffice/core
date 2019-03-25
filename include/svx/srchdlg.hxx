@@ -120,6 +120,7 @@ public:
     virtual ~SvxSearchDialog() override;
 
     virtual void    EndDialog() override;
+    virtual void    ChildWinDispose() override;
     virtual void    Close() override;
 
     // Window
