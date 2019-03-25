@@ -700,6 +700,7 @@ public:
     virtual ~XclExpDxf() override;
 
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
+    virtual void SaveXmlExt( XclExpXmlStream& rStrm);
 
 private:
     std::unique_ptr<XclExpCellAlign> mpAlign;
