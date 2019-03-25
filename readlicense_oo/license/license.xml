@@ -786,6 +786,30 @@
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
     </div>
+    <div class="LIBNUMBERTEXT">
+        <h2>libnumbertext</h2>
+        <p>The following software may be included in this product: libnumbertext. Use of any of this software is
+        governed by the terms of the license below:</p>
+        <p>Copyright 2009–2019 László Németh et al.</p>
+        <p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that
+        the following conditions are met:</p>
+        <ol>
+            <li>Redistributions of source code must retain the above copyright notice, this list of conditions and the
+            following disclaimer.</li>
+            <li>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and
+            the following disclaimer in the documentation and/or other materials provided with the distribution.</li>
+            <li>Neither the name of the copyright holder nor the names of its contributors may be used to endorse or
+            promote products derived from this software without specific prior written permission.</li>
+        </ol>
+        <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+        WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+        PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY
+        DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+        PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+        OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+        DAMAGE.</p>
+    </div>
     <div class="ODFGEN">
         <h2>libodfgen</h2>
         <p>The following software may be included in this product: libodfgen. Use of any of this software is governed
