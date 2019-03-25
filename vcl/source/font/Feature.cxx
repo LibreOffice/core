@@ -100,10 +100,12 @@ FeatureDefinition::FeatureDefinition()
 
 FeatureDefinition::FeatureDefinition(uint32_t nCode, OUString const& rDescription,
                                      FeatureParameterType eType,
-                                     std::vector<FeatureParameter> const& rEnumParameters)
+                                     std::vector<FeatureParameter> const& rEnumParameters,
+                                     uint32_t nDefault)
     : m_sDescription(rDescription)
     , m_pDescriptionID(nullptr)
     , m_nCode(nCode)
+    , m_nDefault(nDefault)
     , m_eType(eType)
     , m_aEnumParameters(rEnumParameters)
 {
@@ -114,6 +116,7 @@ FeatureDefinition::FeatureDefinition(uint32_t nCode, const char* pDescriptionID,
     : m_pDescriptionID(pDescriptionID)
     , m_sNumericPart(rNumericPart)
     , m_nCode(nCode)
+    , m_nDefault(0)
     , m_eType(FeatureParameterType::BOOL)
 {
 }
@@ -122,6 +125,7 @@ FeatureDefinition::FeatureDefinition(uint32_t nCode, const char* pDescriptionID,
                                      std::vector<FeatureParameter> aEnumParameters)
     : m_pDescriptionID(pDescriptionID)
     , m_nCode(nCode)
+    , m_nDefault(0)
     , m_eType(FeatureParameterType::ENUM)
     , m_aEnumParameters(std::move(aEnumParameters))
 {
@@ -157,6 +161,7 @@ FeatureParameterType FeatureDefinition::getType() const { return m_eType; }
 
 FeatureDefinition::operator bool() const { return m_nCode != 0; }
 
+uint32_t FeatureDefinition::getDefault() const { return m_nDefault; }
 } // end font namespace
 } // end vcl namespace
 
