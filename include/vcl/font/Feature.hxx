@@ -57,6 +57,7 @@ class VCL_DLLPUBLIC FeatureDefinition
 {
 private:
     uint32_t m_nCode;
+    uint32_t m_nDefault;
     OUString m_sDescription;
     const char* m_pDescriptionID;
     OUString m_sNumericPart;
@@ -69,7 +70,8 @@ public:
     FeatureDefinition(uint32_t nCode, OUString const& rDescription,
                       FeatureParameterType eType = FeatureParameterType::BOOL,
                       std::vector<FeatureParameter> const& rEnumParameters
-                      = std::vector<FeatureParameter>{});
+                      = std::vector<FeatureParameter>{},
+                      uint32_t nDefault = 0);
     FeatureDefinition(uint32_t nCode, const char* pDescriptionID,
                       OUString const& rNumericPart = OUString());
     FeatureDefinition(uint32_t nCode, const char* pDescriptionID,
@@ -79,6 +81,7 @@ public:
     OUString getDescription() const;
     uint32_t getCode() const;
     FeatureParameterType getType() const;
+    uint32_t getDefault() const;
 
     operator bool() const;
 };

@@ -33,6 +33,7 @@ struct FontFeatureItem
     }
 
     sal_uInt32 m_aFeatureCode;
+    sal_uInt32 m_nDefault;
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Widget> m_xContainer;
     std::unique_ptr<weld::Label> m_xText;
