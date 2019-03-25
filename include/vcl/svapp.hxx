@@ -68,6 +68,7 @@ class Reflection;
 class NotifyEvent;
 class KeyEvent;
 class MouseEvent;
+class GestureEvent;
 struct ImplSVEvent;
 struct ConvertData;
 
@@ -755,6 +756,8 @@ public:
      @param     pMouseEvent     Mouse event to send
     */
     static ImplSVEvent *        PostMouseEvent( VclEventId nEvent, vcl::Window *pWin, MouseEvent const * pMouseEvent );
+
+    static ImplSVEvent* PostGestureEvent(VclEventId nEvent, vcl::Window* pWin, GestureEvent const * pGestureEvent);
 
     /** Remove mouse and keypress events from a window... any also zoom and scroll events
      if the platform supports it.

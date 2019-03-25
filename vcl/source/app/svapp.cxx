@@ -131,11 +131,26 @@ struct ImplPostEventData
     ImplSVEvent *   mnEventId;
     KeyEvent        maKeyEvent;
     MouseEvent      maMouseEvent;
+    GestureEvent    maGestureEvent;
 
-    ImplPostEventData( VclEventId nEvent, vcl::Window* pWin, const KeyEvent& rKeyEvent ) :
-        mnEvent( nEvent ), mpWin( pWin ), mnEventId( nullptr ), maKeyEvent( rKeyEvent ) {}
-    ImplPostEventData( VclEventId nEvent, vcl::Window* pWin, const MouseEvent& rMouseEvent ) :
-        mnEvent( nEvent ), mpWin( pWin ), mnEventId( nullptr ), maMouseEvent( rMouseEvent ) {}
+    ImplPostEventData(VclEventId nEvent, vcl::Window* pWin, const KeyEvent& rKeyEvent)
+        : mnEvent(nEvent)
+        , mpWin(pWin)
+        , mnEventId(nullptr)
+        , maKeyEvent(rKeyEvent)
+    {}
+    ImplPostEventData(VclEventId nEvent, vcl::Window* pWin, const MouseEvent& rMouseEvent)
+        : mnEvent(nEvent)
+        , mpWin(pWin)
+        , mnEventId(nullptr)
+        , maMouseEvent(rMouseEvent)
+    {}
+    ImplPostEventData(VclEventId nEvent, vcl::Window* pWin, const GestureEvent& rGestureEvent)
+        : mnEvent(nEvent)
+        , mpWin(pWin)
+        , mnEventId(nullptr)
+        , maGestureEvent(rGestureEvent)
+    {}
 };
 
 Application* GetpApp()
@@ -829,7 +844,43 @@ ImplSVEvent * Application::PostKeyEvent( VclEventId nEvent, vcl::Window *pWin, K
     return nEventId;
 }
 
-ImplSVEvent * Application::PostMouseEvent( VclEventId nEvent, vcl::Window *pWin, MouseEvent const * pMouseEvent )
+ImplSVEvent* Application::PostGestureEvent(VclEventId nEvent, vcl::Window* pWin, GestureEvent const * pGestureEvent)
+{
+    const SolarMutexGuard aGuard;
+    ImplSVEvent * nEventId = nullptr;
+
+    if (pWin && pGestureEvent)
+    {
+        Point aTransformedPosition(pGestureEvent->mnX, pGestureEvent->mnY);
+
+        aTransformedPosition.AdjustX(pWin->GetOutOffXPixel());
+        aTransformedPosition.AdjustY(pWin->GetOutOffYPixel());
+
+        const GestureEvent aGestureEvent{
+            sal_Int32(aTransformedPosition.X()),
+            sal_Int32(aTransformedPosition.Y()),
+            pGestureEvent->meEventType,
+            pGestureEvent->mnOffset,
+            pGestureEvent->meOrientation
+        };
+
+        std::unique_ptr<ImplPostEventData> pPostEventData(new ImplPostEventData(nEvent, pWin, aGestureEvent));
+
+        nEventId = PostUserEvent(
+                       LINK( nullptr, Application, PostEventHandler ),
+                       pPostEventData.get());
+
+        if (nEventId)
+        {
+            pPostEventData->mnEventId = nEventId;
+            ImplGetSVData()->maAppData.maPostedEventList.emplace_back(pWin, pPostEventData.release());
+        }
+    }
+
+    return nEventId;
+}
+
+ImplSVEvent* Application::PostMouseEvent( VclEventId nEvent, vcl::Window *pWin, MouseEvent const * pMouseEvent )
 {
     const SolarMutexGuard aGuard;
     ImplSVEvent * nEventId = nullptr;
@@ -896,6 +947,11 @@ IMPL_STATIC_LINK( Application, PostEventHandler, void*, pCallData, void )
         case VclEventId::WindowKeyUp:
             nEvent = SalEvent::ExternalKeyUp;
             pEventData = &pData->maKeyEvent;
+        break;
+
+        case VclEventId::WindowGestureEvent:
+            nEvent = SalEvent::ExternalGesture;
+            pEventData = &pData->maGestureEvent;
         break;
 
         default:

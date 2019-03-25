@@ -24,6 +24,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
+#include <vcl/GestureEvent.hxx>
 
 class LogicalFontInstance;
 class SalGraphics;
@@ -82,7 +83,9 @@ enum class SalEvent {
     StartReconversion,
     QueryCharPosition,
     Swipe,
-    LongPress
+    LongPress,
+    ExternalGesture,
+    Gesture,
 };
 
 // MOUSELEAVE must send, when the pointer leave the client area and
@@ -252,6 +255,15 @@ struct SalSwipeEvent
 
 struct SalLongPressEvent
 {
+    long mnX;
+    long mnY;
+};
+
+struct SalGestureEvent
+{
+    GestureEventType meEventType;
+    PanningOrientation meOrientation;
+    double mfOffset;
     long mnX;
     long mnY;
 };

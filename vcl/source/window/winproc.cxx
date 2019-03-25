@@ -28,6 +28,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/event.hxx>
+#include <vcl/GestureEvent.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/cursor.hxx>
@@ -1550,6 +1551,30 @@ static bool ImplHandleLongPress(vcl::Window *pWindow, const SalLongPressEvent& r
     return aHandler.HandleEvent();
 }
 
+class HandleGeneralGestureEvent : public HandleGestureEvent
+{
+private:
+    CommandGestureData m_aGestureData;
+
+public:
+    HandleGeneralGestureEvent(vcl::Window* pWindow, const SalGestureEvent& rEvent)
+        : HandleGestureEvent(pWindow, Point(rEvent.mnX, rEvent.mnY))
+        , m_aGestureData(rEvent.mnX, rEvent.mnY, rEvent.meEventType, rEvent.mfOffset, rEvent.meOrientation)
+    {
+    }
+
+    virtual bool CallCommand(vcl::Window* pWindow, const Point& /*rMousePos*/) override
+    {
+        return ImplCallCommand(pWindow, CommandEventId::Gesture, &m_aGestureData);
+    }
+};
+
+static bool ImplHandleGestureEvent(vcl::Window* pWindow, const SalGestureEvent& rEvent)
+{
+    HandleGeneralGestureEvent aHandler(pWindow, rEvent);
+    return aHandler.HandleEvent();
+}
+
 static void ImplHandlePaint( vcl::Window* pWindow, const tools::Rectangle& rBoundRect, bool bImmediateUpdate )
 {
     // system paint events must be checked for re-mirroring
@@ -2537,7 +2562,26 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
             bRet = ImplHandleLongPress(pWindow, *static_cast<const SalLongPressEvent*>(pEvent));
             break;
 
+        case SalEvent::ExternalGesture:
+        {
+            auto const * pGestureEvent = static_cast<GestureEvent const *>(pEvent);
 
+            SalGestureEvent aSalGestureEvent;
+            aSalGestureEvent.mfOffset = pGestureEvent->mnOffset;
+            aSalGestureEvent.mnX = pGestureEvent->mnX;
+            aSalGestureEvent.mnY = pGestureEvent->mnY;
+            aSalGestureEvent.meEventType = pGestureEvent->meEventType;
+            aSalGestureEvent.meOrientation = pGestureEvent->meOrientation;
+
+            bRet = ImplHandleGestureEvent(pWindow, aSalGestureEvent);
+        }
+        break;
+        case SalEvent::Gesture:
+        {
+            auto const * aSalGestureEvent = static_cast<SalGestureEvent const *>(pEvent);
+            bRet = ImplHandleGestureEvent(pWindow, *aSalGestureEvent);
+        }
+        break;
         default:
             SAL_WARN( "vcl.layout", "ImplWindowFrameProc(): unknown event (" << static_cast<int>(nEvent) << ")" );
             break;
