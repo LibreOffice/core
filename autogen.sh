@@ -203,6 +203,8 @@ for my $arg (@ARGV) {
     if ($arg =~ /^(--help|-h|-\?)$/) {
         print STDOUT "autogen.sh - libreoffice configuration helper\n";
         print STDOUT "   --clean        forcibly re-generate configuration\n";
+        print STDOUT "   --with-distro  use a config from distro-configs/\n";
+        print STDOUT "                  the name needs to be passed without extension\n";
         print STDOUT "   --best-effort  don't fail on un-known configure with/enable options\n";
         print STDOUT "\nOther arguments passed directly to configure:\n\n";
         system ("./configure --help");
