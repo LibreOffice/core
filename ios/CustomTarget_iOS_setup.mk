@@ -66,7 +66,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	cp $(INSTDIR)/share/config/*zip $(IOSRES)/share/config
 	cp -R $(INSTDIR)/share/liblangtag $(IOSRES)/share
 	mkdir -p $(IOSRES)/share/fonts/truetype
-	cp $(INSTDIR)/share/fonts/truetype/Liberation* $(IOSRES)/share/fonts/truetype
+	cp -R $(INSTDIR)/share/fonts/truetype $(IOSRES)/share/fonts
 	cp $(SRCDIR)/ios/welcome.odt $(IOSRES)
 
 	# Set up rc (the "inifile", fundamentalrc, unorc, bootstraprc and versionrc.
