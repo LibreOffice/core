@@ -22,12 +22,14 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#ifdef MACOSX
 #include <premac.h>
+#ifdef MACOSX
 #include <Carbon/Carbon.h>
 #import <Cocoa/Cocoa.h>
-#include <postmac.h>
+#else
+#include <UIKit/UIKit.h>
 #endif
+#include <postmac.h>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceDisplayName.hpp>
@@ -63,8 +65,11 @@ class MacSpellChecker :
     Locale *                aDLocs;
     OUString *              aDNames;
     sal_Int32               numdict;
+#ifdef MACOSX
     int                     macTag;   // unique tag for this doc
-
+#else
+    UITextChecker *         pChecker;
+#endif
     ::comphelper::OInterfaceContainerHelper2       aEvtListeners;
     Reference< XPropertyChangeListener >    xPropHelper;
     linguistic::PropertyHelper_Spell *      pPropHelper;

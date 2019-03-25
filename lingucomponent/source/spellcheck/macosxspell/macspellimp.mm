@@ -55,10 +55,14 @@ MacSpellChecker::MacSpellChecker() :
     bDisposing = false;
     pPropHelper = nullptr;
     numdict = 0;
+#ifndef IOS
     NSApplicationLoad();
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
     macTag = [NSSpellChecker uniqueSpellDocumentTag];
     [pool release];
+#else
+    pChecker = [[UITextChecker alloc] init];
+#endif
 }
 
 
@@ -110,7 +114,11 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         // TODO How on Mac OS X?
 
         // invoke a second  dictionary manager to get the shared dictionary list
+#ifdef MACOSX
         NSArray *aSpellCheckLanguages = [[NSSpellChecker sharedSpellChecker] availableLanguages];
+#else
+        NSArray *aSpellCheckLanguages = [UITextChecker availableLanguages];
+#endif
 
         for (NSUInteger i = 0; i < [aSpellCheckLanguages count]; i++)
         {
@@ -333,8 +341,12 @@ sal_Int16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale 
             aLang = [aLang  stringByAppendingString:aTaggedCountry];
         }
 
+#ifdef MACOSX
         NSInteger aCount;
         NSRange range = [[NSSpellChecker sharedSpellChecker] checkSpellingOfString:aNSStr startingAt:0 language:aLang wrap:false inSpellDocumentWithTag:macTag wordCount:&aCount];
+#else
+        NSRange range = [pChecker rangeOfMisspelledWordInString:aNSStr range:NSMakeRange(0, [aNSStr length]) startingAt:0 wrap:NO language:aLang];
+#endif
         int rVal = 0;
         if(range.length>0)
         {
@@ -432,8 +444,12 @@ Reference< XSpellAlternatives >
             NSString* aTaggedCountry = [@"_" stringByAppendingString:aCountry];
             aLang = [aLang  stringByAppendingString:aTaggedCountry];
         }
+#ifdef MACOSX
         [[NSSpellChecker sharedSpellChecker] setLanguage:aLang];
         NSArray *guesses = [[NSSpellChecker sharedSpellChecker] guessesForWordRange:NSMakeRange(0, [aNSStr length]) inString:aNSStr language:aLang inSpellDocumentWithTag:0];
+#else
+        NSArray *guesses = [pChecker guessesForWordRange:NSMakeRange(0, [aNSStr length]) inString:aNSStr language:aLang];
+#endif
         count = [guesses count];
         if (count)
         {

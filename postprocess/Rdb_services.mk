@@ -131,10 +131,12 @@ $(eval $(call gb_Rdb_add_components,services,\
 				$(call gb_Helper_optional,AVMEDIA,avmedia/source/quicktime/avmediaQuickTime) \
 			) \
 		) \
-		lingucomponent/source/spellcheck/macosxspell/MacOSXSpell \
 		fpicker/source/aqua/fps_aqua \
 		shell/source/backends/macbe/macbe1 \
 		vcl/vcl.macosx \
+	) \
+	$(if $(filter IOS MACOSX,$(OS)), \
+		lingucomponent/source/spellcheck/macosxspell/MacOSXSpell \
 	) \
 	$(if $(filter WNT,$(OS)), \
 		avmedia/source/win/avmediawin \
