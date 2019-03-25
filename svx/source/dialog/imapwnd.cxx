@@ -686,8 +686,8 @@ void IMapWindow::DoPropertyDialog()
     {
         IMapObject* pIMapObj = GetIMapObj( pSdrObj );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractURLDlg> aDlg(pFact->CreateURLDialog( this, pIMapObj->GetURL(), pIMapObj->GetAltText(), pIMapObj->GetDesc(),
-                                        pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList ));
+        ScopedVclPtr<AbstractURLDlg> aDlg(pFact->CreateURLDialog(GetFrameWeld(), pIMapObj->GetURL(), pIMapObj->GetAltText(), pIMapObj->GetDesc(),
+                                        pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList));
         if ( aDlg->Execute() == RET_OK )
         {
             const OUString aURLText( aDlg->GetURL() );

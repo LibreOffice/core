@@ -45,44 +45,35 @@
 |*
 \************************************************************************/
 
-URLDlg::URLDlg( vcl::Window* pWindow, const OUString& rURL, const OUString& rAlternativeText, const OUString& rDescription, const OUString& rTarget, const OUString& rName, TargetList& rTargetList )
-: ModalDialog(pWindow, "IMapDialog", "cui/ui/cuiimapdlg.ui")
+URLDlg::URLDlg(weld::Window* pWindow, const OUString& rURL, const OUString& rAlternativeText,
+               const OUString& rDescription, const OUString& rTarget, const OUString& rName,
+               TargetList& rTargetList)
+    : GenericDialogController(pWindow, "cui/ui/cuiimapdlg.ui", "IMapDialog")
+    , m_xEdtURL(m_xBuilder->weld_entry("urlentry"))
+    , m_xCbbTargets(m_xBuilder->weld_combo_box("frameCB"))
+    , m_xEdtName(m_xBuilder->weld_entry("nameentry"))
+    , m_xEdtAlternativeText(m_xBuilder->weld_entry("textentry"))
+    , m_xEdtDescription(m_xBuilder->weld_text_view("descTV"))
 {
-    get(m_pEdtURL, "urlentry");
-    get(m_pCbbTargets, "frameCB");
-    get(m_pEdtName, "nameentry");
-    get(m_pEdtAlternativeText, "textentry");
-    get(m_pEdtDescription, "descTV");
-    m_pEdtDescription->set_height_request(m_pEdtDescription->GetTextHeight() * 5);
-    m_pEdtDescription->set_width_request(m_pEdtDescription->approximate_char_width() * 60);
+    m_xEdtDescription->set_size_request(m_xEdtDescription->get_approximate_digit_width() * 51,
+                                        m_xEdtDescription->get_height_rows(5));
 
-    m_pEdtURL->SetText( rURL );
-    m_pEdtAlternativeText->SetText( rAlternativeText );
-    m_pEdtDescription->SetText( rDescription );
-    m_pEdtName->SetText( rName );
+    m_xEdtURL->set_text( rURL );
+    m_xEdtAlternativeText->set_text( rAlternativeText );
+    m_xEdtDescription->set_text( rDescription );
+    m_xEdtName->set_text( rName );
 
-    for(OUString & i : rTargetList)
-        m_pCbbTargets->InsertEntry( i );
+    for (const OUString& a : rTargetList)
+        m_xCbbTargets->append_text(a);
 
-    if( rTarget.isEmpty() )
-        m_pCbbTargets->SetText( "_self");
+    if (rTarget.isEmpty())
+        m_xCbbTargets->set_entry_text("_self");
     else
-        m_pCbbTargets->SetText( rTarget );
+        m_xCbbTargets->set_entry_text(rTarget);
 }
 
 URLDlg::~URLDlg()
 {
-    disposeOnce();
-}
-
-void URLDlg::dispose()
-{
-    m_pEdtURL.clear();
-    m_pCbbTargets.clear();
-    m_pEdtName.clear();
-    m_pEdtAlternativeText.clear();
-    m_pEdtDescription.clear();
-    ModalDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
