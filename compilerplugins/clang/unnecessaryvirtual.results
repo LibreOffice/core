@@ -72,6 +72,12 @@ include/comphelper/unique_disposing_ptr.hxx:169
     void comphelper::unique_disposing_solar_mutex_reset_ptr::reset(type-parameter-0-0 *,)
 include/comphelper/weakeventlistener.hxx:120
     void comphelper::OWeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
+include/oox/helper/graphichelper.hxx:77
+    int oox::GraphicHelper::getDefaultChartAreaLineStyle()const
+include/oox/helper/graphichelper.hxx:80
+    short oox::GraphicHelper::getDefaultChartAreaLineWidth()const
+include/sfx2/tabdlg.hxx:103
+    class SfxItemSet * SfxTabDialog::CreateInputItemSet(unsigned short,)
 include/svl/svdde.hxx:237
     class DdeData * DdeTopic::Get(enum SotClipboardFormatId,)
 include/svl/svdde.hxx:238
@@ -108,10 +114,8 @@ include/vbahelper/vbareturntypes.hxx:40
     void ooo::vba::DefaultReturnHelper::setValue(type-parameter-0-0,)
 include/vbahelper/vbareturntypes.hxx:41
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
-include/vcl/filter/PngImageReader.hxx:29
-    void vcl::PngImageReader::~PngImageReader()
-include/xmloff/xmlstyle.hxx:217
-    unsigned short SvXMLStylesContext::GetFamily(const class rtl::OUString &,)const
+include/vcl/weld.hxx:95
+    void weld::Widget::set_visible(_Bool,)
 sc/source/core/opencl/formulagroupcl.cxx:1053
     _Bool sc::opencl::DynamicKernelSlidingArgument::NeedParallelReduction()const
 sc/source/core/opencl/formulagroupcl.cxx:1061
@@ -188,8 +192,8 @@ sc/source/ui/vba/vbapagebreak.hxx:48
     void ScVbaPageBreak::Delete()
 sc/source/ui/vba/vbapagebreak.hxx:49
     class com::sun::star::uno::Reference<class ooo::vba::excel::XRange> ScVbaPageBreak::Location()
-sd/source/ui/inc/ViewClipboard.hxx:77
-    unsigned short sd::ViewClipboard::InsertSlides(const class SdTransferable &,unsigned short,)
+shell/inc/i_xml_parser_event_handler.hxx:41
+    void i_xml_parser_event_handler::~i_xml_parser_event_handler()
 slideshow/source/engine/activities/activitiesfactory.cxx:173
     void slideshow::internal::(anonymous namespace)::FromToByActivity::startAnimation()
 slideshow/source/engine/activities/activitiesfactory.cxx:242
@@ -210,11 +214,9 @@ slideshow/source/engine/animationfactory.cxx:447
     void slideshow::internal::(anonymous namespace)::GenericAnimation::start(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
 sw/inc/flypos.hxx:37
     void SwPosFlyFrame::~SwPosFlyFrame()
-sw/source/uibase/inc/drawbase.hxx:53
-    _Bool SwDrawBase::MouseMove(const class MouseEvent &,)
-vcl/inc/salframe.hxx:135
+vcl/inc/salframe.hxx:144
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
-vcl/inc/salframe.hxx:180
+vcl/inc/salframe.hxx:189
     void SalFrame::Flush(const class tools::Rectangle &,)
 vcl/inc/salinst.hxx:92
     _Bool SalInstance::SVMainHook(int *,)

@@ -100,7 +100,7 @@ friend class SfxTabDialogUIObject;
 protected:
     virtual short               Ok();
     // Is deleted in Sfx!
-    virtual SfxItemSet*         CreateInputItemSet( sal_uInt16 nId );
+    static SfxItemSet*          CreateInputItemSet( sal_uInt16 nId );
     virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
     VclPtr<VclButtonBox>   m_pActionArea;
