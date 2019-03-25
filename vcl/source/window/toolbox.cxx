@@ -2988,33 +2988,12 @@ void ToolBox::ImplFloatControl( bool bStart, FloatingWindow* pFloatWindow )
 
 void ToolBox::ShowLine( bool bNext )
 {
-
     mbFormat = true;
 
-    if ( mpData->mbPageScroll )
-    {
-        ImplToolItems::size_type delta = mnVisLines;
-        if ( bNext )
-        {
-            mnCurLine = mnCurLine + delta;
-            if ( mnCurLine+mnVisLines-1 > mnCurLines )
-                mnCurLine = mnCurLines - mnVisLines+1;
-        }
-        else
-        {
-            if( mnCurLine >= delta+1 )
-                mnCurLine = mnCurLine - delta;
-            else
-                mnCurLine = 1;
-        }
-    }
+    if ( bNext )
+        mnCurLine++;
     else
-    {
-        if ( bNext )
-            mnCurLine++;
-        else
-            mnCurLine--;
-    }
+        mnCurLine--;
 
     ImplFormat();
 }

@@ -133,7 +133,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxLanguageComboBox(VclPtr<vcl::Window>
 
 SvxLanguageBoxBase::SvxLanguageBoxBase()
     : m_bHasLangNone(false)
-    , m_bLangNoneIsLangAll(false)
     , m_bWithCheckmark(false)
 {
 }
@@ -144,7 +143,6 @@ void SvxLanguageBoxBase::ImplLanguageBoxBaseInit()
     m_aCheckedImage = Image(StockImage::Yes, RID_SVXBMP_CHECKED);
     m_aAllString            = SvxResId( RID_SVXSTR_LANGUAGE_ALL );
     m_bHasLangNone          = false;
-    m_bLangNoneIsLangAll    = false;
 
     if ( m_bWithCheckmark )
     {
@@ -221,7 +219,6 @@ void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
     ImplClear();
 
     m_bHasLangNone          = bHasLangNone;
-    m_bLangNoneIsLangAll    = false;
     m_bWithCheckmark        = bCheckSpellAvail;
 
     if ( SvxLanguageListFlags::EMPTY == nLangList )
@@ -326,8 +323,6 @@ sal_Int32 SvxLanguageBoxBase::ImplInsertLanguage( const LanguageType nLangType, 
     }
 
     OUString aStrEntry = SvtLanguageTable::GetLanguageString( nLang );
-    if (LANGUAGE_NONE == nLang && m_bHasLangNone && m_bLangNoneIsLangAll)
-        aStrEntry = m_aAllString;
 
     LanguageType nRealLang = nLang;
     if (nRealLang == LANGUAGE_SYSTEM)
@@ -394,8 +389,6 @@ void SvxLanguageBoxBase::InsertLanguage( const LanguageType nLangType,
     }
 
     OUString aStrEntry = SvtLanguageTable::GetLanguageString( nLang );
-    if (LANGUAGE_NONE == nLang && m_bHasLangNone && m_bLangNoneIsLangAll)
-        aStrEntry = m_aAllString;
 
     sal_Int32 nAt = ImplInsertImgEntry( aStrEntry, LISTBOX_APPEND, bCheckEntry );
     ImplSetEntryData( nAt, reinterpret_cast<void*>(static_cast<sal_uInt16>(nLang)) );

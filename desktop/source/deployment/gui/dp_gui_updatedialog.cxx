@@ -480,7 +480,6 @@ UpdateDialog::UpdateDialog(
     , m_ignoredUpdate(DpResId(RID_DLG_UPDATE_IGNORED_UPDATE))
     , m_updateData(*updateData)
     , m_thread(new UpdateDialog::Thread(context, *this, vExtensionList))
-    , m_bModified( false )
     , m_xChecking(m_xBuilder->weld_label("UPDATE_CHECKING"))
     , m_xThrobber(m_xBuilder->weld_spinner("THROBBER"))
     , m_xUpdate(m_xBuilder->weld_label("UPDATE_LABEL"))
@@ -533,7 +532,6 @@ UpdateDialog::UpdateDialog(
 
 UpdateDialog::~UpdateDialog()
 {
-    storeIgnoredUpdates();
 }
 
 short UpdateDialog::run() {
@@ -756,7 +754,6 @@ void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
         }
     }
 
-    storeIgnoredUpdates();
     createNotifyJob( bPrepareOnly, aItemList );
 }
 
@@ -855,45 +852,6 @@ void UpdateDialog::getIgnoredUpdates()
         IgnoredUpdate *pData = new IgnoredUpdate( aIdentifier, aVersion );
         m_ignoredUpdates.emplace_back( pData );
     }
-}
-
-
-void UpdateDialog::storeIgnoredUpdates()
-{
-    if ( m_bModified && ( !m_ignoredUpdates.empty() ) )
-    {
-        uno::Reference< lang::XMultiServiceFactory > xConfig(
-            configuration::theDefaultProvider::get(m_context));
-        beans::NamedValue aValue( "nodepath", uno::Any( IGNORED_UPDATES ) );
-        uno::Sequence< uno::Any > args(1);
-        args[0] <<= aValue;
-
-        uno::Reference< container::XNameContainer > xNameContainer( xConfig->createInstanceWithArguments(
-            "com.sun.star.configuration.ConfigurationUpdateAccess", args ), uno::UNO_QUERY_THROW );
-
-        for (auto const& ignoredUpdate : m_ignoredUpdates)
-        {
-            if ( xNameContainer->hasByName( ignoredUpdate->sExtensionID ) )
-            {
-                if ( ignoredUpdate->bRemoved )
-                    xNameContainer->removeByName( ignoredUpdate->sExtensionID );
-                else
-                    uno::Reference< beans::XPropertySet >( xNameContainer->getByName( ignoredUpdate->sExtensionID ), uno::UNO_QUERY_THROW )->setPropertyValue( PROPERTY_VERSION, uno::Any( ignoredUpdate->sVersion ) );
-            }
-            else if ( ! ignoredUpdate->bRemoved )
-            {
-                uno::Reference< beans::XPropertySet > elem( uno::Reference< lang::XSingleServiceFactory >( xNameContainer, uno::UNO_QUERY_THROW )->createInstance(), uno::UNO_QUERY_THROW );
-                elem->setPropertyValue( PROPERTY_VERSION, uno::Any( ignoredUpdate->sVersion ) );
-                xNameContainer->insertByName( ignoredUpdate->sExtensionID, uno::Any( elem ) );
-            }
-        }
-
-        uno::Reference< util::XChangesBatch > xChangesBatch( xNameContainer, uno::UNO_QUERY );
-        if ( xChangesBatch.is() && xChangesBatch->hasPendingChanges() )
-            xChangesBatch->commitChanges();
-    }
-
-    m_bModified = false;
 }
 
 

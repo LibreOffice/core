@@ -112,7 +112,6 @@ private:
     void enableOk();
 
     void getIgnoredUpdates();
-    void storeIgnoredUpdates();
 
     void initDescription();
     void clearDescription();
@@ -151,8 +150,6 @@ private:
     std::vector< dp_gui::UpdateData > & m_updateData;
     rtl::Reference< UpdateDialog::Thread > m_thread;
     css::uno::Reference< css::deployment::XExtensionManager > m_xExtensionManager;
-
-    bool    m_bModified;
 
     std::unique_ptr<weld::Label> m_xChecking;
     std::unique_ptr<weld::Spinner> m_xThrobber;

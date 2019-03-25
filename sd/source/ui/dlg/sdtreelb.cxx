@@ -1407,7 +1407,6 @@ SdPageObjsTLV::SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeView)
     , m_pDoc(nullptr)
     , m_pBookmarkDoc(nullptr)
     , m_pMedium(nullptr)
-    , m_pOwnMedium(nullptr)
     , m_bLinkableSelected(false)
     , m_bShowAllPages(false)
 {
@@ -1465,12 +1464,6 @@ SdDrawDocument* SdPageObjsTLV::GetBookmarkDoc()
 {
     if (!m_pBookmarkDoc)
     {
-        // create a new BookmarkDoc if now one exists or if a new Medium is provided
-        if (m_pOwnMedium != nullptr)
-        {
-            CloseBookmarkDoc();
-        }
-
         DBG_ASSERT( m_pMedium, "No SfxMedium provided!" );
 
         if ( m_pMedium )
@@ -1585,25 +1578,15 @@ void SdPageObjsTLV::CloseBookmarkDoc()
     {
         m_xBookmarkDocShRef->DoClose();
         m_xBookmarkDocShRef.clear();
-
-        // Medium is owned by document, so it's destroyed already
-        m_pOwnMedium = nullptr;
     }
     else if (m_pBookmarkDoc)
     {
-        DBG_ASSERT(!m_pOwnMedium, "SfxMedium confusion!");
         if (m_pDoc)
         {
             // The document owns the Medium, so the Medium will be invalid after closing the document
             const_cast<SdDrawDocument*>(m_pDoc)->CloseBookmarkDoc();
             m_pMedium = nullptr;
         }
-    }
-    else
-    {
-        // perhaps mpOwnMedium provided, but no successful creation of BookmarkDoc
-        delete m_pOwnMedium;
-        m_pOwnMedium = nullptr;
     }
 
     m_pBookmarkDoc = nullptr;
