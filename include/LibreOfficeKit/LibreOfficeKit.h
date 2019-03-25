@@ -346,9 +346,18 @@ struct _LibreOfficeKitDocumentClass
 
     /// @see lok::Document::getSignatureState().
     int (*getSignatureState) (LibreOfficeKitDocument* pThis);
+// END CERTIFICATE AND SIGNING
 
     /// @see lok::Document::renderShapeSelection
     size_t (*renderShapeSelection)(LibreOfficeKitDocument* pThis, char** pOutput);
+
+    /// @see lok::Document::postWindowGestureEvent().
+    void (*postWindowGestureEvent) (LibreOfficeKitDocument* pThis,
+                                  unsigned nWindowId,
+                                  const char* pType,
+                                  int nX,
+                                  int nY,
+                                  int nOffset);
 
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };

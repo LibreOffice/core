@@ -101,6 +101,7 @@
 #include <svx/svxids.hrc>
 #include <svx/ucsubset.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/GestureEvent.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/fract.hxx>
@@ -648,6 +649,12 @@ static void doc_postWindowMouseEvent (LibreOfficeKitDocument* pThis,
                                       int nCount,
                                       int nButtons,
                                       int nModifier);
+static void doc_postWindowGestureEvent(LibreOfficeKitDocument* pThis,
+                                      unsigned nLOKWindowId,
+                                      const char* pType,
+                                      int nX,
+                                      int nY,
+                                      int nOffset);
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis,
                                const char* pCommand,
                                const char* pArguments,
@@ -783,6 +790,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->getSignatureState = doc_getSignatureState;
 
         m_pDocumentClass->renderShapeSelection = doc_renderShapeSelection;
+        m_pDocumentClass->postWindowGestureEvent = doc_postWindowGestureEvent;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -2775,6 +2783,43 @@ static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned
             assert(false);
             break;
     }
+}
+
+static void doc_postWindowGestureEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, const char* pType, int nX, int nY, int nOffset)
+{
+    SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
+
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
+    if (!pWindow)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
+        return;
+    }
+
+    OString aType(pType);
+    GestureEventType eEventType = GestureEventType::PanningUpdate;
+
+    if (aType == "panBegin")
+        eEventType = GestureEventType::PanningBegin;
+    else if (aType == "panEnd")
+        eEventType = GestureEventType::PanningEnd;
+
+    GestureEvent aEvent {
+        sal_Int32(nX),
+        sal_Int32(nY),
+        eEventType,
+        sal_Int32(nOffset),
+        PanningOrientation::Vertical,
+    };
+
+    if (Dialog* pDialog = dynamic_cast<Dialog*>(pWindow.get()))
+    {
+        pDialog->EnableInput();
+    }
+
+    Application::PostGestureEvent(VclEventId::WindowGestureEvent, pWindow, &aEvent);
 }
 
 static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int nX, int nY)

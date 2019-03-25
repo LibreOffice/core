@@ -629,6 +629,22 @@ public:
         return mpDoc->pClass->renderShapeSelection(mpDoc, pOutput);
     }
 
+    /**
+     * Posts a gesture event to the window with given id.
+     *
+     * @param nWindowId
+     * @param pType Event type, like panStart, panEnd, panUpdate.
+     * @param nX horizontal position in document coordinates
+     * @param nY vertical position in document coordinates
+     * @param nOffset difference value from when the gesture started to current value
+     */
+    void postWindowGestureEvent(unsigned nWindowId,
+                              const char* pType,
+                              int nX, int nY, int nOffset)
+    {
+        return mpDoc->pClass->postWindowGestureEvent(mpDoc, nWindowId, pType, nX, nY, nOffset);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
