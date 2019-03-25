@@ -283,7 +283,14 @@ public:
 class URLDlg;
 class AbstractURLDlg_Impl :public AbstractURLDlg
 {
-    DECL_ABSTDLG_BASE(AbstractURLDlg_Impl,URLDlg)
+protected:
+    std::unique_ptr<URLDlg> m_xDlg;
+public:
+    explicit AbstractURLDlg_Impl(std::unique_ptr<URLDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
     virtual OUString      GetURL() const override;
     virtual OUString      GetAltText() const override;
     virtual OUString      GetDesc() const override;
@@ -731,7 +738,7 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateGalleryThemePropertiesDialog(weld::Window* pParent,
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet) override;
-    virtual VclPtr<AbstractURLDlg> CreateURLDialog( vcl::Window* pParent,
+    virtual VclPtr<AbstractURLDlg> CreateURLDialog(weld::Window* pParent,
                                             const OUString& rURL, const OUString& rAltText, const OUString& rDescription,
                                             const OUString& rTarget, const OUString& rName,
                                             TargetList& rTargetList ) override;

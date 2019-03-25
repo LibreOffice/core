@@ -19,36 +19,30 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_CUIIMAPWND_HXX
 #define INCLUDED_CUI_SOURCE_INC_CUIIMAPWND_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/button.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/vclmedit.hxx>
-
+#include <vcl/weld.hxx>
 #include <sfx2/frame.hxx>
 
-class URLDlg : public ModalDialog
+class URLDlg : public weld::GenericDialogController
 {
-    VclPtr<Edit>                m_pEdtURL;
-    VclPtr<ComboBox>            m_pCbbTargets;
-    VclPtr<Edit>                m_pEdtName;
-    VclPtr<Edit>                m_pEdtAlternativeText;
-    VclPtr<VclMultiLineEdit>       m_pEdtDescription;
+    std::unique_ptr<weld::Entry> m_xEdtURL;
+    std::unique_ptr<weld::ComboBox> m_xCbbTargets;
+    std::unique_ptr<weld::Entry> m_xEdtName;
+    std::unique_ptr<weld::Entry> m_xEdtAlternativeText;
+    std::unique_ptr<weld::TextView> m_xEdtDescription;
 
 public:
 
-                        URLDlg( vcl::Window* pWindow,
-                                const OUString& rURL, const OUString& rAlternativeText, const OUString& rDescription,
-                                const OUString& rTarget, const OUString& rName,
-                                TargetList& rTargetList );
+                        URLDlg(weld::Window* pWindow,
+                               const OUString& rURL, const OUString& rAlternativeText, const OUString& rDescription,
+                               const OUString& rTarget, const OUString& rName,
+                               TargetList& rTargetList);
     virtual             ~URLDlg() override;
-    virtual void        dispose() override;
 
-    OUString            GetURL() const { return m_pEdtURL->GetText(); }
-    OUString            GetAltText() const { return m_pEdtAlternativeText->GetText(); }
-    OUString            GetDesc() const { return m_pEdtDescription->GetText(); }
-    OUString            GetTarget() const { return m_pCbbTargets->GetText(); }
-    OUString            GetName() const { return m_pEdtName->GetText(); }
+    OUString            GetURL() const { return m_xEdtURL->get_text(); }
+    OUString            GetAltText() const { return m_xEdtAlternativeText->get_text(); }
+    OUString            GetDesc() const { return m_xEdtDescription->get_text(); }
+    OUString            GetTarget() const { return m_xCbbTargets->get_active_text(); }
+    OUString            GetName() const { return m_xEdtName->get_text(); }
 };
 
 #endif
