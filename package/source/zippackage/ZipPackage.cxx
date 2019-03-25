@@ -477,7 +477,7 @@ void ZipPackage::parseContentType()
                     if ( aContentTypeInfo.getLength() != 2 )
                         throw io::IOException(THROW_WHERE );
 
-                    // set the implicit types first
+                    // set the implicit types fist
                     for ( nInd = 0; nInd < aContentTypeInfo[0].getLength(); nInd++ )
                         m_xRootFolder->setChildStreamsTypeByExtension( aContentTypeInfo[0][nInd] );
 
@@ -713,9 +713,9 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                     }
                     else if ( aNamedValue.Value >>= nFormatID )
                     {
-                        if ( nFormatID != embed::StorageFormats::PACKAGE
-                          && nFormatID != embed::StorageFormats::ZIP
-                          && nFormatID != embed::StorageFormats::OFOPXML )
+                        if (nFormatID != embed::StorageFormats::PACKAGE
+                            && nFormatID != embed::StorageFormats::ZIP
+                            && nFormatID != embed::StorageFormats::OFOPXML)
                             throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
 
                         m_nFormat = nFormatID;
@@ -1088,8 +1088,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
     pEntry->nSize = pEntry->nCompressedSize = -1;
     pEntry->nTime = ZipOutputStream::getCurrentDosTime();
 
-    // Convert vector into a uno::Sequence
-    // TODO/LATER: use Default entries in future
+    // Add default entries, the count must be updated manually when appending.
     uno::Sequence< beans::StringPair > aDefaultsSequence(4);
     // Add at least the standard default entries.
     aDefaultsSequence[0].First = "xml";
