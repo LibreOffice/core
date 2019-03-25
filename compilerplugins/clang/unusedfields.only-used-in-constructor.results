@@ -9,9 +9,9 @@ avmedia/source/vlc/wrapper/Types.hxx:44
 avmedia/source/vlc/wrapper/Types.hxx:45
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:43:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:43:7)
 avmedia/source/vlc/wrapper/Types.hxx:47
-    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:41:5)
+    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
 basegfx/source/polygon/b2dtrapezoid.cxx:202
@@ -32,10 +32,6 @@ chart2/source/controller/inc/dlg_View3D.hxx:53
     chart::View3DDialog m_aControllerLocker class chart::ControllerLockHelper
 chart2/source/controller/inc/RangeSelectionListener.hxx:63
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
-chart2/source/inc/MediaDescriptorHelper.hxx:56
-    apphelper::MediaDescriptorHelper m_aRegularProperties css::uno::Sequence<css::beans::PropertyValue>
-chart2/source/inc/MediaDescriptorHelper.hxx:59
-    apphelper::MediaDescriptorHelper m_aDeprecatedProperties css::uno::Sequence<css::beans::PropertyValue>
 connectivity/source/commontools/RowFunctionParser.cxx:374
     connectivity::(anonymous namespace)::ExpressionGrammar::definition unaryFunction ::boost::spirit::rule<ScannerT>
 connectivity/source/commontools/RowFunctionParser.cxx:375
@@ -134,10 +130,8 @@ cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
 cui/source/dialogs/colorpicker.cxx:719
     cui::ColorPickerDialog m_aColorPrevious class cui::ColorPreviewControl
-cui/source/factory/dlgfact.cxx:1357
+cui/source/factory/dlgfact.cxx:1346
     SvxMacroAssignDialog m_aItems class SfxItemSet
-cui/source/inc/cfg.hxx:335
-    SvxMenuEntriesListBox m_bIsInternalDrag _Bool
 cui/source/inc/cfgutil.hxx:242
     SvxScriptSelectorDialog m_aStylesInfo struct SfxStylesInfo_Impl
 cui/source/inc/cuitabarea.hxx:230
@@ -194,7 +188,7 @@ helpcompiler/inc/HelpCompiler.hxx:229
     HelpCompiler lang const std::string
 include/basic/basmgr.hxx:56
     BasicError nReason enum BasicErrorReason
-include/drawinglayer/primitive2d/textlayoutdevice.hxx:61
+include/drawinglayer/primitive2d/textlayoutdevice.hxx:58
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
 include/drawinglayer/texture/texture3d.hxx:62
     drawinglayer::texture::GeoTexSvxBitmapEx maBitmap class Bitmap
@@ -317,13 +311,13 @@ include/sfx2/msg.hxx:147
 include/sfx2/msg.hxx:147
     SfxType14 aAttrib struct SfxTypeAttrib [14]
 include/sfx2/msg.hxx:148
+    SfxType16 nAttribs sal_uInt16
+include/sfx2/msg.hxx:148
     SfxType16 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:148
     SfxType16 aAttrib struct SfxTypeAttrib [16]
 include/sfx2/msg.hxx:148
     SfxType16 pType const std::type_info *
-include/sfx2/msg.hxx:148
-    SfxType16 nAttribs sal_uInt16
 include/sfx2/msg.hxx:149
     SfxType17 nAttribs sal_uInt16
 include/sfx2/msg.hxx:149
@@ -504,8 +498,6 @@ sc/inc/token.hxx:400
     SingleDoubleRefModifier aDub struct ScComplexRefData
 sc/qa/unit/ucalc_column.cxx:104
     aInputs aName const char *
-sc/qa/unit/ucalc_formula.cxx:3011
-      class Test *
 sc/source/core/data/document.cxx:1239
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch const sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1240
@@ -582,7 +574,7 @@ sd/source/ui/remotecontrol/ZeroconfService.hxx:36
     sd::ZeroconfService port const uint
 sd/source/ui/table/TableDesignPane.hxx:100
     sd::TableDesignPane aImpl const class sd::TableDesignWidget
-sd/source/ui/view/DocumentRenderer.cxx:1297
+sd/source/ui/view/DocumentRenderer.cxx:1317
     sd::DocumentRenderer::Implementation mxObjectShell const SfxObjectShellRef
 sd/source/ui/view/viewshel.cxx:1208
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock const sd::slidesorter::view::class SlideSorterView::DrawLock
@@ -597,11 +589,11 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition simple_type rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
+    PDFGrammar::definition null_object rule<ScannerT>
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition stringtype rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition boolean rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
-    PDFGrammar::definition null_object rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
     PDFGrammar::definition name rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:262
@@ -613,9 +605,9 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     PDFGrammar::definition array rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
-    PDFGrammar::definition dict_begin rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     PDFGrammar::definition dict_end rule<ScannerT>
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
+    PDFGrammar::definition dict_begin rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     PDFGrammar::definition value rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
@@ -718,32 +710,32 @@ sw/inc/unosett.hxx:145
     SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
 sw/qa/core/test_ToxTextGenerator.cxx:141
     ToxTextGeneratorWithMockedChapterField mChapterFieldType class SwChapterFieldType
-sw/qa/extras/uiwriter/uiwriter.cxx:4017
+sw/qa/extras/layout/layout.cxx:2600
+      class SvtSysLocaleOptions &
+sw/qa/extras/uiwriter/uiwriter.cxx:4026
     IdleTask maIdle class Idle
 sw/source/core/crsr/crbm.cxx:66
     (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
 sw/source/core/inc/swfont.hxx:985
     SvStatistics nGetStretchTextSize sal_uInt16
-sw/source/core/layout/dbg_lay.cxx:170
+sw/source/core/layout/dbg_lay.cxx:171
     SwImplEnterLeave nAction const enum DbgAction
 sw/source/core/text/inftxt.hxx:686
     SwTextSlot aText class rtl::OUString
-sw/source/core/text/porfld.cxx:141
+sw/source/core/text/porfld.cxx:142
     SwFieldSlot aText class rtl::OUString
 sw/source/ui/dbui/mmaddressblockpage.hxx:208
     SwCustomizeAddressBlockDialog m_aTextFilter class TextFilter
 sw/source/uibase/docvw/romenu.hxx:35
     SwReadOnlyPopup m_aBuilder class VclBuilder
+sw/source/uibase/inc/condedit.hxx:44
+    ConditionEdit m_aDropTargetHelper class ConditionEditDropTarget
 sw/source/uibase/inc/glossary.hxx:93
     SwGlossaryDlg m_aNoSpaceFilter class TextFilter
 sw/source/uibase/inc/olmenu.hxx:77
     SwSpellPopup m_aBuilder class VclBuilder
 sw/source/uibase/inc/olmenu.hxx:86
     SwSpellPopup m_nLangParaMenuId const sal_uInt16
-sw/source/uibase/inc/regionsw.hxx:254
-    SwInsertSectionTabDialog m_nNotePageId sal_uInt16
-sw/source/uibase/inc/regionsw.hxx:274
-    SwSectionPropertyTabDialog m_nNotePageId sal_uInt16
 sw/source/uibase/inc/uivwimp.hxx:95
     SwView_Impl xTmpSelDocSh const class SfxObjectShellLock
 sw/source/uibase/inc/unodispatch.hxx:46
@@ -804,15 +796,15 @@ vcl/inc/WidgetThemeLibrary.hxx:90
     vcl::ControlDrawParameters eState enum ControlState
 vcl/inc/WidgetThemeLibrary.hxx:106
     vcl::WidgetThemeLibrary_t nSize uint32_t
-vcl/source/app/salvtables.cxx:2041
+vcl/source/app/salvtables.cxx:2055
     SalInstanceEntry m_aTextFilter class (anonymous namespace)::WeldTextFilter
-vcl/source/app/salvtables.cxx:4013
+vcl/source/app/salvtables.cxx:4098
     SalInstanceComboBoxWithEdit m_aTextFilter class (anonymous namespace)::WeldTextFilter
 vcl/source/gdi/jobset.cxx:36
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:37
     ImplOldJobSetupData cPortName char [32]
-vcl/unx/gtk3/gtk3gtkinst.cxx:2882
+vcl/unx/gtk3/gtk3gtkinst.cxx:3004
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     HyperLink atk_hyper_link const AtkHyperlink

@@ -302,7 +302,7 @@ include/connectivity/sdbcx/VUser.hxx:54
     connectivity::sdbcx::OUser m_pGroups rtl::Reference<OGroups>
 include/connectivity/sqlparse.hxx:109
     connectivity::OSQLParser_Data aErrors ::connectivity::SQLError
-include/drawinglayer/processor3d/defaultprocessor3d.hxx:94
+include/drawinglayer/processor3d/defaultprocessor3d.hxx:90
     drawinglayer::processor3d::DefaultProcessor3D maDrawinglayerOpt const class SvtOptionsDrawinglayer
 include/editeng/brushitem.hxx:53
     SvxBrushItem maSecOptions class SvtSecurityOptions
@@ -373,7 +373,7 @@ include/test/sheet/xnamedranges.hxx:49
 include/test/sheet/xspreadsheets2.hxx:46
     apitest::XSpreadsheets2 xDocument css::uno::Reference<css::sheet::XSpreadsheetDocument>
 include/unoidl/unoidl.hxx:443
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/noel/disk2/libo6/include/unoidl/unoidl.hxx:443:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/noel/disk2/libo4/include/unoidl/unoidl.hxx:443:5)
 include/unoidl/unoidl.hxx:444
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:445
@@ -426,7 +426,7 @@ oox/qa/token/tokenmap-test.cxx:34
     oox::TokenmapTest tokenMap const class oox::TokenMap
 oox/qa/unit/vba_compression.cxx:71
     TestVbaCompression m_directories const test::Directories
-oox/source/drawingml/chart/objectformatter.cxx:711
+oox/source/drawingml/chart/objectformatter.cxx:712
     oox::drawingml::chart::ObjectFormatterData maFromLocale const struct com::sun::star::lang::Locale
 oox/source/drawingml/diagram/diagramlayoutatoms.hxx:234
     oox::drawingml::ChooseAtom maEmptyChildren const std::vector<LayoutAtomPtr>
@@ -438,13 +438,13 @@ registry/source/reflwrit.cxx:181
     CPInfo::(anonymous) aUik struct RTUik *
 reportdesign/source/ui/inc/ColorListener.hxx:35
     rptui::OColorListener m_aColorConfig const svtools::ColorConfig
-sal/osl/unx/process.cxx:826
+sal/osl/unx/process.cxx:824
     osl_procStat signal char [24]
-sal/osl/unx/process.cxx:827
+sal/osl/unx/process.cxx:825
     osl_procStat blocked char [24]
-sal/osl/unx/process.cxx:828
+sal/osl/unx/process.cxx:826
     osl_procStat sigignore char [24]
-sal/osl/unx/process.cxx:829
+sal/osl/unx/process.cxx:827
     osl_procStat sigcatch char [24]
 sal/rtl/alloc_arena.hxx:100
     rtl_arena_st m_hash_table_0 struct rtl_arena_segment_type *[64]
@@ -459,7 +459,7 @@ sal/rtl/uuid.cxx:65
 sc/inc/compiler.hxx:126
     ScRawToken::(anonymous union)::(anonymous) eItem const class ScTableRefToken::Item
 sc/inc/compiler.hxx:127
-    ScRawToken::(anonymous) table const struct (anonymous struct at /media/noel/disk2/libo6/sc/inc/compiler.hxx:124:9)
+    ScRawToken::(anonymous) table const struct (anonymous struct at /media/noel/disk2/libo4/sc/inc/compiler.hxx:124:9)
 sc/inc/compiler.hxx:132
     ScRawToken::(anonymous) pMat class ScMatrix *const
 sc/inc/formulagroup.hxx:39
@@ -628,19 +628,19 @@ sw/source/core/access/accfrmobjmap.hxx:100
     SwAccessibleChildMap maMap std::map<key_type, mapped_type, key_compare>
 sw/source/core/access/acchypertextdata.hxx:40
     SwAccessibleHyperTextData maMap std::map<key_type, mapped_type, key_compare>
-sw/source/core/access/accmap.cxx:100
+sw/source/core/access/accmap.cxx:101
     SwAccessibleContextMap_Impl maMap std::map<key_type, mapped_type, key_compare>
-sw/source/core/access/accmap.cxx:235
+sw/source/core/access/accmap.cxx:236
     SwAccessibleShapeMap_Impl maMap std::map<key_type, mapped_type, SwShapeFunc>
-sw/source/core/access/accmap.cxx:588
+sw/source/core/access/accmap.cxx:589
     SwAccessibleEventMap_Impl maMap std::map<key_type, mapped_type, key_compare>
-sw/source/core/access/accmap.cxx:628
+sw/source/core/access/accmap.cxx:629
     SwAccessibleSelectedParas_Impl maMap std::map<key_type, mapped_type, key_compare>
 sw/source/core/doc/swstylemanager.cxx:58
     SwStyleManager aAutoCharPool class StylePool
 sw/source/core/doc/swstylemanager.cxx:59
     SwStyleManager aAutoParaPool class StylePool
-sw/source/core/doc/tblrwcl.cxx:83
+sw/source/core/doc/tblrwcl.cxx:84
     CpyTabFrame::(anonymous) nSize SwTwips
 sw/source/core/inc/swblocks.hxx:68
     SwImpBlocks m_bInPutMuchBlocks _Bool
@@ -658,14 +658,8 @@ sw/source/uibase/dbui/mmconfigitem.cxx:110
     SwMailMergeConfigItem_Impl m_aMaleGreetingLines std::vector<OUString>
 sw/source/uibase/dbui/mmconfigitem.cxx:112
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
-sw/source/uibase/inc/dbtree.hxx:69
-    DBTreeList bShowColumns _Bool
 sw/source/uibase/inc/fldmgr.hxx:79
     SwInsertField_Data m_aDBDataSource const css::uno::Any
-sw/source/uibase/inc/numfmtlb.hxx:74
-    SwNumFormatListBox bOneArea _Bool
-sw/source/uibase/inc/numfmtlb.hxx:77
-    SwNumFormatListBox bShowLanguageControl _Bool
 toolkit/source/awt/vclxtoolkit.cxx:435
     (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
 ucb/source/ucp/gio/gio_mount.hxx:46
@@ -946,7 +940,7 @@ vcl/source/treelist/headbar.cxx:42
     ImplHeadItem maImage const class Image
 vcl/source/window/menuitemlist.hxx:58
     MenuItemData aAccessibleName const class rtl::OUString
-vcl/unx/gtk3/gtk3gtkinst.cxx:1165
+vcl/unx/gtk3/gtk3gtkinst.cxx:1167
      out gpointer *
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent const AtkObject
