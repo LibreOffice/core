@@ -25,6 +25,7 @@
 #include <tools/debug.hxx>
 #include <tools/solar.h>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -54,10 +55,11 @@ enum class ConfigFlags {
     UseEnhancedFields            = 0x0100000,
     WordWbctbl                   = 0x0200000,
     SmartArtShapeLoad            = 0x0400000,
-    CharBackgroundToHighlighting = 0x8000000
+    CharBackgroundToHighlighting = 0x8000000,
+    CreateMSOLockFiles           = 0x2000000
 };
 namespace o3tl {
-    template<> struct typed_flags<ConfigFlags> : is_typed_flags<ConfigFlags, 0x87fff3f> {};
+    template<> struct typed_flags<ConfigFlags> : is_typed_flags<ConfigFlags, 0xf7fff3f> {};
 }
 
 class SvtAppFilterOptions_Impl : public utl::ConfigItem
@@ -246,7 +248,8 @@ struct SvtFilterOptions_Impl
             ConfigFlags::ImpressSave |
             ConfigFlags::UseEnhancedFields |
             ConfigFlags::SmartArtShapeLoad |
-            ConfigFlags::CharBackgroundToHighlighting;
+            ConfigFlags::CharBackgroundToHighlighting|
+            ConfigFlags::CreateMSOLockFiles;
         Load();
     }
 
@@ -318,7 +321,8 @@ const Sequence<OUString>& GetPropertyNames()
             "Export/EnableWordPreview",         // 10
             "Import/ImportWWFieldsAsEnhancedFields", // 11
             "Import/SmartArtToShapes",          // 12
-            "Export/CharBackgroundToHighlighting"    // 13
+            "Export/CharBackgroundToHighlighting",   // 13
+            "Import/CreateMSOLockFiles"         // 14
     };
     return aNames;
 }
@@ -356,6 +360,7 @@ static ConfigFlags lcl_GetFlag(sal_Int32 nProp)
         case 11: nFlag = ConfigFlags::UseEnhancedFields; break;
         case 12: nFlag = ConfigFlags::SmartArtShapeLoad; break;
         case 13: nFlag = ConfigFlags::CharBackgroundToHighlighting; break;
+        case 14: nFlag = ConfigFlags::CreateMSOLockFiles; break;
 
         default: OSL_FAIL("illegal value");
     }
@@ -623,7 +628,6 @@ bool SvtFilterOptions::IsEnableWordPreview() const
     return pImpl->IsFlag( ConfigFlags::EnableWordPreview );
 }
 
-
 bool SvtFilterOptions::IsCharBackground2Highlighting() const
 {
     return pImpl->IsFlag( ConfigFlags::CharBackgroundToHighlighting );
@@ -643,6 +647,17 @@ void SvtFilterOptions::SetCharBackground2Highlighting()
 void SvtFilterOptions::SetCharBackground2Shading()
 {
     pImpl->SetFlag( ConfigFlags::CharBackgroundToHighlighting, false );
+    SetModified();
+}
+
+bool SvtFilterOptions::IsMSOLockFileCreationIsEnabled() const
+{
+    return pImpl->IsFlag( ConfigFlags::CreateMSOLockFiles );
+}
+
+void SvtFilterOptions::EnableMSOLockFileCreation(bool bEnable)
+{
+    pImpl->SetFlag( ConfigFlags::CreateMSOLockFiles, bEnable );
     SetModified();
 }
 

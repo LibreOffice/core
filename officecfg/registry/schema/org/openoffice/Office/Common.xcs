@@ -3827,6 +3827,14 @@
             </info>
             <value>true</value>
           </prop>
+          <prop oor:name="CreateMSOLockFiles" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Specifies if LO should create MSO lock files next to the LO lock files
+              when openning a file. This makes MSO to be able to read the user name from
+              the lock file and show it for the user.</desc>
+            </info>
+            <value>false</value>
+          </prop>
         </group>
         <group oor:name="Export">
           <info>
