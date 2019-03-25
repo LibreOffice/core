@@ -45,7 +45,10 @@ SwChildWinWrapper::SwChildWinWrapper(vcl::Window *pParentWindow, sal_uInt16 nId)
 
 IMPL_LINK_NOARG(SwChildWinWrapper, UpdateHdl, Timer *, void)
 {
-    GetController()->Activate();    // update dialog
+    if (GetController())
+        GetController()->Activate();    // update dialog
+    else if (GetWindow())
+        GetWindow()->Activate();    // update dialog
 }
 
 // newly initialise dialog after Doc switch
