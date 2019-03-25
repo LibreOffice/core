@@ -162,7 +162,8 @@ ScTableConditionalFormat::ScTableConditionalFormat(
                 {
                     ScCondFormatEntryItem aItem;
                     const ScFormatEntry* pFrmtEntry = pFormat->GetEntry(i);
-                    if(pFrmtEntry->GetType() != ScFormatEntry::Type::Condition)
+                    if(pFrmtEntry->GetType() != ScFormatEntry::Type::Condition ||
+                       pFrmtEntry->GetType() != ScFormatEntry::Type::ExtCondition)
                         continue;
 
                     const ScCondFormatEntry* pFormatEntry = static_cast<const ScCondFormatEntry*>(pFrmtEntry);
