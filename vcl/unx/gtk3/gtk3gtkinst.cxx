@@ -3570,6 +3570,11 @@ private:
             return;
         }
 
+        // check if we are allowed leave before attempting to resplit the notebooks
+        bool bAllow = !m_aLeavePageHdl.IsSet() || m_aLeavePageHdl.Call(get_current_page_ident());
+        if (!bAllow)
+            return;
+
         disable_notify_events();
 
         // take the overflow pages, and put them back at the end of the normal one
@@ -3579,11 +3584,13 @@ private:
         std::swap(m_nStartTabCount, m_nEndTabCount);
         split_notebooks();
 
+        gtk_notebook_set_current_page(m_pNotebook, nNewPage);
+
         enable_notify_events();
 
-        // we want to call this outside enable_notify_events so that the main
-        // notebook switch-page callback is triggered
-        gtk_notebook_set_current_page(m_pNotebook, nNewPage);
+        // trigger main notebook switch-page callback
+        OString sNewIdent(get_page_ident(m_pNotebook, nNewPage));
+        m_aEnterPageHdl.Call(sNewIdent);
     }
 
     static OString get_page_ident(GtkNotebook *pNotebook, guint nPage)
