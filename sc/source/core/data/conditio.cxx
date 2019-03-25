@@ -189,6 +189,7 @@ ScConditionEntry::ScConditionEntry( const ScConditionEntry& r ) :
     bRelRef2(r.bRelRef2),
     bFirstRun(true),
     mpListener(new ScFormulaListener(r.mpDoc)),
+    eConditionType( r.eConditionType ),
     pCondFormat(r.pCondFormat)
 {
     // ScTokenArray copy ctor creates a flat copy
@@ -221,6 +222,7 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
     bRelRef2(r.bRelRef2),
     bFirstRun(true),
     mpListener(new ScFormulaListener(pDocument)),
+    eConditionType( r.eConditionType),
     pCondFormat(r.pCondFormat)
 {
     // Real copy of the formulas (for Ref Undo)
@@ -236,7 +238,8 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
 ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
         const OUString& rExpr1, const OUString& rExpr2, ScDocument* pDocument, const ScAddress& rPos,
         const OUString& rExprNmsp1, const OUString& rExprNmsp2,
-        FormulaGrammar::Grammar eGrammar1, FormulaGrammar::Grammar eGrammar2 ) :
+        FormulaGrammar::Grammar eGrammar1, FormulaGrammar::Grammar eGrammar2,
+        Type eType ) :
     ScFormatEntry(pDocument),
     eOp(eOper),
     nOptions(0),
@@ -253,6 +256,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     bRelRef2(false),
     bFirstRun(true),
     mpListener(new ScFormulaListener(pDocument)),
+    eConditionType(eType),
     pCondFormat(nullptr)
 {
     Compile( rExpr1, rExpr2, rExprNmsp1, rExprNmsp2, eGrammar1, eGrammar2, false );
@@ -1457,9 +1461,11 @@ ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
                                         const OUString& rStyle,
                                         const OUString& rExprNmsp1, const OUString& rExprNmsp2,
                                         FormulaGrammar::Grammar eGrammar1,
-                                        FormulaGrammar::Grammar eGrammar2 ) :
-    ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, rExprNmsp1, rExprNmsp2, eGrammar1, eGrammar2 ),
-    aStyleName( rStyle )
+                                        FormulaGrammar::Grammar eGrammar2,
+                                        ScFormatEntry::Type eType ) :
+    ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, rExprNmsp1, rExprNmsp2, eGrammar1, eGrammar2, eType ),
+    aStyleName( rStyle ),
+    eCondFormatType( eType )
 {
 }
 
@@ -1474,13 +1480,15 @@ ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
 
 ScCondFormatEntry::ScCondFormatEntry( const ScCondFormatEntry& r ) :
     ScConditionEntry( r ),
-    aStyleName( r.aStyleName )
+    aStyleName( r.aStyleName ),
+    eCondFormatType( r.eCondFormatType)
 {
 }
 
 ScCondFormatEntry::ScCondFormatEntry( ScDocument* pDocument, const ScCondFormatEntry& r ) :
     ScConditionEntry( pDocument, r ),
-    aStyleName( r.aStyleName )
+    aStyleName( r.aStyleName ),
+    eCondFormatType( r.eCondFormatType)
 {
 }
 
@@ -1785,7 +1793,8 @@ const OUString& ScConditionalFormat::GetCellStyle( ScRefCellValue& rCell, const 
 {
     for (const auto& rxEntry : maEntries)
     {
-        if(rxEntry->GetType() == ScFormatEntry::Type::Condition)
+        if(rxEntry->GetType() == ScFormatEntry::Type::Condition ||
+           rxEntry->GetType() == ScFormatEntry::Type::ExtCondition)
         {
             const ScCondFormatEntry& rEntry = static_cast<const ScCondFormatEntry&>(*rxEntry);
             if (rEntry.IsCellValid(rCell, rPos))
@@ -1807,7 +1816,9 @@ ScCondFormatData ScConditionalFormat::GetData( ScRefCellValue& rCell, const ScAd
     ScCondFormatData aData;
     for(const auto& rxEntry : maEntries)
     {
-        if(rxEntry->GetType() == ScFormatEntry::Type::Condition && aData.aStyleName.isEmpty())
+        if( (rxEntry->GetType() == ScFormatEntry::Type::Condition ||
+             rxEntry->GetType() == ScFormatEntry::Type::ExtCondition) &&
+             aData.aStyleName.isEmpty())
         {
             const ScCondFormatEntry& rEntry = static_cast<const ScCondFormatEntry&>(*rxEntry);
             if (rEntry.IsCellValid(rCell, rPos))
@@ -1847,14 +1858,16 @@ void ScConditionalFormat::DoRepaint()
 void ScConditionalFormat::CompileAll()
 {
     for(auto& rxEntry : maEntries)
-        if(rxEntry->GetType() == ScFormatEntry::Type::Condition)
+        if(rxEntry->GetType() == ScFormatEntry::Type::Condition ||
+           rxEntry->GetType() == ScFormatEntry::Type::ExtCondition)
             static_cast<ScCondFormatEntry&>(*rxEntry).CompileAll();
 }
 
 void ScConditionalFormat::CompileXML()
 {
     for(auto& rxEntry : maEntries)
-        if(rxEntry->GetType() == ScFormatEntry::Type::Condition)
+        if(rxEntry->GetType() == ScFormatEntry::Type::Condition ||
+           rxEntry->GetType() == ScFormatEntry::Type::ExtCondition)
             static_cast<ScCondFormatEntry&>(*rxEntry).CompileXML();
 }
 
@@ -1977,7 +1990,8 @@ void ScConditionalFormat::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
 void ScConditionalFormat::RenameCellStyle(const OUString& rOld, const OUString& rNew)
 {
     for(const auto& rxEntry : maEntries)
-        if(rxEntry->GetType() == ScFormatEntry::Type::Condition)
+        if(rxEntry->GetType() == ScFormatEntry::Type::Condition ||
+           rxEntry->GetType() == ScFormatEntry::Type::ExtCondition)
         {
             ScCondFormatEntry& rFormat = static_cast<ScCondFormatEntry&>(*rxEntry);
             if(rFormat.GetStyle() == rOld)
@@ -1989,7 +2003,8 @@ bool ScConditionalFormat::MarkUsedExternalReferences() const
 {
     bool bAllMarked = false;
     for(const auto& rxEntry : maEntries)
-        if(rxEntry->GetType() == ScFormatEntry::Type::Condition)
+        if(rxEntry->GetType() == ScFormatEntry::Type::Condition ||
+           rxEntry->GetType() == ScFormatEntry::Type::ExtCondition)
         {
             const ScCondFormatEntry& rFormat = static_cast<const ScCondFormatEntry&>(*rxEntry);
             bAllMarked = rFormat.MarkUsedExternalReferences();
@@ -2020,7 +2035,8 @@ void ScConditionalFormat::CalcAll()
 {
     for(const auto& rxEntry : maEntries)
     {
-        if (rxEntry->GetType() == ScFormatEntry::Type::Condition)
+        if (rxEntry->GetType() == ScFormatEntry::Type::Condition ||
+            rxEntry->GetType() == ScFormatEntry::Type::ExtCondition)
         {
             ScCondFormatEntry& rFormat = static_cast<ScCondFormatEntry&>(*rxEntry);
             rFormat.CalcAll();

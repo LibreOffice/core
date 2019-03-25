@@ -133,6 +133,7 @@ OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rFormat, c
         switch(rFormat.GetEntry(0)->GetType())
         {
             case ScFormatEntry::Type::Condition:
+            case ScFormatEntry::Type::ExtCondition:
                 {
                     const ScConditionEntry* pEntry = static_cast<const ScConditionEntry*>(rFormat.GetEntry(0));
                     ScConditionMode eMode = pEntry->GetOperation();

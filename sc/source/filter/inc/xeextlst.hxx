@@ -87,6 +87,17 @@ private:
     sal_Int32 nIndex;
 };
 
+class XclExpExtCF : public XclExpRecordBase, protected XclExpRoot
+{
+public:
+    explicit XclExpExtCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormat );
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
+
+private:
+    OUString aFormula;
+    const ScCondFormatEntry mrFormat;
+};
+
 class XclExpExtDataBar : public XclExpRecordBase, protected XclExpRoot
 {
 public:
@@ -133,6 +144,7 @@ private:
     OString const maId;
     const char* pType;
     sal_Int32 const mnPriority;
+    const char* mOperator;
 };
 
 typedef std::shared_ptr<XclExpExt> XclExpExtRef;
