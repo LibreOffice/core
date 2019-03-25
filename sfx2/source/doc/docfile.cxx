@@ -115,6 +115,7 @@
 #include <sot/storage.hxx>
 #include <unotools/saveopt.hxx>
 #include <svl/documentlockfile.hxx>
+#include <svl/msodocumentlockfile.hxx>
 #include <com/sun/star/document/DocumentRevisionListPersistence.hpp>
 
 #include <helper.hxx>
@@ -131,6 +132,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <vcl/weld.hxx>
 #include <tools/diagnose_ex.h>
+#include <unotools/fltrcfg.hxx>
 
 #include <com/sun/star/io/WrongFormatException.hpp>
 
@@ -1414,6 +1416,12 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool b
                         try
                         {
                             ::svt::DocumentLockFile aLockFile( pImpl->m_aLogicName );
+
+                            std::unique_ptr<svt::MSODocumentLockFile> pMSOLockFile = nullptr;
+                            const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
+                            if(rOpt.IsMSOLockFileCreationIsEnabled())
+                                pMSOLockFile.reset(new svt::MSODocumentLockFile(pImpl->m_aLogicName));
+
                             bool  bIoErr = false;
 
                             if (!bHandleSysLocked)
@@ -1421,6 +1429,8 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool b
                                 try
                                 {
                                     bResult = aLockFile.CreateOwnLockFile();
+                                    if(pMSOLockFile)
+                                        bResult &= pMSOLockFile->CreateOwnLockFile();
                                 }
                                 catch (const uno::Exception&)
                                 {
@@ -1445,6 +1455,9 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool b
                                     bResult = true;
                                     // take the ownership over the lock file
                                     aLockFile.OverwriteOwnLockFile();
+
+                                    if(pMSOLockFile)
+                                        pMSOLockFile->OverwriteOwnLockFile();
                                 }
                             }
 
@@ -1499,6 +1512,9 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool b
                                     {
                                         // take the ownership over the lock file
                                         bResult = aLockFile.OverwriteOwnLockFile();
+
+                                        if(pMSOLockFile)
+                                            pMSOLockFile->OverwriteOwnLockFile();
                                     }
                                     else if (bLoading && !bHandleSysLocked)
                                         eResult = LockFileResult::FailedLockFile;
@@ -3054,6 +3070,31 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
     }
     catch( const uno::Exception& )
     {}
+
+    const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
+    if(rOpt.IsMSOLockFileCreationIsEnabled())
+    {
+        ::svt::MSODocumentLockFile aMSOLockFile( pImpl->m_aLogicName );
+
+        try
+        {
+            pImpl->m_bLocked = false;
+            // TODO/LATER: A warning could be shown in case the file is not the own one
+            aMSOLockFile.RemoveFile();
+        }
+        catch( const io::WrongFormatException& )
+        {
+            try
+            {
+                // erase the empty or corrupt file
+                aMSOLockFile.RemoveFileDirectly();
+            }
+            catch( const uno::Exception& )
+            {}
+        }
+        catch( const uno::Exception& )
+        {}
+    }
 #endif
 }
 

@@ -203,8 +203,8 @@
                 <property name="can_focus">False</property>
                 <property name="layout_style">start</property>
                 <child>
-                  <object class="GtkCheckButton" id="enable_mso_lockfile_button">
-                    <property name="label" translatable="yes" context="optfltrembedpage|enable_mso_lockfile_button">Create MSO lock files</property>
+                  <object class="GtkCheckButton" id="mso_lockfile">
+                    <property name="label" translatable="yes" context="optfltrembedpage|mso_lockfile">Create MSO lock file</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
