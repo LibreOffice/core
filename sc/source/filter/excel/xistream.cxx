@@ -871,7 +871,9 @@ OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
         }
 
         *pcEndChar = '\0';
-        aRet.append( pcBuffer.get(), pcUniChar - pcBuffer.get()  );
+        // this has the side-effect of only copying as far as the first null, which appears to be intentional. e.g.
+        // see tdf#124318
+        aRet.append( pcBuffer.get() );
 
         nCharsLeft = nCharsLeft - nReadSize;
         if( nCharsLeft > 0 )
