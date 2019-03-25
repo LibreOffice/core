@@ -28,6 +28,7 @@
 #include <vcl/window.hxx>
 
 #include <sfx2/chalign.hxx>
+#include <sfx2/basedlgs.hxx>
 
 namespace com::sun::star::frame { class XFrame; }
 
