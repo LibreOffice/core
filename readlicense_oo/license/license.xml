@@ -207,6 +207,42 @@
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
     </div>
+    <div class="EPOXY">
+        <h2>Epoxy</h2>
+        <p>The following software may be included in this product: epoxy.</p>
+        <p>The libepoxy project code is covered by the MIT license:</p>
+        <blockquote>
+            <p>Copyright © 2013-2014 Intel Corporation</p>
+            <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+            associated documentation files (the "Software"), to deal in the Software without restriction, including
+            without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+            copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
+            following conditions:</p>
+            <p>The above copyright notice and this permission notice (including the next paragraph) shall be included
+            in all copies or substantial portions of the Software.</p>
+            <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+            LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
+            EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+            IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+            USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+        </blockquote>
+        <p>The generated code is derived from Khronos's xml files, which appear under the following license:</p>
+        <blockquote>
+            <p>Copyright (c) 2013 The Khronos Group Inc.</p>
+            <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and/or
+            associated documentation files (the "Materials"), to deal in the Materials without restriction, including
+            without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+            copies of the Materials, and to permit persons to whom the Materials are furnished to do so, subject to the
+            following conditions:</p>
+            <p>The above copyright notice and this permission notice shall be included in all copies or substantial
+            portions of the Materials.</p>
+            <p>THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+            LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
+            EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+            IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE MATERIALS OR
+            THE USE OR OTHER DEALINGS IN THE MATERIALS.</p>
+        </blockquote>
+    </div>
     <div class="EXPAT">
         <h2>expat XML Parser Toolkit</h2>
         <p>The following software may be included in this product: expat XML Parser Toolkit. Use of any of this
