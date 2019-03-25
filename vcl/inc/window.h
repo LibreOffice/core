@@ -159,6 +159,7 @@ struct ImplFrameData
     bool                mbInSysObjFocusHdl;     //< within a SysChildren's GetFocus handler
     bool                mbInSysObjToTopHdl;     //< within a SysChildren's ToTop handler
     bool                mbSysObjFocus;          //< does a SysChild have focus
+    sal_Int32           mnTouchPanPosition;
 
     css::uno::Reference< css::datatransfer::dnd::XDragSource > mxDragSource;
     css::uno::Reference< css::datatransfer::dnd::XDropTarget > mxDropTarget;

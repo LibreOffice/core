@@ -755,6 +755,26 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
             }
             break;
 
+            case CommandEventId::Gesture:
+            {
+                const CommandGestureData* pData = rCmd.GetGestureData();
+                if (pData->meEventType == GestureEventType::PanningBegin)
+                {
+                    mpWindowImpl->mpFrameData->mnTouchPanPosition = pVScrl->GetThumbPos();
+                }
+                else if(pData->meEventType == GestureEventType::PanningUpdate)
+                {
+                    long nOriginalPosition = mpWindowImpl->mpFrameData->mnTouchPanPosition;
+                    pVScrl->DoScroll(nOriginalPosition + (pData->mfOffset));
+                }
+                if (pData->meEventType == GestureEventType::PanningEnd)
+                {
+                    mpWindowImpl->mpFrameData->mnTouchPanPosition = -1;
+                }
+                bRet = true;
+            }
+            break;
+
             case CommandEventId::AutoScroll:
             {
                 const CommandScrollData* pData = rCmd.GetAutoScrollData();

@@ -2506,6 +2506,10 @@ bool ImplListBox::EventNotify( NotifyEvent& rNEvt )
                 bDone = HandleScrollCommand( rCEvt, mpHScrollBar, mpVScrollBar );
             }
         }
+        else if (rCEvt.GetCommand() == CommandEventId::Gesture)
+        {
+            bDone = HandleScrollCommand(rCEvt, mpHScrollBar, mpVScrollBar);
+        }
     }
 
     return bDone || Window::EventNotify( rNEvt );
