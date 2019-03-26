@@ -299,7 +299,7 @@ void ScParallelismTest::testVLOOKUPSUM()
 {
     m_pDoc->InsertTab(0, "1");
 
-    const size_t nNumRows = 4096*4;
+    const size_t nNumRows = 2048;
     OUString aTableRef = "$A$1:$B$" + OUString::number(nNumRows);
     for (size_t i = 0; i < nNumRows; ++i)
     {
