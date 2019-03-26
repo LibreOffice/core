@@ -898,8 +898,8 @@ ImplSVEvent* Application::PostGestureEvent(VclEventId nEvent, vcl::Window* pWin,
     {
         Point aTransformedPosition(pGestureEvent->mnX, pGestureEvent->mnY);
 
-        aTransformedPosition.AdjustX(pWin->GetOutOffXPixel());
-        aTransformedPosition.AdjustY(pWin->GetOutOffYPixel());
+        aTransformedPosition.MoveX(pWin->GetOutOffXPixel());
+        aTransformedPosition.MoveY(pWin->GetOutOffYPixel());
 
         const GestureEvent aGestureEvent{
             sal_Int32(aTransformedPosition.X()),
