@@ -899,83 +899,21 @@ void SfxMedium::SetEncryptionDataToStorage_Impl()
 
 namespace
 {
-OUString tryMSOwnerFile(const INetURLObject& aLockfileURL)
-{
-    try
-    {
-        static osl::Mutex aMutex;
-        osl::MutexGuard aGuard(aMutex);
-        css::uno::Reference<css::ucb::XCommandEnvironment> xEnv;
-        ucbhelper::Content aSourceContent(
-            aLockfileURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), xEnv,
-            comphelper::getProcessComponentContext());
-
-        // Excel creates Owner Files with FILE_FLAG_DELETE_ON_CLOSE, so we need to open it with
-        // FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE share mode
-        css::uno::Reference<css::io::XInputStream> xStream = aSourceContent.openStreamNoLock();
-        if (!xStream)
-            return OUString();
-
-        const sal_Int32 nBufLen = 256;
-        css::uno::Sequence<sal_Int8> aBuf(nBufLen);
-        const sal_Int32 nRead = xStream->readBytes(aBuf, nBufLen);
-        xStream->closeInput();
-        if (nRead >= 162)
-        {
-            // Reverse engineering of MS Office Owner Files format (MS Office 2016 tested).
-            // It starts with a single byte with name length, after which characters of username go
-            // in current Windows 8-bit codepage.
-            // For Word lockfiles, the name is followed by zero bytes up to position 54.
-            // For PowerPoint lockfiles, the name is followed by a single zero byte, and then 0x20
-            // bytes up to position 55.
-            // For Excel lockfiles, the name is followed by 0x20 bytes up to position 55.
-            // At those positions in each type of lockfile, a name length 2-byte word goes, followed
-            // by UTF-16-LE-encoded copy of username. Spaces or some garbage follow up to the end of
-            // the lockfile (total 162 bytes for Word, 165 bytes for Excel/PowerPoint).
-            // Apparently MS Office does not allow username to be longer than 52 characters (trying
-            // to enter more in its options dialog results in error messages stating this limit).
-            const int nACPLen = aBuf[0];
-            if (nACPLen > 0 && nACPLen <= 52) // skip wrong format
-            {
-                const sal_Int8* pBuf = aBuf.getConstArray() + 54;
-                int nUTF16Len = *pBuf; // try Word position
-                // If UTF-16 length is 0x20, then ACP length is also less than maximal, which means
-                // that in Word lockfile case, at least two preceeding bytes would be zero. Both
-                // Excel and PowerPoint lockfiles would have at least one of those bytes non-zero.
-                if (nUTF16Len == 0x20 && (*(pBuf - 1) != 0 || *(pBuf - 2) != 0))
-                    nUTF16Len = *++pBuf; // use Excel/PowerPoint position
-
-                if (nUTF16Len > 0 && nUTF16Len <= 52) // skip wrong format
-                    return OUString(reinterpret_cast<const sal_Unicode*>(pBuf + 2), nUTF16Len);
-            }
-        }
-    }
-    catch (...) {} // we don't ever need to care about any exceptions here
-
-    return OUString();
-}
 
 OUString tryMSOwnerFiles(const OUString& sDocURL)
 {
-    INetURLObject aURL(sDocURL);
-    if (aURL.HasError())
-        return OUString();
-    const OUString sFileName = aURL.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
-    if (sFileName.isEmpty())
-        return OUString();
-    const OUString sFileExt = aURL.GetFileExtension();
-    const sal_Int32 nFileNameLen
-        = sFileName.getLength() - sFileExt.getLength() - (sFileExt.isEmpty() ? 0 : 1);
-    // Word, Excel, PowerPoint all prepend the filename with "~$".
-    aURL.SetName("~$" + sFileName, INetURLObject::EncodeMechanism::All);
-    OUString sUserData = tryMSOwnerFile(aURL);
-    // Additionally, Word strips first chars of the filename: 1 for length 7, 2 for length >=8.
-    if (sUserData.isEmpty() && nFileNameLen > 6)
+    svt::MSODocumentLockFile aMSOLockFile(sDocURL);
+    LockFileEntry aData;
+    try
     {
-        aURL.SetName("~$" + sFileName.copy((nFileNameLen == 7) ? 1 : 2),
-                     INetURLObject::EncodeMechanism::All);
-        sUserData = tryMSOwnerFile(aURL);
+        aData = aMSOLockFile.GetLockData();
     }
+    catch( const uno::Exception& )
+    {
+        return OUString();
+    }
+
+    OUString sUserData = aData[LockFileComponent::OOOUSERNAME];
 
     if (!sUserData.isEmpty())
         sUserData += " (MS Office)"; // Mention the used office suite
