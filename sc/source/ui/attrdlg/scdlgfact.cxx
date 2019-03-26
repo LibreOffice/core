@@ -162,7 +162,10 @@ short AbstractScNamePasteDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractScPivotFilterDlg_Impl);
+short AbstractScPivotFilterDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractScDPFunctionDlg_Impl::Execute()
 {
@@ -603,9 +606,9 @@ std::vector<OUString> AbstractScNamePasteDlg_Impl::GetSelectedNames() const
     return m_xDlg->GetSelectedNames();
 }
 
-const ScQueryItem&   AbstractScPivotFilterDlg_Impl::GetOutputItem()
+const ScQueryItem& AbstractScPivotFilterDlg_Impl::GetOutputItem()
 {
-    return pDlg->GetOutputItem();
+    return m_xDlg->GetOutputItem();
 }
 
 PivotFunc AbstractScDPFunctionDlg_Impl::GetFuncMask() const
@@ -903,11 +906,10 @@ VclPtr<AbstractScNamePasteDlg> ScAbstractDialogFactory_Impl::CreateScNamePasteDl
     return VclPtr<AbstractScNamePasteDlg_Impl>::Create(std::make_unique<ScNamePasteDlg>(pParent, pShell));
 }
 
-VclPtr<AbstractScPivotFilterDlg> ScAbstractDialogFactory_Impl::CreateScPivotFilterDlg(vcl::Window* pParent,
+VclPtr<AbstractScPivotFilterDlg> ScAbstractDialogFactory_Impl::CreateScPivotFilterDlg(weld::Window* pParent,
     const SfxItemSet& rArgSet, sal_uInt16 nSourceTab)
 {
-    VclPtr<ScPivotFilterDlg> pDlg = VclPtr<ScPivotFilterDlg>::Create(pParent, rArgSet, nSourceTab);
-    return VclPtr<AbstractScPivotFilterDlg_Impl>::Create(pDlg);
+    return VclPtr<AbstractScPivotFilterDlg_Impl>::Create(std::make_unique<ScPivotFilterDlg>(pParent, rArgSet, nSourceTab));
 }
 
 VclPtr<AbstractScDPFunctionDlg> ScAbstractDialogFactory_Impl::CreateScDPFunctionDlg(weld::Window* pParent,

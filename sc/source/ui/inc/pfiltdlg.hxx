@@ -20,11 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_PFILTDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_PFILTDLG_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/combobox.hxx>
+#include <vcl/weld.hxx>
 #include <address.hxx>
 #include <queryparam.hxx>
 #include <array>
@@ -36,34 +32,15 @@ class ScQueryItem;
 class SfxItemSet;
 struct ScFilterEntries;
 
-class ScPivotFilterDlg : public ModalDialog
+class ScPivotFilterDlg : public weld::GenericDialogController
 {
 public:
-    ScPivotFilterDlg(vcl::Window* pParent, const SfxItemSet& rArgSet, SCTAB nSourceTab);
+    ScPivotFilterDlg(weld::Window* pParent, const SfxItemSet& rArgSet, SCTAB nSourceTab);
     virtual ~ScPivotFilterDlg() override;
-    virtual void dispose() override;
 
     const ScQueryItem&  GetOutputItem();
 
 private:
-    VclPtr<ListBox>        m_pLbField1;
-    VclPtr<ListBox>        m_pLbCond1;
-    VclPtr<ComboBox>       m_pEdVal1;
-
-    VclPtr<ListBox>        m_pLbConnect1;
-    VclPtr<ListBox>        m_pLbField2;
-    VclPtr<ListBox>        m_pLbCond2;
-    VclPtr<ComboBox>       m_pEdVal2;
-
-    VclPtr<ListBox>        m_pLbConnect2;
-    VclPtr<ListBox>        m_pLbField3;
-    VclPtr<ListBox>        m_pLbCond3;
-    VclPtr<ComboBox>       m_pEdVal3;
-
-    VclPtr<CheckBox>       m_pBtnCase;
-    VclPtr<CheckBox>       m_pBtnRegExp;
-    VclPtr<CheckBox>       m_pBtnUnique;
-    VclPtr<FixedText>      m_pFtDbArea;
     const OUString aStrNone;
     const OUString aStrEmpty;
     const OUString aStrNotEmpty;
@@ -76,9 +53,28 @@ private:
     ScDocument*         pDoc;
     SCTAB const         nSrcTab;
 
-    VclPtr<ComboBox>           aValueEdArr[3];
-    VclPtr<ListBox>            aFieldLbArr[3];
-    VclPtr<ListBox>            aCondLbArr[3];
+    std::unique_ptr<weld::ComboBox> m_xLbField1;
+    std::unique_ptr<weld::ComboBox> m_xLbCond1;
+    std::unique_ptr<weld::ComboBox> m_xEdVal1;
+
+    std::unique_ptr<weld::ComboBox> m_xLbConnect1;
+    std::unique_ptr<weld::ComboBox> m_xLbField2;
+    std::unique_ptr<weld::ComboBox> m_xLbCond2;
+    std::unique_ptr<weld::ComboBox> m_xEdVal2;
+
+    std::unique_ptr<weld::ComboBox> m_xLbConnect2;
+    std::unique_ptr<weld::ComboBox> m_xLbField3;
+    std::unique_ptr<weld::ComboBox> m_xLbCond3;
+    std::unique_ptr<weld::ComboBox> m_xEdVal3;
+
+    std::unique_ptr<weld::CheckButton> m_xBtnCase;
+    std::unique_ptr<weld::CheckButton> m_xBtnRegExp;
+    std::unique_ptr<weld::CheckButton> m_xBtnUnique;
+    std::unique_ptr<weld::Label> m_xFtDbArea;
+
+    weld::ComboBox* aValueEdArr[3];
+    weld::ComboBox* aFieldLbArr[3];
+    weld::ComboBox* aCondLbArr[3];
 
     std::array<std::unique_ptr<ScFilterEntries>, MAXCOLCOUNT> m_pEntryLists;
 
@@ -90,9 +86,9 @@ private:
     sal_uInt16  GetFieldSelPos  ( SCCOL nField );
 
     // Handler:
-    DECL_LINK( LbSelectHdl, ListBox&, void );
-    DECL_LINK( ValModifyHdl, Edit&, void );
-    DECL_LINK( CheckBoxHdl, Button*, void );
+    DECL_LINK( LbSelectHdl, weld::ComboBox&, void );
+    DECL_LINK( ValModifyHdl, weld::ComboBox&, void );
+    DECL_LINK( CheckBoxHdl, weld::Button&, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_PFILTDLG_HXX

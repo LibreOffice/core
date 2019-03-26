@@ -468,8 +468,9 @@ public:
 
     virtual VclPtr<AbstractScNamePasteDlg> CreateScNamePasteDlg(weld::Window * pParent, ScDocShell* pShell) = 0;
 
-    virtual VclPtr<AbstractScPivotFilterDlg> CreateScPivotFilterDlg(vcl::Window* pParent,
-        const SfxItemSet& rArgSet, sal_uInt16 nSourceTab) = 0;
+    virtual VclPtr<AbstractScPivotFilterDlg> CreateScPivotFilterDlg(weld::Window* pParent,
+                                                                    const SfxItemSet& rArgSet,
+                                                                    sal_uInt16 nSourceTab) = 0;
 
     virtual VclPtr<AbstractScDPFunctionDlg> CreateScDPFunctionDlg(weld::Window* pParent,
                                                                   const ScDPLabelDataVector& rLabelVec,

@@ -206,7 +206,7 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
 
             ScopedVclPtr<AbstractScPivotFilterDlg> pDlg(
                 pFact->CreateScPivotFilterDlg(
-                    pViewData->GetViewShell()->GetDialogParent(), aArgSet, nSrcTab));
+                    pViewData->GetViewShell()->GetFrameWeld(), aArgSet, nSrcTab));
             if ( pDlg->Execute() == RET_OK )
             {
                 ScSheetSourceDesc aNewDesc(pDoc);
