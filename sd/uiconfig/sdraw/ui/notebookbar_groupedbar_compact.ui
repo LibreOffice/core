@@ -2237,14 +2237,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuSettings-UpdateMenu">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" translatable="yes" context="draw_notebookbar_groupedbar_compact|Menu">_Check for Updates...</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="MenuSettings-separator3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
