@@ -53,6 +53,8 @@ struct PrinterInfo : JobData
     // a list of special features separated by ',' not used by psprint
     // but assigned from the outside (currently for "fax","pdf=","autoqueue","external_dialog")
     OUString             m_aFeatures;
+    // auth-info-required, potential [domain],[username],[password] to prompt for to authenticate printing
+    OUString             m_aAuthInfoRequired;
     PrinterSetupMode     meSetupMode;
 
     PrinterInfo()
