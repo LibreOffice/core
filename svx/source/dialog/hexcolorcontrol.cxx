@@ -19,22 +19,49 @@
 
 #include <svx/hexcolorcontrol.hxx>
 #include <rtl/character.hxx>
+#include <vcl/svapp.hxx>
 
 namespace weld {
 
 HexColorControl::HexColorControl(std::unique_ptr<weld::Entry> pEntry)
     : m_xEntry(std::move(pEntry))
+    , m_nAsyncModifyEvent(nullptr)
 {
     m_xEntry->set_max_length(6);
     m_xEntry->set_width_chars(6);
     m_xEntry->connect_insert_text(LINK(this, HexColorControl, ImplProcessInputHdl));
+    m_xEntry->connect_changed(LINK(this, HexColorControl, ImplProcessModifyHdl));
+}
+
+HexColorControl::~HexColorControl()
+{
+    if (m_nAsyncModifyEvent)
+        Application::RemoveUserEvent(m_nAsyncModifyEvent);
+}
+
+IMPL_LINK_NOARG(HexColorControl, OnAsyncModifyHdl, void*, void)
+{
+    m_nAsyncModifyEvent = nullptr;
+    m_aModifyHdl.Call(*m_xEntry);
+}
+
+// tdf#123291 resend it async so it arrives after ImplProcessInputHdl has been
+// processed
+IMPL_LINK_NOARG(HexColorControl, ImplProcessModifyHdl, weld::Entry&, void)
+{
+    if (m_nAsyncModifyEvent)
+        Application::RemoveUserEvent(m_nAsyncModifyEvent);
+    m_nAsyncModifyEvent = Application::PostUserEvent(LINK(this, HexColorControl, OnAsyncModifyHdl));
 }
 
 void HexColorControl::SetColor(Color nColor)
 {
     OUStringBuffer aBuffer;
     sax::Converter::convertColor(aBuffer, nColor);
-    m_xEntry->set_text(aBuffer.makeStringAndClear().copy(1));
+    OUString sColor = aBuffer.makeStringAndClear().copy(1);
+    if (sColor == m_xEntry->get_text())
+        return;
+    m_xEntry->set_text(sColor);
 }
 
 Color HexColorControl::GetColor()
