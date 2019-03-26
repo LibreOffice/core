@@ -16,6 +16,24 @@
       "revId": "39965a08af119e2718a9474eb55b3b26d01672bc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_907d62e9",
+        "filename": "cui/source/dialogs/FontFeaturesDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000125
+      },
+      "writtenOn": "2019-03-26T04:00:20Z",
+      "side": 1,
+      "message": "No because we don\u0027t set the ids on the checkbox, only the combobox. It\u0027s not perfect, to assume 0 \u003d\u003d false and 1 \u003d\u003d true, but I know of no situations where the reverse happens, even if the default may be true.",
+      "parentUuid": "df87a7cf_50127ab3",
+      "revId": "39965a08af119e2718a9474eb55b3b26d01672bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
