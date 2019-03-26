@@ -21,7 +21,7 @@ class autocorrectOptions(UITestCase):
         self.ui_test.close_dialog_through_button(xCancelBtn)
         document = self.ui_test.get_component()
 
-        self.ui_test.execute_dialog_through_command(".uno:AutoCorrectDlg", maxWait=2*MAX_WAIT)
+        self.ui_test.execute_dialog_through_command(".uno:AutoCorrectDlg", maxWait=10*MAX_WAIT)
         xDialog = self.xUITest.getTopFocusWindow()
         xTabs = xDialog.getChild("tabcontrol")
         select_pos(xTabs, "0")       #tab replace
