@@ -509,7 +509,7 @@ class ScGlobal
     static ScUserList*      pUserList;
     static std::map<const char*, OUString>* pRscString;
     static OUString*        pStrScDoc;
-    static OUString*        pEmptyOUString;
+    static SC_DLLPUBLIC const OUString aEmptyOUString;
     static OUString*        pStrClipDocName;
     static SvxBrushItem*    pEmptyBrushItem;
     static SvxBrushItem*    pButtonBrushItem;
@@ -592,7 +592,7 @@ public:
     static void             InitTextHeight(const SfxItemPool* pPool);
     static SvxBrushItem*    GetEmptyBrushItem() { return pEmptyBrushItem; }
     static SvxBrushItem*    GetButtonBrushItem();
-    SC_DLLPUBLIC    static const OUString&    GetEmptyOUString();
+    static const OUString&  GetEmptyOUString() { return aEmptyOUString; }
 
     static bool             HasStarCalcFunctionList();
     static ScFunctionList*  GetStarCalcFunctionList();
