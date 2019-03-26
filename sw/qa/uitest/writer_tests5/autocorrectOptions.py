@@ -20,7 +20,7 @@ class autocorrectOptions(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        self.ui_test.execute_dialog_through_command(".uno:AutoCorrectDlg", maxWait=2*MAX_WAIT)
+        self.ui_test.execute_dialog_through_command(".uno:AutoCorrectDlg", maxWait=10*MAX_WAIT)
         xDialog = self.xUITest.getTopFocusWindow()
         xTabs = xDialog.getChild("tabcontrol")
         select_pos(xTabs, "0")       #tab replace
