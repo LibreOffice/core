@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_eac5d65c",
+        "filename": "package/source/zippackage/ZipPackage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1090,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2019-03-26T12:18:09Z",
+      "side": 1,
+      "message": "This should still be 4, right? (and perhaps the comment doesn\u0027t need to be deleted)",
+      "range": {
+        "startLine": 1090,
+        "startChar": 57,
+        "endLine": 1090,
+        "endChar": 58
+      },
+      "revId": "98c22998a89006767806bb51d011a72b5ce8d832",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
