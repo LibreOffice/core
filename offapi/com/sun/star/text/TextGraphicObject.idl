@@ -122,6 +122,9 @@ published service TextGraphicObject
     /** contains the graphic.
      */
     [optional, property] com::sun::star::graphic::XGraphic    Graphic;
+    /** contains the transformed graphic.
+     */
+    [readonly, optional, property] com::sun::star::graphic::XGraphic    TransformedGraphic;
 
 };
 

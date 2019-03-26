@@ -605,6 +605,8 @@
 #define FN_UNO_STYLE_INTEROP_GRAB_BAG       (FN_EXTRA2 + 123)
 #define FN_UNO_TABLE_TEMPLATE_NAME          (FN_EXTRA2 + 124)
 
+#define FN_UNO_TRANSFORMED_GRAPHIC          (FN_EXTRA2 + 125)
+
 // Area: Help
 // Region: Traveling & Selection
 #define FN_CHAR_LEFT                (FN_SELECTION + 1 ) /* */

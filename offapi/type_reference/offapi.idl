@@ -14967,6 +14967,7 @@ module com {
      [property] short Transparency;
      [property] ::com::sun::star::drawing::ColorMode GraphicColorMode;
      [property, optional] ::com::sun::star::graphic::XGraphic Graphic;
+     [property, readonly, optional] ::com::sun::star::graphic::XGraphic TransformedGraphic;
     };
     published service TextGraphicObjects {
      interface ::com::sun::star::container::XNameAccess;
