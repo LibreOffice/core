@@ -171,11 +171,40 @@ typedef enum
      */
     LOK_CALLBACK_CURSOR_VISIBLE = 5,
     /**
-     * The size and/or the position of the graphic selection changed and
-     * the rotation angle of the embedded graphic object
+     * The size and/or the position of the graphic selection changed,
+     * the rotation angle of the embedded graphic object, and a property list
+     * which can be used for informing the client about severl properties.
      *
-     * Format is "x, y, width, height, angle", where angle is in 100th
-     * of degree.
+     * Format is "x, y, width, height, angle, { list of properties }",
+     * where angle is in 100th of degree, and the property list is optional.
+     *
+     * The "{ list of properties }" part is in JSON format.
+     * Follow some examples of the property list part:
+     *
+     * 1) when the selected object is an image inserted in Writer:
+     *
+     *      { "isWriterGraphic": true }
+     *
+     * 2) when the selected object is a chart legend:
+     *
+     *      { "isDraggable": true, "isResizable": true, "isRotatable": false }
+     *
+     * 3) when the selected object is a pie segment in a chart:
+     *
+     *      {
+     *          "isDraggable": true,
+     *          "isResizable": false,
+     *          "isRotatable": false,
+     *          "dragInfo": {
+     *              "dragMethod": "PieSegmentDragging",
+     *              "initialOffset": 50,
+     *              "dragDirection": [x, y],
+     *              "svg": "<svg ..."
+     *          }
+     *      }
+     *
+     *      where the "svg" property is a string containing an svg document
+     *      which is a rapresentation of the pie segment.
      */
     LOK_CALLBACK_GRAPHIC_SELECTION = 6,
 
