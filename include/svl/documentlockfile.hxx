@@ -50,7 +50,7 @@ public:
 
 protected:
     virtual void WriteEntryToStream( const LockFileEntry& aEntry, const css::uno::Reference< css::io::XOutputStream >& xStream ) = 0;
-    css::uno::Reference< css::io::XInputStream > OpenStream();
+    virtual css::uno::Reference< css::io::XInputStream > OpenStream();
 };
 
 /// Class implementing reading and writing LO lockfiles.

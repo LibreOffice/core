@@ -64,6 +64,8 @@ protected:
     WriteEntryToStream(const LockFileEntry& aEntry,
                        const css::uno::Reference<css::io::XOutputStream>& xStream) override;
 
+    virtual css::uno::Reference<css::io::XInputStream> OpenStream() override;
+
 public:
     MSODocumentLockFile(const OUString& aOrigURL);
     virtual ~MSODocumentLockFile() override;

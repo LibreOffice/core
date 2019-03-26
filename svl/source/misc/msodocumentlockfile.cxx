@@ -11,10 +11,13 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <algorithm>
+#include <ucbhelper/content.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
 namespace svt
 {
@@ -177,6 +180,17 @@ void MSODocumentLockFile::WriteEntryToStream(
     }
 
     xOutput->writeBytes(aData);
+}
+
+css::uno::Reference<css::io::XInputStream> MSODocumentLockFile::OpenStream()
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+
+    css::uno::Reference<css::ucb::XCommandEnvironment> xEnv;
+    ::ucbhelper::Content aSourceContent(GetURL(), xEnv, comphelper::getProcessComponentContext());
+
+    // the file can be opened readonly, no locking will be done
+    return aSourceContent.openStreamNoLock();
 }
 
 LockFileEntry MSODocumentLockFile::GetLockData()
