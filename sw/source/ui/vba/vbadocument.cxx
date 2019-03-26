@@ -28,6 +28,7 @@
 #include "vbabookmarks.hxx"
 #include "vbamailmerge.hxx"
 #include "vbavariables.hxx"
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
