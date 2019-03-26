@@ -274,3 +274,5 @@ namespace vcl
 }
 
 #endif // VCL_INC_NEWPRINTDLG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
