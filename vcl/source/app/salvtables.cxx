@@ -726,11 +726,9 @@ namespace
         return Image(rDevice.GetBitmapEx(Point(), rDevice.GetOutputSizePixel()));
     }
 
-    void insert_to_menu(PopupMenu* pMenu, int pos, const OUString& rId, const OUString& rStr,
+    sal_uInt16 insert_to_menu(sal_uInt16 nLastId, PopupMenu* pMenu, int pos, const OUString& rId, const OUString& rStr,
                         const OUString* pIconName, const VirtualDevice* pImageSurface, bool bCheck)
     {
-        const auto nCount = pMenu->GetItemCount();
-        const sal_uInt16 nLastId = nCount ? pMenu->GetItemId(nCount-1) : 0;
         const sal_uInt16 nNewid = nLastId + 1;
         pMenu->InsertItem(nNewid, rStr, bCheck ? MenuItemBits::CHECKABLE : MenuItemBits::NONE,
                             OUStringToOString(rId, RTL_TEXTENCODING_UTF8), pos == -1 ? MENU_APPEND : pos);
@@ -742,6 +740,7 @@ namespace
         {
             pMenu->SetItemImage(nNewid, createImage(*pImageSurface));
         }
+        return nNewid;
     }
 }
 
@@ -751,12 +750,15 @@ private:
     VclPtr<PopupMenu> m_xMenu;
 
     bool const m_bTakeOwnership;
+    sal_uInt16 m_nLastId;
 
 public:
     SalInstanceMenu(PopupMenu* pMenu, bool bTakeOwnership)
         : m_xMenu(pMenu)
         , m_bTakeOwnership(bTakeOwnership)
     {
+        const auto nCount = m_xMenu->GetItemCount();
+        m_nLastId = nCount ? pMenu->GetItemId(nCount-1) : 0;
     }
     virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle &rRect) override
     {
@@ -773,17 +775,24 @@ public:
     {
         m_xMenu->CheckItem(rIdent, bActive);
     }
-    virtual void show(const OString& rIdent, bool bShow) override
+    virtual void set_visible(const OString& rIdent, bool bShow) override
     {
         m_xMenu->ShowItem(m_xMenu->GetItemId(rIdent), bShow);
     }
-
+    virtual void clear() override
+    {
+        m_xMenu->Clear();
+    }
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
                         const OUString* pIconName, VirtualDevice* pImageSurface, bool bCheck) override
     {
-        insert_to_menu(m_xMenu, pos, rId, rStr, pIconName, pImageSurface, bCheck);
+        m_nLastId = insert_to_menu(m_nLastId, m_xMenu, pos, rId, rStr, pIconName, pImageSurface, bCheck);
     }
-
+    virtual void insert_separator(int pos, const OUString& rId) override
+    {
+        auto nInsertPos = pos == -1 ? MENU_APPEND : pos;
+        m_xMenu->InsertSeparator(rId.toUtf8(), nInsertPos);
+    }
     virtual ~SalInstanceMenu() override
     {
         if (m_bTakeOwnership)
@@ -1203,6 +1212,18 @@ public:
         return rHorzScrollBar.GetVisibleSize();
     }
 
+    virtual void hadjustment_set_page_size(int size) override
+    {
+        ScrollBar& rHorzScrollBar = m_xScrolledWindow->getHorzScrollBar();
+        return rHorzScrollBar.SetVisibleSize(size);
+    }
+
+    virtual void hadjustment_set_page_increment(int size) override
+    {
+        ScrollBar& rHorzScrollBar = m_xScrolledWindow->getHorzScrollBar();
+        return rHorzScrollBar.SetPageSize(size);
+    }
+
     virtual void set_hpolicy(VclPolicyType eHPolicy) override
     {
         WinBits nWinBits = m_xScrolledWindow->GetStyle() & ~(WB_AUTOHSCROLL|WB_HSCROLL);
@@ -1284,6 +1305,18 @@ public:
     {
         ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
         return rVertScrollBar.GetVisibleSize();
+    }
+
+    virtual void vadjustment_set_page_size(int size) override
+    {
+        ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
+        return rVertScrollBar.SetVisibleSize(size);
+    }
+
+    virtual void vadjustment_set_page_increment(int size) override
+    {
+        ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
+        return rVertScrollBar.SetPageSize(size);
     }
 
     virtual void set_vpolicy(VclPolicyType eVPolicy) override
@@ -1530,6 +1563,7 @@ class SalInstanceMenuButton : public SalInstanceButton, public virtual weld::Men
 {
 private:
     VclPtr<::MenuButton> m_xMenuButton;
+    sal_uInt16 m_nLastId;
 
     DECL_LINK(MenuSelectHdl, ::MenuButton*, void);
     DECL_LINK(ActivateHdl, ::MenuButton*, void);
@@ -1538,9 +1572,15 @@ public:
     SalInstanceMenuButton(::MenuButton* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : SalInstanceButton(pButton, pBuilder, bTakeOwnership)
         , m_xMenuButton(pButton)
+        , m_nLastId(0)
     {
         m_xMenuButton->SetActivateHdl(LINK(this, SalInstanceMenuButton, ActivateHdl));
         m_xMenuButton->SetSelectHdl(LINK(this, SalInstanceMenuButton, MenuSelectHdl));
+        if (PopupMenu* pMenu = m_xMenuButton->GetPopupMenu())
+        {
+            const auto nCount = pMenu->GetItemCount();
+            m_nLastId = nCount ? pMenu->GetItemId(nCount-1) : 0;
+        }
     }
 
     virtual void set_active(bool active) override
@@ -1571,7 +1611,13 @@ public:
     virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
                              const OUString* pIconName, VirtualDevice* pImageSurface, bool bCheck) override
     {
-        insert_to_menu(m_xMenuButton->GetPopupMenu(), pos, rId, rStr, pIconName, pImageSurface, bCheck);
+        m_nLastId = insert_to_menu(m_nLastId, m_xMenuButton->GetPopupMenu(), pos, rId, rStr, pIconName, pImageSurface, bCheck);
+    }
+
+    virtual void insert_separator(int pos, const OUString& rId) override
+    {
+        auto nInsertPos = pos == -1 ? MENU_APPEND : pos;
+        m_xMenuButton->GetPopupMenu()->InsertSeparator(rId.toUtf8(), nInsertPos);
     }
 
     virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) override
@@ -1596,6 +1642,12 @@ public:
     {
         PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
         pMenu->SetItemText(pMenu->GetItemId(rIdent), rText);
+    }
+
+    virtual void set_item_visible(const OString& rIdent, bool bShow) override
+    {
+        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+        pMenu->ShowItem(pMenu->GetItemId(rIdent), bShow);
     }
 
     virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) override
@@ -3649,7 +3701,7 @@ private:
     DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
     DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
     DECL_LINK(StyleUpdatedHdl, VclDrawingArea&, void);
-    DECL_LINK(PopupMenuHdl, const Point&, bool);
+    DECL_LINK(PopupMenuHdl, const CommandEvent&, bool);
     DECL_LINK(QueryTooltipHdl, tools::Rectangle&, OUString);
 
     // SalInstanceWidget has a generic listener for all these
@@ -3761,7 +3813,7 @@ public:
     virtual ~SalInstanceDrawingArea() override
     {
         m_xDrawingArea->SetQueryTooltipHdl(Link<tools::Rectangle&, OUString>());
-        m_xDrawingArea->SetPopupMenuHdl(Link<const Point&, bool>());
+        m_xDrawingArea->SetPopupMenuHdl(Link<const CommandEvent&, bool>());
         m_xDrawingArea->SetStyleUpdatedHdl(Link<VclDrawingArea&, void>());
         m_xDrawingArea->SetMousePressHdl(Link<const MouseEvent&, bool>());
         m_xDrawingArea->SetMouseMoveHdl(Link<const MouseEvent&, bool>());
@@ -3821,9 +3873,9 @@ IMPL_LINK_NOARG(SalInstanceDrawingArea, StyleUpdatedHdl, VclDrawingArea&, void)
     m_aStyleUpdatedHdl.Call(*this);
 }
 
-IMPL_LINK(SalInstanceDrawingArea, PopupMenuHdl, const Point&, rPos, bool)
+IMPL_LINK(SalInstanceDrawingArea, PopupMenuHdl, const CommandEvent&, rEvent, bool)
 {
-    return m_aPopupMenuHdl.Call(rPos);
+    return m_aPopupMenuHdl.Call(rEvent);
 }
 
 IMPL_LINK(SalInstanceDrawingArea, QueryTooltipHdl, tools::Rectangle&, rHelpArea, OUString)

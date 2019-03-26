@@ -620,7 +620,7 @@ private:
     Link<const KeyEvent&, bool> m_aKeyPressHdl;
     Link<const KeyEvent&, bool> m_aKeyReleaseHdl;
     Link<VclDrawingArea&, void> m_aStyleUpdatedHdl;
-    Link<const Point&, bool> m_aPopupMenuHdl;
+    Link<const CommandEvent&, bool> m_aPopupMenuHdl;
     Link<tools::Rectangle&, OUString> m_aQueryTooltipHdl;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override
@@ -677,7 +677,7 @@ private:
     }
     virtual void Command(const CommandEvent& rEvent) override
     {
-        if (rEvent.GetCommand() == CommandEventId::ContextMenu && m_aPopupMenuHdl.Call(rEvent.GetMousePosPixel()))
+        if (rEvent.GetCommand() == CommandEventId::ContextMenu && m_aPopupMenuHdl.Call(rEvent))
             return;
         Control::Command(rEvent);
     }
@@ -755,7 +755,7 @@ public:
     {
         m_aStyleUpdatedHdl = rLink;
     }
-    void SetPopupMenuHdl(const Link<const Point&, bool>& rLink)
+    void SetPopupMenuHdl(const Link<const CommandEvent&, bool>& rLink)
     {
         m_aPopupMenuHdl = rLink;
     }

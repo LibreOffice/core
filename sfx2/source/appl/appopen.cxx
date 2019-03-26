@@ -448,12 +448,12 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         if(pCurrentShell)
             xModel = pCurrentShell->GetModel();
 
-        ScopedVclPtrInstance< SfxTemplateManagerDlg > aTemplDlg;
+        SfxTemplateManagerDlg aTemplDlg(rReq.GetFrameWeld());
 
         if (xModel.is())
-            aTemplDlg->setDocumentModel(xModel);
+            aTemplDlg.setDocumentModel(xModel);
 
-        int nRet = aTemplDlg->Execute();
+        int nRet = aTemplDlg.run();
         if ( nRet == RET_OK )
         {
             rReq.Done();

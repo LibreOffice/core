@@ -239,9 +239,9 @@ void SvxShowCharSet::createContextMenu()
     sal_UCS4 cChar = GetSelectCharacter();
     OUString aOUStr( &cChar, 1 );
     if (isFavChar(aOUStr, mxVirDev->GetFont().GetFamilyName()) || maFavCharList.size() >= 16)
-        xItemMenu->show("add", false);
+        xItemMenu->set_visible("add", false);
     else
-        xItemMenu->show("remove", false);
+        xItemMenu->set_visible("remove", false);
 
     ContextMenuSelect(xItemMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(maPosition, Size(1,1))));
     GrabFocus();

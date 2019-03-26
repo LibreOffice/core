@@ -517,8 +517,6 @@ custom_widgets = [
     'SwNavHelpToolBox',
     'TableValueSet',
     'TemplateDefaultView',
-    'TemplateLocalView',
-    'TemplateSearchView',
     'ThesaurusAlternativesCtrl',
     'ValueSet',
     ]
