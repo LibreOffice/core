@@ -129,6 +129,7 @@ public:
     void testTdf115262();
     void testTdf121962();
     void testTdf121615();
+    void testTdf116888();
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
     CPPUNIT_TEST(testTdf106059);
@@ -164,6 +165,7 @@ public:
     CPPUNIT_TEST(testTdf115262);
     CPPUNIT_TEST(testTdf121962);
     CPPUNIT_TEST(testTdf121615);
+    CPPUNIT_TEST(testTdf116888);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1728,6 +1730,106 @@ void PdfExportTest::testTdf121615()
     CPPUNIT_ASSERT_EQUAL( COL_WHITE, aBitmap.GetPixelColor( 0, 299 ));
     CPPUNIT_ASSERT_EQUAL( COL_WHITE, aBitmap.GetPixelColor( 199, 0 ));
     CPPUNIT_ASSERT_EQUAL( COL_BLACK, aBitmap.GetPixelColor( 199, 299 ));
+}
+
+void PdfExportTest::testTdf116888()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf116888.odt";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    // The problem seem to trigger only with 150 DPI and lossless compression.
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+        { { "UseLosslessCompression", uno::Any(true) },
+          { "ReduceImageResolution", uno::Any(true) },
+          { "MaxImageResolution", uno::Any(static_cast<sal_Int32>(150)) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    // Get access to the only image on the only page.
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+    CPPUNIT_ASSERT(pResources);
+    auto pXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"));
+    CPPUNIT_ASSERT(pXObjects);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pXObjects->GetItems().size());
+    vcl::filter::PDFObjectElement* pXObject = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pXObject);
+    vcl::filter::PDFStreamElement* pStream = pXObject->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+
+    // Get image info, it should be 8bpp.
+    auto pWidth = dynamic_cast<vcl::filter::PDFNumberElement*>(pXObject->Lookup("Width"));
+    auto pHeight = dynamic_cast<vcl::filter::PDFNumberElement*>(pXObject->Lookup("Height"));
+    auto pBitsPerComponent = dynamic_cast<vcl::filter::PDFNumberElement*>(pXObject->Lookup("BitsPerComponent"));
+    int width = pWidth->GetValue();
+    int height = pHeight->GetValue();
+    CPPUNIT_ASSERT_GREATER( 500, width ); // reduced DPI reduces size of the image, but check it's sensible
+    CPPUNIT_ASSERT_GREATER( 200, height );
+    CPPUNIT_ASSERT_EQUAL( 8, int(pBitsPerComponent->GetValue()));
+
+    // HACK: The image data is indexed palette, so the colors we need have different values depending on the palette.
+    // Just handle the known cases.
+    int whiteIndex = -1;
+    int blackIndex = -1;
+    auto palette = dynamic_cast<vcl::filter::PDFArrayElement*>(pXObject->Lookup("ColorSpace"));
+    OString hexPalette;
+    for (size_t i = 0; i < palette->GetElements().size(); ++i)
+    {
+        if(auto num = dynamic_cast<vcl::filter::PDFNumberElement*>(palette->GetElements()[i]))
+        {
+            switch( int(num->GetValue()))
+            {
+                case 255: // Written e.g. when using OpenGLSalBitmap.
+                    whiteIndex = 0;
+                    blackIndex = 1;
+                    CPPUNIT_ASSERT_EQUAL( OString("FFFFFF"), hexPalette.copy( 0, 6 ));
+                    CPPUNIT_ASSERT_EQUAL( OString("000000"), hexPalette.copy( 1 * 6, 6 ));
+                    break;
+                case 33:  // Written e.g. when using Qt on Linux.
+                    whiteIndex = 31;
+                    blackIndex = 0;
+                    // The grayscale palette apparently uses FEFEFE rather than FFFFFF.
+                    CPPUNIT_ASSERT_EQUAL( OString("FEFEFE"), hexPalette.copy( 31 * 6, 6 ));
+                    CPPUNIT_ASSERT_EQUAL( OString("000000"), hexPalette.copy( 0, 6 ));
+                    break;
+                default:
+                    CPPUNIT_FAIL( "Unhandled palette size" );
+            }
+        }
+        if(auto hex = dynamic_cast<vcl::filter::PDFHexStringElement*>(palette->GetElements()[i]))
+            hexPalette = hex->GetValue();
+    }
+
+    // Uncompress it.
+    SvMemoryStream aUncompressed;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    rObjectStream.Seek(0);
+    aZCodec.Decompress(rObjectStream, aUncompressed);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+    // Make sure the image is valid. It has black in its bottom-right corner, white otherwise.
+    // Each byte is a pixel, stored as rows.
+    const char* imageData = static_cast<const char*>(aUncompressed.GetData());
+    CPPUNIT_ASSERT_EQUAL( width * height, int(aUncompressed.GetSize()));
+    CPPUNIT_ASSERT_EQUAL( whiteIndex, int(imageData[ 0 ] )); // topleft corner
+    CPPUNIT_ASSERT_EQUAL( whiteIndex, int(imageData[ width - 1 ] )); // topright corner
+    CPPUNIT_ASSERT_EQUAL( whiteIndex, int(imageData[ width * ( height - 1 ) ] )); // bottomleft corner
+    CPPUNIT_ASSERT_EQUAL( blackIndex, int(imageData[ width * height - 1 ] )); // bottomright corner, different color
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
