@@ -334,6 +334,8 @@ void CUPSManager::initialize()
                 aPrinter.m_aInfo.m_aComment=OStringToOUString(pDest->options[k].value, aEncoding);
             if(!strcmp(pDest->options[k].name, "printer-location"))
                 aPrinter.m_aInfo.m_aLocation=OStringToOUString(pDest->options[k].value, aEncoding);
+            if(!strcmp(pDest->options[k].name, "auth-info-required"))
+                aPrinter.m_aInfo.m_aAuthInfoRequired=OStringToOUString(pDest->options[k].value, aEncoding);
         }
 
         OUStringBuffer aBuf( 256 );
@@ -653,6 +655,88 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner
     }
 }
 
+namespace
+{
+    class RTSPWDialog : public weld::GenericDialogController
+    {
+        std::unique_ptr<weld::Label> m_xText;
+        std::unique_ptr<weld::Label> m_xDomainLabel;
+        std::unique_ptr<weld::Entry> m_xDomainEdit;
+        std::unique_ptr<weld::Label> m_xUserLabel;
+        std::unique_ptr<weld::Entry> m_xUserEdit;
+        std::unique_ptr<weld::Label> m_xPassLabel;
+        std::unique_ptr<weld::Entry> m_xPassEdit;
+
+    public:
+        RTSPWDialog(weld::Window* pParent, const OString& rServer, const OString& rUserName);
+
+        OString getDomain() const
+        {
+            return OUStringToOString( m_xDomainEdit->get_text(), osl_getThreadTextEncoding() );
+        }
+
+        OString getUserName() const
+        {
+            return OUStringToOString( m_xUserEdit->get_text(), osl_getThreadTextEncoding() );
+        }
+
+        OString getPassword() const
+        {
+            return OUStringToOString( m_xPassEdit->get_text(), osl_getThreadTextEncoding() );
+        }
+
+        void SetDomainVisible(bool bShow)
+        {
+            m_xDomainLabel->set_visible(bShow);
+            m_xDomainEdit->set_visible(bShow);
+        }
+
+        void SetUserVisible(bool bShow)
+        {
+            m_xUserLabel->set_visible(bShow);
+            m_xUserEdit->set_visible(bShow);
+        }
+
+        void SetPassVisible(bool bShow)
+        {
+            m_xPassLabel->set_visible(bShow);
+            m_xPassEdit->set_visible(bShow);
+        }
+    };
+
+    RTSPWDialog::RTSPWDialog(weld::Window* pParent, const OString& rServer, const OString& rUserName)
+        : GenericDialogController(pParent, "vcl/ui/cupspassworddialog.ui", "CUPSPasswordDialog")
+        , m_xText(m_xBuilder->weld_label("text"))
+        , m_xDomainLabel(m_xBuilder->weld_label("label3"))
+        , m_xDomainEdit(m_xBuilder->weld_entry("domain"))
+        , m_xUserLabel(m_xBuilder->weld_label("label1"))
+        , m_xUserEdit(m_xBuilder->weld_entry("user"))
+        , m_xPassLabel(m_xBuilder->weld_label("label2"))
+        , m_xPassEdit(m_xBuilder->weld_entry("pass"))
+    {
+        OUString aText(m_xText->get_label());
+        aText = aText.replaceFirst("%s", OStringToOUString(rServer, osl_getThreadTextEncoding()));
+        m_xText->set_label(aText);
+        m_xUserEdit->set_text(OStringToOUString(rUserName, osl_getThreadTextEncoding()));
+    }
+
+    bool AuthenticateQuery(const OString& rServer, OString& rUserName, OString& rPassword)
+    {
+        bool bRet = false;
+
+        vcl::Window* pWin = Application::GetDefDialogParent();
+        RTSPWDialog aDialog(pWin ? pWin->GetFrameWeld() : nullptr, rServer, rUserName);
+        if (aDialog.run() == RET_OK)
+        {
+            rUserName = aDialog.getUserName();
+            rPassword = aDialog.getPassword();
+            bRet = true;
+        }
+
+        return bRet;
+    }
+}
+
 bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner, const OUString& rFaxNumber )
 {
     SAL_INFO( "vcl.unx.print", "endSpool: " << rPrintername << "," << rJobTitle << " copy count = " << rDocumentJobData.m_nCopies );
@@ -678,7 +762,56 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
         // setup cups options
         int nNumOptions = 0;
         cups_option_t* pOptions = nullptr;
-        getOptionsFromDocumentSetup( rDocumentJobData, bBanner, nNumOptions, reinterpret_cast<void**>(&pOptions) );
+        auto ppOptions = reinterpret_cast<void**>(&pOptions);
+        getOptionsFromDocumentSetup( rDocumentJobData, bBanner, nNumOptions, ppOptions );
+
+        PrinterInfo aInfo(getPrinterInfo(rPrintername));
+        if (!aInfo.m_aAuthInfoRequired.isEmpty())
+        {
+            bool bDomain(false), bUser(false), bPass(false);
+            sal_Int32 nIndex = 0;
+            do
+            {
+                OUString aToken = aInfo.m_aAuthInfoRequired.getToken(0, ',', nIndex);
+                if (aToken == "domain")
+                    bDomain = true;
+                else if (aToken == "username")
+                    bUser = true;
+                else if (aToken == "password")
+                    bPass = true;
+            }
+            while (nIndex >= 0);
+
+            if (bDomain || bUser || bPass)
+            {
+                OString sPrinterName(OUStringToOString(rPrintername, RTL_TEXTENCODING_UTF8));
+                vcl::Window* pWin = Application::GetDefDialogParent();
+                RTSPWDialog aDialog(pWin ? pWin->GetFrameWeld() : nullptr, sPrinterName, "");
+                aDialog.SetDomainVisible(bDomain);
+                aDialog.SetUserVisible(bUser);
+                aDialog.SetPassVisible(bPass);
+
+                if (aDialog.run() == RET_OK)
+                {
+                    OString sAuth;
+                    if (bDomain)
+                        sAuth = aDialog.getDomain().replaceAll(",", "\\,");
+                    if (bUser)
+                    {
+                        if (!sAuth.isEmpty())
+                            sAuth += ",";
+                        sAuth += aDialog.getUserName().replaceAll(",", "\\,");
+                    }
+                    if (bPass)
+                    {
+                        if (!sAuth.isEmpty())
+                            sAuth += ",";
+                        sAuth += aDialog.getPassword().replaceAll(",", "\\,");
+                    }
+                    nNumOptions = cupsAddOption("auth-info", sAuth.getStr(), nNumOptions, &pOptions);
+                }
+            }
+        }
 
         OString sJobName(OUStringToOString(rJobTitle, aEnc));
 
@@ -766,59 +899,6 @@ bool CUPSManager::checkPrintersChanged( bool bWait )
         initialize();
 
     return bChanged;
-}
-
-namespace
-{
-    class RTSPWDialog : public weld::GenericDialogController
-    {
-        std::unique_ptr<weld::Label> m_xText;
-        std::unique_ptr<weld::Entry> m_xUserEdit;
-        std::unique_ptr<weld::Entry> m_xPassEdit;
-
-    public:
-        RTSPWDialog(const OString& rServer, const OString& rUserName, weld::Window* pParent);
-        OString getUserName() const;
-        OString getPassword() const;
-    };
-
-    RTSPWDialog::RTSPWDialog( const OString& rServer, const OString& rUserName, weld::Window* pParent )
-        : GenericDialogController(pParent, "vcl/ui/cupspassworddialog.ui", "CUPSPasswordDialog")
-        , m_xText(m_xBuilder->weld_label("text"))
-        , m_xUserEdit(m_xBuilder->weld_entry("user"))
-        , m_xPassEdit(m_xBuilder->weld_entry("pass"))
-    {
-        OUString aText(m_xText->get_label());
-        aText = aText.replaceFirst("%s", OStringToOUString(rServer, osl_getThreadTextEncoding()));
-        m_xText->set_label(aText);
-        m_xUserEdit->set_text(OStringToOUString(rUserName, osl_getThreadTextEncoding()));
-    }
-
-    OString RTSPWDialog::getUserName() const
-    {
-        return OUStringToOString( m_xUserEdit->get_text(), osl_getThreadTextEncoding() );
-    }
-
-    OString RTSPWDialog::getPassword() const
-    {
-        return OUStringToOString( m_xPassEdit->get_text(), osl_getThreadTextEncoding() );
-    }
-
-    bool AuthenticateQuery(const OString& rServer, OString& rUserName, OString& rPassword)
-    {
-        bool bRet = false;
-
-        vcl::Window* pWin = Application::GetDefDialogParent();
-        RTSPWDialog aDialog(rServer, rUserName, pWin ? pWin->GetFrameWeld() : nullptr);
-        if (aDialog.run() == RET_OK)
-        {
-            rUserName = aDialog.getUserName();
-            rPassword = aDialog.getPassword();
-            bRet = true;
-        }
-
-        return bRet;
-    }
 }
 
 const char* CUPSManager::authenticateUser()
