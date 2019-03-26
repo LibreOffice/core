@@ -932,6 +932,7 @@ void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel
     // WinSalGraphics::GetEmbedFontData does not set mpFontInstance
     // since it is interested in font file data only.
     mpWinFontEntry[ nFallbackLevel ] = reinterpret_cast<WinFontInstance*>( pFont->mpFontInstance.get() );
+    WinFontInstance *pFontInstance = static_cast<WinFontInstance*>(pFont->mpFontInstance.get());
 
     HFONT hOldFont = nullptr;
     HFONT hNewFont = pFontInstance ? pFontInstance->GetHFONT() : nullptr;
@@ -970,7 +971,6 @@ void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel
             }
             if (mpWinFontEntry[i])
             {
-                GetWinFontEntry(i)->Release();
                 mpWinFontEntry[i] = nullptr;
             }
             mfFontScale[i] = 1.0;
@@ -1363,7 +1363,7 @@ void WinSalGraphics::ClearDevFontCache()
 
 bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
-    WinFontInstance* pFont = mpWinFontEntry[rGlyph.mnFallbackLevel];
+    rtl::Reference<WinFontInstance> pFont = mpWinFontEntry[rGlyph.mnFallbackLevel];
     HFONT hNewFont = pFont ? pFont->GetHFONT() : mhFonts[rGlyph.mnFallbackLevel];
     float fFontScale = pFont ? pFont->GetScale() : mfFontScale[rGlyph.mnFallbackLevel];
 
@@ -1572,7 +1572,7 @@ bool WinSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
     // rescaling needed for the tools::PolyPolygon conversion
     if( rB2DPolyPoly.count() )
     {
-        WinFontInstance *pFont = mpWinFontEntry[rGlyph.mnFallbackLevel];
+        rtl::Reference<WinFontInstance> pFont = mpWinFontEntry[rGlyph.mnFallbackLevel];
         float fFontScale = pFont ? pFont->GetScale() : mfFontScale[rGlyph.mnFallbackLevel];
         const double fFactor(fFontScale/256);
         rB2DPolyPoly.transform(basegfx::utils::createScaleB2DHomMatrix(fFactor, fFactor));
