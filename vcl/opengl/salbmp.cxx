@@ -258,7 +258,7 @@ void OpenGLSalBitmap::Destroy()
 
     VCL_GL_INFO("Destroy OpenGLSalBitmap texture:" << maTexture.Id());
     maTexture = OpenGLTexture();
-    mpUserBuffer.reset();
+    DeallocateUserData();
 }
 
 bool OpenGLSalBitmap::AllocateUserData()
@@ -292,8 +292,7 @@ bool OpenGLSalBitmap::AllocateUserData()
     if (!alloc)
     {
         SAL_WARN("vcl.opengl", "bad alloc " << mnBytesPerRow << "x" << mnHeight);
-        mpUserBuffer.reset();
-        mnBytesPerRow = 0;
+        DeallocateUserData();
     }
 #ifdef DBG_UTIL
     else
@@ -304,6 +303,12 @@ bool OpenGLSalBitmap::AllocateUserData()
 #endif
 
     return mpUserBuffer != nullptr;
+}
+
+void OpenGLSalBitmap::DeallocateUserData()
+{
+    mpUserBuffer.reset();
+    mnBytesPerRow = 0;
 }
 
 namespace {
@@ -763,7 +768,10 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
             if( !AllocateUserData() )
                 return nullptr;
             if( maTexture && !ReadTexture() )
+            {
+                DeallocateUserData();
                 return nullptr;
+            }
         }
     }
 
@@ -870,6 +878,7 @@ bool OpenGLSalBitmap::GetSystemData( BitmapSystemData& /*rData*/ )
         if( !AllocateUserData() || !ReadTexture() )
         {
             rBitmap.ReleaseBuffer( pBuffer, false );
+            DeallocateUserData();
             return false;
         }
     }
@@ -955,7 +964,7 @@ bool OpenGLSalBitmap::ConvertToGreyscale()
     maPalette = Bitmap::GetGreyPalette(256);
 
     // AllocateUserData will handle the rest.
-    mpUserBuffer.reset();
+    DeallocateUserData();
     mbDirtyTexture = false;
 
     CHECK_GL_ERROR();
