@@ -125,6 +125,7 @@ struct ColumnBlockPosition
     CellStoreType::iterator miCellPos;
 
     ColumnBlockPosition(): miCellPos() {}
+    ColumnBlockPosition& operator=(const ColumnBlockPosition& aSrc);
 };
 
 struct ColumnBlockConstPosition

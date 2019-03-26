@@ -51,6 +51,28 @@ void CellStoreEvent::element_block_released(const mdds::mtv::base_element_block*
     }
 }
 
+ColumnBlockPosition& ColumnBlockPosition::operator=(const ColumnBlockPosition& rSrc)
+{
+    static CellNoteStoreType::iterator iCellNotePosDef;
+    static BroadcasterStoreType::iterator iBroadcasterPosDef;
+    static CellTextAttrStoreType::iterator iCellTextAttrPosDef;
+    static CellStoreType::iterator iCellPosDef;
+
+    if (rSrc.miCellNotePos != iCellNotePosDef)
+        miCellNotePos = rSrc.miCellNotePos;
+
+    if (rSrc.miBroadcasterPos != iBroadcasterPosDef)
+        miBroadcasterPos = rSrc.miBroadcasterPos;
+
+    if (rSrc.miCellTextAttrPos != iCellTextAttrPosDef)
+        miCellTextAttrPos = rSrc.miCellTextAttrPos;
+
+    if (rSrc.miCellPos != iCellPosDef)
+        miCellPos = rSrc.miCellPos;
+
+    return *this;
+}
+
 ColumnBlockPositionSet::ColumnBlockPositionSet(ScDocument& rDoc) : mrDoc(rDoc) {}
 
 ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL nCol)
