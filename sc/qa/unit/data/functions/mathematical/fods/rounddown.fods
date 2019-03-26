@@ -2123,6 +2123,23 @@
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=ROUNDDOWN(8.94-8;2)" office:value-type="float" office:value="0.94" calcext:value-type="float">
+      <text:p>0.9400000</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0.94" calcext:value-type="float">
+      <text:p>0.94</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce30" table:formula="of:=[.A14]=[.B14]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce38" table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="=ROUNDDOWN(8.94-8,2)" calcext:value-type="string">
+      <text:p>=ROUNDDOWN(31415.92654, 3)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce47"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce29"/>
      <table:table-cell table:style-name="ce38"/>
