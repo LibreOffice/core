@@ -63,6 +63,7 @@ DECLARE_WW8EXPORT_TEST(testFdo53985, "fdo53985.doc")
     uno::Reference<beans::XPropertySet> xSect(xSections->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Section1 is protected", true, getProperty<bool>(xSect, "IsProtected"));
     xSect.set(xSections->getByIndex(3), uno::UNO_QUERY);
+if ( !mbExported )
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Section4 is protected", false, getProperty<bool>(xSect, "IsProtected"));
 }
 
