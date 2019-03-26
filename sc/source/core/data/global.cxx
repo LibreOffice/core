@@ -83,7 +83,7 @@ std::atomic<CollatorWrapper*> ScGlobal::pCaseCollator(nullptr);
 std::atomic<::utl::TransliterationWrapper*> ScGlobal::pTransliteration(nullptr);
 std::atomic<::utl::TransliterationWrapper*> ScGlobal::pCaseTransliteration(nullptr);
 css::uno::Reference< css::i18n::XOrdinalSuffix> ScGlobal::xOrdinalSuffix;
-OUString*       ScGlobal::pEmptyOUString = nullptr;
+const OUString  ScGlobal::aEmptyOUString;
 OUString*       ScGlobal::pStrClipDocName = nullptr;
 
 SvxBrushItem*   ScGlobal::pEmptyBrushItem = nullptr;
@@ -431,15 +431,8 @@ SvxBrushItem* ScGlobal::GetButtonBrushItem()
     return pButtonBrushItem;
 }
 
-const OUString& ScGlobal::GetEmptyOUString()
-{
-    return *pEmptyOUString;
-}
-
 void ScGlobal::Init()
 {
-    pEmptyOUString = new OUString;
-
     // The default language for number formats (ScGlobal::eLnge) must
     // always be LANGUAGE_SYSTEM
     // FIXME: So remove this variable?
@@ -567,7 +560,6 @@ void ScGlobal::Clear()
     delete pUnitConverter.load(); pUnitConverter = nullptr;
     DELETEZ(pFieldEditEngine);
 
-    DELETEZ(pEmptyOUString);
     xDrawClipDocShellRef.clear();
 }
 
