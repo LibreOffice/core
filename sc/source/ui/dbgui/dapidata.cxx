@@ -125,8 +125,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
                 comphelper::getProcessComponentContext() );
 
         uno::Any aSourceAny = xContext->getByName( aDatabaseName );
-        uno::Reference<sdb::XCompletedConnection> xSource(
-                ScUnoHelpFunctions::AnyToInterface( aSourceAny ), uno::UNO_QUERY );
+        uno::Reference<sdb::XCompletedConnection> xSource(aSourceAny, uno::UNO_QUERY);
         if ( !xSource.is() ) return;
 
         uno::Reference<task::XInteractionHandler> xHandler(

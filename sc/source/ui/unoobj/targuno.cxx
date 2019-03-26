@@ -262,12 +262,11 @@ ScLinkTargetsObj::~ScLinkTargetsObj()
 
 uno::Any SAL_CALL ScLinkTargetsObj::getByName(const OUString& aName)
 {
-    uno::Reference< beans::XPropertySet >  xProp( ScUnoHelpFunctions::AnyToInterface( xCollection->getByName(aName) ), uno::UNO_QUERY );
+    uno::Reference<beans::XPropertySet> xProp(xCollection->getByName(aName), uno::UNO_QUERY);
     if (xProp.is())
         return uno::makeAny(xProp);
 
     throw container::NoSuchElementException();
-//    return uno::Any();
 }
 
 uno::Sequence<OUString> SAL_CALL ScLinkTargetsObj::getElementNames()
