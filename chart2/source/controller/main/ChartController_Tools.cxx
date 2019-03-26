@@ -951,6 +951,26 @@ void ChartController::executeDispatch_LOKSetTextSelection(int nType, int nX, int
     }
 }
 
+void ChartController::executeDispatch_LOKPieSegmentDragging( int nOffset )
+{
+    try
+    {
+        OUString aCID( m_aSelection.getSelectedCID() );
+        const uno::Reference< frame::XModel >& xChartModel = getModel();
+        if( xChartModel.is() )
+        {
+            Reference< beans::XPropertySet > xPointProperties(
+                ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
+            if( xPointProperties.is() )
+                xPointProperties->setPropertyValue( "Offset", uno::Any( nOffset / 100.0 ) );
+        }
+    }
+    catch( const uno::Exception & ex )
+    {
+        SAL_WARN( "chart2", "Exception caught. " << ex );
+    }
+}
+
 void ChartController::impl_ShapeControllerDispatch( const util::URL& rURL, const Sequence< beans::PropertyValue >& rArgs )
 {
     Reference< frame::XDispatch > xDispatch( m_aDispatchContainer.getShapeController() );
