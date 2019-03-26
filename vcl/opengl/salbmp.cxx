@@ -598,8 +598,8 @@ bool OpenGLSalBitmap::ReadTexture()
 #endif
         return true;
     }
-    else if (mnBits == 1 || mnBits == 4)
-    {   // convert buffers from 24-bit RGB to 1 or 4-bit buffer
+    else if (mnBits == 1 || mnBits == 4 || mnBits == 8)
+    {   // convert buffers from 24-bit RGB to 1,4 or 8-bit buffer
         std::vector<sal_uInt8> aBuffer(mnWidth * mnHeight * 3);
 
         sal_uInt8* pBuffer = aBuffer.data();
@@ -614,9 +614,13 @@ bool OpenGLSalBitmap::ReadTexture()
                 pWriter.reset(new ScanlineWriter(maPalette, 8));
                 break;
             case 4:
-            default:
                 pWriter.reset(new ScanlineWriter(maPalette, 2));
                 break;
+            case 8:
+                pWriter.reset(new ScanlineWriter(maPalette, 1));
+                break;
+            default:
+                abort();
         }
 
         for (int y = 0; y < mnHeight; ++y)

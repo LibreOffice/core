@@ -39,11 +39,13 @@ public:
     void testTdf104141();
     void testTdf113918();
     void testDrawBitmap32();
+    void testTdf116888();
 
     CPPUNIT_TEST_SUITE(BitmapRenderTest);
     CPPUNIT_TEST(testTdf104141);
     CPPUNIT_TEST(testTdf113918);
     CPPUNIT_TEST(testDrawBitmap32);
+    CPPUNIT_TEST(testTdf116888);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -124,6 +126,40 @@ void BitmapRenderTest::testDrawBitmap32()
 #if !defined(_WIN32)
     CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x7F, 0xFF, 0x7F), pVDev->GetPixel(Point(2, 2)));
 #endif
+}
+
+void BitmapRenderTest::testTdf116888()
+{
+    // The image is a 8bit image with a non-grayscale palette. In OpenGL mode
+    // pdf export of the image was broken, because OpenGLSalBitmap::ReadTexture()
+    // didn't handle 8bit non-grayscale and moreover OpenGLSalBitmap::AcquireBuffer()
+    // didn't properly release mpUserBuffer after ReadTexture() failure.
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic;
+    const OUString aURL(getFullUrl("tdf116888.gif"));
+    SvFileStream aFileStream(aURL, StreamMode::READ);
+    ErrCode bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
+    Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
+    CPPUNIT_ASSERT(!aBitmap.IsEmpty());
+    aBitmap.Scale(0.8, 0.8); // This scaling discards mpUserData,
+    Bitmap::ScopedReadAccess pAccess(aBitmap); // forcing ReadTexture() here.
+    // Check that there is mpUserBuffer content.
+    CPPUNIT_ASSERT(pAccess);
+    const ScanlineFormat eFormat = pAccess->GetScanlineFormat();
+    CPPUNIT_ASSERT_EQUAL(ScanlineFormat::N8BitPal, eFormat);
+    CPPUNIT_ASSERT(!aBitmap.HasGreyPalette());
+    // HACK: Some rendering backends change white to #FEFEFE while scaling for some reason.
+    // That is pretty much white too in practice, so adjust for that.
+    BitmapColor white(COL_WHITE);
+    if (pAccess->GetColor(0, 0) == Color(0xfe, 0xfe, 0xfe))
+        white = Color(0xfe, 0xfe, 0xfe);
+    // Check that the image contents are also valid.
+    CPPUNIT_ASSERT_EQUAL(white, pAccess->GetColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(white, pAccess->GetColor(0, pAccess->Width() - 1));
+    CPPUNIT_ASSERT_EQUAL(white, pAccess->GetColor(pAccess->Height() - 1, 0));
+    CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_BLACK),
+                         pAccess->GetColor(pAccess->Height() - 1, pAccess->Width() - 1));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BitmapRenderTest);
