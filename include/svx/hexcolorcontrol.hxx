@@ -34,12 +34,17 @@ class SVX_DLLPUBLIC HexColorControl
 {
 private:
     std::unique_ptr<weld::Entry> m_xEntry;
+    Link<weld::Entry&, void> m_aModifyHdl;
+    ImplSVEvent* m_nAsyncModifyEvent;
 
     DECL_STATIC_LINK(HexColorControl, ImplProcessInputHdl, OUString&, bool);
+    DECL_LINK(ImplProcessModifyHdl, weld::Entry&, void);
+    DECL_LINK(OnAsyncModifyHdl, void*, void);
 public:
     HexColorControl(std::unique_ptr<weld::Entry> pEdit);
+    ~HexColorControl();
 
-    void connect_changed(const Link<Entry&, void>& rLink) { m_xEntry->connect_changed(rLink); }
+    void connect_changed(const Link<weld::Entry&, void>& rLink) { m_aModifyHdl = rLink; }
 
     void SetColor( ::Color nColor );
     ::Color GetColor();
