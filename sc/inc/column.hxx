@@ -702,9 +702,10 @@ public:
     bool        ReservePatternCount( SCSIZE nReserve );
 private:
 
-    sc::CellStoreType::iterator GetPositionToInsert( SCROW nRow, std::vector<SCROW>& rNewSharedRows );
+    sc::CellStoreType::iterator GetPositionToInsert( SCROW nRow, std::vector<SCROW>& rNewSharedRows,
+                                                     bool bInsertFormula );
     sc::CellStoreType::iterator GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow,
-                                                     std::vector<SCROW>& rNewSharedRows );
+                                                     std::vector<SCROW>& rNewSharedRows, bool bInsertFormula );
 
     void AttachNewFormulaCell(
         const sc::CellStoreType::iterator& itPos, SCROW nRow, ScFormulaCell& rCell,
