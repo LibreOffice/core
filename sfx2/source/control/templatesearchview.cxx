@@ -22,27 +22,26 @@
 
 #include <vcl/builderfactory.hxx>
 
-#define MNI_OPEN               1
-#define MNI_EDIT               2
-#define MNI_DEFAULT_TEMPLATE   3
-#define MNI_DELETE             4
+#define MNI_OPEN               "open"
+#define MNI_EDIT               "edit"
+#define MNI_DEFAULT_TEMPLATE   "default"
+#define MNI_DELETE             "delete"
 
-TemplateSearchView::TemplateSearchView (vcl::Window *pParent)
-    : ThumbnailView(pParent,WB_TABSTOP | WB_VSCROLL | WB_BORDER),
-    maSelectedItem(nullptr),
-    maPosition(0,0)
+TemplateSearchView::TemplateSearchView(std::unique_ptr<weld::ScrolledWindow> xWindow,
+                                       std::unique_ptr<weld::Menu> xMenu)
+    : SfxThumbnailView(std::move(xWindow), std::move(xMenu))
+    , maSelectedItem(nullptr)
+    , maPosition(0,0)
 {
 }
 
-VCL_BUILDER_FACTORY(TemplateSearchView)
-
-void TemplateSearchView::MouseButtonDown( const MouseEvent& rMEvt )
+bool TemplateSearchView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     GrabFocus();
-    ThumbnailView::MouseButtonDown(rMEvt);
+    return SfxThumbnailView::MouseButtonDown(rMEvt);
 }
 
-void TemplateSearchView::KeyInput( const KeyEvent& rKEvt )
+bool TemplateSearchView::KeyInput( const KeyEvent& rKEvt )
 {
     vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
 
@@ -59,14 +58,14 @@ void TemplateSearchView::KeyInput( const KeyEvent& rKEvt )
 
         if (IsReallyVisible() && IsUpdateMode())
             Invalidate();
-        return;
+        return true;
     }
     else if( aKeyCode == KEY_DELETE && !mFilteredItemList.empty())
     {
-        std::unique_ptr<weld::MessageDialog> xQueryDlg(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo,
+        std::unique_ptr<weld::MessageDialog> xQueryDlg(Application::CreateMessageDialog(GetDrawingArea(), VclMessageType::Question, VclButtonsType::YesNo,
                                                        SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE)));
         if (xQueryDlg->run() != RET_YES)
-            return;
+            return true;
 
         //copy to avoid changing filtered item list during deletion
         ThumbnailValueItemList mFilteredItemListCopy = mFilteredItemList;
@@ -83,104 +82,86 @@ void TemplateSearchView::KeyInput( const KeyEvent& rKEvt )
         }
     }
 
-    ThumbnailView::KeyInput(rKEvt);
+    return SfxThumbnailView::KeyInput(rKEvt);
 }
 
-void TemplateSearchView::Command( const CommandEvent& rCEvt )
+bool TemplateSearchView::ContextMenu(const CommandEvent& rCEvt)
 {
-    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
+    if (rCEvt.IsMouseEvent())
     {
-        if(rCEvt.IsMouseEvent())
-        {
-            deselectItems();
-            size_t nPos = ImplGetItem(rCEvt.GetMousePosPixel());
-            Point aPosition (rCEvt.GetMousePosPixel());
-            maPosition = aPosition;
-            ThumbnailViewItem* pItem = ImplGetItem(nPos);
-            const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
+        deselectItems();
+        size_t nPos = ImplGetItem(rCEvt.GetMousePosPixel());
+        Point aPosition(rCEvt.GetMousePosPixel());
+        maPosition = aPosition;
+        ThumbnailViewItem* pItem = ImplGetItem(nPos);
+        const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
 
-            if(pViewItem)
+        if(pViewItem)
+        {
+            maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+            maCreateContextMenuHdl.Call(pItem);
+        }
+    }
+    else
+    {
+        for (ThumbnailViewItem* pItem : mFilteredItemList)
+        {
+            //create context menu for the first selected item
+            if (pItem->isSelected())
             {
+                deselectItems();
+                pItem->setSelection(true);
+                maItemStateHdl.Call(pItem);
+                tools::Rectangle aRect = pItem->getDrawArea();
+                maPosition = aRect.Center();
                 maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
                 maCreateContextMenuHdl.Call(pItem);
-            }
-        }
-        else
-        {
-            for (ThumbnailViewItem* pItem : mFilteredItemList)
-            {
-                //create context menu for the first selected item
-                if (pItem->isSelected())
-                {
-                    deselectItems();
-                    pItem->setSelection(true);
-                    maItemStateHdl.Call(pItem);
-                    tools::Rectangle aRect = pItem->getDrawArea();
-                    maPosition = aRect.Center();
-                    maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
-                    maCreateContextMenuHdl.Call(pItem);
-                    break;
-                }
+                break;
             }
         }
     }
-
-    ThumbnailView::Command(rCEvt);
+    return true;
 }
 
-void TemplateSearchView::createContextMenu( const bool bIsDefault)
+void TemplateSearchView::createContextMenu(const bool bIsDefault)
 {
-    ScopedVclPtrInstance<PopupMenu> pItemMenu;
-    pItemMenu->InsertItem(MNI_OPEN,SfxResId(STR_OPEN));
-    pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE));
+    mxContextMenu->clear();
+    mxContextMenu->append(MNI_OPEN,SfxResId(STR_OPEN));
+    mxContextMenu->append(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE));
 
-    if(!bIsDefault)
-        pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_DEFAULT_TEMPLATE));
+    if (!bIsDefault)
+        mxContextMenu->append(MNI_DEFAULT_TEMPLATE,SfxResId(STR_DEFAULT_TEMPLATE));
     else
-        pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_RESET_DEFAULT));
+        mxContextMenu->append(MNI_DEFAULT_TEMPLATE,SfxResId(STR_RESET_DEFAULT));
 
-    pItemMenu->InsertSeparator();
-    pItemMenu->InsertItem(MNI_DELETE,SfxResId(STR_DELETE));
+    mxContextMenu->append_separator("separator");
+    mxContextMenu->append(MNI_DELETE,SfxResId(STR_DELETE));
     maSelectedItem->setSelection(true);
     maItemStateHdl.Call(maSelectedItem);
-    pItemMenu->SetSelectHdl(LINK(this, TemplateSearchView, ContextMenuSelectHdl));
-    pItemMenu->Execute(this, tools::Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
+    ContextMenuSelectHdl(mxContextMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(maPosition, Size(1,1))));
     Invalidate();
 }
 
-IMPL_LINK(TemplateSearchView, ContextMenuSelectHdl, Menu*, pMenu, bool)
+void TemplateSearchView::ContextMenuSelectHdl(const OString& rIdent)
 {
-    sal_uInt16 nMenuId = pMenu->GetCurItemId();
-
-    switch(nMenuId)
-    {
-    case MNI_OPEN:
+    if (rIdent == MNI_OPEN)
         maOpenTemplateHdl.Call(maSelectedItem);
-        break;
-    case MNI_EDIT:
+    else if (rIdent == MNI_EDIT)
         maEditTemplateHdl.Call(maSelectedItem);
-        break;
-    case MNI_DELETE:
+    else if (rIdent ==  MNI_DELETE)
     {
-        std::unique_ptr<weld::MessageDialog> xQueryDlg(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo,
+        std::unique_ptr<weld::MessageDialog> xQueryDlg(Application::CreateMessageDialog(GetDrawingArea(), VclMessageType::Question, VclButtonsType::YesNo,
                                                        SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE)));
         if (xQueryDlg->run() != RET_YES)
-            break;
+            return;
 
         maDeleteTemplateHdl.Call(maSelectedItem);
         RemoveItem(maSelectedItem->mnId);
 
         CalculateItemPositions();
     }
-        break;
-    case MNI_DEFAULT_TEMPLATE:
+    else if (rIdent == MNI_DEFAULT_TEMPLATE)
         maDefaultTemplateHdl.Call(maSelectedItem);
-        break;
-    default:
-        break;
-    }
-
-    return false;
 }
 
 void TemplateSearchView::setCreateContextMenuHdl(const Link<ThumbnailViewItem*,void> &rLink)
@@ -235,7 +216,7 @@ void TemplateSearchView::AppendItem(sal_uInt16 nAssocItemId, sal_uInt16 nRegionI
     if(TemplateLocalView::IsDefaultTemplate(rPath))
         pItem->showDefaultIcon(true);
 
-    ThumbnailView::AppendItem(std::move(pItem));
+    SfxThumbnailView::AppendItem(std::move(pItem));
 
     CalculateItemPositions();
 }

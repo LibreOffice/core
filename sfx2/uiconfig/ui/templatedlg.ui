@@ -2,60 +2,56 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
-  <object class="GtkListStore" id="applist">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="templatedlg|applist">All Applications</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="templatedlg|applist">Documents</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="templatedlg|applist">Spreadsheets</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="templatedlg|applist">Presentations</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="templatedlg|applist">Drawings</col>
-      </row>
-    </data>
+  <object class="GtkMenu" id="contextmenu1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
   </object>
-  <object class="GtkListStore" id="folderlist">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="templatedlg|folderlist">All Categories</col>
-      </row>
-    </data>
+  <object class="GtkMenu" id="contextmenu2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
   </object>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sfx2/res/actiontemplates020.png</property>
+    <property name="icon_name">sfx2/res/actiontemplates020.png</property>
   </object>
   <object class="GtkImage" id="image3">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sfx2/res/actiontemplates017.png</property>
+    <property name="icon_name">sfx2/res/actiontemplates017.png</property>
   </object>
   <object class="GtkImage" id="image4">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sfx2/res/actionview010.png</property>
+    <property name="icon_name">sfx2/res/actionview010.png</property>
   </object>
   <object class="GtkImage" id="image5">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_webhtml.png</property>
+    <property name="icon_name">cmd/lc_webhtml.png</property>
+  </object>
+  <object class="GtkImage" id="image7">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sfx2/res/actionaction013.png</property>
+  </object>
+  <object class="GtkMenu" id="menu1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="default">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="colsmenu|insert">Reset Default Template</property>
+        <property name="use_underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="submenu">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </object>
+        </child>
+      </object>
+    </child>
   </object>
   <object class="GtkDialog" id="TemplateDialog">
     <property name="width_request">800</property>
@@ -64,7 +60,12 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="templatedlg|TemplateDialog">Templates</property>
     <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">normal</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -144,6 +145,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes" context="templatedlg|search_filter|tooltip_text">Search</property>
+                    <property name="activates_default">True</property>
                     <property name="placeholder_text" translatable="yes" context="templatedlg|search_filter">Search...</property>
                   </object>
                   <packing>
@@ -163,12 +165,18 @@
                         <property name="can_focus">False</property>
                         <property name="spacing">12</property>
                         <child>
-                          <object class="GtkComboBox" id="filter_application">
+                          <object class="GtkComboBoxText" id="filter_application">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="tooltip_text" translatable="yes" context="templatedlg|filter_application|tooltip_text">Filter by Application</property>
                             <property name="resize_mode">queue</property>
-                            <property name="model">applist</property>
+                            <items>
+                              <item id="0" translatable="yes" context="templatedlg|applist">All Applications</item>
+                              <item id="0" translatable="yes" context="templatedlg|applist">Documents</item>
+                              <item id="0" translatable="yes" context="templatedlg|applist">Spreadsheets</item>
+                              <item id="0" translatable="yes" context="templatedlg|applist">Presentations</item>
+                              <item id="0" translatable="yes" context="templatedlg|applist">Drawings</item>
+                            </items>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -177,12 +185,14 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox" id="filter_folder">
+                          <object class="GtkComboBoxText" id="filter_folder">
                             <property name="width_request">250</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="tooltip_text" translatable="yes" context="templatedlg|filter_folder|tooltip_text">Filter by Category</property>
-                            <property name="model">folderlist</property>
+                            <items>
+                              <item id="0" translatable="yes" context="templatedlg|folderlist">All Categories</item>
+                            </items>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -248,30 +258,65 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="sfxlo-TemplateLocalView" id="template_view">
-                        <property name="visible">True</property>
+                      <object class="GtkScrolledWindow" id="scrolllocal">
                         <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkViewport">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <child>
+                              <object class="GtkDrawingArea" id="template_view">
+                                <property name="can_focus">True</property>
+                                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                                <property name="no_show_all">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-TemplateSearchView" id="search_view">
+                      <object class="GtkScrolledWindow" id="scrollsearch">
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
-                        <property name="margin">0</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkViewport">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <child>
+                              <object class="GtkDrawingArea" id="search_view">
+                                <property name="can_focus">True</property>
+                                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                                <property name="no_show_all">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
@@ -300,24 +345,14 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkToolbar" id="action_action">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="hexpand">True</property>
-                        <child>
-                          <object class="GtkToolButton" id="action_menu">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes" context="templatedlg|action_menu|tooltip_text">Settings</property>
-                            <property name="action_name">action_menu</property>
-                            <property name="icon_name">sfx2/res/actionaction013.png</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
+                      <object class="GtkMenuButton" id="action_menu">
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes" context="templatedlg|action_menu|tooltip_text">Settings</property>
+                        <property name="image">image7</property>
+                        <property name="always_show_image">True</property>
+                        <property name="popup">menu1</property>
+                        <property name="use_popover">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -333,7 +368,6 @@
                         <property name="tooltip_text" translatable="yes" context="templatedlg|online_link|tooltip_text">Browse online templates</property>
                         <property name="image">image5</property>
                         <property name="relief">none</property>
-                        <property name="yalign">0.49000000953674316</property>
                         <property name="always_show_image">True</property>
                       </object>
                       <packing>
@@ -365,10 +399,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="bottom_action_box">
+                  <object class="GtkButtonBox" id="bottom_action_box">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
+                    <property name="spacing">3</property>
                     <child>
                       <object class="GtkButton" id="move_btn">
                         <property name="label" translatable="yes" context="templatedlg|move_btn">Move</property>
@@ -378,7 +413,6 @@
                         <property name="tooltip_text" translatable="yes" context="templatedlg|move_btn|tooltip_text">Move Templates</property>
                         <property name="image">image3</property>
                         <property name="relief">none</property>
-                        <property name="yalign">0.50999999046325684</property>
                         <property name="always_show_image">True</property>
                       </object>
                       <packing>

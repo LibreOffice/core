@@ -12,10 +12,15 @@
 
 #include <sfx2/thumbnailview.hxx>
 
+namespace sfx2
+{
+    class RecentDocsView;
+}
+
 class RecentDocsViewItem final : public ThumbnailViewItem
 {
 public:
-    RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL,
+    RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUString &rURL,
         const OUString &rTitle, const BitmapEx& rThumbnail, sal_uInt16 nId, long nThumbnailSize);
 
     /** Updates own highlight status based on the aPoint position.
@@ -38,6 +43,8 @@ public:
     void OpenDocument();
 
 private:
+    sfx2::RecentDocsView& mrParentView;
+
     /// Return area where is the icon to remove document from the recent documents.
     tools::Rectangle getRemoveIconArea() const;
 

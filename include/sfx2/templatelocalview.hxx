@@ -193,6 +193,127 @@ protected:
     std::vector<TemplateItemProperties > maAllTemplates;
 };
 
+class SFX2_DLLPUBLIC SfxTemplateLocalView : public SfxThumbnailView
+{
+    typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
+
+public:
+
+    SfxTemplateLocalView(std::unique_ptr<weld::ScrolledWindow> xWindow,
+                         std::unique_ptr<weld::Menu> xMenu);
+
+    virtual ~SfxTemplateLocalView () override;
+
+    // Fill view with new item list
+    void insertItems (const std::vector<TemplateItemProperties> &rTemplates, bool isRegionSelected = true, bool bShowCategoryInTooltip = false);
+
+    // Fill view with template folders thumbnails
+    void Populate ();
+
+    virtual void reload ();
+
+    virtual void showAllTemplates ();
+
+    void showRegion (TemplateContainerItem const *pItem);
+
+    void showRegion (const OUString &rName);
+
+    void createContextMenu(const bool bIsDefault );
+
+    void ContextMenuSelectHdl(const OString& rIdent);
+
+    TemplateContainerItem* getRegion(OUString const & sStr);
+
+    sal_uInt16 getRegionId (size_t pos) const;
+
+    sal_uInt16 getRegionId (OUString const & sRegionName) const;
+
+    OUString getRegionName(const sal_uInt16 nRegionId) const;
+
+    OUString getRegionItemName(const sal_uInt16 nItemId) const;
+
+    std::vector<OUString> getFolderNames ();
+
+    std::vector<TemplateItemProperties>
+        getFilteredItems (const std::function<bool (const TemplateItemProperties&) > &rFunc) const;
+
+    sal_uInt16 createRegion (const OUString &rName);
+
+    bool renameRegion(const OUString &rTitle, const OUString &rNewTitle);
+
+    bool removeRegion (const sal_uInt16 nItemId);
+
+    bool removeTemplate (const sal_uInt16 nItemId, const sal_uInt16 nSrcItemId);
+
+    bool moveTemplate (const ThumbnailViewItem* pItem, const sal_uInt16 nSrcItem,
+                       const sal_uInt16 nTargetItem);
+
+    void moveTemplates (const std::set<const ThumbnailViewItem*,selection_cmp_fn> &rItems, const sal_uInt16 nTargetItem);
+
+    bool copyFrom(TemplateContainerItem *pItem, const OUString &rPath);
+
+    bool exportTo (const sal_uInt16 nItemId, const sal_uInt16 nRegionItemId, const OUString &rName);
+
+    virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle) override;
+
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
+
+    virtual bool ContextMenu(const CommandEvent& rPos) override;
+
+    virtual bool KeyInput( const KeyEvent& rKEvt ) override;
+
+    sal_uInt16 getCurRegionId () const { return mnCurRegionId;}
+
+    void setOpenRegionHdl(const Link<void*,void> &rLink);
+
+    void setCreateContextMenuHdl(const Link<ThumbnailViewItem*,void> &rLink);
+
+    void setOpenTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
+
+    void setEditTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
+
+    void setDeleteTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
+
+    void setDefaultTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
+
+    void updateThumbnailDimensions(long itemMaxSize);
+
+    void RemoveDefaultTemplateIcon( const OUString& rPath);
+
+    static BitmapEx scaleImg (const BitmapEx &rImg, long width, long height);
+
+    static BitmapEx getDefaultThumbnail( const OUString& rPath );
+
+    static BitmapEx fetchThumbnail (const OUString &msURL, long width, long height);
+
+    static bool IsDefaultTemplate(const OUString& rPath);
+
+protected:
+    virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
+
+protected:
+    sal_uInt16 mnCurRegionId;
+
+    TemplateViewItem *maSelectedItem;
+
+    long mnThumbnailWidth;
+    long mnThumbnailHeight;
+
+    Point maPosition; //store the point of click event
+
+    Link<void*,void>              maOpenRegionHdl;
+    Link<ThumbnailViewItem*,void> maCreateContextMenuHdl;
+    Link<ThumbnailViewItem*,void> maOpenTemplateHdl;
+    Link<ThumbnailViewItem*,void> maEditTemplateHdl;
+    Link<ThumbnailViewItem*,void> maDeleteTemplateHdl;
+    Link<ThumbnailViewItem*,void> maDefaultTemplateHdl;
+
+    std::unique_ptr<SfxDocumentTemplates> mpDocTemplates;
+    std::vector<std::unique_ptr<TemplateContainerItem> > maRegions;
+    std::vector<TemplateItemProperties > maAllTemplates;
+};
+
+
 #endif // INCLUDED_SFX2_TEMPLATELOCALVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

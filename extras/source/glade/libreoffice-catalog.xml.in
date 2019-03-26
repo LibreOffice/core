@@ -134,10 +134,6 @@
                         generic-name="Gamma Grid Widget" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
 
-    <glade-widget-class title="Template Local View" name="sfxlo-TemplateLocalView"
-                        generic-name="Template Local View" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
-
     <glade-widget-class title="Mark Preview" name="swuilo-SwMarkPreview"
                         generic-name="Mark Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
@@ -435,9 +431,6 @@
                         generic-name="Template Icon View" parent="GtkIconView"
                         icon-name="widget-gtk-iconview"/>
     <glade-widget-class title="Template Thumbnail View" name="sfxlo-TemplateDefaultView"
-                        generic-name="Template Icon View" parent="GtkIconView"
-                        icon-name="widget-gtk-iconview"/>
-    <glade-widget-class title="Template Search View" name="sfxlo-TemplateSearchView"
                         generic-name="Template Icon View" parent="GtkIconView"
                         icon-name="widget-gtk-iconview"/>
 

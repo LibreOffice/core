@@ -27,7 +27,7 @@ using namespace basegfx::utils;
 using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
-EmojiViewItem::EmojiViewItem (ThumbnailView &rView, sal_uInt16 nId)
+EmojiViewItem::EmojiViewItem (ThumbnailViewBase &rView, sal_uInt16 nId)
     : ThumbnailViewItem(rView, nId)
 {
 }

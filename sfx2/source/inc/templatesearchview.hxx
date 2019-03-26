@@ -16,15 +16,16 @@ class TemplateViewItem;
 class PopupMenu;
 class Menu;
 
-class TemplateSearchView final : public ThumbnailView
+class TemplateSearchView final : public SfxThumbnailView
 {
 public:
 
-    TemplateSearchView ( vcl::Window* pParent);
+    TemplateSearchView(std::unique_ptr<weld::ScrolledWindow> xWindow,
+                       std::unique_ptr<weld::Menu> xMenu);
 
     void setOpenTemplateHdl (const Link<ThumbnailViewItem*, void> &rLink);
 
-    DECL_LINK(ContextMenuSelectHdl, Menu*, bool);
+    void ContextMenuSelectHdl(const OString& rIdent);
 
     void setCreateContextMenuHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
@@ -45,11 +46,11 @@ public:
 private:
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
 
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
 
-    virtual void Command( const CommandEvent& rCEvt ) override;
+    virtual bool ContextMenu(const CommandEvent& rPos) override;
 
-    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+    virtual bool KeyInput( const KeyEvent& rKEvt ) override;
 
     TemplateViewItem *maSelectedItem;
 

@@ -38,18 +38,16 @@ namespace com {
     }   }   }
 }
 
-class SFX2_DLLPUBLIC SfxTemplateManagerDlg : public ModalDialog
+class SFX2_DLLPUBLIC SfxTemplateManagerDlg : public weld::GenericDialogController
 {
     typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
 
 public:
 
-    SfxTemplateManagerDlg(vcl::Window *parent = nullptr);
+    SfxTemplateManagerDlg(weld::Window *parent);
 
     virtual ~SfxTemplateManagerDlg() override;
-    virtual void dispose() override;
-    virtual short Execute() override;
-    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
+    virtual short run() override;
 
     void setDocumentModel (const css::uno::Reference<css::frame::XModel> &rModel);
 
@@ -63,21 +61,19 @@ protected:
 
     void fillFolderComboBox();
 
-    DECL_LINK(TBXDropdownHdl, ToolBox*, void);
+    DECL_LINK(SelectApplicationHdl, weld::ComboBox&, void);
+    DECL_LINK(SelectRegionHdl, weld::ComboBox&, void);
 
-    DECL_LINK(SelectApplicationHdl, ListBox&, void);
-    DECL_LINK(SelectRegionHdl, ListBox&, void);
-
-    DECL_LINK(OkClickHdl, Button*, void);
-    DECL_LINK(MoveClickHdl, Button*, void);
-    DECL_LINK(ExportClickHdl, Button*, void);
-    DECL_LINK(ImportClickHdl, Button*, void);
-    DECL_STATIC_LINK(SfxTemplateManagerDlg, LinkClickHdl, Button*, void);
+    DECL_LINK(OkClickHdl, weld::Button&, void);
+    DECL_LINK(MoveClickHdl, weld::Button&, void);
+    DECL_LINK(ExportClickHdl, weld::Button&, void);
+    DECL_LINK(ImportClickHdl, weld::Button&, void);
+    DECL_STATIC_LINK(SfxTemplateManagerDlg, LinkClickHdl, weld::Button&, void);
 
     DECL_LINK(TVItemStateHdl, const ThumbnailViewItem*, void);
 
-    DECL_LINK(MenuSelectHdl, Menu*, bool);
-    DECL_LINK(DefaultTemplateMenuSelectHdl, Menu*, bool);
+    DECL_LINK(MenuSelectHdl, const OString&, void);
+    void DefaultTemplateMenuSelectHdl(const OString& rIdent);
 
     DECL_LINK(OpenRegionHdl, void*, void);
     DECL_LINK(CreateContextMenuHdl, ThumbnailViewItem*, void);
@@ -86,8 +82,13 @@ protected:
     DECL_LINK(DeleteTemplateHdl, ThumbnailViewItem*, void);
     DECL_LINK(DefaultTemplateHdl, ThumbnailViewItem*, void);
 
-    DECL_LINK(SearchUpdateHdl, Edit&, void);
-    DECL_LINK(GetFocusHdl, Control&, void);
+    void SearchUpdate();
+
+    DECL_LINK(SearchUpdateHdl, weld::Entry&, void);
+    DECL_LINK(GetFocusHdl, weld::Widget&, void);
+    DECL_LINK(LoseFocusHdl, weld::Widget&, void);
+    DECL_LINK(ImplUpdateDataHdl, Timer*, void);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
     void OnTemplateImportCategory(const OUString& sCategory);
     static void OnTemplateLink ();
@@ -122,27 +123,28 @@ protected:
     FILTER_APPLICATION getCurrentApplicationFilter();
 
 protected:
-
-    VclPtr<Edit> mpSearchFilter;
-    VclPtr<ListBox> mpCBApp;
-    VclPtr<ListBox> mpCBFolder;
-
-    VclPtr<PushButton> mpOKButton;
-    VclPtr<PushButton> mpMoveButton;
-    VclPtr<PushButton> mpExportButton;
-    VclPtr<PushButton> mpImportButton;
-    VclPtr<PushButton> mpLinkButton;
-    VclPtr<CheckBox> mpCBXHideDlg;
-    VclPtr<ToolBox> mpActionBar;
-    VclPtr<TemplateSearchView> mpSearchView;
-    VclPtr<TemplateLocalView> mpLocalView;
-    VclPtr<PopupMenu> mpActionMenu;
-    VclPtr<PopupMenu> mpTemplateDefaultMenu;
-
     std::set<const ThumbnailViewItem*,selection_cmp_fn> maSelTemplates;
-
     css::uno::Reference< css::frame::XModel > m_xModel;
     css::uno::Reference< css::frame::XDesktop2 > mxDesktop;
+
+    Timer m_aUpdateDataTimer;
+
+    std::unique_ptr<weld::Entry> mxSearchFilter;
+    std::unique_ptr<weld::ComboBox> mxCBApp;
+    std::unique_ptr<weld::ComboBox> mxCBFolder;
+
+    std::unique_ptr<weld::Button> mxOKButton;
+    std::unique_ptr<weld::Button> mxMoveButton;
+    std::unique_ptr<weld::Button> mxExportButton;
+    std::unique_ptr<weld::Button> mxImportButton;
+    std::unique_ptr<weld::Button> mxLinkButton;
+    std::unique_ptr<weld::CheckButton> mxCBXHideDlg;
+    std::unique_ptr<weld::MenuButton> mxActionBar;
+    std::unique_ptr<TemplateSearchView> mxSearchView;
+    std::unique_ptr<SfxTemplateLocalView> mxLocalView;
+    std::unique_ptr<weld::Menu> mxTemplateDefaultMenu;
+    std::unique_ptr<weld::CustomWeld> mxSearchViewWeld;
+    std::unique_ptr<weld::CustomWeld> mxLocalViewWeld;
 };
 
 //  class SfxTemplateCategoryDialog -------------------------------------------------------------------
@@ -192,22 +194,20 @@ public:
 class SFX2_DLLPUBLIC SfxTemplateSelectionDlg : public SfxTemplateManagerDlg
 {
 public:
-    SfxTemplateSelectionDlg(vcl::Window *parent);
+    SfxTemplateSelectionDlg(weld::Window *parent);
 
     virtual ~SfxTemplateSelectionDlg() override;
-    virtual void dispose() override;
-    virtual short Execute() override;
+    virtual short run() override;
 
     OUString const & getTemplatePath() const { return msTemplatePath; };
-    bool IsStartWithTemplate() const { return mpCBXHideDlg->IsChecked(); };
+    bool IsStartWithTemplate() const { return mxCBXHideDlg->get_active(); };
 
 private:
     DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*, void);
-    DECL_LINK(OkClickHdl, Button*, void);
+    DECL_LINK(OkClickHdl, weld::Button&, void);
 
-    OUString   msTemplatePath;
+    OUString msTemplatePath;
 };
-
 
 #endif // INCLUDED_SFX2_INC_TEMPLATEDLG_HXX
 

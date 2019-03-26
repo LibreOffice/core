@@ -660,8 +660,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_TEMPLATE_MANAGER:
         {
-            ScopedVclPtrInstance< SfxTemplateManagerDlg > dlg;
-            dlg->Execute();
+            SfxTemplateManagerDlg aDialog(rReq.GetFrameWeld());
+            aDialog.run();
             bDone = true;
             break;
         }

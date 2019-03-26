@@ -10,7 +10,7 @@
 #include <sfx2/inputdlg.hxx>
 #include <vcl/svapp.hxx>
 
-InputDialog::InputDialog(weld::Window* pParent, const OUString &rLabelText)
+InputDialog::InputDialog(weld::Widget* pParent, const OUString &rLabelText)
     : GenericDialogController(pParent, "sfx/ui/inputdialog.ui", "InputDialog")
     , m_xEntry(m_xBuilder->weld_entry("entry"))
     , m_xLabel(m_xBuilder->weld_label("label"))
