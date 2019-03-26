@@ -1098,6 +1098,10 @@ GDIMetaFile SdrGrafObj::getMetafileFromEmbeddedVectorGraphicData() const
     return aRetval;
 }
 
+#ifdef _WIN32
+#undef GetMetaFile
+#endif
+
 GDIMetaFile SdrGrafObj::GetMetaFile(GraphicType &rGraphicType) const
 {
     if (isEmbeddedVectorGraphicData())
