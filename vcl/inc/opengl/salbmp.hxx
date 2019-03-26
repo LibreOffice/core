@@ -93,6 +93,7 @@ private:
 
     GLuint          CreateTexture();
     bool            AllocateUserData();
+    void            DeallocateUserData();
     bool            ReadTexture();
 
 private:
