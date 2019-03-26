@@ -1414,14 +1414,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="UpdateMenuD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" context="notebookbar_groupedbar_full|Help"  translatable="yes">_Check for Updates...</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="separator113">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -2108,14 +2100,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="UpdateMenuD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" context="notebookbar_groupedbar_full|Menu"  translatable="yes">_Check for Updates...</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="separator58">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -2589,14 +2573,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">service:com.sun.star.deployment.ui.PackageManagerDialog</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="UpdateMenuD2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" context="notebookbar_groupedbar_full|Tools"  translatable="yes">_Check for Updates...</property>
       </object>
     </child>
     <child>
