@@ -2060,16 +2060,20 @@
     <hr />
     <h1><a id="a__Extensions" name="a__Extensions">Extensions</a></h1>
     <p>Only third party extensions are listed here whose source code is not in the LibreOffice tree.</p>
-    <h2>Convert Text to Number</h2>
-    <p>The following software may be included in this product: Convert Text to Number. Use of any of this software is
-    governed by the terms of the license below:</p>
-    <p>Copyright (C) 2008/2009 - Cor Nouws</p>
-    <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
-    <h2>LanguageTool Grammar Checker</h2>
-    <p>The following software may be included in this product: LanguageTool Grammar Checker. Use of any of this
-    software is governed by the terms of the license below:</p>
-    <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
-    <div class="LIBNUMBERTEXT"  >
+    <div class="CT2N">
+        <h2>Convert Text to Number</h2>
+        <p>The following software may be included in this product: Convert Text to Number. Use of any of this software is
+        governed by the terms of the license below:</p>
+        <p>Copyright (C) 2008/2009 - Cor Nouws</p>
+        <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
+    </div>
+    <div class="LANGUAGETOOL">
+        <h2>LanguageTool Grammar Checker</h2>
+        <p>The following software may be included in this product: LanguageTool Grammar Checker. Use of any of this
+        software is governed by the terms of the license below:</p>
+        <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
+    </div>
+    <div class="NUMBERTEXT"><!-- FIXME: license_*.xsl written in XSLT 1.0 matches this when LIBNUMBERTEXT is defined -->
         <h2>Numbertext</h2>
         <p>The following software may be included in this product: Numbertext. Use of any of this software is governed
         by the terms of the license below:</p>
@@ -2084,11 +2088,13 @@
         either express or implied.</p>
         <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
     </div>
-    <h2>Solver for Nonlinear Programming</h2>
-    <p>The following software may be included in this product: Solver for Nonlinear Programming. Use of any of this
-    software is governed by the terms of the license below:</p>
-    <p>Copyright 2009 by Sun Microsystems, Inc.</p>
-    <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
+    <div class="NLPSOLVER">
+        <h2>Solver for Nonlinear Programming</h2>
+        <p>The following software may be included in this product: Solver for Nonlinear Programming. Use of any of this
+        software is governed by the terms of the license below:</p>
+        <p>Copyright 2009 by Sun Microsystems, Inc.</p>
+        <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
+    </div>
     <div class="MORE_FONTS">
         <hr />
         <h1><a id="a__Fonts" name="a__Fonts">Fonts</a></h1>
