@@ -1498,14 +1498,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuHelp-UpdateMenu">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|HelpButton">_Check for Updates...</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="MenuHelp-separator3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -2685,14 +2677,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">service:com.sun.star.deployment.ui.PackageManagerDialog</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuSettings-UpdateMenu">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|MenuButton">_Check for Updates...</property>
       </object>
     </child>
     <child>
