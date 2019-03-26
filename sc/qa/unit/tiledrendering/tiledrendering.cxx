@@ -92,6 +92,7 @@ public:
     void testIMESupport();
     void testFilterDlg();
     void testVbaRangeCopyPaste();
+    void testInvalidationLoop();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -125,6 +126,7 @@ public:
     CPPUNIT_TEST(testIMESupport);
     CPPUNIT_TEST(testFilterDlg);
     CPPUNIT_TEST(testVbaRangeCopyPaste);
+    CPPUNIT_TEST(testInvalidationLoop);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1675,6 +1677,15 @@ void ScTiledRenderingTest::testVbaRangeCopyPaste()
     CPPUNIT_ASSERT(!pDocShell->GetClipData().is());
 
     comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testInvalidationLoop()
+{
+    // Load the document with a form control.
+    createDoc("invalidation-loop.fods");
+    // Without the accompanying fix in place, this test would have never returned due to an infinite
+    // invalidation loop between ScGridWindow::Paint() and vcl::Window::ImplPosSizeWindow().
+    Scheduler::ProcessEventsToIdle();
 }
 
 }
