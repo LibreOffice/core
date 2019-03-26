@@ -195,6 +195,10 @@ bool Edit::set_property(const OString &rKey, const OUString &rValue)
     {
         SetReadOnly(!toBool(rValue));
     }
+    else if (rKey == "overwrite-mode")
+    {
+        SetInsertMode(!toBool(rValue));
+    }
     else if (rKey == "visibility")
     {
         mbPassword = false;
