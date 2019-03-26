@@ -310,7 +310,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
             break;
             case WidgetDrawActionType::IMAGE:
             {
-                double nScaleFactor = 2.0;
+                double nScaleFactor = 1.0;
                 if (comphelper::LibreOfficeKit::isActive())
                     nScaleFactor = comphelper::LibreOfficeKit::getDPIScale();
 
