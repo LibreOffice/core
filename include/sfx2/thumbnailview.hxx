@@ -18,6 +18,7 @@
 
 #include <sfx2/thumbnailviewitem.hxx>
 #include <vcl/ctrl.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/pngread.hxx>
 
@@ -174,7 +175,26 @@ public:
  *
  **/
 
-class SFX2_DLLPUBLIC ThumbnailView : public Control
+class SFX2_DLLPUBLIC ThumbnailViewBase
+{
+    friend class ThumbnailViewAcc;
+    friend class ThumbnailViewItemAcc;
+
+    SFX2_DLLPRIVATE virtual sal_uInt16 ImplGetVisibleItemCount() const = 0;
+    SFX2_DLLPRIVATE virtual ThumbnailViewItem* ImplGetVisibleItem(sal_uInt16 nVisiblePos) = 0;
+
+    virtual css::uno::Reference<css::accessibility::XAccessible> getAccessible() = 0;
+
+public:
+    /// Updates information in the view; used only in RecentDocsView ATM.
+    virtual void Reload() {}
+
+    virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle);
+
+    virtual ~ThumbnailViewBase();
+};
+
+class SFX2_DLLPUBLIC ThumbnailView : public Control, public ThumbnailViewBase
 {
 public:
 
@@ -190,9 +210,6 @@ public:
     void RemoveItem(sal_uInt16 nItemId);
 
     virtual void Clear();
-
-    /// Updates information in the view; used only in RecentDocsView ATM.
-    virtual void Reload() {}
 
     // Change current thumbnail item list with new one (invalidates all pointers to a thumbnail item)
     void updateItems(std::vector<std::unique_ptr<ThumbnailViewItem>> items);
@@ -232,8 +249,6 @@ public:
 
     virtual void Resize() override;
 
-    virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle);
-
     static BitmapEx readThumbnail(const OUString &msURL);
 
 protected:
@@ -255,6 +270,8 @@ protected:
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+
+    virtual css::uno::Reference<css::accessibility::XAccessible> getAccessible() override;
 
 protected:
 
@@ -280,8 +297,8 @@ protected:
     SFX2_DLLPRIVATE void         ImplDeleteItems();
     SFX2_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint ) const;
     SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetItem( size_t nPos );
-    SFX2_DLLPRIVATE sal_uInt16   ImplGetVisibleItemCount() const;
-    SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetVisibleItem( sal_uInt16 nVisiblePos );
+    SFX2_DLLPRIVATE virtual sal_uInt16 ImplGetVisibleItemCount() const override;
+    SFX2_DLLPRIVATE virtual ThumbnailViewItem* ImplGetVisibleItem(sal_uInt16 nVisiblePos) override;
     SFX2_DLLPRIVATE void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     SFX2_DLLPRIVATE bool         ImplHasAccessibleListeners();
     DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar*, void );
@@ -319,6 +336,157 @@ protected:
 
     std::function<bool (const ThumbnailViewItem*)> maFilterFunc;
 };
+
+class SFX2_DLLPUBLIC SfxThumbnailView : public weld::CustomWidgetController, public ThumbnailViewBase
+{
+public:
+    SfxThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu);
+
+    virtual ~SfxThumbnailView() override;
+
+    virtual bool MouseMove(const MouseEvent& rMEvt) override;
+
+    void AppendItem(std::unique_ptr<ThumbnailViewItem> pItem);
+
+    void RemoveItem(sal_uInt16 nItemId);
+
+    virtual void Clear();
+
+    // Change current thumbnail item list with new one (invalidates all pointers to a thumbnail item)
+    void updateItems(std::vector<std::unique_ptr<ThumbnailViewItem>> items);
+
+    size_t GetItemPos( sal_uInt16 nItemId ) const;
+
+    sal_uInt16 GetItemId( size_t nPos ) const;
+
+    sal_uInt16 GetItemId( const Point& rPos ) const;
+
+    sal_uInt16 getNextItemId () const;
+
+    void setItemMaxTextLength (sal_uInt32 nLength);
+
+    void setItemDimensions (long ItemWidth, long ThumbnailHeight,
+                            long DisplayHeight, int itemPadding);
+
+    void SelectItem( sal_uInt16 nItemId );
+
+    bool IsItemSelected( sal_uInt16 nItemId ) const;
+
+    /**
+     *
+     * @brief deselect all current selected items.
+     *
+     **/
+
+    void deselectItems ();
+
+    void ShowTooltips( bool bShowTooltips );
+
+    void SetMultiSelectionEnabled( bool bIsMultiSelectionEnabled );
+
+    void filterItems (const std::function<bool (const ThumbnailViewItem*) > &func);
+
+    void setItemStateHdl (const Link<const ThumbnailViewItem*,void> &aLink) { maItemStateHdl = aLink; }
+
+    virtual void Resize() override;
+
+    static BitmapEx readThumbnail(const OUString &msURL);
+
+    virtual void Show() override
+    {
+        mxScrolledWindow->show();
+        CustomWidgetController::Show();
+    }
+
+    virtual void Hide() override
+    {
+        mxScrolledWindow->hide();
+        CustomWidgetController::Hide();
+    }
+
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+
+protected:
+
+    virtual bool KeyInput( const KeyEvent& rKEvt ) override;
+
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
+
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+
+    virtual void GetFocus() override;
+
+    virtual void LoseFocus() override;
+
+    virtual OUString RequestHelp(tools::Rectangle& rRect) override;
+
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+
+    virtual css::uno::Reference<css::accessibility::XAccessible> getAccessible() override;
+
+protected:
+
+    // Drawing item related functions, override them to make your own custom ones.
+
+    void DrawItem (ThumbnailViewItem const *pItem);
+
+    virtual void OnItemDblClicked (ThumbnailViewItem *pItem);
+
+protected:
+
+    friend class ThumbnailViewAcc;
+    friend class ThumbnailViewItemAcc;
+
+    void CalculateItemPositions (bool bScrollBarUsed = false);
+    void MakeItemVisible( sal_uInt16 nId );
+
+    SFX2_DLLPRIVATE void         ImplInit();
+
+    SFX2_DLLPRIVATE void         ImplDeleteItems();
+    SFX2_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint ) const;
+    SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetItem( size_t nPos );
+    SFX2_DLLPRIVATE virtual sal_uInt16 ImplGetVisibleItemCount() const override;
+    SFX2_DLLPRIVATE virtual ThumbnailViewItem* ImplGetVisibleItem(sal_uInt16 nVisiblePos) override;
+    SFX2_DLLPRIVATE void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
+    SFX2_DLLPRIVATE bool         ImplHasAccessibleListeners();
+    DECL_DLLPRIVATE_LINK( ImplScrollHdl, weld::ScrolledWindow&, void );
+
+protected:
+
+    std::vector< std::unique_ptr<ThumbnailViewItem> > mItemList;
+    css::uno::Reference<css::accessibility::XAccessible> mxAccessible;
+    ThumbnailValueItemList mFilteredItemList; ///< Cache to store the filtered items
+    ThumbnailValueItemList::iterator mpStartSelRange;
+    long mnItemWidth;
+    long mnItemHeight;
+    long mnItemPadding;
+    long mnThumbnailHeight;     // Maximum height of the thumbnail
+    long mnDisplayHeight;       // Height of the data display box (name, etc)
+    long mnVisLines;
+    long mnLines;
+
+    sal_uInt16 mnCols;
+    sal_uInt16 mnFirstLine;
+    bool mbScroll : 1;
+    bool mbHasVisibleItems : 1;
+    bool mbShowTooltips : 1;
+    bool mbIsMultiSelectionEnabled: 1;
+    Color maFillColor;              ///< Background color of the thumbnail view widget.
+    Color maTextColor;              ///< Text color.
+    Color maHighlightColor;         ///< Color of the highlight (background) of the hovered item.
+    Color maHighlightTextColor;     ///< Color of the text for the highlighted item.
+    Color maSelectHighlightColor;   ///< Color of the highlight (background) of the selected and hovered item.
+    Color maSelectHighlightTextColor;   ///< Color of the text of the selected and hovered item.
+    double mfHighlightTransparence; ///< Transparence of the highlight.
+
+    Link<const ThumbnailViewItem*, void> maItemStateHdl;
+    std::unique_ptr<ThumbnailItemAttributes> mpItemAttrs;
+    std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
+    std::unique_ptr<weld::Menu> mxContextMenu;
+
+    std::function<bool (const ThumbnailViewItem*)> maFilterFunc;
+};
+
 
 #endif // INCLUDED_SFX2_THUMBNAILVIEW_HXX
 

@@ -15,7 +15,7 @@
 class EmojiViewItem : public ThumbnailViewItem
 {
 public:
-    EmojiViewItem (ThumbnailView &rView, sal_uInt16 nId);
+    EmojiViewItem (ThumbnailViewBase &rView, sal_uInt16 nId);
 
     virtual ~EmojiViewItem () override;
 

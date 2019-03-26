@@ -254,6 +254,8 @@ public:
     virtual int hadjustment_get_upper() const = 0;
     virtual void hadjustment_set_upper(int upper) = 0;
     virtual int hadjustment_get_page_size() const = 0;
+    virtual void hadjustment_set_page_size(int size) = 0;
+    virtual void hadjustment_set_page_increment(int size) = 0;
     virtual void set_hpolicy(VclPolicyType eHPolicy) = 0;
     virtual VclPolicyType get_hpolicy() const = 0;
     void connect_hadjustment_changed(const Link<ScrolledWindow&, void>& rLink)
@@ -270,6 +272,8 @@ public:
     virtual int vadjustment_get_upper() const = 0;
     virtual void vadjustment_set_upper(int upper) = 0;
     virtual int vadjustment_get_page_size() const = 0;
+    virtual void vadjustment_set_page_size(int size) = 0;
+    virtual void vadjustment_set_page_increment(int size) = 0;
     virtual int vadjustment_get_lower() const = 0;
     virtual void vadjustment_set_lower(int upper) = 0;
     virtual void set_vpolicy(VclPolicyType eVPolicy) = 0;
@@ -852,11 +856,14 @@ public:
     {
         insert_item(-1, rId, rStr, nullptr, &rImage, false);
     }
+    virtual void insert_separator(int pos, const OUString& rId) = 0;
+    void append_separator(const OUString& rId) { insert_separator(-1, rId); }
     virtual void remove_item(const OString& rId) = 0;
     virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) = 0;
     virtual void set_item_active(const OString& rIdent, bool bActive) = 0;
     virtual void set_item_label(const OString& rIdent, const OUString& rLabel) = 0;
     virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) = 0;
+    virtual void set_item_visible(const OString& rIdent, bool bVisible) = 0;
     virtual OString get_item_help_id(const OString& rIdent) const = 0;
 
     virtual void set_popover(weld::Widget* pPopover) = 0;
@@ -1512,11 +1519,17 @@ public:
     virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) = 0;
     virtual void set_sensitive(const OString& rIdent, bool bSensitive) = 0;
     virtual void set_active(const OString& rIdent, bool bActive) = 0;
-    virtual void show(const OString& rIdent, bool bShow) = 0;
+    virtual void set_visible(const OString& rIdent, bool bVisible) = 0;
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
                         const OUString* pIconName, VirtualDevice* pImageSufface, bool bCheck)
         = 0;
+
+    virtual void clear() = 0;
+
+    virtual void insert_separator(int pos, const OUString& rId) = 0;
+    void append_separator(const OUString& rId) { insert_separator(-1, rId); }
+
     void append(const OUString& rId, const OUString& rStr)
     {
         insert(-1, rId, rStr, nullptr, nullptr, false);

@@ -32,7 +32,7 @@
 
 const int THUMBNAILVIEW_ITEM_CORNER = 5;
 
-class ThumbnailView;
+class ThumbnailViewBase;
 class MouseEvent;
 
 namespace basegfx {
@@ -67,7 +67,7 @@ class SFX2_DLLPUBLIC ThumbnailViewItem
 {
 public:
 
-    ThumbnailView &mrParent;
+    ThumbnailViewBase &mrParent;
     sal_uInt16 const mnId;
     bool mbVisible;
     bool mbSelected;
@@ -77,7 +77,7 @@ public:
     OUString maHelpText;
     css::uno::Reference< css::accessibility::XAccessible > mxAcc;
 
-    ThumbnailViewItem (ThumbnailView &rView, sal_uInt16 nId);
+    ThumbnailViewItem (ThumbnailViewBase &rView, sal_uInt16 nId);
 
     virtual ~ThumbnailViewItem ();
 

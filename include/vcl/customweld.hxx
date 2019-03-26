@@ -49,8 +49,8 @@ public:
         m_pDrawingArea->queue_draw_area(rRect.Left(), rRect.Top(), rRect.GetWidth(),
                                         rRect.GetHeight());
     }
-    void Show() { m_pDrawingArea->show(); }
-    void Hide() { m_pDrawingArea->hide(); }
+    virtual void Show() { m_pDrawingArea->show(); }
+    virtual void Hide() { m_pDrawingArea->hide(); }
     void GrabFocus() { m_pDrawingArea->grab_focus(); }
     bool HasFocus() const { return m_pDrawingArea->has_focus(); }
     bool IsVisible() const { return m_pDrawingArea->get_visible(); }
