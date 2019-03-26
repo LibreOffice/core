@@ -983,10 +983,25 @@ void ScInterpreter::RoundNumber( rtl_math_RoundingMode eMode )
         else
         {
             sal_Int16 nDec = GetInt16();
+            double fX = GetDouble();
             if ( nGlobalError != FormulaError::NONE || nDec < -20 || nDec > 20 )
                 PushIllegalArgument();
             else
-                fVal = ::rtl::math::round( GetDouble(), nDec, eMode );
+            {
+                if ( ( eMode == rtl_math_RoundingMode_Down ||
+                       eMode == rtl_math_RoundingMode_Up ) &&
+                     nDec < 12 && fmod( fX, 1.0 ) != 0.0 )
+                {
+                    // tdf124286 : round to 12 significant digits before rounding
+                    //             down or up to avoid unexpected rounding errors
+                    //             caused by decimal -> binary -> decimal conversion
+                    double fRes;
+                    RoundSignificant( fX, 12, fRes );
+                    fVal = ::rtl::math::round( fRes, nDec, eMode );
+                }
+                else
+                    fVal = ::rtl::math::round( fX, nDec, eMode );
+            }
         }
         PushDouble(fVal);
     }
@@ -1007,6 +1022,17 @@ void ScInterpreter::ScRoundUp()
     RoundNumber( rtl_math_RoundingMode_Up );
 }
 
+void ScInterpreter::RoundSignificant( double fX, double fDigits, double &fRes )
+{
+    bool bNegVal = ( fX < 0 );
+    if ( bNegVal )
+        fX *= -1.0;
+    double fTemp = ::rtl::math::approxFloor( log10( fX ) ) + 1.0 - fDigits;
+    fRes = ::rtl::math::round( pow(10.0, -fTemp ) * fX ) * pow( 10.0, fTemp );
+    if ( bNegVal )
+        fRes *= -1.0;
+}
+
 // tdf#106931
 void ScInterpreter::ScRoundSignificant()
 {
@@ -1024,13 +1050,8 @@ void ScInterpreter::ScRoundSignificant()
             PushDouble( 0.0 );
         else
         {
-            bool bNegVal = ( fX < 0 );
-            if ( bNegVal )
-                fX *= -1.0;
-            double fTemp = ::rtl::math::approxFloor( log10( fX ) ) + 1.0 - fDigits;
-            double fRes = ::rtl::math::round( pow(10.0, -fTemp ) * fX ) * pow( 10.0, fTemp );
-            if ( bNegVal )
-                fRes *= -1.0;
+            double fRes;
+            RoundSignificant( fX, fDigits, fRes );
             PushDouble( fRes );
         }
     }

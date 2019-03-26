@@ -776,6 +776,7 @@ private:
     void ScConvertOOo();
     void ScEuroConvert();
     void ScRoundSignificant();
+    static void RoundSignificant( double fX, double fDigits, double &fRes );
 
     // financial functions
     void ScNPV();
