@@ -104,7 +104,7 @@ void ScPivotShell::Execute( const SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
                 ScopedVclPtr<AbstractScPivotFilterDlg> pDlg(pFact->CreateScPivotFilterDlg(
-                    pViewShell->GetDialogParent(), aArgSet, nSrcTab));
+                    pViewShell->GetFrameWeld(), aArgSet, nSrcTab));
 
                 if( pDlg->Execute() == RET_OK )
                 {

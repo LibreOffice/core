@@ -388,7 +388,13 @@ public:
 
 class AbstractScPivotFilterDlg_Impl : public AbstractScPivotFilterDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScPivotFilterDlg_Impl, ScPivotFilterDlg)
+    std::unique_ptr<ScPivotFilterDlg> m_xDlg;
+public:
+    explicit AbstractScPivotFilterDlg_Impl(std::unique_ptr<ScPivotFilterDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
     virtual const ScQueryItem&  GetOutputItem() override;
 };
 
@@ -660,8 +666,8 @@ public:
 
     virtual VclPtr<AbstractScNamePasteDlg> CreateScNamePasteDlg(weld::Window * pParent, ScDocShell* pShell) override;
 
-    virtual VclPtr<AbstractScPivotFilterDlg> CreateScPivotFilterDlg(vcl::Window* pParent,
-        const SfxItemSet& rArgSet, sal_uInt16 nSourceTab) override;
+    virtual VclPtr<AbstractScPivotFilterDlg> CreateScPivotFilterDlg(weld::Window* pParent, const SfxItemSet& rArgSet,
+                                                                    sal_uInt16 nSourceTab) override;
 
     virtual VclPtr<AbstractScDPFunctionDlg> CreateScDPFunctionDlg(weld::Window* pParent,
                                                                   const ScDPLabelDataVector& rLabelVec,
