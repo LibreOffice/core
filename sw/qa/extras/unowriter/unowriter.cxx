@@ -25,8 +25,6 @@
 #include <view.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
 
 namespace
 {
@@ -210,7 +208,7 @@ DECLARE_UNOAPI_TEST(testGraphicDesciptorURLBitmap)
     CPPUNIT_ASSERT(xGraphic.is());
 }
 
-static bool ensureAutoTextExistsByTitle(const Reference<XAutoTextGroup>& autoTextGroup,
+static bool ensureAutoTextExistsByTitle(const uno::Reference<text::XAutoTextGroup>& autoTextGroup,
                                         const OUString& autoTextName)
 {
     uno::Sequence<OUString> aTitles(autoTextGroup->getTitles());
@@ -222,7 +220,7 @@ static bool ensureAutoTextExistsByTitle(const Reference<XAutoTextGroup>& autoTex
     return false;
 }
 
-static bool ensureAutoTextExistsByName(const Reference<XAutoTextGroup>& autoTextGroup,
+static bool ensureAutoTextExistsByName(const uno::Reference<text::XAutoTextGroup>& autoTextGroup,
                                        const OUString& autoTextName)
 {
     uno::Sequence<OUString> aTitles(autoTextGroup->getElementNames());
@@ -236,8 +234,8 @@ static bool ensureAutoTextExistsByName(const Reference<XAutoTextGroup>& autoText
 
 DECLARE_UNOAPI_TEST_FILE(testXAutoTextGroup, "xautotextgroup.odt")
 {
-    Reference<XAutoTextContainer> xAutoTextContainer
-        = AutoTextContainer::create(comphelper::getProcessComponentContext());
+    uno::Reference<text::XAutoTextContainer> xAutoTextContainer
+        = text::AutoTextContainer::create(comphelper::getProcessComponentContext());
 
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
@@ -248,12 +246,12 @@ DECLARE_UNOAPI_TEST_FILE(testXAutoTextGroup, "xautotextgroup.odt")
     const OUString sTextTitleNew = "Test Auto Text Renamed";
 
     // Create new temporary group
-    Reference<XAutoTextGroup> xAutoTextGroup(xAutoTextContainer->insertNewByName(sGroupName),
-                                             uno::UNO_QUERY);
+    uno::Reference<text::XAutoTextGroup> xAutoTextGroup(
+        xAutoTextContainer->insertNewByName(sGroupName), uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("AutoTextGroup was not found!", xAutoTextGroup.is());
 
     // Insert new element and ensure it exists
-    Reference<XAutoTextEntry> xAutoTextEntry
+    uno::Reference<text::XAutoTextEntry> xAutoTextEntry
         = xAutoTextGroup->insertNewByName(sTextName, sTextTitle, xTextRange);
     CPPUNIT_ASSERT_MESSAGE("AutoText was not inserted!", xAutoTextEntry.is());
     CPPUNIT_ASSERT_MESSAGE("Can't find newly created AutoText by title!",
@@ -302,11 +300,11 @@ DECLARE_UNOAPI_TEST_FILE(testXAutoTextGroup, "xautotextgroup.odt")
 
 DECLARE_UNOAPI_TEST(testXURI)
 {
-    Reference<XComponentContext> xContext(::comphelper::getProcessComponentContext());
+    uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
 
     // createKnown()
-    Reference<rdf::XURI> xURIcreateKnown(rdf::URI::createKnown(xContext, rdf::URIs::ODF_PREFIX),
-                                         UNO_SET_THROW);
+    uno::Reference<rdf::XURI> xURIcreateKnown(
+        rdf::URI::createKnown(xContext, rdf::URIs::ODF_PREFIX), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xURIcreateKnown.is());
     CPPUNIT_ASSERT_EQUAL(OUString("http://docs.oasis-open.org/ns/office/1.2/meta/odf#"),
                          xURIcreateKnown->getNamespace());
@@ -320,21 +318,22 @@ DECLARE_UNOAPI_TEST(testXURI)
                                  lang::IllegalArgumentException);
 
     // create()
-    Reference<rdf::XURI> xURIcreate(rdf::URI::create(xContext, "http://example.com/url#somedata"),
-                                    UNO_SET_THROW);
+    uno::Reference<rdf::XURI> xURIcreate(
+        rdf::URI::create(xContext, "http://example.com/url#somedata"), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/url#"), xURIcreate->getNamespace());
     CPPUNIT_ASSERT_EQUAL(OUString("somedata"), xURIcreate->getLocalName());
     CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/url#somedata"), xURIcreate->getStringValue());
 
     // create() without local name splitted with "/"
-    Reference<rdf::XURI> xURIcreate2(rdf::URI::create(xContext, "http://example.com/url"),
-                                     UNO_SET_THROW);
+    uno::Reference<rdf::XURI> xURIcreate2(rdf::URI::create(xContext, "http://example.com/url"),
+                                          uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/"), xURIcreate2->getNamespace());
     CPPUNIT_ASSERT_EQUAL(OUString("url"), xURIcreate2->getLocalName());
     CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/url"), xURIcreate2->getStringValue());
 
     // create() without prefix
-    Reference<rdf::XURI> xURIcreate3(rdf::URI::create(xContext, "#somedata"), UNO_SET_THROW);
+    uno::Reference<rdf::XURI> xURIcreate3(rdf::URI::create(xContext, "#somedata"),
+                                          uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("#"), xURIcreate3->getNamespace());
     CPPUNIT_ASSERT_EQUAL(OUString("somedata"), xURIcreate3->getLocalName());
     CPPUNIT_ASSERT_EQUAL(OUString("#somedata"), xURIcreate3->getStringValue());
@@ -345,16 +344,16 @@ DECLARE_UNOAPI_TEST(testXURI)
                                  lang::IllegalArgumentException);
 
     // createNS()
-    Reference<rdf::XURI> xURIcreateNS(
-        rdf::URI::createNS(xContext, "http://example.com/url#", "somedata"), UNO_SET_THROW);
+    uno::Reference<rdf::XURI> xURIcreateNS(
+        rdf::URI::createNS(xContext, "http://example.com/url#", "somedata"), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/url#"), xURIcreateNS->getNamespace());
     CPPUNIT_ASSERT_EQUAL(OUString("somedata"), xURIcreateNS->getLocalName());
     CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/url#somedata"),
                          xURIcreateNS->getStringValue());
 
     // TODO: What's going on here? Is such usecase valid?
-    Reference<rdf::XURI> xURIcreateNS2(
-        rdf::URI::createNS(xContext, "http://example.com/url", "somedata"), UNO_SET_THROW);
+    uno::Reference<rdf::XURI> xURIcreateNS2(
+        rdf::URI::createNS(xContext, "http://example.com/url", "somedata"), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/"), xURIcreateNS2->getNamespace());
     CPPUNIT_ASSERT_EQUAL(OUString("urlsomedata"), xURIcreateNS2->getLocalName());
     CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/urlsomedata"),
