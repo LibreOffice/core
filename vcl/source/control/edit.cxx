@@ -793,13 +793,19 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
     aSelection.Justify();
 
     OUString aNewText( ImplGetValidString( rStr ) );
-    ImplTruncateToMaxLen( aNewText, aSelection.Len() );
+
+    // as below, if there's no selection, but we're in overwrite mode and not beyond
+    // the end of the existing text then that's like a selection of 1
+    auto nSelectionLen = aSelection.Len();
+    if (!nSelectionLen && !mbInsertMode && aSelection.Max() < maText.getLength())
+        nSelectionLen = 1;
+    ImplTruncateToMaxLen( aNewText, nSelectionLen );
 
     ImplClearLayoutData();
 
     if ( aSelection.Len() )
         maText.remove( static_cast<sal_Int32>(aSelection.Min()), static_cast<sal_Int32>(aSelection.Len()) );
-    else if ( !mbInsertMode && (aSelection.Max() < maText.getLength()) )
+    else if (!mbInsertMode && aSelection.Max() < maText.getLength())
         maText.remove( static_cast<sal_Int32>(aSelection.Max()), 1 );
 
     // take care of input-sequence-checking now
