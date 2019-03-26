@@ -127,8 +127,6 @@ public:
 class SC_DLLPUBLIC ScUnoHelpFunctions
 {
 public:
-    static css::uno::Reference<css::uno::XInterface>
-                            AnyToInterface( const css::uno::Any& rAny );
     static bool             GetBoolProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
                                             const OUString& rName, bool bDefault = false );
     static sal_Int16        GetShortProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,

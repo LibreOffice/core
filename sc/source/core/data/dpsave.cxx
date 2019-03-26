@@ -527,11 +527,9 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
 
     for (long nHier=0; nHier<nHierCount; nHier++)
     {
-        uno::Reference<uno::XInterface> xHierarchy = ScUnoHelpFunctions::AnyToInterface( xHiers->getByIndex(nHier) );
-
         long nLevCount = 0;
         uno::Reference<container::XIndexAccess> xLevels;
-        uno::Reference<sheet::XLevelsSupplier> xLevSupp( xHierarchy, uno::UNO_QUERY );
+        uno::Reference<sheet::XLevelsSupplier> xLevSupp(xHiers->getByIndex(nHier), uno::UNO_QUERY);
         if ( xLevSupp.is() )
         {
             uno::Reference<container::XNameAccess> xLevelsName = xLevSupp->getLevels();
@@ -541,7 +539,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
 
         for (long nLev=0; nLev<nLevCount; nLev++)
         {
-            uno::Reference<uno::XInterface> xLevel = ScUnoHelpFunctions::AnyToInterface( xLevels->getByIndex(nLev) );
+            uno::Reference<uno::XInterface> xLevel(xLevels->getByIndex(nLev), uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xLevProp( xLevel, uno::UNO_QUERY );
             OSL_ENSURE( xLevProp.is(), "no properties at level" );
             if ( xLevProp.is() )
@@ -591,8 +589,8 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                             OUString aMemberName = pMember->GetName();
                             if ( xMembers->hasByName( aMemberName ) )
                             {
-                                uno::Reference<uno::XInterface> xMemberInt = ScUnoHelpFunctions::AnyToInterface(
-                                    xMembers->getByName( aMemberName ) );
+                                uno::Reference<uno::XInterface> xMemberInt(
+                                    xMembers->getByName(aMemberName), uno::UNO_QUERY);
                                 pMember->WriteToSource( xMemberInt, nPosition );
 
                                 if ( nPosition >= 0 )
@@ -1020,8 +1018,7 @@ static void lcl_ResetOrient( const uno::Reference<sheet::XDimensionsSupplier>& x
     long nIntCount = xIntDims->getCount();
     for (long nIntDim=0; nIntDim<nIntCount; nIntDim++)
     {
-        uno::Reference<uno::XInterface> xIntDim = ScUnoHelpFunctions::AnyToInterface( xIntDims->getByIndex(nIntDim) );
-        uno::Reference<beans::XPropertySet> xDimProp( xIntDim, uno::UNO_QUERY );
+        uno::Reference<beans::XPropertySet> xDimProp(xIntDims->getByIndex(nIntDim), uno::UNO_QUERY);
         if (xDimProp.is())
         {
             xDimProp->setPropertyValue( SC_UNO_DP_ORIENTATION, uno::Any(sheet::DataPilotFieldOrientation_HIDDEN) );
@@ -1090,7 +1087,8 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
             bool bFound = false;
             for (long nIntDim=0; nIntDim<nIntCount && !bFound; nIntDim++)
             {
-                uno::Reference<uno::XInterface> xIntDim = ScUnoHelpFunctions::AnyToInterface( xIntDims->getByIndex(nIntDim) );
+                uno::Reference<uno::XInterface> xIntDim(xIntDims->getByIndex(nIntDim),
+                                                        uno::UNO_QUERY);
                 if ( bData )
                 {
                     uno::Reference<beans::XPropertySet> xDimProp( xIntDim, uno::UNO_QUERY );

@@ -70,8 +70,7 @@ void SQLFetchThread::execute()
             = sdb::DatabaseContext::create(comphelper::getProcessComponentContext());
         uno::Any aSourceAny = xContext->getByName(aDatabase);
 
-        uno::Reference<sdb::XCompletedConnection> xSource(
-            ScUnoHelpFunctions::AnyToInterface(aSourceAny), uno::UNO_QUERY);
+        uno::Reference<sdb::XCompletedConnection> xSource(aSourceAny, uno::UNO_QUERY);
         if (!xSource.is())
             return;
 

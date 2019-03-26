@@ -279,8 +279,7 @@ ScVbaApplication::getSelection()
     uno::Any any;
     any <<= false;
     xPropSet->setPropertyValue( aPropName, any );
-    uno::Reference< uno::XInterface > aSelection = ScUnoHelpFunctions::AnyToInterface(
-        xSelSupp->getSelection() );
+    uno::Reference<uno::XInterface> aSelection(xSelSupp->getSelection(), uno::UNO_QUERY);
     xPropSet->setPropertyValue( aPropName, aOldVal );
 
     if (!aSelection.is())

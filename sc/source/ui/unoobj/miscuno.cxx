@@ -32,15 +32,6 @@ using ::com::sun::star::uno::Any;
 
 SC_SIMPLE_SERVICE_INFO( ScNameToIndexAccess, "ScNameToIndexAccess", "stardiv.unknown" )
 
-uno::Reference<uno::XInterface> ScUnoHelpFunctions::AnyToInterface( const uno::Any& rAny )
-{
-    if ( rAny.getValueTypeClass() == uno::TypeClass_INTERFACE )
-    {
-        return uno::Reference<uno::XInterface>(rAny, uno::UNO_QUERY);
-    }
-    return uno::Reference<uno::XInterface>();   //! Exception?
-}
-
 bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
                                             const OUString& rName, bool bDefault )
 {

@@ -354,8 +354,7 @@ void lcl_FillNumberFormats( std::unique_ptr<sal_uInt32[]>& rFormats, long& rCoun
     sal_Int32 nDim = 0;
     for ( ; nDim < nDimCount ; nDim++)
     {
-        uno::Reference<uno::XInterface> xDim =
-                ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
+        uno::Reference<uno::XInterface> xDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
         uno::Reference<container::XNamed> xDimName( xDim, uno::UNO_QUERY );
         if ( xDimProp.is() && xDimName.is() )
@@ -418,9 +417,7 @@ sal_uInt32 lcl_GetFirstNumberFormat( const uno::Reference<container::XIndexAcces
     long nDimCount = xDims->getCount();
     for (long nDim=0; nDim<nDimCount; nDim++)
     {
-        uno::Reference<uno::XInterface> xDim =
-                ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
-        uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
+        uno::Reference<beans::XPropertySet> xDimProp(xDims->getByIndex(nDim), uno::UNO_QUERY);
         if ( xDimProp.is() )
         {
             sheet::DataPilotFieldOrientation eDimOrient =
@@ -536,8 +533,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
         long nDimCount = xDims->getCount();
         for (long nDim=0; nDim<nDimCount; nDim++)
         {
-            uno::Reference<uno::XInterface> xDim =
-                    ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
+            uno::Reference<uno::XInterface> xDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
             uno::Reference<sheet::XHierarchiesSupplier> xDimSupp( xDim, uno::UNO_QUERY );
             if ( xDimProp.is() && xDimSupp.is() )
@@ -565,10 +561,8 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                     if ( nHierarchy >= xHiers->getCount() )
                         nHierarchy = 0;
 
-                    uno::Reference<uno::XInterface> xHier =
-                            ScUnoHelpFunctions::AnyToInterface(
-                                                xHiers->getByIndex(nHierarchy) );
-                    uno::Reference<sheet::XLevelsSupplier> xHierSupp( xHier, uno::UNO_QUERY );
+                    uno::Reference<sheet::XLevelsSupplier> xHierSupp(xHiers->getByIndex(nHierarchy),
+                                                                     uno::UNO_QUERY);
                     if ( xHierSupp.is() )
                     {
                         uno::Reference<container::XIndexAccess> xLevels =
@@ -576,9 +570,8 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                         long nLevCount = xLevels->getCount();
                         for (long nLev=0; nLev<nLevCount; nLev++)
                         {
-                            uno::Reference<uno::XInterface> xLevel =
-                                        ScUnoHelpFunctions::AnyToInterface(
-                                                            xLevels->getByIndex(nLev) );
+                            uno::Reference<uno::XInterface> xLevel(xLevels->getByIndex(nLev),
+                                                                   uno::UNO_QUERY);
                             uno::Reference<container::XNamed> xLevNam( xLevel, uno::UNO_QUERY );
                             uno::Reference<sheet::XDataPilotMemberResults> xLevRes(
                                     xLevel, uno::UNO_QUERY );
@@ -1244,8 +1237,7 @@ void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, s
         long nDimCount = xDims->getCount();
         for (long nDim=0; nDim<nDimCount; nDim++)
         {
-            uno::Reference<uno::XInterface> xDim =
-                    ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
+            uno::Reference<uno::XInterface> xDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
             if ( xDimProp.is() )
             {
