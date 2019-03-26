@@ -189,11 +189,11 @@ sub load_git_log($$$$$$$)
             next;
         }
 
-        $line = search_bugs($pdata, $module, $commit_id, $line);
-        # FIXME: need to be implemented
-#        search_keywords($pdata, $line);
-
         unless (defined $pdata->{$module}{$commit_id}{'summary'}) {
+            $line = search_bugs($pdata, $module, $commit_id, $line);
+            # FIXME: need to be implemented
+            # search_keywords($pdata, $line);
+
             $summary = standardize_summary($line);
             $pdata->{$module}{$commit_id}{'summary'} = $summary;
         }
@@ -206,7 +206,7 @@ sub load_git_log($$$$$$$)
 sub get_repo_name($)
 {
     my $repo_dir = shift;
-    
+
     open (GIT_CONFIG, "$repo_dir/.git/config") ||
         die "can't open \"$$repo_dir/.git/config\" for reading: $!\n";
 
