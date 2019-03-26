@@ -14,7 +14,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_amiri \
 	ExternalPackage_caladea \
 	ExternalPackage_carlito \
-	ExternalPackage_culmus \
+	$(if $(MPL_SUBSET),,ExternalPackage_culmus) \
 	ExternalPackage_dejavu \
 	ExternalPackage_gentium \
 	ExternalPackage_kacst \
@@ -33,7 +33,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	UnpackedTarball_amiri \
 	UnpackedTarball_caladea \
 	UnpackedTarball_carlito \
-	UnpackedTarball_culmus \
+	$(if $(MPL_SUBSET),,UnpackedTarball_culmus) \
 	UnpackedTarball_dejavu \
 	UnpackedTarball_gentium \
 	UnpackedTarball_kacst \
