@@ -257,9 +257,10 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize, std::vector<ScAddress>*
     CellStorageModified();
 }
 
-sc::CellStoreType::iterator ScColumn::GetPositionToInsert( SCROW nRow, std::vector<SCROW>& rNewSharedRows )
+sc::CellStoreType::iterator ScColumn::GetPositionToInsert( SCROW nRow, std::vector<SCROW>& rNewSharedRows,
+        bool bInsertFormula )
 {
-    return GetPositionToInsert(maCells.begin(), nRow, rNewSharedRows);
+    return GetPositionToInsert(maCells.begin(), nRow, rNewSharedRows, bInsertFormula);
 }
 
 void ScColumn::JoinNewFormulaCell(
@@ -535,16 +536,53 @@ void ScColumn::DetachFormulaCells( sc::EndListeningContext& rCxt, SCROW nRow1, S
     sc::ProcessFormula(it, maCells, nRow1, nRow2, aFunc);
 }
 
-sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow,
+static void lcl_AddFormulaGroupBoundaries(const sc::CellStoreType::position_type& rPos,
         std::vector<SCROW>& rNewSharedRows )
+{
+    sc::CellStoreType::iterator itRet = rPos.first;
+    if (itRet->type != sc::element_type_formula)
+        return;
+
+    ScFormulaCell& rFC = *sc::formula_block::at(*itRet->data, rPos.second);
+    if ( rFC.IsShared() )
+    {
+        const SCROW nSharedTopRow = rFC.GetSharedTopRow();
+        const SCROW nSharedLength = rFC.GetSharedLength();
+        rNewSharedRows.push_back( nSharedTopRow);
+        rNewSharedRows.push_back( nSharedTopRow + nSharedLength - 1);
+    }
+    else
+    {
+        const SCROW nRow = rFC.aPos.Row();
+        rNewSharedRows.push_back( nRow);
+        rNewSharedRows.push_back( nRow);
+    }
+}
+
+sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow,
+        std::vector<SCROW>& rNewSharedRows, bool bInsertFormula )
 {
     // See if we are overwriting an existing formula cell.
     sc::CellStoreType::position_type aPos = maCells.position(it, nRow);
     sc::CellStoreType::iterator itRet = aPos.first;
+
     if (itRet->type == sc::element_type_formula)
     {
         ScFormulaCell& rCell = *sc::formula_block::at(*itRet->data, aPos.second);
         DetachFormulaCell(aPos, rCell, rNewSharedRows);
+    }
+    else if (bInsertFormula && !GetDoc()->IsClipOrUndo())
+    {
+        if (nRow > 0)
+        {
+            sc::CellStoreType::position_type aPosBefore = maCells.position(maCells.begin(), nRow-1);
+            lcl_AddFormulaGroupBoundaries(aPosBefore, rNewSharedRows);
+        }
+        if (nRow < MAXROW)
+        {
+            sc::CellStoreType::position_type aPosAfter = maCells.position(maCells.begin(), nRow+1);
+            lcl_AddFormulaGroupBoundaries(aPosAfter, rNewSharedRows);
+        }
     }
 
     return itRet;
@@ -2089,7 +2127,7 @@ void ScColumn::SetEditText( SCROW nRow, std::unique_ptr<EditTextObject> pEditTex
 {
     pEditText->NormalizeString(GetDoc()->GetSharedStringPool());
     std::vector<SCROW> aNewSharedRows;
-    sc::CellStoreType::iterator it = GetPositionToInsert(nRow, aNewSharedRows);
+    sc::CellStoreType::iterator it = GetPositionToInsert(nRow, aNewSharedRows, false);
     maCells.set(it, nRow, pEditText.release());
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
     CellStorageModified();
@@ -2103,7 +2141,7 @@ void ScColumn::SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, std:
 {
     pEditText->NormalizeString(GetDoc()->GetSharedStringPool());
     std::vector<SCROW> aNewSharedRows;
-    rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow, aNewSharedRows);
+    rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow, aNewSharedRows, false);
     rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, pEditText.release());
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.set(
         rBlockPos.miCellTextAttrPos, nRow, sc::CellTextAttr());
@@ -2152,7 +2190,7 @@ void ScColumn::SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::Form
     ScAddress aPos(nCol, nRow, nTab);
 
     std::vector<SCROW> aNewSharedRows;
-    sc::CellStoreType::iterator it = GetPositionToInsert(nRow, aNewSharedRows);
+    sc::CellStoreType::iterator it = GetPositionToInsert(nRow, aNewSharedRows, true);
     ScFormulaCell* pCell = new ScFormulaCell(GetDoc(), aPos, rArray, eGram);
     sal_uInt32 nCellFormat = GetNumberFormat(GetDoc()->GetNonThreadedContext(), nRow);
     if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
@@ -2170,7 +2208,7 @@ void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::Formul
     ScAddress aPos(nCol, nRow, nTab);
 
     std::vector<SCROW> aNewSharedRows;
-    sc::CellStoreType::iterator it = GetPositionToInsert(nRow, aNewSharedRows);
+    sc::CellStoreType::iterator it = GetPositionToInsert(nRow, aNewSharedRows, true);
     ScFormulaCell* pCell = new ScFormulaCell(GetDoc(), aPos, rFormula, eGram);
     sal_uInt32 nCellFormat = GetNumberFormat(GetDoc()->GetNonThreadedContext(), nRow);
     if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
@@ -2188,7 +2226,7 @@ ScFormulaCell* ScColumn::SetFormulaCell(
     bool bInheritNumFormatIfNeeded )
 {
     std::vector<SCROW> aNewSharedRows;
-    sc::CellStoreType::iterator it = GetPositionToInsert(nRow, aNewSharedRows);
+    sc::CellStoreType::iterator it = GetPositionToInsert(nRow, aNewSharedRows, true);
     sal_uInt32 nCellFormat = GetNumberFormat(GetDoc()->GetNonThreadedContext(), nRow);
     if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && bInheritNumFormatIfNeeded )
         pCell->SetNeedNumberFormat(true);
@@ -2208,7 +2246,7 @@ void ScColumn::SetFormulaCell(
     bool bInheritNumFormatIfNeeded )
 {
     std::vector<SCROW> aNewSharedRows;
-    rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow, aNewSharedRows);
+    rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow, aNewSharedRows, true);
     sal_uInt32 nCellFormat = GetNumberFormat(GetDoc()->GetNonThreadedContext(), nRow);
     if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && bInheritNumFormatIfNeeded )
         pCell->SetNeedNumberFormat(true);
@@ -2695,7 +2733,7 @@ void ScColumn::SetError( SCROW nRow, const FormulaError nError)
     pCell->SetErrCode(nError);
 
     std::vector<SCROW> aNewSharedRows;
-    sc::CellStoreType::iterator it = GetPositionToInsert(nRow, aNewSharedRows);
+    sc::CellStoreType::iterator it = GetPositionToInsert(nRow, aNewSharedRows, true);
     it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
 
@@ -2722,7 +2760,7 @@ void ScColumn::SetRawString( SCROW nRow, const svl::SharedString& rStr )
         return;
 
     std::vector<SCROW> aNewSharedRows;
-    sc::CellStoreType::iterator it = GetPositionToInsert(nRow, aNewSharedRows);
+    sc::CellStoreType::iterator it = GetPositionToInsert(nRow, aNewSharedRows, false);
     maCells.set(it, nRow, rStr);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
 
@@ -2740,7 +2778,7 @@ void ScColumn::SetRawString(
         return;
 
     std::vector<SCROW> aNewSharedRows;
-    rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow, aNewSharedRows);
+    rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow, aNewSharedRows, false);
     rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, rStr);
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.set(
         rBlockPos.miCellTextAttrPos, nRow, sc::CellTextAttr());
@@ -2759,7 +2797,7 @@ void ScColumn::SetValue( SCROW nRow, double fVal )
         return;
 
     std::vector<SCROW> aNewSharedRows;
-    sc::CellStoreType::iterator it = GetPositionToInsert(nRow, aNewSharedRows);
+    sc::CellStoreType::iterator it = GetPositionToInsert(nRow, aNewSharedRows, false);
     maCells.set(it, nRow, fVal);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
 
@@ -2777,7 +2815,7 @@ void ScColumn::SetValue(
         return;
 
     std::vector<SCROW> aNewSharedRows;
-    rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow, aNewSharedRows);
+    rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow, aNewSharedRows, false);
     rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, fVal);
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.set(
         rBlockPos.miCellTextAttrPos, nRow, sc::CellTextAttr());
