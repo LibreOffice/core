@@ -621,24 +621,10 @@ void ScDPDimensionSaveData::WriteToData( ScDPGroupTableData& rData ) const
         rEntry.second.AddToData( rData );
 }
 
-namespace {
-
-class AddGroupDimToCache
-{
-    ScDPCache& mrCache;
-public:
-    explicit AddGroupDimToCache(ScDPCache& rCache) : mrCache(rCache) {}
-    void operator() (const ScDPSaveGroupDimension& rDim)
-    {
-        rDim.AddToCache(mrCache);
-    }
-};
-
-}
-
 void ScDPDimensionSaveData::WriteToCache(ScDPCache& rCache) const
 {
-    std::for_each(maGroupDims.begin(), maGroupDims.end(), AddGroupDimToCache(rCache));
+    for (const auto& rEntry : maGroupDims)
+        rEntry.AddToCache(rCache);
     for (const auto& rEntry : maNumGroupDims)
         rEntry.second.AddToCache(rCache);
 }
