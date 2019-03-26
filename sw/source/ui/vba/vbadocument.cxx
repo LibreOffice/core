@@ -34,9 +34,13 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
+#include <com/sun/star/util/thePathSettings.hpp>
 #include <ooo/vba/XControlProvider.hpp>
 #include <ooo/vba/word/WdProtectionType.hpp>
+#include <ooo/vba/word/WdSaveFormat.hpp>
+#include <ooo/vba/word/XApplication.hpp>
 #include <ooo/vba/word/XDocumentOutgoing.hpp>
 
 #include <vbahelper/helperdecl.hxx>
@@ -449,6 +453,114 @@ SwVbaDocument::Frames( const uno::Any& index )
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
     return uno::makeAny( xCol );
+}
+
+namespace {
+
+bool setFilterPropsFromFormat( sal_Int32 nFormat, uno::Sequence< beans::PropertyValue >& rProps )
+{
+    bool bRes = false;
+    for ( sal_Int32 index = 0; index < rProps.getLength(); ++index )
+    {
+        if ( rProps[ index ].Name == "FilterName" )
+        {
+            switch( nFormat )
+            {
+                case word::WdSaveFormat::wdFormatDocument:
+                    rProps[ index ].Value <<= OUString("MS Word 97");
+                    break;
+                // Just save all the text formats as "Text"
+                case word::WdSaveFormat::wdFormatDOSText:
+                case word::WdSaveFormat::wdFormatDOSTextLineBreaks:
+                case word::WdSaveFormat::wdFormatEncodedText:
+                case word::WdSaveFormat::wdFormatText:
+                case word::WdSaveFormat::wdFormatTextLineBreaks:
+                    rProps[ index ].Value <<= OUString("Text");
+                    break;
+                case word::WdSaveFormat::wdFormatFilteredHTML:
+                case word::WdSaveFormat::wdFormatHTML:
+                    rProps[ index ].Value <<= OUString("HTML");
+                    break;
+                case word::WdSaveFormat::wdFormatRTF:
+                    rProps[ index ].Value <<= OUString("Rich Text Format");
+                    break;
+                case word::WdSaveFormat::wdFormatTemplate:
+                    rProps[ index ].Value <<= OUString("MS Word 97 Vorlage");
+                    break;
+
+                // Default to "MS Word 97"
+                default:
+                    rProps[ index ].Value <<= OUString("MS Word 97");
+                    break;
+            }
+            bRes = true;
+            break;
+        }
+    }
+    return bRes;
+}
+
+}
+
+void SAL_CALL
+SwVbaDocument::SaveAs2000( const uno::Any& FileName, const uno::Any& FileFormat, const uno::Any& /*LockComments*/, const uno::Any& /*Password*/, const uno::Any& /*AddToRecentFiles*/, const uno::Any& /*WritePassword*/, const uno::Any& /*ReadOnlyRecommended*/, const uno::Any& /*EmbedTrueTypeFonts*/, const uno::Any& /*SaveNativePictureFormat*/, const uno::Any& /*SaveFormsData*/, const uno::Any& /*SaveAsAOCELetter*/ )
+{
+    // Based on ScVbaWorkbook::SaveAs.
+    OUString sFileName;
+    FileName >>= sFileName;
+    OUString sURL;
+    osl::FileBase::getFileURLFromSystemPath( sFileName, sURL );
+
+    // Detect if there is no path then we need to use the current folder.
+    INetURLObject aURL( sURL );
+    sURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
+    if( sURL.isEmpty() )
+    {
+        // Need to add cur dir ( of this document ) or else the 'Work' dir
+        sURL = getModel()->getURL();
+
+        if ( sURL.isEmpty() )
+        {
+            // Not path available from 'this' document. Need to add the 'document'/work directory then.
+            // Based on SwVbaOptions::getValueEvent()
+            uno::Reference< util::XPathSettings > xPathSettings = util::thePathSettings::get( comphelper::getProcessComponentContext() );
+            OUString sPathUrl;
+            xPathSettings->getPropertyValue( "Work" ) >>= sPathUrl;
+            // Path could be a multipath, Microsoft doesn't support this feature in Word currently.
+            // Only the last path is from interest.
+            sal_Int32 nIndex = sPathUrl.lastIndexOf( ';' );
+            if( nIndex != -1 )
+            {
+                sPathUrl = sPathUrl.copy( nIndex + 1 );
+            }
+
+            aURL.SetURL( sPathUrl );
+        }
+        else
+        {
+            aURL.SetURL( sURL );
+            aURL.Append( sFileName );
+        }
+        sURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
+
+    }
+
+    sal_Int32 nFileFormat = word::WdSaveFormat::wdFormatDocument;
+    FileFormat >>= nFileFormat;
+
+    uno::Sequence<  beans::PropertyValue > storeProps(1);
+    storeProps[0].Name = "FilterName" ;
+
+    setFilterPropsFromFormat( nFileFormat, storeProps );
+
+    uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
+    xStor->storeAsURL( sURL, storeProps );
+}
+
+void SAL_CALL
+SwVbaDocument::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, const uno::Any& LockComments, const uno::Any& Password, const uno::Any& AddToRecentFiles, const uno::Any& WritePassword, const uno::Any& ReadOnlyRecommended, const uno::Any& EmbedTrueTypeFonts, const uno::Any& SaveNativePictureFormat, const uno::Any& SaveFormsData, const uno::Any& SaveAsAOCELetter, const uno::Any& /*Encoding*/, const uno::Any& /*InsertLineBreaks*/, const uno::Any& /*AllowSubstitutions*/, const uno::Any& /*LineEnding*/, const uno::Any& /*AddBiDiMarks*/ )
+{
+    return SaveAs2000( FileName, FileFormat, LockComments, Password, AddToRecentFiles, WritePassword, ReadOnlyRecommended, EmbedTrueTypeFonts, SaveNativePictureFormat, SaveFormsData, SaveAsAOCELetter );
 }
 
 uno::Any
