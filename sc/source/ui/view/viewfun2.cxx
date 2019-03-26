@@ -1840,7 +1840,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                     SfxChildWindow* pWnd = pViewFrm->GetChildWindow(sc::SearchResultsDlgWrapper::GetChildWindowId());
                     if (pWnd)
                     {
-                        sc::SearchResultsDlg* pDlg = static_cast<sc::SearchResultsDlg*>(pWnd->GetWindow());
+                        sc::SearchResultsDlg* pDlg = static_cast<sc::SearchResultsDlg*>(pWnd->GetController().get());
                         if (pDlg)
                             pDlg->FillResults(&rDoc, aMatchedRanges,
                                     pSearchItem->GetCellType() == SvxSearchCellType::NOTE);
