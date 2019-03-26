@@ -534,16 +534,53 @@ void ScColumn::DetachFormulaCells( sc::EndListeningContext& rCxt, SCROW nRow1, S
     sc::ProcessFormula(it, maCells, nRow1, nRow2, aFunc);
 }
 
+static void lcl_AddFormulaGroupBoundaries(const sc::CellStoreType::position_type& rPos,
+        std::vector<SCROW>& rNewSharedRows )
+{
+    sc::CellStoreType::iterator itRet = rPos.first;
+    if (itRet->type != sc::element_type_formula)
+        return;
+
+    ScFormulaCell& rFC = *sc::formula_block::at(*itRet->data, rPos.second);
+    if ( rFC.IsShared() )
+    {
+        const SCROW nSharedTopRow = rFC.GetSharedTopRow();
+        const SCROW nSharedLength = rFC.GetSharedLength();
+        rNewSharedRows.push_back( nSharedTopRow);
+        rNewSharedRows.push_back( nSharedTopRow + nSharedLength - 1);
+    }
+    else
+    {
+        const SCROW nRow = rFC.aPos.Row();
+        rNewSharedRows.push_back( nRow);
+        rNewSharedRows.push_back( nRow);
+    }
+}
+
 sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow,
         std::vector<SCROW>& rNewSharedRows )
 {
     // See if we are overwriting an existing formula cell.
     sc::CellStoreType::position_type aPos = maCells.position(it, nRow);
     sc::CellStoreType::iterator itRet = aPos.first;
+
     if (itRet->type == sc::element_type_formula)
     {
         ScFormulaCell& rCell = *sc::formula_block::at(*itRet->data, aPos.second);
         DetachFormulaCell(aPos, rCell, rNewSharedRows);
+    }
+    else
+    {
+        if (nRow > 0)
+        {
+            sc::CellStoreType::position_type aPosBefore = maCells.position(maCells.begin(), nRow-1);
+            lcl_AddFormulaGroupBoundaries(aPosBefore, rNewSharedRows);
+        }
+        if (nRow < MAXROW)
+        {
+            sc::CellStoreType::position_type aPosAfter = maCells.position(maCells.begin(), nRow+1);
+            lcl_AddFormulaGroupBoundaries(aPosAfter, rNewSharedRows);
+        }
     }
 
     return itRet;
