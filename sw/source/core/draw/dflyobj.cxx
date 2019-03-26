@@ -1169,6 +1169,19 @@ sal_uInt16 SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame(Size& rSize) co
     return nRetval;
 }
 
+long SwVirtFlyDrawObj::GetRotateAngle() const
+{
+    if(ContainsSwGrfNode())
+    {
+        Size aSize;
+        return getPossibleRotationFromFraphicFrame(aSize);
+    }
+    else
+    {
+        return SdrVirtObj::GetRotateAngle();
+    }
+}
+
 SdrObject* SwVirtFlyDrawObj::getFullDragClone() const
 {
     // call parent
