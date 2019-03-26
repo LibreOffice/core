@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <test/mtfxmldump.hxx>
+#include <vcl/scheduler.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
 
