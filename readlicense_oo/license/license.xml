@@ -427,6 +427,13 @@
         ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
         OTHER DEALINGS IN THE SOFTWARE.</p>
     </div>
+    <div class="GPGMEPP">
+        <h2>GPGME</h2>
+        <p>The following software may be included in this product: GnuPG Made Easy (GPGME). Use of any of this
+        software is governed by the terms of the license below:</p>
+        <p>Copyright 2001-2017 g10 Code GmbH</p>
+        <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
+    </div>
     <div class="GRAPHITE">
         <h2>Graphite2</h2>
         <p>The following software may be included in this product: Graphite2. Use of any of this software is governed
@@ -614,6 +621,14 @@
         by the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
     </div>
+    <div class="LIBASSUAN">
+        <h2>Libassuan</h2>
+        <p>The following software may be included in this product: Libassuan. Use of any of this software is governed
+        by the terms of the license below:</p>
+        <p>Copyright (C) 2001-2013 Free Software Foundation, Inc.</p>
+        <p>Copyright (C) 2001-2017 g10 Code GmbH</p>
+        <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
+    </div>
     <div class="LIBATOMIC_OPS">
         <h2>libatomic_ops</h2>
         <p>The following software may be included in this product: libatomic_ops. Use of any of this software is
@@ -737,6 +752,13 @@
         <p>The following software may be included in this product: libfreehand. Use of any of this software is governed
         by the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
+    </div>
+    <div class="LIBGPGERROR">
+        <h2>Libgpg-error</h2>
+        <p>The following software may be included in this product: Libgpg-error. Use of any of this software is governed
+        by the terms of the license below:</p>
+        <p>Copyright (C) 2001-2017 g10 Code GmbH</p>
+        <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
     </div>
     <div class="LIBJPEG_TURBO">
         <h2>libjpeg-turbo</h2>
