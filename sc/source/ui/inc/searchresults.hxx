@@ -10,9 +10,9 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_SEARCHRESULTS_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_SEARCHRESULTS_HXX
 
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
+#include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
-#include <svtools/simptabl.hxx>
 
 class ScDocument;
 class ScRangeList;
@@ -20,27 +20,27 @@ class SvTreeListBox;
 
 namespace sc {
 
-class SearchResultsDlg : public ModelessDialog
+class SearchResultsDlg : public SfxDialogController
 {
-    VclPtr<SvSimpleTable> mpList;
-    VclPtr<FixedText> mpSearchResults;
     OUString const aSkipped;
     SfxBindings* const mpBindings;
     ScDocument* mpDoc;
+    std::unique_ptr<weld::TreeView> mxList;
+    std::unique_ptr<weld::Label> mxSearchResults;
 
-    DECL_LINK( ListSelectHdl, SvTreeListBox*, void );
+    DECL_LINK(ListSelectHdl, weld::TreeView&, void);
 public:
-    SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParent );
+    SearchResultsDlg(SfxBindings* _pBindings, weld::Window* pParent);
     virtual ~SearchResultsDlg() override;
-    virtual void dispose() override;
+
+    virtual void Close() override;
 
     void FillResults( ScDocument* pDoc, const ScRangeList& rMatchedRanges, bool bCellNotes );
-
-    virtual bool Close() override;
 };
 
 class SearchResultsDlgWrapper : public SfxChildWindow
 {
+    std::shared_ptr<SearchResultsDlg> m_xDialog;
 public:
     SearchResultsDlgWrapper(
         vcl::Window* _pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo );

@@ -22,66 +22,56 @@
 
 namespace sc {
 
-SearchResultsDlg::SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParent ) :
-    ModelessDialog(pParent, "SearchResultsDialog", "modules/scalc/ui/searchresults.ui"),
-    aSkipped( ScResId( SCSTR_SKIPPED ) ),
-    mpBindings(_pBindings), mpDoc(nullptr)
+SearchResultsDlg::SearchResultsDlg(SfxBindings* _pBindings, weld::Window* pParent)
+    : SfxDialogController(pParent, "modules/scalc/ui/searchresults.ui", "SearchResultsDialog")
+    , aSkipped(ScResId(SCSTR_SKIPPED))
+    , mpBindings(_pBindings)
+    , mpDoc(nullptr)
+    , mxList(m_xBuilder->weld_tree_view("results"))
+    , mxSearchResults(m_xBuilder->weld_label("lbSearchResults"))
 {
-    get(mpSearchResults, "lbSearchResults");
+    mxList->set_size_request(mxList->get_approximate_digit_width() * 50, mxList->get_height_rows(15));
 
-    SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("results");
-    Size aControlSize(150, 120);
-    aControlSize = pContainer->LogicToPixel(aControlSize, MapMode(MapUnit::MapAppFont));
-    pContainer->set_width_request(aControlSize.Width());
-    pContainer->set_height_request(aControlSize.Height());
-
-    mpList = VclPtr<SvSimpleTable>::Create(*pContainer);
-    long nTabs[] = {0, 40, 60};
-    mpList->SetTabs(SAL_N_ELEMENTS(nTabs), nTabs);
-    mpList->InsertHeaderEntry(ScResId(STR_SHEET) + "\t" + ScResId(STR_CELL) + "\t" + ScResId(STR_CONTENT));
-    mpList->SetSelectHdl( LINK(this, SearchResultsDlg, ListSelectHdl) );
+    std::vector<int> aWidths;
+    aWidths.push_back(mxList->get_approximate_digit_width() * 10);
+    aWidths.push_back(mxList->get_approximate_digit_width() * 10);
+    mxList->set_column_fixed_widths(aWidths);
+    mxList->connect_changed(LINK(this, SearchResultsDlg, ListSelectHdl));
 }
 
 SearchResultsDlg::~SearchResultsDlg()
 {
-    disposeOnce();
-}
-
-void SearchResultsDlg::dispose()
-{
-    mpList.disposeAndClear();
-    mpSearchResults.disposeAndClear();
-    ModelessDialog::dispose();
 }
 
 namespace
 {
     class ListWrapper {
-        OUStringBuffer maName;
-        VclPtr<SvSimpleTable> mpList;
+        weld::TreeView& mrList;
     public:
         size_t mnCount = 0;
         static const size_t mnMaximum = 1000;
-        ListWrapper(const VclPtr<SvSimpleTable> &pList) :
-            mpList(pList)
+        ListWrapper(weld::TreeView& rList)
+            : mrList(rList)
         {
-            mpList->Clear();
-            mpList->SetUpdateMode(false);
+            mrList.clear();
+            mrList.freeze();
         }
-        void Insert(const OUString &aTabName,
+        ~ListWrapper()
+        {
+            mrList.thaw();
+        }
+        void Insert(const OUString &rTabName,
                     const ScAddress &rPos,
                     formula::FormulaGrammar::AddressConvention eConvention,
-                    const OUString &aText)
+                    const OUString &rText)
         {
             if (mnCount++ < mnMaximum)
             {
-                maName.append(aTabName);
-                maName.append("\t");
-                maName.append(rPos.Format(ScRefFlags::ADDR_ABS,
-                                          nullptr, eConvention));
-                maName.append("\t");
-                maName.append(aText);
-                mpList->InsertEntry(maName.makeStringAndClear());
+                mrList.append_text(rTabName);
+                int nPos = mrList.n_children() - 1;
+                mrList.set_text(nPos, rPos.Format(ScRefFlags::ADDR_ABS,
+                                      nullptr, eConvention), 1);
+                mrList.set_text(nPos, rText, 2);
             }
         }
     };
@@ -89,7 +79,7 @@ namespace
 
 void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatchedRanges, bool bCellNotes )
 {
-    ListWrapper aList(mpList);
+    ListWrapper aList(*mxList);
     std::vector<OUString> aTabNames = pDoc->GetAllTableNames();
     SCTAB nTabCount = aTabNames.size();
 
@@ -150,14 +140,12 @@ void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatche
     OUString aSearchResults = aTotal.replaceFirst("%1", OUString::number(aList.mnCount));
     if (aList.mnCount > ListWrapper::mnMaximum)
         aSearchResults += " " + ScGlobal::ReplaceOrAppend( aSkipped, "%1", OUString::number( ListWrapper::mnMaximum ) );
-    mpSearchResults->SetText(aSearchResults);
-
-    mpList->SetUpdateMode(true);
+    mxSearchResults->set_label(aSearchResults);
 
     mpDoc = pDoc;
 }
 
-bool SearchResultsDlg::Close()
+void SearchResultsDlg::Close()
 {
     if (mpBindings)
     {
@@ -168,21 +156,21 @@ bool SearchResultsDlg::Close()
         if (pDispacher)
         {
             pDispacher->ExecuteList(SID_SEARCH_RESULTS_DIALOG,
-                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { &aItem });
+                SfxCallMode::SYNCHRON | SfxCallMode::RECORD, { &aItem });
         }
     }
 
-    return ModelessDialog::Close();
+    SfxDialogController::Close();
 }
 
-IMPL_LINK_NOARG( SearchResultsDlg, ListSelectHdl, SvTreeListBox*, void )
+IMPL_LINK_NOARG( SearchResultsDlg, ListSelectHdl, weld::TreeView&, void )
 {
     if (!mpDoc)
         return;
 
-    SvTreeListEntry *pEntry = mpList->FirstSelected();
-    OUString aTabStr = SvTabListBox::GetEntryText(pEntry, 0);
-    OUString aPosStr = SvTabListBox::GetEntryText(pEntry, 1);
+    int nEntry = mxList->get_selected_index();
+    OUString aTabStr = mxList->get_text(nEntry, 0);
+    OUString aPosStr = mxList->get_text(nEntry, 1);
 
     SCTAB nTab = -1;
     if (!mpDoc->GetTable(aTabStr, nTab))
@@ -203,10 +191,11 @@ IMPL_LINK_NOARG( SearchResultsDlg, ListSelectHdl, SvTreeListBox*, void )
 }
 
 SearchResultsDlgWrapper::SearchResultsDlgWrapper(
-    vcl::Window* _pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* /*pInfo*/ ) :
-    SfxChildWindow(_pParent, nId)
+    vcl::Window* _pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* /*pInfo*/)
+    : SfxChildWindow(_pParent, nId)
+    , m_xDialog(new SearchResultsDlg(pBindings, _pParent->GetFrameWeld()))
 {
-    SetWindow( VclPtr<SearchResultsDlg>::Create(pBindings, _pParent) );
+    SetController(m_xDialog);
 }
 
 SearchResultsDlgWrapper::~SearchResultsDlgWrapper() {}
