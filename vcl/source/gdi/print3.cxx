@@ -159,7 +159,7 @@ public:
 
     vcl::PrinterController::MultiPageSetup                      maMultiPage;
 
-    VclPtr<vcl::PrintProgressDialog>                            mpProgress;
+    std::shared_ptr<vcl::PrintProgressDialog>                   mxProgress;
 
     ImplPageCache                                               maPageCache;
 
@@ -194,11 +194,18 @@ public:
         mbPapersizeFromUser( false ),
         mbPrinterModified( false ),
         meJobState( css::view::PrintableState_JOB_STARTED ),
-        mpProgress( nullptr ),
         mnDefaultPaperBin( -1 ),
         mnFixedPaperBin( -1 )
     {}
-    ~ImplPrinterControllerData() { mpProgress.disposeAndClear(); }
+
+    ~ImplPrinterControllerData()
+    {
+        if (mxProgress)
+        {
+            mxProgress->response(RET_CANCEL);
+            mxProgress.reset();
+        }
+    }
 
     const Size& getRealPaperSize( const Size& i_rPageSize, bool bNoNUP ) const
     {
@@ -973,12 +980,12 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getPageParame
 PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache )
 {
     // update progress if necessary
-    if( mpImplData->mpProgress )
+    if( mpImplData->mxProgress )
     {
         // do nothing if printing is canceled
-        if( mpImplData->mpProgress->isCanceled() )
+        if( mpImplData->mxProgress->isCanceled() )
             return PrinterController::PageSize();
-        mpImplData->mpProgress->tick();
+        mpImplData->mxProgress->tick();
         Application::Reschedule( true );
     }
 
@@ -1284,10 +1291,10 @@ void PrinterController::printFilteredPage( int i_nPage )
     GDIMetaFile aPageFile;
     PrinterController::PageSize aPageSize = getFilteredPageFile( i_nPage, aPageFile );
 
-    if( mpImplData->mpProgress )
+    if( mpImplData->mxProgress )
     {
         // do nothing if printing is canceled
-        if( mpImplData->mpProgress->isCanceled() )
+        if( mpImplData->mxProgress->isCanceled() )
         {
             setJobState( css::view::PrintableState_JOB_ABORTED );
             return;
@@ -1344,7 +1351,13 @@ void PrinterController::abortJob()
     // applications (well, sw) depend on a page request with "IsLastPage" = true
     // to free resources, else they (well, sw) will crash eventually
     setLastPage( true );
-    mpImplData->mpProgress.disposeAndClear();
+
+    if (mpImplData->mxProgress)
+    {
+        mpImplData->mxProgress->response(RET_CANCEL);
+        mpImplData->mxProgress.reset();
+    }
+
     GDIMetaFile aMtf;
     getPageFile( 0, aMtf );
 }
@@ -1667,7 +1680,7 @@ OUString PrinterController::makeEnabled( const OUString& i_rProperty )
 
 void PrinterController::createProgressDialog()
 {
-    if( ! mpImplData->mpProgress )
+    if (!mpImplData->mxProgress)
     {
         bool bShow = true;
         css::beans::PropertyValue* pMonitor = getValue( OUString( "MonitorVisible" ) );
@@ -1686,17 +1699,21 @@ void PrinterController::createProgressDialog()
 
         if( bShow && ! Application::IsHeadlessModeEnabled() )
         {
-            mpImplData->mpProgress = VclPtr<PrintProgressDialog>::Create( nullptr, getPageCountProtected() );
-            mpImplData->mpProgress->Show();
+            VclPtr<vcl::Window> xParent = getWindow();
+            mpImplData->mxProgress.reset(new PrintProgressDialog(xParent ? xParent->GetFrameWeld() : nullptr, getPageCountProtected()));
+            weld::DialogController::runAsync(mpImplData->mxProgress, [](sal_Int32 /*nResult*/){});
         }
     }
     else
-        mpImplData->mpProgress->reset();
+    {
+        mpImplData->mxProgress->response(RET_CANCEL);
+        mpImplData->mxProgress.reset();
+    }
 }
 
 bool PrinterController::isProgressCanceled() const
 {
-    return mpImplData->mpProgress && mpImplData->mpProgress->isCanceled();
+    return mpImplData->mxProgress && mpImplData->mxProgress->isCanceled();
 }
 
 void PrinterController::setMultipage( const MultiPageSetup& i_rMPS )
