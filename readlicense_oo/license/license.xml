@@ -2098,6 +2098,17 @@
     <div class="MORE_FONTS">
         <hr />
         <h1><a id="a__Fonts" name="a__Fonts">Fonts</a></h1>
+        <h2>Alef</h2>
+        <p>Copyright (c) 2012, HaGilda &amp; Mushon Zer-Aviv (&lt;http://hagilda.com|info@hagilda.com&gt;), with
+        Reserved Font Name Alef Regular.</p>
+        <p>Copyright (c) 2012, HaGilda &amp; Mushon Zer-Aviv (&lt;http://hagilda.com|info@hagilda.com&gt;), with
+        Reserved Font Name Alef Bold.</p>
+        <p>This Font Software is licensed under the SIL Open Font License, Version 1.1 as shown below.</p>
+        <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
+        <h2>Amiri</h2>
+        <p>Copyright (c) 2010-2017, Khaled Hosny (&lt;khaledhosny@eglug.org&gt;)</p>
+        <p>This Font Software is licensed under the SIL Open Font License, Version 1.1 as shown below.</p>
+        <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Caladea</h2>
         <p>Copyright (c) 2012 Huerta Tipográfica</p>
         <p>This Font Software is licensed under the Apache License, Version 2.0 as shown below.</p>
@@ -2106,6 +2117,121 @@
         <p>Copyright (c) 2010-2013 by tyPoland Lukasz Dziedzic with Reserved Font Name "Carlito".</p>
         <p>This Font Software is licensed under the SIL Open Font License, Version 1.1 as shown below.</p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
+        <div class="no_mpl_subset">
+            <h2>Culmus</h2>
+            <p>This package is distributed under the terms of GNU General Public License version 2.</p>
+            <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
+            <p>Shofar font family is Copyright 2011-2012 by Yoram Gnat (yoram.gnat@gmail.com) Latin glyphs and
+            punctuation Copyright (URW)++,Copyright 1999 by (URW)++ Design &amp; Development;</p>
+            <p>Hebrew Cantillation marks GSUB and GPOS OpenType positioning rules copyright (c) 2010 by Yoram Gnat
+            (yoram.gnat@gmail.com)</p>
+            <p>Inspired by the Hebrew OpenType Layout logic copyright (c) 2003 &amp; 2007, Ralph Hancock &amp; John
+            Hudson published under the MIT License.</p>
+            <p>As a special exception, if you create a document which uses this font, and embed this font or unaltered
+            portions of this font into the document, this font does not by itself cause the resulting document to be
+            covered by the GNU General Public License. This exception does not however invalidate any other reasons why
+            the document might be covered by the GNU General Public License. If you modify this font, you may extend
+            this exception to your version of the font, but you are not obligated to do so. If you do not wish to do
+            so, delete this exception statement from your version.</p>
+            <p> </p>
+            <p>Keter YG font family is Copyright 2009 by Yoram Gnat (yoram.gnat@gmail.com) Hebrew OpenType Layout logic
+            copyright (c) 2003 &amp; 2007, Ralph Hancock &amp; John Hudson. This layout logic for Biblical Hebrew is
+            open source software under the MIT License; for details contact copyright holders at
+            &lt;license@tiro.com&gt;.</p>
+            <p>As a special exception, if you create a document which uses this font, and embed this font or unaltered
+            portions of this font into the document, this font does not by itself cause the resulting document to be
+            covered by the GNU General Public License. This exception does not however invalidate any other reasons why
+            the document might be covered by the GNU General Public License. If you modify this font, you may extend
+            this exception to your version of the font, but you are not obligated to do so. If you do not wish to do
+            so, delete this exception statement from your version.</p>
+            <p> </p>
+            <p>Hadasim font family is copyright 2010 by Yoram Gnat (yoram.gnat@gmail.com). Latin and parts of general
+            punctuation marks based on modified forms from the LiberationSerif font, created by Digitized data 2007
+            Ascender Corporation. All rights reserved.</p>
+            <p>As a special exception, if you create a document which uses this font, and embed this font or unaltered
+            portions of this font into the document, this font does not by itself cause the resulting document to be
+            covered by the GNU General Public License. This exception does not however invalidate any other reasons why
+            the document might be covered by the GNU General Public License. If you modify this font, you may extend
+            this exception to your version of the font, but you are not obligated to do so. If you do not wish to do
+            so, delete this exception statement from your version.</p>
+            <p> </p>
+            <p>Simple font family is copyright 2007-2010 by Yoram Gnat (yoram-gnat@homeil.com). Latin glyphs, digits
+            and punctuation copyright 1999 by (URW)++ Design &amp; Development. All rights reserved.</p>
+            <p>Hebrew vowel marks positioning algorithms Copyright 2010 by Yoram Gnat 2010. (yoram.gnat@gmail.com.</p>
+            <p>As a special exception, if you create a document which uses this font, and embed this font or unaltered
+            portions of this font into the document, this font does not by itself cause the resulting document to be
+            covered by the GNU General Public License. This exception does not however invalidate any other reasons why
+            the document might be covered by the GNU General Public License. If you modify this font, you may extend
+            this exception to your version of the font, but you are not obligated to do so. If you do not wish to do
+            so, delete this exception statement from your version.</p>
+            <p> </p>
+            <p>Stam Ashkenaz font is copyright 2007-2010 by Yoram Gnat (yoram.gnat@gmail.com).</p>
+            <p>As a special exception, if you create a document which uses this font, and embed this font or unaltered
+            portions of this font into the document, this font does not by itself cause the resulting document to be
+            covered by the GNU General Public License. This exception does not however invalidate any other reasons why
+            the document might be covered by the GNU General Public License. If you modify this font, you may extend
+            this exception to your version of the font, but you are not obligated to do so. If you do not wish to do
+            so, delete this exception statement from your version.</p>
+            <p> </p>
+            <p>Stam Sefarad font is copyright 2008-2010 by Yoram Gnat (yoram.gnat@gmail.com).</p>
+            <p>As a special exception, if you create a document which uses this font, and embed this font or unaltered
+            portions of this font into the document, this font does not by itself cause the resulting document to be
+            covered by the GNU General Public License. This exception does not however invalidate any other reasons why
+            the document might be covered by the GNU General Public License. If you modify this font, you may extend
+            this exception to your version of the font, but you are not obligated to do so. If you do not wish to do
+            so, delete this exception statement from your version.</p>
+            <p> </p>
+            <p>Miriam font family is copyright 2004-2010 by Maxim Iorsh (iorsh@users.sourceforge.net). All rights
+            reserved.</p>
+            <p> </p>
+            <p>Yehuda font family is copyright 2004 by Maxim Iorsh (iorsh@math.technion.ac.il). All rights
+            reserved.</p>
+            <p> </p>
+            <p>Drugulin font family (Hebrew glyphs) is copyright 2003,2004 by Maxim Iorsh (iorsh@math.technion.ac.il).
+            Latin glyphs, digits and punctuation contained in the Drugulin font family are part of Nimbus Roman No9 L
+            font family and are copyright 1999 by (URW)++ Design &amp; Development. All rights reserved.</p>
+            <p> </p>
+            <p>Ellinia font family is copyright 2003,2004 by Maxim Iorsh (iorsh@math.technion.ac.il). All rights
+            reserved.</p>
+            <p> </p>
+            <p>Caladings collection is copyright 2003,2004 by Maxim Iorsh (iorsh@math.technion.ac.il). All rights
+            reserved.</p>
+            <p> </p>
+            <p>Digital version of Aharoni font family (Hebrew glyphs, numerals and part of punctuation) is copyright
+            2002-2004 by Maxim Iorsh (iorsh@math.technion.ac.il). Latin glyphs, digits and part of punctuation
+            contained in the Aharoni font family are part of URW Gothic L font family and are copyright 1999 by (URW)++
+            Design &amp; Development. All rights reserved.</p>
+            <p> </p>
+            <p>Digital version of David font family (Hebrew glyphs, numerals and part of punctuation) is copyright
+            2002-2010 by Maxim Iorsh (iorsh@users.sourceforge.net). Latin glyphs and part of punctuation contained in
+            the David font family are part of Bitstream Charter font family and are copyright 1990 as an unpublished
+            work by Bitstream Inc. All rights reserved. See also LICENSE-BITSTREAM below:</p>
+            <blockquote>
+                <p>(c) Copyright 1989-1992, Bitstream Inc., Cambridge, MA.</p>
+                <p>You are hereby granted permission under all Bitstream propriety rights to use, copy, modify,
+                sublicense, sell, and redistribute the 4 Bitstream Charter (r) Type 1 outline fonts and the 4 Courier
+                Type 1 outline fonts for any purpose and without restriction; provided, that this notice is left intact
+                on all copies of such fonts and that Bitstream's trademark is acknowledged as shown below on all
+                unmodified copies of the 4 Charter Type 1 fonts.</p>
+                <p>BITSTREAM CHARTER is a registered trademark of Bitstream Inc.</p>
+            </blockquote>
+            <p> </p>
+            <p>Frank-Ruehl font family (Hebrew glyphs) is copyright 2002-2011 by Maxim Iorsh
+            (iorsh@users.sourceforge.net). Latin glyphs, digits and punctuation contained in the Frank-Ruehl font
+            family are part of Century Schoolbook L font family and are copyright 1999 by (URW)++ Design &amp;
+            Development. All rights reserved.</p>
+            <p> </p>
+            <p>Nachlieli font family (Hebrew glyphs) is copyright 2002-2017 by Maxim Iorsh
+            (iorsh@users.sourceforge.net). Latin glyphs, digits and punctuation contained in the Nachlieli font family
+            are part of Nimbus Sans L font family and are copyright 1999 by (URW)++ Design &amp; Development. All
+            rights reserved.</p>
+            <p> </p>
+            <p>Miriam Mono font family (Hebrew glyphs) is copyright 2002-2004 by Maxim Iorsh
+            (iorsh@math.technion.ac.il). Hebrew vowel marks positioning algorithms implementation by Yoram Gnat
+            (yoramg@shenkar.ac.il), 2010. Latin glyphs, digits and punctuation contained in the Miriam Mono font family
+            are part of Nimbus Mono L font family and are copyright 1999 by (URW)++ Design &amp; Development. All
+            rights reserved.</p>
+        </div>
         <h2>Deja Vu</h2>
         <p>The following software may be included in this product: Deja Vu fonts. Use of any of this software is
         governed by the terms of the license below:</p>
@@ -2163,6 +2289,45 @@
         <p>Except as contained in this notice, the name of Tavmjong Bah shall not be used in advertising or otherwise
         to promote the sale, use or other dealings in this Font Software without prior written authorization from
         Tavmjong Bah. For further information, contact: tavmjong @ free . fr.</p>
+        <h2>EmojiOne Color</h2>
+        <h3>Licenses</h3>
+        <ul>
+            <li>Copyright 2016 Brad Erickson CC-BY-4.0/MIT</li>
+            <li>Copyright 2015 Ranks.com Inc. CC-BY-4.0</li>
+            <li>Copyright 2013 Joe Loughry and Terence Eden MIT</li>
+        </ul>
+        <h4>Artwork</h4>
+        <ul>
+            <li>Applies to SVG files and TTF font files</li>
+            <li>License: Creative Commons Attribution 4.0 International</li>
+            <li>Human Readable License: <a href=
+            "http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a></li>
+            <li>Complete Legal Terms: <a href=
+            "http://creativecommons.org/licenses/by/4.0/legalcode">http://creativecommons.org/licenses/by/4.0/legalcode</a></li>
+        </ul>
+        <h4>Source Code</h4>
+        <ul>
+            <li>Applies to everything else</li>
+            <li>License: MIT</li>
+            <li>Complete Legal Terms: http://opensource.org/licenses/MIT</li>
+        </ul>
+        <h4>EmojiOne License</h4>
+        <p>The SVG files of the <a href="http://emojione.com/">EmojiOne</a> project have been modified to create the
+        fallback emoji glyphs and used as-is for the SVGinOT color glyphs. Files are stored in
+        <code>assets/emojione-svg</code>.</p>
+        <ul>
+            <li>Source: https://github.com/Ranks/emojione</li>
+            <li>Art License: Creative Commons Attribution 4.0 International</li>
+        </ul>
+        <p>Please review the specific attribution requirements for commercial use of EmojiOne graphics:
+        <a href="http://emojione.com/licensing/">http://emojione.com/licensing/</a></p>
+        <h4>Power Symbol License</h4>
+        <p>The SVG files from the <a href="http://unicodepowersymbol.com/">Unicode Power Symbol</a> project have been
+        modified to create B&amp;W Power Symbol glyphs. Files are stored in <code>assets/svg-bw</code>.</p>
+        <ul>
+            <li>Source: <a href="https://github.com/jloughry/Unicode">https://github.com/jloughry/Unicode</a></li>
+            <li>Art License: MIT</li>
+        </ul>
         <h2>Gentium</h2>
         <p>The following software may be included in this product: Gentium fonts. Use of any of this software is
         governed by the terms of the license below:</p>
@@ -2172,6 +2337,12 @@
         "#a_below">below</a>, and is also available with a FAQ at: <a href=
         "http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
+        <div class="no_mpl_subset">
+            <h2>KACST</h2>
+            <p>KACST fonts are free fonts donated by King Abdulaziz City For Science And Technology (KACST) under GPL.</p>
+            <p>KACST holds the copyright of the included Arabic font which is donated under GPL by KACST.</p>
+            <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
+        </div>
         <h2>Liberation</h2>
         <p>The following software may be included in this product: Liberation fonts. Use of any of this software is
         governed by the terms of the license below:</p>
@@ -2290,6 +2461,35 @@
         LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR
         CONSEQUENTIAL DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF THE USE OR
         INABILITY TO USE THE FONT SOFTWARE OR FROM OTHER DEALINGS IN THE FONT SOFTWARE.</p>
+        <h2>Libre Hebrew</h2>
+        <p>The following software may be included in this product: Libre Hebrew fonts (David Libre, Frank Ruhl Hofsi,
+        Miriam Libre, Rubik). Use of any of this software is governed by the terms of the license below:</p>
+        <p>Copyright 2015 The Frank Ruhl Hofshi Project Authors.</p>
+        <p>This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is copied below,
+        and is also available with a FAQ at: <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
+        <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
+        <h2>Noto</h2>
+        <p>The following software may be included in this product: Google Noto fonts. Use of any of this software is
+        governed by the terms of the license below:</p>
+        <p>This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is copied below,
+        and is also available with a FAQ at: <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
+        <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
+        <h2>Reem Kufi</h2>
+        <p>The following software may be included in this product: Reem Kufi fonts. Use of any of this software is
+        governed by the terms of the license below:</p>
+        <p>Portions copyright (c) 2015, Khaled Hosny (khaledhosny@eglug.org). Copyright (c) 2010 by Typemade, with
+        Reserved Font Name 'Josefin. All Rights Reserved.</p>
+        <p>This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is copied below,
+        and is also available with a FAQ at: <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
+        <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
+        <h2>Scheherazade</h2>
+        <p>The following software may be included in this product: Scheherazade fonts. Use of any of this software is
+        governed by the terms of the license below:</p>
+        <p>Copyright (c) 1994-2015, SIL International (http://www.sil.org/).</p>
+        <p>This Font Software is licensed under the SIL Open Font License, Version 1.1, with Reserved Font Names
+        "Scheherazade" and "SIL". This license is copied below, and is also available with a FAQ at:
+        <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
+        <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Source Code Pro</h2>
         <p>The following software may be included in this product: Source Code Pro fonts. Use of any of this software
         is governed by the terms of the license below:</p>
