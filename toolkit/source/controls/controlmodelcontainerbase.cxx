@@ -1741,6 +1741,9 @@ void ControlContainerBase::ImplStartListingForResourceEvents()
 {
     Reference< resource::XStringResourceResolver > xStringResourceResolver;
 
+    if ( !ImplHasProperty(PROPERTY_RESOURCERESOLVER) )
+        return;
+
     ImplGetPropertyValue( PROPERTY_RESOURCERESOLVER ) >>= xStringResourceResolver;
 
     // Add our helper as listener to retrieve notifications about changes
@@ -1757,7 +1760,11 @@ void ControlContainerBase::ImplUpdateResourceResolver()
 {
     Reference< resource::XStringResourceResolver > xStringResourceResolver;
 
-    ImplGetPropertyValue( PROPERTY_RESOURCERESOLVER ) >>= xStringResourceResolver;
+    if ( !ImplHasProperty(PROPERTY_RESOURCERESOLVER) )
+        return;
+
+    ImplGetPropertyValue(PROPERTY_RESOURCERESOLVER) >>= xStringResourceResolver;
+
     if ( !xStringResourceResolver.is() )
         return;
 
