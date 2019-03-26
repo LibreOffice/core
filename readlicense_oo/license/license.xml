@@ -29,7 +29,6 @@
         <p><a href="#a__Dictionaries">Dictionaries</a></p>
     </div>
     <p><a href="#a__Artwork">Artwork</a></p>
-    <p><a href="#a__Miscellaneous">Miscellaneous</a></p>
     <div class="no_mpl_subset">
         <p><a href="#a__LGPL_version_3">GNU Lesser General Public License Version 3</a></p>
         <p><a href="#a__LGPL_version_2_1">GNU Lesser General Public License Version 2.1</a></p>
@@ -3846,24 +3845,6 @@
         "http://www.gnome.org/">http://www.gnome.org</a></p>
         <p><a href="#a__CC-BY-SA_3_0">Jump to CC-BY-SA 3.0</a></p>
     </div>
-    <h1><a id="a__Miscellaneous" name="a__Miscellaneous">Miscellaneous</a></h1>
-    <h2>Adobe Printer Description Files</h2>
-    <p>The following software may be included in this product: Adobe Printer Description Files. Use of any of this
-    software is governed by the terms of the license below:</p>
-    <p>Copyright 1987-1995 Adobe Systems Incorporated.</p>
-    <p>All Rights Reserved.</p>
-    <p>Permission is granted for redistribution of this file as long as this copyright notice is intact and the
-    contents of the file is not altered in any way from its original form.</p>
-    <p>End of Copyright statement</p>
-    <h2>International Color Consortium sRGB Profiles</h2>
-    <p>The following software may be included in this product: ICC sRGB Profiles. Use of any of this software is
-    governed by the terms of the license below:</p>
-    <p>To anyone who acknowledges that the files "sRGB_IEC61966-2-1_noBPC.icc" and "sRGB_IEC61966-2-1_withBPC.icc" are
-    provided "AS IS" WITH NO EXPRESS OR IMPLIED WARRANTY, permission to use, copy and distribute these file for any
-    purpose is hereby granted without fee, provided that the files are not changed including the HP copyright notice
-    tag, and that the name of Hewlett-Packard Company shall not be used in advertising or publicity pertaining to
-    distribution of the software without specific, written prior permission. Hewlett-Packard Company makes no
-    representations about the suitability of this software for any purpose.</p>
     <div class="no_mpl_subset">
         <hr />
         <h1><a id="a__LGPL_version_3" name="a__LGPL_version_3">GNU LESSER GENERAL PUBLIC LICENSE</a></h1>
