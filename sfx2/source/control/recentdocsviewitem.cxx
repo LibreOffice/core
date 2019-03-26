@@ -32,9 +32,10 @@ using namespace com::sun::star::uno;
 using namespace drawinglayer::primitive2d;
 using namespace drawinglayer::processor2d;
 
-RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL,
+RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUString &rURL,
     const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId, long nThumbnailSize)
     : ThumbnailViewItem(rView, nId),
+      mrParentView(rView),
       maURL(rURL),
       m_bRemoveIconHighlighted(false),
       m_aRemoveRecentBitmap(BMP_RECENTDOC_REMOVE),
@@ -178,7 +179,7 @@ void RecentDocsViewItem::MouseButtonUp(const MouseEvent& rMEvt)
 void RecentDocsViewItem::OpenDocument()
 {
     // show busy mouse pointer
-    mrParent.SetPointer(PointerStyle::Wait);
+    mrParentView.SetPointer(PointerStyle::Wait);
 
     Reference<frame::XDispatch> xDispatch;
     Reference<frame::XDispatchProvider> xDispatchProvider;
@@ -216,7 +217,7 @@ void RecentDocsViewItem::OpenDocument()
     pLoadRecentFile->xDispatch = xDispatch;
     pLoadRecentFile->aTargetURL = aTargetURL;
     pLoadRecentFile->aArgSeq = aArgsList;
-    pLoadRecentFile->pView.set(&mrParent);
+    pLoadRecentFile->pView = &mrParentView;
 
     Application::PostUserEvent(LINK(nullptr, sfx2::RecentDocsView, ExecuteHdl_Impl), pLoadRecentFile, true);
 }

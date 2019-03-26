@@ -475,15 +475,16 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest const & rReq )
         if(bStartWithTemplate)
         {
             //Launch TemplateSelectionDialog
-            ScopedVclPtrInstance< SfxTemplateSelectionDlg > aTemplDlg( SfxGetpApp()->GetTopWindow());
-            aTemplDlg->Execute();
+            vcl::Window* pTopLevel = SfxGetpApp()->GetTopWindow();
+            SfxTemplateSelectionDlg aTemplDlg(pTopLevel ? pTopLevel->GetFrameWeld() : nullptr);
+            aTemplDlg.run();
 
             //check to disable the dialog
-            pOpt->SetStartWithTemplate( aTemplDlg->IsStartWithTemplate() );
+            pOpt->SetStartWithTemplate( aTemplDlg.IsStartWithTemplate() );
 
             //pFrame is loaded with the desired template
-            if(!aTemplDlg->getTemplatePath().isEmpty())
-                pFrame = CreateFromTemplate(aTemplDlg->getTemplatePath(), xTargetFrame);
+            if (!aTemplDlg.getTemplatePath().isEmpty())
+                pFrame = CreateFromTemplate(aTemplDlg.getTemplatePath(), xTargetFrame);
         }
     }
 

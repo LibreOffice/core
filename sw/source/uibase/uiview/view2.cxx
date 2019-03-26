@@ -2414,8 +2414,8 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
         SfxApplication* pSfxApp = SfxGetpApp();
         vcl::Window* pTopWin = pSfxApp->GetTopWindow();
 
-        ScopedVclPtrInstance< SfxTemplateManagerDlg > aDocTemplDlg;
-        int nRet = aDocTemplDlg->Execute();
+        SfxTemplateManagerDlg aDocTemplDlg(GetFrameWeld());
+        int nRet = aDocTemplDlg.run();
         bool bNewWin = false;
         if ( nRet == RET_OK )
         {

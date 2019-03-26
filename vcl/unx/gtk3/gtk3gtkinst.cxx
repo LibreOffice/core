@@ -1321,7 +1321,7 @@ private:
         return pThis->signal_key(pEvent);
     }
 
-    virtual bool signal_popup_menu(const Point&)
+    virtual bool signal_popup_menu(const CommandEvent&)
     {
         return false;
     }
@@ -1390,7 +1390,8 @@ private:
         if (gdk_event_triggers_context_menu(reinterpret_cast<GdkEvent*>(pEvent)) && pEvent->type == GDK_BUTTON_PRESS)
         {
             //if handled for context menu, stop processing
-            if (signal_popup_menu(aPos))
+            CommandEvent aCEvt(aPos, CommandEventId::ContextMenu, true);
+            if (signal_popup_menu(aCEvt))
                 return true;
         }
 
@@ -2150,11 +2151,8 @@ private:
         GtkMenuItem* pMenuItem = GTK_MENU_ITEM(pItem);
         if (GtkWidget* pSubMenu = gtk_menu_item_get_submenu(pMenuItem))
             gtk_container_foreach(GTK_CONTAINER(pSubMenu), collect, widget);
-        else
-        {
-            MenuHelper* pThis = static_cast<MenuHelper*>(widget);
-            pThis->add_to_map(pMenuItem);
-        }
+        MenuHelper* pThis = static_cast<MenuHelper*>(widget);
+        pThis->add_to_map(pMenuItem);
     }
 
     static void signalActivate(GtkMenuItem* pItem, gpointer widget)
@@ -2189,7 +2187,7 @@ public:
         const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pMenuItem));
         OString id(pStr, pStr ? strlen(pStr) : 0);
         auto iter = m_aMap.find(id);
-        g_signal_handlers_disconnect_by_data(iter->second, this);
+        g_signal_handlers_disconnect_by_data(pMenuItem, this);
         m_aMap.erase(iter);
     }
 
@@ -2246,6 +2244,17 @@ public:
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
     }
 
+    void insert_separator(int pos, const OUString& rId)
+    {
+        GtkWidget* pItem = gtk_separator_menu_item_new();
+        gtk_buildable_set_name(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr());
+        gtk_menu_shell_append(GTK_MENU_SHELL(m_pMenu), pItem);
+        gtk_widget_show(pItem);
+        add_to_map(GTK_MENU_ITEM(pItem));
+        if (pos != -1)
+            gtk_menu_reorder_child(m_pMenu, pItem, pos);
+    }
+
     void remove_item(const OString& rIdent)
     {
         GtkMenuItem* pMenuItem = m_aMap[rIdent];
@@ -2280,13 +2289,24 @@ public:
         return get_help_id(GTK_WIDGET(m_aMap.find(rIdent)->second));
     }
 
-    void show_item(const OString& rIdent, bool bShow)
+    void set_item_visible(const OString& rIdent, bool bShow)
     {
         GtkWidget* pWidget = GTK_WIDGET(m_aMap[rIdent]);
         if (bShow)
             gtk_widget_show(pWidget);
         else
             gtk_widget_hide(pWidget);
+    }
+
+    void clear_items()
+    {
+        for (auto& a : m_aMap)
+        {
+            GtkMenuItem* pMenuItem = a.second;
+            g_signal_handlers_disconnect_by_data(pMenuItem, this);
+            gtk_widget_destroy(GTK_WIDGET(pMenuItem));
+        }
+        m_aMap.clear();
     }
 
     virtual ~MenuHelper()
@@ -3339,6 +3359,16 @@ public:
         return gtk_adjustment_get_page_size(m_pHAdjustment);
     }
 
+    virtual void hadjustment_set_page_size(int size) override
+    {
+        gtk_adjustment_set_page_size(m_pHAdjustment, size);
+    }
+
+    virtual void hadjustment_set_page_increment(int size) override
+    {
+        gtk_adjustment_set_page_increment(m_pHAdjustment, size);
+    }
+
     virtual void set_hpolicy(VclPolicyType eHPolicy) override
     {
         GtkPolicyType eGtkVPolicy;
@@ -3408,6 +3438,16 @@ public:
     virtual int vadjustment_get_page_size() const override
     {
         return gtk_adjustment_get_page_size(m_pVAdjustment);
+    }
+
+    virtual void vadjustment_set_page_size(int size) override
+    {
+        gtk_adjustment_set_page_size(m_pVAdjustment, size);
+    }
+
+    virtual void vadjustment_set_page_increment(int size) override
+    {
+        gtk_adjustment_set_page_increment(m_pVAdjustment, size);
     }
 
     virtual void set_vpolicy(VclPolicyType eVPolicy) override
@@ -4551,6 +4591,11 @@ public:
         MenuHelper::insert_item(pos, rId, rStr, pIconName, pImageSurface, bCheck);
     }
 
+    virtual void insert_separator(int pos, const OUString& rId) override
+    {
+        MenuHelper::insert_separator(pos, rId);
+    }
+
     virtual void remove_item(const OString& rId) override
     {
         MenuHelper::remove_item(rId);
@@ -4569,6 +4614,11 @@ public:
     virtual void set_item_label(const OString& rIdent, const OUString& rLabel) override
     {
         MenuHelper::set_item_label(rIdent, rLabel);
+    }
+
+    virtual void set_item_visible(const OString& rIdent, bool bVisible) override
+    {
+        MenuHelper::set_item_visible(rIdent, bVisible);
     }
 
     virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) override
@@ -4646,6 +4696,18 @@ private:
     {
         const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
         m_sActivated = OString(pStr, pStr ? strlen(pStr) : 0);
+    }
+
+    void clear_extras()
+    {
+        if (m_aExtraItems.empty())
+            return;
+        if (m_pTopLevelMenuButton)
+        {
+            for (auto a : m_aExtraItems)
+                m_pTopLevelMenuButton->remove_from_map(a);
+        }
+        m_aExtraItems.clear();
     }
 
 public:
@@ -4738,6 +4800,7 @@ public:
         }
         g_main_loop_unref(pLoop);
         g_signal_handler_disconnect(m_pMenu, nSignalId);
+        gtk_menu_detach(m_pMenu);
 
         return m_sActivated;
     }
@@ -4752,9 +4815,20 @@ public:
         set_item_active(rIdent, bActive);
     }
 
-    virtual void show(const OString& rIdent, bool bShow) override
+    virtual void set_visible(const OString& rIdent, bool bShow) override
     {
-        show_item(rIdent, bShow);
+        set_item_visible(rIdent, bShow);
+    }
+
+    virtual void insert_separator(int pos, const OUString& rId) override
+    {
+        MenuHelper::insert_separator(pos, rId);
+    }
+
+    virtual void clear() override
+    {
+        clear_extras();
+        clear_items();
     }
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
@@ -4806,11 +4880,7 @@ public:
 
     virtual ~GtkInstanceMenu() override
     {
-        if (m_pTopLevelMenuButton)
-        {
-            for (auto a : m_aExtraItems)
-                m_pTopLevelMenuButton->remove_from_map(a);
-        }
+        clear_extras();
     }
 };
 
@@ -7467,9 +7537,9 @@ private:
         gtk_tooltip_set_tip_area(tooltip, &aGdkHelpArea);
         return true;
     }
-    virtual bool signal_popup_menu(const Point& rPos) override
+    virtual bool signal_popup_menu(const CommandEvent& rCEvt) override
     {
-        return m_aPopupMenuHdl.Call(rPos);
+        return m_aPopupMenuHdl.Call(rCEvt);
     }
     static gboolean signalPopupMenu(GtkWidget* pWidget, gpointer widget)
     {
@@ -7478,7 +7548,8 @@ private:
         //center it when we don't know where else to use
         Point aPos(gtk_widget_get_allocated_width(pWidget) / 2,
                    gtk_widget_get_allocated_height(pWidget) / 2);
-        return pThis->signal_popup_menu(aPos);
+        CommandEvent aCEvt(aPos, CommandEventId::ContextMenu, false);
+        return pThis->signal_popup_menu(aCEvt);
     }
 public:
     GtkInstanceDrawingArea(GtkDrawingArea* pDrawingArea, GtkInstanceBuilder* pBuilder, const a11yref& rA11y, bool bTakeOwnership)

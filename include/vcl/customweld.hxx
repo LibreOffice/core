@@ -33,7 +33,7 @@ public:
     virtual void GetFocus() {}
     virtual void LoseFocus() {}
     virtual void StyleUpdated() { Invalidate(); }
-    virtual bool ContextMenu(const Point&) { return false; }
+    virtual bool ContextMenu(const CommandEvent&) { return false; }
     virtual bool KeyInput(const KeyEvent&) { return false; }
     virtual tools::Rectangle GetFocusRect() { return tools::Rectangle(); }
     virtual FactoryFunction GetUITestFactory() const { return nullptr; }
@@ -49,8 +49,8 @@ public:
         m_pDrawingArea->queue_draw_area(rRect.Left(), rRect.Top(), rRect.GetWidth(),
                                         rRect.GetHeight());
     }
-    void Show() { m_pDrawingArea->show(); }
-    void Hide() { m_pDrawingArea->hide(); }
+    virtual void Show() { m_pDrawingArea->show(); }
+    virtual void Hide() { m_pDrawingArea->hide(); }
     void GrabFocus() { m_pDrawingArea->grab_focus(); }
     bool HasFocus() const { return m_pDrawingArea->has_focus(); }
     bool IsVisible() const { return m_pDrawingArea->get_visible(); }
@@ -101,7 +101,7 @@ private:
     DECL_LINK(DoLoseFocus, weld::Widget&, void);
     DECL_LINK(DoKeyPress, const KeyEvent&, bool);
     DECL_LINK(DoFocusRect, weld::Widget&, tools::Rectangle);
-    DECL_LINK(DoPopupMenu, const Point&, bool);
+    DECL_LINK(DoPopupMenu, const CommandEvent&, bool);
     DECL_LINK(DoStyleUpdated, weld::Widget&, void);
     DECL_LINK(DoRequestHelp, tools::Rectangle&, OUString);
 

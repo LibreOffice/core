@@ -103,8 +103,8 @@ public:
 
     virtual sal_Int32                   getMaxCharCount() const;
 
-    void Show() { mxScrollArea->show(); }
-    void Hide() { mxScrollArea->hide(); }
+    virtual void Show() override { mxScrollArea->show(); }
+    virtual void Hide() override { mxScrollArea->hide(); }
 
     uno::Reference<css::accessibility::XAccessible> getAccessibleParent() { return GetDrawingArea()->get_accessible_parent(); }
 
