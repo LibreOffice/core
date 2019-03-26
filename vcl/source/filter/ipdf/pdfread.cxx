@@ -155,6 +155,8 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream,
 namespace vcl
 {
 
+#if HAVE_FEATURE_PDFIUM
+
 size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBitmaps,
                         const size_t nFirstPage, int nPages,
                         const double fResolutionDPI)
@@ -217,6 +219,8 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
 
     return rBitmaps.size();
 }
+
+#endif // HAVE_FEATURE_PDFIUM
 
 bool ImportPDF(SvStream& rStream, Bitmap& rBitmap,
                size_t nPageIndex,
