@@ -53,6 +53,11 @@
             <value>true</value>
           </prop>
         </node>
+        <node oor:name="ParameterNameSubstitution" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
         <node oor:name="DisplayVersionColumns" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
             <value>true</value>
@@ -123,6 +128,11 @@
           </prop>
         </node>
         <node oor:name="IgnoreDriverPrivileges" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+        <node oor:name="ParameterNameSubstitution" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
             <value>true</value>
           </prop>
