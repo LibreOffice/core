@@ -765,7 +765,7 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                 else if(pData->meEventType == GestureEventType::PanningUpdate)
                 {
                     long nOriginalPosition = mpWindowImpl->mpFrameData->mnTouchPanPosition;
-                    pVScrl->DoScroll(nOriginalPosition + (pData->mfOffset));
+                    pVScrl->DoScroll(nOriginalPosition + (pData->mfOffset / pVScrl->GetVisibleSize()));
                 }
                 if (pData->meEventType == GestureEventType::PanningEnd)
                 {
