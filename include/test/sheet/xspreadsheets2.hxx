@@ -46,7 +46,7 @@ protected:
     css::uno::Reference< css::sheet::XSpreadsheetDocument> xDocument;
 
 private:
-    css::uno::Reference< css::sheet::XSpreadsheetDocument> getDoc(const OUString&, css::uno::Reference< css::lang::XComponent >&);
+    css::uno::Reference< css::sheet::XSpreadsheetDocument> getDoc(const OUString&);
     static css::uno::Reference< css::sheet::XNamedRanges> getNamedRanges(css::uno::Reference< css::sheet::XSpreadsheetDocument > const &);
     void importSheetToCopy();
     static bool isExternalReference(const OUString& aDestContent, const OUString& aSrcContent );

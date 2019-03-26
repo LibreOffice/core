@@ -275,13 +275,12 @@ void XSpreadsheets2::testImportCellStyle()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("New style: VertJustify not set", table::CellVertJustify_CENTER, static_cast<table::CellVertJustify>(aVertJustify));
 }
 
-uno::Reference< sheet::XSpreadsheetDocument> XSpreadsheets2::getDoc(const OUString& aFileBase, uno::Reference< lang::XComponent >& xComp)
+uno::Reference< sheet::XSpreadsheetDocument> XSpreadsheets2::getDoc(const OUString& aFileBase)
 {
     OUString aFileURL;
     createFileURL(aFileBase, aFileURL);
 
-    if (!xComp.is())
-        xComp = loadFromDesktop(aFileURL);
+    uno::Reference< lang::XComponent > xComp = loadFromDesktop(aFileURL);
 
     CPPUNIT_ASSERT(xComp.is());
 
@@ -301,22 +300,14 @@ void XSpreadsheets2::importSheetToCopy()
     uno::Reference< container::XNameAccess> xSrcNameAccess(init(),UNO_QUERY_THROW);
     xSrcSheet.set( xSrcNameAccess->getByName(gaSrcSheetName), UNO_QUERY_THROW);
 
-    uno::Reference< lang::XComponent > xDestComponent;
-    if (!xDestComponent.is())
-    {
-        xDestDoc = getDoc(gaDestFileBase, xDestComponent);
-        CPPUNIT_ASSERT(xDestDoc.is());
+    xDestDoc = getDoc(gaDestFileBase);
+    CPPUNIT_ASSERT(xDestDoc.is());
 
-        // import sheet
-        uno::Reference< sheet::XSpreadsheets2 > xDestSheets (xDestDoc->getSheets(), UNO_QUERY_THROW);
-        sal_Int32 nDestPos = 0;
-        sal_Int32 nDestPosEffective = xDestSheets->importSheet(xDocument, gaSrcSheetName, nDestPos);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet index", nDestPosEffective, nDestPos);
-    }
-    else
-    {
-        xDestDoc.set(xDestComponent,UNO_QUERY_THROW);
-    }
+    // import sheet
+    uno::Reference< sheet::XSpreadsheets2 > xDestSheets (xDestDoc->getSheets(), UNO_QUERY_THROW);
+    sal_Int32 nDestPos = 0;
+    sal_Int32 nDestPosEffective = xDestSheets->importSheet(xDocument, gaSrcSheetName, nDestPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet index", nDestPosEffective, nDestPos);
 
     uno::Reference< container::XNameAccess > xDestSheetNameAccess (xDestDoc->getSheets(), UNO_QUERY_THROW);
     xDestSheet.set( xDestSheetNameAccess->getByName(gaSrcSheetName), UNO_QUERY_THROW);
