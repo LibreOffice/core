@@ -496,6 +496,7 @@ private:
     void executeDispatch_ToggleGridVertical();
 
     void executeDispatch_LOKSetTextSelection(int nType, int nX, int nY);
+    void executeDispatch_LOKPieSegmentDragging(int nOffset);
 
     void sendPopupRequest(OUString const & rCID, tools::Rectangle aRectangle);
 

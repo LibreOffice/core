@@ -56,7 +56,7 @@ static const char m_aMultiClick[] = "MultiClick";
 static const char m_aDragMethodEquals[] = "DragMethod=";
 static const char m_aDragParameterEquals[] = "DragParameter=";
 static const char m_aProtocol[] = "CID/";
-static const OUString m_aPieSegmentDragMethodServiceName("PieSegmentDraging");
+static const OUString m_aPieSegmentDragMethodServiceName("PieSegmentDragging");
 
 namespace
 {

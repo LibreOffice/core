@@ -1093,7 +1093,25 @@ void SAL_CALL ChartController::dispatch(
     }
     else if (aCommand == "LOKTransform")
     {
-        this->executeDispatch_PositionAndSize(&rArgs);
+        if (rArgs[0].Name == "Action")
+        {
+            OUString sAction;
+            if ((rArgs[0].Value >>= sAction) && sAction == "PieSegmentDragging")
+            {
+                if (rArgs[1].Name == "Offset")
+                {
+                    sal_Int32 nOffset;
+                    if (rArgs[1].Value >>= nOffset)
+                    {
+                        this->executeDispatch_LOKPieSegmentDragging(nOffset);
+                    }
+                }
+            }
+        }
+        else
+        {
+            this->executeDispatch_PositionAndSize(&rArgs);
+        }
     }
     else if(aCommand == "Paste")
         this->executeDispatch_Paste();

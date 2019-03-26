@@ -3098,25 +3098,27 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
 
         if (aChartHelper.GetWindow())
         {
-            tools::Rectangle aChartBB = aChartHelper.GetChartBoundingBox();
-            int nLeft = OutputDevice::LogicToLogic(aChartBB.Left(), MapUnit::MapTwip, MapUnit::Map100thMM);
-            int nTop = OutputDevice::LogicToLogic(aChartBB.Top(), MapUnit::MapTwip, MapUnit::Map100thMM);
-
-            sal_Int32 value;
-            for (beans::PropertyValue& rPropValue: aPropertyValuesVector)
+            if (aPropertyValuesVector[0].Name != "Action")
             {
-                if (rPropValue.Name == "TransformPosX" || rPropValue.Name == "TransformRotationX")
+                tools::Rectangle aChartBB = aChartHelper.GetChartBoundingBox();
+                int nLeft = OutputDevice::LogicToLogic(aChartBB.Left(), MapUnit::MapTwip, MapUnit::Map100thMM);
+                int nTop = OutputDevice::LogicToLogic(aChartBB.Top(), MapUnit::MapTwip, MapUnit::Map100thMM);
+
+                sal_Int32 value;
+                for (beans::PropertyValue& rPropValue: aPropertyValuesVector)
                 {
-                    rPropValue.Value >>= value;
-                    rPropValue.Value <<= value - nLeft;
-                }
-                else if (rPropValue.Name == "TransformPosY" || rPropValue.Name == "TransformRotationY")
-                {
-                    rPropValue.Value >>= value;
-                    rPropValue.Value <<= value - nTop;
+                    if (rPropValue.Name == "TransformPosX" || rPropValue.Name == "TransformRotationX")
+                    {
+                        rPropValue.Value >>= value;
+                        rPropValue.Value <<= value - nLeft;
+                    }
+                    else if (rPropValue.Name == "TransformPosY" || rPropValue.Name == "TransformRotationY")
+                    {
+                        rPropValue.Value >>= value;
+                        rPropValue.Value <<= value - nTop;
+                    }
                 }
             }
-
             util::URL aCommandURL;
             aCommandURL.Path = "LOKTransform";
             css::uno::Reference<css::frame::XDispatch>& aChartDispatcher = aChartHelper.GetXDispatcher();
