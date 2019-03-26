@@ -2129,55 +2129,41 @@ void PrintDialog::previewBackward()
     mpPageEdit->Down();
 }
 
-
 // PrintProgressDialog
-
-PrintProgressDialog::PrintProgressDialog(vcl::Window* i_pParent, int i_nMax)
-    : ModelessDialog(i_pParent, "PrintProgressDialog", "vcl/ui/printprogressdialog.ui")
+PrintProgressDialog::PrintProgressDialog(weld::Window* i_pParent, int i_nMax)
+    : GenericDialogController(i_pParent, "vcl/ui/printprogressdialog.ui", "PrintProgressDialog")
     , mbCanceled(false)
     , mnCur(0)
     , mnMax(i_nMax)
+    , mxText(m_xBuilder->weld_label("label"))
+    , mxProgress(m_xBuilder->weld_progress_bar("progressbar"))
+    , mxButton(m_xBuilder->weld_button("cancel"))
 {
-    get(mpButton, "cancel");
-    get(mpProgress, "progressbar");
-    get(mpText, "label");
-
     if( mnMax < 1 )
         mnMax = 1;
 
-    maStr = mpText->GetText();
+    maStr = mxText->get_label();
 
     //just multiply largest value by 10 and take the width of that string as
     //the max size we will want
     OUString aNewText( maStr.replaceFirst( "%p", OUString::number( mnMax * 10 ) ) );
     aNewText = aNewText.replaceFirst( "%n", OUString::number( mnMax * 10 ) );
-    mpText->SetText( aNewText );
-    mpText->set_width_request(mpText->get_preferred_size().Width());
+    mxText->set_label( aNewText );
+    mxText->set_size_request(mxText->get_preferred_size().Width(), -1);
 
     //Pick a useful max width
-    mpProgress->set_width_request(mpProgress->LogicToPixel(Size(100, 0), MapMode(MapUnit::MapAppFont)).Width());
+    mxProgress->set_size_request(mxProgress->get_approximate_digit_width() * 25, -1);
 
-    mpButton->SetClickHdl( LINK( this, PrintProgressDialog, ClickHdl ) );
-
+    mxButton->connect_clicked( LINK( this, PrintProgressDialog, ClickHdl ) );
 }
 
 PrintProgressDialog::~PrintProgressDialog()
 {
-    disposeOnce();
 }
 
-void PrintProgressDialog::dispose()
+IMPL_LINK_NOARG(PrintProgressDialog, ClickHdl, weld::Button&, void)
 {
-    mpText.clear();
-    mpProgress.clear();
-    mpButton.clear();
-    ModelessDialog::dispose();
-}
-
-IMPL_LINK( PrintProgressDialog, ClickHdl, Button*, pButton, void )
-{
-    if( pButton == mpButton )
-        mbCanceled = true;
+    mbCanceled = true;
 }
 
 void PrintProgressDialog::setProgress( int i_nCurrent )
@@ -2187,11 +2173,11 @@ void PrintProgressDialog::setProgress( int i_nCurrent )
     if( mnMax < 1 )
         mnMax = 1;
 
-    mpProgress->SetValue(mnCur*100/mnMax);
+    mxProgress->set_percentage(mnCur*100/mnMax);
 
     OUString aNewText( maStr.replaceFirst( "%p", OUString::number( mnCur ) ) );
     aNewText = aNewText.replaceFirst( "%n", OUString::number( mnMax ) );
-    mpText->SetText( aNewText );
+    mxText->set_label( aNewText );
 }
 
 void PrintProgressDialog::tick()

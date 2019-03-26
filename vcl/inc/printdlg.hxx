@@ -250,23 +250,22 @@ namespace vcl
 
     };
 
-    class PrintProgressDialog : public ModelessDialog
+    class PrintProgressDialog : public weld::GenericDialogController
     {
         OUString            maStr;
-        VclPtr<FixedText>   mpText;
-        VclPtr<ProgressBar> mpProgress;
-        VclPtr<CancelButton> mpButton;
-
         bool                mbCanceled;
         sal_Int32           mnCur;
         sal_Int32           mnMax;
 
-        DECL_LINK( ClickHdl, Button*, void );
+        std::unique_ptr<weld::Label> mxText;
+        std::unique_ptr<weld::ProgressBar> mxProgress;
+        std::unique_ptr<weld::Button> mxButton;
+
+        DECL_LINK( ClickHdl, weld::Button&, void );
 
     public:
-        PrintProgressDialog(vcl::Window* i_pParent, int i_nMax);
+        PrintProgressDialog(weld::Window* i_pParent, int i_nMax);
         virtual ~PrintProgressDialog() override;
-        virtual void dispose() override;
         bool isCanceled() const { return mbCanceled; }
         void setProgress( int i_nCurrent );
         void tick();
