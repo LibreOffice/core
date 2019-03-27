@@ -83,9 +83,6 @@
 #include <tokenarray.hxx>
 #include <gridwin.hxx>
 
-// Maximum Ranges in RangeFinder
-#define RANGEFIND_MAX   64
-
 using namespace formula;
 
 bool ScInputHandler::bOptLoaded = false;            // Evaluate App options
@@ -285,7 +282,7 @@ void ScInputHandler::InitRangeFinder( const OUString& rFormula )
     sal_Int32 nStart = 0;
     sal_uInt16 nCount = 0;
     ScRange aRange;
-    while ( nPos < nLen && nCount < RANGEFIND_MAX )
+    while ( nPos < nLen )
     {
         // Skip separator
         while ( nPos<nLen && ScGlobal::UnicodeStrChr( aDelimiters.getStr(), pChar[nPos] ) )
