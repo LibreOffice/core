@@ -2008,7 +2008,7 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                     bool bHaveCaptionOnlyBkm = false;
                     bool bHaveNumberOnlyBkm = false;
                     bool bRunSplittedAtSep = false;
-                    for( auto pFieldType : *pFieldTypes )
+                    for( auto const & pFieldType : *pFieldTypes )
                     {
                         if( SwFieldIds::GetRef == pFieldType->Which() )
                         {

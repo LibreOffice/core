@@ -988,7 +988,7 @@ void SAL_CALL SwXFieldMaster::dispose()
     const SwFieldTypes* pTypes = m_pImpl->m_pDoc->getIDocumentFieldsAccess().GetFieldTypes();
     for( size_t i = 0; i < pTypes->size(); i++ )
     {
-        if((*pTypes)[i] == pFieldType)
+        if((*pTypes)[i].get()== pFieldType)
             nTypeIdx = i;
     }
 
@@ -1046,7 +1046,7 @@ OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rD
         const SwFieldTypes* pTypes = rDoc.getIDocumentFieldsAccess().GetFieldTypes();
         for( size_t i = 0; i <= size_t(INIT_FLDTYPES); i++ )
         {
-            if((*pTypes)[i] == &rType)
+            if((*pTypes)[i].get() == &rType)
             {
                 return SwStyleNameMapper::GetProgName( sName, SwGetPoolIdFromName::TxtColl );
             }
@@ -2948,7 +2948,7 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc & rDoc)
     const size_t nCount = pFieldTypes->size();
     for(size_t nType = 0;  nType < nCount;  ++nType)
     {
-        const SwFieldType *pCurType = (*pFieldTypes)[nType];
+        const SwFieldType *pCurType = (*pFieldTypes)[nType].get();
         SwIterator<SwFormatField,SwFieldType> aIter( *pCurType );
         const SwFormatField* pCurFieldFormat = aIter.First();
         while (pCurFieldFormat)

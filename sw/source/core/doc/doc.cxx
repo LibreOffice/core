@@ -1418,10 +1418,10 @@ bool SwDoc::RemoveInvisibleContent()
         // document's field types, invalidating iterators. So, we need to create own list of
         // matching types prior to processing them.
         std::vector<std::unique_ptr<FieldTypeGuard>> aHidingFieldTypes;
-        for (SwFieldType* pType : *getIDocumentFieldsAccess().GetFieldTypes())
+        for (std::unique_ptr<SwFieldType> const & pType : *getIDocumentFieldsAccess().GetFieldTypes())
         {
             if (FieldCanHideParaWeight(pType->Which()))
-                aHidingFieldTypes.push_back(std::make_unique<FieldTypeGuard>(pType));
+                aHidingFieldTypes.push_back(std::make_unique<FieldTypeGuard>(pType.get()));
         }
         for (const auto& pTypeGuard : aHidingFieldTypes)
         {
@@ -1600,7 +1600,7 @@ bool SwDoc::ConvertFieldsToText(SwRootFrame const& rLayout)
     //go backward, field types are removed
     for(SwFieldTypes::size_type nType = nCount; nType > 0; --nType)
     {
-        const SwFieldType *pCurType = (*pMyFieldTypes)[nType - 1];
+        const SwFieldType *pCurType = (*pMyFieldTypes)[nType - 1].get();
 
         if ( SwFieldIds::Postit == pCurType->Which() )
             continue;
