@@ -1272,9 +1272,9 @@ void SvxBorderTabPage::FillLineListBox_Impl()
     static struct {
         SvxBorderLineStyle mnStyle;
         long mnMinWidth;
-        LineListBox::ColorFunc mpColor1Fn;
-        LineListBox::ColorFunc mpColor2Fn;
-        LineListBox::ColorDistFunc mpColorDistFn;
+        SvtLineListBox::ColorFunc mpColor1Fn;
+        SvtLineListBox::ColorFunc mpColor2Fn;
+        SvtLineListBox::ColorDistFunc mpColorDistFn;
     } const aLines[] = {
         // Simple lines
         { SvxBorderLineStyle::SOLID,        0, &sameColor, &sameColor, &sameDistColor },

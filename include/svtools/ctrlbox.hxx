@@ -22,6 +22,8 @@
 
 #include <svtools/svtdllapi.h>
 
+#include <editeng/borderline.hxx>
+
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/metric.hxx>
@@ -35,7 +37,64 @@ namespace weld { class CustomWeld; }
 class VirtualDevice;
 class BorderWidthImpl;
 class FontList;
-class ImpLineListData;
+
+/** Utility class storing the border line width, style and colors. The widths
+    are defined in Twips.
+  */
+class ImpLineListData
+{
+private:
+    BorderWidthImpl const m_aWidthImpl;
+
+    Color  ( * const m_pColor1Fn )( Color );
+    Color  ( * const m_pColor2Fn )( Color );
+    Color  ( * const m_pColorDistFn )( Color, Color );
+
+    long const   m_nMinWidth;
+    SvxBorderLineStyle const m_nStyle;
+
+public:
+    ImpLineListData( BorderWidthImpl aWidthImpl,
+           SvxBorderLineStyle nStyle, long nMinWidth, Color ( *pColor1Fn )( Color ),
+           Color ( *pColor2Fn )( Color ), Color ( *pColorDistFn )( Color, Color ) ) :
+        m_aWidthImpl( aWidthImpl ),
+        m_pColor1Fn( pColor1Fn ),
+        m_pColor2Fn( pColor2Fn ),
+        m_pColorDistFn( pColorDistFn ),
+        m_nMinWidth( nMinWidth ),
+        m_nStyle( nStyle )
+    {
+    }
+
+    /** Returns the computed width of the line 1 in twips. */
+    long GetLine1ForWidth( long nWidth ) { return m_aWidthImpl.GetLine1( nWidth ); }
+
+    /** Returns the computed width of the line 2 in twips. */
+    long GetLine2ForWidth( long nWidth ) { return m_aWidthImpl.GetLine2( nWidth ); }
+
+    /** Returns the computed width of the gap in twips. */
+    long GetDistForWidth( long nWidth ) { return m_aWidthImpl.GetGap( nWidth ); }
+
+    Color GetColorLine1( const Color& rMain )
+    {
+        return ( *m_pColor1Fn )( rMain );
+    }
+
+    Color GetColorLine2( const Color& rMain )
+    {
+        return ( *m_pColor2Fn )( rMain );
+    }
+
+    Color GetColorDist( const Color& rMain, const Color& rDefault )
+    {
+        return ( *m_pColorDistFn )( rMain, rDefault );
+    }
+
+    /** Returns the minimum width in twips */
+    long   GetMinWidth( ) { return m_nMinWidth;}
+    SvxBorderLineStyle GetStyle( ) { return m_nStyle;}
+};
+
 enum class SvxBorderLineStyle : sal_Int16;
 
 typedef ::std::vector< FontMetric         > ImplFontList;
@@ -138,84 +197,6 @@ inline Color sameColor( Color rMain )
 inline Color sameDistColor( Color /*rMain*/, Color rDefault )
 {
     return rDefault;
-}
-
-class SVT_DLLPUBLIC LineListBox final : public ListBox
-{
-public:
-    typedef Color (*ColorFunc)(Color);
-    typedef Color (*ColorDistFunc)(Color, Color);
-
-                    LineListBox( vcl::Window* pParent, WinBits nWinStyle = WB_BORDER );
-    virtual         ~LineListBox() override;
-    virtual void    dispose() override;
-
-    /** Set the width in Twips */
-    void            SetWidth( long nWidth );
-    long            GetWidth() const { return m_nWidth; }
-    void            SetNone( const OUString& sNone );
-
-    using ListBox::InsertEntry;
-    /** Insert a listbox entry with all widths in Twips. */
-    void            InsertEntry(const BorderWidthImpl& rWidthImpl,
-                        SvxBorderLineStyle nStyle, long nMinWidth = 0,
-                        ColorFunc pColor1Fn = &sameColor,
-                        ColorFunc pColor2Fn = &sameColor,
-                        ColorDistFunc pColorDistFn = &sameDistColor);
-
-    SvxBorderLineStyle GetEntryStyle( sal_Int32 nPos ) const;
-
-    SvxBorderLineStyle GetSelectEntryStyle() const;
-
-    void            SetSourceUnit( FieldUnit eNewUnit ) { eSourceUnit = eNewUnit; }
-
-    const Color&    GetColor() const { return aColor; }
-
-private:
-
-    SVT_DLLPRIVATE void         ImpGetLine( long nLine1, long nLine2, long nDistance,
-                                    Color nColor1, Color nColor2, Color nColorDist,
-                                    SvxBorderLineStyle nStyle, BitmapEx& rBmp );
-    using Window::ImplInit;
-    void            UpdatePaintLineColor();       // returns sal_True if maPaintCol has changed
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-    void            UpdateEntries( long nOldWidth );
-    sal_Int32       GetStylePos( sal_Int32  nListPos, long nWidth );
-
-    inline const Color&    GetPaintColor() const;
-    Color   GetColorLine1( sal_Int32  nPos );
-    Color   GetColorLine2( sal_Int32  nPos );
-    Color   GetColorDist( sal_Int32  nPos );
-
-                    LineListBox( const LineListBox& ) = delete;
-    LineListBox&    operator =( const LineListBox& ) = delete;
-
-    std::vector<std::unique_ptr<ImpLineListData>> m_vLineList;
-    long            m_nWidth;
-    OUString        m_sNone;
-    ScopedVclPtr<VirtualDevice>   aVirDev;
-    Size            aTxtSize;
-    Color const     aColor;
-    Color           maPaintCol;
-    FieldUnit       eSourceUnit;
-};
-
-const Color& LineListBox::GetPaintColor() const
-{
-    return maPaintCol;
-}
-
-inline void LineListBox::SetWidth( long nWidth )
-{
-    long nOldWidth = m_nWidth;
-    m_nWidth = nWidth;
-    UpdateEntries( nOldWidth );
-}
-
-inline void LineListBox::SetNone( const OUString& sNone )
-{
-    m_sNone = sNone;
 }
 
 class SvtValueSet;
