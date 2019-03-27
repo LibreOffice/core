@@ -1434,9 +1434,9 @@ void ScInterpreter::ConvertMatrixJumpConditionToMatrix()
         PushIllegalParameter();
 }
 
-ScTokenMatrixMap* ScInterpreter::CreateTokenMatrixMap()
+std::unique_ptr<ScTokenMatrixMap> ScInterpreter::CreateTokenMatrixMap()
 {
-    return new ScTokenMatrixMap;
+    return std::make_unique<ScTokenMatrixMap>();
 }
 
 bool ScInterpreter::ConvertMatrixParameters()
