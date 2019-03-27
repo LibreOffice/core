@@ -11,6 +11,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,vcl_jpeg_read_write_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,vcl_jpeg_read_write_test, \
     vcl/qa/cppunit/jpeg/JpegReaderTest \
+    vcl/qa/cppunit/jpeg/JpegWriterTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,vcl_jpeg_read_write_test,boost_headers))
