@@ -156,7 +156,7 @@ void FuText::disposing()
     if(mpView)
     {
         if(mpView->SdrEndTextEdit() == SdrEndTextEditKind::Deleted)
-            mxTextObj.reset( nullptr );
+            mxTextObj.reset();
 
         // reset the RequestHandler of the used Outliner to the handler of the document
         ::Outliner* pOutliner = mpView->GetTextEditOutliner();
@@ -278,7 +278,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                    list. The call MarkObj further below accesses then the dead
                    object. As a simple fix, we determine eHit after
                    SdrEndTextEdit again, this returns then SdrHitKind::NONE. */
-                mxTextObj.reset( nullptr );
+                mxTextObj.reset();
                 eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
             }
 
@@ -630,7 +630,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
         if (bReset)
         {
-            mxTextObj.reset( nullptr );
+            mxTextObj.reset();
         }
     }
 
@@ -716,7 +716,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
         if (!mpView->EndCreateObj(SdrCreateCmd::ForceEnd))
         {
             // it was not possible to create text object
-            mxTextObj.reset(nullptr);
+            mxTextObj.reset();
         }
         else if (nSlotId == SID_TEXT_FITTOSIZE)
         {
@@ -791,7 +791,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
             if(!mpView->EndCreateObj(SdrCreateCmd::ForceEnd))
             {
-                mxTextObj.reset(nullptr);
+                mxTextObj.reset();
             }
 
             if(bSnapEnabled)
@@ -882,7 +882,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             // switch to selection
             if (mpView->SdrEndTextEdit() == SdrEndTextEditKind::Deleted)
             {
-                mxTextObj.reset(nullptr);
+                mxTextObj.reset();
             }
 
             mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_OBJECT_SELECT,
@@ -924,7 +924,7 @@ bool FuText::KeyInput(const KeyEvent& rKEvt)
 
         if(mxTextObj.get() != pSelectedObj)
         {
-            mxTextObj.reset(nullptr);
+            mxTextObj.reset();
         }
     }
 
@@ -1134,7 +1134,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
     }
     else
     {
-        mxTextObj.reset(nullptr);
+        mxTextObj.reset();
     }
 }
 
@@ -1235,7 +1235,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
 
     MouseEvent aMEvt(mpWindow->GetPointerPosPixel());
 
-    mxTextObj.reset(nullptr);
+    mxTextObj.reset();
 
     if (nSlotId == SID_TEXTEDIT)
     {
@@ -1354,7 +1354,7 @@ bool FuText::cancel()
     if ( mpView->IsTextEdit() )
     {
         if(mpView->SdrEndTextEdit() == SdrEndTextEditKind::Deleted)
-            mxTextObj.reset(nullptr);
+            mxTextObj.reset();
 
         mpView->SetCurrentObj(OBJ_TEXT);
         mpView->SetEditMode(SdrViewEditMode::Edit);

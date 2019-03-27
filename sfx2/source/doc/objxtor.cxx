@@ -316,7 +316,7 @@ SfxObjectShell::~SfxObjectShell()
         pSfxApp->ReleaseIndex(pImpl->nVisualDocumentNumber);
 
     // Destroy Basic-Manager
-    pImpl->aBasicManager.reset( nullptr );
+    pImpl->aBasicManager.reset();
 
     if ( pSfxApp && pSfxApp->GetDdeService() )
         pSfxApp->RemoveDdeTopic( this );

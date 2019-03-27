@@ -946,7 +946,7 @@ void RtfAttributeOutput::InitTableHelper(
 void RtfAttributeOutput::StartTable()
 {
     // To trigger calling InitTableHelper()
-    m_pTableWrt.reset(nullptr);
+    m_pTableWrt.reset();
 }
 
 void RtfAttributeOutput::StartTableRow(
@@ -1042,7 +1042,7 @@ void RtfAttributeOutput::EndTable()
     if (m_nTableDepth > 0)
     {
         m_nTableDepth--;
-        m_pTableWrt.reset(nullptr);
+        m_pTableWrt.reset();
     }
 
     // We closed the table; if it is a nested table, the cell that contains it
@@ -1050,7 +1050,7 @@ void RtfAttributeOutput::EndTable()
     m_bTableCellOpen = true;
 
     // Cleans the table helper
-    m_pTableWrt.reset(nullptr);
+    m_pTableWrt.reset();
 }
 
 void RtfAttributeOutput::FinishTableRowCell(const ww8::WW8TableNodeInfoInner::Pointer_t& pInner)
