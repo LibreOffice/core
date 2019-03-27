@@ -652,7 +652,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
     // Get the field first, because we retrieve the TextColl via the field's name
     OSL_ENSURE( nId == USHRT_MAX  || nId < rDoc.getIDocumentFieldsAccess().GetFieldTypes()->size(),
             "FieldType index out of bounds." );
-    SwFieldType *pType = (nId != USHRT_MAX) ? (*rDoc.getIDocumentFieldsAccess().GetFieldTypes())[nId] : nullptr;
+    SwFieldType *pType = (nId != USHRT_MAX) ? (*rDoc.getIDocumentFieldsAccess().GetFieldTypes())[nId].get() : nullptr;
     OSL_ENSURE(!pType || pType->Which() == SwFieldIds::SetExp, "wrong Id for Label");
 
     SwTextFormatColl * pColl = nullptr;
@@ -1015,7 +1015,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
     // Because we get by the TextColl's name, we need to create the field first.
     OSL_ENSURE( nId == USHRT_MAX  || nId < rDoc.getIDocumentFieldsAccess().GetFieldTypes()->size(),
             "FieldType index out of bounds" );
-    SwFieldType *pType = nId != USHRT_MAX ? (*rDoc.getIDocumentFieldsAccess().GetFieldTypes())[nId] : nullptr;
+    SwFieldType *pType = nId != USHRT_MAX ? (*rDoc.getIDocumentFieldsAccess().GetFieldTypes())[nId].get() : nullptr;
     OSL_ENSURE( !pType || pType->Which() == SwFieldIds::SetExp, "Wrong label id" );
 
     SwTextFormatColl *pColl = nullptr;

@@ -946,7 +946,7 @@ void SwViewShell::SetEmptyDbFieldHidesPara(bool bEmptyDbFieldHidesPara)
         rIDSA.set(DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA, bEmptyDbFieldHidesPara);
         StartAction();
         GetDoc()->getIDocumentState().SetModified();
-        for (auto* pFieldType : *GetDoc()->getIDocumentFieldsAccess().GetFieldTypes())
+        for (auto const & pFieldType : *GetDoc()->getIDocumentFieldsAccess().GetFieldTypes())
         {
             if (pFieldType->Which() == SwFieldIds::Database)
             {

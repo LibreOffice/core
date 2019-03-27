@@ -739,7 +739,7 @@ bool SwCursorShell::MoveFieldType(
             const size_t nSize = rFieldTypes.size();
             for( size_t i=0; i < nSize; ++i )
             {
-                pFieldType = rFieldTypes[ i ];
+                pFieldType = rFieldTypes[ i ].get();
                 if ( SwFieldIds::SetExp == pFieldType->Which() )
                 {
                     ::lcl_MakeFieldLst( aSrtLst, *pFieldType, IsReadOnlyAvailable(), true );
@@ -753,7 +753,7 @@ bool SwCursorShell::MoveFieldType(
         const size_t nSize = rFieldTypes.size();
         for( size_t i=0; i < nSize; ++i )
         {
-            pFieldType = rFieldTypes[ i ];
+            pFieldType = rFieldTypes[ i ].get();
             if( nResType == pFieldType->Which() )
             {
                 ::lcl_MakeFieldLst( aSrtLst, *pFieldType, IsReadOnlyAvailable() );

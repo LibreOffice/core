@@ -754,7 +754,7 @@ void SwDoc::ChangeAuthorityData( const SwAuthEntry* pNewData )
 
     for( SwFieldTypes::size_type i = INIT_FLDTYPES; i < nSize; ++i )
     {
-        SwFieldType* pFieldType = (*getIDocumentFieldsAccess().GetFieldTypes())[i];
+        SwFieldType* pFieldType = (*getIDocumentFieldsAccess().GetFieldTypes())[i].get();
         if( SwFieldIds::TableOfAuthorities  == pFieldType->Which() )
         {
             SwAuthorityFieldType* pAuthType = static_cast<SwAuthorityFieldType*>(pFieldType);

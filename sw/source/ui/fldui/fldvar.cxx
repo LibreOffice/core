@@ -881,7 +881,7 @@ IMPL_LINK_NOARG(SwFieldVarPage, ModifyHdl, weld::Entry&, void)
 
                     for (i = 0; i < INIT_FLDTYPES; i++)
                     {
-                        SwFieldType* pType = (*p)[ i ];
+                        SwFieldType* pType = (*p)[ i ].get();
                         if (pType == pFieldType)
                             break;
                     }
