@@ -93,7 +93,7 @@ namespace dxcanvas
             HMONITOR MonitorFromWindow( HWND hwnd )
             {
                 // return adapter_default in case something went wrong...
-                if(!(mpMonitorFromWindow))
+                if(!mpMonitorFromWindow)
                     return HMONITOR(nullptr);
                 // MONITOR_DEFAULTTONEAREST
                 const DWORD dwFlags(0x00000002);
@@ -561,7 +561,7 @@ namespace dxcanvas
 
         void DXRenderModule::disposing()
         {
-            if(!(mhWnd))
+            if(!mhWnd)
                 return;
 
             mpTexture.reset();
