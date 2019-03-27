@@ -392,7 +392,7 @@ public:
     SdrModel& getSdrModelFromSdrPage() const { return mrSdrModelFromSdrPage; }
 
 protected:
-    sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact();
 public:
     const sdr::contact::ViewContact& GetViewContact() const;
     sdr::contact::ViewContact& GetViewContact();
