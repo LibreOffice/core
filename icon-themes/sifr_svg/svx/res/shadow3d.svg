@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <path
+     d="m9 15 7-7v-1h-5l-2 2z"
+     fill="#b8b8b8"
+     fill-rule="evenodd"
+     style="fill:#555753;opacity:0.35" />
+  <path
+     style="fill:#555753"
+     d="M 0,2 V 15 H 9 V 2 Z m 2,2 h 5 v 9 H 2 Z"
+     />
+</svg>
