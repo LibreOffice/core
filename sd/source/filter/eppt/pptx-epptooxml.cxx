@@ -123,8 +123,7 @@ void WriteSndAc(const FSHelperPtr& pFS, const OUString& sSoundRelId, const OUStr
         pFS->startElementNS(XML_p, XML_sndAc, FSEND);
         pFS->startElementNS(XML_p, XML_stSnd, FSEND);
         pFS->singleElementNS(XML_p, XML_snd,
-                FSNS(XML_r, XML_embed), sSoundRelId.isEmpty() ? nullptr : USS(sSoundRelId),
-                XML_name, sSoundName.isEmpty() ? nullptr : USS(sSoundName), FSEND);
+                FSNS(XML_r, XML_embed), sSoundRelId.toUtf8(), XML_name, sSoundName.toUtf8(), FSEND);
         pFS->endElement(FSNS(XML_p, XML_stSnd));
         pFS->endElement(FSNS(XML_p, XML_sndAc));
 }
@@ -253,7 +252,7 @@ ShapeExport& PowerPointShapeExport::WriteTextShape(const Reference< XShape >& xS
 {
     OUString sShapeType = xShape->getShapeType();
 
-    SAL_INFO("sd.eppt", "shape(text) : " << USS(sShapeType));
+    SAL_INFO("sd.eppt", "shape(text) : " << sShapeType.toUtf8());
 
     if (sShapeType == "com.sun.star.drawing.TextShape" || sShapeType == "com.sun.star.drawing.GraphicObjectShape")
     {
@@ -306,7 +305,7 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape(const Reference< XShape >&
 {
     OUString sShapeType = xShape->getShapeType();
 
-    SAL_INFO("sd.eppt", "shape(unknown): " << USS(sShapeType));
+    SAL_INFO("sd.eppt", "shape(unknown): " << sShapeType.toUtf8());
 
     if (sShapeType == "com.sun.star.presentation.PageShape")
     {
@@ -321,7 +320,7 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape(const Reference< XShape >&
         }
     }
     else
-        SAL_WARN("sd.eppt", "unknown shape not handled: " << USS(sShapeType));
+        SAL_WARN("sd.eppt", "unknown shape not handled: " << sShapeType.toUtf8());
 
     return *this;
 }
@@ -963,8 +962,8 @@ void PowerPointExport::WriteAuthors()
     {
         pFS->singleElementNS(XML_p, XML_cmAuthor,
                              XML_id, I32S(i.second.nId),
-                             XML_name, USS(i.first),
-                             XML_initials, USS(lcl_GetInitials(i.first)),
+                             XML_name, i.first.toUtf8(),
+                             XML_initials, lcl_GetInitials(i.first).toUtf8(),
                              XML_lastIdx, I32S(i.second.nLastIndex),
                              XML_clrIdx, I32S(i.second.nId),
                              FSEND);
@@ -1099,7 +1098,7 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
 
     mPresentationFS->singleElementNS(XML_p, XML_sldId,
                                      XML_id, I32S(GetNewSlideId()),
-                                     FSNS(XML_r, XML_id), USS(sRelId),
+                                     FSNS(XML_r, XML_id), sRelId.toUtf8(),
                                      FSEND);
 
     if (nPageNum == mnPages - 1)
@@ -1232,7 +1231,7 @@ void PowerPointExport::AddLayoutIdAndRelation(const FSHelperPtr& pFS, sal_Int32 
 
     pFS->singleElementNS(XML_p, XML_sldLayoutId,
                          XML_id, I64S(GetNewSlideMasterId()),
-                         FSNS(XML_r, XML_id), USS(sRelId),
+                         FSNS(XML_r, XML_id), sRelId.toUtf8(),
                          FSEND);
 }
 
@@ -1254,7 +1253,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
 
     mPresentationFS->singleElementNS(XML_p, XML_sldMasterId,
                                      XML_id, OString::number(GetNewSlideMasterId()).getStr(),
-                                     FSNS(XML_r, XML_id), USS(sRelId),
+                                     FSNS(XML_r, XML_id), sRelId.toUtf8(),
                                      FSEND);
 
     if (nPageNum == mnMasterPages - 1)
@@ -1909,7 +1908,7 @@ void PowerPointExport::WriteNotesMaster()
                                   "notesMasters/notesMaster1.xml");
 
     mPresentationFS->singleElementNS(XML_p, XML_notesMasterId,
-                                     FSNS(XML_r, XML_id), USS(sRelId),
+                                     FSNS(XML_r, XML_id), sRelId.toUtf8(),
                                      FSEND);
 
     mPresentationFS->endElementNS(XML_p, XML_notesMasterIdLst);
