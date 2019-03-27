@@ -123,8 +123,8 @@ void WriteAnimationProperty(const FSHelperPtr& pFS, const Any& rAny, sal_Int32 n
             pFS->singleElementNS(XML_p, XML_fltVal, XML_val, DS(fDouble), FSEND);
             break;
         case TypeClass_STRING:
-            pFS->singleElementNS(XML_p, XML_strVal, XML_val, USS(*o3tl::doAccess<OUString>(rAny)),
-                                 FSEND);
+            pFS->singleElementNS(XML_p, XML_strVal, XML_val,
+                                 (*o3tl::doAccess<OUString>(rAny)).toUtf8(), FSEND);
             break;
         default:
             break;
@@ -184,7 +184,7 @@ void WriteAnimateTo(const FSHelperPtr& pFS, const Any& rValue, const OUString& r
     if (!rValue.hasValue())
         return;
 
-    SAL_INFO("sd.eppt", "to attribute name: " << USS(rAttributeName));
+    SAL_INFO("sd.eppt", "to attribute name: " << rAttributeName.toUtf8());
 
     WriteAnimationProperty(pFS, AnimationExporter::convertAnimateValue(rValue, rAttributeName),
                            XML_to);
@@ -199,7 +199,7 @@ void WriteAnimateValues(const FSHelperPtr& pFS, const Reference<XAnimate>& rXAni
     const OUString& sFormula = rXAnimate->getFormula();
     const OUString& rAttributeName = rXAnimate->getAttributeName();
 
-    SAL_INFO("sd.eppt", "animate values, formula: " << USS(sFormula));
+    SAL_INFO("sd.eppt", "animate values, formula: " << sFormula.toUtf8());
 
     pFS->startElementNS(XML_p, XML_tavLst, FSEND);
 
@@ -209,7 +209,7 @@ void WriteAnimateValues(const FSHelperPtr& pFS, const Reference<XAnimate>& rXAni
         if (aValues[i].hasValue())
         {
             pFS->startElementNS(XML_p, XML_tav, XML_fmla,
-                                sFormula.isEmpty() ? nullptr : USS(sFormula), XML_tm,
+                                sFormula.isEmpty() ? nullptr : sFormula.toUtf8().getStr(), XML_tm,
                                 I32S(static_cast<sal_Int32>(aKeyTimes[i] * 100000.0)), FSEND);
             pFS->startElementNS(XML_p, XML_val, FSEND);
             ValuePair aPair;
@@ -295,7 +295,7 @@ void WriteAnimationAttributeName(const FSHelperPtr& pFS, const OUString& rAttrib
 
     pFS->startElementNS(XML_p, XML_attrNameLst, FSEND);
 
-    SAL_INFO("sd.eppt", "write attribute name: " << USS(rAttributeName));
+    SAL_INFO("sd.eppt", "write attribute name: " << rAttributeName.toUtf8());
 
     if (rAttributeName == "X;Y")
     {
@@ -885,9 +885,10 @@ void PPTXAnimationExport::WriteAnimationNodeAnimate(sal_Int32 nXmlNodeType)
         }
 
         mpFS->startElementNS(XML_p, nXmlNodeType, XML_calcmode, pCalcMode, XML_valueType,
-                             pValueType, XML_from, sFrom.getLength() ? USS(sFrom) : nullptr, XML_to,
-                             sTo.getLength() ? USS(sTo) : nullptr, XML_by,
-                             sBy.getLength() ? USS(sBy) : nullptr, FSEND);
+                             pValueType, XML_from,
+                             sFrom.isEmpty() ? nullptr : sFrom.toUtf8().getStr(), XML_to,
+                             sTo.isEmpty() ? nullptr : sTo.toUtf8().getStr(), XML_by,
+                             sBy.isEmpty() ? nullptr : sBy.toUtf8().getStr(), FSEND);
         bTo = sTo.isEmpty() && sFrom.isEmpty() && sBy.isEmpty();
     }
 
@@ -1174,8 +1175,8 @@ void PPTXAnimationExport::WriteAnimationNodeAudio()
 
     mpFS->startElementNS(XML_p, XML_tgtEl, FSEND);
     mpFS->singleElementNS(XML_p, XML_sndTgt, FSNS(XML_r, XML_embed),
-                          sRelId.isEmpty() ? nullptr : USS(sRelId), XML_name,
-                          sUrl.isEmpty() ? nullptr : USS(sName), FSEND);
+                          sRelId.isEmpty() ? nullptr : sRelId.toUtf8().getStr(), XML_name,
+                          sUrl.isEmpty() ? nullptr : sName.toUtf8().getStr(), FSEND);
     mpFS->endElementNS(XML_p, XML_tgtEl);
 
     mpFS->endElementNS(XML_p, XML_cMediaNode);

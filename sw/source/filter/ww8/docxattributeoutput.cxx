@@ -5075,7 +5075,7 @@ void DocxAttributeOutput::WritePostponedChart()
                */
             m_pSerializer->singleElementNS( XML_wp, XML_docPr,
                     XML_id, I32S( m_anchorId++ ),
-                    XML_name, USS( sName ),
+                    XML_name, sName.toUtf8(),
                     FSEND );
 
             m_pSerializer->singleElementNS( XML_wp, XML_cNvGraphicFramePr,
