@@ -1305,7 +1305,7 @@ namespace dbmm
 
             // now that the concrete scripts storage does not have any elements anymore,
             // remove it
-            xScriptsRoot.reset( nullptr ); // need to reset the storage to be allowed to remove it
+            xScriptsRoot.reset(nullptr); // need to reset the storage to be allowed to remove it
             aDocStorage.removeScriptTypeStorage( _eScriptType );
 
             // done so far
