@@ -2672,12 +2672,12 @@ void DocumentRedlineManager::AcceptAllRedline(bool bAccept)
         rUndoMgr.StartUndo(bAccept ? SwUndoId::ACCEPT_REDLINE : SwUndoId::REJECT_REDLINE, &aRewriter);
     }
 
-    while (!mpRedlineTable->empty())
+    for( SwRedlineTable::size_type it = 0; it < mpRedlineTable->size(); ++it )
     {
         if (bAccept)
-            AcceptRedline(mpRedlineTable->size() - 1, true);
+            AcceptRedline(it, true);
         else
-            RejectRedline(mpRedlineTable->size() - 1, true);
+            RejectRedline(it, true);
     }
 
     if (!sUndoStr.isEmpty())
