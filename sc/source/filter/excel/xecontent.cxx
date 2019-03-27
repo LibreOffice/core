@@ -719,7 +719,7 @@ void XclExpCFImpl::WriteBody( XclExpStream& rStrm )
 
     if (mbFormula2)
     {
-        xScTokArr.reset( mrFormatEntry.CreateFlatCopiedTokenArray( 1 ) );
+        xScTokArr = mrFormatEntry.CreateFlatCopiedTokenArray( 1 );
         mxTokArr2 = rFmlaComp.CreateFormula( EXC_FMLATYPE_CONDFMT, *xScTokArr );
     }
 
@@ -1712,7 +1712,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
         std::unique_ptr< ScTokenArray > xScTokArr;
 
         // first formula
-        xScTokArr.reset( pValData->CreateFlatCopiedTokenArray( 0 ) );
+        xScTokArr = pValData->CreateFlatCopiedTokenArray( 0 );
         if (xScTokArr)
         {
             if( pValData->GetDataMode() == SC_VALID_LIST )
@@ -1785,7 +1785,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
         }
 
         // second formula
-        xScTokArr.reset( pValData->CreateFlatCopiedTokenArray( 1 ) );
+        xScTokArr = pValData->CreateFlatCopiedTokenArray( 1 );
         if (xScTokArr)
         {
             if(GetOutput() == EXC_OUTPUT_BINARY)
