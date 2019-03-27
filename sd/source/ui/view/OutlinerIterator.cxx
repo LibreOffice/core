@@ -656,7 +656,7 @@ void ViewIteratorImpl::SetPage (sal_Int32 nPageIndex)
     if (mpObjectIterator!=nullptr && mpObjectIterator->IsMore())
         maPosition.mxObject.reset( mpObjectIterator->Next() );
     else
-        maPosition.mxObject.reset( nullptr );
+        maPosition.mxObject.reset(nullptr);
 
     maPosition.mnText = 0;
     if( !mbDirectionIsForward && maPosition.mxObject.is() )
@@ -679,8 +679,7 @@ void ViewIteratorImpl::Reverse()
         mpObjectIterator.reset();
 
     // Move iterator to the current object.
-    ::tools::WeakReference<SdrObject> xObject = maPosition.mxObject;
-    maPosition.mxObject.reset(nullptr);
+    ::tools::WeakReference<SdrObject> xObject = std::move(maPosition.mxObject);
 
     if (!mpObjectIterator)
         return;

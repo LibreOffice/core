@@ -3080,7 +3080,7 @@ void SwUndoTableStyleMake::RedoImpl(::sw::UndoRedoContext & rContext)
         if (pFormat)
         {
             *pFormat = *m_pAutoFormat;
-            m_pAutoFormat.reset(nullptr);
+            m_pAutoFormat.reset();
         }
     }
 }

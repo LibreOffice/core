@@ -90,7 +90,7 @@ void SfxApplication::Deinitialize()
 
 #if HAVE_FEATURE_SCRIPTING
     BasicManagerRepository::resetApplicationBasicManager();
-    pImpl->pBasicManager->reset( nullptr );
+    pImpl->pBasicManager->reset(nullptr);
         // this will also delete pBasMgr
 #endif
 
