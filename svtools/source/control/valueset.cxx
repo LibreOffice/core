@@ -63,9 +63,6 @@ ValueSet::ValueSet( vcl::Window* pParent, WinBits nWinStyle ) :
     Control( pParent, nWinStyle ),
     maColor( COL_TRANSPARENT )
 {
-    mpNoneItem.reset(nullptr);
-    mxScrollBar.reset(nullptr);
-
     mnItemWidth         = 0;
     mnItemHeight        = 0;
     mnTextOffset        = 0;
@@ -400,9 +397,7 @@ void ValueSet::Format(vcl::RenderContext& rRenderContext)
     {
         nNoneHeight = 0;
         nNoneSpace = 0;
-
-        if (mpNoneItem)
-            mpNoneItem.reset(nullptr);
+        mpNoneItem.reset();
     }
 
     // calculate ScrollBar width
@@ -2196,8 +2191,6 @@ SvtValueSet::SvtValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
 {
     maVirDev->SetBackground(Application::GetSettings().GetStyleSettings().GetFaceColor());
 
-    mpNoneItem.reset(nullptr);
-
     mnItemWidth         = 0;
     mnItemHeight        = 0;
     mnTextOffset        = 0;
@@ -2944,9 +2937,7 @@ void SvtValueSet::Format(vcl::RenderContext const & rRenderContext)
     {
         nNoneHeight = 0;
         nNoneSpace = 0;
-
-        if (mpNoneItem)
-            mpNoneItem.reset(nullptr);
+        mpNoneItem.reset();
     }
 
     // calculate number of columns

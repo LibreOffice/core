@@ -2200,7 +2200,7 @@ void SwChartDataSequence::Notify( const SfxHint& rHint)
     if(!m_pFormat || !m_pTableCursor)
     {
         m_pFormat = nullptr;
-        m_pTableCursor.reset(nullptr);
+        m_pTableCursor.reset();
         dispose();
     }
     else if (dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
@@ -2299,7 +2299,7 @@ void SAL_CALL SwChartDataSequence::dispose(  )
             {
                 EndListeningAll();
                 m_pFormat = nullptr;
-                m_pTableCursor.reset(nullptr);
+                m_pTableCursor.reset();
             }
         }
 

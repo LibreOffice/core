@@ -223,9 +223,7 @@ void SAL_CALL OTempFileService::closeInput(  )
     {
         // stream will be deleted by TempFile implementation
         mpStream = nullptr;
-
-        if ( mpTempFile )
-            mpTempFile.reset(nullptr);
+        mpTempFile.reset();
     }
 }
 
@@ -276,9 +274,7 @@ void SAL_CALL OTempFileService::closeOutput(  )
     {
         // stream will be deleted by TempFile implementation
         mpStream = nullptr;
-
-        if ( mpTempFile )
-            mpTempFile.reset(nullptr);
+        mpTempFile.reset();
     }
 }
 
