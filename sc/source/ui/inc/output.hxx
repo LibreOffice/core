@@ -241,7 +241,7 @@ private:
     void DrawEditStacked(DrawEditParam& rParam);
     void DrawEditAsianVertical(DrawEditParam& rParam);
 
-    ScFieldEditEngine* CreateOutputEditEngine();
+    std::unique_ptr<ScFieldEditEngine> CreateOutputEditEngine();
 
     void ShowClipMarks( DrawEditParam& rParam, long nEngineHeight, const Size& aCellSize,
                         bool bMerged, OutputAreaParam& aAreaParam );
