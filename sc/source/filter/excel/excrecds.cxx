@@ -449,9 +449,9 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
         }
         sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
         rWorksheet->singleElement( XML_sheetProtection,
-            XML_algorithmName, aPH.maAlgorithmName.isEmpty() ? nullptr : XclXmlUtils::ToOString( aPH.maAlgorithmName).getStr(),
-            XML_hashValue, aPH.maHashValue.isEmpty() ? nullptr : XclXmlUtils::ToOString( aPH.maHashValue).getStr(),
-            XML_saltValue, aPH.maSaltValue.isEmpty() ? nullptr : XclXmlUtils::ToOString( aPH.maSaltValue).getStr(),
+            XML_algorithmName, aPH.maAlgorithmName.isEmpty() ? nullptr : aPH.maAlgorithmName.toUtf8().getStr(),
+            XML_hashValue, aPH.maHashValue.isEmpty() ? nullptr : aPH.maHashValue.toUtf8().getStr(),
+            XML_saltValue, aPH.maSaltValue.isEmpty() ? nullptr : aPH.maSaltValue.toUtf8().getStr(),
             XML_spinCount, aPH.mnSpinCount ? OString::number( aPH.mnSpinCount).getStr() : nullptr,
             XML_sheet,  ToPsz( true ),
             XML_password, sHash.isEmpty()? nullptr : sHash.getStr(),
@@ -481,16 +481,16 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
                 SAL_WARN_IF( rProt.maSecurityDescriptorXML.isEmpty() && !rProt.maSecurityDescriptor.empty(),
                         "sc.filter", "XclExpSheetProtection::SaveXml: losing BIFF security descriptor");
                 rWorksheet->singleElement( XML_protectedRange,
-                        XML_name, rProt.maTitle.isEmpty() ? nullptr : XclXmlUtils::ToOString( rProt.maTitle).getStr(),
-                        XML_securityDescriptor, rProt.maSecurityDescriptorXML.isEmpty() ? nullptr : XclXmlUtils::ToOString( rProt.maSecurityDescriptorXML).getStr(),
+                        XML_name, rProt.maTitle.isEmpty() ? nullptr : rProt.maTitle.toUtf8().getStr(),
+                        XML_securityDescriptor, rProt.maSecurityDescriptorXML.isEmpty() ? nullptr : rProt.maSecurityDescriptorXML.toUtf8().getStr(),
                         /* XXX 'password' is not part of OOXML, but Excel2013
                          * writes it if loaded from BIFF, in which case
                          * 'algorithmName', 'hashValue', 'saltValue' and
                          * 'spinCount' are absent; so do we if it was present. */
                         XML_password, rProt.mnPasswordVerifier ? OString::number( rProt.mnPasswordVerifier, 16).getStr() : nullptr,
-                        XML_algorithmName, rProt.maPasswordHash.maAlgorithmName.isEmpty() ? nullptr : XclXmlUtils::ToOString( rProt.maPasswordHash.maAlgorithmName).getStr(),
-                        XML_hashValue, rProt.maPasswordHash.maHashValue.isEmpty() ? nullptr : XclXmlUtils::ToOString( rProt.maPasswordHash.maHashValue).getStr(),
-                        XML_saltValue, rProt.maPasswordHash.maSaltValue.isEmpty() ? nullptr : XclXmlUtils::ToOString( rProt.maPasswordHash.maSaltValue).getStr(),
+                        XML_algorithmName, rProt.maPasswordHash.maAlgorithmName.isEmpty() ? nullptr : rProt.maPasswordHash.maAlgorithmName.toUtf8().getStr(),
+                        XML_hashValue, rProt.maPasswordHash.maHashValue.isEmpty() ? nullptr : rProt.maPasswordHash.maHashValue.toUtf8().getStr(),
+                        XML_saltValue, rProt.maPasswordHash.maSaltValue.isEmpty() ? nullptr : rProt.maPasswordHash.maSaltValue.toUtf8().getStr(),
                         XML_spinCount, rProt.maPasswordHash.mnSpinCount ? OString::number( rProt.maPasswordHash.mnSpinCount).getStr() : nullptr,
                         XML_sqref, rProt.maRangeList.is() ? XclXmlUtils::ToOString( *rProt.maRangeList).getStr() : nullptr,
                         FSEND);

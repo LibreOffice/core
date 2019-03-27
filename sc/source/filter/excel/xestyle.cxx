@@ -1078,7 +1078,7 @@ void XclExpDxfFont::SaveXml(XclExpXmlStream& rStrm)
         if (!aFontName.isEmpty())
         {
             rStyleSheet->singleElement(XML_name,
-                    XML_val, XclXmlUtils::ToOString(aFontName).getStr(),
+                    XML_val, aFontName.toUtf8(),
                     FSEND);
         }
 
@@ -2353,7 +2353,7 @@ void XclExpStyle::SaveXml( XclExpXmlStream& rStrm )
         pBuiltinId = sBuiltinId.getStr();
     }
     else
-        sName = XclXmlUtils::ToOString( maName );
+        sName = maName.toUtf8();
 
     // get the index in sortedlist associated with the mnXId
     sal_Int32 nXFId = rStrm.GetRoot().GetXFBuffer().GetXFIndex( maXFId.mnXFId );
@@ -3157,7 +3157,7 @@ void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
     rStrm.PushStream( aStyleSheet );
 
     aStyleSheet->startElement( XML_styleSheet,
-            XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
+            XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
             FSEND );
 
     CreateRecord( EXC_ID_FORMATLIST )->SaveXml( rStrm );

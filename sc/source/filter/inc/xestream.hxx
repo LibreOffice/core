@@ -252,7 +252,6 @@ public:
     static OUString          GetStreamName( const char* sStreamDir, const char* sStream, sal_Int32 nId );
 
     static OString ToOString( const Color& rColor );
-    static OString ToOString( const OUString& s );
     static OString ToOString( const ScfUInt16Vec& rBuffer );
     static OStringBuffer& ToOString( OStringBuffer& s, const ScAddress& rRange );
     static OString ToOString( const ScRange& rRange, bool bFullAddressNotation = false );
