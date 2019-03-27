@@ -58,7 +58,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::sw::access;
 
-typedef std::set < sal_Int32 > Int32Set_Impl;
+typedef o3tl::sorted_vector< sal_Int32 > Int32Set_Impl;
 typedef std::pair < sal_Int32, sal_Int32 > Int32Pair_Impl;
 
 const unsigned int SELECTION_WITH_NUM = 10;
