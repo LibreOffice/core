@@ -128,7 +128,7 @@ SwXTextPortion::SwXTextPortion(
 SwXTextPortion::~SwXTextPortion()
 {
     SolarMutexGuard aGuard;
-    m_pUnoCursor.reset(nullptr);
+    m_pUnoCursor.reset();
     m_aDepends.EndListeningAll();
 }
 

@@ -3859,7 +3859,7 @@ void SwXCellRange::Impl::Notify( const SfxHint& rHint )
     if(rHint.GetId() == SfxHintId::Dying)
     {
         m_pFrameFormat = nullptr;
-        m_pTableCursor.reset(nullptr);
+        m_pTableCursor.reset();
     }
     if (xThis.is())
     {   // fdo#72695: if UNO object is already dead, don't revive it with event

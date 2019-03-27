@@ -296,7 +296,7 @@ namespace dbaui
         OSL_ENSURE(!m_pImpl->m_bSuspended, "Cannot reconnect while suspended!");
 
         stopConnectionListening( m_pImpl->m_xConnection );
-        m_pImpl->m_aSdbMetaData.reset( nullptr );
+        m_pImpl->m_aSdbMetaData.reset();
         m_pImpl->m_xConnection.clear();
 
         // reconnect
@@ -323,7 +323,7 @@ namespace dbaui
     void DBSubComponentController::disconnect()
     {
         stopConnectionListening(m_pImpl->m_xConnection);
-        m_pImpl->m_aSdbMetaData.reset( nullptr );
+        m_pImpl->m_aSdbMetaData.reset();
         m_pImpl->m_xConnection.clear();
 
         InvalidateAll();

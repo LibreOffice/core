@@ -1389,7 +1389,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
     // Process data after import.
     for (auto& rContext : aContexts)
     {
-        rContext.m_pAccess.reset(nullptr);
+        rContext.m_pAccess.reset();
 
         if (rContext.m_nStatus == ERRCODE_NONE && (rContext.m_eLinkType != GfxLinkType::NONE) && !rContext.m_pGraphic->GetContext())
         {
