@@ -73,7 +73,7 @@ class COooFilter : public IFilter, public IPersistFile, public IPersistStream
 {
 public:
     // From IUnknown
-    virtual  SCODE STDMETHODCALLTYPE  QueryInterface(
+    virtual  HRESULT STDMETHODCALLTYPE  QueryInterface(
         REFIID riid,
         void  ** ppvObject) override;
     virtual  ULONG STDMETHODCALLTYPE  AddRef() override;
@@ -100,31 +100,31 @@ public:
         void ** ppunk) override;
 
     // From IPersistFile
-    virtual  SCODE STDMETHODCALLTYPE  GetClassID(
+    virtual  HRESULT STDMETHODCALLTYPE  GetClassID(
         CLSID * pClassID) override;
-    virtual  SCODE STDMETHODCALLTYPE  IsDirty() override;
-    virtual  SCODE STDMETHODCALLTYPE  Load(
-        LPCWSTR pszFileName,
+    virtual  HRESULT STDMETHODCALLTYPE  IsDirty() override;
+    virtual  HRESULT STDMETHODCALLTYPE  Load(
+        LPCOLESTR pszFileName,
         DWORD dwMode) override;
-    virtual  SCODE STDMETHODCALLTYPE  Save(
-        LPCWSTR pszFileName,
+    virtual  HRESULT STDMETHODCALLTYPE  Save(
+        LPCOLESTR pszFileName,
         BOOL fRemember) override;
 
-    virtual  SCODE STDMETHODCALLTYPE  SaveCompleted(
-        LPCWSTR pszFileName) override;
+    virtual  HRESULT STDMETHODCALLTYPE  SaveCompleted(
+        LPCOLESTR pszFileName) override;
 
-    virtual  SCODE STDMETHODCALLTYPE  GetCurFile(
-        LPWSTR  * ppszFileName) override;
+    virtual  HRESULT STDMETHODCALLTYPE  GetCurFile(
+        LPOLESTR  * ppszFileName) override;
 
     // From IPersistStream
-    virtual SCODE STDMETHODCALLTYPE  Load(
+    virtual HRESULT STDMETHODCALLTYPE  Load(
         IStream *pStm) override;
 
-    virtual SCODE STDMETHODCALLTYPE Save(
+    virtual HRESULT STDMETHODCALLTYPE Save(
         IStream *pStm,
         BOOL fClearDirty) override;
 
-    virtual SCODE STDMETHODCALLTYPE  GetSizeMax(
+    virtual HRESULT STDMETHODCALLTYPE  GetSizeMax(
         ULARGE_INTEGER *pcbSize) override;
 
 
@@ -163,7 +163,7 @@ class COooFilterCF : public IClassFactory
 {
 public:
     // From IUnknown
-    virtual  SCODE STDMETHODCALLTYPE  QueryInterface(
+    virtual  HRESULT STDMETHODCALLTYPE  QueryInterface(
         REFIID riid,
         void  ** ppvObject) override;
 
@@ -171,18 +171,18 @@ public:
     virtual  ULONG STDMETHODCALLTYPE  Release() override;
 
     // From IClassFactory
-    virtual  SCODE STDMETHODCALLTYPE  CreateInstance(
+    virtual  HRESULT STDMETHODCALLTYPE  CreateInstance(
         IUnknown * pUnkOuter,
         REFIID riid, void  ** ppvObject) override;
 
-    virtual  SCODE STDMETHODCALLTYPE  LockServer(
+    virtual  HRESULT STDMETHODCALLTYPE  LockServer(
         BOOL fLock) override;
 
 private:
-    friend SCODE STDMETHODCALLTYPE DllGetClassObject(
+    friend HRESULT STDMETHODCALLTYPE DllGetClassObject(
         REFCLSID   cid,
         REFIID     iid,
-        void **    ppvObj);
+        LPVOID *   ppvObj);
 
     COooFilterCF();
     virtual  ~COooFilterCF();

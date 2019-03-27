@@ -26,7 +26,7 @@
 
 /** constructor.
 */
-CMetaInfoReader::CMetaInfoReader( const std::wstring& DocumentName ):
+CMetaInfoReader::CMetaInfoReader( const Filepath_t& DocumentName ):
 CBaseReader( DocumentName )
 {
     try
@@ -242,9 +242,9 @@ void CMetaInfoReader::saveTagContent( const std::wstring& tag_name )
 
 
 void CMetaInfoReader::start_element(
-    const std::wstring& /*raw_name*/,
-    const std::wstring& local_name,
-    const XmlTagAttributes_t& attributes)
+    const string_t& /*raw_name*/,
+    const string_t& local_name,
+    const xml_tag_attribute_container_t& attributes)
 {
     //get appropriate Xml Tag Builder using MetaInfoBuilderFactory;
     ITag* pTagBuilder = chooseTagReader( local_name,attributes );
@@ -258,7 +258,7 @@ void CMetaInfoReader::start_element(
 // end_element occurs when a tag is closed
 
 
-void CMetaInfoReader::end_element(const std::wstring& /*raw_name*/, const std::wstring& local_name)
+void CMetaInfoReader::end_element(const string_t& /*raw_name*/, const string_t& local_name)
 {
     assert( !m_TagBuilderStack.empty() );
     ITag* pTagBuilder = m_TagBuilderStack.top();
@@ -273,7 +273,7 @@ void CMetaInfoReader::end_element(const std::wstring& /*raw_name*/, const std::w
 // characters occurs when receiving characters
 
 
-void CMetaInfoReader::characters( const std::wstring& character )
+void CMetaInfoReader::characters( const string_t& character )
 {
     if ( character.length() > 0 &&  !HasOnlySpaces( character ) )
     {

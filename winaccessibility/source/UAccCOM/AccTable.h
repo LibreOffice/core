@@ -121,13 +121,13 @@ public:
     STDMETHOD(get_summary)(IUnknown * * accessible) override;
 
     // Determines if table column is selected.
-    STDMETHOD(get_isColumnSelected)(long column, unsigned char * isSelected) override;
+    STDMETHOD(get_isColumnSelected)(long column, boolean * isSelected) override;
 
     // Determines if table row is selected.
-    STDMETHOD(get_isRowSelected)(long row, unsigned char * isSelected) override;
+    STDMETHOD(get_isRowSelected)(long row, boolean * isSelected) override;
 
     // Determines if table cell is selected.
-    STDMETHOD(get_isSelected)(long row, long column, unsigned char * isSelected) override;
+    STDMETHOD(get_isSelected)(long row, long column, boolean * isSelected) override;
 
     // Selects a row and unselect all previously selected rows.
     STDMETHOD(selectRow)(long row ) override;

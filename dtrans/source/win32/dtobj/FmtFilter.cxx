@@ -372,7 +372,7 @@ static ByteSequence_t FileListToByteSequence(const std::vector<std::wstring>& fi
     return bseq;
 }
 
-ByteSequence_t CF_HDROPToFileList(HGLOBAL hGlobal)
+css::uno::Sequence<sal_Int8> CF_HDROPToFileList(HGLOBAL hGlobal)
 {
     UINT nFiles = DragQueryFileW(static_cast<HDROP>(hGlobal), 0xFFFFFFFF, nullptr, 0);
     std::vector<std::wstring> files;

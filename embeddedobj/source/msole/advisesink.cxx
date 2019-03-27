@@ -74,7 +74,7 @@ void OleWrapperAdviseSink::disconnectOleComponent()
     m_pOleComp = nullptr;
 }
 
-STDMETHODIMP_(void) OleWrapperAdviseSink::OnDataChange(LPFORMATETC, LPSTGMEDIUM)
+STDMETHODIMP_(void) OleWrapperAdviseSink::OnDataChange(FORMATETC *, STGMEDIUM *)
 {
     // Unused for now ( no registration for IDataObject events )
 }
@@ -93,7 +93,7 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnViewChange(DWORD dwAspect, LONG)
         xLockComponent->OnViewChange_Impl( dwAspect );
 }
 
-STDMETHODIMP_(void) OleWrapperAdviseSink::OnRename(LPMONIKER)
+STDMETHODIMP_(void) OleWrapperAdviseSink::OnRename(IMoniker *)
 {
     // handled by default inprocess handler
 }

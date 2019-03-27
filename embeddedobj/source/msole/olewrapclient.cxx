@@ -100,13 +100,13 @@ STDMETHODIMP OleWrapperClientSite::SaveObject()
     return hResult;
 }
 
-STDMETHODIMP OleWrapperClientSite::GetMoniker( DWORD, DWORD, LPMONIKER *ppmk )
+STDMETHODIMP OleWrapperClientSite::GetMoniker( DWORD, DWORD, IMoniker **ppmk )
 {
     *ppmk = nullptr;
     return E_NOTIMPL;
 }
 
-STDMETHODIMP OleWrapperClientSite::GetContainer( LPOLECONTAINER* ppContainer )
+STDMETHODIMP OleWrapperClientSite::GetContainer( IOleContainer** ppContainer )
 {
     *ppContainer = nullptr;
     return E_NOTIMPL;

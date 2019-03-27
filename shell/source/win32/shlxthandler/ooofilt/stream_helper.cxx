@@ -100,7 +100,7 @@ long BufferStream::sseek (long offset, int origin)
         return -1;
 }
 
-FileStream::FileStream(const wchar_t *filename) :
+FileStream::FileStream(const Filepath_char_t *filename) :
     file(nullptr)
 {
     // fdo#67534: avoid locking to not interfere with soffice opening the file

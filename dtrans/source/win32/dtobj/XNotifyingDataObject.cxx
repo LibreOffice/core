@@ -40,7 +40,7 @@ CXNotifyingDataObject::CXNotifyingDataObject(
 {
 }
 
-STDMETHODIMP CXNotifyingDataObject::QueryInterface( REFIID iid, LPVOID* ppvObject )
+STDMETHODIMP CXNotifyingDataObject::QueryInterface( REFIID iid, void** ppvObject )
 {
     if ( nullptr == ppvObject )
         return E_INVALIDARG;
@@ -80,7 +80,7 @@ STDMETHODIMP_(ULONG) CXNotifyingDataObject::Release( )
     return nRefCnt;
 }
 
-STDMETHODIMP CXNotifyingDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium )
+STDMETHODIMP CXNotifyingDataObject::GetData( FORMATETC * pFormatetc, STGMEDIUM * pmedium )
 {
     return m_aIDataObject->GetData(pFormatetc, pmedium);
 }
@@ -91,28 +91,28 @@ STDMETHODIMP CXNotifyingDataObject::EnumFormatEtc(
     return m_aIDataObject->EnumFormatEtc(dwDirection, ppenumFormatetc);
 }
 
-STDMETHODIMP CXNotifyingDataObject::QueryGetData( LPFORMATETC pFormatetc )
+STDMETHODIMP CXNotifyingDataObject::QueryGetData( FORMATETC * pFormatetc )
 {
     return m_aIDataObject->QueryGetData(pFormatetc);
 }
 
-STDMETHODIMP CXNotifyingDataObject::GetDataHere( LPFORMATETC lpFetc, LPSTGMEDIUM lpStgMedium )
+STDMETHODIMP CXNotifyingDataObject::GetDataHere( FORMATETC * lpFetc, STGMEDIUM * lpStgMedium )
 {
     return m_aIDataObject->GetDataHere(lpFetc, lpStgMedium);
 }
 
-STDMETHODIMP CXNotifyingDataObject::GetCanonicalFormatEtc( LPFORMATETC lpFetc, LPFORMATETC lpCanonicalFetc )
+STDMETHODIMP CXNotifyingDataObject::GetCanonicalFormatEtc( FORMATETC * lpFetc, FORMATETC * lpCanonicalFetc )
 {
     return m_aIDataObject->GetCanonicalFormatEtc(lpFetc, lpCanonicalFetc);
 }
 
-STDMETHODIMP CXNotifyingDataObject::SetData( LPFORMATETC lpFetc, LPSTGMEDIUM lpStgMedium, BOOL bRelease )
+STDMETHODIMP CXNotifyingDataObject::SetData( FORMATETC * lpFetc, STGMEDIUM * lpStgMedium, BOOL bRelease )
 {
     return m_aIDataObject->SetData( lpFetc, lpStgMedium, bRelease );
 }
 
 STDMETHODIMP CXNotifyingDataObject::DAdvise(
-    LPFORMATETC lpFetc, DWORD advf, LPADVISESINK lpAdvSink, DWORD* pdwConnection )
+    FORMATETC * lpFetc, DWORD advf, IAdviseSink * lpAdvSink, DWORD* pdwConnection )
 {
     return m_aIDataObject->DAdvise( lpFetc, advf, lpAdvSink, pdwConnection );
 }
@@ -122,7 +122,7 @@ STDMETHODIMP CXNotifyingDataObject::DUnadvise( DWORD dwConnection )
     return m_aIDataObject->DUnadvise( dwConnection );
 }
 
-STDMETHODIMP CXNotifyingDataObject::EnumDAdvise( LPENUMSTATDATA * ppenumAdvise )
+STDMETHODIMP CXNotifyingDataObject::EnumDAdvise( IEnumSTATDATA ** ppenumAdvise )
 {
     return m_aIDataObject->EnumDAdvise( ppenumAdvise );
 }

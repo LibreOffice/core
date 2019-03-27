@@ -324,7 +324,7 @@ class type_info_
 {
     friend type_info * RTTInfos::getRTTI( OUString const & ) throw ();
     friend int mscx_filterCppException(
-        LPEXCEPTION_POINTERS, uno_Any *, uno_Mapping * );
+        EXCEPTION_POINTERS *, uno_Any *, uno_Mapping * );
 
 public:
     virtual ~type_info_() throw ();

@@ -158,7 +158,7 @@ static rtl_uString* osl_ProfileGenerateExtension(rtl_uString* ustrFileName, rtl_
 
 static bool osl_getProfileName(rtl_uString* strPath, rtl_uString* strName, rtl_uString** strProfileName);
 
-oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flags)
+oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, oslProfileOption Flags)
 {
     osl_TFile*        pFile = nullptr;
     osl_TProfileImpl* pProfile;

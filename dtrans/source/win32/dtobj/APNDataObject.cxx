@@ -98,7 +98,7 @@ CAPNDataObject::~CAPNDataObject( )
 
 // IUnknown->QueryInterface
 
-STDMETHODIMP CAPNDataObject::QueryInterface( REFIID iid, LPVOID* ppvObject )
+STDMETHODIMP CAPNDataObject::QueryInterface( REFIID iid, void** ppvObject )
 {
     OSL_ASSERT( nullptr != ppvObject );
 
@@ -141,7 +141,7 @@ STDMETHODIMP_(ULONG) CAPNDataObject::Release( )
 
 // IDataObject->GetData
 
-STDMETHODIMP CAPNDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium )
+STDMETHODIMP CAPNDataObject::GetData( FORMATETC * pFormatetc, STGMEDIUM * pmedium )
 {
     HRESULT hr = m_rIDataObjectOrg->GetData( pFormatetc, pmedium );
 
@@ -175,7 +175,7 @@ STDMETHODIMP CAPNDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** 
 
 // IDataObject->QueryGetData
 
-STDMETHODIMP CAPNDataObject::QueryGetData( LPFORMATETC pFormatetc )
+STDMETHODIMP CAPNDataObject::QueryGetData( FORMATETC * pFormatetc )
 {
     HRESULT hr = m_rIDataObjectOrg->QueryGetData( pFormatetc );
 
@@ -192,7 +192,7 @@ STDMETHODIMP CAPNDataObject::QueryGetData( LPFORMATETC pFormatetc )
 
 // IDataObject->GetDataHere
 
-STDMETHODIMP CAPNDataObject::GetDataHere( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium )
+STDMETHODIMP CAPNDataObject::GetDataHere( FORMATETC * pFormatetc, STGMEDIUM * pmedium )
 {
     HRESULT hr = m_rIDataObjectOrg->GetDataHere(pFormatetc, pmedium);
 
@@ -209,7 +209,7 @@ STDMETHODIMP CAPNDataObject::GetDataHere( LPFORMATETC pFormatetc, LPSTGMEDIUM pm
 
 // IDataObject->GetCanonicalFormatEtc
 
-STDMETHODIMP CAPNDataObject::GetCanonicalFormatEtc(LPFORMATETC pFormatectIn, LPFORMATETC pFormatetcOut)
+STDMETHODIMP CAPNDataObject::GetCanonicalFormatEtc(FORMATETC * pFormatectIn, FORMATETC * pFormatetcOut)
 {
     HRESULT hr = m_rIDataObjectOrg->GetCanonicalFormatEtc( pFormatectIn, pFormatetcOut );
 
@@ -226,7 +226,7 @@ STDMETHODIMP CAPNDataObject::GetCanonicalFormatEtc(LPFORMATETC pFormatectIn, LPF
 
 // IDataObject->SetData
 
-STDMETHODIMP CAPNDataObject::SetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium, BOOL fRelease )
+STDMETHODIMP CAPNDataObject::SetData( FORMATETC * pFormatetc, STGMEDIUM * pmedium, BOOL fRelease )
 {
     HRESULT hr = m_rIDataObjectOrg->SetData( pFormatetc, pmedium, fRelease );
 
@@ -243,7 +243,7 @@ STDMETHODIMP CAPNDataObject::SetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmediu
 
 // IDataObject->DAdvise
 
-STDMETHODIMP CAPNDataObject::DAdvise( LPFORMATETC pFormatetc, DWORD advf, LPADVISESINK pAdvSink, DWORD * pdwConnection )
+STDMETHODIMP CAPNDataObject::DAdvise( FORMATETC * pFormatetc, DWORD advf, IAdviseSink * pAdvSink, DWORD * pdwConnection )
 {
     HRESULT hr = m_rIDataObjectOrg->DAdvise(pFormatetc, advf, pAdvSink, pdwConnection);
 
@@ -277,7 +277,7 @@ STDMETHODIMP CAPNDataObject::DUnadvise( DWORD dwConnection )
 
 // IDataObject->EnumDAdvise
 
-STDMETHODIMP CAPNDataObject::EnumDAdvise( LPENUMSTATDATA * ppenumAdvise )
+STDMETHODIMP CAPNDataObject::EnumDAdvise( IEnumSTATDATA ** ppenumAdvise )
 {
     HRESULT hr = m_rIDataObjectOrg->EnumDAdvise(ppenumAdvise);
 

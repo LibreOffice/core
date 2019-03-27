@@ -12,6 +12,8 @@
 #include <iostream>
 #include <fstream>
 #include <set>
+
+#include "check.hxx"
 #include "plugin.hxx"
 
 /**
@@ -53,6 +55,18 @@ bool TypedefParam::VisitFunctionDecl(FunctionDecl const* functionDecl)
         ParmVarDecl const* canonicalParam = canonicalDecl->getParamDecl(i);
         if (!areTypesEqual(thisParam->getType(), canonicalParam->getType()))
         {
+#if defined _WIN32
+            // SAL_IMPLEMENT_MAIN (include/sal/main.h) declares the third parameter of WinMain to be
+            // of type 'char *' rather than 'LPSTR', but using that typedef there would require
+            // including windows.h, which would require including include/prewin.h and
+            // include/postwin.h (to undo macros like Yield defined in windows.h) but which (unlike
+            // include/sal/main.h) are not part of the stable URE interface; so just ignore that
+            // here:
+            if (loplugin::DeclCheck(functionDecl).Function("WinMain").GlobalNamespace())
+            {
+                continue;
+            }
+#endif
             report(DiagnosticsEngine::Warning,
                    "function param %0 at definition site does not match function param at "
                    "declaration site, %1 vs %2",

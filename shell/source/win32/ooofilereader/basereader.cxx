@@ -26,7 +26,7 @@
 
 /**  constructor of CBaseReader.
 */
-CBaseReader::CBaseReader(const std::wstring& DocumentName):
+CBaseReader::CBaseReader(const Filepath_t& DocumentName):
 m_ZipFile( DocumentName )
 {
 }

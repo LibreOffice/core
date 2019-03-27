@@ -567,7 +567,7 @@ STDMETHODIMP CAccTable::get_summary(IUnknown * * accessible)
   * @param    column        the column index.
   * @param    isSelected    the result.
   */
-STDMETHODIMP CAccTable::get_isColumnSelected(long column, unsigned char * isSelected)
+STDMETHODIMP CAccTable::get_isColumnSelected(long column, boolean * isSelected)
 {
     SolarMutexGuard g;
 
@@ -593,7 +593,7 @@ STDMETHODIMP CAccTable::get_isColumnSelected(long column, unsigned char * isSele
   * @param    row           the row index.
   * @param    isSelected    the result.
   */
-STDMETHODIMP CAccTable::get_isRowSelected(long row, unsigned char * isSelected)
+STDMETHODIMP CAccTable::get_isRowSelected(long row, boolean * isSelected)
 {
     SolarMutexGuard g;
 
@@ -621,7 +621,7 @@ STDMETHODIMP CAccTable::get_isRowSelected(long row, unsigned char * isSelected)
   * @param    column         the column index.
   * @param    isSelected     the result.
   */
-STDMETHODIMP CAccTable::get_isSelected(long row, long column, unsigned char * isSelected)
+STDMETHODIMP CAccTable::get_isSelected(long row, long column, boolean * isSelected)
 {
     SolarMutexGuard g;
 

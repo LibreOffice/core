@@ -403,7 +403,7 @@ bool CClassFactory::IsLocked()
 }
 
 
-STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
+STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     OutputDebugStringFormatW( L"DllGetClassObject.\n" );
     *ppv = nullptr;

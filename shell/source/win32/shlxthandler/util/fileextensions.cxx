@@ -63,7 +63,7 @@ const size_t OOFileExtensionTableSize = SAL_N_ELEMENTS(OOFileExtensionTable);
 /** Return the extension of a file
     name without the '.'
 */
-std::wstring get_file_name_extension(const std::wstring& file_name)
+Filepath_t get_file_name_extension(const Filepath_t& file_name)
 {
     std::wstring::size_type idx = file_name.find_last_of(L".");
 
@@ -77,7 +77,7 @@ std::wstring get_file_name_extension(const std::wstring& file_name)
 /** Return the type of a file
 */
 
-File_Type_t get_file_type(const std::wstring& file_name)
+File_Type_t get_file_type(const Filepath_t& file_name)
 {
     std::wstring fext = get_file_name_extension(file_name);
     std::transform(

@@ -100,7 +100,7 @@ class InprocEmbedDocument_Impl : public InprocCountedObject_Impl
         virtual ~InternalCacheWrapper() {}
 
         /* IUnknown methods */
-        STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj) override;
+        STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObj) override;
         STDMETHOD_(ULONG, AddRef)() override;
         STDMETHOD_(ULONG, Release)() override;
 
@@ -137,7 +137,7 @@ public:
     ComSmart< IUnknown >& GetDefHandler() { return m_pDefHandler; }
 
     /* IUnknown methods */
-    STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj) override;
+    STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObj) override;
     STDMETHOD_(ULONG, AddRef)() override;
     STDMETHOD_(ULONG, Release)() override;
 

@@ -121,7 +121,7 @@ COooFilter::~COooFilter()
 //              E_NOINTERFACE
 //              Interface is not supported
 
-SCODE STDMETHODCALLTYPE COooFilter::QueryInterface(
+HRESULT STDMETHODCALLTYPE COooFilter::QueryInterface(
     REFIID riid,
     void  ** ppvObject)
 {
@@ -520,7 +520,7 @@ SCODE STDMETHODCALLTYPE COooFilter::BindRegion(
 //              E_FAIL
 //                  (not implemented)
 
-SCODE STDMETHODCALLTYPE COooFilter::GetClassID(CLSID * pClassID)
+HRESULT STDMETHODCALLTYPE COooFilter::GetClassID(CLSID * pClassID)
 {
     *pClassID = CLSID_COooFilter;
     return S_OK;
@@ -534,7 +534,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetClassID(CLSID * pClassID)
 //              S_OK
 //                  (not implemented)
 
-SCODE STDMETHODCALLTYPE COooFilter::IsDirty()
+HRESULT STDMETHODCALLTYPE COooFilter::IsDirty()
 {
     // File is opened read-only and never changes
     return S_FALSE;
@@ -554,7 +554,7 @@ SCODE STDMETHODCALLTYPE COooFilter::IsDirty()
 //              E_FAIL
 //                  (not implemented)
 
-SCODE STDMETHODCALLTYPE COooFilter::Load(LPCWSTR pszFileName, DWORD /*dwMode*/)
+HRESULT STDMETHODCALLTYPE COooFilter::Load(LPCOLESTR pszFileName, DWORD /*dwMode*/)
 {
     // Load just sets the filename for GetChunk to read and ignores the mode
     m_pwszFileName = getShortPathName( pszFileName );
@@ -587,7 +587,7 @@ SCODE STDMETHODCALLTYPE COooFilter::Load(LPCWSTR pszFileName, DWORD /*dwMode*/)
 //              S_OK
 //                  (not implemented)
 
-SCODE STDMETHODCALLTYPE COooFilter::Save(LPCWSTR /*pszFileName*/, BOOL /*fRemember*/)
+HRESULT STDMETHODCALLTYPE COooFilter::Save(LPCOLESTR /*pszFileName*/, BOOL /*fRemember*/)
 {
     // File is opened read-only; saving it is an error
     return E_FAIL;
@@ -601,7 +601,7 @@ SCODE STDMETHODCALLTYPE COooFilter::Save(LPCWSTR /*pszFileName*/, BOOL /*fRememb
 //  Returns:    S_OK
 //                  Always
 
-SCODE STDMETHODCALLTYPE COooFilter::SaveCompleted(LPCWSTR /*pszFileName*/)
+HRESULT STDMETHODCALLTYPE COooFilter::SaveCompleted(LPCOLESTR /*pszFileName*/)
 {
     // File is opened read-only, so "save" is always finished
     return S_OK;
@@ -616,7 +616,7 @@ SCODE STDMETHODCALLTYPE COooFilter::SaveCompleted(LPCWSTR /*pszFileName*/)
 //              E_OUTOFMEMORY
 //              E_FAIL
 
-SCODE STDMETHODCALLTYPE COooFilter::Load(IStream *pStm)
+HRESULT STDMETHODCALLTYPE COooFilter::Load(IStream *pStm)
 {
     m_pStream = new BufferStream(pStm);
     try
@@ -641,7 +641,7 @@ SCODE STDMETHODCALLTYPE COooFilter::Load(IStream *pStm)
 //                  [out] Pointer to a 64 bit unsigned int indicating the size needed
 //  Returns:    E_NOTIMPL
 
-SCODE STDMETHODCALLTYPE COooFilter::GetSizeMax(ULARGE_INTEGER * /*pcbSize*/)
+HRESULT STDMETHODCALLTYPE COooFilter::GetSizeMax(ULARGE_INTEGER * /*pcbSize*/)
 {
     return E_NOTIMPL;
 }
@@ -655,7 +655,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetSizeMax(ULARGE_INTEGER * /*pcbSize*/)
 //                  [in] Indicates whether to clear dirty flag
 //  Returns:    E_NOTIMPL
 
-SCODE STDMETHODCALLTYPE COooFilter::Save(IStream * /*pStm*/, BOOL )
+HRESULT STDMETHODCALLTYPE COooFilter::Save(IStream * /*pStm*/, BOOL )
 {
     return E_NOTIMPL;
 }
@@ -676,7 +676,7 @@ SCODE STDMETHODCALLTYPE COooFilter::Save(IStream * /*pStm*/, BOOL )
 //                  Operation failed due to some reason
 //                  other than insufficient memory
 
-SCODE STDMETHODCALLTYPE COooFilter::GetCurFile(LPWSTR * ppszFileName)
+HRESULT STDMETHODCALLTYPE COooFilter::GetCurFile(LPOLESTR * ppszFileName)
 {
     if ( EMPTY_STRING == m_pwszFileName )
         return E_FAIL;
@@ -718,7 +718,7 @@ COooFilterCF::~COooFilterCF()
 //              E_NOINTERFACE
 //                  Interface is not supported
 
-SCODE STDMETHODCALLTYPE COooFilterCF::QueryInterface(REFIID riid, void  ** ppvObject)
+HRESULT STDMETHODCALLTYPE COooFilterCF::QueryInterface(REFIID riid, void  ** ppvObject)
 {
     IUnknown *pUnkTemp;
 
@@ -780,7 +780,7 @@ ULONG STDMETHODCALLTYPE COooFilterCF::Release()
 //              E_UNEXPECTED
 //                  Unsuccessful due to an unexpected condition
 
-SCODE STDMETHODCALLTYPE COooFilterCF::CreateInstance(
+HRESULT STDMETHODCALLTYPE COooFilterCF::CreateInstance(
     IUnknown * pUnkOuter,
     REFIID riid,
     void  * * ppvObject)
@@ -816,7 +816,7 @@ SCODE STDMETHODCALLTYPE COooFilterCF::CreateInstance(
 //              E_UNEXPECTED
 //                  (not implemented)
 
-SCODE STDMETHODCALLTYPE COooFilterCF::LockServer(BOOL fLock)
+HRESULT STDMETHODCALLTYPE COooFilterCF::LockServer(BOOL fLock)
 {
     if( fLock )
         InterlockedIncrement( &g_lInstances );
@@ -870,10 +870,10 @@ extern "C" BOOL WINAPI DllMain(
 //              E_UNEXPECTED
 //                  Unsuccessful due to an unexpected condition
 
-extern "C" SCODE STDMETHODCALLTYPE DllGetClassObject(
+extern "C" HRESULT STDMETHODCALLTYPE DllGetClassObject(
     REFCLSID   cid,
     REFIID     iid,
-    void **    ppvObj
+    LPVOID *   ppvObj
 )
 {
     COooFilterCF* pImpl = nullptr;
@@ -905,7 +905,7 @@ extern "C" SCODE STDMETHODCALLTYPE DllGetClassObject(
 //              S_FALSE
 //                  DLL must remain loaded
 
-extern "C" SCODE STDMETHODCALLTYPE DllCanUnloadNow()
+extern "C" HRESULT STDMETHODCALLTYPE DllCanUnloadNow()
 {
     if ( 0 >= g_lInstances )
         return S_OK;
