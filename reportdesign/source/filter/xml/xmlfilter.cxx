@@ -810,14 +810,14 @@ const SvXMLTokenMap& ORptFilter::GetDocContentElemTokenMap() const
 const SvXMLTokenMap& ORptFilter::GetReportElemTokenMap() const
 {
     if (!m_pReportElemTokenMap)
-        m_pReportElemTokenMap.reset(OXMLHelper::GetReportElemTokenMap());
+        m_pReportElemTokenMap = OXMLHelper::GetReportElemTokenMap();
     return *m_pReportElemTokenMap;
 }
 
 const SvXMLTokenMap& ORptFilter::GetSubDocumentElemTokenMap() const
 {
     if (!m_pSubDocumentElemTokenMap)
-        m_pSubDocumentElemTokenMap.reset(OXMLHelper::GetSubDocumentElemTokenMap());
+        m_pSubDocumentElemTokenMap = OXMLHelper::GetSubDocumentElemTokenMap();
     return *m_pSubDocumentElemTokenMap;
 }
 
