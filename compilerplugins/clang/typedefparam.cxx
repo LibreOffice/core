@@ -56,11 +56,10 @@ bool TypedefParam::VisitFunctionDecl(FunctionDecl const* functionDecl)
             report(DiagnosticsEngine::Warning,
                    "function param %0 at definition site does not match function param at "
                    "declaration site, %1 vs %2",
-                   compat::getBeginLoc(functionDecl))
-                << i << thisParam->getType() << canonicalParam->getType()
+                   thisParam->getLocation())
+                << (i + 1) << thisParam->getType() << canonicalParam->getType()
                 << functionDecl->getSourceRange();
-            report(DiagnosticsEngine::Note, "declaration site here",
-                   compat::getBeginLoc(canonicalDecl))
+            report(DiagnosticsEngine::Note, "declaration site here", canonicalParam->getLocation())
                 << canonicalDecl->getSourceRange();
         }
     }
@@ -112,11 +111,11 @@ bool TypedefParam::VisitCXXMethodDecl(CXXMethodDecl const* methodDecl)
                 report(DiagnosticsEngine::Warning,
                        "method param %0 does not match overridden method param "
                        "%1 vs %2",
-                       compat::getBeginLoc(methodDecl))
-                    << i << parmVarDecl->getType() << superParmVarDecl->getType()
+                       parmVarDecl->getLocation())
+                    << (i + 1) << parmVarDecl->getType() << superParmVarDecl->getType()
                     << methodDecl->getSourceRange();
                 report(DiagnosticsEngine::Note, "super-class method here",
-                       compat::getBeginLoc(superMethodDecl))
+                       superParmVarDecl->getLocation())
                     << superMethodDecl->getSourceRange();
             }
             ++i;

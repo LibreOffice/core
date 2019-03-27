@@ -18,7 +18,7 @@ class Foo
 };
 
 void Foo::bar(sal_uLong)
-// expected-error@-1 {{function param 0 at definition site does not match function param at declaration site, 'sal_uLong' (aka 'unsigned long') vs 'sal_uIntPtr' (aka 'unsigned long') [loplugin:typedefparam]}}
+// expected-error@-1 {{function param 1 at definition site does not match function param at declaration site, 'sal_uLong' (aka 'unsigned long') vs 'sal_uIntPtr' (aka 'unsigned long') [loplugin:typedefparam]}}
 {
 }
 
@@ -73,7 +73,7 @@ struct Struct2 : public Struct1
     virtual sal_uLong foo1() override;
     // expected-error@-1 {{method return type does not match overridden method 'sal_uLong' (aka 'unsigned long') vs 'sal_uIntPtr' (aka 'unsigned long') [loplugin:typedefparam]}}
     virtual void foo2(sal_uLong) override;
-    // expected-error@-1 {{method param 0 does not match overridden method param 'sal_uLong' (aka 'unsigned long') vs 'sal_uIntPtr' (aka 'unsigned long') [loplugin:typedefparam]}}
+    // expected-error@-1 {{method param 1 does not match overridden method param 'sal_uLong' (aka 'unsigned long') vs 'sal_uIntPtr' (aka 'unsigned long') [loplugin:typedefparam]}}
 };
 };
 
