@@ -3825,15 +3825,122 @@
     </div>
     <hr />
     <h1><a id="a__Artwork" name="a__Artwork">Artwork</a></h1>
-    <div class="crystal">
-        <h2>KDE Crystal theme icons</h2>
-        <p>The following software may be included in this product: KDE Crystal theme icons. Use of any of this software
-        is governed by the terms of the license below:</p>
-        <p>KDE Crystal theme icons.<br />
-        Copyright (C) 2002 and following years KDE Artists This library is free software; you can redistribute it
-        and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software
-        Foundation, version 2.1 of the License.</p>
-        <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
+    <div class="breeze">
+        <h2>Breeze</h2>
+        <p>Breeze icon theme from KDE to fit in with the Plasma 5 desktop.</p>
+        <p>Breeze Icon Theme has been developed by The KDE Visual Design Group. <a href=
+        "https://forum.kde.org/viewforum.php?f=285">https://forum.kde.org/viewforum.php?f=285</a></p>
+        <p>Copyright 2014 Uri Herrera &lt;kaisergreymon99@gmail.com&gt;</p>
+        <p>Copyright 2015 Andreas Kainz &lt;kainz.a@gmail.com&gt; and other contributors</p>
+        <p>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+        Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+        option) any later version.</p>
+        <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+        implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+        more details.</p>
+        <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
+    </div>
+    <div class="colibre">
+        <h2>Colibre</h2>
+        <p>The Colibre Icon Theme in icons/</p>
+        <p>Original author: Andreas Kainz &lt;kainz.a@gmail.com&gt;</p>
+        <p>Icon theme is released under Creative Commons CC0 You are free to adapt and use them for commercial purposes
+        without attributing the original author or source. Although not required, a link back to LibreOffice is
+        appreciated.</p>
+        <p>For additional Information go to the Creative Commons webpage <a href=
+        "https://creativecommons.org/publicdomain/zero/1.0/">https://creativecommons.org/publicdomain/zero/1.0/</a></p>
+    </div>
+    <div class="elementary">
+        <h2>Elementary</h2>
+        <p>This theme is based on the Human icon theme for LibreOffice and uses resources from the elementary icon
+        theme as well as original work from Shimmer Project. A summary of attributions are below, with further details
+        available at <a href=
+        "https://github.com/rizmut/libreoffice-style-elementary/commits">https://github.com/rizmut/libreoffice-style-elementary/commits</a></p>
+        <p>Elementary theme for LibreOffice</p>
+        <ul>
+            <li>libreoffice-style-elementary: Available under the terms of the GPL</li>
+            <ul>
+                <li>Copyright 2018 by Rizal Muttaqin &lt;riz_17_oke@yahoo.co.id&gt;</li>
+                <li>Copyright 2017 by Andreas Kainz &lt;kainz.a@gmail.com&gt;</li>
+                <li>Copyright 2015 by Simon Steinbeiss &lt;simon@xfce.org&gt;, Pasi Lallinaho
+                &lt;pasi@shimmerproject.org&gt;</li>
+            </ul>
+            <li>elementary(-xfce): Available under the terms of the GPL</li>
+            <ul>
+                <li>Copyright 2008-2015 by Daniel Foré &lt;Daniel.p.Fore@gmail.com&gt;</li>
+                <li>Copyright 2010-2015 by Simon Steinbeiss &lt;simon@xfce.org&gt;</li>
+            </ul>
+        </ul>
+        <p>Human theme for LibreOffice (2015-05-31)</p>
+        <ul>
+            <li>libreoffice-style-human: Available under the terms of the LGPL</li>
+            <ul>
+                <li>Copyright 2006-2007 by Gabriel Hurley</li>
+            </ul>
+            <li>humanity-icon-theme: Available under the terms of the GPL</li>
+            <ul>
+                <li>Copyright 2009 by Daniel Foré &lt;Daniel.p.Fore@gmail.com&gt;, Jonian Guveli
+                &lt;jonian.guveli@gmail.com&gt;, K.Vishnoo Charan Reddy &lt;vish@ubuntu.com&gt;</li>
+                <li>Copyright 2006, 2009 by Gabriel Hurley</li>
+            </ul>
+        </ul>
+        <p><a href="#a__GPL_version_3">Jump to GPL Version 3</a></p>
+    </div>
+    <div class="karasa_jaga">
+        <h2>Karasa Jaga</h2>
+        <p>Karasa Jaga Icon Theme for Sundara OS</p>
+        <blockquote>
+            Copyright (c) 2014 Rizal Muttaqin &lt;sundaralinux@gmail.com&gt;<br />
+            Copyright (c) 2018 Rania Amina &lt;rania@libreoffice.id&gt;
+        </blockquote>
+        <p>Karasa Jaga icon theme is derived heavily from Oxygen icon theme, used for Sundara OS branding. LibreOffice
+        Style Karasa Jaga is part of Karasa Jaga icon theme. For further information see at <a href=
+        "https://github.com/rizmut/libreoffice-style-karasa-jaga">https://github.com/rizmut/libreoffice-style-karasa-jaga</a></p>.
+        <p>The Oxygen Icon Theme</p>
+        <blockquote>
+            Copyright (C) 2007 Nuno Pinheiro &lt;nuno@oxygen-icons.org&gt;<br />
+            Copyright (C) 2007 David Vignoni &lt;david@icon-king.com&gt;<br />
+            Copyright (C) 2007 David Miller &lt;miller@oxygen-icons.org&gt;<br />
+            Copyright (C) 2007 Johann Ollivier Lapeyre &lt;johann@oxygen-icons.org&gt;<br />
+            Copyright (C) 2007 Kenneth Wimer &lt;kwwii@bootsplash.org&gt;<br />
+            Copyright (C) 2007 Riccardo Iaconelli &lt;riccardo@oxygen-icons.org&gt;
+        </blockquote>
+        <p>and others</p>
+        <blockquote>
+            <p>This library is free software; you can redistribute it and/or modify it under the terms of the GNU
+            Lesser General Public License as published by the Free Software Foundation; either version 3 of the
+            License, or (at your option) any later version.</p>
+            <p>This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+            the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General
+            Public License for more details.</p>
+            <p>You should have received a copy of the GNU Lesser General Public License along with this library. If
+            not, see <a href="http://www.gnu.org/licenses/">&lt;http://www.gnu.org/licenses/&gt;</a>.</p>
+        </blockquote>
+        <p>Clarification:</p>
+        <blockquote>
+            <p>The GNU Lesser General Public License or LGPL is written for software libraries in the first place. We
+            expressly want the LGPL to be valid for this artwork library too.</p>
+            <p>KDE Oxygen theme icons is a special kind of software library, it is an artwork library, it's elements
+            can be used in a Graphical User Interface, or GUI.</p>
+            <p>Source code, for this library means:</p>
+            <ul>
+                <li>where they exist, SVG;</li>
+                <li>otherwise, if applicable, the multi-layered formats xcf or psd, or otherwise png.</li>
+            </ul>
+            <p>The LGPL in some sections obliges you to make the files carry notices. With images this is in some cases
+            impossible or hardly useful.</p>
+            <p>With this library a notice is placed at a prominent place in the directory containing the elements. You
+            may follow this practice.</p>
+            <p>The exception in section 5 of the GNU Lesser General Public License covers the use of elements of this
+            art library in a GUI.</p>
+            <p>kde-artists [at] kde.org</p>
+        </blockquote>
+        <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
+    </div>
+    <div class="sifr">
+        <h2>Sifr</h2>
+        <p>This work is distributed under the terms of the Creative Commons BY-SA 3.0 license.</p>
+        <p><a href="#a__CC-BY-SA_3_0">Jump to CC-BY-SA 3.0</a></p>
     </div>
     <div class="tango">
         <h2>Tango theme</h2>
