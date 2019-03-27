@@ -1640,7 +1640,7 @@ SwXText::convertToTextFrame(
     }
     aStartPam.SetMark();
     *aStartPam.End() = *pEndPam->End();
-    pEndPam.reset(nullptr);
+    pEndPam.reset();
 
     // see if there are frames already anchored to this node
     // we have to work with the SdrObjects, as unique name is not guaranteed in their frame format

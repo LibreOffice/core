@@ -740,7 +740,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
             WritePostponedCustomShape();
             m_pSerializer->endElementNS( XML_w, XML_r );
         }
-        m_pPostponedCustomShape.reset(nullptr);
+        m_pPostponedCustomShape.reset();
 
         m_aFramesOfParagraph.clear();
 
@@ -2615,7 +2615,7 @@ void DocxAttributeOutput::WritePostponedGraphic()
         FlyFrameGraphic(rPostponedDiagram.grfNode, rPostponedDiagram.size,
             nullptr, nullptr,
             rPostponedDiagram.pSdrObj);
-    m_pPostponedGraphic.reset(nullptr);
+    m_pPostponedGraphic.reset();
 }
 
 void DocxAttributeOutput::WritePostponedDiagram()
@@ -2623,7 +2623,7 @@ void DocxAttributeOutput::WritePostponedDiagram()
     for( const auto & rPostponedDiagram : *m_pPostponedDiagrams )
         m_rExport.SdrExporter().writeDiagram(rPostponedDiagram.object,
             *rPostponedDiagram.frame, m_anchorId++);
-    m_pPostponedDiagrams.reset(nullptr);
+    m_pPostponedDiagrams.reset();
 }
 
 bool DocxAttributeOutput::FootnoteEndnoteRefTag()
@@ -3557,7 +3557,7 @@ void DocxAttributeOutput::EndTable()
         m_tableReference->m_bTableCellOpen = true;
 
     // Cleans the table helper
-    m_xTableWrt.reset(nullptr);
+    m_xTableWrt.reset();
 
     m_aTableStyleConf.clear();
 }
@@ -5448,7 +5448,7 @@ void DocxAttributeOutput::WritePostponedOLE()
     }
 
     // clear list of postponed objects
-    m_pPostponedOLEs.reset(nullptr);
+    m_pPostponedOLEs.reset();
 }
 
 void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* rFlyFrameFormat )
@@ -5578,7 +5578,7 @@ void DocxAttributeOutput::WritePostponedCustomShape()
         else
             m_rExport.SdrExporter().writeDMLAndVMLDrawing(rPostponedDrawing.object, *rPostponedDrawing.frame, m_anchorId++);
     }
-    m_pPostponedCustomShape.reset(nullptr);
+    m_pPostponedCustomShape.reset();
 }
 
 void DocxAttributeOutput::WritePostponedDMLDrawing()

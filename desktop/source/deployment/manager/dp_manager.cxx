@@ -486,7 +486,7 @@ void PackageManagerImpl::disposing()
         m_xLogFile.clear();
         try_dispose( m_xRegistry );
         m_xRegistry.clear();
-        m_activePackagesDB.reset(nullptr);
+        m_activePackagesDB.reset();
         m_xComponentContext.clear();
 
         t_pm_helper::disposing();
