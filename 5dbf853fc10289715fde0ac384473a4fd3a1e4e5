@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_805f4be4",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/ScriptEditorForBeanShell.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-03-27T10:15:20Z",
+      "side": 1,
+      "message": "Something like:\n\n    StringWriter stringWriter \u003d new StringWriter();\n    t.printStackTrace(new PrintWriter(stringWriter));\n    return stringWriter.toString();\n\nis useful if you want to see the complete stack trace, but then you probably want an error message dialog that has a scrollable textpane in it",
+      "revId": "5dbf853fc10289715fde0ac384473a4fd3a1e4e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
