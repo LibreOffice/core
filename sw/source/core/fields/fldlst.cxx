@@ -46,7 +46,7 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst )
     // iterate over all types
     for(size_t i=0; i < nSize; ++i)
     {
-        SwFieldType* pFieldType = rFieldTypes[ i ];
+        SwFieldType* pFieldType = rFieldTypes[ i ].get();
         const SwFieldIds nType = pFieldType->Which();
 
         if( SwFieldIds::SetExp == nType || SwFieldIds::Input == nType || SwFieldIds::Dropdown == nType )
@@ -133,7 +133,7 @@ bool SwInputFieldList::BuildSortLst()
     // iterate over all types
     for( size_t i = 0; i < nSize; ++i )
     {
-        SwFieldType* pFieldType = rFieldTypes[ i ];
+        SwFieldType* pFieldType = rFieldTypes[ i ].get();
         const SwFieldIds nType = pFieldType->Which();
 
         if( SwFieldIds::SetExp == nType || SwFieldIds::Input == nType )

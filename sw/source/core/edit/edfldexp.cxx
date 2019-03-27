@@ -38,7 +38,7 @@ bool SwEditShell::IsFieldDataSourceAvailable(OUString& rUsedDataSource) const
     const SwFieldTypes * pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
     uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference<sdb::XDatabaseContext> xDBContext = sdb::DatabaseContext::create(xContext);
-    for(const auto pFieldType : *pFieldTypes)
+    for(const auto & pFieldType : *pFieldTypes)
     {
         if(IsUsed(*pFieldType) && pFieldType->Which() == SwFieldIds::Database)
         {

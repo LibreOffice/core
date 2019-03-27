@@ -89,9 +89,14 @@ void SwDBFieldType::ReleaseRef()
 
     if (--m_nRefCnt <= 0)
     {
-        size_t nPos = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes()->GetPos(this);
-
-        if (nPos != SIZE_MAX)
+        size_t nPos = 0;
+        for (auto const & pFieldType : *GetDoc()->getIDocumentFieldsAccess().GetFieldTypes())
+        {
+            if (pFieldType.get() == this)
+                break;
+            ++nPos;
+        }
+        if (nPos < GetDoc()->getIDocumentFieldsAccess().GetFieldTypes()->size())
         {
             GetDoc()->getIDocumentFieldsAccess().RemoveFieldType(nPos);
             delete this;

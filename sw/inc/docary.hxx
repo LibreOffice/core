@@ -301,7 +301,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
-class SwFieldTypes : public SwVectorModifyBase<SwFieldType*> {
+class SwFieldTypes : public std::vector<std::unique_ptr<SwFieldType>> {
 public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };

@@ -55,7 +55,7 @@ size_t SwEditShell::GetFieldTypeCount(SwFieldIds nResId ) const
 
     // all types with the same ResId
     size_t nIdx  = 0;
-    for(const auto pFieldType : *pFieldTypes)
+    for(const auto & pFieldType : *pFieldTypes)
     {
         // same ResId -> increment index
         if(pFieldType->Which() == nResId)
@@ -71,17 +71,17 @@ SwFieldType* SwEditShell::GetFieldType(size_t nField, SwFieldIds nResId ) const
 
     if(nResId == SwFieldIds::Unknown && nField < pFieldTypes->size())
     {
-        return (*pFieldTypes)[nField];
+        return (*pFieldTypes)[nField].get();
     }
 
     size_t nIdx = 0;
-    for(const auto pFieldType : *pFieldTypes)
+    for(const auto & pFieldType : *pFieldTypes)
     {
         // same ResId -> increment index
         if(pFieldType->Which() == nResId)
         {
             if(nIdx == nField)
-                return pFieldType;
+                return pFieldType.get();
             nIdx++;
         }
     }
@@ -112,7 +112,7 @@ void SwEditShell::RemoveFieldType(SwFieldIds nResId, const OUString& rStr)
     for(SwFieldTypes::size_type i = 0; i < nSize; ++i)
     {
         // same ResId -> increment index
-        SwFieldType* pFieldType = (*pFieldTypes)[i];
+        SwFieldType* pFieldType = (*pFieldTypes)[i].get();
         if( pFieldType->Which() == nResId )
         {
             if( aTmp == rCC.lowercase( pFieldType->GetName() ) )
@@ -397,7 +397,7 @@ void SwEditShell::ChangeAuthorityData(const SwAuthEntry* pNewData)
 bool SwEditShell::IsAnyDatabaseFieldInDoc()const
 {
     const SwFieldTypes * pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
-    for(const auto pFieldType : *pFieldTypes)
+    for(const auto & pFieldType : *pFieldTypes)
     {
         if(IsUsed(*pFieldType))
         {
