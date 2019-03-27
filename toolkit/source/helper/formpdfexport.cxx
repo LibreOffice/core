@@ -86,20 +86,20 @@ namespace toolkitform
 
         /** (default-)creates a PDF widget according to a given FormComponentType
         */
-        vcl::PDFWriter::AnyWidget* createDefaultWidget( sal_Int16 _nFormComponentType )
+        std::unique_ptr<vcl::PDFWriter::AnyWidget> createDefaultWidget( sal_Int16 _nFormComponentType )
         {
             switch ( _nFormComponentType )
             {
             case FormComponentType::COMMANDBUTTON:
-                return new vcl::PDFWriter::PushButtonWidget;
+                return std::make_unique<vcl::PDFWriter::PushButtonWidget>();
             case FormComponentType::CHECKBOX:
-                return new vcl::PDFWriter::CheckBoxWidget;
+                return std::make_unique<vcl::PDFWriter::CheckBoxWidget>();
             case FormComponentType::RADIOBUTTON:
-                return new vcl::PDFWriter::RadioButtonWidget;
+                return std::make_unique<vcl::PDFWriter::RadioButtonWidget>();
             case FormComponentType::LISTBOX:
-                return new vcl::PDFWriter::ListBoxWidget;
+                return std::make_unique<vcl::PDFWriter::ListBoxWidget>();
             case FormComponentType::COMBOBOX:
-                return new vcl::PDFWriter::ComboBoxWidget;
+                return std::make_unique<vcl::PDFWriter::ComboBoxWidget>();
 
             case FormComponentType::TEXTFIELD:
             case FormComponentType::FILECONTROL:
@@ -108,7 +108,7 @@ namespace toolkitform
             case FormComponentType::NUMERICFIELD:
             case FormComponentType::CURRENCYFIELD:
             case FormComponentType::PATTERNFIELD:
-                return new vcl::PDFWriter::EditWidget;
+                return std::make_unique<vcl::PDFWriter::EditWidget>();
             }
             return nullptr;
         }
@@ -288,7 +288,7 @@ namespace toolkitform
         {
             Reference< XPropertySet > xModelProps( _rxControl->getModel(), UNO_QUERY );
             sal_Int16 nControlType = classifyFormControl( xModelProps );
-            Descriptor.reset( createDefaultWidget( nControlType ) );
+            Descriptor = createDefaultWidget( nControlType );
             if (!Descriptor)
                 // no PDF widget available for this
                 return Descriptor;
