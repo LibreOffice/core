@@ -383,7 +383,7 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
             try {
                 execute();
             } catch (Exception invokeException) {
-                showErrorMessage(invokeException.getMessage());
+                showErrorMessage(invokeException.toString());
             }
         } else if (actionCommand.equals("Close")) {
             doClose();
