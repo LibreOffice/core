@@ -21,10 +21,11 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/view/XControlAccess.hpp>
 
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <cppunit/extensions/HelperMacros.h>
 
 using namespace css;
-using namespace css::uno;
 
 namespace apitest
 {
@@ -39,7 +40,7 @@ void XControlAccess::testGetControl()
 
     uno::Reference<drawing::XShapes> xShapes(xDP, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape(
-        createControlShape(xComponent, 100, 100, 10000, 50000, "CommandButton"),
+        helper::form::createControlShape(xComponent, "CommandButton", 10000, 50000, 100, 100),
         uno::UNO_QUERY_THROW);
 
     xShapes->add(xShape);
