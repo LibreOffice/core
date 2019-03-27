@@ -43,6 +43,7 @@ class BitmapTest : public CppUnit::TestFixture
     void testScale();
     void testCRC();
     void testGreyPalette();
+    void testCustom8BitPalette();
 
     CPPUNIT_TEST_SUITE(BitmapTest);
     CPPUNIT_TEST(testCreation);
@@ -54,6 +55,7 @@ class BitmapTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testScale);
     CPPUNIT_TEST(testCRC);
     CPPUNIT_TEST(testGreyPalette);
+    CPPUNIT_TEST(testCustom8BitPalette);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -546,6 +548,49 @@ void BitmapTest::testGreyPalette()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 1 wrong", BitmapColor(0, 0, 0), aPalette[0]);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 127 wrong", BitmapColor(127, 127, 127), aPalette[127]);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 255 wrong", BitmapColor(255, 255, 255), aPalette[255]);
+    }
+}
+
+void BitmapTest::testCustom8BitPalette()
+{
+    BitmapPalette aCustomPalette;
+    aCustomPalette.SetEntryCount(256);
+    for (sal_uInt16 i = 0; i < 256; i++)
+    {
+        aCustomPalette[i] = BitmapColor(sal_uInt8(i), sal_uInt8(0xCC), sal_uInt8(0x22));
+    }
+    Bitmap aBitmap(Size(3, 2), 8, &aCustomPalette);
+
+    {
+        BitmapScopedWriteAccess pAccess(aBitmap);
+        pAccess->SetPixelIndex(0, 0, 0);
+        pAccess->SetPixelIndex(0, 1, 1);
+        pAccess->SetPixelIndex(0, 2, 2);
+
+        pAccess->SetPixelIndex(1, 0, 253);
+        pAccess->SetPixelIndex(1, 1, 254);
+        pAccess->SetPixelIndex(1, 2, 255);
+    }
+
+    {
+        Bitmap::ScopedReadAccess pAccess(aBitmap);
+        CPPUNIT_ASSERT_EQUAL(0, int(pAccess->GetPixelIndex(0, 0)));
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0xCC, 0x22), pAccess->GetColor(0, 0));
+
+        CPPUNIT_ASSERT_EQUAL(1, int(pAccess->GetPixelIndex(0, 1)));
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x01, 0xCC, 0x22), pAccess->GetColor(0, 1));
+
+        CPPUNIT_ASSERT_EQUAL(2, int(pAccess->GetPixelIndex(0, 2)));
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x02, 0xCC, 0x22), pAccess->GetColor(0, 2));
+
+        CPPUNIT_ASSERT_EQUAL(253, int(pAccess->GetPixelIndex(1, 0)));
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFD, 0xCC, 0x22), pAccess->GetColor(1, 0));
+
+        CPPUNIT_ASSERT_EQUAL(254, int(pAccess->GetPixelIndex(1, 1)));
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFE, 0xCC, 0x22), pAccess->GetColor(1, 1));
+
+        CPPUNIT_ASSERT_EQUAL(255, int(pAccess->GetPixelIndex(1, 2)));
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xCC, 0x22), pAccess->GetColor(1, 2));
     }
 }
 
