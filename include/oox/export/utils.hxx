@@ -59,8 +59,6 @@ static constexpr const char* ToPsz10(bool b)
     return b ? "1" : "0";
 }
 
-#define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
-
 static constexpr sal_Int64 PPTtoEMU( sal_Int32 nPPT )
 {
     return static_cast<sal_Int64>( static_cast<double>(nPPT) * 1587.5 );
