@@ -545,14 +545,17 @@ void SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
 {
     maMSTOCExpression = rSource.maMSTOCExpression;
     SwTOXType* pType = const_cast<SwTOXType*>(rSource.GetTOXType());
-    if( pDoc && !pDoc->GetTOXTypes().IsAlive(pType))
+    if( pDoc &&
+        std::find_if(pDoc->GetTOXTypes().begin(), pDoc->GetTOXTypes().end(),
+                     [=](const std::unique_ptr<SwTOXType> & p) { return p.get() == pType; })
+            == pDoc->GetTOXTypes().end())
     {
         // type not in pDoc, so create it now
         const SwTOXTypes& rTypes = pDoc->GetTOXTypes();
         bool bFound = false;
         for( size_t n = rTypes.size(); n; )
         {
-            const SwTOXType* pCmp = rTypes[ --n ];
+            const SwTOXType* pCmp = rTypes[ --n ].get();
             if( pCmp->GetType() == pType->GetType() &&
                 pCmp->GetTypeName() == pType->GetTypeName() )
             {

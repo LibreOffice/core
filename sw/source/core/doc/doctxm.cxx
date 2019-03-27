@@ -612,7 +612,7 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
 sal_uInt16 SwDoc::GetTOXTypeCount(TOXTypes eTyp) const
 {
     sal_uInt16 nCnt = 0;
-    for( auto pTOXType : *mpTOXTypes )
+    for( auto const & pTOXType : *mpTOXTypes )
         if( eTyp == pTOXType->GetType() )
             ++nCnt;
     return nCnt;
@@ -621,16 +621,16 @@ sal_uInt16 SwDoc::GetTOXTypeCount(TOXTypes eTyp) const
 const SwTOXType* SwDoc::GetTOXType( TOXTypes eTyp, sal_uInt16 nId ) const
 {
     sal_uInt16 nCnt = 0;
-    for( auto pTOXType : *mpTOXTypes )
+    for( auto const & pTOXType : *mpTOXTypes )
         if( eTyp == pTOXType->GetType() && nCnt++ == nId )
-            return pTOXType;
+            return pTOXType.get();
     return nullptr;
 }
 
 const SwTOXType* SwDoc::InsertTOXType( const SwTOXType& rTyp )
 {
     SwTOXType * pNew = new SwTOXType( rTyp );
-    mpTOXTypes->push_back( pNew );
+    mpTOXTypes->emplace_back( pNew );
     return pNew;
 }
 
