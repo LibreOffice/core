@@ -233,7 +233,7 @@ struct OStorage_Impl
     SotElement_Impl* InsertStream( const OUString& aName, bool bEncr );
     void InsertRawStream( const OUString& aName, const css::uno::Reference< css::io::XInputStream >& xInStream );
 
-    OStorage_Impl* CreateNewStorageImpl( sal_Int32 nStorageMode );
+    std::unique_ptr<OStorage_Impl> CreateNewStorageImpl( sal_Int32 nStorageMode );
     SotElement_Impl* InsertStorage( const OUString& aName, sal_Int32 nStorageMode );
     SotElement_Impl* InsertElement( const OUString& aName, bool bIsStorage );
 
