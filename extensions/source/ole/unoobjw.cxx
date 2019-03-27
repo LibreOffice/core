@@ -139,7 +139,7 @@ InterfaceOleWrapper::~InterfaceOleWrapper()
         UnoObjToWrapperMap.erase(it);
 }
 
-STDMETHODIMP InterfaceOleWrapper::QueryInterface(REFIID riid, LPVOID FAR * ppv)
+STDMETHODIMP InterfaceOleWrapper::QueryInterface(REFIID riid, void ** ppv)
 {
     comphelper::Automation::AutomationInvokedZone aAutomationActive;
 
@@ -238,7 +238,7 @@ STDMETHODIMP  InterfaceOleWrapper::getOriginalUnoStruct( Any * pStruct)
     return ret;
 }
 
-STDMETHODIMP InterfaceOleWrapper::GetTypeInfoCount( unsigned int *pctinfo )
+STDMETHODIMP InterfaceOleWrapper::GetTypeInfoCount( UINT *pctinfo )
 {
     SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::GetTypeInfoCount");
 
@@ -1027,7 +1027,7 @@ void STDMETHODCALLTYPE CXTypeInfo::ReleaseVarDesc(VARDESC *)
     SAL_WARN("extensions.olebridge", this << "@CXTypeInfo::ReleaseVarDesc: E_NOTIMPL");
 }
 
-STDMETHODIMP InterfaceOleWrapper::GetTypeInfo(unsigned int iTInfo, LCID, ITypeInfo ** ppTInfo)
+STDMETHODIMP InterfaceOleWrapper::GetTypeInfo(UINT iTInfo, LCID, ITypeInfo ** ppTInfo)
 {
     comphelper::Automation::AutomationInvokedZone aAutomationActive;
 
@@ -1070,8 +1070,8 @@ STDMETHODIMP InterfaceOleWrapper::GetTypeInfo(unsigned int iTInfo, LCID, ITypeIn
 }
 
 STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
-                                                OLECHAR ** rgszNames,
-                                                unsigned int cNames,
+                                                LPOLESTR * rgszNames,
+                                                UINT cNames,
                                                 LCID /*lcid*/,
                                                 DISPID * rgdispid )
 {
@@ -1800,11 +1800,11 @@ static bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource)
 STDMETHODIMP InterfaceOleWrapper::Invoke(DISPID dispidMember,
                                          REFIID /*riid*/,
                                          LCID /*lcid*/,
-                                         unsigned short wFlags,
+                                         WORD wFlags,
                                          DISPPARAMS * pdispparams,
                                          VARIANT * pvarResult,
                                          EXCEPINFO * pexcepinfo,
-                                         unsigned int * puArgErr )
+                                         UINT * puArgErr )
 {
     comphelper::Automation::AutomationInvokedZone aAutomationActive;
 
@@ -3063,7 +3063,7 @@ Reference< XInterface > UnoObjectWrapperRemoteOpt::createUnoWrapperInstance()
     return Reference<XInterface>( xWeak, UNO_QUERY);
 }
 
-STDMETHODIMP  UnoObjectWrapperRemoteOpt::GetIDsOfNames ( REFIID /*riid*/, OLECHAR ** rgszNames, unsigned int cNames,
+STDMETHODIMP  UnoObjectWrapperRemoteOpt::GetIDsOfNames ( REFIID /*riid*/, LPOLESTR * rgszNames, UINT cNames,
                                 LCID /*lcid*/, DISPID * rgdispid )
 {
     MutexGuard guard( getBridgeMutex());
@@ -3110,9 +3110,9 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::GetIDsOfNames ( REFIID /*riid*/, OLECHA
     return ret;
 }
 
-STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*riid*/, LCID /*lcid*/, unsigned short wFlags,
+STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*riid*/, LCID /*lcid*/, WORD wFlags,
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,
-                         unsigned int * puArgErr )
+                         UINT * puArgErr )
 {
     comphelper::Automation::AutomationInvokedZone aAutomationActive;
 

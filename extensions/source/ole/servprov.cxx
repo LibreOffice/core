@@ -101,7 +101,7 @@ bool OneInstanceOleWrapper::deregisterClass()
     return CoRevokeClassObject(m_factoryHandle) == NOERROR;
 }
 
-STDMETHODIMP OneInstanceOleWrapper::QueryInterface(REFIID riid, void FAR* FAR* ppv)
+STDMETHODIMP OneInstanceOleWrapper::QueryInterface(REFIID riid, void ** ppv)
 {
     if(IsEqualIID(riid, IID_IUnknown))
     {
@@ -178,7 +178,7 @@ STDMETHODIMP OneInstanceOleWrapper::CreateInstance(IUnknown FAR* punkOuter,
     return ret;
 }
 
-STDMETHODIMP OneInstanceOleWrapper::LockServer(int /*fLock*/)
+STDMETHODIMP OneInstanceOleWrapper::LockServer(BOOL /*fLock*/)
 {
     return NOERROR;
 }

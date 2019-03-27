@@ -45,21 +45,21 @@ protected: // protected because its only an implementation relevant class
     virtual void end_document();
 
     virtual void start_element(
-        const std::wstring& raw_name,
-        const std::wstring& local_name,
-        const XmlTagAttributes_t& attributes) override = 0;
+        const string_t& raw_name,
+        const string_t& local_name,
+        const xml_tag_attribute_container_t& attributes) override = 0;
 
     virtual void end_element(
-        const std::wstring& raw_name, const std::wstring& local_name) override = 0;
+        const string_t& raw_name, const string_t& local_name) override = 0;
 
-    virtual void characters(const std::wstring& character) override = 0;
+    virtual void characters(const string_t& character) override = 0;
 
-    virtual void ignore_whitespace(const std::wstring& /*whitespaces*/) override {};
+    virtual void ignore_whitespace(const string_t& /*whitespaces*/) override {};
 
     virtual void processing_instruction(
         const std::wstring& /*target*/, const std::wstring& /*data*/){};
 
-    virtual void comment(const std::wstring& /*comment*/) override {};
+    virtual void comment(const string_t& /*comment*/) override {};
 
     void Initialize( const std::string& /*ContentName*/);
 

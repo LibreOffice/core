@@ -46,7 +46,7 @@ public:
         return cnt;
     }
 
-    HRESULT __stdcall QueryInterface(REFIID riid, LPVOID* ppv) override
+    HRESULT __stdcall QueryInterface(REFIID riid, void** ppv) override
     {
         if (riid == IID_IUnknown)
         {

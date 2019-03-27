@@ -365,7 +365,7 @@ STDAPI DllUnregisterServer()
     return hr;
 }
 
-STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
+STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     *ppv = nullptr;
 

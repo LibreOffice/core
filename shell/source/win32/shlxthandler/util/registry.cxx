@@ -28,7 +28,7 @@
 
 #include <objbase.h>
 
-bool SetRegistryKey(HKEY RootKey, const wchar_t* KeyName, const wchar_t* ValueName, const wchar_t* Value)
+bool SetRegistryKey(HKEY RootKey, const Filepath_char_t* KeyName, const Filepath_char_t* ValueName, const Filepath_char_t* Value)
 {
     HKEY hSubKey;
 
@@ -50,7 +50,7 @@ bool SetRegistryKey(HKEY RootKey, const wchar_t* KeyName, const wchar_t* ValueNa
 }
 
 
-bool DeleteRegistryKey(HKEY RootKey, const wchar_t* KeyName)
+bool DeleteRegistryKey(HKEY RootKey, const Filepath_char_t* KeyName)
 {
     HKEY hKey;
 
@@ -112,7 +112,7 @@ bool DeleteRegistryKey(HKEY RootKey, const wchar_t* KeyName)
 /** May be used to determine if the specified registry key has subkeys
     The function returns true on success else if an error occurs false
 */
-bool HasSubkeysRegistryKey(HKEY RootKey, const wchar_t* KeyName, /* out */ bool& bResult)
+bool HasSubkeysRegistryKey(HKEY RootKey, const Filepath_char_t* KeyName, /* out */ bool& bResult)
 {
     HKEY hKey;
 
@@ -132,7 +132,7 @@ bool HasSubkeysRegistryKey(HKEY RootKey, const wchar_t* KeyName, /* out */ bool&
 }
 
 // Convert a CLSID to a char string.
-std::wstring ClsidToString(const CLSID& clsid)
+Filepath_t ClsidToString(const CLSID& clsid)
 {
     // Get CLSID
     LPOLESTR wszCLSID = nullptr;
@@ -147,7 +147,7 @@ std::wstring ClsidToString(const CLSID& clsid)
 }
 
 
-bool QueryRegistryKey(HKEY RootKey, const wchar_t* KeyName, const wchar_t* ValueName, wchar_t *pszData, DWORD dwBufLen)
+bool QueryRegistryKey(HKEY RootKey, const Filepath_char_t* KeyName, const Filepath_char_t* ValueName, Filepath_char_t *pszData, DWORD dwBufLen)
 {
     HKEY hKey;
 

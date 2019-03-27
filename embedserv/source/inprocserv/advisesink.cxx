@@ -120,7 +120,7 @@ STDMETHODIMP_(ULONG) OleWrapperAdviseSink::Release()
     return nReturn;
 }
 
-STDMETHODIMP_(void) OleWrapperAdviseSink::OnDataChange( LPFORMATETC pFetc, LPSTGMEDIUM pMedium )
+STDMETHODIMP_(void) OleWrapperAdviseSink::OnDataChange( FORMATETC * pFetc, STGMEDIUM * pMedium )
 {
     if ( m_pListener )
     {
@@ -136,7 +136,7 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnViewChange( DWORD dwAspect, LONG lin
     }
 }
 
-STDMETHODIMP_(void) OleWrapperAdviseSink::OnRename( LPMONIKER pMoniker )
+STDMETHODIMP_(void) OleWrapperAdviseSink::OnRename( IMoniker * pMoniker )
 {
     if ( m_pListener )
     {

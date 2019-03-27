@@ -201,7 +201,7 @@ CXTDataObject::~CXTDataObject()
 
 // IUnknown->QueryInterface
 
-STDMETHODIMP CXTDataObject::QueryInterface( REFIID iid, LPVOID* ppvObject )
+STDMETHODIMP CXTDataObject::QueryInterface( REFIID iid, void** ppvObject )
 {
     if ( nullptr == ppvObject )
         return E_INVALIDARG;
@@ -240,7 +240,7 @@ STDMETHODIMP_(ULONG) CXTDataObject::Release( )
     return nRefCnt;
 }
 
-STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium )
+STDMETHODIMP CXTDataObject::GetData( FORMATETC * pFormatetc, STGMEDIUM * pmedium )
 {
     if ( !(pFormatetc && pmedium) )
         return E_INVALIDARG;
@@ -569,7 +569,7 @@ STDMETHODIMP CXTDataObject::EnumFormatEtc(
 
 // IDataObject->QueryGetData
 
-STDMETHODIMP CXTDataObject::QueryGetData( LPFORMATETC pFormatetc )
+STDMETHODIMP CXTDataObject::QueryGetData( FORMATETC * pFormatetc )
 {
     if ( (nullptr == pFormatetc) || IsBadReadPtr( pFormatetc, sizeof( FORMATETC ) ) )
         return E_INVALIDARG;
@@ -582,28 +582,28 @@ STDMETHODIMP CXTDataObject::QueryGetData( LPFORMATETC pFormatetc )
 
 // IDataObject->GetDataHere
 
-STDMETHODIMP CXTDataObject::GetDataHere( LPFORMATETC, LPSTGMEDIUM )
+STDMETHODIMP CXTDataObject::GetDataHere( FORMATETC *, STGMEDIUM * )
 {
     return E_NOTIMPL;
 }
 
 // IDataObject->GetCanonicalFormatEtc
 
-STDMETHODIMP CXTDataObject::GetCanonicalFormatEtc( LPFORMATETC, LPFORMATETC )
+STDMETHODIMP CXTDataObject::GetCanonicalFormatEtc( FORMATETC *, FORMATETC * )
 {
     return E_NOTIMPL;
 }
 
 // IDataObject->SetData
 
-STDMETHODIMP CXTDataObject::SetData( LPFORMATETC, LPSTGMEDIUM, BOOL )
+STDMETHODIMP CXTDataObject::SetData( FORMATETC *, STGMEDIUM *, BOOL )
 {
     return E_NOTIMPL;
 }
 
 // IDataObject->DAdvise
 
-STDMETHODIMP CXTDataObject::DAdvise( LPFORMATETC, DWORD, LPADVISESINK, DWORD * )
+STDMETHODIMP CXTDataObject::DAdvise( FORMATETC *, DWORD, IAdviseSink *, DWORD * )
 {
     return E_NOTIMPL;
 }
@@ -617,7 +617,7 @@ STDMETHODIMP CXTDataObject::DUnadvise( DWORD )
 
 // IDataObject->EnumDAdvise
 
-STDMETHODIMP CXTDataObject::EnumDAdvise( LPENUMSTATDATA * )
+STDMETHODIMP CXTDataObject::EnumDAdvise( IEnumSTATDATA ** )
 {
     return E_NOTIMPL;
 }
@@ -665,7 +665,7 @@ CEnumFormatEtc::CEnumFormatEtc( LPUNKNOWN lpUnkOuter, const CFormatEtcContainer&
 
 // IUnknown->QueryInterface
 
-STDMETHODIMP CEnumFormatEtc::QueryInterface( REFIID iid, LPVOID* ppvObject )
+STDMETHODIMP CEnumFormatEtc::QueryInterface( REFIID iid, void** ppvObject )
 {
     if ( nullptr == ppvObject )
         return E_INVALIDARG;
@@ -710,7 +710,7 @@ STDMETHODIMP_(ULONG) CEnumFormatEtc::Release( )
 
 // IEnumFORMATETC->Next
 
-STDMETHODIMP CEnumFormatEtc::Next( ULONG nRequested, LPFORMATETC lpDest, ULONG* lpFetched )
+STDMETHODIMP CEnumFormatEtc::Next( ULONG nRequested, FORMATETC * lpDest, ULONG* lpFetched )
 {
     if ( ( nRequested < 1 ) ||
          (( nRequested > 1 ) && ( nullptr == lpFetched )) ||

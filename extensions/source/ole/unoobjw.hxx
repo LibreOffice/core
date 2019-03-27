@@ -88,18 +88,18 @@ public:
     ~InterfaceOleWrapper() override;
 
     // IUnknown
-    STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj) override;
+    STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObj) override;
     STDMETHOD_(ULONG, AddRef)() override;
     STDMETHOD_(ULONG, Release)() override;
 
     // IDispatch
-    STDMETHOD( GetTypeInfoCount )( unsigned int * pctinfo ) override;
-    STDMETHOD( GetTypeInfo )( unsigned int itinfo, LCID lcid, ITypeInfo ** pptinfo ) override;
-    STDMETHOD( GetIDsOfNames )( REFIID riid, OLECHAR ** rgszNames, unsigned int cNames,
+    STDMETHOD( GetTypeInfoCount )( UINT * pctinfo ) override;
+    STDMETHOD( GetTypeInfo )( UINT itinfo, LCID lcid, ITypeInfo ** pptinfo ) override;
+    STDMETHOD( GetIDsOfNames )( REFIID riid, LPOLESTR * rgszNames, UINT cNames,
                                 LCID lcid, DISPID * rgdispid ) override;
-    STDMETHOD( Invoke )( DISPID dispidMember, REFIID riid, LCID lcid, unsigned short wFlags,
+    STDMETHOD( Invoke )( DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags,
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,
-                         unsigned int * puArgErr ) override;
+                         UINT * puArgErr ) override;
 
     // IDispatchEx
     virtual HRESULT STDMETHODCALLTYPE GetDispID(
@@ -231,11 +231,11 @@ public:
     UnoObjectWrapperRemoteOpt( Reference<XMultiServiceFactory> const & aFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
     ~UnoObjectWrapperRemoteOpt() override;
 
-    STDMETHOD( GetIDsOfNames )( REFIID riid, OLECHAR ** rgszNames, unsigned int cNames,
+    STDMETHOD( GetIDsOfNames )( REFIID riid, LPOLESTR * rgszNames, UINT cNames,
                                 LCID lcid, DISPID * rgdispid ) override;
-    STDMETHOD( Invoke )( DISPID dispidMember, REFIID riid, LCID lcid, unsigned short wFlags,
+    STDMETHOD( Invoke )( DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags,
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,
-                         unsigned int * puArgErr ) override;
+                         UINT * puArgErr ) override;
 
     // UnoConversionUtility
     // If UNO interfaces are converted in methods of this class then

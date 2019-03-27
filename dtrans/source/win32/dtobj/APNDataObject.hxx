@@ -37,21 +37,21 @@ public:
 
     //IUnknown interface methods
 
-    STDMETHODIMP           QueryInterface(REFIID iid, LPVOID* ppvObject) override;
+    STDMETHODIMP           QueryInterface(REFIID iid, void** ppvObject) override;
     STDMETHODIMP_( ULONG ) AddRef( ) override;
     STDMETHODIMP_( ULONG ) Release( ) override;
 
     // IDataObject interface methods
 
-    STDMETHODIMP GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium ) override;
-    STDMETHODIMP GetDataHere( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium ) override;
-    STDMETHODIMP QueryGetData( LPFORMATETC pFormatetc ) override;
-    STDMETHODIMP GetCanonicalFormatEtc( LPFORMATETC pFormatectIn, LPFORMATETC pFormatetcOut ) override;
-    STDMETHODIMP SetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium, BOOL fRelease ) override;
+    STDMETHODIMP GetData( FORMATETC * pFormatetc, STGMEDIUM * pmedium ) override;
+    STDMETHODIMP GetDataHere( FORMATETC * pFormatetc, STGMEDIUM * pmedium ) override;
+    STDMETHODIMP QueryGetData( FORMATETC * pFormatetc ) override;
+    STDMETHODIMP GetCanonicalFormatEtc( FORMATETC * pFormatectIn, FORMATETC * pFormatetcOut ) override;
+    STDMETHODIMP SetData( FORMATETC * pFormatetc, STGMEDIUM * pmedium, BOOL fRelease ) override;
     STDMETHODIMP EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc ) override;
-    STDMETHODIMP DAdvise( LPFORMATETC pFormatetc, DWORD advf, LPADVISESINK pAdvSink, DWORD* pdwConnection ) override;
+    STDMETHODIMP DAdvise( FORMATETC * pFormatetc, DWORD advf, IAdviseSink * pAdvSink, DWORD* pdwConnection ) override;
     STDMETHODIMP DUnadvise( DWORD dwConnection ) override;
-    STDMETHODIMP EnumDAdvise( LPENUMSTATDATA* ppenumAdvise ) override;
+    STDMETHODIMP EnumDAdvise( IEnumSTATDATA** ppenumAdvise ) override;
 
     operator IDataObject*( );
 

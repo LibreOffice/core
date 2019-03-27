@@ -22,6 +22,6 @@ WinLaunchChild(const wchar_t *exePath, int argc,
                wchar_t **argv, HANDLE userToken = nullptr,
                HANDLE *hProcess = nullptr);
 
-wchar_t* MakeCommandLine(int argc, WCHAR **argv);
+wchar_t* MakeCommandLine(int argc, wchar_t **argv);
 
 #endif

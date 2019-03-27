@@ -35,7 +35,7 @@ namespace dxcanvas
         ULONG_PTR       a_GdiPlusToken;     // GDI+ handle. Owned by this object
     }
 
-    GDIPlusUserSharedPtr GDIPlusUser::createInstance()
+    GDIPlusUser::GDIPlusUserSharedPtr GDIPlusUser::createInstance()
     {
         return GDIPlusUserSharedPtr( new GDIPlusUser() );
     }

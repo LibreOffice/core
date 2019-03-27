@@ -51,16 +51,16 @@ public:
 
 
     virtual HRESULT STDMETHODCALLTYPE Initialize(
-        LPCITEMIDLIST pidlFolder, LPDATAOBJECT lpdobj, HKEY hkeyProgID) override;
+        LPCITEMIDLIST pidlFolder, IDataObject * lpdobj, HKEY hkeyProgID) override;
 
 
     // IShellPropSheetExt
 
 
-    virtual HRESULT STDMETHODCALLTYPE AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam) override;
+    virtual HRESULT STDMETHODCALLTYPE AddPages(LPFNSVADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam) override;
 
     virtual HRESULT STDMETHODCALLTYPE ReplacePage(
-        UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam) override;
+        EXPPS uPageID, LPFNSVADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam) override;
 
 private:
     // Windows callback functions

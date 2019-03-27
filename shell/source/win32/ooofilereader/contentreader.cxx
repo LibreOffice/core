@@ -26,7 +26,7 @@
 
 /** constructor.
 */
-CContentReader::CContentReader( const std::wstring& DocumentName, LocaleSet_t const & DocumentLocale ):
+CContentReader::CContentReader( const Filepath_t& DocumentName, LocaleSet_t const & DocumentLocale ):
 CBaseReader( DocumentName )
 {
     try
@@ -159,9 +159,9 @@ LocaleSet_t const & CContentReader::getLocale( const StyleName_t& Style )
 
 
 void CContentReader::start_element(
-    const std::wstring& /*raw_name*/,
-    const std::wstring& local_name,
-    const XmlTagAttributes_t& attributes)
+    const string_t& /*raw_name*/,
+    const string_t& local_name,
+    const xml_tag_attribute_container_t& attributes)
 {
     //get appropriate Xml Tag Builder using MetaInfoBuilderFactory;
     ITag* pTagBuilder = chooseTagReader( local_name,attributes );
@@ -175,7 +175,7 @@ void CContentReader::start_element(
 // end_element occurs when a tag is closed
 
 
-void CContentReader::end_element(const std::wstring& /*raw_name*/, const std::wstring& local_name)
+void CContentReader::end_element(const string_t& /*raw_name*/, const string_t& local_name)
 {
     assert( !m_TagBuilderStack.empty() );
     ITag* pTagBuilder = m_TagBuilderStack.top();
@@ -204,7 +204,7 @@ void CContentReader::end_element(const std::wstring& /*raw_name*/, const std::ws
 // characters occurs when receiving characters
 
 
-void CContentReader::characters( const std::wstring& character )
+void CContentReader::characters( const string_t& character )
 {
     if ( character.length() > 0 && !HasOnlySpaces( character ) )
     {

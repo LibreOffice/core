@@ -140,13 +140,13 @@ public:
     virtual ~InprocEmbedProvider_Impl();
 
     /* IUnknown methods */
-    STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj) override;
+    STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObj) override;
     STDMETHOD_(ULONG, AddRef)() override;
     STDMETHOD_(ULONG, Release)() override;
 
     /* IClassFactory methods */
     STDMETHOD(CreateInstance)(IUnknown FAR* punkOuter, REFIID riid, void FAR* FAR* ppv) override;
-    STDMETHOD(LockServer)(int fLock) override;
+    STDMETHOD(LockServer)(BOOL fLock) override;
 
 protected:
 
@@ -258,7 +258,7 @@ InprocEmbedProvider_Impl::~InprocEmbedProvider_Impl()
 
 // IUnknown
 
-STDMETHODIMP InprocEmbedProvider_Impl::QueryInterface( REFIID riid, void FAR* FAR* ppv )
+STDMETHODIMP InprocEmbedProvider_Impl::QueryInterface( REFIID riid, void ** ppv )
 {
     if(IsEqualIID(riid, IID_IUnknown))
     {
@@ -315,7 +315,7 @@ STDMETHODIMP InprocEmbedProvider_Impl::CreateInstance(IUnknown FAR* punkOuter,
 }
 
 
-STDMETHODIMP InprocEmbedProvider_Impl::LockServer( int fLock )
+STDMETHODIMP InprocEmbedProvider_Impl::LockServer( BOOL fLock )
 {
     if ( fLock )
         g_nLock++;

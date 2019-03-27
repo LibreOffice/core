@@ -111,7 +111,7 @@ ULONG STDMETHODCALLTYPE CPropertySheet::Release()
 
 
 HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
-    LPCITEMIDLIST /*pidlFolder*/, LPDATAOBJECT lpdobj, HKEY /*hkeyProgID*/)
+    LPCITEMIDLIST /*pidlFolder*/, IDataObject * lpdobj, HKEY /*hkeyProgID*/)
 {
     InitCommonControls();
 
@@ -159,7 +159,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
 // IShellPropSheetExt
 
 
-HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
+HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNSVADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 {
     std::wstring proppage_header;
 
@@ -198,7 +198,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
 
 
 HRESULT STDMETHODCALLTYPE CPropertySheet::ReplacePage(
-    UINT /*uPageID*/, LPFNADDPROPSHEETPAGE /*lpfnReplaceWith*/, LPARAM /*lParam*/)
+    EXPPS /*uPageID*/, LPFNSVADDPROPSHEETPAGE /*lpfnReplaceWith*/, LPARAM /*lParam*/)
 {
     return E_NOTIMPL;
 }

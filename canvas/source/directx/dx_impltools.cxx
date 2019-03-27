@@ -480,7 +480,7 @@ namespace dxcanvas
                                                          aPoint ) );
         }
 
-        bool drawDIBits( const GraphicsSharedPtr& rGraphics,
+        bool drawDIBits( const std::shared_ptr<Gdiplus::Graphics>& rGraphics,
                          const BITMAPINFO&        rBI,
                          const void*              pBits )
         {
@@ -492,7 +492,7 @@ namespace dxcanvas
                                       pBitmap );
         }
 
-        bool drawRGBABits( const GraphicsSharedPtr& rGraphics,
+        bool drawRGBABits( const std::shared_ptr<Gdiplus::Graphics>& rGraphics,
                            const RawRGBABitmap&     rRawRGBAData )
         {
             BitmapSharedPtr pBitmap( new Gdiplus::Bitmap( rRawRGBAData.mnWidth,
