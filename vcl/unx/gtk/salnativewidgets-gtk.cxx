@@ -871,8 +871,8 @@ bool GtkSalGraphics::drawNativeControl(ControlType nType, ControlPart nPart,
     {
         if( bNeedTwoPasses )
         {
-            xPixmap.reset( NWGetPixmapFromScreen( aPixmapRect, BG_WHITE ) );
-            xMask.reset( NWGetPixmapFromScreen( aPixmapRect, BG_BLACK ) );
+            xPixmap = NWGetPixmapFromScreen( aPixmapRect, BG_WHITE );
+            xMask = NWGetPixmapFromScreen( aPixmapRect, BG_BLACK );
             if( !xPixmap || !xMask )
                 return false;
             nPasses = 2;
@@ -881,7 +881,7 @@ bool GtkSalGraphics::drawNativeControl(ControlType nType, ControlPart nPart,
         }
         else
         {
-            xPixmap.reset( NWGetPixmapFromScreen( aPixmapRect, BG_FILL ) );
+            xPixmap = NWGetPixmapFromScreen( aPixmapRect, BG_FILL );
             if( !xPixmap )
                 return false;
             nPasses = 1;
@@ -1298,13 +1298,13 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     if( bNeedTwoPasses ) \
     { \
         _nPasses = 2; \
-        _pixmap.reset( NWGetPixmapFromScreen( aRect, BG_WHITE ) ); \
-        _mask.reset( NWGetPixmapFromScreen( aRect, BG_BLACK ) ); \
+        _pixmap = NWGetPixmapFromScreen( aRect, BG_WHITE ); \
+        _mask = NWGetPixmapFromScreen( aRect, BG_BLACK ); \
     } \
     else \
     { \
         _nPasses = 1; \
-        _pixmap.reset( NWGetPixmapFromScreen( aRect, BG_FILL ) ); \
+        _pixmap = NWGetPixmapFromScreen( aRect, BG_FILL ); \
     } \
     if( !_pixmap || ( bNeedTwoPasses && !_mask ) ) \
         return false; \
@@ -1329,13 +1329,13 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     if( bNeedTwoPasses ) \
     { \
         _nPasses = 2; \
-        pixmap = NWGetPixmapFromScreen( aRect, BG_WHITE ); \
-        mask = NWGetPixmapFromScreen( aRect, BG_BLACK ); \
+        pixmap = NWGetPixmapFromScreen( aRect, BG_WHITE ).release(); \
+        mask = NWGetPixmapFromScreen( aRect, BG_BLACK ).release(); \
     } \
     else \
     { \
         _nPasses = 1; \
-        pixmap = NWGetPixmapFromScreen( aRect, BG_FILL ); \
+        pixmap = NWGetPixmapFromScreen( aRect, BG_FILL ).release(); \
         mask = nullptr; \
     } \
     if( !pixmap || ( bNeedTwoPasses && !mask ) ) \
@@ -2031,7 +2031,7 @@ bool GtkSalGraphics::NWPaintGTKScrollbar( ControlPart nPart,
 
     // as multiple paints are required for the scrollbar
     // painting them directly to the window flickers
-    pixmap.reset( NWGetPixmapFromScreen( pixmapRect ) );
+    pixmap = NWGetPixmapFromScreen( pixmapRect );
     if( ! pixmap )
         return false;
     x = y = 0;
@@ -4066,16 +4066,15 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
  * Create a GdkPixmap filled with the contents of an area of an Xlib window
  ************************************************************************/
 
-GdkX11Pixmap* GtkSalGraphics::NWGetPixmapFromScreen( tools::Rectangle srcRect, int nBgColor )
+std::unique_ptr<GdkX11Pixmap> GtkSalGraphics::NWGetPixmapFromScreen( tools::Rectangle srcRect, int nBgColor )
 {
-    GdkX11Pixmap* pPixmap;
     int nDepth = vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetVisual( m_nXScreen ).GetDepth();
 
-    pPixmap = new GdkX11Pixmap( srcRect.GetWidth(), srcRect.GetHeight(), nDepth );
+    std::unique_ptr<GdkX11Pixmap> pPixmap(new GdkX11Pixmap( srcRect.GetWidth(), srcRect.GetHeight(), nDepth ));
 
     if( nBgColor == BG_FILL )
     {
-        FillPixmapFromScreen( pPixmap, srcRect.Left(), srcRect.Top() );
+        FillPixmapFromScreen( pPixmap.get(), srcRect.Left(), srcRect.Top() );
     }
     else if( nBgColor != BG_NONE )
     {
