@@ -175,7 +175,7 @@ IMPL_LINK_NOARG(SwConvertTableDlg, AutoFormatHdl, weld::Button&, void)
 
     ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(rFact.CreateSwAutoFormatDlg(m_xDialog.get(), pShell, false, mxTAutoFormat.get()));
     if (RET_OK == pDlg->Execute())
-        mxTAutoFormat.reset(pDlg->FillAutoFormatOfIndex());
+        mxTAutoFormat = pDlg->FillAutoFormatOfIndex();
 }
 
 IMPL_LINK(SwConvertTableDlg, BtnHdl, weld::Button&, rButton, void)

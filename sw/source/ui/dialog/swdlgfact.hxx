@@ -344,7 +344,7 @@ public:
     {
     }
     virtual short Execute() override;
-    virtual SwTableAutoFormat* FillAutoFormatOfIndex() const override;
+    virtual std::unique_ptr<SwTableAutoFormat> FillAutoFormatOfIndex() const override;
 };
 
 class AbstractSwFieldDlg_Impl : public AbstractSwFieldDlg
