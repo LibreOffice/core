@@ -244,33 +244,33 @@ SwFieldType* DocumentFieldsManager::InsertFieldType(const SwFieldType &rFieldTyp
                 return (*mpFieldTypes)[i];
     }
 
-    SwFieldType* pNew = rFieldTyp.Copy();
+    std::unique_ptr<SwFieldType> pNew = rFieldTyp.Copy();
     switch( nFieldWhich )
     {
     case SwFieldIds::Dde:
-        static_cast<SwDDEFieldType*>(pNew)->SetDoc( &m_rDoc );
+        static_cast<SwDDEFieldType*>(pNew.get())->SetDoc( &m_rDoc );
         break;
 
     case SwFieldIds::Database:
     case SwFieldIds::Table:
     case SwFieldIds::DateTime:
     case SwFieldIds::GetExp:
-        static_cast<SwValueFieldType*>(pNew)->SetDoc( &m_rDoc );
+        static_cast<SwValueFieldType*>(pNew.get())->SetDoc( &m_rDoc );
         break;
 
     case SwFieldIds::User:
     case SwFieldIds::SetExp:
-        static_cast<SwValueFieldType*>(pNew)->SetDoc( &m_rDoc );
+        static_cast<SwValueFieldType*>(pNew.get())->SetDoc( &m_rDoc );
         // JP 29.07.96: Optionally prepare FieldList for Calculator:
         mpUpdateFields->InsertFieldType( *pNew );
         break;
     case SwFieldIds::TableOfAuthorities :
-        static_cast<SwAuthorityFieldType*>(pNew)->SetDoc( &m_rDoc );
+        static_cast<SwAuthorityFieldType*>(pNew.get())->SetDoc( &m_rDoc );
         break;
     default: break;
     }
 
-    mpFieldTypes->insert( mpFieldTypes->begin() + nSize, pNew );
+    mpFieldTypes->insert( mpFieldTypes->begin() + nSize, pNew.release() );
     m_rDoc.getIDocumentState().SetModified();
 
     return (*mpFieldTypes)[ nSize ];

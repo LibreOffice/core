@@ -40,9 +40,9 @@ SwDropDownFieldType::~SwDropDownFieldType()
 {
 }
 
-SwFieldType * SwDropDownFieldType::Copy() const
+std::unique_ptr<SwFieldType> SwDropDownFieldType::Copy() const
 {
-    return new SwDropDownFieldType;
+    return std::make_unique<SwDropDownFieldType>();
 }
 
 SwDropDownField::SwDropDownField(SwFieldType * pTyp)

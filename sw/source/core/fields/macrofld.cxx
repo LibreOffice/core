@@ -34,10 +34,9 @@ SwMacroFieldType::SwMacroFieldType(SwDoc* pDocument)
 {
 }
 
-SwFieldType* SwMacroFieldType::Copy() const
+std::unique_ptr<SwFieldType> SwMacroFieldType::Copy() const
 {
-    SwMacroFieldType* pType = new SwMacroFieldType(m_pDoc);
-    return pType;
+    return std::make_unique<SwMacroFieldType>(m_pDoc);
 }
 
 SwMacroField::SwMacroField(SwMacroFieldType* pInitType,

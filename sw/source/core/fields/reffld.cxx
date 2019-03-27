@@ -1068,9 +1068,9 @@ SwGetRefFieldType::SwGetRefFieldType( SwDoc* pDc )
     : SwFieldType( SwFieldIds::GetRef ), m_pDoc( pDc )
 {}
 
-SwFieldType* SwGetRefFieldType::Copy() const
+std::unique_ptr<SwFieldType> SwGetRefFieldType::Copy() const
 {
-    return new SwGetRefFieldType( m_pDoc );
+    return std::make_unique<SwGetRefFieldType>( m_pDoc );
 }
 
 void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )

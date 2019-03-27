@@ -201,9 +201,9 @@ OUString SwUserFieldType::Expand(sal_uInt32 nFormat, sal_uInt16 nSubType, Langua
     return m_aContent;
 }
 
-SwFieldType* SwUserFieldType::Copy() const
+std::unique_ptr<SwFieldType> SwUserFieldType::Copy() const
 {
-    SwUserFieldType *pTmp = new SwUserFieldType( GetDoc(), m_aName );
+    std::unique_ptr<SwUserFieldType> pTmp(new SwUserFieldType( GetDoc(), m_aName ));
     pTmp->m_aContent      = m_aContent;
     pTmp->m_nType         = m_nType;
     pTmp->m_bValidValue   = m_bValidValue;

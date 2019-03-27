@@ -38,9 +38,9 @@ SwTableFieldType::SwTableFieldType(SwDoc* pDocPtr)
     : SwValueFieldType( pDocPtr, SwFieldIds::Table )
 {}
 
-SwFieldType* SwTableFieldType::Copy() const
+std::unique_ptr<SwFieldType> SwTableFieldType::Copy() const
 {
-    return new SwTableFieldType(GetDoc());
+    return std::make_unique<SwTableFieldType>(GetDoc());
 }
 
 void SwTableField::CalcField( SwTableCalcPara& rCalcPara )

@@ -35,10 +35,9 @@ SwDateTimeFieldType::SwDateTimeFieldType(SwDoc* pInitDoc)
     : SwValueFieldType( pInitDoc, SwFieldIds::DateTime )
 {}
 
-SwFieldType* SwDateTimeFieldType::Copy() const
+std::unique_ptr<SwFieldType> SwDateTimeFieldType::Copy() const
 {
-    SwDateTimeFieldType *pTmp = new SwDateTimeFieldType(GetDoc());
-    return pTmp;
+    return std::make_unique<SwDateTimeFieldType>(GetDoc());
 }
 
 SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, sal_uInt16 nSub, sal_uLong nFormat, LanguageType nLng)

@@ -29,9 +29,9 @@ SwScriptFieldType::SwScriptFieldType( SwDoc* pD )
     : SwFieldType( SwFieldIds::Script ), m_pDoc( pD )
 {}
 
-SwFieldType* SwScriptFieldType::Copy() const
+std::unique_ptr<SwFieldType> SwScriptFieldType::Copy() const
 {
-    return new SwScriptFieldType( m_pDoc );
+    return std::make_unique<SwScriptFieldType>( m_pDoc );
 }
 
 SwScriptField::SwScriptField( SwScriptFieldType* pInitType,

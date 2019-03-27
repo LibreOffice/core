@@ -41,7 +41,7 @@ class SW_DLLPUBLIC SwChapterFieldType : public SwFieldType
 public:
     SwChapterFieldType();
 
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 
 };
 
