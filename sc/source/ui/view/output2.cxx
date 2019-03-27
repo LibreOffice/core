@@ -2119,9 +2119,9 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
     return tools::Rectangle();
 }
 
-ScFieldEditEngine* ScOutputData::CreateOutputEditEngine()
+std::unique_ptr<ScFieldEditEngine> ScOutputData::CreateOutputEditEngine()
 {
-    ScFieldEditEngine* pEngine = new ScFieldEditEngine(mpDoc, mpDoc->GetEnginePool());
+    std::unique_ptr<ScFieldEditEngine> pEngine(new ScFieldEditEngine(mpDoc, mpDoc->GetEnginePool()));
     pEngine->SetUpdateMode( false );
     // a RefDevice always has to be set, otherwise EditEngine would create a VirtualDevice
     pEngine->SetRefDevice( pFmtDevice );
@@ -4367,7 +4367,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         }
                         SfxItemSet* pPreviewFontSet = mpDoc->GetPreviewFont( nCellX, nCellY, nTab );
                         if (!pEngine)
-                            pEngine.reset(CreateOutputEditEngine());
+                            pEngine = CreateOutputEditEngine();
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
 
@@ -4496,7 +4496,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                     if (!bHidden)
                     {
                         if (!pEngine)
-                            pEngine.reset(CreateOutputEditEngine());
+                            pEngine = CreateOutputEditEngine();
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
 
