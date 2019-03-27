@@ -1,6 +1,3 @@
-"ScDrawPageObj";"com::sun::star::lang::XServiceInfo";"getImplementationName()"
-"ScDrawPageObj";"com::sun::star::lang::XServiceInfo";"supportsService()"
-"ScDrawPageObj";"com::sun::star::lang::XServiceInfo";"getSupportedServiceNames()"
 "ScDrawPageObj";"com::sun::star::drawing::XShapes";"add()"
 "ScDrawPageObj";"com::sun::star::drawing::XShapes";"remove()"
 "ScDrawPageObj";"com::sun::star::drawing::XShapeGrouper";"group()"
