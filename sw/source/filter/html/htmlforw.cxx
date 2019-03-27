@@ -28,6 +28,7 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <hintids.hxx>
 #include <o3tl/any.hxx>
 #include <vcl/svapp.hxx>

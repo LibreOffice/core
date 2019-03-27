@@ -25,14 +25,11 @@
 #include <sal/types.h>
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/print.hxx>
 
 #include <sfx2/tabdlg.hxx>
 
-
-class SvtBasePrintOptions;
 
 class SFX2_DLLPUBLIC SfxCommonPrintOptionsTabPage : public SfxTabPage
 {

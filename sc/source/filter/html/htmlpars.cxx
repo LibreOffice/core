@@ -43,6 +43,7 @@
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 
+#include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/diagnose.h>

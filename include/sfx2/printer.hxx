@@ -22,10 +22,8 @@
 #include <memory>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <sal/types.h>
 #include <vcl/print.hxx>
 
-class SfxTabPage;
 class SfxItemSet;
 
 // class SfxPrinter ------------------------------------------------------

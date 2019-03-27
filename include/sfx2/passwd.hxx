@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <sfx2/app.hxx>
 #include <vcl/weld.hxx>
 #include <o3tl/typed_flags_set.hxx>
 

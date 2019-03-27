@@ -23,6 +23,7 @@
 #include <o3tl/span.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
+#include <svl/style.hxx>
 
 #include <glob.hxx>
 #include <pres.hxx>

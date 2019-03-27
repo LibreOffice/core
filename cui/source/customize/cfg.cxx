@@ -65,6 +65,7 @@
 #include <dialmgr.hxx>
 
 #include <unotools/configmgr.hxx>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>

@@ -35,6 +35,8 @@
 #include <uitool.hxx>
 #include <cmdid.h>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 namespace sw { namespace sidebar{
 
 VclPtr<vcl::Window> PageFooterPanel::Create(

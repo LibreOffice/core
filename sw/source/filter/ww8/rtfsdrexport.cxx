@@ -37,6 +37,9 @@
 #include <algorithm>
 #include "rtfexport.hxx"
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+
 using namespace css;
 
 RtfSdrExport::RtfSdrExport(RtfExport& rExport)

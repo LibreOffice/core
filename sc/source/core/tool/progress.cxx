@@ -26,6 +26,8 @@
 #include <svl/itemset.hxx>
 #include <osl/diagnose.h>
 
+#include <com/sun/star/frame/XModel.hpp>
+
 #define SC_PROGRESS_CXX
 #include <progress.hxx>
 #include <document.hxx>

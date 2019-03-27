@@ -19,6 +19,7 @@
 
 #include <subtotal.hxx>
 #include <interpre.hxx>
+#include <cfloat>
 
 bool SubTotal::SafePlus(double& fVal1, double fVal2)
 {

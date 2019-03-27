@@ -11,12 +11,13 @@
 #define INCLUDED_SFX2_RECENTDOCSVIEW_HXX
 
 #include <sfx2/thumbnailview.hxx>
-#include <sfx2/recentdocsviewitem.hxx>
 #include <vcl/image.hxx>
 
 #include <o3tl/typed_flags_set.hxx>
 
-#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/util/URL.hpp>
+
+namespace com::sun::star::frame { class XDispatch; }
 
 namespace sfx2
 {

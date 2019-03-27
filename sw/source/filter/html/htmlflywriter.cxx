@@ -20,6 +20,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <svx/svxids.hrc>
 #include <hintids.hxx>
 #include <tools/fract.hxx>

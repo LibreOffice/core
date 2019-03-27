@@ -24,6 +24,7 @@
 
 #include <sfx2/docfac.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svx/svxids.hrc>
 #include <svl/srchitem.hxx>
 #include <svx/srchdlg.hxx>

@@ -26,6 +26,8 @@
 #include <sfx2/dispatch.hxx>
 #include <avmedia/MediaControlBase.hxx>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 using namespace avmedia;
 
 namespace svx { namespace sidebar {

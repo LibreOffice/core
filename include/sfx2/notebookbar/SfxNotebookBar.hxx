@@ -11,10 +11,14 @@
 #define INCLUDED_SFX2_NOTEBOOKBAR_SFXNOTEBOOKBAR_HXX
 
 #include <sfx2/dllapi.h>
-#include <sfx2/viewfrm.hxx>
-#include <vcl/notebookbar.hxx>
+#include <rtl/ustring.hxx>
+
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 class SfxBindings;
+class SfxViewFrame;
+class SystemWindow;
 
 namespace sfx2 {
 

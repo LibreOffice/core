@@ -28,6 +28,7 @@
 #include <sfx2/objsh.hxx>
 
 #include <com/sun/star/frame/DocumentTemplates.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <sfx2/doctempl.hxx>
 

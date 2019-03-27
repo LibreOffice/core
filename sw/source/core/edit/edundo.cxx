@@ -21,6 +21,8 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <com/sun/star/frame/XModel.hpp>
+
 #include <editsh.hxx>
 #include <fesh.hxx>
 #include <doc.hxx>

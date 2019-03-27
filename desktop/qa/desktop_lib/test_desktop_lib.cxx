@@ -18,6 +18,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <boost/property_tree/json_parser.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <com/sun/star/frame/XStorable.hpp>
 

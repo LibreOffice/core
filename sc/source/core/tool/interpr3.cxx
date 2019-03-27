@@ -38,6 +38,7 @@
 #include <algorithm>
 #include <comphelper/random.hxx>
 #include <osl/diagnose.h>
+#include <basegfx/numeric/ftools.hxx>
 
 using ::std::vector;
 using namespace formula;

@@ -24,16 +24,10 @@
 #include <sal/types.h>
 #include <svl/itemset.hxx>
 #include <svl/hint.hxx>
-#include <functional>
 
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/XDispatchRecorder.hpp>
 #include <memory>
 
 class SfxPoolItem;
-class SfxAllItemSet;
-class SfxItemSet;
 class SfxItemPool;
 class SfxShell;
 class SfxSlot;
@@ -41,6 +35,9 @@ class SfxViewFrame;
 struct SfxRequest_Impl;
 enum class SfxCallMode : sal_uInt16;
 
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::frame { class XDispatchRecorder; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
 namespace vcl { class Window; }
 namespace weld { class Window; }
 

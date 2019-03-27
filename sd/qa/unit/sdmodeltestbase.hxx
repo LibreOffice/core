@@ -32,6 +32,7 @@
 #include <sfx2/docfilt.hxx>
 #include <svl/itemset.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <drawinglayer/XShapeDumper.hxx>

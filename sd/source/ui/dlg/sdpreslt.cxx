@@ -23,6 +23,7 @@
 #include <sfx2/new.hxx>
 #include <svtools/valueset.hxx>
 #include <tools/debug.hxx>
+#include <vcl/image.hxx>
 
 #include <strings.hrc>
 

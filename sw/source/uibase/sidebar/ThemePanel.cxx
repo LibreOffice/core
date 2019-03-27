@@ -26,6 +26,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <editeng/fontitem.hxx>
 #include <editeng/boxitem.hxx>

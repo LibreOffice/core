@@ -31,6 +31,8 @@
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <com/sun/star/form/FormButtonType.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <sfx2/htmlmode.hxx>
 #include <tools/urlobj.hxx>
 

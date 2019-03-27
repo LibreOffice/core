@@ -135,6 +135,8 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <svx/xbitmap.hxx>

@@ -34,6 +34,8 @@
 
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 
 #include <fmtornt.hxx>
 #include <fmtfld.hxx>

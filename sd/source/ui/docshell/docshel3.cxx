@@ -28,6 +28,7 @@
 #include <svtools/langtab.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxdlg.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <vcl/abstdlg.hxx>
 #include <svx/drawitem.hxx>
 #include <editeng/langitem.hxx>

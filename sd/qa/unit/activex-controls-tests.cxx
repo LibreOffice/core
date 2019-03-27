@@ -21,6 +21,7 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 
 class SdActiveXControlsTest: public SdModelTestBase

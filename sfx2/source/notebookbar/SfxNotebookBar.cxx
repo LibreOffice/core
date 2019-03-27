@@ -25,6 +25,7 @@
 #include <officecfg/Office/UI/ToolbarMode.hxx>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <unotools/confignode.hxx>
 #include <comphelper/types.hxx>
 

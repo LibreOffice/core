@@ -17,6 +17,8 @@
 
 #include <boost/optional.hpp>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 using namespace com::sun::star;
 using namespace oox;
 
