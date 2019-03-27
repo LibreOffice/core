@@ -68,7 +68,6 @@ using ::com::sun::star::beans::XVetoableChangeListener;
 using ::com::sun::star::container::XIndexReplace;
 
 #if OSL_DEBUG_LEVEL > 0
-#define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
@@ -312,43 +311,45 @@ static void lclDumpAnyValue( const Any& value)
     Reference< XIndexReplace > xNumRule;
 
     if( value >>= strValue )
-            fprintf (stderr,"\"%s\"\n", USS( strValue ) );
+            fprintf(stderr,"\"%s\"\n", strValue.toUtf8().getStr());
     else if( value >>= strArray ) {
-            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            fprintf(stderr,"%s\n", value.getValueTypeName().toUtf8().getStr());
             for( int i=0; i<strArray.getLength(); i++ )
-                fprintf (stderr,"\t\t\t[%3d] \"%s\"\n", i, USS( strArray[i] ) );
+                fprintf(stderr,"\t\t\t[%3d] \"%s\"\n", i, strArray[i].toUtf8().getStr());
     } else if( value >>= propArray ) {
-            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            fprintf(stderr,"%s\n", value.getValueTypeName().toUtf8().getStr());
             for( int i=0; i<propArray.getLength(); i++ ) {
-                fprintf (stderr,"\t\t\t[%3d] %s (%s) ", i, USS( propArray[i].Name ), USS(propArray[i].Value.getValueTypeName()) );
+                fprintf(stderr,"\t\t\t[%3d] %s (%s) ", i, propArray[i].Name.toUtf8().getStr(),
+                        propArray[i].Value.getValueTypeName().toUtf8().getStr());
                 lclDumpAnyValue( propArray[i].Value );
             }
     } else if( value >>= propArrayArray ) {
-            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            fprintf(stderr,"%s\n", value.getValueTypeName().toUtf8().getStr());
             for( int i=0; i<propArrayArray.getLength(); i++ ) {
                 fprintf (stderr,"\t\t\t[%3d] ", i);
                 lclDumpAnyValue( makeAny (propArrayArray[i]) );
             }
     } else if( value >>= anyArray ) {
-            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            fprintf(stderr,"%s\n", value.getValueTypeName().toUtf8().getStr());
             for( int i=0; i<anyArray.getLength(); i++ ) {
-                fprintf (stderr,"\t\t\t[%3d] (%s) ", i, USS(value.getValueTypeName()) );
+                fprintf(stderr,"\t\t\t[%3d] (%s) ", i, value.getValueTypeName().toUtf8().getStr());
                 lclDumpAnyValue( anyArray[i] );
             }
     } else if( value >>= adjArray ) {
-            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            fprintf(stderr,"%s\n", value.getValueTypeName().toUtf8().getStr());
             for( int i=0; i<adjArray.getLength(); i++ ) {
-                fprintf (stderr,"\t\t\t[%3d] (%s) ", i, USS(adjArray[i].Value.getValueTypeName()) );
+                fprintf(stderr,"\t\t\t[%3d] (%s) ", i,
+                        adjArray[i].Value.getValueTypeName().toUtf8().getStr());
                 lclDumpAnyValue( adjArray[i].Value );
             }
     } else if( value >>= segArray ) {
-            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            fprintf(stderr,"%s\n", value.getValueTypeName().toUtf8().getStr());
             for( int i=0; i<segArray.getLength(); i++ ) {
                 fprintf (stderr,"\t\t\t[%3d] ", i );
                 lclDumpAnyValue( makeAny( segArray[i] ) );
             }
     } else if( value >>= ppArray ) {
-            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            fprintf(stderr,"%s\n", value.getValueTypeName().toUtf8().getStr());
             for( int i=0; i<ppArray.getLength(); i++ ) {
                 fprintf (stderr,"\t\t\t[%3d] ", i );
                 lclDumpAnyValue( makeAny( ppArray[i] ) );
@@ -361,7 +362,7 @@ static void lclDumpAnyValue( const Any& value)
             fprintf (stderr,"\t\t\t      Second: ");
             lclDumpAnyValue( makeAny (pp.Second) );
     } else if( value >>= par ) {
-            fprintf (stderr,"Parameter (%s): ", USS(par.Value.getValueTypeName()));
+            fprintf(stderr,"Parameter (%s): ", par.Value.getValueTypeName().toUtf8().getStr());
             lclDumpAnyValue( par.Value );
     } else if( value >>= aMatrix ) {
             fprintf (stderr,"Matrix\n%f %f %f\n%f %f %f\n%f %f %f\n", aMatrix.Line1.Column1, aMatrix.Line1.Column2, aMatrix.Line1.Column3, aMatrix.Line2.Column1, aMatrix.Line2.Column2, aMatrix.Line2.Column3, aMatrix.Line3.Column1, aMatrix.Line3.Column2, aMatrix.Line3.Column3);
@@ -385,7 +386,7 @@ static void lclDumpAnyValue( const Any& value)
                     fprintf (stderr, "level %d\n", k);
                     if (xNumRule->getByIndex (k) >>= aBulletPropSeq) {
                         for (int j=0; j<aBulletPropSeq.getLength(); j++) {
-                            fprintf(stderr, "%46s = ", USS (aBulletPropSeq[j].Name));
+                            fprintf(stderr, "%46s = ", aBulletPropSeq[j].Name.toUtf8().getStr());
                             lclDumpAnyValue (aBulletPropSeq[j].Value);
                         }
                     }
@@ -443,7 +444,8 @@ static void lclDumpAnyValue( const Any& value)
 //         else if( value >>= pointValue )
 //             fprintf (stderr,"%d            (RectanglePoint)\n", pointValue);
         else
-      fprintf (stderr,"???           <unhandled type %s>\n", USS(value.getValueTypeName()));
+      fprintf(stderr,"???           <unhandled type %s>\n",
+              value.getValueTypeName().toUtf8().getStr());
 }
 
 #ifdef DBG_UTIL
@@ -461,7 +463,7 @@ void PropertyMap::dump( const Reference< XPropertySet >& rXPropSet )
         try {
             lclDumpAnyValue (rXPropSet->getPropertyValue( props [i].Name ));
         } catch (const Exception&) {
-            fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
+            fprintf(stderr,"unable to get '%s' value\n", props [i].Name.toUtf8().getStr());
         }
     }
 }
@@ -585,7 +587,7 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
     if( value >>= strValue )
     {
         printLevel (level);
-        fprintf (stderr,"OUString str = \"%s\";\n", USS( strValue ) );
+        fprintf(stderr,"OUString str = \"%s\";\n", strValue.toUtf8().getStr());
         return "Any (str)";
     }
     else if( value >>= strArray )
@@ -597,7 +599,8 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
         fprintf (stderr,"static const char *aStrings[] = {\n");
         for( int i=0; i<strArray.getLength(); i++ ) {
             printLevel (level + 1);
-            fprintf (stderr,"\"%s\"%s\n", USS( strArray[i] ), i < strArray.getLength() - 1 ? "," : "" );
+            fprintf(stderr,"\"%s\"%s\n", strArray[i].toUtf8().getStr(),
+                    i < strArray.getLength() - 1 ? "," : "" );
         }
         printLevel (level);
         fprintf (stderr,"};\n");
@@ -611,7 +614,8 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
             printLevel (level);
             fprintf (stderr, "{\n");
             printLevel (level + 1);
-            fprintf (stderr, "aPropSequence [%d].Name = \"%s\";\n", i, USS( propArray[i].Name ));
+            fprintf(stderr, "aPropSequence [%d].Name = \"%s\";\n", i,
+                    propArray[i].Name.toUtf8().getStr());
             const char *var = lclDumpAnyValueCode( propArray[i].Value, level + 1 );
             printLevel (level + 1);
             fprintf (stderr, "aPropSequence [%d].Value = makeAny (%s);\n", i, var);
@@ -652,9 +656,9 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
     }
     else if( value >>= anyArray )
     {
-        fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+        fprintf(stderr,"%s\n", value.getValueTypeName().toUtf8().getStr());
         for( int i=0; i<anyArray.getLength(); i++ ) {
-            fprintf (stderr,"\t\t\t[%3d] (%s) ", i, USS(value.getValueTypeName()) );
+            fprintf(stderr,"\t\t\t[%3d] (%s) ", i, value.getValueTypeName().toUtf8().getStr());
             lclDumpAnyValue( anyArray[i] );
         }
     }
@@ -670,7 +674,8 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
             fprintf (stderr, "aAdjSequence [%d].Value = %s;\n", i, var);
             if (adjArray[i].Name.getLength() > 0) {
                 printLevel (level + 1);
-                fprintf (stderr, "aAdjSequence [%d].Name = \"%s\";\n", i, USS (adjArray[i].Name));
+                fprintf(stderr, "aAdjSequence [%d].Name = \"%s\";\n", i,
+                        adjArray[i].Name.toUtf8().getStr());
             }
             printLevel (level);
             fprintf (stderr, "}\n");
@@ -813,7 +818,7 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
             fprintf (stderr, "level %d\n", k);
             if (xNumRule->getByIndex (k) >>= aBulletPropSeq) {
                 for (int j=0; j<aBulletPropSeq.getLength(); j++) {
-                    fprintf(stderr, "%46s = ", USS (aBulletPropSeq[j].Name));
+                    fprintf(stderr, "%46s = ", aBulletPropSeq[j].Name.toUtf8().getStr());
                     lclDumpAnyValue (aBulletPropSeq[j].Value);
                 }
             }
@@ -892,7 +897,8 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
         fprintf (stderr,"is extractable to int32\n");
     }
     else
-        fprintf (stderr,"???           <unhandled type %s>\n", USS(value.getValueTypeName()));
+        fprintf(stderr,"???           <unhandled type %s>\n",
+                value.getValueTypeName().toUtf8().getStr());
 
     return "";
 }
@@ -921,7 +927,7 @@ void PropertyMap::dumpCode( const Reference< XPropertySet >& rXPropSet )
             printLevel (level);
             fprintf (stderr, "}\n");
         } catch (const Exception&) {
-            fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
+            fprintf(stderr,"unable to get '%s' value\n", props [i].Name.toUtf8().getStr());
         }
     }
 }

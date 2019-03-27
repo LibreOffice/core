@@ -457,7 +457,7 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
 
     pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id,     I32S( nID ),
-                          XML_name,   USS( sName ),
+                          XML_name,   sName.toUtf8(),
                           FSEND );
 
     pFS->singleElementNS( mnXmlNamespace, XML_cNvGraphicFramePr,
@@ -528,7 +528,7 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
     pFS->singleElement(  FSNS( XML_c, XML_chart ),
             FSNS( XML_xmlns, XML_c ), OUStringToOString(pFB->getNamespaceURL(OOX_NS(dmlChart)), RTL_TEXTENCODING_UTF8).getStr(),
             FSNS( XML_xmlns, XML_r ), OUStringToOString(pFB->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSNS( XML_r, XML_id ), USS( sId ),
+            FSNS( XML_r, XML_id ), sId.toUtf8(),
             FSEND );
 
     pFS->endElement( FSNS( XML_a, XML_graphicData ) );
@@ -3067,7 +3067,8 @@ void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,
         else
         {
             // Field
-            pFS->startElement(FSNS(XML_a, XML_fld), XML_id, USS(rField->getGuid()), XML_type, USS(sFieldType), FSEND);
+            pFS->startElement(FSNS(XML_a, XML_fld), XML_id, rField->getGuid().toUtf8(), XML_type,
+                              sFieldType.toUtf8(), FSEND);
             writeRunProperties(pChartExport, xPropertySet);
 
             pFS->startElement(FSNS(XML_a, XML_t), FSEND);

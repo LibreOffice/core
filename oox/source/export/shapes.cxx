@@ -728,7 +728,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         EscherPropertyContainer::IsDefaultObject(
             rSdrObjCustomShape,
             eShapeType));
-    const char* sPresetShape = msfilter::util::GetOOXMLPresetGeometry( USS( sShapeType ) );
+    const char* sPresetShape = msfilter::util::GetOOXMLPresetGeometry(sShapeType.toUtf8());
     SAL_INFO("oox.shape", "custom shape type: " << sShapeType << " ==> " << sPresetShape);
     Sequence< PropertyValue > aGeometrySeq;
     sal_Int32 nAdjustmentValuesIndex = -1;
@@ -806,7 +806,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
                         mpURLTransformer->isExternalURL(sURL));
 
                 mpFS->singleElementNS( XML_a, XML_hlinkClick,
-                        FSNS( XML_r,XML_id ), USS( sRelId ),
+                        FSNS(XML_r,XML_id), sRelId.toUtf8(),
                         FSEND );
             }
         }
@@ -1143,8 +1143,8 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
 
     pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id,     I32S( GetNewShapeID( xShape ) ),
-                          XML_name,   bHaveName ? USS( sName ) : OString( "Picture " + OString::number( mnPictureIdMax++ )).getStr(),
-                          XML_descr,  bHaveDesc ? USS( sDescr ) : nullptr,
+                          XML_name,   bHaveName ? sName.toUtf8() : OString("Picture " + OString::number(mnPictureIdMax++)),
+                          XML_descr,  bHaveDesc ? sDescr.toUtf8() : OString(),
                           FSEND );
 
     // OOXTODO: //cNvPr children: XML_extLst, XML_hlinkClick, XML_hlinkHover
@@ -1481,7 +1481,7 @@ ShapeExport& ShapeExport::WriteShape( const Reference< XShape >& xShape )
 {
     OUString sShapeType = xShape->getShapeType();
     SAL_INFO("oox.shape", "write shape: " << sShapeType);
-    NameToConvertMapType::const_iterator aConverter = lcl_GetConverters().find(USS(sShapeType));
+    NameToConvertMapType::const_iterator aConverter = lcl_GetConverters().find(sShapeType.toUtf8());
     if (aConverter == lcl_GetConverters().end())
     {
         SAL_INFO("oox.shape", "unknown shape");
@@ -2061,7 +2061,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     {
         mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
                           XML_progId, pProgID,
-                          FSNS(XML_r, XML_id), USS( sRelId ),
+                          FSNS(XML_r, XML_id), sRelId.toUtf8(),
                           XML_spid, "",
                           FSEND );
     }
@@ -2069,7 +2069,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     {
         mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
 //?                                              XML_name, "Document",
-                          FSNS(XML_r, XML_id), USS( sRelId ),
+                          FSNS(XML_r, XML_id), sRelId.toUtf8(),
                           // The spec says that this is a required attribute, but PowerPoint can only handle an empty value.
                           XML_spid, "",
                           FSEND );

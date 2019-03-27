@@ -190,7 +190,7 @@ bool DrawingML::GetProperty( const Reference< XPropertySet >& rXPropertySet, con
     }
     catch( const Exception& )
     {
-        /* printf ("exception when trying to get value of property: %s\n", USS(aName)); */
+        /* printf ("exception when trying to get value of property: %s\n", aName.toUtf8()); */
     }
     return false;
 }
@@ -208,7 +208,7 @@ bool DrawingML::GetPropertyAndState( const Reference< XPropertySet >& rXProperty
     }
     catch( const Exception& )
     {
-        /* printf ("exception when trying to get value of property: %s\n", USS(aName)); */
+        /* printf ("exception when trying to get value of property: %s\n", aName.toUtf8()); */
     }
     return false;
 }
@@ -254,7 +254,7 @@ void DrawingML::WriteColor( const OUString& sColorSchemeName, const Sequence< Pr
     if( aTransformations.hasElements() )
     {
         mpFS->startElementNS( XML_a, XML_schemeClr,
-                              XML_val, USS( sColorSchemeName ),
+                              XML_val, sColorSchemeName.toUtf8(),
                               FSEND );
         WriteColorTransformations( aTransformations );
         mpFS->endElementNS( XML_a, XML_schemeClr );
@@ -262,7 +262,7 @@ void DrawingML::WriteColor( const OUString& sColorSchemeName, const Sequence< Pr
     else
     {
         mpFS->singleElementNS( XML_a, XML_schemeClr,
-                              XML_val, USS( sColorSchemeName ),
+                              XML_val, sColorSchemeName.toUtf8(),
                               FSEND );
     }
 }
@@ -1176,7 +1176,7 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
     GetFS()->startElementNS(XML_p, XML_nvPr, FSEND);
 
     GetFS()->singleElementNS(XML_a, eMediaType == Relationship::VIDEO ? XML_videoFile : XML_audioFile,
-                    FSNS(XML_r, XML_link), USS(aVideoFileRelId),
+                    FSNS(XML_r, XML_link), aVideoFileRelId.toUtf8(),
                     FSEND);
 
     GetFS()->startElementNS(XML_p, XML_extLst, FSEND);
@@ -1185,7 +1185,7 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
             FSEND);
 
     GetFS()->singleElementNS(XML_p14, XML_media,
-            bEmbed? FSNS(XML_r, XML_embed): FSNS(XML_r, XML_link), USS(aMediaRelId),
+            bEmbed? FSNS(XML_r, XML_embed): FSNS(XML_r, XML_link), aMediaRelId.toUtf8(),
             FSEND);
 
     GetFS()->endElementNS(XML_p, XML_ext);
@@ -1734,7 +1734,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     mpFS->startElementNS( XML_a, nElement,
                           XML_b, bold,
                           XML_i, italic,
-                          XML_lang, usLanguage.isEmpty() ? nullptr : USS( usLanguage ),
+                          XML_lang, usLanguage.isEmpty() ? nullptr : usLanguage.toUtf8(),
                           XML_sz, IS( nSize ),
             // For Condensed character spacing spc value is negative.
                           XML_spc, nCharKerning ? IS(nCharKerning) : nullptr,
@@ -1792,7 +1792,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         OUString aSubstName( GetSubsFontName( usTypeface, SubsFontFlags::ONLYONE | SubsFontFlags::MS ) );
 
         mpFS->singleElementNS( XML_a, XML_latin,
-                               XML_typeface, USS(aSubstName.getLength() ? aSubstName : usTypeface),
+                               XML_typeface, (aSubstName.getLength() ? aSubstName : usTypeface).toUtf8(),
                                XML_pitchFamily, pitch,
                                XML_charset, charset,
                                FSEND );
@@ -1813,7 +1813,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         OUString aSubstName( GetSubsFontName( usTypeface, SubsFontFlags::ONLYONE | SubsFontFlags::MS ) );
 
         mpFS->singleElementNS( XML_a, bComplex ? XML_cs : XML_ea,
-                               XML_typeface, USS(aSubstName.getLength() ? aSubstName : usTypeface),
+                               XML_typeface, (aSubstName.getLength() ? aSubstName : usTypeface).toUtf8(),
                                XML_pitchFamily, pitch,
                                XML_charset, charset,
                                FSEND );
@@ -1840,7 +1840,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
                                   sURL, true );
 
             mpFS->singleElementNS( XML_a, XML_hlinkClick,
-                       FSNS( XML_r,XML_id ), USS( sRelId ),
+                       FSNS(XML_r, XML_id), sRelId.toUtf8(),
                        FSEND );
         }
     }
@@ -2208,7 +2208,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
         mpFS->singleElementNS( XML_a, XML_buSzPct,
                                XML_val, IS( std::min(static_cast<sal_Int32>(std::lround(100000.f * fBulletSizeRel)), static_cast<sal_Int32>(400000))), FSEND);
         mpFS->startElementNS( XML_a, XML_buBlip, FSEND );
-        mpFS->singleElementNS( XML_a, XML_blip, FSNS( XML_r, XML_embed ), USS( sRelationId ), FSEND );
+        mpFS->singleElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelationId.toUtf8(), FSEND);
         mpFS->endElementNS( XML_a, XML_buBlip );
     }
     else
@@ -2248,7 +2248,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
         }
         else
         {
-            mpFS->singleElementNS(XML_a, XML_buChar, XML_char, USS( OUString( aBulletChar ) ), FSEND);
+            mpFS->singleElementNS(XML_a, XML_buChar, XML_char, OUString(aBulletChar).toUtf8(), FSEND);
         }
     }
 }
@@ -2796,7 +2796,7 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool b
                         aAdjName = aAdjustments[i];
 
                     mpFS->singleElementNS( XML_a, XML_gd,
-                                       XML_name, aAdjustmentSeq[ i ].Name.getLength() > 0 ? USS(aAdjustmentSeq[ i ].Name) : aAdjName.getStr(),
+                                       XML_name, aAdjustmentSeq[ i ].Name.getLength() > 0 ? aAdjustmentSeq[ i ].Name.toUtf8() : aAdjName,
                                        XML_fmla, OString("val " + OString::number( nValue )).getStr(),
                                        FSEND );
                 }
