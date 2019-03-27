@@ -1803,9 +1803,11 @@ void ScOutputData::FindChanged()
     for (nArrY=0; nArrY<nArrCount; nArrY++)
         pRowInfo[nArrY].bChanged = false;
 
-    bool bProgress = false;
     SCCOL nCol1 = MAXCOL, nCol2 = 0;
     SCROW nRow1 = MAXROW, nRow2 = 0;
+    bool bAnyDirty = false;
+    bool bAnyChanged = false;
+
     for (nArrY=0; nArrY<nArrCount; nArrY++)
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
@@ -1817,26 +1819,34 @@ void ScOutputData::FindChanged()
                 continue;
 
             ScFormulaCell* pFCell = rCell.mpFormula;
-            if ( !bProgress && pFCell->GetDirty() )
-            {
-                ScProgress::CreateInterpretProgress(mpDoc);
-                bProgress = true;
-            }
             if (pFCell->IsRunning())
                 // still being interpreted. Skip it.
                 continue;
 
-            ScAddress& rPos(pFCell->aPos);
-            nCol1 = std::min(rPos.Col(), nCol1);
-            nCol2 = std::max(rPos.Col(), nCol2);
-            nRow1 = std::min(rPos.Row(), nRow1);
-            nRow2 = std::max(rPos.Row(), nRow2);
+            bool bDirty = pFCell->GetDirty();
+            bAnyChanged = bAnyChanged || pFCell->IsChanged();
+
+            if (bDirty)
+            {
+                if (!bAnyDirty)
+                {
+                    ScProgress::CreateInterpretProgress(mpDoc);
+                    bAnyDirty = true;
+                }
+
+                ScAddress& rPos(pFCell->aPos);
+                nCol1 = std::min(rPos.Col(), nCol1);
+                nCol2 = std::max(rPos.Col(), nCol2);
+                nRow1 = std::min(rPos.Row(), nRow1);
+                nRow2 = std::max(rPos.Row(), nRow2);
+            }
         }
     }
 
-    if (bProgress)
+    if (bAnyDirty || bAnyChanged)
     {
-        mpDoc->EnsureFormulaCellResults(ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab), true);
+        if (bAnyDirty)
+            mpDoc->EnsureFormulaCellResults(ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab), true);
 
         for (nArrY=0; nArrY<nArrCount; nArrY++)
         {
@@ -1849,6 +1859,9 @@ void ScOutputData::FindChanged()
                     continue;
 
                 ScFormulaCell* pFCell = rCell.mpFormula;
+                if (pFCell->IsRunning())
+                    // still being interpreted. Skip it.
+                    continue;
 
                 if (!pFCell->IsChanged())
                     // the result hasn't changed. Skip it.
@@ -1868,7 +1881,8 @@ void ScOutputData::FindChanged()
             }
         }
 
-        ScProgress::DeleteInterpretProgress();
+        if (bAnyDirty)
+            ScProgress::DeleteInterpretProgress();
     }
 
     mpDoc->EnableIdle(bWasIdleEnabled);
