@@ -3856,6 +3856,9 @@ void DomainMapper_Impl::handleToc
     {
         if (aTocTitle.isEmpty() || bTableOfFigures)
         {
+            // reset marker of the TOC title
+            m_xStdEntryStart = uno::Reference< text::XTextRange >();
+
             xTOC.set(
                     m_xTextFactory->createInstance
                     ( bTableOfFigures ?
