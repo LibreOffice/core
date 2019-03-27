@@ -698,9 +698,12 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl const * pDock,
             pEmptyWin->Actualize();
             SAL_INFO("sfx", "SfxSplitWindow::InsertWindow_Impl - registering empty Splitwindow" );
             pWorkWin->RegisterChild_Impl( *GetSplitWindow(), eAlign )->nVisible = SfxChildVisibility::VISIBLE;
-            pWorkWin->ArrangeChildren_Impl();
+            // tdf#113539 FadeIn will call ArrangeChildren_Impl() for us, and avoiding extra calls to that
+            // can make a different to load times because it avoids extra accessibility calcs
             if ( bFadeIn )
                 FadeIn();
+            else
+                pWorkWin->ArrangeChildren_Impl();
         }
         else
         {
@@ -716,9 +719,12 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl const * pDock,
                 SAL_INFO("sfx", "SfxSplitWindow::InsertWindow_Impl - registering real Splitwindow" );
             }
             pWorkWin->RegisterChild_Impl( *GetSplitWindow(), eAlign )->nVisible = SfxChildVisibility::VISIBLE;
-            pWorkWin->ArrangeChildren_Impl();
+            // tdf#113539 FadeIn will call ArrangeChildren_Impl() for us, and avoiding extra calls to that
+            // can make a different to load times because it avoids extra accessibility calcs
             if ( bFadeIn )
                 FadeIn();
+            else
+                pWorkWin->ArrangeChildren_Impl();
         }
 
         pWorkWin->ShowChildren_Impl();
