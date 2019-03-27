@@ -291,6 +291,21 @@ bool ImplImageTree::loadImage(OUString const & rName, OUString const & rStyle, B
 
         aCurrentStyle = fallbackStyle(aCurrentStyle);
     }
+
+    /* If the uno command has parameters, passed in from a toolbar,
+     * recover from failure by removing the parameters from the file name
+     */
+    if (rName.indexOf("%3f") > 0)
+    {
+        OUString sName(rName);
+        sal_Int32 nStart = sName.indexOf("%3f");
+        sal_Int32 nEnd = sName.lastIndexOf(".");
+
+        sName = sName.replaceAt(nStart, nEnd - nStart, "");
+
+        return loadImage(sName, rStyle, rBitmap, localized, eFlags, nScalePercentage);
+    }
+
     return false;
 }
 
