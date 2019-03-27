@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_edc17030",
+        "filename": "drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-03-27T01:19:47Z",
+      "side": 1,
+      "message": "looks a bit redundant?",
+      "revId": "4a2b5b625acbbdaf05c98e77cc5a5ab4ec569f56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_8ddc6419",
+        "filename": "drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-03-27T01:19:47Z",
+      "side": 1,
+      "message": "Same here - could that be a separate method with a list of PDFWriter enums (or even pop LIBody and ListItem always \u0026 unconditionally)?",
+      "revId": "4a2b5b625acbbdaf05c98e77cc5a5ab4ec569f56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
