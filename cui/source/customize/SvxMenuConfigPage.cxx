@@ -543,7 +543,7 @@ IMPL_LINK_NOARG(SvxMenuConfigPage, ResetMenuHdl, weld::Button&, void)
 
         ReloadTopLevelListBox();
 
-        // Reselect the resetted menu
+        // Reselect the reset menu
         m_xTopLevelListBox->set_active(nPos);
         SelectElement();
     }
