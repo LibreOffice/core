@@ -22,19 +22,26 @@
 
 namespace apitest
 {
+namespace helper
+{
+namespace form
+{
 /** @brief Create a XControlShape
  *
  * @param r_xComponent  The document.
- * @param nHeight       The height of the shape.
- * @param nWidth        The width of the shape.
+ * @param r_aKind       The kind of the shape.
  * @param nX            The x-position of the shape.
  * @param nY            The y-position of the shape.
- * @param r_aKind       The kind of the shape.
+ * @param nHeight       The height of the shape.
+ * @param nWidth        The width of the shape.
+ * @return  The create XControlShape.
  */
 css::uno::Reference<css::drawing::XControlShape> OOO_DLLPUBLIC_TEST createControlShape(
-    const css::uno::Reference<css::lang::XComponent>& r_xComponent, const sal_Int32 nHeight,
-    const sal_Int32 nWidth, const sal_Int32 nX, const sal_Int32 nY, const OUString& r_aKind);
+    const css::uno::Reference<css::lang::XComponent>& r_xComponent, const OUString& r_aKind,
+    const sal_Int32 nX, const sal_Int32 nY, const sal_Int32 nHeight, const sal_Int32 nWidth);
 
+} // namespace form
+} // namespace helper
 } // namespace apitest
 
 #endif // INCLUDED_TEST_INC_HELPER_FORM_HXX
