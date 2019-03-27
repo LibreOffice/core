@@ -1,0 +1,158 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_20c8bf53",
+        "filename": "sd/uiconfig/simpress/ui/customscalemenu.ui",
+        "patchSetId": 21
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-03-27T12:19:40Z",
+      "side": 1,
+      "message": "This is not a menu. What about \u0027Grow/shrink animation: custom scale\u0027 or sth along that line?",
+      "range": {
+        "startLine": 9,
+        "startChar": 103,
+        "endLine": 9,
+        "endChar": 107
+      },
+      "revId": "8e05ba57d2eb6ca67058a7b00809095781227b8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_20f67f91",
+        "filename": "sd/uiconfig/simpress/ui/customscalemenu.ui",
+        "patchSetId": 21
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-03-27T12:19:40Z",
+      "side": 1,
+      "message": "Surely is the checkbox to be placed over the spinboxes? It is customary to put it below",
+      "revId": "8e05ba57d2eb6ca67058a7b00809095781227b8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_80dc2b19",
+        "filename": "sd/uiconfig/simpress/ui/customscalemenu.ui",
+        "patchSetId": 21
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-03-27T12:19:40Z",
+      "side": 1,
+      "message": "Labels should be aligned right",
+      "revId": "8e05ba57d2eb6ca67058a7b00809095781227b8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_e0c17730",
+        "filename": "sd/uiconfig/simpress/ui/customscalemenu.ui",
+        "patchSetId": 21
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-03-27T12:19:40Z",
+      "side": 1,
+      "message": "lower case \u0027scale\u0027 + labels should end with semicolon:",
+      "range": {
+        "startLine": 79,
+        "startChar": 116,
+        "endLine": 79,
+        "endChar": 120
+      },
+      "revId": "8e05ba57d2eb6ca67058a7b00809095781227b8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_00f9fb7e",
+        "filename": "sd/uiconfig/simpress/ui/customscalemenu.ui",
+        "patchSetId": 21
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-03-27T12:19:40Z",
+      "side": 1,
+      "message": "Please add a unit to id: VerticalScale:0%",
+      "revId": "8e05ba57d2eb6ca67058a7b00809095781227b8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_40ff0367",
+        "filename": "sd/uiconfig/simpress/ui/customscalemenu.ui",
+        "patchSetId": 21
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-03-27T12:19:40Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "8e05ba57d2eb6ca67058a7b00809095781227b8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_80050b7d",
+        "filename": "sd/uiconfig/simpress/ui/customscalemenu.ui",
+        "patchSetId": 21
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-03-27T12:19:40Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 101,
+        "startChar": 113,
+        "endLine": 101,
+        "endChar": 118
+      },
+      "revId": "8e05ba57d2eb6ca67058a7b00809095781227b8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_6004877c",
+        "filename": "sd/uiconfig/simpress/ui/customscalemenu.ui",
+        "patchSetId": 21
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-03-27T12:19:40Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "8e05ba57d2eb6ca67058a7b00809095781227b8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
