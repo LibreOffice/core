@@ -1350,9 +1350,9 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
                                         bDone = true;
                                         break;
                                     }
-                                    sText.append(rBody.copy(
+                                    sText.append(rBody,
                                         (pEncodedTextCopyBegin - pBegin),
-                                        (q - 1 - pEncodedTextCopyBegin)));
+                                        (q - 1 - pEncodedTextCopyBegin));
                                     sText.append(sal_Char(nDigit1 << 4 | nDigit2));
                                     q += 2;
                                     pEncodedTextCopyBegin = q;
@@ -1361,18 +1361,18 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
 
                                 case '?':
                                     if (q - pEncodedTextBegin > 1)
-                                        sText.append(rBody.copy(
+                                        sText.append(rBody,
                                             (pEncodedTextCopyBegin - pBegin),
-                                            (q - 1 - pEncodedTextCopyBegin)));
+                                            (q - 1 - pEncodedTextCopyBegin));
                                     else
                                         bEncodedWord = false;
                                     bDone = true;
                                     break;
 
                                 case '_':
-                                    sText.append(rBody.copy(
+                                    sText.append(rBody,
                                         (pEncodedTextCopyBegin - pBegin),
-                                        (q - 1 - pEncodedTextCopyBegin)));
+                                        (q - 1 - pEncodedTextCopyBegin));
                                     sText.append(' ');
                                     pEncodedTextCopyBegin = q;
                                     break;

@@ -275,7 +275,7 @@ static OUString toUNOname(
     while (nPos > 0)
     {
         sal_Int32 n = aStr.lastIndexOf( '@', nPos );
-        aRet.append( aStr.copy( n +1, nPos -n -1 ) );
+        aRet.append( aStr, n +1, nPos -n -1 );
         if (n >= 0)
         {
             aRet.append( '.' );
@@ -295,7 +295,7 @@ static OUString toRTTIname(
     while (nPos > 0)
     {
         sal_Int32 n = rUNOname.lastIndexOf( '.', nPos );
-        aRet.append( rUNOname.copy( n +1, nPos -n -1 ) );
+        aRet.append( rUNOname, n +1, nPos -n -1 );
         aRet.append( '@' );
         nPos = n;
     }
