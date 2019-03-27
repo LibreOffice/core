@@ -88,7 +88,7 @@ inline void SwTableBox::SetSaveUserColor(const Color* p )
     if (p)
         mpUserColor.reset(new Color(*p));
     else
-        mpUserColor.reset(nullptr);
+        mpUserColor.reset();
 }
 
 inline void SwTableBox::SetSaveNumFormatColor( const Color* p )
@@ -96,7 +96,7 @@ inline void SwTableBox::SetSaveNumFormatColor( const Color* p )
     if (p)
         mpNumFormatColor.reset(new Color(*p));
     else
-        mpNumFormatColor.reset(nullptr);
+        mpNumFormatColor.reset();
 }
 
 long SwTableBox::getRowSpan() const

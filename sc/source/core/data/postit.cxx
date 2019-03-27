@@ -850,7 +850,7 @@ ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, const ScPostIt& rNo
     maNoteData( rNote.maNoteData )
 {
     mnPostItId = nPostItId == 0 ? mnLastPostItId++ : nPostItId;
-    maNoteData.mxCaption.reset(nullptr);
+    maNoteData.mxCaption.reset();
     CreateCaption( rPos, rNote.maNoteData.mxCaption.get() );
 }
 
@@ -1082,7 +1082,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
 void ScPostIt::CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCaption )
 {
     OSL_ENSURE( !maNoteData.mxCaption, "ScPostIt::CreateCaption - unexpected caption object found" );
-    maNoteData.mxCaption.reset(nullptr);
+    maNoteData.mxCaption.reset();
 
     /*  #i104915# Never try to create notes in Undo document, leads to
         crash due to missing document members (e.g. row height array). */

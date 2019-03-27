@@ -270,7 +270,7 @@ void TiledRenderingTest::testDocumentLoadLanguage(Office* pOffice)
     OString aResult = pDocument->getTextSelection("text/plain;charset=utf-8");
     CPPUNIT_ASSERT_EQUAL(OString("3\n"), aResult);
 
-    pDocument.reset(nullptr);
+    pDocument.reset();
 
     // FIXME: LOK will fail when trying to open a locked file
     remove(sLockFile.c_str());

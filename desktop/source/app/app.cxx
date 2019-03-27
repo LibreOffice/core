@@ -1731,8 +1731,8 @@ int Desktop::doShutdown()
 
     // be sure that path/language options gets destroyed before
     // UCB is deinitialized
-    pExecGlobals->pLanguageOptions.reset( nullptr );
-    pExecGlobals->pPathOptions.reset( nullptr );
+    pExecGlobals->pLanguageOptions.reset();
+    pExecGlobals->pPathOptions.reset();
 
     comphelper::ThreadPool::getSharedOptimalPool().shutdown();
 
