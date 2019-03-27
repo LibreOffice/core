@@ -981,16 +981,16 @@ void SdrPage::RemovePageUser(sdr::PageUser& rOldUser)
 
 // DrawContact section
 
-sdr::contact::ViewContact* SdrPage::CreateObjectSpecificViewContact()
+std::unique_ptr<sdr::contact::ViewContact> SdrPage::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfSdrPage(*this);
+    return std::make_unique<sdr::contact::ViewContactOfSdrPage>(*this);
 }
 
 const sdr::contact::ViewContact& SdrPage::GetViewContact() const
 {
     if (!mpViewContact)
-        const_cast<SdrPage*>(this)->mpViewContact.reset(
-            const_cast<SdrPage*>(this)->CreateObjectSpecificViewContact());
+        const_cast<SdrPage*>(this)->mpViewContact =
+            const_cast<SdrPage*>(this)->CreateObjectSpecificViewContact();
 
     return *mpViewContact;
 }
@@ -998,7 +998,7 @@ const sdr::contact::ViewContact& SdrPage::GetViewContact() const
 sdr::contact::ViewContact& SdrPage::GetViewContact()
 {
     if (!mpViewContact)
-        mpViewContact.reset(CreateObjectSpecificViewContact());
+        mpViewContact = CreateObjectSpecificViewContact();
 
     return *mpViewContact;
 }
