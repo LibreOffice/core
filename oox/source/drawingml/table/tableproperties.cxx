@@ -99,7 +99,7 @@ namespace
 }
 
 //for pptx just has table style id
-static void SetTableStyleProperties(TableStyle* &pTableStyle , sal_Int32 tblFillClr, sal_Int32 tblTextClr, sal_Int32 lineBdrClr)
+static void SetTableStyleProperties(std::unique_ptr<TableStyle> &pTableStyle , sal_Int32 tblFillClr, sal_Int32 tblTextClr, sal_Int32 lineBdrClr)
 {
     //whole table fill style and color
     oox::drawingml::FillPropertiesPtr pWholeTabFillProperties( new oox::drawingml::FillProperties );
@@ -142,9 +142,9 @@ static void SetTableStyleProperties(TableStyle* &pTableStyle , sal_Int32 tblFill
     pTableStyle->getLastCol().getTextBoldStyle() = textBoldStyle;
 }
 
-static TableStyle* CreateTableStyle(const OUString& styleId)
+static std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
 {
-    TableStyle* pTableStyle = nullptr;
+    std::unique_ptr<TableStyle> pTableStyle;
 
     // It is a bit silly to handle styleIds specifically and separately like this. Also note that
     // the first two code blocks below are mostly copy-pasted, modulo the comments and the fact that
@@ -162,7 +162,7 @@ static TableStyle* CreateTableStyle(const OUString& styleId)
     // to AOO in 2012) knows to look at that?
 
     if(styleId == "{5C22544A-7EE6-4342-B048-85BDC9FD1C3A}") {           //Medium Style 2 Accent 1
-        pTableStyle = new TableStyle();
+        pTableStyle.reset(new TableStyle());
         //first row style
         //fill color and type
         oox::drawingml::FillPropertiesPtr pFirstRowFillProperties( new oox::drawingml::FillProperties );
@@ -198,7 +198,7 @@ static TableStyle* CreateTableStyle(const OUString& styleId)
     }
     else if (styleId == "{21E4AEA4-8DFA-4A89-87EB-49C32662AFE0}")         //Medium Style 2 Accent 2
     {
-        pTableStyle = new TableStyle();
+        pTableStyle.reset(new TableStyle());
         oox::drawingml::FillPropertiesPtr pFirstRowFillProperties( new oox::drawingml::FillProperties );
         pFirstRowFillProperties->moFillType.set(XML_solidFill);
         pFirstRowFillProperties->maFillColor.setSchemeClr(XML_accent2);
@@ -229,7 +229,7 @@ static TableStyle* CreateTableStyle(const OUString& styleId)
     }
     else if (styleId == "{C4B1156A-380E-4F78-BDF5-A606A8083BF9}")         //Medium Style 4 Accent 4
     {
-        pTableStyle = new TableStyle();
+        pTableStyle.reset(new TableStyle());
         SetTableStyleProperties(pTableStyle, XML_accent4, XML_dk1, XML_accent4);
     }
 
@@ -259,7 +259,7 @@ const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilt
         //if the pptx just has table style id, but no table style content, we will create the table style ourselves
         if (!pTableStyle)
         {
-            rTableStyleToDelete.reset(CreateTableStyle(aStyleId));
+            rTableStyleToDelete = CreateTableStyle(aStyleId);
             pTableStyle = rTableStyleToDelete.get();
         }
     }
