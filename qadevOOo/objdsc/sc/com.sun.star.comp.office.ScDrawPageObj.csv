@@ -1,5 +1,3 @@
-"ScDrawPageObj";"com::sun::star::container::XIndexAccess";"getCount()"
-"ScDrawPageObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
 "ScDrawPageObj";"com::sun::star::lang::XServiceInfo";"getImplementationName()"
 "ScDrawPageObj";"com::sun::star::lang::XServiceInfo";"supportsService()"
 "ScDrawPageObj";"com::sun::star::lang::XServiceInfo";"getSupportedServiceNames()"
