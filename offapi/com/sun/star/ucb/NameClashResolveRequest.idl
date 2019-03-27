@@ -42,7 +42,6 @@ module com { module sun { module star { module ucb {
     clashing resource shall be overwritten.
 
     @version    1.0
-    @author     Kai Sommerfeld
 */
 published exception NameClashResolveRequest : com::sun::star::task::ClassifiedInteractionRequest
 {

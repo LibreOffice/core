@@ -34,7 +34,6 @@ module com { module sun { module star { module ucb {
     by the interaction handler.
 
     @version    1.0
-    @author     Kai Sommerfeld
     @see        XCommandProcessor
 */
 published exception CommandFailedException : com::sun::star::uno::Exception

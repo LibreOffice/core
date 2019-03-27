@@ -28,7 +28,6 @@ module com { module sun { module star { module ucb {
 /**  a listener for events related to XContents.
 
     @version  1.0
-    @author   Kai Sommerfeld
     @see      XContent
 */
 published interface XContentEventListener: com::sun::star::lang::XEventListener

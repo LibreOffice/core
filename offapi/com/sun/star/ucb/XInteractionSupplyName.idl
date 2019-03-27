@@ -31,7 +31,6 @@ module com { module sun { module star { module ucb {
     for a clashing resource.
 
      @version  1.0
-     @author   Kai Sommerfeld
 */
 published interface XInteractionSupplyName : com::sun::star::task::XInteractionContinuation
 {

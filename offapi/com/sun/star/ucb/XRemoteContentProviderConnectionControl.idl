@@ -36,7 +36,6 @@ module com { module sun { module star { module ucb {
     XRemoteContentProviderAcceptor::addRemoteContentProvider().
 
     @version 1.0
-    @author Stephan Bergmann
  */
 published interface XRemoteContentProviderConnectionControl:
     com::sun::star::uno::XInterface

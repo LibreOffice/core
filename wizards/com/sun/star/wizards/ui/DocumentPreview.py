@@ -25,7 +25,6 @@ from com.sun.star.awt.VclWindowPeerAttribute import CLIPCHILDREN
 from com.sun.star.awt.WindowAttribute import SHOW
 
 '''
-@author rpiterman
 To change the template for this generated type comment go to
 Window>Preferences>Java>Code Generation>Code and Comments
 '''

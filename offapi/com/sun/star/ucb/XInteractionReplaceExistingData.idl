@@ -32,7 +32,6 @@ module com { module sun { module star { module ucb {
     to overwrite the clashing data.
 
     @version  1.0
-    @author   Kai Sommerfeld
 */
 published interface XInteractionReplaceExistingData : com::sun::star::task::XInteractionContinuation
 {

@@ -31,7 +31,6 @@ module com { module sun { module star { module ucb {
     templates and supplementary arguments.
 
     @version 1.0
-    @author Stephan Bergmann
 */
 published interface XParameterizedContentProvider: com::sun::star::uno::XInterface
 {

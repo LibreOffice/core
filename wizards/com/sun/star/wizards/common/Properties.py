@@ -23,7 +23,6 @@ To make a use of this class, instantiate it, and call
 the put(propName,propValue) method.
 caution: propName should always be a String.
 When finished, call the getProperties() method to get an array of the set properties.
-@author  rp
 '''
 
 class Properties(dict):

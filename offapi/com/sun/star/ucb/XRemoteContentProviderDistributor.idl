@@ -32,7 +32,6 @@ module com { module sun { module star { module ucb {
     XRemoteContentProviderAcceptors.
 
     @version 1.0
-    @author Stephan Bergmann
     @see XRemoteContentProviderAcceptor
 */
 published interface XRemoteContentProviderDistributor: com::sun::star::uno::XInterface

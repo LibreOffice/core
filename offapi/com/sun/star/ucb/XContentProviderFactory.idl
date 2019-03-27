@@ -28,7 +28,6 @@ module com { module sun { module star { module ucb {
 /** a factory for a XContentProvider.
 
      @version  1.0
-     @author   Kai Sommerfeld
      @see      XContentProvider
 */
 published interface XContentProviderFactory : com::sun::star::uno::XInterface
