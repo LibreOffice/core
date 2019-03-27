@@ -79,9 +79,9 @@ SwAuthorityFieldType::~SwAuthorityFieldType()
 {
 }
 
-SwFieldType*    SwAuthorityFieldType::Copy()  const
+std::unique_ptr<SwFieldType> SwAuthorityFieldType::Copy()  const
 {
-    return new SwAuthorityFieldType(m_pDoc);
+    return std::make_unique<SwAuthorityFieldType>(m_pDoc);
 }
 
 void SwAuthorityFieldType::RemoveField(const SwAuthEntry* nHandle)

@@ -46,7 +46,7 @@ public:
 
        @return a copy of this type
     */
-    virtual SwFieldType * Copy () const override;
+    virtual std::unique_ptr<SwFieldType> Copy () const override;
 };
 
 /**

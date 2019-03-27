@@ -203,9 +203,9 @@ SwDDEFieldType::~SwDDEFieldType()
     refLink->Disconnect();
 }
 
-SwFieldType* SwDDEFieldType::Copy() const
+std::unique_ptr<SwFieldType> SwDDEFieldType::Copy() const
 {
-    SwDDEFieldType* pType = new SwDDEFieldType( aName, GetCmd(), GetType() );
+    std::unique_ptr<SwDDEFieldType> pType(new SwDDEFieldType( aName, GetCmd(), GetType() ));
     pType->aExpansion = aExpansion;
     pType->bCRLFFlag = bCRLFFlag;
     pType->bDeleted = bDeleted;

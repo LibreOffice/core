@@ -39,7 +39,7 @@ public:
     virtual ~SwDBFieldType() override;
 
     virtual OUString GetName() const override;
-    virtual SwFieldType*  Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 
     void     AddRef() { m_nRefCnt++; }
     void            ReleaseRef();
@@ -151,7 +151,7 @@ class SW_DLLPUBLIC SwDBNextSetFieldType : public SwFieldType
 public:
     SwDBNextSetFieldType();
 
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 // Next data record with condition.
@@ -190,7 +190,7 @@ class SwDBNumSetFieldType : public SwFieldType
 public:
     SwDBNumSetFieldType();
 
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 // Data record with number xxx.
@@ -238,7 +238,7 @@ public:
     SwDBNameFieldType(SwDoc*);
 
     OUString                Expand() const;
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 // Database field.
@@ -259,7 +259,7 @@ class SW_DLLPUBLIC SwDBSetNumberFieldType : public SwFieldType
 public:
     SwDBSetNumberFieldType();
 
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 // Database field.

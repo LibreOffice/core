@@ -68,7 +68,7 @@ protected:
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 public:
     SwGetRefFieldType(SwDoc* pDoc );
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 
     SwDoc*                  GetDoc() const { return m_pDoc; }
 
