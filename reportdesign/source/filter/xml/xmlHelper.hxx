@@ -63,8 +63,8 @@ namespace rptxml
         static void copyStyleElements(const bool _bOld,const OUString& _sStyleName,const SvXMLStylesContext* _pAutoStyles,const css::uno::Reference< css::beans::XPropertySet>& _xProp);
         static css::uno::Reference< css::beans::XPropertySet> createBorderPropertySet();
 
-        static SvXMLTokenMap* GetReportElemTokenMap();
-        static SvXMLTokenMap* GetSubDocumentElemTokenMap();
+        static std::unique_ptr<SvXMLTokenMap> GetReportElemTokenMap();
+        static std::unique_ptr<SvXMLTokenMap> GetSubDocumentElemTokenMap();
 
     };
 
