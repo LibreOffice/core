@@ -29,7 +29,6 @@ module com { module sun { module star { module ucb {
     com::sun::star::ucb::XRemoteContentProviderSupplier.
 
     @version 1.0
-    @author Stephan Bergmann
  */
 published interface XRemoteContentProviderChangeListener:
     com::sun::star::lang::XEventListener

@@ -53,7 +53,6 @@ module com { module sun { module star { module configuration {
     and all of its aspects.
     </p>
 
-    @author Frank Schoenheit
     @version 1.0 2000/07/06
 */
 

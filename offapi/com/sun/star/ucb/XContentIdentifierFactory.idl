@@ -29,7 +29,6 @@ module com { module sun { module star { module ucb {
 /** A factory for content identifiers.
 
     @version  1.0
-    @author   Kai Sommerfeld
     @see      XContentIdentifier
 */
 published interface XContentIdentifierFactory: com::sun::star::uno::XInterface

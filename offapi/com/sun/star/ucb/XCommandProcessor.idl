@@ -32,7 +32,6 @@ module com { module sun { module star { module ucb {
     specific execution environment.
 
     @version  1.0
-    @author   Kai Sommerfeld
 
     @see com::sun::star::ucb::XCommandProcessor2
     for the improved version of this interface.

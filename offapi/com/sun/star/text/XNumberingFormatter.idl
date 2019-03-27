@@ -31,7 +31,6 @@ module com { module sun { module star { module text {
     @see com::sun::star::text::NumberingRules
     @see com::sun::star::text::NumberingLevel
     @version    1.0
-    @author     <a href="mailto:oliver.specht@germany.sun.com">Oliver Specht</a>
 */
 published interface XNumberingFormatter : com::sun::star::uno::XInterface
 {

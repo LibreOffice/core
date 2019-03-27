@@ -30,7 +30,6 @@ module com { module sun { module star { module ucb {
 /** a content provider which creates and manages XContents.
 
      @version  1.0
-     @author   Kai Sommerfeld
      @see      XContent
      @see      XContentIdentifier
 */

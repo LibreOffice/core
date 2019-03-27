@@ -28,7 +28,6 @@ module com { module sun { module star { module ucb {
 /** a notifier for changes of XCommandInfos.
 
     @version  1.0
-    @author   Kai Sommerfeld
     @see      CommandInfoChangeEvent
     @see      XCommandInfoChangeListener
 */

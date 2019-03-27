@@ -32,7 +32,6 @@ module com { module sun { module star { module ucb {
     local process.
 
     @version 1.0
-    @author Stephan Bergmann
 */
 published interface XRemoteContentProviderAcceptor: com::sun::star::uno::XInterface
 {

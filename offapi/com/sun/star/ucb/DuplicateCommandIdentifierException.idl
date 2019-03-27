@@ -34,7 +34,6 @@ module com { module sun { module star { module ucb {
     be aborted by a client, can be used by any thread.
 
     @version    1.0
-    @author     Kai Sommerfeld
     @see        XCommandProcessor
 */
 published exception DuplicateCommandIdentifierException : com::sun::star::uno::Exception

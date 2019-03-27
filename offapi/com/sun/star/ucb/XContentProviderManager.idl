@@ -31,7 +31,6 @@ module com { module sun { module star { module ucb {
 /** makes it possible to query/register/deregister content providers.
 
     @version  1.0
-    @author   Kai Sommerfeld
     @see      XContentProvider
 */
 published interface XContentProviderManager: com::sun::star::uno::XInterface

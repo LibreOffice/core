@@ -27,7 +27,6 @@ from com.sun.star.awt.Key import DOWN, UP, TAB
 from com.sun.star.awt.KeyModifier import SHIFT, MOD1
 
 '''
-@author rpiterman
 This class implements the UI functionality of the topics scroller control.
 <br/>
 During development, there has been a few changes which were not *fully* done
