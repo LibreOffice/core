@@ -41,6 +41,7 @@ import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -254,9 +255,20 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
         frame.setVisible(true);
     }
 
+    // Wraps long error messages
+    class NarrowOptionPane extends JOptionPane {
+        private static final long serialVersionUID = 1L;
+        public int getMaxCharactersPerLineCount() {
+            return 100;
+        }
+    }
+
     private void showErrorMessage(String message) {
-        JOptionPane.showMessageDialog(frame, message,
-                                      "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane optionPane = new NarrowOptionPane();
+        optionPane.setMessage(message);
+        optionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
+        JDialog dialog = optionPane.createDialog(null, "Error");
+        dialog.setVisible(true);
     }
 
     private void initUI() {
