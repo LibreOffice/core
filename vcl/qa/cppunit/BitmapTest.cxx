@@ -372,7 +372,12 @@ void BitmapTest::testConvert()
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), pReadAccess->GetBitCount());
 
 #if defined LINUX || defined FREEBSD
-        CPPUNIT_ASSERT_EQUAL(sal_uInt32(32), pReadAccess->GetScanlineSize());
+#if HAVE_FEATURE_OPENGL
+        if (OpenGLHelper::isVCLOpenGLEnabled())
+            CPPUNIT_ASSERT_EQUAL(sal_uInt32(30), pReadAccess->GetScanlineSize());
+        else
+#endif
+            CPPUNIT_ASSERT_EQUAL(sal_uInt32(32), pReadAccess->GetScanlineSize());
 #else
 #if defined(_WIN32)
         if (!OpenGLHelper::isVCLOpenGLEnabled())
