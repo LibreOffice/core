@@ -233,7 +233,7 @@ void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource )
             ODataSettings::setFastPropertyValue_NoBroadcast(nOwnHandle, _rSource.NewValue);
                 // don't use our own setFastPropertyValue_NoBroadcast, this would forward it to the CommandSettings,
                 // again
-                // and don't use the "real" setPropertyValue, this is to expensive and not sure to succeed
+                // and don't use the "real" setPropertyValue, this is too expensive and not sure to succeed
         }
         else
         {
