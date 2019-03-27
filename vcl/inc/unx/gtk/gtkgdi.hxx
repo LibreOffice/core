@@ -295,7 +295,7 @@ public:
 
 protected:
 
-    GdkX11Pixmap* NWGetPixmapFromScreen( tools::Rectangle srcRect, int nBgColor = 0 );
+    std::unique_ptr<GdkX11Pixmap> NWGetPixmapFromScreen( tools::Rectangle srcRect, int nBgColor = 0 );
     bool NWRenderPixmapToScreen( GdkX11Pixmap* pPixmap, GdkX11Pixmap* pMask, tools::Rectangle dstRect );
 
     bool DoDrawNativeControl( GdkDrawable* pDrawable,
