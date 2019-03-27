@@ -380,8 +380,8 @@ void XclExpXmlChTrHeaders::SaveXml( XclExpXmlStream& rStrm )
     pHeaders->write("<")->writeId(XML_headers);
 
     rStrm.WriteAttributes(
-        XML_xmlns,              XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
-        FSNS(XML_xmlns, XML_r), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
+        XML_xmlns,              rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8().getStr(),
+        FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)).toUtf8().getStr(),
         XML_guid,               lcl_GuidToOString(maGUID).getStr(),
         XML_lastGuid,           nullptr,   // OOXTODO
         XML_shared,             nullptr,   // OOXTODO
@@ -431,8 +431,8 @@ void XclExpXmlChTrHeader::SaveXml( XclExpXmlStream& rStrm )
     rStrm.WriteAttributes(
         XML_guid, lcl_GuidToOString(maGUID).getStr(),
         XML_dateTime, lcl_DateTimeToOString(maDateTime).getStr(),
-        XML_userName, XclXmlUtils::ToOString(maUserName).getStr(),
-        FSNS(XML_r, XML_id),  XclXmlUtils::ToOString(aRelId).getStr(),
+        XML_userName, maUserName.toUtf8(),
+        FSNS(XML_r, XML_id), aRelId.toUtf8(),
         FSEND);
 
     if (mnMinAction)
@@ -473,8 +473,8 @@ void XclExpXmlChTrHeader::SaveXml( XclExpXmlStream& rStrm )
     pRevLogStrm->write("<")->writeId(XML_revisions);
 
     rStrm.WriteAttributes(
-        XML_xmlns,              XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
-        FSNS(XML_xmlns, XML_r), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
+        XML_xmlns,              rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
+        FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)).toUtf8(),
         FSEND);
 
     pRevLogStrm->write(">");
@@ -1241,7 +1241,7 @@ void XclExpChTrInsertTab::SaveXml( XclExpXmlStream& rStrm )
             XML_ua,             ToPsz( GetAccepted () ),   // OOXTODO? bAccepted == ua or ra; not sure.
             XML_ra,             nullptr,       // OOXTODO: RRD.fUndoAction?  Or RRD.fAccepted?
             XML_sheetId,        OString::number(  GetTabId( nTab ) ).getStr(),
-            XML_name,           XclXmlUtils::ToOString( GetTabInfo().GetScTabName( nTab ) ).getStr(),
+            XML_name,           GetTabInfo().GetScTabName(nTab).toUtf8(),
             XML_sheetPosition,  OString::number(  nTab ).getStr(),
             FSEND );
 }
@@ -1636,8 +1636,8 @@ static void lcl_WriteUserNamesXml( XclExpXmlStream& rWorkbookStrm )
             "application/vnd.openxmlformats-officedocument.spreadsheetml.userNames+xml",
             CREATE_OFFICEDOC_RELATION_TYPE("usernames"));
     pUserNames->startElement( XML_users,
-            XML_xmlns,                  XclXmlUtils::ToOString(rWorkbookStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
-            FSNS( XML_xmlns, XML_r ),   XclXmlUtils::ToOString(rWorkbookStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
+            XML_xmlns,                  rWorkbookStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
+            FSNS( XML_xmlns, XML_r ),   rWorkbookStrm.getNamespaceURL(OOX_NS(officeRel)).toUtf8(),
             XML_count,                  "0",
             FSEND );
     // OOXTODO: XML_userinfo elements for each user editing the file

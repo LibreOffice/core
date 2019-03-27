@@ -208,7 +208,7 @@ void XclExpSstImpl::SaveXml( XclExpXmlStream& rStrm )
     rStrm.PushStream( pSst );
 
     pSst->startElement( XML_sst,
-            XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
+            XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
             XML_count, OString::number(  mnTotal ).getStr(),
             XML_uniqueCount, OString::number(  mnSize ).getStr(),
             FSEND );
@@ -523,13 +523,13 @@ void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
     rStrm.GetCurrentStream()->singleElement( XML_hyperlink,
             XML_ref,                XclXmlUtils::ToOString( maScPos ).getStr(),
             FSNS( XML_r, XML_id ),  !sId.isEmpty()
-                                       ? XclXmlUtils::ToOString( sId ).getStr()
+                                       ? sId.toUtf8().getStr()
                                        : nullptr,
             XML_location,           mxTextMark.get() != nullptr
                                         ? XclXmlUtils::ToOString( *mxTextMark ).getStr()
                                         : nullptr,
             // OOXTODO: XML_tooltip,    from record HLinkTooltip 800h wzTooltip
-            XML_display,            XclXmlUtils::ToOString(m_Repr).getStr(),
+            XML_display,            m_Repr.toUtf8(),
             FSEND );
 }
 
@@ -1026,7 +1026,7 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
     {
         // position and formula grammar are not important
         // we only store a number there
-        aRank = XclXmlUtils::ToOString(mrFormatEntry.GetExpression(ScAddress(0,0,0), 0));
+        aRank = mrFormatEntry.GetExpression(ScAddress(0,0,0), 0).toUtf8();
     }
     OString aText;
     if(IsTextRule(eOperation))
@@ -1036,7 +1036,7 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
         // the token array for that
         std::unique_ptr<ScTokenArray> pTokenArray(mrFormatEntry.CreateFlatCopiedTokenArray(0));
         if(pTokenArray->GetLen())
-            aText = XclXmlUtils::ToOString(pTokenArray->FirstToken()->GetString().getString());
+            aText = pTokenArray->FirstToken()->GetString().getString().toUtf8();
     }
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
@@ -1408,7 +1408,7 @@ void XclExpCondfmt::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_conditionalFormatting,
-            XML_sqref, XclXmlUtils::ToOString( msSeqRef ).getStr(),
+            XML_sqref, msSeqRef.toUtf8(),
             // OOXTODO: XML_pivot,
             FSEND );
 
@@ -1496,7 +1496,7 @@ void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
     // extLst entries for Excel 2010 and 2013
     rWorksheet->startElement( XML_extLst, FSEND );
     rWorksheet->startElement( XML_ext,
-                                FSNS( XML_xmlns, XML_x14 ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls14Lst))).getStr(),
+                                FSNS(XML_xmlns, XML_x14), rStrm.getNamespaceURL(OOX_NS(xls14Lst)).toUtf8(),
                                 XML_uri, "{B025F937-C7B1-47D3-B67F-A62EFF666E3E}",
                                 FSEND );
 
