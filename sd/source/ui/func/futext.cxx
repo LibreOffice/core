@@ -156,7 +156,7 @@ void FuText::disposing()
     if(mpView)
     {
         if(mpView->SdrEndTextEdit() == SdrEndTextEditKind::Deleted)
-            mxTextObj.reset( nullptr );
+            mxTextObj.reset(nullptr);
 
         // reset the RequestHandler of the used Outliner to the handler of the document
         ::Outliner* pOutliner = mpView->GetTextEditOutliner();
@@ -278,7 +278,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                    list. The call MarkObj further below accesses then the dead
                    object. As a simple fix, we determine eHit after
                    SdrEndTextEdit again, this returns then SdrHitKind::NONE. */
-                mxTextObj.reset( nullptr );
+                mxTextObj.reset(nullptr);
                 eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
             }
 
@@ -630,7 +630,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
         if (bReset)
         {
-            mxTextObj.reset( nullptr );
+            mxTextObj.reset(nullptr);
         }
     }
 

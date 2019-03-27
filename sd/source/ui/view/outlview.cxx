@@ -757,7 +757,7 @@ IMPL_LINK_NOARG(OutlineView, BeginDropHdl, EditView*, void)
 
 IMPL_LINK_NOARG(OutlineView, EndDropHdl, EditView*, void)
 {
-    maDragAndDropModelGuard.reset(nullptr);
+    maDragAndDropModelGuard.reset();
 }
 
 /**

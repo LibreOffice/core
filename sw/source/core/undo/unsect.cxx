@@ -96,7 +96,7 @@ SwUndoInsSection::SwUndoInsSection(
     }
     m_pRedlineSaveData.reset( new SwRedlineSaveDatas );
     if( !FillSaveData( rPam, *m_pRedlineSaveData, false ))
-            m_pRedlineSaveData.reset( nullptr );
+            m_pRedlineSaveData.reset();
 
     if( !rPam.HasMark() )
     {
