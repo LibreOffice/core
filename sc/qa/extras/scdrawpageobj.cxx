@@ -8,7 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
-#include <test/helper/shape.hxx>
+#include <test/helper/drawing.hxx>
 #include <test/container/xindexaccess.hxx>
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -65,11 +65,11 @@ uno::Reference<uno::XInterface> ScDrawPageObj::init()
     uno::Reference<drawing::XShapes> xShapes(xDrawPage, uno::UNO_QUERY_THROW);
 
     uno::Reference<drawing::XShape> xRectangle0(
-        apitest::helper::shape::createRectangle(m_xComponent, 7500, 5000, 5000, 3500),
+        apitest::helper::drawing::createRectangle(m_xComponent, 7500, 5000, 5000, 3500),
         uno::UNO_QUERY_THROW);
     xShapes->add(xRectangle0);
     uno::Reference<drawing::XShape> xRectangle1(
-        apitest::helper::shape::createRectangle(m_xComponent, 5000, 5000, 5000, 5500),
+        apitest::helper::drawing::createRectangle(m_xComponent, 5000, 5000, 5000, 5500),
         uno::UNO_QUERY_THROW);
     xShapes->add(xRectangle1);
 
