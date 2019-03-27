@@ -73,10 +73,9 @@ SwDBFieldType::~SwDBFieldType()
 {
 }
 
-SwFieldType* SwDBFieldType::Copy() const
+std::unique_ptr<SwFieldType> SwDBFieldType::Copy() const
 {
-    SwDBFieldType* pTmp = new SwDBFieldType(GetDoc(), m_sColumn, m_aDBData);
-    return pTmp;
+    return std::make_unique<SwDBFieldType>(GetDoc(), m_sColumn, m_aDBData);
 }
 
 OUString SwDBFieldType::GetName() const
@@ -555,10 +554,9 @@ SwDBNextSetFieldType::SwDBNextSetFieldType()
 {
 }
 
-SwFieldType* SwDBNextSetFieldType::Copy() const
+std::unique_ptr<SwFieldType> SwDBNextSetFieldType::Copy() const
 {
-    SwDBNextSetFieldType* pTmp = new SwDBNextSetFieldType();
-    return pTmp;
+    return std::make_unique<SwDBNextSetFieldType>();
 }
 
 // SwDBSetField
@@ -640,10 +638,9 @@ SwDBNumSetFieldType::SwDBNumSetFieldType() :
 {
 }
 
-SwFieldType* SwDBNumSetFieldType::Copy() const
+std::unique_ptr<SwFieldType> SwDBNumSetFieldType::Copy() const
 {
-    SwDBNumSetFieldType* pTmp = new SwDBNumSetFieldType();
-    return pTmp;
+    return std::make_unique<SwDBNumSetFieldType>();
 }
 
 SwDBNumSetField::SwDBNumSetField(SwDBNumSetFieldType* pTyp,
@@ -756,10 +753,9 @@ OUString SwDBNameFieldType::Expand() const
     return aData.sDataSource + "." + aData.sCommand;
 }
 
-SwFieldType* SwDBNameFieldType::Copy() const
+std::unique_ptr<SwFieldType> SwDBNameFieldType::Copy() const
 {
-    SwDBNameFieldType *pTmp = new SwDBNameFieldType(m_pDoc);
-    return pTmp;
+    return std::make_unique<SwDBNameFieldType>(m_pDoc);
 }
 
 // name of the connected database
@@ -799,10 +795,9 @@ SwDBSetNumberFieldType::SwDBSetNumberFieldType()
 {
 }
 
-SwFieldType* SwDBSetNumberFieldType::Copy() const
+std::unique_ptr<SwFieldType> SwDBSetNumberFieldType::Copy() const
 {
-    SwDBSetNumberFieldType *pTmp = new SwDBSetNumberFieldType;
-    return pTmp;
+    return std::make_unique<SwDBSetNumberFieldType>();
 }
 
 // set-number of the connected database

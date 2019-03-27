@@ -266,7 +266,7 @@ SwHistorySetTextField::SwHistorySetTextField( SwTextField* pTextField, sal_uLong
         m_nFieldWhich == SwFieldIds::Dde ||
         !pDoc->getIDocumentFieldsAccess().GetSysFieldType( m_nFieldWhich ))
     {
-        m_pFieldType.reset( m_pField->GetField()->GetTyp()->Copy() );
+        m_pFieldType = m_pField->GetField()->GetTyp()->Copy();
         m_pField->GetField()->ChgTyp( m_pFieldType.get() ); // change field type
     }
     m_nNodeIndex = nNodePos;

@@ -37,7 +37,7 @@ class SwDateTimeFieldType : public SwValueFieldType
 public:
         SwDateTimeFieldType(SwDoc* pDoc);
 
-        virtual SwFieldType*    Copy() const override;
+        virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 class SW_DLLPUBLIC SwDateTimeField : public SwValueField

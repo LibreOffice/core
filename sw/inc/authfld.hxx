@@ -75,7 +75,7 @@ public:
     SwAuthorityFieldType(SwDoc* pDoc);
     virtual ~SwAuthorityFieldType() override;
 
-    virtual SwFieldType* Copy()    const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 
     virtual void        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
     virtual void        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;

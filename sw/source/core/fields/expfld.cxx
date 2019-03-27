@@ -269,9 +269,9 @@ SwGetExpFieldType::SwGetExpFieldType(SwDoc* pDc)
 {
 }
 
-SwFieldType* SwGetExpFieldType::Copy() const
+std::unique_ptr<SwFieldType> SwGetExpFieldType::Copy() const
 {
-    return new SwGetExpFieldType(GetDoc());
+    return std::make_unique<SwGetExpFieldType>(GetDoc());
 }
 
 void SwGetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* pNew )
@@ -517,9 +517,9 @@ SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const OUString& rName, sal_uIn
         EnableFormat(false);    // do not use Numberformatter
 }
 
-SwFieldType* SwSetExpFieldType::Copy() const
+std::unique_ptr<SwFieldType> SwSetExpFieldType::Copy() const
 {
-    SwSetExpFieldType* pNew = new SwSetExpFieldType(GetDoc(), m_sName, m_nType);
+    std::unique_ptr<SwSetExpFieldType> pNew(new SwSetExpFieldType(GetDoc(), m_sName, m_nType));
     pNew->m_bDeleted = m_bDeleted;
     pNew->m_sDelim = m_sDelim;
     pNew->m_nLevel = m_nLevel;
@@ -1205,10 +1205,9 @@ SwInputFieldType::SwInputFieldType( SwDoc* pD )
 {
 }
 
-SwFieldType* SwInputFieldType::Copy() const
+std::unique_ptr<SwFieldType> SwInputFieldType::Copy() const
 {
-    SwInputFieldType* pType = new SwInputFieldType( mpDoc );
-    return pType;
+    return std::make_unique<SwInputFieldType>( mpDoc );
 }
 
 SwInputField::SwInputField( SwInputFieldType* pFieldType,

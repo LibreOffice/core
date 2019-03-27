@@ -258,7 +258,7 @@ public:
 
     /// Only in derived classes.
     virtual OUString        GetName() const;
-    virtual SwFieldType*    Copy()    const = 0;
+    virtual std::unique_ptr<SwFieldType> Copy() const = 0;
     virtual void QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual void PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich );
 

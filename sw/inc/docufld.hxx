@@ -135,7 +135,7 @@ public:
                      sal_uInt16 const nMaxPage, const OUString&, LanguageType = LANGUAGE_NONE ) const;
     void ChangeExpansion( SwDoc* pDoc,
                           bool bVirtPageNum, const SvxNumType* pNumFormat );
-    virtual SwFieldType* Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 // Page numbering.
@@ -177,7 +177,7 @@ public:
     SwAuthorFieldType();
 
     static OUString         Expand(sal_uLong);
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 class SwAuthorField : public SwField
@@ -203,7 +203,7 @@ public:
     SwFileNameFieldType(SwDoc*);
 
     OUString                Expand(sal_uLong) const;
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 class SW_DLLPUBLIC SwFileNameField : public SwField
@@ -229,7 +229,7 @@ public:
     SwTemplNameFieldType(SwDoc*);
 
     OUString                Expand(sal_uLong) const;
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 class SW_DLLPUBLIC SwTemplNameField : public SwField
@@ -252,7 +252,7 @@ class SwDocStatFieldType : public SwFieldType
 public:
     SwDocStatFieldType(SwDoc*);
     OUString                Expand(sal_uInt16 nSubType, SvxNumType nFormat) const;
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 
     void             SetNumFormat( SvxNumType eFormat )  { m_nNumberingType = eFormat; }
 };
@@ -282,7 +282,7 @@ class SwHiddenTextFieldType : public SwFieldType
 public:
     SwHiddenTextFieldType(bool bSetHidden = true);
 
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 
     void                    SetHiddenFlag( bool bSetHidden );
     bool             GetHiddenFlag() const { return m_bHidden; }
@@ -351,7 +351,7 @@ class SwHiddenParaFieldType : public SwFieldType
 public:
     SwHiddenParaFieldType();
 
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 class SwHiddenParaField : public SwField
@@ -382,7 +382,7 @@ class SwMacroFieldType : public SwFieldType
 public:
     SwMacroFieldType(SwDoc*);
 
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 class SW_DLLPUBLIC SwMacroField : public SwField
@@ -430,7 +430,7 @@ private:
 public:
     SwPostItFieldType(SwDoc* pDoc);
 
-    virtual SwFieldType* Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 
     SwDoc* GetDoc() const
     {
@@ -502,7 +502,7 @@ public:
     SwDocInfoFieldType(SwDoc* pDc);
 
     OUString                Expand(sal_uInt16 nSubType, sal_uInt32 nFormat, LanguageType nLang, const OUString& rName) const;
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 class SW_DLLPUBLIC SwDocInfoField : public SwValueField
@@ -536,7 +536,7 @@ public:
     SwExtUserFieldType();
 
     static OUString         Expand(sal_uInt16 nSubType);
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 class SwExtUserField : public SwField
@@ -565,7 +565,7 @@ class SwRefPageSetFieldType : public SwFieldType
 public:
     SwRefPageSetFieldType();
 
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 
 protected:
     /// Overlay, because there is nothing to update!
@@ -609,7 +609,7 @@ protected:
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem * ) override;
 public:
     SwRefPageGetFieldType( SwDoc* pDoc );
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
     bool MakeSetList(SetGetExpFields& rTmpLst, SwRootFrame const* pLayout);
     SwDoc*  GetDoc() const                  { return m_pDoc; }
 };
@@ -641,7 +641,7 @@ class SwJumpEditFieldType : public SwFieldType
 
 public:
     SwJumpEditFieldType( SwDoc* pDoc );
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 
     SwCharFormat* GetCharFormat();
 };
@@ -677,7 +677,7 @@ class SwScriptFieldType : public SwFieldType
 public:
     SwScriptFieldType( SwDoc* pDoc );
 
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 class SwScriptField : public SwField
@@ -716,7 +716,7 @@ class SwCombinedCharFieldType : public SwFieldType
 public:
     SwCombinedCharFieldType();
 
-    virtual SwFieldType*    Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 // ScriptField

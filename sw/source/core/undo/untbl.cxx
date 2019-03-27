@@ -281,7 +281,7 @@ void SwUndoInsTable::UndoImpl(::sw::UndoRedoContext & rContext)
 
     sTableNm = pTableNd->GetTable().GetFrameFormat()->GetName();
     if( auto pDDETable = dynamic_cast<const SwDDETable *>(&pTableNd->GetTable()) )
-        pDDEFieldType.reset( static_cast<SwDDEFieldType*>(pDDETable->GetDDEFieldType()->Copy()) );
+        pDDEFieldType.reset(static_cast<SwDDEFieldType*>(pDDETable->GetDDEFieldType()->Copy().release()));
 
     rDoc.GetNodes().Delete( aIdx, pTableNd->EndOfSectionIndex() -
                                 aIdx.GetIndex() + 1 );
@@ -404,7 +404,7 @@ SwUndoTableToText::SwUndoTableToText( const SwTable& rTable, sal_Unicode cCh )
     m_vBoxSaves.reserve(rTable.GetTabSortBoxes().size());
 
     if( auto pDDETable = dynamic_cast<const SwDDETable *>(&rTable) )
-        pDDEFieldType.reset( static_cast<SwDDEFieldType*>(pDDETable->GetDDEFieldType()->Copy()) );
+        pDDEFieldType.reset(static_cast<SwDDEFieldType*>(pDDETable->GetDDEFieldType()->Copy().release()));
 
     bCheckNumFormat = rTable.GetFrameFormat()->GetDoc()->IsInsTableFormatNum();
 
@@ -641,7 +641,7 @@ void SwUndoTableToText::RedoImpl(::sw::UndoRedoContext & rContext)
     OSL_ENSURE( pTableNd, "Could not find any TableNode" );
 
     if( auto pDDETable = dynamic_cast<const SwDDETable *>(&pTableNd->GetTable()) )
-        pDDEFieldType.reset( static_cast<SwDDEFieldType*>(pDDETable->GetDDEFieldType()->Copy()) );
+        pDDEFieldType.reset(static_cast<SwDDEFieldType*>(pDDETable->GetDDEFieldType()->Copy().release()));
 
     rDoc.TableToText( pTableNd, cSeparator );
 

@@ -70,7 +70,7 @@ public:
     void SetExpansion( const OUString& rStr )   { aExpansion = rStr;
                                                   bCRLFFlag = false; }
 
-    virtual SwFieldType* Copy() const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
     virtual OUString GetName() const override;
 
     virtual void QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;

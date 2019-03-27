@@ -58,9 +58,9 @@ SwChapterFieldType::SwChapterFieldType()
 {
 }
 
-SwFieldType* SwChapterFieldType::Copy() const
+std::unique_ptr<SwFieldType> SwChapterFieldType::Copy() const
 {
-    return new SwChapterFieldType();
+    return std::make_unique<SwChapterFieldType>();
 }
 
 // chapter field
