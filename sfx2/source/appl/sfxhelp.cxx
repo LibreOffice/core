@@ -649,7 +649,7 @@ OUString SfxHelp::GetHelpText(const OUString& aCommandURL, const weld::Widget* p
             if (!sHelpText.isEmpty())
                 xParent.reset();
             else
-                xParent.reset(xParent->weld_parent());
+                xParent = xParent->weld_parent();
         }
 
         if (bIsDebug && sHelpText.isEmpty())
