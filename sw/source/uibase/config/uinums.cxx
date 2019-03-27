@@ -153,10 +153,10 @@ SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName &rCop
     return *this;
 }
 
-SwNumRule* SwNumRulesWithName::MakeNumRule(SwWrtShell& rSh) const
+std::unique_ptr<SwNumRule> SwNumRulesWithName::MakeNumRule(SwWrtShell& rSh) const
 {
     // #i89178#
-    SwNumRule* pChg = new SwNumRule(maName, numfunc::GetDefaultPositionAndSpaceMode());
+    std::unique_ptr<SwNumRule> pChg(new SwNumRule(maName, numfunc::GetDefaultPositionAndSpaceMode()));
     pChg->SetAutoRule( false );
     for (sal_uInt16 n = 0; n < MAXLEVEL; ++n)
     {
