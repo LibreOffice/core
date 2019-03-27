@@ -26,33 +26,12 @@
 
 #ifdef NO_PTHREAD_RTL
 
-/* struct passwd differs on some platforms */
-
-#if defined(MACOSX) || defined(IOS) || defined(OPENBSD) || defined(NETBSD) || defined(HAIKU)
-
-//No mutex needed on macOS, gethostbyname is thread safe
-
 #if defined(MACOSX)
-
-#define RTL_MUTEX_LOCK
-#define RTL_MUTEX_UNLOCK
 
 #include <premac.h>
 #include <Foundation/Foundation.h>
 #include <postmac.h>
 
-#else //defined(MACOSX)
-
-static pthread_mutex_t getrtl_mutex = PTHREAD_MUTEX_INITIALIZER;
-
-#define RTL_MUTEX_LOCK pthread_mutex_lock(&getrtl_mutex);
-#define RTL_MUTEX_UNLOCK pthread_mutex_unlock(&getrtl_mutex);
-
-#endif //defined(MACOSX)
-
-#endif // OSX || IOS || OPENBSD || NETBSD
-
-#if defined(MACOSX)
 /*
  * Add support for resolving Mac native alias files (not the same as unix alias files)
  * (what are "unix alias files"?)
