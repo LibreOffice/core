@@ -1809,7 +1809,7 @@ public:
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
 
-    virtual weld::Container* weld_parent() const override;
+    virtual std::unique_ptr<weld::Container> weld_parent() const override;
 
     virtual OString get_buildable_name() const override
     {
@@ -2368,10 +2368,12 @@ public:
     }
 };
 
-weld::Container* GtkInstanceWidget::weld_parent() const
+std::unique_ptr<weld::Container> GtkInstanceWidget::weld_parent() const
 {
     GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
-    return pParent ? new GtkInstanceContainer(GTK_CONTAINER(pParent), m_pBuilder, false) : nullptr;
+    if (!pParent)
+        return nullptr;
+    return std::make_unique<GtkInstanceContainer>(GTK_CONTAINER(pParent), m_pBuilder, false);
 }
 
 class GtkInstanceWindow : public GtkInstanceContainer, public virtual weld::Window

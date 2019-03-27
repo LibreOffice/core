@@ -593,7 +593,7 @@ public:
         m_xWidget->SetUpdateMode(true);
     }
 
-    virtual weld::Container* weld_parent() const override;
+    virtual std::unique_ptr<weld::Container> weld_parent() const override;
 
     virtual ~SalInstanceWidget() override
     {
@@ -832,10 +832,12 @@ public:
     }
 };
 
-weld::Container* SalInstanceWidget::weld_parent() const
+std::unique_ptr<weld::Container> SalInstanceWidget::weld_parent() const
 {
     vcl::Window* pParent = m_xWidget->GetParent();
-    return pParent ? new SalInstanceContainer(pParent, m_pBuilder, false) : nullptr;
+    if (!pParent)
+        return nullptr;
+    return std::make_unique<SalInstanceContainer>(pParent, m_pBuilder, false);
 }
 
 class SalInstanceWindow : public SalInstanceContainer, public virtual weld::Window
@@ -4686,7 +4688,7 @@ namespace weld
         if (!rRelocateId.isEmpty())
         {
             m_xRelocate = m_xBuilder->weld_container(rRelocateId);
-            m_xOrigParent.reset(m_xRelocate->weld_parent());
+            m_xOrigParent = m_xRelocate->weld_parent();
             //fdo#75121, a bit tricky because the widgets we want to align with
             //don't actually exist in the ui description, they're implied
             m_xOrigParent->move(m_xRelocate.get(), m_xContentArea.get());

@@ -211,7 +211,7 @@ public:
     virtual void freeze() = 0;
     virtual void thaw() = 0;
 
-    virtual Container* weld_parent() const = 0;
+    virtual std::unique_ptr<Container> weld_parent() const = 0;
 
     //iterate upwards through the hierarchy starting at this widgets parent,
     //calling func with their helpid until func returns true or we run out of
