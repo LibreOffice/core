@@ -11,6 +11,7 @@
 #include <test/helper/shape.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xindexaccess.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <cppu/unotype.hxx>
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -30,7 +31,8 @@ namespace sc_apitest
 {
 class ScDrawPageObj : public CalcUnoApiTest,
                       public apitest::XElementAccess,
-                      public apitest::XIndexAccess
+                      public apitest::XIndexAccess,
+                      public apitest::XServiceInfo
 {
 public:
     ScDrawPageObj();
@@ -49,6 +51,11 @@ public:
     CPPUNIT_TEST(testGetByIndex);
     CPPUNIT_TEST(testGetCount);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -59,6 +66,7 @@ ScDrawPageObj::ScDrawPageObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<drawing::XShape>::get())
     , XIndexAccess(2)
+    , XServiceInfo("ScPageObj", "com.sun.star.sheet.SpreadsheetDrawPage")
 {
 }
 
