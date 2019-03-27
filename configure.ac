@@ -12576,7 +12576,7 @@ if test "$enable_mpl_subset" = "yes"; then
     fi
     for theme in $WITH_THEMES; do
         case $theme in
-        breeze|breeze_dark|sifr|sifr_dark|elementary|karasa_jaga) #blacklist of icon themes under GPL or LGPL
+        breeze|breeze_dark|breeze_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg) #blacklist of icon themes under GPL or LGPL
             AC_MSG_ERROR([need to disable icon themes from '$WITH_THEMES': $theme present, use --with-theme=tango]) ;;
         *) : ;;
         esac
