@@ -465,7 +465,7 @@ FreetypeFont::FreetypeFont(LogicalFontInstance* pFontInstance, FreetypeFontInfo*
 
 namespace
 {
-    FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize)
+    std::unique_ptr<FontConfigFontOptions> GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize)
     {
         psp::FastPrintFontInfo aInfo;
 
@@ -482,7 +482,7 @@ const FontConfigFontOptions* FreetypeFont::GetFontOptions() const
 {
     if (!mxFontOptions)
     {
-        mxFontOptions.reset(GetFCFontOptions(mpFontInfo->GetFontAttributes(), mpFontInstance->GetFontSelectPattern().mnHeight));
+        mxFontOptions = GetFCFontOptions(mpFontInfo->GetFontAttributes(), mpFontInstance->GetFontSelectPattern().mnHeight);
         mxFontOptions->SyncPattern(GetFontFileName(), GetFontFaceIndex(), GetFontFaceVariation(), NeedsArtificialBold());
     }
     return mxFontOptions.get();
