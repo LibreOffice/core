@@ -284,7 +284,7 @@ public:
         sc::MixDocContext& rCxt, SCROW nRow1, SCROW nRow2, ScPasteFunc nFunction, bool bSkipEmpty,
         const ScColumn& rSrcCol );
 
-    ScAttrIterator* CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) const;
+    std::unique_ptr<ScAttrIterator> CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) const;
 
     void UpdateSelectionFunction(
         const ScRangeList& rRanges, ScFunctionData& rData, const ScFlatBoolRowSegments& rHiddenRows );
