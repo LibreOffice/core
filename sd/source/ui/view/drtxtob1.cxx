@@ -130,6 +130,59 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         }
         break;
 
+        case SID_INC_INDENT:
+        case SID_DEC_INDENT:
+        {
+            if( pOLV )
+            {
+                ESelection aSel = pOLV->GetSelection();
+                aSel.Adjust();
+                sal_Int32 nStartPara = aSel.nStartPara;
+                sal_Int32 nEndPara = aSel.nEndPara;
+                if( !aSel.HasRange() )
+                {
+                    nStartPara = 0;
+                    nEndPara = pOLV->GetOutliner()->GetParagraphCount() - 1;
+                }
+                for( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
+                {
+                    SfxStyleSheet* pStyleSheet = nullptr;
+                    if (pOLV->GetOutliner() != nullptr)
+                        pStyleSheet = pOLV->GetOutliner()->GetStyleSheet(nPara);
+                    if (pStyleSheet != nullptr)
+                    {
+                        SfxItemSet aAttr( pStyleSheet->GetItemSet() );
+                        SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( nPara ) );
+                        aAttr.Put( aTmpSet, false );
+                        const SvxLRSpaceItem& rItem = aAttr.Get( EE_PARA_LRSPACE );
+                        std::unique_ptr<SvxLRSpaceItem> pNewItem(static_cast<SvxLRSpaceItem*>(rItem.Clone()));
+
+                        long nLeft = pNewItem->GetLeft();
+                        if( nSlot == SID_INC_INDENT )
+                            nLeft += 1000;
+                        else
+                        {
+                            nLeft -= 1000;
+                            nLeft = std::max<long>( nLeft, 0 );
+                        }
+                        pNewItem->SetLeftValue( static_cast<sal_uInt16>(nLeft) );
+
+                        SfxItemSet aNewAttrs( aAttr );
+                        aNewAttrs.Put( *pNewItem );
+                        pNewItem.reset();
+                        pOLV->GetOutliner()->SetParaAttribs( nPara, aNewAttrs );
+                    }
+                }
+            }
+            rReq.Done();
+
+            Invalidate();
+            // to refresh preview (in outline mode), slot has to be invalidated:
+            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
+
+        }
+        break;
+
         case SID_PARASPACE_INCREASE:
         case SID_PARASPACE_DECREASE:
         {

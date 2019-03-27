@@ -434,6 +434,8 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         rSet.DisableItem( SID_ATTR_PARA_LINESPACE_10 );
         rSet.DisableItem( SID_ATTR_PARA_LINESPACE_15 );
         rSet.DisableItem( SID_ATTR_PARA_LINESPACE_20 );
+        rSet.DisableItem( SID_DEC_INDENT );
+        rSet.DisableItem( SID_INC_INDENT );
         rSet.DisableItem( SID_PARASPACE_INCREASE );
         rSet.DisableItem( SID_PARASPACE_DECREASE );
         rSet.DisableItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM );

@@ -123,6 +123,8 @@ static const sal_uInt16 SidArray[] = {
     SID_ATTR_TRANSFORM_AUTOWIDTH,     //   10310
     SID_ATTR_TRANSFORM_AUTOHEIGHT,    //   10311 //Added
     SID_HYPERLINK_GETLINK,            //   10361
+    SID_DEC_INDENT,                   //   10461
+    SID_INC_INDENT,                   //   10462
     SID_CHARMAP,                      //   10503
     SID_TEXTDIRECTION_LEFT_TO_RIGHT,  //   10907
     SID_TEXTDIRECTION_TOP_TO_BOTTOM,  //   10908

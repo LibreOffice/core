@@ -970,6 +970,8 @@ bool FuDraw::cancel()
         bReturn = true;
 
         SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
+        rBindings.Invalidate( SID_DEC_INDENT );
+        rBindings.Invalidate( SID_INC_INDENT );
         rBindings.Invalidate( SID_PARASPACE_INCREASE );
         rBindings.Invalidate( SID_PARASPACE_DECREASE );
     }
