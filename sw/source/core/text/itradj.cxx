@@ -113,9 +113,6 @@ void SwTextAdjuster::FormatBlock( )
 static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwTextIter& rItr,
             sal_Int32& rKashidas, TextFrameIndex& nGluePortion)
 {
-    if ( rInf.GetOut()->GetMinKashida() <= 0 )
-        return false;
-
     // i60594 validate Kashida justification
     TextFrameIndex nIdx = rItr.GetStart();
     TextFrameIndex nEnd = rItr.GetEnd();
@@ -153,6 +150,12 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
         sal_Int32 nKashidasInAttr = rSI.KashidaJustify ( nullptr, nullptr, nIdx, nNext - nIdx );
         if (nKashidasInAttr > 0)
         {
+            // Kashida glyph looks suspicious, skip Kashida justification
+            if ( rInf.GetOut()->GetMinKashida() <= 0 )
+            {
+                return false;
+            }
+
             sal_Int32 nKashidasDropped = 0;
             if ( !SwScriptInfo::IsArabicText( rInf.GetText(), nIdx, nNext - nIdx ) )
             {
@@ -212,7 +215,7 @@ static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwT
             sal_Int32 nKashidasInAttr = rSI.KashidaJustify ( nullptr, nullptr, nIdx, nNext - nIdx );
 
             long nFontMinKashida = rInf.GetOut()->GetMinKashida();
-            if ( nKashidasInAttr > 0 && SwScriptInfo::IsArabicText( rInf.GetText(), nIdx, nNext - nIdx ) )
+            if ( nFontMinKashida && nKashidasInAttr > 0 && SwScriptInfo::IsArabicText( rInf.GetText(), nIdx, nNext - nIdx ) )
             {
                 sal_Int32 nKashidasDropped = 0;
                 while ( rKashidas && nGluePortion && nKashidasInAttr > 0 &&
