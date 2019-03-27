@@ -740,7 +740,7 @@ IMPL_LINK_NOARG(SwInsertDBColAutoPilot, AutoFormatHdl, weld::Button&, void)
 
     ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(rFact.CreateSwAutoFormatDlg(m_xDialog.get(), pView->GetWrtShellPtr(), false, m_xTAutoFormat.get()));
     if( RET_OK == pDlg->Execute())
-        m_xTAutoFormat.reset(pDlg->FillAutoFormatOfIndex());
+        m_xTAutoFormat = pDlg->FillAutoFormatOfIndex();
 }
 
 IMPL_LINK(SwInsertDBColAutoPilot, TVSelectHdl, weld::TreeView&, rBox, void)

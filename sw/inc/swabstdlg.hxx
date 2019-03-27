@@ -297,7 +297,7 @@ class AbstractSwAutoFormatDlg : public VclAbstractDialog
 protected:
     virtual ~AbstractSwAutoFormatDlg() override = default;
 public:
-    virtual SwTableAutoFormat* FillAutoFormatOfIndex() const = 0;
+    virtual std::unique_ptr<SwTableAutoFormat> FillAutoFormatOfIndex() const = 0;
 };
 
 class AbstractSwFieldDlg : public SfxAbstractTabDialog

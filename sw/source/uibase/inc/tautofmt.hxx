@@ -79,7 +79,7 @@ public:
 
     virtual short run() override;
 
-    SwTableAutoFormat* FillAutoFormatOfIndex() const;
+    std::unique_ptr<SwTableAutoFormat> FillAutoFormatOfIndex() const;
 
     virtual ~SwAutoFormatDlg() override;
 };
