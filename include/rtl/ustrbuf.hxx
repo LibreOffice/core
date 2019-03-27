@@ -536,6 +536,26 @@ public:
         return append( str.getStr(), str.getLength() );
     }
 
+    /**
+        Appends a portion of the string to this string buffer.
+
+        The characters of the <code>OUString</code> argument are appended, in
+        order, to the contents of this string buffer, increasing the
+        length of this string buffer by the length of the argument.
+
+        @param   str        a string.
+        @param   beginIndex the beginning index, inclusive.
+        @param   count      the number of characters.
+        @return  this string buffer.
+        @since Libreoffice 6.4
+     */
+    OUStringBuffer & append(const OUString &str, sal_Int32 beginIndex, sal_Int32 count)
+    {
+        assert( beginIndex >= 0 && beginIndex < str.getLength() );
+        assert( beginIndex <= str.getLength() - count );
+        return append( str.getStr() + beginIndex, count );
+    }
+
 #if defined LIBO_INTERNAL_ONLY
     OUStringBuffer & append(std::u16string_view sv) {
         if (sv.size() > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
