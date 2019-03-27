@@ -30,7 +30,6 @@ module com { module sun { module star { module ucb {
 /** defines the environment for a command.
 
     @version  1.0
-    @author   Kai Sommerfeld
     @see XCommandProcessor
 */
 published interface XCommandEnvironment : com::sun::star::uno::XInterface

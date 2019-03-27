@@ -31,7 +31,6 @@ module com { module sun { module star { module ucb {
     XPropertySetRegistry.
 
      @version  1.0
-     @author   Kai Sommerfeld
   */
 published interface XPersistentPropertySet : com::sun::star::beans::XPropertySet
 {

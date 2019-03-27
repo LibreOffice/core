@@ -28,7 +28,6 @@ module com { module sun { module star { module ucb {
 /** An identifier for contents.
 
      @version  1.0
-     @author   Kai Sommerfeld
      @see      XContent
 */
 published interface XContentIdentifier: com::sun::star::uno::XInterface

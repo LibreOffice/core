@@ -45,7 +45,6 @@ module com { module sun { module star { module ucb {
        "CreatableContentsInfo" and command "createNewContent" instead.
 
     @version  1.0
-    @author   Kai Sommerfeld
     @see      XContent
     @see      XCommandProcessor
 */

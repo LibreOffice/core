@@ -33,7 +33,6 @@ module com { module sun { module star { module ucb {
     of the command "open" contains such a data sink.
 
     @version    1.0
-    @author     Kai Sommerfeld
     @see        Content
 */
 published exception UnsupportedDataSinkException : com::sun::star::uno::Exception

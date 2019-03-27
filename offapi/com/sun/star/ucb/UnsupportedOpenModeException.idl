@@ -32,7 +32,6 @@ module com { module sun { module star { module ucb {
     of the command "open" contains such an open mode.
 
     @version    1.0
-    @author     Kai Sommerfeld
     @see        Content
 */
 published exception UnsupportedOpenModeException : com::sun::star::uno::Exception

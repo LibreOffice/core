@@ -37,7 +37,6 @@ module com { module sun { module star { module ucb {
     string from it and after that to release the content.
 
     @version    1.0
-    @author     Kai Sommerfeld
     @see        XContent
     @see        XContentIdentifier
 */

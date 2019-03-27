@@ -24,7 +24,6 @@ from com.sun.star.util import Time
 from datetime import datetime
 
 '''
-@author rpiterman
 DataAware objects are used to live-synchronize UI and DataModel/DataObject.
 It is used as listener on UI events, to keep the DataObject up to date.
 This class, as a base abstract class, sets a frame of functionality,

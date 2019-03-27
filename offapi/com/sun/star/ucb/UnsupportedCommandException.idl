@@ -29,7 +29,6 @@ module com { module sun { module star { module ucb {
     implementation of an interface.
 
     @version    1.0
-    @author     Kai Sommerfeld
     @see        XCommandProcessor
 */
 published exception UnsupportedCommandException: com::sun::star::uno::Exception

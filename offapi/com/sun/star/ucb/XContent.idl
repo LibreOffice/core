@@ -31,7 +31,6 @@ module com { module sun { module star { module ucb {
     listeners for events that are related to contents.
 
      @version  1.0
-     @author   Kai Sommerfeld
      @see      XContentIdentifier
      @see      XContentEventListener
 */

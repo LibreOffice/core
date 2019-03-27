@@ -43,7 +43,6 @@ module com { module sun { module star { module ucb {
     The member NameClash of the exception must be set to NameClash::ERROR
 
     @version    1.0
-    @author     Kai Sommerfeld
     @see        Content
 */
 published exception UnsupportedNameClashException : com::sun::star::uno::Exception
