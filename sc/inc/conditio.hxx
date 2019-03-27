@@ -380,7 +380,7 @@ public:
 
                     /** Create a flat copy using ScTokenArray copy-ctor with
                         shared tokens. */
-    ScTokenArray*   CreateFlatCopiedTokenArray( sal_uInt16 nPos ) const;
+    std::unique_ptr<ScTokenArray> CreateFlatCopiedTokenArray( sal_uInt16 nPos ) const;
 
     void            CompileAll();
     void            CompileXML();

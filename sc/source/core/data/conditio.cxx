@@ -1277,18 +1277,18 @@ OUString ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uInt16 n
     return aRet;
 }
 
-ScTokenArray* ScConditionEntry::CreateFlatCopiedTokenArray( sal_uInt16 nIndex ) const
+std::unique_ptr<ScTokenArray> ScConditionEntry::CreateFlatCopiedTokenArray( sal_uInt16 nIndex ) const
 {
     assert(nIndex <= 1);
-    ScTokenArray* pRet = nullptr;
+    std::unique_ptr<ScTokenArray> pRet;
 
     if ( nIndex==0 )
     {
         if ( pFormula1 )
-            pRet = new ScTokenArray( *pFormula1 );
+            pRet.reset(new ScTokenArray( *pFormula1 ));
         else
         {
-            pRet = new ScTokenArray();
+            pRet.reset(new ScTokenArray());
             if (bIsStr1)
             {
                 svl::SharedStringPool& rSPool = mpDoc->GetSharedStringPool();
@@ -1301,10 +1301,10 @@ ScTokenArray* ScConditionEntry::CreateFlatCopiedTokenArray( sal_uInt16 nIndex ) 
     else if ( nIndex==1 )
     {
         if ( pFormula2 )
-            pRet = new ScTokenArray( *pFormula2 );
+            pRet.reset(new ScTokenArray( *pFormula2 ));
         else
         {
-            pRet = new ScTokenArray();
+            pRet.reset(new ScTokenArray());
             if (bIsStr2)
             {
                 svl::SharedStringPool& rSPool = mpDoc->GetSharedStringPool();
