@@ -372,7 +372,7 @@ void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >
     // set ourself as delegator
     m_xProxy->setDelegator( *this );
 
-    m_pReportElemTokenMap.reset(OXMLHelper::GetReportElemTokenMap());
+    m_pReportElemTokenMap = OXMLHelper::GetReportElemTokenMap();
 }
 
 uno::Any SAL_CALL ImportDocumentHandler::queryInterface( const uno::Type& _rType )

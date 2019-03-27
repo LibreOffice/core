@@ -332,7 +332,7 @@ uno::Reference<beans::XPropertySet> OXMLHelper::createBorderPropertySet()
     return comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
 }
 
-SvXMLTokenMap* OXMLHelper::GetReportElemTokenMap()
+std::unique_ptr<SvXMLTokenMap> OXMLHelper::GetReportElemTokenMap()
 {
     static const SvXMLTokenMapEntry aElemTokenMap[]=
     {
@@ -357,10 +357,10 @@ SvXMLTokenMap* OXMLHelper::GetReportElemTokenMap()
         { XML_NAMESPACE_OFFICE, XML_BODY,                       XML_TOK_SUB_BODY },
         XML_TOKEN_MAP_END
     };
-    return new SvXMLTokenMap( aElemTokenMap );
+    return std::make_unique<SvXMLTokenMap>( aElemTokenMap );
 }
 
-SvXMLTokenMap* OXMLHelper::GetSubDocumentElemTokenMap()
+std::unique_ptr<SvXMLTokenMap> OXMLHelper::GetSubDocumentElemTokenMap()
 {
     static const SvXMLTokenMapEntry aElemTokenMap[]=
     {
@@ -369,7 +369,7 @@ SvXMLTokenMap* OXMLHelper::GetSubDocumentElemTokenMap()
         { XML_NAMESPACE_REPORT, XML_DETAIL,                 XML_TOK_SUB_DETAIL},
         XML_TOKEN_MAP_END
     };
-    return new SvXMLTokenMap( aElemTokenMap );
+    return std::make_unique<SvXMLTokenMap>( aElemTokenMap );
 }
 
 const SvXMLEnumMapEntry<sal_Int16>* OXMLHelper::GetImageScaleOptions()
