@@ -8,6 +8,8 @@
  */
 
 #include <helper/form.hxx>
+#include <rtl/string.hxx>
+#include <sal/types.h>
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -16,19 +18,20 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
+#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-
-#include <rtl/string.hxx>
-#include <sal/types.h>
 
 using namespace css;
 
 namespace apitest
 {
-uno::Reference<drawing::XControlShape>
-createControlShape(const uno::Reference<lang::XComponent>& r_xComponent, const sal_Int32 nHeight,
-                   const sal_Int32 nWidth, const sal_Int32 nX, const sal_Int32 nY,
-                   const OUString& r_aKind)
+namespace helper
+{
+namespace form
+{
+uno::Reference<drawing::XControlShape> OOO_DLLPUBLIC_TEST createControlShape(
+    const uno::Reference<lang::XComponent>& r_xComponent, const OUString& r_aKind,
+    const sal_Int32 nX, const sal_Int32 nY, const sal_Int32 nHeight, const sal_Int32 nWidth)
 {
     uno::Reference<lang::XMultiServiceFactory> xMSF(r_xComponent, uno::UNO_QUERY_THROW);
 
@@ -38,9 +41,7 @@ createControlShape(const uno::Reference<lang::XComponent>& r_xComponent, const s
     uno::Reference<uno::XInterface> aComponent(
         xMSF->createInstance("com.sun.star.form.component." + r_aKind), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(aComponent, uno::UNO_QUERY_THROW);
-    uno::Any aValue;
-    aValue <<= "com.sun.star.form.control." + r_aKind;
-    xPropertySet->setPropertyValue("DefaultControl", aValue);
+    xPropertySet->setPropertyValue("DefaultControl", uno::makeAny("com.sun.star.form.control." + r_aKind));
     uno::Reference<awt::XControlModel> xControlModel(aComponent, uno::UNO_QUERY_THROW);
 
     xControlShape->setSize(awt::Size(nHeight, nWidth));
@@ -50,6 +51,9 @@ createControlShape(const uno::Reference<lang::XComponent>& r_xComponent, const s
 
     return xControlShape;
 }
+
+} // namespace form
+} // namespace helper
 } // namespace apitest
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
