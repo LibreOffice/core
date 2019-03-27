@@ -16,6 +16,24 @@
       "revId": "15575b46be5bdcc2e20d652b8b1dca72ab85d9dd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_20219fb5",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-03-27T15:07:14Z",
+      "side": 1,
+      "message": "Revising the strings is an open task, just took for now what is on the marketing pad.",
+      "parentUuid": "df87a7cf_80c66b16",
+      "revId": "15575b46be5bdcc2e20d652b8b1dca72ab85d9dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
