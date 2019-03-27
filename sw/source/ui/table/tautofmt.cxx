@@ -161,11 +161,11 @@ void SwAutoFormatDlg::UpdateChecks( const SwTableAutoFormat& rFormat, bool bEnab
     m_xBtnAlignment->set_active(rFormat.IsJustify());
 }
 
-SwTableAutoFormat* SwAutoFormatDlg::FillAutoFormatOfIndex() const
+std::unique_ptr<SwTableAutoFormat> SwAutoFormatDlg::FillAutoFormatOfIndex() const
 {
     if( 255 != m_nIndex )
     {
-        return new SwTableAutoFormat( (*m_xTableTable)[ m_nIndex ] );
+        return std::make_unique<SwTableAutoFormat>( (*m_xTableTable)[ m_nIndex ] );
     }
 
     return nullptr;
