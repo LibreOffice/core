@@ -2342,6 +2342,7 @@ bool DocumentRedlineManager::RejectRedline( const SwPaM& rPam, bool bCallDelete 
 
 void DocumentRedlineManager::AcceptAllRedline(bool bAccept)
 {
+    bool bSuccess = true;
     OUString sUndoStr;
     IDocumentUndoRedo& rUndoMgr = m_rDoc.GetIDocumentUndoRedo();
 
@@ -2358,12 +2359,12 @@ void DocumentRedlineManager::AcceptAllRedline(bool bAccept)
         rUndoMgr.StartUndo(bAccept ? SwUndoId::ACCEPT_REDLINE : SwUndoId::REJECT_REDLINE, &aRewriter);
     }
 
-    while (mpRedlineTable->size() > 0)
+    while (!mpRedlineTable->empty() && bSuccess)
     {
         if (bAccept)
-            AcceptRedline(mpRedlineTable->size() - 1, true);
+            bSuccess = AcceptRedline(mpRedlineTable->size() - 1, true);
         else
-            RejectRedline(mpRedlineTable->size() - 1, true);
+            bSuccess = RejectRedline(mpRedlineTable->size() - 1, true);
     }
 
     if (!sUndoStr.isEmpty())
