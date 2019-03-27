@@ -445,6 +445,7 @@ Reference< XSpellAlternatives >
 #ifdef MACOSX
         [[NSSpellChecker sharedSpellChecker] setLanguage:aLang];
         NSArray *guesses = [[NSSpellChecker sharedSpellChecker] guessesForWordRange:NSMakeRange(0, [aNSStr length]) inString:aNSStr language:aLang inSpellDocumentWithTag:0];
+        (void) this; // avoid loplugin:staticmethods, the !MACOSX case uses 'this'
 #else
         NSArray *guesses = [pChecker guessesForWordRange:NSMakeRange(0, [aNSStr length]) inString:aNSStr language:aLang];
 #endif
