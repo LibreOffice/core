@@ -1365,7 +1365,7 @@ void OStorage_Impl::InsertRawStream( const OUString& aName, const uno::Reference
     m_bBroadcastModified = true;
 }
 
-OStorage_Impl* OStorage_Impl::CreateNewStorageImpl( sal_Int32 nStorageMode )
+std::unique_ptr<OStorage_Impl> OStorage_Impl::CreateNewStorageImpl( sal_Int32 nStorageMode )
 {
     SAL_WARN_IF( !m_xPackage.is(), "package.xstor", "Not possible to refer to package as to factory!" );
     if ( !m_xPackage.is() )
@@ -1381,8 +1381,8 @@ OStorage_Impl* OStorage_Impl::CreateNewStorageImpl( sal_Int32 nStorageMode )
         throw io::IOException( THROW_WHERE );
 
     uno::Reference< container::XNameContainer > xPackageSubFolder( xNewElement, uno::UNO_QUERY_THROW );
-    OStorage_Impl* pResult =
-            new OStorage_Impl( this, nStorageMode, xPackageSubFolder, m_xPackage, m_xContext, m_nStorageType );
+    std::unique_ptr<OStorage_Impl> pResult(
+            new OStorage_Impl( this, nStorageMode, xPackageSubFolder, m_xPackage, m_xContext, m_nStorageType ));
     pResult->m_bIsModified = true;
 
     return pResult;
@@ -1392,7 +1392,7 @@ SotElement_Impl* OStorage_Impl::InsertStorage( const OUString& aName, sal_Int32 
 {
     SotElement_Impl* pNewElement = InsertElement( aName, true );
 
-    pNewElement->m_xStorage.reset(CreateNewStorageImpl(nStorageMode));
+    pNewElement->m_xStorage = CreateNewStorageImpl(nStorageMode);
 
     m_aChildrenVector.push_back( pNewElement );
 
@@ -1593,7 +1593,7 @@ void OStorage_Impl::CreateRelStorage()
         if ( !m_pRelStorElement )
         {
             m_pRelStorElement = new SotElement_Impl( "_rels", true, true );
-            m_pRelStorElement->m_xStorage.reset(CreateNewStorageImpl(embed::ElementModes::WRITE));
+            m_pRelStorElement->m_xStorage = CreateNewStorageImpl(embed::ElementModes::WRITE);
             if (m_pRelStorElement->m_xStorage)
                 m_pRelStorElement->m_xStorage->m_pParent = nullptr; // the relation storage is completely controlled by parent
         }
