@@ -1092,11 +1092,11 @@ void FontConfigFontOptions::SyncPattern(const OString& rFileName, sal_uInt32 nIn
     FcPatternAddBool(mpPattern, FC_EMBOLDEN, bEmbolden ? FcTrue : FcFalse);
 }
 
-FontConfigFontOptions* PrintFontManager::getFontOptions(const FastPrintFontInfo& rInfo, int nSize)
+std::unique_ptr<FontConfigFontOptions> PrintFontManager::getFontOptions(const FastPrintFontInfo& rInfo, int nSize)
 {
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 
-    FontConfigFontOptions* pOptions = nullptr;
+    std::unique_ptr<FontConfigFontOptions> pOptions;
     FcConfig* pConfig = FcConfigGetCurrent();
     FcPattern* pPattern = FcPatternCreate();
 
@@ -1125,7 +1125,7 @@ FontConfigFontOptions* PrintFontManager::getFontOptions(const FastPrintFontInfo&
         (void) FcPatternGetInteger(pResult,
             FC_HINT_STYLE, 0, &hintstyle);
 
-        pOptions = new FontConfigFontOptions(pResult);
+        pOptions.reset(new FontConfigFontOptions(pResult));
     }
 
     // cleanup

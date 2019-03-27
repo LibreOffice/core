@@ -312,7 +312,7 @@ public:
     in different fonts in e.g. english and japanese
      */
     void matchFont( FastPrintFontInfo& rInfo, const css::lang::Locale& rLocale );
-    static FontConfigFontOptions* getFontOptions( const FastPrintFontInfo&, int nSize);
+    static std::unique_ptr<FontConfigFontOptions> getFontOptions( const FastPrintFontInfo&, int nSize);
 
     void Substitute(FontSelectPattern &rPattern, OUString& rMissingCodes);
 
