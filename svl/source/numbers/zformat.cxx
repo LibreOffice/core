@@ -1969,7 +1969,7 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr )
         sal_Int32 nEnd;
         if ( (nEnd = GetQuoteEnd( rStr, nPos )) >= 0 )
         {
-            aTmp.append(rStr.copy( nStartPos, ++nEnd - nStartPos ));
+            aTmp.append(rStr, nStartPos, ++nEnd - nStartPos );
             nStartPos = nEnd;
         }
         else

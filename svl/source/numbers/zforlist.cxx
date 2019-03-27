@@ -2932,7 +2932,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
       {
         sal_Int32 nIndexSep = ImpPosToken( sOldFormatString, ';', nIndexE );
         if (nIndexSep > nIndexE)
-            sString.append( sOldFormatString.copy(nIndexE, nIndexSep - nIndexE) );
+            sString.append( sOldFormatString, nIndexE, nIndexSep - nIndexE );
         else
             sString.append( sOldFormatString.copy(nIndexE) );
       }

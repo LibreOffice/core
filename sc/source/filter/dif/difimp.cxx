@@ -357,7 +357,7 @@ TOPIC DifParser::GetNextTopic()
                 OSL_ENSURE( aLine.getLength() >= 2,
                     "+GetNextTopic(): <String> is too short!" );
                 if( aLine.getLength() > 2 )
-                    m_aData.append(aLine.copy(1, aLine.getLength() - 2));
+                    m_aData.append(aLine, 1, aLine.getLength() - 2);
                 else
                     m_aData.truncate();
                 eS = S_END;
@@ -556,7 +556,7 @@ DATASET DifParser::GetNextDataset()
                                     }
                                     else if( pLine[nLineLength - 1] == '"' )
                                     {
-                                        m_aData.append(aLine.copy(0, nLineLength -1));
+                                        m_aData.append(aLine, 0, nLineLength -1);
                                         lcl_DeEscapeQuotesDif(m_aData);
                                         eRet = D_STRING;
                                     }
