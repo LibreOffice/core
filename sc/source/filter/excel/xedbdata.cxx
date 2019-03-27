@@ -80,7 +80,7 @@ void XclExpTablesImpl8::SaveXml( XclExpXmlStream& rStrm )
                 &aRelId);
 
         pWorksheetStrm->singleElement( XML_tablePart,
-                FSNS(XML_r, XML_id), XclXmlUtils::ToOString(aRelId).getStr(),
+                FSNS(XML_r, XML_id), aRelId.toUtf8(),
                 FSEND);
 
         rStrm.PushStream( pTableStrm);
@@ -180,10 +180,10 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
     rData.GetArea( aRange);
     sax_fastparser::FSHelperPtr& pTableStrm = rStrm.GetCurrentStream();
     pTableStrm->startElement( XML_table,
-        XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
+        XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
         XML_id, OString::number( rEntry.mnTableId).getStr(),
-        XML_name, XclXmlUtils::ToOString( rData.GetName()).getStr(),
-        XML_displayName, XclXmlUtils::ToOString( rData.GetName()).getStr(),
+        XML_name, rData.GetName().toUtf8(),
+        XML_displayName, rData.GetName().toUtf8(),
         XML_ref, XclXmlUtils::ToOString(aRange),
         XML_headerRowCount, ToPsz10(rData.HasHeader()),
         XML_totalsRowCount, ToPsz10(rData.HasTotals()),

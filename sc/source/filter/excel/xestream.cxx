@@ -699,11 +699,6 @@ OString XclXmlUtils::ToOString( const Color& rColor )
     return OString( buf );
 }
 
-OString XclXmlUtils::ToOString( const OUString& s )
-{
-    return OUStringToOString( s, RTL_TEXTENCODING_UTF8  );
-}
-
 OStringBuffer& XclXmlUtils::ToOString( OStringBuffer& s, const ScAddress& rAddress )
 {
     rAddress.Format(s, ScRefFlags::VALID, nullptr, ScAddress::Details( FormulaGrammar::CONV_XL_A1));
@@ -726,14 +721,14 @@ OString XclXmlUtils::ToOString( const ScRange& rRange, bool bFullAddressNotation
     OUString sRange(rRange.Format( ScRefFlags::VALID, nullptr,
                                    ScAddress::Details( FormulaGrammar::CONV_XL_A1 ),
                                    bFullAddressNotation ) );
-    return ToOString( sRange );
+    return sRange.toUtf8();
 }
 
 OString XclXmlUtils::ToOString( const ScRangeList& rRangeList )
 {
     OUString s;
     rRangeList.Format(s, ScRefFlags::VALID, nullptr, FormulaGrammar::CONV_XL_OOX, ' ');
-    return ToOString( s );
+    return s.toUtf8();
 }
 
 static ScAddress lcl_ToAddress( const XclAddress& rAddress )
@@ -902,7 +897,7 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
                 // OOXTODO: XML_theme,      index into <clrScheme/>
                 // OOXTODO: XML_tint,       double
                 FSEND );
-    lcl_WriteValue( pStream, nFontId,        XclXmlUtils::ToOString( rFontData.maName ).getStr() );
+    lcl_WriteValue( pStream, nFontId,        rFontData.maName.toUtf8().getStr() );
     lcl_WriteValue( pStream, XML_family,     OString::number(  rFontData.mnFamily ).getStr() );
     lcl_WriteValue( pStream, XML_charset,    rFontData.mnCharSet != 0 ? OString::number(  rFontData.mnCharSet ).getStr() : nullptr );
 

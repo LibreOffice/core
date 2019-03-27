@@ -1057,7 +1057,7 @@ void XclExpExtName::SaveXml(XclExpXmlStream& rStrm)
     sax_fastparser::FSHelperPtr pExternalLink = rStrm.GetCurrentStream();
 
     pExternalLink->startElement(XML_definedName,
-            XML_name, XclXmlUtils::ToOString(maName).getStr(),
+            XML_name, maName.toUtf8(),
             XML_refersTo, nullptr,
             XML_sheetId, nullptr,
             FSEND);
@@ -1690,12 +1690,12 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
             true );
 
     pExternalLink->startElement( XML_externalLink,
-            XML_xmlns,              XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
+            XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
             FSEND);
 
     pExternalLink->startElement( XML_externalBook,
-            FSNS(XML_xmlns, XML_r), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
-            FSNS(XML_r, XML_id),    XclXmlUtils::ToOString( sId ).getStr(),
+            FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)).toUtf8(),
+            FSNS(XML_r, XML_id),    sId.toUtf8(),
             FSEND);
 
     if (!maXctList.IsEmpty())
@@ -2114,7 +2114,7 @@ void XclExpSupbookBuffer::SaveXml( XclExpXmlStream& rStrm )
 
         // externalReference entry in workbook externalReferences
         rStrm.GetCurrentStream()->singleElement( XML_externalReference,
-                FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ).getStr(),
+                FSNS(XML_r, XML_id), sId.toUtf8(),
                 FSEND );
 
         // Each externalBook in a separate stream.

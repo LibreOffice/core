@@ -40,8 +40,8 @@ void savePivotCacheRecordsXml( XclExpXmlStream& rStrm, const ScDPCache& rCache )
 
     sax_fastparser::FSHelperPtr& pRecStrm = rStrm.GetCurrentStream();
     pRecStrm->startElement(XML_pivotCacheRecords,
-        XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
-        FSNS(XML_xmlns, XML_r), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
+        XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
+        FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)).toUtf8(),
         XML_count, OString::number(static_cast<long>(nCount)).getStr(),
         FSEND);
 
@@ -142,7 +142,7 @@ void XclExpXmlPivotCaches::SaveXml( XclExpXmlStream& rStrm )
 
         pWorkbookStrm->singleElement(XML_pivotCache,
             XML_cacheId, OString::number(nCacheId).getStr(),
-            FSNS(XML_r, XML_id), XclXmlUtils::ToOString(aRelId).getStr(),
+            FSNS(XML_r, XML_id), aRelId.toUtf8(),
             FSEND);
 
         rStrm.PushStream(pPCStrm);
@@ -218,9 +218,9 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
     rStrm.PopStream();
 
     pDefStrm->startElement(XML_pivotCacheDefinition,
-        XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
-        FSNS(XML_xmlns, XML_r), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
-        FSNS(XML_r, XML_id), XclXmlUtils::ToOString(aRelId).getStr(),
+        XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
+        FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)).toUtf8(),
+        FSNS(XML_r, XML_id), aRelId.toUtf8(),
         XML_recordCount, OString::number(rEntry.mpCache->GetDataSize()).getStr(),
         XML_createdVersion, "3", // MS Excel 2007, tdf#112936: setting version number makes MSO to handle the pivot table differently
         FSEND);
@@ -233,7 +233,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
     GetDoc().GetName(rEntry.maSrcRange.aStart.Tab(), aSheetName);
     pDefStrm->singleElement(XML_worksheetSource,
         XML_ref, XclXmlUtils::ToOString(rEntry.maSrcRange).getStr(),
-        XML_sheet, XclXmlUtils::ToOString(aSheetName).getStr(),
+        XML_sheet, aSheetName.toUtf8(),
         FSEND);
 
     pDefStrm->endElement(XML_cacheSource);
@@ -248,7 +248,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         OUString aName = rCache.GetDimensionName(i);
 
         pDefStrm->startElement(XML_cacheField,
-            XML_name, XclXmlUtils::ToOString(aName).getStr(),
+            XML_name, aName.toUtf8(),
             XML_numFmtId, OString::number(0).getStr(),
             FSEND);
 
@@ -344,8 +344,8 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
 
         if (isContainsDate)
         {
-            pAttList->add(XML_minDate, XclXmlUtils::ToOString(GetExcelFormattedDate(fMin, GetFormatter())));
-            pAttList->add(XML_maxDate, XclXmlUtils::ToOString(GetExcelFormattedDate(fMax, GetFormatter())));
+            pAttList->add(XML_minDate, GetExcelFormattedDate(fMin, GetFormatter()).toUtf8());
+            pAttList->add(XML_maxDate, GetExcelFormattedDate(fMax, GetFormatter()).toUtf8());
         }
 
         //if (bListItems) // see TODO above
@@ -364,14 +364,14 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
                 {
                     case ScDPItemData::String:
                         pDefStrm->singleElement(XML_s,
-                            XML_v, XclXmlUtils::ToOString(rItem.GetString()),
+                            XML_v, rItem.GetString().toUtf8(),
                             FSEND);
                     break;
                     case ScDPItemData::Value:
                         if (isContainsDate)
                         {
                             pDefStrm->singleElement(XML_d,
-                                XML_v, XclXmlUtils::ToOString(GetExcelFormattedDate(rItem.GetValue(), GetFormatter())),
+                                XML_v, GetExcelFormattedDate(rItem.GetValue(), GetFormatter()).toUtf8(),
                                 FSEND);
                         }
                         else
@@ -384,7 +384,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
                     break;
                     case ScDPItemData::Error:
                         pDefStrm->singleElement(XML_e,
-                            XML_v, XclXmlUtils::ToOString(rItem.GetString()),
+                            XML_v, rItem.GetString().toUtf8(),
                             FSEND);
                     break;
                     case ScDPItemData::GroupValue:
@@ -658,8 +658,8 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
 
     sax_fastparser::FSHelperPtr& pPivotStrm = rStrm.GetCurrentStream();
     pPivotStrm->startElement(XML_pivotTableDefinition,
-        XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
-        XML_name, XclXmlUtils::ToOString(rDPObj.GetName()).getStr(),
+        XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
+        XML_name, rDPObj.GetName().toUtf8(),
         XML_cacheId, OString::number(nCacheId).getStr(),
         XML_applyNumberFormats, ToPsz10(false),
         XML_applyBorderFormats, ToPsz10(false),
@@ -944,7 +944,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             const boost::optional<OUString> & pName = rDim.GetLayoutName();
             pPivotStrm->write("<")->writeId(XML_dataField);
             if (pName)
-                rStrm.WriteAttributes(XML_name, XclXmlUtils::ToOString(*pName), FSEND);
+                rStrm.WriteAttributes(XML_name, pName->toUtf8(), FSEND);
 
             rStrm.WriteAttributes(XML_fld, OString::number(nDimIdx).getStr(), FSEND);
 

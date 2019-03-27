@@ -236,14 +236,14 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int
             &sId );
 
     rStrm.GetCurrentStream()->singleElement( XML_drawing,
-            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ).getStr(),
+            FSNS(XML_r, XML_id), sId.toUtf8(),
             FSEND );
 
     rStrm.PushStream( pDrawing );
     pDrawing->startElement( FSNS( XML_xdr, XML_wsDr ),
-            FSNS( XML_xmlns, XML_xdr ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(dmlSpreadDr))).getStr(),
-            FSNS( XML_xmlns, XML_a ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(dml))).getStr(),
-            FSNS( XML_xmlns, XML_r ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
+            FSNS(XML_xmlns, XML_xdr), rStrm.getNamespaceURL(OOX_NS(dmlSpreadDr)).toUtf8(),
+            FSNS(XML_xmlns, XML_a),   rStrm.getNamespaceURL(OOX_NS(dml)).toUtf8(),
+            FSNS(XML_xmlns, XML_r),   rStrm.getNamespaceURL(OOX_NS(officeRel)).toUtf8(),
             FSEND );
 
     for (const auto& rpObj : aList)
@@ -270,15 +270,15 @@ void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nV
             &sId );
 
     rStrm.GetCurrentStream()->singleElement( XML_legacyDrawing,
-            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ).getStr(),
+            FSNS(XML_r, XML_id), sId.toUtf8(),
             FSEND );
 
     rStrm.PushStream( pVmlDrawing );
     pVmlDrawing->startElement( XML_xml,
-            FSNS( XML_xmlns, XML_v ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(vml))).getStr(),
-            FSNS( XML_xmlns, XML_o ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(vmlOffice))).getStr(),
-            FSNS( XML_xmlns, XML_x ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(vmlExcel))).getStr(),
-            FSNS( XML_xmlns, XML_w10 ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(vmlWord))).getStr(),
+            FSNS(XML_xmlns, XML_v),   rStrm.getNamespaceURL(OOX_NS(vml)).toUtf8(),
+            FSNS(XML_xmlns, XML_o),   rStrm.getNamespaceURL(OOX_NS(vmlOffice)).toUtf8(),
+            FSNS(XML_xmlns, XML_x),   rStrm.getNamespaceURL(OOX_NS(vmlExcel)).toUtf8(),
+            FSNS(XML_xmlns, XML_w10), rStrm.getNamespaceURL(OOX_NS(vmlWord)).toUtf8(),
             FSEND );
 
     for ( const auto& rxObj : rList )
@@ -1260,10 +1260,10 @@ void ExcBundlesheet8::SaveXml( XclExpXmlStream& rStrm )
             &sId );
 
     rStrm.GetCurrentStream()->singleElement( XML_sheet,
-            XML_name,               XclXmlUtils::ToOString( sUnicodeName ).getStr(),
+            XML_name,               sUnicodeName.toUtf8(),
             XML_sheetId,            OString::number( ( nTab+1 ) ).getStr(),
             XML_state,              nGrbit == 0x0000 ? "visible" : "hidden",
-            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ).getStr(),
+            FSNS( XML_r, XML_id ),  sId.toUtf8(),
             FSEND );
 }
 

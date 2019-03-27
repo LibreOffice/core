@@ -306,7 +306,7 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_help, "",
             XML_hidden, ToPsz( ::get_flag( mnFlags, EXC_NAME_HIDDEN ) ),
             XML_localSheetId, mnScTab == SCTAB_GLOBAL ? nullptr : OString::number( mnScTab ).getStr(),
-            XML_name, XclXmlUtils::ToOString( maOrigName ).getStr(),
+            XML_name, maOrigName.toUtf8(),
             // OOXTODO: XML_publishToServer, "",
             // OOXTODO: XML_shortcutKey, "",
             // OOXTODO: XML_statusBar, "",

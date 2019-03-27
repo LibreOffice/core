@@ -438,7 +438,7 @@ void XclExpImgData::SaveXml( XclExpXmlStream& rStrm )
     DrawingML aDML(pWorksheet, &rStrm, drawingml::DOCUMENT_XLSX);
     OUString rId = aDML.WriteImage( maGraphic );
     pWorksheet->singleElement( XML_picture,
-            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( rId ).getStr(),
+            FSNS(XML_r, XML_id), rId.toUtf8(),
             FSEND );
 }
 
@@ -1422,16 +1422,16 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
 
     if( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 )
         rComments->startElement( XML_comments,
-            XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
-            FSNS( XML_xmlns, XML_mc ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(mce))).getStr(),
-            FSNS( XML_xmlns, XML_xdr ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(dmlSpreadDr))).getStr(),
-            FSNS( XML_xmlns, XML_v2 ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(mceTest))).getStr(),
+            XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
+            FSNS(XML_xmlns, XML_mc), rStrm.getNamespaceURL(OOX_NS(mce)).toUtf8(),
+            FSNS(XML_xmlns, XML_xdr), rStrm.getNamespaceURL(OOX_NS(dmlSpreadDr)).toUtf8(),
+            FSNS(XML_xmlns, XML_v2), rStrm.getNamespaceURL(OOX_NS(mceTest)).toUtf8(),
             FSNS( XML_mc, XML_Ignorable ), "v2",
             FSEND );
     else
         rComments->startElement( XML_comments,
-            XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
-            FSNS( XML_xmlns, XML_xdr ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(dmlSpreadDr))).getStr(),
+            XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
+            FSNS(XML_xmlns, XML_xdr), rStrm.getNamespaceURL(OOX_NS(dmlSpreadDr)).toUtf8(),
             FSEND );
 
     rComments->startElement( XML_authors, FSEND );
