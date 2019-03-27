@@ -274,6 +274,13 @@ static bool areTypesEqual(QualType lhs, QualType rhs)
             return false;
         return areTypesEqual(lhsDecayed->getAdjustedType(), rhsDecayed->getAdjustedType());
     }
+    if (auto lhsAttr = dyn_cast<AttributedType>(lhsType))
+    {
+        auto rhsAttr = dyn_cast<AttributedType>(rhsType);
+        if (!rhsAttr)
+            return false;
+        return areTypesEqual(lhsAttr->getModifiedType(), rhsAttr->getModifiedType());
+    }
     return lhsType == rhsType;
 }
 
