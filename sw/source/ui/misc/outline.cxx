@@ -278,7 +278,7 @@ IMPL_LINK(SwOutlineTabDialog, MenuSelectHdl, const OString&, rIdent, void)
         const SwNumRulesWithName *pRules = pChapterNumRules->GetRules( nLevelNo );
         if( pRules )
         {
-            xNumRule.reset(pRules->MakeNumRule(rWrtSh));
+            xNumRule = pRules->MakeNumRule(rWrtSh);
             xNumRule->SetRuleType( OUTLINE_RULE );
             SfxTabPage* pOutlinePage = GetTabPage("numbering");
             assert(pOutlinePage);
