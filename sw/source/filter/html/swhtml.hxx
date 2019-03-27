@@ -807,7 +807,7 @@ public:
     const SwStartNode *InsertTableSection( sal_uInt16 nPoolId );
 
     // Insert methods for various table tags
-    HTMLTableCnts *InsertTableContents( bool bHead );
+    std::unique_ptr<HTMLTableCnts> InsertTableContents( bool bHead );
 
 private:
     // Create a section for the temporary storage of the table caption
