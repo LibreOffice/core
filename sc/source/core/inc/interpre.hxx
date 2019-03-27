@@ -454,7 +454,7 @@ private:
             SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
             SCCOL nCol2, SCROW nRow2, SCTAB nTab2 );
     inline ScTokenMatrixMap& GetTokenMatrixMap();
-    static ScTokenMatrixMap* CreateTokenMatrixMap();
+    static std::unique_ptr<ScTokenMatrixMap> CreateTokenMatrixMap();
     ScMatrixRef GetMatrix();
     ScMatrixRef GetMatrix( short & rParam, size_t & rInRefList );
     sc::RangeMatrix GetRangeMatrix();
@@ -1046,7 +1046,7 @@ inline bool ScInterpreter::MatrixParameterConversion()
 inline ScTokenMatrixMap& ScInterpreter::GetTokenMatrixMap()
 {
     if (!pTokenMatrixMap)
-        pTokenMatrixMap.reset(CreateTokenMatrixMap());
+        pTokenMatrixMap = CreateTokenMatrixMap();
     return *pTokenMatrixMap;
 }
 
