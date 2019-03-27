@@ -96,7 +96,7 @@ OUString LockFileCommon::GenerateURL( const OUString& aOrigURL, const OUString& 
 }
 
 
-INetURLObject LockFileCommon::ResolveLinks( const INetURLObject& aDocURL ) const
+INetURLObject LockFileCommon::ResolveLinks( const INetURLObject& aDocURL )
 {
     if ( aDocURL.HasError() )
         throw lang::IllegalArgumentException();
