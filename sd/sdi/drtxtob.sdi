@@ -191,6 +191,18 @@ shell TextObjectBar
         StateMethod = GetAttrState;
     ]
 
+    SID_INC_INDENT
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_DEC_INDENT
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
     SID_ATTR_PARA_LRSPACE
     [
         ExecMethod = Execute ;

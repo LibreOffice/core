@@ -72,6 +72,8 @@ static const sal_uInt16 SidArray[] = {
                 SID_SET_SUPER_SCRIPT,
                 SID_SET_SUB_SCRIPT,
                 SID_HYPERLINK_GETLINK,
+                SID_DEC_INDENT,
+                SID_INC_INDENT,
                 SID_PARASPACE_INCREASE,
                 SID_PARASPACE_DECREASE,
                 SID_STATUS_PAGE,
