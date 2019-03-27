@@ -1030,9 +1030,9 @@ void FmXFormShell::ForceUpdateSelection_Lock()
     }
 }
 
-VclBuilder* FmXFormShell::GetConversionMenu_Lock()
+std::unique_ptr<VclBuilder> FmXFormShell::GetConversionMenu_Lock()
 {
-    VclBuilder* pBuilder = new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/convertmenu.ui", "");
+    std::unique_ptr<VclBuilder> pBuilder(new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/convertmenu.ui", ""));
     VclPtr<PopupMenu> pNewMenu(pBuilder->get_menu("menu"));
     for (size_t i = 0; i < SAL_N_ELEMENTS(aConvertSlots); ++i)
     {

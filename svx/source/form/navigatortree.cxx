@@ -410,7 +410,7 @@ namespace svxform
                     const sal_Int16 nChangeId = aContextMenu->GetItemId("change");
                     if (!m_bRootSelected && !m_nFormsSelected && (m_nControlsSelected == 1))
                     {
-                        xBuilder.reset(FmXFormShell::GetConversionMenu_Lock());
+                        xBuilder = FmXFormShell::GetConversionMenu_Lock();
                         xConversionMenu = xBuilder->get_menu("menu");
                         aContextMenu->SetPopupMenu(nChangeId, xConversionMenu);
 #if OSL_DEBUG_LEVEL > 0
