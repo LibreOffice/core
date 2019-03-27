@@ -276,6 +276,25 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124212_handle_position)
     sal_Int32 nObservedX(aObservedPosition.X()); // tools::Point
     CPPUNIT_ASSERT_EQUAL_MESSAGE("handle X coordinate", nDesiredX, nObservedX);
 }
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124029_arc_position)
+{
+    // tdf121029 MS binary custom shape mso_sptArc has wrong position
+    // MS uses the sector for position reference. Error was, that
+    // LibreOffice has used the underlaying ellipse.
+    const OUString sFileName("tdf124029_Arc_position.doc");
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.text.TextDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    // The visual wrong position is due to a wrong shape width.
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    awt::Rectangle aFrameRect;
+    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aFrameRect;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("shape width", static_cast<sal_uInt32>(1610),
+                                 static_cast<sal_uInt32>(aFrameRect.Width));
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,6 +57,8 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <com/sun/star/container/XIdentifierContainer.hpp>
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
@@ -378,7 +380,6 @@ sal_Int32 DffPropertyReader::Fix16ToAngle( sal_Int32 nContent )
 DffPropertyReader::~DffPropertyReader()
 {
 }
-
 
 static SvStream& operator>>( SvStream& rIn, SvxMSDffConnectorRule& rRule )
 {
@@ -4510,10 +4511,10 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         }
                     }
 
-                    // mso_sptArc special treating:
-                    // sj: since we actually can't render the arc because of its weird SnapRect settings,
-                    // we will create a new CustomShape, that can be saved/loaded without problems.
-                    // We will change the shape type, so this code applies only if importing arcs from msoffice.
+                    // mso_sptArc special treating
+                    // tdf#124026: A new custom shape is generated from prototype 'msoArc'. Values, which are
+                    // read here, are adapted and merged. The shape type is changed, so this code
+                    // applies only if importing arcs from MS Office.
                     if ( aObjData.eShapeType == mso_sptArc )
                     {
                         const OUString sAdjustmentValues( "AdjustmentValues" );
@@ -4524,181 +4525,193 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         const OUString sPath( "Path" );
                         const OUString sTextFrames( "TextFrames" );
                         SdrCustomShapeGeometryItem aGeometryItem( static_cast<SdrObjCustomShape*>(pRet)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-                        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates;
+                        PropertyValue aPropVal;
+
+                        // The default arc goes form -90deg to 0deg. Replace general defaults used
+                        // when read from stream with this specific values.
+                        double fStartAngle(-90.0);
+                        double fEndAngle(0.0);
                         css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > seqAdjustmentValues;
-
-                        // before clearing the GeometryItem we have to store the current Coordinates
-                        const uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sPath, sCoordinates );
-                        tools::Rectangle aPolyBoundRect;
-                        Point aStartPt( 0,0 );
-                        if ( pAny && ( *pAny >>= seqCoordinates ) && ( seqCoordinates.getLength() >= 4 ) )
+                        const uno::Any* pAny = aGeometryItem.GetPropertyValueByName(sAdjustmentValues);
+                        pAny = aGeometryItem.GetPropertyValueByName(sAdjustmentValues);
+                        if (pAny && (*pAny >>= seqAdjustmentValues) && seqAdjustmentValues.getLength() > 1)
                         {
-                            sal_Int32 nPtNum, nNumElemVert = seqCoordinates.getLength();
-                            XPolygon aXP( static_cast<sal_uInt16>(nNumElemVert) );
-                            for ( nPtNum = 0; nPtNum < nNumElemVert; nPtNum++ )
+                            if (seqAdjustmentValues[0].State == css::beans::PropertyState_DEFAULT_VALUE)
                             {
-                                Point aP;
-                                sal_Int32 nX = 0, nY = 0;
-                                seqCoordinates[ nPtNum ].First.Value >>= nX;
-                                seqCoordinates[ nPtNum ].Second.Value >>= nY;
-                                aP.setX(nX);
-                                aP.setY(nY);
-                                aXP[ static_cast<sal_uInt16>(nPtNum) ] = aP;
+                                seqAdjustmentValues[0].Value <<= -90.0;
+                                seqAdjustmentValues[0].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
                             }
-                            aPolyBoundRect = aXP.GetBoundRect();
-
-                            // arc first command is always wr -- clockwise arc
-                            // the parameters are : (left,top),(right,bottom),start(x,y),end(x,y)
-                            aStartPt = aXP[2];
-                        }
-                        else
-                            aPolyBoundRect = tools::Rectangle( -21600, 0, 21600, 43200 );  // defaulting
-
-                        // clearing items, so MergeDefaultAttributes will set the corresponding defaults from EnhancedCustomShapeGeometry
-                        aGeometryItem.ClearPropertyValue( sHandles );
-                        aGeometryItem.ClearPropertyValue( sEquations );
-                        aGeometryItem.ClearPropertyValue( sViewBox );
-                        aGeometryItem.ClearPropertyValue( sPath );
-
-                        sal_Int32 nEndAngle = 9000;
-                        sal_Int32 nStartAngle = 0;
-                        pAny = aGeometryItem.GetPropertyValueByName( sAdjustmentValues );
-                        if ( pAny && ( *pAny >>= seqAdjustmentValues ) && seqAdjustmentValues.getLength() > 1 )
-                        {
-                            if ( seqAdjustmentValues[ 0 ].State == css::beans::PropertyState_DIRECT_VALUE )
+                            if (seqAdjustmentValues[1].State == css::beans::PropertyState_DEFAULT_VALUE)
                             {
-                                double fNumber;
-                                seqAdjustmentValues[ 0 ].Value >>= fNumber;
-                                sal_Int32 nValue;
-                                bool bFail = o3tl::checked_multiply<sal_Int32>(fNumber, 100, nValue);
-                                if (bFail)
-                                    SAL_WARN("filter.ms", "nEndAngle too large: " << fNumber);
-                                else
-                                    nEndAngle = NormAngle36000(-nValue);
+                                seqAdjustmentValues[1].Value <<= 0.0;
+                                seqAdjustmentValues[1].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
                             }
-                            else
-                            {
-                                //normal situation:if endAngle != 90,there will be a direct_value,but for damaged curve,the endAngle need to recalculate.
-                                Point cent = aPolyBoundRect.Center();
-                                double fNumber;
-                                if ( aStartPt.Y() == cent.Y() )
-                                    fNumber = ( aStartPt.X() >= cent.X() ) ? 0:180.0;
-                                else if ( aStartPt.X() == cent.X() )
-                                    fNumber = ( aStartPt.Y() >= cent.Y() ) ? 90.0: 270.0;
-                                else
-                                {
-                                    fNumber
-                                        = basegfx::rad2deg(atan2(double(aStartPt.X() - cent.X()),
-                                                                 double(aStartPt.Y() - cent.Y()))
-                                                           + F_PI); // 0..360.0
-                                }
-                                nEndAngle = NormAngle36000( - static_cast<sal_Int32>(fNumber) * 100 );
-                                seqAdjustmentValues[ 0 ].Value <<= fNumber;
-                                seqAdjustmentValues[ 0 ].State = css::beans::PropertyState_DIRECT_VALUE;     // so this value will properly be stored
-                            }
-
-                            if ( seqAdjustmentValues[ 1 ].State == css::beans::PropertyState_DIRECT_VALUE )
-                            {
-                                double fNumber;
-                                seqAdjustmentValues[ 1 ].Value >>= fNumber;
-                                nStartAngle = NormAngle36000( - static_cast<sal_Int32>(fNumber) * 100 );
-                            }
-                            else
-                            {
-                                seqAdjustmentValues[ 1 ].Value <<= 0.0;
-                                seqAdjustmentValues[ 1 ].State = css::beans::PropertyState_DIRECT_VALUE;
-                            }
-
-                            PropertyValue aPropVal;
+                            seqAdjustmentValues[0].Value >>= fStartAngle;
+                            seqAdjustmentValues[1].Value >>= fEndAngle;
                             aPropVal.Name = sAdjustmentValues;
                             aPropVal.Value <<= seqAdjustmentValues;
-                            aGeometryItem.SetPropertyValue( aPropVal );     // storing the angle attribute
+                            aGeometryItem.SetPropertyValue(aPropVal);
                         }
-                        if ( nStartAngle != nEndAngle )
+
+                        // arc first command is always wr -- clockwise arc
+                        // the parameters are : (left,top),(right,bottom),start(x,y),end(x,y)
+                        // The left/top vertex of the frame rectangle of the sector is the origin
+                        // of the shape internal coordinate system in MS Office. The default arc
+                        // has an ellipse frame rectange with LT(-21600,0) and
+                        // RB(21600,43200) in this coordinate system.
+                        basegfx::B2DRectangle aEllipseRect_MS(-21600.0, 0.0, 21600.0, 43200.0);
+                        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates;
+                        pAny = aGeometryItem.GetPropertyValueByName( sPath, sCoordinates );
+                        if (pAny && (*pAny >>= seqCoordinates) && (seqCoordinates.getLength() >= 2))
                         {
-                            XPolygon aXPoly( aPolyBoundRect.Center(), aPolyBoundRect.GetWidth() / 2, aPolyBoundRect.GetHeight() / 2,
-                                static_cast<sal_uInt16>(nStartAngle) / 10, static_cast<sal_uInt16>(nEndAngle) / 10, true );
-                            tools::Rectangle aPolyPieRect( aXPoly.GetBoundRect() );
-
-                            double  fYScale = 0.0, fXScale = 0.0;
-                            double  fYOfs, fXOfs;
-
-                            Point aP( aObjData.aBoundRect.Center() );
-                            Size aS( aObjData.aBoundRect.GetSize() );
-                            aP.AdjustX( -(aS.Width() / 2) );
-                            aP.AdjustY( -(aS.Height() / 2) );
-                            tools::Rectangle aLogicRect( aP, aS );
-
-                            fYOfs = fXOfs = 0.0;
-
-                            if ( aPolyBoundRect.GetWidth() && aPolyPieRect.GetWidth() )
-                            {
-                                fXScale = static_cast<double>(aLogicRect.GetWidth()) / static_cast<double>(aPolyPieRect.GetWidth());
-                                if ( nSpFlags & ShapeFlag::FlipH )
-                                    fXOfs = ( static_cast<double>(aPolyPieRect.Right()) - static_cast<double>(aPolyBoundRect.Right()) ) * fXScale;
-                                else
-                                    fXOfs = ( static_cast<double>(aPolyBoundRect.Left()) - static_cast<double>(aPolyPieRect.Left()) ) * fXScale;
-                            }
-                            if ( aPolyBoundRect.GetHeight() && aPolyPieRect.GetHeight() )
-                            {
-                                fYScale = static_cast<double>(aLogicRect.GetHeight()) / static_cast<double>(aPolyPieRect.GetHeight());
-                                if ( nSpFlags & ShapeFlag::FlipV )
-                                    fYOfs = ( static_cast<double>(aPolyPieRect.Bottom()) - static_cast<double>(aPolyBoundRect.Bottom()) ) * fYScale;
-                                else
-                                    fYOfs = (static_cast<double>(aPolyBoundRect.Top()) - static_cast<double>(aPolyPieRect.Top()) ) * fYScale;
-                            }
-
-                            if ( aPolyPieRect.GetWidth() )
-                                fXScale = static_cast<double>(aPolyBoundRect.GetWidth()) / static_cast<double>(aPolyPieRect.GetWidth());
-                            if ( aPolyPieRect.GetHeight() )
-                                fYScale = static_cast<double>(aPolyBoundRect.GetHeight()) / static_cast<double>(aPolyPieRect.GetHeight());
-
-                            tools::Rectangle aOldBoundRect( aObjData.aBoundRect );
-                            aObjData.aBoundRect = tools::Rectangle( Point( aLogicRect.Left() + static_cast<sal_Int32>(fXOfs), aLogicRect.Top() + static_cast<sal_Int32>(fYOfs) ),
-                                 Size( static_cast<sal_Int32>( aLogicRect.GetWidth() * fXScale ), static_cast<sal_Int32>( aLogicRect.GetHeight() * fYScale ) ) );
-
-                            // creating the text frame -> scaling into (0,0),(21600,21600) destination coordinate system
-                            double fTextFrameScaleX = 0.0;
-                            double fTextFrameScaleY = 0.0;
-                            if (aPolyBoundRect.GetWidth())
-                                fTextFrameScaleX = double(21600) / static_cast<double>(aPolyBoundRect.GetWidth());
-                            if (aPolyBoundRect.GetHeight())
-                                fTextFrameScaleY = double(21600) / static_cast<double>(aPolyBoundRect.GetHeight());
-
-                            sal_Int32 nLeft  = static_cast<sal_Int32>(( aPolyPieRect.Left()  - aPolyBoundRect.Left() ) * fTextFrameScaleX );
-                            sal_Int32 nTop   = static_cast<sal_Int32>(( aPolyPieRect.Top()   - aPolyBoundRect.Top() )  * fTextFrameScaleY );
-                            sal_Int32 nRight = static_cast<sal_Int32>(( aPolyPieRect.Right() - aPolyBoundRect.Left() ) * fTextFrameScaleX );
-                            sal_Int32 nBottom= static_cast<sal_Int32>(( aPolyPieRect.Bottom()- aPolyBoundRect.Top() )  * fTextFrameScaleY );
-                            css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > aTextFrame( 1 );
-                            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].TopLeft.First,     nLeft );
-                            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].TopLeft.Second,    nTop );
-                            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].BottomRight.First, nRight );
-                            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].BottomRight.Second,nBottom );
-                            PropertyValue aProp;
-                            aProp.Name = sTextFrames;
-                            aProp.Value <<= aTextFrame;
-                            aGeometryItem.SetPropertyValue( sPath, aProp );
-
-                            // sj: taking care of the different rotation points, since the new arc is having a bigger snaprect
-                            if ( mnFix16Angle )
-                            {
-                                sal_Int32 nAngle = mnFix16Angle;
-                                if ( nSpFlags & ShapeFlag::FlipH )
-                                    nAngle = 36000 - nAngle;
-                                if ( nSpFlags & ShapeFlag::FlipV )
-                                    nAngle = -nAngle;
-                                double a = nAngle * F_PI18000;
-                                double ss = sin( a );
-                                double cc = cos( a );
-                                Point aP1( aOldBoundRect.TopLeft() );
-                                Point aC1( aObjData.aBoundRect.Center() );
-                                Point aP2( aOldBoundRect.TopLeft() );
-                                Point aC2( aOldBoundRect.Center() );
-                                RotatePoint( aP1, aC1, ss, cc );
-                                RotatePoint( aP2, aC2, ss, cc );
-                                aObjData.aBoundRect.Move( aP2.X() - aP1.X(), aP2.Y() - aP1.Y() );
-                            }
+                            sal_Int32 nL, nT, nR, nB;
+                            seqCoordinates[0].First.Value >>= nL;
+                            seqCoordinates[0].Second.Value >>= nT;
+                            seqCoordinates[1].First.Value >>= nR;
+                            seqCoordinates[1].Second.Value >>= nB;
+                            aEllipseRect_MS = basegfx::B2DRectangle(nL, nT, nR, nB);
                         }
+
+                        // MS Office uses the pie frame rectangle as reference for outer position
+                        // and size of the shape and for text in the shape. We can get this rectangle
+                        // from imported viewBox or from the arc geometry.
+                        basegfx::B2DRectangle aPieRect_MS(0.0 , 0.0, 21600.0, 21600.0);
+                        pAny = aGeometryItem.GetPropertyValueByName(sPath,sViewBox);
+                        css::awt::Rectangle aImportedViewBox;
+                        if (pAny && (*pAny >>= aImportedViewBox))
+                        {
+                            aPieRect_MS = basegfx::B2DRectangle( aImportedViewBox.X,
+                                                                aImportedViewBox.Y,
+                                                      aImportedViewBox.X + aImportedViewBox.Width,
+                                                      aImportedViewBox.Y + aImportedViewBox.Height);
+                        }
+                        else
+                        {
+                            double fRadStartAngle(basegfx::deg2rad(NormAngle360(fStartAngle)));
+                            double fRadEndAngle(basegfx::deg2rad(NormAngle360(fEndAngle)));
+                            basegfx::B2DPoint aCenter(aEllipseRect_MS.getCenter());
+                            basegfx::B2DPolygon aTempPie(
+                                    basegfx::utils::createPolygonFromEllipseSegment(
+                                        aCenter,
+                                        aEllipseRect_MS.getWidth() * 0.5,
+                                        aEllipseRect_MS.getHeight() * 0.5,
+                                        fRadStartAngle,
+                                        fRadEndAngle));
+                            aTempPie.append(aCenter);
+                            aPieRect_MS = aTempPie.getB2DRange();
+                        }
+
+                        // MS Office uses for mso_sptArc a frame rectangle (=resize handles)
+                        // which encloses only the sector, LibreOffice uses for custom shapes as
+                        // default a frame rectangle, which encloses the entire ellipse. That would
+                        // result in wrong positions in Writer and Calc, see tdf#124026.
+                        // We workaround this problem, by setting a suitable viewBox.
+                        bool bIsImportPPT(GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_PPT);
+                        css::awt::Rectangle aViewBox_LO; // in LO coordinate system
+                        if (bIsImportPPT || aPieRect_MS.getWidth() == 0 ||  aPieRect_MS.getHeight() == 0)
+                        { // clear item, so that default from EnhancedCustomShapeGeometry is used
+                            aGeometryItem.ClearPropertyValue(sViewBox);
+                        }
+                        else
+                        {
+                            double fX((aPieRect_MS.getMinX() - aEllipseRect_MS.getMinX()) / 2.0);
+                            double fY((aPieRect_MS.getMinY() - aEllipseRect_MS.getMinY()) / 2.0);
+                            aViewBox_LO.X = static_cast<sal_Int32>(fX);
+                            aViewBox_LO.Y = static_cast<sal_Int32>(fY);
+                            aViewBox_LO.Width = static_cast<sal_Int32>(aPieRect_MS.getWidth() / 2.0);
+                            aViewBox_LO.Height = static_cast<sal_Int32>(aPieRect_MS.getHeight() / 2.0);
+                            aPropVal.Name = sViewBox;
+                            aPropVal.Value <<= aViewBox_LO;
+                            aGeometryItem.SetPropertyValue(aPropVal);
+                        }
+
+                        // aObjData.aBoundRect contains position and size of the sector in (outer)
+                        // logic coordinates, e.g. for PPT in 1/100 mm, for Word in twips.
+                        // For Impress the default viewBox is used, so adapt aObjData.aBoundRect.
+                        tools::Rectangle aOldBoundRect(aObjData.aBoundRect); // backup, needed later on
+                        if (bIsImportPPT)
+                        {
+                            double fLogicXOfs(0.0); // LogicLeft_LO = LogicLeft_MS + fXLogicOfs
+                            double fLogicYOfs(0.0);
+                            double fLogicPieWidth(aObjData.aBoundRect.getWidth());
+                            double fLogicPieHeight(aObjData.aBoundRect.getHeight());
+                            double fLogicEllipseWidth(0.0); // to be LogicWidth_LO
+                            double fLogicEllipseHeight(0.0);
+                            if (aPieRect_MS.getWidth())
+                            {
+                                // fXScale = ratio 'logic length' : 'shape internal length'
+                                double fXScale = fLogicPieWidth / aPieRect_MS.getWidth();
+                                if (nSpFlags & ShapeFlag::FlipH)
+                                    fLogicXOfs = (aPieRect_MS.getMaxX() - aEllipseRect_MS.getMaxX()) * fXScale;
+                                else
+                                    fLogicXOfs = (aEllipseRect_MS.getMinX() - aPieRect_MS.getMinX()) * fXScale;
+                                fLogicEllipseWidth = aEllipseRect_MS.getWidth() * fXScale;
+                            }
+                            if (aPieRect_MS.getHeight())
+                            {
+                                double fYScale = fLogicPieHeight / aPieRect_MS.getHeight();
+                                if (nSpFlags & ShapeFlag::FlipV)
+                                    fLogicYOfs = (aPieRect_MS.getMaxY() - aEllipseRect_MS.getMaxY()) * fYScale;
+                                else
+                                    fLogicYOfs = (aEllipseRect_MS.getMinY() - aPieRect_MS.getMinY()) * fYScale;
+                                fLogicEllipseHeight = aEllipseRect_MS.getHeight() * fYScale;
+                            }
+                            aObjData.aBoundRect = tools::Rectangle(
+                                                    Point(aOldBoundRect.Left() + static_cast<sal_Int32>(fLogicXOfs),
+                                                          aOldBoundRect.Top() + static_cast<sal_Int32>(fLogicYOfs)),
+                                                    Size(static_cast<sal_Int32>(fLogicEllipseWidth),
+                                                         static_cast<sal_Int32>(fLogicEllipseHeight)));
+                        }
+                        // else nothing to do. aObjData.aBoundRect corresponds to changed viewBox.
+
+                        // creating the text frame -> scaling into (0,0),(21600,21600) destination coordinate system
+                        double fTextFrameScaleX = 0.0;
+                        double fTextFrameScaleY = 0.0;
+                        if (aEllipseRect_MS.getWidth())
+                            fTextFrameScaleX = 21600.0 / aEllipseRect_MS.getWidth();
+                        if (aEllipseRect_MS.getHeight())
+                            fTextFrameScaleY = 21600.0 / aEllipseRect_MS.getHeight();
+
+                        sal_Int32 nLeft  = static_cast<sal_Int32>((aPieRect_MS.getMinX() - aEllipseRect_MS.getMinX()) * fTextFrameScaleX );
+                        sal_Int32 nTop   = static_cast<sal_Int32>((aPieRect_MS.getMinY() - aEllipseRect_MS.getMinY()) * fTextFrameScaleY );
+                        sal_Int32 nRight = static_cast<sal_Int32>((aPieRect_MS.getMaxX() - aEllipseRect_MS.getMinX()) * fTextFrameScaleX );
+                        sal_Int32 nBottom= static_cast<sal_Int32>((aPieRect_MS.getMaxY() - aEllipseRect_MS.getMinY()) * fTextFrameScaleY );
+                        css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > aTextFrame( 1 );
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].TopLeft.First,     nLeft );
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].TopLeft.Second,    nTop );
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].BottomRight.First, nRight );
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].BottomRight.Second,nBottom );
+                        PropertyValue aProp;
+                        aProp.Name = sTextFrames;
+                        aProp.Value <<= aTextFrame;
+                        aGeometryItem.SetPropertyValue( sPath, aProp );
+
+                        // sj: taking care of the different rotation points, since the new arc is having a bigger snaprect
+                        if ( mnFix16Angle )
+                        {
+                            sal_Int32 nAngle = mnFix16Angle;
+                            if ( nSpFlags & ShapeFlag::FlipH )
+                                nAngle = 36000 - nAngle;
+                            if ( nSpFlags & ShapeFlag::FlipV )
+                                nAngle = -nAngle;
+                            double a = nAngle * F_PI18000;
+                            double ss = sin( a );
+                            double cc = cos( a );
+                            Point aP1( aOldBoundRect.TopLeft() );
+                            Point aC1( aObjData.aBoundRect.Center() );
+                            Point aP2( aOldBoundRect.TopLeft() );
+                            Point aC2( aOldBoundRect.Center() );
+                            RotatePoint( aP1, aC1, ss, cc );
+                            RotatePoint( aP2, aC2, ss, cc );
+                            aObjData.aBoundRect.Move( aP2.X() - aP1.X(), aP2.Y() - aP1.Y() );
+                        }
+
+                        // clearing items, so MergeDefaultAttributes will set the corresponding
+                        // defaults from EnhancedCustomShapeGeometry
+                        aGeometryItem.ClearPropertyValue( sHandles );
+                        aGeometryItem.ClearPropertyValue( sEquations );
+                        aGeometryItem.ClearPropertyValue( sPath );
+
                         static_cast<SdrObjCustomShape*>(pRet)->SetMergedItem( aGeometryItem );
                         static_cast<SdrObjCustomShape*>(pRet)->MergeDefaultAttributes();
 
@@ -4706,7 +4719,6 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         SdrCustomShapeGeometryItem aGeoName( static_cast<SdrObjCustomShape*>(pRet)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                         const OUString sType( "Type" );
                         const OUString sName( "mso-spt100" );
-                        PropertyValue aPropVal;
                         aPropVal.Name = sType;
                         aPropVal.Value <<= sName;
                         aGeoName.SetPropertyValue( aPropVal );
