@@ -345,7 +345,7 @@ public:
 
     void    ForceMove()     { Move(); }
 
-    static SvxNumberInfoItem* MakeNumberInfoItem( ScDocument* pDoc, const ScViewData* pViewData );
+    static std::unique_ptr<SvxNumberInfoItem> MakeNumberInfoItem( ScDocument* pDoc, const ScViewData* pViewData );
 
     static void UpdateNumberFormatter( const SvxNumberInfoItem&  rInfoItem );
 
