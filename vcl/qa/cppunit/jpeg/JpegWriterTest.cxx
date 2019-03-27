@@ -29,9 +29,11 @@ class JpegWriterTest : public test::BootstrapFixtureBase
     BitmapEx roundtripJPG(const OUString& aURL);
 
 public:
+    void testWrite8BitGrayscale();
     void testWrite8BitNonGrayscale();
 
     CPPUNIT_TEST_SUITE(JpegWriterTest);
+    CPPUNIT_TEST(testWrite8BitGrayscale);
     CPPUNIT_TEST(testWrite8BitNonGrayscale);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -62,6 +64,22 @@ BitmapEx JpegWriterTest::roundtripJPG(const BitmapEx& bitmap)
     bResult = rFilter.ImportGraphic(aImportGraphic, "memory", stream, importFormatJPG);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
     return aImportGraphic.GetBitmapEx();
+}
+
+void JpegWriterTest::testWrite8BitGrayscale()
+{
+    Bitmap bitmap = roundtripJPG(getFullUrl("8BitGrayscale.jpg")).GetBitmap();
+    Bitmap::ScopedReadAccess access(bitmap);
+    const ScanlineFormat format = access->GetScanlineFormat();
+    // Check that it's still 8bit grayscale.
+    CPPUNIT_ASSERT_EQUAL(ScanlineFormat::N8BitPal, format);
+    CPPUNIT_ASSERT(bitmap.HasGreyPalette());
+    // Check that the content is valid.
+    CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_WHITE), access->GetColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_WHITE), access->GetColor(0, access->Width() - 1));
+    CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_WHITE), access->GetColor(access->Height() - 1, 0));
+    CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_BLACK),
+                         access->GetColor(access->Height() - 1, access->Width() - 1));
 }
 
 void JpegWriterTest::testWrite8BitNonGrayscale()
