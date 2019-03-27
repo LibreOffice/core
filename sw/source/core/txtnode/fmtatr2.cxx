@@ -40,6 +40,7 @@
 #include <com/sun/star/text/RubyPosition.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 #include <cmdid.h>
 #include <com/sun/star/uno/Any.h>

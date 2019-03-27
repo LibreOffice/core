@@ -21,12 +21,13 @@
 
 #include <memory>
 #include <sal/config.h>
-#include <sfx2/dllapi.h>
-#include <sfx2/printer.hxx>
+#include <vcl/vclptr.hxx>
 #include <vcl/weld.hxx>
 
 
 class SfxViewShell;
+class SfxTabPage;
+class SfxItemSet;
 
 
 struct SfxPrintOptDlg_Impl;

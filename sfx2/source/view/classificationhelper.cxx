@@ -14,6 +14,8 @@
 #include <iterator>
 
 #include <com/sun/star/beans/XPropertyContainer.hpp>
+#include <com/sun/star/beans/Property.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>

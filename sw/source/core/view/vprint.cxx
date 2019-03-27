@@ -21,6 +21,7 @@
 #include <hintids.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/printer.hxx>
 #include <sfx2/prnmon.hxx>
 #include <svl/languageoptions.hxx>
 #include <editeng/paperinf.hxx>

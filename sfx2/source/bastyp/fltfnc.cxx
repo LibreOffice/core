@@ -26,6 +26,8 @@
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 

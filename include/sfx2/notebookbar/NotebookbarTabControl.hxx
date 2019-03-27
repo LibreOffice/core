@@ -10,14 +10,13 @@
 #ifndef INCLUDED_SFX2_NOTEBOOKBAR_NOTEBOOKBARTABCONTROL_HXX
 #define INCLUDED_SFX2_NOTEBOOKBAR_NOTEBOOKBARTABCONTROL_HXX
 
-#include <vcl/toolbox.hxx>
 #include <sfx2/dllapi.h>
 #include <vcl/tabctrl.hxx>
 
-class ChangedUIEventListener;
 namespace com { namespace sun { namespace star { namespace ui {
     class XUIConfigurationListener;
 } } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
 class SFX2_DLLPUBLIC NotebookbarTabControl final : public NotebookbarTabControlBase
 {

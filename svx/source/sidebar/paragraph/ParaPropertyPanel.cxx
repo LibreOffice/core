@@ -32,6 +32,8 @@
 #include <svtools/unitconv.hxx>
 #include <sal/log.hxx>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 using namespace css;
 using namespace css::uno;
 

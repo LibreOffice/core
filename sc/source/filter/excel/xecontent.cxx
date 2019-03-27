@@ -25,6 +25,7 @@
 #include <com/sun/star/sheet/XAreaLinks.hpp>
 #include <com/sun/star/sheet/XAreaLink.hpp>
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
 #include <formula/grammar.hxx>

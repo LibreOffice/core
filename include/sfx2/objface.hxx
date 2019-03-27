@@ -28,9 +28,7 @@
 #include <sfx2/toolbarids.hxx>
 
 struct SfxInterface_Impl;
-class  SfxConfigItem;
 class  SfxModule;
-class  SvStream;
 
 #define SFX_OBJECTBAR_APPLICATION       0
 #define SFX_OBJECTBAR_OBJECT            1

@@ -23,16 +23,11 @@
 #include <sal/config.h>
 #include <sal/types.h>
 #include <sfx2/dllapi.h>
-#include <tools/link.hxx>
 #include <memory>
 
-namespace rtl {
-    class OUString;
-};
+
 class SfxObjectShell;
 struct SfxProgress_Impl;
-struct PlugInLoadStatus;
-struct SvProgressArg;
 
 class SFX2_DLLPUBLIC SfxProgress
 {

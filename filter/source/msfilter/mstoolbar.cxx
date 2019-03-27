@@ -10,6 +10,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <stdarg.h>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>

@@ -14,6 +14,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>

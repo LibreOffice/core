@@ -21,6 +21,8 @@
 
 #include <sfx2/objsh.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 using namespace ::com::sun::star;
 
 VclPtr<SfxTabPage> SfxDocumentFontsPage::Create(TabPageParent pParent, const SfxItemSet* set)

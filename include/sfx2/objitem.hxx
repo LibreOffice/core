@@ -23,8 +23,7 @@
 #include <sfx2/dllapi.h>
 #include <svl/poolitem.hxx>
 
-#include <sfx2/shell.hxx>
-
+class SfxShell;
 
 class SFX2_DLLPUBLIC SfxObjectItem: public SfxPoolItem
 {

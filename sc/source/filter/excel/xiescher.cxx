@@ -39,6 +39,7 @@
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <unotools/moduleoptions.hxx>

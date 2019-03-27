@@ -112,6 +112,7 @@
 #include <swslots.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>

@@ -40,6 +40,8 @@
 #include <svtools/unitconv.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 namespace sw { namespace sidebar{
 
 VclPtr<vcl::Window> PageFormatPanel::Create(

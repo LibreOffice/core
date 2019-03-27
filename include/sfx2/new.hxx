@@ -26,14 +26,17 @@
 #include <sfx2/objsh.hxx>
 
 #include <vcl/idle.hxx>
-#include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
 #include <sfx2/doctempl.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+namespace weld { class Button; }
+namespace weld { class CheckButton; }
+namespace weld { class CustomWeld; }
+namespace weld { class Expander; }
+namespace weld { class Label; }
+namespace weld { class TreeView; }
+namespace weld { class Window; }
 
-class SfxObjectShellLock;
-class SfxObjectShell;
 class SfxPreviewWin_Impl;
 
 enum class SfxNewFileDialogMode {

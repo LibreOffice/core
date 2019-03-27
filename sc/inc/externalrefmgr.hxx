@@ -31,6 +31,7 @@
 #include "rangelst.hxx"
 #include <osl/mutex.hxx>
 #include <formula/types.hxx>
+#include <tools/solar.h>
 
 #include <memory>
 #include <unordered_map>

@@ -39,6 +39,7 @@
 #include <sfx2/viewsh.hxx>
 #include "viewimp.hxx"
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/printer.hxx>
 #include <sfx2/prnmon.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/request.hxx>

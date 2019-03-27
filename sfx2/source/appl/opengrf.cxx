@@ -40,6 +40,7 @@
 #include <vcl/transfer.hxx>
 #include <sot/formats.hxx>
 #include <vcl/button.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/filedlghelper.hxx>

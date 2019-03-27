@@ -41,6 +41,7 @@
 #include <globals.hrc>
 #include <swabstdlg.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <memory>

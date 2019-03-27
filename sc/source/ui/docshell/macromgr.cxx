@@ -26,6 +26,7 @@
 #include <formulacell.hxx>
 #include <vector>
 #include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::RuntimeException;

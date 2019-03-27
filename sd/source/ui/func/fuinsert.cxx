@@ -86,6 +86,7 @@
 #include <memory>
 #include <vcl/weld.hxx>
 #include <vcl/errinf.hxx>
+#include <vcl/graphicfilter.hxx>
 
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>

@@ -29,6 +29,7 @@
 
 #include <vcl/imap.hxx>
 #include <vcl/imapobj.hxx>
+#include <vcl/keycodes.hxx>
 
 #include <accmap.hxx>
 

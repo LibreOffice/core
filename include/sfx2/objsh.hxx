@@ -26,61 +26,43 @@
 #include <vcl/errcode.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/security/DocumentSignatureInformation.hpp>
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/document/CmisVersion.hpp>
 
 #include <vcl/vclptr.hxx>
-#include <vcl/button.hxx>
 #include <svl/poolitem.hxx>
-#include <vcl/bitmap.hxx>
 #include <sot/formats.hxx>
 #include <sot/object.hxx>
-#include <svl/style.hxx>
+#include <tools/gen.hxx>
+#include <tools/link.hxx>
 
-#include <sfx2/XmlIdRegistry.hxx>
 #include <sfx2/shell.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
-#include <com/sun/star/frame/XModel.hpp>
 #include <memory>
 #include <set>
 #include <o3tl/typed_flags_set.hxx>
 #include <functional>
 
-#include <LibreOfficeKit/LibreOfficeKitTypes.h>
-
 class SbxValue;
-class SvxMacro;
 class SbxArray;
 class BasicManager;
 class SfxMedium;
 class SfxObjectFactory;
 class SfxDocumentInfoDialog;
 class SfxStyleSheetBasePool;
-class INote;
-class SfxStyleSheetPool;
-class SfxFrame;
-class SbMethod;
 class StarBASIC;
 class Printer;
 class SvKeyValueIterator;
 class SfxBaseModel;
 class SfxModule;
-class SvData;
 class SfxProgress;
 class GDIMetaFile;
-class Bitmap;
 class INetURLObject;
 class IndexBitSet;
 class JobSetup;
-class Size;
-class Point;
+class Button;
+class OutputDevice;
+class Color;
+class Fraction;
+
 enum class SfxModelFlags;
 enum class SfxEventHintId;
 
@@ -99,7 +81,17 @@ namespace sfx2
     class StyleManager;
 }
 
-namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::document { struct CmisVersion; }
+namespace com::sun::star::embed { class XStorage; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::graphic { class XGraphic; }
+namespace com::sun::star::io { class XStream; }
+namespace com::sun::star::script { class XLibraryContainer; }
+namespace com::sun::star::security { class XCertificate; }
+namespace com::sun::star::security { class XDocumentDigitalSignatures; }
+namespace com::sun::star::security { struct DocumentSignatureInformation; }
+namespace com::sun::star::task { class XInteractionHandler; }
 
 namespace com { namespace sun { namespace star {
     namespace document {
@@ -112,6 +104,8 @@ namespace com { namespace sun { namespace star {
         class XTextRange;
     }
 } } }
+
+namespace sfx2 { class IXmlIdRegistry; }
 
 #define SFX_TITLE_TITLE    0
 #define SFX_TITLE_FILENAME 1
@@ -171,7 +165,6 @@ enum class SfxObjectCreateMode
     into foreign objects.
 */
 
-class SfxToolBoxConfig;
 struct TransferableObjectDescriptor;
 template<class T> bool checkSfxObjectShell(const SfxObjectShell* pShell)
 {

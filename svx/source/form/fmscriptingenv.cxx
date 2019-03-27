@@ -23,6 +23,7 @@
 #include <svx/fmmodel.hxx>
 
 #include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>

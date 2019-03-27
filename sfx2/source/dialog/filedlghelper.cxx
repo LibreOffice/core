@@ -61,6 +61,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/securityoptions.hxx>

@@ -10,7 +10,9 @@
 #ifndef INCLUDED_SFX2_RECENTDOCSVIEWITEM_HXX
 #define INCLUDED_SFX2_RECENTDOCSVIEWITEM_HXX
 
-#include <sfx2/thumbnailview.hxx>
+#include <sfx2/thumbnailviewitem.hxx>
+
+class ThumbnailView;
 
 namespace sfx2
 {

@@ -16,6 +16,7 @@
 #include <com/sun/star/rdf/URIs.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XToolkit.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <comphelper/propertyvalue.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/graphicfilter.hxx>

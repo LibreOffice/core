@@ -22,6 +22,8 @@
 
 #include <sdxfer.hxx>
 
+#include <vcl/bitmapex.hxx>
+
 #include <vector>
 
 class SdDrawDocument;

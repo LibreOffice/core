@@ -24,6 +24,8 @@
 #include "rtfattributeoutput.hxx"
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <docsh.hxx>
 #include <viewsh.hxx>
 #include <viewopt.hxx>

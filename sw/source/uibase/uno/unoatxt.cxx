@@ -22,6 +22,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/container/ElementExistException.hpp>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <vcl/svapp.hxx>

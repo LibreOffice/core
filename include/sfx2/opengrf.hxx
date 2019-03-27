@@ -20,13 +20,15 @@
 #define INCLUDED_SFX2_OPENGRF_HXX
 
 #include <memory>
-#include <vcl/graphicfilter.hxx>
-#include <vcl/weld.hxx>
 #include <sfx2/dllapi.h>
+#include <rtl/ustring.hxx>
+#include <vcl/errcode.hxx>
 
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+namespace com::sun::star::ui::dialogs { class XFilePickerControlAccess; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace weld { class Window; }
 
+class Graphic;
 struct  SvxOpenGrf_Impl;
 
 class SFX2_DLLPUBLIC SvxOpenGraphicDialog

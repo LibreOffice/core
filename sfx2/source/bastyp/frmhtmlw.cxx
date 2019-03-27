@@ -45,6 +45,7 @@
 
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
