@@ -152,6 +152,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121561_tocTitle, "tdf121456_tabsOffset.odt")
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartUnique", 1);
 }
 
+// Related issue tdf#121561: w:sdt/w:sdtContent around TOC
+DECLARE_OOXMLEXPORT_TEST(testTdf124106, "tdf121456.docx")
+{
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> text(textDocument->getText(), uno::UNO_QUERY);
+    // -1 if the 'Y' character does not occur
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), text->getString().indexOf('Y'));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), text->getString().indexOf('y'));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf121561_tocTitleDocx, "tdf121456_tabsOffset.odt")
 {
     xmlDocPtr pXmlDoc = parseExport();
