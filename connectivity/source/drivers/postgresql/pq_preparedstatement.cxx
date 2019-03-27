@@ -305,7 +305,7 @@ sal_Bool PreparedStatement::execute( )
         // Only snafu is giving the types of the parameters and
         // that it needs $1, $2, etc instead of "?"
 
-//         printf( "Splitted %d %s\n" , i , str.getStr() );
+//         printf( "Split %d %s\n" , i , str.getStr() );
         if( isQuoted( str ) )
         {
             buf.append( str );
