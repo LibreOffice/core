@@ -699,9 +699,8 @@ void SwUndoAttr::SaveRedlineData( const SwPaM& rPam, bool bIsContent )
     }
 
     m_pRedlineSaveData.reset( new SwRedlineSaveDatas );
-    if ( !FillSaveDataForFormat( rPam, *m_pRedlineSaveData )) {
-        m_pRedlineSaveData.reset(nullptr);
-    }
+    if ( !FillSaveDataForFormat( rPam, *m_pRedlineSaveData ))
+        m_pRedlineSaveData.reset();
 
     SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
     if ( bIsContent ) {
@@ -857,7 +856,7 @@ void SwUndoDefaultAttr::UndoImpl(::sw::UndoRedoContext & rContext)
         SwUndoFormatAttrHelper aTmp(
             *rDoc.GetDfltTextFormatColl() );
         rDoc.SetDefault( *m_pOldSet );
-        m_pOldSet.reset( nullptr );
+        m_pOldSet.reset();
         if ( aTmp.GetUndo() ) {
             // transfer ownership of helper object's old set
             m_pOldSet = std::move(aTmp.GetUndo()->m_pOldSet);

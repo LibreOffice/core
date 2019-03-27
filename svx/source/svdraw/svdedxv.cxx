@@ -1352,7 +1352,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
     pTextEditOutliner.reset();
 
     pTextEditOutlinerView=nullptr;
-    mxTextEditObj.reset(nullptr);
+    mxTextEditObj.reset();
     pTextEditPV=nullptr;
     pTextEditWin=nullptr;
     maHdlList.SetMoveOutside(false);
@@ -1431,7 +1431,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
         maTEOverlayGroup.clear();
     }
 
-    mxTextEditObj.reset(nullptr);
+    mxTextEditObj.reset();
     pTextEditPV=nullptr;
     pTextEditWin=nullptr;
     SdrOutliner* pTEOutliner = pTextEditOutliner.release();

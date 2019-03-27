@@ -1118,7 +1118,7 @@ void SwPasteContext::remember()
     m_nStartContent = pCursor->GetPoint()->nContent.GetIndex();
 }
 
-void SwPasteContext::forget() { m_pPaM.reset(nullptr); }
+void SwPasteContext::forget() { m_pPaM.reset(); }
 
 SwPasteContext::~SwPasteContext()
 {

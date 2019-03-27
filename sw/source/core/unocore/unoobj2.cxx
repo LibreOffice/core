@@ -487,7 +487,7 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
     }
 
     virtual ~SwXParagraphEnumerationImpl() override
-        { m_pCursor.reset(nullptr); }
+        { m_pCursor.reset(); }
     virtual void SAL_CALL release() throw () override
     {
         SolarMutexGuard g;

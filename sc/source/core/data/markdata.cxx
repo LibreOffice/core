@@ -837,7 +837,7 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
                 }
             }
             if ( bCurColUnMarked )
-                pPrevColMarkedRows.reset( nullptr );
+                pPrevColMarkedRows.reset();
             else
                 pPrevColMarkedRows = std::move( pCurColMarkedRows );
         }

@@ -239,7 +239,7 @@ void SvxShape::InvalidateSdrObject()
     if (HasSdrObjectOwnership())
         return;
 
-    mpSdrObjectWeakReference.reset( nullptr );
+    mpSdrObjectWeakReference.reset();
 };
 
 bool SvxShape::HasSdrObjectOwnership() const
@@ -1029,7 +1029,7 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
     if( !xSelf.is() )
     {
         EndListening(GetSdrObject()->getSdrModelFromSdrObject());
-        mpSdrObjectWeakReference.reset( nullptr );
+        mpSdrObjectWeakReference.reset();
         return;
     }
 
@@ -1063,7 +1063,7 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
                 pSdrObject->setUnoShape(nullptr);
             }
 
-            mpSdrObjectWeakReference.reset(nullptr);
+            mpSdrObjectWeakReference.reset();
 
             // SdrModel *is* going down, try to Free SdrObject even
             // when !HasSdrObjectOwnership
