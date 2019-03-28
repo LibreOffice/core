@@ -1262,8 +1262,7 @@ void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const css::uno::A
 
         Any aNewValue;
         aNewValue <<= aNewFontDescriptor;
-        sal_Int32 nDescriptorId( BASEPROPERTY_FONTDESCRIPTOR );
-        nDescriptorId = BASEPROPERTY_FONTDESCRIPTOR;
+        sal_Int32 nDescriptorId = BASEPROPERTY_FONTDESCRIPTOR;
 
         // also, we need  fire a propertyChange event for the single property, since with
         // the above line, only an event for the FontDescriptor property will be fired

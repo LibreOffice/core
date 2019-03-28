@@ -198,12 +198,8 @@ void XMLEventOOoTransformerContext::StartElement(
     {
         if( !IsXMLToken( aLocation, XML_APPLICATION ) )
             aLocation = GetXMLToken( XML_DOCUMENT );
-        OUStringBuffer sTmp( aLocation.getLength() + aMacroName.getLength() + 1 );
-        sTmp = aLocation;
-        sTmp.append( ':' );
-        sTmp.append( aMacroName );
-        pMutableAttrList->SetValueByIndex( nMacroName,
-                                           sTmp.makeStringAndClear() );
+        OUString sTmp = aLocation + ":" + aMacroName;
+        pMutableAttrList->SetValueByIndex( nMacroName, sTmp );
     }
 
     if( m_bPersistent )

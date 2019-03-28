@@ -1417,11 +1417,9 @@ void SwFramePage::FillRelLB(const FrameMap* _pMap,
                     {
                         if (nLBRelations & rCharMap.nLBRelation)
                         {
-                            SvxSwFramePosString::StringId sStrId1 = rCharMap.eStrId;
-
                             // --> OD 2009-08-31 #mongolianlayout#
-                            sStrId1 =
-                                lcl_ChangeResIdToVerticalOrRTL( sStrId1,
+                            SvxSwFramePosString::StringId sStrId1 =
+                                lcl_ChangeResIdToVerticalOrRTL( rCharMap.eStrId,
                                                                 m_bIsVerticalFrame,
                                                                 m_bIsVerticalL2R,
                                                                 m_bIsInRightToLeft);

@@ -102,9 +102,7 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
     css::uno::Sequence< css::uno::Any > lParams(1);
     lParams[0] <<= aURL.Main;
 
-    css::uno::Reference< css::uno::XInterface > xService;
-
-    xService = m_xFactory->createInstanceWithArguments( sServiceName, lParams );
+    css::uno::Reference< css::uno::XInterface > xService = m_xFactory->createInstanceWithArguments( sServiceName, lParams );
     css::uno::Reference< css::task::XJobExecutor > xExecuteable( xService, css::uno::UNO_QUERY );
     if ( xExecuteable.is() )
         xExecuteable->trigger( OUString() );

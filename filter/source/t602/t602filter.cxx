@@ -169,9 +169,7 @@ OUString T602ImportFilter::detect( Sequence<PropertyValue>& Descriptor)
 
     css::uno::Sequence< sal_Int8 > aData;
     const size_t numBytes = 4;
-    size_t numBytesRead = 0;
-
-    numBytesRead = mxInputStream->readSomeBytes (aData, numBytes);
+    size_t numBytesRead = mxInputStream->readSomeBytes (aData, numBytes);
 
     if ((numBytesRead != numBytes) || (aData[0] != '@') ||
         (aData[1] != 'C') || (aData[2] != 'T') || (aData[3] != ' '))

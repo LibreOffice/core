@@ -438,8 +438,7 @@ void NWPixmapCacheList::AddCache( NWPixmapCache* pCache )
 }
 void NWPixmapCacheList::RemoveCache( NWPixmapCache* pCache )
 {
-    ::std::vector< NWPixmapCache* >::iterator p;
-    p = ::std::find( mCaches.begin(), mCaches.end(), pCache );
+    auto p = ::std::find( mCaches.begin(), mCaches.end(), pCache );
     if( p != mCaches.end() )
         mCaches.erase( p );
 }
@@ -840,11 +839,9 @@ bool GtkSalGraphics::drawNativeControl(ControlType nType, ControlPart nPart,
     if( aClipRegion.IsNull() )
         aClipRegion = aCtrlRect;
 
-    tools::Rectangle aPixmapRect;
-
     // make pixmap a little larger since some themes draw decoration
     // outside the rectangle, see e.g. checkbox
-    aPixmapRect = tools::Rectangle(Point( aCtrlRect.Left()-1, aCtrlRect.Top()-1 ),
+    tools::Rectangle aPixmapRect(Point( aCtrlRect.Left()-1, aCtrlRect.Top()-1 ),
                             Size( aCtrlRect.GetWidth()+2, aCtrlRect.GetHeight()+2) );
 
     ControlCacheKey aControlCacheKey(nType, nPart, nState, aPixmapRect.GetSize());
@@ -1131,10 +1128,8 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         NWEnsureGTKMenubar( m_nXScreen );
         GtkRequisition aReq;
         gtk_widget_size_request( gWidgetData[m_nXScreen].gMenubarWidget, &aReq );
-        tools::Rectangle aMenuBarRect = rControlRegion;
-        aMenuBarRect = tools::Rectangle( aMenuBarRect.TopLeft(),
-                                  Size( aMenuBarRect.GetWidth(), aReq.height+1 ) );
-        rNativeBoundingRegion = aMenuBarRect;
+        rNativeBoundingRegion = tools::Rectangle( rControlRegion.TopLeft(),
+                                       Size( rControlRegion.GetWidth(), aReq.height+1 ) );
         rNativeContentRegion = rNativeBoundingRegion;
         returnVal = true;
     }

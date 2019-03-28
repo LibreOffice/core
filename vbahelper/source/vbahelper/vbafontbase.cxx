@@ -259,8 +259,7 @@ VbaFontBase::getName()
 uno::Any
 VbaFontBase::getColor()
 {
-    uno::Any aAny;
-    aAny = OORGBToXLRGB( mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharColor", "TextColor" ) ) );
+    uno::Any aAny = OORGBToXLRGB( mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharColor", "TextColor" ) ) );
     return aAny;
 }
 

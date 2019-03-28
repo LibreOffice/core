@@ -1610,8 +1610,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             }
             else if (aValue.has<uno::Reference<graphic::XGraphic>>())
             {
-                uno::Reference<graphic::XGraphic> xGraphic;
-                xGraphic = aValue.get<uno::Reference<graphic::XGraphic>>();
+                uno::Reference<graphic::XGraphic> xGraphic = aValue.get<uno::Reference<graphic::XGraphic>>();
                 if (xGraphic.is())
                 {
                     aGraphic = Graphic(xGraphic);
@@ -1647,8 +1646,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             }
             else if (aValue.has<uno::Reference<graphic::XGraphic>>())
             {
-                uno::Reference<graphic::XGraphic> xGraphic;
-                xGraphic = aValue.get<uno::Reference<graphic::XGraphic>>();
+                uno::Reference<graphic::XGraphic> xGraphic = aValue.get<uno::Reference<graphic::XGraphic>>();
                 if (xGraphic.is())
                 {
                     aGraphic = Graphic(xGraphic);

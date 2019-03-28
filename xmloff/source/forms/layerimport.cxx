@@ -376,8 +376,7 @@ void OFormLayerXMLImport_Impl::startPage(const Reference< XDrawPage >& _rxDrawPa
         return;
 
     // add a new entry to our page map
-    ::std::pair< MapDrawPage2Map::iterator, bool > aPagePosition;
-    aPagePosition = m_aControlIds.emplace(_rxDrawPage, MapString2PropertySet());
+    ::std::pair< MapDrawPage2Map::iterator, bool > aPagePosition = m_aControlIds.emplace(_rxDrawPage, MapString2PropertySet());
     OSL_ENSURE(aPagePosition.second, "OFormLayerXMLImport_Impl::startPage: already imported this page!");
     m_aCurrentPageIds = aPagePosition.first;
 }

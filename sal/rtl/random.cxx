@@ -237,10 +237,8 @@ static void readPool (
 
 rtlRandomPool SAL_CALL rtl_random_createPool() SAL_THROW_EXTERN_C()
 {
-    RandomPool_Impl *pImpl = nullptr;
-
     /* try to get system random number, if it fail fall back on own pool */
-    pImpl = static_cast< RandomPool_Impl* >(rtl_allocateZeroMemory(sizeof(RandomPool_Impl)));
+    RandomPool_Impl *pImpl = static_cast< RandomPool_Impl* >(rtl_allocateZeroMemory(sizeof(RandomPool_Impl)));
     if (pImpl)
     {
         char sanity[4];

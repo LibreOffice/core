@@ -244,8 +244,7 @@ bool View::InsertMetaFile( TransferableDataHelper& rDataHelper, const Point& rPo
 
     // restrict movement to WorkArea
     Point aInsertPos( rPos );
-    Size aImageSize;
-    aImageSize = bVector ? aMtf.GetPrefSize() : aGraphic.GetSizePixel();
+    Size aImageSize = bVector ? aMtf.GetPrefSize() : aGraphic.GetSizePixel();
     ImpCheckInsertPos(aInsertPos, aImageSize, GetWorkArea());
 
     if( bVector )

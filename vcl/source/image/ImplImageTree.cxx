@@ -622,10 +622,8 @@ OUString const & ImplImageTree::getRealImageName(OUString const & rIconName)
 
     OUString sNameWithNoExtension = getNameNoExtension(rIconName);
 
-    IconLinkHash::iterator it;
-
     // PNG is priority
-    it = rLinkHash.find(sNameWithNoExtension + ".png");
+    auto it = rLinkHash.find(sNameWithNoExtension + ".png");
     if (it != rLinkHash.end())
         return it->second;
 

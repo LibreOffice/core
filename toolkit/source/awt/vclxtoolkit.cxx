@@ -1079,8 +1079,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     const css::awt::WindowDescriptor& rDescriptor,
     vcl::Window* pParent, WinBits nWinBits, MessBoxStyle nMessBoxStyle )
 {
-    OUString aServiceName( rDescriptor.WindowServiceName );
-    aServiceName = aServiceName.toAsciiLowerCase();
+    OUString aServiceName = rDescriptor.WindowServiceName.toAsciiLowerCase();
 
     VclPtr<vcl::Window> pNewWindow;
     WindowType nType = ImplGetComponentType( aServiceName );

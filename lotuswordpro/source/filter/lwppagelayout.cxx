@@ -440,11 +440,8 @@ bool LwpPageLayout::HasFillerPageText(LwpFoundry const * pFoundry)
     LwpLayout::UseWhenType eWhenType = GetUseWhenType();
     if(eWhenType==LwpLayout::StartOnOddPage||eWhenType==LwpLayout::StartOnEvenPage)
     {
-        //get pagenumber
-        sal_Int32 nPageNumber = 0;
-
         //get the page number that current page layout inserted
-        nPageNumber = GetPageNumber(FIRST_LAYOUTPAGENO)-1;
+        sal_Int32 nPageNumber = GetPageNumber(FIRST_LAYOUTPAGENO)-1;
 
         if(nPageNumber>0)
         {

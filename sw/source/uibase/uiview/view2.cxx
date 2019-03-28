@@ -1096,8 +1096,7 @@ void SwView::Execute(SfxRequest &rReq)
                 SwDBManager* pDBManager = rSh.GetDBManager();
                 if (pDBManager)
                 {
-                    SwDBData aData;
-                    aData = rSh.GetDBData();
+                    SwDBData aData = rSh.GetDBData();
                     rSh.EnterStdMode(); // force change in text shell; necessary for mixing DB fields
                     AttrChangedNotify( &rSh );
 

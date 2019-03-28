@@ -637,8 +637,7 @@ void ScAreaLinkObj::Modify_Impl( const OUString* pNewFile, const OUString* pNewF
         bool bFitBlock = true;          // move, if the size changes with update
         if (pNewFile)
         {
-            aFile = *pNewFile;
-            aFile = ScGlobal::GetAbsDocName( aFile, pDocShell );    //! in InsertAreaLink?
+            aFile = ScGlobal::GetAbsDocName( *pNewFile, pDocShell );    //! in InsertAreaLink?
         }
         if (pNewFilter)
             aFilter = *pNewFilter;

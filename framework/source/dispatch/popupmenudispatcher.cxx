@@ -307,8 +307,7 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
 
                     if ( xLayoutManager.is() )
                     {
-                        css::uno::Reference< css::ui::XUIElement > xMenuBar;
-                        xMenuBar = xLayoutManager->getElement( "private:resource/menubar/menubar" );
+                        css::uno::Reference< css::ui::XUIElement > xMenuBar = xLayoutManager->getElement( "private:resource/menubar/menubar" );
 
                         m_xPopupCtrlQuery.set( xMenuBar, css::uno::UNO_QUERY );
                     }

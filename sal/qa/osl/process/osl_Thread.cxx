@@ -989,11 +989,9 @@ namespace osl_Thread
                 pThread->terminate();
                 p2Thread->terminate();
 
-                sal_Int32 nValueNormal = 0;
-                nValueNormal = pThread->getValue();
+                sal_Int32 nValueNormal = pThread->getValue();
 
-                sal_Int32 nValueNormal2 = 0;
-                nValueNormal2 = p2Thread->getValue();
+                sal_Int32 nValueNormal2 = p2Thread->getValue();
 
                 OString sPrio = getPrioName(_aPriority);
                 t_print("After 10 tenth seconds\n");
@@ -1088,14 +1086,11 @@ namespace osl_Thread
                 //aBelowNormalThread->terminate();
                 //aLowestThread->terminate();
 
-                sal_Int32 nValueHighest = 0;
-                nValueHighest = aHighestThread.getValue();
+                sal_Int32 nValueHighest = aHighestThread.getValue();
 
-                sal_Int32 nValueAboveNormal = 0;
-                nValueAboveNormal = aAboveNormalThread.getValue();
+                sal_Int32 nValueAboveNormal = aAboveNormalThread.getValue();
 
-                sal_Int32 nValueNormal = 0;
-                nValueNormal = aNormalThread.getValue();
+                sal_Int32 nValueNormal = aNormalThread.getValue();
 
                 t_print("After 10 tenth seconds\n");
                 t_print("nValue in Highest Prio Thread is %d\n", static_cast<int>(nValueHighest));
@@ -1163,20 +1158,15 @@ namespace osl_Thread
                 termAndJoinThread(&pBelowNormalThread);
                 termAndJoinThread(&pLowestThread);
 
-                sal_Int32 nValueHighest = 0;
-                nValueHighest = pHighestThread.getValue();
+                sal_Int32 nValueHighest = pHighestThread.getValue();
 
-                sal_Int32 nValueAboveNormal = 0;
-                nValueAboveNormal = pAboveNormalThread.getValue();
+                sal_Int32 nValueAboveNormal = pAboveNormalThread.getValue();
 
-                sal_Int32 nValueNormal = 0;
-                nValueNormal = pNormalThread.getValue();
+                sal_Int32 nValueNormal = pNormalThread.getValue();
 
-                sal_Int32 nValueBelowNormal = 0;
-                nValueBelowNormal = pBelowNormalThread.getValue();
+                sal_Int32 nValueBelowNormal = pBelowNormalThread.getValue();
 
-                sal_Int32 nValueLowest = 0;
-                nValueLowest = pLowestThread.getValue();
+                sal_Int32 nValueLowest = pLowestThread.getValue();
 
                 t_print("After 10 tenth seconds\n");
                 t_print("nValue in Highest Prio Thread is     %d\n", static_cast<int>(nValueHighest));
@@ -1251,17 +1241,13 @@ namespace osl_Thread
                 // sal_Int32 nValueHighest  = 0;
                 // nValueHighest =  pHighestThread->getValue();
 
-                sal_Int32 nValueAboveNormal = 0;
-                nValueAboveNormal = pAboveNormalThread.getValue();
+                sal_Int32 nValueAboveNormal = pAboveNormalThread.getValue();
 
-                sal_Int32 nValueNormal = 0;
-                nValueNormal = pNormalThread.getValue();
+                sal_Int32 nValueNormal = pNormalThread.getValue();
 
-                sal_Int32 nValueBelowNormal = 0;
-                nValueBelowNormal = pBelowNormalThread.getValue();
+                sal_Int32 nValueBelowNormal = pBelowNormalThread.getValue();
 
-                sal_Int32 nValueLowest = 0;
-                nValueLowest = pLowestThread.getValue();
+                sal_Int32 nValueLowest = pLowestThread.getValue();
 
                 t_print("After 5 tenth seconds\n");
                 t_print("nValue in AboveNormal Prio Thread is %d\n", static_cast<int>(nValueAboveNormal));
@@ -1339,14 +1325,11 @@ namespace osl_Thread
                 // sal_Int32 nValueAboveNormal = 0;
                 // nValueAboveNormal = pAboveNormalThread->getValue();
 
-                sal_Int32 nValueNormal = 0;
-                nValueNormal = pNormalThread.getValue();
+                sal_Int32 nValueNormal = pNormalThread.getValue();
 
-                sal_Int32 nValueBelowNormal = 0;
-                nValueBelowNormal = pBelowNormalThread.getValue();
+                sal_Int32 nValueBelowNormal = pBelowNormalThread.getValue();
 
-                sal_Int32 nValueLowest = 0;
-                nValueLowest = pLowestThread.getValue();
+                sal_Int32 nValueLowest = pLowestThread.getValue();
 
                 t_print("After 5 tenth seconds\n");
                 t_print("nValue in Normal Prio Thread is      %d\n", static_cast<int>(nValueNormal));

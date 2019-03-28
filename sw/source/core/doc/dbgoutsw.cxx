@@ -718,10 +718,7 @@ const char * dbg_out( SwOutlineNodes const & rNodes)
 
 static OUString lcl_dbg_out(const SvxNumberFormat & rFormat)
 {
-    OUString aResult;
-
-    aResult = lcl_dbg_out_NumType(rFormat.GetNumberingType());
-
+    OUString aResult = lcl_dbg_out_NumType(rFormat.GetNumberingType());
     return aResult;
 }
 

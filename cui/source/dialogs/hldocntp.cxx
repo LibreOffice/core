@@ -204,8 +204,7 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
             if ( pFilter )
             {
                 // insert doc-name and image
-                OUString aTitleName( aTitle );
-                aTitleName = aTitleName.replaceFirst( "~", "" );
+                OUString aTitleName = aTitle.replaceFirst( "~", "" );
 
                 sal_Int16 nPos = m_pLbDocTypes->InsertEntry ( aTitleName );
                 OUString aStrDefExt( pFilter->GetDefaultExtension () );

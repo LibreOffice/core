@@ -744,8 +744,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             if( meOutDevType == OUTDEV_PRINTER )
             {
                 Printer* pThis = dynamic_cast<Printer*>(this);
-                Point aPageOffset = pThis->GetPageOffsetPixel();
-                aPageOffset = Point( 0, 0 ) - aPageOffset;
+                Point aPageOffset = Point( 0, 0 ) - pThis->GetPageOffsetPixel();
                 Size aSize  = pThis->GetPaperSizePixel();
                 aBackgroundComponent.aBounds = tools::Rectangle( aPageOffset, aSize );
             }

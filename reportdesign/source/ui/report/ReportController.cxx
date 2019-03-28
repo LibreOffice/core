@@ -1647,8 +1647,7 @@ void OReportController::impl_initialize( )
             m_xFormatter->attachNumberFormatsSupplier(Reference< XNumberFormatsSupplier>(m_xReportDefinition,uno::UNO_QUERY));
 
             utl::MediaDescriptor aDescriptor( m_xReportDefinition->getArgs() );
-            OUString sHierarchicalDocumentName;
-            sHierarchicalDocumentName = aDescriptor.getUnpackedValueOrDefault("HierarchicalDocumentName",sHierarchicalDocumentName);
+            OUString sHierarchicalDocumentName = aDescriptor.getUnpackedValueOrDefault("HierarchicalDocumentName",OUString());
 
             if ( sHierarchicalDocumentName.isEmpty() && getConnection().is() )
             {

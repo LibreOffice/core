@@ -148,8 +148,7 @@ namespace xmloff
             bool bIsEmptyValue = TypeClass_VOID == aValue.getValueType().getTypeClass();
             if ( bIsEmptyValue )
             {
-                css::beans::Property aPropDesc;
-                aPropDesc = m_xPropertyInfo->getPropertyByName( rProperty );
+                css::beans::Property aPropDesc = m_xPropertyInfo->getPropertyByName( rProperty );
                 aExportType = aPropDesc.Type;
             }
             token::XMLTokenEnum eValueType = implGetPropertyXMLType( aExportType );

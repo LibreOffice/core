@@ -890,8 +890,7 @@ SlideSharedPtr SlideShowImpl::makeSlide(
         return SlideSharedPtr();
 
     //Retrieve polygons for the current slide
-    PolygonMap::iterator aIter;
-    aIter = findPolygons(xDrawPage);
+    PolygonMap::iterator aIter = findPolygons(xDrawPage);
 
     const SlideSharedPtr pSlide( createSlide(xDrawPage,
                                              xDrawPages,

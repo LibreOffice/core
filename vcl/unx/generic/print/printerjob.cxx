@@ -312,10 +312,8 @@ PrinterJob::StartJob (
              "%!PS-Adobe-3.0\n"
              "%%BoundingBox: (atend)\n" );
 
-    OUString aFilterWS;
-
     // Creator (this application)
-    aFilterWS = WhitespaceToSpace( rAppName, false );
+    OUString aFilterWS = WhitespaceToSpace( rAppName, false );
     WritePS (mpJobHeader.get(), "%%Creator: (");
     WritePS (mpJobHeader.get(), aFilterWS);
     WritePS (mpJobHeader.get(), ")\n");

@@ -340,8 +340,7 @@ OUString  LwpFormulaInfo::Convert(LwpTableLayout* pCellsMap)
 */
 void LwpFormulaInfo::Convert(XFCell * pCell,LwpTableLayout* pCellsMap)
 {
-    OUString aFormula;
-    aFormula = Convert(pCellsMap);
+    OUString aFormula = Convert(pCellsMap);
     if (!aFormula.isEmpty())
     {
         pCell->SetFormula(aFormula);

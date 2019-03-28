@@ -682,9 +682,8 @@ static bool UCBOpenContentSync(
     sal_uInt32 nTimeout(5000); // initially 5000 milliSec
     while(!bResultAchieved) {
 
-        Moderator::Result res;
         // try to get the result for with timeout
-        res = pMod->getResult(nTimeout);
+        Moderator::Result res = pMod->getResult(nTimeout);
 
         switch(res.type) {
         case Moderator::ResultType::STREAM:

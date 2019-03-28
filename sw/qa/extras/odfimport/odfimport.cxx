@@ -165,8 +165,7 @@ DECLARE_ODFIMPORT_TEST(testOdtBorders, "borders_ooo33.odt")
                 uno::Sequence<OUString> const cells = xTextTable->getCellNames();
                 sal_Int32 nLength = cells.getLength();
 
-                AllBordersMap::iterator it;
-                it = map.begin();
+                AllBordersMap::iterator it = map.begin();
 
                 for (sal_Int32 i = 0; i < nLength; ++i)
                 {

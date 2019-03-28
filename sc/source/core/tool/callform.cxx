@@ -169,8 +169,7 @@ bool InitExternalFunc(const OUString& rModuleName)
     if (pTemp)
         return false;
 
-    OUString aNP;
-    aNP = rModuleName;
+    OUString aNP = rModuleName;
 
     std::unique_ptr<osl::Module> pLib(new osl::Module( aNP ));
     if (!pLib->is())

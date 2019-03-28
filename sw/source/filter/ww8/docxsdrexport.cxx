@@ -1346,8 +1346,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
                 OUString sCheckForBrokenChains = rEntry.first;
 
                 //follow the chain and assign the same id, and incremental sequence numbers.
-                std::map<OUString, MSWordExportBase::LinkedTextboxInfo>::iterator followChainIter;
-                followChainIter
+                auto followChainIter
                     = m_pImpl->getExport().m_aLinkedTextboxesHelper.find(rEntry.second.sNextChain);
                 while (followChainIter != m_pImpl->getExport().m_aLinkedTextboxesHelper.end())
                 {

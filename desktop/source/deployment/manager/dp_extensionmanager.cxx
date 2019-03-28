@@ -472,8 +472,7 @@ Reference<css::deployment::XPackage> ExtensionManager::backupExtension(
     Reference<css::deployment::XPackage> xBackup;
     Reference<ucb::XCommandEnvironment> tmpCmdEnv(
         new TmpRepositoryCommandEnv(xCmdEnv->getInteractionHandler()));
-    Reference<css::deployment::XPackage> xOldExtension;
-    xOldExtension = xPackageManager->getDeployedPackage(
+    Reference<css::deployment::XPackage> xOldExtension = xPackageManager->getDeployedPackage(
             identifier, fileName, tmpCmdEnv);
 
     if (xOldExtension.is())

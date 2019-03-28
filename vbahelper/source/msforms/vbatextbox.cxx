@@ -50,8 +50,7 @@ ScVbaTextBox::setValue( const uno::Any& _value )
 OUString SAL_CALL
 ScVbaTextBox::getText()
 {
-    uno::Any aValue;
-    aValue = m_xProps->getPropertyValue( "Text" );
+    uno::Any aValue = m_xProps->getPropertyValue( "Text" );
     OUString sString;
     aValue >>= sString;
     return sString;
@@ -75,8 +74,7 @@ ScVbaTextBox::setText( const OUString& _text )
 sal_Int32 SAL_CALL
 ScVbaTextBox::getMaxLength()
 {
-    uno::Any aValue;
-    aValue = m_xProps->getPropertyValue( "MaxTextLen" );
+    uno::Any aValue = m_xProps->getPropertyValue( "MaxTextLen" );
     sal_Int16 nMaxLength = 0;
     aValue >>= nMaxLength;
     return static_cast<sal_Int32>(nMaxLength);
@@ -93,8 +91,7 @@ ScVbaTextBox::setMaxLength( sal_Int32 _maxlength )
 sal_Bool SAL_CALL
 ScVbaTextBox::getMultiline()
 {
-    uno::Any aValue;
-    aValue = m_xProps->getPropertyValue( "MultiLine" );
+    uno::Any aValue = m_xProps->getPropertyValue( "MultiLine" );
     bool bRet = false;
     aValue >>= bRet;
     return bRet;

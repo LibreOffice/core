@@ -286,9 +286,7 @@ void SAXHelper::startElement(
  */
 void SAXHelper::endElement( const OUString& aName )
 {
-    xmlChar* fullname = nullptr ;
-
-    fullname = ous_to_xmlstr( aName ) ;
+    xmlChar* fullname = ous_to_xmlstr( aName ) ;
     m_pSaxHandler->endElement( m_pParserCtxt , fullname ) ;
 
     if( fullname != nullptr )

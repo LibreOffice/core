@@ -1373,8 +1373,7 @@ XMLTextFrameContext::XMLTextFrameContext(
             {
                 rtl::Reference < XMLTextImportHelper > xTxtImport =
                                                     GetImport().GetTextImport();
-                XMLPropStyleContext* pStyle( nullptr );
-                pStyle = xTxtImport->FindAutoFrameStyle( aStyleName );
+                XMLPropStyleContext* pStyle = xTxtImport->FindAutoFrameStyle( aStyleName );
                 if ( pStyle && pStyle->GetParentName().isEmpty() )
                 {
                     m_HasAutomaticStyleWithoutParentStyle = true;

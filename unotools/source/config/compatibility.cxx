@@ -298,8 +298,7 @@ Sequence< OUString > SvtCompatibilityOptions_Impl::impl_GetPropertyNames( Sequen
     // Copy entries to destination and expand every item with 2 supported sub properties.
     for ( sal_Int32 nSourceStep = 0; nSourceStep < nSourceCount; ++nSourceStep )
     {
-        OUString sFixPath;
-        sFixPath = SETNODE_ALLFILEFORMATS;
+        OUString sFixPath = SETNODE_ALLFILEFORMATS;
         sFixPath += PATHDELIMITER;
         sFixPath += rItems[ nSourceStep ];
         sFixPath += PATHDELIMITER;

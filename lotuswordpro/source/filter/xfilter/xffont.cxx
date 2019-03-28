@@ -293,9 +293,8 @@ void XFFont::ToXml(IXFStream *pStrm)
         ((m_nFlag & XFFONT_FLAG_POSITION) && m_nPosition != 0)
         )
     {
-        OUString tmp;
-        tmp = OUString::number(m_nPosition) + "% ";
-        tmp += OUString::number(m_nScale) + "%";
+        OUString tmp = OUString::number(m_nPosition) + "% "
+                        + OUString::number(m_nScale) + "%";
         pAttrList->AddAttribute("style:text-position", tmp );
     }
 

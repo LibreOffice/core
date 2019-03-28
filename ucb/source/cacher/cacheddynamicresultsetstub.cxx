@@ -218,8 +218,7 @@ Reference< XDynamicResultSet > SAL_CALL CachedDynamicResultSetStubFactory
     ::createCachedDynamicResultSetStub(
             const Reference< XDynamicResultSet > & Source )
 {
-    Reference< XDynamicResultSet > xRet;
-    xRet = new CachedDynamicResultSetStub( Source, m_xContext );
+    Reference< XDynamicResultSet > xRet = new CachedDynamicResultSetStub( Source, m_xContext );
     return xRet;
 }
 

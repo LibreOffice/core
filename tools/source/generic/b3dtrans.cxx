@@ -424,8 +424,7 @@ void B3dCamera::CalcNewViewportValues()
     aNewVUV.normalize();
     aNewVPN.normalize();
 
-    basegfx::B3DVector aNewToTheRight = aNewVPN;
-    aNewToTheRight = aNewToTheRight.getPerpendicular(aNewVUV);
+    basegfx::B3DVector aNewToTheRight = aNewVPN.getPerpendicular(aNewVUV);
     aNewToTheRight.normalize();
     aNewVUV = aNewToTheRight.getPerpendicular(aNewVPN);
     aNewVUV.normalize();
@@ -450,8 +449,7 @@ void B3dCamera::CalcFocalLength()
     double fWidth = GetDeviceRectangleWidth();
 
     // Adjust focal length based on given position
-    basegfx::B3DPoint aOldPosition;
-    aOldPosition = WorldToEyeCoor(aOldPosition);
+    basegfx::B3DPoint aOldPosition = WorldToEyeCoor(aOldPosition);
     if(fWidth != 0.0)
         fFocalLength = aOldPosition.getZ() / fWidth * 35.0;
     if(fFocalLength < 5.0)

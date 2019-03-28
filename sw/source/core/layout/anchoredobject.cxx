@@ -878,9 +878,7 @@ Point SwAnchoredObject::GetRelPosToPageFrame( const bool _bFollowTextFlow,
 */
 Point SwAnchoredObject::GetRelPosToChar() const
 {
-    Point aRelPos;
-
-    aRelPos = GetObjRect().Pos();
+    Point aRelPos = GetObjRect().Pos();
     aRelPos -= GetLastCharRect().Pos();
 
     return aRelPos;
@@ -894,9 +892,7 @@ Point SwAnchoredObject::GetRelPosToChar() const
 */
 Point SwAnchoredObject::GetRelPosToLine() const
 {
-    Point aRelPos;
-
-    aRelPos = GetObjRect().Pos();
+    Point aRelPos = GetObjRect().Pos();
     aRelPos.AdjustY( -(GetLastTopOfLine()) );
 
     return aRelPos;

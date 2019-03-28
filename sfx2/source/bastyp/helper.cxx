@@ -136,8 +136,7 @@ std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUStrin
 
         try
         {
-            uno::Reference< ucb::XDynamicResultSet > xDynResultSet;
-            xDynResultSet = aCnt.createDynamicCursor( aProps );
+            uno::Reference< ucb::XDynamicResultSet > xDynResultSet = aCnt.createDynamicCursor( aProps );
             if ( xDynResultSet.is() )
                 xResultSet = xDynResultSet->getStaticResultSet();
         }

@@ -362,9 +362,7 @@ sal_Int32 ConditionAtom::getNodeCount() const
     const dgm::Point* pPoint = getPresNode();
     if (pPoint)
     {
-        OUString sNodeId = "";
-
-        sNodeId
+        OUString sNodeId
             = navigate(mrLayoutNode, XML_presOf, pPoint->msModelId, /*bSourceToDestination*/ false);
 
         if (sNodeId.isEmpty())

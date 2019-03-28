@@ -107,8 +107,7 @@ bool DAVOptionsCache::getDAVOptions( const OUString & rURL, DAVOptions & rDAVOpt
     normalizeURLLastChar( aEncodedUrl );
 
     // search the URL in the static map
-    DAVOptionsMap::iterator it;
-    it = m_aTheCache.find( aEncodedUrl );
+    DAVOptionsMap::iterator it = m_aTheCache.find( aEncodedUrl );
     if ( it == m_aTheCache.end() )
         return false;
     else
@@ -134,8 +133,7 @@ void DAVOptionsCache::removeDAVOptions( const OUString & rURL )
     OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( NeonUri::unescape( rURL ) ) );
     normalizeURLLastChar( aEncodedUrl );
 
-    DAVOptionsMap::iterator it;
-    it = m_aTheCache.find( aEncodedUrl );
+    DAVOptionsMap::iterator it = m_aTheCache.find( aEncodedUrl );
     if ( it != m_aTheCache.end() )
     {
         m_aTheCache.erase( it );
@@ -156,8 +154,7 @@ void DAVOptionsCache::addDAVOptions( DAVOptions & rDAVOptions, const sal_uInt32 
     rDAVOptions.setRedirectedURL( aRedirURL );
 
     // check if already cached
-    DAVOptionsMap::iterator it;
-    it = m_aTheCache.find( aEncodedUrl );
+    DAVOptionsMap::iterator it = m_aTheCache.find( aEncodedUrl );
     if ( it != m_aTheCache.end() )
     { // already in cache, check LifeTime
         if ( (*it).second.getRequestedTimeLife() == nLifeTime )
@@ -177,8 +174,7 @@ void DAVOptionsCache::setHeadAllowed( const OUString & rURL, const bool HeadAllo
     OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( NeonUri::unescape( rURL ) ) );
     normalizeURLLastChar( aEncodedUrl );
 
-    DAVOptionsMap::iterator it;
-    it = m_aTheCache.find( aEncodedUrl );
+    DAVOptionsMap::iterator it = m_aTheCache.find( aEncodedUrl );
     if ( it != m_aTheCache.end() )
     {
         // first check for stale

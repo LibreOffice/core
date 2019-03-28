@@ -168,8 +168,7 @@ namespace
     {
         //FIXME RenderContext
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        vcl::Font aFont;
-        aFont = rStyleSettings.GetFieldFont();
+        vcl::Font aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
         SetPointFont(*this, aFont);
 
@@ -1214,8 +1213,7 @@ void OAppDetailPageHelper::ImplInitSettings()
 {
     // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    vcl::Font aFont;
-    aFont = rStyleSettings.GetFieldFont();
+    vcl::Font aFont = rStyleSettings.GetFieldFont();
     aFont.SetColor( rStyleSettings.GetWindowTextColor() );
     SetPointFont(*this, aFont);
     m_aTBPreview->SetPointFont(*m_aTBPreview, aFont);
@@ -1305,8 +1303,7 @@ void OPreviewWindow::ImplInitSettings()
 {
     // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    vcl::Font aFont;
-    aFont = rStyleSettings.GetFieldFont();
+    vcl::Font aFont = rStyleSettings.GetFieldFont();
     aFont.SetColor( rStyleSettings.GetWindowTextColor() );
     SetPointFont(*this, aFont);
 

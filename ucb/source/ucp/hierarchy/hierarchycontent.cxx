@@ -751,8 +751,7 @@ void HierarchyContent::queryChildren( HierarchyContentRefVector& rChildren )
         if ( ( aChildURL.getLength() > nLen ) &&
              ( aChildURL.startsWith( aURL ) ) )
         {
-            sal_Int32 nPos = nLen;
-            nPos = aChildURL.indexOf( '/', nPos );
+            sal_Int32 nPos = aChildURL.indexOf( '/', nLen );
 
             if ( ( nPos == -1 ) ||
                  ( nPos == ( aChildURL.getLength() - 1 ) ) )

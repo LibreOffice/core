@@ -54,8 +54,7 @@ OUString getResource(const char* pResourceId,
     OUString sResource = frm::ResourceManager::loadString(pResourceId);
     OSL_ENSURE( !sResource.isEmpty(), "resource not found?" );
 
-    OUString sString( sResource );
-    sString = sString.replaceAll( "$1", rInfo1 );
+    OUString sString = sResource.replaceAll( "$1", rInfo1 );
     sString = sString.replaceAll( "$2", rInfo2 );
     sString = sString.replaceAll( "$3", rInfo3 );
     return sString;

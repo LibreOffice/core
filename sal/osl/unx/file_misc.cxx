@@ -482,9 +482,7 @@ oslFileError osl_psz_createDirectory(char const * pszPath, sal_uInt32 flags)
 
 static oslFileError osl_psz_removeDirectory( const sal_Char* pszPath )
 {
-    int nRet=0;
-
-    nRet = rmdir(pszPath);
+    int nRet = rmdir(pszPath);
 
     if ( nRet < 0 )
     {
@@ -724,9 +722,7 @@ static oslFileError osl_unlinkFile(const sal_Char* pszPath)
 
 static oslFileError osl_psz_moveFile(const sal_Char* pszPath, const sal_Char* pszDestPath)
 {
-    int nRet = 0;
-
-    nRet = rename(pszPath,pszDestPath);
+    int nRet = rename(pszPath,pszDestPath);
 
     if (nRet < 0)
     {

@@ -146,9 +146,8 @@ void LwpParaStyle::Apply(XFParaStyle *pParaStyle)
 {
     assert(pParaStyle);
 
-    LwpVirtualPiece *pPiece = nullptr;
     //alignment:
-    pPiece = dynamic_cast<LwpVirtualPiece*>(m_AlignmentStyle.obj().get());
+    LwpVirtualPiece *pPiece = dynamic_cast<LwpVirtualPiece*>(m_AlignmentStyle.obj().get());
     if( pPiece )
     {
         LwpAlignmentOverride *pAlign = dynamic_cast<LwpAlignmentOverride*>(pPiece->GetOverride());

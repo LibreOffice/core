@@ -3403,8 +3403,7 @@ bool ScDocFunc::SetTabBgColor( SCTAB nTab, const Color& rColor, bool bRecord, bo
         return false;
     }
 
-    Color aOldTabBgColor;
-    aOldTabBgColor = rDoc.GetTabBgColor(nTab);
+    Color aOldTabBgColor = rDoc.GetTabBgColor(nTab);
 
     bool bSuccess = false;
     rDoc.SetTabBgColor(nTab, rColor);

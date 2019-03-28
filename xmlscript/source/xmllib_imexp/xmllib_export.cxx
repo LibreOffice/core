@@ -63,8 +63,7 @@ exportLibraryContainer(
         LibDescriptor& rLib = pLibArray->mpLibs[i];
 
         XMLElement* pLibElement = new XMLElement( XMLNS_LIBRARY_PREFIX ":library" );
-        Reference< xml::sax::XAttributeList > xLibElementAttribs;
-        xLibElementAttribs = static_cast< xml::sax::XAttributeList* >( pLibElement );
+        Reference< xml::sax::XAttributeList > xLibElementAttribs = static_cast< xml::sax::XAttributeList* >( pLibElement );
 
         pLibElement->addAttribute( XMLNS_LIBRARY_PREFIX ":name", rLib.aName );
 
@@ -125,8 +124,7 @@ exportLibrary(
         for( sal_Int32 i = 0 ; i < nElementCount ; i++ )
         {
             XMLElement* pElement = new XMLElement( XMLNS_LIBRARY_PREFIX ":element" );
-            Reference< xml::sax::XAttributeList > xElementAttribs;
-            xElementAttribs = static_cast< xml::sax::XAttributeList* >( pElement );
+            Reference< xml::sax::XAttributeList > xElementAttribs = static_cast< xml::sax::XAttributeList* >( pElement );
 
             pElement->addAttribute( XMLNS_LIBRARY_PREFIX ":name",
                                         pElementNames[i] );

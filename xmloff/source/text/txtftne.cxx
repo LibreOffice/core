@@ -72,8 +72,7 @@ void XMLTextParagraphExport::exportTextFootnote(
     bool bAutoStyles, bool bIsProgress )
 {
     // get footnote and associated text
-    Any aAny;
-    aAny = rPropSet->getPropertyValue(gsFootnote);
+    Any aAny = rPropSet->getPropertyValue(gsFootnote);
     Reference<XFootnote> xFootnote;
     aAny >>= xFootnote;
     Reference<XText> xText(xFootnote, UNO_QUERY);

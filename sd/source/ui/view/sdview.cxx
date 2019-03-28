@@ -713,8 +713,7 @@ bool View::SdrBeginTextEdit(
         {
             if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_TABLE )
             {
-                Color aBackground;
-                aBackground = GetTextEditBackgroundColor(*this);
+                Color aBackground = GetTextEditBackgroundColor(*this);
                 pOL->SetBackgroundColor( aBackground  );
             }
             else

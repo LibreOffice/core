@@ -356,10 +356,9 @@ void XMLSectionExport::ExportRegularSectionStart(
 
     // get XPropertySet for other values
     Reference<XPropertySet> xPropSet(rSection, UNO_QUERY);
-    Any aAny;
 
     // condition and display
-    aAny = xPropSet->getPropertyValue("Condition");
+    Any aAny = xPropSet->getPropertyValue("Condition");
     OUString sCond;
     aAny >>= sCond;
     enum XMLTokenEnum eDisplay = XML_TOKEN_INVALID;
@@ -605,8 +604,7 @@ void XMLSectionExport::ExportAlphabeticalIndexStart(
     {
 
         // style name (if present)
-        Any aAny;
-        aAny = rPropertySet->getPropertyValue("MainEntryCharacterStyleName");
+        Any aAny = rPropertySet->getPropertyValue("MainEntryCharacterStyleName");
         OUString sStyleName;
         aAny >>= sStyleName;
         if (!sStyleName.isEmpty())

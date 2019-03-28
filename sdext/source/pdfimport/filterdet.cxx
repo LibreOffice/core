@@ -232,8 +232,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
             // read the first 1024 byte (see PDF reference implementation note 12)
             const sal_Int32 nHeaderSize = 1024;
             uno::Sequence< sal_Int8 > aBuf( nHeaderSize );
-            sal_uInt64 nBytes = 0;
-            nBytes = xInput->readBytes( aBuf, nHeaderSize );
+            sal_uInt64 nBytes = xInput->readBytes( aBuf, nHeaderSize );
             if( nBytes > 5 )
             {
                 const sal_Int8* pBytes = aBuf.getConstArray();
@@ -492,9 +491,7 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
                 if( pTrailer && pTrailer->m_pDict )
                 {
                     // search document checksum entry
-                    std::unordered_map< OString,
-                                   pdfparse::PDFEntry* >::iterator chk;
-                    chk = pTrailer->m_pDict->m_aMap.find( "DocChecksum" );
+                    auto chk = pTrailer->m_pDict->m_aMap.find( "DocChecksum" );
                     if( chk == pTrailer->m_pDict->m_aMap.end() )
                     {
                         SAL_INFO( "sdext.pdfimport", "no DocChecksum entry" );
@@ -508,9 +505,7 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
                     }
 
                     // search for AdditionalStreams entry
-                    std::unordered_map< OString,
-                                   pdfparse::PDFEntry* >::iterator add_stream;
-                    add_stream = pTrailer->m_pDict->m_aMap.find( "AdditionalStreams" );
+                    auto add_stream = pTrailer->m_pDict->m_aMap.find( "AdditionalStreams" );
                     if( add_stream == pTrailer->m_pDict->m_aMap.end() )
                     {
                         SAL_INFO( "sdext.pdfimport", "no AdditionalStreams entry" );

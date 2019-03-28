@@ -2698,8 +2698,7 @@ void SvImpLBox::SetAnchorSelection(SvTreeListEntry* pOldCursor,SvTreeListEntry* 
 
         if( nNewVisPos < nOldVisPos )
         {
-            pEntry = pNewCursor;
-            pEntry = pView->NextVisible(pEntry);
+            pEntry = pView->NextVisible(pNewCursor);
             while( pEntry && pEntry != pOldCursor )
             {
                 pView->Select( pEntry, false );

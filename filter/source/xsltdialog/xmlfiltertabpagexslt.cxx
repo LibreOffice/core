@@ -102,8 +102,7 @@ void XMLFilterTabPageXSLT::SetURL( URLBox& rURLBox, const OUString& rURL )
     }
     else if( !rURL.isEmpty() )
     {
-        OUString aURL( rURL );
-        aURL = URIHelper::SmartRel2Abs( INetURLObject(sInstPath), aURL, Link<OUString *, bool>(), false );
+        OUString aURL = URIHelper::SmartRel2Abs( INetURLObject(sInstPath), rURL, Link<OUString *, bool>(), false );
         osl::FileBase::getSystemPathFromFileURL( aURL, aPath );
 
         rURLBox.SetBaseURL( aURL );

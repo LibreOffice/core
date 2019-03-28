@@ -678,8 +678,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                     {
                         //create string sequence from comma separated string
                         //uno::Sequence< OUString > seqStr;
-                        std::vector< OUString > seqStr;
-                        seqStr = commaStringToSequence( sNewValue );
+                        std::vector< OUString > seqStr = commaStringToSequence( sNewValue );
 
                         //create appropriate sequence with same size as string sequence
                         uno::Sequence< sal_Int16 > seqShort( seqStr.size() );
@@ -692,8 +691,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                     }
                     else if( sPropertyType == "[]long" )
                     {
-                        std::vector< OUString > seqStrLong;
-                        seqStrLong = commaStringToSequence( sNewValue );
+                        std::vector< OUString > seqStrLong = commaStringToSequence( sNewValue );
 
                         uno::Sequence< sal_Int32 > seqLong( seqStrLong.size() );
                         for( size_t i = 0; i < seqStrLong.size(); ++i )
@@ -704,8 +702,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                     }
                     else if( sPropertyType == "[]hyper" )
                     {
-                        std::vector< OUString > seqStrHyper;
-                        seqStrHyper = commaStringToSequence( sNewValue );
+                        std::vector< OUString > seqStrHyper = commaStringToSequence( sNewValue );
                         uno::Sequence< sal_Int64 > seqHyper( seqStrHyper.size() );
                         for( size_t i = 0; i < seqStrHyper.size(); ++i )
                         {
@@ -715,8 +712,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                     }
                     else if( sPropertyType == "[]double" )
                     {
-                        std::vector< OUString > seqStrDoub;
-                        seqStrDoub = commaStringToSequence( sNewValue );
+                        std::vector< OUString > seqStrDoub = commaStringToSequence( sNewValue );
                         uno::Sequence< double > seqDoub( seqStrDoub.size() );
                         for( size_t i = 0; i < seqStrDoub.size(); ++i )
                         {
@@ -726,8 +722,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                     }
                     else if( sPropertyType == "[]float" )
                     {
-                        std::vector< OUString > seqStrFloat;
-                        seqStrFloat = commaStringToSequence( sNewValue );
+                        std::vector< OUString > seqStrFloat = commaStringToSequence( sNewValue );
                         uno::Sequence< sal_Int16 > seqFloat( seqStrFloat.size() );
                         for( size_t i = 0; i < seqStrFloat.size(); ++i )
                         {

@@ -2851,8 +2851,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                     aChanges.push_back( aChgData );
                 }
 
-                i18n::Boundary aFirstWordBndry;
-                aFirstWordBndry = _xBI->nextWord(
+                i18n::Boundary aFirstWordBndry = _xBI->nextWord(
                         aNodeStr, nCurrentEnd,
                         GetLocale( EditPaM( pNode, nCurrentEnd + 1 ) ),
                         nWordType);

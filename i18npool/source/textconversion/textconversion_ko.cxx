@@ -44,9 +44,7 @@ namespace i18npool {
 TextConversion_ko::TextConversion_ko( const Reference < XComponentContext >& xContext )
     : TextConversionService("com.sun.star.i18n.TextConversion_ko")
 {
-    Reference < XInterface > xI;
-
-    xI = xContext->getServiceManager()->createInstanceWithContext(
+    Reference < XInterface > xI = xContext->getServiceManager()->createInstanceWithContext(
         "com.sun.star.i18n.ConversionDictionary_ko", xContext);
 
     if ( xI.is() )

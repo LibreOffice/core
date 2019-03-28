@@ -66,10 +66,8 @@ void XMLLineNumberingExport::Export()
 
         if (xLineNumbering.is())
         {
-            Any aAny;
-
             // char style
-            aAny = xLineNumbering->getPropertyValue("CharStyleName");
+            Any aAny = xLineNumbering->getPropertyValue("CharStyleName");
             OUString sTmp;
             aAny >>= sTmp;
             if (!sTmp.isEmpty())

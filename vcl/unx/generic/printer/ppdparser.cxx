@@ -1675,8 +1675,7 @@ const PPDValue* PPDContext::getValue( const PPDKey* pKey ) const
     if( ! m_pParser )
         return nullptr;
 
-    hash_type::const_iterator it;
-    it = m_aCurrentValues.find( pKey );
+    hash_type::const_iterator it = m_aCurrentValues.find( pKey );
     if( it != m_aCurrentValues.end() )
         return it->second;
 

@@ -2136,8 +2136,7 @@ Reference< XResultSet > SAL_CALL CachedContentResultSetFactory
             const Reference< XResultSet > & xSource,
             const Reference< XContentIdentifierMapping > & xMapping )
 {
-    Reference< XResultSet > xRet;
-    xRet = new CachedContentResultSet( m_xContext, xSource, xMapping );
+    Reference< XResultSet > xRet = new CachedContentResultSet( m_xContext, xSource, xMapping );
     return xRet;
 }
 

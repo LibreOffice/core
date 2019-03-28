@@ -395,9 +395,7 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
             {
                 bValue = bNumFormat = true;
 
-                OUString sName;
-
-                sName = m_xSelectionLB->get_selected_text();
+                OUString sName = m_xSelectionLB->get_selected_text();
                 m_xNameED->set_text( sName );
 
                 // User- or SetField ?

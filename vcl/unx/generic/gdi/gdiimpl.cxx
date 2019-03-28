@@ -1586,9 +1586,7 @@ bool X11SalGraphicsImpl::drawFilledTriangles(
     }
 
     // prepare transformation for ObjectToDevice coordinate system
-    basegfx::B2DHomMatrix aObjectToDevice(rObjectToDevice);
-
-    aObjectToDevice = basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5) * aObjectToDevice;
+    basegfx::B2DHomMatrix aObjectToDevice = basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5) * rObjectToDevice;
 
      // convert the Triangles into XRender-Triangles
     std::vector<XTriangle> aTriVector(rTriangles.size());

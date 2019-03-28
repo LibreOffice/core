@@ -57,9 +57,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
     // NOTE: if this ever handles XML_DISPLAY attr then beware of fdo#72850 !
     if( bLeft || bFirst )
     {
-        Any aAny;
-
-        aAny = xPropSet->getPropertyValue( sOn );
+        Any aAny = xPropSet->getPropertyValue( sOn );
         bool bOn = *o3tl::doAccess<bool>(aAny);
 
         if( bOn )

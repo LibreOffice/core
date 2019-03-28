@@ -110,9 +110,7 @@ IXFStyleRet XFStyleManager::AddStyle(std::unique_ptr<IXFStyle> pStyle)
     IXFStyleRet aRet;
 
     assert(pStyle);
-    OUString   name;
-
-    name = pStyle->GetStyleName();
+    OUString name = pStyle->GetStyleName();
 
     if( pStyle->GetStyleFamily() == enumXFStyleText )
     {

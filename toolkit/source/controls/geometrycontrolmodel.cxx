@@ -524,8 +524,7 @@
         OPropertyContainer::describeProperties( aProps );
 
         // the aggregate properties
-        Sequence< Property > aAggregateProps;
-        aAggregateProps = AggregateProperties::get()[ _nId ];
+        Sequence< Property > aAggregateProps = AggregateProperties::get()[ _nId ];
 
         // look for duplicates, and remember them
         IntArrayArray::value_type& rDuplicateIds = AmbiguousPropertyIds::get()[ _nId ];

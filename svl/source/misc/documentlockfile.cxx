@@ -214,9 +214,7 @@ LockFileEntry DocumentLockFile::GetLockData()
     const sal_Int32 nBufLen = 32000;
     uno::Sequence< sal_Int8 > aBuffer( nBufLen );
 
-    sal_Int32 nRead = 0;
-
-    nRead = xInput->readBytes( aBuffer, nBufLen );
+    sal_Int32 nRead = xInput->readBytes( aBuffer, nBufLen );
     xInput->closeInput();
 
     if ( nRead == nBufLen )

@@ -573,9 +573,7 @@ static void lcl_getRowsColumns( PyUNO const * me, sal_Int32& nRows, sal_Int32& n
     Sequence<short> aOutParamIndex;
     Sequence<Any> aOutParam;
     Sequence<Any> aParams;
-    Any aRet;
-
-    aRet = me->members->xInvocation->invoke ( "getRows", aParams, aOutParamIndex, aOutParam );
+    Any aRet = me->members->xInvocation->invoke ( "getRows", aParams, aOutParamIndex, aOutParam );
     Reference< XIndexAccess > xIndexAccessRows( aRet, UNO_QUERY );
     nRows = xIndexAccessRows->getCount();
     aRet = me->members->xInvocation->invoke ( "getColumns", aParams, aOutParamIndex, aOutParam );

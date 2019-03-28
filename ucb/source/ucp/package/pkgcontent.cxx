@@ -214,9 +214,7 @@ Content* Content::create(
                 getContentType( aURI.getScheme(), false ) ) )
         return nullptr;
 
-    uno::Reference< container::XHierarchicalNameAccess > xPackage;
-
-    xPackage = pProvider->createPackage( aURI );
+    uno::Reference< container::XHierarchicalNameAccess > xPackage = pProvider->createPackage( aURI );
 
     uno::Reference< ucb::XContentIdentifier > xId
         = new ::ucbhelper::ContentIdentifier( aURI.getUri() );

@@ -314,10 +314,9 @@ void MacroSecurityTrustedSourcesTP::FillCertLB()
         for( sal_uInt32 nEntry = 0 ; nEntry < nEntries ; ++nEntry )
         {
             css::uno::Sequence< OUString >&              rEntry = m_aTrustedAuthors[ nEntry ];
-            uno::Reference< css::security::XCertificate >   xCert;
 
             // create from RawData
-            xCert = m_pDlg->m_xSecurityEnvironment->createCertificateFromAscii( rEntry[ 2 ] );
+            uno::Reference< css::security::XCertificate > xCert = m_pDlg->m_xSecurityEnvironment->createCertificateFromAscii( rEntry[ 2 ] );
 
             m_xTrustCertLB->append(OUString::number(nEntry), xmlsec::GetContentPart(xCert->getSubjectName()));
             m_xTrustCertLB->set_text(nEntry, xmlsec::GetContentPart(xCert->getIssuerName()), 1);

@@ -374,16 +374,12 @@ OUString VDataSeries::getLabelsCID() const
 }
 OUString VDataSeries::getDataCurveCID( sal_Int32 nCurveIndex, bool bAverageLine ) const
 {
-    OUString aRet;
-    aRet = ObjectIdentifier::createDataCurveCID( m_aSeriesParticle, nCurveIndex, bAverageLine );
-    return aRet;
+    return ObjectIdentifier::createDataCurveCID( m_aSeriesParticle, nCurveIndex, bAverageLine );
 }
 
 OUString VDataSeries::getDataCurveEquationCID( sal_Int32 nCurveIndex ) const
 {
-    OUString aRet;
-    aRet = ObjectIdentifier::createDataCurveEquationCID( m_aSeriesParticle, nCurveIndex );
-    return aRet;
+    return ObjectIdentifier::createDataCurveEquationCID( m_aSeriesParticle, nCurveIndex );
 }
 void VDataSeries::setPageReferenceSize( const awt::Size & rPageRefSize )
 {

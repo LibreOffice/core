@@ -533,9 +533,8 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
 {
     OExternalLockGuard aGuard( this );
 
-    uno::Reference< accessibility::XAccessible > xAcc;
     // we do _not_ have a foreign-controlled parent -> default to our VCL parent
-    xAcc = getVclParent();
+    uno::Reference< accessibility::XAccessible > xAcc = getVclParent();
 
     return xAcc;
 }

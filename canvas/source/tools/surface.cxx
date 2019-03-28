@@ -332,8 +332,7 @@ namespace canvas
         // be transformed by the overall transform and uv coordinates will
         // be calculated from the result, and this is why we need to use
         // integer coordinates here...
-        basegfx::B2DHomMatrix aTransform;
-        aTransform = aTransform * rTransform;
+        basegfx::B2DHomMatrix aTransform = rTransform;
         aTransform.translate(::basegfx::fround(rPos.getX()),
                              ::basegfx::fround(rPos.getY()));
 

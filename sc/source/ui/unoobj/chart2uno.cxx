@@ -1861,8 +1861,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     // TableNumberList
     {
         vector<SCTAB> aTableNumVector;
-        InsertTabNumber func;
-        func = ::std::for_each(aAllTokens.begin(), aAllTokens.end(), func);
+        auto func = ::std::for_each(aAllTokens.begin(), aAllTokens.end(), InsertTabNumber());
         func.getVector(aTableNumVector);
         aResult.emplace_back( "TableNumberList", -1,
                                   uno::makeAny( lcl_createTableNumberList( aTableNumVector ) ),
@@ -3081,8 +3080,7 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::generateLabel(chart2::d
         throw uno::RuntimeException();
 
     // Determine the total size of all ranges.
-    AccumulateRangeSize func;
-    func = ::std::for_each(m_aTokens.begin(), m_aTokens.end(), func);
+    auto func = ::std::for_each(m_aTokens.begin(), m_aTokens.end(), AccumulateRangeSize());
     SCCOL nCols = func.getCols();
     SCROW nRows = func.getRows();
 

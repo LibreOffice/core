@@ -302,8 +302,7 @@ void SwView::SetVisArea( const Point &rPt, bool bUpdateScrollbar )
     // align is not possible (better idea?!?!)
     // (fix: Bild.de, 200%) It does not work completely without alignment
     // Let's see how far we get with half BrushSize.
-    Point aPt( rPt );
-    aPt = GetEditWin().LogicToPixel( aPt );
+    Point aPt = GetEditWin().LogicToPixel( rPt );
 #if HAVE_FEATURE_DESKTOP
     const long nTmp = GetWrtShell().IsFrameView() ? 4 : 8;
     aPt.AdjustX( -(aPt.X() % nTmp) );

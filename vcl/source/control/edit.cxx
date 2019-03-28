@@ -743,8 +743,7 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
 
 OUString Edit::ImplGetValidString( const OUString& rString )
 {
-    OUString aValidString( rString );
-    aValidString = aValidString.replaceAll("\n", "").replaceAll("\r", "");
+    OUString aValidString = rString.replaceAll("\n", "").replaceAll("\r", "");
     aValidString = aValidString.replace('\t', ' ');
     return aValidString;
 }
@@ -1033,15 +1032,13 @@ void Edit::ImplPaintBorder(vcl::RenderContext const & rRenderContext)
                     aClipRgn.Move(xNew - aBounds.Left(), 0);
 
                     // move offset of border window
-                    Point aBorderOffs;
-                    aBorderOffs = pBorder->ScreenToOutputPixel(OutputToScreenPixel(aBorderOffs));
+                    Point aBorderOffs = pBorder->ScreenToOutputPixel(OutputToScreenPixel(aBorderOffs));
                     aClipRgn.Move(aBorderOffs.X(), aBorderOffs.Y());
                 }
                 else
                 {
                     // normal case
-                    Point aBorderOffs;
-                    aBorderOffs = pBorder->ScreenToOutputPixel(OutputToScreenPixel(aBorderOffs));
+                    Point aBorderOffs = pBorder->ScreenToOutputPixel(OutputToScreenPixel(aBorderOffs));
                     aClipRgn.Move(aBorderOffs.X(), aBorderOffs.Y());
                 }
 

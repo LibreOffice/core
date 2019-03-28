@@ -297,8 +297,7 @@ uno::Any
 ScVbaFont::getColor()
 {
     // #TODO #FIXME - behave like getXXX above ( wrt. GetDataSet )
-    uno::Any aAny;
-    aAny = OORGBToXLRGB( mxFont->getPropertyValue("CharColor") );
+    uno::Any aAny = OORGBToXLRGB( mxFont->getPropertyValue("CharColor") );
     return aAny;
 }
 

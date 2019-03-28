@@ -343,15 +343,13 @@ css::uno::Sequence< OUString > VCLXPrinterServer::getPrinterNames(  )
 
 css::uno::Reference< css::awt::XPrinter > VCLXPrinterServer::createPrinter( const OUString& rPrinterName )
 {
-    css::uno::Reference< css::awt::XPrinter > xP;
-    xP = new VCLXPrinter( rPrinterName );
+    css::uno::Reference< css::awt::XPrinter > xP = new VCLXPrinter( rPrinterName );
     return xP;
 }
 
 css::uno::Reference< css::awt::XInfoPrinter > VCLXPrinterServer::createInfoPrinter( const OUString& rPrinterName )
 {
-    css::uno::Reference< css::awt::XInfoPrinter > xP;
-    xP = new VCLXInfoPrinter( rPrinterName );
+    css::uno::Reference< css::awt::XInfoPrinter > xP = new VCLXInfoPrinter( rPrinterName );
     return xP;
 }
 

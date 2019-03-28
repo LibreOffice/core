@@ -58,9 +58,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::impl_staticCreateSe
 
 uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
 {
-    OUString aTempURL;
-
-    aTempURL = ::utl::TempFile( nullptr, true ).GetURL();
+    OUString aTempURL = ::utl::TempFile( nullptr, true ).GetURL();
 
     if ( aTempURL.isEmpty() )
         throw uno::RuntimeException(); // TODO: can not create tempfile

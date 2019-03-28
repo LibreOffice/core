@@ -870,8 +870,7 @@ Reference< XInputStream > XmlFilterBase::implGetInputStream( MediaDescriptor& rM
 
 Reference<XStream> XmlFilterBase::implGetOutputStream( MediaDescriptor& rMediaDescriptor ) const
 {
-    Sequence< NamedValue > aMediaEncData;
-    aMediaEncData = rMediaDescriptor.getUnpackedValueOrDefault(
+    Sequence< NamedValue > aMediaEncData = rMediaDescriptor.getUnpackedValueOrDefault(
                                         MediaDescriptor::PROP_ENCRYPTIONDATA(),
                                         Sequence< NamedValue >() );
 
@@ -902,8 +901,7 @@ bool XmlFilterBase::implFinalizeExport( MediaDescriptor& rMediaDescriptor )
 {
     bool bRet = true;
 
-    Sequence< NamedValue > aMediaEncData;
-    aMediaEncData = rMediaDescriptor.getUnpackedValueOrDefault(
+    Sequence< NamedValue > aMediaEncData = rMediaDescriptor.getUnpackedValueOrDefault(
                                         MediaDescriptor::PROP_ENCRYPTIONDATA(),
                                         Sequence< NamedValue >() );
 

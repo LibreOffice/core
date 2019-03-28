@@ -290,9 +290,8 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
             const Point aTmpPoint;
             const tools::Rectangle aOutRect( aTmpPoint, GetOutputSizePixel() );
             const tools::Rectangle aColRect( Point( nX, nY ), Size( nWidth, nHeight ) );
-            tools::Rectangle aWorkRect;
 
-            aWorkRect = tools::Rectangle( 0, 0, aOutRect.Right(), aPos.Y() - 1 );
+            tools::Rectangle aWorkRect = tools::Rectangle( 0, 0, aOutRect.Right(), aPos.Y() - 1 );
             aWorkRect.Justify();
             aWorkRect.Intersection( aColRect );
             if( !aWorkRect.IsEmpty() )

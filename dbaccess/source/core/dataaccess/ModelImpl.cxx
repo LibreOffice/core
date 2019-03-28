@@ -758,8 +758,7 @@ Reference< XStorage > const & ODatabaseModelImpl::getOrCreateRootStorage()
     if ( !m_xDocumentStorage.is() )
     {
         Reference< XSingleServiceFactory> xStorageFactory = StorageFactory::create( m_aContext );
-        Any aSource;
-        aSource = m_aMediaDescriptor.get( "Stream" );
+        Any aSource = m_aMediaDescriptor.get( "Stream" );
         if ( !aSource.hasValue() )
             aSource = m_aMediaDescriptor.get( "InputStream" );
         if ( !aSource.hasValue() && !m_sDocFileLocation.isEmpty() )
@@ -1045,8 +1044,7 @@ bool ODatabaseModelImpl::adjustMacroMode_AutoReject()
 
 bool ODatabaseModelImpl::checkMacrosOnLoading()
 {
-    Reference< XInteractionHandler > xInteraction;
-    xInteraction = m_aMediaDescriptor.getOrDefault( "InteractionHandler", xInteraction );
+    Reference< XInteractionHandler > xInteraction = m_aMediaDescriptor.getOrDefault( "InteractionHandler", xInteraction );
     return m_aMacroMode.checkMacrosOnLoading( xInteraction );
 }
 

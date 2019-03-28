@@ -690,8 +690,7 @@ sal_Int8 OReportSection::AcceptDrop( const AcceptDropEvent& _rEvt )
          )
     {
         if (!m_pParent) return DND_ACTION_NONE;
-        sal_uInt16 nCurrentPosition = 0;
-        nCurrentPosition = m_pParent->getViewsWindow()->getPosition(m_pParent);
+        sal_uInt16 nCurrentPosition = m_pParent->getViewsWindow()->getPosition(m_pParent);
         if (_rEvt.mnAction == DND_ACTION_COPY )
         {
             // we must assure, we can't drop in the top section

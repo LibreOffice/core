@@ -1714,8 +1714,7 @@ static void lcl_FindStartEndCol( const SwLayoutFrame *&rpStart,
     // If necessary we should search backwards again
     while ( rpStart->GetFormat()->GetProtect().IsContentProtected() )
     {
-        const SwLayoutFrame *pTmpLeaf = rpStart;
-        pTmpLeaf = pTmpLeaf->GetNextLayoutLeaf();
+        const SwLayoutFrame *pTmpLeaf = rpStart->GetNextLayoutLeaf();
         while ( pTmpLeaf && aRectFnSet.GetLeft(pTmpLeaf->getFrameArea()) > nEX ) // first skip line
             pTmpLeaf = pTmpLeaf->GetNextLayoutLeaf();
         while ( pTmpLeaf && aRectFnSet.GetLeft(pTmpLeaf->getFrameArea()) < nSX &&
@@ -1736,8 +1735,7 @@ static void lcl_FindStartEndCol( const SwLayoutFrame *&rpStart,
     }
     while ( rpEnd->GetFormat()->GetProtect().IsContentProtected() )
     {
-        const SwLayoutFrame *pTmpLeaf = rpEnd;
-        pTmpLeaf = pTmpLeaf->GetPrevLayoutLeaf();
+        const SwLayoutFrame *pTmpLeaf = rpEnd->GetPrevLayoutLeaf();
         while ( pTmpLeaf && aRectFnSet.GetLeft(pTmpLeaf->getFrameArea()) < nEX ) // skip the line for now
             pTmpLeaf = pTmpLeaf->GetPrevLayoutLeaf();
         while ( pTmpLeaf && aRectFnSet.GetLeft(pTmpLeaf->getFrameArea()) > nEX )

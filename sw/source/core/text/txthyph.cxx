@@ -271,8 +271,7 @@ bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess const &rGu
     // first case: hyphenated word has alternative spelling
     if ( xHyphWord->isAlternativeSpelling() )
     {
-        SvxAlternativeSpelling aAltSpell;
-        aAltSpell = SvxGetAltSpelling( xHyphWord );
+        SvxAlternativeSpelling aAltSpell = SvxGetAltSpelling( xHyphWord );
         OSL_ENSURE( aAltSpell.bIsAltSpelling, "no alternative spelling" );
 
         OUString aAltText = aAltSpell.aReplacement;

@@ -1442,8 +1442,7 @@ void SVTXRoadmap::propertyChange( const css::beans::PropertyChangeEvent& evt )
     if ( !pField )
         return;
 
-    css::uno::Reference< css::uno::XInterface > xRoadmapItem;
-    xRoadmapItem = evt.Source;
+    css::uno::Reference< css::uno::XInterface > xRoadmapItem = evt.Source;
     sal_Int32 nID = 0;
     css::uno::Reference< css::beans::XPropertySet > xPropertySet( xRoadmapItem, css::uno::UNO_QUERY );
     css::uno::Any aValue = xPropertySet->getPropertyValue("ID");

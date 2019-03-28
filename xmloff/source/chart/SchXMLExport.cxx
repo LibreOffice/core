@@ -2913,8 +2913,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
             bool bShowRSquared = false;
             bool bExportEquation = false;
 
-            OUString aService;
-            aService = xServiceName->getServiceName();
+            OUString aService = xServiceName->getServiceName();
 
             std::vector< XMLPropertyState > aPropertyStates = mxExpPropMapper->Filter( xProperties );
 
@@ -3021,9 +3020,7 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
 
         try
         {
-            Any aAny;
-
-            aAny = xSeriesProp->getPropertyValue( bYError ? OUString("ErrorBarY") : OUString("ErrorBarX") );
+            Any aAny = xSeriesProp->getPropertyValue( bYError ? OUString("ErrorBarY") : OUString("ErrorBarX") );
             aAny >>= xErrorBarProp;
 
             if ( xErrorBarProp.is() )

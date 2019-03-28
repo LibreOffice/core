@@ -473,8 +473,7 @@ SortedDynamicResultSetFactory::createSortedDynamicResultSet(
                 const Sequence< NumberedSortingInfo > & Info,
                 const Reference< XAnyCompareFactory > & CompareFactory )
 {
-    Reference< XDynamicResultSet > xRet;
-    xRet = new SortedDynamicResultSet( Source, Info, CompareFactory, m_xContext );
+    Reference< XDynamicResultSet > xRet = new SortedDynamicResultSet( Source, Info, CompareFactory, m_xContext );
     return xRet;
 }
 

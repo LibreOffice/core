@@ -65,8 +65,7 @@ sal_Int8 ConditionEditDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
             bool bBrackets = m_rEdit.GetBrackets();
             if (bBrackets)
                 sDBName += "[";
-            OUString sTmp;
-            sTmp = aColDesc.getDataSource();
+            OUString sTmp = aColDesc.getDataSource();
             sDBName += sTmp;
             sDBName += ".";
 

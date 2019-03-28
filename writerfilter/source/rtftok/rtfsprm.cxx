@@ -41,9 +41,7 @@ std::string RTFSprm::toString() const
 {
     OStringBuffer aBuf("RTFSprm");
 
-    std::string sResult;
-
-    sResult = (*QNameToString::Instance())(m_nKeyword);
+    std::string sResult = (*QNameToString::Instance())(m_nKeyword);
 
     aBuf.append(" ('");
     if (sResult.length() == 0)

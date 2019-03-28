@@ -25,7 +25,9 @@ namespace jfw
 CXPathObjectPtr::CXPathObjectPtr():_object(nullptr)
 {
 }
-
+CXPathObjectPtr::CXPathObjectPtr(xmlXPathObject* pObj):_object(pObj)
+{
+}
 CXPathObjectPtr::~CXPathObjectPtr()
 {
     xmlXPathFreeObject(_object);

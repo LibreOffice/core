@@ -269,8 +269,7 @@ void BubbleChart::createShapes()
 
                         //create data point
                         drawing::Direction3D aSymbolSize = transformToScreenBubbleSize( fBubbleSize );
-                        uno::Reference<drawing::XShape> xShape;
-                        xShape = m_pShapeFactory->createCircle2D( xPointGroupShape_Shapes
+                        uno::Reference<drawing::XShape> xShape = m_pShapeFactory->createCircle2D( xPointGroupShape_Shapes
                                 , aScenePosition, aSymbolSize );
 
                         setMappedProperties( xShape

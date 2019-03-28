@@ -727,8 +727,7 @@ DECLARE_OOXMLEXPORT_TEST(testObjectCrossReference, "object_cross_reference.odt")
 DECLARE_OOXMLEXPORT_TEST(testTdf79435_legacyInputFields, "tdf79435_legacyInputFields.doc")
 {
     //using .doc input file to verify cross-format compatibility.
-    uno::Reference<text::XFormField> xFormField;
-    xFormField
+    uno::Reference<text::XFormField> xFormField
         = getProperty<uno::Reference<text::XFormField>>(getRun(getParagraph(5), 3), "Bookmark");
     uno::Reference<container::XNameContainer> xParameters(xFormField->getParameters());
 
