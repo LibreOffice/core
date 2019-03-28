@@ -453,7 +453,6 @@ namespace basegfx
                     }
 
                     // area clipping
-                    B2DPolyPolygon aMergePolyPolygonA(rClip);
 
                     // First solve all polygon-self and polygon-polygon intersections.
                     // Also get rid of some not-needed polygons (neutral, no area -> when
@@ -461,7 +460,7 @@ namespace basegfx
                     // Now it is possible to correct the orientations in the cut-free
                     // polygons to values corresponding to painting the utils::PolyPolygon with
                     // a XOR-WindingRule.
-                    aMergePolyPolygonA = solveCrossovers(aMergePolyPolygonA);
+                    B2DPolyPolygon aMergePolyPolygonA = solveCrossovers(rClip);
                     aMergePolyPolygonA = stripNeutralPolygons(aMergePolyPolygonA);
                     aMergePolyPolygonA = correctOrientations(aMergePolyPolygonA);
 
@@ -472,10 +471,9 @@ namespace basegfx
                         aMergePolyPolygonA.flip();
                     }
 
-                    B2DPolyPolygon aMergePolyPolygonB(rCandidate);
 
                     // prepare 2nd source polygon in same way
-                    aMergePolyPolygonB = solveCrossovers(aMergePolyPolygonB);
+                    B2DPolyPolygon aMergePolyPolygonB = solveCrossovers(rCandidate);
                     aMergePolyPolygonB = stripNeutralPolygons(aMergePolyPolygonB);
                     aMergePolyPolygonB = correctOrientations(aMergePolyPolygonB);
 

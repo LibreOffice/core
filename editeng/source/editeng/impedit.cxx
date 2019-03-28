@@ -1660,10 +1660,8 @@ bool ImpEditView::IsSelectionAtPoint( const Point& rPosPixel )
     if ( pDragAndDropInfo && pDragAndDropInfo->pField )
         return true;
 
-    Point aMousePos( rPosPixel );
-
     // Logical units ...
-    aMousePos = GetWindow()->PixelToLogic( aMousePos );
+    Point aMousePos = GetWindow()->PixelToLogic( rPosPixel );
 
     if ( ( !GetOutputArea().IsInside( aMousePos ) ) && !pEditEngine->pImpEditEngine->IsInSelectionMode() )
     {
@@ -1679,10 +1677,8 @@ bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
 {
     pEditEngine->CheckIdleFormatter();
 
-    Point aMousePos( rPointPixel );
-
     // Logical units ...
-    aMousePos = GetWindow()->PixelToLogic( aMousePos );
+    Point aMousePos = GetWindow()->PixelToLogic( rPointPixel );
 
     if ( ( !GetOutputArea().IsInside( aMousePos ) ) && !pEditEngine->pImpEditEngine->IsInSelectionMode() )
     {

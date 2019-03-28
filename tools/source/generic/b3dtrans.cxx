@@ -424,8 +424,7 @@ void B3dCamera::CalcNewViewportValues()
     aNewVUV.normalize();
     aNewVPN.normalize();
 
-    basegfx::B3DVector aNewToTheRight = aNewVPN;
-    aNewToTheRight = aNewToTheRight.getPerpendicular(aNewVUV);
+    basegfx::B3DVector aNewToTheRight = aNewVPN.getPerpendicular(aNewVUV);
     aNewToTheRight.normalize();
     aNewVUV = aNewToTheRight.getPerpendicular(aNewVPN);
     aNewVUV.normalize();

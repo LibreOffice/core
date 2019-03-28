@@ -2619,8 +2619,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
                                             {
                                                 OUString sFilter = " WHERE ";
                                                 sFilter = sFilter + xAnalyzer->getFilter();
-                                                OUString sReplace(sSql);
-                                                sReplace = sReplace.replaceFirst(sFilter, "");
+                                                OUString sReplace = sSql.replaceFirst(sFilter, "");
                                                 xAnalyzer->setQuery(sReplace);
                                                 Reference<XSingleSelectQueryComposer> xComposer(xAnalyzer,UNO_QUERY);
                                                 xComposer->setFilter("0=1");

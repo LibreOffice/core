@@ -1131,10 +1131,8 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         NWEnsureGTKMenubar( m_nXScreen );
         GtkRequisition aReq;
         gtk_widget_size_request( gWidgetData[m_nXScreen].gMenubarWidget, &aReq );
-        tools::Rectangle aMenuBarRect = rControlRegion;
-        aMenuBarRect = tools::Rectangle( aMenuBarRect.TopLeft(),
-                                  Size( aMenuBarRect.GetWidth(), aReq.height+1 ) );
-        rNativeBoundingRegion = aMenuBarRect;
+        rNativeBoundingRegion = tools::Rectangle( rControlRegion.TopLeft(),
+                                       Size( rControlRegion.GetWidth(), aReq.height+1 ) );
         rNativeContentRegion = rNativeBoundingRegion;
         returnVal = true;
     }

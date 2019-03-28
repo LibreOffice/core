@@ -2145,9 +2145,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
 #endif
     ErrCode     nStatus = ERRCODE_NONE;
     GraphicType eType;
-    Graphic     aGraphic( rGraphic );
-
-    aGraphic = ImpGetScaledGraphic( rGraphic, aConfigItem );
+    Graphic     aGraphic = ImpGetScaledGraphic( rGraphic, aConfigItem );
     eType = aGraphic.GetType();
 
     if( pConfig->IsExportPixelFormat( nFormat ) )

@@ -150,8 +150,7 @@ namespace dbaui
         m_aStatementHistory.push_back(_rStatement);
 
         // normalize the statement, and remember the normalized form, too
-        OUString sNormalized(_rStatement);
-        sNormalized = sNormalized.replaceAll("\n", " ");
+        OUString sNormalized = _rStatement.replaceAll("\n", " ");
         m_aNormalizedHistory.push_back(sNormalized);
 
         // add the normalized version to the list box

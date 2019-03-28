@@ -276,8 +276,7 @@ sal_uInt16 ScHTMLExport::ToPixel( sal_uInt16 nVal )
 
 Size ScHTMLExport::MMToPixel( const Size& rSize )
 {
-    Size aSize( rSize );
-    aSize = pAppWin->LogicToPixel( rSize, MapMode( MapUnit::Map100thMM ) );
+    Size aSize = pAppWin->LogicToPixel( rSize, MapMode( MapUnit::Map100thMM ) );
     // If there's something there should also be a Pixel
     if ( !aSize.Width() && rSize.Width() )
         aSize.setWidth( 1 );
