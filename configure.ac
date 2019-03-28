@@ -3532,7 +3532,8 @@ if test "$_os" = "WINNT"; then
                 CXX_X64_BINARY="$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"
                 LINK_X64_BINARY="$VC_PRODUCT_DIR/bin/x86_amd64/link.exe"
             fi
-        elif test -f "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/atlmfc/lib/x64/atls.lib"; then
+        elif test -f "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/atlmfc/lib/x64/atls.lib" || \
+             test -f "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/atlmfc/lib/spectre/x64/atls.lib"; then
             # nobody uses 32-bit OS to build, just pick the 64-bit compiler
             if "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64/cl.exe" -? </dev/null >/dev/null 2>&1; then
                 BUILD_X64=TRUE
@@ -12623,7 +12624,10 @@ AC_MSG_NOTICE([setting up the build environment variables...])
 AC_SUBST(COMPATH)
 
 if test "$build_os" = "cygwin"; then
-    if test -d "$COMPATH/atlmfc/lib"; then
+    if test -d "$COMPATH/atlmfc/lib/spectre"; then
+        ATL_LIB="$COMPATH/atlmfc/lib/spectre"
+        ATL_INCLUDE="$COMPATH/atlmfc/include"
+    elif test -d "$COMPATH/atlmfc/lib"; then
         ATL_LIB="$COMPATH/atlmfc/lib"
         ATL_INCLUDE="$COMPATH/atlmfc/include"
     else
