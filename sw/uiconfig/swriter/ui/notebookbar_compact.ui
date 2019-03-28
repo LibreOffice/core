@@ -391,6 +391,12 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="SaveAllD">
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SaveAll</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="NewGlobalDocD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -2517,6 +2523,17 @@
                                 <property name="homogeneous">False</property>
                               </packing>
                             </child>
+                            <child>
+                              <object class="GtkToolButton" id="File-SaveAsRemote">
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:SaveAsRemote</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -2653,6 +2670,16 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ExportDirectToEPUB</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="Files-SendMail">
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:SendMail</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -2844,6 +2871,45 @@
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">16</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="sfxlo-OptionalBox" id="SetDocumentPropertiesSection1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="ExportGroup1">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="toolbar_style">both-horiz</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="Files-SignPDF">
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:SignPDF</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <style>
+                          <class name="priority-1"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">17</property>
                       </packing>
                     </child>
                     <child>
