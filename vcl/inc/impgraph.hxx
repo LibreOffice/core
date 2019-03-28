@@ -45,7 +45,7 @@ private:
     std::unique_ptr<Animation>   mpAnimation;
     std::shared_ptr<GraphicReader> mpContext;
     std::shared_ptr<ImpSwapFile> mpSwapFile;
-    std::shared_ptr<GfxLink>     mpGfxLink;
+    std::unique_ptr<GfxLink>     mpGfxLink;
     GraphicType                  meType;
     mutable sal_uLong            mnSizeBytes;
     bool                         mbSwapOut;
@@ -160,7 +160,7 @@ private:
 
     bool                ImplIsSwapOut() const { return mbSwapOut;}
     bool                ImplIsDummyContext() const { return mbDummyContext; }
-    void                ImplSetLink( const std::shared_ptr<GfxLink>& );
+    void                ImplSetLink( const GfxLink& );
     GfxLink             ImplGetLink();
     bool                ImplIsLink() const;
 
