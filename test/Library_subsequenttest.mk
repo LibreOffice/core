@@ -57,6 +57,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/drawing/captionshape \
 	test/source/drawing/xdrawpages \
 	test/source/drawing/xshapegrouper \
+	test/source/drawing/xshapes \
 	test/source/lang/xserviceinfo \
 	test/source/lang/xcomponent \
 	test/source/sheet/cellarealink \
