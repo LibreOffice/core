@@ -428,8 +428,8 @@ class AbstractScDPNumGroupDlg_Impl : public AbstractScDPNumGroupDlg
 {
     std::unique_ptr<ScDPNumGroupDlg> m_xDlg;
 public:
-    explicit AbstractScDPNumGroupDlg_Impl(ScDPNumGroupDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScDPNumGroupDlg_Impl(std::unique_ptr<ScDPNumGroupDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -440,8 +440,8 @@ class AbstractScDPDateGroupDlg_Impl : public AbstractScDPDateGroupDlg
 {
     std::unique_ptr<ScDPDateGroupDlg> m_xDlg;
 public:
-    explicit AbstractScDPDateGroupDlg_Impl(ScDPDateGroupDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScDPDateGroupDlg_Impl(std::unique_ptr<ScDPDateGroupDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -451,10 +451,10 @@ public:
 
 class AbstractScDPShowDetailDlg_Impl : public AbstractScDPShowDetailDlg
 {
-    std::shared_ptr<ScDPShowDetailDlg> m_xDlg;
+    std::unique_ptr<ScDPShowDetailDlg> m_xDlg;
 public:
-    explicit AbstractScDPShowDetailDlg_Impl(ScDPShowDetailDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScDPShowDetailDlg_Impl(std::unique_ptr<ScDPShowDetailDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -465,8 +465,8 @@ class AbstractScNewScenarioDlg_Impl : public AbstractScNewScenarioDlg
 {
     std::unique_ptr<ScNewScenarioDlg> m_xDlg;
 public:
-    explicit AbstractScNewScenarioDlg_Impl(ScNewScenarioDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScNewScenarioDlg_Impl(std::unique_ptr<ScNewScenarioDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short           Execute() override;
