@@ -800,7 +800,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
 
     SwTableNumFormatMerge aTNFM( *pCpyDoc, *pDoc );
 
-    FndLine_ *pFLine, *pInsFLine = nullptr;
+    FndLine_ *pFLine;
     FndBox_ aFndBox( nullptr, nullptr );
     // Find all Boxes/Lines
     {
@@ -887,11 +887,12 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
             SwTableLine* pLine = pFLine->GetLine();
             SwTableBox* pSttBox = pFLine->GetBoxes()[0]->GetBox();
             const SwTableBoxes::size_type nSttBox = pLine->GetBoxPos( pSttBox );
+            std::unique_ptr<FndLine_> pInsFLine;
             if( nLn >= nFndCnt )
             {
                 // We have more rows in the ClipBoard than we have selected
-                pInsFLine = new FndLine_( GetTabLines()[ nSttLine + nLn ],
-                                        &aFndBox );
+                pInsFLine.reset(new FndLine_( GetTabLines()[ nSttLine + nLn ],
+                                        &aFndBox ));
                 pLine = pInsFLine->GetLine();
             }
             SwTableLine* pCpyLn = rCpyTable.GetTabLines()[ nLn %
@@ -904,7 +905,6 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
                 if( pLine->GetTabBoxes().size() < nSttBox ||
                     pLine->GetTabBoxes().size() - nSttBox < pFLine->GetBoxes().size() )
                 {
-                    delete pInsFLine;
                     return false;
                 }
 
@@ -914,15 +914,14 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
                     SwTableBox *pTmpBox = pLine->GetTabBoxes()[ nSttBox + nBx ];
                     if( !pTmpBox->GetSttNd() )
                     {
-                        delete pInsFLine;
                         return false;
                     }
                     // if Ok, insert the Box into the FndLine
-                    pFndBox = new FndBox_( pTmpBox, pInsFLine );
+                    pFndBox = new FndBox_( pTmpBox, pInsFLine.get() );
                     pInsFLine->GetBoxes().insert( pInsFLine->GetBoxes().begin() + nBx,
                             std::unique_ptr<FndBox_>(pFndBox));
                 }
-                aFndBox.GetLines().insert( aFndBox.GetLines().begin() + nLn, std::unique_ptr<FndLine_>(pInsFLine));
+                aFndBox.GetLines().insert( aFndBox.GetLines().begin() + nLn, std::move(pInsFLine));
             }
             else if( pFLine->GetBoxes().size() == 1 )
             {
