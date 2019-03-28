@@ -326,7 +326,7 @@ const Sequence<OUString>& GetPropertyNames()
             "Export/EnableWordPreview",         // 10
             "Import/ImportWWFieldsAsEnhancedFields", // 11
             "Import/SmartArtToShapes",          // 12
-            "Export/CharBackgroundToHighlighting"    // 13
+            "Export/CharBackgroundToHighlighting",    // 13
             "Import/CreateMSOLockFiles"         // 14
         };
         OUString* pNames = aNames.getArray();
