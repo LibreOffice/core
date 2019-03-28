@@ -661,7 +661,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 }
             }
         }
-            [[fallthrough]];
+            SAL_FALLTHROUGH;
         case SID_EXPORTDOCASPDF:
             bIsPDFExport = true;
             SAL_FALLTHROUGH;
