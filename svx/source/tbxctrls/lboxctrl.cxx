@@ -188,7 +188,7 @@ SvxUndoRedoControl::~SvxUndoRedoControl()
 }
 
 void SvxUndoRedoControl::StateChanged(
-    sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& /* rSlotItem */ )
 {
     if ( nSID == SID_UNDO || nSID == SID_REDO )
     {

@@ -40,7 +40,7 @@ SvxRulerItem::SvxRulerItem(sal_uInt16 _nId, SvxRuler &rRul, SfxBindings &rBindin
 
 
 void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                 const SfxPoolItem* pState)
+                                 const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/)
 {
     // SfxItemState::DONTCARE => pState == -1 => PTR_CAST buff
     if ( eState != SfxItemState::DEFAULT )

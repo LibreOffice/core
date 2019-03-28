@@ -76,6 +76,7 @@ $(eval $(call gb_Library_use_libraries,svl,\
     tl \
     ucbhelper \
     utl \
+    item \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,svl,\

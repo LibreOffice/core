@@ -87,7 +87,7 @@ public:
     virtual void GetFocus() override;
     virtual bool PreNotify( NotifyEvent& _rNEvt ) override;
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState) override;
+                              const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem) override;
 
     void UpdateContent(FmFormShell const *);
     void UpdateContent(const css::uno::Reference< css::form::XForm > &);

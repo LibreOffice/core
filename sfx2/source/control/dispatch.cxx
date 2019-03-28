@@ -76,6 +76,10 @@
 #include <slotserv.hxx>
 #include <workwin.hxx>
 
+// I2TM
+#include <item/base/SlotSet.hxx>
+// ~I2TM
+
 typedef std::vector<SfxShell*> SfxShellStack_Impl;
 
 struct SfxToDo_Impl
@@ -1067,6 +1071,41 @@ const SfxPoolItem* SfxDispatcher::ExecuteList(sal_uInt16 nSlot, SfxCallMode eCal
     }
     return nullptr;
 }
+// I2TM
+const SfxPoolItem* SfxDispatcher::ExecuteList(
+    sal_uInt16 nSlot,
+    SfxCallMode eCall,
+    const Item::SlotSet::SharedPtr& rArgs,
+    const Item::SlotSet::SharedPtr* pInternalArgs)
+{
+    if(IsLocked() || !rArgs || rArgs->empty())
+    {
+        return nullptr;
+    }
+
+    SfxShell* pShell(nullptr);
+    const SfxSlot* pSlot(nullptr);
+
+    if(GetShellAndSlot_Impl(nSlot, &pShell, &pSlot, false, true))
+    {
+        SfxAllItemSet aSet(pShell->GetPool());
+        aSet.slotSet().SetSlots(*rArgs);
+
+        SfxRequest aReq(nSlot, eCall, aSet);
+
+        if(nullptr != pInternalArgs && *pInternalArgs && !(*pInternalArgs)->empty())
+        {
+            SfxAllItemSet aInternalSet(SfxGetpApp()->GetPool());
+            aInternalSet.slotSet().SetSlots(**pInternalArgs);
+            aReq.SetInternalArgs_Impl(aInternalSet);
+        }
+
+        Execute_(*pShell, *pSlot, aReq, eCall);
+        return aReq.GetReturnValue();
+    }
+    return nullptr;
+}
+// ~I2TM
 
 /** Helper method to receive the asynchronously executed <SfxRequest>s.
 */

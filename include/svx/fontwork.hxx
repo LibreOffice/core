@@ -59,7 +59,7 @@ class SvxFontWorkControllerItem : public SfxControllerItem
 
 protected:
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState) override;
+                              const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem) override;
 
 public:
     SvxFontWorkControllerItem(sal_uInt16 nId, SvxFontWorkDialog&, SfxBindings&);

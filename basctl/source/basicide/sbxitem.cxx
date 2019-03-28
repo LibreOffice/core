@@ -23,7 +23,7 @@
 namespace basctl
 {
 
-// ENABLE_ITEMS
+// I2TM
 namespace Item
 {
     Sbx::Sbx(const ScriptDocument* pDocument, const OUString& aLibName, const OUString& aName, const OUString& aMethodName, ItemType eType)
@@ -60,57 +60,57 @@ namespace Item
             && GetType() == rCand.GetType());
     }
 }
-// ~ENABLE_ITEMS
+// ~I2TM
 
-SfxPoolItem* SbxItem::CreateDefault() { SAL_WARN( "basctl.basicide", "No SbxItem factory available"); return nullptr; }
-SbxItem::SbxItem (
-    sal_uInt16 nWhichItem,
-    ScriptDocument const& rDocument,
-    OUString const& aLibName,
-    OUString const& aName,
-    ItemType eType
-) :
-    SfxPoolItem(nWhichItem),
-    m_aDocument(rDocument),
-    m_aLibName(aLibName),
-    m_aName(aName),
-    m_eType(eType)
-{ }
+// SfxPoolItem* SbxItem::CreateDefault() { SAL_WARN( "basctl.basicide", "No SbxItem factory available"); return nullptr; }
+// SbxItem::SbxItem (
+//     sal_uInt16 nWhichItem,
+//     ScriptDocument const& rDocument,
+//     OUString const& aLibName,
+//     OUString const& aName,
+//     ItemType eType
+// ) :
+//     SfxPoolItem(nWhichItem),
+//     m_aDocument(rDocument),
+//     m_aLibName(aLibName),
+//     m_aName(aName),
+//     m_eType(eType)
+// { }
 
-SbxItem::SbxItem (
-    sal_uInt16 nWhichItem,
-    ScriptDocument const& rDocument,
-    OUString const& aLibName,
-    OUString const& aName,
-    OUString const& aMethodName,
-    ItemType eType
-) :
-    SfxPoolItem(nWhichItem),
-    m_aDocument(rDocument),
-    m_aLibName(aLibName),
-    m_aName(aName),
-    m_aMethodName(aMethodName),
-    m_eType(eType)
-{ }
+// SbxItem::SbxItem (
+//     sal_uInt16 nWhichItem,
+//     ScriptDocument const& rDocument,
+//     OUString const& aLibName,
+//     OUString const& aName,
+//     OUString const& aMethodName,
+//     ItemType eType
+// ) :
+//     SfxPoolItem(nWhichItem),
+//     m_aDocument(rDocument),
+//     m_aLibName(aLibName),
+//     m_aName(aName),
+//     m_aMethodName(aMethodName),
+//     m_eType(eType)
+// { }
 
-SfxPoolItem *SbxItem::Clone(SfxItemPool*) const
-{
-    return new SbxItem(*this);
-}
+// SfxPoolItem *SbxItem::Clone(SfxItemPool*) const
+// {
+//     return new SbxItem(*this);
+// }
 
-bool SbxItem::operator==(const SfxPoolItem& rCmp) const
-{
-    SbxItem const* pSbxItem = dynamic_cast<SbxItem const*>(&rCmp);
-    assert(pSbxItem); //no SbxItem!
-    return
-        SfxPoolItem::operator==(rCmp) &&
-        pSbxItem &&
-        m_aDocument == pSbxItem->m_aDocument &&
-        m_aLibName == pSbxItem->m_aLibName &&
-        m_aName == pSbxItem->m_aName &&
-        m_aMethodName == pSbxItem->m_aMethodName &&
-        m_eType == pSbxItem->m_eType;
-}
+// bool SbxItem::operator==(const SfxPoolItem& rCmp) const
+// {
+//     SbxItem const* pSbxItem = dynamic_cast<SbxItem const*>(&rCmp);
+//     assert(pSbxItem); //no SbxItem!
+//     return
+//         SfxPoolItem::operator==(rCmp) &&
+//         pSbxItem &&
+//         m_aDocument == pSbxItem->m_aDocument &&
+//         m_aLibName == pSbxItem->m_aLibName &&
+//         m_aName == pSbxItem->m_aName &&
+//         m_aMethodName == pSbxItem->m_aMethodName &&
+//         m_eType == pSbxItem->m_eType;
+// }
 
 } // namespace basctl
 

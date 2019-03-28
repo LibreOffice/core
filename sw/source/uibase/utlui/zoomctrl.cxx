@@ -41,7 +41,7 @@ SwZoomControl::~SwZoomControl()
 }
 
 void SwZoomControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState )
+                                  const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem )
 {
     const SfxStringItem* pItem = nullptr;
     if (SfxItemState::DEFAULT == eState && (pItem = dynamic_cast<const SfxStringItem*>(pState)))
@@ -52,7 +52,7 @@ void SwZoomControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
     else
     {
         sPreviewZoom.clear();
-        SvxZoomStatusBarControl::StateChanged(nSID, eState, pState);
+        SvxZoomStatusBarControl::StateChanged(nSID, eState, pState, rSlotItem);
     }
 }
 

@@ -229,6 +229,7 @@ void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent
     {
         SfxItemState eState = SfxItemState::DISABLED;
         std::unique_ptr<SfxPoolItem> pItem;
+        Item::IBase::SharedPtr aSlotItem;
         if ( rEvent.IsEnabled )
         {
             eState = SfxItemState::DEFAULT;
@@ -272,19 +273,35 @@ void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent
             }
             else
             {
-                if ( pSlot )
-                    pItem = pSlot->GetType()->CreateItem();
-                if ( pItem )
+                if(nullptr != pSlot)
                 {
-                    pItem->SetWhich( nSlotID );
-                    pItem->PutValue( rEvent.State, 0 );
+                    const bool bSlotItem(pSlot->GetType()->isSlotItem());
+
+                    if(bSlotItem)
+                    {
+                        Item::IBase::AnyIDArgs aArgs;
+                        aArgs.push_back(Item::IBase::AnyIDPair(rEvent.State, 0));
+                        aSlotItem = pSlot->GetType()->CreateSlotItem(aArgs);
+                    }
+                    else
+                    {
+                        pItem = pSlot->GetType()->CreateSfxPoolItem();
+
+                        if(nullptr != pItem)
+                        {
+                            pItem->SetWhich( nSlotID );
+                            pItem->PutValue( rEvent.State, 0 );
+                        }
+                        else
+                        {
+                            pItem.reset(new SfxVoidItem(nSlotID));
+                        }
+                    }
                 }
-                else
-                    pItem.reset( new SfxVoidItem( nSlotID ) );
             }
         }
 
-        StateChanged( nSlotID, eState, pItem.get() );
+        StateChanged( nSlotID, eState, pItem.get(), aSlotItem );
     }
 }
 
@@ -387,7 +404,7 @@ void SfxStatusBarControl::StateChanged
 (
     sal_uInt16              nSID,
     SfxItemState        eState,
-    const SfxPoolItem*  pState  /* Pointer to SfxPoolItem, is only valid
+    const SfxPoolItem*  pState, const Item::IBase::SharedPtr& /*rSlotItem*/  /* Pointer to SfxPoolItem, is only valid
                                    within this Method call. This can be a
                                    Null-Pointer, a Pointer to SfxVoidItem
                                    or of this Type found registered by the

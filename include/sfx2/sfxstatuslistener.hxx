@@ -46,7 +46,7 @@ class SFX2_DLLPUBLIC SfxStatusListener : public cppu::WeakImplHelper<
         void    UnBind();
         void    ReBind();
 
-        virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+        virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem );
 
         // XComponent
         virtual void SAL_CALL dispose() override;

@@ -221,7 +221,8 @@ void SvMetaType::WriteSfxItem(
     const OString& rItemName, SvIdlDataBase const & rBase, SvStream& rOutStm )
 {
     WriteStars( rOutStm );
-    OString aVarName = " a" + rItemName + "_Impl";
+//    OString aVarName = " a" + rItemName + "_Impl";
+    const OString aDemangledVarName(" a" + rItemName.replaceAll("::", "_") + "_Impl");
 
     OStringBuffer aAttrArray;
     sal_uLong   nAttrCount = MakeSfx( aAttrArray );
@@ -245,7 +246,8 @@ void SvMetaType::WriteSfxItem(
     if (bExport)
         rOutStm.WriteCharPtr( "SFX2_DLLPUBLIC " );
     rOutStm.WriteOString( aTypeName )
-           .WriteOString( aVarName ).WriteChar( ';' ) << endl;
+//           .WriteOString( aVarName ).WriteChar( ';' ) << endl;
+           .WriteOString( aDemangledVarName ).WriteChar( ';' ) << endl;
     if (bReturn)
         return;
 
@@ -254,13 +256,30 @@ void SvMetaType::WriteSfxItem(
     rOutStm.WriteCharPtr( "#if !defined(_WIN32) && ((defined(DISABLE_DYNLOADING) && (defined(ANDROID) || defined(IOS) || defined(LINUX))) || STATIC_LINKING)" ) << endl;
     rOutStm.WriteCharPtr( "__attribute__((__weak__))" ) << endl;
     rOutStm.WriteCharPtr( "#endif" ) << endl;
-    rOutStm.WriteOString( aTypeName ).WriteOString( aVarName )
+//    rOutStm.WriteOString( aTypeName ).WriteOString( aVarName )
+    rOutStm.WriteOString( aTypeName ).WriteOString( aDemangledVarName )
            .WriteCharPtr( " = " ) << endl;
     rOutStm.WriteChar( '{' ) << endl;
 
-    rOutStm.WriteCharPtr( "\tcreateSfxPoolItem<" ).WriteOString( rItemName )
-        .WriteCharPtr(">, &typeid(").WriteOString( rItemName ).WriteCharPtr( "), " );
+    const bool bIsSlotItem(rItemName.indexOf("Item::") >= 0);
+    if(bIsSlotItem)
+    {
+        rOutStm.WriteCharPtr( "\tnullptr, ");
+        rOutStm.WriteCharPtr( "createSlotItem<" ).WriteOString( rItemName ).WriteCharPtr(">, ");
+    }
+    else
+    {
+        rOutStm.WriteCharPtr( "\tcreateSfxPoolItem<" ).WriteOString( rItemName ).WriteCharPtr(">, ");
+        rOutStm.WriteCharPtr( "nullptr, ");
+    }
+
+    rOutStm.WriteCharPtr("&typeid(").WriteOString( rItemName ).WriteCharPtr( "), " );
     rOutStm.WriteOString( aAttrCount );
+
+    // rOutStm.WriteCharPtr( "\tcreateSfxPoolItem<" ).WriteOString( rItemName )
+    //     .WriteCharPtr(">, &typeid(").WriteOString( rItemName ).WriteCharPtr( "), " );
+    // rOutStm.WriteOString( aAttrCount );
+
     if( nAttrCount )
     {
         rOutStm.WriteCharPtr( ", { " );

@@ -70,7 +70,7 @@ XmlSecStatusBarControl::~XmlSecStatusBarControl()
 {
 }
 
-void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
+void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/)
 {
     if( SfxItemState::DEFAULT != eState )
     {

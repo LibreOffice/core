@@ -65,7 +65,7 @@ SvxFontWorkControllerItem::SvxFontWorkControllerItem
 // StateChanged method for FontWork items
 
 void SvxFontWorkControllerItem::StateChanged( sal_uInt16 /*nSID*/, SfxItemState /*eState*/,
-                                              const SfxPoolItem* pItem )
+                                              const SfxPoolItem* pItem, const Item::IBase::SharedPtr& /*rSlotItem*/ )
 {
     switch ( GetId() )
     {

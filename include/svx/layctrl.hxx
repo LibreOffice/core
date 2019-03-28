@@ -31,7 +31,7 @@ public:
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
     virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
-                                              const SfxPoolItem* pState ) override;
+                                              const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem ) override;
 
     SFX_DECL_TOOLBOX_CONTROL();
 
@@ -52,7 +52,7 @@ public:
 
     virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
-                                              const SfxPoolItem* pState ) override;
+                                              const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem ) override;
 };
 
 #endif

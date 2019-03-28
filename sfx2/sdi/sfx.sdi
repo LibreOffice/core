@@ -3722,7 +3722,8 @@ SfxBoolItem Saved SID_DOC_SAVED
 
 
 SfxVoidItem SbxDeleted SID_BASICIDE_SBXDELETED
-(SbxItem Sbx SID_BASICIDE_ARG_SBX)
+// (SbxItem Sbx SID_BASICIDE_ARG_SBX)
+(basctl::Item::Sbx Sbx SID_BASICIDE_ARG_SBX)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -3740,7 +3741,8 @@ SfxVoidItem SbxDeleted SID_BASICIDE_SBXDELETED
 
 
 SfxVoidItem SbxInserted SID_BASICIDE_SBXINSERTED
-(SbxItem Sbx SID_BASICIDE_ARG_SBX)
+// (SbxItem Sbx SID_BASICIDE_ARG_SBX)
+(basctl::Item::Sbx Sbx SID_BASICIDE_ARG_SBX)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -4034,7 +4036,8 @@ SfxBoolItem ShowPopups SID_SHOWPOPUPS
 
 
 SfxVoidItem ShowSbx SID_BASICIDE_SHOWSBX
-(SbxItem Sbx SID_BASICIDE_ARG_SBX)
+// (SbxItem Sbx SID_BASICIDE_ARG_SBX)
+(basctl::Item::Sbx Sbx SID_BASICIDE_ARG_SBX)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

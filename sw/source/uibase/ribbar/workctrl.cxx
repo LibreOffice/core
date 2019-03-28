@@ -133,7 +133,7 @@ VclPtr<SfxPopupWindow> SwTbxAutoTextCtrl::CreatePopupWindow()
 
 void SwTbxAutoTextCtrl::StateChanged( sal_uInt16,
                                               SfxItemState,
-                                              const SfxPoolItem* pState )
+                                              const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/ )
 {
     GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SfxItemState::DISABLED) );
 }
@@ -581,7 +581,7 @@ SwPreviewZoomControl::~SwPreviewZoomControl()
 
 void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
                                          SfxItemState eState,
-                                         const SfxPoolItem* pState )
+                                         const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/ )
 {
     sal_uInt16 nId = GetId();
     GetToolBox().EnableItem( nId, (GetItemState(pState) != SfxItemState::DISABLED) );

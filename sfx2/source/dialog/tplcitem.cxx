@@ -53,7 +53,7 @@ SfxTemplateControllerItem::~SfxTemplateControllerItem()
 // passed on by the constructor
 
 void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pItem )
+                                              const SfxPoolItem* pItem, const Item::IBase::SharedPtr& /*rSlotItem*/ )
 {
     switch(nSID)
     {

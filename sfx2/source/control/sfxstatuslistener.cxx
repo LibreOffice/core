@@ -65,7 +65,7 @@ SfxStatusListener::~SfxStatusListener()
 }
 
 // old sfx controller item C++ API
-void SfxStatusListener::StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem* )
+void SfxStatusListener::StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem*, const Item::IBase::SharedPtr& /*rSlotItem*/)
 {
     // must be implemented by sub class
 }
@@ -162,6 +162,8 @@ void SAL_CALL SfxStatusListener::statusChanged( const FeatureStateEvent& rEvent)
 
     SfxItemState eState = SfxItemState::DISABLED;
     std::unique_ptr<SfxPoolItem> pItem;
+    Item::IBase::SharedPtr aSlotItem;
+
     if ( rEvent.IsEnabled )
     {
         eState = SfxItemState::DEFAULT;
@@ -211,19 +213,35 @@ void SAL_CALL SfxStatusListener::statusChanged( const FeatureStateEvent& rEvent)
         }
         else
         {
-            if ( pSlot )
-                pItem = pSlot->GetType()->CreateItem();
-            if ( pItem )
+            if(nullptr != pSlot)
             {
-                pItem->SetWhich( m_nSlotID );
-                pItem->PutValue( rEvent.State, 0 );
+                const bool bSlotItem(pSlot->GetType()->isSlotItem());
+
+                if(bSlotItem)
+                {
+                    Item::IBase::AnyIDArgs aArgs;
+                    aArgs.push_back(Item::IBase::AnyIDPair(rEvent.State, 0));
+                    aSlotItem = pSlot->GetType()->CreateSlotItem(aArgs);
+                }
+                else
+                {
+                    pItem = pSlot->GetType()->CreateSfxPoolItem();
+
+                    if(nullptr != pItem)
+                    {
+                        pItem->SetWhich(m_nSlotID);
+                        pItem->PutValue(rEvent.State, 0);
+                    }
+                    else
+                    {
+                        pItem.reset(new SfxVoidItem(m_nSlotID));
+                    }
+                }
             }
-            else
-                pItem.reset(new SfxVoidItem( m_nSlotID ));
         }
     }
 
-    StateChanged( m_nSlotID, eState, pItem.get() );
+    StateChanged( m_nSlotID, eState, pItem.get(), aSlotItem );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

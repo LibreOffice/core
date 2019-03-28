@@ -1476,6 +1476,27 @@ void SfxItemSet::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
+// I2TM Transfer phase:
+Item::ItemSet& SfxItemSet::itemSet() const
+{
+    if(!m_aItemSetSharedPtr)
+    {
+        const_cast<SfxItemSet*>(this)->m_aItemSetSharedPtr = Item::ItemSet::Create(m_pPool->getModelSpecificIValues());
+    }
+
+    return *m_aItemSetSharedPtr;
+}
+
+Item::SlotSet& SfxItemSet::slotSet() const
+{
+    if(!m_aSlotSetSharedPtr)
+    {
+        const_cast<SfxItemSet*>(this)->m_aSlotSetSharedPtr = Item::SlotSet::Create();
+    }
+
+    return *m_aSlotSetSharedPtr;
+}
+// ~I2TM
 
 // ----------------------------------------------- class SfxAllItemSet
 

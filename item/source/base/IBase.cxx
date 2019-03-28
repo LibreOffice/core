@@ -189,6 +189,20 @@ namespace Item
         return nullptr;
     }
 
+    void IBase::PutValues(const AnyIDArgs& rArgs)
+    {
+        for(const auto& arg : rArgs)
+        {
+            PutValue(arg.first, arg.second);
+        }
+    }
+
+    void IBase::PutValue(const css::uno::Any& /*rVal*/, sal_uInt8 /*nMemberId*/)
+    {
+        // not intended to be used, error
+        assert(false && "Error: Some instance tries to set an Any at an ::Item instance where this is not supported - implement IBase::PutValue method there (!)");
+    }
+
     IBase::~IBase()
     {
     }

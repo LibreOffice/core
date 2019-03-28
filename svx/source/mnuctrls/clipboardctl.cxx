@@ -106,7 +106,7 @@ VclPtr<SfxPopupWindow> SvxClipBoardControl::CreatePopupWindow()
 }
 
 
-void SvxClipBoardControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxClipBoardControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/)
 {
     if ( SID_CLIPBOARD_FORMAT_ITEMS == nSID )
     {

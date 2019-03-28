@@ -62,7 +62,7 @@ public:
     sal_uInt16          GetId() const { return nId; }
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pState );
+                                      const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem );
 
     MapUnit             GetCoreMetric() const;
 
@@ -78,7 +78,7 @@ class SFX2_DLLPUBLIC SfxStatusForwarder: public SfxControllerItem
 
 protected:
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pState ) override;
+                                      const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem ) override;
 
 public:
                             SfxStatusForwarder( sal_uInt16 nSlotId,

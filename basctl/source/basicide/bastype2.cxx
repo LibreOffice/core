@@ -853,15 +853,27 @@ bool TreeListBox::OpenCurrent()
         case OBJ_TYPE_DIALOG:
             if (SfxDispatcher* pDispatcher = GetDispatcher())
             {
-                SbxItem aSbxItem(
-                    SID_BASICIDE_ARG_SBX, aDesc.GetDocument(),
-                    aDesc.GetLibName(), aDesc.GetName(), aDesc.GetMethodName(),
-                    ConvertType(aDesc.GetType())
-                );
+                ::Item::SlotSet::SharedPtr aSlotSet(::Item::SlotSet::Create());
+                aSlotSet->SetSlot(SID_BASICIDE_ARG_SBX, Item::Sbx::Create(
+                    aDesc.GetDocument(),
+                    aDesc.GetLibName(),
+                    aDesc.GetName(),
+                    aDesc.GetMethodName(),
+                    ConvertType(aDesc.GetType())));
                 pDispatcher->ExecuteList(
-                    SID_BASICIDE_SHOWSBX, SfxCallMode::SYNCHRON,
-                    { &aSbxItem }
+                    SID_BASICIDE_SHOWSBX,
+                    SfxCallMode::SYNCHRON,
+                    aSlotSet
                 );
+                // SbxItem aSbxItem(
+                //     SID_BASICIDE_ARG_SBX, aDesc.GetDocument(),
+                //     aDesc.GetLibName(), aDesc.GetName(), aDesc.GetMethodName(),
+                //     ConvertType(aDesc.GetType())
+                // );
+                // pDispatcher->ExecuteList(
+                //     SID_BASICIDE_SHOWSBX, SfxCallMode::SYNCHRON,
+                //     { &aSbxItem }
+                // );
                 return true;
             }
             break;
@@ -1538,15 +1550,27 @@ IMPL_LINK_NOARG(SbTreeListBox, OpenCurrentHdl, weld::TreeView&, void)
         case OBJ_TYPE_DIALOG:
             if (SfxDispatcher* pDispatcher = GetDispatcher())
             {
-                SbxItem aSbxItem(
-                    SID_BASICIDE_ARG_SBX, aDesc.GetDocument(),
-                    aDesc.GetLibName(), aDesc.GetName(), aDesc.GetMethodName(),
-                    ConvertType(aDesc.GetType())
-                );
+                ::Item::SlotSet::SharedPtr aSlotSet(::Item::SlotSet::Create());
+                aSlotSet->SetSlot(SID_BASICIDE_ARG_SBX, Item::Sbx::Create(
+                    aDesc.GetDocument(),
+                    aDesc.GetLibName(),
+                    aDesc.GetName(),
+                    aDesc.GetMethodName(),
+                    ConvertType(aDesc.GetType())));
                 pDispatcher->ExecuteList(
-                    SID_BASICIDE_SHOWSBX, SfxCallMode::SYNCHRON,
-                    { &aSbxItem }
+                    SID_BASICIDE_SHOWSBX,
+                    SfxCallMode::SYNCHRON,
+                    aSlotSet
                 );
+                // SbxItem aSbxItem(
+                //     SID_BASICIDE_ARG_SBX, aDesc.GetDocument(),
+                //     aDesc.GetLibName(), aDesc.GetName(), aDesc.GetMethodName(),
+                //     ConvertType(aDesc.GetType())
+                // );
+                // pDispatcher->ExecuteList(
+                //     SID_BASICIDE_SHOWSBX, SfxCallMode::SYNCHRON,
+                //     { &aSbxItem }
+                // );
                 return;
             }
             break;

@@ -60,7 +60,7 @@ SwViewLayoutControl::~SwViewLayoutControl()
 {
 }
 
-void SwViewLayoutControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
+void SwViewLayoutControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/)
 {
     if ( SfxItemState::DEFAULT != eState || pState->IsVoidItem() )
         GetStatusBar().SetItemText( GetId(), OUString() );

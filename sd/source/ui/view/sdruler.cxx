@@ -42,7 +42,7 @@ class RulerCtrlItem : public SfxControllerItem
 
  protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
-                                const SfxPoolItem* pItem ) override;
+                                const SfxPoolItem* pItem, const Item::IBase::SharedPtr& rSlotItem ) override;
 
  public:
     RulerCtrlItem(Ruler& rRlr, SfxBindings& rBind);
@@ -54,7 +54,7 @@ RulerCtrlItem::RulerCtrlItem(Ruler& rRlr, SfxBindings& rBind)
 {
 }
 
-void RulerCtrlItem::StateChanged( sal_uInt16 nSId, SfxItemState, const SfxPoolItem* pState )
+void RulerCtrlItem::StateChanged( sal_uInt16 nSId, SfxItemState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/)
 {
     switch( nSId )
     {

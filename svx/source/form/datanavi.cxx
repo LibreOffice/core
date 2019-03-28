@@ -2202,7 +2202,7 @@ namespace svxform
         SfxDockingWindow::dispose();
     }
 
-    void DataNavigator::StateChanged( sal_uInt16 , SfxItemState , const SfxPoolItem*  )
+    void DataNavigator::StateChanged( sal_uInt16 , SfxItemState , const SfxPoolItem*, const Item::IBase::SharedPtr& /*rSlotItem*/)
     {
     }
 

@@ -935,4 +935,19 @@ void SfxItemPool::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
+// I2TM Transfer phase: deliver ModelSpecificIValues for this SfxItemPool/Model
+Item::ModelSpecificIValues::SharedPtr SfxItemPool::getModelSpecificIValues() const
+{
+    // global static instance fallback for all SfxItemPool(s)
+    static Item::ModelSpecificIValues::SharedPtr aGlobalDefault;
+
+    if(!aGlobalDefault)
+    {
+        aGlobalDefault = Item::ModelSpecificIValues::Create();
+    }
+
+    return aGlobalDefault;
+}
+// ~I2TM
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

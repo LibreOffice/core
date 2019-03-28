@@ -59,7 +59,7 @@ void SvxVertCTLTextTbxCtrl::initialize(const css::uno::Sequence<css::uno::Any>& 
 void SvxVertCTLTextTbxCtrl::StateChanged(
     sal_uInt16 nSID,
     SfxItemState eState,
-    const SfxPoolItem* pState )
+    const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem )
 {
     SvtLanguageOptions aLangOptions;
     bool bCalc = false;
@@ -70,7 +70,7 @@ void SvxVertCTLTextTbxCtrl::StateChanged(
         bEnabled = aLangOptions.IsCTLFontEnabled();
     else
     {
-        SfxToolBoxControl::StateChanged(nSID, eState, pState);
+        SfxToolBoxControl::StateChanged(nSID, eState, pState, rSlotItem);
         return;
     }
 

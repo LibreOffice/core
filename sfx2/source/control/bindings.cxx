@@ -1035,25 +1035,37 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
             else if ( SfxItemState::DONTCARE == eState )
             {
                 // Create one Status-Item for each Factory
-                std::unique_ptr<SfxPoolItem> pNewItem = pSlot->GetType()->CreateItem();
-                DBG_ASSERT( pNewItem, "Toggle to slot without ItemFactory" );
-                pNewItem->SetWhich( nWhich );
+                const bool bSlotItem(pSlot->GetType()->isSlotItem());
 
-                if ( auto pNewBoolItem = dynamic_cast<SfxBoolItem *>( pNewItem.get() ) )
+                if(bSlotItem)
                 {
-                  // we can toggle Bools
-                    pNewBoolItem->SetValue( true );
-                    aReq.AppendItem( *pNewItem );
+                    // I2TM will have to use as soon as SfxBoolItem gets used and/or
+                    // SfxPoolItem's with 'SfxEnumItemInterface' (?!?)
+                    //  Item::IBase::AnyIDArgs aArgs;
+                    //  Item::IBase::SharedPtr aSlotItem(pSlot->GetType()->CreateSlotItem(aArgs));
                 }
-                else if ( dynamic_cast< const SfxEnumItemInterface *>( pNewItem.get() ) !=  nullptr &&
-                        static_cast<SfxEnumItemInterface *>(pNewItem.get())->HasBoolValue())
+                else
                 {
-                    // and Enums with Bool-Interface
-                    static_cast<SfxEnumItemInterface*>(pNewItem.get())->SetBoolValue(true);
-                    aReq.AppendItem( *pNewItem );
-                }
-                else {
-                    OSL_FAIL( "Toggle only for Enums and Bools allowed" );
+                    std::unique_ptr<SfxPoolItem> pNewItem = pSlot->GetType()->CreateSfxPoolItem();
+                    DBG_ASSERT( pNewItem, "Toggle to slot without ItemFactory" );
+                    pNewItem->SetWhich( nWhich );
+
+                    if ( auto pNewBoolItem = dynamic_cast<SfxBoolItem *>( pNewItem.get() ) )
+                    {
+                    // we can toggle Bools
+                        pNewBoolItem->SetValue( true );
+                        aReq.AppendItem( *pNewItem );
+                    }
+                    else if ( dynamic_cast< const SfxEnumItemInterface *>( pNewItem.get() ) !=  nullptr &&
+                            static_cast<SfxEnumItemInterface *>(pNewItem.get())->HasBoolValue())
+                    {
+                        // and Enums with Bool-Interface
+                        static_cast<SfxEnumItemInterface*>(pNewItem.get())->SetBoolValue(true);
+                        aReq.AppendItem( *pNewItem );
+                    }
+                    else {
+                        OSL_FAIL( "Toggle only for Enums and Bools allowed" );
+                    }
                 }
             }
             else {

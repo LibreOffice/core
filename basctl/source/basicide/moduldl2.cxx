@@ -1490,10 +1490,25 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                 if ( !rDocument.createModule( aLibName, aModName, true, sModuleCode ) )
                     throw Exception("could not create module " + aModName, nullptr);
 
-                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
-                if (SfxDispatcher* pDispatcher = GetDispatcher())
-                    pDispatcher->ExecuteList(SID_BASICIDE_SBXINSERTED,
-                                          SfxCallMode::SYNCHRON, { &aSbxItem });
+                if(SfxDispatcher* pDispatcher = GetDispatcher())
+                {
+                    ::Item::SlotSet::SharedPtr aSlotSet(::Item::SlotSet::Create());
+                    aSlotSet->SetSlot(SID_BASICIDE_ARG_SBX, Item::Sbx::Create(
+                        rDocument,
+                        aLibName,
+                        aModName,
+                        OUString(),
+                        TYPE_MODULE));
+                    pDispatcher->ExecuteList(
+                        SID_BASICIDE_SBXINSERTED,
+                        SfxCallMode::SYNCHRON,
+                        aSlotSet
+                    );
+                }
+                // SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
+                // if (SfxDispatcher* pDispatcher = GetDispatcher())
+                //     pDispatcher->ExecuteList(SID_BASICIDE_SBXINSERTED,
+                //                           SfxCallMode::SYNCHRON, { &aSbxItem });
 
                 if( pBasicBox )
                 {
@@ -1602,10 +1617,25 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                 if ( !rDocument.createModule( aLibName, aModName, true, sModuleCode ) )
                     throw Exception("could not create module " + aModName, nullptr);
 
-                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
-                if (SfxDispatcher* pDispatcher = GetDispatcher())
-                    pDispatcher->ExecuteList(SID_BASICIDE_SBXINSERTED,
-                                          SfxCallMode::SYNCHRON, { &aSbxItem });
+                if(SfxDispatcher* pDispatcher = GetDispatcher())
+                {
+                    ::Item::SlotSet::SharedPtr aSlotSet(::Item::SlotSet::Create());
+                    aSlotSet->SetSlot(SID_BASICIDE_ARG_SBX, Item::Sbx::Create(
+                        rDocument,
+                        aLibName,
+                        aModName,
+                        OUString(),
+                        TYPE_MODULE));
+                    pDispatcher->ExecuteList(
+                        SID_BASICIDE_SBXINSERTED,
+                        SfxCallMode::SYNCHRON,
+                        aSlotSet
+                    );
+                }
+                // SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
+                // if (SfxDispatcher* pDispatcher = GetDispatcher())
+                //     pDispatcher->ExecuteList(SID_BASICIDE_SBXINSERTED,
+                //                           SfxCallMode::SYNCHRON, { &aSbxItem });
 
                 if( pBasicBox )
                 {

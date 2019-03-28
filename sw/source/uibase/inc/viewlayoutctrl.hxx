@@ -36,7 +36,7 @@ public:
     SwViewLayoutControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
     virtual ~SwViewLayoutControl() override;
 
-    virtual void  StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
+    virtual void  StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem ) override;
     virtual void  Paint( const UserDrawEvent& rEvt ) override;
     virtual bool  MouseButtonDown( const MouseEvent & ) override;
     virtual bool  MouseMove( const MouseEvent & ) override;

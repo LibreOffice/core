@@ -34,7 +34,7 @@ ScNavigatorControllerItem::ScNavigatorControllerItem( sal_uInt16          nIdP,
 }
 
 void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemState /* eState */,
-                                                          const SfxPoolItem* pItem )
+                                                          const SfxPoolItem* pItem, const Item::IBase::SharedPtr& /*rSlotItem*/ )
 {
     switch( GetId() )
     {

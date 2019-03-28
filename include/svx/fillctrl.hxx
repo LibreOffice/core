@@ -70,7 +70,7 @@ public:
     SvxFillToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
     virtual ~SvxFillToolBoxControl() override;
 
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
+    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem) override;
     void Update();
     virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
 };

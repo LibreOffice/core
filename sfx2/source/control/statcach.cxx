@@ -79,6 +79,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateE
     else
     {
         std::unique_ptr<SfxPoolItem> pItem;
+        Item::IBase::SharedPtr aSlotItem;
         sal_uInt16 nId = pCache->GetId();
         SfxItemState eState = SfxItemState::DISABLED;
         if ( !aStatus.IsEnabled )
@@ -117,15 +118,31 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateE
             }
             else
             {
-                if ( pSlot )
-                    pItem = pSlot->GetType()->CreateItem();
-                if ( pItem )
+                if(nullptr != pSlot)
                 {
-                    pItem->SetWhich( nId );
-                    pItem->PutValue( aAny, 0 );
+                    const bool bSlotItem(pSlot->GetType()->isSlotItem());
+
+                    if(bSlotItem)
+                    {
+                        Item::IBase::AnyIDArgs aArgs;
+                        aArgs.push_back(Item::IBase::AnyIDPair(rEvent.State, 0));
+                        aSlotItem = pSlot->GetType()->CreateSlotItem(aArgs);
+                    }
+                    else
+                    {
+                        pItem = pSlot->GetType()->CreateSfxPoolItem();
+
+                        if(nullptr != pItem)
+                        {
+                            pItem->SetWhich( nId );
+                            pItem->PutValue( aAny, 0 );
+                        }
+                        else
+                        {
+                            pItem.reset(new SfxVoidItem(nId));
+                        }
+                    }
                 }
-                else
-                    pItem.reset( new SfxVoidItem( nId ) );
             }
         }
         else
@@ -138,7 +155,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateE
         for ( SfxControllerItem *pCtrl = pCache->GetItemLink();
             pCtrl;
             pCtrl = pCtrl->GetItemLink() )
-            pCtrl->StateChanged( nId, eState, pItem.get() );
+            pCtrl->StateChanged( nId, eState, pItem.get(), aSlotItem );
     }
 }
 
@@ -358,14 +375,18 @@ void SfxStateCache::SetVisibleState( bool bShow )
     // Update Controller
     if ( !mxDispatch.is() && pController )
     {
+        const Item::IBase::SharedPtr aSlotItem;
         for ( SfxControllerItem *pCtrl = pController;
                 pCtrl;
                 pCtrl = pCtrl->GetItemLink() )
-            pCtrl->StateChanged( nId, eState, pState );
+            pCtrl->StateChanged( nId, eState, pState, aSlotItem );
     }
 
     if ( pInternalController )
-        pInternalController->StateChanged( nId, eState, pState );
+    {
+        const Item::IBase::SharedPtr aSlotItem;
+        pInternalController->StateChanged( nId, eState, pState, aSlotItem );
+    }
 
     if ( bDeleteItem )
         delete pState;
@@ -406,10 +427,11 @@ void SfxStateCache::SetState_Impl
         // Update Controller
         if ( !mxDispatch.is() && pController )
         {
+            const Item::IBase::SharedPtr aSlotItem;
             for ( SfxControllerItem *pCtrl = pController;
                 pCtrl;
                 pCtrl = pCtrl->GetItemLink() )
-                pCtrl->StateChanged( nId, eState, pState );
+                pCtrl->StateChanged( nId, eState, pState, aSlotItem );
         }
 
         if ( pInternalController )
@@ -445,10 +467,11 @@ void SfxStateCache::SetCachedState( bool bAlways )
     // Update Controller
     if ( !mxDispatch.is() && pController )
     {
+        const Item::IBase::SharedPtr aSlotItem;
         for ( SfxControllerItem *pCtrl = pController;
             pCtrl;
             pCtrl = pCtrl->GetItemLink() )
-            pCtrl->StateChanged( nId, eLastState, pLastItem );
+            pCtrl->StateChanged( nId, eLastState, pLastItem, aSlotItem );
     }
 
     if ( pInternalController )

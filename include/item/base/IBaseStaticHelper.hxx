@@ -83,6 +83,13 @@ namespace Item
         {
             return rCandidate && GetStaticAdmin().IsDefault(rCandidate.get());
         }
+
+        static std::shared_ptr<const TargetType> CreateFromAny(const AnyIDArgs& rArgs)
+        {
+            TargetType* pNewInstance(new TargetType());
+            pNewInstance->PutValues(rArgs);
+            return std::shared_ptr<const TargetType>(pNewInstance);
+        }
     };
 } // end of namespace Item
 

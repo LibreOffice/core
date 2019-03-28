@@ -67,7 +67,7 @@ class SvxIMapDlgItem : public SfxControllerItem
 protected:
 
     virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                               const SfxPoolItem* pState ) override;
+                               const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem ) override;
 
 
 public:

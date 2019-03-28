@@ -65,6 +65,7 @@ $(eval $(call gb_Library_use_libraries,sfx,\
     ucbhelper \
     utl \
     vcl \
+    item \
 ))
 
 $(eval $(call gb_Library_use_externals,sfx,\

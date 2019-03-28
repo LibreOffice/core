@@ -614,9 +614,11 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
             SvMetaAttribute * pPar  = rList[n];
             SvMetaType * pPType     = pPar->GetType();
             WriteTab( rOutStm, 1 );
+            const OString aDemangledVarName(pPType->GetName().replaceAll("::", "_"));
             rOutStm.WriteCharPtr("{ (const SfxType*) &a")
                 // item type
-               .WriteOString(pPType->GetName()).WriteCharPtr("_Impl, ")
+//               .WriteOString(pPType->GetName()).WriteCharPtr("_Impl, ")
+               .WriteOString(aDemangledVarName).WriteCharPtr("_Impl, ")
                 // parameter name
                .WriteCharPtr("\"").WriteOString(pPar->GetName()).WriteCharPtr("\", ")
                 // slot id

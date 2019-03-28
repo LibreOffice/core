@@ -26,13 +26,15 @@
 #include <sfx2/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <sfx2/groupid.hxx>
+#include <item/base/IBase.hxx>
 #include <functional>
 
 #include <climits>
 
 class SfxItemPool;
 
-enum class SfxSlotMode {
+enum class SfxSlotMode
+{
     NONE            =    0x0000L, // default
 
     TOGGLE          =    0x0004L, // inverted for Execute old value
@@ -89,10 +91,9 @@ enum class SfxSlotKind
     Attribute
 };
 
-
 struct SfxTypeAttrib
 {
-    sal_uInt16                  nAID;
+    sal_uInt16 nAID;
     const char* pName;
 };
 
@@ -100,32 +101,59 @@ template<class T> SfxPoolItem* createSfxPoolItem()
 {
     return T::CreateDefault();
 }
+template<class T> std::shared_ptr<const T> createSlotItem(const Item::IBase::AnyIDArgs& rArgs)
+{
+    return T::CreateFromAny(rArgs);
+}
 struct SfxType
 {
     std::function<SfxPoolItem* ()> const createSfxPoolItemFunc;
-    const std::type_info*   pType;
-    sal_uInt16 const        nAttribs;
-    SfxTypeAttrib   aAttrib[1]; // variable length
+    std::function<Item::IBase::SharedPtr(const Item::IBase::AnyIDArgs& rArgs)> const createSlotItemFunc;
+    const std::type_info* pType;
+    sal_uInt16 const nAttribs;
+    SfxTypeAttrib aAttrib[1]; // variable length
 
-    const std::type_info* Type() const{return pType;}
-    std::unique_ptr<SfxPoolItem> CreateItem() const
-                    { return std::unique_ptr<SfxPoolItem>(createSfxPoolItemFunc()); }
+    const std::type_info* Type() const
+    {
+        return pType;
+    }
+
+    std::unique_ptr<SfxPoolItem> CreateSfxPoolItem() const
+    {
+        return std::unique_ptr<SfxPoolItem>(createSfxPoolItemFunc());
+    }
+
+    Item::IBase::SharedPtr CreateSlotItem(const Item::IBase::AnyIDArgs& rArgs) const
+    {
+        return createSlotItemFunc(rArgs);
+    }
+
+    bool isSlotItem() const
+    {
+        return nullptr != createSlotItemFunc;
+    }
 };
 
 struct SfxType0
 {
     std::function<SfxPoolItem* ()> const createSfxPoolItemFunc;
-    const std::type_info*    pType;
-    sal_uInt16 const         nAttribs;
-    const std::type_info*    Type() const { return pType;}
+    std::function<Item::IBase::SharedPtr(const Item::IBase::AnyIDArgs& rArgs)> const createSlotItemFunc;
+    const std::type_info* pType;
+    sal_uInt16 const nAttribs;
+
+    const std::type_info* Type() const
+    {
+        return pType;
+    }
 };
-#define SFX_DECL_TYPE(n)    struct SfxType##n                   \
-                            {                                   \
-                                std::function<SfxPoolItem* ()> createSfxPoolItemFunc; \
-                                const std::type_info* pType; \
-                                sal_uInt16          nAttribs;       \
-                                SfxTypeAttrib   aAttrib[n];     \
-                            }
+#define SFX_DECL_TYPE(n) struct SfxType##n \
+{ \
+    std::function<SfxPoolItem* ()> createSfxPoolItemFunc; \
+    std::function<Item::IBase::SharedPtr(const Item::IBase::AnyIDArgs& rArgs)> const createSlotItemFunc; \
+    const std::type_info* pType; \
+    sal_uInt16 nAttribs; \
+    SfxTypeAttrib aAttrib[n]; \
+}
 
 #define SFX_TYPE(Class) &a##Class##_Impl
 
@@ -150,24 +178,24 @@ SFX_DECL_TYPE(23); // for SvxSearchItem
 #undef SFX_DECL_TYPE
 
 #define SFX_SLOT_ARG( aShellClass, id, GroupId, ExecMethodPtr, StateMethodPtr, Flags, ItemClass, nArg0, nArgs, Name, Prop ) \
-               { id, GroupId, Flags | Prop, \
-                 USHRT_MAX, 0, \
-                 ExecMethodPtr, \
-                 StateMethodPtr, \
-                 (const SfxType*) &a##ItemClass##_Impl, \
-                 0, \
-                 &a##aShellClass##Args_Impl[nArg0], nArgs, SfxDisableFlags::NONE, Name \
-               }
+{ id, GroupId, Flags | Prop, \
+    USHRT_MAX, 0, \
+    ExecMethodPtr, \
+    StateMethodPtr, \
+    (const SfxType*) &a##ItemClass##_Impl, \
+    0, \
+    &a##aShellClass##Args_Impl[nArg0], nArgs, SfxDisableFlags::NONE, Name \
+}
 
 #define SFX_NEW_SLOT_ARG( aShellClass, id, GroupId, pNext, ExecMethodPtr, StateMethodPtr, Flags, DisableFlags, ItemClass, nArg0, nArgs, Prop, UnoName ) \
-               { id, GroupId, Flags | Prop, \
-                 USHRT_MAX, 0, \
-                 ExecMethodPtr, \
-                 StateMethodPtr, \
-                 (const SfxType*) &a##ItemClass##_Impl, \
-                 pNext, \
-                 &a##aShellClass##Args_Impl[nArg0], nArgs, DisableFlags, UnoName \
-               }
+{ id, GroupId, Flags | Prop, \
+    USHRT_MAX, 0, \
+    ExecMethodPtr, \
+    StateMethodPtr, \
+    (const SfxType*) &a##ItemClass##_Impl, \
+    pNext, \
+    &a##aShellClass##Args_Impl[nArg0], nArgs, DisableFlags, UnoName \
+}
 
 struct SfxFormalArgument
 {
@@ -175,10 +203,16 @@ struct SfxFormalArgument
     const char*      pName;    // Name of the sParameters
     sal_uInt16 const nSlotId;  // Slot-Id for identification of the Parameters
 
-    std::unique_ptr<SfxPoolItem> CreateItem() const
-                            { return pType->CreateItem(); }
-};
+    std::unique_ptr<SfxPoolItem> CreateSfxPoolItem() const
+    {
+        return pType->CreateSfxPoolItem();
+    }
 
+    Item::IBase::SharedPtr CreateSlotItem(const Item::IBase::AnyIDArgs& rArgs) const
+    {
+        return pType->CreateSlotItem(rArgs);
+    }
+};
 
 class SfxSlot
 {

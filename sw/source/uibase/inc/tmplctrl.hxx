@@ -27,7 +27,7 @@ protected:
     virtual void    Command( const CommandEvent& rCEvt ) override;
 public:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState ) override;
+                                  const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem ) override;
     virtual void    Paint( const UserDrawEvent& rEvt ) override;
 
     SFX_DECL_STATUSBAR_CONTROL();

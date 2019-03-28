@@ -41,7 +41,7 @@ public:
     virtual void    Select(sal_uInt16 nSelectModifier) override;
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState ) override;
+                                              const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem ) override;
 private:
     DECL_LINK( WaitDoubleClickHdl, Timer*, void );
     void impl_executePaintBrush();

@@ -453,6 +453,7 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
     {
         SfxItemState eState = SfxItemState::DISABLED;
         std::unique_ptr<SfxPoolItem> pItem;
+        Item::IBase::SharedPtr aSlotItem;
         if ( rEvent.IsEnabled )
         {
             eState = SfxItemState::DEFAULT;
@@ -508,19 +509,35 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
             }
             else
             {
-                if ( pSlot )
-                    pItem = pSlot->GetType()->CreateItem();
-                if ( pItem )
+                if(nullptr != pSlot)
                 {
-                    pItem->SetWhich( nSlotId );
-                    pItem->PutValue( rEvent.State, 0 );
+                    const bool bSlotItem(pSlot->GetType()->isSlotItem());
+
+                    if(bSlotItem)
+                    {
+                        Item::IBase::AnyIDArgs aArgs;
+                        aArgs.push_back(Item::IBase::AnyIDPair(rEvent.State, 0));
+                        aSlotItem = pSlot->GetType()->CreateSlotItem(aArgs);
+                    }
+                    else
+                    {
+                        pItem = pSlot->GetType()->CreateSfxPoolItem();
+
+                        if(nullptr != pItem)
+                        {
+                            pItem->SetWhich( nSlotId );
+                            pItem->PutValue( rEvent.State, 0 );
+                        }
+                        else
+                        {
+                            pItem.reset(new SfxVoidItem(nSlotId));
+                        }
+                    }
                 }
-                else
-                    pItem.reset(new SfxVoidItem( nSlotId ));
             }
         }
 
-        StateChanged( nSlotId, eState, pItem.get() );
+        StateChanged( nSlotId, eState, pItem.get(), aSlotItem );
     }
 }
 
@@ -602,7 +619,7 @@ void SfxToolBoxControl::StateChanged
 (
     sal_uInt16              nId,
     SfxItemState        eState,
-    const SfxPoolItem*  pState
+    const SfxPoolItem*  pState, const Item::IBase::SharedPtr& /*rSlotItem*/
 )
 {
     DBG_ASSERT( pImpl->pBox != nullptr, "setting state to dangling ToolBox" );

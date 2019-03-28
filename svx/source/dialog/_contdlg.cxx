@@ -51,7 +51,7 @@ SvxContourDlgItem::SvxContourDlgItem( SvxSuperContourDlg& rContourDlg, SfxBindin
 {
 }
 
-void SvxContourDlgItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/, const SfxPoolItem* pItem )
+void SvxContourDlgItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/, const SfxPoolItem* pItem, const Item::IBase::SharedPtr& /*rSlotItem*/)
 {
     if ( pItem && ( SID_CONTOUR_EXEC == nSID ) )
     {

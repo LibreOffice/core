@@ -31,6 +31,10 @@
 
 #include <initializer_list>
 
+// I2TM
+#include <item/base/SlotSet.hxx>
+// ~I2TM
+
 class SfxSlotServer;
 class SfxRequest;
 class SfxViewFrame;
@@ -116,6 +120,14 @@ public:
                                     SfxCallMode nCall,
                                     std::initializer_list<SfxPoolItem const*> args,
                                     std::initializer_list<SfxPoolItem const*> internalargs = std::initializer_list<SfxPoolItem const*>());
+
+    // I2TM
+    const SfxPoolItem* ExecuteList(
+        sal_uInt16 nSlot,
+        SfxCallMode eCall,
+        const Item::SlotSet::SharedPtr& rArgs,
+        const Item::SlotSet::SharedPtr* pInternalArgs = nullptr);
+    // ~I2TM
 
     const SfxPoolItem*  Execute( sal_uInt16 nSlot,
                                  SfxCallMode nCall,

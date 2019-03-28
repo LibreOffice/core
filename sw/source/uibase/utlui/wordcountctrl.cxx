@@ -27,7 +27,7 @@ SwWordCountStatusBarControl::~SwWordCountStatusBarControl()
 }
 
 void SwWordCountStatusBarControl::StateChanged(
-    sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/ )
 {
     if (eState == SfxItemState::DEFAULT) // Can access pState
         GetStatusBar().SetItemText( GetId(), static_cast<const SfxStringItem*>(pState)->GetValue() );

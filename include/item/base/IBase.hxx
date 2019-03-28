@@ -21,8 +21,10 @@
 #define INCLUDED_ITEM_BASE_IBASE_HXX
 
 #include <memory>
+#include <vector>
 #include <sal/types.h>
 #include <item/itemdllapi.h>
+#include <com/sun/star/uno/Any.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -88,6 +90,11 @@ namespace Item
         // SharedPtr typedef to be used handling instances of this type
         typedef std::shared_ptr<const IBase> SharedPtr;
 
+        // typedefs for PutValues/PutValue/CreateFromAny functionality
+        // used from the SfxSlot mechanism (see CreateSlotItem)
+        typedef std::pair<const css::uno::Any, sal_uInt8> AnyIDPair;
+        typedef std::vector<AnyIDPair> AnyIDArgs;
+
     private:
         // flag to mark this instance being administared by an
         // IAdministrator. Not urgently needed due to also being
@@ -112,6 +119,9 @@ namespace Item
         // designed to be used/called, only exists to have simple Item
         // representations for special purposes, e.g. InvalidateItem/DisableItem
         virtual IAdministrator* GetIAdministrator() const;
+
+        void PutValues(const AnyIDArgs& rArgs);
+        virtual void PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);
 
     public:
         virtual ~IBase();

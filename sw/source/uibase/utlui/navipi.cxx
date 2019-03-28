@@ -837,7 +837,7 @@ IMPL_LINK( SwNavigationPI, ClosePopupWindow, SfxPopupWindow *, pWindow, void )
 }
 
 void SwNavigationPI::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
-                                            const SfxPoolItem* /*pState*/ )
+                                            const SfxPoolItem* /*pState*/, const Item::IBase::SharedPtr& /*rSlotItem*/ )
 {
     if(nSID == SID_DOCFULLNAME)
     {
