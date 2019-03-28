@@ -243,32 +243,31 @@ public:
 };
 
 class SwAssignFieldsControl;
-class SwAssignFieldsDialog : public SfxModalDialog
+class SwAssignFieldsDialog : public SfxDialogController
 {
-    VclPtr<FixedText>               m_pMatchingFI;
-    VclPtr<SwAssignFieldsControl>   m_pFieldsControl;
-
-    VclPtr<FixedText>               m_pPreviewFI;
-    VclPtr<SwAddressPreview>        m_pPreviewWIN;
-
-    VclPtr<OKButton>                m_pOK;
-
     OUString const          m_sNone;
     OUString const          m_rPreviewString;
 
     SwMailMergeConfigItem&  m_rConfigItem;
 
+    std::unique_ptr<AddressPreview> m_xPreview;
+    std::unique_ptr<weld::Label> m_xMatchingFI;
+    std::unique_ptr<weld::Label> m_xAddressFI;
+    std::unique_ptr<weld::Label> m_xPreviewFI;
+    std::unique_ptr<weld::Button> m_xOK;
+    std::unique_ptr<weld::CustomWeld> m_xPreviewWin;
+    std::unique_ptr<SwAssignFieldsControl> m_xFieldsControl;
+
     css::uno::Sequence< OUString > CreateAssignments();
-    DECL_LINK(OkHdl_Impl, Button*, void);
+    DECL_LINK(OkHdl_Impl, weld::Button&, void);
     DECL_LINK(AssignmentModifyHdl_Impl, LinkParamNone*, void);
 
 public:
-    SwAssignFieldsDialog(vcl::Window* pParent,
+    SwAssignFieldsDialog(weld::Window* pParent,
                 SwMailMergeConfigItem& rConfigItem,
                 const OUString& rPreview,
                 bool bIsAddressBlock);
     virtual ~SwAssignFieldsDialog() override;
-    virtual void dispose() override;
 };
 #endif
 
