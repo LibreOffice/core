@@ -931,25 +931,25 @@ VclPtr<AbstractScDPSubtotalDlg> ScAbstractDialogFactory_Impl::CreateScDPSubtotal
 
 VclPtr<AbstractScDPNumGroupDlg> ScAbstractDialogFactory_Impl::CreateScDPNumGroupDlg(weld::Window* pParent, const ScDPNumGroupInfo& rInfo)
 {
-    return VclPtr<AbstractScDPNumGroupDlg_Impl>::Create(new ScDPNumGroupDlg(pParent, rInfo));
+    return VclPtr<AbstractScDPNumGroupDlg_Impl>::Create(std::make_unique<ScDPNumGroupDlg>(pParent, rInfo));
 }
 
 VclPtr<AbstractScDPDateGroupDlg> ScAbstractDialogFactory_Impl::CreateScDPDateGroupDlg(
         weld::Window* pParent, const ScDPNumGroupInfo& rInfo, sal_Int32 nDatePart, const Date& rNullDate)
 {
-    return VclPtr<AbstractScDPDateGroupDlg_Impl>::Create(new ScDPDateGroupDlg(pParent, rInfo, nDatePart, rNullDate));
+    return VclPtr<AbstractScDPDateGroupDlg_Impl>::Create(std::make_unique<ScDPDateGroupDlg>(pParent, rInfo, nDatePart, rNullDate));
 }
 
 VclPtr<AbstractScDPShowDetailDlg> ScAbstractDialogFactory_Impl::CreateScDPShowDetailDlg (
         weld::Window* pParent, ScDPObject& rDPObj, css::sheet::DataPilotFieldOrientation nOrient )
 {
-    return VclPtr<AbstractScDPShowDetailDlg_Impl>::Create(new ScDPShowDetailDlg(pParent, rDPObj, nOrient));
+    return VclPtr<AbstractScDPShowDetailDlg_Impl>::Create(std::make_unique<ScDPShowDetailDlg>(pParent, rDPObj, nOrient));
 }
 
 VclPtr<AbstractScNewScenarioDlg> ScAbstractDialogFactory_Impl::CreateScNewScenarioDlg(weld::Window* pParent, const OUString& rName,
     bool bEdit, bool bSheetProtected)
 {
-    return VclPtr<AbstractScNewScenarioDlg_Impl>::Create(new ScNewScenarioDlg(pParent, rName, bEdit, bSheetProtected));
+    return VclPtr<AbstractScNewScenarioDlg_Impl>::Create(std::make_unique<ScNewScenarioDlg>(pParent, rName, bEdit, bSheetProtected));
 }
 
 VclPtr<AbstractScShowTabDlg> ScAbstractDialogFactory_Impl::CreateScShowTabDlg(weld::Window* pParent)
