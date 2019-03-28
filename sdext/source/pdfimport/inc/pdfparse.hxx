@@ -291,9 +291,9 @@ class PDFReader
 public:
     PDFReader() {}
 
-    static PDFEntry* read( const char* pFileName );
+    static std::unique_ptr<PDFEntry> read( const char* pFileName );
 #ifdef _WIN32
-    static PDFEntry* read( const char* pBuffer, unsigned int nLen );
+    static std::unique_ptr<PDFEntry> read( const char* pBuffer, unsigned int nLen );
 #endif
 };
 

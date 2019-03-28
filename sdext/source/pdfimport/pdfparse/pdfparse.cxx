@@ -550,7 +550,7 @@ public:
 };
 
 #ifdef _WIN32
-PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
+std::unique_ptr<PDFEntry> PDFReader::read( const char* pBuffer, unsigned int nLen )
 {
     PDFGrammar<const char*> aGrammar( pBuffer );
 
@@ -581,11 +581,11 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
 #endif
     }
 
-    PDFEntry* pRet = nullptr;
+    std::unique_ptr<PDFEntry> pRet;
     unsigned int nEntries = aGrammar.m_aObjectStack.size();
     if( nEntries == 1 )
     {
-        pRet = aGrammar.m_aObjectStack.back();
+        pRet.reset(aGrammar.m_aObjectStack.back());
         aGrammar.m_aObjectStack.pop_back();
     }
 #if OSL_DEBUG_LEVEL > 0
@@ -597,7 +597,7 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
 }
 #endif
 
-PDFEntry* PDFReader::read( const char* pFileName )
+std::unique_ptr<PDFEntry> PDFReader::read( const char* pFileName )
 {
 #ifdef _WIN32
     /* #i106583#
@@ -608,7 +608,7 @@ PDFEntry* PDFReader::read( const char* pFileName )
        So for the time being bite the bullet and read the whole file.
        FIXME: give Spirit 2.x another try when we upgrade boost again.
     */
-    PDFEntry* pRet = nullptr;
+    std::unique_ptr<PDFEntry> pRet;
     FILE* fp = fopen( pFileName, "rb" );
     if( fp )
     {
@@ -660,11 +660,11 @@ PDFEntry* PDFReader::read( const char* pFileName )
 #endif
     }
 
-    PDFEntry* pRet = nullptr;
+    std::unique_ptr<PDFEntry> pRet;
     unsigned int nEntries = aGrammar.m_aObjectStack.size();
     if( nEntries == 1 )
     {
-        pRet = aGrammar.m_aObjectStack.back();
+        pRet.reset(aGrammar.m_aObjectStack.back());
         aGrammar.m_aObjectStack.pop_back();
     }
 #if OSL_DEBUG_LEVEL > 0
