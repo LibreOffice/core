@@ -1,6 +1,3 @@
-"ScSheetLinkObj";"com::sun::star::util::XRefreshable";"refresh()"
-"ScSheetLinkObj";"com::sun::star::util::XRefreshable";"addRefreshListener()"
-"ScSheetLinkObj";"com::sun::star::util::XRefreshable";"removeRefreshListener()"
 "ScSheetLinkObj";"com::sun::star::container::XNamed";"getName()"
 "ScSheetLinkObj";"com::sun::star::container::XNamed";"setName()"
 "ScSheetLinkObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
