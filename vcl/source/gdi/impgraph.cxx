@@ -37,7 +37,6 @@
 #include <impgraph.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <vcl/dibtools.hxx>
-#include <map>
 #include <memory>
 #include <o3tl/make_unique.hxx>
 #include <vcl/gdimetafiletools.hxx>
@@ -1476,7 +1475,6 @@ bool ImpGraphic::ImplExportNative( SvStream& rOStm ) const
     return bResult;
 }
 
-static std::map<BitmapChecksum, std::shared_ptr<css::uno::Sequence<sal_Int8>>> sPdfDataCache;
 
 void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
 {
@@ -1625,25 +1623,23 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
             else if (nMagic == nPdfMagic)
             {
                 // Stream in PDF data.
-                BitmapChecksum nPdfId = 0;
-                rIStm.ReadUInt64(nPdfId);
-
-                rImpGraphic.mnPageNumber = 0;
-                rIStm.ReadInt32(rImpGraphic.mnPageNumber);
-
-                auto it = sPdfDataCache.find(nPdfId);
-                assert(it != sPdfDataCache.end());
-
-                rImpGraphic.mpPdfData = it->second;
-
+                sal_uInt32 nPdfDataLength = 0;
+                rIStm.ReadUInt32(nPdfDataLength);
                 Bitmap aBitmap;
-                rImpGraphic.maEx = aBitmap;
 
-                std::vector<Bitmap> aBitmaps;
-                if (vcl::RenderPDFBitmaps(rImpGraphic.mpPdfData->getConstArray(), rImpGraphic.mpPdfData->getLength(), aBitmaps, rImpGraphic.mnPageNumber, 1) == 1)
-                    rImpGraphic.maEx = aBitmaps[0];
+                if (nPdfDataLength && !rIStm.GetError())
+                {
+                    if (!rImpGraphic.mpPdfData)
+                        rImpGraphic.mpPdfData.reset(new uno::Sequence<sal_Int8>());
 
-                rImpGraphic.meType = GraphicType::Bitmap;
+                    if (vcl::ImportPDF(rIStm, aBitmap, rImpGraphic.mnPageNumber,
+                                       *rImpGraphic.mpPdfData,
+                                       rIStm.Tell(), nPdfDataLength))
+                    {
+                        rImpGraphic.maEx = aBitmap;
+                        rImpGraphic.meType = GraphicType::Bitmap;
+                    }
+                }
             }
             else
             {
@@ -1734,14 +1730,10 @@ void WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic)
                 }
                 else if (rImpGraphic.hasPdfData())
                 {
-                    BitmapChecksum nPdfId = vcl_get_checksum(0, rImpGraphic.mpPdfData->getConstArray(), rImpGraphic.mpPdfData->getLength());
-                    if (sPdfDataCache.find(nPdfId) == sPdfDataCache.end())
-                        sPdfDataCache.emplace(nPdfId, rImpGraphic.mpPdfData);
-
                     // Stream out PDF data.
                     rOStm.WriteUInt32(nPdfMagic);
-                    rOStm.WriteUInt64(nPdfId);
-                    rOStm.WriteInt32(rImpGraphic.mnPageNumber);
+                    rOStm.WriteUInt32(rImpGraphic.mpPdfData->getLength());
+                    rOStm.WriteBytes(rImpGraphic.mpPdfData->getConstArray(), rImpGraphic.mpPdfData->getLength());
                 }
                 else if( rImpGraphic.ImplIsAnimated())
                 {
