@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_HELPER_SHAPEFACTORY_HXX
-#define INCLUDED_TEST_HELPER_SHAPEFACTORY_HXX
+#ifndef INCLUDED_TEST_HELPER_SHAPE_HXX
+#define INCLUDED_TEST_HELPER_SHAPE_HXX
 
 #include <rtl/string.hxx>
 #include <sal/config.h>
@@ -33,7 +33,7 @@ namespace shape
  * @param nY            The y-position of the shape.
  * @param nHeight       The height of the shape.
  * @param nWidth        The width of the shape.
- * @return  The create XShape.
+ * @return  The created XShape.
  */
 css::uno::Reference<css::drawing::XShape>
     OOO_DLLPUBLIC_TEST createEllipse(const css::uno::Reference<css::lang::XComponent>& r_xComponent,
@@ -47,7 +47,7 @@ css::uno::Reference<css::drawing::XShape>
  * @param nY            The y-position of the shape.
  * @param nHeight       The height of the shape.
  * @param nWidth        The width of the shape.
- * @return  The create XShape.
+ * @return  The created XShape.
  */
 css::uno::Reference<css::drawing::XShape>
     OOO_DLLPUBLIC_TEST createLine(const css::uno::Reference<css::lang::XComponent>& r_xComponent,
@@ -61,7 +61,7 @@ css::uno::Reference<css::drawing::XShape>
  * @param nY            The y-position of the shape.
  * @param nHeight       The height of the shape.
  * @param nWidth        The width of the shape.
- * @return  The create XShape.
+ * @return  The created XShape.
  */
 css::uno::Reference<css::drawing::XShape> OOO_DLLPUBLIC_TEST
 createRectangle(const css::uno::Reference<css::lang::XComponent>& r_xComponent, const sal_Int32 nX,
@@ -75,7 +75,7 @@ createRectangle(const css::uno::Reference<css::lang::XComponent>& r_xComponent, 
  * @param nY            The y-position of the shape.
  * @param nHeight       The height of the shape.
  * @param nWidth        The width of the shape.
- * @return  The create XShape.
+ * @return  The created XShape.
  */
 css::uno::Reference<css::drawing::XShape>
     OOO_DLLPUBLIC_TEST createShape(const css::uno::Reference<css::lang::XComponent>& r_xComponent,
@@ -86,6 +86,6 @@ css::uno::Reference<css::drawing::XShape>
 } // namespace helper
 } // namespace apitest
 
-#endif // INCLUDED_TEST_HELPER_SHAPEFACTORY_HXX
+#endif // INCLUDED_TEST_HELPER_SHAPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
