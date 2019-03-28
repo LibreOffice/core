@@ -20,9 +20,9 @@
   <menu:menu menu:id=".uno:PickList">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:AddDirect"/>
+      <menu:menuitem menu:id=".uno:RecentFileList"/>
       <menu:menuitem menu:id=".uno:Open"/>
       <menu:menuitem menu:id=".uno:OpenRemote"/>
-      <menu:menuitem menu:id=".uno:RecentFileList"/>
       <menu:menuitem menu:id=".uno:CloseDoc"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
@@ -158,11 +158,8 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AvailableToolbars"/>
       <menu:menuitem menu:id=".uno:StatusBarVisible"/>
-      <menu:menuitem menu:id=".uno:Ruler"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ViewBounds"/>
-      <menu:menuitem menu:id=".uno:TableBoundaries"/>
-      <menu:menuitem menu:id=".uno:ControlCodes"/>
+      <menu:menuitem menu:id=".uno:Ruler"/>
       <menu:menu menu:id=".uno:GridMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:GridVisible"/>
@@ -171,10 +168,14 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:ControlCodes"/>
+      <menu:menuitem menu:id=".uno:ViewBounds"/>
+      <menu:menuitem menu:id=".uno:TableBoundaries"/>
+      <menu:menuitem menu:id=".uno:ShowHiddenParagraphs"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ViewTrackChanges"/>
       <menu:menuitem menu:id=".uno:ShowAnnotations"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ShowHiddenParagraphs"/>
       <menu:menuitem menu:id=".uno:Marks"/>
       <menu:menuitem menu:id=".uno:Fieldnames"/>
       <menu:menuseparator/>
@@ -182,7 +183,6 @@
       <menu:menuitem menu:id=".uno:ViewSidebarStyles"/>
       <menu:menuitem menu:id=".uno:Gallery"/>
       <menu:menuitem menu:id=".uno:Navigator"/>
-      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FullScreen"/>
@@ -191,6 +191,7 @@
           <menu:menuitem menu:id=".uno:ZoomPage"/>
           <menu:menuitem menu:id=".uno:ZoomPageWidth"/>
           <menu:menuitem menu:id=".uno:ZoomOptimal"/>
+          <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:Zoom50Percent"/>
           <menu:menuitem menu:id=".uno:Zoom75Percent"/>
           <menu:menuitem menu:id=".uno:Zoom100Percent"/>
@@ -395,11 +396,11 @@
       <menu:menuitem menu:id=".uno:PageDialog"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:TitlePageDialog"/>
-      <menu:menuitem menu:id=".uno:EditRegion"/>
       <menu:menuitem menu:id=".uno:FormatAllNotes"/>
       <menu:menuitem menu:id=".uno:RubyDialog"/>
       <menu:menuitem menu:id=".uno:FormatColumns"/>
       <menu:menuitem menu:id=".uno:Watermark"/>
+      <menu:menuitem menu:id=".uno:EditRegion"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:FormatImageMenu">
         <menu:menupopup>
@@ -433,6 +434,7 @@
       <menu:menu menu:id=".uno:FormatObjectMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:TransformDialog"/>
+          <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:FormatLine"/>
           <menu:menuitem menu:id=".uno:FormatArea"/>
           <menu:menuitem menu:id=".uno:TextAttributes"/>
@@ -557,10 +559,10 @@
       </menu:menu>
       <menu:menu menu:id=".uno:TableSelectMenu">
         <menu:menupopup>
+          <menu:menuitem menu:id=".uno:EntireCell"/>
           <menu:menuitem menu:id=".uno:EntireRow"/>
           <menu:menuitem menu:id=".uno:EntireColumn"/>
           <menu:menuitem menu:id=".uno:SelectTable"/>
-          <menu:menuitem menu:id=".uno:EntireCell"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:TableAutoFitMenu">
@@ -590,6 +592,7 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:HeadingRowsRepeat"/>
       <menu:menuitem menu:id=".uno:RowSplit"/>
+      <menu:menuitem menu:id=".uno:TableNumberRecognition"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:TableConvertMenu">
         <menu:menupopup>
@@ -597,10 +600,8 @@
           <menu:menuitem menu:id=".uno:ConvertTableToText"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:TableSort"/>
       <menu:menuitem menu:id=".uno:InsertFormula"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:TableNumberRecognition"/>
+      <menu:menuitem menu:id=".uno:TableSort"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:TableDialog"/>
     </menu:menupopup>
@@ -685,7 +686,6 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:BibliographyComponent"/>
       <menu:menuitem menu:id=".uno:AddressBookSource"/>
-      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:MailMergeWizard"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:UpdateMenu">
@@ -700,8 +700,8 @@
           <menu:menuitem menu:id=".uno:UpdateCharts"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:SortDialog"/>
       <menu:menuitem menu:id=".uno:CalculateSel"/>
+      <menu:menuitem menu:id=".uno:SortDialog"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:MacrosMenu">
         <menu:menupopup>
@@ -715,6 +715,7 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
       <menu:menuitem menu:id=".uno:ConfigureDialog"/>
       <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
