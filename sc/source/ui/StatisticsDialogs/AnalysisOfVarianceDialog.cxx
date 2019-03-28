@@ -58,7 +58,7 @@ OUString lclCreateMultiParameterFormula(
     OUStringBuffer aResult;
     for (size_t i = 0; i < aRangeList.size(); i++)
     {
-        OUString aRangeString(aRangeList[i].Format(ScRefFlags::RANGE_ABS, pDocument, aAddressDetails));
+        OUString aRangeString(aRangeList[i].Format(ScRefFlags::RANGE_ABS_3D, pDocument, aAddressDetails));
         OUString aFormulaString = aFormulaTemplate.replaceAll(aWildcard, aRangeString);
         aResult.append(aFormulaString);
         if(i != aRangeList.size() - 1) // Not Last
@@ -251,7 +251,6 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
         output.nextColumn();
 
         // Sum of Squares
-
         aTemplate.setTemplate("=SUMPRODUCT(%SUM_RANGE%;%MEAN_RANGE%)-SUM(%SUM_RANGE%)^2/SUM(%COUNT_RANGE%)");
         aTemplate.autoReplaceAddress("%BETWEEN_SS%", output.current());
         output.writeFormula(aTemplate.getTemplate());
