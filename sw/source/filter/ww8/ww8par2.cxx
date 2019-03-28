@@ -2887,23 +2887,6 @@ bool WW8TabDesc::InFirstParaInCell() const
     return m_pIo->m_pPaM->GetPoint()->nNode == m_pTabBox->GetSttIdx() + 1;
 }
 
-void WW8TabDesc::StartMiserableHackForUnsupportedDirection(short nWwCol)
-{
-    OSL_ENSURE(m_pActBand, "Impossible");
-    if (m_pActBand && nWwCol <= MAX_COL && m_pActBand->maDirections[nWwCol] == 3)
-    {
-        m_pIo->m_xCtrlStck->NewAttr(*m_pIo->m_pPaM->GetPoint(),
-            SvxCharRotateItem(900, false, RES_CHRATR_ROTATE));
-    }
-}
-
-void WW8TabDesc::EndMiserableHackForUnsupportedDirection(short nWwCol)
-{
-    OSL_ENSURE(m_pActBand, "Impossible");
-    if (m_pActBand && nWwCol <= MAX_COL && m_pActBand->maDirections[nWwCol] == 3)
-        m_pIo->m_xCtrlStck->SetAttr(*m_pIo->m_pPaM->GetPoint(), RES_CHRATR_ROTATE);
-}
-
 void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 {
     OSL_ENSURE( m_pActBand, "pActBand is 0" );
@@ -3007,8 +2990,6 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
                 m_pIo->m_xCtrlStck->SetAttr(*pGridPos, RES_PARATR_SNAPTOGRID);
             }
         }
-
-        StartMiserableHackForUnsupportedDirection(nWwCol);
     }
 }
 
@@ -3117,7 +3098,7 @@ static SvxFrameDirection MakeDirection(sal_uInt16 nCode, bool bIsBiDi)
             OSL_ENSURE(eDir == SvxFrameDirection::Environment, "unknown direction code, maybe it's a bitfield");
             [[fallthrough]];
         case 3:
-            eDir = bIsBiDi ? SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB; // #i38158# - Consider RTL tables
+            eDir = SvxFrameDirection::Vertical_LR_BT;
             break;
         case 5:
             eDir = SvxFrameDirection::Vertical_RL_TB;
@@ -3276,8 +3257,6 @@ void WW8TabDesc::AdjustNewBand()
 void WW8TabDesc::TableCellEnd()
 {
     ::SetProgressState(m_pIo->m_nProgress, m_pIo->m_pDocShell);   // Update
-
-    EndMiserableHackForUnsupportedDirection(m_nCurrentCol);
 
     // new line/row
     if( m_pIo->m_bWasTabRowEnd )
