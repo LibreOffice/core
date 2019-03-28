@@ -54,7 +54,6 @@ using namespace ::com::sun::star::ui::dialogs;
 struct SwAddressFragment
 {
     std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Container> m_xOrigContainer;
     std::unique_ptr<weld::Label> m_xLabel;
     std::unique_ptr<weld::Entry> m_xEntry;
 

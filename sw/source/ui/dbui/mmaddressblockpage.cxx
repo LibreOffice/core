@@ -51,13 +51,6 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 
-static void lcl_Move(Control* pCtrl, long nYOffset)
-{
-    Point aPos(pCtrl->GetPosPixel());
-    aPos.AdjustY(nYOffset );
-    pCtrl->SetPosPixel(aPos);
-}
-
 SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage(_pParent, "MMAddressBlockPage",
         "modules/swriter/ui/mmaddressblockpage.ui")
@@ -221,10 +214,8 @@ IMPL_LINK(SwMailMergeAddressBlockPage, AssignHdl_Impl, Button*, pButton, void)
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     const sal_uInt16 nSel = m_pSettingsWIN->GetSelectedAddress();
     const uno::Sequence< OUString> aBlocks = rConfigItem.GetAddressBlocks();
-    ScopedVclPtr<SwAssignFieldsDialog> pDlg(
-        VclPtr<SwAssignFieldsDialog>::Create(
-            pButton, m_pWizard->GetConfigItem(), aBlocks[nSel], true));
-    if(RET_OK == pDlg->Execute())
+    SwAssignFieldsDialog aDlg(pButton->GetFrameWeld(), m_pWizard->GetConfigItem(), aBlocks[nSel], true);
+    if(RET_OK == aDlg.run())
     {
         //preview update
         InsertDataHdl_Impl(nullptr);
@@ -789,81 +780,69 @@ OUString SwCustomizeAddressBlockDialog::GetAddress()
     return sAddress;
 }
 
-class SwAssignFieldsControl : public Control
+struct SwAssignFragment
+{
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Label> m_xLabel;
+    std::unique_ptr<weld::ComboBox> m_xComboBox;
+    std::unique_ptr<weld::Label> m_xPreview;
+
+    SwAssignFragment(weld::Container* pGrid, int nLine)
+        : m_xBuilder(Application::CreateBuilder(pGrid, "modules/swriter/ui/assignfragment.ui"))
+        , m_xLabel(m_xBuilder->weld_label("label"))
+        , m_xComboBox(m_xBuilder->weld_combo_box("combobox"))
+        , m_xPreview(m_xBuilder->weld_label("preview"))
+    {
+        m_xLabel->set_grid_left_attach(0);
+        m_xLabel->set_grid_top_attach(nLine);
+
+        m_xComboBox->set_grid_left_attach(1);
+        m_xComboBox->set_grid_top_attach(nLine);
+
+        m_xPreview->set_grid_left_attach(2);
+        m_xPreview->set_grid_top_attach(nLine);
+    }
+};
+
+class SwAssignFieldsControl
 {
     friend class SwAssignFieldsDialog;
-    VclPtr<ScrollBar>           m_aVScroll;
-    VclPtr<HeaderBar>           m_aHeaderHB;
-    VclPtr<Window>              m_aWindow;
+    std::unique_ptr<weld::ScrolledWindow> m_xVScroll;
+    std::unique_ptr<weld::Container> m_xGrid;
 
-    std::vector<VclPtr<FixedText> >     m_aFieldNames;
-    std::vector<VclPtr<ListBox> >       m_aMatches;
-    std::vector<VclPtr<FixedText> >     m_aPreviews;
+    std::vector<SwAssignFragment> m_aFields;
 
-    SwMailMergeConfigItem*              m_rConfigItem;
+    SwMailMergeConfigItem* m_rConfigItem;
 
     Link<LinkParamNone*,void>   m_aModifyHdl;
 
-    long                        m_nLBStartTopPos;
-    long                        m_nYOffset;
-    long                        m_nFirstYPos;
+    DECL_LINK(MatchHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(GotFocusHdl_Impl, weld::Widget&, void);
 
-    DECL_LINK(ScrollHdl_Impl, ScrollBar*, void);
-    DECL_LINK(MatchHdl_Impl, ListBox&, void);
-    DECL_LINK(GotFocusHdl_Impl, Control&, void);
-
-    virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
-    virtual void        Command( const CommandEvent& rCEvt ) override;
-
-    void                MakeVisible( sal_Int32 nIndex );
+    void MakeVisible(const tools::Rectangle & rRect);
 public:
-    SwAssignFieldsControl(vcl::Window* pParent, WinBits nBits);
-    virtual ~SwAssignFieldsControl() override;
-    virtual void dispose() override;
+    SwAssignFieldsControl(std::unique_ptr<weld::ScrolledWindow> xWindow,
+                          std::unique_ptr<weld::Container> xGrid);
 
-    void        Init(SwMailMergeConfigItem& rConfigItem);
-    void        SetModifyHdl(const Link<LinkParamNone*,void>& rModifyHdl)
-                {
-                    m_aModifyHdl = rModifyHdl;
-                    m_aModifyHdl.Call(nullptr);
-                }
-    virtual void Resize() override;
-    virtual Size GetOptimalSize() const override;
+    void Init(SwAssignFieldsDialog* pDialog, SwMailMergeConfigItem& rConfigItem);
+    void SetModifyHdl(const Link<LinkParamNone*,void>& rModifyHdl)
+    {
+        m_aModifyHdl = rModifyHdl;
+        m_aModifyHdl.Call(nullptr);
+    }
 };
 
-VCL_BUILDER_FACTORY_ARGS(SwAssignFieldsControl, WB_BORDER)
-
-SwAssignFieldsControl::SwAssignFieldsControl(vcl::Window* pParent, WinBits nBits) :
-    Control(pParent, nBits | WB_DIALOGCONTROL | WB_TABSTOP),
-    m_aVScroll(VclPtr<ScrollBar>::Create(this)),
-    m_aHeaderHB(VclPtr<HeaderBar>::Create(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER)),
-    m_aWindow(VclPtr<vcl::Window>::Create(this, WB_BORDER | WB_DIALOGCONTROL)),
-    m_rConfigItem(nullptr),
-    m_nLBStartTopPos(0),
-    m_nYOffset(0),
-    m_nFirstYPos(0)
+SwAssignFieldsControl::SwAssignFieldsControl(std::unique_ptr<weld::ScrolledWindow> xWindow,
+                                             std::unique_ptr<weld::Container> xGrid)
+    : m_xVScroll(std::move(xWindow))
+    , m_xGrid(std::move(xGrid))
+    , m_rConfigItem(nullptr)
 {
-    long nHBHeight = m_aHeaderHB->CalcWindowSizePixel().Height();
-    Size aOutputSize(GetOutputSize());
-    m_aVScroll->Show();
-    m_aHeaderHB->SetSizePixel(
-        Size(aOutputSize.Width(), nHBHeight));
-    m_aHeaderHB->Show();
-    m_aWindow->SetPosPixel(Point( 0, nHBHeight) );
-    m_aWindow->SetSizePixel(Size(aOutputSize.Width() - m_aVScroll->GetSizePixel().Width(), aOutputSize.Height() - nHBHeight));
-    m_aWindow->Show();
 }
 
-Size SwAssignFieldsControl::GetOptimalSize() const
-{
-    return LogicToPixel(Size(248, 120), MapMode(MapUnit::MapAppFont));
-}
-
-void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
+void SwAssignFieldsControl::Init(SwAssignFieldsDialog* pDialog, SwMailMergeConfigItem& rConfigItem)
 {
     m_rConfigItem = &rConfigItem;
-    Size aOutputSize(GetOutputSize());
-    long nHBHeight = m_aHeaderHB->CalcWindowSizePixel().Height();
 
     //get the name of the default headers
     const std::vector<std::pair<OUString, int>>& rHeaders = rConfigItem.GetDefaultAddressHeaders();
@@ -880,226 +859,85 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
     //each position in this sequence matches the position in the header array rHeaders
     //if no assignment is available an empty sequence will be returned
     uno::Sequence< OUString> aAssignments = rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
-    Link<ListBox&,void> aMatchHdl = LINK(this, SwAssignFieldsControl, MatchHdl_Impl);
-    Link<Control&,void> aFocusHdl = LINK(this, SwAssignFieldsControl, GotFocusHdl_Impl);
+    Link<weld::ComboBox&,void> aMatchHdl = LINK(this, SwAssignFieldsControl, MatchHdl_Impl);
+    Link<weld::Widget&,void> aFocusHdl = LINK(this, SwAssignFieldsControl, GotFocusHdl_Impl);
+
+    int nLabelWidth(0), nComboBoxWidth(0), nPreviewWidth(0);
 
     //fill the controls
-    long nControlWidth = aOutputSize.Width() / 3;
-    long nControlHeight = -1;
     for (size_t i = 0; i < rHeaders.size(); ++i)
     {
+        m_aFields.emplace_back(m_xGrid.get(), i);
+
         const OUString rHeader = rHeaders[i].first;
-        VclPtr<FixedText> pNewText = VclPtr<FixedText>::Create(m_aWindow.get(), WB_VCENTER);
-        pNewText->SetText("<" + rHeader + ">");
-        VclPtr<ListBox> pNewLB = VclPtr<ListBox>::Create(m_aWindow.get(), WB_DROPDOWN | WB_VCENTER | WB_TABSTOP);
-        pNewText->set_mnemonic_widget(pNewLB);
-        pNewLB->InsertEntry(SwResId(SW_STR_NONE));
-        pNewLB->SelectEntryPos(0);
-        pNewLB->SetDropDownLineCount(5);
+        weld::ComboBox& rNewLB = *m_aFields.back().m_xComboBox;
+        rNewLB.append_text(SwResId(SW_STR_NONE));
+        rNewLB.set_active(0);
 
-        if (nControlHeight == -1) //first time
-        {
-            nControlHeight = std::max(pNewLB->get_preferred_size().Height(),
-                                      pNewText->get_preferred_size().Height());
-        }
-
-        for(sal_Int32 nField = 0; nField < aFields.getLength(); ++nField)
-            pNewLB->InsertEntry(pFields[nField]);
-        VclPtr<FixedText> pNewPreview = VclPtr<FixedText>::Create(m_aWindow.get(), WB_VCENTER);
-        pNewText->SetSizePixel(Size(nControlWidth - 6, nControlHeight));
-        pNewLB->SetSizePixel(Size(nControlWidth - 6, nControlHeight));
-        pNewPreview->SetSizePixel(Size(aOutputSize.Width() - 2 * nControlWidth, nControlHeight));
+        for (sal_Int32 nField = 0; nField < aFields.getLength(); ++nField)
+            rNewLB.append_text(pFields[nField]);
         //select the ListBox
         //if there is an assignment
         if(static_cast<sal_uInt32>(aAssignments.getLength()) > i && !aAssignments[i].isEmpty())
-            pNewLB->SelectEntry(aAssignments[i]);
+            rNewLB.set_active_text(aAssignments[i]);
         else //otherwise the current column name may match one of the db columns
-            pNewLB->SelectEntry(rHeader);
+            rNewLB.set_active_text(rHeader);
+
+        weld::Label& rNewText = *m_aFields.back().m_xLabel;
+        rNewText.set_label("<" + rHeader + ">");
+
+        weld::Label& rNewPreview = *m_aFields.back().m_xPreview;
         //then the preview can be filled accordingly
-        if(xColAccess.is() && pNewLB->GetSelectedEntryPos() > 0 &&
-                xColAccess->hasByName(pNewLB->GetSelectedEntry()))
+        if (xColAccess.is() && rNewLB.get_active() > 0 &&
+            xColAccess->hasByName(rNewLB.get_active_text()))
         {
-            uno::Any aCol = xColAccess->getByName(pNewLB->GetSelectedEntry());
+            uno::Any aCol = xColAccess->getByName(rNewLB.get_active_text());
             uno::Reference< XColumn > xColumn;
             aCol >>= xColumn;
             if(xColumn.is())
             {
                 try
                 {
-                    pNewPreview->SetText(xColumn->getString());
+                    rNewPreview.set_label(xColumn->getString());
                 }
                 catch (const SQLException&)
                 {
                 }
             }
         }
-        if(!i)
+
+        if (i == 0)
         {
-            //determine the vertical offset, use the bottom position of the ListBox
-            m_nFirstYPos = m_nYOffset = pNewLB->GetPosPixel().Y();
-            m_nLBStartTopPos = m_nYOffset;
-            m_nYOffset += pNewLB->GetSizePixel().Height() + 6;
+            auto nLineHeight = m_xGrid->get_preferred_size().Height();
+            m_xVScroll->set_size_request(m_xVScroll->get_approximate_digit_width() * 65,
+                                         nLineHeight * 6);
+            nComboBoxWidth = rNewLB.get_preferred_size().Width();
         }
 
-        long nMove = m_nYOffset * i;
-        pNewLB->SetSelectHdl(aMatchHdl);
-        pNewLB->SetGetFocusHdl(aFocusHdl);
+        nLabelWidth = std::max<int>(nLabelWidth, rNewText.get_preferred_size().Width());
+        nPreviewWidth = std::max<int>(nPreviewWidth, rNewPreview.get_preferred_size().Width());
 
-        m_aFieldNames.push_back(pNewText);
-        m_aMatches.push_back(pNewLB);
-        m_aPreviews.push_back(pNewPreview);
-        pNewText->Show();
-        pNewText->SetPosPixel(Point(6, nMove));
-        pNewLB->Show();
-        pNewLB->SetPosPixel(Point(nControlWidth, nMove));
-        pNewPreview->Show();
-        pNewPreview->SetPosPixel(Point(2 * nControlWidth + 6, nMove));
+        rNewLB.connect_changed(aMatchHdl);
+        rNewLB.connect_focus_in(aFocusHdl);
+        rNewText.show();
+        rNewLB.show();
+        rNewPreview.show();
     }
-    m_aVScroll->SetRange(Range(0, rHeaders.size()));
-    m_aVScroll->SetPageSize((aOutputSize.Height() - nHBHeight - m_nLBStartTopPos)/ m_nYOffset);
-    m_aVScroll->EnableDrag();
-    m_aVScroll->SetVisibleSize(m_aVScroll->GetPageSize());
-    m_aVScroll->SetScrollHdl(LINK(this, SwAssignFieldsControl, ScrollHdl_Impl));
-
-    m_aVScroll->SetPosPixel(Point(aOutputSize.Width() - m_aVScroll->GetSizePixel().Width(), nHBHeight));
-    m_aVScroll->SetSizePixel(Size(m_aVScroll->GetSizePixel().Width(), aOutputSize.Height() - nHBHeight));
+    pDialog->ConnectSizeGroups(nLabelWidth, nComboBoxWidth, nPreviewWidth);
 }
 
-SwAssignFieldsControl::~SwAssignFieldsControl()
+void SwAssignFieldsControl::MakeVisible(const tools::Rectangle & rRect)
 {
-    disposeOnce();
+    //determine range of visible positions
+    auto nMinVisiblePos = m_xVScroll->vadjustment_get_value();
+    auto nMaxVisiblePos = nMinVisiblePos + m_xVScroll->vadjustment_get_page_size();
+    if (rRect.Top() < nMinVisiblePos || rRect.Bottom() > nMaxVisiblePos)
+        m_xVScroll->vadjustment_set_value(rRect.Top());
 }
 
-void SwAssignFieldsControl::dispose()
+IMPL_LINK(SwAssignFieldsControl, MatchHdl_Impl, weld::ComboBox&, rBox, void)
 {
-    for(auto& rFIItem : m_aFieldNames)
-        rFIItem.disposeAndClear();
-    for(auto& rLBItem : m_aMatches)
-        rLBItem.disposeAndClear();
-    for(auto& rFIItem : m_aPreviews)
-        rFIItem.disposeAndClear();
-
-    m_aFieldNames.clear();
-    m_aMatches.clear();
-    m_aPreviews.clear();
-
-    m_aVScroll.disposeAndClear();
-    m_aHeaderHB.disposeAndClear();
-    m_aWindow.disposeAndClear();
-    Control::dispose();
-}
-
-void SwAssignFieldsControl::Resize()
-{
-    Window::Resize();
-
-    Size aOutputSize = GetOutputSize();
-    long nHBHeight = m_aHeaderHB->CalcWindowSizePixel().Height();
-
-    m_aWindow->SetSizePixel(Size(aOutputSize.Width() - m_aVScroll->GetSizePixel().Width(), aOutputSize.Height() - nHBHeight));
-
-    m_aVScroll->SetPosPixel(Point(aOutputSize.Width() - m_aVScroll->GetSizePixel().Width(), nHBHeight));
-    m_aVScroll->SetSizePixel(Size(m_aVScroll->GetSizePixel().Width(), aOutputSize.Height() - nHBHeight));
-    if(m_nYOffset)
-        m_aVScroll->SetPageSize((aOutputSize.Height() - nHBHeight - m_nLBStartTopPos)/ m_nYOffset);
-    m_aVScroll->SetVisibleSize(m_aVScroll->GetPageSize());
-    m_aVScroll->DoScroll(0);
-
-    sal_Int32 nColWidth = aOutputSize.Width() / 3;
-    m_aHeaderHB->SetSizePixel(Size(aOutputSize.Width(), nHBHeight));
-    m_aHeaderHB->SetItemSize(1, nColWidth);
-    m_aHeaderHB->SetItemSize(2, nColWidth);
-    m_aHeaderHB->SetItemSize(3, nColWidth);
-
-    if (m_aFieldNames.empty() || m_aMatches.empty())
-        return;
-
-    long nControlHeight = std::max(m_aFieldNames[0]->get_preferred_size().Height(),
-                                   m_aMatches[0]->get_preferred_size().Height());
-
-    for(auto& rFIItem : m_aFieldNames)
-        rFIItem->SetSizePixel(Size(nColWidth - 6, nControlHeight));
-    for(auto& rLBItem : m_aMatches)
-    {
-        long nPosY = rLBItem->GetPosPixel().Y();
-        rLBItem->SetPosSizePixel(Point(nColWidth, nPosY), Size(nColWidth - 6, nControlHeight));
-    }
-    for(auto& rFIItem : m_aPreviews)
-    {
-        long nPosY = rFIItem->GetPosPixel().Y();
-        rFIItem->SetPosSizePixel(Point(2 * nColWidth + 6, nPosY), Size(nColWidth, nControlHeight));
-    }
-}
-
-void SwAssignFieldsControl::Command( const CommandEvent& rCEvt )
-{
-    switch ( rCEvt.GetCommand() )
-    {
-        case CommandEventId::Wheel:
-        case CommandEventId::StartAutoScroll:
-        case CommandEventId::AutoScroll:
-        {
-            const CommandWheelData* pWheelData = rCEvt.GetWheelData();
-            if(pWheelData && !pWheelData->IsHorz() && CommandWheelMode::ZOOM != pWheelData->GetMode())
-            {
-                HandleScrollCommand( rCEvt, nullptr, m_aVScroll.get() );
-            }
-        }
-        break;
-        default:
-            Control::Command(rCEvt);
-    }
-}
-
-bool SwAssignFieldsControl::PreNotify( NotifyEvent& rNEvt )
-{
-    if(rNEvt.GetType() == MouseNotifyEvent::COMMAND)
-    {
-        const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
-        if( pCEvt->GetCommand() == CommandEventId::Wheel )
-        {
-            Command(*pCEvt);
-            return true;
-        }
-    }
-    return Control::PreNotify(rNEvt);
-}
-
-void SwAssignFieldsControl::MakeVisible( sal_Int32 nIndex )
-{
-    long nThumb = m_aVScroll->GetThumbPos();
-    long nPage = m_aVScroll->GetPageSize();
-    if(nThumb > nIndex)
-        m_aVScroll->SetThumbPos( nIndex );
-    else if( (nThumb + nPage) < nIndex)
-        m_aVScroll->SetThumbPos( nIndex - nPage );
-    else
-        return;
-    ScrollHdl_Impl( m_aVScroll.get() );
-}
-
-IMPL_LINK(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll, void)
-{
-    long nThumb = pScroll->GetThumbPos();
-    // the scrollbar moves on a per line basis
-    // the height of a line is stored in m_nYOffset
-    // nThumb determines which line has to be set at the top (m_nYOffset)
-    // The first line has to be -(nThumb * m_nYOffset) in the negative
-    long nMove = m_nFirstYPos - (*m_aMatches.begin())->GetPosPixel().Y() - (nThumb * m_nYOffset);
-
-    SetUpdateMode(false);
-    for(auto& rFIItem : m_aFieldNames)
-        lcl_Move(rFIItem, nMove);
-    for(auto& rLBItem : m_aMatches)
-        lcl_Move(rLBItem, nMove);
-    for(auto& rFIItem : m_aPreviews)
-        lcl_Move(rFIItem, nMove);
-    SetUpdateMode(true);
-}
-
-IMPL_LINK(SwAssignFieldsControl, MatchHdl_Impl, ListBox&, rBox, void)
-{
-    const OUString sColumn = rBox.GetSelectedEntry();
+    const OUString sColumn = rBox.get_active_text();
     uno::Reference< XColumnsSupplier > xColsSupp( m_rConfigItem->GetResultSet(), uno::UNO_QUERY);
     uno::Reference <XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
     OUString sPreview;
@@ -1119,87 +957,63 @@ IMPL_LINK(SwAssignFieldsControl, MatchHdl_Impl, ListBox&, rBox, void)
             }
         }
     }
-    auto aLBIter = std::find(m_aMatches.begin(), m_aMatches.end(), &rBox);
-    if(aLBIter != m_aMatches.end())
+    auto aLBIter = std::find_if(m_aFields.begin(), m_aFields.end(), [&rBox](const SwAssignFragment& rFragment){
+                                                                     return &rBox == rFragment.m_xComboBox.get(); });
+    if (aLBIter != m_aFields.end())
     {
-        auto nIndex = static_cast<sal_Int32>(std::distance(m_aMatches.begin(), aLBIter));
-        m_aPreviews[nIndex]->SetText(sPreview);
+        auto nIndex = static_cast<sal_Int32>(std::distance(m_aFields.begin(), aLBIter));
+        m_aFields[nIndex].m_xPreview->set_label(sPreview);
     }
     m_aModifyHdl.Call(nullptr);
 }
 
-IMPL_LINK(SwAssignFieldsControl, GotFocusHdl_Impl, Control&, rControl, void)
+IMPL_LINK(SwAssignFieldsControl, GotFocusHdl_Impl, weld::Widget&, rBox, void)
 {
-    ListBox* pBox = static_cast<ListBox*>(&rControl);
-    if(GetFocusFlags::Tab & pBox->GetGetFocusFlags())
-    {
-        auto aLBIter = std::find(m_aMatches.begin(), m_aMatches.end(), pBox);
-        if(aLBIter != m_aMatches.end())
-        {
-            auto nIndex = static_cast<sal_Int32>(std::distance(m_aMatches.begin(), aLBIter));
-            MakeVisible(nIndex);
-        }
-    }
+    int x, y, width, height;
+    rBox.get_extents_relative_to(*m_xGrid, x, y, width, height);
+    // the container has a border of 3 in the .ui
+    tools::Rectangle aRect(Point(x - 3, y - 3), Size(width + 6, height + 6));
+    MakeVisible(aRect);
 }
 
 SwAssignFieldsDialog::SwAssignFieldsDialog(
-        vcl::Window* pParent, SwMailMergeConfigItem& rConfigItem,
+        weld::Window* pParent, SwMailMergeConfigItem& rConfigItem,
         const OUString& rPreview,
-        bool bIsAddressBlock) :
-    SfxModalDialog(pParent, "AssignFieldsDialog", "modules/swriter/ui/assignfieldsdialog.ui"),
-    m_sNone(SwResId(SW_STR_NONE)),
-    m_rPreviewString(rPreview),
-    m_rConfigItem(rConfigItem)
+        bool bIsAddressBlock)
+    : SfxDialogController(pParent, "modules/swriter/ui/assignfieldsdialog.ui", "AssignFieldsDialog")
+    , m_sNone(SwResId(SW_STR_NONE))
+    , m_rPreviewString(rPreview)
+    , m_rConfigItem(rConfigItem)
+    , m_xPreview(new AddressPreview(m_xBuilder->weld_scrolled_window("previewwin")))
+    , m_xMatchingFI(m_xBuilder->weld_label("MATCHING_LABEL"))
+    , m_xAddressTitle(m_xBuilder->weld_label("addresselem"))
+    , m_xMatchTitle(m_xBuilder->weld_label("matchelem"))
+    , m_xPreviewTitle(m_xBuilder->weld_label("previewelem"))
+    , m_xPreviewFI(m_xBuilder->weld_label("PREVIEW_LABEL"))
+    , m_xOK(m_xBuilder->weld_button("ok"))
+    , m_xPreviewWin(new weld::CustomWeld(*m_xBuilder, "PREVIEW", *m_xPreview))
+    , m_xFieldsControl(new SwAssignFieldsControl(m_xBuilder->weld_scrolled_window("scroll"),
+                                                 m_xBuilder->weld_container("FIELDS")))
 {
-    get(m_pMatchingFI, "MATCHING_LABEL");
-    get(m_pPreviewFI, "PREVIEW_LABEL");
-    get(m_pOK, "ok");
-    get(m_pPreviewWIN, "PREVIEW");
-    Size aSize(LogicToPixel(Size(248, 45), MapMode(MapUnit::MapAppFont)));
-    m_pPreviewWIN->set_width_request(aSize.Width());
-    m_pPreviewWIN->set_height_request(aSize.Height());
-    get(m_pFieldsControl, "FIELDS");
-    m_pFieldsControl->Init(rConfigItem);
-    //resize the HeaderBar
-    OUString sAddressElement( SwResId(ST_ADDRESSELEMENT) );
+    m_xPreviewWin->set_size_request(m_xMatchingFI->get_approximate_digit_width() * 45,
+                                    m_xMatchingFI->get_text_height() * 5);
+    m_xFieldsControl->Init(this, rConfigItem);
+
     const OUString sMatchesTo( SwResId(ST_MATCHESTO) );
-    const OUString sPreview( SwResId(ST_PREVIEW) );
-    if(!bIsAddressBlock)
+    if (!bIsAddressBlock)
     {
-        m_pPreviewFI->SetText(SwResId(ST_SALUTATIONPREVIEW));
-        m_pMatchingFI->SetText(SwResId(ST_SALUTATIONMATCHING));
-        sAddressElement = SwResId(ST_SALUTATIONELEMENT);
+        m_xPreviewFI->set_label(SwResId(ST_SALUTATIONPREVIEW));
+        m_xMatchingFI->set_label(SwResId(ST_SALUTATIONMATCHING));
+        m_xAddressTitle->set_label(SwResId(ST_SALUTATIONELEMENT));
     }
 
-    Size aOutputSize(m_pFieldsControl->m_aHeaderHB->GetSizePixel());
-    sal_Int32 nFirstWidth;
-    sal_Int32 nSecondWidth = nFirstWidth = aOutputSize.Width() / 3;
-    const HeaderBarItemBits nHeadBits = HeaderBarItemBits::FIXED| HeaderBarItemBits::FIXEDPOS;
-    m_pFieldsControl->m_aHeaderHB->InsertItem( 1, sAddressElement, nFirstWidth, nHeadBits|HeaderBarItemBits::LEFT);
-    m_pFieldsControl->m_aHeaderHB->InsertItem( 2, sMatchesTo,      nSecondWidth, nHeadBits|HeaderBarItemBits::LEFT);
-    m_pFieldsControl->m_aHeaderHB->InsertItem( 3, sPreview,
-            aOutputSize.Width() - nFirstWidth - nSecondWidth, nHeadBits|HeaderBarItemBits::LEFT);
-
-    m_pFieldsControl->SetModifyHdl(LINK(this, SwAssignFieldsDialog, AssignmentModifyHdl_Impl ));
-
-    m_pMatchingFI->SetText(m_pMatchingFI->GetText().replaceAll("%1", sMatchesTo));
-
-    m_pOK->SetClickHdl(LINK(this, SwAssignFieldsDialog, OkHdl_Impl));
+    m_xFieldsControl->SetModifyHdl(LINK(this, SwAssignFieldsDialog, AssignmentModifyHdl_Impl ));
+    m_xMatchingFI->set_label(m_xMatchingFI->get_label().replaceAll("%1", sMatchesTo));
+    m_xOK->connect_clicked(LINK(this, SwAssignFieldsDialog, OkHdl_Impl));
 }
 
 SwAssignFieldsDialog::~SwAssignFieldsDialog()
 {
-    disposeOnce();
-}
-
-void SwAssignFieldsDialog::dispose()
-{
-    m_pMatchingFI.clear();
-    m_pFieldsControl.clear();
-    m_pPreviewFI.clear();
-    m_pPreviewWIN.clear();
-    m_pOK.clear();
-    SfxModalDialog::dispose();
 }
 
 uno::Sequence< OUString > SwAssignFieldsDialog::CreateAssignments()
@@ -1208,21 +1022,21 @@ uno::Sequence< OUString > SwAssignFieldsDialog::CreateAssignments()
             m_rConfigItem.GetDefaultAddressHeaders().size());
     OUString* pAssignments = aAssignments.getArray();
     sal_Int32 nIndex = 0;
-    for(const auto& rLBItem : m_pFieldsControl->m_aMatches)
+    for (const auto& rLBItem : m_xFieldsControl->m_aFields)
     {
-        const OUString sSelect = rLBItem->GetSelectedEntry();
+        const OUString sSelect = rLBItem.m_xComboBox->get_active_text();
         pAssignments[nIndex] = (m_sNone != sSelect) ? sSelect : OUString();
         ++nIndex;
     }
     return aAssignments;
 }
 
-IMPL_LINK_NOARG(SwAssignFieldsDialog, OkHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwAssignFieldsDialog, OkHdl_Impl, weld::Button&, void)
 {
     m_rConfigItem.SetColumnAssignment(
                             m_rConfigItem.GetCurrentDBData(),
                             CreateAssignments() );
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
 IMPL_LINK_NOARG(SwAssignFieldsDialog, AssignmentModifyHdl_Impl, LinkParamNone*, void)
@@ -1230,7 +1044,14 @@ IMPL_LINK_NOARG(SwAssignFieldsDialog, AssignmentModifyHdl_Impl, LinkParamNone*, 
     uno::Sequence< OUString > aAssignments = CreateAssignments();
     const OUString sPreview = SwAddressPreview::FillData(
             m_rPreviewString, m_rConfigItem, &aAssignments);
-    m_pPreviewWIN->SetAddress(sPreview);
+    m_xPreview->SetAddress(sPreview);
+}
+
+void SwAssignFieldsDialog::ConnectSizeGroups(int nLabelWidth, int nComboBoxWidth, int nPreviewWidth)
+{
+    m_xAddressTitle->set_size_request(nLabelWidth, -1);
+    m_xMatchTitle->set_size_request(nComboBoxWidth, -1);
+    m_xPreviewTitle->set_size_request(nPreviewWidth, -1);
 }
 
 DDListBox::DDListBox(vcl::Window* pParent, WinBits nStyle)
