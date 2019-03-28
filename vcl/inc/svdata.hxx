@@ -309,6 +309,8 @@ struct ImplSVNWFData
     // floating toolbars that can be redocked because there's no way to track
     // that the toolbar is over a dockable area.
     bool                    mbCanDetermineWindowPosition = true;
+
+    int mnListBoxEntryMargin = 0;
 };
 
 struct BlendFrameCache

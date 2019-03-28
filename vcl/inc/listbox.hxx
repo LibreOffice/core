@@ -54,6 +54,8 @@ struct ImplEntryType
     ListBoxEntryFlags mnFlags;
     long        mnHeight;
 
+    long getHeightWithMargin() const;
+
     ImplEntryType( const OUString& rStr, const Image& rImage ) :
         maStr( rStr ),
         maImage( rImage ),
@@ -336,6 +338,7 @@ public:
     tools::Rectangle       GetBoundingRectangle( sal_Int32  nItem ) const;
 
     long            GetEntryHeight() const              { return mnMaxHeight; }
+    long            GetEntryHeightWithMargin() const;
     long            GetMaxEntryWidth() const            { return mnMaxWidth; }
 
     void            SetScrollHdl( const Link<ImplListBoxWindow*,void>& rLink ) { maScrollHdl = rLink; }
@@ -472,6 +475,7 @@ public:
 
     Size            CalcSize( sal_Int32  nMaxLines ) const              { return maLBWindow->CalcSize( nMaxLines ); }
     long            GetEntryHeight() const          { return maLBWindow->GetEntryHeight(); }
+    long            GetEntryHeightWithMargin() const{ return maLBWindow->GetEntryHeightWithMargin(); }
     long            GetMaxEntryWidth() const        { return maLBWindow->GetMaxEntryWidth(); }
 
     void            SetScrollHdl( const Link<ImplListBox*,void>& rLink ) { maScrollHdl = rLink; }
