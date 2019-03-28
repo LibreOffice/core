@@ -131,7 +131,7 @@ protected:
     DECL_LINK( ClosePopupWindow, SfxPopupWindow *, void );
 
     // old SfxToolBoxControl methods
-    virtual void               StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem );
+    virtual void               StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& rSlotItem );
     virtual void               Select( sal_uInt16 nSelectModifier );
 
     virtual void               DoubleClick();

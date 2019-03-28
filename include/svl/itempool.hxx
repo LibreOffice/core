@@ -28,7 +28,7 @@
 #include <o3tl/sorted_vector.hxx>
 
 // I2TM
-#include <item/base/ModelSpecificIValues.hxx>
+#include <item/base/ModelSpecificItemValues.hxx>
 // ~I2TM
 
 class SfxBroadcaster;
@@ -210,9 +210,9 @@ private:
      //IDs below or equal are Which IDs, IDs above slot IDs
     static const sal_uInt16         SFX_WHICH_MAX = 4999;
 
-    // I2TM Transfer phase: deliver ModelSpecificIValues for this SfxItemPool/Model
+    // I2TM Transfer phase: deliver ModelSpecificItemValues for this SfxItemPool/Model
 public:
-    virtual Item::ModelSpecificIValues::SharedPtr getModelSpecificIValues() const;
+    virtual Item::ModelSpecificItemValues::SharedPtr getModelSpecificIValues() const;
     // ~I2TM
 };
 

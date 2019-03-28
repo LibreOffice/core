@@ -49,7 +49,7 @@ ScZoomSliderControl::~ScZoomSliderControl()
 }
 
 void ScZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState,
-                                       const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/ )
+                                       const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& /*rSlotItem*/ )
 {
     sal_uInt16                  nId  = GetId();
     ToolBox&                rTbx = GetToolBox();

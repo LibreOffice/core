@@ -31,10 +31,11 @@ $(eval $(call gb_Library_add_defs,item,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,item,\
-    item/source/base/IBase \
-    item/source/base/IAdministrator \
-    item/source/base/ModelSpecificIValues \
-    item/source/base/ISet \
+    item/source/base/ItemBase \
+    item/source/base/ItemAdministrator \
+    item/source/base/ModelSpecificItemValues \
+    item/source/base/ItemSet \
+    item/source/base/SlotSet \
     item/source/simple/CntInt16 \
     item/source/simple/CntOUString \
 ))

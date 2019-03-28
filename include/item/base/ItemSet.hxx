@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_ITEM_BASE_ISET_HXX
-#define INCLUDED_ITEM_BASE_ISET_HXX
+#ifndef INCLUDED_ITEM_BASE_ITEMSET_HXX
+#define INCLUDED_ITEM_BASE_ITEMSET_HXX
 
-#include <item/base/ModelSpecificIValues.hxx>
+#include <item/base/ModelSpecificItemValues.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -90,13 +90,13 @@
 
 namespace Item
 {
-    class ITEM_DLLPUBLIC ISet : public std::enable_shared_from_this<ISet>
+    class ITEM_DLLPUBLIC ItemSet : public std::enable_shared_from_this<ItemSet>
     {
     public:
         // SharedPtr typedef to be used handling instances of this type
-        typedef std::shared_ptr<ISet> SharedPtr;
+        typedef std::shared_ptr<ItemSet> SharedPtr;
 
-        // The states that an Item (IBase) can have in an ISet
+        // The states that an Item (ItemBase) can have in an ItemSet
         enum class IState
         {
             /** Specifies that the property is currently disabled. */
@@ -121,11 +121,11 @@ namespace Item
             SET = 0x0040
         };
 
-        // helper class for returning result pairs for calls to ISet::StateAndItem
-        // that contain the IState and the IBase at the same time.
-        // IBase aItem will be set when IState is either SET or DEFAULT. The
-        // DEFAULT will be the evtl. replaced one from ISet (see
-        // ModelSpecificIValues)
+        // helper class for returning result pairs for calls to ItemSet::StateAndItem
+        // that contain the IState and the ItemBase at the same time.
+        // ItemBase aItem will be set when IState is either SET or DEFAULT. The
+        // DEFAULT will be the evtl. replaced one from ItemSet (see
+        // ModelSpecificItemValues)
         template< class TargetType > class StateAndItem
         {
         private:
@@ -155,7 +155,7 @@ namespace Item
     private:
         // helper class for an ImplInvalidateItem - placeholder for InvaidateState
         // SfxItemState::DONTCARE -> IsInvalidItem -> pItem == INVALID_POOL_ITEM -> reinterpret_cast<SfxPoolItem*>(-1)
-        class ImplInvalidateItem : public IBase
+        class ImplInvalidateItem : public ItemBase
         {
         public:
             ImplInvalidateItem() = default;
@@ -163,34 +163,34 @@ namespace Item
 
         // helper class for a ImplDisableItem - placeholder for InvaidateState
         // SfxItemState::DISABLED -> IsVoidItem() -> instance of SfxVoidItem, virtual bool IsVoidItem()
-        class ImplDisableItem : public IBase
+        class ImplDisableItem : public ItemBase
         {
         public:
             ImplDisableItem() = default;
         };
 
-        // the Parent of this ISet
+        // the Parent of this ItemSet
         SharedPtr m_aParent;
 
         // model-specific ItemValues, e.g. overridden defaults.
         // Maybe set or not set, empty allowed here.
-        ModelSpecificIValues::SharedPtr m_aModelSpecificIValues;
+        ModelSpecificItemValues::SharedPtr m_aModelSpecificIValues;
 
         // the items as content
-        std::unordered_map<size_t, IBase::SharedPtr> m_aItems;
+        std::unordered_map<size_t, ItemBase::SharedPtr> m_aItems;
 
         // single global static instance for helper class ImplInvalidateItem
-        static const IBase::SharedPtr& getInvalidateItem()
+        static const ItemBase::SharedPtr& getInvalidateItem()
         {
-            static IBase::SharedPtr aImplInvalidateItem(new ImplInvalidateItem());
+            static ItemBase::SharedPtr aImplInvalidateItem(new ImplInvalidateItem());
 
             return aImplInvalidateItem;
         }
 
         // single global static instance for helper class ImplDisableItem
-        static const IBase::SharedPtr& getDisableItem()
+        static const ItemBase::SharedPtr& getDisableItem()
         {
-            static IBase::SharedPtr aImplDisableItem(new ImplDisableItem());
+            static ItemBase::SharedPtr aImplDisableItem(new ImplDisableItem());
 
             return aImplDisableItem;
         }
@@ -198,22 +198,22 @@ namespace Item
     protected:
         // constructor - protected BY DEFAULT - do NOT CHANGE (!)
         // Use ::Create(...) method instead
-        ISet(const ModelSpecificIValues::SharedPtr& rModelSpecificIValues);
+        ItemSet(const ModelSpecificItemValues::SharedPtr& rModelSpecificIValues);
 
     public:
-        virtual ~ISet();
+        virtual ~ItemSet();
 
         // noncopyable
-        ISet(const ISet&) = delete;
-        ISet& operator=(const ISet&) = delete;
+        ItemSet(const ItemSet&) = delete;
+        ItemSet& operator=(const ItemSet&) = delete;
 
         // parent
         void SetParent(const SharedPtr& rNewParent);
         const SharedPtr& GetParent() const;
 
-        static SharedPtr Create(const ModelSpecificIValues::SharedPtr& rModelSpecificIValues);
+        static SharedPtr Create(const ModelSpecificItemValues::SharedPtr& rModelSpecificIValues);
 
-        const ModelSpecificIValues::SharedPtr& GetModelSpecificIValues() const;
+        const ModelSpecificItemValues::SharedPtr& GetModelSpecificIValues() const;
 
         template< typename TItem > void InvalidateItem()
         {
@@ -232,20 +232,20 @@ namespace Item
         template< typename TItem > std::shared_ptr<TItem> GetDefault() const
         {
             // get static available default as instance
-            IBase::SharedPtr aRetval(TItem::GetDefault());
-            assert(aRetval && "empty IBase::SharedPtr not allowed for default (!)");
+            ItemBase::SharedPtr aRetval(TItem::GetDefault());
+            assert(aRetval && "empty ItemBase::SharedPtr not allowed for default (!)");
 
             if(m_aModelSpecificIValues)
             {
                 // may use model-specific default, get from helper
-                // helper *will* fallback to IBase default
+                // helper *will* fallback to ItemBase default
                 aRetval = m_aModelSpecificIValues->GetDefault(aRetval);
             }
 
             return std::static_pointer_cast<TItem>(aRetval);
         }
 
-        void SetItem(const IBase::SharedPtr& rItem);
+        void SetItem(const ItemBase::SharedPtr& rItem);
 
         template< typename TItem > StateAndItem<TItem> GetStateAndItem(bool bSearchParent = true) const
         {
@@ -254,7 +254,7 @@ namespace Item
 
             if(aRetval != m_aItems.end()) // && aRetval->second)
             {
-                assert(aRetval->second && "empty IBase::SharedPtr set in ISet (!)");
+                assert(aRetval->second && "empty ItemBase::SharedPtr set in ItemSet (!)");
 
                 if(aRetval->second.get() == getInvalidateItem().get())
                 {
@@ -296,6 +296,6 @@ namespace Item
 
 ///////////////////////////////////////////////////////////////////////////////
 
-#endif // INCLUDED_ITEM_BASE_ISET_HXX
+#endif // INCLUDED_ITEM_BASE_ITEMSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

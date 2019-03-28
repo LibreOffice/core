@@ -367,7 +367,7 @@ namespace svxform
         using                       SfxDockingWindow::StateChanged;
 
         void                        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                                  const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem ) override;
+                                                  const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& rSlotItem ) override;
     };
 
     class SVX_DLLPUBLIC DataNavigatorManager : public SfxChildWindow

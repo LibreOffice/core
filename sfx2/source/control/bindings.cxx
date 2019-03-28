@@ -1041,8 +1041,8 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                 {
                     // I2TM will have to use as soon as SfxBoolItem gets used and/or
                     // SfxPoolItem's with 'SfxEnumItemInterface' (?!?)
-                    //  Item::IBase::AnyIDArgs aArgs;
-                    //  Item::IBase::SharedPtr aSlotItem(pSlot->GetType()->CreateSlotItem(aArgs));
+                    //  Item::ItemBase::AnyIDArgs aArgs;
+                    //  Item::ItemBase::SharedPtr aSlotItem(pSlot->GetType()->CreateSlotItem(aArgs));
                 }
                 else
                 {

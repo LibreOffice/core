@@ -7,41 +7,41 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <item/base/IAdministrator.hxx>
+#include <item/base/ItemAdministrator.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace Item
 {
-    void IAdministrator::SetAdministrated(const IBase& rIBase) const
+    void ItemAdministrator::SetAdministrated(const ItemBase& rIBase) const
     {
-        const_cast<IBase&>(rIBase).m_bAdministrated = true;
+        const_cast<ItemBase&>(rIBase).m_bAdministrated = true;
     }
 
-    IAdministrator::IAdministrator(const IBase* pDefault)
-    :   m_aDefault(IBase::SharedPtr(pDefault))
+    ItemAdministrator::ItemAdministrator(const ItemBase* pDefault)
+    :   m_aDefault(ItemBase::SharedPtr(pDefault))
     {
         assert(pDefault != nullptr && "nullptr not allowed, default *is* required (!)");
     }
 
-    IAdministrator::~IAdministrator()
+    ItemAdministrator::~ItemAdministrator()
     {
     }
 
-    void IAdministrator::HintExpired(const IBase* /*pIBase*/)
+    void ItemAdministrator::HintExpired(const ItemBase* /*pIBase*/)
     {
         // Default does nothing and will be triggered from m_aDefault being destructed
         // using the HintExpired calls in the administrated classes. This happens due to
-        // m_aDefault being destroyed from ~IAdministrator() above as last thing in
-        // IAdministrator cleanup, the derived classes are no longer available at that time.
+        // m_aDefault being destroyed from ~ItemAdministrator() above as last thing in
+        // ItemAdministrator cleanup, the derived classes are no longer available at that time.
     }
 
-    const IBase::SharedPtr& IAdministrator::GetDefault() const
+    const ItemBase::SharedPtr& ItemAdministrator::GetDefault() const
     {
         return m_aDefault;
     }
 
-    bool IAdministrator::IsDefault(const IBase* pIBase) const
+    bool ItemAdministrator::IsDefault(const ItemBase* pIBase) const
     {
         assert(pIBase != nullptr && "nullptr not allowed (!)");
         return pIBase == m_aDefault.get() || pIBase->operator==(*m_aDefault.get());
@@ -52,13 +52,13 @@ namespace Item
 
 namespace Item
 {
-    IAdministrator_set::IAdministrator_set(const IBase* pDefault)
-    :   IAdministrator(pDefault),
+    IAdministrator_set::IAdministrator_set(const ItemBase* pDefault)
+    :   ItemAdministrator(pDefault),
         m_aEntries()
     {
     }
 
-    IBase::SharedPtr IAdministrator_set::Create(const IBase* pIBase)
+    ItemBase::SharedPtr IAdministrator_set::Create(const ItemBase* pIBase)
     {
         assert(pIBase != nullptr && "nullptr not allowed (!)");
 
@@ -85,20 +85,20 @@ namespace Item
             // start using offered instance and administrate it from now
             SetAdministrated(*pIBase);
             m_aEntries.insert(pIBase);
-            return IBase::SharedPtr(pIBase);
+            return ItemBase::SharedPtr(pIBase);
         }
     }
 
-    void IAdministrator_set::HintExpired(const IBase* pIBase)
+    void IAdministrator_set::HintExpired(const ItemBase* pIBase)
     {
         // called from ::~Item. This happens in two cases:
         // (1) a temporary Item instance gets deleted
         // (2) last shared_ptr was deleted
         // The caller should have already checked the
         // Administrated-flag, so only administrated instances
-        // of IBase should be handled here which is case (2)
+        // of ItemBase should be handled here which is case (2)
         assert(pIBase != nullptr && "nullptr not allowed (!)");
-        assert(pIBase->IsAdministrated() && "call only for administrated instances of IBase (!)");
+        assert(pIBase->IsAdministrated() && "call only for administrated instances of ItemBase (!)");
         m_aEntries.erase(pIBase);
     }
 } // end of namespace Item
@@ -107,13 +107,13 @@ namespace Item
 
 namespace Item
 {
-    IAdministrator_unordered_set::IAdministrator_unordered_set(const IBase* pDefault)
-    :   IAdministrator(pDefault),
+    IAdministrator_unordered_set::IAdministrator_unordered_set(const ItemBase* pDefault)
+    :   ItemAdministrator(pDefault),
         m_aEntries()
     {
     }
 
-    IBase::SharedPtr IAdministrator_unordered_set::Create(const IBase* pIBase)
+    ItemBase::SharedPtr IAdministrator_unordered_set::Create(const ItemBase* pIBase)
     {
         assert(pIBase != nullptr && "nullptr not allowed (!)");
 
@@ -140,20 +140,20 @@ namespace Item
             // start using offered instance and administrate it from now
             SetAdministrated(*pIBase);
             m_aEntries.insert(pIBase);
-            return IBase::SharedPtr(pIBase);
+            return ItemBase::SharedPtr(pIBase);
         }
     }
 
-    void IAdministrator_unordered_set::HintExpired(const IBase* pIBase)
+    void IAdministrator_unordered_set::HintExpired(const ItemBase* pIBase)
     {
         // called from ::~Item. This happens in two cases:
         // (1) a temporary Item instance gets deleted
         // (2) last shared_ptr was deleted
         // The caller should have already checked the
         // Administrated-flag, so only administrated instances
-        // of IBase should be handled here which is case (2)
+        // of ItemBase should be handled here which is case (2)
         assert(pIBase != nullptr && "nullptr not allowed (!)");
-        assert(pIBase->IsAdministrated() && "call only for administrated instances of IBase (!)");
+        assert(pIBase->IsAdministrated() && "call only for administrated instances of ItemBase (!)");
         m_aEntries.erase(pIBase);
     }
 } // end of namespace Item
@@ -162,11 +162,11 @@ namespace Item
 
 namespace Item
 {
-    std::vector<const IBase*>::iterator IAdministrator_vector::find(const IBase* pIBase)
+    std::vector<const ItemBase*>::iterator IAdministrator_vector::find(const ItemBase* pIBase)
     {
         // find has to linearly traverse through instances and use operator==
         assert(pIBase != nullptr && "nullptr not allowed (!)");
-        for(std::vector<const IBase*>::iterator candidate(m_aEntries.begin()); candidate != m_aEntries.end(); candidate++)
+        for(std::vector<const ItemBase*>::iterator candidate(m_aEntries.begin()); candidate != m_aEntries.end(); candidate++)
         {
             if(*candidate != nullptr)
             {
@@ -180,7 +180,7 @@ namespace Item
         return m_aEntries.end();
     }
 
-    void IAdministrator_vector::insert(const IBase* pIBase)
+    void IAdministrator_vector::insert(const ItemBase* pIBase)
     {
         // insert reuses free slots if there are some, else
         // appends to existing vector
@@ -197,7 +197,7 @@ namespace Item
         return;
     }
 
-    void IAdministrator_vector::erase(std::vector<const IBase*>::iterator& rIter)
+    void IAdministrator_vector::erase(std::vector<const ItemBase*>::iterator& rIter)
     {
         if(rIter != m_aEntries.end())
         {
@@ -212,10 +212,10 @@ namespace Item
                 && m_aEntries.size() > m_aFreeSlots.size()
                 && m_aFreeSlots.size() * 2 > m_aEntries.size())
             {
-                std::vector<const IBase*> aNewEntries;
+                std::vector<const ItemBase*> aNewEntries;
                 aNewEntries.reserve(m_aEntries.size() - m_aFreeSlots.size());
 
-                for(std::vector<const IBase*>::iterator candidate(m_aEntries.begin()); candidate != m_aEntries.end(); candidate++)
+                for(std::vector<const ItemBase*>::iterator candidate(m_aEntries.begin()); candidate != m_aEntries.end(); candidate++)
                 {
                     if(*candidate != nullptr)
                     {
@@ -234,14 +234,14 @@ namespace Item
         }
     }
 
-    IAdministrator_vector::IAdministrator_vector(const IBase* pDefault)
-    :   IAdministrator(pDefault),
+    IAdministrator_vector::IAdministrator_vector(const ItemBase* pDefault)
+    :   ItemAdministrator(pDefault),
         m_aEntries(),
         m_aFreeSlots()
     {
     }
 
-    IBase::SharedPtr IAdministrator_vector::Create(const IBase* pIBase)
+    ItemBase::SharedPtr IAdministrator_vector::Create(const ItemBase* pIBase)
     {
         assert(pIBase != nullptr && "nullptr not allowed (!)");
 
@@ -268,20 +268,20 @@ namespace Item
             // start using offered instance and administrate it from now
             SetAdministrated(*pIBase);
             insert(pIBase);
-            return IBase::SharedPtr(pIBase);
+            return ItemBase::SharedPtr(pIBase);
         }
     }
 
-    void IAdministrator_vector::HintExpired(const IBase* pIBase)
+    void IAdministrator_vector::HintExpired(const ItemBase* pIBase)
     {
         // called from ::~Item. This happens in two cases:
         // (1) a temporary Item instance gets deleted
         // (2) last shared_ptr was deleted
         // The caller should have already checked the
         // Administrated-flag, so only administrated instances
-        // of IBase should be handled here which is case (2)
+        // of ItemBase should be handled here which is case (2)
         assert(pIBase != nullptr && "nullptr not allowed (!)");
-        assert(pIBase->IsAdministrated() && "call only for administrated instances of IBase (!)");
+        assert(pIBase->IsAdministrated() && "call only for administrated instances of ItemBase (!)");
         auto iter(find(pIBase));
         erase(iter);
     }

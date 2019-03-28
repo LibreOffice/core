@@ -73,7 +73,7 @@ SvxIMapDlgItem::SvxIMapDlgItem( SvxIMapDlg& rIMapDlg, SfxBindings& rBindings ) :
 }
 
 void SvxIMapDlgItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
-                                   const SfxPoolItem* pItem, const Item::IBase::SharedPtr& /*rSlotItem*/ )
+                                   const SfxPoolItem* pItem, const Item::ItemBase::SharedPtr& /*rSlotItem*/ )
 {
     if ( ( nSID == SID_IMAP_EXEC ) && pItem )
     {

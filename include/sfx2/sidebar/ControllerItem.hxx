@@ -76,7 +76,7 @@ public:
 
 protected:
 
-    virtual void StateChanged (sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem) override;
+    virtual void StateChanged (sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& rSlotItem) override;
 
 private:
     ItemUpdateReceiverInterface& mrItemUpdateReceiver;

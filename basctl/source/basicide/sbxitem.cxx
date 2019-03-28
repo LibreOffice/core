@@ -49,9 +49,9 @@ namespace Item
         return std::static_pointer_cast<const Sbx>(GetStaticAdmin().Create(new Sbx(&rDocument, aLibName, aName, aMethodName, eType)));
     }
 
-    bool Sbx::operator==(const IBase& rCandidate) const
+    bool Sbx::operator==(const ItemBase& rCandidate) const
     {
-        assert(IBase::operator==(rCandidate));
+        assert(ItemBase::operator==(rCandidate));
         const Sbx& rCand(static_cast<const Sbx&>(rCandidate));
         return (GetDocument() == rCand.GetDocument()
             && GetLibName() == rCand.GetLibName()

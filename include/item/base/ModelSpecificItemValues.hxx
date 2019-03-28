@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_ITEM_BASE_MODELSPECIFICIVALUES_HXX
-#define INCLUDED_ITEM_BASE_MODELSPECIFICIVALUES_HXX
+#ifndef INCLUDED_ITEM_BASE_MODELSPECIFICITEMVALUES_HXX
+#define INCLUDED_ITEM_BASE_MODELSPECIFICITEMVALUES_HXX
 
 #include <memory>
 #include <item/itemdllapi.h>
 #include <unordered_map>
-#include <item/base/IBase.hxx>
+#include <item/base/ItemBase.hxx>
 #include <sal/types.h>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -37,40 +37,40 @@ namespace Item
     // - maybe: ItemNames - currently in ::TakeItemName and others
     // - maybe: hold MapMode info to allow correct GetPresentation
     //   executions
-    class ITEM_DLLPUBLIC ModelSpecificIValues : public std::enable_shared_from_this<ModelSpecificIValues>
+    class ITEM_DLLPUBLIC ModelSpecificItemValues : public std::enable_shared_from_this<ModelSpecificItemValues>
     {
     public:
         // SharedPtr typedef to be used handling instances of this type
-        typedef std::shared_ptr<ModelSpecificIValues> SharedPtr;
+        typedef std::shared_ptr<ModelSpecificItemValues> SharedPtr;
 
     private:
         // the alternative default items
-        std::unordered_map<size_t, IBase::SharedPtr> m_aAlternativeItems;
+        std::unordered_map<size_t, ItemBase::SharedPtr> m_aAlternativeItems;
 
     protected:
         // constructor - protected BY DEFAULT - do NOT CHANGE (!)
         // Use ::Create(...) method instead
-        ModelSpecificIValues();
+        ModelSpecificItemValues();
 
     public:
-        virtual ~ModelSpecificIValues();
+        virtual ~ModelSpecificItemValues();
 
         // noncopyable
-        ModelSpecificIValues(const ModelSpecificIValues&) = delete;
-        ModelSpecificIValues& operator=(const ModelSpecificIValues&) = delete;
+        ModelSpecificItemValues(const ModelSpecificItemValues&) = delete;
+        ModelSpecificItemValues& operator=(const ModelSpecificItemValues&) = delete;
 
         // create instance
         static SharedPtr Create();
 
         // AlternativeDefault interface
-        void SetAlternativeDefaultItem(const IBase::SharedPtr& rItem);
-        bool IsDefault(const IBase::SharedPtr& rItem) const;
-        const IBase::SharedPtr& GetDefault(const IBase::SharedPtr& rItem) const;
+        void SetAlternativeDefaultItem(const ItemBase::SharedPtr& rItem);
+        bool IsDefault(const ItemBase::SharedPtr& rItem) const;
+        const ItemBase::SharedPtr& GetDefault(const ItemBase::SharedPtr& rItem) const;
     };
 } // end of namespace Item
 
 ///////////////////////////////////////////////////////////////////////////////
 
-#endif // INCLUDED_ITEM_BASE_MODELSPECIFICIVALUES_HXX
+#endif // INCLUDED_ITEM_BASE_MODELSPECIFICITEMVALUES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

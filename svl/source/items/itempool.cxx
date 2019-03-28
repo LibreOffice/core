@@ -935,15 +935,15 @@ void SfxItemPool::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-// I2TM Transfer phase: deliver ModelSpecificIValues for this SfxItemPool/Model
-Item::ModelSpecificIValues::SharedPtr SfxItemPool::getModelSpecificIValues() const
+// I2TM Transfer phase: deliver ModelSpecificItemValues for this SfxItemPool/Model
+Item::ModelSpecificItemValues::SharedPtr SfxItemPool::getModelSpecificIValues() const
 {
     // global static instance fallback for all SfxItemPool(s)
-    static Item::ModelSpecificIValues::SharedPtr aGlobalDefault;
+    static Item::ModelSpecificItemValues::SharedPtr aGlobalDefault;
 
     if(!aGlobalDefault)
     {
-        aGlobalDefault = Item::ModelSpecificIValues::Create();
+        aGlobalDefault = Item::ModelSpecificItemValues::Create();
     }
 
     return aGlobalDefault;

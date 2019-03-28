@@ -453,7 +453,7 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
     {
         SfxItemState eState = SfxItemState::DISABLED;
         std::unique_ptr<SfxPoolItem> pItem;
-        Item::IBase::SharedPtr aSlotItem;
+        Item::ItemBase::SharedPtr aSlotItem;
         if ( rEvent.IsEnabled )
         {
             eState = SfxItemState::DEFAULT;
@@ -515,8 +515,8 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
 
                     if(bSlotItem)
                     {
-                        Item::IBase::AnyIDArgs aArgs;
-                        aArgs.push_back(Item::IBase::AnyIDPair(rEvent.State, 0));
+                        Item::ItemBase::AnyIDArgs aArgs;
+                        aArgs.push_back(Item::ItemBase::AnyIDPair(rEvent.State, 0));
                         aSlotItem = pSlot->GetType()->CreateSlotItem(aArgs);
                     }
                     else
@@ -619,7 +619,7 @@ void SfxToolBoxControl::StateChanged
 (
     sal_uInt16              nId,
     SfxItemState        eState,
-    const SfxPoolItem*  pState, const Item::IBase::SharedPtr& /*rSlotItem*/
+    const SfxPoolItem*  pState, const Item::ItemBase::SharedPtr& /*rSlotItem*/
 )
 {
     DBG_ASSERT( pImpl->pBox != nullptr, "setting state to dangling ToolBox" );

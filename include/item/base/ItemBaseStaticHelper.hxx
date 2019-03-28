@@ -17,44 +17,44 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_ITEM_BASE_IBASESTATICHELPER_HXX
-#define INCLUDED_ITEM_BASE_IBASESTATICHELPER_HXX
+#ifndef INCLUDED_ITEM_BASE_ITEMBASESTATICHELPER_HXX
+#define INCLUDED_ITEM_BASE_ITEMBASESTATICHELPER_HXX
 
-#include <item/base/IBase.hxx>
-#include <item/base/IAdministrator.hxx>
+#include <item/base/ItemBase.hxx>
+#include <item/base/ItemAdministrator.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace Item
 {
-    // Template class which supports Item implementations using IBase.
+    // Template class which supports Item implementations using ItemBase.
     // It allows automatic creation of default static methods. To keep
-    // things simple, it directly derives from ::IBase already.
+    // things simple, it directly derives from ::ItemBase already.
     // It provides implementation of all static typed stuff needed to
-    // implement and make available the single global static IAdministrator
+    // implement and make available the single global static ItemAdministrator
     // which will be used for the implementation of that new Item-type.
     // Usually one of three predefined/preimplemented IAdministrators
-    // will be used, for details see IAdministrator.hxx and
+    // will be used, for details see ItemAdministrator.hxx and
     // - IAdministrator_set
     // - IAdministrator_unordered_set
     // - IAdministrator_vector
     // and the explanations/preconditions for their usage.
     // It also defines a convenient SharedPtr type for access for each derived type
     // of Item.
-    template< class TargetType, typename AdminType > class IBaseStaticHelper : public IBase
+    template< class TargetType, typename AdminType > class ItemBaseStaticHelper : public ItemBase
     {
     public:
         // SharedPtr typedef to be used handling instances of given type
         typedef std::shared_ptr<const TargetType> SharedPtr;
 
     protected:
-        static IAdministrator& GetStaticAdmin()
+        static ItemAdministrator& GetStaticAdmin()
         {
             static AdminType aAdmin(new TargetType());
             return aAdmin;
         }
 
-        virtual IAdministrator* GetIAdministrator() const override
+        virtual ItemAdministrator* GetIAdministrator() const override
         {
             return &GetStaticAdmin();
         }
@@ -69,7 +69,7 @@ namespace Item
         // to be very aware what he is doing - to avoid confusion, I
         // decided to *not* offer this currently.
         //
-        // static const IBase::SharedPtr& getStaticDefault()
+        // static const ItemBase::SharedPtr& getStaticDefault()
         // {
         //     return std::static_pointer_cast<const TargetType>(GetStaticAdmin().GetDefault());
         // }
@@ -95,6 +95,6 @@ namespace Item
 
 ///////////////////////////////////////////////////////////////////////////////
 
-#endif // INCLUDED_ITEM_BASE_IBASESTATICHELPER_HXX
+#endif // INCLUDED_ITEM_BASE_ITEMBASESTATICHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

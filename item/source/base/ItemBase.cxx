@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <item/base/IBase.hxx>
-#include <item/base/IAdministrator.hxx>
+#include <item/base/ItemBase.hxx>
+#include <item/base/ItemAdministrator.hxx>
 #include <cassert>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -171,25 +171,25 @@ class SW_DLLPUBLIC SwPaMItem : public SfxPoolItem
 
 namespace Item
 {
-    IBase::IBase()
-    :   std::enable_shared_from_this<IBase>(),
+    ItemBase::ItemBase()
+    :   std::enable_shared_from_this<ItemBase>(),
         m_bAdministrated(false)
     {
     }
 
-    bool IBase::CheckSameType(const IBase& rCmp) const
+    bool ItemBase::CheckSameType(const ItemBase& rCmp) const
     {
         return typeid(rCmp) == typeid(*this);
     }
 
-    IAdministrator* IBase::GetIAdministrator() const
+    ItemAdministrator* ItemBase::GetIAdministrator() const
     {
         // not intended to be used, error
-        assert(false && "IBase::GetIAdministrator call not allowed (!)");
+        assert(false && "ItemBase::GetIAdministrator call not allowed (!)");
         return nullptr;
     }
 
-    void IBase::PutValues(const AnyIDArgs& rArgs)
+    void ItemBase::PutValues(const AnyIDArgs& rArgs)
     {
         for(const auto& arg : rArgs)
         {
@@ -197,23 +197,23 @@ namespace Item
         }
     }
 
-    void IBase::PutValue(const css::uno::Any& /*rVal*/, sal_uInt8 /*nMemberId*/)
+    void ItemBase::PutValue(const css::uno::Any& /*rVal*/, sal_uInt8 /*nMemberId*/)
     {
         // not intended to be used, error
-        assert(false && "Error: Some instance tries to set an Any at an ::Item instance where this is not supported - implement IBase::PutValue method there (!)");
+        assert(false && "Error: Some instance tries to set an Any at an ::Item instance where this is not supported - implement ItemBase::PutValue method there (!)");
     }
 
-    IBase::~IBase()
+    ItemBase::~ItemBase()
     {
     }
 
-    bool IBase::operator==(const IBase& rCmp) const
+    bool ItemBase::operator==(const ItemBase& rCmp) const
     {
         // basic implementation compares type, no data available
         return CheckSameType(rCmp);
     }
 
-    bool IBase::operator<(const IBase& rCmp) const
+    bool ItemBase::operator<(const ItemBase& rCmp) const
     {
         // basic implementation uses addresses of instances to
         // deliver a consistent result, but should *not* be used in
@@ -222,7 +222,7 @@ namespace Item
         return this < &rCmp;
     }
 
-    size_t IBase::GetUniqueKey() const
+    size_t ItemBase::GetUniqueKey() const
     {
         // basic implementation uses adress of instance as hash, to
         // deliver a consistent result, but should *not* be used in
@@ -230,13 +230,13 @@ namespace Item
         return static_cast<size_t>(sal_uInt64(this));
     }
 
-    bool IBase::IsDefault() const
+    bool ItemBase::IsDefault() const
     {
         // callback to static administrator
         return GetIAdministrator()->IsDefault(this);
     }
 
-    const IBase::SharedPtr& IBase::GetDefault() const
+    const ItemBase::SharedPtr& ItemBase::GetDefault() const
     {
         // callback to static administrator
         return GetIAdministrator()->GetDefault();

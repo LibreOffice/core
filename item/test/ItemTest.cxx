@@ -12,10 +12,10 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include <item/base/IBase.hxx>
-#include <item/base/IAdministrator.hxx>
-#include <item/base/ModelSpecificIValues.hxx>
-#include <item/base/ISet.hxx>
+#include <item/base/ItemBase.hxx>
+#include <item/base/ItemAdministrator.hxx>
+#include <item/base/ModelSpecificItemValues.hxx>
+#include <item/base/ItemSet.hxx>
 #include <item/simple/CntInt16.hxx>
 #include <item/simple/CntOUString.hxx>
 
@@ -23,11 +23,11 @@ namespace Item
 {
     // example for multi value Item
     class CntMultiValue;
-    typedef IBaseStaticHelper<CntMultiValue, IAdministrator_vector> CntMultiValueStaticHelper;
+    typedef ItemBaseStaticHelper<CntMultiValue, IAdministrator_vector> CntMultiValueStaticHelper;
 
     // if this should be based on faster IAdministrator_set, changes needed would be:
-    // - typedef IBaseStaticHelper<CntMultiValue, IAdministrator_set> CntMultiValueStaticHelper;
-    // - define virtual bool operator<(const IBase& rCandidate) const override
+    // - typedef ItemBaseStaticHelper<CntMultiValue, IAdministrator_set> CntMultiValueStaticHelper;
+    // - define virtual bool operator<(const ItemBase& rCandidate) const override
 
     class CntMultiValue : public CntMultiValueStaticHelper
     {
@@ -52,7 +52,7 @@ namespace Item
         {
             // needs to be called from here to have the fully derived implementation type
             // in the helper method - do NOT move to a imaginable general
-            // implementation in IBaseStaticHelper (!)
+            // implementation in ItemBaseStaticHelper (!)
             if(IsAdministrated())
             {
                 GetStaticAdmin().HintExpired(this);
@@ -68,9 +68,9 @@ namespace Item
             return std::static_pointer_cast<const CntMultiValue>(GetStaticAdmin().Create(new CntMultiValue(nValueA, nValueB, nValueC)));
         }
 
-        virtual bool operator==(const IBase& rCandidate) const override
+        virtual bool operator==(const ItemBase& rCandidate) const override
         {
-            assert(IBase::operator==(rCandidate));
+            assert(ItemBase::operator==(rCandidate));
             const CntMultiValue& rCand(static_cast<const CntMultiValue&>(rCandidate));
             return (GetValueA() == rCand.GetValueA()
                 && GetValueB() == rCand.GetValueB()
@@ -92,9 +92,9 @@ namespace Item
             return m_nValueC;
         }
 
-        // virtual bool operator<(const IBase& rCandidate) const override
+        // virtual bool operator<(const ItemBase& rCandidate) const override
         // {
-        //     assert(IBase::operator==(rCandidate));
+        //     assert(ItemBase::operator==(rCandidate));
         //     return static_cast<const CntMultiValue*>(this)->GetValueA() < static_cast<const CntMultiValue&>(rCandidate).GetValueA()
         //         && static_cast<const CntMultiValue*>(this)->GetValueB() < static_cast<const CntMultiValue&>(rCandidate).GetValueB()
         //         && static_cast<const CntMultiValue*>(this)->GetValueC() < static_cast<const CntMultiValue&>(rCandidate).GetValueC();
@@ -180,14 +180,14 @@ namespace Item
         {
             int nIncrement(0);
 
-            // make use of local CntMultiValue item in conjuction with ISet
-            ModelSpecificIValues::SharedPtr aModelSpecificIValues(ModelSpecificIValues::Create());
-            ISet::SharedPtr aSet(ISet::Create(aModelSpecificIValues));
+            // make use of local CntMultiValue item in conjuction with ItemSet
+            ModelSpecificItemValues::SharedPtr aModelSpecificIValues(ModelSpecificItemValues::Create());
+            ItemSet::SharedPtr aSet(ItemSet::Create(aModelSpecificIValues));
             aSet->SetItem(CntMultiValue::Create(5,4,3));
 
             if(const auto Item(aSet->GetStateAndItem<const CntMultiValue>()); Item.IsSet())
             {
-                nIncrement += (ISet::IState::SET == Item.GetIState()) ? 1 : 0;
+                nIncrement += (ItemSet::IState::SET == Item.GetIState()) ? 1 : 0;
                 nIncrement += (Item.GetItem()) ? 1 : 0;
                 nIncrement += (nullptr != Item.GetItemInstance()) ? 1 : 0;
                 nIncrement += Item.HasItem();
@@ -310,11 +310,11 @@ namespace Item
         {
             int nIncrement(0);
 
-            ModelSpecificIValues::SharedPtr aModelSpecificIValues(ModelSpecificIValues::Create());
+            ModelSpecificItemValues::SharedPtr aModelSpecificIValues(ModelSpecificItemValues::Create());
             aModelSpecificIValues->SetAlternativeDefaultItem(CntInt16::Create(3));
             aModelSpecificIValues->SetAlternativeDefaultItem(CntInt16::Create(4));
 
-            ISet::SharedPtr aSet(ISet::Create(aModelSpecificIValues));
+            ItemSet::SharedPtr aSet(ItemSet::Create(aModelSpecificIValues));
             const auto aActEmpty(aSet->GetStateAndItem<const CntInt16>());
 
             aSet->SetItem(CntInt16::Create(4));
@@ -333,7 +333,7 @@ namespace Item
 
             if(const auto Item(aSet->GetStateAndItem<const CntOUString>()); Item.IsSet())
             {
-                nIncrement += (ISet::IState::SET == Item.GetIState()) ? 1 : 0;
+                nIncrement += (ItemSet::IState::SET == Item.GetIState()) ? 1 : 0;
                 nIncrement += (Item.GetItem()) ? 1 : 0;
                 nIncrement += (nullptr != Item.GetItemInstance()) ? 1 : 0;
                 nIncrement += Item.HasItem();
@@ -352,7 +352,7 @@ namespace Item
                 nIncrement += Item.IsDisabled();
             }
 
-            // check getting default at Set, this will include ModelSpecificIValues
+            // check getting default at Set, this will include ModelSpecificItemValues
             // compared with the static CntInt16::GetDefault() call
             const CntInt16::SharedPtr aDefSet(aSet->GetDefault<const CntInt16>());
             const CntInt16::SharedPtr aDefGlobal(CntInt16::GetDefault());

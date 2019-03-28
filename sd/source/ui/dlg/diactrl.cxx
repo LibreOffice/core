@@ -102,7 +102,7 @@ SdTbxCtlDiaPages::~SdTbxCtlDiaPages()
 }
 
 void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
-                SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/ )
+                SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& /*rSlotItem*/ )
 {
     SdPagesField* pFld = static_cast<SdPagesField*>( GetToolBox().GetItemWindow( GetId() ) );
     DBG_ASSERT( pFld, "Window not found" );

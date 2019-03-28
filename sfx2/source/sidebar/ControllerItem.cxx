@@ -62,7 +62,7 @@ void ControllerItem::dispose()
 void ControllerItem::StateChanged (
     sal_uInt16 nSID,
     SfxItemState eState,
-    const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/)
+    const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& /*rSlotItem*/)
 {
     mrItemUpdateReceiver.NotifyItemUpdate(nSID, eState, pState, IsEnabled(eState));
 }

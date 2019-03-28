@@ -8,47 +8,47 @@
  */
 
 #include <cassert>
-#include <item/base/ISet.hxx>
+#include <item/base/ItemSet.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace Item
 {
-    ISet::ISet(const ModelSpecificIValues::SharedPtr& rModelSpecificIValues)
-    :   std::enable_shared_from_this<ISet>(),
+    ItemSet::ItemSet(const ModelSpecificItemValues::SharedPtr& rModelSpecificIValues)
+    :   std::enable_shared_from_this<ItemSet>(),
         m_aParent(),
         m_aModelSpecificIValues(rModelSpecificIValues),
         m_aItems()
     {
     }
 
-    ISet::~ISet()
+    ItemSet::~ItemSet()
     {
     }
 
-    void ISet::SetParent(const ISet::SharedPtr& rNewParent)
+    void ItemSet::SetParent(const ItemSet::SharedPtr& rNewParent)
     {
         m_aParent = rNewParent;
     }
 
-    const ISet::SharedPtr& ISet::GetParent() const
+    const ItemSet::SharedPtr& ItemSet::GetParent() const
     {
         return m_aParent;
     }
 
-    ISet::SharedPtr ISet::Create(const ModelSpecificIValues::SharedPtr& rModelSpecificIValues)
+    ItemSet::SharedPtr ItemSet::Create(const ModelSpecificItemValues::SharedPtr& rModelSpecificIValues)
     {
-        return ISet::SharedPtr(new ISet(rModelSpecificIValues));
+        return ItemSet::SharedPtr(new ItemSet(rModelSpecificIValues));
     }
 
-    const ModelSpecificIValues::SharedPtr& ISet::GetModelSpecificIValues() const
+    const ModelSpecificItemValues::SharedPtr& ItemSet::GetModelSpecificIValues() const
     {
         return m_aModelSpecificIValues;
     }
 
-    void ISet::SetItem(const IBase::SharedPtr& rItem)
+    void ItemSet::SetItem(const ItemBase::SharedPtr& rItem)
     {
-        assert(rItem && "empty IBase::SharedPtr not allowed - and should be unable to be created (!)");
+        assert(rItem && "empty ItemBase::SharedPtr not allowed - and should be unable to be created (!)");
         bool bDefault(false);
 
         // detect if rItem is default item, include evtl. model-specific
@@ -56,7 +56,7 @@ namespace Item
         if(m_aModelSpecificIValues)
         {
             // may use model-specific default, get from helper
-            // helper *will* fallback to IBase default
+            // helper *will* fallback to ItemBase default
             bDefault = m_aModelSpecificIValues->IsDefault(rItem);
         }
         else

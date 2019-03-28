@@ -261,7 +261,7 @@ SvxPosSizeStatusBarControl::~SvxPosSizeStatusBarControl()
 */
 
 void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                               const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/ )
+                                               const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& /*rSlotItem*/ )
 {
     // Because the combi-controller, always sets the current Id as HelpId
     // first clean the cached HelpText

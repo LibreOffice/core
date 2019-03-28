@@ -229,7 +229,7 @@ void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent
     {
         SfxItemState eState = SfxItemState::DISABLED;
         std::unique_ptr<SfxPoolItem> pItem;
-        Item::IBase::SharedPtr aSlotItem;
+        Item::ItemBase::SharedPtr aSlotItem;
         if ( rEvent.IsEnabled )
         {
             eState = SfxItemState::DEFAULT;
@@ -279,8 +279,8 @@ void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent
 
                     if(bSlotItem)
                     {
-                        Item::IBase::AnyIDArgs aArgs;
-                        aArgs.push_back(Item::IBase::AnyIDPair(rEvent.State, 0));
+                        Item::ItemBase::AnyIDArgs aArgs;
+                        aArgs.push_back(Item::ItemBase::AnyIDPair(rEvent.State, 0));
                         aSlotItem = pSlot->GetType()->CreateSlotItem(aArgs);
                     }
                     else
@@ -404,7 +404,7 @@ void SfxStatusBarControl::StateChanged
 (
     sal_uInt16              nSID,
     SfxItemState        eState,
-    const SfxPoolItem*  pState, const Item::IBase::SharedPtr& /*rSlotItem*/  /* Pointer to SfxPoolItem, is only valid
+    const SfxPoolItem*  pState, const Item::ItemBase::SharedPtr& /*rSlotItem*/  /* Pointer to SfxPoolItem, is only valid
                                    within this Method call. This can be a
                                    Null-Pointer, a Pointer to SfxVoidItem
                                    or of this Type found registered by the

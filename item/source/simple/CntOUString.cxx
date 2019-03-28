@@ -24,7 +24,7 @@ namespace Item
     {
         // needs to be called from here to have the fully derived implementation type
         // in the helper method - do NOT move to a imaginable general
-        // implementation in IBaseStaticHelper (!)
+        // implementation in ItemBaseStaticHelper (!)
         if(IsAdministrated())
         {
             GetStaticAdmin().HintExpired(this);
@@ -40,9 +40,9 @@ namespace Item
         return std::static_pointer_cast<const CntOUString>(GetStaticAdmin().Create(new CntOUString(rValue)));
     }
 
-    bool CntOUString::operator==(const IBase& rCandidate) const
+    bool CntOUString::operator==(const ItemBase& rCandidate) const
     {
-        assert(IBase::operator==(rCandidate));
+        assert(ItemBase::operator==(rCandidate));
         return (GetValue() == static_cast<const CntOUString&>(rCandidate).GetValue());
     }
 

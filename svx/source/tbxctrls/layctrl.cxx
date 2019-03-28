@@ -698,7 +698,7 @@ VclPtr<SfxPopupWindow> SvxTableToolBoxControl::CreatePopupWindow()
     return nullptr;
 }
 
-void SvxTableToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/)
+void SvxTableToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& /*rSlotItem*/)
 {
     if ( auto pUInt16Item = dynamic_cast<const SfxUInt16Item* >(pState) )
     {
@@ -745,7 +745,7 @@ VclPtr<SfxPopupWindow> SvxColumnsToolBoxControl::CreatePopupWindow()
 
 void SvxColumnsToolBoxControl::StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
-                                              const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem )
+                                              const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& rSlotItem )
 {
     bEnabled = SfxItemState::DISABLED != eState;
     SfxToolBoxControl::StateChanged(nSID,   eState, pState, rSlotItem );

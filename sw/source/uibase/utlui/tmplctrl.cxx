@@ -74,7 +74,7 @@ SwTemplateControl::~SwTemplateControl()
 }
 
 void SwTemplateControl::StateChanged(
-    sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/ )
+    sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& /*rSlotItem*/ )
 {
     const SfxStringItem* pItem = nullptr;
     if (SfxItemState::DEFAULT == eState && (pItem = dynamic_cast<const SfxStringItem*>(pState)))

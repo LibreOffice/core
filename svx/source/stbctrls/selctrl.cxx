@@ -90,7 +90,7 @@ SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,
 }
 
 void SvxSelectionModeControl::StateChanged( sal_uInt16, SfxItemState eState,
-                                            const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/ )
+                                            const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& /*rSlotItem*/ )
 {
     if ( SfxItemState::DEFAULT == eState )
     {

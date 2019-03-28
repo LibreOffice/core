@@ -79,7 +79,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateE
     else
     {
         std::unique_ptr<SfxPoolItem> pItem;
-        Item::IBase::SharedPtr aSlotItem;
+        Item::ItemBase::SharedPtr aSlotItem;
         sal_uInt16 nId = pCache->GetId();
         SfxItemState eState = SfxItemState::DISABLED;
         if ( !aStatus.IsEnabled )
@@ -124,8 +124,8 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateE
 
                     if(bSlotItem)
                     {
-                        Item::IBase::AnyIDArgs aArgs;
-                        aArgs.push_back(Item::IBase::AnyIDPair(rEvent.State, 0));
+                        Item::ItemBase::AnyIDArgs aArgs;
+                        aArgs.push_back(Item::ItemBase::AnyIDPair(rEvent.State, 0));
                         aSlotItem = pSlot->GetType()->CreateSlotItem(aArgs);
                     }
                     else
@@ -375,7 +375,7 @@ void SfxStateCache::SetVisibleState( bool bShow )
     // Update Controller
     if ( !mxDispatch.is() && pController )
     {
-        const Item::IBase::SharedPtr aSlotItem;
+        const Item::ItemBase::SharedPtr aSlotItem;
         for ( SfxControllerItem *pCtrl = pController;
                 pCtrl;
                 pCtrl = pCtrl->GetItemLink() )
@@ -384,7 +384,7 @@ void SfxStateCache::SetVisibleState( bool bShow )
 
     if ( pInternalController )
     {
-        const Item::IBase::SharedPtr aSlotItem;
+        const Item::ItemBase::SharedPtr aSlotItem;
         pInternalController->StateChanged( nId, eState, pState, aSlotItem );
     }
 
@@ -427,7 +427,7 @@ void SfxStateCache::SetState_Impl
         // Update Controller
         if ( !mxDispatch.is() && pController )
         {
-            const Item::IBase::SharedPtr aSlotItem;
+            const Item::ItemBase::SharedPtr aSlotItem;
             for ( SfxControllerItem *pCtrl = pController;
                 pCtrl;
                 pCtrl = pCtrl->GetItemLink() )
@@ -467,7 +467,7 @@ void SfxStateCache::SetCachedState( bool bAlways )
     // Update Controller
     if ( !mxDispatch.is() && pController )
     {
-        const Item::IBase::SharedPtr aSlotItem;
+        const Item::ItemBase::SharedPtr aSlotItem;
         for ( SfxControllerItem *pCtrl = pController;
             pCtrl;
             pCtrl = pCtrl->GetItemLink() )

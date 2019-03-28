@@ -632,7 +632,7 @@ SmGraphicController::SmGraphicController(SmGraphicWindow &rSmGraphic,
 }
 
 
-void SmGraphicController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem)
+void SmGraphicController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& rSlotItem)
 {
     rGraphic.SetTotalSize();
     rGraphic.Invalidate();
@@ -653,7 +653,7 @@ SmEditController::SmEditController(SmEditWindow &rSmEdit,
 
 
 
-void SmEditController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem)
+void SmEditController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& rSlotItem)
 {
     const SfxStringItem *pItem =  dynamic_cast<const SfxStringItem*>( pState);
 

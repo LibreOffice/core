@@ -21,6 +21,6 @@
 */
 
 #include <algorithm>
-#include <item/base/IBase.hxx>
+#include <item/base/ItemBase.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

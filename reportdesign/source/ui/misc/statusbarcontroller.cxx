@@ -140,7 +140,7 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
             Sequence< PropertyValue > aSeq;
             if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 2 )
             {
-                const Item::IBase::SharedPtr aSlotItem;
+                const Item::ItemBase::SharedPtr aSlotItem;
                 SvxZoomSliderItem aZoomSlider(100,20,400);
                 aZoomSlider.PutValue(_aEvent.State, 0);
                 static_cast<SvxZoomSliderControl*>(m_rController.get())->StateChanged(m_nSlotId,SfxItemState::DEFAULT,&aZoomSlider,aSlotItem);
@@ -151,7 +151,7 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
             Sequence< PropertyValue > aSeq;
             if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 3 )
             {
-                const Item::IBase::SharedPtr aSlotItem;
+                const Item::ItemBase::SharedPtr aSlotItem;
                 SvxZoomItem aZoom;
                 aZoom.PutValue(_aEvent.State, 0 );
                 static_cast<SvxZoomStatusBarControl*>(m_rController.get())->StateChanged(m_nSlotId,SfxItemState::DEFAULT,&aZoom,aSlotItem);

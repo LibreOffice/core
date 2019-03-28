@@ -651,7 +651,7 @@ class SfxStyleControllerItem_Impl : public SfxStatusListener
                                      SvxStyleToolBoxControl& rTbxCtl );
 
     protected:
-        virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem ) override;
+        virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& rSlotItem ) override;
 
     private:
         SvxStyleToolBoxControl& rControl;
@@ -2739,7 +2739,7 @@ SfxStyleControllerItem_Impl::SfxStyleControllerItem_Impl(
 }
 
 void SfxStyleControllerItem_Impl::StateChanged(
-    sal_uInt16, SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/ )
+    sal_uInt16, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& /*rSlotItem*/ )
 {
     switch ( GetId() )
     {
@@ -3176,7 +3176,7 @@ IMPL_LINK_NOARG(SvxStyleToolBoxControl, VisibilityNotification, SvxStyleBox_Impl
 }
 
 void SvxStyleToolBoxControl::StateChanged(
-    sal_uInt16 , SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/ )
+    sal_uInt16 , SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& /*rSlotItem*/ )
 {
     sal_uInt16       nId    = GetId();
     ToolBox&     rTbx   = GetToolBox();
@@ -3631,7 +3631,7 @@ SvxSimpleUndoRedoController::~SvxSimpleUndoRedoController()
 {
 }
 
-void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/)
+void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& /*rSlotItem*/)
 {
     const SfxStringItem* pItem = dynamic_cast<const SfxStringItem*>( pState  );
     ToolBox& rBox = GetToolBox();

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_ITEM_BASE_IBASE_HXX
-#define INCLUDED_ITEM_BASE_IBASE_HXX
+#ifndef INCLUDED_ITEM_BASE_ITEMBASE_HXX
+#define INCLUDED_ITEM_BASE_ITEMBASE_HXX
 
 #include <memory>
 #include <vector>
@@ -30,16 +30,16 @@
 
 namespace Item
 {
-    // predefine IAdministrator - no need to include
-    class IAdministrator;
+    // predefine ItemAdministrator - no need to include
+    class ItemAdministrator;
 
-    // Base class for IBase and thus for all new implementation of
+    // Base class for ItemBase and thus for all new implementation of
     // Items. Items are in general read-only instances. The constructor
     // is protected now so that no one is able to create own instances.
     // The reason for that is that for all Items only a single value-
     // specific instance shall exist at any time, guaranteed by being
-    // administrated by an instance of IAdministrator associated with
-    // each implemented type of IBase Item.
+    // administrated by an instance of ItemAdministrator associated with
+    // each implemented type of ItemBase Item.
     // To construct, use the ::Create methods. These are in general
     // static member functions. These have to use the protected
     // constructor(s) from which also any number may be defined to
@@ -48,7 +48,7 @@ namespace Item
     // as needed at the created instance in any local implementation
     // of a ::Create method.
     // That instance created and filled (value-set) in a ::Create method
-    // will then be handed over to the single static global IAdministrator
+    // will then be handed over to the single static global ItemAdministrator
     // instance of the derived Item-type. That method will decide if
     // to use the given instance or delete it again - if already an instance
     // of that Item exists (or is identical to the global default of
@@ -62,7 +62,7 @@ namespace Item
     // will no longer be set-methods like ::SetAny(Any& aAny) or similar.
     // Instead, implement a ::Create method for this that creates an instance
     // using a/the protected constructor, set all members from the Any (in
-    // this exapmle) and hand over to the IAdministrator. Result will in all
+    // this exapmle) and hand over to the ItemAdministrator. Result will in all
     // cases be a shared_ptr of the Item.
     // Items are no longer identified by any global to-be-somewhere-defined
     // (collision-free, global, incompatible, hard to maintain) ItemID, but
@@ -70,7 +70,7 @@ namespace Item
     // typeid(<ItemType>).hash_code().
     // The efficency the administration can be done highly depends on the
     // type of operators defined at the Item-Implementation, see
-    // comments at IAdministrator and it's three default implementations for
+    // comments at ItemAdministrator and it's three default implementations for
     // details - also discussing speed compared to SfxItem implementations.
     // When implementing an Item, you choose one of these three
     // predefined implementations to use for the Item-type, based on the
@@ -80,15 +80,15 @@ namespace Item
     // Note: Be aware that some static local functions will be needed for
     // any Item-implementation. To support this and full typed accesses
     // to implemented Items, check out the implementation helper template
-    // class 'IBaseStaticHelper' which should be used to implement Items.
-    // This Base-Class IBase exists as minimal achor point, it sometimes
+    // class 'ItemBaseStaticHelper' which should be used to implement Items.
+    // This Base-Class ItemBase exists as minimal achor point, it sometimes
     // is useful, see e.g. helper classes ImplInvalidateItem and
-    // ImplDisableItem used in ::Iset to represent ItemStates in ISet's.
-    class ITEM_DLLPUBLIC IBase : public std::enable_shared_from_this<IBase>
+    // ImplDisableItem used in ::Iset to represent ItemStates in ItemSet's.
+    class ITEM_DLLPUBLIC ItemBase : public std::enable_shared_from_this<ItemBase>
     {
     public:
         // SharedPtr typedef to be used handling instances of this type
-        typedef std::shared_ptr<const IBase> SharedPtr;
+        typedef std::shared_ptr<const ItemBase> SharedPtr;
 
         // typedefs for PutValues/PutValue/CreateFromAny functionality
         // used from the SfxSlot mechanism (see CreateSlotItem)
@@ -97,53 +97,53 @@ namespace Item
 
     private:
         // flag to mark this instance being administared by an
-        // IAdministrator. Not urgently needed due to also being
+        // ItemAdministrator. Not urgently needed due to also being
         // able to check being administarted in the HintExpired
         // calls. But that is the point - when using this flag
         // at adding the instance and thus making it being actively
         // administrated it is not necessary to do that check
         // if it is administrated which means a 'find' access
         // to a kind of list which may have varying costs...
-        friend class IAdministrator;
+        friend class ItemAdministrator;
         bool        m_bAdministrated;
 
     protected:
         // constructor - protected BY DEFAULT - do NOT CHANGE (!)
         // Use ::Create(...) methods in derived classes instead
-        IBase();
+        ItemBase();
 
         // basic RTTI TypeCheck to secure e.g. operator== and similar
-        bool CheckSameType(const IBase& rCmp) const;
+        bool CheckSameType(const ItemBase& rCmp) const;
 
         // basic access to Adminiatrator, default returns nullptr and is *not*
         // designed to be used/called, only exists to have simple Item
         // representations for special purposes, e.g. InvalidateItem/DisableItem
-        virtual IAdministrator* GetIAdministrator() const;
+        virtual ItemAdministrator* GetIAdministrator() const;
 
         void PutValues(const AnyIDArgs& rArgs);
         virtual void PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);
 
     public:
-        virtual ~IBase();
+        virtual ~ItemBase();
 
         // noncopyable
-        IBase(const IBase&) = delete;
-        IBase& operator=(const IBase&) = delete;
+        ItemBase(const ItemBase&) = delete;
+        ItemBase& operator=(const ItemBase&) = delete;
 
-        // operators potentially used by IAdministrator implementations, so have to be defined
-        virtual bool operator==(const IBase& rCmp) const;
-        virtual bool operator<(const IBase& rCmp) const;
+        // operators potentially used by ItemAdministrator implementations, so have to be defined
+        virtual bool operator==(const ItemBase& rCmp) const;
+        virtual bool operator<(const ItemBase& rCmp) const;
         virtual size_t GetUniqueKey() const;
 
         // Interface for global default value support. These non-static and
         // non-virtual non-typed local versions can/may work more direct. The
-        // typed static versions are not capable of working with 'const IBase::SharedPtr&'
+        // typed static versions are not capable of working with 'const ItemBase::SharedPtr&'
         // due to using std::static_pointer_cast, thus these may be faster and
         // use less ressources when the type is not needed.
         // These will use the callback to static administrator and it's administrated
         // single global default instance.
         // Remember that there *will* also be static, typed versions of this call
-        // in derived Item(s), see IBaseStaticHelper for reference
+        // in derived Item(s), see ItemBaseStaticHelper for reference
         bool IsDefault() const;
         const SharedPtr& GetDefault() const;
 
@@ -157,6 +157,6 @@ namespace Item
 
 ///////////////////////////////////////////////////////////////////////////////
 
-#endif // INCLUDED_ITEM_BASE_IBASE_HXX
+#endif // INCLUDED_ITEM_BASE_ITEMBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

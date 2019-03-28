@@ -8,38 +8,38 @@
  */
 
 #include <cassert>
-#include <item/base/ModelSpecificIValues.hxx>
+#include <item/base/ModelSpecificItemValues.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace Item
 {
-    ModelSpecificIValues::ModelSpecificIValues()
-    :   std::enable_shared_from_this<ModelSpecificIValues>(),
+    ModelSpecificItemValues::ModelSpecificItemValues()
+    :   std::enable_shared_from_this<ModelSpecificItemValues>(),
         m_aAlternativeItems()
     {
     }
 
-    ModelSpecificIValues::~ModelSpecificIValues()
+    ModelSpecificItemValues::~ModelSpecificItemValues()
     {
     }
 
-    ModelSpecificIValues::SharedPtr ModelSpecificIValues::Create()
+    ModelSpecificItemValues::SharedPtr ModelSpecificItemValues::Create()
     {
-        return ModelSpecificIValues::SharedPtr(new ModelSpecificIValues());
+        return ModelSpecificItemValues::SharedPtr(new ModelSpecificItemValues());
     }
 
-    void ModelSpecificIValues::SetAlternativeDefaultItem(const IBase::SharedPtr& rItem)
+    void ModelSpecificItemValues::SetAlternativeDefaultItem(const ItemBase::SharedPtr& rItem)
     {
-        assert(rItem && "empty IBase::SharedPtr not allowed - and should be unable to be created (!)");
+        assert(rItem && "empty ItemBase::SharedPtr not allowed - and should be unable to be created (!)");
         const size_t hash_code(typeid(*rItem).hash_code());
 
         m_aAlternativeItems[hash_code] = rItem;
     }
 
-    bool ModelSpecificIValues::IsDefault(const IBase::SharedPtr& rItem) const
+    bool ModelSpecificItemValues::IsDefault(const ItemBase::SharedPtr& rItem) const
     {
-        assert(rItem && "empty IBase::SharedPtr not allowed - and should be unable to be created (!)");
+        assert(rItem && "empty ItemBase::SharedPtr not allowed - and should be unable to be created (!)");
 
         if(!m_aAlternativeItems.empty())
         {
@@ -57,9 +57,9 @@ namespace Item
         return rItem->IsDefault();
     }
 
-    const IBase::SharedPtr& ModelSpecificIValues::GetDefault(const IBase::SharedPtr& rItem) const
+    const ItemBase::SharedPtr& ModelSpecificItemValues::GetDefault(const ItemBase::SharedPtr& rItem) const
     {
-        assert(rItem && "empty IBase::SharedPtr not allowed - and should be unable to be created (!)");
+        assert(rItem && "empty ItemBase::SharedPtr not allowed - and should be unable to be created (!)");
 
         if(!m_aAlternativeItems.empty())
         {

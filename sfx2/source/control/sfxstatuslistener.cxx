@@ -65,7 +65,7 @@ SfxStatusListener::~SfxStatusListener()
 }
 
 // old sfx controller item C++ API
-void SfxStatusListener::StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem*, const Item::IBase::SharedPtr& /*rSlotItem*/)
+void SfxStatusListener::StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem*, const Item::ItemBase::SharedPtr& /*rSlotItem*/)
 {
     // must be implemented by sub class
 }
@@ -162,7 +162,7 @@ void SAL_CALL SfxStatusListener::statusChanged( const FeatureStateEvent& rEvent)
 
     SfxItemState eState = SfxItemState::DISABLED;
     std::unique_ptr<SfxPoolItem> pItem;
-    Item::IBase::SharedPtr aSlotItem;
+    Item::ItemBase::SharedPtr aSlotItem;
 
     if ( rEvent.IsEnabled )
     {
@@ -219,8 +219,8 @@ void SAL_CALL SfxStatusListener::statusChanged( const FeatureStateEvent& rEvent)
 
                 if(bSlotItem)
                 {
-                    Item::IBase::AnyIDArgs aArgs;
-                    aArgs.push_back(Item::IBase::AnyIDPair(rEvent.State, 0));
+                    Item::ItemBase::AnyIDArgs aArgs;
+                    aArgs.push_back(Item::ItemBase::AnyIDPair(rEvent.State, 0));
                     aSlotItem = pSlot->GetType()->CreateSlotItem(aArgs);
                 }
                 else

@@ -265,7 +265,7 @@ void FmFieldWin::_propertyChanged(const css::beans::PropertyChangeEvent& evt)
 }
 
 
-void FmFieldWin::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/)
+void FmFieldWin::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& /*rSlotItem*/)
 {
     if (!pState  || SID_FM_FIELDS_CONTROL != nSID)
         return;

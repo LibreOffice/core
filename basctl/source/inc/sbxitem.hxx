@@ -23,7 +23,7 @@
 #include <svl/poolitem.hxx>
 
 // I2TM
-#include <item/base/IBaseStaticHelper.hxx>
+#include <item/base/ItemBaseStaticHelper.hxx>
 // ~I2TM
 
 namespace basctl
@@ -43,7 +43,7 @@ enum ItemType
 namespace Item
 {
     class Sbx;
-    typedef ::Item::IBaseStaticHelper<Sbx, ::Item::IAdministrator_vector> SbxStaticHelper;
+    typedef ::Item::ItemBaseStaticHelper<Sbx, ::Item::IAdministrator_vector> SbxStaticHelper;
 
     class Sbx final : public SbxStaticHelper
     {
@@ -73,7 +73,7 @@ namespace Item
             const OUString& aName = OUString(),
             const OUString& aMethodName = OUString(),
             ItemType eType = TYPE_UNKNOWN);
-        virtual bool operator==(const IBase& rCandidate) const override;
+        virtual bool operator==(const ItemBase& rCandidate) const override;
 
         ScriptDocument const& GetDocument() const { return m_aDocument; }
         OUString const& GetLibName() const { return m_aLibName; }

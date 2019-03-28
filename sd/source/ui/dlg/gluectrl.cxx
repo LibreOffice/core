@@ -118,7 +118,7 @@ SdTbxCtlGlueEscDir::SdTbxCtlGlueEscDir(
  * Represents state in the listbox of the controller
  */
 void SdTbxCtlGlueEscDir::StateChanged( sal_uInt16 nSId,
-                        SfxItemState eState, const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem )
+                        SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& rSlotItem )
 {
     if( eState == SfxItemState::DEFAULT )
     {

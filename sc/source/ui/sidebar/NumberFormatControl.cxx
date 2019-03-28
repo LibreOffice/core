@@ -36,7 +36,7 @@ ScNumberFormatControl::~ScNumberFormatControl()
 }
 
 void ScNumberFormatControl::StateChanged(sal_uInt16, SfxItemState eState,
-                                         const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/)
+                                         const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& /*rSlotItem*/)
 {
     sal_uInt16 nId = GetId();
     ToolBox& rTbx = GetToolBox();

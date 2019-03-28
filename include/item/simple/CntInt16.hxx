@@ -10,7 +10,7 @@
 #ifndef INCLUDED_ITEM_SIMPLE_CNTINT16_HXX
 #define INCLUDED_ITEM_SIMPLE_CNTINT16_HXX
 
-#include <item/base/IBaseStaticHelper.hxx>
+#include <item/base/ItemBaseStaticHelper.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -21,7 +21,7 @@ namespace Item
     // a sorted list for fast accesses. This requires ::operator< to be
     // implemented.
     class CntInt16;
-    typedef IBaseStaticHelper<CntInt16, IAdministrator_set> CntInt16StaticHelper;
+    typedef ItemBaseStaticHelper<CntInt16, IAdministrator_set> CntInt16StaticHelper;
 
     class ITEM_DLLPUBLIC CntInt16 : public CntInt16StaticHelper
     {
@@ -37,8 +37,8 @@ namespace Item
         virtual ~CntInt16();
 
         static CntInt16::SharedPtr Create(sal_Int16 nValue);
-        virtual bool operator==(const IBase& rCandidate) const override;
-        virtual bool operator<(const IBase& rCandidate) const override;
+        virtual bool operator==(const ItemBase& rCandidate) const override;
+        virtual bool operator<(const ItemBase& rCandidate) const override;
         sal_Int16 GetValue() const;
     };
 } // end of namespace Item

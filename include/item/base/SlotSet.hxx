@@ -21,7 +21,7 @@
 #define INCLUDED_ITEM_BASE_SLOTSET_HXX
 
 #include <cassert>
-#include <item/base/ModelSpecificIValues.hxx>
+#include <item/base/ModelSpecificItemValues.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -36,7 +36,7 @@ namespace Item
 
     private:
         // the slots as content
-        std::unordered_map<SlotID, IBase::SharedPtr> m_aSlots;
+        std::unordered_map<SlotID, ItemBase::SharedPtr> m_aSlots;
 
     protected:
         // constructor - protected BY DEFAULT - do NOT CHANGE (!)
@@ -57,7 +57,7 @@ namespace Item
 
         static SharedPtr Create();
 
-        void SetSlot(SlotID aSlotID, const IBase::SharedPtr& rItem);
+        void SetSlot(SlotID aSlotID, const ItemBase::SharedPtr& rItem);
         void SetSlots(const SlotSet& rSlotSet);
 
         template< typename TargetType > std::shared_ptr<const TargetType> GetSlot(SlotID aSlotID) const
@@ -66,8 +66,8 @@ namespace Item
 
             if(aRetval != m_aSlots.end()) // && aRetval->second)
             {
-                assert(aRetval->second && "empty IBase::SharedPtr set in SlotSet (!)");
-                assert(typeid(*aRetval->second) == typeid(TargetType) && "wrong IBase::SharedPtr type in SlotSet (!)");
+                assert(aRetval->second && "empty ItemBase::SharedPtr set in SlotSet (!)");
+                assert(typeid(*aRetval->second) == typeid(TargetType) && "wrong ItemBase::SharedPtr type in SlotSet (!)");
 
                 return std::static_pointer_cast<TargetType>(aRetval->second);
             }

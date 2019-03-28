@@ -50,7 +50,7 @@ public:
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) override;
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem ) override;
+                                  const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& rSlotItem ) override;
 };
 
 
@@ -90,7 +90,7 @@ public:
 
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) override;
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem ) override;
+                                  const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& rSlotItem ) override;
 };
 
 

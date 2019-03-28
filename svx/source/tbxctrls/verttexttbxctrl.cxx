@@ -59,7 +59,7 @@ void SvxVertCTLTextTbxCtrl::initialize(const css::uno::Sequence<css::uno::Any>& 
 void SvxVertCTLTextTbxCtrl::StateChanged(
     sal_uInt16 nSID,
     SfxItemState eState,
-    const SfxPoolItem* pState, const Item::IBase::SharedPtr& rSlotItem )
+    const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& rSlotItem )
 {
     SvtLanguageOptions aLangOptions;
     bool bCalc = false;

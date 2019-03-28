@@ -345,7 +345,7 @@ void SfxViewFrame::INetExecute_Impl( SfxRequest &rRequest )
                 SfxControllerItem* pCtrl = pCache->GetItemLink();
                 while( pCtrl )
                 {
-                    const Item::IBase::SharedPtr aSlotItem;
+                    const Item::ItemBase::SharedPtr aSlotItem;
                     pCtrl->StateChanged( SID_FOCUSURLBOX, SfxItemState::UNKNOWN, nullptr, aSlotItem );
                     pCtrl = pCtrl->GetItemLink();
                 }

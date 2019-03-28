@@ -10,7 +10,7 @@
 #ifndef INCLUDED_ITEM_SIMPLE_CNTOUSTRING_HXX
 #define INCLUDED_ITEM_SIMPLE_CNTOUSTRING_HXX
 
-#include <item/base/IBaseStaticHelper.hxx>
+#include <item/base/ItemBaseStaticHelper.hxx>
 #include <rtl/ustring.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@ namespace Item
     // a hashed list for fast accesses. This requires ::operator== and
     // ::GetUniqueKey() to be implemented.
     class CntOUString;
-    typedef IBaseStaticHelper<CntOUString, IAdministrator_unordered_set> CntOUStringStaticHelper;
+    typedef ItemBaseStaticHelper<CntOUString, IAdministrator_unordered_set> CntOUStringStaticHelper;
 
     class ITEM_DLLPUBLIC CntOUString : public CntOUStringStaticHelper
     {
@@ -38,7 +38,7 @@ namespace Item
         virtual ~CntOUString();
 
         static std::shared_ptr<const CntOUString> Create(const rtl::OUString& rValue);
-        virtual bool operator==(const IBase& rCandidate) const override;
+        virtual bool operator==(const ItemBase& rCandidate) const override;
         virtual size_t GetUniqueKey() const override;
         const rtl::OUString& GetValue() const;
     };

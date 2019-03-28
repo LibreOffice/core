@@ -26,7 +26,7 @@
 #include <sfx2/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <sfx2/groupid.hxx>
-#include <item/base/IBase.hxx>
+#include <item/base/ItemBase.hxx>
 #include <functional>
 
 #include <climits>
@@ -101,14 +101,14 @@ template<class T> SfxPoolItem* createSfxPoolItem()
 {
     return T::CreateDefault();
 }
-template<class T> std::shared_ptr<const T> createSlotItem(const Item::IBase::AnyIDArgs& rArgs)
+template<class T> std::shared_ptr<const T> createSlotItem(const Item::ItemBase::AnyIDArgs& rArgs)
 {
     return T::CreateFromAny(rArgs);
 }
 struct SfxType
 {
     std::function<SfxPoolItem* ()> const createSfxPoolItemFunc;
-    std::function<Item::IBase::SharedPtr(const Item::IBase::AnyIDArgs& rArgs)> const createSlotItemFunc;
+    std::function<Item::ItemBase::SharedPtr(const Item::ItemBase::AnyIDArgs& rArgs)> const createSlotItemFunc;
     const std::type_info* pType;
     sal_uInt16 const nAttribs;
     SfxTypeAttrib aAttrib[1]; // variable length
@@ -123,7 +123,7 @@ struct SfxType
         return std::unique_ptr<SfxPoolItem>(createSfxPoolItemFunc());
     }
 
-    Item::IBase::SharedPtr CreateSlotItem(const Item::IBase::AnyIDArgs& rArgs) const
+    Item::ItemBase::SharedPtr CreateSlotItem(const Item::ItemBase::AnyIDArgs& rArgs) const
     {
         return createSlotItemFunc(rArgs);
     }
@@ -137,7 +137,7 @@ struct SfxType
 struct SfxType0
 {
     std::function<SfxPoolItem* ()> const createSfxPoolItemFunc;
-    std::function<Item::IBase::SharedPtr(const Item::IBase::AnyIDArgs& rArgs)> const createSlotItemFunc;
+    std::function<Item::ItemBase::SharedPtr(const Item::ItemBase::AnyIDArgs& rArgs)> const createSlotItemFunc;
     const std::type_info* pType;
     sal_uInt16 const nAttribs;
 
@@ -149,7 +149,7 @@ struct SfxType0
 #define SFX_DECL_TYPE(n) struct SfxType##n \
 { \
     std::function<SfxPoolItem* ()> createSfxPoolItemFunc; \
-    std::function<Item::IBase::SharedPtr(const Item::IBase::AnyIDArgs& rArgs)> const createSlotItemFunc; \
+    std::function<Item::ItemBase::SharedPtr(const Item::ItemBase::AnyIDArgs& rArgs)> const createSlotItemFunc; \
     const std::type_info* pType; \
     sal_uInt16 nAttribs; \
     SfxTypeAttrib aAttrib[n]; \
@@ -208,7 +208,7 @@ struct SfxFormalArgument
         return pType->CreateSfxPoolItem();
     }
 
-    Item::IBase::SharedPtr CreateSlotItem(const Item::IBase::AnyIDArgs& rArgs) const
+    Item::ItemBase::SharedPtr CreateSlotItem(const Item::ItemBase::AnyIDArgs& rArgs) const
     {
         return pType->CreateSlotItem(rArgs);
     }

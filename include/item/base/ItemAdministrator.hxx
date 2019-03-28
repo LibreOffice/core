@@ -17,24 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_ITEM_BASE_IADMINISTRATOR_HXX
-#define INCLUDED_ITEM_BASE_IADMINISTRATOR_HXX
+#ifndef INCLUDED_ITEM_BASE_ITEMADMINISTRATOR_HXX
+#define INCLUDED_ITEM_BASE_ITEMADMINISTRATOR_HXX
 
 #include <vector>
 #include <set>
 #include <unordered_set>
 #include <cassert>
-#include <item/base/IBase.hxx>
+#include <item/base/ItemBase.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace Item
 {
-    // Base class for IAdministrator. It's Task is to administer instances
-    // of IBase - Items. Target is to always have only one instance
+    // Base class for ItemAdministrator. It's Task is to administer instances
+    // of ItemBase - Items. Target is to always have only one instance
     // of a typed Item in one attributation, e.g. for sal_uInt16 many
     // users may use the instance representing the value '12'.
-    // To do so, IAdministrator has to administer a list of that instances
+    // To do so, ItemAdministrator has to administer a list of that instances
     // as static global typed entity for each type of Item that allows
     // search and removal of typed Items.
     // The instances are by purpose no shared_ptr's of the instances. I have
@@ -58,38 +58,38 @@ namespace Item
     // where to administer the Item's global default. This again is done
     // as shared_ptr to fit nicely to the rest of the mechanism.
     // Note to this default: This is the Item's global, type-specific
-    // default, this may be overriden by ISet and ModelSpecificIValues,
-    // but only in association with an ISet (see there). The Item-specific
+    // default, this may be overriden by ItemSet and ModelSpecificItemValues,
+    // but only in association with an ItemSet (see there). The Item-specific
     // global default will always be the same, so only deviating values
-    // for ModelSpecificIValues need to be overriden.
-    class ITEM_DLLPUBLIC IAdministrator
+    // for ModelSpecificItemValues need to be overriden.
+    class ITEM_DLLPUBLIC ItemAdministrator
     {
     protected:
         // instance of global default value
-        IBase::SharedPtr m_aDefault;
+        ItemBase::SharedPtr m_aDefault;
 
-        void SetAdministrated(const IBase& rIBase) const;
+        void SetAdministrated(const ItemBase& rIBase) const;
 
     public:
         // constructor/destructor
-        IAdministrator(const IBase* pDefault);
-        virtual ~IAdministrator();
+        ItemAdministrator(const ItemBase* pDefault);
+        virtual ~ItemAdministrator();
 
         // noncopyable
-        IAdministrator(const IAdministrator&) = delete;
-        IAdministrator& operator=(const IAdministrator&) = delete;
+        ItemAdministrator(const ItemAdministrator&) = delete;
+        ItemAdministrator& operator=(const ItemAdministrator&) = delete;
 
-        // needed IAdministrator calls from IBase implementations.
+        // needed ItemAdministrator calls from ItemBase implementations.
         // these are the add/remove calls to the list. The Create
         // will check existance/default and either re-use existing
         // instance (and delete given one) or start using given instance
-        virtual void HintExpired(const IBase* pIBase);
-        virtual IBase::SharedPtr Create(const IBase* pIBase) = 0;
+        virtual void HintExpired(const ItemBase* pIBase);
+        virtual ItemBase::SharedPtr Create(const ItemBase* pIBase) = 0;
 
         // interface for global default value support
         // on Administrator level
-        const IBase::SharedPtr& GetDefault() const;
-        bool IsDefault(const IBase* pIBase) const;
+        const ItemBase::SharedPtr& GetDefault() const;
+        bool IsDefault(const ItemBase* pIBase) const;
     };
 } // end of namespace Item
 
@@ -97,32 +97,32 @@ namespace Item
 
 namespace Item
 {
-    // IAdministrator-implementation using std::set for implementation
+    // ItemAdministrator-implementation using std::set for implementation
     // which guarantees good runtime for accesses (sorted list)
-    // requirements from IBase:
-    // - bool IBase::operator<(const IBase& rCand) const
+    // requirements from ItemBase:
+    // - bool ItemBase::operator<(const ItemBase& rCand) const
     // Caution: This does not exist for current SfxItem implementations
-    class ITEM_DLLPUBLIC IAdministrator_set : public IAdministrator
+    class ITEM_DLLPUBLIC IAdministrator_set : public ItemAdministrator
     {
     private:
         struct less_for_set
         {
-            bool operator()(const IBase* pItem1, const IBase* pItem2) const
+            bool operator()(const ItemBase* pItem1, const ItemBase* pItem2) const
             {
-                // forward to IBase::operator<
+                // forward to ItemBase::operator<
                 return pItem1->operator<(*pItem2);
             }
         };
 
         // std::set with all instanciated Items of this type, sorted by
         // operator< (see less_for_set above)
-        std::set<const IBase*, less_for_set> m_aEntries;
+        std::set<const ItemBase*, less_for_set> m_aEntries;
 
     public:
-        IAdministrator_set(const IBase* pDefault);
+        IAdministrator_set(const ItemBase* pDefault);
 
-        virtual IBase::SharedPtr Create(const IBase* pIBase) override;
-        virtual void HintExpired(const IBase* pIBase) override;
+        virtual ItemBase::SharedPtr Create(const ItemBase* pIBase) override;
+        virtual void HintExpired(const ItemBase* pIBase) override;
     };
 } // end of namespace Item
 
@@ -130,42 +130,42 @@ namespace Item
 
 namespace Item
 {
-    // IAdministrator-implementation using std::unordered_set for
+    // ItemAdministrator-implementation using std::unordered_set for
     // implementation which guarantees good runtime for accesses (hashed)
-    // requirements from IBase:
-    // - virtual bool IBase::operator==(const IBase& rCandidate) const
-    // - size_t IBase::GetUniqueKey() const
+    // requirements from ItemBase:
+    // - virtual bool ItemBase::operator==(const ItemBase& rCandidate) const
+    // - size_t ItemBase::GetUniqueKey() const
     // Caution: GetUniqueKey does not exist for current SfxItem implementations
-    class ITEM_DLLPUBLIC IAdministrator_unordered_set : public IAdministrator
+    class ITEM_DLLPUBLIC IAdministrator_unordered_set : public ItemAdministrator
     {
     private:
         struct compare_for_unordered_set
         {
-            bool operator()(const IBase* pItem1, const IBase* pItem2) const
+            bool operator()(const ItemBase* pItem1, const ItemBase* pItem2) const
             {
-                // forward to IBase::operator==
+                // forward to ItemBase::operator==
                 return pItem1->operator==(*pItem2);
             }
         };
 
         struct hash_for_unordered_set
         {
-            size_t operator()(const IBase* pItem) const
+            size_t operator()(const ItemBase* pItem) const
             {
-                // forward to IBase::GetUniqueKey
+                // forward to ItemBase::GetUniqueKey
                 return pItem->GetUniqueKey();
             }
         };
 
         // std::unordered_set with all instanciated Items of this type,
         // using hash and operator== (see hash_for_unordered_set, compare_for_unordered_set above)
-        std::unordered_set<const IBase*, hash_for_unordered_set, compare_for_unordered_set> m_aEntries;
+        std::unordered_set<const ItemBase*, hash_for_unordered_set, compare_for_unordered_set> m_aEntries;
 
     public:
-        IAdministrator_unordered_set(const IBase* pDefault);
+        IAdministrator_unordered_set(const ItemBase* pDefault);
 
-        virtual IBase::SharedPtr Create(const IBase* pIBase) override;
-        virtual void HintExpired(const IBase* pIBase) override;
+        virtual ItemBase::SharedPtr Create(const ItemBase* pIBase) override;
+        virtual void HintExpired(const ItemBase* pIBase) override;
     };
 } // end of namespace Item
 
@@ -173,16 +173,16 @@ namespace Item
 
 namespace Item
 {
-    // IAdministrator-implementation using std::vector for implementation.
+    // ItemAdministrator-implementation using std::vector for implementation.
     // this is slow, but at least uses a 2nd vector to administer the free
     // slots in the 1st list. This is BTW what SfxItemPool does right now,
     // so this is slowest, but guarantees same speed as current implementation.
-    // requirements from IBase:
-    // - virtual bool IBase::operator==(const IBase& rCandidate) const
+    // requirements from ItemBase:
+    // - virtual bool ItemBase::operator==(const ItemBase& rCandidate) const
     // This does exist for current SfxItem implementations, so this is the
     // simple default for all Items that are hard to transfer/change/update,
     // it allows to continue to use the single operator== for administration.
-    class ITEM_DLLPUBLIC IAdministrator_vector : public IAdministrator
+    class ITEM_DLLPUBLIC IAdministrator_vector : public ItemAdministrator
     {
     private:
         // this unsorted list is used when only operator== is available. Thus
@@ -190,23 +190,23 @@ namespace Item
         // not avoidable or in a phase of change (SfxItem's have operator== already).
         // It uses a std::vector to hjold all instances, plus a list of free slots
         // (just indices) for reuse to avoid re-organizing the vector
-        std::vector<const IBase*> m_aEntries;
+        std::vector<const ItemBase*> m_aEntries;
         std::vector<size_t> m_aFreeSlots;
 
-        std::vector<const IBase*>::iterator find(const IBase* pIBase);
-        void insert(const IBase* pIBase);
-        void erase(std::vector<const IBase*>::iterator& rIter);
+        std::vector<const ItemBase*>::iterator find(const ItemBase* pIBase);
+        void insert(const ItemBase* pIBase);
+        void erase(std::vector<const ItemBase*>::iterator& rIter);
 
     public:
-        IAdministrator_vector(const IBase* pDefault);
+        IAdministrator_vector(const ItemBase* pDefault);
 
-        virtual IBase::SharedPtr Create(const IBase* pIBase) override;
-        virtual void HintExpired(const IBase* pIBase) override;
+        virtual ItemBase::SharedPtr Create(const ItemBase* pIBase) override;
+        virtual void HintExpired(const ItemBase* pIBase) override;
     };
 } // end of namespace Item
 
 ///////////////////////////////////////////////////////////////////////////////
 
-#endif // INCLUDED_ITEM_BASE_IADMINISTRATOR_HXX
+#endif // INCLUDED_ITEM_BASE_ITEMADMINISTRATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

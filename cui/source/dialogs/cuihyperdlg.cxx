@@ -57,7 +57,7 @@ void SvxHlinkCtrl::dispose()
 }
 
 void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                 const SfxPoolItem* pState, const Item::IBase::SharedPtr& /*rSlotItem*/ )
+                                 const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& /*rSlotItem*/ )
 {
     if ( eState == SfxItemState::DEFAULT && !pParent->IsDisposed() )
     {

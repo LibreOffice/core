@@ -183,7 +183,7 @@ void SfxURLToolBoxControl_Impl::StateChanged
 (
     sal_uInt16              nSID,
     SfxItemState        eState,
-    const SfxPoolItem*  pState, const Item::IBase::SharedPtr& /*rSlotItem*/
+    const SfxPoolItem*  pState, const Item::ItemBase::SharedPtr& /*rSlotItem*/
 )
 {
     if ( nSID == SID_OPENURL )
