@@ -2133,12 +2133,26 @@ void WW8AttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_
         const SwTableBox * pTabBox1 = rTableBoxes[n];
         const SwFrameFormat * pFrameFormat = pTabBox1->GetFrameFormat();
 
-        if ( SvxFrameDirection::Vertical_RL_TB == m_rWW8Export.TrueFrameDirection( *pFrameFormat ) )
+        // Map from our SvxFrameDirection to WW8 TextFlow.
+        sal_uInt16 nTextFlow = 0;
+        switch (m_rWW8Export.TrueFrameDirection(*pFrameFormat))
+        {
+            case SvxFrameDirection::Vertical_RL_TB:
+                nTextFlow = 5;
+                break;
+            case SvxFrameDirection::Vertical_LR_BT:
+                nTextFlow = 3;
+                break;
+            default:
+                break;
+        }
+
+        if (nTextFlow != 0)
         {
             m_rWW8Export.InsUInt16( NS_sprm::sprmTTextFlow );
             m_rWW8Export.pO->push_back( n );                   //start range
             m_rWW8Export.pO->push_back( sal_uInt8(n + 1) );    //end range
-            m_rWW8Export.InsUInt16( 5 ); //Equals vertical writing
+            m_rWW8Export.InsUInt16(nTextFlow);
         }
     }
 }
