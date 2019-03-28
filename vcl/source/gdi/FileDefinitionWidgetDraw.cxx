@@ -80,6 +80,7 @@ FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
     pSVData->maNWFData.mbProgressNeedsErase = true;
     pSVData->maNWFData.mnStatusBarLowerRightOffset = 10;
     pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
+    pSVData->maNWFData.mnListBoxEntryMargin = 20;
 }
 
 bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, ControlPart ePart)

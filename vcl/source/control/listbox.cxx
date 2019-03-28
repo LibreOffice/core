@@ -1229,7 +1229,7 @@ Size ListBox::CalcSubEditSize() const
         aSz = mpImplLB->CalcSize (mnLineCount ? mnLineCount : mpImplLB->GetEntryList()->GetEntryCount());
     else
     {
-        aSz.Height() = mpImplLB->CalcSize( 1 ).Height();
+        aSz.Height() = mpImplLB->GetEntryHeight();
         // Size to maxmimum entry width
         aSz.Width() = mpImplLB->GetMaxEntryWidth();
 
@@ -1323,7 +1323,7 @@ void ListBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines 
     {
         Size aOutSz = mpImplLB->GetMainWindow()->GetOutputSizePixel();
         rnCols = (sal_uInt16) (aOutSz.Width()/nCharWidth);
-        rnLines = (sal_uInt16) (aOutSz.Height()/mpImplLB->GetEntryHeight());
+        rnLines = (sal_uInt16) (aOutSz.Height()/mpImplLB->GetEntryHeightWithMargin());
     }
     else
     {
