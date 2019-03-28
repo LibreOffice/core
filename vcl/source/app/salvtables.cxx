@@ -3701,7 +3701,7 @@ private:
     DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
     DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
     DECL_LINK(StyleUpdatedHdl, VclDrawingArea&, void);
-    DECL_LINK(PopupMenuHdl, const Point&, bool);
+    DECL_LINK(PopupMenuHdl, const CommandEvent&, bool);
     DECL_LINK(QueryTooltipHdl, tools::Rectangle&, OUString);
 
     // SalInstanceWidget has a generic listener for all these
@@ -3813,7 +3813,7 @@ public:
     virtual ~SalInstanceDrawingArea() override
     {
         m_xDrawingArea->SetQueryTooltipHdl(Link<tools::Rectangle&, OUString>());
-        m_xDrawingArea->SetPopupMenuHdl(Link<const Point&, bool>());
+        m_xDrawingArea->SetPopupMenuHdl(Link<const CommandEvent&, bool>());
         m_xDrawingArea->SetStyleUpdatedHdl(Link<VclDrawingArea&, void>());
         m_xDrawingArea->SetMousePressHdl(Link<const MouseEvent&, bool>());
         m_xDrawingArea->SetMouseMoveHdl(Link<const MouseEvent&, bool>());
@@ -3873,9 +3873,9 @@ IMPL_LINK_NOARG(SalInstanceDrawingArea, StyleUpdatedHdl, VclDrawingArea&, void)
     m_aStyleUpdatedHdl.Call(*this);
 }
 
-IMPL_LINK(SalInstanceDrawingArea, PopupMenuHdl, const Point&, rPos, bool)
+IMPL_LINK(SalInstanceDrawingArea, PopupMenuHdl, const CommandEvent&, rEvent, bool)
 {
-    return m_aPopupMenuHdl.Call(rPos);
+    return m_aPopupMenuHdl.Call(rEvent);
 }
 
 IMPL_LINK(SalInstanceDrawingArea, QueryTooltipHdl, tools::Rectangle&, rHelpArea, OUString)

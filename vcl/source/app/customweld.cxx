@@ -80,7 +80,7 @@ IMPL_LINK_NOARG(CustomWeld, DoStyleUpdated, weld::Widget&, void)
     m_rWidgetController.StyleUpdated();
 }
 
-IMPL_LINK(CustomWeld, DoPopupMenu, const Point&, rPos, bool)
+IMPL_LINK(CustomWeld, DoPopupMenu, const CommandEvent&, rPos, bool)
 {
     return m_rWidgetController.ContextMenu(rPos);
 }

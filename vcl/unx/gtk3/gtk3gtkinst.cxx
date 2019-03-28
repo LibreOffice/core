@@ -1321,7 +1321,7 @@ private:
         return pThis->signal_key(pEvent);
     }
 
-    virtual bool signal_popup_menu(const Point&)
+    virtual bool signal_popup_menu(const CommandEvent&)
     {
         return false;
     }
@@ -1390,7 +1390,8 @@ private:
         if (gdk_event_triggers_context_menu(reinterpret_cast<GdkEvent*>(pEvent)) && pEvent->type == GDK_BUTTON_PRESS)
         {
             //if handled for context menu, stop processing
-            if (signal_popup_menu(aPos))
+            CommandEvent aCEvt(aPos, CommandEventId::ContextMenu, true);
+            if (signal_popup_menu(aCEvt))
                 return true;
         }
 
@@ -7536,9 +7537,9 @@ private:
         gtk_tooltip_set_tip_area(tooltip, &aGdkHelpArea);
         return true;
     }
-    virtual bool signal_popup_menu(const Point& rPos) override
+    virtual bool signal_popup_menu(const CommandEvent& rCEvt) override
     {
-        return m_aPopupMenuHdl.Call(rPos);
+        return m_aPopupMenuHdl.Call(rCEvt);
     }
     static gboolean signalPopupMenu(GtkWidget* pWidget, gpointer widget)
     {
@@ -7547,7 +7548,8 @@ private:
         //center it when we don't know where else to use
         Point aPos(gtk_widget_get_allocated_width(pWidget) / 2,
                    gtk_widget_get_allocated_height(pWidget) / 2);
-        return pThis->signal_popup_menu(aPos);
+        CommandEvent aCEvt(aPos, CommandEventId::ContextMenu, false);
+        return pThis->signal_popup_menu(aCEvt);
     }
 public:
     GtkInstanceDrawingArea(GtkDrawingArea* pDrawingArea, GtkInstanceBuilder* pBuilder, const a11yref& rA11y, bool bTakeOwnership)

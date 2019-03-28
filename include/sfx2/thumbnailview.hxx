@@ -434,7 +434,7 @@ protected:
 
 protected:
 
-    friend class ThumbnailViewAcc;
+    friend class SfxThumbnailViewAcc;
     friend class ThumbnailViewItemAcc;
 
     void CalculateItemPositions (bool bScrollBarUsed = false);

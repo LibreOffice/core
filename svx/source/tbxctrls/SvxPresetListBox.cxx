@@ -20,6 +20,7 @@
 #include <svx/SvxPresetListBox.hxx>
 #include <svx/xtable.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/image.hxx>
@@ -43,14 +44,14 @@ void SvxPresetListBox::Resize()
     SvtValueSet::Resize();
 }
 
-bool SvxPresetListBox::ContextMenu(const Point& rPos)
+bool SvxPresetListBox::ContextMenu(const CommandEvent& rEvent)
 {
     const sal_uInt16 nIndex = GetSelectedItemId();
     if(nIndex > 0)
     {
         std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDrawingArea(), "svx/ui/presetmenu.ui"));
         std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
-        OnMenuItemSelected(xMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(rPos, Size(1,1))));
+        OnMenuItemSelected(xMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(rEvent.GetMousePosPixel(), Size(1,1))));
         return true;
     }
     return false;
