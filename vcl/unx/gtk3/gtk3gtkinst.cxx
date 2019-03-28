@@ -4764,6 +4764,14 @@ public:
                                static_cast<int>(rRect.GetWidth()), static_cast<int>(rRect.GetHeight())};
             if (AllSettings::GetLayoutRTL())
                 aRect.x = gtk_widget_get_allocated_width(pWidget) - aRect.width - 1 - aRect.x;
+
+            // Send a keyboard event through gtk_main_do_event to toggle any active tooltip offs
+            // before trying to launch the menu
+            // https://gitlab.gnome.org/GNOME/gtk/issues/1785
+            GdkEvent *event = GtkSalFrame::makeFakeKeyPress(pWidget);
+            gtk_main_do_event(event);
+            gdk_event_free(event);
+
             gtk_menu_popup_at_rect(m_pMenu, gtk_widget_get_window(pWidget), &aRect, GDK_GRAVITY_NORTH_WEST, GDK_GRAVITY_NORTH_WEST, nullptr);
         }
         else
