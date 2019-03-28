@@ -259,8 +259,6 @@ class WW8TabDesc
     // (the merge groups are processed later at once)
     void UpdateTableMergeGroup(WW8_TCell const & rCell,
         WW8SelBoxInfo* pActGroup, SwTableBox* pActBox, sal_uInt16 nCol  );
-    void StartMiserableHackForUnsupportedDirection(short nWwCol);
-    void EndMiserableHackForUnsupportedDirection(short nWwCol);
 
     WW8TabDesc(WW8TabDesc const&) = delete;
     WW8TabDesc& operator=(WW8TabDesc const&) = delete;
