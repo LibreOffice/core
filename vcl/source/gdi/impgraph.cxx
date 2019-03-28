@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #include <sal/config.h>
 
 #include <comphelper/processfactory.hxx>
@@ -1624,7 +1622,6 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                     }
                 }
             }
-#if HAVE_FEATURE_PDFIUM
             else if (nMagic == nPdfMagic)
             {
                 // Stream in PDF data.
@@ -1648,7 +1645,6 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
 
                 rImpGraphic.meType = GraphicType::Bitmap;
             }
-#endif
             else
             {
                 rIStm.SetError(nOrigError);
