@@ -558,6 +558,7 @@ public:
     static sal_uInt16           GetKeyCode(guint nKeyVal);
     static guint                GetKeyValFor(GdkKeymap* pKeyMap, guint16 hardware_keycode, guint8 group);
     static sal_uInt16           GetKeyModCode(guint nState);
+    static GdkEvent*            makeFakeKeyPress(GtkWidget* pWidget);
 };
 
 #define OOO_TYPE_FIXED ooo_fixed_get_type()

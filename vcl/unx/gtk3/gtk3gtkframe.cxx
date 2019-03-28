@@ -4374,4 +4374,23 @@ void GtkSalFrame::nopaint_container_resize_children(GtkContainer *pContainer)
     m_bSalObjectSetPosSize = false;
 }
 
+GdkEvent* GtkSalFrame::makeFakeKeyPress(GtkWidget* pWidget)
+{
+    GdkEvent *event = gdk_event_new(GDK_KEY_PRESS);
+    event->key.window = GDK_WINDOW(g_object_ref(gtk_widget_get_window(pWidget)));
+
+    GdkSeat *seat = gdk_display_get_default_seat(gtk_widget_get_display(pWidget));
+    gdk_event_set_device(event, gdk_seat_get_keyboard(seat));
+    event->key.send_event = 1 /* TRUE */;
+    event->key.time = gtk_get_current_event_time();
+    event->key.state = 0;
+    event->key.keyval = 0;
+    event->key.length = 0;
+    event->key.string = nullptr;
+    event->key.hardware_keycode = 0;
+    event->key.group = 0;
+    event->key.is_modifier = false;
+    return event;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

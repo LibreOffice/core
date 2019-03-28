@@ -771,18 +771,8 @@ bool GtkSalMenu::TakeFocus()
     //activated via the keyboard. Doesn't do anything except cause the gtk
     //menubar "keyboard_mode" member to get set to true, so typically mnemonics
     //are shown which will serve as indication that the menubar has focus
-    //(given that we wnt to show it with no menus popped down)
-    GdkEvent *event = gdk_event_new(GDK_KEY_PRESS);
-    event->key.window = GDK_WINDOW(g_object_ref(gtk_widget_get_window(mpMenuBarWidget)));
-    event->key.send_event = 1 /* TRUE */;
-    event->key.time = gtk_get_current_event_time();
-    event->key.state = 0;
-    event->key.keyval = 0;
-    event->key.length = 0;
-    event->key.string = nullptr;
-    event->key.hardware_keycode = 0;
-    event->key.group = 0;
-    event->key.is_modifier = false;
+    //(given that we want to show it with no menus popped down)
+    GdkEvent *event = GtkSalFrame::makeFakeKeyPress(mpMenuBarWidget);
     gtk_widget_event(mpMenuBarWidget, event);
     gdk_event_free(event);
 
