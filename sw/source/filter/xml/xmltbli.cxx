@@ -1921,7 +1921,7 @@ SwTableBoxFormat* SwXMLTableContext::GetSharedBoxFormat(
     {
         // set the shared format
         pBoxFormat2 = aIter->second;
-        pBox->ChgFrameFormat( pBoxFormat2 );
+        pBox->ChgFrameFormat( pBoxFormat2, /*bNeedToReregister*/false );
         bNew = false;   // copied from an existing format
 
         // claim it, if we are not allowed to share

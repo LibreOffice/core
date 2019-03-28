@@ -433,7 +433,7 @@ public:
 
     // Creates its own FrameFormat if more boxes depend on it.
     SwFrameFormat* ClaimFrameFormat();
-    void ChgFrameFormat( SwTableBoxFormat *pNewFormat );
+    void ChgFrameFormat( SwTableBoxFormat *pNewFormat, bool bNeedToReregister = true );
 
     void RemoveFromTable();
     const SwStartNode *GetSttNd() const { return m_pStartNode; }
