@@ -129,6 +129,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf63561_clearTabs2, "tdf63561_clearTabs2.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), getProperty< uno::Sequence<style::TabStop> >(getParagraph(4), "ParaTabStops").getLength());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf124384, "tdf124384.docx")
+{
+    // There should be no crash during loading of the document
+    // so, let's check just how much pages we have
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf121456_tabsOffset, "tdf121456_tabsOffset.odt")
 {
     for (int i=2; i<8; i++)

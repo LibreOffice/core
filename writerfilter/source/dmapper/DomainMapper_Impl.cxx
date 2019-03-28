@@ -516,7 +516,7 @@ void DomainMapper_Impl::SetSdt(bool bSdt)
 {
     m_bSdt = bSdt;
 
-    if (m_bSdt)
+    if (m_bSdt && !m_aTextAppendStack.empty())
     {
         m_xStdEntryStart = GetTopTextAppend()->getEnd();
     }
