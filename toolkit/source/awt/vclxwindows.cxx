@@ -1872,14 +1872,14 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const css::uno::Any
             break;
             case BASEPROPERTY_READONLY:
             {
-                bool b = bool();
+                bool b = false;
                 if ( Value >>= b )
                      pListBox->SetReadOnly( b);
             }
             break;
             case BASEPROPERTY_MULTISELECTION:
             {
-                bool b = bool();
+                bool b = false;
                 if ( Value >>= b )
                      pListBox->EnableMultiSelection( b );
             }
@@ -1889,7 +1889,7 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const css::uno::Any
                 break;
             case BASEPROPERTY_LINECOUNT:
             {
-                sal_Int16 n = sal_Int16();
+                sal_Int16 n = 0;
                 if ( Value >>= n )
                      pListBox->SetDropDownLineCount( n );
             }
