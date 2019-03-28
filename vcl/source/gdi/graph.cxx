@@ -569,12 +569,6 @@ void Graphic::SetLink( const GfxLink& rGfxLink )
     mxImpGraphic->ImplSetLink( rGfxLink );
 }
 
-void Graphic::SetSharedLink(const std::shared_ptr<GfxLink>& pGfxLink)
-{
-    ImplTestRefCount();
-    mxImpGraphic->ImplSetSharedLink(pGfxLink);
-}
-
 GfxLink Graphic::GetLink() const
 {
     return mxImpGraphic->ImplGetLink();

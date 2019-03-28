@@ -160,8 +160,7 @@ private:
 
     bool                ImplIsSwapOut() const { return mbSwapOut;}
     bool                ImplIsDummyContext() const { return mbDummyContext; }
-    void                ImplSetLink( const GfxLink& );
-    void                ImplSetSharedLink(const std::shared_ptr<GfxLink>& pGfxLink);
+    void                ImplSetLink( const std::shared_ptr<GfxLink>& );
     GfxLink             ImplGetLink();
     bool                ImplIsLink() const;
 

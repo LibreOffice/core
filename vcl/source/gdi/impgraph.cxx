@@ -125,14 +125,6 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
     , mnPageNumber(rImpGraphic.mnPageNumber)
 {
-    if( rImpGraphic.mpGfxLink )
-    {
-        if (rImpGraphic.mpGfxLink->GetType() == GfxLinkType::NativePdf)
-            mpGfxLink = rImpGraphic.mpGfxLink;
-        else
-            mpGfxLink = std::make_shared<GfxLink>(*rImpGraphic.mpGfxLink);
-    }
-
     if( rImpGraphic.mpAnimation )
     {
         mpAnimation = o3tl::make_unique<Animation>( *rImpGraphic.mpAnimation );
@@ -245,18 +237,9 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         mbSwapOut = rImpGraphic.mbSwapOut;
         mpSwapFile = rImpGraphic.mpSwapFile;
 
-        if (rImpGraphic.mpGfxLink)
-        {
-            if (rImpGraphic.mpGfxLink->GetType() == GfxLinkType::NativePdf)
-                mpGfxLink = rImpGraphic.mpGfxLink;
-            else
-            {
-                mpGfxLink.reset();
+        mpGfxLink = rImpGraphic.mpGfxLink;
 
-                mpGfxLink = std::make_shared<GfxLink>(*rImpGraphic.mpGfxLink);
-            }
-        }
-
+        maVectorGraphicData = rImpGraphic.maVectorGraphicData;
         mpPdfData = rImpGraphic.mpPdfData;
     }
 
@@ -1384,15 +1367,7 @@ bool ImpGraphic::ImplSwapIn( SvStream* xIStm )
 
 void ImpGraphic::ImplSetLink(const GfxLink& rGfxLink)
 {
-    mpGfxLink = std::make_shared<GfxLink>( rGfxLink );
-
-    if( mpGfxLink->IsNative() )
-        mpGfxLink->SwapOut();
-}
-
-void ImpGraphic::ImplSetSharedLink(const std::shared_ptr<GfxLink>& pGfxLink)
-{
-    mpGfxLink = pGfxLink;
+    mpGfxLink = rGfxLink;
 
     if (mpGfxLink && mpGfxLink->IsNative())
         mpGfxLink->SwapOut();
