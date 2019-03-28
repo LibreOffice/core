@@ -215,8 +215,7 @@ static double lcl_Round2DecPlaces( double nVal )
     long tmp = static_cast<long>(nVal);
     if ( ( nVal - tmp ) >= 0.5 )
         ++tmp;
-    nVal = tmp;
-    nVal = nVal/100;
+    nVal = double(tmp)/100;
     return nVal;
 }
 

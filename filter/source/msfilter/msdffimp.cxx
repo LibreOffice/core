@@ -198,8 +198,7 @@ void Impl_OlePres::Write( SvStream & rStm )
         if( MapUnit::Map100thMM != nMU )
         {
             Size aPrefS( pMtf->GetPrefSize() );
-            Size aS( aPrefS );
-            aS = OutputDevice::LogicToLogic(aS, MapMode(nMU), MapMode(MapUnit::Map100thMM));
+            Size aS = OutputDevice::LogicToLogic(aPrefS, MapMode(nMU), MapMode(MapUnit::Map100thMM));
 
             pMtf->Scale( Fraction( aS.Width(), aPrefS.Width() ),
                          Fraction( aS.Height(), aPrefS.Height() ) );

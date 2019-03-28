@@ -3026,9 +3026,7 @@ Point SwAccessibleMap::LogicToPixel( const Point& rPoint ) const
     MapMode aSrc( MapUnit::Map100thMM );
     MapMode aDest( MapUnit::MapTwip );
 
-    Point aPoint = rPoint;
-
-    aPoint = OutputDevice::LogicToLogic( aPoint, aSrc, aDest );
+    Point aPoint = OutputDevice::LogicToLogic( rPoint, aSrc, aDest );
     vcl::Window *pWin = GetShell()->GetWin();
     if( pWin )
     {

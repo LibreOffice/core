@@ -4568,8 +4568,7 @@ namespace osl_Directory
             if (_nMask == osl_VolumeInfo_Mask_FileSystemName)
             {
                 // get file system name
-                OUString aFileSysName(aNullURL);
-                aFileSysName = _aVolumeInfo.getFileSystemName();
+                OUString aFileSysName = _aVolumeInfo.getFileSystemName();
 
                 bool bRes2 = compareFileName(aFileSysName, aNullURL);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("test for getVolumeInfo function: getVolumeInfo of root directory.",

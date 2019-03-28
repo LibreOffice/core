@@ -122,8 +122,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
 
     if (pEntry)
     {
-        OUString aChkWord( rTerm );
-        aChkWord = aChkWord.replace( SVT_HARD_SPACE, ' ' );
+        OUString aChkWord = rTerm.replace( SVT_HARD_SPACE, ' ' );
         RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
             RemoveControlChars( aChkWord );

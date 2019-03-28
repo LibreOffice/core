@@ -743,8 +743,7 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
 
 OUString Edit::ImplGetValidString( const OUString& rString )
 {
-    OUString aValidString( rString );
-    aValidString = aValidString.replaceAll("\n", "").replaceAll("\r", "");
+    OUString aValidString = rString.replaceAll("\n", "").replaceAll("\r", "");
     aValidString = aValidString.replace('\t', ' ');
     return aValidString;
 }

@@ -409,8 +409,7 @@ namespace dbmm
 
                 for (auto const& elem : rDoc.aMovedLibraries)
                 {
-                    OUString sMovedLib( sMovedLibTemplate );
-                    sMovedLib = sMovedLib.replaceAll( "$type$", getScriptTypeDisplayName( elem.eType ) );
+                    OUString sMovedLib = sMovedLibTemplate.replaceAll( "$type$", getScriptTypeDisplayName( elem.eType ) );
                     sMovedLib = sMovedLib.replaceAll( "$old$", elem.sOldName );
                     sMovedLib = sMovedLib.replaceAll( "$new$", elem.sNewName );
 
