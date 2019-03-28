@@ -217,10 +217,10 @@ static int handleFile( const char* pInFile, const char* pOutFile, const char* pP
 
     PDFReader aParser;
     int nRet = 0;
-    PDFEntry* pEntry = pdfparse::PDFReader::read( pInFile );
+    std::unique_ptr<PDFEntry> pEntry = pdfparse::PDFReader::read( pInFile );
     if( pEntry )
     {
-        PDFFile* pPDFFile = dynamic_cast<PDFFile*>(pEntry);
+        PDFFile* pPDFFile = dynamic_cast<PDFFile*>(pEntry.get());
         if( pPDFFile )
         {
             fprintf( stdout, "have a %s PDF file\n", pPDFFile->isEncrypted() ? "encrypted" : "unencrypted" );
@@ -231,7 +231,6 @@ static int handleFile( const char* pInFile, const char* pOutFile, const char* pP
         }
         else
             nRet = 20;
-        delete pEntry;
     }
     return nRet;
 }
