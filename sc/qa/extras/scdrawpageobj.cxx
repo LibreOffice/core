@@ -11,6 +11,7 @@
 #include <test/helper/shape.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xindexaccess.hxx>
+#include <test/drawing/xshapegrouper.hxx>
 #include <test/lang/xserviceinfo.hxx>
 #include <cppu/unotype.hxx>
 
@@ -32,7 +33,8 @@ namespace sc_apitest
 class ScDrawPageObj : public CalcUnoApiTest,
                       public apitest::XElementAccess,
                       public apitest::XIndexAccess,
-                      public apitest::XServiceInfo
+                      public apitest::XServiceInfo,
+                      public apitest::XShapeGrouper
 {
 public:
     ScDrawPageObj();
@@ -55,6 +57,10 @@ public:
     CPPUNIT_TEST(testGetImplementationName);
     CPPUNIT_TEST(testGetSupportedServiceNames);
     CPPUNIT_TEST(testSupportsService);
+
+    // XShapeGrouper
+    CPPUNIT_TEST(testGroup);
+    CPPUNIT_TEST(testUngroup);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -90,6 +96,8 @@ uno::Reference<uno::XInterface> ScDrawPageObj::init()
         uno::UNO_QUERY_THROW);
     xShapes->add(xRectangle1);
 
+    // needed for XShapeGrouper tests
+    setDrawPage(xDrawPage);
     return xDrawPage;
 }
 

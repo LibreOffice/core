@@ -1,4 +1,2 @@
 "ScDrawPageObj";"com::sun::star::drawing::XShapes";"add()"
 "ScDrawPageObj";"com::sun::star::drawing::XShapes";"remove()"
-"ScDrawPageObj";"com::sun::star::drawing::XShapeGrouper";"group()"
-"ScDrawPageObj";"com::sun::star::drawing::XShapeGrouper";"ungroup()"
