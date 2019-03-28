@@ -1530,8 +1530,7 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
                     bool bFound = aURL.endsWith("/");
                     if ( !bFound )
                     {
-                        OUString aUpperURL( aURL );
-                        aUpperURL = aUpperURL.toAsciiUpperCase();
+                        OUString aUpperURL = aURL.toAsciiUpperCase();
 
                         bFound = ::std::any_of(pImpl->m_aFilters.begin(),
                                                pImpl->m_aFilters.end(),
@@ -2100,8 +2099,7 @@ void URLBox::UpdatePicklistForSmartProtocol_Impl()
                     bool bFound = aURL.endsWith("/");
                     if ( !bFound )
                     {
-                        OUString aUpperURL( aURL );
-                        aUpperURL = aUpperURL.toAsciiUpperCase();
+                        OUString aUpperURL = aURL.toAsciiUpperCase();
 
                         bFound = ::std::any_of(pImpl->m_aFilters.begin(),
                                                pImpl->m_aFilters.end(),

@@ -1015,9 +1015,7 @@ void FmUndoPropertyAction::Redo()
 
 OUString FmUndoPropertyAction::GetComment() const
 {
-    OUString aStr(static_STR_UNDO_PROPERTY);
-
-    aStr = aStr.replaceFirst( "#", aPropertyName );
+    OUString aStr = static_STR_UNDO_PROPERTY.replaceFirst( "#", aPropertyName );
     return aStr;
 }
 
