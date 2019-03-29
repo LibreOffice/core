@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "df87a7cf_147dbd1b",
+        "filename": "sc/source/core/data/dociter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2573,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-03-29T20:17:34Z",
+      "side": 1,
+      "message": "Why is this necessary?\n\nThis seems to be an independent change, if so it should go into a separate commit.",
+      "revId": "7629fde050c591502d779cc02b9f39d8b1d3f1b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87a7cf_54834505",
         "filename": "sc/source/ui/docshell/docfunc.cxx",
         "patchSetId": 5
