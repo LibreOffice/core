@@ -26,7 +26,6 @@
 
 using namespace css;
 using namespace css::uno;
-using namespace com::sun::star;
 
 namespace sc_apitest
 {
