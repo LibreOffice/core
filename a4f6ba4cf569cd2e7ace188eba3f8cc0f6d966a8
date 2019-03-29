@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_f9eff2ad",
+        "filename": "sw/uiconfig/sglobal/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-03-29T09:23:04Z",
+      "side": 1,
+      "message": "Don\u0027t see a reason to move this down. The checkbox at last item in a group has a bit cleaner layout.",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 52
+      },
+      "revId": "a4f6ba4cf569cd2e7ace188eba3f8cc0f6d966a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_5934de4a",
+        "filename": "sw/uiconfig/sglobal/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-03-29T09:23:04Z",
+      "side": 1,
+      "message": "Really separate one item? In other sections we place the general properties at the end (wouldn\u0027t do it here).",
+      "range": {
+        "startLine": 484,
+        "startChar": 0,
+        "endLine": 484,
+        "endChar": 31
+      },
+      "revId": "a4f6ba4cf569cd2e7ace188eba3f8cc0f6d966a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_193e5629",
+        "filename": "sw/uiconfig/sglobal/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-03-29T09:23:04Z",
+      "side": 1,
+      "message": "This might also go under uno:AutoFormat one section above.",
+      "range": {
+        "startLine": 642,
+        "startChar": 0,
+        "endLine": 642,
+        "endChar": 60
+      },
+      "revId": "a4f6ba4cf569cd2e7ace188eba3f8cc0f6d966a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_590dbe8e",
+        "filename": "sw/uiconfig/sglobal/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-03-29T09:23:04Z",
+      "side": 1,
+      "message": "At least macros and extensions are somehow related. XML filter settings rather options, but not sure- never used it.",
+      "range": {
+        "startLine": 765,
+        "startChar": 0,
+        "endLine": 765,
+        "endChar": 27
+      },
+      "revId": "a4f6ba4cf569cd2e7ace188eba3f8cc0f6d966a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

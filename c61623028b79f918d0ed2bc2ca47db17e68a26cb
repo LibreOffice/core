@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_992a66e5",
+        "filename": "sw/uiconfig/sglobal/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-03-29T09:23:04Z",
+      "side": 0,
+      "message": "Don\u0027t find this command in the patch.",
+      "range": {
+        "startLine": 176,
+        "startChar": 0,
+        "endLine": 176,
+        "endChar": 49
+      },
+      "revId": "c61623028b79f918d0ed2bc2ca47db17e68a26cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_f944d2b9",
+        "filename": "sw/uiconfig/sglobal/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-03-29T09:23:04Z",
+      "side": 0,
+      "message": "One item per section is not nice but mail merge is a different feature.",
+      "range": {
+        "startLine": 736,
+        "startChar": 0,
+        "endLine": 736,
+        "endChar": 27
+      },
+      "revId": "c61623028b79f918d0ed2bc2ca47db17e68a26cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
