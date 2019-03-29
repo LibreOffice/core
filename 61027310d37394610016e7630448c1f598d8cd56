@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_34700173",
+        "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1230,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-03-29T18:07:30Z",
+      "side": 1,
+      "message": "Rather use\n\n DBG_UNHANDLED_EXCEPTION(\"chart2\", \"Exception in createErrorRectangle(). \" \u003c\u003c e );\n\n(or whatever wording).",
+      "range": {
+        "startLine": 1230,
+        "startChar": 0,
+        "endLine": 1230,
+        "endChar": 55
+      },
+      "revId": "61027310d37394610016e7630448c1f598d8cd56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_745e89e7",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Chart.xcs",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-03-29T18:07:30Z",
+      "side": 1,
+      "message": "Please add a stop/period \u0027.\u0027 for a full sentence.",
+      "revId": "61027310d37394610016e7630448c1f598d8cd56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_545905fc",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Chart.xcs",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-03-29T18:07:30Z",
+      "side": 1,
+      "message": "Should the default value really be true? That would make the setting appear as changed in the Advanced Settings browser if false (which actually is the default behaviour if absent), or wouldn\u0027t it? (I might be mistaken, I didn\u0027t try)",
+      "range": {
+        "startLine": 52,
+        "startChar": 15,
+        "endLine": 52,
+        "endChar": 19
+      },
+      "revId": "61027310d37394610016e7630448c1f598d8cd56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
