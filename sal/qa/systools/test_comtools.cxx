@@ -91,144 +91,119 @@ static void comObjectSource2(LPVOID* ppv)
 namespace test_comtools
 {
 
-    class test_COMReference : public CppUnit::TestFixture
+class test_COMReference : public CppUnit::TestFixture {};
+
+/// test of COMReference<IUnknown> r;
+CPPUNIT_TEST_FIXTURE(test_COMReference, default_ctor)
+{
+    sal::systools::COMReference<IUnknown> r;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("COMReference should be empty", static_cast<IUnknown *>(nullptr), r.get());
+}
+
+CPPUNIT_TEST_FIXTURE(test_COMReference, test_ctor_manual_AddRef)
+{
+    COMObject* p = new COMObject;
+    p->AddRef();
+    sal::systools::COMReference<IUnknown> r(p, false);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r.get())->GetRefCount());
+}
+
+CPPUNIT_TEST_FIXTURE(test_COMReference, test_copy_ctor)
+{
+    sal::systools::COMReference<IUnknown> r(comObjectSource());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r.get())->GetRefCount());
+}
+
+CPPUNIT_TEST_FIXTURE(test_COMReference, test_copy_assignment)
+{
+    sal::systools::COMReference<IUnknown> r;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("COMReference should be empty", static_cast<IUnknown *>(nullptr), r.get());
+
+    r = comObjectSource();
+    CPPUNIT_ASSERT_MESSAGE("COMReference should be empty", r.get() != nullptr);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r.get())->GetRefCount());
+}
+
+CPPUNIT_TEST_FIXTURE(test_COMReference, test_ref_to_ref_assignment)
+{
+    sal::systools::COMReference<IUnknown> r1 = comObjectSource();
+    sal::systools::COMReference<IUnknown> r2 = r1;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 2 is expected", ULONG(2), reinterpret_cast<COMObject*>(r2.get())->GetRefCount());
+}
+
+CPPUNIT_TEST_FIXTURE(test_COMReference, test_pointer_to_ref_assignment)
+{
+    sal::systools::COMReference<IUnknown> r;
+    r = new COMObject;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r.get())->GetRefCount());
+}
+
+CPPUNIT_TEST_FIXTURE(test_COMReference, test_pointer_to_ref_assignment2)
+{
+    sal::systools::COMReference<IUnknown> r = comObjectSource();
+    r = new COMObject;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r.get())->GetRefCount());
+}
+
+CPPUNIT_TEST_FIXTURE(test_COMReference, test_source_sink)
+{
+    CPPUNIT_ASSERT_MESSAGE("Wrong reference count, 0 is expected", comObjectSink(comObjectSource(), 0));
+}
+
+CPPUNIT_TEST_FIXTURE(test_COMReference, test_address_operator)
+{
+    sal::systools::COMReference<IUnknown> r;
+    comObjectSource2(reinterpret_cast<LPVOID*>(&r));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count, 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r.get())->GetRefCount());
+}
+
+CPPUNIT_TEST_FIXTURE(test_COMReference, test_address_operator2)
+{
+    sal::systools::COMReference<IUnknown> r1 = comObjectSource();
+    sal::systools::COMReference<IUnknown> r2 = r1;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 2 is expected", ULONG(2), reinterpret_cast<COMObject*>(r2.get())->GetRefCount());
+    comObjectSource2(reinterpret_cast<LPVOID*>(&r1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r1.get())->GetRefCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r2.get())->GetRefCount());
+}
+
+CPPUNIT_TEST_FIXTURE(test_COMReference, test_clear)
+{
+    sal::systools::COMReference<IUnknown> r = comObjectSource();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r.get())->GetRefCount());
+    r.clear();
+    CPPUNIT_ASSERT_MESSAGE("Expect reference to be empty", !r.is());
+}
+
+CPPUNIT_TEST_FIXTURE(test_COMReference, test_query_interface)
+{
+    try
     {
+        sal::systools::COMReference<IUnknown> r1 = comObjectSource();
+        sal::systools::COMReference<IUnknown> r2 = r1.QueryInterface<IUnknown>(IID_IUnknown);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count, 2 is expected", ULONG(2), reinterpret_cast<COMObject*>(r2.get())->GetRefCount());
+    }
+    catch(const sal::systools::ComError&)
+    {
+        CPPUNIT_ASSERT_MESSAGE("Exception should not have been thrown", false);
+    }
+}
 
-    public:
-        /// test of COMReference<IUnknown> r;
-        void default_ctor()
-        {
-            sal::systools::COMReference<IUnknown> r;
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("COMReference should be empty", static_cast<IUnknown *>(nullptr), r.get());
-        }
+CPPUNIT_TEST_FIXTURE(test_COMReference, test_query_interface_throw)
+{
+    try
+    {
+        sal::systools::COMReference<IUnknown> r1 = comObjectSource();
+        sal::systools::COMReference<IPersistFile> r2 = r1.QueryInterface<IPersistFile>(IID_IPersistFile);
+    }
+    catch(const sal::systools::ComError&)
+    {
+        return;
+    }
+    CPPUNIT_ASSERT_MESSAGE("Exception should have been thrown", false);
+}
 
-        void test_ctor_manual_AddRef()
-        {
-            COMObject* p = new COMObject;
-            p->AddRef();
-            sal::systools::COMReference<IUnknown> r(p, false);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r.get())->GetRefCount());
-        }
-
-        void test_copy_ctor()
-        {
-            sal::systools::COMReference<IUnknown> r(comObjectSource());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r.get())->GetRefCount());
-        }
-
-        void test_copy_assignment()
-        {
-            sal::systools::COMReference<IUnknown> r;
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("COMReference should be empty", static_cast<IUnknown *>(nullptr), r.get());
-
-            r = comObjectSource();
-            CPPUNIT_ASSERT_MESSAGE("COMReference should be empty", r.get() != nullptr);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r.get())->GetRefCount());
-        }
-
-        void test_ref_to_ref_assignment()
-        {
-            sal::systools::COMReference<IUnknown> r1 = comObjectSource();
-            sal::systools::COMReference<IUnknown> r2 = r1;
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 2 is expected", ULONG(2), reinterpret_cast<COMObject*>(r2.get())->GetRefCount());
-        }
-
-        void test_pointer_to_ref_assignment()
-        {
-            sal::systools::COMReference<IUnknown> r;
-            r = new COMObject;
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r.get())->GetRefCount());
-        }
-
-        void test_pointer_to_ref_assignment2()
-        {
-            sal::systools::COMReference<IUnknown> r = comObjectSource();
-            r = new COMObject;
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r.get())->GetRefCount());
-        }
-
-        void test_source_sink()
-        {
-            CPPUNIT_ASSERT_MESSAGE("Wrong reference count, 0 is expected", comObjectSink(comObjectSource(), 0));
-        }
-
-        void test_address_operator()
-        {
-            sal::systools::COMReference<IUnknown> r;
-            comObjectSource2(reinterpret_cast<LPVOID*>(&r));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count, 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r.get())->GetRefCount());
-        }
-
-        void test_address_operator2()
-        {
-            sal::systools::COMReference<IUnknown> r1 = comObjectSource();
-            sal::systools::COMReference<IUnknown> r2 = r1;
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 2 is expected", ULONG(2), reinterpret_cast<COMObject*>(r2.get())->GetRefCount());
-            comObjectSource2(reinterpret_cast<LPVOID*>(&r1));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r1.get())->GetRefCount());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r2.get())->GetRefCount());
-        }
-
-        void test_clear()
-        {
-            sal::systools::COMReference<IUnknown> r = comObjectSource();
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r.get())->GetRefCount());
-            r.clear();
-            CPPUNIT_ASSERT_MESSAGE("Expect reference to be empty", !r.is());
-        }
-
-        void test_query_interface()
-        {
-            try
-            {
-                sal::systools::COMReference<IUnknown> r1 = comObjectSource();
-                sal::systools::COMReference<IUnknown> r2 = r1.QueryInterface<IUnknown>(IID_IUnknown);
-                CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count, 2 is expected", ULONG(2), reinterpret_cast<COMObject*>(r2.get())->GetRefCount());
-            }
-            catch(const sal::systools::ComError&)
-            {
-                CPPUNIT_ASSERT_MESSAGE("Exception should not have been thrown", false);
-            }
-        }
-
-        void test_query_interface_throw()
-        {
-            try
-            {
-                sal::systools::COMReference<IUnknown> r1 = comObjectSource();
-                sal::systools::COMReference<IPersistFile> r2 = r1.QueryInterface<IPersistFile>(IID_IPersistFile);
-            }
-            catch(const sal::systools::ComError&)
-            {
-                return;
-            }
-            CPPUNIT_ASSERT_MESSAGE("Exception should have been thrown", false);
-        }
-
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
-
-        CPPUNIT_TEST_SUITE(test_COMReference);
-        CPPUNIT_TEST(default_ctor);
-        CPPUNIT_TEST(test_ctor_manual_AddRef);
-        CPPUNIT_TEST(test_copy_ctor);
-        CPPUNIT_TEST(test_copy_assignment);
-        CPPUNIT_TEST(test_ref_to_ref_assignment);
-        CPPUNIT_TEST(test_pointer_to_ref_assignment);
-        CPPUNIT_TEST(test_pointer_to_ref_assignment2);
-        CPPUNIT_TEST(test_source_sink);
-        CPPUNIT_TEST(test_address_operator);
-        CPPUNIT_TEST(test_address_operator2);
-        CPPUNIT_TEST(test_clear);
-        CPPUNIT_TEST(test_query_interface);
-        CPPUNIT_TEST(test_query_interface_throw);
-        CPPUNIT_TEST_SUITE_END();
-    };
-
-CPPUNIT_TEST_SUITE_REGISTRATION(test_comtools::test_COMReference);
-
-} // namespace rtl_OUString
+} // namespace test_comtools
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
