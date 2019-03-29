@@ -937,15 +937,19 @@ Point SmShowSymbolSet::OffsetPoint(const Point &rPoint) const
     return Point(rPoint.X() + nXOffset, rPoint.Y() + nYOffset);
 }
 
-void SmShowSymbolSet::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SmShowSymbolSet::Resize()
 {
+    CustomWidgetController::Resize();
     Size aWinSize(GetOutputSizePixel());
     if (aWinSize != m_aOldSize)
     {
-        calccols(rRenderContext);
+        calccols(GetDrawingArea()->get_ref_device());
         m_aOldSize = aWinSize;
     }
+}
 
+void SmShowSymbolSet::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+{
     Color aBackgroundColor;
     Color aTextColor;
     lclGetSettingColors(aBackgroundColor, aTextColor);
@@ -1083,6 +1087,7 @@ void SmShowSymbolSet::calccols(vcl::RenderContext& rRenderContext)
 void SmShowSymbolSet::SetSymbolSet(const SymbolPtrVec_t& rSymbolSet)
 {
     aSymbolSet = rSymbolSet;
+    SetScrollBarRange();
     Invalidate();
 }
 
