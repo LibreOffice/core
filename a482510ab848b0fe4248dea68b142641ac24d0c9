@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_3491e153",
+        "filename": "sc/source/filter/excel/xeextlst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-03-29T19:44:22Z",
+      "side": 1,
+      "message": "Creating a number formatter and keyword table here for each and every entry is way too expensive. Instead, there should be one instance held and reused. Similar to XclExpDxfs::XclExpDxfs(), or XclExpNumFmtBuffer, maybe that could even be shared?",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 60
+      },
+      "revId": "a482510ab848b0fe4248dea68b142641ac24d0c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
