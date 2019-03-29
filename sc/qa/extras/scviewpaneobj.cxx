@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <test/sheet/xcellrangereferrer.hxx>
 #include <test/sheet/xviewpane.hxx>
 #include <test/view/xcontrolaccess.hxx>
@@ -38,6 +39,7 @@ class ScViewPaneObj : public CalcUnoApiTest,
                       public apitest::XCellRangeReferrer,
                       public apitest::XControlAccess,
                       public apitest::XFormLayerAccess,
+                      public apitest::XServiceInfo,
                       public apitest::XViewPane
 {
 public:
@@ -61,6 +63,11 @@ public:
     CPPUNIT_TEST(testIsFormDesignMode);
     CPPUNIT_TEST(testSetFormDesignMode);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     // XViewPane
     CPPUNIT_TEST(testFirstVisibleColumn);
     CPPUNIT_TEST(testFirstVisibleRow);
@@ -74,6 +81,7 @@ private:
 
 ScViewPaneObj::ScViewPaneObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XServiceInfo("ScViewPaneObj", "com.sun.star.sheet.SpreadsheetViewPane")
 {
 }
 
