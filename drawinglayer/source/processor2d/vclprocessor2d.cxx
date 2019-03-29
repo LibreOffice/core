@@ -726,29 +726,32 @@ namespace drawinglayer
                         // back to old OutDev
                         mpOutputDevice = pLastOutputDevice;
 
-                        // draw mask
-                        if(getOptionsDrawinglayer().IsAntiAliasing())
+                        // if the mask fills the whole area we can skip
+                        // creating a transparent vd and filling it.
+                        if (!basegfx::utils::isRectangle(aMask))
                         {
-                            // with AA, use 8bit AlphaMask to get nice borders
-                            VirtualDevice& rTransparence = aBufferDevice.getTransparence();
-                            rTransparence.SetLineColor();
-                            rTransparence.SetFillColor(COL_BLACK);
-                            rTransparence.DrawPolyPolygon(aMask);
-
-                            // dump buffer to outdev
-                            aBufferDevice.paint();
+                            // draw mask
+                            if(getOptionsDrawinglayer().IsAntiAliasing())
+                            {
+                                // with AA, use 8bit AlphaMask to get nice borders
+                                VirtualDevice& rTransparence = aBufferDevice.getTransparence();
+                                rTransparence.SetLineColor();
+                                rTransparence.SetFillColor(COL_BLACK);
+                                rTransparence.DrawPolyPolygon(aMask);
+                            }
+                            else
+                            {
+                                // No AA, use 1bit mask
+                                VirtualDevice& rMask = aBufferDevice.getMask();
+                                rMask.SetLineColor();
+                                rMask.SetFillColor(COL_BLACK);
+                                rMask.DrawPolyPolygon(aMask);
+                            }
                         }
-                        else
-                        {
-                            // No AA, use 1bit mask
-                            VirtualDevice& rMask = aBufferDevice.getMask();
-                            rMask.SetLineColor();
-                            rMask.SetFillColor(COL_BLACK);
-                            rMask.DrawPolyPolygon(aMask);
 
-                            // dump buffer to outdev
-                            aBufferDevice.paint();
-                        }
+                        // dump buffer to outdev
+                        aBufferDevice.paint();
+
                     }
                 }
             }
