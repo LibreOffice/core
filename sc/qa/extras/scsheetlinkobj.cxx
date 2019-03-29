@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xnamed.hxx>
 #include <test/sheet/sheetlink.hxx>
 #include <test/util/xrefreshable.hxx>
 #include <sfx2/app.hxx>
@@ -31,6 +32,7 @@ namespace sc_apitest
 {
 class ScSheetLinkObj : public CalcUnoApiTest,
                        public apitest::SheetLink,
+                       public apitest::XNamed,
                        public apitest::XRefreshable
 {
 public:
@@ -46,6 +48,10 @@ public:
     // SheetLink
     CPPUNIT_TEST(testSheetLinkProperties);
 
+    // XNamed
+    CPPUNIT_TEST(testGetName);
+    CPPUNIT_TEST(testSetNameByScSheetLinkObj);
+
     // XRefreshable
     CPPUNIT_TEST(testRefreshListener);
 
@@ -57,6 +63,7 @@ private:
 
 ScSheetLinkObj::ScSheetLinkObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XNamed(m_directories.getURLFromSrc("/sc/qa/extras/testdocuments/ScSheetLinkObj.ods"))
 {
 }
 

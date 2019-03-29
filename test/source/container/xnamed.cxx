@@ -8,6 +8,7 @@
  */
 
 #include <test/container/xnamed.hxx>
+#include <rtl/ustring.hxx>
 
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -31,6 +32,19 @@ void XNamed::testSetName()
 {
     uno::Reference< container::XNamed > xNamed(init(), UNO_QUERY_THROW);
     OUString aTestName("NewName");
+
+    xNamed->setName(aTestName);
+    CPPUNIT_ASSERT_EQUAL(aTestName, xNamed->getName());
+
+    // restore old name
+    xNamed->setName(m_aTestName);
+    CPPUNIT_ASSERT_EQUAL(m_aTestName, xNamed->getName());
+}
+
+void XNamed::testSetNameByScSheetLinkObj()
+{
+    uno::Reference<container::XNamed> xNamed(init(), uno::UNO_QUERY_THROW);
+    OUString aTestName(m_aTestName.replaceAll("ScSheetLinkObj", "NewScSheetLinkObj"));
 
     xNamed->setName(aTestName);
     CPPUNIT_ASSERT_EQUAL(aTestName, xNamed->getName());
