@@ -431,6 +431,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Bibliography Entry...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:UpdateCharts" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -447,10 +450,16 @@
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">Edit Hyperlink...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:RemoveHyperlink" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Remove Hyperlink</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:CopyHyperlinkLocation" oor:op="replace">
@@ -784,6 +793,9 @@
       <node oor:name=".uno:TextAttributes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Text Attributes...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:SetAnchorToChar" oor:op="replace">
@@ -1402,10 +1414,16 @@
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">Edit F~ields...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:LinkDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Lin~ks to External Files...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ConvertTableText" oor:op="replace">
@@ -1596,6 +1614,9 @@
       <node oor:name=".uno:IndexEntryDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Index Entry...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:GoRight" oor:op="replace">
@@ -2018,6 +2039,9 @@
       <node oor:name=".uno:EditFootnote" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Footnote or Endnote...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:Escape" oor:op="replace">
@@ -2510,6 +2534,9 @@
       <node oor:name=".uno:SelectTextMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Select Text</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:Ruler" oor:op="replace">
