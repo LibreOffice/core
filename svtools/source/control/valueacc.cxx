@@ -1600,7 +1600,15 @@ sal_Int16 SAL_CALL SvtValueSetAcc::getAccessibleRole()
 OUString SAL_CALL SvtValueSetAcc::getAccessibleDescription()
 {
     ThrowIfDisposed();
-    return OUString( "ValueSet" );
+    const SolarMutexGuard aSolarGuard;
+    OUString              aRet;
+
+    if (mpParent)
+    {
+        aRet = mpParent->GetAccessibleDescription();
+    }
+
+    return aRet;
 }
 
 
