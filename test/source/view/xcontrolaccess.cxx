@@ -8,7 +8,7 @@
  */
 
 #include <test/view/xcontrolaccess.hxx>
-#include <helper/form.hxx>
+#include <test/helper/form.hxx>
 
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
