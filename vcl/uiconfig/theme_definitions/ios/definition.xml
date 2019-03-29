@@ -68,18 +68,18 @@
     <pushbutton>
         <part value="Entire">
             <state enabled="true">
-                <external source="pushbutton-default.svgx" />
+                <external source="pushbutton-default.svg" />
             </state>
             <state enabled="true" rollover="true">
-                <external source="pushbutton-rollover.svgx" />
+                <external source="pushbutton-rollover.svg" />
             </state>
             <state enabled="false">
-                <external source="pushbutton-disabled.svgx" />
+                <external source="pushbutton-disabled.svg" />
             </state>
         </part>
         <part value="Focus">
             <state>
-                <external source="common-rect-focus.svgx" />
+                <external source="common-rect-focus.svg" />
             </state>
         </part>
     </pushbutton>
@@ -87,27 +87,27 @@
     <radiobutton>
         <part value="Entire" width="32" height="32">
            <state enabled="true" pressed="false" button-value="true">
-                <image source="tick-on.svgx" />
+                <image source="tick-on.svg" />
             </state>
             <state enabled="true" pressed="true" button-value="true">
-                <image source="tick-on-pressed.svgx" />
+                <image source="tick-on-pressed.svg" />
             </state>
             <state enabled="false" button-value="true">
-                <image source="tick-on-disabled.svgx" />
+                <image source="tick-on-disabled.svg" />
             </state>
             <state enabled="true" pressed="false" button-value="false">
-                <image source="tick-off.svgx" />
+                <image source="tick-off.svg" />
             </state>
             <state enabled="true" pressed="true" button-value="false">
-                <image source="tick-off-pressed.svgx" />
+                <image source="tick-off-pressed.svg" />
             </state>
             <state enabled="false" button-value="false">
-                <image source="tick-on-disabled.svgx" />
+                <image source="tick-on-disabled.svg" />
             </state>
         </part>
         <part value="Focus">
             <state>
-                <external source="common-rect-focus-slim.svgx" />
+                <external source="common-rect-focus-slim.svg" />
             </state>
         </part>
     </radiobutton>
@@ -115,27 +115,27 @@
     <checkbox>
         <part value="Entire" width="44" height="26">
            <state enabled="true" pressed="false" button-value="true">
-                <image source="switch-on.svgx" />
+                <image source="switch-on.svg" />
             </state>
             <state enabled="true" pressed="true" button-value="true">
-                <image source="switch-on-pressed.svgx" />
+                <image source="switch-on-pressed.svg" />
             </state>
             <state enabled="false" button-value="true">
-                <image source="switch-on-disabled.svgx" />
+                <image source="switch-on-disabled.svg" />
             </state>
             <state enabled="true" pressed="false" button-value="false">
-                <image source="switch-off.svgx" />
+                <image source="switch-off.svg" />
             </state>
             <state enabled="true" pressed="true" button-value="false">
-                <image source="switch-off-pressed.svgx" />
+                <image source="switch-off-pressed.svg" />
             </state>
             <state enabled="false" button-value="false">
-                <image source="switch-on-disabled.svgx" />
+                <image source="switch-on-disabled.svg" />
             </state>
         </part>
         <part value="Focus">
             <state>
-                <external source="common-rect-focus-slim.svgx" />
+                <external source="common-rect-focus-slim.svg" />
             </state>
         </part>
     </checkbox>
@@ -143,10 +143,10 @@
     <combobox>
         <part value="Entire">
             <state enabled="true">
-                <external source="combobox.svgx" />
+                <external source="combobox.svg" />
             </state>
             <state enabled="false">
-                <external source="combobox-disabled.svgx" />
+                <external source="combobox-disabled.svg" />
             </state>
         </part>
         <part value="SubEdit">
@@ -155,15 +155,15 @@
         </part>
         <part value="ButtonDown" width="35" height="36">
             <state enabled="true">
-                <image source="combobox-button.svgx" />
+                <image source="combobox-button.svg" />
             </state>
             <state enabled="false">
-                <image source="combobox-button-disabled.svgx" />
+                <image source="combobox-button-disabled.svg" />
             </state>
         </part>
         <part value="Focus">
             <state>
-                <external source="common-rect-focus.svgx" />
+                <external source="common-rect-focus.svg" />
             </state>
         </part>
     </combobox>
@@ -171,13 +171,13 @@
     <editbox>
         <part value="Entire" height="32">
             <state enabled="true">
-                <external source="common-rect.svgx" />
+                <external source="common-rect.svg" />
             </state>
             <state enabled="false">
-                <external source="common-rect-disabled.svgx" />
+                <external source="common-rect-disabled.svg" />
             </state>
             <state focused="true">
-                <external source="common-rect-focus.svgx" />
+                <external source="common-rect-focus.svg" />
             </state>
         </part>
     </editbox>
@@ -185,10 +185,10 @@
     <listbox>
         <part value="Entire">
             <state enabled="true">
-                <external source="combobox.svgx" />
+                <external source="combobox.svg" />
             </state>
             <state enabled="false">
-                <external source="combobox-disabled.svgx" />
+                <external source="combobox-disabled.svg" />
             </state>
         </part>
         <part value="SubEdit">
@@ -197,15 +197,15 @@
         </part>
         <part value="ButtonDown" width="35" height="36">
             <state enabled="true">
-                <image source="combobox-button.svgx" />
+                <image source="combobox-button.svg" />
             </state>
             <state enabled="false">
-                <image source="combobox-button-disabled.svgx" />
+                <image source="combobox-button-disabled.svg" />
             </state>
         </part>
         <part value="Focus">
             <state>
-                <external source="common-rect-focus.svgx" />
+                <external source="common-rect-focus.svg" />
             </state>
         </part>
     </listbox>
@@ -219,35 +219,35 @@
         </part>
         <part value="ButtonDown" width="44" height="26">
             <state enabled="true">
-                <external source="spinbox-left.svgx" />
+                <external source="spinbox-left.svg" />
             </state>
             <state enabled="true" pressed="true">
-                <external source="spinbox-left-pressed.svgx" />
+                <external source="spinbox-left-pressed.svg" />
             </state>
             <state enabled="true" rollover="true">
-                <external source="spinbox-left-rollover.svgx" />
+                <external source="spinbox-left-rollover.svg" />
             </state>
             <state enabled="false">
-                <external source="spinbox-left-disabled.svgx" />
+                <external source="spinbox-left-disabled.svg" />
             </state>
         </part>
         <part value="ButtonUp" width="44" height="26">
             <state enabled="true">
-                <external source="spinbox-right.svgx" />
+                <external source="spinbox-right.svg" />
             </state>
             <state enabled="true" pressed="true">
-                <external source="spinbox-right-pressed.svgx" />
+                <external source="spinbox-right-pressed.svg" />
             </state>
             <state enabled="true" rollover="true">
-                <external source="spinbox-right-rollover.svgx" />
+                <external source="spinbox-right-rollover.svg" />
             </state>
             <state enabled="false">
-                <external source="spinbox-right-disabled.svgx" />
+                <external source="spinbox-right-disabled.svg" />
             </state>
         </part>
         <part value="Focus">
             <state>
-                <external source="common-rect-focus-slim.svgx" />
+                <external source="common-rect-focus-slim.svg" />
             </state>
         </part>
     </spinbox>
@@ -255,12 +255,12 @@
     <scrollbar>
         <part value="ThumbHorz">
             <state>
-                <external source="scrollbar-horizontal.svgx" />
+                <external source="scrollbar-horizontal.svg" />
             </state>
         </part>
         <part value="ThumbVert">
             <state>
-                <external source="scrollbar-vertical.svgx" />
+                <external source="scrollbar-vertical.svg" />
             </state>
         </part>
         <part value="ButtonUp">
@@ -296,7 +296,7 @@
     <slider>
         <part value="Button">
             <state>
-                <image source="slider-button.svgx" />
+                <image source="slider-button.svg" />
             </state>
         </part>
         <part value="TrackHorzLeft">
@@ -345,22 +345,22 @@
     <tabitem>
         <part value="Entire" margin-width="8" height="32">
             <state selected="false" extra="first">
-                <external source="tabitem-first.svgx" />
+                <external source="tabitem-first.svg" />
             </state>
             <state selected="false" extra="middle">
-                <external source="tabitem-middle.svgx" />
+                <external source="tabitem-middle.svg" />
             </state>
             <state selected="false" extra="last">
-                <external source="tabitem-last.svgx" />
+                <external source="tabitem-last.svg" />
             </state>
             <state selected="true" extra="first">
-                <external source="tabitem-first-selected.svgx" />
+                <external source="tabitem-first-selected.svg" />
             </state>
             <state selected="true" extra="middle">
-                <external source="tabitem-middle-selected.svgx" />
+                <external source="tabitem-middle-selected.svg" />
             </state>
             <state selected="true" extra="last">
-                <external source="tabitem-last-selected.svgx" />
+                <external source="tabitem-last-selected.svg" />
             </state>
         </part>
     </tabitem>
@@ -470,10 +470,10 @@
         </part>
         <part value="Arrow">
             <state extra="up">
-                <image source="arrow-up.svgx"/>
+                <image source="arrow-up.svg"/>
             </state>
             <state extra="down">
-                <image source="arrow-down.svgx"/>
+                <image source="arrow-down.svg"/>
             </state>
         </part>
     </listheader>
