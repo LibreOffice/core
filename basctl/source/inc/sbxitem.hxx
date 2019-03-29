@@ -45,8 +45,17 @@ namespace Item
     class Sbx;
     typedef ::Item::ItemBaseStaticHelper<Sbx, ::Item::IAdministrator_vector> SbxStaticHelper;
 
-    class Sbx final : public SbxStaticHelper
+    class Sbx final : public SbxStaticHelper, public ::Item::ItemBase
     {
+    public:
+        // SharedPtr typedef to be used handling instances of given type
+        typedef std::shared_ptr<const Sbx> SharedPtr;
+
+    private:
+        // need to offer internal access to ItemAdministrator
+        // in each derivation - just calls GetStaticAdmin internally
+        virtual ::Item::ItemAdministrator* GetIAdministrator() const override;
+
     private:
         const ScriptDocument    m_aDocument;
         const OUString          m_aLibName;
@@ -67,6 +76,7 @@ namespace Item
     public:
         virtual ~Sbx();
 
+        // SharedPtr-construtcor
         static std::shared_ptr<const Sbx> Create(
             const ScriptDocument& rDocument,
             const OUString& aLibName = OUString(),

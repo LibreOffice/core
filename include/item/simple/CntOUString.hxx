@@ -24,14 +24,26 @@ namespace Item
     class CntOUString;
     typedef ItemBaseStaticHelper<CntOUString, IAdministrator_unordered_set> CntOUStringStaticHelper;
 
-    class ITEM_DLLPUBLIC CntOUString : public CntOUStringStaticHelper
+    class ITEM_DLLPUBLIC CntOUString : public CntOUStringStaticHelper, public ItemBase
     {
+    public:
+        // SharedPtr typedef to be used handling instances of given type
+        typedef std::shared_ptr<const CntOUString> SharedPtr;
+
     private:
+        // need to offer internal access to ItemAdministrator
+        // in each derivation - just calls GetStaticAdmin internally
+        virtual ItemAdministrator* GetIAdministrator() const override;
+
+    private:
+        // local variavbles
         rtl::OUString m_aValue;
 
     protected:
+        // allow local ItemAdministrator access to protected constructor
         friend CntOUStringStaticHelper;
 
+        // SharedPtr-constructor - protected BY DEFAULT - do NOT CHANGE (!)
         CntOUString(const rtl::OUString& rValue = rtl::OUString());
 
     public:

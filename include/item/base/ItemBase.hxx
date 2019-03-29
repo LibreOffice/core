@@ -36,10 +36,12 @@ namespace Item
     // Base class for ItemBase and thus for all new implementation of
     // Items. Items are in general read-only instances. The constructor
     // is protected now so that no one is able to create own instances.
-    // The reason for that is that for all Items only a single value-
+    // The reason for this is that for all Items only a single value-
     // specific instance shall exist at any time, guaranteed by being
     // administrated by an instance of ItemAdministrator associated with
     // each implemented type of ItemBase Item.
+    // To create and/or implement constructors (SharedPtr-constructor's)
+    // use/implement public ::Create.* methods.
     // To construct, use the ::Create methods. These are in general
     // static member functions. These have to use the protected
     // constructor(s) from which also any number may be defined to
@@ -58,7 +60,7 @@ namespace Item
     // thus making runtime existance of Items safe. It also uses typed
     // derivations and templates to ensure throghout usage of typed
     // Items.
-    // That Items are in general read-only instances also means that there
+    // That Items are read-only instances also means that there
     // will no longer be set-methods like ::SetAny(Any& aAny) or similar.
     // Instead, implement a ::Create method for this that creates an instance
     // using a/the protected constructor, set all members from the Any (in
@@ -81,6 +83,8 @@ namespace Item
     // any Item-implementation. To support this and full typed accesses
     // to implemented Items, check out the implementation helper template
     // class 'ItemBaseStaticHelper' which should be used to implement Items.
+    // Usually Items will be derived from a definition of that helper
+    // template 'ItemBaseStaticHelper' and ::ItemBase (see examples).
     // This Base-Class ItemBase exists as minimal achor point, it sometimes
     // is useful, see e.g. helper classes ImplInvalidateItem and
     // ImplDisableItem used in ::Iset to represent ItemStates in ItemSet's.
@@ -113,6 +117,9 @@ namespace Item
     protected:
         // constructor - protected BY DEFAULT - do NOT CHANGE (!)
         // Use ::Create(...) methods in derived classes instead
+        // Note: Every derivation *needs* an empty constructor to
+        // allow unified created static methods like CreateFromAny
+        // to create instances
         ItemBase();
 
         // basic RTTI TypeCheck to secure e.g. operator== and similar

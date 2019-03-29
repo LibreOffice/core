@@ -23,14 +23,26 @@ namespace Item
     class CntInt16;
     typedef ItemBaseStaticHelper<CntInt16, IAdministrator_set> CntInt16StaticHelper;
 
-    class ITEM_DLLPUBLIC CntInt16 : public CntInt16StaticHelper
+    class ITEM_DLLPUBLIC CntInt16 : public CntInt16StaticHelper, public ItemBase
     {
+    public:
+        // SharedPtr typedef to be used handling instances of given type
+        typedef std::shared_ptr<const CntInt16> SharedPtr;
+
     private:
+        // need to offer internal access to ItemAdministrator
+        // in each derivation - just calls GetStaticAdmin internally
+        virtual ItemAdministrator* GetIAdministrator() const override;
+
+    private:
+        // local variavbles
         sal_Int16 m_nValue;
 
     protected:
+        // allow local ItemAdministrator access to protected constructor
         friend CntInt16StaticHelper;
 
+        // SharedPtr-constructor - protected BY DEFAULT - do NOT CHANGE (!)
         CntInt16(sal_Int16 nValue = 0);
 
     public:

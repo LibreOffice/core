@@ -211,6 +211,7 @@ namespace Item
         void SetParent(const SharedPtr& rNewParent);
         const SharedPtr& GetParent() const;
 
+        // SharedPtr-construtcor
         static SharedPtr Create(const ModelSpecificItemValues::SharedPtr& rModelSpecificIValues);
 
         const ModelSpecificItemValues::SharedPtr& GetModelSpecificIValues() const;

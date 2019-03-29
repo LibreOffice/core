@@ -25,8 +25,15 @@ namespace basctl
 // I2TM
 namespace Item
 {
+    // need internal access to ItemAdministrator
+    ::Item::ItemAdministrator* Sbx::GetIAdministrator() const
+    {
+        return &GetStaticAdmin();
+    }
+
     Sbx::Sbx(const ScriptDocument* pDocument, const OUString& aLibName, const OUString& aName, const OUString& aMethodName, ItemType eType)
     :   SbxStaticHelper(),
+        ::Item::ItemBase(),
         m_aDocument(nullptr != pDocument ? *pDocument : ScriptDocument::getApplicationScriptDocument()),
         m_aLibName(aLibName),
         m_aName(aName),

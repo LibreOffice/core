@@ -14,8 +14,15 @@
 
 namespace Item
 {
+    // need internal access to ItemAdministrator
+    ItemAdministrator* CntInt16::GetIAdministrator() const
+    {
+        return &GetStaticAdmin();
+    }
+
     CntInt16::CntInt16(sal_Int16 nValue)
     :   CntInt16StaticHelper(),
+        ItemBase(),
         m_nValue(nValue)
     {
     }

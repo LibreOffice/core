@@ -28,8 +28,7 @@
 namespace Item
 {
     // Template class which supports Item implementations using ItemBase.
-    // It allows automatic creation of default static methods. To keep
-    // things simple, it directly derives from ::ItemBase already.
+    // It allows automatic creation of default static methods.
     // It provides implementation of all static typed stuff needed to
     // implement and make available the single global static ItemAdministrator
     // which will be used for the implementation of that new Item-type.
@@ -39,14 +38,8 @@ namespace Item
     // - IAdministrator_unordered_set
     // - IAdministrator_vector
     // and the explanations/preconditions for their usage.
-    // It also defines a convenient SharedPtr type for access for each derived type
-    // of Item.
-    template< class TargetType, typename AdminType > class ItemBaseStaticHelper : public ItemBase
+    template< class TargetType, typename AdminType > class ItemBaseStaticHelper //: public ItemBase
     {
-    public:
-        // SharedPtr typedef to be used handling instances of given type
-        typedef std::shared_ptr<const TargetType> SharedPtr;
-
     protected:
         static ItemAdministrator& GetStaticAdmin()
         {
@@ -54,27 +47,8 @@ namespace Item
             return aAdmin;
         }
 
-        virtual ItemAdministrator* GetIAdministrator() const override
-        {
-            return &GetStaticAdmin();
-        }
-
     public:
-        // we *could* have a method like below that is able to return
-        // a non-static_pointer_cast value, thus allowing to return
-        // it as const& to the SharedPtr and to avoid constructing the
-        // TargetType::SharedPtr (less overhead). This could be used e.g.
-        // in Set::SetItem calls.
-        // Disadvantage is that the User/Programmer using it would have
-        // to be very aware what he is doing - to avoid confusion, I
-        // decided to *not* offer this currently.
-        //
-        // static const ItemBase::SharedPtr& getStaticDefault()
-        // {
-        //     return std::static_pointer_cast<const TargetType>(GetStaticAdmin().GetDefault());
-        // }
-
-        static std::shared_ptr<const TargetType> GetDefault()
+        static std::shared_ptr<const TargetType> GetStaticDefault()
         {
             return std::static_pointer_cast<const TargetType>(GetStaticAdmin().GetDefault());
         }
@@ -84,7 +58,8 @@ namespace Item
             return rCandidate && GetStaticAdmin().IsDefault(rCandidate.get());
         }
 
-        static std::shared_ptr<const TargetType> CreateFromAny(const AnyIDArgs& rArgs)
+        // SharedPtr-constructor
+        static std::shared_ptr<const TargetType> CreateFromAny(const ItemBase::AnyIDArgs& rArgs)
         {
             TargetType* pNewInstance(new TargetType());
             pNewInstance->PutValues(rArgs);

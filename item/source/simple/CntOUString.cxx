@@ -14,8 +14,15 @@
 
 namespace Item
 {
+    // need internal access to ItemAdministrator
+    ItemAdministrator* CntOUString::GetIAdministrator() const
+    {
+        return &GetStaticAdmin();
+    }
+
     CntOUString::CntOUString(const rtl::OUString& rValue)
     :   CntOUStringStaticHelper(),
+        ItemBase(),
         m_aValue(rValue)
     {
     }

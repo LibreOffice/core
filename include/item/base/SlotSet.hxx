@@ -55,6 +55,7 @@ namespace Item
         SlotSet(const SlotSet&) = delete;
         SlotSet& operator=(const SlotSet&) = delete;
 
+        // SharedPtr-construtcor
         static SharedPtr Create();
 
         void SetSlot(SlotID aSlotID, const ItemBase::SharedPtr& rItem);
@@ -72,7 +73,7 @@ namespace Item
                 return std::static_pointer_cast<TargetType>(aRetval->second);
             }
 
-            return TargetType::GetDefault();
+            return TargetType::GetStaticDefault();
         }
 
         bool ClearSlot(SlotID aSlotID);
