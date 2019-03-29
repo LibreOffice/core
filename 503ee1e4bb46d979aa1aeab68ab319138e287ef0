@@ -36,6 +36,29 @@
     },
     {
       "key": {
+        "uuid": "df87a7cf_f4bb790b",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-03-29T17:09:29Z",
+      "side": 1,
+      "message": "It seems for me, this is an unnecessary code part: the URI can contain slashes, too, and removing this doesn\u0027t affect the fix.",
+      "range": {
+        "startLine": 1129,
+        "startChar": 0,
+        "endLine": 1135,
+        "endChar": 8
+      },
+      "revId": "503ee1e4bb46d979aa1aeab68ab319138e287ef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87a7cf_54cb45a4",
         "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
         "patchSetId": 2
