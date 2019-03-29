@@ -22,7 +22,6 @@
 # -o sc.ScTableRowObj
 # -o sc.ScTableSheetObj
 # -o sc.ScTableSheetsObj
-#-o sc.ScViewPaneObj
 # #i89411 -o sc.XMLContentExporter
 # #i89411 -o sc.XMLContentImporter
 # #i89411 -o sc.XMLExporter
