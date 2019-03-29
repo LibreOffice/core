@@ -1096,7 +1096,7 @@ ScRefFlags parseAddress(const OUString& rString, ScAddress& rAddress, const ScDo
     return rAddress.Parse(rString, pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 }
 
-bool transformURL(const OUString& rOldURL, OUString& rNewURL, const ScDocument* pDoc)
+void transformURL(const OUString& rOldURL, OUString& rNewURL, const ScDocument* pDoc)
 {
     if (rOldURL.startsWith("#"))
     {
@@ -1112,7 +1112,7 @@ bool transformURL(const OUString& rOldURL, OUString& rNewURL, const ScDocument* 
         {
             OUString aString = aRange.Format(nResult, pDoc, formula::FormulaGrammar::CONV_XL_OOX);
             rNewURL = "#" + aString;
-            return true;
+            return;
         }
         else
         {
@@ -1121,13 +1121,19 @@ bool transformURL(const OUString& rOldURL, OUString& rNewURL, const ScDocument* 
             {
                 OUString aString = aAddress.Format(nResult, pDoc, formula::FormulaGrammar::CONV_XL_OOX);
                 rNewURL = "#" + aString;
-                return true;
+                return;
             }
         }
     }
 
-    rNewURL = rOldURL;
-    return false;
+    if ( rOldURL.indexOf("file:///") == 0 )
+    {
+        // external title transformation: file:///drive:/access/path/file_name => file:///drive:\access\path\file_name
+        OUString sURL = rOldURL.copy(8);
+        rNewURL = "file:///" + sURL.replace('/',0x5c);
+    }
+    else
+        rNewURL = rOldURL;
 }
 
 class ScURLTransformer : public oox::drawingml::URLTransformer
@@ -1147,8 +1153,10 @@ public:
 
     virtual bool isExternalURL(const OUString& rURL) const override
     {
-        OUString aNewURL;
-        return transformURL(rURL, aNewURL, &mrDoc);
+        if (rURL.startsWith("#"))
+            return false;
+
+        return true;
     }
 
 private:
