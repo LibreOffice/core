@@ -556,12 +556,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             bool bIsWriter = aRenderer.isWriter();
             bool bIsCalc = aRenderer.isCalc();
 
-            if (!bIsWriter && !bIsCalc)
-            {
-                SAL_WARN( "sfx.doc", "Redaction is supported only for Writer and Calc! (for now...)");
-                return;
-            }
-
             sal_Int32 nPages = aRenderer.getPageCount();
             std::vector< GDIMetaFile > aMetaFiles;
 
