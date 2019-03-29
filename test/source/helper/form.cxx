@@ -29,6 +29,14 @@ namespace helper
 {
 namespace form
 {
+uno::Reference<drawing::XControlShape>
+    OOO_DLLPUBLIC_TEST createCommandButton(const uno::Reference<lang::XComponent>& r_xComponent,
+                                           const sal_Int32 nX, const sal_Int32 nY,
+                                           const sal_Int32 nHeight, const sal_Int32 nWidth)
+{
+    return createControlShape(r_xComponent, "CommandButton", nX, nY, nHeight, nWidth);
+}
+
 uno::Reference<drawing::XControlShape> OOO_DLLPUBLIC_TEST createControlShape(
     const uno::Reference<lang::XComponent>& r_xComponent, const OUString& r_aKind,
     const sal_Int32 nX, const sal_Int32 nY, const sal_Int32 nHeight, const sal_Int32 nWidth)
