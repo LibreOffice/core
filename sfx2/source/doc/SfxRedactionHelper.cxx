@@ -122,8 +122,16 @@ void SfxRedactionHelper::addPagesToDraw(uno::Reference<XComponent>& xComponent,
         GDIMetaFile rGDIMetaFile = aMetaFiles[nPage];
         Graphic aGraphic(rGDIMetaFile);
 
+        sal_Int32 nPageHeight(rGDIMetaFile.GetPrefSize().Height());
+        sal_Int32 nPageWidth(rGDIMetaFile.GetPrefSize().Width());
+
         uno::Reference<graphic::XGraphic> xGraph = aGraphic.GetXGraphic();
         uno::Reference<drawing::XDrawPage> xPage = xDrawPages->insertNewByIndex(nPage);
+
+        // Set page size
+        uno::Reference<beans::XPropertySet> xPageProperySet(xPage, uno::UNO_QUERY);
+        xPageProperySet->setPropertyValue("Height", css::uno::makeAny(nPageHeight));
+        xPageProperySet->setPropertyValue("Width", css::uno::makeAny(nPageWidth));
 
         // Create and insert the shape
         uno::Reference<drawing::XShape> xShape(
