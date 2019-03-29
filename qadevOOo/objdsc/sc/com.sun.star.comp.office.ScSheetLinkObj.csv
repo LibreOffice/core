@@ -1,5 +1,3 @@
-"ScSheetLinkObj";"com::sun::star::container::XNamed";"getName()"
-"ScSheetLinkObj";"com::sun::star::container::XNamed";"setName()"
 "ScSheetLinkObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "ScSheetLinkObj";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "ScSheetLinkObj";"com::sun::star::beans::XPropertySet";"getPropertyValue()"

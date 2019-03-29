@@ -30,6 +30,8 @@ public:
 
     void testGetName();
     void testSetName();
+    // special case, here name is equal to links URL
+    void testSetNameByScSheetLinkObj();
     void testSetNameThrowsException();
 
     virtual css::uno::Reference< css::uno::XInterface > init() = 0;
