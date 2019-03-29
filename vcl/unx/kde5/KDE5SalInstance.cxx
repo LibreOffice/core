@@ -144,6 +144,8 @@ VCLPLUG_KDE5_PUBLIC SalInstance* create_SalInstance()
         unsetenv("SESSION_MANAGER");
     }
 
+    QApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
+
     int* pFakeArgc = new int;
     *pFakeArgc = nFakeArgc;
     pQApplication = new QApplication(*pFakeArgc, pFakeArgv);
