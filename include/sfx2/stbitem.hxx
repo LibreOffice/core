@@ -24,6 +24,7 @@
 #include <svl/poolitem.hxx>
 #include <svtools/statusbarcontroller.hxx>
 #include <vcl/status.hxx>
+#include <item/base/ItemBase.hxx>
 
 
 class SfxModule;

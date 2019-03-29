@@ -573,6 +573,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         case SID_BASICIDE_SBXINSERTED:
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
+            // I2TM
             const auto aSbxItem = rReq.GetArgs()->slotSet().GetSlot<const Item::Sbx>(SID_BASICIDE_ARG_SBX);
             const ScriptDocument& aDocument( aSbxItem->GetDocument() );
             const OUString& aLibName( aSbxItem->GetLibName() );
@@ -588,28 +589,15 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                     FindDlgWin(aDocument, aLibName, aName, true);
                 }
             }
-            // const SbxItem& rSbxItem = rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX );
-            // const ScriptDocument& aDocument( rSbxItem.GetDocument() );
-            // const OUString& aLibName( rSbxItem.GetLibName() );
-            // const OUString& aName( rSbxItem.GetName() );
-            // if ( m_aCurLibName.isEmpty() || ( aDocument == m_aCurDocument && aLibName == m_aCurLibName ) )
-            // {
-            //     if ( rSbxItem.GetType() == TYPE_MODULE )
-            //         FindBasWin( aDocument, aLibName, aName, true );
-            //     else if ( rSbxItem.GetType() == TYPE_DIALOG )
-            //         FindDlgWin( aDocument, aLibName, aName, true );
-            // }
         }
         break;
         case SID_BASICIDE_SBXDELETED:
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
+            // I2TM
             const auto aSbxItem = rReq.GetArgs()->slotSet().GetSlot<const Item::Sbx>(SID_BASICIDE_ARG_SBX);
             const ScriptDocument& aDocument(aSbxItem->GetDocument());
             VclPtr<BaseWindow> pWin = FindWindow(aDocument, aSbxItem->GetLibName(), aSbxItem->GetName(), aSbxItem->GetType(), true);
-            // const SbxItem& rSbxItem = rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX );
-            // const ScriptDocument& aDocument( rSbxItem.GetDocument() );
-            // VclPtr<BaseWindow> pWin = FindWindow( aDocument, rSbxItem.GetLibName(), rSbxItem.GetName(), rSbxItem.GetType(), true );
             if ( pWin )
                 RemoveWindow( pWin, true );
         }
@@ -617,27 +605,23 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         case SID_BASICIDE_SHOWSBX:
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
+            // I2TM
             const auto aSbxItem = rReq.GetArgs()->slotSet().GetSlot<const Item::Sbx>(SID_BASICIDE_ARG_SBX);
             const ScriptDocument& aDocument(aSbxItem->GetDocument());
             const OUString& aLibName(aSbxItem->GetLibName());
             const OUString& aName(aSbxItem->GetName());
-            // const SbxItem& rSbxItem = rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX );
-            // const ScriptDocument& aDocument( rSbxItem.GetDocument() );
-            // const OUString& aLibName( rSbxItem.GetLibName() );
-            // const OUString& aName( rSbxItem.GetName() );
+
             SetCurLib( aDocument, aLibName );
             BaseWindow* pWin = nullptr;
-            // if ( rSbxItem.GetType() == TYPE_DIALOG )
+
             if(TYPE_DIALOG == aSbxItem->GetType())
             {
                 pWin = FindDlgWin( aDocument, aLibName, aName, true );
             }
-            // else if ( rSbxItem.GetType() == TYPE_MODULE )
             else if(TYPE_MODULE == aSbxItem->GetType())
             {
                 pWin = FindBasWin( aDocument, aLibName, aName, true );
             }
-            // else if ( rSbxItem.GetType() == TYPE_METHOD )
             else if(TYPE_METHOD == aSbxItem->GetType())
             {
                 pWin = FindBasWin( aDocument, aLibName, aName, true );

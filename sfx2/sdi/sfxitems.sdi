@@ -26,8 +26,9 @@
     item BYTE       SfxByteItem;
     item INT16      SfxEnumItem;
 
-//    item String     SbxItem;                //! Dummy
-    item String      basctl::Item::Sbx;      //! Dummy
+    // I2TM
+    item String     basctl::Item::Sbx;      //! Dummy
+
     item String     SfxObjectItem;          //! Dummy
     item String     SfxTemplateItem;        //! Dummy
     item String     SfxMacroInfoItem;       //! Dummy

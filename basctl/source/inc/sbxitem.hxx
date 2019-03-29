@@ -83,34 +83,7 @@ namespace Item
     };
 }
 // ~I2TM
-
-// class SbxItem : public SfxPoolItem
-// {
-//     const ScriptDocument    m_aDocument;
-//     const OUString          m_aLibName;
-//     const OUString          m_aName;
-//     const OUString          m_aMethodName;
-//     ItemType                m_eType;
-
-// public:
-//     static SfxPoolItem* CreateDefault();
-//     SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, ItemType);
-//     SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, const OUString& aMethodName, ItemType eType);
-
-//     virtual SfxPoolItem* Clone(SfxItemPool *pPool = nullptr) const override;
-//     virtual bool operator==(const SfxPoolItem&) const override;
-
-//     ScriptDocument const& GetDocument () const { return m_aDocument; }
-//     OUString const& GetLibName () const { return m_aLibName; }
-//     OUString const& GetName () const { return m_aName; }
-//     OUString const& GetMethodName () const { return m_aMethodName; }
-//     ItemType GetType () const { return m_eType; }
-// };
-
 } // namespace basctl
-
-// For baside.sdi, because I don't know how to use nested names in it.
-// using basctl::SbxItem;
 
 #endif // INCLUDED_BASCTL_SOURCE_INC_SBXITEM_HXX
 

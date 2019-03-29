@@ -19,6 +19,37 @@
 class SbxItem : public SfxPoolItem
 -> basctl::Item::Sbx
 -> SID_BASICIDE_ARG_SBX
+-> Done!
+
+defs from sfx2\sdi\sfxitems.sdi may be a good hint which items to convert first (?)
+these are:
+    item void       SfxVoidItem;
+    item BOOL       SfxBoolItem;
+    item INT32      SfxUInt16Item;
+    item INT16      SfxInt16Item;
+    item INT32      SfxUInt32Item;
+    item INT32      SfxInt32Item;
+    item String     SfxStringItem;
+    item BYTE       SfxByteItem;
+    item INT16      SfxEnumItem;
+
+    item String     SfxObjectItem;          //! Dummy
+    item String     SfxTemplateItem;        //! Dummy
+    item String     SfxMacroInfoItem;       //! Dummy
+    item String     SfxImageItem;           //! Dummy
+    item String     SfxObjectShellItem      //! Dummy
+    item String     SfxUnoAnyItem           //! Dummy
+    item String     SfxUnoFrameItem         //! Dummy
+    item String     SfxWatermarkItem        //! Dummy
+
+    item Point SfxPointItem;
+    item Rectangle SfxRectangleItem;
+    item DocInfo SfxDocumentInfoItem;
+    item SvxSearch SvxSearchItem;
+    item SvxSize SvxSizeItem;
+    item SfxScriptOrganizer SfxScriptOrganizerItem;
+    item String     SvxClipboardFormatItem;    //! Dummy
+    item SvxZoom SvxZoomItem;
 
 class SvxChartColorTableItem : public SfxPoolItem
 -> only uses SID_SCH_EDITOPTIONS, currently has non-static members, but no need for them

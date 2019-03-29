@@ -120,6 +120,7 @@ bool ExtTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewT
 
     if (SfxDispatcher* pDispatcher = GetDispatcher())
     {
+        // I2TM
         ::Item::SlotSet::SharedPtr aSlotSet(::Item::SlotSet::Create());
         aSlotSet->SetSlot(SID_BASICIDE_ARG_SBX, Item::Sbx::Create(
             aDocument,
@@ -132,9 +133,6 @@ bool ExtTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewT
             SfxCallMode::SYNCHRON,
             aSlotSet
         );
-        // SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDocument, aLibName, rNewText, ConvertType( eType ) );
-        // pDispatcher->ExecuteList( SID_BASICIDE_SBXRENAMED,
-        //                     SfxCallMode::SYNCHRON, { &aSbxItem });
     }
 
     // OV-Bug?!
@@ -366,6 +364,7 @@ TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
         {
             if( pDispatcher )
             {
+                // I2TM
                 ::Item::SlotSet::SharedPtr aSlotSet(::Item::SlotSet::Create());
                 aSlotSet->SetSlot(SID_BASICIDE_ARG_SBX, Item::Sbx::Create(
                     rSourceDoc,
@@ -378,9 +377,6 @@ TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
                     SfxCallMode::SYNCHRON,
                     aSlotSet
                 );
-                // SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rSourceDoc, aSourceLibName, aSourceName, ConvertType( eType ) );
-                // pDispatcher->ExecuteList( SID_BASICIDE_SBXDELETED,
-                //       SfxCallMode::SYNCHRON, { &aSbxItem });
             }
         }
 
@@ -470,6 +466,7 @@ TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
     {
         if( pDispatcher )
         {
+            // I2TM
             ::Item::SlotSet::SharedPtr aSlotSet(::Item::SlotSet::Create());
             aSlotSet->SetSlot(SID_BASICIDE_ARG_SBX, Item::Sbx::Create(
                 rDestDoc,
@@ -482,9 +479,6 @@ TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
                 SfxCallMode::SYNCHRON,
                 aSlotSet
             );
-            // SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDestDoc, aDestLibName, aSourceName, ConvertType( eType ) );
-            // pDispatcher->ExecuteList( SID_BASICIDE_SBXINSERTED,
-            //                       SfxCallMode::SYNCHRON, { &aSbxItem });
         }
     }
 
@@ -749,6 +743,7 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton, void )
                     aModName = aModName.getToken( 0, ' ' );
                 }
 
+                // I2TM
                 ::Item::SlotSet::SharedPtr aSlotSet(::Item::SlotSet::Create());
                 aSlotSet->SetSlot(SID_BASICIDE_ARG_SBX, Item::Sbx::Create(
                     aDesc.GetDocument(),
@@ -761,10 +756,6 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton, void )
                     SfxCallMode::SYNCHRON,
                     aSlotSet
                 );
-                // SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(),
-                //                   aModName, TreeListBox::ConvertType( aDesc.GetType() ) );
-                // pDispatcher->ExecuteList(SID_BASICIDE_SHOWSBX,
-                //         SfxCallMode::SYNCHRON, { &aSbxItem });
             }
         }
         else    // only Lib selected
@@ -888,9 +879,9 @@ void ObjectPage::NewDialog()
                 if ( !aDocument.createDialog( aLibName, aDlgName, xISP ) )
                     return;
 
-                // SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDocument, aLibName, aDlgName, TYPE_DIALOG );
                 if (SfxDispatcher* pDispatcher = GetDispatcher())
                 {
+                    // I2TM
                     ::Item::SlotSet::SharedPtr aSlotSet(::Item::SlotSet::Create());
                     aSlotSet->SetSlot(SID_BASICIDE_ARG_SBX, Item::Sbx::Create(
                         aDocument,
@@ -903,8 +894,6 @@ void ObjectPage::NewDialog()
                         SfxCallMode::SYNCHRON,
                         aSlotSet
                     );
-                    // pDispatcher->ExecuteList( SID_BASICIDE_SBXINSERTED,
-                    //     SfxCallMode::SYNCHRON, { &aSbxItem });
                 }
                 LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
                 SvTreeListEntry* pRootEntry = m_pBasicBox->FindRootEntry( aDocument, eLocation );
@@ -958,6 +947,7 @@ void ObjectPage::DeleteCurrent()
             m_pBasicBox->Select( m_pBasicBox->GetCurEntry() );
         if (SfxDispatcher* pDispatcher = GetDispatcher())
         {
+            // I2TM
             ::Item::SlotSet::SharedPtr aSlotSet(::Item::SlotSet::Create());
             aSlotSet->SetSlot(SID_BASICIDE_ARG_SBX, Item::Sbx::Create(
                 aDocument,
@@ -970,9 +960,6 @@ void ObjectPage::DeleteCurrent()
                 SfxCallMode::SYNCHRON,
                 aSlotSet
             );
-            // SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDocument, aLibName, aName, TreeListBox::ConvertType( eType ) );
-            // pDispatcher->ExecuteList( SID_BASICIDE_SBXDELETED,
-            //                       SfxCallMode::SYNCHRON, { &aSbxItem });
         }
 
         try
@@ -1056,9 +1043,9 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
             StarBASIC* pBasic = pBasMgr? pBasMgr->GetLib( aLibName ) : nullptr;
             if ( pBasic )
                 pModule = pBasic->FindModule( aModName );
-            // SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
             if (SfxDispatcher* pDispatcher = GetDispatcher())
             {
+                // I2TM
                 ::Item::SlotSet::SharedPtr aSlotSet(::Item::SlotSet::Create());
                 aSlotSet->SetSlot(SID_BASICIDE_ARG_SBX, Item::Sbx::Create(
                     rDocument,
@@ -1071,8 +1058,6 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                     SfxCallMode::SYNCHRON,
                     aSlotSet
                 );
-                // pDispatcher->ExecuteList( SID_BASICIDE_SBXINSERTED,
-                //       SfxCallMode::SYNCHRON, { &aSbxItem });
             }
             LibraryLocation eLocation = rDocument.getLibraryLocation( aLibName );
             SvTreeListEntry* pRootEntry = rBasicBox.FindRootEntry( rDocument, eLocation );
@@ -1164,9 +1149,9 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
             StarBASIC* pBasic = pBasMgr? pBasMgr->GetLib( aLibName ) : nullptr;
             if ( pBasic )
                 pModule = pBasic->FindModule( aModName );
-            // SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
             if (SfxDispatcher* pDispatcher = GetDispatcher())
             {
+                // I2TM
                 ::Item::SlotSet::SharedPtr aSlotSet(::Item::SlotSet::Create());
                 aSlotSet->SetSlot(SID_BASICIDE_ARG_SBX, Item::Sbx::Create(
                     rDocument,
@@ -1179,8 +1164,6 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                     SfxCallMode::SYNCHRON,
                     aSlotSet
                 );
-                // pDispatcher->ExecuteList( SID_BASICIDE_SBXINSERTED,
-                //       SfxCallMode::SYNCHRON, { &aSbxItem });
             }
             LibraryLocation eLocation = rDocument.getLibraryLocation( aLibName );
             std::unique_ptr<weld::TreeIter> xIter(rBasicBox.make_iterator());
