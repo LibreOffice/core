@@ -13,9 +13,9 @@
 
 namespace Item
 {
-    void ItemAdministrator::SetAdministrated(const ItemBase& rIBase) const
+    void SetAdministratedFromItemAdministrator(ItemBase& rIBase)
     {
-        const_cast<ItemBase&>(rIBase).m_bAdministrated = true;
+        rIBase.m_bAdministrated = true;
     }
 
     ItemAdministrator::ItemAdministrator(const ItemBase* pDefault)
@@ -83,7 +83,7 @@ namespace Item
         else
         {
             // start using offered instance and administrate it from now
-            SetAdministrated(*pIBase);
+            SetAdministratedFromItemAdministrator(*const_cast<ItemBase*>(pIBase));
             m_aEntries.insert(pIBase);
             return ItemBase::SharedPtr(pIBase);
         }
@@ -138,7 +138,7 @@ namespace Item
         else
         {
             // start using offered instance and administrate it from now
-            SetAdministrated(*pIBase);
+            SetAdministratedFromItemAdministrator(*const_cast<ItemBase*>(pIBase));
             m_aEntries.insert(pIBase);
             return ItemBase::SharedPtr(pIBase);
         }
@@ -266,7 +266,7 @@ namespace Item
         else
         {
             // start using offered instance and administrate it from now
-            SetAdministrated(*pIBase);
+            SetAdministratedFromItemAdministrator(*const_cast<ItemBase*>(pIBase));
             insert(pIBase);
             return ItemBase::SharedPtr(pIBase);
         }

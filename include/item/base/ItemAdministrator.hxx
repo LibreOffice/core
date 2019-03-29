@@ -68,8 +68,6 @@ namespace Item
         // instance of global default value
         ItemBase::SharedPtr m_aDefault;
 
-        void SetAdministrated(const ItemBase& rIBase) const;
-
     public:
         // constructor/destructor
         ItemAdministrator(const ItemBase* pDefault);

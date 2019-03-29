@@ -98,14 +98,17 @@ namespace Item
     private:
         // flag to mark this instance being administared by an
         // ItemAdministrator. Not urgently needed due to also being
-        // able to check being administarted in the HintExpired
+        // able to check being administrated in the HintExpired
         // calls. But that is the point - when using this flag
         // at adding the instance and thus making it being actively
         // administrated it is not necessary to do that check
         // if it is administrated which means a 'find' access
         // to a kind of list which may have varying costs...
-        friend class ItemAdministrator;
         bool        m_bAdministrated;
+
+        // needed to allow access for ItemAdministrator to m_bAdministrated,
+        // but limited to a single local method in the implementation there
+        friend void SetAdministratedFromItemAdministrator(ItemBase& rIBase);
 
     protected:
         // constructor - protected BY DEFAULT - do NOT CHANGE (!)
