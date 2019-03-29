@@ -26,6 +26,19 @@ namespace helper
 {
 namespace form
 {
+/** @brief Create a XControlShape of kind "CommandButton".
+ *
+ * @param r_xComponent  The document.
+ * @param nX            The x-position of the shape.
+ * @param nY            The y-position of the shape.
+ * @param nHeight       The height of the shape.
+ * @param nWidth        The width of the shape.
+ * @return  The created XControlShape.
+ */
+css::uno::Reference<css::drawing::XControlShape> OOO_DLLPUBLIC_TEST createCommandButton(
+    const css::uno::Reference<css::lang::XComponent>& r_xComponent,
+    const sal_Int32 nX, const sal_Int32 nY, const sal_Int32 nHeight, const sal_Int32 nWidth);
+
 /** @brief Create a XControlShape
  *
  * @param r_xComponent  The document.
@@ -34,7 +47,7 @@ namespace form
  * @param nY            The y-position of the shape.
  * @param nHeight       The height of the shape.
  * @param nWidth        The width of the shape.
- * @return  The create XControlShape.
+ * @return  The created XControlShape.
  */
 css::uno::Reference<css::drawing::XControlShape> OOO_DLLPUBLIC_TEST createControlShape(
     const css::uno::Reference<css::lang::XComponent>& r_xComponent, const OUString& r_aKind,
