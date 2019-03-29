@@ -1351,9 +1351,6 @@ void XclExpNumFmt::SaveXml( XclExpXmlStream& rStrm )
 
 XclExpNumFmtBuffer::XclExpNumFmtBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
-    /*  Compiler needs a hint, this doesn't work: new NfKeywordTable;
-        cannot convert from 'class String *' to 'class String (*)[54]'
-        The effective result here is class String (*)[54*1] */
     mxFormatter( new SvNumberFormatter( comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US ) ),
     mpKeywordTable( new NfKeywordTable ),
     mnStdFmt( GetFormatter().GetStandardIndex( ScGlobal::eLnge ) )
