@@ -187,6 +187,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/util/xreplaceable \
 	test/source/util/xsearchable \
 	test/source/view/xcontrolaccess \
+	test/source/view/xformlayeraccess \
 ))
 
 # vim: set noet sw=4 ts=4:
