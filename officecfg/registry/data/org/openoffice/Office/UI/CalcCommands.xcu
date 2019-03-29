@@ -263,6 +263,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Select Sheets...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:TableEvents" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1469,6 +1472,9 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Named Range or Expression...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:CreateNames" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -2404,6 +2410,9 @@
       <node oor:name=".uno:GroupOutlineMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Group and Outline</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:RowMenu" oor:op="replace">
