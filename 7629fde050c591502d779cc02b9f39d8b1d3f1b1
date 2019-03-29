@@ -39,6 +39,30 @@
       "revId": "7629fde050c591502d779cc02b9f39d8b1d3f1b1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_948ead25",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2496,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-03-29T20:24:51Z",
+      "side": 1,
+      "message": "Sorry, my bad, ScDocFunc::DeleteCells() is only called when cells are removed, not only cleared.",
+      "parentUuid": "df87a7cf_54834505",
+      "range": {
+        "startLine": 2496,
+        "startChar": 0,
+        "endLine": 2496,
+        "endChar": 51
+      },
+      "revId": "7629fde050c591502d779cc02b9f39d8b1d3f1b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
