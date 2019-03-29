@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_d490b598",
+        "filename": "sw/qa/extras/uiwriter/uiwriter2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-03-29T16:04:22Z",
+      "side": 1,
+      "message": "Remove these two lines: you first load your bugdoc then you throw it away (implicitly) by creating an empty document.",
+      "revId": "9b0491e824500bd9dea86e63165528e4edc7aa87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_f48db97b",
+        "filename": "sw/qa/extras/uiwriter/uiwriter2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1141,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-03-29T16:04:22Z",
+      "side": 1,
+      "message": "So this line will throw an exception, as the empty document has no shapes. :-)",
+      "revId": "9b0491e824500bd9dea86e63165528e4edc7aa87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_94e8ed16",
+        "filename": "sw/qa/extras/uiwriter/uiwriter2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1144,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-03-29T16:04:22Z",
+      "side": 1,
+      "message": "A position is a sal_Int32, if you change both places in this line, then finally your test will fail the expected way.",
+      "revId": "9b0491e824500bd9dea86e63165528e4edc7aa87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
