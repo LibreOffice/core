@@ -493,7 +493,9 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
                                         xShape->setPosition(aPoint);
                                         pDocSh->SetModified();
                                     }
-                                    else if (ScDrawLayer::GetAnchorType(*pObj) == SCA_CELL)
+                                    else if (ScDrawLayer::GetAnchorType(*pObj) == SCA_CELL
+                                             || ScDrawLayer::GetAnchorType(*pObj)
+                                                    == SCA_CELL_RESIZE)
                                     {
                                         awt::Size aUnoSize;
                                         awt::Point aCaptionPoint;
@@ -577,7 +579,9 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
                                         xShape->setPosition(aPoint);
                                         pDocSh->SetModified();
                                     }
-                                    else if (ScDrawLayer::GetAnchorType(*pObj) == SCA_CELL)
+                                    else if (ScDrawLayer::GetAnchorType(*pObj) == SCA_CELL
+                                             || ScDrawLayer::GetAnchorType(*pObj)
+                                                    == SCA_CELL_RESIZE)
                                     {
                                         awt::Size aUnoSize;
                                         awt::Point aCaptionPoint;
@@ -705,7 +709,8 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
                         uno::Reference<drawing::XShape> xShape( mxShapeAgg, uno::UNO_QUERY );
                         if (xShape.is())
                         {
-                            if (ScDrawLayer::GetAnchorType(*pObj) == SCA_CELL)
+                            if (ScDrawLayer::GetAnchorType(*pObj) == SCA_CELL
+                                || ScDrawLayer::GetAnchorType(*pObj) == SCA_CELL_RESIZE)
                             {
                                 awt::Size aUnoSize;
                                 awt::Point aCaptionPoint;
@@ -765,7 +770,8 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
                         uno::Reference<drawing::XShape> xShape( mxShapeAgg, uno::UNO_QUERY );
                         if (xShape.is())
                         {
-                            if (ScDrawLayer::GetAnchorType(*pObj) == SCA_CELL)
+                            if (ScDrawLayer::GetAnchorType(*pObj) == SCA_CELL
+                                || ScDrawLayer::GetAnchorType(*pObj) == SCA_CELL_RESIZE)
                             {
                                 awt::Size aUnoSize;
                                 awt::Point aCaptionPoint;
