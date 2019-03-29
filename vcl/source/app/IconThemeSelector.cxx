@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <comphelper/lok.hxx>
+
 #include <vcl/IconThemeSelector.hxx>
 
 #include <vcl/IconThemeScanner.hxx>
@@ -50,6 +52,9 @@ IconThemeSelector::IconThemeSelector()
 /*static*/ OUString
 IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvironment)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return OUString("colibre");
+
     OUString r;
     if ( desktopEnvironment.equalsIgnoreAsciiCase("tde") ||
          desktopEnvironment.equalsIgnoreAsciiCase("kde") ) {
