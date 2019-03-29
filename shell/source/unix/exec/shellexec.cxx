@@ -42,6 +42,9 @@
 #include <errno.h>
 #include <unistd.h>
 
+#if defined MACOSX
+#include <sys/stat.h>
+#endif
 
 // namespace directives
 
@@ -129,6 +132,39 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         }
 
 #ifdef MACOSX
+        if (uri->getScheme().equalsIgnoreAsciiCase("file")) {
+            OUString pathname;
+            auto const e1 = osl::FileBase::getSystemPathFromFileURL(aCommand, pathname);
+            if (e1 != osl::FileBase::E_None) {
+                throw css::lang::IllegalArgumentException(
+                    ("XSystemShellExecute.execute, getSystemPathFromFileURL <" + aCommand
+                     + "> failed with " + OUString::number(e1)),
+                    {}, 0);
+            }
+            OString pathname8;
+            if (!pathname.convertToString(
+                    &pathname8, RTL_TEXTENCODING_UTF8,
+                    (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+                     | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
+            {
+                throw css::lang::IllegalArgumentException(
+                    "XSystemShellExecute.execute, cannot convert \"" + pathname + "\" to UTF-8", {},
+                    0);
+            }
+            struct stat st;
+            auto const e2 = stat(pathname8.getStr(), &st);
+            if (e2 != 0) {
+                auto const e3 = errno;
+                SAL_INFO("shell", "stat(" << pathname8 << ") failed with errno " << e3);
+            }
+            if (e2 != 0 || !S_ISREG(st.st_mode)
+                || (st.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) != 0)
+            {
+                throw css::lang::IllegalArgumentException(
+                    "XSystemShellExecute.execute, cannot process <" + aCommand + ">", {}, 0);
+            }
+        }
+
         //TODO: Using open(1) with an argument that syntactically is an absolute
         // URI reference does not necessarily give expected results:
         // 1  If the given URI reference matches a supported scheme (e.g.,
