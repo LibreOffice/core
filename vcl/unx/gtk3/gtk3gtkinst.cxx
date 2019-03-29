@@ -6514,6 +6514,13 @@ public:
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
 
+    virtual OUString get_accessible_description() const override
+    {
+        AtkObject* pAtkObject = default_drawing_area_get_accessible(m_pWidget);
+        const char* pStr = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
     virtual ~GtkInstanceDrawingArea() override
     {
         g_object_steal_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea");
@@ -7579,16 +7586,7 @@ namespace
         const ImplSVData* pSVData = ImplGetSVData();
         if (pSVData->maHelpData.mbBalloonHelp)
         {
-            /*This is how I would prefer things to be, only a few like this though*/
-            AtkObject* pAtkObject = gtk_widget_get_accessible(pWidget);
-            const char* pDesc = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
-            if (pDesc)
-            {
-                gtk_tooltip_set_text(tooltip, pDesc);
-                return true;
-            }
-
-            /*So fallback to existing mechanism which needs help installed*/
+            /*Current mechanism which needs help installed*/
             OString sHelpId = ::get_help_id(pWidget);
             Help* pHelp = !sHelpId.isEmpty() ? Application::GetHelp() : nullptr;
             if (pHelp)
@@ -7600,10 +7598,19 @@ namespace
                     return true;
                 }
             }
+
+            /*This is how I would prefer things to be, only a few like this though*/
+            AtkObject* pAtkObject = gtk_widget_get_accessible(pWidget);
+            const char* pDesc = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
+            if (pDesc && pDesc[0])
+            {
+                gtk_tooltip_set_text(tooltip, pDesc);
+                return true;
+            }
         }
 
         const char* pDesc = gtk_widget_get_tooltip_text(pWidget);
-        if (pDesc)
+        if (pDesc && pDesc[0])
         {
             gtk_tooltip_set_text(tooltip, pDesc);
             return true;
