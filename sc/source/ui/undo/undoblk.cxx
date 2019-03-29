@@ -1314,22 +1314,6 @@ void ScUndoDragDrop::DoUndo( ScRange aRange )
     maPaintRanges.Join(aPaintRange);
 }
 
-namespace {
-
-class DataChangeNotifier
-{
-    ScHint const maHint;
-public:
-    DataChangeNotifier() : maHint(SfxHintId::ScDataChanged, ScAddress()) {}
-
-    void operator() ( SvtListener* p )
-    {
-        p->Notify(maHint);
-    }
-};
-
-}
-
 void ScUndoDragDrop::Undo()
 {
     mnPaintExtFlags = 0;
@@ -1382,17 +1366,7 @@ void ScUndoDragDrop::Undo()
         DoUndo(aDestRange);
         DoUndo(aSrcRange);
 
-        // Notify all area listeners whose listened areas are partially moved, to
-        // recalculate.
-        std::vector<SvtListener*> aListeners;
-        rDoc.CollectAllAreaListeners(aListeners, aSrcRange, sc::AreaPartialOverlap);
-
-        // Remove any duplicate listener entries.  We must ensure that we notify
-        // each unique listener only once.
-        std::sort(aListeners.begin(), aListeners.end());
-        aListeners.erase(std::unique(aListeners.begin(), aListeners.end()), aListeners.end());
-
-        std::for_each(aListeners.begin(), aListeners.end(), DataChangeNotifier());
+        rDoc.BroadcastCells(aSrcRange, SfxHintId::ScDataChanged, false);
     }
     else
         DoUndo(aDestRange);
