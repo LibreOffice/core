@@ -643,8 +643,8 @@ void Qt5Graphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
         return;
 
     QScreen* pScreen = m_pFrame->GetQWidget()->window()->windowHandle()->screen();
-    rDPIX = pScreen->logicalDotsPerInchX();
-    rDPIY = pScreen->logicalDotsPerInchY();
+    rDPIX = pScreen->logicalDotsPerInchX() * pScreen->devicePixelRatio() + 0.5;
+    rDPIY = pScreen->logicalDotsPerInchY() * pScreen->devicePixelRatio() + 0.5;
 }
 
 sal_uInt16 Qt5Graphics::GetBitCount() const { return getFormatBits(m_pQImage->format()); }
