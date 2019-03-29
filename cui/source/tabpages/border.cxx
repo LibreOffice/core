@@ -549,15 +549,19 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
     if (m_aFrameSel.IsBorderEnabled(svx::FrameBorderType::TLBR))
     {
         sal_uInt16 nBorderDiagId = pPool->GetWhich(SID_ATTR_BORDER_DIAG_TLBR);
-        const SvxLineItem& rLineItem(*static_cast<const SvxLineItem*>(rSet->GetItem(nBorderDiagId)));
-        m_aFrameSel.ShowBorder(svx::FrameBorderType::TLBR, rLineItem.GetLine());
+        if (const SvxLineItem* pLineItem = static_cast<const SvxLineItem*>(rSet->GetItem(nBorderDiagId)))
+            m_aFrameSel.ShowBorder(svx::FrameBorderType::TLBR, pLineItem->GetLine());
+        else
+            m_aFrameSel.SetBorderDontCare(svx::FrameBorderType::TLBR);
     }
 
     if (m_aFrameSel.IsBorderEnabled(svx::FrameBorderType::BLTR))
     {
         sal_uInt16 nBorderDiagId = pPool->GetWhich(SID_ATTR_BORDER_DIAG_BLTR);
-        const SvxLineItem& rLineItem(*static_cast<const SvxLineItem*>(rSet->GetItem(nBorderDiagId)));
-        m_aFrameSel.ShowBorder(svx::FrameBorderType::BLTR, rLineItem.GetLine());
+        if (const SvxLineItem* pLineItem = static_cast<const SvxLineItem*>(rSet->GetItem(nBorderDiagId)))
+            m_aFrameSel.ShowBorder(svx::FrameBorderType::BLTR, pLineItem->GetLine());
+        else
+            m_aFrameSel.SetBorderDontCare(svx::FrameBorderType::BLTR);
     }
 
     if (m_xShadowControls)
