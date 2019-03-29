@@ -591,18 +591,18 @@ namespace emfplushelper
                 ::basegfx::B2DHomMatrix aTextureTransformation;
 
                 if (brush->hasTransformation) {
-                   aTextureTransformation *= brush->brush_transformation;
+                   aTextureTransformation = brush->brush_transformation;
+
+                   // adjust aTextureTransformation for our world space:
+                   // -> revert the mapping -> apply the transformation -> map back
+                   basegfx::B2DHomMatrix aInvertedMapTrasform(maMapTransform);
+                   aInvertedMapTrasform.invert();
+                   aTextureTransformation =  maMapTransform * aTextureTransformation * aInvertedMapTrasform;
                 }
 
-                // adjust aTextureTransformation for our world space:
-                // -> revert the mapping -> apply the transformation -> map back
-                basegfx::B2DHomMatrix aInvertedMapTrasform(maMapTransform);
-                aInvertedMapTrasform.invert();
-                aTextureTransformation =  maMapTransform * aTextureTransformation * aInvertedMapTrasform;
-
                 // select the stored colors
-                basegfx::BColor aStartColor =  brush->solidColor.getBColor();
-                basegfx::BColor aEndColor =  brush->secondColor.getBColor();
+                const basegfx::BColor aStartColor = brush->solidColor.getBColor();
+                const basegfx::BColor aEndColor = brush->secondColor.getBColor();
                 drawinglayer::primitive2d::SvgGradientEntryVector aVector;
 
                 if (brush->blendPositions)
@@ -655,13 +655,13 @@ namespace emfplushelper
                 {
                     if (brush->type == BrushTypeLinearGradient)
                     {
-                        aVector.emplace_back(0.0, aStartColor, 1. );
-                        aVector.emplace_back(1.0, aEndColor, 1. );
+                        aVector.emplace_back(0.0, aStartColor, (255 - brush->solidColor.GetTransparency()) / 255.0);
+                        aVector.emplace_back(1.0, aEndColor, (255 - brush->secondColor.GetTransparency()) / 255.0);
                     }
                     else // again, here reverse
                     {
-                        aVector.emplace_back(0.0, aEndColor, 1. );
-                        aVector.emplace_back(1.0, aStartColor, 1. );
+                        aVector.emplace_back(0.0, aEndColor, (255 - brush->secondColor.GetTransparency()) / 255.0);
+                        aVector.emplace_back(1.0, aStartColor, (255 - brush->solidColor.GetTransparency()) / 255.0);
                     }
                 }
 
@@ -675,9 +675,9 @@ namespace emfplushelper
 
                 if (brush->type == BrushTypeLinearGradient)
                 {
-                    basegfx::B2DPoint aStartPoint = Map(brush->areaX,brush->areaY);
+                    basegfx::B2DPoint aStartPoint = Map(brush->firstPointX, brush->firstPointY);
                     aStartPoint = aPolygonTransformation * aStartPoint;
-                    basegfx::B2DPoint aEndPoint = Map(brush->areaX + brush->areaWidth, brush->areaY + brush->areaHeight);
+                    basegfx::B2DPoint aEndPoint = Map(brush->firstPointX + brush->secondPointX, brush->firstPointY + brush->secondPointY);
                     aEndPoint = aPolygonTransformation * aEndPoint;
 
                     // create the same one used for SVG
@@ -693,7 +693,7 @@ namespace emfplushelper
                 }
                 else // BrushTypePathGradient
                 {
-                    basegfx::B2DPoint aCenterPoint = Map(brush->areaX,brush->areaY);
+                    basegfx::B2DPoint aCenterPoint = Map(brush->firstPointX, brush->firstPointY);
                     aCenterPoint = aPolygonTransformation * aCenterPoint;
 
                     // create the same one used for SVG
