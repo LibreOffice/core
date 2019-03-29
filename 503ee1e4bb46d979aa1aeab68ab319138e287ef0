@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_74f769f7",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-03-29T16:36:30Z",
+      "side": 1,
+      "message": "please use comphelper::isFileUrl(rOldURL) instead",
+      "revId": "503ee1e4bb46d979aa1aeab68ab319138e287ef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_74d0c951",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-03-29T16:36:30Z",
+      "side": 1,
+      "message": "the same here, please try to use some library function. IDK off the top of my head but InetURLObject::getFSysPath looks usable (you prolly want to use it with FSysStyle::Dos). \n\nOr maybe XclExpUrlHelper::EncodeUrl can be used?",
+      "revId": "503ee1e4bb46d979aa1aeab68ab319138e287ef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_54cb45a4",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1156,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-03-29T16:36:30Z",
+      "side": 1,
+      "message": "you can simply \u0027return !rURL.startsWith(...)\u0027",
+      "revId": "503ee1e4bb46d979aa1aeab68ab319138e287ef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
