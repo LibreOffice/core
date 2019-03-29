@@ -1582,7 +1582,7 @@ AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
          Possible choices: *breeze, *breeze_dark, *breeze_svg, *colibre, *colibre_svg, *elementary,
-         *elementary_svg, *karasa_jaga, *sifr, *sifr_dark, *tango.]),
+         *elementary_svg, *karasa_jaga, *sifr, *sif_svg, *sifr_dark, *tango.]),
 ,)
 
 libo_FUZZ_ARG_WITH(helppack-integration,
@@ -3378,7 +3378,7 @@ if test "$_os" = "WINNT"; then
             regvalue="$VC_PRODUCT_DIR/../MSBuild/$vcnumwithdot/Bin/amd64"
         fi
         MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
-	AC_MSG_RESULT([$regvalue])
+    AC_MSG_RESULT([$regvalue])
     fi
 
     # Find the version of devenv.exe
@@ -5223,7 +5223,7 @@ if test "$_os" = "WINNT"; then
     fi
 fi
 if test "$with_system_hsqldb" = "yes"; then
-	perl_use_string="$perl_use_string ; use Archive::Zip"
+    perl_use_string="$perl_use_string ; use Archive::Zip"
 fi
 if $PERL -e "$perl_use_string">/dev/null 2>&1; then
     AC_MSG_RESULT([all modules found])
@@ -7974,11 +7974,11 @@ else
               msdosdjgpp* | go32*)
                 objfmt='COFF'
               ;;
-              os2-emx*)			# not tested
-                objfmt='MSOMF'		# obj
+              os2-emx*)         # not tested
+                objfmt='MSOMF'      # obj
               ;;
               linux*coff* | linux*oldld*)
-                objfmt='COFF'		# ???
+                objfmt='COFF'       # ???
               ;;
               linux*aout*)
                 objfmt='a.out'
@@ -11339,14 +11339,14 @@ dnl ===================================================================
 AC_MSG_CHECKING([which themes to include])
 # if none given use default subset of available themes
 if test "x$with_theme" = "x" -o "x$with_theme" = "xyes"; then
-    with_theme="breeze breeze_dark breeze_svg colibre colibre_svg elementary elementary_svg karasa_jaga sifr sifr_dark tango"
+    with_theme="breeze breeze_dark breeze_svg colibre colibre_svg elementary elementary_svg karasa_jaga sifr sifr_svg sifr_dark tango"
 fi
 
 WITH_THEMES=""
 if test "x$with_theme" != "xno"; then
     for theme in $with_theme; do
         case $theme in
-        breeze|breeze_dark|breeze_svg|colibre|colibre_svg|elementary|elementary_svg|karasa_jaga|sifr|sifr_dark|tango) real_theme="$theme" ;;
+        breeze|breeze_dark|breeze_svg|colibre|colibre_svg|elementary|elementary_svg|karasa_jaga|sifr|sifr_svg|sifr_dark|tango) real_theme="$theme" ;;
         default) real_theme=colibre ;;
         *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
         esac
@@ -11405,7 +11405,7 @@ if test "$enable_build_opensymbol" = "yes"; then
     AC_MSG_RESULT([yes])
     AC_PATH_PROG(FONTFORGE, fontforge)
     if test -z "$FONTFORGE"; then
-	AC_MSG_ERROR([fontforge not installed])
+    AC_MSG_ERROR([fontforge not installed])
     fi
 else
     AC_MSG_RESULT([no])
