@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_14f85dc2",
+        "filename": "sc/source/ui/StatisticsDialogs/AnalysisOfVarianceDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-03-29T19:00:59Z",
+      "side": 0,
+      "message": "I think this should simply be changed to \n\n ScRefFlags::RANGE_ABS_3D\n\ninstead. All other formulas in the ANOVA output are written using 3D references as well.\n\nIf we wanted to change that based on where the output goes then all should be treated differently. (In fact the statistics internal formulas could always be written non-3D as the references point into the output)",
+      "range": {
+        "startLine": 61,
+        "startChar": 51,
+        "endLine": 61,
+        "endChar": 72
+      },
+      "revId": "068880d65081ec2db1af7643fcb9a3680b3119c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_742c4947",
+        "filename": "sc/source/ui/StatisticsDialogs/AnalysisOfVarianceDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-03-29T19:00:59Z",
+      "side": 1,
+      "message": "Distinguishing here is not needed then.",
+      "revId": "81d05f0f6a7d018c20139c58800cb254c771f3f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
