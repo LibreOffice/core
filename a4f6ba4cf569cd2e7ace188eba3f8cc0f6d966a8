@@ -91,6 +91,30 @@
       "revId": "a4f6ba4cf569cd2e7ace188eba3f8cc0f6d966a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_f9e05299",
+        "filename": "sw/uiconfig/sglobal/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2019-03-29T10:47:42Z",
+      "side": 1,
+      "message": "maybe maxim knows more about xmlfiltersettings and why we have it here.\n\nI only want to have not so big groups.",
+      "parentUuid": "df87a7cf_590dbe8e",
+      "range": {
+        "startLine": 765,
+        "startChar": 0,
+        "endLine": 765,
+        "endChar": 27
+      },
+      "revId": "a4f6ba4cf569cd2e7ace188eba3f8cc0f6d966a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "df87a7cf_39d79ac2",
+        "filename": "sw/uiconfig/sglobal/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2019-03-29T10:47:42Z",
+      "side": 0,
+      "message": "There is no Notebookbar for sglobal so this is grayed out (should be removed)",
+      "parentUuid": "df87a7cf_992a66e5",
+      "range": {
+        "startLine": 176,
+        "startChar": 0,
+        "endLine": 176,
+        "endChar": 49
+      },
+      "revId": "c61623028b79f918d0ed2bc2ca47db17e68a26cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87a7cf_f944d2b9",
         "filename": "sw/uiconfig/sglobal/menubar/menubar.xml",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-03-29T09:23:04Z",
       "side": 0,
       "message": "One item per section is not nice but mail merge is a different feature.",
+      "range": {
+        "startLine": 736,
+        "startChar": 0,
+        "endLine": 736,
+        "endChar": 27
+      },
+      "revId": "c61623028b79f918d0ed2bc2ca47db17e68a26cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_d9e30ea4",
+        "filename": "sw/uiconfig/sglobal/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2019-03-29T10:47:42Z",
+      "side": 0,
+      "message": "I know but it\u0027s also linked to databases",
+      "parentUuid": "df87a7cf_f944d2b9",
       "range": {
         "startLine": 736,
         "startChar": 0,
