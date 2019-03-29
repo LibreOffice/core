@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <helper/form.hxx>
+#include <test/helper/form.hxx>
 #include <rtl/string.hxx>
 #include <sal/types.h>
 
