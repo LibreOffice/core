@@ -10028,7 +10028,6 @@ sc/qa/extras/scsubtotalfieldobj.cxx
 sc/qa/extras/sctablesheetobj.cxx
 sc/qa/extras/sctablesheetsobj.cxx
 sc/qa/extras/sctabviewobj.cxx
-sc/qa/extras/scviewpaneobj.cxx
 sc/qa/perf/scperfobj.cxx
 sc/qa/unit/bugfix-test.cxx
 sc/qa/unit/copy_paste_test.cxx

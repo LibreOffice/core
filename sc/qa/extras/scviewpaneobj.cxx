@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -11,8 +11,16 @@
 #include <test/sheet/xcellrangereferrer.hxx>
 #include <test/sheet/xviewpane.hxx>
 #include <test/view/xcontrolaccess.hxx>
+#include <test/view/xformlayeraccess.hxx>
+#include <test/helper/form.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/form/XForm.hpp>
+#include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -20,21 +28,23 @@
 #include <com/sun/star/sheet/XViewPane.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
+#include <com/sun/star/uno/Reference.hxx>
+
 using namespace css;
-using namespace css::uno;
 
-namespace sc_apitest {
-
+namespace sc_apitest
+{
 class ScViewPaneObj : public CalcUnoApiTest,
                       public apitest::XCellRangeReferrer,
                       public apitest::XControlAccess,
+                      public apitest::XFormLayerAccess,
                       public apitest::XViewPane
 {
 public:
     ScViewPaneObj();
 
-    virtual uno::Reference< uno::XInterface > init() override;
-    virtual uno::Reference< uno::XInterface > getXComponent() override;
+    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<uno::XInterface> getXComponent() override;
     virtual void setUp() override;
     virtual void tearDown() override;
 
@@ -45,6 +55,11 @@ public:
 
     // XControlAccess
     CPPUNIT_TEST(testGetControl);
+
+    // XFormLayerAccess
+    CPPUNIT_TEST(testGetFormController);
+    CPPUNIT_TEST(testIsFormDesignMode);
+    CPPUNIT_TEST(testSetFormDesignMode);
 
     // XViewPane
     CPPUNIT_TEST(testFirstVisibleColumn);
@@ -62,20 +77,34 @@ ScViewPaneObj::ScViewPaneObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScViewPaneObj::getXComponent()
+uno::Reference<uno::XInterface> ScViewPaneObj::getXComponent() { return mxComponent; }
+
+uno::Reference<uno::XInterface> ScViewPaneObj::init()
 {
-    return mxComponent;
-}
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-uno::Reference< uno::XInterface > ScViewPaneObj::init()
-{
-    uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<frame::XModel> xModel(xDoc, uno::UNO_QUERY_THROW);
+    uno::Reference<frame::XController> xController(xModel->getCurrentController(),
+                                                   uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIA(xController, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XViewPane> xViewPane(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    uno::Reference< frame::XModel > xModel(xSheetDoc, uno::UNO_QUERY_THROW);
-    uno::Reference< frame::XController > xController = xModel->getCurrentController();
-    uno::Reference< container::XIndexAccess > xIndexAccess(xController, uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XViewPane > xViewPane (xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPagesSupplier> xDPS(xDoc, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xDP(xDPS->getDrawPages(), uno::UNO_QUERY_THROW);
+    xDP->insertNewByIndex(1);
+    xDP->insertNewByIndex(2);
 
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDP->getByIndex(0), uno::UNO_QUERY_THROW);
+    xDrawPage->add(
+        apitest::helper::form::createCommandButton(mxComponent, 15000, 10000, 3000, 4500));
+
+    uno::Reference<form::XFormsSupplier> xFS(xDrawPage, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNameContainer> xNC(xFS->getForms(), uno::UNO_QUERY_THROW);
+
+    // XFormLayerAccess
+    uno::Reference<form::XForm> xForm(xNC->getByName("Form"), uno::UNO_QUERY_THROW);
+    setForm(xForm);
+    // XCellRangeReferrer
     setCellRange(xViewPane->getVisibleRange());
 
     return xViewPane;
@@ -96,8 +125,8 @@ void ScViewPaneObj::tearDown()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScViewPaneObj);
 
-} // End Namespace
+} // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
