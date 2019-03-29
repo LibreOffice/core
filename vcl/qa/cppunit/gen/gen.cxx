@@ -17,6 +17,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/virdev.hxx>
 #include <tools/stream.hxx>
 
 using namespace com::sun::star;
@@ -72,11 +73,44 @@ CPPUNIT_TEST_FIXTURE(GenTest, testTdf121120)
     const Size& rSize = aBitmap.GetPrefSize();
     Color aColor(pAccess->GetPixel(rSize.getWidth() / 2, rSize.getHeight() / 2).GetColor());
     // Without the accompanying fix in place, this test would have failed with 'Expected: 255;
-    // Actual  : 1'. I.e. center if the preview (which has the background color) was ~black, not
+    // Actual  : 1'. I.e. center of the preview (which has the background color) was ~black, not
     // white.
     CPPUNIT_ASSERT_EQUAL(0xff, int(aColor.GetRed()));
     CPPUNIT_ASSERT_EQUAL(0xff, int(aColor.GetBlue()));
     CPPUNIT_ASSERT_EQUAL(0xff, int(aColor.GetGreen()));
+}
+
+/// Test that drawing a line preview to a bitmap is not lost.
+CPPUNIT_TEST_FIXTURE(GenTest, testTdf107966)
+{
+    // Set up the virtual device: white background.
+    ScopedVclPtr<VirtualDevice> pVirtualDevice(VclPtr<VirtualDevice>::Create());
+    pVirtualDevice->SetLineColor();
+    MapMode aMapMode;
+    aMapMode.SetMapUnit(MapUnit::MapTwip);
+    pVirtualDevice->SetMapMode(aMapMode);
+    pVirtualDevice->SetOutputSizePixel(Size(90, 15));
+    pVirtualDevice->SetFillColor(Color(255, 255, 255));
+    pVirtualDevice->DrawRect(tools::Rectangle(Point(), Size(1350, 225)));
+    pVirtualDevice->SetFillColor(Color(0, 0, 0));
+    AntialiasingFlags nOldAA = pVirtualDevice->GetAntialiasing();
+    pVirtualDevice->SetAntialiasing(nOldAA & ~AntialiasingFlags::EnableB2dDraw);
+
+    // Paint a black polygon on it.
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.append(basegfx::B2DPoint(0, 15));
+    aPolygon.append(basegfx::B2DPoint(1350, 15));
+    aPolygon.append(basegfx::B2DPoint(1350, 0));
+    aPolygon.append(basegfx::B2DPoint(0, 0));
+    pVirtualDevice->DrawPolygon(aPolygon);
+
+    // Make sure that the polygon is visible.
+    Bitmap aBitmap = pVirtualDevice->GetBitmap(Point(), Size(1350, 15));
+    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    Color aPixel(pAccess->GetPixel(0, 0).GetColor());
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 000000;
+    // Actual: ffffff', i.e. the top left pixel was white, not black.
+    CPPUNIT_ASSERT_EQUAL(OUString("000000"), aPixel.AsRGBHexString());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

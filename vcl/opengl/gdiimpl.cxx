@@ -1606,6 +1606,11 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygon(
     basegfx::B2DPolyPolygon aPolyPolygon(rPolyPolygon);
     aPolyPolygon.transform(rObjectToDevice);
 
+    // FlushLinesOrTriangles() works with a 0.5 pixel offset, compensate for that here.
+    basegfx::B2DHomMatrix aMatrix;
+    aMatrix.translate(-0.5f, -0.5f);
+    aPolyPolygon.transform(aMatrix);
+
     mpRenderList->addDrawPolyPolygon(
         aPolyPolygon,
         fTransparency,
