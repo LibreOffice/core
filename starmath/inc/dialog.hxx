@@ -260,6 +260,7 @@ class SmShowSymbolSet : public weld::CustomWidgetController
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
+    virtual void Resize() override;
 
     DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
 
@@ -269,8 +270,11 @@ public:
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
     {
         CustomWidgetController::SetDrawingArea(pDrawingArea);
-        pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 27,
-                                       pDrawingArea->get_text_height() * 9);
+        m_aOldSize = Size(pDrawingArea->get_approximate_digit_width() * 27,
+                          pDrawingArea->get_text_height() * 9);
+        pDrawingArea->set_size_request(m_aOldSize.Width(), m_aOldSize.Height());
+        SetOutputSizePixel(m_aOldSize);
+        calccols(pDrawingArea->get_ref_device());
     }
 
     void calccols(vcl::RenderContext& rRenderContext);
