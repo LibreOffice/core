@@ -46,7 +46,7 @@ enum TimeFieldFormat {TIMEF_NONE, TIMEF_SEC, TIMEF_100TH_SEC, TIMEF_SEC_CS, Time
 
 #define KEY_CODE        ((sal_uInt16)0x0FFF)
 
-// Modifier-Tasten
+// Modifier-Keys
 #define KEY_SHIFT       ((sal_uInt16)0x1000)
 #define KEY_MOD1        ((sal_uInt16)0x2000)
 #define KEY_MOD2        ((sal_uInt16)0x4000)
@@ -69,9 +69,9 @@ enum KeyFuncType { KEYFUNC_DONTKNOW, KEYFUNC_NEW, KEYFUNC_OPEN, KEYFUNC_SAVE,
 #endif
 
 
-// --------------------------
-// - Bits fuer ToolBoxItems -
-// --------------------------
+// -------------------------
+// - Bits for ToolBoxItems -
+// -------------------------
 
 // from vcl/inc/toolbox.hxx
 typedef sal_uInt16 ToolBoxItemBits;
