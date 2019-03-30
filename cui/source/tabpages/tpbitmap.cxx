@@ -43,6 +43,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dialoghelper.hxx>
 #include <o3tl/make_unique.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace com::sun::star;
 
@@ -128,6 +129,8 @@ SvxBitmapTabPage::SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     m_pPositionOffY->SetModifyHdl(aLink);
     m_pTileOffset->SetModifyHdl( LINK( this, SvxBitmapTabPage, ModifyTileOffsetHdl ) );
     m_pBtnImport->SetClickHdl( LINK(this, SvxBitmapTabPage, ClickImportHdl) );
+    if (comphelper::LibreOfficeKit::isActive())
+        m_pBtnImport->Hide();
 
     // Calculate size of display boxes
     Size aSize = getDrawPreviewOptimalSize(this);
