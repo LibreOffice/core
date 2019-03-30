@@ -28,6 +28,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <svx/svxids.hrc>
 #include <svx/unoshape.hxx>

@@ -27,6 +27,7 @@
 #include <osl/diagnose.h>
 
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -35,6 +36,7 @@
 #include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/sheet/XCompatibilityNames.hpp>

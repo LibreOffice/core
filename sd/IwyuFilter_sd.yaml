@@ -176,6 +176,7 @@ blacklist:
     - com/sun/star/drawing/XDrawView.hpp
     - com/sun/star/drawing/framework/XControllerManager.hpp
     - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/view/XFormLayerAccess.hpp
     - com/sun/star/view/XSelectionSupplier.hpp
     - sfx2/sfxbasecontroller.hxx

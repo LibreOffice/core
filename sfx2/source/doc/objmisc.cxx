@@ -99,6 +99,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/ctrlitem.hxx>
+#include <sfx2/sfxuno.hxx>
 #include <arrdecl.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/docfac.hxx>

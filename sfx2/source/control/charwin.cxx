@@ -30,6 +30,8 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 using namespace com::sun::star;
 
 SvxCharView::SvxCharView(const VclPtr<VirtualDevice>& rVirDev)

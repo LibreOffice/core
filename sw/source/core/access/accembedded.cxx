@@ -20,6 +20,7 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <flyfrm.hxx>
 #include "accembedded.hxx"

@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 
 #include <facreg.hxx>

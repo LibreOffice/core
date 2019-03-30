@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/implbase.hxx>

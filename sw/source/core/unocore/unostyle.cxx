@@ -82,6 +82,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 

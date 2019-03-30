@@ -34,6 +34,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/typeprovider.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/framework/ConfigurationController.hpp>

@@ -43,6 +43,7 @@
 #include <vcl/wmfexternal.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include "rtfsdrimport.hxx"
 #include "rtfreferenceproperties.hxx"
 #include "rtfskipdestination.hxx"

@@ -24,6 +24,7 @@
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <o3tl/any.hxx>
 #include <officecfg/Office/Common.hxx>

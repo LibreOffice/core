@@ -77,6 +77,7 @@ class SwXDrawPage;
 class SwUnoCursor;
 class SwXDocumentPropertyHelper;
 class SfxViewFrame;
+class SfxViewShell;
 class SwPrintUIOptions;
 class SwPrintData;
 class SwRenderData;

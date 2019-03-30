@@ -128,6 +128,7 @@
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/safemode.hxx>
+#include <sfx2/sfxuno.hxx>
 
 #include <comphelper/types.hxx>
 #include <officecfg/Office/Common.hxx>

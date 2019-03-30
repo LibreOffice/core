@@ -12,13 +12,13 @@
 
 #include <sfx2/dllapi.h>
 
-#include <vcl/outdev.hxx>
-
-#include <sfx2/StylePreviewRenderer.hxx>
 #include <svl/style.hxx>
 
-#include <sfx2/objsh.hxx>
 #include <memory>
+
+class OutputDevice;
+class SfxObjectShell;
+namespace sfx2 { class StylePreviewRenderer; }
 
 namespace sfx2
 {

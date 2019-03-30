@@ -42,6 +42,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
+#include <com/sun/star/beans/NamedValue.hpp>
+
 using namespace com::sun::star;
 
 

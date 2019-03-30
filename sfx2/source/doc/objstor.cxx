@@ -123,6 +123,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sfxuno.hxx>
 #include <openflag.hxx>
 #include <helper.hxx>
 #include <sfx2/event.hxx>

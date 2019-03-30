@@ -14,6 +14,7 @@
 #include <sfx2/objsh.hxx>
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
+#include <vcl/outdev.hxx>
 
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <svx/xdef.hxx>

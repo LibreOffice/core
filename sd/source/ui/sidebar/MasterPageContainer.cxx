@@ -42,6 +42,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/app.hxx>
 #include <svx/svdpage.hxx>

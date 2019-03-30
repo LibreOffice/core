@@ -33,6 +33,8 @@
 #include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 #include <officecfg/Office/Math.hxx>
 #include "cfgitem.hxx"
 

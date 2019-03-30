@@ -24,6 +24,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <cellfrm.hxx>
 #include <tabfrm.hxx>

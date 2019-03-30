@@ -46,6 +46,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/io/IOException.hpp>
@@ -82,6 +83,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sfxuno.hxx>
 #include <sfxtypes.hxx>
 #include <alienwarn.hxx>
 

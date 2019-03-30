@@ -58,6 +58,8 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentState.hxx>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 using namespace ::com::sun::star;
 
 sal_uInt16 SwNumRule::mnRefCount = 0;

@@ -31,6 +31,8 @@
 #include <svl/itempool.hxx>
 #include <helpids.h>
 
+#include <com/sun/star/beans/NamedValue.hpp>
+
 #define SPACING_VERY_TIGHT  -30
 #define SPACING_TIGHT       -15
 #define SPACING_NORMAL        0

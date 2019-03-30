@@ -22,21 +22,10 @@
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/util/URL.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 
-#include <com/sun/star/uno/Sequence.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/supportsservice.hxx>
-#include <rtl/ustring.hxx>
-
+namespace com::sun::star::beans { struct NamedValue; }
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
 
 class SfxAllItemSet ;
 class SfxItemSet    ;

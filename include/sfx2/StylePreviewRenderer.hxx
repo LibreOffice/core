@@ -11,9 +11,10 @@
 #define INCLUDED_SFX2_STYLEPREVIEWRENDERER_HXX
 
 #include <sfx2/dllapi.h>
-#include <vcl/outdev.hxx>
-#include <svl/style.hxx>
 #include <sfx2/objsh.hxx>
+
+class OutputDevice;
+class SfxStyleSheetBase;
 
 namespace sfx2
 {

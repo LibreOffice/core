@@ -28,6 +28,7 @@
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 

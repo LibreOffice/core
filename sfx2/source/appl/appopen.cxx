@@ -19,6 +19,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -39,6 +40,7 @@
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ustring.hxx>
 
 #include <comphelper/processfactory.hxx>

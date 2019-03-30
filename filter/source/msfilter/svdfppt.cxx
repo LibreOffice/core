@@ -118,6 +118,7 @@
 #include <com/sun/star/table/XMergeableCellRange.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/virdev.hxx>
 #include <svtools/embedhlp.hxx>
 #include <o3tl/enumrange.hxx>

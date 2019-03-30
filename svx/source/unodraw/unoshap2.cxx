@@ -67,6 +67,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sal/log.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 
 #include <memory>

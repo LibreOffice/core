@@ -24,39 +24,38 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/DispatchDescriptor.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/frame/XControllerBorder.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
-#include <com/sun/star/util/URL.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/ui/XContextMenuInterception.hpp>
-#include <com/sun/star/ui/XContextMenuInterceptor.hpp>
-#include <com/sun/star/awt/XMouseClickHandler.hpp>
-#include <com/sun/star/awt/XKeyHandler.hpp>
 #include <com/sun/star/awt/XUserInputInterception.hpp>
 #include <tools/link.hxx>
-#include <vcl/button.hxx>
 
-#include <com/sun/star/ui/XSidebarProvider.hpp>
-
-#include <sfx2/viewsh.hxx>
-#include <sfx2/sfxuno.hxx>
 #include <sfx2/groupid.hxx>
+
+namespace com::sun::star::awt { class XKeyHandler; }
+namespace com::sun::star::awt { class XMouseClickHandler; }
+namespace com::sun::star::frame { class XDispatch; }
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::frame { struct DispatchDescriptor; }
+namespace com::sun::star::ui { class XContextMenuInterceptor; }
+namespace com::sun::star::ui { class XSidebarProvider; }
+namespace com::sun::star::util { struct URL; }
 
 struct  IMPL_SfxBaseController_DataContainer    ;   // impl. struct to hold member of class SfxBaseController
 
+class Button;
+class NotifyEvent;
 class SfxViewFrame;
+class SfxViewShell;
 
 sal_Int16 MapGroupIDToCommandGroup( SfxGroupId nGroupID );
 

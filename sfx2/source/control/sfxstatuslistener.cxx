@@ -34,6 +34,7 @@
 #include <com/sun/star/frame/status/ItemStatus.hpp>
 #include <com/sun/star/frame/status/ItemState.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>

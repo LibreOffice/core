@@ -25,6 +25,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>

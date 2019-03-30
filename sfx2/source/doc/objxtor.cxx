@@ -63,6 +63,7 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
@@ -93,6 +94,7 @@
 #include <sfx2/msg.hxx>
 #include <appbaslib.hxx>
 #include <sfx2/sfxbasemodel.hxx>
+#include <sfx2/sfxuno.hxx>
 #include <shellimpl.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 

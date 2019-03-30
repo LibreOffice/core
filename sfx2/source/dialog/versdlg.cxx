@@ -21,6 +21,7 @@
 
 #include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/util/RevisionTag.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 
 #include <unotools/localedatawrapper.hxx>
 #include <svl/eitem.hxx>

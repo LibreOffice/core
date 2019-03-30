@@ -26,6 +26,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/StylePreviewRenderer.hxx>
 
 #include <com/sun/star/frame/DocumentTemplates.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

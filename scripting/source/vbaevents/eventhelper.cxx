@@ -69,6 +69,7 @@
 
 #include <com/sun/star/script/XScriptListener.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/evtmethodhelper.hxx>
 
 #include <list>

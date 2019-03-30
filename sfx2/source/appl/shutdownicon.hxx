@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>

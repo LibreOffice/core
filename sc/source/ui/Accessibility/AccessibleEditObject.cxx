@@ -40,6 +40,7 @@
 #include <svx/svdmodel.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/objsh.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 #include <unonames.hxx>
 #include <document.hxx>

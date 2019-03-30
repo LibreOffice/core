@@ -29,6 +29,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <sfx2/objsh.hxx>
 
+#include <cppuhelper/queryinterface.hxx>
 #include <svx/svdobj.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <Window.hxx>

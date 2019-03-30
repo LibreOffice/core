@@ -27,9 +27,11 @@
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <tools/weakbase.h>
+#include <tools/gen.hxx>
 #include <memory>
 #include <vector>
 

@@ -115,6 +115,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdocapt.hxx>
 #include <svtools/miscopt.hxx>
+#include <vcl/svapp.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

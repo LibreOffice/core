@@ -62,6 +62,7 @@ class Button;
 class OutputDevice;
 class Color;
 class Fraction;
+class SvGlobalName;
 
 enum class SfxModelFlags;
 enum class SfxEventHintId;
@@ -81,6 +82,7 @@ namespace sfx2
     class StyleManager;
 }
 
+namespace vcl { class Window; }
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::document { struct CmisVersion; }
 namespace com::sun::star::embed { class XStorage; }

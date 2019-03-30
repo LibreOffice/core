@@ -20,41 +20,32 @@
 #define INCLUDED_SFX2_SHELL_HXX
 
 #include <memory>
-#include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/types.h>
 #include <svl/typedwhich.hxx>
 #include <sfx2/dllapi.h>
-#include <sfx2/sfxuno.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/strong_int.hxx>
 
-namespace vcl { class Window; }
-class ToolBox;
+namespace com::sun::star::embed { struct VerbDescriptor; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
+
 class SfxItemPool;
 class SfxPoolItem;
 class SfxRequest;
 class SfxItemSet;
-struct SfxFormalArgument;
-class StatusBar;
 class SfxInterface;
 class SfxViewShell;
 class SfxObjectShell;
-class SfxSlotPool;
-class SvGlobalName;
 
-class SfxShellObject;
 class SfxShell;
 struct SfxShell_Impl;
-class SfxShellObject;
 class SfxDispatcher;
 class SfxViewFrame;
 class SfxSlot;
 class SfxRepeatTarget;
-class SbxVariable;
-class SbxBase;
 class SfxBindings;
 class SfxModule;
 class SfxUndoManager;

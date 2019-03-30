@@ -35,6 +35,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <tools/mapunit.hxx>

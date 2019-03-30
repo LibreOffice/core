@@ -46,6 +46,7 @@
 
 #include <formulabase.hxx>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 using namespace ::com::sun::star;
 

@@ -25,6 +25,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
+#include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
 
 #include <pagedesc.hxx>

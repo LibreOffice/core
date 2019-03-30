@@ -38,6 +38,7 @@
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/dispatch.hxx>

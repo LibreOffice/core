@@ -21,6 +21,8 @@
 
 #include <sfx2/sfxmodelfactory.hxx>
 
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+
 #include "register.hxx"
 
 using namespace ::com::sun::star;

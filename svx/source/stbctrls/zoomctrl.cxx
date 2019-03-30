@@ -39,6 +39,8 @@
 #include "modctrl_internal.hxx"
 #include <bitmaps.hlst>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 SFX_IMPL_STATUSBAR_CONTROL(SvxZoomStatusBarControl,SvxZoomItem);
 
 class ZoomPopup_Impl
