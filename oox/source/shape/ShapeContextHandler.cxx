@@ -191,7 +191,7 @@ ShapeContextHandler::getDrawingShapeContext()
     {
         mpDrawing.reset( new oox::vml::Drawing( *mxFilterBase, mxDrawPage, oox::vml::VMLDRAWING_WORD ) );
         mxDrawingFragmentHandler.set
-          (dynamic_cast<ContextHandler *>
+          (static_cast<ContextHandler *>
            (new oox::vml::DrawingFragment
             ( *mxFilterBase, msRelationFragmentPath, *mpDrawing )));
     }
@@ -203,7 +203,7 @@ ShapeContextHandler::getDrawingShapeContext()
         {
             mxDrawingFragmentHandler.clear();
             mxDrawingFragmentHandler.set
-              (dynamic_cast<ContextHandler *>
+              (static_cast<ContextHandler *>
                (new oox::vml::DrawingFragment
                 ( *mxFilterBase, msRelationFragmentPath, *mpDrawing )));
         }

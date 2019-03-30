@@ -144,8 +144,7 @@ std::unique_ptr<SvStream> UcbStreamHelper::CreateStream( const OUString& rFileNa
     // create a specialized interaction handler to manages Web certificates and Web credentials when needed
     Reference< XInteractionHandler > xIH(
         css::task::InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), nullptr ) );
-    Reference < XInteractionHandler > xIHScoped( static_cast< XInteractionHandler *> (
-                                                     new comphelper::SimpleFileAccessInteraction( xIH ) ) );
+    Reference<XInteractionHandler> xIHScoped(new comphelper::SimpleFileAccessInteraction(xIH));
 
     return lcl_CreateStream( rFileName, eOpenMode, xIHScoped, true /* bEnsureFileExists */ );
 }
@@ -157,8 +156,7 @@ std::unique_ptr<SvStream> UcbStreamHelper::CreateStream( const OUString& rFileNa
     // create a specialized interaction handler to manages Web certificates and Web credentials when needed
     Reference< XInteractionHandler > xIH(
         css::task::InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), nullptr ) );
-    Reference < XInteractionHandler > xIHScoped( static_cast< XInteractionHandler *> (
-                                                     new comphelper::SimpleFileAccessInteraction( xIH ) ) );
+    Reference<XInteractionHandler> xIHScoped(new comphelper::SimpleFileAccessInteraction(xIH));
     return lcl_CreateStream( rFileName, eOpenMode, xIHScoped,!bFileExists );
 }
 

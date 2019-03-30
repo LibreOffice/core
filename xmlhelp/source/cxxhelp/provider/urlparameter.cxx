@@ -574,7 +574,7 @@ zipOpen(SAL_UNUSED_PARAMETER const char *) {
     OUString language,jar,path;
 
     if( !ugblData->m_pInitial->get_eid().isEmpty() )
-        return static_cast<void*>(new Reference< XHierarchicalNameAccess >);
+        return new Reference<XHierarchicalNameAccess>;
     else
     {
         jar = ugblData->m_pInitial->get_jar();

@@ -92,13 +92,9 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
                         io::TempFile::create(m_xContext),
                         uno::UNO_QUERY_THROW );
 
-    return uno::Reference< uno::XInterface >(
-                static_cast< OWeakObject* >( new OStorage(  xTempStream,
-                                                            embed::ElementModes::READWRITE,
-                                                            uno::Sequence< beans::PropertyValue >(),
-                                                            m_xContext,
-                                                            embed::StorageFormats::PACKAGE ) ),
-                uno::UNO_QUERY );
+    return static_cast<OWeakObject*>(new OStorage(xTempStream, embed::ElementModes::READWRITE,
+                                                  uno::Sequence<beans::PropertyValue>(), m_xContext,
+                                                  embed::StorageFormats::PACKAGE));
 }
 
 uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithArguments(
@@ -260,9 +256,8 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         if ( !CheckPackageSignature_Impl( xInputStream, xSeekable ) )
             throw io::IOException(); // TODO: this is not a package file
 
-        return uno::Reference< uno::XInterface >(
-                    static_cast< OWeakObject* >( new OStorage( xInputStream, nStorageMode, aPropsToSet, m_xContext, nStorageType ) ),
-                    uno::UNO_QUERY );
+        return static_cast<OWeakObject*>(
+            new OStorage(xInputStream, nStorageMode, aPropsToSet, m_xContext, nStorageType));
     }
     else if ( xStream.is() )
     {
@@ -280,9 +275,8 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         if ( !CheckPackageSignature_Impl( xStream->getInputStream(), xSeekable ) )
             throw io::IOException(); // TODO: this is not a package file
 
-        return uno::Reference< uno::XInterface >(
-                    static_cast< OWeakObject* >( new OStorage( xStream, nStorageMode, aPropsToSet, m_xContext, nStorageType ) ),
-                    uno::UNO_QUERY );
+        return static_cast<OWeakObject*>(
+            new OStorage(xStream, nStorageMode, aPropsToSet, m_xContext, nStorageType));
     }
 
     throw uno::Exception("no input stream or regular stream", nullptr); // general error during creation

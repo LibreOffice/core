@@ -126,9 +126,7 @@ static uno::Reference< uno::XInterface >
 DocumentContentFactory_CreateInstance(
     const uno::Reference< lang::XMultiServiceFactory> & rSMgr )
 {
-    lang::XServiceInfo * pX = static_cast< lang::XServiceInfo * >(
-        new DocumentContentFactory( rSMgr ) );
-    return uno::Reference< uno::XInterface >::query( pX );
+    return static_cast<lang::XServiceInfo*>(new DocumentContentFactory(rSMgr));
 }
 
 

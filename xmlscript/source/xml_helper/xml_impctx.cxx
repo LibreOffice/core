@@ -506,10 +506,8 @@ void DocumentHandlerImpl::startElement(
     }
     pPrefixes.reset();
     // ownership of arrays belongs to attribute list
-    xAttributes = static_cast< xml::input::XAttributes * >(
-        new ExtendedAttributes(
-            nAttribs, std::move(pUids), std::move(pLocalNames), std::move(pQNames),
-            xAttribs ) );
+    xAttributes = new ExtendedAttributes(nAttribs, std::move(pUids), std::move(pLocalNames),
+                                         std::move(pQNames), xAttribs);
 
     getElementName( rQElementName, &nUid, &aLocalName );
 
@@ -704,8 +702,7 @@ Reference< xml::sax::XDocumentHandler > createDocumentHandler(
     SAL_WARN_IF( !xRoot.is(), "xmlscript.xmlhelper", "xRoot is NULL" );
     if (xRoot.is())
     {
-        return static_cast< xml::sax::XDocumentHandler * >(
-            new DocumentHandlerImpl( xRoot, true /* mt use */ ) );
+        return new DocumentHandlerImpl(xRoot, true /* mt use */);
     }
     return Reference< xml::sax::XDocumentHandler >();
 }

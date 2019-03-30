@@ -233,15 +233,13 @@ void LibraryElement::endElement()
 Reference< css::xml::sax::XDocumentHandler >
 importLibraryContainer( LibDescriptorArray* pLibArray )
 {
-    return ::xmlscript::createDocumentHandler(
-        static_cast< xml::input::XRoot * >( new LibraryImport( pLibArray ) ) );
+    return ::xmlscript::createDocumentHandler(new LibraryImport(pLibArray));
 }
 
 css::uno::Reference< css::xml::sax::XDocumentHandler >
 importLibrary( LibDescriptor& rLib )
 {
-    return ::xmlscript::createDocumentHandler(
-        static_cast< xml::input::XRoot * >( new LibraryImport( &rLib ) ) );
+    return ::xmlscript::createDocumentHandler(new LibraryImport(&rLib));
 }
 
 LibDescriptorArray::LibDescriptorArray( sal_Int32 nLibCount )

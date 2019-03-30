@@ -81,10 +81,7 @@ uno::Reference< io::XInputStream > OSeekableInputWrapper::CheckSeekableCanWrap(
     if ( xSeek.is() )
         return xInStream;
 
-    uno::Reference< io::XInputStream > xNewStream(
-            static_cast< io::XInputStream* >(
-                new OSeekableInputWrapper( xInStream, rxContext ) ) );
-    return xNewStream;
+    return new OSeekableInputWrapper(xInStream, rxContext);
 }
 
 

@@ -153,8 +153,8 @@ Reference< XInterface > SAL_CALL
 TVFactory::CreateInstance(
     const Reference< XMultiServiceFactory >& xMultiServiceFactory )
 {
-    XServiceInfo* xP = static_cast<XServiceInfo*>(new TVFactory( comphelper::getComponentContext(xMultiServiceFactory) ));
-    return Reference< XInterface >::query( xP );
+    return static_cast<XServiceInfo*>(
+        new TVFactory(comphelper::getComponentContext(xMultiServiceFactory)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
