@@ -48,8 +48,8 @@ public class OnSlideSwipeListener implements OnTouchListener {
             // Check if the page is already zoomed-in.
             // Disable swiping gesture if that's the case.
             ImmutableViewportMetrics viewportMetrics = mLayerClient.getViewportMetrics();
-            if (viewportMetrics.viewportRectLeft > viewportMetrics.pageRectLeft ||
-                    viewportMetrics.viewportRectRight < viewportMetrics.pageRectRight) {
+            if (Math.round(viewportMetrics.viewportRectLeft) > Math.round(viewportMetrics.pageRectLeft) ||
+                    Math.round(viewportMetrics.viewportRectRight) < Math.round(viewportMetrics.pageRectRight)) {
                 return false;
             }
 
