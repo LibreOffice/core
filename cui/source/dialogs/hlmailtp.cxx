@@ -30,6 +30,8 @@
 
 #include <comphelper/lok.hxx>
 
+#include <comphelper/lok.hxx>
+
 using namespace ::com::sun::star;
 
 /*************************************************************************
