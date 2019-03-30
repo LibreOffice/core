@@ -28,6 +28,8 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <vcl/svapp.hxx>
 
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+
 #include <string.h>
 
 using namespace ::com::sun::star;

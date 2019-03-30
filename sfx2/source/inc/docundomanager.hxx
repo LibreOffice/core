@@ -25,6 +25,7 @@
 #include <com/sun/star/document/XUndoManager.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <vcl/svapp.hxx>
 
 #include <memory>
 

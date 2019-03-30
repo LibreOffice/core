@@ -37,6 +37,8 @@
 #include <cmdid.h>
 #include <helpids.h>
 #include <wrtsh.hxx>
+#include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <svl/imageitm.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>

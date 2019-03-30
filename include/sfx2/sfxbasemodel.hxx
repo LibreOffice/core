@@ -23,65 +23,44 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XModule.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/document/XCmisDocument.hpp>
-#include <com/sun/star/document/CmisVersion.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentRecovery.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
-#include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/lang/NotInitializedException.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
-#include <com/sun/star/frame/DoubleInitializationException.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/util/XCloseBroadcaster.hpp>
-#include <com/sun/star/util/XCloseListener.hpp>
-#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/view/XPrintJobBroadcaster.hpp>
 #include <com/sun/star/frame/XStorable2.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/document/CmisProperty.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
-#include <com/sun/star/ui/XUIConfigurationManager2.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Any.hxx>
-#include <cppuhelper/weak.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/script/XStarBasicAccess.hpp>
-#include <vcl/svapp.hxx>
 
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
 
@@ -89,16 +68,26 @@
 
 class ErrCode;
 class SfxMedium;
-class   SfxPrinter;
-class   SfxViewShell;
 class   SfxObjectShell                      ;
-class   SfxEventHint;
 class   SfxViewFrame;
 struct  IMPL_SfxBaseModel_DataContainer     ;   // impl. struct to hold member of class SfxBaseModel
 
 namespace sfx { namespace intern {
     class ViewCreationGuard;
 } }
+
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::container { class XNameContainer; }
+namespace com::sun::star::container { class XNameReplace; }
+namespace com::sun::star::document { class XEventListener; }
+namespace com::sun::star::document { struct CmisProperty; }
+namespace com::sun::star::document { struct CmisVersion; }
+namespace com::sun::star::document { struct EventObject; }
+namespace com::sun::star::frame { class XController2; }
+namespace com::sun::star::task { class XInteractionHandler; }
+namespace com::sun::star::ui { class XUIConfigurationManager2; }
+namespace com::sun::star::util { class XCloseListener; }
+namespace com::sun::star::util { class XModifyListener; }
 
 //  class declarations
 

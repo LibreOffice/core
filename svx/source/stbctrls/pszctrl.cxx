@@ -49,6 +49,7 @@
 #include <bitmaps.hlst>
 #include <unotools/localedatawrapper.hxx>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 /*  [Description]
 

@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_DOCSH_HXX
 
 #include <memory>
+#include <vector>
 #include <rtl/ref.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <sfx2/docfac.hxx>

@@ -77,6 +77,7 @@
 #include <comphelper/profilezone.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/typeprovider.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

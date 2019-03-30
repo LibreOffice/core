@@ -23,37 +23,28 @@
 #include <sfx2/dllapi.h>
 
 #include <vcl/abstdlg.hxx>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 
-#include <sot/exchange.hxx>
-#include <sfx2/lnkbase.hxx>
+#include <sot/formats.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 
-class SfxTabPage;
-class SfxViewFrame;
-class SfxBindings;
 class SfxItemSet;
 namespace vcl { class Window; }
-namespace rtl {
-   class OUString;
-};
 class SfxItemPool;
 class SvObjectServerList;
 class TransferableDataHelper;
-struct TransferableObjectDescriptor;
+class SvGlobalName;
 
 namespace sfx2
 {
     class LinkManager;
+    class SvBaseLink;
 }
 
-namespace com { namespace sun { namespace star { namespace frame {
-    class XModel;
-} } } }
+namespace com::sun::star::embed { class XEmbeddedObject; }
+namespace com::sun::star::embed { class XStorage; }
+namespace com::sun::star::io { class XInputStream; }
+namespace com::sun::star::uno { class Any; }
 
 class SfxAbstractDialog : virtual public VclAbstractDialog
 {
@@ -119,7 +110,7 @@ public:
     virtual void                SetRunLabel() = 0;
 };
 
-namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
+namespace com::sun::star::frame { class XFrame; }
 
 class SFX2_DLLPUBLIC SfxAbstractDialogFactory : virtual public VclAbstractDialogFactory
 {

@@ -23,14 +23,14 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <svl/poolitem.hxx>
-#include <cppuhelper/weak.hxx>
-#include <osl/conditn.hxx>
-#include <com/sun/star/frame/FeatureStateEvent.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 
 #include <cppuhelper/implbase.hxx>
+
+namespace com::sun::star::frame { class XDispatch; }
+namespace com::sun::star::frame { class XDispatchProvider; }
+namespace com::sun::star::frame { struct FeatureStateEvent; }
 
 class SFX2_DLLPUBLIC SfxStatusListener : public cppu::WeakImplHelper<
                           css::frame::XStatusListener,

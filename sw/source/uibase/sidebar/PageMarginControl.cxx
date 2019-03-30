@@ -38,6 +38,7 @@
 #include <cmdid.h>
 
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 
 #include <vcl/settings.hxx>
 

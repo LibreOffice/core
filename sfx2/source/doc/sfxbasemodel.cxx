@@ -32,9 +32,11 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/IllegalArgumentIOException.hpp>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
+#include <com/sun/star/frame/DoubleInitializationException.hpp>
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
@@ -56,6 +58,7 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/InvalidStateException.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <comphelper/enumhelper.hxx>
 
 #include <cppuhelper/implbase.hxx>

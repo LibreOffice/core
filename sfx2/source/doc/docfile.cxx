@@ -64,11 +64,13 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
@@ -127,6 +129,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/sfxuno.hxx>
 #include <openflag.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/propertysequence.hxx>

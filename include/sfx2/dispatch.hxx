@@ -39,6 +39,8 @@ class SfxModule;
 class Point;
 struct SfxDispatcher_Impl;
 
+namespace vcl { class Window; }
+
 enum class SfxDispatcherPopFlags
 {
     NONE          = 0,

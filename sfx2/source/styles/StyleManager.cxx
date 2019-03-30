@@ -8,6 +8,7 @@
  */
 
 #include <sfx2/StyleManager.hxx>
+#include <sfx2/objsh.hxx>
 
 namespace sfx2
 {

@@ -42,6 +42,8 @@
 #include <bitmaps.hlst>
 #include <sal/log.hxx>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 SFX_IMPL_STATUSBAR_CONTROL( XmlSecStatusBarControl, SfxUInt16Item );
 
 struct XmlSecStatusBarControl::XmlSecStatusBarControl_Impl

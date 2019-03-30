@@ -28,6 +28,7 @@
 #include <sfx2/sfxbasecontroller.hxx>
 #include "SwXDocumentSettings.hxx"
 #include <comphelper/MasterPropertySetInfo.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
