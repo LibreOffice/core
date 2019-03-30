@@ -2624,6 +2624,11 @@
         <p>This library is free software; you can redistribute it and/or modify it under the terms of the <a href=
         "#a_GNU_Lesser_General_Public_License">GNU Lesser General Public License</a> as published by the Free Software
         Foundation; either version 2.1 of the License, or (at your option) any later version.</p>
+        <h2>Albanian</h2>
+        <h3>Spelling dictionary</h3>
+        <p>The following software may be included in this product: Albanian spelling dictionary. Use of any of this
+        software is governed by the terms of the license below:</p>
+        <p><a href="#a__GPL_version_2">Jump to GNU GPL version 2.0</a></p>
         <h2>Arabic</h2>
         <h3>Spelling dictionary</h3>
         <p>The following software may be included in this product: Arabic spelling dictionary. Use of any of this
@@ -2674,6 +2679,12 @@
         <p>The following software may be included in this product: Bengali spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_2">Jump to GNU GPL version 2.0</a></p>
+        <h2>Bosnian</h2>
+        <h3>Spelling dictionary</h3>
+        <p>The following software may be included in this product: Bosnian spelling dictionary. Use of any of this
+        software is governed by the terms of the license below:</p>
+        <p><a href="#a__GPL_version_2">GPL 2.0</a>/<a href="#a__LGPL_version_2_1">LGPL 2.1</a>/<a href="#a__MPL_version_1_1">MPL 1.1</a>
+        tri-license</p>
         <h2>Breton</h2>
         <h3>Spelling dictionary</h3>
         <p>The following software may be included in this product: Breton spelling dictionary. Use of any of this
@@ -2721,13 +2732,23 @@
         <p><a href="#a__GPL_version_3">Jump to GPL version 3</a></p>
         <p><a href="#a__LGPL_version_3">Jump to LGPL version 3</a></p>
         <h2>Czech</h2>
+        <h3>Spelling dictionary</h3>
+        <p>The following software may be included in this product: Czech spelling dictionary. Use of any of this
+        software is governed by the terms of the license below:</p>
+        <p><a href="#a__GPL_version_2">Jump to GNU GPL version 2.0</a></p>
+        <h3>Hyphenation patterns</h3>
+        <p>The following software may be included in this product: Czech hyphenation patterns. Use of any of this
+        software is governed by the terms of the license below:</p>
+        <p><a href="#a__GPL_version_2">Jump to GNU GPL version 2.0</a></p>
         <h3>Thesaurus</h3>
         <p>The following software may be included in this product: Czech thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
-        <p>Copyright (c) 1994,2008 Karel Pala, Jan Všianský<br />
-        pala@fi.muni.cz</p>
-        <p>You can freely use the thesaurus in OpenOffice.org (or its derivatives). You can not modify it or use for
-        commercial purposes without the author's approval.</p>
+        <p>Origin: Generated from an English &lt;-&gt; Czech translation dictionary, <a href=
+        "https://www.svobodneslovniky.cz/">https://www.svobodneslovniky.cz/</a></p>
+        <p>License: GNU Free Documentation License 1.1 or later, details in <a href=
+        "https://gerrit.libreoffice.org/plugins/gitiles/dictionaries/+/master/cs_CZ/README_en.txt">Appendix A</a></p>
+        <p>The thesaurus is generated automatically via a script by Jan Holesovsky &lt;kendy@collabora.com&gt;, based
+        on idea of Zdenek Zabokrtsky - big thanks!</p>
         <h2>Croatian</h2>
         <h3>Spelling dictionary</h3>
         <p>The following software may be included in this product: Croatian spelling dictionary. Use of any of this
@@ -3322,6 +3343,16 @@
         <p>Spellchecker files (gl_ES.aff, gl_ES.dic) from Mar Castro Pereiro also developed for Mancomún.</p>
         <p>Distributed under the GPL License.</p>
         <p><a href="#a__GPL_version_3">Jump to GPL Version 3</a></p>
+        <h2>Guarani</h2>
+        <h3>Spelling dictionary</h3>
+        <p>The following software may be included in this product: Guarani spelling dictionary.</p> <!-- FIXME license missing -->
+        <h3>Thesaurus</h3>
+        <p>The following software may be included in this product: Guarani thesaurus. Use of any of this software is
+        governed by the terms of the license below:</p>
+        <p>Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free
+        Documentation License, Version 1.2 or any later version published by the Free Software Foundation; with no
+        Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. A copy of the license is included in the
+        section entitled "GNU Free Documentation License".</p>
         <h2>Gujarati</h2>
         <h3>Spelling dictionary</h3>
         <p>The following software may be included in this product: Gujarati spelling dictionary. Use of any of this
@@ -3350,18 +3381,16 @@
         <h3>Spelling dictionary</h3>
         <p>The following software may be included in this product: Hungarian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
-        <p>GPL 2.0/LGPL 2.1/MPL 1.1 tri-license</p>
-        <p>The contents of this software may be used under the terms of the GNU General Public License Version 2 or
-        later (the "GPL"), or the GNU Lesser General Public License Version 2.1 or later (the "LGPL", see COPYING.LGPL)
-        or (excepting the LGPLed GNU gettext library in the intl/ directory) the Mozilla Public License Version 1.1 or
-        later (the "MPL", see COPYING.MPL).</p>
+        <p>MPLv2 and LesserGPLv3+</p>
+        <p>The contents of this software may be used under the terms of the GNU Lesser General Public License Version 3
+        or later (the "LGPL", see COPYING.LGPL) or the Mozilla Public License Version 2.0 or later (the "MPL", see
+        COPYING.MPL in the root folder of the source tree).</p>
         <p>Software distributed under these licenses is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND,
         either express or implied. See the licences for the specific language governing rights and limitations under
         the licenses.</p>
-        <p>2010 (c) László Németh &amp; Ferenc Godó</p>
-        <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
-        <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
-        <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
+        <p>2018 (c) László Németh &amp; Ferenc Godó</p>
+        <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
+        <p><a href="#a__MPL_version_2">Jump to MPL Version 2</a></p>
         <h3>Hyphenation patterns</h3>
         <p>The following software may be included in this product: Hungarian hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
@@ -3384,17 +3413,30 @@
         <p><a href="#a__GPL_version_3">Jump to GPL Version 3</a></p>
         <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
+        <h2>Indonesian</h2>
+        <h3>Spelling dictionary</h3>
+        <p>The following software may be included in this product: Indonesian spelling dictionary. Use of any of this
+        software is governed by the terms of the license below:</p>
+        <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
+        <h3>Hyphenation patterns</h3>
+        <p>The following software may be included in this product: Indonesian hyphenation patterns.</p> <!-- FIXME license missing -->
+        <h3>Thesaurus</h3>
+        <p>The following software may be included in this product: Indonesian thesaurus. Use of any of this software is
+        governed by the terms of the license below:</p>
+        <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h2>Icelandic</h2>
-        <h3>Spelling dictionary and thesaurus</h3>
+        <h3>Spelling dictionary, hypenation and thesaurus</h3>
         <p>The wordlist was developed by Orðabók Háskólans in cooperation with Reiknistofnun Háskóla Íslands in
         the early nineties and was released into the public domain. Further modifications to the wordlist are also
-        released into the public domain.<br />
-        <br />
-        The thesaurus and words in the spell checker with additional morphological information are from the Icelandic
-        Wiktionary Project, http://is.wiktionary.org. Works released by the Wiktionary project are under the Creative
-        Commons Attribution-ShareAlike 3.0 Unported license.<br />
-        <br />
-        You are free:<br />
+        released into the public domain.</p>
+        <p>The thesaurus and words in the spell checker with additional morphological information are from the
+        Icelandic Wiktionary Project, http://is.wiktionary.org. Works released by the Wiktionary project are under the
+        Creative Commons Attribution-ShareAlike 3.0 Unported license.</p>
+        <p>The hyphenation rules were developed by Icelandic Language Institute which now is a part of the Árni
+        Magnússon Institute for Icelandic Studies. The rules were made available at <a href=
+        "http://www.malfong.is/index.php?lang=en&amp;pg=hyphen">http://www.malfong.is/index.php?lang=en&amp;pg=hyphen</a>
+        under a Creative Commons Attribution 4.0 International license (CC BY 4.0).</p>
+        <p>You are free:<br />
         <br />
            to Share — to copy, distribute and transmit the work<br />
            to Remix — to adapt the work<br />
@@ -3770,6 +3812,11 @@
         software is governed by the terms of the license below:</p>
         <p>Copyright (C) 2004 Jason M Githeko</p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
+        <h2>Swahili</h2>
+        <h3>Spelling dictionary</h3>
+        <p>The following software may be included in this product: Swahili spelling dictionary. Use of any of this
+        software is governed by the terms of the license below:</p>
+        <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
         <h2>Swedish</h2>
         <h3>Spelling dictionary</h3>
         <p>The following software may be included in this product: Swedish spelling dictionary. Use of any of this
@@ -3814,6 +3861,17 @@
         <p>The following software may be included in this product: Thai spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
+        <h2>Tibetan</h2>
+        <h3>Spelling dictionary</h3>
+        <p>The following software may be included in this product: Classical Tibetan syllable spellchecker for
+        Hunspell. Use of any of this software is governed by the terms of the license below:</p>
+        <p>This work and the derived files are under the Creative Commons CC0 license (Public Domain).</p>
+        <h2>Turkish</h2>
+        <h3>Spelling dictionary</h3>
+        <p>The following software may be included in this product: Turkish spellchecker dictionary. Use of any of this
+        software is governed by the terms of the license below:</p>
+        <p>This dictionary is released under Mozilla Public License Version 2.0.</p>
+        <p><a href="#a__MPL_version_2">Jump to MPL Version 2</a></p>
         <h2>Ukrainian</h2>
         <h3>Spelling dictionary</h3>
         <p>The following software may be included in this product: Ukrainian spelling dictionary. Use of any of this
