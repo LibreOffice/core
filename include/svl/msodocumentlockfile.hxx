@@ -11,37 +11,9 @@
 #define INCLUDED_SVL_MSODOCUMENTLOCKFILE_HXX
 
 #include <svl/svldllapi.h>
-#include <svl/lockfilecommon.hxx>
 #include <svl/documentlockfile.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
-
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace io
-{
-class XInputStream;
-}
-}
-}
-}
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace io
-{
-class XOutputStream;
-}
-}
-}
-}
 
 #define MSO_WORD_LOCKFILE_SIZE 162
 #define MSO_EXCEL_AND_POWERPOINT_LOCKFILE_SIZE 165
@@ -53,11 +25,14 @@ namespace svt
 class SVL_DLLPUBLIC MSODocumentLockFile : public GenDocumentLockFile
 {
 private:
-    OUString m_sOrigURL;
-
-    static bool isWordFormat(const OUString& aOrigURL);
-    static bool isExcelFormat(const OUString& aOrigURL);
-    static bool isPowerPointFormat(const OUString& aOrigURL);
+    enum class AppType
+    {
+        Word,
+        Excel,
+        PowerPoint
+    };
+    static AppType getAppType(const OUString& sOrigURL);
+    AppType m_eAppType;
 
 protected:
     virtual void
@@ -69,9 +44,6 @@ protected:
 public:
     MSODocumentLockFile(const OUString& aOrigURL);
     virtual ~MSODocumentLockFile() override;
-
-    /// Need to generate different lock file name for MSO.
-    virtual OUString GenerateURL(const OUString& aOrigURL, const OUString& aPrefix) override;
 
     virtual LockFileEntry GetLockData() override;
 
