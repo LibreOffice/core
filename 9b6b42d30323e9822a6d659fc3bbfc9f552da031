@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "df87a7cf_74ee8989",
+        "filename": "oox/source/ole/axcontrol.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-03-30T04:41:31Z",
+      "side": 1,
+      "message": "IIUC, the correct procedure to export picture would be:- \n1. Write picture data to a stream.\n2. Use XGraphic object to import the picture from the stream (by calling importGraphic(rPicData) )\n3. use getProperty(xGraphic, PROP_Graphic) and finally export it.\nPlease correct me where I am wrong. I am unable to find a suitable function to do step 1 because I do not know which stream should I write the picture to.",
+      "parentUuid": "ff82abbf_f99dad66",
+      "range": {
+        "startLine": 509,
+        "startChar": 65,
+        "endLine": 509,
+        "endChar": 78
+      },
+      "revId": "9b6b42d30323e9822a6d659fc3bbfc9f552da031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff82abbf_b9896527",
         "filename": "oox/source/ole/axcontrol.cxx",
         "patchSetId": 4
