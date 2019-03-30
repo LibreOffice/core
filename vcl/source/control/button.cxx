@@ -1816,12 +1816,17 @@ void HelpButton::Click()
 
 void HelpButton::StateChanged( StateChangedType nStateChange )
 {
+#if !defined(ANDROID) && !defined(IOS)
     // Hide when we have no help URL.
     if (comphelper::LibreOfficeKit::isActive() &&
         officecfg::Office::Common::Help::HelpRootURL::get().isEmpty())
         Hide();
     else
         PushButton::StateChanged(nStateChange);
+#else
+    (void) nStateChange;
+    Hide();
+#endif
 }
 
 void RadioButton::ImplInitRadioButtonData()
