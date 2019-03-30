@@ -16,6 +16,7 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <IDocumentSettingAccess.hxx>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -68,6 +69,21 @@ DECLARE_OOXMLEXPORT_TEST(testendingSectionProps, "endingSectionProps.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("# of paragraphs", 2, getParagraphs());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Section is RightToLeft", text::WritingMode2::RL_TB, getProperty<sal_Int16>(xSect, "WritingMode"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Section Left Margin", sal_Int32(2540), getProperty<sal_Int32>(xSect, "SectionLeftMargin"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(tdf123912_protectedForm, "tdf123912_protectedForm.odt")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Compatibility: Protect form", true,
+                                 pDoc->getIDocumentSettingAccess().get( DocumentSettingId::PROTECT_FORM ) );
+
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSect(xSections->getByIndex(0), uno::UNO_QUERY);
+    if ( xSect.is() )
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Section1 is protected", true, getProperty<bool>(xSect, "IsProtected"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDateControl, "empty-date-control.odt")
