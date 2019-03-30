@@ -37,7 +37,7 @@ class tdf123479(UITestCase):
         edArg2 = xDialog.getChild("ED_ARG2")
         formulaRes = xDialog.getChild("formula_result")
 
-        #check formula wizzard data
+        #check formula wizard data
         self.assertEqual(get_state_as_dict(edArg1)["Text"], "CHAR(10)")
         self.assertEqual(get_state_as_dict(edArg2)["Text"], "OFFSET($Data.$A$2:$Data.$A$4,0,COLUMN()-3)")
         self.assertEqual(get_state_as_dict(formulaRes)["Text"], "{4;4;4}")
