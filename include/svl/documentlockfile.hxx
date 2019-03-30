@@ -33,10 +33,7 @@ namespace svt {
 class SVL_DLLPUBLIC GenDocumentLockFile : public LockFileCommon
 {
 public:
-    /// Specify the lockfile URL directly
-    GenDocumentLockFile( const OUString& aURL );
-    /// Let the object generate and own URL based on the original file's URL and a prefix
-    GenDocumentLockFile( const OUString& aOrigURL, const OUString& aPrefix );
+    GenDocumentLockFile(const OUString& aLockFileURL);
     virtual ~GenDocumentLockFile() override;
 
     bool CreateOwnLockFile();
