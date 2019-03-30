@@ -13,6 +13,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <IDocumentSettingAccess.hxx>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -50,6 +51,21 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121374_sectionHF2, "tdf121374_sectionHF2.doc")
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xHeaderText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, "HeaderText");
     CPPUNIT_ASSERT( xHeaderText->getString().startsWith("virkamatka-anomus") );
+}
+
+DECLARE_OOXMLEXPORT_TEST(tdf123912_protectedForm, "tdf123912_protectedForm.odt")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Compatibility: Protect form", true,
+                                 pDoc->getIDocumentSettingAccess().get( DocumentSettingId::PROTECT_FORM ) );
+
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSect(xSections->getByIndex(0), uno::UNO_QUERY);
+    if ( xSect.is() )
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Section1 is protected", true, getProperty<bool>(xSect, "IsProtected"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf121867, "tdf121867.odt")
