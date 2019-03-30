@@ -42,7 +42,8 @@ namespace
 
     Reference< XInterface > createInstance( const Reference< XMultiServiceFactory >& rServiceManager )
     {
-        return Reference< XInterface >( static_cast< XClipboard* >( new CWinClipboard( comphelper::getComponentContext(rServiceManager), "" ) ) );
+        return static_cast<XClipboard*>(
+            new CWinClipboard(comphelper::getComponentContext(rServiceManager), ""));
     }
 }
 

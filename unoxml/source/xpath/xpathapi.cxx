@@ -49,7 +49,7 @@ namespace XPath
     // factory
     Reference< XInterface > CXPathAPI::_getInstance(const Reference< XMultiServiceFactory >& rSMgr)
     {
-        return Reference< XInterface >(static_cast<XXPathAPI*>(new CXPathAPI(rSMgr)));
+        return static_cast<XXPathAPI*>(new CXPathAPI(rSMgr));
     }
 
     // ctor

@@ -96,8 +96,7 @@ void DragSource::StartDragImpl(
     // to the IDropSource interface implemented in this class (but only
     // while this function executes). The source context is also used
     // in DragSource::QueryContinueDrag.
-    m_currentContext= static_cast<XDragSourceContext*>( new SourceContext(
-                      this, listener ) );
+    m_currentContext = new SourceContext(this, listener);
 
     // Convert the XTransferable data object into an IDataObject object;
 

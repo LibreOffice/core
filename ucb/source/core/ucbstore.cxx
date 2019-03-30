@@ -163,9 +163,8 @@ XSERVICEINFO_COMMOM_IMPL( UcbStore,
 static css::uno::Reference< css::uno::XInterface >
 UcbStore_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
 {
-    css::lang::XServiceInfo* pX =
-        static_cast<css::lang::XServiceInfo*>(new UcbStore( ucbhelper::getComponentContext(rSMgr) ));
-    return css::uno::Reference< css::uno::XInterface >::query( pX );
+    return static_cast<css::lang::XServiceInfo*>(
+        new UcbStore(ucbhelper::getComponentContext(rSMgr)));
 }
 
 css::uno::Sequence< OUString >

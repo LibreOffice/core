@@ -200,9 +200,7 @@ XSERVICEINFO_COMMOM_IMPL( UcbPropertiesManager,
 static css::uno::Reference< css::uno::XInterface >
 UcbPropertiesManager_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & /*rSMgr*/ )
 {
-    css::lang::XServiceInfo* pX =
-        static_cast<css::lang::XServiceInfo*>(new UcbPropertiesManager);
-    return css::uno::Reference< css::uno::XInterface >::query( pX );
+    return static_cast<css::lang::XServiceInfo*>(new UcbPropertiesManager);
 }
 css::uno::Sequence< OUString >
 UcbPropertiesManager::getSupportedServiceNames_Static()

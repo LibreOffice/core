@@ -1931,13 +1931,11 @@ uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextBase::createEnumera
     {
         ESelection aSelection;
         ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
-        uno::Reference< container::XEnumeration > xEnum( static_cast<container::XEnumeration*>( new SvxUnoTextContentEnumeration( *this, aSelection ) ) );
-        return xEnum;
+        return new SvxUnoTextContentEnumeration(*this, aSelection);
     }
     else
     {
-        uno::Reference< container::XEnumeration > xEnum( static_cast<container::XEnumeration*>( new SvxUnoTextContentEnumeration( *this, maSelection ) ) );
-        return xEnum;
+        return new SvxUnoTextContentEnumeration(*this, maSelection);
     }
 }
 

@@ -1767,8 +1767,7 @@ Reference< xml::sax::XDocumentHandler > importDialogModel(
     std::shared_ptr< std::vector< OUString > > pStyleNames( new std::vector< OUString > );
     std::shared_ptr< std::vector< css::uno::Reference< css::xml::input::XElement > > > pStyles( new std::vector< css::uno::Reference< css::xml::input::XElement > > );
     return ::xmlscript::createDocumentHandler(
-         static_cast< xml::input::XRoot * >(
-            new DialogImport( xContext, xDialogModel, pStyleNames, pStyles, xDocument ) ) );
+        new DialogImport(xContext, xDialogModel, pStyleNames, pStyles, xDocument));
 }
 }
 

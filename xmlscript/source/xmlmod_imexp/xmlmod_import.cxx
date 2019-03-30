@@ -146,8 +146,7 @@ ModuleImport::~ModuleImport()
 Reference< xml::sax::XDocumentHandler >
 importScriptModule( ModuleDescriptor& rMod )
 {
-    return ::xmlscript::createDocumentHandler(
-        static_cast< xml::input::XRoot * >( new ModuleImport( rMod ) ) );
+    return ::xmlscript::createDocumentHandler(new ModuleImport(rMod));
 }
 
 }

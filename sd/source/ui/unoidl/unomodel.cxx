@@ -715,7 +715,7 @@ uno::Reference< drawing::XDrawPages > SAL_CALL SdXImpressDocument::getDrawPages(
     if( !xDrawPages.is() )
     {
         initializeDocument();
-        mxDrawPagesAccess = xDrawPages = static_cast<drawing::XDrawPages*>(new SdDrawPagesAccess(*this));
+        mxDrawPagesAccess = xDrawPages = new SdDrawPagesAccess(*this);
     }
 
     return xDrawPages;

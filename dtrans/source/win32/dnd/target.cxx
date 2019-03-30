@@ -312,8 +312,7 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
         // will be DROPEFFECT_NONE throughout
         m_nLastDropAction= ACTION_DEFAULT | ACTION_MOVE;
 
-        m_currentDragContext= static_cast<XDropTargetDragContext*>( new TargetDragContext(
-            this ) );
+        m_currentDragContext = new TargetDragContext(this);
 
         //--> TRA
 
@@ -451,7 +450,7 @@ HRESULT DropTarget::Drop( IDataObject  * /*pDataObj*/,
         m_bDropComplete= false;
 
         m_nCurrentDropAction= getFilteredActions( grfKeyState, *pdwEffect);
-        m_currentDropContext= static_cast<XDropTargetDropContext*>( new TargetDropContext( this )  );
+        m_currentDropContext = new TargetDropContext(this);
         if( m_nCurrentDropAction)
         {
             DropTargetDropEvent e;
