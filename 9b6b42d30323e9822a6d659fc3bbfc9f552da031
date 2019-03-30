@@ -95,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "df87a7cf_4f988c69",
+        "filename": "oox/source/ole/axcontrol.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-03-30T18:50:00Z",
+      "side": 1,
+      "message": "Sorry for slow progress, Tamás but I am trying as I want to resolve the bug. I just cannot know the right set of instructions to do so.",
+      "parentUuid": "ff82abbf_f9760d3f",
+      "range": {
+        "startLine": 531,
+        "startChar": 13,
+        "endLine": 531,
+        "endChar": 24
+      },
+      "revId": "9b6b42d30323e9822a6d659fc3bbfc9f552da031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff82abbf_b98e4525",
         "filename": "oox/source/ole/axcontrol.cxx",
         "patchSetId": 4
