@@ -40,20 +40,21 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules):
 
     # Avoid debug STL.
     debugStl = {
-        "array": "debug/array",
-        "bitset": "debug/bitset",
-        "deque": "debug/deque",
-        "list": "debug/list",
-        "map": "debug/map.h",
-        "set": "debug/set.h",
-        "set": "debug/multiset.h",
-        "unordered_map": "debug/unordered_map",
-        "unordered_set": "debug/unordered_set",
-        "vector": "debug/vector",
+        "array": ("debug/array"),
+        "bitset": ("debug/bitset"),
+        "deque": ("debug/deque"),
+        "list": ("debug/list"),
+        "map": ("debug/map.h"),
+        "set": ("debug/set.h", "debug/multiset.h"),
+        "unordered_map": ("debug/unordered_map"),
+        "unordered_set": ("debug/unordered_set"),
+        "vector": ("debug/vector"),
     }
-    for k, v in debugStl.items():
-        if include == k and v in toAdd:
-            return True
+    for k, values in debugStl.items():
+        if include == k:
+            for value in values:
+                if value in toAdd:
+                    return True
 
     # Avoid proposing to use libstdc++ internal headers.
     bits = {
