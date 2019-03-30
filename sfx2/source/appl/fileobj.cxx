@@ -34,6 +34,7 @@
 #include <sfx2/docfac.hxx>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/linkmgr.hxx>

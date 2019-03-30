@@ -28,7 +28,6 @@
 
 class SfxModule;
 class SfxStatusBarControl;
-class SfxBindings;
 
 svt::StatusbarController* SfxStatusBarControllerFactory(
     const css::uno::Reference< css::frame::XFrame >& rFrame,

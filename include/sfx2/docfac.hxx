@@ -31,6 +31,8 @@ class SfxFilter;
 class SfxViewFactory;
 struct SfxObjectFactory_Impl;
 class SfxFilterContainer;
+class SvGlobalName;
+class SfxModule;
 
 typedef void (*SfxVoidFunc)();
 

@@ -37,6 +37,7 @@
 #include <tools/debug.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>

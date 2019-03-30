@@ -20,6 +20,7 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <frmfmt.hxx>
 #include <ndnotxt.hxx>
 #include <flyfrm.hxx>

@@ -25,6 +25,7 @@
 #include <stringconstants.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/util/URL.hpp>

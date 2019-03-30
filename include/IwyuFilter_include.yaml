@@ -698,3 +698,66 @@ blacklist:
     include/sfx2/mieclip.hxx:
     # Needed for implicit dtor
     - tools/stream.hxx
+    include/sfx2/sfxbasecontroller.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XController2.hpp
+    - com/sun/star/frame/XControllerBorder.hpp
+    - com/sun/star/frame/XDispatchProvider.hpp
+    - com/sun/star/task/XStatusIndicatorSupplier.hpp
+    - com/sun/star/ui/XContextMenuInterception.hpp
+    - com/sun/star/awt/XUserInputInterception.hpp
+    - com/sun/star/frame/XDispatchInformationProvider.hpp
+    - com/sun/star/frame/XTitle.hpp
+    - com/sun/star/frame/XTitleChangeBroadcaster.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    include/sfx2/sfxbasemodel.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XChild.hpp
+    - com/sun/star/document/XDocumentPropertiesSupplier.hpp
+    - com/sun/star/document/XCmisDocument.hpp
+    - com/sun/star/rdf/XDocumentMetadataAccess.hpp
+    - com/sun/star/document/XDocumentRecovery.hpp
+    - com/sun/star/document/XUndoManagerSupplier.hpp
+    - com/sun/star/document/XEventBroadcaster.hpp
+    - com/sun/star/document/XDocumentEventBroadcaster.hpp
+    - com/sun/star/lang/XEventListener.hpp
+    - com/sun/star/document/XEventsSupplier.hpp
+    - com/sun/star/document/XEmbeddedScripts.hpp
+    - com/sun/star/document/XScriptInvocationContext.hpp
+    - com/sun/star/frame/XModel2.hpp
+    - com/sun/star/util/XModifiable2.hpp
+    - com/sun/star/view/XPrintable.hpp
+    - com/sun/star/view/XPrintJobBroadcaster.hpp
+    - com/sun/star/frame/XStorable2.hpp
+    - com/sun/star/frame/XLoadable.hpp
+    - com/sun/star/script/XStarBasicAccess.hpp
+    - com/sun/star/document/XViewDataSupplier.hpp
+    - com/sun/star/util/XCloseable.hpp
+    - com/sun/star/datatransfer/XTransferable.hpp
+    - com/sun/star/document/XDocumentSubStorageSupplier.hpp
+    - com/sun/star/document/XStorageBasedDocument.hpp
+    - com/sun/star/script/provider/XScriptProviderSupplier.hpp
+    - com/sun/star/ui/XUIConfigurationManagerSupplier.hpp
+    - com/sun/star/embed/XVisualObject.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/frame/XModule.hpp
+    - com/sun/star/frame/XTitle.hpp
+    - com/sun/star/frame/XTitleChangeBroadcaster.hpp
+    - com/sun/star/frame/XUntitledNumbers.hpp
+    include/sfx2/sfxsids.hrc:
+    # Needed for sfxitems.sdi to build
+    - svl/memberid.h
+    # Needed for TypedWhichId defines
+    - svl/typedwhich.hxx
+    - class SvxZoomItem
+    - class SfxUInt16Item
+    - class SvxHyperlinkItem
+    - class SfxDocumentInfoItem
+    - class SvxSearchItem
+    include/sfx2/shell.hxx:
+    # Used in macro define
+    - class SfxModule
+    include/sfx2/sfxstatuslistener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XStatusListener.hpp
+    - com/sun/star/lang/XComponent.hpp

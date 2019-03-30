@@ -104,6 +104,7 @@
 #include <svl/currencytable.hxx>
 #include <svtools/langtab.hxx>
 #include <cppu/unotype.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <bitmaps.hlst>

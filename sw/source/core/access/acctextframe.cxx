@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>

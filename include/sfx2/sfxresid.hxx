@@ -21,7 +21,6 @@
 
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
-#include <locale>
 
 SFX2_DLLPUBLIC OUString SfxResId(const char* pId);
 

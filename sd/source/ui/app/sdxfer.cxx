@@ -58,6 +58,7 @@
 #include <sdxfer.hxx>
 #include <unomodel.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

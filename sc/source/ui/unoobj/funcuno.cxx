@@ -23,6 +23,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/diagnose.h>
+#include <vcl/svapp.hxx>
 
 #include <scitems.hxx>
 #include <funcuno.hxx>

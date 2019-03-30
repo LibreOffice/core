@@ -30,6 +30,8 @@
 #include "stbctrls.h"
 #include <bitmaps.hlst>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 SFX_IMPL_STATUSBAR_CONTROL(SvxSelectionModeControl, SfxUInt16Item);
 
 /// Popup menu to select the selection type

@@ -18,6 +18,7 @@
  */
 
 #include <svl/itemprop.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/util/Date.hpp>
 

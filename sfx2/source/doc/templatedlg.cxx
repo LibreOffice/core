@@ -44,6 +44,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>

@@ -25,6 +25,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
+#include <com/sun/star/lang/NotInitializedException.hpp>
 #include <svl/undo.hxx>
 #include <tools/diagnose_ex.h>
 #include <framework/undomanagerhelper.hxx>

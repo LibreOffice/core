@@ -12,6 +12,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <svl/itemset.hxx>

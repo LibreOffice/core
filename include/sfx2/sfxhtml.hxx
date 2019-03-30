@@ -31,7 +31,6 @@
 
 class ImageMap;
 class SfxMedium;
-class SfxObjectShell;
 class SvNumberFormatter;
 
 class SFX2_DLLPUBLIC SfxHTMLParser : public HTMLParser

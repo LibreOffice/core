@@ -27,6 +27,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
+#include <osl/thread.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
 #include <unotools/streamwrap.hxx>
