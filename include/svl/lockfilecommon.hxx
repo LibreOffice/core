@@ -47,18 +47,15 @@ private:
 protected:
     ::osl::Mutex m_aMutex;
 
+    /// This method generates the URL of the lock file based on the document URL and the specified prefix.
+    static OUString GenerateOwnLockFileURL(const OUString& aOrigURL, const OUString& aPrefix);
+
 public:
-    /// Specify the lockfile URL directly
-    LockFileCommon( const OUString& aURL );
-    /// Let the object generate and own URL based on the original file's URL and a prefix
-    LockFileCommon( const OUString& aOrigURL, const OUString& aPrefix );
+    LockFileCommon(const OUString& aLockFileURL);
     virtual ~LockFileCommon();
 
     const OUString& GetURL() const;
     void SetURL(const OUString& aURL);
-
-    /// This method generates the URL of the lock file based on the document URL and the specified prefix.
-    virtual OUString GenerateURL( const OUString& aOrigURL, const OUString& aPrefix );
 
     static void ParseList( const css::uno::Sequence< sal_Int8 >& aBuffer, std::vector< LockFileEntry > &rOutput );
     static LockFileEntry ParseEntry( const css::uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& o_nCurPos );

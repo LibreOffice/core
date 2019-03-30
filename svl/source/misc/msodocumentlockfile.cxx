@@ -8,7 +8,6 @@
  */
 
 #include <svl/msodocumentlockfile.hxx>
-#include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <algorithm>
 #include <ucbhelper/content.hxx>
@@ -21,60 +20,69 @@
 
 namespace svt
 {
-bool MSODocumentLockFile::isWordFormat(const OUString& aOrigURL)
+namespace
 {
-    INetURLObject aDocURL = LockFileCommon::ResolveLinks(INetURLObject(aOrigURL));
-
-    return aDocURL.GetFileExtension().compareToIgnoreAsciiCase("DOC") == 0
-           || aDocURL.GetFileExtension().compareToIgnoreAsciiCase("DOCX") == 0
-           || aDocURL.GetFileExtension().compareToIgnoreAsciiCase("RTF") == 0
-           || aDocURL.GetFileExtension().compareToIgnoreAsciiCase("ODT") == 0;
+bool isWordFormat(const OUString& sExt)
+{
+    return sExt.equalsIgnoreAsciiCase("DOC") || sExt.equalsIgnoreAsciiCase("DOCX")
+           || sExt.equalsIgnoreAsciiCase("RTF") || sExt.equalsIgnoreAsciiCase("ODT");
 }
 
-bool MSODocumentLockFile::isExcelFormat(const OUString& aOrigURL)
+bool isExcelFormat(const OUString& sExt)
 {
-    INetURLObject aDocURL = LockFileCommon::ResolveLinks(INetURLObject(aOrigURL));
-
-    return //aDocURL.GetFileExtension().compareToIgnoreAsciiCase("XLS") || // MSO does not create lockfile for XLS
-        aDocURL.GetFileExtension().compareToIgnoreAsciiCase("XLSX") == 0
-        || aDocURL.GetFileExtension().compareToIgnoreAsciiCase("ODS") == 0;
+    return //sExt.equalsIgnoreAsciiCase("XLS") || // MSO does not create lockfile for XLS
+        sExt.equalsIgnoreAsciiCase("XLSX") || sExt.equalsIgnoreAsciiCase("ODS");
 }
 
-bool MSODocumentLockFile::isPowerPointFormat(const OUString& aOrigURL)
+bool isPowerPointFormat(const OUString& sExt)
 {
-    INetURLObject aDocURL = LockFileCommon::ResolveLinks(INetURLObject(aOrigURL));
-
-    return aDocURL.GetFileExtension().compareToIgnoreAsciiCase("PPTX") == 0
-           || aDocURL.GetFileExtension().compareToIgnoreAsciiCase("PPT") == 0
-           || aDocURL.GetFileExtension().compareToIgnoreAsciiCase("ODP") == 0;
+    return sExt.equalsIgnoreAsciiCase("PPTX") || sExt.equalsIgnoreAsciiCase("PPT")
+           || sExt.equalsIgnoreAsciiCase("ODP");
 }
 
-MSODocumentLockFile::MSODocumentLockFile(const OUString& aOrigURL)
-    : GenDocumentLockFile(GenerateURL(aOrigURL, "~$"))
-    , m_sOrigURL(aOrigURL)
-{
-}
-
-MSODocumentLockFile::~MSODocumentLockFile() {}
-
-OUString MSODocumentLockFile::GenerateURL(const OUString& aOrigURL, const OUString& aPrefix)
+// Need to generate different lock file name for MSO.
+OUString GenerateMSOLockFileURL(const OUString& aOrigURL)
 {
     INetURLObject aURL = LockFileCommon::ResolveLinks(INetURLObject(aOrigURL));
 
     // For text documents MSO Word cuts some of the first characters of the file name
     OUString sFileName = aURL.GetName();
-    if (isWordFormat(aOrigURL))
+    const OUString sExt = aURL.GetFileExtension();
+
+    if (isWordFormat(sExt))
     {
-        const sal_Int32 nFileNameLength
-            = sFileName.getLength() - aURL.GetFileExtension().getLength() - 1;
+        const sal_Int32 nFileNameLength = sFileName.getLength() - sExt.getLength() - 1;
         if (nFileNameLength >= 8)
             sFileName = sFileName.copy(2);
         else if (nFileNameLength == 7)
             sFileName = sFileName.copy(1);
     }
-    aURL.SetName(aPrefix + sFileName);
+    aURL.SetName("~$" + sFileName);
     return aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 }
+}
+
+// static
+MSODocumentLockFile::AppType MSODocumentLockFile::getAppType(const OUString& sOrigURL)
+{
+    AppType eResult = AppType::PowerPoint;
+    INetURLObject aDocURL = LockFileCommon::ResolveLinks(INetURLObject(sOrigURL));
+    const OUString sExt = aDocURL.GetFileExtension();
+    if (isWordFormat(sExt))
+        eResult = AppType::Word;
+    else if (isExcelFormat(sExt))
+        eResult = AppType::Excel;
+
+    return eResult;
+}
+
+MSODocumentLockFile::MSODocumentLockFile(const OUString& aOrigURL)
+    : GenDocumentLockFile(GenerateMSOLockFileURL(aOrigURL))
+    , m_eAppType(getAppType(aOrigURL))
+{
+}
+
+MSODocumentLockFile::~MSODocumentLockFile() {}
 
 void MSODocumentLockFile::WriteEntryToStream(
     const LockFileEntry& aEntry, const css::uno::Reference<css::io::XOutputStream>& xOutput)
@@ -82,8 +90,8 @@ void MSODocumentLockFile::WriteEntryToStream(
     ::osl::MutexGuard aGuard(m_aMutex);
 
     // Reallocate the date with the right size, different lock file size for different components
-    int nLockFileSize = isWordFormat(m_sOrigURL) ? MSO_WORD_LOCKFILE_SIZE
-                                                 : MSO_EXCEL_AND_POWERPOINT_LOCKFILE_SIZE;
+    int nLockFileSize = m_eAppType == AppType::Word ? MSO_WORD_LOCKFILE_SIZE
+                                                    : MSO_EXCEL_AND_POWERPOINT_LOCKFILE_SIZE;
     css::uno::Sequence<sal_Int8> aData(nLockFileSize);
 
     // Write out the user name's length as a single byte integer
@@ -105,32 +113,26 @@ void MSODocumentLockFile::WriteEntryToStream(
     }
 
     // Fill up the remaining bytes with dummy data
-    if (isWordFormat(m_sOrigURL))
+    switch (m_eAppType)
     {
-        while (nIndex < MSO_USERNAME_MAX_LENGTH + 2)
-        {
+        case AppType::Word:
+            while (nIndex < MSO_USERNAME_MAX_LENGTH + 2)
+            {
+                aData[nIndex] = static_cast<sal_Int8>(0);
+                ++nIndex;
+            }
+            break;
+        case AppType::PowerPoint:
             aData[nIndex] = static_cast<sal_Int8>(0);
             ++nIndex;
-        }
-    }
-    else if (isExcelFormat(m_sOrigURL))
-    {
-        while (nIndex < MSO_USERNAME_MAX_LENGTH + 3)
-        {
-            aData[nIndex] = static_cast<sal_Int8>(0x20);
-            ++nIndex;
-        }
-    }
-    else
-    {
-        aData[nIndex] = static_cast<sal_Int8>(0);
-        ++nIndex;
-
-        while (nIndex < MSO_USERNAME_MAX_LENGTH + 3)
-        {
-            aData[nIndex] = static_cast<sal_Int8>(0x20);
-            ++nIndex;
-        }
+            [[fallthrough]];
+        case AppType::Excel:
+            while (nIndex < MSO_USERNAME_MAX_LENGTH + 3)
+            {
+                aData[nIndex] = static_cast<sal_Int8>(0x20);
+                ++nIndex;
+            }
+            break;
     }
 
     // At the next position we have the user name's length again, but now as a 2 byte integer
@@ -150,26 +152,28 @@ void MSODocumentLockFile::WriteEntryToStream(
     }
 
     // Fill the remaining part with dummy bits
-    if (isWordFormat(m_sOrigURL))
+    switch (m_eAppType)
     {
-        while (nIndex < nLockFileSize)
-        {
-            aData[nIndex] = static_cast<sal_Int8>(0);
-            ++nIndex;
-        }
-    }
-    else
-    {
-        while (nIndex < nLockFileSize)
-        {
-            aData[nIndex] = static_cast<sal_Int8>(0x20);
-            ++nIndex;
-            if (nIndex < nLockFileSize)
+        case AppType::Word:
+            while (nIndex < nLockFileSize)
             {
                 aData[nIndex] = static_cast<sal_Int8>(0);
                 ++nIndex;
             }
-        }
+            break;
+        case AppType::Excel:
+        case AppType::PowerPoint:
+            while (nIndex < nLockFileSize)
+            {
+                aData[nIndex] = static_cast<sal_Int8>(0x20);
+                ++nIndex;
+                if (nIndex < nLockFileSize)
+                {
+                    aData[nIndex] = static_cast<sal_Int8>(0);
+                    ++nIndex;
+                }
+            }
+            break;
     }
 
     xOutput->writeBytes(aData);
@@ -248,7 +252,10 @@ void MSODocumentLockFile::RemoveFile()
 
 bool MSODocumentLockFile::IsMSOSupportedFileFormat(const OUString& aURL)
 {
-    return isWordFormat(aURL) || isExcelFormat(aURL) || isPowerPointFormat(aURL);
+    INetURLObject aDocURL = LockFileCommon::ResolveLinks(INetURLObject(aURL));
+    const OUString sExt = aDocURL.GetFileExtension();
+
+    return isWordFormat(sExt) || isExcelFormat(sExt) || isPowerPointFormat(sExt);
 }
 
 } // namespace svt

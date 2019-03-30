@@ -54,14 +54,8 @@ using namespace ::com::sun::star;
 
 namespace svt {
 
-GenDocumentLockFile::GenDocumentLockFile( const OUString& aURL )
-: LockFileCommon( aURL )
-{
-}
-
-
-GenDocumentLockFile::GenDocumentLockFile( const OUString& aOrigURL, const OUString& aPrefix )
-: LockFileCommon( aOrigURL, aPrefix )
+GenDocumentLockFile::GenDocumentLockFile(const OUString& aLockFileURL)
+    : LockFileCommon(aLockFileURL)
 {
 }
 
@@ -179,7 +173,7 @@ void GenDocumentLockFile::RemoveFileDirectly()
 
 
 DocumentLockFile::DocumentLockFile( const OUString& aOrigURL )
-: GenDocumentLockFile( aOrigURL, ".~lock." )
+    : GenDocumentLockFile(GenerateOwnLockFileURL(aOrigURL, ".~lock."))
 {
 }
 
