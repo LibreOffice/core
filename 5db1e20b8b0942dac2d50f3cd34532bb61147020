@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_348561ae",
+        "filename": "svl/source/misc/msodocumentlockfile.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-03-30T06:47:32Z",
+      "side": 1,
+      "message": "Hmm... this looks incorrect. This just truncates our internal UTF-16 two-byte characters, thus ruining non-ASCII names, instead of converting to current codepage.\n\nInteresting what would MSO do when ACP is UTF-8 (\u003dmultibyte), or other multibyte codepages used in East? Which translates to what is the correct thing for LO to do in these circumstances.",
+      "range": {
+        "startLine": 107,
+        "startChar": 24,
+        "endLine": 107,
+        "endChar": 64
+      },
+      "revId": "5db1e20b8b0942dac2d50f3cd34532bb61147020",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
