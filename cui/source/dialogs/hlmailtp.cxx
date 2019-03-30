@@ -27,6 +27,8 @@
 #include <hlmailtp.hxx>
 #include <bitmaps.hlst>
 
+#include <comphelper/lok.hxx>
+
 using namespace ::com::sun::star;
 
 /*************************************************************************
@@ -61,7 +63,8 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( vcl::Window *pParent, IconChoiceDialog*
     m_pBtAdrBook->SetClickHdl      ( LINK ( this, SvxHyperlinkMailTp, ClickAdrBookHdl_Impl ) );
     m_pCbbReceiver->SetModifyHdl   ( LINK ( this, SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl) );
 
-    if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) )
+    if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) ||
+         comphelper::LibreOfficeKit::isActive() )
         m_pBtAdrBook->Hide();
 }
 
