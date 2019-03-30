@@ -60,27 +60,21 @@ MSODocumentLockFile::~MSODocumentLockFile() {}
 OUString MSODocumentLockFile::GenerateURL(const OUString& aOrigURL, const OUString& aPrefix)
 {
     INetURLObject aDocURL = LockFileCommon::ResolveLinks(INetURLObject(aOrigURL));
-    OUString aURL = aDocURL.GetPartBeforeLastName();
-    aURL += aPrefix;
 
     // For text documents MSO Word cuts some of the first characters of the file name
     OUString sFileName = aDocURL.GetName();
     if (isWordFormat(aOrigURL))
     {
-        sal_Int32 nFileNameLength
-            = aDocURL.GetName().getLength() - aDocURL.GetFileExtension().getLength() - 1;
+        const sal_Int32 nFileNameLength
+            = sFileName.getLength() - aDocURL.GetFileExtension().getLength() - 1;
         if (nFileNameLength >= 8)
-            aURL += sFileName.copy(2);
+            sFileName = sFileName.copy(2);
         else if (nFileNameLength == 7)
-            aURL += sFileName.copy(1);
-        else
-            aURL += sFileName;
+            sFileName = sFileName.copy(1);
     }
-    else
-    {
-        aURL += sFileName;
-    }
-    return INetURLObject(aURL).GetMainURL(INetURLObject::DecodeMechanism::NONE);
+    sFileName = aPrefix + sFileName;
+    aDocURL.SetName(sFileName);
+    return aDocURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 }
 
 void MSODocumentLockFile::WriteEntryToStream(
