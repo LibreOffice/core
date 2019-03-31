@@ -527,8 +527,9 @@ void CppuType::dumpInitializer(
                 out << "0";
                 break;
             case codemaker::UnoType::Sort::Enum:
+                assert(dynamic_cast<unoidl::EnumTypeEntity*>(ent.get()));
                 out << codemaker::cpp::scopedCppName(u2b(n)) << "_"
-                    << (dynamic_cast< unoidl::EnumTypeEntity * >(ent.get())->
+                    << (static_cast<unoidl::EnumTypeEntity*>(ent.get())->
                         getMembers()[0].name);
                 break;
             case codemaker::UnoType::Sort::String:

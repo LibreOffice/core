@@ -4483,8 +4483,9 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
                 break;
             case SC_CAT_MOVE:
                 {
-                    const ScChangeActionMove* pMove = dynamic_cast< const ScChangeActionMove* >( pAction );
-                    OSL_ENSURE( pMove, "ScChangeTrack::Clone: pMove is null!" );
+                    assert(dynamic_cast<const ScChangeActionMove*>(pAction)
+                           && "ScChangeTrack::Clone: pMove is null!");
+                    auto pMove = static_cast<const ScChangeActionMove*>(pAction);
 
                     pClonedAction = new ScChangeActionMove(
                         pAction->GetActionNumber(),

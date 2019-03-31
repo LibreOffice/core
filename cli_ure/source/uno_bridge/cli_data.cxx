@@ -1330,7 +1330,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                             {
                                 void * p= ((uno_Sequence *) seq.get())->elements +
                                     (nPos * element_td.get()->nSize);
-                                System::Object^ elemData= dynamic_cast<System::Array^>(cli_data)->GetValue(nPos);
+                                System::Object^ elemData= safe_cast<System::Array^>(cli_data)->GetValue(nPos);
                                 map_to_uno(
                                     p, elemData, element_td.get()->pWeakRef,
                                     false /* no assign */);

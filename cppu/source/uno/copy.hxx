@@ -21,6 +21,7 @@
 
 #include "prim.hxx"
 #include "constr.hxx"
+#include <cassert>
 #include <cstdlib>
 
 namespace cppu
@@ -138,6 +139,7 @@ inline void _copyConstructAnyFromData(
             pDestAny->pData = &pDestAny->pReserved;
         else
             pDestAny->pData = std::malloc( sizeof(sal_Int64) );
+        assert(pDestAny->pData);
         *static_cast<sal_Int64 *>(pDestAny->pData) = *static_cast<sal_Int64 *>(pSource);
         break;
     case typelib_TypeClass_FLOAT:
@@ -145,6 +147,7 @@ inline void _copyConstructAnyFromData(
             pDestAny->pData = &pDestAny->pReserved;
         else
             pDestAny->pData = std::malloc( sizeof(float) );
+        assert(pDestAny->pData);
         *static_cast<float *>(pDestAny->pData) = *static_cast<float *>(pSource);
         break;
     case typelib_TypeClass_DOUBLE:
@@ -152,6 +155,7 @@ inline void _copyConstructAnyFromData(
             pDestAny->pData = &pDestAny->pReserved;
         else
             pDestAny->pData = std::malloc( sizeof(double) );
+        assert(pDestAny->pData);
         *static_cast<double *>(pDestAny->pData) = *static_cast<double *>(pSource);
         break;
     case typelib_TypeClass_STRING:
@@ -297,6 +301,7 @@ inline void _copyConstructAny(
                     pDestAny->pData = &pDestAny->pReserved;
                 else
                     pDestAny->pData = std::malloc( sizeof(sal_Int64) );
+                assert(pDestAny->pData);
                 *static_cast<sal_Int64 *>(pDestAny->pData) = 0;
                 break;
             case typelib_TypeClass_FLOAT:
@@ -304,6 +309,7 @@ inline void _copyConstructAny(
                     pDestAny->pData = &pDestAny->pReserved;
                 else
                     pDestAny->pData = std::malloc( sizeof(float) );
+                assert(pDestAny->pData);
                 *static_cast<float *>(pDestAny->pData) = 0.0;
                 break;
             case typelib_TypeClass_DOUBLE:
@@ -311,6 +317,7 @@ inline void _copyConstructAny(
                     pDestAny->pData = &pDestAny->pReserved;
                 else
                     pDestAny->pData = std::malloc( sizeof(double) );
+                assert(pDestAny->pData);
                 *static_cast<double *>(pDestAny->pData) = 0.0;
                 break;
             case typelib_TypeClass_STRING:
