@@ -146,13 +146,22 @@ void draw(QStyle::ComplexControl element, QStyleOptionComplex* option, QImage* i
 }
 
 void lcl_drawFrame(QStyle::PrimitiveElement element, QImage* image, QStyle::State const& state,
+                   bool bClip = true,
                    QStyle::PixelMetric eLineMetric = QStyle::PM_DefaultFrameWidth)
 {
+    const int fw = QApplication::style()->pixelMetric(eLineMetric);
     QStyleOptionFrame option;
     option.frameShape = QFrame::StyledPanel;
-    option.state = QStyle::State_Sunken;
-    option.lineWidth = QApplication::style()->pixelMetric(eLineMetric);
-    draw(element, &option, image, state);
+    option.state = QStyle::State_Sunken | state;
+    option.lineWidth = fw;
+
+    QRect aRect(image->rect());
+    option.rect = aRect;
+
+    QPainter painter(image);
+    if (bClip)
+        painter.setClipRegion(QRegion(aRect).subtracted(aRect.adjusted(fw, fw, -fw, -fw)));
+    QApplication::style()->drawPrimitive(element, &option, &painter);
 }
 }
 
@@ -214,8 +223,6 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
             m_image->fill(Qt::transparent);
             break;
     }
-
-    QRegion* localClipRegion = nullptr;
 
     if (type == ControlType::Pushbutton)
     {
@@ -296,12 +303,14 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
             QPoint center = rect.center();
             rect.setHeight(size.height());
             rect.moveCenter(center);
+            option.state |= vclStateValue2StateFlag(nControlState, value);
+            option.rect = rect;
+
+            QPainter painter(m_image.get());
             // don't paint over popup frame border (like the hack above, but here it can be simpler)
-            int fw = QApplication::style()->pixelMetric(QStyle::PM_MenuPanelWidth);
-            localClipRegion
-                = new QRegion(rect.translated(widgetRect.topLeft()).adjusted(fw, 0, -fw, 0));
-            draw(QStyle::CE_MenuItem, &option, m_image.get(),
-                 vclStateValue2StateFlag(nControlState, value), rect);
+            const int fw = QApplication::style()->pixelMetric(QStyle::PM_MenuPanelWidth);
+            painter.setClipRect(rect.adjusted(fw, 0, -fw, 0));
+            QApplication::style()->drawControl(QStyle::CE_MenuItem, &option, &painter);
         }
         else if (part == ControlPart::MenuItemCheckMark || part == ControlPart::MenuItemRadioMark)
         {
@@ -368,30 +377,27 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
              && (part == ControlPart::ThumbVert || part == ControlPart::ThumbHorz))
     { // reduce paint area only to the handle area
         const int handleExtend = QApplication::style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
-        QRect rect;
         QStyleOption option;
+        option.state = vclStateValue2StateFlag(nControlState, value);
 
+        QPainter painter(m_image.get());
         if (part == ControlPart::ThumbVert)
         {
-            rect = QRect(0, 0, handleExtend, widgetRect.height());
-            localClipRegion
-                = new QRegion(widgetRect.x(), widgetRect.y(), handleExtend, widgetRect.height());
-            option.state = QStyle::State_Horizontal;
+            option.rect = QRect(0, 0, handleExtend, widgetRect.height());
+            painter.setClipRect(widgetRect.x(), widgetRect.y(), handleExtend, widgetRect.height());
+            option.state |= QStyle::State_Horizontal;
         }
         else
         {
-            rect = QRect(0, 0, widgetRect.width(), handleExtend);
-            localClipRegion
-                = new QRegion(widgetRect.x(), widgetRect.y(), widgetRect.width(), handleExtend);
+            option.rect = QRect(0, 0, widgetRect.width(), handleExtend);
+            painter.setClipRect(widgetRect.x(), widgetRect.y(), widgetRect.width(), handleExtend);
         }
-
-        draw(QStyle::PE_IndicatorToolBarHandle, &option, m_image.get(),
-             vclStateValue2StateFlag(nControlState, value), rect);
+        QApplication::style()->drawPrimitive(QStyle::PE_IndicatorToolBarHandle, &option, &painter);
     }
     else if (type == ControlType::Editbox || type == ControlType::MultilineEditbox)
     {
         lcl_drawFrame(QStyle::PE_FrameLineEdit, m_image.get(),
-                      vclStateValue2StateFlag(nControlState, value));
+                      vclStateValue2StateFlag(nControlState, value), false);
     }
     else if (type == ControlType::Combobox)
     {
@@ -408,7 +414,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
         {
             case ControlPart::ListboxWindow:
                 lcl_drawFrame(QStyle::PE_Frame, m_image.get(),
-                              vclStateValue2StateFlag(nControlState, value),
+                              vclStateValue2StateFlag(nControlState, value), true,
                               QStyle::PM_ComboBoxFrameWidth);
                 break;
             case ControlPart::SubEdit:
@@ -555,10 +561,6 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
     {
         lcl_drawFrame(QStyle::PE_Frame, m_image.get(),
                       vclStateValue2StateFlag(nControlState, value));
-        // draw just the border, see http://qa.openoffice.org/issues/show_bug.cgi?id=107945
-        int fw = QApplication::style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-        localClipRegion
-            = new QRegion(QRegion(widgetRect).subtracted(widgetRect.adjusted(fw, fw, -fw, -fw)));
     }
     else if (type == ControlType::WindowBackground)
     {
@@ -612,7 +614,6 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
         returnVal = false;
     }
 
-    delete localClipRegion;
     return returnVal;
 }
 
@@ -916,15 +917,8 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
     }
     if (retVal)
     {
-        // Bounding region
-        Point aBPoint(boundingRect.x(), boundingRect.y());
-        Size aBSize(boundingRect.width(), boundingRect.height());
-        nativeBoundingRegion = tools::Rectangle(aBPoint, aBSize);
-
-        // vcl::Region of the content
-        Point aPoint(contentRect.x(), contentRect.y());
-        Size aSize(contentRect.width(), contentRect.height());
-        nativeContentRegion = tools::Rectangle(aPoint, aSize);
+        nativeBoundingRegion = toRectangle(boundingRect);
+        nativeContentRegion = toRectangle(contentRect);
     }
 
     return retVal;
