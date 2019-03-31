@@ -64,6 +64,10 @@ $(readlicense_oo_DIR)/license.txt : \
 	$(call gb_Helper_abbreviate_dirs, \
 		$(gb_AWK) 'sub("$$","\r")' $< > $@.tmp && mv $@.tmp $@ \
 	)
+
+$(SRCDIR)/readlicense_oo/license/LICENSE.html: \
+		$(readlicense_oo_DIR)/license.html
+	cp $< $@
 endif
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
