@@ -96,7 +96,7 @@ fi
 
 CHANGE_ID_AFTER="Bug|Issue"
 
-# Check for, and add if missing, a unique Change-Id
+# Check for, and add if missing, an unique Change-Id
 #
 add_ChangeId() {
         clean_message=`sed -e '
