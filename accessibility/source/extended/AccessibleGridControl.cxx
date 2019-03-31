@@ -377,7 +377,7 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL Accessibl
     SolarMutexGuard g;
 
     // if the context died meanwhile (we're no listener, so it won't tell us explicitly when this happens),
-    // then reset an re-create.
+    // then reset and re-create.
     if ( m_xContext.is() && !m_xContext->isAlive() )
         m_xContext = nullptr;
 
