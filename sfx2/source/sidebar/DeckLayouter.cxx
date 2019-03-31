@@ -32,6 +32,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/ui/XSidebarPanel.hpp>
 
 using namespace css;
 using namespace css::uno;

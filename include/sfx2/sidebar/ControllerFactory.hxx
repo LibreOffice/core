@@ -20,10 +20,12 @@
 #define INCLUDED_SFX2_SIDEBAR_CONTROLLERFACTORY_HXX
 
 #include <sfx2/dllapi.h>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XToolbarController.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
+namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::frame { class XController; }
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::frame { class XToolbarController; }
 
 class ToolBox;
 

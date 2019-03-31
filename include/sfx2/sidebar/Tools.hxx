@@ -21,14 +21,15 @@
 
 #include <vcl/image.hxx>
 #include <vcl/gradient.hxx>
-#include <tools/svborder.hxx>
 
 #include <sfx2/dllapi.h>
 
 #include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/URL.hpp>
+
+namespace com::sun::star::frame { class XController; }
+namespace com::sun::star::frame { class XDispatch; }
+namespace com::sun::star::frame { class XFrame; }
 
 
 namespace sfx2 { namespace sidebar {

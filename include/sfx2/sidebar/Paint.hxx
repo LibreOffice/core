@@ -21,11 +21,8 @@
 
 #include <vcl/gradient.hxx>
 #include <vcl/wall.hxx>
-#include <com/sun/star/awt/Gradient.hpp>
 
 #include <boost/variant.hpp>
-
-class Color;
 
 namespace sfx2 { namespace sidebar {
 

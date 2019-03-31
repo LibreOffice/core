@@ -20,7 +20,6 @@
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_CONTEXTLIST_HXX
 
 #include <sfx2/sidebar/Context.hxx>
-#include <sal/types.h>
 #include <rtl/ustring.hxx>
 
 #include <vector>

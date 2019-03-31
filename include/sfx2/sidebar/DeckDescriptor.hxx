@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_DECKDESCRIPTOR_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_DECKDESCRIPTOR_HXX
 
-#include <vcl/EnumContext.hxx>
 #include <sfx2/sidebar/ContextList.hxx>
 
 #include <sfx2/sidebar/Deck.hxx>

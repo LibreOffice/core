@@ -20,6 +20,7 @@
 #include <memory>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <svx/sidebar/LinePropertyPanelBase.hxx>
+#include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>

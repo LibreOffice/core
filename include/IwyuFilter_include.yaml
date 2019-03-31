@@ -761,3 +761,41 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/frame/XStatusListener.hpp
     - com/sun/star/lang/XComponent.hpp
+    include/sfx2/sidebar/Accessible.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessible.hpp
+    include/sfx2/sidebar/Paint.hxx:
+    # Needed for boost::variant
+    - vcl/gradient.hxx
+    include/sfx2/sidebar/SidebarController.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XContextChangeEventListener.hpp
+    - com/sun/star/beans/XPropertyChangeListener.hpp
+    - com/sun/star/ui/XSidebar.hpp
+    - com/sun/star/frame/XStatusListener.hpp
+    - com/sun/star/frame/XFrameActionListener.hpp
+    include/sfx2/sidebar/SidebarPanelBase.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XContextChangeEventListener.hpp
+    - com/sun/star/ui/XUIElement.hpp
+    - com/sun/star/ui/XToolPanel.hpp
+    - com/sun/star/ui/XSidebarPanel.hpp
+    - com/sun/star/ui/XUpdateModel.hpp
+    include/sfx2/sidebar/Theme.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    include/sfx2/sidebar/UnoDeck.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XDeck.hpp
+    include/sfx2/sidebar/UnoDecks.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XDecks.hpp
+    include/sfx2/sidebar/UnoPanel.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XPanel.hpp
+    include/sfx2/sidebar/UnoPanels.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XPanels.hpp
+    include/sfx2/sidebar/UnoSidebar.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XSidebarProvider.hpp

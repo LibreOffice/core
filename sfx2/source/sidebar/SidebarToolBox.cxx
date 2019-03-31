@@ -29,6 +29,9 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/miscopt.hxx>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XToolbarController.hpp>
 
 using namespace css;
 using namespace css::uno;

@@ -32,6 +32,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <com/sun/star/frame/XDispatch.hpp>
+
 using namespace css;
 using namespace css::uno;
 

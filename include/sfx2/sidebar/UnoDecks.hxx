@@ -14,14 +14,10 @@
 
 #include <com/sun/star/ui/XDecks.hpp>
 
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <cppuhelper/implbase.hxx>
 
-#include <cppuhelper/compbase.hxx>
-
-#include <sfx2/sidebar/SidebarController.hxx>
-#include <sfx2/sidebar/ResourceManager.hxx>
+namespace com::sun::star::frame { class XFrame; }
+namespace sfx2 { namespace sidebar { class SidebarController; } }
 
 /** get the decks
 */

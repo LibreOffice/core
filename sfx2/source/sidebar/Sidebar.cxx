@@ -20,6 +20,7 @@
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
+#include <sfx2/sidebar/PanelDescriptor.hxx>
 
 using namespace css;
 

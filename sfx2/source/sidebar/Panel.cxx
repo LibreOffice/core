@@ -37,6 +37,8 @@
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/ui/XToolPanel.hpp>
+#include <com/sun/star/ui/XSidebarPanel.hpp>
+#include <com/sun/star/ui/XUIElement.hpp>
 
 using namespace css;
 using namespace css::uno;

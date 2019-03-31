@@ -20,10 +20,11 @@
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_ACCESSIBLE_HXX
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
+
+namespace com::sun::star::accessibility { class XAccessibleContext; }
 
 typedef cppu::WeakComponentImplHelper <
     css::accessibility::XAccessible

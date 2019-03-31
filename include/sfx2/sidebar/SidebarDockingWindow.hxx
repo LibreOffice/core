@@ -23,7 +23,7 @@
 
 #include <rtl/ref.hxx>
 
-#include <svtools/acceleratorexecute.hxx>
+namespace svt { class AcceleratorExecute; }
 
 namespace sfx2 { namespace sidebar {
 

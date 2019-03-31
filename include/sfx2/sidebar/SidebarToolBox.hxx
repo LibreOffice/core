@@ -21,10 +21,9 @@
 
 #include <sfx2/dllapi.h>
 #include <vcl/toolbox.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XToolbarController.hpp>
-#include <com/sun/star/util/URL.hpp>
 #include <map>
+
+namespace com::sun::star::frame { class XToolbarController; }
 
 namespace sfx2 { namespace sidebar {
 

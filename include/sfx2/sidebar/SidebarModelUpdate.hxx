@@ -10,9 +10,10 @@
 #ifndef INCLUDED_INCLUDE_SFX2_SIDEBAR_SIDEBARUPDATEMODEL_HXX
 #define INCLUDED_INCLUDE_SFX2_SIDEBAR_SIDEBARUPDATEMODEL_HXX
 
-#include <com/sun/star/frame/XModel.hpp>
-
 #include <sfx2/dllapi.h>
+
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 namespace sfx2 { namespace sidebar {
 

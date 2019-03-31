@@ -28,6 +28,7 @@
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <toolkit/awt/vclxmenu.hxx>
