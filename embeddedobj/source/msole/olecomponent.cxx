@@ -334,7 +334,13 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
         else if ( aMedium.tymed == TYMED_GDI ) // Bitmap
         {
             aFormat = "image/x-MS-bmp";
-            nBufSize = GetBitmapBits( aMedium.hBitmap, 0, nullptr );
+
+            // Find out size of buffer: deprecated GetBitmapBits does not have a mode to return
+            // required buffer size
+            BITMAP aBmp;
+            GetObjectW(aMedium.hBitmap, sizeof(aBmp), &aBmp);
+            nBufSize = aBmp.bmWidthBytes * aBmp.bmHeight;
+
             pBuf.reset(new sal_Int8[nBufSize]);
             if ( nBufSize && nBufSize == sal::static_int_cast< ULONG >( GetBitmapBits( aMedium.hBitmap, nBufSize, pBuf.get() ) ) )
             {
