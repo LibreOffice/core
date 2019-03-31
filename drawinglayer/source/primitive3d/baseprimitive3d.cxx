@@ -166,14 +166,8 @@ namespace drawinglayer
 
             const BasePrimitive3D* pA(dynamic_cast< const BasePrimitive3D* >(rxA.get()));
             const BasePrimitive3D* pB(dynamic_cast< const BasePrimitive3D* >(rxB.get()));
-            const bool bAEqualZero(pA == nullptr);
 
-            if(bAEqualZero != (pB == nullptr))
-            {
-                return false;
-            }
-
-            if(bAEqualZero)
+            if(!pA || !pB)
             {
                 return false;
             }

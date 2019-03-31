@@ -617,6 +617,7 @@ void Test::testHyperlinkCopyPaste()
     CPPUNIT_ASSERT_EQUAL( sal_Int32(13), aURLFieldInfo1.aPosition.nIndex );
     CPPUNIT_ASSERT_EQUAL( sal_uInt16(EE_FEATURE_FIELD), aURLFieldInfo1.pFieldItem->Which() );
     SvxURLField* pURLField1 = dynamic_cast<SvxURLField*> ( const_cast<SvxFieldData*> (aURLFieldInfo1.pFieldItem->GetField()) );
+    CPPUNIT_ASSERT(pURLField1);
     CPPUNIT_ASSERT_EQUAL( aURL1, pURLField1->GetURL() );
     CPPUNIT_ASSERT_EQUAL( aRepres1, pURLField1->GetRepresentation() );
 
@@ -625,6 +626,7 @@ void Test::testHyperlinkCopyPaste()
     CPPUNIT_ASSERT_EQUAL( sal_Int32(21), aURLFieldInfo2.aPosition.nIndex );
     CPPUNIT_ASSERT_EQUAL( sal_uInt16(EE_FEATURE_FIELD), aURLFieldInfo2.pFieldItem->Which() );
     SvxURLField* pURLField2 = dynamic_cast<SvxURLField*> ( const_cast<SvxFieldData*> (aURLFieldInfo2.pFieldItem->GetField()) );
+    CPPUNIT_ASSERT(pURLField2);
     CPPUNIT_ASSERT_EQUAL( aURL2, pURLField2->GetURL() );
     CPPUNIT_ASSERT_EQUAL( aRepres2, pURLField2->GetRepresentation() );
 
@@ -652,6 +654,7 @@ void Test::testHyperlinkCopyPaste()
     CPPUNIT_ASSERT_EQUAL( sal_Int32(13), aACPURLFieldInfo1.aPosition.nIndex );
     CPPUNIT_ASSERT_EQUAL( sal_uInt16(EE_FEATURE_FIELD), aACPURLFieldInfo1.pFieldItem->Which() );
     SvxURLField* pACPURLField1 = dynamic_cast<SvxURLField*> ( const_cast<SvxFieldData*> (aACPURLFieldInfo1.pFieldItem->GetField()) );
+    CPPUNIT_ASSERT(pACPURLField1);
     CPPUNIT_ASSERT_EQUAL( aURL1, pACPURLField1->GetURL() );
     CPPUNIT_ASSERT_EQUAL( aRepres1, pACPURLField1->GetRepresentation() );
 
@@ -660,6 +663,7 @@ void Test::testHyperlinkCopyPaste()
     CPPUNIT_ASSERT_EQUAL( sal_Int32(21), aACPURLFieldInfo2.aPosition.nIndex );
     CPPUNIT_ASSERT_EQUAL( sal_uInt16(EE_FEATURE_FIELD), aACPURLFieldInfo2.pFieldItem->Which() );
     SvxURLField* pACPURLField2 = dynamic_cast<SvxURLField*> ( const_cast<SvxFieldData*> (aACPURLFieldInfo2.pFieldItem->GetField()) );
+    CPPUNIT_ASSERT(pACPURLField2);
     CPPUNIT_ASSERT_EQUAL( aURL2, pACPURLField2->GetURL() );
     CPPUNIT_ASSERT_EQUAL( aRepres2, pACPURLField2->GetRepresentation() )    ;
 
@@ -668,6 +672,7 @@ void Test::testHyperlinkCopyPaste()
     CPPUNIT_ASSERT_EQUAL( sal_Int32(38), aACPURLFieldInfo3.aPosition.nIndex );
     CPPUNIT_ASSERT_EQUAL( sal_uInt16(EE_FEATURE_FIELD), aACPURLFieldInfo3.pFieldItem->Which() );
     SvxURLField* pACPURLField3 = dynamic_cast<SvxURLField*> ( const_cast<SvxFieldData*> (aACPURLFieldInfo3.pFieldItem->GetField()) );
+    CPPUNIT_ASSERT(pACPURLField3);
     CPPUNIT_ASSERT_EQUAL( aURL1, pACPURLField3->GetURL() );
     CPPUNIT_ASSERT_EQUAL( aRepres1, pACPURLField3->GetRepresentation() );
 }

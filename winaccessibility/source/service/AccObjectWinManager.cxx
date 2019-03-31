@@ -111,9 +111,8 @@ AccObjectWinManager::Get_ToATInterface(HWND hWnd, long lParam, WPARAM wParam)
 
     if ( pRetIMAcc && lParam == OBJID_CLIENT )
     {
-        IAccessible* pTemp = dynamic_cast<IAccessible*>( pRetIMAcc );
-        LRESULT result = LresultFromObject(IID_IAccessible, wParam, pTemp);
-        pTemp->Release();
+        LRESULT result = LresultFromObject(IID_IAccessible, wParam, pRetIMAcc);
+        pRetIMAcc->Release();
         return result;
     }
     return 0;
