@@ -59,7 +59,7 @@ namespace basegfx
 
             // to have the correct curve segments in the crossover checks,
             // it is necessary to keep the original next vectors, too. Else,
-            // it may happen to use a already switched next vector which
+            // it may happen to use an already switched next vector which
             // would interpolate the wrong comparison point
             B2DVector               maOriginalNext;
         };
