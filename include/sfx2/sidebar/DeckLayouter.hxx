@@ -21,18 +21,11 @@
 
 #include <sfx2/sidebar/Panel.hxx>
 
-#include <tools/gen.hxx>
-
-#include <com/sun/star/ui/LayoutSize.hpp>
-
-#include <vector>
-
 class ScrollBar;
 namespace vcl { class Window; }
+namespace tools { class Rectangle; }
 
 namespace sfx2 { namespace sidebar {
-
-class Panel;
 
 /** Helper for layouting the direct and indirect children of a
     deck like title bars, panels, and scroll bars.

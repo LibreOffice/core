@@ -19,22 +19,22 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_PANEL_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_PANEL_HXX
 
-#include <sfx2/sidebar/Context.hxx>
 #include <sfx2/dllapi.h>
 
 #include <vcl/window.hxx>
 
-#include <com/sun/star/ui/XUIElement.hpp>
-#include <com/sun/star/ui/XSidebarPanel.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-
 #include <vector>
+
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::ui { class XSidebarPanel; }
+namespace com::sun::star::ui { class XUIElement; }
+namespace com::sun::star::awt { class XWindow; }
 
 namespace sfx2 { namespace sidebar {
 
 class PanelDescriptor;
-class TitleBar;
 class PanelTitleBar;
+class Context;
 
 class SFX2_DLLPUBLIC Panel : public vcl::Window
 {

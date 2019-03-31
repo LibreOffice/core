@@ -21,7 +21,6 @@
 
 #include <sfx2/sidebar/Paint.hxx>
 
-#include <vcl/fixed.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
 
 namespace sfx2 { namespace sidebar {

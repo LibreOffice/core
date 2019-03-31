@@ -11,20 +11,14 @@
 #ifndef INCLUDED_SFX2_SIDEBAR_SIDEBAR_HXX
 #define INCLUDED_SFX2_SIDEBAR_SIDEBAR_HXX
 
-#include <sfx2/dllapi.h>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/ui/XSidebarProvider.hpp>
-#include <com/sun/star/ui/XSidebar.hpp>
 
-#include <com/sun/star/awt/XWindow2.hpp>
+#include <cppuhelper/implbase.hxx>
 
-#include <cppuhelper/compbase.hxx>
-
-#include <sfx2/sidebar/SidebarController.hxx>
-#include <sfx2/sidebar/SidebarDockingWindow.hxx>
-
-#include <sfx2/sidebar/UnoDecks.hxx>
-#include <com/sun/star/ui/XDecks.hpp>
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::ui { class XDecks; }
+namespace com::sun::star::ui { class XSidebar; }
+namespace sfx2 { namespace sidebar { class SidebarController; } }
 
 /** get the sidebar for a given frame
 */

@@ -24,23 +24,24 @@
 
 #include <sfx2/sidebar/AsynchronousCall.hxx>
 #include <sfx2/sidebar/Context.hxx>
+#include <sfx2/sidebar/Deck.hxx>
 #include <sfx2/sidebar/FocusManager.hxx>
-#include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/TabBar.hxx>
 
-#include <vcl/menu.hxx>
-
-#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XStatusListener.hpp>
+#include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
-#include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
 
 #include <boost/optional.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
+
+namespace com::sun::star::awt { class XWindowPeer; }
+namespace com::sun::star::frame { class XDispatch; }
+namespace com::sun::star::ui { class XUIElement; }
 
 typedef cppu::WeakComponentImplHelper <
     css::ui::XContextChangeEventListener,
@@ -51,16 +52,11 @@ typedef cppu::WeakComponentImplHelper <
     > SidebarControllerInterfaceBase;
 
 class SfxSplitWindow;
-class FixedBitmap;
 
 namespace sfx2 { namespace sidebar {
 
-class ContentPanelDescriptor;
-class Deck;
 class DeckDescriptor;
 class SidebarDockingWindow;
-class TabBar;
-class TabBarConfiguration;
 
 class SFX2_DLLPUBLIC SidebarController
     : private ::cppu::BaseMutex,

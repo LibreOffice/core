@@ -13,9 +13,11 @@
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 
+#include <sfx2/sidebar/PanelDescriptor.hxx>
 #include <sfx2/sidebar/PanelTitleBar.hxx>
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/Deck.hxx>
+#include <sfx2/sidebar/DeckDescriptor.hxx>
 
 #include <vcl/svapp.hxx>
 

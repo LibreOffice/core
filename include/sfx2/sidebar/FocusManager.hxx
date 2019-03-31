@@ -24,7 +24,6 @@
 #include <vcl/keycod.hxx>
 
 class Button;
-class VclSimpleEvent;
 
 namespace sfx2 { namespace sidebar {
 

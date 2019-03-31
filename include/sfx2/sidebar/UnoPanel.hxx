@@ -12,16 +12,17 @@
 #define INCLUDED_SFX2_SIDEBAR_UNOPANEL_HXX
 
 #include <com/sun/star/ui/XPanel.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 
 
-#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/implbase.hxx>
 
-#include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/Deck.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
+
+namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::frame { class XFrame; }
+namespace sfx2 { namespace sidebar { class SidebarController; } }
 
 
 /** get the Panel

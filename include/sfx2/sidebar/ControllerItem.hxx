@@ -21,7 +21,7 @@
 
 #include <sfx2/ctrlitem.hxx>
 
-#include <com/sun/star/lang/XComponent.hpp>
+namespace com::sun::star::lang { class XComponent; }
 
 
 namespace sfx2 { namespace sidebar {

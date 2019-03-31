@@ -20,28 +20,20 @@
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_TABBAR_HXX
 
 #include <sfx2//dllapi.h>
-#include <sfx2/sidebar/DeckDescriptor.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
 
 
+#include <vcl/button.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/window.hxx>
 
-#include <com/sun/star/frame/XFrame.hpp>
-
 #include <functional>
 
-#include <svtools/acceleratorexecute.hxx>
-
-class Button;
-class CheckBox;
-class RadioButton;
+namespace svt { class AcceleratorExecute; }
 
 namespace sfx2 { namespace sidebar {
 
 class FocusManager;
-class TabBarConfiguration;
-class TabItem;
 class SidebarController;
 
 /** The tab bar is the container for the individual tabs.

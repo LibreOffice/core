@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sfx2/sidebar/DeckDescriptor.hxx>
+#include <sfx2/sidebar/PanelDescriptor.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 
@@ -30,6 +32,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <vcl/EnumContext.hxx>
 
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/ui/XUpdateModel.hpp>

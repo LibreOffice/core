@@ -22,8 +22,6 @@
 #include <sfx2/sidebar/Panel.hxx>
 
 #include <vcl/window.hxx>
-#include <vcl/image.hxx>
-#include <com/sun/star/ui/LayoutSize.hpp>
 
 class ScrollBar;
 

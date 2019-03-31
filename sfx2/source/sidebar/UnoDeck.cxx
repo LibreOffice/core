@@ -16,6 +16,7 @@
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/DeckTitleBar.hxx>
 #include <sfx2/sidebar/Deck.hxx>
+#include <sfx2/sidebar/DeckDescriptor.hxx>
 
 #include <vcl/svapp.hxx>
 

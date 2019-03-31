@@ -26,15 +26,12 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <tools/gen.hxx>
-#include <rtl/ref.hxx>
 #include <vcl/wall.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <map>
 #include <unordered_map>
-
-class SvBorder;
 
 
 namespace sfx2 { namespace sidebar {

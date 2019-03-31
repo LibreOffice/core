@@ -21,8 +21,6 @@
 
 #include <rtl/ustring.hxx>
 
-#include <vector>
-
 namespace sfx2 { namespace sidebar {
 
 class Context

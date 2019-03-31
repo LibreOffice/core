@@ -20,15 +20,13 @@
 #define INCLUDED_SFX2_SIDEBAR_CONTROLFACTORY_HXX
 
 #include <sfx2/dllapi.h>
-#include <sfx2/sidebar/SidebarToolBox.hxx>
-#include <vcl/button.hxx>
 #include <vcl/vclptr.hxx>
 
-class ToolBox;
+class CheckBox;
+class ImageRadioButton;
+namespace vcl { class Window; }
 
 namespace sfx2 { namespace sidebar {
-
-class ToolBoxBackground;
 
 /** Factory for controls used in sidebar panels.
     The reason to use this factory instead of creating the controls

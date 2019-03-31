@@ -21,7 +21,10 @@
 #define INCLUDED_SFX2_SIDEBAR_SIDEBAR_HXX
 
 #include <sfx2/dllapi.h>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <rtl/ustring.hxx>
+
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 
 namespace sfx2 { namespace sidebar {

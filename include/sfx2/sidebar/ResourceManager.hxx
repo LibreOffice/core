@@ -19,14 +19,15 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_RESOURCEMANAGER_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_RESOURCEMANAGER_HXX
 
-#include <sfx2/sidebar/DeckDescriptor.hxx>
-#include <sfx2/sidebar/PanelDescriptor.hxx>
-#include <sfx2/sidebar/Context.hxx>
 #include <unotools/confignode.hxx>
-#include <com/sun/star/frame/XController.hpp>
 #include <map>
 #include <set>
 #include <svtools/miscopt.hxx>
+
+namespace com::sun::star::frame { class XController; }
+namespace com::sun::star::frame { class XModel; }
+namespace sfx2 { namespace sidebar { class DeckDescriptor; } }
+namespace sfx2 { namespace sidebar { class PanelDescriptor; } }
 
 namespace sfx2 { namespace sidebar {
 

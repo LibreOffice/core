@@ -20,11 +20,8 @@
 #define INCLUDED_SFX2_SIDEBAR_ILAYOUTABLEWINDOW_HXX
 
 #include <sfx2/dllapi.h>
-#include <tools/gen.hxx>
 #include <sal/types.h>
 #include <com/sun/star/ui/LayoutSize.hpp>
-
-namespace vcl { class Window; }
 
 namespace sfx2 { namespace sidebar {
 

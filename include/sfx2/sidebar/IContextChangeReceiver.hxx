@@ -19,8 +19,9 @@
 #ifndef INCLUDED_SFX2_SIDEBAR_ICONTEXTCHANGERECEIVER_HXX
 #define INCLUDED_SFX2_SIDEBAR_ICONTEXTCHANGERECEIVER_HXX
 
-#include <vcl/EnumContext.hxx>
 #include <sfx2/dllapi.h>
+
+namespace vcl { class EnumContext; }
 
 
 namespace sfx2 { namespace sidebar {

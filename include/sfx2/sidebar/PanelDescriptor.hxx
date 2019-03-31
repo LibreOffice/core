@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_PANELDESCRIPTOR_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_PANELDESCRIPTOR_HXX
 
-#include <vcl/EnumContext.hxx>
 #include <sfx2/sidebar/ContextList.hxx>
 
 namespace sfx2 { namespace sidebar {

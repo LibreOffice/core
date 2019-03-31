@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_ASYNCHRONOUSCALL_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_ASYNCHRONOUSCALL_HXX
 
-#include <tools/solar.h>
 #include <tools/link.hxx>
 
 #include <functional>

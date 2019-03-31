@@ -37,6 +37,7 @@ class MetricField;
 class CheckBox;
 class MetricBox;
 class Edit;
+class ToolBox;
 
 namespace svx {
 class DialControl;

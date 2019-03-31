@@ -21,7 +21,8 @@
 
 #include <sfx2/sidebar/TitleBar.hxx>
 
-#include <com/sun/star/frame/XFrame.hpp>
+namespace com::sun::star::frame { class XController; }
+namespace com::sun::star::frame { class XFrame; }
 
 namespace sfx2 { namespace sidebar {
 
