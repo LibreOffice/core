@@ -112,9 +112,6 @@ namespace pcr
     using ::com::sun::star::container::NoSuchElementException;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::container::XNameReplace;
-    using ::com::sun::star::lang::IllegalArgumentException;
-    using ::com::sun::star::lang::WrappedTargetException;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::inspection::LineDescriptor;
     using ::com::sun::star::inspection::XPropertyControlFactory;

@@ -31,10 +31,8 @@
 #include <vector>
 
 using com::sun::star::uno::Any;
-using com::sun::star::uno::Type;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Exception;
-using com::sun::star::uno::RuntimeException;
 using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::beans::Property;
 using com::sun::star::beans::XPropertySetInfo;

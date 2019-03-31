@@ -28,7 +28,6 @@ namespace pcr
 {
 
 
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::inspection::XPropertyControlContext;
     using ::com::sun::star::uno::Exception;

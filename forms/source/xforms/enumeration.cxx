@@ -30,7 +30,6 @@
 
 using com::sun::star::container::NoSuchElementException;
 using com::sun::star::container::XIndexAccess;
-using com::sun::star::lang::WrappedTargetException;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::RuntimeException;
 

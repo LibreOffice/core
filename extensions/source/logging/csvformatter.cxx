@@ -37,7 +37,6 @@
 namespace logging
 {
     using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::logging::LogRecord;
 
     // formats for csv files as defined by RFC4180
