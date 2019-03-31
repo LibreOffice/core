@@ -1519,7 +1519,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
 
         // The following optimization does not make much sense currently just because
         // only one aspect is supported, and only three formats for the aspect are supported
-        // and moreover it is not guarantied that the once returned format will be supported further
+        // and moreover it is not guaranteed that the once returned format will be supported further
         // example - i52106
         // TODO/LATER: bring the optimization back when other aspects are supported
 
