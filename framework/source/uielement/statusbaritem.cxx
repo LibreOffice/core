@@ -24,7 +24,6 @@
 #include <com/sun/star/ui/ItemStyle.hpp>
 
 using namespace com::sun::star::ui;
-using com::sun::star::uno::RuntimeException;
 
 namespace framework
 {

@@ -40,7 +40,6 @@ namespace pcr
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::inspection::XObjectInspectorUI;
     using ::com::sun::star::inspection::XPropertyControl;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::inspection::XPropertyControlObserver;
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;

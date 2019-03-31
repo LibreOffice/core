@@ -60,7 +60,6 @@ namespace pcr
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::beans::UnknownPropertyException;
     using ::com::sun::star::beans::Property;
     using ::com::sun::star::awt::XControlModel;
     using ::com::sun::star::drawing::XControlShape;

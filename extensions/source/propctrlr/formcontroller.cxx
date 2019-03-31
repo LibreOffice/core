@@ -45,7 +45,6 @@ namespace pcr
     using ::com::sun::star::uno::TypeClass_STRING;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::inspection::XObjectInspectorModel;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::XInterface;
@@ -54,7 +53,6 @@ namespace pcr
     using ::com::sun::star::beans::Property;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::lang::IllegalArgumentException;
-    using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::util::VetoException;
     using ::com::sun::star::beans::PropertyVetoException;

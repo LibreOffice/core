@@ -37,7 +37,6 @@ namespace xforms
 {
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::uno::makeAny;
@@ -46,7 +45,6 @@ namespace xforms
     using ::com::sun::star::container::NoSuchElementException;
     using ::com::sun::star::container::ElementExistException;
     using ::com::sun::star::container::XEnumeration;
-    using ::com::sun::star::lang::WrappedTargetException;
     using ::com::sun::star::xsd::XDataType;
     using namespace frm;
 

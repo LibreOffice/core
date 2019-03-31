@@ -55,8 +55,6 @@
 using com::sun::star::lang::XUnoTunnel;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::PropertyValue;
-using com::sun::star::lang::WrappedTargetException;
-using com::sun::star::ucb::XSimpleFileAccess3;
 using com::sun::star::ucb::SimpleFileAccess;
 using com::sun::star::io::XInputStream;
 

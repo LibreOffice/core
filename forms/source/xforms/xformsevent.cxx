@@ -25,8 +25,6 @@ namespace sun {
 namespace star {
 namespace xforms {
 
-using com::sun::star::uno::RuntimeException;
-
 void SAL_CALL XFormsEventConcrete::initXFormsEvent(const OUString& typeArg,
     sal_Bool canBubbleArg, sal_Bool cancelableArg)
 {

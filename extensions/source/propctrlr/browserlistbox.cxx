@@ -53,7 +53,6 @@ namespace pcr
     using ::com::sun::star::inspection::XPropertyControlContext;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::inspection::XPropertyControl;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::uno::UNO_QUERY;

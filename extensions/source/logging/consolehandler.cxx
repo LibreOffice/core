@@ -40,7 +40,6 @@ namespace logging
     using ::com::sun::star::lang::XServiceInfo;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::logging::XLogFormatter;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::logging::LogRecord;

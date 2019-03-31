@@ -35,17 +35,12 @@ namespace xforms
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
-    using ::com::sun::star::uno::Exception;
     using ::com::sun::star::util::Date;
     using ::com::sun::star::util::Time;
     using ::com::sun::star::util::DateTime;
     using ::com::sun::star::lang::IllegalArgumentException;
-    using ::com::sun::star::lang::WrappedTargetException;
-    using ::com::sun::star::beans::UnknownPropertyException;
-    using ::com::sun::star::beans::PropertyVetoException;
     using ::com::sun::star::beans::XPropertyChangeListener;
     using ::com::sun::star::beans::XVetoableChangeListener;
 
