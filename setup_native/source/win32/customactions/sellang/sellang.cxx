@@ -27,6 +27,7 @@
 #include <msiquery.h>
 #include <malloc.h>
 
+#include <cassert>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -44,6 +45,7 @@ static BOOL GetMsiPropA( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
         sz++;
         DWORD nbytes = sz * sizeof( char );
         char* buff = static_cast<char*>( malloc( nbytes ) );
+        assert(buff); // Don't handle OOM conditions
         ZeroMemory( buff, nbytes );
         MsiGetPropertyA( hMSI, pPropName, buff, &sz );
         *ppValue = buff;

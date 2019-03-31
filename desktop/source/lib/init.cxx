@@ -2239,6 +2239,7 @@ static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart)
     OString aString = OUStringToOString(aPartInfo, RTL_TEXTENCODING_UTF8);
 
     char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
+    assert(pMemory); // Don't handle OOM conditions
     strcpy(pMemory, aString.getStr());
     return pMemory;
 }
@@ -2259,6 +2260,7 @@ static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
     OUString sRectangles = pDoc->getPartPageRectangles();
     OString aString = OUStringToOString(sRectangles, RTL_TEXTENCODING_UTF8);
     char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
+    assert(pMemory); // Don't handle OOM conditions
     strcpy(pMemory, aString.getStr());
     return pMemory;
 
@@ -2280,6 +2282,7 @@ static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
     OUString sName = pDoc->getPartName( nPart );
     OString aString = OUStringToOString(sName, RTL_TEXTENCODING_UTF8);
     char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
+    assert(pMemory); // Don't handle OOM conditions
     strcpy(pMemory, aString.getStr());
     return pMemory;
 
@@ -2301,6 +2304,7 @@ static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart)
     OUString sHash = pDoc->getPartHash(nPart);
     OString aString = OUStringToOString(sHash, RTL_TEXTENCODING_UTF8);
     char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
+    assert(pMemory); // Don't handle OOM conditions
     strcpy(pMemory, aString.getStr());
     return pMemory;
 
@@ -3100,6 +3104,7 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
         aRet = pDoc->getTextSelection("text/plain;charset=utf-8", aUsedMimeType);
 
     char* pMemory = static_cast<char*>(malloc(aRet.getLength() + 1));
+    assert(pMemory); // Don't handle OOM conditions
     strcpy(pMemory, aRet.getStr());
 
     if (pUsedMimeType)
@@ -3215,6 +3220,7 @@ static char* getLanguages(const char* pCommand)
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
     char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
+    assert(pJson); // Don't handle OOM conditions
     strcpy(pJson, aStream.str().c_str());
     pJson[aStream.str().size()] = '\0';
     return pJson;
@@ -3253,6 +3259,7 @@ static char* getFonts (const char* pCommand)
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
     char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
+    assert(pJson); // Don't handle OOM conditions
     strcpy(pJson, aStream.str().c_str());
     pJson[aStream.str().size()] = '\0';
     return pJson;
@@ -3305,6 +3312,7 @@ static char* getFontSubset (const OString& aFontName)
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
     char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
+    assert(pJson); // Don't handle OOM conditions
     strcpy(pJson, aStream.str().c_str());
     pJson[aStream.str().size()] = '\0';
     return pJson;
@@ -3429,6 +3437,7 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
     char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
+    assert(pJson); // Don't handle OOM conditions
     strcpy(pJson, aStream.str().c_str());
     pJson[aStream.str().size()] = '\0';
     return pJson;
@@ -3650,6 +3659,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         OString aString = OUStringToOString(aHeaders, RTL_TEXTENCODING_UTF8);
 
         char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
+        assert(pMemory); // Don't handle OOM conditions
         strcpy(pMemory, aString.getStr());
         return pMemory;
     }
@@ -3701,6 +3711,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         OString aString = pDoc->getCellCursor(nOutputWidth, nOutputHeight, nTileWidth, nTileHeight);
 
         char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
+        assert(pMemory); // Don't handle OOM conditions
         strcpy(pMemory, aString.getStr());
         return pMemory;
     }
@@ -4194,6 +4205,7 @@ static char* lo_getError (LibreOfficeKit *pThis)
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     OString aString = OUStringToOString(pLib->maLastExceptionMsg, RTL_TEXTENCODING_UTF8);
     char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
+    assert(pMemory); // Don't handle OOM conditions
     strcpy(pMemory, aString.getStr());
     return pMemory;
 }
@@ -4290,6 +4302,7 @@ static char* lo_getVersionInfo(SAL_UNUSED_PARAMETER LibreOfficeKit* /*pThis*/)
     const OString sVersionStr = OUStringToOString(ReplaceStringHookProc(sVersionStrTemplate), RTL_TEXTENCODING_UTF8);
 
     char* pVersion = static_cast<char*>(malloc(sVersionStr.getLength() + 1));
+    assert(pVersion); // Don't handle OOM conditions
     strcpy(pVersion, sVersionStr.getStr());
     return pVersion;
 }

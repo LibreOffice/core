@@ -1324,6 +1324,7 @@ static DEVMODEW const * ImplSalSetCopies( DEVMODEW const * pDevMode, sal_uLong n
             nCopies = 32765;
         sal_uLong nDevSize = pDevMode->dmSize+pDevMode->dmDriverExtra;
         LPDEVMODEW pNewDevMode = static_cast<LPDEVMODEW>(std::malloc( nDevSize ));
+        assert(pNewDevMode); // Don't handle OOM conditions
         memcpy( pNewDevMode, pDevMode, nDevSize );
         pNewDevMode->dmFields |= DM_COPIES;
         pNewDevMode->dmCopies  = static_cast<short>(static_cast<sal_uInt16>(nCopies));

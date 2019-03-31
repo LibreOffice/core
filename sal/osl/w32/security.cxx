@@ -19,6 +19,7 @@
 
 #include "system.h"
 
+#include <cassert>
 #include <osl/security.h>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
@@ -782,6 +783,7 @@ static bool getUserNameImpl(oslSecurity Security, rtl_uString **strName,  bool b
 
             WNetGetUserW(nullptr, nullptr, &needed);
             pNameW = static_cast<sal_Unicode *>(malloc (needed*sizeof(sal_Unicode)));
+            assert(pNameW); // Don't handle OOM conditions
 
             if (WNetGetUserW(nullptr, o3tl::toW(pNameW), &needed) == NO_ERROR)
             {
