@@ -21,4 +21,9 @@ $(eval $(call gb_Package_add_file,readlicense_oo_files,Resources/EULA_en-US.rtf,
 $(eval $(call gb_Package_add_file,readlicense_oo_files,Resources/CREDITS.fodt,CREDITS.fodt))
 endif
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Package_add_file,readlicense_oo_files,LICENSE.fodt,LICENSE.html))
+$(eval $(call gb_Package_add_file,readlicense_oo_files,LICENSE.html,LICENSE.html))
+endif
+
 # vim: set noet sw=4 ts=4:
