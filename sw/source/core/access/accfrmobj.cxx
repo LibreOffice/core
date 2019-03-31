@@ -244,11 +244,11 @@ SwRect SwAccessibleChild::GetBox( const SwAccessibleMap& rAccMap ) const
     }
     else if( mpDrawObj )
     {
-        SwDrawContact const*const pContact(dynamic_cast<SwDrawContact const*>(::GetUserCall(mpDrawObj)));
+        const SwContact* const pContact = ::GetUserCall(mpDrawObj);
         // assume that a) the SwVirt* objects that don't have this are handled
         // by the mpFrame case above b) for genuine SdrObject this must be set
         // if it's connected to layout
-        assert(pContact);
+        assert(dynamic_cast<SwDrawContact const*>(pContact));
         SwPageFrame const*const pPage(const_cast<SwAnchoredObject *>(
             pContact->GetAnchoredObj(mpDrawObj))->FindPageFrameOfAnchor());
         if (pPage) // may end up here with partial layout -> not visible

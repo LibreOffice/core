@@ -124,9 +124,9 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Win
     get(pBtnCancel,"cancel");
 
     ScTabViewShell* pScViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
-    ScDocShell*     pScDocSh  = dynamic_cast<ScDocShell*>(     SfxObjectShell::Current()  );
-
-    OSL_ENSURE( pScDocSh, "Current DocumentShell not found :-(" );
+    SfxObjectShell* pSfxObjSh = SfxObjectShell::Current();
+    assert(dynamic_cast<ScDocShell*>(pSfxObjSh) && "Current DocumentShell not found :-(");
+    ScDocShell* pScDocSh = static_cast<ScDocShell*>(pSfxObjSh);
 
     pDoc = &pScDocSh->GetDocument();
 

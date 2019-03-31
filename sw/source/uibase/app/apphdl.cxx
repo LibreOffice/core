@@ -323,9 +323,8 @@ SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
             SfxViewShell* pViewShell = pShell->GetViewShell();
             if(pViewShell)
             {
-                if( nullptr!= dynamic_cast<SwView*>(pViewShell) )
+                if ((pNewView = dynamic_cast<SwView*>(pViewShell)))
                 {
-                    pNewView = dynamic_cast< SwView* >(pViewShell);
                     pNewView->GetViewFrame()->GetFrame().Appear();
                 }
                 else
