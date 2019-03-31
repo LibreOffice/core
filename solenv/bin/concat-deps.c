@@ -1146,6 +1146,7 @@ int main(int argc, char** argv)
         return 1;
     work_dir_len = strlen(work_dir);
     phony_content_buffer = malloc(PHONY_TARGET_BUFFER);
+    assert(phony_content_buffer); // Don't handle OOM conditions
     strcpy(phony_content_buffer, work_dir);
     phony_content_buffer[work_dir_len] = '/';
 
