@@ -47,7 +47,6 @@ ifneq ($(ENABLE_DBGUTIL),TRUE)
 			$(INSTDIR)/program/shlxthdl/*.dll \
 			$(INSTDIR)/sdk/cli/*.dll \
 			$(INSTDIR)/sdk/bin/*.exe \
-			$(INSTDIR)/share/extensions/mysql-connector-ooo/*.dll\
 	&& rm $$EXCLUDELIST && touch $@
 else
 	@echo "Doing nothing on non product builds ..."
