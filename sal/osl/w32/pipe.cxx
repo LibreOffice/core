@@ -136,12 +136,14 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
             PSECURITY_DESCRIPTOR pSecDesc;
 
             pSecDesc = static_cast< PSECURITY_DESCRIPTOR >(malloc(SECURITY_DESCRIPTOR_MIN_LENGTH));
+            assert(pSecDesc); // Don't handle OOM conditions
 
             /* add a NULL disc. ACL to the security descriptor */
             OSL_VERIFY(InitializeSecurityDescriptor(pSecDesc, SECURITY_DESCRIPTOR_REVISION));
             OSL_VERIFY(SetSecurityDescriptorDacl(pSecDesc, TRUE, nullptr, FALSE));
 
             pSecAttr = static_cast< PSECURITY_ATTRIBUTES >(malloc(sizeof(SECURITY_ATTRIBUTES)));
+            assert(pSecAttr); // Don't handle OOM conditions
             pSecAttr->nLength = sizeof(SECURITY_ATTRIBUTES);
             pSecAttr->lpSecurityDescriptor = pSecDesc;
             pSecAttr->bInheritHandle = TRUE;

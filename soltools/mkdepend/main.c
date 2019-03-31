@@ -56,6 +56,7 @@ typedef _W64 int   ssize_t;
 #endif
 
 #include "def.h"
+#include <assert.h>
 #include <string.h>
 #ifdef hpux
 #define sigvec sigvector
@@ -522,7 +523,7 @@ void freefile(struct filepointer *fp)
 char *copy(char const *str)
 {
     char   *p = (char *)malloc(strlen(str) + 1);
-
+    assert(p); // Don't handle OOM conditions
     strcpy(p, str);
     return p;
 }
@@ -718,6 +719,7 @@ char* append_slash(char *path)
         new_string = path;
     } else {
         new_string = (char*)malloc(sizeof(char) * (strlen(path) + 2));
+        assert(new_string); // Don't handle OOM conditions
         strcpy(new_string, path);
         if (native_win_slashes)
             strcat(new_string, "\\");

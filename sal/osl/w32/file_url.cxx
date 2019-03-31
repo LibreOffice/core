@@ -603,7 +603,7 @@ static void osl_encodeURL_( rtl_uString *strURL, rtl_String **pstrEncodedURL )
     rtl_uString2String( &strUTF8, rtl_uString_getStr( strURL ), rtl_uString_getLength( strURL ), RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS );
 
     pszEncodedURL = static_cast<sal_Char*>(malloc( (rtl_string_getLength( strUTF8 ) * 3 + 1)  * sizeof(sal_Char) ));
-
+    assert(pszEncodedURL); // Don't handle OOM conditions
     pURLDest = pszEncodedURL;
     pURLScan = rtl_string_getStr( strUTF8 );
     nURLScanLen = rtl_string_getLength( strUTF8 );

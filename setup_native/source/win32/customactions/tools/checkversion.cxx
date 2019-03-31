@@ -21,6 +21,7 @@
 #include <windows.h>
 #include <msiquery.h>
 
+#include <cassert>
 #include <string.h>
 #include <malloc.h>
 #include <stdio.h>
@@ -37,6 +38,7 @@ static BOOL GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppV
         sz++;
         DWORD nbytes = sz * sizeof( wchar_t );
         wchar_t* buff = static_cast<wchar_t*>( malloc( nbytes ) );
+        assert(buff); // Don't handle OOM conditions
         ZeroMemory( buff, nbytes );
         MsiGetPropertyW( hMSI, pPropName, buff, &sz );
         *ppValue = buff;

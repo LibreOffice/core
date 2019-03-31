@@ -345,11 +345,12 @@ static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
             }
 
             WCHAR* szFileMask = static_cast< WCHAR* >( malloc( sizeof( WCHAR ) * ( nLen + nSuffLen + 1 ) ) );
-
+            assert(szFileMask); // Don't handle OOM conditions
             wcscpy( szFileMask, o3tl::toW(rtl_uString_getStr( pPath )) );
             wcscat( szFileMask, pSuffix );
 
             pDirectory = static_cast<LPDIRECTORY>(HeapAlloc(GetProcessHeap(), 0, sizeof(DIRECTORY)));
+            assert(pDirectory); // Don't handle OOM conditions
             pDirectory->hFind = FindFirstFileW(szFileMask, &pDirectory->aFirstData);
 
             if (!IsValidHandle(pDirectory->hFind))
@@ -437,6 +438,7 @@ static oslFileError osl_openLocalRoot(
         Directory_Impl  *pDirImpl;
 
         pDirImpl = static_cast<Directory_Impl*>(malloc( sizeof(Directory_Impl)));
+        assert(pDirImpl); // Don't handle OOM conditions
         ZeroMemory( pDirImpl, sizeof(Directory_Impl) );
         rtl_uString_newFromString( &pDirImpl->m_pDirectoryPath, strSysPath );
 
@@ -501,6 +503,7 @@ static oslFileError osl_openFileDirectory(
     *pDirectory = nullptr;
 
     Directory_Impl *pDirImpl = static_cast<Directory_Impl*>(malloc(sizeof(Directory_Impl)));
+    assert(pDirImpl); // Don't handle OOM conditions
     ZeroMemory( pDirImpl, sizeof(Directory_Impl) );
     rtl_uString_newFromString( &pDirImpl->m_pDirectoryPath, strDirectoryPath );
 
@@ -566,6 +569,7 @@ static oslFileError osl_openNetworkServer(
         Directory_Impl  *pDirImpl;
 
         pDirImpl = static_cast<Directory_Impl*>(malloc(sizeof(Directory_Impl)));
+        assert(pDirImpl); // Don't handle OOM conditions
         ZeroMemory( pDirImpl, sizeof(Directory_Impl) );
         pDirImpl->uType = DIRECTORYTYPE_NETROOT;
         pDirImpl->hDirectory = hEnum;
@@ -1068,18 +1072,24 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
             {
                 DirectoryItem_Impl  *pItemImpl =
                     static_cast<DirectoryItem_Impl*>(malloc(sizeof(DirectoryItem_Impl)));
+                if (!pItemImpl)
+                    error = osl_File_E_NOMEM;
 
-                ZeroMemory( pItemImpl, sizeof(DirectoryItem_Impl) );
-                osl_acquireDirectoryItem( static_cast<oslDirectoryItem>(pItemImpl) );
+                if (osl_File_E_None == error)
+                {
+                    ZeroMemory(pItemImpl, sizeof(DirectoryItem_Impl));
+                    osl_acquireDirectoryItem(static_cast<oslDirectoryItem>(pItemImpl));
 
-                CopyMemory( &pItemImpl->FindData, &aFindData, sizeof(WIN32_FIND_DATAW) );
-                rtl_uString_newFromString( &pItemImpl->m_pFullPath, strSysFilePath );
+                    CopyMemory(&pItemImpl->FindData, &aFindData, sizeof(WIN32_FIND_DATAW));
+                    rtl_uString_newFromString(&pItemImpl->m_pFullPath, strSysFilePath);
 
-                // MT: This costs 600ms startup time on fast v60x!
-                // GetCaseCorrectPathName( pItemImpl->szFullPath, pItemImpl->szFullPath, sizeof(pItemImpl->szFullPath) );
+                    // MT: This costs 600ms startup time on fast v60x!
+                    // GetCaseCorrectPathName( pItemImpl->szFullPath, pItemImpl->szFullPath, sizeof(pItemImpl->szFullPath) );
 
-                pItemImpl->uType = DIRECTORYITEM_FILE;
-                *pItem = pItemImpl;
+                    pItemImpl->uType = DIRECTORYITEM_FILE;
+                    *pItem = pItemImpl;
+                }
+
                 FindClose( hFind );
             }
             else

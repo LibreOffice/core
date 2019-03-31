@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -208,6 +209,7 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
         if ( value != NULL )
             size += wcslen( PATHSEPARATOR ) + wcslen( value );
         wchar_t* envstr = (wchar_t*) malloc( size*sizeof(wchar_t) );
+        assert(envstr);
         wcscpy( envstr, ENVVARNAME );
         wcscat( envstr, L"=" );
         wcscat( envstr, path );
@@ -312,6 +314,7 @@ wchar_t* createCommandLine( wchar_t const * appendix )
         /* create the command line */
         cmdline = (wchar_t*) malloc( (wcslen( DQUOTE ) + wcslen( cmdname ) +
             wcslen ( DQUOTE ) + wcslen( SPACE ) + wcslen( appendix ) + 1) * sizeof(wchar_t) );
+        assert(cmdline);
         wcscpy( cmdline, DQUOTE );
         wcscat( cmdline, cmdname );
         wcscat( cmdline, DQUOTE );

@@ -528,7 +528,7 @@ static void do_msvcr_magic(OUString const &jvm_dll)
     }
 
     PIMAGE_DOS_HEADER dos_hdr = static_cast<PIMAGE_DOS_HEADER>(malloc(st.st_size));
-
+    assert(dos_hdr);
     if (fread(dos_hdr, st.st_size, 1, f) != 1 ||
         memcmp(dos_hdr, "MZ", 2) != 0 ||
         dos_hdr->e_lfanew < 0 ||

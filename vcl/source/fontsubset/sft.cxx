@@ -635,14 +635,15 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
         return 0;
 
     np = myPoints.size();
-
-    pa = static_cast<ControlPoint*>(calloc(np, sizeof(ControlPoint)));
-    assert(pa != nullptr);
-
     if (np > 0)
-        memcpy( pa, &myPoints[0], np*sizeof(ControlPoint) );
+    {
+        pa = static_cast<ControlPoint*>(calloc(np, sizeof(ControlPoint)));
+        assert(pa != nullptr);
 
-    *pointArray = pa;
+        memcpy(pa, &myPoints[0], np * sizeof(ControlPoint));
+
+        *pointArray = pa;
+    }
     return np;
 }
 
@@ -2537,6 +2538,7 @@ int GetTTNameRecords(TrueTypeFont const *ttf, NameRecord **nr)
     }
 
     NameRecord* rec = static_cast<NameRecord*>(calloc(n, sizeof(NameRecord)));
+    assert(rec);
 
     for (i = 0; i < n; i++) {
         int nLargestFixedOffsetPos = 6 + 10 + 12 * i;
