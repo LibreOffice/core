@@ -30,8 +30,9 @@
 #include <osl/process.h>
 #include <sal/log.hxx>
 
+#include <Qt5Data.hxx>
+
 #include "KDE5FilePicker.hxx"
-#include "KDE5SalData.hxx"
 #include "KDE5SalInstance.hxx"
 #include "KDE5SalFrame.hxx"
 
@@ -42,8 +43,6 @@ KDE5SalInstance::KDE5SalInstance(std::unique_ptr<QApplication>& pQApp)
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mxToolkitName = OUString("kde5");
-
-    KDE5SalData::initNWF();
 }
 
 SalFrame* KDE5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nState)
@@ -100,7 +99,7 @@ VCLPLUG_KDE5_PUBLIC SalInstance* create_SalInstance()
     KDE5SalInstance* pInstance = new KDE5SalInstance(pQApp);
     pInstance->MoveFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
 
-    new KDE5SalData(pInstance);
+    new Qt5Data(pInstance);
 
     return pInstance;
 }
