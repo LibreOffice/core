@@ -55,6 +55,7 @@ OUString osl::detail::backtraceAsString(sal_uInt32 maxDepth)
 
     SYMBOL_INFO  * pSymbol;
     pSymbol = static_cast<SYMBOL_INFO *>(calloc( sizeof( SYMBOL_INFO ) + 1024 * sizeof( char ), 1 ));
+    assert(pSymbol);
     pSymbol->MaxNameLen = 1024 - 1;
     pSymbol->SizeOfStruct = sizeof( SYMBOL_INFO );
 
@@ -99,6 +100,7 @@ OUString sal::backtrace_to_string(BacktraceState* backtraceState)
 
     SYMBOL_INFO  * pSymbol;
     pSymbol = static_cast<SYMBOL_INFO *>(calloc( sizeof( SYMBOL_INFO ) + 1024 * sizeof( char ), 1 ));
+    assert(pSymbol);
     pSymbol->MaxNameLen = 1024 - 1;
     pSymbol->SizeOfStruct = sizeof( SYMBOL_INFO );
     HANDLE hProcess = GetCurrentProcess();

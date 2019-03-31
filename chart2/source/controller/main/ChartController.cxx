@@ -396,7 +396,8 @@ void SAL_CALL ChartController::attachFrame(
     uno::Reference<ui::XSidebar> xSidebar = getSidebarFromModel(getModel());
     if (xSidebar.is())
     {
-        sfx2::sidebar::SidebarController* pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
+        assert(dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get()));
+        auto pSidebar = static_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
         sfx2::sidebar::SidebarController::registerSidebarForFrame(pSidebar, this);
         pSidebar->updateModel(getModel());
         css::lang::EventObject aEvent;
