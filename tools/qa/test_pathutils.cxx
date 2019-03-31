@@ -26,7 +26,7 @@
 
 #include <cwchar>
 
-#include "testshl/simpleheader.hxx"
+#include "gtest/gtest.h"
 #include "tools/pathutils.hxx"
 
 namespace {
@@ -38,8 +38,8 @@ void buildPath(
     wchar_t p[MAX_PATH];
     wchar_t * e = tools::buildPath(
         p, front, front + std::wcslen(front), back, std::wcslen(back));
-    CPPUNIT_ASSERT_EQUAL(p + std::wcslen(path), e);
-    CPPUNIT_ASSERT_EQUAL(0, std::wcscmp(path, p));
+    ASSERT_EQ(p + std::wcslen(path), e);
+    ASSERT_EQ(0, std::wcscmp(path, p));
 #else
     (void) front;
     (void) back;
@@ -47,16 +47,18 @@ void buildPath(
 #endif
 }
 
-class Test: public CppUnit::TestFixture {
+class Test: public ::testing::Test {
 public:
-    void testBuildPath();
+    void SetUp()
+    {
+    }
 
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testBuildPath);
-    CPPUNIT_TEST_SUITE_END();
+    void TearDown()
+    {
+    }
 };
 
-void Test::testBuildPath() {
+TEST_F(Test, testBuildPath) {
     buildPath(L"a:\\b\\", L"..", L"a:\\");
     buildPath(L"a:\\b\\", L"..\\", L"a:\\");
     buildPath(L"a:\\b\\c\\", L"..\\..\\..\\d", L"a:\\..\\d");
@@ -65,8 +67,11 @@ void Test::testBuildPath() {
     buildPath(L"", L"..\\a", L"..\\a");
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
-
 }
 
-NOADDITIONAL;
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
+

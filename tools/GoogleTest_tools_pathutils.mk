@@ -20,25 +20,27 @@
 #**************************************************************
 
 
-
-
-$(eval $(call gb_Module_Module,tools))
-
-$(eval $(call gb_Module_add_targets,tools,\
-    Executable_mkunroll \
-    Executable_rscdep \
-    Executable_so_checksum \
-    Executable_sspretty \
-    Library_tl \
-    Package_inc \
-    StaticLibrary_ooopathutils \
+$(eval $(call gb_GoogleTest_GoogleTest,tools_pathutils))
+ 
+$(eval $(call gb_GoogleTest_add_exception_objects,tools_pathutils, \
+	tools/qa/test_pathutils \
+))
+ 
+$(eval $(call gb_GoogleTest_add_linked_libs,tools_pathutils, \
+    stl \
+    tl \
+    $(gb_STDLIBS) \
 ))
 
-ifeq ($(ENABLE_UNIT_TESTS),YES)
-$(eval $(call gb_Module_add_check_targets,tools,\
-    GoogleTest_tools_fractiontest \
-    GoogleTest_tools_pathutils \
-))
-endif
 
+$(eval $(call gb_GoogleTest_add_linked_static_libs,tools_pathutils, \
+    ooopathutils \
+))
+ 
+$(eval $(call gb_GoogleTest_set_include,tools_pathutils,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/inc \
+	-I$(SRCDIR)/tools/inc/pch \
+))
+ 
 # vim: set noet sw=4 ts=4:
