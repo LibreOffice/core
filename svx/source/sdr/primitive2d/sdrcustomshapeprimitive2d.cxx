@@ -61,7 +61,7 @@ namespace drawinglayer
                 // visualisation objects and be visualized by the 3d renderer
                 // as a single shadow.
 
-                // The shadow for AutoShapes could be handled uniformely by not setting any
+                // The shadow for AutoShapes could be handled uniformly by not setting any
                 // shadow items at the helper model objects and only adding shadow here for
                 // 2D and 3D (and it works, too), but this would lead to two 3D scenes for
                 // the 3D object; one for the shadow and one for the content. The one for the
