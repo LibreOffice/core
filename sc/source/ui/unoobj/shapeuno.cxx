@@ -53,6 +53,7 @@ static const SfxItemPropertyMapEntry* lcl_GetShapeMap()
     static const SfxItemPropertyMapEntry aShapeMap_Impl[] =
     {
         {OUString(SC_UNONAME_ANCHOR), 0, cppu::UnoType<uno::XInterface>::get(), 0, 0 },
+        {OUString(SC_UNONAME_RESIZE_WITH_CELL), 0, cppu::UnoType<sal_Bool>::get(), 0, 0 },
         {OUString(SC_UNONAME_HORIPOS), 0, cppu::UnoType<sal_Int32>::get(), 0, 0 },
         {OUString(SC_UNONAME_IMAGEMAP), 0, cppu::UnoType<container::XIndexContainer>::get(), 0, 0 },
         {OUString(SC_UNONAME_VERTPOS), 0, cppu::UnoType<sal_Int32>::get(), 0, 0 },
@@ -417,6 +418,24 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
         }
 
     }
+    else if ( aPropertyName == SC_UNONAME_RESIZE_WITH_CELL )
+    {
+        SdrObject* pObj = GetSdrObject();
+        if (!pObj)
+            return;
+        ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType(*pObj);
+
+        // Nothing to do if anchored to page
+        if (aAnchorType == SCA_PAGE)
+            return;
+
+        ScDrawObjData* pDrawObjData = ScDrawLayer::GetObjData(pObj);
+        if (!pDrawObjData)
+            return;
+
+        aValue >>= pDrawObjData->mbResizeWithCell;
+        ScDrawLayer::SetCellAnchored(*pObj, *pDrawObjData);
+    }
     else if ( aPropertyName == SC_UNONAME_IMAGEMAP )
     {
         SdrObject* pObj = GetSdrObject();
@@ -672,6 +691,17 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
                 }
             }
         }
+    }
+    else if (aPropertyName == SC_UNONAME_RESIZE_WITH_CELL)
+    {
+        bool bIsResizeWithCell = false;
+        SdrObject* pObj = GetSdrObject();
+        if (pObj)
+        {
+            ScAnchorType anchorType = ScDrawLayer::GetAnchorType(*pObj);
+            bIsResizeWithCell = (anchorType == SCA_CELL_RESIZE);
+        }
+        aAny <<= bIsResizeWithCell;
     }
     else if ( aPropertyName == SC_UNONAME_IMAGEMAP )
     {
