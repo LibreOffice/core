@@ -3520,10 +3520,16 @@ gboolean GtkDropTarget::signalDragMotion(GtkWidget *pWidget, GdkDragContext *con
     GdkModifierType mask;
     gdk_window_get_pointer(widget_get_window(pWidget), nullptr, nullptr, &mask);
 
+    // tdf#124411 default to move if drag originates within LO itself, default
+    // to copy if it comes from outside, this is similar to srcAndDestEqual
+    // in macosx DropTarget::determineDropAction equivalent
+    sal_Int8 nNewDropAction = GtkDragSource::g_ActiveDragSource ?
+                                css::datatransfer::dnd::DNDConstants::ACTION_MOVE :
+                                css::datatransfer::dnd::DNDConstants::ACTION_COPY;
+
     // tdf#109227 if a modifier is held down, default to the matching
     // action for that modifier combo, otherwise pick the preferred
     // default from the possible source actions
-    sal_Int8 nNewDropAction = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
     if ((mask & GDK_SHIFT_MASK) && !(mask & GDK_CONTROL_MASK))
         nNewDropAction = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
     else if ((mask & GDK_CONTROL_MASK) && !(mask & GDK_SHIFT_MASK))
