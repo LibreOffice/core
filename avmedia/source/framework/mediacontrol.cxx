@@ -44,7 +44,8 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     maIdle( "avmedia MediaControl Idle" ),
     maItem( 0, AVMediaSetMask::ALL ),
     mbLocked( false ),
-    meControlStyle( eControlStyle )
+    meControlStyle( eControlStyle ),
+    mfTime(0.0)
 {
     mpPlayToolBox =  VclPtr<ToolBox>::Create(this, WB_3DLOOK) ;
     mpTimeSlider = VclPtr<Slider>::Create(this, WB_HORZ | WB_DRAG | WB_3DLOOK) ;
@@ -116,10 +117,10 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
         mpZoomToolBox->SetBackground();
         mpZoomToolBox->SetPaintTransparent( true );
     }
-
-    maIdle.SetPriority( TaskPriority::HIGH_IDLE );
+    // we want time field + progress slider to update as the media plays
+    // give this task a lower prio than REPAINT so that UI updates are not starved
+    maIdle.SetPriority( TaskPriority::POST_PAINT );
     maIdle.SetInvokeHandler( LINK( this, MediaControl, implTimeoutHdl ) );
-    maIdle.Start();
 }
 
 void MediaControl::InitializeWidgets()
@@ -245,8 +246,10 @@ void MediaControl::Resize()
 
 void MediaControl::setState( const MediaItem& rItem )
 {
-    if( !mbLocked )
+    double fTime = rItem.getTime();
+    if( !mbLocked && fTime != mfTime)
     {
+        mfTime = fTime;
         maItem.merge( rItem );
         if( rItem.getURL().isEmpty() && meControlStyle == MEDIACONTROLSTYLE_SINGLELINE )
             mpPlayToolBox->Disable();
@@ -311,6 +314,12 @@ IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p, void )
         else
             SelectPlayToolBoxItem( aExecItem, maItem, p->GetCurItemId() );
 
+        if (aExecItem.getState() == MediaState::Play)
+            maIdle.Start();
+        else if (aExecItem.getState() == MediaState::Pause ||
+                 aExecItem.getState() == MediaState::Stop)
+            maIdle.Stop();
+
         if( aExecItem.getMaskSet() != AVMediaSetMask::NONE )
             execute( aExecItem );
     }
@@ -348,6 +357,7 @@ IMPL_LINK( MediaControl, implZoomSelectHdl, ListBox&, p, void )
 IMPL_LINK_NOARG(MediaControl, implTimeoutHdl, Timer *, void)
 {
     update();
+    maIdle.Start();
 }
 
 } // namespace avmedia
