@@ -53,7 +53,7 @@ MacroChooser::MacroChooser(weld::Window* pParnt, const Reference< frame::XFrame 
     : SfxDialogController(pParnt, "modules/BasicIDE/ui/basicmacrodialog.ui", "BasicMacroDialog")
     , m_xDocumentFrame(xDocFrame)
     // the Sfx doesn't ask the BasicManager whether modified or not
-    // => start saving in case of a change without a into the BasicIDE.
+    // => start saving in case of a change without an into the BasicIDE.
     , bForceStoreBasic(false)
     , nMode(All)
     , m_xMacroNameEdit(m_xBuilder->weld_entry("macronameedit"))
