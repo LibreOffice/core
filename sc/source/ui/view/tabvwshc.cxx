@@ -669,6 +669,8 @@ const OUString ScTabViewShell::DoAutoSum(bool& rRangeFinder, bool& rSubTotal)
     const ScMarkData& rMark = GetViewData().GetMarkData();
     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
     {
+        //need to handle this part of code for autosum use on a selection
+        //only sum is being inserted at the moment when selecting a function from dropdown
         ScRangeList aMarkRangeList;
         rRangeFinder = rSubTotal = false;
         rMark.FillRangeListWithMarks( &aMarkRangeList, false );
