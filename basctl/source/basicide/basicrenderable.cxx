@@ -64,7 +64,7 @@ Renderable::Renderable (BaseWindow* pWin)
                                                    aHelpIds, aPrintContentName,
                                                    aChoices, 0);
 
-    // create a an Edit dependent on "Pages" selected
+    // create an Edit dependent on "Pages" selected
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt(aPrintContentName, 1, true);
     m_aUIProperties[2].Value = setEditControlOpt("pagerange", OUString(),
                                                  OUString(), "PageRange",
