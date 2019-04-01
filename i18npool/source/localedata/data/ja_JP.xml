@@ -481,11 +481,9 @@
           <DefaultFullName>平成</DefaultFullName>
         </Era>
         <Era>
-          <!-- TODO: Naruhito is only the emperor's name, the era name and
-               abbreviation and full name are not known yet (2018-07-26) -->
-          <EraID>Naruhito</EraID>
-          <DefaultAbbrvName>Na</DefaultAbbrvName>
-          <DefaultFullName>Naruhito</DefaultFullName>
+          <EraID>Reiwa</EraID>
+          <DefaultAbbrvName>令</DefaultAbbrvName>
+          <DefaultFullName>令和</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
