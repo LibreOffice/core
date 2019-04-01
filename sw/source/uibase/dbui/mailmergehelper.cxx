@@ -37,6 +37,7 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/svapp.hxx>
 
 #include <sfx2/passwd.hxx>
 
@@ -622,6 +623,9 @@ void AddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), GetOutputSizePixel()));
     Color aPaintColor(IsEnabled() ? rSettings.GetWindowTextColor() : rSettings.GetDisableColor());
     rRenderContext.SetLineColor(aPaintColor);
+
+    if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
+        pDefaultDevice->SetPointFont(rRenderContext, GetDrawingArea()->get_font());
     vcl::Font aFont(rRenderContext.GetFont());
     aFont.SetColor(aPaintColor);
     rRenderContext.SetFont(aFont);
