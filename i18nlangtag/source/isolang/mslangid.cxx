@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
-#include <rtl/string.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <i18nlangtag/mslangid.hxx>
