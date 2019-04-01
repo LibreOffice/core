@@ -163,14 +163,19 @@ void TextUndoDelPara::Undo()
 
 void TextUndoDelPara::Redo()
 {
+    auto & rDocNodes = GetDoc()->GetNodes();
     // pNode is not valid anymore in case an Undo joined paragraphs
-    mpNode = GetDoc()->GetNodes()[ mnPara ].get();
+    mpNode = rDocNodes[ mnPara ].get();
 
     GetTEParaPortions()->Remove( mnPara );
 
     // do not delete Node because of Undo!
-    GetDoc()->GetNodes().erase( ::std::find_if( GetDoc()->GetNodes().begin(), GetDoc()->GetNodes().end(),
-                                                [&] (std::unique_ptr<TextNode> const & p) { return p.get() == mpNode; } ) );
+    auto it = ::std::find_if( rDocNodes.begin(), rDocNodes.end(),
+                              [&] (std::unique_ptr<TextNode> const & p) { return p.get() == mpNode; } );
+    assert(it != rDocNodes.end());
+    it->release();
+    GetDoc()->GetNodes().erase( it );
+
     GetTextEngine()->ImpParagraphRemoved( mnPara );
 
     mbDelObject = true; // belongs again to the Undo
