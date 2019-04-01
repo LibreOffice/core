@@ -322,7 +322,7 @@ namespace accessibility
                     xParent = getListBox()->GetAccessible( );
             }
             else
-            {   // we have a entry as parent -> get its accessible
+            {   // we have an entry as parent -> get its accessible
 
                 // shorten our access path by one
                 std::deque< sal_Int32 > aParentPath( m_aEntryPath );
