@@ -301,9 +301,9 @@ static std::wstring getShellLinkTarget(const std::wstring& aLnkFile)
 
     try
     {
-        sal::systools::COMReference<IShellLinkA> pIShellLink;
+        sal::systools::COMReference<IShellLinkW> pIShellLink;
         HRESULT hr = CoCreateInstance(
-            CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER, IID_IShellLink, reinterpret_cast<LPVOID*>(&pIShellLink));
+            CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER, IID_IShellLinkW, reinterpret_cast<LPVOID*>(&pIShellLink));
         if (FAILED(hr))
             return target;
 
@@ -318,14 +318,12 @@ static std::wstring getShellLinkTarget(const std::wstring& aLnkFile)
         if (FAILED(hr))
             return target;
 
-        char pathA[MAX_PATH];
-        WIN32_FIND_DATA wfd;
-        hr = pIShellLink->GetPath(pathA, MAX_PATH, &wfd, SLGP_RAWPATH);
+        wchar_t pathW[MAX_PATH];
+        WIN32_FIND_DATAW wfd;
+        hr = pIShellLink->GetPath(pathW, MAX_PATH, &wfd, SLGP_RAWPATH);
         if (FAILED(hr))
             return target;
 
-        wchar_t pathW[MAX_PATH];
-        MultiByteToWideChar(CP_ACP, 0, pathA, -1, pathW, MAX_PATH);
         target = pathW;
     }
     catch(sal::systools::ComError& ex)
