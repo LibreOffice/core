@@ -785,7 +785,7 @@ namespace basegfx
                             // says for interpretation:
 
                             // "(If there is no previous command or if the previous command was
-                            // not an C, c, S or s, assume the first control point is coincident
+                            // not a C, c, S or s, assume the first control point is coincident
                             // with the current point.)"
 
                             // That's what is done from our import, so avoid exporting it as first statement
