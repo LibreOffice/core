@@ -76,10 +76,10 @@ public:
 
     SvtScriptType   GetSelectionScriptType();
 
-    bool            GetAutoSumArea(ScRangeList& rRangeList);
-    void            EnterAutoSum(const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr);
-    bool            AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor, bool bContinue );
-    OUString        GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr );
+    bool            GetAutoSumArea( ScRangeList& rRangeList );
+    void            EnterAutoSum( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr, const OpCode eCode );
+    bool            AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor, bool bContinue, const OpCode eCode );
+    OUString        GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr, const OpCode eCode );
 
     void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString,
                                const EditTextObject* pData = nullptr );
