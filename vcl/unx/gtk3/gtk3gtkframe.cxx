@@ -4385,8 +4385,14 @@ GdkEvent* GtkSalFrame::makeFakeKeyPress(GtkWidget* pWidget)
     GdkEvent *event = gdk_event_new(GDK_KEY_PRESS);
     event->key.window = GDK_WINDOW(g_object_ref(gtk_widget_get_window(pWidget)));
 
-    GdkSeat *seat = gdk_display_get_default_seat(gtk_widget_get_display(pWidget));
-    gdk_event_set_device(event, gdk_seat_get_keyboard(seat));
+#if GTK_CHECK_VERSION(3, 20, 0)
+    if (gtk_check_version(3, 20, 0) == nullptr)
+    {
+        GdkSeat *seat = gdk_display_get_default_seat(gtk_widget_get_display(pWidget));
+        gdk_event_set_device(event, gdk_seat_get_keyboard(seat));
+    }
+#endif
+
     event->key.send_event = 1 /* TRUE */;
     event->key.time = gtk_get_current_event_time();
     event->key.state = 0;
