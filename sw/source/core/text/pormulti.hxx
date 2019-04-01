@@ -82,60 +82,60 @@ struct SwBracket
 // or a rotated portion.
 class SwMultiPortion : public SwLinePortion
 {
-    SwLineLayout aRoot;     // One or more lines
-    bool bTab1      :1;     // First line tabulator
-    bool bTab2      :1;     // Second line includes tabulator
-    bool bDouble    :1;     // Double line
-    bool bRuby      :1;     // Phonetics
-    bool bBidi      :1;
-    bool bFormatted :1;     // Already formatted
-    bool bFollowField :1;     // Field follow inside
-    bool bFlyInContent:1;     // Fly as character inside
-    RubyPosition eRubyPosition;     // Phonetic position
-    sal_uInt8 nDirection:2; // Direction (0/90/180/270 degrees)
+    SwLineLayout m_aRoot;     // One or more lines
+    bool m_bTab1      :1;     // First line tabulator
+    bool m_bTab2      :1;     // Second line includes tabulator
+    bool m_bDouble    :1;     // Double line
+    bool m_bRuby      :1;     // Phonetics
+    bool m_bBidi      :1;
+    bool m_bFormatted :1;     // Already formatted
+    bool m_bFollowField :1;     // Field follow inside
+    bool m_bFlyInContent:1;     // Fly as character inside
+    RubyPosition m_eRubyPosition;     // Phonetic position
+    sal_uInt8 m_nDirection:2; // Direction (0/90/180/270 degrees)
 protected:
     explicit SwMultiPortion(TextFrameIndex const nEnd)
-        : bTab1(false)
-        , bTab2(false)
-        , bDouble(false)
-        , bRuby(false)
-        , bBidi(false)
-        , bFormatted(false)
-        , bFollowField(false)
-        , bFlyInContent(false)
-        , eRubyPosition( RubyPosition::ABOVE )
-        , nDirection(0)
+        : m_bTab1(false)
+        , m_bTab2(false)
+        , m_bDouble(false)
+        , m_bRuby(false)
+        , m_bBidi(false)
+        , m_bFormatted(false)
+        , m_bFollowField(false)
+        , m_bFlyInContent(false)
+        , m_eRubyPosition( RubyPosition::ABOVE )
+        , m_nDirection(0)
     {
         SetWhichPor(PortionType::Multi);
         SetLen(nEnd);
     }
-    void SetDouble() { bDouble = true; }
-    void SetRuby() { bRuby = true; }
-    void SetBidi() { bBidi = true; }
-    void SetRubyPosition( RubyPosition eNew ) { eRubyPosition = eNew; }
-    void SetTab1( bool bNew ) { bTab1 = bNew; }
-    void SetTab2( bool bNew ) { bTab2 = bNew; }
-    void SetDirection( sal_uInt8 nNew ) { nDirection = nNew; }
-    bool GetTab1() const { return bTab1; }
-    bool GetTab2() const { return bTab2; }
+    void SetDouble() { m_bDouble = true; }
+    void SetRuby() { m_bRuby = true; }
+    void SetBidi() { m_bBidi = true; }
+    void SetRubyPosition( RubyPosition eNew ) { m_eRubyPosition = eNew; }
+    void SetTab1( bool bNew ) { m_bTab1 = bNew; }
+    void SetTab2( bool bNew ) { m_bTab2 = bNew; }
+    void SetDirection( sal_uInt8 nNew ) { m_nDirection = nNew; }
+    bool GetTab1() const { return m_bTab1; }
+    bool GetTab2() const { return m_bTab2; }
 public:
     virtual ~SwMultiPortion() override;
-    const SwLineLayout& GetRoot() const { return aRoot; }
-    SwLineLayout& GetRoot() { return aRoot; }
+    const SwLineLayout& GetRoot() const { return m_aRoot; }
+    SwLineLayout& GetRoot() { return m_aRoot; }
 
-    bool HasTabulator() const { return bTab1 || bTab2; }
-    bool IsFormatted() const { return bFormatted; }
-    void SetFormatted() { bFormatted = true; }
-    bool IsFollowField() const { return bFollowField; }
-    void SetFollowField() { bFollowField = true; }
-    bool HasFlyInContent() const { return bFlyInContent; }
-    void SetFlyInContent( bool bNew ) { bFlyInContent = bNew; }
-    bool IsDouble() const { return bDouble; }
-    bool IsRuby() const { return bRuby; }
-    bool IsBidi() const { return bBidi; }
-    bool OnTop() const { return eRubyPosition == RubyPosition::ABOVE; }
-    bool OnRight() const { return eRubyPosition == RubyPosition::RIGHT; }
-    RubyPosition GetRubyPosition() const { return eRubyPosition; }
+    bool HasTabulator() const { return m_bTab1 || m_bTab2; }
+    bool IsFormatted() const { return m_bFormatted; }
+    void SetFormatted() { m_bFormatted = true; }
+    bool IsFollowField() const { return m_bFollowField; }
+    void SetFollowField() { m_bFollowField = true; }
+    bool HasFlyInContent() const { return m_bFlyInContent; }
+    void SetFlyInContent( bool bNew ) { m_bFlyInContent = bNew; }
+    bool IsDouble() const { return m_bDouble; }
+    bool IsRuby() const { return m_bRuby; }
+    bool IsBidi() const { return m_bBidi; }
+    bool OnTop() const { return m_eRubyPosition == RubyPosition::ABOVE; }
+    bool OnRight() const { return m_eRubyPosition == RubyPosition::RIGHT; }
+    RubyPosition GetRubyPosition() const { return m_eRubyPosition; }
     void ActualizeTabulator();
 
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
@@ -146,9 +146,9 @@ public:
     void CalcSize( SwTextFormatter& rLine, SwTextFormatInfo &rInf );
 
     inline bool HasBrackets() const;
-    bool HasRotation() const { return 0 != (1 & nDirection); }
-    bool IsRevers() const { return 0 != (2 & nDirection); }
-    sal_uInt8 GetDirection() const { return nDirection; }
+    bool HasRotation() const { return 0 != (1 & m_nDirection); }
+    bool IsRevers() const { return 0 != (2 & m_nDirection); }
+    sal_uInt8 GetDirection() const { return m_nDirection; }
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;

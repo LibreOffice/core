@@ -143,7 +143,7 @@ void SwMultiPortion::ActualizeTabulator()
 {
     SwLinePortion* pPor = GetRoot().GetFirstPortion();
     // First line
-    for( bTab1 = bTab2 = false; pPor; pPor = pPor->GetNextPortion() )
+    for( m_bTab1 = m_bTab2 = false; pPor; pPor = pPor->GetNextPortion() )
         if( pPor->InTabGrp() )
             SetTab1( true );
     if( GetRoot().GetNext() )
