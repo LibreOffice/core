@@ -24,6 +24,8 @@
 #include <svl/eitem.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <comphelper/string.hxx>
+#include <tools/debug.hxx>
+#include <unotools/collatorwrapper.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

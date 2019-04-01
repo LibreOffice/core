@@ -20,7 +20,6 @@
 
 #include <vcl/commandevent.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/event.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/button.hxx>

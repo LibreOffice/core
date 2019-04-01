@@ -18,7 +18,6 @@
  */
 
 #include <vcl/decoview.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/ImageTree.hxx>

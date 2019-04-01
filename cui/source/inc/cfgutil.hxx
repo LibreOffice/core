@@ -30,10 +30,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <vcl/timer.hxx>
-#include <vcl/svtabbx.hxx>
-#include <vcl/treelistbox.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/image.hxx>
 #include <vcl/weld.hxx>
 
 class Button;

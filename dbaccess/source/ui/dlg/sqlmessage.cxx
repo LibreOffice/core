@@ -25,14 +25,9 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
-#include <vcl/treelistbox.hxx>
-#include <vcl/treelistentry.hxx>
-#include <svtools/svmedit.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <unotools/configmgr.hxx>

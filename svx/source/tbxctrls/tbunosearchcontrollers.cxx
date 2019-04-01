@@ -59,6 +59,7 @@
 #include <svx/srchdlg.hxx>
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/window.hxx>
 

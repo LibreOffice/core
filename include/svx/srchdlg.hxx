@@ -19,16 +19,8 @@
 #ifndef INCLUDED_SVX_SRCHDLG_HXX
 #define INCLUDED_SVX_SRCHDLG_HXX
 
-#include <vcl/combobox.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/button.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/dialog.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <svtools/svmedit.hxx>
 #include <svl/srchdefs.hxx>
 #include <svl/itempool.hxx>
 #include <svx/svxdllapi.h>

@@ -23,12 +23,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 
 #include <svx/fmsearch.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include <tools/link.hxx>
 #include <rtl/ustring.hxx>
 

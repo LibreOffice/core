@@ -19,20 +19,11 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_OPTDICT_HXX
 #define INCLUDED_CUI_SOURCE_INC_OPTDICT_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/decoview.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/util/Language.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-
-
-#include <svtools/simptabl.hxx>
 #include <svx/langbox.hxx>
 
 namespace com{namespace sun{namespace star{

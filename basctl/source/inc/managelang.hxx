@@ -20,10 +20,7 @@
 #ifndef INCLUDED_BASCTL_SOURCE_INC_MANAGELANG_HXX
 #define INCLUDED_BASCTL_SOURCE_INC_MANAGELANG_HXX
 
-#include <svx/checklbx.hxx>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 
 class LanguageBox;
 

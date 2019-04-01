@@ -26,8 +26,7 @@
 
 #include <comphelper/string.hxx>
 
-
-#include <vcl/dialog.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/field.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
