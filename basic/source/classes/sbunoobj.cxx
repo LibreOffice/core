@@ -2556,7 +2556,7 @@ SbUnoProperty::SbUnoProperty
     , mRealType( eRealSbxType )
     , mbUnoStruct( bUnoStruct )
 {
-    // as needed establish an dummy array so that SbiRuntime::CheckArray() works
+    // as needed establish a dummy array so that SbiRuntime::CheckArray() works
     static SbxArrayRef xDummyArray = new SbxArray( SbxVARIANT );
     if( eSbxType & SbxARRAY )
         PutObject( xDummyArray.get() );
@@ -3757,7 +3757,7 @@ void SbUnoSingleton::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 
 // Implementation of an EventAttacher-drawn AllListener, which
-// solely transmits several events to an general AllListener
+// solely transmits several events to a general AllListener
 class BasicAllListener_Impl : public WeakImplHelper< XAllListener >
 {
     void firing_impl(const AllEventObject& Event, Any* pRet);
