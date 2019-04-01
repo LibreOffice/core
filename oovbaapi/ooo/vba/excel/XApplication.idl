@@ -87,6 +87,7 @@ interface XApplication
     void Volatile([in] any Volatile);
     any Caller( [in] any Index );
     any MenuBars( [in] any aIndex );
+    any Rows( [in] any aIndex );
     void Undo();
 };
 

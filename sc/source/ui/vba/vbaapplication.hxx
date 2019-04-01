@@ -143,6 +143,7 @@ public:
     virtual double SAL_CALL InchesToPoints( double InchesToPoints ) override;
     virtual void SAL_CALL Volatile( const css::uno::Any& Volatile ) override;
     virtual css::uno::Any SAL_CALL MenuBars( const css::uno::Any& aIndex ) override;
+    virtual css::uno::Any SAL_CALL Rows( const css::uno::Any& aIndex ) override;
     virtual css::uno::Any SAL_CALL Caller( const css::uno::Any& aIndex ) override;
     virtual void SAL_CALL Undo() override;
 
