@@ -592,6 +592,7 @@ public:
     // be used.
     static sal_uInt16               GetColorValueSetMaximumRowCount();
 
+    void                            SetListBoxPreviewDefaultLogicSize(Size const & rSize);
     const Size&                     GetListBoxPreviewDefaultPixelSize() const;
 
     // the default LineWidth for ListBox UI previews (LineStyle, LineDash, LineStartEnd). Default is 1.
