@@ -63,8 +63,8 @@ css::uno::Any SAL_CALL CrashReportUI::dispatchWithReturnValue(const css::util::U
 {
     SolarMutexGuard aGuard;
     css::uno::Any aRet;
-    ScopedVclPtrInstance<CrashReportDialog> xDialog(nullptr);
-    xDialog->Execute();
+    CrashReportDialog aDialog(nullptr);
+    aDialog.run();
     return aRet;
 }
 

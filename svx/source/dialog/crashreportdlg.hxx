@@ -10,37 +10,27 @@
 #ifndef INCLUDED_SVX_SOURCE_DIALOG_CRASHREPORTDLG_HXX
 #define INCLUDED_SVX_SOURCE_DIALOG_CRASHREPORTDLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/vclmedit.hxx>
+#include <vcl/weld.hxx>
 
-class CrashReportDialog : public Dialog
+class CrashReportDialog : public weld::GenericDialogController
 {
 public:
-
-    explicit CrashReportDialog(vcl::Window* pParent);
-
+    explicit CrashReportDialog(weld::Window* pParent);
+    virtual short run() override;
     virtual ~CrashReportDialog() override;
 
-    virtual void dispose() override;
-
-    virtual bool Close() override;
-
 private:
-
-    VclPtr<Button> mpBtnSend;
-    VclPtr<Button> mpBtnCancel;
-    VclPtr<Button> mpBtnClose;
-    VclPtr<FixedText> mpEditPreUpload;
-    VclPtr<VclMultiLineEdit> mpEditPostUpload;
-    VclPtr<VclMultiLineEdit> mpFtBugReport;
-    VclPtr<CheckBox> mpCBSafeMode;
+    std::unique_ptr<weld::Button> mxBtnSend;
+    std::unique_ptr<weld::Button> mxBtnCancel;
+    std::unique_ptr<weld::Button> mxBtnClose;
+    std::unique_ptr<weld::Label> mxEditPreUpload;
+    std::unique_ptr<weld::TextView> mxEditPostUpload;
+    std::unique_ptr<weld::TextView> mxFtBugReport;
+    std::unique_ptr<weld::CheckButton> mxCBSafeMode;
 
     OUString maSuccessMsg;
 
-    DECL_LINK(BtnHdl, Button*, void);
+    DECL_LINK(BtnHdl, weld::Button&, void);
 };
 
 #endif
