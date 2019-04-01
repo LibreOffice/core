@@ -12,7 +12,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,readlicense_oo/license))
 readlicense_oo_DIR := $(call gb_CustomTarget_get_workdir,readlicense_oo/license)
 readlicense_oo_LICENSE_xml := $(SRCDIR)/readlicense_oo/license/license.xml
 
-$(call gb_CustomTarget_get_target,readlicense_oo/license) : $(readlicense_oo_DIR)/license.html
+$(call gb_CustomTarget_get_target,readlicense_oo/license) : $(readlicense_oo_DIR)/LICENSE.html
 
 ifeq ($(OS),WNT)
 $(call gb_CustomTarget_get_target,readlicense_oo/license) : $(readlicense_oo_DIR)/license.txt
@@ -20,7 +20,7 @@ else
 $(call gb_CustomTarget_get_target,readlicense_oo/license) : $(readlicense_oo_DIR)/LICENSE
 endif
 
-$(readlicense_oo_DIR)/license.html : \
+$(readlicense_oo_DIR)/LICENSE.html : \
 		$(SRCDIR)/readlicense_oo/license/license_html.xsl \
 		$(readlicense_oo_LICENSE_xml) \
 		| $(readlicense_oo_DIR)/.dir \

@@ -20,9 +20,9 @@ endif
 endif
 
 ifneq ($(OS),MACOSX)
-$(eval $(call gb_Package_add_file,readlicense_oo_license,LICENSE.html,license.html))
+$(eval $(call gb_Package_add_file,readlicense_oo_license,LICENSE.html,LICENSE.html))
 else
-$(eval $(call gb_Package_add_file,readlicense_oo_license,Resources/LICENSE.html,license.html))
+$(eval $(call gb_Package_add_file,readlicense_oo_license,Resources/LICENSE.html,LICENSE.html))
 endif
 
 # vim: set noet sw=4 ts=4:
