@@ -518,9 +518,10 @@ void SwTextFrame::SwitchHorizontalToVertical( SwRect& rRect ) const
 
     if (IsVertLRBT())
     {
-        SAL_WARN_IF(!mbIsSwapped, "sw.core",
-                    "SwTextFrame::SwitchHorizontalToVertical, IsVertLRBT, not swapped");
-        rRect.Top(getFrameArea().Top() + getFrameArea().Width() - nOfstX);
+        if (mbIsSwapped)
+            rRect.Top(getFrameArea().Top() + getFrameArea().Width() - nOfstX);
+        else
+            rRect.Top(getFrameArea().Top() + getFrameArea().Height() - nOfstX);
     }
     else
         rRect.Top(getFrameArea().Top() + nOfstX);

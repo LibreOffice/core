@@ -420,7 +420,7 @@ SwRect SwTextFrame::GetPaintSwRect()
         SwRepaint& rRepaint = GetPara()->GetRepaint();
         long l;
 
-        if ( IsVertLR() ) // mba: the following line was added, but we don't need it for the existing directions; kept for IsVertLR(), but should be checked
+        if ( IsVertLR() && !IsVertLRBT()) // mba: the following line was added, but we don't need it for the existing directions; kept for IsVertLR(), but should be checked
             rRepaint.Chg( GetUpper()->getFrameArea().Pos() + GetUpper()->getFramePrintArea().Pos(), GetUpper()->getFramePrintArea().SSize() );
 
         if( rRepaint.GetOfst() )
