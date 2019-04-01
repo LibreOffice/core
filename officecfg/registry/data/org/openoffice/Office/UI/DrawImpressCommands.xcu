@@ -57,6 +57,9 @@
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:RenamePage</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:RenameLayer" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -589,6 +592,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">F~ields...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertFileField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -697,6 +703,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Hyperlink...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:HideLastLevel" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -752,6 +761,9 @@
       <node oor:name=".uno:ManageLinks" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Lin~ks to External Files...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ConvertInto3DLathe" oor:op="replace">
