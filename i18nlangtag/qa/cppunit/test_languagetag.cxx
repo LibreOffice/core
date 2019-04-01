@@ -18,9 +18,6 @@
 #include <i18nlangtag/languagetag.hxx>
 
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
-#include <osl/file.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
