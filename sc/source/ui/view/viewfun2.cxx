@@ -225,7 +225,11 @@ enum ScAutoSum
 {
     ScAutoSumNone = 0,
     ScAutoSumData,
-    ScAutoSumSum
+    ScAutoSumSum,
+    ScAutoSumAverage,
+    ScAutoSumMax,
+    ScAutoSumMin,
+    ScAutoSumCount
 };
 
 static ScAutoSum lcl_IsAutoSumData( ScDocument* pDoc, SCCOL nCol, SCROW nRow,
@@ -236,12 +240,28 @@ static ScAutoSum lcl_IsAutoSumData( ScDocument* pDoc, SCCOL nCol, SCROW nRow,
     {
         if (aCell.meType == CELLTYPE_FORMULA)
         {
+            ScAutoSum val = ScAutoSumNone;
             ScTokenArray* pCode = aCell.mpFormula->GetCode();
-            if ( pCode && pCode->GetOuterFuncOpCode() == ocSum )
+            if ( pCode )
             {
+                switch( pCode->GetOuterFuncOpCode() )
+                {
+                    case ocSum     : val = ScAutoSumSum;
+                        break;
+                    case ocAverage : val = ScAutoSumAverage;
+                        break;
+                    case ocMax     : val = ScAutoSumMax;
+                        break;
+                    case ocMin     : val = ScAutoSumMin;
+                        break;
+                    case ocCount   : val = ScAutoSumCount;
+                        break;
+                    default        :
+                        break;
+                }
                 if ( pCode->GetAdjacentExtendOfOuterFuncRefs( nExtend,
                         ScAddress( nCol, nRow, nTab ), eDir ) )
-                    return ScAutoSumSum;
+                    return val;
             }
         }
         return ScAutoSumData;
@@ -292,7 +312,7 @@ static bool lcl_FindNextSumEntryInColumn( ScDocument* pDoc, SCCOL nCol, SCROW& n
     {
         --nRow;
     }
-    return eSkip == ScAutoSumSum && nRow < nTmp;
+    return eSkip >= ScAutoSumSum && nRow < nTmp;
 }
 
 static bool lcl_FindNextSumEntryInRow( ScDocument* pDoc, SCCOL& nCol, SCROW nRow,
@@ -305,7 +325,7 @@ static bool lcl_FindNextSumEntryInRow( ScDocument* pDoc, SCCOL& nCol, SCROW nRow
     {
         --nCol;
     }
-    return eSkip == ScAutoSumSum && nCol < nTmp;
+    return eSkip >= ScAutoSumSum && nCol < nTmp;
 }
 
 static ScAutoSum lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rRangeList, const ScRange& rRange )
@@ -324,7 +344,7 @@ static ScAutoSum lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rR
     SCCOLROW nExtend = 0;
     ScAutoSum eSum = lcl_IsAutoSumData( pDoc, nCol, nEndRow, nTab, DIR_TOP, nExtend /*out*/ );
 
-    if ( eSum == ScAutoSumSum )
+    if ( eSum >= ScAutoSumSum )
     {
         bool bContinue = false;
         do
@@ -369,7 +389,7 @@ static ScAutoSum lcl_GetAutoSumForRowRange( ScDocument* pDoc, ScRangeList& rRang
     SCCOLROW nExtend = 0;
     ScAutoSum eSum = lcl_IsAutoSumData( pDoc, nEndCol, nRow, nTab, DIR_LEFT, nExtend /*out*/ );
 
-    if ( eSum == ScAutoSumSum )
+    if ( eSum >= ScAutoSumSum )
     {
         bool bContinue = false;
         do
@@ -444,7 +464,7 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
         if ( bRow )
         {
             nStartRow = nSeekRow;       // nSeekRow might be adjusted via reference
-            if ( eSum == ScAutoSumSum )
+            if ( eSum >= ScAutoSumSum  && eSum <= ScAutoSumCount )
                 nEndRow = nStartRow;        // only sum sums
             else
                 nEndRow = nRow - 1;     // maybe extend data area at bottom
@@ -452,7 +472,7 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
         else
         {
             nStartCol = nSeekCol;       // nSeekCol might be adjusted vie reference
-            if ( eSum == ScAutoSumSum )
+            if ( eSum >= ScAutoSumSum )
                 nEndCol = nStartCol;        // only sum sums
             else
                 nEndCol = nCol - 1;     // maybe extend data area to the right
@@ -477,7 +497,7 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
             }
             rRangeList.push_back(
                 ScRange( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab ) );
-            if ( eSum == ScAutoSumSum )
+            if ( eSum >= ScAutoSumSum )
             {
                 if ( bRow )
                 {
@@ -714,10 +734,10 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
     // there is only one, or the data range if more than one. Otherwise use the
     // original selection. All extended by end column/row where the sum is put.
     const ScRange aMarkRange(
-            (eSum == ScAutoSumSum ?
+            (eSum >= ScAutoSumSum ?
              (nRowSums == 1 ? nRowSumsStartCol : nStartCol) :
              rRange.aStart.Col()),
-            (eSum == ScAutoSumSum ?
+            (eSum >= ScAutoSumSum ?
              (nColSums == 1 ? nColSumsStartRow : nStartRow) :
              rRange.aStart.Row()),
             nTab, nMarkEndCol, nMarkEndRow, nTab );

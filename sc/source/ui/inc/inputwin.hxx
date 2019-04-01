@@ -30,6 +30,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/window.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/menu.hxx>
 
 class EditView;
 class ScAccessibleEditLineTextData;
@@ -262,6 +263,9 @@ public:
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
+
+    DECL_LINK( MenuHdl, Menu *, bool );
+    DECL_LINK( DropdownClickHdl, ToolBox*, void );
 
 private:
     bool IsPointerAtResizePos();
