@@ -18,7 +18,6 @@
  */
 
 #include <stdlib.h>
-#include <stdio.h>
 
 #ifdef MACOSX
 #include <osl/process.h>
@@ -30,8 +29,7 @@
 #endif  // MACOSX
 
 #include <osl/mutex.hxx>
-#include <rtl/instance.hxx>
-#include <i18nlangtag/languagetag.hxx>
+#include <osl/doublecheckedlocking.h>
 #include <i18nlangtag/mslangid.hxx>
 
 
