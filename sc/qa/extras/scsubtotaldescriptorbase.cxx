@@ -21,35 +21,34 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSubTotalCalculatable.hpp>
 #include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
 
 using namespace css;
-using namespace css::uno;
-using namespace com::sun::star;
 
-namespace sc_apitest {
-
-class ScSubTotalDescriptorBaseObj : public CalcUnoApiTest,public apitest::XEnumerationAccess,
-                                                          public apitest::SubTotalDescriptor,
-                                                          public apitest::XSubTotalDescriptor
+namespace sc_apitest
+{
+class ScSubTotalDescriptorBase : public CalcUnoApiTest,
+                                 public apitest::SubTotalDescriptor,
+                                 public apitest::XEnumerationAccess,
+                                 public apitest::XSubTotalDescriptor
 {
 public:
-    ScSubTotalDescriptorBaseObj();
+    ScSubTotalDescriptorBase();
 
-    virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference<uno::XInterface> init() override;
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    CPPUNIT_TEST_SUITE(ScSubTotalDescriptorBaseObj);
-
-    // XEnumerationAccess
-    CPPUNIT_TEST(testCreateEnumeration);
+    CPPUNIT_TEST_SUITE(ScSubTotalDescriptorBase);
 
     // SubTotalDescriptor
     CPPUNIT_TEST(testSubTotalDescriptorProperties);
+
+    // XEnumerationAccess
+    CPPUNIT_TEST(testCreateEnumeration);
 
     // XSubTotalDescriptor
     CPPUNIT_TEST(testAddNew);
@@ -58,25 +57,25 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference<lang::XComponent> mxComponent;
 };
 
-ScSubTotalDescriptorBaseObj::ScSubTotalDescriptorBaseObj()
+ScSubTotalDescriptorBase::ScSubTotalDescriptorBase()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
-uno::Reference< uno::XInterface > ScSubTotalDescriptorBaseObj::init()
+uno::Reference<uno::XInterface> ScSubTotalDescriptorBase::init()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference< container::XIndexAccess > xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    uno::Reference< sheet::XSubTotalCalculatable > xSTC(xSheet, uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XSubTotalDescriptor > xSTD = xSTC->createSubTotalDescriptor(true);
+    uno::Reference<sheet::XSubTotalCalculatable> xSTC(xSheet, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSubTotalDescriptor> xSTD = xSTC->createSubTotalDescriptor(true);
 
-    uno::Sequence< sheet::SubTotalColumn > xCols;
+    uno::Sequence<sheet::SubTotalColumn> xCols;
     xCols.realloc(1);
     xCols[0].Column = 5;
     xCols[0].Function = sheet::GeneralFunction_SUM;
@@ -85,22 +84,22 @@ uno::Reference< uno::XInterface > ScSubTotalDescriptorBaseObj::init()
     return xSTD;
 }
 
-void ScSubTotalDescriptorBaseObj::setUp()
+void ScSubTotalDescriptorBase::setUp()
 {
     CalcUnoApiTest::setUp();
-    // create a calc document
+    // create calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
-void ScSubTotalDescriptorBaseObj::tearDown()
+void ScSubTotalDescriptorBase::tearDown()
 {
     closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ScSubTotalDescriptorBaseObj);
+CPPUNIT_TEST_SUITE_REGISTRATION(ScSubTotalDescriptorBase);
 
-} // end namespace
+} // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
