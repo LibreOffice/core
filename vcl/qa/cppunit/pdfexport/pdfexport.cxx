@@ -97,6 +97,7 @@ public:
     void testTdf66597_3();
 #endif
     void testTdf109143();
+    void testTdf124272();
     void testTdf105954();
     void testTdf106702();
     void testTdf113143();
@@ -128,6 +129,7 @@ public:
     CPPUNIT_TEST(testTdf66597_3);
 #endif
     CPPUNIT_TEST(testTdf109143);
+    CPPUNIT_TEST(testTdf124272);
     CPPUNIT_TEST(testTdf105954);
     CPPUNIT_TEST(testTdf106702);
     CPPUNIT_TEST(testTdf113143);
@@ -503,6 +505,72 @@ void PdfExportTest::testTdf109143()
     // This failed: cropped TIFF-in-JPEG wasn't re-compressed, so crop was
     // lost. Size was 59416, now is 11827.
     CPPUNIT_ASSERT(nLength < 50000);
+}
+
+void PdfExportTest::testTdf124272()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf124272.odt";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result with pdfium.
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    mpPdfDocument = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
+    CPPUNIT_ASSERT(mpPdfDocument);
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(mpPdfDocument));
+    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/0);
+    CPPUNIT_ASSERT(mpPdfPage);
+
+    // There is a single image on the page.
+    int nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
+    CPPUNIT_ASSERT_EQUAL(6, nPageObjectCount);
+
+
+    FPDF_PAGEOBJECT pPageObject0 = FPDFPage_GetObject(mpPdfPage, 0);
+    CPPUNIT_ASSERT_EQUAL(FPDFPageObj_GetType(pPageObject0), FPDF_PAGEOBJ_PATH);
+
+    unsigned int nRed = 0, nGreen = 0, nBlue = 0, nAlpha = 0;
+    FPDFPath_GetFillColor(pPageObject0, &nRed, &nGreen, &nBlue, &nAlpha);
+    CPPUNIT_ASSERT_EQUAL(Color(nRed, nGreen, nBlue), COL_YELLOW);
+
+    FPDF_PATHSEGMENT pSegment = FPDFPath_GetPathSegment(pPageObject0, 0);
+    CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_MOVETO, FPDFPathSegment_GetType(pSegment));
+    float fX = 0;
+    float fY = 0;
+    FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
+    CPPUNIT_ASSERT_EQUAL(56700, static_cast<int>(round(fX * 1000)));
+    CPPUNIT_ASSERT_EQUAL(771439, static_cast<int>(round(fY * 1000)));
+    CPPUNIT_ASSERT(!FPDFPathSegment_GetClose(pSegment));
+
+    FPDF_PAGEOBJECT pPageObject1 = FPDFPage_GetObject(mpPdfPage, 3);
+    CPPUNIT_ASSERT_EQUAL(FPDFPageObj_GetType(pPageObject1), FPDF_PAGEOBJ_PATH);
+
+    FPDFPath_GetFillColor(pPageObject1, &nRed, &nGreen, &nBlue, &nAlpha);
+    CPPUNIT_ASSERT_EQUAL(Color(nRed, nGreen, nBlue), COL_BLACK);
+
+    pSegment = FPDFPath_GetPathSegment(pPageObject1, 0);
+    CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_MOVETO, FPDFPathSegment_GetType(pSegment));
+    FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
+    CPPUNIT_ASSERT_EQUAL(390800, static_cast<int>(round(fX * 1000)));
+    CPPUNIT_ASSERT_EQUAL(771439, static_cast<int>(round(fY * 1000)));
+    CPPUNIT_ASSERT(!FPDFPathSegment_GetClose(pSegment));
+
+    // Check width and height of the image.
+    FPDF_PAGEOBJECT pPageObject2 = FPDFPage_GetObject(mpPdfPage, 5);
+    FPDF_IMAGEOBJ_METADATA aMeta;
+    CPPUNIT_ASSERT(FPDFImageObj_GetImageMetadata(pPageObject2, mpPdfPage, &aMeta));
+    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(651), aMeta.width);
+    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(400), aMeta.height);
 }
 
 void PdfExportTest::testTdf106972()
