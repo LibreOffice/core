@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_72b538ee",
+        "filename": "chart2/source/controller/main/ChartController.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-01T15:10:57Z",
+      "side": 1,
+      "message": "Note that, in general, the values of dynamic_cast and static_cast need not be the same:\n\n  #include \u003ciostream\u003e\n  struct S1 { int n; virtual ~S1() {} };\n  struct S2: S1 {};\n  struct S3: S1 {};\n  struct S4: S2, S3 {};\n  void f(S1 * p) {\n    std::cout \u003c\u003c dynamic_cast\u003cS3 *\u003e(p) \u003c\u003c \u0027\\n\u0027;\n    std::cout \u003c\u003c static_cast\u003cS3 *\u003e(p) \u003c\u003c \u0027\\n\u0027;\n  }\n  int main() {\n    S4 s;\n    f(static_cast\u003cS2 *\u003e(\u0026s));\n  }\n\nIf silencing these warnings is necessary at all, I would rather try some\n\n  auto const p \u003d dynamic_cast\u003cT *\u003e(x);\n  assert(p !\u003d nullptr);\n  ...\u003cuse p\u003e...\n\npattern.",
+      "revId": "85456fae54029edd26df2277a9eec5e2fe3d9739",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
