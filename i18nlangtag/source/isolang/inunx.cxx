@@ -18,20 +18,19 @@
  */
 
 #include <stdlib.h>
-#include <stdio.h>
 
 #ifdef MACOSX
 #include <osl/process.h>
 #include <rtl/locale.h>
 #include <rtl/ustring.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #else   // MACOSX
 #include <rtl/string.hxx>
 #endif  // MACOSX
 
 #include <osl/mutex.hxx>
-#include <rtl/instance.hxx>
-#include <i18nlangtag/languagetag.hxx>
+#include <osl/doublecheckedlocking.h>
 #include <i18nlangtag/mslangid.hxx>
 
 
