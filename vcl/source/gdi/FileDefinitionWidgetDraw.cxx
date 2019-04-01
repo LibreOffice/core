@@ -929,6 +929,7 @@ bool FileDefinitionWidgetDraw::updateSettings(AllSettings& rSettings)
 
     aStyleSet.SetTitleHeight(16);
     aStyleSet.SetFloatTitleHeight(12);
+    aStyleSet.SetListBoxPreviewDefaultLogicSize(Size(16, 16));
 
     rSettings.SetStyleSettings(aStyleSet);
 
