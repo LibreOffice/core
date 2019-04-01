@@ -100,8 +100,8 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
 
                     # compile and execute the module
                     codeobject = compile( src, encfile(filename), "exec" )
+                    mod.__file__ = filename
                     exec(codeobject, mod.__dict__)
-                    mod.__file__ = encfile(filename)
                     g_loadedComponents[url] = mod
                 return mod
             elif "vnd.openoffice.pymodule" == protocol:
