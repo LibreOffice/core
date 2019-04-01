@@ -2658,7 +2658,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 bool bSubTotal = false;
                 bool bRangeFinder = false;
-                const OUString aFormula = pTabViewShell->DoAutoSum( bRangeFinder, bSubTotal );
+                const OUString aFormula = pTabViewShell->DoAutoSum( bRangeFinder, bSubTotal , ocSum );
                 if ( !aFormula.isEmpty() )
                 {
                     const sal_Int32 nPar = aFormula.indexOf( '(' );
