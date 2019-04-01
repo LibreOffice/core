@@ -13,7 +13,7 @@ $(eval $(call gb_Package_Package,odk_share_readme,$(readlicense_oo_DIR)))
 $(eval $(call gb_Package_set_outdir,odk_share_readme,$(INSTDIR)))
 
 $(eval $(call gb_Package_add_files,odk_share_readme,$(SDKDIRNAME)/share/readme,\
-	license.html \
+	LICENSE.html \
 ))
 
 # for WNT see Package_share_readme_generated.mk
