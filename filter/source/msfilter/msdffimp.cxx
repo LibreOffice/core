@@ -4559,7 +4559,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         // the parameters are : (left,top),(right,bottom),start(x,y),end(x,y)
                         // The left/top vertex of the frame rectangle of the sector is the origin
                         // of the shape internal coordinate system in MS Office. The default arc
-                        // has an ellipse frame rectange with LT(-21600,0) and
+                        // has an ellipse frame rectangle with LT(-21600,0) and
                         // RB(21600,43200) in this coordinate system.
                         basegfx::B2DRectangle aEllipseRect_MS(-21600.0, 0.0, 21600.0, 43200.0);
                         css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates;
