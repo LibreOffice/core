@@ -20,7 +20,7 @@
 
 #ifdef MACOSX
 ScpAction scp_Copy_Thirdpartylicense_Readme_Html
-    Copy = "LICENSE.html";
+    Copy = "license.html";
     Name= "LICENSE.html";
     Subdir = "LICENSEs";
 End
