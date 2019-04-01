@@ -660,12 +660,14 @@ bool ScTabViewShell::UseSubTotal(ScRangeList* pRangeList)
     return bSubTotal;
 }
 
-const OUString ScTabViewShell::DoAutoSum(bool& rRangeFinder, bool& rSubTotal)
+const OUString ScTabViewShell::DoAutoSum(bool& rRangeFinder, bool& rSubTotal, const OpCode eCode)
 {
     OUString aFormula;
     const ScMarkData& rMark = GetViewData().GetMarkData();
     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
     {
+        //need to handle this part of code for autosum use on a selection
+        //only sum is being inserted at the moment when selecting a function from dropdown
         ScRangeList aMarkRangeList;
         rRangeFinder = rSubTotal = false;
         rMark.FillRangeListWithMarks( &aMarkRangeList, false );
@@ -695,7 +697,7 @@ const OUString ScTabViewShell::DoAutoSum(bool& rRangeFinder, bool& rSubTotal)
                 ScAddress aAddr = aRangeList.back().aEnd;
                 aAddr.IncRow();
                 const bool bSubTotal( UseSubTotal( &aRangeList ) );
-                EnterAutoSum( aRangeList, bSubTotal, aAddr );
+                EnterAutoSum( aRangeList, bSubTotal, aAddr, eCode );
             }
         }
         else
@@ -706,14 +708,14 @@ const OUString ScTabViewShell::DoAutoSum(bool& rRangeFinder, bool& rSubTotal)
                 const ScRange & rRange = aMarkRangeList[i];
                 const bool bSetCursor = ( i == nCount - 1 );
                 const bool bContinue = ( i != 0 );
-                if ( !AutoSum( rRange, bSubTotal, bSetCursor, bContinue ) )
+                if ( !AutoSum( rRange, bSubTotal, bSetCursor, bContinue, eCode ) )
                 {
                     MarkRange( rRange, false );
                     SetCursor( rRange.aEnd.Col(), rRange.aEnd.Row() );
                     const ScRangeList aRangeList;
                     ScAddress aAddr = rRange.aEnd;
                     aAddr.IncRow();
-                    aFormula = GetAutoSumFormula( aRangeList, bSubTotal, aAddr );
+                    aFormula = GetAutoSumFormula( aRangeList, bSubTotal, aAddr , eCode);
                     break;
                 }
             }
@@ -725,7 +727,7 @@ const OUString ScTabViewShell::DoAutoSum(bool& rRangeFinder, bool& rSubTotal)
         rRangeFinder = GetAutoSumArea( aRangeList );
         rSubTotal = UseSubTotal( &aRangeList );
         ScAddress aAddr = GetViewData().GetCurPos();
-        aFormula = GetAutoSumFormula( aRangeList, rSubTotal, aAddr );
+        aFormula = GetAutoSumFormula( aRangeList, rSubTotal, aAddr , eCode);
     }
     return aFormula;
 }

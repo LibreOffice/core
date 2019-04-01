@@ -62,6 +62,7 @@
 #include <rangeutl.hxx>
 #include <docfunc.hxx>
 #include <funcdesc.hxx>
+#include <formula/opcode.hxx>
 #include <editeng/fontitem.hxx>
 #include <AccessibleEditObject.hxx>
 #include <AccessibleText.hxx>
@@ -183,12 +184,13 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     InsertWindow    (1, aWndPos.get(), ToolBoxItemBits::NONE, 0);
     InsertSeparator (1);
     InsertItem      (SID_INPUT_FUNCTION, Image(StockImage::Yes, RID_BMP_INPUT_FUNCTION), ToolBoxItemBits::NONE, 2);
-    InsertItem      (SID_INPUT_SUM,      Image(StockImage::Yes, RID_BMP_INPUT_SUM), ToolBoxItemBits::NONE, 3);
+    InsertItem      (SID_INPUT_SUM,      Image(StockImage::Yes, RID_BMP_INPUT_SUM), ToolBoxItemBits::DROPDOWNONLY, 3);
     InsertItem      (SID_INPUT_EQUAL,    Image(StockImage::Yes, RID_BMP_INPUT_EQUAL), ToolBoxItemBits::NONE, 4);
     InsertItem      (SID_INPUT_CANCEL,   Image(StockImage::Yes, RID_BMP_INPUT_CANCEL), ToolBoxItemBits::NONE, 5);
     InsertItem      (SID_INPUT_OK,       Image(StockImage::Yes, RID_BMP_INPUT_OK), ToolBoxItemBits::NONE, 6);
     InsertSeparator (7);
     InsertWindow    (7, &aTextWindow, ToolBoxItemBits::NONE, 8);
+    SetDropdownClickHdl( LINK( this, ScInputWindow, DropdownClickHdl ));
 
     aWndPos   ->SetQuickHelpText(ScResId(SCSTR_QHELP_POSWND));
     aWndPos   ->SetHelpId       (HID_INSWIN_POS);
@@ -327,45 +329,6 @@ void ScInputWindow::Select()
             pScMod->InputEnterHandler();
             SetSumAssignMode();
             aTextWindow.Invalidate(); // Or else the Selection remains
-            break;
-
-        case SID_INPUT_SUM:
-            {
-                ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
-                if ( pViewSh )
-                {
-                    bool bSubTotal = false;
-                    bool bRangeFinder = false;
-                    const OUString aFormula = pViewSh->DoAutoSum(bRangeFinder, bSubTotal);
-                    if (!aFormula.isEmpty())
-                    {
-                        SetFuncString( aFormula );
-                        if (bRangeFinder && pScMod->IsEditMode())
-                        {
-                            ScInputHandler* pHdl = pScMod->GetInputHdl( pViewSh );
-                            if ( pHdl )
-                            {
-                                pHdl->InitRangeFinder( aFormula );
-
-                                //! SetSelection at the InputHandler?
-                                //! Set bSelIsRef?
-                                const sal_Int32 nOpen = aFormula.indexOf('(');
-                                const sal_Int32 nLen = aFormula.getLength();
-                                if ( nOpen != -1 && nLen > nOpen )
-                                {
-                                    ESelection aSel( 0, nOpen + (bSubTotal ? 3 : 1), 0, nLen-1 );
-                                    EditView* pTableView = pHdl->GetTableView();
-                                    if ( pTableView )
-                                        pTableView->SetSelection( aSel );
-                                    EditView* pTopView = pHdl->GetTopView();
-                                    if ( pTopView )
-                                        pTopView->SetSelection( aSel );
-                                }
-                            }
-                        }
-                    }
-                }
-            }
             break;
 
         case SID_INPUT_EQUAL:
@@ -899,6 +862,85 @@ void ScInputBarGroup::DecrementVerticalSize()
     {
         maTextWnd->SetNumLines( maTextWnd->GetNumLines() - 1 );
         TriggerToolboxLayout();
+    }
+}
+
+IMPL_LINK( ScInputWindow, MenuHdl, Menu *, pMenu, bool )
+{
+    OString aCommand = pMenu->GetCurItemIdent();
+    if (!aCommand.isEmpty())
+    {
+        ScModule* pScMod = SC_MOD();
+        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
+        if ( pViewSh )
+        {
+            bool bSubTotal = false;
+            bool bRangeFinder = false;
+            OpCode eCode = ocSum;
+            if ( aCommand ==  "sum" )
+            {
+                eCode = ocSum;
+            }
+            else if ( aCommand == "average" )
+            {
+                eCode = ocAverage;
+            }
+            else if ( aCommand == "max" )
+            {
+                eCode = ocMax;
+            }
+            else if ( aCommand == "min" )
+            {
+                eCode = ocMin;
+            }
+            else if ( aCommand == "count" )
+            {
+                eCode = ocCount;
+            }
+
+            const OUString aFormula = pViewSh->DoAutoSum(bRangeFinder, bSubTotal, eCode);
+            if ( !aFormula.isEmpty() )
+            {
+                SetFuncString( aFormula );
+                const sal_Int32 aOpen = aFormula.indexOf('(');
+                const sal_Int32 aLen  = aFormula.getLength();
+                if (bRangeFinder && pScMod->IsEditMode())
+                {
+                    ScInputHandler* pHdl = pScMod->GetInputHdl( pViewSh );
+                    if ( pHdl )
+                    {
+                        pHdl->InitRangeFinder( aFormula );
+
+                        //! SetSelection at the InputHandler?
+                        //! Set bSelIsRef?
+                        if ( aOpen != -1 && aLen > aOpen )
+                        {
+                            ESelection aSel( 0, aOpen + (bSubTotal ? 3 : 1), 0, aLen-1 );
+                            EditView* pTableView = pHdl->GetTableView();
+                            if ( pTableView )
+                                pTableView->SetSelection( aSel );
+                            EditView* pTopView = pHdl->GetTopView();
+                            if ( pTopView )
+                                pTopView->SetSelection( aSel );
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+IMPL_LINK_NOARG(ScInputWindow, DropdownClickHdl, ToolBox *, void)
+{
+    sal_uInt16 nCurID = GetCurItemId();
+    EndSelection();
+    if (nCurID == SID_INPUT_SUM)
+    {
+        VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/scalc/ui/autosum.ui", "");
+        VclPtr<PopupMenu> aPopMenu(aBuilder.get_menu("menu"));
+        aPopMenu->SetSelectHdl(LINK(this, ScInputWindow, MenuHdl));
+        aPopMenu->Execute(this, GetItemRect(SID_INPUT_SUM), PopupMenuFlags::NoMouseUpClose);
     }
 }
 
