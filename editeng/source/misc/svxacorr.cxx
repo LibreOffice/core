@@ -1180,7 +1180,7 @@ sal_Unicode SvxAutoCorrect::GetQuote( sal_Unicode cInsChar, bool bSttQuote,
 
 void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
                                     sal_Unicode cInsChar, bool bSttQuote,
-                                    bool bIns )
+                                    bool bIns, bool b_iApostrophe )
 {
     const LanguageType eLang = GetDocLanguage( rDoc, nInsPos );
     sal_Unicode cRet = GetQuote( cInsChar, bSttQuote, eLang );
@@ -1212,6 +1212,22 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
     }
 
     rDoc.Replace( nInsPos, sChg );
+
+    // i' -> I' in English (last step for the undo)
+    if( b_iApostrophe && eLang.anyOf(
+        LANGUAGE_ENGLISH,
+        LANGUAGE_ENGLISH_US,
+        LANGUAGE_ENGLISH_UK,
+        LANGUAGE_ENGLISH_AUS,
+        LANGUAGE_ENGLISH_CAN,
+        LANGUAGE_ENGLISH_NZ,
+        LANGUAGE_ENGLISH_EIRE,
+        LANGUAGE_ENGLISH_SAFRICA,
+        LANGUAGE_ENGLISH_JAMAICA,
+        LANGUAGE_ENGLISH_CARRIBEAN))
+    {
+        rDoc.Replace( nInsPos-1, "I" );
+    }
 }
 
 OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc const & rDoc, sal_Int32 nInsPos,
@@ -1267,6 +1283,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             {
                 sal_Unicode cPrev;
                 bool bSttQuote = !nInsPos;
+                bool b_iApostrophe = false;
                 if (!bSttQuote)
                 {
                     cPrev = rTxt[ nInsPos-1 ];
@@ -1274,8 +1291,10 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                         lcl_IsInAsciiArr( "([{", cPrev ) ||
                         ( cEmDash == cPrev ) ||
                         ( cEnDash == cPrev );
+                    b_iApostrophe = bSingle && ( cPrev == 'i' ) &&
+                        (( nInsPos == 1 ) || IsWordDelim( rTxt[ nInsPos-2 ] ));
                 }
-                InsertQuote( rDoc, nInsPos, cChar, bSttQuote, bInsert );
+                InsertQuote( rDoc, nInsPos, cChar, bSttQuote, bInsert, b_iApostrophe );
                 break;
             }
 

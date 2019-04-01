@@ -352,9 +352,11 @@ public:
     void testTdf117225();
     void testTdf91801();
     void testTdf51223();
+    void testTdf108423();
     void testInconsistentBookmark();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
+#if 0
     CPPUNIT_TEST(testReplaceForward);
     CPPUNIT_TEST(testReplaceBackward);
     CPPUNIT_TEST(testRedlineFrameAtCharStartOutside0);
@@ -556,6 +558,8 @@ public:
     CPPUNIT_TEST(testTdf91801);
     CPPUNIT_TEST(testTdf51223);
     CPPUNIT_TEST(testInconsistentBookmark);
+#endif
+    CPPUNIT_TEST(testTdf108423);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -6840,6 +6844,25 @@ void SwUiWriterTest::testInconsistentBookmark()
             CPPUNIT_ASSERT_GREATER(pos2, pos3);
         }
     }
+}
+
+void SwUiWriterTest::testTdf108423()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    // testing autocorrect of i' -> I' on start of first paragraph
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    pWrtShell->Insert("i");
+    const sal_Unicode cChar = '\'';
+    pWrtShell->AutoCorrect(corr, cChar);
+    // The word "i" should be capitalized due to autocorrect, followed by a typographical apostrophe
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    OUString sIApostrophe = OUString("I") + OUStringLiteral1(0x2019);
+    CPPUNIT_ASSERT_EQUAL(sIApostrophe, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    pWrtShell->Insert(" i");
+    pWrtShell->AutoCorrect(corr, cChar);
+    OUString sText = sIApostrophe + OUString(" ") + sIApostrophe;
+    CPPUNIT_ASSERT_EQUAL(sText, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
