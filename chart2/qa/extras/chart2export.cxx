@@ -112,6 +112,7 @@ public:
     void testPlotVisOnlyXLSX();
     void testBarChartVaryColorsXLSX();
     void testMultipleAxisXLSX();
+    void testSecondaryAxisXLSX();
     void testAxisTitleRotationXLSX();
     void testAxisCrossBetweenXSLX();
     void testPieChartDataPointExplosionXLSX();
@@ -204,6 +205,7 @@ public:
     CPPUNIT_TEST(testPlotVisOnlyXLSX);
     CPPUNIT_TEST(testBarChartVaryColorsXLSX);
     CPPUNIT_TEST(testMultipleAxisXLSX);
+    CPPUNIT_TEST(testSecondaryAxisXLSX);
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
     CPPUNIT_TEST(testAxisCrossBetweenXSLX);
     CPPUNIT_TEST(testPieChartDataPointExplosionXLSX);
@@ -1740,6 +1742,22 @@ void Chart2ExportTest::testMultipleAxisXLSX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:delete[@val='1']", 1);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:axPos[@val='l']", 1);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:axPos[@val='r']", 1);
+}
+
+void Chart2ExportTest::testSecondaryAxisXLSX()
+{
+    load("/chart2/qa/extras/data/ods/", "secondary_axis.ods");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart", 2);
+    // test there is just those series in the first <lineChart> tag which are attached to the primary axis
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart[1]/c:ser", 2);
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart[1]/c:ser[1]/c:tx/c:strRef/c:strCache/c:pt/c:v", "b");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart[1]/c:ser[2]/c:tx/c:strRef/c:strCache/c:pt/c:v", "c");
+    // test there is just those series in the second <lineChart> tag which are attached to the secondary axis
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart[2]/c:ser", 1);
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart[2]/c:ser[1]/c:tx/c:strRef/c:strCache/c:pt/c:v", "a");
 }
 
 void Chart2ExportTest::testAxisTitleRotationXLSX()
