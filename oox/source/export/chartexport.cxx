@@ -1592,6 +1592,7 @@ std::vector<Sequence<Reference<chart2::XDataSeries> > > splitDataSeriesByAxis(co
     Reference< chart2::XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY );
     if(xDSCnt.is())
     {
+        sal_Int32 nAxisIndexOfFirstSeries = -1;
         Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries());
         for (sal_Int32 nIndex = 0, nEnd = aSeriesSeq.getLength(); nIndex < nEnd; ++nIndex)
         {
@@ -1604,6 +1605,10 @@ std::vector<Sequence<Reference<chart2::XDataSeries> > > splitDataSeriesByAxis(co
             uno::Any aAny = xPropSet->getPropertyValue("AttachedAxisIndex");
             aAny >>= nAxisIndex;
             size_t nVectorPos = 0;
+            if (nAxisIndexOfFirstSeries == -1)
+            {
+                nAxisIndexOfFirstSeries = nAxisIndex;
+            }
 
             auto it = aMapAxisToIndex.find(nAxisIndex);
             if (it == aMapAxisToIndex.end())
@@ -1612,11 +1617,21 @@ std::vector<Sequence<Reference<chart2::XDataSeries> > > splitDataSeriesByAxis(co
                 nVectorPos = aSplitSeries.size() - 1;
                 aMapAxisToIndex.insert(std::pair<sal_Int32, size_t>(nAxisIndex, nVectorPos));
             }
+            else
+            {
+                nVectorPos = it->second;
+            }
 
             uno::Sequence<Reference<chart2::XDataSeries> >& rAxisSeriesSeq = aSplitSeries[nVectorPos];
             sal_Int32 nLength = rAxisSeriesSeq.getLength();
             rAxisSeriesSeq.realloc(nLength + 1);
             rAxisSeriesSeq[nLength] = xSeries;
+        }
+        // if the first series attached to secondary axis, then export those series first, which are attached to primary axis
+        // also the MS Office export every time in this order
+        if ( aSplitSeries.size() > 1 && nAxisIndexOfFirstSeries == 1 )
+        {
+            std::swap( aSplitSeries[0], aSplitSeries[1] );
         }
     }
 
