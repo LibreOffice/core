@@ -45,35 +45,27 @@
 
 using namespace com::sun::star;
 
-ScSolverProgressDialog::ScSolverProgressDialog(vcl::Window* pParent)
-    : ModelessDialog(pParent, "SolverProgressDialog",
-        "modules/scalc/ui/solverprogressdialog.ui")
+ScSolverProgressDialog::ScSolverProgressDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "modules/scalc/ui/solverprogressdialog.ui",
+                              "SolverProgressDialog")
+    , m_xFtTime(m_xBuilder->weld_label("progress"))
 {
-    get(m_pFtTime, "progress");
 }
 
 ScSolverProgressDialog::~ScSolverProgressDialog()
 {
-    disposeOnce();
 }
-
-void ScSolverProgressDialog::dispose()
-{
-    m_pFtTime.clear();
-    ModelessDialog::dispose();
-}
-
 
 void ScSolverProgressDialog::HideTimeLimit()
 {
-    m_pFtTime->Hide();
+    m_xFtTime->hide();
 }
 
 void ScSolverProgressDialog::SetTimeLimit( sal_Int32 nSeconds )
 {
-    OUString aOld = m_pFtTime->GetText();
+    OUString aOld = m_xFtTime->get_label();
     OUString aNew = aOld.replaceFirst("#", OUString::number(nSeconds));
-    m_pFtTime->SetText( aNew );
+    m_xFtTime->set_label(aNew);
 }
 
 ScSolverNoSolutionDialog::ScSolverNoSolutionDialog(weld::Window* pParent, const OUString& rErrorText)
@@ -811,15 +803,15 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
 {
     // show progress dialog
 
-    ScopedVclPtrInstance< ScSolverProgressDialog > aProgress( this );
+    std::shared_ptr<ScSolverProgressDialog> xProgress(new ScSolverProgressDialog(GetFrameWeld()));
     sal_Int32 nTimeout = 0;
     if ( FindTimeout( nTimeout ) )
-        aProgress->SetTimeLimit( nTimeout );
+        xProgress->SetTimeLimit( nTimeout );
     else
-        aProgress->HideTimeLimit();
-    aProgress->Show();
-    aProgress->Update();
-    aProgress->Flush();
+        xProgress->HideTimeLimit();
+
+    weld::DialogController::runAsync(xProgress, [](sal_Int32 /*nResult*/){});
+
     // try to make sure the progress dialog is painted before continuing
     Application::Reschedule(true);
 
@@ -1009,7 +1001,8 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     xSolver->solve();
     bool bSuccess = xSolver->getSuccess();
 
-    aProgress->Hide();
+    xProgress->response(RET_CLOSE);
+
     bool bClose = false;
     bool bRestore = true;   // restore old values unless a solution is accepted
     if ( bSuccess )

@@ -199,14 +199,13 @@ private:
     DECL_LINK( SelectHdl, ListBox&, void );
 };
 
-class ScSolverProgressDialog : public ModelessDialog
+class ScSolverProgressDialog : public weld::GenericDialogController
 {
-    VclPtr<FixedText> m_pFtTime;
+    std::unique_ptr<weld::Label> m_xFtTime;
 
 public:
-    ScSolverProgressDialog( vcl::Window* pParent );
+    ScSolverProgressDialog(weld::Window* pParent);
     virtual ~ScSolverProgressDialog() override;
-    virtual void dispose() override;
 
     void    HideTimeLimit();
     void    SetTimeLimit( sal_Int32 nSeconds );
