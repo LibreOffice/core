@@ -22,7 +22,6 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/logger.hxx>

@@ -23,14 +23,7 @@
 #include <sal/config.h>
 
 #include <salhelper/thread.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/idle.hxx>
 #include <svl/slstitm.hxx>
 #include <vcl/transfer.hxx>

@@ -23,7 +23,6 @@
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
 #include <TableGrantCtrl.hxx>
 #include "adminpages.hxx"
 

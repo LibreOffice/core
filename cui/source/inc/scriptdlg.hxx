@@ -21,13 +21,9 @@
 #define INCLUDED_CUI_SOURCE_INC_SCRIPTDLG_HXX
 
 #include <memory>
-#include <vcl/treelistbox.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
+#include <sfx2/basedlgs.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/weld.hxx>
-#include <sfx2/basedlgs.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>

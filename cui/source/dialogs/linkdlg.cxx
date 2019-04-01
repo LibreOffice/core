@@ -21,16 +21,12 @@
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/svmedit.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/svtabbx.hxx>
-#include <vcl/treelistentry.hxx>
 
 #include <strings.hrc>
 #include <sfx2/linkmgr.hxx>

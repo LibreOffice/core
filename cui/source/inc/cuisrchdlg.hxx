@@ -19,10 +19,8 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_CUISRCHDLG_HXX
 #define INCLUDED_CUI_SOURCE_INC_CUISRCHDLG_HXX
 
-#include <vcl/dialog.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <svtools/svmedit.hxx>
 #include <svl/srchdefs.hxx>
 
 class SvxJSearchOptionsPage;

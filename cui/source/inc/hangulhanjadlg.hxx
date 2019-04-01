@@ -20,14 +20,8 @@
 #define INCLUDED_CUI_SOURCE_INC_HANGULHANJADLG_HXX
 
 #include <vcl/customweld.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/scrbar.hxx>
+#include <vcl/event.hxx>
 #include <vcl/weld.hxx>
-#include <svx/checklbx.hxx>
 #include <editeng/hangulhanja.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <editeng/unolingu.hxx>
