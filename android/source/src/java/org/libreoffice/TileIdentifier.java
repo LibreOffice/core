@@ -48,7 +48,7 @@ public class TileIdentifier {
     }
 
     /**
-     * Returns a integer rectangle of the tiles position in non-scaled and rounded coordinates (coordinates as the zoom would be 1).
+     * Returns an integer rectangle of the tiles position in non-scaled and rounded coordinates (coordinates as the zoom would be 1).
      */
     public Rect getCSSRect() {
         float cssX = x / zoom;
