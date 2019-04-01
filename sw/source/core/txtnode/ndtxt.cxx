@@ -1394,7 +1394,7 @@ void SwTextNode::Update(
             bool bAtLeastOneBookmarkMoved = false;
             bool bAtLeastOneExpandedBookmarkAtInsertionPosition = false;
             // A text node already knows its marks via its SwIndexes.
-            std::set<const sw::mark::IMark*> aSeenMarks;
+            std::unordered_set<const sw::mark::IMark*> aSeenMarks;
             const SwIndex* next;
             for (const SwIndex* pIndex = GetFirstIndex(); pIndex; pIndex = next )
             {
@@ -1403,9 +1403,8 @@ void SwTextNode::Update(
                 if (!pMark)
                     continue;
                 // Only handle bookmarks once, if they start and end at this node as well.
-                if (aSeenMarks.find(pMark) != aSeenMarks.end())
+                if (!aSeenMarks.insert(pMark).second)
                     continue;
-                aSeenMarks.insert(pMark);
                 const SwPosition* pEnd = &pMark->GetMarkEnd();
                 SwIndex & rEndIdx = const_cast<SwIndex&>(pEnd->nContent);
                 if( this == &pEnd->nNode.GetNode() &&
