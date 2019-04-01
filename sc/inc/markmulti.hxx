@@ -23,13 +23,13 @@
 #include "segmenttree.hxx"
 #include "markarr.hxx"
 
-#include <map>
+#include <vector>
 
 class ScMultiSel
 {
 
 private:
-    typedef std::map<SCCOL, ScMarkArray> MapType;
+    typedef std::vector<ScMarkArray> MapType;
     MapType aMultiSelContainer;
     ScMarkArray aRowSel;
 
@@ -43,11 +43,7 @@ public:
     ScMultiSel& operator=(const ScMultiSel& rMultiSel);
     ScMultiSel& operator=(const ScMultiSel&& rMultiSel) = delete;
 
-    SCCOL size() const
-    {
-        return static_cast<SCCOL>( aMultiSelContainer.size() );
-    }
-
+    SCCOL GetMultiSelectionCount() const;
     bool HasMarks( SCCOL nCol ) const;
     bool HasOneMark( SCCOL nCol, SCROW& rStartRow, SCROW& rEndRow ) const;
     bool GetMark( SCCOL nCol, SCROW nRow ) const;

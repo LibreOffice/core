@@ -23,43 +23,24 @@
 
 #include <algorithm>
 
-ScMultiSel::ScMultiSel():
-    aMultiSelContainer(),
-    aRowSel()
+ScMultiSel::ScMultiSel()
 {
 }
 
-ScMultiSel::ScMultiSel( const ScMultiSel& rMultiSel )
+ScMultiSel::ScMultiSel( const ScMultiSel& rOther )
 {
-    MapType::iterator aDestEnd = aMultiSelContainer.end();
-    MapType::iterator aDestIter = aDestEnd;
-    for ( const auto& aSourcePair : rMultiSel.aMultiSelContainer )
-    {
-        // correct hint is always aDestEnd as keys come in ascending order
-        // Amortized constant time operation as we always give the correct hint
-        aDestIter = aMultiSelContainer.emplace_hint( aDestEnd, aSourcePair.first, ScMarkArray() );
-        aSourcePair.second.CopyMarksTo( aDestIter->second );
-    }
-    rMultiSel.aRowSel.CopyMarksTo( aRowSel );
+    aRowSel = rOther.aRowSel;
+    aMultiSelContainer = rOther.aMultiSelContainer;
 }
 
 ScMultiSel::~ScMultiSel()
 {
 }
 
-ScMultiSel& ScMultiSel::operator=(const ScMultiSel& rMultiSel)
+ScMultiSel& ScMultiSel::operator=(const ScMultiSel& rOther)
 {
-    Clear();
-    MapType::iterator aDestEnd = aMultiSelContainer.end();
-    MapType::iterator aDestIter = aDestEnd;
-    for ( const auto& aSourcePair : rMultiSel.aMultiSelContainer )
-    {
-        // correct hint is always aDestEnd as keys come in ascending order
-        // Amortized constant time operation as we always give the correct hint
-        aDestIter = aMultiSelContainer.emplace_hint( aDestEnd, aSourcePair.first, ScMarkArray() );
-        aSourcePair.second.CopyMarksTo( aDestIter->second );
-    }
-    rMultiSel.aRowSel.CopyMarksTo( aRowSel );
+    aRowSel = rOther.aRowSel;
+    aMultiSelContainer = rOther.aMultiSelContainer;
     return *this;
 }
 
@@ -69,24 +50,28 @@ void ScMultiSel::Clear()
     aRowSel.Reset();
 }
 
+SCCOL ScMultiSel::GetMultiSelectionCount() const
+{
+    SCCOL nCount = 0;
+    for (const auto & i : aMultiSelContainer)
+        if (i.HasMarks())
+            ++nCount;
+    return nCount;
+}
+
 bool ScMultiSel::HasMarks( SCCOL nCol ) const
 {
     if ( aRowSel.HasMarks() )
         return true;
-    MapType::const_iterator aIter = aMultiSelContainer.find( nCol );
-    if ( aIter == aMultiSelContainer.end() )
-        return false;
-    return aIter->second.HasMarks();
+    return nCol < static_cast<SCCOL>(aMultiSelContainer.size()) && aMultiSelContainer[nCol].HasMarks();
 }
 
 bool ScMultiSel::HasOneMark( SCCOL nCol, SCROW& rStartRow, SCROW& rEndRow ) const
 {
-    bool aResult2 = false;
     SCROW nRow1 = -1, nRow2 = -1, nRow3 = -1, nRow4 = -1;
     bool aResult1 = aRowSel.HasOneMark( nRow1, nRow2 );
-    MapType::const_iterator aIter = aMultiSelContainer.find( nCol );
-    if ( aIter != aMultiSelContainer.end() )
-        aResult2 = aIter->second.HasOneMark( nRow3, nRow4 );
+    bool aResult2 = nCol < static_cast<SCCOL>(aMultiSelContainer.size())
+                    && aMultiSelContainer[nCol].HasOneMark( nRow3, nRow4 );
 
     if ( aResult1 || aResult2 )
     {
@@ -121,17 +106,13 @@ bool ScMultiSel::GetMark( SCCOL nCol, SCROW nRow ) const
 {
     if ( aRowSel.GetMark( nRow ) )
         return true;
-    MapType::const_iterator aIter = aMultiSelContainer.find( nCol );
-    if ( aIter != aMultiSelContainer.end() )
-        return aIter->second.GetMark( nRow );
-    return false;
+    return nCol < static_cast<SCCOL>(aMultiSelContainer.size()) && aMultiSelContainer[nCol].GetMark(nRow);
 }
 
 bool ScMultiSel::IsAllMarked( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const
 {
     bool bHasMarks1 = aRowSel.HasMarks();
-    MapType::const_iterator aIter = aMultiSelContainer.find( nCol );
-    bool bHasMarks2 = ( aIter != aMultiSelContainer.end() && aIter->second.HasMarks() );
+    bool bHasMarks2 = nCol < static_cast<SCCOL>(aMultiSelContainer.size()) && aMultiSelContainer[nCol].HasMarks();
 
     if ( !bHasMarks1 && !bHasMarks2 )
         return false;
@@ -139,7 +120,7 @@ bool ScMultiSel::IsAllMarked( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const
     if ( bHasMarks1 && bHasMarks2 )
     {
         if ( aRowSel.IsAllMarked( nStartRow, nEndRow ) ||
-             aIter->second.IsAllMarked( nStartRow, nEndRow ) )
+             aMultiSelContainer[nCol].IsAllMarked( nStartRow, nEndRow ) )
             return true;
         ScMultiSelIter aMultiIter( *this, nCol );
         ScFlatBoolRowSegments::RangeData aRowRange;
@@ -150,24 +131,21 @@ bool ScMultiSel::IsAllMarked( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const
     if ( bHasMarks1 )
         return aRowSel.IsAllMarked( nStartRow, nEndRow );
 
-    return aIter->second.IsAllMarked( nStartRow, nEndRow );
+    return aMultiSelContainer[nCol].IsAllMarked( nStartRow, nEndRow );
 }
 
 bool ScMultiSel::HasEqualRowsMarked( SCCOL nCol1, SCCOL nCol2 ) const
 {
-    MapType::const_iterator aIter1 = aMultiSelContainer.find( nCol1 );
-    MapType::const_iterator aIter2 = aMultiSelContainer.find( nCol2 );
-    MapType::const_iterator aEnd = aMultiSelContainer.end();
-    bool bCol1Exists = ( aIter1 != aEnd );
-    bool bCol2Exists = ( aIter2 != aEnd );
+    bool bCol1Exists = nCol1 < static_cast<SCCOL>(aMultiSelContainer.size());
+    bool bCol2Exists = nCol2 < static_cast<SCCOL>(aMultiSelContainer.size());
     if ( bCol1Exists || bCol2Exists )
     {
         if ( bCol1Exists && bCol2Exists )
-            return aIter1->second.HasEqualRowsMarked( aIter2->second );
+            return aMultiSelContainer[nCol1] == aMultiSelContainer[nCol2];
         else if ( bCol1Exists )
-            return !aIter1->second.HasMarks();
+            return !aMultiSelContainer[nCol1].HasMarks();
         else
-            return !aIter2->second.HasMarks();
+            return !aMultiSelContainer[nCol2].HasMarks();
     }
 
     return true;
@@ -175,13 +153,12 @@ bool ScMultiSel::HasEqualRowsMarked( SCCOL nCol1, SCCOL nCol2 ) const
 
 SCROW ScMultiSel::GetNextMarked( SCCOL nCol, SCROW nRow, bool bUp ) const
 {
-    MapType::const_iterator aIter = aMultiSelContainer.find( nCol );
-    if ( aIter == aMultiSelContainer.end() )
+    if ( nCol >= static_cast<SCCOL>(aMultiSelContainer.size()) || !aMultiSelContainer[nCol].HasMarks() )
         return aRowSel.GetNextMarked( nRow, bUp );
 
     SCROW nRow1, nRow2;
     nRow1 = aRowSel.GetNextMarked( nRow, bUp );
-    nRow2 = aIter->second.GetNextMarked( nRow, bUp );
+    nRow2 = aMultiSelContainer[nCol].GetNextMarked( nRow, bUp );
     if ( nRow1 == nRow2 )
         return nRow1;
     if ( nRow1 == -1 )
@@ -195,11 +172,10 @@ SCROW ScMultiSel::GetNextMarked( SCCOL nCol, SCROW nRow, bool bUp ) const
 
 void ScMultiSel::MarkAllCols( SCROW nStartRow, SCROW nEndRow )
 {
-    MapType::iterator aIter = aMultiSelContainer.end();
+    aMultiSelContainer.resize(MAXCOL+1);
     for ( SCCOL nCol = MAXCOL; nCol >= 0; --nCol )
     {
-        aIter = aMultiSelContainer.emplace_hint( aIter, nCol, ScMarkArray() );
-        aIter->second.SetMarkArea( nStartRow, nEndRow, true );
+        aMultiSelContainer[nCol].SetMarkArea( nStartRow, nEndRow, true );
     }
 }
 
@@ -212,8 +188,8 @@ void ScMultiSel::SetMarkArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, S
         {
             // Remove any per column marks for the row range.
             for ( auto& aIter : aMultiSelContainer )
-                if ( aIter.second.HasMarks() )
-                    aIter.second.SetMarkArea( nStartRow, nEndRow, false );
+                if ( aIter.HasMarks() )
+                    aIter.SetMarkArea( nStartRow, nEndRow, false );
         }
         return;
     }
@@ -253,14 +229,10 @@ void ScMultiSel::SetMarkArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, S
         aRowSel.SetMarkArea( nStartRow, nEndRow, false );
     }
 
-    MapType::iterator aIter = aMultiSelContainer.end();
+    if (nEndCol >= static_cast<SCCOL>(aMultiSelContainer.size()))
+        aMultiSelContainer.resize(nEndCol+1);
     for ( SCCOL nColIter = nEndCol; nColIter >= nStartCol; --nColIter )
-    {
-        // First hint is usually off, so the first emplace operation will take up to
-        // logarithmic in map size, all other iterations will take only constant time.
-        aIter = aMultiSelContainer.emplace_hint( aIter, nColIter, ScMarkArray() );
-        aIter->second.SetMarkArea( nStartRow, nEndRow, bMark );
-    }
+        aMultiSelContainer[nColIter].SetMarkArea( nStartRow, nEndRow, bMark );
 }
 
 bool ScMultiSel::IsRowMarked( SCROW nRow ) const
@@ -291,7 +263,7 @@ bool ScMultiSel::HasAnyMarks() const
     if ( aRowSel.HasMarks() )
         return true;
     for ( const auto& aPair : aMultiSelContainer )
-        if ( aPair.second.HasMarks() )
+        if ( aPair.HasMarks() )
             return true;
     return false;
 }
@@ -307,66 +279,50 @@ void ScMultiSel::ShiftCols(SCCOL nStartCol, long nColOffset)
     if (nColOffset < 0)
     {
         // columns that would be moved on the left of nStartCol must be removed
-        const SCCOL nEndPos = nStartCol - nColOffset;
+        const SCCOL nEndPos = std::min<SCCOL>(aNewMultiSel.aMultiSelContainer.size(), nStartCol - nColOffset);
         for (SCCOL nSearchPos = nStartCol; nSearchPos < nEndPos; ++nSearchPos)
-        {
-            const auto& aColIt = aNewMultiSel.aMultiSelContainer.find(nSearchPos);
-            if (aColIt != aNewMultiSel.aMultiSelContainer.end())
-            {
-                aNewMultiSel.aMultiSelContainer.erase(aColIt);
-            }
-        }
+            aNewMultiSel.aMultiSelContainer[nSearchPos].Reset();
     }
 
-    MapType::iterator aDestEnd = aMultiSelContainer.end();
-    MapType::iterator aDestIter = aDestEnd;
-    for (const auto& aSourcePair : aNewMultiSel.aMultiSelContainer)
+    SCCOL nCol = 0;
+    for (const auto& aSourceArray : aNewMultiSel.aMultiSelContainer)
     {
-        SCCOL nCol = aSourcePair.first;
-        if (aSourcePair.first >= nStartCol)
+        SCCOL nDestCol = nCol;
+        if (nDestCol >= nStartCol)
         {
-            nCol += nColOffset;
-            if (nCol < 0)
-                nCol = 0;
-            else if (nCol > MAXCOL)
-                nCol = MAXCOL;
+            nDestCol += nColOffset;
+            if (nDestCol < 0)
+                nDestCol = 0;
+            else if (nDestCol > MAXCOL)
+                nDestCol = MAXCOL;
         }
-        // correct hint is always aDestEnd as keys come in ascending order
-        // Amortized constant time operation as we always give the correct hint
-        aDestIter = aMultiSelContainer.emplace_hint( aDestEnd, nCol, ScMarkArray() );
-        aSourcePair.second.CopyMarksTo(aDestIter->second);
+        if (nDestCol >= static_cast<SCCOL>(aMultiSelContainer.size()))
+            aMultiSelContainer.resize(nDestCol);
+        aMultiSelContainer[nDestCol] = aSourceArray;
+        ++nCol;
     }
-    aNewMultiSel.aRowSel.CopyMarksTo(aRowSel);
+    aRowSel = aNewMultiSel.aRowSel;
 
-    if (nColOffset > 0 && nStartCol > 0)
+    if (nColOffset > 0 && nStartCol > 0 && nStartCol < static_cast<SCCOL>(aNewMultiSel.aMultiSelContainer.size()))
     {
         // insert nColOffset new columns, and select their cells if they are selected
         // both in the old column at nStartPos and in the previous column
-        const auto& aPrevPosIt = aNewMultiSel.aMultiSelContainer.find(nStartCol - 1);
-        if (aPrevPosIt != aNewMultiSel.aMultiSelContainer.end())
-        {
-            const auto& aStartPosIt = aNewMultiSel.aMultiSelContainer.find(nStartCol);
-            if (aStartPosIt != aNewMultiSel.aMultiSelContainer.end())
-            {
-                MapType::iterator aNewColIt = aMultiSelContainer.emplace_hint(aDestEnd, nStartCol, ScMarkArray());
-                aStartPosIt->second.CopyMarksTo(aNewColIt->second);
-                aNewColIt->second.Intersect(aPrevPosIt->second);
-                for (long i = 1; i < nColOffset; ++i)
-                {
-                    aDestIter = aMultiSelContainer.emplace_hint(aDestEnd, nStartCol + i, ScMarkArray());
-                    aNewColIt->second.CopyMarksTo(aDestIter->second);
-                }
-            }
-        }
+        auto& rPrevPos = aNewMultiSel.aMultiSelContainer[nStartCol - 1];
+        auto& rStartPos = aNewMultiSel.aMultiSelContainer[nStartCol];
+        auto& rNewCol = aMultiSelContainer[nStartCol];
+        rNewCol = rStartPos;
+        rNewCol.Intersect(rPrevPos);
+        if (nStartCol + nColOffset >= static_cast<SCCOL>(aNewMultiSel.aMultiSelContainer.size()))
+            aNewMultiSel.aMultiSelContainer.resize(nStartCol + nColOffset);
+        for (long i = 1; i < nColOffset; ++i)
+            aMultiSelContainer[nStartCol + i] = rNewCol;
     }
 }
 
 void ScMultiSel::ShiftRows(SCROW nStartRow, long nRowOffset)
 {
     for (auto& aPair: aMultiSelContainer)
-    {
-        aPair.second.Shift(nStartRow, nRowOffset);
-    }
+        aPair.Shift(nStartRow, nRowOffset);
     aRowSel.Shift(nStartRow, nRowOffset);
 }
 
@@ -377,8 +333,9 @@ const ScMarkArray& ScMultiSel::GetRowSelArray() const
 
 const ScMarkArray* ScMultiSel::GetMultiSelArray( SCCOL nCol ) const
 {
-    ScMultiSel::MapType::const_iterator aIter = aMultiSelContainer.find( nCol );
-    return (aIter != aMultiSelContainer.end()) ? &aIter->second : nullptr;
+    if (nCol >= static_cast<SCCOL>(aMultiSelContainer.size()))
+        return nullptr;
+    return &aMultiSelContainer[nCol];
 }
 
 ScMultiSelIter::ScMultiSelIter( const ScMultiSel& rMultiSel, SCCOL nCol ) :
@@ -386,8 +343,8 @@ ScMultiSelIter::ScMultiSelIter( const ScMultiSel& rMultiSel, SCCOL nCol ) :
     nNextSegmentStart(0)
 {
     bool bHasMarks1 = rMultiSel.aRowSel.HasMarks();
-    ScMultiSel::MapType::const_iterator aIter = rMultiSel.aMultiSelContainer.find( nCol );
-    bool bHasMarks2 = ( ( aIter != rMultiSel.aMultiSelContainer.end() ) && aIter->second.HasMarks() );
+    bool bHasMarks2 = nCol < static_cast<SCCOL>(rMultiSel.aMultiSelContainer.size())
+                    && rMultiSel.aMultiSelContainer[nCol].HasMarks();
 
     if (bHasMarks1 && bHasMarks2)
     {
@@ -401,7 +358,7 @@ ScMultiSelIter::ScMultiSelIter( const ScMultiSel& rMultiSel, SCCOL nCol ) :
         }
 
         {
-            ScMarkArrayIter aMarkIter( &aIter->second );
+            ScMarkArrayIter aMarkIter( &rMultiSel.aMultiSelContainer[nCol] );
             SCROW nTop, nBottom;
             while ( aMarkIter.Next( nTop, nBottom ) )
                 pRowSegs->setTrue( nTop, nBottom );
@@ -413,7 +370,7 @@ ScMultiSelIter::ScMultiSelIter( const ScMultiSel& rMultiSel, SCCOL nCol ) :
     }
     else if (bHasMarks2)
     {
-        aMarkArrayIter.reset( &aIter->second);
+        aMarkArrayIter.reset( &rMultiSel.aMultiSelContainer[nCol]);
     }
 }
 

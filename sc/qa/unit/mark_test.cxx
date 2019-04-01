@@ -243,7 +243,7 @@ void Test::testMultiMark( const MultiMarkTestData& rMarksData )
     ScMarkData aMark;
     ScMultiSel aMultiSel;
     CPPUNIT_ASSERT( !aMark.IsMarked() && !aMark.IsMultiMarked() );
-    CPPUNIT_ASSERT_EQUAL( SCCOL(0), aMultiSel.size() );
+    CPPUNIT_ASSERT_EQUAL( SCCOL(0), aMultiSel.GetMultiSelectionCount() );
     CPPUNIT_ASSERT( !aMultiSel.HasAnyMarks() );
 
     for ( const auto& rAreaTestData : rMarksData.aMarks )
@@ -392,7 +392,7 @@ void Test::testMultiMark( const MultiMarkTestData& rMarksData )
         CPPUNIT_ASSERT( !aMultiSel.HasEqualRowsMarked( rColsWithUnequalMarks.first, rColsWithUnequalMarks.second ) );
 
     aMultiSel.Clear();
-    CPPUNIT_ASSERT_EQUAL( SCCOL(0), aMultiSel.size() );
+    CPPUNIT_ASSERT_EQUAL( SCCOL(0), aMultiSel.GetMultiSelectionCount() );
     CPPUNIT_ASSERT( !aMultiSel.HasAnyMarks() );
 }
 

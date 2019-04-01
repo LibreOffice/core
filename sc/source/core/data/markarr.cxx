@@ -31,13 +31,15 @@ ScMarkArray::ScMarkArray() :
 }
 
 // Move constructor
-ScMarkArray::ScMarkArray( ScMarkArray&& rArray ) :
-    nCount( rArray.nCount ),
-    nLimit( rArray.nLimit ),
-    pData( rArray.pData.release() )
+ScMarkArray::ScMarkArray( ScMarkArray&& rOther )
 {
-    rArray.nCount = 0;
-    rArray.nLimit = 0;
+    operator=(std::move(rOther));
+}
+
+// Copy constructor
+ScMarkArray::ScMarkArray( const ScMarkArray & rOther )
+{
+    operator=(rOther);
 }
 
 ScMarkArray::~ScMarkArray()
@@ -293,7 +295,7 @@ bool ScMarkArray::HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const
     return bRet;
 }
 
-bool ScMarkArray::HasEqualRowsMarked( const ScMarkArray& rOther ) const
+bool ScMarkArray::operator==( const ScMarkArray& rOther ) const
 {
     if (nCount != rOther.nCount)
         return false;
@@ -308,17 +310,28 @@ bool ScMarkArray::HasEqualRowsMarked( const ScMarkArray& rOther ) const
     return true;
 }
 
-void ScMarkArray::CopyMarksTo( ScMarkArray& rDestMarkArray ) const
+ScMarkArray& ScMarkArray::operator=( const ScMarkArray& rOther )
 {
-    if (pData)
+    if (rOther.pData)
     {
-        rDestMarkArray.pData.reset( new ScMarkEntry[nCount] );
-        memcpy( rDestMarkArray.pData.get(), pData.get(), nCount * sizeof(ScMarkEntry) );
+        pData.reset( new ScMarkEntry[rOther.nCount] );
+        memcpy( pData.get(), rOther.pData.get(), rOther.nCount * sizeof(ScMarkEntry) );
     }
     else
-        rDestMarkArray.pData.reset();
+        pData.reset();
 
-    rDestMarkArray.nCount = rDestMarkArray.nLimit = nCount;
+    nCount = nLimit = rOther.nCount;
+    return *this;
+}
+
+ScMarkArray& ScMarkArray::operator=( ScMarkArray&& rOther )
+{
+    nCount = rOther.nCount;
+    nLimit = rOther.nLimit;
+    pData = std::move( rOther.pData );
+    rOther.nCount = 0;
+    rOther.nLimit = 0;
+    return *this;
 }
 
 SCROW ScMarkArray::GetNextMarked( SCROW nRow, bool bUp ) const
