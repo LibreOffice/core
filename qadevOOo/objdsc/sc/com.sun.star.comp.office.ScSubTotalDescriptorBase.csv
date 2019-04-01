@@ -1,5 +1,3 @@
-"ScSubTotalDescriptorBase";"com::sun::star::container::XIndexAccess";"getCount()"
-"ScSubTotalDescriptorBase";"com::sun::star::container::XIndexAccess";"getByIndex()"
 "ScSubTotalDescriptorBase";"com::sun::star::container::XElementAccess";"getElementType()"
 "ScSubTotalDescriptorBase";"com::sun::star::container::XElementAccess";"hasElements()"
 "ScSubTotalDescriptorBase";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
