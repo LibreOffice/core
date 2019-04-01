@@ -2,7 +2,7 @@
 /*
  * This file is part of the LibreOffice project.
  *
- * This Source Code Form is subject to the terms of the Mozilla Public
+ * This Source eCode Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
@@ -226,7 +226,11 @@ enum ScAutoSum
 {
     ScAutoSumNone = 0,
     ScAutoSumData,
-    ScAutoSumSum
+    ScAutoSumSum,
+    ScAutoSumAverage,
+    ScAutoSumMax,
+    ScAutoSumMin,
+    ScAutoSumCount
 };
 
 static ScAutoSum lcl_IsAutoSumData( ScDocument* pDoc, SCCOL nCol, SCROW nRow,
@@ -237,12 +241,28 @@ static ScAutoSum lcl_IsAutoSumData( ScDocument* pDoc, SCCOL nCol, SCROW nRow,
     {
         if (aCell.meType == CELLTYPE_FORMULA)
         {
+            ScAutoSum val = ScAutoSumNone;
             ScTokenArray* pCode = aCell.mpFormula->GetCode();
-            if ( pCode && pCode->GetOuterFuncOpCode() == ocSum )
+            if ( pCode )
             {
+                switch( pCode->GetOuterFuncOpCode() )
+                {
+                    case ocSum     : val = ScAutoSumSum;
+                        break;
+                    case ocAverage : val = ScAutoSumAverage;
+                        break;
+                    case ocMax     : val = ScAutoSumMax;
+                        break;
+                    case ocMin     : val = ScAutoSumMin;
+                        break;
+                    case ocCount   : val = ScAutoSumCount;
+                        break;
+                    default        :
+                        break;
+                }
                 if ( pCode->GetAdjacentExtendOfOuterFuncRefs( nExtend,
                         ScAddress( nCol, nRow, nTab ), eDir ) )
-                    return ScAutoSumSum;
+                    return val;
             }
         }
         return ScAutoSumData;
@@ -293,7 +313,7 @@ static bool lcl_FindNextSumEntryInColumn( ScDocument* pDoc, SCCOL nCol, SCROW& n
     {
         --nRow;
     }
-    return eSkip == ScAutoSumSum && nRow < nTmp;
+    return eSkip >= ScAutoSumSum && nRow < nTmp;
 }
 
 static bool lcl_FindNextSumEntryInRow( ScDocument* pDoc, SCCOL& nCol, SCROW nRow,
@@ -306,7 +326,7 @@ static bool lcl_FindNextSumEntryInRow( ScDocument* pDoc, SCCOL& nCol, SCROW nRow
     {
         --nCol;
     }
-    return eSkip == ScAutoSumSum && nCol < nTmp;
+    return eSkip >= ScAutoSumSum && nCol < nTmp;
 }
 
 static ScAutoSum lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rRangeList, const ScRange& rRange )
@@ -325,7 +345,7 @@ static ScAutoSum lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rR
     SCCOLROW nExtend = 0;
     ScAutoSum eSum = lcl_IsAutoSumData( pDoc, nCol, nEndRow, nTab, DIR_TOP, nExtend /*out*/ );
 
-    if ( eSum == ScAutoSumSum )
+    if ( eSum >= ScAutoSumSum )
     {
         bool bContinue = false;
         do
@@ -370,7 +390,7 @@ static ScAutoSum lcl_GetAutoSumForRowRange( ScDocument* pDoc, ScRangeList& rRang
     SCCOLROW nExtend = 0;
     ScAutoSum eSum = lcl_IsAutoSumData( pDoc, nEndCol, nRow, nTab, DIR_LEFT, nExtend /*out*/ );
 
-    if ( eSum == ScAutoSumSum )
+    if ( eSum >= ScAutoSumSum )
     {
         bool bContinue = false;
         do
@@ -397,6 +417,27 @@ static ScAutoSum lcl_GetAutoSumForRowRange( ScDocument* pDoc, ScRangeList& rRang
     }
 
     return eSum;
+}
+
+static sal_Int8 GetSubTotal( const OpCode eCode )
+{
+    sal_Int8 val;
+    switch ( eCode )
+    {
+        case ocSum     : val = 9;
+            break;
+        case ocAverage : val = 1;
+            break;
+        case ocMax     : val = 4;
+            break;
+        case ocMin     : val = 5;
+            break;
+        case ocCount   : val = 2;
+            break;
+        default        : val = 9;
+    }
+
+    return val;
 }
 
 bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
@@ -445,7 +486,7 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
         if ( bRow )
         {
             nStartRow = nSeekRow;       // nSeekRow might be adjusted via reference
-            if ( eSum == ScAutoSumSum )
+            if ( eSum >= ScAutoSumSum  && eSum <= ScAutoSumCount )
                 nEndRow = nStartRow;        // only sum sums
             else
                 nEndRow = nRow - 1;     // maybe extend data area at bottom
@@ -453,7 +494,7 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
         else
         {
             nStartCol = nSeekCol;       // nSeekCol might be adjusted via reference
-            if ( eSum == ScAutoSumSum )
+            if ( eSum >= ScAutoSumSum )
                 nEndCol = nStartCol;        // only sum sums
             else
                 nEndCol = nCol - 1;     // maybe extend data area to the right
@@ -478,7 +519,7 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
             }
             rRangeList.push_back(
                 ScRange( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab ) );
-            if ( eSum == ScAutoSumSum )
+            if ( eSum >= ScAutoSumSum )
             {
                 if ( bRow )
                 {
@@ -505,13 +546,13 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
     return false;
 }
 
-void ScViewFunc::EnterAutoSum(const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr)
+void ScViewFunc::EnterAutoSum(const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr, const OpCode eCode)
 {
-    OUString aFormula = GetAutoSumFormula( rRangeList, bSubTotal, rAddr );
+    OUString aFormula = GetAutoSumFormula( rRangeList, bSubTotal, rAddr , eCode);
     EnterBlock( aFormula, nullptr );
 }
 
-bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor, bool bContinue )
+bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor, bool bContinue , const OpCode eCode)
 {
     ScDocument* pDoc = GetViewData().GetDocument();
     const SCTAB nTab = rRange.aStart.Tab();
@@ -667,7 +708,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
                     if (++nRowSums == 1)
                         nRowSumsStartCol = aRangeList[0].aStart.Col();
                     const OUString aFormula = GetAutoSumFormula(
-                        aRangeList, bSubTotal, ScAddress(nCol, nInsRow, nTab));
+                        aRangeList, bSubTotal, ScAddress(nCol, nInsRow, nTab), eCode);
                     EnterData( nCol, nInsRow, nTab, aFormula );
                 }
             }
@@ -703,7 +744,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
                 {
                     if (++nColSums == 1)
                         nColSumsStartRow = aRangeList[0].aStart.Row();
-                    const OUString aFormula = GetAutoSumFormula( aRangeList, bSubTotal, ScAddress(nInsCol, nRow, nTab) );
+                    const OUString aFormula = GetAutoSumFormula( aRangeList, bSubTotal, ScAddress(nInsCol, nRow, nTab), eCode );
                     EnterData( nInsCol, nRow, nTab, aFormula );
                 }
             }
@@ -715,10 +756,10 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
     // there is only one, or the data range if more than one. Otherwise use the
     // original selection. All extended by end column/row where the sum is put.
     const ScRange aMarkRange(
-            (eSum == ScAutoSumSum ?
+            (eSum >= ScAutoSumSum ?
              (nRowSums == 1 ? nRowSumsStartCol : nStartCol) :
              rRange.aStart.Col()),
-            (eSum == ScAutoSumSum ?
+            (eSum >= ScAutoSumSum ?
              (nColSums == 1 ? nColSumsStartRow : nStartRow) :
              rRange.aStart.Row()),
             nTab, nMarkEndCol, nMarkEndRow, nTab );
@@ -731,18 +772,18 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
     return true;
 }
 
-OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr )
+OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr , const OpCode eCode)
 {
     ScViewData& rViewData = GetViewData();
     ScDocument* pDoc = rViewData.GetDocument();
     std::unique_ptr<ScTokenArray> pArray(new ScTokenArray);
 
-    pArray->AddOpCode(bSubTotal ? ocSubTotal : ocSum);
+    pArray->AddOpCode(bSubTotal ? ocSubTotal : eCode);
     pArray->AddOpCode(ocOpen);
 
     if (bSubTotal)
     {
-        pArray->AddDouble(9);
+        pArray->AddDouble( GetSubTotal( eCode ) );
         pArray->AddOpCode(ocSep);
     }
 
