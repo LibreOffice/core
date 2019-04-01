@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "df87a7cf_f2c86875",
+        "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1230,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2019-04-01T15:30:31Z",
+      "side": 1,
+      "message": "I just copied the code from VSeriesPlotter::createErrorBar().\nI\u0027ll change that code in a separate commit.",
+      "parentUuid": "df87a7cf_34700173",
+      "range": {
+        "startLine": 1230,
+        "startChar": 0,
+        "endLine": 1230,
+        "endChar": 55
+      },
+      "revId": "61027310d37394610016e7630448c1f598d8cd56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87a7cf_745e89e7",
         "filename": "officecfg/registry/schema/org/openoffice/Office/Chart.xcs",
         "patchSetId": 4
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "df87a7cf_12c62c69",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Chart.xcs",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2019-04-01T15:30:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df87a7cf_745e89e7",
+      "revId": "61027310d37394610016e7630448c1f598d8cd56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87a7cf_545905fc",
         "filename": "officecfg/registry/schema/org/openoffice/Office/Chart.xcs",
         "patchSetId": 4
@@ -53,6 +95,30 @@
       "writtenOn": "2019-03-29T18:07:30Z",
       "side": 1,
       "message": "Should the default value really be true? That would make the setting appear as changed in the Advanced Settings browser if false (which actually is the default behaviour if absent), or wouldn\u0027t it? (I might be mistaken, I didn\u0027t try)",
+      "range": {
+        "startLine": 52,
+        "startChar": 15,
+        "endLine": 52,
+        "endChar": 19
+      },
+      "revId": "61027310d37394610016e7630448c1f598d8cd56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_b2a0a0a7",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Chart.xcs",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2019-04-01T15:30:31Z",
+      "side": 1,
+      "message": "You\u0027re right, it should be false as default value.",
+      "parentUuid": "df87a7cf_545905fc",
       "range": {
         "startLine": 52,
         "startChar": 15,
