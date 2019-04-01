@@ -236,7 +236,7 @@ namespace cairocanvas
             DeviceSettingsGuard aGuard(mpVirtualDevice.get(), mpCairo.get());
 
 #if defined CAIRO_HAS_WIN32_SURFACE
-            // FIXME: Some kind of work-araound...
+            // FIXME: Some kind of work-around...
             cairo_rectangle (mpCairo.get(), 0, 0, 0, 0);
             cairo_fill(mpCairo.get());
 #endif
@@ -295,7 +295,7 @@ namespace cairocanvas
                 DeviceSettingsGuard aGuard(mpVirtualDevice.get(), mpCairo.get());
 
 #if defined CAIRO_HAS_WIN32_SURFACE
-                // FIXME: Some kind of work-araound...
+                // FIXME: Some kind of work-around...
                 cairo_rectangle(mpCairo.get(), 0, 0, 0, 0);
                 cairo_fill(mpCairo.get());
 #endif
