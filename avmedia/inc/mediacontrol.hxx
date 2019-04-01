@@ -77,6 +77,7 @@ private:
     Size                maMinSize;
     bool                mbLocked;
     MediaControlStyle   meControlStyle;
+    double mfTime;
 };
 
 }
