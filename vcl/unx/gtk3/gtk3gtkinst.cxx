@@ -8927,6 +8927,25 @@ private:
             if (gtk_label_get_use_underline(pLabel))
                 m_aMnemonicLabels.push_back(pLabel);
         }
+        else if (GTK_IS_TEXT_VIEW(pWidget))
+        {
+            GtkTextView* pTextView = GTK_TEXT_VIEW(pWidget);
+            if (m_pStringReplace != nullptr)
+            {
+                GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(pTextView);
+                GtkTextIter start, end;
+                gtk_text_buffer_get_bounds(pBuffer, &start, &end);
+                char* pTextStr = gtk_text_buffer_get_text(pBuffer, &start, &end, true);
+                int nTextLen = pTextStr ? strlen(pTextStr) : 0;
+                if (nTextLen)
+                {
+                    OUString sOldText = OUString(pTextStr, nTextLen, RTL_TEXTENCODING_UTF8);
+                    OString sText(OUStringToOString((*m_pStringReplace)(sOldText), RTL_TEXTENCODING_UTF8));
+                    gtk_text_buffer_set_text(pBuffer, sText.getStr(), sText.getLength());
+                }
+                g_free(pTextStr);
+            }
+        }
         else if (GTK_IS_WINDOW(pWidget))
         {
             if (m_pStringReplace != nullptr) {
