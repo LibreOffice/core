@@ -22,60 +22,50 @@
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
-CrashReportDialog::CrashReportDialog(vcl::Window* pParent):
-    Dialog(pParent, "CrashReportDialog",
-            "svx/ui/crashreportdlg.ui")
+CrashReportDialog::CrashReportDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "svx/ui/crashreportdlg.ui",
+                            "CrashReportDialog")
+    , mxBtnSend(m_xBuilder->weld_button("btn_send"))
+    , mxBtnCancel(m_xBuilder->weld_button("btn_cancel"))
+    , mxBtnClose(m_xBuilder->weld_button("btn_close"))
+    , mxEditPreUpload(m_xBuilder->weld_label("ed_pre"))
+    , mxEditPostUpload(m_xBuilder->weld_text_view("ed_post"))
+    , mxFtBugReport(m_xBuilder->weld_text_view("ed_bugreport"))
+    , mxCBSafeMode(m_xBuilder->weld_check_button("check_safemode"))
 {
-    get(mpBtnSend, "btn_send");
-    get(mpBtnCancel, "btn_cancel");
-    get(mpBtnClose, "btn_close");
-    get(mpEditPreUpload, "ed_pre");
-    get(mpEditPostUpload, "ed_post");
-    get(mpFtBugReport, "ed_bugreport");
-    get(mpCBSafeMode, "check_safemode");
+    maSuccessMsg = mxEditPostUpload->get_text();
 
-    maSuccessMsg = mpEditPostUpload->GetText();
+    auto nWidth = mxEditPreUpload->get_preferred_size().Width();
+    nWidth = std::max(nWidth, mxCBSafeMode->get_size_request().Width());
+    mxEditPreUpload->set_size_request(nWidth, -1);
+    mxCBSafeMode->set_size_request(nWidth, -1);
 
-    mpBtnSend->SetClickHdl(LINK(this, CrashReportDialog, BtnHdl));
-    mpBtnCancel->SetClickHdl(LINK(this, CrashReportDialog, BtnHdl));
-    mpBtnClose->SetClickHdl(LINK(this, CrashReportDialog, BtnHdl));
-    mpEditPostUpload->SetReadOnly();
+    mxBtnSend->connect_clicked(LINK(this, CrashReportDialog, BtnHdl));
+    mxBtnCancel->connect_clicked(LINK(this, CrashReportDialog, BtnHdl));
+    mxBtnClose->connect_clicked(LINK(this, CrashReportDialog, BtnHdl));
 }
 
 CrashReportDialog::~CrashReportDialog()
 {
-    disposeOnce();
 }
 
-void CrashReportDialog::dispose()
+short CrashReportDialog::run()
 {
-    mpBtnSend.clear();
-    mpBtnCancel.clear();
-    mpBtnClose.clear();
-    mpEditPreUpload.clear();
-    mpEditPostUpload.clear();
-    mpFtBugReport.clear();
-    mpCBSafeMode.clear();
+    short nRet = GenericDialogController::run();
 
-    Dialog::dispose();
-}
-
-bool CrashReportDialog::Close()
-{
     // Check whether to go to safe mode
-    if (mpCBSafeMode->IsChecked())
+    if (mxCBSafeMode->get_active())
     {
         sfx2::SafeMode::putFlag();
         css::task::OfficeRestartManager::get(comphelper::getProcessComponentContext())->requestRestart(
             css::uno::Reference< css::task::XInteractionHandler >());
     }
-
-    return Dialog::Close();
+    return nRet;
 }
 
-IMPL_LINK(CrashReportDialog, BtnHdl, Button*, pBtn, void)
+IMPL_LINK(CrashReportDialog, BtnHdl, weld::Button&, rBtn, void)
 {
-    if (pBtn == mpBtnSend.get())
+    if (&rBtn == mxBtnSend.get())
     {
         std::string ini_path = CrashReporter::getIniFileName();
 
@@ -89,32 +79,33 @@ IMPL_LINK(CrashReportDialog, BtnHdl, Button*, pBtn, void)
             OUString aProcessedMessage = maSuccessMsg.replaceAll("%CRASHID", aCrashID.replaceAll("Crash-ID=",""));
 
             // vclbuilder seems to replace _ with ~ even in text
-            mpEditPostUpload->SetText(aProcessedMessage.replaceAll("~", "_"));
+            mxEditPostUpload->set_text(aProcessedMessage.replaceAll("~", "_"));
         }
         else
         {
-            mpEditPostUpload->SetText(aCrashID);
+            mxEditPostUpload->set_text(aCrashID);
         }
 
-        mpBtnClose->Show();
-        mpFtBugReport->Show();
-        mpEditPreUpload->Hide();
-        mpEditPostUpload->Show();
-        mpBtnSend->Hide();
-        mpBtnSend->Disable();
-        mpBtnCancel->Hide();
-        mpBtnCancel->Disable();
-        mpBtnClose->GrabFocus();
+        mxBtnClose->show();
+        mxFtBugReport->show();
+        mxEditPostUpload->show();
+        mxBtnSend->set_sensitive(false);
+        mxBtnCancel->set_sensitive(false);
+        mxBtnClose->grab_focus();
 
-        setOptimalLayoutSize();
+        mxEditPreUpload->hide();
+        mxBtnSend->hide();
+        mxBtnCancel->hide();
+
+        m_xDialog->resize_to_request();
     }
-    else if (pBtn == mpBtnCancel.get())
+    else if (&rBtn == mxBtnCancel.get())
     {
-        Close();
+        m_xDialog->response(RET_CLOSE);
     }
-    else if (pBtn == mpBtnClose.get())
+    else if (&rBtn == mxBtnClose.get())
     {
-        Close();
+        m_xDialog->response(RET_CLOSE);
     }
 }
 

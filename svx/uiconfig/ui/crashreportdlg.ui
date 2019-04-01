@@ -16,8 +16,13 @@ Thank you for your help in improving %PRODUCTNAME.</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="crashreportdlg|CrashReportDialog">Crash Report</property>
-    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -32,6 +37,7 @@ Thank you for your help in improving %PRODUCTNAME.</property>
                 <property name="label" translatable="yes" context="crashreportdlg|btn_send">_Send Crash Report</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
@@ -95,14 +101,28 @@ You can help us to fix this issue by sending an anonymous crash report to the %P
             <property name="can_focus">False</property>
             <property name="valign">center</property>
             <property name="editable">False</property>
-            <property name="wrap_mode">word</property>
             <property name="cursor_visible">False</property>
             <property name="buffer">textbuffer1</property>
+            <property name="accepts_tab">False</property>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkTextView" id="ed_bugreport">
+            <property name="can_focus">False</property>
+            <property name="editable">False</property>
+            <property name="cursor_visible">False</property>
+            <property name="buffer">textbuffer2</property>
+            <property name="accepts_tab">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -113,20 +133,6 @@ You can help us to fix this issue by sending an anonymous crash report to the %P
             <property name="receives_default">False</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkTextView" id="ed_bugreport">
-            <property name="can_focus">False</property>
-            <property name="editable">False</property>
-            <property name="wrap_mode">word</property>
-            <property name="cursor_visible">False</property>
-            <property name="buffer">textbuffer2</property>
           </object>
           <packing>
             <property name="expand">False</property>
