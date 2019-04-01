@@ -1374,6 +1374,15 @@ ScVbaApplication::MenuBars( const uno::Any& aIndex )
     return uno::Any( xMenuBars );
 }
 
+uno::Any SAL_CALL
+ScVbaApplication::Rows( const uno::Any& aIndex )
+{
+    uno::Reference< excel::XWorksheet > xWorksheet( getActiveSheet(), uno::UNO_QUERY );
+    if ( xWorksheet.is() )
+        return uno::Any( xWorksheet->Rows( aIndex ) );
+    return uno::Any();
+}
+
 void SAL_CALL ScVbaApplication::OnKey( const OUString& Key, const uno::Any& Procedure )
 {
     try
