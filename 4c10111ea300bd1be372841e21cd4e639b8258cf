@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_ef4e3fc0",
+        "filename": "vcl/qt5/Qt5Instance.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2019-04-01T08:57:57Z",
+      "side": 1,
+      "message": "It still might be a good idea to protect this piece of memory from possibility of leak by using either std::string (or something like boost::optional\u003cstd::string\u003e to distinguish between no \"SESSION_MANAGER\" env set and empty \"SESSION_MANAGER\" value) or FreeableArg.",
+      "revId": "4c10111ea300bd1be372841e21cd4e639b8258cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
