@@ -43,6 +43,7 @@
 #include <vcl/transfer.hxx>
 #include <vcl/graph.hxx>
 
+#include <comphelper/automationinvokedzone.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -334,9 +335,10 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             else if ((nFormatId == SotClipboardFormatId::STRING || nFormatId == SotClipboardFormatId::STRING_TSVC)
                     && aDataHelper.GetString( nFormatId, *pStrBuffer ))
             {
-                // Do CSV dialog if more than one line.
+                // Do CSV dialog if more than one line. But not if invoked from Automation.
                 sal_Int32 nDelim = pStrBuffer->indexOf('\n');
-                if (nDelim >= 0 && nDelim != pStrBuffer->getLength () - 1)
+                if (!comphelper::Automation::AutomationInvokedZone::isActive()
+                    && nDelim >= 0 && nDelim != pStrBuffer->getLength () - 1)
                 {
                     vcl::Window* pParent = GetActiveWin();
 
