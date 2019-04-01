@@ -1,5 +1,3 @@
-"ScSubTotalDescriptorBase";"com::sun::star::container::XElementAccess";"getElementType()"
-"ScSubTotalDescriptorBase";"com::sun::star::container::XElementAccess";"hasElements()"
 "ScSubTotalDescriptorBase";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "ScSubTotalDescriptorBase";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "ScSubTotalDescriptorBase";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
