@@ -2559,7 +2559,10 @@ public:
         m_xButton->SetLoseFocusHdl(LINK(this, SalInstanceSpinButton, LoseFocusHdl));
         m_xButton->SetOutputHdl(LINK(this, SalInstanceSpinButton, OutputHdl));
         m_xButton->SetInputHdl(LINK(this, SalInstanceSpinButton, InputHdl));
-        m_xButton->GetSubEdit()->SetActivateHdl(LINK(this, SalInstanceSpinButton, ActivateHdl));
+        if (Edit* pEdit = m_xButton->GetSubEdit())
+            pEdit->SetActivateHdl(LINK(this, SalInstanceSpinButton, ActivateHdl));
+        else
+            m_xButton->SetActivateHdl(LINK(this, SalInstanceSpinButton, ActivateHdl));
     }
 
     virtual int get_value() const override
@@ -2621,6 +2624,8 @@ public:
     {
         if (Edit* pEdit = m_xButton->GetSubEdit())
             pEdit->SetActivateHdl(Link<Edit&, bool>());
+        else
+            m_xButton->SetActivateHdl(Link<Edit&, bool>());
         m_xButton->SetInputHdl(Link<sal_Int64*, TriState>());
         m_xButton->SetOutputHdl(Link<Edit&, bool>());
         m_xButton->SetLoseFocusHdl(Link<Control&, void>());
