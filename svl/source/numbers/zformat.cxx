@@ -3476,7 +3476,7 @@ void SvNumberformat::ImpAppendEraG( OUStringBuffer& OutString,
             cEra = 'H';
             break;
         case 5:
-            cEra = 'N';     /* TODO: the real one letter era name is not known yet (2018-07-26) */
+            cEra = 'R';
             break;
         default:
             cEra = '?';
