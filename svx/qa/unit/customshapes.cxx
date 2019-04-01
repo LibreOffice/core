@@ -281,7 +281,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124029_arc_position)
 {
     // tdf121029 MS binary custom shape mso_sptArc has wrong position
     // MS uses the sector for position reference. Error was, that
-    // LibreOffice has used the underlaying ellipse.
+    // LibreOffice has used the underlying ellipse.
     const OUString sFileName("tdf124029_Arc_position.doc");
     OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.text.TextDocument");
