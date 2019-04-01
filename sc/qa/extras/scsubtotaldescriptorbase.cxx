@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/container/xindexaccess.hxx>
 #include <test/sheet/subtotaldescriptor.hxx>
 #include <test/sheet/xsubtotaldescriptor.hxx>
 
@@ -33,6 +34,7 @@ namespace sc_apitest
 class ScSubTotalDescriptorBase : public CalcUnoApiTest,
                                  public apitest::SubTotalDescriptor,
                                  public apitest::XEnumerationAccess,
+                                 public apitest::XIndexAccess,
                                  public apitest::XSubTotalDescriptor
 {
 public:
@@ -50,6 +52,10 @@ public:
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
 
+    // XIndexAccess
+    CPPUNIT_TEST(testGetByIndex);
+    CPPUNIT_TEST(testGetCount);
+
     // XSubTotalDescriptor
     CPPUNIT_TEST(testAddNew);
     CPPUNIT_TEST(testClear);
@@ -62,6 +68,7 @@ private:
 
 ScSubTotalDescriptorBase::ScSubTotalDescriptorBase()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XIndexAccess(1)
 {
 }
 
