@@ -32,6 +32,7 @@
 #include <swtypes.hxx>
 #include <fmtornt.hxx>
 #include <xmloff/odffields.hxx>
+#include <txtfrm.hxx>
 
 namespace
 {
@@ -69,6 +70,7 @@ public:
     void testCheckboxFormFieldInsertion();
     void testDropDownFormFieldInsertion();
     void testMixedFormFieldInsertion();
+    void testTdf124261();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
@@ -97,6 +99,7 @@ public:
     CPPUNIT_TEST(testCheckboxFormFieldInsertion);
     CPPUNIT_TEST(testDropDownFormFieldInsertion);
     CPPUNIT_TEST(testMixedFormFieldInsertion);
+    CPPUNIT_TEST(testTdf124261);
     CPPUNIT_TEST_SUITE_END();
 
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
@@ -1119,6 +1122,40 @@ void SwUiWriterTest2::testMixedFormFieldInsertion()
     lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
     lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pMarkAccess->getAllMarksCount());
+}
+
+void SwUiWriterTest2::testTdf124261()
+{
+#if !defined(WNT)
+    // Make sure that pressing a key in a btlr cell frame causes an immediate, correct repaint.
+    SwDoc* pDoc = createDoc("tdf124261.docx");
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pPageFrame = pLayout->GetLower();
+    CPPUNIT_ASSERT(pPageFrame->IsPageFrame());
+
+    SwFrame* pBodyFrame = pPageFrame->GetLower();
+    CPPUNIT_ASSERT(pBodyFrame->IsBodyFrame());
+
+    SwFrame* pTabFrame = pBodyFrame->GetLower();
+    CPPUNIT_ASSERT(pTabFrame->IsTabFrame());
+
+    SwFrame* pRowFrame = pTabFrame->GetLower();
+    CPPUNIT_ASSERT(pRowFrame->IsRowFrame());
+
+    SwFrame* pCellFrame = pRowFrame->GetLower();
+    CPPUNIT_ASSERT(pCellFrame->IsCellFrame());
+
+    SwFrame* pFrame = pCellFrame->GetLower();
+    CPPUNIT_ASSERT(pFrame->IsTextFrame());
+
+    // Make sure that the text frame's area and the paint rectangle match.
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 1721;
+    // Actual: 1547', i.e. an area other than the text frame was invalidated for a single-line
+    // paragraph.
+    SwTextFrame* pTextFrame = static_cast<SwTextFrame*>(pFrame);
+    SwRect aRect = pTextFrame->GetPaintSwRect();
+    CPPUNIT_ASSERT_EQUAL(pTextFrame->getFrameArea().Top(), aRect.Top());
+#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
