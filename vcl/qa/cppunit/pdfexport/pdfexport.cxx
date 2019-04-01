@@ -123,6 +123,7 @@ public:
     void testTdf66597_3();
 #endif
     void testTdf109143();
+    void testTdf124272();
     void testTdf105954();
     void testTdf106702();
     void testTdf113143();
@@ -158,6 +159,7 @@ public:
     CPPUNIT_TEST(testTdf66597_3);
 #endif
     CPPUNIT_TEST(testTdf109143);
+    CPPUNIT_TEST(testTdf124272);
     CPPUNIT_TEST(testTdf105954);
     CPPUNIT_TEST(testTdf106702);
     CPPUNIT_TEST(testTdf113143);
@@ -535,6 +537,58 @@ void PdfExportTest::testTdf109143()
     // This failed: cropped TIFF-in-JPEG wasn't re-compressed, so crop was
     // lost. Size was 59416, now is 11827.
     CPPUNIT_ASSERT(nLength < 50000);
+}
+
+void PdfExportTest::testTdf124272()
+{
+    vcl::filter::PDFDocument aDocument;
+    load("tdf124272.odt", aDocument);
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    // Get access to the only image on the only page.
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+    CPPUNIT_ASSERT(pResources);
+    auto pXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"));
+    CPPUNIT_ASSERT(pXObjects);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pXObjects->GetItems().size());
+    vcl::filter::PDFObjectElement* pXObject = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pXObject);
+    vcl::filter::PDFStreamElement* pStream = pXObject->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+
+    // Load the embedded image.
+    rObjectStream.Seek( 0 );
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic;
+    sal_uInt16 format;
+    ErrCode bResult = rFilter.ImportGraphic(aGraphic, OUString( "import" ), rObjectStream,
+        GRFILTER_FORMAT_DONTKNOW, &format);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
+
+    // The image should be grayscale 8bit JPEG.
+    sal_uInt16 jpegFormat = rFilter.GetImportFormatNumberForShortName( JPG_SHORTNAME );
+    CPPUNIT_ASSERT( jpegFormat != GRFILTER_FORMAT_NOTFOUND );
+    CPPUNIT_ASSERT_EQUAL( jpegFormat, format );
+    BitmapEx aBitmap = aGraphic.GetBitmapEx();
+    CPPUNIT_ASSERT_EQUAL( 400L, aBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL( 400L, aBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL( 8, int(aBitmap.GetBitCount()));
+
+    CPPUNIT_ASSERT_EQUAL( 0, int(aBitmap.GetTransparency( 0, 0 )));
+    CPPUNIT_ASSERT_EQUAL( COL_BLACK, aBitmap.GetPixelColor( 0, 0 ));
+    CPPUNIT_ASSERT_EQUAL( 0, int(aBitmap.GetTransparency( 0, 399 )));
+    CPPUNIT_ASSERT_EQUAL( COL_BLACK, aBitmap.GetPixelColor( 0, 399 ));
+    CPPUNIT_ASSERT_EQUAL( 0, int(aBitmap.GetTransparency( 399, 0 )));
+    CPPUNIT_ASSERT_EQUAL( COL_BLACK, aBitmap.GetPixelColor( 399, 0 ));
+    CPPUNIT_ASSERT_EQUAL( 0, int(aBitmap.GetTransparency( 399, 399 )));
+    CPPUNIT_ASSERT_EQUAL( COL_BLACK, aBitmap.GetPixelColor( 399, 399 ));
+
+    CPPUNIT_ASSERT_EQUAL( 0, int(aBitmap.GetTransparency( 200, 200 )));
+    CPPUNIT_ASSERT_EQUAL( COL_BLACK, aBitmap.GetPixelColor( 200, 200 ));
 }
 
 void PdfExportTest::testTdf106972()
