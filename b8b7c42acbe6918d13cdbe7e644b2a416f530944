@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_129b8c72",
+        "filename": "vcl/source/edit/textundo.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-04-01T15:41:34Z",
+      "side": 1,
+      "message": "this looks a bit scary....",
+      "revId": "b8b7c42acbe6918d13cdbe7e644b2a416f530944",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
