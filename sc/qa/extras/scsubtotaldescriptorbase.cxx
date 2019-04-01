@@ -12,6 +12,7 @@
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <test/sheet/subtotaldescriptor.hxx>
 #include <test/sheet/xsubtotaldescriptor.hxx>
 #include <cppu/unotype.hxx>
@@ -41,6 +42,7 @@ class ScSubTotalDescriptorBase : public CalcUnoApiTest,
                                  public apitest::XEnumerationAccess,
                                  public apitest::XIndexAccess,
                                  public apitest::XPropertySet,
+                                 public apitest::XServiceInfo,
                                  public apitest::XSubTotalDescriptor
 {
 public:
@@ -77,6 +79,11 @@ public:
     CPPUNIT_TEST(testAddNew);
     CPPUNIT_TEST(testClear);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -87,6 +94,7 @@ ScSubTotalDescriptorBase::ScSubTotalDescriptorBase()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<sheet::XSubTotalField>::get())
     , XIndexAccess(1)
+    , XServiceInfo("ScSubTotalDescriptorBase", "com.sun.star.sheet.SubTotalDescriptor")
 {
 }
 
