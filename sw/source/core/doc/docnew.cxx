@@ -1084,20 +1084,22 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
                 --aNodeIndex;
                 SwPaM aPaM(aNodeIndex);
                 // Collect the marks starting or ending at this text node.
-                std::set<sw::mark::IMark*> aSeenMarks;
+                o3tl::sorted_vector<const sw::mark::IMark*> aSeenMarks;
                 IDocumentMarkAccess* pMarkAccess = getIDocumentMarkAccess();
                 for (const SwIndex* pIndex = pTextNode->GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
                 {
                     sw::mark::IMark* pMark = const_cast<sw::mark::IMark*>(pIndex->GetMark());
                     if (!pMark)
                         continue;
-                    if (aSeenMarks.find(pMark) != aSeenMarks.end())
+                    if (!aSeenMarks.insert(pMark).second)
                         continue;
-                    aSeenMarks.insert(pMark);
                 }
                 // And move them back.
-                for (sw::mark::IMark* pMark : aSeenMarks)
-                    pMarkAccess->repositionMark(pMark, aPaM);
+                for (auto const& pMark : aSeenMarks)
+                {
+                    sw::mark::IMark* ppMark = const_cast<sw::mark::IMark*>(pMark);
+                    pMarkAccess->repositionMark(ppMark, aPaM);
+                }
             }
 
             // Flush the page break, if we want to keep it

@@ -203,7 +203,7 @@ namespace
         else
         {
             // A text node already knows its marks via its SwIndexes.
-            std::set<sw::mark::IMark*> aSeenMarks;
+            o3tl::sorted_vector<const sw::mark::IMark*> aSeenMarks;
             for (const SwIndex* pIndex = pTextNode->GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
             {
                 // Need a non-cost mark here, as we'll create an UNO wrapper around it.
@@ -216,9 +216,8 @@ namespace
                     eType != IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK)
                     continue;
                 // Only handle bookmarks once, if they start and end at this node as well.
-                if (aSeenMarks.find(pBkmk) != aSeenMarks.end())
+                if (!aSeenMarks.insert(pBkmk).second)
                     continue;
-                aSeenMarks.insert(pBkmk);
                 lcl_FillBookmark(pBkmk, nOwnNode, rDoc, rBkmArr);
             }
         }
