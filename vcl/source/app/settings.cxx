@@ -2045,6 +2045,11 @@ StyleSettings::operator !=( const StyleSettings& rSet ) const
     return !(*this == rSet);
 }
 
+void StyleSettings::SetListBoxPreviewDefaultLogicSize(Size const& rSize)
+{
+    mxData->maListBoxPreviewDefaultLogicSize = rSize;
+}
+
 const Size& StyleSettings::GetListBoxPreviewDefaultPixelSize() const
 {
     if(0 == mxData->maListBoxPreviewDefaultPixelSize.Width() || 0 == mxData->maListBoxPreviewDefaultPixelSize.Height())
