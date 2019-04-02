@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_d50aee88",
+        "filename": "UnoControls/source/controls/framecontrol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-04-02T06:53:11Z",
+      "side": 1,
+      "message": "\"exists\".. \"to its\"",
+      "range": {
+        "startLine": 77,
+        "startChar": 26,
+        "endLine": 77,
+        "endChar": 31
+      },
+      "revId": "72227d13153f3fa0b3e1bb123c41df699ccaa599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_75ff6267",
+        "filename": "UnoControls/source/controls/framecontrol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-04-02T06:53:11Z",
+      "side": 1,
+      "message": "\"is unknown\"",
+      "range": {
+        "startLine": 83,
+        "startChar": 26,
+        "endLine": 83,
+        "endChar": 33
+      },
+      "revId": "72227d13153f3fa0b3e1bb123c41df699ccaa599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
