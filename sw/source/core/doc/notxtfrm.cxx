@@ -987,9 +987,34 @@ void paintGraphicUsingPrimitivesHelper(
                 ceil(aClipRange.getMaxX() + aSinglePixelXY.getX()),
                 ceil(aClipRange.getMaxY() + aSinglePixelXY.getY()));
 
+            // create the enclosing rectangle as polygon
+            basegfx::B2DPolyPolygon aTarget(basegfx::utils::createPolygonFromRect(aExpandedClipRange));
+
+            // tdf#124272 the fix above (tdf#114076) was too rough - the
+            // clip region used may be a PolyPolygon. In that case that
+            // PolyPolygon would have to be scaled to mentioned PixelBounds.
+            // Since that is not really possible geometrically (would need
+            // more some 'grow in outside direction' but with unequal grow
+            // values in all directions - just maaany problems
+            // involved), use a graphical trick: The topology of the
+            // PolyPolygon uses the stndard FillRule, so adding the now
+            // guaranteed to be bigger or equal bounding (enclosing)
+            // rectangle twice as polygon will expand the BoundRange, but
+            // not change the geometry visualization at all
+            if(!rOutputDevice.GetClipRegion().IsRectangle())
+            {
+                // double the outer rectangle range polygon to have it
+                // included twice
+                aTarget.append(aTarget.getB2DPolygon(0));
+
+                // add the original clip 'inside' (due to being smaller
+                // or equal). That PolyPolygon may have an unknown number
+                // of polygons (>=1)
+                aTarget.append(aClip);
+            }
+
             aContent[0] = new drawinglayer::primitive2d::MaskPrimitive2D(
-                basegfx::B2DPolyPolygon(
-                    basegfx::utils::createPolygonFromRect(aExpandedClipRange)),
+                aTarget,
                 aContent);
         }
     }
