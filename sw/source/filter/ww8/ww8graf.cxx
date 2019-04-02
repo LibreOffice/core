@@ -2530,6 +2530,13 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         return nullptr;
     }
 
+    // tdf#118375
+    tools::Rectangle aObjSnapRect(pObject->GetSnapRect());
+    pF->nXaLeft = aObjSnapRect.Left();
+    pF->nYaTop = aObjSnapRect.Top();
+    pF->nXaRight = aObjSnapRect.Right();
+    pF->nYaBottom = aObjSnapRect.Bottom();
+
     bool bDone = false;
     SdrObject* pOurNewObject = nullptr;
     bool bReplaceable = false;
