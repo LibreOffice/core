@@ -46,6 +46,8 @@ $(call gb_UITest_get_clean_target,%) :
 
 ifneq ($(DISABLE_PYTHON),TRUE)
 
+# qadevOOo/qa/registrymodifications.xcu is copied to user profile directory to ensure en_US locale;
+# this might be overwritten later when gb_UITest_use_config is set
 .PHONY : $(call gb_UITest_get_target,%)
 $(call gb_UITest_get_target,%) :| $(gb_UITest_DEPS)
 ifneq ($(gb_SUPPRESS_TESTS),)
@@ -54,7 +56,8 @@ else
 	$(call gb_Output_announce,$*,$(true),UIT,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf $(dir $(call gb_UITest_get_target,$*)) && \
-		mkdir -p $(dir $(call gb_UITest_get_target,$*)) && \
+		mkdir -p $(dir $(call gb_UITest_get_target,$*))/user/user && \
+		cp $(SRCDIR)/qadevOOo/qa/registrymodifications.xcu $(dir $(call gb_UITest_get_target,$*))/user/user/ && \
 		$(if $(gb_UITest__interactive),, \
 		    rm -fr $@.core && mkdir -p $(dir $(call gb_UITest_get_target,$*))user/ && mkdir $@.core && cd $@.core && ) \
 		$(if $(gb_UITest_use_config), \
