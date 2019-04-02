@@ -77,6 +77,7 @@
 #include <stlpool.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/lok.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/dibtools.hxx>
@@ -132,8 +133,8 @@ public:
     void testTableBorderLineStyle();
     void testBnc862510_6();
     void testBnc862510_7();
-    void testPDFImportShared();
 #if ENABLE_PDFIMPORT
+    void testPDFImportShared();
 #if defined(IMPORT_PDF_ELEMENTS)
     void testPDFImport();
     void testPDFImportSkipImages();
@@ -215,10 +216,12 @@ public:
     CPPUNIT_TEST(testTableBorderLineStyle);
     CPPUNIT_TEST(testBnc862510_6);
     CPPUNIT_TEST(testBnc862510_7);
-#if ENABLE_PDFIMPORT && defined(IMPORT_PDF_ELEMENTS)
+#if ENABLE_PDFIMPORT
+    CPPUNIT_TEST(testPDFImportShared);
+#if defined(IMPORT_PDF_ELEMENTS)
     CPPUNIT_TEST(testPDFImport);
     CPPUNIT_TEST(testPDFImportSkipImages);
-    CPPUNIT_TEST(testPDFImportShared);
+#endif
 #endif
     CPPUNIT_TEST(testBulletSuffix);
     CPPUNIT_TEST(testBnc910045);
@@ -1138,24 +1141,59 @@ void SdImportTest::testBnc862510_7()
     xDocShRef->DoClose();
 }
 
+#if ENABLE_PDFIMPORT
+
 void SdImportTest::testPDFImportShared()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pdf/txtpic.pdf"), PDF);
+    comphelper::LibreOfficeKit::setActive();
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pdf/multipage.pdf"), PDF);
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-    uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "no exactly two shapes", static_cast<sal_Int32>(2), xPage->getCount() );
 
-    uno::Reference< beans::XPropertySet > xShape( getShape( 0, xPage ) );
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
-    CPPUNIT_ASSERT_MESSAGE( "not a text shape", !xText.is() );
-    CPPUNIT_ASSERT_MESSAGE( "fail", false);
+    std::vector<std::shared_ptr<css::uno::Sequence<sal_Int8>>> aPdfSeqSharedPtrs;
+    std::vector<std::shared_ptr<GfxLink>> aGfxLinkSharedPtrs;
+
+    for (int nPageIndex = 0; nPageIndex < pDoc->GetPageCount(); ++nPageIndex)
+    {
+        const SdrPage* pPage = GetPage(nPageIndex, xDocShRef);
+        if (pPage == nullptr)
+            break;
+
+        for (size_t nObjIndex = 0; nObjIndex < pPage->GetObjCount(); ++nObjIndex)
+        {
+            SdrObject* pObject = pPage->GetObj(nObjIndex);
+            if (pObject == nullptr)
+                continue;
+
+            SdrGrafObj* pSdrGrafObj = dynamic_cast<SdrGrafObj*>(pObject);
+            if (pSdrGrafObj == nullptr)
+                continue;
+
+            const GraphicObject& rGraphicObject = pSdrGrafObj->GetGraphicObject().GetGraphic();
+            const Graphic& rGraphic = rGraphicObject.GetGraphic();
+            aPdfSeqSharedPtrs.push_back(rGraphic.getPdfData());
+            aGfxLinkSharedPtrs.push_back(rGraphic.GetSharedLink());
+        }
+    }
+
+    CPPUNIT_ASSERT_MESSAGE("Expected more than one page.", aPdfSeqSharedPtrs.size() > 1);
+    CPPUNIT_ASSERT_MESSAGE("Expected as many PDF streams as GfxLinks.",
+                           aPdfSeqSharedPtrs.size() == aGfxLinkSharedPtrs.size());
+
+    const std::shared_ptr<css::uno::Sequence<sal_Int8>> pPdfSeq = aPdfSeqSharedPtrs[0];
+    const std::shared_ptr<GfxLink> pGfxLink = aGfxLinkSharedPtrs[0];
+    for (int i = 0; i < aPdfSeqSharedPtrs.size(); ++i)
+    {
+        CPPUNIT_ASSERT_MESSAGE("Expected all PDF streams to be identical.",
+                               aPdfSeqSharedPtrs[i].get() == pPdfSeq.get());
+        CPPUNIT_ASSERT_MESSAGE("Expected all GfxLinks to be identical.",
+                               aGfxLinkSharedPtrs[i].get() == pGfxLink.get());
+    }
 
     xDocShRef->DoClose();
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
-#if ENABLE_PDFIMPORT
 #if defined(IMPORT_PDF_ELEMENTS)
 
 void SdImportTest::testPDFImport()
