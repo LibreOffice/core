@@ -281,7 +281,7 @@ class formatParagraph(UITestCase):
         props = {"TEXT": "Level 1"}
         actionProps = mkPropertyValues(props)
         xOutline.executeAction("SELECT", actionProps)
-        props2 = {"TEXT": "List 1"}
+        props2 = {"TEXT": "Bullet •"}
         actionProps2 = mkPropertyValues(props2)
         xNumbering.executeAction("SELECT", actionProps2)
         xPara.executeAction("CLICK", tuple())
@@ -301,7 +301,7 @@ class formatParagraph(UITestCase):
         xParaSpin = xDialog.getChild("spinNF_RESTART_PARA")
 
         self.assertEqual(get_state_as_dict(xOutline)["SelectEntryText"], "Level 1")
-        self.assertEqual(get_state_as_dict(xNumbering)["SelectEntryText"], "List 1")
+        self.assertEqual(get_state_as_dict(xNumbering)["SelectEntryText"], "Bullet •")
         self.assertEqual(get_state_as_dict(xPara)["Selected"], "true")
         self.assertEqual(get_state_as_dict(xParaSpin)["Text"], "2")
 
