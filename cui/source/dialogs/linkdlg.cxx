@@ -23,10 +23,10 @@
 
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/svmedit.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/timer.hxx>
+#include <vcl/weld.hxx>
+#include <vcl/window.hxx>
 
 #include <strings.hrc>
 #include <sfx2/linkmgr.hxx>

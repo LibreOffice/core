@@ -19,7 +19,6 @@
 
 #include <cstdarg>
 
-#include <svtools/svmedit.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/event.hxx>

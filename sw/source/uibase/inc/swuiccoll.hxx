@@ -20,7 +20,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SWUICCOLL_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/svtabbx.hxx>
 
 class SwWrtShell;
 class SwFormat;

@@ -31,9 +31,8 @@
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <svtools/svmedit.hxx>
+#include <tools/lineend.hxx>
 #include <vcl/fmtfield.hxx>
-
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/awt/XItemEventBroadcaster.hpp>

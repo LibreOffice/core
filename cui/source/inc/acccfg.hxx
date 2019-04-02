@@ -31,10 +31,6 @@
 
 #include <algorithm>
 
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/svtabbx.hxx>
-#include <vcl/treelistbox.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <i18nutil/searchopt.hxx>
@@ -44,18 +40,6 @@ class SfxMacroInfoItem;
 class CuiConfigFunctionListBox;
 class SfxAcceleratorConfigPage;
 class SfxStringItem;
-
-class SfxAccCfgTabListBox_Impl : public SvTabListBox
-{
-    void                        KeyInput( const KeyEvent &rKEvt ) override;
-
-public:
-    SfxAccCfgTabListBox_Impl(vcl::Window *pParent, WinBits nStyle)
-        : SvTabListBox(pParent, nStyle)
-    {
-    }
-    virtual ~SfxAccCfgTabListBox_Impl() override;
-};
 
 // class SfxAcceleratorConfigPage ----------------------------------------
 
@@ -94,7 +78,6 @@ enum class StartFileDialogType { Open, SaveAs };
 
 class SfxAcceleratorConfigPage : public SfxTabPage
 {
-    friend class SfxAccCfgTabListBox_Impl;
 private:
     const SfxMacroInfoItem*         m_pMacroInfoItem;
     std::unique_ptr<sfx2::FileDialogHelper> m_pFileDlg;

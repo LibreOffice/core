@@ -19,14 +19,7 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_SVXMENUCONFIGPAGE_HXX
 #define INCLUDED_CUI_SOURCE_INC_SVXMENUCONFIGPAGE_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/menubtn.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/treelistbox.hxx>
-#include <svtools/svmedit2.hxx>
-#include <svtools/svmedit.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

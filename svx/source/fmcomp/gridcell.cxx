@@ -61,7 +61,6 @@
 #include <vcl/fmtfield.hxx>
 #include <svl/numuno.hxx>
 #include <svl/zforlist.hxx>
-#include <svtools/svmedit.hxx>
 #include <svx/dialmgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>

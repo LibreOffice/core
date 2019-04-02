@@ -19,9 +19,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/strings.hrc>
