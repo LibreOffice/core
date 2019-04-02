@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_63400809",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-02T21:17:25Z",
+      "side": 1,
+      "message": "Indeed. Good catch.",
+      "revId": "2e7d8cef905e0850a982a203c02c8d4a04256c22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_83450c1a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-02T21:17:25Z",
+      "side": 1,
+      "message": "I wonder if there really are duplicates. It may actually be that collecting everything may have encountered the same listener more than once, but that should not be the case for the broadcast.",
+      "revId": "2e7d8cef905e0850a982a203c02c8d4a04256c22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
