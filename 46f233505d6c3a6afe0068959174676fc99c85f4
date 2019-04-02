@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_55733ee8",
+        "filename": "sw/source/core/doc/docnew.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-02T08:36:46Z",
+      "side": 1,
+      "message": "rather just don\u0027t use const here, then the const_cast below becomes unnecessary\n\n(const_cast should be avoided where possible, its a bit of a hacky thing)",
+      "revId": "46f233505d6c3a6afe0068959174676fc99c85f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
