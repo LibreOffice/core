@@ -296,7 +296,7 @@ Graphic SvXMLGraphicOutputStream::GetGraphic()
         mpOStm->Seek( 0 );
         sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
         sal_uInt16 nDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
-        GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, "", *mpOStm ,nFormat, &nDeterminedFormat );
+        GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, "", *mpOStm ,nFormat,&nDeterminedFormat);
 
         if (nDeterminedFormat == GRFILTER_FORMAT_DONTKNOW)
         {
@@ -760,8 +760,8 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
             std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(aStream.xStream));
             if (bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData())
             {
-                const std::shared_ptr<uno::Sequence<sal_Int8>>& rPdfData = aGraphic.getPdfData();
-                if (rPdfData && rPdfData->hasElements())
+                const std::shared_ptr<std::vector<sal_Int8>>& rPdfData = aGraphic.getPdfData();
+                if (rPdfData && !rPdfData->empty())
                 {
                     // See if we have this PDF already, and avoid duplicate storage.
                     auto aIt = maExportPdf.find(rPdfData.get());
@@ -776,7 +776,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                     // vcl::ImportPDF() possibly downgraded the PDF data from a
                     // higher PDF version, while aGfxLink still contains the
                     // original data provided by the user.
-                    pStream->WriteBytes(rPdfData->getConstArray(), rPdfData->getLength());
+                    pStream->WriteBytes(rPdfData->data(), rPdfData->size());
                 }
                 else
                 {
