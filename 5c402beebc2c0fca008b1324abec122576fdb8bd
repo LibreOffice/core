@@ -81,6 +81,24 @@
       "revId": "5c402beebc2c0fca008b1324abec122576fdb8bd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_58f61392",
+        "filename": "sc/source/ui/unoobj/shapeuno.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-02T12:57:35Z",
+      "side": 1,
+      "message": "Got it, SCA_CELL_RESIZE is the result if mbResizeWithCell\u003dtrue",
+      "parentUuid": "df87a7cf_7583e205",
+      "revId": "5c402beebc2c0fca008b1324abec122576fdb8bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
