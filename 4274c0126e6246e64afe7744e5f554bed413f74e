@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_d82c639b",
+        "filename": "svx/uiconfig/ui/crashreportdlg.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2019-04-02T09:11:39Z",
+      "side": 1,
+      "message": "Hi Caolán,\nNot really related to the goal of this commit but do you think this link could be clickable ?",
+      "revId": "4274c0126e6246e64afe7744e5f554bed413f74e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
