@@ -82,6 +82,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/graphicmimetype.hxx>
+#include <comphelper/lok.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/dibtools.hxx>
@@ -140,9 +141,12 @@ public:
     void testTableBorderLineStyle();
     void testBnc862510_6();
     void testBnc862510_7();
-#if ENABLE_PDFIMPORT && defined(IMPORT_PDF_ELEMENTS)
+#if ENABLE_PDFIMPORT
+    void testPDFImportShared();
+#if defined(IMPORT_PDF_ELEMENTS)
     void testPDFImport();
     void testPDFImportSkipImages();
+#endif
 #endif
     void testBulletSuffix();
     void testBnc910045();
@@ -232,9 +236,12 @@ public:
     CPPUNIT_TEST(testTableBorderLineStyle);
     CPPUNIT_TEST(testBnc862510_6);
     CPPUNIT_TEST(testBnc862510_7);
-#if ENABLE_PDFIMPORT && defined(IMPORT_PDF_ELEMENTS)
+#if ENABLE_PDFIMPORT
+    CPPUNIT_TEST(testPDFImportShared);
+#if defined(IMPORT_PDF_ELEMENTS)
     CPPUNIT_TEST(testPDFImport);
     CPPUNIT_TEST(testPDFImportSkipImages);
+#endif
 #endif
     CPPUNIT_TEST(testBulletSuffix);
     CPPUNIT_TEST(testBnc910045);
