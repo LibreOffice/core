@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/beans/xpropertyset.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
@@ -33,7 +34,8 @@ class ScAutoFormatObj : public CalcUnoApiTest,
                         public apitest::XElementAccess,
                         public apitest::XEnumerationAccess,
                         public apitest::XIndexAccess,
-                        public apitest::XNamed
+                        public apitest::XNamed,
+                        public apitest::XPropertySet
 {
 public:
     ScAutoFormatObj();
@@ -61,6 +63,13 @@ public:
     // XNamed
     CPPUNIT_TEST(testGetName);
     CPPUNIT_TEST(testSetName);
+
+    // XPropertySet
+    CPPUNIT_TEST(testGetPropertySetInfo);
+    CPPUNIT_TEST(testGetPropertyValue);
+    CPPUNIT_TEST(testSetPropertyValue);
+    CPPUNIT_TEST(testPropertyChangeListener);
+    CPPUNIT_TEST(testVetoableChangeListener);
 
     CPPUNIT_TEST_SUITE_END();
 

@@ -23,7 +23,6 @@
 # FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
 # -o sc.ScAnnotationShapeObj
 -o sc.ScAutoFormatFieldObj
--o sc.ScAutoFormatObj
 -o sc.ScCellCursorObj
 # ported to cppunit -o sc.ScCellFieldObj
 -o sc.ScCellObj
