@@ -92,6 +92,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/graphicmimetype.hxx>
+#include <comphelper/lok.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/dibtools.hxx>
@@ -149,9 +150,12 @@ public:
     void testTableBorderLineStyle();
     void testBnc862510_6();
     void testBnc862510_7();
-#if ENABLE_PDFIMPORT && defined(IMPORT_PDF_ELEMENTS)
+#if ENABLE_PDFIMPORT
+    void testPDFImportShared();
+#if defined(IMPORT_PDF_ELEMENTS)
     void testPDFImport();
     void testPDFImportSkipImages();
+#endif
 #endif
     void testBulletSuffix();
     void testBnc910045();
@@ -242,9 +246,12 @@ public:
     CPPUNIT_TEST(testTableBorderLineStyle);
     CPPUNIT_TEST(testBnc862510_6);
     CPPUNIT_TEST(testBnc862510_7);
-#if ENABLE_PDFIMPORT && defined(IMPORT_PDF_ELEMENTS)
+#if ENABLE_PDFIMPORT
+    CPPUNIT_TEST(testPDFImportShared);
+#if defined(IMPORT_PDF_ELEMENTS)
     CPPUNIT_TEST(testPDFImport);
     CPPUNIT_TEST(testPDFImportSkipImages);
+#endif
 #endif
     CPPUNIT_TEST(testBulletSuffix);
     CPPUNIT_TEST(testBnc910045);
@@ -1193,7 +1200,66 @@ void SdImportTest::testBnc862510_7()
     xDocShRef->DoClose();
 }
 
-#if ENABLE_PDFIMPORT && defined(IMPORT_PDF_ELEMENTS)
+#if ENABLE_PDFIMPORT
+
+void SdImportTest::testPDFImportShared()
+{
+    comphelper::LibreOfficeKit::setActive();
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pdf/multipage.pdf"), PDF);
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
+
+    // This test is to verify that we share the PDF stream linked to each
+    // Graphic instance in the imported document.
+    // Since we import PDFs as images, we support attaching the original
+    // PDF with each image to allow for advanced editing.
+    // Here we iterate over all Graphic instances embedded in the pages
+    // and verify that they all point to the same object in memory.
+    std::vector<std::shared_ptr<std::vector<sal_Int8>>> aPdfSeqSharedPtrs;
+    std::vector<std::shared_ptr<GfxLink>> aGfxLinkSharedPtrs;
+
+    for (int nPageIndex = 0; nPageIndex < pDoc->GetPageCount(); ++nPageIndex)
+    {
+        const SdrPage* pPage = GetPage(nPageIndex, xDocShRef);
+        if (pPage == nullptr)
+            break;
+
+        for (size_t nObjIndex = 0; nObjIndex < pPage->GetObjCount(); ++nObjIndex)
+        {
+            SdrObject* pObject = pPage->GetObj(nObjIndex);
+            if (pObject == nullptr)
+                continue;
+
+            SdrGrafObj* pSdrGrafObj = dynamic_cast<SdrGrafObj*>(pObject);
+            if (pSdrGrafObj == nullptr)
+                continue;
+
+            const GraphicObject& rGraphicObject = pSdrGrafObj->GetGraphicObject().GetGraphic();
+            const Graphic& rGraphic = rGraphicObject.GetGraphic();
+            aPdfSeqSharedPtrs.push_back(rGraphic.getPdfData());
+            aGfxLinkSharedPtrs.push_back(rGraphic.GetSharedGfxLink());
+        }
+    }
+
+    CPPUNIT_ASSERT_MESSAGE("Expected more than one page.", aPdfSeqSharedPtrs.size() > 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected as many PDF streams as GfxLinks.",
+                                 aPdfSeqSharedPtrs.size(), aGfxLinkSharedPtrs.size());
+
+    const std::shared_ptr<std::vector<sal_Int8>> pPdfSeq = aPdfSeqSharedPtrs[0];
+    const std::shared_ptr<GfxLink> pGfxLink = aGfxLinkSharedPtrs[0];
+    for (size_t i = 0; i < aPdfSeqSharedPtrs.size(); ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected all PDF streams to be identical.",
+                                     aPdfSeqSharedPtrs[i].get(), pPdfSeq.get());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected all GfxLinks to be identical.",
+                                     aGfxLinkSharedPtrs[i].get(), pGfxLink.get());
+    }
+
+    xDocShRef->DoClose();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+#if defined(IMPORT_PDF_ELEMENTS)
 
 void SdImportTest::testPDFImport()
 {
@@ -1230,6 +1296,7 @@ void SdImportTest::testPDFImportSkipImages()
     xDocShRef->DoClose();
 }
 
+#endif
 #endif
 
 void SdImportTest::testBulletSuffix()
