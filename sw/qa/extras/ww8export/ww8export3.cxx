@@ -254,6 +254,29 @@ DECLARE_WW8EXPORT_TEST(testBtlrFrame, "btlr-frame.odt")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9000), getProperty<sal_Int32>(xFrame, "RotateAngle"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf118375export, "tdf118375_240degClockwise.doc")
+{
+    // The input document has one custom shape, which is rotated 240deg. Check
+    // that it has the same position as in Word.
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("Could not get XDrawPagesSupplier", xDrawPagesSupplier.is());
+    uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("Could not get xDrawPage", xDrawPage.is());
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get xShape", xShape.is());
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
+    sal_Int32 nPosX, nPosY;
+    xShapeProps->getPropertyValue("HoriOrientPosition") >>= nPosX;
+    xShapeProps->getPropertyValue("VertOrientPosition") >>= nPosY;
+    // Allow some tolerance because rounding errors through integer arithmethic
+    // in rotation.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5200.0, static_cast<double>(nPosX), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1152.0, static_cast<double>(nPosY), 1.0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
