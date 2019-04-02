@@ -1664,6 +1664,11 @@ void ImpGraphic::ImplSetLink(const std::shared_ptr<GfxLink>& rGfxLink)
     mpGfxLink = rGfxLink;
 }
 
+std::shared_ptr<GfxLink> ImpGraphic::ImplGetSharedGfxLink() const
+{
+    return mpGfxLink;
+}
+
 GfxLink ImpGraphic::ImplGetLink()
 {
     ensureAvailable();
