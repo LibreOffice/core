@@ -99,8 +99,8 @@ public:
                                             const css::uno::Any& TextBoundaries,
                                             const css::uno::Any& VRuler,
                                             const css::uno::Any& Highlight ) override;
-    virtual OUString SAL_CALL WindowName() override;
-    virtual sal_Bool SAL_CALL ExistingBookmark( const OUString& Name ) override;
+    virtual css::uno::Any SAL_CALL WindowName( const css::uno::Any& Number ) override;
+    virtual css::uno::Any SAL_CALL ExistingBookmark( const OUString& Name ) override;
     virtual void SAL_CALL MailMergeOpenDataSource(const OUString& Name, const css::uno::Any& Format,
                                                   const css::uno::Any& ConfirmConversions, const css::uno::Any& ReadOnly,
                                                   const css::uno::Any& LinkToSource, const css::uno::Any& AddToRecentFiles,
@@ -109,10 +109,10 @@ public:
                                                   const css::uno::Any& WritePasswordTemplate, const css::uno::Any& Connection,
                                                   const css::uno::Any& SQLStatement, const css::uno::Any& SQLStatement1,
                                                   const css::uno::Any& OpenExclusive, const css::uno::Any& SubType) override;
-    virtual sal_Int32 SAL_CALL AppMaximize( const css::uno::Any& WindowName, const css::uno::Any& State ) override;
-    virtual sal_Int32 SAL_CALL DocMaximize( const css::uno::Any& State ) override;
+    virtual css::uno::Any SAL_CALL AppMaximize( const css::uno::Any& WindowName, const css::uno::Any& State ) override;
+    virtual css::uno::Any SAL_CALL DocMaximize( const css::uno::Any& State ) override;
     virtual void SAL_CALL AppShow(  const css::uno::Any& WindowName ) override;
-    virtual sal_Int32 SAL_CALL AppCount() override;
+    virtual css::uno::Any SAL_CALL AppCount() override;
 };
 
 SwVbaApplication::SwVbaApplication( uno::Reference<uno::XComponentContext >& xContext ):
@@ -619,17 +619,17 @@ SwWordBasic::ToolsOptionsView( const css::uno::Any& DraftFont,
              << ")");
 }
 
-OUString SAL_CALL
-SwWordBasic::WindowName()
+css::uno::Any SAL_CALL
+SwWordBasic::WindowName( const css::uno::Any& /*Number*/ )
 {
-    return mpApp->getActiveSwVbaWindow()->getCaption();
+    return css::uno::makeAny( mpApp->getActiveSwVbaWindow()->getCaption() );
 }
 
-sal_Bool SAL_CALL
+css::uno::Any SAL_CALL
 SwWordBasic::ExistingBookmark( const OUString& Name )
 {
     uno::Reference< word::XBookmarks > xBookmarks( mpApp->getActiveDocument()->Bookmarks( uno::Any() ), uno::UNO_QUERY );
-    return xBookmarks.is() && xBookmarks->Exists( Name );
+    return css::uno::makeAny( xBookmarks.is() && xBookmarks->Exists( Name ) );
 }
 
 void SAL_CALL
@@ -651,22 +651,22 @@ SwWordBasic::MailMergeOpenDataSource( const OUString& Name, const css::uno::Any&
                                                                 OpenExclusive, SubType );
 }
 
-sal_Int32 SAL_CALL
+css::uno::Any SAL_CALL
 SwWordBasic::AppMaximize( const css::uno::Any& WindowName, const css::uno::Any& State )
 {
     SAL_INFO("sw.vba", "WordBasic.AppMaximize( WindowName:=" << WindowName << ", State:=" << State);
 
     // FIXME: Implement if necessary
-    return 0;
+    return css::uno::makeAny( sal_Int32(0) );
 }
 
-sal_Int32 SAL_CALL
+css::uno::Any SAL_CALL
 SwWordBasic::DocMaximize( const css::uno::Any& State )
 {
     SAL_INFO("sw.vba", "WordBasic.DocMaximize(State:=" << State << ")");
 
     // FIXME: Implement if necessary
-    return 0;
+    return css::uno::makeAny( sal_Int32(0) );
 }
 
 void SAL_CALL
@@ -677,13 +677,13 @@ SwWordBasic::AppShow( const css::uno::Any& WindowName )
     // FIXME: Implement if necessary
 }
 
-sal_Int32 SAL_CALL
+css::uno::Any SAL_CALL
 SwWordBasic::AppCount()
 {
     SAL_INFO("sw.vba", "WordBasic.AppCount()");
 
     // FIXME: Implement if necessary. Return a random number for now.
-    return 2;
+    return css::uno::makeAny( sal_Int32(2) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
