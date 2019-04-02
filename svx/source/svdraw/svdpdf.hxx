@@ -161,7 +161,7 @@ class ImpSdrPdfImport final
     ::std::vector<SdrObject*> maTmpList;
     ScopedVclPtr<VirtualDevice> mpVD;
     tools::Rectangle const maScaleRect;
-    const std::shared_ptr<css::uno::Sequence<sal_Int8>> mpPdfData;
+    const std::shared_ptr<std::vector<sal_Int8>> mpPdfData;
     size_t mnMapScalingOfs; // from here on, not edited with MapScaling
     std::unique_ptr<SfxItemSet> mpLineAttr;
     std::unique_ptr<SfxItemSet> mpFillAttr;
@@ -233,7 +233,7 @@ class ImpSdrPdfImport final
 
 public:
     ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools::Rectangle& rRect,
-                    const std::shared_ptr<css::uno::Sequence<sal_Int8>>& pPdfData);
+                    const std::shared_ptr<std::vector<sal_Int8>>& pPdfData);
     ~ImpSdrPdfImport();
 
     int GetPageCount() const { return mnPageCount; }
