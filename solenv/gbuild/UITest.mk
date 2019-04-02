@@ -54,7 +54,8 @@ else
 	$(call gb_Output_announce,$*,$(true),UIT,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf $(dir $(call gb_UITest_get_target,$*)) && \
-		mkdir -p $(dir $(call gb_UITest_get_target,$*)) && \
+		mkdir -p $(dir $(call gb_UITest_get_target,$*))/user && \
+		cp $(SRCDIR)/qadevOOo/qa/registrymodifications.xcu $(dir $(call gb_UITest_get_target,$*))/user/ && \
 		$(if $(gb_UITest__interactive),, \
 		    rm -fr $@.core && mkdir -p $(dir $(call gb_UITest_get_target,$*))user/ && mkdir $@.core && cd $@.core && ) \
 		$(if $(gb_UITest_use_config), \
