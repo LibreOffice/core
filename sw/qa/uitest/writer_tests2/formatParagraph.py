@@ -281,7 +281,7 @@ class formatParagraph(UITestCase):
         props = {"TEXT": "Level 1"}
         actionProps = mkPropertyValues(props)
         xOutline.executeAction("SELECT", actionProps)
-        props2 = {"TEXT": "List 1"}
+        props2 = {"TEXT": "Bullet •"}
         actionProps2 = mkPropertyValues(props2)
         xNumbering.executeAction("SELECT", actionProps2)
         xPara.executeAction("CLICK", tuple())
