@@ -88,7 +88,7 @@
 #include <gridwin.hxx>
 
 // Maximum Ranges in RangeFinder
-#define RANGEFIND_MAX   64
+#define RANGEFIND_MAX   128
 
 using namespace formula;
 

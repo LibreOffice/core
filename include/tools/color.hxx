@@ -284,6 +284,9 @@ constexpr ::Color COL_AUTHOR8_LIGHT           ( 226,  234, 241 );
 constexpr ::Color COL_AUTHOR9_DARK            ( 209,  118,   0 );
 constexpr ::Color COL_AUTHOR9_NORMAL          ( 255,  226, 185 );
 constexpr ::Color COL_AUTHOR9_LIGHT           ( 255,  231, 199 );
+constexpr ::Color COL_FUCHSIA                 ( 255,    0, 255 );
+constexpr ::Color COL_ORANGE                  ( 255,  165,   0 );
+
 
 #endif
 
