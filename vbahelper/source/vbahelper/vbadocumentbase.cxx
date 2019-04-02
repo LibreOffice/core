@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/XApplicationBase.hpp>
 
+#include <comphelper/automationinvokedzone.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <tools/urlobj.hxx>
@@ -97,6 +98,15 @@ VbaDocumentBase::getPath()
 OUString
 VbaDocumentBase::getFullName()
 {
+    // In the Automation case, follow the specs.
+    if (comphelper::Automation::AutomationInvokedZone::isActive())
+    {
+        // We know that Automation is relevant only on Windows, so hardcode "\\".
+        OUString sPath = getPath() + "\\" + getName();
+        SAL_INFO("vbahelper", "VbaDocumentBase::getFullName: '" << sPath << "'");
+        return sPath;
+    }
+
     OUString sPath = getName();
     //::osl::File::getSystemPathFromFileURL( getModel()->getURL(), sPath );
     SAL_INFO("vbahelper", "VbaDocumentBase::getFullName: '" << sPath << "'");
