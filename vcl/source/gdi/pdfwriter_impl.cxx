@@ -4875,12 +4875,12 @@ bool PDFWriterImpl::emitEmbeddedFiles()
         aLine.append(rEmbeddedFile.m_nObject);
         aLine.append(" 0 obj\n");
         aLine.append("<< /Type /EmbeddedFile /Length ");
-        aLine.append(static_cast<sal_Int64>(rEmbeddedFile.m_aData.size()));
+        aLine.append(static_cast<sal_Int64>(rEmbeddedFile.m_pData->size()));
         aLine.append(" >>\nstream\n");
         CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
         aLine.setLength(0);
 
-        CHECK_RETURN(writeBuffer(rEmbeddedFile.m_aData.data(), rEmbeddedFile.m_aData.size()));
+        CHECK_RETURN(writeBuffer(rEmbeddedFile.m_pData->data(), rEmbeddedFile.m_pData->size()));
 
         aLine.append("\nendstream\nendobj\n\n");
         CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
@@ -9688,18 +9688,18 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
     sal_uInt32 nLength = rGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength();
     auto const & rArray = rGraphic.getVectorGraphicData()->getVectorGraphicDataArray();
 
-    std::vector<sal_Int8> aPDFData(rArray.getConstArray(), rArray.getConstArray() + nLength);
+    auto pPDFData = std::make_shared<std::vector<sal_Int8>>(rArray.getConstArray(), rArray.getConstArray() + nLength);
 
     if (m_aContext.UseReferenceXObject)
     {
         // Store the original PDF data as an embedded file.
         m_aEmbeddedFiles.emplace_back();
         m_aEmbeddedFiles.back().m_nObject = createObject();
-        m_aEmbeddedFiles.back().m_aData = aPDFData;
+        m_aEmbeddedFiles.back().m_pData = pPDFData;
         rEmit.m_nEmbeddedObject = m_aEmbeddedFiles.back().m_nObject;
     }
     else
-        rEmit.m_aPDFData = aPDFData;
+        rEmit.m_aPDFData = *pPDFData;
 
     rEmit.m_nFormObject = createObject();
     rEmit.m_aPixelSize = rGraphic.GetPrefSize();
