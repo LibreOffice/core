@@ -11,8 +11,6 @@ svx/uiconfig/ui/chinesedictionary.ui://GtkLabel[@id='mappingft'] orphan-label
 svx/uiconfig/ui/chinesedictionary.ui://GtkEntry[@id='mapping'] no-labelled-by
 svx/uiconfig/ui/chinesedictionary.ui://GtkLabel[@id='propertyft'] orphan-label
 svx/uiconfig/ui/chinesedictionary.ui://GtkComboBoxText[@id='property'] no-labelled-by
-svx/uiconfig/ui/chinesedictionary.ui://svtlo-SvSimpleTableContainer[@id='tradtosimpleview:border'] no-labelled-by
-svx/uiconfig/ui/chinesedictionary.ui://svtlo-SvSimpleTableContainer[@id='simpletotradview:border'] no-labelled-by
 svx/uiconfig/ui/classificationdialog.ui:GtkDialog[@id='AdvancedDocumentClassificationDialog']/GtkBox[@id='dialog-vbox1']/GtkGrid/GtkGrid/GtkLabel orphan-label
 svx/uiconfig/ui/classificationdialog.ui:GtkDialog[@id='AdvancedDocumentClassificationDialog']/GtkBox[@id='dialog-vbox1']/GtkGrid/GtkGrid/GtkLabel orphan-label
 svx/uiconfig/ui/classificationdialog.ui://GtkComboBoxText[@id='classificationCB'] no-labelled-by
@@ -100,7 +98,6 @@ svx/uiconfig/ui/mediaplayback.ui://GtkEntry[@id='timeedit:border'] no-labelled-b
 svx/uiconfig/ui/mediaplayback.ui://GtkScale[@id='volumeslider'] no-labelled-by
 svx/uiconfig/ui/namespacedialog.ui://GtkLabel[@id='prefix'] orphan-label
 svx/uiconfig/ui/namespacedialog.ui://GtkLabel[@id='url'] orphan-label
-svx/uiconfig/ui/namespacedialog.ui://svtlo-SvSimpleTableContainer[@id='namespaces'] no-labelled-by
 svx/uiconfig/ui/oldcolorwindow.ui://GtkButton[@id='auto_color_button'] button-no-label
 svx/uiconfig/ui/oldcolorwindow.ui://GtkComboBox[@id='palette_listbox'] no-labelled-by
 svx/uiconfig/ui/oldcolorwindow.ui://GtkLabel[@id='label1'] orphan-label
