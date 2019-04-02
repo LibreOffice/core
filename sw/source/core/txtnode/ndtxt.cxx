@@ -1394,7 +1394,7 @@ void SwTextNode::Update(
             bool bAtLeastOneBookmarkMoved = false;
             bool bAtLeastOneExpandedBookmarkAtInsertionPosition = false;
             // A text node already knows its marks via its SwIndexes.
-            std::unordered_set<const sw::mark::IMark*> aSeenMarks;
+            o3tl::sorted_vector<const sw::mark::IMark*> aSeenMarks;
             const SwIndex* next;
             for (const SwIndex* pIndex = GetFirstIndex(); pIndex; pIndex = next )
             {
