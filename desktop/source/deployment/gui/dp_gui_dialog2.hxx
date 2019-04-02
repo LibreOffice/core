@@ -32,8 +32,6 @@
 #include <vcl/waitobj.hxx>
 #include <vcl/weld.hxx>
 
-#include <svtools/svmedit.hxx>
-
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
 

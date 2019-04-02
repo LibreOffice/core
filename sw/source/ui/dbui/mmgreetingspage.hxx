@@ -22,7 +22,6 @@
 #include <svtools/wizardmachine.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <mailmergehelper.hxx>
-#include <svtools/svmedit.hxx>
 #include <vcl/weld.hxx>
 
 class SwMailMergeWizard;

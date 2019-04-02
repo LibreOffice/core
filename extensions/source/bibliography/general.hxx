@@ -26,7 +26,6 @@
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
 
 #include <vcl/layout.hxx>
-#include <svtools/svmedit.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/scrbar.hxx>

@@ -23,12 +23,12 @@
 #include "migrationprogress.hxx"
 #include "rangeprogressbar.hxx"
 
-#include <svtools/svmedit.hxx>
 #include <svtools/urlcontrol.hxx>
 #include <svtools/wizardmachine.hxx>
 #include <svx/databaselocationinput.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/vclmedit.hxx>
 
 namespace svt
 {

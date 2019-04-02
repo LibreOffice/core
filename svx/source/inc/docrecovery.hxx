@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_SOURCE_INC_DOCRECOVERY_HXX
 
 #include <vcl/weld.hxx>
-#include <svtools/svmedit2.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <cppuhelper/implbase.hxx>

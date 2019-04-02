@@ -19,8 +19,8 @@
 #ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_BASTYPE3_HXX
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_BASTYPE3_HXX
 
-#include <svtools/svmedit.hxx>
 #include <vcl/accel.hxx>
+#include <vcl/edit.hxx>
 
 namespace basctl
 {

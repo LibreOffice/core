@@ -20,9 +20,6 @@
 #define INCLUDED_SW_SOURCE_UI_DBUI_ADDRESSLISTDIALOG_HXX
 
 #include <sfx2/basedlgs.hxx>
-#include <vcl/button.hxx>
-#include <vcl/svtabbx.hxx>
-#include <vcl/headbar.hxx>
 #include <swdbdata.hxx>
 #include <sharedconnection.hxx>
 

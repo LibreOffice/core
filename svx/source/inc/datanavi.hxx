@@ -20,7 +20,6 @@
 #define INCLUDED_SVX_SOURCE_INC_DATANAVI_HXX
 
 #include <vcl/builder.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
@@ -31,8 +30,6 @@
 #include <vcl/idle.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/inettbc.hxx>
-#include <svtools/simptabl.hxx>
-#include <svtools/svmedit.hxx>
 #include <vcl/treelistbox.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/childwin.hxx>
