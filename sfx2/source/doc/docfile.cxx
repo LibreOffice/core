@@ -763,9 +763,9 @@ bool SfxMedium::IsStorage()
     {
         OUString aURL;
         if ( osl::FileBase::getFileURLFromSystemPath( pImpl->m_aName, aURL )
-             == osl::FileBase::E_None )
+             != osl::FileBase::E_None )
         {
-            SAL_WARN( "sfx.doc", "Physical name not convertible!");
+            SAL_WARN( "sfx.doc", "Physical name '" << pImpl->m_aName << "' not convertible to file URL");
         }
         pImpl->bIsStorage = SotStorage::IsStorageFile( aURL ) && !SotStorage::IsOLEStorage( aURL);
         if ( !pImpl->bIsStorage )
