@@ -311,29 +311,27 @@ lcl_TypeToPropertyMap_Index(const TOXTypes eType)
 }
 
 class SwXDocumentIndex::Impl
-    : public SwClient
+    : public SvtListener
 {
 private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
+    SwSectionFormat* m_pFormat;
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
     ::cppu::OMultiTypeInterfaceContainerHelper m_Listeners;
-    SfxItemPropertySet const&   m_rPropSet;
-    const TOXTypes              m_eTOXType;
-    bool                        m_bIsDescriptor;
-    SwDoc *                     m_pDoc;
+    SfxItemPropertySet const& m_rPropSet;
+    const TOXTypes m_eTOXType;
+    bool m_bIsDescriptor;
+    SwDoc* m_pDoc;
     std::unique_ptr<SwDocIndexDescriptorProperties_Impl> m_pProps;
     uno::WeakReference<container::XIndexReplace> m_wStyleAccess;
     uno::WeakReference<container::XIndexReplace> m_wTokenAccess;
 
-    Impl(   SwDoc & rDoc,
-            const TOXTypes eType,
-            SwTOXBaseSection *const pBaseSection)
-        : SwClient(pBaseSection ? pBaseSection->GetFormat() : nullptr)
+    Impl(SwDoc& rDoc, const TOXTypes eType, SwTOXBaseSection *const pBaseSection)
+        : m_pFormat(pBaseSection ? pBaseSection->GetFormat() : nullptr)
         , m_Listeners(m_Mutex)
-        , m_rPropSet(
-            *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Index(eType)))
+        , m_rPropSet(*aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Index(eType)))
         , m_eTOXType(eType)
         , m_bIsDescriptor(nullptr == pBaseSection)
         , m_pDoc(&rDoc)
@@ -341,11 +339,19 @@ public:
             ? new SwDocIndexDescriptorProperties_Impl(rDoc.GetTOXType(eType, 0))
             : nullptr)
     {
+        if(m_pFormat)
+            StartListening(m_pFormat->GetNotifier());
     }
 
-    SwSectionFormat * GetSectionFormat() const {
-        return static_cast<SwSectionFormat *>(
-                const_cast<SwModify *>(GetRegisteredIn()));
+    void SetSectionFormat(SwSectionFormat& rFormat)
+    {
+        EndListeningAll();
+        m_pFormat = &rFormat;
+        StartListening(rFormat.GetNotifier());
+    }
+
+    SwSectionFormat* GetSectionFormat() const {
+        return m_pFormat;
     }
 
     SwTOXBase & GetTOXSectionOrThrow() const
@@ -371,27 +377,30 @@ public:
             ? SwForm::GetFormMaxLevel(m_eTOXType)
             : rSection.GetTOXForm().GetFormMax();
     }
-protected:
-    // SwClient
-    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
+    virtual void Notify(const SfxHint&) override;
 
 };
 
-void SwXDocumentIndex::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
+void SwXDocumentIndex::Impl::Notify(const SfxHint& rHint)
 {
-    ClientModify(this, pOld, pNew);
-    if (GetRegisteredIn())
+    if(auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        return; // core object still alive
+        if(pLegacy->m_pOld && pLegacy->m_pOld->Which() == RES_REMOVE_UNO_OBJECT)
+            m_pFormat = nullptr;
     }
-
-    uno::Reference<uno::XInterface> const xThis(m_wThis);
-    if (!xThis.is())
-    {   // fdo#72695: if UNO object is already dead, don't revive it with event
-        return;
+    else if(rHint.GetId() == SfxHintId::Dying)
+        m_pFormat = nullptr;
+    if(!m_pFormat)
+    {
+        EndListeningAll();
+        uno::Reference<uno::XInterface> const xThis(m_wThis);
+        if (!xThis.is())
+        {   // fdo#72695: if UNO object is already dead, don't revive it with event
+            return;
+        }
+        lang::EventObject const ev(xThis);
+        m_Listeners.disposeAndClear(ev);
     }
-    lang::EventObject const ev(xThis);
-    m_Listeners.disposeAndClear(ev);
 }
 
 SwXDocumentIndex::SwXDocumentIndex(
@@ -1356,7 +1365,7 @@ SwXDocumentIndex::attach(const uno::Reference< text::XTextRange > & xTextRange)
     pDoc->SetTOXBaseName(*pTOX, m_pImpl->m_pProps->GetTOXBase().GetTOXName());
 
     // update page numbers
-    pTOX->GetFormat()->Add(m_pImpl.get());
+    m_pImpl->SetSectionFormat(*pTOX->GetFormat());
     pTOX->GetFormat()->SetXObject(static_cast< ::cppu::OWeakObject*>(this));
     pTOX->UpdatePageNum();
 
