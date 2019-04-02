@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <test/table/tablerow.hxx>
 #include <test/table/xcellrange.hxx>
 
@@ -30,7 +31,8 @@ namespace sc_apitest
 class ScTableRowObj : public CalcUnoApiTest,
                       public apitest::TableRow,
                       public apitest::XCellRange,
-                      public apitest::XPropertySet
+                      public apitest::XPropertySet,
+                      public apitest::XServiceInfo
 {
 public:
     ScTableRowObj();
@@ -55,6 +57,11 @@ public:
     CPPUNIT_TEST(testSetPropertyValue);
     CPPUNIT_TEST(testPropertyChangeListener);
     CPPUNIT_TEST(testVetoableChangeListener);
+
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -98,6 +105,7 @@ ScTableRowObj::ScTableRowObj()
                      "ValidationLocal",
                      "ValidationXML",
                      "WritingMode" })
+    , XServiceInfo("ScTableRowObj", "com.sun.star.table.TableRow")
 {
 }
 
