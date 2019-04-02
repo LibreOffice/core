@@ -1125,15 +1125,7 @@ void transformURL(const OUString& rOldURL, OUString& rNewURL, const ScDocument* 
             }
         }
     }
-
-    if ( rOldURL.indexOf("file:///") == 0 )
-    {
-        // external title transformation: file:///drive:/access/path/file_name => file:///drive:\access\path\file_name
-        OUString sURL = rOldURL.copy(8);
-        rNewURL = "file:///" + sURL.replace('/',0x5c);
-    }
-    else
-        rNewURL = rOldURL;
+    rNewURL = rOldURL;
 }
 
 class ScURLTransformer : public oox::drawingml::URLTransformer
@@ -1153,10 +1145,7 @@ public:
 
     virtual bool isExternalURL(const OUString& rURL) const override
     {
-        if (rURL.startsWith("#"))
-            return false;
-
-        return true;
+        return !rURL.startsWith("#");
     }
 
 private:

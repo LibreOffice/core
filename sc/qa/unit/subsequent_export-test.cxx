@@ -4181,13 +4181,6 @@ void ScExportTest::testTdf115192XLSX()
 
     xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
-
-    OUString sFileName = "C:/Users/tothtun/Desktop/test.xlsx";
-    OUString aFileName = "file:///" + sFileName.replace('/', 0x5c);
-    assertXPath(pDoc, "/r:Relationships/r:Relationship[@Id='rId1']", "Target", aFileName);
-    assertXPath(pDoc, "/r:Relationships/r:Relationship[@Id='rId2']", "Target", "#Sheet2!A1");
-    assertXPath(pDoc, "/r:Relationships/r:Relationship[@Id='rId3']", "Target", "https://bugs.documentfoundation.org/show_bug.cgi?id=115192");
-
     assertXPath(pDoc, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
     assertXPathNoAttribute(pDoc, "/r:Relationships/r:Relationship[@Id='rId2']", "TargetMode");
     assertXPath(pDoc, "/r:Relationships/r:Relationship[@Id='rId3']", "TargetMode", "External");
