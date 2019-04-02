@@ -507,7 +507,6 @@ custom_widgets = [
     'SvxLanguageComboBox',
     'SvxLightCtl3D',
     'SvxNoSpaceEdit',
-    'SvxPathControl',
     'SvxRelativeField',
     'SvxTextEncodingBox',
     'SvxTextEncodingBox',

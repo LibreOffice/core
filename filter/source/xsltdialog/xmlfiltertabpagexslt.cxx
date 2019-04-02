@@ -23,6 +23,7 @@
 #include <unotools/pathoptions.hxx>
 #include <osl/file.hxx>
 #include <svl/urihelper.hxx>
+#include <vcl/svapp.hxx>
 
 #include "xmlfiltertabpagexslt.hxx"
 #include "xmlfiltersettingsdialog.hxx"

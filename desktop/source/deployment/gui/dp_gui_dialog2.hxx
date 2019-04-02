@@ -93,7 +93,7 @@ public:
                                                const char* pResID,
                                                bool &bHadWarning );
 
-    void            incBusy() { m_aBusy.incBusy(m_xVCLWindow); }
+    void            incBusy() { m_aBusy.incBusy(m_xVCLWindow->GetFrameWeld()); }
     void            decBusy() { m_aBusy.decBusy(); }
     bool            isBusy() const { return m_aBusy.isBusy(); }
     bool            installExtensionWarn(const OUString &rExtensionURL);

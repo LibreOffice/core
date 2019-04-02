@@ -22,6 +22,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
+#include <vcl/weld.hxx>
 
 #include <stack>
 #include <vector>
@@ -46,7 +47,7 @@ private:
     std::stack<std::vector<VclPtr<vcl::Window>>> m_aBusyStack;
 public:
     // lock all toplevels, except the argument
-    void incBusy(const vcl::Window* pIgnore);
+    void incBusy(const weld::Window* pIgnore);
     // unlock previous lock
     void decBusy();
     bool isBusy() const { return !m_aBusyStack.empty(); }

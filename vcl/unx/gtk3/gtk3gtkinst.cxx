@@ -5953,6 +5953,11 @@ public:
         m_nRowInsertedSignalId = g_signal_connect(pModel, "row-inserted", G_CALLBACK(signalRowInserted), this);
     }
 
+    virtual void columns_autosize() override
+    {
+        gtk_tree_view_columns_autosize(m_pTreeView);
+    }
+
     virtual void set_column_fixed_widths(const std::vector<int>& rWidths) override
     {
         GList* pEntry = g_list_first(m_pColumns);

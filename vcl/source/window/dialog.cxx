@@ -1572,14 +1572,14 @@ void Dialog::Activate()
     SystemWindow::Activate();
 }
 
-void TopLevelWindowLocker::incBusy(const vcl::Window* pIgnore)
+void TopLevelWindowLocker::incBusy(const weld::Window* pIgnore)
 {
     // lock any toplevel windows from being closed until busy is over
     std::vector<VclPtr<vcl::Window>> aTopLevels;
     vcl::Window *pTopWin = Application::GetFirstTopLevelWindow();
     while (pTopWin)
     {
-        if (pTopWin != pIgnore)
+        if (pTopWin->GetFrameWeld() != pIgnore)
             aTopLevels.push_back(pTopWin);
         pTopWin = Application::GetNextTopLevelWindow(pTopWin);
     }

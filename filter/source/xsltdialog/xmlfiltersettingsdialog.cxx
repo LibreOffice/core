@@ -20,6 +20,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -67,37 +68,37 @@ OUString XsltResId(const char* pId)
     return Translate::get(pId, Translate::Create("flt"));
 }
 
-XMLFilterSettingsDialog::XMLFilterSettingsDialog(vcl::Window* pParent,
-    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-    Dialog::InitFlag eFlag)
-    : ModelessDialog(pParent, "XMLFilterSettingsDialog", "filter/ui/xmlfiltersettings.ui", eFlag)
+XMLFilterSettingsDialog::XMLFilterSettingsDialog(weld::Window* pParent,
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+    : GenericDialogController(pParent, "filter/ui/xmlfiltersettings.ui", "XMLFilterSettingsDialog")
     , mxContext( rxContext )
     , m_sTemplatePath("$(user)/template/")
     , m_sDocTypePrefix("doctype:")
+    , m_xPBNew(m_xBuilder->weld_button("new"))
+    , m_xPBEdit(m_xBuilder->weld_button("edit"))
+    , m_xPBTest(m_xBuilder->weld_button("test"))
+    , m_xPBDelete(m_xBuilder->weld_button("delete"))
+    , m_xPBSave(m_xBuilder->weld_button("save"))
+    , m_xPBOpen(m_xBuilder->weld_button("open"))
+    , m_xPBClose(m_xBuilder->weld_button("close"))
+    , m_xFilterListBox(m_xBuilder->weld_tree_view("filterlist"))
 {
-    get(m_pCtrlFilterList, "filterlist");
-    get(m_pPBNew, "new");
-    get(m_pPBEdit, "edit");
-    get(m_pPBTest, "test");
-    get(m_pPBDelete, "delete");
-    get(m_pPBSave, "save");
-    get(m_pPBOpen, "open");
-    get(m_pPBClose, "close");
+    m_xFilterListBox->set_selection_mode(SelectionMode::Multiple);
 
-    m_pFilterListBox = m_pCtrlFilterList->getListBox();
-    m_pFilterListBox->SetSelectHdl( LINK( this, XMLFilterSettingsDialog, SelectionChangedHdl_Impl ) );
-    m_pFilterListBox->SetDeselectHdl( LINK( this, XMLFilterSettingsDialog, SelectionChangedHdl_Impl ) );
-    m_pFilterListBox->SetDoubleClickHdl( LINK( this, XMLFilterSettingsDialog, DoubleClickHdl_Impl ) );
-    m_pFilterListBox->SetAccessibleName(XsltResId(STR_XML_FILTER_LISTBOX));
-    m_pFilterListBox->SetHelpId(m_pCtrlFilterList->GetHelpId());
+    m_xFilterListBox->set_size_request(m_xFilterListBox->get_approximate_digit_width() * 65,
+                                       m_xFilterListBox->get_height_rows(12));
 
-    m_pPBNew->SetClickHdl(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
-    m_pPBEdit->SetClickHdl(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
-    m_pPBTest->SetClickHdl(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
-    m_pPBDelete->SetClickHdl(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
-    m_pPBSave->SetClickHdl(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
-    m_pPBOpen->SetClickHdl(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
-    m_pPBClose->SetClickHdl(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
+    m_xFilterListBox->connect_changed( LINK( this, XMLFilterSettingsDialog, SelectionChangedHdl_Impl ) );
+    m_xFilterListBox->connect_row_activated( LINK( this, XMLFilterSettingsDialog, DoubleClickHdl_Impl ) );
+    m_xFilterListBox->set_accessible_name(XsltResId(STR_XML_FILTER_LISTBOX));
+
+    m_xPBNew->connect_clicked(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
+    m_xPBEdit->connect_clicked(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
+    m_xPBTest->connect_clicked(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
+    m_xPBDelete->connect_clicked(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
+    m_xPBSave->connect_clicked(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
+    m_xPBOpen->connect_clicked(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
+    m_xPBClose->connect_clicked(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
 
     try
     {
@@ -116,92 +117,75 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog(vcl::Window* pParent,
 
 XMLFilterSettingsDialog::~XMLFilterSettingsDialog()
 {
-    disposeOnce();
 }
 
-void XMLFilterSettingsDialog::dispose()
-{
-    m_pFilterListBox.clear();
-    m_pCtrlFilterList.clear();
-    m_pPBNew.clear();
-    m_pPBEdit.clear();
-    m_pPBTest.clear();
-    m_pPBDelete.clear();
-    m_pPBSave.clear();
-    m_pPBOpen.clear();
-    m_pPBClose.clear();
-    ModelessDialog::dispose();
-}
-
-IMPL_LINK(XMLFilterSettingsDialog, ClickHdl_Impl, Button *, pButton, void )
+IMPL_LINK(XMLFilterSettingsDialog, ClickHdl_Impl, weld::Button&, rButton, void)
 {
     // tdf#122171 block closing libreoffice until the following dialog is dismissed
     incBusy();
 
-    if (m_pPBNew == pButton)
+    if (m_xPBNew.get() == &rButton)
     {
         onNew();
     }
-    else if (m_pPBEdit == pButton)
+    else if (m_xPBEdit.get() == &rButton)
     {
         onEdit();
     }
-    else if (m_pPBTest == pButton)
+    else if (m_xPBTest.get() == &rButton)
     {
         onTest();
     }
-    else if (m_pPBDelete == pButton)
+    else if (m_xPBDelete.get() == &rButton)
     {
         onDelete();
     }
-    else if (m_pPBSave == pButton)
+    else if (m_xPBSave.get() == &rButton)
     {
         onSave();
     }
-    else if (m_pPBOpen == pButton)
+    else if (m_xPBOpen.get() == &rButton)
     {
         onOpen();
     }
-    else if (m_pPBClose == pButton)
-    {
-        Close();
-    }
 
     decBusy();
+
+    if (m_xPBClose.get() == &rButton)
+        m_xDialog->response(RET_CLOSE);
 }
 
-IMPL_LINK_NOARG(XMLFilterSettingsDialog, SelectionChangedHdl_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(XMLFilterSettingsDialog, SelectionChangedHdl_Impl, weld::TreeView&, void)
 {
     updateStates();
 }
 
-IMPL_LINK_NOARG(XMLFilterSettingsDialog, DoubleClickHdl_Impl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(XMLFilterSettingsDialog, DoubleClickHdl_Impl, weld::TreeView&, void)
 {
     onEdit();
-    return false;
 }
 
 void XMLFilterSettingsDialog::UpdateWindow()
 {
-    m_pCtrlFilterList->GrabFocus();
+    m_xFilterListBox->grab_focus();
     disposeFilterList();
-    m_pFilterListBox->Clear();
+    m_xFilterListBox->clear();
     initFilterList();
     updateStates();
 }
 
 void XMLFilterSettingsDialog::updateStates()
 {
-    SvTreeListEntry* pSelectedEntry = m_pFilterListBox->FirstSelected();
+    std::vector<int> aRows = m_xFilterListBox->get_selected_rows();
 
-    bool bHasSelection = pSelectedEntry != nullptr;
+    bool bHasSelection = !aRows.empty();
 
-    bool bMultiSelection = bHasSelection && (m_pFilterListBox->NextSelected( pSelectedEntry ) != nullptr );
+    bool bMultiSelection = aRows.size() > 1;
     bool bIsReadonly = false;
     bool bIsDefault = false;
-    if(pSelectedEntry)
+    if (bHasSelection)
     {
-        filter_info_impl* pInfo = static_cast<filter_info_impl*>(pSelectedEntry->GetUserData());
+        filter_info_impl* pInfo = reinterpret_cast<filter_info_impl*>(m_xFilterListBox->get_id(aRows[0]).toInt64());
         bIsReadonly = pInfo->mbReadonly;
 
         for( auto nFact : o3tl::enumrange<SvtModuleOptions::EFactory>())
@@ -214,10 +198,10 @@ void XMLFilterSettingsDialog::updateStates()
             }
         }
     }
-    m_pPBEdit->Enable( bHasSelection && !bMultiSelection && !bIsReadonly);
-    m_pPBTest->Enable( bHasSelection && !bMultiSelection );
-    m_pPBDelete->Enable( bHasSelection && !bMultiSelection && !bIsReadonly && !bIsDefault);
-    m_pPBSave->Enable( bHasSelection );
+    m_xPBEdit->set_sensitive( bHasSelection && !bMultiSelection && !bIsReadonly);
+    m_xPBTest->set_sensitive( bHasSelection && !bMultiSelection );
+    m_xPBDelete->set_sensitive( bHasSelection && !bMultiSelection && !bIsReadonly && !bIsDefault);
+    m_xPBSave->set_sensitive( bHasSelection );
 }
 
 /** is called when the user clicks on the "New" button */
@@ -238,7 +222,7 @@ void XMLFilterSettingsDialog::onNew()
     aTempInfo.maDocumentService = "com.sun.star.text.TextDocument";
 
     // execute XML Filter Dialog
-    XMLFilterTabDialog aDlg(GetFrameWeld(), mxContext, &aTempInfo);
+    XMLFilterTabDialog aDlg(m_xDialog.get(), mxContext, &aTempInfo);
     if (aDlg.run() == RET_OK)
     {
         // insert the new filter
@@ -249,15 +233,12 @@ void XMLFilterSettingsDialog::onNew()
 /** is called when the user clicks on the "Edit" Button */
 void XMLFilterSettingsDialog::onEdit()
 {
-    // get selected filter entry
-    SvTreeListEntry* pEntry = m_pFilterListBox->FirstSelected();
-    if( pEntry )
+    // get selected filter info
+    filter_info_impl* pOldInfo = reinterpret_cast<filter_info_impl*>(m_xFilterListBox->get_selected_id().toInt64());
+    if (pOldInfo)
     {
-        // get its filter info
-        filter_info_impl* pOldInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
-
         // execute XML Filter Dialog
-        XMLFilterTabDialog aDlg(GetFrameWeld(), mxContext, pOldInfo);
+        XMLFilterTabDialog aDlg(m_xDialog.get(), mxContext, pOldInfo);
         if (aDlg.run() == RET_OK)
         {
             filter_info_impl* pNewInfo = aDlg.getNewFilterInfo();
@@ -737,11 +718,11 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
     {
         if( pOldInfo )
         {
-            m_pFilterListBox->changeEntry( pFilterEntry );
+            changeEntry( pFilterEntry );
         }
         else
         {
-            m_pFilterListBox->addFilterEntry( pFilterEntry );
+            addFilterEntry( pFilterEntry );
             maFilterVector.push_back( std::unique_ptr<filter_info_impl>(pFilterEntry) );
         }
     }
@@ -753,27 +734,26 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
 void XMLFilterSettingsDialog::onTest()
 {
     // get the first selected filter
-    SvTreeListEntry* pEntry = m_pFilterListBox->FirstSelected();
-    if( pEntry )
+    filter_info_impl* pInfo = reinterpret_cast<filter_info_impl*>(m_xFilterListBox->get_selected_id().toInt64());
+    if (pInfo)
     {
-        filter_info_impl* pInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
-
-        XMLFilterTestDialog aDlg(GetFrameWeld(), mxContext);
+        XMLFilterTestDialog aDlg(m_xDialog.get(), mxContext);
         aDlg.test( *pInfo );
     }
 }
 
 void XMLFilterSettingsDialog::onDelete()
 {
-    SvTreeListEntry* pEntry = m_pFilterListBox->FirstSelected();
-    if( pEntry )
+    int nIndex = m_xFilterListBox->get_selected_index();
+    if (nIndex == -1)
+        return;
+    filter_info_impl* pInfo = reinterpret_cast<filter_info_impl*>(m_xFilterListBox->get_id(nIndex).toInt64());
+    if (pInfo)
     {
-        filter_info_impl* pInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
-
         OUString aMessage(XsltResId(STR_WARN_DELETE));
         aMessage = aMessage.replaceFirst( "%s", pInfo->maFilterName );
 
-        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(m_xDialog.get(),
                                                    VclMessageType::Warning, VclButtonsType::YesNo,
                                                    aMessage));
         xWarn->set_default_response(RET_YES);
@@ -837,7 +817,7 @@ void XMLFilterSettingsDialog::onDelete()
                         xFlushable->flush();
 
                     // now remove entry from ui
-                    m_pFilterListBox->RemoveSelection();
+                    m_xFilterListBox->remove(nIndex);
 
                     // and delete the filter entry
                     maFilterVector.erase(std::find_if( maFilterVector.begin(), maFilterVector.end(),
@@ -861,19 +841,17 @@ void XMLFilterSettingsDialog::onSave()
 
     int nFilters = 0;
 
-    SvTreeListEntry* pEntry = m_pFilterListBox->FirstSelected();
-    while( pEntry )
-    {
-        filter_info_impl* pInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
-        aFilters.push_back( pInfo );
-        pEntry = m_pFilterListBox->NextSelected( pEntry );
-        nFilters++;
-    }
+    m_xFilterListBox->selected_foreach([&](weld::TreeIter& rEntry){
+        filter_info_impl* pInfo = reinterpret_cast<filter_info_impl*>(m_xFilterListBox->get_id(rEntry).toInt64());
+        aFilters.push_back(pInfo);
+        ++nFilters;
+        return false;
+    });
 
     // Open Fileopen-Dialog
     ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
-        FileDialogFlags::NONE, GetFrameWeld());
+        FileDialogFlags::NONE, m_xDialog.get());
 
     OUString aExtensions( "*.jar" );
     OUString aFilterName(XsltResId(STR_FILTER_PACKAGE));
@@ -904,7 +882,7 @@ void XMLFilterSettingsDialog::onSave()
             aMsg = aMsg.replaceFirst( sPlaceholder, aURL.GetName() );
         }
 
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       aMsg));
         xInfoBox->run();
@@ -918,7 +896,7 @@ void XMLFilterSettingsDialog::onOpen()
     // Open Fileopen-Dialog
     ::sfx2::FileDialogHelper aDlg(
     css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-    FileDialogFlags::NONE, GetFrameWeld());
+    FileDialogFlags::NONE, m_xDialog.get());
 
     OUString aExtensions( "*.jar" );
     OUString aFilterName(XsltResId(STR_FILTER_PACKAGE));
@@ -968,41 +946,17 @@ void XMLFilterSettingsDialog::onOpen()
             aMsg = aMsg.replaceFirst( sPlaceholder, OUString::number( nFilters ) );
         }
 
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       aMsg));
         xInfoBox->run();
     }
 }
 
-bool XMLFilterSettingsDialog::EventNotify( NotifyEvent& rNEvt )
-{
-    // Because of tab control first call the base class.
-    bool bRet = ModelessDialog::EventNotify(rNEvt);
-    if ( !bRet )
-    {
-        if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-        {
-            const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-            vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();
-            sal_uInt16 nKeyCode = aKeyCode.GetCode();
-            bool bMod1 = pKEvt->GetKeyCode().IsMod1();
-
-            if( nKeyCode == KEY_ESCAPE || (bMod1 && (nKeyCode == KEY_W)))
-            {
-                Close();
-                return true;
-            }
-        }
-    }
-
-    return bRet;
-}
-
 void XMLFilterSettingsDialog::disposeFilterList()
 {
     maFilterVector.clear();
-    m_pFilterListBox->Clear();
+    m_xFilterListBox->clear();
 }
 
 void XMLFilterSettingsDialog::initFilterList()
@@ -1161,7 +1115,7 @@ void XMLFilterSettingsDialog::initFilterList()
 
                 // add entry to internal container and to ui filter list box
                 maFilterVector.push_back( std::unique_ptr<filter_info_impl>(pTempFilter.get()) );
-                m_pFilterListBox->addFilterEntry( pTempFilter.release() );
+                addFilterEntry( pTempFilter.release() );
 
 
                 pTempFilter.reset( new filter_info_impl );
@@ -1174,9 +1128,11 @@ void XMLFilterSettingsDialog::initFilterList()
         }
     }
 
-    SvTreeListEntry* pEntry = m_pFilterListBox->GetEntry( 0 );
-    if( pEntry )
-        m_pFilterListBox->Select( pEntry );
+    if (m_xFilterListBox->n_children())
+    {
+        m_xFilterListBox->columns_autosize();
+        m_xFilterListBox->select(0);
+    }
 }
 
 application_info_impl::application_info_impl( const sal_Char * pDocumentService, const OUString& rUINameRes, const sal_Char * mpXMLImporter, const sal_Char * mpXMLExporter )
@@ -1268,193 +1224,37 @@ OUString getApplicationUIName( const OUString& rServiceName )
     }
 }
 
-SvxPathControl::SvxPathControl(vcl::Window* pParent)
-    : Window(pParent, WB_HIDE | WB_CLIPCHILDREN | WB_TABSTOP | WB_DIALOGCONTROL | WB_BORDER)
-    , bHasBeenShown(false)
-{
-    m_pVBox = VclPtr<VclVBox>::Create(this);
-
-    m_pHeaderBar = VclPtr<HeaderBar>::Create(m_pVBox, WB_BOTTOMBORDER);
-    m_pHeaderBar->set_height_request(GetTextHeight() + 6);
-
-    m_pFocusCtrl = VclPtr<XMLFilterListBox>::Create(m_pVBox, this);
-    m_pFocusCtrl->set_fill(true);
-    m_pFocusCtrl->set_expand(true);
-
-    m_pVBox->set_hexpand(true);
-    m_pVBox->set_vexpand(true);
-    m_pVBox->set_expand(true);
-    m_pVBox->set_fill(true);
-    m_pVBox->Show();
-}
-
-#define ITEMID_NAME     1
-#define ITEMID_TYPE     2
-
-void SvxPathControl::Resize()
-{
-    Window::Resize();
-
-    if (!m_pVBox)
-        return;
-
-    m_pVBox->SetSizePixel(GetSizePixel());
-
-    if (!bHasBeenShown)
-        bHasBeenShown = IsReallyShown();
-
-    if (!bHasBeenShown)
-    {
-        std::vector<long> aWidths;
-        m_pFocusCtrl->getPreferredDimensions(aWidths);
-        if (aWidths.empty())
-        {
-            bHasBeenShown = false;
-            return;
-        }
-        long nFirstColumnWidth = aWidths[1];
-        m_pHeaderBar->SetItemSize(ITEMID_NAME, nFirstColumnWidth);
-        m_pHeaderBar->SetItemSize(ITEMID_TYPE, 0xFFFF);
-        long nTabs[] = {0, nFirstColumnWidth};
-        m_pFocusCtrl->SetTabs(SAL_N_ELEMENTS(nTabs), nTabs, MapUnit::MapPixel);
-    }
-}
-
-Size SvxPathControl::GetOptimalSize() const
-{
-    Size aDefSize(LogicToPixel(Size(150, 0), MapMode(MapUnit::MapAppFont)));
-    Size aOptSize(m_pVBox->GetOptimalSize());
-    long nRowHeight(GetTextHeight());
-    aOptSize.setHeight( nRowHeight * 10 );
-    aOptSize.setWidth( std::max(aDefSize.Width(), aOptSize.Width()) );
-    return aOptSize;
-}
-
-SvxPathControl::~SvxPathControl()
-{
-    disposeOnce();
-}
-
-void SvxPathControl::dispose()
-{
-    m_pFocusCtrl.disposeAndClear();
-    m_pHeaderBar.disposeAndClear();
-    m_pVBox.disposeAndClear();
-    vcl::Window::dispose();
-}
-
-VCL_BUILDER_FACTORY(SvxPathControl)
-
-bool SvxPathControl::EventNotify(NotifyEvent& rNEvt)
-{
-    bool bRet = Window::EventNotify(rNEvt);
-
-    if ( m_pFocusCtrl && rNEvt.GetWindow() != m_pFocusCtrl && rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
-        m_pFocusCtrl->GrabFocus();
-
-    return bRet;
-}
-
-XMLFilterListBox::XMLFilterListBox(Window* pParent, SvxPathControl* pPathControl)
-    : SvTabListBox(pParent, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP)
-    , m_pHeaderBar(pPathControl->getHeaderBar())
-{
-    Size aBoxSize( pParent->GetOutputSizePixel() );
-
-    m_pHeaderBar->SetEndDragHdl( LINK( this, XMLFilterListBox, HeaderEndDrag_Impl ) );
-
-    OUString aStr1(XsltResId(STR_COLUMN_HEADER_NAME));
-    OUString aStr2(XsltResId(STR_COLUMN_HEADER_TYPE));
-
-    long nTabSize = aBoxSize.Width() / 2;
-
-    m_pHeaderBar->InsertItem( ITEMID_NAME, aStr1, nTabSize, HeaderBarItemBits::LEFT );
-    m_pHeaderBar->InsertItem( ITEMID_TYPE, aStr2, nTabSize, HeaderBarItemBits::LEFT );
-
-    static long nTabs[] = {0, nTabSize };
-
-    SetSelectionMode( SelectionMode::Multiple );
-    SetTabs( SAL_N_ELEMENTS(nTabs), nTabs, MapUnit::MapPixel );
-    SetScrolledHdl( LINK( this, XMLFilterListBox, TabBoxScrollHdl_Impl ) );
-    SetHighlightRange();
-    Show();
-    m_pHeaderBar->Show();
-}
-
-XMLFilterListBox::~XMLFilterListBox()
-{
-    disposeOnce();
-}
-
-void XMLFilterListBox::dispose()
-{
-    m_pHeaderBar.clear();
-    SvTabListBox::dispose();
-}
-
-IMPL_LINK_NOARG( XMLFilterListBox, TabBoxScrollHdl_Impl, SvTreeListBox*, void )
-{
-    m_pHeaderBar->SetOffset( -GetXOffset() );
-}
-
-IMPL_LINK( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
-{
-    if ( pBar && !pBar->GetCurItemId() )
-        return;
-
-    if ( !m_pHeaderBar->IsItemMode() )
-    {
-        Size aSz;
-        sal_uInt16 nTabs = m_pHeaderBar->GetItemCount();
-        long nTmpSz = 0;
-        long nWidth = m_pHeaderBar->GetItemSize(ITEMID_NAME);
-        long nBarWidth = m_pHeaderBar->GetSizePixel().Width();
-
-        if(nWidth < 30)
-            m_pHeaderBar->SetItemSize( ITEMID_TYPE, 30);
-        else if ( ( nBarWidth - nWidth ) < 30 )
-            m_pHeaderBar->SetItemSize( ITEMID_TYPE, nBarWidth - 30 );
-
-        for ( sal_uInt16 i = 1; i <= nTabs; ++i )
-        {
-            long nW = m_pHeaderBar->GetItemSize(i);
-            aSz.setWidth(  nW + nTmpSz );
-            nTmpSz += nW;
-            SetTab( i, PixelToLogic( aSz, MapMode(MapUnit::MapAppFont) ).Width() );
-        }
-    }
-}
-
 /** adds a new filter info entry to the ui filter list */
-void XMLFilterListBox::addFilterEntry( const filter_info_impl* pInfo )
+void XMLFilterSettingsDialog::addFilterEntry( const filter_info_impl* pInfo )
 {
-    const OUString aEntryStr( getEntryString( pInfo ) );
-    InsertEntryToColumn( aEntryStr, TREELIST_APPEND, 0xffff, const_cast<filter_info_impl *>(pInfo) );
+    int nRow = m_xFilterListBox->n_children();
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pInfo)));
+    m_xFilterListBox->append(sId, pInfo->maFilterName);
+    m_xFilterListBox->set_text(nRow, getEntryString(pInfo), 1);
 }
 
-void XMLFilterListBox::changeEntry( const filter_info_impl* pInfo )
+void XMLFilterSettingsDialog::changeEntry( const filter_info_impl* pInfo )
 {
-    const sal_uLong nCount = GetEntryCount();
-    sal_uLong nPos;
-    for( nPos = 0; nPos < nCount; nPos++ )
+    const int nCount = m_xFilterListBox->n_children();
+    for(int nPos = 0; nPos < nCount; ++nPos)
     {
-        SvTreeListEntry* pEntry = GetEntry( nPos );
-        if( static_cast<filter_info_impl*>(pEntry->GetUserData()) == pInfo )
+        filter_info_impl* pEntry = reinterpret_cast<filter_info_impl*>(m_xFilterListBox->get_id(nPos).toInt64());
+        if (pEntry == pInfo)
         {
-            OUString aEntryText( getEntryString( pInfo ) );
-            SetEntryText( aEntryText, pEntry );
+            m_xFilterListBox->set_text(nPos, pInfo->maFilterName, 0);
+            m_xFilterListBox->set_text(nPos, getEntryString(pInfo), 1);
             break;
         }
     }
 }
 
-OUString XMLFilterListBox::getEntryString( const filter_info_impl* pInfo )
+OUString XMLFilterSettingsDialog::getEntryString( const filter_info_impl* pInfo )
 {
-    OUString aEntryStr( pInfo->maFilterName + "\t");
+    OUString aEntryStr;
     if ( !pInfo->maExportService.isEmpty() )
-        aEntryStr += getApplicationUIName( pInfo->maExportService );
+        aEntryStr = getApplicationUIName( pInfo->maExportService );
     else
-        aEntryStr += getApplicationUIName( pInfo->maImportService );
+        aEntryStr = getApplicationUIName( pInfo->maImportService );
     aEntryStr += " - ";
 
     if( pInfo->maFlags & 1 )
