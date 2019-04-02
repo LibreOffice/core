@@ -72,6 +72,13 @@
 #include <unotools/streamwrap.hxx>
 #include <vcl/graphicfilter.hxx>
 
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <o3tl/char16_t2wchar_t.hxx>
+#include <osl/file.hxx>
+#endif
+
 #include <svx/unomodel.hxx>
 #include <fmturl.hxx>
 #include <fmtinfmt.hxx>
@@ -2469,9 +2476,33 @@ bool SwTransferable::PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                 OUString sDesc;
                 SwTransferable::CheckForURLOrLNKFile( rData, sText, &sDesc );
 
-                aBkmk = INetBookmark(
-                        URIHelper::SmartRel2Abs(INetURLObject(), sText, Link<OUString *, bool>(), false ),
-                        sDesc );
+                sText = URIHelper::SmartRel2Abs(INetURLObject(), sText, Link<OUString*, bool>(),
+                    false);
+
+#ifdef _WIN32
+                // Now that the path could be modified after SwTransferable::CheckForURLOrLNKFile,
+                // where it could have been converted to URL, and made sure it's actually converted
+                // to URL in URIHelper::SmartRel2Abs, we can finally convert file: URL back to
+                // system path to make sure we don't use short path.
+                // It looks not optimal, when we could apply GetLongPathNameW right to the original
+                // pasted filename. But I don't know if (1) all arriving strings are system paths;
+                // and (2) if SwTransferable::CheckForURLOrLNKFile could result in a different short
+                // path, so taking a safe route.
+                if (sText.startsWithIgnoreAsciiCase("file:"))
+                {
+                    // tdf#124500: Convert short path to long path which should be used in links
+                    OUString sSysPath;
+                    osl::FileBase::getSystemPathFromFileURL(sText, sSysPath);
+                    std::unique_ptr<sal_Unicode[]> aBuf(new sal_Unicode[32767]);
+                    DWORD nCopied = GetLongPathNameW(o3tl::toW(sSysPath.getStr()),
+                                                     o3tl::toW(aBuf.get()), 32767);
+                    if (nCopied && nCopied < 32767)
+                        sText = URIHelper::SmartRel2Abs(INetURLObject(), aBuf.get(),
+                                                        Link<OUString*, bool>(), false);
+                }
+#endif
+
+                aBkmk = INetBookmark(sText, sDesc);
                 bCheckForGrf = true;
                 bCheckForImageMap = SwPasteSdr::Replace == nAction;
             }
