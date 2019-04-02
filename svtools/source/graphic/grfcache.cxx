@@ -82,13 +82,13 @@ GraphicID::GraphicID( const GraphicObject& rObj )
             }
             else if (rGraphic.hasPdfData())
             {
-                std::shared_ptr<css::uno::Sequence<sal_Int8>> pPdfData = rGraphic.getPdfData();
+                std::shared_ptr<std::vector<sal_Int8>> pPdfData(rGraphic.getPdfData());
                 const BitmapEx& rBmpEx = rGraphic.GetBitmapEx();
 
                 mnID1 |= (rGraphic.getPageNumber() & 0x0fffffff);
                 mnID2 = rBmpEx.GetSizePixel().Width();
                 mnID3 = rBmpEx.GetSizePixel().Height();
-                mnID4 = vcl_get_checksum(0, pPdfData->getConstArray(), pPdfData->getLength());
+                mnID4 = vcl_get_checksum(0, pPdfData->data(), pPdfData->size());
             }
             else if( rGraphic.IsAnimated() )
             {
@@ -164,7 +164,7 @@ private:
 
     // VectorGraphicData support
     VectorGraphicDataPtr    maVectorGraphicData;
-    std::shared_ptr<uno::Sequence<sal_Int8>> mpPdfData;
+    std::shared_ptr<std::vector<sal_Int8>> mpPdfData;
 
     bool                ImplInit( const GraphicObject& rObj );
     void                ImplFillSubstitute( Graphic& rSubstitute );
@@ -250,7 +250,7 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
                 else
                 {
                     mpBmpEx = new BitmapEx( rGraphic.GetBitmapEx() );
-                    if (rGraphic.hasPdfData() && rGraphic.getPdfData()->hasElements())
+                    if (rGraphic.hasPdfData() && !rGraphic.getPdfData()->empty())
                         mpPdfData = rGraphic.getPdfData();
                 }
             }
@@ -297,7 +297,7 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
     else if( mpBmpEx )
     {
         rSubstitute = *mpBmpEx;
-        if (mpPdfData && mpPdfData->hasElements())
+        if (mpPdfData && !mpPdfData->empty())
             rSubstitute.setPdfData(mpPdfData);
     }
     else if( mpAnimation )

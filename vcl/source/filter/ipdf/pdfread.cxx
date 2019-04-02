@@ -226,7 +226,7 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
 
 bool ImportPDF(SvStream& rStream, Bitmap& rBitmap,
                size_t nPageIndex,
-               css::uno::Sequence<sal_Int8>& rPdfData,
+               std::vector<sal_Int8>& rPdfData,
                sal_uInt64 nPos, sal_uInt64 nSize,
                const double fResolutionDPI)
 {
@@ -244,9 +244,9 @@ bool ImportPDF(SvStream& rStream, Bitmap& rBitmap,
         return false;
 
     aMemoryStream.Seek(STREAM_SEEK_TO_END);
-    rPdfData = css::uno::Sequence<sal_Int8>(aMemoryStream.Tell());
+    rPdfData = std::vector<sal_Int8>(aMemoryStream.Tell());
     aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
-    aMemoryStream.ReadBytes(rPdfData.getArray(), rPdfData.getLength());
+    aMemoryStream.ReadBytes(rPdfData.data(), rPdfData.size());
 
     return true;
 }
@@ -255,19 +255,19 @@ bool ImportPDF(SvStream& rStream, Bitmap& rBitmap,
 bool ImportPDF(SvStream& rStream, Graphic& rGraphic,
                const double fResolutionDPI)
 {
-    uno::Sequence<sal_Int8> aPdfData;
+    std::vector<sal_Int8> aPdfData;
     Bitmap aBitmap;
     const bool bRet = ImportPDF(rStream, aBitmap, 0, aPdfData,
                                 STREAM_SEEK_TO_BEGIN,
                                 STREAM_SEEK_TO_END, fResolutionDPI);
     rGraphic = aBitmap;
-    rGraphic.setPdfData(std::make_shared<css::uno::Sequence<sal_Int8>>(aPdfData));
+    rGraphic.setPdfData(std::make_shared<std::vector<sal_Int8>>(aPdfData));
     rGraphic.setPageNumber(0); // We currently import only the first page.
     return bRet;
 }
 
 size_t ImportPDF(const OUString& rURL, std::vector<Bitmap>& rBitmaps,
-                 css::uno::Sequence<sal_Int8>& rPdfData,
+                 std::vector<sal_Int8>& rPdfData,
                  const double fResolutionDPI)
 {
     std::unique_ptr<SvStream> xStream(
@@ -282,9 +282,9 @@ size_t ImportPDF(const OUString& rURL, std::vector<Bitmap>& rBitmaps,
         return 0;
 
     aMemoryStream.Seek(STREAM_SEEK_TO_END);
-    rPdfData = css::uno::Sequence<sal_Int8>(aMemoryStream.Tell());
+    rPdfData = std::vector<sal_Int8>(aMemoryStream.Tell());
     aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
-    aMemoryStream.ReadBytes(rPdfData.getArray(), rPdfData.getLength());
+    aMemoryStream.ReadBytes(rPdfData.data(), rPdfData.size());
 
     return rBitmaps.size();
 }
@@ -302,14 +302,14 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
 
     // Copy into PdfData
     aMemoryStream.Seek(STREAM_SEEK_TO_END);
-    auto pPdfData = std::make_shared<css::uno::Sequence<sal_Int8>>(aMemoryStream.Tell());
+    auto pPdfData = std::make_shared<std::vector<sal_Int8>>(aMemoryStream.Tell());
     aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
-    aMemoryStream.ReadBytes(pPdfData->getArray(), pPdfData->getLength());
+    aMemoryStream.ReadBytes(pPdfData->data(), pPdfData->size());
 
     // Prepare the link with the PDF stream.
-    const size_t nGraphicContentSize = pPdfData->getLength();
+    const size_t nGraphicContentSize = pPdfData->size();
     std::unique_ptr<sal_uInt8[]> pGraphicContent(new sal_uInt8[nGraphicContentSize]);
-    memcpy(pGraphicContent.get(), pPdfData->get(), nGraphicContentSize);
+    memcpy(pGraphicContent.get(), pPdfData->data(), nGraphicContentSize);
     std::shared_ptr<GfxLink> pGfxLink(std::make_shared<GfxLink>(
         std::move(pGraphicContent), nGraphicContentSize, GfxLinkType::NativePdf));
 
@@ -322,7 +322,7 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
 
     // Load the buffer using pdfium.
     FPDF_DOCUMENT pPdfDocument
-        = FPDF_LoadMemDocument(pPdfData->getArray(), pPdfData->getLength(), /*password=*/nullptr);
+        = FPDF_LoadMemDocument(pPdfData->data(), pPdfData->size(), /*password=*/nullptr);
     if (!pPdfDocument)
         return 0;
 

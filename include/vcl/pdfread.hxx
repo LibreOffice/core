@@ -40,7 +40,7 @@ VCL_DLLPUBLIC size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vecto
 
 /// Imports a PDF stream into rGraphic as a GDIMetaFile.
 VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Bitmap& rBitmap, size_t nPageIndex,
-                             css::uno::Sequence<sal_Int8>& rPdfData,
+                             std::vector<sal_Int8>& rPdfData,
                              sal_uInt64 nPos = STREAM_SEEK_TO_BEGIN,
                              sal_uInt64 nSize = STREAM_SEEK_TO_END,
                              const double fResolutionDPI = 96.);
@@ -49,7 +49,7 @@ VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic,
                              const double fResolutionDPI = 96.);
 
 VCL_DLLPUBLIC size_t ImportPDF(const OUString& rURL, std::vector<Bitmap>& rBitmaps,
-                               css::uno::Sequence<sal_Int8>& rPdfData,
+                               std::vector<sal_Int8>& rPdfData,
                                const double fResolutionDPI = 96.);
 
 /// Import PDF as Graphic images (1 per page), all unloaded.
