@@ -113,6 +113,7 @@ public:
     void testBarChartVaryColorsXLSX();
     void testMultipleAxisXLSX();
     void testSecondaryAxisXLSX();
+    void testSetSeriesToSecondaryAxisXLSX();
     void testAxisTitleRotationXLSX();
     void testAxisCrossBetweenXSLX();
     void testPieChartDataPointExplosionXLSX();
@@ -206,6 +207,7 @@ public:
     CPPUNIT_TEST(testBarChartVaryColorsXLSX);
     CPPUNIT_TEST(testMultipleAxisXLSX);
     CPPUNIT_TEST(testSecondaryAxisXLSX);
+    CPPUNIT_TEST(testSetSeriesToSecondaryAxisXLSX);
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
     CPPUNIT_TEST(testAxisCrossBetweenXSLX);
     CPPUNIT_TEST(testPieChartDataPointExplosionXLSX);
@@ -1758,6 +1760,25 @@ void Chart2ExportTest::testSecondaryAxisXLSX()
     // test there is just those series in the second <lineChart> tag which are attached to the secondary axis
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart[2]/c:ser", 1);
     assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart[2]/c:ser[1]/c:tx/c:strRef/c:strCache/c:pt/c:v", "a");
+}
+
+void Chart2ExportTest::testSetSeriesToSecondaryAxisXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "add_series_secondary_axis.xlsx");
+    Reference< chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    // Second series
+    Reference<chart2::XDataSeries> xSeries = getDataSeriesFromDoc(xChartDoc, 1);
+    CPPUNIT_ASSERT(xSeries.is());
+
+    Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY_THROW);
+    sal_Int32 AxisIndex = 1;
+    // Attach the second series to the secondary axis. (The third series is already attached.)
+    xPropSet->setPropertyValue("AttachedAxisIndex", uno::Any(AxisIndex));
+
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Check there are only two <lineChart> tag in the XML, one for the primary and one for the secondary axis.
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart", 2);
 }
 
 void Chart2ExportTest::testAxisTitleRotationXLSX()

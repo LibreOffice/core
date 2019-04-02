@@ -312,6 +312,10 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
         OUString aService = OUString::createFromAscii( maTypeInfo.mpcServiceName );
         Reference< XChartType > xChartType( createInstance( aService ), UNO_QUERY_THROW );
 
+        Reference< XChartTypeContainer > oldxChartTypeCont( rxCoordSystem, UNO_QUERY_THROW );
+        Sequence< Reference< XChartType > > oldxChartType( oldxChartTypeCont->getChartTypes() );
+        bool sameChartTypeExist = false;
+
         // additional properties
         PropertySet aDiaProp( rxDiagram );
         PropertySet aTypeProp( xChartType );
@@ -423,7 +427,23 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
             {
                 SeriesConverter& rSeriesConv = *elem;
                 Reference< XDataSeries > xDataSeries = rSeriesConv.createDataSeries( *this, bVaryColorsByPoint );
-                insertDataSeries( xChartType, xDataSeries, nAxesSetIdx );
+                if ( oldxChartType.hasElements() )
+                {
+                    for( sal_Int32 nCTIdx=0; nCTIdx<oldxChartType.getLength(); ++nCTIdx )
+                    {
+                        if ( xChartType->getChartType() == oldxChartType[nCTIdx]->getChartType() )
+                        {
+                            // insert the series into the existing (old) chart type object
+                            insertDataSeries(oldxChartType[nCTIdx], xDataSeries, nAxesSetIdx);
+                            sameChartTypeExist = true;
+                        }
+                    }
+                }
+                // insert the series into the (new) chart type object
+                if (!sameChartTypeExist)
+                {
+                    insertDataSeries(xChartType, xDataSeries, nAxesSetIdx);
+                }
 
                 /*  Excel does not use the value of the c:smooth element of the
                     chart type to set a default line smoothing for the data
@@ -440,7 +460,20 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
 
         // add chart type object to coordinate system
         Reference< XChartTypeContainer > xChartTypeCont( rxCoordSystem, UNO_QUERY_THROW );
-        xChartTypeCont->addChartType( xChartType );
+        if (sameChartTypeExist)
+        {
+            for( sal_Int32 nCTIdx=0; nCTIdx<oldxChartType.getLength(); ++nCTIdx )
+            {
+                if ( xChartType->getChartType() == oldxChartType[nCTIdx]->getChartType() )
+                {
+                    xChartTypeCont->addChartType(oldxChartType[nCTIdx]);
+                }
+            }
+        }
+        else
+        {
+            xChartTypeCont->addChartType(xChartType);
+        }
 
         // set existence of bar connector lines at diagram (only in stacked 2D bar charts)
         if( mrModel.mxSerLines.is() && !mb3dChart && (maTypeInfo.meTypeCategory == TYPECATEGORY_BAR) && (isStacked() || isPercent()) )
