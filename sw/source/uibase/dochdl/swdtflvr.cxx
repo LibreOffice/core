@@ -72,6 +72,13 @@
 #include <unotools/streamwrap.hxx>
 #include <vcl/graphicfilter.hxx>
 
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
+#include <o3tl/char16_t2wchar_t.hxx>
+#endif
+
 #include <svx/unomodel.hxx>
 #include <fmturl.hxx>
 #include <fmtinfmt.hxx>
@@ -2469,9 +2476,25 @@ bool SwTransferable::PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                 OUString sDesc;
                 SwTransferable::CheckForURLOrLNKFile( rData, sText, &sDesc );
 
-                aBkmk = INetBookmark(
-                        URIHelper::SmartRel2Abs(INetURLObject(), sText, Link<OUString *, bool>(), false ),
-                        sDesc );
+                sText = URIHelper::SmartRel2Abs(INetURLObject(), sText, Link<OUString*, bool>(),
+                    false);
+
+#ifdef _WIN32
+                if (sText.startsWithIgnoreAsciiCase("file:"))
+                {
+                    // tdf#124500: Convert short path to long path which should be used in links
+                    INetURLObject aURL(sText);
+                    sal_Unicode sBuf[32767];
+                    DWORD nCopied
+                        = GetLongPathNameW(o3tl::toW(aURL.getFSysPath(FSysStyle::Dos).getStr()),
+                                           o3tl::toW(sBuf), SAL_N_ELEMENTS(sBuf));
+                    if (nCopied && nCopied < SAL_N_ELEMENTS(sBuf))
+                        sText = URIHelper::SmartRel2Abs(INetURLObject(), sBuf,
+                                                        Link<OUString*, bool>(), false);
+                }
+#endif
+
+                aBkmk = INetBookmark(sText, sDesc);
                 bCheckForGrf = true;
                 bCheckForImageMap = SwPasteSdr::Replace == nAction;
             }
