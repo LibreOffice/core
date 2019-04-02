@@ -312,6 +312,10 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
         OUString aService = OUString::createFromAscii( maTypeInfo.mpcServiceName );
         Reference< XChartType > xChartType( createInstance( aService ), UNO_QUERY_THROW );
 
+        Reference< XChartTypeContainer > xChartTypeContOld( rxCoordSystem, UNO_QUERY_THROW );
+        Sequence< Reference< XChartType > > xOldChartTypes( xChartTypeContOld->getChartTypes() );
+        sal_Int32 nOldChartTypeIdx = -1;
+
         // additional properties
         PropertySet aDiaProp( rxDiagram );
         PropertySet aTypeProp( xChartType );
@@ -419,11 +423,19 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
         }
         else
         {
+            for( sal_Int32 nCTIdx=0; nCTIdx<xOldChartTypes.getLength(); ++nCTIdx )
+            {
+                if ( xChartType->getChartType() == xOldChartTypes[nCTIdx]->getChartType() )
+                {
+                    nOldChartTypeIdx = nCTIdx;
+                }
+            }
+
             for (auto const& elem : aSeries)
             {
                 SeriesConverter& rSeriesConv = *elem;
                 Reference< XDataSeries > xDataSeries = rSeriesConv.createDataSeries( *this, bVaryColorsByPoint );
-                insertDataSeries( xChartType, xDataSeries, nAxesSetIdx );
+                insertDataSeries( nOldChartTypeIdx == -1 ? xChartType : xOldChartTypes[nOldChartTypeIdx], xDataSeries, nAxesSetIdx );
 
                 /*  Excel does not use the value of the c:smooth element of the
                     chart type to set a default line smoothing for the data
@@ -440,7 +452,10 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
 
         // add chart type object to coordinate system
         Reference< XChartTypeContainer > xChartTypeCont( rxCoordSystem, UNO_QUERY_THROW );
-        xChartTypeCont->addChartType( xChartType );
+        if (nOldChartTypeIdx == -1)
+        {
+            xChartTypeCont->addChartType(xChartType);
+        }
 
         // set existence of bar connector lines at diagram (only in stacked 2D bar charts)
         if( mrModel.mxSerLines.is() && !mb3dChart && (maTypeInfo.meTypeCategory == TYPECATEGORY_BAR) && (isStacked() || isPercent()) )
