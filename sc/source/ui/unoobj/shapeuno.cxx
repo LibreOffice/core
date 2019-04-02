@@ -403,6 +403,9 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
                                     ScDrawObjData aAnchor;
                                     aAnchor.maStart = ScAddress(aAddress.StartColumn, aAddress.StartRow, aAddress.Sheet);
                                     aAnchor.maStartOffset = Point(aRelPoint.X, aRelPoint.Y);
+                                    ScDrawObjData* pDrawObjData = ScDrawLayer::GetObjData(pObj);
+                                    if (pDrawObjData)
+                                        aAnchor.mbResizeWithCell = pDrawObjData->mbResizeWithCell;
                                     //Uno sets the Anchor in terms of the unrotated shape, not much we can do
                                     //about that since uno also displays the shape geometry in terms of the unrotated
                                     //shape. #TODO think about changing the anchoring behaviour here too
