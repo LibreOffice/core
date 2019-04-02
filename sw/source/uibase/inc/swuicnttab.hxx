@@ -33,9 +33,6 @@
 
 #include <tox.hxx>
 #include "toxmgr.hxx"
-#include <svx/checklbx.hxx>
-#include <vcl/treelistbox.hxx>
-#include <vcl/menubtn.hxx>
 #include <svx/langbox.hxx>
 #include "cnttab.hxx"
 #include <vector>

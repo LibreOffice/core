@@ -25,7 +25,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/layout.hxx>
-#include <svtools/svmedit.hxx>
+#include <vcl/vclmedit.hxx>
 #include <vcl/headbar.hxx>
 #include <vcl/treelistbox.hxx>
 #include <vcl/combobox.hxx>

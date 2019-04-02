@@ -21,12 +21,12 @@
 #include <com/sun/star/embed/Aspects.hpp>
 
 #include <pastedlg.hxx>
-#include <svtools/svmedit.hxx>
 #include <svtools/insdlg.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
+#include <tools/lineend.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

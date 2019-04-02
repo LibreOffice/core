@@ -50,7 +50,6 @@
 #include <vcl/window.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/svmedit.hxx>
 
 #include "bibresid.hxx"
 #include <strings.hrc>

@@ -26,7 +26,6 @@
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <svtools/svmedit.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>

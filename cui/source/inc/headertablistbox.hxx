@@ -20,8 +20,7 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_HEADERTABLISTBOX_HXX
 #define INCLUDED_CUI_SOURCE_INC_HEADERTABLISTBOX_HXX
 
-#include <vcl/headbar.hxx>
-#include <vcl/svtabbx.hxx>
+#include <vcl/weld.hxx>
 
 class MacroEventListBox final
 {

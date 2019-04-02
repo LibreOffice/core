@@ -21,8 +21,6 @@
 #define INCLUDED_SFX2_SOURCE_INC_VERSDLG_HXX
 
 #include <sfx2/basedlgs.hxx>
-#include <svtools/simptabl.hxx>
-#include <svtools/svmedit.hxx>
 #include <vcl/weld.hxx>
 
 class SfxViewFrame;

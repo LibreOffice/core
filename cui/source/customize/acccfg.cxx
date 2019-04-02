@@ -34,6 +34,7 @@
 
 #include <sal/macros.h>
 #include <vcl/builderfactory.hxx>
+#include <vcl/edit.hxx>
 
 #include <strings.hrc>
 #include <sfx2/strings.hrc>
@@ -778,66 +779,6 @@ static const sal_uInt16 KEYCODE_ARRAY[] =
 };
 
 static const sal_uInt16 KEYCODE_ARRAY_SIZE = SAL_N_ELEMENTS(KEYCODE_ARRAY);
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeSfxAccCfgTabListBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    WinBits nWinBits = WB_TABSTOP;
-
-    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-
-    rRet = VclPtr<SfxAccCfgTabListBox_Impl>::Create(pParent, nWinBits);
-}
-
-SfxAccCfgTabListBox_Impl::~SfxAccCfgTabListBox_Impl()
-{
-    disposeOnce();
-}
-
-/** select the entry, which match the current key input ... excepting
-    keys, which are used for the dialog itself.
-  */
-void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
-{
-    vcl::KeyCode aCode1 = aKey.GetKeyCode();
-    sal_uInt16 nCode1 = aCode1.GetCode();
-    sal_uInt16 nMod1 = aCode1.GetModifier();
-
-    // is it related to our list box ?
-    if (
-        (nCode1 != KEY_DOWN    ) &&
-        (nCode1 != KEY_UP      ) &&
-        (nCode1 != KEY_LEFT    ) &&
-        (nCode1 != KEY_RIGHT   ) &&
-        (nCode1 != KEY_PAGEUP  ) &&
-        (nCode1 != KEY_PAGEDOWN)
-       )
-    {
-        SvTreeListEntry* pEntry = First();
-        while (pEntry)
-        {
-            TAccInfo* pUserData = static_cast<TAccInfo*>(pEntry->GetUserData());
-            if (pUserData)
-            {
-                sal_uInt16 nCode2 = pUserData->m_aKey.GetCode();
-                sal_uInt16 nMod2  = pUserData->m_aKey.GetModifier();
-
-                if ((nCode1 == nCode2) &&
-                    (nMod1  == nMod2 ))
-                {
-                    Select(pEntry);
-                    MakeVisible(pEntry);
-                    return;
-                }
-            }
-            pEntry = Next(pEntry);
-        }
-    }
-
-    // no - handle it as normal dialog input
-    SvTabListBox::KeyInput(aKey);
-}
 
 SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(TabPageParent pParent, const SfxItemSet& aSet )
     : SfxTabPage(pParent, "cui/ui/accelconfigpage.ui", "AccelConfigPage", &aSet)

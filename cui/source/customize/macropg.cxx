@@ -21,10 +21,10 @@
 
 #include <macropg.hxx>
 #include <vcl/layout.hxx>
-#include <svtools/svmedit.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
 #include <svl/eitem.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>

@@ -20,13 +20,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_REGIONSW_HXX
 
 #include <hintids.hxx>
-#include <vcl/field.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/treelistbox.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <editeng/brushitem.hxx>

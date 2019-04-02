@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/svmedit.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>

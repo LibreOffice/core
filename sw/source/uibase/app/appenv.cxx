@@ -25,7 +25,6 @@
 #include <sfx2/request.hxx>
 #include <svx/svxids.hrc>
 
-#include <svtools/svmedit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <sfx2/app.hxx>

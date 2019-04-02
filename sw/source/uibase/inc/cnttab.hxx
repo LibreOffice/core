@@ -20,17 +20,11 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CNTTAB_HXX
 
 #include <svx/stddlg.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
 #include <sfx2/tabdlg.hxx>
 
 #include <tox.hxx>
 #include "toxmgr.hxx"
 #include <svx/checklbx.hxx>
-#include <vcl/treelistbox.hxx>
-#include <vcl/menubtn.hxx>
 #include <svx/langbox.hxx>
 
 #define TOX_PAGE_SELECT 1

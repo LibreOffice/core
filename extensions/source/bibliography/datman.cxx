@@ -50,8 +50,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <svl/urihelper.hxx>
-#include <vcl/svtabbx.hxx>
-#include <vcl/headbar.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
