@@ -10,8 +10,8 @@
 #include <test/sheet/shape.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -28,65 +28,54 @@ namespace apitest
 void Shape::testShapeProperties()
 {
     uno::Reference<beans::XPropertySet> xShape(init(), UNO_QUERY_THROW);
-    OUString propName;
     uno::Any aNewValue;
 
-    propName = "Anchor";
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(getXSheetDocument(), UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Sequence<OUString> sheetNames = xSheets->getElementNames();
     uno::Reference<sheet::XSpreadsheet> xSheet(xSheets->getByName(sheetNames[0]), UNO_QUERY_THROW);
     uno::Reference<table::XCell> xCell(xSheet->getCellByPosition(0, 0), UNO_QUERY_THROW);
 
+    // Shape should be anchored to sheet by default
     uno::Reference<sheet::XSpreadsheet> xSheetGet;
+    CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue Anchor (XSpreadsheet)",
+                           xShape->getPropertyValue("Anchor") >>= xSheetGet);
+
+    // Anchor the shape to a cell
+    aNewValue <<= xCell;
+    xShape->setPropertyValue("Anchor", aNewValue);
     uno::Reference<table::XCell> xCellGet;
+    CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue Anchor (XCell)",
+                           xShape->getPropertyValue("Anchor") >>= xCellGet);
 
-    if (xShape->getPropertyValue(propName) >>= xSheetGet)
-    {
-        uno::Reference<sheet::XSpreadsheet> xSheetSet;
-        CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue Anchor (XSpreadsheet)",
-                               xShape->getPropertyValue(propName) >>= xSheetGet);
+    // Now anchor to sheet again
+    aNewValue <<= xSheet;
+    xShape->setPropertyValue("Anchor", aNewValue);
+    xShape->getPropertyValue("Anchor") >>= xSheetGet;
+    CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue Anchor (XSpreadsheet)",
+                           xShape->getPropertyValue("Anchor") >>= xSheetGet);
 
-        aNewValue <<= xSheet;
-        xShape->setPropertyValue(propName, aNewValue);
-        CPPUNIT_ASSERT(xShape->getPropertyValue(propName) >>= xSheetSet);
-        // TODO: Find a way to compare sheet::XSpreadsheet objects
-        //CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue Anchor (XSpreadsheet)",
-        //xSheet.get(), xSheetSet.get());
-    }
-    else if (xShape->getPropertyValue(propName) >>= xCellGet)
-    {
-        uno::Reference<table::XCell> xCellSet;
-        CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue Anchor (XCell)",
-                               xShape->getPropertyValue(propName) >>= xCellGet);
-
-        aNewValue <<= xCell;
-        xShape->setPropertyValue(propName, aNewValue);
-        CPPUNIT_ASSERT(xShape->getPropertyValue(propName) >>= xCellSet);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue Anchor (XCell)", xCell, xCellSet);
-    }
-
-    propName = "HoriOrientPosition";
     sal_Int32 nHoriOrientPositionGet = 0;
     sal_Int32 nHoriOrientPositionSet = 0;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue HoriOrientPosition",
-                           xShape->getPropertyValue(propName) >>= nHoriOrientPositionGet);
+                           xShape->getPropertyValue("HoriOrientPosition")
+                           >>= nHoriOrientPositionGet);
 
     aNewValue <<= nHoriOrientPositionGet + 42;
-    xShape->setPropertyValue(propName, aNewValue);
-    CPPUNIT_ASSERT(xShape->getPropertyValue(propName) >>= nHoriOrientPositionSet);
+    xShape->setPropertyValue("HoriOrientPosition", aNewValue);
+    CPPUNIT_ASSERT(xShape->getPropertyValue("HoriOrientPosition") >>= nHoriOrientPositionSet);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue HoriOrientPosition",
                                  nHoriOrientPositionGet + 42, nHoriOrientPositionSet);
 
-    propName = "VertOrientPosition";
     sal_Int32 nVertOrientPositionGet = 0;
     sal_Int32 nVertOrientPositionSet = 0;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue VertOrientPosition",
-                           xShape->getPropertyValue(propName) >>= nVertOrientPositionGet);
+                           xShape->getPropertyValue("VertOrientPosition")
+                           >>= nVertOrientPositionGet);
 
     aNewValue <<= nVertOrientPositionGet + 42;
-    xShape->setPropertyValue(propName, aNewValue);
-    CPPUNIT_ASSERT(xShape->getPropertyValue(propName) >>= nVertOrientPositionSet);
+    xShape->setPropertyValue("VertOrientPosition", aNewValue);
+    CPPUNIT_ASSERT(xShape->getPropertyValue("VertOrientPosition") >>= nVertOrientPositionSet);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue VertOrientPosition",
                                  nVertOrientPositionGet + 42, nVertOrientPositionSet);
 }
