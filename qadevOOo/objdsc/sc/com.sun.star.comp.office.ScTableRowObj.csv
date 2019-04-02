@@ -1,7 +1,3 @@
-"ScTableRowObj";"com::sun::star::table::TableRow";"Height"
-"ScTableRowObj";"com::sun::star::table::TableRow";"OptimalHeight"
-"ScTableRowObj";"com::sun::star::table::TableRow";"IsVisible"
-"ScTableRowObj";"com::sun::star::table::TableRow";"IsStartOfNewPage"
 "ScTableRowObj";"com::sun::star::table::XCellRange";"getCellByPosition()"
 "ScTableRowObj";"com::sun::star::table::XCellRange";"getCellRangeByPosition()"
 "ScTableRowObj";"com::sun::star::table::XCellRange";"getCellRangeByName()"

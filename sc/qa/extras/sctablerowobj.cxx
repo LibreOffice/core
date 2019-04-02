@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
+#include <test/table/tablerow.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -25,7 +26,7 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScTableRowObj : public CalcUnoApiTest, public apitest::XPropertySet
+class ScTableRowObj : public CalcUnoApiTest, public apitest::TableRow, public apitest::XPropertySet
 {
 public:
     ScTableRowObj();
@@ -35,6 +36,9 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScTableRowObj);
+
+    // TableRow
+    CPPUNIT_TEST(testTableRowProperties);
 
     // XPropertySet
     CPPUNIT_TEST(testGetPropertySetInfo);
