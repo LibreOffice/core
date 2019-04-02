@@ -997,7 +997,7 @@ void paintGraphicUsingPrimitivesHelper(
             // more some 'grow in outside direction' but with unequal grow
             // values in all directions - just maaany problems
             // involved), use a graphical trick: The topology of the
-            // PolyPolygon uses the stndard FillRule, so adding the now
+            // PolyPolygon uses the standard FillRule, so adding the now
             // guaranteed to be bigger or equal bounding (enclosing)
             // rectangle twice as polygon will expand the BoundRange, but
             // not change the geometry visualization at all
