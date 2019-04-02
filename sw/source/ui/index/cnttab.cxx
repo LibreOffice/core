@@ -1113,7 +1113,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
         case TOX_AUTHORITIES:
         case TOX_BIBLIOGRAPHY :
         {
-            if (m_xBracketLB->get_active() != -1)
+            if (m_xBracketLB->get_active())
                 rDesc.SetAuthBrackets(m_xBracketLB->get_active_text());
             else
                 rDesc.SetAuthBrackets(OUString());
