@@ -11,6 +11,7 @@
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
+#include <test/container/xnamed.hxx>
 #include <test/sheet/tableautoformat.hxx>
 #include <cppu/unotype.hxx>
 
@@ -31,7 +32,8 @@ class ScAutoFormatObj : public CalcUnoApiTest,
                         public apitest::TableAutoFormat,
                         public apitest::XElementAccess,
                         public apitest::XEnumerationAccess,
-                        public apitest::XIndexAccess
+                        public apitest::XIndexAccess,
+                        public apitest::XNamed
 {
 public:
     ScAutoFormatObj();
@@ -56,6 +58,10 @@ public:
     CPPUNIT_TEST(testGetByIndex);
     CPPUNIT_TEST(testGetCount);
 
+    // XNamed
+    CPPUNIT_TEST(testGetName);
+    CPPUNIT_TEST(testSetName);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -66,6 +72,7 @@ ScAutoFormatObj::ScAutoFormatObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<beans::XPropertySet>::get())
     , XIndexAccess(16)
+    , XNamed("Default")
 {
 }
 

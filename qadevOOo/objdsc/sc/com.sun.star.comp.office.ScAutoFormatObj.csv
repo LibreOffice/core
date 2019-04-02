@@ -1,5 +1,3 @@
-"ScAutoFormatObj";"com::sun::star::container::XNamed";"getName()"
-"ScAutoFormatObj";"com::sun::star::container::XNamed";"setName()"
 "ScAutoFormatObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "ScAutoFormatObj";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "ScAutoFormatObj";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
