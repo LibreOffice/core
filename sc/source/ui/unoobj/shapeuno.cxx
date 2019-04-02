@@ -57,7 +57,6 @@ static const SfxItemPropertyMapEntry* lcl_GetShapeMap()
         {OUString(SC_UNONAME_IMAGEMAP), 0, cppu::UnoType<container::XIndexContainer>::get(), 0, 0 },
         {OUString(SC_UNONAME_VERTPOS), 0, cppu::UnoType<sal_Int32>::get(), 0, 0 },
         {OUString(SC_UNONAME_MOVEPROTECT), 0, cppu::UnoType<sal_Bool>::get(), 0, 0 },
-        // #i66550 HLINK_FOR_SHAPES
         {OUString(SC_UNONAME_HYPERLINK), 0, cppu::UnoType<OUString>::get(), 0, 0 },
         {OUString(SC_UNONAME_URL), 0, cppu::UnoType<OUString>::get(), 0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -73,7 +72,6 @@ const SvEventDescription* ScShapeObj::GetSupportedMacroItems()
     };
     return aMacroDescriptionsImpl;
 }
-// #i66550 HLINK_FOR_SHAPES
 ScMacroInfo* ScShapeObj_getShapeHyperMacroInfo( const ScShapeObj* pShape, bool bCreate = false )
 {
         if( pShape )

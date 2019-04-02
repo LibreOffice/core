@@ -3435,7 +3435,6 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
     }
     if (!bIsChart)
     {
-        // #i66550 HLINK_FOR_SHAPES
         OUString sHlink;
         try
         {

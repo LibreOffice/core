@@ -194,7 +194,6 @@
 #define SC_UNONAME_ANCHOR           "Anchor"
 #define SC_UNONAME_HORIPOS          "HoriOrientPosition"
 #define SC_UNONAME_VERTPOS          "VertOrientPosition"
-//     #i66550 HLINK_FOR_SHAPES
 #define SC_UNONAME_HYPERLINK        "Hyperlink"
 #define SC_UNONAME_MOVEPROTECT      "MoveProtect"
 

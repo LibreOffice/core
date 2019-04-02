@@ -5039,7 +5039,6 @@ SfxVoidItem SplitWindow SID_WINDOW_SPLIT
 ]
 
 
-// ISSUE66550_HLINK_FOR_SHAPES
 SfxVoidItem EditShapeHyperlink SID_DRAW_HLINK_EDIT
 ()
 [
@@ -5058,7 +5057,6 @@ SfxVoidItem EditShapeHyperlink SID_DRAW_HLINK_EDIT
 ]
 
 
-// ISSUE66550_HLINK_FOR_SHAPES
 SfxVoidItem DeleteShapeHyperlink SID_DRAW_HLINK_DELETE
 ()
 [
