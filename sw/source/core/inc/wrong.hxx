@@ -320,9 +320,6 @@ public:
     const SwWrongArea* GetWrongElement(TextFrameIndex nStart);
 
     bool LooksUseful() { return m_pMergedPara || m_pWrongList; }
-    bool MergedOrSame(SwWrongList const*const pList) const {
-        return m_pMergedPara || m_pWrongList == pList;
-    }
 };
 
 class WrongListIteratorCounter

@@ -1755,7 +1755,6 @@ SwTextSlot::SwTextSlot(
             {
                 std::pair<SwTextNode const*, sal_Int32> pos(pNew->GetTextFrame()->MapViewToModel(nIdx));
                 SwWrongList const*const pSmartTags(pos.first->GetSmartTags());
-                assert(m_pOldSmartTagList->MergedOrSame(pSmartTags));
                 if (pSmartTags)
                 {
                     const sal_uInt16 nPos = pSmartTags->GetWrongPos(pos.second);
@@ -1784,7 +1783,6 @@ SwTextSlot::SwTextSlot(
             {
                 std::pair<SwTextNode const*, sal_Int32> pos(pNew->GetTextFrame()->MapViewToModel(nIdx));
                 SwWrongList const*const pGrammar(pos.first->GetGrammarCheck());
-                assert(m_pOldGrammarCheckList->MergedOrSame(pGrammar));
                 if (pGrammar)
                 {
                     const sal_uInt16 nPos = pGrammar->GetWrongPos(pos.second);
