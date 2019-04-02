@@ -74,13 +74,13 @@ Any SAL_CALL BaseControl::queryInterface( const Type& rType )
     Any aReturn;
     if ( m_xDelegator.is() )
     {
-        // If an delegator exist, forward question to his queryInterface.
-        // Delegator will ask his own queryAggregation!
+        // If a delegator exists, forward question to its queryInterface.
+        // Delegator will ask its own queryAggregation!
         aReturn = m_xDelegator->queryInterface( rType );
     }
     else
     {
-        // If an delegator unknown, forward question to own queryAggregation.
+        // If a delegator is unknown, forward question to own queryAggregation.
         aReturn = queryAggregation( rType );
     }
 
@@ -566,7 +566,7 @@ void SAL_CALL BaseControl::draw(    sal_Int32   nX  ,
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
 
-    // - paint to an view
+    // - paint to a view
     // - use the method "paint()"
     // - see also "windowPaint()"
     impl_paint( nX, nY, m_xGraphicsView );
@@ -576,7 +576,7 @@ void SAL_CALL BaseControl::draw(    sal_Int32   nX  ,
 
 sal_Bool SAL_CALL BaseControl::setGraphics( const Reference< XGraphics >& xDevice )
 {
-    // - set the graphics for an view
+    // - set the graphics for a view
     // - in this class exist 2 graphics-member ... one for peer[_xGraphicsPeer] and one for view[_xGraphicsView]
     // - they are used by "windowPaint() and draw()", forwarded to "paint ()"
     bool bReturn = false;
@@ -699,7 +699,7 @@ void SAL_CALL BaseControl::windowHidden( const EventObject& /*aEvent*/ )
 
 WindowDescriptor BaseControl::impl_getWindowDescriptor( const Reference< XWindowPeer >& xParentPeer )
 {
-    // - used from "createPeer()" to set the values of an css::awt::WindowDescriptor !!!
+    // - used from "createPeer()" to set the values of a css::awt::WindowDescriptor !!!
     // - if you will change the descriptor-values, you must override this virtual function
     // - the caller must release the memory for this dynamical descriptor !!!
 
