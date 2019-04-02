@@ -197,6 +197,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_tablecolumnsobj \
 	CppunitTest_sc_tableconditionalentryobj \
 	CppunitTest_sc_tableconditionalformat \
+	CppunitTest_sc_tablerowobj \
 	CppunitTest_sc_tablerowsobj \
 	CppunitTest_sc_tablesheetobj \
 	CppunitTest_sc_tablesheetsobj \
