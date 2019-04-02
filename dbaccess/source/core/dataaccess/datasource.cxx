@@ -616,7 +616,8 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
             Reference<XPropertySet> const xPropSet(xRootStorage, UNO_QUERY_THROW);
             sal_Int32 nOpenMode(0);
             if ((xPropSet->getPropertyValue("OpenMode") >>= nOpenMode)
-                && (nOpenMode & css::embed::ElementModes::WRITE))
+                && (nOpenMode & css::embed::ElementModes::WRITE)
+                && (!Application::IsHeadlessModeEnabled()))
             {
                 MigrationWarnDialog aWarnDlg(GetFrameWeld(m_pImpl->getModel_noCreate()));
                 bNeedMigration = aWarnDlg.run() == RET_OK;
