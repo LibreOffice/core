@@ -117,6 +117,7 @@ bool SdPdfFilter::Import()
     {
         const Graphic& rGraphic = aPair.first;
         const Size& aSize = aPair.second;
+        SAL_WARN("vcl.gdi", "PDF PAGE! " << aSize);
 
         const sal_Int32 nPageNumber = rGraphic.getPageNumber();
         assert(nPageNumber >= 0 && nPageNumber < static_cast<sal_Int32>(aGraphics.size()));

@@ -162,6 +162,7 @@ private:
     bool                ImplIsDummyContext() const { return mbDummyContext; }
     void                ImplSetLink( const GfxLink& );
     void                ImplSetSharedLink(const std::shared_ptr<GfxLink>& pGfxLink);
+    std::shared_ptr<GfxLink> ImplGetSharedLink() const;
     GfxLink             ImplGetLink();
     bool                ImplIsLink() const;
 
