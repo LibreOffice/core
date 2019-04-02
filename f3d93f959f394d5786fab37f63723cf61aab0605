@@ -16,6 +16,24 @@
       "revId": "f3d93f959f394d5786fab37f63723cf61aab0605",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_18c64b69",
+        "filename": "vcl/inc/salinst.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-04-02T12:02:13Z",
+      "side": 1,
+      "message": "Yes, at first I was thinking to create something like that but for SalBitmap, but then I need this info before making a new Bitmap instance. Anyway, let\u0027s hope we won\u0027t need this for a long time.",
+      "parentUuid": "df87a7cf_38978f93",
+      "revId": "f3d93f959f394d5786fab37f63723cf61aab0605",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
