@@ -16,6 +16,24 @@
       "revId": "4c10111ea300bd1be372841e21cd4e639b8258cf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_a3bb70e3",
+        "filename": "vcl/qt5/Qt5Instance.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-04-02T22:42:24Z",
+      "side": 1,
+      "message": "I renamed FreeableArg to FreeableCStr and used that with reset. Since strdup requires a valid string, no real other possibility here. No reason to use any more sophisticated classes here (after all we just want to temporary get rid of SESSION_MANAGER env, so QSessionManager won\u0027t interfere with LO session management).\n\nOh - there is - since Qt 5.6 - isFallbackSessionManagementEnabled(). defaulting to true, but I have no idea, what happens when setting it to false. I guess we simply keep this hack. I couldn\u0027t find any better way, at least there is no Qt::AA_NoSessionManager flag or somesuch.",
+      "parentUuid": "df87a7cf_ef4e3fc0",
+      "revId": "4c10111ea300bd1be372841e21cd4e639b8258cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
