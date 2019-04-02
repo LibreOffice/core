@@ -48,12 +48,30 @@ void Shape::testShapeProperties()
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue Anchor (XCell)",
                            xShape->getPropertyValue("Anchor") >>= xCellGet);
 
+    // Shape should not resize with cell by default
+    bool bIsResizeWithCell;
+    xShape->getPropertyValue("ResizeWithCell") >>= bIsResizeWithCell;
+    CPPUNIT_ASSERT_MESSAGE("Shape should not resize with the cell", !bIsResizeWithCell);
+
+    xShape->setPropertyValue("ResizeWithCell", uno::Any(true));
+    xShape->getPropertyValue("ResizeWithCell") >>= bIsResizeWithCell;
+    CPPUNIT_ASSERT_MESSAGE("Shape should resize with the cell", bIsResizeWithCell);
+
     // Now anchor to sheet again
     aNewValue <<= xSheet;
     xShape->setPropertyValue("Anchor", aNewValue);
     xShape->getPropertyValue("Anchor") >>= xSheetGet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue Anchor (XSpreadsheet)",
                            xShape->getPropertyValue("Anchor") >>= xSheetGet);
+
+    // Setting ResizeWithCell while anchored to page should not have any effect
+    xShape->getPropertyValue("ResizeWithCell") >>= bIsResizeWithCell;
+    CPPUNIT_ASSERT_MESSAGE("ResizeWithCell should be false for sheet anchored shapes",
+                           !bIsResizeWithCell);
+    xShape->setPropertyValue("ResizeWithCell", uno::Any(true));
+    xShape->getPropertyValue("ResizeWithCell") >>= bIsResizeWithCell;
+    CPPUNIT_ASSERT_MESSAGE("ResizeWithCell should be unchangeable for sheet anchored shapes",
+                           !bIsResizeWithCell);
 
     sal_Int32 nHoriOrientPositionGet = 0;
     sal_Int32 nHoriOrientPositionSet = 0;
