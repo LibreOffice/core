@@ -106,13 +106,12 @@ private:
     css::uno::Reference<css::awt::XWindow>   mxParent;  /// parent window
     css::uno::Reference< XComponentContext > mxContext;
 
-    VclPtr<XMLFilterSettingsDialog>          mpDialog;
+    std::shared_ptr<XMLFilterSettingsDialog> mxDialog;
 };
 
-XMLFilterDialogComponent::XMLFilterDialogComponent( const css::uno::Reference< XComponentContext >& rxContext ) :
-    OComponentHelper( maMutex ),
-    mxContext( rxContext ),
-    mpDialog( nullptr )
+XMLFilterDialogComponent::XMLFilterDialogComponent(const css::uno::Reference< XComponentContext >& rxContext)
+    : OComponentHelper(maMutex)
+    , mxContext(rxContext)
 {
     Reference< XDesktop2 > xDesktop = Desktop::create( rxContext );
     Reference< XTerminateListener > xListener( this );
@@ -241,7 +240,8 @@ void SAL_CALL XMLFilterDialogComponent::disposing()
 {
     ::SolarMutexGuard aGuard;
 
-    mpDialog.disposeAndClear();
+    if (mxDialog)
+        mxDialog->response(RET_CLOSE);
 }
 
 
@@ -249,18 +249,17 @@ void SAL_CALL XMLFilterDialogComponent::disposing()
 void SAL_CALL XMLFilterDialogComponent::queryTermination( const EventObject& /* Event */ )
 {
     ::SolarMutexGuard aGuard;
-    if (!mpDialog)
+    if (!mxDialog)
         return;
-    mpDialog->ToTop();
+    mxDialog->present();
 }
 
 void SAL_CALL XMLFilterDialogComponent::notifyTermination( const EventObject& /* Event */ )
 {
     {
         ::SolarMutexGuard aGuard;
-        if (!mpDialog)
-            return;
-        mpDialog->Close();
+        if (mxDialog)
+            mxDialog->response(RET_CLOSE);
     }
 
     // we are going down, so dispose us!
@@ -280,27 +279,24 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute()
     ::SolarMutexGuard aGuard;
 
     bool bLaunch = false;
-    if (!mpDialog)
+    if (!mxDialog)
     {
         Reference< XComponent > xComp( this );
-        if (mxParent.is())
-            mpDialog = VclPtr<XMLFilterSettingsDialog>::Create(VCLUnoHelper::GetWindow(mxParent), mxContext);
-        else
-            mpDialog = VclPtr<XMLFilterSettingsDialog>::Create(nullptr, mxContext, Dialog::InitFlag::NoParent);
+        mxDialog.reset(new XMLFilterSettingsDialog(Application::GetFrameWeld(mxParent), mxContext));
         bLaunch = true;
     }
 
-    mpDialog->UpdateWindow();
+    mxDialog->UpdateWindow();
 
     if (!bLaunch)
     {
-        mpDialog->ToTop();
+        mxDialog->present();
         return 0;
     }
 
-    mpDialog->StartExecuteAsync([this](sal_Int32)
+    weld::DialogController::runAsync(mxDialog, [this](sal_Int32)
     {
-        mpDialog.reset();
+        mxDialog.reset();
     });
 
     return 0;

@@ -740,6 +740,7 @@ public:
     virtual void clear() = 0;
     virtual int get_height_rows(int nRows) const = 0;
 
+    virtual void columns_autosize() = 0;
     virtual void set_column_fixed_widths(const std::vector<int>& rWidths) = 0;
     virtual int get_column_width(int nCol) const = 0;
     virtual OUString get_column_title(int nColumn) const = 0;

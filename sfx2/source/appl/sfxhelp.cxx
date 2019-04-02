@@ -1124,8 +1124,9 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
 
             if(bShowOfflineHelpPopUp)
             {
-                aBusy.incBusy(pWindow);
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWindow ? pWindow->GetFrameWeld() : nullptr, "sfx/ui/helpmanual.ui"));
+                weld::Window* pWeldWindow = pWindow ? pWindow->GetFrameWeld() : nullptr;
+                aBusy.incBusy(pWeldWindow);
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWeldWindow, "sfx/ui/helpmanual.ui"));
                 std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("onlinehelpmanual"));
                 std::unique_ptr<weld::CheckButton> m_xHideOfflineHelpCB(xBuilder->weld_check_button("hidedialog"));
                 LanguageTag aLangTag = Application::GetSettings().GetUILanguageTag();
@@ -1143,8 +1144,9 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
                     return true;
                 else
                 {
-                    aBusy.incBusy(pWindow);
-                    NoHelpErrorBox aErrBox(pWindow ? pWindow->GetFrameWeld() : nullptr);
+                    weld::Window* pWeldWindow = pWindow ? pWindow->GetFrameWeld() : nullptr;
+                    aBusy.incBusy(pWeldWindow);
+                    NoHelpErrorBox aErrBox(pWeldWindow);
                     aErrBox.run();
                     aBusy.decBusy();
                     return false;

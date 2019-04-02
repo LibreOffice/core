@@ -23,77 +23,28 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XHierarchicalName.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/svtabbx.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 #include <svl/poolitem.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include "xmlfiltercommon.hxx"
 
-class HeaderBar;
-class XMLFilterListBox;
-
-class SvxPathControl : public vcl::Window
-{
-private:
-    bool bHasBeenShown;
-    VclPtr<VclVBox> m_pVBox;
-    VclPtr<HeaderBar> m_pHeaderBar;
-    VclPtr<XMLFilterListBox> m_pFocusCtrl;
-protected:
-    virtual void Resize() override;
-    virtual Size GetOptimalSize() const override;
-public:
-    explicit SvxPathControl(vcl::Window* pParent);
-    HeaderBar* getHeaderBar() { return m_pHeaderBar; }
-    XMLFilterListBox* getListBox() { return m_pFocusCtrl; }
-    virtual ~SvxPathControl() override;
-    virtual void dispose() override;
-
-    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
-};
-
-class HeaderBar;
-
-class XMLFilterListBox : public SvTabListBox
-{
-private:
-    VclPtr<HeaderBar>  m_pHeaderBar;
-
-    DECL_LINK( TabBoxScrollHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK( HeaderEndDrag_Impl, HeaderBar*, void );
-
-    static OUString getEntryString( const filter_info_impl* pInfo );
-
-public:
-    XMLFilterListBox(Window* pParent, SvxPathControl* pPathControl);
-    virtual ~XMLFilterListBox() override;
-    virtual void dispose() override;
-
-    /** adds a new filter info entry to the ui filter list */
-    void addFilterEntry( const filter_info_impl* pInfo );
-
-    void changeEntry( const filter_info_impl* pInfo );
-};
-
-
-class XMLFilterSettingsDialog : public ModelessDialog
+class XMLFilterSettingsDialog : public weld::GenericDialogController
 {
 public:
-    XMLFilterSettingsDialog(vcl::Window* pParent,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-        Dialog::InitFlag eFlag = Dialog::InitFlag::Default);
+    XMLFilterSettingsDialog(weld::Window* pParent,
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext);
     virtual ~XMLFilterSettingsDialog() override;
-    virtual void dispose() override;
 
-    DECL_LINK(ClickHdl_Impl, Button *, void );
-    DECL_LINK(SelectionChangedHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK(DoubleClickHdl_Impl, SvTreeListBox*, bool );
+    DECL_LINK(ClickHdl_Impl, weld::Button&, void );
+    DECL_LINK(SelectionChangedHdl_Impl, weld::TreeView&, void);
+    DECL_LINK(DoubleClickHdl_Impl, weld::TreeView&, void);
 
     void    UpdateWindow();
+
+    void    present() { m_xDialog->present(); }
 
     void    onNew();
     void    onEdit();
@@ -103,14 +54,11 @@ public:
     void    onOpen();
 
     void    updateStates();
-
-    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
-
 private:
     void    initFilterList();
     void    disposeFilterList();
 
-    void    incBusy() { maBusy.incBusy(this); }
+    void    incBusy() { maBusy.incBusy(m_xDialog.get()); }
     void    decBusy() { maBusy.decBusy(); }
 
     bool    insertOrEdit( filter_info_impl* pNewInfo, const filter_info_impl* pOldInfo = nullptr );
@@ -118,6 +66,13 @@ private:
     OUString createUniqueFilterName( const OUString& rUIName );
     OUString createUniqueTypeName( const OUString& rTypeName );
     OUString createUniqueInterfaceName( const OUString& rInterfaceName );
+
+    /** adds a new filter info entry to the ui filter list */
+    void addFilterEntry( const filter_info_impl* pInfo );
+
+    void changeEntry( const filter_info_impl* pInfo );
+
+    static OUString getEntryString( const filter_info_impl* pInfo );
 
 private:
     css::uno::Reference< css::uno::XComponentContext >    mxContext;
@@ -128,20 +83,20 @@ private:
     std::vector< std::unique_ptr<filter_info_impl> > maFilterVector;
 
     TopLevelWindowLocker maBusy;
-    VclPtr<XMLFilterListBox>   m_pFilterListBox;
-    VclPtr<SvxPathControl> m_pCtrlFilterList;
-    VclPtr<PushButton> m_pPBNew;
-    VclPtr<PushButton> m_pPBEdit;
-    VclPtr<PushButton> m_pPBTest;
-    VclPtr<PushButton> m_pPBDelete;
-    VclPtr<PushButton> m_pPBSave;
-    VclPtr<PushButton> m_pPBOpen;
-    VclPtr<CloseButton> m_pPBClose;
 
     OUString m_sTemplatePath;
     OUString m_sDocTypePrefix;
 
     SvtModuleOptions maModuleOpt;
+
+    std::unique_ptr<weld::Button> m_xPBNew;
+    std::unique_ptr<weld::Button> m_xPBEdit;
+    std::unique_ptr<weld::Button> m_xPBTest;
+    std::unique_ptr<weld::Button> m_xPBDelete;
+    std::unique_ptr<weld::Button> m_xPBSave;
+    std::unique_ptr<weld::Button> m_xPBOpen;
+    std::unique_ptr<weld::Button> m_xPBClose;
+    std::unique_ptr<weld::TreeView> m_xFilterListBox;
 };
 
 #endif

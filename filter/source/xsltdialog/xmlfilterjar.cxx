@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/fileurl.hxx>
 #include <unotools/resmgr.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <osl/file.hxx>
 

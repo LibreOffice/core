@@ -28,6 +28,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -41,6 +42,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <osl/file.hxx>
 #include <unotools/tempfile.hxx>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 

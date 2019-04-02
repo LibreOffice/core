@@ -2278,6 +2278,7 @@ private:
     int m_nSortColumn;
 
     DECL_LINK(SelectHdl, SvTreeListBox*, void);
+    DECL_LINK(DeSelectHdl, SvTreeListBox*, void);
     DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
     DECL_LINK(ExpandingHdl, SvTreeListBox*, bool);
     DECL_LINK(EndDragHdl, HeaderBar*, void);
@@ -2296,6 +2297,7 @@ public:
     {
         m_xTreeView->SetNodeDefaultImages();
         m_xTreeView->SetSelectHdl(LINK(this, SalInstanceTreeView, SelectHdl));
+        m_xTreeView->SetDeselectHdl(LINK(this, SalInstanceTreeView, DeSelectHdl));
         m_xTreeView->SetDoubleClickHdl(LINK(this, SalInstanceTreeView, DoubleClickHdl));
         m_xTreeView->SetExpandingHdl(LINK(this, SalInstanceTreeView, ExpandingHdl));
         const long aTabPositions[] = { 0 };
@@ -2318,6 +2320,19 @@ public:
         }
         m_aCheckButtonData.SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
         m_aRadioButtonData.SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
+    }
+
+    virtual void columns_autosize() override
+    {
+        std::vector<long> aWidths;
+        m_xTreeView->getPreferredDimensions(aWidths);
+        if (aWidths.size() > 2)
+        {
+            std::vector<int> aColWidths;
+            for (size_t i = 1; i < aWidths.size() - 1; ++i)
+                aColWidths.push_back(aWidths[i] - aWidths[i - 1]);
+            set_column_fixed_widths(aColWidths);
+        }
     }
 
     virtual void set_column_fixed_widths(const std::vector<int>& rWidths) override
@@ -3163,6 +3178,7 @@ public:
         m_xTreeView->SetExpandingHdl(Link<SvTreeListBox*, bool>());
         m_xTreeView->SetDoubleClickHdl(Link<SvTreeListBox*, bool>());
         m_xTreeView->SetSelectHdl(Link<SvTreeListBox*, void>());
+        m_xTreeView->SetDeselectHdl(Link<SvTreeListBox*, void>());
         m_xTreeView->SetScrolledHdl(Link<SvTreeListBox*, void>());
     }
 };
@@ -3245,6 +3261,15 @@ IMPL_LINK(SalInstanceTreeView, ToggleHdl, SvLBoxButtonData*, pData, void)
 IMPL_LINK_NOARG(SalInstanceTreeView, SelectHdl, SvTreeListBox*, void)
 {
     if (notify_events_disabled())
+        return;
+    signal_changed();
+}
+
+IMPL_LINK_NOARG(SalInstanceTreeView, DeSelectHdl, SvTreeListBox*, void)
+{
+    if (notify_events_disabled())
+        return;
+    if (m_xTreeView->GetSelectionMode() == SelectionMode::Single)
         return;
     signal_changed();
 }
