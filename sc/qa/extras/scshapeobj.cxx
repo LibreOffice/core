@@ -42,7 +42,8 @@ public:
     CPPUNIT_TEST_SUITE(ScShapeObj);
 
     // Shape
-    CPPUNIT_TEST(testShapeProperties);
+    CPPUNIT_TEST(testShapePropertiesAnchor);
+    CPPUNIT_TEST(testShapePropertiesPosition);
 
     CPPUNIT_TEST_SUITE_END();
 

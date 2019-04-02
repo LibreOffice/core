@@ -25,7 +25,7 @@ using namespace com::sun::star::uno;
 
 namespace apitest
 {
-void Shape::testShapeProperties()
+void Shape::testShapePropertiesAnchor()
 {
     uno::Reference<beans::XPropertySet> xShape(init(), UNO_QUERY_THROW);
     uno::Any aNewValue;
@@ -72,6 +72,12 @@ void Shape::testShapeProperties()
     xShape->getPropertyValue("ResizeWithCell") >>= bIsResizeWithCell;
     CPPUNIT_ASSERT_MESSAGE("ResizeWithCell should be unchangeable for sheet anchored shapes",
                            !bIsResizeWithCell);
+}
+
+void Shape::testShapePropertiesPosition()
+{
+    uno::Reference<beans::XPropertySet> xShape(init(), UNO_QUERY_THROW);
+    uno::Any aNewValue;
 
     sal_Int32 nHoriOrientPositionGet = 0;
     sal_Int32 nHoriOrientPositionSet = 0;
