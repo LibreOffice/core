@@ -147,7 +147,9 @@ public:
     const Graphic&          GetGraphic() const;
 
     Graphic                 GetTransformedGraphic( SdrGrafObjTransformsAttrs nTransformFlags = SdrGrafObjTransformsAttrs::ALL ) const;
+
     GraphicType             GetGraphicType() const;
+
     GraphicAttr             GetGraphicAttr( SdrGrafObjTransformsAttrs nTransformFlags = SdrGrafObjTransformsAttrs::ALL  ) const;
 
     // Keep ATM for SD.
@@ -200,7 +202,7 @@ public:
     GDIMetaFile getMetafileFromEmbeddedVectorGraphicData() const;
 
     bool isEmbeddedPdfData() const;
-    std::shared_ptr<css::uno::Sequence<sal_Int8>> const & getEmbeddedPdfData() const;
+    std::shared_ptr<std::vector<sal_Int8>> const & getEmbeddedPdfData() const;
     /// Returns the page number of the embedded data (typically to re-render or import it).
     sal_Int32 getEmbeddedPageNumber() const;
 
