@@ -203,7 +203,7 @@ public:
         /// Size of the bitmap replacement, in pixels.
         Size m_aPixelSize;
         /// PDF data from the graphic object, if not writing a reference XObject.
-        css::uno::Sequence<sal_Int8> m_aPDFData;
+        std::vector<sal_Int8> m_aPDFData;
 
         ReferenceXObjectEmit()
             : m_nFormObject(0),
@@ -423,7 +423,7 @@ public:
         /// ID of the file.
         sal_Int32 m_nObject;
         /// Contents of the file.
-        css::uno::Sequence<sal_Int8> m_aData;
+        std::vector<sal_Int8> m_aData;
 
         PDFEmbeddedFile()
             : m_nObject(0)

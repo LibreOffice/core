@@ -4516,12 +4516,12 @@ bool PDFWriterImpl::emitEmbeddedFiles()
         aLine.append(rEmbeddedFile.m_nObject);
         aLine.append(" 0 obj\n");
         aLine.append("<< /Type /EmbeddedFile /Length ");
-        aLine.append(static_cast<sal_Int64>(rEmbeddedFile.m_aData.getLength()));
+        aLine.append(static_cast<sal_Int64>(rEmbeddedFile.m_aData.size()));
         aLine.append(" >>\nstream\n");
         CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
         aLine.setLength(0);
 
-        CHECK_RETURN(writeBuffer(rEmbeddedFile.m_aData.getArray(), rEmbeddedFile.m_aData.getLength()));
+        CHECK_RETURN(writeBuffer(rEmbeddedFile.m_aData.data(), rEmbeddedFile.m_aData.size()));
 
         aLine.append("\nendstream\nendobj\n\n");
         CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
@@ -8473,7 +8473,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
 
 void PDFWriterImpl::writeJPG( JPGEmit& rObject )
 {
-    if (rObject.m_aReferenceXObject.m_aPDFData.hasElements() && !m_aContext.UseReferenceXObject)
+    if (!rObject.m_aReferenceXObject.m_aPDFData.empty() && !m_aContext.UseReferenceXObject)
     {
         writeReferenceXObject(rObject.m_aReferenceXObject);
         return;
@@ -8787,7 +8787,7 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
         // Parse the PDF data, we need that to write the PDF dictionary of our
         // object.
         SvMemoryStream aPDFStream;
-        aPDFStream.WriteBytes(rEmit.m_aPDFData.getArray(), rEmit.m_aPDFData.getLength());
+        aPDFStream.WriteBytes(rEmit.m_aPDFData.data(), rEmit.m_aPDFData.size());
         aPDFStream.Seek(0);
         filter::PDFDocument aPDFDocument;
         if (!aPDFDocument.Read(aPDFStream))
@@ -9023,7 +9023,7 @@ namespace
 
 bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
 {
-    if (rObject.m_aReferenceXObject.m_aPDFData.hasElements() && !m_aContext.UseReferenceXObject)
+    if (!rObject.m_aReferenceXObject.m_aPDFData.empty() && !m_aContext.UseReferenceXObject)
     {
         writeReferenceXObject(rObject.m_aReferenceXObject);
         return true;

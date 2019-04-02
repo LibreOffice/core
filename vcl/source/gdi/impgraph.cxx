@@ -125,13 +125,13 @@ GraphicID::GraphicID(ImpGraphic const & rGraphic)
         }
         else if (rGraphic.hasPdfData())
         {
-            std::shared_ptr<css::uno::Sequence<sal_Int8>> pPdfData = rGraphic.getPdfData();
+            std::shared_ptr<std::vector<sal_Int8>> pPdfData = rGraphic.getPdfData();
             const BitmapEx& rBmpEx = rGraphic.ImplGetBitmapExRef();
 
             mnID1 |= (rGraphic.mnPageNumber & 0x0fffffff);
             mnID2 = rBmpEx.GetSizePixel().Width();
             mnID3 = rBmpEx.GetSizePixel().Height();
-            mnID4 = vcl_get_checksum(0, pPdfData->getConstArray(), pPdfData->getLength());
+            mnID4 = vcl_get_checksum(0, pPdfData->data(), pPdfData->size());
         }
         else if (rGraphic.ImplIsAnimated())
         {
@@ -439,7 +439,7 @@ bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
                         bRet = (*maVectorGraphicData) == (*rImpGraphic.maVectorGraphicData);
                     }
                 }
-                else if (mpPdfData && mpPdfData->hasElements())
+                else if (mpPdfData && !mpPdfData->empty())
                 {
                     bRet = (rImpGraphic.mpPdfData && *mpPdfData == *rImpGraphic.mpPdfData);
                 }
@@ -470,14 +470,14 @@ const VectorGraphicDataPtr& ImpGraphic::getVectorGraphicData() const
     return maVectorGraphicData;
 }
 
-void ImpGraphic::setPdfData(const std::shared_ptr<uno::Sequence<sal_Int8>>& rPdfData)
+void ImpGraphic::setPdfData(const std::shared_ptr<std::vector<sal_Int8>>& rPdfData)
 {
     ensureAvailable();
 
     mpPdfData = rPdfData;
 }
 
-const std::shared_ptr<uno::Sequence<sal_Int8>>& ImpGraphic::getPdfData() const
+const std::shared_ptr<std::vector<sal_Int8>>& ImpGraphic::getPdfData() const
 {
     ensureAvailable();
 
@@ -1696,10 +1696,10 @@ BitmapChecksum ImpGraphic::ImplGetChecksum() const
             {
                 if(maVectorGraphicData)
                     nRet = maVectorGraphicData->GetChecksum();
-                else if (mpPdfData && mpPdfData->hasElements())
+                else if (mpPdfData && !mpPdfData->empty())
                     // Include the PDF data in the checksum, so a metafile with
                     // and without PDF data is considered to be different.
-                    nRet = vcl_get_checksum(nRet, mpPdfData->getConstArray(), mpPdfData->getLength());
+                    nRet = vcl_get_checksum(nRet, mpPdfData->data(), mpPdfData->size());
                 else if( mpAnimation )
                     nRet = mpAnimation->GetChecksum();
                 else
@@ -1742,7 +1742,7 @@ bool ImpGraphic::ImplExportNative( SvStream& rOStm ) const
     return bResult;
 }
 
-static std::map<BitmapChecksum, std::shared_ptr<css::uno::Sequence<sal_Int8>>> sPdfDataCache;
+static std::map<BitmapChecksum, std::shared_ptr<std::vector<sal_Int8>>> sPdfDataCache;
 
 void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
 {
@@ -1906,7 +1906,7 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                 rImpGraphic.maEx = aBitmap;
 
                 std::vector<Bitmap> aBitmaps;
-                if (vcl::RenderPDFBitmaps(rImpGraphic.mpPdfData->getConstArray(), rImpGraphic.mpPdfData->getLength(), aBitmaps, rImpGraphic.mnPageNumber, 1) == 1)
+                if (vcl::RenderPDFBitmaps(rImpGraphic.mpPdfData->data(), rImpGraphic.mpPdfData->size(), aBitmaps, rImpGraphic.mnPageNumber, 1) == 1)
                     rImpGraphic.maEx = aBitmaps[0];
 
                 rImpGraphic.meType = GraphicType::Bitmap;
@@ -2002,7 +2002,7 @@ void WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic)
                 }
                 else if (rImpGraphic.hasPdfData())
                 {
-                    BitmapChecksum nPdfId = vcl_get_checksum(0, rImpGraphic.mpPdfData->getConstArray(), rImpGraphic.mpPdfData->getLength());
+                    BitmapChecksum nPdfId = vcl_get_checksum(0, rImpGraphic.mpPdfData->data(), rImpGraphic.mpPdfData->size());
                     if (sPdfDataCache.find(nPdfId) == sPdfDataCache.end())
                         sPdfDataCache.emplace(nPdfId, rImpGraphic.mpPdfData);
 
