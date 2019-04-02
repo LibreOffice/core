@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_38978f93",
+        "filename": "vcl/inc/salinst.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-04-02T10:15:13Z",
+      "side": 1,
+      "message": "As an aside, it initially struck me that supportsOperation in vcl/inc/salgdi.hxx might be similar enough to be extended with that info, but it doesn\u0027t seem to fit after all.",
+      "revId": "f3d93f959f394d5786fab37f63723cf61aab0605",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
