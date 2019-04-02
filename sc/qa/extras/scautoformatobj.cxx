@@ -13,6 +13,7 @@
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnamed.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <test/sheet/tableautoformat.hxx>
 #include <cppu/unotype.hxx>
 
@@ -35,7 +36,8 @@ class ScAutoFormatObj : public CalcUnoApiTest,
                         public apitest::XEnumerationAccess,
                         public apitest::XIndexAccess,
                         public apitest::XNamed,
-                        public apitest::XPropertySet
+                        public apitest::XPropertySet,
+                        public apitest::XServiceInfo
 {
 public:
     ScAutoFormatObj();
@@ -71,6 +73,11 @@ public:
     CPPUNIT_TEST(testPropertyChangeListener);
     CPPUNIT_TEST(testVetoableChangeListener);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -82,6 +89,7 @@ ScAutoFormatObj::ScAutoFormatObj()
     , XElementAccess(cppu::UnoType<beans::XPropertySet>::get())
     , XIndexAccess(16)
     , XNamed("Default")
+    , XServiceInfo("ScAutoFormatObj", "com.sun.star.sheet.TableAutoFormat")
 {
 }
 
