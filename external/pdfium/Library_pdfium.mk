@@ -27,6 +27,7 @@ $(eval $(call gb_Library_add_defs,pdfium,\
     -DUSE_SYSTEM_ICUUC \
     -DMEMORY_TOOL_REPLACES_ALLOCATOR \
     -DUNICODE \
+    -DWIN32_LEAN_AND_MEAN \
 ))
 
 # Don't show warnings upstream doesn't care about.
