@@ -55,7 +55,10 @@ VbaDocumentBase::VbaDocumentBase( uno::Sequence< uno::Any> const & args,
 OUString
 VbaDocumentBase::getName()
 {
-    return VbaDocumentBase::getNameFromModel( getModel() );
+    OUString sName = VbaDocumentBase::getNameFromModel( getModel() );
+    SAL_INFO("vbahelper", "VbaDocumentBase::getName: '" << sName << "'");
+
+    return sName;
 }
 
 OUString VbaDocumentBase::getNameFromModel( const uno::Reference< frame::XModel >& xModel )
@@ -86,6 +89,8 @@ VbaDocumentBase::getPath()
        sURL = sURL.copy( 0, sURL.getLength() - aURL.GetLastName().getLength() - 1 );
        ::osl::File::getSystemPathFromFileURL( sURL, sPath );
     }
+    SAL_INFO("vbahelper", "VbaDocumentBase::getPath: '" << sPath << "'");
+
     return sPath;
 }
 
@@ -94,6 +99,7 @@ VbaDocumentBase::getFullName()
 {
     OUString sPath = getName();
     //::osl::File::getSystemPathFromFileURL( getModel()->getURL(), sPath );
+    SAL_INFO("vbahelper", "VbaDocumentBase::getFullName: '" << sPath << "'");
     return sPath;
 }
 
