@@ -810,9 +810,11 @@ sal_Int32 ImplListBoxWindow::GetEntryPosForPoint( const Point& rPoint ) const
 
     sal_Int32 nSelect = mnTop;
     const ImplEntryType* pEntry = mpEntryList->GetEntryPtr( nSelect );
-    long nEntryHeight = pEntry->getHeightWithMargin();
-    while( pEntry && rPoint.Y() > nEntryHeight + nY )
+    while (pEntry)
     {
+        long nEntryHeight = pEntry->getHeightWithMargin();
+        if (rPoint.Y() <= nEntryHeight + nY)
+            break;
         nY += nEntryHeight;
         pEntry = mpEntryList->GetEntryPtr( ++nSelect );
     }
