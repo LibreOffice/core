@@ -115,7 +115,7 @@ struct FPDFBitmapDeleter
 using namespace com::sun::star;
 
 ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools::Rectangle& rRect,
-                                 const std::shared_ptr<uno::Sequence<sal_Int8>>& pPdfData)
+                                 const std::shared_ptr<std::vector<sal_Int8>>& pPdfData)
     : maTmpList()
     , mpVD(VclPtr<VirtualDevice>::Create())
     , maScaleRect(rRect)
@@ -163,7 +163,7 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     FPDF_InitLibraryWithConfig(&aConfig);
 
     // Load the buffer using pdfium.
-    mpPdfDocument = FPDF_LoadMemDocument(mpPdfData->getConstArray(), mpPdfData->getLength(),
+    mpPdfDocument = FPDF_LoadMemDocument(mpPdfData->data(), mpPdfData->size(),
                                          /*password=*/nullptr);
     if (!mpPdfDocument)
     {
