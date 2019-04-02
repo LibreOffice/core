@@ -2021,6 +2021,10 @@ URLBox::URLBox(std::unique_ptr<weld::ComboBox> pWidget)
     , bHistoryDisabled(false)
     , m_xWidget(std::move(pWidget))
 {
+    //don't grow to fix mega-long urls
+    Size aSize(m_xWidget->get_preferred_size());
+    m_xWidget->set_size_request(aSize.Width(), -1);
+
     Init();
 
     m_xWidget->connect_focus_in(LINK(this, URLBox, FocusInHdl));
