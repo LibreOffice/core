@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_f52052fa",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-04-02T07:11:13Z",
+      "side": 1,
+      "message": "Now this comment is a bit misleading, given you assert \"6\", not \"1\". :-)",
+      "revId": "1176e83dcf68ae8fc670b3ea4c610ec9063ad07f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
