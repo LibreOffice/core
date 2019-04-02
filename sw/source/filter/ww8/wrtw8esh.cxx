@@ -659,6 +659,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                 WinwordAnchoring::ConvertPosition( rHOr, rVOr, rFormat );
 
             Point aObjPos;
+            bool bHasHeightWidthSwapped(false);
             if (RES_FLYFRMFMT == rFormat.Which())
             {
                 SwRect aLayRect(rFormat.FindLayoutRect(false, &aObjPos));
@@ -694,6 +695,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                         const long nHeight = aRect.getHeight();
                         aRect.setWidth( nHeight );
                         aRect.setHeight( nWidth );
+                        bHasHeightWidthSwapped = true;
                     }
                 }
             }
@@ -754,6 +756,34 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
 
             //Nasty swap for bidi if necessary
             rWrt.MiserableRTLFrameFormatHack(nLeft, nRight, rFrameFormat);
+
+            // tdf#70838. Word relates the position to the unrotated rectangle,
+            // Writer to the rotated one. Because the rotation is around center,
+            // the difference counts half.
+            if(pObj && pObj->GetRotateAngle())
+            {
+                SwTwips nXOff;
+                SwTwips nYOff;
+                SwTwips nSnapWidth = pObj->GetSnapRect().getWidth();
+                SwTwips nSnapHeight = pObj->GetSnapRect().getHeight();
+                SwTwips nLogicWidth = pObj->GetLogicRect().getWidth();
+                SwTwips nLogicHeight = pObj->GetLogicRect().getHeight();
+                // +1 for to compensate integer arithmetic rounding errors
+                if(bHasHeightWidthSwapped)
+                {
+                    nXOff = (nSnapWidth - nLogicHeight + 1) / 2;
+                    nYOff = (nSnapHeight - nLogicWidth + 1) / 2;
+                }
+                else
+                {
+                    nXOff = (nSnapWidth - nLogicWidth + 1) / 2;
+                    nYOff = (nSnapHeight - nLogicHeight + 1) / 2;
+                }
+                nLeft += nXOff;
+                nRight += nXOff;
+                nTop += nYOff;
+                nBottom += nYOff;
+            }
 
             //xaLeft/yaTop/xaRight/yaBottom - rel. to anchor
             //(most of) the border is outside the graphic is word, so
