@@ -969,7 +969,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScSheetLinkObj \
     qadevOOo/tests/java/mod/_sc/ScStyleObj \
     qadevOOo/tests/java/mod/_sc/ScTableColumnObj \
-    qadevOOo/tests/java/mod/_sc/ScTableRowObj \
     qadevOOo/tests/java/mod/_sc/ScTableSheetObj \
     qadevOOo/tests/java/mod/_sc/ScTableSheetsObj \
     qadevOOo/tests/java/mod/_sc/ScTabViewObj \

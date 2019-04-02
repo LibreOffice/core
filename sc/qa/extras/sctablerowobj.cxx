@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
 #include <test/table/tablerow.hxx>
+#include <test/table/xcellrange.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -26,7 +27,10 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScTableRowObj : public CalcUnoApiTest, public apitest::TableRow, public apitest::XPropertySet
+class ScTableRowObj : public CalcUnoApiTest,
+                      public apitest::TableRow,
+                      public apitest::XCellRange,
+                      public apitest::XPropertySet
 {
 public:
     ScTableRowObj();
@@ -39,6 +43,11 @@ public:
 
     // TableRow
     CPPUNIT_TEST(testTableRowProperties);
+
+    // XCellRange
+    CPPUNIT_TEST(testGetCellByPosition);
+    CPPUNIT_TEST(testGetCellRangeByName);
+    CPPUNIT_TEST(testGetCellRangeByPosition);
 
     // XPropertySet
     CPPUNIT_TEST(testGetPropertySetInfo);
@@ -55,6 +64,7 @@ private:
 
 ScTableRowObj::ScTableRowObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XCellRange("A7:A7")
     , XPropertySet({ "BottomBorder",
                      "BottomBorder2",
                      "CellProtection",
