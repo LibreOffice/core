@@ -224,7 +224,7 @@ public:
     const VectorGraphicDataPtr& getVectorGraphicData() const;
 
     void setPdfData(const std::shared_ptr<std::vector<sal_Int8>>& rPdfData);
-    const std::shared_ptr<std::vector<sal_Int8>>& getPdfData() const;
+    std::shared_ptr<std::vector<sal_Int8>> getPdfData() const;
     bool hasPdfData() const;
 
     /// Set the page number of the multi-page source this Graphic is rendered from.

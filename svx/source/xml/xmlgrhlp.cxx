@@ -760,7 +760,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
             std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(aStream.xStream));
             if (bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData())
             {
-                const std::shared_ptr<std::vector<sal_Int8>>& rPdfData = aGraphic.getPdfData();
+                const std::shared_ptr<std::vector<sal_Int8>> rPdfData = aGraphic.getPdfData();
                 if (rPdfData && !rPdfData->empty())
                 {
                     // See if we have this PDF already, and avoid duplicate storage.

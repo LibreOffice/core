@@ -553,14 +553,14 @@ void Graphic::setPdfData(const std::shared_ptr<std::vector<sal_Int8>>& rPdfData)
     mxImpGraphic->setPdfData(rPdfData);
 }
 
-const std::shared_ptr<std::vector<sal_Int8>>& Graphic::getPdfData() const
+std::shared_ptr<std::vector<sal_Int8>> Graphic::getPdfData() const
 {
     return mxImpGraphic->getPdfData();
 }
 
 bool Graphic::hasPdfData() const
 {
-    std::shared_ptr<std::vector<sal_Int8>> pPdfData = getPdfData();
+    std::shared_ptr<std::vector<sal_Int8>> pPdfData(getPdfData());
     return pPdfData && !pPdfData->empty();
 }
 
