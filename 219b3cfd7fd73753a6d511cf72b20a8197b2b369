@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_c3ed5426",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-02T20:47:04Z",
+      "side": 1,
+      "message": "COL_FUSHSIA ? I presume that should be COL_FUCHSIA instead..",
+      "range": {
+        "startLine": 287,
+        "startChar": 18,
+        "endLine": 287,
+        "endChar": 29
+      },
+      "revId": "219b3cfd7fd73753a6d511cf72b20a8197b2b369",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
