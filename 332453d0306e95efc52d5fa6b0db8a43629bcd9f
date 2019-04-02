@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_f5d93222",
+        "filename": "UnoControls/source/base/basecontainercontrol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-04-02T06:52:12Z",
+      "side": 1,
+      "message": "\"exists\", .... \"to its\"...",
+      "range": {
+        "startLine": 58,
+        "startChar": 26,
+        "endLine": 58,
+        "endChar": 31
+      },
+      "revId": "332453d0306e95efc52d5fa6b0db8a43629bcd9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_15d7f6ef",
+        "filename": "UnoControls/source/base/basecontainercontrol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-04-02T06:52:12Z",
+      "side": 1,
+      "message": "\"is unknown\"",
+      "range": {
+        "startLine": 64,
+        "startChar": 26,
+        "endLine": 64,
+        "endChar": 33
+      },
+      "revId": "332453d0306e95efc52d5fa6b0db8a43629bcd9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
