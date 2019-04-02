@@ -174,7 +174,7 @@ private:
 
     const VectorGraphicDataPtr& getVectorGraphicData() const { return maVectorGraphicData; }
 
-    const std::shared_ptr<std::vector<sal_Int8>>& getPdfData() const;
+    std::shared_ptr<std::vector<sal_Int8>> getPdfData() const;
 
     void setPdfData(const std::shared_ptr<std::vector<sal_Int8>>& rPdfData);
 };

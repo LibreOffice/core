@@ -558,7 +558,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
                     // vcl::ImportPDF() possibly downgraded the PDF data from a
                     // higher PDF version, while aGfxLink still contains the
                     // original data provided by the user.
-                    std::shared_ptr<std::vector<sal_Int8>> pPdfData = aGraphic.getPdfData();
+                    std::shared_ptr<std::vector<sal_Int8>> pPdfData(aGraphic.getPdfData());
                     pStream->WriteBytes(pPdfData->data(), pPdfData->size());
 
                     // put into cache
