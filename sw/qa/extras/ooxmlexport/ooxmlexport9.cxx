@@ -82,6 +82,32 @@ DECLARE_OOXMLEXPORT_TEST(testDocm, "hello.docm")
                     "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testDefaultContentTypes, "fdo55381.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml"))
+    {
+        assertXPath(pXmlDoc,
+                    "/ContentType:Types/ContentType:Default[@Extension='xml']",
+                    "ContentType",
+                    "application/xml");
+
+        assertXPath(pXmlDoc,
+                    "/ContentType:Types/ContentType:Default[@Extension='rels']",
+                    "ContentType",
+                    "application/vnd.openxmlformats-package.relationships+xml");
+
+        assertXPath(pXmlDoc,
+                    "/ContentType:Types/ContentType:Default[@Extension='png']",
+                    "ContentType",
+                    "image/png");
+
+        assertXPath(pXmlDoc,
+                    "/ContentType:Types/ContentType:Default[@Extension='jpeg']",
+                    "ContentType",
+                    "image/jpeg");
+    }
+}
+
 DECLARE_SW_ROUNDTRIP_TEST(testDocmSave, "hello.docm", nullptr, DocmTest)
 {
     // This was
