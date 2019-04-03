@@ -49,6 +49,7 @@ public:
     int                     mnMaxHeight;            // max. client height in pixeln
     RECT                    maFullScreenRect;       // fullscreen rect
     int                     mnFullScreenShowState;  // fullscreen restore show state
+    bool                    mbFullScreenCaption;    // WS_CAPTION reset in full screen mode.
     UINT                    mnInputLang;            // current Input Language
     UINT                    mnInputCodePage;        // current Input CodePage
     SalFrameStyleFlags      mnStyle;                // style
