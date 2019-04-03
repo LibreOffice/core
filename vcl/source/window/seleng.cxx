@@ -131,7 +131,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
 
     if( !rMEvt.IsRight() )
     {
-        pWin->CaptureMouse();
+        CaptureMouse();
         nFlags |= SelectionEngineFlags::IN_SEL;
     }
     else
@@ -284,6 +284,13 @@ void SelectionEngine::ReleaseMouse()
     pWin->ReleaseMouse();
 }
 
+void SelectionEngine::CaptureMouse()
+{
+    if (!pWin || pWin->IsMouseCaptured())
+        return;
+    pWin->CaptureMouse();
+}
+
 bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
 {
 
@@ -325,8 +332,8 @@ void SelectionEngine::SetWindow( vcl::Window* pNewWin )
         if (nFlags & SelectionEngineFlags::IN_SEL)
             ReleaseMouse();
         pWin = pNewWin;
-        if ( pWin && ( nFlags & SelectionEngineFlags::IN_SEL ) )
-            pWin->CaptureMouse();
+        if (nFlags & SelectionEngineFlags::IN_SEL)
+            CaptureMouse();
     }
 }
 

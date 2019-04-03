@@ -104,6 +104,7 @@ public:
     //context menu via "Command" which is delivered after
     //mouse down but before mouse up, then use this
     void                ReleaseMouse();
+    void                CaptureMouse();
 
     // Keyboard
     void                CursorPosChanging( bool bShift, bool bMod1 );
