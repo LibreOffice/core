@@ -20,6 +20,7 @@
 #include "text/TextPropertyPanel.hxx"
 #include "styles/StylesPropertyPanel.hxx"
 #include "paragraph/ParaPropertyPanel.hxx"
+#include "lists/ListsPropertyPanel.hxx"
 #include "area/AreaPropertyPanel.hxx"
 #include "shadow/ShadowPropertyPanel.hxx"
 #include "graphic/GraphicPropertyPanel.hxx"
@@ -130,6 +131,10 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     else if (rsResourceURL.endsWith("/ParaPropertyPanel"))
     {
         pControl = ParaPropertyPanel::Create(pParentWindow, xFrame, pBindings, xSidebar);
+    }
+    else if (rsResourceURL.endsWith("/ListsPropertyPanel"))
+    {
+        pControl = ListsPropertyPanel::Create(pParentWindow, xFrame);
     }
     else if (rsResourceURL.endsWith("/AreaPropertyPanel"))
     {

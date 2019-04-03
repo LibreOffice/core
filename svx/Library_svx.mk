@@ -187,6 +187,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/sidebar/text/TextUnderlinePopup \
     svx/source/sidebar/text/TextPropertyPanel \
     svx/source/sidebar/styles/StylesPropertyPanel \
+    svx/source/sidebar/lists/ListsPropertyPanel \
     svx/source/sidebar/paragraph/ParaLineSpacingControl \
     svx/source/sidebar/paragraph/ParaLineSpacingPopup \
     svx/source/sidebar/paragraph/ParaPropertyPanel \
