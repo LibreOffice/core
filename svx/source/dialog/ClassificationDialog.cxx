@@ -23,8 +23,8 @@
 #include <config_folders.h>
 #include <tools/XmlWriter.hxx>
 #include <tools/XmlWalker.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <officecfg/Office/Common.hxx>
@@ -232,15 +232,26 @@ ClassificationDialog::ClassificationDialog(weld::Window* pParent, const bool bPe
     m_xRecentlyUsedListBox->set_size_request(m_xRecentlyUsedListBox->get_approximate_digit_width() * 5, -1);
     m_xRecentlyUsedListBox->connect_changed(LINK(this, ClassificationDialog, SelectRecentlyUsedHdl));
 
-    bool bExpand = officecfg::Office::Common::Classification::IntellectualPropertySectionExpanded::get();
-    m_xIntellectualPropertyExpander->set_expanded(bExpand);
     m_xIntellectualPropertyExpander->connect_expanded(LINK(this, ClassificationDialog, ExpandedHdl));
+    if (officecfg::Office::Common::Classification::IntellectualPropertySectionExpanded::get())
+        m_nAsyncExpandEvent = Application::PostUserEvent(LINK(this, ClassificationDialog, OnAsyncExpandHdl));
+    else
+        m_nAsyncExpandEvent = nullptr;
 
     m_xEditWindow->SetModifyHdl(LINK(this, ClassificationDialog, EditWindowModifiedHdl));
 }
 
+//do it async so gtk has a chance to shrink it to best size, otherwise its larger than min
+IMPL_LINK_NOARG(ClassificationDialog, OnAsyncExpandHdl, void*, void)
+{
+    m_nAsyncExpandEvent = nullptr;
+    m_xIntellectualPropertyExpander->set_expanded(true);
+}
+
 ClassificationDialog::~ClassificationDialog()
 {
+    if (m_nAsyncExpandEvent)
+        Application::RemoveUserEvent(m_nAsyncExpandEvent);
 }
 
 short ClassificationDialog::run()

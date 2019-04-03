@@ -30,6 +30,7 @@ private:
     const bool m_bPerParagraph;
     const std::function<void()> m_aParagraphSignHandler;
 
+    ImplSVEvent* m_nAsyncExpandEvent;
     sal_Int32 m_nCurrentSelectedCategory;
 
     std::vector<std::vector<ClassificationResult>> m_aRecentlyUsedValuesCollection;
@@ -61,6 +62,7 @@ private:
     DECL_LINK(EditWindowModifiedHdl, LinkParamNone*, void);
     DECL_STATIC_LINK(ClassificationDialog, ExpandedHdl, weld::Expander&, void);
     DECL_STATIC_LINK(ClassificationDialog, KeyInput, const KeyEvent&, bool);
+    DECL_LINK(OnAsyncExpandHdl, void*, void);
 
     void insertField(ClassificationType eType, OUString const & rString, OUString const & rFullString, OUString const & rIdentifier = OUString());
     void insertCategoryField(sal_Int32 nID);
