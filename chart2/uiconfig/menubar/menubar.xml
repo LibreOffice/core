@@ -45,7 +45,6 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:AvailableToolbars"/>
       <menu:menuitem menu:id=".uno:StatusBarVisible"/>
-      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Sidebar"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:DiagramData"/>
@@ -69,15 +68,6 @@
   </menu:menu>
   <menu:menu menu:id=".uno:FormatMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:FormatSelection"/>
-      <menu:menuitem menu:id=".uno:TransformDialog"/>
-      <menu:menu menu:id=".uno:ArrangeRow">
-        <menu:menupopup>
-          <menu:menuitem menu:id=".uno:Forward"/>
-          <menu:menuitem menu:id=".uno:Backward"/>
-        </menu:menupopup>
-      </menu:menu>
-      <menu:menuseparator/>
       <menu:menu menu:id=".uno:ChartTitleMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:MainTitle"/>
@@ -127,7 +117,15 @@
         <menu:menuitem menu:id=".uno:DiagramType"/>
         <menu:menuitem menu:id=".uno:DataRanges"/>
         <menu:menuitem menu:id=".uno:View3D"/>
-
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:FormatSelection"/>
+      <menu:menuitem menu:id=".uno:TransformDialog"/>
+      <menu:menu menu:id=".uno:ArrangeRow">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:Forward"/>
+          <menu:menuitem menu:id=".uno:Backward"/>
+        </menu:menupopup>
+      </menu:menu>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:ToolsMenu">
@@ -143,7 +141,6 @@
           <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
       <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
       <menu:menuitem menu:id=".uno:ConfigureDialog"/>
       <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
