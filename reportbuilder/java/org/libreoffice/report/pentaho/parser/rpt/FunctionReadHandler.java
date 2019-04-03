@@ -32,7 +32,7 @@ import org.xml.sax.SAXException;
 
 /**
  * Parses a named expression. These expressions are encountered on reports and
- * groups and compute global values. Expressions must have an unique name.
+ * groups and compute global values. Expressions must have a unique name.
  *
  */
 public class FunctionReadHandler extends AbstractXmlReadHandler

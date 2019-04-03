@@ -56,7 +56,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
     public static final String[] SERVICENAMES = {"com.sun.star.task.AsyncJob"};
 
     /** the const uno implementation name.
-     *  It must be an unique value! The best naming schema seems to use
+     *  It must be a unique value! The best naming schema seems to use
      *  a registered domain in reverse order ...
      */
     public static final String IMPLEMENTATIONNAME = "com.sun.star.comp.framework.java.services.AsyncJob";

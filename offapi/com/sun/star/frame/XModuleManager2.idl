@@ -40,7 +40,7 @@ interface XModuleManager2
     /** provides read access to the configuration of office modules.
 
         <p>
-        Every module is referenced by an unique service name
+        Every module is referenced by a unique service name
         (which is used inside configuration as set node name too)
         and is further represented by a sequence of elements of type
         com::sun::star::beans::PropertyValue.

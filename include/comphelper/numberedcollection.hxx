@@ -124,7 +124,7 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
     private:
 
 
-        /** @short  tries to find an unique number not already used within this collection.
+        /** @short  tries to find a unique number not already used within this collection.
 
             @descr  It reuses the smallest number which isn't used by any component
                     of this collection. (fragmentation!) If collection is full (means there
@@ -138,7 +138,7 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
                     So the outside code has to make sure that retrieving and using of those numbers
                     will be an atomic operation.
 
-            @return an unique number or special value INVALID_NUMBER if collection is full.
+            @return a unique number or special value INVALID_NUMBER if collection is full.
          */
         ::sal_Int32 impl_searchFreeNumber ();
 

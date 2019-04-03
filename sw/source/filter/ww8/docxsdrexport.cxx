@@ -1251,7 +1251,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
     Size aSize(sdrObject->GetSnapRect().GetWidth(), sdrObject->GetSnapRect().GetHeight());
     startDMLAnchorInline(&rFrameFormat, aSize);
 
-    // generate an unique id
+    // generate a unique id
     sax_fastparser::FastAttributeList* pDocPrAttrList
         = sax_fastparser::FastSerializerHelper::createAttrList();
     pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());

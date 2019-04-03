@@ -170,7 +170,7 @@ public class DrawingDemo
             XNamed xNamed = UnoRuntime.queryInterface(
                 XNamed.class, xLastPage );
 
-            // beware, the page must have an unique name
+            // beware, the page must have a unique name
             xNamed.setName( sLastPageName );
         }
         catch( Exception ex )
