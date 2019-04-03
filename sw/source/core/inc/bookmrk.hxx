@@ -247,28 +247,34 @@ namespace sw {
             virtual void ReleaseDoc(SwDoc* const pDoc) override;
         };
 
+        // Non text fieldmarks has has no content between the start and end marks.
+        class NonTextFieldmark
+            : public Fieldmark
+        {
+        public:
+            NonTextFieldmark(const SwPaM& rPaM);
+            virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode) override;
+            virtual void ReleaseDoc(SwDoc* const pDoc) override;
+        };
+
         /// Fieldmark representing a checkbox form field.
         class CheckboxFieldmark
             : virtual public ICheckboxFieldmark
-            , public Fieldmark
+            , public NonTextFieldmark
         {
         public:
             CheckboxFieldmark(const SwPaM& rPaM);
-            virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode) override;
-            virtual void ReleaseDoc(SwDoc* const pDoc) override;
             bool IsChecked() const override;
             void SetChecked(bool checked) override;
         };
 
         /// Fieldmark representing a drop-down form field.
         class DropDownFieldmark
-            : public Fieldmark
+            : public NonTextFieldmark
         {
         public:
             DropDownFieldmark(const SwPaM& rPaM);
             virtual ~DropDownFieldmark() override;
-            virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode) override;
-            virtual void ReleaseDoc(SwDoc* const pDoc) override;
 
             // This method should be called only by the portion so we can now the portion's painting area
             void SetPortionPaintArea(const SwRect& rPortionPaintArea);

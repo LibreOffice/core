@@ -431,11 +431,11 @@ namespace sw { namespace mark
         lcl_RemoveFieldMarks(this, pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
     }
 
-    CheckboxFieldmark::CheckboxFieldmark(const SwPaM& rPaM)
+    NonTextFieldmark::NonTextFieldmark(const SwPaM& rPaM)
         : Fieldmark(rPaM)
     { }
 
-    void CheckboxFieldmark::InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode const eMode)
+    void NonTextFieldmark::InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode const eMode)
     {
         if (eMode == sw::mark::InsertMode::New)
         {
@@ -453,11 +453,16 @@ namespace sw { namespace mark
         }
     }
 
-    void CheckboxFieldmark::ReleaseDoc(SwDoc* const pDoc)
+    void NonTextFieldmark::ReleaseDoc(SwDoc* const pDoc)
     {
         lcl_RemoveFieldMarks(this, pDoc,
                 CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
     }
+
+
+    CheckboxFieldmark::CheckboxFieldmark(const SwPaM& rPaM)
+        : NonTextFieldmark(rPaM)
+    { }
 
     void CheckboxFieldmark::SetChecked(bool checked)
     {
@@ -481,7 +486,7 @@ namespace sw { namespace mark
     }
 
     DropDownFieldmark::DropDownFieldmark(const SwPaM& rPaM)
-        : Fieldmark(rPaM)
+        : NonTextFieldmark(rPaM)
         , m_pButton(nullptr)
     {
     }
@@ -489,30 +494,6 @@ namespace sw { namespace mark
     DropDownFieldmark::~DropDownFieldmark()
     {
         m_pButton.disposeAndClear();
-    }
-
-    void DropDownFieldmark::InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode const eMode)
-    {
-        if (eMode == sw::mark::InsertMode::New)
-        {
-            lcl_SetFieldMarks(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
-
-            // For some reason the end mark is moved from 1 by the Insert:
-            // we don't want this for checkboxes
-            SwPosition aNewEndPos = GetMarkEnd();
-            aNewEndPos.nContent--;
-            SetMarkEndPos( aNewEndPos );
-        }
-        else
-        {
-            lcl_AssertFieldMarksSet(this, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
-        }
-    }
-
-    void DropDownFieldmark::ReleaseDoc(SwDoc* const pDoc)
-    {
-        lcl_RemoveFieldMarks(this, pDoc,
-                CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
     }
 
     void DropDownFieldmark::SetPortionPaintArea(const SwRect& rPortionPaintArea)
