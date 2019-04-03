@@ -25,10 +25,6 @@ $(eval $(call gb_Executable_add_libs,mbsdiff,\
 ))
 endif
 
-$(eval $(call gb_Executable_add_defs,mbsdiff,\
-	-DUNICODE \
-))
-
 $(eval $(call gb_Executable_add_cxxobjects,mbsdiff,\
 	onlineupdate/source/mbsdiff/bsdiff \
 ))
