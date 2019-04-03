@@ -115,7 +115,7 @@ void SelectionEngine::CursorPosChanging( bool bShift, bool bMod1 )
 bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
 {
     nFlags &= ~SelectionEngineFlags::CMDEVT;
-    if ( !pFunctionSet || !pWin || rMEvt.GetClicks() > 1 || rMEvt.IsRight() )
+    if ( !pFunctionSet || rMEvt.GetClicks() > 1 || rMEvt.IsRight() )
         return false;
 
     sal_uInt16 nModifier = rMEvt.GetModifier() | nLockedMods;
@@ -237,7 +237,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
 bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
 {
     aWTimer.Stop();
-    if( !pFunctionSet || !pWin )
+    if (!pFunctionSet)
     {
         const SelectionEngineFlags nMask = SelectionEngineFlags::CMDEVT | SelectionEngineFlags::WAIT_UPEVT | SelectionEngineFlags::IN_SEL;
         nFlags &= ~nMask;
@@ -349,7 +349,7 @@ void SelectionEngine::Reset()
 void SelectionEngine::Command( const CommandEvent& rCEvt )
 {
     // Timer aWTimer is active during enlarging a selection
-    if ( !pFunctionSet || !pWin || aWTimer.IsActive() )
+    if ( !pFunctionSet || aWTimer.IsActive() )
         return;
     aWTimer.Stop();
     if ( rCEvt.GetCommand() == CommandEventId::StartDrag )
