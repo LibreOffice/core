@@ -127,9 +127,16 @@ void main(void)
     int dx = int( tex_coord.s * xdestconvert );
     int dy = int( tex_coord.t * ydestconvert );
 
+    // How much each column/row will contribute to the resulting pixel.
+    // Note: These values are always the same for the same X (or Y),
+    // so they could be precalculated in C++ and passed to the shader,
+    // but GLSL has limits on the size of uniforms passed to it,
+    // so it'd need something like texture buffer objects from newer
+    // GLSL versions, and it seems the hassle is not really worth it.
     float xratio[ 16 + 2 ];
     float yratio[ 16 + 2 ];
 
+    // For finding the first and last source pixel.
     int xpixel[ 16 + 2 ];
     int ypixel[ 16 + 2 ];
 
