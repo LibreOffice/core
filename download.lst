@@ -139,8 +139,8 @@ ifeq ($(PYTHON_VERSION_MINOR),3)
 export PYTHON_MD5SUM := 803a75927f8f241ca78633890c798021
 export PYTHON_TARBALL := Python-3.3.5.tgz
 else
-export PYTHON_MD5SUM := f5a99f765e765336a3ebbb2a24ca2be3
-export PYTHON_TARBALL := Python-3.5.6.tar.xz
+export PYTHON_MD5SUM := b1b4949786732494f4d6675c184aa765
+export PYTHON_TARBALL := Python-3.5.7.tar.xz
 endif
 
 export RAPTOR_TARBALL := 4ceb9316488b0ea01acf011023cf7fff-raptor2-2.0.9.tar.gz
