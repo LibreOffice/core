@@ -23,11 +23,6 @@ $(eval $(call gb_Library_set_componentfile,sysdtrans,dtrans/util/sysdtrans))
 
 $(eval $(call gb_Library_use_sdk_api,sysdtrans))
 
-$(eval $(call gb_Library_add_defs,sysdtrans,\
-	-D_UNICODE \
-	-DUNICODE \
-))
-
 $(eval $(call gb_Library_use_libraries,sysdtrans,\
 	comphelper \
 	cppu \

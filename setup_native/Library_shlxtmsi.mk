@@ -12,8 +12,6 @@ $(eval $(call gb_Library_Library,shlxtmsi))
 $(eval $(call gb_Library_use_external,shlxtmsi,boost_headers))
 
 $(eval $(call gb_Library_add_defs,shlxtmsi,\
-	-DUNICODE \
-	-D_UNICODE \
 	-U_DLL \
 ))
 

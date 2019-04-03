@@ -10,8 +10,6 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,quickstarter))
 
 $(eval $(call gb_StaticLibrary_add_defs,quickstarter,\
-	-DUNICODE \
-	-D_UNICODE \
 	-U_DLL \
 ))
 
