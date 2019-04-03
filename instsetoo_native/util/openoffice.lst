@@ -139,6 +139,7 @@ Apache_OpenOffice_Dev
 			REGISTRYLAYERNAME LayerDev
 			UPDATEURL https://ooo-updates.apache.org/aoonextdev/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
+			ADDSYSTEMINTEGRATION 1
 			EVAL
 			PACKAGEVERSION 4.5.0
 			PACKAGEREVISION {milestone}
@@ -354,7 +355,7 @@ Apache_OpenOffice_Beta
 			UPDATEURL https://ooo-updates.apache.org/aoonextbeta/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
-			ADDSYSTEMINTEGRATION 0
+			ADDSYSTEMINTEGRATION 1
 			EVAL
 			PACKAGEVERSION 4.5.0
 			PACKAGEREVISION {milestone}
