@@ -27,7 +27,7 @@
 //---------------------------------------Note----------------------------------
 //    allows for different iterators for grammar checking and smart tags,
 //    interface must be implemented exactly once for each document since
-//    the interface pointer will be used to get an unique document id.
+//    the interface pointer will be used to get a unique document id.
 
 
 module com {  module sun {  module star {  module text {

@@ -255,7 +255,7 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< O
         const OUString * pString = aPropertyNames.getConstArray();
         PropertyDataHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
 
-        //!! have an unique_ptr to an array of OGuards in order to have the
+        //!! have a unique_ptr to an array of OGuards in order to have the
         //!! allocated memory properly freed (exception safe!).
         //!! Since the array itself has unique_ptrs as members we have to use a
         //!! helper class 'AutoOGuardArray' in order to have

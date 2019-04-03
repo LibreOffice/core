@@ -33,12 +33,12 @@
  */
 interface XSimpleTabController : com::sun::star::uno::XInterface
 {
-    /** create a new tab and return an unique ID,
+    /** create a new tab and return a unique ID,
         which can be used further to address this tab by using other methods
         of this interface.
 
         @return [long
-                an unique ID for this new tab.
+                a unique ID for this new tab.
      */
     long insertTab();
 

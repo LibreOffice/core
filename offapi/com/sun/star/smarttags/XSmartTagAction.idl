@@ -76,7 +76,7 @@ interface XSmartTagAction: com::sun::star::lang::XInitialization
                 (exclusively).
 
         @return
-                an unique name of the smart tag type. Smart tag  type
+                a unique name of the smart tag type. Smart tag  type
                 names are always in the format of namespaceURI#tagname.
 
         @throws com::sun::star::lang::IndexOutOfBoundsException

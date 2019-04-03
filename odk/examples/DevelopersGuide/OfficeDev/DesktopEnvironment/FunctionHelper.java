@@ -806,12 +806,12 @@ public class FunctionHelper
 
 
     /**
-     * Try to find an unique frame name, which isn't currently used inside
+     * Try to find a unique frame name, which isn't currently used inside
      * remote office instance. Because we create top level frames
      * only, it's enough to check the names of existing child frames on the
      * desktop only.
      *
-     *          should represent an unique frame name, which currently isn't
+     *          should represent a unique frame name, which currently isn't
      *          used inside the remote office frame tree
      *          (Couldn't guaranteed for a real multithreaded environment.
      *           But we try it ...)

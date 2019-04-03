@@ -3420,7 +3420,7 @@ void AutoRecovery::implts_generateNewTempURL(const OUString&               sBack
                                                    AutoRecovery::TDocumentInfo&   rInfo           )
 {
     // specify URL for saving (which points to a temp file inside backup directory)
-    // and define an unique name, so we can locate it later.
+    // and define a unique name, so we can locate it later.
     // This unique name must solve an optimization problem too!
     // In case we are asked to save unmodified documents too - and one of them
     // is an empty one (because it was new created using e.g. an URL private:factory/...)

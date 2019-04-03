@@ -2725,7 +2725,7 @@ void XFrameImpl::impl_setPropertyValue(sal_Int32 nHandle,
     */
 
     /* Attention: You can use nHandle only, if you are sure that all supported
-                  properties has an unique handle. That must be guaranteed
+                  properties has a unique handle. That must be guaranteed
                   inside method initListeners()!
     */
     switch (nHandle)
@@ -2780,7 +2780,7 @@ css::uno::Any XFrameImpl::impl_getPropertyValue(sal_Int32 nHandle)
     */
 
     /* Attention: You can use nHandle only, if you are sure that all supported
-                  properties has an unique handle. That must be guaranteed
+                  properties has a unique handle. That must be guaranteed
                   inside method initListeners()!
     */
     css::uno::Any aValue;

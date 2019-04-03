@@ -53,7 +53,7 @@ public interface IOnewayLink
 
     /**
      * @param nRequest
-     *          The two user of this callback can define an unique number,
+     *          The two user of this callback can define a unique number,
      *          which identify the type of original interface method. So the called
      *          interface object can decide, which action will be necessary.
      *
