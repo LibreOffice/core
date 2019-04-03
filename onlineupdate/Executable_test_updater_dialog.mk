@@ -39,10 +39,6 @@ $(eval $(call gb_Executable_add_ldflags,test_updater_dialog,\
 	/ENTRY:wmainCRTStartup \
 ))
 
-$(eval $(call gb_Executable_add_defs,test_updater_dialog,\
-	-DUNICODE \
-))
-
 else
 
 $(eval $(call gb_Executable_add_defs,test_updater_dialog,\

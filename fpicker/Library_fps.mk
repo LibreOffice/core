@@ -27,11 +27,6 @@ $(eval $(call gb_Library_use_external,fps,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,fps))
 
-$(eval $(call gb_Library_add_defs,fps,\
-	-D_UNICODE \
-	-DUNICODE \
-))
-
 $(eval $(call gb_Library_use_libraries,fps,\
 	comphelper \
 	cppu \

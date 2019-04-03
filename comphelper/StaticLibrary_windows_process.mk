@@ -13,10 +13,6 @@ $(eval $(call gb_StaticLibrary_set_include,windows_process,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_StaticLibrary_add_defs,windows_process,\
-	-DUNICODE \
-))
-
 $(eval $(call gb_StaticLibrary_add_exception_objects,windows_process,\
 	comphelper/source/windows/windows_process \
 ))

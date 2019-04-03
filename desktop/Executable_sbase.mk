@@ -11,10 +11,6 @@ $(eval $(call gb_Executable_Executable,sbase))
 
 $(eval $(call gb_Executable_set_targettype_gui,sbase,YES))
 
-$(eval $(call gb_Executable_add_defs,sbase,\
-    -DUNICODE \
-))
-
 $(eval $(call gb_Executable_add_ldflags,sbase,\
     /ENTRY:wWinMainCRTStartup \
 ))

@@ -14,10 +14,6 @@ $(eval $(call gb_StaticLibrary_set_include,libmar,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_StaticLibrary_add_defs,libmar,\
-	-DUNICODE \
-))
-
 $(eval $(call gb_StaticLibrary_add_cobjects,libmar,\
 	onlineupdate/source/libmar/src/mar_create \
 	onlineupdate/source/libmar/src/mar_extract \

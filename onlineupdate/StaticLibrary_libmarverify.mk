@@ -14,11 +14,7 @@ $(eval $(call gb_StaticLibrary_set_include,libmarverify,\
 	$$(INCLUDE) \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_StaticLibrary_add_defs,libmarverify,\
-	-DUNICODE \
-))
-else
+ifneq ($(OS),WNT)
 $(eval $(call gb_StaticLibrary_add_defs,libmarverify,\
 	-DMAR_NSS \
 ))

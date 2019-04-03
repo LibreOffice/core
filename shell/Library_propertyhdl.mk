@@ -16,9 +16,7 @@ $(eval $(call gb_Library_set_include,propertyhdl,\
 
 $(eval $(call gb_Library_add_defs,propertyhdl,\
 	-DISOLATION_AWARE_ENABLED \
-	-DUNICODE \
 	-DWIN32_LEAN_AND_MEAN \
-	-D_UNICODE \
 	-UNOMINMAX \
 ))
 

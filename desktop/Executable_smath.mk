@@ -11,10 +11,6 @@ $(eval $(call gb_Executable_Executable,smath))
 
 $(eval $(call gb_Executable_set_targettype_gui,smath,YES))
 
-$(eval $(call gb_Executable_add_defs,smath,\
-    -DUNICODE \
-))
-
 $(eval $(call gb_Executable_add_ldflags,smath,\
     /ENTRY:wWinMainCRTStartup \
 ))
