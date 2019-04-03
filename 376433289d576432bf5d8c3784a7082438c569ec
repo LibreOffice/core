@@ -39,6 +39,29 @@
       "revId": "376433289d576432bf5d8c3784a7082438c569ec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_69cb07a5",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2496,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-03T20:50:11Z",
+      "side": 1,
+      "message": "Is this even necessary? Wouldn\u0027t the individual switch cases below be sufficient? That would also eliminate the ScMarkData::IsMarked() vs IsMultiMarked() problem.\n\nWhat would be the actual use case here?",
+      "range": {
+        "startLine": 2495,
+        "startChar": 0,
+        "endLine": 2496,
+        "endChar": 51
+      },
+      "revId": "376433289d576432bf5d8c3784a7082438c569ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
