@@ -93,7 +93,8 @@ void ParaPropertyPanel::HandleContextChange (
         case CombinedEnumContext(Application::DrawImpress, Context::Table):
             mpTBxVertAlign->Show();
             mpTBxBackColor->Hide();
-            mpTBxNumBullet->Show();
+            mpTBxNumBullet->Hide();
+            mpTBxOutline->Hide();
             ReSize();
             break;
 
@@ -129,8 +130,6 @@ void ParaPropertyPanel::HandleContextChange (
         default:
             break;
     }
-
-    mpTBxOutline->Show( maContext.GetApplication_DI() == vcl::EnumContext::Application::DrawImpress );
 }
 
 void ParaPropertyPanel::DataChanged (const DataChangedEvent&) {}
