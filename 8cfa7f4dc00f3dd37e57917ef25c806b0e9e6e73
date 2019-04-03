@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_63132868",
+        "filename": "include/rtl/strbuf.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-03T07:44:04Z",
+      "side": 1,
+      "message": "(and it should have been \"@since LibreOffice 6.3\" anyway)",
+      "revId": "8cfa7f4dc00f3dd37e57917ef25c806b0e9e6e73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
