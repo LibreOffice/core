@@ -589,6 +589,7 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
             m_xMtrCenterY->set_sensitive(false);
             m_xFtAngle->set_sensitive(true);
             m_xMtrAngle->set_sensitive(true);
+            m_xSliderAngle->set_sensitive(true);
             break;
 
         case css::awt::GradientStyle_RADIAL:
@@ -597,6 +598,7 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
             m_xMtrCenterY->set_sensitive(true);
             m_xFtAngle->set_sensitive(false);
             m_xMtrAngle->set_sensitive(false);
+            m_xSliderAngle->set_sensitive(false);
             break;
 
         case css::awt::GradientStyle_ELLIPTICAL:
@@ -605,6 +607,7 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
             m_xMtrCenterY->set_sensitive(true);
             m_xFtAngle->set_sensitive(true);
             m_xMtrAngle->set_sensitive(true);
+            m_xSliderAngle->set_sensitive(true);
             break;
 
         case css::awt::GradientStyle_SQUARE:
@@ -614,6 +617,7 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
             m_xMtrCenterY->set_sensitive(true);
             m_xFtAngle->set_sensitive(true);
             m_xMtrAngle->set_sensitive(true);
+            m_xSliderAngle->set_sensitive(true);
             break;
         default:
             break;
