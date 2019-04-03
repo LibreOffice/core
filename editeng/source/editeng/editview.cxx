@@ -234,8 +234,8 @@ void EditView::InvalidateOtherViewWindows( const tools::Rectangle& rInvRect )
 void EditView::Invalidate()
 {
     const tools::Rectangle& rInvRect = GetInvalidateRect();
-    pImpEditView->GetWindow()->Invalidate( rInvRect );
-    InvalidateOtherViewWindows( rInvRect );
+    pImpEditView->InvalidateAtWindow(rInvRect);
+    InvalidateOtherViewWindows(rInvRect);
 }
 
 void EditView::SetReadOnly( bool bReadOnly )
