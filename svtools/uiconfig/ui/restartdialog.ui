@@ -244,6 +244,21 @@
               </packing>
             </child>
             <child>
+              <object class="GtkLabel" id="reason_threading">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes" context="restartdialog|reason_threading">For the multi-threaded calculation changes to take effect, %PRODUCTNAME must be restarted.</property>
+                <property name="wrap">True</property>
+                <property name="max_width_chars">50</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">12</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="reason_mscompatible_formsmenu">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
@@ -255,7 +270,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">12</property>
+                <property name="position">13</property>
               </packing>
             </child>
             <child>
@@ -269,7 +284,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">13</property>
+                <property name="position">14</property>
               </packing>
             </child>
           </object>
