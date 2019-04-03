@@ -14390,6 +14390,8 @@ svx/source/sidebar/paragraph/ParaLineSpacingControl.hxx
 svx/source/sidebar/paragraph/ParaLineSpacingPopup.cxx
 svx/source/sidebar/paragraph/ParaPropertyPanel.cxx
 svx/source/sidebar/paragraph/ParaPropertyPanel.hxx
+svx/source/sidebar/lists/ListsPropertyPanel.cxx
+svx/source/sidebar/lists/ListsPropertyPanel.hxx
 svx/source/sidebar/paragraph/ParaSpacingControl.cxx
 svx/source/sidebar/paragraph/ParaSpacingWindow.cxx
 svx/source/sidebar/paragraph/ParaSpacingWindow.hxx
