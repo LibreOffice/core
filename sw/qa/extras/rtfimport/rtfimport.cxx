@@ -772,38 +772,23 @@ DECLARE_RTFIMPORT_TEST(testFdo68291, "fdo68291.odt")
                              ->getPropertyValue("PageDescName"));
 }
 
-class testTdf105511 : public Test
+CPPUNIT_TEST_FIXTURE(Test, testTdf105511)
 {
-protected:
-    virtual OUString getTestName() override { return OUString("testTdf105511"); }
-
-public:
-    CPPUNIT_TEST_SUITE(testTdf105511);
-    CPPUNIT_TEST(Import);
-    CPPUNIT_TEST_SUITE_END();
-
-    void Import()
+    struct DefaultLocale : public comphelper::ConfigurationProperty<DefaultLocale, OUString>
     {
-        struct DefaultLocale : public comphelper::ConfigurationProperty<DefaultLocale, OUString>
+        static OUString path()
         {
-            static OUString path()
-            {
-                return OUString("/org.openoffice.Office.Linguistic/General/DefaultLocale");
-            }
-            ~DefaultLocale() = delete;
-        };
-        auto batch = comphelper::ConfigurationChanges::create();
-        DefaultLocale::set("ru-RU", batch);
-        batch->commit();
-        executeImportTest("tdf105511.rtf", nullptr);
-    }
-    virtual void verify() override
-    {
-        OUString aExpected(u"\u0418\u043C\u044F");
-        getParagraph(1, aExpected);
-    }
-};
-CPPUNIT_TEST_SUITE_REGISTRATION(testTdf105511);
+            return OUString("/org.openoffice.Office.Linguistic/General/DefaultLocale");
+        }
+        ~DefaultLocale() = delete;
+    };
+    auto batch = comphelper::ConfigurationChanges::create();
+    DefaultLocale::set("ru-RU", batch);
+    batch->commit();
+    load(mpTestDocumentPath, "tdf105511.rtf");
+    OUString aExpected(u"\u0418\u043C\u044F");
+    getParagraph(1, aExpected);
+}
 
 DECLARE_RTFIMPORT_TEST(testContSectionPageBreak, "cont-section-pagebreak.rtf")
 {
