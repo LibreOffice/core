@@ -1509,6 +1509,9 @@ public:
     virtual void queue_draw() = 0;
     virtual void queue_draw_area(int x, int y, int width, int height) = 0;
     virtual void queue_resize() = 0;
+
+    virtual void set_text_cursor() = 0;
+
     // use return here just to generate matching VirtualDevices
     virtual OutputDevice& get_ref_device() = 0;
 

@@ -623,7 +623,7 @@ namespace
 // callback from the active EditView, forward to evtl. existing instances of the
 // TextEditOverlayObject(s). This will additionally update the selection which
 // is an integral part of the text visualization
-void SdrObjEditView::EditViewInvalidate() const
+void SdrObjEditView::EditViewInvalidate(const tools::Rectangle&) const
 {
     if (IsTextEdit())
     {
@@ -663,6 +663,11 @@ void SdrObjEditView::EditViewSelectionChange() const
     }
 }
 
+OutputDevice& SdrObjEditView::EditViewOutputDevice() const
+{
+    return *pTextEditWin;
+}
+
 void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow) const
 {
     if (!comphelper::LibreOfficeKit::isActive())
@@ -670,7 +675,7 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow) const
         // adapt all TextEditOverlayObject(s), so call EditViewInvalidate()
         // to update accordingly (will update selection, too). Suppress new
         // stuff when LibreOfficeKit is active
-        EditViewInvalidate();
+        EditViewInvalidate(tools::Rectangle());
     }
     else
     {

@@ -1237,32 +1237,32 @@ void SwDocShell::Execute(SfxRequest& rReq)
         break;
         case SID_CLASSIFICATION_DIALOG:
         {
-            VclPtr<svx::ClassificationDialog> pDialog(VclPtr<svx::ClassificationDialog>::Create(&GetView()->GetViewFrame()->GetWindow(), false));
+            std::shared_ptr<svx::ClassificationDialog> xDialog(new svx::ClassificationDialog(GetView()->GetViewFrame()->GetWindow().GetFrameWeld(), false));
 
             SwWrtShell* pShell = GetWrtShell();
             std::vector<svx::ClassificationResult> aInput = pShell->CollectAdvancedClassification();
-            pDialog->setupValues(aInput);
+            xDialog->setupValues(aInput);
 
-            pDialog->StartExecuteAsync([pDialog, pShell](sal_Int32 nResult){
+            weld::DialogController::runAsync(xDialog, [xDialog, pShell](sal_Int32 nResult){
                 if (RET_OK == nResult)
-                    pShell->ApplyAdvancedClassification(pDialog->getResult());
+                    pShell->ApplyAdvancedClassification(xDialog->getResult());
             });
         }
         break;
         case SID_PARAGRAPH_SIGN_CLASSIFY_DLG:
         {
             SwWrtShell* pShell = GetWrtShell();
-            VclPtr<svx::ClassificationDialog> pDialog(VclPtr<svx::ClassificationDialog>::Create(&GetView()->GetViewFrame()->GetWindow(), true, [pShell]()
+            std::shared_ptr<svx::ClassificationDialog> xDialog(new svx::ClassificationDialog(GetView()->GetViewFrame()->GetWindow().GetFrameWeld(), true, [pShell]()
             {
                 pShell->SignParagraph();
             }));
 
             std::vector<svx::ClassificationResult> aInput = pShell->CollectParagraphClassification();
-            pDialog->setupValues(aInput);
+            xDialog->setupValues(aInput);
 
-            pDialog->StartExecuteAsync([pDialog, pShell](sal_Int32 nResult){
+            weld::DialogController::runAsync(xDialog, [xDialog, pShell](sal_Int32 nResult){
                 if (RET_OK == nResult)
-                    pShell->ApplyParagraphClassification(pDialog->getResult());
+                    pShell->ApplyParagraphClassification(xDialog->getResult());
             });
         }
         break;
