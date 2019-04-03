@@ -65,6 +65,9 @@ public:
         case svtools::RESTART_REASON_OPENCL:
             reason_ = m_xBuilder->weld_widget("reason_opencl");
             break;
+        case svtools::RESTART_REASON_THREADING:
+            reason_ = m_xBuilder->weld_widget("reason_threading");
+            break;
         case svtools::RESTART_REASON_MSCOMPATIBLE_FORMS_MENU:
             reason_ = m_xBuilder->weld_widget("reason_mscompatible_formsmenu");
             break;

@@ -27,6 +27,7 @@
 #include <docoptio.hxx>
 #include <sc.hrc>
 #include <officecfg/Office/Calc.hxx>
+#include <svtools/restartdialog.hxx>
 
 #include <tpcalc.hxx>
 
@@ -206,6 +207,11 @@ bool ScTpCalcOptions::FillItemSet( SfxItemSet* rCoreAttrs )
         std::shared_ptr<comphelper::ConfigurationChanges> xBatch(comphelper::ConfigurationChanges::create());
         officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::set(bShouldEnableThreading, xBatch);
         xBatch->commit();
+        SolarMutexGuard aGuard;
+        if (svtools::executeRestartDialog(
+                     comphelper::getProcessComponentContext(), GetFrameWeld(),
+                     svtools::RESTART_REASON_THREADING))
+            GetParentDialog()->EndDialog(RET_OK);
     }
     if ( *pLocalOptions != *pOldOptions )
     {
