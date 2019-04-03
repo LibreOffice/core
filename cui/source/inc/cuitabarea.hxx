@@ -377,6 +377,7 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xMtrCenterY;
     std::unique_ptr<weld::Label> m_xFtAngle;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrAngle;
+    std::unique_ptr<weld::Scale> m_xSliderAngle;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrBorder;
     std::unique_ptr<weld::Scale> m_xSliderBorder;
     std::unique_ptr<ColorListBox> m_xLbColorFrom;
@@ -386,7 +387,6 @@ private:
     std::unique_ptr<SvxPresetListBox> m_xGradientLB;
     std::unique_ptr<weld::SpinButton> m_xMtrIncrement;
     std::unique_ptr<weld::CheckButton> m_xCbIncrement;
-    std::unique_ptr<weld::Scale> m_xSliderIncrement;
     std::unique_ptr<weld::Button> m_xBtnAdd;
     std::unique_ptr<weld::Button> m_xBtnModify;
     std::unique_ptr<weld::CustomWeld> m_xCtlPreview;

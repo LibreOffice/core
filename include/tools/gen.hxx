@@ -197,6 +197,12 @@ public:
     void            setWidth(long nWidth)  { nA = nWidth; }
     void            setHeight(long nHeight)  { nB = nHeight; }
 
+    void extendBy(long x, long y)
+    {
+        nA += x;
+        nB += y;
+    }
+
     Pair const &    toPair() const { return *this; }
     Pair &          toPair() { return *this; }
 

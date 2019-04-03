@@ -62,6 +62,7 @@ SvxGradientTabPage::SvxGradientTabPage(TabPageParent pParent, const SfxItemSet& 
     , m_xMtrCenterY(m_xBuilder->weld_metric_spin_button("centerymtr", FieldUnit::PERCENT))
     , m_xFtAngle(m_xBuilder->weld_label("angleft"))
     , m_xMtrAngle(m_xBuilder->weld_metric_spin_button("anglemtr", FieldUnit::DEGREE))
+    , m_xSliderAngle(m_xBuilder->weld_scale("angleslider"))
     , m_xMtrBorder(m_xBuilder->weld_metric_spin_button("bordermtr", FieldUnit::PERCENT))
     , m_xSliderBorder(m_xBuilder->weld_scale("borderslider"))
     , m_xLbColorFrom(new ColorListBox(m_xBuilder->weld_menu_button("colorfromlb"), pParent.GetFrameWeld()))
@@ -71,7 +72,6 @@ SvxGradientTabPage::SvxGradientTabPage(TabPageParent pParent, const SfxItemSet& 
     , m_xGradientLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("gradientpresetlistwin")))
     , m_xMtrIncrement(m_xBuilder->weld_spin_button("incrementmtr"))
     , m_xCbIncrement(m_xBuilder->weld_check_button("autoincrement"))
-    , m_xSliderIncrement(m_xBuilder->weld_scale("incrementslider"))
     , m_xBtnAdd(m_xBuilder->weld_button("add"))
     , m_xBtnModify(m_xBuilder->weld_button("modify"))
     , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, "previewctl", m_aCtlPreview))
@@ -105,10 +105,10 @@ SvxGradientTabPage::SvxGradientTabPage(TabPageParent pParent, const SfxItemSet& 
     m_xLbGradientType->connect_changed( aLink2 );
     m_xCbIncrement->connect_toggled(LINK(this, SvxGradientTabPage, ChangeAutoStepHdl_Impl));
     m_xMtrIncrement->connect_value_changed(LINK(this, SvxGradientTabPage, ModifiedEditHdl_Impl));
-    m_xSliderIncrement->connect_value_changed(LINK(this, SvxGradientTabPage, ModifiedSliderHdl_Impl));
     m_xMtrCenterX->connect_value_changed( aLink );
     m_xMtrCenterY->connect_value_changed( aLink );
     m_xMtrAngle->connect_value_changed( aLink );
+    m_xSliderAngle->connect_value_changed(LINK(this, SvxGradientTabPage, ModifiedSliderHdl_Impl));
     m_xMtrBorder->connect_value_changed( aLink );
     m_xSliderBorder->connect_value_changed(LINK(this, SvxGradientTabPage, ModifiedSliderHdl_Impl));
     m_xMtrColorFrom->connect_value_changed( aLink );
@@ -233,7 +233,6 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 void SvxGradientTabPage::Reset( const SfxItemSet* )
 {
     m_xMtrIncrement->set_value(DEFAULT_GRADIENTSTEP);
-    m_xSliderIncrement->set_value(DEFAULT_GRADIENTSTEP);
     ChangeGradientHdl_Impl();
 
     // determine state of the buttons
@@ -284,12 +283,10 @@ IMPL_LINK_NOARG( SvxGradientTabPage, ChangeAutoStepHdl_Impl, weld::ToggleButton&
 {
     if (m_xCbIncrement->get_active())
     {
-        m_xSliderIncrement->set_sensitive(false);
         m_xMtrIncrement->set_sensitive(false);
     }
     else
     {
-        m_xSliderIncrement->set_sensitive(true);
         m_xMtrIncrement->set_sensitive(true);
     }
     ModifiedHdl_Impl(m_xMtrIncrement.get());
@@ -301,10 +298,10 @@ void SvxGradientTabPage::ModifiedHdl_Impl( void const * pControl )
         m_xSliderBorder->set_value(m_xMtrBorder->get_value(FieldUnit::NONE));
     if (pControl == m_xSliderBorder.get())
         m_xMtrBorder->set_value(m_xSliderBorder->get_value(), FieldUnit::NONE);
-    if (pControl == m_xMtrIncrement.get())
-        m_xSliderIncrement->set_value(m_xMtrIncrement->get_value());
-    if (pControl == m_xSliderIncrement.get())
-        m_xMtrIncrement->set_value(m_xSliderIncrement->get_value());
+    if (pControl == m_xMtrAngle.get())
+        m_xSliderAngle->set_value(m_xMtrAngle->get_value(FieldUnit::NONE));
+    if (pControl == m_xSliderAngle.get())
+        m_xMtrAngle->set_value(m_xSliderAngle->get_value(), FieldUnit::NONE);
 
     css::awt::GradientStyle eXGS = static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active());
 
@@ -545,15 +542,12 @@ void SvxGradientTabPage::ChangeGradientHdl_Impl()
         {
             m_xCbIncrement->set_state(TRISTATE_TRUE);
             m_xMtrIncrement->set_sensitive(false);
-            m_xSliderIncrement->set_sensitive(false);
         }
         else
         {
             m_xCbIncrement->set_state(TRISTATE_FALSE);
             m_xMtrIncrement->set_sensitive(true);
             m_xMtrIncrement->set_value( nValue );
-            m_xSliderIncrement->set_sensitive(true);
-            m_xSliderIncrement->set_value(nValue);
         }
         m_xLbGradientType->set_active(
             sal::static_int_cast< sal_Int32 >( eXGS ) );
@@ -566,6 +560,7 @@ void SvxGradientTabPage::ChangeGradientHdl_Impl()
         m_xLbColorTo->SelectEntry( pGradient->GetEndColor() );
 
         m_xMtrAngle->set_value(pGradient->GetAngle() / 10, FieldUnit::NONE); // should be changed in resource
+        m_xSliderAngle->set_value(pGradient->GetAngle() / 10);
         m_xMtrBorder->set_value(pGradient->GetBorder(), FieldUnit::NONE);
         m_xSliderBorder->set_value(pGradient->GetBorder());
         m_xMtrCenterX->set_value(pGradient->GetXOffset(), FieldUnit::NONE);

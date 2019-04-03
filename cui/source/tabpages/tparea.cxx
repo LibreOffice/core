@@ -158,6 +158,8 @@ void SvxAreaTabPage::SetOptimalSize(weld::DialogController* pController)
     }
     m_pFillTabPage.disposeAndClear();
 
+    aSize.extendBy(10, 10); // apply a bit of margin
+
     m_xFillTab->set_size_request(aSize.Width(), aSize.Height());
 }
 
