@@ -6,6 +6,8 @@ Part of the SDK; to build you need to add --enable-odk.
 Testing the examples:
 =====================
 
+* Go to instdir/sdk (Don't try directly in odk/)
+
 * See <https://api.libreoffice.org/docs/install.html> how to set up the SDK.
 
 ** When asked about it during configuration, tell the SDK to do automatic
