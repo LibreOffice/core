@@ -28,6 +28,19 @@ chart2/res/dataeditor_icon08.png cmd/sc_insertcolumns.png
 chart2/res/dataeditor_icon09.png cmd/sc_insertrowsbefore.png
 chart2/res/selectrange.png formula/res/refinp1.png
 
+cmd/sc_insertmenulegend.png cmd/sc_legend.png
+cmd/sc_insertmenuaxes.png cmd/sc_diagramaxis.png
+cmd/sc_insertmenugrids.png cmd/sc_togglegridhorizontal.png
+cmd/sc_diagramaxisall.png cmd/sc_diagramaxisxyz.png
+cmd/lc_insertmenulegend.png cmd/lc_togglelegend.png
+cmd/lc_insertmenuaxes.png cmd/lc_diagramaxis.png
+cmd/lc_insertmenugrids.png cmd/lc_togglegridhorizontal.png
+cmd/lc_diagramaxisall.png cmd/lc_diagramaxisxyz.png
+
+cmd/sc_charttitlemenu.png cmd/sc_toggletitle.png
+cmd/sc_diagramaxismenu.png cmd/sc_diagramaxis.png
+cmd/sc_diagramgridmenu.png cmd/sc_togglegridhorizontal.png
+
 # cmd
 # ==============================================
 

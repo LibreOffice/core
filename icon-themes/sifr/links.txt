@@ -1,3 +1,48 @@
+# avmedia
+# ==============================================
+avmedia/res/av02048.png cmd/sc_open.png
+avmedia/res/av02049.png cmd/sc_runbasic.png
+avmedia/res/av02050.png cmd/sc_mediapause.png
+avmedia/res/av02051.png cmd/sc_basicstop.png
+avmedia/res/av02052.png cmd/sc_mediarepeat.png
+avmedia/res/av02053.png cmd/sc_ok.png
+avmedia/res/av02054.png cmd/sc_mediamute.png
+avmedia/res/avl02048.png cmd/lc_open.png
+avmedia/res/avl02049.png cmd/lc_mediaplay.png
+avmedia/res/avl02050.png cmd/lc_mediapause.png
+avmedia/res/avl02051.png cmd/lc_basicstop.png
+avmedia/res/avl02052.png cmd/lc_mediarepeat.png
+avmedia/res/avl02053.png cmd/lc_ok.png
+avmedia/res/avl02054.png cmd/lc_mediamute.png
+
+# chart2
+# ==============================================
+chart2/res/dataeditor_icon01.png cmd/sc_insertrowsafter.png
+chart2/res/dataeditor_icon02.png cmd/sc_insertcolumnsafter.png
+chart2/res/dataeditor_icon03.png cmd/sc_deleterows.png
+chart2/res/dataeditor_icon04.png cmd/sc_deletecolumns.png
+chart2/res/dataeditor_icon05.png cmd/sc_insertcellsright.png
+chart2/res/dataeditor_icon06.png cmd/sc_insertcellsdown.png
+chart2/res/dataeditor_icon07.png cmd/sc_insertcolumnsafter.png
+chart2/res/dataeditor_icon08.png cmd/sc_insertcolumns.png
+chart2/res/dataeditor_icon09.png cmd/sc_insertrowsbefore.png
+chart2/res/selectrange.png formula/res/refinp1.png
+
+cmd/sc_insertmenulegend.png cmd/sc_legend.png
+cmd/sc_togglelegend.png cmd/sc_legend.png
+cmd/sc_insertmenuaxes.png cmd/sc_diagramaxis.png
+cmd/sc_insertmenugrids.png cmd/sc_togglegridhorizontal.png
+cmd/sc_diagramaxisall.png cmd/sc_diagramaxisxyz.png
+cmd/lc_insertmenulegend.png cmd/lc_legend.png
+cmd/lc_togglelegend.png cmd/lc_legend.png
+cmd/lc_insertmenuaxes.png cmd/lc_diagramaxis.png
+cmd/lc_insertmenugrids.png cmd/lc_togglegridhorizontal.png
+cmd/lc_diagramaxisall.png cmd/lc_diagramaxisxyz.png
+
+cmd/sc_charttitlemenu.png cmd/sc_toggletitle.png
+cmd/sc_diagramaxismenu.png cmd/sc_diagramaxis.png
+cmd/sc_diagramgridmenu.png cmd/sc_togglegridhorizontal.png
+
 # Navigator - Writer
 sw/res/all_left.png cmd/sc_firstpage.png
 sw/res/all_right.png cmd/sc_lastpage.png
