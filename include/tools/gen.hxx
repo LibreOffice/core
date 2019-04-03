@@ -195,6 +195,12 @@ public:
     long            getHeight() const { return Height(); }
     void            setWidth(long nWidth)  { Width() = nWidth; }
     void            setHeight(long nHeight)  { Height() = nHeight; }
+
+    void extendBy(long x, long y)
+    {
+        nA += x;
+        nB += y;
+    }
 };
 
 inline bool operator ==(Size const & s1, Size const & s2)

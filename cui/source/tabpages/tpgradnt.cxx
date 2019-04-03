@@ -67,13 +67,13 @@ SvxGradientTabPage::SvxGradientTabPage
 {
     get(m_pCbIncrement,    "autoincrement");
     get(m_pMtrIncrement,   "incrementmtr");
-    get(m_pSliderIncrement,"incrementslider");
     get(m_pLbGradientType, "gradienttypelb");
     get(m_pFtCenter,       "centerft");
     get(m_pMtrCenterX,     "centerxmtr");
     get(m_pMtrCenterY,     "centerymtr");
     get(m_pFtAngle,        "angleft");
     get(m_pMtrAngle,       "anglemtr");
+    get(m_pSliderAngle,    "angleslider");
     get(m_pMtrBorder,      "bordermtr");
     get(m_pSliderBorder,   "borderslider");
     get(m_pLbColorFrom,    "colorfromlb");
@@ -94,10 +94,10 @@ SvxGradientTabPage::SvxGradientTabPage
 
     // as long as NOT supported by the item
 
-    m_pSliderIncrement->SetRange(Range(3,256));
     m_pMtrColorTo->SetValue( 100 );
     m_pMtrColorFrom->SetValue( 100 );
     m_pSliderBorder->SetRange(Range(0,100));
+    m_pSliderAngle->SetRange(Range(0,359));
 
     // setting the output device
     m_rXFSet.Put( XFillStyleItem(drawing::FillStyle_GRADIENT) );
@@ -117,10 +117,10 @@ SvxGradientTabPage::SvxGradientTabPage
     m_pLbGradientType->SetSelectHdl( aLink2 );
     m_pCbIncrement->SetToggleHdl( LINK( this, SvxGradientTabPage, ChangeAutoStepHdl_Impl ) );
     m_pMtrIncrement->SetModifyHdl( aLink );
-    m_pSliderIncrement->SetSlideHdl( LINK( this, SvxGradientTabPage, ModifiedSliderHdl_Impl ) );
     m_pMtrCenterX->SetModifyHdl( aLink );
     m_pMtrCenterY->SetModifyHdl( aLink );
     m_pMtrAngle->SetModifyHdl( aLink );
+    m_pSliderAngle->SetSlideHdl( LINK( this, SvxGradientTabPage, ModifiedSliderHdl_Impl ) );
     m_pMtrBorder->SetModifyHdl( aLink );
     m_pSliderBorder->SetSlideHdl( LINK( this, SvxGradientTabPage, ModifiedSliderHdl_Impl ) );
     m_pMtrColorFrom->SetModifyHdl( aLink );
@@ -144,13 +144,13 @@ void SvxGradientTabPage::dispose()
 {
     m_pCbIncrement.clear();
     m_pMtrIncrement.clear();
-    m_pSliderIncrement.clear();
     m_pLbGradientType.clear();
     m_pFtCenter.clear();
     m_pMtrCenterX.clear();
     m_pMtrCenterY.clear();
     m_pFtAngle.clear();
     m_pMtrAngle.clear();
+    m_pSliderAngle.clear();
     m_pMtrBorder.clear();
     m_pSliderBorder.clear();
     m_pLbColorFrom.clear();
@@ -262,7 +262,6 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 void SvxGradientTabPage::Reset( const SfxItemSet* )
 {
     m_pMtrIncrement->SetValue(DEFAULT_GRADIENTSTEP);
-    m_pSliderIncrement->SetThumbPos(DEFAULT_GRADIENTSTEP);
     ChangeGradientHdl_Impl();
 
     // determine state of the buttons
@@ -308,12 +307,10 @@ IMPL_LINK_NOARG( SvxGradientTabPage, ChangeAutoStepHdl_Impl, CheckBox&, void )
 {
     if(m_pCbIncrement->IsChecked())
     {
-        m_pSliderIncrement->Disable();
         m_pMtrIncrement->Disable();
     }
     else
     {
-        m_pSliderIncrement->Enable();
         m_pMtrIncrement->Enable();
     }
     ModifiedHdl_Impl(m_pMtrIncrement);
@@ -325,10 +322,10 @@ void SvxGradientTabPage::ModifiedHdl_Impl( void const * pControl )
         m_pSliderBorder->SetThumbPos( m_pMtrBorder->GetValue() );
     if( pControl == m_pSliderBorder )
         m_pMtrBorder->SetValue( m_pSliderBorder->GetThumbPos() );
-    if( pControl == m_pMtrIncrement )
-        m_pSliderIncrement->SetThumbPos( m_pMtrIncrement->GetValue() );
-    if(pControl == m_pSliderIncrement)
-        m_pMtrIncrement->SetValue( m_pSliderIncrement->GetThumbPos() );
+    if( pControl == m_pMtrAngle )
+        m_pSliderAngle->SetThumbPos( m_pMtrAngle->GetValue() );
+    if(pControl == m_pSliderAngle)
+        m_pMtrAngle->SetValue( m_pSliderAngle->GetThumbPos() );
 
     css::awt::GradientStyle eXGS = (css::awt::GradientStyle) m_pLbGradientType->GetSelectedEntryPos();
 
@@ -581,15 +578,12 @@ void SvxGradientTabPage::ChangeGradientHdl_Impl()
         {
             m_pCbIncrement->SetState(TRISTATE_TRUE);
             m_pMtrIncrement->Disable();
-            m_pSliderIncrement->Disable();
         }
         else
         {
             m_pCbIncrement->SetState(TRISTATE_FALSE);
             m_pMtrIncrement->Enable();
             m_pMtrIncrement->SetValue( nValue );
-            m_pSliderIncrement->Enable();
-            m_pSliderIncrement->SetThumbPos( nValue );
         }
         m_pLbGradientType->SelectEntryPos(
             sal::static_int_cast< sal_Int32 >( eXGS ) );
@@ -602,6 +596,7 @@ void SvxGradientTabPage::ChangeGradientHdl_Impl()
         m_pLbColorTo->SelectEntry( pGradient->GetEndColor() );
 
         m_pMtrAngle->SetValue( pGradient->GetAngle() / 10 ); // should be changed in resource
+        m_pSliderAngle->SetThumbPos( pGradient->GetAngle() / 10 );
         m_pMtrBorder->SetValue( pGradient->GetBorder() );
         m_pSliderBorder->SetThumbPos( pGradient->GetBorder() );
         m_pMtrCenterX->SetValue( pGradient->GetXOffset() );
@@ -633,6 +628,7 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
             m_pMtrCenterY->Disable();
             m_pFtAngle->Enable();
             m_pMtrAngle->Enable();
+            m_pSliderAngle->Enable();
             break;
 
         case css::awt::GradientStyle_RADIAL:
@@ -641,6 +637,7 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
             m_pMtrCenterY->Enable();
             m_pFtAngle->Disable();
             m_pMtrAngle->Disable();
+            m_pSliderAngle->Disable();
             break;
 
         case css::awt::GradientStyle_ELLIPTICAL:
@@ -649,6 +646,7 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
             m_pMtrCenterY->Enable();
             m_pFtAngle->Enable();
             m_pMtrAngle->Enable();
+            m_pSliderAngle->Enable();
             break;
 
         case css::awt::GradientStyle_SQUARE:
@@ -658,6 +656,7 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
             m_pMtrCenterY->Enable();
             m_pFtAngle->Enable();
             m_pMtrAngle->Enable();
+            m_pSliderAngle->Enable();
             break;
         default:
             break;

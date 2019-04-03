@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -203,19 +203,7 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkScale" id="incrementslider">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="round_digits">1</property>
-                        <property name="draw_value">False</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
@@ -227,7 +215,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="top_attach">2</property>
+                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -236,6 +224,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="hexpand">True</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
@@ -244,12 +233,6 @@
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
                       </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                   </object>
                   <packing>
@@ -266,33 +249,6 @@
                     <property name="row_spacing">3</property>
                     <property name="column_spacing">6</property>
                     <child>
-                      <object class="GtkLabel" id="angleft">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="gradientpage|angleft">A_ngle:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">anglemtr:0degrees</property>
-                        <property name="xalign">0</property>
-                        <property name="yalign">0.43999999761581421</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="anglemtr:0degrees">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
-                        <property name="adjustment">angleadjustment</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkLabel" id="centerft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -304,6 +260,7 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
@@ -344,11 +301,12 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
+                    <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">2</property>
                   </packing>
@@ -372,7 +330,8 @@
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="top_attach">2</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
@@ -385,7 +344,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="top_attach">3</property>
                       </packing>
                     </child>
                     <child>
@@ -398,11 +357,50 @@
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
+                        <property name="top_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="angleft">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="gradientpage|angleft">A_ngle:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">anglemtr:0degrees</property>
+                        <property name="xalign">0</property>
+                        <property name="yalign">0.43999999761581421</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScale" id="angleslider">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="draw_value">False</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
                       </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <object class="GtkSpinButton" id="anglemtr:0degrees">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="halign">end</property>
+                        <property name="invisible_char">●</property>
+                        <property name="adjustment">angleadjustment</property>
+                        <property name="value">15</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -430,12 +428,14 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
                       <object class="svxcorelo-SvxColorListBox" id="colorfromlb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <property name="entry_text_column">0</property>
                         <property name="id_column">1</property>
                       </object>
@@ -457,9 +457,6 @@
                         <property name="top_attach">1</property>
                       </packing>
                     </child>
-                    <child>
-                      <placeholder/>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -478,6 +475,7 @@
                       <object class="svxcorelo-SvxColorListBox" id="colortolb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <property name="entry_text_column">0</property>
                         <property name="id_column">1</property>
                       </object>
@@ -511,10 +509,8 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
+                        <property name="width">2</property>
                       </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                   </object>
                   <packing>

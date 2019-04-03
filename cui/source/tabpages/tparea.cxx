@@ -145,6 +145,8 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     lclExtendSize(aSize, m_pFillTabPage->GetOptimalSize());
     m_pFillTabPage.disposeAndClear();
 
+    aSize.extendBy(10, 10); // apply a bit of margin
+
     m_pFillTab->set_width_request(aSize.Width());
     m_pFillTab->set_height_request(aSize.Height());
 }

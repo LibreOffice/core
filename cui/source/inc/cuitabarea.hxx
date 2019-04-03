@@ -353,6 +353,7 @@ private:
     VclPtr<MetricField>        m_pMtrCenterY;
     VclPtr<FixedText>          m_pFtAngle;
     VclPtr<MetricField>        m_pMtrAngle;
+    VclPtr<Slider>             m_pSliderAngle;
     VclPtr<MetricField>        m_pMtrBorder;
     VclPtr<Slider>             m_pSliderBorder;
     VclPtr<SvxColorListBox>    m_pLbColorFrom;
@@ -362,7 +363,6 @@ private:
     VclPtr<SvxPresetListBox>   m_pGradientLB;
     VclPtr<NumericField>       m_pMtrIncrement;
     VclPtr<CheckBox>           m_pCbIncrement;
-    VclPtr<Slider>             m_pSliderIncrement;
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
     VclPtr<PushButton>         m_pBtnAdd;
     VclPtr<PushButton>         m_pBtnModify;
