@@ -426,7 +426,7 @@ void SvRTFParser::ScanText()
                             OUString sSave( aToken );
                             nNextCh = '\\';
                             int nToken = GetNextToken_();
-                            DBG_ASSERT( RTF_U == nToken, "still not an UNI-Code character" );
+                            DBG_ASSERT( RTF_U == nToken, "still not a UNI-Code character" );
                             // don't convert symbol chars
                             aStrBuffer.append(static_cast< sal_Unicode >(nTokenValue));
 
