@@ -47,7 +47,7 @@ namespace internal
        id is 2000 */
     static void LoadSignetImageFromResource(ZipFile::ZipContentBuffer_t& buffer)
     {
-        HRSRC hrc = FindResourceW(g_hModule, L"#2000", RT_RCDATA);
+        HRSRC hrc = FindResourceW(g_hModule, L"#2000", MAKEINTRESOURCEW(RT_RCDATA));
         DWORD size = SizeofResource(g_hModule, hrc);
         HGLOBAL hglob = LoadResource(g_hModule, hrc);
         char* data = static_cast<char*>(LockResource(hglob));
