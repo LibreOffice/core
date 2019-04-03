@@ -63,8 +63,16 @@ $(OBJLOCAL)/liblo-native-code.so : native-code.cxx $(ALL_STATIC_LIBS)
 
 $(SODEST)/liblo-native-code.so : $(OBJLOCAL)/liblo-native-code.so
 	mkdir -p $(SODEST)
+
+	# Before strip copy the file with the debug symbols to the debug directory.
+	# You can use these debug symbols in Android Studio:
+	# Run -> Debug... -> Edit configurations..., a popup with debug options will open,
+	# go to Debugger section, add the directory with symbols to Symbol Directories
+	# [eg. /local/libreoffice/master-android/android/source/jniLibs/armeabi-v7a]
+	$(OBJCOPY) --only-keep-debug $(OBJLOCAL)/liblo-native-code.so $(SODEST)/liblo-native-code.debug
+
+	# strip liblo-native-code.so from OBJLOCAL and copy to to SODEST
 	$(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so
-	#to keep some symbols, eg.: $(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so -w -K 'Java*'
 
 $(SODEST)/nss-libraries : 
 	mkdir -p $(SODEST)

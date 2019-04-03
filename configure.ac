@@ -484,6 +484,7 @@ if test -n "$with_android_ndk"; then
     test -z "$SYSBASE" && SYSBASE=$ANDROID_NDK_HOME/platforms/android-${ANDROID_API_LEVEL}/arch-${ANDROID_ARCH}
     test -z "$AR" && AR=$ANDROID_BINUTILS_PREBUILT_ROOT/bin/$android_gnu_prefix-ar
     test -z "$NM" && NM=$ANDROID_BINUTILS_PREBUILT_ROOT/bin/$android_gnu_prefix-nm
+    test -z "$OBJCOPY" && OBJCOPY=$ANDROID_BINUTILS_PREBUILT_ROOT/bin/$android_gnu_prefix-objcopy
     test -z "$OBJDUMP" && OBJDUMP=$ANDROID_BINUTILS_PREBUILT_ROOT/bin/$android_gnu_prefix-objdump
     test -z "$RANLIB" && RANLIB=$ANDROID_BINUTILS_PREBUILT_ROOT/bin/$android_gnu_prefix-ranlib
     test -z "$STRIP" && STRIP=$ANDROID_BINUTILS_PREBUILT_ROOT/bin/$android_gnu_prefix-strip
@@ -4664,7 +4665,7 @@ if test "$cross_compiling" = "yes"; then
     (
     unset COM USING_X11 OS CPUNAME
     unset CC CXX SYSBASE CFLAGS
-    unset AR NM OBJDUMP PKG_CONFIG RANLIB READELF STRIP
+    unset AR NM OBJCOPY OBJDUMP PKG_CONFIG RANLIB READELF STRIP
     unset CPPUNIT_CFLAGS CPPUNIT_LIBS
     unset LIBXML_CFLAGS LIBXML_LIBS LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC PKG_CONFIG_LIBDIR
     test -n "$CC_FOR_BUILD" && export CC="$CC_FOR_BUILD"
@@ -5266,6 +5267,7 @@ if test "$_os" != "WINNT"; then
         AC_CHECK_TOOL(NM,nm)
         AC_CHECK_TOOL(RANLIB,ranlib)
     fi
+    AC_CHECK_TOOL(OBJCOPY,objcopy)
     AC_CHECK_TOOL(OBJDUMP,objdump)
     AC_CHECK_TOOL(READELF,readelf)
     AC_CHECK_TOOL(STRIP,strip)
@@ -5277,6 +5279,7 @@ fi
 AC_SUBST(AR)
 AC_SUBST(DLLTOOL)
 AC_SUBST(NM)
+AC_SUBST(OBJCOPY)
 AC_SUBST(OBJDUMP)
 AC_SUBST(PKG_CONFIG)
 AC_SUBST(RANLIB)
