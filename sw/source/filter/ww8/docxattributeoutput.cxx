@@ -528,7 +528,7 @@ static OString convertToOOXMLHoriOrient(sal_Int16 nOrient, bool bIsPosToggle)
         case text::HoriOrientation::RIGHT:
             return OString( bIsPosToggle ? "outside" : "right" );
         case text::HoriOrientation::CENTER:
-        // fall-through indended
+        // fall-through intended
         case text::HoriOrientation::FULL:
         default:
             return OString( "center" );
