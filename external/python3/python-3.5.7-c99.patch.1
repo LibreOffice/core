@@ -1,0 +1,62 @@
+remove C99 which isn't suppored by all compilers yet
+
+--- python3/Modules/_pickle.c.orig	2019-04-03 16:34:01.380124314 +0200
++++ python3/Modules/_pickle.c	2019-04-03 16:35:18.579005171 +0200
+@@ -674,9 +674,12 @@
+         PyErr_NoMemory();
+         return NULL;
+     }
+-    for (size_t i = 0; i < self->mt_allocated; i++) {
++    {
++    size_t i;
++    for (i = 0; i < self->mt_allocated; i++) {
+         Py_XINCREF(self->mt_table[i].me_key);
+     }
++    }
+     memcpy(new->mt_table, self->mt_table,
+            sizeof(PyMemoEntry) * self->mt_allocated);
+ 
+@@ -4204,7 +4207,9 @@
+         return NULL;
+ 
+     memo = self->pickler->memo;
+-    for (size_t i = 0; i < memo->mt_allocated; ++i) {
++    {
++    size_t i;
++    for (i = 0; i < memo->mt_allocated; ++i) {
+         PyMemoEntry entry = memo->mt_table[i];
+         if (entry.me_key != NULL) {
+             int status;
+@@ -4225,6 +4230,7 @@
+                 goto error;
+         }
+     }
++    }
+     return new_memo;
+ 
+   error:
+@@ -6791,10 +6797,13 @@
+         if (new_memo == NULL)
+             return -1;
+ 
+-        for (size_t i = 0; i < new_memo_size; i++) {
++        {
++        size_t i;
++        for (i = 0; i < new_memo_size; i++) {
+             Py_XINCREF(unpickler->memo[i]);
+             new_memo[i] = unpickler->memo[i];
+         }
++        }
+     }
+     else if (PyDict_Check(obj)) {
+         Py_ssize_t i = 0;
+@@ -6839,7 +6848,8 @@
+ 
+   error:
+     if (new_memo_size) {
+-        for (size_t i = new_memo_size - 1; i != SIZE_MAX; i--) {
++        size_t i;
++        for (i = new_memo_size - 1; i != SIZE_MAX; i--) {
+             Py_XDECREF(new_memo[i]);
+         }
+         PyMem_FREE(new_memo);
