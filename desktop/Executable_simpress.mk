@@ -12,7 +12,6 @@ $(eval $(call gb_Executable_Executable,simpress))
 $(eval $(call gb_Executable_set_targettype_gui,simpress,YES))
 
 $(eval $(call gb_Executable_add_defs,simpress,\
-    -DUNICODE \
 ))
 
 $(eval $(call gb_Executable_add_ldflags,simpress,\

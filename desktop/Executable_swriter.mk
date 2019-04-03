@@ -12,7 +12,6 @@ $(eval $(call gb_Executable_Executable,swriter))
 $(eval $(call gb_Executable_set_targettype_gui,swriter,YES))
 
 $(eval $(call gb_Executable_add_defs,swriter,\
-    -DUNICODE \
 ))
 
 $(eval $(call gb_Executable_add_ldflags,swriter,\

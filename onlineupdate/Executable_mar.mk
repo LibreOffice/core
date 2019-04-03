@@ -33,7 +33,6 @@ $(eval $(call gb_Executable_use_externals,mar,\
 ))
 
 $(eval $(call gb_Executable_add_defs,mar,\
-	-DUNICODE \
 	-DMAR_NSS \
 ))
 

@@ -22,9 +22,7 @@ $(eval $(call gb_Library_set_include,shlxthdl_x64,\
 
 $(eval $(call gb_Library_add_defs,shlxthdl_x64,\
 	-DISOLATION_AWARE_ENABLED \
-	-DUNICODE \
 	-DWIN32_LEAN_AND_MEAN \
-	-D_UNICODE \
 	-UNOMINMAX \
 ))
 

@@ -16,7 +16,6 @@ $(eval $(call gb_StaticLibrary_set_include,updatehelper,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_defs,updatehelper,\
-	-DUNICODE \
 	-DNSS3 \
 	-DVERIFY_MAR_SIGNATURE \
 ))

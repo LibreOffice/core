@@ -19,8 +19,6 @@ $(eval $(call gb_Library_set_include,spsupp,\
 ))
 
 $(eval $(call gb_Library_add_defs,spsupp,\
-	-DUNICODE \
-	-D_UNICODE \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,spsupp,\

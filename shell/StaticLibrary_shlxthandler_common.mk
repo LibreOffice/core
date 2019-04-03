@@ -16,9 +16,7 @@ $(eval $(call gb_StaticLibrary_set_include,shlxthandler_common,\
 
 $(eval $(call gb_StaticLibrary_add_defs,shlxthandler_common,\
 	-DISOLATION_AWARE_ENABLED \
-	-DUNICODE \
 	-DWIN32_LEAN_AND_MEAN \
-	-D_UNICODE \
 ))
 
 $(eval $(call gb_StaticLibrary_use_externals,shlxthandler_common,\

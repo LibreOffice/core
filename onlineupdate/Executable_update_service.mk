@@ -43,7 +43,6 @@ $(eval $(call gb_Executable_add_libs,update_service,\
 ))
 
 $(eval $(call gb_Executable_add_defs,update_service,\
-	-DUNICODE \
 ))
 
 $(eval $(call gb_Executable_add_ldflags,update_service,\

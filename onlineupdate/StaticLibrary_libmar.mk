@@ -15,7 +15,6 @@ $(eval $(call gb_StaticLibrary_set_include,libmar,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_defs,libmar,\
-	-DUNICODE \
 ))
 
 $(eval $(call gb_StaticLibrary_add_cobjects,libmar,\

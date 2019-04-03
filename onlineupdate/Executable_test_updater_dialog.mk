@@ -40,7 +40,6 @@ $(eval $(call gb_Executable_add_ldflags,test_updater_dialog,\
 ))
 
 $(eval $(call gb_Executable_add_defs,test_updater_dialog,\
-	-DUNICODE \
 ))
 
 else

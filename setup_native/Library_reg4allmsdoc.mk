@@ -10,8 +10,6 @@
 $(eval $(call gb_Library_Library,reg4allmsdoc))
 
 $(eval $(call gb_Library_add_defs,reg4allmsdoc,\
-	-DUNICODE \
-	-D_UNICODE \
 	-U_DLL \
 ))
 

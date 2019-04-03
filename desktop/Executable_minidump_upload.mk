@@ -15,7 +15,6 @@ $(eval $(call gb_Executable_use_libraries,minidump_upload,\
 ))
 
 $(eval $(call gb_Executable_add_defs,minidump_upload,\
-	-DUNICODE \
 ))
 
 $(eval $(call gb_Executable_use_external,minidump_upload,curl))
