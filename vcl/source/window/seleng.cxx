@@ -149,7 +149,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
             {
                 nFlags |= SelectionEngineFlags::WAIT_UPEVT;
                 nFlags &= ~SelectionEngineFlags::IN_SEL;
-                pWin->ReleaseMouse();
+                ReleaseMouse();
                 return true;  // wait for STARTDRAG-Command-Event
             }
             if ( eSelMode != SelectionMode::Single )
@@ -170,7 +170,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
         case KEY_SHIFT:
             if ( eSelMode == SelectionMode::Single )
             {
-                pWin->ReleaseMouse();
+                ReleaseMouse();
                 nFlags &= ~SelectionEngineFlags::IN_SEL;
                 return false;
             }
@@ -194,7 +194,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
             if ( eSelMode != SelectionMode::Multiple )
             {
                 nFlags &= ~SelectionEngineFlags::IN_SEL;
-                pWin->ReleaseMouse();
+                ReleaseMouse();
                 return true;  // skip Mouse-Click
             }
             if ( nFlags & SelectionEngineFlags::HAS_ANCH )
@@ -217,7 +217,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
         case KEY_SHIFT + KEY_MOD1:
             if ( eSelMode != SelectionMode::Multiple )
             {
-                pWin->ReleaseMouse();
+                ReleaseMouse();
                 nFlags &= ~SelectionEngineFlags::IN_SEL;
                 return false;
             }
@@ -244,10 +244,8 @@ bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
         return false;
     }
 
-    if( !rMEvt.IsRight() )
-    {
-       ReleaseMouse();
-    }
+    if (!rMEvt.IsRight())
+        ReleaseMouse();
 
     if( (nFlags & SelectionEngineFlags::WAIT_UPEVT) && !(nFlags & SelectionEngineFlags::CMDEVT) &&
         eSelMode != SelectionMode::Single)
@@ -324,8 +322,8 @@ void SelectionEngine::SetWindow( vcl::Window* pNewWin )
 {
     if( pNewWin != pWin )
     {
-        if ( pWin && (nFlags & SelectionEngineFlags::IN_SEL) )
-            pWin->ReleaseMouse();
+        if (nFlags & SelectionEngineFlags::IN_SEL)
+            ReleaseMouse();
         pWin = pNewWin;
         if ( pWin && ( nFlags & SelectionEngineFlags::IN_SEL ) )
             pWin->CaptureMouse();
@@ -335,8 +333,8 @@ void SelectionEngine::SetWindow( vcl::Window* pNewWin )
 void SelectionEngine::Reset()
 {
     aWTimer.Stop();
-    if ( nFlags & SelectionEngineFlags::IN_SEL )
-        pWin->ReleaseMouse();
+    if (nFlags & SelectionEngineFlags::IN_SEL)
+        ReleaseMouse();
     nFlags &= ~SelectionEngineFlags(SelectionEngineFlags::HAS_ANCH | SelectionEngineFlags::IN_SEL);
     nLockedMods = 0;
 }
