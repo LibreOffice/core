@@ -29,7 +29,6 @@
 #define SLIDER_STATE_THUMB_DOWN     (sal_uInt16(0x0004))
 
 #define SLIDER_THUMB_SIZE           9
-#define SLIDER_THUMB_HALFSIZE       4
 #define SLIDER_CHANNEL_OFFSET       0
 #define SLIDER_CHANNEL_SIZE         4
 #define SLIDER_CHANNEL_HALFSIZE     2
@@ -43,6 +42,7 @@ void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnThumbPixOffset    = 0;
     mnThumbPixRange     = 0;
     mnThumbPixPos       = 0;    // between mnThumbPixOffset and mnThumbPixOffset+mnThumbPixRange
+    mnThumbSize         = SLIDER_THUMB_SIZE;
     mnChannelPixOffset  = 0;
     mnChannelPixRange   = 0;
     mnChannelPixTop     = 0;
@@ -115,8 +115,8 @@ void Slider::ImplUpdateRects( bool bUpdate )
     {
         if ( GetStyle() & WB_HORZ )
         {
-            maThumbRect.SetLeft( mnThumbPixPos-SLIDER_THUMB_HALFSIZE );
-            maThumbRect.SetRight( maThumbRect.Left()+SLIDER_THUMB_SIZE-1 );
+            maThumbRect.SetLeft(mnThumbPixPos - (mnThumbSize / 2));
+            maThumbRect.SetRight(maThumbRect.Left() + mnThumbSize - 1);
             if ( mnChannelPixOffset < maThumbRect.Left() )
             {
                 maChannel1Rect.SetLeft( mnChannelPixOffset );
@@ -136,7 +136,7 @@ void Slider::ImplUpdateRects( bool bUpdate )
             else
                 maChannel2Rect.SetEmpty();
 
-            const tools::Rectangle aControlRegion( tools::Rectangle( Point(0,0), Size( SLIDER_THUMB_SIZE, 10 ) ) );
+            const tools::Rectangle aControlRegion(tools::Rectangle(Point(), Size(mnThumbSize, 10)));
             tools::Rectangle aThumbBounds, aThumbContent;
             if ( GetNativeControlRegion( ControlType::Slider, ControlPart::ThumbHorz,
                                          aControlRegion, ControlState::NONE, ImplControlValue(),
@@ -149,8 +149,8 @@ void Slider::ImplUpdateRects( bool bUpdate )
         }
         else
         {
-            maThumbRect.SetTop( mnThumbPixPos-SLIDER_THUMB_HALFSIZE );
-            maThumbRect.SetBottom( maThumbRect.Top()+SLIDER_THUMB_SIZE-1 );
+            maThumbRect.SetTop( mnThumbPixPos - (mnThumbSize / 2));
+            maThumbRect.SetBottom( maThumbRect.Top() + mnThumbSize - 1);
             if ( mnChannelPixOffset < maThumbRect.Top() )
             {
                 maChannel1Rect.SetTop( mnChannelPixOffset );
@@ -170,7 +170,7 @@ void Slider::ImplUpdateRects( bool bUpdate )
             else
                 maChannel2Rect.SetEmpty();
 
-            const tools::Rectangle aControlRegion( tools::Rectangle( Point(0,0), Size( 10, SLIDER_THUMB_SIZE ) ) );
+            const tools::Rectangle aControlRegion(tools::Rectangle(Point(), Size(10, mnThumbSize)));
             tools::Rectangle aThumbBounds, aThumbContent;
             if ( GetNativeControlRegion( ControlType::Slider, ControlPart::ThumbVert,
                                          aControlRegion, ControlState::NONE, ImplControlValue(),
@@ -247,8 +247,39 @@ void Slider::ImplCalc( bool bUpdate )
 {
     bool bInvalidateAll = false;
 
-    if ( mbCalcSize )
+    if (mbCalcSize)
     {
+        if (GetStyle() & WB_HORZ)
+        {
+            const tools::Rectangle aControlRegion(tools::Rectangle(Point(), Size(SLIDER_THUMB_SIZE, 10)));
+            tools::Rectangle aThumbBounds, aThumbContent;
+            if (GetNativeControlRegion(ControlType::Slider, ControlPart::ThumbHorz,
+                                       aControlRegion, ControlState::NONE, ImplControlValue(),
+                                       aThumbBounds, aThumbContent))
+            {
+                mnThumbSize = aThumbBounds.GetWidth();
+            }
+            else
+            {
+                mnThumbSize = SLIDER_THUMB_SIZE;
+            }
+        }
+        else
+        {
+            const tools::Rectangle aControlRegion(tools::Rectangle(Point(), Size(10, SLIDER_THUMB_SIZE)));
+            tools::Rectangle aThumbBounds, aThumbContent;
+            if (GetNativeControlRegion( ControlType::Slider, ControlPart::ThumbVert,
+                                         aControlRegion, ControlState::NONE, ImplControlValue(),
+                                         aThumbBounds, aThumbContent))
+            {
+                mnThumbSize = aThumbBounds.GetHeight();
+            }
+            else
+            {
+                mnThumbSize = SLIDER_THUMB_SIZE;
+            }
+        }
+
         long nOldChannelPixOffset   = mnChannelPixOffset;
         long nOldChannelPixRange    = mnChannelPixRange;
         long nOldChannelPixTop      = mnChannelPixTop;
@@ -276,10 +307,10 @@ void Slider::ImplCalc( bool bUpdate )
             maThumbRect.SetRight( aSize.Width()-1 );
         }
 
-        if ( nCalcWidth >= SLIDER_THUMB_SIZE )
+        if (nCalcWidth >= mnThumbSize)
         {
-            mnThumbPixOffset    = SLIDER_THUMB_HALFSIZE;
-            mnThumbPixRange     = nCalcWidth-(SLIDER_THUMB_HALFSIZE*2);
+            mnThumbPixOffset    = mnThumbSize / 2;
+            mnThumbPixRange     = nCalcWidth - mnThumbSize;
             mnThumbPixPos       = 0;
             mnChannelPixOffset  = SLIDER_CHANNEL_OFFSET;
             mnChannelPixRange   = nCalcWidth-(SLIDER_CHANNEL_OFFSET*2);
@@ -936,7 +967,7 @@ void Slider::SetThumbPos( long nNewThumbPos )
 
 Size Slider::CalcWindowSizePixel()
 {
-    long nWidth = mnMaxRange-mnMinRange+(SLIDER_THUMB_HALFSIZE*2)+1;
+    long nWidth = mnMaxRange - mnMinRange + mnThumbSize + 1;
     long nHeight = SLIDER_HEIGHT;
     Size aSize;
     if ( GetStyle() & WB_HORZ )
