@@ -512,24 +512,21 @@ static OString convertToOOXMLVertOrient(sal_Int16 nOrient)
     }
 }
 
-static OString convertToOOXMLHoriOrient(sal_Int16 nOrient)
+static OString convertToOOXMLHoriOrient(sal_Int16 nOrient, bool bIsPosToggle)
 {
     switch( nOrient )
     {
-        case text::VertOrientation::NONE:
+        case text::HoriOrientation::NONE:
             return OString();
-        case text::VertOrientation::CENTER:
-        case text::VertOrientation::LINE_CENTER:
-            return OString( "center" );
-        case text::VertOrientation::BOTTOM:
-            return OString( "bottom" );
-        case text::VertOrientation::LINE_BOTTOM:
-            return OString( "outside" );
-        case text::VertOrientation::TOP:
-            return OString( "top" );
-        case text::VertOrientation::LINE_TOP:
+        case text::HoriOrientation::LEFT:
+            return OString( bIsPosToggle ? "inside" : "left" );
+        case text::HoriOrientation::RIGHT:
+            return OString( bIsPosToggle ? "outside" : "right" );
+        case text::HoriOrientation::CENTER:
+        // fall-through indended
+        case text::HoriOrientation::FULL:
         default:
-            return OString( "inside" );
+            return OString( "center" );
     }
 }
 
@@ -8374,7 +8371,7 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFormatVertOrient& rFlyV
 
 void DocxAttributeOutput::FormatHorizOrientation( const SwFormatHoriOrient& rFlyHori )
 {
-    OString sAlign   = convertToOOXMLHoriOrient( rFlyHori.GetHoriOrient() );
+    OString sAlign   = convertToOOXMLHoriOrient( rFlyHori.GetHoriOrient(), rFlyHori.IsPosToggle() );
     OString sHAnchor = convertToOOXMLHoriOrientRel( rFlyHori.GetRelationOrient() );
 
     if (m_rExport.SdrExporter().getTextFrameSyntax())
