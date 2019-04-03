@@ -79,7 +79,7 @@ CollaboraOffice
         downloadname    CollaboraOffice_{productversion}_{os}_install_{languages}
         langpackdownloadname    CollaboraOffice_{productversion}_languagepack_{os}_install_{languages}
         helppackdownloadname    CollaboraOffice_{productversion}_helppack_{os}_install_{languages}
-        include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{packinfopath}
+        include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{customtargetpath}/readlicense_oo/license,{packinfopath}
     }
 }
 
@@ -131,7 +131,7 @@ LibreOfficeDev
         downloadname    LibreOfficeDev_{productversion}_{os}_install_{languages}
         langpackdownloadname    LibreOfficeDev_{productversion}_languagepack_{os}_install_{languages}
         helppackdownloadname    LibreOfficeDev_{productversion}_helppack_{os}_install_{languages}
-        include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{packinfopath}
+        include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{customtargetpath}/readlicense_oo/license,{packinfopath}
     }
 }
 
@@ -169,7 +169,7 @@ LibreOffice_SDK
         active 1
         compression 5
         script sdkoo
-        include {installscriptdir},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{licensepath},{packinfopath}
+        include {installscriptdir},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{licensepath},{customtargetpath}/readlicense_oo/license,{packinfopath}
     }
 }
 
@@ -214,6 +214,6 @@ LibreOfficeDev_SDK
         active 1
         compression 5
         script sdkoo
-        include {installscriptdir},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{licensepath},{packinfopath}
+        include {installscriptdir},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{licensepath},{customtargetpath}/readlicense_oo/license,{packinfopath}
     }
 }
