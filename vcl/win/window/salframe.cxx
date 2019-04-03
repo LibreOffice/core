@@ -843,6 +843,7 @@ WinSalFrame::WinSalFrame()
     mbBorder            = false;
     mbFixBorder         = false;
     mbSizeBorder        = false;
+    mbFullScreenCaption = false;
     mbFullScreen        = false;
     mbPresentation      = false;
     mbInShow            = false;
@@ -1850,6 +1851,15 @@ void WinSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
         if ( !(GetWindowStyle( mhWnd ) & WS_VISIBLE) )
             mnShowState = SW_SHOW;
 
+        // Save caption state.
+        mbFullScreenCaption = mbCaption;
+        if (mbCaption)
+        {
+            DWORD nStyle = GetWindowStyle(mhWnd);
+            SetWindowStyle(mhWnd, nStyle & ~WS_CAPTION);
+            mbCaption = false;
+        }
+
         // set window to screen size
         ImplSalFrameFullScreenPos( this, true );
     }
@@ -1864,6 +1874,14 @@ void WinSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
         if ( mbFullScreenToolWin )
             SetWindowExStyle( mhWnd, GetWindowExStyle( mhWnd ) | WS_EX_TOOLWINDOW );
         mbFullScreenToolWin = false;
+
+        // Restore caption state.
+        if (mbFullScreenCaption)
+        {
+            DWORD nStyle = GetWindowStyle(mhWnd);
+            SetWindowStyle(mhWnd, nStyle | WS_CAPTION);
+        }
+        mbCaption = mbFullScreenCaption;
 
         SetWindowPos( mhWnd, nullptr,
                       maFullScreenRect.left,
