@@ -195,9 +195,9 @@ STDMETHODIMP CAccRelation::put_XSubInterface(hyper pXSubInterface)
 */
 BSTR CAccRelation::getRelationTypeBSTR(int type)
 {
-    static LPCTSTR map[] =
+    static LPCWSTR map[] =
         {
-            _T("INVALID"),               // AccessibleRelationType::INVALID
+            L"INVALID",                  // AccessibleRelationType::INVALID
             IA2_RELATION_FLOWS_FROM,     // AccessibleRelationType::CONTENT_FLOWS_FROM
             IA2_RELATION_FLOWS_TO,       // AccessibleRelationType::CONTENT_FLOWS_TO
             IA2_RELATION_CONTROLLED_BY,  // AccessibleRelationType::CONTROLLED_BY
@@ -211,7 +211,7 @@ BSTR CAccRelation::getRelationTypeBSTR(int type)
         };
 
     return ::SysAllocString( (type >= AccessibleRelationType::INVALID && type <= AccessibleRelationType::DESCRIBED_BY)
-                             ? map[type] : _T(""));
+                             ? map[type] : L"");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -163,26 +163,26 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNSVADDPROPSHEETPAGE lpfnAd
 {
     std::wstring proppage_header;
 
-    PROPSHEETPAGE psp;
-    ZeroMemory(&psp, sizeof(PROPSHEETPAGEA));
+    PROPSHEETPAGEW psp;
+    ZeroMemory(&psp, sizeof(psp));
 
     // add the summary property page
-    psp.dwSize      = sizeof(PROPSHEETPAGE);
+    psp.dwSize      = sizeof(psp);
     psp.dwFlags     = PSP_DEFAULT | PSP_USETITLE | PSP_USECALLBACK;
     psp.hInstance   = GetModuleHandleW(MODULE_NAME);
     psp.lParam      = reinterpret_cast<LPARAM>(this);
-    psp.pfnCallback = reinterpret_cast<LPFNPSPCALLBACK>(CPropertySheet::PropPageSummaryCallback);
+    psp.pfnCallback = reinterpret_cast<LPFNPSPCALLBACKW>(CPropertySheet::PropPageSummaryCallback);
 
     HPROPSHEETPAGE hPage = nullptr;
 
     // add the statistics property page
     proppage_header = GetResString(IDS_PROPPAGE_STATISTICS_TITLE);
 
-    psp.pszTemplate = MAKEINTRESOURCE(IDD_PROPPAGE_STATISTICS);
+    psp.pszTemplate = MAKEINTRESOURCEW(IDD_PROPPAGE_STATISTICS);
     psp.pszTitle    = proppage_header.c_str();
     psp.pfnDlgProc  = reinterpret_cast<DLGPROC>(CPropertySheet::PropPageStatisticsProc);
 
-    hPage = CreatePropertySheetPage(&psp);
+    hPage = CreatePropertySheetPageW(&psp);
 
     if (hPage)
     {
