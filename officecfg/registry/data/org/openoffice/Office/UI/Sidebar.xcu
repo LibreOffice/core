@@ -1094,6 +1094,31 @@
         </prop>
       </node>
 
+      <node oor:name="ListsPropertyPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Lists</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ListsPropertyPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>PropertyDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            DrawImpress,    DrawText,   visible ;
+            DrawImpress,    Table,      visible ;
+            DrawImpress,    TextObject, hidden  ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SvxPanelFactory/ListsPropertyPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>300</value>
+        </prop>
+      </node>
+
       <node oor:name="SwWrapPropertyPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Wrap</value>
