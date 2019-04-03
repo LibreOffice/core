@@ -18,6 +18,7 @@
 #include <editeng/numitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
+#include <vcl/customweld.hxx>
 
 namespace svx {
 
@@ -29,14 +30,13 @@ public:
     virtual OUString CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rTxtColor, boost::optional<Color>& rFldColor) override;
 };
 
-class SVX_DLLPUBLIC ClassificationEditView : public Control
+class SVX_DLLPUBLIC ClassificationEditView : public weld::CustomWidgetController,
+                                             public EditViewCallbacks
 {
 public:
-    ClassificationEditView(vcl::Window* pParent,  WinBits nBits);
+    ClassificationEditView();
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual ~ClassificationEditView() override;
-
-    using Control::SetFont;
-    using Control::SetText;
 
     void SetCharAttributes();
 
@@ -61,13 +61,30 @@ public:
 
 protected:
     virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void Command( const CommandEvent& rCEvt ) override;
+    virtual bool MouseMove( const MouseEvent& rMEvt ) override;
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual bool KeyInput( const KeyEvent& rKEvt ) override;
     virtual void GetFocus() override;
     virtual void Resize() override;
+
+
+    virtual void EditViewInvalidate(const tools::Rectangle& rRect) const override
+    {
+        weld::DrawingArea* pDrawingArea = GetDrawingArea();
+        pDrawingArea->queue_draw_area(rRect.Left(), rRect.Top(), rRect.GetWidth(), rRect.GetHeight());
+    }
+
+    virtual void EditViewSelectionChange() const override
+    {
+        weld::DrawingArea* pDrawingArea = GetDrawingArea();
+        pDrawingArea->queue_draw();
+    }
+
+    virtual OutputDevice& EditViewOutputDevice() const override
+    {
+        return GetDrawingArea()->get_ref_device();
+    }
 };
 
 } // end svx namespace

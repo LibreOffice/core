@@ -20,9 +20,8 @@ svx/uiconfig/ui/classificationdialog.ui://GtkComboBoxText[@id='recentlyUsedCB'] 
 svx/uiconfig/ui/classificationdialog.ui:GtkDialog[@id='AdvancedDocumentClassificationDialog']/GtkBox[@id='dialog-vbox1']/GtkGrid/GtkGrid/GtkLabel orphan-label
 svx/uiconfig/ui/classificationdialog.ui://GtkTreeView[@id='markingLB'] no-labelled-by
 svx/uiconfig/ui/classificationdialog.ui:GtkDialog[@id='AdvancedDocumentClassificationDialog']/GtkBox[@id='dialog-vbox1']/GtkGrid/GtkGrid/GtkLabel orphan-label
-svx/uiconfig/ui/classificationdialog.ui://svxlo-ClassificationEditView[@id='classificationEditWindow'] no-labelled-by
 svx/uiconfig/ui/classificationdialog.ui:GtkDialog[@id='AdvancedDocumentClassificationDialog']/GtkBox[@id='dialog-vbox1']/GtkGrid/GtkExpander[@id='intellectualPropertyExpander']/GtkGrid/GtkLabel orphan-label
-svx/uiconfig/ui/classificationdialog.ui://svxlo-IntellectualPropertyPartEdit[@id='intellectualPropertyPartEntry'] no-labelled-by
+svx/uiconfig/ui/classificationdialog.ui://GtkEntry[@id='intellectualPropertyPartEntry'] no-labelled-by
 svx/uiconfig/ui/classificationdialog.ui:GtkDialog[@id='AdvancedDocumentClassificationDialog']/GtkBox[@id='dialog-vbox1']/GtkGrid/GtkExpander[@id='intellectualPropertyExpander']/GtkGrid/GtkLabel orphan-label
 svx/uiconfig/ui/classificationdialog.ui://GtkTreeView[@id='intellectualPropertyPartNumberLB'] no-labelled-by
 svx/uiconfig/ui/classificationdialog.ui://GtkTreeView[@id='intellectualPropertyPartLB'] no-labelled-by

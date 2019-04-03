@@ -97,7 +97,7 @@ bool SdrOutliner::hasEditViewCallbacks() const
     {
         OutlinerView* pOutlinerView = GetView(a);
 
-        if (pOutlinerView && pOutlinerView->GetEditView().hasEditViewCallbacks())
+        if (pOutlinerView && pOutlinerView->GetEditView().getEditViewCallbacks())
         {
             return true;
         }

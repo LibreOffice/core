@@ -1105,8 +1105,10 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                     aCurSel = pImpEditEngine->MoveCursor( rKeyEvent, pEditView );
 
                     if ( aCurSel.HasRange() ) {
-                        Reference<css::datatransfer::clipboard::XClipboard> aSelection(pEditView->GetWindow()->GetPrimarySelection());
-                        pEditView->pImpEditView->CutCopy( aSelection, false );
+                        if (vcl::Window* pWindow = pEditView->GetWindow()) {
+                            Reference<css::datatransfer::clipboard::XClipboard> aSelection(pWindow->GetPrimarySelection());
+                            pEditView->pImpEditView->CutCopy( aSelection, false );
+                        }
                     }
 
                     bMoved = true;

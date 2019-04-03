@@ -29,6 +29,7 @@
 
 class Timer;
 struct ImplCursorData;
+class OutputDevice;
 namespace vcl { class Window; }
 
 // Cursor styles
@@ -95,8 +96,11 @@ public:
     bool            operator!=( const Cursor& rCursor ) const
                         { return !(Cursor::operator==( rCursor )); }
 
+    void            DrawToDevice(OutputDevice& rRenderContext);
+
 private:
     void LOKNotify( vcl::Window* pWindow, const OUString& rAction );
+    bool ImplPrepForDraw(OutputDevice* pDevice, ImplCursorData& rData);
     void ImplRestore();
     void ImplDoShow( bool bDrawDirect, bool bRestore );
     bool ImplDoHide( bool bStop );
