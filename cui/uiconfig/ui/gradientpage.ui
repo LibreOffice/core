@@ -25,6 +25,11 @@
     <property name="upper">359</property>
     <property name="step_increment">15</property>
   </object>
+  <object class="GtkAdjustment" id="angleadjustmentslider">
+    <property name="upper">359</property>
+    <property name="step_increment">15</property>
+    <property name="page_increment">15</property>
+  </object>
   <object class="GtkAdjustment" id="percentadjustment">
     <property name="upper">100</property>
     <property name="step_increment">5</property>
@@ -384,7 +389,6 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="adjustment">adjustment3</property>
-                        <property name="fill_level">0</property>
                         <property name="round_digits">1</property>
                         <property name="draw_value">False</property>
                       </object>
@@ -521,8 +525,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="adjustment">angleadjustment</property>
-                        <property name="fill_level">0</property>
+                        <property name="adjustment">angleadjustmentslider</property>
                         <property name="draw_value">False</property>
                       </object>
                       <packing>
