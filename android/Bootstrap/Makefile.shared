@@ -63,8 +63,15 @@ $(OBJLOCAL)/liblo-native-code.so : native-code.cxx $(ALL_STATIC_LIBS)
 
 $(SODEST)/liblo-native-code.so : $(OBJLOCAL)/liblo-native-code.so
 	mkdir -p $(SODEST)
+	#before strip copy the file with the debug symbols to the debug directory
+	objcopy --only-keep-debug --target=elf32-i386 $(OBJLOCAL)/liblo-native-code.so $(SODEST)/debug/liblo-native-code.debug
+
+	#strip liblo-native-code.so from OBJLOCAL and copy to to SODEST
 	$(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so
-	#to keep some symbols, eg.: $(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so -w -K 'Java*'
+
+	#to use the above generated debug symbols in Android Studio
+	#Run>Debug>Edit debug configurations, a popup with debug options will open
+	#go to Debugger section, add the directory with symbols to Symbol Directories
 
 $(SODEST)/nss-libraries : 
 	mkdir -p $(SODEST)
