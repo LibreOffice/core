@@ -1,0 +1,216 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_1e739382",
+        "filename": "cui/Library_cui.mk",
+        "patchSetId": 25
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-03T10:49:33Z",
+      "side": 1,
+      "message": "infodialog is something that would not be obvious when looking for \"tip ow the day\". Please rename everything to be like \"tipofthedayfoo\" or somesuch.",
+      "range": {
+        "startLine": 118,
+        "startChar": 23,
+        "endLine": 118,
+        "endChar": 30
+      },
+      "revId": "306617c563e3b67b9be479c197a62a99ecbd2b4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_9e0483c8",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 25
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-03T10:49:33Z",
+      "side": 1,
+      "message": "Generally it looks awkward to hardcode the constants here. It would be better to have a dedicated file with tips; which would auto-generate code for getResID from infodlg.cxx. Of course, there would be needed a machinery for that, and for making those tips available for translation.",
+      "revId": "306617c563e3b67b9be479c197a62a99ecbd2b4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_de53ebe1",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 25
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-03T10:49:33Z",
+      "side": 1,
+      "message": "accompanying",
+      "range": {
+        "startLine": 399,
+        "startChar": 9,
+        "endLine": 399,
+        "endChar": 21
+      },
+      "revId": "306617c563e3b67b9be479c197a62a99ecbd2b4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_5e591bfc",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 25
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-03T10:49:33Z",
+      "side": 1,
+      "message": "using MAX here implies that this is the maximal number used in the following names. Actually, it looks like it\u0027s COUNT, not maximal used index.",
+      "range": {
+        "startLine": 402,
+        "startChar": 16,
+        "endLine": 402,
+        "endChar": 19
+      },
+      "revId": "306617c563e3b67b9be479c197a62a99ecbd2b4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_be32a7a6",
+        "filename": "cui/source/dialogs/infodlg.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-03T10:49:33Z",
+      "side": 1,
+      "message": "This would fail in case of installing into D:\\программы\\LibreOffice.\n\nPlease use our file API for things like that, e.g. https://opengrok.libreoffice.org/xref/core/desktop/source/migration/migration.cxx?r\u003d25a6599a#688",
+      "range": {
+        "startLine": 63,
+        "startChar": 18,
+        "endLine": 63,
+        "endChar": 94
+      },
+      "revId": "306617c563e3b67b9be479c197a62a99ecbd2b4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_5e27db65",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 25
+      },
+      "lineNbr": 5464,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-03T10:49:33Z",
+      "side": 1,
+      "message": "Trailing whitespace",
+      "range": {
+        "startLine": 5464,
+        "startChar": 63,
+        "endLine": 5464,
+        "endChar": 64
+      },
+      "revId": "306617c563e3b67b9be479c197a62a99ecbd2b4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_1e21534e",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 1229,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-03T10:49:33Z",
+      "side": 1,
+      "message": "How is the name of the variable reflect its meaning? What is \"UITest\" here?\n\nPlease don\u0027t reuse --nofirststartwizard obsolete parameter which is ignored now. I suppose it should check other options instead, like --nologo, --minimized, or somesuch.",
+      "range": {
+        "startLine": 1228,
+        "startChar": 20,
+        "endLine": 1229,
+        "endChar": 41
+      },
+      "revId": "306617c563e3b67b9be479c197a62a99ecbd2b4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_3e1e970c",
+        "filename": "solenv/sanitizers/ui/cui.suppr",
+        "patchSetId": 25
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-03T10:49:33Z",
+      "side": 1,
+      "message": "Why do we add suppressions for a newly added code?",
+      "range": {
+        "startLine": 247,
+        "startChar": 0,
+        "endLine": 248,
+        "endChar": 67
+      },
+      "revId": "306617c563e3b67b9be479c197a62a99ecbd2b4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_de1a0b16",
+        "filename": "vcl/source/app/salvtables.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 2024,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-03T10:49:33Z",
+      "side": 1,
+      "message": "Please add one separating line :-)",
+      "revId": "306617c563e3b67b9be479c197a62a99ecbd2b4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_fe17cfec",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 5104,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-03T10:49:33Z",
+      "side": 1,
+      "message": "And here, too ;-)",
+      "revId": "306617c563e3b67b9be479c197a62a99ecbd2b4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

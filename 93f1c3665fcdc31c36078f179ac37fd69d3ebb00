@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_7e2c1f47",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-03T10:49:33Z",
+      "side": 0,
+      "message": "Irrelevant change",
+      "revId": "93f1c3665fcdc31c36078f179ac37fd69d3ebb00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
