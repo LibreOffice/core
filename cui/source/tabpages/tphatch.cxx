@@ -389,9 +389,9 @@ void SvxHatchTabPage::ChangeHatchHdl_Impl()
         m_xLbLineColor->SetNoSelection();
         m_xLbLineColor->SelectEntry( pHatch->GetColor() );
         SetMetricValue( *m_xMtrDistance, pHatch->GetDistance(), m_ePoolUnit );
-        long mHatchAngle = pHatch->GetAngle() / 10;
-        m_xMtrAngle->set_value(mHatchAngle, FieldUnit::NONE);
-        m_xSliderAngle->set_value(mHatchAngle);
+        long nHatchAngle = pHatch->GetAngle() / 10;
+        m_xMtrAngle->set_value(nHatchAngle, FieldUnit::NONE);
+        m_xSliderAngle->set_value(nHatchAngle);
 
         // fill ItemSet and pass it on to m_aCtlPreview
         m_rXFSet.Put( XFillHatchItem( OUString(), *pHatch ) );
