@@ -72,6 +72,7 @@
 #include <svx/svxdlg.hxx>
 #include <vcl/toolbox.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <vcl/combobox.hxx>
 
 #include <cstdlib>
 #include <memory>
@@ -542,6 +543,13 @@ void SvxSearchDialog::SetSaveToModule(bool b)
     pImpl->bSaveToModule = b;
 }
 
+void SvxSearchDialog::SetSearchLabel(const OUString& rStr)
+{
+    m_xSearchLabel->set_label(rStr);
+
+    if (rStr == SvxResId(RID_SVXSTR_SEARCH_NOT_FOUND))
+        m_xSearchLB->set_entry_error(true);
+}
 
 void SvxSearchDialog::ApplyTransliterationFlags_Impl( TransliterationFlags nSettings )
 {
@@ -1449,6 +1457,8 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, weld::ComboBox&, rEd, void )
             m_xReplaceBtn->set_sensitive(false);
             m_xReplaceAllBtn->set_sensitive(false);
         }
+
+        m_xSearchLB->set_entry_error(false);
     }
 }
 
@@ -2352,6 +2362,8 @@ static void lcl_SetSearchLabelWindow(const OUString& rStr)
     if (!pViewFrame)
         return;
 
+    bool bNotFound = rStr == SvxResId(RID_SVXSTR_SEARCH_NOT_FOUND);
+
     css::uno::Reference< css::beans::XPropertySet > xPropSet(
             pViewFrame->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
@@ -2375,6 +2387,16 @@ static void lcl_SetSearchLabelWindow(const OUString& rStr)
                 pSearchLabel->SetSizePixel(Size(16, pSearchLabel->get_preferred_size().Height()));
             else
                 pSearchLabel->SetSizePixel(pSearchLabel->get_preferred_size());
+        }
+
+        if (pToolBox->GetItemCommand(id) == ".uno:FindText")
+        {
+            ComboBox* pFindText = dynamic_cast<ComboBox*>(pToolBox->GetItemWindow(id));
+            assert(pFindText);
+            if (bNotFound)
+                pFindText->SetEditColors(COL_LIGHTRED, COL_WHITE);
+            else
+                pFindText->ResetEditColors();
         }
     }
     xLayoutManager->doLayout();
