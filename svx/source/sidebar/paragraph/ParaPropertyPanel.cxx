@@ -93,7 +93,7 @@ void ParaPropertyPanel::HandleContextChange (
         case CombinedEnumContext(Application::DrawImpress, Context::Table):
             mpTBxVertAlign->Show();
             mpTBxBackColor->Hide();
-            mpTBxNumBullet->Show();
+            mpTBxNumBullet->Hide();
             ReSize();
             break;
 
@@ -129,8 +129,6 @@ void ParaPropertyPanel::HandleContextChange (
         default:
             break;
     }
-
-    mpTBxOutline->Show( maContext.GetApplication_DI() == vcl::EnumContext::Application::DrawImpress );
 }
 
 void ParaPropertyPanel::DataChanged (const DataChangedEvent&) {}
@@ -422,7 +420,6 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
     //NumBullet&Backcolor
     get(mpTBxNumBullet, "numberbullet");
     get(mpTBxBackColor, "backgroundcolor");
-    get(mpTBxOutline, "outline");
     //Paragraph spacing
     get(mpTopDist,      "aboveparaspacing");
     mpTopDist->set_width_request(mpTopDist->get_preferred_size().Width());
@@ -449,7 +446,6 @@ void ParaPropertyPanel::dispose()
     mpTBxVertAlign.clear();
     mpTBxNumBullet.clear();
     mpTBxBackColor.clear();
-    mpTBxOutline.clear();
     mpTopDist.clear();
     mpBottomDist.clear();
     mpLeftIndent.clear();
