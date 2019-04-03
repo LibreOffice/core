@@ -1543,18 +1543,18 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_CLASSIFICATION_DIALOG:
         {
-            ScopedVclPtr<svx::ClassificationDialog> pDialog(VclPtr<svx::ClassificationDialog>::Create(nullptr, false, [](){} ));
+            std::shared_ptr<svx::ClassificationDialog> xDialog(new svx::ClassificationDialog(GetFrameWeld(), false, [](){} ));
             ClassificationCollector aCollector(*this);
             aCollector.collect();
 
-            pDialog->setupValues(aCollector.getResults());
+            xDialog->setupValues(aCollector.getResults());
 
-            if (RET_OK == pDialog->Execute())
+            if (RET_OK == xDialog->run())
             {
                 ClassificationInserter aInserter(*this);
-                aInserter.insert(pDialog->getResult());
+                aInserter.insert(xDialog->getResult());
             }
-            pDialog.disposeAndClear();
+            xDialog.reset();
 
             Cancel();
             rReq.Ignore();

@@ -65,8 +65,9 @@ class SVX_DLLPUBLIC SdrObjEditView : public SdrGlueEditView, public EditViewCall
 
     // Now derived from EditViewCallbacks and overriding these callbacks to
     // allow own EditText visualization
-    virtual void EditViewInvalidate() const override;
+    virtual void EditViewInvalidate(const tools::Rectangle& rRect) const override;
     virtual void EditViewSelectionChange() const override;
+    virtual OutputDevice& EditViewOutputDevice() const override;
 
     // The OverlayObjects used for visualizing active TextEdit (currently
     // using TextEditOverlayObject, but not limited to it

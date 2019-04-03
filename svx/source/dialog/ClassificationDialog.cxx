@@ -24,36 +24,25 @@
 #include <tools/XmlWriter.hxx>
 #include <tools/XmlWalker.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/event.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <officecfg/Office/Common.hxx>
 
 namespace svx {
 
-
-IntellectualPropertyPartEdit::IntellectualPropertyPartEdit(vcl::Window* pParent)
-    : Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK|WB_TABSTOP)
-{
-}
-
-VCL_BUILDER_FACTORY(IntellectualPropertyPartEdit)
-
-void IntellectualPropertyPartEdit::KeyInput(const KeyEvent& rKeyEvent)
+IMPL_STATIC_LINK(ClassificationDialog, KeyInput, const KeyEvent&, rKeyEvent, bool)
 {
     bool bTextIsFreeForm = officecfg::Office::Common::Classification::IntellectualPropertyTextInputIsFreeForm::get();
 
-    if (bTextIsFreeForm)
-    {
-        Edit::KeyInput(rKeyEvent);
-    }
-    else
+    if (!bTextIsFreeForm)
     {
         // Ignore key combination with modifier keys
         if (rKeyEvent.GetKeyCode().IsMod3()
          || rKeyEvent.GetKeyCode().IsMod2()
          || rKeyEvent.GetKeyCode().IsMod1())
         {
-            return;
+            return true;
         }
 
         switch (rKeyEvent.GetKeyCode().GetCode())
@@ -64,13 +53,15 @@ void IntellectualPropertyPartEdit::KeyInput(const KeyEvent& rKeyEvent)
             case KEY_DIVIDE:
             case KEY_SEMICOLON:
             case KEY_SPACE:
-                Edit::KeyInput(rKeyEvent);
-                return;
+                return false;
             // Anything else is ignored
             default:
+                return true;
                 break;
         }
     }
+
+    return false;
 }
 
 namespace {
@@ -161,117 +152,98 @@ void writeResultToXml(tools::XmlWriter & rXmlWriter,
 
 } // end anonymous namespace
 
-ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPerParagraph, const std::function<void()>& rParagraphSignHandler)
-    : ModalDialog(pParent, "AdvancedDocumentClassificationDialog", "svx/ui/classificationdialog.ui")
+ClassificationDialog::ClassificationDialog(weld::Window* pParent, const bool bPerParagraph, const std::function<void()>& rParagraphSignHandler)
+    : GenericDialogController(pParent, "svx/ui/classificationdialog.ui", "AdvancedDocumentClassificationDialog")
     , maHelper(SfxObjectShell::Current()->getDocProperties())
     , maInternationalHelper(SfxObjectShell::Current()->getDocProperties(), /*bUseLocalizedPolicy*/ false)
     , m_bPerParagraph(bPerParagraph)
     , m_aParagraphSignHandler(rParagraphSignHandler)
     , m_nCurrentSelectedCategory(-1)
+    , m_xOkButton(m_xBuilder->weld_button("ok"))
+    , m_xSignButton(m_xBuilder->weld_button("signButton"))
+    , m_xToolBox(m_xBuilder->weld_toggle_button("toolbox"))
+    , m_xRecentlyUsedListBox(m_xBuilder->weld_combo_box("recentlyUsedCB"))
+    , m_xClassificationListBox(m_xBuilder->weld_combo_box("classificationCB"))
+    , m_xInternationalClassificationListBox(m_xBuilder->weld_combo_box("internationalClassificationCB"))
+    , m_xMarkingLabel(m_xBuilder->weld_label("markingLabel"))
+    , m_xMarkingListBox(m_xBuilder->weld_tree_view("markingLB"))
+    , m_xIntellectualPropertyPartListBox(m_xBuilder->weld_tree_view("intellectualPropertyPartLB"))
+    , m_xIntellectualPropertyPartNumberListBox(m_xBuilder->weld_tree_view("intellectualPropertyPartNumberLB"))
+    , m_xIntellectualPropertyPartAddButton(m_xBuilder->weld_button("intellectualPropertyPartAddButton"))
+    , m_xIntellectualPropertyPartEdit(m_xBuilder->weld_entry("intellectualPropertyPartEntry"))
+    , m_xIntellectualPropertyExpander(m_xBuilder->weld_expander("intellectualPropertyExpander"))
+    , m_xEditWindow(new ClassificationEditView)
+    , m_xEditWindowWeld(new weld::CustomWeld(*m_xBuilder, "classificationEditWindow", *m_xEditWindow))
 {
-    get(m_pOkButton, "ok");
-    get(m_pEditWindow, "classificationEditWindow");
-    get(m_pSignButton, "signButton");
-    get(m_pToolBox, "toolbox");
-    get(m_pRecentlyUsedListBox, "recentlyUsedCB");
-    get(m_pClassificationListBox, "classificationCB");
-    get(m_pInternationalClassificationListBox, "internationalClassificationCB");
-    get(m_pMarkingLabel, "markingLabel");
-    get(m_pMarkingListBox, "markingLB");
-    get(m_pIntellectualPropertyPartNumberListBox, "intellectualPropertyPartNumberLB");
-    get(m_pIntellectualPropertyPartListBox, "intellectualPropertyPartLB");
-    get(m_pIntellectualPropertyPartAddButton, "intellectualPropertyPartAddButton");
-    get(m_pIntellectualPropertyPartEdit, "intellectualPropertyPartEntry");
-    get(m_pIntellectualPropertyExpander, "intellectualPropertyExpander");
+    m_xSignButton->connect_clicked(LINK(this, ClassificationDialog, ButtonClicked));
+    m_xSignButton->set_visible(m_bPerParagraph);
 
-    m_pSignButton->SetClickHdl(LINK(this, ClassificationDialog, ButtonClicked));
-    m_pSignButton->Show(m_bPerParagraph);
+    m_xIntellectualPropertyPartEdit->connect_key_press(LINK(this, ClassificationDialog, KeyInput));
 
     // no need for BOLD if we do paragraph classification
     if (m_bPerParagraph)
     {
-        m_pToolBox->Show(false);
+        m_xToolBox->hide();
     }
     else
     {
-        m_pToolBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectToolboxHdl));
+        m_xToolBox->connect_toggled(LINK(this, ClassificationDialog, SelectToolboxHdl));
     }
 
-    m_pIntellectualPropertyPartAddButton->SetClickHdl(LINK(this, ClassificationDialog, ButtonClicked));
+    m_xIntellectualPropertyPartAddButton->connect_clicked(LINK(this, ClassificationDialog, ButtonClicked));
 
-    m_pClassificationListBox->setMaxWidthChars(20);
-    m_pClassificationListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectClassificationHdl));
+    m_xClassificationListBox->set_size_request(m_xClassificationListBox->get_approximate_digit_width() * 20, -1);
+    m_xClassificationListBox->connect_changed(LINK(this, ClassificationDialog, SelectClassificationHdl));
     for (const OUString& rName : maHelper.GetBACNames())
-        m_pClassificationListBox->InsertEntry(rName);
+        m_xClassificationListBox->append_text(rName);
 
-    m_pInternationalClassificationListBox->setMaxWidthChars(20);
-    m_pInternationalClassificationListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectClassificationHdl));
+    m_xInternationalClassificationListBox->set_size_request(m_xInternationalClassificationListBox->get_approximate_digit_width() * 20, -1);
+    m_xInternationalClassificationListBox->connect_changed(LINK(this, ClassificationDialog, SelectClassificationHdl));
     for (const OUString& rName : maInternationalHelper.GetBACNames())
-        m_pInternationalClassificationListBox->InsertEntry(rName);
+        m_xInternationalClassificationListBox->append_text(rName);
 
     if (!maHelper.GetMarkings().empty())
     {
-        m_pMarkingListBox->setMaxWidthChars(10);
-        m_pMarkingListBox->SetDropDownLineCount(4);
-        m_pMarkingListBox->SetDoubleClickHdl(LINK(this, ClassificationDialog, SelectMarkingHdl));
+        m_xMarkingListBox->set_size_request(m_xMarkingListBox->get_approximate_digit_width() * 10,
+                                            m_xMarkingListBox->get_height_rows(4));
+        m_xMarkingListBox->connect_row_activated(LINK(this, ClassificationDialog, SelectMarkingHdl));
 
         for (const OUString& rName : maHelper.GetMarkings())
-            m_pMarkingListBox->InsertEntry(rName);
+            m_xMarkingListBox->append_text(rName);
     }
     else
     {
-        m_pMarkingListBox->Show(false);
-        m_pMarkingLabel->Show(false);
+        m_xMarkingListBox->hide();
+        m_xMarkingLabel->hide();
     }
 
-    m_pIntellectualPropertyPartNumberListBox->SetDropDownLineCount(5);
-    m_pIntellectualPropertyPartNumberListBox->setMaxWidthChars(10);
-    m_pIntellectualPropertyPartNumberListBox->SetDoubleClickHdl(LINK(this, ClassificationDialog, SelectIPPartNumbersHdl));
+    m_xIntellectualPropertyPartNumberListBox->set_size_request(m_xIntellectualPropertyPartNumberListBox->get_approximate_digit_width() * 10,
+                                                               m_xIntellectualPropertyPartNumberListBox->get_height_rows(5));
+    m_xIntellectualPropertyPartNumberListBox->connect_row_activated(LINK(this, ClassificationDialog, SelectIPPartNumbersHdl));
     for (const OUString& rName : maHelper.GetIntellectualPropertyPartNumbers())
-        m_pIntellectualPropertyPartNumberListBox->InsertEntry(rName);
+        m_xIntellectualPropertyPartNumberListBox->append_text(rName);
 
-    m_pIntellectualPropertyPartListBox->SetDropDownLineCount(5);
-    m_pIntellectualPropertyPartNumberListBox->setMaxWidthChars(20);
-    m_pIntellectualPropertyPartListBox->SetDoubleClickHdl(LINK(this, ClassificationDialog, SelectIPPartHdl));
+    m_xIntellectualPropertyPartNumberListBox->set_size_request(m_xIntellectualPropertyPartNumberListBox->get_approximate_digit_width() * 20,
+                                                               m_xIntellectualPropertyPartListBox->get_height_rows(5));
+    m_xIntellectualPropertyPartListBox->connect_row_activated(LINK(this, ClassificationDialog, SelectIPPartHdl));
     for (const OUString& rName : maHelper.GetIntellectualPropertyParts())
-        m_pIntellectualPropertyPartListBox->InsertEntry(rName);
+        m_xIntellectualPropertyPartListBox->append_text(rName);
 
-    m_pRecentlyUsedListBox->setMaxWidthChars(5);
-    m_pRecentlyUsedListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectRecentlyUsedHdl));
+    m_xRecentlyUsedListBox->set_size_request(m_xRecentlyUsedListBox->get_approximate_digit_width() * 5, -1);
+    m_xRecentlyUsedListBox->connect_changed(LINK(this, ClassificationDialog, SelectRecentlyUsedHdl));
 
     bool bExpand = officecfg::Office::Common::Classification::IntellectualPropertySectionExpanded::get();
-    m_pIntellectualPropertyExpander->set_expanded(bExpand);
-    m_pIntellectualPropertyExpander->SetExpandedHdl(LINK(this, ClassificationDialog, ExpandedHdl));
+    m_xIntellectualPropertyExpander->set_expanded(bExpand);
+    m_xIntellectualPropertyExpander->connect_expanded(LINK(this, ClassificationDialog, ExpandedHdl));
 
-    m_pEditWindow->SetModifyHdl(LINK(this, ClassificationDialog, EditWindowModifiedHdl));
+    m_xEditWindow->SetModifyHdl(LINK(this, ClassificationDialog, EditWindowModifiedHdl));
 }
 
 ClassificationDialog::~ClassificationDialog()
 {
-    disposeOnce();
 }
 
-void ClassificationDialog::dispose()
-{
-    m_pOkButton.clear();
-    m_pEditWindow.clear();
-    m_pSignButton.clear();
-    m_pToolBox.clear();
-    m_pRecentlyUsedListBox.clear();
-    m_pClassificationListBox.clear();
-    m_pInternationalClassificationListBox.clear();
-    m_pMarkingLabel.clear();
-    m_pMarkingListBox.clear();
-    m_pIntellectualPropertyPartListBox.clear();
-    m_pIntellectualPropertyPartNumberListBox.clear();
-    m_pIntellectualPropertyPartAddButton.clear();
-    m_pIntellectualPropertyPartEdit.clear();
-    m_pIntellectualPropertyExpander.clear();
-
-    ModalDialog::dispose();
-}
-
-short ClassificationDialog::Execute()
+short ClassificationDialog::run()
 {
     readRecentlyUsed();
     readIn(m_aInitialValues);
@@ -279,7 +251,7 @@ short ClassificationDialog::Execute()
     int nNumber = 1;
     if (m_aRecentlyUsedValuesCollection.empty())
     {
-        m_pRecentlyUsedListBox->Disable();
+        m_xRecentlyUsedListBox->set_sensitive(false);
     }
     else
     {
@@ -289,11 +261,11 @@ short ClassificationDialog::Execute()
             OUString rDescription = OUString::number(nNumber) + ": " + rContentRepresentation;
             nNumber++;
 
-            m_pRecentlyUsedListBox->InsertEntry(rDescription);
+            m_xRecentlyUsedListBox->append_text(rDescription);
         }
     }
 
-    short nResult = ModalDialog::Execute();
+    short nResult = GenericDialogController::run();
     if (nResult == RET_OK)
     {
         writeRecentlyUsed();
@@ -312,7 +284,7 @@ void ClassificationDialog::insertCategoryField(sal_Int32 nID)
 void ClassificationDialog::insertField(ClassificationType eType, OUString const & rString, OUString const & rFullString, OUString const & rIdentifier)
 {
     ClassificationField aField(eType, rString, rFullString, rIdentifier);
-    m_pEditWindow->InsertField(SvxFieldItem(aField, EE_FEATURE_FIELD));
+    m_xEditWindow->InsertField(SvxFieldItem(aField, EE_FEATURE_FIELD));
 }
 
 void ClassificationDialog::setupValues(std::vector<ClassificationResult> const & rInput)
@@ -441,7 +413,7 @@ void ClassificationDialog::readIn(std::vector<ClassificationResult> const & rInp
         {
             case svx::ClassificationType::TEXT:
             {
-                m_pEditWindow->pEdView->InsertText(rClassificationResult.msName);
+                m_xEditWindow->pEdView->InsertText(rClassificationResult.msName);
             }
             break;
 
@@ -457,9 +429,9 @@ void ClassificationDialog::readIn(std::vector<ClassificationResult> const & rInp
                 if (sAbbreviatedName.isEmpty())
                     sAbbreviatedName = maHelper.GetAbbreviatedBACName(sName);
 
-                m_pClassificationListBox->SelectEntry(sName);
-                m_nCurrentSelectedCategory = m_pClassificationListBox->GetSelectedEntryPos();
-                m_pInternationalClassificationListBox->SelectEntryPos(m_pClassificationListBox->GetSelectedEntryPos());
+                m_xClassificationListBox->set_active_text(sName);
+                m_nCurrentSelectedCategory = m_xClassificationListBox->get_active();
+                m_xInternationalClassificationListBox->set_active(m_xClassificationListBox->get_active());
 
                 insertField(rClassificationResult.meType, sAbbreviatedName, sName, rClassificationResult.msIdentifier);
             }
@@ -467,7 +439,7 @@ void ClassificationDialog::readIn(std::vector<ClassificationResult> const & rInp
 
             case svx::ClassificationType::MARKING:
             {
-                m_pMarkingListBox->SelectEntry(rClassificationResult.msName);
+                m_xMarkingListBox->select_text(rClassificationResult.msName);
                 insertField(rClassificationResult.meType, rClassificationResult.msName, rClassificationResult.msName, rClassificationResult.msIdentifier);
             }
             break;
@@ -483,13 +455,13 @@ void ClassificationDialog::readIn(std::vector<ClassificationResult> const & rInp
                 nParagraph++;
 
                 if (nParagraph != 0)
-                    m_pEditWindow->pEdView->InsertParaBreak();
+                    m_xEditWindow->pEdView->InsertParaBreak();
 
                 // Set paragraph font weight
                 FontWeight eWeight = (rClassificationResult.msName == "BOLD") ? WEIGHT_BOLD : WEIGHT_NORMAL;
-                std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(m_pEditWindow->pEdEngine->GetParaAttribs(nParagraph)));
+                std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(m_xEditWindow->pEdEngine->GetParaAttribs(nParagraph)));
                 pSet->Put(SvxWeightItem(eWeight, EE_CHAR_WEIGHT));
-                m_pEditWindow->pEdEngine->SetParaAttribs(nParagraph, *pSet);
+                m_xEditWindow->pEdEngine->SetParaAttribs(nParagraph, *pSet);
             }
             break;
 
@@ -502,7 +474,7 @@ void ClassificationDialog::readIn(std::vector<ClassificationResult> const & rInp
 
 void ClassificationDialog::toggleWidgetsDependingOnCategory()
 {
-    const EditEngine& rEditEngine = m_pEditWindow->getEditEngine();
+    const EditEngine& rEditEngine = m_xEditWindow->getEditEngine();
 
     for (sal_Int32 nParagraph = 0; nParagraph < rEditEngine.GetParagraphCount(); ++nParagraph)
     {
@@ -515,7 +487,7 @@ void ClassificationDialog::toggleWidgetsDependingOnCategory()
                 const ClassificationField* pClassificationField = dynamic_cast<const ClassificationField*>(aFieldInfo.pFieldItem->GetField());
                 if (pClassificationField && pClassificationField->meType == ClassificationType::CATEGORY)
                 {
-                    m_pOkButton->Enable();
+                    m_xOkButton->set_sensitive(true);
                     return;
                 }
             }
@@ -523,16 +495,16 @@ void ClassificationDialog::toggleWidgetsDependingOnCategory()
     }
 
     // Category field in the text edit has been deleted, so reset the list boxes
-    m_pOkButton->Disable();
-    m_pClassificationListBox->SetNoSelection();
-    m_pInternationalClassificationListBox->SetNoSelection();
+    m_xOkButton->set_sensitive(false);
+    m_xClassificationListBox->set_active(-1);
+    m_xInternationalClassificationListBox->set_active(-1);
 }
 
 std::vector<ClassificationResult> ClassificationDialog::getResult()
 {
     std::vector<ClassificationResult> aClassificationResults;
 
-    std::unique_ptr<EditTextObject> pEditText(m_pEditWindow->pEdEngine->CreateTextObject());
+    std::unique_ptr<EditTextObject> pEditText(m_xEditWindow->pEdEngine->CreateTextObject());
 
     sal_Int32 nCurrentParagraph = -1;
 
@@ -546,7 +518,7 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
 
             // Get Weight of current paragraph
             FontWeight eFontWeight = WEIGHT_NORMAL;
-            SfxItemSet aItemSet(m_pEditWindow->pEdEngine->GetParaAttribs(nCurrentParagraph));
+            SfxItemSet aItemSet(m_xEditWindow->pEdEngine->GetParaAttribs(nCurrentParagraph));
             if (const SfxPoolItem* pItem = aItemSet.GetItem(EE_CHAR_WEIGHT, false))
             {
                 const SvxWeightItem* pWeightItem = dynamic_cast<const SvxWeightItem*>(pItem);
@@ -565,7 +537,7 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
         const SvxFieldItem* pFieldItem = findField(rSection);
 
         ESelection aSelection(rSection.mnParagraph, rSection.mnStart, rSection.mnParagraph, rSection.mnEnd);
-        const OUString sDisplayString = m_pEditWindow->pEdEngine->GetText(aSelection);
+        const OUString sDisplayString = m_xEditWindow->pEdEngine->GetText(aSelection);
         if (!sDisplayString.isEmpty())
         {
             const ClassificationField* pClassificationField = pFieldItem ? dynamic_cast<const ClassificationField*>(pFieldItem->GetField()) : nullptr;
@@ -585,13 +557,13 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
     return aClassificationResults;
 }
 
-IMPL_LINK(ClassificationDialog, SelectClassificationHdl, ListBox&, rBox, void)
+IMPL_LINK(ClassificationDialog, SelectClassificationHdl, weld::ComboBox&, rBox, void)
 {
-    const sal_Int32 nSelected = rBox.GetSelectedEntryPos();
+    const sal_Int32 nSelected = rBox.get_active();
     if (nSelected < 0 || m_nCurrentSelectedCategory == nSelected)
         return;
 
-    std::unique_ptr<EditTextObject> pEditText(m_pEditWindow->pEdEngine->CreateTextObject());
+    std::unique_ptr<EditTextObject> pEditText(m_xEditWindow->pEdEngine->CreateTextObject());
     std::vector<editeng::Section> aSections;
     pEditText->GetAllSections(aSections);
 
@@ -616,19 +588,19 @@ IMPL_LINK(ClassificationDialog, SelectClassificationHdl, ListBox&, rBox, void)
     }
 
     if (bReplaceExisting)
-        m_pEditWindow->pEdView->SetSelection(aExistingFieldSelection);
+        m_xEditWindow->pEdView->SetSelection(aExistingFieldSelection);
 
     insertCategoryField(nSelected);
 
     // Change category to the new selection
-    m_pInternationalClassificationListBox->SelectEntryPos(nSelected);
-    m_pClassificationListBox->SelectEntryPos(nSelected);
+    m_xInternationalClassificationListBox->set_active(nSelected);
+    m_xClassificationListBox->set_active(nSelected);
     m_nCurrentSelectedCategory = nSelected;
 }
 
-IMPL_LINK(ClassificationDialog, SelectMarkingHdl, ListBox&, rBox, void)
+IMPL_LINK(ClassificationDialog, SelectMarkingHdl, weld::TreeView&, rBox, void)
 {
-    sal_Int32 nSelected = rBox.GetSelectedEntryPos();
+    sal_Int32 nSelected = rBox.get_selected_index();
     if (nSelected >= 0)
     {
         const OUString aString = maHelper.GetMarkings()[nSelected];
@@ -636,69 +608,62 @@ IMPL_LINK(ClassificationDialog, SelectMarkingHdl, ListBox&, rBox, void)
     }
 }
 
-IMPL_LINK(ClassificationDialog, SelectIPPartNumbersHdl, ListBox&, rBox, void)
+IMPL_LINK(ClassificationDialog, SelectIPPartNumbersHdl, weld::TreeView&, rBox, void)
 {
-    sal_Int32 nSelected = rBox.GetSelectedEntryPos();
+    sal_Int32 nSelected = rBox.get_selected_index();
     if (nSelected >= 0)
     {
         OUString sString = maHelper.GetIntellectualPropertyPartNumbers()[nSelected];
-        m_pIntellectualPropertyPartEdit->ReplaceSelected(sString);
-        m_pIntellectualPropertyPartEdit->GrabFocus();
+        m_xIntellectualPropertyPartEdit->replace_selection(sString);
+        m_xIntellectualPropertyPartEdit->grab_focus();
     }
 }
 
-IMPL_LINK(ClassificationDialog, SelectRecentlyUsedHdl, ListBox&, rBox, void)
+IMPL_LINK(ClassificationDialog, SelectRecentlyUsedHdl, weld::ComboBox&, rBox, void)
 {
-    sal_Int32 nSelected = rBox.GetSelectedEntryPos();
+    sal_Int32 nSelected = rBox.get_active();
     if (nSelected >= 0)
     {
-        m_pEditWindow->pEdEngine->Clear();
+        m_xEditWindow->pEdEngine->Clear();
         readIn(m_aRecentlyUsedValuesCollection[nSelected]);
     }
 }
 
-IMPL_LINK(ClassificationDialog, SelectIPPartHdl, ListBox&, rBox, void)
+IMPL_LINK(ClassificationDialog, SelectIPPartHdl, weld::TreeView&, rBox, void)
 {
-    const sal_Int32 nSelected = rBox.GetSelectedEntryPos();
+    const sal_Int32 nSelected = rBox.get_selected_index();
     if (nSelected >= 0)
     {
         const OUString sString = maHelper.GetIntellectualPropertyParts()[nSelected];
-        m_pIntellectualPropertyPartEdit->ReplaceSelected(sString);
-        m_pIntellectualPropertyPartEdit->GrabFocus();
+        m_xIntellectualPropertyPartEdit->replace_selection(sString);
+        m_xIntellectualPropertyPartEdit->grab_focus();
     }
 }
 
-IMPL_LINK(ClassificationDialog, ButtonClicked, Button*, pButton, void)
+IMPL_LINK(ClassificationDialog, ButtonClicked, weld::Button&, rButton, void)
 {
-    if (pButton == m_pSignButton)
+    if (&rButton == m_xSignButton.get())
     {
         m_aParagraphSignHandler();
     }
-    else if (pButton == m_pIntellectualPropertyPartAddButton)
+    else if (&rButton == m_xIntellectualPropertyPartAddButton.get())
     {
-        const OUString sString = m_pIntellectualPropertyPartEdit->GetText();
+        const OUString sString = m_xIntellectualPropertyPartEdit->get_text();
         insertField(ClassificationType::INTELLECTUAL_PROPERTY_PART, sString, sString);
     }
 }
 
-
-IMPL_LINK_NOARG(ClassificationDialog, SelectToolboxHdl, ToolBox*, void)
+IMPL_LINK_NOARG(ClassificationDialog, SelectToolboxHdl, weld::ToggleButton&, void)
 {
-    sal_uInt16 nId = m_pToolBox->GetCurItemId();
-    const OUString sCommand = m_pToolBox->GetItemCommand(nId);
-    if (sCommand == "bold")
-    {
-        m_pEditWindow->InvertSelectionWeight();
-    }
+    m_xEditWindow->InvertSelectionWeight();
 }
-
 
 IMPL_LINK_NOARG(ClassificationDialog, EditWindowModifiedHdl, LinkParamNone*, void)
 {
     toggleWidgetsDependingOnCategory();
 }
 
-IMPL_STATIC_LINK(ClassificationDialog, ExpandedHdl, VclExpander&, rExpander, void)
+IMPL_STATIC_LINK(ClassificationDialog, ExpandedHdl, weld::Expander&, rExpander, void)
 {
     std::shared_ptr<comphelper::ConfigurationChanges> aConfigurationChanges(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Classification::IntellectualPropertySectionExpanded::set(rExpander.get_expanded(), aConfigurationChanges);
