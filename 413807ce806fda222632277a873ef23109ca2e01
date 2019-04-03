@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_09327bf2",
+        "filename": "test/source/sheet/xsheetannotationshapesupplier.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-03T20:36:56Z",
+      "side": 0,
+      "message": "Please no unrelated changes, especially not if they are just cosmetic.",
+      "revId": "413807ce806fda222632277a873ef23109ca2e01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

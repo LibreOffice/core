@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_e934f7e0",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1422,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-03T20:36:56Z",
+      "side": 1,
+      "message": "This is wrong. The following code assumes that there is a multi-mark and if not then obtaining aMarkRange below with GetMultiMarkArea() always results in a range (0,0,t,0,0,t), by luck an object anchored to A1 is not deleted because rMark.IsAllMarked(aRange) always returns false if there is no multi-mark.\n\nTo be correct, if there is no multi-mark and bAnchored was passed then rMark should be converted to a multi-mark (i.e. copy to temporary and call aTempMark.MarkToMulti() and afterwards operate only on aTempMark).\n\nBtw, a space would had been nice for readability,\n\n \u0026\u0026 !bAnchored",
+      "revId": "376433289d576432bf5d8c3784a7082438c569ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_89f76bf6",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1459,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-03T20:36:56Z",
+      "side": 1,
+      "message": "If bAnchored\u003dtrue was passed then bObjectInMarkArea should always be false, otherwise objects selected but not anchored in the selection would be deleted as well.",
+      "range": {
+        "startLine": 1459,
+        "startChar": 29,
+        "endLine": 1459,
+        "endChar": 46
+      },
+      "revId": "376433289d576432bf5d8c3784a7082438c569ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
