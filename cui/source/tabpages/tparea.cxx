@@ -428,54 +428,59 @@ void SvxAreaTabPage::CreatePage( sal_Int32 nId, SfxTabPage* pTab )
 {
     if(nId == SOLID )
     {
-        static_cast<SvxColorTabPage*>(pTab)->SetColorList( m_pColorList );
-        static_cast<SvxColorTabPage*>(pTab)->SetColorChgd( m_pnColorListState );
-        static_cast<SvxColorTabPage*>(pTab)->Construct();
-        static_cast<SvxColorTabPage*>(pTab)->ActivatePage( m_rXFSet );
-        static_cast<SvxColorTabPage*>(pTab)->Reset(&m_rXFSet);
-        static_cast<SvxColorTabPage*>(pTab)->Show();
+        auto* pColorTab = static_cast<SvxColorTabPage*>(pTab);
+        pColorTab->SetColorList(m_pColorList);
+        pColorTab->SetColorChgd(m_pnColorListState);
+        pColorTab->Construct();
+        pColorTab->ActivatePage(m_rXFSet);
+        pColorTab->Reset(&m_rXFSet);
+        pColorTab->Show();
     }
     else if(nId == GRADIENT)
     {
-        static_cast<SvxGradientTabPage*>(pTab)->SetColorList( m_pColorList );
-        static_cast<SvxGradientTabPage*>(pTab)->SetGradientList( m_pGradientList );
-        static_cast<SvxGradientTabPage*>(pTab)->SetGrdChgd( m_pnGradientListState );
-        static_cast<SvxGradientTabPage*>(pTab)->SetColorChgd( m_pnColorListState );
-        static_cast<SvxGradientTabPage*>(pTab)->Construct();
-        static_cast<SvxGradientTabPage*>(pTab)->ActivatePage( m_rXFSet );
-        static_cast<SvxGradientTabPage*>(pTab)->Reset(&m_rXFSet);
-        static_cast<SvxGradientTabPage*>(pTab)->Show();
+        auto* pGradientTab = static_cast<SvxGradientTabPage*>(pTab);
+        pGradientTab->SetColorList(m_pColorList);
+        pGradientTab->SetGradientList(m_pGradientList);
+        pGradientTab->SetGrdChgd(m_pnGradientListState);
+        pGradientTab->SetColorChgd(m_pnColorListState);
+        pGradientTab->Construct();
+        pGradientTab->ActivatePage(m_rXFSet);
+        pGradientTab->Reset(&m_rXFSet);
+        pGradientTab->Show();
     }
     else if(nId == HATCH)
     {
-        static_cast<SvxHatchTabPage*>(pTab)->SetColorList( m_pColorList );
-        static_cast<SvxHatchTabPage*>(pTab)->SetHatchingList( m_pHatchingList );
-        static_cast<SvxHatchTabPage*>(pTab)->SetHtchChgd( m_pnHatchingListState );
-        static_cast<SvxHatchTabPage*>(pTab)->SetColorChgd( m_pnColorListState );
-        static_cast<SvxHatchTabPage*>(pTab)->Construct();
-        static_cast<SvxHatchTabPage*>(pTab)->ActivatePage( m_rXFSet );
-        static_cast<SvxHatchTabPage*>(pTab)->Reset(&m_rXFSet);
-        static_cast<SvxHatchTabPage*>(pTab)->Show();
+        auto* pHatchTab = static_cast<SvxHatchTabPage*>(pTab);
+        pHatchTab->SetColorList(m_pColorList);
+        pHatchTab->SetHatchingList(m_pHatchingList);
+        pHatchTab->SetHtchChgd(m_pnHatchingListState);
+        pHatchTab->SetColorChgd(m_pnColorListState);
+        pHatchTab->Construct();
+        pHatchTab->ActivatePage(m_rXFSet);
+        pHatchTab->Reset(&m_rXFSet);
+        pHatchTab->Show();
     }
     else if(nId == BITMAP)
     {
-        static_cast<SvxBitmapTabPage*>(pTab)->SetBitmapList( m_pBitmapList );
-        static_cast<SvxBitmapTabPage*>(pTab)->SetBmpChgd( m_pnBitmapListState );
-        static_cast<SvxBitmapTabPage*>(pTab)->Construct();
-        static_cast<SvxBitmapTabPage*>(pTab)->ActivatePage( m_rXFSet );
-        static_cast<SvxBitmapTabPage*>(pTab)->Reset(&m_rXFSet);
-        static_cast<SvxBitmapTabPage*>(pTab)->Show();
+        auto* pBitmapTab = static_cast<SvxBitmapTabPage*>(pTab);
+        pBitmapTab->SetBitmapList(m_pBitmapList);
+        pBitmapTab->SetBmpChgd(m_pnBitmapListState);
+        pBitmapTab->Construct();
+        pBitmapTab->ActivatePage(m_rXFSet);
+        pBitmapTab->Reset(&m_rXFSet);
+        pBitmapTab->Show();
     }
     else if(nId == PATTERN)
     {
-        static_cast<SvxPatternTabPage*>(pTab)->SetColorList( m_pColorList );
-        static_cast<SvxPatternTabPage*>(pTab)->SetPatternList( m_pPatternList );
-        static_cast<SvxPatternTabPage*>(pTab)->SetPtrnChgd( m_pnPatternListState );
-        static_cast<SvxPatternTabPage*>(pTab)->SetColorChgd( m_pnColorListState );
-        static_cast<SvxPatternTabPage*>(pTab)->Construct();
-        static_cast<SvxPatternTabPage*>(pTab)->ActivatePage( m_rXFSet );
-        static_cast<SvxPatternTabPage*>(pTab)->Reset( &m_rXFSet );
-        static_cast<SvxPatternTabPage*>(pTab)->Show();
+        auto* pPatternTab = static_cast<SvxPatternTabPage*>(pTab);
+        pPatternTab->SetColorList(m_pColorList);
+        pPatternTab->SetPatternList(m_pPatternList);
+        pPatternTab->SetPtrnChgd(m_pnPatternListState);
+        pPatternTab->SetColorChgd(m_pnColorListState);
+        pPatternTab->Construct();
+        pPatternTab->ActivatePage(m_rXFSet);
+        pPatternTab->Reset(&m_rXFSet);
+        pPatternTab->Show();
     }
 }
 
