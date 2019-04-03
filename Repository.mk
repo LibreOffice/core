@@ -975,11 +975,11 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 		fonts_amiri \
 		fonts_caladea \
 		fonts_carlito \
-		fonts_culmus \
+		$(if $(MPL_SUBSET),,fonts_culmus) \
 		fonts_dejavu \
 		fonts_emojione_color \
 		fonts_gentium \
-		fonts_kacst \
+		$(if $(MPL_SUBSET),,fonts_kacst) \
 		fonts_liberation \
 		fonts_liberation_narrow \
 		fonts_libertineg \
