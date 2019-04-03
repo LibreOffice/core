@@ -697,6 +697,7 @@ void ComboBox::DataChanged( const DataChangedEvent& rDCEvt )
             m_pImpl->m_pBtn->SetSettings( GetSettings() );
             ImplInitDropDownButton( m_pImpl->m_pBtn );
         }
+        ResetEditColors();
         Resize();
         m_pImpl->m_pImplLB->Resize(); // not called by ComboBox::Resize() if ImplLB is unchanged
 
@@ -1418,6 +1419,20 @@ tools::Rectangle ComboBox::GetBoundingRectangle( sal_Int32 nItem ) const
     tools::Rectangle aOffset = m_pImpl->m_pImplLB->GetMainWindow()->GetWindowExtentsRelative( static_cast<vcl::Window*>(const_cast<ComboBox *>(this)) );
     aRect.Move( aOffset.TopLeft().X(), aOffset.TopLeft().Y() );
     return aRect;
+}
+
+void ComboBox::SetEditColors( const Color& rBackground, const Color& rForeground )
+{
+    m_pImpl->m_pSubEdit->SetForceControlBackground(true);
+    m_pImpl->m_pSubEdit->SetControlBackground(rBackground);
+    m_pImpl->m_pSubEdit->SetControlForeground(rForeground);
+}
+
+void ComboBox::ResetEditColors()
+{
+    m_pImpl->m_pSubEdit->SetForceControlBackground(false);
+    m_pImpl->m_pSubEdit->SetControlBackground();
+    m_pImpl->m_pSubEdit->SetControlForeground();
 }
 
 void ComboBox::SetBorderStyle( WindowBorderStyle nBorderStyle )

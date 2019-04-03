@@ -1269,12 +1269,36 @@ void SAL_CALL SearchLabelToolboxController::initialize( const css::uno::Sequence
 // XStatusListener
 void SAL_CALL SearchLabelToolboxController::statusChanged( const css::frame::FeatureStateEvent& )
 {
-    if (m_pSL)
+    if (!m_pSL)
+        return;
+
+    OUString aStr = SvxSearchDialogWrapper::GetSearchLabel();
+    m_pSL->SetText(aStr);
+    long aWidth = !aStr.isEmpty() ? m_pSL->get_preferred_size().getWidth() : 16;
+    m_pSL->SetSizePixel(Size(aWidth, m_pSL->get_preferred_size().getHeight()));
+
+    bool bNotFound = aStr == SvxResId(RID_SVXSTR_SEARCH_NOT_FOUND);
+
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(getParent());
+    ToolBox* pToolBox = static_cast<ToolBox*>(pWindow.get());
+    if (pToolBox)
     {
-        OUString aStr = SvxSearchDialogWrapper::GetSearchLabel();
-        m_pSL->SetText(aStr);
-        long aWidth = !aStr.isEmpty() ? m_pSL->get_preferred_size().getWidth() : 16;
-        m_pSL->SetSizePixel(Size(aWidth, m_pSL->get_preferred_size().getHeight()));
+        for (ToolBox::ImplToolItems::size_type i=0; i<pToolBox->GetItemCount(); i++)
+        {
+            sal_uInt16 id = pToolBox->GetItemId(i);
+            if (pToolBox->GetItemCommand(id) == COMMAND_FINDTEXT)
+            {
+                ComboBox* pCombo = dynamic_cast<ComboBox*>(pToolBox->GetItemWindow(id));
+                if (pCombo)
+                {
+                    if (bNotFound)
+                        pCombo->SetEditColors(COL_LIGHTRED, COL_WHITE);
+                    else
+                        pCombo->ResetEditColors();
+                    break;
+                }
+            }
+        }
     }
 }
 

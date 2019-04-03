@@ -130,7 +130,7 @@ public:
     bool GetSrchFlag() { return mbSuccess; }
     void            SetSaveToModule(bool b);
 
-    void SetSearchLabel(const OUString& rStr) { m_xSearchLabel->set_label(rStr); }
+    void SetSearchLabel(const OUString& rStr);
 
 private:
     bool            mbSuccess;
