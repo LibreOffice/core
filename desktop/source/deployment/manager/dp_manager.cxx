@@ -210,7 +210,7 @@ void PackageManagerImpl::initActivationLayer(
                             1 /* Title */ ) );
                 if (title.endsWith("removed", &title))
                 {
-                    //save the file name withouth the "removed" part
+                    //save the file name without the "removed" part
                     removedEntries.push_back(::rtl::Uri::encode(
                                                 title, rtl_UriCharClassPchar,
                                                 rtl_UriEncodeIgnoreEscapes,
