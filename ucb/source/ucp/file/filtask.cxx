@@ -492,10 +492,7 @@ TaskManager::registerNotifier( const OUString& aUnqPath, Notifier* pNotifier )
     ContentMap::iterator it =
         m_aContent.emplace( aUnqPath, UnqPathData() ).first;
 
-    if( ! it->second.notifier )
-        it->second.notifier.reset( new NotifierList );
-
-    std::vector< Notifier* >& nlist = *( it->second.notifier );
+    std::vector< Notifier* >& nlist = it->second.notifier;
 
     std::vector<Notifier*>::iterator it1 = std::find(nlist.begin(), nlist.end(), pNotifier);
     if( it1 != nlist.end() )               // Every "Notifier" only once
@@ -515,9 +512,9 @@ TaskManager::deregisterNotifier( const OUString& aUnqPath,Notifier* pNotifier )
     if( it == m_aContent.end() )
         return;
 
-    it->second.notifier->erase(std::remove(it->second.notifier->begin(), it->second.notifier->end(), pNotifier), it->second.notifier->end());
+    it->second.notifier.erase(std::remove(it->second.notifier.begin(), it->second.notifier.end(), pNotifier), it->second.notifier.end());
 
-    if( it->second.notifier->empty() )
+    if( it->second.notifier.empty() )
         m_aContent.erase( it );
 }
 
@@ -559,7 +556,7 @@ TaskManager::associate( const OUString& aUnqPath,
         // Load the XPersistentPropertySetInfo and create it, if it does not exist
         load( it,true );
 
-        PropertySet& properties = *(it->second.properties);
+        PropertySet& properties = it->second.properties;
         it1 = properties.find( newProperty );
         if( it1 != properties.end() )
             throw beans::PropertyExistException(THROW_WHERE );
@@ -588,7 +585,7 @@ TaskManager::deassociate( const OUString& aUnqPath,
 
     load( it,false );
 
-    PropertySet& properties = *(it->second.properties);
+    PropertySet& properties = it->second.properties;
 
     it1 = properties.find( oldProperty );
     if( it1 == properties.end() )
@@ -851,7 +848,7 @@ TaskManager::setv( const OUString& aUnqPath,
     uno::Sequence< beans::PropertyChangeEvent > seqChanged( values.getLength() );
 
     TaskManager::ContentMap::iterator it = m_aContent.find( aUnqPath );
-    PropertySet& properties = *( it->second.properties );
+    PropertySet& properties = it->second.properties;
     TaskManager::PropertySet::iterator it1;
     uno::Any aAny;
 
@@ -1103,7 +1100,7 @@ TaskManager::getv( sal_Int32 CommandId,
         commit( it,aFileStatus );
 
         TaskManager::PropertySet::iterator it1;
-        PropertySet& propset = *(it->second.properties);
+        PropertySet& propset = it->second.properties;
 
         for( sal_Int32 i = 0; i < seq.getLength(); ++i )
         {
@@ -1941,7 +1938,7 @@ void TaskManager::insertDefaultProperties( const OUString& aUnqPath )
 
     MyProperty ContentTProperty( ContentType );
 
-    PropertySet& properties = *(it->second.properties);
+    PropertySet& properties = it->second.properties;
     bool ContentNotDefau = properties.find( ContentTProperty ) != properties.end();
 
     for (auto const& defaultprop : m_aDefaultProperties)
@@ -2197,9 +2194,6 @@ TaskManager::getMaskFromProperties(
 void
 TaskManager::load( const ContentMap::iterator& it, bool create )
 {
-    if( ! it->second.properties )
-        it->second.properties.reset( new PropertySet );
-
     if( ( ! it->second.xS.is() ||
           ! it->second.xC.is() ||
           ! it->second.xA.is() )
@@ -2218,7 +2212,7 @@ TaskManager::load( const ContentMap::iterator& it, bool create )
 
             // Now put in all values in the storage in the local hash;
 
-            PropertySet& properties = *(it->second.properties);
+            PropertySet& properties = it->second.properties;
             uno::Sequence< beans::Property > seq = xS->getPropertySetInfo()->getProperties();
 
             for( sal_Int32 i = 0; i < seq.getLength(); ++i )
@@ -2258,13 +2252,13 @@ TaskManager::commit( const TaskManager::ContentMap::iterator& it,
 {
     TaskManager::PropertySet::iterator it1;
 
-    if( it->second.properties == nullptr )
+    if( it->second.properties.empty() )
     {
         OUString aPath = it->first;
         insertDefaultProperties( aPath );
     }
 
-    PropertySet& properties = *( it->second.properties );
+    PropertySet& properties = it->second.properties;
 
     it1 = properties.find( MyProperty( Title ) );
     if( it1 != properties.end() )
@@ -2532,7 +2526,7 @@ TaskManager::getv(
         commit( it,aFileStatus );
 
         TaskManager::PropertySet::iterator it1;
-        PropertySet& propset = *(it->second.properties);
+        PropertySet& propset = it->second.properties;
 
         for( sal_Int32 i = 0; i < seq.getLength(); ++i )
         {
@@ -2562,9 +2556,9 @@ TaskManager::getContentEventListeners( const OUString& aName )
     {
         osl::MutexGuard aGuard( m_aMutex );
         TaskManager::ContentMap::iterator it = m_aContent.find( aName );
-        if( it != m_aContent.end() && it->second.notifier )
+        if( it != m_aContent.end() && !it->second.notifier.empty() )
         {
-            std::vector<Notifier*>& listOfNotifiers = *( it->second.notifier );
+            std::vector<Notifier*>& listOfNotifiers = it->second.notifier;
             for (auto const& pointer : listOfNotifiers)
             {
                 std::unique_ptr<ContentEventNotifier> notifier = pointer->cCEL();
@@ -2584,9 +2578,9 @@ TaskManager::getContentDeletedEventListeners( const OUString& aName )
     {
         osl::MutexGuard aGuard( m_aMutex );
         TaskManager::ContentMap::iterator it = m_aContent.find( aName );
-        if( it != m_aContent.end() && it->second.notifier )
+        if( it != m_aContent.end() && !it->second.notifier.empty() )
         {
-            std::vector<Notifier*>& listOfNotifiers = *( it->second.notifier );
+            std::vector<Notifier*>& listOfNotifiers = it->second.notifier;
             for (auto const& pointer : listOfNotifiers)
             {
                 std::unique_ptr<ContentEventNotifier> notifier = pointer->cDEL();
@@ -2633,9 +2627,9 @@ TaskManager::getPropertySetListeners( const OUString& aName )
     {
         osl::MutexGuard aGuard( m_aMutex );
         TaskManager::ContentMap::iterator it = m_aContent.find( aName );
-        if( it != m_aContent.end() && it->second.notifier )
+        if( it != m_aContent.end() && !it->second.notifier.empty() )
         {
-            std::vector<Notifier*>& listOfNotifiers = *( it->second.notifier );
+            std::vector<Notifier*>& listOfNotifiers = it->second.notifier;
             for (auto const& pointer : listOfNotifiers)
             {
                 std::unique_ptr<PropertySetInfoChangeNotifier> notifier = pointer->cPSL();
@@ -2720,14 +2714,15 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
                 itnew->second.properties = std::move(itold->second.properties);
 
                 // copy existing list
-                std::unique_ptr<std::vector< Notifier* >> copyList = std::move(itnew->second.notifier);
+                std::vector< Notifier* > copyList;
+                std::swap(copyList, itnew->second.notifier);
                 itnew->second.notifier = std::move(itold->second.notifier);
 
                 m_aContent.erase( itold );
 
-                if( itnew != m_aContent.end() && itnew->second.notifier )
+                if( itnew != m_aContent.end() && !itnew->second.notifier.empty() )
                 {
-                    std::vector<Notifier*>& listOfNotifiers = *( itnew->second.notifier );
+                    std::vector<Notifier*>& listOfNotifiers = itnew->second.notifier;
                     for (auto const& pointer : listOfNotifiers)
                     {
                         std::unique_ptr<ContentEventNotifier> notifier = pointer->cEXC( aNewName );
@@ -2738,13 +2733,8 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
 
                 // Merge with preexisting notifiers
                 // However, these may be in status BaseContent::Deleted
-                if( copyList != nullptr )
-                {
-                    for( const auto& rCopyPtr : *copyList )
-                    {
-                        itnew->second.notifier->push_back( rCopyPtr );
-                    }
-                }
+                for( const auto& rCopyPtr : copyList )
+                    itnew->second.notifier.push_back( rCopyPtr );
             }
         }
     }
@@ -2769,9 +2759,9 @@ TaskManager::getPropertyChangeNotifier( const OUString& aName )
     {
         osl::MutexGuard aGuard( m_aMutex );
         TaskManager::ContentMap::iterator it = m_aContent.find( aName );
-        if( it != m_aContent.end() && it->second.notifier )
+        if( it != m_aContent.end() && !it->second.notifier.empty() )
         {
-            std::vector<Notifier*>& listOfNotifiers = *( it->second.notifier );
+            std::vector<Notifier*>& listOfNotifiers = it->second.notifier;
             for (auto const& pointer : listOfNotifiers)
             {
                 std::unique_ptr<PropertyChangeNotifier> notifier = pointer->cPCL();
@@ -2841,7 +2831,7 @@ TaskManager::erasePersistentSet( const OUString& aUnqPath,
                 it->second.xC = nullptr;
                 it->second.xA = nullptr;
 
-                it->second.properties.reset();
+                it->second.properties.clear();
             }
         }
 
