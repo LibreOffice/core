@@ -34,7 +34,7 @@ endef
 
 # CObject class
 
-# $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins)
+# $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins,symbols)
 define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
@@ -60,7 +60,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter YES,$(CXXOBJECT_X64)), -U_X86_ -D_AMD64_,) \
 		$(if $(filter YES,$(PE_X86)), -D_X86_ -U_AMD64_,) \
 		-c $(3) \
-		-Fo$(1)) $(if $(filter $(true),$(gb_SYMBOL)),/link /DEBUG:FASTLINK) \
+		-Fo$(1)) $(if $(filter $(true),$(6)),/link /DEBUG:FASTLINK) \
 		$(if $(COMPILER_TEST),,$(call gb_create_deps,$(4),$(1),$(3)))
 endef
 
@@ -222,7 +222,6 @@ endef
 gb_Windows_PE_TARGETTYPEFLAGS := \
 	-release \
 	-opt:noref \
-	$(if $(filter $(true),$(gb_SYMBOL)),-debug) \
 	$(if $(filter NO,$(LIBRARY_X64)), -safeseh) \
 	-nxcompat \
 	-dynamicbase \

@@ -239,9 +239,9 @@ $(WORKDIR)/pot.done : $(foreach exec,cfgex helpex localize propex ulfex xrmex tr
 		&& touch $@)
 
 # enable if: no "-MODULE/" defined AND ["all" defined OR "MODULE/" defined]
-gb_Module__debug_enabled = \
- $(and $(if $(filter -$(1)/,$(ENABLE_DEBUGINFO_FOR)),,$(true)),\
-       $(filter all $(1)/,$(ENABLE_DEBUGINFO_FOR)))
+gb_Module__symbols_enabled = \
+ $(and $(if $(filter -$(1)/,$(gb_ENABLE_SYMBOLS_FOR)),,$(true)),\
+       $(filter all $(1)/,$(gb_ENABLE_SYMBOLS_FOR)))
 
 define gb_Module_Module
 gb_Module_ALLMODULES += $(1)
@@ -256,7 +256,7 @@ gb_Module_SUBSEQUENTCHECKTARGETSTACK := $(call gb_Module_get_subsequentcheck_tar
 gb_Module_STAGINGCHECKTARGETSTACK := $(call gb_Module_get_stagingcheck_target,$(1)) $(gb_Module_STAGINGCHECKTARGETSTACK)
 gb_Module_PERFCHECKTARGETSTACK := $(call gb_Module_get_perfcheck_target,$(1)) $(gb_Module_PERFCHECKTARGETSTACK)
 gb_Module_CLEANTARGETSTACK := $(call gb_Module_get_clean_target,$(1)) $(gb_Module_CLEANTARGETSTACK)
-gb_Module_CURRENTMODULE_DEBUG_ENABLED := $(call gb_Module__debug_enabled,$(1))
+gb_Module_CURRENTMODULE_SYMBOLS_ENABLED := $(call gb_Module__symbols_enabled,$(1))
 gb_Module_CURRENTMODULE_NAME := $(1)
 $(call gb_Helper_make_userfriendly_targets,$(1),Module)
 $(if $(filter-out libreoffice instsetoo_native android ios,$(1)),\
