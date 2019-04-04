@@ -86,12 +86,7 @@ endif
 
 # sun ld doesn't understand -O1 optimize flag
 gb_LINKEROPTFLAGS :=
-
-ifeq ($(gb_SYMBOL),$(true))
-gb_LINKERSTRIPDEBUGFLAGS :=
-else
 gb_LINKERSTRIPDEBUGFLAGS := -Wl,-zredlocsym -Wl,-znoldynsym
-endif
 
 # LinkTarget class
 
