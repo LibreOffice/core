@@ -709,7 +709,7 @@ public:
     virtual std::unique_ptr<SdrUndoAction> CreateUndoMoveObject( SdrObject& rObject, const Size& rDist );
     virtual std::unique_ptr<SdrUndoAction> CreateUndoGeoObject( SdrObject& rObject );
     virtual std::unique_ptr<SdrUndoAction> CreateUndoAttrObject( SdrObject& rObject, bool bStyleSheet1 = false, bool bSaveText = false );
-    virtual std::unique_ptr<SdrUndoAction> CreateUndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect = false);
+    virtual std::unique_ptr<SdrUndoAction> CreateUndoRemoveObject(SdrObject& rObject);
     virtual std::unique_ptr<SdrUndoAction> CreateUndoInsertObject( SdrObject& rObject, bool bOrdNumDirect = false);
     virtual std::unique_ptr<SdrUndoAction> CreateUndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect = false);
     virtual std::unique_ptr<SdrUndoAction> CreateUndoNewObject( SdrObject& rObject, bool bOrdNumDirect = false);

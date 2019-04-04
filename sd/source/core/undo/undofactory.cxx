@@ -22,9 +22,9 @@
 
 using namespace sd;
 
-std::unique_ptr<SdrUndoAction> UndoFactory::CreateUndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
+std::unique_ptr<SdrUndoAction> UndoFactory::CreateUndoRemoveObject(SdrObject& rObject)
 {
-    return std::make_unique<UndoRemoveObject>( rObject, bOrdNumDirect );
+    return std::make_unique<UndoRemoveObject>(rObject);
 }
 
 std::unique_ptr<SdrUndoAction> UndoFactory::CreateUndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect )
