@@ -71,6 +71,9 @@ typedef struct _cairo cairo_t;
 typedef struct _cairo_surface cairo_surface_t;
 typedef struct _cairo_user_data_key cairo_user_data_key_t;
 
+VCL_DLLPUBLIC void dl_cairo_surface_set_device_scale(cairo_surface_t *surface, double x_scale, double y_scale);
+VCL_DLLPUBLIC void dl_cairo_surface_get_device_scale(cairo_surface_t *surface, double *x_scale, double *y_scale);
+
 enum class PaintMode { Over, Xor };
 
 typedef void (*damageHandler)(void* handle,
