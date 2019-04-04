@@ -60,6 +60,24 @@
     },
     {
       "key": {
+        "uuid": "df87a7cf_a92a6fe4",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 25
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-04T06:57:40Z",
+      "side": 1,
+      "message": "Again - this is a localization machinery; so possibly better ask Caolan for advise how to do that properly - I am not an expert in that.",
+      "parentUuid": "df87a7cf_49f64392",
+      "revId": "306617c563e3b67b9be479c197a62a99ecbd2b4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87a7cf_de53ebe1",
         "filename": "cui/inc/strings.hrc",
         "patchSetId": 25
@@ -199,6 +217,30 @@
     },
     {
       "key": {
+        "uuid": "df87a7cf_a9134fb8",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 1229,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-04T06:57:40Z",
+      "side": 1,
+      "message": "My concern is that we will fill the --nofirststartwizard with irrelevant semantics. What you show is not a \"first start wizard\" - it\u0027s meant to be \"first thing to be shown\", yes, but its idea is not \"show once to prepare the suite for usage\" (there, it was optionally registered , and user information was filled). Possibly it\u0027s my misconception, so - if others disagree, I don\u0027t insist.",
+      "parentUuid": "df87a7cf_89044b7d",
+      "range": {
+        "startLine": 1228,
+        "startChar": 20,
+        "endLine": 1229,
+        "endChar": 41
+      },
+      "revId": "306617c563e3b67b9be479c197a62a99ecbd2b4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87a7cf_3e1e970c",
         "filename": "solenv/sanitizers/ui/cui.suppr",
         "patchSetId": 25
@@ -234,6 +276,30 @@
       "side": 1,
       "message": "It\u0027s about the accessibility test. Labels should have a buddy relation to a control. These two don\u0027t have it as static text.",
       "parentUuid": "df87a7cf_3e1e970c",
+      "range": {
+        "startLine": 247,
+        "startChar": 0,
+        "endLine": 248,
+        "endChar": 67
+      },
+      "revId": "306617c563e3b67b9be479c197a62a99ecbd2b4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_09f03b90",
+        "filename": "solenv/sanitizers/ui/cui.suppr",
+        "patchSetId": 25
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-04T06:57:40Z",
+      "side": 1,
+      "message": "Well - we must have some way to tell that at the .ui level, not in the .suppr level... let\u0027s ask Caolan (?) how could it be done.",
+      "parentUuid": "df87a7cf_29f97f7f",
       "range": {
         "startLine": 247,
         "startChar": 0,
