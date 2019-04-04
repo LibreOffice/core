@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "df87a7cf_64e6ceeb",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2019-04-04T13:26:09Z",
+      "side": 1,
+      "message": "- cause items with subgroups are grouped together\n- recent is more importend than open (otherwise LibO would show open dialog at startwindow instead of recent)\n- have a look at writer/draw/impress. recent change to 2. item already",
+      "parentUuid": "df87a7cf_e49dfe66",
+      "revId": "aca2782de64b9f780ae632086194655b5f04f59a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87a7cf_8488b21f",
         "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "df87a7cf_44cdca5b",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2019-04-04T13:26:09Z",
+      "side": 1,
+      "message": "In writer the groups in EditMenu are\n1. undo/redo\n2. cut, copy\n3. select\n4. search\n5. changes\n6. other stuff\n\nso I move cellprotect and setinputmode in calc back that there is the group\n1. undo/redo\n2. cut, copy\n3. select\n4. search\n5. changes\n6. other stuff (like cellprotect)\n\nbut I would prefer an protect submenu somewhere cause protect stuff is located in editmenu and toolsmenu, but this need an bug report first. so focus here on the arrangement.",
+      "parentUuid": "df87a7cf_8488b21f",
+      "revId": "aca2782de64b9f780ae632086194655b5f04f59a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87a7cf_a48e1625",
         "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2019-04-04T13:03:56Z",
       "side": 1,
       "message": "Doesn\u0027t the toolbar on/off switches belong to the same section as above so the separator is obsolete?",
+      "revId": "aca2782de64b9f780ae632086194655b5f04f59a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_c40a3a89",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2019-04-04T13:26:09Z",
+      "side": 1,
+      "message": "if you want I can remove the separator. It is not importend that\u0027s true. Main reason for the separator is to have groupes with less items. so yes can be removed.",
+      "parentUuid": "df87a7cf_a48e1625",
       "revId": "aca2782de64b9f780ae632086194655b5f04f59a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
