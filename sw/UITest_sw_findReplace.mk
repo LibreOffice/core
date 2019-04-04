@@ -5,12 +5,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call 	gb_UITest_UITest,findReplace))
+$(eval $(call 	gb_UITest_UITest,sw_findReplace))
 
-$(eval $(call gb_UITest_add_modules,findReplace,$(SRCDIR)/sd/qa/uitest,\
+$(eval $(call gb_UITest_add_modules,sw_findReplace,$(SRCDIR)/sw/qa/uitest,\
 	findReplace/ \
 ))
 
-$(eval $(call gb_UITest_set_defs,findReplace, \
-    TDOC="$(SRCDIR)/sd/qa/uitest/impress_tests/data" \
+$(eval $(call gb_UITest_set_defs,sw_findReplace, \
+    TDOC="$(SRCDIR)/sw/qa/uitest/writer_tests/data" \
 ))
