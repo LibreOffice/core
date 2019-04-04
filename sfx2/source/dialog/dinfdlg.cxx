@@ -948,8 +948,14 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     const SfxDocumentInfoItem& rInfoItem = rSet->Get(SID_DOCINFO);
 
     // template data
-    if ( rInfoItem.HasTemplate() )
-        m_xTemplValFt->set_label( rInfoItem.getTemplateName() );
+    if (rInfoItem.HasTemplate())
+    {
+        const OUString& rName = rInfoItem.getTemplateName();
+        if (rName.getLength() > SAL_MAX_INT16) // tdf#122780 pick some ~arbitrary max size
+            m_xTemplValFt->set_label(rName.copy(0, SAL_MAX_INT16));
+        else
+            m_xTemplValFt->set_label(rName);
+    }
     else
     {
         m_xTemplFt->hide();
