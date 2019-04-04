@@ -2103,8 +2103,10 @@ namespace
     {
         Size aSize(rDevice.GetOutputSizePixel());
         cairo_surface_t* surface = get_underlying_cairo_surface(rDevice);
-        double m_fXScale, m_fYScale;
+        double m_fXScale(1.0), m_fYScale(1.0);
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
         cairo_surface_get_device_scale(surface, &m_fXScale, &m_fYScale);
+#endif
         return gdk_pixbuf_get_from_surface(surface, 0, 0, aSize.Width() * m_fXScale, aSize.Height() * m_fYScale);
     }
 
