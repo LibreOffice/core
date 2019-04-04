@@ -696,6 +696,13 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="en-US">.uno:SubScript</value>
           </prop>
         </node>
+        <!-- tdf#118269 Replace Ctrl-Alt-C with Shift-Ctrl-H for Hungarian (Calc) -->
+        <node oor:name="H_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:InsertAnnotation</value>
+          </prop>
+        </node>
         <node oor:name="DELETE" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -1361,6 +1368,8 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertAnnotation</value>
+            <!-- tdf#118269 Replace Ctrl-Alt-C with Shift-Ctrl-H for Hungarian -->
+            <value xml:lang="hu"></value>
           </prop>
         </node>
         <node oor:name="TAB_MOD1" oor:op="replace">
@@ -2470,6 +2479,13 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="de">.uno:Italic</value>
           </prop>
         </node>
+        <!-- tdf#118269 Replace Ctrl-Alt-C with Shift-Ctrl-H for Hungarian (Master document) -->
+        <node oor:name="H_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:InsertAnnotation</value>
+          </prop>
+        </node>
         <node oor:name="LEFT" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -2528,6 +2544,8 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertAnnotation</value>
+            <!-- tdf#118269 Replace Ctrl-Alt-C with Shift-Ctrl-H for Hungarian -->
+            <value xml:lang="hu"></value>
           </prop>
         </node>
         <node oor:name="PAGEDOWN" oor:op="replace">
@@ -2767,6 +2785,8 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertAnnotation</value>
+            <!-- tdf#118269 Replace Ctrl-Alt-C with Shift-Ctrl-H for Hungarian -->
+            <value xml:lang="hu"></value>
           </prop>
         </node>
         <node oor:name="PAGEDOWN" oor:op="replace">
@@ -2891,6 +2911,13 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de">.uno:Dismantle</value>
+          </prop>
+        </node>
+        <!-- tdf#118269 Replace Ctrl-Alt-C with Shift-Ctrl-H for Hungarian (Impress) -->
+        <node oor:name="H_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:InsertAnnotation</value>
           </prop>
         </node>
         <node oor:name="DELETE" oor:op="replace">
@@ -3910,6 +3937,13 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="de">.uno:Italic</value>
           </prop>
         </node>
+        <!-- tdf#118269 Replace Ctrl-Alt-C with Shift-Ctrl-H for Hungarian (Writer/Web) -->
+        <node oor:name="H_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:InsertAnnotation</value>
+          </prop>
+        </node>
         <node oor:name="LEFT" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -3968,6 +4002,8 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertAnnotation</value>
+            <!-- tdf#118269 Replace Ctrl-Alt-C with Shift-Ctrl-H for Hungarian -->
+            <value xml:lang="hu"></value>
           </prop>
         </node>
         <node oor:name="PAGEDOWN" oor:op="replace">
@@ -4702,6 +4738,13 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="de">.uno:Italic</value>
           </prop>
         </node>
+        <!-- tdf#118269 Replace Ctrl-Alt-C with Shift-Ctrl-H for Hungarian (Base / Form Design) -->
+        <node oor:name="H_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:InsertAnnotation</value>
+          </prop>
+        </node>
         <node oor:name="LEFT" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -4772,6 +4815,8 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertAnnotation</value>
+            <!-- tdf#118269 Replace Ctrl-Alt-C with Shift-Ctrl-H for Hungarian -->
+            <value xml:lang="hu"></value>
           </prop>
         </node>
         <node oor:name="PAGEDOWN" oor:op="replace">
@@ -5482,6 +5527,13 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="de">.uno:Italic</value>
           </prop>
         </node>
+        <!-- tdf#118269 Replace Ctrl-Alt-C with Shift-Ctrl-H for Hungarian (Base / Text report design) -->
+        <node oor:name="H_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:InsertAnnotation</value>
+          </prop>
+        </node>
         <node oor:name="LEFT" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -5540,6 +5592,8 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertAnnotation</value>
+            <!-- tdf#118269 Replace Ctrl-Alt-C with Shift-Ctrl-H for Hungarian -->
+            <value xml:lang="hu"></value>
           </prop>
         </node>
         <node oor:name="PAGEDOWN" oor:op="replace">
@@ -5897,6 +5951,13 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="es">.uno:SearchDialog</value>
+          </prop>
+        </node>
+        <!-- tdf#118269 Replace Ctrl-Alt-C with Shift-Ctrl-H for Hungarian (Writer) -->
+        <node oor:name="H_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:InsertAnnotation</value>
           </prop>
         </node>
         <node oor:name="B_SHIFT_MOD1" oor:op="replace">
@@ -6353,6 +6414,8 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertAnnotation</value>
+            <!-- tdf#118269 Replace Ctrl-Alt-C with Shift-Ctrl-H for Hungarian -->
+            <value xml:lang="hu"></value>
           </prop>
         </node>
         <node oor:name="PAGEDOWN" oor:op="replace">
@@ -7101,6 +7164,13 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="de">.uno:Italic</value>
           </prop>
         </node>
+        <!-- tdf#118269 Replace Ctrl-Alt-C with Shift-Ctrl-H for Hungarian (XML Form) -->
+        <node oor:name="H_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:InsertAnnotation</value>
+          </prop>
+        </node>
         <node oor:name="LEFT" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -7159,6 +7229,8 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertAnnotation</value>
+            <!-- tdf#118269 Replace Ctrl-Alt-C with Shift-Ctrl-H for Hungarian -->
+            <value xml:lang="hu"></value>
           </prop>
         </node>
         <node oor:name="PAGEDOWN" oor:op="replace">
@@ -7615,6 +7687,8 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertAnnotation</value>
+            <!-- tdf#118269 Replace Ctrl-Alt-C with Shift-Ctrl-H for Hungarian -->
+            <value xml:lang="hu"></value>
           </prop>
         </node>
         <node oor:name="BACKSPACE_MOD2" oor:op="replace">
@@ -7663,6 +7737,13 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="es">.uno:HyperlinkDialog</value>
+          </prop>
+        </node>
+        <!-- tdf#118269 Replace Ctrl-Alt-C with Shift-Ctrl-H for Hungarian (Draw) -->
+        <node oor:name="H_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:InsertAnnotation</value>
           </prop>
         </node>
         <node oor:name="N_MOD1" oor:op="replace">
