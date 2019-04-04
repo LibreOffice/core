@@ -45,6 +45,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <comphelper/lok.hxx>
 #include <unx/gendata.hxx>
+#include <dlfcn.h>
 
 #if ENABLE_CAIRO_CANVAS
 #   if defined CAIRO_VERSION && CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 10, 0)
@@ -614,9 +615,7 @@ void SvpSalGraphics::setSurface(cairo_surface_t* pSurface, const basegfx::B2IVec
 {
     m_pSurface = pSurface;
     m_aFrameSize = rSize;
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
-    cairo_surface_get_device_scale(pSurface, &m_fScale, nullptr);
-#endif
+    dl_cairo_surface_get_device_scale(pSurface, &m_fScale, nullptr);
     ResetClipRegion();
 }
 
@@ -1599,9 +1598,7 @@ void SvpSalGraphics::copyBits( const SalTwoRect& rTR,
                                             cairo_surface_get_content(m_pSurface),
                                             aTR.mnSrcWidth * m_fScale,
                                             aTR.mnSrcHeight * m_fScale);
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
-        cairo_surface_set_device_scale(pCopy, m_fScale, m_fScale);
-#endif
+        dl_cairo_surface_set_device_scale(pCopy, m_fScale, m_fScale);
         cairo_t* cr = cairo_create(pCopy);
         cairo_set_source_surface(cr, source, -aTR.mnSrcX, -aTR.mnSrcY);
         cairo_rectangle(cr, 0, 0, aTR.mnSrcWidth, aTR.mnSrcHeight);
@@ -1848,9 +1845,7 @@ void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
                                                                     extents.getWidth() * m_fScale,
                                                                     extents.getHeight() * m_fScale);
 
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
-            cairo_surface_set_device_scale(surface, m_fScale, m_fScale);
-#endif
+            dl_cairo_surface_set_device_scale(surface, m_fScale, m_fScale);
             cairo_t* stipple_cr = cairo_create(surface);
             cairo_set_source_rgb(stipple_cr, 1.0, 1.0, 1.0);
             cairo_mask(stipple_cr, pattern);
@@ -2004,9 +1999,7 @@ cairo_t* SvpSalGraphics::createTmpCompatibleCairoContext() const
             m_aFrameSize.getX() * m_fScale,
             m_aFrameSize.getY() * m_fScale);
 
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
-    cairo_surface_set_device_scale(target, m_fScale, m_fScale);
-#endif
+    dl_cairo_surface_set_device_scale(target, m_fScale, m_fScale);
 
     return cairo_create(target);
 }
@@ -2200,6 +2193,29 @@ GlyphCache& SvpSalGraphics::getPlatformGlyphCache()
     GenericUnixSalData* const pSalData(GetGenericUnixSalData());
     assert(pSalData);
     return *pSalData->GetGlyphCache();
+}
+
+void dl_cairo_surface_set_device_scale(cairo_surface_t *surface, double x_scale, double y_scale)
+{
+    static auto func = reinterpret_cast<void(*)(cairo_surface_t*, double, double)>(
+        dlsym(nullptr, "cairo_surface_set_device_scale"));
+    if (func)
+        func(surface, x_scale, y_scale);
+}
+
+void dl_cairo_surface_get_device_scale(cairo_surface_t *surface, double* x_scale, double* y_scale)
+{
+    static auto func = reinterpret_cast<void(*)(cairo_surface_t*, double*, double*)>(
+        dlsym(nullptr, "cairo_surface_get_device_scale"));
+    if (func)
+        func(surface, x_scale, y_scale);
+    else
+    {
+        if (x_scale)
+            *x_scale = 1.0;
+        if (y_scale)
+            *y_scale = 1.0;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

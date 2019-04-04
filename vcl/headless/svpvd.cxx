@@ -89,7 +89,6 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
         }
         else if (pBuffer)
         {
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
             double fXScale, fYScale;
             if (comphelper::LibreOfficeKit::isActive())
             {
@@ -98,18 +97,15 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
             }
             else
             {
-                cairo_surface_get_device_scale(m_pRefSurface, &fXScale, &fYScale);
+                dl_cairo_surface_get_device_scale(m_pRefSurface, &fXScale, &fYScale);
                 nNewDX *= fXScale;
                 nNewDY *= fYScale;
             }
-#endif
 
             m_pSurface = cairo_image_surface_create_for_data(pBuffer, CAIRO_FORMAT_ARGB32,
                                 nNewDX, nNewDY, cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nNewDX));
 
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
-            cairo_surface_set_device_scale(m_pSurface, fXScale, fYScale);
-#endif
+            dl_cairo_surface_set_device_scale(m_pSurface, fXScale, fYScale);
         }
         else
         {

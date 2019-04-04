@@ -2104,7 +2104,7 @@ namespace
         Size aSize(rDevice.GetOutputSizePixel());
         cairo_surface_t* surface = get_underlying_cairo_surface(rDevice);
         double m_fXScale, m_fYScale;
-        cairo_surface_get_device_scale(surface, &m_fXScale, &m_fYScale);
+        dl_cairo_surface_get_device_scale(surface, &m_fXScale, &m_fYScale);
         return gdk_pixbuf_get_from_surface(surface, 0, 0, aSize.Width() * m_fXScale, aSize.Height() * m_fYScale);
     }
 
