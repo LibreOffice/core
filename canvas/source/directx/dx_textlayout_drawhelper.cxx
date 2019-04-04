@@ -195,7 +195,7 @@ namespace dxcanvas
             SetTextAlign(hdc, TA_BASELINE);
             SetWorldTransform(hdc, &aXForm);
 
-            // use a empty StartPosition for text rendering
+            // use an empty StartPosition for text rendering
             const Point aEmptyPoint(0, 0);
 
             // create the String
