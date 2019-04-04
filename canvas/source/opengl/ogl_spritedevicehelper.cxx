@@ -156,7 +156,7 @@ namespace oglcanvas
         if( !mxContext->isInitialized() )
             return ::canvas::tools::createInfiniteSize2D(); // we're disposed
 
-        // Map a one-by-one millimeter box to pixel
+        // Map an one-by-one millimeter box to pixel
         SystemChildWindow* pChildWindow = mxContext->getChildWindow();
         const MapMode aOldMapMode( pChildWindow->GetMapMode() );
         pChildWindow->SetMapMode( MapMode(MapUnit::MapMM) );
