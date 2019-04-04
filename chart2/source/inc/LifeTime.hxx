@@ -116,7 +116,7 @@ private:
 /*
 Use this Guard in your ApiCalls to protect access on resources
 which will be released in dispose.
-It's guarantied, that the release of resources only starts if your
+It's guaranteed that the release of resources only starts if your
 guarded call has finished.
 ! It's only partly guaranteed that this resources will not change during the call.
 See the example for details.
@@ -124,7 +124,7 @@ See the example for details.
 This class is to be used as described in the example.
 
 If this guard is used in all api calls of an XCloseable object
-it's guarantied, that the closeable will close itself after finishing the last call
+it's guaranteed that the closeable will close itself after finishing the last call
 if it should do so.
 
   ::ApiCall
