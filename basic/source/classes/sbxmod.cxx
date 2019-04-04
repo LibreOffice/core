@@ -1114,7 +1114,7 @@ void SbModule::Run( SbMethod* pMeth )
                 pRt->pNext->unblock();
 
             // #63710 It can happen by an another thread handling at events,
-            // that the show call returns to an dialog (by closing the
+            // that the show call returns to a dialog (by closing the
             // dialog per UI), before a by an event triggered further call returned,
             // which stands in Basic more top in the stack and that had been run on
             // a  Basic-Breakpoint. Then would the instance below destroyed. And if the Basic,
