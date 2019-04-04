@@ -273,6 +273,8 @@
 <block-list:block block-list:abbreviated-name="automátcio" block-list:name="automático"/>
 <block-list:block block-list:abbreviated-name="automáticamente" block-list:name="automaticamente"/>
 <block-list:block block-list:abbreviated-name="autonomos" block-list:name="autónomos"/>
+<block-list:block block-list:abbreviated-name="autoritario" block-list:name="autoritário"/>
+<block-list:block block-list:abbreviated-name="autoritarios" block-list:name="autoritários"/>
 <block-list:block block-list:abbreviated-name="avisinha" block-list:name="avizinha"/>
 <block-list:block block-list:abbreviated-name="axa" block-list:name="acha"/>
 <block-list:block block-list:abbreviated-name="axam" block-list:name="acham"/>
@@ -471,6 +473,7 @@
 <block-list:block block-list:abbreviated-name="cinsero" block-list:name="sincero"/>
 <block-list:block block-list:abbreviated-name="cinseros" block-list:name="sinceros"/>
 <block-list:block block-list:abbreviated-name="cinsseridade" block-list:name="sinceridade"/>
+<block-list:block block-list:abbreviated-name="civís" block-list:name="civis"/>
 <block-list:block block-list:abbreviated-name="ckaro" block-list:name="claro"/>
 <block-list:block block-list:abbreviated-name="classico" block-list:name="clássico"/>
 <block-list:block block-list:abbreviated-name="classicos" block-list:name="clássicos"/>
@@ -1248,12 +1251,16 @@
 <block-list:block block-list:abbreviated-name="indentificou" block-list:name="identificou"/>
 <block-list:block block-list:abbreviated-name="indescrição" block-list:name="indiscrição"/>
 <block-list:block block-list:abbreviated-name="indespensável" block-list:name="indispensável"/>
+<block-list:block block-list:abbreviated-name="indice" block-list:name="índice"/>
+<block-list:block block-list:abbreviated-name="indices" block-list:name="índices"/>
 <block-list:block block-list:abbreviated-name="indiota" block-list:name="idiota"/>
 <block-list:block block-list:abbreviated-name="indiotas" block-list:name="idiotas"/>
 <block-list:block block-list:abbreviated-name="individuo" block-list:name="indivíduo"/>
 <block-list:block block-list:abbreviated-name="indíviduo" block-list:name="indivíduo"/>
 <block-list:block block-list:abbreviated-name="individuos" block-list:name="indivíduos"/>
 <block-list:block block-list:abbreviated-name="indíviduos" block-list:name="indivíduos"/>
+<block-list:block block-list:abbreviated-name="inequidade" block-list:name="iniquidade"/>
+<block-list:block block-list:abbreviated-name="inequidades" block-list:name="iniquidades"/>
 <block-list:block block-list:abbreviated-name="infelis" block-list:name="infeliz"/>
 <block-list:block block-list:abbreviated-name="infelises" block-list:name="infelizes"/>
 <block-list:block block-list:abbreviated-name="infelismente" block-list:name="infelizmente"/>
@@ -1874,6 +1881,7 @@
 <block-list:block block-list:abbreviated-name="possiveis" block-list:name="possíveis"/>
 <block-list:block block-list:abbreviated-name="possivel" block-list:name="possível"/>
 <block-list:block block-list:abbreviated-name="possue" block-list:name="possui"/>
+<block-list:block block-list:abbreviated-name="pôtencial" block-list:name="potencial"/>
 <block-list:block block-list:abbreviated-name="potuguês" block-list:name="português"/>
 <block-list:block block-list:abbreviated-name="pozição" block-list:name="posição"/>
 <block-list:block block-list:abbreviated-name="pozições" block-list:name="posições"/>
@@ -2039,6 +2047,8 @@
 <block-list:block block-list:abbreviated-name="refem" block-list:name="refém"/>
 <block-list:block block-list:abbreviated-name="refens" block-list:name="reféns"/>
 <block-list:block block-list:abbreviated-name="regeição" block-list:name="rejeição"/>
+<block-list:block block-list:abbreviated-name="regíme" block-list:name="regime"/>
+<block-list:block block-list:abbreviated-name="regímes" block-list:name="regimes"/>
 <block-list:block block-list:abbreviated-name="reias" block-list:name="reais"/>
 <block-list:block block-list:abbreviated-name="relacha" block-list:name="relaxa"/>
 <block-list:block block-list:abbreviated-name="relacham" block-list:name="relaxam"/>
@@ -2124,6 +2134,8 @@
 <block-list:block block-list:abbreviated-name="sexis" block-list:name="sexies"/>
 <block-list:block block-list:abbreviated-name="sexu" block-list:name="sexo"/>
 <block-list:block block-list:abbreviated-name="sexys" block-list:name="sexies"/>
+<block-list:block block-list:abbreviated-name="simbolico" block-list:name="simbólico"/>
+<block-list:block block-list:abbreviated-name="simbolicos" block-list:name="simbólicos"/>
 <block-list:block block-list:abbreviated-name="significatimente" block-list:name="significativamente"/>
 <block-list:block block-list:abbreviated-name="simolador" block-list:name="simulador"/>
 <block-list:block block-list:abbreviated-name="simoladores" block-list:name="simuladores"/>
