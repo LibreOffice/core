@@ -53,6 +53,7 @@ $(eval $(call gb_Package_add_files_with_dir,vcl_theme_definitions,$(LIBO_SHARE_F
 	ios/arrow-up.svg \
 	ios/arrow-down.svg \
 	ios/slider-button.svg \
+	ios/slider-button-disabled.svg \
 ))
 
 # vim: set noet sw=4 ts=4:
