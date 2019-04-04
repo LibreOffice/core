@@ -1555,12 +1555,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="es">.uno:Open</value>
           </prop>
         </node>
-        <node oor:name="A_SHIFT_MOD1_MOD2" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:AnimationMode</value>
-          </prop>
-        </node>
         <node oor:name="B_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -2835,12 +2829,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="es">.uno:Open</value>
-          </prop>
-        </node>
-        <node oor:name="A_SHIFT_MOD1_MOD2" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:AnimationMode</value>
           </prop>
         </node>
         <node oor:name="B_MOD1" oor:op="replace">
