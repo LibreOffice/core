@@ -198,7 +198,7 @@ class SVNFileInfo(VCSFileInfo):
     repo = None
     svndata = {}
 
-    # This regex separates protocol and optional username/password from a url.
+    # This regex separates protocol and optional username/password from an url.
     # For instance, all the following urls will be transformed into
     # 'foo.com/bar':
     #
@@ -300,7 +300,7 @@ def GetVCSFilename(file, srcdir):
     return (file.replace("\\", "/"), root)
 
 def GetPlatformSpecificDumper(**kwargs):
-    """This function simply returns a instance of a subclass of Dumper
+    """This function simply returns an instance of a subclass of Dumper
     that is appropriate for the current platform."""
     return {'win32': Dumper_Win32,
             'cygwin': Dumper_Win32,
