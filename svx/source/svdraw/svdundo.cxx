@@ -1699,9 +1699,9 @@ std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoAttrObject( SdrObject& 
     return std::make_unique<SdrUndoAttrObj>( rObject, bStyleSheet1, bSaveText );
 }
 
-std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
+std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoRemoveObject(SdrObject& rObject)
 {
-    return std::make_unique<SdrUndoRemoveObj>( rObject, bOrdNumDirect );
+    return std::make_unique<SdrUndoRemoveObj>(rObject);
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoInsertObject( SdrObject& rObject, bool bOrdNumDirect )
