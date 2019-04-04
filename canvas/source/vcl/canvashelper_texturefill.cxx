@@ -101,7 +101,7 @@ namespace vclcanvas
         /** Fill linear or axial gradient
 
             Since most of the code for linear and axial gradients are
-            the same, we've a unified method here
+            the same, we've an unified method here
          */
         void fillLinearGradient( OutputDevice&                                  rOutDev,
                                  const ::basegfx::B2DHomMatrix&                 rTextureTransform,
