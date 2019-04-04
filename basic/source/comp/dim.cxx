@@ -73,7 +73,7 @@ SbiSymDef* SbiParser::VarDecl( SbiExprListPtr* ppDim, bool bStatic, bool bConst 
     return pDef;
 }
 
-// Resolving of a AS-Type-Declaration
+// Resolving of an AS-Type-Declaration
 // The data type were inserted into the handed over variable
 
 void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
@@ -127,7 +127,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
                     }
                 }
                 break;
-            case SYMBOL: // can only be a TYPE or a object class!
+            case SYMBOL: // can only be a TYPE or an object class!
                 if( eScanType != SbxVARIANT )
                     Error( ERRCODE_BASIC_SYNTAX );
                 else
