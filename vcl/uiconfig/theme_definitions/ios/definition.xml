@@ -102,7 +102,7 @@
                 <image source="tick-off-pressed.svg" />
             </state>
             <state enabled="false" button-value="false">
-                <image source="tick-on-disabled.svg" />
+                <image source="tick-off-disabled.svg" />
             </state>
         </part>
         <part value="Focus">
@@ -113,7 +113,7 @@
     </radiobutton>
 
     <checkbox>
-        <part value="Entire" width="44" height="26">
+        <part value="Entire" width="46" height="32">
            <state enabled="true" pressed="false" button-value="true">
                 <image source="switch-on.svg" />
             </state>
@@ -130,7 +130,7 @@
                 <image source="switch-off-pressed.svg" />
             </state>
             <state enabled="false" button-value="false">
-                <image source="switch-on-disabled.svg" />
+                <image source="switch-off-disabled.svg" />
             </state>
         </part>
         <part value="Focus">
@@ -192,8 +192,7 @@
             </state>
         </part>
         <part value="SubEdit">
-            <state>
-            </state>
+            <state/> <!-- Intentional empty - don't draw anything -->
         </part>
         <part value="ButtonDown" width="35" height="36">
             <state enabled="true">
@@ -212,7 +211,9 @@
 
     <spinbox>
         <part value="Entire">
-            <state/> <!-- Intentional empty - don't draw anything -->
+            <state>
+                <rect stroke="#ffffff" fill="#ffffff" stroke-width="0" />
+            </state>
         </part>
         <part value="SubEdit">
             <state/> <!-- Intentional empty - don't draw anything -->
@@ -224,9 +225,6 @@
             <state enabled="true" pressed="true">
                 <external source="spinbox-left-pressed.svg" />
             </state>
-            <state enabled="true" rollover="true">
-                <external source="spinbox-left-rollover.svg" />
-            </state>
             <state enabled="false">
                 <external source="spinbox-left-disabled.svg" />
             </state>
@@ -237,9 +235,6 @@
             </state>
             <state enabled="true" pressed="true">
                 <external source="spinbox-right-pressed.svg" />
-            </state>
-            <state enabled="true" rollover="true">
-                <external source="spinbox-right-rollover.svg" />
             </state>
             <state enabled="false">
                 <external source="spinbox-right-disabled.svg" />

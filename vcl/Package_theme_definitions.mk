@@ -25,11 +25,9 @@ $(eval $(call gb_Package_add_files_with_dir,vcl_theme_definitions,$(LIBO_SHARE_F
 	ios/tick-on-disabled.svg \
 	ios/spinbox-left.svg \
 	ios/spinbox-left-pressed.svg \
-	ios/spinbox-left-rollover.svg \
 	ios/spinbox-left-disabled.svg \
 	ios/spinbox-right.svg \
 	ios/spinbox-right-pressed.svg \
-	ios/spinbox-right-rollover.svg \
 	ios/spinbox-right-disabled.svg \
 	ios/common-rect.svg \
 	ios/common-rect-disabled.svg \
