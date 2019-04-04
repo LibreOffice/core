@@ -763,7 +763,7 @@ void VistaFilePickerImpl::impl_sta_SetDirectory(const RequestRef& rRequest)
         // Vista stores last used folders for file dialogs
         // so we don't want the application to change the folder
         // in most cases.
-        // Store the requested folder in the mean time and decide later
+        // Store the requested folder in the meantime and decide later
         // what to do
         m_sDirectory = sDirectory;
     }
