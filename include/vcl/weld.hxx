@@ -522,6 +522,7 @@ private:
 
 public:
     TreeIter() {}
+    virtual bool equal(const TreeIter& rOther) const = 0;
     virtual ~TreeIter() {}
 };
 
@@ -556,10 +557,9 @@ protected:
     void signal_toggled(const std::pair<int, int>& rRowCol) { m_aRadioToggleHdl.Call(rRowCol); }
 
 public:
-    virtual void insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
-                        const OUString* pId, const OUString* pIconName,
-                        VirtualDevice* pImageSurface, const OUString* pExpanderName,
-                        bool bChildrenOnDemand, TreeIter* pRet)
+    virtual void insert(const TreeIter* pParent, int pos, const OUString* pStr, const OUString* pId,
+                        const OUString* pIconName, VirtualDevice* pImageSurface,
+                        const OUString* pExpanderName, bool bChildrenOnDemand, TreeIter* pRet)
         = 0;
 
     void insert(int nRow, TreeIter* pRet = nullptr)
@@ -590,12 +590,12 @@ public:
     {
         insert(nullptr, -1, &rStr, &rId, &rImage, nullptr, nullptr, false, nullptr);
     }
-    void append(const weld::TreeIter* pParent, const OUString& rId, const OUString& rStr,
+    void append(const TreeIter* pParent, const OUString& rId, const OUString& rStr,
                 const OUString& rImage)
     {
         insert(pParent, -1, &rStr, &rId, &rImage, nullptr, nullptr, false, nullptr);
     }
-    void append(const weld::TreeIter* pParent, const OUString& rStr)
+    void append(const TreeIter* pParent, const OUString& rStr)
     {
         insert(pParent, -1, &rStr, nullptr, nullptr, nullptr, nullptr, false, nullptr);
     }
@@ -606,10 +606,14 @@ public:
 
     void connect_changed(const Link<TreeView&, void>& rLink) { m_aChangeHdl = rLink; }
     void connect_row_activated(const Link<TreeView&, void>& rLink) { m_aRowActivatedHdl = rLink; }
+
+    // Argument is a pair of row, col describing the node in non-tree mode.
+    // If in tree mode, then retrieve the toggled node with get_cursor
     void connect_toggled(const Link<const std::pair<int, int>&, void>& rLink)
     {
         m_aRadioToggleHdl = rLink;
     }
+
     void connect_column_clicked(const Link<int, void>& rLink) { m_aColumnClickedHdl = rLink; }
     void connect_model_changed(const Link<TreeView&, void>& rLink) { m_aModelChangedHdl = rLink; }
 
@@ -625,8 +629,8 @@ public:
     virtual void set_text(int row, const OUString& rText, int col = -1) = 0;
     virtual void set_sensitive(int row, bool bSensitive, int col = -1) = 0;
     virtual void set_id(int row, const OUString& rId) = 0;
-    virtual void set_toggle(int row, bool bOn, int col) = 0;
-    virtual bool get_toggle(int row, int col) const = 0;
+    virtual void set_toggle(int row, TriState eState, int col) = 0;
+    virtual TriState get_toggle(int row, int col) const = 0;
     virtual void set_image(int row, const OUString& rImage, int col = -1) = 0;
     virtual void set_image(int row, VirtualDevice& rImage, int col = -1) = 0;
     virtual void set_image(int row, const css::uno::Reference<css::graphic::XGraphic>& rImage,
@@ -694,7 +698,11 @@ public:
     virtual void expand_row(const TreeIter& rIter) = 0;
     virtual void collapse_row(const TreeIter& rIter) = 0;
     virtual void set_text(const TreeIter& rIter, const OUString& rStr, int col = -1) = 0;
-    virtual void set_image(const weld::TreeIter& rIter, const OUString& rImage, int col = -1) = 0;
+    virtual void set_image(const TreeIter& rIter, const OUString& rImage, int col = -1) = 0;
+    virtual void set_text_emphasis(const TreeIter& rIter, bool bOn, int col) = 0;
+    virtual bool get_text_emphasis(const TreeIter& rIter, int col) const = 0;
+    virtual void set_toggle(const TreeIter& rIter, TriState bOn, int col) = 0;
+    virtual TriState get_toggle(const TreeIter& rIter, int col) const = 0;
     virtual OUString get_text(const TreeIter& rIter, int col = -1) const = 0;
     virtual void set_id(const TreeIter& rIter, const OUString& rId) = 0;
     virtual OUString get_id(const TreeIter& rIter) const = 0;
@@ -704,8 +712,7 @@ public:
     virtual void scroll_to_row(const TreeIter& rIter) = 0;
     virtual bool is_selected(const TreeIter& rIter) const = 0;
 
-    virtual void move_subtree(weld::TreeIter& rNode, const weld::TreeIter* pNewParent,
-                              int nIndexInNewParent)
+    virtual void move_subtree(TreeIter& rNode, const TreeIter* pNewParent, int nIndexInNewParent)
         = 0;
 
     //calling func on each selected element until func returns true or we run out of elements

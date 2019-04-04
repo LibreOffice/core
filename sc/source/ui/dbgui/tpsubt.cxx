@@ -101,7 +101,7 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
     // first we have to clear the listboxes...
     for (int nLbEntry = 0, nCount = mxLbColumns->n_children(); nLbEntry < nCount; ++nLbEntry)
     {
-        mxLbColumns->set_toggle(nLbEntry, false, 0);
+        mxLbColumns->set_toggle(nLbEntry, TRISTATE_FALSE, 0);
         mxLbColumns->set_id(nLbEntry, "0");
     }
     mxLbFunctions->select(0);
@@ -124,7 +124,7 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
         {
             sal_uInt16  nCheckPos = GetFieldSelPos( pSubTotals[i] );
 
-            mxLbColumns->set_toggle(nCheckPos, true, 0);
+            mxLbColumns->set_toggle(nCheckPos, TRISTATE_TRUE, 0);
             mxLbColumns->set_id(nCheckPos, OUString::number(FuncToLbPos(pFunctions[i])));
 
             if (i == 0 || nCheckPos < nFirstChecked)
@@ -150,7 +150,7 @@ namespace
         int nRet = 0;
         for (sal_Int32 i=0, nEntryCount = rTreeView.n_children(); i < nEntryCount; ++i)
         {
-            if (rTreeView.get_toggle(i, 0))
+            if (rTreeView.get_toggle(i, 0) == TRISTATE_TRUE)
                 ++nRet;
         }
         return nRet;
@@ -210,7 +210,7 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
 
         for ( sal_Int32 i=0, nCheck=0; i<nEntryCount; i++ )
         {
-            if (mxLbColumns->get_toggle(i, 0))
+            if (mxLbColumns->get_toggle(i, 0) == TRISTATE_TRUE)
             {
                 OSL_ENSURE( nCheck <= nCheckCount,
                             "Range error :-(" );
@@ -260,7 +260,7 @@ void ScTpSubTotalGroup::FillListBoxes()
             nFieldArr[i] = col;
             mxLbGroup->insert_text(i+1, aFieldName);
             mxLbColumns->insert(i);
-            mxLbColumns->set_toggle(i, false, 0);
+            mxLbColumns->set_toggle(i, TRISTATE_FALSE, 0);
             mxLbColumns->set_text(i, aFieldName, 1);
             mxLbColumns->set_id(i, "0");
             i++;
@@ -358,7 +358,7 @@ void ScTpSubTotalGroup::SelectHdl(const weld::Widget *pLb)
         else if ( pLb == mxLbFunctions.get() )
         {
             mxLbColumns->set_id(nColumn, OUString::number(nFunction));
-            mxLbColumns->set_toggle(nColumn, true, 0);
+            mxLbColumns->set_toggle(nColumn, TRISTATE_TRUE, 0);
         }
     }
 }

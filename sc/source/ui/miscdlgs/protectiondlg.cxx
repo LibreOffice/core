@@ -73,7 +73,7 @@ ScTableProtectionDlg::~ScTableProtectionDlg()
 void ScTableProtectionDlg::SetDialogData(const ScTableProtection& rData)
 {
     for (size_t i = 0; i < aOptions.size(); ++i)
-        m_xOptionsListBox->set_toggle(i, rData.isOptionEnabled(aOptions[i]), 0);
+        m_xOptionsListBox->set_toggle(i, rData.isOptionEnabled(aOptions[i]) ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
 }
 
 void ScTableProtectionDlg::WriteData(ScTableProtection& rData) const
@@ -84,14 +84,14 @@ void ScTableProtectionDlg::WriteData(ScTableProtection& rData) const
     rData.setPassword(m_xPassword1Edit->get_text());
 
     for (size_t i = 0; i < aOptions.size(); ++i)
-        rData.setOption(aOptions[i], m_xOptionsListBox->get_toggle(i, 0));
+        rData.setOption(aOptions[i], m_xOptionsListBox->get_toggle(i, 0) == TRISTATE_TRUE);
 }
 
 void ScTableProtectionDlg::InsertEntry(const OUString& rTxt)
 {
     m_xOptionsListBox->append();
     const int nRow = m_xOptionsListBox->n_children() - 1;
-    m_xOptionsListBox->set_toggle(nRow, false, 0);
+    m_xOptionsListBox->set_toggle(nRow, TRISTATE_FALSE, 0);
     m_xOptionsListBox->set_text(nRow, rTxt, 1);
 }
 
@@ -115,8 +115,8 @@ void ScTableProtectionDlg::Init()
     InsertEntry(m_aDeleteColumns);
     InsertEntry(m_aDeleteRows);
 
-    m_xOptionsListBox->set_toggle(0, true, 0);
-    m_xOptionsListBox->set_toggle(1, true, 0);
+    m_xOptionsListBox->set_toggle(0, TRISTATE_TRUE, 0);
+    m_xOptionsListBox->set_toggle(1, TRISTATE_TRUE, 0);
 
     m_xOptionsListBox->thaw();
 

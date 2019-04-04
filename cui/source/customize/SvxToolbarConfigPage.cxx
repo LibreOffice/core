@@ -605,7 +605,7 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
 
                     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
                     m_xContentsListBox->insert(nActEntry, sId);
-                    m_xContentsListBox->set_toggle(nActEntry, pEntry->IsVisible(), 0);
+                    m_xContentsListBox->set_toggle(nActEntry, pEntry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
                     InsertEntryIntoUI(pEntry, nActEntry, 1);
 
                     m_xContentsListBox->select(nActEntry);
@@ -645,7 +645,7 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
 
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
             m_xContentsListBox->insert(nActEntry, sId);
-            m_xContentsListBox->set_toggle(nActEntry, pEntry->IsVisible(), 0);
+            m_xContentsListBox->set_toggle(nActEntry, pEntry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
             InsertEntryIntoUI(pEntry, nActEntry, 1);
 
             m_xContentsListBox->select(nActEntry);
@@ -702,7 +702,7 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
             m_xContentsListBox->insert(nActEntry, sId);
             m_xContentsListBox->set_toggle(nActEntry,
-                pEntry->IsVisible(), 0);
+                pEntry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
             InsertEntryIntoUI(pEntry, nActEntry, 1);
 
             m_xContentsListBox->select(nActEntry);
@@ -834,7 +834,7 @@ void SvxToolbarConfigPage::SelectElement()
         OUString sId(OUString::number(reinterpret_cast<sal_Int64>(entry)));
         m_xContentsListBox->insert(i, sId);
         if (entry->IsBinding() && !entry->IsSeparator())
-            m_xContentsListBox->set_toggle(i,  entry->IsVisible(), 0);
+            m_xContentsListBox->set_toggle(i,  entry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
         InsertEntryIntoUI(entry, i, 1);
         ++i;
     }
@@ -861,7 +861,7 @@ void SvxToolbarConfigPage::AddFunction(int nTarget, bool bFront)
     if ( pEntry->IsBinding() ) //TODO sep ?
     {
         pEntry->SetVisible(true);
-        m_xContentsListBox->set_toggle(nNewLBEntry, true, 0);
+        m_xContentsListBox->set_toggle(nNewLBEntry, TRISTATE_TRUE, 0);
     }
 
     InsertEntryIntoUI(pEntry, nNewLBEntry, 1);
@@ -895,7 +895,7 @@ void SvxToolbarEntriesListBox::ChangedVisibility(int nRow)
 
     if (pEntryData->IsBinding())
     {
-        pEntryData->SetVisible(m_xControl->get_toggle(nRow, 0));
+        pEntryData->SetVisible(m_xControl->get_toggle(nRow, 0) == TRISTATE_TRUE);
 
         SvxConfigEntry* pToolbar = pPage->GetTopLevelSelection();
 
@@ -920,7 +920,7 @@ IMPL_LINK(SvxToolbarEntriesListBox, KeyInputHdl, const KeyEvent&, rKeyEvent, boo
         SvxConfigEntry* pEntryData = reinterpret_cast<SvxConfigEntry*>(m_xControl->get_id(nRow).toInt64());
         if (pEntryData->IsBinding() && !pEntryData->IsSeparator())
         {
-            m_xControl->set_toggle(nRow, !m_xControl->get_toggle(nRow, 0), 0);
+            m_xControl->set_toggle(nRow, m_xControl->get_toggle(nRow, 0) == TRISTATE_TRUE ? TRISTATE_FALSE : TRISTATE_TRUE, 0);
             ChangedVisibility(nRow);
         }
         return true;

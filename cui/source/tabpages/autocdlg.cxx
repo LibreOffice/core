@@ -216,14 +216,14 @@ bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet* )
     ACFlags nFlags = pAutoCorrect->GetFlags();
 
     int nPos = 0;
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::Autocorrect,          m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartWord,     m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartSentence, m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgWeightUnderl,      m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::SetINetAttr,          m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgToEnEmDash,        m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::IgnoreDoubleSpace,    m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::CorrectCapsLock,      m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::Autocorrect,          m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartWord,     m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartSentence, m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgWeightUnderl,      m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::SetINetAttr,          m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgToEnEmDash,        m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::IgnoreDoubleSpace,    m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::CorrectCapsLock,      m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
 
     bool bReturn = nFlags != pAutoCorrect->GetFlags();
     if(bReturn )
@@ -244,7 +244,7 @@ void OfaAutocorrOptionsPage::InsertEntry(const OUString& rTxt)
 {
     m_xCheckLB->append();
     const int nRow = m_xCheckLB->n_children() - 1;
-    m_xCheckLB->set_toggle(nRow, false, CBCOL_FIRST);
+    m_xCheckLB->set_toggle(nRow, TRISTATE_FALSE, CBCOL_FIRST);
     m_xCheckLB->set_text(nRow, rTxt, 1);
 }
 
@@ -266,14 +266,14 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet* )
     InsertEntry(m_sAccidentalCaps);
 
     int nPos = 0;
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::Autocorrect), CBCOL_FIRST );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CapitalStartWord), CBCOL_FIRST );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CapitalStartSentence), CBCOL_FIRST );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::ChgWeightUnderl), CBCOL_FIRST );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::SetINetAttr), CBCOL_FIRST );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::ChgToEnEmDash), CBCOL_FIRST );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::IgnoreDoubleSpace), CBCOL_FIRST );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CorrectCapsLock), CBCOL_FIRST );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::Autocorrect) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CapitalStartWord) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CapitalStartSentence) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::ChgWeightUnderl) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::SetINetAttr) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::ChgToEnEmDash) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::IgnoreDoubleSpace) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CorrectCapsLock) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST );
 
     m_xCheckLB->thaw();
 }
@@ -385,9 +385,9 @@ void OfaSwAutoFmtOptionsPage::CreateEntry(const OUString& rTxt, sal_uInt16 nCol)
     m_xCheckLB->append();
     const int nRow = m_xCheckLB->n_children() - 1;
     if (nCol == CBCOL_FIRST || nCol == CBCOL_BOTH)
-        m_xCheckLB->set_toggle(nRow, false, CBCOL_FIRST);
+        m_xCheckLB->set_toggle(nRow, TRISTATE_FALSE, CBCOL_FIRST);
     if (nCol == CBCOL_SECOND || nCol == CBCOL_BOTH)
-        m_xCheckLB->set_toggle(nRow, false, CBCOL_SECOND);
+        m_xCheckLB->set_toggle(nRow, TRISTATE_FALSE, CBCOL_SECOND);
     m_xCheckLB->set_text(nRow, rTxt, 2);
 }
 
@@ -409,51 +409,51 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
     SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
     ACFlags nFlags = pAutoCorrect->GetFlags();
 
-    bool bCheck = m_xCheckLB->get_toggle(USE_REPLACE_TABLE, CBCOL_FIRST);
+    bool bCheck = m_xCheckLB->get_toggle(USE_REPLACE_TABLE, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bAutoCorrect != bCheck;
     pOpt->bAutoCorrect = bCheck;
     pAutoCorrect->SetAutoCorrFlag(ACFlags::Autocorrect,
-                        m_xCheckLB->get_toggle(USE_REPLACE_TABLE, CBCOL_SECOND));
+                        m_xCheckLB->get_toggle(USE_REPLACE_TABLE, CBCOL_SECOND) == TRISTATE_TRUE);
 
-    bCheck = m_xCheckLB->get_toggle(CORR_UPPER, CBCOL_FIRST);
+    bCheck = m_xCheckLB->get_toggle(CORR_UPPER, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bCapitalStartWord != bCheck;
     pOpt->bCapitalStartWord = bCheck;
     pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartWord,
-                        m_xCheckLB->get_toggle(CORR_UPPER, CBCOL_SECOND));
+                        m_xCheckLB->get_toggle(CORR_UPPER, CBCOL_SECOND) == TRISTATE_TRUE);
 
-    bCheck = m_xCheckLB->get_toggle(BEGIN_UPPER, CBCOL_FIRST);
+    bCheck = m_xCheckLB->get_toggle(BEGIN_UPPER, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bCapitalStartSentence != bCheck;
     pOpt->bCapitalStartSentence = bCheck;
     pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartSentence,
-                        m_xCheckLB->get_toggle(BEGIN_UPPER, CBCOL_SECOND));
+                        m_xCheckLB->get_toggle(BEGIN_UPPER, CBCOL_SECOND) == TRISTATE_TRUE);
 
-    bCheck = m_xCheckLB->get_toggle(BOLD_UNDERLINE, CBCOL_FIRST);
+    bCheck = m_xCheckLB->get_toggle(BOLD_UNDERLINE, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bChgWeightUnderl != bCheck;
     pOpt->bChgWeightUnderl = bCheck;
     pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgWeightUnderl,
-                        m_xCheckLB->get_toggle(BOLD_UNDERLINE, CBCOL_SECOND));
+                        m_xCheckLB->get_toggle(BOLD_UNDERLINE, CBCOL_SECOND) == TRISTATE_TRUE);
 
     pAutoCorrect->SetAutoCorrFlag(ACFlags::IgnoreDoubleSpace,
-                        m_xCheckLB->get_toggle(IGNORE_DBLSPACE, CBCOL_SECOND));
+                        m_xCheckLB->get_toggle(IGNORE_DBLSPACE, CBCOL_SECOND) == TRISTATE_TRUE);
 
     pAutoCorrect->SetAutoCorrFlag(ACFlags::CorrectCapsLock,
-                        m_xCheckLB->get_toggle(CORRECT_CAPS_LOCK, CBCOL_SECOND));
+                        m_xCheckLB->get_toggle(CORRECT_CAPS_LOCK, CBCOL_SECOND) == TRISTATE_TRUE);
 
-    bCheck = m_xCheckLB->get_toggle(DETECT_URL, CBCOL_FIRST);
+    bCheck = m_xCheckLB->get_toggle(DETECT_URL, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bSetINetAttr != bCheck;
     pOpt->bSetINetAttr = bCheck;
     pAutoCorrect->SetAutoCorrFlag(ACFlags::SetINetAttr,
-                        m_xCheckLB->get_toggle(DETECT_URL, CBCOL_SECOND));
+                        m_xCheckLB->get_toggle(DETECT_URL, CBCOL_SECOND) == TRISTATE_TRUE);
 
-    bCheck = m_xCheckLB->get_toggle(DEL_EMPTY_NODE, CBCOL_FIRST);
+    bCheck = m_xCheckLB->get_toggle(DEL_EMPTY_NODE, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bDelEmptyNode != bCheck;
     pOpt->bDelEmptyNode = bCheck;
 
-    bCheck = m_xCheckLB->get_toggle(REPLACE_USER_COLL, CBCOL_FIRST);
+    bCheck = m_xCheckLB->get_toggle(REPLACE_USER_COLL, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bChgUserColl != bCheck;
     pOpt->bChgUserColl = bCheck;
 
-    bCheck = m_xCheckLB->get_toggle(REPLACE_BULLETS, CBCOL_FIRST);
+    bCheck = m_xCheckLB->get_toggle(REPLACE_BULLETS, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bChgEnumNum != bCheck;
     pOpt->bChgEnumNum = bCheck;
     bModified |= aBulletFont != pOpt->aBulletFont;
@@ -466,45 +466,45 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
     pOpt->aByInputBulletFont = aByInputBulletFont;
     pOpt->cByInputBullet = sByInputBulletChar[0];
 
-    bCheck = m_xCheckLB->get_toggle(MERGE_SINGLE_LINE_PARA, CBCOL_FIRST);
+    bCheck = m_xCheckLB->get_toggle(MERGE_SINGLE_LINE_PARA, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bRightMargin != bCheck;
     pOpt->bRightMargin = bCheck;
     bModified |= nPercent != pOpt->nRightMargin;
     pOpt->nRightMargin = static_cast<sal_uInt8>(nPercent);
 
-    bCheck = m_xCheckLB->get_toggle(APPLY_NUMBERING, CBCOL_SECOND);
+    bCheck = m_xCheckLB->get_toggle(APPLY_NUMBERING, CBCOL_SECOND) == TRISTATE_TRUE;
     bModified |= pOpt->bSetNumRule != bCheck;
     pOpt->bSetNumRule = bCheck;
 
-    bCheck = m_xCheckLB->get_toggle(INSERT_BORDER, CBCOL_SECOND);
+    bCheck = m_xCheckLB->get_toggle(INSERT_BORDER, CBCOL_SECOND) == TRISTATE_TRUE;
     bModified |= pOpt->bSetBorder != bCheck;
     pOpt->bSetBorder = bCheck;
 
-    bCheck = m_xCheckLB->get_toggle(CREATE_TABLE, CBCOL_SECOND);
+    bCheck = m_xCheckLB->get_toggle(CREATE_TABLE, CBCOL_SECOND) == TRISTATE_TRUE;
     bModified |= pOpt->bCreateTable != bCheck;
     pOpt->bCreateTable = bCheck;
 
-    bCheck = m_xCheckLB->get_toggle(REPLACE_STYLES, CBCOL_SECOND);
+    bCheck = m_xCheckLB->get_toggle(REPLACE_STYLES, CBCOL_SECOND) == TRISTATE_TRUE;
     bModified |= pOpt->bReplaceStyles != bCheck;
     pOpt->bReplaceStyles = bCheck;
 
-    bCheck = m_xCheckLB->get_toggle(REPLACE_DASHES, CBCOL_FIRST);
+    bCheck = m_xCheckLB->get_toggle(REPLACE_DASHES, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bChgToEnEmDash != bCheck;
     pOpt->bChgToEnEmDash = bCheck;
     pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgToEnEmDash,
-                        m_xCheckLB->get_toggle(REPLACE_DASHES, CBCOL_SECOND));
+                        m_xCheckLB->get_toggle(REPLACE_DASHES, CBCOL_SECOND) == TRISTATE_TRUE);
 
-    bCheck = m_xCheckLB->get_toggle(DEL_SPACES_AT_STT_END, CBCOL_FIRST);
+    bCheck = m_xCheckLB->get_toggle(DEL_SPACES_AT_STT_END, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bAFormatDelSpacesAtSttEnd != bCheck;
     pOpt->bAFormatDelSpacesAtSttEnd = bCheck;
-    bCheck = m_xCheckLB->get_toggle(DEL_SPACES_AT_STT_END, CBCOL_SECOND);
+    bCheck = m_xCheckLB->get_toggle(DEL_SPACES_AT_STT_END, CBCOL_SECOND) == TRISTATE_TRUE;
     bModified |= pOpt->bAFormatByInpDelSpacesAtSttEnd != bCheck;
     pOpt->bAFormatByInpDelSpacesAtSttEnd = bCheck;
 
-    bCheck = m_xCheckLB->get_toggle(DEL_SPACES_BETWEEN_LINES, CBCOL_FIRST);
+    bCheck = m_xCheckLB->get_toggle(DEL_SPACES_BETWEEN_LINES, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bAFormatDelSpacesBetweenLines != bCheck;
     pOpt->bAFormatDelSpacesBetweenLines = bCheck;
-    bCheck = m_xCheckLB->get_toggle(DEL_SPACES_BETWEEN_LINES, CBCOL_SECOND);
+    bCheck = m_xCheckLB->get_toggle(DEL_SPACES_BETWEEN_LINES, CBCOL_SECOND) == TRISTATE_TRUE;
     bModified |= pOpt->bAFormatByInpDelSpacesBetweenLines != bCheck;
     pOpt->bAFormatByInpDelSpacesBetweenLines = bCheck;
 
@@ -563,32 +563,32 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
     CreateEntry(sBullet.replaceFirst("%1", sByInputBulletChar), CBCOL_FIRST);
     CreateEntry(sRightMargin.replaceFirst("%1", sMargin), CBCOL_FIRST);
 
-    m_xCheckLB->set_toggle(USE_REPLACE_TABLE, pOpt->bAutoCorrect, CBCOL_FIRST);
-    m_xCheckLB->set_toggle(USE_REPLACE_TABLE, bool(nFlags & ACFlags::Autocorrect), CBCOL_SECOND);
-    m_xCheckLB->set_toggle(CORR_UPPER, pOpt->bCapitalStartWord, CBCOL_FIRST);
-    m_xCheckLB->set_toggle(CORR_UPPER, bool(nFlags & ACFlags::CapitalStartWord), CBCOL_SECOND);
-    m_xCheckLB->set_toggle(BEGIN_UPPER, pOpt->bCapitalStartSentence, CBCOL_FIRST);
-    m_xCheckLB->set_toggle(BEGIN_UPPER, bool(nFlags & ACFlags::CapitalStartSentence), CBCOL_SECOND);
-    m_xCheckLB->set_toggle(BOLD_UNDERLINE, pOpt->bChgWeightUnderl, CBCOL_FIRST);
-    m_xCheckLB->set_toggle(BOLD_UNDERLINE, bool(nFlags & ACFlags::ChgWeightUnderl), CBCOL_SECOND);
-    m_xCheckLB->set_toggle(DETECT_URL, pOpt->bSetINetAttr, CBCOL_FIRST);
-    m_xCheckLB->set_toggle(DETECT_URL, bool(nFlags & ACFlags::SetINetAttr), CBCOL_SECOND);
-    m_xCheckLB->set_toggle(REPLACE_DASHES, pOpt->bChgToEnEmDash, CBCOL_FIRST);
-    m_xCheckLB->set_toggle(REPLACE_DASHES, bool(nFlags & ACFlags::ChgToEnEmDash), CBCOL_SECOND);
-    m_xCheckLB->set_toggle(DEL_SPACES_AT_STT_END, pOpt->bAFormatDelSpacesAtSttEnd, CBCOL_FIRST);
-    m_xCheckLB->set_toggle(DEL_SPACES_AT_STT_END, pOpt->bAFormatByInpDelSpacesAtSttEnd, CBCOL_SECOND);
-    m_xCheckLB->set_toggle(DEL_SPACES_BETWEEN_LINES, pOpt->bAFormatDelSpacesBetweenLines, CBCOL_FIRST);
-    m_xCheckLB->set_toggle(DEL_SPACES_BETWEEN_LINES, pOpt->bAFormatByInpDelSpacesBetweenLines, CBCOL_SECOND);
-    m_xCheckLB->set_toggle(IGNORE_DBLSPACE, bool(nFlags & ACFlags::IgnoreDoubleSpace), CBCOL_SECOND);
-    m_xCheckLB->set_toggle(CORRECT_CAPS_LOCK, bool(nFlags & ACFlags::CorrectCapsLock), CBCOL_SECOND);
-    m_xCheckLB->set_toggle(APPLY_NUMBERING, pOpt->bSetNumRule, CBCOL_SECOND);
-    m_xCheckLB->set_toggle(INSERT_BORDER, pOpt->bSetBorder, CBCOL_SECOND);
-    m_xCheckLB->set_toggle(CREATE_TABLE, pOpt->bCreateTable, CBCOL_SECOND);
-    m_xCheckLB->set_toggle(REPLACE_STYLES, pOpt->bReplaceStyles, CBCOL_SECOND);
-    m_xCheckLB->set_toggle(DEL_EMPTY_NODE, pOpt->bDelEmptyNode, CBCOL_FIRST);
-    m_xCheckLB->set_toggle(REPLACE_USER_COLL, pOpt->bChgUserColl, CBCOL_FIRST);
-    m_xCheckLB->set_toggle(REPLACE_BULLETS, pOpt->bChgEnumNum, CBCOL_FIRST);
-    m_xCheckLB->set_toggle(MERGE_SINGLE_LINE_PARA, pOpt->bRightMargin, CBCOL_FIRST);
+    m_xCheckLB->set_toggle(USE_REPLACE_TABLE, pOpt->bAutoCorrect ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+    m_xCheckLB->set_toggle(USE_REPLACE_TABLE, bool(nFlags & ACFlags::Autocorrect) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+    m_xCheckLB->set_toggle(CORR_UPPER, pOpt->bCapitalStartWord ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+    m_xCheckLB->set_toggle(CORR_UPPER, bool(nFlags & ACFlags::CapitalStartWord) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+    m_xCheckLB->set_toggle(BEGIN_UPPER, pOpt->bCapitalStartSentence ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+    m_xCheckLB->set_toggle(BEGIN_UPPER, bool(nFlags & ACFlags::CapitalStartSentence) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+    m_xCheckLB->set_toggle(BOLD_UNDERLINE, pOpt->bChgWeightUnderl ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+    m_xCheckLB->set_toggle(BOLD_UNDERLINE, bool(nFlags & ACFlags::ChgWeightUnderl) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+    m_xCheckLB->set_toggle(DETECT_URL, pOpt->bSetINetAttr ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+    m_xCheckLB->set_toggle(DETECT_URL, bool(nFlags & ACFlags::SetINetAttr) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+    m_xCheckLB->set_toggle(REPLACE_DASHES, pOpt->bChgToEnEmDash ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+    m_xCheckLB->set_toggle(REPLACE_DASHES, bool(nFlags & ACFlags::ChgToEnEmDash) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+    m_xCheckLB->set_toggle(DEL_SPACES_AT_STT_END, pOpt->bAFormatDelSpacesAtSttEnd ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+    m_xCheckLB->set_toggle(DEL_SPACES_AT_STT_END, pOpt->bAFormatByInpDelSpacesAtSttEnd ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+    m_xCheckLB->set_toggle(DEL_SPACES_BETWEEN_LINES, pOpt->bAFormatDelSpacesBetweenLines ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+    m_xCheckLB->set_toggle(DEL_SPACES_BETWEEN_LINES, pOpt->bAFormatByInpDelSpacesBetweenLines ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+    m_xCheckLB->set_toggle(IGNORE_DBLSPACE, bool(nFlags & ACFlags::IgnoreDoubleSpace) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+    m_xCheckLB->set_toggle(CORRECT_CAPS_LOCK, bool(nFlags & ACFlags::CorrectCapsLock) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+    m_xCheckLB->set_toggle(APPLY_NUMBERING, pOpt->bSetNumRule ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+    m_xCheckLB->set_toggle(INSERT_BORDER, pOpt->bSetBorder ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+    m_xCheckLB->set_toggle(CREATE_TABLE, pOpt->bCreateTable ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+    m_xCheckLB->set_toggle(REPLACE_STYLES, pOpt->bReplaceStyles ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+    m_xCheckLB->set_toggle(DEL_EMPTY_NODE, pOpt->bDelEmptyNode ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+    m_xCheckLB->set_toggle(REPLACE_USER_COLL, pOpt->bChgUserColl ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+    m_xCheckLB->set_toggle(REPLACE_BULLETS, pOpt->bChgEnumNum ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+    m_xCheckLB->set_toggle(MERGE_SINGLE_LINE_PARA, pOpt->bRightMargin ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
 
     ImpUserData* pUserData = new ImpUserData(&sBulletChar, &aBulletFont);
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pUserData)));
@@ -1532,9 +1532,9 @@ void OfaQuoteTabPage::CreateEntry(weld::TreeView& rCheckLB, const OUString& rTxt
     rCheckLB.append();
     const int nRow = rCheckLB.n_children() - 1;
     if (nCol == CBCOL_FIRST || nCol == CBCOL_BOTH)
-        rCheckLB.set_toggle(nRow, false, CBCOL_FIRST);
+        rCheckLB.set_toggle(nRow, TRISTATE_FALSE, CBCOL_FIRST);
     if (nCol == CBCOL_SECOND || nCol == CBCOL_BOTH)
-        rCheckLB.set_toggle(nRow, false, CBCOL_SECOND);
+        rCheckLB.set_toggle(nRow, TRISTATE_FALSE, CBCOL_SECOND);
     rCheckLB.set_text(nRow, rTxt, nTextCol);
 }
 
@@ -1615,8 +1615,8 @@ bool OfaQuoteTabPage::FillItemSet( SfxItemSet*  )
     if (m_xCheckLB->get_visible())
     {
         int nPos = 0;
-        pAutoCorrect->SetAutoCorrFlag(ACFlags::AddNonBrkSpace, m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
-        pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgOrdinalNumber, m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
+        pAutoCorrect->SetAutoCorrFlag(ACFlags::AddNonBrkSpace, m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
+        pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgOrdinalNumber, m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
     }
 
     bool bModified = false;
@@ -1624,17 +1624,17 @@ bool OfaQuoteTabPage::FillItemSet( SfxItemSet*  )
     {
         SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
 
-        bool bCheck = m_xSwCheckLB->get_toggle(ADD_NONBRK_SPACE, CBCOL_FIRST);
+        bool bCheck = m_xSwCheckLB->get_toggle(ADD_NONBRK_SPACE, CBCOL_FIRST) == TRISTATE_TRUE;
         bModified |= pOpt->bAddNonBrkSpace != bCheck;
         pOpt->bAddNonBrkSpace = bCheck;
         pAutoCorrect->SetAutoCorrFlag(ACFlags::AddNonBrkSpace,
-                            m_xSwCheckLB->get_toggle(ADD_NONBRK_SPACE, CBCOL_SECOND));
+                            m_xSwCheckLB->get_toggle(ADD_NONBRK_SPACE, CBCOL_SECOND) == TRISTATE_TRUE);
 
-        bCheck = m_xSwCheckLB->get_toggle(REPLACE_1ST, CBCOL_FIRST);
+        bCheck = m_xSwCheckLB->get_toggle(REPLACE_1ST, CBCOL_FIRST) == TRISTATE_TRUE;
         bModified |= pOpt->bChgOrdinalNumber != bCheck;
         pOpt->bChgOrdinalNumber = bCheck;
         pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgOrdinalNumber,
-                        m_xSwCheckLB->get_toggle(REPLACE_1ST, CBCOL_SECOND));
+                        m_xSwCheckLB->get_toggle(REPLACE_1ST, CBCOL_SECOND) == TRISTATE_TRUE);
     }
 
     pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgQuotes, m_xDoubleTypoCB->get_active());
@@ -1695,10 +1695,10 @@ void OfaQuoteTabPage::Reset( const SfxItemSet* )
         CreateEntry(*m_xSwCheckLB, sNonBrkSpace, CBCOL_BOTH, 2);
         CreateEntry(*m_xSwCheckLB, sOrdinal, CBCOL_BOTH, 2);
 
-        m_xSwCheckLB->set_toggle(ADD_NONBRK_SPACE, pOpt->bAddNonBrkSpace, CBCOL_FIRST);
-        m_xSwCheckLB->set_toggle(ADD_NONBRK_SPACE, bool(nFlags & ACFlags::AddNonBrkSpace), CBCOL_SECOND);
-        m_xSwCheckLB->set_toggle(REPLACE_1ST, pOpt->bChgOrdinalNumber, CBCOL_FIRST);
-        m_xSwCheckLB->set_toggle(REPLACE_1ST, bool(nFlags & ACFlags::ChgOrdinalNumber), CBCOL_SECOND);
+        m_xSwCheckLB->set_toggle(ADD_NONBRK_SPACE, pOpt->bAddNonBrkSpace ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+        m_xSwCheckLB->set_toggle(ADD_NONBRK_SPACE, bool(nFlags & ACFlags::AddNonBrkSpace) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+        m_xSwCheckLB->set_toggle(REPLACE_1ST, pOpt->bChgOrdinalNumber ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+        m_xSwCheckLB->set_toggle(REPLACE_1ST, bool(nFlags & ACFlags::ChgOrdinalNumber) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
 
         m_xSwCheckLB->thaw();
     }
@@ -1713,8 +1713,8 @@ void OfaQuoteTabPage::Reset( const SfxItemSet* )
         CreateEntry(*m_xCheckLB, sOrdinal, CBCOL_FIRST, 1);
 
         int nPos = 0;
-        m_xCheckLB->set_toggle(nPos++, bool(nFlags & ACFlags::AddNonBrkSpace), CBCOL_FIRST);
-        m_xCheckLB->set_toggle(nPos++, bool(nFlags & ACFlags::ChgOrdinalNumber), CBCOL_FIRST);
+        m_xCheckLB->set_toggle(nPos++, bool(nFlags & ACFlags::AddNonBrkSpace) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+        m_xCheckLB->set_toggle(nPos++, bool(nFlags & ACFlags::ChgOrdinalNumber) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
 
         m_xCheckLB->thaw();
     }
@@ -2208,7 +2208,7 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
             m_xSmartTagTypesLB->append();
             const int nRow = m_xSmartTagTypesLB->n_children() - 1;
             const bool bCheck = rSmartTagMgr.IsSmartTagTypeEnabled( aSmartTagType );
-            m_xSmartTagTypesLB->set_toggle(nRow, bCheck, CBCOL_FIRST);
+            m_xSmartTagTypesLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
             m_xSmartTagTypesLB->set_text(nRow, aLBEntry, 1);
             m_xSmartTagTypesLB->set_id(nRow, OUString::number(reinterpret_cast<sal_Int64>(new ImplSmartTagLBUserData(aSmartTagType, xRec, j))));
         }
@@ -2283,7 +2283,7 @@ bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet* )
     for (int i = 0; i < nCount; ++i)
     {
         const ImplSmartTagLBUserData* pUserData = reinterpret_cast<ImplSmartTagLBUserData*>(m_xSmartTagTypesLB->get_id(i).toInt64());
-        const bool bChecked = m_xSmartTagTypesLB->get_toggle(i, CBCOL_FIRST);
+        const bool bChecked = m_xSmartTagTypesLB->get_toggle(i, CBCOL_FIRST) == TRISTATE_TRUE;
         const bool bIsCurrentlyEnabled = pSmartTagMgr->IsSmartTagTypeEnabled( pUserData->maSmartTagType );
 
         bModifiedSmartTagTypes = bModifiedSmartTagTypes || ( !bChecked != !bIsCurrentlyEnabled );
