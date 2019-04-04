@@ -782,7 +782,7 @@ namespace svx
 
             DBG_ASSERT( xDict.is(), "-HangulHanjaOptionsDialog::OkHdl(): someone is evaporated..." );
 
-            bool bActive = m_xDictsLB->get_toggle(n, 0);
+            bool bActive = m_xDictsLB->get_toggle(n, 0) == TRISTATE_TRUE;
             xDict->setActive( bActive );
             Reference< util::XFlushable > xFlush( xDict, uno::UNO_QUERY );
             if( xFlush.is() )
@@ -948,7 +948,7 @@ namespace svx
     {
         m_xDictsLB->append();
         int nRow = m_xDictsLB->n_children() - 1;
-        m_xDictsLB->set_toggle(nRow, bChecked, 0);
+        m_xDictsLB->set_toggle(nRow, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
         m_xDictsLB->set_text(nRow, rName, 1);
         m_xDictsLB->set_id(nRow, rName);
     }

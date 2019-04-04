@@ -35,9 +35,6 @@ namespace dbaui
             :public OGenericAdministrationPage
     {
     private:
-        VclPtr<VclContainer>           m_pTables;
-        VclPtr<OTableTreeListBox>      m_pTablesList;
-
         OUString                       m_sCatalogSeparator;
         bool                           m_bCatalogAtStart : 1;
 
@@ -47,15 +44,15 @@ namespace dbaui
                                        m_xCollator;
         VclPtr<OTableSubscriptionDialog> m_pTablesDlg;
 
+        std::unique_ptr<weld::Widget>  m_xTables;
+        std::unique_ptr<TableTreeListBox> m_xTablesList;
+
     public:
         virtual bool            FillItemSet(SfxItemSet* _rCoreAttrs) override;
         virtual DeactivateRC    DeactivatePage(SfxItemSet* _pSet) override;
         using OGenericAdministrationPage::DeactivatePage;
 
-        virtual void            StateChanged( StateChangedType nStateChange ) override;
-        virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-        OTableSubscriptionPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs ,OTableSubscriptionDialog* _pTablesDlg);
+        OTableSubscriptionPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs ,OTableSubscriptionDialog* _pTablesDlg);
         virtual ~OTableSubscriptionPage() override;
         virtual void dispose() override;
 
@@ -63,16 +60,15 @@ namespace dbaui
         virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
         virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
 
-        DECL_LINK( OnTreeEntryCompare, const SvSortData&, sal_Int32 );
-        DECL_LINK( OnTreeEntryChecked, void*, void );
-        DECL_LINK( OnTreeEntryButtonChecked, SvTreeListBox*, void );
+        typedef std::pair<int, int> row_col;
+        DECL_LINK(OnTreeEntryChecked, const row_col&, void);
 
         /** check the tables in <member>m_aTablesList</member> according to <arg>_rTables</arg>
         */
         void implCheckTables(const css::uno::Sequence< OUString >& _rTables);
 
         /// returns the next sibling, if not available, the next sibling of the parent, a.s.o.
-        SvTreeListEntry* implNextSibling(SvTreeListEntry* _pEntry) const;
+        std::unique_ptr<weld::TreeIter> implNextSibling(weld::TreeIter* pEntry) const;
 
         /** return the current selection in <member>m_aTablesList</member>
         */

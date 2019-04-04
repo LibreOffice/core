@@ -549,7 +549,7 @@ IMPL_LINK(UpdateDialog, entryToggled, const row_col&, rRowCol, void)
     // error's can't be enabled
     const UpdateDialog::Index* p = reinterpret_cast<UpdateDialog::Index const *>(m_xUpdates->get_id(rRowCol.first).toInt64());
     if (p->m_eKind == SPECIFIC_ERROR)
-        m_xUpdates->set_toggle(nRow, false, 0);
+        m_xUpdates->set_toggle(nRow, TRISTATE_FALSE, 0);
 
     enableOk();
 }
@@ -558,7 +558,7 @@ sal_uInt16 UpdateDialog::insertItem(UpdateDialog::Index *pEntry, bool bEnabledCh
 {
     int nEntry = m_xUpdates->n_children();
     m_xUpdates->append();
-    m_xUpdates->set_toggle(nEntry, bEnabledCheckBox, 0);
+    m_xUpdates->set_toggle(nEntry, bEnabledCheckBox ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
     m_xUpdates->set_text(nEntry, pEntry->m_aName, 1);
     m_xUpdates->set_id(nEntry, OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
 
@@ -654,7 +654,7 @@ void UpdateDialog::enableOk() {
     if (!m_xChecking->get_visible()) {
         int nChecked = 0;
         for (int i = 0, nCount = m_xUpdates->n_children(); i < nCount; ++i) {
-            if (m_xUpdates->get_toggle(i, 0))
+            if (m_xUpdates->get_toggle(i, 0) == TRISTATE_TRUE)
                 ++nChecked;
         }
         m_xOk->set_sensitive(nChecked != 0);
@@ -1057,7 +1057,7 @@ IMPL_LINK_NOARG(UpdateDialog, okHandler, weld::Button&, void)
         UpdateDialog::Index const * p =
             reinterpret_cast< UpdateDialog::Index const * >(
                 m_xUpdates->get_id(i).toInt64());
-        if (p->m_eKind == ENABLED_UPDATE && m_xUpdates->get_toggle(i, 0)) {
+        if (p->m_eKind == ENABLED_UPDATE && m_xUpdates->get_toggle(i, 0) == TRISTATE_TRUE) {
             m_updateData.push_back( m_enabledUpdates[ p->m_nIndex ] );
         }
     }

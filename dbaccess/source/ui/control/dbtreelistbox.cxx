@@ -117,7 +117,7 @@ SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const OUString& aName, SvTree
 
         if (pItem && pItem->GetText() == aName)
         {
-            if (!_pFilter || _pFilter->includeEntry(pEntry))
+            if (!_pFilter || _pFilter->includeEntry(pEntry->GetUserData()))
                 // found
                 break;
         }

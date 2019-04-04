@@ -148,7 +148,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(weld::Window* pParent,
             {
                 m_xAttrLB->append();
                 const int nRow = m_xAttrLB->n_children() - 1;
-                m_xAttrLB->set_toggle(nRow, bChecked, 0);
+                m_xAttrLB->set_toggle(nRow, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
                 m_xAttrLB->set_text(nRow, SvxAttrNameTable::GetString(nId), 1);
                 m_xAttrLB->set_id(nRow, OUString::number(nSlot));
             }
@@ -174,7 +174,7 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, weld::Button&, void)
     for (int i = 0, nCount = m_xAttrLB->n_children(); i < nCount; ++i)
     {
         sal_uInt16 nSlot = m_xAttrLB->get_id(i).toUInt32();
-        bool bChecked = m_xAttrLB->get_toggle(i, 0);
+        bool bChecked = m_xAttrLB->get_toggle(i, 0) == TRISTATE_TRUE;
 
         sal_uInt16 j;
         for ( j = rList.Count(); j; )
