@@ -47,12 +47,6 @@
 #include <unx/gendata.hxx>
 #include <dlfcn.h>
 
-#if ENABLE_CAIRO_CANVAS
-#   if defined CAIRO_VERSION && CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 10, 0)
-#      define CAIRO_OPERATOR_DIFFERENCE (static_cast<cairo_operator_t>(23))
-#   endif
-#endif
-
 namespace
 {
     basegfx::B2DRange getClipBox(cairo_t* cr)
@@ -1805,14 +1799,7 @@ void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
 
     cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
 
-    if (cairo_version() >= CAIRO_VERSION_ENCODE(1, 10, 0))
-    {
-        cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
-    }
-    else
-    {
-        SAL_WARN("vcl.gdi", "SvpSalGraphics::invert, archaic cairo");
-    }
+    cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
 
     if (nFlags & SalInvert::TrackFrame)
     {
