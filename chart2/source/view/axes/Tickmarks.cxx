@@ -95,7 +95,7 @@ TickFactory::TickFactory(
     if( m_rScale.Scaling.is() )
     {
         m_xInverseScaling = m_rScale.Scaling->getInverseScaling();
-        OSL_ENSURE( m_xInverseScaling.is(), "each Scaling needs to return a inverse Scaling" );
+        OSL_ENSURE( m_xInverseScaling.is(), "each Scaling needs to return an inverse Scaling" );
     }
 
     m_fScaledVisibleMin = m_rScale.Minimum;
