@@ -708,7 +708,7 @@ void SdrUndoRemoveObj::Redo()
     {
         ImplUnmarkObject( pObj );
         E3DModifySceneSnapRectUpdater aUpdater(pObj);
-        pObjList->RemoveObject(nOrdNum);
+        pObjList->RemoveObject(pObj->GetOrdNum());
     }
 
     // Trigger PageChangeCall
@@ -730,7 +730,7 @@ void SdrUndoInsertObj::Undo()
     {
         ImplUnmarkObject( pObj );
 
-        SdrObject* pChkObj= pObjList->RemoveObject(nOrdNum);
+        SdrObject* pChkObj= pObjList->RemoveObject(pObj->GetOrdNum());
         DBG_ASSERT(pChkObj==pObj,"UndoInsertObj: RemoveObjNum!=pObj");
     }
 }
@@ -886,7 +886,7 @@ void SdrUndoReplaceObj::Undo()
         SetNewOwner(true);
 
         ImplUnmarkObject( pNewObj );
-        pObjList->ReplaceObject(pObj,nOrdNum);
+        pObjList->ReplaceObject(pObj,pNewObj->GetOrdNum());
     }
     else
     {
@@ -904,7 +904,7 @@ void SdrUndoReplaceObj::Redo()
         SetNewOwner(false);
 
         ImplUnmarkObject( pObj );
-        pObjList->ReplaceObject(pNewObj,nOrdNum);
+        pObjList->ReplaceObject(pNewObj,pObj->GetOrdNum());
 
     }
     else
