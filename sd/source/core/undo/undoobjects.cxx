@@ -91,8 +91,8 @@ void UndoRemovePresObjectImpl::Redo()
         mpUndoUsercall->Redo();
 }
 
-UndoRemoveObject::UndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
-: SdrUndoRemoveObj( rObject, bOrdNumDirect ), UndoRemovePresObjectImpl( rObject )
+UndoRemoveObject::UndoRemoveObject( SdrObject& rObject )
+: SdrUndoRemoveObj( rObject ), UndoRemovePresObjectImpl( rObject )
 , mxSdrObject(&rObject)
 {
 }

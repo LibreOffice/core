@@ -63,9 +63,9 @@ std::unique_ptr<SdrUndoAction> OReportUndoFactory::CreateUndoAttrObject( SdrObje
     return m_pUndoFactory->CreateUndoAttrObject( rObject, bStyleSheet1, bSaveText );
 }
 
-std::unique_ptr<SdrUndoAction> OReportUndoFactory::CreateUndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
+std::unique_ptr<SdrUndoAction> OReportUndoFactory::CreateUndoRemoveObject(SdrObject& rObject)
 {
-    return m_pUndoFactory->CreateUndoRemoveObject( rObject, bOrdNumDirect );
+    return m_pUndoFactory->CreateUndoRemoveObject(rObject);
 }
 
 std::unique_ptr<SdrUndoAction> OReportUndoFactory::CreateUndoInsertObject( SdrObject& rObject, bool /*bOrdNumDirect*/ )
