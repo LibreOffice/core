@@ -155,6 +155,9 @@ public:
     void            SetNoSelection();
     tools::Rectangle       GetBoundingRectangle( sal_Int32  nItem ) const;
 
+    void            SetEditColors(const Color& rBackground, const Color& rForeground);
+    void            ResetEditColors();
+
     /** checks whether a certain point lies within the bounds of
         a list item and returns the item as well as the character position
         the point is at.
