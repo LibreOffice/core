@@ -72,6 +72,8 @@
 
 #include <strings.hrc>
 
+#include <officecfg/Office/Writer.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -768,6 +770,7 @@ void SwGlossaryDlg::Init()
     m_pNetRelCB->Check( rCfg.IsSaveRelNet() );
     m_pNetRelCB->SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
     m_pInsertTipCB->Check( rCfg.IsAutoTextTip() );
+    m_pInsertTipCB->Enable(!officecfg::Office::Writer::AutoFunction::Text::ShowToolTip::isReadOnly());
     m_pInsertTipCB->SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
 }
 
