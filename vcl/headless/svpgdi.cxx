@@ -47,6 +47,12 @@
 #include <unx/gendata.hxx>
 #include <dlfcn.h>
 
+#if ENABLE_CAIRO_CANVAS
+#   if defined CAIRO_VERSION && CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 10, 0)
+#      define CAIRO_OPERATOR_DIFFERENCE (static_cast<cairo_operator_t>(23))
+#   endif
+#endif
+
 namespace
 {
     basegfx::B2DRange getClipBox(cairo_t* cr)
@@ -1739,7 +1745,11 @@ std::shared_ptr<SalBitmap> SvpSalGraphics::getBitmap( long nX, long nY, long nWi
 
 Color SvpSalGraphics::getPixel( long nX, long nY )
 {
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
     cairo_surface_t *target = cairo_surface_create_similar_image(m_pSurface, CAIRO_FORMAT_ARGB32, 1, 1);
+#else
+    cairo_surface_t *target = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1);
+#endif
 
     cairo_t* cr = cairo_create(target);
 
@@ -1795,7 +1805,14 @@ void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
 
     cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
 
-    cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
+    if (cairo_version() >= CAIRO_VERSION_ENCODE(1, 10, 0))
+    {
+        cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
+    }
+    else
+    {
+        SAL_WARN("vcl.gdi", "SvpSalGraphics::invert, archaic cairo");
+    }
 
     if (nFlags & SalInvert::TrackFrame)
     {
@@ -1973,7 +1990,11 @@ cairo_surface_t* SvpSalGraphics::createCairoSurface(const BitmapBuffer *pBuffer)
 
 cairo_t* SvpSalGraphics::createTmpCompatibleCairoContext() const
 {
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
     cairo_surface_t *target = cairo_surface_create_similar_image(m_pSurface,
+#else
+    cairo_surface_t *target = cairo_image_surface_create(
+#endif
             CAIRO_FORMAT_ARGB32,
             m_aFrameSize.getX() * m_fScale,
             m_aFrameSize.getY() * m_fScale);
