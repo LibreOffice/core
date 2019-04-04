@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_c4d79a23",
+        "filename": "shell/source/unix/exec/shellexec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-04-04T12:22:31Z",
+      "side": 1,
+      "message": "so here we disallow symlinks, but the windows code goes to great length to be able to dereference \"shortcuts\"? could be simpler to just forbid all shortcuts...",
+      "revId": "1b0294139eb0dc6d385ddc3efe89021fed90379d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
