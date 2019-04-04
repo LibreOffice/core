@@ -23,6 +23,7 @@
 #include <unotools/configmgr.hxx>
 
 #include <memory>
+#include <mutex>
 #include <chrono>
 #include <unordered_set>
 
@@ -35,6 +36,7 @@ namespace graphic
 class Manager final
 {
 private:
+    std::recursive_mutex maMutex; // instead of SolarMutex because graphics can live past vcl main
     std::unordered_set<ImpGraphic*> m_pImpGraphicList;
     std::chrono::seconds mnAllowedIdleTime;
     sal_Int64 mnMemoryLimit;
