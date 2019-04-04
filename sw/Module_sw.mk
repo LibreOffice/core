@@ -146,7 +146,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sw,\
 	UITest_writer_tests4 \
 	UITest_writer_tests5 \
 	UITest_table \
-	UITest_findReplace \
+	UITest_sw_findReplace \
 	UITest_chapterNumbering \
 	UITest_librelogo \
 	UITest_options \
