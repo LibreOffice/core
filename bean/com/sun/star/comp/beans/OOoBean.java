@@ -441,7 +441,7 @@ public class OOoBean
         was showing, then this method needs to be called after the container window
         was made visible (java.lang.Component.setVisible(true)).
         <p>
-        Another scenario is that a OOoBean contains a document and is removed
+        Another scenario is that an OOoBean contains a document and is removed
         from a Java container and later added again. Then aquireSystemWindow needs
         to be called after the container window is displayed.
         <p>
@@ -1419,7 +1419,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
            public void queryTermination( /*IN*/ com.sun.star.lang.EventObject Event )
             throws com.sun.star.frame.TerminationVetoException
         {
-            // disallow termination of OOo while a OOoBean exists
+            // disallow termination of OOo while an OOoBean exists
             throw new com.sun.star.frame.TerminationVetoException();
         }
 
