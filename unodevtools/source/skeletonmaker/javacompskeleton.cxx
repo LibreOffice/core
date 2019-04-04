@@ -495,18 +495,18 @@ static void generateMethodBodies(std::ostream& o,
     for (const OUString& type : interfaces) {
         if (type == "com.sun.star.lang.XServiceInfo") {
             generateXServiceInfoBodies(o);
-            generated.add(u2b(type));
+            generated.add(type.toUtf8());
         } else {
             if (options.componenttype == 2) {
                 if (type == "com.sun.star.lang.XServiceName") {
                     o << "    // com.sun.star.lang.XServiceName:\n"
                         "    public String getServiceName() {\n"
                         "        return sADDIN_SERVICENAME;\n    }\n";
-                    generated.add(u2b(type));
+                    generated.add(type.toUtf8());
                     continue;
                 } else if (type == "com.sun.star.sheet.XAddIn") {
                     generateXAddInBodies(o);
-                    generated.add(u2b(type));
+                    generated.add(type.toUtf8());
 
                     // special handling of XLocalizable -> parent of XAddIn
                     if (!generated.contains("com.sun.star.lang.XLocalizable")) {
@@ -516,26 +516,26 @@ static void generateMethodBodies(std::ostream& o,
                     continue;
                 } else if (type == "com.sun.star.lang.XLocalizable") {
                     generateXLocalizableBodies(o);
-                    generated.add(u2b(type));
+                    generated.add(type.toUtf8());
                     continue;
                 } else if (type == "com.sun.star.sheet.XCompatibilityNames") {
                     generateXCompatibilityNamesBodies(o);
-                    generated.add(u2b(type));
+                    generated.add(type.toUtf8());
                     continue;
                 }
             }
             if (options.componenttype == 3) {
                 if (type == "com.sun.star.lang.XInitialization") {
                     generateXInitializationBodies(o);
-                    generated.add(u2b(type));
+                    generated.add(type.toUtf8());
                     continue;
                 } else if (type == "com.sun.star.frame.XDispatch") {
                     generateXDispatchBodies(o, options);
-                    generated.add(u2b(type));
+                    generated.add(type.toUtf8());
                     continue;
                 } else if (type == "com.sun.star.frame.XDispatchProvider") {
                     generateXDispatchProviderBodies(o, options);
-                    generated.add(u2b(type));
+                    generated.add(type.toUtf8());
                     continue;
                 }
             }
@@ -812,7 +812,7 @@ void generateSkeleton(ProgramOptions const & options,
     bool supportxcomponent = false;
 
     for (const auto& rType : types) {
-        checkType(manager, b2u(rType), interfaces, services, properties);
+        checkType(manager, OUString::fromUtf8(rType), interfaces, services, properties);
     }
 
     if (options.componenttype == 3) {

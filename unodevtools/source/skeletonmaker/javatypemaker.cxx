@@ -77,7 +77,7 @@ static void printType(
 
     OString sType(
         codemaker::java::translateUnoToJavaType(
-            sort, u2b(nucleus), referenceType && rank == 0));
+            sort, nucleus.toUtf8(), referenceType && rank == 0));
     if (sType.startsWith("java.lang.")) {
         sType = sType.copy(std::strlen("java.lang."));
     }
@@ -155,7 +155,7 @@ static bool printConstructorParameters(
                 printType(o, options, manager, rMember.type, false);
                 o << ' '
                   << codemaker::java::translateUnoToJavaIdentifier(
-                      u2b(rMember.name), "param");
+                      rMember.name.toUtf8(), "param");
             }
             break;
         }
@@ -178,7 +178,7 @@ static bool printConstructorParameters(
                 }
                 o << ' '
                   << codemaker::java::translateUnoToJavaIdentifier(
-                      u2b(rMember.name), "param");
+                      rMember.name.toUtf8(), "param");
             }
             break;
         }
@@ -205,7 +205,7 @@ static bool printConstructorParameters(
                 }
                 o << ' '
                   << codemaker::java::translateUnoToJavaIdentifier(
-                      u2b(rMember.name), "param");
+                      rMember.name.toUtf8(), "param");
             }
             break;
         }
@@ -231,7 +231,7 @@ static bool printConstructorParameters(
                 printType(o, options, manager, rMember.type, false);
                 o << ' '
                   << codemaker::java::translateUnoToJavaIdentifier(
-                      u2b(rMember.name), "param");
+                      rMember.name.toUtf8(), "param");
             }
             break;
         }
@@ -280,7 +280,7 @@ static void printMethodParameters(
             o << ' ';
         }
         o << codemaker::java::translateUnoToJavaIdentifier(
-            u2b(i->name), "param");
+            i->name.toUtf8(), "param");
     }
 }
 
@@ -397,7 +397,7 @@ void printMethods(std::ostream & o,
     OString const & delegate, OString const & indentation,
     bool defaultvalue, bool usepropertymixin)
 {
-    if ( generated.contains(u2b(name)) || name == "com.sun.star.uno.XInterface" ||
+    if ( generated.contains(name.toUtf8()) || name == "com.sun.star.uno.XInterface" ||
          ( defaultvalue &&
            ( name == "com.sun.star.lang.XComponent" ||
              name == "com.sun.star.lang.XTypeProvider" ||
@@ -407,15 +407,15 @@ void printMethods(std::ostream & o,
 
     if ( usepropertymixin ) {
         if (name == "com.sun.star.beans.XPropertySet") {
-            generated.add(u2b(name));
+            generated.add(name.toUtf8());
             generateXPropertySetBodies(o);
             return;
         } else if (name == "com.sun.star.beans.XFastPropertySet") {
-            generated.add(u2b(name));
+            generated.add(name.toUtf8());
             generateXFastPropertySetBodies(o);
             return;
         } else if (name == "com.sun.star.beans.XPropertyAccess") {
-            generated.add(u2b(name));
+            generated.add(name.toUtf8());
             generateXPropertyAccessBodies(o);
             return;
         }
@@ -425,7 +425,7 @@ void printMethods(std::ostream & o,
     bool body = !delegate.isEmpty();
     bool defaultbody = delegate == sd;
 
-    generated.add(u2b(name));
+    generated.add(name.toUtf8());
     rtl::Reference< unoidl::Entity > ent;
     if (manager->getSort(name, &ent) != codemaker::UnoType::Sort::Interface)
     {
@@ -570,7 +570,7 @@ static void printConstructors(
             o << "create";
         } else {
             o << codemaker::java::translateUnoToJavaIdentifier(
-                u2b(rConstructor.name), "method");
+                rConstructor.name.toUtf8(), "method");
         }
         o << "(com.sun.star.uno.XComponentContext the_context";
         for (const auto& rParam : rConstructor.parameters)
@@ -582,7 +582,7 @@ static void printConstructors(
             }
             o << ' '
               << codemaker::java::translateUnoToJavaIdentifier(
-                  u2b(rParam.name), "param");
+                  rParam.name.toUtf8(), "param");
         }
         o << ')';
         printExceptionSpecification(o, options, manager, rConstructor.exceptions);
@@ -601,12 +601,12 @@ static void printServiceMembers(
     for (const auto& rService : entity->getDirectMandatoryBaseServices())
     {
         o << "\n// exported service " << rService.name << "\n";
-        generateDocumentation(o, options, manager, u2b(rService.name), delegate);
+        generateDocumentation(o, options, manager, rService.name.toUtf8(), delegate);
     }
     for (const auto& rIface : entity->getDirectMandatoryBaseInterfaces())
     {
         o << "\n// supported interface " << rIface.name << "\n";
-        generateDocumentation(o, options, manager, u2b(rIface.name), delegate);
+        generateDocumentation(o, options, manager, rIface.name.toUtf8(), delegate);
     }
     o << "\n// properties of service \""<< name << "\"\n";
     for (const auto& rProp : entity->getDirectProperties())
@@ -615,7 +615,7 @@ static void printServiceMembers(
         printType(o, options, manager, rProp.type, false);
         o << " "
           << codemaker::java::translateUnoToJavaIdentifier(
-              u2b(rProp.name), "property")
+              rProp.name.toUtf8(), "property")
           << ";\n";
     }
 }
@@ -647,7 +647,7 @@ void generateDocumentation(std::ostream & o,
     OUString nucleus;
     sal_Int32 rank;
     codemaker::UnoType::Sort sort = manager->decompose(
-        b2u(type), false, &nucleus, &rank, nullptr, nullptr);
+        OUString::fromUtf8(type), false, &nucleus, &rank, nullptr, nullptr);
 
     bool comment = true;
     if (!delegate.isEmpty()) {
@@ -730,7 +730,7 @@ void generateDocumentation(std::ostream & o,
     std::vector< OUString > arguments;
     rtl::Reference< unoidl::Entity > entity;
     sort = manager->decompose(
-        b2u(type), true, &nucleus, &rank, &arguments, &entity);
+        OUString::fromUtf8(type), true, &nucleus, &rank, &arguments, &entity);
     if (rank != 0) {
         printMapsToJavaType(
             o, options, manager, sort, nucleus, rank, arguments, "array");
@@ -816,8 +816,8 @@ void generateDocumentation(std::ostream & o,
             printConstructors(o, options, manager, nucleus);
             generateDocumentation(
                 o, options, manager,
-                u2b(dynamic_cast< unoidl::SingleInterfaceBasedServiceEntity * >(
-                        entity.get())->getBase()),
+                dynamic_cast< unoidl::SingleInterfaceBasedServiceEntity * >(
+                        entity.get())->getBase().toUtf8(),
                 delegate);
             break;
 

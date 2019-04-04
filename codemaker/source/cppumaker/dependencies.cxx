@@ -215,7 +215,7 @@ Dependencies::~Dependencies() {}
 void Dependencies::insert(OUString const & name, Kind kind) {
     sal_Int32 k;
     std::vector< OString > args;
-    OUString n(b2u(UnoType::decompose(u2b(name), &k, &args)));
+    OUString n(OUString::fromUtf8(UnoType::decompose(name.toUtf8(), &k, &args)));
     if (k != 0) {
         m_sequenceDependency = true;
     }
@@ -266,7 +266,7 @@ void Dependencies::insert(OUString const & name, Kind kind) {
     case UnoType::Sort::PolymorphicStructTemplate:
         for (const OString& arg : args)
         {
-            insert(b2u(arg), KIND_NORMAL);
+            insert(OUString::fromUtf8(arg), KIND_NORMAL);
         }
         [[fallthrough]];
     case UnoType::Sort::Sequence:
