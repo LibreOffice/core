@@ -93,7 +93,7 @@ public class LocalOfficeWindow
      */
     private XToolkit queryAWTToolkit() throws com.sun.star.uno.Exception
     {
-         // Create a UNO toolkit.
+         // Create an UNO toolkit.
          XComponentContext xContext = mConnection.getComponentContext();
          XMultiComponentFactory compfactory = xContext.getServiceManager();
          XMultiServiceFactory factory = UnoRuntime.queryInterface(
