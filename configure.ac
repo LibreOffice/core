@@ -3636,7 +3636,7 @@ if test "$COM_IS_CLANG" = TRUE; then
         else
             my_args="-E -P"
         fi
-        clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CC_PLAIN $my_args -`
+        clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CC_PLAIN $my_args - | sed 's/ //g'`
         CLANGVER=`echo $clang_version \
             | $AWK -F. '{ print \$1*10000+(\$2<100?\$2:99)*100+(\$3<100?\$3:99) }'`
         if test "$CLANGVER" -ge 50002; then
