@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_c967b325",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 26
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-04T08:45:09Z",
+      "side": 1,
+      "message": "A tip: aFile.close() is automatically called in File::~File. So, this might be simplified to\n\n    if (aFile.open(osl_File_OpenFlag_Read) \u003d\u003d osl::FileBase::E_None)\n        return true;",
+      "range": {
+        "startLine": 66,
+        "startChar": 8,
+        "endLine": 66,
+        "endChar": 22
+      },
+      "revId": "82bf5ee51706337de14f1db2321137c53b7b556a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
