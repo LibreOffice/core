@@ -299,7 +299,7 @@ wrapper::ItemConverter* createItemConverter(
     }
     else
     {
-        //create itemconverter for a all objects of given type
+        //create itemconverter for all objects of given type
         switch(eObjectType)
         {
             case OBJECTTYPE_TITLE:
