@@ -20,6 +20,7 @@
 #include <graphic/Manager.hxx>
 #include <impgraph.hxx>
 #include <vcl/lazydelete.hxx>
+#include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
 using namespace css;
@@ -72,6 +73,8 @@ Manager::Manager()
 
 void Manager::reduceGraphicMemory()
 {
+    std::lock_guard<std::recursive_mutex> aGuard(maMutex);
+
     for (ImpGraphic* pEachImpGraphic : m_pImpGraphicList)
     {
         if (mnUsedSize < mnMemoryLimit * 0.7)
@@ -102,6 +105,8 @@ sal_Int64 Manager::getGraphicSizeBytes(const ImpGraphic* pImpGraphic)
 
 IMPL_LINK(Manager, SwapOutTimerHandler, Timer*, pTimer, void)
 {
+    std::lock_guard<std::recursive_mutex> aGuard(maMutex);
+
     pTimer->Stop();
     reduceGraphicMemory();
     pTimer->Start();
@@ -110,6 +115,8 @@ IMPL_LINK(Manager, SwapOutTimerHandler, Timer*, pTimer, void)
 void Manager::registerGraphic(const std::shared_ptr<ImpGraphic>& pImpGraphic,
                               OUString const& /*rsContext*/)
 {
+    std::lock_guard<std::recursive_mutex> aGuard(maMutex);
+
     // make some space first
     if (mnUsedSize > mnMemoryLimit)
         reduceGraphicMemory();
@@ -139,6 +146,8 @@ void Manager::registerGraphic(const std::shared_ptr<ImpGraphic>& pImpGraphic,
 
 void Manager::unregisterGraphic(ImpGraphic* pImpGraphic)
 {
+    std::lock_guard<std::recursive_mutex> aGuard(maMutex);
+
     mnUsedSize -= getGraphicSizeBytes(pImpGraphic);
     m_pImpGraphicList.erase(pImpGraphic);
 }
@@ -201,16 +210,22 @@ std::shared_ptr<ImpGraphic> Manager::newInstance(const GraphicExternalLink& rGra
 
 void Manager::swappedIn(const ImpGraphic* pImpGraphic)
 {
+    std::lock_guard<std::recursive_mutex> aGuard(maMutex);
+
     mnUsedSize += getGraphicSizeBytes(pImpGraphic);
 }
 
 void Manager::swappedOut(const ImpGraphic* pImpGraphic)
 {
+    std::lock_guard<std::recursive_mutex> aGuard(maMutex);
+
     mnUsedSize -= getGraphicSizeBytes(pImpGraphic);
 }
 
 void Manager::changeExisting(const ImpGraphic* pImpGraphic, sal_Int64 nOldSizeBytes)
 {
+    std::lock_guard<std::recursive_mutex> aGuard(maMutex);
+
     mnUsedSize -= nOldSizeBytes;
     mnUsedSize += getGraphicSizeBytes(pImpGraphic);
 }
