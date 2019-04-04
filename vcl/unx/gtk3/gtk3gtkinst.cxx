@@ -5634,6 +5634,10 @@ struct GtkInstanceTreeIter : public weld::TreeIter
         else
             memset(&iter, 0, sizeof(iter));
     }
+    virtual bool equal(const TreeIter& rOther) const override
+    {
+        return memcmp(&iter,  &static_cast<const GtkInstanceTreeIter&>(rOther).iter, sizeof(GtkTreeIter)) == 0;
+    }
     GtkTreeIter iter;
 };
 
@@ -5647,6 +5651,10 @@ private:
     std::vector<gulong> m_aColumnSignalIds;
     // map from toggle column to toggle visibility column
     std::map<int, int> m_aToggleVisMap;
+    // map from toggle column to tristate column
+    std::map<int, int> m_aToggleTriStateMap;
+    // map from text column to text weight column
+    std::map<int, int> m_aWeightMap;
     std::vector<GtkSortType> m_aSavedSortTypes;
     std::vector<int> m_aSavedSortColumns;
     std::vector<int> m_aViewColToModelCol;
@@ -5745,15 +5753,29 @@ private:
         return sRet;
     }
 
+    gint get_int(const GtkTreeIter& iter, int col) const
+    {
+        gint nRet(-1);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        gtk_tree_model_get(pModel, const_cast<GtkTreeIter*>(&iter), col, &nRet, -1);
+        return nRet;
+    }
+
+    bool get_bool(const GtkTreeIter& iter, int col) const
+    {
+        gboolean bRet(false);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        gtk_tree_model_get(pModel, const_cast<GtkTreeIter*>(&iter), col, &bRet, -1);
+        return bRet;
+    }
+
     bool get_bool(int pos, int col) const
     {
         gboolean bRet(false);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
         if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
-        {
-            gtk_tree_model_get(pModel, &iter, col, &bRet, -1);
-        }
+            bRet = get_bool(iter, col);
         return bRet;
     }
 
@@ -5768,9 +5790,12 @@ private:
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
         if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
-        {
             set(iter, col, rText);
-        }
+    }
+
+    void set(const GtkTreeIter& iter, int col, bool bOn)
+    {
+        gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), col, bOn, -1);
     }
 
     void set(int pos, int col, bool bOn)
@@ -5778,9 +5803,12 @@ private:
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
         if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
-        {
-            gtk_tree_store_set(m_pTreeStore, &iter, col, bOn, -1);
-        }
+            set(iter, col, bOn);
+    }
+
+    void set(const GtkTreeIter& iter, int col, gint bInt)
+    {
+        gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), col, bInt, -1);
     }
 
     static gboolean signalTestExpandRow(GtkTreeView*, GtkTreeIter* iter, GtkTreePath*, gpointer widget)
@@ -5926,15 +5954,18 @@ public:
             for (GList* pRenderer = g_list_first(pRenderers); pRenderer; pRenderer = g_list_next(pRenderer))
             {
                 GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
-                if (m_nTextCol == -1 && GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
+                if (GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
                 {
-                    m_nTextCol = nIndex;
+                    if (m_nTextCol == -1)
+                        m_nTextCol = nIndex;
+                    m_aWeightMap[nIndex] = -1;
                 }
                 else if (GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer))
                 {
                     g_object_set_data(G_OBJECT(pCellRenderer), "g-lo-CellIndex", reinterpret_cast<gpointer>(nIndex));
                     g_signal_connect(G_OBJECT(pCellRenderer), "toggled", G_CALLBACK(signalCellToggled), this);
                     m_aToggleVisMap[nIndex] = -1;
+                    m_aToggleTriStateMap[nIndex] = -1;
                 }
                 else if (GTK_IS_CELL_RENDERER_PIXBUF(pCellRenderer))
                 {
@@ -5950,11 +5981,15 @@ public:
             g_list_free(pRenderers);
             m_aViewColToModelCol.push_back(nIndex - 1);
         }
+
         m_nIdCol = nIndex++;
+
         for (auto& a : m_aToggleVisMap)
-        {
             a.second = nIndex++;
-        }
+        for (auto& a : m_aToggleTriStateMap)
+            a.second = nIndex++;
+        for (auto& a : m_aWeightMap)
+            a.second = nIndex++;
 
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         m_nRowDeletedSignalId = g_signal_connect(pModel, "row-deleted", G_CALLBACK(signalRowDeleted), this);
@@ -6337,17 +6372,64 @@ public:
         set(pos, col, rText);
     }
 
-    virtual bool get_toggle(int pos, int col) const override
+    virtual TriState get_toggle(int pos, int col) const override
     {
-        return get_bool(pos, get_model_col(col));
+        col = get_model_col(col);
+        if (get_bool(pos, m_aToggleTriStateMap.find(col)->second))
+            return TRISTATE_INDET;
+        return get_bool(pos, col) ? TRISTATE_TRUE : TRISTATE_FALSE;
     }
 
-    virtual void set_toggle(int pos, bool bOn, int col) override
+    virtual TriState get_toggle(const weld::TreeIter& rIter, int col) const override
+    {
+        col = get_model_col(col);
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        if (get_bool(rGtkIter.iter, m_aToggleTriStateMap.find(col)->second))
+            return TRISTATE_INDET;
+        return get_bool(rGtkIter.iter, col) ? TRISTATE_TRUE : TRISTATE_FALSE;
+    }
+
+    virtual void set_toggle(int pos, TriState eState, int col) override
     {
         col = get_model_col(col);
         // checkbuttons are invisible until toggled on or off
         set(pos, m_aToggleVisMap[col], true);
-        set(pos, col, bOn);
+        if (eState == TRISTATE_INDET)
+            set(pos, m_aToggleTriStateMap[col], true);
+        else
+        {
+            set(pos, m_aToggleTriStateMap[col], false);
+            set(pos, col, eState == TRISTATE_TRUE);
+        }
+    }
+
+    virtual void set_toggle(const weld::TreeIter& rIter, TriState eState, int col) override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        col = get_model_col(col);
+        // checkbuttons are invisible until toggled on or off
+        set(rGtkIter.iter, m_aToggleVisMap[col], true);
+        if (eState == TRISTATE_INDET)
+            set(rGtkIter.iter, m_aToggleTriStateMap[col], true);
+        else
+        {
+            set(rGtkIter.iter, m_aToggleTriStateMap[col], false);
+            set(rGtkIter.iter, col, eState == TRISTATE_TRUE);
+        }
+    }
+
+    virtual void set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int col) override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        col = get_model_col(col);
+        set(rGtkIter.iter, m_aWeightMap[col], bOn ? PANGO_WEIGHT_BOLD : -1);
+    }
+
+    virtual bool get_text_emphasis(const weld::TreeIter& rIter, int col) const override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        col = get_model_col(col);
+        return get_int(rGtkIter.iter, m_aWeightMap.find(col)->second) == PANGO_WEIGHT_BOLD;
     }
 
     using GtkInstanceWidget::set_sensitive;
@@ -6360,6 +6442,8 @@ public:
             col = get_model_col(col);
         col += m_nIdCol + 1; // skip over id column
         col += m_aToggleVisMap.size(); // skip over toggle columns
+        col += m_aToggleTriStateMap.size(); // skip over tristate columns
+        col += m_aWeightMap.size(); // skip over weight columns
         set(pos, col, bSensitive);
     }
 

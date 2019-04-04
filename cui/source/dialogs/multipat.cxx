@@ -60,7 +60,7 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, SelectHdl_Impl, weld::TreeView&, void)
 void SvxMultiPathDialog::HandleEntryChecked(int nRow)
 {
     m_xRadioLB->select(nRow);
-    bool bChecked = m_xRadioLB->get_toggle(nRow, 0);
+    bool bChecked = m_xRadioLB->get_toggle(nRow, 0) == TRISTATE_TRUE;
     if (bChecked)
     {
         // we have radio button behavior -> so uncheck the other entries
@@ -68,7 +68,7 @@ void SvxMultiPathDialog::HandleEntryChecked(int nRow)
         for (int i = 0; i < nCount; ++i)
         {
             if (i != nRow)
-                m_xRadioLB->set_toggle(i, false, 0);
+                m_xRadioLB->set_toggle(i, TRISTATE_TRUE, 0);
         }
     }
 }
@@ -82,7 +82,7 @@ void SvxMultiPathDialog::AppendEntry(const OUString& rText, const OUString& rId)
 {
     m_xRadioLB->append();
     const int nRow = m_xRadioLB->n_children() - 1;
-    m_xRadioLB->set_toggle(nRow, false, 0);
+    m_xRadioLB->set_toggle(nRow, TRISTATE_FALSE, 0);
     m_xRadioLB->set_text(nRow, rText, 1);
     m_xRadioLB->set_id(nRow, rId);
 }
@@ -150,7 +150,7 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl, weld::Button&, void)
 IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl, weld::Button&, void)
 {
     int nPos = m_xRadioLB->get_selected_index();
-    bool bChecked = m_xRadioLB->get_toggle(nPos, 0);
+    bool bChecked = m_xRadioLB->get_toggle(nPos, 0) == TRISTATE_TRUE;
     m_xRadioLB->remove(nPos);
     int nCnt = m_xRadioLB->n_children();
     if (nCnt)
@@ -161,7 +161,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl, weld::Button&, void)
             nPos = nCnt;
         if (bChecked)
         {
-            m_xRadioLB->set_toggle(nPos, true, 0);
+            m_xRadioLB->set_toggle(nPos, TRISTATE_TRUE, 0);
             HandleEntryChecked(nPos);
         }
         m_xRadioLB->select(nPos);
@@ -240,7 +240,7 @@ OUString SvxMultiPathDialog::GetPath() const
     OUString sWritable;
     for (int i = 0, nCount = m_xRadioLB->n_children(); i < nCount; ++i)
     {
-        if (m_xRadioLB->get_toggle(i, 0))
+        if (m_xRadioLB->get_toggle(i, 0) == TRISTATE_TRUE)
             sWritable = m_xRadioLB->get_id(i);
         else
         {
@@ -292,7 +292,7 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
 
         if (nCount)
         {
-            m_xRadioLB->set_toggle(nCount - 1, true, 0);
+            m_xRadioLB->set_toggle(nCount - 1, TRISTATE_TRUE, 0);
             HandleEntryChecked(nCount - 1);
         }
     }
