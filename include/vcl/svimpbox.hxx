@@ -89,6 +89,7 @@ class VCL_DLLPUBLIC SvImpLBox
 {
 friend class ImpLBSelEng;
 friend class SvTreeListBox;
+friend class SalInstanceTreeView;
 friend class IconView;
 private:
     SvTreeList*          pTree;

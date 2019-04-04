@@ -795,7 +795,7 @@ void LibPage::InsertLib()
             weld::TreeView& rView = xLibDlg->GetLibBox();
             rView.append();
             const int nRow = rView.n_children() - 1;
-            rView.set_toggle(nRow, true, 0);
+            rView.set_toggle(nRow, TRISTATE_TRUE, 0);
             rView.set_text(nRow, aLibName, 1);
         }
     }
@@ -829,7 +829,7 @@ void LibPage::InsertLib()
             weld::TreeView& rView = xLibDlg->GetLibBox();
             for (int nLib = 0, nChildren = rView.n_children(); nLib < nChildren; ++nLib)
             {
-                if (rView.get_toggle(nLib, 0))
+                if (rView.get_toggle(nLib, 0) == TRISTATE_TRUE)
                 {
                     OUString aLibName(rView.get_text(nLib, 1));
                     Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );

@@ -173,11 +173,13 @@ bool SvLBoxButtonData::IsRadio() {
 
 
 SvLBoxString::SvLBoxString(const OUString& rStr)
-    : maText(rStr)
+    : mbEmphasized(false)
+    , maText(rStr)
 {
 }
 
 SvLBoxString::SvLBoxString()
+    : mbEmphasized(false)
 {
 }
 
@@ -203,7 +205,19 @@ void SvLBoxString::Paint(
         nStyle |= DrawTextFlags::PathEllipsis | DrawTextFlags::Center;
         aSize.setWidth( rDev.GetEntryWidth() );
     }
+
+    if (mbEmphasized)
+    {
+        rRenderContext.Push();
+        vcl::Font aFont(rRenderContext.GetFont());
+        aFont.SetWeight(WEIGHT_BOLD);
+        rRenderContext.SetFont(aFont);
+    }
+
     rRenderContext.DrawText(tools::Rectangle(rPos, aSize), maText, nStyle);
+
+    if (mbEmphasized)
+        rRenderContext.Pop();
 }
 
 std::unique_ptr<SvLBoxItem> SvLBoxString::Clone(SvLBoxItem const * pSource) const
@@ -218,7 +232,19 @@ void SvLBoxString::InitViewData(
 {
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
+
+    if (mbEmphasized)
+    {
+        pView->Push();
+        vcl::Font aFont( pView->GetFont());
+        aFont.SetWeight(WEIGHT_BOLD);
+        pView->Control::SetFont( aFont );
+    }
+
     pViewData->maSize = Size(pView->GetTextWidth(maText), pView->GetTextHeight());
+
+    if (mbEmphasized)
+        pView->Pop();
 }
 
 // ***************************************************************

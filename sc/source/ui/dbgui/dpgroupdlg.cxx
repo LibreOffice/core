@@ -225,7 +225,7 @@ ScDPDateGroupDlg::ScDPDateGroupDlg(weld::Window* pParent,
     for (size_t nIdx = 0; nIdx < SAL_N_ELEMENTS(aDatePartResIds); ++nIdx)
     {
         mxLbUnits->append();
-        mxLbUnits->set_toggle(nIdx, (nDatePart & spnDateParts[ nIdx ]) != 0, 0);
+        mxLbUnits->set_toggle(nIdx, (nDatePart & spnDateParts[ nIdx ]) ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
         mxLbUnits->set_text(nIdx, ScResId(aDatePartResIds[nIdx]), 1);
     }
 
@@ -296,7 +296,7 @@ sal_Int32 ScDPDateGroupDlg::GetDatePart() const
     // return listbox contents for "units" mode
     sal_Int32 nDatePart = 0;
     for (int nIdx = 0, nCount = mxLbUnits->n_children(); nIdx < nCount; ++nIdx )
-        if (mxLbUnits->get_toggle(nIdx, 0))
+        if (mxLbUnits->get_toggle(nIdx, 0) == TRISTATE_TRUE)
             nDatePart |= spnDateParts[ nIdx ];
     return nDatePart;
 }
@@ -328,7 +328,7 @@ namespace
     {
         for (int i = 0; i < rView.n_children(); ++i)
         {
-            if (rView.get_toggle(i, 0))
+            if (rView.get_toggle(i, 0) == TRISTATE_TRUE)
                 return true;
         }
         return false;

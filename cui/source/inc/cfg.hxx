@@ -343,7 +343,7 @@ public:
     void set_dropdown(int row, int col) { m_xControl->set_image(row, *m_xDropDown, col); }
     void set_id(int row, const OUString& rId) { m_xControl->set_id(row, rId); }
     void clear() { m_xControl->clear(); } //need frees ?
-    void set_toggle(int row, bool bOn, int col) { m_xControl->set_toggle(row, bOn, col); }
+    void set_toggle(int row, TriState eState, int col) { m_xControl->set_toggle(row, eState, col); }
     void scroll_to_row(int pos) { m_xControl->scroll_to_row(pos); }
     void select(int pos) { m_xControl->select(pos); }
 
