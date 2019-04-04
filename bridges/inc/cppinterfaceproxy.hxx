@@ -49,7 +49,7 @@ extern "C" void freeCppInterfaceProxy(
     uno_ExtEnvironment * pEnv, void * pInterface);
 
 /**
- * A cpp proxy wrapping a uno interface.
+ * A cpp proxy wrapping an uno interface.
  */
 class CppInterfaceProxy {
 public:
