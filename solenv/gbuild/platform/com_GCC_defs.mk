@@ -85,12 +85,6 @@ endif
 
 gb_CXXFLAGS_Wundef = -Wno-undef
 
-ifeq ($(ENABLE_GDB_INDEX),TRUE)
-gb_LinkTarget_LDFLAGS += -Wl,--gdb-index
-gb_CFLAGS_COMMON += -ggnu-pubnames
-gb_CXXFLAGS_COMMON += -ggnu-pubnames
-endif
-
 ifeq ($(strip $(gb_GCOV)),YES)
 gb_CFLAGS_COMMON += -fprofile-arcs -ftest-coverage
 gb_CXXFLAGS_COMMON += -fprofile-arcs -ftest-coverage
@@ -199,9 +193,15 @@ gb_DEBUGINFO_FLAGS=-ggdb2
 else
 gb_DEBUGINFO_FLAGS=-g2
 endif
+gb_LINKER_DEBUGINFO_FLAGS=
 
 ifeq ($(HAVE_GCC_SPLIT_DWARF),TRUE)
 gb_DEBUGINFO_FLAGS+=-gsplit-dwarf
+endif
+
+ifeq ($(ENABLE_GDB_INDEX),TRUE)
+gb_LINKER_DEBUGINFO_FLAGS += -Wl,--gdb-index
+gb_DEBUGINFO_FLAGS += -ggnu-pubnames
 endif
 
 gb_LinkTarget_INCLUDE :=\
