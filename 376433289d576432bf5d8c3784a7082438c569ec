@@ -62,6 +62,30 @@
       "revId": "376433289d576432bf5d8c3784a7082438c569ec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_24944644",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2496,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2019-04-04T12:49:03Z",
+      "side": 1,
+      "message": "I was not sure if I have to distinguish between marked and unmarked. As it seems not to be necessary, I\u0027ll remove that part.",
+      "parentUuid": "df87a7cf_69cb07a5",
+      "range": {
+        "startLine": 2495,
+        "startChar": 0,
+        "endLine": 2496,
+        "endChar": 51
+      },
+      "revId": "376433289d576432bf5d8c3784a7082438c569ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
