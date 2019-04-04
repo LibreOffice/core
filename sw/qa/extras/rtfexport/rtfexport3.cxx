@@ -232,6 +232,24 @@ DECLARE_RTFEXPORT_TEST(testTdf123393, "tdf123393.rtf")
         7.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()), 1), "CharHeight"));
 }
 
+DECLARE_RTFEXPORT_TEST(testBtlrCell, "btlr-cell.rtf")
+{
+    // Without the accompanying fix in place, this test would have failed, as
+    // the btlr text direction in the A1 cell was lost.
+    uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTables = xSupplier->getTextTables();
+    uno::Reference<text::XTextTable> xTable(xTables->getByName("Table1"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xA1(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, getProperty<sal_Int16>(xA1, "WritingMode"));
+
+    uno::Reference<beans::XPropertySet> xB1(xTable->getCellByName("B1"), uno::UNO_QUERY);
+    auto nActual = getProperty<sal_Int16>(xB1, "WritingMode");
+    CPPUNIT_ASSERT(nActual == text::WritingMode2::LR_TB || nActual == text::WritingMode2::CONTEXT);
+
+    uno::Reference<beans::XPropertySet> xC1(xTable->getCellByName("C1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, getProperty<sal_Int16>(xC1, "WritingMode"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

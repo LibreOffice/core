@@ -847,6 +847,13 @@ void RtfAttributeOutput::TableVerticalCell(
     const SwWriteTableCell* const pCell
         = pRow->GetCells()[pTableTextNodeInfoInner->getCell()].get();
     const SwFrameFormat* pCellFormat = pCell->GetBox()->GetFrameFormat();
+
+    // Text direction.
+    if (SvxFrameDirection::Vertical_RL_TB == m_rExport.TrueFrameDirection(*pCellFormat))
+        m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLTXTBRL);
+    else if (SvxFrameDirection::Vertical_LR_BT == m_rExport.TrueFrameDirection(*pCellFormat))
+        m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLTXBTLR);
+
     const SfxPoolItem* pItem;
 
     // vertical merges
