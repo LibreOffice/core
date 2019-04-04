@@ -408,7 +408,7 @@ void CppuType::dump(CppuOptions const & options)
             m_cppuTypeDynamic = false;
     }
     dumpFiles(
-        options.isValid("-O") ? b2u(options.getOption("-O")) : "", options);
+        options.isValid("-O") ? OUString::fromUtf8(options.getOption("-O")) : "", options);
 }
 
 void CppuType::dumpFile(
@@ -416,18 +416,18 @@ void CppuType::dumpFile(
     CppuOptions const & options)
 {
     OUString fileUri(
-        b2u(createFileNameFromType(
-                u2b(uri), u2b(name), hpp ? ".hpp" : ".hdl")));
+        OUString::fromUtf8(createFileNameFromType(
+                uri.toUtf8(), name.toUtf8(), hpp ? ".hpp" : ".hdl")));
     if (fileUri.isEmpty()) {
         throw CannotDumpException("empty target URI for entity " + name);
     }
-    bool exists = fileExists(u2b(fileUri));
+    bool exists = fileExists(fileUri.toUtf8());
     if (exists && options.isValid("-G")) {
         return;
     }
     FileStream out;
-    out.createTempFile(getTempDir(u2b(fileUri)));
-    OUString tmpUri(b2u(out.getName()));
+    out.createTempFile(getTempDir(fileUri.toUtf8()));
+    OUString tmpUri(OUString::fromUtf8(out.getName()));
     if(!out.isValid()) {
         throw CannotDumpException("cannot open " + tmpUri + " for writing");
     }
@@ -443,15 +443,15 @@ void CppuType::dumpFile(
         out.close();
         // Remove existing type file if something goes wrong to ensure
         // consistency:
-        if (fileExists(u2b(fileUri))) {
-            removeTypeFile(u2b(fileUri));
+        if (fileExists(fileUri.toUtf8())) {
+            removeTypeFile(fileUri.toUtf8());
         }
-        removeTypeFile(u2b(tmpUri));
+        removeTypeFile(tmpUri.toUtf8());
         throw;
     }
     out.close();
     (void)makeValidTypeFile(
-               u2b(fileUri), u2b(tmpUri), exists && options.isValid("-Gc"));
+               fileUri.toUtf8(), tmpUri.toUtf8(), exists && options.isValid("-Gc"));
 }
 
 void CppuType::dumpDependedTypes(
@@ -506,8 +506,8 @@ void CppuType::dumpInitializer(
         sal_Int32 k;
         std::vector< OString > args;
         OUString n(
-            b2u(codemaker::UnoType::decompose(
-                    u2b(resolveAllTypedefs(name)), &k, &args)));
+            OUString::fromUtf8(codemaker::UnoType::decompose(
+                    resolveAllTypedefs(name).toUtf8(), &k, &args)));
         if (k == 0) {
             rtl::Reference< unoidl::Entity > ent;
             switch (m_typeMgr->getSort(n, &ent)) {
@@ -528,7 +528,7 @@ void CppuType::dumpInitializer(
                 break;
             case codemaker::UnoType::Sort::Enum:
                 assert(dynamic_cast<unoidl::EnumTypeEntity*>(ent.get()));
-                out << codemaker::cpp::scopedCppName(u2b(n)) << "_"
+                out << codemaker::cpp::scopedCppName(n.toUtf8()) << "_"
                     << (static_cast<unoidl::EnumTypeEntity*>(ent.get())->
                         getMembers()[0].name);
                 break;
@@ -752,8 +752,8 @@ void CppuType::dumpType(
     sal_Int32 k;
     std::vector< OString > args;
     OUString n(
-        b2u(codemaker::UnoType::decompose(
-                u2b(resolveAllTypedefs(name)), &k, &args)));
+        OUString::fromUtf8(codemaker::UnoType::decompose(
+                resolveAllTypedefs(name).toUtf8(), &k, &args)));
     if (isConst) {
         out << "const ";
     }
@@ -811,10 +811,10 @@ void CppuType::dumpType(
     case codemaker::UnoType::Sort::Enum:
     case codemaker::UnoType::Sort::PlainStruct:
     case codemaker::UnoType::Sort::Exception:
-        out << codemaker::cpp::scopedCppName(u2b(n));
+        out << codemaker::cpp::scopedCppName(n.toUtf8());
         break;
     case codemaker::UnoType::Sort::PolymorphicStructTemplate:
-        out << codemaker::cpp::scopedCppName(u2b(n));
+        out << codemaker::cpp::scopedCppName(n.toUtf8());
         if (!args.empty()) {
             out << "< ";
             for (std::vector< OString >::iterator i(args.begin());
@@ -822,7 +822,7 @@ void CppuType::dumpType(
                 if (i != args.begin()) {
                     out << ", ";
                 }
-                dumpType(out, b2u(*i));
+                dumpType(out, OUString::fromUtf8(*i));
             }
             out << " >";
         }
@@ -831,7 +831,7 @@ void CppuType::dumpType(
         if (!native) {
             out << "::css::uno::Reference< ";
         }
-        out << codemaker::cpp::scopedCppName(u2b(n));
+        out << codemaker::cpp::scopedCppName(n.toUtf8());
         if (!native) {
             out << " >";
         }
@@ -994,15 +994,15 @@ OUString CppuType::resolveOuterTypedefs(OUString const & name) const
 OUString CppuType::resolveAllTypedefs(OUString const & name) const
 {
     sal_Int32 k1;
-    OUString n(b2u(codemaker::UnoType::decompose(u2b(name), &k1)));
+    OUString n(OUString::fromUtf8(codemaker::UnoType::decompose(name.toUtf8(), &k1)));
     for (;;) {
         rtl::Reference< unoidl::Entity > ent;
         if (m_typeMgr->getSort(n, &ent) != codemaker::UnoType::Sort::Typedef) {
             break;
         }
         sal_Int32 k2;
-        n = b2u(codemaker::UnoType::decompose(
-            u2b(dynamic_cast<unoidl::TypedefEntity&>(*ent).getType()), &k2));
+        n = OUString::fromUtf8(codemaker::UnoType::decompose(
+            dynamic_cast<unoidl::TypedefEntity&>(*ent).getType().toUtf8(), &k2));
         k1 += k2; //TODO: overflow
     }
     OUStringBuffer b;
@@ -1154,7 +1154,7 @@ void InterfaceType::dumpDeclaration(FileStream & out)
              entity_->getDirectMandatoryBases().begin());
          i != entity_->getDirectMandatoryBases().end(); ++i) {
         out << (i == entity_->getDirectMandatoryBases().begin() ? " :" : ",")
-            << " public " << codemaker::cpp::scopedCppName(u2b(i->name));
+            << " public " << codemaker::cpp::scopedCppName(i->name.toUtf8());
     }
     out << "\n{\npublic:\n";
     inc();
@@ -1189,7 +1189,7 @@ void InterfaceType::dumpHppFile(
     out << "\n";
     dumpGetCppuType(out);
     out << "\n::css::uno::Type const & "
-        << codemaker::cpp::scopedCppName(u2b(name_))
+        << codemaker::cpp::scopedCppName(name_.toUtf8())
         << "::static_type(SAL_UNUSED_PARAMETER void *) {\n";
     inc();
     out << indent() << "return ::cppu::UnoType< ";
@@ -1671,7 +1671,7 @@ void ConstantGroup::dumpHppFile(
 {
     OUString headerDefine(dumpHeaderDefine(out, "HPP"));
     out << "\n";
-    codemaker::cppumaker::Includes::dumpInclude(out, u2b(name_), false);
+    codemaker::cppumaker::Includes::dumpInclude(out, name_.toUtf8(), false);
     out << "\n#endif // "<< headerDefine << "\n";
 }
 
@@ -1823,7 +1823,7 @@ void PlainStructType::dumpDeclaration(FileStream & out)
     out << id_;
     OUString base(entity_->getDirectBase());
     if (!base.isEmpty()) {
-        out << ": public " << codemaker::cpp::scopedCppName(u2b(base));
+        out << ": public " << codemaker::cpp::scopedCppName(base.toUtf8());
     }
     out << " {\n";
     inc();
@@ -1853,7 +1853,7 @@ void PlainStructType::dumpDeclaration(FileStream & out)
                 && i->type != "hyper" && i->type != "unsigned hyper"
                 && i->type != "double") {
                 out << " CPPU_GCC3_ALIGN("
-                    << codemaker::cpp::scopedCppName(u2b(base)) << ")";
+                    << codemaker::cpp::scopedCppName(base.toUtf8()) << ")";
             }
             out << ";\n";
         }
@@ -1877,7 +1877,7 @@ void PlainStructType::dumpHppFile(
     OUString base(entity_->getDirectBase());
     bool bFirst = true;
     if (!base.isEmpty()) {
-        out << indent() << ": " << codemaker::cpp::scopedCppName(u2b(base))
+        out << indent() << ": " << codemaker::cpp::scopedCppName(base.toUtf8())
             << "()\n";
         bFirst = false;
     }
@@ -1905,7 +1905,7 @@ void PlainStructType::dumpHppFile(
         inc();
         bFirst = true;
         if (!base.isEmpty()) {
-            out << indent() << ": " << codemaker::cpp::scopedCppName(u2b(base))
+            out << indent() << ": " << codemaker::cpp::scopedCppName(base.toUtf8())
                 << "(";
             dumpBaseMembers(out, base, false);
             out << ")\n";
@@ -1926,8 +1926,8 @@ void PlainStructType::dumpHppFile(
     out << indent() << "return ";
     bFirst = true;
     if (!base.isEmpty()) {
-        out << "operator==( static_cast< " << codemaker::cpp::scopedCppName(u2b(base))
-            << ">(the_lhs), static_cast< " << codemaker::cpp::scopedCppName(u2b(base)) << ">(the_rhs) )\n";
+        out << "operator==( static_cast< " << codemaker::cpp::scopedCppName(base.toUtf8())
+            << ">(the_lhs), static_cast< " << codemaker::cpp::scopedCppName(base.toUtf8()) << ">(the_rhs) )\n";
         bFirst = false;
     }
     for (const unoidl::PlainStructTypeEntity::Member& member : entity_->getDirectMembers()) {
@@ -2675,7 +2675,7 @@ void PolyStructType::dumpTemplateParameters(FileStream & out) const
 OUString typeToIdentifier(OUString const & name)
 {
     sal_Int32 k;
-    OUString n(b2u(codemaker::UnoType::decompose(u2b(name), &k)));
+    OUString n(OUString::fromUtf8(codemaker::UnoType::decompose(name.toUtf8(), &k)));
     OUStringBuffer b;
     for (sal_Int32 i = 0; i != k; ++i) {
         b.append("seq_");
@@ -2761,7 +2761,7 @@ void ExceptionType::dumpHppFile(
     OUString base(entity_->getDirectBase());
     bool bFirst = true;
     if (!base.isEmpty()) {
-        out << indent() << ": " << codemaker::cpp::scopedCppName(u2b(base))
+        out << indent() << ": " << codemaker::cpp::scopedCppName(base.toUtf8())
             << "()\n";
         bFirst = false;
     }
@@ -2798,7 +2798,7 @@ void ExceptionType::dumpHppFile(
         inc();
         bFirst = true;
         if (!base.isEmpty()) {
-            out << indent() << ": " << codemaker::cpp::scopedCppName(u2b(base))
+            out << indent() << ": " << codemaker::cpp::scopedCppName(base.toUtf8())
                 << "(";
             dumpBaseMembers(out, base, false, false);
             out << ")\n";
@@ -2825,7 +2825,7 @@ void ExceptionType::dumpHppFile(
         << "(" << id_ << " const & the_other)";
     bFirst = true;
     if (!base.isEmpty()) {
-        out << ": " << codemaker::cpp::scopedCppName(u2b(base))
+        out << ": " << codemaker::cpp::scopedCppName(base.toUtf8())
             << "(the_other)";
         bFirst = false;
     }
@@ -2842,7 +2842,7 @@ void ExceptionType::dumpHppFile(
         << ("//TODO: Just like its implicitly-defined counterpart, this"
             " function definition is not exception-safe\n");
     if (!base.isEmpty()) {
-        out << indent() << codemaker::cpp::scopedCppName(u2b(base))
+        out << indent() << codemaker::cpp::scopedCppName(base.toUtf8())
             << "::operator =(the_other);\n";
     }
     for (const unoidl::ExceptionTypeEntity::Member& member : entity_->getDirectMembers()) {
@@ -3034,7 +3034,7 @@ void ExceptionType::dumpDeclaration(FileStream & out)
     out << "\nclass CPPU_GCC_DLLPUBLIC_EXPORT SAL_WARN_UNUSED " << id_;
     OUString base(entity_->getDirectBase());
     if (!base.isEmpty()) {
-        out << " : public " << codemaker::cpp::scopedCppName(u2b(base));
+        out << " : public " << codemaker::cpp::scopedCppName(base.toUtf8());
     }
     out << "\n{\npublic:\n";
     inc();
@@ -3069,7 +3069,7 @@ void ExceptionType::dumpDeclaration(FileStream & out)
             && i->type != "hyper" && i->type != "unsigned hyper"
             && i->type != "double") {
             out << " CPPU_GCC3_ALIGN( "
-                << codemaker::cpp::scopedCppName(u2b(base)) << " )";
+                << codemaker::cpp::scopedCppName(base.toUtf8()) << " )";
         }
         out << ";\n";
     }
@@ -3180,7 +3180,7 @@ void EnumType::dumpDeclaration(FileStream& o)
     inc();
 
     for (const unoidl::EnumTypeEntity::Member& member : entity_->getMembers()) {
-        o << indent() << id_ << "_" << u2b(member.name) << " = " << member.value
+        o << indent() << id_ << "_" << member.name.toUtf8() << " = " << member.value
           << ",\n";
     }
 
@@ -3192,9 +3192,9 @@ void EnumType::dumpDeclaration(FileStream& o)
     // use constexpr to create a kind of type-alias so we don't have to modify existing code
     o << "#if defined LIBO_INTERNAL_ONLY\n";
     for (const unoidl::EnumTypeEntity::Member& member : entity_->getMembers()) {
-        o << "constexpr auto " << id_ << "_" << u2b(member.name)
+        o << "constexpr auto " << id_ << "_" << member.name.toUtf8()
           << " = "
-          << id_ << "::" << id_ << "_" << u2b(member.name)
+          << id_ << "::" << id_ << "_" << member.name.toUtf8()
           << ";\n";
     }
     o << "#endif\n";
@@ -3228,8 +3228,8 @@ void EnumType::dumpNormalGetCppuType(FileStream& o)
     o << indent() << "typelib_static_enum_type_init( &the_type,\n";
     inc(31);
     o << indent() << "\"" << name_ << "\",\n"
-      << indent() << codemaker::cpp::scopedCppName(u2b(name_)) << "_"
-      << u2b(entity_->getMembers()[0].name) << " );\n";
+      << indent() << codemaker::cpp::scopedCppName(name_.toUtf8()) << "_"
+      << entity_->getMembers()[0].name.toUtf8() << " );\n";
     dec(31);
     dec();
     o << indent() << "}\n";
@@ -3266,7 +3266,7 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
     std::vector< unoidl::EnumTypeEntity::Member >::size_type n = 0;
     for (const unoidl::EnumTypeEntity::Member& member : entity_->getMembers()) {
         o << indent() << "::rtl::OUString sEnumValue" << n << "( \""
-          << u2b(member.name) << "\" );\n";
+          << member.name.toUtf8() << "\" );\n";
         o << indent() << "enumValueNames[" << n << "] = sEnumValue" << n
           << ".pData;\n";
         ++n;
@@ -3283,8 +3283,8 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
     inc();
     o << indent() << "sTypeName.pData,\n"
       << indent() << "(sal_Int32)"
-      << codemaker::cpp::scopedCppName(u2b(name_), false) << "_"
-      << u2b(entity_->getMembers()[0].name) << ",\n"
+      << codemaker::cpp::scopedCppName(name_.toUtf8(), false) << "_"
+      << entity_->getMembers()[0].name.toUtf8() << ",\n"
       << indent() << entity_->getMembers().size()
       << ", enumValueNames, enumValues );\n\n";
     dec();
@@ -3466,8 +3466,8 @@ void ServiceType::dumpHppFile(
                     for (const unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter& param :
                          cons.parameters) {
                         if (m_typeMgr->getSort(
-                                b2u(codemaker::UnoType::decompose(
-                                        u2b(param.type))))
+                                OUString::fromUtf8(codemaker::UnoType::decompose(
+                                        param.type.toUtf8())))
                             == codemaker::UnoType::Sort::Char) {
                             includes.addCppuUnotypeHxx();
                             break;
@@ -3476,7 +3476,7 @@ void ServiceType::dumpHppFile(
                 }
                 codemaker::ExceptionTree tree;
                 for (const OUString& ex : cons.exceptions) {
-                    tree.add(u2b(ex), m_typeMgr);
+                    tree.add(ex.toUtf8(), m_typeMgr);
                 }
                 if (!tree.getRoot().present) {
                     includes.add("com.sun.star.uno.Exception");
@@ -3488,7 +3488,7 @@ void ServiceType::dumpHppFile(
     }
     OString cppName(
         codemaker::cpp::translateUnoToCppIdentifier(
-            u2b(id_), "service", isGlobal()));
+            id_.toUtf8(), "service", isGlobal()));
     OUString headerDefine(dumpHeaderDefine(o, "HPP"));
     o << "\n";
     includes.dump(o, nullptr, true);
@@ -3513,7 +3513,7 @@ void ServiceType::dumpHppFile(
     o << "\nclass " << cppName << " {\n";
     inc();
     if (!entity_->getConstructors().empty()) {
-        OString baseName(u2b(entity_->getBase()));
+        OString baseName(entity_->getBase().toUtf8());
         OString scopedBaseName(codemaker::cpp::scopedCppName(baseName));
         o << "public:\n";
         for (const unoidl::SingleInterfaceBasedServiceEntity::Constructor& cons :
@@ -3580,7 +3580,7 @@ void ServiceType::dumpHppFile(
                 o << indent() << "static ::css::uno::Reference< "
                   << scopedBaseName << " > "
                   << codemaker::cpp::translateUnoToCppIdentifier(
-                      u2b(cons.name), "method", codemaker::cpp::IdentifierTranslationMode::NonGlobal,
+                      cons.name.toUtf8(), "method", codemaker::cpp::IdentifierTranslationMode::NonGlobal,
                       &cppName)
                   << ("(::css::uno::Reference< ::css::uno::XComponentContext > const &"
                       " the_context");
@@ -3598,7 +3598,7 @@ void ServiceType::dumpHppFile(
                     dumpType(o, type, byRef, byRef);
                     o << " "
                       << codemaker::cpp::translateUnoToCppIdentifier(
-                          u2b(param.name), "param", codemaker::cpp::IdentifierTranslationMode::NonGlobal);
+                          param.name.toUtf8(), "param", codemaker::cpp::IdentifierTranslationMode::NonGlobal);
                 }
                 o << ") {\n";
                 inc();
@@ -3615,14 +3615,14 @@ void ServiceType::dumpHppFile(
                         o << indent() << "the_arguments[" << n++ << "] ";
                         OString param(
                             codemaker::cpp::translateUnoToCppIdentifier(
-                                u2b(j.name), "param",
+                                j.name.toUtf8(), "param",
                                 codemaker::cpp::IdentifierTranslationMode::NonGlobal));
                         sal_Int32 rank;
                         if (resolveOuterTypedefs(j.type) == "any") {
                             o << "= " << param;
                         } else if (m_typeMgr->getSort(
-                                       b2u(codemaker::UnoType::decompose(
-                                               u2b(j.type), &rank)))
+                                       OUString::fromUtf8(codemaker::UnoType::decompose(
+                                               j.type.toUtf8(), &rank)))
                                    == codemaker::UnoType::Sort::Char) {
                             o << "= ::css::uno::Any(&" << param
                               << ", ::cppu::UnoType< ";
@@ -3644,7 +3644,7 @@ void ServiceType::dumpHppFile(
                   << scopedBaseName << " > the_instance;\n";
                 codemaker::ExceptionTree tree;
                 for (const OUString& ex : cons.exceptions) {
-                    tree.add(u2b(ex), m_typeMgr);
+                    tree.add(ex.toUtf8(), m_typeMgr);
                 }
                 if (!tree.getRoot().present) {
                     o << indent() << "try {\n";
@@ -3665,7 +3665,7 @@ void ServiceType::dumpHppFile(
                   << ")(the_context.get(), ";
                 if (rest) {
                     o << codemaker::cpp::translateUnoToCppIdentifier(
-                          u2b(cons.parameters.back().name), "param",
+                          cons.parameters.back().name.toUtf8(), "param",
                           codemaker::cpp::IdentifierTranslationMode::NonGlobal);
                 } else if (cons.parameters.empty()) {
                     o << "::css::uno::Sequence< ::css::uno::Any >()";
@@ -3692,7 +3692,7 @@ void ServiceType::dumpHppFile(
                   << name_ << "\", ";
                 if (rest) {
                     o << codemaker::cpp::translateUnoToCppIdentifier(
-                          u2b(cons.parameters.back().name), "param",
+                          cons.parameters.back().name.toUtf8(), "param",
                           codemaker::cpp::IdentifierTranslationMode::NonGlobal);
                 } else if (cons.parameters.empty()) {
                     o << "::css::uno::Sequence< ::css::uno::Any >()";
@@ -3748,7 +3748,7 @@ void ServiceType::dumpCatchClauses(
 {
     if (node->present) {
         out << indent() << "} catch (const ";
-        dumpType(out, b2u(node->name));
+        dumpType(out, OUString::fromUtf8(node->name));
         out << " &) {\n";
         inc();
         out << indent() << "throw;\n";
@@ -3782,8 +3782,8 @@ void SingletonType::dumpHppFile(
 {
     OString cppName(
         codemaker::cpp::translateUnoToCppIdentifier(
-            u2b(id_), "singleton", isGlobal()));
-    OString baseName(u2b(entity_->getBase()));
+            id_.toUtf8(), "singleton", isGlobal()));
+    OString baseName(entity_->getBase().toUtf8());
     OString scopedBaseName(codemaker::cpp::scopedCppName(baseName));
     OUString headerDefine(dumpHeaderDefine(o, "HPP"));
     o << "\n";
@@ -3873,10 +3873,10 @@ void produce(
     OUString const & name, rtl::Reference< TypeManager > const & manager,
     codemaker::GeneratedTypeSet & generated, CppuOptions const & options)
 {
-    if (generated.contains(u2b(name))) {
+    if (generated.contains(name.toUtf8())) {
         return;
     }
-    generated.add(u2b(name));
+    generated.add(name.toUtf8());
     if (!manager->foundAtPrimaryProvider(name)) {
         return;
     }

@@ -79,8 +79,7 @@ OString translateUnoToCppType(
         {
             buf.append("::css::uno::XInterface");
         } else {
-            //TODO: check that nucleus is a valid (UTF-8) identifier
-            buf.append(u2b(nucleus));
+            buf.append(nucleus.toUtf8()); // nucleus must be a valid UTF-16
         }
     }
     return buf.makeStringAndClear();
