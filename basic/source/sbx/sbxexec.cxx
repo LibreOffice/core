@@ -55,7 +55,7 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
     }
     else
     {
-        // A symbol had to begin with a alphabetic character or an underline
+        // A symbol had to begin with an alphabetic character or an underline
         if( !rtl::isAsciiAlpha( *p ) && *p != '_' )
         {
             SbxBase::SetError( ERRCODE_BASIC_SYNTAX );
