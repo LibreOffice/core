@@ -781,7 +781,7 @@ void ExtensionBox_Impl::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeft() )
     {
         if ( rMEvt.IsMod1() && m_bHasActive )
-            selectEntry( m_vEntries.size() );   // Selecting an not existing entry will deselect the current one
+            selectEntry( m_vEntries.size() );   // Selecting a not existing entry will deselect the current one
         else
             selectEntry( nPos );
     }
@@ -990,7 +990,7 @@ void ExtensionBox_Impl::updateEntry( const uno::Reference< deployment::XPackage 
 //This function is also called as a result of removing an extension.
 //see PackageManagerImpl::removePackage
 //The gui is a registered as listener on the package. Removing it will cause the
-//listeners to be notified an then this function is called. At this moment xPackage
+//listeners to be notified and then this function is called. At this moment xPackage
 //is in the disposing state and all calls on it may result in a DisposedException.
 void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage > &xPackage )
 {
