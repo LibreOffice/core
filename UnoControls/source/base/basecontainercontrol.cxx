@@ -55,7 +55,7 @@ Any SAL_CALL BaseContainerControl::queryInterface( const Type& rType )
     Reference< XInterface > xDel = BaseControl::impl_getDelegator();
     if ( xDel.is() )
     {
-        // If a delegator exist, forward question to his queryInterface.
+        // If a delegator exists, forward question to its queryInterface.
         // Delegator will ask its own queryAggregation!
         aReturn = xDel->queryInterface( rType );
     }
