@@ -19,6 +19,7 @@
 
 #include <unotools/moduleoptions.hxx>
 #include <unotools/fltrcfg.hxx>
+#include <officecfg/Office/Common.hxx>
 #include "optfltr.hxx"
 #include <strings.hrc>
 #include <dialmgr.hxx>
@@ -328,6 +329,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
 
     aMSOLockFileCB->Check(rOpt.IsMSOLockFileCreationIsEnabled());
     aMSOLockFileCB->SaveValue();
+    aMSOLockFileCB->Enable(!officecfg::Office::Common::Filter::Microsoft::Import::CreateMSOLockFiles::isReadOnly());
 }
 
 void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, MSFltrPg2_CheckBoxEntries _nType )
