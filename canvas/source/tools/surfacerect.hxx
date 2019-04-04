@@ -45,7 +45,7 @@ namespace canvas
         // in other words, 'size' means the number of pixels
         // this rectangle encloses plus one. for example with pos[0,0]
         // and size[512,512], p[512,512] would return inside.
-        // a size of [0,0] therefore denotes a one-by-one rectangle.
+        // a size of [0,0] therefore denotes an one-by-one rectangle.
         bool pointInside( sal_Int32 px, sal_Int32 py ) const
         {
             const sal_Int32 x1(maPos.getX());
