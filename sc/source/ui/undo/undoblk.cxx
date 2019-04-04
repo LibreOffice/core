@@ -1352,10 +1352,6 @@ void ScUndoDragDrop::Undo()
                 pName->UpdateReference(aCxt, nTab);
         }
 
-        // Notify all listeners of the destination range, and have them update their references.
-        sc::RefMovedHint aHint(aDestRange, ScAddress(nColDelta, nRowDelta, nTabDelta), aCxt);
-        rDoc.BroadcastRefMoved(aHint);
-
         ScValidationDataList* pValidList = rDoc.GetValidationList();
         if (pValidList)
         {
