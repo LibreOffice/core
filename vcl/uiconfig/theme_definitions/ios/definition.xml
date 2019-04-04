@@ -295,13 +295,19 @@
 
     <slider>
         <part value="Button">
-            <state>
+            <state enabled="true">
                 <image source="slider-button.svg" />
+            </state>
+            <state enabled="false">
+                <image source="slider-button-disabled.svg" />
             </state>
         </part>
         <part value="TrackHorzLeft">
-            <state>
+            <state enabled="true">
                 <line stroke="#007AFF" stroke-width="6" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
+            </state>
+            <state enabled="false">
+                <line stroke="#8e8e93" stroke-width="6" x1="0.0" y1="0.5" x2="1.0" y2="0.5"/>
             </state>
         </part>
         <part value="TrackHorzRight">
@@ -310,8 +316,11 @@
             </state>
         </part>
         <part value="TrackVertUpper">
-            <state>
+            <state enabled="true">
                 <line stroke="#007AFF" stroke-width="6" x1="0.5" y1="0.0" x2="0.5" y2="1.0"/>
+            </state>
+            <state enabled="false">
+                <line stroke="#8e8e93" stroke-width="6" x1="0.5" y1="0.0" x2="0.5" y2="1.0"/>
             </state>
         </part>
         <part value="TrackVertLower">
