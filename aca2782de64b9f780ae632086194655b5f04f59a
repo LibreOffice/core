@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_e49dfe66",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-04T13:03:56Z",
+      "side": 1,
+      "message": "Why do you move Recent? It feels wrong to have it before Open.",
+      "revId": "aca2782de64b9f780ae632086194655b5f04f59a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_8488b21f",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-04T13:03:56Z",
+      "side": 1,
+      "message": "Why do you move this? Not that it\u0027s badly located but I still see no reason for the change.",
+      "revId": "aca2782de64b9f780ae632086194655b5f04f59a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_a48e1625",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-04T13:03:56Z",
+      "side": 1,
+      "message": "Doesn\u0027t the toolbar on/off switches belong to the same section as above so the separator is obsolete?",
+      "revId": "aca2782de64b9f780ae632086194655b5f04f59a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
