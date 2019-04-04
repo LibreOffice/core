@@ -83,17 +83,8 @@ endif
 endif
 endif
 
-ifneq ($(gb_DEBUGLEVEL),0)
-gb_LINKEROPTFLAGS :=
-else
 gb_LINKEROPTFLAGS := -Wl,-O1
-endif
-
-ifeq ($(gb_SYMBOL),$(true))
-gb_LINKERSTRIPDEBUGFLAGS :=
-else
 gb_LINKERSTRIPDEBUGFLAGS := -Wl,-S
-endif
 
 # LinkTarget class
 
