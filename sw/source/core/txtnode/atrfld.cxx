@@ -582,9 +582,8 @@ void SwTextInputField::UpdateFieldContent()
         const sal_Int32 nLen = static_cast<sal_Int32>(std::max<sal_Int32>( 0, ( (*End()) - 1 - nIdx ) ));
         const OUString aNewFieldContent = GetTextNode().GetExpandText(nullptr, nIdx, nLen);
 
-        const SwField* pField = GetFormatField().GetField();
-        assert(dynamic_cast<const SwInputField*>(pField));
-        const SwInputField* pInputField = static_cast<const SwInputField*>(pField);
+        auto pInputField = dynamic_cast<const SwInputField*>(GetFormatField().GetField());
+        assert(pInputField);
         const_cast<SwInputField*>(pInputField)->applyFieldContent( aNewFieldContent );
         // trigger update of fields for scenarios in which the Input Field's content is part of e.g. a table formula
         GetTextNode().GetDoc()->getIDocumentFieldsAccess().GetUpdateFields().SetFieldsDirty(true);
@@ -624,9 +623,8 @@ SwTextAnnotationField::~SwTextAnnotationField()
 
 ::sw::mark::IMark* SwTextAnnotationField::GetAnnotationMark() const
 {
-    const SwField* pField = GetFormatField().GetField();
-    assert(dynamic_cast<const SwPostItField*>(pField));
-    const SwPostItField* pPostItField = static_cast<const SwPostItField*>(pField);
+    auto pPostItField = dynamic_cast<const SwPostItField*>(GetFormatField().GetField());
+    assert(pPostItField);
 
     SwDoc* pDoc = static_cast<const SwPostItFieldType*>(pPostItField->GetTyp())->GetDoc();
     assert(pDoc != nullptr);

@@ -852,8 +852,8 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                             m_xUndoManager );
 
                         bool bChanged = false;
-                        assert(dynamic_cast<ChartModel*>(getModel().get()));
-                        ChartModel* pModel = static_cast<ChartModel*>(getModel().get());
+                        ChartModel* pModel = dynamic_cast<ChartModel*>(getModel().get());
+                        assert(pModel);
                         if ( eObjectType == OBJECTTYPE_LEGEND )
                             bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning( *pModel, false , true );
 
