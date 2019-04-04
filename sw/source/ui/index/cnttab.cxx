@@ -575,7 +575,10 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(weld::Window* pParent,
             OUString sEntry = rStyles.getToken(0, TOX_STYLE_DELIMITER, nPos);
             m_xHeaderTree->append_text(sEntry);
             for (sal_uInt16 j = 0; j <= MAXLEVEL; ++j)
-                m_xHeaderTree->set_toggle(nRow, i == j - 1, j + 1);
+            {
+                TriState eState = i == j - 1 ? TRISTATE_TRUE : TRISTATE_FALSE;
+                m_xHeaderTree->set_toggle(nRow, eState, j + 1);
+            }
             ++nRow;
         } while (nPos>=0);
     }
@@ -605,7 +608,10 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(weld::Window* pParent,
             {
                 m_xHeaderTree->append_text(aName);
                 for (sal_uInt16 k = 0; k <= MAXLEVEL; ++k)
-                    m_xHeaderTree->set_toggle(nRow, k == 0, k + 1);
+                {
+                    TriState eState = k == 0 ? TRISTATE_TRUE : TRISTATE_FALSE;
+                    m_xHeaderTree->set_toggle(nRow, eState, k + 1);
+                }
                 ++nRow;
             }
         }
@@ -635,7 +641,10 @@ IMPL_LINK(SwAddStylesDlg_Impl, TreeSizeAllocHdl, const Size&, rSize, void)
 IMPL_LINK(SwAddStylesDlg_Impl, RadioToggleOnHdl, const row_col&, rRowCol, void)
 {
     for (sal_uInt16 i = 0; i <= MAXLEVEL; ++i)
-        m_xHeaderTree->set_toggle(rRowCol.first, rRowCol.second == i + 1, i + 1);
+    {
+        TriState eState = rRowCol.second == i + 1 ? TRISTATE_TRUE : TRISTATE_FALSE;
+        m_xHeaderTree->set_toggle(rRowCol.first, eState, i + 1);
+    }
 }
 
 IMPL_LINK(SwAddStylesDlg_Impl, KeyInput, const KeyEvent&, rKEvt, bool)
@@ -668,7 +677,7 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl, weld::Button&, void)
         int nToggleColumn = 0;
         for (sal_uInt16 j = 0; j <= MAXLEVEL; ++j)
         {
-            if (m_xHeaderTree->get_toggle(i, j + 1))
+            if (m_xHeaderTree->get_toggle(i, j + 1) == TRISTATE_TRUE)
             {
                 nToggleColumn = j;
                 break;
@@ -696,7 +705,7 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, weld::Button&, rBtn, void)
         int nToggleColumn = 0;
         for (sal_uInt16 j = 0; j <= MAXLEVEL; ++j)
         {
-            if (m_xHeaderTree->get_toggle(nEntry, j + 1))
+            if (m_xHeaderTree->get_toggle(nEntry, j + 1) == TRISTATE_TRUE)
             {
                 nToggleColumn = j;
                 break;
@@ -715,7 +724,9 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, weld::Button&, rBtn, void)
         }
 
         for (sal_uInt16 j = 0; j <= MAXLEVEL; ++j)
-            m_xHeaderTree->set_toggle(nEntry, j == nToggleColumn, j + 1);
+        {
+            m_xHeaderTree->set_toggle(nEntry, j == nToggleColumn ? TRISTATE_TRUE : TRISTATE_FALSE, j + 1);
+        }
     }
 }
 
@@ -788,7 +799,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(TabPageParent pParent, const SfxItemSet& 
     {
         OUString sId(OUString::number(static_cast<sal_uInt32>(RES_SRCTYPES[i].second)));
         m_xFromObjCLB->append();
-        m_xFromObjCLB->set_toggle(i, false, 0);
+        m_xFromObjCLB->set_toggle(i, TRISTATE_FALSE, 0);
         m_xFromObjCLB->set_text(i, SwResId(RES_SRCTYPES[i].first), 1);
         m_xFromObjCLB->set_id(i, sId);
     }
@@ -1006,7 +1017,7 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
         for (int nFromObj = 0, nCount = m_xFromObjCLB->n_children(); nFromObj < nCount; ++nFromObj)
         {
             SwTOOElements nData = static_cast<SwTOOElements>(m_xFromObjCLB->get_id(nFromObj).toInt32());
-            m_xFromObjCLB->set_toggle(nFromObj, bool(nData & nOLEData), 0);
+            m_xFromObjCLB->set_toggle(nFromObj, bool(nData & nOLEData) ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
         }
     }
     else if(TOX_AUTHORITIES == aCurType.eType)
@@ -1101,7 +1112,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
             SwTOOElements nOLEData = SwTOOElements::NONE;
             for (int i = 0, nCount = m_xFromObjCLB->n_children(); i < nCount; ++i)
             {
-                if (m_xFromObjCLB->get_toggle(i, 0))
+                if (m_xFromObjCLB->get_toggle(i, 0) == TRISTATE_TRUE)
                 {
                     SwTOOElements nData = static_cast<SwTOOElements>(m_xFromObjCLB->get_id(i).toInt32());
                     nOLEData |= nData;

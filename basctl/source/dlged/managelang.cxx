@@ -275,7 +275,7 @@ void SetDefaultLanguageDialog::FillLanguageBox()
             LanguageType eLang = m_xLanguageCB->get_id(j);
             m_xCheckLangLB->append();
             const int nRow = m_xCheckLangLB->n_children() - 1;
-            m_xCheckLangLB->set_toggle(nRow, false, 0);
+            m_xCheckLangLB->set_toggle(nRow, TRISTATE_FALSE, 0);
             m_xCheckLangLB->set_text(nRow, m_xLanguageCB->get_text(j), 1);
             m_xCheckLangLB->set_id(nRow, OUString::number(eLang.get()));
         }
@@ -311,7 +311,7 @@ Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
     const sal_Int32 nCount = m_xCheckLangLB->n_children();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        if (m_xCheckLangLB->get_toggle(i, 0))
+        if (m_xCheckLangLB->get_toggle(i, 0) == TRISTATE_TRUE)
         {
             LanguageType eType = LanguageType(m_xCheckLangLB->get_id(i).toUInt32());
             aLocaleSeq.push_back(LanguageTag::convertToLocale(eType));

@@ -270,6 +270,10 @@ private:
     VCL_DLLPRIVATE static void RemoveBoxFromDDList_Impl( const SvTreeListBox& rB );
     DECL_DLLPRIVATE_LINK( DragFinishHdl_Impl, sal_Int8, void );
 
+    // after a checkbox entry is inserted, use this to get its width to support
+    // autowidth for the 1st checkbox column
+    VCL_DLLPRIVATE void CheckBoxInserted(SvTreeListEntry* pEntry);
+
 protected:
 
     bool            CheckDragAndDropMode( SvTreeListBox const * pSource, sal_Int8 );

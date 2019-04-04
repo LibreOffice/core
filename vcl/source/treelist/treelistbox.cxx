@@ -1679,6 +1679,20 @@ void SvTreeListBox::SetCollapsedEntryBmp(SvTreeListEntry* pEntry,const Image& aB
     }
 }
 
+void SvTreeListBox::CheckBoxInserted(SvTreeListEntry* pEntry)
+{
+    SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
+    if( pItem )
+    {
+        long nWidth = pItem->GetSize(this, pEntry).Width();
+        if( mnCheckboxItemWidth < nWidth )
+        {
+            mnCheckboxItemWidth = nWidth;
+            nTreeFlags |= SvTreeFlags::RECALCTABS;
+        }
+    }
+}
+
 void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
 {
 
@@ -1712,18 +1726,8 @@ void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
     if( !(nTreeFlags & SvTreeFlags::CHKBTN) )
         return;
 
-    SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
-    if( pItem )
-    {
-        long nWidth = pItem->GetSize(this, pEntry).Width();
-        if( mnCheckboxItemWidth < nWidth )
-        {
-            mnCheckboxItemWidth = nWidth;
-            nTreeFlags |= SvTreeFlags::RECALCTABS;
-        }
-    }
+    CheckBoxInserted(pEntry);
 }
-
 
 void SvTreeListBox::SetCheckButtonState( SvTreeListEntry* pEntry, SvButtonState eState)
 {
@@ -1846,7 +1850,6 @@ void SvTreeListBox::SetDefaultCollapsedEntryBmp( const Image& aBmp )
 
 void SvTreeListBox::EnableCheckButton( SvLBoxButtonData* pData )
 {
-    DBG_ASSERT(!GetEntryCount(),"EnableCheckButton: Entry count != 0");
     if( !pData )
         nTreeFlags &= ~SvTreeFlags::CHKBTN;
     else
