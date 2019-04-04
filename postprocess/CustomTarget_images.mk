@@ -96,9 +96,9 @@ $(packimages_DIR)/commandimagelist.ilst :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(FIND) $(SRCDIR)/icon-themes -name "*.png" -o -name "*.svg" | \
-			grep -e '/cmd/' | sed 's#^.*/icon-themes/[^/]*##' | $(SORT) | uniq | \
+			grep -e '/cmd/' | sed 's#^.*/icon-themes/[^/]*##' | \
 			sed "s#^#%MODULE%#" | \
-			LC_ALL=C $(SORT) > $@.tmp && \
+			LC_ALL=C $(SORT) -u > $@.tmp && \
 		$(call gb_Helper_replace_if_different_and_touch,$@.tmp,$@))
 
 $(packimages_DIR)/sorted.lst : \

@@ -42,7 +42,7 @@ $(call gb_GeneratedPackage_get_target,%) :
 		$(foreach pair,$(PACKAGE_DIRS),&& cp -R $(PACKAGE_SOURCEDIR)/$(call gb_GeneratedPackage__get_srcdir,$(pair)) $(call gb_GeneratedPackage__get_destdir,$(pair))) \
 	)
 	$(call gb_Helper_abbreviate_dirs,\
-		$(FIND) $(foreach pair,$(PACKAGE_DIRS),$(call gb_GeneratedPackage__get_destdir,$(pair))) \( -type f -o -type l \) -print > $@ \
+		$(FIND) $(foreach pair,$(PACKAGE_DIRS),$(call gb_GeneratedPackage__get_destdir,$(pair))) \( -type f -o -type l \) -print | LC_ALL=C $(SORT) > $@ \
 	)
 
 .PHONY : $(call gb_GeneratedPackage_get_clean_target,%)
