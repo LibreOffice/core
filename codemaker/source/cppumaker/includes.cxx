@@ -71,7 +71,7 @@ Includes::~Includes()
 void Includes::add(OString const & entityName) {
     sal_Int32 k;
     std::vector< OString > args;
-    OUString n(b2u(codemaker::UnoType::decompose(entityName, &k, &args)));
+    OUString n(OUString::fromUtf8(codemaker::UnoType::decompose(entityName, &k, &args)));
     if (k != 0) {
         m_includeSequence = true;
     }
@@ -115,7 +115,7 @@ void Includes::add(OString const & entityName) {
         break;
     default:
         throw CannotDumpException(
-            "unexpected type \"" + b2u(entityName)
+            "unexpected type \"" + OUString::fromUtf8(entityName)
             + "\" in call to codemaker::cppumaker::Includes::add");
     }
 }
@@ -139,7 +139,7 @@ void Includes::dump(
     if (!m_includeReference) {
         for (const auto& pair : m_map)
         {
-            if (isInterfaceType(u2b(pair.first))) {
+            if (isInterfaceType(pair.first.toUtf8())) {
                 m_includeReference = true;
                 break;
             }
@@ -151,7 +151,7 @@ void Includes::dump(
     }
     if (companionHdl) {
         out << "\n";
-        dumpInclude(out, u2b(*companionHdl), false);
+        dumpInclude(out, companionHdl->toUtf8(), false);
     }
     bool first = true;
     for (const auto& pair : m_map)
@@ -159,11 +159,11 @@ void Includes::dump(
         if (exceptions || pair.second != Dependencies::KIND_EXCEPTION) {
             dumpEmptyLineBeforeFirst(out, &first);
             if (m_hpp || pair.second == Dependencies::KIND_BASE
-                || !isInterfaceType(u2b(pair.first)))
+                || !isInterfaceType(pair.first.toUtf8()))
             {
                 // If we know our name, then avoid including ourselves.
                 if (!companionHdl || *companionHdl != pair.first) {
-                    dumpInclude(out, u2b(pair.first), m_hpp);
+                    dumpInclude(out, pair.first.toUtf8(), m_hpp);
                 }
             } else {
                 bool ns = dumpNamespaceOpen(out, pair.first, false);
@@ -264,7 +264,7 @@ void Includes::dumpInclude(
 }
 
 bool Includes::isInterfaceType(OString const & entityName) const {
-    return m_manager->getSort(b2u(entityName)) == UnoType::Sort::Interface;
+    return m_manager->getSort(OUString::fromUtf8(entityName)) == UnoType::Sort::Interface;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
