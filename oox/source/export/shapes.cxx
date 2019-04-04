@@ -1133,13 +1133,15 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
 
     pFS->startElementNS( mnXmlNamespace, XML_nvPicPr, FSEND );
 
-    OUString sName, sDescr;
-    bool bHaveName, bHaveDesc;
+    OUString sName, sDescr, sURL;
+    bool bHaveName, bHaveDesc, bHaveURL;
 
     if ( ( bHaveName= GetProperty( xShapeProps, "Name" ) ) )
         mAny >>= sName;
     if ( ( bHaveDesc = GetProperty( xShapeProps, "Description" ) ) )
         mAny >>= sDescr;
+    if ( ( bHaveURL = GetProperty( xShapeProps, "URL" ) ) )
+        mAny >>= sURL;
 
     pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id,     I32S( GetNewShapeID( xShape ) ),
@@ -1149,19 +1151,28 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
                           XML_descr,  bHaveDesc ? sDescr.toUtf8().getStr() : nullptr,
                           FSEND );
 
-    // OOXTODO: //cNvPr children: XML_extLst, XML_hlinkClick, XML_hlinkHover
+    // OOXTODO: //cNvPr children: XML_extLst, XML_hlinkHover
     if (bHasMediaURL)
         pFS->singleElementNS(XML_a, XML_hlinkClick,
                              FSNS(XML_r, XML_id), "",
                              XML_action, "ppaction://media",
                              FSEND);
+    if( !sURL.isEmpty() )
+    {
+        OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
+        oox::getRelationship(Relationship::HYPERLINK),
+        mpURLTransformer->getTransformedString(sURL),
+        mpURLTransformer->isExternalURL(sURL));
 
+        mpFS->singleElementNS( XML_a, XML_hlinkClick,
+        FSNS( XML_r,XML_id ), USS( sRelId ),
+        FSEND );
+    }
     pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
 
     pFS->singleElementNS( mnXmlNamespace, XML_cNvPicPr,
                           // OOXTODO: XML_preferRelativeSize
                           FSEND );
-
     if (bHasMediaURL)
         WriteMediaNonVisualProperties(xShape);
     else
