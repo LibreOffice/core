@@ -292,6 +292,7 @@ size_t ImportPDF(const OUString& rURL, std::vector<Bitmap>& rBitmaps,
 size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Size>>& rGraphics,
                          const double fResolutionDPI)
 {
+#if HAVE_FEATURE_PDFIUM
     std::unique_ptr<SvStream> xStream(
         ::utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ | StreamMode::SHARE_DENYNONE));
 
@@ -359,6 +360,13 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
     FPDF_DestroyLibrary();
 
     return rGraphics.size();
+#else
+    (void) rURL;
+    (void) rGraphics;
+    (void) fResolutionDPI;
+
+    return 0;
+#endif
 }
 }
 
