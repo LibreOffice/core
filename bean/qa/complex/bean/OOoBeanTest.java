@@ -258,7 +258,7 @@ public class OOoBeanTest
     }
 
     /**
-       1. Create a OOoBean
+       1. Create an OOoBean
        2. Load a document
        3. Create Frame (do not show yet)
        4. Add OOoBean to Frame
