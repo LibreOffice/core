@@ -181,7 +181,7 @@ namespace dxcanvas
             Gdiplus::PointF vector(1, 1);
             aMatrix.TransformVectors(&vector);
 
-            // paint a one-by-one circle, with the given point
+            // paint an one-by-one circle, with the given point
             // in the middle (rounded to float)
             ENSURE_OR_THROW(
                 Gdiplus::Ok == pGraphics->FillEllipse( &aBrush,
