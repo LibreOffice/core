@@ -80,6 +80,7 @@ cmd/lc_insertformula.png cmd/lc_dbviewfunctions.png
 cmd/lc_insertformvscroll.png cmd/lc_scrollbar.png
 cmd/lc_insertframeinteract.png cmd/lc_insertframe.png
 cmd/lc_insertframeinteractnocolumns.png cmd/lc_insertframe.png
+cmd/lc_insertimagecontrol.png cmd/lc_insertgraphic.png
 cmd/lc_insertobjectchart.png cmd/lc_drawchart.png
 cmd/lc_insertnumericfield.png cmd/lc_numberformatstandard.png
 cmd/lc_numericfield.png cmd/lc_numberformatstandard.png
@@ -114,7 +115,7 @@ cmd/sc_scrollbarmenu.png cmd/sc_scrollbar.png
 cmd/sc_insertframeinteract.png cmd/sc_insertframe.png
 cmd/sc_insertframemenu.png cmd/sc_insertframe.png
 cmd/sc_insertframeinteractnocolumns.png cmd/sc_insertframe.png
-cmd/sc_insertimagecontrol.png cmd/sc_drawchart.png
+cmd/sc_insertimagecontrol.png cmd/sc_insertgraphic.png
 cmd/sc_insertobjectchart.png cmd/sc_drawchart.png
 cmd/sc_insertnumericfield.png cmd/sc_numberformatstandard.png
 cmd/sc_numericfield.png cmd/sc_numberformatstandard.png
@@ -172,7 +173,6 @@ cmd/lc_fontheight.png cmd/lc_scaletext.png
 cmd/sc_textfittosizetool.png cmd/sc_text_marquee.png
 cmd/sc_texttoolbox.png cmd/sc_text.png
 cmd/sc_drawtext.png cmd/sc_text.png
-cmd/sc_edit.png cmd/sc_text.png
 cmd/sc_doubleclicktextedit.png cmd/sc_pickthrough.png
 cmd/sc_fontworkcharacterspacingfloater.png cmd/sc_spacing.png
 cmd/sc_fontheight.png cmd/sc_scaletext.png
