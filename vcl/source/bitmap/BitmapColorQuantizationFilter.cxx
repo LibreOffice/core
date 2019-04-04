@@ -27,7 +27,7 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
 
     bool bRet = false;
 
-    if (aBitmap.GetColorCount() <= static_cast<sal_uLong>(mnNewColorCount))
+    if (aBitmap.GetColorCount() <= sal_Int64(mnNewColorCount))
     {
         bRet = true;
     }
