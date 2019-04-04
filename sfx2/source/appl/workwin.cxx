@@ -1501,6 +1501,11 @@ void SfxWorkWindow::HidePopups_Impl(bool bHide, sal_uInt16 nId )
         {
             vcl::Window *pWin = pCW->GetWindow();
             SfxChild_Impl *pChild = FindChild_Impl(*pWin);
+            if (!pChild)
+            {
+                SAL_WARN("sfx.appl", "missing SfxChild_Impl child!");
+                continue;
+            }
             if (bHide)
             {
                 pChild->nVisible &= ~SfxChildVisibility::ACTIVE;
