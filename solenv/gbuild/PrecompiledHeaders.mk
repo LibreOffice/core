@@ -22,12 +22,9 @@
 
 ifeq ($(gb_ENABLE_PCH),$(true))
 
-# gb_PrecompiledHeader_get_enableflags defined by platform
-ifneq ($(strip $(gb_DEBUGLEVEL)$(gb_SYMBOL)),0)
-gb_PrecompiledHeader_DEBUGDIR := debug
-else
-gb_PrecompiledHeader_DEBUGDIR := nodebug
-endif
+# Use different PCH file depending on whether we use debugging symbols.
+# TODO: This doesn't work because T_SYMBOLS is not expanded as/when necessary.
+gb_PrecompiledHeader__get_debugdir := $(if $(filter $(true),$(T_SYMBOLS)),debug,nodebug)
 
 $(call gb_PrecompiledHeader_get_dep_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\

@@ -82,20 +82,33 @@ else
 gb_ENABLE_DBGUTIL := $(false)
 endif
 
+gb_ENABLE_SYMBOLS_FOR := $(ENABLE_SYMBOLS_FOR)
+
+# ENABLE_SYMBOLS (presumably from the command line)
+ifneq ($(strip $(ENABLE_SYMBOLS)),)
+gb_ENABLE_SYMBOLS_FOR := $(ENABLE_SYMBOLS)
+endif
+ifneq ($(strip $(enable_symbols)),)
+gb_ENABLE_SYMBOLS_FOR := $(enable_symbols)
+endif
+
+# note: ENABLE_BREAKPAD turns on symbols
+ifneq ($(strip $(ENABLE_BREAKPAD)),)
+gb_ENABLE_SYMBOLS_FOR := all
+endif
+
 gb_DEBUGLEVEL := 0
 ifneq ($(strip $(DEBUG)),)
 gb_DEBUGLEVEL := 1
 # make DEBUG=true should force -g
 ifeq ($(origin DEBUG),command line)
-ENABLE_DEBUGINFO_FOR := all
-ENABLE_SYMBOLS := TRUE
+gb_ENABLE_SYMBOLS_FOR := all
 endif
 endif
 ifneq ($(strip $(debug)),)
 gb_DEBUGLEVEL := 1
 ifeq ($(origin debug),command line)
-ENABLE_DEBUGINFO_FOR := all
-ENABLE_SYMBOLS := TRUE
+gb_ENABLE_SYMBOLS_FOR := all
 endif
 endif
 ifeq ($(gb_ENABLE_DBGUTIL),$(true))
@@ -105,21 +118,28 @@ endif
 ifneq ($(strip $(DBGLEVEL)),)
 gb_DEBUGLEVEL := $(strip $(DBGLEVEL))
 ifeq ($(origin DBGLEVEL),command line)
-ENABLE_DEBUGINFO_FOR := all
+gb_ENABLE_SYMBOLS_FOR := all
 endif
 endif
 ifneq ($(strip $(dbglevel)),)
 gb_DEBUGLEVEL := $(strip $(dbglevel))
 ifeq ($(origin dbglevel),command line)
-ENABLE_DEBUGINFO_FOR := all
+gb_ENABLE_SYMBOLS_FOR := all
 endif
 endif
 
-# note: ENABLE_BREAKPAD turns on gb_SYMBOL
-ifneq ($(strip $(ENABLE_SYMBOLS)$(enable_symbols)$(ENABLE_BREAKPAD)),)
-gb_SYMBOL := $(true)
-else
-gb_SYMBOL := $(false)
+# handle special cases
+ifeq ($(gb_ENABLE_SYMBOLS_FOR),1)
+gb_ENABLE_SYMBOLS_FOR := all
+endif
+ifeq ($(gb_ENABLE_SYMBOLS_FOR),0)
+gb_ENABLE_SYMBOLS_FOR :=
+endif
+ifeq ($(gb_ENABLE_SYMBOLS_FOR),yes)
+gb_ENABLE_SYMBOLS_FOR := all
+endif
+ifeq ($(gb_ENABLE_SYMBOLS_FOR),no)
+gb_ENABLE_SYMBOLS_FOR :=
 endif
 
 ifneq ($(strip $(ENABLE_PCH)),)
