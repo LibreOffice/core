@@ -1077,12 +1077,12 @@ namespace
 
         virtual ~FilterByEntryDataId() {}
 
-        virtual bool    includeEntry( SvTreeListEntry* _pEntry ) const override;
+        virtual bool    includeEntry(const void* pEntry) const override;
     };
 
-    bool FilterByEntryDataId::includeEntry( SvTreeListEntry* _pEntry ) const
+    bool FilterByEntryDataId::includeEntry(const void* pUserData) const
     {
-        DBTreeListUserData* pData = static_cast< DBTreeListUserData* >( _pEntry->GetUserData() );
+        const DBTreeListUserData* pData = static_cast<const DBTreeListUserData*>(pUserData);
         return ( !pData || ( pData->sAccessor == sId ) );
     }
 }

@@ -16,6 +16,10 @@
       <column type="gboolean"/>
       <!-- column-name checkvis2 -->
       <column type="gboolean"/>
+      <!-- column-name checktri1 -->
+      <column type="gboolean"/>
+      <!-- column-name checktri2 -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkBox" id="ApplyAutoFmtPage">

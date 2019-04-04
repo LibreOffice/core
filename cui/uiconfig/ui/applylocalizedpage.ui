@@ -16,6 +16,10 @@
       <column type="gboolean"/>
       <!-- column-name checkvis2 -->
       <column type="gboolean"/>
+      <!-- column-name checktri1 -->
+      <column type="gboolean"/>
+      <!-- column-name checktri2 -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkTreeStore" id="liststore2">
@@ -27,6 +31,8 @@
       <!-- column-name id -->
       <column type="gchararray"/>
       <!-- column-name checkvis1 -->
+      <column type="gboolean"/>
+      <!-- column-name checktri1 -->
       <column type="gboolean"/>
     </columns>
   </object>

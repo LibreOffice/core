@@ -491,6 +491,7 @@ SwCaptionOptPage::SwCaptionOptPage(TabPageParent pParent, const SfxItemSet& rSet
 
     std::vector<int> aWidths;
     aWidths.push_back(m_xCheckLB->get_checkbox_column_width());
+    aWidths.push_back(m_xCheckLB->get_checkbox_column_width());
     m_xCheckLB->set_column_fixed_widths(aWidths);
 
     SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_ABB, m_sIllustration);
@@ -590,7 +591,7 @@ bool SwCaptionOptPage::FillItemSet( SfxItemSet* )
     int nCheckCount = 0;
     for (int i = 0, nCount = m_xCheckLB->n_children(); i < nCount; ++i)
     {
-        if (m_xCheckLB->get_toggle(i, 0))
+        if (m_xCheckLB->get_toggle(i, 0) == TRISTATE_TRUE)
             ++nCheckCount;
         InsCaptionOpt* pData = reinterpret_cast<InsCaptionOpt*>(m_xCheckLB->get_id(i).toInt64());
         bRet |= pModOpt->SetCapOption(bHTMLMode, pData);
@@ -618,15 +619,15 @@ void SwCaptionOptPage::Reset( const SfxItemSet* rSet)
     // Writer objects
     int nPos = 0;
     m_xCheckLB->append();
-    m_xCheckLB->set_toggle(nPos, false, 0);
+    m_xCheckLB->set_toggle(nPos, TRISTATE_FALSE, 0);
     m_xCheckLB->set_text(nPos, m_sSWTable, 1);
     SetOptions(nPos++, TABLE_CAP);
     m_xCheckLB->append();
-    m_xCheckLB->set_toggle(nPos, false, 0);
+    m_xCheckLB->set_toggle(nPos, TRISTATE_FALSE, 0);
     m_xCheckLB->set_text(nPos, m_sSWFrame, 1);
     SetOptions(nPos++, FRAME_CAP);
     m_xCheckLB->append();
-    m_xCheckLB->set_toggle(nPos, false, 0);
+    m_xCheckLB->set_toggle(nPos, TRISTATE_FALSE, 0);
     m_xCheckLB->set_text(nPos, m_sSWGraphic, 1);
     SetOptions(nPos++, GRAPHIC_CAP);
 
@@ -651,7 +652,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet* rSet)
         // don't show product version
         sClass = sClass.replaceFirst( sComplete, sWithoutVersion );
         m_xCheckLB->append();
-        m_xCheckLB->set_toggle(nPos, false, 0);
+        m_xCheckLB->set_toggle(nPos, TRISTATE_FALSE, 0);
         m_xCheckLB->set_text(nPos, sClass, 1);
         SetOptions( nPos++, OLE_CAP, &rOleId );
     }
@@ -671,7 +672,7 @@ void SwCaptionOptPage::SetOptions(const sal_uLong nPos,
     {
         InsCaptionOpt* pIns = new InsCaptionOpt(*pOpt);
         m_xCheckLB->set_id(nPos, OUString::number(reinterpret_cast<sal_Int64>(pIns)));
-        m_xCheckLB->set_toggle(nPos, pOpt->UseCaption(), 0);
+        m_xCheckLB->set_toggle(nPos, pOpt->UseCaption() ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
     }
     else
     {
@@ -693,7 +694,7 @@ void SwCaptionOptPage::UpdateEntry(int nSelEntry)
 {
     if (nSelEntry != -1)
     {
-        bool bChecked = m_xCheckLB->get_toggle(nSelEntry, 0);
+        bool bChecked = m_xCheckLB->get_toggle(nSelEntry, 0) == TRISTATE_TRUE;
 
         m_xSettingsGroup->set_sensitive(bChecked);
         bool bNumSep = bChecked && m_xLbCaptionOrder->get_active() == 1;
@@ -816,7 +817,7 @@ void SwCaptionOptPage::SaveEntry(int nEntry)
 
     InsCaptionOpt* pOpt = reinterpret_cast<InsCaptionOpt*>(m_xCheckLB->get_id(nEntry).toInt64());
 
-    pOpt->UseCaption() = m_xCheckLB->get_toggle(nEntry, 0);
+    pOpt->UseCaption() = m_xCheckLB->get_toggle(nEntry, 0) == TRISTATE_TRUE;
     const OUString aName(m_xCategoryBox->get_active_text());
     if (aName == m_sNone)
         pOpt->SetCategory("");
@@ -881,7 +882,7 @@ IMPL_LINK(SwCaptionOptPage, OrderHdl, weld::ComboBox&, rBox, void)
     bool bChecked = false;
     if (nSelEntry != -1)
     {
-        bChecked = m_xCheckLB->get_toggle(nSelEntry, 0);
+        bChecked = m_xCheckLB->get_toggle(nSelEntry, 0) == TRISTATE_TRUE;
     }
 
     int nPos = rBox.get_active();

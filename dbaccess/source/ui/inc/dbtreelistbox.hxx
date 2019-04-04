@@ -26,6 +26,7 @@
 
 #include <vcl/treelistbox.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/weld.hxx>
 
 #include <memory>
 #include <set>
@@ -40,7 +41,7 @@ namespace dbaui
     class IEntryFilter
     {
     public:
-        virtual bool    includeEntry( SvTreeListEntry* _pEntry ) const = 0;
+        virtual bool    includeEntry(const void* pUserData) const = 0;
 
     protected:
         ~IEntryFilter() {}

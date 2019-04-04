@@ -21,7 +21,6 @@
 #include <stringconstants.hxx>
 #include <bitmaps.hlst>
 
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicColorMode.hpp>
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
@@ -144,6 +143,33 @@ namespace dbaui
         }
     }
 
+    OUString ImageProvider::getImageId(const OUString& _rName, const sal_Int32 _nDatabaseObjectType)
+    {
+        if (_nDatabaseObjectType != DatabaseObject::TABLE)
+        {
+            // for types other than tables, the icon does not depend on the concrete object
+            return getDefaultImageResourceID( _nDatabaseObjectType );
+        }
+        else
+        {
+            // no -> determine by type
+            OUString sImageResourceID;
+            lcl_getTableImageResourceID_nothrow( *m_pData, _rName, sImageResourceID );
+            return sImageResourceID;
+        }
+    }
+
+    Reference<XGraphic> ImageProvider::getXGraphic(const OUString& _rName, const sal_Int32 _nDatabaseObjectType)
+    {
+        Reference<XGraphic> xGraphic;
+        if (_nDatabaseObjectType == DatabaseObject::TABLE)
+        {
+            // check whether the connection can give us an icon
+            lcl_getConnectionProvidedTableIcon_nothrow( *m_pData, _rName, xGraphic );
+        }
+        return xGraphic;
+    }
+
     Image ImageProvider::getDefaultImage( sal_Int32 _nDatabaseObjectType )
     {
         Image aObjectImage;
@@ -203,6 +229,31 @@ namespace dbaui
         if (!sImageResourceID.isEmpty())
             aFolderImage = Image(StockImage::Yes, sImageResourceID);
         return aFolderImage;
+    }
+
+    OUString ImageProvider::getFolderImageId( sal_Int32 _nDatabaseObjectType )
+    {
+        OUString sImageResourceID;
+        switch ( _nDatabaseObjectType )
+        {
+        case DatabaseObject::QUERY:
+            sImageResourceID = QUERYFOLDER_TREE_ICON;
+            break;
+        case DatabaseObject::FORM:
+            sImageResourceID = FORMFOLDER_TREE_ICON;
+            break;
+        case DatabaseObject::REPORT:
+            sImageResourceID = REPORTFOLDER_TREE_ICON;
+            break;
+        case DatabaseObject::TABLE:
+            sImageResourceID = TABLEFOLDER_TREE_ICON;
+            break;
+        default:
+            OSL_FAIL( "ImageProvider::getDefaultImage: invalid database object type!" );
+            break;
+        }
+
+        return sImageResourceID;
     }
 
     Image ImageProvider::getDatabaseImage()
