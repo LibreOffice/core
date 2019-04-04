@@ -597,6 +597,7 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.list :
 	$(call gb_Helper_abbreviate_dirs,\
 	    $(FIND) $(call gb_XcuResTarget_get_target,fcfg_langpack/$*/) \
 	         -name *.xcu -size +0c \
+		| LC_ALL=C $(SORT) \
 	        | $(gb_AWK) 'BEGIN{print "<list>"} \
 	                    {print "<filename>"$$0"</filename>"} \
 	               END  {print "</list>"}' > $@ \
@@ -612,6 +613,7 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_%.list :
 	         $(if $(filter TRUE,$(ENABLE_ONLINE_UPDATE)),\
 	             $(call gb_XcuResTarget_get_target,updchk/$*/))\
 	         -name *.xcu \
+		| LC_ALL=C $(SORT) \
 	        | $(gb_AWK) 'BEGIN{print "<list>"} \
 	                    {print "<filename>"$$0"</filename>"} \
 	               END  {print "</list>"}' > $@ \
