@@ -102,7 +102,7 @@ namespace cairocanvas
 
     geometry::RealSize2D DeviceHelper::getPhysicalResolution()
     {
-        // Map a one-by-one millimeter box to pixel
+        // Map an one-by-one millimeter box to pixel
         const MapMode aOldMapMode( mpRefDevice->GetMapMode() );
         mpRefDevice->SetMapMode( MapMode(MapUnit::MapMM) );
         const Size aPixelSize( mpRefDevice->LogicToPixel(Size(1,1)) );
