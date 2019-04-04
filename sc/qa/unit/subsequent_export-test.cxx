@@ -212,6 +212,7 @@ public:
     void testPivotCacheAfterExportXLSX();
     void testTdf114969XLSX();
     void testTdf115192XLSX();
+    void testTdf91634XLSX();
 
     void testXltxExport();
 
@@ -331,6 +332,7 @@ public:
     CPPUNIT_TEST(testPivotCacheAfterExportXLSX);
     CPPUNIT_TEST(testTdf114969XLSX);
     CPPUNIT_TEST(testTdf115192XLSX);
+    CPPUNIT_TEST(testTdf91634XLSX);
 
     CPPUNIT_TEST(testXltxExport);
 
@@ -4184,6 +4186,21 @@ void ScExportTest::testTdf115192XLSX()
     assertXPath(pDoc, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
     assertXPathNoAttribute(pDoc, "/r:Relationships/r:Relationship[@Id='rId2']", "TargetMode");
     assertXPath(pDoc, "/r:Relationships/r:Relationship[@Id='rId3']", "TargetMode", "External");
+}
+
+void ScExportTest::testTdf91634XLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("image_hyperlink.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:pic/xdr:nvPicPr/xdr:cNvPr/a:hlinkClick", 1);
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/r:Relationships/r:Relationship[@Id='rId1']", "Target", "https://www.google.com/");
+    assertXPath(pDo2, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
