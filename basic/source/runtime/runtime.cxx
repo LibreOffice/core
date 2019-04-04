@@ -4314,7 +4314,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         short nDims = pArray->GetDims();
         sal_Int32 nTotalSize = 0;
 
-        // must be a one-dimensional array
+        // must be an one-dimensional array
         sal_Int32 nLower, nUpper;
         for( sal_Int32 i = 0 ; i < nDims ; ++i )
         {
