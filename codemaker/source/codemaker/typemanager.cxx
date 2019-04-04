@@ -164,7 +164,7 @@ codemaker::UnoType::Sort TypeManager::decompose(
 {
     sal_Int32 k;
     std::vector< OString > args;
-    OUString n = b2u(codemaker::UnoType::decompose(u2b(name), &k, &args));
+    OUString n = OUString::fromUtf8(codemaker::UnoType::decompose(name.toUtf8(), &k, &args));
     for (;;) {
         rtl::Reference< unoidl::Entity > ent;
         codemaker::UnoType::Sort s = getSort(n, &ent);
@@ -238,7 +238,7 @@ codemaker::UnoType::Sort TypeManager::decompose(
                 arguments->clear();
                 for (const OString& rArg : args)
                 {
-                    arguments->push_back(b2u(rArg));
+                    arguments->push_back(OUString::fromUtf8(rArg));
                 }
             }
             if (entity != nullptr) {

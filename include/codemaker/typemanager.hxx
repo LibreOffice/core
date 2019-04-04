@@ -62,15 +62,6 @@ private:
     std::vector< rtl::Reference< unoidl::Provider > > primaryProviders_;
 };
 
-
-inline OString u2b(OUString const & s) {
-    return OUStringToOString(s, RTL_TEXTENCODING_UTF8);
-}
-
-inline OUString b2u(OString const & s) {
-    return OStringToOUString(s, RTL_TEXTENCODING_UTF8);
-}
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

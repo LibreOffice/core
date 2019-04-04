@@ -81,7 +81,7 @@ bool getOutputStream(ProgramOptions const & options,
     if( !file.isValid() )
     {
         throw CannotDumpException(
-            "cannot open " + b2u(targetSourceFileName) + " for writing");
+            "cannot open " + OUString::fromUtf8(targetSourceFileName) + " for writing");
     }
     tmpSourceFileName = file.getName();
     file.close();
@@ -539,10 +539,10 @@ static void generateFunctionParameterMap(std::ostream& o,
             o, options, manager, rBase.name, generated, bFirst);
     }
 
-    if ( generated.contains(u2b(name)) )
+    if ( generated.contains(name.toUtf8()) )
         return;
     else
-        generated.add(u2b(name));
+        generated.add(name.toUtf8());
 
     for (const auto& rMethod : ent2->getDirectMethods())
     {
