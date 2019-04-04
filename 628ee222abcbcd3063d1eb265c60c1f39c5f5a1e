@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_84bc326a",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1152,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-04-04T17:03:19Z",
+      "side": 1,
+      "message": "extremely minor nitpicking: this XML element is hereby implemented so feel free to update this comment",
+      "range": {
+        "startLine": 1152,
+        "startChar": 46,
+        "endLine": 1152,
+        "endChar": 60
+      },
+      "revId": "628ee222abcbcd3063d1eb265c60c1f39c5f5a1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_44ae2a2f",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4198,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-04-04T17:03:19Z",
+      "side": 1,
+      "message": "You may want to test relationship stream (xl/drawings/_rels) for the correct content as well",
+      "revId": "628ee222abcbcd3063d1eb265c60c1f39c5f5a1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
