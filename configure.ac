@@ -1145,20 +1145,15 @@ libo_FUZZ_ARG_ENABLE(sal-log,
     AS_HELP_STRING([--enable-sal-log],
         [Make SAL_INFO and SAL_WARN calls do something even in a non-debug build.]))
 
-AC_ARG_ENABLE(selective-debuginfo,
-    AS_HELP_STRING([--enable-selective-debuginfo],
-        [If --enable-debug or --enable-dbgutil is used, build debugging information
-         (-g compiler flag) only for the specified gbuild build targets
-         (where all means everything, - prepended means not to enable, / appended means
-         everything in the directory; there is no ordering, more specific overrides
-         more general, and disabling takes precedence).
-         Example: --enable-selective-debuginfo="all -sw/ -Library_sc".]))
-
 libo_FUZZ_ARG_ENABLE(symbols,
     AS_HELP_STRING([--enable-symbols],
         [Generate debug information.
          By default, enabled for --enable-debug and --enable-dbgutil, disabled
-         otherwise.]))
+         otherwise. It is possible to explicitly specify gbuild build targets
+         (where 'all' means everything, '-' prepended means to not enable, '/' appended means
+         everything in the directory; there is no ordering, more specific overrides
+         more general, and disabling takes precedence).
+         Example: --enable-symbols="all -sw/ -Library_sc".]))
 
 libo_FUZZ_ARG_ENABLE(optimized,
     AS_HELP_STRING([--disable-optimized],
@@ -3813,7 +3808,7 @@ AC_SUBST(MSVC_USE_DEBUG_RUNTIME)
 dnl Set the ENABLE_DEBUG variable.
 dnl ===================================================================
 if test -n "$enable_debug" && test "$enable_debug" != "yes" && test "$enable_debug" != "no"; then
-    AC_MSG_ERROR([--enable-debug now accepts only yes or no, use --enable-selective-debuginfo])
+    AC_MSG_ERROR([--enable-debug now accepts only yes or no, use --enable-symbols])
 fi
 if test -n "$ENABLE_DBGUTIL" -a "$enable_debug" = "no"; then
     if test -z "$libo_fuzzed_enable_debug"; then
@@ -4048,27 +4043,6 @@ if test "$enable_sal_log" = yes; then
 fi
 AC_SUBST(ENABLE_SAL_LOG)
 
-dnl Selective debuginfo
-ENABLE_DEBUGINFO_FOR=
-if test -n "$ENABLE_DEBUG"; then
-    AC_MSG_CHECKING([whether to use selective debuginfo])
-    if test -n "$enable_selective_debuginfo" -a "$enable_selective_debuginfo" != "no"; then
-        if test "$enable_selective_debuginfo" = "yes"; then
-            AC_MSG_ERROR([--enable-selective-debuginfo requires a parameter])
-        fi
-        ENABLE_DEBUGINFO_FOR="$enable_selective_debuginfo"
-        AC_MSG_RESULT([for "$enable_selective_debuginfo"])
-    else
-        ENABLE_DEBUGINFO_FOR=all
-        AC_MSG_RESULT([no, for all])
-    fi
-else
-    if test -n "$enable_selective_debuginfo"; then
-        AC_MSG_ERROR([--enable-selective-debuginfo must be used together with either --enable-debug or --enable-dbgutil])
-    fi
-fi
-AC_SUBST(ENABLE_DEBUGINFO_FOR)
-
 dnl Check for enable symbols option
 dnl ===================================================================
 AC_MSG_CHECKING([whether to generate debug information])
@@ -4079,14 +4053,18 @@ if test -z "$enable_symbols"; then
         enable_symbols=no
     fi
 fi
-if test "$enable_symbols" != no; then
-    ENABLE_SYMBOLS=TRUE
+if test "$enable_symbols" = yes; then
+    ENABLE_SYMBOLS_FOR=all
     AC_MSG_RESULT([yes])
-else
-    ENABLE_SYMBOLS=
+elif test "$enable_symbols" = no; then
+    ENABLE_SYMBOLS_FOR=
     AC_MSG_RESULT([no])
+else
+    # Selective debuginfo.
+    ENABLE_SYMBOLS_FOR="$enable_symbols"
+    AC_MSG_RESULT([for "$enable_symbols"])
 fi
-AC_SUBST(ENABLE_SYMBOLS)
+AC_SUBST(ENABLE_SYMBOLS_FOR)
 
 if test -n "$with_android_ndk" -a \( -n "$ENABLE_SYMBOLS" -o -n "$ENABLE_DEBUG" -o -n "$ENABLE_DBGUTIL" \) -a "$ENABLE_DEBUGINFO_FOR" = "all"; then
     # Building on Android with full symbols: without enough memory the linker never finishes currently.
