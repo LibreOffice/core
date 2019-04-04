@@ -458,7 +458,7 @@ def runHandleFileTests(opts):
         writeReport(state, startTime)
 
 def parseArgs(argv):
-    epilog = "'location' is a pathname, not a URL. 'outdir' and 'userdir' are URLs.\n" \
+    epilog = "'location' is a pathname, not an URL. 'outdir' and 'userdir' are URLs.\n" \
              "The 'directory' parameters should be full absolute pathnames, not URLs."
 
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter,
