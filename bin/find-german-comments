@@ -376,7 +376,7 @@ class Parser:
 
         for path in lines:
             baseDir = self.first_elem(path)
-            # If we have an globalscan use the whitelist.
+            # If we have a globalscan use the whitelist.
             if globalscan:
                 if not baseDir in directory_whitelist:
                     sys.stderr.write("\n - Error: Missing path %s -\n\n" % baseDir)
