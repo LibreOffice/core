@@ -864,7 +864,7 @@ namespace basegfx
             VectorOfPolygons aPolygonPool;
             ListOfEdges      aActiveEdgeList;
 
-            // sometimes not enough, but a usable compromise
+            // sometimes not enough, but an usable compromise
             aPolygonPool.reserve( rRanges.size() );
 
             for (auto& aSweepLineEvent : aSweepLineEvents)
