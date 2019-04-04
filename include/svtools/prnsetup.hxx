@@ -47,6 +47,7 @@ private:
     AutoTimer              maStatusTimer;
     VclPtr<Printer>        mpPrinter;
     VclPtr<Printer>        mpTempPrinter;
+    short solar_execute();
 
     SVT_DLLPRIVATE void         ImplSetInfo();
 
