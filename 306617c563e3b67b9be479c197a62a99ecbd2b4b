@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "df87a7cf_49f64392",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 25
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-04T06:40:58Z",
+      "side": 1,
+      "message": "No idea how to do so. It\u0027s also awkward to list all res id\u0027s in the cxx.",
+      "parentUuid": "df87a7cf_9e0483c8",
+      "revId": "306617c563e3b67b9be479c197a62a99ecbd2b4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87a7cf_de53ebe1",
         "filename": "cui/inc/strings.hrc",
         "patchSetId": 25
@@ -157,6 +175,30 @@
     },
     {
       "key": {
+        "uuid": "df87a7cf_89044b7d",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 1229,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-04T06:40:58Z",
+      "side": 1,
+      "message": "The uitest.uicheck procedure fails when the dialog is shown. Don\u0027t want to touch every test so this suppresses the dialog. uitests start with (legacy) nofirststartwizard and nologo too but I thought the first suits better my use case.",
+      "parentUuid": "df87a7cf_1e21534e",
+      "range": {
+        "startLine": 1228,
+        "startChar": 20,
+        "endLine": 1229,
+        "endChar": 41
+      },
+      "revId": "306617c563e3b67b9be479c197a62a99ecbd2b4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87a7cf_3e1e970c",
         "filename": "solenv/sanitizers/ui/cui.suppr",
         "patchSetId": 25
@@ -168,6 +210,30 @@
       "writtenOn": "2019-04-03T10:49:33Z",
       "side": 1,
       "message": "Why do we add suppressions for a newly added code?",
+      "range": {
+        "startLine": 247,
+        "startChar": 0,
+        "endLine": 248,
+        "endChar": 67
+      },
+      "revId": "306617c563e3b67b9be479c197a62a99ecbd2b4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_29f97f7f",
+        "filename": "solenv/sanitizers/ui/cui.suppr",
+        "patchSetId": 25
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-04T06:40:58Z",
+      "side": 1,
+      "message": "It\u0027s about the accessibility test. Labels should have a buddy relation to a control. These two don\u0027t have it as static text.",
+      "parentUuid": "df87a7cf_3e1e970c",
       "range": {
         "startLine": 247,
         "startChar": 0,

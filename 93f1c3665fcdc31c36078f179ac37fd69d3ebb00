@@ -16,6 +16,24 @@
       "revId": "93f1c3665fcdc31c36078f179ac37fd69d3ebb00",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_69ff8767",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-04T06:40:58Z",
+      "side": 0,
+      "message": "IIRC clang-format wanted this but will try again w/o.",
+      "parentUuid": "df87a7cf_7e2c1f47",
+      "revId": "93f1c3665fcdc31c36078f179ac37fd69d3ebb00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
