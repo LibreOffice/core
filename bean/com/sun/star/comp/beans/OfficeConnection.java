@@ -42,7 +42,7 @@ public interface OfficeConnection
     /**
      * Sets an AWT container factory.
      *
-     * @param containerFactory This is a application provided AWT container
+     * @param containerFactory This is an application provided AWT container
      *  factory.
      */
     void setContainerFactory(ContainerFactory containerFactory);
