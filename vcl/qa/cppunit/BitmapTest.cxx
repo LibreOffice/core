@@ -77,8 +77,7 @@ void BitmapTest::testCreation()
         CPPUNIT_ASSERT_MESSAGE("Not empty", aBmp.IsEmpty());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(0),
                                      aBmp.GetBitCount());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", static_cast<sal_uLong>(1),
-                                     aBmp.GetColorCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", sal_Int64(1), aBmp.GetColorCount());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(0),
                                      aBmp.GetSizeBytes());
     }
@@ -92,8 +91,7 @@ void BitmapTest::testCreation()
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(1),
                                      aBmp.GetBitCount());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", static_cast<sal_uLong>(2),
-                                     aBmp.GetColorCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", sal_Int64(2), aBmp.GetColorCount());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(12),
                                      aBmp.GetSizeBytes());
     }
@@ -107,8 +105,7 @@ void BitmapTest::testCreation()
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(4),
                                      aBmp.GetBitCount());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", static_cast<sal_uLong>(16),
-                                     aBmp.GetColorCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", sal_Int64(16), aBmp.GetColorCount());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(50),
                                      aBmp.GetSizeBytes());
     }
@@ -122,8 +119,7 @@ void BitmapTest::testCreation()
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(8),
                                      aBmp.GetBitCount());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", static_cast<sal_uLong>(256),
-                                     aBmp.GetColorCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", sal_Int64(256), aBmp.GetColorCount());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(100),
                                      aBmp.GetSizeBytes());
     }
@@ -137,7 +133,7 @@ void BitmapTest::testCreation()
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(24),
                                      aBmp.GetBitCount());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", static_cast<sal_uLong>(16777216),
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", sal_Int64(16777216),
                                      aBmp.GetColorCount());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(300),
                                      aBmp.GetSizeBytes());
@@ -152,7 +148,7 @@ void BitmapTest::testCreation()
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(24),
                                      aBmp.GetBitCount());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", static_cast<sal_uLong>(16777216),
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", sal_Int64(16777216),
                                      aBmp.GetColorCount());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(300),
                                      aBmp.GetSizeBytes());
@@ -171,8 +167,8 @@ void BitmapTest::testCreation()
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", sal_uInt16(32), aBmp.GetBitCount());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", sal_Int64(4294967296U),
-                                     sal_Int64(aBmp.GetColorCount()));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", sal_Int64(4294967296ull),
+                                     aBmp.GetColorCount());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", sal_uLong(400), aBmp.GetSizeBytes());
     }
 }
