@@ -318,7 +318,7 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
     double nYScale = 0;
     GetFont().GetScale(&nXScale, &nYScale);
 
-    Point aCurrPos(0, 0);
+    basegfx::B2DPoint aCurrPos(0, 0);
     while (true)
     {
         int nBidiMinRunPos, nBidiEndRunPos;
@@ -570,12 +570,12 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
                 nXOffset = std::lround(nXOffset * nXScale);
                 nYOffset = std::lround(nYOffset * nYScale);
 
-                Point aNewPos(aCurrPos.X() + nXOffset, aCurrPos.Y() + nYOffset);
+                Point aNewPos(aCurrPos.getX() + nXOffset, aCurrPos.getY() + nYOffset);
                 const GlyphItem aGI(nCharPos, nCharCount, nGlyphIndex, aNewPos, nGlyphFlags,
                                     nAdvance, nXOffset, &GetFont());
                 m_GlyphItems.Impl()->push_back(aGI);
 
-                aCurrPos.AdjustX(nAdvance );
+                aCurrPos.setX(aCurrPos.getX() + nAdvance);
             }
         }
     }
