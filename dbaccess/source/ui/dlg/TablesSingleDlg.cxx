@@ -32,13 +32,13 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
     // OTableSubscriptionDialog
-OTableSubscriptionDialog::OTableSubscriptionDialog(vcl::Window* pParent
+OTableSubscriptionDialog::OTableSubscriptionDialog(weld::Window* pParent
             ,const SfxItemSet* _pItems
             ,const Reference< XComponentContext >& _rxORB
             ,const css::uno::Any& _aDataSourceName)
-    : SfxSingleTabDialog(pParent, _pItems, "TablesFilterDialog",
-        "dbaccess/ui/tablesfilterdialog.ui")
-    , m_pImpl( new ODbDataSourceAdministrationHelper( _rxORB, GetFrameWeld(), pParent ? pParent->GetFrameWeld() : nullptr, this ) )
+    : SfxSingleTabDialogController(pParent, _pItems,
+        "dbaccess/ui/tablesfilterdialog.ui", "TablesFilterDialog")
+    , m_pImpl(new ODbDataSourceAdministrationHelper(_rxORB, m_xDialog.get(), pParent, this))
     , m_bStopExecution(false)
 {
     m_pImpl->setDataSourceOrName(_aDataSourceName);
@@ -48,28 +48,22 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(vcl::Window* pParent
     m_pImpl->translateProperties(xDatasource, *m_pOutSet);
     SetInputSet(m_pOutSet.get());
 
-    VclPtrInstance<OTableSubscriptionPage> pTabPage(get_content_area(), *m_pOutSet, this);
+    TabPageParent pPageParent(get_content_area(), this);
+    auto pTabPage = VclPtrInstance<OTableSubscriptionPage>(pPageParent, *m_pOutSet, this);
     pTabPage->SetServiceFactory(_rxORB);
     SetTabPage(pTabPage);
 }
 
 OTableSubscriptionDialog::~OTableSubscriptionDialog()
 {
-    disposeOnce();
 }
 
-void OTableSubscriptionDialog::dispose()
-{
-    m_pOutSet.reset();
-    SfxSingleTabDialog::dispose();
-}
-
-short OTableSubscriptionDialog::Execute()
+short OTableSubscriptionDialog::run()
 {
     short nRet = RET_CANCEL;
     if ( !m_bStopExecution )
     {
-        nRet = SfxSingleTabDialog::Execute();
+        nRet = SfxSingleTabDialogController::run();
         if ( nRet == RET_OK )
         {
             m_pOutSet->Put(*GetOutputItemSet());

@@ -39,7 +39,7 @@ namespace dbaui
 {
 class ODbDataSourceAdministrationHelper;
     // OTableSubscriptionDialog
-    class OTableSubscriptionDialog : public SfxSingleTabDialog, public IItemSetHelper
+    class OTableSubscriptionDialog : public SfxSingleTabDialogController, public IItemSetHelper
     {
         std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
         bool m_bStopExecution; // set when the dialog should not be executed
@@ -47,13 +47,12 @@ class ODbDataSourceAdministrationHelper;
         std::unique_ptr<SfxItemSet> m_pOutSet;
     public:
 
-        OTableSubscriptionDialog(vcl::Window* pParent
+        OTableSubscriptionDialog(weld::Window* pParent
             ,const SfxItemSet* _pItems
             ,const css::uno::Reference< css::uno::XComponentContext >& _rxORB
             ,const css::uno::Any& _aDataSourceName
         );
         virtual ~OTableSubscriptionDialog() override;
-        virtual void dispose() override;
 
         // forwards from ODbDataSourceAdministrationHelper
         void        successfullyConnected();
@@ -66,7 +65,7 @@ class ODbDataSourceAdministrationHelper;
         virtual const SfxItemSet* getOutputSet() const override;
         virtual SfxItemSet* getWriteOutputSet() override;
 
-        virtual short   Execute() override;
+        virtual short run() override;
     };
 
 }   // namespace dbaui
