@@ -432,6 +432,7 @@ void XclExpXmlPivotTableManager::Initialize()
     {
         ScDPObject& rDPObj = (*pDPColl)[i];
         rDPObj.SyncAllDimensionMembers();
+        (void)rDPObj.GetOutputRangeByType(sheet::DataPilotOutputRangeType::TABLE);
     }
 
     // Go through the caches first.
@@ -615,6 +616,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     std::vector<long> aPageFields;
     std::vector<DataField> aDataFields;
 
+    long nDataDimCount = rSaveData.GetDataDimensionCount();
     // Use dimensions in the save data to get their correct ordering.
     // Dimension order here is significant as they specify the order of
     // appearance in each axis.
@@ -646,6 +648,8 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         switch (eOrient)
         {
             case sheet::DataPilotFieldOrientation_COLUMN:
+                if (nPos == -2 && nDataDimCount <= 1)
+                    break;
                 aColFields.push_back(nPos);
             break;
             case sheet::DataPilotFieldOrientation_ROW:
@@ -693,14 +697,15 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     sal_Int32 nFirstDataRow = 2;
     sal_Int32 nFirstDataCol = 1;
     ScRange aResRange = rDPObj.GetOutputRangeByType(sheet::DataPilotOutputRangeType::RESULT);
+
+    if (!aOutRange.IsValid())
+        aOutRange = rDPObj.GetOutRange();
+
     if (aOutRange.IsValid() && aResRange.IsValid())
     {
         nFirstDataRow = aResRange.aStart.Row() - aOutRange.aStart.Row();
         nFirstDataCol = aResRange.aStart.Col() - aOutRange.aStart.Col();
     }
-
-    if (!aOutRange.IsValid())
-        aOutRange = rDPObj.GetOutRange();
 
     pPivotStrm->write("<")->writeId(XML_location);
     rStrm.WriteAttributes(XML_ref,

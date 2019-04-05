@@ -61,6 +61,8 @@ public:
 
     // Export
     void testPivotTableExportXLSX();
+    void testPivotTableExportXLSXSingleDataField();
+    void testPivotTableExportXLSXMultipleDataFields();
     void testPivotCacheExportXLSX();
     void testPivotTableXLSX();
     void testPivotTableTwoDataFieldsXLSX();
@@ -100,6 +102,8 @@ public:
     CPPUNIT_TEST(testTdf112501);
 
     CPPUNIT_TEST(testPivotTableExportXLSX);
+    CPPUNIT_TEST(testPivotTableExportXLSXSingleDataField);
+    CPPUNIT_TEST(testPivotTableExportXLSXMultipleDataFields);
     CPPUNIT_TEST(testPivotCacheExportXLSX);
     CPPUNIT_TEST(testPivotTableXLSX);
     CPPUNIT_TEST(testPivotTableTwoDataFieldsXLSX);
@@ -753,6 +757,58 @@ void ScPivotTableFiltersTest::testPivotTableExportXLSX()
     assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[3]/x:items/x:item", 4);
     assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[3]/x:items/x:item[3]",
                 "h", "1");
+}
+
+void ScPivotTableFiltersTest::testPivotTableExportXLSXSingleDataField()
+{
+    ScDocShellRef xShell = loadDoc("tdf123421_1datafield.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pTable
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
+    CPPUNIT_ASSERT(pTable);
+
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "ref", "A3:B6");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstHeaderRow", "1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstDataRow", "1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstDataCol", "1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:dataFields", "count", "1");
+
+    // There should not be any colFields tag, before the fix there used to be a singleton with
+    // <field x="-2"/> as child node.
+    assertXPath(pTable, "/x:pivotTableDefinition/x:colFields", 0);
+
+    xShell->DoClose();
+}
+
+void ScPivotTableFiltersTest::testPivotTableExportXLSXMultipleDataFields()
+{
+    ScDocShellRef xShell = loadDoc("tdf123421_2datafields.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pTable
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
+    CPPUNIT_ASSERT(pTable);
+
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "ref", "A1:C6");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstHeaderRow", "1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstDataRow", "2");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstDataCol", "1");
+
+    assertXPath(pTable, "/x:pivotTableDefinition/x:dataFields", "count", "2");
+
+    // There should be a single colFields tag with sole child node
+    // <field x="-2"/>.
+    assertXPath(pTable, "/x:pivotTableDefinition/x:colFields", 1);
+    assertXPath(pTable, "/x:pivotTableDefinition/x:colFields", "count", "1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:colFields/x:field", 1);
+    assertXPath(pTable, "/x:pivotTableDefinition/x:colFields/x:field", "x", "-2");
+
+    xShell->DoClose();
 }
 
 void ScPivotTableFiltersTest::testPivotCacheExportXLSX()
