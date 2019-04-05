@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -498,33 +498,6 @@
   <object class="GtkMenu" id="MenuEdit">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="undoi2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:Undo</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="redod2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:Redo</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="repeati2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:Repeat</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separator65">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
     <child>
       <object class="GtkMenuItem" id="cutd2">
         <property name="visible">True</property>
@@ -2841,10 +2814,10 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_full|menub">_Menu</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="relief">none</property>
                                 <property name="use_underline">True</property>
-                                <property name="focus_on_click">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -2894,10 +2867,10 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_full|toolsb">_Tools</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="relief">none</property>
                                 <property name="use_underline">True</property>
-                                <property name="focus_on_click">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -2949,10 +2922,10 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_full|helpb">_Help</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="relief">none</property>
                                 <property name="use_underline">True</property>
-                                <property name="focus_on_click">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -3057,11 +3030,11 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_full|fileb">_File</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="halign">start</property>
                                 <property name="relief">none</property>
                                 <property name="use_underline">True</property>
-                                <property name="focus_on_click">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -3295,11 +3268,11 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_full|editb">_Edit</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="halign">start</property>
                                 <property name="relief">none</property>
                                 <property name="use_underline">True</property>
-                                <property name="focus_on_click">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -3455,11 +3428,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|slideshowb">_Slide Show</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                         <property name="always_show_image">True</property>
                                       </object>
                                       <packing>
@@ -3653,11 +3626,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|paragraphstylet">S_lide</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -3805,11 +3778,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|insertText">_Insert</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -4155,11 +4128,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|draw">D_raw</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -4343,11 +4316,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|viewb">_View</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -4493,11 +4466,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|reviewb">_Review</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -4785,11 +4758,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|arrangedrawb">_Arrange</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -4944,11 +4917,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|slideshowt">_Slide Show</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                         <property name="always_show_image">True</property>
                                       </object>
                                       <packing>
@@ -5197,11 +5170,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|formatd">F_ormat</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -5522,11 +5495,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|paragraphTextb">_Paragraph</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -5769,11 +5742,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|insertTextt">_Insert</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -5935,11 +5908,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|viewt">_View</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -6085,11 +6058,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|reviewp">_Review</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -6226,11 +6199,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|slideshowtt">_Slide Show</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                         <property name="always_show_image">True</property>
                                       </object>
                                       <packing>
@@ -6479,11 +6452,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|formatd">F_ormat</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -6804,11 +6777,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|paragraphTextb">_Paragraph</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -6984,11 +6957,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|tabled">T_able</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -7253,11 +7226,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|rowscolumnst">R_ows</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -7377,11 +7350,11 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_full|calculatet">_Calc</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
-                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -7717,11 +7690,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|drawb">D_raw</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -8012,11 +7985,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|editdrawb">_Edit</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -8428,11 +8401,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|arrangedrawb">_Arrange</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -8583,11 +8556,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|GridDrawB">_Grid</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -8729,11 +8702,11 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_full|viewDrawb">Grou_p</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
-                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -8872,11 +8845,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|3Db">3_D</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -9134,11 +9107,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|graphicB">_Graphic</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -9304,10 +9277,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_full|colorb">C_olor</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
-                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -9707,11 +9680,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|arrangedrawb">_Arrange</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -9862,11 +9835,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|GridDrawB">_Grid</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -10269,11 +10242,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|media">_Media</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -10448,11 +10421,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|slideshowOLE">_Slide Show</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                         <property name="always_show_image">True</property>
                                       </object>
                                       <packing>
@@ -10732,11 +10705,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|editdrawb">F_rame</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -11148,11 +11121,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|arrangedrawb">_Arrange</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -11303,11 +11276,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|GridDrawB">_Grid</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -11453,11 +11426,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|viewtOLE">_View</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -11617,11 +11590,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|oleB">_Master Page</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -11856,11 +11829,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|insertTextm">_Insert</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -12089,11 +12062,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|drawm">D_raw</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -12419,11 +12392,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|arrangedrawb">_Arrange</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -12585,11 +12558,11 @@
                                         <property name="label" translatable="yes" context="notebookbar_groupedbar_full|masterviewm">_View</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="focus_on_click">False</property>
                                         <property name="receives_default">False</property>
                                         <property name="halign">start</property>
                                         <property name="relief">none</property>
                                         <property name="use_underline">True</property>
-                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>

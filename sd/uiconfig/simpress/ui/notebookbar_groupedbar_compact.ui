@@ -520,33 +520,6 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="MenuEdit-Undo">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:Undo</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuEdit-Redo">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:Redo</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuEdit-Repeat">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:Repeat</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="MenuEdit-separator1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="MenuEdit-Cut">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
