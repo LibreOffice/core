@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_38ff8aab",
+        "filename": "codemaker/source/commoncpp/commoncpp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-05T07:59:26Z",
+      "side": 1,
+      "message": "The original comment was more about checking that `nucleus` is a valid identifier.",
+      "revId": "84662e9030a855c8db7cd40d9ce354b773d78c16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_781e720d",
+        "filename": "codemaker/source/cppumaker/cppumaker.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-05T07:59:26Z",
+      "side": 1,
+      "message": "Here and elsewhere: The assert in fromUtf8 is clearly unwarranted with the current implementations of Options.",
+      "revId": "84662e9030a855c8db7cd40d9ce354b773d78c16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_58e60e19",
+        "filename": "codemaker/source/javamaker/javatype.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-05T07:59:26Z",
+      "side": 1,
+      "message": "Again, assert in fromUtf8 is not warranted here.",
+      "revId": "84662e9030a855c8db7cd40d9ce354b773d78c16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
