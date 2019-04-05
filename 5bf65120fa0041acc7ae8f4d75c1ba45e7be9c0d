@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_1892c6f7",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 4298,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-04-05T12:00:17Z",
+      "side": 1,
+      "message": "Just noticed this: please consider using comphelper::OStorageHelper::CopyInputToOutput() here instead of this manual buffer management. I know you just moved the code, so it\u0027s fine for now, but something to think about in a follow-up commit.",
+      "revId": "5bf65120fa0041acc7ae8f4d75c1ba45e7be9c0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
