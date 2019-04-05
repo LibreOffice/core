@@ -22,14 +22,7 @@
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
-#include <sqlext.h>
-#include <comphelper/scopeguard.hxx>
-
-// the name of the library which contains the SQLManageDataSources function
-#define ODBC_UI_LIB_NAME    L"ODBCCP32.DLL"
-
-// the signature of the SQLManageDataSources function
-typedef SQLRETURN (SQL_API* TSQLManageDataSource) (SQLHWND hwndParent);
+#include <odbcinst.h>
 
 // displays the error text for the last error (GetLastError), and returns this error value
 static int displayLastError()
@@ -109,19 +102,7 @@ extern "C" int APIENTRY wWinMain( HINSTANCE _hAppInstance, HINSTANCE, LPWSTR, in
     if ( !IsWindow( hAppWindow ) )
         return displayLastError();
 
-    HMODULE hModule = LoadLibraryW( ODBC_UI_LIB_NAME );
-    if ( hModule == nullptr )
-        hModule = LoadLibraryExW( ODBC_UI_LIB_NAME, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH );
-    if ( hModule == nullptr )
-        return displayLastError();
-    comphelper::ScopeGuard hModuleReleaser([hModule]() { FreeLibrary(hModule); });
-
-    FARPROC pManageDSProc = GetProcAddress( hModule, "SQLManageDataSources" );
-    if ( pManageDSProc == nullptr )
-        return displayLastError();
-
-    TSQLManageDataSource pManageDS = reinterpret_cast<TSQLManageDataSource>(pManageDSProc);
-    if ( !( (*pManageDS)( hAppWindow ) ) )
+    if (!SQLManageDataSources(hAppWindow))
         return displayLastError();
 
     return 0;

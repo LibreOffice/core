@@ -27,6 +27,7 @@
 
 #include <systools/win32/uwinapi.h>
 #include <errorrep.h>
+#include <werapi.h>
 
 namespace
 {
@@ -39,14 +40,7 @@ bool onInitSignal()
 {
     pPreviousHandler = SetUnhandledExceptionFilter(signalHandlerFunction);
 
-    HMODULE hFaultRep = LoadLibraryW( L"faultrep.dll" );
-    if ( hFaultRep )
-    {
-        pfn_ADDEREXCLUDEDAPPLICATIONW pfn = reinterpret_cast<pfn_ADDEREXCLUDEDAPPLICATIONW>(GetProcAddress( hFaultRep, "AddERExcludedApplicationW" ));
-        if ( pfn )
-            pfn( L"SOFFICE.EXE" );
-        FreeLibrary( hFaultRep );
-    }
+    WerAddExcludedApplication(L"SOFFICE.EXE", FALSE);
 
     return true;
 }

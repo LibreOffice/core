@@ -65,50 +65,6 @@ namespace dxcanvas
 {
     namespace
     {
-
-        // monitorSupport
-
-
-        class monitorSupport
-        {
-        public:
-
-            monitorSupport() :
-                mhLibrary(LoadLibraryW(L"user32.dll")),
-                mpMonitorFromWindow(nullptr)
-            {
-                if(mhLibrary)
-                    mpMonitorFromWindow = reinterpret_cast<fMonitorFromWindow>(
-                        GetProcAddress(
-                            mhLibrary,"MonitorFromWindow"));
-            }
-
-            ~monitorSupport()
-            {
-                if(mhLibrary)
-                    FreeLibrary(mhLibrary);
-                mhLibrary=nullptr;
-            }
-
-            HMONITOR MonitorFromWindow( HWND hwnd )
-            {
-                // return adapter_default in case something went wrong...
-                if(!mpMonitorFromWindow)
-                    return HMONITOR(nullptr);
-                // MONITOR_DEFAULTTONEAREST
-                const DWORD dwFlags(0x00000002);
-                return mpMonitorFromWindow(hwnd,dwFlags);
-            }
-        private:
-
-            HINSTANCE mhLibrary;
-            typedef HMONITOR (WINAPI *fMonitorFromWindow )( HWND hwnd, DWORD dwFlags );
-            fMonitorFromWindow mpMonitorFromWindow;
-        };
-
-        monitorSupport aMonitorSupport;
-
-
         class DXRenderModule;
 
 
@@ -1100,7 +1056,7 @@ namespace dxcanvas
 
         UINT DXRenderModule::getAdapterFromWindow()
         {
-            HMONITOR hMonitor(aMonitorSupport.MonitorFromWindow(mhWnd));
+            HMONITOR hMonitor(MonitorFromWindow(mhWnd, MONITOR_DEFAULTTONEAREST));
             UINT aAdapterCount(mpDirect3D9->GetAdapterCount());
             for(UINT i=0; i<aAdapterCount; ++i)
                 if(hMonitor == mpDirect3D9->GetAdapterMonitor(i))

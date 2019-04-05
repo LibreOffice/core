@@ -33,24 +33,11 @@ extern "C" {
 void sal_detail_initialize(int argc, char ** argv)
 {
     sal_initGlobalTimer();
-    HMODULE h = GetModuleHandleW(L"kernel32.dll");
-    if (h != nullptr) {
-        FARPROC p;
 #ifndef _WIN64
-        p = GetProcAddress(h, "SetProcessDEPPolicy");
-        if (p != 0) {
-            reinterpret_cast< BOOL (WINAPI *)(DWORD) >(p)(0x00000001);
-        }
+    SetProcessDEPPolicy(PROCESS_DEP_ENABLE);
 #endif
-        p = GetProcAddress(h, "SetDllDirectoryW");
-        if (p != nullptr) {
-            reinterpret_cast< BOOL (WINAPI *)(LPCWSTR) >(p)(L"");
-        }
-        p = GetProcAddress(h, "SetSearchPathMode");
-        if (p != nullptr) {
-            reinterpret_cast< BOOL (WINAPI *)(DWORD) >(p)(0x8001);
-        }
-    }
+    SetDllDirectoryW(L""); // remove the current directory from the default DLL search order
+    SetSearchPathMode(BASE_SEARCH_PATH_ENABLE_SAFE_SEARCHMODE | BASE_SEARCH_PATH_PERMANENT);
 
     WSADATA wsaData;
     int     error;

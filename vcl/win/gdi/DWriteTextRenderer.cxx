@@ -32,43 +32,6 @@
 #include <comphelper/windowserrorstring.hxx>
 #include <sal/log.hxx>
 
-HINSTANCE D2DWriteTextOutRenderer::mmD2d1 = nullptr,
-          D2DWriteTextOutRenderer::mmDWrite = nullptr;
-D2DWriteTextOutRenderer::pD2D1CreateFactory_t D2DWriteTextOutRenderer::D2D1CreateFactory = nullptr;
-D2DWriteTextOutRenderer::pDWriteCreateFactory_t D2DWriteTextOutRenderer::DWriteCreateFactory = nullptr;
-
-bool D2DWriteTextOutRenderer::InitModules()
-{
-    mmD2d1 = LoadLibraryW(L"D2d1.dll");
-    mmDWrite = LoadLibraryW(L"dwrite.dll");
-    if (mmD2d1 && mmDWrite)
-    {
-        D2D1CreateFactory = pD2D1CreateFactory_t(GetProcAddress(mmD2d1, "D2D1CreateFactory"));
-        DWriteCreateFactory = pDWriteCreateFactory_t(GetProcAddress(mmDWrite, "DWriteCreateFactory"));
-    }
-
-    if (!D2D1CreateFactory || !DWriteCreateFactory)
-    {
-        CleanupModules();
-        return false;
-    }
-
-    return true;
-}
-
-void D2DWriteTextOutRenderer::CleanupModules()
-{
-    if (mmD2d1)
-        FreeLibrary(mmD2d1);
-    if (mmDWrite)
-        FreeLibrary(mmDWrite);
-
-    mmD2d1 = nullptr;
-    mmDWrite = nullptr;
-    D2D1CreateFactory = nullptr;
-    DWriteCreateFactory = nullptr;
-}
-
 namespace
 {
 
@@ -167,8 +130,6 @@ D2DWriteTextOutRenderer::~D2DWriteTextOutRenderer()
         mpDWriteFactory->Release();
     if (mpD2DFactory)
         mpD2DFactory->Release();
-
-    CleanupModules();
 }
 
 void D2DWriteTextOutRenderer::applyTextAntiAliasMode()
