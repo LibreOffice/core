@@ -307,7 +307,7 @@ cmd/32/starshapes.png cmd/32/starshapes.star5.png
 cmd/32/stylewatercanmode cmd/32/styleapply.png
 cmd/32/symbolcatalogue.png cmd/32/insertsymbol.png
 cmd/32/symbolshapes.png cmd/32/symbolshapes.smiley.png
-cmd/32/tableautofitmenu.png cmd/32/setoptimalrowheight.png 
+cmd/32/tableautofitmenu.png cmd/32/setoptimalrowheight.png
 cmd/32/tablecellbackgroundcolor.png cmd/32/backgroundcolor.png
 cmd/32/tabledeletemenu.png cmd/32/deletetable.png
 cmd/32/tableevents.png cmd/32/animationeffects.png
@@ -360,8 +360,8 @@ cmd/ko/lc_drawtext.png cmd/ko/lc_text.png
 cmd/ko/lc_underlinesimple.png cmd/ko/lc_underline.png
 cmd/ko/sc_fontcolor.png cmd/ko/sc_color.png
 cmd/ko/sc_ordercrit.png cmd/ko/sc_datasort.png
-cmd/ko/sc_sortdown.png cmd/ko/sc_sortdescending.png
-cmd/ko/sc_sortup.png cmd/ko/sc_sortascending.png
+dbaccess/res/sortdown.png cmd/sc_downsearch.png
+dbaccess/res/sortup.png cmd/sc_upsearch.png
 cmd/ko/sc_tablesort.png cmd/ko/sc_datasort.png
 cmd/ko/sc_drawtext.png cmd/ko/sc_text.png
 cmd/ko/sc_underlinesimple.png cmd/ko/sc_underline.png
@@ -656,7 +656,7 @@ cmd/lc_starshapes.png cmd/lc_starshapes.star5.png
 cmd/lc_stylewatercanmode cmd/lc_styleapply.png
 cmd/lc_symbolcatalogue.png cmd/lc_insertsymbol.png
 cmd/lc_symbolshapes.png cmd/lc_symbolshapes.smiley.png
-cmd/lc_tableautofitmenu.png cmd/lc_setoptimalrowheight.png 
+cmd/lc_tableautofitmenu.png cmd/lc_setoptimalrowheight.png
 cmd/lc_tablecellbackgroundcolor.png cmd/lc_backgroundcolor.png
 cmd/lc_tabledeletemenu.png cmd/lc_deletetable.png
 cmd/lc_tableevents.png cmd/lc_animationeffects.png
@@ -971,7 +971,7 @@ cmd/sc_starshapes.png cmd/sc_starshapes.star5.png
 cmd/sc_stylewatercanmode cmd/sc_styleapply.png
 cmd/sc_symbolcatalogue.png cmd/sc_insertsymbol.png
 cmd/sc_symbolshapes.png cmd/sc_symbolshapes.smiley.png
-cmd/sc_tableautofitmenu.png cmd/sc_setoptimalrowheight.png 
+cmd/sc_tableautofitmenu.png cmd/sc_setoptimalrowheight.png
 cmd/sc_tablecellbackgroundcolor.png cmd/sc_backgroundcolor.png
 cmd/sc_tabledeletemenu.png cmd/sc_deletetable.png
 cmd/sc_tableevents.png cmd/sc_animationeffects.png
