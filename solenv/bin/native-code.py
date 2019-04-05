@@ -64,6 +64,7 @@ core_factory_list = [
     ("libsvtlo.a", "svt_component_getFactory"),
     ("libctllo.a", "ctl_component_getFactory"),
     ("libMacOSXSpelllo.a", "MacOSXSpell_component_getFactory", "#ifdef IOS"),
+    ("libcuilo.a", "cui_component_getFactory"),
     ]
 
 core_constructor_list = [
