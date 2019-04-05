@@ -100,7 +100,6 @@ namespace dbaui
             ::comphelper::disposeComponent(m_xCurrentConnection);
         }
         catch (RuntimeException&) { }
-        m_pTablesDlg.clear();
         OGenericAdministrationPage::dispose();
     }
 
