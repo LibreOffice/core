@@ -18,6 +18,7 @@
  */
 
 #include "system.h"
+#include <userenv.h>
 
 #include <cassert>
 #include <osl/security.h>
@@ -31,45 +32,13 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 #include "secimpl.hxx"
 
-/* Data for use in (un)LoadProfile Functions */
-/* Declarations based on USERENV.H for Windows 2000 Beta 2 */
-#define PI_NOUI         0x00000001   // Prevents displaying of messages
-
-typedef struct {
-  DWORD    dwSize;          // Must be set to sizeof(PROFILEINFO)
-  DWORD    dwFlags;         // See flags above
-  LPWSTR   lpUserName;      // User name (required)
-  LPWSTR   lpProfilePath;   // Roaming profile path
-  LPWSTR   lpDefaultPath;   // Default user profile path
-  LPWSTR   lpServerName;    // Validating DC name in netbios format
-  LPWSTR   lpPolicyPath;    // Path to the NT4 style policy file
-  HANDLE   hProfile;        // Registry key handle - filled by function
-} PROFILEINFOW, FAR * LPPROFILEINFOW;
-
-/* Typedefs for function pointers in USERENV.DLL */
-typedef BOOL (STDMETHODCALLTYPE FAR * LPFNLOADUSERPROFILE) (
-  HANDLE hToken,
-  LPPROFILEINFOW lpProfileInfo
-);
-
-typedef BOOL (STDMETHODCALLTYPE FAR * LPFNUNLOADUSERPROFILE) (
-  HANDLE hToken,
-  HANDLE hProfile
-);
-
-typedef BOOL (STDMETHODCALLTYPE FAR * LPFNGETUSERPROFILEDIR) (
-  HANDLE hToken,
-  LPWSTR lpProfileDir,
-  LPDWORD lpcchSize
-);
-
 /* To get an impersonation token we need to create an impersonation
    duplicate so every access token has to be created with duplicate
    access rights */
 
 #define TOKEN_DUP_QUERY (TOKEN_QUERY|TOKEN_DUPLICATE)
 
-static bool GetSpecialFolder(rtl_uString **strPath,int nFolder);
+static bool GetSpecialFolder(rtl_uString **strPath, REFKNOWNFOLDERID rFolder);
 // We use LPCTSTR here, because we use it with SE_foo_NAME constants
 // which are defined in winnt.h as UNICODE-dependent TEXT("PrivilegeName")
 static BOOL Privilege(LPCTSTR pszPrivilege, BOOL bEnable);
@@ -399,7 +368,7 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
         }
         else
         {
-                bSuccess = GetSpecialFolder(&ustrSysDir, CSIDL_PERSONAL) &&
+                bSuccess = GetSpecialFolder(&ustrSysDir, FOLDERID_Documents) &&
                                      (osl_File_E_None == osl_getFileURLFromSystemPath(ustrSysDir, pustrDirectory));
         }
     }
@@ -440,7 +409,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
                 rtl_uString *ustrFile = nullptr;
                 sal_Unicode sFile[_MAX_PATH];
 
-                if ( !GetSpecialFolder( &ustrFile, CSIDL_APPDATA) )
+                if ( !GetSpecialFolder( &ustrFile, FOLDERID_RoamingAppData) )
                 {
                     OSL_VERIFY(GetWindowsDirectoryW(o3tl::toW(sFile), _MAX_DIR) > 0);
 
@@ -473,9 +442,6 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
 
     if (Privilege(SE_RESTORE_NAME, TRUE))
     {
-        HMODULE                 hUserEnvLib         = nullptr;
-        LPFNLOADUSERPROFILE     fLoadUserProfile    = nullptr;
-        LPFNUNLOADUSERPROFILE   fUnloadUserProfile  = nullptr;
         HANDLE                  hAccessToken        = static_cast<oslSecurityImpl*>(Security)->m_hToken;
 
         /* try to create user profile */
@@ -492,37 +458,24 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
             }
         }
 
-        hUserEnvLib = LoadLibraryW(L"userenv.dll");
+        rtl_uString *buffer = nullptr;
+        PROFILEINFOW pi;
 
-        if (hUserEnvLib)
+        getUserNameImpl(Security, &buffer, false);
+
+        ZeroMemory(&pi, sizeof(pi));
+        pi.dwSize = sizeof(pi);
+        pi.lpUserName = o3tl::toW(rtl_uString_getStr(buffer));
+        pi.dwFlags = PI_NOUI;
+
+        if (LoadUserProfileW(hAccessToken, &pi))
         {
-            fLoadUserProfile = reinterpret_cast<LPFNLOADUSERPROFILE>(GetProcAddress(hUserEnvLib, "LoadUserProfileW"));
-            fUnloadUserProfile = reinterpret_cast<LPFNUNLOADUSERPROFILE>(GetProcAddress(hUserEnvLib, "UnloadUserProfile"));
+            UnloadUserProfile(hAccessToken, pi.hProfile);
 
-            if (fLoadUserProfile && fUnloadUserProfile)
-            {
-                rtl_uString *buffer = nullptr;
-                PROFILEINFOW pi;
-
-                getUserNameImpl(Security, &buffer, false);
-
-                ZeroMemory(&pi, sizeof(pi));
-                pi.dwSize = sizeof(pi);
-                pi.lpUserName = o3tl::toW(rtl_uString_getStr(buffer));
-                pi.dwFlags = PI_NOUI;
-
-                if (fLoadUserProfile(hAccessToken, &pi))
-                {
-                    fUnloadUserProfile(hAccessToken, pi.hProfile);
-
-                    bOk = true;
-                }
-
-                rtl_uString_release(buffer);
-            }
-
-            FreeLibrary(hUserEnvLib);
+            bOk = true;
         }
+
+        rtl_uString_release(buffer);
 
         if (hAccessToken && (hAccessToken != static_cast<oslSecurityImpl*>(Security)->m_hToken))
             CloseHandle(hAccessToken);
@@ -535,8 +488,6 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
 {
     if ( static_cast<oslSecurityImpl*>(Security)->m_hProfile != nullptr )
     {
-        HMODULE                 hUserEnvLib         = nullptr;
-        LPFNUNLOADUSERPROFILE   fUnloadUserProfile  = nullptr;
         HANDLE                  hAccessToken        = static_cast<oslSecurityImpl*>(Security)->m_hToken;
 
         if ( !hAccessToken )
@@ -552,20 +503,8 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
             }
         }
 
-        hUserEnvLib = LoadLibraryW(L"userenv.dll");
-
-        if (hUserEnvLib)
-        {
-            fUnloadUserProfile = reinterpret_cast<LPFNUNLOADUSERPROFILE>(GetProcAddress(hUserEnvLib, "UnloadUserProfile"));
-
-            if (fUnloadUserProfile)
-            {
-                /* unloading the user profile */
-                fUnloadUserProfile(hAccessToken, static_cast<oslSecurityImpl*>(Security)->m_hProfile);
-            }
-
-            FreeLibrary(hUserEnvLib);
-        }
+        /* unloading the user profile */
+        UnloadUserProfile(hAccessToken, static_cast<oslSecurityImpl*>(Security)->m_hProfile);
 
         static_cast<oslSecurityImpl*>(Security)->m_hProfile = nullptr;
 
@@ -574,100 +513,15 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
     }
 }
 
-static bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
+static bool GetSpecialFolder(rtl_uString **strPath, REFKNOWNFOLDERID rFolder)
 {
     bool bRet = false;
-    HINSTANCE hLibrary = LoadLibraryW(L"shell32.dll");
-
-    if (hLibrary != nullptr)
+    PWSTR PathW;
+    if (SUCCEEDED(SHGetKnownFolderPath(rFolder, KF_FLAG_CREATE, nullptr, &PathW)))
     {
-        sal_Unicode PathW[_MAX_PATH];
-        BOOL (WINAPI *pSHGetSpecialFolderPathW)(HWND, LPWSTR, int, BOOL) = reinterpret_cast<BOOL (WINAPI *)(HWND, LPWSTR, int, BOOL)>(GetProcAddress(hLibrary, "SHGetSpecialFolderPathW"));
-
-        if (pSHGetSpecialFolderPathW)
-        {
-            if (pSHGetSpecialFolderPathW(GetActiveWindow(), o3tl::toW(PathW), nFolder, TRUE))
-            {
-                rtl_uString_newFromStr( strPath, PathW);
-                bRet = true;
-            }
-        }
-        else
-        {
-            HRESULT (WINAPI *pSHGetSpecialFolderLocation)(HWND, int, LPITEMIDLIST *) = reinterpret_cast<HRESULT (WINAPI *)(HWND, int, LPITEMIDLIST *)>(GetProcAddress(hLibrary, "SHGetSpecialFolderLocation"));
-            BOOL (WINAPI *pSHGetPathFromIDListW)(LPCITEMIDLIST, LPWSTR) = reinterpret_cast<BOOL (WINAPI *)(LPCITEMIDLIST, LPWSTR)>(GetProcAddress(hLibrary, "SHGetPathFromIDListW"));
-            HRESULT (WINAPI *pSHGetMalloc)(LPMALLOC *) = reinterpret_cast<HRESULT (WINAPI *)(LPMALLOC *)>(GetProcAddress(hLibrary, "SHGetMalloc"));
-
-            if (pSHGetSpecialFolderLocation && pSHGetPathFromIDListW && pSHGetMalloc )
-            {
-                LPITEMIDLIST pidl;
-                LPMALLOC pMalloc;
-                HRESULT  hr;
-
-                hr = pSHGetSpecialFolderLocation(GetActiveWindow(), nFolder, &pidl);
-
-                /* Get SHGetSpecialFolderLocation fails if directory does not exists. */
-                /* If it fails we try to create the directory and redo the call */
-                if (! SUCCEEDED(hr))
-                {
-                    HKEY hRegKey;
-
-                    if (RegOpenKeyW(HKEY_CURRENT_USER,
-                                   L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
-                                   &hRegKey) == ERROR_SUCCESS)
-                    {
-                        LONG lRet;
-                        DWORD lSize = sizeof(PathW);
-                        DWORD Type = REG_SZ;
-
-                        switch (nFolder)
-                        {
-                            case CSIDL_APPDATA:
-                                lRet = RegQueryValueExW(hRegKey, L"AppData", nullptr, &Type, reinterpret_cast<LPBYTE>(PathW), &lSize);
-                                  break;
-
-                            case CSIDL_PERSONAL:
-                                lRet = RegQueryValueExW(hRegKey, L"Personal", nullptr, &Type, reinterpret_cast<LPBYTE>(PathW), &lSize);
-                                break;
-
-                            default:
-                                lRet = -1l;
-                        }
-
-                        if ((lRet == ERROR_SUCCESS) && (Type == REG_SZ))
-                        {
-                            if (_waccess(o3tl::toW(PathW), 0) < 0)
-                                CreateDirectoryW(o3tl::toW(PathW), nullptr);
-
-                            hr = pSHGetSpecialFolderLocation(GetActiveWindow(), nFolder, &pidl);
-                        }
-
-                        RegCloseKey(hRegKey);
-                    }
-                }
-
-                if (SUCCEEDED(hr))
-                {
-                    if (pSHGetPathFromIDListW(pidl, o3tl::toW(PathW)))
-                    {
-                        /* if directory does not exist, create it */
-                        if (_waccess(o3tl::toW(PathW), 0) < 0)
-                            CreateDirectoryW(o3tl::toW(PathW), nullptr);
-
-                        rtl_uString_newFromStr( strPath, PathW);
-                        bRet = true;
-                    }
-                }
-
-                if (SUCCEEDED(pSHGetMalloc(&pMalloc)))
-                {
-                    pMalloc->Free(pidl);
-                    pMalloc->Release();
-                }
-            }
-        }
-
-        FreeLibrary(hLibrary);
+        rtl_uString_newFromStr(strPath, o3tl::toU(PathW));
+        CoTaskMemFree(PathW);
+        bRet = true;
     }
 
     return bRet;

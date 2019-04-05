@@ -15,6 +15,11 @@ $(eval $(call gb_Executable_use_libraries,odbcconfig,\
     comphelper \
 ))
 
+$(eval $(call gb_Executable_use_system_win32_libs,odbcconfig,\
+	legacy_stdio_definitions \
+	odbccp32 \
+))
+
 $(eval $(call gb_Library_use_sdk_api,odbcconfig))
 
 $(eval $(call gb_Executable_add_exception_objects,odbcconfig,\

@@ -210,16 +210,11 @@ TextOutRenderer & TextOutRenderer::get(bool bUseDWrite)
 
     if (bUseDWrite)
     {
-        static bool const bSuccess(D2DWriteTextOutRenderer::InitModules());
-        if (bSuccess && !pSalData->m_pD2DWriteTextOutRenderer)
+        if (!pSalData->m_pD2DWriteTextOutRenderer)
         {
             pSalData->m_pD2DWriteTextOutRenderer.reset(new D2DWriteTextOutRenderer());
         }
-        if (pSalData->m_pD2DWriteTextOutRenderer)
-        {
-            return *pSalData->m_pD2DWriteTextOutRenderer;
-        }
-        // else: fall back to GDI
+        return *pSalData->m_pD2DWriteTextOutRenderer;
     }
     if (!pSalData->m_pExTextOutRenderer)
     {
