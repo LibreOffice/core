@@ -315,7 +315,7 @@ public:
 
     ScDPSaveDimension* GetInnermostDimension(css::sheet::DataPilotFieldOrientation nOrientation);
     ScDPSaveDimension* GetFirstDimension(css::sheet::DataPilotFieldOrientation eOrientation);
-    long GetDataDimensionCount() const;
+    SC_DLLPUBLIC long GetDataDimensionCount() const;
 
     void SetPosition( ScDPSaveDimension* pDim, long nNew );
     SC_DLLPUBLIC void SetColumnGrand( bool bSet );
