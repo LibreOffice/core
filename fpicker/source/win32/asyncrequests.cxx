@@ -80,6 +80,8 @@ AsyncRequests::~AsyncRequests()
     // the already destructed SolarMutex, which would crash LO on exit.
     if (isRunning())
     {
+        // tdf#123502: make sure we actually hold the mutex before releasing it
+        SolarMutexGuard aGuard;
         SolarMutexReleaser aReleaser;
         join();
     }
