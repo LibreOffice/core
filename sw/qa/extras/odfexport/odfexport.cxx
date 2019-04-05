@@ -2156,6 +2156,14 @@ DECLARE_ODFEXPORT_TEST(tdf99631, "tdf99631.docx")
     assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaWidth']", "4515");
     assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaHeight']", "1354");
 }
+
+DECLARE_ODFEXPORT_TEST(testLayoutInCell, "layoutInCell.docx")
+{
+    // the horizontal position was wrong due to missing layoutInCell attribute
+    // in the odf export
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(14861), parseDump("/root/page/footer/txt/anchored/fly/tab/row/cell/txt/anchored/fly/infos/bounds", "top").toInt32());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

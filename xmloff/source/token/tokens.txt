@@ -1024,6 +1024,7 @@ last-page
 last-row-spanned
 layer
 layer-set
+layout-in-cell
 leader-char
 left
 left-outside

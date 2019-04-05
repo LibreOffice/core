@@ -2305,6 +2305,16 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   </rng:define>
 
   <!-- TODO no proposal -->
+  <rng:define name="layout-in-cell" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:layout-in-cell">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+
+  <!-- TODO no proposal -->
   <rng:define name="text-bookmark-start-attlist" combine="interleave">
     <rng:optional>
       <rng:attribute name="loext:hidden">
