@@ -522,8 +522,9 @@ RTFDocumentImpl::getProperties(const RTFSprms& rAttributes, RTFSprms const& rSpr
         }
 
         // Get rid of direct formatting what is already in the style.
-        RTFSprms const sprms(aSprms.cloneAndDeduplicate(aStyleSprms, nStyleType));
-        RTFSprms const attributes(rAttributes.cloneAndDeduplicate(aStyleAttributes, nStyleType));
+        RTFSprms const sprms(aSprms.cloneAndDeduplicate(aStyleSprms, nStyleType, true));
+        RTFSprms const attributes(
+            rAttributes.cloneAndDeduplicate(aStyleAttributes, nStyleType, true));
         return new RTFReferenceProperties(attributes, sprms);
     }
 
@@ -2031,6 +2032,61 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::createStylePrope
     return pProps;
 }
 
+/** 2 different representations of the styles are needed:
+
+    1) flat content, as read from the input file:
+       stored in m_aStyleTableEntries, used as reference input for
+       deduplication both here and for hard formatting in getProperties()
+
+    2) real content, with proper override of sprms/attributes where it differs
+       from parent style; this is produced here and sent to domain mapper
+ */
+RTFReferenceTable::Entries_t RTFDocumentImpl::deduplicateStyleTable()
+{
+    RTFReferenceTable::Entries_t ret;
+    for (auto const& it : m_aStyleTableEntries)
+    {
+        auto pStyle = it.second;
+        // ugly downcasts here, but can't easily replace the members with
+        // RTFReferenceProperties because dmapper wants SvRef<Properties> anyway
+        RTFValue::Pointer_t const pBasedOn(
+            static_cast<RTFReferenceProperties&>(*pStyle).getSprms().find(
+                NS_ooxml::LN_CT_Style_basedOn));
+        if (pBasedOn)
+        {
+            int const nBasedOn(pBasedOn->getInt());
+            auto const itParent(m_aStyleTableEntries.find(nBasedOn)); // definition as read!
+            if (itParent != m_aStyleTableEntries.end())
+            {
+                auto const pStyleType(
+                    static_cast<RTFReferenceProperties&>(*pStyle).getAttributes().find(
+                        NS_ooxml::LN_CT_Style_type));
+                assert(pStyleType);
+                int const nStyleType(pStyleType->getInt());
+                RTFSprms const sprms(
+                    static_cast<RTFReferenceProperties&>(*pStyle).getSprms().cloneAndDeduplicate(
+                        static_cast<RTFReferenceProperties&>(*itParent->second).getSprms(),
+                        nStyleType));
+                RTFSprms const attributes(
+                    static_cast<RTFReferenceProperties&>(*pStyle)
+                        .getAttributes()
+                        .cloneAndDeduplicate(
+                            static_cast<RTFReferenceProperties&>(*itParent->second).getAttributes(),
+                            nStyleType));
+
+                pStyle = new RTFReferenceProperties(attributes, sprms);
+            }
+            else
+            {
+                SAL_WARN("writerfilter.rtf", "parent style not found: " << nBasedOn);
+            }
+        }
+        ret[it.first] = pStyle;
+    }
+    assert(ret.size() == m_aStyleTableEntries.size());
+    return ret;
+}
+
 void RTFDocumentImpl::resetSprms()
 {
     m_aStates.top().aTableSprms.clear();
@@ -2094,8 +2150,9 @@ RTFError RTFDocumentImpl::popState()
         break;
         case Destination::STYLESHEET:
         {
+            RTFReferenceTable::Entries_t const pStyleTableDeduplicated(deduplicateStyleTable());
             writerfilter::Reference<Table>::Pointer_t const pTable(
-                new RTFReferenceTable(m_aStyleTableEntries));
+                new RTFReferenceTable(pStyleTableDeduplicated));
             Mapper().table(NS_ooxml::LN_STYLESHEET, pTable);
         }
         break;
