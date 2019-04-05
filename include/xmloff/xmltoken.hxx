@@ -2367,6 +2367,7 @@ namespace xmloff { namespace token {
 
         // DVO, OD 01.10.2003 #i18732
         XML_FLOW_WITH_TEXT,
+        XML_LAYOUT_IN_CELL,
 
         XML_WITH_TAB, // #i21237#
 

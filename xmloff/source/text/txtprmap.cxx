@@ -460,6 +460,7 @@ XMLPropertyMapEntry const aXMLAdditionalTextDefaultsMap[] =
 {
     // RES_FOLLOW_TEXT_FLOW - DVO #i18732#
     MG_ED( "IsFollowingTextFlow", STYLE, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
+    MG_ED( "IsLayoutInCell", LO_EXT, LAYOUT_IN_CELL,      XML_TYPE_BOOL, 0 ),
 
     // #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
     MG_ED( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION, 0 ),
@@ -853,6 +854,7 @@ XMLPropertyMapEntry const aXMLFramePropMap[] =
     // RES_FOLLOW_TEXT_FLOW - DVO #i18732#
     MG_E( "IsFollowingTextFlow", DRAW, FLOW_WITH_TEXT,      XML_TYPE_BOOL|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_OLD_FLOW_WITH_TEXT ),
     MG_E( "IsFollowingTextFlow", STYLE, FLOW_WITH_TEXT,     XML_TYPE_BOOL, 0 ),
+    MG_E( "IsLayoutInCell", LO_EXT, LAYOUT_IN_CELL,     XML_TYPE_BOOL, 0 ),
     // #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
     MG_E( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION, 0 ),
 
@@ -911,6 +913,7 @@ XMLPropertyMapEntry const aXMLShapePropMap[] =
 
     // RES_FOLLOW_TEXT_FLOW (#i26791#)
     MG_ED( "IsFollowingTextFlow", STYLE, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
+    MG_ED( "IsLayoutInCell", LO_EXT, LAYOUT_IN_CELL,      XML_TYPE_BOOL, 0 ),
 
     // RES_FRM_SIZE
     MAP_EXT("RelativeWidthRelation", XML_NAMESPACE_LO_EXT, XML_REL_WIDTH_REL, XML_TYPE_TEXT_HORIZONTAL_REL|XML_TYPE_PROP_GRAPHIC, CTF_RELWIDTHREL),
