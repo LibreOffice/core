@@ -625,7 +625,7 @@ static OString generateClassDefinition(std::ostream& o,
         std::set< OUString >::const_iterator iter = interfaces.begin();
         while (iter != interfaces.end())
         {
-            o << "\n        " << scopedCppName(iter->toUtf8());
+            o << "\n        " << scopedCppName(u2b(*iter));
             ++iter;
             if (iter != interfaces.end())
                 o << ",";
@@ -636,7 +636,7 @@ static OString generateClassDefinition(std::ostream& o,
 
     if (propertyhelper.getLength() > 1) {
         o << ",\n    public ::cppu::PropertySetMixin< "
-          << scopedCppName(propertyhelper.toUtf8()) << " >";
+          << scopedCppName(u2b(propertyhelper)) << " >";
     }
 
     o << "\n{\npublic:\n"
@@ -665,7 +665,7 @@ static OString generateClassDefinition(std::ostream& o,
         std::set< OUString >::const_iterator iter = interfaces.begin();
         while (iter != interfaces.end())
         {
-            buffer.append(scopedCppName(iter->toUtf8()));
+            buffer.append(scopedCppName(u2b(*iter)));
             ++iter;
             if (iter != interfaces.end())
                 buffer.append(", ");
@@ -771,7 +771,7 @@ static OString generateClassDefinition(std::ostream& o,
             o << "    ::cppu::WeakComponentImplHelper" << interfaces.size() << "<";
             std::set< OUString >::const_iterator iter = interfaces.begin();
             while (iter != interfaces.end()) {
-                o << "\n        " << scopedCppName(iter->toUtf8());
+                o << "\n        " << scopedCppName(u2b(*iter));
                 ++iter;
                 if (iter != interfaces.end())
                     o << ",";
@@ -781,7 +781,7 @@ static OString generateClassDefinition(std::ostream& o,
         }
         if (propertyhelper.getLength() > 1) {
             o << "    ::cppu::PropertySetMixin< "
-              << scopedCppName(propertyhelper.toUtf8()) << " >(\n"
+              << scopedCppName(u2b(propertyhelper)) << " >(\n"
                  "        context, static_cast< Implements >(\n            ";
             OStringBuffer buffer(128);
             if (propinterfaces.find("com/sun/star/beans/XPropertySet")
@@ -865,7 +865,7 @@ static void generateMethodBodies(std::ostream& o,
     for (const auto& rIface : interfaces) {
         if ( rIface == "com.sun.star.lang.XServiceInfo" ) {
             generateXServiceInfoBodies(o, name, comphelpernamespace);
-            generated.add(rIface.toUtf8());
+            generated.add(u2b(rIface));
         } else {
             printMethods(o, options, manager, rIface, generated, "_",
                          name, "", true, propertyhelper);
@@ -897,7 +897,7 @@ static void generateQueryInterface(std::ostream& o,
     std::set< OUString >::const_iterator iter = interfaces.begin();
     while (iter != interfaces.end())
     {
-        o << "\n        " << scopedCppName(iter->toUtf8());
+        o << "\n        " << scopedCppName(u2b(*iter));
         ++iter;
         if (iter != interfaces.end())
             o << ",";
@@ -940,7 +940,7 @@ void generateSkeleton(ProgramOptions const & options,
     bool supportxcomponent = false;
 
     for (const auto& rType : types) {
-        checkType(manager, OUString::fromUtf8(rType), interfaces, services, properties);
+        checkType(manager, b2u(rType), interfaces, services, properties);
     }
 
     if (options.componenttype == 3) {
@@ -1071,7 +1071,7 @@ void generateCalcAddin(ProgramOptions const & options,
 
 
     for (const auto& rType : types) {
-        checkType(manager, OUString::fromUtf8(rType), interfaces, services, properties);
+        checkType(manager, b2u(rType), interfaces, services, properties);
     }
 
     OUString sAddinService;
