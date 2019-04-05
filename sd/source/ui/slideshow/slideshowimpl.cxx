@@ -64,6 +64,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/scheduler.hxx>
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -1670,7 +1671,12 @@ void SlideshowImpl::updateSlideShow()
 
         if (mxShow.is() && (fUpdate >= 0.0))
         {
-            if (!::basegfx::fTools::equalZero(fUpdate))
+            if (::basegfx::fTools::equalZero(fUpdate))
+            {
+                // Make sure idle tasks don't starve when we don't have to wait.
+                Scheduler::ProcessEventsToIdle();
+            }
+            else
             {
                 // Avoid busy loop when the previous call to update()
                 // returns a small positive number but not 0 (which is
