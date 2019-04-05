@@ -611,6 +611,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     // appearance in each axis.
     const ScDPSaveData::DimsType& rDims = rSaveData.GetDimensions();
     bool bTabularMode = false;
+    long nDataDimCount = rSaveData.GetDataDimensionCount();
     for (const auto & i : rDims)
     {
         const ScDPSaveDimension& rDim = *i;
@@ -637,6 +638,8 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         switch (eOrient)
         {
             case sheet::DataPilotFieldOrientation_COLUMN:
+                if (nPos == -2 && nDataDimCount <= 1)
+                    break;
                 aColFields.push_back(nPos);
             break;
             case sheet::DataPilotFieldOrientation_ROW:
