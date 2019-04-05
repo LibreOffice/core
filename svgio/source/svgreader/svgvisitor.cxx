@@ -74,6 +74,8 @@ void SvgDrawVisitor::visit(svgio::svgreader::SvgNode const& rNode)
             pRectangle->mnStrokeWidth
                 = rRectNode.getSvgStyleAttributes()->getStrokeWidth().getNumber();
 
+            pRectangle->mnOpacity = rRectNode.getSvgStyleAttributes()->getOpacity().getNumber();
+
             const basegfx::BColor* pFillColor = rRectNode.getSvgStyleAttributes()->getFill();
             if (pFillColor)
                 pRectangle->mpFillColor = std::make_shared<basegfx::BColor>(*pFillColor);
@@ -96,6 +98,8 @@ void SvgDrawVisitor::visit(svgio::svgreader::SvgNode const& rNode)
 
                 pDrawPath->mnStrokeWidth
                     = rPathNode.getSvgStyleAttributes()->getStrokeWidth().getNumber();
+
+                pDrawPath->mnOpacity = rPathNode.getSvgStyleAttributes()->getOpacity().getNumber();
 
                 const basegfx::BColor* pFillColor = rPathNode.getSvgStyleAttributes()->getFill();
                 if (pFillColor)

@@ -62,6 +62,7 @@ public:
     double mnRy;
 
     double mnStrokeWidth;
+    double mnOpacity;
     std::shared_ptr<basegfx::BColor> mpFillColor;
     std::shared_ptr<basegfx::BColor> mpStrokeColor;
 
@@ -71,6 +72,7 @@ public:
         , mnRx(1.0)
         , mnRy(1.0)
         , mnStrokeWidth(1.0)
+        , mnOpacity(1.0)
     {
     }
 };
@@ -81,6 +83,7 @@ public:
     basegfx::B2DPolyPolygon maPolyPolygon;
 
     double mnStrokeWidth;
+    double mnOpacity;
     std::shared_ptr<basegfx::BColor> mpFillColor;
     std::shared_ptr<basegfx::BColor> mpStrokeColor;
 
@@ -88,6 +91,7 @@ public:
         : DrawBase(DrawCommandType::Path)
         , maPolyPolygon(rPolyPolygon)
         , mnStrokeWidth(1.0)
+        , mnOpacity(1.0)
     {
     }
 };

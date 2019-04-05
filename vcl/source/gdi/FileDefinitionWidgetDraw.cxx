@@ -185,14 +185,15 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                     rGraphics.SetLineColor();
                     rGraphics.SetFillColor(Color(*rRectangle.mpFillColor));
                     rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(),
-                                              basegfx::B2DPolyPolygon(aB2DPolygon), 0.0f, nullptr);
+                                              basegfx::B2DPolyPolygon(aB2DPolygon),
+                                              1.0 - rRectangle.mnOpacity, nullptr);
                 }
                 if (rRectangle.mpStrokeColor)
                 {
                     rGraphics.SetLineColor(Color(*rRectangle.mpStrokeColor));
                     rGraphics.SetFillColor();
                     rGraphics.DrawPolyLine(
-                        basegfx::B2DHomMatrix(), aB2DPolygon, 0.0f,
+                        basegfx::B2DHomMatrix(), aB2DPolygon, 1.0 - rRectangle.mnOpacity,
                         basegfx::B2DVector(rRectangle.mnStrokeWidth, rRectangle.mnStrokeWidth),
                         basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, false,
                         nullptr);
@@ -229,7 +230,8 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                 {
                     rGraphics.SetLineColor();
                     rGraphics.SetFillColor(Color(*rPath.mpFillColor));
-                    rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(), aPolyPolygon, 0.0f, nullptr);
+                    rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(), aPolyPolygon,
+                                              1.0 - rPath.mnOpacity, nullptr);
                 }
                 if (rPath.mpStrokeColor)
                 {
@@ -238,7 +240,7 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                     for (auto const& rPolygon : aPolyPolygon)
                     {
                         rGraphics.DrawPolyLine(
-                            basegfx::B2DHomMatrix(), rPolygon, 0.0f,
+                            basegfx::B2DHomMatrix(), rPolygon, 1.0 - rPath.mnOpacity,
                             basegfx::B2DVector(rPath.mnStrokeWidth, rPath.mnStrokeWidth),
                             basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, false,
                             nullptr);
