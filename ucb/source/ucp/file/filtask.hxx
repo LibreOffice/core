@@ -226,8 +226,8 @@ namespace fileaccess
             UnqPathData(UnqPathData&&);
             ~UnqPathData();
 
-            std::unique_ptr<PropertySet> properties;
-            std::unique_ptr<NotifierList> notifier;
+            PropertySet properties;
+            NotifierList notifier;
 
             // Three views on the PersistentPropertySet
             css::uno::Reference< css::ucb::XPersistentPropertySet >   xS;

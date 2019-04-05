@@ -44,7 +44,7 @@ XPropertySetInfo_impl::XPropertySetInfo_impl( TaskManager* pMyShell,const OUStri
 
     TaskManager::ContentMap::iterator it = m_pMyShell->m_aContent.find( aUnqPath );
 
-    TaskManager::PropertySet& properties = *(it->second.properties);
+    TaskManager::PropertySet& properties = it->second.properties;
 
     m_seq.realloc( properties.size() );
 
