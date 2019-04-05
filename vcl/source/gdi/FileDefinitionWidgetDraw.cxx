@@ -188,14 +188,15 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                 {
                     rGraphics.SetLineColor();
                     rGraphics.SetFillColor(ImplColorToSal(Color(*rRectangle.mpFillColor)));
-                    rGraphics.DrawPolyPolygon(basegfx::B2DPolyPolygon(aB2DPolygon), 0.0f, nullptr);
+                    rGraphics.DrawPolyPolygon(basegfx::B2DPolyPolygon(aB2DPolygon),
+                                              1.0 - rRectangle.mnOpacity, nullptr);
                 }
                 if (rRectangle.mpStrokeColor)
                 {
                     rGraphics.SetLineColor(ImplColorToSal(Color(*rRectangle.mpStrokeColor)));
                     rGraphics.SetFillColor();
                     rGraphics.DrawPolyLine(
-                        aB2DPolygon, 0.0f,
+                        aB2DPolygon, 1.0 - rRectangle.mnOpacity,
                         basegfx::B2DVector(rRectangle.mnStrokeWidth, rRectangle.mnStrokeWidth),
                         basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, nullptr);
                 }
@@ -231,7 +232,7 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                 {
                     rGraphics.SetLineColor();
                     rGraphics.SetFillColor(ImplColorToSal(Color(*rPath.mpFillColor)));
-                    rGraphics.DrawPolyPolygon(aPolyPolygon, 0.0f, nullptr);
+                    rGraphics.DrawPolyPolygon(aPolyPolygon, 1.0 - rPath.mnOpacity, nullptr);
                 }
                 if (rPath.mpStrokeColor)
                 {
@@ -240,7 +241,7 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                     for (auto const& rPolygon : aPolyPolygon)
                     {
                         rGraphics.DrawPolyLine(
-                            rPolygon, 0.0f,
+                            rPolygon, 1.0 - rPath.mnOpacity,
                             basegfx::B2DVector(rPath.mnStrokeWidth, rPath.mnStrokeWidth),
                             basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f,
                             nullptr);
