@@ -964,6 +964,15 @@
                                               </packing>
                                             </child>
                                             <child>
+                                              <object class="GtkSpinButton" id="pagemarginsb:0mm">
+                                                <property name="can_focus">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">4</property>
+                                              </packing>
+                                            </child>
+                                            <child>
                                               <object class="GtkLabel" id="sheetmargintxt1">
                                                 <property name="can_focus">False</property>
                                                 <property name="halign">start</property>
@@ -978,15 +987,6 @@
                                             </child>
                                             <child>
                                               <object class="GtkSpinButton" id="sheetmarginsb:0mm">
-                                                <property name="can_focus">True</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="top_attach">4</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkSpinButton" id="pagemarginsb:0mm">
                                                 <property name="can_focus">True</property>
                                               </object>
                                               <packing>
