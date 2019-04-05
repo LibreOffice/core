@@ -274,6 +274,7 @@ protected:
     std::unique_ptr<weld::Button> m_xHelpBtn;
 
     void                CreateOutputItemSet(const SfxItemSet& rInput);
+    void                SetInputSet(const SfxItemSet* pInSet) { m_pInputSet = pInSet; }
     DECL_DLLPRIVATE_LINK(OKHdl_Impl, weld::Button&, void);
 };
 
