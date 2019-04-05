@@ -438,7 +438,8 @@ static void lcl_copyFlatten(RTFReferenceProperties& rProps, RTFSprms& rStyleAttr
     for (auto& rSprm : rProps.getSprms())
     {
         // createStyleProperties() puts properties to rPr, but here we need a flat list.
-        if (rSprm.first == NS_ooxml::LN_CT_Style_rPr)
+        if (rSprm.first == NS_ooxml::LN_CT_Style_rPr
+            || rSprm.first == NS_ooxml::LN_CT_Style_pPr) // ???
         {
             // rPr can have both attributes and SPRMs, copy over both types.
             RTFSprms& rRPrSprms = rSprm.second->getSprms();
@@ -1377,9 +1378,10 @@ void RTFDocumentImpl::text(OUString& rString)
                             m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_styleId,
                                                                  pValue);
                             m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Style_name, pValue);
+                            // FIXME
 
                             writerfilter::Reference<Properties>::Pointer_t const pProp(
-                                createStyleProperties());
+                                createStyleProperties(pType->getInt()));
                             m_aStyleTableEntries.insert(
                                 std::make_pair(m_nCurrentStyleIndex, pProp));
                         }
@@ -1952,6 +1954,7 @@ RTFError RTFDocumentImpl::pushState()
             // this is a "faked" destination for the style sheet entry
             m_aStates.top().pDestinationText = &m_aStates.top().aDestinationText;
             m_aStates.top().eDestination = Destination::STYLEENTRY;
+#if 1
             {
                 // the *default* is \s0 i.e. paragraph style default
                 // this will be overwritten by \sN \csN \dsN \tsN
@@ -1959,6 +1962,7 @@ RTFError RTFDocumentImpl::pushState()
                 auto pValue = new RTFValue(NS_ooxml::LN_Value_ST_StyleType_paragraph);
                 m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type, pValue);
             }
+#endif
             break;
         case Destination::FIELDRESULT:
         case Destination::SHAPETEXT:
@@ -1995,8 +1999,10 @@ RTFError RTFDocumentImpl::pushState()
     return RTFError::OK;
 }
 
-writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::createStyleProperties()
+writerfilter::Reference<Properties>::Pointer_t
+RTFDocumentImpl::createStyleProperties(int const nStyleType)
 {
+    RTFValue::Pointer_t pParaProps;
     int nBasedOn = 0;
     RTFValue::Pointer_t pBasedOn = m_aStates.top().aTableSprms.find(NS_ooxml::LN_CT_Style_basedOn);
     if (pBasedOn)
@@ -2017,8 +2023,32 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::createStylePrope
         }
     }
 
+    // FIXME hardcoded para
+    if (pBasedOn && nStyleType == NS_ooxml::LN_Value_ST_StyleType_paragraph)
+    {
+        auto it = m_aStyleTableEntries.find(nBasedOn);
+        if (it != m_aStyleTableEntries.end())
+        {
+            RTFSprms aStyleSprms;
+            RTFSprms aStyleAttributes;
+            RTFReferenceProperties& rProps
+                = *static_cast<RTFReferenceProperties*>(it->second.get());
+            lcl_copyFlatten(rProps, aStyleAttributes, aStyleSprms);
+            RTFSprms const sprms(
+                m_aStates.top().aParagraphSprms.cloneAndDeduplicate(aStyleSprms, nStyleType));
+            RTFSprms const attributes(m_aStates.top().aParagraphAttributes.cloneAndDeduplicate(
+                aStyleAttributes, nStyleType));
+            pParaProps = new RTFValue(attributes, sprms);
+        }
+    }
+
+#if 0
     RTFValue::Pointer_t pParaProps
-        = new RTFValue(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms);
+#else
+    if (!pParaProps)
+        pParaProps
+#endif
+    = new RTFValue(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms);
     RTFValue::Pointer_t pCharProps
         = new RTFValue(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms);
 

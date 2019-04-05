@@ -194,6 +194,36 @@ DECLARE_RTFEXPORT_TEST(testParaBottomMargin, "para-bottom-margin.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(getParagraph(1), "ParaTopMargin"));
 }
 
+DECLARE_RTFEXPORT_TEST(testParaStyleBottomMargin, "para-style-bottom-margin.rtf")
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(353), getProperty<sal_Int32>(xPropertySet, "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(style::LineSpacingMode::PROP,
+                         getProperty<style::LineSpacing>(xPropertySet, "ParaLineSpacing").Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(115),
+                         getProperty<style::LineSpacing>(xPropertySet, "ParaLineSpacing").Height);
+
+    // The reason why this is 0 despite the default style containing \sa200
+    // is that Word will actually interpret \basedonN
+    // as "set style N and for every attribute of that style,
+    // set an attribute with default value on the style"
+    uno::Reference<beans::XPropertySet> xPropertySet1(
+        getStyles("ParagraphStyles")->getByName("Contents 1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPropertySet1, "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(style::LineSpacingMode::PROP,
+                         getProperty<style::LineSpacing>(xPropertySet1, "ParaLineSpacing").Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100),
+                         getProperty<style::LineSpacing>(xPropertySet1, "ParaLineSpacing").Height);
+    auto const xPara(getParagraph(1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(
+        style::LineSpacingMode::PROP,
+        getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Mode); // 0 or 3 ???
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100),
+                         getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Height);
+}
+
 DECLARE_RTFEXPORT_TEST(testFdo66040, "fdo66040.rtf")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);

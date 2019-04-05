@@ -637,7 +637,7 @@ public:
 private:
     SvStream& Strm();
     Color getColorTable(sal_uInt32 nIndex);
-    writerfilter::Reference<Properties>::Pointer_t createStyleProperties();
+    writerfilter::Reference<Properties>::Pointer_t createStyleProperties(int nStyleType);
     void resetSprms();
     void resetAttributes();
     void resolveSubstream(std::size_t nPos, Id nId);

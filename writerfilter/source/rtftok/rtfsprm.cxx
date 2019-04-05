@@ -12,6 +12,7 @@
 #include <ooxml/QNameToString.hxx>
 #include <rtl/strbuf.hxx>
 #include "rtfdocumentimpl.hxx"
+#include <sal/log.hxx>
 
 namespace writerfilter
 {
@@ -155,10 +156,21 @@ static RTFValue::Pointer_t getDefaultSPRM(Id const id, Id nStyleType)
         {
             case NS_ooxml::LN_CT_Spacing_before:
             case NS_ooxml::LN_CT_Spacing_after:
+                printf("XXX LN_CT_Spacing_after");
+                BOOST_FALLTHROUGH;
             case NS_ooxml::LN_CT_Ind_left:
             case NS_ooxml::LN_CT_Ind_right:
             case NS_ooxml::LN_CT_Ind_firstLine:
                 return new RTFValue(0);
+
+            case NS_ooxml::LN_CT_Spacing_lineRule:
+                printf("XXX LN_CT_Spacing_lineRule");
+                return new RTFValue(NS_ooxml::LN_Value_doc_ST_LineSpacingRule_auto);
+            case NS_ooxml::LN_CT_Spacing_line:
+                printf("XXX LN_CT_Spacing_line");
+                return new RTFValue(
+                    240); // FIXME is the default 12pt or 100% - and how to push 100% to dmapper if there's no font size
+                // ah! static const int nSingleLineSpacing = 240;
 
             default:
                 break;
