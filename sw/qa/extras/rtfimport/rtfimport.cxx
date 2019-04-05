@@ -19,6 +19,8 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/BreakType.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -1560,6 +1562,35 @@ DECLARE_RTFIMPORT_TEST(testDefaultValues, "default-values.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(run, "CharEscapementHeight"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(run, "CharKerning"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_AUTO), getProperty<sal_Int32>(run, "CharColor"));
+}
+
+DECLARE_RTFIMPORT_TEST(testParaStyleBottomMargin, "para-style-bottom-margin.rtf")
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(353), getProperty<sal_Int32>(xPropertySet, "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(style::LineSpacingMode::PROP,
+                         getProperty<style::LineSpacing>(xPropertySet, "ParaLineSpacing").Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(115),
+                         getProperty<style::LineSpacing>(xPropertySet, "ParaLineSpacing").Height);
+
+    // The reason why this is 0 despite the default style containing \sa200
+    // is that Word will actually interpret \basedonN
+    // as "set style N and for every attribute of that style,
+    // set an attribute with default value on the style"
+    uno::Reference<beans::XPropertySet> xPropertySet1(
+        getStyles("ParagraphStyles")->getByName("Contents 1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPropertySet1, "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(style::LineSpacingMode::PROP,
+                         getProperty<style::LineSpacing>(xPropertySet1, "ParaLineSpacing").Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100),
+                         getProperty<style::LineSpacing>(xPropertySet1, "ParaLineSpacing").Height);
+    auto const xPara(getParagraph(1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(style::LineSpacingMode::PROP, // 0 or 3 ???
+                         getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100),
+                         getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Height);
 }
 
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
