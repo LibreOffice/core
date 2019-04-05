@@ -4,10 +4,10 @@
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore2">
     <columns>
-      <!-- column-name check1 -->
-      <column type="gboolean"/>
       <!-- column-name expander -->
       <column type="GdkPixbuf"/>
+      <!-- column-name check1 -->
+      <column type="gboolean"/>
       <!-- column-name text -->
       <column type="gchararray"/>
       <!-- column-name id -->
@@ -74,7 +74,7 @@
                     <property name="vexpand">True</property>
                     <property name="model">liststore2</property>
                     <property name="headers_visible">False</property>
-                    <property name="search_column">1</property>
+                    <property name="search_column">2</property>
                     <property name="enable_tree_lines">True</property>
                     <property name="show_expanders">True</property>
                     <child internal-child="selection">
@@ -84,24 +84,29 @@
                       <object class="GtkTreeViewColumn" id="treeviewcolumn8">
                         <property name="spacing">6</property>
                         <child>
-                          <object class="GtkCellRendererToggle" id="cellrenderer5"/>
+                          <object class="GtkCellRendererPixbuf" id="cellrenderertext5"/>
                           <attributes>
-                            <attribute name="visible">4</attribute>
-                            <attribute name="active">0</attribute>
-                            <attribute name="inconsistent">5</attribute>
+                            <attribute name="pixbuf">0</attribute>
                           </attributes>
                         </child>
                         <child>
-                          <object class="GtkCellRendererPixbuf" id="cellrenderertext5"/>
+                          <object class="GtkCellRendererToggle" id="cellrenderer5"/>
                           <attributes>
-                            <attribute name="pixbuf">1</attribute>
+                            <attribute name="visible">4</attribute>
+                            <attribute name="active">1</attribute>
+                            <attribute name="inconsistent">5</attribute>
                           </attributes>
                         </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn9">
+                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext6"/>
                           <attributes>
                             <attribute name="text">2</attribute>
-                            <attribute name="weight">5</attribute>
+                            <attribute name="weight">6</attribute>
                           </attributes>
                         </child>
                       </object>

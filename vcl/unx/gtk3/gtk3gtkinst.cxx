@@ -5863,6 +5863,10 @@ private:
     {
         GtkTreePath *tree_path = gtk_tree_path_new_from_string(path);
 
+        // toggled signal handlers can query get_cursor to get which
+        // node was clicked
+        gtk_tree_view_set_cursor(m_pTreeView, tree_path, nullptr, false);
+
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
         gtk_tree_model_get_iter(pModel, &iter, tree_path);
@@ -5875,6 +5879,8 @@ private:
         gint depth;
         gint* indices = gtk_tree_path_get_indices_with_depth(tree_path, &depth);
         int nRow = indices[depth-1];
+
+        set(iter, m_aToggleTriStateMap[nCol], false);
 
         signal_toggled(std::make_pair(nRow, nCol));
 
@@ -6422,7 +6428,7 @@ public:
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         col = get_model_col(col);
-        set(rGtkIter.iter, m_aWeightMap[col], bOn ? PANGO_WEIGHT_BOLD : -1);
+        set(rGtkIter.iter, m_aWeightMap[col], bOn ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL);
     }
 
     virtual bool get_text_emphasis(const weld::TreeIter& rIter, int col) const override
