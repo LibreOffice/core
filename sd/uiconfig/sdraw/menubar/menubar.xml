@@ -104,7 +104,6 @@
       <menu:menuitem menu:id=".uno:EditHyperlink"/>
       <menu:menuitem menu:id=".uno:ModifyField"/>
       <menu:menuitem menu:id=".uno:ManageLinks"/>
-      <menu:menuitem menu:id=".uno:ImageMapDialog"/>
       <menu:menuitem menu:id=".uno:ObjectMenue"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EditDoc"/>
@@ -589,6 +588,7 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AutoCorrectDlg"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:ImageMapDialog"/>
       <menu:menuitem menu:id=".uno:BmpMask"/>
       <menu:menuitem menu:id=".uno:AVMediaPlayer"/>
       <menu:menuseparator/>
