@@ -1480,6 +1480,29 @@ public:
     ~SolarMutexReleaser() { Application::AcquireSolarMutex( mnReleased ); }
 };
 
+/**
+ A helper class that calls Application::ReleaseSolarMutex() in its constructor
+ and restores the mutex in its destructor, *only if current thread holds it*.
+ This is a hack, because it shows that a code handles both locked and unlocked
+ calls, which, citing jmux, "leads to madness". Its use must be an indication
+ that something is implemented incorrectly, so this workaround is required.
+*/
+class SolarMutexReleaserIfHeld
+{
+    const sal_uInt32 mnReleased;
+public:
+    SolarMutexReleaserIfHeld()
+        : mnReleased(
+              Application::GetSolarMutex().IsCurrentThread() ? Application::ReleaseSolarMutex() : 0)
+    {
+    }
+    ~SolarMutexReleaserIfHeld()
+    {
+        if (mnReleased)
+            Application::AcquireSolarMutex(mnReleased);
+    }
+};
+
 VCL_DLLPUBLIC Application* GetpApp();
 
 VCL_DLLPUBLIC bool InitVCL();
