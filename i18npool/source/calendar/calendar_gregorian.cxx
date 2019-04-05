@@ -205,10 +205,11 @@ Calendar_hanja::loadCalendar( const OUString& /*uniqueID*/, const css::lang::Loc
 }
 
 static const Era gengou_eraArray[] = {
-    {1868,  1,  1, 0},
-    {1912,  7, 30, 0},
-    {1926, 12, 25, 0},
-    {1989,  1,  8, 0},
+    {1868,  1,  1, 0},  // Meiji
+    {1912,  7, 30, 0},  // Taisho
+    {1926, 12, 25, 0},  // Showa
+    {1989,  1,  8, 0},  // Heisei
+    {2019,  5,  1, 0},  // Reiwa
     {0, 0, 0, 0}
 };
 Calendar_gengou::Calendar_gengou() : Calendar_gregorian(gengou_eraArray)

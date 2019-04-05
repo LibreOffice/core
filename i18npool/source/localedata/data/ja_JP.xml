@@ -480,6 +480,11 @@
           <DefaultAbbrvName>平</DefaultAbbrvName>
           <DefaultFullName>平成</DefaultFullName>
         </Era>
+        <Era>
+          <EraID>Reiwa</EraID>
+          <DefaultAbbrvName>令</DefaultAbbrvName>
+          <DefaultFullName>令和</DefaultFullName>
+        </Era>
       </Eras>
       <StartDayOfWeek>
         <DayID>sun</DayID>
