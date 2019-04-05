@@ -613,7 +613,7 @@ void writeClassFile(
     tempfile.createTempFile(getTempDir(filename));
     if (!tempfile.isValid()) {
         throw CannotDumpException(
-            "Cannot create temporary file for " + OUString::fromUtf8(filename));
+            "Cannot create temporary file for " + b2u(filename));
     }
     OString tempname(tempfile.getName());
     try {
@@ -630,8 +630,8 @@ void writeClassFile(
     tempfile.close();
     if (!makeValidTypeFile(filename, tempname, bCheck)) {
         throw CannotDumpException(
-            "Cannot create " + OUString::fromUtf8(filename) + " from temporary file "
-            + OUString::fromUtf8(tempname));
+            "Cannot create " + b2u(filename) + " from temporary file "
+            + b2u(tempname));
     }
 }
 
@@ -2442,10 +2442,10 @@ void produce(
     OUString const & name, rtl::Reference< TypeManager > const & manager,
     codemaker::GeneratedTypeSet & generated, JavaOptions const & options)
 {
-    if (generated.contains(name.toUtf8())) {
+    if (generated.contains(u2b(name))) {
         return;
     }
-    generated.add(name.toUtf8());
+    generated.add(u2b(name));
     if (!manager->foundAtPrimaryProvider(name)) {
         return;
     }

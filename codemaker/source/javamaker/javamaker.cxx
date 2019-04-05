@@ -54,7 +54,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
         }
         codemaker::GeneratedTypeSet generated;
         if (options.isValid("-T")) {
-            OUString names(OUString::fromUtf8(options.getOption("-T")));
+            OUString names(b2u(options.getOption("-T")));
             for (sal_Int32 i = 0; i != -1;) {
                 OUString name(names.getToken(0, ';', i));
                 if (!name.isEmpty()) {
