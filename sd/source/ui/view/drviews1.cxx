@@ -1185,7 +1185,7 @@ void DrawViewShell::ResetActualLayer()
                     {
                         if (!pPV->IsLayerVisible(aName))
                         {
-                            nBits |= TabBarPageBits::Blue;
+                            nBits |= TabBarPageBits::Gray;
                         }
                         if (pPV->IsLayerLocked(aName))
                         {
@@ -1208,7 +1208,7 @@ void DrawViewShell::ResetActualLayer()
                     TabBarPageBits nBits = TabBarPageBits::NONE;
                     if (!mpDrawView->GetSdrPageView()->IsLayerVisible(aName))
                     {
-                        nBits = TabBarPageBits::Blue;
+                        nBits = TabBarPageBits::Gray;
                     }
                     if (mpDrawView->GetSdrPageView()->IsLayerLocked(aName))
                     {
