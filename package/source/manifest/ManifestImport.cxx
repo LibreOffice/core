@@ -173,7 +173,7 @@ void ManifestImport::doEncryptedCipherValue()
     {
         aKeyInfoSequence[2].Name = "CipherValue";
         uno::Sequence < sal_Int8 > aDecodeBuffer;
-        ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters);
+        ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters.toString());
         aKeyInfoSequence[2].Value <<= aDecodeBuffer;
         aCurrentCharacters = ""; // consumed
     }
@@ -187,7 +187,7 @@ void ManifestImport::doEncryptedKeyId()
     {
         aKeyInfoSequence[0].Name = "KeyId";
         uno::Sequence < sal_Int8 > aDecodeBuffer;
-        ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters);
+        ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters.toString());
         aKeyInfoSequence[0].Value <<= aDecodeBuffer;
         aCurrentCharacters = ""; // consumed
     }
@@ -201,7 +201,7 @@ void ManifestImport::doEncryptedKeyPacket()
     {
         aKeyInfoSequence[1].Name = "KeyPacket";
         uno::Sequence < sal_Int8 > aDecodeBuffer;
-        ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters);
+        ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters.toString());
         aKeyInfoSequence[1].Value <<= aDecodeBuffer;
         aCurrentCharacters = ""; // consumed
     }
@@ -510,7 +510,7 @@ void SAL_CALL ManifestImport::endElement( const OUString& aName )
 
 void SAL_CALL ManifestImport::characters( const OUString& aChars )
 {
-    aCurrentCharacters += aChars;
+    aCurrentCharacters.append(aChars);
 }
 
 void SAL_CALL ManifestImport::ignorableWhitespace( const OUString& /*aWhitespaces*/ )
