@@ -102,6 +102,7 @@ void TestParsing::testSimpleRectangle()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xff0000), sal_Int32(Color(*pDrawRect->mpStrokeColor)));
     CPPUNIT_ASSERT(bool(pDrawRect->mpFillColor));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00cc00), sal_Int32(Color(*pDrawRect->mpFillColor)));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.1, pDrawRect->mnOpacity, 1E-12);
 }
 
 void TestParsing::testPath()
@@ -133,6 +134,7 @@ void TestParsing::testPath()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), sal_Int32(Color(*pDrawPath->mpStrokeColor)));
     CPPUNIT_ASSERT(bool(pDrawPath->mpFillColor));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x007aff), sal_Int32(Color(*pDrawPath->mpFillColor)));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.1, pDrawPath->mnOpacity, 1E-12);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestParsing);
