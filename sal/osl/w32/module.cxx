@@ -18,7 +18,7 @@
  */
 
 #include "system.h"
-#include <tlhelp32.h>
+#include <psapi.h>
 
 #include "file_url.hxx"
 #include "path_helper.hxx"
@@ -180,204 +180,55 @@ osl_getAsciiFunctionSymbol( oslModule Module, const sal_Char *pSymbol )
     return fncAddr;
 }
 
-/*****************************************************************************/
-/* Implementation for Windows 95, 98 and Me */
-/*****************************************************************************/
-
-/* Undefine because there is no explicit "A" definition */
-
-#ifdef MODULEENTRY32
-#undef MODULEENTRY32
-#endif
-
-#ifdef LPMODULEENTRY32
-#undef LPMODULEENTRY32
-#endif
-
-/***************************************************************************************/
-/* Implementation for Windows NT, 2K and XP (2K and XP could use the above method too) */
-/***************************************************************************************/
-
-#include <imagehlp.h>
-
-typedef BOOL (WINAPI *SymInitialize_PROC)(
-    HANDLE   hProcess,
-    LPWSTR   UserSearchPath,
-    BOOL     fInvadeProcess
-    );
-
-typedef BOOL (WINAPI *SymCleanup_PROC)(
-    HANDLE hProcess
-    );
-
-typedef BOOL (WINAPI *SymGetModuleInfo_PROC)(
-    HANDLE              hProcess,
-    DWORD               dwAddr,
-    PIMAGEHLP_MODULEW   ModuleInfo
-    );
-
-/* Seems that IMAGEHLP.DLL is always available on NT 4. But MSDN from Platform SDK says Win 2K is required. MSDN from VS 6.0a says
-    it's O.K on NT 4 ???!!!
-    BTW: We are using ANSI function because not all version of IMAGEHLP.DLL contain Unicode support
-*/
-
-static bool osl_addressGetModuleURL_NT4_( void *pv, rtl_uString **pustrURL )
-{
-    bool    bSuccess    = false;    /* Assume failure */
-
-    /*  IMAGEHELP.DLL has a bug that it recursively scans subdirectories of
-        the root when calling SymInitialize(), so we prefer DBGHELP.DLL
-        which exports the same symbols and is shipped with OOo */
-
-    HMODULE     hModImageHelp = LoadLibraryW( L"DBGHELP.DLL" );
-
-    if ( !hModImageHelp )
-        hModImageHelp = LoadLibraryW( L"IMAGEHLP.DLL" );
-
-    if ( hModImageHelp )
-    {
-        SymGetModuleInfo_PROC   lpfnSymGetModuleInfo;
-        SymInitialize_PROC      lpfnSymInitialize;
-        SymCleanup_PROC         lpfnSymCleanup;
-
-        lpfnSymInitialize = reinterpret_cast<SymInitialize_PROC>(GetProcAddress( hModImageHelp, "SymInitializeW" ));
-        lpfnSymCleanup = reinterpret_cast<SymCleanup_PROC>(GetProcAddress( hModImageHelp, "SymCleanup" ));
-        lpfnSymGetModuleInfo = reinterpret_cast<SymGetModuleInfo_PROC>(GetProcAddress( hModImageHelp, "SymGetModuleInfoW" ));
-
-        if ( lpfnSymInitialize && lpfnSymCleanup && lpfnSymGetModuleInfo )
-        {
-            IMAGEHLP_MODULEW ModuleInfo;
-            ::osl::LongPathBuffer< sal_Unicode > aModuleFileName( MAX_LONG_PATH );
-            LPWSTR lpSearchPath = nullptr;
-
-            if ( GetModuleFileNameW( nullptr, o3tl::toW(aModuleFileName), aModuleFileName.getBufSizeInSymbols() ) )
-            {
-                wchar_t *pLastBkSlash = wcsrchr( o3tl::toW(aModuleFileName), L'\\' );
-
-                if (
-                    pLastBkSlash &&
-                    pLastBkSlash > o3tl::toW(aModuleFileName)
-                    && *(pLastBkSlash - 1) != L':'
-                    && *(pLastBkSlash - 1) != L'\\'
-                    )
-                {
-                    *pLastBkSlash = 0;
-                    lpSearchPath = o3tl::toW(aModuleFileName);
-                }
-            }
-
-            lpfnSymInitialize( GetCurrentProcess(), lpSearchPath, TRUE );
-
-            ZeroMemory( &ModuleInfo, sizeof(ModuleInfo) );
-            ModuleInfo.SizeOfStruct = sizeof(ModuleInfo);
-
-            bSuccess = !!lpfnSymGetModuleInfo( GetCurrentProcess(), reinterpret_cast<DWORD_PTR>(pv), &ModuleInfo );
-
-            if ( bSuccess )
-            {
-                /*  #99182 On localized (non-english) NT4 and XP (!!!) for some libraries the LoadedImageName member of ModuleInfo isn't filled. Because
-                    other members ModuleName and ImageName do not contain the full path we can cast the Member
-                    BaseOfImage to a HMODULE (on NT it's the same) and use GetModuleFileName to retrieve the full
-                    path of the loaded image */
-
-                if ( ModuleInfo.LoadedImageName[0] || GetModuleFileNameW( reinterpret_cast<HMODULE>(ModuleInfo.BaseOfImage), ModuleInfo.LoadedImageName, SAL_N_ELEMENTS(ModuleInfo.LoadedImageName) ) )
-                {
-                    rtl_uString *ustrSysPath = nullptr;
-
-                    rtl_uString_newFromStr( &ustrSysPath, o3tl::toU(ModuleInfo.LoadedImageName) );
-                    OSL_ASSERT(ustrSysPath != nullptr);
-                    osl_getFileURLFromSystemPath( ustrSysPath, pustrURL );
-                    rtl_uString_release( ustrSysPath );
-                }
-                else
-                    bSuccess = false;
-            }
-
-            lpfnSymCleanup( GetCurrentProcess() );
-        }
-
-        FreeLibrary( hModImageHelp );
-    }
-
-    return bSuccess;
-}
-
-typedef struct MODULEINFO {
-    LPVOID lpBaseOfDll;
-    DWORD SizeOfImage;
-    LPVOID EntryPoint;
-} *LPMODULEINFO;
-
-typedef BOOL (WINAPI *EnumProcessModules_PROC)(
-  HANDLE hProcess,      // handle to the process
-  HMODULE * lphModule,  // array to receive the module handles
-  DWORD cb,             // size of the array
-  LPDWORD lpcbNeeded    // receives the number of bytes returned
-);
-
-typedef BOOL (WINAPI *GetModuleInformation_PROC)(
-  HANDLE hProcess,         // handle to the process
-  HMODULE hModule,         // handle to the module
-  LPMODULEINFO lpmodinfo,  // structure that receives information
-  DWORD cb                 // size of the structure
-);
-
-/* This version can fail because PSAPI.DLL is not always part of NT 4 despite MSDN Library 6.0a say so */
-
-static bool osl_addressGetModuleURL_NT_( void *pv, rtl_uString **pustrURL )
+sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL )
 {
     bool    bSuccess    = false;    /* Assume failure */
     static HMODULE hModPsapi = LoadLibraryW( L"PSAPI.DLL" );
+    static auto lpfnEnumProcessModules = reinterpret_cast<decltype(EnumProcessModules)*>(
+        hModPsapi ? GetProcAddress(hModPsapi, "EnumProcessModules") : nullptr);
+    static auto lpfnGetModuleInformation = reinterpret_cast<decltype(GetModuleInformation)*>(
+        hModPsapi ? GetProcAddress(hModPsapi, "GetModuleInformation") : nullptr);
 
-    if ( hModPsapi )
+    if (lpfnEnumProcessModules && lpfnGetModuleInformation)
     {
-        EnumProcessModules_PROC     lpfnEnumProcessModules      = reinterpret_cast<EnumProcessModules_PROC>(GetProcAddress( hModPsapi, "EnumProcessModules" ));
-        GetModuleInformation_PROC   lpfnGetModuleInformation    = reinterpret_cast<GetModuleInformation_PROC>(GetProcAddress( hModPsapi, "GetModuleInformation" ));
+        DWORD cbNeeded = 0;
+        HMODULE* lpModules = nullptr;
+        DWORD nModules = 0;
+        UINT iModule = 0;
+        MODULEINFO modinfo;
 
-        if ( lpfnEnumProcessModules && lpfnGetModuleInformation )
+        lpfnEnumProcessModules(GetCurrentProcess(), nullptr, 0, &cbNeeded);
+
+        lpModules = static_cast<HMODULE*>(_alloca(cbNeeded));
+        lpfnEnumProcessModules(GetCurrentProcess(), lpModules, cbNeeded, &cbNeeded);
+
+        nModules = cbNeeded / sizeof(HMODULE);
+
+        for (iModule = 0; !bSuccess && iModule < nModules; iModule++)
         {
-            DWORD       cbNeeded = 0;
-            HMODULE     *lpModules = nullptr;
-            DWORD       nModules = 0;
-            UINT        iModule = 0;
-            MODULEINFO  modinfo;
+            lpfnGetModuleInformation(GetCurrentProcess(), lpModules[iModule], &modinfo,
+                                     sizeof(modinfo));
 
-            lpfnEnumProcessModules( GetCurrentProcess(), nullptr, 0, &cbNeeded );
-
-            lpModules = static_cast<HMODULE *>(_alloca( cbNeeded ));
-            lpfnEnumProcessModules( GetCurrentProcess(), lpModules, cbNeeded, &cbNeeded );
-
-            nModules = cbNeeded / sizeof(HMODULE);
-
-            for ( iModule = 0; !bSuccess && iModule < nModules; iModule++ )
+            if (static_cast<BYTE*>(pv) >= static_cast<BYTE*>(modinfo.lpBaseOfDll)
+                && static_cast<BYTE*>(pv)
+                       < static_cast<BYTE*>(modinfo.lpBaseOfDll) + modinfo.SizeOfImage)
             {
-                lpfnGetModuleInformation( GetCurrentProcess(), lpModules[iModule], &modinfo, sizeof(modinfo) );
+                ::osl::LongPathBuffer<sal_Unicode> aBuffer(MAX_LONG_PATH);
+                rtl_uString* ustrSysPath = nullptr;
 
-                if ( static_cast<BYTE *>(pv) >= static_cast<BYTE *>(modinfo.lpBaseOfDll) && static_cast<BYTE *>(pv) < static_cast<BYTE *>(modinfo.lpBaseOfDll) + modinfo.SizeOfImage )
-                {
-                    ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
-                    rtl_uString *ustrSysPath = nullptr;
+                GetModuleFileNameW(lpModules[iModule], o3tl::toW(aBuffer),
+                                   aBuffer.getBufSizeInSymbols());
 
-                    GetModuleFileNameW( lpModules[iModule], o3tl::toW(aBuffer), aBuffer.getBufSizeInSymbols() );
+                rtl_uString_newFromStr(&ustrSysPath, aBuffer);
+                osl_getFileURLFromSystemPath(ustrSysPath, pustrURL);
+                rtl_uString_release(ustrSysPath);
 
-                    rtl_uString_newFromStr( &ustrSysPath, aBuffer );
-                    osl_getFileURLFromSystemPath( ustrSysPath, pustrURL );
-                    rtl_uString_release( ustrSysPath );
-
-                    bSuccess = true;
-                }
+                bSuccess = true;
             }
         }
-
     }
 
     return bSuccess;
-}
-
-sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL )
-{
-    /* Use ..._NT first because ..._NT4 is much slower */
-    return osl_addressGetModuleURL_NT_( pv, pustrURL ) || osl_addressGetModuleURL_NT4_( pv, pustrURL );
 }
 
 sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress( oslGenericFunction addr, rtl_uString ** ppLibraryUrl )

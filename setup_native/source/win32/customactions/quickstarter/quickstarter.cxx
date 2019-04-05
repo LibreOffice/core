@@ -93,17 +93,14 @@ static bool IsValidHandle( HANDLE handle )
 
 static DWORD WINAPI GetModuleFileNameExW_( HANDLE hProcess, HMODULE hModule, PWSTR lpFileName, DWORD nSize )
 {
-    typedef DWORD (WINAPI *FN_PROC)( HANDLE hProcess, HMODULE hModule, LPWSTR lpFileName, DWORD nSize );
-
-    static FN_PROC  lpProc = nullptr;
-
-    if ( !lpProc )
-    {
+    static auto lpProc = []() {
         HMODULE hLibrary = LoadLibraryW(L"PSAPI.DLL");
-
-        if ( hLibrary )
-            lpProc = reinterpret_cast< FN_PROC >(GetProcAddress( hLibrary, "GetModuleFileNameExW" ));
-    }
+        decltype(GetModuleFileNameExW)* pRet = nullptr;
+        if (hLibrary)
+            pRet = reinterpret_cast<decltype(GetModuleFileNameExW)*>(
+                GetProcAddress(hLibrary, "GetModuleFileNameExW"));
+        return pRet;
+    }();
 
     if ( lpProc )
         return lpProc( hProcess, hModule, lpFileName, nSize );

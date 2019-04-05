@@ -1794,34 +1794,26 @@ void WinSalFrame::SetApplicationID( const OUString &rApplicationID )
     // http://msdn.microsoft.com/en-us/library/windows/desktop/dd378430(v=vs.85).aspx
     // A window's properties must be removed before the window is closed.
 
-    typedef HRESULT ( WINAPI *SHGETPROPERTYSTOREFORWINDOW )( HWND, REFIID, void ** );
-    SHGETPROPERTYSTOREFORWINDOW pSHGetPropertyStoreForWindow;
-    pSHGetPropertyStoreForWindow = reinterpret_cast<SHGETPROPERTYSTOREFORWINDOW>(GetProcAddress(
-                                   GetModuleHandleW (L"shell32.dll"), "SHGetPropertyStoreForWindow" ));
-
-    if( pSHGetPropertyStoreForWindow )
+    IPropertyStore *pps;
+    HRESULT hr = SHGetPropertyStoreForWindow(mhWnd, IID_PPV_ARGS(&pps));
+    if (SUCCEEDED(hr))
     {
-        IPropertyStore *pps;
-        HRESULT hr = pSHGetPropertyStoreForWindow ( mhWnd, IID_PPV_ARGS(&pps) );
-        if ( SUCCEEDED(hr) )
+        PROPVARIANT pv;
+        if (!rApplicationID.isEmpty())
         {
-            PROPVARIANT pv;
-            if ( !rApplicationID.isEmpty() )
-            {
-                hr = InitPropVariantFromString( o3tl::toW(rApplicationID.getStr()), &pv );
-                mbPropertiesStored = true;
-            }
-            else
-                // if rApplicationID we remove the property from the window, if present
-                PropVariantInit( &pv );
-
-            if ( SUCCEEDED(hr) )
-            {
-                hr = pps->SetValue( PKEY_AppUserModel_ID, pv );
-                PropVariantClear( &pv );
-            }
-            pps->Release();
+            hr = InitPropVariantFromString(o3tl::toW(rApplicationID.getStr()), &pv);
+            mbPropertiesStored = true;
         }
+        else
+            // if rApplicationID we remove the property from the window, if present
+            PropVariantInit(&pv);
+
+        if (SUCCEEDED(hr))
+        {
+            hr = pps->SetValue(PKEY_AppUserModel_ID, pv);
+            PropVariantClear(&pv);
+        }
+        pps->Release();
     }
 }
 
