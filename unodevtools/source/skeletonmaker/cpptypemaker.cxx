@@ -168,7 +168,7 @@ static bool printConstructorParameters(
                 printType(o, options, manager, rMember.type, 4);
                 o << ' '
                   << codemaker::cpp::translateUnoToCppIdentifier(
-                      rMember.name.toUtf8(), "param");
+                      u2b(rMember.name), "param");
             }
             break;
         }
@@ -191,7 +191,7 @@ static bool printConstructorParameters(
                 }
                 o << ' '
                   << codemaker::cpp::translateUnoToCppIdentifier(
-                      rMember.name.toUtf8(), "param");
+                      u2b(rMember.name), "param");
             }
             break;
         }
@@ -218,7 +218,7 @@ static bool printConstructorParameters(
                 }
                 o << ' '
                   << codemaker::cpp::translateUnoToCppIdentifier(
-                      rMember.name.toUtf8(), "param");
+                      u2b(rMember.name), "param");
             }
             break;
         }
@@ -244,7 +244,7 @@ static bool printConstructorParameters(
                 printType(o, options, manager, rMember.type, 4);
                 o << ' '
                   << codemaker::cpp::translateUnoToCppIdentifier(
-                      rMember.name.toUtf8(), "param");
+                      u2b(rMember.name), "param");
             }
             break;
         }
@@ -295,7 +295,7 @@ static void printMethodParameters(
             printType(o, options, manager, i->type, referenceType);
             o << ' ';
         }
-        o << codemaker::cpp::translateUnoToCppIdentifier(i->name.toUtf8(), "param");
+        o << codemaker::cpp::translateUnoToCppIdentifier(u2b(i->name), "param");
     }
 }
 
@@ -405,7 +405,7 @@ void printMethods(std::ostream & o,
     OString const & indentation, bool defaultvalue,
     OUString const & propertyhelper)
 {
-    if (generated.contains(name.toUtf8()) || name == "com.sun.star.uno.XInterface" ||
+    if (generated.contains(u2b(name)) || name == "com.sun.star.uno.XInterface" ||
         (defaultvalue &&
          ( name == "com.sun.star.lang.XComponent" ||
            name == "com.sun.star.lang.XTypeProvider" ||
@@ -420,19 +420,19 @@ void printMethods(std::ostream & o,
 
     if (body && propertyhelper.getLength() > 1) {
         if (name == "com.sun.star.beans.XPropertySet") {
-            generated.add(name.toUtf8());
+            generated.add(u2b(name));
             generateXPropertySetBodies(
-                o, classname, scopedCppName(propertyhelper.toUtf8()));
+                o, classname, scopedCppName(u2b(propertyhelper)));
             return;
         } else if (name == "com.sun.star.beans.XFastPropertySet") {
-            generated.add(name.toUtf8());
+            generated.add(u2b(name));
             generateXFastPropertySetBodies(
-                o, classname, scopedCppName(propertyhelper.toUtf8()));
+                o, classname, scopedCppName(u2b(propertyhelper)));
             return;
         } else if (name == "com.sun.star.beans.XPropertyAccess") {
-            generated.add(name.toUtf8());
+            generated.add(u2b(name));
             generateXPropertyAccessBodies(
-                o, classname, scopedCppName(propertyhelper.toUtf8()));
+                o, classname, scopedCppName(u2b(propertyhelper)));
             return;
         }
     }
@@ -444,11 +444,11 @@ void printMethods(std::ostream & o,
                 "throw (css::uno::RuntimeException)\n{\n    "
                 "return OUString("
                 "sADDIN_SERVICENAME);\n}\n";
-            generated.add(name.toUtf8());
+            generated.add(u2b(name));
             return;
         } else if (name == "com.sun.star.sheet.XAddIn") {
             generateXAddInBodies(o, classname);
-            generated.add(name.toUtf8());
+            generated.add(u2b(name));
 
             // special handling of XLocalizable -> parent of XAddIn
             if (!generated.contains("com.sun.star.lang.XLocalizable")) {
@@ -458,11 +458,11 @@ void printMethods(std::ostream & o,
             return;
         } else if (name == "com.sun.star.lang.XLocalizable") {
             generateXLocalizable(o, classname);
-            generated.add(name.toUtf8());
+            generated.add(u2b(name));
             return;
         } else if (name == "com.sun.star.sheet.XCompatibilityNames") {
             generateXCompatibilityNamesBodies(o, classname);
-            generated.add(name.toUtf8());
+            generated.add(u2b(name));
             return;
         }
     }
@@ -470,20 +470,20 @@ void printMethods(std::ostream & o,
     if (body && options.componenttype == 3) {
         if (name == "com.sun.star.lang.XInitialization") {
             generateXInitialization(o, classname);
-            generated.add(name.toUtf8());
+            generated.add(u2b(name));
             return;
         } else if (name == "com.sun.star.frame.XDispatch") {
             generateXDispatch(o, classname, options.protocolCmdMap);
-            generated.add(name.toUtf8());
+            generated.add(u2b(name));
             return;
         } else if (name == "com.sun.star.frame.XDispatchProvider") {
             generateXDispatchProvider(o, classname, options.protocolCmdMap);
-            generated.add(name.toUtf8());
+            generated.add(u2b(name));
             return;
         }
     }
 
-    generated.add(name.toUtf8());
+    generated.add(u2b(name));
     rtl::Reference< unoidl::Entity > ent;
     if (manager->getSort(name, &ent) != codemaker::UnoType::Sort::Interface)
     {
@@ -657,7 +657,7 @@ static void printConstructors(
             o << "create";
         } else {
             o << codemaker::cpp::translateUnoToCppIdentifier(
-                rConstructor.name.toUtf8(), "method");
+                u2b(rConstructor.name), "method");
         }
         o << ((options.shortnames) ? "(css::uno::Reference< css" :
               "(::com::sun::star::uno::Reference< ::com::sun::star")
@@ -668,7 +668,7 @@ static void printConstructors(
             printType(o, options, manager, rParam.type, 4);
             o << ' '
               << codemaker::cpp::translateUnoToCppIdentifier(
-                  rParam.name.toUtf8(), "param");
+                  u2b(rParam.name), "param");
         }
         o << ')';
         printExceptionSpecification(o, options, manager, rConstructor.exceptions);
@@ -687,13 +687,13 @@ static void printServiceMembers(
     for (const auto& rService : entity->getDirectMandatoryBaseServices())
     {
         o << "\n// exported service " << rService.name << "\n";
-        generateDocumentation(o, options, manager, rService.name.toUtf8(), delegate);
+        generateDocumentation(o, options, manager, u2b(rService.name), delegate);
         o << "\n// end of exported service " << rService.name << "\n";
     }
     for (const auto& rIface : entity->getDirectMandatoryBaseInterfaces())
     {
         o << "\n// supported interface " << rIface.name << "\n";
-        generateDocumentation(o, options, manager, rIface.name.toUtf8(), delegate);
+        generateDocumentation(o, options, manager, u2b(rIface.name), delegate);
     }
     if (delegate.isEmpty()) {
         o << "\n// properties of service \""<< name << "\"\n";
@@ -703,7 +703,7 @@ static void printServiceMembers(
             printType(o, options, manager, rProp.type, 1);
             o << " "
               << codemaker::cpp::translateUnoToCppIdentifier(
-                  rProp.name.toUtf8(), "property")
+                  u2b(rProp.name), "property")
               << ";\n";
         }
     }
@@ -738,7 +738,7 @@ void generateDocumentation(std::ostream & o,
     OUString nucleus;
     sal_Int32 rank;
     codemaker::UnoType::Sort sort = manager->decompose(
-        OUString::fromUtf8(type), false, &nucleus, &rank, nullptr, nullptr);
+        b2u(type), false, &nucleus, &rank, nullptr, nullptr);
 
     bool comment = true;
     if (!delegate.isEmpty()) {
@@ -821,7 +821,7 @@ void generateDocumentation(std::ostream & o,
     std::vector< OUString > arguments;
     rtl::Reference< unoidl::Entity > entity;
     sort = manager->decompose(
-        OUString::fromUtf8(type), true, &nucleus, &rank, &arguments, &entity);
+        b2u(type), true, &nucleus, &rank, &arguments, &entity);
     if (rank != 0) {
         if (comment) {
             printMapsToCppType(
@@ -929,9 +929,8 @@ void generateDocumentation(std::ostream & o,
             }
             generateDocumentation(
                 o, options, manager,
-                dynamic_cast<unoidl::SingleInterfaceBasedServiceEntity&>(*entity.get())
-                    .getBase()
-                    .toUtf8(),
+                u2b(dynamic_cast<unoidl::SingleInterfaceBasedServiceEntity&>(*entity.get())
+                    .getBase()),
                 delegate);
             break;
 
