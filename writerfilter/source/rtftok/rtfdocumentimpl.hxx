@@ -504,6 +504,8 @@ public:
     /// Buffers properties to be sent later.
     void bufferProperties(RTFBuffer_t& rBuffer, const RTFValue::Pointer_t& pValue,
                           const tools::SvRef<TableRowBuffer>& pTableProperties);
+    /// implement non-obvious RTF specific style inheritance
+    RTFReferenceTable::Entries_t deduplicateStyleTable();
 
 private:
     SvStream& Strm();
