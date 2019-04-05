@@ -24,6 +24,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <vector>
+#include <rtl/ustrbuf.hxx>
 
 #include <HashMaps.hxx>
 
@@ -54,7 +55,7 @@ class ManifestImport final : public cppu::WeakImplHelper < css::xml::sax::XDocum
     std::vector< css::beans::NamedValue > aKeyInfoSequence;
     std::vector< css::uno::Sequence< css::beans::NamedValue > > aKeys;
     std::vector< css::beans::PropertyValue > aSequence;
-    OUString aCurrentCharacters;
+    OUStringBuffer aCurrentCharacters;
     ManifestStack aStack;
     bool bIgnoreEncryptData;
     bool bPgpEncryption;
