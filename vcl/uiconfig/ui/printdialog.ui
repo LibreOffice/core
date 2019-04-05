@@ -286,6 +286,7 @@
                               <object class="GtkSpinButton" id="pageedit-nospin">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes" context="printdialog|pageedit-nospin">Current page number</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -1028,6 +1029,9 @@
                                                 <property name="use_underline">True</property>
                                                 <property name="draw_indicator">True</property>
                                                 <property name="group">pagespersheetbtn</property>
+                                                <accessibility>
+                                                  <relation type="label-for" target="scriptdirection"/>
+                                                </accessibility>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
@@ -1154,6 +1158,10 @@
                                             <child>
                                               <object class="GtkComboBox" id="scriptdirection">
                                                 <property name="can_focus">False</property>
+                                                <property name="visible">True</property>
+                                                <accessibility>
+                                                  <relation type="labelled-by" target="brochure"/>
+                                                </accessibility>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">1</property>
