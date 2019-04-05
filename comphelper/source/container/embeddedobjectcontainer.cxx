@@ -55,19 +55,22 @@ using namespace ::com::sun::star;
 
 namespace comphelper {
 
-typedef std::unordered_map<OUString, uno::Reference <embed::XEmbeddedObject>>
-EmbeddedObjectContainerNameMap;
-
+typedef std::unordered_map<OUString, uno::Reference<embed::XEmbeddedObject>> EmbeddedObjectContainerNameMap;
 struct EmbedImpl
 {
+    struct XEmbeddedObjectRefHash
+    {
+        size_t operator()(const uno::Reference<embed::XEmbeddedObject>& rObject) const
+            { return reinterpret_cast<size_t>(rObject.get()); }
+    };
     // TODO/LATER: remove objects from temp. Container storage when object is disposed
-    EmbeddedObjectContainerNameMap maObjectContainer;
+    EmbeddedObjectContainerNameMap maNameToObjectMap;
+    // to speed up lookup by Reference
+    std::unordered_map<uno::Reference<embed::XEmbeddedObject>, OUString, XEmbeddedObjectRefHash> maObjectToNameMap;
     uno::Reference < embed::XStorage > mxStorage;
     EmbeddedObjectContainer* mpTempObjectContainer;
     uno::Reference < embed::XStorage > mxImageStorage;
     uno::WeakReference < uno::XInterface > m_xModel;
-    //EmbeddedObjectContainerNameMap maTempObjectContainer;
-    //uno::Reference < embed::XStorage > mxTempStorage;
 
     bool mbOwnsStorage : 1;
     bool mbUserAllowsLinkUpdate : 1;
@@ -197,7 +200,7 @@ EmbeddedObjectContainer::~EmbeddedObjectContainer()
 
 void EmbeddedObjectContainer::CloseEmbeddedObjects()
 {
-    for( const auto& rObj : pImpl->maObjectContainer )
+    for( const auto& rObj : pImpl->maNameToObjectMap )
     {
         uno::Reference < util::XCloseable > xClose( rObj.second, uno::UNO_QUERY );
         if( xClose.is() )
@@ -229,18 +232,18 @@ OUString EmbeddedObjectContainer::CreateUniqueObjectName()
 
 uno::Sequence < OUString > EmbeddedObjectContainer::GetObjectNames() const
 {
-    return comphelper::mapKeysToSequence(pImpl->maObjectContainer);
+    return comphelper::mapKeysToSequence(pImpl->maNameToObjectMap);
 }
 
 bool EmbeddedObjectContainer::HasEmbeddedObjects() const
 {
-    return !pImpl->maObjectContainer.empty();
+    return !pImpl->maNameToObjectMap.empty();
 }
 
 bool EmbeddedObjectContainer::HasEmbeddedObject( const OUString& rName )
 {
-    EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.find( rName );
-    if (aIt != pImpl->maObjectContainer.end())
+    auto aIt = pImpl->maNameToObjectMap.find( rName );
+    if (aIt != pImpl->maNameToObjectMap.end())
         return true;
     uno::Reference <container::XNameAccess> xAccess(pImpl->mxStorage, uno::UNO_QUERY);
     if (!xAccess.is())
@@ -250,12 +253,7 @@ bool EmbeddedObjectContainer::HasEmbeddedObject( const OUString& rName )
 
 bool EmbeddedObjectContainer::HasEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj ) const
 {
-    for( const auto& rObj : pImpl->maObjectContainer )
-    {
-        if( rObj.second == xObj )
-            return true;
-    }
-    return false;
+    return pImpl->maObjectToNameMap.find(xObj) != pImpl->maObjectToNameMap.end();
 }
 
 bool EmbeddedObjectContainer::HasInstantiatedEmbeddedObject( const OUString& rName )
@@ -263,19 +261,19 @@ bool EmbeddedObjectContainer::HasInstantiatedEmbeddedObject( const OUString& rNa
     // allows to detect whether the object was already instantiated
     // currently the filter instantiate it on loading, so this method allows
     // to avoid objects pointing to the same persistence
-    EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.find( rName );
-    return ( aIt != pImpl->maObjectContainer.end() );
+    auto aIt = pImpl->maNameToObjectMap.find( rName );
+    return ( aIt != pImpl->maNameToObjectMap.end() );
 }
 
 OUString EmbeddedObjectContainer::GetEmbeddedObjectName( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj ) const
 {
-    for( const auto& rObj : pImpl->maObjectContainer )
+    auto it = pImpl->maObjectToNameMap.find(xObj);
+    if (it == pImpl->maObjectToNameMap.end())
     {
-        if( rObj.second == xObj )
-            return rObj.first;
+        SAL_WARN( "comphelper.container", "Unknown object!" );
+        return OUString();
     }
-    SAL_WARN( "comphelper.container", "Unknown object!" );
-    return OUString();
+    return it->second;
 }
 
 uno::Reference< embed::XEmbeddedObject>
@@ -285,7 +283,7 @@ EmbeddedObjectContainer::GetEmbeddedObject(
     SAL_WARN_IF( rName.isEmpty(), "comphelper.container", "Empty object name!");
 
     uno::Reference < embed::XEmbeddedObject > xObj;
-    EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.find( rName );
+    auto aIt = pImpl->maNameToObjectMap.find( rName );
 
 #if OSL_DEBUG_LEVEL > 1
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
@@ -296,11 +294,11 @@ EmbeddedObjectContainer::GetEmbeddedObject(
     {
         (void)*pIter;
     }
-    OSL_ENSURE( aIt != pImpl->maObjectContainer.end() || xAccess->hasByName(rName), "Could not return object!" );
+    OSL_ENSURE( aIt != pImpl->maNameToObjectMap.end() || xAccess->hasByName(rName), "Could not return object!" );
 #endif
 
     // check if object was already created
-    if ( aIt != pImpl->maObjectContainer.end() )
+    if ( aIt != pImpl->maNameToObjectMap.end() )
         xObj = (*aIt).second;
     else
         xObj = Get_Impl(rName, uno::Reference<embed::XEmbeddedObject>(), pBaseURL);
@@ -424,9 +422,10 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const css::uno::Reference < css
 #endif
 
     // remember object - it needs to be in storage already
-    EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.find( rName );
-    OSL_ENSURE( aIt == pImpl->maObjectContainer.end(), "Element already inserted!" );
-    pImpl->maObjectContainer[ rName ] = xObj;
+    auto aIt = pImpl->maNameToObjectMap.find( rName );
+    OSL_ENSURE( aIt == pImpl->maNameToObjectMap.end(), "Element already inserted!" );
+    pImpl->maNameToObjectMap[ rName ] = xObj;
+    pImpl->maObjectToNameMap[ xObj ] = rName;
     uno::Reference < container::XChild > xChild( xObj, uno::UNO_QUERY );
     if ( xChild.is() && xChild->getParent() != pImpl->m_xModel.get() )
         xChild->setParent( pImpl->m_xModel.get() );
@@ -434,7 +433,7 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const css::uno::Reference < css
     // look for object in temporary container
     if ( pImpl->mpTempObjectContainer )
     {
-        auto& rObjectContainer = pImpl->mpTempObjectContainer->pImpl->maObjectContainer;
+        auto& rObjectContainer = pImpl->mpTempObjectContainer->pImpl->maNameToObjectMap;
         auto aIter = std::find_if(rObjectContainer.begin(), rObjectContainer.end(),
             [&xObj](const EmbeddedObjectContainerNameMap::value_type& rEntry) { return rEntry.second == xObj; });
         if (aIter != rObjectContainer.end())
@@ -464,7 +463,8 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const css::uno::Reference < css
             }
 
             // temp. container needs to forget the object
-            pImpl->mpTempObjectContainer->pImpl->maObjectContainer.erase( aIter );
+            pImpl->mpTempObjectContainer->pImpl->maObjectToNameMap.erase( aIter->second );
+            pImpl->mpTempObjectContainer->pImpl->maNameToObjectMap.erase( aIter );
         }
     }
 }
@@ -841,15 +841,15 @@ void EmbeddedObjectContainer::RemoveEmbeddedObject( const OUString& rName, bool 
 bool EmbeddedObjectContainer::MoveEmbeddedObject( const OUString& rName, EmbeddedObjectContainer& rCnt )
 {
     // find object entry
-    EmbeddedObjectContainerNameMap::iterator aIt2 = rCnt.pImpl->maObjectContainer.find( rName );
-    OSL_ENSURE( aIt2 == rCnt.pImpl->maObjectContainer.end(), "Object does already exist in target container!" );
+    auto aIt2 = rCnt.pImpl->maNameToObjectMap.find( rName );
+    OSL_ENSURE( aIt2 == rCnt.pImpl->maNameToObjectMap.end(), "Object does already exist in target container!" );
 
-    if ( aIt2 != rCnt.pImpl->maObjectContainer.end() )
+    if ( aIt2 != rCnt.pImpl->maNameToObjectMap.end() )
         return false;
 
     uno::Reference < embed::XEmbeddedObject > xObj;
-    EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.find( rName );
-    if ( aIt != pImpl->maObjectContainer.end() )
+    auto aIt = pImpl->maNameToObjectMap.find( rName );
+    if ( aIt != pImpl->maNameToObjectMap.end() )
     {
         xObj = (*aIt).second;
         try
@@ -859,7 +859,8 @@ bool EmbeddedObjectContainer::MoveEmbeddedObject( const OUString& rName, Embedde
                 // move object
                 OUString aName( rName );
                 rCnt.InsertEmbeddedObject( xObj, aName );
-                pImpl->maObjectContainer.erase( aIt );
+                pImpl->maObjectToNameMap.erase( aIt->second );
+                pImpl->maNameToObjectMap.erase( aIt );
                 uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
                 if ( xPersist.is() )
                     pImpl->mxStorage->removeElement( rName );
@@ -956,11 +957,12 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
         return false;
     }
 
-    auto aIter = std::find_if(pImpl->maObjectContainer.begin(), pImpl->maObjectContainer.end(),
+    auto aIter = std::find_if(pImpl->maNameToObjectMap.begin(), pImpl->maNameToObjectMap.end(),
         [&xObj](const EmbeddedObjectContainerNameMap::value_type& rEntry) { return rEntry.second == xObj; });
-    if (aIter != pImpl->maObjectContainer.end())
+    if (aIter != pImpl->maNameToObjectMap.end())
     {
-        pImpl->maObjectContainer.erase( aIter );
+        pImpl->maObjectToNameMap.erase( aIter->second );
+        pImpl->maNameToObjectMap.erase( aIter );
         uno::Reference < container::XChild > xChild( xObj, uno::UNO_QUERY );
         if ( xChild.is() )
             xChild->setParent( uno::Reference < uno::XInterface >() );
@@ -997,11 +999,12 @@ void EmbeddedObjectContainer::CloseEmbeddedObject( const uno::Reference < embed:
 {
     // disconnect the object from the container and close it if possible
 
-    auto aIter = std::find_if(pImpl->maObjectContainer.begin(), pImpl->maObjectContainer.end(),
+    auto aIter = std::find_if(pImpl->maNameToObjectMap.begin(), pImpl->maNameToObjectMap.end(),
         [&xObj](const EmbeddedObjectContainerNameMap::value_type& rEntry) { return rEntry.second == xObj; });
-    if (aIter != pImpl->maObjectContainer.end())
+    if (aIter != pImpl->maNameToObjectMap.end())
     {
-        pImpl->maObjectContainer.erase( aIter );
+        pImpl->maObjectToNameMap.erase( aIter->second );
+        pImpl->maNameToObjectMap.erase( aIter );
 
         uno::Reference < ::util::XCloseable > xClose( xObj, uno::UNO_QUERY );
         try
