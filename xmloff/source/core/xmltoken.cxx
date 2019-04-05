@@ -2375,6 +2375,7 @@ namespace xmloff { namespace token {
 
         // DVO, OD 01.10.2003 #i18732#
         TOKEN( "flow-with-text",        XML_FLOW_WITH_TEXT ),
+        TOKEN( "layout-in-cell",        XML_LAYOUT_IN_CELL ),
         TOKEN( "with-tab",              XML_WITH_TAB ), // #i21237#
 
         TOKEN( "custom-shape" ,                     XML_CUSTOM_SHAPE ),
