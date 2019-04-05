@@ -1117,10 +1117,11 @@ struct SwFieldProperties_Impl
 };
 
 class SwXTextField::Impl
-    : public SwClient
+    : public SwClient, public SvtListener
 {
 private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
+    SwFieldType* m_pFieldType;
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
@@ -1131,8 +1132,6 @@ public:
     rtl::Reference<SwTextAPIObject> m_xTextObject;
 
     bool                m_bIsDescriptor;
-    // required to access field master of not yet inserted fields
-    SwClient            m_FieldTypeClient;
     bool                m_bCallUpdate;
     SwServiceType const       m_nServiceId;
     OUString            m_sTypeName;
@@ -1164,9 +1163,29 @@ public:
 
     const SwField*      GetField() const;
 
+    SwFieldType* GetFieldType()
+    {
+        if (m_bIsDescriptor)
+            return m_pFieldType;
+        if (!GetRegisteredIn())
+            throw uno::RuntimeException();
+        return m_pFormatField->GetField()->GetTyp();
+    }
+    void SetFieldType(SwFieldType& rType)
+    {
+        SvtListener::EndListeningAll();
+        m_pFieldType = &rType;
+        StartListening(m_pFieldType->GetNotifier());
+    }
+    void ClearFieldType()
+    {
+        SvtListener::EndListeningAll();
+        m_pFieldType = nullptr;
+    }
 protected:
     // SwClient
     virtual void Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew) override;
+    virtual void Notify(const SfxHint&) override;
 };
 
 namespace
@@ -1270,26 +1289,14 @@ void SAL_CALL SwXTextField::attachTextFieldMaster(
         throw lang::IllegalArgumentException();
     }
     m_pImpl->m_sTypeName = pFieldType->GetName();
-    pFieldType->Add( &m_pImpl->m_FieldTypeClient );
+    m_pImpl->SetFieldType(*pFieldType);
 }
 
 uno::Reference< beans::XPropertySet > SAL_CALL
 SwXTextField::getTextFieldMaster()
 {
     SolarMutexGuard aGuard;
-    SwFieldType* pType = nullptr;
-    if (m_pImpl->m_bIsDescriptor && m_pImpl->m_FieldTypeClient.GetRegisteredIn())
-    {
-        pType = static_cast<SwFieldType*>(
-                    m_pImpl->m_FieldTypeClient.GetRegisteredIn());
-    }
-    else
-    {
-        if (!m_pImpl->GetRegisteredIn())
-            throw uno::RuntimeException();
-        pType = m_pImpl->m_pFormatField->GetField()->GetTyp();
-    }
-
+    SwFieldType* pType = m_pImpl->GetFieldType();
     uno::Reference<beans::XPropertySet> const xRet(
             SwXFieldMaster::CreateXFieldMaster(m_pImpl->m_pDoc, pType));
     return xRet;
@@ -1959,11 +1966,7 @@ void SAL_CALL SwXTextField::attach(
     m_pImpl->m_pDoc = pDoc;
     const_cast<SwFormatField *>(m_pImpl->m_pFormatField)->Add(m_pImpl.get());
     m_pImpl->m_bIsDescriptor = false;
-    if (m_pImpl->m_FieldTypeClient.GetRegisteredIn())
-    {
-        m_pImpl->m_FieldTypeClient.GetRegisteredIn()
-            ->Remove(&m_pImpl->m_FieldTypeClient);
-    }
+    m_pImpl->ClearFieldType();
     m_pImpl->m_pProps.reset();
     if (m_pImpl->m_bCallUpdate)
         update();
@@ -2574,7 +2577,7 @@ void SwXTextField::Impl::Invalidate()
 {
     if (GetRegisteredIn())
     {
-        EndListeningAll();
+        SwClient::EndListeningAll();
         m_pFormatField = nullptr;
         m_pDoc = nullptr;
         uno::Reference<uno::XInterface> const xThis(m_wThis);
@@ -2604,6 +2607,14 @@ void SwXTextField::Impl::Modify(
             static_cast<const SwFormatChg*>(pOld)->pChangedFormat->IsFormatInDTOR() )
             Invalidate();
         break;
+    }
+}
+
+void SwXTextField::Impl::Notify(const SfxHint& rHint)
+{
+    if(rHint.GetId() == SfxHintId::Dying)
+    {
+        m_pFieldType = nullptr;
     }
 }
 
