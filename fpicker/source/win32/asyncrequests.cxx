@@ -80,6 +80,11 @@ AsyncRequests::~AsyncRequests()
     // the already destructed SolarMutex, which would crash LO on exit.
     if (isRunning())
     {
+        // tdf#123502: make sure we actually hold the mutex before releasing it
+        // UNO directly destroys the VistaFilePicker object, so we need GUI protection in there.
+        // But since we redirect GUI stuff to the async thread we also have to release it, so we
+        // can join it, if the thread currently blocks on the SolarMutex.
+        SolarMutexGuard aGuard;
         SolarMutexReleaser aReleaser;
         join();
     }
