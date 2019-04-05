@@ -105,7 +105,6 @@
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <calbck.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
