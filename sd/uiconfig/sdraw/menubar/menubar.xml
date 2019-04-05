@@ -163,6 +163,7 @@
           <menu:menuitem menu:id=".uno:ZoomPage"/>
           <menu:menuitem menu:id=".uno:ZoomPageWidth"/>
           <menu:menuitem menu:id=".uno:ZoomOptimal"/>
+          <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:Zoom50Percent"/>
           <menu:menuitem menu:id=".uno:Zoom75Percent"/>
           <menu:menuitem menu:id=".uno:Zoom100Percent"/>
