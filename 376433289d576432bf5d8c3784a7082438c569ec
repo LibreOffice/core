@@ -86,6 +86,30 @@
       "revId": "376433289d576432bf5d8c3784a7082438c569ec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_fb7d9ce7",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2496,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-05T23:45:15Z",
+      "side": 1,
+      "message": "aMark in this function only marks the actually selected sheets of the range passed in rRange. Apart from that, breaking in debugger and inspecting aMark and/or stepping over would had revealed ;-)  The cell area is determined by rRange of which columns and rows are taken.",
+      "parentUuid": "df87a7cf_24944644",
+      "range": {
+        "startLine": 2495,
+        "startChar": 0,
+        "endLine": 2496,
+        "endChar": 51
+      },
+      "revId": "376433289d576432bf5d8c3784a7082438c569ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
