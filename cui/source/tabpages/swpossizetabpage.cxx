@@ -36,6 +36,10 @@
 #include <svx/svxids.hrc>
 #include <svtools/unitconv.hxx>
 
+// I2TM
+#include <item/simple/CntInt16.hxx>
+// ~I2TM
+
 using namespace ::com::sun::star::text;
 
 #define SwFPos SvxSwFramePosString
@@ -748,7 +752,9 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
     bool bModified = false;
     if(bAnchorChanged)
     {
-        rSet->Put(SfxInt16Item(SID_ATTR_TRANSFORM_ANCHOR, static_cast<sal_Int16>(nAnchor)));
+        // I2TM
+        rSet->slotSet().SetSlot(SID_ATTR_TRANSFORM_ANCHOR, Item::CntInt16::Create(static_cast<sal_Int16>(nAnchor)));
+        // ~I2TM
         bModified = true;
     }
     if (m_xPositionCB->get_state_changed_from_saved())
@@ -892,12 +898,14 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
 
 void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
 {
-    const SfxPoolItem* pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_ANCHOR );
     bool bInvalidateAnchor = false;
     RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA;
-    if(pItem)
+
+    // I2TM
+    if(const auto Slot(rSet->slotSet().GetSlot<const Item::CntInt16>(SID_ATTR_TRANSFORM_ANCHOR)); Slot)
     {
-        nAnchorType = static_cast<RndStdIds>(static_cast<const SfxInt16Item*>(pItem)->GetValue());
+        nAnchorType = static_cast<RndStdIds>(Slot->GetValue());
+        // I2TM
         switch(nAnchorType)
         {
             case RndStdIds::FLY_AT_PAGE:   m_xToPageRB->set_active(true);  break;
@@ -922,7 +930,7 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
         m_xToFrameRB->set_sensitive( false );
     }
 
-    pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_PROTECT_POS );
+    const SfxPoolItem* pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_PROTECT_POS );
     if (pItem)
     {
         bool bProtected = static_cast<const SfxBoolItem*>(pItem)->GetValue();

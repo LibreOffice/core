@@ -87,6 +87,64 @@
 // static const ::sal_Int16 UNKNOWN = (sal_Int16)0;
 //
 ///////////////////////////////////////////////////////////////////////////////
+//
+// SfxItemSet::PutExtended usages:
+// void                        PutExtended( const SfxItemSet&,
+//                                          SfxItemState eDontCareAs,
+//                                          SfxItemState eDefaultAs );
+//
+//     rDestSet.PutExtended( rSourceSet, SfxItemState::DONTCARE, SfxItemState::DEFAULT );
+//             aDestSub.PutExtended( rSrcSub, SfxItemState::DONTCARE, SfxItemState::DEFAULT );
+//             aDestSub.PutExtended( rSrcSub, SfxItemState::DONTCARE, SfxItemState::DEFAULT );
+//     pStyles[i].pDest->GetItemSet().PutExtended(
+//         pStyles[i].pSource->GetItemSet(), SfxItemState::DONTCARE, SfxItemState::DEFAULT);
+// aSetItem.GetItemSet().PutExtended( rCoreSet, SfxItemState::DONTCARE, SfxItemState::SET );
+//    pFound[i].pDest->GetItemSet().PutExtended(pFound[i].pSource->GetItemSet(), SfxItemState::DONTCARE, SfxItemState::DEFAULT);
+//
+// -> all eDontCareAs -> SfxItemState::DONTCARE -> Not needed
+// -> only one eDefaultAs different from SfxItemState::DEFAULT
+//      -> check ScViewUtil::PutItemScript is this is needed (sc\source\ui\view\viewutil.cxx)
+//
+// SvxScriptSetItem aSetItem( rPool.GetSlotId(nWhichId), rPool );
+// SvxScriptSetItem::SvxScriptSetItem( sal_uInt16 nSlotId, SfxItemPool& rPool )
+//     : SfxSetItem( nSlotId, std::make_unique<SfxItemSet>( rPool,
+//                         svl::Items<SID_ATTR_CHAR_FONT, SID_ATTR_CHAR_FONT>{} ))
+// {
+//     sal_uInt16 nLatin, nAsian, nComplex;
+//     GetWhichIds( nLatin, nAsian, nComplex );
+//     GetItemSet().MergeRange( nLatin, nLatin );
+//     GetItemSet().MergeRange( nAsian, nAsian );
+//     GetItemSet().MergeRange( nComplex, nComplex );
+// }
+//
+// -> default from pool from source-ItemSet is hard set as Item
+// -> since this *is* the default, sould not be needed for new mechanism (?)
+//
+// case SID_ATTR_CHAR_FONT:
+//     rLatin = SID_ATTR_CHAR_FONT;
+//     rAsian = SID_ATTR_CHAR_CJK_FONT;
+//     rComplex = SID_ATTR_CHAR_CTL_FONT;
+//
+// -> would be needed if ::SET state is checked for these, e.g. SID_ATTR_CHAR_CJK_FONT
+//
+// //get the font from itemset
+// SfxItemState eState = _pPage->GetItemSet().GetItemState( _nFontWhich );
+// if ( eState >= SfxItemState::DEFAULT )
+//
+// -> SfxItemState::DEFAULT and SfxItemState::SET are handled equal
+// but:
+//
+// nSlot = SID_ATTR_CHAR_CJK_FONT;
+// nWhich = GetWhich( nSlot );
+// if ( !bChanged && pExampleSet &&
+//      pExampleSet->GetItemState( nWhich, false, &pItem ) == SfxItemState::SET &&
+//      static_cast<const SvxFontItem*>(pItem)->GetFamilyName() != aFontItem.GetFamilyName() )
+//     bChanged = true;
+//
+// -> here used with SfxItemState::SET, but maybe OK -> needs testing (!)
+//
+///////////////////////////////////////////////////////////////////////////////
+
 
 namespace Item
 {
@@ -292,6 +350,8 @@ namespace Item
 
             return (0 != m_aItems.erase(hash_code));
         }
+
+        void SetItems(const ItemSet& rSource, bool bDontCareToDefault = true);
     };
 } // end of namespace Item
 

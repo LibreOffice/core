@@ -78,6 +78,25 @@ namespace Item
             m_aItems[hash_code] = rItem;
         }
     }
+
+    void ItemSet::SetItems(const ItemSet& rSource, bool bDontCareToDefault)
+    {
+        for(const auto& candidate : rSource.m_aItems)
+        {
+            assert(candidate.second && "empty ItemBase::SharedPtr not allowed - and should be unable to be created (!)");
+
+            if(bDontCareToDefault && candidate.second.get() == getInvalidateItem().get())
+            {
+                // SfxItemState::DONTCARE
+                m_aItems.erase(candidate.first);
+            }
+            else
+            {
+                // SfxItemState::SET || SfxItemState::DISABLED
+                m_aItems.insert(candidate);
+            }
+        }
+    }
 } // end of namespace Item
 
 ///////////////////////////////////////////////////////////////////////////////

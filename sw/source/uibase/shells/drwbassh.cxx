@@ -62,6 +62,10 @@
 #include <memory>
 #include <fmtfollowtextflow.hxx>
 
+// I2TM
+#include <item/simple/CntInt16.hxx>
+// ~I2TM
+
 using namespace ::com::sun::star;
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SwDrawBaseShell, SwBaseShell)
@@ -213,7 +217,9 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         if (bCaption)
                             pSdrView->GetAttributes( aSet );
 
-                        aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_ANCHOR, static_cast<sal_Int16>(nAnchor)));
+                        // I2TM
+                        aSet.slotSet().SetSlot(SID_ATTR_TRANSFORM_ANCHOR, Item::CntInt16::Create(static_cast<sal_Int16>(nAnchor)));
+                        // ~I2TM
                         bool bRTL;
                         bool bVertL2R;
                         aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT, pSh->IsFrameVertical(true, bRTL, bVertL2R)));
@@ -261,20 +267,21 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
 
                             bool bSingleSelection = rMarkList.GetMarkCount() == 1;
 
-                            const SfxPoolItem* pAnchorItem;
-                            if(SfxItemState::SET == pOutSet->GetItemState(
-                                SID_ATTR_TRANSFORM_ANCHOR, false, &pAnchorItem))
+                            // I2TM
+                            if(const auto Slot(pOutSet->slotSet().GetSlot<const Item::CntInt16>(SID_ATTR_TRANSFORM_ANCHOR)); Slot)
                             {
                                 if(!bSingleSelection)
-                                    pSh->ChgAnchor(static_cast<RndStdIds>(static_cast<const SfxInt16Item*>(pAnchorItem)
-                                            ->GetValue()), false, bPosCorr );
+                                {
+                                    pSh->ChgAnchor(static_cast<RndStdIds>(Slot->GetValue()), false, bPosCorr);
+                                }
                                 else
                                 {
                                     SwFormatAnchor aAnchor(pFrameFormat->GetAnchor());
-                                    aAnchor.SetType(static_cast<RndStdIds>(static_cast<const SfxInt16Item*>(pAnchorItem)->GetValue()));
+                                    aAnchor.SetType(static_cast<RndStdIds>(Slot->GetValue()));
                                     aFrameAttrSet.Put( aAnchor );
                                 }
                             }
+                            // ~I2TM
                             const SfxPoolItem* pHoriOrient = nullptr;
                             const SfxPoolItem* pHoriRelation = nullptr;
                             const SfxPoolItem* pHoriPosition = nullptr;

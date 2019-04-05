@@ -183,6 +183,10 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
     : m_pPool( rASet.m_pPool )
     , m_pParent( rASet.m_pParent )
     , m_nCount( rASet.m_nCount )
+// I2TM copy shared ptrs - no clone
+    , m_aItemSetSharedPtr(rASet.m_aItemSetSharedPtr)
+    , m_aSlotSetSharedPtr(rASet.m_aSlotSetSharedPtr)
+// ~I2TM
 {
     // Calculate the attribute count
     sal_uInt16 nCnt = 0;
@@ -537,6 +541,12 @@ bool SfxItemSet::Put( const SfxItemSet& rSet, bool bInvalidAsDefault )
             pPtr += 2;
         }
     }
+
+// I2TM
+    itemSet().SetItems(rSet.itemSet(), bInvalidAsDefault);
+    slotSet().SetSlots(rSet.slotSet());
+// ~I2TM
+
     return bRet;
 }
 
