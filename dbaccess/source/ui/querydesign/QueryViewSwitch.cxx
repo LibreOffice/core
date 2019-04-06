@@ -149,9 +149,9 @@ void OQueryViewSwitch::impl_forceSQLView()
     OAddTableDlg* pAddTabDialog( getAddTableDialog() );
 
     // hide the "Add Table" dialog
-    m_bAddTableDialogWasVisible = pAddTabDialog && pAddTabDialog->IsVisible();
-    if ( m_bAddTableDialogWasVisible )
-        pAddTabDialog->Hide();
+    m_bAddTableDialogWasVisible = pAddTabDialog != nullptr;
+    if (m_bAddTableDialogWasVisible)
+        pAddTabDialog->response(RET_CLOSE);
 
     // tell the views they're in/active
     m_pDesignView->stopTimer();
@@ -226,7 +226,7 @@ bool OQueryViewSwitch::impl_postViewSwitch( const bool i_bGraphicalDesign, const
         OAddTableDlg* pAddTabDialog( getAddTableDialog() );
         if ( pAddTabDialog )
             if ( i_bGraphicalDesign && m_bAddTableDialogWasVisible )
-                pAddTabDialog->Show();
+                m_pDesignView->getController().runDialogAsync();
 
         GrabFocus();
     }

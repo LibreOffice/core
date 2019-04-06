@@ -40,8 +40,6 @@ namespace dbaui
 
         css::uno::Reference< css::sdbc::XConnection >
                                        m_xCurrentConnection;   /// valid as long as the page is active
-        css::uno::Reference< css::i18n::XCollator >
-                                       m_xCollator;
         OTableSubscriptionDialog*      m_pTablesDlg;
 
         std::unique_ptr<weld::Widget>  m_xTables;

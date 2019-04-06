@@ -58,14 +58,14 @@ class TableListFacade : public ::cppu::BaseMutex
                     ,   public TableObjectListFacade
                     ,   public ::comphelper::OContainerListener
 {
-    OTableTreeListBox&          m_rTableList;
+    TableTreeListBox&           m_rTableList;
     Reference< XConnection >    m_xConnection;
     ::rtl::Reference< comphelper::OContainerListenerAdapter>
                                 m_pContainerListener;
     bool                        m_bAllowViews;
 
 public:
-    TableListFacade( OTableTreeListBox& _rTableList, const Reference< XConnection >& _rxConnection )
+    TableListFacade( TableTreeListBox& _rTableList, const Reference< XConnection >& _rxConnection )
         : ::comphelper::OContainerListener(m_aMutex)
         ,m_rTableList( _rTableList )
         ,m_xConnection( _rxConnection )
@@ -92,20 +92,29 @@ TableListFacade::~TableListFacade()
 
 OUString TableListFacade::getSelectedName( OUString& _out_rAliasName ) const
 {
-    SvTreeListEntry* pEntry = m_rTableList.FirstSelected();
-    if ( !pEntry )
+    weld::TreeView& rTableList = m_rTableList.GetWidget();
+    std::unique_ptr<weld::TreeIter> xEntry(rTableList.make_iterator());
+
+    if (!rTableList.get_selected(xEntry.get()))
         return OUString();
 
     OUString aCatalog, aSchema, aTableName;
-    SvTreeListEntry* pSchema = m_rTableList.GetParent(pEntry);
-    if(pSchema && pSchema != m_rTableList.getAllObjectsEntry())
+    std::unique_ptr<weld::TreeIter> xSchema(rTableList.make_iterator(xEntry.get()));
+    if (rTableList.iter_parent(*xSchema))
     {
-        SvTreeListEntry* pCatalog = m_rTableList.GetParent(pSchema);
-        if(pCatalog && pCatalog != m_rTableList.getAllObjectsEntry())
-            aCatalog = m_rTableList.GetEntryText(pCatalog);
-        aSchema = m_rTableList.GetEntryText(pSchema);
+        auto xAll = m_rTableList.getAllObjectsEntry();
+        if (!xAll || !xSchema->equal(*xAll))
+        {
+            std::unique_ptr<weld::TreeIter> xCatalog(rTableList.make_iterator(xSchema.get()));
+            if (rTableList.iter_parent(*xCatalog))
+            {
+                if (!xAll || !xCatalog->equal(*xAll))
+                    aCatalog = rTableList.get_text(*xCatalog);
+            }
+            aSchema = rTableList.get_text(*xSchema);
+        }
     }
-    aTableName = m_rTableList.GetEntryText(pEntry);
+    aTableName = rTableList.get_text(*xEntry);
 
     OUString aComposedName;
     try
@@ -149,7 +158,8 @@ void TableListFacade::_elementReplaced( const container::ContainerEvent& /*_rEve
 void TableListFacade::updateTableObjectList( bool _bAllowViews )
 {
     m_bAllowViews = _bAllowViews;
-    m_rTableList.Clear();
+    weld::TreeView& rTableList = m_rTableList.GetWidget();
+    rTableList.clear();
     try
     {
         Reference< XTablesSupplier > xTableSupp( m_xConnection, UNO_QUERY_THROW );
@@ -198,14 +208,16 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
         }
 
         m_rTableList.UpdateTableList( m_xConnection, sTables, sViews );
-        SvTreeListEntry* pEntry = m_rTableList.First();
-        while( pEntry && m_rTableList.GetModel()->HasChildren( pEntry ) )
+
+        std::unique_ptr<weld::TreeIter> xEntry(rTableList.make_iterator());
+        bool bEntry = rTableList.get_iter_first(*xEntry);
+        while (bEntry && rTableList.iter_has_child(*xEntry))
         {
-            m_rTableList.Expand( pEntry );
-            pEntry = m_rTableList.Next( pEntry );
+            rTableList.expand_row(*xEntry);
+            bEntry = rTableList.iter_next(*xEntry);
         }
-        if ( pEntry )
-            m_rTableList.Select(pEntry);
+        if (bEntry)
+            rTableList.select(*xEntry);
     }
     catch( const Exception& )
     {
@@ -215,21 +227,23 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
 
 bool TableListFacade::isLeafSelected() const
 {
-    SvTreeListEntry* pEntry = m_rTableList.FirstSelected();
-    return pEntry && !m_rTableList.GetModel()->HasChildren( pEntry );
+    weld::TreeView& rTableList = m_rTableList.GetWidget();
+    std::unique_ptr<weld::TreeIter> xEntry(rTableList.make_iterator());
+    const bool bEntry = rTableList.get_selected(xEntry.get());
+    return bEntry && !rTableList.iter_has_child(*xEntry);
 }
 
 class QueryListFacade : public ::cppu::BaseMutex
                     ,   public TableObjectListFacade
                     ,   public ::comphelper::OContainerListener
 {
-    SvTreeListBox&              m_rQueryList;
+    weld::TreeView&             m_rQueryList;
     Reference< XConnection >    m_xConnection;
     ::rtl::Reference< comphelper::OContainerListenerAdapter>
                                 m_pContainerListener;
 
 public:
-    QueryListFacade( SvTreeListBox& _rQueryList, const Reference< XConnection >& _rxConnection )
+    QueryListFacade( weld::TreeView& _rQueryList, const Reference< XConnection >& _rxConnection )
         : ::comphelper::OContainerListener(m_aMutex)
         ,m_rQueryList( _rQueryList )
         ,m_xConnection( _rxConnection )
@@ -257,7 +271,10 @@ void QueryListFacade::_elementInserted( const container::ContainerEvent& _rEvent
 {
     OUString sName;
     if ( _rEvent.Accessor >>= sName )
-        m_rQueryList.InsertEntry( sName );
+    {
+        OUString aQueryImage(ImageProvider::getDefaultImageResourceID(css::sdb::application::DatabaseObject::QUERY));
+        m_rQueryList.append("", sName, aQueryImage);
+    }
 }
 
 void QueryListFacade::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ )
@@ -271,14 +288,10 @@ void QueryListFacade::_elementReplaced( const container::ContainerEvent& /*_rEve
 
 void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
 {
-    m_rQueryList.Clear();
+    m_rQueryList.clear();
     try
     {
-        ImageProvider aImageProvider( m_xConnection );
-        Image aQueryImage( ImageProvider::getDefaultImage( css::sdb::application::DatabaseObject::QUERY ) );
-
-        m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImage );
-        m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImage );
+        OUString aQueryImage(ImageProvider::getDefaultImageResourceID(css::sdb::application::DatabaseObject::QUERY));
 
         Reference< XQueriesSupplier > xSuppQueries( m_xConnection, UNO_QUERY_THROW );
         Reference< XNameAccess > xQueries( xSuppQueries->getQueries(), UNO_QUERY_THROW );
@@ -290,7 +303,7 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
         Sequence< OUString > aQueryNames = xQueries->getElementNames();
 
         for ( auto const & name : aQueryNames )
-            m_rQueryList.InsertEntry( name );
+            m_rQueryList.append("", name, aQueryImage);
     }
     catch( const Exception& )
     {
@@ -301,80 +314,63 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
 OUString QueryListFacade::getSelectedName( OUString& _out_rAliasName ) const
 {
     OUString sSelected;
-    SvTreeListEntry* pEntry = m_rQueryList.FirstSelected();
-    if ( pEntry )
-        sSelected = _out_rAliasName = m_rQueryList.GetEntryText( pEntry );
+    std::unique_ptr<weld::TreeIter> xEntry(m_rQueryList.make_iterator());
+    const bool bEntry = m_rQueryList.get_selected(xEntry.get());
+    if (bEntry)
+        sSelected = _out_rAliasName = m_rQueryList.get_text(*xEntry);
     return sSelected;
 }
 
 bool QueryListFacade::isLeafSelected() const
 {
-    SvTreeListEntry* pEntry = m_rQueryList.FirstSelected();
-    return pEntry && !m_rQueryList.GetModel()->HasChildren( pEntry );
+    std::unique_ptr<weld::TreeIter> xEntry(m_rQueryList.make_iterator());
+    const bool bEntry = m_rQueryList.get_selected(xEntry.get());
+    return bEntry && !m_rQueryList.iter_has_child(*xEntry);
+
 }
 
-OAddTableDlg::OAddTableDlg( vcl::Window* pParent, IAddTableDialogContext& _rContext )
-   : ModelessDialog(pParent, "TablesJoinDialog", "dbaccess/ui/tablesjoindialog.ui")
+OAddTableDlg::OAddTableDlg(weld::Window* pParent, IAddTableDialogContext& _rContext)
+   : GenericDialogController(pParent, "dbaccess/ui/tablesjoindialog.ui", "TablesJoinDialog")
    , m_rContext(_rContext)
+   , m_xCaseTables(m_xBuilder->weld_radio_button("tables"))
+   , m_xCaseQueries(m_xBuilder->weld_radio_button("queries"))
+   , m_xTableList(new TableTreeListBox(m_xBuilder->weld_tree_view("tablelist")))
+   , m_xQueryList(m_xBuilder->weld_tree_view("querylist"))
+   , m_xAddButton(m_xBuilder->weld_button("add"))
+   , m_xCloseButton(m_xBuilder->weld_button("close"))
 {
-    get(m_pCaseTables, "tables");
-    get(m_pCaseQueries, "queries");
+    weld::TreeView& rTableList = m_xTableList->GetWidget();
+    Size aSize(rTableList.get_approximate_digit_width() * 23,
+               rTableList.get_height_rows(15));
+    rTableList.set_size_request(aSize.Width(), aSize.Height());
+    m_xQueryList->set_size_request(aSize.Width(), aSize.Height());
 
-    get(m_pTableList, "tablelist");
-    get(m_pQueryList, "querylist");
-    Size aSize(LogicToPixel(Size(106 , 122), MapMode(MapUnit::MapAppFont)));
-    m_pTableList->set_height_request(aSize.Height());
-    m_pTableList->set_width_request(aSize.Width());
-    get(m_pQueryList, "querylist");
-    m_pQueryList->set_height_request(aSize.Height());
-    m_pQueryList->set_width_request(aSize.Width());
+    m_xCaseTables->connect_clicked( LINK( this, OAddTableDlg, OnTypeSelected ) );
+    m_xCaseQueries->connect_clicked( LINK( this, OAddTableDlg, OnTypeSelected ) );
+    m_xAddButton->connect_clicked( LINK( this, OAddTableDlg, AddClickHdl ) );
+    m_xCloseButton->connect_clicked( LINK( this, OAddTableDlg, CloseClickHdl ) );
+    rTableList.connect_row_activated( LINK( this, OAddTableDlg, TableListDoubleClickHdl ) );
+    rTableList.connect_changed( LINK( this, OAddTableDlg, TableListSelectHdl ) );
+    m_xQueryList->connect_row_activated( LINK( this, OAddTableDlg, TableListDoubleClickHdl ) );
+    m_xQueryList->connect_changed( LINK( this, OAddTableDlg, TableListSelectHdl ) );
 
-    get(m_pAddButton, "add");
-    get(m_pCloseButton, "close");
+    rTableList.set_selection_mode(SelectionMode::Single);
+    m_xTableList->DisableCheckButtons(); // do not show any buttons
+    m_xTableList->SuppressEmptyFolders();
 
-    m_pCaseTables->SetClickHdl( LINK( this, OAddTableDlg, OnTypeSelected ) );
-    m_pCaseQueries->SetClickHdl( LINK( this, OAddTableDlg, OnTypeSelected ) );
-    m_pAddButton->SetClickHdl( LINK( this, OAddTableDlg, AddClickHdl ) );
-    m_pCloseButton->SetClickHdl( LINK( this, OAddTableDlg, CloseClickHdl ) );
-    m_pTableList->SetDoubleClickHdl( LINK( this, OAddTableDlg, TableListDoubleClickHdl ) );
-    m_pTableList->SetSelectHdl( LINK( this, OAddTableDlg, TableListSelectHdl ) );
-    m_pQueryList->SetDoubleClickHdl( LINK( this, OAddTableDlg, TableListDoubleClickHdl ) );
-    m_pQueryList->SetSelectHdl( LINK( this, OAddTableDlg, TableListSelectHdl ) );
-
-    m_pTableList->EnableInplaceEditing( false );
-    m_pTableList->SetStyle(m_pTableList->GetStyle() | WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_SORT | WB_HSCROLL );
-    m_pTableList->EnableCheckButton( nullptr ); // do not show any buttons
-    m_pTableList->SetSelectionMode( SelectionMode::Single );
-    m_pTableList->notifyHiContrastChanged();
-    m_pTableList->suppressEmptyFolders();
-
-    m_pQueryList->EnableInplaceEditing( false );
-    m_pQueryList->SetSelectionMode( SelectionMode::Single );
+    m_xQueryList->set_selection_mode(SelectionMode::Single);
 
     if ( !m_rContext.allowQueries() )
     {
-        m_pCaseTables->Hide();
-        m_pCaseQueries->Hide();
+        m_xCaseTables->hide();
+        m_xCaseQueries->hide();
     }
 
-    SetText( getDialogTitleForContext( m_rContext ) );
+    m_xDialog->set_title(getDialogTitleForContext(m_rContext));
 }
 
 OAddTableDlg::~OAddTableDlg()
 {
-    disposeOnce();
-}
-
-void OAddTableDlg::dispose()
-{
-    m_rContext.onWindowClosing( this );
-    m_pCaseTables.clear();
-    m_pCaseQueries.clear();
-    m_pTableList.clear();
-    m_pQueryList.clear();
-    m_pAddButton.clear();
-    m_pCloseButton.clear();
-    ModelessDialog::dispose();
 }
 
 void OAddTableDlg::impl_switchTo( ObjectList _eList )
@@ -382,17 +378,17 @@ void OAddTableDlg::impl_switchTo( ObjectList _eList )
     switch ( _eList )
     {
     case Tables:
-        m_pTableList->Show();  m_pCaseTables->Check();
-        m_pQueryList->Show( false ); m_pCaseQueries->Check( false );
-        m_xCurrentList.reset( new TableListFacade( *m_pTableList, m_rContext.getConnection() ) );
-        m_pTableList->GrabFocus();
+        m_xTableList->GetWidget().show(); m_xCaseTables->set_active(true);
+        m_xQueryList->hide(); m_xCaseQueries->set_active(false);
+        m_xCurrentList.reset( new TableListFacade( *m_xTableList, m_rContext.getConnection() ) );
+        m_xTableList->GetWidget().grab_focus();
         break;
 
     case Queries:
-        m_pTableList->Show( false ); m_pCaseTables->Check( false );
-        m_pQueryList->Show();  m_pCaseQueries->Check();
-        m_xCurrentList.reset( new QueryListFacade( *m_pQueryList, m_rContext.getConnection() ) );
-        m_pQueryList->GrabFocus();
+        m_xTableList->GetWidget().hide(); m_xCaseTables->set_active(false);
+        m_xQueryList->show();  m_xCaseQueries->set_active(true);
+        m_xCurrentList.reset( new QueryListFacade( *m_xQueryList, m_rContext.getConnection() ) );
+        m_xQueryList->grab_focus();
         break;
     }
     m_xCurrentList->updateTableObjectList( m_rContext.allowViews() );
@@ -406,12 +402,12 @@ void OAddTableDlg::Update()
         m_xCurrentList->updateTableObjectList( m_rContext.allowViews() );
 }
 
-IMPL_LINK_NOARG( OAddTableDlg, AddClickHdl, Button*, void )
+IMPL_LINK_NOARG( OAddTableDlg, AddClickHdl, weld::Button&, void )
 {
-    TableListDoubleClickHdl(nullptr);
+    TableListDoubleClickHdl(m_xTableList->GetWidget());
 }
 
-IMPL_LINK_NOARG( OAddTableDlg, TableListDoubleClickHdl, SvTreeListBox*, bool )
+IMPL_LINK_NOARG(OAddTableDlg, TableListDoubleClickHdl, weld::TreeView&, void)
 {
     if ( impl_isAddAllowed() )
     {
@@ -423,35 +419,31 @@ IMPL_LINK_NOARG( OAddTableDlg, TableListDoubleClickHdl, SvTreeListBox*, bool )
             m_rContext.addTableWindow( sSelectedName, sAliasName );
         }
         if ( !impl_isAddAllowed() )
-            Close();
-        return true;  // handled
+            m_xDialog->response(RET_CLOSE);
     }
-
-    return false;  // not handled
 }
 
-IMPL_LINK_NOARG( OAddTableDlg, TableListSelectHdl, SvTreeListBox*, void )
+IMPL_LINK_NOARG( OAddTableDlg, TableListSelectHdl, weld::TreeView&, void )
 {
-    m_pAddButton->Enable( m_xCurrentList->isLeafSelected() );
+    m_xAddButton->set_sensitive( m_xCurrentList->isLeafSelected() );
 }
 
-IMPL_LINK_NOARG( OAddTableDlg, CloseClickHdl, Button*, void )
+IMPL_LINK_NOARG( OAddTableDlg, CloseClickHdl, weld::Button&, void )
 {
-    Close();
+    m_xDialog->response(RET_CLOSE);
 }
 
-IMPL_LINK_NOARG( OAddTableDlg, OnTypeSelected, Button*, void )
+IMPL_LINK_NOARG( OAddTableDlg, OnTypeSelected, weld::Button&, void )
 {
-    if ( m_pCaseTables->IsChecked() )
+    if ( m_xCaseTables->get_active() )
         impl_switchTo( Tables );
     else
         impl_switchTo( Queries );
 }
 
-bool OAddTableDlg::Close()
+void OAddTableDlg::OnClose()
 {
-    m_rContext.onWindowClosing( this );
-    return ModelessDialog::Close();
+    m_rContext.onWindowClosing();
 }
 
 bool OAddTableDlg::impl_isAddAllowed()
