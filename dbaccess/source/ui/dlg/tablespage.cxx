@@ -210,20 +210,6 @@ namespace dbaui
                 }
             }
 
-            if (!m_xCollator.is())
-            {
-                // the collator for the string compares
-                try
-                {
-                    m_xCollator = Collator::create(m_xORB);
-                    m_xCollator->loadDefaultCollator(Application::GetSettings().GetLanguageTag().getLocale(), 0);
-                }
-                catch(const Exception&)
-                {
-                    DBG_UNHANDLED_EXCEPTION("dbaccess");
-                }
-            }
-
             // fill the table list with this connection information
             SQLExceptionInfo aErrorInfo;
             // the current DSN
@@ -234,7 +220,6 @@ namespace dbaui
             try
             {
                 weld::WaitObject aWaitCursor(GetDialogFrameWeld());
-                m_xTablesList->GetWidget().set_sort_order(false);
 
                 Reference<XPropertySet> xProp = m_pTablesDlg->getCurrentDataSource();
                 OSL_ENSURE(xProp.is(),"No data source set!");

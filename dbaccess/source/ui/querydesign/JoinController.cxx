@@ -86,7 +86,7 @@ public:
     virtual bool    allowQueries() const override;
     virtual bool    allowAddition() const override;
     virtual void    addTableWindow( const OUString& _rQualifiedTableName, const OUString& _rAliasName ) override;
-    virtual void    onWindowClosing( const vcl::Window* _pWindow ) override;
+    virtual void    onWindowClosing() override;
 
 private:
     OJoinTableView* getTableView() const;
@@ -117,14 +117,10 @@ void AddTableDialogContext::addTableWindow( const OUString& _rQualifiedTableName
     getTableView()->AddTabWin( _rQualifiedTableName, _rAliasName, true );
 }
 
-void AddTableDialogContext::onWindowClosing( const vcl::Window* _pWindow )
+void AddTableDialogContext::onWindowClosing()
 {
-    if ( !m_rController.getView() )
+    if (!m_rController.getView())
         return;
-
-    ::dbaui::notifySystemWindow(
-        m_rController.getView(), const_cast< vcl::Window* >( _pWindow ), ::comphelper::mem_fun( &TaskPaneList::RemoveWindow ) );
-
     m_rController.InvalidateFeature( ID_BROWSER_ADDTABLE );
     m_rController.getView()->GrabFocus();
 }
@@ -139,8 +135,7 @@ OJoinTableView* AddTableDialogContext::getTableView() const
 // OJoinController
 
 OJoinController::OJoinController(const Reference< XComponentContext >& _rM)
-    :OJoinController_BASE(_rM)
-    ,m_pAddTableDialog(nullptr)
+    : OJoinController_BASE(_rM)
 {
 }
 
@@ -155,7 +150,11 @@ OJoinDesignView* OJoinController::getJoinView()
 
 void OJoinController::disposing()
 {
-    m_pAddTableDialog.disposeAndClear();
+    if (m_xAddTableDialog)
+    {
+        m_xAddTableDialog->response(RET_CLOSE);
+        m_xAddTableDialog.reset();
+    }
 
     OJoinController_BASE::disposing();
 
@@ -168,8 +167,8 @@ void OJoinController::disposing()
 void OJoinController::reconnect( bool _bUI )
 {
     OJoinController_BASE::reconnect( _bUI );
-    if ( isConnected() && m_pAddTableDialog )
-        m_pAddTableDialog->Update();
+    if ( isConnected() && m_xAddTableDialog )
+        m_xAddTableDialog->Update();
 }
 
 void OJoinController::impl_onModifyChanged()
@@ -207,7 +206,7 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId) const
         case ID_BROWSER_ADDTABLE:
             aReturn.bEnabled = ( getView() != nullptr )
                             && const_cast< OJoinController* >( this )->getJoinView()->getTableView()->IsAddAllowed();
-            aReturn.bChecked = aReturn.bEnabled && m_pAddTableDialog != nullptr && m_pAddTableDialog->IsVisible() ;
+            aReturn.bChecked = aReturn.bEnabled && m_xAddTableDialog;
             if ( aReturn.bEnabled )
                 aReturn.sTitle = OAddTableDlg::getDialogTitleForContext( impl_getDialogContext() );
             break;
@@ -253,28 +252,34 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
             InvalidateAll();
             return;
         case ID_BROWSER_ADDTABLE:
-            if ( !m_pAddTableDialog )
-                m_pAddTableDialog = VclPtr<OAddTableDlg>::Create( getView(), impl_getDialogContext() );
-
-            if ( m_pAddTableDialog->IsVisible() )
+            if (m_xAddTableDialog)
             {
-                m_pAddTableDialog->Show( false );
+                m_xAddTableDialog->response(RET_CLOSE);
                 getView()->GrabFocus();
             }
             else
             {
-                {
-                    WaitObject aWaitCursor( getView() );
-                    m_pAddTableDialog->Update();
-                }
-                m_pAddTableDialog->Show();
-                ::dbaui::notifySystemWindow(getView(),m_pAddTableDialog,::comphelper::mem_fun(&TaskPaneList::AddWindow));
+                runDialogAsync();
             }
             break;
         default:
             OJoinController_BASE::Execute(_nId,aArgs);
     }
     InvalidateFeature(_nId);
+}
+
+void OJoinController::runDialogAsync()
+{
+    assert(!m_xAddTableDialog);
+    m_xAddTableDialog.reset(new OAddTableDlg(getFrameWeld(), impl_getDialogContext()));
+    {
+        weld::WaitObject aWaitCursor(getFrameWeld());
+        m_xAddTableDialog->Update();
+    }
+    weld::DialogController::runAsync(m_xAddTableDialog, [this](sal_Int32 /*nResult*/){
+        m_xAddTableDialog->OnClose();
+        m_xAddTableDialog.reset();
+    });
 }
 
 void OJoinController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY )

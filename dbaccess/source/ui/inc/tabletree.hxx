@@ -167,6 +167,8 @@ class TableTreeListBox
                     m_xImageProvider;   // provider for our images
     bool            m_bVirtualRoot;     // should the first entry be visible
     bool            m_bNoEmptyFolders;  // should empty catalogs/schematas be prevented from being displayed?
+    bool            m_bShowToggles;     // show toggle buttons
+    int             m_nTextColumn;      // column text is in, depends on if toggles are shown
     std::unique_ptr<weld::TreeView> m_xTreeView;
 
 public:
@@ -179,7 +181,8 @@ public:
     typedef std::pair< OUString, bool > TTableViewName;
     typedef std::vector< TTableViewName >         TNames;
 
-    void    suppressEmptyFolders() { m_bNoEmptyFolders = true; }
+    void    SuppressEmptyFolders() { m_bNoEmptyFolders = true; }
+    void    DisableCheckButtons();
 
     /** determines whether the given entry denotes a tables folder
     */
