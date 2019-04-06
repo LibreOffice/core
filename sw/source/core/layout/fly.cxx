@@ -1484,6 +1484,7 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                 {
                     // #i28701#
                     SwAnchoredObject* pAnchoredObj = (*pFrame->GetDrawObjs())[i];
+                    assert(pAnchoredObj);
 
                     // determine if anchored object has to be
                     // formatted and, in case, format it

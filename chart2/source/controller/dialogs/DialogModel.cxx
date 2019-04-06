@@ -854,6 +854,7 @@ ChartModel& DialogModel::getModel() const
 {
     uno::Reference< frame::XModel > xModel = getChartModel();
     ChartModel* pModel = dynamic_cast<ChartModel*>(xModel.get());
+    assert(pModel);
     return *pModel;
 }
 
