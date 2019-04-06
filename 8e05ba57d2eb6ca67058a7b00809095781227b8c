@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "df87a7cf_bbbcf469",
+        "filename": "sd/source/ui/animations/CustomAnimationDialog.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2019-04-06T05:51:36Z",
+      "side": 1,
+      "message": "This doesn\u0027t support shrink. Check the comments nearby line 1351.",
+      "range": {
+        "startLine": 1365,
+        "startChar": 0,
+        "endLine": 1366,
+        "endChar": 69
+      },
+      "revId": "8e05ba57d2eb6ca67058a7b00809095781227b8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87a7cf_20c8bf53",
         "filename": "sd/uiconfig/simpress/ui/customscalemenu.ui",
         "patchSetId": 21
