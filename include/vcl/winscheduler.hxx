@@ -31,6 +31,11 @@ struct VCL_DLLPUBLIC WinScheduler final
     /// Hack for Windows native dialogs, which run the main loop, so we can't
     /// use the direct processing shortcut.
     static void SetForceRealTimer();
+
+    // Posting a dummy messages might be needed to ensure that main loop eventually returns from
+    // GetMessage ("wakes up") in modes without a visible window. This, e.g., might be needed to
+    // let main thread recheck a condition set from another thread.
+    static void PostDummyMessage();
 };
 
 #endif // _WIN32
