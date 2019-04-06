@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_5b5fe840",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3192,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-04-06T08:12:19Z",
+      "side": 1,
+      "message": "sColorName is set to the whole tool tip text rather than just the color name. For example, when hovered over to the most recent color it displays \"Font color (Dark Blue)\", rather than just Dark Blue. \nI could filter it out by reading the string character by character and replacing it by the string between the parenthesis. I\u0027m wondering if is it the right way?",
+      "revId": "15f8fbd182b9b51944cc69bc29640ec0664d696a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
