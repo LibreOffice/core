@@ -3507,7 +3507,7 @@ void SvxColorToolBoxControl::execute(sal_Int16 /*nSelectModifier*/)
     dispatchCommand( aCommand, aArgs );
 
     EnsurePaletteManager();
-    OUString sColorName = "#" + aColor.AsRGBHexString().toAsciiUpperCase();
+    OUString sColorName = m_xBtnUpdater->GetCurrentColorName();
     m_xPaletteManager->AddRecentColor(aColor, sColorName);
 }
 
