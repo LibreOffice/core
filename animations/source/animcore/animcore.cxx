@@ -57,6 +57,7 @@
 
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
+#include <array>
 #include <vector>
 #include <algorithm>
 #include <string.h>
@@ -287,7 +288,7 @@ private:
     const sal_Int16 mnNodeType;
 
     // for XTypeProvider
-    static Sequence< Type >* mpTypes[12];
+    static std::array<Sequence< Type >*, 12> mpTypes;
 
     // attributes for the XAnimationNode interface implementation
     Any maBegin, maDuration, maEnd, maEndSync, maRepeatCount, maRepeatDuration;
@@ -388,7 +389,7 @@ Any SAL_CALL TimeContainerEnumeration::nextElement()
 }
 
 
-Sequence< Type >* AnimationNode::mpTypes[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+std::array<Sequence< Type >*, 12> AnimationNode::mpTypes = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 
 AnimationNode::AnimationNode( sal_Int16 nNodeType )
 :   maChangeListener(maMutex),
@@ -418,7 +419,7 @@ AnimationNode::AnimationNode( sal_Int16 nNodeType )
     mnIterateType( css::presentation::ShapeAnimationSubType::AS_WHOLE ),
     mfIterateInterval(0.0)
 {
-    assert(nNodeType < int(SAL_N_ELEMENTS(mpTypes)));
+    assert(nNodeType < int(mpTypes.size()));
 }
 
 AnimationNode::AnimationNode( const AnimationNode& rNode )
@@ -696,7 +697,7 @@ void AnimationNode::initTypeProvider( sal_Int16 nNodeType ) throw()
 
     if(! mpTypes[nNodeType] )
     {
-        static const sal_Int32 type_numbers[] =
+        static constexpr std::array<sal_Int32, mpTypes.size()> type_numbers =
         {
             7, // CUSTOM
             9, // PAR
