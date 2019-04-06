@@ -19,6 +19,7 @@
 
 #include "asyncrequests.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/winscheduler.hxx>
 #include <osl/mutex.hxx>
 
 namespace fpicker{
@@ -56,6 +57,7 @@ void Request::waitProcessMessages()
 void Request::notify()
 {
     m_aJoiner.set();
+    WinScheduler::SetForceRealTimer();
 }
 
 AsyncRequests::AsyncRequests(const RequestHandlerRef& rHandler)
