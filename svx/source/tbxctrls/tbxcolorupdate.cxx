@@ -142,6 +142,19 @@ namespace svx
 
         mpTbx->SetItemOverlayImage(mnBtnId, Image(pVirDev->GetBitmapEx(Point(0,0), aItemSize)));
     }
+
+    OUString ToolboxButtonColorUpdater::GetCurrentColorName()
+    {
+        OUString sColorName = mpTbx->GetQuickHelpText(mnBtnId);
+        // The obtained string is of format: color context (color name)
+        // Generate a substring which contains only the color name
+        sal_Int32 nStart = sColorName.indexOf('(');
+        sColorName = sColorName.copy( nStart + 1 );
+        sal_Int32 nLength = sColorName.getLength();
+        if(nLength > 0)
+            sColorName = sColorName.copy( 0, nLength - 1);
+        return sColorName;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
