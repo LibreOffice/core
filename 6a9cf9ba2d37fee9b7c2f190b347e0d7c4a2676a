@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_db30d80a",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-06T08:50:40Z",
+      "side": 1,
+      "message": "This was removed in commit 4a4b1df72909fe96acdbcb95f90e30bd1a79c5eb; unfortunately, the change was based on ea996016cdfe26a5cdfd385db78c7490de7456b2, so it passed.",
+      "range": {
+        "startLine": 1168,
+        "startChar": 30,
+        "endLine": 1168,
+        "endChar": 33
+      },
+      "revId": "6a9cf9ba2d37fee9b7c2f190b347e0d7c4a2676a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
