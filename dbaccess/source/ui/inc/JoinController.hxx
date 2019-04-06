@@ -48,7 +48,7 @@ namespace dbaui
 
         ::dbtools::SQLExceptionInfo             m_aExceptionInfo;
 
-        VclPtr<OAddTableDlg>                          m_pAddTableDialog;
+        std::shared_ptr<OAddTableDlg>           m_xAddTableDialog;
         std::unique_ptr< AddTableDialogContext >    m_pDialogContext;
         Point                                   m_aMinimumTableViewSize;
 
@@ -82,7 +82,7 @@ namespace dbaui
         // attribute access
         TTableWindowData&        getTableWindowData()     { return m_vTableData; }
         TTableConnectionData&    getTableConnectionData() { return m_vTableConnectionData;}
-        OAddTableDlg*            getAddTableDialog()const { return m_pAddTableDialog; }
+        OAddTableDlg*            getAddTableDialog()const { return m_xAddTableDialog.get(); }
 
         // OSingleDocumentController overridables
         virtual void        reconnect( bool _bUI ) override;
@@ -138,6 +138,9 @@ namespace dbaui
             m_aExceptionInfo = ::dbtools::SQLExceptionInfo();
             return aInfo;
         }
+
+        // show the dialog
+        void runDialogAsync();
 
     protected:
         TTableWindowData::value_type createTableWindowData(const OUString& _sComposedName,const OUString& _sTableName,const OUString& _sWindowName);
