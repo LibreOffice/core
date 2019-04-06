@@ -52,6 +52,7 @@ namespace svx
         void        Update( const NamedColor& rNamedColor );
         void        Update( const Color& rColor, bool bForceUpdate = false );
         Color const & GetCurrentColor() const { return maCurColor; }
+        OUString    GetCurrentColorName();
 
     private:
         ToolboxButtonColorUpdater(ToolboxButtonColorUpdater const &) = delete;

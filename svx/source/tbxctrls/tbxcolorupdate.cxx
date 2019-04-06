@@ -142,6 +142,11 @@ namespace svx
 
         mpTbx->SetItemOverlayImage(mnBtnId, Image(pVirDev->GetBitmapEx(Point(0,0), aItemSize)));
     }
+
+    OUString ToolboxButtonColorUpdater::GetCurrentColorName()
+    {
+        return mpTbx->GetQuickHelpText(mnBtnId);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
