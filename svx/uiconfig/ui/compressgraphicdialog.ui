@@ -138,6 +138,10 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">radio-lossless</property>
+                            <accessibility>
+                              <relation type="label-for" target="scale-quality"/>
+                              <relation type="label-for" target="spin-quality"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -155,6 +159,10 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <accessibility>
+                              <relation type="label-for" target="scale-compression"/>
+                              <relation type="label-for" target="spin-compression"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -181,6 +189,9 @@
                                     <property name="digits">0</property>
                                     <property name="draw_value">False</property>
                                     <property name="value_pos">right</property>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="radio-jpeg"/>
+                                    </accessibility>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -196,6 +207,9 @@
                                     <property name="adjustment">quality-adjustment</property>
                                     <property name="numeric">True</property>
                                     <property name="value">90</property>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="radio-jpeg"/>
+                                    </accessibility>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -229,6 +243,9 @@
                                     <property name="digits">0</property>
                                     <property name="draw_value">False</property>
                                     <property name="value_pos">right</property>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="radio-lossless"/>
+                                    </accessibility>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -244,6 +261,9 @@
                                     <property name="adjustment">compression-adjustment</property>
                                     <property name="numeric">True</property>
                                     <property name="value">9</property>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="radio-lossless"/>
+                                    </accessibility>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -524,101 +544,15 @@
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">6</property>
                         <child>
-                          <object class="GtkLabel" id="label7">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="compressgraphicdialog|label7">Actual dimensions:</property>
-                            <property name="single_line_mode">True</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label-original-size">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <property name="label">???</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label8">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="compressgraphicdialog|label8">Apparent dimensions:</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label9">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="compressgraphicdialog|label9">Image size:</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label-view-size">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <property name="label">???</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label-image-capacity">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <property name="label">???</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label-new-capacity">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <property name="label">???</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">4</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkLabel" id="label15">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="compressgraphicdialog|label15">Type:</property>
                             <property name="single_line_mode">True</property>
                             <property name="xalign">0</property>
+                            <accessibility>
+                              <relation type="label-for" target="label-graphic-type"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -632,10 +566,107 @@
                             <property name="hexpand">True</property>
                             <property name="label">???</property>
                             <property name="xalign">0</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="label15"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label7">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes" context="compressgraphicdialog|label7">Actual dimensions:</property>
+                            <property name="single_line_mode">True</property>
+                            <property name="xalign">0</property>
+                            <accessibility>
+                                <relation type="label-for" target="label-original-size"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label-original-size">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="label">???</property>
+                            <property name="xalign">0</property>
+                            <accessibility>
+                                <relation type="labelled-by" target="label7"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label8">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes" context="compressgraphicdialog|label8">Apparent dimensions:</property>
+                            <property name="xalign">0</property>
+                            <accessibility>
+                                <relation type="label-for" target="label-view-size"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label-view-size">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="label">???</property>
+                            <property name="xalign">0</property>
+                            <accessibility>
+                                <relation type="labelled-by" target="label8"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label9">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes" context="compressgraphicdialog|label9">Image size:</property>
+                            <property name="xalign">0</property>
+                            <accessibility>
+                                <relation type="label-for" target="label-image-capacity"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label-image-capacity">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="label">???</property>
+                            <property name="xalign">0</property>
+                            <accessibility>
+                                <relation type="labelled-by" target="label9"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">3</property>
                           </packing>
                         </child>
                         <child>
@@ -645,9 +676,28 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="halign">start</property>
+                            <accessibility>
+                              <relation type="label-for" target="label-new-capacity"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
+                            <property name="top_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label-new-capacity">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="label">???</property>
+                            <property name="xalign">0</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="calculate"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
                             <property name="top_attach">4</property>
                           </packing>
                         </child>
