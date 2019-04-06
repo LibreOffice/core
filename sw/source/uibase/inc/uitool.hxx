@@ -37,6 +37,7 @@ class SwFrameFormat;
 class SwTabCols;
 class DateTime;
 class SfxViewFrame;
+class SwEditShell;
 
 // switch a metric
 SW_DLLPUBLIC void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit);
@@ -59,6 +60,17 @@ SW_DLLPUBLIC void ConvertAttrCharToGen(SfxItemSet& rSet);
  * @param[in]       rOrigSet    original itemset used as input for the dialog
 **/
 SW_DLLPUBLIC void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet);
+
+
+/**
+* Apply characeter background on the shell. Need to use this to hide the mixed
+* charachter background and character highlighting attribute, which were
+* added for MSO compatibility where there are two kind of character background.
+*
+* @param[in]       rBackgroundColor    the color to apply on the shell
+* @param[in,out]   rShell              the shell on which we apply the new attirbute
+**/
+SW_DLLPUBLIC void ApplyCharBackground(const Color& rBackgroundColor, SwWrtShell& rShell);
 
 // SfxItemSets <-> PageDesc
 void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc );
