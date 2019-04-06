@@ -37,6 +37,8 @@
 #include <vector>
 #include <svtools/restartdialog.hxx>
 #include <comphelper/processfactory.hxx>
+#include <officecfg/Office/Compatibility.hxx>
+#include <vcl/svlbitm.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
@@ -82,11 +84,31 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(vcl::Window* pParent, const SfxIt
     m_pOptionsLB->SetStyle( m_pOptionsLB->GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
     m_pOptionsLB->SetHighlightRange();
 
-    SvTreeListEntry* pEntry = m_pGlobalOptionsCLB->SvTreeListBox::InsertEntry( m_pGlobalOptionsLB->GetEntry( 0 ) );
+
+    // Set MSOCompatibleFormsMenu entry attributes
+    const bool bReadOnly = officecfg::Office::Compatibility::View::MSCompatibleFormsMenu::isReadOnly();
+    const bool bChecked = m_aViewConfigItem.HasMSOCompatibleFormsMenu();
+
+    SvTreeListEntry* pEntry;
+    if(bReadOnly)
+    {
+        pEntry = m_pGlobalOptionsCLB->SvTreeListBox::InsertEntry( m_pGlobalOptionsLB->GetEntry( 0 ), nullptr, false,
+                                                                  TREELIST_APPEND, nullptr, SvLBoxButtonKind::DisabledCheckbox);
+    }
+    else
+    {
+        pEntry = m_pGlobalOptionsCLB->SvTreeListBox::InsertEntry( m_pGlobalOptionsLB->GetEntry( 0 ) );
+    }
+
     if ( pEntry )
     {
-        m_pGlobalOptionsCLB->SetCheckButtonState( pEntry, SvButtonState::Unchecked );
+        SvLBoxButton* pButton = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
+        if(bChecked)
+            pButton->SetStateChecked();
+        else
+            pButton->SetStateUnchecked();
     }
+
     m_pGlobalOptionsLB->Clear();
 
     m_pGlobalOptionsCLB->SetStyle( m_pGlobalOptionsCLB->GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
