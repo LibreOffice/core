@@ -19,6 +19,7 @@
 
 #include "asyncrequests.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/winscheduler.hxx>
 #include <osl/mutex.hxx>
 
 namespace fpicker{
@@ -56,6 +57,10 @@ void Request::waitProcessMessages()
 void Request::notify()
 {
     m_aJoiner.set();
+    // Make sure that main loop receives at least this message to return from GetMessage and recheck
+    // the condition, even in case when there's no visible application windows present, and thus no
+    // other messages might arrive to the main loop.
+    WinScheduler::PostDummyMessage();
 }
 
 AsyncRequests::AsyncRequests(const RequestHandlerRef& rHandler)
