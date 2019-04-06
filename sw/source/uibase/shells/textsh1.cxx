@@ -1195,11 +1195,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 if (nSlot != SID_ATTR_CHAR_COLOR_EXT)
                 {
-                    rWrtSh.StartUndo( SwUndoId::INSATTR );
-
                     SfxItemSet aCoreSet( rWrtSh.GetView().GetPool(), svl::Items<
-                                         RES_CHRATR_BACKGROUND, RES_CHRATR_BACKGROUND,
-                                         RES_CHRATR_GRABBAG, RES_CHRATR_GRABBAG>{} );
+                                         RES_CHRATR_BACKGROUND, RES_CHRATR_BACKGROUND>{} );
+
                     rWrtSh.GetCurAttr( aCoreSet );
 
                     // Remove highlight if already set of the same color
@@ -1207,25 +1205,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     if ( aSet == rBrushItem.GetColor() )
                         aSet = COL_TRANSPARENT;
 
-                    rWrtSh.SetAttrItem( SvxBrushItem(aSet, RES_CHRATR_BACKGROUND) );
-
-                    // Remove MS specific highlight when background is set
-                    rWrtSh.SetAttrItem( SvxBrushItem(RES_CHRATR_HIGHLIGHT) );
-
-                    // Remove shading marker
-                    const SfxPoolItem *pTmpItem;
-                    if( SfxItemState::SET == aCoreSet.GetItemState( RES_CHRATR_GRABBAG, false, &pTmpItem ) )
-                    {
-                        SfxGrabBagItem aGrabBag(*static_cast<const SfxGrabBagItem*>(pTmpItem));
-                        std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
-                        auto aIterator = rMap.find("CharShadingMarker");
-                        if( aIterator != rMap.end() )
-                        {
-                            aIterator->second <<= false;
-                        }
-                        rWrtSh.SetAttrItem( aGrabBag );
-                    }
-                    rWrtSh.EndUndo( SwUndoId::INSATTR );
+                    ApplyCharBackground(aSet, rWrtSh);
                 }
                 else
                     rWrtSh.SetAttrItem(

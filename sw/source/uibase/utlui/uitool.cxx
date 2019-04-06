@@ -74,6 +74,7 @@
 #include <docary.hxx>
 #include <charfmt.hxx>
 #include <SwStyleNameMapper.hxx>
+#include <editsh.hxx>
 // 50 cm 28350
 
 #define MAXHEIGHT 28350
@@ -175,6 +176,39 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet)
         }
     }
     rSet.ClearItem( RES_BACKGROUND );
+}
+
+void ApplyCharBackground(const Color& rBackgroundColor, SwWrtShell& rShell)
+{
+    rShell.StartUndo(SwUndoId::INSATTR);
+
+    SfxItemSet aCoreSet(rShell.GetView().GetPool(), svl::Items<
+        RES_CHRATR_GRABBAG, RES_CHRATR_GRABBAG>{});
+
+    rShell.GetCurAttr(aCoreSet);
+
+    // Set char background
+    rShell.SetAttrItem(SvxBrushItem(rBackgroundColor, RES_CHRATR_BACKGROUND));
+
+    // Highlight is an MS specific thing, so remove it at the first time when LO modifies
+    // this part of the imported document.
+    rShell.SetAttrItem(SvxBrushItem(RES_CHRATR_HIGHLIGHT));
+
+    // Remove shading marker
+    const SfxPoolItem *pTmpItem;
+    if (SfxItemState::SET == aCoreSet.GetItemState(RES_CHRATR_GRABBAG, false, &pTmpItem))
+    {
+        SfxGrabBagItem aGrabBag(*static_cast<const SfxGrabBagItem*>(pTmpItem));
+        std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
+        auto aIterator = rMap.find("CharShadingMarker");
+        if (aIterator != rMap.end())
+        {
+            aIterator->second <<= false;
+        }
+        rShell.SetAttrItem(aGrabBag);
+    }
+
+    rShell.EndUndo(SwUndoId::INSATTR);
 }
 
 // Fill header footer
