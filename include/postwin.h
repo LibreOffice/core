@@ -53,17 +53,6 @@
 #undef Yield
 #undef mciSetCommand
 
-/* new StretchBlt() Modes (simpler names) */
-#ifndef STRETCH_ANDSCANS
-#define STRETCH_ANDSCANS        1
-#endif
-#ifndef STRETCH_ORSCANS
-#define STRETCH_ORSCANS         2
-#endif
-#ifndef STRETCH_DELETESCANS
-#define STRETCH_DELETESCANS     3
-#endif
-
 #if !defined INCLUDED_POSTWIN_H && defined __cplusplus
 #define INCLUDED_POSTWIN_H
 #endif
