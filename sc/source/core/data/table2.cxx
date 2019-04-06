@@ -1405,11 +1405,13 @@ bool ScTable::TestCopyScenarioTo( const ScTable* pDestTab ) const
 bool ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const OUString& rString,
                          const ScSetStringParam * pParam )
 {
-    if (ValidColRow(nCol,nRow))
-        return aCol[nCol].SetString(
-            nRow, nTabP, rString, pDocument->GetAddressConvention(), pParam );
-    else
+    if (!ValidColRow(nCol,nRow))
+    {
         return false;
+    }
+
+    return CreateColumnIfNotExists(nCol).SetString(
+        nRow, nTabP, rString, pDocument->GetAddressConvention(), pParam);
 }
 
 bool ScTable::SetEditText( SCCOL nCol, SCROW nRow, std::unique_ptr<EditTextObject> pEditText )
