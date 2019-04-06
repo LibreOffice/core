@@ -25,6 +25,52 @@
     },
     {
       "key": {
+        "uuid": "df87a7cf_6e3b0838",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2397,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-04-06T22:42:40Z",
+      "side": 1,
+      "message": "Consider using Edit::GetSubEdit() here to set the edit colors",
+      "range": {
+        "startLine": 2397,
+        "startChar": 16,
+        "endLine": 2397,
+        "endChar": 66
+      },
+      "revId": "5df5476a69640278e6815bfcdaf6fc2209901139",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_2e4500b4",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2399,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-04-06T22:42:40Z",
+      "side": 1,
+      "message": "Consider using Edit::GetSubEdit() here to reset the edit colors",
+      "range": {
+        "startLine": 2399,
+        "startChar": 16,
+        "endLine": 2399,
+        "endChar": 45
+      },
+      "revId": "5df5476a69640278e6815bfcdaf6fc2209901139",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87a7cf_2403e644",
         "filename": "svx/source/tbxctrls/tbunosearchcontrollers.cxx",
         "patchSetId": 2
