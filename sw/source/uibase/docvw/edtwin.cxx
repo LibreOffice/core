@@ -4750,7 +4750,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     m_pApplyTempl->nUndo =
                         std::min(m_pApplyTempl->nUndo, rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount());
                     if (nId == RES_CHRATR_BACKGROUND)
-                        rSh.SetAttrItem( SvxBrushItem( m_aWaterCanTextBackColor, nId ) );
+                        ApplyCharBackground(m_aWaterCanTextBackColor, rSh);
                     else
                         rSh.SetAttrItem( SvxColorItem( m_aWaterCanTextColor, nId ) );
                     rSh.UnSetVisibleCursor();
