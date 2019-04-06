@@ -2605,6 +2605,20 @@
           <value xml:lang="en-US">Default</value>
         </prop>
       </node>
+      <node oor:name=".uno:DefaultCellStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Default</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Default Cell Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Default&amp;FamilyName:string=CellStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleApply?Style:string=Accent 1&amp;FamilyName:string=CellStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Accent 1</value>
