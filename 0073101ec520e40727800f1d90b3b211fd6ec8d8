@@ -22,6 +22,30 @@
       "revId": "0073101ec520e40727800f1d90b3b211fd6ec8d8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_4e3e442a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-04-06T22:22:37Z",
+      "side": 1,
+      "message": "SetTimer is a periodic timer. That\u0027s the API and AFAIK there isn\u0027t any way to make it one-shot automatically. I would instantly replace this workaround.\n\nSome background:\n\n1. there is vcl/README.scheduler, which probably need some update\n\n2. on some systems it\u0027s called event loop, other call it message loop\n\nLO\u0027s event loop normally processes one event, then checks the two or three event queues (Windows just has two, others have three, no idea why  - vcl/inc/salusereventlist.hxx) for the next pending event and eventually starts the system timer to wake up LO when the next event is expected to be ready and otherwise sleeps on the system loop. That\u0027s the high-level view and different backends have more or less workaround to make LO behave like this on all systems.\n\nBefore this commit I didn\u0027t realize SetTimer was periodic, so this would generate WM_TIMER messages and wake up LO unnecessary, which is bad, as the CPU can\u0027t sleep - eventually it may result in a busy loop. Normally the  Windows backend won\u0027t use SetTimer but CreateTimerQueueTimer, which has a higher resolution. See vcl/win/app/saltimer.cxx for the gory details.\n\nBTW: this is implemented for all backends in SalInstance::DoYield. I tried to unify and simplify this as much as possible, but it is still fragile.\n\nOn Windows opening system dialogs normally start a nested event loop, which doesn\u0027t know about our short-cuts to prevent timers when there is more work to process. So LO stops processing it\u0027s own events. Therefore we have WinScheduler::SetForceRealTimer, which forces our event loop to fall back to always use SetTimer and WM_TIMER, which will be processed correctly.",
+      "parentUuid": "df87a7cf_eed71823",
+      "range": {
+        "startLine": 9,
+        "startChar": 32,
+        "endLine": 10,
+        "endChar": 8
+      },
+      "revId": "0073101ec520e40727800f1d90b3b211fd6ec8d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
