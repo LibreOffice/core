@@ -1954,19 +1954,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuParagraph-BulletsAndNumberingDialog">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:BulletsAndNumberingDialog</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="MenuParagraph-separator5">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="MenuParagraph-DecrementLevel">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -2079,6 +2066,13 @@
       <object class="GtkSeparatorMenuItem" id="MenuParagraph-separator9">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuParagraph-BulletsAndNumberingDialog">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:BulletsAndNumberingDialog</property>
       </object>
     </child>
     <child>

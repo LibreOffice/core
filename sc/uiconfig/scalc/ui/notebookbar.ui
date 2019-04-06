@@ -262,24 +262,31 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-ToggleObjectRotateMode">
+      <object class="GtkMenuItem" id="MenuDraw-ExtrusionTiltDown">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:ToggleObjectRotateMode</property>
+        <property name="action_name">.uno:ExtrusionTiltDown</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-ObjectMirrorVertical">
+      <object class="GtkMenuItem" id="MenuDraw-ExtrusionTiltUp">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:FlipVertical</property>
+        <property name="action_name">.uno:ExtrusionTiltUp</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-ObjectMirrorHorizontal">
+      <object class="GtkMenuItem" id="MenuDraw-ExtrusionTiltLeft">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:FlipHorizontal</property>
+        <property name="action_name">.uno:ExtrusionTiltLeft</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuDraw-ExtrusionTiltRight">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ExtrusionTiltRight</property>
       </object>
     </child>
     <child>
@@ -6223,7 +6230,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="has_tooltip">True</property>
-                                    <property name="tooltip_text" translatable="yes" context="CalcNotebookbar|bordertype|tooltip_text">Specify the borders of the selected cells.</property>
+                                    <property name="tooltip_text" translatable="yes" context="CalcNotebookbar|objectalign|tooltip_text">Object Align</property>
                                     <property name="halign">start</property>
                                     <property name="action_name">.uno:ObjectAlign</property>
                                   </object>
@@ -10866,7 +10873,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-4"/>
+                          <class name="priority-5"/>
                         </style>
                       </object>
                       <packing>
@@ -11001,7 +11008,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-3"/>
+                          <class name="priority-4"/>
                         </style>
                       </object>
                       <packing>
@@ -11124,7 +11131,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-2"/>
+                          <class name="priority-3"/>
                         </style>
                       </object>
                       <packing>
@@ -11230,6 +11237,151 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSeparator" id="separator48">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
+                            <property name="orientation">vertical</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="padding">5</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <style>
+                          <class name="priority-2"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="sfxlo-OptionalBox" id="Draw-Section-Fontwork">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom98">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
+                            <property name="toolbar_style">both</property>
+                            <property name="show_arrow">False</property>
+                            <property name="icon_size">3</property>
+                            <child>
+                              <object class="GtkToolButton" id="Draw-FontworkGalleryFloater">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:FontworkGalleryFloater</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="GroupB68">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="valign">center</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="sfxlo-NotebookbarToolBox" id="SectionBottom108">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="valign">center</property>
+                                <property name="vexpand">True</property>
+                                <property name="toolbar_style">icons</property>
+                                <property name="show_arrow">False</property>
+                                <child>
+                                  <object class="GtkToolButton" id="Draw-FontworkShapeType">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:FontworkShapeType</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolButton" id="Draw-FontworkSameLetterHeights">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:FontworkSameLetterHeights</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="sfxlo-NotebookbarToolBox" id="SectionBottom116">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="valign">center</property>
+                                <property name="vexpand">True</property>
+                                <property name="toolbar_style">icons</property>
+                                <property name="show_arrow">False</property>
+                                <child>
+                                  <object class="GtkToolButton" id="Draw-FontworkAlignmentFloater">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:FontworkAlignmentFloater</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolButton" id="Draw-FontworkCharacterSpacingFloater">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:FontworkCharacterSpacingFloater</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">2</property>
                           </packing>
                         </child>
@@ -11240,7 +11392,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">5</property>
+                        <property name="position">6</property>
                       </packing>
                     </child>
                   </object>
