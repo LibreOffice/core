@@ -1099,7 +1099,7 @@ void ScTable::StartListening( sc::StartListeningContext& rCxt, const ScAddress& 
     if (!ValidCol(rAddress.Col()))
         return;
 
-    aCol[rAddress.Col()].StartListening(rCxt, rAddress, rListener);
+    CreateColumnIfNotExists(rAddress.Col()).StartListening(rCxt, rAddress, rListener);
 }
 
 void ScTable::EndListening( sc::EndListeningContext& rCxt, const ScAddress& rAddress, SvtListener& rListener )
