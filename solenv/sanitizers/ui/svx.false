@@ -3,4 +3,9 @@ svx/uiconfig/ui/classificationdialog.ui:GtkDialog[@id='AdvancedDocumentClassific
 svx/uiconfig/ui/classificationdialog.ui://GtkDrawingArea[@id='classificationEditWindow'] no-labelled-by
 svx/uiconfig/ui/classificationdialog.ui://GtkTreeViewColumn[@id='treeviewcolumn6'] no-labelled-by
 svx/uiconfig/ui/classificationdialog.ui://GtkTreeViewColumn[@id='treeviewcolumn4'] no-labelled-by
-
+svx/uiconfig/ui/findreplacedialog.ui://GtkComboBox[@id='searchlist'] no-labelled-by
+svx/uiconfig/ui/findreplacedialog.ui://GtkLabel[@id='searchdesc'] orphan-label
+svx/uiconfig/ui/findreplacedialog.ui://GtkLabel[@id='searchlabel'] orphan-label
+svx/uiconfig/ui/findreplacedialog.ui://GtkComboBox[@id='replacelist'] no-labelled-by
+svx/uiconfig/ui/findreplacedialog.ui://GtkLabel[@id='entirecells'] orphan-label
+svx/uiconfig/ui/findreplacedialog.ui://GtkLabel[@id='replacedesc'] orphan-label
