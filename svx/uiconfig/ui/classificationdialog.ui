@@ -117,11 +117,14 @@
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">6</property>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="classificationLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="classificationdialog|label-Classification">Classification:</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="classificationCB"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -129,11 +132,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="internationalClassificationLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="classificationdialog|label-InternationalClassification">International:</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="internationalClassificationCB"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -145,6 +151,9 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="classificationLabel"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -155,6 +164,9 @@
                   <object class="GtkComboBoxText" id="internationalClassificationCB">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="internationalClassificationLabel"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -167,6 +179,9 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="classificationdialog|label-Marking">Marking:</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="markingLB"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -175,25 +190,31 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="recentlyUsedCB">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="recentlyUsedLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="classificationdialog|label-Classification">Recently Used:</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="recentlyUsedCB"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="recentlyUsedCB">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="recentlyUsedLabel"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
@@ -212,6 +233,9 @@
                         <property name="headers_visible">False</property>
                         <property name="headers_clickable">False</property>
                         <property name="show_expanders">False</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="markingLabel"/>
+                        </accessibility>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
@@ -345,11 +369,29 @@
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">6</property>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="GtkLabel" id="intellectualPropertyPartLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="classificationdialog|label-PartNumber">License:</property>
+                        <property name="xalign">0</property>
+                        <accessibility>
+                          <relation type="label-for" target="intellectualPropertyPartLB"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="intellectualPropertyPartNumberLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="classificationdialog|label-PartNumber">Part Number:</property>
                         <property name="xalign">0</property>
+                        <accessibility>
+                          <relation type="label-for" target="intellectualPropertyPartNumberLB"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -358,9 +400,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="intellectualPropertyPartEntry">
+                      <object class="GtkLabel" id="intellectualPropertyPartEntryLabel">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="classificationdialog|label-PartNumber">Part text:</property>
+                        <property name="xalign">0</property>
+                        <accessibility>
+                          <relation type="label-for" target="intellectualPropertyPartEntry"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -369,29 +416,58 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="intellectualPropertyPartAddButton">
-                        <property name="label" translatable="yes" context="classificationdialog|intellectualPropertyPartAddButton">Add</property>
+                      <object class="GtkEntry" id="intellectualPropertyPartEntry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="halign">center</property>
-                        <property name="valign">center</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="classificationdialog|label-PartNumber">License:</property>
-                        <property name="xalign">0</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="intellectualPropertyPartEntryLabel"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="top_attach">3</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkTreeView" id="intellectualPropertyPartLB">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="model">liststore3</property>
+                            <property name="headers_visible">False</property>
+                            <property name="headers_clickable">False</property>
+                            <property name="show_expanders">False</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="intellectualPropertyPartLabel"/>
+                            </accessibility>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection"/>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn6">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer6"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -409,6 +485,9 @@
                             <property name="headers_visible">False</property>
                             <property name="headers_clickable">False</property>
                             <property name="show_expanders">False</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="intellectualPropertyPartNumberLabel"/>
+                                </accessibility>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection"/>
                             </child>
@@ -433,41 +512,17 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkScrolledWindow">
+                      <object class="GtkButton" id="intellectualPropertyPartAddButton">
+                        <property name="label" translatable="yes" context="classificationdialog|intellectualPropertyPartAddButton">Add</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="shadow_type">in</property>
-                        <child>
-                          <object class="GtkTreeView" id="intellectualPropertyPartLB">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
-                            <property name="model">liststore3</property>
-                            <property name="headers_visible">False</property>
-                            <property name="headers_clickable">False</property>
-                            <property name="show_expanders">False</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection"/>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn" id="treeviewcolumn6">
-                                <property name="resizable">True</property>
-                                <property name="spacing">6</property>
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderer6"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
+                        <property name="receives_default">True</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="left_attach">2</property>
+                        <property name="top_attach">3</property>
                       </packing>
                     </child>
                     <child>
