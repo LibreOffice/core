@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_db621817",
+        "filename": "vcl/source/gdi/CommonSalLayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-06T06:38:46Z",
+      "side": 1,
+      "message": "surely you would want to convert these variables to double, and drop the rounding? Or is that that planned for further commits?",
+      "revId": "5a372a348865c4829810ee2babf05fc5636944b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
