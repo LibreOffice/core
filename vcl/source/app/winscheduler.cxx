@@ -25,11 +25,22 @@
 #include <win/saldata.hxx>
 #include <win/salinst.h>
 
+namespace {
+void PostMessageToComWnd(UINT nMsg)
+{
+    BOOL const ret = PostMessageW(GetSalData()->mpInstance->mhComWnd, nMsg, 0, 0);
+    SAL_WARN_IF(0 == ret, "vcl.schedule", "ERROR: PostMessage() failed!");
+}
+}
+
 void WinScheduler::SetForceRealTimer()
 {
-    BOOL const ret
-        = PostMessageW(GetSalData()->mpInstance->mhComWnd, SAL_MSG_FORCE_REAL_TIMER, 0, 0);
-    SAL_WARN_IF(0 == ret, "vcl.schedule", "ERROR: PostMessage() failed!");
+    PostMessageToComWnd(SAL_MSG_FORCE_REAL_TIMER);
+}
+
+void WinScheduler::PostDummyMessage()
+{
+    PostMessageToComWnd(SAL_MSG_DUMMY);
 }
 
 #endif // _WIN32
