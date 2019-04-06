@@ -18,6 +18,7 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="printerpaperpage|paperft">_Paper size:</property>
         <property name="use_underline">True</property>
+        <property name="mnemonic_widget">paperlb</property>
         <property name="xalign">1</property>
       </object>
       <packing>
@@ -31,6 +32,7 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="printerpaperpage|orientft">_Orientation:</property>
         <property name="use_underline">True</property>
+        <property name="mnemonic_widget">orientlb</property>
         <property name="xalign">1</property>
       </object>
       <packing>
@@ -44,6 +46,7 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="printerpaperpage|duplexft">_Duplex:</property>
         <property name="use_underline">True</property>
+        <property name="mnemonic_widget">duplexlb</property>
         <property name="xalign">1</property>
       </object>
       <packing>
@@ -57,6 +60,7 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="printerpaperpage|slotft">Paper tray:</property>
         <property name="use_underline">True</property>
+        <property name="mnemonic_widget">slotlb</property>
         <property name="xalign">1</property>
       </object>
       <packing>
