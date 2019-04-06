@@ -1165,7 +1165,7 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
         mpURLTransformer->isExternalURL(sURL));
 
         mpFS->singleElementNS( XML_a, XML_hlinkClick,
-        FSNS( XML_r,XML_id ), USS( sRelId ),
+        FSNS( XML_r,XML_id ), OUStringToOString( sRelId, RTL_TEXTENCODING_UTF8 ).getStr(),
         FSEND );
     }
     pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
