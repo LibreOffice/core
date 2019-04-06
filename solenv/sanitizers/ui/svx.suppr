@@ -5,12 +5,6 @@ svx/uiconfig/ui/asianphoneticguidedialog.ui://GtkLabel[@id='basetextft'] orphan-
 svx/uiconfig/ui/asianphoneticguidedialog.ui://GtkLabel[@id='rubytextft'] orphan-label
 svx/uiconfig/ui/asianphoneticguidedialog.ui://GtkEntry[@id='Left1ED'] no-labelled-by
 svx/uiconfig/ui/asianphoneticguidedialog.ui://GtkEntry[@id='Right1ED'] no-labelled-by
-svx/uiconfig/ui/chinesedictionary.ui://GtkLabel[@id='termft'] orphan-label
-svx/uiconfig/ui/chinesedictionary.ui://GtkEntry[@id='term'] no-labelled-by
-svx/uiconfig/ui/chinesedictionary.ui://GtkLabel[@id='mappingft'] orphan-label
-svx/uiconfig/ui/chinesedictionary.ui://GtkEntry[@id='mapping'] no-labelled-by
-svx/uiconfig/ui/chinesedictionary.ui://GtkLabel[@id='propertyft'] orphan-label
-svx/uiconfig/ui/chinesedictionary.ui://GtkComboBoxText[@id='property'] no-labelled-by
 svx/uiconfig/ui/classificationdialog.ui:GtkDialog[@id='AdvancedDocumentClassificationDialog']/GtkBox[@id='dialog-vbox1']/GtkGrid/GtkGrid/GtkLabel orphan-label
 svx/uiconfig/ui/classificationdialog.ui:GtkDialog[@id='AdvancedDocumentClassificationDialog']/GtkBox[@id='dialog-vbox1']/GtkGrid/GtkGrid/GtkLabel orphan-label
 svx/uiconfig/ui/classificationdialog.ui://GtkComboBoxText[@id='classificationCB'] no-labelled-by

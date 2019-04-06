@@ -155,6 +155,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="chinesedictionary|termft">Term</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">term</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -168,6 +169,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="chinesedictionary|mappingft">Mapping</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">mapping</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -237,6 +239,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="chinesedictionary|propertyft">Property</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">property</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
