@@ -1280,12 +1280,14 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                                     &nActionFlags );
     }
 
-    bool bInsertOleTable = ( EXCHG_OUT_ACTION_INSERT_OLE == nAction && ( rData.HasFormat( SotClipboardFormatId::SYLK ) ||
-                  rData.HasFormat( SotClipboardFormatId::SYLK_BIGCAPS ) ) );
-
-    // content of 1-cell tables is inserted as simple text
-    if (bInsertOleTable)
+    // tdf#37223 avoid OLE insertion of worksheets in the following cases:
+    // content of 1-cell worksheets are inserted as simple text using RTF format,
+    // bigger worksheets within native (Writer) table cells are inserted as native tables,
+    // ie. cell by cell instead of embedding the worksheet in a single cell of the Writer table
+    if ( EXCHG_OUT_ACTION_INSERT_OLE == nAction && ( rData.HasFormat( SotClipboardFormatId::SYLK ) ||
+                  rData.HasFormat( SotClipboardFormatId::SYLK_BIGCAPS ) ) )
     {
+        // is it a 1-cell worksheet?
         OUString aExpand;
         if( rData.GetString( SotClipboardFormatId::STRING, aExpand ))
         {
@@ -1298,13 +1300,41 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                     bSingleCellTable = true;
             }
         }
+
+        // convert the worksheet to a temporary native table using HTML format, and copy that into the original native table
+        if (!bSingleCellTable && rSh.GetDoc()->IsIdxInTable(rSh.GetCursor()->GetNode()) != nullptr && rSh.DoesUndo())
+        {
+            SfxDispatcher* pDispatch = rSh.GetView().GetViewFrame()->GetDispatcher();
+            sal_uInt32 nLevel = 0;
+            // within Writer table cells, inserting worksheets using HTML format results only plain text, not a native table,
+            // so remove all outer nested tables temporary to get a working insertion point
+            // (RTF format has no such problem, but that inserts the hidden rows of the original Calc worksheet, too)
+            do
+            {
+                // insert a random character to redo the place of the insertion at the end
+                pDispatch->Execute(FN_INSERT_NNBSP, SfxCallMode::SYNCHRON);
+                pDispatch->Execute(FN_TABLE_DELETE_TABLE, SfxCallMode::SYNCHRON);
+                nLevel++;
+            } while (rSh.GetDoc()->IsIdxInTable(rSh.GetCursor()->GetNode()) != nullptr);
+            if ( SwTransferable::PasteData( rData, rSh, EXCHG_OUT_ACTION_INSERT_STRING, nActionFlags, SotClipboardFormatId::HTML,
+                                        nDestination, false, false, nullptr, 0, false, nAnchorType, &aPasteContext ))
+            {
+                pDispatch->Execute(FN_CHAR_LEFT, SfxCallMode::SYNCHRON);
+                pDispatch->Execute(FN_TABLE_SELECT_ALL, SfxCallMode::SYNCHRON);
+                pDispatch->Execute(SID_COPY, SfxCallMode::SYNCHRON);
+                for(sal_uInt32 a = 0; a < 1 + (nLevel * 2); a++)
+                    pDispatch->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
+                pDispatch->Execute(SID_PASTE, SfxCallMode::SYNCHRON);
+                return true;
+            } else {
+                for(sal_uInt32 a = 0; a < (nLevel * 2); a++)
+                    pDispatch->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
+            }
+        }
     }
 
-    bool bInsertOleTableInTable = (bInsertOleTable && !bSingleCellTable &&
-            (rSh.GetDoc()->IsIdxInTable(rSh.GetCursor()->GetNode()) != nullptr));
-
     // special case for tables from draw application or 1-cell tables
-    if( EXCHG_OUT_ACTION_INSERT_DRAWOBJ == nAction || bSingleCellTable || bInsertOleTableInTable )
+    if( EXCHG_OUT_ACTION_INSERT_DRAWOBJ == nAction || bSingleCellTable )
     {
         if( rData.HasFormat( SotClipboardFormatId::RTF ) )
         {
@@ -1316,26 +1346,6 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
             nAction = EXCHG_OUT_ACTION_INSERT_STRING;
             nFormat = SotClipboardFormatId::RICHTEXT;
         }
-    }
-
-    // tdf#37223 insert OLE table in text tables as a native text table
-    // (first as an RTF nested table, and cut and paste that to get a
-    // native table insertion, removing also the temporary nested table)
-    // TODO set a working view lock to avoid of showing the temporary nested table for a moment
-    if (bInsertOleTableInTable && EXCHG_OUT_ACTION_INSERT_STRING == nAction)
-    {
-        bool bPasted = SwTransferable::PasteData( rData, rSh, nAction, nActionFlags, nFormat,
-                                        nDestination, false, false, nullptr, 0, false, nAnchorType, &aPasteContext );
-        if (bPasted && rSh.DoesUndo())
-        {
-            SfxDispatcher* pDispatch = rSh.GetView().GetViewFrame()->GetDispatcher();
-            pDispatch->Execute(FN_PREV_TABLE, SfxCallMode::SYNCHRON);
-            pDispatch->Execute(FN_TABLE_SELECT_ALL, SfxCallMode::SYNCHRON);
-            pDispatch->Execute(SID_COPY, SfxCallMode::SYNCHRON);
-            pDispatch->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
-            pDispatch->Execute(SID_PASTE, SfxCallMode::SYNCHRON);
-        }
-        return bPasted;
     }
 
     return EXCHG_INOUT_ACTION_NONE != nAction &&
