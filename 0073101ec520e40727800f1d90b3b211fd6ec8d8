@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_eed71823",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-06T17:15:01Z",
+      "side": 1,
+      "message": "Why do we want to use it that way? and why can\u0027t we turn it to a normal one-shot?",
+      "range": {
+        "startLine": 9,
+        "startChar": 32,
+        "endLine": 10,
+        "endChar": 8
+      },
+      "revId": "0073101ec520e40727800f1d90b3b211fd6ec8d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
