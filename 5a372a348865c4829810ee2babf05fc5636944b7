@@ -16,6 +16,24 @@
       "revId": "5a372a348865c4829810ee2babf05fc5636944b7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_0e359cda",
+        "filename": "vcl/source/gdi/CommonSalLayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1002108
+      },
+      "writtenOn": "2019-04-06T11:27:56Z",
+      "side": 1,
+      "message": "Yeah that is the plan, hopefully I\u0027ll be doing this for GSoC. \nIn order to change these variables to double I think lots of other changes need to be made throughout the codebase. I thought I would do these changes in a series of small independent patches.",
+      "parentUuid": "df87a7cf_db621817",
+      "revId": "5a372a348865c4829810ee2babf05fc5636944b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
