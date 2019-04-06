@@ -159,8 +159,9 @@ std::size_t alignment(SbxVariable const * variable) {
         case SbxOBJECT:
             {
                 std::size_t n = 1;
-                SbxArray * props = dynamic_cast<SbxObject*>( variable->GetObject() )->
-                    GetProperties();
+                SbxObject* pobj = dynamic_cast<SbxObject*>(variable->GetObject());
+                assert(pobj);
+                SbxArray* props = pobj->GetProperties();
                 for (sal_uInt16 i = 0; i < props->Count(); ++i) {
                     n = std::max(n, alignment(props->Get(i)));
                 }
@@ -175,6 +176,7 @@ std::size_t alignment(SbxVariable const * variable) {
         }
     } else {
         SbxDimArray * arr = dynamic_cast<SbxDimArray*>( variable->GetObject() );
+        assert(arr);
         int dims = arr->GetDims();
         std::vector< sal_Int32 > low(dims);
         for (int i = 0; i < dims; ++i) {
@@ -210,8 +212,9 @@ ErrCode marshalStruct(
     MarshalData & data)
 {
     OSL_ASSERT(variable != nullptr);
-    SbxArray * props = dynamic_cast<SbxObject*>( variable->GetObject() )->
-        GetProperties();
+    SbxObject* pobj = dynamic_cast<SbxObject*>(variable->GetObject());
+    assert(pobj);
+    SbxArray* props = pobj->GetProperties();
     for (sal_uInt16 i = 0; i < props->Count(); ++i) {
         ErrCode e = marshal(false, props->Get(i), false, blob, offset, data);
         if (e != ERRCODE_NONE) {
@@ -227,6 +230,7 @@ ErrCode marshalArray(
 {
     OSL_ASSERT(variable != nullptr);
     SbxDimArray * arr = dynamic_cast<SbxDimArray*>( variable->GetObject() );
+    assert(arr);
     int dims = arr->GetDims();
     std::vector< sal_Int32 > low(dims);
     std::vector< sal_Int32 > up(dims);
@@ -402,8 +406,9 @@ void const * unmarshal(SbxVariable * variable, void const * data) {
                     align(
                         reinterpret_cast< sal_uIntPtr >(data),
                         alignment(variable)));
-                SbxArray * props = dynamic_cast<SbxObject*>( variable->GetObject() )->
-                    GetProperties();
+                SbxObject* pobj = dynamic_cast<SbxObject*>(variable->GetObject());
+                assert(pobj);
+                SbxArray* props = pobj->GetProperties();
                 for (sal_uInt16 i = 0; i < props->Count(); ++i) {
                     data = unmarshal(props->Get(i), data);
                 }
@@ -421,6 +426,7 @@ void const * unmarshal(SbxVariable * variable, void const * data) {
         }
     } else {
         SbxDimArray * arr = dynamic_cast<SbxDimArray*>( variable->GetObject() );
+        assert(arr);
         int dims = arr->GetDims();
         std::vector< sal_Int32 > low(dims);
         std::vector< sal_Int32 > up(dims);

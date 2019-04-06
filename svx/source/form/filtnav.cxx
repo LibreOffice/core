@@ -294,7 +294,7 @@ void FmFilterAdapter::setText(sal_Int32 nRowPos,
                               const OUString& rText)
 {
     FmFormItem* pFormItem = dynamic_cast<FmFormItem*>( pFilterItem->GetParent()->GetParent()  );
-
+    assert(pFormItem);
     try
     {
         Reference< XFilterController > xController( pFormItem->GetController(), UNO_QUERY_THROW );
@@ -788,6 +788,7 @@ void FmFilterModel::Remove( const ::std::vector<std::unique_ptr<FmFilterData>>::
 bool FmFilterModel::ValidateText(FmFilterItem const * pItem, OUString& rText, OUString& rErrorMsg) const
 {
     FmFormItem* pFormItem = dynamic_cast<FmFormItem*>( pItem->GetParent()->GetParent()  );
+    assert(pFormItem);
     try
     {
         Reference< XFormController > xFormController( pFormItem->GetController() );
