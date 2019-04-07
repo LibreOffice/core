@@ -1804,52 +1804,54 @@ void ODatabaseDocument::disposing()
     std::vector< Reference< XInterface > > aKeepAlive;
 
     // SYNCHRONIZED ->
-    SolarMutexClearableGuard aGuard;
-
-    OSL_ENSURE( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
-    // normally, nobody should explicitly dispose, but only XCloseable::close
-    // the document. And upon closing, our controllers are closed, too
-
     {
-        uno::Reference<uno::XInterface> xUIInterface( m_xUIConfigurationManager );
-        aKeepAlive.push_back( xUIInterface );
+        SolarMutexGuard aGuard;
+
+        OSL_ENSURE(m_aControllers.empty(),
+                   "ODatabaseDocument::disposing: there still are controllers!");
+        // normally, nobody should explicitly dispose, but only XCloseable::close
+        // the document. And upon closing, our controllers are closed, too
+
+        {
+            uno::Reference<uno::XInterface> xUIInterface(m_xUIConfigurationManager);
+            aKeepAlive.push_back(xUIInterface);
+        }
+        m_xUIConfigurationManager = nullptr;
+
+        clearObjectContainer(m_xForms);
+        clearObjectContainer(m_xReports);
+
+        // reset the macro mode: in case the our impl struct stays alive (e.g. because our DataSource
+        // object still exists), and somebody subsequently re-opens the document, we want to have
+        // the security warning, again.
+        m_pImpl->resetMacroExecutionMode();
+
+        // similar arguing for our ViewMonitor
+        m_aViewMonitor.reset();
+
+        // tell our Impl to forget us
+        m_pImpl->modelIsDisposing(impl_isInitialized(), ODatabaseModelImpl::ResetModelAccess());
+
+        // now, at the latest, the controller array should be empty. Controllers are
+        // expected to listen for our disposal, and disconnect then
+        OSL_ENSURE(m_aControllers.empty(),
+                   "ODatabaseDocument::disposing: there still are controllers!");
+        impl_disposeControllerFrames_nothrow();
+
+        {
+            uno::Reference<uno::XInterface> xModuleInterface(m_xModuleManager);
+            aKeepAlive.push_back(xModuleInterface);
+        }
+        m_xModuleManager.clear();
+
+        {
+            uno::Reference<uno::XInterface> xTitleInterface(m_xTitleHelper);
+            aKeepAlive.push_back(xTitleInterface);
+        }
+        m_xTitleHelper.clear();
+
+        m_pImpl.clear();
     }
-    m_xUIConfigurationManager = nullptr;
-
-    clearObjectContainer( m_xForms );
-    clearObjectContainer( m_xReports );
-
-    // reset the macro mode: in case the our impl struct stays alive (e.g. because our DataSource
-    // object still exists), and somebody subsequently re-opens the document, we want to have
-    // the security warning, again.
-    m_pImpl->resetMacroExecutionMode();
-
-    // similar arguing for our ViewMonitor
-    m_aViewMonitor.reset();
-
-    // tell our Impl to forget us
-    m_pImpl->modelIsDisposing( impl_isInitialized(), ODatabaseModelImpl::ResetModelAccess() );
-
-    // now, at the latest, the controller array should be empty. Controllers are
-    // expected to listen for our disposal, and disconnect then
-    OSL_ENSURE( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
-    impl_disposeControllerFrames_nothrow();
-
-    {
-        uno::Reference<uno::XInterface> xModuleInterface( m_xModuleManager );
-        aKeepAlive.push_back( xModuleInterface );
-    }
-    m_xModuleManager.clear();
-
-    {
-        uno::Reference<uno::XInterface> xTitleInterface( m_xTitleHelper );
-        aKeepAlive.push_back( xTitleInterface );
-    }
-    m_xTitleHelper.clear();
-
-    m_pImpl.clear();
-
-    aGuard.clear();
     // <- SYNCHRONIZED
 
     aKeepAlive.clear();

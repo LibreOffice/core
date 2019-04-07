@@ -54,7 +54,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
                                                                                                      const css::uno::Sequence< css::uno::Any >& lArguments)
 {
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
 
     auto & cache = TheFilterCache::get();
 

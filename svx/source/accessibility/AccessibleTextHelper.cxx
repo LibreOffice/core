@@ -1392,22 +1392,24 @@ namespace accessibility
     void AccessibleTextHelper_Impl::FireEvent( const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue ) const
     {
         // -- object locked --
-        ::osl::ClearableMutexGuard aGuard( maMutex );
-
         AccessibleEventObject aEvent;
+        {
+            osl::MutexGuard aGuard(maMutex);
 
-        DBG_ASSERT(mxFrontEnd.is(), "AccessibleTextHelper::FireEvent: no event source set" );
+            DBG_ASSERT(mxFrontEnd.is(), "AccessibleTextHelper::FireEvent: no event source set");
 
-        if( mxFrontEnd.is() )
-            aEvent = AccessibleEventObject(mxFrontEnd->getAccessibleContext(), nEventId, rNewValue, rOldValue);
-        else
-            aEvent = AccessibleEventObject(uno::Reference< uno::XInterface >(), nEventId, rNewValue, rOldValue);
+            if (mxFrontEnd.is())
+                aEvent = AccessibleEventObject(mxFrontEnd->getAccessibleContext(), nEventId,
+                                               rNewValue, rOldValue);
+            else
+                aEvent = AccessibleEventObject(uno::Reference<uno::XInterface>(), nEventId,
+                                               rNewValue, rOldValue);
 
-        // no locking necessary, FireEvent internally copies listeners
-        // if someone removes/adds in between Further locking,
-        // actually, might lead to deadlocks, since we're calling out
-        // of this object
-        aGuard.clear();
+            // no locking necessary, FireEvent internally copies listeners
+            // if someone removes/adds in between Further locking,
+            // actually, might lead to deadlocks, since we're calling out
+            // of this object
+        }
         // -- until here --
 
         FireEvent(aEvent);

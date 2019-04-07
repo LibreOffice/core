@@ -795,7 +795,7 @@ bool OleEmbeddedObject::SaveObject_Impl()
 
 bool OleEmbeddedObject::OnShowWindow_Impl( bool bShow )
 {
-    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+    osl::ClearableMutexGuard aGuard(m_aMutex);
 
     bool bResult = false;
 
@@ -1507,7 +1507,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     }
     // end wrapping related part ====================
 
-    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+    osl::ClearableMutexGuard aGuard(m_aMutex);
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -1665,7 +1665,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
     // ask container to store the object, the container has to make decision
     // to do so or not
 
-    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+    osl::ClearableMutexGuard aGuard(m_aMutex);
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 

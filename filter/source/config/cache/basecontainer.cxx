@@ -55,7 +55,7 @@ void BaseContainer::init(const css::uno::Reference< css::uno::XComponentContext 
                                FilterCache::EItemType                                  eType              )
 {
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
 
     m_sImplementationName = sImplementationName;
     m_lServiceNames       = lServiceNames      ;
@@ -69,7 +69,7 @@ void BaseContainer::impl_loadOnDemand()
 {
 #ifdef LOAD_IMPLICIT
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
 
     // A generic container needs all items of a set of our cache!
     // Of course it can block for a while, till the cache is really filled.
@@ -104,7 +104,7 @@ void BaseContainer::impl_loadOnDemand()
 void BaseContainer::impl_initFlushMode()
 {
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
     if (!m_pFlushCache)
         m_pFlushCache = TheFilterCache::get().clone();
     if (!m_pFlushCache)
@@ -117,7 +117,7 @@ void BaseContainer::impl_initFlushMode()
 FilterCache* BaseContainer::impl_getWorkingCache() const
 {
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
     if (m_pFlushCache)
         return m_pFlushCache.get();
     else
@@ -164,7 +164,7 @@ void SAL_CALL BaseContainer::insertByName(const OUString& sItem ,
     impl_loadOnDemand();
 
     // SAFE -> ----------------------------------
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
 
     // create write copy of used cache on demand ...
     impl_initFlushMode();
@@ -173,8 +173,6 @@ void SAL_CALL BaseContainer::insertByName(const OUString& sItem ,
     if (pCache->hasItem(m_eType, sItem))
         throw css::container::ElementExistException(OUString(), static_cast< css::container::XNameContainer* >(this));
     pCache->setItem(m_eType, sItem, aItem);
-
-    aLock.clear();
     // <- SAFE ----------------------------------
 }
 
@@ -184,15 +182,13 @@ void SAL_CALL BaseContainer::removeByName(const OUString& sItem)
     impl_loadOnDemand();
 
     // SAFE -> ----------------------------------
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
 
     // create write copy of used cache on demand ...
     impl_initFlushMode();
 
     FilterCache* pCache = impl_getWorkingCache();
     pCache->removeItem(m_eType, sItem); // throw exceptions automatically
-
-    aLock.clear();
     // <- SAFE ----------------------------------
 }
 
@@ -218,7 +214,7 @@ void SAL_CALL BaseContainer::replaceByName(const OUString& sItem ,
     impl_loadOnDemand();
 
     // SAFE -> ----------------------------------
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
 
     // create write copy of used cache on demand ...
     impl_initFlushMode();
@@ -227,8 +223,6 @@ void SAL_CALL BaseContainer::replaceByName(const OUString& sItem ,
     if (!pCache->hasItem(m_eType, sItem))
         throw css::container::NoSuchElementException(OUString(), static_cast< css::container::XNameContainer* >(this));
     pCache->setItem(m_eType, sItem, aItem);
-
-    aLock.clear();
     // <- SAFE ----------------------------------
 }
 
@@ -244,7 +238,7 @@ css::uno::Any SAL_CALL BaseContainer::getByName(const OUString& sItem)
     impl_loadOnDemand();
 
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
 
     CacheItem aItem;
     try
@@ -277,7 +271,7 @@ css::uno::Sequence< OUString > SAL_CALL BaseContainer::getElementNames()
     impl_loadOnDemand();
 
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
 
     try
     {
@@ -304,7 +298,7 @@ sal_Bool SAL_CALL BaseContainer::hasByName(const OUString& sItem)
     impl_loadOnDemand();
 
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
 
     try
     {
@@ -338,7 +332,7 @@ sal_Bool SAL_CALL BaseContainer::hasElements()
     impl_loadOnDemand();
 
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
 
     try
     {
@@ -373,7 +367,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
     impl_loadOnDemand();
 
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
 
     try
     {
@@ -414,7 +408,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
 void SAL_CALL BaseContainer::flush()
 {
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aLock);
 
     if (!m_pFlushCache)
         throw css::lang::WrappedTargetRuntimeException(

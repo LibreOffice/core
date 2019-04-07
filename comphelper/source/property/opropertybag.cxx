@@ -208,21 +208,21 @@ namespace comphelper
         if ( !( _element >>= aProperty ) )
             throw IllegalArgumentException( OUString(), *this, 1 );
 
-        ::osl::ClearableMutexGuard g( m_aMutex );
+        {
+            osl::MutexGuard g(m_aMutex);
 
-        // check whether the type is allowed, everything else will be checked
-        // by m_aDynamicProperties
-        if  (   !m_aAllowedTypes.empty()
-            &&  m_aAllowedTypes.find( aProperty.Type ) == m_aAllowedTypes.end()
-            )
-            throw IllegalArgumentException( OUString(), *this, 1 );
+            // check whether the type is allowed, everything else will be checked
+            // by m_aDynamicProperties
+            if (!m_aAllowedTypes.empty()
+                && m_aAllowedTypes.find(aProperty.Type) == m_aAllowedTypes.end())
+                throw IllegalArgumentException(OUString(), *this, 1);
 
-        m_aDynamicProperties.addVoidProperty( aProperty.Name, aProperty.Type, findFreeHandle(), aProperty.Attributes );
+            m_aDynamicProperties.addVoidProperty(aProperty.Name, aProperty.Type, findFreeHandle(),
+                                                 aProperty.Attributes);
 
-        // our property info is dirty
-        m_pArrayHelper.reset();
-
-        g.clear();
+            // our property info is dirty
+            m_pArrayHelper.reset();
+        }
         setModified(true);
     }
 
@@ -312,37 +312,36 @@ namespace comphelper
 
     void SAL_CALL OPropertyBag::addProperty( const OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue )
     {
-        ::osl::ClearableMutexGuard g( m_aMutex );
+        {
+            osl::MutexGuard g(m_aMutex);
 
-        // check whether the type is allowed, everything else will be checked
-        // by m_aDynamicProperties
-        const Type& aPropertyType = _rInitialValue.getValueType();
-        if  (   _rInitialValue.hasValue()
-            &&  !m_aAllowedTypes.empty()
-            &&  m_aAllowedTypes.find( aPropertyType ) == m_aAllowedTypes.end()
-            )
-            throw IllegalTypeException( OUString(), *this );
+            // check whether the type is allowed, everything else will be checked
+            // by m_aDynamicProperties
+            const Type& aPropertyType = _rInitialValue.getValueType();
+            if (_rInitialValue.hasValue() && !m_aAllowedTypes.empty()
+                && m_aAllowedTypes.find(aPropertyType) == m_aAllowedTypes.end())
+                throw IllegalTypeException(OUString(), *this);
 
-        m_aDynamicProperties.addProperty( _rName, findFreeHandle(), _nAttributes, _rInitialValue );
+            m_aDynamicProperties.addProperty(_rName, findFreeHandle(), _nAttributes,
+                                             _rInitialValue);
 
-        // our property info is dirty
-        m_pArrayHelper.reset();
-
-        g.clear();
+            // our property info is dirty
+            m_pArrayHelper.reset();
+        }
         setModified(true);
     }
 
 
     void SAL_CALL OPropertyBag::removeProperty( const OUString& _rName )
     {
-        ::osl::ClearableMutexGuard g( m_aMutex );
+        {
+            osl::MutexGuard g(m_aMutex);
 
-        m_aDynamicProperties.removeProperty( _rName );
+            m_aDynamicProperties.removeProperty(_rName);
 
-        // our property info is dirty
-        m_pArrayHelper.reset();
-
-        g.clear();
+            // our property info is dirty
+            m_pArrayHelper.reset();
+        }
         setModified(true);
     }
 

@@ -2453,7 +2453,7 @@ void ChartView::createShapes()
 {
     SolarMutexGuard aSolarGuard;
 
-    osl::ResettableMutexGuard aTimedGuard(maTimeMutex);
+    osl::MutexGuard aTimedGuard(maTimeMutex);
     if(mrChartModel.isTimeBased())
     {
         maTimeBased.bTimeBased = true;
@@ -2927,7 +2927,7 @@ OUString ChartView::dump()
 
 void ChartView::setViewDirty()
 {
-    osl::ResettableMutexGuard aGuard(maTimeMutex);
+    osl::MutexGuard aGuard(maTimeMutex);
     m_bViewDirty = true;
 }
 

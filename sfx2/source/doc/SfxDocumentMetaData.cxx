@@ -1616,28 +1616,30 @@ void SAL_CALL
 SfxDocumentMetaData::setDocumentStatistics(
         const css::uno::Sequence< css::beans::NamedValue > & the_value)
 {
-    ::osl::ClearableMutexGuard g(m_aMutex);
-    checkInit();
-    std::vector<std::pair<const char *, OUString> > attributes;
-    for (sal_Int32 i = 0; i < the_value.getLength(); ++i) {
-        const OUString name = the_value[i].Name;
-        // inefficiently search for matching attribute
-        for (size_t j = 0; s_stdStats[j] != nullptr; ++j) {
-            if (name.equalsAscii(s_stdStats[j])) {
-                const css::uno::Any any = the_value[i].Value;
-                sal_Int32 val = 0;
-                if (any >>= val) {
-                    attributes.emplace_back(s_stdStatAttrs[j],
-                                OUString::number(val));
-                } else {
-                    SAL_WARN("sfx.doc", "Invalid statistic: " << name);
+    {
+        osl::MutexGuard g(m_aMutex);
+        checkInit();
+        std::vector<std::pair<const char *, OUString> > attributes;
+        for (sal_Int32 i = 0; i < the_value.getLength(); ++i) {
+            const OUString name = the_value[i].Name;
+            // inefficiently search for matching attribute
+            for (size_t j = 0; s_stdStats[j] != nullptr; ++j) {
+                if (name.equalsAscii(s_stdStats[j])) {
+                    const css::uno::Any any = the_value[i].Value;
+                    sal_Int32 val = 0;
+                    if (any >>= val) {
+                        attributes.emplace_back(s_stdStatAttrs[j],
+                            OUString::number(val));
+                    }
+                    else {
+                        SAL_WARN("sfx.doc", "Invalid statistic: " << name);
+                    }
+                    break;
                 }
-                break;
             }
         }
+        updateElement("meta:document-statistic", &attributes);
     }
-    updateElement("meta:document-statistic", &attributes);
-    g.clear();
     setModified(true);
 }
 

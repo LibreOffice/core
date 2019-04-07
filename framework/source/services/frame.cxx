@@ -869,7 +869,7 @@ void SAL_CALL XFrameImpl::setCreator( const css::uno::Reference< css::frame::XFr
 
     /* SAFE { */
     {
-        SolarMutexClearableGuard aWriteLock;
+        SolarMutexGuard aWriteLock;
         m_xParent = xCreator;
     }
     /* } SAFE */
@@ -1479,9 +1479,10 @@ sal_Bool SAL_CALL XFrameImpl::setComponent(const css::uno::Reference< css::awt::
         // Before we dispose this controller we should hide it inside this frame instance.
         // We hold it alive for next calls by using xOldController!
         /* SAFE {*/
-        SolarMutexClearableGuard aWriteLock;
-        m_xController = nullptr;
-        aWriteLock.clear();
+        {
+            SolarMutexGuard aWriteLock;
+            m_xController = nullptr;
+        }
         /* } SAFE */
 
         css::uno::Reference< css::lang::XComponent > xDisposable( xOldController, css::uno::UNO_QUERY );
@@ -1508,9 +1509,10 @@ sal_Bool SAL_CALL XFrameImpl::setComponent(const css::uno::Reference< css::awt::
        )
     {
         /* SAFE { */
-        SolarMutexClearableGuard aWriteLock;
-        m_xComponentWindow = nullptr;
-        aWriteLock.clear();
+        {
+            SolarMutexGuard aWriteLock;
+            m_xComponentWindow = nullptr;
+        }
         /* } SAFE */
 
         css::uno::Reference< css::lang::XComponent > xDisposable( xOldComponentWindow, css::uno::UNO_QUERY );
@@ -1718,9 +1720,10 @@ void SAL_CALL XFrameImpl::close( sal_Bool bDeliverOwnership )
     }
 
     /* SAFE { */
-    SolarMutexClearableGuard aWriteLock;
-    m_bIsHidden = true;
-    aWriteLock.clear();
+    {
+        SolarMutexGuard aWriteLock;
+        m_bIsHidden = true;
+    }
     /* } SAFE */
     impl_checkMenuCloser();
 
@@ -1899,7 +1902,7 @@ css::uno::Any SAL_CALL XFrameImpl::getPropertyValue(const OUString& sProperty)
     checkDisposed();
 
     // SAFE ->
-    SolarMutexClearableGuard aReadLock;
+    SolarMutexGuard aReadLock;
 
     TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
     if (pIt == m_lProps.end())
@@ -1917,13 +1920,13 @@ void SAL_CALL XFrameImpl::addPropertyChangeListener(
     checkDisposed();
 
     // SAFE ->
-    SolarMutexClearableGuard aReadLock;
+    {
+        SolarMutexGuard aReadLock;
 
-    TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
-    if (pIt == m_lProps.end())
-        throw css::beans::UnknownPropertyException();
-
-    aReadLock.clear();
+        TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
+        if (pIt == m_lProps.end())
+            throw css::beans::UnknownPropertyException();
+    }
     // <- SAFE
 
     m_lSimpleChangeListener.addInterface(sProperty, xListener);
@@ -1934,13 +1937,13 @@ void SAL_CALL XFrameImpl::removePropertyChangeListener(
         const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener)
 {
     // SAFE ->
-    SolarMutexClearableGuard aReadLock;
+    {
+        SolarMutexGuard aReadLock;
 
-    TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
-    if (pIt == m_lProps.end())
-        throw css::beans::UnknownPropertyException();
-
-    aReadLock.clear();
+        TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
+        if (pIt == m_lProps.end())
+            throw css::beans::UnknownPropertyException();
+    }
     // <- SAFE
 
     m_lSimpleChangeListener.removeInterface(sProperty, xListener);
@@ -1953,13 +1956,13 @@ void SAL_CALL XFrameImpl::addVetoableChangeListener(
     checkDisposed();
 
     // SAFE ->
-    SolarMutexClearableGuard aReadLock;
+    {
+        SolarMutexGuard aReadLock;
 
-    TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
-    if (pIt == m_lProps.end())
-        throw css::beans::UnknownPropertyException();
-
-    aReadLock.clear();
+        TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
+        if (pIt == m_lProps.end())
+            throw css::beans::UnknownPropertyException();
+    }
     // <- SAFE
 
     m_lVetoChangeListener.addInterface(sProperty, xListener);
@@ -1970,13 +1973,13 @@ void SAL_CALL XFrameImpl::removeVetoableChangeListener(
         const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener)
 {
     // SAFE ->
-    SolarMutexClearableGuard aReadLock;
+    {
+        SolarMutexGuard aReadLock;
 
-    TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
-    if (pIt == m_lProps.end())
-        throw css::beans::UnknownPropertyException();
-
-    aReadLock.clear();
+        TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
+        if (pIt == m_lProps.end())
+            throw css::beans::UnknownPropertyException();
+    }
     // <- SAFE
 
     m_lVetoChangeListener.removeInterface(sProperty, xListener);
@@ -2616,9 +2619,10 @@ void SAL_CALL XFrameImpl::windowShown( const css::lang::EventObject& )
 void SAL_CALL XFrameImpl::windowHidden( const css::lang::EventObject& )
 {
     /* SAFE { */
-    SolarMutexClearableGuard aReadLock;
-    m_bIsHidden = true;
-    aReadLock.clear();
+    {
+        SolarMutexGuard aReadLock;
+        m_bIsHidden = true;
+    }
     /* } SAFE */
 
     impl_checkMenuCloser();

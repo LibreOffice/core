@@ -106,9 +106,10 @@ NeonLockStore::NeonLockStore()
 
 NeonLockStore::~NeonLockStore()
 {
-    osl::ResettableMutexGuard aGuard(m_aMutex);
-    stopTicker(aGuard);
-    aGuard.reset(); // actually no threads should even try to access members now
+    {
+        osl::ClearableMutexGuard aGuard(m_aMutex);
+        stopTicker(aGuard);
+    } // actually no threads should even try to access members now
 
     // release active locks, if any.
     SAL_WARN_IF( !m_aLockInfoMap.empty(), "ucb.ucp.webdav", "NeonLockStore::~NeonLockStore - Releasing active locks!" );

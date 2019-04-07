@@ -507,10 +507,8 @@ ShutdownIcon* ShutdownIcon::createInstance()
 
 void ShutdownIcon::init()
 {
-    ::osl::ResettableMutexGuard aGuard( m_aMutex );
-    aGuard.clear();
     css::uno::Reference < XDesktop2 > xDesktop = Desktop::create( m_xContext );
-    aGuard.reset();
+    osl::MutexGuard aGuard(m_aMutex);
     m_xDesktop = xDesktop;
 }
 
@@ -534,7 +532,7 @@ void SAL_CALL ShutdownIcon::disposing( const css::lang::EventObject& )
 void SAL_CALL ShutdownIcon::queryTermination( const css::lang::EventObject& )
 {
     SAL_INFO("sfx.appl", "ShutdownIcon::queryTermination: veto is " << m_bVeto);
-    ::osl::ClearableMutexGuard  aGuard( m_aMutex );
+    osl::MutexGuard  aGuard( m_aMutex );
 
     if ( m_bVeto )
         throw css::frame::TerminationVetoException();
