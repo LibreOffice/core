@@ -50,6 +50,7 @@
 
 #include "vbacommandbars.hxx"
 
+#include <boost/functional/hash.hpp>
 #include <unordered_map>
 
 using namespace ::com::sun::star;
@@ -139,9 +140,11 @@ struct VbaTimerInfoHash
 {
     size_t operator()( const VbaTimerInfo& rTimerInfo ) const
     {
-        return static_cast<size_t>(rTimerInfo.first.hashCode())
-             + static_cast<size_t>(rtl_str_hashCode_WithLength( reinterpret_cast<char const *>(&rTimerInfo.second.first), sizeof( double ) ))
-             + static_cast<size_t>(rtl_str_hashCode_WithLength( reinterpret_cast<char const *>(&rTimerInfo.second.second), sizeof( double ) ));
+        std::size_t seed = 0;
+        boost::hash_combine(seed, rTimerInfo.first.hashCode());
+        boost::hash_combine(seed, rTimerInfo.second.first);
+        boost::hash_combine(seed, rTimerInfo.second.second);
+        return seed;
     }
 };
 

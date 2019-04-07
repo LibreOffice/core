@@ -16,6 +16,7 @@
 #include <functional>
 #include <unordered_set>
 #include <unordered_map>
+#include <boost/functional/hash.hpp>
 
 namespace svgi
 {
@@ -264,53 +265,55 @@ namespace std
         using argument_type = svgi::State;
         std::size_t operator()(const svgi::State& rState ) const
         {
-            return std::hash<double>()(rState.maCTM.get( 0, 0 ))
-                ^  std::hash<double>()(rState.maCTM.get( 1, 0 ))
-                ^  std::hash<double>()(rState.maCTM.get( 0, 1 ))
-                ^  std::hash<double>()(rState.maCTM.get( 1, 1 ))
-                ^  std::hash<double>()(rState.maCTM.get( 0, 2 ))
-                ^  std::hash<double>()(rState.maCTM.get( 1, 2 ))
-                ^  std::hash<double>()(rState.maViewport.getWidth())
-                ^  std::hash<double>()(rState.maViewport.getHeight())
-                ^  std::hash<double>()(rState.maViewBox.getWidth())
-                ^  std::hash<double>()(rState.maViewBox.getHeight())
-                ^  size_t(rState.mbIsText)
-                ^  size_t(rState.maFontFamily.hashCode())
-                ^  std::hash<double>()(rState.mnFontSize)
-                ^  std::hash<double>()(rState.mnParentFontSize)
-                ^  size_t(rState.maFontStyle.hashCode())
-                ^  size_t(rState.maFontVariant.hashCode())
-                ^  std::hash<double>()(rState.mnFontWeight)
-                ^  size_t(rState.meTextAnchor)
-                ^  size_t(rState.mbVisibility)
-                ^  size_t(rState.meFillType)
-                ^  std::hash<double>()(rState.mnFillOpacity)
-                ^  std::hash<double>()(rState.mnOpacity)
-                ^  size_t(rState.meStrokeType)
-                ^  std::hash<double>()(rState.mnStrokeOpacity)
-                ^  std::hash<double>()(rState.mnViewportFillOpacity)
-                ^  size_t(rState.maFillColor.a)
-                ^  size_t(rState.maFillColor.r)
-                ^  size_t(rState.maFillColor.g)
-                ^  size_t(rState.maFillColor.b)
-                ^  size_t(rState.maFillGradient.maStops.size())
-                ^  size_t(rState.meFillRule)
-                ^  size_t(rState.maStrokeColor.a)
-                ^  size_t(rState.maStrokeColor.r)
-                ^  size_t(rState.maStrokeColor.g)
-                ^  size_t(rState.maStrokeColor.b)
-                ^  size_t(rState.maStrokeGradient.maStops.size())
-                ^  size_t(rState.maDashArray.size())
-                ^  std::hash<double>()(rState.mnDashOffset)
-                ^  size_t(rState.meLineCap)
-                ^  size_t(rState.meLineJoin)
-                ^  std::hash<double>()(rState.mnMiterLimit)
-                ^  std::hash<double>()(rState.mnStrokeWidth)
-                ^  size_t(rState.maViewportFillColor.a)
-                ^  size_t(rState.maViewportFillColor.r)
-                ^  size_t(rState.maViewportFillColor.g)
-                ^  size_t(rState.maViewportFillColor.b)
-                ^  size_t(rState.maViewportFillGradient.maStops.size());
+            std::size_t seed = 0;
+            boost::hash_combine(seed, rState.maCTM.get( 0, 0 ));
+            boost::hash_combine(seed, rState.maCTM.get( 1, 0 ));
+            boost::hash_combine(seed, rState.maCTM.get( 0, 1 ));
+            boost::hash_combine(seed, rState.maCTM.get( 1, 1 ));
+            boost::hash_combine(seed, rState.maCTM.get( 0, 2 ));
+            boost::hash_combine(seed, rState.maCTM.get( 1, 2 ));
+            boost::hash_combine(seed, rState.maViewport.getWidth());
+            boost::hash_combine(seed, rState.maViewport.getHeight());
+            boost::hash_combine(seed, rState.maViewBox.getWidth());
+            boost::hash_combine(seed, rState.maViewBox.getHeight());
+            boost::hash_combine(seed, rState.mbIsText);
+            boost::hash_combine(seed, rState.maFontFamily);
+            boost::hash_combine(seed, rState.mnFontSize);
+            boost::hash_combine(seed, rState.mnParentFontSize);
+            boost::hash_combine(seed, rState.maFontStyle);
+            boost::hash_combine(seed, rState.maFontVariant);
+            boost::hash_combine(seed, rState.mnFontWeight);
+            boost::hash_combine(seed, rState.meTextAnchor);
+            boost::hash_combine(seed, rState.mbVisibility);
+            boost::hash_combine(seed, rState.meFillType)
+            boost::hash_combine(seed, rState.mnFillOpacity);
+            boost::hash_combine(seed, rState.mnOpacity);
+            boost::hash_combine(seed, rState.meStrokeType);
+            boost::hash_combine(seed, rState.mnStrokeOpacity);
+            boost::hash_combine(seed, rState.mnViewportFillOpacity);
+            boost::hash_combine(seed, rState.maFillColor.a);
+            boost::hash_combine(seed, rState.maFillColor.r);
+            boost::hash_combine(seed, rState.maFillColor.g);
+            boost::hash_combine(seed, rState.maFillColor.b);
+            boost::hash_combine(seed, rState.maFillGradient.maStops.size());
+            boost::hash_combine(seed, rState.meFillRule);
+            boost::hash_combine(seed, rState.maStrokeColor.a);
+            boost::hash_combine(seed, rState.maStrokeColor.r);
+            boost::hash_combine(seed, rState.maStrokeColor.g);
+            boost::hash_combine(seed, rState.maStrokeColor.b);
+            boost::hash_combine(seed, rState.maStrokeGradient.maStops.size());
+            boost::hash_combine(seed, rState.maDashArray.size());
+            boost::hash_combine(seed, rState.mnDashOffset);
+            boost::hash_combine(seed, rState.meLineCap);
+            boost::hash_combine(seed, rState.meLineJoin);
+            boost::hash_combine(seed, rState.mnMiterLimit);
+            boost::hash_combine(seed, rState.mnStrokeWidth);
+            boost::hash_combine(seed, rState.maViewportFillColor.a);
+            boost::hash_combine(seed, rState.maViewportFillColor.r);
+            boost::hash_combine(seed, rState.maViewportFillColor.g);
+            boost::hash_combine(seed, rState.maViewportFillColor.b);
+            boost::hash_combine(seed, rState.maViewportFillGradient.maStops.size());
+            return seed;
         }
     };
 }

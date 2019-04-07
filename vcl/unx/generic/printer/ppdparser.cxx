@@ -54,6 +54,7 @@
 
 #include <config_dbus.h>
 #include <config_gio.h>
+#include <boost/functional/hash.hpp>
 
 namespace psp
 {
@@ -73,11 +74,12 @@ namespace psp
         struct LocaleHash
         {
             size_t operator()(const css::lang::Locale& rLocale) const
-            { return
-                  static_cast<size_t>(rLocale.Language.hashCode())
-                ^ static_cast<size_t>(rLocale.Country.hashCode())
-                ^ static_cast<size_t>(rLocale.Variant.hashCode())
-                ;
+            {
+                std::size_t seed = 0;
+                boost::hash_combine(seed, rLocale.Language.hashCode());
+                boost::hash_combine(seed, rLocale.Country.hashCode());
+                boost::hash_combine(seed, rLocale.Variant.hashCode());
+                return seed;
             }
         };
 
