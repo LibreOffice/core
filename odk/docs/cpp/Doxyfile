@@ -30,7 +30,7 @@ HTML_TIMESTAMP = NO
 
 GENERATE_LATEX = NO
 
-ALIASES = "derive=\par Derive: \n"
+ALIASES = "derive=\par Derive:"
 
 MACRO_EXPANSION = YES
 EXPAND_ONLY_PREDEF = YES
