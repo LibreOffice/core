@@ -916,12 +916,12 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
     {
         // #i103058# re-add old creation comment mode
         const ImpPathCreateUser* pU = static_cast<const ImpPathCreateUser*>(rDrag.GetUser());
-        const SdrObjKind eKindMerk(meObjectKind);
+        const SdrObjKind eOriginalKind(meObjectKind);
         mrSdrPathObject.meKind = pU->eCurrentKind;
         OUString aTmp;
         mrSdrPathObject.ImpTakeDescriptionStr(STR_ViewCreateObj, aTmp);
         aStr = aTmp;
-        mrSdrPathObject.meKind = eKindMerk;
+        mrSdrPathObject.meKind = eOriginalKind;
 
         Point aPrev(rDrag.GetPrev());
         Point aNow(rDrag.GetNow());
