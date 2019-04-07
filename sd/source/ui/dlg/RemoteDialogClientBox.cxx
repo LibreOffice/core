@@ -184,7 +184,7 @@ void ClientBox::selectEntry( const long nPos )
     //It would be probably best to always use a copy of m_vEntries
     //and some other state variables from ClientBox for
     //the whole painting operation. See issue i86993
-    ::osl::ClearableMutexGuard guard(m_entriesMutex);
+    osl::MutexGuard guard(m_entriesMutex);
 
     if ( m_bHasActive )
     {
@@ -230,8 +230,6 @@ void ClientBox::selectEntry( const long nPos )
         m_bNeedsRecalc = true;
         Invalidate();
     }
-
-    guard.clear();
 }
 
 void ClientBox::DrawRow(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect, const TClientBoxEntry& rEntry)
@@ -583,21 +581,21 @@ void ClientBox::addEntry( const std::shared_ptr<ClientInfo>& pClientInfo )
 
     TClientBoxEntry xEntry( new ClientBoxEntry( pClientInfo ) );
 
-    ::osl::ClearableMutexGuard guard(m_entriesMutex);
-    if ( m_vEntries.empty() )
     {
-        m_vEntries.push_back( xEntry );
-    }
-    else
-    {
-        m_vEntries.insert( m_vEntries.begin()+nPos, xEntry );
-    }
+        osl::MutexGuard guard(m_entriesMutex);
+        if (m_vEntries.empty())
+        {
+            m_vEntries.push_back(xEntry);
+        }
+        else
+        {
+            m_vEntries.insert(m_vEntries.begin() + nPos, xEntry);
+        }
 
-    //access to m_nActive must be guarded
-    if ( m_bHasActive && ( m_nActive >= nPos ) )
-        m_nActive += 1;
-
-    guard.clear();
+        //access to m_nActive must be guarded
+        if (m_bHasActive && (m_nActive >= nPos))
+            m_nActive += 1;
+    }
 
     if ( IsReallyVisible() )
         Invalidate();

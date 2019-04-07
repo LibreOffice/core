@@ -494,12 +494,10 @@ LRESULT CMtaOleClipboard::onClipboardUpdate()
     // registering ourself as clipboard
     if ( !m_bInRegisterClipViewer )
     {
-        ClearableMutexGuard aGuard( m_ClipboardChangedEventCountMutex );
+        MutexGuard aGuard( m_ClipboardChangedEventCountMutex );
 
         m_ClipboardChangedEventCount++;
         SetEvent( m_hClipboardChangedEvent );
-
-        aGuard.clear( );
     }
 
     return 0;

@@ -223,11 +223,12 @@ void SAL_CALL ToolbarModeMenuController::itemSelected( const css::awt::MenuEvent
     Reference< XURLTransformer >        xURLTransformer;
     Reference< XFrame >                 xFrame;
 
-    osl::ClearableMutexGuard aLock( m_aMutex );
-    xPopupMenu             = m_xPopupMenu;
-    xURLTransformer        = m_xURLTransformer;
-    xFrame                 = m_xFrame;
-    aLock.clear();
+    {
+        osl::MutexGuard aLock(m_aMutex);
+        xPopupMenu = m_xPopupMenu;
+        xURLTransformer = m_xURLTransformer;
+        xFrame = m_xFrame;
+    }
 
     if ( xPopupMenu.is() )
     {

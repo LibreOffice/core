@@ -799,19 +799,19 @@ IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, b
     ::std::vector< std::unique_ptr<IMPL_TextlistItem> >* pTextList;
 
     // Ready for multithreading
-    ClearableMutexGuard aGuard ( m_aMutex );
-
-    if ( bbeforeProgress )
     {
-        pTextList = &maTextlist_Top;
-    }
-    else
-    {
-        pTextList = &maTextlist_Bottom;
-    }
+        MutexGuard aGuard(m_aMutex);
 
+        if (bbeforeProgress)
+        {
+            pTextList = &maTextlist_Top;
+        }
+        else
+        {
+            pTextList = &maTextlist_Bottom;
+        }
+    }
     // Switch off guard.
-    aGuard.clear ();
 
     // Search the topic in textlist.
     size_t nPosition    = 0;

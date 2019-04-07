@@ -143,7 +143,7 @@ public:
     // XPropertyChangeListener
     void SAL_CALL OXReportControllerObserver::propertyChange(const beans::PropertyChangeEvent& _rEvent)
     {
-        ::osl::ClearableMutexGuard aGuard( m_pImpl->m_aMutex );
+        osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
         if ( m_pImpl->m_nLocks != 0 )
             return;

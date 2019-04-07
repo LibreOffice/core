@@ -74,7 +74,7 @@ OUString SAL_CALL TypeDetection::queryTypeByURL(const OUString& sURL)
     OUString sType;
 
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
 
     css::util::URL  aURL;
     aURL.Complete = sURL;
@@ -379,7 +379,7 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
     try
     {
         // SAFE -> ----------------------------------
-        ::osl::ResettableMutexGuard aLock(m_aLock);
+        osl::ClearableMutexGuard aLock(m_aLock);
 
         // parse given URL to split it into e.g. main and jump marks ...
         sURL = stlDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL(), OUString());
@@ -549,7 +549,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
     try
     {
         // SAFE ->
-        ::osl::ResettableMutexGuard aLock(m_aLock);
+        osl::ClearableMutexGuard aLock(m_aLock);
 
         CacheItem aType = cache.getItem(FilterCache::E_TYPE, sType);
         aType[PROPNAME_PREFERREDFILTER] >>= sFilter;
@@ -644,9 +644,8 @@ bool TypeDetection::impl_getPreselectionForType(
     try
     {
         // SAFE -> --------------------------
-        ::osl::ResettableMutexGuard aLock(m_aLock);
+        osl::MutexGuard aLock(m_aLock);
         aType = TheFilterCache::get().getItem(FilterCache::E_TYPE, sType);
-        aLock.clear();
         // <- SAFE --------------------------
     }
     catch(const css::container::NoSuchElementException&)
@@ -731,7 +730,7 @@ void TypeDetection::impl_getPreselectionForDocumentService(
     try
     {
         // SAFE -> --------------------------
-        ::osl::ResettableMutexGuard aLock(m_aLock);
+        osl::MutexGuard aLock(m_aLock);
 
         // Attention: For executing next lines of code, We must be sure that
         // all filters already loaded :-(
@@ -742,8 +741,6 @@ void TypeDetection::impl_getPreselectionForDocumentService(
         CacheItem lIProps;
         lIProps[PROPNAME_DOCUMENTSERVICE] <<= sPreSelDocumentService;
         lFilters = cache.getMatchingItemsByProps(FilterCache::E_FILTER, lIProps);
-
-        aLock.clear();
         // <- SAFE --------------------------
     }
     catch (const css::container::NoSuchElementException&)
@@ -905,7 +902,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
         try
         {
             // SAFE -> ----------------------------------
-            ::osl::ResettableMutexGuard aLock(m_aLock);
+            osl::ClearableMutexGuard aLock(m_aLock);
             CacheItem aType = TheFilterCache::get().getItem(FilterCache::E_TYPE, sFlatType);
             aLock.clear();
 
@@ -986,9 +983,10 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
     css::uno::Reference< css::uno::XComponentContext >         xContext;
 
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
-    xContext = m_xContext;
-    aLock.clear();
+    {
+        osl::MutexGuard aLock(m_aLock);
+        xContext = m_xContext;
+    }
     // <- SAFE
 
     try
@@ -1158,13 +1156,14 @@ bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      utl::MediaDescript
                                                             const OUString&               sType      )
 {
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
-    if (TheFilterCache::get().hasItem(FilterCache::E_TYPE, sType))
     {
-        rDescriptor[utl::MediaDescriptor::PROP_TYPENAME()] <<= sType;
-        return true;
+        osl::MutexGuard aLock(m_aLock);
+        if (TheFilterCache::get().hasItem(FilterCache::E_TYPE, sType))
+        {
+            rDescriptor[utl::MediaDescriptor::PROP_TYPENAME()] <<= sType;
+            return true;
+        }
     }
-    aLock.clear();
     // <- SAFE
 
     // remove all related information from the descriptor
@@ -1179,7 +1178,7 @@ bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      utl::MediaDescri
     try
     {
         // SAFE ->
-        ::osl::ResettableMutexGuard aLock(m_aLock);
+        osl::ClearableMutexGuard aLock(m_aLock);
 
         auto & cache = TheFilterCache::get();
         CacheItem aFilter = cache.getItem(FilterCache::E_FILTER, sFilter);

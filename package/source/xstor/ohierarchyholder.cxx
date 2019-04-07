@@ -261,15 +261,15 @@ void SAL_CALL OHierarchyElement_Impl::disposing( const lang::EventObject& Source
 {
     try
     {
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
-        uno::Reference< embed::XExtendedStorageStream > xStream( Source.Source, uno::UNO_QUERY );
+        {
+            osl::MutexGuard aGuard(m_aMutex);
+            uno::Reference< embed::XExtendedStorageStream > xStream(Source.Source, uno::UNO_QUERY);
 
-        m_aOpenStreams.erase(std::remove_if(m_aOpenStreams.begin(), m_aOpenStreams.end(),
-            [&xStream](const OWeakStorRefList_Impl::value_type& rxStorage) {
+            m_aOpenStreams.erase(std::remove_if(m_aOpenStreams.begin(), m_aOpenStreams.end(),
+                [&xStream](const OWeakStorRefList_Impl::value_type& rxStorage) {
                 return !rxStorage.get().is() || rxStorage.get() == xStream; }),
-            m_aOpenStreams.end());
-
-        aGuard.clear();
+                m_aOpenStreams.end());
+        }
 
         TestForClosing();
     }

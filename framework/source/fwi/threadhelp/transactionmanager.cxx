@@ -71,29 +71,29 @@ TransactionManager::~TransactionManager()
 void  TransactionManager::setWorkingMode( EWorkingMode eMode )
 {
     // Safe member access.
-    ::osl::ClearableMutexGuard  aAccessGuard( m_aAccessLock );
-    bool                        bWaitFor    = false;
-    // Change working mode first!
-    if  (
-            ( m_eWorkingMode == E_INIT        && eMode == E_WORK        ) ||
-            ( (m_eWorkingMode == E_WORK || m_eWorkingMode == E_INIT) && eMode == E_BEFORECLOSE ) ||
-            ( m_eWorkingMode == E_BEFORECLOSE && eMode == E_CLOSE       ) ||
-            ( m_eWorkingMode == E_CLOSE       && eMode == E_INIT        )
-        )
+    bool bWaitFor = false;
     {
-        m_eWorkingMode = eMode;
-        if( m_eWorkingMode == E_BEFORECLOSE || m_eWorkingMode == E_CLOSE )
+        osl::MutexGuard aAccessGuard(m_aAccessLock);
+        // Change working mode first!
+        if (
+            (m_eWorkingMode == E_INIT && eMode == E_WORK) ||
+            ((m_eWorkingMode == E_WORK || m_eWorkingMode == E_INIT) && eMode == E_BEFORECLOSE) ||
+            (m_eWorkingMode == E_BEFORECLOSE && eMode == E_CLOSE) ||
+            (m_eWorkingMode == E_CLOSE && eMode == E_INIT)
+            )
         {
-            bWaitFor = true;
+            m_eWorkingMode = eMode;
+            if (m_eWorkingMode == E_BEFORECLOSE || m_eWorkingMode == E_CLOSE)
+            {
+                bWaitFor = true;
+            }
         }
     }
-
     // Wait for current existing transactions then!
     // (Only necessary for changing to E_BEFORECLOSE or E_CLOSE!...
     // otherwise; if you wait at setting E_WORK another thread could finish a acquire-call during our unlock() and wait() call
     // ... and we will wait forever here!!!)
     // Don't forget to release access mutex before.
-    aAccessGuard.clear();
     if( bWaitFor )
     {
         m_aBarrier.wait();

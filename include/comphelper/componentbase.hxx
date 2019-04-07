@@ -127,7 +127,7 @@ namespace comphelper
         }
 
     private:
-        ::osl::ResettableMutexGuard   m_aMutexGuard;
+        osl::ClearableMutexGuard m_aMutexGuard;
     };
 
 

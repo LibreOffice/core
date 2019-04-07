@@ -250,7 +250,7 @@ void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
 void SAL_CALL
 SplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
 {
-    ::osl::ClearableMutexGuard  aGuard( _aMutex );
+    osl::MutexGuard  aGuard( _aMutex );
     if (aArguments.getLength() > 0)
     {
         aArguments[0] >>= _bVisible;

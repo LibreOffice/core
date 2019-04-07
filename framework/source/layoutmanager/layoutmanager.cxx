@@ -157,7 +157,7 @@ LayoutManager::~LayoutManager()
 
 void LayoutManager::implts_createMenuBar(const OUString& rMenuBarName)
 {
-    SolarMutexClearableGuard aWriteLock;
+    SolarMutexGuard aWriteLock;
 
     // Create a customized menu if compatibility mode is on
     SvtCompatibilityViewOptions aCompOptions;
@@ -172,8 +172,6 @@ void LayoutManager::implts_createMenuBar(const OUString& rMenuBarName)
         m_xMenuBar = implts_createElement( rMenuBarName );
         if ( m_xMenuBar.is() )
         {
-            SolarMutexGuard aGuard;
-
             SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
             if ( pSysWindow )
             {
@@ -211,7 +209,6 @@ void LayoutManager::implts_createMenuBar(const OUString& rMenuBarName)
             }
         }
     }
-    aWriteLock.clear();
 }
 
 // Internal helper function
@@ -538,7 +535,7 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
     {
         bool bGetSettingsState( false );
 
-        SolarMutexResettableGuard aWriteLock;
+        SolarMutexClearableGuard aWriteLock;
         bool bGlobalSettings( bInGlobalSettings );
         if ( rGlobalSettings == nullptr )
         {
@@ -628,9 +625,10 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
             {
                 if ( pGlobalSettings->HasToolbarStatesInfo())
                 {
-                    SolarMutexClearableGuard aWriteLock2;
-                    bInGlobalSettings = true;
-                    aWriteLock2.clear();
+                    {
+                        SolarMutexGuard aWriteLock2;
+                        bInGlobalSettings = true;
+                    }
 
                     uno::Any aValue;
                     if ( pGlobalSettings->GetToolbarStateInfo(
@@ -664,7 +662,7 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
 
 void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UIElement& rElementData )
 {
-    SolarMutexResettableGuard aWriteLock;
+    SolarMutexClearableGuard aWriteLock;
     Reference< XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
 
     aWriteLock.clear();
@@ -730,10 +728,6 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
         {
         }
     }
-
-    // Reset flag
-    aWriteLock.reset();
-    aWriteLock.clear();
 }
 
 ::Size LayoutManager::implts_getContainerWindowOutputSize()
@@ -777,9 +771,10 @@ Reference< XUIElement > LayoutManager::implts_createElement( const OUString& aNa
 
 void LayoutManager::implts_setVisibleState( bool bShow )
 {
-    SolarMutexClearableGuard aWriteLock;
-    m_aStatusBarElement.m_bMasterHide = !bShow;
-    aWriteLock.clear();
+    {
+        SolarMutexGuard aWriteLock;
+        m_aStatusBarElement.m_bMasterHide = !bShow;
+    }
 
     implts_updateUIElementsVisibleState( bShow );
 }
@@ -847,12 +842,13 @@ void LayoutManager::implts_updateUIElementsVisibleState( bool bSetVisible )
 
 void LayoutManager::implts_setCurrentUIVisibility( bool bShow )
 {
-    SolarMutexClearableGuard aWriteLock;
-    if ( !bShow && m_aStatusBarElement.m_bVisible && m_aStatusBarElement.m_xUIElement.is() )
-        m_aStatusBarElement.m_bMasterHide = true;
-    else if ( bShow && m_aStatusBarElement.m_bVisible )
-        m_aStatusBarElement.m_bMasterHide = false;
-    aWriteLock.clear();
+    {
+        SolarMutexGuard aWriteLock;
+        if (!bShow && m_aStatusBarElement.m_bVisible && m_aStatusBarElement.m_xUIElement.is())
+            m_aStatusBarElement.m_bMasterHide = true;
+        else if (bShow && m_aStatusBarElement.m_bVisible)
+            m_aStatusBarElement.m_bMasterHide = false;
+    }
 
     implts_updateUIElementsVisibleState( bShow );
 }
@@ -875,14 +871,15 @@ void LayoutManager::implts_destroyStatusBar()
 
 void LayoutManager::implts_createStatusBar( const OUString& aStatusBarName )
 {
-    SolarMutexClearableGuard aWriteLock;
-    if ( !m_aStatusBarElement.m_xUIElement.is() )
     {
-        implts_readStatusBarState( aStatusBarName );
-        m_aStatusBarElement.m_aName      = aStatusBarName;
-        m_aStatusBarElement.m_xUIElement = implts_createElement( aStatusBarName );
+        SolarMutexGuard aWriteLock;
+        if (!m_aStatusBarElement.m_xUIElement.is())
+        {
+            implts_readStatusBarState(aStatusBarName);
+            m_aStatusBarElement.m_aName = aStatusBarName;
+            m_aStatusBarElement.m_xUIElement = implts_createElement(aStatusBarName);
+        }
     }
-    aWriteLock.clear();
 
     implts_createProgressBar();
 }
@@ -1036,7 +1033,7 @@ bool LayoutManager::implts_showProgressBar()
     Reference< awt::XWindow > xWindow;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    SolarMutexClearableGuard aWriteLock;
+    SolarMutexGuard aWriteLock;
     xStatusBar.set( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
     xProgressBar.set( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
     bool bVisible( m_bVisible );
@@ -1055,10 +1052,7 @@ bool LayoutManager::implts_showProgressBar()
                 xWindow = pWrapper->getStatusBar();
         }
     }
-    aWriteLock.clear();
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    SolarMutexGuard aGuard;
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     if ( pWindow )
     {
@@ -1336,7 +1330,6 @@ void SAL_CALL LayoutManager::setDockingAreaAcceptor( const Reference< ui::XDocki
         // #i37884# set initial visibility state - in the plugin case the container window is already shown
         // and we get no notification anymore
         {
-            SolarMutexGuard aGuard;
             VclPtr<vcl::Window> pContainerWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
             if( pContainerWindow )
                 m_bParentWindowVisible = pContainerWindow->IsVisible();
@@ -1735,9 +1728,10 @@ sal_Bool SAL_CALL LayoutManager::showElement( const OUString& aName )
     if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
          aElementName.equalsIgnoreAsciiCase("menubar") )
     {
-        SolarMutexClearableGuard aWriteLock;
-        m_bMenuVisible = true;
-        aWriteLock.clear();
+        {
+            SolarMutexGuard aWriteLock;
+            m_bMenuVisible = true;
+        }
 
         bResult = implts_resetMenuBar();
         bNotify = bResult;
@@ -2204,10 +2198,11 @@ void SAL_CALL LayoutManager::unlock()
 #endif
     // conform to documentation: unlock with lock count == 0 means force a layout
 
-    SolarMutexClearableGuard aWriteLock;
-    if ( bDoLayout )
-        m_aAsyncLayoutTimer.Stop();
-    aWriteLock.clear();
+    {
+        SolarMutexGuard aWriteLock;
+        if (bDoLayout)
+            m_aAsyncLayoutTimer.Stop();
+    }
 
     Any a( nLockCount );
     implts_notifyListeners( frame::LayoutManagerEvents::UNLOCK, a );
@@ -2274,9 +2269,6 @@ bool LayoutManager::implts_doLayout( bool bForceRequestBorderSpace, bool bOuterR
     {
         bLayouted = true;
 
-        SolarMutexResettableGuard aWriteGuard;
-        aWriteGuard.clear();
-
         awt::Rectangle aDockSpace( implts_calcDockingAreaSizes() );
         awt::Rectangle aBorderSpace( aDockSpace );
         bool       bGotRequestedBorderSpace( true );
@@ -2320,10 +2312,9 @@ bool LayoutManager::implts_doLayout( bool bForceRequestBorderSpace, bool bOuterR
 
             if ( bGotRequestedBorderSpace )
             {
-                aWriteGuard.reset();
+                SolarMutexGuard aWriteGuard;
                 m_aDockingArea = aBorderSpace;
                 m_bMustDoLayout = false;
-                aWriteGuard.clear();
             }
         }
 
@@ -2355,9 +2346,6 @@ bool LayoutManager::implts_doLayout( bool bForceRequestBorderSpace, bool bOuterR
             }
 
             xDockingAreaAcceptor->setDockingAreaSpace( aBorderSpace );
-
-            aWriteGuard.reset();
-            aWriteGuard.clear();
         }
     }
 
@@ -2506,7 +2494,7 @@ void LayoutManager::implts_updateMenuBarClose()
 bool LayoutManager::implts_resetMenuBar()
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    SolarMutexClearableGuard aWriteLock;
+    SolarMutexGuard aWriteLock;
     bool bMenuVisible( m_bMenuVisible );
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
 
@@ -2519,10 +2507,7 @@ bool LayoutManager::implts_resetMenuBar()
         if ( pMenuBarWrapper )
             pSetMenuBar = static_cast<MenuBar*>(pMenuBarWrapper->GetMenuBarManager()->GetMenuBar());
     }
-    aWriteLock.clear();
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    SolarMutexGuard aGuard;
     SystemWindow* pSysWindow = getTopSystemWindow( xContainerWindow );
     if ( pSysWindow && bMenuVisible && pSetMenuBar )
     {
@@ -2536,7 +2521,7 @@ bool LayoutManager::implts_resetMenuBar()
 
 void LayoutManager::implts_createMSCompatibleMenuBar( const OUString& aName )
 {
-    SolarMutexClearableGuard aWriteLock;
+    SolarMutexGuard aWriteLock;
 
     // Find Forms menu in the original menubar
     m_xMenuBar = implts_createElement( aName );
@@ -2584,8 +2569,6 @@ void LayoutManager::implts_createMSCompatibleMenuBar( const OUString& aName )
     if ( xFormsMenuComp.is() )
         xFormsMenuComp->dispose();
     xFormsMenu.clear();
-
-    aWriteLock.clear();
 }
 
 IMPL_LINK_NOARG(LayoutManager, MenuBarClose, void*, void)
@@ -2729,12 +2712,12 @@ void SAL_CALL LayoutManager::windowHidden( const lang::EventObject& aEvent )
 
 IMPL_LINK_NOARG(LayoutManager, AsyncLayoutHdl, Timer *, void)
 {
-    SolarMutexClearableGuard aReadLock;
+    {
+        SolarMutexGuard aReadLock;
 
-    if( !m_xContainerWindow.is() )
-        return;
-
-    aReadLock.clear();
+        if (!m_xContainerWindow.is())
+            return;
+    }
 
     implts_setDockingAreaWindowSizes();
     implts_doLayout( true, false );
@@ -2748,9 +2731,10 @@ void SAL_CALL LayoutManager::frameAction( const FrameActionEvent& aEvent )
     {
         SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::frameAction (COMPONENT_ATTACHED|REATTACHED)" );
 
-        SolarMutexClearableGuard aWriteLock;
-        m_bMustDoLayout = true;
-        aWriteLock.clear();
+        {
+            SolarMutexGuard aWriteLock;
+            m_bMustDoLayout = true;
+        }
 
         implts_reset( true );
         implts_doLayout( true, false );
@@ -2775,94 +2759,94 @@ void SAL_CALL LayoutManager::disposing( const lang::EventObject& rEvent )
     bool bDisposeAndClear( false );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    SolarMutexClearableGuard aWriteLock;
-
-    if ( rEvent.Source == Reference< XInterface >( m_xFrame, UNO_QUERY ))
     {
-        // Our frame gets disposed, release all our references that depends on a working frame reference.
+        SolarMutexGuard aWriteLock;
 
-        setDockingAreaAcceptor( Reference< ui::XDockingAreaAcceptor >() );
-
-        // destroy all elements, it's possible that detaching is NOT called!
-        implts_destroyElements();
-        impl_clearUpMenuBar();
-        m_xMenuBar.clear();
-        VclPtr<Menu> pMenuBar;
-        if (m_xInplaceMenuBar.is())
+        if (rEvent.Source == Reference<XInterface>(m_xFrame, UNO_QUERY))
         {
-            pMenuBar = m_xInplaceMenuBar->GetMenuBar();
-            m_xInplaceMenuBar->dispose();
-            m_xInplaceMenuBar.clear();
+            // Our frame gets disposed, release all our references that depends on a working frame reference.
+
+            setDockingAreaAcceptor(Reference<ui::XDockingAreaAcceptor>());
+
+            // destroy all elements, it's possible that detaching is NOT called!
+            implts_destroyElements();
+            impl_clearUpMenuBar();
+            m_xMenuBar.clear();
+            VclPtr<Menu> pMenuBar;
+            if (m_xInplaceMenuBar.is())
+            {
+                pMenuBar = m_xInplaceMenuBar->GetMenuBar();
+                m_xInplaceMenuBar->dispose();
+                m_xInplaceMenuBar.clear();
+            }
+            pMenuBar.disposeAndClear();
+            m_xContainerWindow.clear();
+            m_xContainerTopWindow.clear();
+
+            // forward disposing call to toolbar manager
+            if (m_xToolbarManager.is())
+                m_xToolbarManager->disposing(rEvent);
+
+            if (m_xModuleCfgMgr.is())
+            {
+                try
+                {
+                    Reference<XUIConfiguration> xModuleCfgMgr(m_xModuleCfgMgr, UNO_QUERY);
+                    xModuleCfgMgr->removeConfigurationListener(Reference<XUIConfigurationListener>(
+                        static_cast<OWeakObject*>(this), UNO_QUERY));
+                }
+                catch (const Exception&)
+                {
+                }
+            }
+
+            if (m_xDocCfgMgr.is())
+            {
+                try
+                {
+                    Reference<XUIConfiguration> xDocCfgMgr(m_xDocCfgMgr, UNO_QUERY);
+                    xDocCfgMgr->removeConfigurationListener(Reference<XUIConfigurationListener>(
+                        static_cast<OWeakObject*>(this), UNO_QUERY));
+                }
+                catch (const Exception&)
+                {
+                }
+            }
+
+            m_xDocCfgMgr.clear();
+            m_xModuleCfgMgr.clear();
+            m_xFrame.clear();
+            m_pGlobalSettings.reset();
+
+            bDisposeAndClear = true;
         }
-        pMenuBar.disposeAndClear();
-        m_xContainerWindow.clear();
-        m_xContainerTopWindow.clear();
-
-        // forward disposing call to toolbar manager
-        if ( m_xToolbarManager.is() )
-            m_xToolbarManager->disposing(rEvent);
-
-        if ( m_xModuleCfgMgr.is() )
+        else if (rEvent.Source == Reference<XInterface>(m_xContainerWindow, UNO_QUERY))
         {
-            try
+            // Our container window gets disposed. Remove all user interface elements.
+            ToolbarLayoutManager* pToolbarManager = m_xToolbarManager.get();
+            if (pToolbarManager)
             {
-                Reference< XUIConfiguration > xModuleCfgMgr( m_xModuleCfgMgr, UNO_QUERY );
-                xModuleCfgMgr->removeConfigurationListener(
-                    Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                uno::Reference<awt::XWindowPeer> aEmptyWindowPeer;
+                pToolbarManager->setParentWindow(aEmptyWindowPeer);
             }
-            catch (const Exception&)
+            impl_clearUpMenuBar();
+            m_xMenuBar.clear();
+            VclPtr<Menu> pMenuBar;
+            if (m_xInplaceMenuBar.is())
             {
+                pMenuBar = m_xInplaceMenuBar->GetMenuBar();
+                m_xInplaceMenuBar->dispose();
+                m_xInplaceMenuBar.clear();
             }
+            pMenuBar.disposeAndClear();
+            m_xContainerWindow.clear();
+            m_xContainerTopWindow.clear();
         }
-
-        if ( m_xDocCfgMgr.is() )
-        {
-            try
-            {
-                Reference< XUIConfiguration > xDocCfgMgr( m_xDocCfgMgr, UNO_QUERY );
-                xDocCfgMgr->removeConfigurationListener(
-                    Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
-            }
-            catch (const Exception&)
-            {
-            }
-        }
-
-        m_xDocCfgMgr.clear();
-        m_xModuleCfgMgr.clear();
-        m_xFrame.clear();
-        m_pGlobalSettings.reset();
-
-        bDisposeAndClear = true;
+        else if (rEvent.Source == Reference<XInterface>(m_xDocCfgMgr, UNO_QUERY))
+            m_xDocCfgMgr.clear();
+        else if (rEvent.Source == Reference<XInterface>(m_xModuleCfgMgr, UNO_QUERY))
+            m_xModuleCfgMgr.clear();
     }
-    else if ( rEvent.Source == Reference< XInterface >( m_xContainerWindow, UNO_QUERY ))
-    {
-        // Our container window gets disposed. Remove all user interface elements.
-        ToolbarLayoutManager* pToolbarManager = m_xToolbarManager.get();
-        if ( pToolbarManager )
-        {
-            uno::Reference< awt::XWindowPeer > aEmptyWindowPeer;
-            pToolbarManager->setParentWindow( aEmptyWindowPeer );
-        }
-        impl_clearUpMenuBar();
-        m_xMenuBar.clear();
-        VclPtr<Menu> pMenuBar;
-        if (m_xInplaceMenuBar.is())
-        {
-            pMenuBar = m_xInplaceMenuBar->GetMenuBar();
-            m_xInplaceMenuBar->dispose();
-            m_xInplaceMenuBar.clear();
-        }
-        pMenuBar.disposeAndClear();
-        m_xContainerWindow.clear();
-        m_xContainerTopWindow.clear();
-    }
-    else if ( rEvent.Source == Reference< XInterface >( m_xDocCfgMgr, UNO_QUERY ))
-        m_xDocCfgMgr.clear();
-    else if ( rEvent.Source == Reference< XInterface >( m_xModuleCfgMgr , UNO_QUERY ))
-        m_xModuleCfgMgr.clear();
-
-    aWriteLock.clear();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
     // Send disposing to our listener when we have lost our frame.

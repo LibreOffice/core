@@ -74,7 +74,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
                                                                                                 const css::uno::Sequence< css::uno::Any >& lArguments)
 {
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
 
     auto & cache = TheFilterCache::get();
 
@@ -164,11 +164,12 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     if (lTokens.valid())
     {
         // SAFE -> ----------------------
-        ::osl::ResettableMutexGuard aLock(m_aLock);
-        // May be not all filters was loaded ...
-        // But we need it now!
-        impl_loadOnDemand();
-        aLock.clear();
+        {
+            osl::MutexGuard aLock(m_aLock);
+            // May be not all filters was loaded ...
+            // But we need it now!
+            impl_loadOnDemand();
+        }
         // <- SAFE ----------------------
 
         if (lTokens.find(QUERY_IDENTIFIER_GETPREFERREDFILTERFORTYPE) != lTokens.end())
@@ -251,7 +252,7 @@ std::vector<OUString> FilterFactory::impl_queryMatchByDocumentService(const Quer
         nEFlags = pIt->second.toInt32();
 
     // SAFE -> ----------------------
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aLock);
 
     // search suitable filters
     FilterCache* pCache       = impl_getWorkingCache();
@@ -406,7 +407,7 @@ std::vector<OUString> FilterFactory::impl_getSortedFilterList(const QueryTokeniz
 std::vector<OUString> FilterFactory::impl_getListOfInstalledModules() const
 {
     // SAFE -> ----------------------
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aLock.clear();
     // <- SAFE ----------------------
@@ -428,7 +429,7 @@ std::vector<OUString> FilterFactory::impl_getSortedFilterListForModule(const OUS
     lIProps[PROPNAME_DOCUMENTSERVICE] <<= sModule;
 
     // SAFE -> ----------------------
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aLock);
     FilterCache* pCache        = impl_getWorkingCache();
     std::vector<OUString> lOtherFilters = pCache->getMatchingItemsByProps(FilterCache::E_FILTER, lIProps);
     aLock.clear();
@@ -469,7 +470,7 @@ std::vector<OUString> FilterFactory::impl_getSortedFilterListForModule(const OUS
 std::vector<OUString> FilterFactory::impl_readSortedFilterListFromConfig(const OUString& sModule) const
 {
     // SAFE -> ----------------------
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aLock.clear();
     // <- SAFE ----------------------
