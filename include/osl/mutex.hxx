@@ -20,6 +20,8 @@
 #ifndef INCLUDED_OSL_MUTEX_HXX
 #define INCLUDED_OSL_MUTEX_HXX
 
+#include "sal/config.h"
+#include <cassert>
 #include "osl/mutex.h"
 
 
@@ -175,11 +177,9 @@ namespace osl
         */
         void clear()
         {
-            if(pT)
-            {
-                pT->release();
-                pT = NULL;
-            }
+            assert(pT);
+            pT->release();
+            pT = NULL;
         }
     };
 
@@ -213,11 +213,10 @@ namespace osl
         */
         void reset()
         {
-            if( pResetT )
-            {
-                this->pT = pResetT;
-                this->pT->acquire();
-            }
+            assert(!this->pT);
+            assert(pResetT);
+            this->pT = pResetT;
+            this->pT->acquire();
         }
     };
 
