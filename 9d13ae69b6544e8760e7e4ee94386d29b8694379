@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_516909bc",
+        "filename": "filter/source/config/cache/typedetection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-07T13:11:28Z",
+      "side": 0,
+      "message": "Unrelated",
+      "range": {
+        "startLine": 1188,
+        "startChar": 8,
+        "endLine": 1188,
+        "endChar": 68
+      },
+      "revId": "9d13ae69b6544e8760e7e4ee94386d29b8694379",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
