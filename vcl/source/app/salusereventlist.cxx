@@ -63,9 +63,7 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
     oslThreadIdentifier aCurId = osl::Thread::getCurrentIdentifier();
 
     DBG_TESTSOLARMUTEX();
-    // cleared after we pop a single event and are save in the 2nd guard.
-    // this way we guarantee to process at least one event, if available.
-    osl::ResettableMutexGuard aResettableGuard(m_aUserEventsMutex);
+    osl::ResettableMutexGuard aResettableListGuard(m_aUserEventsMutex);
 
     if (!m_aUserEvents.empty())
     {
@@ -90,19 +88,19 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
 
         SalUserEvent aEvent( nullptr, nullptr, SalEvent::NONE );
         do {
-            {
-                osl::MutexGuard aGuard(m_aUserEventsMutex);
-                aResettableGuard.clear();
-                if (m_aProcessingUserEvents.empty() || aCurId != m_aProcessingThread)
-                    break;
-                aEvent = m_aProcessingUserEvents.front();
-                m_aProcessingUserEvents.pop_front();
-            }
+            if (m_aProcessingUserEvents.empty() || aCurId != m_aProcessingThread)
+                break;
+            aEvent = m_aProcessingUserEvents.front();
+            m_aProcessingUserEvents.pop_front();
+
+            // remember to reset the guard before break or continue the loop
+            aResettableListGuard.clear();
 
             if ( !isFrameAlive( aEvent.m_pFrame ) )
             {
                 if ( aEvent.m_nEvent == SalEvent::UserEvent )
                     delete static_cast< ImplSVEvent* >( aEvent.m_pData );
+                aResettableListGuard.reset();
                 continue;
             }
 
@@ -126,11 +124,11 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
                 SAL_WARN("vcl", "Uncaught exception during DispatchUserEvents!");
                 std::abort();
             }
+            aResettableListGuard.reset();
             if (!bHandleAllCurrentEvents)
                 break;
         }
         while( true );
-        aResettableGuard.reset();
     }
 
     if ( !m_bAllUserEventProcessedSignaled && !HasUserEvents() )
