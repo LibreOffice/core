@@ -83,13 +83,13 @@ SwDBTreeList_Impl::~SwDBTreeList_Impl()
 {
     if(m_xDatabaseContext.is())
     {
-        m_refCount++;
+        osl_atomic_increment(&m_refCount);
         //block necessary due to solaris' compiler behaviour to
         //remove temporaries at the block's end
         {
             m_xDatabaseContext->removeContainerListener( this );
         }
-        m_refCount--;
+        osl_atomic_decrement(&m_refCount);
     }
 }
 

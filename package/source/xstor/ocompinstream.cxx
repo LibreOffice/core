@@ -67,7 +67,7 @@ OInputCompStream::~OInputCompStream()
 
     if ( !m_bDisposed )
     {
-        m_refCount++;
+        osl_atomic_increment(&m_refCount);
         dispose();
     }
 }

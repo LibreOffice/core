@@ -1668,7 +1668,7 @@ OWriteStream::~OWriteStream()
     ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
     if ( m_pImpl )
     {
-        m_refCount++;
+        osl_atomic_increment(&m_refCount);
         try {
             dispose();
         }

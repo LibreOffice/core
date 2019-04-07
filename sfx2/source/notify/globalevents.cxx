@@ -143,10 +143,10 @@ SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const uno::Reference < uno::XCompone
     , m_aLegacyListeners      (m_aLock)
     , m_aDocumentListeners    (m_aLock)
 {
-    m_refCount++;
+    osl_atomic_increment(&m_refCount);
     SfxApplication::GetOrCreate();
     m_xEvents = new GlobalEventConfig();
-    m_refCount--;
+    osl_atomic_decrement(&m_refCount);
 }
 
 uno::Reference< container::XNameReplace > SAL_CALL SfxGlobalEvents_Impl::getEvents()

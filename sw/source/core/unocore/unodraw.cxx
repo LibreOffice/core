@@ -904,10 +904,10 @@ SwXShape::SwXShape(uno::Reference<uno::XInterface> & xShape,
         }
     }
     xShape = nullptr;
-    m_refCount++;
+    osl_atomic_increment(&m_refCount);
     if( xShapeAgg.is() )
         xShapeAgg->setDelegator( static_cast<cppu::OWeakObject*>(this) );
-    m_refCount--;
+    osl_atomic_decrement(&m_refCount);
 
     uno::Reference< lang::XUnoTunnel > xShapeTunnel(xShapeAgg, uno::UNO_QUERY);
     SvxShape* pShape = nullptr;

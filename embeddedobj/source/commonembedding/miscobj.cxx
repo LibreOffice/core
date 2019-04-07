@@ -261,7 +261,7 @@ OCommonEmbeddedObject::~OCommonEmbeddedObject()
 {
     if ( m_pInterfaceContainer || m_xDocHolder.is() )
     {
-        m_refCount++;
+        osl_atomic_increment(&m_refCount);
         try {
             lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
 

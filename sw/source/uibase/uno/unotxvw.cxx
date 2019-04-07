@@ -120,7 +120,7 @@ void SwXTextView::Invalidate()
         mxTextViewCursor.clear();
     }
 
-    m_refCount++; //prevent second d'tor call
+    osl_atomic_increment(&m_refCount); //prevent second d'tor call
 
     {
         uno::Reference<uno::XInterface> const xInt(static_cast<
@@ -129,7 +129,7 @@ void SwXTextView::Invalidate()
         m_SelChangedListeners.disposeAndClear(aEvent);
     }
 
-    m_refCount--;
+    osl_atomic_decrement(&m_refCount);
     m_pView = nullptr;
 }
 

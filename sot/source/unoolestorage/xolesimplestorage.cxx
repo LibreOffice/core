@@ -140,7 +140,7 @@ OLESimpleStorage::OLESimpleStorage(
 OLESimpleStorage::~OLESimpleStorage()
 {
     try {
-        m_refCount++;
+        osl_atomic_increment(&m_refCount);
         dispose();
     } catch( uno::Exception& )
     {}

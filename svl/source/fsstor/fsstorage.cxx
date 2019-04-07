@@ -102,7 +102,7 @@ FSStorage::FSStorage( const ::ucbhelper::Content& aContent,
 FSStorage::~FSStorage()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    m_refCount++; // to call dispose
+    osl_atomic_increment(&m_refCount); // to call dispose
     try {
         dispose();
     }

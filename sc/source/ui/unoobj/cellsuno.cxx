@@ -1409,12 +1409,12 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR) :
 {
     // this is a hack to get m_wThis initialized; ideally there would be
     // factory functions doing this but there are so many subclasses of this...
-    ++m_refCount;
+    osl_atomic_increment(&m_refCount);
     {
         m_wThis = uno::Reference<uno::XInterface>(
                     static_cast<cppu::OWeakObject*>(this));
     }
-    --m_refCount;
+    osl_atomic_decrement(&m_refCount);
 
     ScRange aCellRange(rR);
     aCellRange.PutInOrder();
@@ -1441,12 +1441,12 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR) :
 {
     // this is a hack to get m_wThis initialized; ideally there would be
     // factory functions doing this but there are so many subclasses of this...
-    ++m_refCount;
+    osl_atomic_increment(&m_refCount);
     {
         m_wThis = uno::Reference<uno::XInterface>(
                     static_cast<cppu::OWeakObject*>(this));
     }
-    --m_refCount;
+    osl_atomic_decrement(&m_refCount);
 
     if (pDocShell)  // Null if created with createInstance
     {

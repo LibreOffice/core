@@ -61,7 +61,8 @@ OZipFileAccess::~OZipFileAccess()
     if ( !m_bDisposed )
     {
         try {
-            m_refCount++; // dispose will use refcounting so the further destruction must be avoided
+             // dispose will use refcounting so the further destruction must be avoided
+            osl_atomic_increment(&m_refCount);
             dispose();
         } catch( uno::Exception& )
         {}

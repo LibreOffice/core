@@ -142,7 +142,7 @@ OleEmbeddedObject::~OleEmbeddedObject()
     if ( m_pOleComponent || m_pInterfaceContainer || m_xObjectStream.is() )
     {
         // the component must be cleaned during closing
-        m_refCount++; // to avoid crash
+        osl_atomic_increment(&m_refCount); // to avoid crash
         try {
             Dispose();
         } catch( const uno::Exception& ) {}
