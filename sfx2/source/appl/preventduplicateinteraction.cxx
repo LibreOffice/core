@@ -41,20 +41,14 @@ PreventDuplicateInteraction::~PreventDuplicateInteraction()
 void PreventDuplicateInteraction::setHandler(const css::uno::Reference< css::task::XInteractionHandler >& xHandler)
 {
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
     m_xWarningDialogsParent.reset();
     m_xHandler = xHandler;
-    aLock.clear();
     // <- SAFE
 }
 
 void PreventDuplicateInteraction::useDefaultUUIHandler()
 {
-    // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
-    aLock.clear();
-    // <- SAFE
-
     //if we use the default handler, set the parent to a window belonging to this object so that the dialogs
     //don't block unrelated windows.
     m_xWarningDialogsParent.reset(new WarningDialogsParentScope(m_xContext));
@@ -62,9 +56,8 @@ void PreventDuplicateInteraction::useDefaultUUIHandler()
         m_xContext, m_xWarningDialogsParent->GetDialogParent()), css::uno::UNO_QUERY_THROW);
 
     // SAFE ->
-    aLock.reset();
+    osl::MutexGuard aLock(m_aLock);
     m_xHandler = xHandler;
-    aLock.clear();
     // <- SAFE
 }
 
@@ -72,7 +65,7 @@ css::uno::Any SAL_CALL PreventDuplicateInteraction::queryInterface( const css::u
 {
     if ( aType.equals( cppu::UnoType<XInteractionHandler2>::get() ) )
     {
-        ::osl::ResettableMutexGuard aLock(m_aLock);
+        osl::MutexGuard aLock(m_aLock);
         css::uno::Reference< css::task::XInteractionHandler2 > xHandler( m_xHandler, css::uno::UNO_QUERY );
         if ( !xHandler.is() )
             return css::uno::Any();
@@ -86,7 +79,7 @@ void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css
     bool          bHandleIt = true;
 
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aLock);
 
     auto pIt = std::find_if(m_lInteractionRules.begin(), m_lInteractionRules.end(),
         [&aRequest](const InteractionInfo& rInfo) { return aRequest.isExtractableTo(rInfo.m_aInteraction); });
@@ -131,7 +124,7 @@ sal_Bool SAL_CALL PreventDuplicateInteraction::handleInteractionRequest( const c
     bool      bHandleIt = true;
 
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aLock);
 
     auto pIt = std::find_if(m_lInteractionRules.begin(), m_lInteractionRules.end(),
         [&aRequest](const InteractionInfo& rInfo) { return aRequest.isExtractableTo(rInfo.m_aInteraction); });
@@ -176,7 +169,7 @@ sal_Bool SAL_CALL PreventDuplicateInteraction::handleInteractionRequest( const c
 void PreventDuplicateInteraction::addInteractionRule(const PreventDuplicateInteraction::InteractionInfo& aInteractionInfo)
 {
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
 
     auto pIt = std::find_if(m_lInteractionRules.begin(), m_lInteractionRules.end(),
         [&aInteractionInfo](const InteractionInfo& rInfo) { return rInfo.m_aInteraction == aInteractionInfo.m_aInteraction; });
@@ -189,8 +182,6 @@ void PreventDuplicateInteraction::addInteractionRule(const PreventDuplicateInter
     }
 
     m_lInteractionRules.push_back(aInteractionInfo);
-
-    aLock.clear();
     // <- SAFE
 }
 
@@ -198,7 +189,7 @@ bool PreventDuplicateInteraction::getInteractionInfo(const css::uno::Type&      
                                                            PreventDuplicateInteraction::InteractionInfo* pReturn     ) const
 {
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
 
     auto pIt = std::find_if(m_lInteractionRules.begin(), m_lInteractionRules.end(),
         [&aInteraction](const InteractionInfo& rInfo) { return rInfo.m_aInteraction == aInteraction; });
@@ -207,8 +198,6 @@ bool PreventDuplicateInteraction::getInteractionInfo(const css::uno::Type&      
         *pReturn = *pIt;
         return true;
     }
-
-    aLock.clear();
     // <- SAFE
 
     return false;

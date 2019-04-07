@@ -128,7 +128,7 @@ namespace dbaui
         virtual ::framework::IMutex& getGuardedMutex() override;
 
     private:
-        ::osl::ResettableMutexGuard m_aGuard;
+        osl::ClearableMutexGuard m_aGuard;
         OslMutexFacade              m_aMutexFacade;
     };
 

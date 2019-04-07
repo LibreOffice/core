@@ -565,7 +565,7 @@ void SAL_CALL ODocumentContainer::insertByHierarchicalName( const OUString& _sNa
     if ( !xContent.is() )
         throw IllegalArgumentException();
 
-    ClearableMutexGuard aGuard(m_aMutex);
+    MutexGuard aGuard(m_aMutex);
     Any aContent;
     Reference< XNameContainer > xNameContainer(this);
     OUString sName;
@@ -589,7 +589,7 @@ void SAL_CALL ODocumentContainer::removeByHierarchicalName( const OUString& _sNa
     if ( _sName.isEmpty() )
         throw NoSuchElementException(_sName,*this);
 
-    ClearableMutexGuard aGuard(m_aMutex);
+    MutexGuard aGuard(m_aMutex);
     Any aContent;
     OUString sName;
     Reference< XNameContainer > xNameContainer(this);
@@ -606,7 +606,7 @@ void SAL_CALL ODocumentContainer::replaceByHierarchicalName( const OUString& _sN
     if ( !xContent.is() )
         throw IllegalArgumentException();
 
-    ClearableMutexGuard aGuard(m_aMutex);
+    MutexGuard aGuard(m_aMutex);
     Any aContent;
     OUString sName;
     Reference< XNameContainer > xNameContainer(this);

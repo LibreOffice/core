@@ -211,7 +211,7 @@ void SAL_CALL ControlMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(static_cast<OWeakObject *>(this), UNO_QUERY );
 
-    osl::ResettableMutexGuard aLock( m_aMutex );
+    osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
 
@@ -225,7 +225,7 @@ void SAL_CALL ControlMenuController::disposing( const EventObject& )
 // XStatusListener
 void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Event )
 {
-    osl::ResettableMutexGuard aLock( m_aMutex );
+    osl::MutexGuard aLock( m_aMutex );
 
     OString sIdent;
     for (size_t i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
@@ -285,7 +285,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
 // XMenuListener
 void SAL_CALL ControlMenuController::itemActivated( const css::awt::MenuEvent& )
 {
-    osl::ResettableMutexGuard aLock( m_aMutex );
+    osl::MutexGuard aLock( m_aMutex );
 
     if ( m_xPopupMenu.is() )
     {
@@ -323,7 +323,7 @@ void ControlMenuController::impl_setPopupMenu()
 
 void SAL_CALL ControlMenuController::updatePopupMenu()
 {
-    osl::ResettableMutexGuard aLock( m_aMutex );
+    osl::MutexGuard aLock( m_aMutex );
 
     throwIfDisposed();
 
@@ -353,7 +353,7 @@ void SAL_CALL ControlMenuController::updatePopupMenu()
 // XInitialization
 void SAL_CALL ControlMenuController::initialize( const Sequence< Any >& aArguments )
 {
-    osl::ResettableMutexGuard aLock( m_aMutex );
+    osl::MutexGuard aLock( m_aMutex );
     svt::PopupMenuControllerBase::initialize(aArguments);
     m_aBaseURL.clear();
 }

@@ -117,7 +117,7 @@ void SAL_CALL GenericPropertySet::addPropertyChangeListener( const OUString& aPr
 
 void SAL_CALL GenericPropertySet::removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
 {
-    ResettableMutexGuard aGuard( maMutex );
+    ClearableMutexGuard aGuard( maMutex );
     Reference < XPropertySetInfo > xInfo = getPropertySetInfo(  );
     aGuard.clear();
     if ( xInfo.is() )

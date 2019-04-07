@@ -450,11 +450,10 @@ void SfxDocTplService_Impl::init_Impl()
 
             VclPtrInstance< WaitWindow_Impl > pWin;
             aSolarGuard.clear();
-            ::osl::ClearableMutexGuard anotherGuard( maMutex );
-
-            update();
-
-            anotherGuard.clear();
+            {
+                osl::MutexGuard anotherGuard(maMutex);
+                update();
+            }
             SolarMutexGuard aSecondSolarGuard;
 
             pWin.disposeAndClear();

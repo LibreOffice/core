@@ -541,13 +541,14 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
     Reference< XFrame >                 xFrame;
     Reference< XNameAccess >            xPersistentWindowState;
 
-    osl::ClearableMutexGuard aLock( m_aMutex );
-    xPopupMenu             = m_xPopupMenu;
-    xContext               = m_xContext;
-    xURLTransformer        = m_xURLTransformer;
-    xFrame                 = m_xFrame;
-    xPersistentWindowState = m_xPersistentWindowState;
-    aLock.clear();
+    {
+        osl::MutexGuard aLock(m_aMutex);
+        xPopupMenu = m_xPopupMenu;
+        xContext = m_xContext;
+        xURLTransformer = m_xURLTransformer;
+        xFrame = m_xFrame;
+        xPersistentWindowState = m_xPersistentWindowState;
+    }
 
     if ( xPopupMenu.is() )
     {

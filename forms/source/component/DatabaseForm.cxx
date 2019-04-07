@@ -1877,7 +1877,7 @@ Any ODatabaseForm::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 
 void SAL_CALL ODatabaseForm::reset()
 {
-    ::osl::ResettableMutexGuard aGuard(m_aMutex);
+    osl::ClearableMutexGuard aGuard(m_aMutex);
 
     if (isLoaded())
     {
@@ -2304,7 +2304,7 @@ void ODatabaseForm::_propertyChanged(const PropertyChangeEvent& evt)
 void SAL_CALL ODatabaseForm::setParent(const css::uno::Reference<css::uno::XInterface>& Parent)
 {
     // SYNCHRONIZED ----->
-    ::osl::ResettableMutexGuard aGuard(m_aMutex);
+    osl::ClearableMutexGuard aGuard(m_aMutex);
 
     Reference<XForm>  xParentForm(getParent(), UNO_QUERY);
     if (xParentForm.is())
@@ -2364,7 +2364,7 @@ void SAL_CALL ODatabaseForm::setParent(const css::uno::Reference<css::uno::XInte
 
 sal_Bool SAL_CALL ODatabaseForm::getGroupControl()
 {
-    ::osl::ResettableMutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
 
     // Should controls be combined into a TabOrder group?
     if (m_aCycle.hasValue())
@@ -2383,7 +2383,7 @@ sal_Bool SAL_CALL ODatabaseForm::getGroupControl()
 
 void SAL_CALL ODatabaseForm::setControlModels(const Sequence<Reference<XControlModel> >& rControls)
 {
-    ::osl::ResettableMutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
 
     // Set TabIndex in the order of the sequence
     sal_Int32 nCount = getCount();
@@ -2968,7 +2968,7 @@ void SAL_CALL ODatabaseForm::cursorMoved(const EventObject& /*event*/)
 {
     // reload the subform with the new parameters of the parent
     // do this handling delayed to provide of execute too many SQL Statements
-    ::osl::ResettableMutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
 
     DBG_ASSERT( m_pLoadTimer, "ODatabaseForm::cursorMoved: how can this happen?!" );
     if ( !m_pLoadTimer )
@@ -3158,7 +3158,7 @@ sal_Bool SAL_CALL ODatabaseForm::approveRowSetChange(const EventObject& event)
 
 void SAL_CALL ODatabaseForm::addRowSetApproveListener(const Reference<XRowSetApproveListener>& _rListener)
 {
-    ::osl::ResettableMutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
     m_aRowSetApproveListeners.addInterface(_rListener);
 
     // do we have to multiplex ?
@@ -3176,7 +3176,7 @@ void SAL_CALL ODatabaseForm::addRowSetApproveListener(const Reference<XRowSetApp
 
 void SAL_CALL ODatabaseForm::removeRowSetApproveListener(const Reference<XRowSetApproveListener>& _rListener)
 {
-    ::osl::ResettableMutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
     // do we have to remove the multiplex ?
     m_aRowSetApproveListeners.removeInterface(_rListener);
     if ( m_aRowSetApproveListeners.getLength() == 0 )
@@ -3244,7 +3244,7 @@ void SAL_CALL ODatabaseForm::executeWithCompletion( const Reference< XInteractio
 
 void SAL_CALL ODatabaseForm::execute()
 {
-    ::osl::ResettableMutexGuard aGuard(m_aMutex);
+    osl::ClearableMutexGuard aGuard(m_aMutex);
     // if somebody calls an execute and we're not loaded we reroute this call to our load method.
 
     // the difference between execute and load is, that we position on the first row in case of load

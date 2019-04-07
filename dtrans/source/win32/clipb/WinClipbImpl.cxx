@@ -63,9 +63,10 @@ CWinClipbImpl::CWinClipbImpl( const OUString& aClipboardName, CWinClipboard* the
 
 CWinClipbImpl::~CWinClipbImpl( )
 {
-    ClearableMutexGuard aGuard( s_aMutex );
-    s_pCWinClipbImpl = nullptr;
-    aGuard.clear( );
+    {
+        MutexGuard aGuard(s_aMutex);
+        s_pCWinClipbImpl = nullptr;
+    }
 
     unregisterClipboardViewer( );
 }
@@ -74,16 +75,17 @@ Reference< XTransferable > CWinClipbImpl::getContents( )
 {
     // use the shortcut or create a transferable from
     // system clipboard
-    ClearableMutexGuard aGuard( m_ClipContentMutex );
-
-    if ( nullptr != m_pCurrentClipContent )
     {
-        return m_pCurrentClipContent->m_XTransferable;
-    }
+        MutexGuard aGuard(m_ClipContentMutex);
 
-    // release the mutex, so that the variable may be
-    // changed by other threads
-    aGuard.clear( );
+        if (nullptr != m_pCurrentClipContent)
+        {
+            return m_pCurrentClipContent->m_XTransferable;
+        }
+
+        // release the mutex, so that the variable may be
+        // changed by other threads
+    }
 
     Reference< XTransferable > rClipContent;
 
@@ -112,15 +114,14 @@ void CWinClipbImpl::setContents(
 
     if ( xTransferable.is( ) )
     {
-        ClearableMutexGuard aGuard( m_ClipContentMutex );
+        {
+            MutexGuard aGuard(m_ClipContentMutex);
 
-        m_pCurrentClipContent = new CXNotifyingDataObject(
-            CDTransObjFactory::createDataObjFromTransferable( m_pWinClipboard->m_xContext , xTransferable ),
-            xTransferable,
-            xClipboardOwner,
-            this );
-
-        aGuard.clear( );
+            m_pCurrentClipContent
+                = new CXNotifyingDataObject(CDTransObjFactory::createDataObjFromTransferable(
+                                                m_pWinClipboard->m_xContext, xTransferable),
+                                            xTransferable, xClipboardOwner, this);
+        }
 
         pIDataObj = IDataObjectPtr( m_pCurrentClipContent );
     }

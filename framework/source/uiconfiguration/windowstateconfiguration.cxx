@@ -321,7 +321,7 @@ sal_Bool SAL_CALL ConfigurationAccess_WindowState::hasElements()
 void SAL_CALL ConfigurationAccess_WindowState::removeByName( const OUString& rResourceURL )
 {
     // SAFE
-    osl::ResettableMutexGuard g(m_aMutex);
+    osl::ClearableMutexGuard g(m_aMutex);
 
     ResourceURLToInfoCache::iterator pIter = m_aResourceURLToInfoCache.find( rResourceURL );
     if ( pIter != m_aResourceURLToInfoCache.end() )
@@ -355,7 +355,7 @@ void SAL_CALL ConfigurationAccess_WindowState::removeByName( const OUString& rRe
 void SAL_CALL ConfigurationAccess_WindowState::insertByName( const OUString& rResourceURL, const css::uno::Any& aPropertySet )
 {
     // SAFE
-    osl::ResettableMutexGuard g(m_aMutex);
+    osl::ClearableMutexGuard g(m_aMutex);
 
     Sequence< PropertyValue > aPropSet;
     if ( !(aPropertySet >>= aPropSet) )
@@ -413,7 +413,7 @@ void SAL_CALL ConfigurationAccess_WindowState::insertByName( const OUString& rRe
 void SAL_CALL ConfigurationAccess_WindowState::replaceByName( const OUString& rResourceURL, const css::uno::Any& aPropertySet )
 {
     // SAFE
-    osl::ResettableMutexGuard g(m_aMutex);
+    osl::ClearableMutexGuard g(m_aMutex);
 
     Sequence< PropertyValue > aPropSet;
     if ( !(aPropertySet >>= aPropSet) )
