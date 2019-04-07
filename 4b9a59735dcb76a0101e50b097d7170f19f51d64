@@ -16,6 +16,24 @@
       "revId": "4b9a59735dcb76a0101e50b097d7170f19f51d64",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_b15bb52c",
+        "filename": "framework/source/layoutmanager/toolbarlayoutmanager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3774,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-07T12:08:46Z",
+      "side": 1,
+      "message": "If I am not mistaken, clearing the cleared guard would abort? (or I could be confused)",
+      "parentUuid": "df87a7cf_f1513d10",
+      "revId": "4b9a59735dcb76a0101e50b097d7170f19f51d64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
