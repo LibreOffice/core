@@ -454,13 +454,14 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
     {
         uno::Reference< ui::XUIElement > xUIElement;
 
+        SolarMutexClearableGuard aReadLock2;
         uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
         aPropSeq[0].Name = "Frame";
         aPropSeq[0].Value <<= m_xFrame;
         aPropSeq[1].Name = "Persistent";
         aPropSeq[1].Value <<= true;
         uno::Reference< ui::XUIElementFactory > xUIElementFactory( m_xUIElementFactoryManager );
-        aReadLock.clear();
+        aReadLock2.clear();
 
         implts_setToolbarCreation();
         try
