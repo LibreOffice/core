@@ -240,7 +240,7 @@ DECLARE_WW8EXPORT_TEST(testTdf118375export, "tdf118375_240degClockwise.doc")
     sal_Int32 nPosX, nPosY;
     xShapeProps->getPropertyValue("HoriOrientPosition") >>= nPosX;
     xShapeProps->getPropertyValue("VertOrientPosition") >>= nPosY;
-    // Allow some tolerance because rounding errors through integer arithmethic
+    // Allow some tolerance because rounding errors through integer arithmetic
     // in rotation.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5200.0, static_cast<double>(nPosX), 1.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1152.0, static_cast<double>(nPosY), 1.0);
