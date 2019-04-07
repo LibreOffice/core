@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_31c6c569",
+        "filename": "svx/source/tbxctrls/tbxcolorupdate.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-04-07T18:20:25Z",
+      "side": 1,
+      "message": "Hi Jim,\nI tried to filter out the context part of the string which was needless. Please let me know if the following lines of code causes any error in any test case. I\u0027ve taken care of one - when the string is empty. In such a case, the call \"sColorName.copy( 0, nLength - 1)\" will generate error. So I \"if-conditioned\" it.",
+      "revId": "f8135856c1c7b161b7f3a4bfecd70f3291412c4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
