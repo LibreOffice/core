@@ -180,6 +180,11 @@ namespace osl
                 pT->release();
                 pT = NULL;
             }
+            else
+            {
+                // clear() is called on already cleared guard - must not happen: bad locking logic
+                assert(0);
+            }
         }
     };
 
