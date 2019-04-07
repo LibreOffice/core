@@ -225,7 +225,7 @@ void SbRtl_Error(StarBASIC * pBasic, SbxArray & rPar, bool)
             StarBASIC::MakeErrorText( nErr, aErrorMsg );
             tmpErrMsg = StarBASIC::GetErrorText();
         }
-        // If this rtlfunc 'Error'  passed a errcode the same as the active Err Objects's
+        // If this rtlfunc 'Error' passed an errcode the same as the active Err Objects's
         // current err then  return the description for the error message if it is set
         // ( complicated isn't it ? )
         if ( bVBA && rPar.Count() > 1 )
