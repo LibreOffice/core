@@ -20,6 +20,7 @@
 #ifndef INCLUDED_OSL_MUTEX_HXX
 #define INCLUDED_OSL_MUTEX_HXX
 
+#include <cassert>
 #include "osl/mutex.h"
 
 
@@ -180,6 +181,11 @@ namespace osl
                 pT->release();
                 pT = NULL;
             }
+            else
+            {
+                // clear() is called on already cleared guard - must not happen: bad locking logic
+                assert(false);
+            }
         }
     };
 
@@ -213,11 +219,9 @@ namespace osl
         */
         void reset()
         {
-            if( pResetT )
-            {
-                this->pT = pResetT;
-                this->pT->acquire();
-            }
+            assert(!this->pT && "The guard was not cleared before reset - must not happen");
+            this->pT = pResetT;
+            this->pT->acquire();
         }
     };
 
