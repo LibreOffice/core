@@ -126,34 +126,11 @@ namespace fs
     void copy(const fs::path &src, const fs::path &dest);
 }
 
-struct joaat_hash
-{
-    size_t operator()(const std::string &str) const
-    {
-        size_t hash = 0;
-        const char *key = str.data();
-        for (size_t i = 0; i < str.size(); i++)
-        {
-            hash += key[i];
-            hash += (hash << 10);
-            hash ^= (hash >> 6);
-        }
-        hash += (hash << 3);
-        hash ^= (hash >> 11);
-        hash += (hash << 15);
-        return hash;
-    }
-};
 
-#define get16bits(d) ((((sal_uInt32)(((const sal_uInt8 *)(d))[1])) << 8)\
-                       +(sal_uInt32)(((const sal_uInt8 *)(d))[0]) )
-
-#define pref_hash joaat_hash
-
-typedef std::unordered_map<std::string, std::string, pref_hash> Stringtable;
+typedef std::unordered_map<std::string, std::string> Stringtable;
 typedef std::deque<std::string> LinkedList;
 
-typedef std::unordered_map<std::string, LinkedList, pref_hash> Hashtable;
+typedef std::unordered_map<std::string, LinkedList> Hashtable;
 
 class StreamTable
 {
