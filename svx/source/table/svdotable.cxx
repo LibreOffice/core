@@ -1805,8 +1805,8 @@ bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
     rOutl.Init( OutlinerMode::TextObject );
     rOutl.SetRefDevice(getSdrModelFromSdrObject().GetRefDevice());
 
-    bool bUpdMerk=rOutl.GetUpdateMode();
-    if (bUpdMerk) rOutl.SetUpdateMode(false);
+    bool bUpdateMode=rOutl.GetUpdateMode();
+    if (bUpdateMode) rOutl.SetUpdateMode(false);
     Size aPaperMin;
     Size aPaperMax;
     tools::Rectangle aEditArea;
@@ -1816,7 +1816,7 @@ bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
     rOutl.SetMaxAutoPaperSize(aPaperMax);
     rOutl.SetPaperSize(aPaperMax);
 
-    if (bUpdMerk) rOutl.SetUpdateMode(true);
+    if (bUpdateMode) rOutl.SetUpdateMode(true);
 
     EEControlBits nStat=rOutl.GetControlWord();
     nStat   |= EEControlBits::AUTOPAGESIZE;
