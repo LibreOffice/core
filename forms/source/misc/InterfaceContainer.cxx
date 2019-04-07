@@ -855,7 +855,6 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
         aEvt.Accessor <<= _nIndex;
         aEvt.Element  = pElementMetaData->aElementTypeInterface;
 
-        aGuard.clear();
         m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvt );
     }
 }
