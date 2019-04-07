@@ -89,10 +89,13 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
         m_aProcessingThread = aCurId;
 
         SalUserEvent aEvent( nullptr, nullptr, SalEvent::NONE );
+        bool bFirstEvent = true;
         do {
             {
                 osl::MutexGuard aGuard(m_aUserEventsMutex);
-                aResettableGuard.clear();
+                if (bFirstEvent)
+                    aResettableGuard.clear();
+                bFirstEvent = false;
                 if (m_aProcessingUserEvents.empty() || aCurId != m_aProcessingThread)
                     break;
                 aEvent = m_aProcessingUserEvents.front();
