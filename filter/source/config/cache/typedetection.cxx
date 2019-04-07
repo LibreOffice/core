@@ -1185,7 +1185,6 @@ bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      utl::MediaDescri
         CacheItem aFilter = cache.getItem(FilterCache::E_FILTER, sFilter);
         OUString sType;
         aFilter[PROPNAME_TYPE] >>= sType;
-        CacheItem aType = cache.getItem(FilterCache::E_TYPE, sType);
 
         aLock.clear();
         // <- SAFE
