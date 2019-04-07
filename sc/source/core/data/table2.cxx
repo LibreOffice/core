@@ -1493,7 +1493,7 @@ ScFormulaCell* ScTable::SetFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* p
         return nullptr;
     }
 
-    return aCol[nCol].SetFormulaCell(nRow, pCell, sc::ConvertToGroupListening);
+    return CreateColumnIfNotExists(nCol).SetFormulaCell(nRow, pCell, sc::ConvertToGroupListening);
 }
 
 bool ScTable::SetFormulaCells( SCCOL nCol, SCROW nRow, std::vector<ScFormulaCell*>& rCells )
