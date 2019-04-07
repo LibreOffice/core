@@ -24,6 +24,7 @@
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/intitem.hxx>
 #include <svtools/langhelp.hxx>
@@ -35,10 +36,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
+#include <com/sun/star/view/XRenderable.hpp>
 #include <cppuhelper/implbase.hxx>
 
 #include <osl/file.hxx>
@@ -48,6 +53,7 @@
 #include <svtools/miscopt.hxx>
 #include <svtools/soerr.hxx>
 #include <svtools/embedhlp.hxx>
+#include <tools/svborder.hxx>
 
 #include <basic/basmgr.hxx>
 #include <basic/sbuno.hxx>
@@ -80,6 +86,7 @@
 #include <sfx2/event.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/ipclient.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <workwin.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/docfilt.hxx>

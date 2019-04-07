@@ -23,6 +23,7 @@
 #include <svx/svxids.hrc>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/bindings.hxx>
+#include <vcl/commandevent.hxx>
 
 #include <View.hxx>
 #include <DrawViewShell.hxx>

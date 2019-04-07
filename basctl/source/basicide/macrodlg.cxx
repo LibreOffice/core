@@ -38,6 +38,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <vcl/weld.hxx>
+#include <osl/diagnose.h>
 
 #include <map>
 

@@ -24,6 +24,7 @@
 #include <strings.hrc>
 #include <dialmgr.hxx>
 
+#include <vcl/event.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
 

@@ -24,6 +24,7 @@
 
 #include <sfx2/viewsh.hxx>
 #include <vcl/prntypes.hxx>
+#include <vcl/scrbar.hxx>
 #include <o3tl/deleter.hxx>
 #include <pres.hxx>
 #include "View.hxx"

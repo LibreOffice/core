@@ -33,6 +33,7 @@
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
+#include <vcl/event.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/logger.hxx>

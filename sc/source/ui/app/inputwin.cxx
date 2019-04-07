@@ -40,6 +40,7 @@
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/svapp.hxx>
 #include <unotools/charclass.hxx>
 
 #include <inputwin.hxx>

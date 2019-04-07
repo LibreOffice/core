@@ -36,6 +36,7 @@
 #include <unotools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <sfx2/app.hxx>
+#include <osl/diagnose.h>
 
 namespace basctl
 {

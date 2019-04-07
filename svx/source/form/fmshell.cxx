@@ -36,6 +36,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svl/whiter.hxx>

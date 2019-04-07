@@ -28,6 +28,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
@@ -60,6 +61,7 @@
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <svtools/soerr.hxx>
 #include <sfx2/ipclient.hxx>
 #include <svx/svdoashp.hxx>

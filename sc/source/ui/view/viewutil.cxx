@@ -36,6 +36,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
+#include <osl/diagnose.h>
 
 #include <viewutil.hxx>
 #include <global.hxx>

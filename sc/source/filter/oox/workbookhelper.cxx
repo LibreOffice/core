@@ -32,6 +32,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <osl/thread.h>
+#include <osl/diagnose.h>
 #include <oox/helper/progressbar.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/ole/vbaproject.hxx>

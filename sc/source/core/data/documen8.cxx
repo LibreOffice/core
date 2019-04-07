@@ -38,6 +38,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <sal/log.hxx>
 
+#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 

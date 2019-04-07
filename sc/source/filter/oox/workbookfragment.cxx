@@ -64,6 +64,7 @@
 #include <oox/core/fastparser.hxx>
 #include <comphelper/threadpool.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <memory>
 

@@ -30,6 +30,7 @@
 #include <svl/intitem.hxx>
 #include <dsitems.hxx>
 #include "dsnItem.hxx"
+#include <vcl/layout.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/cjkoptions.hxx>
 

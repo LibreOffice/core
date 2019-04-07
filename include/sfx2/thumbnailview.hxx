@@ -16,34 +16,19 @@
 #include <memory>
 #include <vector>
 
-#include <sfx2/thumbnailviewitem.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/customweld.hxx>
-#include <vcl/timer.hxx>
-#include <vcl/pngread.hxx>
-
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/embed/StorageFactory.hpp>
 
 class BitmapEx;
 class MouseEvent;
-class TrackingEvent;
-class HelpEvent;
 class KeyEvent;
 class DataChangedEvent;
 class ScrollBar;
+class ThumbnailViewItem;
 typedef ::std::vector< ThumbnailViewItem* > ThumbnailValueItemList;
 
-struct ThumbnailItemAttributes;
-class ThumbnailViewAcc;
-class ThumbnailViewItemAcc;
 
-namespace drawinglayer {
-    namespace processor2d {
-        class BaseProcessor2D;
-    }
-}
+struct ThumbnailItemAttributes;
 
 /*************************************************************************
 

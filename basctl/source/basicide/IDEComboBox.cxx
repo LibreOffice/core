@@ -28,6 +28,8 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svtools/langtab.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/event.hxx>
 
 namespace basctl
 {

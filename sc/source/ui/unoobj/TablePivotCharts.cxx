@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
@@ -29,6 +30,7 @@
 #include <tools/globname.hxx>
 #include <svtools/embedhlp.hxx>
 #include <comphelper/sequence.hxx>
+#include <vcl/svapp.hxx>
 
 #include <TablePivotChart.hxx>
 #include <TablePivotCharts.hxx>

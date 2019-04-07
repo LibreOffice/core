@@ -36,6 +36,7 @@
 #include <arrdecl.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/module.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/unoctitm.hxx>

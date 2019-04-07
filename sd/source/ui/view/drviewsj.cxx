@@ -19,6 +19,7 @@
 
 #include <DrawViewShell.hxx>
 #include <com/sun/star/embed/EmbedMisc.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <svl/aeitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/globl3d.hxx>

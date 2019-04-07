@@ -46,6 +46,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <svl/stritem.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>

@@ -28,6 +28,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <svx/svdpage.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/virdev.hxx>

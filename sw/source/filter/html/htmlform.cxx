@@ -29,6 +29,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/event.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>

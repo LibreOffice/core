@@ -50,6 +50,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -69,6 +70,7 @@
 #include <svl/stritem.hxx>
 #include <tools/diagnose_ex.h>
 #include <ucbhelper/simpleinteractionrequest.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
 using ::com::sun::star::beans::PropertyValue;

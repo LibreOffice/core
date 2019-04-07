@@ -25,6 +25,7 @@
 #include <vcl/BitmapSolarizeFilter.hxx>
 #include <vcl/BitmapColorQuantizationFilter.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/svapp.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>

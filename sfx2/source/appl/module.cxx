@@ -29,6 +29,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <svl/intitem.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/strbuf.hxx>

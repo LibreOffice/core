@@ -13,6 +13,7 @@
 #include <view.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/editeng.hxx>
+#include <osl/diagnose.h>
 #include <cassert>
 
 void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor){

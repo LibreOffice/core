@@ -42,6 +42,7 @@
 #include <vcl/transfer.hxx>
 #include <svl/urlbmk.hxx>
 #include <svl/sharedstringpool.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <avmedia/mediawindow.hxx>
 

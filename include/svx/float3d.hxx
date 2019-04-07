@@ -26,6 +26,7 @@
 #include <vcl/field.hxx>
 #include <sfx2/dockwin.hxx>
 #include <vcl/button.hxx>
+#include <vcl/layout.hxx>
 #include <svx/svxdllapi.h>
 
 #include <svx/f3dchild.hxx>

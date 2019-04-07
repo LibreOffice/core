@@ -18,6 +18,7 @@
  */
 
 #include <rtl/tencinfo.h>
+#include <osl/diagnose.h>
 #include <hintids.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <unotools/tempfile.hxx>
@@ -28,6 +29,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/textview.hxx>
+#include <vcl/svapp.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>

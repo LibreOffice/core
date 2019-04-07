@@ -30,6 +30,7 @@
 
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
+#include <com/sun/star/ui/ContextMenuExecuteEvent.hpp>
 
 #include <vcl/inputctx.hxx>
 #include <vcl/help.hxx>

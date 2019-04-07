@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <wrtsh.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>

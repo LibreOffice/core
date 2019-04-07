@@ -25,21 +25,14 @@
 #include <sfx2/basedlgs.hxx>
 #include <sal/types.h>
 #include <vcl/button.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
-#include <vcl/weld.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <o3tl/typed_flags_set.hxx>
 
-class SfxPoolItem;
-class SfxTabDialog;
-class SfxViewFrame;
 class SfxTabPage;
-class SfxBindings;
 
 typedef VclPtr<SfxTabPage> (*CreateTabPage)(TabPageParent pParent, const SfxItemSet *rAttrSet);
 typedef const sal_uInt16*     (*GetTabPageRanges)(); // provides international Which-value
@@ -281,8 +274,6 @@ public:
     //calls Ok without closing dialog
     bool Apply();
 };
-
-namespace sfx { class ItemConnectionBase; }
 
 enum class DeactivateRC {
     KeepPage   = 0x00,      // Error handling; page does not change

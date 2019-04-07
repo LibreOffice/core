@@ -19,11 +19,13 @@
 
 #undef SC_DLLIMPLEMENTATION
 
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <svtools/collatorres.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <osl/diagnose.h>
 
 #include <scitems.hxx>
 #include <uiitems.hxx>

@@ -26,6 +26,7 @@
 #include <tools/globname.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <unotools/streamwrap.hxx>
+#include <osl/diagnose.h>
 #include <filter.hxx>
 #include <document.hxx>
 #include <xistream.hxx>

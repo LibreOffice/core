@@ -44,6 +44,7 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/module.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
 #include <sfxtypes.hxx>

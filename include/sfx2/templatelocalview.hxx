@@ -10,7 +10,6 @@
 #ifndef INCLUDED_SFX2_TEMPLATELOCALVIEW_HXX
 #define INCLUDED_SFX2_TEMPLATELOCALVIEW_HXX
 
-#include <vcl/menu.hxx>
 #include <sfx2/thumbnailview.hxx>
 #include <sfx2/templateproperties.hxx>
 #include <functional>
@@ -34,13 +33,6 @@
 class SfxDocumentTemplates;
 class TemplateContainerItem;
 class TemplateViewItem;
-class PopupMenu;
-
-namespace com {
-    namespace sun { namespace star { namespace frame {
-        class XModel;
-    }   }   }
-}
 
 enum class FILTER_APPLICATION
 {

@@ -21,6 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/event.hxx>
 #include <sfx2/dialoghelper.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>

@@ -32,6 +32,7 @@
 
 #include <svl/itemprop.hxx>
 #include <vcl/svapp.hxx>
+#include <osl/diagnose.h>
 
 #include <miscuno.hxx>
 #include <convuno.hxx>

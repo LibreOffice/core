@@ -45,6 +45,7 @@
 #include <svx/dialogs.hrc>
 #include <svl/inethist.hxx>
 #include <vcl/waitobj.hxx>
+#include <vcl/svapp.hxx>
 #include <svx/svxerr.hxx>
 #include <tools/diagnose_ex.h>
 

@@ -26,6 +26,9 @@
 #include <sdresid.hxx>
 #include <app.hrc>
 
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+
 using namespace ::com::sun::star;
 
 SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlDiaPages,  SfxUInt16Item )

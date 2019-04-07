@@ -15,25 +15,17 @@
 
 #include <set>
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
-#include <com/sun/star/frame/XDesktop2.hpp>
 
 #include <sfx2/templatelocalview.hxx>
 
-class Edit;
-class PopupMenu;
-class TemplateLocalView;
 class TemplateSearchView;
-class ThumbnailView;
 class ThumbnailViewItem;
-class ToolBox;
 
 namespace com {
     namespace sun { namespace star { namespace frame {
-        class XComponentLoader;
+        class XDesktop2;
         class XModel;
     }   }   }
 }

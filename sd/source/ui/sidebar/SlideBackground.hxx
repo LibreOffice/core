@@ -24,6 +24,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
+#include <vcl/layout.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svx/itemwin.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>

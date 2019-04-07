@@ -26,6 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <unokywds.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 #include <vector>
 #include <ViewShell.hxx>

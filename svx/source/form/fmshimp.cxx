@@ -96,6 +96,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 #include <algorithm>
 #include <functional>

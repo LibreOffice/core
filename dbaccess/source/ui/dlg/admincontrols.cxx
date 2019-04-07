@@ -24,6 +24,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
+#include <vcl/svapp.hxx>
 
 namespace dbaui
 {

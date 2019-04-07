@@ -57,6 +57,7 @@
 #include <vcl/textview.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cassert>
+#include <osl/diagnose.h>
 
 namespace basctl
 {

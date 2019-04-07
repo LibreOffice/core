@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmeth.hxx>
@@ -38,6 +39,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <svtools/ehdl.hxx>
 
 namespace basctl

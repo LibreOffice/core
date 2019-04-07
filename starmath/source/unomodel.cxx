@@ -24,6 +24,7 @@
 
 #include <o3tl/any.hxx>
 #include <sfx2/printer.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/settings.hxx>

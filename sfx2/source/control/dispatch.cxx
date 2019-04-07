@@ -33,6 +33,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/ui/ContextMenuExecuteEvent.hpp>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
@@ -54,6 +55,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxhelp.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>

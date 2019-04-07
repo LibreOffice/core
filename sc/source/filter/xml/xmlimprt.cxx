@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <svl/zforlist.hxx>
 
@@ -41,6 +42,7 @@
 #include <svl/languageoptions.hxx>
 #include <editeng/editstat.hxx>
 #include <formula/errorcodes.hxx>
+#include <vcl/svapp.hxx>
 
 #include <appluno.hxx>
 #include "xmlimprt.hxx"

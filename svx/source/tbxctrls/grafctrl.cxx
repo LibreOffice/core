@@ -24,6 +24,7 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/svapp.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
@@ -52,6 +53,8 @@
 #include <svx/grafctrl.hxx>
 #include <svx/tbxcolor.hxx>
 #include <bitmaps.hlst>
+
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;

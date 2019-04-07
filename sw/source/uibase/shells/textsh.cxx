@@ -53,6 +53,7 @@
 #include <sfx2/htmlmode.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <comphelper/classids.hxx>
 #include <editeng/acorrcfg.hxx>

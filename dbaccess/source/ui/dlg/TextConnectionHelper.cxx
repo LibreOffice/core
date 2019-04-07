@@ -31,6 +31,7 @@
 #include <svl/intitem.hxx>
 #include <dsitems.hxx>
 #include "dbfindex.hxx"
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/cjkoptions.hxx>

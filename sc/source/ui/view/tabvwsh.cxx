@@ -28,6 +28,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
+#include <sfx2/viewfac.hxx>
 
 #include <cellvalue.hxx>
 #include <docoptio.hxx>

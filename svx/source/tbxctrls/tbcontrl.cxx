@@ -27,6 +27,7 @@
 #include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/menubtn.hxx>
@@ -60,6 +61,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <svx/strings.hrc>
 #include <svx/svxitems.hrc>
 #include <svx/svxids.hrc>

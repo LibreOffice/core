@@ -37,6 +37,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -60,6 +61,7 @@
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/svapp.hxx>
 
 #include <memory>
 

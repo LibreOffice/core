@@ -76,6 +76,7 @@
 #include <basic/sbuno.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/svborder.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/errcode.hxx>
@@ -109,12 +110,14 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/module.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
 #include <basic/basmgr.hxx>
 #include <sfx2/event.hxx>
 #include <eventsupplier.hxx>
 #include <sfx2/evntconf.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/strings.hrc>
 #include <sfx2/app.hxx>
 #include <appdata.hxx>

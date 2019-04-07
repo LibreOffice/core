@@ -29,6 +29,8 @@
 #include <svl/style.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
+#include <vcl/button.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <xmloff/autolayout.hxx>
 

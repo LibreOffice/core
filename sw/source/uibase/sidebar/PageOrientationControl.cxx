@@ -21,6 +21,7 @@
 #include "PageMarginControl.hxx"
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 #include <swtypes.hxx>
 #include <sfx2/viewsh.hxx>
