@@ -8579,16 +8579,14 @@ void PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     {
         if( ! m_bIsPDF_A1 )
         {
+            // 7.8.3 Resource dicts are required for content streams
+            aLine.append( "/Resources " );
+            aLine.append( getResourceDictObj() );
+            aLine.append( " 0 R\n" );
+
             aLine.append( "/Group<</S/Transparency/CS/DeviceRGB/K true>>\n" );
         }
     }
-    /* #i42884# the PDF reference recommends that each Form XObject
-    *  should have a resource dict; alas if that is the same object
-    *  as the one of the page it triggers an endless recursion in
-    *  acroread 5 (6 and up have that fixed). Since we have only one
-    *  resource dict anyway, let's use the one from the page by NOT
-    *  emitting a Resources entry.
-    */
 
     aLine.append( "/Length " );
     aLine.append( static_cast<sal_Int32>(nSize) );
@@ -8661,7 +8659,11 @@ void PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
             appendFixedInt( rObject.m_aBoundRect.Bottom()+1, aMask );
             aMask.append( "]\n" );
 
-            /* #i42884# see above */
+            // 7.8.3 Resource dicts are required for content streams
+            aMask.append( "/Resources " );
+            aMask.append( getResourceDictObj() );
+            aMask.append( " 0 R\n" );
+
             aMask.append( "/Group<</S/Transparency/CS/DeviceRGB>>\n" );
             aMask.append( "/Length " );
             aMask.append( nMaskSize );
