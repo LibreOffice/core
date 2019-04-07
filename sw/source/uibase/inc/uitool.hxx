@@ -63,12 +63,12 @@ SW_DLLPUBLIC void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrig
 
 
 /**
-* Apply characeter background on the shell. Need to use this to hide the mixed
-* charachter background and character highlighting attribute, which were
+* Apply character background on the shell. Need to use this to hide the mixed
+* character background and character highlighting attribute, which were
 * added for MSO compatibility where there are two kind of character background.
 *
 * @param[in]       rBackgroundColor    the color to apply on the shell
-* @param[in,out]   rShell              the shell on which we apply the new attirbute
+* @param[in,out]   rShell              the shell on which we apply the new attribute
 **/
 SW_DLLPUBLIC void ApplyCharBackground(const Color& rBackgroundColor, SwWrtShell& rShell);
 
