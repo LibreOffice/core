@@ -714,12 +714,13 @@ void SAL_CALL SdStyleSheet::release(  ) throw ()
 
 void SAL_CALL SdStyleSheet::dispose(  )
 {
-    ClearableMutexGuard aGuard( mrBHelper.rMutex );
-    if (mrBHelper.bDisposed || mrBHelper.bInDispose)
-        return;
+    {
+        MutexGuard aGuard(mrBHelper.rMutex);
+        if (mrBHelper.bDisposed || mrBHelper.bInDispose)
+            return;
 
-    mrBHelper.bInDispose = true;
-    aGuard.clear();
+        mrBHelper.bInDispose = true;
+    }
     try
     {
         // side effect: keeping a reference to this

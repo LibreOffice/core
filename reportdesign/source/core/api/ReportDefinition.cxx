@@ -639,7 +639,7 @@ void SAL_CALL OReportDefinition::disposing()
     // SYNCHRONIZED --->
     {
     SolarMutexGuard aSolarGuard;
-    ::osl::ResettableMutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
 
     m_pImpl->m_aControllers.clear();
 
@@ -1732,7 +1732,7 @@ sal_Bool SAL_CALL OReportDefinition::isModified(  )
 
 void SAL_CALL OReportDefinition::setModified( sal_Bool _bModified )
 {
-    ::osl::ResettableMutexGuard aGuard(m_aMutex);
+    osl::ClearableMutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
 
     if ( !m_pImpl->m_bSetModifiedEnabled )
@@ -1773,7 +1773,7 @@ void OReportDefinition::notifyEvent(const OUString& _sEventName)
 {
     try
     {
-        ::osl::ResettableMutexGuard aGuard(m_aMutex);
+        osl::ClearableMutexGuard aGuard(m_aMutex);
         ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
         document::EventObject aEvt(*this, _sEventName);
         aGuard.clear();
@@ -1791,7 +1791,7 @@ void SAL_CALL OReportDefinition::notifyDocumentEvent( const OUString& rEventName
 {
     try
     {
-        ::osl::ResettableMutexGuard aGuard(m_aMutex);
+        osl::ClearableMutexGuard aGuard(m_aMutex);
         ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
         document::DocumentEvent aEvt(*this, rEventName, rViewController, rSupplement);
         aGuard.clear();

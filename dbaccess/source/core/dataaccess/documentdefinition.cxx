@@ -959,7 +959,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         // making it release the own mutex before calling SolarMutex-code is ... difficult, at least.
         // So, to be on the same side, we lock the SolarMutex here. Yes, it sucks.
         ::SolarMutexGuard aSolarGuard;
-        ::osl::ClearableMutexGuard aGuard(m_aMutex);
+        osl::MutexGuard aGuard(m_aMutex);
         if ( m_bInExecute )
             return aRet;
 
@@ -994,7 +994,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         return onCommandOpenSomething( aCommand.Argument, bActivateObject, Environment );
     }
 
-    ::osl::ClearableMutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
     if ( m_bInExecute )
         return aRet;
 

@@ -56,7 +56,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Reference;
 using ::osl::MutexGuard;
 using ::osl::ClearableMutexGuard;
-using ::osl::ResettableMutexGuard;
 using ::com::sun::star::uno::Any;
 
 namespace chart
@@ -412,29 +411,31 @@ void AccessibleBase::SetInfo( const AccessibleElementInfo & rNewInfo )
 // ________ (XComponent::dispose) ________
 void SAL_CALL AccessibleBase::disposing()
 {
-    ClearableMutexGuard aGuard( GetMutex() );
-    OSL_ENSURE( ! m_bIsDisposed, "dispose() called twice" );
-
-    // notify disposing to all AccessibleEvent listeners asynchron
-    if ( m_nEventNotifierId )
     {
-        ::comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( m_nEventNotifierId, *this );
-        m_nEventNotifierId = 0;
+        MutexGuard aGuard(GetMutex());
+        OSL_ENSURE(!m_bIsDisposed, "dispose() called twice");
+
+        // notify disposing to all AccessibleEvent listeners asynchron
+        if (m_nEventNotifierId)
+        {
+            ::comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing(m_nEventNotifierId,
+                                                                               *this);
+            m_nEventNotifierId = 0;
+        }
+
+        // reset pointers
+        m_aAccInfo.m_pParent = nullptr;
+
+        // attach new empty state set helper to member reference
+        ::utl::AccessibleStateSetHelper * pHelper = new ::utl::AccessibleStateSetHelper();
+        pHelper->AddState(AccessibleStateType::DEFUNC);
+        // release old helper and attach new one
+        m_xStateSetHelper = pHelper;
+
+        m_bIsDisposed = true;
+
     }
-
-    // reset pointers
-    m_aAccInfo.m_pParent = nullptr;
-
-    // attach new empty state set helper to member reference
-    ::utl::AccessibleStateSetHelper * pHelper = new ::utl::AccessibleStateSetHelper();
-    pHelper->AddState( AccessibleStateType::DEFUNC );
-    // release old helper and attach new one
-    m_xStateSetHelper = pHelper;
-
-    m_bIsDisposed = true;
-
     // call listeners unguarded
-    aGuard.clear();
 
     if( m_bMayHaveChildren )
     {
@@ -480,7 +481,7 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleChild( sal_Int32 
     CheckDisposeState();
     Reference< XAccessible > xResult;
 
-    ResettableMutexGuard aGuard( GetMutex() );
+    ClearableMutexGuard aGuard( GetMutex() );
     bool bMustUpdateChildren = ( m_bMayHaveChildren &&
                                  ! m_bChildrenInitialized );
 

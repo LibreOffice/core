@@ -152,7 +152,7 @@ SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const uno::Reference < uno::XCompone
 uno::Reference< container::XNameReplace > SAL_CALL SfxGlobalEvents_Impl::getEvents()
 {
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
     return m_xEvents;
     // <- SAFE
 }
@@ -214,11 +214,10 @@ void SAL_CALL SfxGlobalEvents_Impl::disposing(const lang::EventObject& aEvent)
     uno::Reference< frame::XModel > xDoc(aEvent.Source, uno::UNO_QUERY);
 
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
     TModelList::iterator pIt = impl_searchDoc(xDoc);
     if (pIt != m_lModels.end())
         m_lModels.erase(pIt);
-    aLock.clear();
     // <- SAFE
 }
 
@@ -231,11 +230,10 @@ sal_Bool SAL_CALL SfxGlobalEvents_Impl::has(const uno::Any& aElement)
     bool bHas = false;
 
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
     TModelList::iterator pIt = impl_searchDoc(xDoc);
     if (pIt != m_lModels.end())
         bHas = true;
-    aLock.clear();
     // <- SAFE
 
     return bHas;
@@ -253,14 +251,15 @@ void SAL_CALL SfxGlobalEvents_Impl::insert( const uno::Any& aElement )
                 0);
 
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
-    TModelList::iterator pIt = impl_searchDoc(xDoc);
-    if (pIt != m_lModels.end())
-        throw container::ElementExistException(
+    {
+        osl::MutexGuard aLock(m_aLock);
+        TModelList::iterator pIt = impl_searchDoc(xDoc);
+        if (pIt != m_lModels.end())
+            throw container::ElementExistException(
                 OUString(),
-                static_cast< container::XSet* >(this));
-    m_lModels.push_back(xDoc);
-    aLock.clear();
+                static_cast<container::XSet*>(this));
+        m_lModels.push_back(xDoc);
+    }
     // <- SAFE
 
     uno::Reference< document::XDocumentEventBroadcaster > xDocBroadcaster(xDoc, uno::UNO_QUERY );
@@ -287,14 +286,15 @@ void SAL_CALL SfxGlobalEvents_Impl::remove( const uno::Any& aElement )
                 0);
 
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
-    TModelList::iterator pIt = impl_searchDoc(xDoc);
-    if (pIt == m_lModels.end())
-        throw container::NoSuchElementException(
+    {
+        osl::MutexGuard aLock(m_aLock);
+        TModelList::iterator pIt = impl_searchDoc(xDoc);
+        if (pIt == m_lModels.end())
+            throw container::NoSuchElementException(
                 OUString(),
-                static_cast< container::XSet* >(this));
-    m_lModels.erase(pIt);
-    aLock.clear();
+                static_cast<container::XSet*>(this));
+        m_lModels.erase(pIt);
+    }
     // <- SAFE
 
     uno::Reference< document::XDocumentEventBroadcaster > xDocBroadcaster(xDoc, uno::UNO_QUERY );
@@ -313,14 +313,13 @@ void SAL_CALL SfxGlobalEvents_Impl::remove( const uno::Any& aElement )
 uno::Reference< container::XEnumeration > SAL_CALL SfxGlobalEvents_Impl::createEnumeration()
 {
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
     uno::Sequence<uno::Any> models(m_lModels.size());
     for (size_t i = 0; i < m_lModels.size(); ++i)
     {
         models[i] <<= m_lModels[i];
     }
     uno::Reference<container::XEnumeration> xEnum(new ::comphelper::OAnyEnumeration(models));
-    aLock.clear();
     // <- SAFE
 
     return xEnum;
@@ -336,7 +335,7 @@ uno::Type SAL_CALL SfxGlobalEvents_Impl::getElementType()
 sal_Bool SAL_CALL SfxGlobalEvents_Impl::hasElements()
 {
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
     return (!m_lModels.empty());
     // <- SAFE
 }
@@ -360,7 +359,7 @@ void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const document::D
     try
     {
         // SAFE ->
-        ::osl::ResettableMutexGuard aLock(m_aLock);
+        osl::ClearableMutexGuard aLock(m_aLock);
         uno::Reference< container::XNameReplace > xEvents = m_xEvents;
         aLock.clear();
         // <- SAFE

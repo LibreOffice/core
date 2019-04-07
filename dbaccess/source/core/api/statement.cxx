@@ -307,7 +307,7 @@ void OStatementBase::clearWarnings()
 void OStatementBase::cancel()
 {
     // no blocking as cancel is typically called from a different thread
-    ClearableMutexGuard aCancelGuard(m_aCancelMutex);
+    MutexGuard aCancelGuard(m_aCancelMutex);
     if (m_xAggregateAsCancellable.is())
         m_xAggregateAsCancellable->cancel();
     // else do nothing

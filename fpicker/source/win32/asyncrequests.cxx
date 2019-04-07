@@ -75,9 +75,10 @@ AsyncRequests::AsyncRequests(const RequestHandlerRef& rHandler)
 AsyncRequests::~AsyncRequests()
 {
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
-    m_bFinish = true;
-    aLock.clear();
+    {
+        osl::MutexGuard aLock(m_aMutex);
+        m_bFinish = true;
+    }
     // <- SYNCHRONIZED
 
     // The static AsyncRequests aNotify in VistaFilePickerEventHandler::impl_sendEvent
@@ -106,9 +107,10 @@ void AsyncRequests::triggerJobExecution()
 void AsyncRequests::triggerRequestProcessMessages (const RequestRef& rRequest)
 {
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
-    m_lRequests.push(rRequest);
-    aLock.clear();
+    {
+        osl::MutexGuard aLock(m_aMutex);
+        m_lRequests.push(rRequest);
+    }
     // <- SYNCHRONIZED
 
     rRequest->waitProcessMessages();
@@ -117,9 +119,10 @@ void AsyncRequests::triggerRequestProcessMessages (const RequestRef& rRequest)
 void AsyncRequests::triggerRequestBlocked(const RequestRef& rRequest)
 {
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
-    m_lRequests.push(rRequest);
-    aLock.clear();
+    {
+        osl::MutexGuard aLock(m_aMutex);
+        m_lRequests.push(rRequest);
+    }
     // <- SYNCHRONIZED
 
     triggerJobExecution();
@@ -130,9 +133,10 @@ void AsyncRequests::triggerRequestBlocked(const RequestRef& rRequest)
 void AsyncRequests::triggerRequestNonBlocked(const RequestRef& rRequest)
 {
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
-    m_lRequests.push(rRequest);
-    aLock.clear();
+    {
+        osl::MutexGuard aLock(m_aMutex);
+        m_lRequests.push(rRequest);
+    }
     // <- SYNCHRONIZED
 
     triggerJobExecution();
@@ -141,7 +145,7 @@ void AsyncRequests::triggerRequestNonBlocked(const RequestRef& rRequest)
 void AsyncRequests::triggerRequestDirectly(const RequestRef& rRequest)
 {
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
+    osl::ClearableMutexGuard aLock(m_aMutex);
     RequestHandlerRef rHandler = m_rHandler;
     aLock.clear();
     // <- SYNCHRONIZED

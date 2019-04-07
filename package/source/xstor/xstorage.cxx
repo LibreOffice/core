@@ -2231,7 +2231,7 @@ void SAL_CALL OStorage::copyToStorage( const uno::Reference< embed::XStorage >& 
 uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
     const OUString& aStreamName, sal_Int32 nOpenMode )
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    osl::ClearableMutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
 
     if ( !m_pImpl )
     {
@@ -2770,161 +2770,167 @@ sal_Bool SAL_CALL OStorage::isStorageElement( const OUString& aElementName )
 
 void SAL_CALL OStorage::removeElement( const OUString& aElementName )
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
-
-    if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", THROW_WHERE "Disposed!");
-        throw lang::DisposedException( THROW_WHERE );
-    }
+        osl::MutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
 
-    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, false ) )
-        throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
+        if (!m_pImpl)
+        {
+            SAL_INFO("package.xstor", THROW_WHERE "Disposed!");
+            throw lang::DisposedException(THROW_WHERE);
+        }
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aElementName == "_rels" )
-        throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 ); // TODO: unacceptable name
+        if (aElementName.isEmpty()
+            || !::comphelper::OStorageHelper::IsValidZipEntryFileName(aElementName, false))
+            throw lang::IllegalArgumentException(THROW_WHERE "Unexpected entry name syntax.",
+                                                 uno::Reference<uno::XInterface>(), 1);
 
-    if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE ) )
-        throw io::IOException( THROW_WHERE ); // TODO: access denied
+        if (m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aElementName == "_rels")
+            throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference<uno::XInterface>(),
+                                                 1); // TODO: unacceptable name
 
-    try
-    {
-        SotElement_Impl* pElement = m_pImpl->FindElement( aElementName );
+        if (!(m_pImpl->m_nStorageMode & embed::ElementModes::WRITE))
+            throw io::IOException(THROW_WHERE); // TODO: access denied
 
-        if ( !pElement )
-            throw container::NoSuchElementException( THROW_WHERE ); //???
+        try
+        {
+            SotElement_Impl* pElement = m_pImpl->FindElement(aElementName);
 
-        m_pImpl->RemoveElement( pElement );
+            if (!pElement)
+                throw container::NoSuchElementException(THROW_WHERE); //???
 
-        m_pImpl->m_bIsModified = true;
-        m_pImpl->m_bBroadcastModified = true;
-    }
-    catch( const embed::InvalidStorageException& rInvalidStorageException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
-        throw;
-    }
-    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
-        throw;
-    }
-    catch( const container::NoSuchElementException& rNoSuchElementException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException);
-        throw;
-    }
-    catch( const io::IOException& rIOException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
-        throw;
-    }
-    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
-        throw;
-    }
-    catch( const uno::RuntimeException& rRuntimeException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
-        throw;
-    }
-    catch( const uno::Exception& )
-    {
-        uno::Any aCaught( ::cppu::getCaughtException() );
-        SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
+            m_pImpl->RemoveElement(pElement);
 
-        throw embed::StorageWrappedTargetException( THROW_WHERE "Can't remove element!",
-                                                 uno::Reference< io::XInputStream >(),
-                                                 aCaught );
-    }
+            m_pImpl->m_bIsModified = true;
+            m_pImpl->m_bBroadcastModified = true;
+        }
+        catch (const embed::InvalidStorageException& rInvalidStorageException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
+            throw;
+        }
+        catch (const lang::IllegalArgumentException& rIllegalArgumentException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
+            throw;
+        }
+        catch (const container::NoSuchElementException& rNoSuchElementException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException);
+            throw;
+        }
+        catch (const io::IOException& rIOException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rIOException);
+            throw;
+        }
+        catch (const embed::StorageWrappedTargetException& rStorageWrappedTargetException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
+            throw;
+        }
+        catch (const uno::RuntimeException& rRuntimeException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
+            throw;
+        }
+        catch (const uno::Exception&)
+        {
+            uno::Any aCaught(::cppu::getCaughtException());
+            SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
-    aGuard.clear();
+            throw embed::StorageWrappedTargetException(THROW_WHERE "Can't remove element!",
+                                                       uno::Reference<io::XInputStream>(), aCaught);
+        }
+    }
 
     BroadcastModifiedIfNecessary();
 }
 
 void SAL_CALL OStorage::renameElement( const OUString& aElementName, const OUString& aNewName )
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
-
-    if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", THROW_WHERE "Disposed!");
-        throw lang::DisposedException( THROW_WHERE );
-    }
+        osl::MutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
 
-    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, false )
-      || aNewName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aNewName, false ) )
-        throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
+        if (!m_pImpl)
+        {
+            SAL_INFO("package.xstor", THROW_WHERE "Disposed!");
+            throw lang::DisposedException(THROW_WHERE);
+        }
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && ( aElementName == "_rels" || aNewName == "_rels" ) )
-        throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 ); // TODO: unacceptable element name
+        if (aElementName.isEmpty()
+            || !::comphelper::OStorageHelper::IsValidZipEntryFileName(aElementName, false)
+            || aNewName.isEmpty()
+            || !::comphelper::OStorageHelper::IsValidZipEntryFileName(aNewName, false))
+            throw lang::IllegalArgumentException(THROW_WHERE "Unexpected entry name syntax.",
+                                                 uno::Reference<uno::XInterface>(), 1);
 
-    if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE ) )
-        throw io::IOException( THROW_WHERE ); // TODO: access denied
+        if (m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
+            && (aElementName == "_rels" || aNewName == "_rels"))
+            throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference<uno::XInterface>(),
+                                                 0); // TODO: unacceptable element name
 
-    try
-    {
-        SotElement_Impl* pRefElement = m_pImpl->FindElement( aNewName );
-        if ( pRefElement )
-            throw container::ElementExistException( THROW_WHERE ); //???
+        if (!(m_pImpl->m_nStorageMode & embed::ElementModes::WRITE))
+            throw io::IOException(THROW_WHERE); // TODO: access denied
 
-        SotElement_Impl* pElement = m_pImpl->FindElement( aElementName );
-        if ( !pElement )
-            throw container::NoSuchElementException( THROW_WHERE ); //???
+        try
+        {
+            SotElement_Impl* pRefElement = m_pImpl->FindElement(aNewName);
+            if (pRefElement)
+                throw container::ElementExistException(THROW_WHERE); //???
 
-        pElement->m_aName = aNewName;
+            SotElement_Impl* pElement = m_pImpl->FindElement(aElementName);
+            if (!pElement)
+                throw container::NoSuchElementException(THROW_WHERE); //???
 
-        m_pImpl->m_bIsModified = true;
-        m_pImpl->m_bBroadcastModified = true;
-    }
-    catch( const embed::InvalidStorageException& rInvalidStorageException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
-        throw;
-    }
-    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
-        throw;
-    }
-    catch( const container::NoSuchElementException& rNoSuchElementException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException);
-        throw;
-    }
-    catch( const container::ElementExistException& rElementExistException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rElementExistException);
-        throw;
-    }
-    catch( const io::IOException& rIOException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
-        throw;
-    }
-    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
-        throw;
-    }
-    catch( const uno::RuntimeException& rRuntimeException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
-        throw;
-    }
-    catch( const uno::Exception& )
-    {
-        uno::Any aCaught( ::cppu::getCaughtException() );
-        SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
+            pElement->m_aName = aNewName;
 
-        throw embed::StorageWrappedTargetException( THROW_WHERE "Can't rename element!",
-                                                 uno::Reference< io::XInputStream >(),
-                                                 aCaught );
-    }
+            m_pImpl->m_bIsModified = true;
+            m_pImpl->m_bBroadcastModified = true;
+        }
+        catch (const embed::InvalidStorageException& rInvalidStorageException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
+            throw;
+        }
+        catch (const lang::IllegalArgumentException& rIllegalArgumentException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
+            throw;
+        }
+        catch (const container::NoSuchElementException& rNoSuchElementException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException);
+            throw;
+        }
+        catch (const container::ElementExistException& rElementExistException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rElementExistException);
+            throw;
+        }
+        catch (const io::IOException& rIOException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rIOException);
+            throw;
+        }
+        catch (const embed::StorageWrappedTargetException& rStorageWrappedTargetException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
+            throw;
+        }
+        catch (const uno::RuntimeException& rRuntimeException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
+            throw;
+        }
+        catch (const uno::Exception&)
+        {
+            uno::Any aCaught(::cppu::getCaughtException());
+            SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
-    aGuard.clear();
+            throw embed::StorageWrappedTargetException(THROW_WHERE "Can't rename element!",
+                                                       uno::Reference<io::XInputStream>(), aCaught);
+        }
+    }
 
     BroadcastModifiedIfNecessary();
 }
@@ -3014,90 +3020,97 @@ void SAL_CALL OStorage::moveElementTo(  const OUString& aElementName,
                                         const uno::Reference< embed::XStorage >& xDest,
                                         const OUString& aNewName )
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
-
-    if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", THROW_WHERE "Disposed!");
-        throw lang::DisposedException( THROW_WHERE );
+        osl::MutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
+
+        if (!m_pImpl)
+        {
+            SAL_INFO("package.xstor", THROW_WHERE "Disposed!");
+            throw lang::DisposedException(THROW_WHERE);
+        }
+
+        if (aElementName.isEmpty()
+            || !::comphelper::OStorageHelper::IsValidZipEntryFileName(aElementName, false)
+            || aNewName.isEmpty()
+            || !::comphelper::OStorageHelper::IsValidZipEntryFileName(aNewName, false))
+            throw lang::IllegalArgumentException(THROW_WHERE "Unexpected entry name syntax.",
+                                                 uno::Reference<uno::XInterface>(), 1);
+
+        if (!xDest.is()
+            || xDest
+                   == uno::Reference<uno::XInterface>(static_cast<OWeakObject*>(this),
+                                                      uno::UNO_QUERY))
+            throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference<uno::XInterface>(), 2);
+
+        if (m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
+            && (aElementName == "_rels" || aNewName == "_rels"))
+            throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference<uno::XInterface>(),
+                                                 0); // unacceptable element name
+
+        if (!(m_pImpl->m_nStorageMode & embed::ElementModes::WRITE))
+            throw io::IOException(THROW_WHERE); // TODO: access denied
+
+        try
+        {
+            SotElement_Impl* pElement = m_pImpl->FindElement(aElementName);
+            if (!pElement)
+                throw container::NoSuchElementException(THROW_WHERE); //???
+
+            uno::Reference<XNameAccess> xNameAccess(xDest, uno::UNO_QUERY_THROW);
+            if (xNameAccess->hasByName(aNewName))
+                throw container::ElementExistException(THROW_WHERE);
+
+            m_pImpl->CopyStorageElement(pElement, xDest, aNewName, false);
+
+            m_pImpl->RemoveElement(pElement);
+
+            m_pImpl->m_bIsModified = true;
+            m_pImpl->m_bBroadcastModified = true;
+        }
+        catch (const embed::InvalidStorageException& rInvalidStorageException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
+            throw;
+        }
+        catch (const lang::IllegalArgumentException& rIllegalArgumentException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
+            throw;
+        }
+        catch (const container::NoSuchElementException& rNoSuchElementException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException);
+            throw;
+        }
+        catch (const container::ElementExistException& rElementExistException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rElementExistException);
+            throw;
+        }
+        catch (const embed::StorageWrappedTargetException& rStorageWrappedTargetException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
+            throw;
+        }
+        catch (const io::IOException& rIOException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rIOException);
+            throw;
+        }
+        catch (const uno::RuntimeException& rRuntimeException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
+            throw;
+        }
+        catch (const uno::Exception&)
+        {
+            uno::Any aCaught(::cppu::getCaughtException());
+            SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
+
+            throw embed::StorageWrappedTargetException(THROW_WHERE "Can't move element!",
+                                                       uno::Reference<io::XInputStream>(), aCaught);
+        }
     }
-
-    if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, false )
-      || aNewName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aNewName, false ) )
-        throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
-
-    if ( !xDest.is() || xDest == uno::Reference< uno::XInterface >( static_cast< OWeakObject* >( this ), uno::UNO_QUERY ) )
-        throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 2 );
-
-    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && ( aElementName == "_rels" || aNewName == "_rels" ) )
-        throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 ); // unacceptable element name
-
-    if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE ) )
-        throw io::IOException( THROW_WHERE ); // TODO: access denied
-
-    try
-    {
-        SotElement_Impl* pElement = m_pImpl->FindElement( aElementName );
-        if ( !pElement )
-            throw container::NoSuchElementException( THROW_WHERE ); //???
-
-        uno::Reference< XNameAccess > xNameAccess( xDest, uno::UNO_QUERY_THROW );
-        if ( xNameAccess->hasByName( aNewName ) )
-            throw container::ElementExistException( THROW_WHERE );
-
-        m_pImpl->CopyStorageElement( pElement, xDest, aNewName, false );
-
-        m_pImpl->RemoveElement( pElement );
-
-        m_pImpl->m_bIsModified = true;
-        m_pImpl->m_bBroadcastModified = true;
-    }
-    catch( const embed::InvalidStorageException& rInvalidStorageException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
-        throw;
-    }
-    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
-        throw;
-    }
-    catch( const container::NoSuchElementException& rNoSuchElementException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException);
-        throw;
-    }
-    catch( const container::ElementExistException& rElementExistException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rElementExistException);
-        throw;
-    }
-    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
-        throw;
-    }
-    catch( const io::IOException& rIOException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
-        throw;
-    }
-    catch( const uno::RuntimeException& rRuntimeException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
-        throw;
-    }
-    catch( const uno::Exception& )
-    {
-        uno::Any aCaught( ::cppu::getCaughtException() );
-        SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
-
-        throw embed::StorageWrappedTargetException( THROW_WHERE "Can't move element!",
-                                                 uno::Reference< io::XInputStream >(),
-                                                 aCaught );
-    }
-
-    aGuard.clear();
 
     BroadcastModifiedIfNecessary();
 }
@@ -3106,7 +3119,7 @@ void SAL_CALL OStorage::moveElementTo(  const OUString& aElementName,
 uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
     const OUString& aStreamName, sal_Int32 nOpenMode, const uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    osl::ClearableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3589,56 +3602,62 @@ void SAL_CALL OStorage::revert()
 
     BroadcastTransaction( STOR_MESS_PREREVERT );
 
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
-
-    if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", THROW_WHERE "Disposed!");
-        throw lang::DisposedException( THROW_WHERE );
-    }
+        osl::MutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
 
-    bool bThrow = std::any_of(m_pImpl->m_aChildrenVector.begin(), m_pImpl->m_aChildrenVector.end(), [](const SotElement_Impl* pElement) {
-        return (pElement->m_xStorage
-                && (pElement->m_xStorage->m_pAntiImpl || !pElement->m_xStorage->m_aReadOnlyWrapVector.empty()))
-            || (pElement->m_xStream
-                && (pElement->m_xStream->m_pAntiImpl || !pElement->m_xStream->m_aInputStreamsVector.empty())); });
-    if (bThrow)
-        throw io::IOException( THROW_WHERE ); // TODO: access denied
+        if (!m_pImpl)
+        {
+            SAL_INFO("package.xstor", THROW_WHERE "Disposed!");
+            throw lang::DisposedException(THROW_WHERE);
+        }
 
-    if ( m_pData->m_bReadOnlyWrap || !m_pImpl->m_bListCreated )
-        return; // nothing to do
+        bool bThrow = std::any_of(
+            m_pImpl->m_aChildrenVector.begin(), m_pImpl->m_aChildrenVector.end(),
+            [](const SotElement_Impl* pElement) {
+                return (pElement->m_xStorage
+                        && (pElement->m_xStorage->m_pAntiImpl
+                            || !pElement->m_xStorage->m_aReadOnlyWrapVector.empty()))
+                       || (pElement->m_xStream
+                           && (pElement->m_xStream->m_pAntiImpl
+                               || !pElement->m_xStream->m_aInputStreamsVector.empty()));
+            });
+        if (bThrow)
+            throw io::IOException(THROW_WHERE); // TODO: access denied
 
-    try {
-        m_pImpl->Revert();
-        m_pImpl->m_bIsModified = false;
-        m_pImpl->m_bBroadcastModified = true;
-    }
-    catch( const io::IOException& rIOException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
-        throw;
-    }
-    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
-        throw;
-    }
-    catch( const uno::RuntimeException& rRuntimeException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
-        throw;
-    }
-    catch( const uno::Exception& )
-    {
-        uno::Any aCaught( ::cppu::getCaughtException() );
-        SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
+        if (m_pData->m_bReadOnlyWrap || !m_pImpl->m_bListCreated)
+            return; // nothing to do
 
-        throw embed::StorageWrappedTargetException( THROW_WHERE "Problems on revert!",
-                                  static_cast< ::cppu::OWeakObject* >( this ),
-                                  aCaught );
-    }
+        try
+        {
+            m_pImpl->Revert();
+            m_pImpl->m_bIsModified = false;
+            m_pImpl->m_bBroadcastModified = true;
+        }
+        catch (const io::IOException& rIOException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rIOException);
+            throw;
+        }
+        catch (const embed::StorageWrappedTargetException& rStorageWrappedTargetException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
+            throw;
+        }
+        catch (const uno::RuntimeException& rRuntimeException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
+            throw;
+        }
+        catch (const uno::Exception&)
+        {
+            uno::Any aCaught(::cppu::getCaughtException());
+            SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
-    aGuard.clear();
+            throw embed::StorageWrappedTargetException(THROW_WHERE "Problems on revert!",
+                                                       static_cast<::cppu::OWeakObject*>(this),
+                                                       aCaught);
+        }
+    }
 
     setModified( false );
     BroadcastTransaction( STOR_MESS_REVERTED );
@@ -3693,21 +3712,22 @@ sal_Bool SAL_CALL OStorage::isModified()
 
 void SAL_CALL OStorage::setModified( sal_Bool bModified )
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
-
-    if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", THROW_WHERE "Disposed!");
-        throw lang::DisposedException( THROW_WHERE );
+        osl::MutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
+
+        if (!m_pImpl)
+        {
+            SAL_INFO("package.xstor", THROW_WHERE "Disposed!");
+            throw lang::DisposedException(THROW_WHERE);
+        }
+
+        if (m_pData->m_bReadOnlyWrap)
+            throw beans::PropertyVetoException(THROW_WHERE); // TODO: access denied
+
+        if (m_pImpl->m_bIsModified != bool(bModified))
+            m_pImpl->m_bIsModified = bModified;
     }
 
-    if ( m_pData->m_bReadOnlyWrap )
-        throw beans::PropertyVetoException( THROW_WHERE ); // TODO: access denied
-
-    if ( m_pImpl->m_bIsModified != bool(bModified) )
-        m_pImpl->m_bIsModified = bModified;
-
-    aGuard.clear();
     if ( bModified )
     {
         m_pImpl->m_bBroadcastModified = true;

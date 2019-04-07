@@ -605,7 +605,7 @@ void ODefinitionContainer::approveNewObject(const OUString& _sName,const Referen
 // XPropertyChangeListener
 void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& evt )
 {
-    ClearableMutexGuard aGuard(m_aMutex);
+    MutexGuard aGuard(m_aMutex);
     if( evt.PropertyName == PROPERTY_NAME || evt.PropertyName ==  "Title" )
     {
         m_bInPropertyChange = true;

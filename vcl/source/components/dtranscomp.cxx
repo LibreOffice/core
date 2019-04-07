@@ -169,14 +169,14 @@ sal_Int8 GenericClipboard::getRenderingCapabilities()
 
 void GenericClipboard::addClipboardListener( const Reference< datatransfer::clipboard::XClipboardListener >& listener )
 {
-    osl::ClearableMutexGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard(m_aMutex);
 
     m_aListeners.push_back( listener );
 }
 
 void GenericClipboard::removeClipboardListener( const Reference< datatransfer::clipboard::XClipboardListener >& listener )
 {
-    osl::ClearableMutexGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard(m_aMutex);
 
     m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener), m_aListeners.end());
 }

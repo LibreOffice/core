@@ -139,10 +139,11 @@ DispatchHelper::executeDispatch(const css::uno::Reference<css::frame::XDispatch>
             css::uno::Reference<css::frame::XDispatchResultListener> xListener(xTHIS,
                                                                                css::uno::UNO_QUERY);
             /* SAFE { */
-            osl::ClearableMutexGuard aWriteLock(m_mutex);
-            m_xBroadcaster.set(xNotifyDispatch, css::uno::UNO_QUERY);
-            m_aBlock.reset();
-            aWriteLock.clear();
+            {
+                osl::MutexGuard aWriteLock(m_mutex);
+                m_xBroadcaster.set(xNotifyDispatch, css::uno::UNO_QUERY);
+                m_aBlock.reset();
+            }
             /* } SAFE */
 
             // dispatch it and wait for a notification

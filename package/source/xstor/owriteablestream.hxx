@@ -257,7 +257,7 @@ protected:
 
     void CopyToStreamInternally_Impl( const css::uno::Reference< css::io::XStream >& xStream );
 
-    void ModifyParentUnlockMutex_Impl( ::osl::ResettableMutexGuard& aGuard );
+    void ModifyParentUnlockMutex_Impl(osl::ClearableMutexGuard& aGuard);
 
     void BroadcastTransaction( sal_Int8 nMessage );
 

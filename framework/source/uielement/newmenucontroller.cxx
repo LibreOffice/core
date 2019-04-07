@@ -392,10 +392,11 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
     Reference< css::awt::XPopupMenu > xPopupMenu;
     Reference< XComponentContext >    xContext;
 
-    osl::ClearableMutexGuard aLock( m_aMutex );
-    xPopupMenu = m_xPopupMenu;
-    xContext   = m_xContext;
-    aLock.clear();
+    {
+        osl::MutexGuard aLock(m_aMutex);
+        xPopupMenu = m_xPopupMenu;
+        xContext = m_xContext;
+    }
 
     if ( xPopupMenu.is() )
     {

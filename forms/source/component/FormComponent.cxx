@@ -1344,7 +1344,7 @@ void OBoundControlModel::disposing()
 {
     OControlModel::disposing();
 
-    ::osl::ClearableMutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
 
     if ( m_pAggPropMultiplexer )
         m_pAggPropMultiplexer->dispose();
@@ -2697,7 +2697,7 @@ void OBoundControlModel::disconnectValidator( )
 
 void SAL_CALL OBoundControlModel::setValidator( const Reference< XValidator >& _rxValidator )
 {
-    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     OSL_PRECOND( m_bSupportsValidation, "OBoundControlModel::setValidator: How did you reach this method?" );
     // the interface for this method should not have been exposed if we do not
     // support validation
@@ -2733,7 +2733,7 @@ Reference< XValidator > SAL_CALL OBoundControlModel::getValidator(  )
 
 void SAL_CALL OBoundControlModel::validityConstraintChanged( const EventObject& /*Source*/ )
 {
-    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     OSL_PRECOND( m_bSupportsValidation, "OBoundControlModel::validityConstraintChanged: How did you reach this method?" );
     // the interface for this method should not have been exposed if we do not
     // support validation

@@ -344,19 +344,20 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XCompon
 void LoadEnv::startLoading()
 {
     // SAFE ->
-    osl::ClearableMutexGuard aReadLock(m_mutex);
+    {
+        osl::MutexGuard aReadLock(m_mutex);
 
-    // Handle still running processes!
-    if (m_xAsynchronousJob.is())
-        throw LoadEnvException(LoadEnvException::ID_STILL_RUNNING);
+        // Handle still running processes!
+        if (m_xAsynchronousJob.is())
+            throw LoadEnvException(LoadEnvException::ID_STILL_RUNNING);
 
-    // content can not be loaded or handled
-    // check "classifyContent()" failed before ...
-    if (m_eContentType == E_UNSUPPORTED_CONTENT)
-        throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT, "from LoadEnv::startLoading");
-
+        // content can not be loaded or handled
+        // check "classifyContent()" failed before ...
+        if (m_eContentType == E_UNSUPPORTED_CONTENT)
+            throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT,
+                                   "from LoadEnv::startLoading");
+    }
     // <- SAFE
-    aReadLock.clear();
 
     // detect its type/filter etc.
     // These information will be available by the
@@ -406,10 +407,11 @@ bool LoadEnv::waitWhileLoading(sal_uInt32 nTimeout)
     while(true)
     {
         // SAFE -> ------------------------------
-        osl::ClearableMutexGuard aReadLock1(m_mutex);
-        if (!m_xAsynchronousJob.is())
-            break;
-        aReadLock1.clear();
+        {
+            osl::MutexGuard aReadLock1(m_mutex);
+            if (!m_xAsynchronousJob.is())
+                break;
+        }
         // <- SAFE ------------------------------
 
         Application::Yield();
@@ -1520,14 +1522,15 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     }
 
     // SAFE -> ..................................
-    osl::ClearableMutexGuard aWriteLock(m_mutex);
+    {
+        osl::MutexGuard aWriteLock(m_mutex);
 
-    css::uno::Reference< css::document::XActionLockable > xLock(xTask, css::uno::UNO_QUERY);
-    if (!m_aTargetLock.setResource(xLock))
-        return css::uno::Reference< css::frame::XFrame >();
+        css::uno::Reference< css::document::XActionLockable > xLock(xTask, css::uno::UNO_QUERY);
+        if (!m_aTargetLock.setResource(xLock))
+            return css::uno::Reference< css::frame::XFrame >();
 
-    m_bReactivateControllerOnError = bReactivateOldControllerOnError;
-    aWriteLock.clear();
+        m_bReactivateControllerOnError = bReactivateOldControllerOnError;
+    }
     // <- SAFE ..................................
 
     // bring it to front ...
@@ -1705,24 +1708,24 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
        return;
 
     // SOLAR SAFE ->
-    SolarMutexClearableGuard aSolarGuard1;
+    {
+        SolarMutexGuard aSolarGuard1;
 
-    VclPtr<vcl::Window>  pWindow = VCLUnoHelper::GetWindow(xWindow);
-    if (!pWindow)
-        return;
+        VclPtr<vcl::Window>  pWindow = VCLUnoHelper::GetWindow(xWindow);
+        if (!pWindow)
+            return;
 
-    bool bSystemWindow = pWindow->IsSystemWindow();
-    bool bWorkWindow   = (pWindow->GetType() == WindowType::WORKWINDOW);
+        bool bSystemWindow = pWindow->IsSystemWindow();
+        bool bWorkWindow = (pWindow->GetType() == WindowType::WORKWINDOW);
 
-    if (!bSystemWindow && !bWorkWindow)
-        return;
+        if (!bSystemWindow && !bWorkWindow)
+            return;
 
-    // don't overwrite this special state!
-    WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow.get());
-    if (pWorkWindow->IsMinimized())
-        return;
-
-    aSolarGuard1.clear();
+        // don't overwrite this special state!
+        WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow.get());
+        if (pWorkWindow->IsMinimized())
+            return;
+    }
     // <- SOLAR SAFE
 
     // SAFE ->
