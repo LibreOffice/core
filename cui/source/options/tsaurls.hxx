@@ -12,6 +12,8 @@
 
 #include <vcl/weld.hxx>
 
+#include <set>
+
 class TSAURLsDialog : public weld::GenericDialogController
 {
 private:

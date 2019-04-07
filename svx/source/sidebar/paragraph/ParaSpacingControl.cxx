@@ -29,6 +29,8 @@
 #include <svl/intitem.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <com/sun/star/frame/XFrame.hpp>
+
 using namespace svx;
 
 SFX_IMPL_TOOLBOX_CONTROL(ParaAboveSpacingControl, SvxULSpaceItem);

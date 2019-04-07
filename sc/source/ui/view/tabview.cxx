@@ -25,6 +25,7 @@
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
+#include <tools/svborder.hxx>
 
 #include <pagedata.hxx>
 #include <tabview.hxx>

@@ -44,6 +44,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <svl/aeitem.hxx>
@@ -51,6 +52,7 @@
 #include <basic/sbstar.hxx>
 #include <basic/sberrors.hxx>
 #include <xmloff/autolayout.hxx>
+#include <vcl/svapp.hxx>
 
 #include <undo/undoobjects.hxx>
 

@@ -22,6 +22,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
+#include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/settings.hxx>

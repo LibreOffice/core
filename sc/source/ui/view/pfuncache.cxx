@@ -18,6 +18,7 @@
  */
 
 #include <tools/multisel.hxx>
+#include <osl/diagnose.h>
 
 #include <pfuncache.hxx>
 #include <printfun.hxx>

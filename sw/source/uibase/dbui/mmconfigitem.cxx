@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>

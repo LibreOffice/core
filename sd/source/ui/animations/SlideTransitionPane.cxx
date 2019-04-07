@@ -35,6 +35,7 @@
 
 #include <sal/log.hxx>
 #include <svx/gallery.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <tools/urlobj.hxx>

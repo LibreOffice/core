@@ -102,6 +102,7 @@
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <svx/srchdlg.hxx>
 

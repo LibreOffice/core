@@ -86,6 +86,7 @@
 #include <svx/svxdlg.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 

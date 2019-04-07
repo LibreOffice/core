@@ -23,6 +23,7 @@
 #include <svx/svdlayer.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/dispatch.hxx>
+#include <vcl/commandevent.hxx>
 
 #include <sdattr.hxx>
 #include <sdmod.hxx>

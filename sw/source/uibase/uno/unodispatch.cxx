@@ -19,6 +19,8 @@
 
 #include <config_features.h>
 
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+
 #include <vcl/svapp.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>

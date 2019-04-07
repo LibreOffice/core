@@ -33,6 +33,8 @@
 #include <tpsubt.hxx>
 #include <memory>
 
+#include <osl/diagnose.h>
+
 // Subtotals group tabpage:
 
 ScTpSubTotalGroup::ScTpSubTotalGroup(TabPageParent pParent, const SfxItemSet& rArgSet)

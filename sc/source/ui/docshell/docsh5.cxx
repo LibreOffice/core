@@ -22,6 +22,8 @@
 
 #include <cassert>
 
+#include <osl/diagnose.h>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 #include <sfx2/app.hxx>

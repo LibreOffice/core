@@ -27,6 +27,7 @@
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <vcl/field.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/eitem.hxx>
 #include <com/sun/star/uno/Exception.hpp>

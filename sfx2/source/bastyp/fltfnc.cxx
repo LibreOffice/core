@@ -81,6 +81,7 @@
 #include <sfx2/doctempl.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <helper.hxx>
 #include "fltlst.hxx"

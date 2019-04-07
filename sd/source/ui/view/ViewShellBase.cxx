@@ -72,6 +72,7 @@
 #include <svl/whiter.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
@@ -79,6 +80,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <editeng/editview.hxx>
+#include <tools/svborder.hxx>
 
 #include <fubullet.hxx>
 #include <drawview.hxx>

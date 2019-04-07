@@ -28,6 +28,9 @@
 #include <officecfg/Office/Common.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/textview.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/scrbar.hxx>

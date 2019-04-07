@@ -38,6 +38,7 @@
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/opengrf.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svx/svxdlg.hxx>
 #include <sfx2/viewsh.hxx>

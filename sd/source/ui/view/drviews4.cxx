@@ -20,6 +20,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 
 #include <DrawViewShell.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
@@ -38,6 +39,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <editeng/editview.hxx>
 #include <vcl/cursor.hxx>
+#include <vcl/commandevent.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>

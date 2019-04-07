@@ -23,6 +23,7 @@
 #include <sal/macros.h>
 #include <svtools/unoimap.hxx>
 #include <svx/unofill.hxx>
+#include <vcl/svapp.hxx>
 #include <editeng/unonrule.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

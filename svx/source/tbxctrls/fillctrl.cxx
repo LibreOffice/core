@@ -25,6 +25,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolbox.hxx>
 #include <svx/svxids.hrc>

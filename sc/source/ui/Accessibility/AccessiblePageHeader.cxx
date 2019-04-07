@@ -36,6 +36,7 @@
 
 #include <vcl/window.hxx>
 #include <svl/hint.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <svl/style.hxx>

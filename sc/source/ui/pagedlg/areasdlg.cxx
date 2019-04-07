@@ -21,6 +21,7 @@
 
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/charclass.hxx>
 

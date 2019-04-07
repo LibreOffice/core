@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <editeng/eeitem.hxx>
 #include <editeng/sizeitem.hxx>

@@ -38,6 +38,7 @@
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/event.hxx>
 
 #define IID_BOTTOMLOCK 1
 #define IID_TOPLOCK    2

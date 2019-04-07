@@ -53,6 +53,7 @@
 #include <unotools/moduleoptions.hxx>
 
 #include <svtools/imagemgr.hxx>
+#include <svtools/framestatuslistener.hxx>
 #include <comphelper/processfactory.hxx>
 #include <framework/addonmenu.hxx>
 #include <framework/addonsoptions.hxx>

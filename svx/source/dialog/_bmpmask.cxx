@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/event.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/field.hxx>

@@ -122,6 +122,7 @@
 #include <vcl/ImageTree.hxx>
 #include <vcl/ITiledRenderable.hxx>
 #include <vcl/IDialogRenderable.hxx>
+#include <vcl/dialog.hxx>
 #include <unicode/uchar.h>
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>

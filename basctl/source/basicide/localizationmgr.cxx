@@ -29,8 +29,10 @@
 #include <com/sun/star/resource/MissingResourceException.hpp>
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 namespace basctl
 {

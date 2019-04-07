@@ -45,6 +45,8 @@
 #include <boost/optional/optional.hpp>
 #include <memory>
 
+namespace com::sun::star::beans { struct PropertyValue; }
+
 namespace com { namespace sun { namespace star {
     namespace document {
         class XDocumentProperties;

@@ -24,6 +24,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/dialoghelper.hxx>

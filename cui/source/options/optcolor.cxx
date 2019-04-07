@@ -21,6 +21,7 @@
 
 #include <bitset>
 
+#include <tools/debug.hxx>
 #include <editeng/editids.hrc>
 #include <svtools/colorcfg.hxx>
 #include <svtools/extcolorcfg.hxx>
@@ -31,6 +32,7 @@
 #include <svx/xtable.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/pathoptions.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/weld.hxx>

@@ -31,6 +31,7 @@
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/module.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>

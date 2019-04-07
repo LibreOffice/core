@@ -24,6 +24,7 @@
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <vcl/errinf.hxx>
 #include <sfx2/app.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

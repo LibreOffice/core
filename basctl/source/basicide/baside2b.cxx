@@ -41,11 +41,14 @@
 #include <vcl/weld.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svxids.hrc>
+#include <vcl/commandevent.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
 #include <svtools/textwindowpeer.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/taskpanelist.hxx>

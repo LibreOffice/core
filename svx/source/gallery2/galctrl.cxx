@@ -22,6 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <avmedia/mediaplayer.hxx>
 #include <helpids.h>
 #include <galbrws2.hxx>

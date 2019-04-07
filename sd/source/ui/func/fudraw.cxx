@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <editeng/eeitem.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <editeng/flditem.hxx>

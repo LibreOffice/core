@@ -30,6 +30,7 @@
 #include <tools/link.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/errcode.hxx>
+#include <vcl/event.hxx>
 #include <editeng/editstat.hxx>
 #include <svl/languageoptions.hxx>
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>

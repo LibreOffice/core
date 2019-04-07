@@ -31,6 +31,7 @@
 #include <sfx2/event.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sfxsids.hrc>
 
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -48,6 +49,7 @@
 #include <svl/stritem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/event.hxx>
 #include <vcl/syswin.hxx>
 #include <sal/log.hxx>
 

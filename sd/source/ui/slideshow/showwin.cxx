@@ -25,6 +25,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/sfxsids.hrc>
 
 
 #include <slideshow.hxx>

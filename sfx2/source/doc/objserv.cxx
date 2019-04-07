@@ -98,11 +98,13 @@
 #include <sfx2/checkin.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/sfxuno.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <SfxRedactionHelper.hxx>
 
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>

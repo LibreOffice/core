@@ -18,6 +18,8 @@
  */
 
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
@@ -25,6 +27,7 @@
 #include <sfx2/module.hxx>
 #include <tools/urlobj.hxx>
 
+#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>

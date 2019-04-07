@@ -34,6 +34,8 @@
 #include <comphelper/processfactory.hxx>
 #include <svtools/colorcfg.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 // namespaces
 using namespace ::com::sun::star::uno;

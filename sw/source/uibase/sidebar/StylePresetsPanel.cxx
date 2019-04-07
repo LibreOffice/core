@@ -20,6 +20,7 @@
 #include <svx/dlgutil.hxx>
 #include <svx/rulritem.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/svapp.hxx>
 
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/dispatch.hxx>

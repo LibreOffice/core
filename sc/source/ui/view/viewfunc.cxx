@@ -34,6 +34,7 @@
 #include <sfx2/bindings.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>

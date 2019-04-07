@@ -15,6 +15,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <test/bootstrapfixture.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotest/macros_test.hxx>

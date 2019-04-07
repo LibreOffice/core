@@ -19,6 +19,7 @@
 
 #include <svl/itemset.hxx>
 #include <vcl/virdev.hxx>
+#include <osl/diagnose.h>
 
 #include <undostyl.hxx>
 #include <docsh.hxx>

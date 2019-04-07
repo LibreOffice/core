@@ -22,6 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <connectivity/dbtools.hxx>
+#include <osl/diagnose.h>
 
 #include <editutil.hxx>
 #include <filtuno.hxx>

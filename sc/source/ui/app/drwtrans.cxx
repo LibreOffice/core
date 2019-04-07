@@ -19,6 +19,7 @@
 
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -21,12 +21,7 @@
 
 #include <memory>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
-#include <com/sun/star/frame/XDispatchResultListener.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/FeatureStateEvent.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -34,9 +29,14 @@
 #include <sfx2/ctrlitem.hxx>
 #include <osl/mutex.hxx>
 
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::frame { class XNotifyingDispatch; }
+namespace com::sun::star::frame { class XStatusListener; }
+namespace com::sun::star::frame { struct FeatureStateEvent; }
+
 class SfxBindings;
-class SfxFrame;
 class SfxDispatcher;
+class SfxSlot;
 
 typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
     SfxStatusDispatcher_Impl_ListenerContainer;

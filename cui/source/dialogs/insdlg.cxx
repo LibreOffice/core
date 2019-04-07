@@ -43,6 +43,7 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <svl/urihelper.hxx>
+#include <vcl/image.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/classids.hxx>

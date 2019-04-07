@@ -21,6 +21,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/event.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

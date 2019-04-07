@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
@@ -26,6 +27,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 
+#include <osl/diagnose.h>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
@@ -37,6 +39,7 @@
 #include <tools/globname.hxx>
 #include <svx/charthelper.hxx>
 #include <svtools/embedhlp.hxx>
+#include <vcl/svapp.hxx>
 
 #include <ChartTools.hxx>
 #include <chartuno.hxx>

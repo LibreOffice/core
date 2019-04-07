@@ -21,6 +21,7 @@
 #include <osl/file.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/infobar.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>

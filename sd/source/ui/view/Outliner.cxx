@@ -21,6 +21,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <vcl/wrkwin.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 #include <svl/srchitem.hxx>
 #include <editeng/colritem.hxx>

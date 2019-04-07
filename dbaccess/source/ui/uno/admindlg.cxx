@@ -23,6 +23,7 @@
 #include <dbadmin.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace dbaui;
 

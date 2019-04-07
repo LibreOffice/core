@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
 #include <View.hxx>

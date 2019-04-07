@@ -22,6 +22,7 @@
 #include <comphelper/string.hxx>
 #include <svx/colorbox.hxx>
 #include <unotools/useroptions.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/localedatawrapper.hxx>
 

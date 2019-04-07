@@ -33,6 +33,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/svapp.hxx>
 
 #include <sdpage.hxx>
 #include <drawdoc.hxx>

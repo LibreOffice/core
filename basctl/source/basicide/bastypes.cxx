@@ -34,6 +34,9 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/srchdefs.hxx>
+#include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <tools/stream.hxx>
 #include <boost/functional/hash.hpp>

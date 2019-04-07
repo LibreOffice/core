@@ -21,6 +21,7 @@
 #include "optchart.hxx"
 #include <vcl/builderfactory.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svxids.hrc>
 #include <osl/diagnose.h>

@@ -42,6 +42,7 @@
 #include <svx/svdotext.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 

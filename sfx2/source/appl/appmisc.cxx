@@ -21,6 +21,7 @@
 
 #include <vcl/canvastools.hxx>
 #include <vcl/status.hxx>
+#include <vcl/svapp.hxx>
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
@@ -58,6 +59,7 @@
 #include <sfx2/templdlg.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/msgpool.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <openflag.hxx>
 #include <sfx2/viewsh.hxx>

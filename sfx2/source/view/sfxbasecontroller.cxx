@@ -73,6 +73,8 @@
 #include <toolkit/helper/convert.hxx>
 #include <framework/titlehelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <vcl/svapp.hxx>
+#include <tools/svborder.hxx>
 
 #include <sfx2/event.hxx>
 #include <sfx2/viewfac.hxx>

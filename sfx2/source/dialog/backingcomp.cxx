@@ -40,10 +40,12 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XTypeProvider.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/weak.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/wrkwin.hxx>

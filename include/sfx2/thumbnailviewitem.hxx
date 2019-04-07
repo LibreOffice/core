@@ -22,11 +22,11 @@
 
 #include <basegfx/vector/b2dvector.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <vcl/bitmapex.hxx>
 #include <sfx2/dllapi.h>
 
-#include <com/sun/star/accessibility/XAccessible.hpp>
+namespace com::sun::star::accessibility { class XAccessible; }
+namespace drawinglayer::primitive2d { class Primitive2DContainer; }
 
 #define THUMBNAILVIEW_ITEM_NONEITEM      0xFFFE
 

@@ -20,15 +20,18 @@
 #include <starmath.hrc>
 #include <helpids.h>
 
+#include <vcl/commandevent.hxx>
 #include <vcl/settings.hxx>
 
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <svl/stritem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <svtools/colorcfg.hxx>
+#include <osl/diagnose.h>
 
 #include <edit.hxx>
 #include <smmod.hxx>

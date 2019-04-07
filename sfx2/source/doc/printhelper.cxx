@@ -47,6 +47,7 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>

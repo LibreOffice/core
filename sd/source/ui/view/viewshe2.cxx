@@ -19,6 +19,7 @@
 
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>

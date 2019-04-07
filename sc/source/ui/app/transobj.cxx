@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
+#include <osl/diagnose.h>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/fileformat.h>

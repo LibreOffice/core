@@ -21,6 +21,7 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/outliner.hxx>
@@ -50,6 +51,8 @@
 #include <editeng/editview.hxx>
 #include <editeng/svxfont.hxx>
 #include <editeng/fhgtitem.hxx>
+
+#include <com/sun/star/frame/XFrame.hpp>
 
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>

@@ -11,6 +11,7 @@
 #define INCLUDED_SFX2_LOKHELPER_HXX
 
 #include <vcl/IDialogRenderable.hxx>
+#include <vcl/event.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/viewsh.hxx>
 #include <cstddef>

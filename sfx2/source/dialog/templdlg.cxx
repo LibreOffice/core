@@ -20,6 +20,7 @@
 #include <memory>
 
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/event.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <svl/intitem.hxx>
@@ -37,6 +38,7 @@
 #include <officecfg/Office/Common.hxx>
 
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
@@ -52,6 +54,7 @@
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/sfxresid.hxx>
 
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/strings.hrc>
 #include <arrdecl.hxx>
 #include <sfx2/docfilt.hxx>

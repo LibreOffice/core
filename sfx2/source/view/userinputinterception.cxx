@@ -22,6 +22,7 @@
 
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
+#include <com/sun/star/awt/XUserInputInterception.hpp>
 
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/weak.hxx>

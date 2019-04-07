@@ -31,6 +31,7 @@
 #include <linguistic/misc.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

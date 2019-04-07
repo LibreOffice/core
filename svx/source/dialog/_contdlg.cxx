@@ -24,6 +24,7 @@
 #include <svl/eitem.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/localedatawrapper.hxx>

@@ -45,6 +45,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/charclass.hxx>
 #include <tools/multisel.hxx>

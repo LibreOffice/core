@@ -19,8 +19,10 @@
 
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/charclass.hxx>
+#include <osl/diagnose.h>
 
 #include <arealink.hxx>
 

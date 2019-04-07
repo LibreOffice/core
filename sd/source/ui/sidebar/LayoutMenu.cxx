@@ -49,6 +49,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/languageoptions.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/image.hxx>
 #include <vcl/floatwin.hxx>
 #include <xmloff/autolayout.hxx>

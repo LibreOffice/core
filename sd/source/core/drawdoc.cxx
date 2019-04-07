@@ -76,6 +76,7 @@
 #include <sdundogr.hxx>
 #include <undopage.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <unokywds.hxx>
 
 namespace com { namespace sun { namespace star { namespace linguistic2 { class XHyphenator; } } } }

@@ -28,6 +28,7 @@
 #include <editeng/sizeitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svxids.hrc>
 #include <svx/pageitem.hxx>
@@ -39,6 +40,7 @@
 
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 #include <vcl/settings.hxx>
 

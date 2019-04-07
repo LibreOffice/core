@@ -33,6 +33,7 @@
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
+#include <com/sun/star/frame/XController.hpp>
 
 #include <ViewShellBase.hxx>
 #include <DrawViewShell.hxx>

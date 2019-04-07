@@ -31,6 +31,7 @@
 #include <svl/intitem.hxx>
 #include <vcl/weld.hxx>
 #include <svl/zformat.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/chart2/AxisType.hpp>
 

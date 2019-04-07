@@ -32,6 +32,7 @@
 #include <sfx2/printer.hxx>
 #include <svx/postattr.hxx>
 #include <unotools/misccfg.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 

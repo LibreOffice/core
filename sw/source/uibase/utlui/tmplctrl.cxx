@@ -22,6 +22,7 @@
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/status.hxx>
 
 #include <swtypes.hxx>

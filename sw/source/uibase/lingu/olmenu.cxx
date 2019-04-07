@@ -79,6 +79,7 @@
 #include <map>
 
 #include <com/sun/star/document/XDocumentLanguages.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

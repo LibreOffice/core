@@ -29,6 +29,7 @@
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <com/sun/star/embed/XEmbeddedOleObject.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

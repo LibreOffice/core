@@ -50,6 +50,7 @@
 #include <vcl/help.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <formula/formulahelper.hxx>
 #include <formula/funcvarargs.h>

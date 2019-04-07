@@ -28,6 +28,7 @@ class SfxViewFrame;
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <cppuhelper/weak.hxx>
+#include <tools/svborder.hxx>
 
 #include <sfx2/viewsh.hxx>
 #include <sfx2/sfxuno.hxx>

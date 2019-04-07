@@ -19,6 +19,7 @@
 
 #undef SC_DLLIMPLEMENTATION
 
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/zforlist.hxx>
 

@@ -54,6 +54,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

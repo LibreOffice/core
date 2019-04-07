@@ -35,6 +35,9 @@
 #include <tools/urlobj.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/embed/StorageFactory.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>

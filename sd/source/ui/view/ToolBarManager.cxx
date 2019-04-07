@@ -43,6 +43,7 @@
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <tools/link.hxx>
+#include <vcl/svapp.hxx>
 
 #include <map>
 #include <utility>

@@ -25,6 +25,8 @@
 #include <tools/debug.hxx>
 #include <vcl/metric.hxx>
 
+#include <set>
+
 class CharClass;
 class CollatorWrapper;
 class SmartTagMgr;

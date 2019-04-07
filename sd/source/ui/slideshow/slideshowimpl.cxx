@@ -72,10 +72,13 @@
 
 #include <bitmaps.hlst>
 #include <vcl/canvastools.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
+
 #include <vcl/settings.hxx>
 #include <vcl/scheduler.hxx>
-
+#include <vcl/svapp.hxx>
+#include <vcl/help.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>

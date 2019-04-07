@@ -37,6 +37,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/viewfac.hxx>
 #include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/poolitem.hxx>
@@ -50,11 +51,13 @@
 #include <editeng/editview.hxx>
 #include <svx/svxdlg.hxx>
 #include <sfx2/zoomitem.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <sal/log.hxx>
+#include <tools/svborder.hxx>
 
 #include <unotools/streamwrap.hxx>
 

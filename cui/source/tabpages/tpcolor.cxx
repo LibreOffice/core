@@ -28,6 +28,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svtools/colrdlg.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svx/ofaitem.hxx>

@@ -25,6 +25,7 @@
 #include <svx/rubydialog.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/eitem.hxx>

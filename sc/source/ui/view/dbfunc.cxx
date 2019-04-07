@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/charclass.hxx>
 

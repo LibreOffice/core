@@ -21,6 +21,8 @@
 #include <docsh.hxx>
 #include <drwlayer.hxx>
 
+#include <vcl/svapp.hxx>
+
 using namespace ::com::sun::star;
 
 ScDrawDefaultsObj::ScDrawDefaultsObj(ScDocShell* pDocSh) :

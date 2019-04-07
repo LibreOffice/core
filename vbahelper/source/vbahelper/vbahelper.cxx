@@ -47,6 +47,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -68,6 +69,7 @@
 #include <sal/log.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>
 #include <tools/diagnose_ex.h>

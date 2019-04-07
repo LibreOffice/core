@@ -21,6 +21,7 @@
 
 #include <hintids.hxx>
 
+#include <vcl/commandevent.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 
@@ -50,6 +51,7 @@
 #include <basegfx/utils/zoomtools.hxx>
 #include <comphelper/lok.hxx>
 #include <vcl/weld.hxx>
+#include <tools/svborder.hxx>
 
 #include "viewfunc.hxx"
 

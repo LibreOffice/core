@@ -26,7 +26,6 @@
 
 class SfxViewFrame;
 class SfxViewShell;
-namespace vcl { class Window; }
 
 typedef SfxViewShell* (*SfxViewCtor)(SfxViewFrame*, SfxViewShell*);
 

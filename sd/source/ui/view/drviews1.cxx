@@ -22,6 +22,7 @@
 
 #include <DrawController.hxx>
 #include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <comphelper/anytostring.hxx>
 #include <comphelper/scopeguard.hxx>

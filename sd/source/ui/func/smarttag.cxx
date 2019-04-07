@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/commandevent.hxx>
+
 #include <ViewShell.hxx>
 #include <smarttag.hxx>
 #include <Window.hxx>

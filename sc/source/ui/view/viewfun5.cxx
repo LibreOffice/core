@@ -42,6 +42,7 @@
 #include <svl/stritem.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/graph.hxx>
+#include <osl/thread.h>
 
 #include <comphelper/automationinvokedzone.hxx>
 #include <comphelper/lok.hxx>

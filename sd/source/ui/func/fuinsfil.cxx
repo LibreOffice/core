@@ -18,6 +18,7 @@
  */
 
 #include <fuinsfil.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <sfx2/progress.hxx>
 #include <editeng/outliner.hxx>

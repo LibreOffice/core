@@ -26,6 +26,9 @@
 #include <svl/itemset.hxx>
 #include <tools/solar.h>
 #include <vcl/abstdlg.hxx>
+
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 #include "prlayout.hxx"
 #include "pres.hxx"
 #include "sddllapi.h"

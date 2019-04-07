@@ -27,6 +27,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/charclass.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;

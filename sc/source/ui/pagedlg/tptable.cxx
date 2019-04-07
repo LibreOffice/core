@@ -21,6 +21,7 @@
 
 #include <scitems.hxx>
 
+#include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <osl/diagnose.h>
 

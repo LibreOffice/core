@@ -27,6 +27,7 @@
 #include <table.hxx>
 
 #include <vcl/builderfactory.hxx>
+#include <vcl/scrbar.hxx>
 #include <vcl/seleng.hxx>
 #include <sal/log.hxx>
 

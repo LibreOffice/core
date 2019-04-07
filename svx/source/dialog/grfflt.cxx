@@ -27,6 +27,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 
+#include <osl/diagnose.h>
 #include <svx/grfflt.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svxdlg.hxx>

@@ -31,6 +31,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/strings.hrc>

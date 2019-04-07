@@ -27,6 +27,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/stritem.hxx>
@@ -36,6 +37,7 @@
 #include <vcl/settings.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/securityoptions.hxx>
+#include <osl/diagnose.h>
 
 #include <i18nlangtag/mslangid.hxx>
 #include <comphelper/doublecheckedinit.hxx>

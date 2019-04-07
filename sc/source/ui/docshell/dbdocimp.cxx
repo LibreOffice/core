@@ -20,10 +20,12 @@
 #include <vcl/errinf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>

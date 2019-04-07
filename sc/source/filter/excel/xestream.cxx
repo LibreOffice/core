@@ -30,6 +30,7 @@
 #include <unotools/streamwrap.hxx>
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/svapp.hxx>
 
 #include <docuno.hxx>
 #include <xestream.hxx>

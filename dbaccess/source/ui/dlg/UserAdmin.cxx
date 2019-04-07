@@ -36,6 +36,7 @@
 #include <strings.hxx>
 #include <core_resource.hxx>
 #include <dbadmin.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/passwd.hxx>
 

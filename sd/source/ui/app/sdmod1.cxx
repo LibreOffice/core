@@ -23,6 +23,8 @@
 #include <unotools/moduleoptions.hxx>
 #include <framework/FrameworkHelper.hxx>
 
+#include <vcl/commandevent.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/errinf.hxx>
 #include <editeng/langitem.hxx>
 #include <vcl/weld.hxx>

@@ -33,6 +33,7 @@
 #include <svl/aeitem.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/outlobj.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>

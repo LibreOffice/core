@@ -18,6 +18,7 @@
 #include <sfx2/infobar.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <vcl/svapp.hxx>

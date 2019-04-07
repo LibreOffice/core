@@ -60,6 +60,7 @@
 #include <sfx2/minfitem.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <appdata.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <basic/basmgr.hxx>

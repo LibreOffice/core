@@ -29,6 +29,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfilt.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/waitobj.hxx>

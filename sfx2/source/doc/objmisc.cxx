@@ -37,6 +37,7 @@
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/script/provider/XScript.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
@@ -104,6 +105,7 @@
 #include <sfx2/module.hxx>
 #include <sfx2/docfac.hxx>
 #include <helper.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/strings.hrc>
 #include <workwin.hxx>
 #include <sfx2/sfxdlg.hxx>

@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>

@@ -24,6 +24,7 @@
 #include <svl/intitem.hxx>
 #include <sot/exchange.hxx>
 #include <svl/eitem.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
 #include <svx/clipboardctl.hxx>
 #include <svx/clipfmtitem.hxx>

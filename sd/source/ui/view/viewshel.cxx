@@ -32,6 +32,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/scrbar.hxx>
 #include <svl/eitem.hxx>
 #include <svx/ruler.hxx>
@@ -66,6 +67,7 @@
 #include <svx/fontworkbar.hxx>
 #include <svx/svdoutl.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/svborder.hxx>
 #include <comphelper/lok.hxx>
 
 #include <svl/slstitm.hxx>

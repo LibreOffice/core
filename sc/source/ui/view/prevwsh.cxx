@@ -36,10 +36,12 @@
 #include <svl/whiter.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/viewfac.hxx>
 
 #include <drwlayer.hxx>
 #include <prevwsh.hxx>
