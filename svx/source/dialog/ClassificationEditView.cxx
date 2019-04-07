@@ -128,6 +128,8 @@ void ClassificationEditView::InvertSelectionWeight()
 
 void ClassificationEditView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
+    //note: ScEditWindow::Paint is similar
+
     rRenderContext.Push(PushFlags::ALL);
     rRenderContext.SetClipRegion();
 
