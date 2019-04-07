@@ -447,7 +447,7 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
     bool bHoriLines=bHoriSolid || bHoriFine || !bVertFine;
     bool bVertLines=bVertSolid || bVertFine;
 
-    Color aColorMerk( rOut.GetLineColor() );
+    Color aOriginalLineColor( rOut.GetLineColor() );
     rOut.SetLineColor( aColor );
 
     bool bMap0=rOut.IsMapModeEnabled();
@@ -554,7 +554,7 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
     }
 
     rOut.EnableMapMode(bMap0);
-    rOut.SetLineColor(aColorMerk);
+    rOut.SetLineColor(aOriginalLineColor);
 }
 
 void SdrPageView::AdjHdl()
