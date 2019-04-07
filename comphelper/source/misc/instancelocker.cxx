@@ -50,7 +50,7 @@ OInstanceLocker::~OInstanceLocker()
 {
     if ( !m_bDisposed )
     {
-        m_refCount++; // to call dispose
+        osl_atomic_increment(&m_refCount); // to call dispose
         try {
             dispose();
         }

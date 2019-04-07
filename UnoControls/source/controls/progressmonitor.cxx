@@ -48,7 +48,7 @@ ProgressMonitor::ProgressMonitor( const css::uno::Reference< XComponentContext >
 {
     // It's not allowed to work with member in this method (refcounter !!!)
     // But with a HACK (++refcount) its "OK" :-(
-    ++m_refCount;
+    osl_atomic_increment(&m_refCount);
 
     // Create instances for fixedtext, button and progress ...
 
@@ -94,7 +94,7 @@ ProgressMonitor::ProgressMonitor( const css::uno::Reference< XComponentContext >
     m_xTopic_Bottom->setText ( PROGRESSMONITOR_DEFAULT_TOPIC );
     m_xText_Bottom->setText  ( PROGRESSMONITOR_DEFAULT_TEXT );
 
-    --m_refCount;
+    osl_atomic_decrement(&m_refCount);
 }
 
 ProgressMonitor::~ProgressMonitor()

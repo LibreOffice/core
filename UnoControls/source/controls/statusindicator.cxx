@@ -42,7 +42,7 @@ StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >
 {
     // It's not allowed to work with member in this method (refcounter !!!)
     // But with a HACK (++refcount) its "OK" :-(
-    ++m_refCount;
+    osl_atomic_increment(&m_refCount);
 
     // Create instances for fixedtext and progress ...
     m_xText.set( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
@@ -61,7 +61,7 @@ StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >
     // (progressbar take automatically its own defaults)
     m_xText->setText( "" );
 
-    --m_refCount;
+    osl_atomic_decrement(&m_refCount);
 }
 
 StatusIndicator::~StatusIndicator() {}

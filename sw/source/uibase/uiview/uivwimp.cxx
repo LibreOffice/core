@@ -224,7 +224,7 @@ void SwView_Impl::Invalidate()
 void SwView_Impl::AddTransferable(SwTransferable& rTransferable)
 {
     //prevent removing of the non-referenced SwTransferable
-    rTransferable.m_refCount++;
+    osl_atomic_increment(&rTransferable.m_refCount);
     {
         // Remove previously added, but no longer existing weak references.
         mxTransferables.erase(std::remove_if(mxTransferables.begin(), mxTransferables.end(),
@@ -235,7 +235,7 @@ void SwView_Impl::AddTransferable(SwTransferable& rTransferable)
 
         mxTransferables.emplace_back(uno::Reference<lang::XUnoTunnel>(&rTransferable));
     }
-    rTransferable.m_refCount--;
+    osl_atomic_decrement(&rTransferable.m_refCount);
 }
 
 void SwView_Impl::StartDocumentInserter(

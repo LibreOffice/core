@@ -173,7 +173,7 @@ DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& 
     m_aOutplaceFrameProps[1] <<= aArg;
 
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
-    m_refCount++;
+    osl_atomic_increment(&m_refCount);
     try
     {
         xDesktop->addTerminateListener( this );
@@ -181,7 +181,7 @@ DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& 
     catch ( const uno::Exception& )
     {
     }
-    m_refCount--;
+    osl_atomic_decrement(&m_refCount);
 
     aArg.Name = "ParentFrame";
     aArg.Value <<= xDesktop; //TODO/LATER: should use parent document frame
@@ -191,7 +191,7 @@ DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& 
 
 DocumentHolder::~DocumentHolder()
 {
-    m_refCount++; // to allow deregistration as a listener
+    osl_atomic_increment(&m_refCount); // to allow deregistration as a listener
 
     if( m_xFrame.is() )
         CloseFrame();

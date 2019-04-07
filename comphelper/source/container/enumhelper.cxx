@@ -105,14 +105,14 @@ void OEnumerationByName::impl_startDisposeListening()
     if (m_bListening)
         return;
 
-    ++m_refCount;
+    osl_atomic_increment(&m_refCount);
     css::uno::Reference< css::lang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
     if (xDisposable.is())
     {
         xDisposable->addEventListener(this);
         m_bListening = true;
     }
-    --m_refCount;
+    osl_atomic_decrement(&m_refCount);
 }
 
 
@@ -123,14 +123,14 @@ void OEnumerationByName::impl_stopDisposeListening()
     if (!m_bListening)
         return;
 
-    ++m_refCount;
+    osl_atomic_increment(&m_refCount);
     css::uno::Reference< css::lang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
     if (xDisposable.is())
     {
         xDisposable->removeEventListener(this);
         m_bListening = false;
     }
-    --m_refCount;
+    osl_atomic_decrement(&m_refCount);
 }
 
 OEnumerationByIndex::OEnumerationByIndex(const css::uno::Reference< css::container::XIndexAccess >& _rxAccess)
@@ -201,14 +201,14 @@ void OEnumerationByIndex::impl_startDisposeListening()
     if (m_bListening)
         return;
 
-    ++m_refCount;
+    osl_atomic_increment(&m_refCount);
     css::uno::Reference< css::lang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
     if (xDisposable.is())
     {
         xDisposable->addEventListener(this);
         m_bListening = true;
     }
-    --m_refCount;
+    osl_atomic_decrement(&m_refCount);
 }
 
 
@@ -219,14 +219,14 @@ void OEnumerationByIndex::impl_stopDisposeListening()
     if (!m_bListening)
         return;
 
-    ++m_refCount;
+    osl_atomic_increment(&m_refCount);
     css::uno::Reference< css::lang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
     if (xDisposable.is())
     {
         xDisposable->removeEventListener(this);
         m_bListening = false;
     }
-    --m_refCount;
+    osl_atomic_decrement(&m_refCount);
 }
 
 OAnyEnumeration::OAnyEnumeration(const css::uno::Sequence< css::uno::Any >& lItems)

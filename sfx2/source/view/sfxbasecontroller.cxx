@@ -181,12 +181,12 @@ public:
                                 , pWorkWindow( pWork )
                                 , _nStartTime(0)
                             {
-                                ++m_refCount;
+                                osl_atomic_increment(&m_refCount);
                                 Reference< lang::XComponent > xComponent(
                                     static_cast< ::cppu::OWeakObject* >(pController), uno::UNO_QUERY );
                                 if (xComponent.is())
                                     xComponent->addEventListener(this);
-                                --m_refCount;
+                                osl_atomic_decrement(&m_refCount);
                             }
 
     virtual void SAL_CALL   start(const OUString& aText, sal_Int32 nRange) override;
