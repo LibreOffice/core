@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_TPOPTION_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_TPOPTION_HXX
 
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>

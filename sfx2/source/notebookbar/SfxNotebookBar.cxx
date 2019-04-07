@@ -16,6 +16,7 @@
 #include <vcl/syswin.hxx>
 #include <vcl/tabctrl.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>

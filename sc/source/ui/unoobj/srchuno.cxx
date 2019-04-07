@@ -22,6 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/diagnose.h>
 
 #include <srchuno.hxx>
 #include <docsh.hxx>

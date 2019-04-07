@@ -34,6 +34,7 @@
 #include <svl/intitem.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/svapp.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

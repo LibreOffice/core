@@ -21,6 +21,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/fixedhyper.hxx>
 #include <vcl/weld.hxx>

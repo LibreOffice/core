@@ -31,6 +31,8 @@
 #include <svl/itempool.hxx>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/Desktop.hpp>

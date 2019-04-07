@@ -51,8 +51,11 @@
 #include <svx/svxids.hrc>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
+#include <vcl/button.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 
 namespace basctl

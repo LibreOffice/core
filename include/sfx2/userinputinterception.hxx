@@ -22,9 +22,12 @@
 
 #include <sfx2/dllapi.h>
 
-#include <com/sun/star/awt/XUserInputInterception.hpp>
-
 #include <memory>
+
+namespace com::sun::star::awt { class XKeyHandler; }
+namespace com::sun::star::awt { class XMouseClickHandler; }
+namespace com::sun::star::uno { template <typename > class Reference; }
+namespace osl { class Mutex; }
 
 class NotifyEvent;
 

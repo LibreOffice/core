@@ -29,6 +29,7 @@
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/PaletteManager.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/fixed.hxx>
 
 #include <functional>
 

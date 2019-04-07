@@ -22,13 +22,9 @@
 #include <memory>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <vcl/ctrl.hxx>
-#include <svl/style.hxx>
+#include <vcl/window.hxx>
 
-#include <sfx2/dockwin.hxx>
-#include <sfx2/childwin.hxx>
-#include <sfx2/basedlgs.hxx>
-
+class SfxBindings;
 class SfxTemplateDialog_Impl;
 
 class SFX2_DLLPUBLIC SfxTemplatePanelControl : public vcl::Window

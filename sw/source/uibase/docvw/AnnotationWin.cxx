@@ -26,6 +26,7 @@
 #include <cmdid.h>
 
 #include <vcl/menu.hxx>
+#include <vcl/scrbar.hxx>
 
 #include <svl/undo.hxx>
 #include <unotools/localedatawrapper.hxx>

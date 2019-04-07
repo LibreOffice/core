@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/app.hxx>
+#include <vcl/layout.hxx>
 #include <svx/sidebar/AreaTransparencyGradientPopup.hxx>
 #include <svx/sidebar/AreaPropertyPanelBase.hxx>
 #include <svx/xflftrit.hxx>

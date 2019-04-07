@@ -20,6 +20,7 @@
 #include <LayerTabBar.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdpagv.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/dispatch.hxx>

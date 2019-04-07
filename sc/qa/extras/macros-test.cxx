@@ -13,6 +13,7 @@
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 
+#include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>

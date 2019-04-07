@@ -45,6 +45,7 @@
 #include <svx/fmshell.hxx>
 #include <svl/eitem.hxx>
 #include <svl/aeitem.hxx>
+#include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/visitem.hxx>

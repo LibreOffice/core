@@ -39,6 +39,7 @@
 #include <ViewShellBase.hxx>
 #include <sfx2/objface.hxx>
 #include <drawview.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/image.hxx>
 #include <vcl/floatwin.hxx>
 #include <svl/languageoptions.hxx>

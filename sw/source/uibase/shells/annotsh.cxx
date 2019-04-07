@@ -22,6 +22,7 @@
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nutil/transliteration.hxx>

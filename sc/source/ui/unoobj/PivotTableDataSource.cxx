@@ -15,6 +15,7 @@
 #include <docsh.hxx>
 
 #include <comphelper/sequence.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace css;
 

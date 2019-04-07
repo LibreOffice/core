@@ -18,7 +18,9 @@
  */
 
 #include <svl/eitem.hxx>
+#include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/settings.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
@@ -32,6 +34,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <workwin.hxx>
 #include <splitwin.hxx>
 #include <sfx2/viewsh.hxx>

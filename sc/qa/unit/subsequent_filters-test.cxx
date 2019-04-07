@@ -15,6 +15,7 @@
 #include <osl/file.hxx>
 #include <config_features.h>
 
+#include <vcl/svapp.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/stritem.hxx>

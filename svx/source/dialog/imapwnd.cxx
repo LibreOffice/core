@@ -20,6 +20,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <vcl/commandevent.hxx>
 #include <vcl/imaprect.hxx>
 #include <vcl/imapcirc.hxx>
 #include <vcl/imappoly.hxx>

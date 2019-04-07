@@ -93,6 +93,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/templatedlg.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <openuriexternally.hxx>
 
 #include <officecfg/Office/ProtocolHandler.hxx>

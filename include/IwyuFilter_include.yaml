@@ -698,6 +698,9 @@ blacklist:
     include/sfx2/mieclip.hxx:
     # Needed for implicit dtor
     - tools/stream.hxx
+    include/sfx2/recentdocsview.hxx:
+    # Needed for struct declaration
+    - com/sun/star/beans/PropertyValue.hpp
     include/sfx2/sfxbasecontroller.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XController2.hpp
@@ -799,3 +802,10 @@ blacklist:
     include/sfx2/sidebar/UnoSidebar.hxx:
     # base class has to be a complete type
     - com/sun/star/ui/XSidebarProvider.hpp
+    include/sfx2/unoctitm.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XNotifyingDispatch.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    include/sfx2/viewsh.hxx:
+    # Needed for macro 
+    - class SfxViewFactory

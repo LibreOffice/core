@@ -16,6 +16,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 namespace com::sun::star::frame { class XDispatch; }
 

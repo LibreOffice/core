@@ -23,52 +23,45 @@
 #include <memory>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <svl/lstner.hxx>
-#include <com/sun/star/ui/XContextMenuInterceptor.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <sfx2/shell.hxx>
-#include <sfx2/viewfac.hxx>
-#include <tools/gen.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/errcode.hxx>
-#include <vcl/jobset.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/vclptr.hxx>
-#include <sfx2/tabdlg.hxx>
+#include <vcl/tabpage.hxx>
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 #include <editeng/outliner.hxx>
 #include <functional>
 
+class SfxTabPage;
 class SfxBaseController;
 class Size;
+class Point;
 class Fraction;
-namespace vcl { class Window; }
 namespace weld { class Window; }
 class KeyEvent;
-class WorkWindow;
 class SvBorder;
 class SdrView;
-class SfxFrame;
-class SfxMedium;
 class SfxModule;
 class SfxViewFrame;
-class SfxItemPool;
-class SfxFrameSetDescriptor;
 class Printer;
 class SfxPrinter;
-class SfxProgress;
-class SfxFrameItem;
 class Menu;
 class NotifyEvent;
 class SfxInPlaceClient;
 namespace vcl { class PrinterController; }
+
+namespace com::sun::star::datatransfer { namespace clipboard { class XClipboardListener; } }
+namespace com::sun::star::datatransfer { namespace clipboard { class XClipboardNotifier; } }
+namespace com::sun::star::embed { class XEmbeddedObject; }
+namespace com::sun::star::frame { class XController; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::ui { class XContextMenuInterceptor; }
+namespace com::sun::star::ui { struct ContextMenuExecuteEvent; }
+namespace com::sun::star::view { class XRenderable; }
 
 
 enum class SfxPrinterChangeFlags

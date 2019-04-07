@@ -19,6 +19,7 @@
 
 #include <editeng/forbiddencharacterstable.hxx>
 #include <comphelper/processfactory.hxx>
+#include <vcl/svapp.hxx>
 
 #include <forbiuno.hxx>
 #include <docsh.hxx>

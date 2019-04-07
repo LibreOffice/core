@@ -24,6 +24,8 @@
 
 #include <tpstat.hxx>
 
+#include <vcl/layout.hxx>
+
 // Dokumentinfo-Tabpage:
 
 VclPtr<SfxTabPage> ScDocStatPage::Create( TabPageParent pParent, const SfxItemSet* rSet )

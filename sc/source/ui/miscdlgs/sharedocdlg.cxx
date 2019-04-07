@@ -18,6 +18,7 @@
  */
 
 #include <osl/security.hxx>
+#include <osl/diagnose.h>
 #include <sfx2/dialoghelper.hxx>
 #include <svl/sharecontrolfile.hxx>
 #include <unotools/useroptions.hxx>

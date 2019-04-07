@@ -21,6 +21,7 @@
 #include <editeng/eeitem.hxx>
 #include <svx/svdpool.hxx>
 
+#include <vcl/svapp.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>

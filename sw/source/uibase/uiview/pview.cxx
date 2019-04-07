@@ -40,6 +40,7 @@
 #include <svx/dlgutil.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svx/svxids.hrc>
+#include <tools/svborder.hxx>
 
 #include <swwait.hxx>
 #include <globdoc.hxx>

@@ -40,6 +40,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svl/imageitm.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/ustring.hxx>
@@ -53,6 +54,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/srchdlg.hxx>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 // Size check
 #define NAVI_ENTRIES 20

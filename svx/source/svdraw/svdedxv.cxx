@@ -22,6 +22,7 @@
 #include <svx/svdedxv.hxx>
 #include <svl/solar.hrc>
 #include <svl/itemiter.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/hatch.hxx>
 #include <svl/whiter.hxx>

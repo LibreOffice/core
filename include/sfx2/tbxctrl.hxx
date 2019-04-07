@@ -23,19 +23,13 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <vcl/timer.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/fixed.hxx>
+#include <svl/poolitem.hxx>
 #include <vcl/floatwin.hxx>
-#include <sfx2/ctrlitem.hxx>
-#include <sfx2/sfxstatuslistener.hxx>
 #include <svtools/toolboxcontroller.hxx>
-#include <svtools/framestatuslistener.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <rtl/ref.hxx>
 
+namespace com::sun::star::frame { class XDispatchProvider; }
+namespace com::sun::star::frame { class XFrame; }
 
 class SfxToolBoxControl;
 class SfxModule;

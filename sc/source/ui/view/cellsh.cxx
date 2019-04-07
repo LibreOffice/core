@@ -35,6 +35,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/svapp.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 #include <editeng/langitem.hxx>

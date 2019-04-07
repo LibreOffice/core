@@ -18,6 +18,7 @@
  */
 
 #include "tp_Trendline.hxx"
+#include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 
 namespace chart

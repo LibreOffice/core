@@ -72,6 +72,8 @@
 #include <svx/obj3d.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/svddrgmt.hxx>
+#include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>

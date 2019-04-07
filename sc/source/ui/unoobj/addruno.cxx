@@ -21,6 +21,7 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
+#include <osl/diagnose.h>
 #include <svl/itemprop.hxx>
 #include <vcl/svapp.hxx>
 

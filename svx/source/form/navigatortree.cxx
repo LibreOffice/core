@@ -34,6 +34,7 @@
 #include <fmobj.hxx>
 #include <fmprop.hxx>
 #include <sal/log.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
@@ -53,6 +54,7 @@
 #include <svx/strings.hrc>
 #include <bitmaps.hlst>
 #include <vcl/treelistentry.hxx>
+#include <vcl/commandevent.hxx>
 
 namespace svxform
 {

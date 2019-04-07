@@ -18,6 +18,7 @@
  */
 
 #include <time.h>
+#include <osl/diagnose.h>
 
 #include <address.hxx>
 #include <autostyl.hxx>

@@ -24,6 +24,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/charclass.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>

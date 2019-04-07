@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/dispatch.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/request.hxx>

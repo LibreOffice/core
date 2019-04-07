@@ -23,6 +23,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <svl/itempool.hxx>
 #include <svl/undo.hxx>
 #include <itemdel.hxx>
@@ -39,6 +40,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfxtypes.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <statcach.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sidebar/ContextChangeBroadcaster.hxx>

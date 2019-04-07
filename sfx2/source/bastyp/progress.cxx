@@ -38,6 +38,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfxtypes.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <workwin.hxx>
 #include <sfx2/msg.hxx>
 #include <sfxslots.hxx>

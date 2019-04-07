@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <vcl/menu.hxx>
 #include <svl/intitem.hxx>
@@ -33,6 +34,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <tools/globname.hxx>
+#include <tools/svborder.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 
 #include <appdata.hxx>
@@ -47,6 +49,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <openflag.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>

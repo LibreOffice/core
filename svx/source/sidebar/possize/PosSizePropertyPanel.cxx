@@ -27,12 +27,14 @@
 #include <svx/svxids.hrc>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/module.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/dlgutil.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/viewoptions.hxx>
+#include <vcl/button.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/field.hxx>
