@@ -23,42 +23,53 @@
 ifeq ($(gb_ENABLE_PCH),$(true))
 
 # Use different PCH file depending on whether we use debugging symbols.
-# TODO: This doesn't work because T_SYMBOLS is not expanded as/when necessary.
-gb_PrecompiledHeader__get_debugdir := $(if $(filter $(true),$(T_SYMBOLS)),debug,nodebug)
+gb_PrecompiledHeader__get_debugdir = $(if $(call gb_LinkTarget__symbols_enabled,$(1)),debug,nodebug)
 
-$(call gb_PrecompiledHeader_get_dep_target,%) :
-	$(call gb_Helper_abbreviate_dirs,\
-		mkdir -p $(dir $@) && \
-		echo "$(call gb_PrecompiledHeader_get_target,$*) : $(gb_Helper_PHONY)" > $@)
+# IMPORTANT: Since these defines get expanded, every $ needs to be doubled to $$, except
+# for $(1)'s and things that are constant.
+# The defines are needed to get the right version of gb_PrecompiledHeader__get_debugdir.
+
+# $(call gb_PrecompiledHeader_generate_rules,pchtarget,linktargetmakefilename)
+define gb_PrecompiledHeader_generate_rules
+
+$(call gb_PrecompiledHeader_get_dep_target,$(1),$(2)) :
+	$$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $$(dir $$@) && \
+		echo "$$(call gb_PrecompiledHeader_get_target,$(1),$(2)) : $$(gb_Helper_PHONY)" > $$@)
 
 # despite this being only one .d file, need to run concat-deps on it to
 # re-write external headers from UnpackedTarball
-$(call gb_PrecompiledHeader_get_target,%) :
-	rm -f $@
-	$(call gb_PrecompiledHeader__command,$@,$*,$<,$(PCH_DEFS),$(PCH_CXXFLAGS) $(gb_PrecompiledHeader_EXCEPTIONFLAGS),$(INCLUDE))
-	$(SHA256SUM) $@ >$@.sum
+$(call gb_PrecompiledHeader_get_target,$(1),$(2)) :
+	rm -f $$@
+	$$(call gb_PrecompiledHeader__command,$$@,$(1),$$<,$$(PCH_DEFS),$$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS),$$(INCLUDE),$(2))
+	$(SHA256SUM) $$@ >$$@.sum
 ifeq ($(gb_FULLDEPS),$(true))
-	$(call gb_Helper_abbreviate_dirs,\
-		RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,$(call gb_PrecompiledHeader_get_dep_target_tmp,$*)) && \
-		$(call gb_Executable_get_command,concat-deps) $${RESPONSEFILE} \
-			> $(call gb_PrecompiledHeader_get_dep_target,$*) && \
-		rm -f $${RESPONSEFILE} $(call gb_PrecompiledHeader_get_dep_target_tmp,$*))
+	$$(call gb_Helper_abbreviate_dirs,\
+		RESPONSEFILE=$$(call var2file,$$(shell $$(gb_MKTEMP)),200,$$(call gb_PrecompiledHeader_get_dep_target_tmp,$(1),$(2))) && \
+		$$(call gb_Executable_get_command,concat-deps) $$$${RESPONSEFILE} \
+			> $$(call gb_PrecompiledHeader_get_dep_target,$(1),$(2)) && \
+		rm -f $$$${RESPONSEFILE} $$(call gb_PrecompiledHeader_get_dep_target_tmp,$(1),$(2)))
 endif
 
-.PHONY : $(call gb_PrecompiledHeader_get_clean_target,%)
-$(call gb_PrecompiledHeader_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),PCH,1)
-	-$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_PrecompiledHeader_get_target,$*) \
-			$(call gb_PrecompiledHeader_get_target,$*).obj \
-			$(call gb_PrecompiledHeader_get_target,$*).pdb \
-			$(call gb_PrecompiledHeader_get_target,$*).sum \
-			$(call gb_PrecompiledHeader_get_timestamp,$*) \
-			$(call gb_PrecompiledHeader_get_dep_target,$*))
+.PHONY : $(call gb_PrecompiledHeader_get_clean_target,$(1))
+$(call gb_PrecompiledHeader_get_clean_target,$(1)) :
+	$$(call gb_Output_announce,$(1),$(false),PCH,1)
+	-$$(call gb_Helper_abbreviate_dirs,\
+		rm -f $$(call gb_PrecompiledHeader_get_target,$(1),$(2)) \
+			$$(call gb_PrecompiledHeader_get_target,$(1),$(2)).obj \
+			$$(call gb_PrecompiledHeader_get_target,$(1),$(2)).pdb \
+			$$(call gb_PrecompiledHeader_get_target,$(1),$(2)).sum \
+			$$(call gb_PrecompiledHeader_get_timestamp,$(2)) \
+			$$(call gb_PrecompiledHeader_get_dep_target,$(1),$(2)))
+
+endef
 
 endif
 
-$(call gb_PrecompiledHeader_get_timestamp,%) :
-	mkdir -p $(dir $@) && touch $@
+# $(call gb_PrecompiledHeader_generate_timestamp_rule,linktargetmakefilename)
+define gb_PrecompiledHeader_generate_timestamp_rule
+$(call gb_PrecompiledHeader_get_timestamp,$(1)) :
+	mkdir -p $$(dir $$@) && touch $$@
+endef
 
 # vim: set noet sw=4:
