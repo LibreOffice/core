@@ -175,11 +175,9 @@ namespace osl
         */
         void clear()
         {
-            if(pT)
-            {
-                pT->release();
-                pT = NULL;
-            }
+            assert(pT);
+            pT->release();
+            pT = NULL;
         }
     };
 
@@ -213,11 +211,9 @@ namespace osl
         */
         void reset()
         {
-            if( pResetT )
-            {
-                this->pT = pResetT;
-                this->pT->acquire();
-            }
+            assert(!this->pT);
+            this->pT = pResetT;
+            this->pT->acquire();
         }
     };
 
