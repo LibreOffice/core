@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_f1513d10",
+        "filename": "framework/source/layoutmanager/toolbarlayoutmanager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3774,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-07T12:06:47Z",
+      "side": 1,
+      "message": "hoho! very good catch! perhaps we need an assert in clear(), that the mutex is not already cleared?",
+      "revId": "4b9a59735dcb76a0101e50b097d7170f19f51d64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
