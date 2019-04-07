@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_91831105",
+        "filename": "vcl/source/app/salusereventlist.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-07T19:03:25Z",
+      "side": 1,
+      "message": "The comment would need an update now, when the guard will also guard following cycles?",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 73
+      },
+      "revId": "a19710f81049d7beb9c8e68e239c81995622d583",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
