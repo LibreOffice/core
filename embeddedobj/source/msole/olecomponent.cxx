@@ -460,9 +460,7 @@ OleComponent::~OleComponent()
 
     if ( m_pOleWrapClientSite || m_pImplAdviseSink || m_pInterfaceContainer || m_bOleInitialized )
     {
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
-        m_refCount++;
-        aGuard.clear();
+        osl_incrementInterlockedCount(&m_refCount);
         try {
             Dispose();
         } catch( const uno::Exception& ) {}

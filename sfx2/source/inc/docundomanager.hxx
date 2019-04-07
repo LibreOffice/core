@@ -90,7 +90,7 @@ public:
     }
 
 private:
-    SolarMutexResettableGuard  m_aGuard;
+    SolarMutexClearableGuard  m_aGuard;
 };
 
 namespace sfx2

@@ -1907,7 +1907,7 @@ namespace frm
             m_aItemListeners.notifyEach( &XItemListener::itemStateChanged, _rEvent );
 
         // and do the handling for the ChangeListeners
-        ::osl::ClearableMutexGuard aGuard(m_aMutex);
+        osl::MutexGuard aGuard(m_aMutex);
         if ( m_aChangeIdle.IsActive() )
         {
             Reference<XPropertySet> xSet(getModel(), UNO_QUERY);

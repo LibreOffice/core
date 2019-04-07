@@ -208,9 +208,10 @@ void StorageHolder::commitPath(const OUString& sPath)
     }
 
     // SAFE -> ------------------------------
-    osl::ClearableMutexGuard aReadLock(m_mutex);
-    xCommit.set(m_xRoot, css::uno::UNO_QUERY);
-    aReadLock.clear();
+    {
+        osl::MutexGuard aReadLock(m_mutex);
+        xCommit.set(m_xRoot, css::uno::UNO_QUERY);
+    }
     // <- SAFE ------------------------------
 
     if (xCommit.is())
@@ -345,25 +346,25 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(cons
         return css::uno::Reference< css::embed::XStorage >();
 
     // SAFE -> ----------------------------------
-    osl::ClearableMutexGuard aReadLock(m_mutex);
-
-    // b)
-    if (c < 2)
-        return m_xRoot;
-
-    // c)
-    OUStringBuffer sParentPath;
-    sal_Int32       i = 0;
-    for (i=0; i<c-1; ++i)
     {
-        sParentPath.append(lFolders[i]).append(PATH_SEPARATOR);
+        osl::MutexGuard aReadLock(m_mutex);
+
+        // b)
+        if (c < 2)
+            return m_xRoot;
+
+        // c)
+        OUStringBuffer sParentPath;
+        sal_Int32       i = 0;
+        for (i = 0; i < c - 1; ++i)
+        {
+            sParentPath.append(lFolders[i]).append(PATH_SEPARATOR);
+        }
+
+        auto pParent = m_lStorages.find(sParentPath.makeStringAndClear());
+        if (pParent != m_lStorages.end())
+            return pParent->second.Storage;
     }
-
-    TPath2StorageInfo::const_iterator pParent = m_lStorages.find(sParentPath.makeStringAndClear());
-    if (pParent != m_lStorages.end())
-        return pParent->second.Storage;
-
-    aReadLock.clear();
     // <- SAFE ----------------------------------
 
     // ?

@@ -492,10 +492,11 @@ void StatusIndicatorFactory::impl_hideProgress()
 void StatusIndicatorFactory::impl_reschedule(bool bForce)
 {
     // SAFE ->
-    osl::ClearableMutexGuard aReadLock(m_mutex);
-    if (m_bDisableReschedule)
-        return;
-    aReadLock.clear();
+    {
+        osl::MutexGuard aReadLock(m_mutex);
+        if (m_bDisableReschedule)
+            return;
+    }
     // <- SAFE
 
     bool bReschedule = bForce;

@@ -804,25 +804,25 @@ void SAL_CALL Job::notifyClosing( const css::lang::EventObject& )
 void SAL_CALL Job::disposing( const css::lang::EventObject& aEvent )
 {
     /* SAFE { */
-    SolarMutexClearableGuard aWriteLock;
+    {
+        SolarMutexGuard aWriteLock;
 
-    if (m_xDesktop.is() && aEvent.Source == m_xDesktop)
-    {
-        m_xDesktop.clear();
-        m_bListenOnDesktop = false;
+        if (m_xDesktop.is() && aEvent.Source == m_xDesktop)
+        {
+            m_xDesktop.clear();
+            m_bListenOnDesktop = false;
+        }
+        else if (m_xFrame.is() && aEvent.Source == m_xFrame)
+        {
+            m_xFrame.clear();
+            m_bListenOnFrame = false;
+        }
+        else if (m_xModel.is() && aEvent.Source == m_xModel)
+        {
+            m_xModel.clear();
+            m_bListenOnModel = false;
+        }
     }
-    else if (m_xFrame.is() && aEvent.Source == m_xFrame)
-    {
-        m_xFrame.clear();
-        m_bListenOnFrame = false;
-    }
-    else if (m_xModel.is() && aEvent.Source == m_xModel)
-    {
-        m_xModel.clear();
-        m_bListenOnModel = false;
-    }
-
-    aWriteLock.clear();
     /* } SAFE */
 
     die();

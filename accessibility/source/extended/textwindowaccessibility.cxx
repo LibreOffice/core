@@ -589,7 +589,7 @@ void SAL_CALL Paragraph::removeAccessibleEventListener(
 {
     comphelper::AccessibleEventNotifier::TClientId nId = 0;
     {
-        ::osl::ClearableMutexGuard aGuard(rBHelper.rMutex);
+        osl::MutexGuard aGuard(rBHelper.rMutex);
         if (rListener.is() && m_nClientId != 0
             && comphelper::AccessibleEventNotifier::removeEventListener( m_nClientId, rListener ) == 0)
         {
@@ -612,7 +612,7 @@ void SAL_CALL Paragraph::disposing()
 {
     comphelper::AccessibleEventNotifier::TClientId nId = 0;
     {
-        ::osl::ClearableMutexGuard aGuard(rBHelper.rMutex);
+        osl::MutexGuard aGuard(rBHelper.rMutex);
         nId = m_nClientId;
         m_nClientId = 0;
     }

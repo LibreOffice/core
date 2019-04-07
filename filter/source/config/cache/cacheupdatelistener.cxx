@@ -50,7 +50,7 @@ CacheUpdateListener::~CacheUpdateListener()
 void CacheUpdateListener::startListening()
 {
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aLock);
     css::uno::Reference< css::util::XChangesNotifier > xNotifier(m_xConfig, css::uno::UNO_QUERY);
     aLock.clear();
     // <- SAFE
@@ -66,7 +66,7 @@ void CacheUpdateListener::startListening()
 void CacheUpdateListener::stopListening()
 {
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aLock);
     css::uno::Reference< css::util::XChangesNotifier > xNotifier(m_xConfig, css::uno::UNO_QUERY);
     aLock.clear();
     // <- SAFE
@@ -82,7 +82,7 @@ void CacheUpdateListener::stopListening()
 void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEvent& aEvent)
 {
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aLock);
 
     // disposed ?
     if ( ! m_xConfig.is())
@@ -176,10 +176,9 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
 void SAL_CALL CacheUpdateListener::disposing(const css::lang::EventObject& aEvent)
 {
     // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::MutexGuard aLock(m_aLock);
     if (aEvent.Source == m_xConfig)
         m_xConfig.clear();
-    aLock.clear();
     // <- SAFE
 }
 

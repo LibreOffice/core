@@ -167,9 +167,10 @@ void SAL_CALL PopupMenuControllerBase::itemDeactivated( const awt::MenuEvent& )
 
 void SAL_CALL PopupMenuControllerBase::updatePopupMenu()
 {
-    osl::ClearableMutexGuard aLock( m_aMutex );
-    throwIfDisposed();
-    aLock.clear();
+    {
+        osl::MutexGuard aLock(m_aMutex);
+        throwIfDisposed();
+    }
 
     updateCommand( m_aCommandURL );
 }
@@ -211,9 +212,10 @@ Sequence< Reference< XDispatch > > SAL_CALL PopupMenuControllerBase::queryDispat
 {
     // Create return list - which must have same size then the given descriptor
     // It's not allowed to pack it!
-    osl::ClearableMutexGuard aLock( m_aMutex );
-    throwIfDisposed();
-    aLock.clear();
+    {
+        osl::MutexGuard aLock(m_aMutex);
+        throwIfDisposed();
+    }
 
     sal_Int32                                                          nCount = lDescriptor.getLength();
     uno::Sequence< uno::Reference< frame::XDispatch > > lDispatcher( nCount );

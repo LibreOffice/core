@@ -40,40 +40,40 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
                                                                                         const OUString& sTargetFrameName,
                                                                                               sal_Int32        nSearchFlags    )
 {
+    css::uno::Reference<css::frame::XDispatchProvider> xInterceptor;
     // SAFE {
-    SolarMutexClearableGuard aReadLock;
-
-    // a) first search an interceptor, which match to this URL by its URL pattern registration
-    //    Note: if it return NULL - it does not mean an empty interceptor list automatically!
-    css::uno::Reference< css::frame::XDispatchProvider > xInterceptor;
-    InterceptorList::const_iterator pIt = m_lInterceptionRegs.findByPattern(aURL.Complete);
-    if (pIt != m_lInterceptionRegs.end())
-        xInterceptor = pIt->xInterceptor;
-
-    // b) No match by registration - but a valid interceptor list.
-    //    Find first interceptor w/o pattern, so we need to query it
-    if (!xInterceptor.is())
     {
-        for (auto const& lInterceptionReg : m_lInterceptionRegs)
-        {
-            if (!lInterceptionReg.lURLPattern.getLength())
-            {
-                // no pattern -> need to ask this guy!
-                xInterceptor = lInterceptionReg.xInterceptor;
-                break;
-            }
-        }
-        // if we didn't find any non-pattern interceptor, there's no-one
-        // registered for this command url (we already searched for matching
-        // patterns above)
-    }
-    // c) No registered interceptor => use our direct slave.
-    //    This helper exist by design and must be valid everytimes ...
-    //    But to be more feature proof - we should check that .-)
-    if (!xInterceptor.is() && m_xSlave.is())
-        xInterceptor = m_xSlave;
+        SolarMutexGuard aReadLock;
 
-    aReadLock.clear();
+        // a) first search an interceptor, which match to this URL by its URL pattern registration
+        //    Note: if it return NULL - it does not mean an empty interceptor list automatically!
+        InterceptorList::const_iterator pIt = m_lInterceptionRegs.findByPattern(aURL.Complete);
+        if (pIt != m_lInterceptionRegs.end())
+            xInterceptor = pIt->xInterceptor;
+
+        // b) No match by registration - but a valid interceptor list.
+        //    Find first interceptor w/o pattern, so we need to query it
+        if (!xInterceptor.is())
+        {
+            for (auto const& lInterceptionReg : m_lInterceptionRegs)
+            {
+                if (!lInterceptionReg.lURLPattern.getLength())
+                {
+                    // no pattern -> need to ask this guy!
+                    xInterceptor = lInterceptionReg.xInterceptor;
+                    break;
+                }
+            }
+            // if we didn't find any non-pattern interceptor, there's no-one
+            // registered for this command url (we already searched for matching
+            // patterns above)
+        }
+        // c) No registered interceptor => use our direct slave.
+        //    This helper exist by design and must be valid everytimes ...
+        //    But to be more feature proof - we should check that .-)
+        if (!xInterceptor.is() && m_xSlave.is())
+            xInterceptor = m_xSlave;
+    }
     // } SAFE
 
     css::uno::Reference< css::frame::XDispatch > xReturn;

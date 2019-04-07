@@ -1068,18 +1068,18 @@ void SAL_CALL Desktop::disposing()
     // tests for instance in sc/qa/unit) nothing bad happens.
     SAL_WARN_IF( !m_bIsTerminated, "fwk.desktop", "Desktop disposed before terminating it" );
 
-    SolarMutexClearableGuard aWriteLock;
-
     {
-        TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+        SolarMutexGuard aWriteLock;
+
+        {
+            TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);
+        }
+
+        // Disable this instance for further work.
+        // This will wait for all current running transactions ...
+        // and reject all new incoming requests!
+        m_aTransactionManager.setWorkingMode(E_BEFORECLOSE);
     }
-
-    // Disable this instance for further work.
-    // This will wait for all current running transactions ...
-    // and reject all new incoming requests!
-    m_aTransactionManager.setWorkingMode( E_BEFORECLOSE );
-
-    aWriteLock.clear();
 
     // Following lines of code can be called outside a synchronized block ...
     // Because our transaction manager will block all new requests to this object.

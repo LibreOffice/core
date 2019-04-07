@@ -1605,7 +1605,7 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
     sal_Int32 i = 0;
 
     /* SAFE */ {
-    osl::ResettableMutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     // Changes of the configuration must be ignored if AutoSave/Recovery was disabled for this
     // office session. That can happen if e.g. the command line arguments "--norestore" or "--headless"

@@ -182,7 +182,7 @@ bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
     }
 
     // SAFE -> ----------------------------------
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aLock);
 
     css::uno::Reference< css::frame::XDispatchProvider > xProvider = m_xDispatcher;
 
@@ -247,7 +247,7 @@ OUString AcceleratorExecute::findCommand(const css::awt::KeyEvent& aKey)
 OUString AcceleratorExecute::impl_ts_findCommand(const css::awt::KeyEvent& aKey)
 {
     // SAFE -> ----------------------------------
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_aLock);
 
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xGlobalCfg = m_xGlobalCfg;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xModuleCfg = m_xModuleCfg;
