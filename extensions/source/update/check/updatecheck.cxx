@@ -844,9 +844,10 @@ UpdateCheck::download()
         {
             shutdownThread(true);
 
-            osl::ClearableMutexGuard aGuard2(m_aMutex);
-            enableDownload(true);
-            aGuard2.clear();
+            {
+                osl::MutexGuard aGuard2(m_aMutex);
+                enableDownload(true);
+            }
             setUIState(UPDATESTATE_DOWNLOADING);
         }
     }
@@ -1051,7 +1052,7 @@ UpdateCheck::downloadTargetExists(const OUString& rFileName)
 
 bool UpdateCheck::checkDownloadDestination( const OUString& rFileName )
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
 
     rtl::Reference< UpdateHandler > aUpdateHandler( getUpdateHandler() );
 

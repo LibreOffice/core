@@ -508,7 +508,7 @@ EventList& Entity::getEventList()
 {
     if (!mxProducedEvents)
     {
-        osl::ResettableMutexGuard aGuard(maEventProtector);
+        osl::ClearableMutexGuard aGuard(maEventProtector);
         if (!maUsedEvents.empty())
         {
             mxProducedEvents = std::move(maUsedEvents.front());

@@ -406,7 +406,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
             if( xDispatcher.is() )
             {
                 {
-                    ::osl::ClearableMutexGuard aGuard(m_mutex);
+                    osl::MutexGuard aGuard(m_mutex);
                     // Remember request so we can find it in statusChanged!
                     m_nRequestCount++;
                 }
@@ -754,9 +754,10 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                 xDisp->dispatchWithNotification( aDispatche.aURL, aArgs, this );
             else
             {
-                ::osl::ClearableMutexGuard aGuard(m_mutex);
-                m_nRequestCount--;
-                aGuard.clear();
+                {
+                    osl::MutexGuard aGuard(m_mutex);
+                    m_nRequestCount--;
+                }
                 xDispatch->dispatch( aDispatche.aURL, aArgs );
             }
         }

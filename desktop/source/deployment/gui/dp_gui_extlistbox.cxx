@@ -920,38 +920,39 @@ void ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     if ( pEntry->m_sTitle.isEmpty() )
         return;
 
-    ::osl::ClearableMutexGuard guard(m_entriesMutex);
-    if ( m_vEntries.empty() )
     {
-        addEventListenerOnce(xPackage);
-        m_vEntries.push_back( pEntry );
-    }
-    else
-    {
-        if ( !FindEntryPos( pEntry, 0, m_vEntries.size()-1, nPos ) )
+        osl::MutexGuard guard(m_entriesMutex);
+        if (m_vEntries.empty())
         {
             addEventListenerOnce(xPackage);
-            m_vEntries.insert( m_vEntries.begin()+nPos, pEntry );
+            m_vEntries.push_back(pEntry);
         }
-        else if ( !m_bInCheckMode )
+        else
         {
-            OSL_FAIL( "ExtensionBox_Impl::addEntry(): Will not add duplicate entries"  );
+            if (!FindEntryPos(pEntry, 0, m_vEntries.size() - 1, nPos))
+            {
+                addEventListenerOnce(xPackage);
+                m_vEntries.insert(m_vEntries.begin() + nPos, pEntry);
+            }
+            else if (!m_bInCheckMode)
+            {
+                OSL_FAIL("ExtensionBox_Impl::addEntry(): Will not add duplicate entries");
+            }
         }
+
+        pEntry->m_bHasOptions = m_pManager->supportsOptions(xPackage);
+        pEntry->m_bUser = (xPackage->getRepositoryName() == USER_PACKAGE_MANAGER);
+        pEntry->m_bShared = (xPackage->getRepositoryName() == SHARED_PACKAGE_MANAGER);
+        pEntry->m_bNew = m_bInCheckMode;
+        pEntry->m_bMissingLic = bLicenseMissing;
+
+        if (bLicenseMissing)
+            pEntry->m_sErrorText = DpResId(RID_STR_ERROR_MISSING_LICENSE);
+
+        //access to m_nActive must be guarded
+        if (!m_bInCheckMode && m_bHasActive && (m_nActive >= nPos))
+            m_nActive += 1;
     }
-
-    pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
-    pEntry->m_bUser       = (xPackage->getRepositoryName() == USER_PACKAGE_MANAGER);
-    pEntry->m_bShared     = (xPackage->getRepositoryName() == SHARED_PACKAGE_MANAGER);
-    pEntry->m_bNew        = m_bInCheckMode;
-    pEntry->m_bMissingLic = bLicenseMissing;
-
-    if ( bLicenseMissing )
-        pEntry->m_sErrorText = DpResId( RID_STR_ERROR_MISSING_LICENSE );
-
-    //access to m_nActive must be guarded
-    if ( !m_bInCheckMode && m_bHasActive && ( m_nActive >= nPos ) )
-        m_nActive += 1;
-    guard.clear();
 
     if ( IsReallyVisible() )
         Invalidate();
@@ -1087,47 +1088,50 @@ void ExtensionBox_Impl::checkEntries()
     long nPos = 0;
     bool bNeedsUpdate = false;
 
-    ::osl::ClearableMutexGuard guard(m_entriesMutex);
-    auto iIndex = m_vEntries.begin();
-    while ( iIndex != m_vEntries.end() )
     {
-        if ( !(*iIndex)->m_bChecked )
+        osl::MutexGuard guard(m_entriesMutex);
+        auto iIndex = m_vEntries.begin();
+        while (iIndex != m_vEntries.end())
         {
-            (*iIndex)->m_bChecked = true;
-            bNeedsUpdate = true;
-            nPos = iIndex-m_vEntries.begin();
-            if ( (*iIndex)->m_bNew )
-            { // add entry to list and correct active pos
-                if ( nNewPos == - 1)
-                    nNewPos = nPos;
-                if ( nPos <= m_nActive )
-                    m_nActive += 1;
-                ++iIndex;
+            if (!(*iIndex)->m_bChecked)
+            {
+                (*iIndex)->m_bChecked = true;
+                bNeedsUpdate = true;
+                nPos = iIndex - m_vEntries.begin();
+                if ((*iIndex)->m_bNew)
+                { // add entry to list and correct active pos
+                    if (nNewPos == -1)
+                        nNewPos = nPos;
+                    if (nPos <= m_nActive)
+                        m_nActive += 1;
+                    ++iIndex;
+                }
+                else
+                { // remove entry from list
+                    if (nPos < nNewPos)
+                    {
+                        --nNewPos;
+                    }
+                    if (nPos < nChangedActivePos)
+                    {
+                        --nChangedActivePos;
+                    }
+                    if (nPos < m_nActive)
+                        m_nActive -= 1;
+                    else if (nPos == m_nActive)
+                    {
+                        nChangedActivePos = nPos;
+                        m_nActive = -1;
+                        m_bHasActive = false;
+                    }
+                    m_vRemovedEntries.push_back(*iIndex);
+                    iIndex = m_vEntries.erase(iIndex);
+                }
             }
             else
-            {   // remove entry from list
-                if (nPos < nNewPos) {
-                    --nNewPos;
-                }
-                if (nPos < nChangedActivePos) {
-                    --nChangedActivePos;
-                }
-                if ( nPos < m_nActive )
-                    m_nActive -= 1;
-                else if ( nPos == m_nActive )
-                {
-                    nChangedActivePos = nPos;
-                    m_nActive = -1;
-                    m_bHasActive = false;
-                }
-                m_vRemovedEntries.push_back( *iIndex );
-                iIndex = m_vEntries.erase( iIndex );
-            }
+                ++iIndex;
         }
-        else
-            ++iIndex;
     }
-    guard.clear();
 
     m_bInCheckMode = false;
 

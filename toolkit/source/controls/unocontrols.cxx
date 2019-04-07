@@ -2344,7 +2344,7 @@ void SAL_CALL UnoControlListBoxModel::setItemTextAndImage( ::sal_Int32 i_nPositi
 
 void SAL_CALL UnoControlListBoxModel::setItemData( ::sal_Int32 i_nPosition, const Any& i_rDataValue )
 {
-    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+    osl::MutexGuard aGuard( GetMutex() );
     ListItem& rItem( m_xData->getItem( i_nPosition ) );
     rItem.ItemData = i_rDataValue;
 }
@@ -2376,7 +2376,7 @@ beans::Pair< OUString, OUString > SAL_CALL UnoControlListBoxModel::getItemTextAn
 
 Any SAL_CALL UnoControlListBoxModel::getItemData( ::sal_Int32 i_nPosition )
 {
-    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+    osl::MutexGuard aGuard( GetMutex() );
     const ListItem& rItem( m_xData->getItem( i_nPosition ) );
     return rItem.ItemData;
 }

@@ -1783,7 +1783,7 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
     }
 }
 
-void OWriteStream::ModifyParentUnlockMutex_Impl( ::osl::ResettableMutexGuard& aGuard )
+void OWriteStream::ModifyParentUnlockMutex_Impl(osl::ClearableMutexGuard& aGuard)
 {
     if ( m_pImpl->m_pParent )
     {
@@ -2116,7 +2116,7 @@ uno::Reference< io::XOutputStream > SAL_CALL OWriteStream::getOutputStream()
 
 void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    osl::ClearableMutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
 
     // the write method makes initialization itself, since it depends from the aData length
     // NO CheckInitOnDemand()!
@@ -2301,7 +2301,7 @@ sal_Int64 SAL_CALL OWriteStream::getLength()
 
 void SAL_CALL OWriteStream::truncate()
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    osl::ClearableMutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
 
     CheckInitOnDemand();
 
@@ -2414,7 +2414,7 @@ void SAL_CALL OWriteStream::removeEventListener(
 
 void SAL_CALL OWriteStream::setEncryptionPassword( const OUString& aPass )
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    osl::ClearableMutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
 
     CheckInitOnDemand();
 
@@ -2433,7 +2433,7 @@ void SAL_CALL OWriteStream::setEncryptionPassword( const OUString& aPass )
 
 void SAL_CALL OWriteStream::removeEncryption()
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    osl::ClearableMutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
 
     CheckInitOnDemand();
 
@@ -2452,7 +2452,7 @@ void SAL_CALL OWriteStream::removeEncryption()
 
 void SAL_CALL OWriteStream::setEncryptionData( const uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    osl::ClearableMutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
 
     CheckInitOnDemand();
 
@@ -2471,7 +2471,7 @@ void SAL_CALL OWriteStream::setEncryptionData( const uno::Sequence< beans::Named
 
 sal_Bool SAL_CALL OWriteStream::hasEncryptionData()
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    osl::ClearableMutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
 
     if (!m_pImpl)
         return false;
@@ -2849,7 +2849,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OWriteStream::getPropertySetI
 
 void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    osl::ClearableMutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
 
     if ( !m_pImpl )
     {
@@ -3142,7 +3142,7 @@ void SAL_CALL OWriteStream::commit()
     try {
         BroadcastTransaction( STOR_MESS_PRECOMMIT );
 
-        ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+        osl::ClearableMutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
 
         if ( !m_pImpl )
         {
@@ -3199,42 +3199,42 @@ void SAL_CALL OWriteStream::revert()
 
     BroadcastTransaction( STOR_MESS_PREREVERT );
 
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    {
+        osl::MutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
 
-    if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
+        if (!m_pImpl)
+        {
+            SAL_INFO("package.xstor", "Disposed!");
+            throw lang::DisposedException();
+        }
 
-    try {
-        m_pImpl->Revert();
+        try {
+            m_pImpl->Revert();
+        }
+        catch (const io::IOException& rIOException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rIOException);
+            throw;
+        }
+        catch (const embed::StorageWrappedTargetException& rStorageWrappedTargetException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
+            throw;
+        }
+        catch (const uno::RuntimeException& rRuntimeException)
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
+            throw;
+        }
+        catch (const uno::Exception&)
+        {
+            uno::Any aCaught(::cppu::getCaughtException());
+            SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
+            throw embed::StorageWrappedTargetException("Problems on revert!",
+                static_cast<::cppu::OWeakObject*>(this),
+                aCaught);
+        }
     }
-    catch( const io::IOException& rIOException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
-        throw;
-    }
-    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
-        throw;
-    }
-    catch( const uno::RuntimeException& rRuntimeException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
-        throw;
-    }
-    catch( const uno::Exception& )
-    {
-        uno::Any aCaught( ::cppu::getCaughtException() );
-        SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
-        throw embed::StorageWrappedTargetException( "Problems on revert!",
-                                  static_cast< ::cppu::OWeakObject* >( this ),
-                                  aCaught );
-    }
-
-    aGuard.clear();
 
     BroadcastTransaction( STOR_MESS_REVERTED );
 }

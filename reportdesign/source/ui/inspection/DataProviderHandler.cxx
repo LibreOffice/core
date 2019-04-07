@@ -432,7 +432,7 @@ inspection::InteractiveSelectionResult SAL_CALL DataProviderHandler::onInteracti
 
 void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const OUString & ActuatingPropertyName, const uno::Any & NewValue, const uno::Any & OldValue, const uno::Reference< inspection::XObjectInspectorUI > & InspectorUI, sal_Bool FirstTimeInit)
 {
-    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if ( ActuatingPropertyName == PROPERTY_COMMAND )
     {

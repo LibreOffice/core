@@ -134,7 +134,7 @@ void Acceptor::run()
 void Acceptor::initialize( const Sequence<Any>& aArguments )
 {
     // prevent multiple initialization
-    osl::ClearableMutexGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     SAL_INFO( "desktop.offacc", "Acceptor::initialize()" );
 
     bool bOk = false;
