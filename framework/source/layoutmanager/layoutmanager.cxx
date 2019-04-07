@@ -1520,60 +1520,62 @@ void SAL_CALL LayoutManager::destroyElement( const OUString& aName )
 {
     SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::destroyElement" );
 
+    bool bMustBeLayouted(false);
+    bool bNotify(false);
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    SolarMutexClearableGuard aWriteLock;
-
-    bool            bMustBeLayouted( false );
-    bool            bNotify( false );
-    OUString aElementType;
-    OUString aElementName;
-
-    parseResourceURL( aName, aElementType, aElementName );
-
-    if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
-         aElementName.equalsIgnoreAsciiCase("menubar") )
     {
-        if ( !m_bInplaceMenuSet )
+        SolarMutexClearableGuard aWriteLock;
+
+        OUString aElementType;
+        OUString aElementName;
+
+        parseResourceURL(aName, aElementType, aElementName);
+
+        if (aElementType.equalsIgnoreAsciiCase("menubar")
+            && aElementName.equalsIgnoreAsciiCase("menubar"))
         {
-            impl_clearUpMenuBar();
-            m_xMenuBar.clear();
+            if (!m_bInplaceMenuSet)
+            {
+                impl_clearUpMenuBar();
+                m_xMenuBar.clear();
+                bNotify = true;
+            }
+        }
+        else if ((aElementType.equalsIgnoreAsciiCase("statusbar")
+                  && aElementName.equalsIgnoreAsciiCase("statusbar"))
+                 || (m_aStatusBarElement.m_aName == aName))
+        {
+            aWriteLock.clear();
+            implts_destroyStatusBar();
+            bMustBeLayouted = true;
             bNotify = true;
         }
-    }
-    else if (( aElementType.equalsIgnoreAsciiCase("statusbar") &&
-               aElementName.equalsIgnoreAsciiCase("statusbar") ) ||
-             ( m_aStatusBarElement.m_aName == aName ))
-    {
-        aWriteLock.clear();
-        implts_destroyStatusBar();
-        bMustBeLayouted = true;
-        bNotify         = true;
-    }
-    else if ( aElementType.equalsIgnoreAsciiCase("progressbar") &&
-              aElementName.equalsIgnoreAsciiCase("progressbar") )
-    {
-        aWriteLock.clear();
-        implts_createProgressBar();
-        bMustBeLayouted = true;
-        bNotify = true;
-    }
-    else if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ) && m_xToolbarManager.is() )
-    {
-        aWriteLock.clear();
-        bNotify         = m_xToolbarManager->destroyToolbar( aName );
-        bMustBeLayouted = m_xToolbarManager->isLayoutDirty();
-    }
-    else if ( aElementType.equalsIgnoreAsciiCase("dockingwindow"))
-    {
-        uno::Reference< frame::XFrame > xFrame( m_xFrame );
-        uno::Reference< XComponentContext > xContext( m_xContext );
-        aWriteLock.clear();
+        else if (aElementType.equalsIgnoreAsciiCase("progressbar")
+                 && aElementName.equalsIgnoreAsciiCase("progressbar"))
+        {
+            aWriteLock.clear();
+            implts_createProgressBar();
+            bMustBeLayouted = true;
+            bNotify = true;
+        }
+        else if (aElementType.equalsIgnoreAsciiCase(UIRESOURCETYPE_TOOLBAR)
+                 && m_xToolbarManager.is())
+        {
+            aWriteLock.clear();
+            bNotify = m_xToolbarManager->destroyToolbar(aName);
+            bMustBeLayouted = m_xToolbarManager->isLayoutDirty();
+        }
+        else if (aElementType.equalsIgnoreAsciiCase("dockingwindow"))
+        {
+            uno::Reference<frame::XFrame> xFrame(m_xFrame);
+            uno::Reference<XComponentContext> xContext(m_xContext);
+            aWriteLock.clear();
 
-        impl_setDockingWindowVisibility( xContext, xFrame, aElementName, false );
-        bMustBeLayouted = false;
-        bNotify         = false;
+            impl_setDockingWindowVisibility(xContext, xFrame, aElementName, false);
+            bMustBeLayouted = false;
+            bNotify = false;
+        }
     }
-    aWriteLock.clear();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
     if ( bMustBeLayouted )

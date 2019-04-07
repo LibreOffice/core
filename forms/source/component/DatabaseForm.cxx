@@ -2853,16 +2853,15 @@ void SAL_CALL ODatabaseForm::unload()
             // close the aggregate
             Reference<XCloseable>  xCloseable;
             query_aggregation( m_xAggregate, xCloseable);
-            aGuard.clear();
             if (xCloseable.is())
                 xCloseable->close();
         }
         catch(const SQLException&)
         {
         }
-        aGuard.reset();
     }
 
+    aGuard.reset();
     m_bLoaded = false;
 
     // if the connection we used while we were loaded is only shared with our parent, we
