@@ -1290,10 +1290,10 @@ endif
 endef
 
 # Add a bison grammar to the build.
-# call gb_LinkTarget_add_grammar,linktarget,yaccfile,linktargetmakefilename,cxxflags
+# call gb_LinkTarget_add_grammar,linktarget,yaccfile,cxxflags,linktargetmakefilename
 define gb_LinkTarget_add_grammar
 $(call gb_YaccTarget_YaccTarget,$(2))
-$(call gb_LinkTarget_add_generated_exception_object,$(1),YaccTarget/$(2),$(3),$(if $(filter GCC,$(COM)),-Wno-unused-macros))
+$(call gb_LinkTarget_add_generated_exception_object,$(1),YaccTarget/$(2),$(3) $(if $(filter GCC,$(COM)),-Wno-unused-macros),$(4))
 $(call gb_GenCxxObject_get_target,YaccTarget/$(2)): PLUGIN_WARNINGS_AS_ERRORS := $(true)
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_YaccTarget_get_clean_target,$(2))
 $(call gb_LinkTarget_get_headers_target,$(1)) : $(call gb_YaccTarget_get_header_target,$(2))
@@ -1302,30 +1302,30 @@ $(call gb_LinkTarget__add_include,$(1),$(dir $(call gb_YaccTarget_get_header_tar
 endef
 
 # Add bison grammars to the build.
-# call gb_LinkTarget_add_grammars,linktarget,yaccfiles,ignored,linktargetmakefilename
+# call gb_LinkTarget_add_grammars,linktarget,yaccfiles,cxxflags,linktargetmakefilename
 define gb_LinkTarget_add_grammars
-$(foreach grammar,$(2),$(call gb_LinkTarget_add_grammar,$(1),$(grammar),$(4)))
+$(foreach grammar,$(2),$(call gb_LinkTarget_add_grammar,$(1),$(grammar),$(3),$(4)))
 endef
 
 # Add a flex scanner to the build.
-# call gb_LinkTarget_add_scanner,linktarget,lexfile,linktargetmakefilename,cxxflags
+# call gb_LinkTarget_add_scanner,linktarget,lexfile,cxxflags,linktargetmakefilename
 define gb_LinkTarget_add_scanner
 $(call gb_LexTarget_LexTarget,$(2))
-$(call gb_LinkTarget_add_generated_exception_object,$(1),LexTarget/$(2),$(3),$(if $(filter GCC,$(COM)),-Wno-unused-macros))
+$(call gb_LinkTarget_add_generated_exception_object,$(1),LexTarget/$(2),$(3) $(if $(filter GCC,$(COM)),-Wno-unused-macros),$(4))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_LexTarget_get_clean_target,$(2))
 
 endef
 
 # Add flex scanners to the build.
-# call gb_LinkTarget_add_scanners,linktarget,lexfiles,ignored,linktargetmakefilename
+# call gb_LinkTarget_add_scanners,linktarget,lexfiles,cxxflags,linktargetmakefilename
 define gb_LinkTarget_add_scanners
-$(foreach scanner,$(2),$(call gb_LinkTarget_add_scanner,$(1),$(scanner),$(4)))
+$(foreach scanner,$(2),$(call gb_LinkTarget_add_scanner,$(1),$(scanner),$(3),$(4)))
 
 endef
 
-# call gb_LinkTarget_add_exception_object,linktarget,sourcefile,linktargetmakefilename
+# call gb_LinkTarget_add_exception_object,linktarget,sourcefile,cxxflags,linktargetmakefilename
 define gb_LinkTarget_add_exception_object
-$(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(3)),$(3))
+$(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(4)) $(3),$(4))
 endef
 
 # call gb_LinkTarget__use_linktarget_objects,linktarget,linktargets
@@ -1382,18 +1382,18 @@ endef
 
 # call gb_LinkTarget_add_asmobjects,linktarget,sourcefiles,asmflags,linktargetmakefilename
 define gb_LinkTarget_add_asmobjects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_asmobject,$(1),$(obj),$(3)))
+$(foreach obj,$(2),$(call gb_LinkTarget_add_asmobject,$(1),$(obj),$(3),$(4)))
 endef
 
-# call gb_LinkTarget_add_exception_objects,linktarget,sourcefiles,ignored,linktargetmakefilename
+# call gb_LinkTarget_add_exception_objects,linktarget,sourcefiles,cxxflags,linktargetmakefilename
 define gb_LinkTarget_add_exception_objects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_exception_object,$(1),$(obj),$(4)))
+$(foreach obj,$(2),$(call gb_LinkTarget_add_exception_object,$(1),$(obj),$(3),$(4)))
 endef
 
 #only useful for building x64 libraries on windows
-# call gb_LinkTarget_add_x64_generated_exception_objects,linktarget,sourcefiles,ignored,linktargetmakefilename
+# call gb_LinkTarget_add_x64_generated_exception_objects,linktarget,sourcefiles,cxxflags,linktargetmakefilename
 define gb_LinkTarget_add_x64_generated_exception_objects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_exception_object,$(1),$(obj),$(4)))
+$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_exception_object,$(1),$(obj),$(3),$(4)))
 $(foreach obj,$(2),$(eval $(call gb_GenCxxObject_get_target,$(obj)) : CXXOBJECT_X64 := YES))
 endef
 
@@ -1409,14 +1409,14 @@ $(foreach obj,$(2),$(call gb_LinkTarget_add_generated_c_object,$(1),$(obj),$(3),
 $(foreach obj,$(2),$(eval $(call gb_GenCObject_get_target,$(obj)) : CXXOBJECT_X64 := YES))
 endef
 
-# call gb_LinkTarget_add_generated_exception_object,linktarget,sourcefile,linktargetmakefilename,cxxflags
+# call gb_LinkTarget_add_generated_exception_object,linktarget,sourcefile,cxxflags,linktargetmakefilename
 define gb_LinkTarget_add_generated_exception_object
-$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(3)) $(4))
+$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(4)) $(3),$(4))
 endef
 
-# call gb_LinkTarget_add_generated_exception_objects,linktarget,sourcefile,ignored,linktargetmakefilename
+# call gb_LinkTarget_add_generated_exception_objects,linktarget,sourcefile,cxxflags,linktargetmakefilename
 define gb_LinkTarget_add_generated_exception_objects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_exception_object,$(1),$(obj),$(4)))
+$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_exception_object,$(1),$(obj),$(3),$(4)))
 endef
 
 # call gb_LinkTarget_add_generated_cxxclrobjects,linktarget,sourcefiles,cxxclrflags,linktargetmakefilename
