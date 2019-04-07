@@ -237,6 +237,141 @@ cmd/sc_sectionaligntop.png cmd/sc_alignup.png
 cmd/sc_sectionalignbottom.png cmd/sc_aligndown.png
 cmd/sc_alignhorizontalceter.png cmd/sc_alignhorizontalcenter.png
 
+# Graphic
+cmd/lc_colorsettings.png cmd/lc_graphicfiltersmooth.png
+cmd/lc_graphicfilterposter.png cmd/lc_graphicdialog.png
+cmd/lc_grafmode.png cmd/lc_graphicdialog.png
+cmd/lc_grafinvert.png cmd/lc_graphicfilterinvert.png
+cmd/lc_colorview.png cmd/lc_graphicfilterinvert.png
+cmd/sc_colorsettings.png cmd/sc_graphicfiltersmooth.png
+cmd/sc_graphicfilterposter.png cmd/sc_insertgraphic.png
+cmd/sc_grafmode.png cmd/sc_insertgraphic.png
+cmd/sc_grafinvert.png cmd/sc_graphicfilterinvert.png
+cmd/sc_colorview.png cmd/sc_graphicfilterinvert.png
+cmd/sc_objecttitledescription.png cmd/sc_insertcaptiondialog.png
+cmd/lc_objecttitledescription.png cmd/lc_insertcaptiondialog.png
+
+# shapes
+cmd/lc_fontworkshapetype.fontwork-circle-pour.png cmd/lc_basicshapes.ring.png
+cmd/lc_flowchartshapes.flowchart-connector.png cmd/lc_circle.png
+cmd/lc_basicshapes.circle.png cmd/lc_circle.png
+cmd/lc_symbolshapes.smiley.png cmd/lc_symbolshapes.png
+cmd/lc_basicshapes.round-rectangle.png cmd/lc_rect_rounded.png
+cmd/lc_flowchartshapes.flowchart-punched-tape.png cmd/lc_fontworkshapetype.fontwork-wave.png
+cmd/lc_basicshapes.parallelogram.png cmd/lc_flowchartshapes.flowchart-data.png
+cmd/lc_calloutshapes.round-rectangular-callout.png cmd/lc_calloutshapes.png
+cmd/lc_flowchartshapes.flowchart-manual-operation.png cmd/lc_basicshapes.trapezoid.png
+cmd/lc_flowchartshapes.flowchart-alternate-process.png cmd/lc_basicshapes.round-quadrat.png
+cmd/lc_arrowshapes.left-right-arrow.png cmd/lc_arrowshapes.png
+cmd/lc_flowchartshapes.flowchart-extract.png cmd/lc_basicshapes.isosceles-triangle.png
+cmd/lc_fontworkshapetype.fontwork-triangle-up.png cmd/lc_basicshapes.isosceles-triangle.png
+cmd/lc_basicshapes.circle-pie.png cmd/lc_pie.png
+cmd/lc_flowchartshapes.flowchart-merge.png cmd/lc_fontworkshapetype.fontwork-triangle-down.png
+cmd/lc_fontworkshapetype.fontwork-fade-down.png cmd/lc_basicshapes.trapezoid.png
+cmd/lc_flowchartshapes.flowchart-magnetic-disk.png cmd/lc_basicshapes.can.png
+cmd/sc_flowchartshapes.png cmd/lc_flowchartshapes.flowchart-document.png
+
+cmd/lc_measureattributes.png cmd/lc_measureline.png
+cmd/sc_measureattributes.png cmd/sc_measureline.png
+
+cmd/sc_fontworkshapetype.fontwork-circle-pour.png cmd/sc_basicshapes.ring.png
+cmd/sc_basicshapes.circle.png cmd/sc_circle.png
+cmd/sc_flowchartshapes.flowchart-connector.png cmd/sc_circle.png
+cmd/sc_symbolshapes.smiley.png cmd/sc_symbolshapes.png
+cmd/sc_basicshapes.round-rectangle.png cmd/sc_rect_rounded.png
+cmd/sc_flowchartshapes.flowchart-punched-tape.png cmd/sc_fontworkshapetype.fontwork-wave.png
+cmd/sc_basicshapes.parallelogram.png cmd/sc_flowchartshapes.flowchart-data.png
+cmd/sc_calloutshapes.round-rectangular-callout.png cmd/sc_calloutshapes.png
+cmd/sc_flowchartshapes.flowchart-manual-operation.png cmd/sc_basicshapes.trapezoid.png
+cmd/sc_flowchartshapes.flowchart-alternate-process.png cmd/sc_basicshapes.round-quadrat.png
+cmd/sc_arrowshapes.left-right-arrow.png cmd/sc_arrowshapes.png
+cmd/sc_flowchartshapes.flowchart-extract.png cmd/sc_basicshapes.isosceles-triangle.png
+cmd/sc_fontworkshapetype.fontwork-triangle-up.png cmd/sc_basicshapes.isosceles-triangle.png
+cmd/sc_basicshapes.circle-pie.png cmd/sc_pie.png
+cmd/sc_flowchartshapes.flowchart-merge.png cmd/sc_fontworkshapetype.fontwork-triangle-down.png
+cmd/sc_fontworkshapetype.fontwork-fade-down.png cmd/sc_basicshapes.trapezoid.png
+cmd/sc_flowchartshapes.flowchart-magnetic-disk.png cmd/sc_basicshapes.can.png
+
+# Open
+cmd/lc_openfromwriter.png cmd/lc_open.png
+cmd/lc_openfromcalc.png cmd/lc_open.png
+cmd/sc_openfromwriter.png cmd/sc_open.png
+cmd/sc_openfromcalc.png cmd/sc_open.png
+
+# Merge
+cmd/lc_mergedocument.png cmd/lc_mergedocuments.png
+cmd/sc_mergedocument.png cmd/sc_mergedocuments.png
+
+# Print
+cmd/lc_previewprintoptions.png cmd/lc_printpreview.png
+cmd/lc_sendfax.png cmd/lc_print.png
+cmd/sc_previewprintoptions.png cmd/sc_printpreview.png
+cmd/sc_sendfax.png cmd/sc_scan.png
+
+# Folder
+cmd/lc_dbtableopen.png cmd/lc_open.png
+cmd/lc_dbreportopen.png cmd/lc_open.png
+cmd/lc_dbqueryopen.png cmd/lc_open.png
+cmd/lc_dbformopen.png cmd/lc_open.png
+cmd/lc_newrecord.png cmd/lc_open.png
+cmd/sc_dbreportopen.png cmd/sc_open.png
+cmd/sc_dbqueryopen.png cmd/sc_open.png
+cmd/sc_dbformopen.png cmd/sc_open.png
+cmd/sc_insertdoc.png cmd/sc_open.png
+cmd/sc_open_h.png cmd/sc_open.png
+cmd/sc_newrecord.png cmd/sc_open.png
+
+# Import
+cmd/lc_importfromfile.png cmd/lc_dataimport.png
+cmd/sc_importfromfile.png cmd/sc_dataimport.png
+
+# Wizard
+cmd/lc_dbnewqueryautopilot.png cmd/lc_autopilotmenu.png
+cmd/lc_graphicfiltertoolbox.png cmd/lc_autopilotmenu.png
+cmd/lc_dbnewtableautopilot.png cmd/lc_autopilotmenu.png
+cmd/lc_dbnewformautopilot.png cmd/lc_autopilotmenu.png
+cmd/lc_commontaskbarvisible.png cmd/lc_autopilotmenu.png
+cmd/lc_newarrangement.png cmd/lc_autopilotmenu.png
+cmd/sc_dbnewqueryautopilot.png cmd/sc_autopilotmenu.png
+cmd/sc_graphicfiltertoolbox.png cmd/sc_autopilotmenu.png
+cmd/sc_dbnewtableautopilot.png cmd/sc_autopilotmenu.png
+cmd/sc_commontaskbarvisible.png cmd/sc_autopilotmenu.png
+
+# Filter
+cmd/lc_formfilterexecute.png cmd/lc_datafilterstandardfilter.png
+cmd/lc_filtercrit.png cmd/lc_datafilterstandardfilter.png
+cmd/lc_formfilter.png cmd/lc_datafilterspecialfilter.png
+cmd/lc_autofilter.png cmd/lc_datafilterautofilter.png
+cmd/lc_removefilter.png cmd/lc_removefiltersort.png
+cmd/sc_formfilterexecute.png cmd/sc_datafilterstandardfilter.png
+cmd/sc_filtercrit.png cmd/sc_datafilterstandardfilter.png
+cmd/sc_formfilter.png cmd/sc_datafilterspecialfilter.png
+cmd/sc_autofilter.png cmd/sc_datafilterautofilter.png
+cmd/sc_removefilter.png cmd/sc_removefiltersort.png
+
+# Bullets
+cmd/lc_bulletliststyle.png cmd/lc_defaultbullet.png
+cmd/sc_bulletliststyle.png cmd/sc_defaultbullet.png
+cmd/lc_defaultparastyle.png cmd/lc_controlcodes.png
+cmd/sc_defaultparastyle.png cmd/sc_controlcodes.png
+
+# Group
+cmd/lc_leaveallgroups.png cmd/lc_leavegroup.png
+cmd/sc_leaveallgroups.png cmd/sc_leavegroup.png
+cmd/sc_groupmenu.png cmd/sc_formatgroup.png
+
+# Undo
+cmd/lc_recundo.png cmd/lc_undo.png
+cmd/sc_recundo.png cmd/sc_undo.png
+
+# Label
+cmd/lc_addname.png cmd/lc_label.png
+cmd/sc_addname.png cmd/sc_label.png
+
+# Rotate
+cmd/lc_clickchangerotation.png cmd/lc_toggleobjectrotatemode.png
+cmd/sc_clickchangerotation.png cmd/sc_toggleobjectrotatemode.png
+
 # Navigator - Writer
 sw/res/all_left.png cmd/sc_firstpage.png
 sw/res/all_right.png cmd/sc_lastpage.png
@@ -258,8 +393,8 @@ sw/res/sc20171.png cmd/sc_downsearch.png
 sw/res/sc20172.png cmd/sc_navigateback.png
 sw/res/sc20173.png cmd/sc_navigateforward.png
 sw/res/sc20174.png cmd/sc_upsearch.png
-sw/res/sc20175.png cmd/sc_flowchartshapes.flowchart-merge.png
-sw/res/sc20186.png cmd/sc_flowchartshapes.flowchart-extract.png
+sw/res/sc20175.png cmd/sc_fontworkshapetype.fontwork-triangle-down.png
+sw/res/sc20186.png cmd/sc_basicshapes.isosceles-triangle.png
 sw/res/sc20235.png cmd/sc_inserthyperlink.png
 sw/res/sc20239.png cmd/sc_copy.png
 sw/res/sc20249.png cmd/sc_navigator.png
@@ -380,10 +515,6 @@ cmd/sc_charmapcontrol.png cmd/sc_insertsymbol.png
 # Draw - Line and Filling Toolbar
 cmd/lc_advancedmode.png cmd/lc_toggleobjectrotatemode.png
 cmd/sc_advancedmode.png cmd/sc_toggleobjectrotatemode.png
-
-# calc autofilter
-cmd/lc_datafilterautofilter.png cmd/lc_autofilter.png
-cmd/sc_datafilterautofilter.png cmd/sc_autofilter.png
 
 # calc fx function symbol
 cmd/lc_functiondialog.png cmd/lc_dbviewfunctions.png
