@@ -172,15 +172,7 @@ protected:
     OpenGLCapabilitySwitch maOpenGLCapabilitySwitch;
 
 private:
-    struct ProgramHash
-    {
-        size_t operator()( const OString& aDigest ) const
-        {
-            return static_cast<size_t>( rtl_crc32( 0, aDigest.getStr(), aDigest.getLength() ) );
-        }
-    };
-
-    typedef std::unordered_map< OString, std::shared_ptr<OpenGLProgram>, ProgramHash > ProgramCollection;
+    typedef std::unordered_map< OString, std::shared_ptr<OpenGLProgram> > ProgramCollection;
     ProgramCollection maPrograms;
     OpenGLProgram* mpCurrentProgram;
 
