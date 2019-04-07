@@ -415,7 +415,7 @@ void SAL_CALL AccessibleBase::disposing()
         MutexGuard aGuard(m_aMutex);
         OSL_ENSURE(!m_bIsDisposed, "dispose() called twice");
 
-        // notify disposing to all AccessibleEvent listeners asynchron
+        // notify disposing to all AccessibleEvent listeners asynchronous
         if (m_nEventNotifierId)
         {
             ::comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing(m_nEventNotifierId,
