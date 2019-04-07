@@ -826,7 +826,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
         if(pMtf)
             pMtf->Pause(true);
 
-        vcl::Font aFontMerk(pOut->GetFont());
+        vcl::Font aOriginalFont(pOut->GetFont());
         vcl::Font aTmpFont( OutputDevice::GetDefaultFont( DefaultFontType::SERIF, LANGUAGE_SYSTEM, GetDefaultFontFlags::OnlyOne ) );
 
         aTmpFont.SetFontSize(Size(0,100));
@@ -835,7 +835,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
         aTmpFont.SetFontSize(Size(800,100));
         pOut->SetFont(aTmpFont);
         Size aSize2(pOut->GetTextWidth(aTestString), pOut->GetTextHeight());
-        pOut->SetFont(aFontMerk);
+        pOut->SetFont(aOriginalFont);
 
         if(pMtf)
             pMtf->Pause(false);
