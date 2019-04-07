@@ -23,9 +23,9 @@
 #include <scdllapi.h>
 #include <cppuhelper/weakref.hxx>
 #include <tools/wintypes.hxx>
+#include <editeng/editview.hxx>
 #include <editeng/svxenum.hxx>
-#include <vcl/ctrl.hxx>
-#include <vcl/menu.hxx>
+#include <vcl/customweld.hxx>
 
 #include <functional>
 
@@ -46,16 +46,15 @@ enum ScEditWindowLocation
     Right
 };
 
-class SC_DLLPUBLIC ScEditWindow : public Control
+class SC_DLLPUBLIC ScEditWindow : public weld::CustomWidgetController
+                                , public EditViewCallbacks
 {
 public:
-            ScEditWindow( vcl::Window* pParent,  WinBits nBits , ScEditWindowLocation eLoc );
-            virtual ~ScEditWindow() override;
-    virtual void dispose() override;
+    ScEditWindow(ScEditWindowLocation eLoc, weld::Window* pParent);
+    virtual void SetDrawingArea(weld::DrawingArea* pArea) override;
+    virtual ~ScEditWindow() override;
 
-    using Control::SetFont;
     void            SetFont( const ScPatternAttr& rPattern );
-    using Control::SetText;
     void            SetText( const EditTextObject& rTextObject );
     std::unique_ptr<EditTextObject> CreateTextObject();
     void            SetCharAttributes();
@@ -73,20 +72,37 @@ public:
     void SetLocation(ScEditWindowLocation eLoc) { eLocation = eLoc; }
 protected:
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void    Command( const CommandEvent& rCEvt ) override;
+    virtual bool    MouseMove( const MouseEvent& rMEvt ) override;
+    virtual bool    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool    MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual bool    KeyInput( const KeyEvent& rKEvt ) override;
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
     virtual void    Resize() override;
+
+    virtual void EditViewInvalidate(const tools::Rectangle& rRect) const override
+    {
+        weld::DrawingArea* pDrawingArea = GetDrawingArea();
+        pDrawingArea->queue_draw_area(rRect.Left(), rRect.Top(), rRect.GetWidth(), rRect.GetHeight());
+    }
+
+    virtual void EditViewSelectionChange() const override
+    {
+        weld::DrawingArea* pDrawingArea = GetDrawingArea();
+        pDrawingArea->queue_draw();
+    }
+
+    virtual OutputDevice& EditViewOutputDevice() const override
+    {
+        return GetDrawingArea()->get_ref_device();
+    }
 
 private:
     std::unique_ptr<ScHeaderEditEngine> pEdEngine;
     std::unique_ptr<EditView>           pEdView;
     ScEditWindowLocation eLocation;
     bool mbRTL;
+    weld::Window* mpDialog;
 
     css::uno::WeakReference< css::accessibility::XAccessible > xAcc;
     ScAccessibleEditObject* pAcc;

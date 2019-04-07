@@ -471,7 +471,6 @@ custom_widgets = [
     'ScCursorRefEdit',
     'ScDataTableView',
     'ScDoubleField',
-    'ScEditWindow',
     'ScPivotLayoutTreeList',
     'ScPivotLayoutTreeListData',
     'ScPivotLayoutTreeListLabel',
