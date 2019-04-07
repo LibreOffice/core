@@ -22,6 +22,30 @@
       "revId": "960b95ca4a9623dc53b407aed834ed8c5c219e56",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_71c20d88",
+        "filename": "embeddedobj/source/msole/olecomponent.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1427,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-07T14:14:41Z",
+      "side": 1,
+      "message": "yeah, the declaration of this (but not the assignment) should probably be moved outside the guard block",
+      "parentUuid": "df87a7cf_916f91c4",
+      "range": {
+        "startLine": 1427,
+        "startChar": 8,
+        "endLine": 1427,
+        "endChar": 91
+      },
+      "revId": "960b95ca4a9623dc53b407aed834ed8c5c219e56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
