@@ -3771,7 +3771,7 @@ void SAL_CALL ToolbarLayoutManager::closed( const lang::EventObject& e )
         SolarMutexClearableGuard aReadLock;
         bool bLayoutDirty = m_bLayoutDirty;
         LayoutManager* pParentLayouter( m_pParentLayouter );
-        aWriteLock.clear();
+        aReadLock.clear();
 
         if ( bLayoutDirty && pParentLayouter )
             pParentLayouter->requestLayout();
