@@ -21,8 +21,8 @@
 #define INCLUDED_SC_SOURCE_UI_INC_SCUITPHFEDIT_HXX
 
 #include "tphfedit.hxx"
-#include <sfx2/tabdlg.hxx>
-#include <vcl/menubtn.hxx>
+#include <vcl/customweld.hxx>
+#include <vcl/weld.hxx>
 
 enum ScHFEntryId
 {
@@ -54,39 +54,47 @@ public:
     void            ClearTextAreas();
 
 protected:
-                ScHFEditPage( vcl::Window*           pParent,
+                ScHFEditPage( TabPageParent pParent,
                               const SfxItemSet& rCoreSet,
                               sal_uInt16        nWhich,
                               bool              bHeader );
     virtual     ~ScHFEditPage() override;
-    virtual void dispose() override;
 
 private:
-    VclPtr<ScEditWindow>    m_pWndLeft;
-    VclPtr<ScEditWindow>    m_pWndCenter;
-    VclPtr<ScEditWindow>    m_pWndRight;
-    VclPtr<FixedText>       m_pFtDefinedHF;
-    VclPtr<ListBox>         m_pLbDefined;
-    VclPtr<FixedText>       m_pFtCustomHF;
-    VclPtr<PushButton>      m_pBtnText;
-    VclPtr<MenuButton>      m_pBtnFile;
-    VclPtr<PushButton>      m_pBtnTable;
-    VclPtr<PushButton>      m_pBtnPage;
-    VclPtr<PushButton>      m_pBtnLastPage;
-    VclPtr<PushButton>      m_pBtnDate;
-    VclPtr<PushButton>      m_pBtnTime;
+    sal_uInt16 const       nWhich;
+    bool m_bDropDownActive;
+    sal_Int64 m_nTimeToggled;
 
-    VclPtr<FixedText>       m_pFtConfidential;
-    VclPtr<FixedText>       m_pFtPage;
-    VclPtr<FixedText>       m_pFtOfQuestion;
-    VclPtr<FixedText>       m_pFtOf;
-    VclPtr<FixedText>       m_pFtNone;
-    VclPtr<FixedText>       m_pFtCreatedBy;
-    VclPtr<FixedText>       m_pFtCustomized;
+    std::unique_ptr<weld::Label> m_xFtDefinedHF;
+    std::unique_ptr<weld::ComboBox> m_xLbDefined;
+    std::unique_ptr<weld::Label> m_xFtCustomHF;
+    std::unique_ptr<weld::Button> m_xBtnText;
+    std::unique_ptr<weld::MenuButton> m_xBtnFile;
+    std::unique_ptr<weld::Button> m_xBtnTable;
+    std::unique_ptr<weld::Button> m_xBtnPage;
+    std::unique_ptr<weld::Button> m_xBtnLastPage;
+    std::unique_ptr<weld::Button> m_xBtnDate;
+    std::unique_ptr<weld::Button> m_xBtnTime;
+
+    std::unique_ptr<weld::Label> m_xFtConfidential;
+    std::unique_ptr<weld::Label> m_xFtPage;
+    std::unique_ptr<weld::Label> m_xFtOfQuestion;
+    std::unique_ptr<weld::Label> m_xFtOf;
+    std::unique_ptr<weld::Label> m_xFtNone;
+    std::unique_ptr<weld::Label> m_xFtCreatedBy;
+    std::unique_ptr<weld::Label> m_xFtCustomized;
+
+    std::unique_ptr<weld::Widget> m_xLeft;
+    std::unique_ptr<weld::Widget> m_xRight;
+
+    std::unique_ptr<ScEditWindow> m_xWndLeft;
+    std::unique_ptr<ScEditWindow> m_xWndCenter;
+    std::unique_ptr<ScEditWindow> m_xWndRight;
+    std::unique_ptr<weld::CustomWeld> m_xWndLeftWnd;
+    std::unique_ptr<weld::CustomWeld> m_xWndCenterWnd;
+    std::unique_ptr<weld::CustomWeld> m_xWndRightWnd;
 
     ScEditWindow * m_pEditFocus; ///one of m_pWndLeft, m_pWndCenter, m_pWndRight
-
-    sal_uInt16 const       nWhich;
 
     DECL_LINK( ObjectSelectHdl, ScEditWindow&, void );
 
@@ -99,9 +107,10 @@ private:
     bool IsPageEntry(EditEngine*pEngine, const EditTextObject* pTextObj);
     static bool IsDateEntry(const EditTextObject* pTextObj);
     static bool IsExtFileNameEntry(const EditTextObject* pTextObj);
-    DECL_LINK( ListHdl_Impl, ListBox&, void);
-    DECL_LINK( ClickHdl, Button*, void );
-    DECL_LINK( MenuHdl, MenuButton*, void );
+    DECL_LINK( ListHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK( ListToggleHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK( ClickHdl, weld::Button&, void );
+    DECL_LINK( MenuHdl, const OString&, void );
 };
 
 class ScRightHeaderEditPage : public ScHFEditPage
@@ -111,7 +120,7 @@ public:
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rCoreSet );
 
 private:
-    ScRightHeaderEditPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    ScRightHeaderEditPage( TabPageParent pParent, const SfxItemSet& rSet );
 };
 
 class ScLeftHeaderEditPage : public ScHFEditPage
@@ -121,7 +130,7 @@ public:
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rCoreSet );
 
 private:
-    ScLeftHeaderEditPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    ScLeftHeaderEditPage( TabPageParent pParent, const SfxItemSet& rSet );
 };
 
 class ScRightFooterEditPage : public ScHFEditPage
@@ -131,7 +140,7 @@ public:
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rCoreSet );
 
 private:
-    ScRightFooterEditPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    ScRightFooterEditPage( TabPageParent pParent, const SfxItemSet& rSet );
 };
 
 class ScLeftFooterEditPage : public ScHFEditPage
@@ -141,7 +150,7 @@ public:
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rCoreSet );
 
 private:
-    ScLeftFooterEditPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    ScLeftFooterEditPage( TabPageParent pParent, const SfxItemSet& rSet );
 };
 
 #endif

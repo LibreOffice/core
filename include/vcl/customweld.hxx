@@ -38,6 +38,7 @@ public:
     virtual tools::Rectangle GetFocusRect() { return tools::Rectangle(); }
     virtual FactoryFunction GetUITestFactory() const { return nullptr; }
     virtual OUString RequestHelp(tools::Rectangle&) { return OUString(); }
+    virtual OUString GetHelpText() const { return m_pDrawingArea->get_tooltip_text(); }
     Size const& GetOutputSizePixel() const { return m_aSize; }
     void SetOutputSizePixel(const Size& rSize) { m_aSize = rSize; }
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) { m_pDrawingArea = pDrawingArea; }
@@ -124,6 +125,8 @@ public:
     void set_sensitive(bool bSensitive) { m_xDrawingArea->set_sensitive(bSensitive); }
     bool get_sensitive() const { return m_xDrawingArea->get_sensitive(); }
     bool get_visible() const { return m_xDrawingArea->get_visible(); }
+    void set_grid_left_attach(int nAttach) { m_xDrawingArea->set_grid_left_attach(nAttach); }
+    int get_grid_left_attach() const { return m_xDrawingArea->get_grid_left_attach(); }
 };
 }
 #endif

@@ -59,26 +59,39 @@ static void lcl_GetFieldData( ScHeaderFieldData& rData )
 
 // class ScEditWindow
 
-ScEditWindow::ScEditWindow( vcl::Window* pParent, WinBits nBits, ScEditWindowLocation eLoc )
-    :   Control( pParent, nBits ),
-    eLocation(eLoc),
-    pAcc(nullptr)
+ScEditWindow::ScEditWindow(ScEditWindowLocation eLoc, weld::Window* pDialog)
+    : eLocation(eLoc)
+    , mbRTL(ScGlobal::IsSystemRTL())
+    , mpDialog(pDialog)
+    , pAcc(nullptr)
 {
+}
+
+void ScEditWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    OutputDevice& rDevice = pDrawingArea->get_ref_device();
+
+    Size aSize = rDevice.LogicToPixel(Size(80, 120), MapMode(MapUnit::MapAppFont));
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    SetOutputSizePixel(aSize);
+
+    weld::CustomWidgetController::SetDrawingArea(pDrawingArea);
+
     EnableRTL(false);
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
 
-    SetMapMode(MapMode(MapUnit::MapTwip));
-    SetPointer( PointerStyle::Text );
-    SetBackground( aBgColor );
+    rDevice.SetMapMode(MapMode(MapUnit::MapTwip));
+    rDevice.SetBackground(aBgColor);
 
-    Size aSize( GetOutputSize() );
+    Size aOutputSize(rDevice.PixelToLogic(aSize));
+    aSize = aOutputSize;
     aSize.setHeight( aSize.Height() * 4 );
 
     pEdEngine.reset( new ScHeaderEditEngine( EditEngine::CreatePool() ) );
     pEdEngine->SetPaperSize( aSize );
-    pEdEngine->SetRefDevice( this );
+    pEdEngine->SetRefDevice( &rDevice );
 
     ScHeaderFieldData aData;
     lcl_GetFieldData( aData );
@@ -86,33 +99,34 @@ ScEditWindow::ScEditWindow( vcl::Window* pParent, WinBits nBits, ScEditWindowLoc
     // fields
     pEdEngine->SetData( aData );
     pEdEngine->SetControlWord( pEdEngine->GetControlWord() | EEControlBits::MARKFIELDS );
-    mbRTL = ScGlobal::IsSystemRTL();
     if (mbRTL)
         pEdEngine->SetDefaultHorizontalTextDirection(EEHorizontalTextDirection::R2L);
 
-    pEdView.reset( new EditView( pEdEngine.get(), this ) );
-    pEdView->SetOutputArea( tools::Rectangle( Point(0,0), GetOutputSize() ) );
+    pEdView.reset(new EditView(pEdEngine.get(), nullptr));
+    pEdView->setEditViewCallbacks(this);
+    pEdView->SetOutputArea(tools::Rectangle(Point(0,0), aOutputSize));
 
     pEdView->SetBackgroundColor( aBgColor );
     pEdEngine->InsertView( pEdView.get() );
+
+    pDrawingArea->set_text_cursor();
+
+    if (pAcc)
+        pAcc->SetDescription(pDrawingArea->get_tooltip_text());
 }
 
 void ScEditWindow::Resize()
 {
-    Size aOutputSize(GetOutputSize());
+    OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
+    Size aOutputSize(rDevice.PixelToLogic(GetOutputSizePixel()));
     Size aSize(aOutputSize);
     aSize.setHeight( aSize.Height() * 4 );
     pEdEngine->SetPaperSize(aSize);
     pEdView->SetOutputArea(tools::Rectangle(Point(0,0), aOutputSize));
-    Control::Resize();
+    weld::CustomWidgetController::Resize();
 }
 
 ScEditWindow::~ScEditWindow()
-{
-    disposeOnce();
-}
-
-void ScEditWindow::dispose()
 {
     // delete Accessible object before deleting EditEngine and EditView
     if (pAcc)
@@ -123,12 +137,6 @@ void ScEditWindow::dispose()
     }
     pEdEngine.reset();
     pEdView.reset();
-    Control::dispose();
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeScEditWindow(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
-{
-    rRet = VclPtr<ScEditWindow>::Create(pParent, WB_BORDER|WB_TABSTOP, Left);
 }
 
 void ScEditWindow::SetNumType(SvxNumType eNumType)
@@ -196,9 +204,8 @@ void ScEditWindow::SetCharAttributes()
 
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-        vcl::Window* pWin = GetParent();
         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
-            pWin ? pWin->GetFrameWeld() : nullptr,  &aSet, pDocSh));
+            mpDialog,  &aSet, pDocSh));
         pDlg->SetText( ScResId( STR_TEXTATTRS ) );
         if ( pDlg->Execute() == RET_OK )
         {
@@ -213,62 +220,81 @@ void ScEditWindow::SetCharAttributes()
 
 void ScEditWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
 {
+    //note: ClassificationEditView::Paint is similar
+
+    rRenderContext.Push(PushFlags::ALL);
+    rRenderContext.SetClipRegion();
+
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
 
     pEdView->SetBackgroundColor( aBgColor );
 
-    SetBackground( aBgColor );
+    rRenderContext.SetBackground( aBgColor );
 
-    Control::Paint(rRenderContext, rRect);
+    tools::Rectangle aLogicRect(rRenderContext.PixelToLogic(rRect));
+    pEdView->Paint(aLogicRect, &rRenderContext);
 
-    pEdView->Paint(rRect);
-
-    if( HasFocus() )
+    if (HasFocus())
+    {
         pEdView->ShowCursor();
+        vcl::Cursor* pCursor = pEdView->GetCursor();
+        pCursor->DrawToDevice(rRenderContext);
+    }
+
+    std::vector<tools::Rectangle> aLogicRects;
+
+    // get logic selection
+    pEdView->GetSelectionRectangles(aLogicRects);
+
+    rRenderContext.SetLineColor();
+    rRenderContext.SetFillColor(COL_BLACK);
+    rRenderContext.SetRasterOp(RasterOp::Invert);
+
+    for (const auto &rSelectionRect : aLogicRects)
+        rRenderContext.DrawRect(rSelectionRect);
+
+    rRenderContext.Pop();
 }
 
-void ScEditWindow::MouseMove( const MouseEvent& rMEvt )
+bool ScEditWindow::MouseMove( const MouseEvent& rMEvt )
 {
-    pEdView->MouseMove( rMEvt );
+    return pEdView->MouseMove( rMEvt );
 }
 
-void ScEditWindow::MouseButtonDown( const MouseEvent& rMEvt )
+bool ScEditWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( !HasFocus() )
         GrabFocus();
 
-    pEdView->MouseButtonDown( rMEvt );
+    return pEdView->MouseButtonDown( rMEvt );
 }
 
-void ScEditWindow::MouseButtonUp( const MouseEvent& rMEvt )
+bool ScEditWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    pEdView->MouseButtonUp( rMEvt );
+    return pEdView->MouseButtonUp( rMEvt );
 }
 
-void ScEditWindow::KeyInput( const KeyEvent& rKEvt )
+bool ScEditWindow::KeyInput( const KeyEvent& rKEvt )
 {
     sal_uInt16 nKey =  rKEvt.GetKeyCode().GetModifier()
                  + rKEvt.GetKeyCode().GetCode();
 
     if ( nKey == KEY_TAB || nKey == KEY_TAB + KEY_SHIFT )
     {
-        Control::KeyInput( rKEvt );
+        return false;
     }
     else if ( !pEdView->PostKeyEvent( rKEvt ) )
     {
-        Control::KeyInput( rKEvt );
+        return false;
     }
     else if ( !rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsShift() &&
                 rKEvt.GetKeyCode().IsMod2() && rKEvt.GetKeyCode().GetCode() == KEY_DOWN )
     {
         aObjectSelectLink.Call(*this);
+        return true;
     }
-}
-
-void ScEditWindow::Command( const CommandEvent& rCEvt )
-{
-    pEdView->Command( rCEvt );
+    return false;
 }
 
 void ScEditWindow::GetFocus()
@@ -286,7 +312,7 @@ void ScEditWindow::GetFocus()
     else
         pAcc = nullptr;
 
-    Control::GetFocus();
+    weld::CustomWidgetController::GetFocus();
 }
 
 void ScEditWindow::LoseFocus()
@@ -298,13 +324,13 @@ void ScEditWindow::LoseFocus()
     }
     else
         pAcc = nullptr;
-    Control::LoseFocus();
+    weld::CustomWidgetController::LoseFocus();
+    Invalidate(); // redraw without cursor
 }
 
 css::uno::Reference< css::accessibility::XAccessible > ScEditWindow::CreateAccessible()
 {
     OUString sName;
-    OUString sDescription(GetHelpText());
     switch (eLocation)
     {
     case Left:
@@ -323,10 +349,13 @@ css::uno::Reference< css::accessibility::XAccessible > ScEditWindow::CreateAcces
         }
         break;
     }
+#if 0
+    //TODO
     pAcc = new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), pEdView.get(), this,
-        sName, sDescription, ScAccessibleEditObject::EditControl);
+        sName, OUString(), ScAccessibleEditObject::EditControl);
     css::uno::Reference< css::accessibility::XAccessible > xAccessible = pAcc;
     xAcc = xAccessible;
+#endif
     return pAcc;
 }
 

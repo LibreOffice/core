@@ -241,6 +241,12 @@ public:
     void
         CommitChange(const css::accessibility::AccessibleEventObject& rEvent) const;
 
+    /// Use this method to set initial Name without notification
+    void SetName(const OUString& rName) { msName = rName; }
+
+    /// Use this method to set initial Description without notification
+    void SetDescription(const OUString& rDesc) { msDescription = rDesc; }
+
 protected:
     /// Calls all FocusListener to tell they that the focus is gained.
     void CommitFocusGained() const;
@@ -252,11 +258,6 @@ protected:
 
     /// @throws css::lang::DisposedException
     void IsObjectValid() const;
-
-    /// Use this method to set initial Name without notification
-    void SetName(const OUString& rName) { msName = rName; }
-    /// Use this method to set initial Description without notification
-    void SetDescription(const OUString& rDesc) { msDescription = rDesc; }
 
     /// Reference to the parent object.
     css::uno::Reference<css::accessibility::XAccessible> mxParent;
