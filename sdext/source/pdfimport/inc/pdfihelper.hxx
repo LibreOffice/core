@@ -82,13 +82,14 @@ namespace pdfi
     {
         size_t operator()(const FontAttributes& rFont ) const
         {
-            return static_cast<size_t>(rFont.familyName.hashCode())
-                ^  size_t(rFont.isBold ? 0xd47be593 : 0)
-                ^  size_t(rFont.isItalic ? 0x1efd51a1 : 0)
-                ^  size_t(rFont.isUnderline ? 0xf6bd325a : 0)
-                ^  size_t(rFont.isOutline ?  0x12345678 : 0)
-                ^  size_t(rFont.size)
-                ;
+            std::size_t seed = 0;
+            boost::hash_combine(seed, rFont.familyName.hashCode());
+            boost::hash_combine(seed, rFont.isBold);
+            boost::hash_combine(seed, rFont.isItalic);
+            boost::hash_combine(seed, rFont.isUnderline);
+            boost::hash_combine(seed, rFont.isOutline);
+            boost::hash_combine(seed, rFont.size);
+            return seed;
         }
     };
 
@@ -184,31 +185,32 @@ namespace pdfi
     {
         size_t operator()(const GraphicsContext& rGC ) const
         {
-            return boost::hash_value(rGC.LineColor.Red)
-                ^  boost::hash_value(rGC.LineColor.Green)
-                ^  boost::hash_value(rGC.LineColor.Blue)
-                ^  boost::hash_value(rGC.LineColor.Alpha)
-                ^  boost::hash_value(rGC.FillColor.Red)
-                ^  boost::hash_value(rGC.FillColor.Green)
-                ^  boost::hash_value(rGC.FillColor.Blue)
-                ^  boost::hash_value(rGC.FillColor.Alpha)
-                ^  boost::hash_value(rGC.LineJoin)
-                ^  boost::hash_value(rGC.LineCap)
-                ^  boost::hash_value(rGC.BlendMode)
-                ^  boost::hash_value(rGC.LineWidth)
-                ^  boost::hash_value(rGC.Flatness)
-                ^  boost::hash_value(rGC.MiterLimit)
-                ^  rGC.DashArray.size()
-                ^  boost::hash_value(rGC.FontId)
-                ^  boost::hash_value(rGC.TextRenderMode)
-                ^  boost::hash_value(rGC.Transformation.get( 0, 0 ))
-                ^  boost::hash_value(rGC.Transformation.get( 1, 0 ))
-                ^  boost::hash_value(rGC.Transformation.get( 0, 1 ))
-                ^  boost::hash_value(rGC.Transformation.get( 1, 1 ))
-                ^  boost::hash_value(rGC.Transformation.get( 0, 2 ))
-                ^  boost::hash_value(rGC.Transformation.get( 1, 2 ))
-                ^  boost::hash_value(rGC.Clip.count() ? rGC.Clip.getB2DPolygon(0).count() : 0)
-                ;
+            std::size_t seed = 0;
+            boost::hash_combine(seed, rGC.LineColor.Red);
+            boost::hash_combine(seed, rGC.LineColor.Green);
+            boost::hash_combine(seed, rGC.LineColor.Blue);
+            boost::hash_combine(seed, rGC.LineColor.Alpha);
+            boost::hash_combine(seed, rGC.FillColor.Red);
+            boost::hash_combine(seed, rGC.FillColor.Green);
+            boost::hash_combine(seed, rGC.FillColor.Blue);
+            boost::hash_combine(seed, rGC.FillColor.Alpha);
+            boost::hash_combine(seed, rGC.LineJoin);
+            boost::hash_combine(seed, rGC.LineCap);
+            boost::hash_combine(seed, rGC.BlendMode);
+            boost::hash_combine(seed, rGC.LineWidth);
+            boost::hash_combine(seed, rGC.Flatness);
+            boost::hash_combine(seed, rGC.MiterLimit);
+            boost::hash_combine(seed, rGC.DashArray.size());
+            boost::hash_combine(seed, rGC.FontId);
+            boost::hash_combine(seed, rGC.TextRenderMode);
+            boost::hash_combine(seed, rGC.Transformation.get( 0, 0 ));
+            boost::hash_combine(seed, rGC.Transformation.get( 1, 0 ));
+            boost::hash_combine(seed, rGC.Transformation.get( 0, 1 ));
+            boost::hash_combine(seed, rGC.Transformation.get( 1, 1 ));
+            boost::hash_combine(seed, rGC.Transformation.get( 0, 2 ));
+            boost::hash_combine(seed, rGC.Transformation.get( 1, 2 ));
+            boost::hash_combine(seed, rGC.Clip.count() ? rGC.Clip.getB2DPolygon(0).count() : 0);
+            return seed;
         }
     };
 

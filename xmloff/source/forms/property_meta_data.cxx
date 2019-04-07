@@ -24,6 +24,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 
+#include <boost/functional/hash.hpp>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -128,7 +129,10 @@ namespace xmloff { namespace metadata
         {
             size_t operator()( const AttributeDescription& i_attribute ) const
             {
-                return size_t( i_attribute.attributeToken * 100 ) + size_t( i_attribute.namespacePrefix );
+                std::size_t seed = 0;
+                boost::hash_combine(seed, i_attribute.attributeToken);
+                boost::hash_combine(seed, i_attribute.namespacePrefix);
+                return seed;
             }
         };
 

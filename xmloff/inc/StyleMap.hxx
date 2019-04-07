@@ -22,6 +22,7 @@
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <boost/functional/hash.hpp>
 #include <unordered_map>
 
 struct StyleNameKey_Impl
@@ -46,8 +47,10 @@ struct StyleNameHash_Impl
 
 inline size_t StyleNameHash_Impl::operator()( const StyleNameKey_Impl& r ) const
 {
-    return static_cast< size_t >( r.m_nFamily ) +
-           static_cast< size_t >( r.m_aName.hashCode() );
+    std::size_t seed = 0;
+    boost::hash_combine(seed, r.m_nFamily);
+    boost::hash_combine(seed, r.m_aName.hashCode());
+    return seed;
 }
 
 inline bool StyleNameHash_Impl::operator()(

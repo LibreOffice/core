@@ -32,9 +32,10 @@ namespace std
     {
         size_t operator()(const pair< sal_UCS4, FontWeight >& rData) const
         {
-            size_t h1 = hash<sal_UCS4>()(rData.first);
-            size_t h2 = hash<int>()(rData.second);
-            return h1 ^ h2;
+            std::size_t seed = 0;
+            boost::hash_combine(seed, rData.first);
+            boost::hash_combine(seed, rData.second);
+            return seed;
         }
     };
 }
