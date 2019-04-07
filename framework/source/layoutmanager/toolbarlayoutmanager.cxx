@@ -439,12 +439,13 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
 {
     bool bNotify( false );
 
-    SolarMutexClearableGuard aReadLock;
-    uno::Reference< frame::XFrame > xFrame( m_xFrame );
-    uno::Reference< awt::XWindow2 > xContainerWindow( m_xContainerWindow );
-    aReadLock.clear();
-
-    bNotify = false;
+    uno::Reference<frame::XFrame> xFrame;
+    uno::Reference<awt::XWindow2> xContainerWindow;
+    {
+        SolarMutexGuard aReadLock;
+        xFrame.set(m_xFrame);
+        xContainerWindow.set(m_xContainerWindow);
+    }
 
     if ( !xFrame.is() || !xContainerWindow.is() )
         return false;
@@ -453,14 +454,17 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
     if ( !aToolbarElement.m_xUIElement.is()  )
     {
         uno::Reference< ui::XUIElement > xUIElement;
+        uno::Sequence<beans::PropertyValue> aPropSeq(2);
+        uno::Reference<ui::XUIElementFactory> xUIElementFactory;
 
-        uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
-        aPropSeq[0].Name = "Frame";
-        aPropSeq[0].Value <<= m_xFrame;
-        aPropSeq[1].Name = "Persistent";
-        aPropSeq[1].Value <<= true;
-        uno::Reference< ui::XUIElementFactory > xUIElementFactory( m_xUIElementFactoryManager );
-        aReadLock.clear();
+        {
+            SolarMutexGuard aReadLock;
+            aPropSeq[0].Name = "Frame";
+            aPropSeq[0].Value <<= m_xFrame;
+            aPropSeq[1].Name = "Persistent";
+            aPropSeq[1].Value <<= true;
+            xUIElementFactory.set(m_xUIElementFactoryManager);
+        }
 
         implts_setToolbarCreation();
         try
