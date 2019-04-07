@@ -178,25 +178,25 @@ public:
 
 void ImpItemEdit::KeyInput(const KeyEvent& rKEvt)
 {
-    SdrItemBrowserControl* pBrowseMerk = pBrowse;
+    SdrItemBrowserControl* pBrowseTemp = pBrowse;
 
     sal_uInt16 nKeyCode(rKEvt.GetKeyCode().GetCode() + rKEvt.GetKeyCode().GetModifier());
 
     if(nKeyCode == KEY_RETURN)
     {
-        pBrowseMerk->EndChangeEntry();
-        pBrowseMerk->GrabFocus();
+        pBrowseTemp->EndChangeEntry();
+        pBrowseTemp->GrabFocus();
     }
     else if(nKeyCode == KEY_ESCAPE)
     {
-        pBrowseMerk->BreakChangeEntry();
-        pBrowseMerk->GrabFocus();
+        pBrowseTemp->BreakChangeEntry();
+        pBrowseTemp->GrabFocus();
     }
     else if(nKeyCode == KEY_UP || nKeyCode == KEY_DOWN)
     {
-        pBrowseMerk->EndChangeEntry();
-        pBrowseMerk->GrabFocus();
-        pBrowseMerk->KeyInput(rKEvt);
+        pBrowseTemp->EndChangeEntry();
+        pBrowseTemp->GrabFocus();
+        pBrowseTemp->KeyInput(rKEvt);
     }
     else
         Edit::KeyInput(rKEvt);
