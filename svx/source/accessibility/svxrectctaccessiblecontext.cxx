@@ -32,7 +32,6 @@
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <sal/log.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svx/strings.hrc>
 #include <svx/dlgctrl.hxx>
