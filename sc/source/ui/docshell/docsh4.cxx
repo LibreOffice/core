@@ -1844,8 +1844,9 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
+                        vcl::Window *pDialogParent = GetActiveDialogParent();
                         VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScHFEditDlg(
-                                                                                GetActiveDialogParent(),
+                                                                                pDialogParent ? pDialogParent->GetFrameWeld() : nullptr,
                                                                                 rStyleSet,
                                                                                 aStr,
                                                                                 nResId));
