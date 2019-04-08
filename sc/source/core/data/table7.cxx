@@ -421,10 +421,10 @@ bool ScTable::IsEditActionAllowed(
 
 std::unique_ptr<sc::ColumnIterator> ScTable::GetColumnIterator( SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const
 {
-    if (!ValidCol(nCol) || nCol >= aCol.size())
+    if (!ValidCol(nCol))
         return std::unique_ptr<sc::ColumnIterator>();
 
-    return aCol[nCol].GetColumnIterator(nRow1, nRow2);
+    return CreateColumnIfNotExists(nCol).GetColumnIterator(nRow1, nRow2);
 }
 
 bool ScTable::EnsureFormulaCellResults( const SCCOL nCol1, SCROW nRow1, const SCCOL nCol2, SCROW nRow2, bool bSkipRunning )
