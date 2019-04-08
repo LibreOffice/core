@@ -89,10 +89,10 @@ public:
         xReferenceResolvedListener = xListener;
     }
 
-    void addReference( SignatureReferenceType type, sal_Int32 digestID, const OUString& uri, sal_Int32 keeperId )
+    void addReference( SignatureReferenceType type, sal_Int32 digestID, const OUString& uri, sal_Int32 keeperId, const OUString& rType )
     {
         signatureInfor.vSignatureReferenceInfors.push_back(
-                SignatureReferenceInformation(type, digestID, uri));
+                SignatureReferenceInformation(type, digestID, uri, rType));
         vKeeperIds.push_back( keeperId );
     }
 };
@@ -261,7 +261,8 @@ private:
     void switchGpgSignature();
     void addReference(
         const OUString& ouUri,
-        sal_Int32 nDigestID );
+        sal_Int32 nDigestID,
+        const OUString& ouType );
     void addStreamReference(
         const OUString& ouUri,
         bool isBinary,
