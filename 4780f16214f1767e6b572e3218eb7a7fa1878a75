@@ -22,6 +22,30 @@
       "revId": "4780f16214f1767e6b572e3218eb7a7fa1878a75",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_8c59b4ff",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1837,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2019-04-08T09:58:11Z",
+      "side": 1,
+      "message": "I\u0027m not sure if I understood you right here concerning the tab. If I\u0027m deleting something from tab sheet2 as example, sheet2 has to be visible. How can I delete something from tab sheet2, if sheet1 is visible? Is there a way to do this?",
+      "parentUuid": "df87a7cf_5b55a84f",
+      "range": {
+        "startLine": 1837,
+        "startChar": 0,
+        "endLine": 1837,
+        "endChar": 58
+      },
+      "revId": "4780f16214f1767e6b572e3218eb7a7fa1878a75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
