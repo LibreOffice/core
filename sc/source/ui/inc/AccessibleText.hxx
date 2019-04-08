@@ -103,7 +103,7 @@ class ScAccessibleEditObjectTextData : public ScAccessibleTextData
 {
 public:
     // Add a para to indicate whether the object is cloned
-    ScAccessibleEditObjectTextData(EditView* pEditView, vcl::Window* pWin, bool isClone = false);
+    ScAccessibleEditObjectTextData(EditView* pEditView, OutputDevice* pWin, bool isClone = false);
     virtual             ~ScAccessibleEditObjectTextData() override;
 
     virtual ScAccessibleTextData* Clone() const override;
@@ -123,14 +123,14 @@ protected:
     EditView*                  mpEditView;
     EditEngine*                mpEditEngine;
     std::unique_ptr<SvxEditEngineForwarder>    mpForwarder;
-    VclPtr<vcl::Window>        mpWindow;
+    VclPtr<OutputDevice>       mpWindow;
     bool                       mbIsCloned;
 };
 
 class ScAccessibleEditLineTextData : public ScAccessibleEditObjectTextData
 {
 public:
-                        ScAccessibleEditLineTextData(EditView* pEditView, vcl::Window* pWin);
+                        ScAccessibleEditLineTextData(EditView* pEditView, OutputDevice* pWin);
     virtual             ~ScAccessibleEditLineTextData() override;
 
     virtual ScAccessibleTextData* Clone() const override;
