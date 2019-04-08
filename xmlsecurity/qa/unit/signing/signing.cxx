@@ -102,6 +102,7 @@ public:
 #endif
     void test96097Calc();
     void test96097Doc();
+    void testXAdESNotype();
     /// Creates a XAdES signature from scratch.
     void testXAdES();
     /// Works with an existing good XAdES signature.
@@ -148,6 +149,7 @@ public:
 #endif
     CPPUNIT_TEST(test96097Calc);
     CPPUNIT_TEST(test96097Doc);
+    CPPUNIT_TEST(testXAdESNotype);
     CPPUNIT_TEST(testXAdES);
     CPPUNIT_TEST(testXAdESGood);
     CPPUNIT_TEST(testSignatureLineImages);
@@ -730,6 +732,65 @@ void SigningTest::test96097Doc()
     {
         CPPUNIT_FAIL("Fail to save as the document");
     }
+}
+
+void SigningTest::testXAdESNotype()
+{
+    // Create a working copy.
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    OUString aURL = aTempFile.GetURL();
+    CPPUNIT_ASSERT_EQUAL(
+        osl::File::RC::E_None,
+        osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + "notype-xades.odt", aURL));
+
+    // Read existing signature.
+    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    CPPUNIT_ASSERT(aManager.init());
+    uno::Reference<embed::XStorage> xStorage
+        = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
+            ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
+    CPPUNIT_ASSERT(xStorage.is());
+    aManager.mxStore = xStorage;
+    aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
+    aManager.read(/*bUseTempStream=*/false);
+
+    // Create a new signature.
+    uno::Reference<security::XCertificate> xCertificate
+        = getCertificate(aManager, svl::crypto::SignatureMethodAlgorithm::RSA);
+    if (!xCertificate.is())
+        return;
+    sal_Int32 nSecurityId;
+    aManager.add(xCertificate, mxSecurityContext, /*rDescription=*/OUString(), nSecurityId,
+                 /*bAdESCompliant=*/true);
+
+    // Write to storage.
+    aManager.read(/*bUseTempStream=*/true);
+    aManager.write(/*bXAdESCompliantIfODF=*/true);
+    uno::Reference<embed::XTransactedObject> xTransactedObject(xStorage, uno::UNO_QUERY);
+    xTransactedObject->commit();
+
+    // Parse the resulting XML.
+    uno::Reference<embed::XStorage> xMetaInf
+        = xStorage->openStorageElement("META-INF", embed::ElementModes::READ);
+    uno::Reference<io::XInputStream> xInputStream(
+        xMetaInf->openStreamElement("documentsignatures.xml", embed::ElementModes::READ),
+        uno::UNO_QUERY);
+    std::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    xmlDocPtr pXmlDoc = parseXmlStream(pStream.get());
+
+    // Without the accompanying fix in place, this test would have failed with "unexpected 'Type'
+    // attribute", i.e. the signature without such an attribute was not preserved correctly.
+    assertXPathNoAttribute(pXmlDoc,
+                           "/odfds:document-signatures/dsig:Signature[1]/dsig:SignedInfo/"
+                           "dsig:Reference[@URI='#idSignedProperties']",
+                           "Type");
+
+    // New signature always has the Type attribute.
+    assertXPath(pXmlDoc,
+                "/odfds:document-signatures/dsig:Signature[2]/dsig:SignedInfo/"
+                "dsig:Reference[@URI='#idSignedProperties']",
+                "Type", "http://uri.etsi.org/01903#SignedProperties");
 }
 
 void SigningTest::testXAdES()
