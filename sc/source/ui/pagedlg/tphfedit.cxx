@@ -112,7 +112,24 @@ void ScEditWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     pDrawingArea->set_text_cursor();
 
     if (pAcc)
-        pAcc->SetDescription(pDrawingArea->get_tooltip_text());
+    {
+        OUString sName;
+        switch (eLocation)
+        {
+            case Left:
+                sName = ScResId(STR_ACC_LEFTAREA_NAME);
+                break;
+            case Center:
+                sName = ScResId(STR_ACC_CENTERAREA_NAME);
+                break;
+            case Right:
+                sName = ScResId(STR_ACC_RIGHTAREA_NAME);
+                break;
+        }
+
+        pAcc->InitAcc(nullptr, pEdView.get(), nullptr,
+                      sName, pDrawingArea->get_tooltip_text());
+    }
 }
 
 void ScEditWindow::Resize()
@@ -330,32 +347,9 @@ void ScEditWindow::LoseFocus()
 
 css::uno::Reference< css::accessibility::XAccessible > ScEditWindow::CreateAccessible()
 {
-    OUString sName;
-    switch (eLocation)
-    {
-    case Left:
-        {
-            sName = ScResId(STR_ACC_LEFTAREA_NAME);
-        }
-        break;
-    case Center:
-        {
-            sName = ScResId(STR_ACC_CENTERAREA_NAME);
-        }
-        break;
-    case Right:
-        {
-            sName = ScResId(STR_ACC_RIGHTAREA_NAME);
-        }
-        break;
-    }
-#if 0
-    //TODO
-    pAcc = new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), pEdView.get(), this,
-        sName, OUString(), ScAccessibleEditObject::EditControl);
+    pAcc = new ScAccessibleEditControlObject(this);
     css::uno::Reference< css::accessibility::XAccessible > xAccessible = pAcc;
     xAcc = xAccessible;
-#endif
     return pAcc;
 }
 

@@ -25,6 +25,7 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <address.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/customweld.hxx>
 
 #include <memory>
 
@@ -56,8 +57,15 @@ public:
         EditView* pEditView, vcl::Window* pWin, const OUString& rName,
         const OUString& rDescription, EditObjectType eObjectType);
 
+    void InitAcc(
+        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+        EditView* pEditView, vcl::Window* pWin, const OUString& rName,
+        const OUString& rDescription);
+
 protected:
     virtual ~ScAccessibleEditObject() override;
+
+    ScAccessibleEditObject(EditObjectType eObjectType);
 
     using ScAccessibleContextBase::IsDefunc;
 
@@ -82,6 +90,8 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible >
         SAL_CALL getAccessibleAtPoint(
         const css::awt::Point& rPoint ) override;
+
+    virtual OutputDevice* GetOutputDeviceForView();
 
 protected:
     /// Return the object's current bounding box relative to the desktop.
@@ -180,6 +190,34 @@ private:
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
 
     sal_Int32 GetFgBgColor(  const OUString &strPropColor) ;
+};
+
+class ScAccessibleEditControlObject : public ScAccessibleEditObject
+{
+private:
+    weld::CustomWidgetController* m_pController;
+
+protected:
+    /// Return the object's current bounding box relative to the desktop.
+    virtual tools::Rectangle GetBoundingBoxOnScreen() const override;
+
+    /// Return the object's current bounding box relative to the parent object.
+    virtual tools::Rectangle GetBoundingBox() const override;
+
+public:
+    ScAccessibleEditControlObject(weld::CustomWidgetController* pController)
+        : ScAccessibleEditObject(ScAccessibleEditObject::EditControl)
+        , m_pController(pController)
+    {
+    }
+
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
+
+    // for mapping positions/sizes within the TextView to a11y
+    virtual OutputDevice* GetOutputDeviceForView() override;
+
+    using ScAccessibleContextBase::disposing;
+    virtual void SAL_CALL disposing() override;
 };
 
 #endif
