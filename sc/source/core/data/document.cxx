@@ -6527,7 +6527,7 @@ void ScDocument::SetNote(const ScAddress& rPos, std::unique_ptr<ScPostIt> pNote)
 
 void ScDocument::SetNote(SCCOL nCol, SCROW nRow, SCTAB nTab, std::unique_ptr<ScPostIt> pNote)
 {
-    return maTabs[nTab]->aCol[nCol].SetCellNote(nRow, std::move(pNote));
+    return maTabs[nTab]->CreateColumnIfNotExists(nCol).SetCellNote(nRow, std::move(pNote));
 }
 
 bool ScDocument::HasNote(const ScAddress& rPos) const
