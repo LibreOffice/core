@@ -861,6 +861,7 @@ void SigningTest::testXAdESNotype()
                 "Type", "http://uri.etsi.org/01903#SignedProperties");
 }
 
+/// Creates a XAdES signature from scratch.
 void SigningTest::testXAdES()
 {
     // Create an empty document, store it to a tempfile and load it as a storage.
