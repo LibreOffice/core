@@ -13,7 +13,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,openssl,$(OPENSSL_TARBALL),,openssl
 
 $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
 	external/openssl/openssllnx.patch \
-	external/openssl/opensslmingw.patch \
 	external/openssl/opensslwnt.patch \
 	external/openssl/openssl-1.0.1h-win64.patch.1 \
 	external/openssl/opensslsol.patch \
