@@ -983,7 +983,9 @@ bool ComboBox::IsTravelSelect() const
 
 bool ComboBox::IsInDropDown() const
 {
-    return m_pImpl->m_pFloatWin && m_pImpl->m_pFloatWin->IsInPopupMode();
+    // when the dropdown is dismissed, first mbInPopupMode is set to false, and on the next event iteration then
+    // mbPopupMode is set to false
+    return m_pImpl->m_pFloatWin && m_pImpl->m_pFloatWin->IsInPopupMode() && m_pImpl->m_pFloatWin->ImplIsInPrivatePopupMode();
 }
 
 void ComboBox::EnableMultiSelection( bool bMulti )

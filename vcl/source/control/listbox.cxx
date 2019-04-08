@@ -1120,7 +1120,9 @@ bool ListBox::IsTravelSelect() const
 
 bool ListBox::IsInDropDown() const
 {
-    return mpFloatWin && mpFloatWin->IsInPopupMode();
+    // when the dropdown is dismissed, first mbInPopupMode is set to false, and on the next event iteration then
+    // mbPopupMode is set to false
+    return mpFloatWin && mpFloatWin->IsInPopupMode() && mpFloatWin->ImplIsInPrivatePopupMode();
 }
 
 tools::Rectangle ListBox::GetBoundingRectangle( sal_Int32 nItem ) const
