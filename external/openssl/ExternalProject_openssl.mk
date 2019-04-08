@@ -61,7 +61,7 @@ OPENSSL_PLATFORM := \
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,openssl,build):
 	$(call gb_ExternalProject_run,build,\
-		export CC="$(shell cygpath -w $(filter-out -%,$(CC))) $(filter -%,$(CC))" \
+		export CC="$(shell cygpath -w $(filter-out -%,$(CC))) $(filter -%,$(CC)) $(if $(findstring 140_70,$(VCVER)_$(WINDOWS_SDK_VERSION)),-D_USING_V110_SDK71_)" \
 		&& export PERL="$(shell cygpath -w $(PERL))" \
 		&& export LIB="$(ILIB)" \
 		&& $(PERL) Configure $(OPENSSL_PLATFORM) no-idea \
