@@ -60,13 +60,35 @@ ScAccessibleEditObject::ScAccessibleEditObject(
         const uno::Reference<XAccessible>& rxParent,
         EditView* pEditView, vcl::Window* pWin, const OUString& rName,
         const OUString& rDescription, EditObjectType eObjectType)
-    :
-    ScAccessibleContextBase(rxParent, AccessibleRole::TEXT_FRAME),
-    mpEditView(pEditView),
-    mpWindow(pWin),
-    meObjectType(eObjectType),
-    mbHasFocus(false)
+    : ScAccessibleContextBase(rxParent, AccessibleRole::TEXT_FRAME)
+    , mpEditView(pEditView)
+    , mpWindow(pWin)
+    , meObjectType(eObjectType)
+    , mbHasFocus(false)
+    , m_pScDoc(nullptr)
 {
+    InitAcc(rxParent, pEditView, pWin, rName, rDescription);
+}
+
+ScAccessibleEditObject::ScAccessibleEditObject(EditObjectType eObjectType)
+    : ScAccessibleContextBase(nullptr, AccessibleRole::TEXT_FRAME)
+    , mpEditView(nullptr)
+    , mpWindow(nullptr)
+    , meObjectType(eObjectType)
+    , mbHasFocus(false)
+    , m_pScDoc(nullptr)
+{
+}
+
+void ScAccessibleEditObject::InitAcc(
+        const uno::Reference<XAccessible>& rxParent,
+        EditView* pEditView, vcl::Window* pWin, const OUString& rName,
+        const OUString& rDescription)
+{
+    SetParent(rxParent);
+    mpEditView = pEditView;
+    mpWindow = pWin;
+
     CreateTextHelper();
     SetName(rName);
     SetDescription(rDescription);
@@ -78,13 +100,7 @@ ScAccessibleEditObject::ScAccessibleEditObject(
             m_pScDoc = pAccDoc->GetDocument();
             m_curCellAddress =pAccDoc->GetCurCellAddress();
         }
-        else
-        {
-            m_pScDoc=nullptr;
-        }
     }
-    else
-        m_pScDoc=nullptr;
 }
 
 ScAccessibleEditObject::~ScAccessibleEditObject()
@@ -331,6 +347,11 @@ bool ScAccessibleEditObject::IsDefunc(
          (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 
+OutputDevice* ScAccessibleEditObject::GetOutputDeviceForView()
+{
+    return mpWindow;
+}
+
 void ScAccessibleEditObject::CreateTextHelper()
 {
     if (!mpTextHelper)
@@ -339,12 +360,12 @@ void ScAccessibleEditObject::CreateTextHelper()
         if (meObjectType == CellInEditMode || meObjectType == EditControl)
         {
             pAccessibleTextData.reset
-                (new ScAccessibleEditObjectTextData(mpEditView, mpWindow));
+                (new ScAccessibleEditObjectTextData(mpEditView, GetOutputDeviceForView()));
         }
         else
         {
             pAccessibleTextData.reset
-                (new ScAccessibleEditLineTextData(nullptr, mpWindow));
+                (new ScAccessibleEditLineTextData(nullptr, GetOutputDeviceForView()));
         }
 
         std::unique_ptr<ScAccessibilityEditSource> pEditSrc =
@@ -510,6 +531,64 @@ uno::Reference< XAccessibleRelationSet > ScAccessibleEditObject::getAccessibleRe
         return rSet;
     }
     return uno::Reference< XAccessibleRelationSet >();
+}
+
+tools::Rectangle ScAccessibleEditControlObject::GetBoundingBoxOnScreen() const
+{
+    tools::Rectangle aScreenBounds;
+
+    if (m_pController && m_pController->GetDrawingArea())
+    {
+        aScreenBounds = tools::Rectangle(m_pController->GetDrawingArea()->get_accessible_location(),
+                                         m_pController->GetOutputSizePixel());
+    }
+
+    return aScreenBounds;
+}
+
+tools::Rectangle ScAccessibleEditControlObject::GetBoundingBox() const
+{
+    tools::Rectangle aBounds( GetBoundingBoxOnScreen() );
+
+    uno::Reference< XAccessibleContext > xContext(const_cast<ScAccessibleEditControlObject*>(this)->getAccessibleContext());
+    if ( xContext.is() )
+    {
+        uno::Reference< XAccessible > xParent( xContext->getAccessibleParent() );
+        if ( xParent.is() )
+        {
+            uno::Reference< XAccessibleComponent > xParentComponent( xParent->getAccessibleContext(), uno::UNO_QUERY );
+            if ( xParentComponent.is() )
+            {
+                Point aScreenLoc = aBounds.TopLeft();
+                awt::Point aParentScreenLoc = xParentComponent->getLocationOnScreen();
+                Point aPos( aScreenLoc.getX() - aParentScreenLoc.X, aScreenLoc.getY() - aParentScreenLoc.Y );
+                aBounds.SetPos( aPos );
+            }
+        }
+    }
+
+    return aBounds;
+}
+
+void SAL_CALL ScAccessibleEditControlObject::disposing()
+{
+    ScAccessibleEditObject::disposing();
+    m_pController = nullptr;
+}
+
+uno::Reference< XAccessibleRelationSet > ScAccessibleEditControlObject::getAccessibleRelationSet()
+{
+    SolarMutexGuard aGuard;
+    if (!m_pController || !m_pController->GetDrawingArea())
+        return uno::Reference< XAccessibleRelationSet >();
+    return m_pController->GetDrawingArea()->get_accessible_relation_set();
+}
+
+OutputDevice* ScAccessibleEditControlObject::GetOutputDeviceForView()
+{
+    if (!m_pController || !m_pController->GetDrawingArea())
+        return nullptr;
+    return &m_pController->GetDrawingArea()->get_ref_device();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

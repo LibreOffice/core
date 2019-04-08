@@ -247,6 +247,8 @@ public:
     /// Use this method to set initial Description without notification
     void SetDescription(const OUString& rDesc) { msDescription = rDesc; }
 
+    void SetParent(const css::uno::Reference<css::accessibility::XAccessible>& rParent) { mxParent = rParent; }
+
 protected:
     /// Calls all FocusListener to tell they that the focus is gained.
     void CommitFocusGained() const;
