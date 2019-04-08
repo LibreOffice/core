@@ -203,33 +203,6 @@ struct SingleTabDlgImpl
 
 typedef const sal_uInt16* (*GetTabPageRanges)(); // provides international Which values
 
-class SFX2_DLLPUBLIC SfxSingleTabDialog : public SfxModalDialog
-{
-public:
-    SfxSingleTabDialog(vcl::Window *pParent, const SfxItemSet& rOptionsSet,
-        const OUString& rID = OUString("SingleTabDialog"),
-        const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"));
-
-    SfxSingleTabDialog(vcl::Window *pParent, const SfxItemSet* pInSet,
-        const OUString& rID = OUString("SingleTabDialog"),
-        const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"));
-
-    virtual             ~SfxSingleTabDialog() override;
-    virtual void        dispose() override;
-
-    void                SetTabPage(SfxTabPage* pTabPage);
-    SfxTabPage*         GetTabPage() const { return pImpl->m_pSfxPage; }
-
-private:
-    VclPtr<OKButton>      pOKBtn;
-    VclPtr<CancelButton>  pCancelBtn;
-    VclPtr<HelpButton>    pHelpBtn;
-
-    DECL_DLLPRIVATE_LINK(OKHdl_Impl, Button*, void);
-
-    std::unique_ptr<SingleTabDlgImpl>   pImpl;
-};
-
 class SFX2_DLLPUBLIC SfxOkDialogController : public SfxDialogController
 {
 public:
