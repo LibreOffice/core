@@ -93,14 +93,12 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
             aEvent = m_aProcessingUserEvents.front();
             m_aProcessingUserEvents.pop_front();
 
-            // remember to reset the guard before break or continue the loop
-            aResettableListGuard.clear();
+            osl::MutexReleaser aReleaser(aResettableListGuard);
 
             if ( !isFrameAlive( aEvent.m_pFrame ) )
             {
                 if ( aEvent.m_nEvent == SalEvent::UserEvent )
                     delete static_cast< ImplSVEvent* >( aEvent.m_pData );
-                aResettableListGuard.reset();
                 continue;
             }
 
@@ -124,7 +122,6 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
                 SAL_WARN("vcl", "Uncaught exception during DispatchUserEvents!");
                 std::abort();
             }
-            aResettableListGuard.reset();
             if (!bHandleAllCurrentEvents)
                 break;
         }
