@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_6c3d50ba",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 4092,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-04-08T08:07:28Z",
+      "side": 1,
+      "message": "Nitpick: just a few lines above you \"generate a unique id\", did you check if reusing that here would work? Having deterministic output is always a nice goal.",
+      "revId": "251e054747f0ffc1fdc9069f987735f1db7e7cbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
