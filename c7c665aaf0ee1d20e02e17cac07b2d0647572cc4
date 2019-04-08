@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_87566f06",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-08T20:48:55Z",
+      "side": 1,
+      "message": "A delegating constructor feature is available since c++11:\n\n    Releaser(T \u0026 t, const sal_uInt32 nRelease \u003d 1)\n        : Releaser(\u0026t, nRelease)\n    {\n    }",
+      "range": {
+        "startLine": 248,
+        "startChar": 8,
+        "endLine": 254,
+        "endChar": 9
+      },
+      "revId": "c7c665aaf0ee1d20e02e17cac07b2d0647572cc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
