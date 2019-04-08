@@ -63,7 +63,7 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
     oslThreadIdentifier aCurId = osl::Thread::getCurrentIdentifier();
 
     DBG_TESTSOLARMUTEX();
-    osl::ResettableMutexGuard aResettableListGuard(m_aUserEventsMutex);
+    osl::MutexGuard aGuard(m_aUserEventsMutex);
 
     if (!m_aUserEvents.empty())
     {
@@ -93,14 +93,12 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
             aEvent = m_aProcessingUserEvents.front();
             m_aProcessingUserEvents.pop_front();
 
-            // remember to reset the guard before break or continue the loop
-            aResettableListGuard.clear();
+            osl::MutexReleaser aReleaser(m_aUserEventsMutex);
 
             if ( !isFrameAlive( aEvent.m_pFrame ) )
             {
                 if ( aEvent.m_nEvent == SalEvent::UserEvent )
                     delete static_cast< ImplSVEvent* >( aEvent.m_pData );
-                aResettableListGuard.reset();
                 continue;
             }
 
@@ -124,7 +122,6 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
                 SAL_WARN("vcl", "Uncaught exception during DispatchUserEvents!");
                 std::abort();
             }
-            aResettableListGuard.reset();
             if (!bHandleAllCurrentEvents)
                 break;
         }
