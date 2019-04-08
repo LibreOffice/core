@@ -767,7 +767,7 @@ void GenericSalLayout::ApplyDXArray(const ImplLayoutArgs& rArgs)
                     nOverlap = nExcess / (nCopies - 1);
             }
 
-            Point aPos(pGlyphIter->m_aLinearPos.X() - nTotalWidth, 0);
+            Point aPos(pGlyphIter->m_aLinearPos.getX() - nTotalWidth, 0);
             int nCharPos = pGlyphIter->m_nCharPos;
             int const nFlags = GlyphItem::IS_IN_CLUSTER | GlyphItem::IS_RTL_GLYPH;
             while (nCopies--)

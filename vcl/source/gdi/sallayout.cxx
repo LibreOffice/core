@@ -712,7 +712,7 @@ DeviceCoordinate GenericSalLayout::GetTextWidth() const
     for (auto const& aGlyphItem : *m_GlyphItems.Impl())
     {
         // update the text extent with the glyph extent
-        DeviceCoordinate nXPos = aGlyphItem.m_aLinearPos.X();
+        DeviceCoordinate nXPos = aGlyphItem.m_aLinearPos.getX();
         if( nMinPos > nXPos )
             nMinPos = nXPos;
         nXPos += aGlyphItem.m_nNewWidth - aGlyphItem.m_nXOffset;
@@ -789,14 +789,14 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
         {
             for( pGlyphIter = m_GlyphItems.Impl()->begin(); ++pGlyphIter != pGlyphIterRight;)
             {
-                int nX = pGlyphIter->m_aLinearPos.X();
+                int nX = pGlyphIter->m_aLinearPos.getX();
                 nX = static_cast<int>(nX * fSqueeze);
                 pGlyphIter->m_aLinearPos.setX( nX );
             }
         }
         // adjust glyph widths to new positions
         for( pGlyphIter = m_GlyphItems.Impl()->begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter )
-            pGlyphIter->m_nNewWidth = pGlyphIter[1].m_aLinearPos.X() - pGlyphIter[0].m_aLinearPos.X();
+            pGlyphIter->m_nNewWidth = pGlyphIter[1].m_aLinearPos.getX() - pGlyphIter[0].m_aLinearPos.getX();
     }
 }
 
@@ -850,7 +850,7 @@ void GenericSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) co
     // calculate caret positions using glyph array
     for (auto const& aGlyphItem : *m_GlyphItems.Impl())
     {
-        long nXPos = aGlyphItem.m_aLinearPos.X();
+        long nXPos = aGlyphItem.m_aLinearPos.getX();
         long nXRight = nXPos + aGlyphItem.m_nOrigWidth;
         int n = aGlyphItem.m_nCharPos;
         int nCurrIdx = 2 * (n - mnMinCharPos);
@@ -943,7 +943,7 @@ void GenericSalLayout::MoveGlyph( int nStart, long nNewXPos )
     if( pGlyphIter->IsRTLGlyph() )
         nNewXPos += pGlyphIter->m_nNewWidth - pGlyphIter->m_nOrigWidth;
     // calculate the x-offset to the old position
-    long nXDelta = nNewXPos - pGlyphIter->m_aLinearPos.X();
+    long nXDelta = nNewXPos - pGlyphIter->m_aLinearPos.getX();
     // adjust all following glyph positions if needed
     if( nXDelta != 0 )
     {
