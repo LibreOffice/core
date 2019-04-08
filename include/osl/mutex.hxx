@@ -22,6 +22,7 @@
 
 #include "osl/mutex.h"
 
+#include <assert.h>
 
 namespace osl
 {
@@ -221,9 +222,40 @@ namespace osl
         }
     };
 
+    /** Releases a lock-level on creation and re-aquires it on destruction
+     */
+    template<class T>
+    class Releaser
+    {
+    private:
+        T * m_pT;
+
+        Releaser(const Releaser&) SAL_DELETED_FUNCTION;
+        const Releaser& operator=(const Releaser&) SAL_DELETED_FUNCTION;
+
+    public:
+        Releaser(T * pT)
+            : m_pT(pT)
+        {
+            assert(m_pT != nullptr);
+            m_pT->release();
+        }
+
+        Releaser(T & t)
+            : Releaser(&t)
+        {
+        }
+
+        ~Releaser()
+        {
+            m_pT->acquire();
+        }
+    };
+
     typedef Guard<Mutex> MutexGuard;
     typedef ClearableGuard<Mutex> ClearableMutexGuard;
     typedef ResettableGuard< Mutex > ResettableMutexGuard;
+    typedef Releaser<Mutex> MutexReleaser;
 }
 
 #endif // INCLUDED_OSL_MUTEX_HXX
