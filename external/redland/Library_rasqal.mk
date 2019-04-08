@@ -26,6 +26,10 @@ $(eval $(call gb_Library_add_defs,rasqal,\
 	-D_USRDLL \
 	-DWIN32_EXPORTS \
 	-D_MT \
+	-DHAVE_STDLIB_H \
+	-DHAVE_STDINT_H \
+	-DHAVE_TIME_H \
+	$(if $(filter-out WNT,$(OS)), -DHAVE_UNISTD_H ) \
 ))
 
 $(eval $(call gb_Library_set_include,rasqal,\
