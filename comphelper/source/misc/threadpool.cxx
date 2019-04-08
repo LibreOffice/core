@@ -20,6 +20,18 @@
 #include <thread>
 #include <chrono>
 
+#if defined HAVE_VALGRIND_HEADERS
+#include <valgrind/memcheck.h>
+#endif
+
+#if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#elif defined UNX
+#include <unistd.h>
+#include <fcntl.h>
+#endif
+
 namespace comphelper {
 
 /** prevent waiting for a task from inside a task */
@@ -304,15 +316,50 @@ bool ThreadTaskTag::isDone()
     return mnTasksWorking == 0;
 }
 
+static bool isDebuggerAttached()
+{
+#if defined(_WIN32)
+    return IsDebuggerPresent();
+#elif defined UNX
+    char buf[ 4096 ];
+    int fd = open( "/proc/self/status", O_RDONLY );
+    if( fd < 0 )
+        return false;
+    int size = read( fd, buf, sizeof( buf ) - 1 );
+    close( fd );
+    if( size < 0 ) // not Linux? feel free to add more platforms
+        return false;
+    assert( size < int( sizeof( buf )) - 1 );
+    buf[ sizeof( buf ) - 1 ] = '\0';
+    // "TracerPid: <pid>" for pid != 0 means something is attached
+    const char* pos = strstr( buf, "TracerPid:" );
+    if( pos == nullptr )
+        return false;
+    pos += strlen( "TracerPid:" );
+    while( *pos != '\n' && isspace( *pos ))
+        ++pos;
+    return *pos != '\n' && *pos != '0';
+#endif
+}
+
 void ThreadTaskTag::waitUntilDone()
 {
     std::unique_lock< std::mutex > aGuard( maMutex );
     while( mnTasksWorking > 0 )
     {
 #if defined DBG_UTIL && !defined NDEBUG
-        // 3 minute timeout in debug mode so our tests fail sooner rather than later
+        // 3 minute timeout in debug mode so our tests fail sooner rather than later,
+        // unless the code is debugged in valgrind or gdb, in which case the threads
+        // should not time out in the middle of a debugging session
+        int maxTimeout = 3 * 60;
+#if defined HAVE_VALGRIND_HEADERS
+        if( RUNNING_ON_VALGRIND )
+            maxTimeout = 30 * 60;
+#endif
+        if( isDebuggerAttached())
+            maxTimeout = 300 * 60;
         std::cv_status result = maTasksComplete.wait_for(
-            aGuard, std::chrono::seconds( 3 * 60 ));
+            aGuard, std::chrono::seconds( maxTimeout ));
         assert(result != std::cv_status::timeout);
 #else
         // 10 minute timeout in production so the app eventually throws some kind of error
