@@ -2953,6 +2953,17 @@
           <value xml:lang="en-US">Horizontal ~Line</value>
         </prop>
       </node>
+      <node oor:name=".uno:HorizontalLine" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Horizontal ~Line</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Horizontal Line&amp;FamilyName:string=ParagraphStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleApply?Style:string=Standard&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Default ~Paragraph</value>
