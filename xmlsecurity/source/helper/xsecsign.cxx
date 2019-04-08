@@ -137,12 +137,13 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     {
         internalSignatureInfor.signatureInfor.ouSignatureId = createId();
         internalSignatureInfor.signatureInfor.ouPropertyId = createId();
-        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, internalSignatureInfor.signatureInfor.ouPropertyId, -1 );
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, internalSignatureInfor.signatureInfor.ouPropertyId, -1, OUString() );
         size++;
 
         if (bXAdESCompliantIfODF)
         {
-            internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idSignedProperties", -1);
+            // We write a new reference, so it's possible to use the correct type URI.
+            internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idSignedProperties", -1, "http://uri.etsi.org/01903#SignedProperties");
             size++;
         }
 
@@ -150,17 +151,17 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
         {
             // Only mention the hash of the description in the signature if it's non-empty.
             internalSignatureInfor.signatureInfor.ouDescriptionPropertyId = createId();
-            internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, internalSignatureInfor.signatureInfor.ouDescriptionPropertyId, -1);
+            internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, internalSignatureInfor.signatureInfor.ouDescriptionPropertyId, -1, OUString());
             size++;
         }
     }
     else
     {
-        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idPackageObject", -1);
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idPackageObject", -1, OUString());
         size++;
-        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idOfficeObject", -1);
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idOfficeObject", -1, OUString());
         size++;
-        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idSignedProperties", -1);
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idSignedProperties", -1, OUString());
         size++;
     }
 
@@ -188,7 +189,7 @@ void XSecController::signAStream( sal_Int32 securityId, const OUString& uri, boo
     if (index == -1)
     {
         InternalSignatureInformation isi(securityId, nullptr);
-        isi.addReference(type, digestID, uri, -1);
+        isi.addReference(type, digestID, uri, -1, OUString());
         m_vInternalSignatureInformations.push_back( isi );
     }
     else
@@ -196,7 +197,7 @@ void XSecController::signAStream( sal_Int32 securityId, const OUString& uri, boo
         // use sha512 for gpg signing unconditionally
         if (!m_vInternalSignatureInformations[index].signatureInfor.ouGpgCertificate.isEmpty())
             digestID = cssxc::DigestID::SHA512;
-        m_vInternalSignatureInformations[index].addReference(type, digestID, uri, -1);
+        m_vInternalSignatureInformations[index].addReference(type, digestID, uri, -1, OUString());
     }
 }
 

@@ -128,12 +128,14 @@ void SAL_CALL XSecParser::startElement(
         {
             OUString ouUri = xAttribs->getValueByName("URI");
             SAL_WARN_IF( ouUri.isEmpty(), "xmlsecurity.helper", "URI is empty" );
+            // Remember the type of this reference.
+            OUString ouType = xAttribs->getValueByName("Type");
             if (ouUri.startsWith("#"))
             {
                 /*
                 * remove the first character '#' from the attribute value
                 */
-                m_pXSecController->addReference( ouUri.copy(1), m_nReferenceDigestID );
+                m_pXSecController->addReference( ouUri.copy(1), m_nReferenceDigestID, ouType );
             }
             else
             {
