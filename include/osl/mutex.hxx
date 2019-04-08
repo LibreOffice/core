@@ -221,9 +221,49 @@ namespace osl
         }
     };
 
+    /** Releases n lock-levels on creation and re-aquires them on destruction
+     *
+     * n must be specified, as it's normally unknown, but defaults to 1.
+     */
+    template<class T>
+    class Releaser
+    {
+    private:
+        T * m_pT;
+        const sal_uInt32 m_nReleased;
+
+        Releaser(const Releaser&) SAL_DELETED_FUNCTION;
+        const Releaser& operator=(const Releaser&) SAL_DELETED_FUNCTION;
+
+    public:
+        Releaser(T * pT, const sal_uInt32 nRelease = 1)
+            : m_pT(pT)
+            , m_nReleased(nRelease)
+        {
+            assert(pT != nullptr);
+            for (sal_uInt32 i = 0; i < m_nReleased; ++i)
+                m_pT->release();
+        }
+
+        Releaser(T & t, const sal_uInt32 nRelease = 1)
+            : m_pT(&t)
+            , m_nReleased(nRelease)
+        {
+            for (sal_uInt32 i = 0; i < m_nReleased; ++i)
+                m_pT->release();
+        }
+
+        ~Releaser()
+        {
+            for (sal_uInt32 i = 0; i < m_nReleased; ++i)
+                m_pT->acquire();
+        }
+    };
+
     typedef Guard<Mutex> MutexGuard;
     typedef ClearableGuard<Mutex> ClearableMutexGuard;
     typedef ResettableGuard< Mutex > ResettableMutexGuard;
+    typedef Releaser<Mutex> MutexReleaser;
 }
 
 #endif // INCLUDED_OSL_MUTEX_HXX
