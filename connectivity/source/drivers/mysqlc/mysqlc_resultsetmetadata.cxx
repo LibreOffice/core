@@ -197,13 +197,10 @@ void OResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
     auto nColCount = m_fields.size();
     if (columnIndex < 1 || columnIndex > static_cast<sal_Int32>(nColCount))
     {
-        OUStringBuffer buf;
-        buf.append("Column index out of range (expected 1 to ");
-        buf.append(sal_Int32(nColCount));
-        buf.append(", got ");
-        buf.append(columnIndex);
-        buf.append('.');
-        throw SQLException(buf.makeStringAndClear(), *this, OUString(), 1, Any());
+        OUString str = "Column index out of range (expected 1 to "
+                       + OUString::number(sal_Int32(nColCount)) + ", got "
+                       + OUString::number(columnIndex) + ".";
+        throw SQLException(str, *this, OUString(), 1, Any());
     }
 }
 
