@@ -4,7 +4,3 @@
 "ScCellFieldObj";"com::sun::star::text::TextContent";"AnchorType#optional"
 "ScCellFieldObj";"com::sun::star::text::TextContent";"AnchorTypes#optional"
 "ScCellFieldObj";"com::sun::star::text::TextContent";"TextWrap#optional"
-"ScCellFieldObj";"com::sun::star::beans::XPropertySet#optional";"addPropertyChangeListener()"
-"ScCellFieldObj";"com::sun::star::beans::XPropertySet#optional";"removePropertyChangeListener()"
-"ScCellFieldObj";"com::sun::star::beans::XPropertySet#optional";"addVetoableChangeListener()"
-"ScCellFieldObj";"com::sun::star::beans::XPropertySet#optional";"removeVetoableChangeListener()"

@@ -9,26 +9,32 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
-#include <test/text/xtextfield.hxx>
 #include <test/text/xtextcontent.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/sheet/XHeaderFooterContent.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XHeaderFooterContent.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+
+#include <com/sun/star/uno/Reference.hxx>
 
 using namespace css;
-using namespace css::uno;
 
-namespace sc_apitest {
-
-class ScEditFieldObj_Header : public CalcUnoApiTest, public apitest::XTextContent, public apitest::XPropertySet
+namespace sc_apitest
+{
+class ScEditFieldObj_Header : public CalcUnoApiTest,
+                              public apitest::XTextContent,
+                              public apitest::XPropertySet
 {
 public:
     ScEditFieldObj_Header();
@@ -46,6 +52,8 @@ public:
     CPPUNIT_TEST(testGetPropertySetInfo);
     CPPUNIT_TEST(testGetPropertyValue);
     CPPUNIT_TEST(testSetPropertyValue);
+    CPPUNIT_TEST(testPropertyChangeListener);
+    CPPUNIT_TEST(testVetoableChangeListener);
 
     // XTextContent
     CPPUNIT_TEST(testGetAnchor);
@@ -63,7 +71,7 @@ uno::Reference<text::XTextField> ScEditFieldObj_Header::mxField;
 uno::Reference<text::XText> ScEditFieldObj_Header::mxRightText;
 
 ScEditFieldObj_Header::ScEditFieldObj_Header()
-     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
@@ -89,24 +97,27 @@ uno::Reference<uno::XInterface> ScEditFieldObj_Header::init()
     // Return a field that's already in the header.
     if (!mxField.is())
     {
-        uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, UNO_QUERY_THROW);
+        uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, uno::UNO_QUERY_THROW);
 
         // Create a new URL field object, and populate it with name and URL.
-        mxField.set(xSM->createInstance("com.sun.star.text.TextField.Time"), UNO_QUERY_THROW);
+        mxField.set(xSM->createInstance("com.sun.star.text.TextField.Time"), uno::UNO_QUERY_THROW);
 
-        uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, UNO_QUERY_THROW);
-        uno::Reference<container::XNameAccess> xStyleFamilies(xSFS->getStyleFamilies(), UNO_QUERY_THROW);
-        uno::Reference<container::XNameAccess> xPageStyles(xStyleFamilies->getByName("PageStyles"), UNO_QUERY_THROW);
-        uno::Reference<beans::XPropertySet> xPropSet(xPageStyles->getByName("Default"), UNO_QUERY_THROW);
+        uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<container::XNameAccess> xStyleFamilies(xSFS->getStyleFamilies(),
+                                                              uno::UNO_QUERY_THROW);
+        uno::Reference<container::XNameAccess> xPageStyles(xStyleFamilies->getByName("PageStyles"),
+                                                           uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xPropSet(xPageStyles->getByName("Default"),
+                                                     uno::UNO_QUERY_THROW);
 
         uno::Reference<sheet::XHeaderFooterContent> xHeaderContent(
-            xPropSet->getPropertyValue("RightPageHeaderContent"), UNO_QUERY_THROW);
+            xPropSet->getPropertyValue("RightPageHeaderContent"), uno::UNO_QUERY_THROW);
 
         // Use the left header text.
         uno::Reference<text::XText> xText = xHeaderContent->getLeftText();
         uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-        uno::Reference<text::XTextRange> xRange(xCursor, UNO_QUERY_THROW);
-        uno::Reference<text::XTextContent> xContent(mxField, UNO_QUERY_THROW);
+        uno::Reference<text::XTextRange> xRange(xCursor, uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextContent> xContent(mxField, uno::UNO_QUERY_THROW);
         xText->insertTextContent(xRange, xContent, false);
 
         xPropSet->setPropertyValue("RightPageHeaderContent", uno::makeAny(xHeaderContent));
@@ -120,22 +131,22 @@ uno::Reference<uno::XInterface> ScEditFieldObj_Header::init()
 uno::Reference<text::XTextContent> ScEditFieldObj_Header::getTextContent()
 {
     // Return a field object that's not yet inserted.
-    uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<text::XTextContent> xField(
-        xSM->createInstance("com.sun.star.text.TextField.Date"), UNO_QUERY_THROW);
+        xSM->createInstance("com.sun.star.text.TextField.Date"), uno::UNO_QUERY_THROW);
     return xField;
 }
 
 uno::Reference<text::XTextRange> ScEditFieldObj_Header::getTextRange()
 {
     // Use the right header text for this.
-    uno::Reference<text::XTextRange> xRange(mxRightText, UNO_QUERY_THROW);
+    uno::Reference<text::XTextRange> xRange(mxRightText, uno::UNO_QUERY_THROW);
     return xRange;
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScEditFieldObj_Header);
 
-}
+} // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
