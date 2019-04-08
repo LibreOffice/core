@@ -480,6 +480,8 @@ bool RangeNameBufferWK3::FindRel( const OUString& rRef, sal_uInt16& rIndex )
 
 bool RangeNameBufferWK3::FindAbs( const OUString& rRef, sal_uInt16& rIndex )
 {
+    if (rRef.isEmpty())
+        return false;
     OUString            aTmp( rRef );
     aTmp = aTmp.copy(1);
     StringHashEntry     aRef( aTmp ); // search w/o '$'!
