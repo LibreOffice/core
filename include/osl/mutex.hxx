@@ -22,6 +22,7 @@
 
 #include "osl/mutex.h"
 
+#include <assert.h>
 
 namespace osl
 {
@@ -102,8 +103,13 @@ namespace osl
         Mutex& operator= (const Mutex&) SAL_DELETED_FUNCTION;
     };
 
-    /** A helper class for mutex objects and interfaces.
-    */
+    /** Object lifetime scoped mutex object or interface lock.
+     *
+     * Aquires the template object on construction and releases it on
+     * destruction.
+     *
+     * @see MutexGuard
+     */
     template<class T>
     class Guard
     {
@@ -119,6 +125,7 @@ namespace osl
         */
         Guard(T * pT_) : pT(pT_)
         {
+            assert(pT != NULL);
             pT->acquire();
         }
 
@@ -136,8 +143,12 @@ namespace osl
         }
     };
 
-    /** A helper class for mutex objects and interfaces.
-    */
+    /** Object lifetime scoped mutex object or interface lock with unlock.
+     *
+     * Use this if you can't use scoped code blocks and Guard.
+     *
+     * @see ClearableMutexGuard, Guard
+     */
     template<class T>
     class ClearableGuard
     {
@@ -153,6 +164,7 @@ namespace osl
         */
         ClearableGuard(T * pT_) : pT(pT_)
         {
+            assert(pT != NULL);
             pT->acquire();
         }
 
@@ -183,8 +195,14 @@ namespace osl
         }
     };
 
-    /** A helper class for mutex objects and interfaces.
-    */
+    /** Template for temporary releasable mutex objects and interfaces locks.
+     *
+     * Use this if you want to acquire a lock but need to temporary release
+     * it. If you can work with code scopes, it is more secure to use a
+     * combination of Guard and Releaser.
+     *
+     * @see ResettableMutexGuard, Guard, Releaser
+     */
     template< class T >
     class ResettableGuard : public ClearableGuard< T >
     {
@@ -221,9 +239,47 @@ namespace osl
         }
     };
 
+    /** Releases a lock-level on creation and re-aquires it on destruction.
+     *
+     * @see ResettableGuard, MutexReleaser
+     */
+    template<class T>
+    class Releaser
+    {
+    private:
+        T * m_pT;
+
+        Releaser(const Releaser&) SAL_DELETED_FUNCTION;
+        const Releaser& operator=(const Releaser&) SAL_DELETED_FUNCTION;
+
+    public:
+        /** Releases one lock-level of the object specified as parameter.
+        */
+        Releaser(T * pT)
+            : m_pT(pT)
+        {
+            assert(m_pT != NULL);
+            m_pT->release();
+        }
+
+        /** Releases one lock-level of the object specified as parameter.
+        */
+        Releaser(T & rT)
+            : m_pT(&rT)
+        {
+            m_pT->release();
+        }
+
+        ~Releaser()
+        {
+            m_pT->acquire();
+        }
+    };
+
     typedef Guard<Mutex> MutexGuard;
     typedef ClearableGuard<Mutex> ClearableMutexGuard;
     typedef ResettableGuard< Mutex > ResettableMutexGuard;
+    typedef Releaser<Mutex> MutexReleaser;
 }
 
 #endif // INCLUDED_OSL_MUTEX_HXX
