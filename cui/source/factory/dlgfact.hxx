@@ -26,7 +26,6 @@
 #include <tools/link.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
-class SfxTabDialog;
 class SfxModalDialog;
 class SfxSingleTabDialogController;
 class Dialog;
