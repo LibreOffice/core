@@ -2624,9 +2624,37 @@
           <value xml:lang="en-US">Accent 1</value>
         </prop>
       </node>
+      <node oor:name=".uno:Accent1CellStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Accent 1</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Accent 1 Cell Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Accent 1&amp;FamilyName:string=CellStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleApply?Style:string=Accent 2&amp;FamilyName:string=CellStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Accent 2</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:Accent2CellStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Accent 2</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Accent 2 Cell Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Accent 2&amp;FamilyName:string=CellStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
         </prop>
       </node>
       <node oor:name=".uno:StyleApply?Style:string=Accent 3&amp;FamilyName:string=CellStyles" oor:op="replace">
@@ -2634,9 +2662,37 @@
           <value xml:lang="en-US">Accent 3</value>
         </prop>
       </node>
+      <node oor:name=".uno:Accent3CellStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Accent 3</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Accent 3 Cell Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Accent 3&amp;FamilyName:string=CellStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=CellStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Heading 1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:Heading1CellStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Heading 1</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Heading 1 Cell Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=CellStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
         </prop>
       </node>
       <node oor:name=".uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=CellStyles" oor:op="replace">
@@ -2644,9 +2700,37 @@
           <value xml:lang="en-US">Heading 2</value>
         </prop>
       </node>
+      <node oor:name=".uno:Heading2CellStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Heading 2</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Heading 2 Cell Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=CellStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleApply?Style:string=Bad&amp;FamilyName:string=CellStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Bad</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:BadCellStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Bad</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Bad Cell Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Bad&amp;FamilyName:string=CellStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
         </prop>
       </node>
       <node oor:name=".uno:StyleApply?Style:string=Error&amp;FamilyName:string=CellStyles" oor:op="replace">
@@ -2654,9 +2738,37 @@
           <value xml:lang="en-US">Error</value>
         </prop>
       </node>
+      <node oor:name=".uno:ErrorCellStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Error</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Error Cell Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Error&amp;FamilyName:string=CellStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleApply?Style:string=Good&amp;FamilyName:string=CellStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Good</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:GoodCellStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Good</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Good Cell Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Good&amp;FamilyName:string=CellStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
         </prop>
       </node>
       <node oor:name=".uno:StyleApply?Style:string=Neutral&amp;FamilyName:string=CellStyles" oor:op="replace">
@@ -2664,9 +2776,37 @@
           <value xml:lang="en-US">Neutral</value>
         </prop>
       </node>
+      <node oor:name=".uno:NeutralCellStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Neutral</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Neutral Cell Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Neutral&amp;FamilyName:string=CellStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleApply?Style:string=Warning&amp;FamilyName:string=CellStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Warning</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:WarningCellStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Warning</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Warning Cell Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Warning&amp;FamilyName:string=CellStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
         </prop>
       </node>
       <node oor:name=".uno:StyleApply?Style:string=Footnote&amp;FamilyName:string=CellStyles" oor:op="replace">
@@ -2674,9 +2814,37 @@
           <value xml:lang="en-US">Footnote</value>
         </prop>
       </node>
+      <node oor:name=".uno:FootnoteCellStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Footnote</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Footnote Cell Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Footnote&amp;FamilyName:string=CellStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleApply?Style:string=Note&amp;FamilyName:string=CellStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Note</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:NoteCellStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Note</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Note Cell Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Note&amp;FamilyName:string=CellStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
         </prop>
       </node>
     </node>
