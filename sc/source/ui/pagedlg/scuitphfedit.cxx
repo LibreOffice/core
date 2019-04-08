@@ -95,7 +95,6 @@ ScHFEditPage::ScHFEditPage(TabPageParent pParent,
     m_xBtnLastPage->connect_clicked( LINK( this, ScHFEditPage, ClickHdl ) );
     m_xBtnDate->connect_clicked( LINK( this, ScHFEditPage, ClickHdl ) );
     m_xBtnTime->connect_clicked( LINK( this, ScHFEditPage, ClickHdl ) );
-    m_xBtnFile->connect_clicked( LINK( this, ScHFEditPage, ClickHdl ) );
     m_xBtnTable->connect_clicked( LINK( this, ScHFEditPage, ClickHdl ) );
 
     m_xFtDefinedHF->show();
@@ -755,10 +754,6 @@ IMPL_LINK( ScHFEditPage, ClickHdl, weld::Button&, rBtn, void )
             m_pEditFocus->InsertField(SvxFieldItem(SvxDateField(Date(Date::SYSTEM),SvxDateType::Var), EE_FEATURE_FIELD));
         else if ( &rBtn == m_xBtnTime.get() )
             m_pEditFocus->InsertField(SvxFieldItem(SvxTimeField(), EE_FEATURE_FIELD));
-        else if ( &rBtn == m_xBtnFile.get() )
-        {
-            m_pEditFocus->InsertField(SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD));
-        }
         else if ( &rBtn == m_xBtnTable.get() )
             m_pEditFocus->InsertField(SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD));
     }
