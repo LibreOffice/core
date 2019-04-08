@@ -129,7 +129,7 @@ void XSecController::switchGpgSignature()
 #endif
 }
 
-void XSecController::addReference( const OUString& ouUri, sal_Int32 nDigestID )
+void XSecController::addReference( const OUString& ouUri, sal_Int32 nDigestID, const OUString& ouType )
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -137,7 +137,7 @@ void XSecController::addReference( const OUString& ouUri, sal_Int32 nDigestID )
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
-    isi.addReference(SignatureReferenceType::SAMEDOCUMENT, nDigestID, ouUri, -1 );
+    isi.addReference(SignatureReferenceType::SAMEDOCUMENT, nDigestID, ouUri, -1, ouType );
 }
 
 void XSecController::addStreamReference(
@@ -170,7 +170,7 @@ void XSecController::addStreamReference(
         }
     }
 
-    isi.addReference(type, nDigestID, ouUri, -1);
+    isi.addReference(type, nDigestID, ouUri, -1, OUString());
 }
 
 void XSecController::setReferenceCount() const

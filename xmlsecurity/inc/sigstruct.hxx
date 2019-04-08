@@ -46,6 +46,8 @@ struct SignatureReferenceInformation
     // For ODF: XAdES digests (SHA256) or the old SHA1, from css::xml::crypto::DigestID
     sal_Int32  nDigestID;
     OUString   ouDigestValue;
+    /// Type of the reference: an URI (newer idSignedProperties references) or empty.
+    OUString ouType;
 
     SignatureReferenceInformation() :
         nType(SignatureReferenceType::SAMEDOCUMENT),
@@ -55,12 +57,13 @@ struct SignatureReferenceInformation
     {
     }
 
-    SignatureReferenceInformation( SignatureReferenceType type, sal_Int32 digestID, const OUString& uri ) :
+    SignatureReferenceInformation( SignatureReferenceType type, sal_Int32 digestID, const OUString& uri, const OUString& rType ) :
         SignatureReferenceInformation()
     {
         nType = type;
         nDigestID = digestID;
         ouURI = uri;
+        ouType = rType;
     }
 };
 
