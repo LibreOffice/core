@@ -989,51 +989,51 @@ VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScAttrDlg(weld:
     return VclPtr<ScAbstractTabController_Impl>::Create(std::make_unique<ScAttrDlg>(pParent, pCellAttrs));
 }
 
-VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScHFEditDlg( vcl::Window*         pParent,
+VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScHFEditDlg( weld::Window*         pParent,
                                                                         const SfxItemSet&   rCoreSet,
                                                                         const OUString&     rPageStyle,
                                                                         sal_uInt16          nResId )
 {
-    VclPtr<SfxTabDialog> pDlg;
+    std::unique_ptr<SfxTabDialogController> xDlg;
 
     switch (nResId)
     {
         case RID_SCDLG_HFED_HEADER:
         case RID_SCDLG_HFEDIT_HEADER:
-            pDlg = VclPtr<ScHFEditHeaderDlg>::Create(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_unique<ScHFEditHeaderDlg>(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFED_FOOTER:
         case RID_SCDLG_HFEDIT_FOOTER:
-            pDlg = VclPtr<ScHFEditFooterDlg>::Create(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_unique<ScHFEditFooterDlg>(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_LEFTHEADER:
-            pDlg = VclPtr<ScHFEditLeftHeaderDlg>::Create(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_unique<ScHFEditLeftHeaderDlg>(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_RIGHTHEADER:
-            pDlg = VclPtr<ScHFEditRightHeaderDlg>::Create(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_unique<ScHFEditRightHeaderDlg>(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_LEFTFOOTER:
-            pDlg = VclPtr<ScHFEditLeftFooterDlg>::Create(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_unique<ScHFEditLeftFooterDlg>(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_RIGHTFOOTER:
-            pDlg = VclPtr<ScHFEditRightFooterDlg>::Create(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_unique<ScHFEditRightFooterDlg>(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_SHDR:
-            pDlg = VclPtr<ScHFEditSharedHeaderDlg>::Create(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_unique<ScHFEditSharedHeaderDlg>(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_SFTR:
-            pDlg = VclPtr<ScHFEditSharedFooterDlg>::Create(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_unique<ScHFEditSharedFooterDlg>(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_ALL:
-            pDlg = VclPtr<ScHFEditAllDlg>::Create(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_unique<ScHFEditAllDlg>(pParent, rCoreSet, rPageStyle);
             break;
         default:
         case RID_SCDLG_HFEDIT:
-            pDlg = VclPtr<ScHFEditActiveDlg>::Create(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_unique<ScHFEditActiveDlg>(pParent, rCoreSet, rPageStyle);
             break;
     }
 
-    return pDlg ? VclPtr<ScAbstractTabDialog_Impl>::Create( pDlg ) : nullptr;
+    return xDlg ? VclPtr<ScAbstractTabController_Impl>::Create(std::move(xDlg)) : nullptr;
 }
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScStyleDlg(weld::Window* pParent,

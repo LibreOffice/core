@@ -23,84 +23,84 @@
 #include <sfx2/tabdlg.hxx>
 #include <editeng/svxenum.hxx>
 
-class ScHFEditDlg : public SfxTabDialog
+class ScHFEditDlg : public SfxTabDialogController
 {
     SvxNumType eNumType;
 protected:
-    ScHFEditDlg(vcl::Window* pParent,
+    ScHFEditDlg(weld::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle,
-        const OUString& rID, const OUString& rUIXMLDescription );
+        const OUString& rUIXMLDescription, const OString& rID);
 public:
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage& rPage ) override;
+    virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
 };
 
 class ScHFEditHeaderDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditHeaderDlg(vcl::Window* pParent,
+    ScHFEditHeaderDlg(weld::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
 class ScHFEditFooterDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditFooterDlg(vcl::Window* pParent,
+    ScHFEditFooterDlg(weld::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
 class ScHFEditLeftHeaderDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditLeftHeaderDlg(vcl::Window* pParent,
+    ScHFEditLeftHeaderDlg(weld::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
 class ScHFEditRightHeaderDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditRightHeaderDlg(vcl::Window* pParent,
+    ScHFEditRightHeaderDlg(weld::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
 class ScHFEditLeftFooterDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditLeftFooterDlg(vcl::Window* pParent,
+    ScHFEditLeftFooterDlg(weld::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
 class ScHFEditRightFooterDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditRightFooterDlg(vcl::Window* pParent,
+    ScHFEditRightFooterDlg(weld::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
 class ScHFEditSharedHeaderDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditSharedHeaderDlg(vcl::Window* pParent,
+    ScHFEditSharedHeaderDlg(weld::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
 class ScHFEditSharedFooterDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditSharedFooterDlg(vcl::Window* pParent,
+    ScHFEditSharedFooterDlg(weld::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
 class ScHFEditAllDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditAllDlg(vcl::Window* pParent,
+    ScHFEditAllDlg(weld::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
 class ScHFEditActiveDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditActiveDlg(vcl::Window* pParent,
+    ScHFEditActiveDlg(weld::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 

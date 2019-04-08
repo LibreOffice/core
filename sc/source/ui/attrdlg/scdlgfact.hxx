@@ -717,7 +717,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog> CreateScAttrDlg(weld::Window* pParent,
                                                          const SfxItemSet* pCellAttrs) override;
 
-    virtual VclPtr<SfxAbstractTabDialog> CreateScHFEditDlg(vcl::Window*       pParent,
+    virtual VclPtr<SfxAbstractTabDialog> CreateScHFEditDlg(weld::Window*       pParent,
                                                     const SfxItemSet&   rCoreSet,
                                                     const OUString&     rPageStyle,
                                                     sal_uInt16          nResId ) override;
