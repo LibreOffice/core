@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_ccd1fc59",
+        "filename": "framework/source/layoutmanager/toolbarlayoutmanager.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-04-08T09:50:46Z",
+      "side": 1,
+      "message": "this looks a bit funny now, aReadLock isn\u0027t used below - how about putting these 5 lines into a scope and using plain SolarMutexGuard?",
+      "revId": "09906f397307c4ca34cde6e1b9791912d1bf67ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_ecd64050",
+        "filename": "framework/source/layoutmanager/toolbarlayoutmanager.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-04-08T09:50:46Z",
+      "side": 1,
+      "message": "and the same here?",
+      "revId": "09906f397307c4ca34cde6e1b9791912d1bf67ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
