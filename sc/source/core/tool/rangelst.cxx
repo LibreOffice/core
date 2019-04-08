@@ -96,36 +96,6 @@ private:
     size_t mnCellCount;
 };
 
-class FormatString
-{
-public:
-    FormatString(OUString& rStr, ScRefFlags nFlags, ScDocument* pDoc, FormulaGrammar::AddressConvention eConv, sal_Unicode cDelim, bool bFullAddressNotation) :
-        mrStr(rStr),
-        mnFlags(nFlags),
-        mpDoc(pDoc),
-        meConv(eConv),
-        mcDelim(cDelim),
-        mbFirst(true),
-        mbFullAddressNotation(bFullAddressNotation) {}
-
-    void operator() (const ScRange & r)
-    {
-        OUString aStr(r.Format(mnFlags, mpDoc, meConv, mbFullAddressNotation));
-        if (mbFirst)
-            mbFirst = false;
-        else
-            mrStr += OUStringLiteral1(mcDelim);
-        mrStr += aStr;
-    }
-private:
-    OUString& mrStr;
-    ScRefFlags const mnFlags;
-    ScDocument* const mpDoc;
-    FormulaGrammar::AddressConvention const meConv;
-    sal_Unicode const mcDelim;
-    bool mbFirst;
-    bool const mbFullAddressNotation;
-};
 
 }
 
@@ -178,14 +148,20 @@ void ScRangeList::Format( OUString& rStr, ScRefFlags nFlags, ScDocument* pDoc,
                           formula::FormulaGrammar::AddressConvention eConv,
                           sal_Unicode cDelimiter, bool bFullAddressNotation ) const
 {
-
     if (!cDelimiter)
         cDelimiter = ScCompiler::GetNativeSymbolChar(ocSep);
 
-    OUString aStr;
-    FormatString func(aStr, nFlags, pDoc, eConv, cDelimiter, bFullAddressNotation);
-    for_each(maRanges.begin(), maRanges.end(), func);
-    rStr = aStr;
+    OUStringBuffer aBuf;
+    bool bFirst = true;
+    for( auto const & r : maRanges)
+    {
+        if (bFirst)
+            bFirst = false;
+        else
+            aBuf.append(OUStringLiteral1(cDelimiter));
+        aBuf.append(r.Format(nFlags, pDoc, eConv, bFullAddressNotation));
+    }
+    rStr = aBuf.makeStringAndClear();
 }
 
 void ScRangeList::Join( const ScRange& rNewRange, bool bIsInList )
