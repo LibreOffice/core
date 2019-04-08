@@ -1028,7 +1028,7 @@ void OStorage_Impl::Commit()
     while (  mapIter != m_aChildrenMap.end() )
     {
         // renamed and inserted elements must be really inserted to package later
-        // since thay can conflict with removed elements
+        // since they can conflict with removed elements
         auto & pElement = mapIter->second;
         if ( pElement->m_bIsRemoved )
         {
@@ -1050,7 +1050,7 @@ void OStorage_Impl::Commit()
     for ( auto& pair : m_aChildrenMap )
     {
         // if it is a 'duplicate commit' inserted elements must be really inserted to package later
-        // since thay can conflict with renamed elements
+        // since they can conflict with renamed elements
         auto & pElement = pair.second;
         if ( !pElement->m_bIsInserted )
         {
@@ -1570,7 +1570,7 @@ void OStorage_Impl::CloneStreamElement( const OUString& aStreamName,
     // the copy will be created internally
 
     // usual copying is not applicable here, only last flushed version of the
-    // child stream should be used for copiing. Probably the children m_xPackageStream
+    // child stream should be used for copying. Probably the children m_xPackageStream
     // can be used as a base of a new stream, that would be copied to result
     // storage. The only problem is that some package streams can be accessed from outside
     // at the same time (now solved by wrappers that remember own position).
