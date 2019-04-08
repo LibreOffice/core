@@ -26,6 +26,8 @@
 
 namespace osl
 {
+    template<class T> class Releaser;
+
     /** A mutual exclusion synchronization object
     */
     class SAL_WARN_UNUSED Mutex {
@@ -194,13 +196,17 @@ namespace osl
     /** Template for temporary releasable mutex objects and interfaces locks.
      *
      * Use this if you want to acquire a lock but need to temporary release
-     * it and can't use multiple scoped Guard objects.
+     * it and can't use multiple scoped Guard objects. If you can partly work
+     * with code scopes, it is more secure to use Releaser objects instead of
+     * manually calling clear and reset.
      *
-     * @see ResettableMutexGuard
+     * @see ResettableMutexGuard, Releaser
      */
     template< class T >
     class ResettableGuard : public ClearableGuard< T >
     {
+        template<typename> friend class Releaser;
+
         ResettableGuard(const ResettableGuard&) SAL_DELETED_FUNCTION;
         ResettableGuard& operator=(const ResettableGuard&) SAL_DELETED_FUNCTION;
 
@@ -232,9 +238,40 @@ namespace osl
         }
     };
 
+    /** Clears a the ResettableGuard on creation and resets it on destruction.
+     *
+     * So Releasers can just be constructed from ResettableGuard non-cleared
+     * objects, so a developer won't wrongly assume an other Guard is always
+     * valid.
+     *
+     * @see ResettableGuard, MutexReleaser
+     */
+    template<class T>
+    class Releaser
+    {
+        const ResettableGuard<T> &m_aGuard;
+
+        Releaser(const Releaser&) SAL_DELETED_FUNCTION;
+        Releaser& operator=(const Releaser&) SAL_DELETED_FUNCTION;
+
+    public:
+        /** Clears the object specified as parameter.
+         */
+        Releaser(const ResettableGuard<T> & aGuard) : m_aGuard(aGuard)
+        {
+            m_aGuard.clear();
+        }
+
+        ~Releaser()
+        {
+            m_aGuard.reset();
+        }
+    };
+
     typedef Guard<Mutex> MutexGuard;
     typedef ClearableGuard<Mutex> ClearableMutexGuard;
     typedef ResettableGuard< Mutex > ResettableMutexGuard;
+    typedef Releaser<Mutex> MutexReleaser;
 }
 
 #endif // INCLUDED_OSL_MUTEX_HXX
