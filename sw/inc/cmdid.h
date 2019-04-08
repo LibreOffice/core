@@ -698,6 +698,8 @@
 #define SID_JUMP_TO_SPECIFIC_PAGE    (FN_SELECTION + 92)
 #define SID_TRACK_CHANGES_BAR       (FN_SELECTION + 93)   /* shows/hides track changes bar */
 
+#define FN_SELECT_SENTENCE          (FN_SELECTION + 94)   /* select paragraph*/
+
 // QUERY-Block
 #define FN_TXTATR_INET              (FN_QUERY +29)      /* INet-Attribut */
 
