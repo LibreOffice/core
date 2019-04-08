@@ -449,6 +449,11 @@ interface BaseText
         ExecMethod = ExecMove ;
         StateMethod = NoState ;
     ]
+    FN_SELECT_SENTENCE // status(final|play)
+    [
+        ExecMethod = ExecMove ;
+        StateMethod = NoState ;
+    ]
 
      // Goto - Methods
 

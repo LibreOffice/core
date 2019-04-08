@@ -2077,6 +2077,11 @@
           <value xml:lang="en-US">Select Word</value>
         </prop>
       </node>
+      <node oor:name=".uno:SelectSentence" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Select Sentence</value>
+        </prop>
+      </node>
       <node oor:name=".uno:NumberFormatStandard" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Number Format: Standard</value>
