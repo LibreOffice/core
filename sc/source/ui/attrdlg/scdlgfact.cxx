@@ -227,8 +227,6 @@ short AbstractScTextImportOptionsDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(ScAbstractTabDialog_Impl);
-
 AbstractScLinkedAreaDlg_Impl::~AbstractScLinkedAreaDlg_Impl()
 {
 }
@@ -236,32 +234,6 @@ AbstractScLinkedAreaDlg_Impl::~AbstractScLinkedAreaDlg_Impl()
 short AbstractScLinkedAreaDlg_Impl::Execute()
 {
     return m_xDlg->run();
-}
-
-void ScAbstractTabDialog_Impl::SetCurPageId( const OString& rName )
-{
-    pDlg->SetCurPageId( rName );
-}
-
-const SfxItemSet* ScAbstractTabDialog_Impl::GetOutputItemSet() const
-{
-    return pDlg->GetOutputItemSet();
-}
-
-const sal_uInt16* ScAbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
-{
-    return pDlg->GetInputRanges( pItem );
-}
-
-void ScAbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
-{
-     pDlg->SetInputSet( pInSet );
-}
-
-//From class Window.
-void ScAbstractTabDialog_Impl::SetText( const OUString& rStr )
-{
-    pDlg->SetText( rStr );
 }
 
 void AbstractScImportAsciiDlg_Impl::GetOptions( ScAsciiOptions& rOpt )
