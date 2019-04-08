@@ -154,6 +154,10 @@ void SwTextShell::ExecMove(SfxRequest &rReq)
         case FN_SELECT_WORD:
             bRet = rSh.SelNearestWrd();
             break;
+        case FN_SELECT_PARAGRAPH:
+            rSh.SelPara( nullptr );
+            bRet = true;
+            break;
         case SID_SELECTALL:
             rSh.SelAll();
             bRet = true;
