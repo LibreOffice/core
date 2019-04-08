@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_4c408c36",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 29
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-08T08:13:11Z",
+      "side": 1,
+      "message": "This needs to include path to the header:\n\n    INCLUDED_CUI_INC_TIPOFTHEDAY_HRC\n\nSee cui/inc/strings.hrc for an example",
+      "range": {
+        "startLine": 20,
+        "startChar": 8,
+        "endLine": 20,
+        "endChar": 32
+      },
+      "revId": "bc19a76cc75455c1e87b791fcc2e2f07190fbe23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_ac74b89a",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 29
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-08T08:13:11Z",
+      "side": 1,
+      "message": "Looks like a leftover?",
+      "range": {
+        "startLine": 26,
+        "startChar": 3,
+        "endLine": 26,
+        "endChar": 67
+      },
+      "revId": "bc19a76cc75455c1e87b791fcc2e2f07190fbe23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_2c47484e",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 29
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-08T08:13:11Z",
+      "side": 1,
+      "message": "Not a problem here; just wanted to show what I\u0027d write here - hope it gives you something interesting:\n\n    osl::File aFile(fileName);\n    return aFile.open(osl_File_OpenFlag_Read) \u003d\u003d osl::FileBase::E_None;",
+      "range": {
+        "startLine": 60,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 21
+      },
+      "revId": "bc19a76cc75455c1e87b791fcc2e2f07190fbe23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
