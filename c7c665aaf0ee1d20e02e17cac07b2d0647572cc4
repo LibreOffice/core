@@ -22,6 +22,30 @@
       "revId": "c7c665aaf0ee1d20e02e17cac07b2d0647572cc4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_47406736",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-04-08T21:11:33Z",
+      "side": 1,
+      "message": "Much better.",
+      "parentUuid": "df87a7cf_87566f06",
+      "range": {
+        "startLine": 248,
+        "startChar": 8,
+        "endLine": 254,
+        "endChar": 9
+      },
+      "revId": "c7c665aaf0ee1d20e02e17cac07b2d0647572cc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
