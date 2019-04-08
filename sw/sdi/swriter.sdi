@@ -5077,6 +5077,23 @@ SfxVoidItem SelectWord FN_SELECT_WORD
     GroupId = SfxGroupId::Navigator;
 ]
 
+SfxVoidItem SelectSentence FN_SELECT_SENTENCE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Navigator;
+]
+
 SfxVoidItem SendAbstractToStarImpress FN_ABSTRACT_STARIMPRESS
 ()
 [
