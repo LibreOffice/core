@@ -1656,7 +1656,9 @@ CommentCaptionState ScTable::GetAllNoteCaptionsState(const ScRange& rRange, std:
     bool bIsFirstNoteShownState = true; // because of error: -Werror=maybe-uninitialized
     bool bFirstControl = true;
 
-    for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+    ScTable* pTab = pDocument->FetchTable(nTab);
+    const SCCOL nEndCol = pTab->ClampToAllocatedColumns(rRange.aEnd.Col());
+    for (SCCOL nCol = rRange.aStart.Col(); nCol <= nEndCol; ++nCol)
     {
         if (bFirstControl && pDocument->HasColNotes(nCol, nTab)) // detect status of first note caption
         {
