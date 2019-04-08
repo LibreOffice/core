@@ -234,6 +234,14 @@ namespace Item
         assert(false && "Error: Some instance tries to set an Any at an ::Item instance where this is not supported - implement ItemBase::PutValue method there (!)");
     }
 
+    void ItemBase::implInstanceCleanup()
+    {
+        if(IsAdministrated())
+        {
+            GetIAdministrator()->HintExpired(this);
+        }
+    }
+
     ItemBase::~ItemBase()
     {
     }

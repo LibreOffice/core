@@ -53,7 +53,7 @@ namespace Item
             return std::static_pointer_cast<const TargetType>(GetStaticAdmin().GetDefault());
         }
 
-        static bool IsDefault(const std::shared_ptr<const TargetType>& rCandidate)
+        static bool IsStaticDefault(const std::shared_ptr<const TargetType>& rCandidate)
         {
             return rCandidate && GetStaticAdmin().IsDefault(rCandidate.get());
         }

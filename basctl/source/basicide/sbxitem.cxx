@@ -44,10 +44,7 @@ namespace Item
 
     Sbx::~Sbx()
     {
-        if(IsAdministrated())
-        {
-            GetStaticAdmin().HintExpired(this);
-        }
+        implInstanceCleanup();
     }
 
     std::shared_ptr<const Sbx> Sbx::Create(const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, const OUString& aMethodName, ItemType eType)

@@ -32,10 +32,7 @@ namespace Item
         // needs to be called from here to have the fully derived implementation type
         // in the helper method - do NOT move to a imaginable general
         // implementation in ItemBaseStaticHelper (!)
-        if(IsAdministrated())
-        {
-            GetStaticAdmin().HintExpired(this);
-        }
+        implInstanceCleanup();
     }
 
     CntInt16::SharedPtr CntInt16::Create(sal_Int16 nValue)

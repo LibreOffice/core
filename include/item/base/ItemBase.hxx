@@ -130,8 +130,13 @@ namespace Item
         // representations for special purposes, e.g. InvalidateItem/DisableItem
         virtual ItemAdministrator* GetIAdministrator() const;
 
+        // PutValue/Any interface for automated instance creation from SfxType
+        // mechanism (UNO API and sfx2 stuff)
         void PutValues(const AnyIDArgs& rArgs);
         virtual void PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);
+
+        // Cleanup helper for virtual destructor
+        void implInstanceCleanup();
 
     public:
         virtual ~ItemBase();

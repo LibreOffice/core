@@ -291,7 +291,7 @@ namespace Item
         template< typename TItem > std::shared_ptr<TItem> GetDefault() const
         {
             // get static available default as instance
-            ItemBase::SharedPtr aRetval(TItem::GetDefault());
+            ItemBase::SharedPtr aRetval(TItem::GetStaticDefault());
             assert(aRetval && "empty ItemBase::SharedPtr not allowed for default (!)");
 
             if(m_aModelSpecificIValues)
