@@ -101,23 +101,23 @@ class SwGlossaryDlg : public SvxStandardDialog
     VclPtr<PushButton>     m_pBibBtn;
     VclPtr<PushButton>     m_pPathBtn;
 
-    OUString const        sReadonlyPath;
+    OUString const        m_sReadonlyPath;
 
     css::uno::Reference< css::text::XAutoTextContainer2 > m_xAutoText;
-    std::unique_ptr<SwOneExampleFrame>  pExampleFrame;
+    std::unique_ptr<SwOneExampleFrame>  m_pExampleFrame;
 
-    SwGlossaryHdl*  pGlossaryHdl;
+    SwGlossaryHdl*  m_pGlossaryHdl;
 
-    OUString        sResumeGroup;
-    OUString        sResumeShortName;
-    bool            bResume;
+    OUString        m_sResumeGroup;
+    OUString        m_sResumeShortName;
+    bool            m_bResume;
 
-    const bool      bSelection : 1;
-    bool            bReadOnly : 1;
-    bool            bIsOld : 1;
-    bool            bIsDocReadOnly:1;
+    const bool      m_bSelection : 1;
+    bool            m_bReadOnly : 1;
+    bool            m_bIsOld : 1;
+    bool            m_bIsDocReadOnly:1;
 
-    SwWrtShell*     pSh;
+    SwWrtShell*     m_pShell;
 
     void EnableShortName(bool bOn = true);
     void ShowPreview();
@@ -142,9 +142,9 @@ class SwGlossaryDlg : public SvxStandardDialog
     void            ResumeShowAutoText();
 
     bool            GetResumeData(OUString& rGroup, OUString& rShortName)
-                        {rGroup = sResumeGroup; rShortName = sResumeShortName; return bResume;}
+                        {rGroup = m_sResumeGroup; rShortName = m_sResumeShortName; return m_bResume;}
     void            SetResumeData(const OUString& rGroup, const OUString& rShortName)
-                        {sResumeGroup = rGroup; sResumeShortName = rShortName; bResume = true;}
+                        {m_sResumeGroup = rGroup; m_sResumeShortName = rShortName; m_bResume = true;}
 
     void            DeleteEntry();
 public:
