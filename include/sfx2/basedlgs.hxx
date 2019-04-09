@@ -139,9 +139,10 @@ class SFX2_DLLPUBLIC SfxModelessDialogController : public SfxDialogController
 protected:
     SfxModelessDialogController(SfxBindings*, SfxChildWindow* pChildWin,
         weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID);
-    virtual ~SfxModelessDialogController() override;
 
 public:
+    virtual ~SfxModelessDialogController() override;
+
     void                    Initialize (SfxChildWinInfo const * pInfo);
     bool                    IsClosing() const;
     virtual void            Close() override;

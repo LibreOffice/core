@@ -109,4 +109,75 @@ ScRange ScMatrixComparisonGenerator::ApplyOutput(ScDocShell* pDocShell)
     return ScRange(output.mMinimumAddress, output.mMaximumAddress);
 }
 
+ScMatrixComparisonGeneratorController::ScMatrixComparisonGeneratorController(
+                                    SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
+                                    weld::Window* pParent, ScViewData* pViewData,
+                                    const OUString& rUiXmlDescription,
+                                    const OString& rID)
+    : ScStatisticsInputOutputDialogController(pSfxBindings, pChildWindow, pParent, pViewData, rUiXmlDescription, rID)
+{}
+
+ScMatrixComparisonGeneratorController::~ScMatrixComparisonGeneratorController()
+{}
+
+const char* ScMatrixComparisonGeneratorController::GetUndoNameId()
+{
+    return STR_CORRELATION_UNDO_NAME;
+}
+
+ScRange ScMatrixComparisonGeneratorController::ApplyOutput(ScDocShell* pDocShell)
+{
+    AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument,
+            formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
+    FormulaTemplate aTemplate(mDocument);
+
+    SCTAB inTab = mInputRange.aStart.Tab();
+
+    ScRangeList aRangeList = (mGroupedBy == BY_COLUMN) ?
+        MakeColumnRangeList(inTab, mInputRange.aStart, mInputRange.aEnd) :
+        MakeRowRangeList(inTab, mInputRange.aStart, mInputRange.aEnd);
+
+    // labels
+    output.writeString(getLabel());
+    output.nextColumn();
+
+    const OUString strWildcardNumber("%NUMBER%");
+
+    // write labels to columns
+    for (size_t i = 0; i < aRangeList.size(); i++)
+    {
+        if (mGroupedBy == BY_COLUMN)
+            aTemplate.setTemplate(ScResId(STR_COLUMN_LABEL_TEMPLATE));
+        else
+            aTemplate.setTemplate(ScResId(STR_ROW_LABEL_TEMPLATE));
+
+        aTemplate.applyNumber(strWildcardNumber, i + 1);
+        output.writeString(aTemplate.getTemplate());
+        output.nextColumn();
+    }
+
+    // write labels to rows
+    output.resetColumn();
+    output.nextRow();
+    for (size_t i = 0; i < aRangeList.size(); i++)
+    {
+        if (mGroupedBy == BY_COLUMN)
+            aTemplate.setTemplate(ScResId(STR_COLUMN_LABEL_TEMPLATE));
+        else
+            aTemplate.setTemplate(ScResId(STR_ROW_LABEL_TEMPLATE));
+
+        aTemplate.applyNumber(strWildcardNumber, i + 1);
+        output.writeString(aTemplate.getTemplate());
+        output.nextRow();
+    }
+
+    // write correlation formulas
+    output.reset();
+    output.push(1, 1);
+
+    lclWriteCorrelationFormulas(output, aTemplate, aRangeList, getTemplate());
+
+    return ScRange(output.mMinimumAddress, output.mMaximumAddress);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
