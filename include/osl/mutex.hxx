@@ -22,6 +22,7 @@
 
 #include "osl/mutex.h"
 
+#include <cassert>
 
 namespace osl
 {
@@ -119,6 +120,7 @@ namespace osl
         */
         Guard(T * pT_) : pT(pT_)
         {
+            assert(pT != NULL);
             pT->acquire();
         }
 
@@ -153,6 +155,7 @@ namespace osl
         */
         ClearableGuard(T * pT_) : pT(pT_)
         {
+            assert(pT != NULL);
             pT->acquire();
         }
 
