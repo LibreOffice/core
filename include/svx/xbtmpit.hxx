@@ -26,8 +26,6 @@
 #include <array>
 
 class SdrModel;
-class BitmapColor;
-
 
 // class XFillBitmapItem
 
