@@ -1845,3 +1845,7 @@ cmd/sc_focustofindbar.png cmd/lc_recsearch.png
 cmd/sc_macroorganizer%3ftabid%3ashort=1.png cmd/sc_open.png
 cmd/sc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/sc_insertplugin.png
 
+# calc styles
+cmd/sc_badcellstyles.png cmd/sc_badcellstyle.png
+cmd/sc_goodcellstyles.png cmd/sc_goodcellstyle.png
+cmd/sc_neutralcellstyles.png cmd/sc_neutralcellstyle.png
