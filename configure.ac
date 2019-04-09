@@ -3887,7 +3887,11 @@ printf ("hello world\n");
             if test -n "$use_ld_has_cpp_typeinfo"; then
                 AC_MSG_RESULT( yes )
             else
-                AC_MSG_RESULT( no )
+                if test -n "$use_ld_fail_if_error"; then
+                    AC_MSG_ERROR( no )
+                else
+                    AC_MSG_RESULT( no )
+                fi
                 use_ld_ok=
             fi
         fi
