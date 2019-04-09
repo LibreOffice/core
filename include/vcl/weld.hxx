@@ -732,15 +732,18 @@ public:
     void select_all() { unselect(-1); }
     void unselect_all() { select(-1); }
 
+    // return the number of toplevel nodes
     virtual int n_children() const = 0;
 
     virtual void make_sorted() = 0;
     virtual void make_unsorted() = 0;
     virtual bool get_sort_order() const = 0;
     virtual void set_sort_order(bool bAscending) = 0;
+
     // TRUE ascending, FALSE, descending, INDET, neither (off)
     virtual void set_sort_indicator(TriState eState, int nColumn = -1) = 0;
     virtual TriState get_sort_indicator(int nColumn = -1) const = 0;
+
     virtual int get_sort_column() const = 0;
     virtual void set_sort_column(int nColumn) = 0;
 

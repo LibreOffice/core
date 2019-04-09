@@ -2558,7 +2558,7 @@ public:
 
     virtual int n_children() const override
     {
-        return m_xTreeView->GetEntryCount();
+        return m_xTreeView->GetModel()->GetChildList(nullptr).size();
     }
 
     virtual void select(int pos) override
