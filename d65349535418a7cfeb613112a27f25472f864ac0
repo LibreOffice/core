@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_a7eb73ae",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-09T06:25:33Z",
+      "side": 1,
+      "message": "better #include \u003csal/config.h\u003e before including anything else",
+      "revId": "d65349535418a7cfeb613112a27f25472f864ac0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_47d067f8",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-09T06:25:33Z",
+      "side": 1,
+      "message": "This is unhelpful \"defensive programming\" now.  When the precondition is pT!\u003dnullptr, then we don\u0027t need the \"if(ptT)\" check.",
+      "revId": "d65349535418a7cfeb613112a27f25472f864ac0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_27d763f0",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-09T06:25:33Z",
+      "side": 1,
+      "message": "I would just write both asserts without the \u0026\u0026\"message\" idiom.  Potentially spares a bit of final code size, esp. for such a public-facing include file like this.",
+      "revId": "d65349535418a7cfeb613112a27f25472f864ac0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
