@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_82273d65",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-09T13:22:45Z",
+      "side": 1,
+      "message": "[loplugin:includeform]",
+      "revId": "1eeea94d75fee9a6f1ce0700236fc37d0ad996bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_a22cc147",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-09T13:22:45Z",
+      "side": 1,
+      "message": "wouldn\u0027t the second assert better be moved to the ctor?",
+      "revId": "1eeea94d75fee9a6f1ce0700236fc37d0ad996bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
