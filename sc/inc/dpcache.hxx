@@ -209,7 +209,6 @@ public:
 private:
     void PostInit();
     void Clear();
-    void AddLabel(const OUString& rLabel);
     const GroupItems* GetGroupItems(long nDim) const;
 };
 
