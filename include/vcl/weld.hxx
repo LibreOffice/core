@@ -383,6 +383,11 @@ public:
     virtual Button* get_widget_for_response(int response) = 0;
     virtual Container* weld_content_area() = 0;
 
+    // shrink the dialog down to shown just these widgets
+    virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) = 0;
+    // undo previous dialog collapse
+    virtual void undo_collapse() = 0;
+
     virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink)
         = 0;
 };

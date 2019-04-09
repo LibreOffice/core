@@ -56,7 +56,9 @@ class FormulaDlg_Impl;
 class IControlReferenceHandler;
 class FormulaHelper;
 class RefEdit;
+class WeldRefEdit;
 class RefButton;
+class WeldRefButton;
 class FormEditData;
 
 class FORMULA_DLLPUBLIC FormulaModalDialog :   public ModalDialog, public formula::IFormulaEditorHelper
@@ -76,6 +78,7 @@ protected:
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
+    static ::std::pair<WeldRefButton*,WeldRefEdit*> RefInputStartBefore( WeldRefEdit* pEdit, WeldRefButton* pButton );
     void            RefInputStartAfter();
     void            RefInputDoneAfter();
 
@@ -110,6 +113,7 @@ protected:
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
+    static ::std::pair<WeldRefButton*,WeldRefEdit*> RefInputStartBefore( WeldRefEdit* pEdit, WeldRefButton* pButton );
     void            RefInputStartAfter();
     void            RefInputDoneAfter( bool bForced );
 

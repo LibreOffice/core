@@ -1016,15 +1016,48 @@ IMPL_LINK_NOARG(SalInstanceWindow, HelpHdl, vcl::Window&, bool)
     return false;
 }
 
+typedef std::set<VclPtr<vcl::Window> > winset;
+
+namespace
+{
+    void hideUnless(const vcl::Window *pTop, const winset& rVisibleWidgets,
+        std::vector<VclPtr<vcl::Window> > &rWasVisibleWidgets)
+    {
+        for (vcl::Window* pChild = pTop->GetWindow(GetWindowType::FirstChild); pChild;
+            pChild = pChild->GetWindow(GetWindowType::Next))
+        {
+            if (!pChild->IsVisible())
+                continue;
+            if (rVisibleWidgets.find(pChild) == rVisibleWidgets.end())
+            {
+                rWasVisibleWidgets.emplace_back(pChild);
+                pChild->Hide();
+            }
+            else if (isContainerWindow(pChild))
+            {
+                hideUnless(pChild, rVisibleWidgets, rWasVisibleWidgets);
+            }
+        }
+    }
+}
+
 class SalInstanceDialog : public SalInstanceWindow, public virtual weld::Dialog
 {
 private:
     VclPtr<::Dialog> m_xDialog;
 
+    // for calc ref dialog that shrink to range selection widgets and resize back
+    VclPtr<vcl::Window> m_xRefEdit;
+    std::vector<VclPtr<vcl::Window> > m_aHiddenWidgets;    // vector of hidden Controls
+    long m_nOldEditWidthReq; // Original width request of the input field
+    sal_Int32 m_nOldBorderWidth; // border width for expanded dialog
+
 public:
     SalInstanceDialog(::Dialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : SalInstanceWindow(pDialog, pBuilder, bTakeOwnership)
         , m_xDialog(pDialog)
+        , m_nOldEditWidthReq(0)
+        , m_nOldBorderWidth(0)
     {
     }
 
@@ -1042,6 +1075,67 @@ public:
         aCtx.mxOwnerSelf.reset(this);
         aCtx.maEndDialogFn = rEndDialogFn;
         return m_xDialog->StartExecuteAsync(aCtx);
+    }
+
+    virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) override
+    {
+        SalInstanceWidget* pVclEdit = dynamic_cast<SalInstanceWidget*>(pEdit);
+        SalInstanceWidget* pVclButton = dynamic_cast<SalInstanceWidget*>(pButton);
+
+        vcl::Window* pRefEdit = pVclEdit->getWidget();
+        vcl::Window* pRefBtn = pVclButton ? pVclButton->getWidget() : nullptr;
+
+        auto nOldEditWidth = pRefEdit->GetSizePixel().Width();
+        m_nOldEditWidthReq = pRefEdit->get_width_request();
+
+        //We want just pRefBtn and pRefEdit to be shown
+        //mark widgets we want to be visible, starting with pRefEdit
+        //and all its direct parents.
+        winset aVisibleWidgets;
+        vcl::Window *pContentArea = m_xDialog->get_content_area();
+        for (vcl::Window *pCandidate = pRefEdit;
+            pCandidate && (pCandidate != pContentArea && pCandidate->IsVisible());
+            pCandidate = pCandidate->GetWindow(GetWindowType::RealParent))
+        {
+            aVisibleWidgets.insert(pCandidate);
+        }
+        //same again with pRefBtn, except stop if there's a
+        //shared parent in the existing widgets
+        for (vcl::Window *pCandidate = pRefBtn;
+            pCandidate && (pCandidate != pContentArea && pCandidate->IsVisible());
+            pCandidate = pCandidate->GetWindow(GetWindowType::RealParent))
+        {
+            if (aVisibleWidgets.insert(pCandidate).second)
+                break;
+        }
+
+        //hide everything except the aVisibleWidgets
+        hideUnless(pContentArea, aVisibleWidgets, m_aHiddenWidgets);
+
+        pRefEdit->set_width_request(nOldEditWidth);
+        m_nOldBorderWidth = m_xDialog->get_border_width();
+        m_xDialog->set_border_width(0);
+        if (vcl::Window *pActionArea = m_xDialog->get_action_area())
+            pActionArea->Hide();
+        m_xDialog->setOptimalLayoutSize();
+        m_xRefEdit = pRefEdit;
+    }
+
+    virtual void undo_collapse() override
+    {
+        // All others: Show();
+        for (VclPtr<vcl::Window> const & pWindow : m_aHiddenWidgets)
+        {
+            pWindow->Show();
+        }
+        m_aHiddenWidgets.clear();
+
+        m_xRefEdit->set_width_request(m_nOldEditWidthReq);
+        m_xRefEdit.clear();
+        m_xDialog->set_border_width(m_nOldBorderWidth);
+        if (vcl::Window *pActionArea = m_xDialog->get_action_area())
+            pActionArea->Show();
+        m_xDialog->setOptimalLayoutSize();
     }
 
     virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink) override

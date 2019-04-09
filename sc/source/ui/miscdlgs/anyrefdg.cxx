@@ -47,7 +47,10 @@ ScFormulaReferenceHelper::ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindi
  : m_pDlg(_pDlg)
  , m_pRefEdit (nullptr)
  , m_pRefBtn (nullptr)
+ , m_pWeldRefEdit (nullptr)
+ , m_pWeldRefBtn (nullptr)
  , m_pWindow(nullptr)
+ , m_pDialog(nullptr)
  , m_pBindings(_pBindings)
  , m_nOldBorderWidth (0)
  , m_nRefTab(0)
@@ -85,6 +88,7 @@ void ScFormulaReferenceHelper::dispose()
 
     m_pOldEditParent.clear();
     m_pWindow.clear();
+    m_pDialog = nullptr;
     m_pRefBtn.clear();
     m_pRefEdit.clear();
 }
@@ -321,6 +325,39 @@ void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit )
     }
 }
 
+void ScFormulaReferenceHelper::ReleaseFocus( formula::WeldRefEdit* pEdit )
+{
+    if( !m_pWeldRefEdit && pEdit )
+    {
+        m_pDlg->RefInputStart( pEdit );
+    }
+
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if( pViewShell )
+    {
+        pViewShell->ActiveGrabFocus();
+        if( m_pWeldRefEdit )
+        {
+            const ScViewData& rViewData = pViewShell->GetViewData();
+            ScDocument* pDoc = rViewData.GetDocument();
+            ScRangeList aRangeList;
+            if( ParseWithNames( aRangeList, m_pWeldRefEdit->GetText(), pDoc ) )
+            {
+                if ( !aRangeList.empty() )
+                {
+                    const ScRange & rRange = aRangeList.front();
+                    pViewShell->SetTabNo( rRange.aStart.Tab() );
+                    pViewShell->MoveCursorAbs(  rRange.aStart.Col(),
+                        rRange.aStart.Row(), SC_FOLLOW_JUMP, false, false );
+                    pViewShell->MoveCursorAbs( rRange.aEnd.Col(),
+                        rRange.aEnd.Row(), SC_FOLLOW_JUMP, true, false );
+                    m_pDlg->SetReference( rRange, pDoc );
+                }
+            }
+        }
+    }
+}
+
 void ScFormulaReferenceHelper::Init()
 {
     ScViewData* pViewData=ScDocShell::GetViewData();    //! use pScViewShell?
@@ -353,6 +390,14 @@ IMPL_LINK( ScFormulaReferenceHelper, AccelSelectHdl, Accelerator&, rSelAccel, vo
     }
 }
 
+IMPL_LINK_NOARG(ScFormulaReferenceHelper, ActivateHdl, weld::Widget&, bool)
+{
+    if (m_pWeldRefEdit)
+        m_pWeldRefEdit->GrabFocus();
+    m_pDlg->RefInputDone(true);
+    return true;
+}
+
 void ScFormulaReferenceHelper::RefInputDone( bool bForced )
 {
     if ( CanInputDone( bForced ) )
@@ -363,62 +408,86 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
             m_bAccInserted = false;
         }
 
-        //get rid of all this junk when we can
-        if (!m_bOldDlgLayoutEnabled)
+        if (m_pDialog)
         {
-            m_pWindow->SetOutputSizePixel(m_aOldDialogSize);
+            // Adjust window title
+            m_pDialog->set_title(m_sOldDialogText);
 
-            // restore the parent of the edit field
-            m_pRefEdit->SetParent(m_pOldEditParent);
+            if (m_pWeldRefEdit)
+                m_pWeldRefEdit->SetActivateHdl(Link<weld::Widget&, bool>());
 
-            // the window is at the old size again
-            m_pWindow->SetOutputSizePixel(m_aOldDialogSize);
-
-            // set button parent
-            if( m_pRefBtn )
+            // set button image
+            if (m_pWeldRefBtn)
             {
-                m_pRefBtn->SetParent(m_pWindow);
+                m_pWeldRefBtn->SetActivateHdl(Link<weld::Widget&, bool>());
+                m_pWeldRefBtn->SetStartImage();
             }
+
+            m_pDialog->undo_collapse();
+
+            m_pWeldRefEdit = nullptr;
+            m_pWeldRefBtn = nullptr;
         }
 
-        if (!m_bOldEditParentLayoutEnabled)
+        if (m_pWindow)
         {
-            // set pEditCell to old position
-            m_pRefEdit->SetPosSizePixel(m_aOldEditPos, m_aOldEditSize);
-
-            // set button position
-            if( m_pRefBtn )
+            //get rid of all this junk when we can
+            if (!m_bOldDlgLayoutEnabled)
             {
-                m_pRefBtn->SetPosPixel( m_aOldButtonPos );
+                m_pWindow->SetOutputSizePixel(m_aOldDialogSize);
+
+                // restore the parent of the edit field
+                m_pRefEdit->SetParent(m_pOldEditParent);
+
+                // the window is at the old size again
+                m_pWindow->SetOutputSizePixel(m_aOldDialogSize);
+
+                // set button parent
+                if( m_pRefBtn )
+                {
+                    m_pRefBtn->SetParent(m_pWindow);
+                }
             }
+
+            if (!m_bOldEditParentLayoutEnabled)
+            {
+                // set pEditCell to old position
+                m_pRefEdit->SetPosSizePixel(m_aOldEditPos, m_aOldEditSize);
+
+                // set button position
+                if( m_pRefBtn )
+                {
+                    m_pRefBtn->SetPosPixel( m_aOldButtonPos );
+                }
+            }
+
+            // Adjust window title
+            m_pWindow->SetText(m_sOldDialogText);
+
+            // set button image
+            if( m_pRefBtn )
+                m_pRefBtn->SetStartImage();
+
+            // All others: Show();
+            for (VclPtr<vcl::Window> const & pWindow : m_aHiddenWidgets)
+            {
+                pWindow->Show();
+            }
+            m_aHiddenWidgets.clear();
+
+            if (m_bOldDlgLayoutEnabled)
+            {
+                m_pRefEdit->set_width_request(m_nOldEditWidthReq);
+                Dialog* pResizeDialog = m_pRefEdit->GetParentDialog();
+                pResizeDialog->set_border_width(m_nOldBorderWidth);
+                if (vcl::Window *pActionArea = pResizeDialog->get_action_area())
+                    pActionArea->Show();
+                pResizeDialog->setOptimalLayoutSize();
+            }
+
+            m_pRefEdit = nullptr;
+            m_pRefBtn = nullptr;
         }
-
-        // Adjust window title
-        m_pWindow->SetText(m_sOldDialogText);
-
-        // set button image
-        if( m_pRefBtn )
-            m_pRefBtn->SetStartImage();
-
-        // All others: Show();
-        for (VclPtr<vcl::Window> const & pWindow : m_aHiddenWidgets)
-        {
-            pWindow->Show();
-        }
-        m_aHiddenWidgets.clear();
-
-        if (m_bOldDlgLayoutEnabled)
-        {
-            m_pRefEdit->set_width_request(m_nOldEditWidthReq);
-            Dialog* pResizeDialog = m_pRefEdit->GetParentDialog();
-            pResizeDialog->set_border_width(m_nOldBorderWidth);
-            if (vcl::Window *pActionArea = pResizeDialog->get_action_area())
-                pActionArea->Show();
-            pResizeDialog->setOptimalLayoutSize();
-        }
-
-        m_pRefEdit = nullptr;
-        m_pRefBtn = nullptr;
     }
 }
 
@@ -591,6 +660,37 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
     }
 }
 
+void ScFormulaReferenceHelper::RefInputStart( formula::WeldRefEdit* pEdit, formula::WeldRefButton* pButton )
+{
+    if (!m_pWeldRefEdit)
+    {
+        m_pWeldRefEdit = pEdit;
+        m_pWeldRefBtn  = pButton;
+
+        // Save and adjust window title
+        m_sOldDialogText = m_pDialog->get_title();
+        if (weld::Label *pLabel = m_pWeldRefEdit->GetLabelWidgetForShrinkMode())
+        {
+            const OUString sLabel = pLabel->get_label();
+            if (!sLabel.isEmpty())
+            {
+                const OUString sNewDialogText = m_sOldDialogText + ": " + comphelper::string::stripEnd(sLabel, ':');
+                m_pDialog->set_title(pLabel->strip_mnemonic(sNewDialogText));
+            }
+        }
+
+        m_pDialog->collapse(pEdit->GetWidget(), pButton ? pButton->GetWidget() : nullptr);
+
+        // set button image
+        if (pButton)
+            pButton->SetEndImage();
+
+        m_pWeldRefEdit->SetActivateHdl(LINK(this, ScFormulaReferenceHelper, ActivateHdl));
+        if (m_pWeldRefBtn)
+            m_pWeldRefBtn->SetActivateHdl(LINK(this, ScFormulaReferenceHelper, ActivateHdl));
+    }
+}
+
 void ScFormulaReferenceHelper::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
     if( pEdit )
@@ -607,6 +707,26 @@ void ScFormulaReferenceHelper::ToggleCollapsed( formula::RefEdit* pEdit, formula
             // pRefEdit might differ from pEdit after RefInputStart() (i.e. ScFormulaDlg)
             if( m_pRefEdit )
                 m_pRefEdit->GrabFocus();
+        }
+    }
+}
+
+void ScFormulaReferenceHelper::ToggleCollapsed( formula::WeldRefEdit* pEdit, formula::WeldRefButton* pButton )
+{
+    if( pEdit )
+    {
+        if( m_pWeldRefEdit == pEdit )                 // is this the active ref edit field?
+        {
+            m_pWeldRefEdit->GrabFocus();              // before RefInputDone()
+            m_pDlg->RefInputDone( true );               // finish ref input
+        }
+        else
+        {
+            m_pDlg->RefInputDone( true );               // another active ref edit?
+            m_pDlg->RefInputStart( pEdit, pButton );    // start ref input
+            // pRefEdit might differ from pEdit after RefInputStart() (i.e. ScFormulaDlg)
+            if( m_pWeldRefEdit )
+                m_pWeldRefEdit->GrabFocus();
         }
     }
 }
@@ -747,16 +867,25 @@ static void lcl_HideAllReferences()
     }
 }
 
-//The class of ScAnyRefDlg is rewritten by PengYunQuan for Validity Cell Range Picker
-//  class ScRefHandler
-
 ScRefHandler::ScRefHandler( vcl::Window &rWindow, SfxBindings* pB, bool bBindRef ):
         m_rWindow( &rWindow ),
+        m_pController( nullptr ),
         m_bInRefMode( false ),
         m_aHelper(this,pB),
         m_pMyBindings( pB )
 {
     m_aHelper.SetWindow(m_rWindow.get());
+
+    if( bBindRef ) EnterRefMode();
+}
+
+ScRefHandler::ScRefHandler(SfxModelessDialogController& rController, SfxBindings* pB, bool bBindRef)
+    : m_pController(&rController)
+    , m_bInRefMode(false)
+    , m_aHelper(this, pB)
+    , m_pMyBindings(pB)
+{
+    m_aHelper.SetDialog(rController.getDialog());
 
     if( bBindRef ) EnterRefMode();
 }
@@ -819,6 +948,7 @@ ScRefHandler::~ScRefHandler()
 void ScRefHandler::disposeRefHandler()
 {
     m_rWindow.clear();
+    m_pController = nullptr;
     LeaveRefMode();
     m_aHelper.dispose();
 }
@@ -831,6 +961,8 @@ bool ScRefHandler::LeaveRefMode()
 
     if( Dialog *pDlg = dynamic_cast<Dialog*>( m_rWindow.get() ) )
         pDlg->SetModalInputMode(false);
+    if (m_pController)
+        m_pController->getDialog()->set_modal(false);
     SetDispatcherLock( false );         //! here and in DoClose ?
 
     ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
@@ -885,6 +1017,8 @@ bool ScRefHandler::IsDocAllowed(SfxObjectShell* pDocSh) const   // pDocSh may be
 
 bool ScRefHandler::IsRefInputMode() const
 {
+    if (m_pController)
+        return m_pController->getDialog()->get_visible();
     return m_rWindow->IsVisible(); // references can only be input to visible windows
 }
 
@@ -924,7 +1058,17 @@ void ScRefHandler::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* p
     m_aHelper.RefInputStart( pEdit, pButton );
 }
 
+void ScRefHandler::RefInputStart( formula::WeldRefEdit* pEdit, formula::WeldRefButton* pButton )
+{
+    m_aHelper.RefInputStart( pEdit, pButton );
+}
+
 void ScRefHandler::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton )
+{
+    m_aHelper.ToggleCollapsed( pEdit, pButton );
+}
+
+void ScRefHandler::ToggleCollapsed( formula::WeldRefEdit* pEdit, formula::WeldRefButton* pButton )
 {
     m_aHelper.ToggleCollapsed( pEdit, pButton );
 }
@@ -945,6 +1089,11 @@ void ScRefHandler::ShowReference(const OUString& rStr)
 }
 
 void ScRefHandler::ReleaseFocus( formula::RefEdit* pEdit )
+{
+    m_aHelper.ReleaseFocus( pEdit );
+}
+
+void ScRefHandler::ReleaseFocus( formula::WeldRefEdit* pEdit )
 {
     m_aHelper.ReleaseFocus( pEdit );
 }
