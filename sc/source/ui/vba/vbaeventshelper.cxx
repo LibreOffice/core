@@ -36,6 +36,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/eventcfg.hxx>
+#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vbahelper/vbaaccesshelper.hxx>

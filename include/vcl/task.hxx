@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_TASK_HXX
 
 #include <vcl/dllapi.h>
-#include <sal/log.hxx>
 
 struct ImplSchedulerData;
 

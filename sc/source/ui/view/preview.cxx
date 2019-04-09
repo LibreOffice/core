@@ -30,6 +30,7 @@
 #include <svtools/accessibilityoptions.hxx>
 #include <svl/itemset.hxx>
 #include <tools/multisel.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
 #include <o3tl/deleter.hxx>

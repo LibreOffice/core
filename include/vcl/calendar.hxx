@@ -24,7 +24,6 @@
 #include <unotools/calendarwrapper.hxx>
 
 #include <vcl/ctrl.hxx>
-#include <vcl/field.hxx>
 #include <memory>
 #include <set>
 
@@ -33,10 +32,6 @@ class TrackingEvent;
 class KeyEvent;
 class HelpEvent;
 class DataChangedEvent;
-class FloatingWindow;
-class PushButton;
-class ImplCFieldFloatWin;
-class Button;
 
 /*************************************************************************
 

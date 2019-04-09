@@ -31,6 +31,7 @@
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <docuno.hxx>
 #include <xestream.hxx>

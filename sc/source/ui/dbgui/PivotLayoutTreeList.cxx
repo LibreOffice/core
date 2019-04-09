@@ -14,6 +14,7 @@
 #include <PivotLayoutDialog.hxx>
 
 #include <vcl/builderfactory.hxx>
+#include <vcl/event.hxx>
 #include <vcl/treelistentry.hxx>
 #include <pivot.hxx>
 #include <scabstdlg.hxx>

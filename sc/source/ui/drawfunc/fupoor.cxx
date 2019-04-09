@@ -27,6 +27,7 @@
 #include <drawview.hxx>
 #include <detfunc.hxx>
 #include <document.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdrhittesthelper.hxx>
 

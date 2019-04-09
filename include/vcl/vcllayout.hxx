@@ -20,8 +20,6 @@
 #ifndef INCLUDED_VCL_VCLLAYOUT_HXX
 #define INCLUDED_VCL_VCLLAYOUT_HXX
 
-#include <memory>
-
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/gen.hxx>
 #include <vcl/devicecoordinate.hxx>
@@ -32,11 +30,6 @@ class PhysicalFontFace;
 class SalGraphics;
 struct GlyphItem;
 class SalLayoutGlyphs;
-
-namespace vcl
-{
-    class TextLayoutCache;
-}
 
 // all positions/widths are in font units
 // one exception: drawposition is in pixel units

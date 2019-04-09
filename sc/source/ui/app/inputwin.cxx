@@ -36,6 +36,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
 #include <editeng/scriptspaceitem.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>

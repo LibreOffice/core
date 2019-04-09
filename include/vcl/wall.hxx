@@ -25,7 +25,6 @@
 #include <vcl/dllapi.h>
 #include <o3tl/cow_wrapper.hxx>
 
-class Color;
 class Gradient;
 class BitmapEx;
 class ImplWallpaper;
