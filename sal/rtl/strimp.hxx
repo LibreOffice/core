@@ -61,8 +61,8 @@ typedef void  (*rtl_freeStringFn)(void *);
 
 }
 
-extern rtl_allocateStringFn rtl_allocateString;
-extern rtl_freeStringFn rtl_freeString;
+rtl_allocateStringFn rtl_allocateString(rtl_allocateStringFn in = nullptr);
+rtl_freeStringFn rtl_freeString(rtl_freeStringFn in = nullptr);
 
 // string lifetime instrumentation / diagnostics
 #if USE_SDT_PROBES
