@@ -826,7 +826,7 @@ retry:
                code here. Could be the case for apple encodings */
             while ( nInfo & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL )
             {
-                rtl_freeString( pTemp );
+                rtl_freeString()( pTemp );
                 nNewLen += 8;
                 pTemp = rtl_uString_ImplAlloc( nNewLen );
                 if (pTemp == nullptr) {
@@ -855,7 +855,7 @@ retry:
             if (pTemp2 != nullptr)
             {
                 rtl_str_ImplCopy(pTemp2->buffer, pTemp->buffer, nDestChars);
-                rtl_freeString(pTemp);
+                rtl_freeString()(pTemp);
                 pTemp = pTemp2;
             }
             else
@@ -922,7 +922,7 @@ static void rtl_ustring_intern_internal( rtl_uString ** newStr,
 
     if( can_return && *newStr != str )
     { /* we dupped, then found a match */
-        rtl_freeString( str );
+        rtl_freeString()( str );
     }
 }
 
@@ -1073,7 +1073,7 @@ internRelease (rtl_uString *pThis)
         osl_releaseMutex( pPoolMutex );
     }
     if (pFree)
-        rtl_freeString (pFree);
+        rtl_freeString()(pFree);
 }
 
 sal_uInt32 SAL_CALL rtl_uString_iterateCodePoints(
