@@ -515,8 +515,7 @@ SwPageDescExt & SwPageDescExt::operator = (const SwPageDesc & rSrc)
 
 SwPageDescExt & SwPageDescExt::operator = (const SwPageDescExt & rSrc)
 {
-    SetPageDesc(rSrc.m_PageDesc);
-
+    operator=(rSrc.m_PageDesc);
     return *this;
 }
 
