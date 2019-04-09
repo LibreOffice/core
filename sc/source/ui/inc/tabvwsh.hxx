@@ -328,6 +328,10 @@ public:
                                                const SfxChildWinInfo* pInfo,
                                                vcl::Window* pParent, sal_uInt16 nSlotId );
 
+    std::unique_ptr<SfxModelessDialogController> CreateRefDialogController(SfxBindings* pB, SfxChildWindow* pCW,
+                                                    const SfxChildWinInfo* pInfo,
+                                                    weld::Window* pParent, sal_uInt16 nSlotId);
+
     void            UpdateOleZoom();
 
     virtual const FmFormShell* GetFormShell() const override { return pFormShell.get(); }

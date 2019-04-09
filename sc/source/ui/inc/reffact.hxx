@@ -79,7 +79,7 @@ private:
 };
 
 class ScCorrelationDialogWrapper :
-    public ChildWindowWrapper<SID_CORRELATION_DIALOG>
+    public ChildControllerWrapper<SID_CORRELATION_DIALOG>
 {
 private:
     ScCorrelationDialogWrapper() = delete;

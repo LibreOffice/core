@@ -34,6 +34,24 @@ protected:
     virtual const OUString getTemplate() = 0;
 };
 
+class ScMatrixComparisonGeneratorController : public ScStatisticsInputOutputDialogController
+{
+public:
+    ScMatrixComparisonGeneratorController(
+        SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
+        weld::Window* pParent, ScViewData* pViewData,
+        const OUString& rUiXmlDescription, const OString& rID);
+
+    virtual ~ScMatrixComparisonGeneratorController() override;
+
+protected:
+    virtual const char* GetUndoNameId() override;
+    virtual ScRange ApplyOutput(ScDocShell* pDocShell) override;
+
+    virtual const OUString getLabel() = 0;
+    virtual const OUString getTemplate() = 0;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

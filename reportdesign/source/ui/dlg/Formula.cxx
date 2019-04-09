@@ -201,6 +201,10 @@ void FormulaDialog::ReleaseFocus( RefEdit* /*pEdit*/)
 {
 }
 
+void FormulaDialog::ReleaseFocus( WeldRefEdit* /*pEdit*/)
+{
+}
+
 void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
 {
     ::std::pair<RefButton*,RefEdit*> aPair = RefInputStartBefore( _pEdit, _pButton );
@@ -226,6 +230,11 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
     RefInputStartAfter();
     m_pAddField->Show();
 
+}
+
+void FormulaDialog::ToggleCollapsed( WeldRefEdit* /*_pEdit*/, WeldRefButton* /*_pButton*/)
+{
+    assert(false);
 }
 
 IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow& ,_rAddFieldDlg, void)
