@@ -33,6 +33,24 @@
       "revId": "1eeea94d75fee9a6f1ce0700236fc37d0ad996bc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_621eb90d",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-09T13:24:42Z",
+      "side": 1,
+      "message": "As you noted yourself, pResetT is protected; so it must be here. And it doesn\u0027t be in ctor, since ClearableGuard ctor already has it",
+      "parentUuid": "df87a7cf_a22cc147",
+      "revId": "1eeea94d75fee9a6f1ce0700236fc37d0ad996bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
