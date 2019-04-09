@@ -4032,12 +4032,7 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     pop();
 
     OStringBuffer aDA( 256 );
-    const pdf::BuildinFont& rBestFont = pdf::BuildinFontFace::Get(
-        getBestBuildinFont(Font("ZapfDingbats", aFont.GetFontSize())));
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
-    aDA.append( ' ' );
-    aDA.append(rBestFont.getNameObject());
-    aDA.append( " 0 Tf" );
     rBox.m_aDAString = aDA.makeStringAndClear();
     //to encrypt this (el)
     rBox.m_aMKDict = "/CA";
@@ -4054,10 +4049,8 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     aDA.append( "/Tx BMC\nq BT\n" );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
     aDA.append( ' ' );
-    aDA.append(rBestFont.getNameObject());
-    aDA.append( ' ' );
     m_aPages[m_nCurrentPage].appendMappedLength( sal_Int32( aCheckRect.GetHeight() ), aDA );
-    aDA.append( " Tf\n0 0 Td\nET\nQ\n" );
+    aDA.append( " 0 0 Td\nET\nQ\n" );
     writeBuffer( aDA.getStr(), aDA.getLength() );
     setFillColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ) );
     setLineColor( COL_TRANSPARENT );
