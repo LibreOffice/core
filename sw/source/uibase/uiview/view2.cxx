@@ -1975,7 +1975,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
                 {
                     sal_uInt16 nSeqNo = sName.copy( nNoPos + 1 ).toInt32();
                     sName = sName.copy( 0, nNoPos );
-                    m_pWrtShell->GotoRefMark( sName, REF_SEQUENCEFLD, nSeqNo );
+                    bRet = m_pWrtShell->GotoRefMark(sName, REF_SEQUENCEFLD, nSeqNo);
                 }
             }
             else if( sCmp == "text" )
