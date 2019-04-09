@@ -70,7 +70,7 @@ sub put_linenumber_into_script
 {
     my ( $scriptfile ) = @_;
 
-    my $linenumber =  $#{$scriptfile} + 2;
+    my $linenumber = $#{$scriptfile} + 2;
 
     $installer::logger::Lang->printf("Adding linenumber %d into download shell script\n", $linenumber);
 
@@ -469,15 +469,15 @@ sub get_downloadname_productname
             }
         }
 
-        if ( $allvariables->{'PRODUCTNAME'} eq "AOO-Developer-Build" )
+        if ( $allvariables->{'PRODUCTNAME'} eq "OpenOffice Developer Build" )
         {
             if ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )
             {
-                $start .= "-Dev-SDK";
+                $start .= "_Dev-SDK";
             }
             else
             {
-                $start .= "-Dev";
+                $start .= "_Dev";
             }
         }
 
@@ -507,7 +507,7 @@ sub get_download_version
     # the environment variable CWS_WORK_STAMP is set only in CWS
     if ( $ENV{'CWS_WORK_STAMP'} ) { $cwsproduct = 1; }
 
-    if (( $cwsproduct ) || ( $devproduct ))  # use "DEV300m75"
+    if (( $cwsproduct ) || ( $devproduct )) # use "DEV300m75"
     {
         my $source = uc($installer::globals::build); # DEV300
         my $localminor = "";
@@ -515,7 +515,7 @@ sub get_download_version
         else { $localminor = $installer::globals::lastminor; }
         $version = $source . $localminor;
     }
-    else  # use 3.2.0rc1
+    else # use 3.2.0rc1
     {
         $version = $allvariables->{'PRODUCTVERSION'};
         if (( $allvariables->{'ABOUTBOXPRODUCTVERSION'} ) && ( $allvariables->{'ABOUTBOXPRODUCTVERSION'} ne "" )) { $version = $allvariables->{'ABOUTBOXPRODUCTVERSION'}; }
@@ -1403,7 +1403,7 @@ sub replace_identifier_in_nshfile
         {
             my $oldstring = $1;
             ${$nshfile}[$i] =~ s/\Q$oldstring\E/$newstring/;
-            $installer::logger::Lang->printf("NSIS replacement in %s (%s):  \-\> %s\n",
+            $installer::logger::Lang->printf("NSIS replacement in %s (%s): \-\> %s\n",
                 $nshfilename,
                 $onelanguage,
                 $oldstring,
@@ -1512,7 +1512,7 @@ sub convert_utf8_to_utf16
     installer::systemactions::copy_one_file($filename, $savfilename);
 
     open( IN, "<:utf8", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_utf8_to_utf16");
-    while (my  $line = <IN>)
+    while (my $line = <IN>)
     {
         push @localfile, $line;
     }
@@ -1893,7 +1893,7 @@ sub create_download_sets
             if ($$scriptref eq "") { installer::exiter::exit_program("ERROR: Could not find script file $scriptfilename!", "create_download_sets"); }
             my $scriptfile = installer::files::read_file($$scriptref);
 
-            $installer::logger::Lang->printf("Found  script file %s: %s \n", $scriptfilename, $$scriptref);
+            $installer::logger::Lang->printf("Found script file %s: %s \n", $scriptfilename, $$scriptref);
 
             # add product name into script template
             put_productname_into_script($scriptfile, $allvariableshashref);
