@@ -2256,7 +2256,7 @@ css::uno::Any Document::mapFontWeight(::FontWeight nWeight)
 {
     // Map from ::FontWeight to css::awt::FontWeight, depends on order of
     // elements in ::FontWeight (vcl/vclenum.hxx):
-    static float const aWeight[]
+    static const std::array<const float, 11> aWeight
         = { css::awt::FontWeight::DONTKNOW, // WEIGHT_DONTKNOW
             css::awt::FontWeight::THIN, // WEIGHT_THIN
             css::awt::FontWeight::ULTRALIGHT, // WEIGHT_ULTRALIGHT
