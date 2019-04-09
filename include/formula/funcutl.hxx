@@ -28,6 +28,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/vclptr.hxx>
 
 class KeyEvent;
@@ -83,6 +84,74 @@ public:
     }
 };
 
+class FORMULA_DLLPUBLIC WeldRefEdit
+{
+private:
+    std::unique_ptr<weld::Entry> xEntry;
+    Idle aIdle;
+    IControlReferenceHandler* pAnyRefDlg; // parent dialog
+    weld::Label* pLabelWidget;
+    Link<WeldRefEdit&,void> maGetFocusHdl;
+    Link<WeldRefEdit&,void> maLoseFocusHdl;
+    Link<WeldRefEdit&,void> maModifyHdl;
+    Link<weld::Widget&,bool> maActivateHdl;
+
+    DECL_LINK( UpdateHdl, Timer*, void );
+
+protected:
+    DECL_LINK(KeyInput, const KeyEvent&, bool);
+    DECL_LINK(GetFocus, weld::Widget&, void);
+    DECL_LINK(LoseFocus, weld::Widget&, void);
+    DECL_LINK(Modify, weld::Entry&, void);
+
+public:
+    WeldRefEdit(std::unique_ptr<weld::Entry> xControl);
+    weld::Widget* GetWidget() const { return xEntry.get(); }
+    ~WeldRefEdit();
+
+    void SetRefString( const OUString& rStr );
+
+    /**
+     * Flag reference valid or invalid, which in turn changes the visual
+     * appearance of the control accordingly.
+     */
+    void SetRefValid(bool bValid);
+
+    void SetText(const OUString& rStr);
+    OUString GetText() const
+    {
+        return xEntry->get_text();
+    }
+
+    void StartUpdateData();
+
+    void SetReferences( IControlReferenceHandler* pDlg, weld::Label *pLabelWidget );
+
+    void DoModify()
+    {
+        Modify(*xEntry);
+    }
+
+    void GrabFocus()
+    {
+        xEntry->grab_focus();
+    }
+
+    void SelectAll()
+    {
+        xEntry->select_region(0, -1);
+    }
+
+    weld::Label* GetLabelWidgetForShrinkMode()
+    {
+        return pLabelWidget;
+    }
+
+    void SetGetFocusHdl(const Link<WeldRefEdit&,void>& rLink) { maGetFocusHdl = rLink; }
+    void SetLoseFocusHdl(const Link<WeldRefEdit&,void>& rLink) { maLoseFocusHdl = rLink; }
+    void SetModifyHdl(const Link<WeldRefEdit&,void>& rLink) { maModifyHdl = rLink; }
+    void SetActivateHdl(const Link<weld::Widget&,bool>& rLink) { maActivateHdl = rLink; }
+};
 
 class FORMULA_DLLPUBLIC RefButton : public ImageButton
 {
@@ -112,6 +181,39 @@ public:
         Click();
     }
 };
+
+class FORMULA_DLLPUBLIC WeldRefButton
+{
+private:
+    std::unique_ptr<weld::Button> xButton;
+    IControlReferenceHandler* pAnyRefDlg;   // parent dialog
+    WeldRefEdit*              pRefEdit;     // associated Edit-Control
+    Link<WeldRefButton&,void> maGetFocusHdl;
+    Link<WeldRefButton&,void> maLoseFocusHdl;
+    Link<weld::Widget&,bool> maActivateHdl;
+
+protected:
+    DECL_LINK(Click, weld::Button&, void);
+    DECL_LINK(KeyInput, const KeyEvent&, bool);
+    DECL_LINK(GetFocus, weld::Widget&, void);
+    DECL_LINK(LoseFocus, weld::Widget&, void);
+
+public:
+    WeldRefButton(std::unique_ptr<weld::Button> xControl);
+    weld::Widget* GetWidget() const { return xButton.get(); }
+    ~WeldRefButton();
+    void SetReferences(IControlReferenceHandler* pDlg, WeldRefEdit* pEdit);
+    void SetStartImage();
+    void SetEndImage();
+    void DoRef()
+    {
+        Click(*xButton);
+    }
+    void SetGetFocusHdl(const Link<WeldRefButton&,void>& rLink) { maGetFocusHdl = rLink; }
+    void SetLoseFocusHdl(const Link<WeldRefButton&,void>& rLink) { maLoseFocusHdl = rLink; }
+    void SetActivateHdl(const Link<weld::Widget&,bool>& rLink) { maActivateHdl = rLink; }
+};
+
 
 } // formula
 
