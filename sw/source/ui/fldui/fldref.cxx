@@ -38,8 +38,6 @@
 
 #include <comphelper/string.hxx>
 
-#include <vcl/treelistentry.hxx>
-
 #define REFFLDFLAG          0x4000
 #define REFFLDFLAG_BOOKMARK 0x4800
 #define REFFLDFLAG_FOOTNOTE 0x5000

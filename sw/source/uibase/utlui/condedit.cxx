@@ -21,7 +21,6 @@
 
 #include <condedit.hxx>
 #include <svx/dbaexchange.hxx>
-#include <vcl/builderfactory.hxx>
 
 using namespace ::svx;
 using namespace ::com::sun::star::uno;

@@ -20,8 +20,6 @@
 #include <sfx2/strings.hrc>
 #include <bitmaps.hlst>
 
-#include <vcl/builderfactory.hxx>
-
 #define MNI_OPEN               "open"
 #define MNI_EDIT               "edit"
 #define MNI_DEFAULT_TEMPLATE   "default"

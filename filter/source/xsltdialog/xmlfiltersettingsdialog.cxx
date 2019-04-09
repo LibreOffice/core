@@ -28,17 +28,14 @@
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <tools/urlobj.hxx>
-#include <vcl/headbar.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/streamwrap.hxx>
 #include <osl/file.hxx>
 #include <o3tl/enumrange.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <vcl/treelistentry.hxx>
 #include <tools/stream.hxx>
 
 #include <rtl/uri.hxx>

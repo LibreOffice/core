@@ -19,7 +19,6 @@
 
 #include <dbmgr.hxx>
 #include <sfx2/app.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/print.hxx>
 #include <vcl/settings.hxx>
 

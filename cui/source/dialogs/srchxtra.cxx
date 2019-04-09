@@ -31,7 +31,6 @@
 #include <svx/dialogs.hrc>
 #include <tools/resary.hxx>
 #include <rtl/strbuf.hxx>
-#include <vcl/treelistentry.hxx>
 
 SvxSearchFormatDialog::SvxSearchFormatDialog(weld::Window* pParent, const SfxItemSet& rSet)
     : SfxTabDialogController(pParent, "cui/ui/searchformatdialog.ui", "SearchFormatDialog", &rSet)

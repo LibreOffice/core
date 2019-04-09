@@ -36,9 +36,7 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <dbtree.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/treelistentry.hxx>
 
 #include <bitmaps.hlst>
 

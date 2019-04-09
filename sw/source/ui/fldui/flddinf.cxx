@@ -22,7 +22,6 @@
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <vcl/treelistentry.hxx>
 
 #include <swtypes.hxx>
 #include <flddinf.hrc>

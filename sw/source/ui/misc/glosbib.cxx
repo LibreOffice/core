@@ -22,11 +22,9 @@
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/builderfactory.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/pathoptions.hxx>
-#include <vcl/treelistentry.hxx>
 #include <osl/diagnose.h>
 
 #include <swtypes.hxx>

@@ -37,7 +37,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/ipclient.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/svtabbx.hxx>
 #include <svl/urlbmk.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <vcl/cursor.hxx>

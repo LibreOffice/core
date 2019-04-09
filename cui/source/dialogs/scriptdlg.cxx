@@ -24,7 +24,6 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/builderfactory.hxx>
 
 #include <strings.hrc>
 #include <bitmaps.hlst>
@@ -53,7 +52,6 @@
 
 #include <basic/sbx.hxx>
 #include <svtools/imagemgr.hxx>
-#include <vcl/treelistentry.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <vector>

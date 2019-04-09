@@ -18,7 +18,6 @@
  */
 
 #include <i18nutil/unicode.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/field.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/settings.hxx>
@@ -40,7 +39,6 @@
 #include <sfx2/sfxsids.hrc>
 #include <svl/eitem.hxx>
 #include <svl/languageoptions.hxx>
-#include <vcl/svlbitm.hxx>
 #include <svx/SmartTagMgr.hxx>
 #include <com/sun/star/smarttags/XSmartTagRecognizer.hpp>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
