@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_a2afe192",
+        "filename": "solenv/gbuild/LinkTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 1328,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-04-09T14:25:39Z",
+      "side": 0,
+      "message": "hmm i think the intent here was that you can\u0027t override cxxflags per object, because that would lead to loads of custom one-off hacks everywhere ... but maybe that was an overreaction to historic issues and we don\u0027t use SunStudio compiler any more :)",
+      "revId": "ae349f1730c310a4c11ef0deaad755600c5c32ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
