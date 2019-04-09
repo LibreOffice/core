@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_02c56d3c",
+        "filename": "svx/source/svdraw/svdcrtv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-04-09T15:22:59Z",
+      "side": 1,
+      "message": "SdrDragStat::GetPointCount() returns sal_Int32 so that would be more appropriate",
+      "revId": "72ce7b3a13f4b76be810c0bcb62da52cf583e7d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
