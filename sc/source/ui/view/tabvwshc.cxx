@@ -348,12 +348,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
         }
         break;
 
-        case SID_CORRELATION_DIALOG:
-        {
-            pResult = VclPtr<ScCorrelationDialog>::Create( pB, pCW, pParent, &GetViewData() );
-        }
-        break;
-
         case SID_COVARIANCE_DIALOG:
         {
             pResult = VclPtr<ScCovarianceDialog>::Create( pB, pCW, pParent, &GetViewData() );
@@ -510,6 +504,45 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
     }
 
     return pResult;
+}
+
+std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogController(
+                                SfxBindings* pB, SfxChildWindow* pCW,
+                                const SfxChildWinInfo* pInfo,
+                                weld::Window* pParent, sal_uInt16 nSlotId)
+{
+    // only open dialog when called through ScModule::SetRefDialog,
+    // so that it does not re appear for instance after a crash (#42341#).
+
+    if ( SC_MOD()->GetCurRefDlgId() != nSlotId )
+        return nullptr;
+
+    if ( nCurRefDlgId != nSlotId )
+    {
+        //  the dialog has been opened in a different view
+        //  -> lock the dispatcher for this view (modal mode)
+
+        GetViewData().GetDispatcher().Lock( true );    // lock is reset when closing dialog
+        return nullptr;
+    }
+
+    std::unique_ptr<SfxModelessDialogController> xResult;
+
+    if(pCW)
+        pCW->SetHideNotDelete(true);
+
+    switch( nSlotId )
+    {
+        case SID_CORRELATION_DIALOG:
+        {
+            xResult.reset(new ScCorrelationDialog(pB, pCW, pParent, &GetViewData()));
+        }
+        break;
+    }
+
+    if (xResult)
+        xResult->Initialize( pInfo );
+    return xResult;
 }
 
 int ScTabViewShell::getPart() const

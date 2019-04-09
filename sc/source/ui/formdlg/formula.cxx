@@ -393,6 +393,14 @@ void ScFormulaDlg::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* p
     RefInputStartAfter();
 }
 
+void ScFormulaDlg::RefInputStart( formula::WeldRefEdit* pEdit, formula::WeldRefButton* pButton )
+{
+    pEdit->SelectAll();
+    ::std::pair<formula::WeldRefButton*,formula::WeldRefEdit*> aPair = RefInputStartBefore( pEdit, pButton );
+    m_aHelper.RefInputStart( aPair.second, aPair.first);
+    RefInputStartAfter();
+}
+
 void ScFormulaDlg::RefInputDone( bool bForced )
 {
     m_aHelper.RefInputDone( bForced );
@@ -531,7 +539,15 @@ void ScFormulaDlg::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton*
 {
     m_aHelper.ToggleCollapsed(pEdit,pButton);
 }
+void ScFormulaDlg::ToggleCollapsed( formula::WeldRefEdit* pEdit, formula::WeldRefButton* pButton)
+{
+    m_aHelper.ToggleCollapsed(pEdit,pButton);
+}
 void ScFormulaDlg::ReleaseFocus( formula::RefEdit* pEdit)
+{
+    m_aHelper.ReleaseFocus(pEdit);
+}
+void ScFormulaDlg::ReleaseFocus( formula::WeldRefEdit* pEdit)
 {
     m_aHelper.ReleaseFocus(pEdit);
 }
