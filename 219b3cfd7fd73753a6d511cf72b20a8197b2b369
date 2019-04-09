@@ -22,6 +22,30 @@
       "revId": "219b3cfd7fd73753a6d511cf72b20a8197b2b369",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_c719d788",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2019-04-09T10:35:47Z",
+      "side": 1,
+      "message": "Yes, I will fix that :)",
+      "parentUuid": "df87a7cf_c3ed5426",
+      "range": {
+        "startLine": 287,
+        "startChar": 18,
+        "endLine": 287,
+        "endChar": 29
+      },
+      "revId": "219b3cfd7fd73753a6d511cf72b20a8197b2b369",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
