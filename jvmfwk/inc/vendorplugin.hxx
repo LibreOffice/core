@@ -28,9 +28,9 @@
 
 #include <memory>
 #include <vector>
-#include <utility>
-#include "elements.hxx"
 #include "vendorbase.hxx"
+
+namespace jfw { class VendorSettings; }
 
 /**
    @file
@@ -56,7 +56,6 @@ enum class javaPluginError
     WrongVersionFormat,
     FailedVersion,
     NoJre,
-    WrongVendor,
     WrongArch,
     VmCreationFailed
 };
@@ -64,26 +63,14 @@ enum class javaPluginError
 
 /** obtains information about installations of Java Runtime Environments (JREs).
 
-    <p>The function gathers information about available JREs which have the same
-    vendor as determined by the <code>sVendor</code> parameter. Only information
+    <p>The function gathers information about available JREs. Only information
     about those JREs which match the version requirements are returned. These
-    requirements are specified by the parameters <code>sMinVersion</code>,
-    <code>sMaxVersion</code> and <code>arExcludeList</code>.
+    requirements are specified by the parameter <code>vendorSettings</code>.
     </p>
     <p>
     The JavaInfo structures returned in <code>parJavaInfo</code> should be ordered
     according to their version. The one, representing a JRE with the highest
     version should be the first in the array. </p>
-    @param sVendor
-        [in] only JREs from this vendor are examined. This parameter always contains
-        a vendor string. That is, the string it is not empty.
-    @param sMinVersion
-        [in] represents the minimum version of a JRE. The string can be empty.
-    @param sMaxVersion
-        [in] represents the maximum version of a JRE. The string can be empty.
-    @param arExcludeList
-        [in] contains a list of &quot;bad&quot; versions. JREs which have one of these
-        versions must not be returned by this function.
     @param parJavaInfo
         [out] if the function runs successfully then <code>parJavaInfo</code> contains
         on return a vector of pointers to <code>JavaInfo</code> objects.
@@ -91,40 +78,25 @@ enum class javaPluginError
     @return
     javaPluginError::NONE the function ran successfully.</br>
     javaPluginError::Error an error occurred during execution.</br>
-    javaPluginError::InvalidArg an argument was not valid.</br>
     javaPluginError::WrongVersionFormat the version strings in
-    <code>sMinVersion,sMaxVersion,arExcludeList</code> are not recognized as valid
+    <code>vendorSettings</code> are not recognized as valid
     version strings.
  */
 javaPluginError jfw_plugin_getAllJavaInfos(
     bool checkJavaHomeAndPath,
-    OUString const& sVendor,
-    OUString const& sMinVersion,
-    OUString const& sMaxVersion,
-    std::vector<OUString> const & arExcludeList,
+    jfw::VendorSettings const & vendorSettings,
     std::vector<std::unique_ptr<JavaInfo>> * parJavaInfo,
     std::vector<rtl::Reference<jfw_plugin::VendorBase>> & infos);
 
 /** obtains information for a JRE at a given location.
 
-   <p>If the given location belongs to a JRE whoose vendor matches the
-   sVendor argument and the JRE has a version which meets the requirements as
-   specified by <code>sMinVersion, sMaxVersion, arExcludeList</code> then
-   this function shall return a JavaInfo object for this JRE if this implementation
-   supports this vendor.</p>
+   <p>If the given location belongs to a JRE
+   and the JRE has a version which meets the requirements as
+   specified by <code>vendorSettings</code> then
+   this function shall return a JavaInfo object for this JRE.</p>
 
    @param sLocation
        [in] a file URL to the directory of the JRE.
-   @param sVendor
-      [in] a name of a vendor. This parameter always contains
-        a vendor string. That is, the string it is not empty.
-   @param sMinVersion
-       [in] represents the minimum version of a JRE.
-   @param sMaxVersion
-       [in] represents the maximum version of a JRE.
-   @param arExcludeList
-       [in] contains a list of &quot;bad&quot; versions. JREs which have one of these
-        versions must not be returned by this function.
    @param ppInfo
        [out] if the function runs successfully then <code>ppInfo</code> contains
         on return a pointer to a <code>JavaInfo</code> object.
@@ -134,37 +106,23 @@ javaPluginError jfw_plugin_getAllJavaInfos(
    javaPluginError::Error an error occurred during execution.</br>
    javaPluginError::InvalidArg an argument was not valid. For example, sLocation
     is an empty string.</br>
-   javaPluginError::WrongVersionFormat the version strings in
-    <code>sMinVersion,sMaxVersion,arExcludeList</code> are not recognized as valid
-    version strings.
    javaPluginError::FailedVersion there is a JRE at the given location but it does not
    meet the version requirements.
-   javaPluginError::NoJre no JRE could be detected at the given location. However, that
-   does not mean necessarily that there is no JRE. There could be a JRE but it has
-   a vendor which is not supported by this API implementation.
+   javaPluginError::NoJre no JRE could be detected at the given location.
  */
 javaPluginError jfw_plugin_getJavaInfoByPath(
     OUString const& sLocation,
-    OUString const& sVendor,
-    OUString const& sMinVersion,
-    OUString const& sMaxVersion,
-    std::vector<OUString> const &arExcludeList,
+    jfw::VendorSettings const & vendorSettings,
     std::unique_ptr<JavaInfo> * ppInfo);
 
 
 /** obtains information for a JRE referenced by the JAVA_HOME environment variable.
 
-   <p>If the JAVA_HOME environment variable is set and points to a JRE whoose vendor
-   matches the requirements given by vecVendorInfos (i.e. it has a vendor that is
-   given in vecVendorInfos and the version requirements for the vendor are met),
+   <p>If the JAVA_HOME environment variable is set and points to a JRE that
+   matches the requirements given by vendorSettings (i.e.
+   the version requirements, if any, for the vendor are met),
    then this function shall return a JavaInfo object for this JRE.</p>
 
-   @param vecVendorInfos
-       [in] vector specifying the vendor and version requirements that the JRE must fulfill.
-       The vector contains pairs of vendors and the respective version requirements
-       for those vendors. The JRE must support the requirements of one given pair in the
-       vector (i.e. it must be of one of the vendors and meet the version requirements
-       - minVersion, maxVersion, excludeVersions - for that specific vendor).
    @param ppInfo
        [out] if the JAVA_HOME environment variable is set and points to a suitable
        JRE, then <code>ppInfo</code> contains
@@ -173,12 +131,12 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
    @return
    javaPluginError::NONE the function ran successfully.</br>
    javaPluginError::NoJre no suitable JRE could be detected at the given location. However, that
-   does not mean necessarily that there is no JRE. There could be a JRE but it has
-   a vendor which is not supported by this API implementation or it does not
+   does not mean necessarily that there is no JRE. There could be a JRE but
+   it does not
    meet the version requirements.
  */
 javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
-    std::vector<std::pair<OUString, jfw::VersionInfo>> const& vecVendorInfos,
+    jfw::VendorSettings const & vendorSettings,
     std::unique_ptr<JavaInfo> * ppInfo,
     std::vector<rtl::Reference<jfw_plugin::VendorBase>> & infos);
 
@@ -187,20 +145,14 @@ javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
     whose executable is in the PATH.
 
     <p>The function gathers information about available JREs which are on the PATH
-    (PATH environment variable) and meet the vendor and version requirements given by
-    <code>vecVendorInfos</code> (i.e. they have a vendor that is given in
-    <code>vecVendorInfos</code> and the version requirements for the vendor are met).
+    (PATH environment variable) and meet the version requirements given by
+    <code>vendorSettings</code> (i.e.
+    the version requirements, if any, for the vendor are met).
     </p>
     <p>
     The JavaInfo structures returned in <code>vecJavaInfosFromPath</code> should be ordered
     according to their occurrence in the PATH. The one that is the first one on the PATH
     is also the first element in the vector.</p>
-    @param vecVendorInfos
-       [in] vector specifying the vendor and version requirements that the JRE must fulfill.
-       The vector contains pairs of vendors and the respective version requirements
-       for those vendors. The JRE must support the requirements of one given pair in the
-       vector (i.e. it must be of one of the vendors and meet the version requirements
-       - minVersion, maxVersion, excludeVersions - for that specific vendor).
     @param vecJavaInfosFromPath
         [out] if the function runs successfully then <code>vecJavaInfosFromPath</code>
         contains on return a vector of pointers to <code>JavaInfo</code> objects.
@@ -216,7 +168,7 @@ javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
  */
 
 javaPluginError jfw_plugin_getJavaInfosFromPath(
-    std::vector<std::pair<OUString, jfw::VersionInfo>> const& vecVendorInfos,
+    jfw::VendorSettings const & vendorSettings,
     std::vector<std::unique_ptr<JavaInfo>> & vecJavaInfosFromPath,
     std::vector<rtl::Reference<jfw_plugin::VendorBase>> & infos);
 
@@ -256,8 +208,6 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
     @return
     javaPluginError::NONE the function ran successfully.</br>
     javaPluginError::Error an error occurred during execution.</br>
-    javaPluginError::WrongVendor the <code>JavaInfo</code> object was not created
-    in by this library and the VM cannot be started.</br>
     JFW_PLUGIN_E_VM_CREATION_FAILED a VM could not be created. The error was caused
     by the JRE.
  */
