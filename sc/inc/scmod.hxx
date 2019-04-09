@@ -75,6 +75,7 @@ class ScSelectionTransferObj;
 class ScFormEditData;
 class ScMarkData;
 struct ScDragData;
+class SfxModelessDialogController;
 
 class ScModule: public SfxModule, public SfxListener, public utl::ConfigurationListener
 {
@@ -108,6 +109,7 @@ class ScModule: public SfxModule, public SfxListener, public utl::ConfigurationL
     bool                m_bIsInSharedDocSaving:1;
 
     std::map<sal_uInt16, std::vector<VclPtr<vcl::Window> > > m_mapRefWindow;
+    std::map<sal_uInt16, std::vector<SfxModelessDialogController*>> m_mapRefController;
 
     css::uno::Reference< ooo::vba::XSinkCaller > mxAutomationApplicationEventsCaller;
 
@@ -249,6 +251,9 @@ public:
     SC_DLLPUBLIC void   RegisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
     SC_DLLPUBLIC void   UnregisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
     SC_DLLPUBLIC vcl::Window * Find1RefWindow( sal_uInt16 nSlotId, vcl::Window *pWndAncestor );
+
+    SC_DLLPUBLIC void   RegisterRefController( sal_uInt16 nSlotId, SfxModelessDialogController *pWnd );
+    SC_DLLPUBLIC void   UnregisterRefController( sal_uInt16 nSlotId, SfxModelessDialogController *pWnd );
 
     SC_DLLPUBLIC void RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
     SC_DLLPUBLIC void CallAutomationApplicationEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);

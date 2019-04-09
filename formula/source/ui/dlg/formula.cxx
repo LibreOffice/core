@@ -77,6 +77,8 @@ class FormulaDlg_Impl
 public:
     ::std::pair<RefButton*, RefEdit*>
         RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
+    ::std::pair<WeldRefButton*, WeldRefEdit*>
+        RefInputStartBefore( WeldRefEdit* pEdit, WeldRefButton* pButton );
     void            RefInputStartAfter();
     void            RefInputDoneAfter( bool bForced );
     bool            CalcValue( const OUString& rStrExp, OUString& rStrResult, bool bForceMatrixFormula = false );
@@ -1522,6 +1524,15 @@ void FormulaDlg_Impl::UpdateSelection()
     return aPair;
 }
 
+::std::pair<WeldRefButton*, WeldRefEdit*> FormulaDlg_Impl::RefInputStartBefore( WeldRefEdit* pEdit, WeldRefButton* pButton )
+{
+    assert(!pEdit && !pButton);
+    ::std::pair<WeldRefButton*, WeldRefEdit*> aPair;
+    aPair.first = nullptr;
+    aPair.second = nullptr;
+    return aPair;
+}
+
 void FormulaDlg_Impl::RefInputStartAfter()
 {
     m_pRefBtn->SetEndImage();
@@ -1779,6 +1790,11 @@ void FormulaModalDialog::Update()
     return m_pImpl->RefInputStartBefore( pEdit, pButton );
 }
 
+::std::pair<WeldRefButton*, WeldRefEdit*> FormulaModalDialog::RefInputStartBefore( WeldRefEdit* pEdit, WeldRefButton* pButton )
+{
+    return m_pImpl->RefInputStartBefore( pEdit, pButton );
+}
+
 void FormulaModalDialog::RefInputStartAfter()
 {
     m_pImpl->RefInputStartAfter();
@@ -1864,6 +1880,11 @@ void FormulaDlg::DoEnter()
 }
 
 ::std::pair<RefButton*, RefEdit*> FormulaDlg::RefInputStartBefore( RefEdit* pEdit, RefButton* pButton )
+{
+    return m_pImpl->RefInputStartBefore( pEdit, pButton );
+}
+
+::std::pair<WeldRefButton*, WeldRefEdit*> FormulaDlg::RefInputStartBefore( WeldRefEdit* pEdit, WeldRefButton* pButton )
 {
     return m_pImpl->RefInputStartBefore( pEdit, pButton );
 }

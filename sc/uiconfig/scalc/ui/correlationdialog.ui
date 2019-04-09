@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="CorrelationDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="correlationdialog|CorrelationDialog">Correlation</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -96,10 +98,10 @@
                       <object class="GtkLabel" id="input-range-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="correlationdialog|input-range-label">Input range:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">input-range-edit</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -110,10 +112,10 @@
                       <object class="GtkLabel" id="output-range-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="correlationdialog|output-range-label">Results to:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">output-range-edit</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -121,7 +123,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefEdit" id="input-range-edit">
+                      <object class="GtkEntry" id="input-range-edit">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="valign">center</property>
@@ -134,7 +136,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefEdit" id="output-range-edit">
+                      <object class="GtkEntry" id="output-range-edit">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="valign">center</property>
@@ -147,7 +149,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefButton" id="input-range-button">
+                      <object class="GtkButton" id="input-range-button">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -158,7 +160,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefButton" id="output-range-button">
+                      <object class="GtkButton" id="output-range-button">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -266,6 +268,7 @@
     </child>
     <action-widgets>
       <action-widget response="-5">ok</action-widget>
+      <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>

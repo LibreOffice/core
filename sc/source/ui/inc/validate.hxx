@@ -228,6 +228,11 @@ public:
         ScValidationDlgBase::RefInputStart( pEdit, pButton );
     }
 
+    virtual void        RefInputStart( formula::WeldRefEdit* pEdit, formula::WeldRefButton* pButton = nullptr ) override
+    {
+        assert(!pEdit && !pButton);
+    }
+
     virtual void        RefInputDone( bool bForced = false ) override
     {
         if( !CanInputDone( bForced ) )
