@@ -67,7 +67,6 @@
 #include <UITools.hxx>
 #include <algorithm>
 #include <iterator>
-#include <vcl/treelistbox.hxx>
 #include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
 #include <unotools/pathoptions.hxx>

@@ -38,7 +38,6 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <unotools/eventcfg.hxx>
-#include <vcl/treelistentry.hxx>
 
 #include <headertablistbox.hxx>
 #include "macropg_impl.hxx"

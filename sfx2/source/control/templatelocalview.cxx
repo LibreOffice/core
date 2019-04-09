@@ -19,7 +19,6 @@
 #include <svl/inettype.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

@@ -26,8 +26,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/docpasswordrequest.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/treelistentry.hxx>
-#include <vcl/layout.hxx>
 
 using namespace ::com::sun::star;
 

@@ -37,7 +37,6 @@
 #include <sfx2/objsh.hxx>
 #include <svtools/unitconv.hxx>
 #include <vcl/print.hxx>
-#include <vcl/builderfactory.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/scripttypeitem.hxx>
 #include <comphelper/processfactory.hxx>

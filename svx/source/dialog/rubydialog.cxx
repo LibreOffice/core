@@ -42,9 +42,9 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <svtools/colorcfg.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/event.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/builderfactory.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace css::uno;
 using namespace css::frame;

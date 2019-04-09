@@ -21,7 +21,6 @@
 #include "selectdbtabledialog.hxx"
 #include "dbtablepreviewdialog.hxx"
 #include <svtools/simptabl.hxx>
-#include <vcl/treelistentry.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>

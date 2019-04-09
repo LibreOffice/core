@@ -32,7 +32,6 @@
 #include <svtools/scriptedtext.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/virdev.hxx>
 #include <comphelper/processfactory.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>

@@ -29,7 +29,6 @@
 #include <svx/ucsubset.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/virdev.hxx>
 #include <svl/stritem.hxx>

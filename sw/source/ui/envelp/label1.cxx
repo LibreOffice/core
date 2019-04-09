@@ -21,7 +21,6 @@
 #include <vcl/waitobj.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <vcl/treelistentry.hxx>
 #include <tools/lineend.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <swtypes.hxx>
