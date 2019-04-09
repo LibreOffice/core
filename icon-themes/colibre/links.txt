@@ -1839,3 +1839,9 @@ cmd/lc_footnotecellstyles.png cmd/lc_insertfootnote.png
 cmd/sc_footnotecellstyles.png cmd/sc_insertfootnote.png
 cmd/lc_notecellstyles.png cmd/lc_showannotations.png
 cmd/sc_notecellstyles.png cmd/sc_showannotations.png
+
+# menubar icons
+cmd/sc_focustofindbar.png cmd/lc_recsearch.png
+cmd/sc_macroorganizer%3ftabid%3ashort=1.png cmd/sc_open.png
+cmd/sc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/sc_insertplugin.png
+
