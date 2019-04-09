@@ -185,27 +185,6 @@ XFListStyle::XFListStyle(const XFListStyle& other):XFStyle(other)
     }
 }
 
-XFListStyle& XFListStyle::operator=(const XFListStyle& other)
-{
-    for( int i=0; i<10; i++ )
-    {
-        const enumXFListLevel type = other.m_pListLevels[i]->m_eListType;
-        if( type == enumXFListLevelNumber )
-        {
-            XFListlevelNumber *pNum = static_cast<XFListlevelNumber*>(m_pListLevels[i].get());
-            m_pListLevels[i].reset(new XFListlevelNumber(*pNum));
-        }
-        else if( type == enumXFListLevelBullet )
-        {
-            XFListLevelBullet *pBullet = static_cast<XFListLevelBullet*>(m_pListLevels[i].get());
-            m_pListLevels[i].reset(new XFListLevelBullet(*pBullet));
-        }
-        else
-            m_pListLevels[i].reset();
-    }
-    return *this;
-}
-
 XFListStyle::~XFListStyle()
 {
 }

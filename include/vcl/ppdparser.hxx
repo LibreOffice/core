@@ -237,7 +237,7 @@ class VCL_DLLPUBLIC PPDContext
 public:
     PPDContext();
     PPDContext( const PPDContext& rContext ) { operator=( rContext ); }
-    PPDContext& operator=( const PPDContext& rContext );
+    PPDContext& operator=( const PPDContext& rContext ) = default;
     PPDContext& operator=( PPDContext&& rContext );
 
     void setParser( const PPDParser* );

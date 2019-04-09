@@ -2363,13 +2363,7 @@ public:
 
     MatrixOpWrapper( const MatrixOpWrapper& r ) : mrMat(r.mrMat), pos(r.pos), mpOp(r.mpOp) {}
 
-    MatrixOpWrapper& operator= ( const MatrixOpWrapper& r )
-    {
-        mrMat = r.mrMat;
-        pos = r.pos;
-        mpOp = r.mpOp;
-        return *this;
-    }
+    MatrixOpWrapper& operator= ( const MatrixOpWrapper& r ) = default;
 
     void operator()(const MatrixImplType::element_block_node_type& node)
     {
