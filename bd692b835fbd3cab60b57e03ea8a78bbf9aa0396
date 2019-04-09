@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_826f3dc4",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-09T12:21:25Z",
+      "side": 1,
+      "message": "Nice - so why not remove these ctors? If needed, a nested function could accept a reference to a guard which it might release temporarily (there are lots of that pattern in the codebase), and I don\u0027t see another reliable way to safely guarantee the lock/unlock order, so having a completely unrelated places with separate lock and unlock is a sure way to hell?",
+      "range": {
+        "startLine": 259,
+        "startChar": 8,
+        "endLine": 274,
+        "endChar": 9
+      },
+      "revId": "bd692b835fbd3cab60b57e03ea8a78bbf9aa0396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
