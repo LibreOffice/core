@@ -103,19 +103,23 @@ namespace osl
         Mutex& operator= (const Mutex&) SAL_DELETED_FUNCTION;
     };
 
-    /** A helper class for mutex objects and interfaces.
-    */
+    /** Object lifetime scoped mutex object or interface lock.
+     *
+     * Aquires the template object on construction and releases it on
+     * destruction.
+     *
+     * @see MutexGuard
+     */
     template<class T>
     class Guard
     {
-    private:
-        Guard( const Guard& ) SAL_DELETED_FUNCTION;
-        const Guard& operator = ( const Guard& ) SAL_DELETED_FUNCTION;
+        Guard(const Guard&) SAL_DELETED_FUNCTION;
+        Guard& operator=(const Guard&) SAL_DELETED_FUNCTION;
 
     protected:
         T * pT;
-    public:
 
+    public:
         /** Acquires the object specified as parameter.
         */
         Guard(T * pT_) : pT(pT_)
@@ -138,19 +142,22 @@ namespace osl
         }
     };
 
-    /** A helper class for mutex objects and interfaces.
-    */
+    /** Object lifetime scoped mutex object or interface lock with unlock.
+     *
+     * Use this if you can't use scoped code blocks and Guard.
+     *
+     * @see ClearableMutexGuard, Guard
+     */
     template<class T>
     class ClearableGuard
     {
-    private:
         ClearableGuard( const ClearableGuard& ) SAL_DELETED_FUNCTION;
-        const ClearableGuard& operator = ( const ClearableGuard& )
-            SAL_DELETED_FUNCTION;
+        ClearableGuard& operator=(const ClearableGuard&) SAL_DELETED_FUNCTION;
+
     protected:
         T * pT;
-    public:
 
+    public:
         /** Acquires the object specified as parameter.
         */
         ClearableGuard(T * pT_) : pT(pT_)
@@ -186,17 +193,22 @@ namespace osl
         }
     };
 
-    /** A helper class for mutex objects and interfaces.
-    */
+    /** Template for temporary releasable mutex objects and interfaces locks.
+     *
+     * Use this if you want to acquire a lock but need to temporary release
+     * it and can't use multiple scoped Guard objects.
+     *
+     * @see ResettableMutexGuard
+     */
     template< class T >
     class ResettableGuard : public ClearableGuard< T >
     {
-    private:
-        ResettableGuard(ResettableGuard &) SAL_DELETED_FUNCTION;
-        void operator =(ResettableGuard &) SAL_DELETED_FUNCTION;
+        ResettableGuard(const ResettableGuard&) SAL_DELETED_FUNCTION;
+        ResettableGuard& operator=(const ResettableGuard&) SAL_DELETED_FUNCTION;
 
     protected:
         T* pResetT;
+
     public:
         /** Acquires the object specified as parameter.
         */
