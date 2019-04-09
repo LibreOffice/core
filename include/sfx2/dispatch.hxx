@@ -32,7 +32,7 @@
 #include <initializer_list>
 
 // I2TM
-#include <item/base/SlotSet.hxx>
+namespace Item { class ItemBase; }
 // ~I2TM
 
 class SfxSlotServer;
@@ -122,11 +122,11 @@ public:
                                     std::initializer_list<SfxPoolItem const*> internalargs = std::initializer_list<SfxPoolItem const*>());
 
     // I2TM
-    const SfxPoolItem* ExecuteList(
+    const SfxPoolItem* ExecuteList2(
         sal_uInt16 nSlot,
         SfxCallMode eCall,
-        const Item::SlotSet::SharedPtr& rArgs,
-        const Item::SlotSet::SharedPtr* pInternalArgs = nullptr);
+        std::initializer_list<const std::shared_ptr<const Item::ItemBase>*> args,
+        std::initializer_list<const std::shared_ptr<const Item::ItemBase>*> internalargs = std::initializer_list<const std::shared_ptr<const Item::ItemBase>*>());
     // ~I2TM
 
     const SfxPoolItem*  Execute( sal_uInt16 nSlot,

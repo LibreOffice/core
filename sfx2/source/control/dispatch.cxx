@@ -1072,13 +1072,13 @@ const SfxPoolItem* SfxDispatcher::ExecuteList(sal_uInt16 nSlot, SfxCallMode eCal
     return nullptr;
 }
 // I2TM
-const SfxPoolItem* SfxDispatcher::ExecuteList(
+const SfxPoolItem* SfxDispatcher::ExecuteList2(
     sal_uInt16 nSlot,
     SfxCallMode eCall,
-    const Item::SlotSet::SharedPtr& rArgs,
-    const Item::SlotSet::SharedPtr* pInternalArgs)
+    std::initializer_list<const std::shared_ptr<const Item::ItemBase>*> args,
+    std::initializer_list<const std::shared_ptr<const Item::ItemBase>*> internalargs)
 {
-    if(IsLocked() || !rArgs || rArgs->empty())
+    if(IsLocked() || 0 == args.size())
     {
         return nullptr;
     }
@@ -1089,20 +1089,32 @@ const SfxPoolItem* SfxDispatcher::ExecuteList(
     if(GetShellAndSlot_Impl(nSlot, &pShell, &pSlot, false, true))
     {
         SfxAllItemSet aSet(pShell->GetPool());
-        aSet.slotSet().SetSlots(*rArgs);
+
+        for(const std::shared_ptr<const Item::ItemBase>* arg : args)
+        {
+            assert(arg);
+            aSet.itemSet().SetItem(*arg);
+        }
 
         SfxRequest aReq(nSlot, eCall, aSet);
 
-        if(nullptr != pInternalArgs && *pInternalArgs && !(*pInternalArgs)->empty())
+        if(0 != internalargs.size())
         {
             SfxAllItemSet aInternalSet(SfxGetpApp()->GetPool());
-            aInternalSet.slotSet().SetSlots(**pInternalArgs);
+
+            for(const std::shared_ptr<const Item::ItemBase>* arg : internalargs)
+            {
+                assert(arg);
+                aInternalSet.itemSet().SetItem(*arg);
+            }
+
             aReq.SetInternalArgs_Impl(aInternalSet);
         }
 
         Execute_(*pShell, *pSlot, aReq, eCall);
         return aReq.GetReturnValue();
     }
+
     return nullptr;
 }
 // ~I2TM

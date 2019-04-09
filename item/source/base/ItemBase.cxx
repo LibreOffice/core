@@ -21,6 +21,11 @@ class SbxItem : public SfxPoolItem
 -> basctl::Item::Sbx
 -> SID_BASICIDE_ARG_SBX
 -> Done!
+-> Now moved to use ::ItemSet and new ExecuteList2, no more SlotSet
+
+class SfxInt16Item
+-> Item::CntInt16
+-> SID_ATTR_TRANSFORM_ANCHOR -> need own type to replace in ItemSet ->
 
 defs from sfx2\sdi\sfxitems.sdi may be a good hint which items to convert first (?)
 these are:

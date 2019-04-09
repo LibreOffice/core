@@ -854,18 +854,18 @@ bool TreeListBox::OpenCurrent()
             if (SfxDispatcher* pDispatcher = GetDispatcher())
             {
                 // I2TM
-                ::Item::SlotSet::SharedPtr aSlotSet(::Item::SlotSet::Create());
-                aSlotSet->SetSlot(SID_BASICIDE_ARG_SBX, Item::Sbx::Create(
-                    aDesc.GetDocument(),
-                    aDesc.GetLibName(),
-                    aDesc.GetName(),
-                    aDesc.GetMethodName(),
-                    ConvertType(aDesc.GetType())));
-                pDispatcher->ExecuteList(
+                const std::shared_ptr<const ::Item::ItemBase> aSbxItem(
+                    Item::Sbx::Create(
+                        aDesc.GetDocument(),
+                        aDesc.GetLibName(),
+                        aDesc.GetName(),
+                        aDesc.GetMethodName(),
+                        ConvertType(aDesc.GetType())));
+                pDispatcher->ExecuteList2(
                     SID_BASICIDE_SHOWSBX,
                     SfxCallMode::SYNCHRON,
-                    aSlotSet
-                );
+                    { &aSbxItem });
+                // ~I2TM
                 return true;
             }
             break;
@@ -1543,18 +1543,18 @@ IMPL_LINK_NOARG(SbTreeListBox, OpenCurrentHdl, weld::TreeView&, void)
             if (SfxDispatcher* pDispatcher = GetDispatcher())
             {
                 // I2TM
-                ::Item::SlotSet::SharedPtr aSlotSet(::Item::SlotSet::Create());
-                aSlotSet->SetSlot(SID_BASICIDE_ARG_SBX, Item::Sbx::Create(
-                    aDesc.GetDocument(),
-                    aDesc.GetLibName(),
-                    aDesc.GetName(),
-                    aDesc.GetMethodName(),
-                    ConvertType(aDesc.GetType())));
-                pDispatcher->ExecuteList(
+                const std::shared_ptr<const ::Item::ItemBase> aSbxItem(
+                    Item::Sbx::Create(
+                        aDesc.GetDocument(),
+                        aDesc.GetLibName(),
+                        aDesc.GetName(),
+                        aDesc.GetMethodName(),
+                        ConvertType(aDesc.GetType())));
+                pDispatcher->ExecuteList2(
                     SID_BASICIDE_SHOWSBX,
                     SfxCallMode::SYNCHRON,
-                    aSlotSet
-                );
+                    { &aSbxItem });
+                // I2TM
                 return;
             }
             break;
