@@ -34,7 +34,7 @@
 #include "framework.hxx"
 #include "fwkutil.hxx"
 #include "elements.hxx"
-#include "fwkbase.hxx"
+#include <fwkbase.hxx>
 
 namespace {
 
@@ -58,8 +58,6 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
         osl::MutexGuard guard(jfw::FwkMutex::get());
 
         jfw::VendorSettings aVendorSettings;
-        std::vector<OUString> vecVendors =
-            aVendorSettings.getSupportedVendors();
         //Add the JavaInfos found by jfw_plugin_getAllJavaInfos to the vector
         std::vector<std::unique_ptr<JavaInfo>> vecInfo;
         //get the list of paths to jre locations which have been
@@ -67,22 +65,12 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
         const jfw::MergedSettings settings;
         const std::vector<OUString>& vecJRELocations =
             settings.getJRELocations();
-        //Use every plug-in library to get Java installations.
-        for (auto const & vendor: vecVendors)
-        {
-            jfw::VersionInfo versionInfo =
-                aVendorSettings.getVersionInformation(vendor);
-
-            //get all installations of one vendor according to minVersion,
-            //maxVersion and excludeVersions
+        //Use all plug-in libraries to get Java installations.
             std::vector<std::unique_ptr<JavaInfo>> arInfos;
             std::vector<rtl::Reference<jfw_plugin::VendorBase>> infos;
             javaPluginError plerr = jfw_plugin_getAllJavaInfos(
                 true,
-                vendor,
-                versionInfo.sMinVersion,
-                versionInfo.sMaxVersion,
-                versionInfo.vecExcludeVersions,
+            aVendorSettings,
                 & arInfos,
                 infos);
 
@@ -92,7 +80,7 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
             for (auto & j: arInfos)
                 vecInfo.push_back(std::move(j));
 
-            //Check if the current plugin can detect JREs at the location
+        //Check if any plugin can detect JREs at the location
             // of the paths added by jfw_addJRELocation
             //Check every manually added location
             for (auto const & ii: vecJRELocations)
@@ -100,10 +88,7 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
                 std::unique_ptr<JavaInfo> aInfo;
                 plerr = jfw_plugin_getJavaInfoByPath(
                     ii,
-                    vendor,
-                    versionInfo.sMinVersion,
-                    versionInfo.sMaxVersion,
-                    versionInfo.vecExcludeVersions,
+                aVendorSettings,
                     &aInfo);
                 if (plerr == javaPluginError::NoJre)
                     continue;
@@ -112,27 +97,18 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
                 else if (plerr != javaPluginError::NONE)
                     return JFW_E_ERROR;
 
-                // Was this JRE already added?  Different plugins could detect
-                // the same JRE.  Also make sure vecInfo contains only JavaInfos
-                // for the vendors for which there is a javaSelection/plugins/
-                // library entry in the javavendors.xml; jfw_getJavaInfoByPath
-                // can return a JavaInfo of any vendor:
-                if ((std::find_if(
+            // Was this JRE already added?
+            if (std::find_if(
                          vecInfo.begin(), vecInfo.end(),
                          [&aInfo](std::unique_ptr<JavaInfo> const & info) {
                              return areEqualJavaInfo(
                                  info.get(), aInfo.get());
                          })
                      == vecInfo.end())
-                    && (std::find(
-                            vecVendors.begin(), vecVendors.end(),
-                            aInfo->sVendor)
-                        != vecVendors.end()))
                 {
                     vecInfo.push_back(std::move(aInfo));
                 }
             }
-        }
 
         *pparInfo = std::move(vecInfo);
 
@@ -304,7 +280,6 @@ javaFrameworkError jfw_startVM(
             g_pJavaVM = pVm;
             *ppVM = pVm;
         }
-        OSL_ASSERT(plerr != javaPluginError::WrongVendor);
     }
     catch (const jfw::FrameworkException& e)
     {
@@ -344,28 +319,13 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
 
         // get list of vendors for Java installations
         jfw::VendorSettings aVendorSettings;
-        std::vector<OUString> vecVendors =
-            aVendorSettings.getSupportedVendors();
-
-        // save vendors and respective version requirements pair-wise in a vector
-        std::vector<std::pair<OUString, jfw::VersionInfo>> versionInfos;
-        typedef std::vector<OUString>::const_iterator ciVendor;
-        for (ciVendor i = vecVendors.begin(); i != vecVendors.end(); ++i)
-        {
-            const OUString & vendor = *i;
-            jfw::VersionInfo versionInfo =
-                aVendorSettings.getVersionInformation(vendor);
-
-            versionInfos.push_back(
-                std::pair<OUString, jfw::VersionInfo>(vendor, versionInfo));
-        }
 
         std::vector<rtl::Reference<jfw_plugin::VendorBase>> infos;
 
         // first inspect Java installation that the JAVA_HOME
         // environment variable points to (if it is set)
         if (jfw_plugin_getJavaInfoFromJavaHome(
-                versionInfos, &aCurrentInfo, infos)
+                aVendorSettings, &aCurrentInfo, infos)
             == javaPluginError::NONE)
         {
             // compare features
@@ -383,7 +343,7 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
         {
             std::vector<std::unique_ptr<JavaInfo>> vecJavaInfosFromPath;
             if (jfw_plugin_getJavaInfosFromPath(
-                    versionInfos, vecJavaInfosFromPath, infos)
+                    aVendorSettings, vecJavaInfosFromPath, infos)
                 == javaPluginError::NONE)
             {
                 for (auto & pJInfo: vecJavaInfosFromPath)
@@ -409,33 +369,20 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
 
 
         // if no suitable Java installation has been found yet:
-        // first iterate over all vendors to find a suitable Java installation,
+        // first use jfw_plugin_getAllJavaInfos to find a suitable Java installation,
         // then try paths that have been added manually
         if (!bInfoFound)
         {
-            //Use every vendor to get Java installations. At the first usable
-            //Java the loop will break
-            typedef std::vector<OUString>::const_iterator ci_pl;
-            for (ci_pl i = vecVendors.begin(); i != vecVendors.end(); ++i)
-            {
-                const OUString & vendor = *i;
-                jfw::VersionInfo versionInfo =
-                    aVendorSettings.getVersionInformation(vendor);
-
-                //get all installations of one vendor according to minVersion,
-                //maxVersion and excludeVersions
+            //get all installations
                 std::vector<std::unique_ptr<JavaInfo>> arInfos;
                 javaPluginError plerr = jfw_plugin_getAllJavaInfos(
                     false,
-                    vendor,
-                    versionInfo.sMinVersion,
-                    versionInfo.sMaxVersion,
-                    versionInfo.vecExcludeVersions,
+                aVendorSettings,
                     & arInfos,
                     infos);
 
-                if (plerr != javaPluginError::NONE)
-                    continue;
+            if (plerr == javaPluginError::NONE)
+            {
                 //iterate over all installations to find the best which has
                 //all features
                 for (auto & pJInfo: arInfos)
@@ -448,7 +395,6 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                         //the just found Java implements all required features
                         //currently there is only accessibility!!!
                         aCurrentInfo = std::move(pJInfo);
-                        bInfoFound = true;
                         break;
                     }
                     else if (!aCurrentInfo)
@@ -458,12 +404,8 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                         aCurrentInfo = std::move(pJInfo);
                     }
                 }
-
-                if (bInfoFound)
-                    break;
-                //All Java installations found by the current plug-in lib
-                //do not provide the required features. Try the next plug-in
             }
+
             if (!aCurrentInfo)
             {//The plug-ins did not find a suitable Java. Now try the paths which have been
             //added manually.
@@ -472,24 +414,13 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                 //node.loadFromSettings();
                 const std::vector<OUString> & vecJRELocations =
                     settings.getJRELocations();
-                //use every plug-in to determine the JavaInfo objects
-                for (ci_pl i = vecVendors.begin(); i != vecVendors.end(); ++i)
+                //use all plug-ins to determine the JavaInfo objects
+                for (auto const & JRELocation : vecJRELocations)
                 {
-                    const OUString & vendor = *i;
-                    jfw::VersionInfo versionInfo =
-                        aVendorSettings.getVersionInformation(vendor);
-
-                    typedef std::vector<OUString>::const_iterator citLoc;
-                    for (citLoc it = vecJRELocations.begin();
-                        it != vecJRELocations.end(); ++it)
-                    {
-                        std::unique_ptr<JavaInfo> aInfo;
-                        javaPluginError err = jfw_plugin_getJavaInfoByPath(
-                            *it,
-                            vendor,
-                            versionInfo.sMinVersion,
-                            versionInfo.sMaxVersion,
-                            versionInfo.vecExcludeVersions,
+                    std::unique_ptr<JavaInfo> aInfo;
+                    javaPluginError err = jfw_plugin_getJavaInfoByPath(
+                        JRELocation,
+                        aVendorSettings,
                             &aInfo);
                         if (err == javaPluginError::NoJre)
                             continue;
@@ -508,7 +439,6 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                                 //the just found Java implements all required features
                                 //currently there is only accessibility!!!
                                 aCurrentInfo = std::move(aInfo);
-                                bInfoFound = true;
                                 break;
                             }
                             else if (!aCurrentInfo)
@@ -519,9 +449,6 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                             }
                         }
                     }//end iterate over paths
-                    if (bInfoFound)
-                        break;
-                }// end iterate plug-ins
             }
         }
         if (aCurrentInfo)
@@ -635,45 +562,21 @@ javaFrameworkError jfw_getJavaInfoByPath(OUString const & pPath, std::unique_ptr
         osl::MutexGuard guard(jfw::FwkMutex::get());
 
         jfw::VendorSettings aVendorSettings;
-        std::vector<OUString> vecVendors =
-            aVendorSettings.getSupportedVendors();
 
-        //Use every plug-in library to determine if the path represents a
-        //JRE. If a plugin recognized it then the loop will break
-        typedef std::vector<OUString>::const_iterator ci_pl;
-        for (ci_pl i = vecVendors.begin(); i != vecVendors.end(); ++i)
-        {
-            const OUString & vendor = *i;
-            jfw::VersionInfo versionInfo =
-                aVendorSettings.getVersionInformation(vendor);
-
-            //ask the plugin if this is a JRE.
+        //ask all plugins if this is a JRE.
             //If so check if it meets the version requirements.
             //Only if it does return a JavaInfo
             javaPluginError plerr = jfw_plugin_getJavaInfoByPath(
                 pPath,
-                vendor,
-                versionInfo.sMinVersion,
-                versionInfo.sMaxVersion,
-                versionInfo.vecExcludeVersions,
+            aVendorSettings,
                 ppInfo);
 
-            if (plerr == javaPluginError::NONE)
-            {
-                break;
-            }
-            else if(plerr == javaPluginError::FailedVersion)
+        if(plerr == javaPluginError::FailedVersion)
             {//found JRE but it has the wrong version
                 ppInfo->reset();
                 errcode = JFW_E_FAILED_VERSION;
-                break;
-            }
-            else if (plerr == javaPluginError::NoJre)
-            {// plugin does not recognize this path as belonging to JRE
-                continue;
-            }
-            OSL_ASSERT(false);
         }
+        OSL_ASSERT(plerr == javaPluginError::NONE || plerr == javaPluginError::NoJre);
         if (!*ppInfo && errcode != JFW_E_FAILED_VERSION)
             errcode = JFW_E_NOT_RECOGNIZED;
     }

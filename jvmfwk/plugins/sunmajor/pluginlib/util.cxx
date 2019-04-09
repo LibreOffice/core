@@ -1050,6 +1050,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
         }
     }
 
+    auto knownVendor = false;
     if (!sVendorName.isEmpty())
     {
         //find the creator func for the respective vendor name
@@ -1061,9 +1062,15 @@ rtl::Reference<VendorBase> getJREInfoByPath(
             if (sNameMap.equals(sVendorName))
             {
                 ret = createInstance(gVendorMap[c].createFunc, props);
+                knownVendor = true;
                 break;
             }
         }
+    }
+    // For unknown vendors, try SunInfo as fallback:
+    if (!knownVendor)
+    {
+        ret = createInstance(SunInfo::createInstance, props);
     }
     if (!ret.is())
     {

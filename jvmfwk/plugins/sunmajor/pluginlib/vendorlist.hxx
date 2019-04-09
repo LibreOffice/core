@@ -46,11 +46,6 @@ VendorSupportMapEntry gVendorMap[] ={
 #define END_VENDOR_MAP() \
     {nullptr, nullptr, nullptr} };
 
-/* Examines if the vendor supplied in parameter sVendor is part of the
-   list of supported vendors. That is the arry of VendorSupportMapEntry
-   is search for an respective entry.
-*/
-bool isVendorSupported(const OUString & sVendor);
 }
 
 #endif
