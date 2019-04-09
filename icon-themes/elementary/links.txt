@@ -2141,3 +2141,8 @@ cmd/sc_renametable.png cmd/sc_name.png
 cmd/32/textattributes.png cmd/32/fontdialog.png
 cmd/lc_textattributes.png cmd/lc_fontdialog.png
 cmd/sc_textattributes.png cmd/sc_fontdialog.png
+
+# menubar icons
+cmd/sc_focustofindbar.png cmd/lc_recsearch.png
+cmd/sc_macroorganizer%3ftabid%3ashort=1.png cmd/sc_open.png
+cmd/sc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/sc_insertplugin.png
