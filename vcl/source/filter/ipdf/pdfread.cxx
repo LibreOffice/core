@@ -30,22 +30,10 @@ namespace
 /// Callback class to be used with FPDF_SaveWithVersion().
 struct CompatibleWriter : public FPDF_FILEWRITE
 {
-public:
-    CompatibleWriter();
-    static int WriteBlockCallback(FPDF_FILEWRITE* pFileWrite, const void* pData,
-                                  unsigned long nSize);
-
     SvMemoryStream m_aStream;
 };
 
-CompatibleWriter::CompatibleWriter()
-{
-    FPDF_FILEWRITE::version = 1;
-    FPDF_FILEWRITE::WriteBlock = CompatibleWriter::WriteBlockCallback;
-}
-
-int CompatibleWriter::WriteBlockCallback(FPDF_FILEWRITE* pFileWrite, const void* pData,
-                                         unsigned long nSize)
+int CompatibleWriterCallback(FPDF_FILEWRITE* pFileWrite, const void* pData, unsigned long nSize)
 {
     auto pImpl = static_cast<CompatibleWriter*>(pFileWrite);
     pImpl->m_aStream.WriteBytes(pData, nSize);
@@ -182,6 +170,9 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream, sal_uInt64 n
             return false;
 
         CompatibleWriter aWriter;
+        aWriter.version = 1;
+        aWriter.WriteBlock = &CompatibleWriterCallback;
+
         // 15 means PDF-1.5.
         if (!FPDF_SaveWithVersion(pPdfDocument, &aWriter, 0, 15))
             return false;
