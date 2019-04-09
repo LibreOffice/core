@@ -26,14 +26,18 @@
 namespace formula
 {
     class RefEdit;
+    class WeldRefEdit;
     class RefButton;
+    class WeldRefButton;
     class FORMULA_DLLPUBLIC SAL_NO_VTABLE IControlReferenceHandler
     {
     public:
         virtual void ShowReference(const OUString& _sRef) = 0;
         virtual void HideReference( bool bDoneRefMode = true ) = 0;
         virtual void ReleaseFocus( RefEdit* pEdit ) = 0;
+        virtual void ReleaseFocus( WeldRefEdit* pEdit ) = 0;
         virtual void ToggleCollapsed( RefEdit* pEdit, RefButton* pButton ) = 0;
+        virtual void ToggleCollapsed( WeldRefEdit* pEdit, WeldRefButton* pButton ) = 0;
 
     protected:
         ~IControlReferenceHandler() {}

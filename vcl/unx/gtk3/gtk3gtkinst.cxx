@@ -2761,6 +2761,34 @@ struct DialogRunner
     }
 };
 
+typedef std::set<GtkWidget*> winset;
+
+namespace
+{
+    void hideUnless(GtkContainer *pTop, const winset& rVisibleWidgets,
+        std::vector<GtkWidget*> &rWasVisibleWidgets)
+    {
+        GList* pChildren = gtk_container_get_children(pTop);
+        for (GList* pEntry = g_list_first(pChildren); pEntry; pEntry = g_list_next(pEntry))
+        {
+            GtkWidget* pChild = static_cast<GtkWidget*>(pEntry->data);
+            if (!gtk_widget_get_visible(pChild))
+                continue;
+            if (rVisibleWidgets.find(pChild) == rVisibleWidgets.end())
+            {
+                g_object_ref(pChild);
+                rWasVisibleWidgets.emplace_back(pChild);
+                gtk_widget_hide(pChild);
+            }
+            else if (GTK_IS_CONTAINER(pChild))
+            {
+                hideUnless(GTK_CONTAINER(pChild), rVisibleWidgets, rWasVisibleWidgets);
+            }
+        }
+        g_list_free(pChildren);
+    }
+}
+
 class GtkInstanceDialog : public GtkInstanceWindow, public virtual weld::Dialog
 {
 private:
@@ -2772,6 +2800,13 @@ private:
     std::function<void(sal_Int32)> m_aFunc;
     gulong m_nCloseSignalId;
     gulong m_nResponseSignalId;
+
+    // for calc ref dialog that shrink to range selection widgets and resize back
+    GtkWidget* m_pRefEdit;
+    std::vector<GtkWidget*> m_aHiddenWidgets;    // vector of hidden Controls
+    int m_nOldEditWidth;  // Original width of the input field
+    int m_nOldEditWidthReq; // Original width request of the input field
+    int m_nOldBorderWidth; // border width for expanded dialog
 
     static void signalClose(GtkWidget*, gpointer widget)
     {
@@ -2828,6 +2863,10 @@ public:
         , m_aDialogRun(pDialog)
         , m_nCloseSignalId(g_signal_connect(m_pDialog, "close", G_CALLBACK(signalClose), this))
         , m_nResponseSignalId(0)
+        , m_pRefEdit(nullptr)
+        , m_nOldEditWidth(0)
+        , m_nOldEditWidthReq(0)
+        , m_nOldBorderWidth(0)
     {
     }
 
@@ -2948,6 +2987,69 @@ public:
         return new GtkInstanceContainer(GTK_CONTAINER(gtk_dialog_get_content_area(m_pDialog)), m_pBuilder, false);
     }
 
+    virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) override
+    {
+        GtkInstanceWidget* pVclEdit = dynamic_cast<GtkInstanceWidget*>(pEdit);
+        GtkInstanceWidget* pVclButton = dynamic_cast<GtkInstanceWidget*>(pButton);
+
+        GtkWidget* pRefEdit = pVclEdit->getWidget();
+        GtkWidget* pRefBtn = pVclButton ? pVclButton->getWidget() : nullptr;
+
+        m_nOldEditWidth = gtk_widget_get_allocated_width(pRefEdit);
+
+        gtk_widget_get_size_request(pRefEdit, &m_nOldEditWidthReq, nullptr);
+
+        //We want just pRefBtn and pRefEdit to be shown
+        //mark widgets we want to be visible, starting with pRefEdit
+        //and all its direct parents.
+        winset aVisibleWidgets;
+        GtkWidget *pContentArea = gtk_dialog_get_content_area(m_pDialog);
+        for (GtkWidget *pCandidate = pRefEdit;
+            pCandidate && pCandidate != pContentArea && gtk_widget_get_visible(pCandidate);
+            pCandidate = gtk_widget_get_parent(pCandidate))
+        {
+            aVisibleWidgets.insert(pCandidate);
+        }
+        //same again with pRefBtn, except stop if there's a
+        //shared parent in the existing widgets
+        for (GtkWidget *pCandidate = pRefBtn;
+            pCandidate && pCandidate != pContentArea && gtk_widget_get_visible(pCandidate);
+            pCandidate = gtk_widget_get_parent(pCandidate))
+        {
+            if (aVisibleWidgets.insert(pCandidate).second)
+                break;
+        }
+
+        //hide everything except the aVisibleWidgets
+        hideUnless(GTK_CONTAINER(pContentArea), aVisibleWidgets, m_aHiddenWidgets);
+
+        gtk_widget_set_size_request(pRefEdit, m_nOldEditWidth, -1);
+        m_nOldBorderWidth = gtk_container_get_border_width(GTK_CONTAINER(m_pDialog));
+        gtk_container_set_border_width(GTK_CONTAINER(m_pDialog), 0);
+        if (GtkWidget* pActionArea = gtk_dialog_get_action_area(m_pDialog))
+            gtk_widget_hide(pActionArea);
+        resize_to_request();
+        m_pRefEdit = pRefEdit;
+    }
+
+    virtual void undo_collapse() override
+    {
+        // All others: Show();
+        for (GtkWidget* pWindow : m_aHiddenWidgets)
+        {
+            gtk_widget_show(pWindow);
+            g_object_unref(pWindow);
+        }
+        m_aHiddenWidgets.clear();
+
+        gtk_widget_set_size_request(m_pRefEdit, m_nOldEditWidthReq, -1);
+        m_pRefEdit = nullptr;
+        gtk_container_set_border_width(GTK_CONTAINER(m_pDialog), m_nOldBorderWidth);
+        if (GtkWidget* pActionArea = gtk_dialog_get_action_area(m_pDialog))
+            gtk_widget_show(pActionArea);
+        resize_to_request();
+    }
+
     virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>&) override
     {
         //not implemented for the gtk variant
@@ -2955,6 +3057,13 @@ public:
 
     virtual ~GtkInstanceDialog() override
     {
+        if (!m_aHiddenWidgets.empty())
+        {
+            for (GtkWidget* pWindow : m_aHiddenWidgets)
+                g_object_unref(pWindow);
+            m_aHiddenWidgets.clear();
+        }
+
         g_signal_handler_disconnect(m_pDialog, m_nCloseSignalId);
         if (m_nResponseSignalId)
             g_signal_handler_disconnect(m_pDialog, m_nResponseSignalId);

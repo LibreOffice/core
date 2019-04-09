@@ -101,7 +101,9 @@ public:
     virtual void ShowReference(const OUString& _sRef) override;
     virtual void HideReference( bool bDoneRefMode = true ) override;
     virtual void ReleaseFocus( formula::RefEdit* pEdit ) override;
+    virtual void ReleaseFocus( formula::WeldRefEdit* pEdit ) override;
     virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton ) override;
+    virtual void ToggleCollapsed( formula::WeldRefEdit* pEdit, formula::WeldRefButton* pButton ) override;
 };
 
 
