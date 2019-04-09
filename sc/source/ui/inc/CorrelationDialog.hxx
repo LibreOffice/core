@@ -13,14 +13,14 @@
 
 #include "MatrixComparisonGenerator.hxx"
 
-class ScCorrelationDialog : public ScMatrixComparisonGenerator
+class ScCorrelationDialog : public ScMatrixComparisonGeneratorController
 {
 public:
     ScCorrelationDialog(
         SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-        vcl::Window* pParent, ScViewData* pViewData);
+        weld::Window* pParent, ScViewData* pViewData);
 
-    virtual bool Close() override;
+    virtual void Close() override;
 
 protected:
     virtual const OUString getLabel() override;
