@@ -34,6 +34,7 @@
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

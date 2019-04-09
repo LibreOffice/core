@@ -22,16 +22,10 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <vcl/dllapi.h>
+#include <vcl/vclptr.hxx>
 
-class XWindowPeer;
-class XToolkit;
-class EventList;
 namespace vcl { class Window; }
 class OutputDevice;
-class MouseEvent;
-class CommandEvent;
-class KeyEvent;
-namespace tools { class Rectangle; }
 class Menu;
 
 namespace com {
@@ -42,9 +36,6 @@ namespace awt {
     class XToolkit;
     class XWindow;
     class XWindowPeer;
-}
-namespace lang {
-    class XMultiServiceFactory;
 }
 } } }
 

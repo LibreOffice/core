@@ -8,13 +8,20 @@
  *
  */
 
-#include <vcl/dllapi.h>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include <tools/stream.hxx>
-#include <vcl/bitmapex.hxx>
-
 #ifndef INCLUDED_VCL_FILTER_PNGIMAGEREADER_HXX
 #define INCLUDED_VCL_FILTER_PNGIMAGEREADER_HXX
+
+#include <vcl/dllapi.h>
+
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com::sun::star::task
+{
+class XStatusIndicator;
+}
+
+class BitmapEx;
+class SvStream;
 
 namespace vcl
 {

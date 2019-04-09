@@ -22,10 +22,11 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
-#include <vcl/weld.hxx>
 
 #include <stack>
 #include <vector>
+
+namespace weld { class Window; }
 
 class VCL_DLLPUBLIC WaitObject
 {

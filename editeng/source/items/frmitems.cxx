@@ -47,6 +47,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <i18nutil/unicode.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <limits.h>

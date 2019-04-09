@@ -31,6 +31,7 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/event.hxx>
 
 #include <sal/types.h>
 

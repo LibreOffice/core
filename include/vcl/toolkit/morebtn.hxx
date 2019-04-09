@@ -20,9 +20,7 @@
 #ifndef INCLUDED_VCL_MOREBTN_HXX
 #define INCLUDED_VCL_MOREBTN_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
-#include <vcl/mapmod.hxx>
 #include <vcl/button.hxx>
 #include <memory>
 

@@ -48,6 +48,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <vcl/help.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

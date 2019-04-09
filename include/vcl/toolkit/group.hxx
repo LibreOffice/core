@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_GROUP_HXX
 #define INCLUDED_VCL_GROUP_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 
