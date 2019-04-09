@@ -54,15 +54,11 @@ rtl_uString* rtl_uString_ImplAlloc( sal_Int32 nLen );
 
 rtl_String* rtl_string_ImplAlloc( sal_Int32 nLen );
 
-extern "C" {
+using rtl_allocateStringFn = void *(*)(size_t size);
+using rtl_freeStringFn = void (*)(void *);
 
-typedef void *(SAL_CALL * rtl_allocateStringFn)(size_t size);
-typedef void  (*rtl_freeStringFn)(void *);
-
-}
-
-extern rtl_allocateStringFn rtl_allocateString;
-extern rtl_freeStringFn rtl_freeString;
+rtl_allocateStringFn rtl_allocateString(rtl_allocateStringFn in = nullptr);
+rtl_freeStringFn rtl_freeString(rtl_freeStringFn in = nullptr);
 
 // string lifetime instrumentation / diagnostics
 #if USE_SDT_PROBES

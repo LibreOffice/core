@@ -65,10 +65,22 @@ bool rtl_ImplIsWhitespace( sal_Unicode c )
  */
 static rtl_arena_type *pre_arena = nullptr;
 
-rtl_allocateStringFn rtl_allocateString = malloc;
-rtl_freeStringFn rtl_freeString = free;
+rtl_allocateStringFn rtl_allocateString(rtl_allocateStringFn in)
+{
+    static rtl_allocateStringFn f = malloc;
+    if (in)
+        f = in;
+    return f;
+}
 
-extern "C" {
+rtl_freeStringFn rtl_freeString(rtl_freeStringFn in)
+{
+    static rtl_freeStringFn f = free;
+    if (in)
+        f = in;
+    return f;
+}
+
 static void *pre_allocateStringFn(size_t n)
 {
     sal_Size size = RTL_MEMORY_ALIGN(n + 4, 4);
@@ -85,7 +97,6 @@ static void pre_freeStringFn(void *data)
 
     rtl_arena_free(pre_arena, addr, size);
 }
-} // extern "C"
 
 static void mark_static(void *addr, sal_Size /* size */)
 {
@@ -98,8 +109,8 @@ void SAL_CALL rtl_alloc_preInit (sal_Bool start) SAL_THROW_EXTERN_C()
 {
     if (start)
     {
-        rtl_allocateString = pre_allocateStringFn;
-        rtl_freeString = pre_freeStringFn;
+        rtl_allocateString(pre_allocateStringFn);
+        rtl_freeString(pre_freeStringFn);
         pre_arena = rtl_arena_create("pre-init strings", 4, 0,
                                      nullptr, rtl_arena_alloc,
                                      rtl_arena_free, 0);
@@ -110,8 +121,8 @@ void SAL_CALL rtl_alloc_preInit (sal_Bool start) SAL_THROW_EXTERN_C()
     else
     {
         rtl_arena_foreach(pre_arena, mark_static);
-        rtl_allocateString = malloc;
-        rtl_freeString = free;
+        rtl_allocateString(malloc);
+        rtl_freeString(free);
 
         // TODO: also re-initialize main allocator as well.
     }
