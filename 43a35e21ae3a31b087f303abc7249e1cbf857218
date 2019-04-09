@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_4794e744",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-09T04:43:43Z",
+      "side": 1,
+      "message": "I like using\n\n    assert(m_pT);\n\nbut that is, of course, personal opinion :-)",
+      "range": {
+        "startLine": 261,
+        "startChar": 12,
+        "endLine": 261,
+        "endChar": 33
+      },
+      "revId": "43a35e21ae3a31b087f303abc7249e1cbf857218",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
