@@ -102,6 +102,7 @@ public:
     void testAxisTitleDefaultRotationXLSX();
     void testSecondaryAxisTitleDefaultRotationXLSX();
     void testAxisTitleRotationXLSX();
+    void testCombinedChartAttachedAxisXLSX();
 
     void testTdf90510(); // Pie chart label placement settings(XLS)
     void testTdf109858(); // Pie chart label placement settings(XLSX)
@@ -182,6 +183,7 @@ public:
     CPPUNIT_TEST(testAxisTitleDefaultRotationXLSX);
     CPPUNIT_TEST(testSecondaryAxisTitleDefaultRotationXLSX);
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
+    CPPUNIT_TEST(testCombinedChartAttachedAxisXLSX);
     CPPUNIT_TEST(testTdf90510);
     CPPUNIT_TEST(testTdf109858);
     CPPUNIT_TEST(testTdf111173);
@@ -1397,6 +1399,32 @@ void Chart2ImportTest::testAxisTitleRotationXLSX()
         CPPUNIT_ASSERT_EQUAL(270.0, nRotation);
     }
 
+}
+
+void Chart2ImportTest::testCombinedChartAttachedAxisXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "testCombinedChartAxis.xlsx");
+    Reference< chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    // First series
+    Reference<chart2::XDataSeries> xSeries = getDataSeriesFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT(xSeries.is());
+
+    Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY_THROW);
+    sal_Int32 nAxisIndex = -1;
+    // First series (column chart) should be attached to secondary axis!
+    uno::Any aAny = xPropSet->getPropertyValue("AttachedAxisIndex");
+    CPPUNIT_ASSERT(aAny >>= nAxisIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nAxisIndex);
+
+    // Second series
+    xSeries = getDataSeriesFromDoc(xChartDoc, 0, 1);
+    CPPUNIT_ASSERT(xSeries.is());
+
+    xPropSet.set(xSeries, uno::UNO_QUERY_THROW);
+    // Second series (line chart) should be attached to primary axis!
+    aAny = xPropSet->getPropertyValue("AttachedAxisIndex");
+    CPPUNIT_ASSERT(aAny >>= nAxisIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nAxisIndex);
 }
 
 void Chart2ImportTest::testInternalDataProvider() {
