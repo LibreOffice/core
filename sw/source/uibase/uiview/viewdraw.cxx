@@ -353,6 +353,10 @@ void SwView::ExecDraw(SfxRequest& rReq)
             {
                 m_pWrtShell->GotoObj(true);
             }
+            else if (dynamic_cast<ConstCustomShape*>(pTempFuncPtr))
+            {
+                pTempFuncPtr->CreateDefaultObject();
+            }
             else
             {
                 pFuncPtr->CreateDefaultObject();
