@@ -174,10 +174,6 @@ cmd/lc_objects3dtoolbox.png cmd/lc_cube.png
 cmd/sc_view3d.png cmd/sc_cube.png
 cmd/sc_objects3dtoolbox.png cmd/sc_cube.png
 
-# Control
-cmd/lc_optionstreedialog.png cmd/lc_configuredialog.png
-cmd/sc_optionstreedialog.png cmd/sc_configuredialog.png
-
 # Formatmenu
 cmd/lc_anchormenu.png cmd/lc_toggleanchortype.png
 cmd/lc_conditionalformatmenu.png cmd/lc_colorscaleformatdialog.png
