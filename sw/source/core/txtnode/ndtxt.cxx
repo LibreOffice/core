@@ -2863,7 +2863,10 @@ void SwTextNode::NumRuleChgd()
         if ( pNumRule && pNumRule != GetNum()->GetNumRule() )
         {
             mpNodeNum->ChangeNumRule( *pNumRule );
-            mpNodeNumRLHidden->ChangeNumRule( *pNumRule );
+            if (mpNodeNumRLHidden)
+            {
+                mpNodeNumRLHidden->ChangeNumRule(*pNumRule);
+            }
         }
     }
 
