@@ -85,6 +85,7 @@ public:
     void testPivotTableOutlineModeXLSX();
     void testPivotTableDuplicatedMemberFilterXLSX();
     void testPivotTableTabularModeXLSX();
+    void testPivotTableDuplicateFields();
     void testTdf112106();
     void testTdf123923();
 
@@ -126,6 +127,7 @@ public:
     CPPUNIT_TEST(testPivotTableOutlineModeXLSX);
     CPPUNIT_TEST(testPivotTableDuplicatedMemberFilterXLSX);
     CPPUNIT_TEST(testPivotTableTabularModeXLSX);
+    CPPUNIT_TEST(testPivotTableDuplicateFields);
     CPPUNIT_TEST(testTdf112106);
     CPPUNIT_TEST(testTdf123923);
 
@@ -2342,6 +2344,28 @@ void ScPivotTableFiltersTest::testPivotTableTabularModeXLSX()
     assertXPath(pTable, "/x:pivotTableDefinition", "compactData", "0");
     assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]", "compact", "0");
     assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]", "outline", "0");
+}
+
+void ScPivotTableFiltersTest::testPivotTableDuplicateFields()
+{
+    ScDocShellRef xShell = loadDoc("caseinsensitive-duplicate-fields.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pCacheDef
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotCache/pivotCacheDefinition1.xml");
+    CPPUNIT_ASSERT(pCacheDef);
+
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields", "count", "6");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]", "name", "ID");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]", "name", "Name");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]", "name", "Score");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]", "name", "Method");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]", "name", "method2");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]", "name", "Method3");
+
+    xShell->DoClose();
 }
 
 void ScPivotTableFiltersTest::testTdf112106()
