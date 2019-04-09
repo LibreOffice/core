@@ -92,7 +92,7 @@ private:
     OUString                  aShrinkQuickHelp;
     OUString                  aExpandQuickHelp;
     IControlReferenceHandler* pAnyRefDlg;   // parent dialog
-    VclPtr<RefEdit>                  pRefEdit;     // zugeordnetes Edit-Control
+    VclPtr<RefEdit>           pRefEdit; // associated Edit-Control
 
 protected:
     virtual void Click() override;
