@@ -28,7 +28,7 @@
 #include "framework.hxx"
 #include <fwkutil.hxx>
 #include <elements.hxx>
-#include "fwkbase.hxx"
+#include <fwkbase.hxx>
 
 using namespace osl;
 
@@ -116,11 +116,23 @@ VendorSettings::VendorSettings():
     }
 }
 
-VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor) const
+boost::optional<VersionInfo> VendorSettings::getVersionInformation(const OUString & sVendor) const
 {
     OSL_ASSERT(!sVendor.isEmpty());
-    VersionInfo aVersionInfo;
     OString osVendor = OUStringToOString(sVendor, RTL_TEXTENCODING_UTF8);
+    CXPathObjectPtr pathObject;
+    pathObject = xmlXPathEvalExpression(
+        reinterpret_cast<xmlChar const *>(
+            OString(
+                "/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"" + osVendor
+                + "\"]/jf:minVersion").getStr()),
+        m_xmlPathContextVendorSettings);
+    if (xmlXPathNodeSetIsEmpty(pathObject->nodesetval))
+    {
+        return {};
+    }
+
+    VersionInfo aVersionInfo;
     //Get minVersion
     OString sExpression = OString(
         "/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
