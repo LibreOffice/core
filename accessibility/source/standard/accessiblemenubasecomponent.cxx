@@ -32,6 +32,8 @@
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>
 
+#include <array>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -114,7 +116,7 @@ void OAccessibleMenuBaseComponent::SetEnabled( bool bEnabled )
         {
             nStateType = AccessibleStateType::VISIBLE;
         }
-        Any aOldValue[2], aNewValue[2];
+        std::array<Any, 2> aOldValue, aNewValue;
         if ( m_bEnabled )
         {
             aOldValue[0] <<= AccessibleStateType::SENSITIVE;
