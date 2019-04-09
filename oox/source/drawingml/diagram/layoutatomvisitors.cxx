@@ -48,10 +48,10 @@ void ShapeCreationVisitor::visit(AlgAtom& rAtom)
 
 void ShapeCreationVisitor::visit(ForEachAtom& rAtom)
 {
-    if (rAtom.iterator().mnAxis == XML_followSib)
+    if (rAtom.iterator().mbHideLastTrans && rAtom.iterator().mnAxis == XML_followSib)
     {
-        // If the axis is the follow sibling, then the last atom should not be
-        // visited.
+        // If last transition is hidden and the axis is the follow sibling,
+        // then the last atom should not be visited.
         if (mnCurrIdx + mnCurrStep >= mnCurrCnt)
             return;
     }

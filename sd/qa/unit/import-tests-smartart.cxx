@@ -397,6 +397,13 @@ void SdImportTestSmartArt::testChevron()
 
 void SdImportTestSmartArt::testCycle()
 {
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-cycle.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+    // 10 children: 5 shapes, 5 connectors
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10), xGroup->getCount());
+
     //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
 }
 
