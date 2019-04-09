@@ -30,10 +30,8 @@
 #include <sfx2/minfitem.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/treelistentry.hxx>
 
 #include <sal/macros.h>
-#include <vcl/builderfactory.hxx>
 #include <vcl/edit.hxx>
 
 #include <strings.hrc>
@@ -67,7 +65,6 @@
 // include other projects
 #include <comphelper/processfactory.hxx>
 #include <svtools/acceleratorexecute.hxx>
-#include <vcl/svlbitm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <rtl/ustrbuf.hxx>

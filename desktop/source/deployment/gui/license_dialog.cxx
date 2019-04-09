@@ -31,7 +31,6 @@
 #include <vcl/textview.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/threadex.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/weld.hxx>
 
 #include "license_dialog.hxx"

@@ -28,7 +28,6 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <editeng/numitem.hxx>
 #include <svl/eitem.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/strarray.hxx>
@@ -39,7 +38,6 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/builderfactory.hxx>
 #include <cuicharmap.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/dlgutil.hxx>

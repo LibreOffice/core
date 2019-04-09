@@ -20,9 +20,7 @@
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/headbar.hxx>
-#include <vcl/treelistentry.hxx>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 
 #include <swabstdlg.hxx>

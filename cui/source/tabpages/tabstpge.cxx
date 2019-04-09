@@ -21,7 +21,6 @@
 #include <svtools/ruler.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/settings.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 
 #include <editeng/lrspitem.hxx>

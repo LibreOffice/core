@@ -20,7 +20,6 @@
 #include <config_folders.h>
 
 #include <sal/log.hxx>
-#include <vcl/builderfactory.hxx>
 #include <svl/style.hxx>
 #include <vcl/help.hxx>
 #include <vcl/weld.hxx>
@@ -32,7 +31,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/simptabl.hxx>
-#include <vcl/treelistentry.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxdlg.hxx>
 #include <svx/flagsdef.hxx>

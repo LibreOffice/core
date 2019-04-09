@@ -34,7 +34,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svtools/htmlcfg.hxx>
-#include <vcl/treelistentry.hxx>
 
 #include <uitool.hxx>
 #include <IMark.hxx>

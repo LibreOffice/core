@@ -32,8 +32,6 @@
 #include <sfx2/evntconf.hxx>
 #include <sfx2/objsh.hxx>
 #include <headertablistbox.hxx>
-#include <vcl/svlbitm.hxx>
-#include <vcl/treelistentry.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XFrame;

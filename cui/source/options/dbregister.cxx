@@ -23,10 +23,8 @@
 #include <svl/filenotation.hxx>
 #include <helpids.h>
 #include <svtools/editbrowsebox.hxx>
-#include <vcl/treelistentry.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
-#include <vcl/field.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/eitem.hxx>
@@ -35,7 +33,6 @@
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <vcl/svtabbx.hxx>
 #include <svl/itemset.hxx>
 #include "doclinkdialog.hxx"
 #include <unotools/localfilehelper.hxx>

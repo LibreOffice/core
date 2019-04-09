@@ -48,7 +48,6 @@
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
-#include <vcl/treelistentry.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;

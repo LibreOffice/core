@@ -29,8 +29,6 @@
 #include <vcl/help.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 
@@ -47,9 +45,6 @@
 #include <sfx2/sfxsids.hrc>
 #include <svl/stritem.hxx>
 #include <svtools/miscopt.hxx>
-#include <vcl/svlbitm.hxx>
-#include <vcl/treelistentry.hxx>
-#include <vcl/viewdataentry.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>

@@ -20,10 +20,8 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/builderfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/mslangid.hxx>

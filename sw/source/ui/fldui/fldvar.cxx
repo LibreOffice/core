@@ -19,7 +19,6 @@
 
 #include <swtypes.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <vcl/builderfactory.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <usrfld.hxx>
 #include <docufld.hxx>

@@ -29,11 +29,9 @@
 #include <svl/stritem.hxx>
 #include <svl/itemset.hxx>
 #include <unotools/useroptions.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <tools/datetime.hxx>
-#include <vcl/treelistentry.hxx>
 #include <svtools/miscopt.hxx>
 
 #include <versdlg.hxx>

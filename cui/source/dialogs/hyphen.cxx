@@ -24,7 +24,6 @@
 #include <editeng/unolingu.hxx>
 #include <svtools/langtab.hxx>
 #include <svx/dlgutil.hxx>
-#include <vcl/builderfactory.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>

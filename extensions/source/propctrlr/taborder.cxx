@@ -28,9 +28,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/runtime/FormController.hpp>
-#include <vcl/scrbar.hxx>
-#include <vcl/treelistentry.hxx>
-#include <vcl/builderfactory.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 

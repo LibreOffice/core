@@ -19,7 +19,6 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/colorcfg.hxx>
 

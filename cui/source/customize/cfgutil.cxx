@@ -52,17 +52,13 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <svtools/imagemgr.hxx>
-#include <vcl/treelistentry.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <unotools/configmgr.hxx>
 #include <dialmgr.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/builderfactory.hxx>
-#include <vcl/button.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
 #include <vcl/vclmedit.hxx>
 

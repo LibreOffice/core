@@ -20,9 +20,6 @@
 #include <basic/basmgr.hxx>
 
 #include <macropg.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/svlbitm.hxx>
-#include <vcl/treelistentry.hxx>
 #include <svl/eitem.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -39,7 +36,6 @@
 #include "macropg_impl.hxx"
 #include <svx/dialogs.hrc>
 #include <strings.hrc>
-#include <vcl/builderfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 
 #include <algorithm>

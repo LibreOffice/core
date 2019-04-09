@@ -24,7 +24,6 @@
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
-#include <vcl/builderfactory.hxx>
 #include <editeng/numitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/strarray.hxx>

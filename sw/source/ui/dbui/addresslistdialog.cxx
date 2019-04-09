@@ -28,12 +28,9 @@
 #include <dbconfig.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/fixed.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
-#include <svtools/simptabl.hxx>
-#include <vcl/treelistentry.hxx>
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -52,7 +49,6 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <swunohelper.hxx>
-#include <vcl/waitobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/urihelper.hxx>
 #include <dbui.hrc>
