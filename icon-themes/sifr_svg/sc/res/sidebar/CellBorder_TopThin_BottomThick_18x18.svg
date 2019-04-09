@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+  <path
+     d="M 2,2 H 16 V 14 H 2 Z"
+     style="opacity:0.35;fill:#555753"
+     id="path4" />
+  <path
+     style="fill:#1c99e0"
+     d="m 0,14 v 4 h 18 v -4 z"
+     />
+  <path
+     d="m0 0h18v2h-18z"
+     style="fill:#555753" />
+</svg>
