@@ -69,6 +69,9 @@ ScRefreshTimer::~ScRefreshTimer()
 
 ScRefreshTimer& ScRefreshTimer::operator=( const ScRefreshTimer& r )
 {
+    if(this == &r)
+        return *this;
+
     SetRefreshControl(nullptr);
     AutoTimer::operator=( r );
     return *this;

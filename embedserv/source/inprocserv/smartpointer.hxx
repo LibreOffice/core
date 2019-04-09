@@ -64,6 +64,9 @@ public:
 
     ComSmart& operator=( const ComSmart<T>& rObj )
     {
+        if(this == &rObj)
+            return *this;
+
         OwnRelease();
 
         m_pInterface = rObj.m_pInterface;

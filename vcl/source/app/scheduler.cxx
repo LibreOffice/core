@@ -609,6 +609,9 @@ void Task::SetPriority(TaskPriority ePriority)
 
 Task& Task::operator=( const Task& rTask )
 {
+    if(this == &rTask)
+        return *this;
+
     if ( IsActive() )
         Stop();
 

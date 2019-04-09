@@ -60,6 +60,9 @@ SharedString::~SharedString()
 
 SharedString& SharedString::operator= ( const SharedString& r )
 {
+    if(this == &r)
+        return *this;
+
     if (mpData)
         rtl_uString_release(mpData);
     if (mpDataIgnoreCase)

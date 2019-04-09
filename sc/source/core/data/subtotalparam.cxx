@@ -80,6 +80,9 @@ void ScSubTotalParam::Clear()
 
 ScSubTotalParam& ScSubTotalParam::operator=( const ScSubTotalParam& r )
 {
+    if(this == &r)
+        return *this;
+
     nCol1           = r.nCol1;
     nRow1           = r.nRow1;
     nCol2           = r.nCol2;

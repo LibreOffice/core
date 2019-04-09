@@ -29,6 +29,9 @@ using namespace psp;
 
 JobData& JobData::operator=(const JobData& rRight)
 {
+    if(this == &rRight)
+        return *this;
+
     m_nCopies               = rRight.m_nCopies;
     m_bCollate              = rRight.m_bCollate;
     m_nLeftMarginAdjust     = rRight.m_nLeftMarginAdjust;

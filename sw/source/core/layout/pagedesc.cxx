@@ -90,6 +90,9 @@ SwPageDesc::SwPageDesc( const SwPageDesc &rCpy )
 
 SwPageDesc & SwPageDesc::operator = (const SwPageDesc & rSrc)
 {
+    if(this == &rSrc)
+        return *this;
+
     m_StyleName = rSrc.m_StyleName;
     m_NumType = rSrc.m_NumType;
     m_Master = rSrc.m_Master;
