@@ -75,7 +75,7 @@ namespace svx
     void ToolboxButtonColorUpdater::Update(const NamedColor &rNamedColor)
     {
         Update(rNamedColor.first);
-        if (!mbWideButton && !rNamedColor.second.isEmpty())
+        if (!mbWideButton)
         {
             // Also show the current color as QuickHelpText
             OUString colorSuffix = " (%1)";
