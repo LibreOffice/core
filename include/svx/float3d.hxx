@@ -237,7 +237,7 @@ class Svx3DCtrlItem : public SfxControllerItem
 {
  protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
-                                const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& rSlotItem ) override;
+                                const SfxPoolItem* pState, const std::shared_ptr<const Item::ItemBase>& rSlotItem ) override;
 
  public:
     Svx3DCtrlItem( sal_uInt16, SfxBindings* );
@@ -255,7 +255,7 @@ class SvxConvertTo3DItem : public SfxControllerItem
     bool                        bState;
 
 protected:
-    virtual void StateChanged(sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& rSlotItem) override;
+    virtual void StateChanged(sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState, const std::shared_ptr<const Item::ItemBase>& rSlotItem) override;
 
 public:
     SvxConvertTo3DItem(sal_uInt16 nId, SfxBindings* pBindings);

@@ -9,20 +9,30 @@
 
 #include <cassert>
 #include <item/simple/CntOUString.hxx>
+#include <item/base/ItemAdministrator.hxx>
+#include <item/base/ItemControlBlock.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace Item
 {
-    // need internal access to ItemAdministrator
-    ItemAdministrator* CntOUString::GetIAdministrator() const
+    ItemControlBlock& CntOUString::GetStaticItemControlBlock()
     {
-        return &GetStaticAdmin();
+        static ItemControlBlock aItemControlBlock(
+            std::shared_ptr<ItemAdministrator>(new IAdministrator_unordered_set()),
+            std::shared_ptr<const ItemBase>(new CntOUString()),
+            [](){ return new CntOUString(); });
+
+        return aItemControlBlock;
+    }
+
+    ItemControlBlock& CntOUString::GetItemControlBlock() const
+    {
+        return CntOUString::GetStaticItemControlBlock();
     }
 
     CntOUString::CntOUString(const rtl::OUString& rValue)
-    :   CntOUStringStaticHelper(),
-        ItemBase(),
+    :   ItemBase(),
         m_aValue(rValue)
     {
     }
@@ -41,7 +51,9 @@ namespace Item
         // - detection of being default (will delete local incarnation)
         // - detection of reuse (will delete local incarnation)
         // - detectiomn of new use - will create shared_ptr for local incarnation and buffer
-        return std::static_pointer_cast<const CntOUString>(GetStaticAdmin().Create(new CntOUString(rValue)));
+        return std::static_pointer_cast<const CntOUString>(
+            CntOUString::GetStaticItemControlBlock().GetItemAdministrator()->Create(
+                new CntOUString(rValue)));
     }
 
     bool CntOUString::operator==(const ItemBase& rCandidate) const

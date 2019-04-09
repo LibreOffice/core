@@ -239,7 +239,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             {
                 Item::ItemBase::AnyIDArgs aArgs;
                 aArgs.push_back(Item::ItemBase::AnyIDPair(rProp.Value, bConvertTwips ? CONVERT_TWIPS : 0));
-                Item::ItemBase::SharedPtr aSlotItem(pType->CreateSlotItem(aArgs));
+                std::shared_ptr<const Item::ItemBase> aSlotItem(pType->CreateSlotItem(aArgs));
                 if(aSlotItem)
                 {
                     rSet.slotSet().SetSlot(nWhich, aSlotItem);
@@ -324,7 +324,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 }
                 else
                 {
-                    Item::ItemBase::SharedPtr aSlotItem(pType->CreateSlotItem(aArgs));
+                    std::shared_ptr<const Item::ItemBase> aSlotItem(pType->CreateSlotItem(aArgs));
                     if(aSlotItem)
                     {
                         rSet.slotSet().SetSlot(nWhich, aSlotItem);

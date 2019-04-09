@@ -221,7 +221,7 @@ void SvMetaType::WriteSfxItem(
     const OString& rItemName, SvIdlDataBase const & rBase, SvStream& rOutStm )
 {
     WriteStars( rOutStm );
-//    OString aVarName = " a" + rItemName + "_Impl";
+    // I2TM use simple self-demangling for VarName to support nakmespaces
     const OString aDemangledVarName(" a" + rItemName.replaceAll("::", "_") + "_Impl");
 
     OStringBuffer aAttrArray;
@@ -246,7 +246,6 @@ void SvMetaType::WriteSfxItem(
     if (bExport)
         rOutStm.WriteCharPtr( "SFX2_DLLPUBLIC " );
     rOutStm.WriteOString( aTypeName )
-//           .WriteOString( aVarName ).WriteChar( ';' ) << endl;
            .WriteOString( aDemangledVarName ).WriteChar( ';' ) << endl;
     if (bReturn)
         return;
@@ -256,11 +255,11 @@ void SvMetaType::WriteSfxItem(
     rOutStm.WriteCharPtr( "#if !defined(_WIN32) && ((defined(DISABLE_DYNLOADING) && (defined(ANDROID) || defined(IOS) || defined(LINUX))) || STATIC_LINKING)" ) << endl;
     rOutStm.WriteCharPtr( "__attribute__((__weak__))" ) << endl;
     rOutStm.WriteCharPtr( "#endif" ) << endl;
-//    rOutStm.WriteOString( aTypeName ).WriteOString( aVarName )
     rOutStm.WriteOString( aTypeName ).WriteOString( aDemangledVarName )
            .WriteCharPtr( " = " ) << endl;
     rOutStm.WriteChar( '{' ) << endl;
 
+    // I2TM bIsSlotItem is temorary - when change would be completely done, may be remoevd
     const bool bIsSlotItem(rItemName.indexOf("Item::") >= 0);
     if(bIsSlotItem)
     {
@@ -275,10 +274,6 @@ void SvMetaType::WriteSfxItem(
 
     rOutStm.WriteCharPtr("&typeid(").WriteOString( rItemName ).WriteCharPtr( "), " );
     rOutStm.WriteOString( aAttrCount );
-
-    // rOutStm.WriteCharPtr( "\tcreateSfxPoolItem<" ).WriteOString( rItemName )
-    //     .WriteCharPtr(">, &typeid(").WriteOString( rItemName ).WriteCharPtr( "), " );
-    // rOutStm.WriteOString( aAttrCount );
 
     if( nAttrCount )
     {

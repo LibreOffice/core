@@ -46,9 +46,9 @@ namespace Item
         return m_aModelSpecificIValues;
     }
 
-    void ItemSet::SetItem(const ItemBase::SharedPtr& rItem)
+    void ItemSet::SetItem(const std::shared_ptr<const ItemBase>& rItem)
     {
-        assert(rItem && "empty ItemBase::SharedPtr not allowed - and should be unable to be created (!)");
+        assert(rItem && "empty std::shared_ptr<const ItemBase> not allowed - and should be unable to be created (!)");
         bool bDefault(false);
 
         // detect if rItem is default item, include evtl. model-specific
@@ -62,7 +62,7 @@ namespace Item
         else
         {
             // use Item's own static global default
-            bDefault = rItem->IsDefault();
+            bDefault = ItemBase::IsDefault(rItem);
         }
 
         const size_t hash_code(typeid(*rItem).hash_code());
@@ -83,7 +83,7 @@ namespace Item
     {
         for(const auto& candidate : rSource.m_aItems)
         {
-            assert(candidate.second && "empty ItemBase::SharedPtr not allowed - and should be unable to be created (!)");
+            assert(candidate.second && "empty std::shared_ptr<const ItemBase> not allowed - and should be unable to be created (!)");
 
             if(bDontCareToDefault && candidate.second.get() == getInvalidateItem().get())
             {

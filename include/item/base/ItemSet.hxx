@@ -235,20 +235,20 @@ namespace Item
         ModelSpecificItemValues::SharedPtr m_aModelSpecificIValues;
 
         // the items as content
-        std::unordered_map<size_t, ItemBase::SharedPtr> m_aItems;
+        std::unordered_map<size_t, std::shared_ptr<const ItemBase>> m_aItems;
 
         // single global static instance for helper class ImplInvalidateItem
-        static const ItemBase::SharedPtr& getInvalidateItem()
+        static const std::shared_ptr<const ItemBase>& getInvalidateItem()
         {
-            static ItemBase::SharedPtr aImplInvalidateItem(new ImplInvalidateItem());
+            static std::shared_ptr<const ItemBase> aImplInvalidateItem(new ImplInvalidateItem());
 
             return aImplInvalidateItem;
         }
 
         // single global static instance for helper class ImplDisableItem
-        static const ItemBase::SharedPtr& getDisableItem()
+        static const std::shared_ptr<const ItemBase>& getDisableItem()
         {
-            static ItemBase::SharedPtr aImplDisableItem(new ImplDisableItem());
+            static std::shared_ptr<const ItemBase> aImplDisableItem(new ImplDisableItem());
 
             return aImplDisableItem;
         }
@@ -288,11 +288,11 @@ namespace Item
             m_aItems[hash_code] = getDisableItem();
         }
 
-        template< typename TItem > std::shared_ptr<TItem> GetDefault() const
+        template< typename TItem > std::shared_ptr<const TItem> GetDefault() const
         {
             // get static available default as instance
-            ItemBase::SharedPtr aRetval(TItem::GetStaticDefault());
-            assert(aRetval && "empty ItemBase::SharedPtr not allowed for default (!)");
+            std::shared_ptr<const ItemBase> aRetval(TItem::GetStaticItemControlBlock().GetDefaultItem());
+            assert(aRetval && "empty std::shared_ptr<const ItemBase> not allowed for default (!)");
 
             if(m_aModelSpecificIValues)
             {
@@ -301,10 +301,10 @@ namespace Item
                 aRetval = m_aModelSpecificIValues->GetDefault(aRetval);
             }
 
-            return std::static_pointer_cast<TItem>(aRetval);
+            return std::static_pointer_cast<const TItem>(aRetval);
         }
 
-        void SetItem(const ItemBase::SharedPtr& rItem);
+        void SetItem(const std::shared_ptr<const ItemBase>& rItem);
 
         template< typename TItem > StateAndItem<TItem> GetStateAndItem(bool bSearchParent = true) const
         {
@@ -313,7 +313,7 @@ namespace Item
 
             if(aRetval != m_aItems.end()) // && aRetval->second)
             {
-                assert(aRetval->second && "empty ItemBase::SharedPtr set in ItemSet (!)");
+                assert(aRetval->second && "empty std::shared_ptr<const ItemBase> set in ItemSet (!)");
 
                 if(aRetval->second.get() == getInvalidateItem().get())
                 {

@@ -141,7 +141,7 @@ public:
     void            MoveOutline(SwOutlineNodes::size_type nSource, SwOutlineNodes::size_type nTarget, bool bWithCilds);
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                            const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& rSlotItem ) override;
+                                            const SfxPoolItem* pState, const std::shared_ptr<const Item::ItemBase>& rSlotItem ) override;
 
     virtual void    StateChanged(StateChangedType nStateChange) override;
 

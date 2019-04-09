@@ -10,7 +10,8 @@
 #ifndef INCLUDED_ITEM_SIMPLE_CNTOUSTRING_HXX
 #define INCLUDED_ITEM_SIMPLE_CNTOUSTRING_HXX
 
-#include <item/base/ItemBaseStaticHelper.hxx>
+//#include <item/base/ItemBaseStaticHelper.hxx>
+#include <item/base/ItemBase.hxx>
 #include <rtl/ustring.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,28 +22,17 @@ namespace Item
     // It uses IAdministrator_unordered_set to provide an Administrator using
     // a hashed list for fast accesses. This requires ::operator== and
     // ::GetUniqueKey() to be implemented.
-    class CntOUString;
-    typedef ItemBaseStaticHelper<CntOUString, IAdministrator_unordered_set> CntOUStringStaticHelper;
-
-    class ITEM_DLLPUBLIC CntOUString : public CntOUStringStaticHelper, public ItemBase
+    class ITEM_DLLPUBLIC CntOUString : public ItemBase
     {
     public:
-        // SharedPtr typedef to be used handling instances of given type
-        typedef std::shared_ptr<const CntOUString> SharedPtr;
-
-    private:
-        // need to offer internal access to ItemAdministrator
-        // in each derivation - just calls GetStaticAdmin internally
-        virtual ItemAdministrator* GetIAdministrator() const override;
+        static ItemControlBlock& GetStaticItemControlBlock();
+        virtual ItemControlBlock& GetItemControlBlock() const override;
 
     private:
         // local variavbles
         rtl::OUString m_aValue;
 
     protected:
-        // allow local ItemAdministrator access to protected constructor
-        friend CntOUStringStaticHelper;
-
         // SharedPtr-constructor - protected BY DEFAULT - do NOT CHANGE (!)
         CntOUString(const rtl::OUString& rValue = rtl::OUString());
 

@@ -9,6 +9,7 @@
 
 #include <item/base/ItemBase.hxx>
 #include <item/base/ItemAdministrator.hxx>
+#include <item/base/ItemControlBlock.hxx>
 #include <cassert>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -202,6 +203,22 @@ class SW_DLLPUBLIC SwPaMItem : public SfxPoolItem
 
 namespace Item
 {
+    ItemControlBlock& ItemBase::GetStaticItemControlBlock()
+    {
+        assert(false && "ItemBase::GetItemControlBlock call not allowed (!)");
+        static ItemControlBlock aItemControlBlock(
+            std::shared_ptr<ItemAdministrator>(),
+            std::shared_ptr<const ItemBase>(),
+            [](){ return nullptr; });
+
+        return aItemControlBlock;
+    }
+
+    ItemControlBlock& ItemBase::GetItemControlBlock() const
+    {
+        return ItemBase::GetStaticItemControlBlock();
+    }
+
     ItemBase::ItemBase()
     :   std::enable_shared_from_this<ItemBase>(),
         m_bAdministrated(false)
@@ -211,13 +228,6 @@ namespace Item
     bool ItemBase::CheckSameType(const ItemBase& rCmp) const
     {
         return typeid(rCmp) == typeid(*this);
-    }
-
-    ItemAdministrator* ItemBase::GetIAdministrator() const
-    {
-        // not intended to be used, error
-        assert(false && "ItemBase::GetIAdministrator call not allowed (!)");
-        return nullptr;
     }
 
     void ItemBase::PutValues(const AnyIDArgs& rArgs)
@@ -238,7 +248,7 @@ namespace Item
     {
         if(IsAdministrated())
         {
-            GetIAdministrator()->HintExpired(this);
+            GetItemControlBlock().GetItemAdministrator()->HintExpired(this);
         }
     }
 
@@ -271,14 +281,20 @@ namespace Item
 
     bool ItemBase::IsDefault() const
     {
-        // callback to static administrator
-        return GetIAdministrator()->IsDefault(this);
+        // callback to ItemControlBlock
+        return GetItemControlBlock().IsDefaultDDD(*this);
     }
 
-    const ItemBase::SharedPtr& ItemBase::GetDefault() const
+    const std::shared_ptr<const ItemBase>& ItemBase::GetDefault() const
     {
-        // callback to static administrator
-        return GetIAdministrator()->GetDefault();
+        // callback to ItemControlBlock
+        assert(GetItemControlBlock().GetDefaultItem() && "empty DefaultItem detected - not allowed (!)");
+        return GetItemControlBlock().GetDefaultItem();
+    }
+
+    bool ItemBase::IsDefault(const std::shared_ptr<const ItemBase>& rCandidate)
+    {
+        return rCandidate && rCandidate->GetItemControlBlock().IsDefaultDDD(*rCandidate);
     }
 } // end of namespace Item
 

@@ -23,7 +23,8 @@
 #include <svl/poolitem.hxx>
 
 // I2TM
-#include <item/base/ItemBaseStaticHelper.hxx>
+#include <item/base/ItemBase.hxx>
+//#include <item/base/ItemBaseStaticHelper.hxx>
 // ~I2TM
 
 namespace basctl
@@ -42,19 +43,11 @@ enum ItemType
 // I2TM
 namespace Item
 {
-    class Sbx;
-    typedef ::Item::ItemBaseStaticHelper<Sbx, ::Item::IAdministrator_vector> SbxStaticHelper;
-
-    class Sbx final : public SbxStaticHelper, public ::Item::ItemBase
+    class Sbx final : public ::Item::ItemBase
     {
     public:
-        // SharedPtr typedef to be used handling instances of given type
-        typedef std::shared_ptr<const Sbx> SharedPtr;
-
-    private:
-        // need to offer internal access to ItemAdministrator
-        // in each derivation - just calls GetStaticAdmin internally
-        virtual ::Item::ItemAdministrator* GetIAdministrator() const override;
+        static ::Item::ItemControlBlock& GetStaticItemControlBlock();
+        virtual ::Item::ItemControlBlock& GetItemControlBlock() const override;
 
     private:
         const ScriptDocument    m_aDocument;
@@ -64,8 +57,6 @@ namespace Item
         ItemType                m_eType;
 
     protected:
-        friend SbxStaticHelper;
-
         Sbx(
             const ScriptDocument* pDocument = nullptr,
             const OUString& aLibName = OUString(),

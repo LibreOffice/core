@@ -9,20 +9,30 @@
 
 #include <cassert>
 #include <item/simple/CntInt16.hxx>
+#include <item/base/ItemAdministrator.hxx>
+#include <item/base/ItemControlBlock.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace Item
 {
-    // need internal access to ItemAdministrator
-    ItemAdministrator* CntInt16::GetIAdministrator() const
+    ItemControlBlock& CntInt16::GetStaticItemControlBlock()
     {
-        return &GetStaticAdmin();
+        static ItemControlBlock aItemControlBlock(
+            std::shared_ptr<ItemAdministrator>(new IAdministrator_set()),
+            std::shared_ptr<const ItemBase>(new CntInt16()),
+            [](){ return new CntInt16(); });
+
+        return aItemControlBlock;
+    }
+
+    ItemControlBlock& CntInt16::GetItemControlBlock() const
+    {
+        return CntInt16::GetStaticItemControlBlock();
     }
 
     CntInt16::CntInt16(sal_Int16 nValue)
-    :   CntInt16StaticHelper(),
-        ItemBase(),
+    :   ItemBase(),
         m_nValue(nValue)
     {
     }
@@ -35,13 +45,15 @@ namespace Item
         implInstanceCleanup();
     }
 
-    CntInt16::SharedPtr CntInt16::Create(sal_Int16 nValue)
+    std::shared_ptr<const CntInt16> CntInt16::Create(sal_Int16 nValue)
     {
         // use ::Create(...) method with local incarnation, it will handle
         // - detection of being default (will delete local incarnation)
         // - detection of reuse (will delete local incarnation)
         // - detectiomn of new use - will create shared_ptr for local incarnation and buffer
-        return std::static_pointer_cast<const CntInt16>(GetStaticAdmin().Create(new CntInt16(nValue)));
+        return std::static_pointer_cast<const CntInt16>(
+            CntInt16::GetStaticItemControlBlock().GetItemAdministrator()->Create(
+                new CntInt16(nValue)));
     }
 
     bool CntInt16::operator==(const ItemBase& rCandidate) const

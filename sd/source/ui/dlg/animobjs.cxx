@@ -1112,7 +1112,7 @@ AnimationControllerItem::AnimationControllerItem(
 }
 
 void AnimationControllerItem::StateChanged( sal_uInt16 nSId,
-                        SfxItemState eState, const SfxPoolItem* pItem, const Item::ItemBase::SharedPtr& /*rSlotItem*/ )
+                        SfxItemState eState, const SfxPoolItem* pItem, const std::shared_ptr<const Item::ItemBase>& /*rSlotItem*/ )
 {
     if( eState >= SfxItemState::DEFAULT && nSId == SID_ANIMATOR_STATE )
     {

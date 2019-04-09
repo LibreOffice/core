@@ -29,9 +29,9 @@ namespace Item
         return SlotSet::SharedPtr(new SlotSet());
     }
 
-    void SlotSet::SetSlot(SlotID aSlotID, const ItemBase::SharedPtr& rItem)
+    void SlotSet::SetSlot(SlotID aSlotID, const std::shared_ptr<const ItemBase>& rItem)
     {
-        assert(rItem && "empty ItemBase::SharedPtr not allowed - and should be unable to be created (!)");
+        assert(rItem && "empty std::shared_ptr<const ItemBase> not allowed - and should be unable to be created (!)");
         m_aSlots[aSlotID] = rItem;
     }
 

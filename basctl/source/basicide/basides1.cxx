@@ -574,7 +574,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             // I2TM
-            const auto aSbxItem = rReq.GetArgs()->slotSet().GetSlot<const Item::Sbx>(SID_BASICIDE_ARG_SBX);
+            const auto aSbxItem = rReq.GetArgs()->slotSet().GetSlot<const basctl::Item::Sbx>(SID_BASICIDE_ARG_SBX);
             const ScriptDocument& aDocument( aSbxItem->GetDocument() );
             const OUString& aLibName( aSbxItem->GetLibName() );
             const OUString& aName( aSbxItem->GetName() );

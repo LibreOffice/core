@@ -46,7 +46,7 @@ public:
 
     virtual void                Select(sal_uInt16 nSelectModifier) override;
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& rSlotItem ) override;
+                                              const SfxPoolItem* pState, const std::shared_ptr<const Item::ItemBase>& rSlotItem ) override;
 };
 
 #endif

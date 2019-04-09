@@ -27,7 +27,7 @@ class SvxSearchController : public SfxControllerItem
     SvxSearchDialog&    rSrchDlg;
 
 protected:
-    virtual void        StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& rSlotItem ) override;
+    virtual void        StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem* pState, const std::shared_ptr<const Item::ItemBase>& rSlotItem ) override;
 
 public:
     SvxSearchController( sal_uInt16 nId, SfxBindings& rBnd, SvxSearchDialog& rDlg );

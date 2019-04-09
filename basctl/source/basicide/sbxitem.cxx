@@ -19,21 +19,30 @@
 
 #include <sbxitem.hxx>
 #include <sal/log.hxx>
+#include <item/base/ItemAdministrator.hxx>
 
 namespace basctl
 {
 // I2TM
 namespace Item
 {
-    // need internal access to ItemAdministrator
-    ::Item::ItemAdministrator* Sbx::GetIAdministrator() const
+    ::Item::ItemControlBlock& Sbx::GetStaticItemControlBlock()
     {
-        return &GetStaticAdmin();
+        static ::Item::ItemControlBlock aItemControlBlock(
+            std::shared_ptr<::Item::ItemAdministrator>(new ::Item::IAdministrator_vector()),
+            std::shared_ptr<const ::Item::ItemBase>(new Sbx()),
+            [](){ return new Sbx(); });
+
+        return aItemControlBlock;
+    }
+
+    ::Item::ItemControlBlock& Sbx::GetItemControlBlock() const
+    {
+        return Sbx::GetStaticItemControlBlock();
     }
 
     Sbx::Sbx(const ScriptDocument* pDocument, const OUString& aLibName, const OUString& aName, const OUString& aMethodName, ItemType eType)
-    :   SbxStaticHelper(),
-        ::Item::ItemBase(),
+    :   ::Item::ItemBase(),
         m_aDocument(nullptr != pDocument ? *pDocument : ScriptDocument::getApplicationScriptDocument()),
         m_aLibName(aLibName),
         m_aName(aName),
@@ -47,9 +56,16 @@ namespace Item
         implInstanceCleanup();
     }
 
-    std::shared_ptr<const Sbx> Sbx::Create(const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, const OUString& aMethodName, ItemType eType)
+    std::shared_ptr<const Sbx> Sbx::Create(
+        const ScriptDocument& rDocument,
+        const OUString& aLibName,
+        const OUString& aName,
+        const OUString& aMethodName,
+        ItemType eType)
     {
-        return std::static_pointer_cast<const Sbx>(GetStaticAdmin().Create(new Sbx(&rDocument, aLibName, aName, aMethodName, eType)));
+        return std::static_pointer_cast<const Sbx>(
+            Sbx::GetStaticItemControlBlock().GetItemAdministrator()->Create(
+                new Sbx(&rDocument, aLibName, aName, aMethodName, eType)));
     }
 
     bool Sbx::operator==(const ItemBase& rCandidate) const

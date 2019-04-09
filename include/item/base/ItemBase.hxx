@@ -32,6 +32,7 @@ namespace Item
 {
     // predefine ItemAdministrator - no need to include
     class ItemAdministrator;
+    class ItemControlBlock;
 
     // Base class for ItemBase and thus for all new implementation of
     // Items. Items are in general read-only instances. The constructor
@@ -91,9 +92,6 @@ namespace Item
     class ITEM_DLLPUBLIC ItemBase : public std::enable_shared_from_this<ItemBase>
     {
     public:
-        // SharedPtr typedef to be used handling instances of this type
-        typedef std::shared_ptr<const ItemBase> SharedPtr;
-
         // typedefs for PutValues/PutValue/CreateFromAny functionality
         // used from the SfxSlot mechanism (see CreateSlotItem)
         typedef std::pair<const css::uno::Any, sal_uInt8> AnyIDPair;
@@ -114,6 +112,10 @@ namespace Item
         // but limited to a single local method in the implementation there
         friend void SetAdministratedFromItemAdministrator(ItemBase& rIBase);
 
+    public:
+        static ItemControlBlock& GetStaticItemControlBlock();
+        virtual ItemControlBlock& GetItemControlBlock() const;
+
     protected:
         // constructor - protected BY DEFAULT - do NOT CHANGE (!)
         // Use ::Create(...) methods in derived classes instead
@@ -125,13 +127,9 @@ namespace Item
         // basic RTTI TypeCheck to secure e.g. operator== and similar
         bool CheckSameType(const ItemBase& rCmp) const;
 
-        // basic access to Adminiatrator, default returns nullptr and is *not*
-        // designed to be used/called, only exists to have simple Item
-        // representations for special purposes, e.g. InvalidateItem/DisableItem
-        virtual ItemAdministrator* GetIAdministrator() const;
-
         // PutValue/Any interface for automated instance creation from SfxType
         // mechanism (UNO API and sfx2 stuff)
+        friend class ItemControlBlock;
         void PutValues(const AnyIDArgs& rArgs);
         virtual void PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId);
 
@@ -152,7 +150,7 @@ namespace Item
 
         // Interface for global default value support. These non-static and
         // non-virtual non-typed local versions can/may work more direct. The
-        // typed static versions are not capable of working with 'const ItemBase::SharedPtr&'
+        // typed static versions are not capable of working with 'const std::shared_ptr<const ItemBase>&'
         // due to using std::static_pointer_cast, thus these may be faster and
         // use less ressources when the type is not needed.
         // These will use the callback to static administrator and it's administrated
@@ -160,12 +158,19 @@ namespace Item
         // Remember that there *will* also be static, typed versions of this call
         // in derived Item(s), see ItemBaseStaticHelper for reference
         bool IsDefault() const;
-        const SharedPtr& GetDefault() const;
+        const std::shared_ptr<const ItemBase>& GetDefault() const;
 
         // check Administrated flag
         bool IsAdministrated() const
         {
             return m_bAdministrated;
+        }
+
+        static bool IsDefault(const std::shared_ptr<const ItemBase>& rCandidate);
+
+        template<class T> static std::shared_ptr<const T> GetDefault()
+        {
+            return std::static_pointer_cast<const T>(T::GetStaticItemControlBlock().GetDefaultItem());
         }
     };
 } // end of namespace Item

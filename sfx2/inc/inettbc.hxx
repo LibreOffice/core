@@ -54,7 +54,7 @@ public:
     virtual                 ~SfxURLToolBoxControl_Impl() override;
 
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) override;
-    virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& rSlotItem ) override;
+    virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, const std::shared_ptr<const Item::ItemBase>& rSlotItem ) override;
 };
 
 #endif

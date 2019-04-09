@@ -29,17 +29,17 @@ namespace Item
         return ModelSpecificItemValues::SharedPtr(new ModelSpecificItemValues());
     }
 
-    void ModelSpecificItemValues::SetAlternativeDefaultItem(const ItemBase::SharedPtr& rItem)
+    void ModelSpecificItemValues::SetAlternativeDefaultItem(const std::shared_ptr<const ItemBase>& rItem)
     {
-        assert(rItem && "empty ItemBase::SharedPtr not allowed - and should be unable to be created (!)");
+        assert(rItem && "empty std::shared_ptr<const ItemBase> not allowed - and should be unable to be created (!)");
         const size_t hash_code(typeid(*rItem).hash_code());
 
         m_aAlternativeItems[hash_code] = rItem;
     }
 
-    bool ModelSpecificItemValues::IsDefault(const ItemBase::SharedPtr& rItem) const
+    bool ModelSpecificItemValues::IsDefault(const std::shared_ptr<const ItemBase>& rItem) const
     {
-        assert(rItem && "empty ItemBase::SharedPtr not allowed - and should be unable to be created (!)");
+        assert(rItem && "empty std::shared_ptr<const ItemBase> not allowed - and should be unable to be created (!)");
 
         if(!m_aAlternativeItems.empty())
         {
@@ -54,12 +54,12 @@ namespace Item
         }
 
         // use Item's own static global default
-        return rItem->IsDefault();
+        return ItemBase::IsDefault(rItem);
     }
 
-    const ItemBase::SharedPtr& ModelSpecificItemValues::GetDefault(const ItemBase::SharedPtr& rItem) const
+    const std::shared_ptr<const ItemBase>& ModelSpecificItemValues::GetDefault(const std::shared_ptr<const ItemBase>& rItem) const
     {
-        assert(rItem && "empty ItemBase::SharedPtr not allowed - and should be unable to be created (!)");
+        assert(rItem && "empty std::shared_ptr<const ItemBase> not allowed - and should be unable to be created (!)");
 
         if(!m_aAlternativeItems.empty())
         {

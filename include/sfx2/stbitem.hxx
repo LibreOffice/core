@@ -93,7 +93,7 @@ protected:
 
     // Old sfx2 interface
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& rSlotItem );
+                                  const SfxPoolItem* pState, const std::shared_ptr<const Item::ItemBase>& rSlotItem );
     virtual void    Click();
     virtual void    Command( const CommandEvent& rCEvt );
     virtual bool    MouseButtonDown( const MouseEvent & );

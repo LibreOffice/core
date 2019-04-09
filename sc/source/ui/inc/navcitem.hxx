@@ -32,7 +32,7 @@ public:
                                SfxBindings& rBindings );
 protected:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pItem, const Item::ItemBase::SharedPtr& rSlotItem ) override;
+                                      const SfxPoolItem* pItem, const std::shared_ptr<const Item::ItemBase>& rSlotItem ) override;
 
 private:
     ScNavigatorDlg& rNavigatorDlg;

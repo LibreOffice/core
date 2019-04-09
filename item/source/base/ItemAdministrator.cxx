@@ -18,10 +18,8 @@ namespace Item
         rIBase.m_bAdministrated = true;
     }
 
-    ItemAdministrator::ItemAdministrator(const ItemBase* pDefault)
-    :   m_aDefault(ItemBase::SharedPtr(pDefault))
+    ItemAdministrator::ItemAdministrator()
     {
-        assert(pDefault != nullptr && "nullptr not allowed, default *is* required (!)");
     }
 
     ItemAdministrator::~ItemAdministrator()
@@ -35,39 +33,29 @@ namespace Item
         // m_aDefault being destroyed from ~ItemAdministrator() above as last thing in
         // ItemAdministrator cleanup, the derived classes are no longer available at that time.
     }
-
-    const ItemBase::SharedPtr& ItemAdministrator::GetDefault() const
-    {
-        return m_aDefault;
-    }
-
-    bool ItemAdministrator::IsDefault(const ItemBase* pIBase) const
-    {
-        assert(pIBase != nullptr && "nullptr not allowed (!)");
-        return pIBase == m_aDefault.get() || pIBase->operator==(*m_aDefault.get());
-    }
 } // end of namespace Item
 
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace Item
 {
-    IAdministrator_set::IAdministrator_set(const ItemBase* pDefault)
-    :   ItemAdministrator(pDefault),
+    IAdministrator_set::IAdministrator_set()
+    :   ItemAdministrator(),
         m_aEntries()
     {
     }
 
-    ItemBase::SharedPtr IAdministrator_set::Create(const ItemBase* pIBase)
+    std::shared_ptr<const ItemBase> IAdministrator_set::Create(const ItemBase* pIBase)
     {
         assert(pIBase != nullptr && "nullptr not allowed (!)");
 
-        if(IsDefault(pIBase))
+        if(pIBase->IsDefault())
         {
             // if the Item to-be-created equals default, delete it and
             // use the existing single global default
+            const std::shared_ptr<const ItemBase>& rDefault(pIBase->GetDefault());
             delete pIBase;
-            return GetDefault();
+            return rDefault;
         }
 
         // check for existance
@@ -85,7 +73,7 @@ namespace Item
             // start using offered instance and administrate it from now
             SetAdministratedFromItemAdministrator(*const_cast<ItemBase*>(pIBase));
             m_aEntries.insert(pIBase);
-            return ItemBase::SharedPtr(pIBase);
+            return std::shared_ptr<const ItemBase>(pIBase);
         }
     }
 
@@ -107,22 +95,23 @@ namespace Item
 
 namespace Item
 {
-    IAdministrator_unordered_set::IAdministrator_unordered_set(const ItemBase* pDefault)
-    :   ItemAdministrator(pDefault),
+    IAdministrator_unordered_set::IAdministrator_unordered_set()
+    :   ItemAdministrator(),
         m_aEntries()
     {
     }
 
-    ItemBase::SharedPtr IAdministrator_unordered_set::Create(const ItemBase* pIBase)
+    std::shared_ptr<const ItemBase> IAdministrator_unordered_set::Create(const ItemBase* pIBase)
     {
         assert(pIBase != nullptr && "nullptr not allowed (!)");
 
-        if(IsDefault(pIBase))
+        if(pIBase->IsDefault())
         {
             // if the Item to-be-created equals default, delete it and
             // use the existing single global default
+            const std::shared_ptr<const ItemBase>& rDefault(pIBase->GetDefault());
             delete pIBase;
-            return GetDefault();
+            return rDefault;
         }
 
         // check for existance
@@ -140,7 +129,7 @@ namespace Item
             // start using offered instance and administrate it from now
             SetAdministratedFromItemAdministrator(*const_cast<ItemBase*>(pIBase));
             m_aEntries.insert(pIBase);
-            return ItemBase::SharedPtr(pIBase);
+            return std::shared_ptr<const ItemBase>(pIBase);
         }
     }
 
@@ -234,23 +223,24 @@ namespace Item
         }
     }
 
-    IAdministrator_vector::IAdministrator_vector(const ItemBase* pDefault)
-    :   ItemAdministrator(pDefault),
+    IAdministrator_vector::IAdministrator_vector()
+    :   ItemAdministrator(),
         m_aEntries(),
         m_aFreeSlots()
     {
     }
 
-    ItemBase::SharedPtr IAdministrator_vector::Create(const ItemBase* pIBase)
+    std::shared_ptr<const ItemBase> IAdministrator_vector::Create(const ItemBase* pIBase)
     {
         assert(pIBase != nullptr && "nullptr not allowed (!)");
 
-        if(IsDefault(pIBase))
+        if(pIBase->IsDefault())
         {
             // if the Item to-be-created equals default, delete it and
             // use the existing single global default
+            const std::shared_ptr<const ItemBase>& rDefault(pIBase->GetDefault());
             delete pIBase;
-            return GetDefault();
+            return rDefault;
         }
 
         // check for existance
@@ -268,7 +258,7 @@ namespace Item
             // start using offered instance and administrate it from now
             SetAdministratedFromItemAdministrator(*const_cast<ItemBase*>(pIBase));
             insert(pIBase);
-            return ItemBase::SharedPtr(pIBase);
+            return std::shared_ptr<const ItemBase>(pIBase);
         }
     }
 

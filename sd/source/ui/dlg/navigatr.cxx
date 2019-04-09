@@ -780,7 +780,7 @@ SdNavigatorControllerItem::SdNavigatorControllerItem(
 }
 
 void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
-                        SfxItemState eState, const SfxPoolItem* pItem, const Item::ItemBase::SharedPtr& /*rSlotItem*/ )
+                        SfxItemState eState, const SfxPoolItem* pItem, const std::shared_ptr<const Item::ItemBase>& /*rSlotItem*/ )
 {
     if( !(eState >= SfxItemState::DEFAULT && nSId == SID_NAVIGATOR_STATE) )
         return;
@@ -851,7 +851,7 @@ SdPageNameControllerItem::SdPageNameControllerItem(
 }
 
 void SdPageNameControllerItem::StateChanged( sal_uInt16 nSId,
-                        SfxItemState eState, const SfxPoolItem* pItem, const Item::ItemBase::SharedPtr& /*rSlotItem*/ )
+                        SfxItemState eState, const SfxPoolItem* pItem, const std::shared_ptr<const Item::ItemBase>& /*rSlotItem*/ )
 {
     if( !(eState >= SfxItemState::DEFAULT && nSId == SID_NAVIGATOR_PAGENAME) )
         return;

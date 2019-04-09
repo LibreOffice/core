@@ -433,7 +433,7 @@ SvxGrafToolBoxControl::~SvxGrafToolBoxControl()
 {
 }
 
-void SvxGrafToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& /*rSlotItem*/)
+void SvxGrafToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState, const std::shared_ptr<const Item::ItemBase>& /*rSlotItem*/)
 
 {
     ImplGrafControl* pCtrl = static_cast<ImplGrafControl*>( GetToolBox().GetItemWindow( GetId() ) );
@@ -520,7 +520,7 @@ SvxGrafModeToolBoxControl::~SvxGrafModeToolBoxControl()
 {
 }
 
-void SvxGrafModeToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState, const Item::ItemBase::SharedPtr& /*rSlotItem*/)
+void SvxGrafModeToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState, const std::shared_ptr<const Item::ItemBase>& /*rSlotItem*/)
 
 {
     ImplGrafModeControl* pCtrl = static_cast<ImplGrafModeControl*>( GetToolBox().GetItemWindow( GetId() ) );

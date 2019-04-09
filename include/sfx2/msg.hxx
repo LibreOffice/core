@@ -101,14 +101,18 @@ template<class T> SfxPoolItem* createSfxPoolItem()
 {
     return T::CreateDefault();
 }
+// I2TM version for ::Item stuff - if all would be changed, version above may be deleted
 template<class T> std::shared_ptr<const T> createSlotItem(const Item::ItemBase::AnyIDArgs& rArgs)
 {
-    return T::CreateFromAny(rArgs);
+    // I2TM was 'return T::CreateFromAny(rArgs);' but no real need to have a
+    // static Item::CreateFromAny templated version
+    return std::static_pointer_cast<const T>(T::GetStaticItemControlBlock().CreateFromAny(rArgs));
 }
 struct SfxType
 {
     std::function<SfxPoolItem* ()> const createSfxPoolItemFunc;
-    std::function<Item::ItemBase::SharedPtr(const Item::ItemBase::AnyIDArgs& rArgs)> const createSlotItemFunc;
+    // I2TM extended to five members due to need of new creator method
+    std::function<std::shared_ptr<const Item::ItemBase>(const Item::ItemBase::AnyIDArgs& rArgs)> const createSlotItemFunc;
     const std::type_info* pType;
     sal_uInt16 const nAttribs;
     SfxTypeAttrib aAttrib[1]; // variable length
@@ -123,11 +127,13 @@ struct SfxType
         return std::unique_ptr<SfxPoolItem>(createSfxPoolItemFunc());
     }
 
-    Item::ItemBase::SharedPtr CreateSlotItem(const Item::ItemBase::AnyIDArgs& rArgs) const
+    // I2TM
+    std::shared_ptr<const Item::ItemBase> CreateSlotItem(const Item::ItemBase::AnyIDArgs& rArgs) const
     {
         return createSlotItemFunc(rArgs);
     }
 
+    // I2TM temporary
     bool isSlotItem() const
     {
         return nullptr != createSlotItemFunc;
@@ -137,7 +143,7 @@ struct SfxType
 struct SfxType0
 {
     std::function<SfxPoolItem* ()> const createSfxPoolItemFunc;
-    std::function<Item::ItemBase::SharedPtr(const Item::ItemBase::AnyIDArgs& rArgs)> const createSlotItemFunc;
+    std::function<std::shared_ptr<const Item::ItemBase>(const Item::ItemBase::AnyIDArgs& rArgs)> const createSlotItemFunc;
     const std::type_info* pType;
     sal_uInt16 const nAttribs;
 
@@ -149,7 +155,7 @@ struct SfxType0
 #define SFX_DECL_TYPE(n) struct SfxType##n \
 { \
     std::function<SfxPoolItem* ()> createSfxPoolItemFunc; \
-    std::function<Item::ItemBase::SharedPtr(const Item::ItemBase::AnyIDArgs& rArgs)> const createSlotItemFunc; \
+    std::function<std::shared_ptr<const Item::ItemBase>(const Item::ItemBase::AnyIDArgs& rArgs)> const createSlotItemFunc; \
     const std::type_info* pType; \
     sal_uInt16 nAttribs; \
     SfxTypeAttrib aAttrib[n]; \
@@ -208,7 +214,7 @@ struct SfxFormalArgument
         return pType->CreateSfxPoolItem();
     }
 
-    Item::ItemBase::SharedPtr CreateSlotItem(const Item::ItemBase::AnyIDArgs& rArgs) const
+    std::shared_ptr<const Item::ItemBase> CreateSlotItem(const Item::ItemBase::AnyIDArgs& rArgs) const
     {
         return pType->CreateSlotItem(rArgs);
     }

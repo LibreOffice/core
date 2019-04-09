@@ -22,6 +22,7 @@
 
 #include <cassert>
 #include <item/base/ModelSpecificItemValues.hxx>
+#include <item/base/ItemControlBlock.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -36,7 +37,7 @@ namespace Item
 
     private:
         // the slots as content
-        std::unordered_map<SlotID, ItemBase::SharedPtr> m_aSlots;
+        std::unordered_map<SlotID, std::shared_ptr<const ItemBase>> m_aSlots;
 
     protected:
         // constructor - protected BY DEFAULT - do NOT CHANGE (!)
@@ -58,22 +59,22 @@ namespace Item
         // SharedPtr-construtcor
         static SharedPtr Create();
 
-        void SetSlot(SlotID aSlotID, const ItemBase::SharedPtr& rItem);
+        void SetSlot(SlotID aSlotID, const std::shared_ptr<const ItemBase>& rItem);
         void SetSlots(const SlotSet& rSlotSet);
 
-        template< typename TargetType > std::shared_ptr<const TargetType> GetSlot(SlotID aSlotID) const
+        template< typename TargetType > const std::shared_ptr<const TargetType> GetSlot(SlotID aSlotID) const
         {
             const auto aRetval(m_aSlots.find(aSlotID));
 
             if(aRetval != m_aSlots.end()) // && aRetval->second)
             {
-                assert(aRetval->second && "empty ItemBase::SharedPtr set in SlotSet (!)");
-                assert(typeid(*aRetval->second) == typeid(TargetType) && "wrong ItemBase::SharedPtr type in SlotSet (!)");
+                assert(aRetval->second && "empty std::shared_ptr<const ItemBase> set in SlotSet (!)");
+                assert(typeid(*aRetval->second) == typeid(TargetType) && "wrong std::shared_ptr<const ItemBase> type in SlotSet (!)");
 
                 return std::static_pointer_cast<TargetType>(aRetval->second);
             }
 
-            return TargetType::GetStaticDefault();
+            return std::static_pointer_cast<const TargetType>(TargetType::GetStaticItemControlBlock().GetDefaultItem());
         }
 
         bool ClearSlot(SlotID aSlotID);

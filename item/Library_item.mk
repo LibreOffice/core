@@ -36,6 +36,7 @@ $(eval $(call gb_Library_add_exception_objects,item,\
     item/source/base/ModelSpecificItemValues \
     item/source/base/ItemSet \
     item/source/base/SlotSet \
+    item/source/base/ItemControlBlock \
     item/source/simple/CntInt16 \
     item/source/simple/CntOUString \
 ))

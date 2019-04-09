@@ -24,12 +24,15 @@
 #include <set>
 #include <unordered_set>
 #include <cassert>
-#include <item/base/ItemBase.hxx>
+//#include <item/base/ItemBase.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace Item
 {
+    // predefine ItemAdministrator and ItemBase - no need to include
+    class ItemBase;
+
     // Base class for ItemAdministrator. It's Task is to administer instances
     // of ItemBase - Items. Target is to always have only one instance
     // of a typed Item in one attributation, e.g. for sal_uInt16 many
@@ -64,13 +67,9 @@ namespace Item
     // for ModelSpecificItemValues need to be overriden.
     class ITEM_DLLPUBLIC ItemAdministrator
     {
-    protected:
-        // instance of global default value
-        ItemBase::SharedPtr m_aDefault;
-
     public:
         // constructor/destructor
-        ItemAdministrator(const ItemBase* pDefault);
+        ItemAdministrator();
         virtual ~ItemAdministrator();
 
         // noncopyable
@@ -82,12 +81,7 @@ namespace Item
         // will check existance/default and either re-use existing
         // instance (and delete given one) or start using given instance
         virtual void HintExpired(const ItemBase* pIBase);
-        virtual ItemBase::SharedPtr Create(const ItemBase* pIBase) = 0;
-
-        // interface for global default value support
-        // on Administrator level
-        const ItemBase::SharedPtr& GetDefault() const;
-        bool IsDefault(const ItemBase* pIBase) const;
+        virtual std::shared_ptr<const ItemBase> Create(const ItemBase* pIBase) = 0;
     };
 } // end of namespace Item
 
@@ -117,9 +111,9 @@ namespace Item
         std::set<const ItemBase*, less_for_set> m_aEntries;
 
     public:
-        IAdministrator_set(const ItemBase* pDefault);
+        IAdministrator_set();
 
-        virtual ItemBase::SharedPtr Create(const ItemBase* pIBase) override;
+        virtual std::shared_ptr<const ItemBase> Create(const ItemBase* pIBase) override;
         virtual void HintExpired(const ItemBase* pIBase) override;
     };
 } // end of namespace Item
@@ -160,9 +154,9 @@ namespace Item
         std::unordered_set<const ItemBase*, hash_for_unordered_set, compare_for_unordered_set> m_aEntries;
 
     public:
-        IAdministrator_unordered_set(const ItemBase* pDefault);
+        IAdministrator_unordered_set();
 
-        virtual ItemBase::SharedPtr Create(const ItemBase* pIBase) override;
+        virtual std::shared_ptr<const ItemBase> Create(const ItemBase* pIBase) override;
         virtual void HintExpired(const ItemBase* pIBase) override;
     };
 } // end of namespace Item
@@ -196,9 +190,9 @@ namespace Item
         void erase(std::vector<const ItemBase*>::iterator& rIter);
 
     public:
-        IAdministrator_vector(const ItemBase* pDefault);
+        IAdministrator_vector();
 
-        virtual ItemBase::SharedPtr Create(const ItemBase* pIBase) override;
+        virtual std::shared_ptr<const ItemBase> Create(const ItemBase* pIBase) override;
         virtual void HintExpired(const ItemBase* pIBase) override;
     };
 } // end of namespace Item

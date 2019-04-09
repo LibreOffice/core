@@ -10,7 +10,7 @@
 #ifndef INCLUDED_ITEM_SIMPLE_CNTINT16_HXX
 #define INCLUDED_ITEM_SIMPLE_CNTINT16_HXX
 
-#include <item/base/ItemBaseStaticHelper.hxx>
+#include <item/base/ItemBase.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -20,35 +20,25 @@ namespace Item
     // It uses IAdministrator_set to provide an Administrator using
     // a sorted list for fast accesses. This requires ::operator< to be
     // implemented.
-    class CntInt16;
-    typedef ItemBaseStaticHelper<CntInt16, IAdministrator_set> CntInt16StaticHelper;
 
-    class ITEM_DLLPUBLIC CntInt16 : public CntInt16StaticHelper, public ItemBase
+    class ITEM_DLLPUBLIC CntInt16 : public ItemBase
     {
     public:
-        // SharedPtr typedef to be used handling instances of given type
-        typedef std::shared_ptr<const CntInt16> SharedPtr;
-
-    private:
-        // need to offer internal access to ItemAdministrator
-        // in each derivation - just calls GetStaticAdmin internally
-        virtual ItemAdministrator* GetIAdministrator() const override;
+        static ItemControlBlock& GetStaticItemControlBlock();
+        virtual ItemControlBlock& GetItemControlBlock() const override;
 
     private:
         // local variavbles
         sal_Int16 m_nValue;
 
     protected:
-        // allow local ItemAdministrator access to protected constructor
-        friend CntInt16StaticHelper;
-
         // SharedPtr-constructor - protected BY DEFAULT - do NOT CHANGE (!)
         CntInt16(sal_Int16 nValue = 0);
 
     public:
         virtual ~CntInt16();
 
-        static CntInt16::SharedPtr Create(sal_Int16 nValue);
+        static std::shared_ptr<const CntInt16> Create(sal_Int16 nValue);
         virtual bool operator==(const ItemBase& rCandidate) const override;
         virtual bool operator<(const ItemBase& rCandidate) const override;
         sal_Int16 GetValue() const;
