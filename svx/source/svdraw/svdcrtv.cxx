@@ -602,7 +602,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 
     if (pCurrentCreate!=nullptr)
     {
-        sal_uInt64 nCount=maDragStat.GetPointCount();
+        sal_uInt32 nCount=maDragStat.GetPointCount();
 
         if (nCount<=1 && eCmd==SdrCreateCmd::ForceEnd)
         {
