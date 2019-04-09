@@ -335,12 +335,36 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
     // store all axis models in a map, keyed by axis identifier
     typedef ModelMap< sal_Int32, AxisModel > AxisMap;
     AxisMap aAxisMap;
+    std::vector<sal_Int32>rValAxisIds;
+    std::vector<sal_Int32>rRealValAxisIds;
+
+    for (auto const& atypeGroup : mrModel.maTypeGroups)
+    {
+        if (atypeGroup->maAxisIds.size() > 1)
+        {
+            // let's collect which axId belongs to the Y Axis according to maTypeGroups
+            rRealValAxisIds.push_back(atypeGroup->maAxisIds[1]);
+        }
+    }
+
     for (auto const& axis : mrModel.maAxes)
     {
         OSL_ENSURE( axis->mnAxisId >= 0, "PlotAreaConverter::convertFromModel - invalid axis identifier" );
         OSL_ENSURE( !aAxisMap.has( axis->mnAxisId ), "PlotAreaConverter::convertFromModel - axis identifiers not unique" );
         if( axis->mnAxisId != -1 )
             aAxisMap[ axis->mnAxisId ] = axis;
+
+        if ( axis->mnAxisId != -1 && axis->mnTypeId == C_TOKEN(valAx) )
+        {
+            for (size_t i = 0; i < rRealValAxisIds.size(); i++)
+            {
+                if (axis->mnAxisId == rRealValAxisIds[i])
+                {
+                    // let's collect which axId belongs to the Y Axis according to maAxes
+                    rValAxisIds.push_back(axis->mnAxisId);
+                }
+            }
+        }
     }
 
     // group the type group models into different axes sets
@@ -390,13 +414,15 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
     // varying point colors only for single series in single chart type
     bool bSupportsVaryColorsByPoint = mrModel.maTypeGroups.size() == 1;
 
-    // convert all axes sets
-    sal_Int32 nAxesSetIdx = 0;
+    // convert all axes sets, and check which axis is attached to the first maTypeGroups
+    sal_Int32 nStartAxesSetIdx = (rValAxisIds.size() > 1 && aAxesSets[0]->maAxes[1]->mnAxisId != rValAxisIds[0] ) ? 1 : 0;
+    sal_Int32 nAxesSetIdx = nStartAxesSetIdx;
+
     for (auto const& axesSet : aAxesSets)
     {
         AxesSetConverter aAxesSetConv(*this, *axesSet);
         aAxesSetConv.convertFromModel( xDiagram, rView3DModel, nAxesSetIdx, bSupportsVaryColorsByPoint );
-        if( nAxesSetIdx == 0 )
+        if(nAxesSetIdx == nStartAxesSetIdx)
         {
             maAutoTitle = aAxesSetConv.getAutomaticTitle();
             mb3dChart = aAxesSetConv.is3dChart();
@@ -407,7 +433,7 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
         {
             maAutoTitle.clear();
         }
-        ++nAxesSetIdx;
+        nAxesSetIdx = 1 - nAxesSetIdx;
     }
 
     DataTableConverter dataTableConverter (*this, mrModel.mxDataTable.getOrCreate());
