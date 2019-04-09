@@ -47,6 +47,8 @@
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
+#include <array>
+
 // class VCLXAccessibleToolBoxItem ------------------------------------------
 
 using namespace ::com::sun::star::accessibility;
@@ -217,7 +219,7 @@ void VCLXAccessibleToolBoxItem::NotifyChildEvent( const Reference< XAccessible >
 
 void VCLXAccessibleToolBoxItem::ToggleEnableState()
 {
-    Any aOldValue[2], aNewValue[2];
+    std::array<Any, 2> aOldValue, aNewValue;
     if ( m_pToolBox->IsItemEnabled( m_nItemId ) )
     {
         aNewValue[0] <<= AccessibleStateType::SENSITIVE;
