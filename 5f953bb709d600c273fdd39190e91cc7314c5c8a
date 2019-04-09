@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_e27ac986",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-09T12:21:25Z",
+      "side": 1,
+      "message": "Good; when needed, similar cases for ClearableGuard might be added. But what those ctors on mutexes are for?",
+      "range": {
+        "startLine": 276,
+        "startChar": 8,
+        "endLine": 280,
+        "endChar": 9
+      },
+      "revId": "5f953bb709d600c273fdd39190e91cc7314c5c8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
