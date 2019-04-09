@@ -1637,13 +1637,6 @@ PPDContext::PPDContext() :
 {
 }
 
-PPDContext& PPDContext::operator=( const PPDContext& rCopy )
-{
-    m_pParser           = rCopy.m_pParser;
-    m_aCurrentValues    = rCopy.m_aCurrentValues;
-    return *this;
-}
-
 PPDContext& PPDContext::operator=( PPDContext&& rCopy )
 {
     std::swap(m_pParser, rCopy.m_pParser);

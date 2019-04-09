@@ -1549,14 +1549,7 @@ WpBase::WpBase(const WpBase& aWrapper)
 //inline
 WpBase& WpBase::operator=(const WpBase& rhs)
 {
-    if (rhs.pIUnknown != pIUnknown)
-    {
-        if (pIUnknown)
-            pIUnknown->Release();
-        pIUnknown = rhs.pIUnknown;
-        if (pIUnknown)
-            pIUnknown->AddRef();
-    }
+    operator=(rhs.pIUnknown);
     return *this;
 };
 

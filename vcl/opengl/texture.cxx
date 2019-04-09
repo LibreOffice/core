@@ -561,16 +561,8 @@ OpenGLTexture::operator bool() const
 
 OpenGLTexture& OpenGLTexture::operator=(const OpenGLTexture& rTexture)
 {
-    if (rTexture.mpImpl)
-        rTexture.mpImpl->IncreaseRefCount(rTexture.mnSlotNumber);
-
-    if (mpImpl)
-        mpImpl->DecreaseRefCount(mnSlotNumber);
-
-    maRect = rTexture.maRect;
-    mpImpl = rTexture.mpImpl;
-    mnSlotNumber = rTexture.mnSlotNumber;
-
+    OpenGLTexture aTemp(rTexture);
+    *this = std::move(aTemp);
     return *this;
 }
 

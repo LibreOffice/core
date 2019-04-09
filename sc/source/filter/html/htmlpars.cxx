@@ -3005,12 +3005,7 @@ class CSSHandler
 
         MemStr() : mp(nullptr), mn(0) {}
         MemStr(const char* p, size_t n) : mp(p), mn(n) {}
-        MemStr& operator=(const MemStr& r)
-        {
-            mp = r.mp;
-            mn = r.mn;
-            return *this;
-        }
+        MemStr& operator=(const MemStr& r) = default;
     };
 
     MemStr maPropName;  /// current property name.

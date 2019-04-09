@@ -190,7 +190,7 @@ public:
 
     XFListStyle(const XFListStyle& other);
 
-    XFListStyle& operator=(const XFListStyle& other);
+    XFListStyle& operator=(const XFListStyle& other) = delete;
 
     virtual ~XFListStyle() override;
 

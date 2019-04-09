@@ -850,15 +850,8 @@ void ONDXPagePtr::Clear()
 
 ONDXPagePtr& ONDXPagePtr::operator=(ONDXPagePtr const & rOther)
 {
-    if (rOther.mpPage != nullptr) {
-        rOther.mpPage->AddNextRef();
-    }
-    ONDXPage * pOldObj = mpPage;
-    mpPage = rOther.mpPage;
-    nPagePos = rOther.nPagePos;
-    if (pOldObj != nullptr) {
-        pOldObj->ReleaseRef();
-    }
+    ONDXPagePtr aTemp(rOther);
+    *this = std::move(aTemp);
     return *this;
 }
 
