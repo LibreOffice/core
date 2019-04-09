@@ -221,7 +221,7 @@ namespace oox { namespace drawingml {
 IteratorAttr::IteratorAttr( )
     : mnAxis( 0 )
     , mnCnt( -1 )
-    , mbHideLastTrans( false )
+    , mbHideLastTrans( true )
     , mnPtType( 0 )
     , mnSt( 0 )
     , mnStep( 1 )
@@ -233,7 +233,7 @@ void IteratorAttr::loadFromXAttr( const Reference< XFastAttributeList >& xAttr )
     AttributeList attr( xAttr );
     mnAxis = xAttr->getOptionalValueToken( XML_axis, 0 );
     mnCnt = attr.getInteger( XML_cnt, -1 );
-    mbHideLastTrans = attr.getBool( XML_hideLastTrans, false );
+    mbHideLastTrans = attr.getBool( XML_hideLastTrans, true );
     mnPtType = xAttr->getOptionalValueToken( XML_ptType, 0 );
     mnSt = attr.getInteger( XML_st, 0 );
     mnStep = attr.getInteger( XML_step, 1 );
