@@ -1261,7 +1261,7 @@ void TabBar::Resize()
     long nSizerWidth = 0;
     long nButtonWidth = 0;
 
-    // Sizer anordnen
+    // order the Sizer
     if ( mpImpl->mpSizer )
     {
         Size    aSizerSize = mpImpl->mpSizer->GetSizePixel();
