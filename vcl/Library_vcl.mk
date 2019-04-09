@@ -568,6 +568,13 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/opengl/OpenGLContext \
     vcl/source/opengl/OpenGLHelper \
  ))
+
+# runtime dependency
+$(eval $(call gb_Library_use_package,vcl,vcl_opengl_shader))
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_use_package,vcl,vcl_opengl_blacklist))
+endif
+
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,vcl,\
     -lm $(DLOPEN_LIBS) \
