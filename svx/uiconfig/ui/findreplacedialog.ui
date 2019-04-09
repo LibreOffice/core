@@ -102,6 +102,9 @@
                                 <property name="valign">center</property>
                                 <property name="hexpand">True</property>
                                 <property name="has_entry">True</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label4"/>
+                                </accessibility>
                                 <child internal-child="entry">
                                   <object class="GtkEntry" id="combobox-entry">
                                     <property name="can_focus">True</property>
@@ -142,6 +145,9 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0.40000000596046448</property>
+                            <accessibility>
+                              <relation type="label-for" target="searchterm"/>
+                            </accessibility>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -352,6 +358,9 @@
                                 <property name="valign">center</property>
                                 <property name="hexpand">True</property>
                                 <property name="has_entry">True</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label5"/>
+                                </accessibility>
                                 <child internal-child="entry">
                                   <object class="GtkEntry" id="combobox-entry2">
                                     <property name="can_focus">True</property>
@@ -391,6 +400,9 @@
                             <property name="label" translatable="yes" context="findreplacedialog|label5">Re_place:</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <accessibility>
+                              <relation type="label-for" target="replaceterm"/>
+                            </accessibility>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -976,6 +988,9 @@
                                         <property name="label" translatable="yes" context="findreplacedialog|searchinlabel">Search i_n:</property>
                                         <property name="use_underline">True</property>
                                         <property name="xalign">0</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="calcsearchin"/>
+                                        </accessibility>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -987,6 +1002,9 @@
                                       <object class="GtkComboBoxText" id="calcsearchin">
                                         <property name="can_focus">False</property>
                                         <property name="no_show_all">True</property>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="searchinlabel"/>
+                                        </accessibility>
                                         <items>
                                           <item translatable="yes" context="findreplacedialog|calcsearchin">Formulas</item>
                                           <item translatable="yes" context="findreplacedialog|calcsearchin">Values</item>
