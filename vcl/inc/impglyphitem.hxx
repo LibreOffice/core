@@ -38,11 +38,11 @@ struct VCL_DLLPUBLIC GlyphItem
     int m_nCharPos; // index in string
     int m_nFlags;
     int m_nNewWidth; // width after adjustments
-    int m_nXOffset;
+    double m_nXOffset;
     Point m_aLinearPos; // absolute position of non rotated string
 
     GlyphItem(int nCharPos, int nCharCount, sal_GlyphId aGlyphId, const Point& rLinearPos,
-              long nFlags, int nOrigWidth, int nXOffset, LogicalFontInstance* pFontInstance)
+              long nFlags, int nOrigWidth, double nXOffset, LogicalFontInstance* pFontInstance)
         : m_aGlyphId(aGlyphId)
         , m_nCharCount(nCharCount)
         , m_nOrigWidth(nOrigWidth)
