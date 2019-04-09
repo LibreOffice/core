@@ -51,6 +51,24 @@
       "revId": "1eeea94d75fee9a6f1ce0700236fc37d0ad996bc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_c2d22535",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-09T13:27:06Z",
+      "side": 1,
+      "message": "Well - ClearableGuard has not the assert, but dereferencing.\n\nDo you think I should add asserts there? (I thought they would be added in https://gerrit.libreoffice.org/70431)",
+      "parentUuid": "df87a7cf_621eb90d",
+      "revId": "1eeea94d75fee9a6f1ce0700236fc37d0ad996bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
