@@ -33,6 +33,7 @@
 #include <cellvalue.hxx>
 
 #include <rtl/math.hxx>
+#include <unotools/charclass.hxx>
 #include <unotools/textsearch.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
@@ -337,43 +338,51 @@ struct InitDocData
 
 typedef std::unordered_set<OUString> LabelSet;
 
-class InsertLabel
+void normalizeAddLabel(const OUString& rLabel, std::vector<OUString>& rLabels, LabelSet& rExistingNames)
 {
-    LabelSet& mrNames;
-public:
-    explicit InsertLabel(LabelSet& rNames) : mrNames(rNames) {}
-    void operator() (const OUString& r)
+    const OUString aLabelLower = ScGlobal::pCharClass->lowercase(rLabel);
+    sal_Int32 nSuffix = 1;
+    OUString aNewLabel = rLabel;
+    OUString aNewLabelLower = aLabelLower;
+    while (true)
     {
-        mrNames.insert(r);
-    }
-};
+        if (!rExistingNames.count(aNewLabelLower))
+        {
+            // this is a unique label.
+            rLabels.push_back(aNewLabel);
+            rExistingNames.insert(aNewLabelLower);
+            break;
+        }
 
-std::vector<OUString> normalizeLabels( const std::vector<InitColumnData>& rColData )
+        // This name already exists.
+        aNewLabel = rLabel + OUString::number(++nSuffix);
+        aNewLabelLower = aLabelLower + OUString::number(nSuffix);
+    }
+}
+
+std::vector<OUString> normalizeLabels(const std::vector<InitColumnData>& rColData)
 {
     std::vector<OUString> aLabels(1u, ScResId(STR_PIVOT_DATA));
 
     LabelSet aExistingNames;
 
     for (const InitColumnData& rCol : rColData)
-    {
-        const OUString& rLabel = rCol.maLabel;
-        sal_Int32 nSuffix = 1;
-        OUString aNewLabel = rLabel;
-        while (true)
-        {
-            if (!aExistingNames.count(aNewLabel))
-            {
-                // this is a unique label.
-                aLabels.push_back(aNewLabel);
-                aExistingNames.insert(aNewLabel);
-                break;
-            }
+        normalizeAddLabel(rCol.maLabel, aLabels, aExistingNames);
 
-            // This name already exists.
-            OUStringBuffer aBuf(rLabel);
-            aBuf.append(++nSuffix);
-            aNewLabel = aBuf.makeStringAndClear();
-        }
+    return aLabels;
+}
+
+std::vector<OUString> normalizeLabels(const ScDPCache::DBConnector& rDB, const sal_Int32 nLabelCount)
+{
+    std::vector<OUString> aLabels(nLabelCount+1);
+    aLabels.push_back(ScResId(STR_PIVOT_DATA));
+
+    LabelSet aExistingNames;
+
+    for (sal_Int32 nCol = 0; nCol < nLabelCount; ++nCol)
+    {
+        OUString aColTitle = rDB.getColumnLabel(nCol);
+        normalizeAddLabel(aColTitle, aLabels, aExistingNames);
     }
 
     return aLabels;
@@ -632,14 +641,7 @@ bool ScDPCache::InitFromDataBase(DBConnector& rDB)
             maFields.push_back(o3tl::make_unique<Field>());
 
         // Get column titles and types.
-        maLabelNames.clear();
-        maLabelNames.reserve(mnColumnCount+1);
-
-        for (sal_Int32 nCol = 0; nCol < mnColumnCount; ++nCol)
-        {
-            OUString aColTitle = rDB.getColumnLabel(nCol);
-            AddLabel(aColTitle);
-        }
+        maLabelNames = normalizeLabels(rDB, mnColumnCount);
 
         std::vector<Bucket> aBuckets;
         ScDPItemData aData;
@@ -957,33 +959,6 @@ void ScDPCache::Clear()
     maGroupFields.clear();
     maEmptyRows.clear();
     maStringPools.clear();
-}
-
-void ScDPCache::AddLabel(const OUString& rLabel)
-{
-
-    if ( maLabelNames.empty() )
-        maLabelNames.push_back(ScResId(STR_PIVOT_DATA));
-
-    //reset name if needed
-    LabelSet aExistingNames;
-    std::for_each(maLabelNames.begin(), maLabelNames.end(), InsertLabel(aExistingNames));
-    sal_Int32 nSuffix = 1;
-    OUString aNewName = rLabel;
-    while (true)
-    {
-        if (!aExistingNames.count(aNewName))
-        {
-            // unique name found!
-            maLabelNames.push_back(aNewName);
-            return;
-        }
-
-        // Name already exists.
-        OUStringBuffer aBuf(rLabel);
-        aBuf.append(++nSuffix);
-        aNewName = aBuf.makeStringAndClear();
-    }
 }
 
 SCROW ScDPCache::GetItemDataId(sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty) const
