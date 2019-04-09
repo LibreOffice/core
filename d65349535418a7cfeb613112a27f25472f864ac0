@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "df87a7cf_07481fca",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-09T06:52:47Z",
+      "side": 1,
+      "message": "I don\u0027t think that\u0027s helpful.  (I would only use it when there\u0027s no \"obvious\" way to write the code when the condition is false, like when you would need to return something from a function.  When a condition must never be true, why bother adding explicit code beyond an assert for it?)",
+      "parentUuid": "df87a7cf_27f0c390",
+      "revId": "d65349535418a7cfeb613112a27f25472f864ac0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87a7cf_27d763f0",
         "filename": "include/osl/mutex.hxx",
         "patchSetId": 12
