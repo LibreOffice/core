@@ -1166,6 +1166,9 @@ OString Menu::GetHelpId( sal_uInt16 nItemId ) const
 
 Menu& Menu::operator=( const Menu& rMenu )
 {
+    if(this == &rMenu)
+        return *this;
+
     // clean up
     Clear();
 

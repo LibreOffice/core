@@ -104,6 +104,9 @@ SwFormat::SwFormat( const SwFormat& rFormat ) :
 
 SwFormat &SwFormat::operator=(const SwFormat& rFormat)
 {
+    if(this == &rFormat)
+        return *this;
+
     m_nWhichId = rFormat.m_nWhichId;
     m_nPoolFormatId = rFormat.GetPoolFormatId();
     m_nPoolHelpId = rFormat.GetPoolHelpId();

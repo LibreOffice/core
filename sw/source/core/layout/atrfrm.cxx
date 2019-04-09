@@ -600,6 +600,9 @@ SwFormatPageDesc::SwFormatPageDesc( const SwPageDesc *pDesc )
 
 SwFormatPageDesc &SwFormatPageDesc::operator=(const SwFormatPageDesc &rCpy)
 {
+    if(this == &rCpy)
+        return *this;
+
     if (rCpy.GetPageDesc())
         RegisterToPageDesc(*const_cast<SwPageDesc*>(rCpy.GetPageDesc()));
     m_oNumOffset = rCpy.m_oNumOffset;

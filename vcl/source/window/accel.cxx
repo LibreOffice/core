@@ -281,6 +281,8 @@ Accelerator* Accelerator::GetAccel( sal_uInt16 nItemId ) const
 
 Accelerator& Accelerator::operator=( const Accelerator& rAccel )
 {
+    if(this == &rAccel)
+        return *this;
 
     // assign new data
     maCurKeyCode    = vcl::KeyCode();

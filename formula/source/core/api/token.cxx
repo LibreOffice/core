@@ -644,6 +644,9 @@ void FormulaTokenArray::Assign( sal_uInt16 nCode, FormulaToken **pTokens )
 
 FormulaTokenArray& FormulaTokenArray::operator=( const FormulaTokenArray& rArr )
 {
+    if(this == &rArr)
+        return *this;
+
     Clear();
     Assign( rArr );
     return *this;

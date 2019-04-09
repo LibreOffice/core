@@ -438,6 +438,9 @@ SwPaM::SwPaM(SwPaM const& rPam, SwPaM *const pRing)
 // @@@ semantic: no copy assignment for super class Ring.
 SwPaM &SwPaM::operator=( const SwPaM &rPam )
 {
+    if(this == &rPam)
+        return *this;
+
     *m_pPoint = *( rPam.m_pPoint );
     if ( rPam.HasMark() )
     {
