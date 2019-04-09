@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "df87a7cf_67f6cb92",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-09T06:43:37Z",
+      "side": 1,
+      "message": "\"1. I wanted initially to keep the behavior (and only allow the diagnostic at debug time, to show developer own mistakes) to avoid actual API change (a wrong intention, I see)\":\n\nThen you could use SAL_WARN instead of assert.  But I at least am fine with any of the three ways going forward (SAL_WARN; assert w/o announcing [API CHANGE]; assert w/ announcing [API CHANGE]).\n\n\"(I don\u0027t know if that\u0027s actually true, but makers of PVS static analyzer claim so.)\":\n\nI don\u0027t think that\u0027s true.  The C/C++ standards only mandate the \"mechanical semantics\" of assert---where it is just a nop under NDEBUG.",
+      "parentUuid": "df87a7cf_87ff4f66",
+      "revId": "d65349535418a7cfeb613112a27f25472f864ac0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87a7cf_27d763f0",
         "filename": "include/osl/mutex.hxx",
         "patchSetId": 12
