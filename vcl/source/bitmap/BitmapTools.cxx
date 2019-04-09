@@ -1004,7 +1004,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
         return BitmapEx(aBitmap);
     }
 
-    bool isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBack, BitmapColor& o_rFront)
+    bool isHistorical8x8(const BitmapEx& rBitmapEx, Color& o_rBack, Color& o_rFront)
     {
         bool bRet(false);
 
@@ -1026,8 +1026,8 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
 
                             // #i123564# background and foreground were exchanged; of course
                             // rPalette[0] is the background color
-                            o_rFront = rPalette[1];
-                            o_rBack = rPalette[0];
+                            o_rFront = rPalette[1].GetColor();
+                            o_rBack = rPalette[0].GetColor();
 
                             bRet = true;
                         }

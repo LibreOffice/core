@@ -296,9 +296,9 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, SvtValueSet*, void)
 
     if(pGraphicObject)
     {
-        BitmapColor aBack;
-        BitmapColor aFront;
-        bool bIs8x8(vcl::bitmap::isHistorical8x8(pGraphicObject->GetGraphic().GetBitmapEx(), aBack, aFront));
+        Color aBackColor;
+        Color aPixelColor;
+        bool bIs8x8(vcl::bitmap::isHistorical8x8(pGraphicObject->GetGraphic().GetBitmapEx(), aBackColor, aPixelColor));
 
         m_xLbColor->SetNoSelection();
         m_xLbBackgroundColor->SetNoSelection();
@@ -312,9 +312,6 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, SvtValueSet*, void)
             // setting the pixel control
 
             m_xCtlPixel->SetXBitmap(pGraphicObject->GetGraphic().GetBitmapEx());
-
-            Color aPixelColor = aFront.GetColor();
-            Color aBackColor = aBack.GetColor();
 
             m_xLbColor->SelectEntry( aPixelColor );
             m_xLbBackgroundColor->SelectEntry( aBackColor );

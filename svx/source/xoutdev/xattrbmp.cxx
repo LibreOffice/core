@@ -164,7 +164,7 @@ bool XFillBitmapItem::operator==(const SfxPoolItem& rItem) const
 
 bool XFillBitmapItem::isPattern() const
 {
-    BitmapColor aBack, aFront;
+    Color aBack, aFront;
     return vcl::bitmap::isHistorical8x8(GetGraphicObject().GetGraphic().GetBitmapEx(), aBack, aFront);
 }
 
