@@ -16,7 +16,7 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
-class ScMatrixComparisonGenerator : public ScStatisticsInputOutputDialogController
+class ScMatrixComparisonGenerator : public ScStatisticsInputOutputDialog
 {
 public:
     ScMatrixComparisonGenerator(

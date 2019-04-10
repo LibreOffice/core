@@ -17,7 +17,7 @@
 ScChiSquareTestDialog::ScChiSquareTestDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                     weld::Window* pParent, ScViewData* pViewData ) :
-    ScStatisticsInputOutputDialogController(
+    ScStatisticsInputOutputDialog(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "modules/scalc/ui/chisquaretestdialog.ui", "ChiSquareTestDialog")
 {

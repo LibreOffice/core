@@ -19,7 +19,7 @@
 class FormulaTemplate;
 class AddressWalkerWriter;
 
-class ScAnalysisOfVarianceDialog : public ScStatisticsInputOutputDialogController
+class ScAnalysisOfVarianceDialog : public ScStatisticsInputOutputDialog
 {
 private:
     enum AnovaFactor

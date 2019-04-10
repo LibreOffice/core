@@ -16,7 +16,7 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
-class ScMovingAverageDialog : public ScStatisticsInputOutputDialogController
+class ScMovingAverageDialog : public ScStatisticsInputOutputDialog
 {
 private:
     std::unique_ptr<weld::SpinButton> mxIntervalSpin;

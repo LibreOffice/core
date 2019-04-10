@@ -13,7 +13,7 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
-class ScDescriptiveStatisticsDialog : public ScStatisticsInputOutputDialogController
+class ScDescriptiveStatisticsDialog : public ScStatisticsInputOutputDialog
 {
 public:
     ScDescriptiveStatisticsDialog(

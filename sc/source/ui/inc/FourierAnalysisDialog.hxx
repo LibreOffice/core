@@ -13,7 +13,7 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
-class ScFourierAnalysisDialog : public ScStatisticsInputOutputDialogController
+class ScFourierAnalysisDialog : public ScStatisticsInputOutputDialog
 {
     ScAddress maLabelAddr;
     ScRange maActualInputRange;

@@ -49,7 +49,7 @@ static const StatisticCalculation lclCalcDefinitions[] =
 ScDescriptiveStatisticsDialog::ScDescriptiveStatisticsDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                     weld::Window* pParent, ScViewData* pViewData ) :
-    ScStatisticsInputOutputDialogController(
+    ScStatisticsInputOutputDialog(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "modules/scalc/ui/descriptivestatisticsdialog.ui",
             "DescriptiveStatisticsDialog")

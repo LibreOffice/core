@@ -16,7 +16,7 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
-class ScExponentialSmoothingDialog : public ScStatisticsInputOutputDialogController
+class ScExponentialSmoothingDialog : public ScStatisticsInputOutputDialog
 {
 private:
     std::unique_ptr<weld::SpinButton> mxSmoothingFactor;
