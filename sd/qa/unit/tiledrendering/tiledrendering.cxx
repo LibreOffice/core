@@ -871,11 +871,11 @@ void SdTiledRenderingTest::testResizeTable()
     auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
     CPPUNIT_ASSERT(pTableObject);
 
-    SdrHdlList handleList(nullptr);
-    pObject->AddToHdlList(handleList);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(14), handleList.GetHdlCount());
-    // Take the top left handle
-    SdrHdl* pHdl = handleList.GetHdl(0);
+    // Select the table by marking it + starting and ending text edit.
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pObject);
+    pView->SdrEndTextEdit();
 
     // Remember the original row heights.
     uno::Reference<table::XColumnRowRange> xTable(pTableObject->getTable(), uno::UNO_QUERY);
@@ -886,14 +886,15 @@ void SdTiledRenderingTest::testResizeTable()
     sal_Int32 nExpectedRow2 = xRow2->getPropertyValue("Size").get<sal_Int32>();
 
     // Resize the upper row, decrease its height by 1 cm.
-    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, convertMm100ToTwip(pHdl->GetPos().getX()), convertMm100ToTwip(pHdl->GetPos().getY()));
-    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, convertMm100ToTwip(pHdl->GetPos().getX()), convertMm100ToTwip(pHdl->GetPos().getY() + 1000));
+    Point aInnerRowEdge = pObject->GetSnapRect().Center();
+    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, convertMm100ToTwip(aInnerRowEdge.getX()), convertMm100ToTwip(aInnerRowEdge.getY()));
+    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, convertMm100ToTwip(aInnerRowEdge.getX()), convertMm100ToTwip(aInnerRowEdge.getY() - 1000));
 
     // Remember the resized row heights.
     sal_Int32 nResizedRow1 = xRow1->getPropertyValue("Size").get<sal_Int32>();
     CPPUNIT_ASSERT(nResizedRow1 < nExpectedRow1);
     sal_Int32 nResizedRow2 = xRow2->getPropertyValue("Size").get<sal_Int32>();
-    CPPUNIT_ASSERT(nResizedRow2 < nExpectedRow2);
+    CPPUNIT_ASSERT_EQUAL(nExpectedRow2, nResizedRow2);
 
     // Now undo the resize.
     pXImpressDocument->GetDocShell()->GetUndoManager()->Undo();
@@ -903,7 +904,7 @@ void SdTiledRenderingTest::testResizeTable()
     CPPUNIT_ASSERT_EQUAL(nExpectedRow1, nActualRow1);
     sal_Int32 nActualRow2 = xRow2->getPropertyValue("Size").get<sal_Int32>();
     // Expected was 4000, actual was 4572, i.e. the second row after undo was larger than expected.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(nExpectedRow2, nActualRow2, 1.0);
+    CPPUNIT_ASSERT_EQUAL(nExpectedRow2, nActualRow2);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
@@ -918,11 +919,11 @@ void SdTiledRenderingTest::testResizeTableColumn()
     auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
     CPPUNIT_ASSERT(pTableObject);
 
-    SdrHdlList handleList(nullptr);
-    pObject->AddToHdlList(handleList);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(14), handleList.GetHdlCount());
-    // Take the top left handle
-    SdrHdl* pHdl = handleList.GetHdl(0);
+    // Select the table by marking it + starting and ending text edit.
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pObject);
+    pView->SdrEndTextEdit();
 
     // Remember the original cell widths.
     xmlDocPtr pXmlDoc = parseXmlDump();
@@ -933,15 +934,16 @@ void SdTiledRenderingTest::testResizeTableColumn()
     pXmlDoc = nullptr;
 
     // Resize the left column, decrease its width by 1 cm.
-    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, convertMm100ToTwip(pHdl->GetPos().getX()), convertMm100ToTwip(pHdl->GetPos().getY()));
-    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, convertMm100ToTwip(pHdl->GetPos().getX() + 1000), convertMm100ToTwip(pHdl->GetPos().getY()));
+    Point aInnerRowEdge = pObject->GetSnapRect().Center();
+    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, convertMm100ToTwip(aInnerRowEdge.getX()), convertMm100ToTwip(aInnerRowEdge.getY()));
+    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, convertMm100ToTwip(aInnerRowEdge.getX() - 1000), convertMm100ToTwip(aInnerRowEdge.getY()));
 
     // Remember the resized column widths.
     pXmlDoc = parseXmlDump();
     sal_Int32 nResizedColumn1 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[1]", "size").toInt32();
     CPPUNIT_ASSERT(nResizedColumn1 < nExpectedColumn1);
     sal_Int32 nResizedColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size").toInt32();
-    CPPUNIT_ASSERT(nResizedColumn2 < nExpectedColumn2);
+    CPPUNIT_ASSERT(nResizedColumn2 > nExpectedColumn2);
     xmlFreeDoc(pXmlDoc);
     pXmlDoc = nullptr;
 
