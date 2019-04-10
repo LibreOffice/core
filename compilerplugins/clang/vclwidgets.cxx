@@ -292,7 +292,7 @@ void VCLWidgets::checkAssignmentForVclPtrToRawConversion(const SourceLocation& s
 
     // if we have T* on the LHS and VclPtr<T> on the RHS, we expect to see either
     // an ImplicitCastExpr
-    // or a ExprWithCleanups and then an ImplicitCastExpr
+    // or an ExprWithCleanups and then an ImplicitCastExpr
     if (auto implicitCastExpr = dyn_cast<ImplicitCastExpr>(rhs)) {
         if (implicitCastExpr->getCastKind() != CK_UserDefinedConversion) {
             return;
