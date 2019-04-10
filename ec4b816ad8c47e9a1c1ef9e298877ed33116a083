@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "df87a7cf_1d194fd6",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-04-10T16:22:20Z",
+      "side": 1,
+      "message": "That has been the case when the original code was committed long ago. This is now the API and it\u0027s a \"silent\" change which will just be caught on runtime. IMHO this is the worst kind of change.\n\nNow it will probably be caught by crashes at runtime, as mutexes tend to be used, but still it\u0027ll crash.\n\n\u003e What got discussed on the mailing list is that the interface should only be narrow for LIBO_INTERNAL_ONLY.\n\nOk - I missed that. So I\u0027ll add the !LIBO_INTERNAL_ONLY ifdefs.",
+      "parentUuid": "df87a7cf_3df3f3a0",
+      "revId": "ec4b816ad8c47e9a1c1ef9e298877ed33116a083",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87a7cf_9df6bf8f",
         "filename": "include/osl/mutex.hxx",
         "patchSetId": 1
