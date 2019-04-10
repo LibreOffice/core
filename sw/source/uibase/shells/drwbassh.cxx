@@ -63,7 +63,7 @@
 #include <fmtfollowtextflow.hxx>
 
 // I2TM
-#include <item/simple/CntInt16.hxx>
+#include <svx/item/TransformAnchor.hxx>
 // ~I2TM
 
 using namespace ::com::sun::star;
@@ -218,8 +218,9 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                             pSdrView->GetAttributes( aSet );
 
                         // I2TM
-                        aSet.slotSet().SetSlot(SID_ATTR_TRANSFORM_ANCHOR, Item::CntInt16::Create(static_cast<sal_Int16>(nAnchor)));
+                        aSet.itemSet().SetItem(Item::TransformAnchor::Create(nAnchor));
                         // ~I2TM
+
                         bool bRTL;
                         bool bVertL2R;
                         aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT, pSh->IsFrameVertical(true, bRTL, bVertL2R)));
@@ -268,16 +269,16 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                             bool bSingleSelection = rMarkList.GetMarkCount() == 1;
 
                             // I2TM
-                            if(const auto Slot(pOutSet->slotSet().GetSlot<const Item::CntInt16>(SID_ATTR_TRANSFORM_ANCHOR)); Slot)
+                            if(const auto Item(pOutSet->itemSet().GetStateAndItem<const Item::TransformAnchor>()); Item.HasItem())
                             {
                                 if(!bSingleSelection)
                                 {
-                                    pSh->ChgAnchor(static_cast<RndStdIds>(Slot->GetValue()), false, bPosCorr);
+                                    pSh->ChgAnchor(Item.GetItem()->GetAnchorType(), false, bPosCorr);
                                 }
                                 else
                                 {
                                     SwFormatAnchor aAnchor(pFrameFormat->GetAnchor());
-                                    aAnchor.SetType(static_cast<RndStdIds>(Slot->GetValue()));
+                                    aAnchor.SetType(Item.GetItem()->GetAnchorType());
                                     aFrameAttrSet.Put( aAnchor );
                                 }
                             }

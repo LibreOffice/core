@@ -58,7 +58,11 @@ namespace Item
 
     bool CntOUString::operator==(const ItemBase& rCandidate) const
     {
-        assert(ItemBase::operator==(rCandidate));
+        if(ItemBase::operator==(rCandidate)) // compares ptrs
+        {
+            return true;
+        }
+
         return (GetValue() == static_cast<const CntOUString&>(rCandidate).GetValue());
     }
 

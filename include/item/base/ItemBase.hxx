@@ -124,9 +124,6 @@ namespace Item
         // to create instances
         ItemBase();
 
-        // basic RTTI TypeCheck to secure e.g. operator== and similar
-        bool CheckSameType(const ItemBase& rCmp) const;
-
         // PutValue/Any interface for automated instance creation from SfxType
         // mechanism (UNO API and sfx2 stuff)
         friend class ItemControlBlock;

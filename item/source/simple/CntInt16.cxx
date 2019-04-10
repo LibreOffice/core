@@ -58,13 +58,16 @@ namespace Item
 
     bool CntInt16::operator==(const ItemBase& rCandidate) const
     {
-        assert(ItemBase::operator==(rCandidate));
+        if(ItemBase::operator==(rCandidate)) // compares ptrs
+        {
+            return true;
+        }
+
         return (GetValue() == static_cast<const CntInt16&>(rCandidate).GetValue());
     }
 
     bool CntInt16::operator<(const ItemBase& rCandidate) const
     {
-        assert(ItemBase::operator==(rCandidate));
         return static_cast<const CntInt16*>(this)->GetValue() < static_cast<const CntInt16&>(rCandidate).GetValue();
     }
 

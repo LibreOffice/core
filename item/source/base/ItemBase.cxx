@@ -25,7 +25,8 @@ class SbxItem : public SfxPoolItem
 
 class SfxInt16Item
 -> Item::CntInt16
--> SID_ATTR_TRANSFORM_ANCHOR -> need own type to replace in ItemSet ->
+-> SID_ATTR_TRANSFORM_ANCHOR -> need own type to replace in ItemSet -> Item::TransformAnchor
+-> replace using TransformAnchor and ItemSet -> done!
 
 defs from sfx2\sdi\sfxitems.sdi may be a good hint which items to convert first (?)
 these are:
@@ -230,11 +231,6 @@ namespace Item
     {
     }
 
-    bool ItemBase::CheckSameType(const ItemBase& rCmp) const
-    {
-        return typeid(rCmp) == typeid(*this);
-    }
-
     void ItemBase::PutValues(const AnyIDArgs& rArgs)
     {
         for(const auto& arg : rArgs)
@@ -263,8 +259,8 @@ namespace Item
 
     bool ItemBase::operator==(const ItemBase& rCmp) const
     {
-        // basic implementation compares type, no data available
-        return CheckSameType(rCmp);
+        // basic implementation compares pointers, no data available
+        return this == &rCmp;
     }
 
     bool ItemBase::operator<(const ItemBase& rCmp) const
@@ -272,7 +268,6 @@ namespace Item
         // basic implementation uses addresses of instances to
         // deliver a consistent result, but should *not* be used in
         // this form - it will not compare any data
-        assert(CheckSameType(rCmp));
         return this < &rCmp;
     }
 

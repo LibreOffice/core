@@ -37,7 +37,7 @@
 #include <svtools/unitconv.hxx>
 
 // I2TM
-#include <item/simple/CntInt16.hxx>
+#include <svx/item/TransformAnchor.hxx>
 // ~I2TM
 
 using namespace ::com::sun::star::text;
@@ -753,7 +753,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
     if(bAnchorChanged)
     {
         // I2TM
-        rSet->slotSet().SetSlot(SID_ATTR_TRANSFORM_ANCHOR, Item::CntInt16::Create(static_cast<sal_Int16>(nAnchor)));
+        rSet->itemSet().SetItem(Item::TransformAnchor::Create(nAnchor));
         // ~I2TM
         bModified = true;
     }
@@ -902,9 +902,9 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
     RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA;
 
     // I2TM
-    if(const auto Slot(rSet->slotSet().GetSlot<const Item::CntInt16>(SID_ATTR_TRANSFORM_ANCHOR)); Slot)
+    if(const auto Item(rSet->itemSet().GetStateAndItem<const Item::TransformAnchor>()); Item.HasItem())
     {
-        nAnchorType = static_cast<RndStdIds>(Slot->GetValue());
+        nAnchorType = Item.GetItem()->GetAnchorType();
         // I2TM
         switch(nAnchorType)
         {

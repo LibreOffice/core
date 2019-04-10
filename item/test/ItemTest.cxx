@@ -78,8 +78,13 @@ namespace Item
 
         virtual bool operator==(const ItemBase& rCandidate) const override
         {
-            assert(ItemBase::operator==(rCandidate));
+            if(ItemBase::operator==(rCandidate)) // compares ptrs
+            {
+                return true;
+            }
+
             const MultiValueAB& rCand(static_cast<const MultiValueAB&>(rCandidate));
+
             return (GetValueA() == rCand.GetValueA()
                 && GetValueB() == rCand.GetValueB());
         }
@@ -96,7 +101,6 @@ namespace Item
 
         // virtual bool operator<(const ItemBase& rCandidate) const override
         // {
-        //     assert(ItemBase::operator==(rCandidate));
         //     return static_cast<const MultiValueAB*>(this)->GetValueA() < static_cast<const MultiValueAB&>(rCandidate).GetValueA()
         //         && static_cast<const MultiValueAB*>(this)->GetValueB() < static_cast<const MultiValueAB&>(rCandidate).GetValueB();
         // }
@@ -159,8 +163,8 @@ namespace Item
 
         virtual bool operator==(const ItemBase& rCandidate) const override
         {
-            assert(ItemBase::operator==(rCandidate));
             const MultiValueABC& rCand(static_cast<const MultiValueABC&>(rCandidate));
+
             return (MultiValueAB::operator==(rCandidate)
                 && GetValueC() == rCand.GetValueC());
         }
@@ -172,7 +176,6 @@ namespace Item
 
         // virtual bool operator<(const ItemBase& rCandidate) const override
         // {
-        //     assert(ItemBase::operator==(rCandidate));
         //     return MultiValueAB::operator<(rCandidate)
         //         && static_cast<const MultiValueABC*>(this)->GetValueC() < static_cast<const MultiValueABC&>(rCandidate).GetValueC();
         // }
@@ -187,17 +190,17 @@ namespace Item
     class MultiValueAB_Alternative : public MultiValueAB
     {
     public:
-        static ItemControlBlock& MultiValueAB_Alternative::GetStaticItemControlBlock()
+        static ItemControlBlock& GetStaticItemControlBlock()
         {
             static ItemControlBlock aItemControlBlock(
-                MultiValueABC::GetStaticItemControlBlock().GetItemAdministrator(),
+                MultiValueAB::GetStaticItemControlBlock().GetItemAdministrator(),
                 std::shared_ptr<const ItemBase>(new MultiValueAB_Alternative()),
                 [](){ return new MultiValueAB_Alternative(); });
 
             return aItemControlBlock;
         }
 
-        virtual ItemControlBlock& MultiValueAB_Alternative::GetItemControlBlock() const override
+        virtual ItemControlBlock& GetItemControlBlock() const override
         {
             return MultiValueAB_Alternative::GetStaticItemControlBlock();
         }
@@ -218,12 +221,6 @@ namespace Item
             return std::static_pointer_cast<const MultiValueAB_Alternative>(
                 MultiValueAB_Alternative::GetStaticItemControlBlock().GetItemAdministrator()->Create(
                     new MultiValueAB_Alternative(nValueA, nValueB)));
-        }
-
-        virtual bool operator==(const ItemBase& rCandidate) const override
-        {
-            assert(ItemBase::operator==(rCandidate));
-            return (MultiValueAB::operator==(rCandidate));
         }
     };
 } // end of namespace Item

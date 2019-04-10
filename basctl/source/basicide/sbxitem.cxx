@@ -70,8 +70,13 @@ namespace Item
 
     bool Sbx::operator==(const ItemBase& rCandidate) const
     {
-        assert(ItemBase::operator==(rCandidate));
+        if(ItemBase::operator==(rCandidate)) // compares ptrs
+        {
+            return true;
+        }
+
         const Sbx& rCand(static_cast<const Sbx&>(rCandidate));
+
         return (GetDocument() == rCand.GetDocument()
             && GetLibName() == rCand.GetLibName()
             && GetName() == rCand.GetName()

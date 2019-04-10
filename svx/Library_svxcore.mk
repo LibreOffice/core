@@ -77,6 +77,7 @@ $(eval $(call gb_Library_use_libraries,svxcore,\
     utl \
     vcl \
     xo \
+    item \
 ))
 
 $(eval $(call gb_Library_use_externals,svxcore,\
@@ -163,6 +164,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/items/e3ditem \
     svx/source/items/galleryitem \
     svx/source/items/grfitem \
+    svx/source/items/TransformAnchor \
     svx/source/sdr/animation/scheduler \
     svx/source/sdr/animation/objectanimator \
     svx/source/sdr/animation/animationstate \
