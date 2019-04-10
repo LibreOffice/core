@@ -3269,6 +3269,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
                 int nTop = OutputDevice::LogicToLogic(aChartBB.Top(), MapUnit::MapTwip, MapUnit::Map100thMM);
 
                 sal_Int32 value;
+
                 for (beans::PropertyValue& rPropValue: aPropertyValuesVector)
                 {
                     if (rPropValue.Name == "TransformPosX" || rPropValue.Name == "TransformRotationX")
