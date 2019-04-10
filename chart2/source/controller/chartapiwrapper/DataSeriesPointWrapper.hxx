@@ -117,7 +117,7 @@ private:
     bool                m_bLinesAllowed;
 
     //this should only be used, if the DataSeriesPointWrapper is initialized via the XInitialize interface
-    //because a big change in the chartmodel may lead to an dataseriespointer that is not connected to the model anymore
+    //because a big change in the chartmodel may lead to a dataseriespointer that is not connected to the model anymore
     //with the indices instead we can always get the new dataseries
     css::uno::Reference< css::chart2::XDataSeries >     m_xDataSeries;
 };
