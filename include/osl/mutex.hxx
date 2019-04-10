@@ -192,9 +192,14 @@ namespace osl
         */
         void clear()
         {
-            assert(pT);
-            pT->release();
-            pT = NULL;
+            assert(pT != NULL);
+#ifndef LIBO_INTERNAL_ONLY
+            if (pT)
+#endif
+            {
+                pT->release();
+                pT = NULL;
+            }
         }
     };
 
@@ -235,9 +240,15 @@ namespace osl
         */
         void reset()
         {
-            assert(!this->pT);
-            this->pT = pResetT;
-            this->pT->acquire();
+            assert(pResetT != NULL);
+#ifndef LIBO_INTERNAL_ONLY
+            if (pResetT)
+#endif
+            {
+                assert(this->pT == NULL);
+                this->pT = pResetT;
+                this->pT->acquire();
+            }
         }
     };
 
