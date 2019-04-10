@@ -543,7 +543,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
      *  Well, I do not really have a good term for this... The point is, database documents are in real
      *  only *one* aspect of a more complex thing. The second aspect is a data source. Both, in some sense,
      *  just represent different views on the same thing. For a given database, there's at each time at most
-     *  one data source, and at most one database document. Both have a independent life time, and are
+     *  one data source, and at most one database document. Both have an independent life time, and are
      *  created when needed.
      *  In particular, a document can be closed (this is what happens when the last UI window displaying
      *  this document is closed), and then dies. Now when the other "view", the data source, still exists,
