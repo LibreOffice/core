@@ -13,7 +13,7 @@
 
 #include "StatisticsTwoVariableDialog.hxx"
 
-class ScFTestDialog : public ScStatisticsTwoVariableDialogController
+class ScFTestDialog : public ScStatisticsTwoVariableDialog
 {
 public:
     ScFTestDialog(

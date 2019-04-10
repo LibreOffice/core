@@ -19,7 +19,7 @@
 ScFTestDialog::ScFTestDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                     weld::Window* pParent, ScViewData* pViewData ) :
-    ScStatisticsTwoVariableDialogController(
+    ScStatisticsTwoVariableDialog(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "modules/scalc/ui/ttestdialog.ui", "TTestDialog" )
 {
