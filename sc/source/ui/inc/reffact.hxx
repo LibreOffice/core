@@ -86,7 +86,7 @@ private:
 };
 
 class ScCovarianceDialogWrapper :
-    public ChildWindowWrapper<SID_COVARIANCE_DIALOG>
+    public ChildControllerWrapper<SID_COVARIANCE_DIALOG>
 {
 private:
     ScCovarianceDialogWrapper() = delete;
