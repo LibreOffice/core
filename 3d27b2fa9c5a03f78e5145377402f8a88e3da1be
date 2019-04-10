@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_fd534ce1",
+        "filename": "sal/rtl/strimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-10T05:58:50Z",
+      "side": 0,
+      "message": "And this",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 12
+      },
+      "revId": "3d27b2fa9c5a03f78e5145377402f8a88e3da1be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_5d47d81e",
+        "filename": "sal/rtl/strimp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-10T05:58:50Z",
+      "side": 0,
+      "message": "This looks irrelevant to the problem you declared you wanted to solve.",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 1
+      },
+      "revId": "3d27b2fa9c5a03f78e5145377402f8a88e3da1be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
