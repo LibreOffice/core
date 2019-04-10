@@ -108,7 +108,7 @@ public class PolymorphicType: Type
         if (name == null || type == null)
             throw new ArgumentNullException(
                 "cli-uno: uno.PolymorphicType.GetType was called with a null argument");
-        //check if the type is either a array of structs or a polymorphic struct.
+        //check if the type is either an array of structs or a polymorphic struct.
         if (type.IsArray)
         {
             Type elementType = type;
