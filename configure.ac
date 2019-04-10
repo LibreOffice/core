@@ -7240,7 +7240,7 @@ if test "$ENABLE_JAVA" != ""; then
     # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
     if test "$JAVA_HOME" = "/usr" -a "x$with_jdk_home" = "x"; then
         if basename $(readlink $(readlink $JAVACOMPILER)) >/dev/null 2>/dev/null; then
-           # try to recover first by looking whether we have a alternatives
+           # try to recover first by looking whether we have an alternatives
            # system as in Debian or newer SuSEs where following /usr/bin/javac
            # over /etc/alternatives/javac leads to the right bindir where we
            # just need to strip a bit away to get a valid JAVA_HOME
