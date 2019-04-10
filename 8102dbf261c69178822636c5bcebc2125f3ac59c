@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_bd7864f8",
+        "filename": "oox/source/drawingml/chart/plotareaconverter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-04-10T09:55:11Z",
+      "side": 1,
+      "message": "no need to check this, because empty() is only equivalent of size() \u003d\u003d 0",
+      "range": {
+        "startLine": 342,
+        "startChar": 13,
+        "endLine": 342,
+        "endChar": 47
+      },
+      "revId": "8102dbf261c69178822636c5bcebc2125f3ac59c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_dd99a81f",
+        "filename": "oox/source/drawingml/chart/plotareaconverter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-04-10T09:55:11Z",
+      "side": 1,
+      "message": "it\u0027s better to check this outside of the for loop, and you can move the whole loop in the block of \"if( axis-\u003emnAxisId !\u003d -1 )\"",
+      "range": {
+        "startLine": 358,
+        "startChar": 16,
+        "endLine": 358,
+        "endChar": 77
+      },
+      "revId": "8102dbf261c69178822636c5bcebc2125f3ac59c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
