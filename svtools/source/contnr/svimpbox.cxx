@@ -2879,23 +2879,19 @@ IMPL_LINK_NOARG(SvImpLBox, BeginDragHdl, Timer *, void)
     pView->StartDrag( 0, aAsyncBeginDragPos );
 }
 
-void SvImpLBox::PaintDDCursor( SvTreeListEntry* pInsertionPos )
+void SvImpLBox::PaintDDCursor(SvTreeListEntry* pEntry, bool bShow)
 {
-    long nY;
-    if( pInsertionPos )
+    if (pEntry)
     {
-        nY = GetEntryLine( pInsertionPos );
-        nY += pView->GetEntryHeight();
+        SvViewDataEntry* pViewData = pView->GetViewData(pEntry);
+        pViewData->SetDragTarget(bShow);
+#ifdef MACOSX
+        // in MacOS we need to draw directly (as we are synchronuous) or no invalidation happens
+        pView->PaintEntry1(*pEntry, GetEntryLine(pEntry), *pView);
+#else
+        InvalidateEntry(pEntry);
+#endif
     }
-    else
-        nY = 1;
-    RasterOp eOldOp = pView->GetRasterOp();
-    pView->SetRasterOp( RasterOp::Invert );
-    Color aOldLineColor = pView->GetLineColor();
-    pView->SetLineColor( Color( COL_BLACK ) );
-    pView->DrawLine( Point( 0, nY ), Point( aOutputSize.Width(), nY ) );
-    pView->SetLineColor( aOldLineColor );
-    pView->SetRasterOp( eOldOp );
 }
 
 void SvImpLBox::Command( const CommandEvent& rCEvt )

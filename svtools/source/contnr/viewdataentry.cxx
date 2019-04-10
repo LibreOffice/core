@@ -26,6 +26,7 @@ SvViewDataEntry::SvViewDataEntry() :
     mbExpanded(false),
     mbFocused(false),
     mbSelectable(true),
+    mbDragTarget(false),
     maPaintRectangle()
 {
 }
@@ -37,6 +38,7 @@ SvViewDataEntry::SvViewDataEntry( const SvViewDataEntry& rData ) :
     mbExpanded(rData.mbExpanded),
     mbFocused(false),
     mbSelectable(rData.mbSelectable),
+    mbDragTarget(false),
     maPaintRectangle(rData.maPaintRectangle)
 {
 }
