@@ -96,6 +96,7 @@ cmd/lc_inserttimefield.png cmd/lc_timefield.png
 cmd/sc_insobjctrl.png cmd/sc_newdoc.png
 cmd/sc_insert.png cmd/sc_togglesheetgrid.png
 cmd/sc_insertavmedia.png cmd/sc_avmediaplayer.png
+cmd/sc_graphicmenu.png cmd/sc_avmediaplayer.png
 cmd/sc_insertcurrencyfield.png cmd/sc_formattedfield.png
 cmd/sc_insertdatefield.png cmd/sc_datefield.png
 cmd/sc_insertauthorfield.png cmd/sc_dbviewaliases.png
@@ -111,7 +112,6 @@ cmd/sc_insertformradio.png cmd/sc_radiobutton.png
 cmd/sc_insertformspin.png cmd/sc_spinbutton.png
 cmd/sc_insertformula.png cmd/sc_dbviewfunctions.png
 cmd/sc_insertformvscroll.png cmd/sc_scrollbar.png
-cmd/sc_scrollbarmenu.png cmd/sc_scrollbar.png
 cmd/sc_insertframeinteract.png cmd/sc_insertframe.png
 cmd/sc_insertframemenu.png cmd/sc_insertframe.png
 cmd/sc_insertframeinteractnocolumns.png cmd/sc_insertframe.png
@@ -204,7 +204,8 @@ cmd/sc_formatspacingmenu.png cmd/sc_spacepara15.png
 cmd/sc_textalign.png cmd/sc_alignblock.png
 cmd/sc_formatbulletsmenu.png cmd/sc_defaultbullet.png
 cmd/sc_formatimagemenu.png cmd/sc_gallery.png
-cmd/sc_formatframemenu.png cmd/sc_framedialog.png
+cmd/sc_formatframemenu.png cmd/sc_formatline.png
+cmd/sc_formatobjectmenu.png cmd/sc_text.png
 
 # Url
 cmd/lc_webhtml.png cmd/lc_browseview.png
@@ -232,9 +233,6 @@ cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
 cmd/sc_deleteallnotes.png cmd/sc_deleteallannotation.png
 cmd/lc_deleteallnotes.png cmd/lc_deleteallannotation.png
 cmd/sc_formatallnotes.png cmd/sc_editannotation.png
-
-# Template Menu
-cmd/sc_templatemenu.png cmd/sc_adddirect.png
 
 # Animation
 cmd/lc_customanimation.png cmd/lc_animationobjects.png
@@ -767,7 +765,6 @@ cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
 # Grid
 cmd/lc_gridvisible.png cmd/lc_grid.png
 cmd/sc_gridvisible.png cmd/sc_grid.png
-cmd/sc_gridmenu.png cmd/sc_grid.png
 cmd/sc_insertgridcontrol.png cmd/sc_grid.png
 cmd/lc_insertgridcontrol.png cmd/lc_grid.png
 
@@ -1788,7 +1785,7 @@ cmd/sc_convertmenu.png cmd/sc_bezierconvert.png
 # calc menubar icons
 # ===============================================
 cmd/sc_chartmenu.png cmd/sc_drawchart.png
-cmd/sc_objectmenu.png cmd/sc_insertframe.png
+cmd/sc_objectmenu.png cmd/sc_insertobject.png
 
 # writer
 # ===============================================
@@ -1827,6 +1824,9 @@ cmd/sc_basicideappear.png cmd/sc_toolsmacroedit.png
 
 cmd/lc_donation.png cmd/lc_currencyfield.png
 cmd/sc_donation.png cmd/sc_currencyfield.png
+
+cmd/sc_autoformatmenu.png cmd/sc_autopilotmenu.png
+cmd/sc_chapternumberingdialog.png cmd/sc_linenumberdialog.png
 
 # Calc Style
 cmd/lc_defaultcellstyles.png cmd/lc_defaultcharstyle.png
