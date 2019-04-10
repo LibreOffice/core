@@ -136,7 +136,7 @@ namespace comphelper
 
             @retval
                 true if there is a value with the given name, which could successfully
-                be extraced. In this case, @c _out_rValue will contain the requested
+                be extracted. In this case, @c _out_rValue will contain the requested
                 value.
             @retval
                 false, if there is no value with the given name.
