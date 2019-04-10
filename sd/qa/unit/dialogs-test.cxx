@@ -28,7 +28,6 @@
 #include <svx/svdtext.hxx>
 #include <svx/svdotext.hxx>
 #include <vcl/sound.hxx>
-#include <vcl/svapp.hxx>
 
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>

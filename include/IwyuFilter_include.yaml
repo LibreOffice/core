@@ -920,6 +920,19 @@ blacklist:
     - com/sun/star/awt/FontDescriptor.hpp
     - com/sun/star/style/LineSpacing.hpp
     - com/sun/star/style/TabStop.hpp
+    include/formula/FormulaOpCodeMapperObj.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/sheet/XFormulaOpCodeMapper.hpp
+    include/formula/paramclass.hxx:
+    # Needed for enum type
+    - sal/types.h
+    include/formula/opcode.hxx:
+    # Needed for enum type
+    - sal/types.h
+    include/formula/tokenarray.hxx:
+    # Needed to avoid linking errors on WIN
+    - formula/ExternalReferenceHelper.hxx
     include/svx/AccessibleControlShape.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertyChangeListener.hpp
