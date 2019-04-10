@@ -2,7 +2,6 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="period-adjustment">
     <property name="lower">1</property>
     <property name="upper">100</property>
@@ -20,6 +19,8 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="samplingdialog|SamplingDialog">Sampling</property>
     <property name="resizable">False</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
@@ -123,7 +124,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefEdit" id="input-range-edit">
+                      <object class="GtkEntry" id="input-range-edit">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="valign">center</property>
@@ -136,7 +137,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefButton" id="input-range-button">
+                      <object class="GtkButton" id="input-range-button">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -161,7 +162,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefEdit" id="output-range-edit">
+                      <object class="GtkEntry" id="output-range-edit">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="valign">center</property>
@@ -174,7 +175,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefButton" id="output-range-button">
+                      <object class="GtkButton" id="output-range-button">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -266,8 +267,8 @@
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
+                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">periodic-method-radio</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>

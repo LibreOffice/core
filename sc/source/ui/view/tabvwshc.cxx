@@ -330,12 +330,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
         }
         break;
 
-        case SID_SAMPLING_DIALOG:
-        {
-            pResult = VclPtr<ScSamplingDialog>::Create( pB, pCW, pParent, &GetViewData() );
-        }
-        break;
-
         case SID_DESCRIPTIVE_STATISTICS_DIALOG:
         {
             pResult = VclPtr<ScDescriptiveStatisticsDialog>::Create( pB, pCW, pParent, &GetViewData() );
@@ -536,6 +530,11 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         case SID_CORRELATION_DIALOG:
         {
             xResult.reset(new ScCorrelationDialog(pB, pCW, pParent, &GetViewData()));
+        }
+        break;
+        case SID_SAMPLING_DIALOG:
+        {
+            xResult.reset(new ScSamplingDialog(pB, pCW, pParent, &GetViewData()));
         }
         break;
     }
