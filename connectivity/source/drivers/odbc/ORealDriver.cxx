@@ -266,7 +266,7 @@ css::uno::Reference< css::uno::XInterface > ODBCDriver_CreateInstance(const css:
 // ODBC Environment (common for all Connections):
 SQLHANDLE ORealObdcDriver::EnvironmentHandle(OUString &_rPath)
 {
-    // Is (for this instance) already a Environment made?
+    // Is (for this instance) already an Environment made?
     if (!m_pDriverHandle)
     {
         SQLHANDLE h = SQL_NULL_HANDLE;
