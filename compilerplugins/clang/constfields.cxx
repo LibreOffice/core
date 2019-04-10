@@ -377,7 +377,7 @@ void ConstFields::check(const FieldDecl* fieldDecl, const Expr* memberExpr)
             {
                 auto varDecl = dyn_cast_or_null<VarDecl>(parentsRange.begin()->get<Decl>());
                 // The isImplicit() call is to avoid triggering when we see the vardecl which is part of a for-range statement,
-                // which is of type 'T&&' and also an l-value-ref ?
+                // which is of type 'T&&' and also a l-value-ref ?
                 if (varDecl && !varDecl->isImplicit()
                     && loplugin::TypeCheck(varDecl->getType()).LvalueReference().NonConst())
                 {
