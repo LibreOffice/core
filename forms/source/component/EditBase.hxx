@@ -33,7 +33,7 @@
 #define PF_HANDLE_COMMON_PROPS  0x8000
     // Derived classes which use their own persistence methods (read/write) and have an own
     // version handling therein may want to clear this flag in getPersistenceFlags.
-    // If done so, this class will write an version without a call to writeCommonEditProperties.
+    // If done so, this class will write a version without a call to writeCommonEditProperties.
 #define PF_FAKE_FORMATTED_FIELD 0x4000
     // .... hmmm .... a fake, as the name suggests. see OFormattedFieldWrapper
 
