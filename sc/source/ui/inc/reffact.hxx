@@ -180,7 +180,10 @@ class ScSimpleRefDlgWrapper: public SfxChildWindow
                                 SfxBindings*,
                                 SfxChildWinInfo* );
 
-        SFX_DECL_CHILDWINDOW_WITHID(Class);
+        static std::unique_ptr<SfxChildWindow> CreateImpl(vcl::Window *pParent, sal_uInt16 nId,
+                                                          SfxBindings *pBindings, SfxChildWinInfo* pInfo);
+        static void     RegisterChildWindow(bool bVisible=false, SfxModule *pMod=nullptr, SfxChildWindowFlags nFlags=SfxChildWindowFlags::NONE);
+        static          sal_uInt16 GetChildWindowId();
 
         static void     SetDefaultPosSize(Point aPos, Size aSize);
         void            SetRefString(const OUString& rStr);
