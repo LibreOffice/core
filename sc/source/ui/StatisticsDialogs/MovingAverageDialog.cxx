@@ -18,28 +18,22 @@
 
 ScMovingAverageDialog::ScMovingAverageDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    vcl::Window* pParent, ScViewData* pViewData ) :
-    ScStatisticsInputOutputDialog(
+                    weld::Window* pParent, ScViewData* pViewData )
+    : ScStatisticsInputOutputDialogController(
             pSfxBindings, pChildWindow, pParent, pViewData,
-            "MovingAverageDialog", "modules/scalc/ui/movingaveragedialog.ui" )
+            "modules/scalc/ui/movingaveragedialog.ui",
+            "MovingAverageDialog")
+    , mxIntervalSpin(m_xBuilder->weld_spin_button("interval-spin"))
 {
-    get(mpIntervalSpin, "interval-spin");
 }
 
 ScMovingAverageDialog::~ScMovingAverageDialog()
 {
-    disposeOnce();
 }
 
-void ScMovingAverageDialog::dispose()
+void ScMovingAverageDialog::Close()
 {
-    mpIntervalSpin.clear();
-    ScStatisticsInputOutputDialog::dispose();
-}
-
-bool ScMovingAverageDialog::Close()
-{
-    return DoClose( ScMovingAverageDialogWrapper::GetChildWindowId() );
+    DoClose( ScMovingAverageDialogWrapper::GetChildWindowId() );
 }
 
 const char* ScMovingAverageDialog::GetUndoNameId()
@@ -59,7 +53,7 @@ ScRange ScMovingAverageDialog::ApplyOutput(ScDocShell* pDocShell)
     else
         pIterator.reset(new DataRangeByRowIterator(mInputRange));
 
-    sal_Int32 aIntervalSize = mpIntervalSpin->GetValue();
+    sal_Int32 aIntervalSize = mxIntervalSpin->get_value();
     const bool aCentral = true; //to-do add support to change this to the dialog
 
     for( ; pIterator->hasNext(); pIterator->next() )
