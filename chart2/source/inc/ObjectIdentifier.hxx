@@ -164,7 +164,7 @@ public:
     static OUString getDragMethodServiceName( const OUString& rClassifiedIdentifier );
     static OUString getDragParameterString( const OUString& rCID );
     static bool isDragableObject( const OUString& rClassifiedIdentifier );
-    bool isDragableObject();
+    bool isDragableObject() const;
     static bool isRotateableObject( const OUString& rClassifiedIdentifier );
     static bool isMultiClickObject( const OUString& rClassifiedIdentifier );
     static bool areSiblings( const OUString& rCID1, const OUString& rCID2 );//identical object is no sibling
@@ -172,7 +172,7 @@ public:
 
     static OUString getStringForType( ObjectType eObjectType );
     static ObjectType    getObjectType( const OUString& rCID );
-    ObjectType getObjectType();
+    ObjectType getObjectType() const;
 
     static OUString createSeriesSubObjectStub( ObjectType eSubObjectType
                     , const OUString& rSeriesParticle

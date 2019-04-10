@@ -30,6 +30,7 @@
 #include <svdibrow.hxx>
 #endif
 
+#include <osl/thread.h>
 #include <svx/svdoole2.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xflgrit.hxx>
@@ -56,7 +57,10 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <sfx2/lokcharthelper.hxx>
 #include <sfx2/viewsh.hxx>
+
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 using namespace com::sun::star;
 
@@ -734,6 +738,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     tools::Rectangle aRect(GetMarkedObjRect());
     tools::Rectangle aSelection(aRect);
 
+    bool bIsChart = false;
     if (bTiledRendering && !aRect.IsEmpty())
     {
         sal_uInt32 nTotalPaintWindows = this->PaintWindowCount();
@@ -742,6 +747,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
             const vcl::Window* pWin = dynamic_cast<const vcl::Window*>(this->GetFirstOutputDevice());
             if (pWin && pWin->IsChart())
             {
+                bIsChart = true;
                 const vcl::Window* pViewShellWindow = GetSfxViewShell()->GetEditWindowForActiveOLEObj();
                 if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pWin))
                 {
@@ -798,6 +804,34 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                 if (bWriterGraphic)
                 {
                     sProperties = "{ WriterGraphic=true }";
+                }
+                else if (bIsChart)
+                {
+                    LokChartHelper aChartHelper(pViewShell);
+                    css::uno::Reference<css::frame::XController>& xChartController = aChartHelper.GetXController();
+                    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier( xChartController, uno::UNO_QUERY);
+                    if (xSelectionSupplier.is())
+                    {
+                        uno::Any aSel = xSelectionSupplier->getSelection();
+                        OUString aValue;
+                        if (aSel >>= aValue)
+                        {
+                            OString aObjectCID(aValue.getStr(), aValue.getLength(), osl_getThreadTextEncoding());
+                            sProperties += "{ ";
+                            const std::vector<OString> aProps{"Draggable=", "Resizable=", "Rotatable="};
+                            for (const auto& rProp: aProps)
+                            {
+                                sal_Int32 nPos = aObjectCID.indexOf(rProp);
+                                if (nPos == -1) continue;
+                                nPos += rProp.getLength();
+                                if (sProperties.getLength() > 2)
+                                    sProperties += ", ";
+                                sProperties += rProp;
+                                sProperties += OString::boolean(aObjectCID[nPos] == '1');
+                            }
+                            sProperties += " }";
+                        }
+                    }
                 }
 
                 if (!sProperties.isEmpty())
