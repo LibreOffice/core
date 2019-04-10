@@ -666,7 +666,7 @@ void FmSearchDialog::LoadParams()
     OnCheckBoxToggled(*m_pcbCase);
     OnCheckBoxToggled(*m_pcbBackwards);
 
-    m_pHalfFullFormsCJK->set_active( !aParams.isIgnoreWidthCJK( ) );  // BEWARE: this checkbox has a inverse semantics!
+    m_pHalfFullFormsCJK->set_active( !aParams.isIgnoreWidthCJK( ) );  // BEWARE: this checkbox has an inverse semantics!
     m_pSoundsLikeCJK->set_active( aParams.bSoundsLikeCJK );
     OnCheckBoxToggled(*m_pHalfFullFormsCJK);
     OnCheckBoxToggled(*m_pSoundsLikeCJK);
