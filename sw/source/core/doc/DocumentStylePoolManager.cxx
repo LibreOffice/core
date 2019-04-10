@@ -1403,7 +1403,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
     SwFormatsBase* pArray[ 2 ];
     sal_uInt16 nArrCnt = 1;
     const char* pRCId = nullptr;
-    sal_uInt16* pWhichRange = nullptr;
+    sal_uInt16 const * pWhichRange = nullptr;
 
     switch( nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
     {

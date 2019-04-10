@@ -134,7 +134,7 @@ using namespace ::com::sun::star;
 // some ranges for sets in collections/ nodes
 
 // AttrSet range for the 2 break attributes
-sal_uInt16 aBreakSetRange[] = {
+sal_uInt16 const aBreakSetRange[] = {
     RES_PAGEDESC, RES_BREAK,
     0
 };
@@ -142,7 +142,7 @@ sal_uInt16 aBreakSetRange[] = {
 // AttrSet range for TextFormatColl
 // list attributes ( RES_PARATR_LIST_BEGIN - RES_PARATR_LIST_END ) are not
 // included in the paragraph style's itemset.
-sal_uInt16 aTextFormatCollSetRange[] = {
+sal_uInt16 const aTextFormatCollSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
@@ -155,7 +155,7 @@ sal_uInt16 aTextFormatCollSetRange[] = {
 };
 
 // AttrSet range for GrfFormatColl
-sal_uInt16 aGrfFormatCollSetRange[] = {
+sal_uInt16 const aGrfFormatCollSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
@@ -163,7 +163,7 @@ sal_uInt16 aGrfFormatCollSetRange[] = {
 };
 
 // AttrSet range for TextNode
-sal_uInt16 aTextNodeSetRange[] = {
+sal_uInt16 const aTextNodeSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
@@ -177,14 +177,14 @@ sal_uInt16 aTextNodeSetRange[] = {
 };
 
 // AttrSet range for NoTextNode
-sal_uInt16 aNoTextNodeSetRange[] = {
+sal_uInt16 const aNoTextNodeSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
-sal_uInt16 aTableSetRange[] = {
+sal_uInt16 const aTableSetRange[] = {
     RES_FILL_ORDER,     RES_FRM_SIZE,
     RES_LR_SPACE,       RES_BREAK,
     RES_BACKGROUND,     RES_SHADOW,
@@ -200,7 +200,7 @@ sal_uInt16 aTableSetRange[] = {
     0
 };
 
-sal_uInt16 aTableLineSetRange[] = {
+sal_uInt16 const aTableLineSetRange[] = {
     RES_FILL_ORDER,     RES_FRM_SIZE,
     RES_LR_SPACE,       RES_UL_SPACE,
     RES_BACKGROUND,     RES_SHADOW,
@@ -212,7 +212,7 @@ sal_uInt16 aTableLineSetRange[] = {
     0
 };
 
-sal_uInt16 aTableBoxSetRange[] = {
+sal_uInt16 const aTableBoxSetRange[] = {
     RES_FILL_ORDER,     RES_FRM_SIZE,
     RES_LR_SPACE,       RES_UL_SPACE,
     RES_BACKGROUND,     RES_SHADOW,
@@ -226,7 +226,7 @@ sal_uInt16 aTableBoxSetRange[] = {
 };
 
 // AttrSet range for SwFrameFormat
-sal_uInt16 aFrameFormatSetRange[] = {
+sal_uInt16 const aFrameFormatSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
 
@@ -237,14 +237,14 @@ sal_uInt16 aFrameFormatSetRange[] = {
 };
 
 // AttrSet range for SwCharFormat
-sal_uInt16 aCharFormatSetRange[] = {
+sal_uInt16 const aCharFormatSetRange[] = {
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
 // AttrSet range for character autostyles
-sal_uInt16 aCharAutoFormatSetRange[] = {
+sal_uInt16 const aCharAutoFormatSetRange[] = {
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
@@ -252,7 +252,7 @@ sal_uInt16 aCharAutoFormatSetRange[] = {
 };
 
 // AttrSet range for SwPageDescFormat
-sal_uInt16 aPgFrameFormatSetRange[] = {
+sal_uInt16 const aPgFrameFormatSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
