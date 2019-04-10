@@ -705,10 +705,10 @@ void ScExportTest::testCommentExportXLSX()
     xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/comments1.xml");
     CPPUNIT_ASSERT(pSheet);
 
-    assertXPath(pSheet, "/x:comments/x:authors/x:author[1]", "BAKO");
+    assertXPathContent(pSheet, "/x:comments/x:authors/x:author[1]", "BAKO");
     assertXPath(pSheet, "/x:comments/x:authors/x:author", 1);
 
-    assertXPath(pSheet, "/x:comments/x:commentList/x:comment/x:text/x:r/x:t", "Komentarz");
+    assertXPathContent(pSheet, "/x:comments/x:commentList/x:comment/x:text/x:r/x:t", "Komentarz");
 
 }
 
