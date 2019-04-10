@@ -179,7 +179,7 @@ namespace frm
 
         /** refreshes our list entries
 
-            In case we have an external list source, its used to obtain the new entries, and then
+            In case we have an external list source, it's used to obtain the new entries, and then
             stringItemListChanged is called to give the derived class the possibility to
             react on this.
 
