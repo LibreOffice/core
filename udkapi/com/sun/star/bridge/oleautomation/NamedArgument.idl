@@ -43,7 +43,7 @@ struct NamedArgument
      */
     string Name;
 
-    /** The value of the argument whoose name is the one as contained in the
+    /** The value of the argument whose name is the one as contained in the
         member #Name.
      */
     any Value;
