@@ -21,11 +21,11 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:AddDirect"/>
       <menu:menuitem menu:id=".uno:OpenFromWriter"/>
-      <menu:menuitem menu:id=".uno:OpenRemote"/>
+      <menu:menuitem menu:id=".uno:OpenRemote" menu:style="text"/>
       <menu:menuitem menu:id=".uno:RecentFileList"/>
       <menu:menuitem menu:id=".uno:CloseDoc"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
+      <menu:menuitem menu:id=".uno:AutoPilotMenu" menu:style="text"/>
       <menu:menu menu:id=".uno:TemplateMenu">
           <menu:menupopup>
               <menu:menuitem menu:id=".uno:OpenTemplate"/>
@@ -35,18 +35,18 @@
           </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:Reload"/>
-      <menu:menuitem menu:id=".uno:VersionDialog"/>
+      <menu:menuitem menu:id=".uno:Reload" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:VersionDialog" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Save"/>
-      <menu:menuitem menu:id=".uno:SaveAsRemote"/>
       <menu:menuitem menu:id=".uno:SaveAs"/>
-      <menu:menuitem menu:id=".uno:SaveACopy"/>
-      <menu:menuitem menu:id=".uno:SaveAll"/>
+      <menu:menuitem menu:id=".uno:SaveAsRemote" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:SaveACopy" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:SaveAll" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:CheckOut"/>
-      <menu:menuitem menu:id=".uno:CancelCheckOut"/>
-      <menu:menuitem menu:id=".uno:CheckIn"/>
+      <menu:menuitem menu:id=".uno:CheckOut" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:CancelCheckOut" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:CheckIn" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ExportTo"/>
       <menu:menu menu:id=".uno:ExportAsMenu">
@@ -75,19 +75,19 @@
           <menu:menuitem menu:id=".uno:SendAbstractToStarImpress"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menuitem menu:id=".uno:WebHtml" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:WebHtml"/>
       <menu:menuitem menu:id=".uno:PrintPreview"/>
       <menu:menuitem menu:id=".uno:Print"/>
-      <menu:menuitem menu:id=".uno:PrinterSetup"/>
+      <menu:menuitem menu:id=".uno:PrinterSetup" menu:style="text"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
       <menu:menu menu:id=".uno:SignaturesMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Signature"/>
           <menu:menuitem menu:id=".uno:SignPDF"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Quit"/>
     </menu:menupopup>
