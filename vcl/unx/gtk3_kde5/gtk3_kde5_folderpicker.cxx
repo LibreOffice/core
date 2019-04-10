@@ -76,7 +76,11 @@ void SAL_CALL Gtk3KDE5FolderPicker::setTitle(const OUString& aTitle)
     m_ipc.sendCommand(Commands::SetTitle, aTitle);
 }
 
-sal_Int16 SAL_CALL Gtk3KDE5FolderPicker::execute() { return m_ipc.execute(); }
+sal_Int16 SAL_CALL Gtk3KDE5FolderPicker::execute()
+{
+    SolarMutexGuard g;
+    return m_ipc.execute();
+}
 
 // XCancellable
 
