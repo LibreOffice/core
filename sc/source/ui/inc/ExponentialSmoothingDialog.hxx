@@ -16,20 +16,19 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
-class ScExponentialSmoothingDialog : public ScStatisticsInputOutputDialog
+class ScExponentialSmoothingDialog : public ScStatisticsInputOutputDialogController
 {
 private:
-    VclPtr<NumericField> mpSmoothingFactor;
+    std::unique_ptr<weld::SpinButton> mxSmoothingFactor;
 
 public:
     ScExponentialSmoothingDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        vcl::Window* pParent, ScViewData* pViewData );
+        weld::Window* pParent, ScViewData* pViewData );
 
     virtual ~ScExponentialSmoothingDialog() override;
-    virtual void dispose() override;
 
-    virtual bool Close() override;
+    virtual void Close() override;
 
 protected:
     virtual const char* GetUndoNameId() override;
