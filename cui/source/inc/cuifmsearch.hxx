@@ -87,7 +87,7 @@ class FmSearchDialog final : public weld::GenericDialogController
 public:
     /** This can search in different sets of fields. There is a number of contexts; their names are in strContexts (separated
         by ';'), the user can choose one of them.
-        When the user chooses a context, lnkContextSupplier is called, it gets a pointer on an FmSearchContext-structure,
+        When the user chooses a context, lnkContextSupplier is called, it gets a pointer on a FmSearchContext-structure,
         that has to be filled.
         The following counts for the search :
         a) in case of formatted search the iterator itself is used (like in the first constructor)
