@@ -67,10 +67,10 @@ OUString lclCreateMultiParameterFormula(
     return aResult.makeStringAndClear();
 }
 
-void lclMakeSubRangesList(ScRangeList& rRangeList, const ScRange& rInputRange, ScStatisticsInputOutputDialog::GroupedBy aGroupedBy)
+void lclMakeSubRangesList(ScRangeList& rRangeList, const ScRange& rInputRange, ScStatisticsInputOutputDialogController::GroupedBy aGroupedBy)
 {
     std::unique_ptr<DataRangeIterator> pIterator;
-    if (aGroupedBy == ScStatisticsInputOutputDialog::BY_COLUMN)
+    if (aGroupedBy == ScStatisticsInputOutputDialogController::BY_COLUMN)
         pIterator.reset(new DataRangeByColumnIterator(rInputRange));
     else
         pIterator.reset(new DataRangeByRowIterator(rInputRange));
@@ -86,43 +86,33 @@ void lclMakeSubRangesList(ScRangeList& rRangeList, const ScRange& rInputRange, S
 
 ScAnalysisOfVarianceDialog::ScAnalysisOfVarianceDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    vcl::Window* pParent, ScViewData* pViewData ) :
-    ScStatisticsInputOutputDialog(
+                    weld::Window* pParent, ScViewData* pViewData )
+    : ScStatisticsInputOutputDialogController(
             pSfxBindings, pChildWindow, pParent, pViewData,
-            "AnalysisOfVarianceDialog", "modules/scalc/ui/analysisofvariancedialog.ui" ),
-    meFactor(SINGLE_FACTOR)
+            "modules/scalc/ui/analysisofvariancedialog.ui",
+            "AnalysisOfVarianceDialog")
+    , meFactor(SINGLE_FACTOR)
+    , mxAlphaField(m_xBuilder->weld_spin_button("alpha-spin"))
+    , mxSingleFactorRadio(m_xBuilder->weld_radio_button("radio-single-factor"))
+    , mxTwoFactorRadio(m_xBuilder->weld_radio_button("radio-two-factor"))
+    , mxRowsPerSampleField(m_xBuilder->weld_spin_button("rows-per-sample-spin"))
 {
-    get(mpAlphaField,         "alpha-spin");
-    get(mpSingleFactorRadio,  "radio-single-factor");
-    get(mpTwoFactorRadio,     "radio-two-factor");
-    get(mpRowsPerSampleField, "rows-per-sample-spin");
+    mxSingleFactorRadio->connect_toggled( LINK( this, ScAnalysisOfVarianceDialog, FactorChanged ) );
+    mxTwoFactorRadio->connect_toggled( LINK( this, ScAnalysisOfVarianceDialog, FactorChanged ) );
 
-    mpSingleFactorRadio->SetToggleHdl( LINK( this, ScAnalysisOfVarianceDialog, FactorChanged ) );
-    mpTwoFactorRadio->SetToggleHdl( LINK( this, ScAnalysisOfVarianceDialog, FactorChanged ) );
-
-    mpSingleFactorRadio->Check();
-    mpTwoFactorRadio->Check(false);
+    mxSingleFactorRadio->set_active(true);
+    mxTwoFactorRadio->set_active(false);
 
     FactorChanged();
 }
 
 ScAnalysisOfVarianceDialog::~ScAnalysisOfVarianceDialog()
 {
-    disposeOnce();
 }
 
-void ScAnalysisOfVarianceDialog::dispose()
+void ScAnalysisOfVarianceDialog::Close()
 {
-    mpAlphaField.clear();
-    mpSingleFactorRadio.clear();
-    mpTwoFactorRadio.clear();
-    mpRowsPerSampleField.clear();
-    ScStatisticsInputOutputDialog::dispose();
-}
-
-bool ScAnalysisOfVarianceDialog::Close()
-{
-    return DoClose( ScAnalysisOfVarianceDialogWrapper::GetChildWindowId() );
+    DoClose( ScAnalysisOfVarianceDialogWrapper::GetChildWindowId() );
 }
 
 const char* ScAnalysisOfVarianceDialog::GetUndoNameId()
@@ -130,25 +120,25 @@ const char* ScAnalysisOfVarianceDialog::GetUndoNameId()
     return STR_ANALYSIS_OF_VARIANCE_UNDO_NAME;
 }
 
-IMPL_LINK_NOARG( ScAnalysisOfVarianceDialog, FactorChanged, RadioButton&, void )
+IMPL_LINK_NOARG( ScAnalysisOfVarianceDialog, FactorChanged, weld::ToggleButton&, void )
 {
     FactorChanged();
 }
 
 void ScAnalysisOfVarianceDialog::FactorChanged()
 {
-    if (mpSingleFactorRadio->IsChecked())
+    if (mxSingleFactorRadio->get_active())
     {
-        mpGroupByRowsRadio->Enable();
-        mpGroupByColumnsRadio->Enable();
-        mpRowsPerSampleField->Enable(false);
+        mxGroupByRowsRadio->set_sensitive(true);
+        mxGroupByColumnsRadio->set_sensitive(true);
+        mxRowsPerSampleField->set_sensitive(false);
         meFactor = SINGLE_FACTOR;
     }
-    else if (mpTwoFactorRadio->IsChecked())
+    else if (mxTwoFactorRadio->get_active())
     {
-        mpGroupByRowsRadio->Enable(false);
-        mpGroupByColumnsRadio->Enable(false);
-        mpRowsPerSampleField->Enable(false); // Rows per sample not yet implemented
+        mxGroupByRowsRadio->set_sensitive(false);
+        mxGroupByColumnsRadio->set_sensitive(false);
+        mxRowsPerSampleField->set_sensitive(false); // Rows per sample not yet implemented
         meFactor = TWO_FACTOR;
     }
 }
@@ -193,7 +183,7 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
     output.writeBoldString(ScResId(STR_ANOVA_SINGLE_FACTOR_LABEL));
     output.newLine();
 
-    double aAlphaValue = mpAlphaField->GetValue() / 100.0;
+    double aAlphaValue = mxAlphaField->get_value() / 100.0;
     output.writeString(ScResId(STR_LABEL_ALPHA));
     output.nextColumn();
     output.writeValue(aAlphaValue);
@@ -340,7 +330,7 @@ void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, For
     output.writeBoldString(ScResId(STR_ANOVA_TWO_FACTOR_LABEL));
     output.newLine();
 
-    double aAlphaValue = mpAlphaField->GetValue() / 100.0;
+    double aAlphaValue = mxAlphaField->get_value() / 100.0;
     output.writeString("Alpha");
     output.nextColumn();
     output.writeValue(aAlphaValue);
