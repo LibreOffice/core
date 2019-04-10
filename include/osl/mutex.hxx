@@ -142,6 +142,7 @@ namespace osl
         /** Releases the mutex or interface. */
         ~Guard()
         {
+            assert(pT != NULL);
             pT->release();
         }
     };
