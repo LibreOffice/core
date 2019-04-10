@@ -132,49 +132,35 @@ static size_t lcl_GetNumRowsColsInRange(const ScRange& rRange, bool bRows)
 
 ScRegressionDialog::ScRegressionDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    vcl::Window* pParent, ScViewData* pViewData ) :
-    ScStatisticsTwoVariableDialog(
+                    weld::Window* pParent, ScViewData* pViewData )
+    : ScStatisticsTwoVariableDialogController(
             pSfxBindings, pChildWindow, pParent, pViewData,
-            "RegressionDialog", "modules/scalc/ui/regressiondialog.ui" ),
-    mbUnivariate(true),
-    mnNumIndependentVars(1),
-    mnNumObservations(0),
-    mbUse3DAddresses(false),
-    mbCalcIntercept(true)
+            "modules/scalc/ui/regressiondialog.ui", "RegressionDialog")
+    , mbUnivariate(true)
+    , mnNumIndependentVars(1)
+    , mnNumObservations(0)
+    , mbUse3DAddresses(false)
+    , mbCalcIntercept(true)
+    , mxWithLabelsCheckBox(m_xBuilder->weld_check_button("withlabels-check"))
+    , mxLinearRadioButton(m_xBuilder->weld_radio_button("linear-radio"))
+    , mxLogarithmicRadioButton(m_xBuilder->weld_radio_button("logarithmic-radio"))
+    , mxPowerRadioButton(m_xBuilder->weld_radio_button("power-radio"))
+    , mxErrorMessage(m_xBuilder->weld_label("error-message"))
+    , mxConfidenceLevelField(m_xBuilder->weld_spin_button("confidencelevel-spin"))
+    , mxCalcResidualsCheckBox(m_xBuilder->weld_check_button("calcresiduals-check"))
+    , mxNoInterceptCheckBox(m_xBuilder->weld_check_button("nointercept-check"))
 {
-    get(mpWithLabelsCheckBox, "withlabels-check");
-    get(mpLinearRadioButton, "linear-radio");
-    get(mpLogarithmicRadioButton, "logarithmic-radio");
-    get(mpPowerRadioButton, "power-radio");
-    get(mpConfidenceLevelField, "confidencelevel-spin");
-    get(mpCalcResidualsCheckBox, "calcresiduals-check");
-    get(mpNoInterceptCheckBox, "nointercept-check");
-    get(mpErrorMessage, "error-message");
-    mpWithLabelsCheckBox->SetToggleHdl(LINK(this, ScRegressionDialog, CheckBoxHdl));
-    mpConfidenceLevelField->SetModifyHdl(LINK(this, ScRegressionDialog, NumericFieldHdl));
+    mxWithLabelsCheckBox->connect_toggled(LINK(this, ScRegressionDialog, CheckBoxHdl));
+    mxConfidenceLevelField->connect_value_changed(LINK(this, ScRegressionDialog, NumericFieldHdl));
 }
 
 ScRegressionDialog::~ScRegressionDialog()
 {
-    disposeOnce();
 }
 
-bool ScRegressionDialog::Close()
+void ScRegressionDialog::Close()
 {
-    return DoClose(ScRegressionDialogWrapper::GetChildWindowId());
-}
-
-void ScRegressionDialog::dispose()
-{
-    mpWithLabelsCheckBox.disposeAndClear();
-    mpLinearRadioButton.disposeAndClear();
-    mpLogarithmicRadioButton.disposeAndClear();
-    mpPowerRadioButton.disposeAndClear();
-    mpConfidenceLevelField.disposeAndClear();
-    mpCalcResidualsCheckBox.disposeAndClear();
-    mpNoInterceptCheckBox.disposeAndClear();
-    mpErrorMessage.disposeAndClear();
-    ScStatisticsTwoVariableDialog::dispose();
+    DoClose(ScRegressionDialogWrapper::GetChildWindowId());
 }
 
 const char* ScRegressionDialog::GetUndoNameId()
@@ -188,7 +174,7 @@ ScRange ScRegressionDialog::ApplyOutput(ScDocShell* pDocShell)
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(mDocument);
     aTemplate.autoReplaceUses3D(mbUse3DAddresses);
-    mbCalcIntercept = !mpNoInterceptCheckBox->IsChecked();
+    mbCalcIntercept = !mxNoInterceptCheckBox->get_active();
 
     // max col of our output should account for
     // 1. constant term column,
@@ -211,7 +197,7 @@ ScRange ScRegressionDialog::ApplyOutput(ScDocShell* pDocShell)
     WriteRegressionStatistics(aOutput, aTemplate);
     WriteRegressionANOVAResults(aOutput, aTemplate);
     WriteRegressionEstimatesWithCI(aOutput, aTemplate, bTakeLogX);
-    if (mpCalcResidualsCheckBox->IsChecked())
+    if (mxCalcResidualsCheckBox->get_active())
         WritePredictionsWithResiduals(aOutput, aTemplate, nRegressionIndex);
 
     ScAddress aMaxAddress(aOutput.mMaximumAddress);
@@ -223,27 +209,27 @@ bool ScRegressionDialog::InputRangesValid()
 {
     if (!mVariable1Range.IsValid())
     {
-        mpErrorMessage->SetText(ScResId(STR_MESSAGE_XINVALID_RANGE));
+        mxErrorMessage->set_label(ScResId(STR_MESSAGE_XINVALID_RANGE));
         return false;
     }
 
     if (!mVariable2Range.IsValid())
     {
-        mpErrorMessage->SetText(ScResId(STR_MESSAGE_YINVALID_RANGE));
+        mxErrorMessage->set_label(ScResId(STR_MESSAGE_YINVALID_RANGE));
         return false;
     }
 
     if (!mOutputAddress.IsValid())
     {
-        mpErrorMessage->SetText(ScResId(STR_MESSAGE_INVALID_OUTPUT_ADDR));
+        mxErrorMessage->set_label(ScResId(STR_MESSAGE_INVALID_OUTPUT_ADDR));
         return false;
     }
 
     {
-        double fConfidenceLevel = mpConfidenceLevelField->GetValue();
+        double fConfidenceLevel = mxConfidenceLevelField->get_value();
         if ( fConfidenceLevel <= 0.0 || fConfidenceLevel >= 100.0 )
         {
-            mpErrorMessage->SetText(ScResId(STR_MESSAGE_INVALID_CONFIDENCE_LEVEL));
+            mxErrorMessage->set_label(ScResId(STR_MESSAGE_INVALID_CONFIDENCE_LEVEL));
             return false;
         }
     }
@@ -262,13 +248,13 @@ bool ScRegressionDialog::InputRangesValid()
     if (!bYHasSingleDim)
     {
         if (bGroupedByColumn)
-            mpErrorMessage->SetText(ScResId(STR_MESSAGE_YVARIABLE_MULTI_COLUMN));
+            mxErrorMessage->set_label(ScResId(STR_MESSAGE_YVARIABLE_MULTI_COLUMN));
         else
-            mpErrorMessage->SetText(ScResId(STR_MESSAGE_YVARIABLE_MULTI_ROW));
+            mxErrorMessage->set_label(ScResId(STR_MESSAGE_YVARIABLE_MULTI_ROW));
         return false;
     }
 
-    bool bWithLabels = mpWithLabelsCheckBox->IsChecked();
+    bool bWithLabels = mxWithLabelsCheckBox->get_active();
 
     size_t nYObs = lcl_GetNumRowsColsInRange(mVariable2Range, bGroupedByColumn);
     size_t nNumXVars = lcl_GetNumRowsColsInRange(mVariable1Range, !bGroupedByColumn);
@@ -277,9 +263,9 @@ bool ScRegressionDialog::InputRangesValid()
     if (lcl_GetNumRowsColsInRange(mVariable1Range, bGroupedByColumn) != nYObs)
     {
         if (mbUnivariate)
-            mpErrorMessage->SetText(ScResId(STR_MESSAGE_UNIVARIATE_NUMOBS_MISMATCH));
+            mxErrorMessage->set_label(ScResId(STR_MESSAGE_UNIVARIATE_NUMOBS_MISMATCH));
         else
-            mpErrorMessage->SetText(ScResId(STR_MESSAGE_MULTIVARIATE_NUMOBS_MISMATCH));
+            mxErrorMessage->set_label(ScResId(STR_MESSAGE_MULTIVARIATE_NUMOBS_MISMATCH));
         return false;
     }
 
@@ -289,23 +275,23 @@ bool ScRegressionDialog::InputRangesValid()
     mbUse3DAddresses = mVariable1Range.aStart.Tab() != mOutputAddress.Tab() ||
         mVariable2Range.aStart.Tab() != mOutputAddress.Tab();
 
-    mpErrorMessage->SetText("");
+    mxErrorMessage->set_label("");
 
     return true;
 }
 
 size_t ScRegressionDialog::GetRegressionTypeIndex()
 {
-    if (mpLinearRadioButton->IsChecked())
+    if (mxLinearRadioButton->get_active())
         return 0;
-    if (mpLogarithmicRadioButton->IsChecked())
+    if (mxLogarithmicRadioButton->get_active())
         return 1;
     return 2;
 }
 
 ScRange ScRegressionDialog::GetDataRange(const ScRange& rRange)
 {
-    if (!mpWithLabelsCheckBox->IsChecked())
+    if (!mxWithLabelsCheckBox->get_active())
         return rRange;
 
     ScRange aDataRange(rRange);
@@ -322,7 +308,7 @@ OUString ScRegressionDialog::GetVariableNameFormula(bool bXVar, size_t nIndex, b
     if (bXVar && nIndex == 0)
         return "=\"" + ScResId(STR_LABEL_INTERCEPT) + "\"";
 
-    if (mpWithLabelsCheckBox->IsChecked())
+    if (mxWithLabelsCheckBox->get_active())
     {
         ScAddress aAddr(bXVar ? mVariable1Range.aStart : mVariable2Range.aStart);
         if (mGroupedBy == BY_COLUMN)
@@ -512,7 +498,7 @@ void ScRegressionDialog::WriteRegressionANOVAResults(AddressWalkerWriter& rOutpu
     rOutput.newLine();
     rOutput.writeString(ScResId(STR_LABEL_CONFIDENCE_LEVEL));
     rOutput.nextColumn();
-    rOutput.writeValue(mpConfidenceLevelField->GetValue() / 100.0);
+    rOutput.writeValue(mxConfidenceLevelField->get_value() / 100.0);
     rTemplate.autoReplaceAddress("%CONFIDENCE_LEVEL_ADDR%", rOutput.current());
     rOutput.newLine();
 }
@@ -687,12 +673,12 @@ void ScRegressionDialog::WriteTable(const std::function<CellValueGetter>& rCellG
     }
 }
 
-IMPL_LINK_NOARG(ScRegressionDialog, CheckBoxHdl, CheckBox&, void)
+IMPL_LINK_NOARG(ScRegressionDialog, CheckBoxHdl, weld::ToggleButton&, void)
 {
     ValidateDialogInput();
 }
 
-IMPL_LINK_NOARG(ScRegressionDialog, NumericFieldHdl, Edit&, void)
+IMPL_LINK_NOARG(ScRegressionDialog, NumericFieldHdl, weld::SpinButton&, void)
 {
     ValidateDialogInput();
 }

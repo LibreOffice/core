@@ -13,34 +13,33 @@
 
 #include "StatisticsTwoVariableDialog.hxx"
 
-class ScRegressionDialog : public ScStatisticsTwoVariableDialog
+class ScRegressionDialog : public ScStatisticsTwoVariableDialogController
 {
-    VclPtr<CheckBox>     mpWithLabelsCheckBox;
-    VclPtr<RadioButton>  mpLinearRadioButton;
-    VclPtr<RadioButton>  mpLogarithmicRadioButton;
-    VclPtr<RadioButton>  mpPowerRadioButton;
-    VclPtr<FixedText>    mpErrorMessage;
-    VclPtr<NumericField> mpConfidenceLevelField;
-    VclPtr<CheckBox>     mpCalcResidualsCheckBox;
-    VclPtr<CheckBox>     mpNoInterceptCheckBox;
-
     bool mbUnivariate;
     size_t mnNumIndependentVars;
     size_t mnNumObservations;
     bool mbUse3DAddresses;
     bool mbCalcIntercept;
 
+    std::unique_ptr<weld::CheckButton> mxWithLabelsCheckBox;
+    std::unique_ptr<weld::RadioButton> mxLinearRadioButton;
+    std::unique_ptr<weld::RadioButton> mxLogarithmicRadioButton;
+    std::unique_ptr<weld::RadioButton> mxPowerRadioButton;
+    std::unique_ptr<weld::Label> mxErrorMessage;
+    std::unique_ptr<weld::SpinButton> mxConfidenceLevelField;
+    std::unique_ptr<weld::CheckButton> mxCalcResidualsCheckBox;
+    std::unique_ptr<weld::CheckButton> mxNoInterceptCheckBox;
+
 public:
     ScRegressionDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        vcl::Window* pParent, ScViewData* pViewData );
+        weld::Window* pParent, ScViewData* pViewData );
 
     virtual ~ScRegressionDialog() override;
 
-    virtual bool Close() override;
+    virtual void Close() override;
 
 protected:
-    void dispose() override;
     virtual const char* GetUndoNameId() override;
     virtual ScRange ApplyOutput(ScDocShell* pDocShell) override;
     virtual bool InputRangesValid() override;
@@ -75,8 +74,8 @@ private:
                     size_t nColsInTable, AddressWalkerWriter& rOutput,
                     const std::function<CellWriter>& rFunc);
 
-    DECL_LINK( CheckBoxHdl, CheckBox&, void );
-    DECL_LINK( NumericFieldHdl, Edit&, void );
+    DECL_LINK( CheckBoxHdl, weld::ToggleButton&, void );
+    DECL_LINK( NumericFieldHdl, weld::SpinButton&, void );
 };
 
 
