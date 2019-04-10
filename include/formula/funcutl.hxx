@@ -142,6 +142,18 @@ public:
         xEntry->select_region(0, -1);
     }
 
+    void SetSelection(const Selection& rSelection)
+    {
+        xEntry->select_region(rSelection.Min(), rSelection.Max());
+    }
+
+    Selection GetSelection() const
+    {
+        int nStartPos, nEndPos;
+        xEntry->get_selection_bounds(nStartPos, nEndPos);
+        return Selection(nStartPos, nEndPos);
+    }
+
     weld::Label* GetLabelWidgetForShrinkMode()
     {
         return pLabelWidget;

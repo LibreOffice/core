@@ -48,7 +48,7 @@ SFX_IMPL_MODELESSDIALOG_WITHID(ScColRowNameRangesDlgWrapper, SID_DEFINE_COLROWNA
 SFX_IMPL_MODELESSDIALOG_WITHID(ScFormulaDlgWrapper, SID_OPENDLG_FUNCTION )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScAcceptChgDlgWrapper, FID_CHG_ACCEPT )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScHighlightChgDlgWrapper, FID_CHG_SHOW )
-SFX_IMPL_MODELESSDIALOG_WITHID(ScSimpleRefDlgWrapper, WID_SIMPLE_REF )
+SFX_IMPL_CHILDWINDOW_WITHID(ScSimpleRefDlgWrapper, WID_SIMPLE_REF )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScCondFormatDlgWrapper, WID_CONDFRMT_REF )
 
 SFX_IMPL_CHILDWINDOW_WITHID(ScValidityRefChildWin, SID_VALIDITY_REFERENCE)
@@ -183,12 +183,12 @@ ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( vcl::Window* pParentP,
         pInfo->aSize.setHeight(nScSimpleRefHeight );
         pInfo->aSize.setWidth(nScSimpleRefWidth );
     }
-    SetWindow(nullptr);
+    SetController(nullptr);
 
-    if(bAutoReOpen && pViewShell)
-        SetWindow( pViewShell->CreateRefDialog( p, this, pInfo, pParentP, WID_SIMPLE_REF) );
+    if (bAutoReOpen && pViewShell)
+        SetController(pViewShell->CreateRefDialogController(p, this, pInfo, pParentP->GetFrameWeld(), WID_SIMPLE_REF));
 
-    if (!GetWindow())
+    if (!GetController())
     {
         SC_MOD()->SetRefDialog( nId, false );
     }
@@ -210,42 +210,47 @@ void ScSimpleRefDlgWrapper::SetAutoReOpen(bool bFlag)
 
 void ScSimpleRefDlgWrapper::SetRefString(const OUString& rStr)
 {
-    if(GetWindow())
+    auto xDlgController = GetController();
+    if (xDlgController)
     {
-        static_cast<ScSimpleRefDlg*>(GetWindow())->SetRefString(rStr);
+        static_cast<ScSimpleRefDlg*>(xDlgController.get())->SetRefString(rStr);
     }
 }
 
 void ScSimpleRefDlgWrapper::SetCloseHdl( const Link<const OUString*,void>& rLink )
 {
-    if(GetWindow())
+    auto xDlgController = GetController();
+    if (xDlgController)
     {
-        static_cast<ScSimpleRefDlg*>(GetWindow())->SetCloseHdl( rLink );
+        static_cast<ScSimpleRefDlg*>(xDlgController.get())->SetCloseHdl(rLink);
     }
 }
 
 void ScSimpleRefDlgWrapper::SetUnoLinks( const Link<const OUString&,void>& rDone,
                     const Link<const OUString&,void>& rAbort, const Link<const OUString&,void>& rChange )
 {
-    if(GetWindow())
+    auto xDlgController = GetController();
+    if (xDlgController)
     {
-        static_cast<ScSimpleRefDlg*>(GetWindow())->SetUnoLinks( rDone, rAbort, rChange );
+        static_cast<ScSimpleRefDlg*>(xDlgController.get())->SetUnoLinks( rDone, rAbort, rChange );
     }
 }
 
 void ScSimpleRefDlgWrapper::SetFlags( bool bCloseOnButtonUp, bool bSingleCell, bool bMultiSelection )
 {
-    if(GetWindow())
+    auto xDlgController = GetController();
+    if (xDlgController)
     {
-        static_cast<ScSimpleRefDlg*>(GetWindow())->SetFlags( bCloseOnButtonUp, bSingleCell, bMultiSelection );
+        static_cast<ScSimpleRefDlg*>(xDlgController.get())->SetFlags( bCloseOnButtonUp, bSingleCell, bMultiSelection );
     }
 }
 
 void ScSimpleRefDlgWrapper::StartRefInput()
 {
-    if(GetWindow())
+    auto xDlgController = GetController();
+    if (xDlgController)
     {
-        static_cast<ScSimpleRefDlg*>(GetWindow())->StartRefInput();
+        static_cast<ScSimpleRefDlg*>(xDlgController.get())->StartRefInput();
     }
 }
 
