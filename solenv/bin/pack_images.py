@@ -566,7 +566,7 @@ def get_imagelist_filenames(filename):
                     line_split.strip()
                     imagelist_filenames[line_split] = ''
 
-    LOGGER.debug("Extraced imagelist filenames:\n%s", "\n".join(imagelist_filenames.keys()))
+    LOGGER.debug("Extracted imagelist filenames:\n%s", "\n".join(imagelist_filenames.keys()))
     return imagelist_filenames
 
 
