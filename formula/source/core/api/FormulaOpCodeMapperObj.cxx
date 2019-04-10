@@ -26,6 +26,7 @@
 #include <formula/FormulaOpCodeMapperObj.hxx>
 #include <formula/opcode.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 namespace formula
 {
