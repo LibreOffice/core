@@ -16,6 +16,24 @@
       "revId": "87248fefb0dcc4464c36a11a63ffaf5b1a640592",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_5dd7d7ee",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-04-10T16:04:17Z",
+      "side": 1,
+      "message": "This is less about sanity, but more about a programmers mistake. It doesn\u0027t change anything and can potentially catch a bug, which should never happen, but eventually will.\n\nWe could say the same about all the access to the protected values in all these templates.",
+      "parentUuid": "df87a7cf_1de2afd6",
+      "revId": "87248fefb0dcc4464c36a11a63ffaf5b1a640592",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
