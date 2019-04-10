@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,tipoftheday_images,extras/source/tipoftheday))
+$(eval $(call gb_Package_Package,tipoftheday_images,$(SRCDIR)/extras/source/tipoftheday))
 
 $(eval $(call gb_Package_add_files_with_dir,tipoftheday_images,$(LIBO_SHARE_FOLDER)/tipoftheday,\
 	tipoftheday.png \
