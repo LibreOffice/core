@@ -35,7 +35,7 @@ static bool hasOption(char const * szOption, int argc, char** argv);
 " First the system path is converted into a file URL. Then all " \
 "characters which have a special meaning in bootstrap variables, " \
 "such as \'$\' are escaped. The resulting string is written to " \
-"stdout an can be assigned to a bootstrap variable.\n" \
+"stdout and can be assigned to a bootstrap variable.\n" \
 "\n\n" \
 "OPTIONS \n\n" \
 "\tThe following options are supported: \n" \
