@@ -2882,7 +2882,7 @@ void SvImpLBox::PaintDDCursor(SvTreeListEntry* pEntry, bool bShow)
         SvViewDataEntry* pViewData = pView->GetViewData(pEntry);
         pViewData->SetDragTarget(bShow);
 #ifdef MACOSX
-        // in MacOS we need to draw directly (as we are synchronuous) or no invalidation happens
+        // in MacOS we need to draw directly (as we are synchronous) or no invalidation happens
         pView->PaintEntry1(*pEntry, GetEntryLine(pEntry), *pView);
 #else
         InvalidateEntry(pEntry);
