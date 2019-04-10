@@ -15,7 +15,7 @@
 
 #include <formula/formuladllapi.h>
 #include <formula/token.hxx>
-#include <rtl/ustring.hxx>
+#include <rtl/ustring.h>
 
 namespace formula {
 

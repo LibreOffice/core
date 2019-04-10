@@ -28,13 +28,11 @@
 #include <formula/formuladllapi.h>
 #include <formula/grammar.hxx>
 #include <formula/opcode.hxx>
-#include <formula/token.hxx>
 #include <formula/tokenarray.hxx>
 #include <formula/types.hxx>
 #include <formula/paramclass.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <sal/types.h>
 #include <tools/debug.hxx>
 

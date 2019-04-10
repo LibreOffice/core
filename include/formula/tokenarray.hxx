@@ -28,8 +28,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include <com/sun/star/uno/Sequence.hxx>
-#include <formula/ExternalReferenceHelper.hxx>
 #include <formula/formuladllapi.h>
 #include <formula/opcode.hxx>
 #include <formula/token.hxx>
@@ -40,6 +38,10 @@
 namespace com { namespace sun { namespace star {
     namespace sheet { struct FormulaToken; }
 } } }
+
+namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace formula { class ExternalReferenceHelper; }
+namespace formula { class FormulaTokenArray; }
 
 namespace svl {
 
