@@ -330,18 +330,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
         }
         break;
 
-        case SID_TTEST_DIALOG:
-        {
-            pResult = VclPtr<ScTTestDialog>::Create( pB, pCW, pParent, &GetViewData() );
-        }
-        break;
-
-        case SID_FTEST_DIALOG:
-        {
-            pResult = VclPtr<ScFTestDialog>::Create( pB, pCW, pParent, &GetViewData() );
-        }
-        break;
-
         case SID_ZTEST_DIALOG:
         {
             pResult = VclPtr<ScZTestDialog>::Create( pB, pCW, pParent, &GetViewData() );
@@ -529,6 +517,16 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         case SID_REGRESSION_DIALOG:
         {
             xResult.reset(new ScRegressionDialog(pB, pCW, pParent, &GetViewData()));
+        }
+        break;
+        case SID_FTEST_DIALOG:
+        {
+            xResult.reset(new ScFTestDialog(pB, pCW, pParent, &GetViewData()));
+        }
+        break;
+        case SID_TTEST_DIALOG:
+        {
+            xResult.reset(new ScTTestDialog(pB, pCW, pParent, &GetViewData()));
         }
         break;
     }
