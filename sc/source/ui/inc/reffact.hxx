@@ -114,14 +114,14 @@ private:
 };
 
 class ScTTestDialogWrapper :
-    public ChildWindowWrapper<SID_TTEST_DIALOG>
+    public ChildControllerWrapper<SID_TTEST_DIALOG>
 {
 private:
     ScTTestDialogWrapper() = delete;
 };
 
 class ScFTestDialogWrapper :
-    public ChildWindowWrapper<SID_FTEST_DIALOG>
+    public ChildControllerWrapper<SID_FTEST_DIALOG>
 {
 private:
     ScFTestDialogWrapper() = delete;

@@ -18,20 +18,20 @@
 
 ScTTestDialog::ScTTestDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    vcl::Window* pParent, ScViewData* pViewData ) :
-    ScStatisticsTwoVariableDialog(
+                    weld::Window* pParent, ScViewData* pViewData ) :
+    ScStatisticsTwoVariableDialogController(
             pSfxBindings, pChildWindow, pParent, pViewData,
-            "TTestDialog", "modules/scalc/ui/ttestdialog.ui" )
+            "modules/scalc/ui/ttestdialog.ui", "TTestDialog")
 {
-    SetText(ScResId(STR_TTEST));
+    m_xDialog->set_title(ScResId(STR_TTEST));
 }
 
 ScTTestDialog::~ScTTestDialog()
 {}
 
-bool ScTTestDialog::Close()
+void ScTTestDialog::Close()
 {
-    return DoClose( ScTTestDialogWrapper::GetChildWindowId() );
+    DoClose( ScTTestDialogWrapper::GetChildWindowId() );
 }
 
 const char* ScTTestDialog::GetUndoNameId()
