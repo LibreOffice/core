@@ -13,7 +13,7 @@
 
 #include "StatisticsTwoVariableDialog.hxx"
 
-class ScRegressionDialog : public ScStatisticsTwoVariableDialogController
+class ScRegressionDialog : public ScStatisticsTwoVariableDialog
 {
     bool mbUnivariate;
     size_t mnNumIndependentVars;

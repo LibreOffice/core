@@ -133,7 +133,7 @@ static size_t lcl_GetNumRowsColsInRange(const ScRange& rRange, bool bRows)
 ScRegressionDialog::ScRegressionDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                     weld::Window* pParent, ScViewData* pViewData )
-    : ScStatisticsTwoVariableDialogController(
+    : ScStatisticsTwoVariableDialog(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "modules/scalc/ui/regressiondialog.ui", "RegressionDialog")
     , mbUnivariate(true)

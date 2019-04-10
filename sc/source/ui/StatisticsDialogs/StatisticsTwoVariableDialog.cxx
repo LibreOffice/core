@@ -18,7 +18,7 @@
 
 #include <StatisticsTwoVariableDialog.hxx>
 
-ScStatisticsTwoVariableDialogController::ScStatisticsTwoVariableDialogController(
+ScStatisticsTwoVariableDialog::ScStatisticsTwoVariableDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                     weld::Window* pParent, ScViewData* pViewData, const OUString& rUIXMLDescription, const OString& rID)
     : ScAnyRefDlgController(pSfxBindings, pChildWindow, pParent, rUIXMLDescription, rID)
@@ -58,50 +58,50 @@ ScStatisticsTwoVariableDialogController::ScStatisticsTwoVariableDialogController
     GetRangeFromSelection();
 }
 
-ScStatisticsTwoVariableDialogController::~ScStatisticsTwoVariableDialogController()
+ScStatisticsTwoVariableDialog::~ScStatisticsTwoVariableDialog()
 {
 }
 
-void ScStatisticsTwoVariableDialogController::Init()
+void ScStatisticsTwoVariableDialog::Init()
 {
-    mxButtonOk->connect_clicked( LINK( this, ScStatisticsTwoVariableDialogController, OkClicked ) );
+    mxButtonOk->connect_clicked( LINK( this, ScStatisticsTwoVariableDialog, OkClicked ) );
     mxButtonOk->set_sensitive(false);
 
-    Link<formula::WeldRefEdit&,void> aEditLink = LINK( this, ScStatisticsTwoVariableDialogController, GetEditFocusHandler );
+    Link<formula::WeldRefEdit&,void> aEditLink = LINK( this, ScStatisticsTwoVariableDialog, GetEditFocusHandler );
     mxVariable1RangeEdit->SetGetFocusHdl( aEditLink );
     mxVariable2RangeEdit->SetGetFocusHdl( aEditLink );
     mxOutputRangeEdit->SetGetFocusHdl( aEditLink );
 
-    Link<formula::WeldRefButton&,void> aButtonLink = LINK( this, ScStatisticsTwoVariableDialogController, GetButtonFocusHandler );
+    Link<formula::WeldRefButton&,void> aButtonLink = LINK( this, ScStatisticsTwoVariableDialog, GetButtonFocusHandler );
     mxVariable1RangeButton->SetGetFocusHdl( aButtonLink );
     mxVariable2RangeButton->SetGetFocusHdl( aButtonLink );
     mxOutputRangeButton->SetGetFocusHdl( aButtonLink );
 
-    aEditLink = LINK( this, ScStatisticsTwoVariableDialogController, LoseEditFocusHandler );
+    aEditLink = LINK( this, ScStatisticsTwoVariableDialog, LoseEditFocusHandler );
     mxVariable1RangeEdit->SetLoseFocusHdl( aEditLink );
     mxVariable2RangeEdit->SetLoseFocusHdl( aEditLink );
     mxOutputRangeEdit->SetLoseFocusHdl( aEditLink );
 
-    aButtonLink = LINK( this, ScStatisticsTwoVariableDialogController, LoseButtonFocusHandler );
+    aButtonLink = LINK( this, ScStatisticsTwoVariableDialog, LoseButtonFocusHandler );
     mxVariable1RangeButton->SetLoseFocusHdl( aButtonLink );
     mxVariable2RangeButton->SetLoseFocusHdl( aButtonLink );
     mxOutputRangeButton->SetLoseFocusHdl( aButtonLink );
 
-    Link<formula::WeldRefEdit&,void> aLink2 = LINK( this, ScStatisticsTwoVariableDialogController, RefInputModifyHandler);
+    Link<formula::WeldRefEdit&,void> aLink2 = LINK( this, ScStatisticsTwoVariableDialog, RefInputModifyHandler);
     mxVariable1RangeEdit->SetModifyHdl( aLink2);
     mxVariable2RangeEdit->SetModifyHdl( aLink2);
     mxOutputRangeEdit->SetModifyHdl( aLink2);
 
     mxOutputRangeEdit->GrabFocus();
 
-    mxGroupByColumnsRadio->connect_toggled( LINK( this, ScStatisticsTwoVariableDialogController, GroupByChanged ) );
-    mxGroupByRowsRadio->connect_toggled( LINK( this, ScStatisticsTwoVariableDialogController, GroupByChanged ) );
+    mxGroupByColumnsRadio->connect_toggled( LINK( this, ScStatisticsTwoVariableDialog, GroupByChanged ) );
+    mxGroupByRowsRadio->connect_toggled( LINK( this, ScStatisticsTwoVariableDialog, GroupByChanged ) );
 
     mxGroupByColumnsRadio->set_active(true);
     mxGroupByRowsRadio->set_active(false);
 }
 
-void ScStatisticsTwoVariableDialogController::GetRangeFromSelection()
+void ScStatisticsTwoVariableDialog::GetRangeFromSelection()
 {
     OUString aCurrentString;
 
@@ -128,7 +128,7 @@ void ScStatisticsTwoVariableDialogController::GetRangeFromSelection()
     }
 }
 
-void ScStatisticsTwoVariableDialogController::SetActive()
+void ScStatisticsTwoVariableDialog::SetActive()
 {
     if ( mDialogLostFocus )
     {
@@ -143,7 +143,7 @@ void ScStatisticsTwoVariableDialogController::SetActive()
     RefInputDone();
 }
 
-void ScStatisticsTwoVariableDialogController::SetReference( const ScRange& rReferenceRange, ScDocument* pDocument )
+void ScStatisticsTwoVariableDialog::SetReference( const ScRange& rReferenceRange, ScDocument* pDocument )
 {
     if ( mpActiveEdit != nullptr )
     {
@@ -179,13 +179,13 @@ void ScStatisticsTwoVariableDialogController::SetReference( const ScRange& rRefe
     ValidateDialogInput();
 }
 
-IMPL_LINK_NOARG( ScStatisticsTwoVariableDialogController, OkClicked, weld::Button&, void )
+IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, OkClicked, weld::Button&, void )
 {
     CalculateInputAndWriteToOutput();
     response(RET_OK);
 }
 
-IMPL_LINK(ScStatisticsTwoVariableDialogController, GetEditFocusHandler, formula::WeldRefEdit&, rCtrl, void)
+IMPL_LINK(ScStatisticsTwoVariableDialog, GetEditFocusHandler, formula::WeldRefEdit&, rCtrl, void)
 {
     mpActiveEdit = nullptr;
     if (&rCtrl == mxVariable1RangeEdit.get())
@@ -205,7 +205,7 @@ IMPL_LINK(ScStatisticsTwoVariableDialogController, GetEditFocusHandler, formula:
         mpActiveEdit->SelectAll();
 }
 
-IMPL_LINK( ScStatisticsTwoVariableDialogController, GetButtonFocusHandler, formula::WeldRefButton&, rCtrl, void )
+IMPL_LINK( ScStatisticsTwoVariableDialog, GetButtonFocusHandler, formula::WeldRefButton&, rCtrl, void )
 {
     mpActiveEdit = nullptr;
     if (&rCtrl == mxVariable1RangeButton.get())
@@ -225,17 +225,17 @@ IMPL_LINK( ScStatisticsTwoVariableDialogController, GetButtonFocusHandler, formu
         mpActiveEdit->SelectAll();
 }
 
-IMPL_LINK_NOARG( ScStatisticsTwoVariableDialogController, LoseEditFocusHandler, formula::WeldRefEdit&, void )
+IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, LoseEditFocusHandler, formula::WeldRefEdit&, void )
 {
     mDialogLostFocus = !m_xDialog->has_toplevel_focus();
 }
 
-IMPL_LINK_NOARG( ScStatisticsTwoVariableDialogController, LoseButtonFocusHandler, formula::WeldRefButton&, void )
+IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, LoseButtonFocusHandler, formula::WeldRefButton&, void )
 {
     mDialogLostFocus = !m_xDialog->has_toplevel_focus();
 }
 
-IMPL_LINK_NOARG(ScStatisticsTwoVariableDialogController, GroupByChanged, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ScStatisticsTwoVariableDialog, GroupByChanged, weld::ToggleButton&, void)
 {
     if (mxGroupByColumnsRadio->get_active())
         mGroupedBy = BY_COLUMN;
@@ -245,7 +245,7 @@ IMPL_LINK_NOARG(ScStatisticsTwoVariableDialogController, GroupByChanged, weld::T
     ValidateDialogInput();
 }
 
-IMPL_LINK_NOARG( ScStatisticsTwoVariableDialogController, RefInputModifyHandler, formula::WeldRefEdit&, void )
+IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, RefInputModifyHandler, formula::WeldRefEdit&, void )
 {
     if ( mpActiveEdit )
     {
@@ -313,7 +313,7 @@ IMPL_LINK_NOARG( ScStatisticsTwoVariableDialogController, RefInputModifyHandler,
     ValidateDialogInput();
 }
 
-void ScStatisticsTwoVariableDialogController::CalculateInputAndWriteToOutput()
+void ScStatisticsTwoVariableDialog::CalculateInputAndWriteToOutput()
 {
     OUString aUndo(ScResId(GetUndoNameId()));
     ScDocShell* pDocShell = mViewData->GetDocShell();
@@ -326,12 +326,12 @@ void ScStatisticsTwoVariableDialogController::CalculateInputAndWriteToOutput()
     pDocShell->PostPaint( aOutputRange, PaintPartFlags::Grid );
 }
 
-bool ScStatisticsTwoVariableDialogController::InputRangesValid()
+bool ScStatisticsTwoVariableDialog::InputRangesValid()
 {
     return mVariable1Range.IsValid() && mVariable2Range.IsValid() && mOutputAddress.IsValid();
 }
 
-void ScStatisticsTwoVariableDialogController::ValidateDialogInput()
+void ScStatisticsTwoVariableDialog::ValidateDialogInput()
 {
     // Enable OK button if all inputs are ok.
     mxButtonOk->set_sensitive(InputRangesValid());

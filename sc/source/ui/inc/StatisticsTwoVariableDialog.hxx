@@ -17,7 +17,7 @@
 
 #include <vcl/fixed.hxx>
 
-class ScStatisticsTwoVariableDialogController : public ScAnyRefDlgController
+class ScStatisticsTwoVariableDialog : public ScAnyRefDlgController
 {
 public:
     enum GroupedBy {
@@ -25,12 +25,12 @@ public:
         BY_ROW
     };
 
-    ScStatisticsTwoVariableDialogController(
+    ScStatisticsTwoVariableDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
         weld::Window* pParent, ScViewData* pViewData,
         const OUString& rUIXMLDescription, const OString& rID);
 
-    virtual ~ScStatisticsTwoVariableDialogController() override;
+    virtual ~ScStatisticsTwoVariableDialog() override;
 
     virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
     virtual void        SetActive() override;
