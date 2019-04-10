@@ -19,7 +19,7 @@ namespace dbaui
 
 /**
  * Dialog to set such properties of a query as distinct values and limit
- * It can be opened form Edit menu in Query Design View
+ * It can be opened from Edit menu in Query Design View
  */
 class QueryPropertiesDialog : public weld::GenericDialogController
 {
