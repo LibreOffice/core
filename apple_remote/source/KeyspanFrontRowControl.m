@@ -45,7 +45,7 @@
     [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonPlay]         forKey:@"11_18_61_10_"];
     [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonRight]        forKey:@"11_18_96_10_"];
     [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonLeft]         forKey:@"11_18_97_10_"];
-    /* hold events are not being send by this device
+    /* hold events are not being sent by this device
     [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonRight_Hold]  forKey:@"14_6_4_2_"];
     [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonLeft_Hold]   forKey:@"14_6_3_2_"];
     [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonMenu_Hold]   forKey:@"14_6_14_6_"];
