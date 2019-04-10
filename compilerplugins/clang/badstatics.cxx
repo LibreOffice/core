@@ -160,7 +160,7 @@ public:
         {
             auto const name(pVarDecl->getName());
             if (   name == "g_pI18NStatusInstance" // I18NStatus::free()
-                || name == "s_pPreviousView" // not a owning pointer
+                || name == "s_pPreviousView" // not an owning pointer
                 || name == "s_pDefCollapsed" // SvImpLBox::~SvImpLBox()
                 || name == "s_pDefExpanded"  // SvImpLBox::~SvImpLBox()
                 || name == "g_pDDSource" // SvTreeListBox::dispose()
