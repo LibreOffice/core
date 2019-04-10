@@ -480,7 +480,7 @@ private:
     bool EndTextEdit();
 
     void executeDispatch_View3D();
-    void executeDispatch_PositionAndSize();
+    void executeDispatch_PositionAndSize( const ::css::uno::Sequence< ::css::beans::PropertyValue >* pArgs = nullptr );
 
     void executeDispatch_EditData();
 
