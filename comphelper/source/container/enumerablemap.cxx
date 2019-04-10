@@ -183,7 +183,7 @@ namespace comphelper
     private:
         void    impl_initValues_throw( const Sequence< Pair< Any, Any > >& _initialValues );
 
-        /// throws a IllegalTypeException if the given value is not compatible with our ValueType
+        /// throws an IllegalTypeException if the given value is not compatible with our ValueType
         void    impl_checkValue_throw( const Any& _value ) const;
         void    impl_checkKey_throw( const Any& _key ) const;
         void    impl_checkNaN_throw( const Any& _keyOrValue, const Type& _keyOrValueType ) const;
