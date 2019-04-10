@@ -273,7 +273,7 @@ namespace dbaui
 
         /** adds a new object to the detail page.
             @param  _eType
-                The type where the entry shold be appended.
+                The type where the entry should be appended.
             @param  _rName
                 The name of the object to be inserted
             @param  _rObject
@@ -285,9 +285,9 @@ namespace dbaui
                         ,const OUString& _rName
                         ,const css::uno::Any& _rObject );
 
-        /** replaces a objects name with a new one
+        /** replaces an objects name with a new one
             @param  _eType
-                The type where the entry shold be appended.
+                The type where the entry should be appended.
             @param  _rOldName
                 The old name of the object to be replaced
             @param  _rNewName
@@ -301,7 +301,7 @@ namespace dbaui
 
         /** removes an element from the detail page.
             @param  _eType
-                The type where the entry shold be appended.
+                The type where the entry should be appended.
             @param  _rName
                 The name of the element to be removed.
             @param  _rxConn
