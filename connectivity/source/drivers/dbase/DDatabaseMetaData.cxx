@@ -181,7 +181,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
             {
                 Reference< XColumnsSupplier> xTable(
                     xNames->getByName(*pTabBegin), css::uno::UNO_QUERY);
-                OSL_ENSURE(xTable.is(),"Table not found! Normally a exception had to be thrown here!");
+                OSL_ENSURE(xTable.is(),"Table not found! Normally an exception had to be thrown here!");
                 aRow[3] = new ORowSetValueDecorator(*pTabBegin);
 
                 Reference< XNameAccess> xColumns = xTable->getColumns();
