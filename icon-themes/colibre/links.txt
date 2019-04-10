@@ -233,9 +233,6 @@ cmd/sc_deleteallnotes.png cmd/sc_deleteallannotation.png
 cmd/lc_deleteallnotes.png cmd/lc_deleteallannotation.png
 cmd/sc_formatallnotes.png cmd/sc_editannotation.png
 
-# Template Menu
-cmd/sc_templatemenu.png cmd/sc_adddirect.png
-
 # Animation
 cmd/lc_customanimation.png cmd/lc_animationobjects.png
 cmd/sc_customanimation.png cmd/sc_animationobjects.png
