@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_bd3aa3e4",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport9.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-10T18:33:00Z",
+      "side": 1,
+      "message": "Justin, could you please re-check what this tests?\n\nassertXPath\u0027s 3rd arg is attribute name (seems that it\u0027s what you intend to test), and 4th arg is its value (empty string by default). Currently, omitting the 4th arg may pass in 2 cases: there\u0027s the attribute with empty value (like \u003cw:rStyle w:val\u003d\"\"\u003e), or the attribute is missing. We have a dedicated test for absent attribute (assertXPathNoAttribute), so when I needed to test that we write empty attribute (as opposed to previously absent attribute), and found that assertXPath does not discriminate the two, I decided to change assertXPath to also assert existence of its non-empty attribute name. And that started to fail here.\n\nDo you assert absence of the attribute here, or its presence (which could be likely, based on the description)? Sorry, didn\u0027t look closely to the other code.",
+      "range": {
+        "startLine": 428,
+        "startChar": 4,
+        "endLine": 428,
+        "endChar": 96
+      },
+      "revId": "ac1081170c5bc2234b14ce99b7ea8e583bac82b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
