@@ -56,6 +56,30 @@
       "revId": "01094f9e3a2a18cbe47d4ebe30d03b906c4ba9a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_ddd527bb",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-04-10T17:31:27Z",
+      "side": 1,
+      "message": "I can send an extra patch.\n\nIsn\u0027t calling reset() without clear() wrong usage?",
+      "parentUuid": "df87a7cf_bd5b8385",
+      "range": {
+        "startLine": 248,
+        "startChar": 23,
+        "endLine": 248,
+        "endChar": 39
+      },
+      "revId": "01094f9e3a2a18cbe47d4ebe30d03b906c4ba9a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
