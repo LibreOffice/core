@@ -27,7 +27,6 @@
 #include <vector>
 
 #include <formula/formuladllapi.h>
-#include <formula/IFunctionDescription.hxx>
 #include <formula/opcode.hxx>
 #include <formula/types.hxx>
 #include <formula/paramclass.hxx>
