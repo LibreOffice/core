@@ -33,7 +33,18 @@
         SFX_DECL_CHILDWINDOW_WITHID(Class);                                     \
     };
 
-DECL_WRAPPER_WITHID(ScNameDlgWrapper)
+#define DECL_WRAPPER_WITHID_CONTROLLER(Class) \
+    class Class : public SfxChildWindow                                         \
+    {                                                                           \
+    public:                                                                     \
+        Class( vcl::Window*, sal_uInt16, SfxBindings*, const SfxChildWinInfo* ); \
+        static  std::unique_ptr<SfxChildWindow> CreateImpl(vcl::Window *pParent, sal_uInt16 nId, \
+                    SfxBindings *pBindings, SfxChildWinInfo* pInfo ); \
+        static  void RegisterChildWindow (bool bVisible=false, SfxModule *pMod=nullptr, SfxChildWindowFlags nFlags=SfxChildWindowFlags::NONE); \
+        static  sal_uInt16 GetChildWindowId ();\
+    };
+
+DECL_WRAPPER_WITHID_CONTROLLER(ScNameDlgWrapper)
 DECL_WRAPPER_WITHID(ScNameDefDlgWrapper)
 DECL_WRAPPER_WITHID(ScSolverDlgWrapper)
 DECL_WRAPPER_WITHID(ScOptSolverDlgWrapper)

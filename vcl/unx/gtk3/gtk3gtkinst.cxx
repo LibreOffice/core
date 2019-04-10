@@ -7519,6 +7519,25 @@ public:
         GtkInstanceWidget* pTargetWidget = dynamic_cast<GtkInstanceWidget*>(pTarget);
         gtk_label_set_mnemonic_widget(m_pLabel, pTargetWidget ? pTargetWidget->getWidget() : nullptr);
     }
+
+    virtual void set_error(bool bShowError) override
+    {
+        if (bShowError)
+        {
+            Color aColor(Application::GetSettings().GetStyleSettings().GetHighlightColor());
+
+            guint16 nRed = aColor.GetRed() << 8;
+            guint16 nGreen = aColor.GetRed() << 8;
+            guint16 nBlue = aColor.GetBlue() << 8;
+
+            PangoAttrList* pAttrs = pango_attr_list_new();
+            pango_attr_list_insert(pAttrs, pango_attr_background_new(nRed, nGreen, nBlue));
+            gtk_label_set_attributes(m_pLabel, pAttrs);
+            pango_attr_list_unref(pAttrs);
+        }
+        else
+            gtk_label_set_attributes(m_pLabel, nullptr);
+    }
 };
 
 class GtkInstanceTextView : public GtkInstanceContainer, public virtual weld::TextView

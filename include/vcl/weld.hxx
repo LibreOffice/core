@@ -1435,6 +1435,7 @@ public:
     virtual void set_label(const OUString& rText) = 0;
     virtual OUString get_label() const = 0;
     virtual void set_mnemonic_widget(Widget* pTarget) = 0;
+    virtual void set_error(bool bShowError) = 0;
 };
 
 class VCL_DLLPUBLIC TextView : virtual public Container
