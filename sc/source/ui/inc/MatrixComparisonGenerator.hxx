@@ -16,24 +16,6 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
-class ScMatrixComparisonGenerator : public ScStatisticsInputOutputDialog
-{
-public:
-    ScMatrixComparisonGenerator(
-        SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-        vcl::Window* pParent, ScViewData* pViewData,
-        const OUString& rID, const OUString& rUiXmlDescription );
-
-    virtual ~ScMatrixComparisonGenerator() override;
-
-protected:
-    virtual const char* GetUndoNameId() override;
-    virtual ScRange ApplyOutput(ScDocShell* pDocShell) override;
-
-    virtual const OUString getLabel() = 0;
-    virtual const OUString getTemplate() = 0;
-};
-
 class ScMatrixComparisonGeneratorController : public ScStatisticsInputOutputDialogController
 {
 public:
