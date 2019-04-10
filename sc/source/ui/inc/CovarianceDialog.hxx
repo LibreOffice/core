@@ -13,7 +13,7 @@
 
 #include "MatrixComparisonGenerator.hxx"
 
-class ScCovarianceDialog : public ScMatrixComparisonGeneratorController
+class ScCovarianceDialog : public ScMatrixComparisonGenerator
 {
 public:
     ScCovarianceDialog(

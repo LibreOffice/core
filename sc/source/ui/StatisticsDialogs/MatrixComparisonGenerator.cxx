@@ -39,7 +39,7 @@ namespace
     }
 }
 
-ScMatrixComparisonGeneratorController::ScMatrixComparisonGeneratorController(
+ScMatrixComparisonGenerator::ScMatrixComparisonGenerator(
                                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                                     weld::Window* pParent, ScViewData* pViewData,
                                     const OUString& rUiXmlDescription,
@@ -47,15 +47,15 @@ ScMatrixComparisonGeneratorController::ScMatrixComparisonGeneratorController(
     : ScStatisticsInputOutputDialogController(pSfxBindings, pChildWindow, pParent, pViewData, rUiXmlDescription, rID)
 {}
 
-ScMatrixComparisonGeneratorController::~ScMatrixComparisonGeneratorController()
+ScMatrixComparisonGenerator::~ScMatrixComparisonGenerator()
 {}
 
-const char* ScMatrixComparisonGeneratorController::GetUndoNameId()
+const char* ScMatrixComparisonGenerator::GetUndoNameId()
 {
     return STR_CORRELATION_UNDO_NAME;
 }
 
-ScRange ScMatrixComparisonGeneratorController::ApplyOutput(ScDocShell* pDocShell)
+ScRange ScMatrixComparisonGenerator::ApplyOutput(ScDocShell* pDocShell)
 {
     AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument,
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
