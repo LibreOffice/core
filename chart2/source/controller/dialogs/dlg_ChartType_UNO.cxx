@@ -35,7 +35,7 @@ ChartTypeUnoDlg::ChartTypeUnoDlg( const uno::Reference< uno::XComponentContext >
 }
 ChartTypeUnoDlg::~ChartTypeUnoDlg()
 {
-    // we do this here cause the base class' call to destroyDialog won't reach us anymore: we're within an dtor,
+    // we do this here cause the base class' call to destroyDialog won't reach us anymore: we're within a dtor,
     // so this virtual-method-call the base class does not work, we're already dead then...
     if (m_aDialog)
     {
