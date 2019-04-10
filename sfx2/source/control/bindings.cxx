@@ -1170,21 +1170,21 @@ std::unique_ptr<SfxItemSet> SfxBindings::CreateSet_Impl
     }
 
     // Create a Set from the ranges
-    std::unique_ptr<sal_uInt16[]> pRanges(new sal_uInt16[rFound.size() * 2 + 1]);
-    int j = 0;
+    std::vector<std::pair<sal_uInt16,sal_uInt16>> vec;
     size_t i = 0;
     while ( i < rFound.size() )
     {
-        pRanges[j++] = rFound[i].nWhichId;
+        sal_uInt16 nRangeStart = rFound[i].nWhichId;
             // consecutive numbers
         for ( ; i < rFound.size()-1; ++i )
             if ( rFound[i].nWhichId+1 != rFound[i+1].nWhichId )
                 break;
-        pRanges[j++] = rFound[i++].nWhichId;
+        vec.emplace_back( nRangeStart, rFound[i++].nWhichId );
     }
-    pRanges[j] = 0; // terminating NULL
-    std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(rPool, pRanges.get()));
-    pRanges.reset();
+    // SfxItemSet wants sorted ranges
+    std::sort(vec.begin(), vec.end());
+    vec.emplace_back( 0, 0 ); // terminating NULL
+    std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(rPool, reinterpret_cast<sal_uInt16*>(vec.data())));
     return pSet;
 }
 

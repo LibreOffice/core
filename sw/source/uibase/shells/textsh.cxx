@@ -841,13 +841,13 @@ SfxItemSet SwTextShell::CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr)
     static const sal_uInt16 aFrameAttrRange[] =
     {
         RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
-        SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
-        FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,
-        SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,
-        FN_SET_FRM_NAME,        FN_SET_FRM_NAME,
-        SID_HTML_MODE,          SID_HTML_MODE,
-        SID_COLOR_TABLE,        SID_PATTERN_LIST,
         XATTR_FILL_FIRST,       XATTR_FILL_LAST, // tdf#95003
+        SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
+        SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,
+        SID_COLOR_TABLE,        SID_PATTERN_LIST,
+        SID_HTML_MODE,          SID_HTML_MODE,
+        FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,
+        FN_SET_FRM_NAME,        FN_SET_FRM_NAME,
         0
     };
 

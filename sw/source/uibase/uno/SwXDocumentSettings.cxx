@@ -436,10 +436,10 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                 aStream.Seek ( STREAM_SEEK_TO_BEGIN );
                 static sal_uInt16 const nRange[] =
                 {
-                    FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
-                    SID_HTML_MODE,  SID_HTML_MODE,
                     SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
+                    SID_HTML_MODE,  SID_HTML_MODE,
+                    FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
                     0
                 };
                 auto pItemSet = std::make_unique<SfxItemSet>( mpDoc->GetAttrPool(), nRange );
