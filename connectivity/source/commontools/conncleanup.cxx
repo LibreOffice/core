@@ -155,7 +155,7 @@ namespace dbtools
                 // as the RowSet changed
 
                 // Unfortunately, the our database form implementations sometimes fire the change of their
-                // ActiveConnection twice. This is a error in forms/source/component/DatabaseForm.cxx, but
+                // ActiveConnection twice. This is an error in forms/source/component/DatabaseForm.cxx, but
                 // changing this would require incompatible changes we can't do for a while.
                 // So for the moment, we have to live with it here.
                 //
