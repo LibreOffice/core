@@ -142,8 +142,8 @@ class XWindow(UITestCase):
         self.assertEqual(0, keymouseEventsIntercepted)
 
         global mouseEventsIntercepted
-        # Not expected 3 interceptions
-        self.assertEqual(0, mouseEventsIntercepted)
+        # mousePressed, mouseReleased and mouseEntered should be triggered
+        self.assertEqual(3, mouseEventsIntercepted)
 
         # close document
         self.ui_test.close_doc()
