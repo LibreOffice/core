@@ -890,7 +890,7 @@ Reference< XNumberFormatsSupplier> getNumberFormats(
             bool _bAlloweDefault,
             const Reference< XComponentContext>& _rxContext)
 {
-    // ask the parent of the connection (should be an DatabaseAccess)
+    // ask the parent of the connection (should be a DatabaseAccess)
     Reference< XNumberFormatsSupplier> xReturn;
     Reference< XChild> xConnAsChild(_rxConn, UNO_QUERY);
     OUString sPropFormatsSupplier( "NumberFormatsSupplier" );
@@ -1040,7 +1040,7 @@ try
                 // The Effective-Properties should always be void or string or double ....
 
             if (hasProperty(sPropDefaultDate, xNewProps) && !bIsString)
-            {   // (to convert a OUString into a date will not always succeed, because it might be bound to a text-column,
+            {   // (to convert an OUString into a date will not always succeed, because it might be bound to a text-column,
                 // but we can work with a double)
                 Date aDate = DBTypeConversion::toDate(getDouble(aEffectiveDefault));
                 xNewProps->setPropertyValue(sPropDefaultDate, makeAny(aDate));
