@@ -256,7 +256,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString const & aFirs
                         }
                         if (cDecimalDelimiter && c == cDecimalDelimiter)
                         {
-                            io_nPrecisions = 15; // we have an decimal value
+                            io_nPrecisions = 15; // we have a decimal value
                             io_nScales = 2;
                             ++nDecimalDelCount;
                         } // if (cDecimalDelimiter && c == cDecimalDelimiter)
