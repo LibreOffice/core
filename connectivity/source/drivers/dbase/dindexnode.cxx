@@ -459,7 +459,7 @@ ONDXNode ONDXPage::Split(ONDXPage& rPage)
         aResultNode = (*this)[(nCount + 1) / 2];
         nCount = (nCount + 1) / 2;
 
-        // new page points to page with extraced node
+        // new page points to page with extracted node
         rPage.SetChild(aResultNode.GetChild());
     }
     // node points to new page
