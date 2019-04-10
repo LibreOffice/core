@@ -13,4 +13,8 @@ $(eval $(call gb_UITest_add_modules,demo_ui,$(SRCDIR)/uitest,\
 	demo_ui/ \
 ))
 
+$(eval $(call gb_UITest_set_defs,demo_ui, \
+    TDOC="$(SRCDIR)/uitest/demo_ui/data" \
+))
+
 # vim: set noet sw=4 ts=4:
