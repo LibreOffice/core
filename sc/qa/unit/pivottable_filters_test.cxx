@@ -89,6 +89,7 @@ public:
     void testTdf112106();
     void testTdf123923();
     void testTdf123939();
+    void testTdf124651();
 
     CPPUNIT_TEST_SUITE(ScPivotTableFiltersTest);
 
@@ -132,6 +133,7 @@ public:
     CPPUNIT_TEST(testTdf112106);
     CPPUNIT_TEST(testTdf123923);
     CPPUNIT_TEST(testTdf123939);
+    CPPUNIT_TEST(testTdf124651);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2355,17 +2357,21 @@ void ScPivotTableFiltersTest::testPivotTableDuplicateFields()
 
     std::shared_ptr<utl::TempFile> pXPathFile
         = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pCacheDef
-        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotCache/pivotCacheDefinition1.xml");
+    xmlDocPtr pCacheDef = XPathHelper::parseExport(pXPathFile, m_xSFactory,
+                                                   "xl/pivotCache/pivotCacheDefinition1.xml");
     CPPUNIT_ASSERT(pCacheDef);
 
     assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields", "count", "6");
     assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]", "name", "ID");
     assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]", "name", "Name");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]", "name", "Score");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]", "name", "Method");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]", "name", "method2");
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]", "name", "Method3");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]", "name",
+                "Score");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]", "name",
+                "Method");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]", "name",
+                "method2");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]", "name",
+                "Method3");
 
     xShell->DoClose();
 }
@@ -2441,6 +2447,21 @@ void ScPivotTableFiltersTest::testTdf123939()
 
     assertXPath(pTable, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
                 "containsMixedTypes", "1");
+}
+
+void ScPivotTableFiltersTest::testTdf124651()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf124651_simplePivotTable.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocPtr pDoc
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
+    CPPUNIT_ASSERT(pDoc);
+    // We have to export name attribute, even though it's optional according to ECMA-376 standard,
+    // because Excel (at least 2016) seems to require it.
+    assertXPath(pDoc, "/x:pivotTableDefinition/x:dataFields/x:dataField", "name", "");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPivotTableFiltersTest);
