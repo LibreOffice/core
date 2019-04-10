@@ -219,6 +219,7 @@ sc/uiconfig/scalc/ui/sidebaralignment.ui://GtkSpinButton[@id='leftindent:0pt'] m
 sc/uiconfig/scalc/ui/sidebaralignment.ui://GtkSpinButton[@id='leftindent:0pt'] labelled-by-and-mnemonic
 sc/uiconfig/scalc/ui/sidebaralignment.ui://GtkLabel[@id='orientationlabel'] orphan-label
 sc/uiconfig/scalc/ui/sidebaralignment.ui://VclComboBoxNumeric[@id='orientationdegrees:0degrees'] missing-label-for
+sc/uiconfig/scalc/ui/simplerefdialog.ui://GtkButton[@id='assignref'] button-no-label
 sc/uiconfig/scalc/ui/solverdlg.ui://GtkLabel[@id='targetlabel'] orphan-label
 sc/uiconfig/scalc/ui/solverdlg.ui://GtkLabel[@id='result'] orphan-label
 sc/uiconfig/scalc/ui/solverdlg.ui://GtkLabel[@id='changelabel'] orphan-label

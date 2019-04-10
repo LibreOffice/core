@@ -365,16 +365,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
         }
         break;
 
-        case WID_SIMPLE_REF:
-        {
-            // dialog checks, what is in the cell
-
-            ScViewData& rViewData = GetViewData();
-            rViewData.SetRefTabNo( rViewData.GetTabNo() );
-            pResult = VclPtr<ScSimpleRefDlg>::Create( pB, pCW, pParent );
-        }
-        break;
-
         case WID_CONDFRMT_REF:
         {
             bool        bFound      = false;
@@ -484,6 +474,15 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         case SID_FOURIER_ANALYSIS_DIALOG:
             xResult.reset(new ScFourierAnalysisDialog(pB, pCW, pParent, &GetViewData()));
             break;
+        case WID_SIMPLE_REF:
+        {
+            // dialog checks, what is in the cell
+
+            ScViewData& rViewData = GetViewData();
+            rViewData.SetRefTabNo( rViewData.GetTabNo() );
+            xResult.reset(new ScSimpleRefDlg(pB, pCW, pParent));
+            break;
+        }
         case FID_DEFINE_NAME:
         {
             if (!mbInSwitch)
