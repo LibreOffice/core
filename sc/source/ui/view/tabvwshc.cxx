@@ -330,12 +330,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
         }
         break;
 
-        case SID_ANALYSIS_OF_VARIANCE_DIALOG:
-        {
-            pResult = VclPtr<ScAnalysisOfVarianceDialog>::Create( pB, pCW, pParent, &GetViewData() );
-        }
-        break;
-
         case SID_COVARIANCE_DIALOG:
         {
             pResult = VclPtr<ScCovarianceDialog>::Create( pB, pCW, pParent, &GetViewData() );
@@ -534,6 +528,11 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         case SID_DESCRIPTIVE_STATISTICS_DIALOG:
         {
             xResult.reset(new ScDescriptiveStatisticsDialog(pB, pCW, pParent, &GetViewData()));
+        }
+        break;
+        case SID_ANALYSIS_OF_VARIANCE_DIALOG:
+        {
+            xResult.reset(new ScAnalysisOfVarianceDialog(pB, pCW, pParent, &GetViewData()));
         }
         break;
     }
