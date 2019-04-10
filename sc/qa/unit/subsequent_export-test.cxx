@@ -221,6 +221,7 @@ public:
     void testTdf121612();
     void testPivotCacheAfterExportXLSX();
     void testTdf114969XLSX();
+    void testTdf115159();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -337,6 +338,7 @@ public:
     CPPUNIT_TEST(testTdf121612);
     CPPUNIT_TEST(testPivotCacheAfterExportXLSX);
     CPPUNIT_TEST(testTdf114969XLSX);
+    CPPUNIT_TEST(testTdf115159);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4242,6 +4244,23 @@ void ScExportTest::testTdf114969XLSX()
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[1]", "location", "'1.1.1.1'!C1");
     assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[2]", "location", "'1.1.1.1'!C2");
+}
+
+void ScExportTest::testTdf115159()
+{
+    ScDocShellRef xShell = loadDoc("tdf115159.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    xShell->DoClose();
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/workbook.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    //assert the existing OOXML built-in name is not duplicated
+    assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName", 1);
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
