@@ -261,7 +261,7 @@ void UseUniquePtr::CheckDeleteExpr(const FunctionDecl* functionDecl, const CXXDe
         // don't always own this
         if (fn == SRCDIR "/editeng/source/editeng/impedit2.cxx")
             return;
-        // this member needs to get passed via a extern "C" API
+        // this member needs to get passed via an extern "C" API
         if (fn == SRCDIR "/sd/source/filter/sdpptwrp.cxx")
             return;
         // ownership complicated between this and the group
