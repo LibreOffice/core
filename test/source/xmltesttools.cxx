@@ -73,6 +73,9 @@ OUString XmlTestTools::getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const 
         return OUString();
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
     xmlChar * prop = xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr()));
+    OString sAttAbsent = "In <" + OString(pXmlDoc->name) + ">, XPath '" + rXPath
+                         + "' no attribute '" + rAttribute + "' exist";
+    CPPUNIT_ASSERT_MESSAGE(sAttAbsent.getStr(), prop);
     OUString s(convert(prop));
     xmlFree(prop);
     xmlXPathFreeObject(pXmlObj);

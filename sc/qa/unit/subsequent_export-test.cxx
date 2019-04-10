@@ -716,10 +716,11 @@ void ScExportTest::testCommentExportXLSX()
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/comments1.xml");
     CPPUNIT_ASSERT(pComments);
 
-    assertXPath(pComments, "/x:comments/x:authors/x:author[1]", "BAKO");
+    assertXPathContent(pComments, "/x:comments/x:authors/x:author[1]", "BAKO");
     assertXPath(pComments, "/x:comments/x:authors/x:author", 1);
 
-    assertXPath(pComments, "/x:comments/x:commentList/x:comment/x:text/x:r/x:t", "Komentarz");
+    assertXPathContent(pComments, "/x:comments/x:commentList/x:comment/x:text/x:r/x:t",
+                       "Komentarz");
 
     const xmlDocPtr pVmlDrawing
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/vmlDrawing1.vml");
@@ -757,7 +758,8 @@ void ScExportTest::testCommentExportXLSX_2_XLSX()
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/comments1.xml");
     CPPUNIT_ASSERT(pComments);
 
-    assertXPath(pComments, "/x:comments/x:commentList/x:comment/x:text/x:r/x:t", "visible comment");
+    assertXPathContent(pComments, "/x:comments/x:commentList/x:comment/x:text/x:r/x:t",
+                       "visible comment");
 
     const xmlDocPtr pVmlDrawing
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/vmlDrawing1.vml");

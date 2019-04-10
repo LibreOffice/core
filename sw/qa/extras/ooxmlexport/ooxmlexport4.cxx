@@ -437,7 +437,7 @@ DECLARE_OOXMLEXPORT_TEST(testIndentation, "test_indentation.docx")
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:ind", "end", "");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:ind", "end");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testChartInFooter, "chart-in-footer.docx")
@@ -599,7 +599,8 @@ DECLARE_OOXMLEXPORT_TEST(testOleObject, "test_ole_object.docx")
     if (!pXmlDoc)
         return;
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object/v:shape/v:imagedata", "o:title", "");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object/v:shape/v:imagedata",
+                           "o:title");
     assertXPath(pXmlDoc,
         "/w:document/w:body/w:p[2]/w:r/w:object/o:OLEObject",
         "DrawAspect",
@@ -931,7 +932,10 @@ DECLARE_OOXMLEXPORT_TEST(testFileWithInvalidImageLink, "FileWithInvalidImageLink
     if (!pXmlDoc)
       return;
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/pic:pic[1]/pic:blipFill[1]/a:blip[1]", "embed", "");
+    assertXPathNoAttribute(pXmlDoc,
+                           "/w:document/w:body/w:p[2]/w:r[2]/w:drawing[1]/wp:inline[1]/"
+                           "a:graphic[1]/a:graphicData[1]/pic:pic[1]/pic:blipFill[1]/a:blip[1]",
+                           "embed");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testContentTypeDOCX, "fdo80410.docx")
