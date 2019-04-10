@@ -51,7 +51,7 @@ DECL_WRAPPER_WITHID(ScHighlightChgDlgWrapper)
 DECL_WRAPPER_WITHID(ScCondFormatDlgWrapper)
 
 class ScDescriptiveStatisticsDialogWrapper :
-    public ChildWindowWrapper<SID_DESCRIPTIVE_STATISTICS_DIALOG>
+    public ChildControllerWrapper<SID_DESCRIPTIVE_STATISTICS_DIALOG>
 {
 private:
     ScDescriptiveStatisticsDialogWrapper() = delete;
