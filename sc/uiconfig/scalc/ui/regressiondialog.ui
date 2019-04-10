@@ -2,7 +2,6 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="confidencelevel-adjustment">
     <property name="upper">1</property>
     <property name="value">0.94999999999999996</property>
@@ -13,6 +12,8 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="regressiondialog|RegressionDialog">Regression</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
@@ -116,11 +117,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefEdit" id="variable1-range-edit">
+                      <object class="GtkEntry" id="variable1-range-edit">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                         <property name="width_chars">30</property>
                       </object>
                       <packing>
@@ -129,7 +131,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefButton" id="variable1-range-button">
+                      <object class="GtkButton" id="variable1-range-button">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -154,11 +156,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefEdit" id="variable2-range-edit">
+                      <object class="GtkEntry" id="variable2-range-edit">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                         <property name="width_chars">30</property>
                       </object>
                       <packing>
@@ -167,7 +170,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefButton" id="variable2-range-button">
+                      <object class="GtkButton" id="variable2-range-button">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -189,6 +192,7 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
+                        <property name="width">3</property>
                       </packing>
                     </child>
                     <child>
@@ -206,11 +210,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefEdit" id="output-range-edit">
+                      <object class="GtkEntry" id="output-range-edit">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                         <property name="width_chars">30</property>
                       </object>
                       <packing>
@@ -219,7 +224,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefButton" id="output-range-button">
+                      <object class="GtkButton" id="output-range-button">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -228,12 +233,6 @@
                         <property name="left_attach">2</property>
                         <property name="top_attach">3</property>
                       </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                   </object>
                 </child>
@@ -472,6 +471,7 @@
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
                         <property name="valign">center</property>
+                        <property name="activates_default">True</property>
                         <property name="text" context="regressiondialog|confidencelevel-spin">0,95</property>
                         <property name="adjustment">confidencelevel-adjustment</property>
                         <property name="digits">2</property>
@@ -534,6 +534,7 @@
     </child>
     <action-widgets>
       <action-widget response="-5">ok</action-widget>
+      <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>

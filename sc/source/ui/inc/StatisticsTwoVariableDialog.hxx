@@ -89,6 +89,79 @@ private:
     DECL_LINK( RefInputModifyHandler, Edit&, void );
 };
 
+class ScStatisticsTwoVariableDialogController : public ScAnyRefDlgController
+{
+public:
+    enum GroupedBy {
+        BY_COLUMN,
+        BY_ROW
+    };
+
+    ScStatisticsTwoVariableDialogController(
+        SfxBindings* pB, SfxChildWindow* pCW,
+        weld::Window* pParent, ScViewData* pViewData,
+        const OUString& rUIXMLDescription, const OString& rID);
+
+    virtual ~ScStatisticsTwoVariableDialogController() override;
+
+    virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
+    virtual void        SetActive() override;
+
+protected:
+    void CalculateInputAndWriteToOutput();
+
+    virtual ScRange ApplyOutput(ScDocShell* pDocShell) = 0;
+    virtual const char* GetUndoNameId() = 0;
+    virtual bool InputRangesValid();
+    void ValidateDialogInput();
+
+    // Widgets
+    std::unique_ptr<weld::Label> mxVariable1RangeLabel;
+    std::unique_ptr<formula::WeldRefEdit> mxVariable1RangeEdit;
+    std::unique_ptr<formula::WeldRefButton> mxVariable1RangeButton;
+
+    std::unique_ptr<weld::Label> mxVariable2RangeLabel;
+    std::unique_ptr<formula::WeldRefEdit> mxVariable2RangeEdit;
+    std::unique_ptr<formula::WeldRefButton> mxVariable2RangeButton;
+
+    std::unique_ptr<weld::Label> mxOutputRangeLabel;
+    std::unique_ptr<formula::WeldRefEdit> mxOutputRangeEdit;
+    std::unique_ptr<formula::WeldRefButton> mxOutputRangeButton;
+
+    // Data
+    ScViewData* const         mViewData;
+    ScDocument* const         mDocument;
+
+    ScRange                   mVariable1Range;
+    ScRange                   mVariable2Range;
+
+    ScAddress::Details const  mAddressDetails;
+    ScAddress                 mOutputAddress;
+    GroupedBy                 mGroupedBy;
+
+private:
+    // Widgets
+    std::unique_ptr<weld::Button> mxButtonOk;
+
+    std::unique_ptr<weld::RadioButton> mxGroupByColumnsRadio;
+    std::unique_ptr<weld::RadioButton> mxGroupByRowsRadio;
+
+    formula::WeldRefEdit*      mpActiveEdit;
+    ScAddress const            mCurrentAddress;
+    bool                       mDialogLostFocus;
+
+    void Init();
+    void GetRangeFromSelection();
+
+    DECL_LINK( GroupByChanged, weld::ToggleButton&, void );
+    DECL_LINK( OkClicked, weld::Button&, void );
+    DECL_LINK( GetEditFocusHandler, formula::WeldRefEdit&, void );
+    DECL_LINK( GetButtonFocusHandler, formula::WeldRefButton&, void );
+    DECL_LINK( LoseEditFocusHandler, formula::WeldRefEdit&, void );
+    DECL_LINK( LoseButtonFocusHandler, formula::WeldRefButton&, void );
+    DECL_LINK( RefInputModifyHandler, formula::WeldRefEdit&, void );
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
