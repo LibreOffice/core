@@ -111,9 +111,7 @@ cmd/sc_insertformradio.png cmd/sc_radiobutton.png
 cmd/sc_insertformspin.png cmd/sc_spinbutton.png
 cmd/sc_insertformula.png cmd/sc_dbviewfunctions.png
 cmd/sc_insertformvscroll.png cmd/sc_scrollbar.png
-cmd/sc_scrollbarmenu.png cmd/sc_scrollbar.png
 cmd/sc_insertframeinteract.png cmd/sc_insertframe.png
-cmd/sc_insertframemenu.png cmd/sc_insertframe.png
 cmd/sc_insertframeinteractnocolumns.png cmd/sc_insertframe.png
 cmd/sc_insertimagecontrol.png cmd/sc_insertgraphic.png
 cmd/sc_insertobjectchart.png cmd/sc_drawchart.png
@@ -132,7 +130,6 @@ cmd/sc_showtrackedchanges.png cmd/sc_addwatch.png
 cmd/lc_showtrackedchanges.png cmd/lc_addwatch.png
 cmd/sc_tracechangemode.png cmd/sc_trackchanges.png
 cmd/lc_tracechangemode.png cmd/lc_trackchanges.png
-cmd/sc_shapesmenu.png cmd/sc_basicshapes.round-quadrat.png
 cmd/sc_charactermenu.png cmd/sc_fontdialog.png
 cmd/sc_paragraphmenu.png cmd/sc_paragraphdialog.png
 cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png
@@ -204,7 +201,7 @@ cmd/sc_formatspacingmenu.png cmd/sc_spacepara15.png
 cmd/sc_textalign.png cmd/sc_alignblock.png
 cmd/sc_formatbulletsmenu.png cmd/sc_defaultbullet.png
 cmd/sc_formatimagemenu.png cmd/sc_gallery.png
-cmd/sc_formatframemenu.png cmd/sc_framedialog.png
+cmd/sc_formatframemenu.png cmd/sc_formatline.png
 
 # Url
 cmd/lc_webhtml.png cmd/lc_browseview.png
@@ -232,9 +229,6 @@ cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
 cmd/sc_deleteallnotes.png cmd/sc_deleteallannotation.png
 cmd/lc_deleteallnotes.png cmd/lc_deleteallannotation.png
 cmd/sc_formatallnotes.png cmd/sc_editannotation.png
-
-# Template Menu
-cmd/sc_templatemenu.png cmd/sc_adddirect.png
 
 # Animation
 cmd/lc_customanimation.png cmd/lc_animationobjects.png
@@ -664,7 +658,6 @@ cmd/sc_fillcolor.png cmd/sc_formatarea.png
 # Notebookbar
 cmd/lc_headerandfooter.png cmd/lc_editheaderandfooter.png
 cmd/sc_headerandfooter.png cmd/sc_editheaderandfooter.png
-cmd/sc_insertheaderfootermenu.png cmd/sc_editheaderandfooter.png
 cmd/lc_recalcpivottable.png cmd/lc_calculate.png
 cmd/sc_recalcpivottable.png cmd/sc_calculate.png
 cmd/lc_dataproviderrefresh.png cmd/lc_calculate.png
@@ -767,7 +760,6 @@ cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
 # Grid
 cmd/lc_gridvisible.png cmd/lc_grid.png
 cmd/sc_gridvisible.png cmd/sc_grid.png
-cmd/sc_gridmenu.png cmd/sc_grid.png
 cmd/sc_insertgridcontrol.png cmd/sc_grid.png
 cmd/lc_insertgridcontrol.png cmd/lc_grid.png
 
@@ -828,10 +820,6 @@ cmd/sc_outlineright.png cmd/sc_decrementlevel.png
 cmd/sc_outlineleft.png cmd/sc_decrementindent.png
 cmd/sc_incrementlevel.png cmd/sc_decrementindent.png
 
-# Index
-cmd/sc_indexesmenu.png cmd/sc_insertindexesentry.png
-cmd/sc_insertfootnotesmenu.png cmd/sc_insertfootnote.png
-
 # Mirror
 cmd/lc_fliphorizontal.png cmd/lc_mirror.png
 cmd/sc_fliphorizontal.png cmd/sc_mirror.png
@@ -888,7 +876,6 @@ cmd/sc_refresh.png cmd/sc_reload.png
 cmd/sc_refreshformcontrol.png cmd/sc_reload.png
 cmd/sc_styleupdatebyexample.png cmd/sc_reload.png
 cmd/sc_draw.png cmd/sc_reload.png
-cmd/sc_updatemenu.png cmd/sc_reload.png
 cmd/sc_updateall.png cmd/sc_reload.png
 cmd/sc_repaginate.png cmd/sc_insertpagenumberfield.png
 cmd/sc_updatefields.png cmd/sc_addfield.png
@@ -1788,7 +1775,6 @@ cmd/sc_convertmenu.png cmd/sc_bezierconvert.png
 # calc menubar icons
 # ===============================================
 cmd/sc_chartmenu.png cmd/sc_drawchart.png
-cmd/sc_objectmenu.png cmd/sc_insertframe.png
 
 # writer
 # ===============================================
@@ -1813,7 +1799,6 @@ cmd/lc_tableevents.png cmd/lc_animationeffects.png
 cmd/sc_sheetlefttoright.png cmd/sc_paralefttoright.png
 cmd/sc_sheetrighttoleft.png cmd/sc_pararighttoleft.png
 cmd/sc_tableevents.png cmd/sc_animationeffects.png
-
 
 # Macro
 cmd/32/macrosmenu.png cmd/32/choosemacro.png
@@ -1844,6 +1829,7 @@ cmd/sc_notecellstyles.png cmd/sc_showannotations.png
 cmd/sc_focustofindbar.png cmd/lc_recsearch.png
 cmd/sc_macroorganizer%3ftabid%3ashort=1.png cmd/sc_open.png
 cmd/sc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/sc_insertplugin.png
+cmd/sc_formatobjectmenu.png cmd/sc_fontworkgalleryfloater.png
 
 # calc styles
 cmd/sc_badcellstyles.png cmd/sc_badcellstyle.png
