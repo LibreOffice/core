@@ -142,7 +142,7 @@ private:
 };
 
 class ScFourierAnalysisDialogWrapper :
-    public ChildWindowWrapper<SID_FOURIER_ANALYSIS_DIALOG>
+    public ChildControllerWrapper<SID_FOURIER_ANALYSIS_DIALOG>
 {
 private:
     ScFourierAnalysisDialogWrapper() = delete;

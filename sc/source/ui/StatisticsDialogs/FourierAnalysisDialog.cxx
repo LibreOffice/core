@@ -26,11 +26,11 @@
 #include <strings.hrc>
 
 ScFourierAnalysisDialog::ScFourierAnalysisDialog(SfxBindings* pSfxBindings,
-                                                 SfxChildWindow* pChildWindow, vcl::Window* pParent,
-                                                 ScViewData* pViewData)
-    : ScStatisticsInputOutputDialog(pSfxBindings, pChildWindow, pParent, pViewData,
-                                    "FourierAnalysisDialog",
-                                    "modules/scalc/ui/fourieranalysisdialog.ui")
+                                                 SfxChildWindow* pChildWindow,
+                                                 weld::Window* pParent, ScViewData* pViewData)
+    : ScStatisticsInputOutputDialogController(pSfxBindings, pChildWindow, pParent, pViewData,
+                                              "modules/scalc/ui/fourieranalysisdialog.ui",
+                                              "FourierAnalysisDialog")
     , maLabelAddr(ScAddress::INITIALIZE_INVALID)
     , maActualInputRange(ScAddress::INITIALIZE_INVALID)
     , mnLen(0)
@@ -40,32 +40,22 @@ ScFourierAnalysisDialog::ScFourierAnalysisDialog(SfxBindings* pSfxBindings,
     , mbWithLabels(false)
     , mbInverse(false)
     , mbPolar(false)
+    , mxWithLabelsCheckBox(m_xBuilder->weld_check_button("withlabels-check"))
+    , mxInverseCheckBox(m_xBuilder->weld_check_button("inverse-check"))
+    , mxPolarCheckBox(m_xBuilder->weld_check_button("polar-check"))
+    , mxMinMagnitudeField(m_xBuilder->weld_spin_button("minmagnitude-spin"))
+    , mxErrorMessage(m_xBuilder->weld_label("error-message"))
 {
-    SetText(ScResId(STR_FOURIER_ANALYSIS));
-    get(mpWithLabelsCheckBox, "withlabels-check");
-    get(mpInverseCheckBox, "inverse-check");
-    get(mpPolarCheckBox, "polar-check");
-    get(mpMinMagnitudeField, "minmagnitude-spin");
-    get(mpErrorMessage, "error-message");
+    m_xDialog->set_title(ScResId(STR_FOURIER_ANALYSIS));
 
-    mpWithLabelsCheckBox->SetToggleHdl(LINK(this, ScFourierAnalysisDialog, CheckBoxHdl));
+    mxWithLabelsCheckBox->connect_toggled(LINK(this, ScFourierAnalysisDialog, CheckBoxHdl));
 }
 
-ScFourierAnalysisDialog::~ScFourierAnalysisDialog() { disposeOnce(); }
+ScFourierAnalysisDialog::~ScFourierAnalysisDialog() {}
 
-bool ScFourierAnalysisDialog::Close()
+void ScFourierAnalysisDialog::Close()
 {
-    return DoClose(ScFourierAnalysisDialogWrapper::GetChildWindowId());
-}
-
-void ScFourierAnalysisDialog::dispose()
-{
-    mpWithLabelsCheckBox.disposeAndClear();
-    mpInverseCheckBox.disposeAndClear();
-    mpPolarCheckBox.disposeAndClear();
-    mpMinMagnitudeField.disposeAndClear();
-    mpErrorMessage.disposeAndClear();
-    ScStatisticsInputOutputDialog::dispose();
+    DoClose(ScFourierAnalysisDialogWrapper::GetChildWindowId());
 }
 
 const char* ScFourierAnalysisDialog::GetUndoNameId() { return STR_FOURIER_ANALYSIS; }
@@ -120,20 +110,20 @@ bool ScFourierAnalysisDialog::InputRangesValid()
 {
     if (!mInputRange.IsValid())
     {
-        mpErrorMessage->SetText(ScResId(STR_MESSAGE_INVALID_INPUT_RANGE));
+        mxErrorMessage->set_label(ScResId(STR_MESSAGE_INVALID_INPUT_RANGE));
         return false;
     }
 
     if (!mOutputAddress.IsValid())
     {
-        mpErrorMessage->SetText(ScResId(STR_MESSAGE_INVALID_OUTPUT_ADDR));
+        mxErrorMessage->set_label(ScResId(STR_MESSAGE_INVALID_OUTPUT_ADDR));
         return false;
     }
 
     mInputRange.PutInOrder();
 
     mbGroupedByColumn = mGroupedBy == BY_COLUMN;
-    mbWithLabels = mpWithLabelsCheckBox->IsChecked();
+    mbWithLabels = mxWithLabelsCheckBox->get_active();
 
     mbUse3DAddresses = mInputRange.aStart.Tab() != mOutputAddress.Tab();
 
@@ -147,13 +137,13 @@ bool ScFourierAnalysisDialog::InputRangesValid()
     {
         OUString aMsg = mbGroupedByColumn ? ScResId(STR_MESSAGE_INVALID_NUMCOLS)
                                           : ScResId(STR_MESSAGE_INVALID_NUMROWS);
-        mpErrorMessage->SetText(aMsg);
+        mxErrorMessage->set_label(aMsg);
         return false;
     }
 
     if (mbWithLabels && nLen < 2)
     {
-        mpErrorMessage->SetText(ScResId(STR_MESSAGE_NODATA_IN_RANGE));
+        mxErrorMessage->set_label(ScResId(STR_MESSAGE_NODATA_IN_RANGE));
         return false;
     }
 
@@ -164,7 +154,7 @@ bool ScFourierAnalysisDialog::InputRangesValid()
 
     if (nLastOutputRow > MAXROW)
     {
-        mpErrorMessage->SetText(ScResId(STR_MESSAGE_OUTPUT_TOO_LONG));
+        mxErrorMessage->set_label(ScResId(STR_MESSAGE_OUTPUT_TOO_LONG));
         return false;
     }
 
@@ -190,17 +180,17 @@ bool ScFourierAnalysisDialog::InputRangesValid()
     }
 
     maActualInputRange = ScRange(aActualStart, mInputRange.aEnd);
-    mpErrorMessage->SetText("");
+    mxErrorMessage->set_label("");
 
     return true;
 }
 
 void ScFourierAnalysisDialog::getOptions()
 {
-    mbInverse = mpInverseCheckBox->IsChecked();
-    mbPolar = mpPolarCheckBox->IsChecked();
+    mbInverse = mxInverseCheckBox->get_active();
+    mbPolar = mxPolarCheckBox->get_active();
 
-    sal_Int32 nDeciBels = static_cast<sal_Int32>(mpMinMagnitudeField->GetValue());
+    sal_Int32 nDeciBels = static_cast<sal_Int32>(mxMinMagnitudeField->get_value());
     if (nDeciBels <= -150)
         mfMinMag = 0.0;
     else
@@ -242,6 +232,9 @@ void ScFourierAnalysisDialog::genFormula(OUString& rFormula)
                + OUString::boolean(mbInverse) + ";true;" + OUString::number(mfMinMag) + ")";
 }
 
-IMPL_LINK_NOARG(ScFourierAnalysisDialog, CheckBoxHdl, CheckBox&, void) { ValidateDialogInput(); }
+IMPL_LINK_NOARG(ScFourierAnalysisDialog, CheckBoxHdl, weld::ToggleButton&, void)
+{
+    ValidateDialogInput();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

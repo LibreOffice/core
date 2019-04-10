@@ -13,14 +13,8 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
-class ScFourierAnalysisDialog : public ScStatisticsInputOutputDialog
+class ScFourierAnalysisDialog : public ScStatisticsInputOutputDialogController
 {
-    VclPtr<CheckBox> mpWithLabelsCheckBox;
-    VclPtr<CheckBox> mpInverseCheckBox;
-    VclPtr<CheckBox> mpPolarCheckBox;
-    VclPtr<NumericField> mpMinMagnitudeField;
-    VclPtr<FixedText> mpErrorMessage;
-
     ScAddress maLabelAddr;
     ScRange maActualInputRange;
     SCSIZE mnLen;
@@ -33,16 +27,21 @@ class ScFourierAnalysisDialog : public ScStatisticsInputOutputDialog
     bool mbInverse : 1;
     bool mbPolar : 1;
 
+    std::unique_ptr<weld::CheckButton> mxWithLabelsCheckBox;
+    std::unique_ptr<weld::CheckButton> mxInverseCheckBox;
+    std::unique_ptr<weld::CheckButton> mxPolarCheckBox;
+    std::unique_ptr<weld::SpinButton> mxMinMagnitudeField;
+    std::unique_ptr<weld::Label> mxErrorMessage;
+
 public:
-    ScFourierAnalysisDialog(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
+    ScFourierAnalysisDialog(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
                             ScViewData* pViewData);
 
     virtual ~ScFourierAnalysisDialog() override;
 
-    virtual bool Close() override;
+    virtual void Close() override;
 
 protected:
-    void dispose() override;
     virtual const char* GetUndoNameId() override;
     virtual ScRange ApplyOutput(ScDocShell* pDocShell) override;
     virtual bool InputRangesValid() override;
@@ -52,7 +51,7 @@ private:
     void getDataLabel(OUString& rLabel);
     void genFormula(OUString& rFormula);
 
-    DECL_LINK(CheckBoxHdl, CheckBox&, void);
+    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
 };
 
 #endif
