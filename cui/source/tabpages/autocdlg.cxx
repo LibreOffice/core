@@ -887,7 +887,7 @@ void OfaAutocorrReplacePage::Reset( const SfxItemSet* )
 
 void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
 {
-    //save old settings an refill
+    //save old settings a refill
     if(eSet != eLang)
     {
         RefillReplaceBox(false, eLang, eSet);
