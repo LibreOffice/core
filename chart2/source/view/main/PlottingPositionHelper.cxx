@@ -106,10 +106,10 @@ uno::Reference< XTransformation > PlottingPositionHelper::getTransformationScale
 {
     //this is a standard transformation for a cartesian coordinate system
 
-    //transformation from 2) to 4) //@todo 2) and 4) need a ink to a document
+    //transformation from 2) to 4) //@todo 2) and 4) need an ink to a document
 
     //we need to apply this transformation to each geometric object because of a bug/problem
-    //of the old drawing layer (the UNO_NAME_3D_EXTRUDE_DEPTH is an integer value instead of an double )
+    //of the old drawing layer (the UNO_NAME_3D_EXTRUDE_DEPTH is an integer value instead of a double )
     if(!m_xTransformationLogicToScene.is())
     {
         ::basegfx::B3DHomMatrix aMatrix;
