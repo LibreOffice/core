@@ -121,7 +121,7 @@ css::uno::Reference< css::sdbc::XCloseable > UpdateableResultSet::createFromPGRe
     UpdateableResultSet *pRS =  new UpdateableResultSet(
         mutex, owner, columnNames, data, ppSettings, schema, table, primaryKey );
 
-    Reference <XCloseable > ret = pRS; // give it an refcount
+    Reference <XCloseable > ret = pRS; // give it a refcount
 
     pRS->m_meta = new ResultSetMetaData( mutex, pRS,nullptr, ppSettings, result, schema, table );
 
