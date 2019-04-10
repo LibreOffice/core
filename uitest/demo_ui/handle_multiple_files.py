@@ -11,13 +11,14 @@ from libreoffice.uno.eventlistener import EventListener
 from uitest.framework import UITestCase
 
 from uitest.debug import sleep
-from uitest.path import get_srcdir_url
 
 import time
+import org.libreoffice.unotest
 import os
+import pathlib
 
 def get_url_for_data_file(file_name):
-    return get_srcdir_url() + "/uitest/demo_ui/data/" + file_name
+    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 class HandleFiles(UITestCase):
 
