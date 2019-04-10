@@ -43,15 +43,13 @@ class XMouseListenerExtended(unohelper.Base, XMouseListener):
     # is invoked when the mouse enters a window.
     @classmethod
     def mouseEntered(self, xMouseEvent):
-        global mouseEventsIntercepted
-        mouseEventsIntercepted += 1
+        # doesn't work in UI tests
         return super(XMouseListenerExtended, self).mouseEntered(xMouseEvent)
 
     # is invoked when the mouse exits a window.
     @classmethod
     def mouseExited(self, xMouseEvent):
-        global mouseEventsIntercepted
-        mouseEventsIntercepted += 1
+        # doesn't work in UI tests
         return super(XMouseListenerExtended, self).mouseExited(xMouseEvent)
 
 
@@ -142,8 +140,8 @@ class XWindow(UITestCase):
         self.assertEqual(0, keymouseEventsIntercepted)
 
         global mouseEventsIntercepted
-        # Not expected 3 interceptions
-        self.assertEqual(0, mouseEventsIntercepted)
+        # mousePressed, mouseReleased and mouseEntered should be triggered
+        self.assertEqual(2, mouseEventsIntercepted)
 
         # close document
         self.ui_test.close_doc()
