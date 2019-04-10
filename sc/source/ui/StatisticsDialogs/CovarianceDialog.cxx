@@ -15,10 +15,10 @@
 
 ScCovarianceDialog::ScCovarianceDialog(
                         SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                        vcl::Window* pParent, ScViewData* pViewData ) :
-    ScMatrixComparisonGenerator(
+                        weld::Window* pParent, ScViewData* pViewData ) :
+    ScMatrixComparisonGeneratorController(
             pSfxBindings, pChildWindow, pParent, pViewData,
-            "CovarianceDialog", "modules/scalc/ui/covariancedialog.ui" )
+            "modules/scalc/ui/covariancedialog.ui", "CovarianceDialog")
 {}
 
 const char* ScCovarianceDialog::GetUndoNameId()
@@ -26,9 +26,9 @@ const char* ScCovarianceDialog::GetUndoNameId()
     return STR_COVARIANCE_UNDO_NAME;
 }
 
-bool ScCovarianceDialog::Close()
+void ScCovarianceDialog::Close()
 {
-    return DoClose( ScCovarianceDialogWrapper::GetChildWindowId() );
+    DoClose( ScCovarianceDialogWrapper::GetChildWindowId() );
 }
 
 const OUString ScCovarianceDialog::getLabel()
