@@ -16,7 +16,7 @@
 ScCorrelationDialog::ScCorrelationDialog(
                         SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                         weld::Window* pParent, ScViewData* pViewData ) :
-    ScMatrixComparisonGeneratorController(
+    ScMatrixComparisonGenerator(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "modules/scalc/ui/correlationdialog.ui", "CorrelationDialog")
 {}

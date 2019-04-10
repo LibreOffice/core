@@ -16,15 +16,15 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
-class ScMatrixComparisonGeneratorController : public ScStatisticsInputOutputDialogController
+class ScMatrixComparisonGenerator : public ScStatisticsInputOutputDialogController
 {
 public:
-    ScMatrixComparisonGeneratorController(
+    ScMatrixComparisonGenerator(
         SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
         weld::Window* pParent, ScViewData* pViewData,
         const OUString& rUiXmlDescription, const OString& rID);
 
-    virtual ~ScMatrixComparisonGeneratorController() override;
+    virtual ~ScMatrixComparisonGenerator() override;
 
 protected:
     virtual const char* GetUndoNameId() override;
