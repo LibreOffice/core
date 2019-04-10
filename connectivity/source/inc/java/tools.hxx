@@ -46,7 +46,7 @@ namespace connectivity
 
     jobject convertTypeMapToJavaMap(const css::uno::Reference< css::container::XNameAccess > & _rMap);
 
-    /** return if a exception occurred
+    /** return if an exception occurred
         the exception will be cleared.
         @param  pEnv
             The native java env
