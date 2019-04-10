@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_1de2afd6",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-10T15:59:00Z",
+      "side": 1,
+      "message": "I wouldn\u0027t get too carried away with all this clean up.  Every sane derived class would treat pT as a const member (which it arguably should have been to begin with), I don\u0027t see much value in adding this assert.",
+      "revId": "87248fefb0dcc4464c36a11a63ffaf5b1a640592",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
