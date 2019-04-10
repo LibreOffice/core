@@ -89,6 +89,7 @@ public:
     void testTdf112106();
     void testTdf123923();
     void testTdf123939();
+    void testTdf124651();
 
     CPPUNIT_TEST_SUITE(ScPivotTableFiltersTest);
 
@@ -132,6 +133,7 @@ public:
     CPPUNIT_TEST(testTdf112106);
     CPPUNIT_TEST(testTdf123923);
     CPPUNIT_TEST(testTdf123939);
+    CPPUNIT_TEST(testTdf124651);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2441,6 +2443,19 @@ void ScPivotTableFiltersTest::testTdf123939()
 
     assertXPath(pTable, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems",
                 "containsMixedTypes", "1");
+}
+
+void ScPivotTableFiltersTest::testTdf124651()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf124651_simplePivotTable.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+        "xl/pivotTables/pivotTable1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    // We have to export name attribute, even though it's optional according to ECMA-376 standard,
+    // because Excel (at least 2016) seems to require it.
+    assertXPath(pDoc, "/x:pivotTableDefinition/x:dataFields/x:dataField", "name", "");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPivotTableFiltersTest);
