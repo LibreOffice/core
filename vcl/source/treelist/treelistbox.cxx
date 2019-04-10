@@ -687,7 +687,7 @@ void SvTreeListBox::ImplShowTargetEmphasis( SvTreeListEntry* pEntry, bool bShow)
         return;
     if ( !bShow && !(nImpFlags & SvTreeListBoxFlags::TARGEMPH_VIS) )
         return;
-    pImpl->PaintDDCursor( pEntry );
+    pImpl->PaintDDCursor( pEntry, bShow);
     if( bShow )
         nImpFlags |= SvTreeListBoxFlags::TARGEMPH_VIS;
     else
@@ -2585,7 +2585,6 @@ void SvTreeListBox::InvalidateEntry(SvTreeListEntry* pEntry)
 
 void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::RenderContext& rRenderContext)
 {
-
     tools::Rectangle aRect; // multi purpose
 
     bool bHorSBar = pImpl->HasHorScrollBar();
@@ -2770,6 +2769,15 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
 
         nCurItem++;
         nCurTab++;
+    }
+
+    if (pViewDataEntry->IsDragTarget())
+    {
+        rRenderContext.Push();
+        rRenderContext.SetLineColor(rSettings.GetDeactiveColor());
+        rRenderContext.SetFillColor(rSettings.GetDeactiveColor());
+        rRenderContext.DrawRect(tools::Rectangle(Point(0, nLine + nTempEntryHeight - 2), Size(nWidth, 2)));
+        rRenderContext.Pop();
     }
 
     if (bCurFontIsSel || rEntry.GetTextColor())

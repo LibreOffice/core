@@ -292,7 +292,7 @@ public:
     void                MakeVisible( SvTreeListEntry* pEntry, bool bMoveToTop = false );
     void                ScrollToAbsPos( long nPos );
 
-    void                PaintDDCursor( SvTreeListEntry* );
+    void                PaintDDCursor(SvTreeListEntry* pEntry, bool bShow);
 
     // Images
     inline Image&       implGetImageLocation( const ImageType _eType );
