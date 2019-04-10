@@ -58,7 +58,7 @@ private:
 };
 
 class ScSamplingDialogWrapper :
-    public ChildWindowWrapper<SID_SAMPLING_DIALOG>
+    public ChildControllerWrapper<SID_SAMPLING_DIALOG>
 {
 private:
     ScSamplingDialogWrapper() = delete;
