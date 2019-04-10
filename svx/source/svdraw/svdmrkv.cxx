@@ -30,6 +30,7 @@
 #include <svdibrow.hxx>
 #endif
 
+#include <osl/thread.h>
 #include <svx/svdoole2.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xflgrit.hxx>
@@ -55,6 +56,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <sfx2/lokcharthelper.hxx>
 #include <sfx2/viewsh.hxx>
 
 #include <array>
@@ -797,6 +799,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     tools::Rectangle aRect(GetMarkedObjRect());
     tools::Rectangle aSelection(aRect);
 
+    bool bIsChart = false;
     if (bTiledRendering && !aRect.IsEmpty())
     {
         sal_uInt32 nTotalPaintWindows = this->PaintWindowCount();
@@ -805,6 +808,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
             const vcl::Window* pWin = dynamic_cast<const vcl::Window*>(this->GetFirstOutputDevice());
             if (pWin && pWin->IsChart())
             {
+                bIsChart = true;
                 const vcl::Window* pViewShellWindow = GetSfxViewShell()->GetEditWindowForActiveOLEObj();
                 if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pWin))
                 {
@@ -845,17 +849,6 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
             {
                 SdrObject* pO = mpMarkedObj;
                 long nRotAngle = pO->GetRotateAngle();
-                // true if we are delaing with a RotGrfFlyFrame
-                // (SwVirtFlyDrawObj with a SwGrfNode)
-                bool bWriterGraphic = pO->HasLimitedRotation();
-
-                if (bWriterGraphic)
-                {
-                    nRotAngle *= 10;
-                }
-
-                sSelection += OString(", ") + OString::number(nRotAngle);
-
                 // true if we are delaing with a RotGrfFlyFrame
                 // (SwVirtFlyDrawObj with a SwGrfNode)
                 bool bWriterGraphic = pO->HasLimitedRotation();

@@ -571,6 +571,23 @@ bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
     return false;
 }
 
+bool ChartController::isSelectedObjectDraggable() const
+{
+    return m_aSelection.isDragableObjectSelected();
+}
+
+bool ChartController::isSelectedObjectResizable() const
+{
+    return m_aSelection.isResizeableObjectSelected();
+}
+
+bool ChartController::isSelectedObjectRotatable() const
+{
+    const ChartController* pThis = this;
+    const uno::Reference< frame::XModel >& xChartModel = const_cast<ChartController*>(pThis)->getModel();
+    return m_aSelection.isRotateableObjectSelected(xChartModel);
+}
+
 bool ChartController::isShapeContext() const
 {
     return m_aSelection.isAdditionalShapeSelected() ||
