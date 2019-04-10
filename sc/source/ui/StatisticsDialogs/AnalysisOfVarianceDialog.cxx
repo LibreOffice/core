@@ -67,10 +67,10 @@ OUString lclCreateMultiParameterFormula(
     return aResult.makeStringAndClear();
 }
 
-void lclMakeSubRangesList(ScRangeList& rRangeList, const ScRange& rInputRange, ScStatisticsInputOutputDialogController::GroupedBy aGroupedBy)
+void lclMakeSubRangesList(ScRangeList& rRangeList, const ScRange& rInputRange, ScStatisticsInputOutputDialog::GroupedBy aGroupedBy)
 {
     std::unique_ptr<DataRangeIterator> pIterator;
-    if (aGroupedBy == ScStatisticsInputOutputDialogController::BY_COLUMN)
+    if (aGroupedBy == ScStatisticsInputOutputDialog::BY_COLUMN)
         pIterator.reset(new DataRangeByColumnIterator(rInputRange));
     else
         pIterator.reset(new DataRangeByRowIterator(rInputRange));
@@ -87,7 +87,7 @@ void lclMakeSubRangesList(ScRangeList& rRangeList, const ScRange& rInputRange, S
 ScAnalysisOfVarianceDialog::ScAnalysisOfVarianceDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                     weld::Window* pParent, ScViewData* pViewData )
-    : ScStatisticsInputOutputDialogController(
+    : ScStatisticsInputOutputDialog(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "modules/scalc/ui/analysisofvariancedialog.ui",
             "AnalysisOfVarianceDialog")

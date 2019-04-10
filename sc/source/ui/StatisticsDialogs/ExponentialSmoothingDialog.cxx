@@ -19,7 +19,7 @@
 ScExponentialSmoothingDialog::ScExponentialSmoothingDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                     weld::Window* pParent, ScViewData* pViewData )
-    : ScStatisticsInputOutputDialogController(
+    : ScStatisticsInputOutputDialog(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "modules/scalc/ui/exponentialsmoothingdialog.ui",
             "ExponentialSmoothingDialog")

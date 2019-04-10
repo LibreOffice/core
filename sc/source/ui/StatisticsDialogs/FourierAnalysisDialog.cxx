@@ -28,9 +28,9 @@
 ScFourierAnalysisDialog::ScFourierAnalysisDialog(SfxBindings* pSfxBindings,
                                                  SfxChildWindow* pChildWindow,
                                                  weld::Window* pParent, ScViewData* pViewData)
-    : ScStatisticsInputOutputDialogController(pSfxBindings, pChildWindow, pParent, pViewData,
-                                              "modules/scalc/ui/fourieranalysisdialog.ui",
-                                              "FourierAnalysisDialog")
+    : ScStatisticsInputOutputDialog(pSfxBindings, pChildWindow, pParent, pViewData,
+                                    "modules/scalc/ui/fourieranalysisdialog.ui",
+                                    "FourierAnalysisDialog")
     , maLabelAddr(ScAddress::INITIALIZE_INVALID)
     , maActualInputRange(ScAddress::INITIALIZE_INVALID)
     , mnLen(0)

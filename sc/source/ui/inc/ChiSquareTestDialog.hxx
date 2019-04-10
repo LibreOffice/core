@@ -13,7 +13,7 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
-class ScChiSquareTestDialog : public ScStatisticsInputOutputDialogController
+class ScChiSquareTestDialog : public ScStatisticsInputOutputDialog
 {
 public:
     ScChiSquareTestDialog(

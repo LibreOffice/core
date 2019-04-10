@@ -17,7 +17,7 @@
 
 #include <vcl/fixed.hxx>
 
-class ScStatisticsInputOutputDialogController : public ScAnyRefDlgController
+class ScStatisticsInputOutputDialog : public ScAnyRefDlgController
 {
 public:
     enum GroupedBy {
@@ -25,13 +25,13 @@ public:
         BY_ROW
     };
 
-    ScStatisticsInputOutputDialogController(
+    ScStatisticsInputOutputDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
         weld::Window* pParent, ScViewData* pViewData,
         const OUString& rUIXMLDescription,
         const OString& rID);
 
-    virtual ~ScStatisticsInputOutputDialogController() override;
+    virtual ~ScStatisticsInputOutputDialog() override;
 
     virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
     virtual void        SetActive() override;
