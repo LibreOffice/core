@@ -3764,6 +3764,14 @@ public:
         SalInstanceWidget* pTargetWidget = dynamic_cast<SalInstanceWidget*>(pTarget);
         pLabel->set_mnemonic_widget(pTargetWidget ? pTargetWidget->getWidget() : nullptr);
     }
+
+    virtual void set_error(bool bShowError) override
+    {
+        if (bShowError)
+            m_xLabel->SetControlBackground(m_xLabel->GetSettings().GetStyleSettings().GetHighlightColor());
+        else
+            m_xLabel->SetControlBackground();
+    }
 };
 
 class SalInstanceTextView : public SalInstanceContainer, public virtual weld::TextView

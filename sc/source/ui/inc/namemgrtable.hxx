@@ -106,7 +106,6 @@ private:
 
     void GetLine(ScRangeNameLine& aLine, weld::TreeIter& rEntry);
     void Init();
-    void CheckForFormulaString();
     const ScRangeData* findRangeData(const ScRangeNameLine& rLine);
 
     DECL_LINK(SizeAllocHdl, const Size&, void);
@@ -117,9 +116,19 @@ public:
         const std::map<OUString, std::unique_ptr<ScRangeName>>& rTabRangeNames,
         const ScAddress& rPos);
 
-    int n_children() const { return m_xTreeView->n_children(); }
+    void CheckForFormulaString();
 
-    void addEntry(const ScRangeNameLine& rLine);
+    int n_children() const { return m_xTreeView->n_children(); }
+    void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_changed(rLink); }
+    void set_cursor(int nPos) { m_xTreeView->set_cursor(nPos); }
+
+    void addEntry(const ScRangeNameLine& rLine, bool bSetCurEntry);
+    void DeleteSelectedEntries();
+    void SetEntry( const ScRangeNameLine& rLine );
+
+    void GetCurrentLine(ScRangeNameLine& rLine);
+    bool IsMultiSelection();
+    bool HasSelection();
     std::vector<ScRangeNameLine> GetSelectedEntries();
 };
 

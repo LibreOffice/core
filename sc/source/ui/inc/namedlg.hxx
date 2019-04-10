@@ -33,28 +33,9 @@ class ScViewData;
 class ScDocument;
 
 //logic behind the manage names dialog
-class ScNameDlg : public ScAnyRefDlg, public ScRangeManagerTable::InitListener
+class ScNameDlg : public ScAnyRefDlgController
 {
 private:
-    VclPtr<Edit>               m_pEdName;
-    VclPtr<formula::RefEdit>   m_pEdAssign;
-    VclPtr<formula::RefButton> m_pRbAssign;
-    VclPtr<ListBox>            m_pLbScope;
-
-    VclPtr<CheckBox>           m_pBtnPrintArea;
-    VclPtr<CheckBox>           m_pBtnColHeader;
-    VclPtr<CheckBox>           m_pBtnCriteria;
-    VclPtr<CheckBox>           m_pBtnRowHeader;
-
-    VclPtr<PushButton>         m_pBtnAdd;
-    VclPtr<PushButton>         m_pBtnDelete;
-    VclPtr<PushButton>         m_pBtnOk;
-    VclPtr<PushButton>         m_pBtnCancel;
-
-    VclPtr<FixedText>          m_pFtInfo;
-
-    VclPtr<ScRangeManagerTable> m_pRangeManagerTable;
-
     const OUString maGlobalNameStr;
     const OUString maErrInvalidNameStr;
     const OUString maErrNameInUse;
@@ -74,6 +55,28 @@ private:
 
     RangeNameContainer m_RangeMap;
 
+    std::unique_ptr<weld::Entry> m_xEdName;
+    std::unique_ptr<weld::Label> m_xFtAssign;
+    std::unique_ptr<formula::WeldRefEdit>   m_xEdAssign;
+    std::unique_ptr<formula::WeldRefButton> m_xRbAssign;
+    std::unique_ptr<weld::ComboBox> m_xLbScope;
+
+    std::unique_ptr<weld::CheckButton> m_xBtnPrintArea;
+    std::unique_ptr<weld::CheckButton> m_xBtnColHeader;
+    std::unique_ptr<weld::CheckButton> m_xBtnCriteria;
+    std::unique_ptr<weld::CheckButton> m_xBtnRowHeader;
+
+    std::unique_ptr<weld::Button> m_xBtnAdd;
+    std::unique_ptr<weld::Button> m_xBtnDelete;
+    std::unique_ptr<weld::Button> m_xBtnOk;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
+
+    std::unique_ptr<weld::Label> m_xFtInfo;
+
+    std::unique_ptr<weld::Expander> m_xExpander;
+
+    std::unique_ptr<RangeManagerTable> m_xRangeManagerTable;
+
 private:
     void Init();
     void UpdateChecks(const ScRangeData* pData);
@@ -87,41 +90,38 @@ private:
 
     void AddPushed();
     void RemovePushed();
-    void CancelPushed();
     void ScopeChanged();
     void NameModified();
 
     void SelectionChanged();
 
     // Handler:
-    DECL_LINK( OkBtnHdl, Button*, void );
-    DECL_LINK( CancelBtnHdl, Button*, void );
-    DECL_LINK( AddBtnHdl, Button*, void );
-    DECL_LINK( RemoveBtnHdl, Button*, void );
-    DECL_LINK( EdModifyHdl, Edit&, void );
-    DECL_LINK( EdModifyCheckBoxHdl, CheckBox&, void );
-    DECL_LINK( AssignGetFocusHdl, Control&, void );
-    DECL_LINK( SelectionChangedHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK( ScopeChangedHdl, ListBox&, void );
+    DECL_LINK( OkBtnHdl, weld::Button&, void );
+    DECL_LINK( CancelBtnHdl, weld::Button&, void );
+    DECL_LINK( AddBtnHdl, weld::Button&, void );
+    DECL_LINK( RemoveBtnHdl, weld::Button&, void );
+    DECL_LINK( EdModifyHdl, weld::Entry&, void );
+    DECL_LINK( RefEdModifyHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( EdModifyCheckBoxHdl, weld::ToggleButton&, void );
+    DECL_LINK( AssignGetFocusHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( SelectionChangedHdl_Impl, weld::TreeView&, void );
+    DECL_LINK( ScopeChangedHdl, weld::ComboBox&, void );
 
 protected:
     virtual void    RefInputDone( bool bForced = false ) override;
 
 public:
-                    ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
-                               ScViewData*      ptrViewData,
-                               const ScAddress& aCursorPos,
-                               std::map<OUString, std::unique_ptr<ScRangeName>>* pRangeMap = nullptr);
+    ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
+               ScViewData*      ptrViewData,
+               const ScAddress& aCursorPos,
+               std::map<OUString, std::unique_ptr<ScRangeName>>* pRangeMap = nullptr);
     virtual         ~ScNameDlg() override;
-    virtual void    dispose() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
     virtual bool    IsRefInputMode() const override;
 
     virtual void    SetActive() override;
-    virtual bool    Close() override;
-
-    virtual void tableInitialized() override;
+    virtual void    Close() override;
 
     void GetRangeNames(std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap);
     void SetEntry(const OUString& rName, const OUString& rScope);

@@ -32,7 +32,7 @@
 #include <scres.hrc>
 #include <validate.hxx>
 
-SFX_IMPL_MODELESSDIALOG_WITHID(ScNameDlgWrapper, FID_DEFINE_NAME )
+SFX_IMPL_CHILDWINDOW_WITHID(ScNameDlgWrapper, FID_DEFINE_NAME)
 SFX_IMPL_MODELESSDIALOG_WITHID(ScNameDefDlgWrapper, FID_ADD_NAME )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScSolverDlgWrapper, SID_OPENDLG_SOLVE )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScOptSolverDlgWrapper, SID_OPENDLG_OPTSOLVER )
@@ -97,7 +97,31 @@ namespace
             pViewShell->GetViewFrame()->SetChildWindow( nId, false );           \
     }
 
-IMPL_CHILD_CTOR( ScNameDlgWrapper, FID_DEFINE_NAME )
+#define IMPL_CONTROLLER_CHILD_CTOR(Class,sid) \
+    Class::Class( vcl::Window*               pParentP,                   \
+                    sal_uInt16              nId,                        \
+                    SfxBindings*        p,                          \
+                    const SfxChildWinInfo*  pInfo )                     \
+        : SfxChildWindow(pParentP, nId)                             \
+    {                                                               \
+        /************************************************************************************/\
+        /*      When a new document is creating, the SfxViewFrame may be ready,             */\
+        /*      But the ScTabViewShell may have not been activated yet. In this             */\
+        /*      situation, SfxViewShell::Current() does not get the correct shell,          */\
+        /*      and we should lcl_GetTabViewShell( p ) instead of SfxViewShell::Current()   */\
+        /************************************************************************************/\
+        ScTabViewShell* pViewShell = lcl_GetTabViewShell( p );      \
+        if (!pViewShell)                                            \
+            pViewShell = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  ); \
+        OSL_ENSURE( pViewShell, "missing view shell :-(" );         \
+        SetController( pViewShell ?                                      \
+            pViewShell->CreateRefDialogController( p, this, pInfo, pParentP->GetFrameWeld(), sid ) : nullptr );    \
+        if (pViewShell && !GetController())                                     \
+            pViewShell->GetViewFrame()->SetChildWindow( nId, false );           \
+    }
+
+
+IMPL_CONTROLLER_CHILD_CTOR( ScNameDlgWrapper, FID_DEFINE_NAME )
 
 IMPL_CHILD_CTOR( ScNameDefDlgWrapper, FID_ADD_NAME )
 

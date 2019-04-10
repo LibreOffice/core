@@ -134,6 +134,13 @@ void ScRangeManagerTable::GetCurrentLine(ScRangeNameLine& rLine)
     GetLine(rLine, pCurrentEntry);
 }
 
+void RangeManagerTable::GetCurrentLine(ScRangeNameLine& rLine)
+{
+    std::unique_ptr<weld::TreeIter> xCurrentEntry(m_xTreeView->make_iterator());
+    if (m_xTreeView->get_cursor(xCurrentEntry.get()))
+        GetLine(rLine, *xCurrentEntry);
+}
+
 void ScRangeManagerTable::GetLine(ScRangeNameLine& rLine, SvTreeListEntry* pEntry)
 {
     rLine.aName = GetEntryText( pEntry, 0);
@@ -200,9 +207,22 @@ void ScRangeManagerTable::DeleteSelectedEntries()
         RemoveSelection();
 }
 
+void RangeManagerTable::DeleteSelectedEntries()
+{
+    std::vector<int> aRows = m_xTreeView->get_selected_rows();
+    std::sort(aRows.begin(), aRows.end());
+    for (auto it = aRows.rbegin(); it != aRows.rend(); ++it)
+        m_xTreeView->remove(*it);
+}
+
 bool ScRangeManagerTable::IsMultiSelection()
 {
     return GetSelectionCount() > 1;
+}
+
+bool RangeManagerTable::IsMultiSelection()
+{
+    return m_xTreeView->count_selected_rows() > 1;
 }
 
 std::vector<ScRangeNameLine> ScRangeManagerTable::GetSelectedEntries()
@@ -232,6 +252,18 @@ void ScRangeManagerTable::SetEntry(const ScRangeNameLine& rLine)
                 && rLine.aScope == GetEntryText(pEntry, 2))
         {
             SetCurEntry(pEntry);
+        }
+    }
+}
+
+void RangeManagerTable::SetEntry(const ScRangeNameLine& rLine)
+{
+    for (int i = 0, nEntryCount = m_xTreeView->n_children(); i < nEntryCount; ++i)
+    {
+        if (rLine.aName == m_xTreeView->get_text(i, 0) &&
+            rLine.aScope == m_xTreeView->get_text(i, 2))
+        {
+            m_xTreeView->set_cursor(i);
         }
     }
 }
@@ -367,7 +399,7 @@ IMPL_LINK_NOARG(RangeManagerTable, SizeAllocHdl, const Size&, void)
     CheckForFormulaString();
 }
 
-void RangeManagerTable::addEntry(const ScRangeNameLine& rLine)
+void RangeManagerTable::addEntry(const ScRangeNameLine& rLine, bool bSetCurEntry)
 {
     int nRow = m_xTreeView->n_children();
     m_xTreeView->append();
@@ -376,6 +408,8 @@ void RangeManagerTable::addEntry(const ScRangeNameLine& rLine)
     m_xTreeView->set_text(nRow, rLine.aScope, 2);
     // just unique to track which one has been cached by maCalculatedFormulaEntries
     m_xTreeView->set_id(nRow, OUString::number(m_nId++));
+    if (bSetCurEntry)
+        m_xTreeView->set_cursor(nRow);
 }
 
 void RangeManagerTable::GetLine(ScRangeNameLine& rLine, weld::TreeIter& rEntry)
@@ -402,7 +436,7 @@ void RangeManagerTable::Init()
             if (!rEntry.second->HasType(ScRangeData::Type::Database))
             {
                 aLine.aName = rEntry.second->GetName();
-                addEntry(aLine);
+                addEntry(aLine, false);
             }
         }
     }
