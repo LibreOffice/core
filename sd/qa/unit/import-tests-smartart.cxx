@@ -401,10 +401,26 @@ void SdImportTestSmartArt::testCycle()
         m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-cycle.pptx"), PPTX);
     uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroup.is());
+
     // 10 children: 5 shapes, 5 connectors
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10), xGroup->getCount());
 
-    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+    uno::Reference<drawing::XShape> xShape0(xGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShapeConn(xGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape2(xGroup->getByIndex(2), uno::UNO_QUERY_THROW);
+
+    uno::Reference<text::XText> xText0(xShape0, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), xText0->getString());
+    uno::Reference<text::XText> xText2(xShape2, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("b"), xText2->getString());
+
+    // xShapeConn is connector between shapes 0 and 2
+    // it should lay between them and be rotated 0 -> 2
+    CPPUNIT_ASSERT(xShape0->getPosition().X < xShapeConn->getPosition().X);
+    CPPUNIT_ASSERT(xShape0->getPosition().Y < xShapeConn->getPosition().Y && xShapeConn->getPosition().Y < xShape2->getPosition().Y);
+    uno::Reference<beans::XPropertySet> xPropSetConn(xShapeConn, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(32400), xPropSetConn->getPropertyValue("RotateAngle").get<sal_Int32>());
+
 }
 
 void SdImportTestSmartArt::testHierarchy()
