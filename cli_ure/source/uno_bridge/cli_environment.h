@@ -94,7 +94,7 @@ public:
      * will give the same id.
      * <p>
      * @return     the generated oid.
-     * @param      object     the object for which a Oid should be generated.
+     * @param      object     the object for which an Oid should be generated.
      */
     static System::String^ getObjectIdentifier(Object^ obj);
 
