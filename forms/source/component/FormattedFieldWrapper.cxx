@@ -54,7 +54,7 @@ css::uno::Reference<css::uno::XInterface> OFormattedFieldWrapper::createFormatte
 
     if (bActAsFormatted)
     {
-        // instantiate an FormattedModel
+        // instantiate a FormattedModel
         // (instantiate it directly ..., as the OFormattedModel isn't
         // registered for any service names anymore)
         OFormattedModel* pModel = new OFormattedModel(pRef->m_xContext);
@@ -311,7 +311,7 @@ void OFormattedFieldWrapper::ensureAggregate()
         return;
 
     {
-        // instantiate an EditModel (the only place where we are allowed to decide that we're an FormattedModel
+        // instantiate an EditModel (the only place where we are allowed to decide that we're a FormattedModel
         // is in ::read)
         css::uno::Reference<css::uno::XInterface>  xEditModel = m_xContext->getServiceManager()->createInstanceWithContext(FRM_SUN_COMPONENT_TEXTFIELD, m_xContext);
         if (!xEditModel.is())
