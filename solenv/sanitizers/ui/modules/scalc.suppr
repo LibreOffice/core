@@ -253,3 +253,6 @@ sc/uiconfig/scalc/ui/xmlsourcedialog.ui://GtkLabel[@id='sourcefile'] orphan-labe
 sc/uiconfig/scalc/ui/xmlsourcedialog.ui://vcllo-SvTreeListBox[@id='tree:border'] no-labelled-by
 sc/uiconfig/scalc/ui/xmlsourcedialog.ui://GtkLabel[@id='label5'] orphan-label
 sc/uiconfig/scalc/ui/xmlsourcedialog.ui://foruilo-RefEdit[@id='edit'] no-labelled-by
+sc/uiconfig/scalc/ui/ztestdialog.ui://GtkButton[@id='variable1-range-button'] button-no-label
+sc/uiconfig/scalc/ui/ztestdialog.ui://GtkButton[@id='variable2-range-button'] button-no-label
+sc/uiconfig/scalc/ui/ztestdialog.ui://GtkButton[@id='output-range-button'] button-no-label

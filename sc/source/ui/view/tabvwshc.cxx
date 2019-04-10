@@ -330,12 +330,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
         }
         break;
 
-        case SID_ZTEST_DIALOG:
-        {
-            pResult = VclPtr<ScZTestDialog>::Create( pB, pCW, pParent, &GetViewData() );
-        }
-        break;
-
         case SID_CHI_SQUARE_TEST_DIALOG:
         {
             pResult = VclPtr<ScChiSquareTestDialog>::Create( pB, pCW, pParent, &GetViewData() );
@@ -527,6 +521,11 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         case SID_TTEST_DIALOG:
         {
             xResult.reset(new ScTTestDialog(pB, pCW, pParent, &GetViewData()));
+        }
+        break;
+        case SID_ZTEST_DIALOG:
+        {
+            xResult.reset(new ScZTestDialog(pB, pCW, pParent, &GetViewData()));
         }
         break;
     }
