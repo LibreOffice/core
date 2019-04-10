@@ -7519,6 +7519,10 @@ public:
         GtkInstanceWidget* pTargetWidget = dynamic_cast<GtkInstanceWidget*>(pTarget);
         gtk_label_set_mnemonic_widget(m_pLabel, pTargetWidget ? pTargetWidget->getWidget() : nullptr);
     }
+
+    virtual void set_error(bool bShowError) override
+    {
+    }
 };
 
 class GtkInstanceTextView : public GtkInstanceContainer, public virtual weld::TextView

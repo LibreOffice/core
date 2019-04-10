@@ -92,22 +92,27 @@ void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
 void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialog* pDialog)
 {
    sal_uInt16 nSlotId = SC_MOD()->GetCurRefDlgId();
+   if( nSlotId == FID_ADD_NAME )
+   {
+        static_cast<ScNameDefDlg*>(pDialog)->GetNewData(maName, maScope);
+        static_cast<ScNameDefDlg*>(pDialog)->Close();
+        sal_uInt16 nId  = ScNameDlgWrapper::GetChildWindowId();
+        SfxViewFrame* pViewFrm = GetViewFrame();
+        SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+
+        SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
+   }
+}
+
+void ScTabViewShell::SwitchBetweenRefDialogControllers(SfxModelessDialogController* pDialog)
+{
+   sal_uInt16 nSlotId = SC_MOD()->GetCurRefDlgId();
    if (nSlotId == FID_DEFINE_NAME)
    {
         mbInSwitch = true;
         static_cast<ScNameDlg*>(pDialog)->GetRangeNames(m_RangeMap);
         static_cast<ScNameDlg*>(pDialog)->Close();
         sal_uInt16 nId  = ScNameDefDlgWrapper::GetChildWindowId();
-        SfxViewFrame* pViewFrm = GetViewFrame();
-        SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
-
-        SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
-   }
-   else if( nSlotId == FID_ADD_NAME )
-   {
-        static_cast<ScNameDefDlg*>(pDialog)->GetNewData(maName, maScope);
-        static_cast<ScNameDlg*>(pDialog)->Close();
-        sal_uInt16 nId  = ScNameDlgWrapper::GetChildWindowId();
         SfxViewFrame* pViewFrm = GetViewFrame();
         SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
@@ -144,27 +149,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
 
     switch( nSlotId )
     {
-        case FID_DEFINE_NAME:
-        {
-            if (!mbInSwitch)
-            {
-                pResult = VclPtr<ScNameDlg>::Create( pB, pCW, pParent, &GetViewData(),
-                                     ScAddress( GetViewData().GetCurX(),
-                                                GetViewData().GetCurY(),
-                                                GetViewData().GetTabNo() ) );
-            }
-            else
-            {
-                pResult = VclPtr<ScNameDlg>::Create( pB, pCW, pParent, &GetViewData(),
-                                     ScAddress( GetViewData().GetCurX(),
-                                                GetViewData().GetCurY(),
-                                                GetViewData().GetTabNo() ), &m_RangeMap);
-                static_cast<ScNameDlg*>(pResult.get())->SetEntry( maName, maScope);
-                mbInSwitch = false;
-            }
-        }
-        break;
-
         case FID_ADD_NAME:
         {
             if (!mbInSwitch)
@@ -462,70 +446,64 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
     switch( nSlotId )
     {
         case SID_CORRELATION_DIALOG:
-        {
             xResult.reset(new ScCorrelationDialog(pB, pCW, pParent, &GetViewData()));
-        }
-        break;
+            break;
         case SID_SAMPLING_DIALOG:
-        {
             xResult.reset(new ScSamplingDialog(pB, pCW, pParent, &GetViewData()));
-        }
-        break;
+            break;
         case SID_DESCRIPTIVE_STATISTICS_DIALOG:
-        {
             xResult.reset(new ScDescriptiveStatisticsDialog(pB, pCW, pParent, &GetViewData()));
-        }
-        break;
+            break;
         case SID_ANALYSIS_OF_VARIANCE_DIALOG:
-        {
             xResult.reset(new ScAnalysisOfVarianceDialog(pB, pCW, pParent, &GetViewData()));
-        }
-        break;
+            break;
         case SID_COVARIANCE_DIALOG:
-        {
             xResult.reset(new ScCovarianceDialog(pB, pCW, pParent, &GetViewData()));
-        }
-        break;
+            break;
         case SID_EXPONENTIAL_SMOOTHING_DIALOG:
-        {
             xResult.reset(new ScExponentialSmoothingDialog(pB, pCW, pParent, &GetViewData()));
-        }
-        break;
+            break;
         case SID_MOVING_AVERAGE_DIALOG:
-        {
             xResult.reset(new ScMovingAverageDialog(pB, pCW, pParent, &GetViewData()));
-        }
-        break;
+            break;
         case SID_REGRESSION_DIALOG:
-        {
             xResult.reset(new ScRegressionDialog(pB, pCW, pParent, &GetViewData()));
-        }
-        break;
+            break;
         case SID_FTEST_DIALOG:
-        {
             xResult.reset(new ScFTestDialog(pB, pCW, pParent, &GetViewData()));
-        }
-        break;
+            break;
         case SID_TTEST_DIALOG:
-        {
             xResult.reset(new ScTTestDialog(pB, pCW, pParent, &GetViewData()));
-        }
-        break;
+            break;
         case SID_ZTEST_DIALOG:
-        {
             xResult.reset(new ScZTestDialog(pB, pCW, pParent, &GetViewData()));
-        }
-        break;
+            break;
         case SID_CHI_SQUARE_TEST_DIALOG:
-        {
             xResult.reset(new ScChiSquareTestDialog(pB, pCW, pParent, &GetViewData()));
-        }
-        break;
+            break;
         case SID_FOURIER_ANALYSIS_DIALOG:
-        {
             xResult.reset(new ScFourierAnalysisDialog(pB, pCW, pParent, &GetViewData()));
+            break;
+        case FID_DEFINE_NAME:
+        {
+            if (!mbInSwitch)
+            {
+                xResult.reset(new ScNameDlg(pB, pCW, pParent, &GetViewData(),
+                                     ScAddress( GetViewData().GetCurX(),
+                                                GetViewData().GetCurY(),
+                                                GetViewData().GetTabNo() ) ));
+            }
+            else
+            {
+                xResult.reset(new ScNameDlg( pB, pCW, pParent, &GetViewData(),
+                                     ScAddress( GetViewData().GetCurX(),
+                                                GetViewData().GetCurY(),
+                                                GetViewData().GetTabNo() ), &m_RangeMap));
+                static_cast<ScNameDlg*>(xResult.get())->SetEntry(maName, maScope);
+                mbInSwitch = false;
+            }
+            break;
         }
-        break;
     }
 
     if (xResult)

@@ -40,11 +40,12 @@
 
 //logic
 
-ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
+ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
         ScViewData*       ptrViewData,
         const ScAddress&  aCursorPos,
         std::map<OUString, std::unique_ptr<ScRangeName>> *const pRangeMap)
-    : ScAnyRefDlg(pB, pCW, pParent, "ManageNamesDialog", "modules/scalc/ui/managenamesdialog.ui")
+    : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/managenamesdialog.ui",
+                            "ManageNamesDialog")
 
     , maGlobalNameStr(ScResId(STR_GLOBAL_SCOPE))
     , maErrInvalidNameStr(ScResId(STR_ERR_NAME_INVALID))
@@ -57,24 +58,27 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent
     , mbNeedUpdate(true)
     , mbDataChanged(false)
     , mbCloseWithoutUndo(false)
+
+    , m_xEdName(m_xBuilder->weld_entry("name"))
+    , m_xFtAssign(m_xBuilder->weld_label("label3"))
+    , m_xEdAssign(new formula::WeldRefEdit(m_xBuilder->weld_entry("range")))
+    , m_xRbAssign(new formula::WeldRefButton(m_xBuilder->weld_button("assign")))
+    , m_xLbScope(m_xBuilder->weld_combo_box("scope"))
+    , m_xBtnPrintArea(m_xBuilder->weld_check_button("printrange"))
+    , m_xBtnColHeader(m_xBuilder->weld_check_button("colheader"))
+    , m_xBtnCriteria(m_xBuilder->weld_check_button("filter"))
+    , m_xBtnRowHeader(m_xBuilder->weld_check_button("rowheader"))
+    , m_xBtnAdd(m_xBuilder->weld_button("add"))
+    , m_xBtnDelete(m_xBuilder->weld_button("delete"))
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
+    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
+    , m_xFtInfo(m_xBuilder->weld_label("info"))
+    , m_xExpander(m_xBuilder->weld_expander("more"))
 {
-    get(m_pEdName, "name");
-    get(m_pEdAssign, "range");
-    m_pEdAssign->SetReferences(this, m_pEdName);
-    get(m_pRbAssign, "assign");
-    m_pRbAssign->SetReferences(this, m_pEdAssign);
-    get(m_pLbScope, "scope");
-    get(m_pBtnPrintArea, "printrange");
-    get(m_pBtnColHeader, "colheader");
-    get(m_pBtnCriteria, "filter");
-    get(m_pBtnRowHeader, "rowheader");
-    get(m_pBtnAdd, "add");
-    get(m_pBtnDelete, "delete");
-    get(m_pBtnOk, "ok");
-    get(m_pBtnCancel, "cancel");
-    get(m_pFtInfo, "info");
-    maStrInfoDefault = m_pFtInfo->GetText();
-    m_pFtInfo->SetText(OUString());
+    m_xEdAssign->SetReferences(this, m_xFtAssign.get());
+    m_xRbAssign->SetReferences(this, m_xEdAssign.get());
+    maStrInfoDefault = m_xFtInfo->get_label();
+    m_xFtInfo->set_label(OUString());
 
     if (!pRangeMap)
     {
@@ -94,26 +98,6 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent
 
 ScNameDlg::~ScNameDlg()
 {
-    disposeOnce();
-}
-
-void ScNameDlg::dispose()
-{
-    m_pRangeManagerTable.disposeAndClear();
-    m_pEdName.clear();
-    m_pEdAssign.clear();
-    m_pRbAssign.clear();
-    m_pLbScope.clear();
-    m_pBtnPrintArea.clear();
-    m_pBtnColHeader.clear();
-    m_pBtnCriteria.clear();
-    m_pBtnRowHeader.clear();
-    m_pBtnAdd.clear();
-    m_pBtnDelete.clear();
-    m_pBtnOk.clear();
-    m_pBtnCancel.clear();
-    m_pFtInfo.clear();
-    ScAnyRefDlg::dispose();
 }
 
 void ScNameDlg::Init()
@@ -121,38 +105,43 @@ void ScNameDlg::Init()
     OSL_ENSURE( mpViewData && mpDoc, "ViewData or Document not found!" );
 
     //init UI
-    m_pFtInfo->SetStyle(WB_VCENTER);
 
-    SvSimpleTableContainer *pCtrl = get<SvSimpleTableContainer>("names");
-    pCtrl->set_height_request(pCtrl->GetTextHeight()*12);
+    std::unique_ptr<weld::TreeView> xTreeView(m_xBuilder->weld_tree_view("names"));
+    xTreeView->set_size_request(xTreeView->get_approximate_digit_width() * 75,
+                                xTreeView->get_height_rows(10));
+    m_xRangeManagerTable.reset(new RangeManagerTable(std::move(xTreeView), m_RangeMap, maCursorPos));
 
-    m_pRangeManagerTable = VclPtr<ScRangeManagerTable>::Create(*pCtrl, m_RangeMap, maCursorPos);
-    m_pRangeManagerTable->setInitListener(this);
-    m_pRangeManagerTable->SetSelectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
-    m_pRangeManagerTable->SetDeselectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
+    if (m_xRangeManagerTable->n_children())
+    {
+        m_xRangeManagerTable->set_cursor(0);
+        m_xRangeManagerTable->CheckForFormulaString();
+        SelectionChanged();
+    }
 
-    m_pBtnOk->SetClickHdl  ( LINK( this, ScNameDlg, OkBtnHdl ) );
-    m_pBtnCancel->SetClickHdl  ( LINK( this, ScNameDlg, CancelBtnHdl ) );
-    m_pBtnAdd->SetClickHdl     ( LINK( this, ScNameDlg, AddBtnHdl ) );
-    m_pEdAssign->SetGetFocusHdl( LINK( this, ScNameDlg, AssignGetFocusHdl ) );
-    m_pEdAssign->SetModifyHdl  ( LINK( this, ScNameDlg, EdModifyHdl ) );
-    m_pEdName->SetModifyHdl ( LINK( this, ScNameDlg, EdModifyHdl ) );
-    m_pLbScope->SetSelectHdl( LINK(this, ScNameDlg, ScopeChangedHdl) );
-    m_pBtnDelete->SetClickHdl ( LINK( this, ScNameDlg, RemoveBtnHdl ) );
-    m_pBtnPrintArea->SetToggleHdl( LINK(this, ScNameDlg, EdModifyCheckBoxHdl ) );
-    m_pBtnCriteria->SetToggleHdl( LINK(this, ScNameDlg, EdModifyCheckBoxHdl ) );
-    m_pBtnRowHeader->SetToggleHdl( LINK(this, ScNameDlg, EdModifyCheckBoxHdl ) );
-    m_pBtnColHeader->SetToggleHdl( LINK(this, ScNameDlg, EdModifyCheckBoxHdl ) );
+    m_xRangeManagerTable->connect_changed( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
+
+    m_xBtnOk->connect_clicked( LINK( this, ScNameDlg, OkBtnHdl ) );
+    m_xBtnCancel->connect_clicked( LINK( this, ScNameDlg, CancelBtnHdl ) );
+    m_xBtnAdd->connect_clicked( LINK( this, ScNameDlg, AddBtnHdl ) );
+    m_xEdAssign->SetGetFocusHdl( LINK( this, ScNameDlg, AssignGetFocusHdl ) );
+    m_xEdAssign->SetModifyHdl  ( LINK( this, ScNameDlg, RefEdModifyHdl ) );
+    m_xEdName->connect_changed( LINK( this, ScNameDlg, EdModifyHdl ) );
+    m_xLbScope->connect_changed( LINK(this, ScNameDlg, ScopeChangedHdl) );
+    m_xBtnDelete->connect_clicked( LINK( this, ScNameDlg, RemoveBtnHdl ) );
+    m_xBtnPrintArea->connect_toggled( LINK(this, ScNameDlg, EdModifyCheckBoxHdl ) );
+    m_xBtnCriteria->connect_toggled( LINK(this, ScNameDlg, EdModifyCheckBoxHdl ) );
+    m_xBtnRowHeader->connect_toggled( LINK(this, ScNameDlg, EdModifyCheckBoxHdl ) );
+    m_xBtnColHeader->connect_toggled( LINK(this, ScNameDlg, EdModifyCheckBoxHdl ) );
 
     // Initialize scope list.
-    m_pLbScope->InsertEntry(maGlobalNameStr);
-    m_pLbScope->SelectEntryPos(0);
+    m_xLbScope->append_text(maGlobalNameStr);
+    m_xLbScope->set_active(0);
     SCTAB n = mpDoc->GetTableCount();
     for (SCTAB i = 0; i < n; ++i)
     {
         OUString aTabName;
         mpDoc->GetName(i, aTabName);
-        m_pLbScope->InsertEntry(aTabName);
+        m_xLbScope->append_text(aTabName);
     }
 
     CheckForEmptyTable();
@@ -160,78 +149,67 @@ void ScNameDlg::Init()
 
 bool ScNameDlg::IsRefInputMode() const
 {
-    return m_pEdAssign->IsEnabled();
+    return m_xEdAssign->GetWidget()->get_sensitive();
 }
 
 void ScNameDlg::RefInputDone( bool bForced)
 {
-    ScAnyRefDlg::RefInputDone(bForced);
-    EdModifyHdl(*m_pEdAssign);
+    ScAnyRefDlgController::RefInputDone(bForced);
+    RefEdModifyHdl(*m_xEdAssign);
 }
 
 void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    if ( m_pEdAssign->IsEnabled() )
+    if (m_xEdAssign->GetWidget()->get_sensitive())
     {
         if ( rRef.aStart != rRef.aEnd )
-            RefInputStart(m_pEdAssign);
+            RefInputStart(m_xEdAssign.get());
         OUString aRefStr(rRef.Format(ScRefFlags::RANGE_ABS_3D, pDocP,
                 ScAddress::Details(pDocP->GetAddressConvention(), 0, 0)));
-        m_pEdAssign->SetRefString( aRefStr );
+        m_xEdAssign->SetRefString( aRefStr );
     }
 }
 
-bool ScNameDlg::Close()
+void ScNameDlg::Close()
 {
     if (mbDataChanged && !mbCloseWithoutUndo)
         mpViewData->GetDocFunc().ModifyAllRangeNames(m_RangeMap);
-    return DoClose( ScNameDlgWrapper::GetChildWindowId() );
-}
-
-void ScNameDlg::tableInitialized()
-{
-    if (m_pRangeManagerTable->GetSelectionCount())
-        SelectionChanged();
+    DoClose(ScNameDlgWrapper::GetChildWindowId());
 }
 
 void ScNameDlg::CheckForEmptyTable()
 {
-    if (!m_pRangeManagerTable->GetEntryCount())
+    if (!m_xRangeManagerTable->n_children())
     {
-        m_pBtnDelete->Disable();
-        m_pEdAssign->Disable();
-        m_pRbAssign->Disable();
-        m_pEdName->Disable();
-        m_pLbScope->Disable();
+        m_xBtnDelete->set_sensitive(false);
+        m_xEdAssign->GetWidget()->set_sensitive(false);
+        m_xRbAssign->GetWidget()->set_sensitive(false);
+        m_xEdName->set_sensitive(false);
+        m_xLbScope->set_sensitive(false);
 
-        m_pBtnCriteria->Disable();
-        m_pBtnPrintArea->Disable();
-        m_pBtnColHeader->Disable();
-        m_pBtnRowHeader->Disable();
+        m_xBtnCriteria->set_sensitive(false);
+        m_xBtnPrintArea->set_sensitive(false);
+        m_xBtnColHeader->set_sensitive(false);
+        m_xBtnRowHeader->set_sensitive(false);
     }
     else
     {
-        m_pBtnDelete->Enable();
-        m_pEdAssign->Enable();
-        m_pRbAssign->Enable();
-        m_pEdName->Enable();
-        m_pLbScope->Enable();
+        m_xBtnDelete->set_sensitive(true);
+        m_xEdAssign->GetWidget()->set_sensitive(true);
+        m_xRbAssign->GetWidget()->set_sensitive(true);
+        m_xEdName->set_sensitive(true);
+        m_xLbScope->set_sensitive(true);
 
-        m_pBtnCriteria->Enable();
-        m_pBtnPrintArea->Enable();
-        m_pBtnColHeader->Enable();
-        m_pBtnRowHeader->Enable();
+        m_xBtnCriteria->set_sensitive(true);
+        m_xBtnPrintArea->set_sensitive(true);
+        m_xBtnColHeader->set_sensitive(true);
+        m_xBtnRowHeader->set_sensitive(true);
     }
-}
-
-void ScNameDlg::CancelPushed()
-{
-    DoClose( ScNameDlgWrapper::GetChildWindowId() );
 }
 
 void ScNameDlg::SetActive()
 {
-    m_pEdAssign->GrabFocus();
+    m_xEdAssign->GrabFocus();
     RefInputDone();
 }
 
@@ -243,28 +221,28 @@ void ScNameDlg::UpdateChecks(const ScRangeData* pData)
     // handlers, triggering handlers while already processing a handler can
     // ( and does in this case ) corrupt the internal data
 
-    m_pBtnCriteria->SetToggleHdl( Link<CheckBox&,void>() );
-    m_pBtnPrintArea->SetToggleHdl( Link<CheckBox&,void>() );
-    m_pBtnColHeader->SetToggleHdl( Link<CheckBox&,void>() );
-    m_pBtnRowHeader->SetToggleHdl( Link<CheckBox&,void>() );
+    m_xBtnCriteria->connect_toggled( Link<weld::ToggleButton&,void>() );
+    m_xBtnPrintArea->connect_toggled( Link<weld::ToggleButton&,void>() );
+    m_xBtnColHeader->connect_toggled( Link<weld::ToggleButton&,void>() );
+    m_xBtnRowHeader->connect_toggled( Link<weld::ToggleButton&,void>() );
 
-    m_pBtnCriteria->Check( pData->HasType( ScRangeData::Type::Criteria ) );
-    m_pBtnPrintArea->Check( pData->HasType( ScRangeData::Type::PrintArea ) );
-    m_pBtnColHeader->Check( pData->HasType( ScRangeData::Type::ColHeader ) );
-    m_pBtnRowHeader->Check( pData->HasType( ScRangeData::Type::RowHeader ) );
+    m_xBtnCriteria->set_active( pData->HasType( ScRangeData::Type::Criteria ) );
+    m_xBtnPrintArea->set_active( pData->HasType( ScRangeData::Type::PrintArea ) );
+    m_xBtnColHeader->set_active( pData->HasType( ScRangeData::Type::ColHeader ) );
+    m_xBtnRowHeader->set_active( pData->HasType( ScRangeData::Type::RowHeader ) );
 
     // Restore handlers so user input is processed again
-    Link<CheckBox&,void> aToggleHandler = LINK( this, ScNameDlg, EdModifyCheckBoxHdl );
-    m_pBtnCriteria->SetToggleHdl( aToggleHandler );
-    m_pBtnPrintArea->SetToggleHdl( aToggleHandler );
-    m_pBtnColHeader->SetToggleHdl( aToggleHandler );
-    m_pBtnRowHeader->SetToggleHdl( aToggleHandler );
+    Link<weld::ToggleButton&,void> aToggleHandler = LINK( this, ScNameDlg, EdModifyCheckBoxHdl );
+    m_xBtnCriteria->connect_toggled( aToggleHandler );
+    m_xBtnPrintArea->connect_toggled( aToggleHandler );
+    m_xBtnColHeader->connect_toggled( aToggleHandler );
+    m_xBtnRowHeader->connect_toggled( aToggleHandler );
 }
 
 bool ScNameDlg::IsNameValid()
 {
-    OUString aScope = m_pLbScope->GetSelectedEntry();
-    OUString aName = m_pEdName->GetText();
+    OUString aScope = m_xLbScope->get_active_text();
+    OUString aName = m_xEdName->get_text();
     aName = aName.trim();
 
     if (aName.isEmpty())
@@ -274,27 +252,27 @@ bool ScNameDlg::IsNameValid()
 
     if (ScRangeData::IsNameValid( aName, mpDoc ) != ScRangeData::NAME_VALID)
     {
-        m_pFtInfo->SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
-        m_pFtInfo->SetText(maErrInvalidNameStr);
+        m_xFtInfo->set_error(true);
+        m_xFtInfo->set_label(maErrInvalidNameStr);
         return false;
     }
     else if (pRangeName && pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(aName)))
     {
-        m_pFtInfo->SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
-        m_pFtInfo->SetText(maErrNameInUse);
+        m_xFtInfo->set_error(true);
+        m_xFtInfo->set_label(maErrNameInUse);
         return false;
     }
-    m_pFtInfo->SetText( maStrInfoDefault );
+    m_xFtInfo->set_label( maStrInfoDefault );
     return true;
 }
 
 bool ScNameDlg::IsFormulaValid()
 {
     ScCompiler aComp( mpDoc, maCursorPos, mpDoc->GetGrammar());
-    std::unique_ptr<ScTokenArray> pCode = aComp.CompileString(m_pEdAssign->GetText());
+    std::unique_ptr<ScTokenArray> pCode = aComp.CompileString(m_xEdAssign->GetText());
     if (pCode->GetCodeError() != FormulaError::NONE)
     {
-        m_pFtInfo->SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
+        m_xFtInfo->set_error(true);
         return false;
     }
     else
@@ -325,7 +303,7 @@ void ScNameDlg::AddPushed()
 {
     mbCloseWithoutUndo = true;
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-    pViewSh->SwitchBetweenRefDialogs(this);
+    pViewSh->SwitchBetweenRefDialogControllers(this);
 }
 
 void ScNameDlg::SetEntry(const OUString& rName, const OUString& rScope)
@@ -336,14 +314,14 @@ void ScNameDlg::SetEntry(const OUString& rName, const OUString& rScope)
         ScRangeNameLine aLine;
         aLine.aName = rName;
         aLine.aScope = rScope;
-        m_pRangeManagerTable->SetEntry(aLine);
+        m_xRangeManagerTable->SetEntry(aLine);
     }
 }
 
 void ScNameDlg::RemovePushed()
 {
-    std::vector<ScRangeNameLine> aEntries = m_pRangeManagerTable->GetSelectedEntries();
-    m_pRangeManagerTable->DeleteSelectedEntries();
+    std::vector<ScRangeNameLine> aEntries = m_xRangeManagerTable->GetSelectedEntries();
+    m_xRangeManagerTable->DeleteSelectedEntries();
     for (const auto& rEntry : aEntries)
     {
         ScRangeName* pRangeName = GetRangeName(rEntry.aScope);
@@ -361,11 +339,11 @@ void ScNameDlg::RemovePushed()
 void ScNameDlg::NameModified()
 {
     ScRangeNameLine aLine;
-    m_pRangeManagerTable->GetCurrentLine(aLine);
+    m_xRangeManagerTable->GetCurrentLine(aLine);
     OUString aOldName = aLine.aName;
-    OUString aNewName = m_pEdName->GetText();
+    OUString aNewName = m_xEdName->get_text();
     aNewName = aNewName.trim();
-    m_pFtInfo->SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
+    m_xFtInfo->set_error(false);
     if (aNewName != aOldName)
     {
         if (!IsNameValid())
@@ -373,7 +351,7 @@ void ScNameDlg::NameModified()
     }
     else
     {
-        m_pFtInfo->SetText( maStrInfoDefault );
+        m_xFtInfo->set_label( maStrInfoDefault );
     }
 
     if (!IsFormulaValid())
@@ -386,8 +364,8 @@ void ScNameDlg::NameModified()
     //empty table
     if (aOldScope.isEmpty())
         return;
-    OUString aExpr = m_pEdAssign->GetText();
-    OUString aNewScope = m_pLbScope->GetSelectedEntry();
+    OUString aExpr = m_xEdAssign->GetText();
+    OUString aNewScope = m_xLbScope->get_active_text();
 
     ScRangeName* pOldRangeName = GetRangeName( aOldScope );
     ScRangeData* pData = pOldRangeName->findByUpperName( ScGlobal::pCharClass->uppercase(aOldName) );
@@ -402,12 +380,12 @@ void ScNameDlg::NameModified()
 
         pOldRangeName->erase(*pData);
         mbNeedUpdate = false;
-        m_pRangeManagerTable->DeleteSelectedEntries();
+        m_xRangeManagerTable->DeleteSelectedEntries();
         ScRangeData::Type nType = ScRangeData::Type::Name;
-        if ( m_pBtnRowHeader->IsChecked() ) nType |= ScRangeData::Type::RowHeader;
-        if ( m_pBtnColHeader->IsChecked() ) nType |= ScRangeData::Type::ColHeader;
-        if ( m_pBtnPrintArea->IsChecked() ) nType |= ScRangeData::Type::PrintArea;
-        if ( m_pBtnCriteria->IsChecked()  ) nType |= ScRangeData::Type::Criteria;
+        if ( m_xBtnRowHeader->get_active() ) nType |= ScRangeData::Type::RowHeader;
+        if ( m_xBtnColHeader->get_active() ) nType |= ScRangeData::Type::ColHeader;
+        if ( m_xBtnPrintArea->get_active() ) nType |= ScRangeData::Type::PrintArea;
+        if ( m_xBtnCriteria->get_active()  ) nType |= ScRangeData::Type::Criteria;
 
         ScRangeData* pNewEntry = new ScRangeData( mpDoc, aNewName, aExpr,
                 maCursorPos, nType);
@@ -416,7 +394,7 @@ void ScNameDlg::NameModified()
         aLine.aName = aNewName;
         aLine.aExpression = aExpr;
         aLine.aScope = aNewScope;
-        m_pRangeManagerTable->addEntry(aLine, true);
+        m_xRangeManagerTable->addEntry(aLine, true);
         mbNeedUpdate = true;
         mbDataChanged = true;
     }
@@ -430,37 +408,37 @@ void ScNameDlg::SelectionChanged()
         return;
     }
 
-    if (m_pRangeManagerTable->IsMultiSelection())
+    if (m_xRangeManagerTable->IsMultiSelection())
     {
-        m_pEdName->SetText(maStrMultiSelect);
-        m_pEdAssign->SetText(maStrMultiSelect);
+        m_xEdName->set_text(maStrMultiSelect);
+        m_xEdAssign->SetText(maStrMultiSelect);
 
-        m_pEdName->Disable();
-        m_pEdAssign->Disable();
-        m_pRbAssign->Disable();
-        m_pLbScope->Disable();
-        m_pBtnRowHeader->Disable();
-        m_pBtnColHeader->Disable();
-        m_pBtnPrintArea->Disable();
-        m_pBtnCriteria->Disable();
+        m_xEdName->set_sensitive(false);
+        m_xEdAssign->GetWidget()->set_sensitive(false);
+        m_xRbAssign->GetWidget()->set_sensitive(false);
+        m_xLbScope->set_sensitive(false);
+        m_xBtnRowHeader->set_sensitive(false);
+        m_xBtnColHeader->set_sensitive(false);
+        m_xBtnPrintArea->set_sensitive(false);
+        m_xBtnCriteria->set_sensitive(false);
     }
     else
     {
         ScRangeNameLine aLine;
-        m_pRangeManagerTable->GetCurrentLine(aLine);
-        m_pEdAssign->SetText(aLine.aExpression);
-        m_pEdName->SetText(aLine.aName);
-        m_pLbScope->SelectEntry(aLine.aScope);
+        m_xRangeManagerTable->GetCurrentLine(aLine);
+        m_xEdAssign->SetText(aLine.aExpression);
+        m_xEdName->set_text(aLine.aName);
+        m_xLbScope->set_active_text(aLine.aScope);
         ShowOptions(aLine);
-        m_pBtnDelete->Enable();
-        m_pEdName->Enable();
-        m_pEdAssign->Enable();
-        m_pRbAssign->Enable();
-        m_pLbScope->Enable();
-        m_pBtnRowHeader->Enable();
-        m_pBtnColHeader->Enable();
-        m_pBtnPrintArea->Enable();
-        m_pBtnCriteria->Enable();
+        m_xBtnDelete->set_sensitive(true);
+        m_xEdName->set_sensitive(true);
+        m_xEdAssign->GetWidget()->set_sensitive(true);
+        m_xRbAssign->GetWidget()->set_sensitive(true);
+        m_xLbScope->set_sensitive(true);
+        m_xBtnRowHeader->set_sensitive(true);
+        m_xBtnColHeader->set_sensitive(true);
+        m_xBtnPrintArea->set_sensitive(true);
+        m_xBtnCriteria->set_sensitive(true);
     }
 }
 
@@ -474,47 +452,52 @@ void ScNameDlg::GetRangeNames(std::map<OUString, std::unique_ptr<ScRangeName>>& 
     m_RangeMap.swap(rRangeMap);
 }
 
-IMPL_LINK_NOARG(ScNameDlg, OkBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScNameDlg, OkBtnHdl, weld::Button&, void)
 {
-    Close();
+    response(RET_OK);
 }
 
-IMPL_LINK_NOARG(ScNameDlg, CancelBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScNameDlg, CancelBtnHdl, weld::Button&, void)
 {
-    CancelPushed();
+    response(RET_CANCEL);
 }
 
-IMPL_LINK_NOARG(ScNameDlg, AddBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScNameDlg, AddBtnHdl, weld::Button&, void)
 {
     AddPushed();
 }
 
-IMPL_LINK_NOARG(ScNameDlg, RemoveBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScNameDlg, RemoveBtnHdl, weld::Button&, void)
 {
     RemovePushed();
 }
 
-IMPL_LINK_NOARG(ScNameDlg, EdModifyCheckBoxHdl, CheckBox&, void)
+IMPL_LINK_NOARG(ScNameDlg, EdModifyCheckBoxHdl, weld::ToggleButton&, void)
 {
     NameModified();
 }
 
-IMPL_LINK_NOARG(ScNameDlg, EdModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(ScNameDlg, EdModifyHdl, weld::Entry&, void)
 {
     NameModified();
 }
 
-IMPL_LINK_NOARG(ScNameDlg, AssignGetFocusHdl, Control&, void)
+IMPL_LINK_NOARG(ScNameDlg, RefEdModifyHdl, formula::WeldRefEdit&, void)
 {
-    EdModifyHdl(*m_pEdAssign);
+    NameModified();
 }
 
-IMPL_LINK_NOARG(ScNameDlg, SelectionChangedHdl_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(ScNameDlg, AssignGetFocusHdl, formula::WeldRefEdit&, void)
+{
+    RefEdModifyHdl(*m_xEdAssign);
+}
+
+IMPL_LINK_NOARG(ScNameDlg, SelectionChangedHdl_Impl, weld::TreeView&, void)
 {
     SelectionChanged();
 }
 
-IMPL_LINK_NOARG(ScNameDlg, ScopeChangedHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScNameDlg, ScopeChangedHdl, weld::ComboBox&, void)
 {
     ScopeChanged();
 }
