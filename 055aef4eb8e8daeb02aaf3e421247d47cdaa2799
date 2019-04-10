@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_dd8e882d",
+        "filename": "svtools/source/control/tabbar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1264,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-04-10T08:26:25Z",
+      "side": 1,
+      "message": "this sounded wrong to me, but dictionaries say you can use \"order\" to mean \"arrange\"",
+      "revId": "055aef4eb8e8daeb02aaf3e421247d47cdaa2799",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
