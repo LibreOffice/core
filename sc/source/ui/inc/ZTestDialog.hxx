@@ -13,16 +13,16 @@
 
 #include "StatisticsTwoVariableDialog.hxx"
 
-class ScZTestDialog : public ScStatisticsTwoVariableDialog
+class ScZTestDialog : public ScStatisticsTwoVariableDialogController
 {
 public:
     ScZTestDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        vcl::Window* pParent, ScViewData* pViewData );
+        weld::Window* pParent, ScViewData* pViewData );
 
     virtual ~ScZTestDialog() override;
 
-    virtual bool Close() override;
+    virtual void Close() override;
 
 protected:
     virtual const char* GetUndoNameId() override;

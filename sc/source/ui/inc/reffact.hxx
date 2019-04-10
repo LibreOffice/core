@@ -128,7 +128,7 @@ private:
 };
 
 class ScZTestDialogWrapper :
-    public ChildWindowWrapper<SID_ZTEST_DIALOG>
+    public ChildControllerWrapper<SID_ZTEST_DIALOG>
 {
 private:
     ScZTestDialogWrapper() = delete;
