@@ -809,3 +809,13 @@ blacklist:
     include/sfx2/viewsh.hxx:
     # Needed for macro 
     - class SfxViewFactory
+    include/formula/FormulaOpCodeMapperObj.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/sheet/XFormulaOpCodeMapper.hpp
+    include/formula/paramclass.hxx:
+    # Needed for enum type
+    - sal/types.h
+    include/formula/opcode.hxx:
+    # Needed for enum type
+    - sal/types.h
