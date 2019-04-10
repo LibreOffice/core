@@ -98,7 +98,7 @@ Any WrappedTitleStringProperty::getPropertyValue( const Reference< beans::XPrope
 }
 Any WrappedTitleStringProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
 {
-    return uno::Any( OUString() );//default title is a empty String
+    return uno::Any( OUString() );//default title is an empty String
 }
 
 class WrappedStackedTextProperty : public WrappedProperty
