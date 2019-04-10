@@ -52,6 +52,24 @@
       "revId": "87248fefb0dcc4464c36a11a63ffaf5b1a640592",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87a7cf_7d5f3b41",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-10T18:21:56Z",
+      "side": 1,
+      "message": "I strongly disagree with this:\n\n\u003e a programmer error causing violation of that condition is IMO too unlikely to warrant adding an assert here\n\nIt sounds like a misconception ;-)\nAssert is, among others, a documentation of preconditions, and assumptions, that were taken into account when creating the code (or reviewing it, as here); and as the documentation, it is guidance for those who might later think how to use the code.\n\nSo - the question is: what is the cost of adding the assert? what is the negative side of that documenting (which at the same time is enforcement of proper implementation), which warrants opposing it?",
+      "parentUuid": "df87a7cf_7d3e5b2a",
+      "revId": "87248fefb0dcc4464c36a11a63ffaf5b1a640592",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
