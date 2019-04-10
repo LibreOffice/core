@@ -713,7 +713,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                 uno::Reference< embed::XLinkageSupport > xOrigLinkage( xObj, uno::UNO_QUERY );
                 if ( xOrigLinkage.is() && xOrigLinkage->isLink() )
                 {
-                    // this is a OOo link, it has no persistence
+                    // this is an OOo link, it has no persistence
                     OUString aURL = xOrigLinkage->getLinkURL();
                     if ( aURL.isEmpty() )
                         throw uno::RuntimeException();
@@ -1335,7 +1335,7 @@ bool EmbeddedObjectContainer::StoreChildren(bool _bOasisFormat,bool _bObjectsOnl
 
             // begin:all charts will be persisted as xml format on disk when saving, which is time consuming.
                     // '_bObjectsOnly' mean we are storing to alien formats.
-                    //  'isStorageElement' mean current object is NOT an MS OLE format. (may also include in future), i120168
+                    //  'isStorageElement' mean current object is NOT a MS OLE format. (may also include in future), i120168
                     if (_bObjectsOnly && (nCurState == embed::EmbedStates::LOADED || nCurState == embed::EmbedStates::RUNNING)
                         && (pImpl->mxStorage->isStorageElement( *pIter ) ))
                     {
