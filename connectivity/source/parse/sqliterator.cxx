@@ -574,7 +574,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getTableNode( OSQLTables& _rTables, 
                 if ( SQL_ISRULE( pQueryExpression, select_statement ) )
                 {
                     getSelect_statement( *m_pImpl->m_pSubTables, pQueryExpression );
-                    // TODO: now, we need to setup a OSQLTable from pQueryExpression in some way
+                    // TODO: now, we need to setup an OSQLTable from pQueryExpression in some way
                     //       and stick it in _rTables[rTableRange]. Probably fake it by
                     //       setting up a full OSQLParseTreeIterator on pQueryExpression
                     //       and using its m_aSelectColumns
@@ -720,7 +720,7 @@ namespace
             else
                 _out_rColumnName = _pColumnRef->getChild(0)->getTokenValue();
 
-            // look up the column in the select column, to find an possible alias
+            // look up the column in the select column, to find a possible alias
             if ( _pSelectColumns )
             {
                 for (const Reference< XPropertySet >& xColumn : _pSelectColumns->get())
@@ -1837,7 +1837,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getOrderTree() const
     OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
     pOrderClause = pTableExp->getChild(ORDER_BY_CHILD_POS);
-    // If it is a order_by, it must not be empty
+    // If it is an order_by, it must not be empty
     if(pOrderClause->count() != 3)
         pOrderClause = nullptr;
     return pOrderClause;
