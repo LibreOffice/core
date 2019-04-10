@@ -135,7 +135,7 @@ private:
 };
 
 class ScChiSquareTestDialogWrapper :
-    public ChildWindowWrapper<SID_CHI_SQUARE_TEST_DIALOG>
+    public ChildControllerWrapper<SID_CHI_SQUARE_TEST_DIALOG>
 {
 private:
     ScChiSquareTestDialogWrapper() = delete;
