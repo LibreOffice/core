@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_bd138366",
+        "filename": "solenv/gdb/libreoffice/basegfx.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-10T19:19:17Z",
+      "side": 1,
+      "message": "these two if statements look extremely weird.\nFor starters, they overlap.\nThen the \u003d\u003d TYPE_CODE_PTR check is redundant, since it can only succeed if the second condition also succeeds\n\nSo this first \"if\" statement can be deleted?",
+      "revId": "0dabb6bb5408a4db152aba31f988173b44fce6c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
