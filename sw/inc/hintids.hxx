@@ -420,29 +420,29 @@ sal_Unicode GetCharOfTextAttr( const SwTextAttr& rAttr );
 // all Sets defined in init.cxx
 
 // AttrSet-Range for the 3 Break-Attribute
-extern sal_uInt16 aBreakSetRange[];
+extern sal_uInt16 const aBreakSetRange[];
 // AttrSet-Range for TextFormatColl
-extern sal_uInt16 aTextFormatCollSetRange[];
+extern sal_uInt16 const aTextFormatCollSetRange[];
 // AttrSet-Range for GrfFormatColl
-extern sal_uInt16 aGrfFormatCollSetRange[];
+extern sal_uInt16 const aGrfFormatCollSetRange[];
 // AttrSet-Range for TextNode
-SW_DLLPUBLIC extern sal_uInt16 aTextNodeSetRange[];
+SW_DLLPUBLIC extern sal_uInt16 const aTextNodeSetRange[];
 // AttrSet-Range for NoTextNode
-extern sal_uInt16 aNoTextNodeSetRange[];
+extern sal_uInt16 const aNoTextNodeSetRange[];
 // AttrSet-Range for SwTable
-extern sal_uInt16 aTableSetRange[];
+extern sal_uInt16 const aTableSetRange[];
 // AttrSet-Range for SwTableLine
-extern sal_uInt16 aTableLineSetRange[];
+extern sal_uInt16 const aTableLineSetRange[];
 // AttrSet-Range for SwTableBox
-extern sal_uInt16 aTableBoxSetRange[];
+extern sal_uInt16 const aTableBoxSetRange[];
 // AttrSet-Range for SwFrameFormat
-SW_DLLPUBLIC extern sal_uInt16 aFrameFormatSetRange[];
+SW_DLLPUBLIC extern sal_uInt16 const aFrameFormatSetRange[];
 // AttrSet-Range for SwCharFormat
-extern sal_uInt16 aCharFormatSetRange[];
+extern sal_uInt16 const aCharFormatSetRange[];
 // AttrSet-Range for the autostyles
-extern sal_uInt16 aCharAutoFormatSetRange[];
+extern sal_uInt16 const aCharAutoFormatSetRange[];
 // AttrSet-Range for SwPageDescFormat
-extern sal_uInt16 aPgFrameFormatSetRange[];
+extern sal_uInt16 const aPgFrameFormatSetRange[];
 
 // check if ID is InRange of AttrSet-Ids
 bool IsInRange( const sal_uInt16* pRange, const sal_uInt16 nId );
