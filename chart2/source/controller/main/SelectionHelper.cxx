@@ -288,7 +288,7 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper 
     }
 }
 
-bool Selection::isResizeableObjectSelected()
+bool Selection::isResizeableObjectSelected() const
 {
     ObjectType eObjectType = m_aSelectedOID.getObjectType();
     switch( eObjectType )
@@ -303,12 +303,12 @@ bool Selection::isResizeableObjectSelected()
     }
 }
 
-bool Selection::isRotateableObjectSelected( const uno::Reference< frame::XModel >& xChartModel )
+bool Selection::isRotateableObjectSelected( const uno::Reference< frame::XModel >& xChartModel ) const
 {
     return SelectionHelper::isRotateableObject( m_aSelectedOID.getObjectCID(), xChartModel );
 }
 
-bool Selection::isDragableObjectSelected()
+bool Selection::isDragableObjectSelected() const
 {
     return m_aSelectedOID.isDragableObject();
 }

@@ -1669,6 +1669,17 @@ uno::Any SAL_CALL ChartController::getSelection()
         OUString aCID( m_aSelection.getSelectedCID() );
         if ( !aCID.isEmpty() )
         {
+            if ( comphelper::LibreOfficeKit::isActive() )
+            {
+                sal_Int32 nPos = aCID.lastIndexOf('/');
+                OUString sFirst = aCID.copy(0, nPos);
+                OUString sSecond = aCID.copy(nPos);
+                aCID = sFirst;
+                aCID += "/Draggable=" + OUString::number(static_cast<int>(isSelectedObjectDraggable()));
+                aCID += ":Resizable=" + OUString::number(static_cast<int>(isSelectedObjectResizable()));
+                aCID += ":Rotatable=" + OUString::number(static_cast<int>(isSelectedObjectRotatable()));
+                aCID += sSecond;
+            }
             aReturn <<= aCID;
         }
         else
