@@ -167,7 +167,7 @@ namespace dbaccess
                 m_xActiveConnection points to a valid SDB-level connection
 
             @throws css::sdb::SQLException
-                if an database-related error occurred
+                if a database-related error occurred
 
             @throws css::uno::RuntimeException
                 if any of the components involved throws a css::uno::RuntimeException
