@@ -161,7 +161,7 @@ namespace cppu_threadpool {
                 {
                     // Note : Oneways should not get a disposable disposeid,
                     //        It does not make sense to dispose a call in this state.
-                    //        That's way we put it an disposeid, that can't be used otherwise.
+                    //        That's way we put it a disposeid, that can't be used otherwise.
                     m_pQueue->enter(
                         sal::static_int_cast< sal_Int64 >(
                             reinterpret_cast< sal_IntPtr >(this)),
