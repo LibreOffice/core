@@ -1091,6 +1091,10 @@ void SAL_CALL ChartController::dispatch(
             executeDispatch_LOKSetTextSelection(nType, nX, nY);
         }
     }
+    else if (aCommand == "LOKTransform")
+    {
+        this->executeDispatch_PositionAndSize(&rArgs);
+    }
     else if(aCommand == "Paste")
         this->executeDispatch_Paste();
     else if(aCommand == "Copy" )

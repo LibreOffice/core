@@ -989,7 +989,14 @@ void CallbackFlushHandler::queue(const int type, const char* data)
     }
 #endif
 
-    if (m_bPartTilePainting)
+    bool bIsChartActive = false;
+    if (type == LOK_CALLBACK_GRAPHIC_SELECTION)
+    {
+        LokChartHelper aChartHelper(SfxViewShell::Current());
+        bIsChartActive = aChartHelper.GetWindow() != nullptr;
+    }
+
+    if (m_bPartTilePainting && !bIsChartActive)
     {
         // We drop notifications when this is set, except for important ones.
         // When we issue a complex command (such as .uno:InsertAnnotation)
@@ -3056,13 +3063,20 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     {
         bool bNeedConversion = false;
         SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (const SdrView* pView = pViewShell->GetDrawView())
+        LokChartHelper aChartHelper(pViewShell);
+
+        if (aChartHelper.GetWindow() )
+        {
+            bNeedConversion = true;
+        }
+        else if (const SdrView* pView = pViewShell->GetDrawView())
         {
             if (OutputDevice* pOutputDevice = pView->GetFirstOutputDevice())
             {
                 bNeedConversion = (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM);
             }
         }
+
         if (bNeedConversion)
         {
             sal_Int32 value;
@@ -3079,8 +3093,35 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
                     value = OutputDevice::LogicToLogic(value, MapUnit::MapTwip, MapUnit::Map100thMM);
                     rPropValue.Value <<= value;
                 }
-
             }
+        }
+
+        if (aChartHelper.GetWindow())
+        {
+            tools::Rectangle aChartBB = aChartHelper.GetChartBoundingBox();
+            int nLeft = OutputDevice::LogicToLogic(aChartBB.Left(), MapUnit::MapTwip, MapUnit::Map100thMM);
+            int nTop = OutputDevice::LogicToLogic(aChartBB.Top(), MapUnit::MapTwip, MapUnit::Map100thMM);
+
+            sal_Int32 value;
+            for (beans::PropertyValue& rPropValue: aPropertyValuesVector)
+            {
+                if (rPropValue.Name == "TransformPosX" || rPropValue.Name == "TransformRotationX")
+                {
+                    rPropValue.Value >>= value;
+                    rPropValue.Value <<= value - nLeft;
+                }
+                else if (rPropValue.Name == "TransformPosY" || rPropValue.Name == "TransformRotationY")
+                {
+                    rPropValue.Value >>= value;
+                    rPropValue.Value <<= value - nTop;
+                }
+            }
+
+            util::URL aCommandURL;
+            aCommandURL.Path = "LOKTransform";
+            css::uno::Reference<css::frame::XDispatch>& aChartDispatcher = aChartHelper.GetXDispatcher();
+            aChartDispatcher->dispatch(aCommandURL, comphelper::containerToSequence(aPropertyValuesVector));
+            return;
         }
     }
 
