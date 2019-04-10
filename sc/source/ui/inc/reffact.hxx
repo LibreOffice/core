@@ -72,7 +72,7 @@ private:
 };
 
 class ScAnalysisOfVarianceDialogWrapper :
-    public ChildWindowWrapper<SID_ANALYSIS_OF_VARIANCE_DIALOG>
+    public ChildControllerWrapper<SID_ANALYSIS_OF_VARIANCE_DIALOG>
 {
 private:
     ScAnalysisOfVarianceDialogWrapper() = delete;
