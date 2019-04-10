@@ -25,20 +25,13 @@
 
 class ScDocument;
 
-class ScSimpleRefDlg: public ScAnyRefDlg
+class ScSimpleRefDlg: public ScAnyRefDlgController
 {
 private:
     Link<const OUString*,void> aCloseHdl;
     Link<const OUString&,void> aDoneHdl;
     Link<const OUString&,void> aAbortedHdl;
     Link<const OUString&,void> aChangeHdl;
-
-    VclPtr<FixedText> m_pFtAssign;
-    VclPtr<formula::RefEdit> m_pEdAssign;
-    VclPtr<formula::RefButton> m_pRbAssign;
-
-    VclPtr<OKButton>       m_pBtnOk;
-    VclPtr<CancelButton>   m_pBtnCancel;
 
     ScRange         theCurArea;
     bool            bCloseFlag;
@@ -47,30 +40,34 @@ private:
     bool            bSingleCell;
     bool            bMultiSelection;
 
+    std::unique_ptr<weld::Label> m_xFtAssign;
+    std::unique_ptr<formula::WeldRefEdit> m_xEdAssign;
+    std::unique_ptr<formula::WeldRefButton> m_xRbAssign;
+    std::unique_ptr<weld::Button> m_xBtnOk;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
+
     void            Init();
 
-    DECL_LINK( CancelBtnHdl, Button*, void );
-    DECL_LINK( OkBtnHdl, Button*, void );
+    DECL_LINK( CancelBtnHdl, weld::Button&, void );
+    DECL_LINK( OkBtnHdl, weld::Button&, void );
 
 protected:
 
     virtual void    RefInputDone( bool bForced = false ) override;
 
 public:
-                    ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent);
+                    ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent);
     virtual        ~ScSimpleRefDlg() override;
-    virtual void    dispose() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
 
     virtual bool    IsRefInputMode() const override;
     virtual void    SetActive() override;
-    virtual bool    Close() override;
+    virtual void    Close() override;
 
     void            StartRefInput();
 
     void            SetRefString(const OUString &rStr);
-    virtual void    FillInfo(SfxChildWinInfo&) const override;
 
     void            SetCloseHdl( const Link<const OUString*,void>& rLink );
     void            SetUnoLinks( const Link<const OUString&,void>& rDone, const Link<const OUString&,void>& rAbort,

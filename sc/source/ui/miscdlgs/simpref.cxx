@@ -21,23 +21,20 @@
 #include <document.hxx>
 #include <simpref.hxx>
 
-ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent)
-    : ScAnyRefDlg(pB, pCW, pParent, "SimpleRefDialog", "modules/scalc/ui/simplerefdialog.ui")
-,
-
-        bAutoReOpen     ( true ),
-        bCloseOnButtonUp( false ),
-        bSingleCell     ( false ),
-        bMultiSelection ( false )
+ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent)
+    : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/simplerefdialog.ui", "SimpleRefDialog")
+    , bAutoReOpen(true)
+    , bCloseOnButtonUp(false)
+    , bSingleCell(false)
+    , bMultiSelection(false)
+    , m_xFtAssign(m_xBuilder->weld_label("area"))
+    , m_xEdAssign(new formula::WeldRefEdit(m_xBuilder->weld_entry("assign")))
+    , m_xRbAssign(new formula::WeldRefButton(m_xBuilder->weld_button("assignref")))
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
+    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
 {
-    get(m_pFtAssign, "area");
-    get(m_pEdAssign, "assign");
-    m_pEdAssign->SetReferences(this, m_pFtAssign);
-    get(m_pRbAssign, "assignref");
-    m_pRbAssign->SetReferences(this, m_pEdAssign);
-
-    get(m_pBtnOk, "ok");
-    get(m_pBtnCancel, "cancel");
+    m_xEdAssign->SetReferences(this, m_xFtAssign.get());
+    m_xRbAssign->SetReferences(this, m_xEdAssign.get());
 
     // in order to keep the Strings with the FixedTexts in the resource:
     Init();
@@ -46,35 +43,18 @@ ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
 
 ScSimpleRefDlg::~ScSimpleRefDlg()
 {
-    disposeOnce();
-}
-
-void ScSimpleRefDlg::dispose()
-{
     SetDispatcherLock( false ); // deactivate modal mode
-    m_pFtAssign.clear();
-    m_pEdAssign.clear();
-    m_pRbAssign.clear();
-    m_pBtnOk.clear();
-    m_pBtnCancel.clear();
-    ScAnyRefDlg::dispose();
-}
-
-void ScSimpleRefDlg::FillInfo(SfxChildWinInfo& rWinInfo) const
-{
-    ScAnyRefDlg::FillInfo(rWinInfo);
-    rWinInfo.bVisible=bAutoReOpen;
 }
 
 void ScSimpleRefDlg::SetRefString(const OUString &rStr)
 {
-    m_pEdAssign->SetText(rStr);
+    m_xEdAssign->SetText(rStr);
 }
 
 void ScSimpleRefDlg::Init()
 {
-    m_pBtnOk->SetClickHdl      ( LINK( this, ScSimpleRefDlg, OkBtnHdl ) );
-    m_pBtnCancel->SetClickHdl  ( LINK( this, ScSimpleRefDlg, CancelBtnHdl ) );
+    m_xBtnOk->connect_clicked( LINK( this, ScSimpleRefDlg, OkBtnHdl ) );
+    m_xBtnCancel->connect_clicked( LINK( this, ScSimpleRefDlg, CancelBtnHdl ) );
     bCloseFlag=false;
 }
 
@@ -82,10 +62,10 @@ void ScSimpleRefDlg::Init()
 // shown as the new selection in the reference field.
 void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    if ( m_pEdAssign->IsEnabled() )
+    if (m_xEdAssign->GetWidget()->get_sensitive())
     {
         if ( rRef.aStart != rRef.aEnd )
-            RefInputStart(m_pEdAssign);
+            RefInputStart(m_xEdAssign.get());
 
         theCurArea = rRef;
         OUString aRefStr;
@@ -99,30 +79,29 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
         if ( bMultiSelection )
         {
-            OUString aVal = m_pEdAssign->GetText();
-            Selection aSel = m_pEdAssign->GetSelection();
+            OUString aVal = m_xEdAssign->GetText();
+            Selection aSel = m_xEdAssign->GetSelection();
             aSel.Justify();
             aVal = aVal.replaceAt( aSel.Min(), aSel.Len(), aRefStr );
             Selection aNewSel( aSel.Min(), aSel.Min()+aRefStr.getLength() );
-            m_pEdAssign->SetRefString( aVal );
-            m_pEdAssign->SetSelection( aNewSel );
+            m_xEdAssign->SetRefString( aVal );
+            m_xEdAssign->SetSelection( aNewSel );
         }
         else
-            m_pEdAssign->SetRefString( aRefStr );
+            m_xEdAssign->SetRefString( aRefStr );
 
         aChangeHdl.Call( aRefStr );
     }
 }
 
-bool ScSimpleRefDlg::Close()
+void ScSimpleRefDlg::Close()
 {
-    CancelBtnHdl(m_pBtnCancel);
-    return true;
+    CancelBtnHdl(*m_xBtnCancel);
 }
 
 void ScSimpleRefDlg::SetActive()
 {
-    m_pEdAssign->GrabFocus();
+    m_xEdAssign->GrabFocus();
 
     //  no NameModifyHdl.  Otherwise ranges could not be altered
     //  (after marking the reference, the old field content would be shown)
@@ -162,36 +141,36 @@ void ScSimpleRefDlg::StartRefInput()
     if ( bMultiSelection )
     {
         // initially select the whole string, so it gets replaced by default
-        m_pEdAssign->SetSelection( Selection( 0, m_pEdAssign->GetText().getLength() ) );
+        m_xEdAssign->SelectAll();
     }
 
-    m_pRbAssign->DoRef();
+    m_xRbAssign->DoRef();
     bCloseFlag = true;
 }
 
 void ScSimpleRefDlg::RefInputDone( bool bForced)
 {
-    ScAnyRefDlg::RefInputDone(bForced);
+    ScAnyRefDlgController::RefInputDone(bForced);
     if ( (bForced || bCloseOnButtonUp) && bCloseFlag )
-        OkBtnHdl(m_pBtnOk);
+        OkBtnHdl(*m_xBtnOk);
 }
 
 // Handler:
 
-IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl, weld::Button&, void)
 {
     bAutoReOpen=false;
-    OUString aResult=m_pEdAssign->GetText();
+    OUString aResult=m_xEdAssign->GetText();
     aCloseHdl.Call(&aResult);
     Link<const OUString&,void> aUnoLink = aDoneHdl;     // stack var because this is deleted in DoClose
     DoClose( ScSimpleRefDlgWrapper::GetChildWindowId() );
     aUnoLink.Call( aResult );
 }
 
-IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl, weld::Button&, void)
 {
     bAutoReOpen=false;
-    OUString aResult=m_pEdAssign->GetText();
+    OUString aResult=m_xEdAssign->GetText();
     aCloseHdl.Call(nullptr);
     Link<const OUString&,void> aUnoLink = aAbortedHdl;  // stack var because this is deleted in DoClose
     DoClose( ScSimpleRefDlgWrapper::GetChildWindowId() );
