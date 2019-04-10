@@ -38,9 +38,9 @@ public: //methods
     css::uno::Reference< css::drawing::XShape > const & getSelectedAdditionalShape();
     const ObjectIdentifier& getSelectedOID() const { return m_aSelectedOID;}
 
-    bool isResizeableObjectSelected();
-    bool isRotateableObjectSelected( const css::uno::Reference< css::frame::XModel >& xChartModel );
-    bool isDragableObjectSelected();
+    bool isResizeableObjectSelected() const;
+    bool isRotateableObjectSelected( const css::uno::Reference< css::frame::XModel >& xChartModel ) const;
+    bool isDragableObjectSelected() const;
 
     bool isAdditionalShapeSelected() const;
 
