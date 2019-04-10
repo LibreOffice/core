@@ -48,18 +48,19 @@ static const StatisticCalculation lclCalcDefinitions[] =
 
 ScDescriptiveStatisticsDialog::ScDescriptiveStatisticsDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    vcl::Window* pParent, ScViewData* pViewData ) :
-    ScStatisticsInputOutputDialog(
+                    weld::Window* pParent, ScViewData* pViewData ) :
+    ScStatisticsInputOutputDialogController(
             pSfxBindings, pChildWindow, pParent, pViewData,
-            "DescriptiveStatisticsDialog", "modules/scalc/ui/descriptivestatisticsdialog.ui" )
+            "modules/scalc/ui/descriptivestatisticsdialog.ui",
+            "DescriptiveStatisticsDialog")
 {}
 
 ScDescriptiveStatisticsDialog::~ScDescriptiveStatisticsDialog()
 {}
 
-bool ScDescriptiveStatisticsDialog::Close()
+void ScDescriptiveStatisticsDialog::Close()
 {
-    return DoClose( ScDescriptiveStatisticsDialogWrapper::GetChildWindowId() );
+    DoClose( ScDescriptiveStatisticsDialogWrapper::GetChildWindowId() );
 }
 
 const char* ScDescriptiveStatisticsDialog::GetUndoNameId()
