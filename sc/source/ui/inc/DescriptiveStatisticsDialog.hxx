@@ -13,16 +13,16 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
-class ScDescriptiveStatisticsDialog : public ScStatisticsInputOutputDialog
+class ScDescriptiveStatisticsDialog : public ScStatisticsInputOutputDialogController
 {
 public:
     ScDescriptiveStatisticsDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        vcl::Window* pParent, ScViewData* pViewData );
+        weld::Window* pParent, ScViewData* pViewData );
 
     virtual ~ScDescriptiveStatisticsDialog() override;
 
-    virtual bool Close() override;
+    virtual void Close() override;
 
 protected:
     virtual const char* GetUndoNameId() override;
