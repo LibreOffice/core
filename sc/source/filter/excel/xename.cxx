@@ -64,6 +64,9 @@ public:
         @param sValue   the name's symbolic value */
     void                SetSymbol( const OUString& rValue );
 
+    /** Returns the symbol value */
+    const OUString& GetSymbol() const { return msSymbol; }
+
     /** Returns the original name (title) of this defined name. */
     const OUString& GetOrigName() const { return maOrigName; }
     /** Returns the Excel built-in name index of this defined name.
@@ -157,7 +160,7 @@ private:
 
     /** Returns the index of an existing built-in NAME record with the passed definition, otherwise 0. */
     sal_uInt16          FindBuiltInNameIdx( const OUString& rName,
-                            const XclTokenArray& rTokArr ) const;
+                            const OUString& sSymbol ) const;
     /** Returns an unused name for the passed name. */
     OUString            GetUnusedName( const OUString& rName ) const;
 
@@ -525,7 +528,7 @@ sal_uInt16 XclExpNameManagerImpl::FindNamedExp( SCTAB nTab, OUString sName )
 }
 
 sal_uInt16 XclExpNameManagerImpl::FindBuiltInNameIdx(
-        const OUString& rName, const XclTokenArray& rTokArr ) const
+        const OUString& rName, const OUString& sSymbol ) const
 {
     /*  Get built-in index from the name. Special case: the database range
         'unnamed' will be mapped to Excel's built-in '_FilterDatabase' name. */
@@ -537,11 +540,9 @@ sal_uInt16 XclExpNameManagerImpl::FindBuiltInNameIdx(
         for( size_t nPos = 0; nPos < mnFirstUserIdx; ++nPos )
         {
             XclExpNameRef xName = maNameList.GetRecord( nPos );
-            if( xName->GetBuiltInName() == cBuiltIn )
+            if( xName->GetBuiltInName() == cBuiltIn && xName->GetSymbol() == sSymbol )
             {
-                XclTokenArrayRef xTokArr = xName->GetTokenArray();
-                if( xTokArr && (*xTokArr == rTokArr) )
-                    return static_cast< sal_uInt16 >( nPos + 1 );
+                return static_cast< sal_uInt16 >( nPos + 1 );
             }
         }
     }
@@ -628,7 +629,7 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
             cannot be done earlier. If a built-in name is found, the created NAME
             record for this name and all following records in the list must be
             deleted, otherwise they may contain wrong name list indexes. */
-        sal_uInt16 nBuiltInIdx = FindBuiltInNameIdx( rName, *xTokArr );
+        sal_uInt16 nBuiltInIdx = FindBuiltInNameIdx( rName, sSymbol );
         if( nBuiltInIdx != 0 )
         {
             // delete the new NAME records
