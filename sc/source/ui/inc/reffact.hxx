@@ -93,7 +93,7 @@ private:
 };
 
 class ScExponentialSmoothingDialogWrapper :
-    public ChildWindowWrapper<SID_EXPONENTIAL_SMOOTHING_DIALOG>
+    public ChildControllerWrapper<SID_EXPONENTIAL_SMOOTHING_DIALOG>
 {
 private:
     ScExponentialSmoothingDialogWrapper() = delete;
