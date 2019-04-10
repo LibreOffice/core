@@ -16,20 +16,20 @@
 
 ScChiSquareTestDialog::ScChiSquareTestDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    vcl::Window* pParent, ScViewData* pViewData ) :
-    ScStatisticsInputOutputDialog(
+                    weld::Window* pParent, ScViewData* pViewData ) :
+    ScStatisticsInputOutputDialogController(
             pSfxBindings, pChildWindow, pParent, pViewData,
-            "ChiSquareTestDialog", "modules/scalc/ui/chisquaretestdialog.ui" )
+            "modules/scalc/ui/chisquaretestdialog.ui", "ChiSquareTestDialog")
 {
-    SetText(ScResId(STR_CHI_SQUARE_TEST));
+    m_xDialog->set_title(ScResId(STR_CHI_SQUARE_TEST));
 }
 
 ScChiSquareTestDialog::~ScChiSquareTestDialog()
 {}
 
-bool ScChiSquareTestDialog::Close()
+void ScChiSquareTestDialog::Close()
 {
-    return DoClose(ScChiSquareTestDialogWrapper::GetChildWindowId());
+    DoClose(ScChiSquareTestDialogWrapper::GetChildWindowId());
 }
 
 const char* ScChiSquareTestDialog::GetUndoNameId()
