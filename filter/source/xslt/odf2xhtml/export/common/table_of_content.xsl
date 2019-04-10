@@ -490,7 +490,7 @@ Scenarios unmatched:
 
         <xsl:variable name="text">
             <xsl:choose>
-            <!-- heuristic assumption that first in a content table row, there is numbering (if at all) and than the text,
+            <!-- heuristic assumption that first in a content table row, there is numbering (if at all) and then the text,
             furthermore that a tab will separate the to be neglected page number -->
                 <xsl:when test="text:tab">
                     <xsl:call-template name="write-text-without-line-numbers">
