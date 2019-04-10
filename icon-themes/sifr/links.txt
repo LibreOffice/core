@@ -303,6 +303,7 @@ cmd/lc_previewprintoptions.png cmd/lc_printpreview.png
 cmd/lc_sendfax.png cmd/lc_print.png
 cmd/sc_previewprintoptions.png cmd/sc_printpreview.png
 cmd/sc_sendfax.png cmd/sc_scan.png
+cmd/sc_sendto.png cmd/sc_sendmail.png
 
 # Folder
 cmd/lc_dbtableopen.png cmd/lc_open.png
@@ -1778,11 +1779,11 @@ cmd/lc_donation.png cmd/lc_currencyfield.png
 cmd/sc_donation.png cmd/sc_currencyfield.png
 
 # menubar icons
-cmd/sc_focustofindbar.png cmd/lc_recsearch.png
+cmd/sc_focustofindbar.png cmd/sc_recsearch.png
 cmd/sc_macroorganizer%3ftabid%3ashort=1.png cmd/sc_open.png
 cmd/sc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/sc_insertplugin.png
 
 # calc styles
-cmd/sc_badcellstyles.png cmd/sc_badcellstyle.png
-cmd/sc_goodcellstyles.png cmd/sc_goodcellstyle.png
-cmd/sc_neutralcellstyles.png cmd/sc_neutralcellstyle.png
+cmd/sc_badcellstyle.png cmd/sc_badcellstyles.png
+cmd/sc_goodcellstyle.png cmd/sc_goodcellstyles.png
+cmd/sc_neutralcellstyle.png cmd/sc_neutralcellstyles.png
