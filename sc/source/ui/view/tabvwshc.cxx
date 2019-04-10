@@ -330,12 +330,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
         }
         break;
 
-        case SID_MOVING_AVERAGE_DIALOG:
-        {
-            pResult = VclPtr<ScMovingAverageDialog>::Create( pB, pCW, pParent, &GetViewData() );
-        }
-        break;
-
         case SID_REGRESSION_DIALOG:
         {
             pResult = VclPtr<ScRegressionDialog>::Create( pB, pCW, pParent, &GetViewData() );
@@ -531,6 +525,11 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         case SID_EXPONENTIAL_SMOOTHING_DIALOG:
         {
             xResult.reset(new ScExponentialSmoothingDialog(pB, pCW, pParent, &GetViewData()));
+        }
+        break;
+        case SID_MOVING_AVERAGE_DIALOG:
+        {
+            xResult.reset(new ScMovingAverageDialog(pB, pCW, pParent, &GetViewData()));
         }
         break;
     }

@@ -124,6 +124,8 @@ sc/uiconfig/scalc/ui/mergecolumnentry.ui:GtkGrid[@id='grid']/GtkBox/GtkGrid[@id=
 sc/uiconfig/scalc/ui/mergecolumnentry.ui://GtkEntry[@id='ed_separator'] no-labelled-by
 sc/uiconfig/scalc/ui/mergecolumnentry.ui:GtkGrid[@id='grid']/GtkBox/GtkGrid[@id='grid_details']/GtkLabel orphan-label
 sc/uiconfig/scalc/ui/mergecolumnentry.ui://GtkEntry[@id='ed_columns'] no-labelled-by
+sc/uiconfig/scalc/ui/movingaveragedialog.ui://GtkButton[@id='input-range-button'] button-no-label
+sc/uiconfig/scalc/ui/movingaveragedialog.ui://GtkButton[@id='output-range-button'] button-no-label
 sc/uiconfig/scalc/ui/texttransformationentry.ui:GtkGrid[@id='grid']/GtkBox/GtkLabel orphan-label
 sc/uiconfig/scalc/ui/sorttransformationentry.ui:GtkGrid[@id='grid']/GtkBox/GtkLabel orphan-label
 sc/uiconfig/scalc/ui/aggregatefunctionentry.ui:GtkGrid[@id='grid']/GtkBox/GtkLabel orphan-label
