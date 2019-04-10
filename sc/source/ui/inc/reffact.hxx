@@ -100,7 +100,7 @@ private:
 };
 
 class ScMovingAverageDialogWrapper :
-    public ChildWindowWrapper<SID_MOVING_AVERAGE_DIALOG>
+    public ChildControllerWrapper<SID_MOVING_AVERAGE_DIALOG>
 {
 private:
     ScMovingAverageDialogWrapper() = delete;
