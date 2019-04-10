@@ -17,41 +17,21 @@
 
 #include <vcl/fixed.hxx>
 
-class ScSamplingDialog : public ScAnyRefDlg
+class ScSamplingDialog : public ScAnyRefDlgController
 {
 public:
     ScSamplingDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        vcl::Window* pParent, ScViewData* pViewData );
+        weld::Window* pParent, ScViewData* pViewData );
 
     virtual ~ScSamplingDialog() override;
-    virtual void    dispose() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
     virtual void    SetActive() override;
-    virtual bool    Close() override;
+    virtual void    Close() override;
 
 private:
-    // Widgets
-    VclPtr<FixedText>          mpInputRangeLabel;
-    VclPtr<formula::RefEdit>   mpInputRangeEdit;
-    VclPtr<formula::RefButton> mpInputRangeButton;
-
-    VclPtr<FixedText>          mpOutputRangeLabel;
-    VclPtr<formula::RefEdit>   mpOutputRangeEdit;
-    VclPtr<formula::RefButton> mpOutputRangeButton;
-
-    VclPtr<NumericField>       mpSampleSize;
-    VclPtr<NumericField>       mpPeriod;
-
-    VclPtr<RadioButton>        mpRandomMethodRadio;
-    VclPtr<CheckBox>           mpWithReplacement;
-    VclPtr<CheckBox>           mpKeepOrder;
-    VclPtr<RadioButton>        mpPeriodicMethodRadio;
-
-    VclPtr<OKButton>           mpButtonOk;
-
-    VclPtr<formula::RefEdit>   mpActiveEdit;
+    formula::WeldRefEdit* mpActiveEdit;
 
     // Data
     ScViewData* const         mViewData;
@@ -68,6 +48,25 @@ private:
 
     bool                mDialogLostFocus;
 
+    // Widgets
+    std::unique_ptr<weld::Label> mxInputRangeLabel;
+    std::unique_ptr<formula::WeldRefEdit> mxInputRangeEdit;
+    std::unique_ptr<formula::WeldRefButton> mxInputRangeButton;
+
+    std::unique_ptr<weld::Label> mxOutputRangeLabel;
+    std::unique_ptr<formula::WeldRefEdit> mxOutputRangeEdit;
+    std::unique_ptr<formula::WeldRefButton> mxOutputRangeButton;
+
+    std::unique_ptr<weld::SpinButton> mxSampleSize;
+    std::unique_ptr<weld::SpinButton> mxPeriod;
+
+    std::unique_ptr<weld::RadioButton> mxRandomMethodRadio;
+    std::unique_ptr<weld::CheckButton> mxWithReplacement;
+    std::unique_ptr<weld::CheckButton> mxKeepOrder;
+    std::unique_ptr<weld::RadioButton> mxPeriodicMethodRadio;
+
+    std::unique_ptr<weld::Button> mxButtonOk;
+
     void Init();
     void GetRangeFromSelection();
     void PerformSampling();
@@ -78,14 +77,16 @@ private:
     ScRange PerformRandomSamplingKeepOrder(ScDocShell* pDocShell);
     ScRange PerformPeriodicSampling(ScDocShell* pDocShell);
 
-    DECL_LINK( OkClicked, Button*, void );
-    DECL_LINK( GetFocusHandler, Control&, void );
-    DECL_LINK( LoseFocusHandler, Control&, void );
-    DECL_LINK( SamplingSizeValueModified, Edit&, void );
-    DECL_LINK( PeriodValueModified, Edit&, void );
-    DECL_LINK( ToggleSamplingMethod, RadioButton&, void );
-    DECL_LINK( RefInputModifyHandler, Edit&, void );
-    DECL_LINK( CheckHdl, Button*, void );
+    DECL_LINK( OkClicked, weld::Button&, void );
+    DECL_LINK( GetEditFocusHandler, formula::WeldRefEdit&, void );
+    DECL_LINK( GetButtonFocusHandler, formula::WeldRefButton&, void );
+    DECL_LINK( LoseEditFocusHandler, formula::WeldRefEdit&, void );
+    DECL_LINK( LoseButtonFocusHandler, formula::WeldRefButton&, void );
+    DECL_LINK( SamplingSizeValueModified, weld::SpinButton&, void );
+    DECL_LINK( PeriodValueModified, weld::SpinButton&, void );
+    DECL_LINK( ToggleSamplingMethod, weld::ToggleButton&, void );
+    DECL_LINK( RefInputModifyHandler, formula::WeldRefEdit&, void );
+    DECL_LINK( CheckHdl, weld::Button&, void );
     void ToggleSamplingMethod();
 };
 
