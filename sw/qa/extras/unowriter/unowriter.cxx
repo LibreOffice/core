@@ -83,49 +83,7 @@ public:
     }
 };
 
-/**
- * Macro to declare a new test with preloaded file
- * (similar to DECLARE_SW_ROUNDTRIP_TEST)
- */
-#define DECLARE_UNOAPI_TEST_FILE(TestName, filename)                                               \
-    class TestName : public SwUnoWriter                                                            \
-    {                                                                                              \
-    protected:                                                                                     \
-        virtual OUString getTestName() override { return OUString(#TestName); }                    \
-                                                                                                   \
-    public:                                                                                        \
-        CPPUNIT_TEST_SUITE(TestName);                                                              \
-        CPPUNIT_TEST(loadAndTest);                                                                 \
-        CPPUNIT_TEST_SUITE_END();                                                                  \
-        void loadAndTest()                                                                         \
-        {                                                                                          \
-            load(mpTestDocumentPath, filename);                                                    \
-            runTest();                                                                             \
-        }                                                                                          \
-        void runTest();                                                                            \
-    };                                                                                             \
-    CPPUNIT_TEST_SUITE_REGISTRATION(TestName);                                                     \
-    void TestName::runTest()
-
-/**
- * Macro to declare a new test without loading any files
- */
-#define DECLARE_UNOAPI_TEST(TestName)                                                              \
-    class TestName : public SwUnoWriter                                                            \
-    {                                                                                              \
-    protected:                                                                                     \
-        virtual OUString getTestName() override { return OUString(#TestName); }                    \
-                                                                                                   \
-    public:                                                                                        \
-        CPPUNIT_TEST_SUITE(TestName);                                                              \
-        CPPUNIT_TEST(runTest);                                                                     \
-        CPPUNIT_TEST_SUITE_END();                                                                  \
-        void runTest();                                                                            \
-    };                                                                                             \
-    CPPUNIT_TEST_SUITE_REGISTRATION(TestName);                                                     \
-    void TestName::runTest()
-
-DECLARE_UNOAPI_TEST(testDefaultCharStyle)
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDefaultCharStyle)
 {
     // Create a new document, type a character, set its char style to Emphasis
     // and assert the style was set.
@@ -151,7 +109,7 @@ DECLARE_UNOAPI_TEST(testDefaultCharStyle)
                          getProperty<awt::FontSlant>(xCursorProps, "CharPosture"));
 }
 
-DECLARE_UNOAPI_TEST(testGraphicDesciptorURL)
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDesciptorURL)
 {
     loadURL("private:factory/swriter", nullptr);
 
@@ -178,7 +136,7 @@ DECLARE_UNOAPI_TEST(testGraphicDesciptorURL)
     CPPUNIT_ASSERT(xGraphic.is());
 }
 
-DECLARE_UNOAPI_TEST(testGraphicDesciptorURLBitmap)
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDesciptorURLBitmap)
 {
     loadURL("private:factory/swriter", nullptr);
 
@@ -233,8 +191,9 @@ static bool ensureAutoTextExistsByName(const uno::Reference<text::XAutoTextGroup
     return false;
 }
 
-DECLARE_UNOAPI_TEST_FILE(testXAutoTextGroup, "xautotextgroup.odt")
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXAutoTextGroup)
 {
+    load(mpTestDocumentPath, "xautotextgroup.odt");
     uno::Reference<text::XAutoTextContainer> xAutoTextContainer
         = text::AutoTextContainer::create(comphelper::getProcessComponentContext());
 
@@ -299,7 +258,7 @@ DECLARE_UNOAPI_TEST_FILE(testXAutoTextGroup, "xautotextgroup.odt")
     xAutoTextContainer->removeByName(sGroupName);
 }
 
-DECLARE_UNOAPI_TEST(testXURI)
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXURI)
 {
     uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
 
@@ -370,7 +329,7 @@ DECLARE_UNOAPI_TEST(testXURI)
                                  lang::IllegalArgumentException);
 }
 
-DECLARE_UNOAPI_TEST(testSetPagePrintSettings)
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSetPagePrintSettings)
 {
     // Create an empty new document with a single char
     loadURL("private:factory/swriter", nullptr);
@@ -395,8 +354,9 @@ DECLARE_UNOAPI_TEST(testSetPagePrintSettings)
     CPPUNIT_ASSERT_EQUAL(true, aMap.getValue("IsLandscape").get<bool>());
 }
 
-DECLARE_UNOAPI_TEST_FILE(testSelectionInTableEnum, "selection-in-table-enum.odt")
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSelectionInTableEnum)
 {
+    load(mpTestDocumentPath, "selection-in-table-enum.odt");
     // Select the A1 cell's text.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -428,8 +388,9 @@ DECLARE_UNOAPI_TEST_FILE(testSelectionInTableEnum, "selection-in-table-enum.odt"
     CPPUNIT_ASSERT(!xEnum->hasMoreElements());
 }
 
-DECLARE_UNOAPI_TEST_FILE(testSelectionInTableEnumEnd, "selection-in-table-enum.odt")
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSelectionInTableEnumEnd)
 {
+    load(mpTestDocumentPath, "selection-in-table-enum.odt");
     // Select from "Before" till the table end.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -466,8 +427,9 @@ DECLARE_UNOAPI_TEST_FILE(testSelectionInTableEnumEnd, "selection-in-table-enum.o
     CPPUNIT_ASSERT(!xEnum->hasMoreElements());
 }
 
-DECLARE_UNOAPI_TEST_FILE(testRenderablePagePosition, "renderable-page-position.odt")
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testRenderablePagePosition)
 {
+    load(mpTestDocumentPath, "renderable-page-position.odt");
     // Make sure that the document has 2 pages.
     uno::Reference<view::XRenderable> xRenderable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(mxComponent.is());
@@ -507,7 +469,7 @@ DECLARE_UNOAPI_TEST_FILE(testRenderablePagePosition, "renderable-page-position.o
     CPPUNIT_ASSERT_GREATER(aPosition1.Y, aPosition2.Y);
 }
 
-DECLARE_UNOAPI_TEST(testPasteListener)
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testPasteListener)
 {
     loadURL("private:factory/swriter", nullptr);
 
