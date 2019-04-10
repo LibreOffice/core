@@ -1,6 +1,8 @@
 sc/uiconfig/scalc/ui/advancedfilterdialog.ui://foruilo-RefEdit[@id='edfilterarea'] no-labelled-by
 sc/uiconfig/scalc/ui/advancedfilterdialog.ui://GtkLabel[@id='dbarealabel'] orphan-label
 sc/uiconfig/scalc/ui/advancedfilterdialog.ui://GtkLabel[@id='dbarea'] orphan-label
+sc/uiconfig/scalc/ui/analysisofvariancedialog.ui://GtkButton[@id='input-range-button'] button-no-label
+sc/uiconfig/scalc/ui/analysisofvariancedialog.ui://GtkButton[@id='output-range-button'] button-no-label
 sc/uiconfig/scalc/ui/cellprotectionpage.ui://GtkLabel[@id='label1'] orphan-label
 sc/uiconfig/scalc/ui/cellprotectionpage.ui://GtkLabel[@id='label4'] orphan-label
 sc/uiconfig/scalc/ui/conditionalentry.ui://GtkLabel[@id='number'] orphan-label
