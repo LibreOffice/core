@@ -932,7 +932,7 @@ namespace cppcanvas
 
                 aReliefColor = COL_LIGHTGRAY;
 
-                // we don't have a automatic color, so black is always
+                // we don't have an automatic color, so black is always
                 // drawn on white (literally copied from
                 // vcl/source/gdi/outdev3.cxx)
                 if( aTextColor == COL_BLACK )
@@ -1400,7 +1400,7 @@ namespace cppcanvas
                         }
                         else
                         {
-                            // #120994# Do switch on/off LineColor, even when a overriding one is set
+                            // #120994# Do switch on/off LineColor, even when an overriding one is set
                             bool bSetting(static_cast<MetaLineColorAction*>(pCurrAct)->IsSetting());
 
                             rStates.getState().isLineColorSet = bSetting;
@@ -1417,7 +1417,7 @@ namespace cppcanvas
                         }
                         else
                         {
-                            // #120994# Do switch on/off FillColor, even when a overriding one is set
+                            // #120994# Do switch on/off FillColor, even when an overriding one is set
                             bool bSetting(static_cast<MetaFillColorAction*>(pCurrAct)->IsSetting());
 
                             rStates.getState().isFillColorSet = bSetting;
@@ -1455,7 +1455,7 @@ namespace cppcanvas
                         }
                         else
                         {
-                            // #120994# Do switch on/off TextFillColor, even when a overriding one is set
+                            // #120994# Do switch on/off TextFillColor, even when an overriding one is set
                             bool bSetting(static_cast<MetaTextFillColorAction*>(pCurrAct)->IsSetting());
 
                             rStates.getState().isTextFillColorSet = bSetting;
@@ -1472,7 +1472,7 @@ namespace cppcanvas
                         }
                         else
                         {
-                            // #120994# Do switch on/off TextLineColor, even when a overriding one is set
+                            // #120994# Do switch on/off TextLineColor, even when an overriding one is set
                             bool bSetting(static_cast<MetaTextLineColorAction*>(pCurrAct)->IsSetting());
 
                             rStates.getState().isTextLineColorSet = bSetting;
@@ -2910,7 +2910,7 @@ namespace cppcanvas
             aStateStack.clearStateStack();
 
             // Setup local state, such that the metafile renders
-            // itself into a one-by-one square at the origin for
+            // itself into an one-by-one square at the origin for
             // identity view and render transformations
             aStateStack.getState().transform.scale( 1.0 / aMtfSizePix.Width(),
                                                      1.0 / aMtfSizePix.Height() );
