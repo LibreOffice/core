@@ -3024,9 +3024,9 @@ void sw_BoxSetSplitBoxFormats( SwTableBox* pBox, SwCollectTableLineBoxes* pSplPa
         {
             sal_uInt16 const aTableSplitBoxSetRange[] {
                 RES_LR_SPACE,       RES_UL_SPACE,
-                RES_BACKGROUND,     RES_SHADOW,
                 RES_PROTECT,        RES_PROTECT,
                 RES_VERT_ORIENT,    RES_VERT_ORIENT,
+                RES_BACKGROUND,     RES_SHADOW,
                 0 };
 
             SfxItemSet aTmpSet( pFormat->GetDoc()->GetAttrPool(),

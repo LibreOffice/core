@@ -471,9 +471,9 @@ void SwHHCWrapper::ReplaceUnit(
                     "SwHHCWrapper::ReplaceUnit : unexpected target language" );
 
             sal_uInt16 const aRanges[] {
-                    RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
                     RES_CHRATR_CJK_FONT,     RES_CHRATR_CJK_FONT,
-                    0, 0, 0  };
+                    RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
+                    0  };
 
             SfxItemSet aSet( m_rWrtShell.GetAttrPool(), aRanges );
             if (pNewUnitLanguage)
