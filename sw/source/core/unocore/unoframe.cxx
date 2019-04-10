@@ -44,6 +44,7 @@
 #include <memory>
 #include <utility>
 #include <hints.hxx>
+#include <cntfrm.hxx>
 #include <doc.hxx>
 #include <drawdoc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -2096,6 +2097,36 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 if(!pGrfNode)
                     throw uno::RuntimeException();
                 aAny <<= pGrfNode->GetGrf().GetXGraphic();
+            }
+        }
+        else if( FN_UNO_TRANSFORMED_GRAPHIC == pEntry->nWID )
+        {
+            const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
+            if(pIdx)
+            {
+                SwNodeIndex aIdx(*pIdx, 1);
+                SwGrfNode* pGrfNode = aIdx.GetNode().GetGrfNode();
+                if(!pGrfNode)
+                    throw uno::RuntimeException();
+
+                SwDoc* pDoc = pFormat->GetDoc();
+                if (pDoc)
+                {
+                    const SwEditShell* pEditShell = pDoc->GetEditShell();
+                    if (pEditShell)
+                    {
+                        SwFrame* pCurrFrame = pEditShell->GetCurrFrame(false);
+                        GraphicAttr aGraphicAttr;
+                        pGrfNode->GetGraphicAttr( aGraphicAttr, pCurrFrame );
+                        const GraphicObject aGraphicObj = pGrfNode->GetGrfObj();
+
+                        awt::Size aFrameSize = getSize();
+                        Size aSize100thmm(aFrameSize.Width, aFrameSize.Height);
+                        Size aSize = OutputDevice::LogicToLogic(aSize100thmm, MapMode(MapUnit::Map100thMM), aGraphicObj.GetPrefMapMode());
+                        Graphic aGraphic = aGraphicObj.GetTransformedGraphic(aSize, aGraphicObj.GetPrefMapMode(), aGraphicAttr);
+                        aAny <<= aGraphic.GetXGraphic();
+                    }
+                }
             }
         }
         else if(FN_UNO_FRAME_STYLE_NAME == pEntry->nWID)

@@ -564,13 +564,10 @@ void SdrMarkView::showMarkHandles()
 
 bool SdrMarkView::ImpIsFrameHandles() const
 {
-    // There can be multiple mark views, but we're only interested in the one that has a window associated.
-    const bool bTiledRendering = comphelper::LibreOfficeKit::isActive() && GetFirstOutputDevice() && GetFirstOutputDevice()->GetOutDevType() == OUTDEV_WINDOW;
-
     const size_t nMarkCount=GetMarkedObjectCount();
     bool bFrmHdl=nMarkCount>static_cast<size_t>(mnFrameHandlesLimit) || mbForceFrameHandles;
     bool bStdDrag=meDragMode==SdrDragMode::Move;
-    if (!bTiledRendering && nMarkCount==1 && bStdDrag && bFrmHdl)
+    if (nMarkCount==1 && bStdDrag && bFrmHdl)
     {
         const SdrObject* pObj=GetMarkedObjectByIndex(0);
         if (pObj->GetObjInventor()==SdrInventor::Default)
@@ -710,7 +707,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     bool bSingleTextObjMark=false;
     bool bLimitedRotation(false);
 
-    if (!bTiledRendering && nMarkCount==1)
+    if (nMarkCount==1)
     {
         mpMarkedObj=GetMarkedObjectByIndex(0);
 
@@ -742,9 +739,6 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
             }
         }
     }
-
-    // There can be multiple mark views, but we're only interested in the one that has a window associated.
-    const bool bTiledRendering = comphelper::LibreOfficeKit::isActive() && GetFirstOutputDevice() && GetFirstOutputDevice()->GetOutDevType() == OUTDEV_WINDOW;
 
     // check if text edit or ole is active and handles need to be suppressed. This may be the case
     // when a single object is selected
@@ -847,14 +841,21 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         }
         if(SfxViewShell* pViewShell = GetSfxViewShell())
         {
-            long nRotAngle(0);
-            if(GetMarkedObjectCount())
+            if (GetMarkedObjectCount())
             {
-                SdrMark* pM = GetSdrMarkByIndex(0);
-                SdrObject* pO = pM->GetMarkedSdrObj();
+                SdrObject* pO = mpMarkedObj;
+                long nRotAngle = pO->GetRotateAngle();
+                // true if we are delaing with a RotGrfFlyFrame
+                // (SwVirtFlyDrawObj with a SwGrfNode)
+                bool bWriterGraphic = pO->HasLimitedRotation();
 
-                nRotAngle = pO->GetRotateAngle();
+                if (bWriterGraphic)
+                {
+                    nRotAngle *= 10;
+                }
+
                 sSelection += OString(", ") + OString::number(nRotAngle);
+
                 // true if we are delaing with a RotGrfFlyFrame
                 // (SwVirtFlyDrawObj with a SwGrfNode)
                 bool bWriterGraphic = pO->HasLimitedRotation();

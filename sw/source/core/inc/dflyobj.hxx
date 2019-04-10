@@ -95,6 +95,7 @@ public:
     // we treat the size calculation completely on ourself here
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;
     virtual const tools::Rectangle& GetLastBoundRect() const override;
+    virtual       long       GetRotateAngle() const override;
     virtual       void       RecalcBoundRect() override;
     virtual       void       RecalcSnapRect() override;
     virtual const tools::Rectangle& GetSnapRect()  const override;

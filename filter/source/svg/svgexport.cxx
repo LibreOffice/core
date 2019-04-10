@@ -687,7 +687,7 @@ bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSu
     {
         uno::Reference<beans::XPropertySet> xPropertySet(xSelection, uno::UNO_QUERY);
         uno::Reference<graphic::XGraphic> xGraphic;
-        xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+        xPropertySet->getPropertyValue("TransformedGraphic") >>= xGraphic;
 
         if (!xGraphic.is())
             return false;
