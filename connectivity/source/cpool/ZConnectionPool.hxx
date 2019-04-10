@@ -94,7 +94,7 @@ namespace connectivity
 
     typedef std::map< TDigestHolder,TConnectionPool,TDigestLess> TConnectionMap;
 
-    // contains additional information about a activeconnection which is needed to put it back to the pool
+    // contains additional information about an activeconnection which is needed to put it back to the pool
     typedef struct
     {
         TConnectionMap::iterator aPos;
