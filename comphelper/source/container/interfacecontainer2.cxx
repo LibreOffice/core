@@ -159,7 +159,7 @@ void OInterfaceContainerHelper2::copyAndResetInUse()
     OSL_ENSURE( bInUse, "OInterfaceContainerHelper2 not in use" );
     if( bInUse )
     {
-        // this should be the worst case. If a iterator is active
+        // this should be the worst case. If an iterator is active
         // and a new Listener is added.
         if( bIsList )
             aData.pAsVector = new std::vector< Reference< XInterface > >( *aData.pAsVector );
