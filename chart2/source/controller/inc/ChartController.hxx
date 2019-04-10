@@ -319,6 +319,10 @@ public:
 
     static bool isObjectDeleteable( const css::uno::Any& rSelection );
 
+    bool isSelectedObjectDraggable() const;
+    bool isSelectedObjectResizable() const;
+    bool isSelectedObjectRotatable() const;
+
     void setDrawMode( ChartDrawMode eMode ) { m_eDrawMode = eMode; }
 
     bool isShapeContext() const;
