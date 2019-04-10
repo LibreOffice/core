@@ -33,10 +33,6 @@
 
 class KeyEvent;
 
-namespace vcl {
-    class Window;
-}
-
 namespace formula {
 
 class IControlReferenceHandler;

@@ -33,7 +33,6 @@
 #include <tools/link.hxx>
 #include <vcl/dialog.hxx>
 
-class Idle;
 class NotifyEvent;
 class SfxBindings;
 class SfxChildWindow;
