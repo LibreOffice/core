@@ -480,7 +480,7 @@ public:
         frame of the desktop, then the current frame. If both are <NULL/>,
         the SfxViewFrame::Current's XFrame is used. If this is <NULL/>, too, an empty string is returned.
 
-        If the given frame is not <NULL/>, or an default frame could be successfully determined, then
+        If the given frame is not <NULL/>, or a default frame could be successfully determined, then
         the ModuleManager is asked for the module ID of the component in the frame.
     */
     static OUString
