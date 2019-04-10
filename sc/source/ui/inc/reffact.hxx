@@ -107,7 +107,7 @@ private:
 };
 
 class ScRegressionDialogWrapper :
-    public ChildWindowWrapper<SID_REGRESSION_DIALOG>
+    public ChildControllerWrapper<SID_REGRESSION_DIALOG>
 {
 private:
     ScRegressionDialogWrapper() = delete;
