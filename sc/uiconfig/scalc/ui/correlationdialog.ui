@@ -7,6 +7,8 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="correlationdialog|CorrelationDialog">Correlation</property>
     <property name="resizable">False</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
@@ -128,6 +130,7 @@
                         <property name="can_focus">True</property>
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                         <property name="width_chars">30</property>
                       </object>
                       <packing>
@@ -141,6 +144,7 @@
                         <property name="can_focus">True</property>
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                         <property name="width_chars">30</property>
                       </object>
                       <packing>
