@@ -105,7 +105,7 @@ namespace osl
 
     /** Object lifetime scoped mutex object or interface lock.
      *
-     * Aquires the template object on construction and releases it on
+     * Acquires the template object on construction and releases it on
      * destruction.
      *
      * @see MutexGuard
