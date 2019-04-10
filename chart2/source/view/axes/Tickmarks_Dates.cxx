@@ -43,7 +43,7 @@ DateTickFactory::DateTickFactory(
     if( m_aScale.Scaling.is() )
     {
         m_xInverseScaling = m_aScale.Scaling->getInverseScaling();
-        OSL_ENSURE( m_xInverseScaling.is(), "each Scaling needs to return a inverse Scaling" );
+        OSL_ENSURE( m_xInverseScaling.is(), "each Scaling needs to return an inverse Scaling" );
     }
 }
 
