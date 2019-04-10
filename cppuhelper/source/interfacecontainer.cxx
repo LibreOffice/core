@@ -177,7 +177,7 @@ void OInterfaceContainerHelper::copyAndResetInUse()
     OSL_ENSURE( bInUse, "OInterfaceContainerHelper not in use" );
     if( bInUse )
     {
-        // this should be the worst case. If a iterator is active
+        // this should be the worst case. If an iterator is active
         // and a new Listener is added.
         if( bIsList )
             aData.pAsSequence = new Sequence< Reference< XInterface > >( *aData.pAsSequence );
