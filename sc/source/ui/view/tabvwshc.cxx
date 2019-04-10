@@ -330,12 +330,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
         }
         break;
 
-        case SID_FOURIER_ANALYSIS_DIALOG:
-        {
-            pResult = VclPtr<ScFourierAnalysisDialog>::Create( pB, pCW, pParent, &GetViewData() );
-        }
-        break;
-
         case SID_OPENDLG_OPTSOLVER:
         {
             ScViewData& rViewData = GetViewData();
@@ -525,6 +519,11 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         case SID_CHI_SQUARE_TEST_DIALOG:
         {
             xResult.reset(new ScChiSquareTestDialog(pB, pCW, pParent, &GetViewData()));
+        }
+        break;
+        case SID_FOURIER_ANALYSIS_DIALOG:
+        {
+            xResult.reset(new ScFourierAnalysisDialog(pB, pCW, pParent, &GetViewData()));
         }
         break;
     }
