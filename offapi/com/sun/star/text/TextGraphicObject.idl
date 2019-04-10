@@ -132,6 +132,12 @@ published service TextGraphicObject
      */
     [optional, property] com::sun::star::graphic::XGraphic Graphic;
 
+    /** contains the transformed graphic.
+
+        @since LibreOffice 6.3
+     */
+    [readonly, optional, property] com::sun::star::graphic::XGraphic TransformedGraphic;
+
 };
 
 
