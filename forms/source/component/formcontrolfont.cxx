@@ -439,7 +439,7 @@ namespace frm
     {
         if (isFontAggregateProperty(nHandle))
         {
-            // need to fire a event for PROPERTY_ID_FONT too apparently, so:
+            // need to fire an event for PROPERTY_ID_FONT too apparently, so:
             FontDescriptor font(getFont());
 
             // first set new value on backup copy
