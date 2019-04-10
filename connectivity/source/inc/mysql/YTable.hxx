@@ -72,7 +72,7 @@ namespace connectivity
                 This method needs to be implemented in derived classes.
                 <BR>
                 The method gets called with s_aMutex acquired.
-                @return                         an pointer to the newly created array helper. Must not be NULL.
+                @return                         a pointer to the newly created array helper. Must not be NULL.
             */
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const override;
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
