@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df87a7cf_5d24b80d",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 33
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-10T09:37:11Z",
+      "side": 1,
+      "message": "Why did you do this change from a good code to worse, which makes all future additions to the list to make this last line to also look changed?",
+      "revId": "6619c2a233a03ec52c12b683d701ef0d87ece971",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
