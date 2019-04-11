@@ -46,6 +46,30 @@
       "revId": "ac1081170c5bc2234b14ce99b7ea8e583bac82b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_5ebb75e4",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport9.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-11T23:03:56Z",
+      "side": 1,
+      "message": "I have figured it.\n\nNo, I has not misinterpreted that. And your test actually simply asserted existence of w:rStyle element, without *some* attribute that actually didn\u0027t exist.\n\nThe thing is, it turns out that one should not specify namespace for attributes (at least when they are same as of their nodes). Specifying them makes getXPath not find it (\u003dlook for some non-existing attribute).\n\nFixing that in https://gerrit.libreoffice.org/70612.",
+      "parentUuid": "7f96bb07_5e75b597",
+      "range": {
+        "startLine": 428,
+        "startChar": 4,
+        "endLine": 428,
+        "endChar": 96
+      },
+      "revId": "ac1081170c5bc2234b14ce99b7ea8e583bac82b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
