@@ -303,7 +303,7 @@ void ScNameDlg::AddPushed()
 {
     mbCloseWithoutUndo = true;
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-    pViewSh->SwitchBetweenRefDialogControllers(this);
+    pViewSh->SwitchBetweenRefDialogs(this);
 }
 
 void ScNameDlg::SetEntry(const OUString& rName, const OUString& rScope)

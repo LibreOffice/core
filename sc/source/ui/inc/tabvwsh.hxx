@@ -378,8 +378,7 @@ public:
     const   OUString DoAutoSum(bool& rRangeFinder, bool& rSubTotal);
 
     // ugly hack to call Define Names from Manage Names
-    void    SwitchBetweenRefDialogs(SfxModelessDialog* pDialog);
-    void    SwitchBetweenRefDialogControllers(SfxModelessDialogController* pDialog);
+    void    SwitchBetweenRefDialogs(SfxModelessDialogController* pDialog);
     // #i123629#
     bool    GetForceFocusOnCurCell() const { return bForceFocusOnCurCell; }
     void SetForceFocusOnCurCell(bool bFlag) { bForceFocusOnCurCell=bFlag; }
