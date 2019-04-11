@@ -147,6 +147,11 @@ public:
         xEntry->select_region(rSelection.Min(), rSelection.Max());
     }
 
+    void SetCursorAtLast()
+    {
+        xEntry->set_position(-1);
+    }
+
     Selection GetSelection() const
     {
         int nStartPos, nEndPos;

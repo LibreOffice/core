@@ -1989,10 +1989,20 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
             sal_uInt16 nCurRefDlgId=pScMod->GetCurRefDlgId();
             SfxViewFrame* pViewFrm = aViewData.GetViewShell()->GetViewFrame();
             SfxChildWindow* pChildWnd = pViewFrm->GetChildWindow( nCurRefDlgId );
-            IAnyRefDialog* pRefDlg = pChildWnd ? dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow()) : nullptr;
-            if (pRefDlg)
+            if (pChildWnd)
             {
-                pRefDlg->ViewShellChanged();
+                if (pChildWnd->GetWindow())
+                {
+                    IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
+                    if (pRefDlg)
+                        pRefDlg->ViewShellChanged();
+                }
+                if (pChildWnd->GetController())
+                {
+                    IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetController().get());
+                    if (pRefDlg)
+                        pRefDlg->ViewShellChanged();
+                }
             }
         }
 
