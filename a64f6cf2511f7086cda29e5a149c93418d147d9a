@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f91af0f_62d1f857",
+        "filename": "sc/source/core/data/dpcache.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-11T12:23:29Z",
+      "side": 1,
+      "message": "Are labels really ASCII-only?",
+      "range": {
+        "startLine": 341,
+        "startChar": 40,
+        "endLine": 341,
+        "endChar": 59
+      },
+      "revId": "a64f6cf2511f7086cda29e5a149c93418d147d9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
