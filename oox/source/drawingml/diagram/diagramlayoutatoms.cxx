@@ -87,56 +87,6 @@ sal_Int32 getPropertyFromConstraint(sal_Int32 nConstraint)
     return 0;
 }
 
-/// Determines the connector shape type from a linear alg.
-sal_Int32 getConnectorType(const oox::drawingml::LayoutNode* pNode)
-{
-    sal_Int32 nType = oox::XML_rightArrow;
-
-    if (!pNode)
-        return nType;
-
-    // This is cheaper than visiting the whole sub-tree.
-    if (pNode->getName().startsWith("hierChild"))
-        return oox::XML_bentConnector3;
-
-    for (const auto& pChild : pNode->getChildren())
-    {
-        auto pAlgAtom = dynamic_cast<oox::drawingml::AlgAtom*>(pChild.get());
-        if (!pAlgAtom)
-            continue;
-
-        switch (pAlgAtom->getType())
-        {
-            case oox::XML_lin:
-            {
-                sal_Int32 nDir = oox::XML_fromL;
-                if (pAlgAtom->getMap().count(oox::XML_linDir))
-                    nDir = pAlgAtom->getMap().find(oox::XML_linDir)->second;
-
-                switch (nDir)
-                {
-                    case oox::XML_fromL:
-                        nType = oox::XML_rightArrow;
-                        break;
-                    case oox::XML_fromR:
-                        nType = oox::XML_leftArrow;
-                        break;
-                }
-                break;
-            }
-            case oox::XML_hierChild:
-            {
-                // TODO <dgm:param type="connRout" val="..."/> should be able
-                // to customize this.
-                nType = oox::XML_bentConnector3;
-                break;
-            }
-        }
-    }
-
-    return nType;
-}
-
 /**
  * Determines if pShape is (or contains) a presentation of a data node of type
  * nType.
@@ -444,6 +394,30 @@ void AlgAtom::accept( LayoutAtomVisitor& rVisitor )
     rVisitor.visit(*this);
 }
 
+sal_Int32 AlgAtom::getConnectorType()
+{
+    sal_Int32 nConnRout = 0;
+    sal_Int32 nBegSty = 0;
+    sal_Int32 nEndSty = 0;
+    if (maMap.count(oox::XML_connRout))
+        nConnRout = maMap.find(oox::XML_connRout)->second;
+    if (maMap.count(oox::XML_begSty))
+        nBegSty = maMap.find(oox::XML_begSty)->second;
+    if (maMap.count(oox::XML_endSty))
+        nEndSty = maMap.find(oox::XML_endSty)->second;
+
+    if (nConnRout == oox::XML_bend)
+        return oox::XML_bentConnector3;
+    if (nBegSty == oox::XML_arr && nEndSty == oox::XML_arr)
+        return oox::XML_leftRightArrow;
+    if (nBegSty == oox::XML_arr)
+        return oox::XML_leftArrow;
+    if (nEndSty == oox::XML_arr)
+        return oox::XML_rightArrow;
+
+    return oox::XML_rightArrow;
+}
+
 void AlgAtom::layoutShape( const ShapePtr& rShape,
                            const std::vector<Constraint>& rConstraints )
 {
@@ -559,7 +533,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             {
                 // There is no shape type "conn", replace it by an arrow based
                 // on the direction of the parent linear layout.
-                sal_Int32 nType = getConnectorType(getLayoutNode().getParentLayoutNode());
+                sal_Int32 nType = getConnectorType();
 
                 rShape->setSubType(nType);
                 rShape->getCustomShapeProperties()->setShapePresetType(nType);
