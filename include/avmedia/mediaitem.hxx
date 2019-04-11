@@ -22,13 +22,14 @@
 
 #include <svl/poolitem.hxx>
 #include <com/sun/star/media/ZoomLevel.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <avmedia/avmediadllapi.h>
 #include <memory>
 #include <o3tl/typed_flags_set.hxx>
 
-class SvStream;
+namespace com::sun::star::embed { class XStorage; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::io { class XInputStream; }
+namespace com::sun::star::io { class XStream; }
 
 enum class AVMediaSetMask
 {

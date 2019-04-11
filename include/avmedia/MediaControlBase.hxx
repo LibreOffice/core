@@ -19,13 +19,14 @@
 #ifndef INCLUDED_AVMEDIA_MEDIACONTROLBASE_HXX
 #define INCLUDED_AVMEDIA_MEDIACONTROLBASE_HXX
 
-#include <svx/svxdllapi.h>
 #include <vcl/edit.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/slider.hxx>
-#include <avmedia/mediaitem.hxx>
-#include <avmedia/mediawindow.hxx>
+
+#include <avmedia/avmediadllapi.h>
+
+namespace avmedia { class MediaItem; }
 
 #define AVMEDIA_TIME_RANGE          2048
 #define AVMEDIA_DB_RANGE            -40

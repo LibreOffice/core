@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <com/sun/star/media/XPlayer.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>

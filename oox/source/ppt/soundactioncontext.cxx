@@ -23,6 +23,8 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 
+#include <com/sun/star/io/XInputStream.hpp>
+
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <drawingml/embeddedwavaudiofile.hxx>

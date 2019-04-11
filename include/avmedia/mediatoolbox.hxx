@@ -20,7 +20,6 @@
 #ifndef INCLUDED_AVMEDIA_MEDIATOOLBOX_HXX
 #define INCLUDED_AVMEDIA_MEDIATOOLBOX_HXX
 
-#include <svl/lstner.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <avmedia/avmediadllapi.h>
 
