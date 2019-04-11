@@ -488,7 +488,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf109310_endnoteStyleForMSO, "tdf109310_endnoteSty
     xmlDocPtr pXmlDoc = parseExport("word/endnotes.xml");
     if (!pXmlDoc)
         return;
-//    assertXPath(pXmlDoc, "/w:endnotes/w:endnote[@w:id='2']/w:p/w:r[1]/w:rPr/w:rStyle", "w:val"); // what does it test?
+    // Check that there's w:rStyle element with w:val attribute
+    OUString s_wWal
+        = getXPath(pXmlDoc, "/w:endnotes/w:endnote[@w:id='2']/w:p/w:r[1]/w:rPr/w:rStyle", "w:val");
+    CPPUNIT_ASSERT(!s_wWal.isEmpty());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf103389, "tdf103389.docx")
