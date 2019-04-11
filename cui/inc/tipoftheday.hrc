@@ -213,7 +213,7 @@ const char* TIPOFTHEDAY_STRINGARRAY[] =
     NC_("RID_CUI_TIPOFTHEDAY", "LibreOffice uses Regexp ICU’s engine (International Components for Unicode)"),
     NC_("RID_CUI_TIPOFTHEDAY", "Calc›View›Value Highlighting displays cell contents in colors: Text/black, Formulas/green, Numbers/blue, Protected cells/grey background"),
     NC_("RID_CUI_TIPOFTHEDAY", "Calc: to show formulas instead of results in cells Tools›Options›Calc›View›Display›Formulas or check Format›Page›Sheet tab›Print›Formulas"),
-    NC_("RID_CUI_TIPOFTHEDAY", "Writer: Want to reach a page by its number? F5 to open the navigator›Type the number in the fied›Enter"),
+    NC_("RID_CUI_TIPOFTHEDAY", "Writer: Want to reach a page by its number? F5 to open the navigator›Type the number in the field›Enter"),
     NC_("RID_CUI_TIPOFTHEDAY", "With Edit›AutoText›Import you can select Word document or template, containing the AutoText entries that you want to import"),
     NC_("RID_CUI_TIPOFTHEDAY", "Calc can display a number or a calculation as a fraction: Format›Cells›Number tab›Category›Fraction"),
     NC_("RID_CUI_TIPOFTHEDAY", "To print the notes of your slides File›Print›General tab›Select Notes in the Print listbox"),
