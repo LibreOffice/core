@@ -1779,8 +1779,7 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
                 case DataType::LONGVARCHAR:
                 case DataType::CLOB:
                 {
-                    OUString sRet;
-                    sRet = m_aRow[nColumnIndex].getString();
+                    OUString sRet = m_aRow[nColumnIndex].getString();
                     OString aString(OUStringToOString(sRet,m_nTextEncoding));
                     N3SQLPutData (m_aStatementHandle, static_cast<SQLPOINTER>(const_cast<char *>(aString.getStr())), aString.getLength());
                     break;
