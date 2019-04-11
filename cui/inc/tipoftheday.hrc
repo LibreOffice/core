@@ -269,7 +269,7 @@ const char* TIPOFTHEDAY_STRINGARRAY[] =
     NC_("RID_CUI_TIPOFTHEDAY", "Calc: Need to fill a serie? Select the cell range›Edit›Fill›Series›Choose between Linear, Growth, Date and AutoFill"),
     NC_("RID_CUI_TIPOFTHEDAY", "Writer: Click at the beginning (end) of a section and press Alt+Enter to insert a paragraph before (after) the section"),
     NC_("RID_CUI_TIPOFTHEDAY", "With File›Versions Save multiple versions of the document in the same file. You can also open, delete, and compare previous versions"),
-    NC_("RID_CUI_TIPOFTHEDAY", "You change computers and want to recover your customizations? See https://wiki.documentfoundation.org/UserProfile"),
+    NC_("RID_CUI_TIPOFTHEDAY", "You change computer and want to recover your customizations? See https://wiki.documentfoundation.org/UserProfile"),
     NC_("RID_CUI_TIPOFTHEDAY", "Calc: You can set a color for each tab: right-click the tab›Tab ColourfA"),
     NC_("RID_CUI_TIPOFTHEDAY", "Looking for examples of LibreOffice Basic macros? Look at LibreOffice Macros›Tools"),
     NC_("RID_CUI_TIPOFTHEDAY", "Calc: Insert›Function List opens a resizable dockable window which displays all functions that can be inserted into your document"),
