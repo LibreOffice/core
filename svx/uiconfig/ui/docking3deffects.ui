@@ -1066,6 +1066,16 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="docking3deffects|label17">_Light source</property>
                         <property name="use_underline">True</property>
+                        <accessibility>
+                          <relation type="label-for" target="light1"/>
+                          <relation type="label-for" target="light2"/>
+                          <relation type="label-for" target="light3"/>
+                          <relation type="label-for" target="light4"/>
+                          <relation type="label-for" target="light5"/>
+                          <relation type="label-for" target="light6"/>
+                          <relation type="label-for" target="light7"/>
+                          <relation type="label-for" target="light8"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -1140,6 +1150,9 @@
                             <property name="receives_default">True</property>
                             <property name="tooltip_text" translatable="yes" context="docking3deffects|light1|tooltip_text">Light Source 1</property>
                             <property name="image">image20</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="label17"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -1153,6 +1166,9 @@
                             <property name="receives_default">True</property>
                             <property name="tooltip_text" translatable="yes" context="docking3deffects|light2|tooltip_text">Light Source 2</property>
                             <property name="image">image21</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="label17"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -1166,6 +1182,9 @@
                             <property name="receives_default">True</property>
                             <property name="tooltip_text" translatable="yes" context="docking3deffects|light3|tooltip_text">Light Source 3</property>
                             <property name="image">image22</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="label17"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -1179,6 +1198,9 @@
                             <property name="receives_default">True</property>
                             <property name="tooltip_text" translatable="yes" context="docking3deffects|light4|tooltip_text">Light Source 4</property>
                             <property name="image">image23</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="label17"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
@@ -1192,6 +1214,9 @@
                             <property name="receives_default">True</property>
                             <property name="tooltip_text" translatable="yes" context="docking3deffects|light5|tooltip_text">Light Source 5</property>
                             <property name="image">image24</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="label17"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -1205,6 +1230,9 @@
                             <property name="receives_default">True</property>
                             <property name="tooltip_text" translatable="yes" context="docking3deffects|light6|tooltip_text">Light Source 6</property>
                             <property name="image">image25</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="label17"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -1218,6 +1246,9 @@
                             <property name="receives_default">True</property>
                             <property name="tooltip_text" translatable="yes" context="docking3deffects|light7|tooltip_text">Light Source 7</property>
                             <property name="image">image26</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="label17"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -1231,6 +1262,9 @@
                             <property name="receives_default">True</property>
                             <property name="tooltip_text" translatable="yes" context="docking3deffects|light8|tooltip_text">Light Source 8</property>
                             <property name="image">image27</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="label17"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
@@ -1254,6 +1288,7 @@
                             <property name="can_focus">False</property>
                             <property name="valign">start</property>
                             <property name="hexpand">True</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor1|tooltip_text">Light 1 color</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1267,6 +1302,7 @@
                             <property name="no_show_all">True</property>
                             <property name="valign">start</property>
                             <property name="hexpand">True</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor1|tooltip_text">Light 2 color</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1280,6 +1316,7 @@
                             <property name="no_show_all">True</property>
                             <property name="valign">start</property>
                             <property name="hexpand">True</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor1|tooltip_text">Light 3 color</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1293,6 +1330,7 @@
                             <property name="no_show_all">True</property>
                             <property name="valign">start</property>
                             <property name="hexpand">True</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor1|tooltip_text">Light 4 color</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1306,6 +1344,7 @@
                             <property name="no_show_all">True</property>
                             <property name="valign">start</property>
                             <property name="hexpand">True</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor1|tooltip_text">Light 5 color</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1319,6 +1358,7 @@
                             <property name="no_show_all">True</property>
                             <property name="valign">start</property>
                             <property name="hexpand">True</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor1|tooltip_text">Light 6 color</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1332,6 +1372,7 @@
                             <property name="no_show_all">True</property>
                             <property name="valign">start</property>
                             <property name="hexpand">True</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor1|tooltip_text">Light 7 color</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1345,6 +1386,7 @@
                             <property name="no_show_all">True</property>
                             <property name="valign">start</property>
                             <property name="hexpand">True</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor1|tooltip_text">Light 8 color</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1403,6 +1445,10 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="docking3deffects|label20">_Type</property>
                         <property name="use_underline">True</property>
+                        <accessibility>
+                          <relation type="label-for" target="textype"/>
+                          <relation type="label-for" target="texcolor"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -1416,6 +1462,11 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="docking3deffects|label22">_Mode</property>
                         <property name="use_underline">True</property>
+                        <accessibility>
+                          <relation type="label-for" target="texreplace"/>
+                          <relation type="label-for" target="texmodulate"/>
+                          <relation type="label-for" target="texblend"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -1429,6 +1480,11 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="docking3deffects|label23">_Projection X</property>
                         <property name="use_underline">True</property>
+                        <accessibility>
+                          <relation type="label-for" target="texobjx"/>
+                          <relation type="label-for" target="texparallelx"/>
+                          <relation type="label-for" target="texcirclex"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -1442,6 +1498,11 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="docking3deffects|label24">P_rojection Y</property>
                         <property name="use_underline">True</property>
+                        <accessibility>
+                          <relation type="label-for" target="texobjy"/>
+                          <relation type="label-for" target="texparallely"/>
+                          <relation type="label-for" target="texcircley"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -1455,6 +1516,9 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="docking3deffects|label25">_Filtering</property>
                         <property name="use_underline">True</property>
+                        <accessibility>
+                          <relation type="label-for" target="texfilter"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -1469,6 +1533,9 @@
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|textype|tooltip_text">Black &amp; White</property>
                         <property name="halign">center</property>
                         <property name="image">image28</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="label20"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1483,6 +1550,9 @@
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|texcolor|tooltip_text">Color</property>
                         <property name="halign">center</property>
                         <property name="image">image29</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="label20"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -1497,6 +1567,9 @@
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|texreplace|tooltip_text">Only Texture</property>
                         <property name="halign">center</property>
                         <property name="image">image30</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="label22"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1511,9 +1584,30 @@
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|texmodulate|tooltip_text">Texture and Shading</property>
                         <property name="halign">center</property>
                         <property name="image">image31</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="label22"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="texblend">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|texblend|tooltip_text">Texture, Shadow and Color</property>
+                        <property name="halign">start</property>
+                        <property name="hexpand">True</property>
+                        <property name="image">image42</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="label22"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left_attach">3</property>
                         <property name="top_attach">1</property>
                       </packing>
                     </child>
@@ -1525,6 +1619,9 @@
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|texobjx|tooltip_text">Object-Specific</property>
                         <property name="halign">center</property>
                         <property name="image">image32</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="label23"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1539,6 +1636,9 @@
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|texparallelx|tooltip_text">Parallel</property>
                         <property name="halign">center</property>
                         <property name="image">image33</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="label23"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -1554,6 +1654,9 @@
                         <property name="halign">start</property>
                         <property name="hexpand">True</property>
                         <property name="image">image34</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="label23"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -1568,6 +1671,9 @@
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|texobjy|tooltip_text">Object-Specific</property>
                         <property name="halign">center</property>
                         <property name="image">image35</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="label24"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1582,6 +1688,9 @@
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|texparallely|tooltip_text">Parallel</property>
                         <property name="halign">center</property>
                         <property name="image">image36</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="label24"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -1596,6 +1705,9 @@
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|texcircley|tooltip_text">Circular</property>
                         <property name="halign">start</property>
                         <property name="image">image37</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="label24"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -1610,25 +1722,13 @@
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|texfilter|tooltip_text">Filtering On/Off</property>
                         <property name="halign">center</property>
                         <property name="image">image38</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="label25"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="texblend">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|texblend|tooltip_text">Texture, Shadow and Color</property>
-                        <property name="halign">start</property>
-                        <property name="hexpand">True</property>
-                        <property name="image">image42</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -1685,6 +1785,9 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="docking3deffects|label26">_Favorites</property>
                         <property name="use_underline">True</property>
+                        <accessibility>
+                          <relation type="label-for" target="favorites"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -1747,6 +1850,9 @@
                       <object class="GtkComboBoxText" id="favorites">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="label26"/>
+                        </accessibility>
                         <items>
                           <item translatable="yes" context="docking3deffects|favorites">User-defined</item>
                           <item translatable="yes" context="docking3deffects|favorites">Metal</item>
