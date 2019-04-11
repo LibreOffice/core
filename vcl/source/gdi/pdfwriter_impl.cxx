@@ -66,6 +66,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <vcl/fontcharmap.hxx>
 #include <vcl/image.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/metric.hxx>
@@ -4384,45 +4385,75 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     pop();
 
     OStringBuffer aDA( 256 );
+
+    // tdf#93853 don't rely on Zapf (or any other 'standard' font)
+    // being present, but our own OpenSymbol - N.B. PDF/A for good
+    // reasons require even the standard PS fonts to be embedded!
+    getReferenceDevice()->Push();
+    getReferenceDevice()->SetFont(
+        Font( OUString( "OpenSymbol" ), Size( 0, 500 ) ) );
+    getReferenceDevice()->ImplNewFont();
+    FontCharMapRef pMap;
+    getReferenceDevice()->GetFontCharMap(pMap);
+    const PhysicalFontFace* pDevFont = m_pReferenceDevice->mpFontInstance->
+        GetFontFace();
+    getReferenceDevice()->Pop();
+
+    // make sure OpenSymbol is embedded, and includes our checkmark
+    const sal_Unicode cMark=0x2713;
+    const GlyphItem aItem(pMap->GetGlyphIndex(cMark), 0, 0,
+                          Point(), 0, 0, 0);
+    const std::vector<sal_Ucs> aCodeUnits={ cMark };
+    sal_uInt8 nMappedGlyph;
+    sal_Int32 nMappedFontObject;
+    registerGlyph(&aItem, pDevFont, aCodeUnits, nMappedGlyph, nMappedFontObject);
+
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
-    sal_Int32 nBest = getBestBuiltinFont( Font( "ZapfDingbats", aFont.GetFontSize() ) );
     aDA.append( ' ' );
-    aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
+    aDA.append( "/F" );
+    aDA.append( nMappedFontObject );
     aDA.append( " 0 Tf" );
+
+    OStringBuffer aDR( 32 );
+    aDR.append( "/Font " );
+    aDR.append( getFontDictObject() );
+    aDR.append( " 0 R" );
+    rBox.m_aDRDict = aDR.makeStringAndClear();
     rBox.m_aDAString = aDA.makeStringAndClear();
     rBox.m_aMKDict = "/CA";
     rBox.m_aMKDictCAString = "8";
     rBox.m_aRect = aCheckRect;
 
     // create appearance streams
-    sal_Char cMark = '8';
-    sal_Int32 nCharXOffset = 1000-m_aBuiltinFonts[13].m_aWidths[sal_Int32(cMark)];
+    sal_Int32 nCharXOffset = 1000;
     nCharXOffset *= aCheckRect.GetHeight();
     nCharXOffset /= 2000;
-    sal_Int32 nCharYOffset = 1000-
-        (m_aBuiltinFonts[13].m_nAscent+m_aBuiltinFonts[13].m_nDescent); // descent is negative
+    sal_Int32 nCharYOffset = 1000-(820-143); // metrics from Zapf
     nCharYOffset *= aCheckRect.GetHeight();
     nCharYOffset /= 2000;
 
+    // write 'checked' appearance stream
     SvMemoryStream* pCheckStream = new SvMemoryStream( 256, 256 );
     beginRedirect( pCheckStream, aCheckRect );
     aDA.append( "/Tx BMC\nq BT\n" );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
     aDA.append( ' ' );
-    aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
+    aDA.append( "/F" );
+    aDA.append( nMappedFontObject );
     aDA.append( ' ' );
     m_aPages[ m_nCurrentPage ].appendMappedLength( sal_Int32( aCheckRect.GetHeight() ), aDA );
     aDA.append( " Tf\n" );
     m_aPages[ m_nCurrentPage ].appendMappedLength( nCharXOffset, aDA );
     aDA.append( " " );
     m_aPages[ m_nCurrentPage ].appendMappedLength( nCharYOffset, aDA );
-    aDA.append( " Td (" );
-    aDA.append( cMark );
-    aDA.append( ") Tj\nET\nQ\nEMC\n" );
+    aDA.append( " Td <" );
+    appendHex( nMappedGlyph, aDA );
+    aDA.append( "> Tj\nET\nQ\nEMC\n" );
     writeBuffer( aDA.getStr(), aDA.getLength() );
     endRedirect();
     rBox.m_aAppearances[ "N" ][ "Yes" ] = pCheckStream;
 
+    // write 'unchecked' appearance stream
     SvMemoryStream* pUncheckStream = new SvMemoryStream( 256, 256 );
     beginRedirect( pUncheckStream, aCheckRect );
     writeBuffer( "/Tx BMC\nEMC\n", 12 );
