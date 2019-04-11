@@ -553,6 +553,13 @@ void SidebarController::OpenThenToggleDeck (
     }
     RequestOpenDeck();
     SwitchToDeck(rsDeckId);
+
+    // Make sure the sidebar is wide enough to fit the requested content
+    sal_Int32 nRequestedWidth = mpCurrentDeck->GetMinimalWidth()
+                                + TabBar::GetDefaultWidth() * mpTabBar->GetDPIScaleFactor();
+    if (mnSavedSidebarWidth < nRequestedWidth)
+        SetChildWindowWidth(nRequestedWidth);
+
     mpTabBar->Invalidate();
     mpTabBar->HighlightDeck(rsDeckId);
     collectUIInformation(rsDeckId);
@@ -1222,10 +1229,6 @@ void SidebarController::RestrictWidth (sal_Int32 nWidth)
         const sal_uInt16 nSetId (pSplitWindow->GetSet(nId));
         const sal_Int32 nRequestedWidth
             = (TabBar::GetDefaultWidth() + nWidth) * mpTabBar->GetDPIScaleFactor();
-
-        // Make sure the sidebar is wide enough to fit the requested content
-        if (pSplitWindow->GetSizePixel().Width() < nRequestedWidth)
-            SetChildWindowWidth(nRequestedWidth);
 
         pSplitWindow->SetItemSizeRange(
             nSetId,
