@@ -89,7 +89,7 @@ void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
 }
 
 //ugly hack to call Define Name from Manage Names
-void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialog* pDialog)
+void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialogController* pDialog)
 {
    sal_uInt16 nSlotId = SC_MOD()->GetCurRefDlgId();
    if( nSlotId == FID_ADD_NAME )
@@ -102,12 +102,7 @@ void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialog* pDialog)
 
         SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
    }
-}
-
-void ScTabViewShell::SwitchBetweenRefDialogControllers(SfxModelessDialogController* pDialog)
-{
-   sal_uInt16 nSlotId = SC_MOD()->GetCurRefDlgId();
-   if (nSlotId == FID_DEFINE_NAME)
+   else if (nSlotId == FID_DEFINE_NAME)
    {
         mbInSwitch = true;
         static_cast<ScNameDlg*>(pDialog)->GetRangeNames(m_RangeMap);
@@ -149,32 +144,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
 
     switch( nSlotId )
     {
-        case FID_ADD_NAME:
-        {
-            if (!mbInSwitch)
-            {
-                std::map<OUString, ScRangeName*> aRangeMap;
-                pDoc->GetRangeNameMap(aRangeMap);
-                pResult = VclPtr<ScNameDefDlg>::Create( pB, pCW, pParent, &GetViewData(), aRangeMap,
-                                ScAddress( GetViewData().GetCurX(),
-                                            GetViewData().GetCurY(),
-                                            GetViewData().GetTabNo() ), true );
-            }
-            else
-            {
-                std::map<OUString, ScRangeName*> aRangeMap;
-                for (auto const& itr : m_RangeMap)
-                {
-                    aRangeMap.insert(std::pair<OUString, ScRangeName*>(itr.first, itr.second.get()));
-                }
-                pResult = VclPtr<ScNameDefDlg>::Create( pB, pCW, pParent, &GetViewData(), aRangeMap,
-                                ScAddress( GetViewData().GetCurX(),
-                                            GetViewData().GetCurY(),
-                                            GetViewData().GetTabNo() ), false );
-            }
-        }
-        break;
-
         case SID_DEFINE_COLROWNAMERANGES:
         {
             pResult = VclPtr<ScColRowNameRangesDlg>::Create( pB, pCW, pParent, &GetViewData() );
@@ -433,6 +402,8 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
     if(pCW)
         pCW->SetHideNotDelete(true);
 
+    ScDocument* pDoc = GetViewData().GetDocument();
+
     switch( nSlotId )
     {
         case SID_CORRELATION_DIALOG:
@@ -500,6 +471,31 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                                                 GetViewData().GetTabNo() ), &m_RangeMap));
                 static_cast<ScNameDlg*>(xResult.get())->SetEntry(maName, maScope);
                 mbInSwitch = false;
+            }
+            break;
+        }
+        case FID_ADD_NAME:
+        {
+            if (!mbInSwitch)
+            {
+                std::map<OUString, ScRangeName*> aRangeMap;
+                pDoc->GetRangeNameMap(aRangeMap);
+                xResult.reset(new ScNameDefDlg(pB, pCW, pParent, &GetViewData(), aRangeMap,
+                                ScAddress(GetViewData().GetCurX(),
+                                          GetViewData().GetCurY(),
+                                          GetViewData().GetTabNo()), true));
+            }
+            else
+            {
+                std::map<OUString, ScRangeName*> aRangeMap;
+                for (auto const& itr : m_RangeMap)
+                {
+                    aRangeMap.insert(std::pair<OUString, ScRangeName*>(itr.first, itr.second.get()));
+                }
+                xResult.reset(new ScNameDefDlg(pB, pCW, pParent, &GetViewData(), aRangeMap,
+                                ScAddress(GetViewData().GetCurX(),
+                                          GetViewData().GetCurY(),
+                                          GetViewData().GetTabNo()), false));
             }
             break;
         }

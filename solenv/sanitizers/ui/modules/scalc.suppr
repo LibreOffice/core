@@ -71,6 +71,7 @@ sc/uiconfig/scalc/ui/definedatabaserangedialog.ui://GtkLabel[@id='Source'] orpha
 sc/uiconfig/scalc/ui/definedatabaserangedialog.ui://GtkLabel[@id='Operations'] orphan-label
 sc/uiconfig/scalc/ui/definedatabaserangedialog.ui://GtkLabel[@id='invalid'] orphan-label
 sc/uiconfig/scalc/ui/definename.ui://GtkLabel[@id='label'] orphan-label
+sc/uiconfig/scalc/ui/definename.ui://GtkButton[@id='refbutton'] button-no-label
 sc/uiconfig/scalc/ui/deletecolumnentry.ui:GtkGrid[@id='grid']/GtkBox/GtkLabel orphan-label
 sc/uiconfig/scalc/ui/deletecolumnentry.ui:GtkGrid[@id='grid']/GtkBox/GtkGrid[@id='grid_details']/GtkLabel orphan-label
 sc/uiconfig/scalc/ui/deletecolumnentry.ui://GtkEntry[@id='ed_columns'] no-labelled-by
