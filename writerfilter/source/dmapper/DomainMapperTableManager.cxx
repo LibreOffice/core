@@ -279,13 +279,6 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             case NS_ooxml::LN_CT_TcPrBase_textDirection:
             {
                 TablePropertyMapPtr pPropMap( new TablePropertyMap );
-
-                // Remember the cell direction, so later in
-                // DomainMapperTableHandler::endTableGetCellProperties() can we
-                // handle the combination of the cell direction and paragraph
-                // alignment as necessary.
-                pPropMap->Insert(PROP_CELL_DIRECTION, uno::Any(nIntValue));
-
                 bool bInsertCellProps = true;
                 switch ( nIntValue )
                 {

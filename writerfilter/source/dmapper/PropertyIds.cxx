@@ -333,7 +333,6 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_CELL_INTEROP_GRAB_BAG          :   sName = "CellInteropGrabBag"; break;
         case PROP_TABLE_INTEROP_GRAB_BAG         :   sName = "TableInteropGrabBag"; break;
         case PROP_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING : sName = "ApplyParagraphMarkFormatToNumbering"; break;
-        case PROP_CELL_DIRECTION: sName = "CellDirection"; break;
         case PROP_SDT_END_BEFORE: sName = "SdtEndBefore"; break;
         case PROP_PARA_SDT_END_BEFORE: sName = "ParaSdtEndBefore"; break;
         case META_PROP_TABLE_LOOK: sName = "TableStyleLook"; break;

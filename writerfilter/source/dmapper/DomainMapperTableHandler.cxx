@@ -29,9 +29,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
-#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
-#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include "TablePositionHandler.hxx"
 #include "ConversionHelper.hxx"
 #include "util.hxx"
@@ -848,21 +846,6 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                     }
                     (*aCellIterator)->Erase(PROP_HORIZONTAL_MERGE);
                 }
-
-                // Cell direction is not an UNO Property, either.
-                const boost::optional<PropertyMap::Property> aCellDirectionVal = (*aCellIterator)->getProperty(PROP_CELL_DIRECTION);
-                if (aCellDirectionVal)
-                {
-                    if (aCellDirectionVal->second.get<sal_Int32>() == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_TextDirection_btLr))
-                    {
-                        // btLr, so map ParagraphAdjust_CENTER to VertOrientation::CENTER.
-                        uno::Reference<beans::XPropertySet> xPropertySet(m_aTableRanges[nRow][nCell][0], uno::UNO_QUERY);
-                        if (xPropertySet.is() && xPropertySet->getPropertyValue("ParaAdjust").get<sal_Int16>() == sal_Int16(style::ParagraphAdjust_CENTER))
-                            (*aCellIterator)->Insert(PROP_VERT_ORIENT, uno::makeAny(text::VertOrientation::CENTER));
-                    }
-                    (*aCellIterator)->Erase(PROP_CELL_DIRECTION);
-                }
-
                 pSingleCellProperties[nCell] = (*aCellIterator)->GetPropertyValues();
 #ifdef DBG_UTIL
                 TagLogger::getInstance().endElement();
