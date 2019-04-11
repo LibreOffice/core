@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9f91af0f_df877bb6",
+        "filename": "configure.ac",
+        "patchSetId": 30
+      },
+      "lineNbr": 3328,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2019-04-11T09:28:51Z",
+      "side": 1,
+      "message": "I doubt that.\n\nVS was installed to\nC:\\Program Files (x86)\\Microsoft Visual Studio\nnot to\nC:\\Program Files\\Microsoft Visual Studio\n\nI uninstalled preview version, removed the key I added, and installed the release version. Still there was no key like I used.\n\nunder 64bit only key, there is a key like\nHKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\nbut there is 12.0, 14.0, Debugger, Setup\nData in one of which points to the path of VS 2019.\n\nBy the way, now that we can get the release version, should I remove the description about preview versions?",
+      "parentUuid": "9f91af0f_bff9574e",
+      "revId": "083d46de7bc1211c015d38e720d40af2ae725ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f91af0f_bfe07798",
         "filename": "configure.ac",
         "patchSetId": 30
@@ -30,6 +48,24 @@
       "writtenOn": "2019-04-11T09:04:14Z",
       "side": 1,
       "message": "i think this * case is obsolete and can be removed",
+      "revId": "083d46de7bc1211c015d38e720d40af2ae725ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_7fc2efeb",
+        "filename": "configure.ac",
+        "patchSetId": 30
+      },
+      "lineNbr": 12674,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2019-04-11T09:28:51Z",
+      "side": 1,
+      "message": "Thanks. Done.",
+      "parentUuid": "9f91af0f_bfe07798",
       "revId": "083d46de7bc1211c015d38e720d40af2ae725ae7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
