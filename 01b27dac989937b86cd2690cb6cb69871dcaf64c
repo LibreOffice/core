@@ -16,6 +16,24 @@
       "revId": "01b27dac989937b86cd2690cb6cb69871dcaf64c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_1e564d08",
+        "filename": "solenv/gdb/libreoffice/basegfx.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2019-04-11T17:22:23Z",
+      "side": 1,
+      "message": "Not necessarily: It can be of type pointer but a NULL/nullptr pointer.\nI got the idea from this blog entry https://www.rethinkdb.com/blog/make-debugging-easier-with-custom-pretty-printers/ and modified it to our needs.",
+      "parentUuid": "9f91af0f_5f360bb7",
+      "revId": "01b27dac989937b86cd2690cb6cb69871dcaf64c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
