@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f91af0f_bf8dd77c",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 15028,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-04-11T05:47:11Z",
+      "side": 1,
+      "message": "I don\u0027t think you are supposed to change this.",
+      "revId": "4138fcabf745f57a09802d2a8c514fce15bff20e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
