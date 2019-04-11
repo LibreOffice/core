@@ -420,6 +420,13 @@ void SdImportTestSmartArt::testCycle()
     CPPUNIT_ASSERT(xShape0->getPosition().Y < xShapeConn->getPosition().Y && xShapeConn->getPosition().Y < xShape2->getPosition().Y);
     uno::Reference<beans::XPropertySet> xPropSetConn(xShapeConn, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(32400), xPropSetConn->getPropertyValue("RotateAngle").get<sal_Int32>());
+
+    // Make sure that we have an arrow shape between the two shapes
+    comphelper::SequenceAsHashMap aCustomShapeGeometry(
+        xPropSetConn->getPropertyValue("CustomShapeGeometry"));
+    CPPUNIT_ASSERT(aCustomShapeGeometry["Type"].has<OUString>());
+    OUString aType = aCustomShapeGeometry["Type"].get<OUString>();
+    CPPUNIT_ASSERT_EQUAL(OUString("ooxml-rightArrow"), aType);
 }
 
 void SdImportTestSmartArt::testHierarchy()
@@ -444,7 +451,23 @@ void SdImportTestSmartArt::testInvertedPyramid()
 
 void SdImportTestSmartArt::testMultidirectional()
 {
-    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+    // similar document as cycle, but arrows are pointing in both directions
+
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-multidirectional.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+
+    // 6 children: 3 shapes, 3 connectors
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), xGroup->getCount());
+
+    uno::Reference<drawing::XShape> xShapeConn(xGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropSetConn(xShapeConn, uno::UNO_QUERY_THROW);
+    comphelper::SequenceAsHashMap aCustomShapeGeometry(
+        xPropSetConn->getPropertyValue("CustomShapeGeometry"));
+    CPPUNIT_ASSERT(aCustomShapeGeometry["Type"].has<OUString>());
+    OUString aType = aCustomShapeGeometry["Type"].get<OUString>();
+    CPPUNIT_ASSERT_EQUAL(OUString("ooxml-leftRightArrow"), aType);
 }
 
 void SdImportTestSmartArt::testHorizontalBulletList()

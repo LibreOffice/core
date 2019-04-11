@@ -178,6 +178,9 @@ private:
     ParamMap  maMap;
     /// Aspect ratio is not integer, so not part of maMap.
     double mfAspectRatio = 0;
+
+    /// Determines the connector shape type for conn algorithm
+    sal_Int32 getConnectorType();
 };
 
 typedef std::shared_ptr< AlgAtom > AlgAtomPtr;
