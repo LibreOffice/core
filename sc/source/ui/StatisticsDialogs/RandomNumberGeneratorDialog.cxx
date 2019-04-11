@@ -44,35 +44,31 @@ const sal_Int64 DIGITS      = 4;
 
 ScRandomNumberGeneratorDialog::ScRandomNumberGeneratorDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    vcl::Window* pParent, ScViewData* pViewData ) :
-    ScAnyRefDlg     ( pSfxBindings, pChildWindow, pParent,
-                      "RandomNumberGeneratorDialog", "modules/scalc/ui/randomnumbergenerator.ui" ),
-    mpViewData       ( pViewData ),
-    mpDoc( pViewData->GetDocument() ),
-    mbDialogLostFocus( false )
+                    weld::Window* pParent, ScViewData* pViewData)
+    : ScAnyRefDlgController(pSfxBindings, pChildWindow, pParent,
+                          "modules/scalc/ui/randomnumbergenerator.ui",
+                          "RandomNumberGeneratorDialog")
+    , mpViewData(pViewData)
+    , mpDoc(pViewData->GetDocument())
+    , mbDialogLostFocus(false)
+    , mxInputRangeText(m_xBuilder->weld_label("cell-range-label"))
+    , mxInputRangeEdit(new formula::WeldRefEdit(m_xBuilder->weld_entry("cell-range-edit")))
+    , mxInputRangeButton(new formula::WeldRefButton(m_xBuilder->weld_button("cell-range-button")))
+    , mxDistributionCombo(m_xBuilder->weld_combo_box("distribution-combo"))
+    , mxParameter1Text(m_xBuilder->weld_label("parameter1-label"))
+    , mxParameter1Value(m_xBuilder->weld_spin_button("parameter1-spin"))
+    , mxParameter2Text(m_xBuilder->weld_label("parameter2-label"))
+    , mxParameter2Value(m_xBuilder->weld_spin_button("parameter2-spin"))
+    , mxSeed(m_xBuilder->weld_spin_button("seed-spin"))
+    , mxEnableSeed(m_xBuilder->weld_check_button("enable-seed-check"))
+    , mxDecimalPlaces(m_xBuilder->weld_spin_button("decimal-places-spin"))
+    , mxEnableRounding(m_xBuilder->weld_check_button("enable-rounding-check"))
+    , mxButtonApply(m_xBuilder->weld_button("apply"))
+    , mxButtonOk(m_xBuilder->weld_button("ok"))
+    , mxButtonClose(m_xBuilder->weld_button("close"))
 {
-    get(mpInputRangeText,   "cell-range-label");
-    get(mpInputRangeEdit,   "cell-range-edit");
-    get(mpInputRangeButton, "cell-range-button");
-    mpInputRangeEdit->SetReferences(this, mpInputRangeText);
-    mpInputRangeButton->SetReferences(this, mpInputRangeEdit);
-
-    get(mpParameter1Value, "parameter1-spin");
-    get(mpParameter1Text,  "parameter1-label");
-    get(mpParameter2Value, "parameter2-spin");
-    get(mpParameter2Text,  "parameter2-label");
-
-    get(mpEnableSeed, "enable-seed-check");
-    get(mpSeed,       "seed-spin");
-
-    get(mpEnableRounding, "enable-rounding-check");
-    get(mpDecimalPlaces,  "decimal-places-spin");
-
-    get(mpDistributionCombo, "distribution-combo");
-
-    get(mpButtonOk,     "ok");
-    get(mpButtonApply,  "apply");
-    get(mpButtonClose,  "close");
+    mxInputRangeEdit->SetReferences(this, mxInputRangeText.get());
+    mxInputRangeButton->SetReferences(this, mxInputRangeEdit.get());
 
     Init();
     GetRangeFromSelection();
@@ -80,61 +76,38 @@ ScRandomNumberGeneratorDialog::ScRandomNumberGeneratorDialog(
 
 ScRandomNumberGeneratorDialog::~ScRandomNumberGeneratorDialog()
 {
-    disposeOnce();
-}
-
-void ScRandomNumberGeneratorDialog::dispose()
-{
-    mpInputRangeText.clear();
-    mpInputRangeEdit.clear();
-    mpInputRangeButton.clear();
-    mpDistributionCombo.clear();
-    mpParameter1Text.clear();
-    mpParameter1Value.clear();
-    mpParameter2Text.clear();
-    mpParameter2Value.clear();
-    mpSeed.clear();
-    mpEnableSeed.clear();
-    mpDecimalPlaces.clear();
-    mpEnableRounding.clear();
-    mpButtonApply.clear();
-    mpButtonOk.clear();
-    mpButtonClose.clear();
-    ScAnyRefDlg::dispose();
 }
 
 void ScRandomNumberGeneratorDialog::Init()
 {
-    mpButtonOk->SetClickHdl( LINK( this, ScRandomNumberGeneratorDialog, OkClicked ) );
-    mpButtonClose->SetClickHdl( LINK( this, ScRandomNumberGeneratorDialog, CloseClicked ) );
-    mpButtonApply->SetClickHdl( LINK( this, ScRandomNumberGeneratorDialog, ApplyClicked ) );
+    mxButtonOk->connect_clicked( LINK( this, ScRandomNumberGeneratorDialog, OkClicked ) );
+    mxButtonClose->connect_clicked( LINK( this, ScRandomNumberGeneratorDialog, CloseClicked ) );
+    mxButtonApply->connect_clicked( LINK( this, ScRandomNumberGeneratorDialog, ApplyClicked ) );
 
-    Link<Control&,void> aLink = LINK( this, ScRandomNumberGeneratorDialog, GetFocusHandler );
-    mpInputRangeEdit->SetGetFocusHdl( aLink );
-    mpInputRangeButton->SetGetFocusHdl( aLink );
+    mxInputRangeEdit->SetGetFocusHdl(LINK( this, ScRandomNumberGeneratorDialog, GetEditFocusHandler ));
+    mxInputRangeButton->SetGetFocusHdl(LINK( this, ScRandomNumberGeneratorDialog, GetButtonFocusHandler ));
 
-    aLink = LINK( this, ScRandomNumberGeneratorDialog, LoseFocusHandler );
-    mpInputRangeEdit->SetLoseFocusHdl ( aLink );
-    mpInputRangeButton->SetLoseFocusHdl ( aLink );
+    mxInputRangeEdit->SetLoseFocusHdl (LINK( this, ScRandomNumberGeneratorDialog, LoseEditFocusHandler ));
+    mxInputRangeButton->SetLoseFocusHdl (LINK( this, ScRandomNumberGeneratorDialog, LoseButtonFocusHandler ));
 
-    mpInputRangeEdit->SetModifyHdl( LINK( this, ScRandomNumberGeneratorDialog, InputRangeModified ));
-    mpParameter1Value->SetModifyHdl( LINK( this, ScRandomNumberGeneratorDialog, Parameter1ValueModified ));
-    mpParameter2Value->SetModifyHdl( LINK( this, ScRandomNumberGeneratorDialog, Parameter2ValueModified ));
+    mxInputRangeEdit->SetModifyHdl( LINK( this, ScRandomNumberGeneratorDialog, InputRangeModified ));
+    mxParameter1Value->connect_value_changed( LINK( this, ScRandomNumberGeneratorDialog, Parameter1ValueModified ));
+    mxParameter2Value->connect_value_changed( LINK( this, ScRandomNumberGeneratorDialog, Parameter2ValueModified ));
 
-    mpDistributionCombo->SetSelectHdl( LINK( this, ScRandomNumberGeneratorDialog, DistributionChanged ));
+    mxDistributionCombo->connect_changed( LINK( this, ScRandomNumberGeneratorDialog, DistributionChanged ));
 
-    mpEnableSeed->SetToggleHdl( LINK( this, ScRandomNumberGeneratorDialog, CheckChanged ));
-    mpEnableRounding->SetToggleHdl( LINK( this, ScRandomNumberGeneratorDialog, CheckChanged ));
+    mxEnableSeed->connect_toggled( LINK( this, ScRandomNumberGeneratorDialog, CheckChanged ));
+    mxEnableRounding->connect_toggled( LINK( this, ScRandomNumberGeneratorDialog, CheckChanged ));
 
-    DistributionChanged(*mpDistributionCombo);
-    CheckChanged(*mpEnableSeed);
+    DistributionChanged(*mxDistributionCombo);
+    CheckChanged(*mxEnableSeed);
 }
 
 void ScRandomNumberGeneratorDialog::GetRangeFromSelection()
 {
     mpViewData->GetSimpleArea(maInputRange);
     OUString aCurrentString(maInputRange.Format(ScRefFlags::RANGE_ABS_3D, mpDoc, mpDoc->GetAddressConvention()));
-    mpInputRangeEdit->SetText( aCurrentString );
+    mxInputRangeEdit->SetText( aCurrentString );
 }
 
 void ScRandomNumberGeneratorDialog::SetActive()
@@ -142,35 +115,35 @@ void ScRandomNumberGeneratorDialog::SetActive()
     if ( mbDialogLostFocus )
     {
         mbDialogLostFocus = false;
-        if( mpInputRangeEdit )
-            mpInputRangeEdit->GrabFocus();
+        if( mxInputRangeEdit )
+            mxInputRangeEdit->GrabFocus();
     }
     else
     {
-        GrabFocus();
+        m_xDialog->grab_focus();
     }
     RefInputDone();
 }
 
-bool ScRandomNumberGeneratorDialog::Close()
+void ScRandomNumberGeneratorDialog::Close()
 {
-    return DoClose( ScRandomNumberGeneratorDialogWrapper::GetChildWindowId() );
+    DoClose( ScRandomNumberGeneratorDialogWrapper::GetChildWindowId() );
 }
 
 void ScRandomNumberGeneratorDialog::SetReference( const ScRange& rReferenceRange, ScDocument* pDoc )
 {
-    if ( mpInputRangeEdit->IsEnabled() )
+    if (mxInputRangeEdit->GetWidget()->get_sensitive())
     {
         if ( rReferenceRange.aStart != rReferenceRange.aEnd )
-            RefInputStart( mpInputRangeEdit );
+            RefInputStart(mxInputRangeEdit.get());
 
         maInputRange = rReferenceRange;
 
         OUString aReferenceString(maInputRange.Format(ScRefFlags::RANGE_ABS_3D, pDoc, pDoc->GetAddressConvention()));
-        mpInputRangeEdit->SetRefString( aReferenceString );
+        mxInputRangeEdit->SetRefString( aReferenceString );
 
-        mpButtonApply->Enable();
-        mpButtonOk->Enable();
+        mxButtonApply->set_sensitive(true);
+        mxButtonOk->set_sensitive(true);
     }
 }
 
@@ -179,14 +152,13 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
     if (!maInputRange.IsValid())
         return;
 
-    sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectedEntryPos();
-    sal_Int64 aSelectedId = reinterpret_cast<sal_Int64>(mpDistributionCombo->GetEntryData(aSelectedIndex));
+    sal_Int64 aSelectedId = mxDistributionCombo->get_active_id().toInt64();
 
     sal_uInt32 seedValue;
 
-    if( mpEnableSeed->IsChecked() )
+    if( mxEnableSeed->get_active() )
     {
-        seedValue = mpSeed->GetValue();
+        seedValue = mxSeed->get_value();
     }
     else
     {
@@ -197,16 +169,16 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
 
     std::mt19937 seed(seedValue);
 
-    sal_Int64 parameterInteger1 = mpParameter1Value->GetValue();
-    sal_Int64 parameterInteger2 = mpParameter2Value->GetValue();
+    sal_Int64 parameterInteger1 = mxParameter1Value->get_value();
+    sal_Int64 parameterInteger2 = mxParameter2Value->get_value();
 
     double parameter1 = parameterInteger1 / static_cast<double>(PRECISION);
     double parameter2 = parameterInteger2 / static_cast<double>(PRECISION);
 
     boost::optional<sal_Int8> aDecimalPlaces;
-    if (mpEnableRounding->IsChecked())
+    if (mxEnableRounding->get_active())
     {
-        aDecimalPlaces = static_cast<sal_Int8>(mpDecimalPlaces->GetValue());
+        aDecimalPlaces = static_cast<sal_Int8>(mxDecimalPlaces->get_value());
     }
 
     switch(aSelectedId)
@@ -323,188 +295,185 @@ void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG& randomGenerator, const 
     pDocShell->PostPaint( maInputRange, PaintPartFlags::Grid );
 }
 
-IMPL_LINK_NOARG( ScRandomNumberGeneratorDialog, OkClicked, Button*, void )
+IMPL_LINK_NOARG( ScRandomNumberGeneratorDialog, OkClicked, weld::Button&, void )
 {
-    ApplyClicked(nullptr);
-    CloseClicked(nullptr);
+    ApplyClicked(*mxButtonApply);
+    CloseClicked(*mxButtonClose);
 }
 
-IMPL_LINK_NOARG( ScRandomNumberGeneratorDialog, ApplyClicked, Button*, void )
+IMPL_LINK_NOARG( ScRandomNumberGeneratorDialog, ApplyClicked, weld::Button&, void )
 {
     SelectGeneratorAndGenerateNumbers();
 }
 
-IMPL_LINK_NOARG( ScRandomNumberGeneratorDialog, CloseClicked, Button*, void )
+IMPL_LINK_NOARG( ScRandomNumberGeneratorDialog, CloseClicked, weld::Button&, void )
 {
-    Close();
+    response(RET_CLOSE);
 }
 
-IMPL_LINK( ScRandomNumberGeneratorDialog, GetFocusHandler, Control&, rCtrl, void )
+IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, GetEditFocusHandler, formula::WeldRefEdit&, void)
 {
-    Edit* pEdit = nullptr;
-
-    if( (&rCtrl == static_cast<Control*>(mpInputRangeEdit)) || (&rCtrl == static_cast<Control*>(mpInputRangeButton)) )
-        pEdit = mpInputRangeEdit;
-
-    if( pEdit )
-        pEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
+    mxInputRangeEdit->SelectAll();
 }
 
-IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, LoseFocusHandler, Control&, void)
+IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, GetButtonFocusHandler, formula::WeldRefButton&, void)
 {
-    mbDialogLostFocus = !IsActive();
+    mxInputRangeEdit->SelectAll();
 }
 
-IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, InputRangeModified, Edit&, void)
+IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, LoseEditFocusHandler, formula::WeldRefEdit&, void)
+{
+    mbDialogLostFocus = !m_xDialog->has_toplevel_focus();
+}
+
+IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, LoseButtonFocusHandler, formula::WeldRefButton&, void)
+{
+    mbDialogLostFocus = !m_xDialog->has_toplevel_focus();
+}
+
+IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, InputRangeModified, formula::WeldRefEdit&, void)
 {
     ScRangeList aRangeList;
-    bool bValid = ParseWithNames( aRangeList, mpInputRangeEdit->GetText(), mpDoc);
+    bool bValid = ParseWithNames( aRangeList, mxInputRangeEdit->GetText(), mpDoc);
     const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
     if (pRange)
     {
         maInputRange = *pRange;
-        mpButtonApply->Enable();
-        mpButtonOk->Enable();
+        mxButtonApply->set_sensitive(true);
+        mxButtonOk->set_sensitive(true);
         // Highlight the resulting range.
-        mpInputRangeEdit->StartUpdateData();
+        mxInputRangeEdit->StartUpdateData();
     }
     else
     {
         maInputRange = ScRange( ScAddress::INITIALIZE_INVALID);
-        mpButtonApply->Disable();
-        mpButtonOk->Disable();
+        mxButtonApply->set_sensitive(false);
+        mxButtonOk->set_sensitive(false);
     }
 }
 
-IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, Parameter1ValueModified, Edit&, void)
+IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, Parameter1ValueModified, weld::SpinButton&, void)
 {
-    sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectedEntryPos();
-    sal_Int64 aSelectedId = reinterpret_cast<sal_Int64>( mpDistributionCombo->GetEntryData(aSelectedIndex) );
+    sal_Int64 aSelectedId = mxDistributionCombo->get_active_id().toInt64();
     if (aSelectedId == DIST_UNIFORM ||
         aSelectedId == DIST_UNIFORM_INTEGER)
     {
-        sal_Int64 min = mpParameter1Value->GetValue();
-        sal_Int64 max = mpParameter2Value->GetValue();
+        sal_Int64 min = mxParameter1Value->get_value();
+        sal_Int64 max = mxParameter2Value->get_value();
         if(min > max)
         {
-            mpParameter2Value->SetValue(min);
+            mxParameter2Value->set_value(min);
         }
     }
 }
 
-IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, Parameter2ValueModified, Edit&, void)
+IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, Parameter2ValueModified, weld::SpinButton&, void)
 {
-    sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectedEntryPos();
-    sal_Int64 aSelectedId = reinterpret_cast<sal_Int64>( mpDistributionCombo->GetEntryData(aSelectedIndex) );
+    sal_Int64 aSelectedId = mxDistributionCombo->get_active_id().toInt64();
     if (aSelectedId == DIST_UNIFORM ||
         aSelectedId == DIST_UNIFORM_INTEGER)
     {
-        sal_Int64 min = mpParameter1Value->GetValue();
-        sal_Int64 max = mpParameter2Value->GetValue();
+        sal_Int64 min = mxParameter1Value->get_value();
+        sal_Int64 max = mxParameter2Value->get_value();
         if(min > max)
         {
-            mpParameter1Value->SetValue(max);
+            mxParameter1Value->set_value(max);
         }
     }
 }
 
-IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, CheckChanged, CheckBox&, void)
+IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, CheckChanged, weld::ToggleButton&, void)
 {
-    mpSeed->Enable(mpEnableSeed->IsChecked());
-    mpDecimalPlaces->Enable(mpEnableRounding->IsChecked());
+    mxSeed->set_sensitive(mxEnableSeed->get_active());
+    mxDecimalPlaces->set_sensitive(mxEnableRounding->get_active());
 }
 
-IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged, ListBox&, void)
+IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged, weld::ComboBox&, void)
 {
-    sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectedEntryPos();
-    sal_Int64 aSelectedId = reinterpret_cast<sal_Int64>( mpDistributionCombo->GetEntryData(aSelectedIndex) );
+    sal_Int64 aSelectedId = mxDistributionCombo->get_active_id().toInt64();
 
-    mpParameter1Value->SetMin(SAL_MIN_INT64);
-    mpParameter1Value->SetMax(SAL_MAX_INT64);
-    mpParameter2Value->SetMin(SAL_MIN_INT64);
-    mpParameter2Value->SetMax(SAL_MAX_INT64);
+    mxParameter1Value->set_range(SAL_MIN_INT32, SAL_MAX_INT32);
+    mxParameter2Value->set_range(SAL_MIN_INT32, SAL_MAX_INT32);
 
-    mpParameter1Value->SetDecimalDigits(DIGITS);
-    mpParameter1Value->SetSpinSize(PRECISION);
+    mxParameter1Value->set_digits(DIGITS);
+    mxParameter1Value->set_increments(PRECISION, PRECISION * 10);
 
-    mpParameter2Value->SetDecimalDigits(DIGITS);
-    mpParameter2Value->SetSpinSize(PRECISION);
+    mxParameter2Value->set_digits(DIGITS);
+    mxParameter2Value->set_increments(PRECISION, PRECISION * 10);
 
     switch(aSelectedId)
     {
         case DIST_UNIFORM:
         {
-            mpParameter1Text->SetText(ScResId(STR_RNG_PARAMETER_MINIMUM));
-            mpParameter2Text->SetText(ScResId(STR_RNG_PARAMETER_MAXIMUM));
-            mpParameter2Text->Show();
-            mpParameter2Value->Show();
+            mxParameter1Text->set_label(ScResId(STR_RNG_PARAMETER_MINIMUM));
+            mxParameter2Text->set_label(ScResId(STR_RNG_PARAMETER_MAXIMUM));
+            mxParameter2Text->show();
+            mxParameter2Value->show();
             break;
         }
         case DIST_UNIFORM_INTEGER:
         {
-            mpParameter1Text->SetText(ScResId(STR_RNG_PARAMETER_MINIMUM));
-            mpParameter1Value->SetDecimalDigits(0);
-            mpParameter1Value->SetSpinSize(1);
+            mxParameter1Text->set_label(ScResId(STR_RNG_PARAMETER_MINIMUM));
+            mxParameter1Value->set_digits(0);
+            mxParameter1Value->set_increments(1, 10);
 
-            mpParameter2Text->SetText(ScResId(STR_RNG_PARAMETER_MAXIMUM));
-            mpParameter2Value->SetDecimalDigits(0);
-            mpParameter2Value->SetSpinSize(1);
+            mxParameter2Text->set_label(ScResId(STR_RNG_PARAMETER_MAXIMUM));
+            mxParameter2Value->set_digits(0);
+            mxParameter2Value->set_increments(1, 10);
 
-            mpParameter2Text->Show();
-            mpParameter2Value->Show();
+            mxParameter2Text->show();
+            mxParameter2Value->show();
             break;
         }
         case DIST_NORMAL:
         {
-            mpParameter1Text->SetText(ScResId(STR_RNG_PARAMETER_MEAN));
-            mpParameter2Text->SetText(ScResId(STR_RNG_PARAMETER_STANDARD_DEVIATION));
-            mpParameter2Text->Show();
-            mpParameter2Value->Show();
+            mxParameter1Text->set_label(ScResId(STR_RNG_PARAMETER_MEAN));
+            mxParameter2Text->set_label(ScResId(STR_RNG_PARAMETER_STANDARD_DEVIATION));
+            mxParameter2Text->show();
+            mxParameter2Value->show();
             break;
         }
         case DIST_CAUCHY:
         {
-            mpParameter1Text->SetText(ScResId(STR_RNG_PARAMETER_STANDARD_MEDIAN));
-            mpParameter2Text->SetText(ScResId(STR_RNG_PARAMETER_STANDARD_SIGMA));
-            mpParameter2Text->Show();
-            mpParameter2Value->Show();
+            mxParameter1Text->set_label(ScResId(STR_RNG_PARAMETER_STANDARD_MEDIAN));
+            mxParameter2Text->set_label(ScResId(STR_RNG_PARAMETER_STANDARD_SIGMA));
+            mxParameter2Text->show();
+            mxParameter2Value->show();
             break;
         }
         case DIST_BERNOULLI:
         case DIST_GEOMETRIC:
         {
-            mpParameter1Text->SetText(ScResId(STR_RNG_PARAMETER_STANDARD_PROBABILITY));
-            mpParameter1Value->SetMin(         0 );
-            mpParameter1Value->SetMax( PRECISION );
-            mpParameter1Value->SetSpinSize(1000);
+            mxParameter1Text->set_label(ScResId(STR_RNG_PARAMETER_STANDARD_PROBABILITY));
+            mxParameter1Value->set_range(0, PRECISION);
+            mxParameter1Value->set_increments(1000, 10000);
 
-            mpParameter2Text->Hide();
-            mpParameter2Value->Hide();
+            mxParameter2Text->hide();
+            mxParameter2Value->hide();
             break;
         }
         case DIST_BINOMIAL:
         case DIST_NEGATIVE_BINOMIAL:
         {
-            mpParameter1Text->SetText(ScResId(STR_RNG_PARAMETER_STANDARD_PROBABILITY));
-            mpParameter1Value->SetMin(         0 );
-            mpParameter1Value->SetMax( PRECISION );
-            mpParameter1Value->SetSpinSize(1000);
+            mxParameter1Text->set_label(ScResId(STR_RNG_PARAMETER_STANDARD_PROBABILITY));
+            mxParameter1Value->set_range(0, PRECISION);
+            mxParameter1Value->set_increments(1000, 10000);
 
-            mpParameter2Text->SetText(ScResId(STR_RNG_PARAMETER_STANDARD_NUMBER_OF_TRIALS));
-            mpParameter2Value->SetDecimalDigits(0);
-            mpParameter2Value->SetSpinSize(1);
-            mpParameter2Value->SetMin(0);
+            mxParameter2Text->set_label(ScResId(STR_RNG_PARAMETER_STANDARD_NUMBER_OF_TRIALS));
+            mxParameter2Value->set_digits(0);
+            mxParameter2Value->set_increments(1, 10);
+            mxParameter2Value->set_min(0);
 
-            mpParameter2Text->Show();
-            mpParameter2Value->Show();
+            mxParameter2Text->show();
+            mxParameter2Value->show();
             break;
         }
         case DIST_CHI_SQUARED:
         {
-            mpParameter1Text->SetText(ScResId(STR_RNG_PARAMETER_STANDARD_NU_VALUE));
+            mxParameter1Text->set_label(ScResId(STR_RNG_PARAMETER_STANDARD_NU_VALUE));
 
-            mpParameter2Text->Hide();
-            mpParameter2Value->Hide();
+            mxParameter2Text->hide();
+            mxParameter2Value->hide();
             break;
         }
     }
