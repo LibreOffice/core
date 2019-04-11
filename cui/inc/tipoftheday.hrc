@@ -200,7 +200,7 @@ const char* TIPOFTHEDAY_STRINGARRAY[] =
     NC_("RID_CUI_TIPOFTHEDAY", "You can easily arrange size table rows and coloumns - Right click - Row(or Coloums) - Optimal Height and Width"),
     NC_("RID_CUI_TIPOFTHEDAY", "Best way to fix bad looking MS Word table cells via Right click - Row(or Coloums) - Optimal Height and Width (Or Table AutoFit)"),
     NC_("RID_CUI_TIPOFTHEDAY", "Don't get lost in long%large documents. Use Navigator(F5) to find your way through the content."),
-    NC_("RID_CUI_TIPOFTHEDAY", "Want to change a word which appeares multiple places many place Use Find&Replace to save time."),
+    NC_("RID_CUI_TIPOFTHEDAY", "Want to change a word which appears multiple places many place Use Find&Replace to save time."),
     NC_("RID_CUI_TIPOFTHEDAY", "You can use various table styles via Table - AutoFormat to have good looking tables"),
     NC_("RID_CUI_TIPOFTHEDAY", "Want to select a large range of cells without scrolling? Type the range reference (e.g. A1:A1000) in the name box then Enter"),
     NC_("RID_CUI_TIPOFTHEDAY", "Calc›Data›Validity allows you to create drop-down lists for the user selects instead of typing"),
