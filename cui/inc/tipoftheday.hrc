@@ -218,7 +218,7 @@ const char* TIPOFTHEDAY_STRINGARRAY[] =
     NC_("RID_CUI_TIPOFTHEDAY", "Calc can display a number or a calculation as a fraction: Format›Cells›Number tab›Category›Fraction"),
     NC_("RID_CUI_TIPOFTHEDAY", "To print the notes of your slides File›Print›General tab›Select Notes in the Print listbox"),
     NC_("RID_CUI_TIPOFTHEDAY", "Draw: To Move an object to another Layer›Hold it until its edges flash›Drag to the name tab of the layer you want to move it to›Release"),
-    NC_("RID_CUI_TIPOFTHEDAY", "Want to exclude duplicate rows in a spreasheet? Use Data›Filter›Standard Filter›Options›No duplications"),
+    NC_("RID_CUI_TIPOFTHEDAY", "Want to exclude duplicate rows in a spreadsheet? Use Data›Filter›Standard Filter›Options›No duplications"),
     NC_("RID_CUI_TIPOFTHEDAY", "Want to find words more than 10 characters? Edit›Find & Replace›Search›\\<[a-z]{10,}›Other Options›Check Regular expressions"),
     NC_("RID_CUI_TIPOFTHEDAY", "You delete instead of insert? You are in overwrite mode. Press the Insert key on the keyboard or click in the status bar on Overwrite"),
     NC_("RID_CUI_TIPOFTHEDAY", "Surprised that Writer adds blank pages in a mailing? Would you like to have a recipient letter to the back of another (Duplexing)?"),
