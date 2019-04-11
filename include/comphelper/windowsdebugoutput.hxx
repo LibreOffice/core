@@ -421,8 +421,11 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
             stream << (double)rVariant.date;
             break; // FIXME
         case VT_BSTR:
-            stream << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(
-                rVariant.bstrVal);
+            if (rVariant.bstrVal == nullptr)
+                stream << "(null)";
+            else
+                stream << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(
+                    rVariant.bstrVal);
             break;
         case VT_DISPATCH:
             stream << rVariant.pdispVal;
