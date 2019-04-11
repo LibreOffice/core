@@ -219,8 +219,7 @@ Reference<XResultSet> SAL_CALL OPreparedStatement::executeQuery()
                                                      *this, m_xConnection->getConnectionEncoding());
     }
 
-    Reference<XResultSet> xResultSet;
-    xResultSet = new OPreparedResultSet(*m_xConnection, this, m_pStmt);
+    Reference<XResultSet> xResultSet = new OPreparedResultSet(*m_xConnection, this, m_pStmt);
     return xResultSet;
 }
 

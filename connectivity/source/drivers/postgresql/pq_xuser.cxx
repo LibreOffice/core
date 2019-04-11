@@ -96,9 +96,7 @@ Sequence< sal_Int8> User::getImplementationId()
 
 Any User::queryInterface( const Type & reqType )
 {
-    Any ret;
-
-    ret = ReflectionBase::queryInterface( reqType );
+    Any ret = ReflectionBase::queryInterface( reqType );
     if( ! ret.hasValue() )
         ret = ::cppu::queryInterface(
             reqType,

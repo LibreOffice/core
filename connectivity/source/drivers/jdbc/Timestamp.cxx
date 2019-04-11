@@ -35,8 +35,7 @@ java_sql_Date::java_sql_Date( const css::util::Date& _rOut ) : java_util_Date( n
         return;
     jvalue args[1];
     // Convert parameters
-    OUString sDateStr;
-    sDateStr = ::dbtools::DBTypeConversion::toDateString(_rOut);
+    OUString sDateStr = ::dbtools::DBTypeConversion::toDateString(_rOut);
     args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);
 
     // Turn of Java-Call for the constructor
@@ -103,9 +102,8 @@ java_sql_Time::java_sql_Time( const css::util::Time& _rOut ): java_util_Date( nu
         return;
     jvalue args[1];
     // Convert parameters
-    OUString sDateStr;
     // java.sql.Time supports only whole seconds...
-    sDateStr = ::dbtools::DBTypeConversion::toTimeStringS(_rOut);
+    OUString sDateStr = ::dbtools::DBTypeConversion::toTimeStringS(_rOut);
     args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);
 
     // Turn off Java-Call for the constructor
@@ -159,8 +157,7 @@ java_sql_Timestamp::java_sql_Timestamp(const css::util::DateTime& _rOut)
         return;
     jvalue args[1];
     // Convert parameters
-    OUString sDateStr;
-    sDateStr = ::dbtools::DBTypeConversion::toDateTimeString(_rOut);
+    OUString sDateStr = ::dbtools::DBTypeConversion::toDateTimeString(_rOut);
 
     args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);
 
