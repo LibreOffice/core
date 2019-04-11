@@ -580,7 +580,7 @@ OUString GetUndoComment(SwUndoId eId)
             pId = STR_UNDO_FLYFRMFMT_TITLE;
             break;
         case SwUndoId::FLYFRMFMT_DESCRIPTION:
-            pId = STR_UNDO_FLYFRMFMT_DESCRITPTION;
+            pId = STR_UNDO_FLYFRMFMT_DESCRIPTION;
             break;
         case SwUndoId::TBLSTYLE_CREATE:
             pId = STR_UNDO_TBLSTYLE_CREATE;
