@@ -282,7 +282,7 @@ const char* TIPOFTHEDAY_STRINGARRAY[] =
     NC_("RID_CUI_TIPOFTHEDAY", "Writer: To delete picture's caption select the picture›Ctrl+X›There is only the legend's frame›Select›Delete›Ctrl+C to paste the picture"),
     NC_("RID_CUI_TIPOFTHEDAY", "Base: Need a crosstab query ? Calc›Data›Pivot Table›Create›choose your registered Data source"),
     NC_("RID_CUI_TIPOFTHEDAY", "Calc Print: Repeat rows/columns on every pages? Format›Print Ranges›Edit›Click the Row/Col text box›drag the mouse in the sheet"),
-    NC_("RID_CUI_TIPOFTHEDAY", "Calc: To copy rows/cols to another sheet preserving heights/widths, select them by clicking the labels before before copying"),
+    NC_("RID_CUI_TIPOFTHEDAY", "Calc: To copy rows/cols to another sheet preserving heights/widths, select them by clicking the labels before copying"),
     NC_("RID_CUI_TIPOFTHEDAY", "With LibreOffice it is very easy to install a new dictionary: they are supplied as an extension"),
     NC_("RID_CUI_TIPOFTHEDAY", "Registered databases can also be used in Calc, for example to export your tables to CSV format"),
     NC_("RID_CUI_TIPOFTHEDAY", "Need to precisely position? Alt+Arrow Keys move objects (shape, picture, formula...) by one pixel"),
