@@ -152,7 +152,7 @@ const char* TIPOFTHEDAY_STRINGARRAY[] =
     NC_("RID_CUI_TIPOFTHEDAY", "Want your chapter titles to always begin a page? Edit Heading1 (paragraph style)›Flow tab›Breaks›check Insert›Page›Before"),
     NC_("RID_CUI_TIPOFTHEDAY", "Do you want to keep the text but remove a hyperlink in Writer? Right click on the link›Remove Hyperlink"),
     NC_("RID_CUI_TIPOFTHEDAY", "Want to remove all <> at once & keep the text inside? Edit›Find & Replace›Search›[<|>]›Replace›blank›Other Options›check Regular expressions"),
-    NC_("RID_CUI_TIPOFTHEDAY", "Calc: Use Format›Conditional Formating›Manage to find out which are the cells for which conditional 9formating has been defined"),
+    NC_("RID_CUI_TIPOFTHEDAY", "Calc: Use Format›Conditional Formatting›Manage to find out which are the cells for which conditional formatting has been defined"),
     NC_("RID_CUI_TIPOFTHEDAY", "Writer: To create a chart based on a Writer table, click in the table and then Insert›Object›Chart"),
     NC_("RID_CUI_TIPOFTHEDAY", "Calc: Move a column between 2 others in 1 step? Click header then a cell in the col, keep mouse button and move to the target with Alt key"),
     NC_("RID_CUI_TIPOFTHEDAY", "Calc: Use the Backspace key instead of Delete.  You can choose what to delete"),
