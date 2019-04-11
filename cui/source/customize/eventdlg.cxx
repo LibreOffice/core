@@ -67,9 +67,7 @@ SvxEventConfigPage::SvxEventConfigPage(TabPageParent pParent, const SfxItemSet& 
     m_xSaveInListBox->connect_changed( LINK( this, SvxEventConfigPage,
                 SelectHdl_Impl ) );
 
-    uno::Reference< frame::XGlobalEventBroadcaster > xSupplier;
-
-    xSupplier =
+    uno::Reference< frame::XGlobalEventBroadcaster > xSupplier =
         frame::theGlobalEventBroadcaster::get(::comphelper::getProcessComponentContext());
 
     m_xAppEvents = xSupplier->getEvents();
