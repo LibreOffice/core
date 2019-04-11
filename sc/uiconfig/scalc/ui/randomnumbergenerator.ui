@@ -1,60 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">10000000000</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkAdjustment" id="decimal-places-adjustment">
     <property name="lower">1</property>
     <property name="upper">255</property>
     <property name="value">1</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
-  </object>
-  <object class="GtkListStore" id="distribution-liststore">
-    <columns>
-      <!-- column-name value -->
-      <column type="gchararray"/>
-      <!-- column-name id -->
-      <column type="gint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="randomnumbergenerator|distribution-liststore">Uniform</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="randomnumbergenerator|distribution-liststore">Uniform Integer</col>
-        <col id="1">8</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="randomnumbergenerator|distribution-liststore">Normal</col>
-        <col id="1">1</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="randomnumbergenerator|distribution-liststore">Cauchy</col>
-        <col id="1">2</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="randomnumbergenerator|distribution-liststore">Bernoulli</col>
-        <col id="1">3</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="randomnumbergenerator|distribution-liststore">Binomial</col>
-        <col id="1">4</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="randomnumbergenerator|distribution-liststore">Chi Squared</col>
-        <col id="1">5</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="randomnumbergenerator|distribution-liststore">Geometric</col>
-        <col id="1">6</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="randomnumbergenerator|distribution-liststore">Negative Binomial</col>
-        <col id="1">7</col>
-      </row>
-    </data>
   </object>
   <object class="GtkAdjustment" id="parameter1-adjustment">
     <property name="upper">100</property>
@@ -72,7 +30,12 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="randomnumbergenerator|RandomNumberGeneratorDialog">Random Number Generator</property>
     <property name="resizable">False</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -188,11 +151,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefEdit" id="cell-range-edit">
+                      <object class="GtkEntry" id="cell-range-edit">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                         <property name="width_chars">30</property>
                       </object>
                       <packing>
@@ -202,7 +166,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefButton" id="cell-range-button">
+                      <object class="GtkButton" id="cell-range-button">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -269,11 +233,22 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="distribution-combo">
+                      <object class="GtkComboBoxText" id="distribution-combo">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="model">distribution-liststore</property>
+                        <property name="active">0</property>
+                        <items>
+                          <item id="0" translatable="yes" context="randomnumbergenerator|distribution-liststore">Uniform</item>
+                          <item id="8" translatable="yes" context="randomnumbergenerator|distribution-liststore">Uniform Integer</item>
+                          <item id="1" translatable="yes" context="randomnumbergenerator|distribution-liststore">Normal</item>
+                          <item id="2" translatable="yes" context="randomnumbergenerator|distribution-liststore">Cauchy</item>
+                          <item id="3" translatable="yes" context="randomnumbergenerator|distribution-liststore">Bernoulli</item>
+                          <item id="4" translatable="yes" context="randomnumbergenerator|distribution-liststore">Binomial</item>
+                          <item id="5" translatable="yes" context="randomnumbergenerator|distribution-liststore">Chi Squared</item>
+                          <item id="6" translatable="yes" context="randomnumbergenerator|distribution-liststore">Geometric</item>
+                          <item id="7" translatable="yes" context="randomnumbergenerator|distribution-liststore">Negative Binomial</item>
+                        </items>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -315,6 +290,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                         <property name="text">0,0000</property>
                         <property name="adjustment">parameter2-adjustment</property>
                         <property name="digits">4</property>
@@ -329,6 +305,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                         <property name="text">1,0000</property>
                         <property name="adjustment">parameter1-adjustment</property>
                         <property name="digits">4</property>
@@ -416,6 +393,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -459,6 +438,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                         <property name="text">1</property>
                         <property name="adjustment">decimal-places-adjustment</property>
                         <property name="value">1</property>
@@ -492,7 +472,7 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">apply</action-widget>
+      <action-widget response="100">apply</action-widget>
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-7">close</action-widget>
       <action-widget response="-11">help</action-widget>

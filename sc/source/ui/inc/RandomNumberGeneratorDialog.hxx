@@ -20,38 +20,20 @@
 
 namespace boost { template <typename T> class optional; }
 
-class ScRandomNumberGeneratorDialog : public ScAnyRefDlg
+class ScRandomNumberGeneratorDialog : public ScAnyRefDlgController
 {
 public:
     ScRandomNumberGeneratorDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        vcl::Window* pParent, ScViewData* pViewData );
+        weld::Window* pParent, ScViewData* pViewData );
 
     virtual ~ScRandomNumberGeneratorDialog() override;
-    virtual void dispose() override;
 
     virtual void SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
     virtual void SetActive() override;
-    virtual bool Close() override;
+    virtual void Close() override;
 
 private:
-    // Widgets
-    VclPtr<FixedText>          mpInputRangeText;
-    VclPtr<formula::RefEdit>   mpInputRangeEdit;
-    VclPtr<formula::RefButton> mpInputRangeButton;
-    VclPtr<ListBox>            mpDistributionCombo;
-    VclPtr<FixedText>          mpParameter1Text;
-    VclPtr<NumericField>       mpParameter1Value;
-    VclPtr<FixedText>          mpParameter2Text;
-    VclPtr<NumericField>       mpParameter2Value;
-    VclPtr<NumericField>       mpSeed;
-    VclPtr<CheckBox>           mpEnableSeed;
-    VclPtr<NumericField>       mpDecimalPlaces;
-    VclPtr<CheckBox>           mpEnableRounding;
-    VclPtr<PushButton>         mpButtonApply;
-    VclPtr<OKButton>           mpButtonOk;
-    VclPtr<CloseButton>        mpButtonClose;
-
     // Data
     ScViewData* const          mpViewData;
     ScDocument* const          mpDoc;
@@ -59,6 +41,23 @@ private:
     ScRange             maInputRange;
 
     bool                mbDialogLostFocus;
+
+    // Widgets
+    std::unique_ptr<weld::Label> mxInputRangeText;
+    std::unique_ptr<formula::WeldRefEdit>   mxInputRangeEdit;
+    std::unique_ptr<formula::WeldRefButton> mxInputRangeButton;
+    std::unique_ptr<weld::ComboBox> mxDistributionCombo;
+    std::unique_ptr<weld::Label> mxParameter1Text;
+    std::unique_ptr<weld::SpinButton> mxParameter1Value;
+    std::unique_ptr<weld::Label> mxParameter2Text;
+    std::unique_ptr<weld::SpinButton> mxParameter2Value;
+    std::unique_ptr<weld::SpinButton> mxSeed;
+    std::unique_ptr<weld::CheckButton> mxEnableSeed;
+    std::unique_ptr<weld::SpinButton> mxDecimalPlaces;
+    std::unique_ptr<weld::CheckButton> mxEnableRounding;
+    std::unique_ptr<weld::Button> mxButtonApply;
+    std::unique_ptr<weld::Button> mxButtonOk;
+    std::unique_ptr<weld::Button> mxButtonClose;
 
     void Init();
     void GetRangeFromSelection();
@@ -69,17 +68,19 @@ private:
 
     void SelectGeneratorAndGenerateNumbers();
 
-    DECL_LINK( OkClicked,        Button*, void );
-    DECL_LINK( CloseClicked,     Button*, void );
-    DECL_LINK( ApplyClicked,     Button*, void );
-    DECL_LINK( GetFocusHandler,  Control&, void );
-    DECL_LINK( LoseFocusHandler, Control&, void );
+    DECL_LINK( OkClicked, weld::Button&, void );
+    DECL_LINK( CloseClicked, weld::Button&, void );
+    DECL_LINK( ApplyClicked, weld::Button&, void );
+    DECL_LINK( GetEditFocusHandler,  formula::WeldRefEdit&, void );
+    DECL_LINK( GetButtonFocusHandler,  formula::WeldRefButton&, void );
+    DECL_LINK( LoseEditFocusHandler, formula::WeldRefEdit&, void );
+    DECL_LINK( LoseButtonFocusHandler, formula::WeldRefButton&, void );
 
-    DECL_LINK( InputRangeModified, Edit&, void );
-    DECL_LINK( Parameter1ValueModified, Edit&, void );
-    DECL_LINK( Parameter2ValueModified, Edit&, void );
-    DECL_LINK( DistributionChanged, ListBox&, void );
-    DECL_LINK( CheckChanged, CheckBox&, void );
+    DECL_LINK( InputRangeModified, formula::WeldRefEdit&, void );
+    DECL_LINK( Parameter1ValueModified, weld::SpinButton&, void );
+    DECL_LINK( Parameter2ValueModified, weld::SpinButton&, void );
+    DECL_LINK( DistributionChanged, weld::ComboBox&, void );
+    DECL_LINK( CheckChanged, weld::ToggleButton&, void );
 
 };
 
