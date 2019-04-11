@@ -124,7 +124,7 @@ const char* TIPOFTHEDAY_STRINGARRAY[] =
     NC_("RID_CUI_TIPOFTHEDAY", "Want to print 2 portrait pages on a landscape one (reducing A4 to A5)? File›Print›Page Layout tab, select 2 pages per page"),
     NC_("RID_CUI_TIPOFTHEDAY", "To be able to get the Vertical Text tool in Drawing toolbar check Tool›Options›Language Settings›Languages›Default languages›Asian"),
     NC_("RID_CUI_TIPOFTHEDAY", "Draw/Impress: double-click a tool in drawing toolbar to use it for multiple tasks"),
-    NC_("RID_CUI_TIPOFTHEDAY", "Want to to display only the highest 10 values in a spreadsheet g? Data›Filter›AutoFilter›Standard click the drop-down arrow›Top10"),
+    NC_("RID_CUI_TIPOFTHEDAY", "Want to display only the highest 10 values in a spreadsheet? Data›Filter›AutoFilter›Standard click the drop-down arrow›Top10"),
     NC_("RID_CUI_TIPOFTHEDAY", "You can not modify or delete a custom cell style? Check all sheets: none should be protected"),
     NC_("RID_CUI_TIPOFTHEDAY", "Calc: Want to get the number of days in month? Try =DAYSINMONTH(TODAY())"),
     NC_("RID_CUI_TIPOFTHEDAY", "Do you know that the Styles & Formatting dialog allows you to hide the styles you do not use?"),
