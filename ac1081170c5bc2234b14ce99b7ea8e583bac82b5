@@ -22,6 +22,30 @@
       "revId": "ac1081170c5bc2234b14ce99b7ea8e583bac82b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_5e75b597",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport9.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-04-11T18:20:23Z",
+      "side": 1,
+      "message": "If my patch is reverted, the test produces the error:\nTest name: testTdf109310_endnoteStyleForMSO::Import_Export_Import\nequality assertion failed\n- Expected: 1\n- Actual  : 0\n- In \u003cfile:///tmp/libtest_sw_ooxmlexport9.socyiddk.tmp\u003e, XPath \u0027/w:endnotes/w:endnote[@w:id\u003d\u00272\u0027]/w:p/w:r[1]/w:rPr/w:rStyle\u0027 number of nodes is incorrect\n\nSo the test is just to see if the nodes exist - and I  didn\u0027t care about the contents.  The contents ought to be \"\"EndnoteCharacters\" from what I understand, not \"\" or null. However if I put that in as the 4th argument, I get errors. I can\u0027t explain that. Have you perhaps misinterpreted what happens in the 3-value call?  It seems to me (from observation, not code review) is that if the 4th argument is  default, it can pass if the attribute simply exists (the opposite of what you said).\n\nThe simple answer is that I assert the presence of the w:style w:val attribute.",
+      "parentUuid": "df87a7cf_bd3aa3e4",
+      "range": {
+        "startLine": 428,
+        "startChar": 4,
+        "endLine": 428,
+        "endChar": 96
+      },
+      "revId": "ac1081170c5bc2234b14ce99b7ea8e583bac82b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
