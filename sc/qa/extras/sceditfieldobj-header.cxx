@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
+#include <test/text/textcontent.hxx>
 #include <test/text/xtextcontent.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -18,6 +19,8 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
@@ -33,8 +36,9 @@ using namespace css;
 namespace sc_apitest
 {
 class ScEditFieldObj_Header : public CalcUnoApiTest,
-                              public apitest::XTextContent,
-                              public apitest::XPropertySet
+                              public apitest::TextContent,
+                              public apitest::XPropertySet,
+                              public apitest::XTextContent
 {
 public:
     ScEditFieldObj_Header();
@@ -47,6 +51,9 @@ public:
     virtual bool isAttachSupported() override { return false; }
 
     CPPUNIT_TEST_SUITE(ScEditFieldObj_Header);
+
+    // TextContent
+    CPPUNIT_TEST(testTextContentProperties);
 
     // XPropertySet
     CPPUNIT_TEST(testGetPropertySetInfo);
@@ -72,6 +79,9 @@ uno::Reference<text::XText> ScEditFieldObj_Header::mxRightText;
 
 ScEditFieldObj_Header::ScEditFieldObj_Header()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , TextContent(text::TextContentAnchorType_AS_CHARACTER,
+                  text::TextContentAnchorType_AS_CHARACTER, text::WrapTextMode_NONE,
+                  text::WrapTextMode_NONE)
 {
 }
 

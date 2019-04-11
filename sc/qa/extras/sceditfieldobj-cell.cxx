@@ -9,15 +9,18 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
+#include <test/text/textcontent.hxx>
 #include <test/text/xtextfield.hxx>
 #include <test/text/xtextcontent.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/XCell.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
@@ -33,6 +36,7 @@ using namespace css;
 namespace sc_apitest
 {
 class ScEditFieldObj_Cell : public CalcUnoApiTest,
+                            public apitest::TextContent,
                             public apitest::XPropertySet,
                             public apitest::XTextContent,
                             public apitest::XTextField
@@ -50,6 +54,9 @@ public:
     void testEditFieldProperties();
 
     CPPUNIT_TEST_SUITE(ScEditFieldObj_Cell);
+
+    // TextContent
+    CPPUNIT_TEST(testTextContentProperties);
 
     // XPropertySet
     CPPUNIT_TEST(testGetPropertySetInfo);
@@ -79,6 +86,9 @@ uno::Reference<text::XTextField> ScEditFieldObj_Cell::mxField;
 
 ScEditFieldObj_Cell::ScEditFieldObj_Cell()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , TextContent(text::TextContentAnchorType_AS_CHARACTER,
+                  text::TextContentAnchorType_AS_CHARACTER, text::WrapTextMode_NONE,
+                  text::WrapTextMode_NONE)
 {
 }
 
