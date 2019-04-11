@@ -21,7 +21,8 @@ namespace Item
         static ItemControlBlock aItemControlBlock(
             std::shared_ptr<ItemAdministrator>(new IAdministrator_unordered_set()),
             [](){ return new CntOUString(CntOUString::GetStaticItemControlBlock()); },
-            [](){ return new CntOUString(CntOUString::GetStaticItemControlBlock()); });
+            [](){ return new CntOUString(CntOUString::GetStaticItemControlBlock()); },
+            "CntOUString");
 
         return aItemControlBlock;
     }

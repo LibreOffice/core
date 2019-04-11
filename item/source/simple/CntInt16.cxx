@@ -21,7 +21,8 @@ namespace Item
         static ItemControlBlock aItemControlBlock(
             std::shared_ptr<ItemAdministrator>(new IAdministrator_set()),
             [](){ return new CntInt16(CntInt16::GetStaticItemControlBlock()); },
-            [](){ return new CntInt16(CntInt16::GetStaticItemControlBlock()); });
+            [](){ return new CntInt16(CntInt16::GetStaticItemControlBlock()); },
+            "CntInt16");
 
         return aItemControlBlock;
     }

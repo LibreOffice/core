@@ -37,12 +37,14 @@ namespace Item
         std::shared_ptr<const ItemBase>     m_aDefaultItem;
         std::function<ItemBase*()>          m_aConstructDefaultItem;
         std::function<ItemBase*()>          m_aConstructItem;
+        OUString                            m_aName;
 
     public:
         ItemControlBlock(
             const std::shared_ptr<ItemAdministrator>& rItemAdministrator,
             std::function<ItemBase*()>constructDefaultItem,
-            std::function<ItemBase*()>constructItem);
+            std::function<ItemBase*()>constructItem,
+            const OUString& rName);
         ItemControlBlock();
 
         const std::shared_ptr<ItemAdministrator>& GetItemAdministrator()
@@ -58,7 +60,13 @@ namespace Item
         }
 
         std::shared_ptr<const ItemBase> CreateFromAny(const ItemBase::AnyIDArgs& rArgs);
+
         bool IsDefault(const ItemBase& rItem) const;
+
+        const OUString& GetName() const
+        {
+            return m_aName;
+        }
     };
 } // end of namespace Item
 

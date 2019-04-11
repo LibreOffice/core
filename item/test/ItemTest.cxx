@@ -34,7 +34,8 @@ namespace Item
             static ItemControlBlock aItemControlBlock(
                 std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
                 [](){ return new MultiValueAB(MultiValueAB::GetStaticItemControlBlock()); },
-                [](){ return new MultiValueAB(MultiValueAB::GetStaticItemControlBlock()); });
+                [](){ return new MultiValueAB(MultiValueAB::GetStaticItemControlBlock()); },
+                "MultiValueAB");
 
             return aItemControlBlock;
         }
@@ -121,7 +122,8 @@ namespace Item
             static ItemControlBlock aItemControlBlock(
                 std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
                 [](){ return new MultiValueABC(MultiValueABC::GetStaticItemControlBlock()); },
-                [](){ return new MultiValueABC(MultiValueABC::GetStaticItemControlBlock()); });
+                [](){ return new MultiValueABC(MultiValueABC::GetStaticItemControlBlock()); },
+                "MultiValueABC");
 
             return aItemControlBlock;
         }
@@ -200,7 +202,8 @@ namespace Item
             static ItemControlBlock aItemControlBlock(
                 std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
                 [](){ return new MultiValueABD(MultiValueABD::GetStaticItemControlBlock()); },
-                [](){ return new MultiValueABD(MultiValueABD::GetStaticItemControlBlock()); });
+                [](){ return new MultiValueABD(MultiValueABD::GetStaticItemControlBlock()); },
+                "MultiValueABD");
 
             return aItemControlBlock;
         }
@@ -243,7 +246,8 @@ namespace Item
             static ItemControlBlock aItemControlBlock(
                 std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
                 [](){ return new MultiValueABCD(MultiValueABCD::GetStaticItemControlBlock()); },
-                [](){ return new MultiValueABCD(MultiValueABCD::GetStaticItemControlBlock()); });
+                [](){ return new MultiValueABCD(MultiValueABCD::GetStaticItemControlBlock()); },
+                "MultiValueABCD");
 
             return aItemControlBlock;
         }

@@ -20,7 +20,8 @@ namespace Item
         static ItemControlBlock aItemControlBlock(
             CntInt16::GetStaticItemControlBlock().GetItemAdministrator(),
             [](){ return new TransformAnchor(TransformAnchor::GetStaticItemControlBlock()); },
-            [](){ return new TransformAnchor(TransformAnchor::GetStaticItemControlBlock()); });
+            [](){ return new TransformAnchor(TransformAnchor::GetStaticItemControlBlock()); },
+            "TransformAnchor");
 
         return aItemControlBlock;
     }

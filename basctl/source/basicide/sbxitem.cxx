@@ -31,7 +31,8 @@ namespace Item
         static ::Item::ItemControlBlock aItemControlBlock(
             std::shared_ptr<::Item::ItemAdministrator>(new ::Item::IAdministrator_vector()),
             [](){ return new Sbx(Sbx::GetStaticItemControlBlock()); },
-            [](){ return new Sbx(Sbx::GetStaticItemControlBlock()); });
+            [](){ return new Sbx(Sbx::GetStaticItemControlBlock()); },
+            "Sbx");
 
         return aItemControlBlock;
     }

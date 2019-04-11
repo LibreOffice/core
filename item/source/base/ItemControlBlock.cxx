@@ -17,11 +17,13 @@ namespace Item
     ItemControlBlock::ItemControlBlock(
         const std::shared_ptr<ItemAdministrator>& rItemAdministrator,
         std::function<ItemBase*()>constructDefaultItem,
-        std::function<ItemBase*()>constructItem)
+        std::function<ItemBase*()>constructItem,
+        const OUString& rName)
     :   m_aItemAdministrator(rItemAdministrator),
         m_aDefaultItem(),
         m_aConstructDefaultItem(constructDefaultItem),
-        m_aConstructItem(constructItem)
+        m_aConstructItem(constructItem),
+        m_aName(rName)
     {
         assert(rItemAdministrator && "nullptr not allowed, an ItemAdministrator *is* required (!)");
     }
