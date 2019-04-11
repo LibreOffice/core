@@ -692,10 +692,6 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     if ( mpMetaFile )
     {
         mpMetaFile->AddAction( new MetaMapModeAction( rNewMapMode ) );
-#ifdef DBG_UTIL
-        if ( GetOutDevType() != OUTDEV_PRINTER )
-            SAL_WARN_IF( !bRelMap, "vcl.gdi", "Please record only relative MapModes!" );
-#endif
     }
 
     // do nothing if MapMode was not changed
