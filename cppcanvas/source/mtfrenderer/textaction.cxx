@@ -2027,9 +2027,7 @@ namespace cppcanvas
 
                 for( const auto& rVCLPolyPolygon : aVCLPolyPolyVector )
                 {
-                    ::basegfx::B2DPolyPolygon aPolyPolygon;
-
-                    aPolyPolygon = rVCLPolyPolygon.getB2DPolyPolygon();
+                    ::basegfx::B2DPolyPolygon aPolyPolygon = rVCLPolyPolygon.getB2DPolyPolygon();
                     aPolyPolygon.transform( aMapModeTransform );
 
                     // append result to collecting polypoly

@@ -58,8 +58,7 @@ void setProcessServiceFactory(const Reference< XMultiServiceFactory >& xSMgr)
 
 Reference< XMultiServiceFactory > getProcessServiceFactory()
 {
-    Reference< XMultiServiceFactory> xReturn;
-    xReturn = localProcessFactory( xReturn, false );
+    Reference< XMultiServiceFactory> xReturn = localProcessFactory( xReturn, false );
     if ( !xReturn.is() )
     {
         throw DeploymentException( "null process service factory" );
