@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9f91af0f_3f88e71d",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2019-04-11T08:06:23Z",
+      "side": 1,
+      "message": "in menu item\u0027s you can\u0027t add menu:style\u003d\"text\" which is ok, cause menu items were not used in toolbars so you \"only\" have to remove the icon from the icon theme(s). That\u0027s the reason links.txt was also added in this patch.",
+      "parentUuid": "9f91af0f_bfecf7f3",
+      "range": {
+        "startLine": 29,
+        "startChar": 31,
+        "endLine": 29,
+        "endChar": 43
+      },
+      "revId": "2c03691cb10ed5cc90c5e4362f282e607440c99e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f91af0f_7fc0af51",
         "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2019-04-11T07:48:17Z",
       "side": 1,
       "message": "style\u003dtext?",
+      "range": {
+        "startLine": 107,
+        "startChar": 39,
+        "endLine": 107,
+        "endChar": 51
+      },
+      "revId": "2c03691cb10ed5cc90c5e4362f282e607440c99e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_ff9eff52",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2019-04-11T08:06:23Z",
+      "side": 1,
+      "message": "no, cause this items will be shown also on right click and so it\u0027s better for recognize the icon with the function.",
+      "parentUuid": "9f91af0f_7fc0af51",
       "range": {
         "startLine": 107,
         "startChar": 39,
@@ -87,6 +135,53 @@
         "startChar": 35,
         "endLine": 122,
         "endChar": 47
+      },
+      "revId": "2c03691cb10ed5cc90c5e4362f282e607440c99e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_bf44f7b8",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2019-04-11T08:06:23Z",
+      "side": 1,
+      "message": "ok removed the icon and also at go to page command",
+      "parentUuid": "9f91af0f_3fba27de",
+      "range": {
+        "startLine": 122,
+        "startChar": 35,
+        "endLine": 122,
+        "endChar": 47
+      },
+      "revId": "2c03691cb10ed5cc90c5e4362f282e607440c99e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_5f136bb9",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2019-04-11T08:06:23Z",
+      "side": 1,
+      "message": "as most changes stuff is here I add here an icon,",
+      "range": {
+        "startLine": 125,
+        "startChar": 31,
+        "endLine": 125,
+        "endChar": 42
       },
       "revId": "2c03691cb10ed5cc90c5e4362f282e607440c99e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
@@ -220,6 +315,30 @@
       "writtenOn": "2019-04-11T07:48:17Z",
       "side": 1,
       "message": "Don\u0027t see a difference in the three icons and would hide all.",
+      "range": {
+        "startLine": 297,
+        "startChar": 14,
+        "endLine": 297,
+        "endChar": 23
+      },
+      "revId": "2c03691cb10ed5cc90c5e4362f282e607440c99e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_3f1227b3",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2019-04-11T08:06:23Z",
+      "side": 1,
+      "message": "good point",
+      "parentUuid": "9f91af0f_7fa50fb5",
       "range": {
         "startLine": 297,
         "startChar": 14,
