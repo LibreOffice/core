@@ -99,7 +99,7 @@ const char* TIPOFTHEDAY_STRINGARRAY[] =
     NC_("RID_CUI_TIPOFTHEDAY", "Besides styles, customizations menus and toolbars can be saved in a template"),
     NC_("RID_CUI_TIPOFTHEDAY", "Tools›Options›LibreOffice›Color lets you edit and create colors available in all LibreOffice documents"),
     NC_("RID_CUI_TIPOFTHEDAY", "To edit a not showed comment in Calc, right-click the cell and choose Insert comment. Edit then click outside the comment (hidden again)"),
-    NC_("RID_CUI_TIPOFTHEDAY", "In Calc use TRIMMEAN() to return the mean of a data set excluding the the highest and lowest values "),
+    NC_("RID_CUI_TIPOFTHEDAY", "In Calc use TRIMMEAN() to return the mean of a data set excluding the highest and lowest values"),
     NC_("RID_CUI_TIPOFTHEDAY", "To keep the zeros before a number, use the 'leading zeroes' cell format option or format the cell as text before entering the number"),
     NC_("RID_CUI_TIPOFTHEDAY", "To copy a comment without losing the content of the target cell : Paste Special›uncheck everything except Comments. Operations select Add"),
     NC_("RID_CUI_TIPOFTHEDAY", "With Calc calculate loan repayments: eg. PMT(2%/12;36;2500) interest rate per payment period 2%/12, 36 months, loan amount 2500"),
