@@ -34,6 +34,24 @@
       "revId": "c5a131c1f3fa51cb68d52b59aff1dc1b4a0be7a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_422cf446",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-11T13:41:18Z",
+      "side": 1,
+      "message": "\"We can keep the if instead, but that doesn\u0027t feel consequent, so an inheriting class could clear pResetT and thet would be fine. I\u0027m not sure if that is intended.\":  At \u003chttps://gerrit.libreoffice.org/#/c/70381/12//COMMIT_MSG@12\u003e we discussed how the if(pResetT) check should better be left intact precisely because of the (unlikely, but still) chance that a derived class would change it to null before reset() is called.  (At least that was my intention in that discussion.  There may have been a misunderstanding there as Mike nevertheless left the if(pResetT) check out of the final commit.)\n\n\"BTW - any reason, why this explicitly uses \"this-\u003e\" here?\"  That\u0027s needed because pT is a member of a base class that depends on a template parameter.",
+      "parentUuid": "9f91af0f_c246c450",
+      "revId": "c5a131c1f3fa51cb68d52b59aff1dc1b4a0be7a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
