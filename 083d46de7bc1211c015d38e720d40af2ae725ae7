@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f91af0f_bff9574e",
+        "filename": "configure.ac",
+        "patchSetId": 30
+      },
+      "lineNbr": 3328,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-04-11T09:04:14Z",
+      "side": 1,
+      "message": "this is not ideal - did you check if there is another registry key with the required value?\n\nperhaps it\u0027s a 64-bit only key, did you try to replace reg_get_value_32 with reg_get_value?",
+      "revId": "083d46de7bc1211c015d38e720d40af2ae725ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_bfe07798",
+        "filename": "configure.ac",
+        "patchSetId": 30
+      },
+      "lineNbr": 12674,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-04-11T09:04:14Z",
+      "side": 1,
+      "message": "i think this * case is obsolete and can be removed",
+      "revId": "083d46de7bc1211c015d38e720d40af2ae725ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
