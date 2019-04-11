@@ -32,41 +32,20 @@
 class ScViewData;
 class ScDocument;
 
-class ScDbNameDlg : public ScAnyRefDlg
+class ScDbNameDlg : public ScAnyRefDlgController
 {
 public:
-                    ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
-                                 ScViewData*    ptrViewData );
-                    virtual ~ScDbNameDlg() override;
-    virtual void    dispose() override;
+    ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
+                ScViewData* ptrViewData);
+    virtual ~ScDbNameDlg() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
 
     virtual bool    IsRefInputMode() const override;
     virtual void    SetActive() override;
-    virtual bool    Close() override;
+    virtual void    Close() override;
 
 private:
-    VclPtr<ComboBox>           m_pEdName;
-
-    VclPtr<VclFrame>           m_pAssignFrame;
-    VclPtr<formula::RefEdit>   m_pEdAssign;
-    VclPtr<formula::RefButton> m_pRbAssign;
-
-    VclPtr<VclContainer>       m_pOptions;
-    VclPtr<CheckBox>           m_pBtnHeader;
-    VclPtr<CheckBox>           m_pBtnTotals;
-    VclPtr<CheckBox>           m_pBtnDoSize;
-    VclPtr<CheckBox>           m_pBtnKeepFmt;
-    VclPtr<CheckBox>           m_pBtnStripData;
-    VclPtr<FixedText>          m_pFTSource;
-    VclPtr<FixedText>          m_pFTOperations;
-
-    VclPtr<OKButton>           m_pBtnOk;
-    VclPtr<CancelButton>       m_pBtnCancel;
-    VclPtr<PushButton>         m_pBtnAdd;
-    VclPtr<PushButton>         m_pBtnRemove;
-
     bool            bSaved;
 
     OUString        aStrAdd;
@@ -85,18 +64,43 @@ private:
     ScRange         theCurArea;
     std::vector<ScRange> aRemoveList;
 
+    std::unique_ptr<weld::EntryTreeView> m_xEdName;
+
+    std::unique_ptr<weld::Frame> m_xAssignFrame;
+    std::unique_ptr<formula::WeldRefEdit> m_xEdAssign;
+    std::unique_ptr<formula::WeldRefButton> m_xRbAssign;
+
+    std::unique_ptr<weld::Widget> m_xOptions;
+    std::unique_ptr<weld::CheckButton> m_xBtnHeader;
+    std::unique_ptr<weld::CheckButton> m_xBtnTotals;
+    std::unique_ptr<weld::CheckButton> m_xBtnDoSize;
+    std::unique_ptr<weld::CheckButton> m_xBtnKeepFmt;
+    std::unique_ptr<weld::CheckButton> m_xBtnStripData;
+    std::unique_ptr<weld::Label> m_xFTSource;
+    std::unique_ptr<weld::Label> m_xFTOperations;
+
+    std::unique_ptr<weld::Button> m_xBtnOk;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
+    std::unique_ptr<weld::Button> m_xBtnAdd;
+    std::unique_ptr<weld::Button> m_xBtnRemove;
+
+    std::unique_ptr<weld::Button> m_xModifyPB;
+    std::unique_ptr<weld::Label> m_xInvalidFT;
+
+    std::unique_ptr<weld::Label> m_xFrameLabel;
+    std::unique_ptr<weld::Expander> m_xExpander;
 private:
     void            Init();
     void            UpdateNames();
     void            UpdateDBData( const OUString& rStrName );
     void            SetInfoStrings( const ScDBData* pDBData );
 
-    DECL_LINK( CancelBtnHdl, Button*, void );
-    DECL_LINK( OkBtnHdl, Button*, void );
-    DECL_LINK( AddBtnHdl, Button*, void );
-    DECL_LINK( RemoveBtnHdl, Button*, void );
-    DECL_LINK( NameModifyHdl, Edit&, void );
-    DECL_LINK( AssModifyHdl, Edit&, void );
+    DECL_LINK( CancelBtnHdl, weld::Button&, void );
+    DECL_LINK( OkBtnHdl, weld::Button&, void );
+    DECL_LINK( AddBtnHdl, weld::Button&, void );
+    DECL_LINK( RemoveBtnHdl, weld::Button&, void );
+    DECL_LINK( NameModifyHdl, weld::ComboBox&, void );
+    DECL_LINK( AssModifyHdl, formula::WeldRefEdit&, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_DBNAMDLG_HXX
