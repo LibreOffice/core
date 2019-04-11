@@ -76,7 +76,7 @@ private:
 };
 
 class ScRandomNumberGeneratorDialogWrapper :
-    public ChildWindowWrapper<SID_RANDOM_NUMBER_GENERATOR_DIALOG>
+    public ChildControllerWrapper<SID_RANDOM_NUMBER_GENERATOR_DIALOG>
 {
 private:
     ScRandomNumberGeneratorDialogWrapper() = delete;

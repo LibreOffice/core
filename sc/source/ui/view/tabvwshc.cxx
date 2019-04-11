@@ -277,12 +277,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
         }
         break;
 
-        case SID_RANDOM_NUMBER_GENERATOR_DIALOG:
-        {
-            pResult = VclPtr<ScRandomNumberGeneratorDialog>::Create( pB, pCW, pParent, &GetViewData() );
-        }
-        break;
-
         case SID_OPENDLG_OPTSOLVER:
         {
             ScViewData& rViewData = GetViewData();
@@ -499,6 +493,9 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             }
             break;
         }
+        case SID_RANDOM_NUMBER_GENERATOR_DIALOG:
+            xResult.reset(new ScRandomNumberGeneratorDialog(pB, pCW, pParent, &GetViewData()));
+            break;
     }
 
     if (xResult)

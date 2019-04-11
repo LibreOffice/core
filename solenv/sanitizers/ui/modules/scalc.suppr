@@ -175,6 +175,7 @@ sc/uiconfig/scalc/ui/protectsheetdlg.ui://GtkLabel[@id='insert-columns'] orphan-
 sc/uiconfig/scalc/ui/protectsheetdlg.ui://GtkLabel[@id='insert-rows'] orphan-label
 sc/uiconfig/scalc/ui/protectsheetdlg.ui://GtkLabel[@id='delete-columns'] orphan-label
 sc/uiconfig/scalc/ui/protectsheetdlg.ui://GtkLabel[@id='delete-rows'] orphan-label
+sc/uiconfig/scalc/ui/randomnumbergenerator.ui://GtkButton[@id='cell-range-button'] button-no-label
 sc/uiconfig/scalc/ui/regressiondialog.ui://GtkLabel[@id='error-message'] orphan-label
 sc/uiconfig/scalc/ui/regressiondialog.ui://GtkButton[@id='variable1-range-button'] button-no-label
 sc/uiconfig/scalc/ui/regressiondialog.ui://GtkButton[@id='variable2-range-button'] button-no-label
