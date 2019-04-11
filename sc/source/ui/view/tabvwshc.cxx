@@ -188,18 +188,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
         }
         break;
 
-        case SID_DEFINE_DBNAME:
-        {
-            // when called for an existing range, then mark
-            GetDBData( true, SC_DB_OLD );
-            const ScMarkData& rMark = GetViewData().GetMarkData();
-            if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
-                MarkDataArea( false );
-
-            pResult = VclPtr<ScDbNameDlg>::Create( pB, pCW, pParent, &GetViewData() );
-        }
-        break;
-
         case SID_SPECIAL_FILTER:
         {
             ScQueryParam    aQueryParam;
@@ -496,6 +484,17 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         case SID_RANDOM_NUMBER_GENERATOR_DIALOG:
             xResult.reset(new ScRandomNumberGeneratorDialog(pB, pCW, pParent, &GetViewData()));
             break;
+        case SID_DEFINE_DBNAME:
+        {
+            // when called for an existing range, then mark
+            GetDBData( true, SC_DB_OLD );
+            const ScMarkData& rMark = GetViewData().GetMarkData();
+            if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
+                MarkDataArea( false );
+
+            xResult.reset(new ScDbNameDlg(pB, pCW, pParent, &GetViewData()));
+            break;
+        }
     }
 
     if (xResult)

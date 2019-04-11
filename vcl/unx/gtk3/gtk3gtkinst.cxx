@@ -3128,6 +3128,8 @@ public:
         const gchar* pStr = gtk_frame_get_label(m_pFrame);
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
+
+    virtual std::unique_ptr<weld::Label> weld_label_widget() const override;
 };
 
 static GType crippled_viewport_get_type();
@@ -7539,6 +7541,14 @@ public:
             gtk_label_set_attributes(m_pLabel, nullptr);
     }
 };
+
+std::unique_ptr<weld::Label> GtkInstanceFrame::weld_label_widget() const
+{
+    GtkWidget* pLabel = gtk_frame_get_label_widget(m_pFrame);
+    if (!pLabel || !GTK_IS_LABEL(pLabel))
+        return nullptr;
+    return std::make_unique<GtkInstanceLabel>(GTK_LABEL(pLabel), m_pBuilder, false);
+}
 
 class GtkInstanceTextView : public GtkInstanceContainer, public virtual weld::TextView
 {
