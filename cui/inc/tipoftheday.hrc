@@ -52,7 +52,7 @@ const char* TIPOFTHEDAY_STRINGARRAY[] =
     NC_("RID_CUI_TIPOFTHEDAY", "You can use Quickstart to open LibreOffice quicker"),
     NC_("RID_CUI_TIPOFTHEDAY", "Have you tried our new sidebar- Appearance- Sidebar"),
     NC_("RID_CUI_TIPOFTHEDAY", "Have you known that LibreOffice has great documentation and free user guide books http://www.libreoffice.org/get-help/documentation/ "),
-    NC_("RID_CUI_TIPOFTHEDAY", "Embedded help can save lifes. Just click F1 to reach the embedded help, if you've installed it. Otherwise you may benefit from this huge content online at http://help.libreoffice.org"),
+    NC_("RID_CUI_TIPOFTHEDAY", "Embedded help can save lives. Just click F1 to reach the embedded help, if you've installed it. Otherwise you may benefit from this huge content online at http://help.libreoffice.org"),
     NC_("RID_CUI_TIPOFTHEDAY", "LibreOffice has a portable version which gives you mobility. If you don't have administrator rights on your computer you may install LibreOffice Portable to your hard drive too http://www.libreoffice.org/download/portable-versions/"),
     NC_("RID_CUI_TIPOFTHEDAY", "How to remove pagebreaks from a .docx document that someone sent you, where there are pagebreaks for each sentence in the document."),
     NC_("RID_CUI_TIPOFTHEDAY", "Open 1 document in 2 windows"),
