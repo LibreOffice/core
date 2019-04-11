@@ -1234,8 +1234,8 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     const sal_Int32 nDay = std::chrono::duration_cast<std::chrono::hours>(t0).count()/24; // days since 1970-01-01
                     if (nDay-nLastTipOfTheDay > 0) { //only once per day
                         VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-                        VclPtr<VclAbstractDialog> pDlg =
-                            pFact->CreateTipOfTheDayDialog( GetWindow().GetFrameWeld() );
+                        ScopedVclPtr<VclAbstractDialog> pDlg(
+                            pFact->CreateTipOfTheDayDialog(GetWindow().GetFrameWeld()));
                         pDlg->Execute();
                     }
                 }
