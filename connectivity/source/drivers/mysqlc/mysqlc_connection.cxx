@@ -223,9 +223,8 @@ Reference<XStatement> SAL_CALL OConnection::createStatement()
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     // create a statement
-    Reference<XStatement> xReturn;
     // the statement can only be executed once
-    xReturn = new OStatement(this);
+    Reference<XStatement> xReturn = new OStatement(this);
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
 
     return xReturn;
@@ -246,8 +245,7 @@ Reference<XPreparedStatement> SAL_CALL OConnection::prepareStatement(const OUStr
         mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(&m_mysql), nErrorNum, *this,
                                                      getConnectionEncoding());
 
-    Reference<XPreparedStatement> xStatement;
-    xStatement = new OPreparedStatement(this, pStmt);
+    Reference<XPreparedStatement> xStatement = new OPreparedStatement(this, pStmt);
     m_aStatements.push_back(WeakReferenceHelper(xStatement));
     return xStatement;
 }

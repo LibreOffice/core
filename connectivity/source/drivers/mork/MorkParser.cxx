@@ -542,8 +542,7 @@ void MorkParser::parseMeta( char c )
 
 MorkTableMap *MorkParser::getTables( int TableScope )
 {
-    TableScopeMap::Map::iterator iter;
-    iter = mork_.map.find( TableScope );
+    TableScopeMap::Map::iterator iter = mork_.map.find( TableScope );
 
     if ( iter == mork_.map.end() )
     {
@@ -555,8 +554,7 @@ MorkTableMap *MorkParser::getTables( int TableScope )
 
 MorkRowMap *MorkParser::getRows( int RowScope, RowScopeMap *table )
 {
-    RowScopeMap::Map::iterator iter;
-    iter = table->map.find( RowScope );
+    RowScopeMap::Map::iterator iter = table->map.find( RowScope );
 
     if ( iter == table->map.end() )
     {

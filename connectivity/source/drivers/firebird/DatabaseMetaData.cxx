@@ -1469,9 +1469,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     uno::Reference< XResultSet > xResultSet = pResultSet;
 
     uno::Reference< XStatement > statement = m_pConnection->createStatement();
-    OUString sSQL;
 
-    sSQL = "SELECT "
+    OUString sSQL = "SELECT "
            "RDB$REF_CONSTRAINTS.RDB$UPDATE_RULE, " // 1 update rule
            "RDB$REF_CONSTRAINTS.RDB$DELETE_RULE, " // 2 delete rule
            "RDB$REF_CONSTRAINTS.RDB$CONST_NAME_UQ, " // 3 primary or unique key name

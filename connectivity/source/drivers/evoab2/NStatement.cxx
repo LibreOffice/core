@@ -358,8 +358,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
 
         const sal_Unicode WILDCARD = '%';
 
-        OUString aMatchString;
-        aMatchString = pAtom->getTokenValue();
+        OUString aMatchString = pAtom->getTokenValue();
 
         // Determine where '%' character is...
         if( aMatchString == OUStringLiteral1(WILDCARD) )

@@ -436,8 +436,7 @@ namespace
                     {
                         const OUString sQuote = xMetaData->getIdentifierQuoteString();
                         OUString sQuotedName  = ::dbtools::quoteName(sQuote,_rName);
-                        OUString sComposedName;
-                        sComposedName = composeTableNameForSelect(_xConnection, getString( _aCatalog ), _aSchema, _aTable );
+                        OUString sComposedName = composeTableNameForSelect(_xConnection, getString( _aCatalog ), _aSchema, _aTable );
 
                         ColumnInformationMap aInfo(_bCase);
                         collectColumnInformation(_xConnection,sComposedName,sQuotedName,aInfo);
@@ -538,8 +537,7 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
         return xProp;
 
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-    Any aCatalog;
-    aCatalog = _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME));
+    Any aCatalog = _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME));
     OUString sCatalog;
     aCatalog >>= sCatalog;
 

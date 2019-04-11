@@ -116,8 +116,7 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
 
                     if (m_options.count("-T") > 0)
                     {
-                        OString tmp(m_options["-T"]);
-                        tmp = tmp + ";" + s;
+                        OString tmp = m_options["-T"] + ";" + s;
                         m_options["-T"] = tmp;
                     } else
                     {
