@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f91af0f_1f6c0307",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-11T09:56:56Z",
+      "side": 1,
+      "message": "the if(pRsetT) check was meant to be added back unconditionally; it is orthogonal to the conditional-interface-wideness-change--related assert(!this-\u003epT)",
+      "revId": "c5a131c1f3fa51cb68d52b59aff1dc1b4a0be7a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
