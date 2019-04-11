@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9f91af0f_62757898",
+        "filename": "configure.ac",
+        "patchSetId": 30
+      },
+      "lineNbr": 3328,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-04-11T11:25:43Z",
+      "side": 1,
+      "message": "is there a string value in the registry that is \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\\" ?\n\nthen use the corresponding key :)\n\ni believe regedit.exe can search for values.\n\nif there is situation didn\u0027t change between Preview and Release, then i guess you can remove the Preview wording.",
+      "parentUuid": "9f91af0f_df877bb6",
+      "revId": "083d46de7bc1211c015d38e720d40af2ae725ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f91af0f_bfe07798",
         "filename": "configure.ac",
         "patchSetId": 30
