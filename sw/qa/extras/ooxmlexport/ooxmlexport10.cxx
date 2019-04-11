@@ -694,11 +694,19 @@ DECLARE_OOXMLEXPORT_TEST(testFootnote, "footnote.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTableBtlrCenter, "table-btlr-center.docx")
 {
+    // Note that this is btLr text, so layout and doc model horizontal/vertical is the opposite of
+    // each other.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    // Cell vertical alignment was NONE, should be CENTER.
-    CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER, getProperty<sal_Int16>(xTable->getCellByName("A2"), "VertOrient"));
+    uno::Reference<table::XCell> xCell = xTable->getCellByName("A2");
+    // Cell vertical alignment was CENTER, should be NONE.
+    CPPUNIT_ASSERT_EQUAL(text::VertOrientation::NONE, getProperty<sal_Int16>(xCell, "VertOrient"));
+
+    // Cell horizontal alignment should be CENTER.
+    uno::Reference<text::XText> xCellText(xCell, uno::UNO_QUERY);
+    auto nActual = getProperty<sal_Int32>(getParagraphOfText(1, xCellText), "ParaAdjust");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(style::ParagraphAdjust_CENTER), nActual);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo80555, "fdo80555.docx")
