@@ -26,7 +26,6 @@ namespace Item
     {
     public:
         static ItemControlBlock& GetStaticItemControlBlock();
-        virtual ItemControlBlock& GetItemControlBlock() const override;
 
     private:
         // local variavbles
@@ -34,7 +33,9 @@ namespace Item
 
     protected:
         // SharedPtr-constructor - protected BY DEFAULT - do NOT CHANGE (!)
-        CntOUString(const rtl::OUString& rValue = rtl::OUString());
+        CntOUString(
+            ItemControlBlock& rItemControlBlock,
+            const rtl::OUString& rValue = rtl::OUString());
 
     public:
         virtual ~CntOUString();

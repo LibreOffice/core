@@ -47,7 +47,6 @@ namespace Item
     {
     public:
         static ::Item::ItemControlBlock& GetStaticItemControlBlock();
-        virtual ::Item::ItemControlBlock& GetItemControlBlock() const override;
 
     private:
         const ScriptDocument    m_aDocument;
@@ -58,6 +57,7 @@ namespace Item
 
     protected:
         Sbx(
+            ::Item::ItemControlBlock& rItemControlBlock,
             const ScriptDocument* pDocument = nullptr,
             const OUString& aLibName = OUString(),
             const OUString& aName = OUString(),

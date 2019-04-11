@@ -22,7 +22,7 @@
 
 #include <cassert>
 #include <item/base/ModelSpecificItemValues.hxx>
-#include <item/base/ItemControlBlock.hxx>
+//#include <item/base/ItemControlBlock.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 

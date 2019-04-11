@@ -33,14 +33,15 @@ namespace Item
     class ITEM_DLLPUBLIC ItemControlBlock
     {
     private:
-        std::shared_ptr<ItemAdministrator>      m_aItemAdministrator;
-        const std::shared_ptr<const ItemBase>   m_aDefaultItem;
-        std::function<ItemBase*()>              m_aConstructItem;
+        std::shared_ptr<ItemAdministrator>  m_aItemAdministrator;
+        std::shared_ptr<const ItemBase>     m_aDefaultItem;
+        std::function<ItemBase*()>          m_aConstructDefaultItem;
+        std::function<ItemBase*()>          m_aConstructItem;
 
     public:
         ItemControlBlock(
             const std::shared_ptr<ItemAdministrator>& rItemAdministrator,
-            const std::shared_ptr<const ItemBase>& rDefaultItem,
+            std::function<ItemBase*()>constructDefaultItem,
             std::function<ItemBase*()>constructItem);
         ItemControlBlock();
 
@@ -49,10 +50,7 @@ namespace Item
             return m_aItemAdministrator;
         }
 
-        const std::shared_ptr<const ItemBase>& GetDefaultItem() const
-        {
-            return m_aDefaultItem;
-        }
+        const std::shared_ptr<const ItemBase>& GetDefaultItem() const;
 
         ItemBase* ConstructItem() const
         {
@@ -60,7 +58,7 @@ namespace Item
         }
 
         std::shared_ptr<const ItemBase> CreateFromAny(const ItemBase::AnyIDArgs& rArgs);
-        bool IsDefaultDDD(const ItemBase& rItem) const;
+        bool IsDefault(const ItemBase& rItem) const;
     };
 } // end of namespace Item
 

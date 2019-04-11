@@ -16,21 +16,32 @@ namespace Item
 {
     ItemControlBlock::ItemControlBlock(
         const std::shared_ptr<ItemAdministrator>& rItemAdministrator,
-        const std::shared_ptr<const ItemBase>& rDefaultItem,
+        std::function<ItemBase*()>constructDefaultItem,
         std::function<ItemBase*()>constructItem)
     :   m_aItemAdministrator(rItemAdministrator),
-        m_aDefaultItem(rDefaultItem),
+        m_aDefaultItem(),
+        m_aConstructDefaultItem(constructDefaultItem),
         m_aConstructItem(constructItem)
     {
         assert(rItemAdministrator && "nullptr not allowed, an ItemAdministrator *is* required (!)");
-        assert(rDefaultItem && "nullptr not allowed, a default value *is* required (!)");
     }
 
     ItemControlBlock::ItemControlBlock()
     :   m_aItemAdministrator(),
         m_aDefaultItem(),
+        m_aConstructDefaultItem(),
         m_aConstructItem()
     {
+    }
+
+    const std::shared_ptr<const ItemBase>& ItemControlBlock::GetDefaultItem() const
+    {
+        if(!m_aDefaultItem)
+        {
+            const_cast<ItemControlBlock*>(this)->m_aDefaultItem.reset(m_aConstructDefaultItem());
+        }
+
+        return m_aDefaultItem;
     }
 
     std::shared_ptr<const ItemBase> ItemControlBlock::CreateFromAny(const ItemBase::AnyIDArgs& rArgs)
@@ -40,11 +51,10 @@ namespace Item
         return std::shared_ptr<const ItemBase>(pNewInstance);
     }
 
-    bool ItemControlBlock::IsDefaultDDD(const ItemBase& rItem) const
+    bool ItemControlBlock::IsDefault(const ItemBase& rItem) const
     {
-        assert(nullptr != m_aDefaultItem.get() && "empty DefaultItem detected - not allowed (!)");
-        assert(typeid(rItem) == typeid(*m_aDefaultItem) && "different types compared - not allowed (!)");
-        return &rItem == m_aDefaultItem.get() || rItem.operator==(*m_aDefaultItem.get());
+        assert(typeid(rItem) == typeid(*GetDefaultItem()) && "different types compared - not allowed (!)");
+        return &rItem == GetDefaultItem().get() || rItem.operator==(*GetDefaultItem().get());
     }
 } // end of namespace Item
 

@@ -98,6 +98,12 @@ namespace Item
         typedef std::vector<AnyIDPair> AnyIDArgs;
 
     private:
+        // local reference to instance of ItemControlBlock for this
+        // incarnation - same as type::GetStaticItemControlBlock(), but
+        // this way accessible for all incarnations - at the cost of
+        // one local reference
+        ItemControlBlock& m_rItemControlBlock;
+
         // flag to mark this instance being administared by an
         // ItemAdministrator. Not urgently needed due to also being
         // able to check being administrated in the HintExpired
@@ -106,15 +112,11 @@ namespace Item
         // administrated it is not necessary to do that check
         // if it is administrated which means a 'find' access
         // to a kind of list which may have varying costs...
-        bool        m_bAdministrated;
+        bool m_bAdministrated;
 
         // needed to allow access for ItemAdministrator to m_bAdministrated,
         // but limited to a single local method in the implementation there
         friend void SetAdministratedFromItemAdministrator(ItemBase& rIBase);
-
-    public:
-        static ItemControlBlock& GetStaticItemControlBlock();
-        virtual ItemControlBlock& GetItemControlBlock() const;
 
     protected:
         // constructor - protected BY DEFAULT - do NOT CHANGE (!)
@@ -122,7 +124,7 @@ namespace Item
         // Note: Every derivation *needs* an empty constructor to
         // allow unified created static methods like CreateFromAny
         // to create instances
-        ItemBase();
+        ItemBase(ItemControlBlock& rItemControlBlock);
 
         // PutValue/Any interface for automated instance creation from SfxType
         // mechanism (UNO API and sfx2 stuff)

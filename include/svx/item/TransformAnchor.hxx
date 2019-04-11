@@ -21,10 +21,11 @@ namespace Item
     {
     public:
         static ItemControlBlock& GetStaticItemControlBlock();
-        virtual ItemControlBlock& GetItemControlBlock() const override;
 
     protected:
-        TransformAnchor(RndStdIds nValue = RndStdIds::UNKNOWN);
+        TransformAnchor(
+            ItemControlBlock& rItemControlBlock,
+            RndStdIds nValue = RndStdIds::UNKNOWN);
 
     public:
         static std::shared_ptr<const TransformAnchor> Create(RndStdIds nValue);

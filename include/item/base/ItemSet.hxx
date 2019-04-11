@@ -21,6 +21,7 @@
 #define INCLUDED_ITEM_BASE_ITEMSET_HXX
 
 #include <item/base/ModelSpecificItemValues.hxx>
+#include <item/base/ItemControlBlock.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -215,16 +216,20 @@ namespace Item
         // SfxItemState::DONTCARE -> IsInvalidItem -> pItem == INVALID_POOL_ITEM -> reinterpret_cast<SfxPoolItem*>(-1)
         class ImplInvalidateItem : public ItemBase
         {
+        private:
+            ItemControlBlock m_aItemControlBlock;
         public:
-            ImplInvalidateItem() = default;
+            ImplInvalidateItem() : ItemBase(m_aItemControlBlock), m_aItemControlBlock() {}
         };
 
         // helper class for a ImplDisableItem - placeholder for InvaidateState
         // SfxItemState::DISABLED -> IsVoidItem() -> instance of SfxVoidItem, virtual bool IsVoidItem()
         class ImplDisableItem : public ItemBase
         {
+        private:
+            ItemControlBlock m_aItemControlBlock;
         public:
-            ImplDisableItem() = default;
+            ImplDisableItem() : ItemBase(m_aItemControlBlock), m_aItemControlBlock() {}
         };
 
         // the Parent of this ItemSet

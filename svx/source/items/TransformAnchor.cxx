@@ -19,19 +19,18 @@ namespace Item
     {
         static ItemControlBlock aItemControlBlock(
             CntInt16::GetStaticItemControlBlock().GetItemAdministrator(),
-            std::shared_ptr<const ItemBase>(new TransformAnchor()),
-            [](){ return new TransformAnchor(); });
+            [](){ return new TransformAnchor(TransformAnchor::GetStaticItemControlBlock()); },
+            [](){ return new TransformAnchor(TransformAnchor::GetStaticItemControlBlock()); });
 
         return aItemControlBlock;
     }
 
-    ItemControlBlock& TransformAnchor::GetItemControlBlock() const
-    {
-        return TransformAnchor::GetStaticItemControlBlock();
-    }
-
-    TransformAnchor::TransformAnchor(RndStdIds nValue)
-    :   CntInt16(static_cast<sal_Int16>(nValue))
+    TransformAnchor::TransformAnchor(
+        ItemControlBlock& rItemControlBlock,
+        RndStdIds nValue)
+    :   CntInt16(
+            rItemControlBlock,
+            static_cast<sal_Int16>(nValue))
     {
     }
 
@@ -43,7 +42,9 @@ namespace Item
         // - detectiomn of new use - will create shared_ptr for local incarnation and buffer
         return std::static_pointer_cast<const TransformAnchor>(
             TransformAnchor::GetStaticItemControlBlock().GetItemAdministrator()->Create(
-                new TransformAnchor(nValue)));
+                new TransformAnchor(
+                    TransformAnchor::GetStaticItemControlBlock(),
+                    nValue)));
     }
 } // end of namespace Item
 

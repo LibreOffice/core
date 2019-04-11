@@ -33,24 +33,21 @@ namespace Item
         {
             static ItemControlBlock aItemControlBlock(
                 std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
-                std::shared_ptr<const ItemBase>(new MultiValueAB()),
-                [](){ return new MultiValueAB(); });
+                [](){ return new MultiValueAB(MultiValueAB::GetStaticItemControlBlock()); },
+                [](){ return new MultiValueAB(MultiValueAB::GetStaticItemControlBlock()); });
 
             return aItemControlBlock;
         }
 
-        virtual ItemControlBlock& MultiValueAB::GetItemControlBlock() const override
-        {
-            return MultiValueAB::GetStaticItemControlBlock();
-        }
-
-    private:
         sal_Int16 m_nValueA;
         sal_Int32 m_nValueB;
 
     protected:
-        MultiValueAB(sal_Int16 nValueA = 0, sal_Int16 nValueB = 0)
-        :   ItemBase(),
+        MultiValueAB(
+            ItemControlBlock& rItemControlBlock,
+            sal_Int16 nValueA = 0,
+            sal_Int16 nValueB = 0)
+        :   ItemBase(rItemControlBlock),
             m_nValueA(nValueA),
             m_nValueB(nValueB)
         {
@@ -73,7 +70,10 @@ namespace Item
             // - detectiomn of new use - will create shared_ptr for local incarnation and buffer
             return std::static_pointer_cast<const MultiValueAB>(
                 MultiValueAB::GetStaticItemControlBlock().GetItemAdministrator()->Create(
-                    new MultiValueAB(nValueA, nValueB)));
+                    new MultiValueAB(
+                        MultiValueAB::GetStaticItemControlBlock(),
+                        nValueA,
+                        nValueB)));
         }
 
         virtual bool operator==(const ItemBase& rCandidate) const override
@@ -120,23 +120,24 @@ namespace Item
         {
             static ItemControlBlock aItemControlBlock(
                 std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
-                std::shared_ptr<const ItemBase>(new MultiValueABC()),
-                [](){ return new MultiValueABC(); });
+                [](){ return new MultiValueABC(MultiValueABC::GetStaticItemControlBlock()); },
+                [](){ return new MultiValueABC(MultiValueABC::GetStaticItemControlBlock()); });
 
             return aItemControlBlock;
         }
 
-        virtual ItemControlBlock& MultiValueABC::GetItemControlBlock() const override
-        {
-            return MultiValueABC::GetStaticItemControlBlock();
-        }
-
-    private:
         sal_Int64 m_nValueC;
 
     protected:
-        MultiValueABC(sal_Int16 nValueA = 0, sal_Int16 nValueB = 0, sal_Int16 nValueC = 0)
-        :   MultiValueAB(nValueA, nValueB),
+        MultiValueABC(
+            ItemControlBlock& rItemControlBlock,
+            sal_Int16 nValueA = 0,
+            sal_Int16 nValueB = 0,
+            sal_Int16 nValueC = 0)
+        :   MultiValueAB(
+                rItemControlBlock,
+                nValueA,
+                nValueB),
             m_nValueC(nValueC)
         {
         }
@@ -158,7 +159,11 @@ namespace Item
             // - detectiomn of new use - will create shared_ptr for local incarnation and buffer
             return std::static_pointer_cast<const MultiValueABC>(
                 MultiValueABC::GetStaticItemControlBlock().GetItemAdministrator()->Create(
-                    new MultiValueABC(nValueA, nValueB, nValueC)));
+                    new MultiValueABC(
+                        MultiValueABC::GetStaticItemControlBlock(),
+                        nValueA,
+                        nValueB,
+                        nValueC)));
         }
 
         virtual bool operator==(const ItemBase& rCandidate) const override
@@ -186,41 +191,87 @@ namespace Item
 
 namespace Item
 {
-    // example for Item deived from existing ojne, only new type
-    class MultiValueAB_Alternative : public MultiValueAB
+    // example for Item deived from existing one, only new type
+    class MultiValueABD : public MultiValueAB
     {
     public:
-        static ItemControlBlock& GetStaticItemControlBlock()
+        static ItemControlBlock& MultiValueABD::GetStaticItemControlBlock()
         {
             static ItemControlBlock aItemControlBlock(
-                MultiValueAB::GetStaticItemControlBlock().GetItemAdministrator(),
-                std::shared_ptr<const ItemBase>(new MultiValueAB_Alternative()),
-                [](){ return new MultiValueAB_Alternative(); });
+                std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
+                [](){ return new MultiValueABD(MultiValueABD::GetStaticItemControlBlock()); },
+                [](){ return new MultiValueABD(MultiValueABD::GetStaticItemControlBlock()); });
 
             return aItemControlBlock;
         }
 
-        virtual ItemControlBlock& GetItemControlBlock() const override
-        {
-            return MultiValueAB_Alternative::GetStaticItemControlBlock();
-        }
-
     protected:
-        MultiValueAB_Alternative(sal_Int16 nValueA = 0, sal_Int16 nValueB = 0)
-        :   MultiValueAB(nValueA, nValueB)
+        MultiValueABD(
+            ItemControlBlock& rItemControlBlock,
+            sal_Int16 nValueA = 0,
+            sal_Int16 nValueB = 0)
+        :   MultiValueAB(
+            rItemControlBlock,
+            nValueA,
+            nValueB)
         {
         }
 
     public:
-        static std::shared_ptr<const MultiValueAB_Alternative> Create(sal_Int16 nValueA, sal_Int16 nValueB)
+        static std::shared_ptr<const MultiValueABD> Create(sal_Int16 nValueA, sal_Int16 nValueB)
         {
-            // use ::Create(...) method with local incarnation, it will handle
-            // - detection of being default (will delete local incarnation)
-            // - detection of reuse (will delete local incarnation)
-            // - detectiomn of new use - will create shared_ptr for local incarnation and buffer
-            return std::static_pointer_cast<const MultiValueAB_Alternative>(
-                MultiValueAB_Alternative::GetStaticItemControlBlock().GetItemAdministrator()->Create(
-                    new MultiValueAB_Alternative(nValueA, nValueB)));
+            return std::static_pointer_cast<const MultiValueABD>(
+                MultiValueABD::GetStaticItemControlBlock().GetItemAdministrator()->Create(
+                    new MultiValueABD(
+                        MultiValueABD::GetStaticItemControlBlock(),
+                        nValueA,
+                        nValueB)));
+        }
+    };
+} // end of namespace Item
+
+///////////////////////////////////////////////////////////////////////////////
+
+namespace Item
+{
+    // example for Item deived from existing combined one, only new type
+    class MultiValueABCD : public MultiValueABC
+    {
+    public:
+        static ItemControlBlock& MultiValueABCD::GetStaticItemControlBlock()
+        {
+            static ItemControlBlock aItemControlBlock(
+                std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
+                [](){ return new MultiValueABCD(MultiValueABCD::GetStaticItemControlBlock()); },
+                [](){ return new MultiValueABCD(MultiValueABCD::GetStaticItemControlBlock()); });
+
+            return aItemControlBlock;
+        }
+
+    protected:
+        MultiValueABCD(
+            ItemControlBlock& rItemControlBlock,
+            sal_Int16 nValueA = 0,
+            sal_Int16 nValueB = 0,
+            sal_Int16 nValueC = 0)
+        :   MultiValueABC(
+            rItemControlBlock,
+            nValueA,
+            nValueB,
+            nValueC)
+        {
+        }
+
+    public:
+        static std::shared_ptr<const MultiValueABCD> Create(sal_Int16 nValueA, sal_Int16 nValueB, sal_Int16 nValueC)
+        {
+            return std::static_pointer_cast<const MultiValueABCD>(
+                MultiValueABCD::GetStaticItemControlBlock().GetItemAdministrator()->Create(
+                    new MultiValueABCD(
+                        MultiValueABCD::GetStaticItemControlBlock(),
+                        nValueA,
+                        nValueB,
+                        nValueC)));
         }
     };
 } // end of namespace Item
@@ -233,7 +284,7 @@ namespace Item
     {
     private:
     public:
-        void checkMultiValue()
+        void checkMultiValueAB()
         {
             // make direct use of local MultiValueAB item
 
@@ -303,7 +354,7 @@ namespace Item
             test.clear();
         }
 
-        void checkMultiValueDerived()
+        void checkMultiValueABC()
         {
             // make direct use of local MultiValueABC item
             int nIncrement(0);
@@ -358,43 +409,43 @@ namespace Item
             testx.clear();
         }
 
-        void checkMultiValueAlternative()
+        void checkMultiValueABD()
         {
             int nIncrement(0);
             const sal_uInt32 nLoopNumber(50);
-            std::shared_ptr<const MultiValueAB_Alternative> mhas3_A(MultiValueAB_Alternative::Create(5,2));
+            std::shared_ptr<const MultiValueABD> mhas3_A(MultiValueABD::Create(5,2));
 
-            if(ItemBase::IsDefault(MultiValueAB_Alternative::Create(3,0)))
+            if(ItemBase::IsDefault(MultiValueABD::Create(3,0)))
             {
                 nIncrement++;
             }
 
-            if(ItemBase::IsDefault(MultiValueAB_Alternative::Create(8,7)))
+            if(ItemBase::IsDefault(MultiValueABD::Create(8,7)))
             {
                 nIncrement++;
             }
 
-            if(ItemBase::IsDefault(ItemBase::GetDefault<MultiValueAB_Alternative>()))
+            if(ItemBase::IsDefault(ItemBase::GetDefault<MultiValueABD>()))
             {
                 nIncrement++;
             }
 
-            std::vector<std::shared_ptr<const MultiValueAB_Alternative>> testAB_A;
+            std::vector<std::shared_ptr<const MultiValueABD>> testAB_A;
 
             for(sal_uInt32 aloop(0); aloop < nLoopNumber; aloop++)
             {
-                testAB_A.push_back(MultiValueAB_Alternative::Create(aloop+1, (aloop+1)*2));
+                testAB_A.push_back(MultiValueABD::Create(aloop+1, (aloop+1)*2));
             }
 
-            std::shared_ptr<const MultiValueAB_Alternative> testA_A(MultiValueAB_Alternative::Create(2,4));
-            std::shared_ptr<const MultiValueAB_Alternative> testB_A(MultiValueAB_Alternative::Create(2,3));
+            std::shared_ptr<const MultiValueABD> testA_A(MultiValueABD::Create(2,4));
+            std::shared_ptr<const MultiValueABD> testB_A(MultiValueABD::Create(2,3));
 
             for(sal_uInt32 dloop(0); dloop < nLoopNumber; dloop+=2)
             {
                 testAB_A[dloop] = nullptr;
                 if(dloop%5)
                 {
-                    testAB_A.push_back(MultiValueAB_Alternative::Create(dloop+1, (dloop+1)*2));
+                    testAB_A.push_back(MultiValueABD::Create(dloop+1, (dloop+1)*2));
                 }
             }
 
@@ -403,41 +454,175 @@ namespace Item
                 testAB_A[eloop] = nullptr;
                 if(eloop%7)
                 {
-                    testAB_A.push_back(MultiValueAB_Alternative::Create(eloop+1, (eloop+1)*2));
+                    testAB_A.push_back(MultiValueABD::Create(eloop+1, (eloop+1)*2));
                 }
             }
 
             testAB_A.clear();
         }
 
-        void checkMultiValueAtISet()
+        void checkMultiValueABCD()
+        {
+            int nIncrement(0);
+            const sal_uInt32 nLoopNumber(50);
+            std::shared_ptr<const MultiValueABCD> mhas3_A(MultiValueABCD::Create(5,2, 3));
+
+            if(ItemBase::IsDefault(MultiValueABCD::Create(3,0, 4)))
+            {
+                nIncrement++;
+            }
+
+            if(ItemBase::IsDefault(MultiValueABCD::Create(8,7,2)))
+            {
+                nIncrement++;
+            }
+
+            if(ItemBase::IsDefault(ItemBase::GetDefault<MultiValueABCD>()))
+            {
+                nIncrement++;
+            }
+
+            std::vector<std::shared_ptr<const MultiValueABCD>> testAB_A;
+
+            for(sal_uInt32 aloop(0); aloop < nLoopNumber; aloop++)
+            {
+                testAB_A.push_back(MultiValueABCD::Create(aloop+1, (aloop+1)*2, (aloop+1)*5));
+            }
+
+            std::shared_ptr<const MultiValueABCD> testA_A(MultiValueABCD::Create(2,4,7));
+            std::shared_ptr<const MultiValueABCD> testB_A(MultiValueABCD::Create(2,3,3));
+
+            for(sal_uInt32 dloop(0); dloop < nLoopNumber; dloop+=2)
+            {
+                testAB_A[dloop] = nullptr;
+                if(dloop%5)
+                {
+                    testAB_A.push_back(MultiValueABCD::Create(dloop+1, (dloop+1)*2, (dloop+1)*6));
+                }
+            }
+
+            for(sal_uInt32 eloop(1); eloop < (nLoopNumber * 2) / 3; eloop+=2)
+            {
+                testAB_A[eloop] = nullptr;
+                if(eloop%7)
+                {
+                    testAB_A.push_back(MultiValueABCD::Create(eloop+1, (eloop+1)*2, (eloop+1)*3));
+                }
+            }
+
+            testAB_A.clear();
+        }
+
+        void checkMultiValuesAtISet()
         {
             int nIncrement(0);
 
             // make use of local MultiValueAB item in conjuction with ItemSet
             ModelSpecificItemValues::SharedPtr aModelSpecificIValues(ModelSpecificItemValues::Create());
             ItemSet::SharedPtr aSet(ItemSet::Create(aModelSpecificIValues));
-            aSet->SetItem(MultiValueAB::Create(5,4));
 
-            if(const auto Item(aSet->GetStateAndItem<const MultiValueAB>()); Item.IsSet())
+            ///////////////////////////////////////////////////////////////////////////////
+
+            std::shared_ptr<const MultiValueAB> testAB(MultiValueAB::Create(2,4));
+            std::shared_ptr<const MultiValueABC> testABC(MultiValueABC::Create(2,4,6));
+            std::shared_ptr<const MultiValueABD> testABD(MultiValueABD::Create(2,4));
+            std::shared_ptr<const MultiValueABCD> testABCD(MultiValueABCD::Create(2,4,6));
+
+            aSet->SetItem(testAB);
+            aSet->SetItem(testABC);
+            aSet->SetItem(testABD);
+            aSet->SetItem(testABCD);
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            if(const auto ItemAB(aSet->GetStateAndItem<const MultiValueAB>()); ItemAB.IsSet())
             {
-                nIncrement += (ItemSet::IState::SET == Item.GetIState()) ? 1 : 0;
-                nIncrement += (Item.GetItem()) ? 1 : 0;
-                nIncrement += (nullptr != Item.GetItemInstance()) ? 1 : 0;
-                nIncrement += Item.HasItem();
-                nIncrement += Item.IsDisabled();
+                nIncrement += (ItemSet::IState::SET == ItemAB.GetIState()) ? 1 : 0;
+                nIncrement += (ItemAB.GetItem()) ? 1 : 0;
+                nIncrement += (nullptr != ItemAB.GetItemInstance()) ? 1 : 0;
+                nIncrement += ItemAB.HasItem();
+                nIncrement += ItemAB.IsDisabled();
             }
-            else if(Item.IsDefault())
+            else if(ItemAB.IsDefault())
             {
-                nIncrement += Item.IsDisabled();
+                nIncrement += ItemAB.IsDisabled();
             }
-            else if(Item.IsDontCare())
+            else if(ItemAB.IsDontCare())
             {
-                nIncrement += Item.IsDisabled();
+                nIncrement += ItemAB.IsDisabled();
             }
             else
             {
-                nIncrement += Item.IsDisabled();
+                nIncrement += ItemAB.IsDisabled();
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            if(const auto ItemABC(aSet->GetStateAndItem<const MultiValueABC>()); ItemABC.IsSet())
+            {
+                nIncrement += (ItemSet::IState::SET == ItemABC.GetIState()) ? 1 : 0;
+                nIncrement += (ItemABC.GetItem()) ? 1 : 0;
+                nIncrement += (nullptr != ItemABC.GetItemInstance()) ? 1 : 0;
+                nIncrement += ItemABC.HasItem();
+                nIncrement += ItemABC.IsDisabled();
+            }
+            else if(ItemABC.IsDefault())
+            {
+                nIncrement += ItemABC.IsDisabled();
+            }
+            else if(ItemABC.IsDontCare())
+            {
+                nIncrement += ItemABC.IsDisabled();
+            }
+            else
+            {
+                nIncrement += ItemABC.IsDisabled();
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            if(const auto ItemABD(aSet->GetStateAndItem<const MultiValueABD>()); ItemABD.IsSet())
+            {
+                nIncrement += (ItemSet::IState::SET == ItemABD.GetIState()) ? 1 : 0;
+                nIncrement += (ItemABD.GetItem()) ? 1 : 0;
+                nIncrement += (nullptr != ItemABD.GetItemInstance()) ? 1 : 0;
+                nIncrement += ItemABD.HasItem();
+                nIncrement += ItemABD.IsDisabled();
+            }
+            else if(ItemABD.IsDefault())
+            {
+                nIncrement += ItemABD.IsDisabled();
+            }
+            else if(ItemABD.IsDontCare())
+            {
+                nIncrement += ItemABD.IsDisabled();
+            }
+            else
+            {
+                nIncrement += ItemABD.IsDisabled();
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            if(const auto ItemABCD(aSet->GetStateAndItem<const MultiValueABCD>()); ItemABCD.IsSet())
+            {
+                nIncrement += (ItemSet::IState::SET == ItemABCD.GetIState()) ? 1 : 0;
+                nIncrement += (ItemABCD.GetItem()) ? 1 : 0;
+                nIncrement += (nullptr != ItemABCD.GetItemInstance()) ? 1 : 0;
+                nIncrement += ItemABCD.HasItem();
+                nIncrement += ItemABCD.IsDisabled();
+            }
+            else if(ItemABCD.IsDefault())
+            {
+                nIncrement += ItemABCD.IsDisabled();
+            }
+            else if(ItemABCD.IsDontCare())
+            {
+                nIncrement += ItemABCD.IsDisabled();
+            }
+            else
+            {
+                nIncrement += ItemABCD.IsDisabled();
             }
 
             // CPPUNIT_ASSERT_EQUAL_MESSAGE("simple range rounding from double to integer",
@@ -603,10 +788,11 @@ namespace Item
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(ibase);
-        CPPUNIT_TEST(checkMultiValue);
-        CPPUNIT_TEST(checkMultiValueDerived);
-        CPPUNIT_TEST(checkMultiValueAlternative);
-        CPPUNIT_TEST(checkMultiValueAtISet);
+        CPPUNIT_TEST(checkMultiValueAB);
+        CPPUNIT_TEST(checkMultiValueABC);
+        CPPUNIT_TEST(checkMultiValueABD);
+        CPPUNIT_TEST(checkMultiValueABCD);
+        CPPUNIT_TEST(checkMultiValuesAtISet);
         CPPUNIT_TEST(checkSimpleItems);
         CPPUNIT_TEST(checkSimpleItemsAtISet);
         CPPUNIT_TEST_SUITE_END();

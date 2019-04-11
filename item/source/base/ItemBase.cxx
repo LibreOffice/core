@@ -209,24 +209,9 @@ class SW_DLLPUBLIC SwPaMItem : public SfxPoolItem
 
 namespace Item
 {
-    ItemControlBlock& ItemBase::GetStaticItemControlBlock()
-    {
-        assert(false && "ItemBase::GetItemControlBlock call not allowed (!)");
-        static ItemControlBlock aItemControlBlock(
-            std::shared_ptr<ItemAdministrator>(),
-            std::shared_ptr<const ItemBase>(),
-            [](){ return nullptr; });
-
-        return aItemControlBlock;
-    }
-
-    ItemControlBlock& ItemBase::GetItemControlBlock() const
-    {
-        return ItemBase::GetStaticItemControlBlock();
-    }
-
-    ItemBase::ItemBase()
+    ItemBase::ItemBase(ItemControlBlock& rItemControlBlock)
     :   std::enable_shared_from_this<ItemBase>(),
+        m_rItemControlBlock(rItemControlBlock),
         m_bAdministrated(false)
     {
     }
@@ -249,7 +234,7 @@ namespace Item
     {
         if(IsAdministrated())
         {
-            GetItemControlBlock().GetItemAdministrator()->HintExpired(this);
+            m_rItemControlBlock.GetItemAdministrator()->HintExpired(this);
         }
     }
 
@@ -282,19 +267,19 @@ namespace Item
     bool ItemBase::IsDefault() const
     {
         // callback to ItemControlBlock
-        return GetItemControlBlock().IsDefaultDDD(*this);
+        return m_rItemControlBlock.IsDefault(*this);
     }
 
     const std::shared_ptr<const ItemBase>& ItemBase::GetDefault() const
     {
         // callback to ItemControlBlock
-        assert(GetItemControlBlock().GetDefaultItem() && "empty DefaultItem detected - not allowed (!)");
-        return GetItemControlBlock().GetDefaultItem();
+        assert(m_rItemControlBlock.GetDefaultItem() && "empty DefaultItem detected - not allowed (!)");
+        return m_rItemControlBlock.GetDefaultItem();
     }
 
     bool ItemBase::IsDefault(const std::shared_ptr<const ItemBase>& rCandidate)
     {
-        return rCandidate && rCandidate->GetItemControlBlock().IsDefaultDDD(*rCandidate);
+        return rCandidate && rCandidate->m_rItemControlBlock.IsDefault(*rCandidate);
     }
 } // end of namespace Item
 

@@ -20,12 +20,10 @@ namespace Item
     // It uses IAdministrator_set to provide an Administrator using
     // a sorted list for fast accesses. This requires ::operator< to be
     // implemented.
-
     class ITEM_DLLPUBLIC CntInt16 : public ItemBase
     {
     public:
         static ItemControlBlock& GetStaticItemControlBlock();
-        virtual ItemControlBlock& GetItemControlBlock() const override;
 
     private:
         // local variavbles
@@ -33,7 +31,9 @@ namespace Item
 
     protected:
         // SharedPtr-constructor - protected BY DEFAULT - do NOT CHANGE (!)
-        CntInt16(sal_Int16 nValue = 0);
+        CntInt16(
+            ItemControlBlock& rItemControlBlock,
+            sal_Int16 nValue = 0);
 
     public:
         virtual ~CntInt16();

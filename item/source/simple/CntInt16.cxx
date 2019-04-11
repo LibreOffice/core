@@ -20,19 +20,16 @@ namespace Item
     {
         static ItemControlBlock aItemControlBlock(
             std::shared_ptr<ItemAdministrator>(new IAdministrator_set()),
-            std::shared_ptr<const ItemBase>(new CntInt16()),
-            [](){ return new CntInt16(); });
+            [](){ return new CntInt16(CntInt16::GetStaticItemControlBlock()); },
+            [](){ return new CntInt16(CntInt16::GetStaticItemControlBlock()); });
 
         return aItemControlBlock;
     }
 
-    ItemControlBlock& CntInt16::GetItemControlBlock() const
-    {
-        return CntInt16::GetStaticItemControlBlock();
-    }
-
-    CntInt16::CntInt16(sal_Int16 nValue)
-    :   ItemBase(),
+    CntInt16::CntInt16(
+        ItemControlBlock& rItemControlBlock,
+        sal_Int16 nValue)
+    :   ItemBase(rItemControlBlock),
         m_nValue(nValue)
     {
     }
@@ -53,7 +50,9 @@ namespace Item
         // - detectiomn of new use - will create shared_ptr for local incarnation and buffer
         return std::static_pointer_cast<const CntInt16>(
             CntInt16::GetStaticItemControlBlock().GetItemAdministrator()->Create(
-                new CntInt16(nValue)));
+                new CntInt16(
+                    CntInt16::GetStaticItemControlBlock(),
+                    nValue)));
     }
 
     bool CntInt16::operator==(const ItemBase& rCandidate) const

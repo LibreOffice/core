@@ -30,19 +30,20 @@ namespace Item
     {
         static ::Item::ItemControlBlock aItemControlBlock(
             std::shared_ptr<::Item::ItemAdministrator>(new ::Item::IAdministrator_vector()),
-            std::shared_ptr<const ::Item::ItemBase>(new Sbx()),
-            [](){ return new Sbx(); });
+            [](){ return new Sbx(Sbx::GetStaticItemControlBlock()); },
+            [](){ return new Sbx(Sbx::GetStaticItemControlBlock()); });
 
         return aItemControlBlock;
     }
 
-    ::Item::ItemControlBlock& Sbx::GetItemControlBlock() const
-    {
-        return Sbx::GetStaticItemControlBlock();
-    }
-
-    Sbx::Sbx(const ScriptDocument* pDocument, const OUString& aLibName, const OUString& aName, const OUString& aMethodName, ItemType eType)
-    :   ::Item::ItemBase(),
+    Sbx::Sbx(
+        ::Item::ItemControlBlock& rItemControlBlock,
+        const ScriptDocument* pDocument,
+        const OUString& aLibName,
+        const OUString& aName,
+        const OUString& aMethodName,
+        ItemType eType)
+    :   ::Item::ItemBase(rItemControlBlock),
         m_aDocument(nullptr != pDocument ? *pDocument : ScriptDocument::getApplicationScriptDocument()),
         m_aLibName(aLibName),
         m_aName(aName),
@@ -65,7 +66,13 @@ namespace Item
     {
         return std::static_pointer_cast<const Sbx>(
             Sbx::GetStaticItemControlBlock().GetItemAdministrator()->Create(
-                new Sbx(&rDocument, aLibName, aName, aMethodName, eType)));
+                new Sbx(
+                    Sbx::GetStaticItemControlBlock(),
+                    &rDocument,
+                    aLibName,
+                    aName,
+                    aMethodName,
+                    eType)));
     }
 
     bool Sbx::operator==(const ItemBase& rCandidate) const
