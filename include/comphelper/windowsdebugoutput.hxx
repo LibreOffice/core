@@ -295,8 +295,11 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
                 stream << *static_cast<double*>(rVariant.byref);
                 break; // FIXME
             case VT_BSTR:
-                stream << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(
-                    *static_cast<OLECHAR**>(rVariant.byref));
+                if (rVariant.bstrVal == nullptr)
+                    stream << "(null)";
+                else
+                    stream << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(
+                        *static_cast<OLECHAR**>(rVariant.byref));
                 break;
             case VT_DISPATCH:
                 stream << rVariant.byref;
