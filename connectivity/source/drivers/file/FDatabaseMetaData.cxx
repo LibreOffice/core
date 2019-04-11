@@ -202,8 +202,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     pInfo[ 0 ].Ascending   = true;
 
     Reference < XAnyCompareFactory > xFactory;
-    Reference< XDynamicResultSet > xDynamicResultSet;
-    xDynamicResultSet = xSRSFac->createSortedDynamicResultSet( xContent, aSortInfo, xFactory );
+    Reference< XDynamicResultSet > xDynamicResultSet = xSRSFac->createSortedDynamicResultSet( xContent, aSortInfo, xFactory );
     Reference<XResultSet> xResultSet = xDynamicResultSet->getStaticResultSet();
 
     Reference<XRow> xRow(xResultSet,UNO_QUERY);
