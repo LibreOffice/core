@@ -116,13 +116,9 @@ OutlineBulletDlg::OutlineBulletDlg(weld::Window* pParent, const SfxItemSet* pAtt
 
     SetInputSet(&m_aInputSet);
 
-    if (!m_bTitle)
-        AddTabPage("singlenum", RID_SVXPAGE_PICK_SINGLE_NUM);
-    else
+    if (m_bTitle)
         RemoveTabPage("singlenum");
 
-    AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET);
-    AddTabPage("graphics", RID_SVXPAGE_PICK_BMP);
     AddTabPage("customize", RID_SVXPAGE_NUM_OPTIONS);
     AddTabPage("position", RID_SVXPAGE_NUM_POSITION);
 }
