@@ -20,24 +20,22 @@
 #ifndef INCLUDED_AVMEDIA_MEDIAWINDOW_HXX
 #define INCLUDED_AVMEDIA_MEDIAWINDOW_HXX
 
-#include <memory>
 #include <vector>
 #include <tools/gen.hxx>
-#include <com/sun/star/media/ZoomLevel.hpp>
-#include <com/sun/star/media/XPlayer.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <vcl/bitmapex.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <vcl/vclptr.hxx>
 #include <avmedia/avmediadllapi.h>
 
 #define AVMEDIA_FRAMEGRABBER_DEFAULTFRAME -1.0
 
+namespace com::sun::star::graphic { class XGraphic; }
+namespace com::sun::star::media { class XPlayer; }
+
+namespace vcl { class Window; }
 namespace weld { class Window; }
 class KeyEvent;
 class MouseEvent;
 class CommandEvent;
-class PopupMenu;
 struct AcceptDropEvent;
 struct ExecuteDropEvent;
 enum class PointerStyle;
