@@ -38,8 +38,7 @@ namespace basegfx { namespace utils
                                sal_Int32(0)) * (1.0+fSpace);
         for( sal_Int32 i=0; i<aNum.getLength(); ++i )
         {
-            B2DPolyPolygon aCurr;
-            aCurr=createSevenSegmentPolyPolygon(aNum[i],
+            B2DPolyPolygon aCurr=createSevenSegmentPolyPolygon(aNum[i],
                                                 bLitSegments);
 
             aMat.identity();

@@ -2967,9 +2967,7 @@ void SfxLibrary::implSetModified( bool _bIsModified )
 // Methods XInterface
 Any SAL_CALL SfxLibrary::queryInterface( const Type& rType )
 {
-    Any aRet;
-
-    aRet =
+    Any aRet =
         ::cppu::queryInterface(
             rType,
             static_cast< XContainer * >( this ),

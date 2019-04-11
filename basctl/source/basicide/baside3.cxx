@@ -998,8 +998,7 @@ bool implImportDialog(weld::Window* pWin, const OUString& rCurPath, const Script
                 {
                     const std::shared_ptr<LocalizationMgr>& pCurMgr = pShell->GetCurLocalizationMgr();
 
-                    lang::Locale aFirstLocale;
-                    aFirstLocale = aOnlyInImportLanguages[0];
+                    lang::Locale aFirstLocale = aOnlyInImportLanguages[0];
                     if( nOnlyInImportLanguageCount > 1 )
                     {
                         // Check if import default belongs to only import languages and use it then
@@ -1244,8 +1243,7 @@ void DialogWindow::InitSettings()
 {
     // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    vcl::Font aFont;
-    aFont = rStyleSettings.GetFieldFont();
+    vcl::Font aFont = rStyleSettings.GetFieldFont();
     SetPointFont(*this, aFont);
 
     SetTextColor( rStyleSettings.GetFieldTextColor() );
