@@ -233,7 +233,7 @@ const char* TIPOFTHEDAY_STRINGARRAY[] =
     NC_("RID_CUI_TIPOFTHEDAY", "Search by default in several sheets, select them before you start the search"),
     NC_("RID_CUI_TIPOFTHEDAY", "Want to change spell checking for some part of the text? Click in the language zone of the status bar or better, apply a style"),
     NC_("RID_CUI_TIPOFTHEDAY", "You don't like the selection color ? Uncheck or modify Tools›Options›LibreOffice›View›Selection›Transparency"),
-    NC_("RID_CUI_TIPOFTHEDAY", "Calc: a date is a formated number of days since a date origin. An hour is a day divided by 24: noon = 0.5"),
+    NC_("RID_CUI_TIPOFTHEDAY", "Calc: a date is a formatted number of days since a date origin. An hour is a day divided by 24: noon = 0.5"),
     NC_("RID_CUI_TIPOFTHEDAY", "Need custom contents for metadata properties? File›Properties›Custom Properties tab lets you create what you want"),
     NC_("RID_CUI_TIPOFTHEDAY", "Customize›ToolbarModify›Change Icon›Import to use your icons for toolbars (only PNG file format and 16x16 or 26x26 pixels)"),
     NC_("RID_CUI_TIPOFTHEDAY", "Insert your metadata in your Writer document: Insert›Fields›Other›Document or DocInformation tabs"),
