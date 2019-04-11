@@ -837,18 +837,18 @@ void SfxItemPool::FillItemIdRanges_Impl( std::unique_ptr<sal_uInt16[]>& pWhichRa
 {
     DBG_ASSERT( !pImpl->mpPoolRanges, "GetFrozenRanges() would be faster!" );
 
-    const SfxItemPool *pPool;
+    std::vector< std::pair<sal_uInt16, sal_uInt16> > vec;
+    for( const SfxItemPool *pPool = this; pPool; pPool = pPool->pImpl->mpSecondary )
+        vec.emplace_back( pPool->pImpl->mnStart, pPool->pImpl->mnEnd );
+    // SfxItemSet wants the ranges sorted
+    std::sort(vec.begin(), vec.end());
+
+    pWhichRanges.reset(new sal_uInt16[ 2*vec.size() + 1 ]);
     sal_uInt16 nLevel = 0;
-    for( pPool = this; pPool; pPool = pPool->pImpl->mpSecondary )
-        ++nLevel;
-
-    pWhichRanges.reset(new sal_uInt16[ 2*nLevel + 1 ]);
-
-    nLevel = 0;
-    for( pPool = this; pPool; pPool = pPool->pImpl->mpSecondary )
+    for (auto const & rPair : vec)
     {
-        pWhichRanges[nLevel++] = pPool->pImpl->mnStart;
-        pWhichRanges[nLevel++] = pPool->pImpl->mnEnd;
+        pWhichRanges[nLevel++] = rPair.first;
+        pWhichRanges[nLevel++] = rPair.second;
         pWhichRanges[nLevel] = 0;
     }
 }
