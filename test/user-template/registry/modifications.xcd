@@ -19,6 +19,9 @@
     <prop oor:name="UseLocking">
       <value>false</value>
     </prop>
+    <prop oor:name="ShowTipOfTheDay">
+      <value>false</value>
+    </prop>
   </node>
   <node oor:name="Filter">
     <node oor:name="Graphic">
