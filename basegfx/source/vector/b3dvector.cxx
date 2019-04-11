@@ -48,8 +48,7 @@ namespace basegfx
 
     B3DVector B3DVector::getPerpendicular(const B3DVector& rNormalizedVec) const
     {
-        B3DVector aNew(*this);
-        aNew = cross(aNew, rNormalizedVec);
+        B3DVector aNew = cross(*this, rNormalizedVec);
         aNew.normalize();
         return aNew;
     }

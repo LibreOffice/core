@@ -3328,8 +3328,7 @@ SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
             {
                 try
                 {
-                    Any aAny;
-                    aAny = xField->get( aAny );
+                    Any aAny = xField->get( aAny );
 
                     // Convert to Sbx
                     pRes = new SbxVariable( SbxVARIANT );
@@ -3788,8 +3787,7 @@ void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet 
 
     if( xSbxObj.is() )
     {
-        OUString aMethodName = aPrefixName;
-        aMethodName = aMethodName + Event.MethodName;
+        OUString aMethodName = aPrefixName + Event.MethodName;
 
         SbxVariable * pP = xSbxObj.get();
         while( pP->GetParent() )

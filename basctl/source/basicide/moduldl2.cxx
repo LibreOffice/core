@@ -697,8 +697,7 @@ void LibPage::InsertLib()
 
     // filter
     OUString aTitle(IDEResId(RID_STR_BASIC));
-    OUString aFilter;
-    aFilter = "*.sbl;*.xlc;*.xlb"        // library files
+    OUString aFilter = "*.sbl;*.xlc;*.xlb"        // library files
               ";*.sdw;*.sxw;*.odt"       // text
               ";*.vor;*.stw;*.ott"       // text template
               ";*.sgl;*.sxg;*.odm"       // master document
@@ -1159,8 +1158,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
 
     // filter
     OUString aTitle(IDEResId(RID_STR_PACKAGE_BUNDLE));
-    OUString aFilter;
-    aFilter = "*.oxt" ;       // library files
+    OUString aFilter = "*.oxt" ;       // library files
     xFP->appendFilter( aTitle, aFilter );
 
     // set display directory and filter

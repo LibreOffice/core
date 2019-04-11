@@ -199,10 +199,7 @@ namespace accessibility
 
     Locale AccessibleListBoxEntry::implGetLocale()
     {
-        Locale aLocale;
-        aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
-
-        return aLocale;
+        return Application::GetSettings().GetUILanguageTag().getLocale();
     }
     void AccessibleListBoxEntry::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex )
     {
