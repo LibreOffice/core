@@ -1605,11 +1605,19 @@ bool ScModule::IsTableLocked()
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( m_nCurRefDlgId );
         if ( pChildWnd )
         {
-            IAnyRefDialog* pRefDlg(dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow()));
-            assert(pRefDlg);
-            if(pRefDlg)
+            if (pChildWnd->GetWindow())
             {
-                bLocked = pRefDlg->IsTableLocked();
+                IAnyRefDialog* pRefDlg(dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow()));
+                assert(pRefDlg);
+                if (pRefDlg)
+                    bLocked = pRefDlg->IsTableLocked();
+            }
+            if (pChildWnd->GetController())
+            {
+                IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetController().get());
+                assert(pRefDlg);
+                if (pRefDlg)
+                    bLocked = pRefDlg->IsTableLocked();
             }
         }
         else
@@ -1764,11 +1772,23 @@ void ScModule::AddRefEntry()
         OSL_ENSURE( pChildWnd, "NoChildWin" );
         if ( pChildWnd )
         {
-            IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
-            assert(pRefDlg);
-            if(pRefDlg)
+            if (pChildWnd->GetWindow())
             {
-                pRefDlg->AddRefEntry();
+                IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
+                assert(pRefDlg);
+                if (pRefDlg)
+                {
+                    pRefDlg->AddRefEntry();
+                }
+            }
+            if (pChildWnd->GetController())
+            {
+                IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetController().get());
+                assert(pRefDlg);
+                if (pRefDlg)
+                {
+                    pRefDlg->AddRefEntry();
+                }
             }
         }
     }

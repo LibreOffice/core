@@ -144,12 +144,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
 
     switch( nSlotId )
     {
-        case SID_DEFINE_COLROWNAMERANGES:
-        {
-            pResult = VclPtr<ScColRowNameRangesDlg>::Create( pB, pCW, pParent, &GetViewData() );
-        }
-        break;
-
         case SID_OPENDLG_CONSOLIDATE:
         {
             SfxItemSet aArgSet( GetPool(),
@@ -491,7 +485,10 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         }
         case SID_OPENDLG_EDIT_PRINTAREA:
             xResult.reset(new ScPrintAreasDlg(pB, pCW, pParent));
-        break;
+            break;
+        case SID_DEFINE_COLROWNAMERANGES:
+            xResult.reset(new ScColRowNameRangesDlg(pB, pCW, pParent, &GetViewData()));
+            break;
     }
 
     if (xResult)

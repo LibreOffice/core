@@ -199,11 +199,18 @@ void ScTabViewShell::Activate(bool bMDI)
             SfxChildWindow* pChildWnd = pThisFrame->GetChildWindow( nModRefDlgId );
             if ( pChildWnd )
             {
-                IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
-                assert(pRefDlg);
-                if(pRefDlg)
+                if (pChildWnd->GetWindow())
                 {
-                    pRefDlg->ViewShellChanged();
+                    IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
+                    assert(pRefDlg);
+                    if (pRefDlg)
+                        pRefDlg->ViewShellChanged();
+                }
+                if (pChildWnd->GetController())
+                {
+                    IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetController().get());
+                    if (pRefDlg)
+                        pRefDlg->ViewShellChanged();
                 }
             }
         }

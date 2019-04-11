@@ -29,35 +29,20 @@
 class ScViewData;
 class ScDocument;
 
-class ScColRowNameRangesDlg : public ScAnyRefDlg
+class ScColRowNameRangesDlg : public ScAnyRefDlgController
 {
 public:
-                    ScColRowNameRangesDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
-                                 ScViewData*    ptrViewData );
-                    virtual ~ScColRowNameRangesDlg() override;
-    virtual void    dispose() override;
+    ScColRowNameRangesDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
+                          ScViewData* ptrViewData);
+    virtual ~ScColRowNameRangesDlg() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
 
     virtual bool    IsRefInputMode() const override;
     virtual void    SetActive() override;
-    virtual bool    Close() override;
+    virtual void    Close() override;
 
 private:
-    VclPtr<ListBox>         pLbRange;
-
-    VclPtr<formula::RefEdit>        pEdAssign;
-    VclPtr<formula::RefButton>      pRbAssign;
-    VclPtr<RadioButton>     pBtnColHead;
-    VclPtr<RadioButton>     pBtnRowHead;
-    VclPtr<formula::RefEdit>        pEdAssign2;
-    VclPtr<formula::RefButton>      pRbAssign2;
-
-    VclPtr<OKButton>        pBtnOk;
-    VclPtr<CancelButton>    pBtnCancel;
-    VclPtr<PushButton>      pBtnAdd;
-    VclPtr<PushButton>      pBtnRemove;
-
     ScRange         theCurArea;
     ScRange         theCurData;
 
@@ -68,25 +53,45 @@ private:
     NameRangeMap    aRangeMap;
     ScViewData* const     pViewData;
     ScDocument*     pDoc;
-    VclPtr<formula::RefEdit>       pEdActive;
     bool            bDlgLostFocus;
+
+    formula::WeldRefEdit* m_pEdActive;
+    std::unique_ptr<weld::TreeView> m_xLbRange;
+
+    std::unique_ptr<formula::WeldRefEdit> m_xEdAssign;
+    std::unique_ptr<formula::WeldRefButton> m_xRbAssign;
+    std::unique_ptr<weld::RadioButton> m_xBtnColHead;
+    std::unique_ptr<weld::RadioButton> m_xBtnRowHead;
+    std::unique_ptr<formula::WeldRefEdit> m_xEdAssign2;
+    std::unique_ptr<formula::WeldRefButton> m_xRbAssign2;
+
+    std::unique_ptr<weld::Button> m_xBtnOk;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
+    std::unique_ptr<weld::Button> m_xBtnAdd;
+    std::unique_ptr<weld::Button> m_xBtnRemove;
+
+    std::unique_ptr<weld::Frame> m_xRangeFrame;
+    std::unique_ptr<weld::Label> m_xRangeFT;
+    std::unique_ptr<weld::Label> m_xDataFT;
 
     void Init               ();
     void UpdateNames        ();
     void UpdateRangeData    ( const ScRange& rRange, bool bColName );
     void SetColRowData( const ScRange& rLabelRange, bool bRef=false);
     void AdjustColRowData( const ScRange& rDataRange, bool bRef=false);
-    DECL_LINK( CancelBtnHdl, Button*, void );
-    DECL_LINK( OkBtnHdl, Button*, void );
-    DECL_LINK( AddBtnHdl, Button*, void );
-    DECL_LINK( RemoveBtnHdl, Button*, void );
-    DECL_LINK( Range1SelectHdl, ListBox&, void );
-    DECL_LINK( Range1DataModifyHdl, Edit&, void );
-    DECL_LINK( ColClickHdl, Button*, void );
-    DECL_LINK( RowClickHdl, Button*, void );
-    DECL_LINK( Range2DataModifyHdl, Edit&, void );
-    DECL_LINK( GetFocusHdl, Control&, void );
-    DECL_LINK( LoseFocusHdl, Control&, void );
+    DECL_LINK( CancelBtnHdl, weld::Button&, void );
+    DECL_LINK( OkBtnHdl, weld::Button&, void );
+    DECL_LINK( AddBtnHdl, weld::Button&, void );
+    DECL_LINK( RemoveBtnHdl, weld::Button&, void );
+    DECL_LINK( Range1SelectHdl, weld::TreeView&, void );
+    DECL_LINK( Range1DataModifyHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( ColClickHdl, weld::Button&, void );
+    DECL_LINK( RowClickHdl, weld::Button&, void );
+    DECL_LINK( Range2DataModifyHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( GetEditFocusHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( LoseEditFocusHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( GetButtonFocusHdl, formula::WeldRefButton&, void );
+    DECL_LINK( LoseButtonFocusHdl, formula::WeldRefButton&, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_CRNRDLG_HXX
