@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f91af0f_bf69578c",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-11T07:10:53Z",
+      "side": 1,
+      "message": "This could be without for more structure in the area.",
+      "range": {
+        "startLine": 440,
+        "startChar": 35,
+        "endLine": 440,
+        "endChar": 50
+      },
+      "revId": "b9b5909052ba123fa2259f0166987d794f39c84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_7f098fdb",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-11T07:10:53Z",
+      "side": 1,
+      "message": "style\u003dtext",
+      "range": {
+        "startLine": 589,
+        "startChar": 31,
+        "endLine": 589,
+        "endChar": 46
+      },
+      "revId": "b9b5909052ba123fa2259f0166987d794f39c84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_1f0e43e5",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-11T07:10:53Z",
+      "side": 1,
+      "message": "style\u003dtext",
+      "range": {
+        "startLine": 600,
+        "startChar": 31,
+        "endLine": 600,
+        "endChar": 46
+      },
+      "revId": "b9b5909052ba123fa2259f0166987d794f39c84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_3f130710",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-11T07:10:53Z",
+      "side": 1,
+      "message": "style\u003dtext",
+      "range": {
+        "startLine": 607,
+        "startChar": 31,
+        "endLine": 607,
+        "endChar": 46
+      },
+      "revId": "b9b5909052ba123fa2259f0166987d794f39c84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_dff77bd4",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-11T07:10:53Z",
+      "side": 1,
+      "message": "definitely style\u003dtext",
+      "range": {
+        "startLine": 615,
+        "startChar": 31,
+        "endLine": 615,
+        "endChar": 47
+      },
+      "revId": "b9b5909052ba123fa2259f0166987d794f39c84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_9f01f3b2",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-11T07:10:53Z",
+      "side": 1,
+      "message": "style\u003dtext",
+      "range": {
+        "startLine": 644,
+        "startChar": 31,
+        "endLine": 644,
+        "endChar": 47
+      },
+      "revId": "b9b5909052ba123fa2259f0166987d794f39c84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_5f2dab44",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-11T07:10:53Z",
+      "side": 1,
+      "message": "style\u003dtext",
+      "range": {
+        "startLine": 704,
+        "startChar": 35,
+        "endLine": 704,
+        "endChar": 50
+      },
+      "revId": "b9b5909052ba123fa2259f0166987d794f39c84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_bffe37ac",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-11T07:10:53Z",
+      "side": 1,
+      "message": "all items style\u003dtext",
+      "range": {
+        "startLine": 706,
+        "startChar": 14,
+        "endLine": 706,
+        "endChar": 23
+      },
+      "revId": "b9b5909052ba123fa2259f0166987d794f39c84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_7f32efa9",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-11T07:10:53Z",
+      "side": 1,
+      "message": "style\u003dtext",
+      "range": {
+        "startLine": 720,
+        "startChar": 31,
+        "endLine": 720,
+        "endChar": 45
+      },
+      "revId": "b9b5909052ba123fa2259f0166987d794f39c84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_1f272367",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-11T07:10:53Z",
+      "side": 1,
+      "message": "style\u003dtext",
+      "range": {
+        "startLine": 739,
+        "startChar": 31,
+        "endLine": 739,
+        "endChar": 41
+      },
+      "revId": "b9b5909052ba123fa2259f0166987d794f39c84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
