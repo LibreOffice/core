@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f91af0f_5f360bb7",
+        "filename": "solenv/gdb/libreoffice/basegfx.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-11T06:53:47Z",
+      "side": 1,
+      "message": "this if stmt is always true if the preceding line is true? what am I missing?",
+      "revId": "01b27dac989937b86cd2690cb6cb69871dcaf64c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
