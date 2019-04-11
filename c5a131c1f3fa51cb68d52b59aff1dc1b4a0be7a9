@@ -16,6 +16,24 @@
       "revId": "c5a131c1f3fa51cb68d52b59aff1dc1b4a0be7a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f91af0f_c246c450",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-04-11T11:27:34Z",
+      "side": 1,
+      "message": "That\u0027s why I originally added an assert(pResetT) in the LIBO_INTERNAL_ONLY case, which just makes sense without the if (pResetT), as the acquire would otherwise fail.\n\nWe can keep the if instead, but that doesn\u0027t feel consequent, so an inheriting class could clear pResetT and thet would be fine. I\u0027m not sure if that is intended.\n\nBTW - any reason, why this explicitly uses \"this-\u003e\" here?",
+      "parentUuid": "9f91af0f_1f6c0307",
+      "revId": "c5a131c1f3fa51cb68d52b59aff1dc1b4a0be7a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
