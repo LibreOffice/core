@@ -159,6 +159,16 @@ public:
         return pLabelWidget;
     }
 
+    void SaveValue()
+    {
+        xEntry->save_value();
+    }
+
+    bool IsValueChangedFromSaved() const
+    {
+        return xEntry->get_value_changed_from_saved();
+    }
+
     void SetGetFocusHdl(const Link<WeldRefEdit&,void>& rLink) { maGetFocusHdl = rLink; }
     void SetLoseFocusHdl(const Link<WeldRefEdit&,void>& rLink) { maLoseFocusHdl = rLink; }
     void SetModifyHdl(const Link<WeldRefEdit&,void>& rLink) { maModifyHdl = rLink; }
