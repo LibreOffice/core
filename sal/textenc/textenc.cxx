@@ -370,6 +370,13 @@ public:
 
 #else
 
+// this allows us to provide custom 'sal_textenclo' module name
+#ifdef CUSTOM_SAL_TEXTENCLO_MODULENAME
+#define SAL_TEXTENCLO_MODULENAME CUSTOM_SAL_TEXTENCLO_MODULENAME
+#else
+#define SAL_TEXTENCLO_MODULENAME "sal_textenclo"
+#endif
+
 extern "C" {
 
 typedef ImplTextEncodingData const * TextEncodingFunction(rtl_TextEncoding);
@@ -381,7 +388,7 @@ void thisModule() {}
 class FullTextEncodingData {
 public:
     FullTextEncodingData() {
-        if (!module_.loadRelative(&thisModule, SAL_MODULENAME("sal_textenclo")))
+        if (!module_.loadRelative(&thisModule, SAL_MODULENAME(SAL_TEXTENCLO_MODULENAME)))
         {
             SAL_WARN( "sal.textenc", "Loading sal_textenc library failed" );
             std::abort();
