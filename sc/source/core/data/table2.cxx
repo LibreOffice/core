@@ -1952,7 +1952,7 @@ sal_uInt32 ScTable::GetNumberFormat( const ScInterpreterContext& rContext, const
 sal_uInt32 ScTable::GetNumberFormat( SCCOL nCol, SCROW nRow ) const
 {
     if (ValidColRow(nCol,nRow))
-        return aCol[nCol].GetNumberFormat( pDocument->GetNonThreadedContext(), nRow );
+        return CreateColumnIfNotExists(nCol).GetNumberFormat(pDocument->GetNonThreadedContext(), nRow);
     else
         return 0;
 }
