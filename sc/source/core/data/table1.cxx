@@ -2059,10 +2059,18 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
     SCCOL nNewCol = rCol;
     while (nMissing > 0 && nNewCol < MAXCOL)
     {
-        ScRefCellValue aNextCell = aCol[nNewCol+1].GetCellValue(nRow);
-        if (!aNextCell.isEmpty())
+        auto nNextCol = nNewCol + 1;
+        bool bNextEmpty = true;
+        if (GetAllocatedColumnsCount() > nNextCol)
+        {
+            ScRefCellValue aNextCell = aCol[nNextCol].GetCellValue(nRow);
+            bNextEmpty = aNextCell.isEmpty();
+        }
+        if (!bNextEmpty)
+        {
             // Cell content in a next column ends display of this string.
             nMissing = 0;
+        }
         else
             nMissing -= GetColWidth(++nNewCol);
     }
