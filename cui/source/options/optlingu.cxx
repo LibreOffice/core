@@ -1462,8 +1462,7 @@ IMPL_LINK(SvxLinguTabPage, ClickHdl_Impl, weld::Button&, rBtn, void)
             sal_Int32 nDics = aDics.getLength();
             if (nDicPos < nDics)
             {
-                uno::Reference< XDictionary > xDic;
-                xDic = aDics.getConstArray()[ nDicPos ];
+                uno::Reference< XDictionary > xDic = aDics.getConstArray()[ nDicPos ];
                 if (xDic.is())
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -1488,8 +1487,7 @@ IMPL_LINK(SvxLinguTabPage, ClickHdl_Impl, weld::Button&, rBtn, void)
             sal_Int32 nDics = aDics.getLength();
             if (nDicPos < nDics)
             {
-                uno::Reference< XDictionary > xDic;
-                xDic = aDics.getConstArray()[ nDicPos ];
+                uno::Reference< XDictionary > xDic = aDics.getConstArray()[ nDicPos ];
                 if (xDic.is())
                 {
                     if (LinguMgr::GetIgnoreAllList() == xDic)

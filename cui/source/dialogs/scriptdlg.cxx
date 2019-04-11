@@ -822,8 +822,7 @@ void SvxScriptOrgDialog::createEntry(weld::TreeIter& rEntry)
         Sequence< sal_Int16 > outIndex;
         try
         {
-            Any aResult;
-            aResult = xInv->invoke( "Creatable", args, outIndex, outArgs );
+            Any aResult = xInv->invoke( "Creatable", args, outIndex, outArgs );
             Reference< browse::XBrowseNode > newNode( aResult, UNO_QUERY );
             aChildNode = newNode;
 
@@ -907,8 +906,7 @@ void SvxScriptOrgDialog::renameEntry(weld::TreeIter& rEntry)
         Sequence< sal_Int16 > outIndex;
         try
         {
-            Any aResult;
-            aResult = xInv->invoke( "Renamable", args, outIndex, outArgs );
+            Any aResult = xInv->invoke( "Renamable", args, outIndex, outArgs );
             Reference< browse::XBrowseNode > newNode( aResult, UNO_QUERY );
             aChildNode = newNode;
 
@@ -959,8 +957,7 @@ void SvxScriptOrgDialog::deleteEntry(weld::TreeIter& rEntry)
         Sequence< sal_Int16 > outIndex;
         try
         {
-            Any aResult;
-            aResult = xInv->invoke( "Deletable", args, outIndex, outArgs );
+            Any aResult = xInv->invoke( "Deletable", args, outIndex, outArgs );
             aResult >>= result; // or do we just assume true if no exception ?
         }
         catch( Exception const & )

@@ -49,8 +49,7 @@ void CanvasTest::testComposite()
 
     // a huge canvas ...
     Size aSize (1, 1);
-    uno::Reference<rendering::XBitmap> xBitmap;
-    xBitmap = xCanvas->getDevice ()->createCompatibleAlphaBitmap(
+    uno::Reference<rendering::XBitmap> xBitmap = xCanvas->getDevice ()->createCompatibleAlphaBitmap(
                         vcl::unotools::integerSize2DFromSize( aSize ) );
     CPPUNIT_ASSERT( xBitmap.is() );
 
