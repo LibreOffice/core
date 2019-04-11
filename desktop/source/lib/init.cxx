@@ -2779,7 +2779,8 @@ static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsig
                                        OUString::fromUtf8(OString(pText, strlen(pText))));
         break;
     case LOK_EXT_TEXTINPUT_END:
-        pWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+        pWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput,
+                                       OUString::fromUtf8(OString(pText, strlen(pText))));
         break;
     default:
         assert(false && "Unhandled External Text input event!");
