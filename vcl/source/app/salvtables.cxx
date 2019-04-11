@@ -1236,6 +1236,8 @@ public:
     {
         return m_xFrame->get_label();
     }
+
+    virtual std::unique_ptr<weld::Label> weld_label_widget() const override;
 };
 
 class SalInstanceScrolledWindow : public SalInstanceContainer, public virtual weld::ScrolledWindow
@@ -3773,6 +3775,14 @@ public:
             m_xLabel->SetControlBackground();
     }
 };
+
+std::unique_ptr<weld::Label> SalInstanceFrame::weld_label_widget() const
+{
+    FixedText* pLabel = dynamic_cast<FixedText*>(m_xFrame->get_label_widget());
+    if (!pLabel)
+        return nullptr;
+    return std::make_unique<SalInstanceLabel>(pLabel, m_pBuilder, false);
+}
 
 class SalInstanceTextView : public SalInstanceContainer, public virtual weld::TextView
 {
