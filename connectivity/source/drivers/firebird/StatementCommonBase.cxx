@@ -138,9 +138,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
         pOutSqlda->sqln = 10;
     }
 
-    ISC_STATUS aErr = 0;
-
-    aErr = isc_dsql_allocate_statement(m_statusVector,
+    ISC_STATUS aErr = isc_dsql_allocate_statement(m_statusVector,
                                        &m_pConnection->getDBHandle(),
                                        &m_aStatementHandle);
 

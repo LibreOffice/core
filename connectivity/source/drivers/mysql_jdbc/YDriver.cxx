@@ -225,8 +225,7 @@ Reference<XConnection> SAL_CALL ODriverDelegator::connect(const OUString& url,
     Reference<XConnection> xConnection;
     if (acceptsURL(url))
     {
-        Reference<XDriver> xDriver;
-        xDriver = loadDriver(url, info);
+        Reference<XDriver> xDriver = loadDriver(url, info);
         if (xDriver.is())
         {
             OUString sCuttedUrl = transformUrl(url);
