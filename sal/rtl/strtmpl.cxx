@@ -1145,7 +1145,7 @@ IMPL_RTL_STRINGDATA* IMPL_RTL_STRINGNAME( ImplAlloc )( sal_Int32 nLen )
         = (sal::static_int_cast< sal_uInt32 >(nLen)
            <= ((SAL_MAX_UINT32 - sizeof (IMPL_RTL_STRINGDATA))
                / sizeof (IMPL_RTL_STRCODE)))
-        ? static_cast<IMPL_RTL_STRINGDATA *>(rtl_allocateString(
+        ? static_cast<IMPL_RTL_STRINGDATA *>(rtl_allocateString()(
             sizeof (IMPL_RTL_STRINGDATA) + nLen * sizeof (IMPL_RTL_STRCODE)))
         : nullptr;
     if (pData != nullptr) {
@@ -1221,7 +1221,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( release )( IMPL_RTL_STRINGDATA* pThis )
     if ( !osl_atomic_decrement( &(pThis->refCount) ) )
     {
         RTL_LOG_STRING_DELETE( pThis );
-        rtl_freeString( pThis );
+        rtl_freeString()( pThis );
     }
 }
 
