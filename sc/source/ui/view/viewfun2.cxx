@@ -451,7 +451,7 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
         }
         else
         {
-            nStartCol = nSeekCol;       // nSeekCol might be adjusted vie reference
+            nStartCol = nSeekCol;       // nSeekCol might be adjusted via reference
             if ( eSum == ScAutoSumSum )
                 nEndCol = nStartCol;        // only sum sums
             else
