@@ -254,7 +254,7 @@ const char* TIPOFTHEDAY_STRINGARRAY[] =
     NC_("RID_CUI_TIPOFTHEDAY", "Want to sort a pivot table? Click on drop-list's arrow in the row/col header and select sort method: ascending, descending or custom"),
     NC_("RID_CUI_TIPOFTHEDAY", "Sticky templates (user & shared template folders) let you apply style changes when you open a document created from the template"),
     NC_("RID_CUI_TIPOFTHEDAY", "Tools›AutoCorrect›Replace provides a list of common substitutions. Take a look and complete with your own replacements"),
-    NC_("RID_CUI_TIPOFTHEDAY", "Center a picture in a Writer Table's cell? Anchor as ›Center buttons in Formating (horizontally) & Table (vertically) toolbars"),
+    NC_("RID_CUI_TIPOFTHEDAY", "Center a picture in a Writer Table's cell? Anchor as ›Center buttons in Formatting (horizontally) & Table (vertically) toolbars"),
     NC_("RID_CUI_TIPOFTHEDAY", "Do not insert empty paragraph to separate two paragraphs, set Indents & Spacing›Spacing›Below paragraph for the paragraph style"),
     NC_("RID_CUI_TIPOFTHEDAY", "Want your documents open where you were when last saved? Fill Tools›Options›LibreOffice›User Data First/Last name"),
     NC_("RID_CUI_TIPOFTHEDAY", "Writer: with the navigator you can select & move up/down headings and the text below the heading, in the Navigator and in the document"),
