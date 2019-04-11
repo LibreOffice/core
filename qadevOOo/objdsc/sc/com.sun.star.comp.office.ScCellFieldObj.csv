@@ -1,6 +1,3 @@
 "ScCellFieldObj";"com::sun::star::lang::XComponent";"dispose()"
 "ScCellFieldObj";"com::sun::star::lang::XComponent";"addEventListener()"
 "ScCellFieldObj";"com::sun::star::lang::XComponent";"removeEventListener()"
-"ScCellFieldObj";"com::sun::star::text::TextContent";"AnchorType#optional"
-"ScCellFieldObj";"com::sun::star::text::TextContent";"AnchorTypes#optional"
-"ScCellFieldObj";"com::sun::star::text::TextContent";"TextWrap#optional"
