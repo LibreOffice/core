@@ -288,12 +288,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
         }
         break;
 
-        case SID_OPENDLG_EDIT_PRINTAREA:
-        {
-            pResult = VclPtr<ScPrintAreasDlg>::Create( pB, pCW, pParent );
-        }
-        break;
-
         case SID_OPENDLG_FUNCTION:
         {
             // dialog checks, what is in the cell
@@ -495,6 +489,9 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             xResult.reset(new ScDbNameDlg(pB, pCW, pParent, &GetViewData()));
             break;
         }
+        case SID_OPENDLG_EDIT_PRINTAREA:
+            xResult.reset(new ScPrintAreasDlg(pB, pCW, pParent));
+        break;
     }
 
     if (xResult)
