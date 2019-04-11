@@ -302,7 +302,7 @@ const char* TIPOFTHEDAY_STRINGARRAY[] =
     NC_("RID_CUI_TIPOFTHEDAY", "Tools›Customize›Keyboard›Save saves the current shortcut key configuration, so that you can load it later or on another computer"),
     NC_("RID_CUI_TIPOFTHEDAY", "Property mapping for charts allows to change data serie's fill & border colors based on spreadsheet values"),
     NC_("RID_CUI_TIPOFTHEDAY", "Calc: Ctrl+Shift+F9 Recalculates all formulas in all sheets (some functions like RANDBETWEEN are not calculated by F9)"),
-    NC_("RID_CUI_TIPOFTHEDAY", "Writer: Write along a curve ? Draw the line›Double clic›Type the text›Format›Object›Fontwork... Have fun with the proposed effects"),
+    NC_("RID_CUI_TIPOFTHEDAY", "Writer: Write along a curve? Draw the line›Double click›Type the text›Format›Object›Fontwork... Have fun with the proposed effects"),
     NC_("RID_CUI_TIPOFTHEDAY", "Click the bo4rders button adds borders to selected cells - Shift+Click replaces all borders of current cell with your choice"),
     NC_("RID_CUI_TIPOFTHEDAY", "Writer: you can create an illustration index from Object names, not only from Captions"),
     NC_("RID_CUI_TIPOFTHEDAY", "To enable macro recording check Tools›Options›LibreOffice›Advanced›Enable macro recording (limited)"),
