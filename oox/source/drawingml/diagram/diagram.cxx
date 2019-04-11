@@ -137,7 +137,7 @@ void Diagram::build(  )
 {
     // build name-object maps
 #ifdef DEBUG_OOX_DIAGRAM
-    std::ofstream output("/tmp/tree.dot");
+    std::ofstream output("tree.dot");
 
     output << "digraph datatree {" << std::endl;
 #endif
