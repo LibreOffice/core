@@ -338,12 +338,13 @@ void RangeColumnSpanSet::executeColumnAction(ScDocument& rDoc, sc::ColumnSpanSet
 {
     for (SCTAB nTab = range.aStart.Tab(); nTab <= range.aEnd.Tab(); ++nTab)
     {
-        for (SCCOL nCol = range.aStart.Col(); nCol <= range.aEnd.Col(); ++nCol)
-        {
-            ScTable* pTab = rDoc.FetchTable(nTab);
-            if (!pTab)
-                continue;
+        ScTable* pTab = rDoc.FetchTable(nTab);
+        if (!pTab)
+            continue;
 
+        SCCOL nEndCol = pTab->ClampToAllocatedColumns(range.aEnd.Col());
+        for (SCCOL nCol = range.aStart.Col(); nCol <= nEndCol; ++nCol)
+        {
             if (!ValidCol(nCol))
                 break;
 
