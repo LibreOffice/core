@@ -28,12 +28,11 @@ class ScDocument;
 class ScViewData;
 class SfxStringItem;
 
-class ScPrintAreasDlg : public ScAnyRefDlg
+class ScPrintAreasDlg : public ScAnyRefDlgController
 {
 public:
-                    ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent );
-                    virtual ~ScPrintAreasDlg() override;
-    virtual void    dispose() override;
+    ScPrintAreasDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent);
+    virtual ~ScPrintAreasDlg() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
     virtual void    AddRefEntry() override;
@@ -41,41 +40,52 @@ public:
     virtual bool    IsTableLocked() const override;
 
     virtual void    SetActive() override;
-    virtual void    Deactivate() override;
-    virtual bool    Close() override;
+    virtual void    Close() override;
 
 private:
-    VclPtr<ListBox>                 pLbPrintArea;
-    VclPtr<formula::RefEdit>        pEdPrintArea;
-    VclPtr<formula::RefButton>      pRbPrintArea;
-
-    VclPtr<ListBox>                 pLbRepeatRow;
-    VclPtr<formula::RefEdit>        pEdRepeatRow;
-    VclPtr<formula::RefButton>      pRbRepeatRow;
-
-    VclPtr<ListBox>                 pLbRepeatCol;
-    VclPtr<formula::RefEdit>        pEdRepeatCol;
-    VclPtr<formula::RefButton>      pRbRepeatCol;
-
-    VclPtr<OKButton>        pBtnOk;
-    VclPtr<CancelButton>    pBtnCancel;
-
     bool            bDlgLostFocus;
-    VclPtr<formula::RefEdit>       pRefInputEdit;
     ScDocument*     pDoc;
     ScViewData*     pViewData;
     SCTAB           nCurTab;
 
+    formula::WeldRefEdit* m_pRefInputEdit;
+
+    std::unique_ptr<weld::ComboBox> m_xLbPrintArea;
+    std::unique_ptr<formula::WeldRefEdit> m_xEdPrintArea;
+    std::unique_ptr<formula::WeldRefButton> m_xRbPrintArea;
+
+    std::unique_ptr<weld::ComboBox> m_xLbRepeatRow;
+    std::unique_ptr<formula::WeldRefEdit> m_xEdRepeatRow;
+    std::unique_ptr<formula::WeldRefButton> m_xRbRepeatRow;
+
+    std::unique_ptr<weld::ComboBox> m_xLbRepeatCol;
+    std::unique_ptr<formula::WeldRefEdit> m_xEdRepeatCol;
+    std::unique_ptr<formula::WeldRefButton> m_xRbRepeatCol;
+
+    std::unique_ptr<weld::Button> m_xBtnOk;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
+
+    std::unique_ptr<weld::Frame> m_xPrintFrame;
+    std::unique_ptr<weld::Frame> m_xRowFrame;
+    std::unique_ptr<weld::Frame> m_xColFrame;
+
+    std::unique_ptr<weld::Label> m_xPrintFrameFT;
+    std::unique_ptr<weld::Label> m_xRowFrameFT;
+    std::unique_ptr<weld::Label> m_xColFrameFT;
+
     void Impl_Reset();
     bool Impl_CheckRefStrings();
     void Impl_FillLists();
-    bool Impl_GetItem( const Edit* pEd, SfxStringItem& rItem );
+    bool Impl_GetItem( const formula::WeldRefEdit* pEd, SfxStringItem& rItem );
 
     // Handler:
-    DECL_LINK( Impl_SelectHdl, ListBox&, void );
-    DECL_LINK( Impl_ModifyHdl, Edit&, void  );
-    DECL_LINK( Impl_BtnHdl,    Button*, void );
-    DECL_LINK( Impl_GetFocusHdl, Control&, void );
+    DECL_LINK( Impl_SelectHdl, weld::ComboBox&, void );
+    DECL_LINK( Impl_ModifyHdl, formula::WeldRefEdit&, void  );
+    DECL_LINK( Impl_BtnHdl,    weld::Button&, void );
+    DECL_LINK( Impl_GetEditFocusHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( Impl_LoseEditFocusHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( Impl_LoseButtonFocusHdl, formula::WeldRefButton&, void );
+    DECL_LINK( Impl_GetFocusHdl, weld::Widget&, void );
 };
 
 #endif
