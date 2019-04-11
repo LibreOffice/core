@@ -529,7 +529,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
     {
         // get the default PPD
         pNewParser = PPDParser::getParser( "SGENPRT" );
-        SAL_WARN("vcl.unx.print", "Parsing default SGENPRT PPD" );
+        SAL_INFO("vcl.unx.print", "Parsing default SGENPRT PPD" );
 
         PrinterInfo& rInfo = m_aPrinters[ aPrinter ].m_aInfo;
 
