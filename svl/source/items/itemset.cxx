@@ -59,6 +59,31 @@ sal_uInt16 Count_Impl( const sal_uInt16 *pRanges )
     return nCount;
 }
 
+void assertWhichRangesSorted( const sal_uInt16 *pRanges )
+{
+#if !defined NDEBUG
+    int i = 0;
+    for (const sal_uInt16 *pRange = pRanges; *pRange; pRange += 2)
+    {
+        assert(pRange[0] <= pRange[1] && "range start must be < range end");
+        // ranges must be sorted and discrete
+        if (pRange[2])
+        {
+            if (pRange[2] <= pRange[1])
+            {
+                SAL_WARN("svl", "pair at index " << (i+1) << " needs to be earlier in list");
+                for (const sal_uInt16 *p = pRanges; *p; p += 2)
+                    SAL_WARN("svl", (*p) << " " << (*(p+1)));
+            }
+            assert( pRange[2] > pRange[1] && "ranges must be sorted");
+        }
+        ++i;
+    }
+#else
+    (void)pRanges;
+#endif
+}
+
 /**
  * Determines the total number of sal_uInt16s described in a 0-terminated
  * array of pairs of sal_uInt16s, each representing an range of sal_uInt16s.
@@ -100,26 +125,10 @@ SfxItemSet::SfxItemSet(SfxItemPool& rPool)
         m_pPool->FillItemIdRanges_Impl(tmp);
         m_pWhichRanges = tmp.release();
     }
+    assertWhichRangesSorted(m_pWhichRanges);
 
     const sal_uInt16 nSize = TotalCount();
     m_pItems.reset(new const SfxPoolItem*[nSize]{});
-}
-
-void SfxItemSet::InitRanges_Impl(const sal_uInt16 *pWhichPairTable)
-{
-    sal_uInt16 nCnt = 0;
-    const sal_uInt16* pPtr = pWhichPairTable;
-    while( *pPtr )
-    {
-        nCnt += ( *(pPtr+1) - *pPtr ) + 1;
-        pPtr += 2;
-    }
-
-    m_pItems.reset( new const SfxPoolItem*[nCnt]{} );
-
-    std::ptrdiff_t cnt = pPtr - pWhichPairTable +1;
-    m_pWhichRanges = new sal_uInt16[ cnt ];
-    memcpy( m_pWhichRanges, pWhichPairTable, sizeof( sal_uInt16 ) * cnt );
 }
 
 SfxItemSet::SfxItemSet(
@@ -137,7 +146,10 @@ SfxItemSet::SfxItemSet(
     assert(wids.size() != 0);
     assert(wids.size() % 2 == 0);
     std::copy(wids.begin(), wids.end(), m_pWhichRanges);
+    auto pPair = reinterpret_cast<std::pair<sal_uInt16,sal_uInt16>*>(m_pWhichRanges);
+    std::sort(pPair, pPair + wids.size()/2);
     m_pWhichRanges[wids.size()] = 0;
+    assertWhichRangesSorted(m_pWhichRanges);
 }
 
 SfxItemSet::SfxItemSet(
@@ -164,8 +176,11 @@ SfxItemSet::SfxItemSet(
         //TODO: prev = p.wid2;
 #endif
     }
+    auto pPair = reinterpret_cast<std::pair<sal_uInt16,sal_uInt16>*>(m_pWhichRanges);
+    std::sort(pPair, pPair + wids.size());
     m_pWhichRanges[i] = 0;
     m_pItems.reset( new SfxPoolItem const *[size]{} );
+    assertWhichRangesSorted(m_pWhichRanges);
 }
 
 SfxItemSet::SfxItemSet( SfxItemPool& rPool, const sal_uInt16* pWhichPairTable )
@@ -176,7 +191,24 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, const sal_uInt16* pWhichPairTable )
 {
     // pWhichPairTable == 0 is for the SfxAllEnumItemSet
     if ( pWhichPairTable )
-        InitRanges_Impl(pWhichPairTable);
+    {
+        sal_uInt16 nCnt = 0;
+        const sal_uInt16* pPtr = pWhichPairTable;
+        while( *pPtr )
+        {
+            nCnt += ( *(pPtr+1) - *pPtr ) + 1;
+            pPtr += 2;
+        }
+
+        m_pItems.reset( new const SfxPoolItem*[nCnt]{} );
+
+        std::ptrdiff_t nWhichTableSize = pPtr - pWhichPairTable + 1;
+        m_pWhichRanges = new sal_uInt16[ nWhichTableSize ];
+        memcpy( m_pWhichRanges, pWhichPairTable, sizeof( sal_uInt16 ) * nWhichTableSize );
+        auto pPair = reinterpret_cast<std::pair<sal_uInt16,sal_uInt16>*>(m_pWhichRanges);
+        std::sort(pPair, pPair + nWhichTableSize/2);
+        assertWhichRangesSorted(m_pWhichRanges);
+    }
 }
 
 SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
@@ -633,13 +665,7 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
 
 #ifdef DBG_UTIL
     assert(nFrom <= nTo);
-    for (const sal_uInt16 *pRange = m_pWhichRanges; *pRange; pRange += 2)
-    {
-        assert(pRange[0] <= pRange[1]);
-        // ranges must be sorted and discrete
-        assert(
-            !pRange[2] || (pRange[2] > pRange[1] && pRange[2] - pRange[1] > 1));
-    }
+    assertWhichRangesSorted(m_pWhichRanges);
 #endif
 
     // create vector of ranges (sal_uInt16 pairs of lower and upper bound)
@@ -710,6 +736,7 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
         ++pOld;
         ++pNew;
     }
+    assertWhichRangesSorted(pNewRanges);
 
     // create new item-array (by iterating through all new ranges)
     sal_uInt16   nSize = Capacity_Impl(pNewRanges);

@@ -88,8 +88,6 @@ friend class SfxItemPoolCache;
 friend class SfxAllItemSet;
 
 private:
-    SVL_DLLPRIVATE void                     InitRanges_Impl(const sal_uInt16 *nWhichPairTable);
-
     SfxItemSet(
         SfxItemPool & pool, std::initializer_list<sal_uInt16> wids,
         std::size_t items);

@@ -1219,7 +1219,7 @@ void makeRedline( SwPaM const & rPaM,
             SwDoc *const pDoc = rPaM.GetDoc();
 
             // Build set of attributes we want to fetch
-            std::vector<sal_uInt16> aWhichPairs;
+            std::vector<std::pair<sal_uInt16, sal_uInt16>> aWhichPairs;
             std::vector<SfxItemPropertySimpleEntry const*> aEntries;
             aEntries.reserve(aRevertProperties.getLength());
             for (sal_Int32 i = 0; i < aRevertProperties.getLength(); ++i)
@@ -1239,16 +1239,18 @@ void makeRedline( SwPaM const & rPaM,
                 else
                 {
                     // FIXME: we should have some nice way of merging ranges surely ?
-                    aWhichPairs.push_back(pEntry->nWID);
-                    aWhichPairs.push_back(pEntry->nWID);
+                    aWhichPairs.emplace_back(pEntry->nWID, pEntry->nWID);
                 }
                 aEntries.push_back(pEntry);
             }
 
             if (!aWhichPairs.empty())
             {
-                aWhichPairs.push_back(0); // terminate
-                SfxItemSet aItemSet(pDoc->GetAttrPool(), &aWhichPairs[0]);
+                std::sort(aWhichPairs.begin(), aWhichPairs.end());
+                // sometimes different props map to same which id, so remove dups
+                aWhichPairs.erase(std::unique(aWhichPairs.begin(), aWhichPairs.end()), aWhichPairs.end());
+                aWhichPairs.emplace_back(0, 0); // terminate
+                SfxItemSet aItemSet(pDoc->GetAttrPool(), reinterpret_cast<sal_uInt16*>(aWhichPairs.data()));
 
                 for (size_t i = 0; i < aEntries.size(); ++i)
                 {
