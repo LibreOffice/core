@@ -170,21 +170,30 @@ void ScNoteMarker::InvalidateWin()
 {
     if (m_bVisible)
     {
-        m_pWindow->Invalidate( OutputDevice::LogicToLogic(m_aRect, m_aMapMode, m_pWindow->GetMapMode()) );
+        // Extend the invalidated rectangle by 1 pixel in each direction in case AA would slightly
+        // paint outside the nominal area.
+        tools::Rectangle aRect(m_aRect);
+        const Size aPixelSize = m_pWindow->PixelToLogic(Size(1, 1));
+        aRect.AdjustLeft(-aPixelSize.getWidth());
+        aRect.AdjustTop(-aPixelSize.getHeight());
+        aRect.AdjustRight(aPixelSize.getWidth());
+        aRect.AdjustBottom(aPixelSize.getHeight());
+
+        m_pWindow->Invalidate( OutputDevice::LogicToLogic(aRect, m_aMapMode, m_pWindow->GetMapMode()) );
 
         if ( m_pRightWin || m_pBottomWin )
         {
             Size aWinSize = m_pWindow->PixelToLogic( m_pWindow->GetOutputSizePixel(), m_aMapMode );
             if ( m_pRightWin )
-                m_pRightWin->Invalidate( OutputDevice::LogicToLogic(m_aRect,
+                m_pRightWin->Invalidate( OutputDevice::LogicToLogic(aRect,
                                         lcl_MoveMapMode( m_aMapMode, Size( aWinSize.Width(), 0 ) ),
                                         m_pRightWin->GetMapMode()) );
             if ( m_pBottomWin )
-                m_pBottomWin->Invalidate( OutputDevice::LogicToLogic(m_aRect,
+                m_pBottomWin->Invalidate( OutputDevice::LogicToLogic(aRect,
                                         lcl_MoveMapMode( m_aMapMode, Size( 0, aWinSize.Height() ) ),
                                         m_pBottomWin->GetMapMode()) );
             if ( m_pDiagWin )
-                m_pDiagWin->Invalidate( OutputDevice::LogicToLogic(m_aRect,
+                m_pDiagWin->Invalidate( OutputDevice::LogicToLogic(aRect,
                                         lcl_MoveMapMode( m_aMapMode, aWinSize ),
                                         m_pDiagWin->GetMapMode()) );
         }
