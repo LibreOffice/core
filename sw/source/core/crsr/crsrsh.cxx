@@ -22,6 +22,7 @@
 
 #include <hintids.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/srchdlg.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <sfx2/viewsh.hxx>
 #include <SwSmartTagMgr.hxx>
@@ -1343,8 +1344,14 @@ void SwCursorShell::NotifyCursor(SfxViewShell* pOtherShell) const
 /// go to the next SSelection
 bool SwCursorShell::GoNextCursor()
 {
+    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+
     if( !m_pCurrentCursor->IsMultiSelection() )
+    {
+        if( !m_pCurrentCursor->HasMark() )
+            SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
         return false;
+    }
 
     SET_CURR_SHELL( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
@@ -1362,8 +1369,14 @@ bool SwCursorShell::GoNextCursor()
 /// go to the previous SSelection
 bool SwCursorShell::GoPrevCursor()
 {
+    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+
     if( !m_pCurrentCursor->IsMultiSelection() )
+    {
+        if( !m_pCurrentCursor->HasMark() )
+            SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
         return false;
+    }
 
     SET_CURR_SHELL( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
