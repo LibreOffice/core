@@ -987,17 +987,15 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
 
                                 // Moving the anchor?
                                 if( !( DelContentType::CheckNoCntnt & nDelContentType ) &&
-                                    ( rPoint.nNode.GetIndex() == pAPos->nNode.GetIndex() ) )
-                                {
+                                    (rPoint.nNode.GetIndex() == pAPos->nNode.GetIndex())
                                     // Do not try to move the anchor to a table!
-                                    if( rMark.nNode.GetNode().GetTextNode() )
-                                    {
-                                        pHistory->Add( *pFormat );
-                                        SwFormatAnchor aAnch( *pAnchor );
-                                        SwPosition aPos( rMark.nNode );
-                                        aAnch.SetAnchor( &aPos );
-                                        pFormat->SetFormatAttr( aAnch );
-                                    }
+                                    && rMark.nNode.GetNode().IsTextNode())
+                                {
+                                    pHistory->Add( *pFormat );
+                                    SwFormatAnchor aAnch( *pAnchor );
+                                    SwPosition aPos( rMark.nNode );
+                                    aAnch.SetAnchor( &aPos );
+                                    pFormat->SetFormatAttr( aAnch );
                                 }
                                 else
                                 {
