@@ -448,6 +448,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_CONTEXT_CHANGED";
     case LOK_CALLBACK_SIGNATURE_STATUS:
         return "LOK_CALLBACK_SIGNATURE_STATUS";
+    case LOK_CALLBACK_PROFILE_FRAME:
+        return "LOK_CALLBACK_PROFILE_FRAME";
     }
     g_assert(false);
     return nullptr;
