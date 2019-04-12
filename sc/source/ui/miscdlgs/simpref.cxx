@@ -23,7 +23,6 @@
 
 ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent)
     : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/simplerefdialog.ui", "SimpleRefDialog")
-    , bAutoReOpen(true)
     , bCloseOnButtonUp(false)
     , bSingleCell(false)
     , bMultiSelection(false)
@@ -159,7 +158,6 @@ void ScSimpleRefDlg::RefInputDone( bool bForced)
 
 IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl, weld::Button&, void)
 {
-    bAutoReOpen=false;
     OUString aResult=m_xEdAssign->GetText();
     aCloseHdl.Call(&aResult);
     Link<const OUString&,void> aUnoLink = aDoneHdl;     // stack var because this is deleted in DoClose
@@ -169,7 +167,6 @@ IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl, weld::Button&, void)
 {
-    bAutoReOpen=false;
     OUString aResult=m_xEdAssign->GetText();
     aCloseHdl.Call(nullptr);
     Link<const OUString&,void> aUnoLink = aAbortedHdl;  // stack var because this is deleted in DoClose

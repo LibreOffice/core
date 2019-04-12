@@ -228,17 +228,19 @@ dbaccess/source/core/inc/SingleSelectQueryComposer.hxx:86
     dbaccess::OSingleSelectQueryComposer m_aTablesCollection std::vector<std::unique_ptr<OPrivateTables> >
 dbaccess/source/core/inc/TableDeco.hxx:67
     dbaccess::ODBTableDecorator m_xColumnMediator css::uno::Reference<css::container::XContainerListener>
-dbaccess/source/core/misc/DatabaseDataProvider.cxx:623
+dbaccess/source/core/misc/DatabaseDataProvider.cxx:621
     dbaccess::(anonymous namespace)::ColumnDescription nResultSetPosition sal_Int32
-dbaccess/source/core/misc/DatabaseDataProvider.cxx:624
+dbaccess/source/core/misc/DatabaseDataProvider.cxx:622
     dbaccess::(anonymous namespace)::ColumnDescription nDataType sal_Int32
 dbaccess/source/filter/xml/dbloader2.cxx:227
     dbaxml::DBContentLoader m_xMySelf Reference<class com::sun::star::frame::XFrameLoader>
 dbaccess/source/ui/browser/dbloader.cxx:69
     DBContentLoader m_xListener Reference<class com::sun::star::frame::XLoadEventListener>
-desktop/qa/desktop_lib/test_desktop_lib.cxx:199
+desktop/qa/desktop_lib/test_desktop_lib.cxx:201
     DesktopLOKTest m_bModified _Bool
-desktop/source/deployment/gui/dp_gui_updatedialog.hxx:153
+desktop/source/deployment/gui/dp_gui_updatedialog.cxx:161
+    dp_gui::UpdateDialog::IgnoredUpdate bRemoved _Bool
+desktop/source/deployment/gui/dp_gui_updatedialog.hxx:152
     dp_gui::UpdateDialog m_xExtensionManager css::uno::Reference<css::deployment::XExtensionManager>
 desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:117
     dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
@@ -380,7 +382,7 @@ include/opencl/platforminfo.hxx:31
     OpenCLDeviceInfo mnFrequency size_t
 include/sfx2/minfitem.hxx:35
     SfxMacroInfoItem aCommentText const class rtl::OUString
-include/sfx2/notebookbar/NotebookbarTabControl.hxx:45
+include/sfx2/notebookbar/NotebookbarTabControl.hxx:44
     NotebookbarTabControl m_pListener css::uno::Reference<css::ui::XUIConfigurationListener>
 include/svtools/brwbox.hxx:247
     BrowseBox::CursorMoveAttempt m_nCol const long
@@ -392,14 +394,20 @@ include/svtools/ctrltool.hxx:150
     FontList mpDev2 VclPtr<class OutputDevice>
 include/svx/bmpmask.hxx:130
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
-include/svx/ClassificationDialog.hxx:78
+include/svx/ClassificationDialog.hxx:37
     svx::ClassificationDialog m_aInitialValues std::vector<ClassificationResult>
 include/svx/fmtools.hxx:156
     FmXDisposeListener m_pAdapter rtl::Reference<FmXDisposeMultiplexer>
 include/svx/imapdlg.hxx:118
     SvxIMapDlg aIMapItem class SvxIMapDlgItem
+include/svx/langbox.hxx:78
+    SvxLanguageBoxBase m_aAllString class rtl::OUString
+include/svx/langbox.hxx:81
+    SvxLanguageBoxBase m_bHasLangNone _Bool
 include/svx/ofaitem.hxx:44
     OfaRefItem mxRef rtl::Reference<reference_type>
+include/svx/svdundo.hxx:336
+    SdrUndoReplaceObj nOrdNum sal_uInt32
 include/svx/viewpt3d.hxx:62
     Viewport3D::(anonymous) X double
 include/svx/viewpt3d.hxx:62
@@ -410,7 +418,7 @@ include/test/beans/xpropertyset.hxx:56
     apitest::XPropertySet::PropsToTest constrained std::vector<OUString>
 include/vcl/builder.hxx:123
     VclBuilder m_aDeferredProperties VclBuilder::stringmap
-include/vcl/opengl/OpenGLContext.hxx:35
+include/vcl/opengl/OpenGLContext.hxx:32
     GLWindow bMultiSampleSupported _Bool
 include/vcl/salnativewidgets.hxx:443
     ToolbarValue mbIsTopDockingArea _Bool
@@ -428,8 +436,6 @@ include/vcl/vclenum.hxx:199
     ItalicMatrix xy double
 include/vcl/vclenum.hxx:199
     ItalicMatrix xx double
-include/xmloff/shapeexport.hxx:166
-    XMLShapeExport maShapeInfos ImplXMLShapeExportInfoVector
 include/xmloff/shapeimport.hxx:180
     SdXML3DSceneAttributesHelper mbVRPUsed _Bool
 include/xmloff/shapeimport.hxx:181
@@ -512,7 +518,7 @@ sc/inc/compiler.hxx:256
     ScCompiler::AddInMap pEnglish const char *
 sc/inc/compiler.hxx:258
     ScCompiler::AddInMap pUpper const char *
-sc/inc/document.hxx:2571
+sc/inc/document.hxx:2573
     ScMutationDisable mpDocument class ScDocument *
 sc/inc/matrixoperators.hxx:22
     sc::op::Op_ mInitVal const double
@@ -540,17 +546,17 @@ sc/source/core/data/column.cxx:3379
     (anonymous namespace)::TransferListenersHandler maListenerList (anonymous namespace)::TransferListenersHandler::ListenerListType
 sc/source/core/data/sortparam.cxx:264
     sc::(anonymous namespace)::ReorderIndex mnPos1 SCCOLROW
-sc/source/core/data/table2.cxx:3563
+sc/source/core/data/table2.cxx:3584
     (anonymous namespace)::OutlineArrayFinder mpArray class ScOutlineArray *
-sc/source/core/data/table2.cxx:3564
+sc/source/core/data/table2.cxx:3585
     (anonymous namespace)::OutlineArrayFinder mbSizeChanged _Bool
-sc/source/core/data/table3.cxx:238
+sc/source/core/data/table3.cxx:237
     ScSortInfoArray::Cell maDrawObjects std::vector<SdrObject *>
-sc/source/core/data/table3.cxx:539
+sc/source/core/data/table3.cxx:538
     (anonymous namespace)::SortedColumn miPatternPos PatRangeType::const_iterator
-sc/source/core/data/table3.cxx:565
+sc/source/core/data/table3.cxx:564
     (anonymous namespace)::SortedRowFlags miPosHidden FlagsType::const_iterator
-sc/source/core/data/table3.cxx:566
+sc/source/core/data/table3.cxx:565
     (anonymous namespace)::SortedRowFlags miPosFiltered FlagsType::const_iterator
 sc/source/core/inc/bcaslot.hxx:289
     ScBroadcastAreaSlotMachine aBulkBroadcastAreas ScBroadcastAreasBulk
@@ -584,9 +590,9 @@ sc/source/filter/excel/xltoolbar.hxx:80
     CTBS ictbView sal_uInt16
 sc/source/filter/excel/xltools.cxx:100
      smD union sal_math_Double
-sc/source/filter/html/htmlpars.cxx:3015
+sc/source/filter/html/htmlpars.cxx:3011
     (anonymous namespace)::CSSHandler maPropName struct (anonymous namespace)::CSSHandler::MemStr
-sc/source/filter/html/htmlpars.cxx:3016
+sc/source/filter/html/htmlpars.cxx:3012
     (anonymous namespace)::CSSHandler maPropValue struct (anonymous namespace)::CSSHandler::MemStr
 sc/source/filter/inc/exp_op.hxx:47
     ExportBiff5 pExcRoot struct RootData *
@@ -648,6 +654,8 @@ sc/source/ui/inc/PivotLayoutTreeListData.hxx:36
     ScPivotLayoutTreeListData maDataItemValues std::vector<std::unique_ptr<ScItemValue> >
 sc/source/ui/inc/preview.hxx:47
     ScPreview nTabPage long
+sc/source/ui/inc/simpref.hxx:38
+    ScSimpleRefDlg bAutoReOpen _Bool
 sc/source/ui/inc/tabvwsh.hxx:120
     ScTabViewShell xDisProvInterceptor css::uno::Reference<css::frame::XDispatchProviderInterceptor>
 sc/source/ui/inc/transobj.hxx:47
@@ -656,7 +664,7 @@ sc/source/ui/inc/uiitems.hxx:47
     ScInputStatusItem aStartPos const class ScAddress
 sc/source/ui/inc/uiitems.hxx:48
     ScInputStatusItem aEndPos const class ScAddress
-scripting/source/vbaevents/eventhelper.cxx:182
+scripting/source/vbaevents/eventhelper.cxx:183
     TranslatePropMap aTransInfo const struct TranslateInfo
 sd/source/filter/ppt/ppt97animations.hxx:41
     Ppt97AnimationInfoAtom nSlideCount sal_uInt16
@@ -674,21 +682,21 @@ sd/source/ui/remotecontrol/Receiver.hxx:35
     sd::Receiver pTransmitter class sd::Transmitter *
 sd/source/ui/sidebar/MasterPageContainerProviders.hxx:136
     sd::sidebar::TemplatePreviewProvider msURL const class rtl::OUString
-sd/source/ui/sidebar/SlideBackground.hxx:93
+sd/source/ui/sidebar/SlideBackground.hxx:94
     sd::sidebar::SlideBackground m_pContainer VclPtr<class VclVBox>
 sfx2/source/appl/fileobj.hxx:37
     SvFileObject mxDelMed tools::SvRef<SfxMedium>
-sfx2/source/dialog/filtergrouping.cxx:339
+sfx2/source/dialog/filtergrouping.cxx:340
     sfx2::ReferToFilterEntry m_aClassPos FilterGroup::iterator
 sfx2/source/inc/splitwin.hxx:51
     SfxSplitWindow pActive VclPtr<class SfxDockingWindow>
-sfx2/source/view/classificationcontroller.cxx:59
+sfx2/source/view/classificationcontroller.cxx:61
     sfx2::ClassificationCategoriesController m_aPropertyListener class sfx2::ClassificationPropertyListener
 slideshow/source/engine/opengl/TransitionImpl.hxx:296
     Vertex normal glm::vec3
 slideshow/source/engine/opengl/TransitionImpl.hxx:297
     Vertex texcoord glm::vec2
-slideshow/source/engine/slideshowimpl.cxx:1045
+slideshow/source/engine/slideshowimpl.cxx:1044
     (anonymous namespace)::SlideShowImpl::PrefetchPropertiesFunc mpSlideShowImpl class (anonymous namespace)::SlideShowImpl *const
 slideshow/test/testview.cxx:53
     ImplTestView maCreatedSprites std::vector<std::pair<basegfx::B2DVector, double> >
@@ -760,7 +768,7 @@ svx/source/form/dataaccessdescriptor.cxx:40
     svx::ODADescriptorImpl m_bSetOutOfDate _Bool
 svx/source/form/formcontroller.cxx:212
     svxform::ColumnInfo nNullable sal_Int32
-svx/source/inc/docrecovery.hxx:131
+svx/source/inc/docrecovery.hxx:130
     svx::DocRecovery::TURLInfo Module class rtl::OUString
 svx/source/sdr/attribute/sdrformtextattribute.cxx:155
     drawinglayer::attribute::ImpSdrFormTextAttribute mnFormTextShdwTransp const sal_uInt16
@@ -792,7 +800,7 @@ svx/source/svdraw/svdpdf.hxx:196
     ImpSdrPdfImport mdPageWidthPts double
 svx/source/table/tablertfimporter.cxx:54
     sdr::table::RTFCellDefault maItemSet class SfxItemSet
-svx/source/tbxctrls/tbcontrl.cxx:191
+svx/source/tbxctrls/tbcontrl.cxx:194
     SvxFontNameBox_Impl m_aOwnFontList ::std::unique_ptr<FontList>
 sw/inc/accmap.hxx:96
     SwAccessibleMap mvShapes SwShapeList_Impl
@@ -800,7 +808,7 @@ sw/inc/shellio.hxx:150
     SwReader aFileName const class rtl::OUString
 sw/inc/shellio.hxx:151
     SwReader sBaseURL class rtl::OUString
-sw/inc/swmodule.hxx:107
+sw/inc/swmodule.hxx:108
     SwModule m_xLinguServiceEventListener css::uno::Reference<css::linguistic2::XLinguServiceEventListener>
 sw/inc/swwait.hxx:45
     SwWait mpLockedDispatchers std::unordered_set<SfxDispatcher *>
@@ -942,29 +950,29 @@ vcl/inc/salmenu.hxx:43
     SalMenuButtonItem maImage class Image
 vcl/inc/salmenu.hxx:44
     SalMenuButtonItem maToolTipText class rtl::OUString
-vcl/inc/salwtype.hxx:195
+vcl/inc/salwtype.hxx:198
     SalSurroundingTextRequestEvent mnStart sal_uLong
-vcl/inc/salwtype.hxx:196
+vcl/inc/salwtype.hxx:199
     SalSurroundingTextRequestEvent mnEnd sal_uLong
-vcl/inc/salwtype.hxx:207
-    SalQueryCharPositionEvent mbValid _Bool
-vcl/inc/salwtype.hxx:209
-    SalQueryCharPositionEvent mbVertical _Bool
 vcl/inc/salwtype.hxx:210
-    SalQueryCharPositionEvent mnCursorBoundX long
-vcl/inc/salwtype.hxx:211
-    SalQueryCharPositionEvent mnCursorBoundY long
+    SalQueryCharPositionEvent mbValid _Bool
 vcl/inc/salwtype.hxx:212
-    SalQueryCharPositionEvent mnCursorBoundWidth long
+    SalQueryCharPositionEvent mbVertical _Bool
 vcl/inc/salwtype.hxx:213
+    SalQueryCharPositionEvent mnCursorBoundX long
+vcl/inc/salwtype.hxx:214
+    SalQueryCharPositionEvent mnCursorBoundY long
+vcl/inc/salwtype.hxx:215
+    SalQueryCharPositionEvent mnCursorBoundWidth long
+vcl/inc/salwtype.hxx:216
     SalQueryCharPositionEvent mnCursorBoundHeight long
-vcl/inc/salwtype.hxx:240
+vcl/inc/salwtype.hxx:243
     SalInputContext mpFont rtl::Reference<LogicalFontInstance>
-vcl/inc/salwtype.hxx:247
+vcl/inc/salwtype.hxx:250
     SalSwipeEvent mnVelocityY double
 vcl/inc/sft.hxx:462
     vcl::TrueTypeFont mapper sal_uInt32 (*)(const sal_uInt8 *, sal_uInt32, sal_uInt32)
-vcl/inc/svdata.hxx:415
+vcl/inc/svdata.hxx:417
     ImplSVEvent mpInstanceRef VclPtr<vcl::Window>
 vcl/inc/unx/gtk/gtkframe.hxx:88
     GtkSalFrame::IMHandler::PreviousKeyPress window GdkWindow *
@@ -972,8 +980,6 @@ vcl/inc/unx/gtk/gtkframe.hxx:89
     GtkSalFrame::IMHandler::PreviousKeyPress send_event gint8
 vcl/inc/unx/gtk/gtkframe.hxx:90
     GtkSalFrame::IMHandler::PreviousKeyPress time guint32
-vcl/inc/widgetdraw/WidgetDefinition.hxx:121
-    vcl::ExternalSourceDrawCommand msSource class rtl::OUString
 vcl/inc/WidgetThemeLibrary.hxx:20
     vcl::WidgetDrawStyle nSize uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:91
@@ -982,7 +988,7 @@ vcl/inc/WidgetThemeLibrary.hxx:92
     vcl::ControlDrawParameters bIsAction _Bool
 vcl/inc/WidgetThemeLibrary.hxx:93
     vcl::ControlDrawParameters nValue int64_t
-vcl/opengl/salbmp.cxx:441
+vcl/opengl/salbmp.cxx:446
     (anonymous namespace)::ScanlineWriter mpCurrentScanline sal_uInt8 *
 vcl/source/filter/graphicfilter.cxx:905
     ImpFilterLibCacheEntry maFiltername const class rtl::OUString
@@ -1026,8 +1032,8 @@ vcl/unx/gtk/a11y/atkutil.cxx:142
     DocumentFocusListener m_aRefList std::set<uno::Reference<uno::XInterface> >
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent const AtkObject
-vcl/unx/gtk/a11y/atkwrapper.hxx:80
-    AtkObjectWrapperClass aParentClass const AtkObjectClass
+vcl/unx/gtk/a11y/atkwrapper.hxx:78
+    AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk/gloactiongroup.cxx:30
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20

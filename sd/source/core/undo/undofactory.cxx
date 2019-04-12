@@ -37,9 +37,9 @@ std::unique_ptr<SdrUndoAction> UndoFactory::CreateUndoObjectSetText( SdrObject& 
     return std::make_unique<UndoObjectSetText>( rNewObj, nText );
 }
 
-std::unique_ptr<SdrUndoAction> UndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
+std::unique_ptr<SdrUndoAction> UndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject )
 {
-    return std::make_unique<UndoReplaceObject>( rOldObject, rNewObject, bOrdNumDirect );
+    return std::make_unique<UndoReplaceObject>( rOldObject, rNewObject );
 }
 
 std::unique_ptr<SdrUndoAction> UndoFactory::CreateUndoGeoObject( SdrObject& rObject )

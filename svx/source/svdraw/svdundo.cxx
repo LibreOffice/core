@@ -833,23 +833,14 @@ OUString SdrUndoNewObj::GetComment() const
     return aStr;
 }
 
-SdrUndoReplaceObj::SdrUndoReplaceObj(SdrObject& rOldObj1, SdrObject& rNewObj1, bool bOrdNumDirect)
+SdrUndoReplaceObj::SdrUndoReplaceObj(SdrObject& rOldObj1, SdrObject& rNewObj1)
     : SdrUndoObj(rOldObj1)
     , bOldOwner(false)
     , bNewOwner(false)
     , pNewObj(&rNewObj1)
 {
     SetOldOwner(true);
-
     pObjList=pObj->getParentSdrObjListFromSdrObject();
-    if (bOrdNumDirect)
-    {
-        nOrdNum=pObj->GetOrdNumDirect();
-    }
-    else
-    {
-        nOrdNum=pObj->GetOrdNum();
-    }
 }
 
 SdrUndoReplaceObj::~SdrUndoReplaceObj()
@@ -1729,9 +1720,9 @@ std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoObjectOrdNum( SdrObject
     return std::make_unique<SdrUndoObjOrdNum>( rObject, nOldOrdNum1, nNewOrdNum1 );
 }
 
-std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
+std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject )
 {
-    return std::make_unique<SdrUndoReplaceObj>( rOldObject, rNewObject, bOrdNumDirect );
+    return std::make_unique<SdrUndoReplaceObj>( rOldObject, rNewObject );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoObjectLayerChange( SdrObject& rObject, SdrLayerID aOldLayer, SdrLayerID aNewLayer )

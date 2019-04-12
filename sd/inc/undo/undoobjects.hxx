@@ -73,7 +73,7 @@ private:
 class UndoReplaceObject : public SdrUndoReplaceObj, public UndoRemovePresObjectImpl
 {
 public:
-    UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect );
+    UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject );
 
     virtual void Undo() override;
     virtual void Redo() override;

@@ -333,11 +333,10 @@ class SVX_DLLPUBLIC SdrUndoReplaceObj : public SdrUndoObj
     bool                        bNewOwner;
 
     SdrObjList*                 pObjList;
-    sal_uInt32                      nOrdNum;
     SdrObject*                  pNewObj;
 
 public:
-    SdrUndoReplaceObj(SdrObject& rOldObj1, SdrObject& rNewObj1, bool bOrdNumDirect);
+    SdrUndoReplaceObj(SdrObject& rOldObj1, SdrObject& rNewObj1);
     virtual ~SdrUndoReplaceObj() override;
 
     virtual void Undo() override;
@@ -717,7 +716,7 @@ public:
 
     virtual std::unique_ptr<SdrUndoAction> CreateUndoObjectOrdNum( SdrObject& rObject, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1);
 
-    virtual std::unique_ptr<SdrUndoAction> CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect = false );
+    virtual std::unique_ptr<SdrUndoAction> CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject );
     virtual std::unique_ptr<SdrUndoAction> CreateUndoObjectLayerChange( SdrObject& rObject, SdrLayerID aOldLayer, SdrLayerID aNewLayer );
     virtual std::unique_ptr<SdrUndoAction> CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText );
 
