@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_c14484ba",
+        "filename": "configure.ac",
+        "patchSetId": 37
+      },
+      "lineNbr": 3291,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-12T11:38:11Z",
+      "side": 1,
+      "message": "Sorry to nitpick - trailing blanks ;-)",
+      "range": {
+        "startLine": 3291,
+        "startChar": 0,
+        "endLine": 3291,
+        "endChar": 4
+      },
+      "revId": "f4c81f7ff47fa914027900c57de2de8734b0af74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
