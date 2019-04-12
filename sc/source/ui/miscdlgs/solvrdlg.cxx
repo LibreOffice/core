@@ -42,86 +42,75 @@ namespace
     }
 }
 
-ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
+ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
                           ScDocument* pDocument,
                           const ScAddress& aCursorPos )
 
-    : ScAnyRefDlg(pB, pCW, pParent, "GoalSeekDialog", "modules/scalc/ui/goalseekdlg.ui")
+    : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/goalseekdlg.ui", "GoalSeekDialog")
     , theFormulaCell(aCursorPos)
     , theVariableCell(aCursorPos)
     , pDoc(pDocument)
     , nCurTab(aCursorPos.Tab())
-    , pEdActive(nullptr)
     , bDlgLostFocus(false)
     , errMsgInvalidVar(ScResId(STR_INVALIDVAR))
     , errMsgInvalidForm(ScResId(STR_INVALIDFORM))
     , errMsgNoFormula(ScResId(STR_NOFORMULA))
     , errMsgInvalidVal(ScResId(STR_INVALIDVAL))
+    , m_pEdActive(nullptr)
+    , m_xFtFormulaCell(m_xBuilder->weld_label("formulatext"))
+    , m_xEdFormulaCell(new formula::WeldRefEdit(m_xBuilder->weld_entry("formulaedit")))
+    , m_xRBFormulaCell(new formula::WeldRefButton(m_xBuilder->weld_button("formulabutton")))
+    , m_xEdTargetVal(m_xBuilder->weld_entry("target"))
+    , m_xFtVariableCell(m_xBuilder->weld_label("vartext"))
+    , m_xEdVariableCell(new formula::WeldRefEdit(m_xBuilder->weld_entry("varedit")))
+    , m_xRBVariableCell(new formula::WeldRefButton(m_xBuilder->weld_button("varbutton")))
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
+    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
 {
-    get(m_pFtFormulaCell, "formulatext");
-    get(m_pEdFormulaCell, "formulaedit");
-    m_pEdFormulaCell->SetReferences(this, m_pFtFormulaCell);
-    get(m_pRBFormulaCell, "formulabutton");
-    m_pRBFormulaCell->SetReferences(this, m_pEdFormulaCell);
-    get(m_pEdTargetVal, "target");
-    get(m_pFtVariableCell, "vartext");
-    get(m_pEdVariableCell, "varedit");
-    m_pEdVariableCell->SetReferences(this, m_pFtVariableCell);
-    get(m_pRBVariableCell, "varbutton");
-    m_pRBVariableCell->SetReferences(this, m_pEdVariableCell);
-    get(m_pBtnOk, "ok");
-    get(m_pBtnCancel, "cancel");
+    m_xEdFormulaCell->SetReferences(this, m_xFtFormulaCell.get());
+    m_xRBFormulaCell->SetReferences(this, m_xEdFormulaCell.get());
+    m_xEdVariableCell->SetReferences(this, m_xFtVariableCell.get());
+    m_xRBVariableCell->SetReferences(this, m_xEdVariableCell.get());
     Init();
 }
 
 ScSolverDlg::~ScSolverDlg()
 {
-    disposeOnce();
-}
-
-void ScSolverDlg::dispose()
-{
-    m_pFtFormulaCell.clear();
-    m_pEdFormulaCell.clear();
-    m_pRBFormulaCell.clear();
-    m_pEdTargetVal.clear();
-    m_pFtVariableCell.clear();
-    m_pEdVariableCell.clear();
-    m_pRBVariableCell.clear();
-    m_pBtnOk.clear();
-    m_pBtnCancel.clear();
-    pEdActive.clear();
-    ScAnyRefDlg::dispose();
 }
 
 void ScSolverDlg::Init()
 {
-    m_pBtnOk->SetClickHdl( LINK( this, ScSolverDlg, BtnHdl ) );
-    m_pBtnCancel->SetClickHdl( LINK( this, ScSolverDlg, BtnHdl ) );
+    m_xBtnOk->connect_clicked( LINK( this, ScSolverDlg, BtnHdl ) );
+    m_xBtnCancel->connect_clicked( LINK( this, ScSolverDlg, BtnHdl ) );
 
-    Link<Control&,void> aLink = LINK( this, ScSolverDlg, GetFocusHdl );
-    m_pEdFormulaCell->SetGetFocusHdl( aLink );
-    m_pRBFormulaCell->SetGetFocusHdl( aLink );
-    m_pEdVariableCell->SetGetFocusHdl( aLink );
-    m_pRBVariableCell->SetGetFocusHdl( aLink );
-    m_pEdTargetVal->SetGetFocusHdl( aLink );
+    Link<formula::WeldRefEdit&,void> aEditLink = LINK( this, ScSolverDlg, GetEditFocusHdl );
+    m_xEdFormulaCell->SetGetFocusHdl( aEditLink );
+    m_xEdVariableCell->SetGetFocusHdl( aEditLink );
 
-    aLink = LINK( this, ScSolverDlg, LoseFocusHdl );
-    m_pEdFormulaCell->SetLoseFocusHdl ( aLink );
-    m_pRBFormulaCell->SetLoseFocusHdl ( aLink );
-    m_pEdVariableCell->SetLoseFocusHdl ( aLink );
-    m_pRBVariableCell->SetLoseFocusHdl ( aLink );
+    Link<formula::WeldRefButton&,void> aButtonLink = LINK( this, ScSolverDlg, GetButtonFocusHdl );
+    m_xRBFormulaCell->SetGetFocusHdl( aButtonLink );
+    m_xRBVariableCell->SetGetFocusHdl( aButtonLink );
+
+    m_xEdTargetVal->connect_focus_in(LINK(this, ScSolverDlg, GetFocusHdl));
+
+    aEditLink = LINK( this, ScSolverDlg, LoseEditFocusHdl );
+    m_xEdFormulaCell->SetLoseFocusHdl ( aEditLink );
+    m_xEdVariableCell->SetLoseFocusHdl ( aEditLink );
+
+    aButtonLink = LINK( this, ScSolverDlg, LoseButtonFocusHdl );
+    m_xRBFormulaCell->SetLoseFocusHdl ( aButtonLink );
+    m_xRBVariableCell->SetLoseFocusHdl ( aButtonLink );
 
     OUString aStr(theFormulaCell.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention()));
 
-    m_pEdFormulaCell->SetText( aStr );
-    m_pEdFormulaCell->GrabFocus();
-    pEdActive = m_pEdFormulaCell;
+    m_xEdFormulaCell->SetText( aStr );
+    m_xEdFormulaCell->GrabFocus();
+    m_pEdActive = m_xEdFormulaCell.get();
 }
 
-bool ScSolverDlg::Close()
+void ScSolverDlg::Close()
 {
-    return DoClose( ScSolverDlgWrapper::GetChildWindowId() );
+    DoClose( ScSolverDlgWrapper::GetChildWindowId() );
 }
 
 void ScSolverDlg::SetActive()
@@ -129,22 +118,22 @@ void ScSolverDlg::SetActive()
     if ( bDlgLostFocus )
     {
         bDlgLostFocus = false;
-        if( pEdActive )
-            pEdActive->GrabFocus();
+        if( m_pEdActive )
+            m_pEdActive->GrabFocus();
     }
     else
     {
-        GrabFocus();
+        m_xDialog->grab_focus();
     }
     RefInputDone();
 }
 
 void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    if( pEdActive )
+    if( m_pEdActive )
     {
         if ( rRef.aStart != rRef.aEnd )
-            RefInputStart(pEdActive);
+            RefInputStart(m_pEdActive);
 
         ScAddress   aAdr = rRef.aStart;
         ScRefFlags      nFmt = ( aAdr.Tab() == nCurTab )
@@ -152,11 +141,11 @@ void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
                                 : ScRefFlags::ADDR_ABS_3D;
 
         OUString aStr(aAdr.Format(nFmt, pDocP, pDocP->GetAddressConvention()));
-        pEdActive->SetRefString( aStr );
+        m_pEdActive->SetRefString( aStr );
 
-        if ( pEdActive == m_pEdFormulaCell )
+        if (m_pEdActive == m_xEdFormulaCell.get())
             theFormulaCell = aAdr;
-        else if ( pEdActive == m_pEdVariableCell )
+        else if (m_pEdActive == m_xEdVariableCell.get())
             theVariableCell = aAdr;
     }
 }
@@ -166,30 +155,30 @@ void ScSolverDlg::RaiseError( ScSolverErr eError )
     switch ( eError )
     {
         case SOLVERR_NOFORMULA:
-            lclErrorDialog(GetFrameWeld(), errMsgNoFormula,
+            lclErrorDialog(m_xDialog.get(), errMsgNoFormula,
                 [this](sal_Int32 /*nResult*/) {
-                    m_pEdFormulaCell->GrabFocus();
+                    m_xEdFormulaCell->GrabFocus();
                 });
             break;
 
         case SOLVERR_INVALID_FORMULA:
-            lclErrorDialog(GetFrameWeld(), errMsgInvalidForm,
+            lclErrorDialog(m_xDialog.get(), errMsgInvalidForm,
                 [this](sal_Int32 /*nResult*/) {
-                    m_pEdFormulaCell->GrabFocus();
+                    m_xEdFormulaCell->GrabFocus();
                 });
             break;
 
         case SOLVERR_INVALID_VARIABLE:
-            lclErrorDialog(GetFrameWeld(), errMsgInvalidVar,
+            lclErrorDialog(m_xDialog.get(), errMsgInvalidVar,
                 [this](sal_Int32 /*nResult*/) {
-                    m_pEdVariableCell->GrabFocus();
+                    m_xEdVariableCell->GrabFocus();
                 });
             break;
 
         case SOLVERR_INVALID_TARGETVALUE:
-            lclErrorDialog(GetFrameWeld(), errMsgInvalidVal,
+            lclErrorDialog(m_xDialog.get(), errMsgInvalidVal,
                 [this](sal_Int32 /*nResult*/) {
-                    m_pEdTargetVal->GrabFocus();
+                    m_xEdTargetVal->grab_focus();
                 });
             break;
     }
@@ -197,7 +186,7 @@ void ScSolverDlg::RaiseError( ScSolverErr eError )
 
 bool ScSolverDlg::IsRefInputMode() const
 {
-    return pEdActive != nullptr;
+    return m_pEdActive != nullptr;
 }
 
 bool ScSolverDlg::CheckTargetValue( const OUString& rStrVal )
@@ -210,11 +199,11 @@ bool ScSolverDlg::CheckTargetValue( const OUString& rStrVal )
 
 // Handler:
 
-IMPL_LINK( ScSolverDlg, BtnHdl, Button*, pBtn, void )
+IMPL_LINK(ScSolverDlg, BtnHdl, weld::Button&, rBtn, void)
 {
-    if (pBtn == m_pBtnOk)
+    if (&rBtn == m_xBtnOk.get())
     {
-        theTargetValStr = m_pEdTargetVal->GetText();
+        theTargetValStr = m_xEdTargetVal->get_text();
 
         // The following code checks:
         // 1. do the strings contain correct references / defined names?
@@ -222,8 +211,8 @@ IMPL_LINK( ScSolverDlg, BtnHdl, Button*, pBtn, void )
         // 3. has a valid target value been entered?
 
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-        ScRefFlags  nRes1 = theFormulaCell .Parse( m_pEdFormulaCell->GetText(),  pDoc, eConv );
-        ScRefFlags  nRes2 = theVariableCell.Parse( m_pEdVariableCell->GetText(), pDoc, eConv );
+        ScRefFlags  nRes1 = theFormulaCell .Parse( m_xEdFormulaCell->GetText(),  pDoc, eConv );
+        ScRefFlags  nRes2 = theVariableCell.Parse( m_xEdVariableCell->GetText(), pDoc, eConv );
 
         if ( (nRes1 & ScRefFlags::VALID) == ScRefFlags::VALID )
         {
@@ -250,7 +239,7 @@ IMPL_LINK( ScSolverDlg, BtnHdl, Button*, pBtn, void )
                         GetBindings().GetDispatcher()->ExecuteList(SID_SOLVE,
                                                   SfxCallMode::SLOT | SfxCallMode::RECORD,
                                                   { &aOutItem });
-                        Close();
+                        response(RET_OK);
                     }
                     else RaiseError( SOLVERR_NOFORMULA );
                 }
@@ -260,31 +249,49 @@ IMPL_LINK( ScSolverDlg, BtnHdl, Button*, pBtn, void )
         }
         else RaiseError( SOLVERR_INVALID_FORMULA );
     }
-    else if (pBtn == m_pBtnCancel)
+    else if (&rBtn == m_xBtnCancel.get())
     {
-        Close();
+        response(RET_CANCEL);
     }
 }
 
-IMPL_LINK( ScSolverDlg, GetFocusHdl, Control&, rCtrl, void )
+IMPL_LINK(ScSolverDlg, GetEditFocusHdl, formula::WeldRefEdit&, rCtrl, void)
 {
-    Edit* pEdit = nullptr;
-    pEdActive = nullptr;
+    if (&rCtrl == m_xEdFormulaCell.get())
+        m_pEdActive = m_xEdFormulaCell.get();
+    else if (&rCtrl == m_xEdVariableCell.get())
+        m_pEdActive = m_xEdVariableCell.get();
 
-    if( (&rCtrl == static_cast<Control*>(m_pEdFormulaCell)) || (&rCtrl == static_cast<Control*>(m_pRBFormulaCell)) )
-        pEdit = pEdActive = m_pEdFormulaCell;
-    else if( (&rCtrl == static_cast<Control*>(m_pEdVariableCell)) || (&rCtrl == static_cast<Control*>(m_pRBVariableCell)) )
-        pEdit = pEdActive = m_pEdVariableCell;
-    else if( &rCtrl == static_cast<Control*>(m_pEdTargetVal) )
-        pEdit = m_pEdTargetVal;
-
-    if( pEdit )
-        pEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
+    if (m_pEdActive)
+        m_pEdActive->SelectAll();
 }
 
-IMPL_LINK_NOARG(ScSolverDlg, LoseFocusHdl, Control&, void)
+IMPL_LINK_NOARG(ScSolverDlg, GetFocusHdl, weld::Widget&, void)
 {
-    bDlgLostFocus = !IsActive();
+    m_pEdActive = nullptr;
+    m_xEdTargetVal->select_region(0, -1);
 }
+
+IMPL_LINK(ScSolverDlg, GetButtonFocusHdl, formula::WeldRefButton&, rCtrl, void)
+{
+    if (&rCtrl == m_xRBFormulaCell.get())
+        m_pEdActive = m_xEdFormulaCell.get();
+    else if (&rCtrl == m_xRBVariableCell.get())
+        m_pEdActive = m_xEdVariableCell.get();
+
+    if (m_pEdActive)
+        m_pEdActive->SelectAll();
+}
+
+IMPL_LINK_NOARG(ScSolverDlg, LoseEditFocusHdl, formula::WeldRefEdit&, void)
+{
+    bDlgLostFocus = !m_xDialog->has_toplevel_focus();
+}
+
+IMPL_LINK_NOARG(ScSolverDlg, LoseButtonFocusHdl, formula::WeldRefButton&, void)
+{
+    bDlgLostFocus = !m_xDialog->has_toplevel_focus();
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

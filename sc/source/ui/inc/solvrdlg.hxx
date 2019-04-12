@@ -33,54 +33,59 @@ enum ScSolverErr
         SOLVERR_INVALID_TARGETVALUE
     };
 
-class ScSolverDlg : public ScAnyRefDlg
+class ScSolverDlg : public ScAnyRefDlgController
 {
 public:
-                    ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
-                                 ScDocument* pDocument,
-                                 const ScAddress& aCursorPos );
-                    virtual ~ScSolverDlg() override;
-    virtual void    dispose() override;
+    ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
+                 ScDocument* pDocument,
+                 const ScAddress& aCursorPos );
+    virtual ~ScSolverDlg() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
     virtual bool    IsRefInputMode() const override;
     virtual void    SetActive() override;
-    virtual bool    Close() override;
+    virtual void    Close() override;
 
 private:
-    VclPtr<FixedText>      m_pFtFormulaCell;
-    VclPtr<formula::RefEdit>   m_pEdFormulaCell;
-    VclPtr<formula::RefButton> m_pRBFormulaCell;
-
-    VclPtr<Edit>           m_pEdTargetVal;
-
-    VclPtr<FixedText>      m_pFtVariableCell;
-    VclPtr<formula::RefEdit>   m_pEdVariableCell;
-    VclPtr<formula::RefButton> m_pRBVariableCell;
-
-    VclPtr<OKButton>       m_pBtnOk;
-    VclPtr<CancelButton>   m_pBtnCancel;
-
     ScAddress       theFormulaCell;
     ScAddress       theVariableCell;
     OUString        theTargetValStr;
 
     ScDocument*     pDoc;
     const SCTAB     nCurTab;
-    VclPtr<formula::RefEdit>       pEdActive;
     bool            bDlgLostFocus;
     const OUString  errMsgInvalidVar;
     const OUString  errMsgInvalidForm;
     const OUString  errMsgNoFormula;
     const OUString  errMsgInvalidVal;
 
+    formula::WeldRefEdit* m_pEdActive;
+
+    std::unique_ptr<weld::Label> m_xFtFormulaCell;
+    std::unique_ptr<formula::WeldRefEdit> m_xEdFormulaCell;
+    std::unique_ptr<formula::WeldRefButton> m_xRBFormulaCell;
+
+    std::unique_ptr<weld::Entry> m_xEdTargetVal;
+
+    std::unique_ptr<weld::Label> m_xFtVariableCell;
+    std::unique_ptr<formula::WeldRefEdit> m_xEdVariableCell;
+    std::unique_ptr<formula::WeldRefButton> m_xRBVariableCell;
+
+    std::unique_ptr<weld::Button> m_xBtnOk;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
+
     void    Init();
     bool    CheckTargetValue( const OUString& rStrVal );
     void    RaiseError( ScSolverErr eError );
 
-    DECL_LINK( BtnHdl, Button*, void );
-    DECL_LINK( GetFocusHdl, Control&, void );
-    DECL_LINK( LoseFocusHdl, Control&, void );
+    DECL_LINK( BtnHdl, weld::Button&, void );
+    DECL_LINK( GetEditFocusHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( LoseEditFocusHdl, formula::WeldRefEdit&, void );
+
+    DECL_LINK( GetButtonFocusHdl, formula::WeldRefButton&, void );
+    DECL_LINK( LoseButtonFocusHdl, formula::WeldRefButton&, void );
+
+    DECL_LINK( GetFocusHdl, weld::Widget&, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_SOLVRDLG_HXX
