@@ -348,7 +348,32 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
     switch( m_nMoveType )
     {
         case NID_PGE:
-            bNext ? PhyPageDown() : PhyPageUp();
+            if ( bNext )
+            {
+                if ( USHRT_MAX == rSh.GetNextPrevPageNum( true ) )
+                {
+                    rSh.GotoPage( 1, true );
+                    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
+                }
+                else
+                {
+                    PhyPageDown();
+                    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+                }
+            }
+            else
+            {
+                if ( USHRT_MAX == rSh.GetNextPrevPageNum( false ) )
+                {
+                    rSh.GotoPage( rSh.GetPageCnt(), true );
+                    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::StartWrapped );
+                }
+                else
+                {
+                    PhyPageUp();
+                    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+                }
+            }
         break;
         case NID_TBL :
             rSh.EnterStdMode();
