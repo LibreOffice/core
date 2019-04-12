@@ -2720,7 +2720,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
         if ( graphics.getLength() > 0 )
         {
             m_aGraphics.push_back(graphics[0]);
-            Image img = Image(graphics[0]);
+            Image img(graphics[0]);
             m_xTbSymbol->InsertItem(m_aGraphics.size(), img, elem.first);
         }
     }
@@ -2765,7 +2765,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
 
         if ( graphics.getLength() > 0 )
         {
-            Image img = Image(graphics[0]);
+            Image img(graphics[0]);
             if (!img.GetBitmapEx().IsEmpty())
             {
                 m_aGraphics.push_back(graphics[0]);

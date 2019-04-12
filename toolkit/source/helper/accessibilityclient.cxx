@@ -172,8 +172,7 @@ namespace toolkit
             s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
             if ( s_hAccessibleImplementationModule != nullptr )
             {
-                const OUString sFactoryCreationFunc =
-                    OUString("getStandardAccessibleFactory");
+                const OUString sFactoryCreationFunc("getStandardAccessibleFactory");
                 s_pAccessibleFactoryFunc = reinterpret_cast<GetStandardAccComponentFactory>(
                     osl_getFunctionSymbol( s_hAccessibleImplementationModule, sFactoryCreationFunc.pData ));
 

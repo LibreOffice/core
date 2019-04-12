@@ -1132,8 +1132,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
                                                                           StreamMode::STD_WRITE );
                 if ( pStream && !pStream->GetError() )
                 {
-                    uno::Reference< io::XStream > xStream =
-                        uno::Reference < io::XStream >( new ::utl::OStreamWrapper( std::move(pStream) ) );
+                    uno::Reference< io::XStream > xStream( new ::utl::OStreamWrapper( std::move(pStream) ) );
                     xResult = new OFSStreamContainer(xStream);
                 }
             }

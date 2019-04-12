@@ -388,7 +388,7 @@ int ftruncate_with_name(int fd, sal_uInt64 uSize, rtl_String* path)
      * abstraction layer that keeps the pathname around.
      */
 
-    OString fn = OString(path);
+    OString fn(path);
 
 #ifdef MACOSX
     fn = macxp_resolveAliasAndConvert(fn);

@@ -380,7 +380,7 @@ void ChartController::executeDispatch_InsertTrendline()
     // open dialog
     SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
     aItemConverter.FillItemSet( aItemSet );
-    ObjectPropertiesDialogParameter aDialogParameter = ObjectPropertiesDialogParameter(
+    ObjectPropertiesDialogParameter aDialogParameter(
         ObjectIdentifier::createDataCurveCID(
             ObjectIdentifier::getSeriesParticleFromCID( m_aSelection.getSelectedCID()),
             RegressionCurveHelper::getRegressionCurveIndex( xRegressionCurveContainer, xCurve ), false ));
@@ -439,7 +439,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
         SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
         aItemSet.Put(SfxBoolItem(SCHATTR_STAT_ERRORBAR_TYPE,bYError));
         aItemConverter.FillItemSet( aItemSet );
-        ObjectPropertiesDialogParameter aDialogParameter = ObjectPropertiesDialogParameter(
+        ObjectPropertiesDialogParameter aDialogParameter(
             ObjectIdentifier::createClassifiedIdentifierWithParent(
                 objType, OUString(), m_aSelection.getSelectedCID()));
         aDialogParameter.init( getModel() );

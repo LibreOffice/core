@@ -161,7 +161,7 @@ void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
         MapControlModels aModelAssignment;
 
         typedef TreeVisitor< FormComponentPair, FormHierarchyComparator, FormComponentAssignment >   FormComponentVisitor;
-        FormComponentVisitor aVisitor = FormComponentVisitor( FormHierarchyComparator() );
+        FormComponentVisitor aVisitor{ FormHierarchyComparator() };
 
         FormComponentAssignment aAssignmentProcessor( aModelAssignment );
         aVisitor.process( FormComponentPair( xForeignForms, m_xForms ), aAssignmentProcessor );

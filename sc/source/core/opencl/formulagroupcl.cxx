@@ -924,7 +924,7 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
         {
             if (vRef.mpStringArray[i])
             {
-                const OUString tmp = OUString(vRef.mpStringArray[i]);
+                const OUString tmp(vRef.mpStringArray[i]);
                 pHashBuffer[i] = tmp.hashCode();
             }
             else

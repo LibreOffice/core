@@ -386,7 +386,7 @@ void SAL_CALL ChartTypeTemplate::applyStyle(
         try
         {
             StackMode eStackMode = getStackMode( nChartTypeIndex );
-            const uno::Any aPropValue = uno::Any(
+            const uno::Any aPropValue(
                 ( (eStackMode == StackMode::YStacked) ||
                   (eStackMode == StackMode::YStackedPercent) )
                 ? chart2::StackingDirection_Y_STACKING

@@ -31,6 +31,7 @@ public:
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
     bool VisitCXXConstructExpr(CXXConstructExpr const*);
+    bool VisitVarDecl(VarDecl const*);
 
     // ignore some contexts within which nullptr is fine
     bool TraverseReturnStmt(ReturnStmt*) { return true; }
@@ -66,6 +67,42 @@ bool SimplifyConstruct::VisitCXXConstructExpr(CXXConstructExpr const* constructE
                constructExpr->getSourceRange().getBegin())
             << constructExpr->getType() << constructExpr->getSourceRange();
     }
+    return true;
+}
+
+bool SimplifyConstruct::VisitVarDecl(VarDecl const* varDecl)
+{
+    if (ignoreLocation(varDecl))
+        return true;
+    // cannot use OUString s("xxx") style syntax in a parameter
+    if (isa<ParmVarDecl>(varDecl))
+        return true;
+    varDecl = varDecl->getCanonicalDecl();
+    if (!varDecl->getInit())
+        return true;
+    if (varDecl->getInitStyle() != VarDecl::InitializationStyle::CInit)
+        return true;
+    if (!varDecl->getType()->isRecordType())
+        return true;
+    if (isa<AutoType>(varDecl->getType()))
+        return true;
+
+    auto init = varDecl->getInit()->IgnoreImplicit();
+    auto functionalCast = dyn_cast<CXXFunctionalCastExpr>(init);
+    if (!functionalCast)
+        return true;
+
+    // e.g. the LANGUAGE_DONTKNOW defines
+    if (compiler.getSourceManager().isMacroBodyExpansion(compat::getBeginLoc(init)))
+        return true;
+
+    //    varDecl->getInit()->IgnoreImplicit()->dump();
+    //    varDecl->getType()->dump();
+    //    varDecl->getType()->getUnqualifiedDesugaredType()->dump();
+
+    report(DiagnosticsEngine::Warning, "simplify", varDecl->getLocation())
+        << varDecl->getSourceRange();
+
     return true;
 }
 

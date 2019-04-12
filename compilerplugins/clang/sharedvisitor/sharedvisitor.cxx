@@ -626,6 +626,11 @@ public:
             if( !externVar->VisitVarDecl( arg ))
                 externVar = nullptr;
         }
+        if( simplifyConstruct != nullptr )
+        {
+            if( !simplifyConstruct->VisitVarDecl( arg ))
+                simplifyConstruct = nullptr;
+        }
         if( stringStatic != nullptr )
         {
             if( !stringStatic->VisitVarDecl( arg ))

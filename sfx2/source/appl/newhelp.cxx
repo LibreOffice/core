@@ -2795,7 +2795,7 @@ IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl, Control*, bool)
     else
     {
         OUString aId;
-        OUString aAnchor = OUString('#');
+        OUString aAnchor('#');
         if ( comphelper::string::getTokenCount(aEntry, '#') == 2 )
         {
             sal_Int32 nIdx{ 0 };

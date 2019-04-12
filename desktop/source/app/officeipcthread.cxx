@@ -667,7 +667,7 @@ void RequestHandler::EnableRequests()
             pGlobal->mState = State::RequestsEnabled;
         }
         // hit the compiler over the head
-        ProcessDocumentsRequest aEmptyReq = ProcessDocumentsRequest( boost::optional< OUString >() );
+        ProcessDocumentsRequest aEmptyReq { boost::optional< OUString >() };
         // trigger already queued requests
         RequestHandler::ExecuteCmdLineRequests(aEmptyReq, true);
     }

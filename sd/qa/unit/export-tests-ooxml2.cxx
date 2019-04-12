@@ -669,7 +669,7 @@ void SdOOXMLExportTest2::testPresetShapesExport()
 
     size_t i = 0;
     while(i < SAL_N_ELEMENTS( sShapeTypeAndValues )) {
-        OString sType = OString( sShapeTypeAndValues[ i++ ] );
+        OString sType( sShapeTypeAndValues[ i++ ] );
         for ( size_t j = 1 ; i < SAL_N_ELEMENTS( sShapeTypeAndValues ) && OString(sShapeTypeAndValues[i]).startsWith("adj") ; ++j ) {
             OString sXPath= sPattern.replaceFirst( sT, sType).replaceFirst( sN, OString::number(j) );
             assertXPath(pXmlDocCT, sXPath, sPropertyName , OUString::createFromAscii(sShapeTypeAndValues[ i++ ]) );

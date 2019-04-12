@@ -31,8 +31,8 @@
 
 namespace sd { namespace slidesorter { namespace view {
 
-const static Color Black = Color(0x000000);
-const static Color White = Color(0xffffff);
+const static Color Black(0x000000);
+const static Color White(0xffffff);
 
 static Color ChangeLuminance (Color aColor, const int nValue)
 {

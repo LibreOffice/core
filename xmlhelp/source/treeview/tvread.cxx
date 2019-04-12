@@ -773,8 +773,7 @@ TVChildTarget::getHierAccess( const Reference< XMultiServiceFactory >& sProvider
     if( sProvider.is() )
     {
         Sequence< Any > seq(1);
-        OUString sReaderService =
-            OUString( "com.sun.star.configuration.ConfigurationAccess" );
+        OUString sReaderService( "com.sun.star.configuration.ConfigurationAccess" );
 
         seq[0] <<= OUString::createFromAscii( file );
 

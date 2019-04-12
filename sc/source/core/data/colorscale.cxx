@@ -1403,7 +1403,7 @@ BitmapEx& ScIconSetFormat::getBitmap(sc::IconSetBitmapMap & rIconSetBitmapMap,
     if (itr != rIconSetBitmapMap.end())
         return itr->second;
 
-    BitmapEx aBitmap = BitmapEx(sBitmap);
+    BitmapEx aBitmap(sBitmap);
     std::pair<OUString, BitmapEx> aPair(sBitmap, aBitmap);
     std::pair<std::map<OUString, BitmapEx>::iterator, bool> itrNew = rIconSetBitmapMap.insert(aPair);
     assert(itrNew.second);

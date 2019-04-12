@@ -1234,7 +1234,7 @@ OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc const & rDoc, sal_Int32 nInsPo
     const LanguageType eLang = GetDocLanguage( rDoc, nInsPos );
     sal_Unicode cRet = GetQuote( cInsChar, bSttQuote, eLang );
 
-    OUString sRet = OUString(cRet);
+    OUString sRet(cRet);
 
     if( '\"' == cInsChar )
     {

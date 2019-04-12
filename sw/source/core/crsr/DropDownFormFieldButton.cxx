@@ -199,8 +199,7 @@ void DropDownFormFieldButton::Paint(vcl::RenderContext& rRenderContext, const to
 
     //const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     Color aLineColor = COL_BLACK;
-    Color aFillColor
-        = Color(lcl_GetFillColor(aLineColor.getBColor(), (m_pFieldPopup ? 0.5 : 0.75)));
+    Color aFillColor(lcl_GetFillColor(aLineColor.getBColor(), (m_pFieldPopup ? 0.5 : 0.75)));
 
     // Draw the frame around the field
     // GTK3 backend cuts down the frame's top and left border, to avoid that add a padding around the frame

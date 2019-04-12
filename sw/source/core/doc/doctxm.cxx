@@ -1461,7 +1461,7 @@ void SwTOXBaseSection::UpdateContent( SwTOXElement eMyType,
 
                     if( rOLEObj.IsOleRef() )    // Not yet loaded
                     {
-                        SvGlobalName aTmpName = SvGlobalName( rOLEObj.GetOleRef()->getClassID() );
+                        SvGlobalName aTmpName( rOLEObj.GetOleRef()->getClassID() );
                         SwTOOElements nObj = ::lcl_IsSOObject( aTmpName );
                         bInclude = ( (nMyOLEOptions & SwTOOElements::Other) && SwTOOElements::NONE == nObj )
                                    || (nMyOLEOptions & nObj);

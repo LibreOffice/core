@@ -409,8 +409,7 @@ void NodeJava::write() const
     //The element must exist
     if (m_enabled)
     {
-        OString sExpression= OString(
-            "/jf:java/jf:enabled");
+        OString sExpression("/jf:java/jf:enabled");
         pathObj = xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>(sExpression.getStr()),
                                          contextUser);
         if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
@@ -432,8 +431,7 @@ void NodeJava::write() const
     //The element must exist
     if (m_userClassPath)
     {
-        OString sExpression= OString(
-            "/jf:java/jf:userClassPath");
+        OString sExpression("/jf:java/jf:userClassPath");
         pathObj = xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>(sExpression.getStr()),
                                          contextUser);
         if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
@@ -447,8 +445,7 @@ void NodeJava::write() const
     //set <javaInfo> element
     if (m_javaInfo)
     {
-        OString sExpression= OString(
-            "/jf:java/jf:javaInfo");
+        OString sExpression("/jf:java/jf:javaInfo");
         pathObj = xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>(sExpression.getStr()),
                                                 contextUser);
         if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
@@ -460,8 +457,7 @@ void NodeJava::write() const
     //set <vmParameters> element
     if (m_vmParameters)
     {
-        OString sExpression= OString(
-            "/jf:java/jf:vmParameters");
+        OString sExpression("/jf:java/jf:vmParameters");
         pathObj = xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>(sExpression.getStr()),
                                          contextUser);
         if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
@@ -500,8 +496,7 @@ void NodeJava::write() const
     //set <jreLocations> element
     if (m_JRELocations)
     {
-        OString sExpression= OString(
-            "/jf:java/jf:jreLocations");
+        OString sExpression("/jf:java/jf:jreLocations");
         pathObj = xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>(sExpression.getStr()),
                                          contextUser);
         if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))

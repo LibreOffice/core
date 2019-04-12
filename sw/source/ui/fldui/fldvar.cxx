@@ -1166,7 +1166,7 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
             else
             {
                 nSubType--;
-                OUString sSeparator = OUString(m_xSeparatorED->get_text()[0]);
+                OUString sSeparator(m_xSeparatorED->get_text()[0]);
                 cSeparator = !sSeparator.isEmpty() ? sSeparator[0] : ' ';
             }
             break;

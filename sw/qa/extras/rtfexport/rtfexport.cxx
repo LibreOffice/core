@@ -483,7 +483,7 @@ DECLARE_RTFEXPORT_TEST(testFdo61507, "fdo61507.rtf")
         mxComponent, uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xDocumentProperties(
         xDocumentPropertiesSupplier->getDocumentProperties());
-    OUString aExpected = OUString(u"\u00C9\u00C1\u0150\u0170\u222D");
+    OUString aExpected(u"\u00C9\u00C1\u0150\u0170\u222D");
     CPPUNIT_ASSERT_EQUAL(aExpected, xDocumentProperties->getTitle());
 
     // Only "Hello.", no additional characters.

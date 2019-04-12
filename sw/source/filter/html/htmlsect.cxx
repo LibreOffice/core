@@ -235,7 +235,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
             {
                 SwContentNode *pCNd =
                     m_xDoc->GetNodes()[pStartNdIdx->GetIndex()+1]->GetContentNode();
-                SwNodeIndex aTmpSwNodeIndex = SwNodeIndex(*pCNd);
+                SwNodeIndex aTmpSwNodeIndex(*pCNd);
                 SwPosition aNewPos( aTmpSwNodeIndex, SwIndex( pCNd, 0 ) );
                 SaveDocContext(xCntxt.get(), HtmlContextFlags::MultiColMask, &aNewPos);
                 aId.clear();

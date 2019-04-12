@@ -1161,7 +1161,7 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
 
     if ( !IsEmpty() && !IsHiddenNow() )
     {
-        TextFrameIndex nFormat = TextFrameIndex(COMPLETE_STRING);
+        TextFrameIndex nFormat(COMPLETE_STRING);
         do
         {
             if (nFormat != TextFrameIndex(COMPLETE_STRING) && !IsFollow() &&

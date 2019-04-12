@@ -2079,8 +2079,8 @@ void SwDocTest::testTableCellComparison()
     CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges("A2", "Z2", "A1", "Z1", true) );
     CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges("A6", "Z2", "A1", "Z1", true) );
 
-    OUString rCell1 = OUString("A1");
-    OUString rCell2 = OUString("C5");
+    OUString rCell1("A1");
+    OUString rCell2("C5");
 
     sw_NormalizeRange(rCell1, rCell2);
     CPPUNIT_ASSERT_EQUAL( OUString("A1"), rCell1 );

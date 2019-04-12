@@ -1155,7 +1155,7 @@ void VCLXWindow::setBackground( sal_Int32 nColor )
 
     if ( GetWindow() )
     {
-        Color aColor = Color(nColor);
+        Color aColor(nColor);
         GetWindow()->SetBackground( aColor );
         GetWindow()->SetControlBackground( aColor );
 
@@ -1631,7 +1631,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
                 sal_Int32 nColor = 0;
                 if ( Value >>= nColor )
                 {
-                    Color aColor = Color( nColor );
+                    Color aColor( nColor );
                     pWindow->SetControlBackground( aColor );
                     pWindow->SetBackground( aColor );
                     switch ( eWinType )
@@ -1661,7 +1661,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
                 sal_Int32 nColor = 0;
                 if ( Value >>= nColor )
                 {
-                    Color aColor = Color( nColor );
+                    Color aColor( nColor );
                     pWindow->SetTextColor( aColor );
                     pWindow->SetControlForeground( aColor );
                 }
@@ -1677,7 +1677,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
                 sal_Int32 nColor = 0;
                 if ( Value >>= nColor )
                 {
-                    Color aColor = Color( nColor );
+                    Color aColor( nColor );
                     pWindow->SetTextLineColor( aColor );
                 }
             }
@@ -1690,7 +1690,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
                 sal_Int32 nColor = 0;
                 if ( Value >>= nColor )
                 {
-                    Color aColor = Color( nColor );
+                    Color aColor( nColor );
                     pWindow->SetFillColor( aColor );
                 }
             }
@@ -1703,7 +1703,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
                 sal_Int32 nColor = 0;
                 if ( Value >>= nColor )
                 {
-                    Color aColor = Color( nColor );
+                    Color aColor( nColor );
                     pWindow->SetLineColor( aColor );
                 }
             }

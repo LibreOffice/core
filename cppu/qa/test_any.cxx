@@ -2012,7 +2012,7 @@ void Test::testInterface() {
 }
 
 void Test::testNull() {
-    css::uno::Any a = css::uno::Any(css::uno::Reference< Interface2a >());
+    css::uno::Any a { css::uno::Reference< Interface2a >() };
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<Interface2a>::get()));
     {
         bool b = true;

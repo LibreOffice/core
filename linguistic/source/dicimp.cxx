@@ -293,7 +293,7 @@ ErrCode DictionaryNeo::loadEntries(const OUString &rMainURL)
     if (!xStream.is())
         return ErrCode(sal_uInt32(-1));
 
-    SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
+    SvStreamPtr pStream( utl::UcbStreamHelper::CreateStream( xStream ) );
 
     // read header
     bool bNegativ;
@@ -427,7 +427,7 @@ ErrCode DictionaryNeo::saveEntries(const OUString &rURL)
     if (!xStream.is())
         return ErrCode(sal_uInt32(-1));
 
-    SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
+    SvStreamPtr pStream( utl::UcbStreamHelper::CreateStream( xStream ) );
 
     // Always write as the latest version, i.e. DIC_VERSION_7
 

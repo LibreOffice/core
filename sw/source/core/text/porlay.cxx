@@ -946,7 +946,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
         // all of the characters in this group are weak. We have to assign
         // the scripts to these characters depending on the fonts which are
         // set for these characters to display them.
-        TextFrameIndex nEnd = TextFrameIndex(
+        TextFrameIndex nEnd(
             g_pBreakIt->GetBreakIter()->endOfScript(rText, sal_Int32(nChg), WEAK));
 
         if (nEnd > TextFrameIndex(rText.getLength()) || nEnd < TextFrameIndex(0))

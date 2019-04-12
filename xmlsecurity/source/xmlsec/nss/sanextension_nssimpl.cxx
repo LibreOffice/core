@@ -138,7 +138,7 @@ css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl:
                     m_Entries[i].Type = ExtAltNameType_REGISTERED_ID;
 
 
-                    OString nssOid = OString(CERT_GetOidString(&current->name.other));
+                    OString nssOid(CERT_GetOidString(&current->name.other));
                     OString unoOid = removeOIDFromString(nssOid);
                     m_Entries[i].Value <<= OStringToOUString( unoOid, RTL_TEXTENCODING_ASCII_US );
                     break;

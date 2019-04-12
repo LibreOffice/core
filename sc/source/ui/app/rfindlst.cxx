@@ -54,8 +54,8 @@ Color ScRangeFindList::FindColor( const ScRange& rRef, const size_t nIndex )
 {
     sal_Int32 nOldCntr = 0;
     sal_Int32 nNewCntr = 0;
-    Color nOldColor = Color(0);
-    Color nNewColor = Color(0);
+    Color nOldColor(0);
+    Color nNewColor(0);
 
     DBG_ASSERT( (nIndex < maEntries.size()), "nIndex out of range!" );
 

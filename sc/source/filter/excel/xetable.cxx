@@ -1602,7 +1602,7 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
     // column flags
     ::set_flag( mnFlags, EXC_COLINFO_HIDDEN, rDoc.ColHidden(nScCol, nScTab) );
 
-    XclExpDefcolwidth defColWidth = XclExpDefcolwidth( rRoot );
+    XclExpDefcolwidth defColWidth( rRoot );
     mbCustomWidth = !defColWidth.IsDefWidth( mnWidth );
     set_flag(mnFlags, EXC_COLINFO_CUSTOMWIDTH, mbCustomWidth);
 

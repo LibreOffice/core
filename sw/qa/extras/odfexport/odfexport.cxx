@@ -1052,7 +1052,7 @@ DECLARE_ODFEXPORT_TEST(testShapeRelsize, "shape-relsize.odt")
 DECLARE_ODFEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.odt")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
-    comphelper::SequenceAsHashMap aCustomShapeGeometry = comphelper::SequenceAsHashMap(getProperty< uno::Sequence<beans::PropertyValue> >(xShape, "CustomShapeGeometry"));
+    comphelper::SequenceAsHashMap aCustomShapeGeometry(getProperty< uno::Sequence<beans::PropertyValue> >(xShape, "CustomShapeGeometry"));
 
     // Test that the shape is a rounded rectangle.
     CPPUNIT_ASSERT_EQUAL(OUString("round-rectangle"), aCustomShapeGeometry["Type"].get<OUString>());
