@@ -971,7 +971,7 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
     style.SetCursorBlinkTime(flash_time != 0 ? flash_time / 2 : STYLE_CURSOR_NOBLINKTIME);
 
     // Menu
-    std::unique_ptr<QMenuBar> pMenuBar = std::unique_ptr<QMenuBar>(new QMenuBar());
+    std::unique_ptr<QMenuBar> pMenuBar = std::make_unique<QMenuBar>();
     QPalette qMenuCG = pMenuBar->palette();
 
     // Menu text and background color, theme specific

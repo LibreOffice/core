@@ -973,7 +973,7 @@ static gboolean postDocumentLoad(gpointer pData)
     // Total number of columns in this document.
     guint nColumns = ceil(static_cast<double>(nDocumentWidthPixels) / nTileSizePixels);
 
-    priv->m_pTileBuffer = std::unique_ptr<TileBuffer>(new TileBuffer(nColumns));
+    priv->m_pTileBuffer = std::make_unique<TileBuffer>(nColumns);
     gtk_widget_set_size_request(GTK_WIDGET(pLOKDocView),
                                 nDocumentWidthPixels,
                                 nDocumentHeightPixels);
@@ -3485,7 +3485,7 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
     // Total number of columns in this document.
     guint nColumns = ceil(static_cast<double>(nDocumentWidthPixels) / nTileSizePixels);
 
-    priv->m_pTileBuffer = std::unique_ptr<TileBuffer>(new TileBuffer(nColumns));
+    priv->m_pTileBuffer = std::make_unique<TileBuffer>(nColumns);
     gtk_widget_set_size_request(GTK_WIDGET(pDocView),
                                 nDocumentWidthPixels,
                                 nDocumentHeightPixels);

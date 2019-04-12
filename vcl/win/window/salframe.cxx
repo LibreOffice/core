@@ -4967,7 +4967,7 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         LONG nTextLen = ImmGetCompositionStringW( hIMC, GCS_RESULTSTR, nullptr, 0 ) / sizeof( WCHAR );
         if ( nTextLen >= 0 )
         {
-            auto pTextBuf = std::unique_ptr<WCHAR[]>(new WCHAR[nTextLen]);
+            auto pTextBuf = std::make_unique<WCHAR[]>(nTextLen];
             ImmGetCompositionStringW( hIMC, GCS_RESULTSTR, pTextBuf.get(), nTextLen*sizeof( WCHAR ) );
             aEvt.maText = OUString( o3tl::toU(pTextBuf.get()), static_cast<sal_Int32>(nTextLen) );
         }
@@ -4993,7 +4993,7 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         if ( nTextLen > 0 )
         {
             {
-                auto pTextBuf = std::unique_ptr<WCHAR[]>(new WCHAR[nTextLen]);
+                auto pTextBuf = std::make_unique<WCHAR[]>(nTextLen);
                 ImmGetCompositionStringW( hIMC, GCS_COMPSTR, pTextBuf.get(), nTextLen*sizeof( WCHAR ) );
                 aEvt.maText = OUString( o3tl::toU(pTextBuf.get()), static_cast<sal_Int32>(nTextLen) );
             }

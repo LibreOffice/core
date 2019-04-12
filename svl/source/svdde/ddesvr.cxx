@@ -93,7 +93,7 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
             if( !nTopics )
                 return nullptr;
 
-            auto pPairs = std::unique_ptr<HSZPAIR[]>(new HSZPAIR [nTopics + 1]);
+            auto pPairs = std::make_unique<HSZPAIR[]>(nTopics + 1);
 
             HSZPAIR* q = pPairs.get();
             for (auto& rpService : rAll)

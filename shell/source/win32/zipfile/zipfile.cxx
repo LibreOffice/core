@@ -130,7 +130,7 @@ std::string readString(StreamInterface *stream, unsigned long size)
 {
     if (!stream || stream->stell() == -1)
         throw IOException(-1);
-    auto tmp = std::unique_ptr<unsigned char[]>(new unsigned char[size]);
+    auto tmp = std::make_unique<unsigned char[]>(size);
     unsigned long numBytesRead = stream->sread(tmp.get(), size);
     if (numBytesRead != size)
     {

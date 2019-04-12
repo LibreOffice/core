@@ -69,7 +69,7 @@ css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl:
         DWORD size;
         CryptDecodeObjectEx(X509_ASN_ENCODING, X509_ALTERNATE_NAME, reinterpret_cast<unsigned char*>(m_xExtnValue.getArray()), m_xExtnValue.getLength(), CRYPT_DECODE_ALLOC_FLAG | CRYPT_DECODE_NOCOPY_FLAG, nullptr,&subjectName, &size);
 
-        auto arrCertAltNameEntry = std::unique_ptr<CertAltNameEntry[]>(new CertAltNameEntry[subjectName->cAltEntry]);
+        auto arrCertAltNameEntry = std::make_unique<CertAltNameEntry[]>(subjectName->cAltEntry);
 
         for (unsigned int i = 0; i < static_cast<unsigned int>(subjectName->cAltEntry); i++){
           PCERT_ALT_NAME_ENTRY pEntry = &subjectName->rgAltEntry[i];
