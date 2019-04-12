@@ -138,27 +138,25 @@ static std::unique_ptr<SvStream> lcl_CreateStream( const OUString& rFileName, St
     return pStream;
 }
 
-std::unique_ptr<SvStream> UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode )
+std::unique_ptr<SvStream> UcbStreamHelper::CreateStream(const OUString& rFileName, StreamMode eOpenMode, css::uno::Reference<css::awt::XWindow> xParentWin)
 {
     // related tdf#99312
     // create a specialized interaction handler to manages Web certificates and Web credentials when needed
     Reference< XInteractionHandler > xIH(
-        css::task::InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), nullptr ) );
-    Reference < XInteractionHandler > xIHScoped( static_cast< XInteractionHandler *> (
-                                                     new comphelper::SimpleFileAccessInteraction( xIH ) ) );
+        css::task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), xParentWin));
+    Reference<XInteractionHandler> xIHScoped(new comphelper::SimpleFileAccessInteraction(xIH));
 
     return lcl_CreateStream( rFileName, eOpenMode, xIHScoped, true /* bEnsureFileExists */ );
 }
 
-std::unique_ptr<SvStream> UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
-                                         bool bFileExists )
+std::unique_ptr<SvStream> UcbStreamHelper::CreateStream(const OUString& rFileName, StreamMode eOpenMode,
+                                                        bool bFileExists, css::uno::Reference<css::awt::XWindow> xParentWin)
 {
     // related tdf#99312
     // create a specialized interaction handler to manages Web certificates and Web credentials when needed
     Reference< XInteractionHandler > xIH(
-        css::task::InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), nullptr ) );
-    Reference < XInteractionHandler > xIHScoped( static_cast< XInteractionHandler *> (
-                                                     new comphelper::SimpleFileAccessInteraction( xIH ) ) );
+        css::task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), xParentWin));
+    Reference<XInteractionHandler> xIHScoped(new comphelper::SimpleFileAccessInteraction(xIH));
     return lcl_CreateStream( rFileName, eOpenMode, xIHScoped,!bFileExists );
 }
 

@@ -488,6 +488,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/unocore/unotbl  \
     sw/source/core/unocore/unotext \
     sw/source/core/unocore/unotextmarkup \
+    sw/source/core/view/dialoghelp \
     sw/source/core/view/pagepreviewlayout \
     sw/source/core/view/printdata \
     sw/source/core/view/vdraw \
