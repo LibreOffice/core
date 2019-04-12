@@ -127,7 +127,7 @@ bool XcdParser::startElement(
                 reader, nsId, name, existingDependencies);
         }
         if (nsId == ParseManager::NAMESPACE_OOR &&
-            name.equals("component-data"))
+            (name.equals("component-data") || name.equals("items")))
         {
             nestedParser_ = new XcuParser(layer_ + 1, data_, nullptr, nullptr, nullptr);
             nesting_ = 1;
