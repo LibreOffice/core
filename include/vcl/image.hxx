@@ -27,7 +27,7 @@
 
 #include <memory>
 
-struct ImplImage;
+class ImplImage;
 
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
@@ -57,7 +57,7 @@ public:
     explicit Image(BitmapEx const & rBitmapEx);
     explicit Image(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
     explicit Image(OUString const & rPNGFileUrl);
-    explicit Image(StockImage , OUString const & rPNGFilePath);
+    explicit Image(StockImage, OUString const & rPNGFilePath, Size aSpecificSize = Size());
 
     Size GetSizePixel() const;
     BitmapEx GetBitmapEx() const;
