@@ -227,7 +227,7 @@ bool osl_searchPath(
 
     bool               bfound = false;
     OUString      fp(const_cast<rtl_uString*>(pustrFilePath));
-    OUString      pl = OUString(const_cast<rtl_uString*>(pustrSearchPathList));
+    OUString      pl(const_cast<rtl_uString*>(pustrSearchPathList));
     path_list_iterator pli(pl);
 
     while (!pli.done())

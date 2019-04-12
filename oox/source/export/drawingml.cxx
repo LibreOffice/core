@@ -1777,7 +1777,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
              && eState == beans::PropertyState_DIRECT_VALUE)
             || GetProperty(rXPropSet, "CharUnderlineColor")))
     {
-        ::Color color = ::Color(*o3tl::doAccess<sal_uInt32>(mAny));
+        ::Color color(*o3tl::doAccess<sal_uInt32>(mAny));
         // if color is automatic, then we shouldn't write information about color but to take color from character
         if( color != COL_AUTO )
         {

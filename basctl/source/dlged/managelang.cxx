@@ -302,7 +302,7 @@ Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
     bool bNotLocalized = !m_xLocalizationMgr->isLibraryLocalized();
     if (bNotLocalized)
     {
-        LanguageType eType = LanguageType(m_xLanguageLB->get_selected_id().toUInt32());
+        LanguageType eType(m_xLanguageLB->get_selected_id().toUInt32());
         Sequence<Locale> aLocaleSeq(1);
         aLocaleSeq[0] = LanguageTag(eType).getLocale();
         return aLocaleSeq;
@@ -313,7 +313,7 @@ Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
     {
         if (m_xCheckLangLB->get_toggle(i, 0) == TRISTATE_TRUE)
         {
-            LanguageType eType = LanguageType(m_xCheckLangLB->get_id(i).toUInt32());
+            LanguageType eType(m_xCheckLangLB->get_id(i).toUInt32());
             aLocaleSeq.push_back(LanguageTag::convertToLocale(eType));
         }
     }

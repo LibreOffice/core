@@ -753,7 +753,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
         pItemConverter->FillItemSet(aItemSet);
 
         //prepare dialog
-        ObjectPropertiesDialogParameter aDialogParameter = ObjectPropertiesDialogParameter( rObjectCID );
+        ObjectPropertiesDialogParameter aDialogParameter( rObjectCID );
         aDialogParameter.init( getModel() );
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get() );
 

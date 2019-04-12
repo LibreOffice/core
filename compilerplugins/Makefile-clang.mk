@@ -24,7 +24,7 @@ endif
 
 # Whether to make plugins use one shared ASTRecursiveVisitor (plugins run faster).
 # By default enabled, disable if you work on an affected plugin (re-generating takes time).
-LO_CLANG_SHARED_PLUGINS=1
+LO_CLANG_SHARED_PLUGINS=
 #TODO:
 ifeq ($(OS),WNT)
 LO_CLANG_SHARED_PLUGINS=

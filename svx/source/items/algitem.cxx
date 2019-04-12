@@ -199,7 +199,7 @@ bool SvxMarginItem::GetPresentation
     OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
-    OUString cpDelimTmp = OUString(cpDelim);
+    OUString cpDelimTmp(cpDelim);
 
     switch ( ePres )
     {

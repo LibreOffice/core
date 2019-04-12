@@ -104,7 +104,7 @@ bool SvxPageItem::GetPresentation
 )   const
 {
     rText.clear();
-    OUString cpDelimTmp = OUString(cpDelim);
+    OUString cpDelimTmp(cpDelim);
 
     switch ( ePres )
     {

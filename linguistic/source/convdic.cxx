@@ -93,7 +93,7 @@ static void ReadThroughDic( const OUString &rMainURL, ConvDicXMLImport &rImport 
     if (!xIn.is())
         return;
 
-    SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xIn ) );
+    SvStreamPtr pStream( utl::UcbStreamHelper::CreateStream( xIn ) );
 
     // prepare ParserInputSource
     xml::sax::InputSource aParserInput;
@@ -246,7 +246,7 @@ void ConvDic::Save()
     if (!xStream.is())
         return;
 
-    SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
+    SvStreamPtr pStream( utl::UcbStreamHelper::CreateStream( xStream ) );
 
     // get XML writer
     uno::Reference< xml::sax::XWriter > xSaxWriter = xml::sax::Writer::create(xContext);

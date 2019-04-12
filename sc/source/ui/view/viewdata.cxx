@@ -2802,7 +2802,7 @@ void ScViewData::WriteUserData(OUString& rData)
         rData += ";";                   // Numbering must not get mixed up under any circumstances
         if (i < static_cast<SCTAB>(maTabData.size()) && maTabData[i])
         {
-            OUString cTabSep = OUString(SC_OLD_TABSEP);                // like 3.1
+            OUString cTabSep(SC_OLD_TABSEP);                // like 3.1
             if ( maTabData[i]->nCurY > MAXROW_30 ||
                  maTabData[i]->nPosY[0] > MAXROW_30 || maTabData[i]->nPosY[1] > MAXROW_30 ||
                  ( maTabData[i]->eVSplitMode == SC_SPLIT_FIX &&

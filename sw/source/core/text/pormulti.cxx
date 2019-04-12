@@ -307,14 +307,14 @@ SwDoubleLinePortion::SwDoubleLinePortion(
     SwFontScript nTmp = SW_SCRIPTS;
     if( pBracket->cPre > 255 )
     {
-        OUString aText = OUString(pBracket->cPre);
+        OUString aText(pBracket->cPre);
         nTmp = SwScriptInfo::WhichFont(0, aText);
     }
     pBracket->nPreScript = nTmp;
     nTmp = SW_SCRIPTS;
     if( pBracket->cPost > 255 )
     {
-        OUString aText = OUString(pBracket->cPost);
+        OUString aText(pBracket->cPost);
         nTmp = SwScriptInfo::WhichFont(0, aText);
     }
     pBracket->nPostScript = nTmp;

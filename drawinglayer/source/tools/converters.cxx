@@ -101,7 +101,7 @@ namespace drawinglayer
                 if(bDoSaveForVisualControl)
                 {
                     SvFileStream aNew("c:\\test_content.png", StreamMode::WRITE|StreamMode::TRUNC);
-                    BitmapEx aContentEx = BitmapEx(aContent);
+                    BitmapEx aContentEx(aContent);
                     vcl::PNGWriter aPNGWriter(aContentEx);
                     aPNGWriter.Write(aNew);
                 }
@@ -132,7 +132,7 @@ namespace drawinglayer
                 if(bDoSaveForVisualControl)
                 {
                     SvFileStream aNew("c:\\test_alpha.png", StreamMode::WRITE|StreamMode::TRUNC);
-                    BitmapEx aAlphaEx = BitmapEx(aAlpha);
+                    BitmapEx aAlphaEx(aAlpha);
                     vcl::PNGWriter aPNGWriter(aAlphaEx);
                     aPNGWriter.Write(aNew);
                 }

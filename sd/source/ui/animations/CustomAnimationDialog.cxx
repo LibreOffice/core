@@ -1859,7 +1859,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage(weld::Container* pPar
             {
                 sal_Int32 nColor = 0;
                 aDimColor >>= nColor;
-                Color aColor = Color(nColor);
+                Color aColor(nColor);
                 mxCLBDimColor->SelectEntry(aColor);
             }
             else

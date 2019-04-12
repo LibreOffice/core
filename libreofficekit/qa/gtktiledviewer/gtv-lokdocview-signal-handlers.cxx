@@ -87,7 +87,7 @@ void LOKDocViewSigHandlers::commandChanged(LOKDocView* pDocView, char* pPayload,
         }
         else if (aKey == ".uno:TrackedChangeIndex")
         {
-            std::string aText = std::string("Current redline: ");
+            std::string aText("Current redline: ");
             if (aValue.empty())
                 aText += "none";
             else
