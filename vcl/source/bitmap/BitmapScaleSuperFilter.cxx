@@ -77,29 +77,32 @@ struct ScaleContext {
     }
 };
 
-#define SCALE_THREAD_STRIP 32
-struct ScaleRangeContext {
-    ScaleContext *mrCtx;
-    long mnStartY, mnEndY;
-    ScaleRangeContext( ScaleContext *rCtx, long nStartY )
-        : mrCtx( rCtx ), mnStartY( nStartY ),
-          mnEndY( nStartY + SCALE_THREAD_STRIP ) {}
-};
+constexpr long constScaleThreadStrip = 32;
 
-typedef void (*ScaleRangeFn)(ScaleContext &rCtx, long nStartY, long nEndY);
+typedef void (*ScaleRangeFn)(ScaleContext &rContext, long nStartY, long nEndY);
 
 class ScaleTask : public comphelper::ThreadTask
 {
-    ScaleRangeFn const mpFn;
-    std::vector< ScaleRangeContext > maStrips;
+    ScaleRangeFn const mpScaleRangeFunction;
+    ScaleContext& mrContext;
+    const long mnStartY;
+    const long mnEndY;
+
 public:
-    explicit ScaleTask( const std::shared_ptr<comphelper::ThreadTaskTag>& pTag, ScaleRangeFn pFn )
-        : comphelper::ThreadTask(pTag), mpFn( pFn ) {}
-    void push( ScaleRangeContext const &aRC ) { maStrips.push_back( aRC ); }
+    explicit ScaleTask(const std::shared_ptr<comphelper::ThreadTaskTag>& pTag,
+                       ScaleRangeFn pScaleRangeFunction,
+                       ScaleContext& rContext,
+                       long nStartY, long nEndY)
+        : comphelper::ThreadTask(pTag)
+        , mpScaleRangeFunction(pScaleRangeFunction)
+        , mrContext(rContext)
+        , mnStartY(nStartY)
+        , mnEndY(nEndY)
+    {}
+
     virtual void doWork() override
     {
-        for (auto const& strip : maStrips)
-            mpFn( *(strip.mrCtx), strip.mnStartY, strip.mnEndY );
+        mpScaleRangeFunction(mrContext, mnStartY, mnEndY);
     }
 };
 
@@ -1026,12 +1029,11 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
             // We want to thread - only if there is a lot of work to do:
             // We work hard when there is a large destination image, or
             // A large source image.
-            bool bHorizontalWork = pReadAccess->Width() > 512 || pWriteAccess->Width() > 512;
+            bool bHorizontalWork = pReadAccess->Height() >= 512 && pReadAccess->Width() >= 512;
             bool bUseThreads = true;
 
             static bool bDisableThreadedScaling = getenv ("VCL_NO_THREAD_SCALE");
-            if ( bDisableThreadedScaling || !bHorizontalWork ||
-                 nEndY - nStartY < SCALE_THREAD_STRIP )
+            if (bDisableThreadedScaling || !bHorizontalWork)
             {
                 SAL_INFO("vcl.gdi", "Scale in main thread");
                 bUseThreads = false;
@@ -1044,26 +1046,22 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
                     // partition and queue work
                     comphelper::ThreadPool &rShared = comphelper::ThreadPool::getSharedOptimalPool();
                     std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
-                    sal_uInt32 nThreads = rShared.getWorkerCount();
-                    assert( nThreads > 0 );
-                    sal_uInt32 nStrips = ((nEndY - nStartY) + SCALE_THREAD_STRIP - 1) / SCALE_THREAD_STRIP;
-                    sal_uInt32 nStripsPerThread = nStrips / nThreads;
-                    SAL_INFO("vcl.gdi", "Scale in " << nStrips << " strips " << nStripsPerThread << " per thread we have " << nThreads << " CPU threads ");
-                    long nStripY = nStartY;
-                    for ( sal_uInt32 t = 0; t < nThreads - 1; t++ )
-                    {
-                        std::unique_ptr<ScaleTask> pTask(new ScaleTask( pTag, pScaleRangeFn ));
-                        for ( sal_uInt32 j = 0; j < nStripsPerThread; j++ )
-                        {
-                            ScaleRangeContext aRC( &aContext, nStripY );
-                            pTask->push( aRC );
-                            nStripY += SCALE_THREAD_STRIP;
-                        }
-                        rShared.pushTask( std::move(pTask) );
-                    }
-                    // finish any remaining bits here
-                    pScaleRangeFn( aContext, nStripY, nEndY );
 
+                    long nStripYStart = nStartY;
+                    long nStripYEnd = nStripYStart + constScaleThreadStrip - 1;
+
+                    while (nStripYEnd < nEndY)
+                    {
+                        std::unique_ptr<ScaleTask> pTask(new ScaleTask(pTag, pScaleRangeFn, aContext, nStripYStart, nStripYEnd));
+                        rShared.pushTask(std::move(pTask));
+                        nStripYStart += constScaleThreadStrip;
+                        nStripYEnd += constScaleThreadStrip;
+                    }
+                    if (nStripYStart <= nEndY)
+                    {
+                        std::unique_ptr<ScaleTask> pTask(new ScaleTask(pTag, pScaleRangeFn, aContext, nStripYStart, nEndY));
+                        rShared.pushTask(std::move(pTask));
+                    }
                     rShared.waitUntilDone(pTag);
                     SAL_INFO("vcl.gdi", "All threaded scaling tasks complete");
                 }
