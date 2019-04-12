@@ -40,8 +40,6 @@ public:
     VendorSettings();
 
     boost::optional<VersionInfo> getVersionInformation(const OUString & sVendor) const;
-
-    ::std::vector< OUString> getSupportedVendors() const;
 };
 
 /* The class offers functions to retrieve verified bootstrap parameters.

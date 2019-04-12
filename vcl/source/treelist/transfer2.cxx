@@ -439,17 +439,6 @@ void TransferDataContainer::CopyString( const OUString& rStr )
 }
 
 
-void TransferDataContainer::CopyAny( SotClipboardFormatId nFmt,
-                                    const css::uno::Any& rAny )
-{
-    TDataCntnrEntry_Impl aEntry;
-    aEntry.nId = nFmt;
-    aEntry.aAny = rAny;
-    pImpl->aFmtList.push_back( aEntry );
-    AddFormat( aEntry.nId );
-}
-
-
 bool TransferDataContainer::HasAnyData() const
 {
     return !pImpl->aFmtList.empty() ||

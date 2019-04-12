@@ -45,12 +45,6 @@
 using namespace nsSwDocInfoSubType;
 using namespace com::sun::star;
 
-void FillFieldSelect(ListBox& rListBox)
-{
-    for (size_t i = 0; i < SAL_N_ELEMENTS(FLD_SELECT); ++i)
-        rListBox.InsertEntry(SwResId(FLD_SELECT[i]));
-}
-
 void FillFieldSelect(weld::TreeView& rListBox)
 {
     for (size_t i = 0; i < SAL_N_ELEMENTS(FLD_SELECT); ++i)

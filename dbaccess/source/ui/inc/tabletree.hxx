@@ -48,12 +48,8 @@ class OTableTreeListBox final : public OMarkableTreeListBox
 public:
     OTableTreeListBox(vcl::Window* pParent, WinBits nWinStyle);
 
-    void init() { m_bVirtualRoot = true; }
-
     typedef std::pair< OUString, bool > TTableViewName;
     typedef std::vector< TTableViewName >         TNames;
-
-    void    suppressEmptyFolders() { m_bNoEmptyFolders = true; }
 
     /** call when HiContrast change.
     */
@@ -108,18 +104,6 @@ public:
     SvTreeListEntry*    getEntryByQualifiedName( const OUString& _rName );
 
     SvTreeListEntry*    getAllObjectsEntry() const;
-
-    /** does a wildcard check of the given entry
-        <p>There are two different 'checked' states: If the user checks all children of an entry, this is different
-        from checking the entry itself. The second is called 'wildcard' checking, 'cause in the resulting
-        table filter it's represented by a wildcard.</p>
-    */
-    void            checkWildcard(SvTreeListEntry* _pEntry);
-
-    /** determine if the given entry is 'wildcard checked'
-        @see checkWildcard
-    */
-    static bool     isWildcardChecked(SvTreeListEntry* pEntry);
 
 private:
     virtual void InitEntry(SvTreeListEntry* _pEntry, const OUString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap, SvLBoxButtonKind _eButtonKind) override;
@@ -184,10 +168,6 @@ public:
     void    SuppressEmptyFolders() { m_bNoEmptyFolders = true; }
     void    DisableCheckButtons();
 
-    /** determines whether the given entry denotes a tables folder
-    */
-    static bool isFolderEntry( const SvTreeListEntry* _pEntry );
-
     /** fill the table list with the tables belonging to the connection described by the parameters
         @param _rxConnection
             the connection, which must support the service com.sun.star.sdb.Connection
@@ -210,27 +190,6 @@ public:
                 const css::uno::Sequence< OUString>& _rTables,
                 const css::uno::Sequence< OUString>& _rViews
             );
-
-    /** returns a NamedDatabaseObject record which describes the given entry
-    */
-    css::sdb::application::NamedDatabaseObject
-            describeObject( SvTreeListEntry* _pEntry );
-
-    /** to be used if a foreign instance added a table
-    */
-    SvTreeListEntry* addedTable( const OUString& _rName );
-
-    /** to be used if a foreign instance removed a table
-    */
-    void    removedTable( const OUString& _rName );
-
-    /** returns the fully qualified name of a table entry
-        @param _pEntry
-            the entry whose name is to be obtained. Must not denote a folder entry.
-    */
-    OUString getQualifiedTableName( SvTreeListEntry* _pEntry ) const;
-
-    SvTreeListEntry*    getEntryByQualifiedName( const OUString& _rName );
 
     std::unique_ptr<weld::TreeIter>    getAllObjectsEntry() const;
 

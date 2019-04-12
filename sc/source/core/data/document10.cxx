@@ -397,17 +397,6 @@ void ScDocument::AddDelayedFormulaGroupingCell( const ScFormulaCell* cell )
         pDelayedFormulaGrouping->ExtendTo( cell->aPos );
 }
 
-void ScDocument::CollectAllAreaListeners(
-    std::vector<SvtListener*>& rListener, const ScRange& rRange, sc::AreaOverlapType eType )
-{
-    if (!pBASM)
-        return;
-
-    std::vector<sc::AreaListener> aAL = pBASM->GetAllListeners(rRange, eType);
-    for (const auto& rItem : aAL)
-        rListener.push_back(rItem.mpListener);
-}
-
 bool ScDocument::HasFormulaCell( const ScRange& rRange ) const
 {
     if (!rRange.IsValid())

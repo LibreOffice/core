@@ -69,7 +69,6 @@ public:
     void SetObjectSelectHdl( const Link<ScEditWindow&,void>& aLink) { aObjectSelectLink = aLink; }
     void SetGetFocusHdl(const std::function<void (ScEditWindow&)>& rLink) { m_GetFocusLink = rLink; }
 
-    void SetLocation(ScEditWindowLocation eLoc) { eLocation = eLoc; }
 protected:
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual bool    MouseMove( const MouseEvent& rMEvt ) override;

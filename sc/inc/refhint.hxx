@@ -22,7 +22,6 @@ class RefHint : public SfxHint
 {
 public:
     enum Type {
-        Moved,
         ColumnReordered,
         RowReordered,
         StartListening,
@@ -45,30 +44,6 @@ public:
     RefHint & operator =(RefHint &&) = delete;
 
     Type getType() const;
-};
-
-class RefMovedHint : public RefHint
-{
-    ScRange const maRange;
-    ScAddress const maMoveDelta;
-    const sc::RefUpdateContext& mrCxt;
-
-public:
-
-    RefMovedHint( const ScRange& rRange, const ScAddress& rMove, const sc::RefUpdateContext& rCxt );
-    virtual ~RefMovedHint() override;
-
-    /**
-     * Get the source range from which the references have moved.
-     */
-    const ScRange& getRange() const;
-
-    /**
-     * Get the movement vector.
-     */
-    const ScAddress& getDelta() const;
-
-    const sc::RefUpdateContext& getContext() const;
 };
 
 class RefColReorderHint : public RefHint
