@@ -44,11 +44,6 @@ using namespace ::com::sun::star::uno;
 
 #define USERITEM_NAME "UserItem"
 
-SingleTabDlgImpl::SingleTabDlgImpl()
-    : m_pSfxPage(nullptr)
-{
-}
-
 class SfxModelessDialog_Impl : public SfxListener
 {
 public:
@@ -122,8 +117,7 @@ void SfxModalDialog::GetDialogData_Impl()
 }
 
 SfxModalDialog::SfxModalDialog(vcl::Window *pParent, const OUString& rID, const OUString& rUIXMLDescription )
-:   ModalDialog(pParent, rID, rUIXMLDescription),
-    pInputSet(nullptr)
+:   ModalDialog(pParent, rID, rUIXMLDescription)
 {
     SetInstallLOKNotifierHdl(LINK(this, SfxModalDialog, InstallLOKNotifierHdl));
     GetDialogData_Impl();
@@ -145,16 +139,6 @@ void SfxModalDialog::dispose()
     pOutputSet.reset();
 
     ModalDialog::dispose();
-}
-
-void SfxModalDialog::CreateOutputItemSet( const SfxItemSet& rSet )
-{
-    DBG_ASSERT( !pOutputSet, "Double creation of OutputSet!" );
-    if (!pOutputSet)
-    {
-        pOutputSet.reset(new SfxItemSet( rSet ));
-        pOutputSet->ClearItem();
-    }
 }
 
 void SfxModelessDialog::StateChanged( StateChangedType nStateChange )

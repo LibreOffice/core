@@ -479,26 +479,9 @@ void TableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConne
     m_xTreeView->make_sorted();
 }
 
-bool OTableTreeListBox::isWildcardChecked(SvTreeListEntry* _pEntry)
-{
-    if (_pEntry)
-    {
-        OBoldListboxString* pTextItem = static_cast<OBoldListboxString*>(_pEntry->GetFirstItem(SvLBoxItemType::String));
-        if (pTextItem)
-            return pTextItem->isEmphasized();
-    }
-    return false;
-}
-
 bool TableTreeListBox::isWildcardChecked(weld::TreeIter& rEntry)
 {
     return m_xTreeView->get_text_emphasis(rEntry, m_nTextColumn);
-}
-
-void OTableTreeListBox::checkWildcard(SvTreeListEntry* _pEntry)
-{
-    SetCheckButtonState(_pEntry, SvButtonState::Checked);
-    checkedButton_noBroadcast(_pEntry);
 }
 
 void TableTreeListBox::checkWildcard(weld::TreeIter& rEntry)

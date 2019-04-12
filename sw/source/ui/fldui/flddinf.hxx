@@ -63,7 +63,6 @@ public:
     virtual void        FillUserData() override;
 };
 
-void FillFieldSelect(ListBox& rListBox);
 void FillFieldSelect(weld::TreeView& rListBox);
 
 #endif

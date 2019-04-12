@@ -210,32 +210,6 @@ boost::optional<VersionInfo> VendorSettings::getVersionInformation(const OUStrin
     return aVersionInfo;
 }
 
-std::vector<OUString> VendorSettings::getSupportedVendors() const
-{
-    std::vector<OUString> vecVendors;
-    //get the nodeset for the vendor elements
-    jfw::CXPathObjectPtr result;
-    result = xmlXPathEvalExpression(
-        reinterpret_cast<xmlChar const *>("/jf:javaSelection/jf:vendorInfos/jf:vendor"),
-        m_xmlPathContextVendorSettings);
-    if (!xmlXPathNodeSetIsEmpty(result->nodesetval))
-    {
-        //get the values of the vendor elements + name attribute
-        xmlNode* cur = result->nodesetval->nodeTab[0];
-        while (cur != nullptr)
-        {
-            //between vendor elements are also text elements
-            if (cur->type == XML_ELEMENT_NODE)
-            {
-                jfw::CXmlCharPtr sAttrVendor(xmlGetProp(cur, reinterpret_cast<xmlChar const *>("name")));
-                vecVendors.push_back(sAttrVendor);
-            }
-            cur = cur->next;
-        }
-    }
-    return vecVendors;
-}
-
 ::std::vector<OString> BootParams::getVMParameters()
 {
     ::std::vector<OString> vecParams;

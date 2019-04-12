@@ -2363,24 +2363,6 @@ void ScFormulaCell::Notify( const SfxHint& rHint )
 
         switch (rRefHint.getType())
         {
-            case sc::RefHint::Moved:
-            {
-                // One of the references has moved.
-
-                const sc::RefMovedHint& rRefMoved = static_cast<const sc::RefMovedHint&>(rRefHint);
-                if (!IsShared() || IsSharedTop())
-                {
-                    sc::RefUpdateResult aRes = pCode->MoveReference(aPos, rRefMoved.getContext());
-                    if (aRes.mbNameModified)
-                    {
-                        // RPN token needs to be re-generated.
-                        bCompile = true;
-                        CompileTokenArray();
-                        SetDirtyVar();
-                    }
-                }
-            }
-            break;
             case sc::RefHint::ColumnReordered:
             {
                 const sc::RefColReorderHint& rRefColReorder =

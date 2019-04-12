@@ -43,7 +43,6 @@ class Timer;
 class SFX2_DLLPUBLIC SfxModalDialog: public ModalDialog
 {
     OUString                aExtraData;
-    const SfxItemSet*       pInputSet;
     std::unique_ptr<SfxItemSet> pOutputSet;
 
 private:
@@ -58,16 +57,10 @@ protected:
     SfxModalDialog(vcl::Window *pParent, const OUString& rID, const OUString& rUIXMLDescription);
 
     OUString&           GetExtraData()      { return aExtraData; }
-    void                CreateOutputItemSet( const SfxItemSet& rInput );
-    void                SetInputSet( const SfxItemSet* pInSet ) { pInputSet = pInSet; }
-    SfxItemSet*         GetOutputSetImpl() { return pOutputSet.get(); }
 
 public:
     virtual ~SfxModalDialog() override;
     virtual void dispose() override;
-
-    const SfxItemSet*   GetOutputItemSet() const { return pOutputSet.get(); }
-    const SfxItemSet*   GetInputItemSet() const { return pInputSet; }
 };
 
 // class SfxModelessDialog --------------------------------------------------
@@ -194,13 +187,6 @@ public:
 };
 
 // class SfxNoLayoutSingleTabDialog --------------------------------------------------
-
-struct SingleTabDlgImpl
-{
-    VclPtr<SfxTabPage>          m_pSfxPage;
-
-    SingleTabDlgImpl();
-};
 
 typedef const sal_uInt16* (*GetTabPageRanges)(); // provides international Which values
 

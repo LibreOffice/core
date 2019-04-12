@@ -172,21 +172,7 @@ public:
                               const css::uno::Any& rOldValue,
                               const css::uno::Any& rNewValue );
 
-    bool HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
-
-    static SfxThumbnailViewAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) throw();
-
 public:
-
-    /** Called by the corresponding ValueSet when it gets the focus.
-        Stores the new focus state and broadcasts a state change event.
-    */
-    void GetFocus();
-
-    /** Called by the corresponding ValueSet when it loses the focus.
-        Stores the new focus state and broadcasts a state change event.
-    */
-    void LoseFocus();
 
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;

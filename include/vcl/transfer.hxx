@@ -492,7 +492,6 @@ public:
     void                CopyINetBookmark( const INetBookmark& rBkmk );
     void                CopyString( const OUString& rStr );
     void                CopyString( SotClipboardFormatId nFmt, const OUString& rStr );
-    void                CopyAny( SotClipboardFormatId nFmt, const css::uno::Any& rAny );
 
     void                CopyByteString( SotClipboardFormatId nFormatId, const OString& rStr );
     void                CopyAnyData( SotClipboardFormatId nFormatId, const sal_Char* pData, sal_uLong nLen );

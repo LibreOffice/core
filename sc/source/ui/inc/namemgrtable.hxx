@@ -29,64 +29,6 @@ struct ScRangeNameLine
     OUString aScope;
 };
 
-//Implements the table for the manage names dialog
-//TODO: cache the lines for performance improvements
-//otherwise handling of a large set of range names might get extremely slow
-//Need some sort of a filter to handle several range names
-class SC_DLLPUBLIC ScRangeManagerTable : public SvSimpleTable
-{
-public:
-    class InitListener
-    {
-    public:
-        virtual ~InitListener();
-        virtual void tableInitialized() = 0;
-    };
-
-private:
-    OUString const maGlobalString;
-
-    // should be const because we should not modify it here
-    const std::map<OUString, std::unique_ptr<ScRangeName>>& m_RangeMap;
-    // for performance, save which entries already have the formula entry
-    // otherwise opening the dialog with a lot of range names is extremely slow because
-    // we would calculate all formula strings during opening
-    std::map<SvTreeListEntry*, bool> maCalculatedFormulaEntries;
-    const ScAddress maPos;
-
-    InitListener* mpInitListener;
-
-    static void GetLine(ScRangeNameLine& aLine, SvTreeListEntry* pEntry);
-    void Init();
-    void CheckForFormulaString();
-    const ScRangeData* findRangeData(const ScRangeNameLine& rLine);
-
-    void setColWidths();
-
-public:
-    ScRangeManagerTable(SvSimpleTableContainer& rParent,
-        const std::map<OUString, std::unique_ptr<ScRangeName>>& rTabRangeNames,
-        const ScAddress& rPos);
-    virtual ~ScRangeManagerTable() override;
-    virtual void dispose() override;
-
-    virtual void Resize() override;
-    virtual void StateChanged( StateChangedType nStateChange ) override;
-
-    void setInitListener( InitListener* pListener );
-
-    void addEntry( const ScRangeNameLine& rLine, bool bSetCurEntry );
-    void DeleteSelectedEntries();
-    void SetEntry( const ScRangeNameLine& rLine );
-
-    void GetCurrentLine(ScRangeNameLine& rLine);
-    bool IsMultiSelection();
-    std::vector<ScRangeNameLine> GetSelectedEntries();
-
-    DECL_LINK( ScrollHdl, SvTreeListBox*, void);
-    DECL_LINK( HeaderEndDragHdl, HeaderBar*, void);
-};
-
 class SC_DLLPUBLIC RangeManagerTable
 {
 private:

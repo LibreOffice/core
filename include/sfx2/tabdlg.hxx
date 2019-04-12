@@ -127,15 +127,9 @@ public:
                                     CreateTabPage pCreateFunc,      // != 0
                                     sal_uInt16 nPos = TAB_APPEND);
 
-    void                RemoveTabPage( sal_uInt16 nId );
-
     void                SetCurPageId(sal_uInt16 nId)
     {
         m_nAppPageId = nId;
-    }
-    void                SetCurPageId(const OString& rName)
-    {
-        m_nAppPageId = m_pTabCtrl->GetPageId(rName);
     }
     sal_uInt16          GetCurPageId() const
     {
@@ -158,7 +152,6 @@ public:
 
     // may provide local slots converted by Map
     const sal_uInt16*       GetInputRanges( const SfxItemPool& );
-    void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return m_pOutSet.get(); }
 
     short               Execute() override;

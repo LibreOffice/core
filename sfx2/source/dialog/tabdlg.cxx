@@ -630,51 +630,6 @@ void SfxTabDialog::AddTabPage
     m_pImpl->aData.push_back( new Data_Impl(nId, "", pCreateFunc, nullptr ) );
 }
 
-void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
-
-/*  [Description]
-
-    Delete the TabPage with ID nId
-*/
-
-{
-    sal_uInt16 nPos = 0;
-    m_pTabCtrl->RemovePage( nId );
-    Data_Impl* pDataObject = Find( m_pImpl->aData, nId, &nPos );
-
-    if ( pDataObject )
-    {
-        if ( pDataObject->pTabPage )
-        {
-            pDataObject->pTabPage->FillUserData();
-            OUString aPageData( pDataObject->pTabPage->GetUserData() );
-            if ( !aPageData.isEmpty() )
-            {
-                // save settings of this page (user data)
-                OUString sConfigId = OStringToOUString(pDataObject->pTabPage->GetConfigId(),
-                    RTL_TEXTENCODING_UTF8);
-                if (sConfigId.isEmpty())
-                {
-                    SAL_WARN("sfx.dialog", "Tabpage needs to be converted to .ui format");
-                    sConfigId = OUString::number(pDataObject->nId);
-                }
-
-                SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
-                aPageOpt.SetUserItem( USERITEM_NAME, makeAny( aPageData ) );
-            }
-
-            pDataObject->pTabPage.disposeAndClear();
-        }
-
-        delete pDataObject;
-        m_pImpl->aData.erase( m_pImpl->aData.begin() + nPos );
-    }
-    else
-    {
-        SAL_INFO( "sfx.dialog", "TabPage-Id not known" );
-    }
-}
-
 void SfxTabDialog::PageCreated
 
 /*  [Description]
@@ -1269,24 +1224,6 @@ const sal_uInt16* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
 void SfxTabDialog::SetPageName(sal_uInt16 nPageId, const OString& rName) const
 {
     m_pTabCtrl->SetPageName(nPageId, rName);
-}
-
-void SfxTabDialog::SetInputSet( const SfxItemSet* pInSet )
-
-/*  [Description]
-
-    With this method the Input-Set can subsequently be set initially or re-set.
-*/
-
-{
-    bool bSet = ( m_pSet != nullptr );
-    m_pSet.reset(pInSet ? new SfxItemSet(*pInSet) : nullptr);
-
-    if (!bSet && !m_pExampleSet && !m_pOutSet && m_pSet)
-    {
-        m_pExampleSet = new SfxItemSet( *m_pSet );
-        m_pOutSet.reset(new SfxItemSet( *m_pSet->GetPool(), m_pSet->GetRanges() ));
-    }
 }
 
 FactoryFunction SfxTabDialog::GetUITestFactory() const

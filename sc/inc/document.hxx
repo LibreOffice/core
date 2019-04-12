@@ -2200,7 +2200,6 @@ public:
     void                Broadcast( const ScHint& rHint );
 
     void BroadcastCells( const ScRange& rRange, SfxHintId nHint, bool bBroadcastSingleBroadcasters = true );
-    void BroadcastRefMoved( const sc::RefMovedHint& rHint );
 
                         /// only area, no cell broadcast
     void                AreaBroadcast( const ScHint& rHint );
@@ -2218,8 +2217,6 @@ public:
     void EndListeningCell( sc::EndListeningContext& rCxt, const ScAddress& rPos, SvtListener& rListener );
 
     void EndListeningFormulaCells( std::vector<ScFormulaCell*>& rCells );
-    void CollectAllAreaListeners(
-        std::vector<SvtListener*>& rListeners, const ScRange& rRange, sc::AreaOverlapType eType );
 
     void                PutInFormulaTree( ScFormulaCell* pCell );
     void                RemoveFromFormulaTree( ScFormulaCell* pCell );

@@ -19,26 +19,6 @@ RefHint::Type RefHint::getType() const
     return meType;
 }
 
-RefMovedHint::RefMovedHint( const ScRange& rRange, const ScAddress& rMove, const sc::RefUpdateContext& rCxt ) :
-    RefHint(Moved), maRange(rRange), maMoveDelta(rMove), mrCxt(rCxt) {}
-
-RefMovedHint::~RefMovedHint() {}
-
-const ScRange& RefMovedHint::getRange() const
-{
-    return maRange;
-}
-
-const ScAddress& RefMovedHint::getDelta() const
-{
-    return maMoveDelta;
-}
-
-const sc::RefUpdateContext& RefMovedHint::getContext() const
-{
-    return mrCxt;
-}
-
 RefColReorderHint::RefColReorderHint( const sc::ColRowReorderMapType& rColMap, SCTAB nTab, SCROW nRow1, SCROW nRow2 ) :
     RefHint(ColumnReordered), mrColMap(rColMap), mnTab(nTab), mnRow1(nRow1), mnRow2(nRow2) {}
 

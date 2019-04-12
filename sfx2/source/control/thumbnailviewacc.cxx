@@ -596,44 +596,6 @@ const uno::Sequence< sal_Int8 >& SfxThumbnailViewAcc::getUnoTunnelId()
     return theSfxValueSetAccUnoTunnelId::get().getSeq();
 }
 
-SfxThumbnailViewAcc* SfxThumbnailViewAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
-    throw()
-{
-    try
-    {
-        uno::Reference< lang::XUnoTunnel > xUnoTunnel( rxData, uno::UNO_QUERY );
-        return( xUnoTunnel.is() ? reinterpret_cast<SfxThumbnailViewAcc*>(sal::static_int_cast<sal_IntPtr>(xUnoTunnel->getSomething( SfxThumbnailViewAcc::getUnoTunnelId() ))) : nullptr );
-    }
-    catch(const css::uno::Exception&)
-    {
-        return nullptr;
-    }
-}
-
-void SfxThumbnailViewAcc::GetFocus()
-{
-    mbIsFocused = true;
-
-    // Broadcast the state change.
-    css::uno::Any aOldState, aNewState;
-    aNewState <<= css::accessibility::AccessibleStateType::FOCUSED;
-    FireAccessibleEvent(
-        css::accessibility::AccessibleEventId::STATE_CHANGED,
-        aOldState, aNewState);
-}
-
-void SfxThumbnailViewAcc::LoseFocus()
-{
-    mbIsFocused = false;
-
-    // Broadcast the state change.
-    css::uno::Any aOldState, aNewState;
-    aOldState <<= css::accessibility::AccessibleStateType::FOCUSED;
-    FireAccessibleEvent(
-        css::accessibility::AccessibleEventId::STATE_CHANGED,
-        aOldState, aNewState);
-}
-
 uno::Reference< accessibility::XAccessibleContext > SAL_CALL SfxThumbnailViewAcc::getAccessibleContext()
 {
     ThrowIfDisposed();

@@ -60,7 +60,6 @@ class CustomAnimationPane : public PanelLayout, public ICustomAnimationListContr
     friend class MotionPathTag;
 public:
     CustomAnimationPane( vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame );
-    CustomAnimationPane( vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame, bool bHorizontal );
     virtual ~CustomAnimationPane() override;
     virtual void dispose() override;
 
@@ -165,8 +164,6 @@ private:
     sal_Int32   mnCurvePathPos;
     sal_Int32   mnPolygonPathPos;
     sal_Int32   mnFreeformPathPos;
-
-    bool const      mbHorizontal;
 
     EffectSequence  maListSelection;
     css::uno::Any   maViewSelection;
