@@ -202,9 +202,9 @@ public:
     // Fill view with template folders thumbnails
     void Populate ();
 
-    virtual void reload ();
+    void reload ();
 
-    virtual void showAllTemplates ();
+    void showAllTemplates ();
 
     void showRegion (TemplateContainerItem const *pItem);
 
