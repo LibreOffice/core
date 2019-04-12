@@ -44,6 +44,7 @@ class BitmapTest : public CppUnit::TestFixture
     void testN8Greyscale();
     void testConvert();
     void testScale();
+    void testScale2();
     void testCRC();
     void testGreyPalette();
     void testCustom8BitPalette();
@@ -58,6 +59,7 @@ class BitmapTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testN4Greyscale);
     CPPUNIT_TEST(testN8Greyscale);
     CPPUNIT_TEST(testScale);
+    CPPUNIT_TEST(testScale2);
     CPPUNIT_TEST(testCRC);
     CPPUNIT_TEST(testGreyPalette);
     CPPUNIT_TEST(testCustom8BitPalette);
@@ -451,6 +453,98 @@ void BitmapTest::testScale()
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
         rFilter.compressAsPNG(aBitmap24Bit, aStream);
     }
+}
+
+bool checkBitmapColor(Bitmap const& rBitmap, Color const& rExpectedColor)
+{
+    bool bResult = true;
+    Bitmap aBitmap(rBitmap);
+    Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+    long nHeight = pReadAccess->Height();
+    long nWidth = pReadAccess->Width();
+    for (long y = 0; y < nHeight; ++y)
+    {
+        Scanline pScanlineRead = pReadAccess->GetScanline(y);
+        for (long x = 0; x < nWidth; ++x)
+        {
+            Color aColor = pReadAccess->GetPixelFromData(pScanlineRead, x).GetColor();
+            if (aColor != rExpectedColor)
+                bResult = false;
+        }
+    }
+
+    return bResult;
+}
+
+void BitmapTest::testScale2()
+{
+    const bool bExportBitmap(true);
+
+    Bitmap aBitmap24Bit(Size(4096, 4096), 24);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), aBitmap24Bit.GetBitCount());
+
+    {
+        BitmapScopedWriteAccess aWriteAccess(aBitmap24Bit);
+        aWriteAccess->Erase(COL_YELLOW);
+    }
+
+    if (bExportBitmap)
+    {
+        SvFileStream aStream("~/scale_before.png", StreamMode::WRITE | StreamMode::TRUNC);
+        GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+        rFilter.compressAsPNG(aBitmap24Bit, aStream);
+    }
+
+    // Scale - 65x65
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(4096), aBitmap24Bit.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(4096), aBitmap24Bit.GetSizePixel().Height());
+    Bitmap aScaledBitmap(aBitmap24Bit);
+    aScaledBitmap.Scale(Size(65, 65));
+
+    if (bExportBitmap)
+    {
+        SvFileStream aStream("~/scale_after_65x65.png", StreamMode::WRITE | StreamMode::TRUNC);
+        GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+        rFilter.compressAsPNG(aScaledBitmap, aStream);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(65), aScaledBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(65), aScaledBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT(checkBitmapColor(aScaledBitmap, Color(COL_YELLOW)));
+
+    // Scale - 64x64
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(4096), aBitmap24Bit.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(4096), aBitmap24Bit.GetSizePixel().Height());
+    aScaledBitmap = Bitmap(aBitmap24Bit);
+    aScaledBitmap.Scale(Size(64, 64));
+
+    if (bExportBitmap)
+    {
+        SvFileStream aStream("~/scale_after_64x64.png", StreamMode::WRITE | StreamMode::TRUNC);
+        GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+        rFilter.compressAsPNG(aScaledBitmap, aStream);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(64), aScaledBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(64), aScaledBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT(checkBitmapColor(aScaledBitmap, Color(COL_YELLOW)));
+
+    // Scale - 63x63
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(4096), aBitmap24Bit.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(4096), aBitmap24Bit.GetSizePixel().Height());
+    aScaledBitmap = Bitmap(aBitmap24Bit);
+    aScaledBitmap.Scale(Size(63, 63));
+
+    if (bExportBitmap)
+    {
+        SvFileStream aStream("~/scale_after_63x63.png", StreamMode::WRITE | StreamMode::TRUNC);
+        GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+        rFilter.compressAsPNG(aScaledBitmap, aStream);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(63), aScaledBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(63), aScaledBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT(checkBitmapColor(aScaledBitmap, Color(COL_YELLOW)));
 }
 
 typedef std::unordered_map<sal_uInt64, const char*> CRCHash;
