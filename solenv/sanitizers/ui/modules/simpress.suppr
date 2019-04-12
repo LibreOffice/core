@@ -1,17 +1,4 @@
 sd/uiconfig/simpress/ui/customanimationspanel.ui://sdlo-PropertyControl[@id='effect_property_list'] no-labelled-by
-sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://sdlo-CustomAnimationList[@id='custom_animation_list'] no-labelled-by
-sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://GtkLabel[@id='start_effect'] orphan-label
-sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://GtkLabel[@id='effect_property'] orphan-label
-sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://GtkComboBoxText[@id='start_effect_list'] no-labelled-by
-sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://sdlo-PropertyControl[@id='effect_property_list'] no-labelled-by
-sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://GtkLabel[@id='categorylabel'] orphan-label
-sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://GtkComboBoxText[@id='categorylb'] no-labelled-by
-sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://GtkLabel[@id='effect_duration'] orphan-label
-sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://GtkLabel[@id='delay_label'] orphan-label
-sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://GtkSpinButton[@id='delay_value:0.0sec'] no-labelled-by
-sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://GtkLabel[@id='effectlabel'] orphan-label
-sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://sdlo-CategoryListBox[@id='effect_list'] no-labelled-by
-sd/uiconfig/simpress/ui/customanimationspanelhorizontal.ui://GtkButton[@id='more_properties'] button-no-label
 sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkMenuButton[@id='color'] button-no-label
 sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkSpinButton[@id='fontsize'] no-labelled-by
 sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkSpinButton[@id='rotate'] no-labelled-by
