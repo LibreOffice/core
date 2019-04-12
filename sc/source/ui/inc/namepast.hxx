@@ -37,7 +37,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtnPasteAll;
     std::unique_ptr<weld::Button> m_xBtnPaste;
     std::unique_ptr<weld::Button> m_xBtnClose;
-    std::unique_ptr<RangeManagerTable> m_xTable;
+    std::unique_ptr<ScRangeManagerTable> m_xTable;
 
     std::vector<OUString> maSelectedNames;
     std::map<OUString, std::unique_ptr<ScRangeName>> m_RangeMap;

@@ -29,7 +29,7 @@ struct ScRangeNameLine
     OUString aScope;
 };
 
-class SC_DLLPUBLIC RangeManagerTable
+class SC_DLLPUBLIC ScRangeManagerTable
 {
 private:
     std::unique_ptr<weld::TreeView> m_xTreeView;
@@ -54,7 +54,7 @@ private:
     DECL_LINK(VisRowsScrolledHdl, weld::TreeView&, void);
 
 public:
-    RangeManagerTable(std::unique_ptr<weld::TreeView>,
+    ScRangeManagerTable(std::unique_ptr<weld::TreeView>,
         const std::map<OUString, std::unique_ptr<ScRangeName>>& rTabRangeNames,
         const ScAddress& rPos);
 

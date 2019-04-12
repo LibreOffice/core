@@ -22,14 +22,14 @@
 #include <vcl/layout.hxx>
 #include <tools/link.hxx>
 
-void RangeManagerTable::GetCurrentLine(ScRangeNameLine& rLine)
+void ScRangeManagerTable::GetCurrentLine(ScRangeNameLine& rLine)
 {
     std::unique_ptr<weld::TreeIter> xCurrentEntry(m_xTreeView->make_iterator());
     if (m_xTreeView->get_cursor(xCurrentEntry.get()))
         GetLine(rLine, *xCurrentEntry);
 }
 
-void RangeManagerTable::DeleteSelectedEntries()
+void ScRangeManagerTable::DeleteSelectedEntries()
 {
     std::vector<int> aRows = m_xTreeView->get_selected_rows();
     std::sort(aRows.begin(), aRows.end());
@@ -37,12 +37,12 @@ void RangeManagerTable::DeleteSelectedEntries()
         m_xTreeView->remove(*it);
 }
 
-bool RangeManagerTable::IsMultiSelection()
+bool ScRangeManagerTable::IsMultiSelection()
 {
     return m_xTreeView->count_selected_rows() > 1;
 }
 
-void RangeManagerTable::SetEntry(const ScRangeNameLine& rLine)
+void ScRangeManagerTable::SetEntry(const ScRangeNameLine& rLine)
 {
     for (int i = 0, nEntryCount = m_xTreeView->n_children(); i < nEntryCount; ++i)
     {
@@ -54,7 +54,7 @@ void RangeManagerTable::SetEntry(const ScRangeNameLine& rLine)
     }
 }
 
-RangeManagerTable::RangeManagerTable(std::unique_ptr<weld::TreeView> xTreeView,
+ScRangeManagerTable::ScRangeManagerTable(std::unique_ptr<weld::TreeView> xTreeView,
         const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap,
         const ScAddress& rPos)
     : m_xTreeView(std::move(xTreeView))
@@ -71,16 +71,16 @@ RangeManagerTable::RangeManagerTable(std::unique_ptr<weld::TreeView> xTreeView,
 
     Init();
     m_xTreeView->set_selection_mode(SelectionMode::Multiple);
-    m_xTreeView->connect_size_allocate(LINK(this, RangeManagerTable, SizeAllocHdl));
-    m_xTreeView->connect_visible_range_changed(LINK(this, RangeManagerTable, VisRowsScrolledHdl));
+    m_xTreeView->connect_size_allocate(LINK(this, ScRangeManagerTable, SizeAllocHdl));
+    m_xTreeView->connect_visible_range_changed(LINK(this, ScRangeManagerTable, VisRowsScrolledHdl));
 }
 
-IMPL_LINK_NOARG(RangeManagerTable, VisRowsScrolledHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(ScRangeManagerTable, VisRowsScrolledHdl, weld::TreeView&, void)
 {
     CheckForFormulaString();
 }
 
-const ScRangeData* RangeManagerTable::findRangeData(const ScRangeNameLine& rLine)
+const ScRangeData* ScRangeManagerTable::findRangeData(const ScRangeNameLine& rLine)
 {
     const ScRangeName* pRangeName;
     if (rLine.aScope == maGlobalString)
@@ -91,7 +91,7 @@ const ScRangeData* RangeManagerTable::findRangeData(const ScRangeNameLine& rLine
     return pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(rLine.aName));
 }
 
-void RangeManagerTable::CheckForFormulaString()
+void ScRangeManagerTable::CheckForFormulaString()
 {
     m_xTreeView->visible_foreach([this](weld::TreeIter& rEntry){
         OUString sId(m_xTreeView->get_id(rEntry));
@@ -110,12 +110,12 @@ void RangeManagerTable::CheckForFormulaString()
     });
 }
 
-IMPL_LINK_NOARG(RangeManagerTable, SizeAllocHdl, const Size&, void)
+IMPL_LINK_NOARG(ScRangeManagerTable, SizeAllocHdl, const Size&, void)
 {
     CheckForFormulaString();
 }
 
-void RangeManagerTable::addEntry(const ScRangeNameLine& rLine, bool bSetCurEntry)
+void ScRangeManagerTable::addEntry(const ScRangeNameLine& rLine, bool bSetCurEntry)
 {
     int nRow = m_xTreeView->n_children();
     m_xTreeView->append();
@@ -128,14 +128,14 @@ void RangeManagerTable::addEntry(const ScRangeNameLine& rLine, bool bSetCurEntry
         m_xTreeView->set_cursor(nRow);
 }
 
-void RangeManagerTable::GetLine(ScRangeNameLine& rLine, weld::TreeIter& rEntry)
+void ScRangeManagerTable::GetLine(ScRangeNameLine& rLine, weld::TreeIter& rEntry)
 {
     rLine.aName = m_xTreeView->get_text(rEntry, 0);
     rLine.aExpression = m_xTreeView->get_text(rEntry, 1);
     rLine.aScope = m_xTreeView->get_text(rEntry, 2);
 }
 
-void RangeManagerTable::Init()
+void ScRangeManagerTable::Init()
 {
     m_xTreeView->freeze();
     m_xTreeView->clear();
@@ -159,7 +159,7 @@ void RangeManagerTable::Init()
     m_xTreeView->thaw();
 }
 
-std::vector<ScRangeNameLine> RangeManagerTable::GetSelectedEntries()
+std::vector<ScRangeNameLine> ScRangeManagerTable::GetSelectedEntries()
 {
     std::vector<ScRangeNameLine> aSelectedEntries;
     m_xTreeView->selected_foreach([this, &aSelectedEntries](weld::TreeIter& rEntry){

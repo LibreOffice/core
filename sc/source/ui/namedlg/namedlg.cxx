@@ -109,7 +109,7 @@ void ScNameDlg::Init()
     std::unique_ptr<weld::TreeView> xTreeView(m_xBuilder->weld_tree_view("names"));
     xTreeView->set_size_request(xTreeView->get_approximate_digit_width() * 75,
                                 xTreeView->get_height_rows(10));
-    m_xRangeManagerTable.reset(new RangeManagerTable(std::move(xTreeView), m_RangeMap, maCursorPos));
+    m_xRangeManagerTable.reset(new ScRangeManagerTable(std::move(xTreeView), m_RangeMap, maCursorPos));
 
     if (m_xRangeManagerTable->n_children())
     {
