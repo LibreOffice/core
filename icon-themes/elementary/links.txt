@@ -874,12 +874,15 @@ cmd/32/datapilotmenu.png cmd/32/datadatapilotrun.png
 cmd/32/deletecell.png cmd/32/delete.png
 cmd/32/functiondialog.png cmd/32/dbviewfunctions.png
 cmd/32/functionbox.png cmd/32/dbviewfunctions.png
+cmd/32/groupoutlinemenu.png cmd/32/autooutline.png
 cmd/32/inputlinevisible.png cmd/32/dbviewfunctions.png
 cmd/32/insertrowsmenu.png cmd/32/insertrows.png
 cmd/32/insertcolumnsmenu.png cmd/32/insertcolumns.png
+cmd/32/insertpivottable.png cmd/32/datadatapilotrun.png
 cmd/32/mergecellsmenu.png cmd/32/mergecells.png
+cmd/32/navigatemenu.png cmd/32/navigator.png
 cmd/32/printrangesmenu.png cmd/32/defineprintarea.png
-cmd/32/recalcpivottable.png cmd/32/calculate.png
+cmd/32/recalcpivottable.png cmd/32/dataarearefresh.png
 cmd/32/sheetcommentmenu.png cmd/32/showannotations.png
 cmd/32/toggleformula.png cmd/32/dbviewfunctions.png
 
@@ -888,12 +891,15 @@ cmd/lc_datapilotmenu.png cmd/lc_datadatapilotrun.png
 cmd/lc_deletecell.png cmd/lc_delete.png
 cmd/lc_functiondialog.png cmd/lc_dbviewfunctions.png
 cmd/lc_functionbox.png cmd/lc_dbviewfunctions.png
+cmd/lc_groupoutlinemenu.png cmd/lc_autooutline.png
 cmd/lc_inputlinevisible.png cmd/lc_dbviewfunctions.png
 cmd/lc_insertrowsmenu.png cmd/lc_insertrows.png
 cmd/lc_insertcolumnsmenu.png cmd/lc_insertcolumns.png
+cmd/lc_insertpivottable.png cmd/lc_datadatapilotrun.png
 cmd/lc_mergecellsmenu.png cmd/lc_mergecells.png
+cmd/lc_navigatemenu.png cmd/lc_navigator.png
 cmd/lc_printrangesmenu.png cmd/lc_defineprintarea.png
-cmd/lc_recalcpivottable.png cmd/lc_calculate.png
+cmd/lc_recalcpivottable.png cmd/lc_dataarearefresh.png
 cmd/lc_sheetcommentmenu.png cmd/lc_showannotations.png
 cmd/lc_toggleformula.png cmd/lc_dbviewfunctions.png
 
@@ -902,12 +908,15 @@ cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
 cmd/sc_deletecell.png cmd/sc_delete.png
 cmd/sc_functiondialog.png cmd/sc_dbviewfunctions.png
 cmd/sc_functionbox.png cmd/sc_dbviewfunctions.png
+cmd/sc_groupoutlinemenu.png cmd/sc_autooutline.png
 cmd/sc_inputlinevisible.png cmd/sc_dbviewfunctions.png
 cmd/sc_insertrowsmenu.png cmd/sc_insertrows.png
 cmd/sc_insertcolumnsmenu.png cmd/sc_insertcolumns.png
+cmd/sc_insertpivottable.png cmd/sc_datadatapilotrun.png
 cmd/sc_mergecellsmenu.png cmd/sc_mergecells.png
+cmd/sc_navigatemenu.png cmd/sc_navigator.png
 cmd/sc_printrangesmenu.png cmd/sc_defineprintarea.png
-cmd/sc_recalcpivottable.png cmd/sc_calculate.png
+cmd/sc_recalcpivottable.png cmd/sc_dataarearefresh.png
 cmd/sc_sheetcommentmenu.png cmd/sc_showannotations.png
 cmd/sc_toggleformula.png cmd/sc_dbviewfunctions.png
 
@@ -1968,32 +1977,47 @@ cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
 # ===============================================
 cmd/32/authoritiesentrydialog.png cmd/32/dbviewaliases.png
 cmd/32/changesmenu.png cmd/32/accepttrackedchange.png
+cmd/32/com.sun.star.deployment.ui.packagemanagerdialog.png cmd/32/insertplugin.png
 cmd/32/commentchange.png cmd/32/commentchangetracking.png
 cmd/32/editfootnote.png cmd/32/insertfootnote.png
+cmd/32/editlinks.png cmd/32/linkdialog.png
 cmd/32/editlinksmenu.png cmd/32/insertreferencefield.png
 cmd/32/editpastespecialmenu.png cmd/32/pastespecial.png
 cmd/32/fielddialog.png cmd/32/fields.png
+cmd/32/focustofindbar.png cmd/32/recsearch.png
 cmd/32/indexentrydialog.png cmd/32/insertindexesentry.png
+cmd/32/managelinks.png cmd/32/linkdialog.png
+cmd/32/modifyfield.png cmd/32/fields.png
 cmd/32/pastespecialmenu.png cmd/32/pastespecial.png
 
 cmd/lc_authoritiesentrydialog.png cmd/lc_dbviewaliases.png
 cmd/lc_changesmenu.png cmd/lc_accepttrackedchange.png
+cmd/lc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/lc_insertplugin.png
 cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
 cmd/lc_editfootnote.png cmd/lc_insertfootnote.png
+cmd/lc_editlinks.png cmd/lc_linkdialog.png
 cmd/lc_editlinksmenu.png cmd/lc_insertreferencefield.png
 cmd/lc_editpastespecialmenu.png cmd/lc_pastespecial.png
 cmd/lc_fielddialog.png cmd/lc_fields.png
+cmd/lc_focustofindbar.png cmd/lc_recsearch.png
 cmd/lc_indexentrydialog.png cmd/lc_insertindexesentry.png
+cmd/lc_managelinks.png cmd/lc_linkdialog.png
+cmd/lc_modifyfield.png cmd/lc_fields.png
 cmd/lc_pastespecialmenu.png cmd/lc_pastespecial.png
 
 cmd/sc_authoritiesentrydialog.png cmd/sc_dbviewaliases.png
 cmd/sc_changesmenu.png cmd/sc_accepttrackedchange.png
+cmd/sc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/sc_insertplugin.png
 cmd/sc_commentchange.png cmd/sc_commentchangetracking.png
 cmd/sc_editfootnote.png cmd/sc_insertfootnote.png
+cmd/sc_editlinks.png cmd/sc_linkdialog.png
 cmd/sc_editlinksmenu.png cmd/sc_insertreferencefield.png
 cmd/sc_editpastespecialmenu.png cmd/sc_pastespecial.png
 cmd/sc_fielddialog.png cmd/sc_fields.png
+cmd/sc_focustofindbar.png cmd/sc_recsearch.png
 cmd/sc_indexentrydialog.png cmd/sc_insertindexesentry.png
+cmd/sc_managelinks.png cmd/sc_linkdialog.png
+cmd/sc_modifyfield.png cmd/sc_fields.png
 cmd/sc_pastespecialmenu.png cmd/sc_pastespecial.png
 
 # View menu
@@ -2031,6 +2055,8 @@ cmd/32/graphicmenu.png cmd/32/avmediaplayer.png
 cmd/32/insertfootnotesmenu.png cmd/32/insertfootnote.png
 cmd/32/insertformmenu.png cmd/32/choosecontrols.png
 cmd/32/insertheaderfootermenu.png cmd/32/editheaderandfooter.png
+cmd/32/insertpagefooter.png cmd/32/insertfooter.png
+cmd/32/insertpageheader.png cmd/32/insertheader.png
 cmd/32/objectmenu.png cmd/32/insertobject.png
 cmd/32/shapeslinemenu.png cmd/32/line.png
 cmd/32/shapesmenu.png cmd/32/basicshapes.round-quadrat.png
@@ -2040,6 +2066,9 @@ cmd/lc_graphicmenu.png cmd/lc_avmediaplayer.png
 cmd/lc_insertfootnotesmenu.png cmd/lc_insertfootnote.png
 cmd/lc_insertformmenu.png cmd/lc_choosecontrols.png
 cmd/lc_insertheaderfootermenu.png cmd/lc_editheaderandfooter.png
+cmd/lc_insertpagefield.png cmd/lc_insertpagenumberfield.png
+cmd/lc_insertpagefooter.png cmd/lc_insertfooter.png
+cmd/lc_insertpageheader.png cmd/lc_insertheader.png
 cmd/lc_objectmenu.png cmd/lc_insertobject.png
 cmd/lc_shapeslinemenu.png cmd/lc_line.png
 cmd/lc_shapesmenu.png cmd/lc_basicshapes.round-quadrat.png
@@ -2049,6 +2078,9 @@ cmd/sc_graphicmenu.png cmd/sc_avmediaplayer.png
 cmd/sc_insertfootnotesmenu.png cmd/sc_insertfootnote.png
 cmd/sc_insertformmenu.png cmd/sc_choosecontrols.png
 cmd/sc_insertheaderfootermenu.png cmd/sc_editheaderandfooter.png
+cmd/sc_insertpagefield.png cmd/sc_insertpagenumberfield.png
+cmd/sc_insertpagefooter.png cmd/sc_insertfooter.png
+cmd/sc_insertpageheader.png cmd/sc_insertheader.png
 cmd/sc_objectmenu.png cmd/sc_insertobject.png
 cmd/sc_shapeslinemenu.png cmd/sc_line.png
 cmd/sc_shapesmenu.png cmd/sc_basicshapes.round-quadrat.png
@@ -2057,19 +2089,25 @@ cmd/sc_shapesmenu.png cmd/sc_basicshapes.round-quadrat.png
 # ===============================================
 cmd/32/autoformatmenu.png cmd/32/autocorrectdlg.png
 cmd/32/languagemenu.png cmd/32/managelanguage.png
+cmd/32/macroorganizer%3ftabid%3ashort=1.png cmd/32/open.png
 cmd/32/openxmlfiltersettings.png cmd/32/managexmlsource.png
+cmd/32/toolsformsmenu.png cmd/32/formproperties.png
 cmd/32/updatealllinks.png cmd/32/inserthyperlinkcontrol.png
 cmd/32/updatecharts.png cmd/32/drawchart.png
 
 cmd/lc_autoformatmenu.png cmd/lc_autocorrectdlg.png
 cmd/lc_languagemenu.png cmd/lc_managelanguage.png
+cmd/lc_macroorganizer%3ftabid%3ashort=1.png cmd/lc_open.png
 cmd/lc_openxmlfiltersettings.png cmd/lc_managexmlsource.png
+cmd/lc_toolsformsmenu.png cmd/lc_formproperties.png
 cmd/lc_updatealllinks.png cmd/lc_inserthyperlinkcontrol.png
 cmd/lc_updatecharts.png cmd/lc_drawchart.png
 
 cmd/sc_autoformatmenu.png cmd/sc_autocorrectdlg.png
 cmd/sc_languagemenu.png cmd/sc_managelanguage.png
+cmd/sc_macroorganizer%3ftabid%3ashort=1.png cmd/sc_open.png
 cmd/sc_openxmlfiltersettings.png cmd/sc_managexmlsource.png
+cmd/sc_toolsformsmenu.png cmd/sc_formproperties.png
 cmd/sc_updatealllinks.png cmd/sc_inserthyperlinkcontrol.png
 cmd/sc_updatecharts.png cmd/sc_drawchart.png
 
@@ -2084,6 +2122,7 @@ cmd/32/commonalignjustified.png cmd/32/alignblock.png
 cmd/32/commonalignleft.png cmd/32/alignleft.png
 cmd/32/commonalignright.png cmd/32/alignright.png
 cmd/32/conditionalformatmenu.png cmd/32/conditionalformatdialog.png
+cmd/32/editregion.png cmd/32/insertsection.png
 cmd/32/formatbulletsmenu.png cmd/32/defaultbullet.png
 cmd/32/formatframemenu.png cmd/32/chainframes.png
 cmd/32/formatimagemenu.png cmd/32/graphic.png
@@ -2103,6 +2142,7 @@ cmd/lc_commonalignjustified.png cmd/lc_alignblock.png
 cmd/lc_commonalignleft.png cmd/lc_alignleft.png
 cmd/lc_commonalignright.png cmd/lc_alignright.png
 cmd/lc_conditionalformatmenu.png cmd/lc_conditionalformatdialog.png
+cmd/lc_editregion.png cmd/lc_insertsection.png
 cmd/lc_formatbulletsmenu.png cmd/lc_defaultbullet.png
 cmd/lc_formatframemenu.png cmd/lc_chainframes.png
 cmd/lc_formatimagemenu.png cmd/lc_graphic.png
@@ -2122,6 +2162,7 @@ cmd/sc_commonalignjustified.png cmd/sc_alignblock.png
 cmd/sc_commonalignleft.png cmd/sc_alignleft.png
 cmd/sc_commonalignright.png cmd/sc_alignright.png
 cmd/sc_conditionalformatmenu.png cmd/sc_conditionalformatdialog.png
+cmd/sc_editregion.png cmd/sc_insertsection.png
 cmd/sc_formatbulletsmenu.png cmd/sc_defaultbullet.png
 cmd/sc_formatframemenu.png cmd/sc_chainframes.png
 cmd/sc_formatimagemenu.png cmd/sc_graphic.png
