@@ -118,7 +118,7 @@ class tdf117276_autofilter_reset(UITestCase):
         # autofilter still exist
         self.assertEqual(document.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
-        # 3. open filter of column A and deselect first 3 entires (Unique a2, Unique a3, Unique a4)
+        # 3. open filter of column A and deselect first 3 entries (Unique a2, Unique a3, Unique a4)
         xGridWindow.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
         xFloatWindow = self.xUITest.getFloatWindow()
         xCheckListMenu = xFloatWindow.getChild("check_list_menu")
