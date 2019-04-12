@@ -70,6 +70,30 @@
       "revId": "4780f16214f1767e6b572e3218eb7a7fa1878a75",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_21b528ef",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1837,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2019-04-12T09:58:53Z",
+      "side": 1,
+      "message": "I have played around with selected multiple sheets, but I can\u0027t still see the influence to this code. I can copy multiple sheets or delete them completely.",
+      "parentUuid": "df87a7cf_c230e50a",
+      "range": {
+        "startLine": 1837,
+        "startChar": 0,
+        "endLine": 1837,
+        "endChar": 58
+      },
+      "revId": "4780f16214f1767e6b572e3218eb7a7fa1878a75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
