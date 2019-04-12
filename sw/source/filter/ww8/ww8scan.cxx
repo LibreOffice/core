@@ -2682,7 +2682,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
                         if (aEntry.mnLen)
                         {
                             aEntry.mpData = new sal_uInt8[aEntry.mnLen];
-                            memcpy(aEntry.mpData, &(aSprms[0]), aEntry.mnLen);
+                            memcpy(aEntry.mpData, aSprms.data(), aEntry.mnLen);
                             aEntry.mbMustDelete = true;
                         }
                     }

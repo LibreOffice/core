@@ -4456,7 +4456,7 @@ void WW8RStyle::ImportOldFormatStyles()
             true);
 
         if (!aConvertedChpx[stcp].empty())
-            ImportSprms(&(aConvertedChpx[stcp][0]),
+            ImportSprms(aConvertedChpx[stcp].data(),
                         static_cast< short >(aConvertedChpx[stcp].size()),
                         false);
 

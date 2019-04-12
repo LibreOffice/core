@@ -2932,7 +2932,7 @@ bool PDFWriterImpl::emitFonts()
                 sal_Int32 nFontDescriptor = emitFontDescriptor( subset.first, aSubsetInfo, s_subset.m_nFontID, nFontStream );
 
                 if( nToUnicodeStream )
-                    nToUnicodeStream = createToUnicodeCMap( pEncoding, &aCodeUnits[0], pCodeUnitsPerGlyph, pEncToUnicodeIndex, nGlyphs );
+                    nToUnicodeStream = createToUnicodeCMap( pEncoding, aCodeUnits.data(), pCodeUnitsPerGlyph, pEncToUnicodeIndex, nGlyphs );
 
                 sal_Int32 nFontObject = createObject();
                 if ( !updateObject( nFontObject ) ) return false;
@@ -5153,9 +5153,9 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     if (!nBytesNeeded)
       return 0;
     std::vector<unsigned char> aBuffer(nBytesNeeded);
-    cmsSaveProfileToMem(hProfile, &aBuffer[0], &nBytesNeeded);
+    cmsSaveProfileToMem(hProfile, aBuffer.data(), &nBytesNeeded);
     cmsCloseProfile(hProfile);
-    bool written = writeBuffer( &aBuffer[0], static_cast<sal_Int32>(aBuffer.size()) );
+    bool written = writeBuffer( aBuffer.data(), static_cast<sal_Int32>(aBuffer.size()) );
     disableStreamEncryption();
     endCompression();
     sal_uInt64 nEndStreamPos = 0;
@@ -5411,9 +5411,9 @@ bool PDFWriterImpl::emitTrailer()
 
             // emit the owner password, must not be encrypted
             aLineS.append( "/O(" );
-            appendLiteralString( reinterpret_cast<char*>(&m_aContext.Encryption.OValue[0]), sal_Int32(m_aContext.Encryption.OValue.size()), aLineS );
+            appendLiteralString( reinterpret_cast<char*>(m_aContext.Encryption.OValue.data()), sal_Int32(m_aContext.Encryption.OValue.size()), aLineS );
             aLineS.append( ")/U(" );
-            appendLiteralString( reinterpret_cast<char*>(&m_aContext.Encryption.UValue[0]), sal_Int32(m_aContext.Encryption.UValue.size()), aLineS );
+            appendLiteralString( reinterpret_cast<char*>(m_aContext.Encryption.UValue.data()), sal_Int32(m_aContext.Encryption.UValue.size()), aLineS );
             aLineS.append( ")/P " );// the permission set
             aLineS.append( m_nAccessPermissions );
             aLineS.append( ">>\nendobj\n\n" );

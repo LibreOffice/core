@@ -2922,7 +2922,7 @@ bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
 
             SalExtTextInputEvent aEv;
             aEv.maText          = rSeq;
-            aEv.mpTextAttr      = &attribs[0];
+            aEv.mpTextAttr      = attribs.data();
             aEv.mnCursorPos     = 0;
             aEv.mnCursorFlags   = 0;
 

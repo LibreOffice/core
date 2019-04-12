@@ -1163,7 +1163,7 @@ void PDFWriterImpl::checkAndEnableStreamEncryption( sal_Int32 nObject )
         // the other location of m_nEncryptionKey is already set to 0, our fixed generation number
         // do the MD5 hash
         ::std::vector<unsigned char> const nMD5Sum(::comphelper::Hash::calculateHash(
-            &m_aContext.Encryption.EncryptionKey[0], i+2, ::comphelper::HashType::MD5));
+            m_aContext.Encryption.EncryptionKey.data(), i+2, ::comphelper::HashType::MD5));
         // the i+2 to take into account the generation number, always zero
         // initialize the RC4 with the key
         // key length: see algorithm 3.1, step 4: (N+5) max 16
@@ -1183,7 +1183,7 @@ void PDFWriterImpl::enableStringEncryption( sal_Int32 nObject )
         // do the MD5 hash
         // the i+2 to take into account the generation number, always zero
         ::std::vector<unsigned char> const nMD5Sum(::comphelper::Hash::calculateHash(
-            &m_aContext.Encryption.EncryptionKey[0], i+2, ::comphelper::HashType::MD5));
+            m_aContext.Encryption.EncryptionKey.data(), i+2, ::comphelper::HashType::MD5));
         // initialize the RC4 with the key
         // key length: see algorithm 3.1, step 4: (N+5) max 16
         rtl_cipher_initARCFOUR( m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum.data(), m_nRC4KeyLength, nullptr, 0 );
@@ -1314,7 +1314,7 @@ bool PDFWriterImpl::computeEncryptionKey( EncHashTransporter* i_pTransporter, vc
     {
         //step 3
         if( ! io_rProperties.OValue.empty() )
-            pDigest->update(&io_rProperties.OValue[0], io_rProperties.OValue.size());
+            pDigest->update(io_rProperties.OValue.data(), io_rProperties.OValue.size());
         else
             bSuccess = false;
         //Step 4
@@ -1328,7 +1328,7 @@ bool PDFWriterImpl::computeEncryptionKey( EncHashTransporter* i_pTransporter, vc
         pDigest->update(nPerm, sizeof(nPerm));
 
         //step 5, get the document ID, binary form
-        pDigest->update(&io_rProperties.DocumentIdentifier[0], io_rProperties.DocumentIdentifier.size());
+        pDigest->update(io_rProperties.DocumentIdentifier.data(), io_rProperties.DocumentIdentifier.size());
         //get the digest
         nMD5Sum = pDigest->finalize();
 
@@ -1396,7 +1396,7 @@ bool PDFWriterImpl::computeODictionaryValue( const sal_uInt8* i_pPaddedOwnerPass
         {
             // encrypt the user password using the key set above
             rtl_cipher_encodeARCFOUR( aCipher, i_pPaddedUserPassword, ENCRYPTED_PWD_SIZE, // the data to be encrypted
-                                      &io_rOValue[0], sal_Int32(io_rOValue.size()) ); //encrypted data
+                                      io_rOValue.data(), sal_Int32(io_rOValue.size()) ); //encrypted data
             //Step 7, only if 128 bit
             if( i_nKeyLength == SECUR_128BIT_KEY )
             {
@@ -1416,8 +1416,8 @@ bool PDFWriterImpl::computeODictionaryValue( const sal_uInt8* i_pPaddedOwnerPass
                         bSuccess = false;
                         break;
                     }
-                    rtl_cipher_encodeARCFOUR( aCipher, &io_rOValue[0], sal_Int32(io_rOValue.size()), // the data to be encrypted
-                                              &io_rOValue[0], sal_Int32(io_rOValue.size()) ); // encrypted data, can be the same as the input, encrypt "in place"
+                    rtl_cipher_encodeARCFOUR( aCipher, io_rOValue.data(), sal_Int32(io_rOValue.size()), // the data to be encrypted
+                                              io_rOValue.data(), sal_Int32(io_rOValue.size()) ); // encrypted data, can be the same as the input, encrypt "in place"
                     //step 8, store in class data member
                 }
             }
@@ -1466,14 +1466,14 @@ bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
                 io_rProperties.UValue[i] = 0;
             //steps 2 and 3
             aDigest.update(s_nPadString, sizeof(s_nPadString));
-            aDigest.update(&io_rProperties.DocumentIdentifier[0], io_rProperties.DocumentIdentifier.size());
+            aDigest.update(io_rProperties.DocumentIdentifier.data(), io_rProperties.DocumentIdentifier.size());
 
             ::std::vector<unsigned char> const nMD5Sum(aDigest.finalize());
             //Step 4
             rtl_cipher_initARCFOUR( aCipher, rtl_Cipher_DirectionEncode,
-                                    &io_rProperties.EncryptionKey[0], SECUR_128BIT_KEY, nullptr, 0 ); //destination data area
+                                    io_rProperties.EncryptionKey.data(), SECUR_128BIT_KEY, nullptr, 0 ); //destination data area
             rtl_cipher_encodeARCFOUR( aCipher, nMD5Sum.data(), nMD5Sum.size(), // the data to be encrypted
-                                      &io_rProperties.UValue[0], SECUR_128BIT_KEY ); //encrypted data, stored in class data member
+                                      io_rProperties.UValue.data(), SECUR_128BIT_KEY ); //encrypted data, stored in class data member
             //step 5
             sal_uInt32 i;
             size_t y;
@@ -1487,8 +1487,8 @@ bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
                 rtl_cipher_initARCFOUR( aCipher, rtl_Cipher_DirectionEncode,
                                         nLocalKey, SECUR_128BIT_KEY, // key and key length
                                         nullptr, 0 ); //destination data area, on init can be NULL
-                rtl_cipher_encodeARCFOUR( aCipher, &io_rProperties.UValue[0], SECUR_128BIT_KEY, // the data to be encrypted
-                                          &io_rProperties.UValue[0], SECUR_128BIT_KEY ); // encrypted data, can be the same as the input, encrypt "in place"
+                rtl_cipher_encodeARCFOUR( aCipher, io_rProperties.UValue.data(), SECUR_128BIT_KEY, // the data to be encrypted
+                                          io_rProperties.UValue.data(), SECUR_128BIT_KEY ); // encrypted data, can be the same as the input, encrypt "in place"
             }
         }
         else

@@ -1867,7 +1867,7 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nCurrentLFO,
                 {
                     std::unique_ptr<SfxItemSet> xOldCurrentItemSet(SetCurrentItemSet(std::move(xListIndent)));
 
-                    sal_uInt8* pSprms1  = &aParaSprms[0];
+                    sal_uInt8* pSprms1  = aParaSprms.data();
                     while (0 < nLen)
                     {
                         sal_uInt16 nL1 = ImportSprm(pSprms1, nLen);
