@@ -73,6 +73,7 @@
 #include <svx/svxdlg.hxx>
 #include <vcl/toolbox.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <vcl/combobox.hxx>
 
 #include <cstdlib>
 #include <memory>
@@ -543,6 +544,13 @@ void SvxSearchDialog::SetSaveToModule(bool b)
     pImpl->bSaveToModule = b;
 }
 
+void SvxSearchDialog::SetSearchLabel(const OUString& rStr)
+{
+    m_xSearchLabel->set_label(rStr);
+
+    if (rStr == SvxResId(RID_SVXSTR_SEARCH_NOT_FOUND))
+        m_xSearchLB->set_entry_error(true);
+}
 
 void SvxSearchDialog::ApplyTransliterationFlags_Impl( TransliterationFlags nSettings )
 {
@@ -2174,7 +2182,10 @@ void SvxSearchDialog::PaintAttrText_Impl()
 void SvxSearchDialog::SetModifyFlag_Impl( const weld::Widget* pCtrl )
 {
     if (m_xSearchLB.get() == pCtrl)
+    {
         nModifyFlag |= ModifyFlags::Search;
+        m_xSearchLB->set_entry_error(false);
+    }
     else if ( m_xReplaceLB.get() == pCtrl )
         nModifyFlag |= ModifyFlags::Replace;
     else if ( m_xWordBtn.get() == pCtrl )
@@ -2353,6 +2364,8 @@ static void lcl_SetSearchLabelWindow(const OUString& rStr)
     if (!pViewFrame)
         return;
 
+    bool bNotFound = rStr == SvxResId(RID_SVXSTR_SEARCH_NOT_FOUND);
+
     css::uno::Reference< css::beans::XPropertySet > xPropSet(
             pViewFrame->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
@@ -2376,6 +2389,17 @@ static void lcl_SetSearchLabelWindow(const OUString& rStr)
                 pSearchLabel->SetSizePixel(Size(16, pSearchLabel->get_preferred_size().Height()));
             else
                 pSearchLabel->SetSizePixel(pSearchLabel->get_preferred_size());
+        }
+
+        if (pToolBox->GetItemCommand(id) == ".uno:FindText")
+        {
+            ComboBox* pFindText = dynamic_cast<ComboBox*>(pToolBox->GetItemWindow(id));
+            assert(pFindText);
+            Edit* pEdit = pFindText->GetSubEdit();
+            if (bNotFound)
+                pEdit->SetControlForeground(COL_LIGHTRED);
+            else
+                pEdit->SetControlForeground();
         }
     }
     xLayoutManager->doLayout();

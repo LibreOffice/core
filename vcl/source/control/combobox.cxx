@@ -697,6 +697,8 @@ void ComboBox::DataChanged( const DataChangedEvent& rDCEvt )
             m_pImpl->m_pBtn->SetSettings( GetSettings() );
             ImplInitDropDownButton( m_pImpl->m_pBtn );
         }
+
+        GetSubEdit()->SetControlBackground();
         Resize();
         m_pImpl->m_pImplLB->Resize(); // not called by ComboBox::Resize() if ImplLB is unchanged
 
