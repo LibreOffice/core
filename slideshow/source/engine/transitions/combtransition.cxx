@@ -117,7 +117,7 @@ void CombTransition::renderComb( double           t,
     const basegfx::B2DSize enteringSizePixel(
         getEnteringSlideSizePixel( rViewEntry.mpView) );
 
-    const basegfx::B2DVector aPushDirection = basegfx::B2DVector(
+    const basegfx::B2DVector aPushDirection(
         enteringSizePixel * maPushDirectionUnit );
     const basegfx::B2DPolyPolygon aClipPolygon1 =
         createClipPolygon( maPushDirectionUnit,

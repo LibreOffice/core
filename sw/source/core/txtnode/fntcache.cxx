@@ -2197,7 +2197,7 @@ TextFrameIndex SwFntObj::GetCursorOfst(SwDrawTextInfo &rInf)
 
             const long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf );
 
-            for (TextFrameIndex j = TextFrameIndex(0); j < rInf.GetLen(); j++)
+            for (TextFrameIndex j(0); j < rInf.GetLen(); j++)
             {
                 long nScr = pKernArray[sal_Int32(j)] + (nSpaceAdd + nGridWidthAdd) * (sal_Int32(j) + 1);
                 if( nScr >= rInf.GetOfst())

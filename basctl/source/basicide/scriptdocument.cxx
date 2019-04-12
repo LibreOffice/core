@@ -1087,7 +1087,7 @@ namespace basctl
 
         for (auto const& doc : aDocuments)
         {
-            const ScriptDocument aCheck = ScriptDocument( doc.xModel );
+            const ScriptDocument aCheck( doc.xModel );
             if  (   _rUrlOrCaption == aCheck.getTitle()
                 ||  _rUrlOrCaption == aCheck.m_pImpl->getURL()
                 )

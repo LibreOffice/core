@@ -123,7 +123,7 @@ namespace toolkit
             // for the real background (everything except the buttons and the thumb),
             // use an average between the desired color and "white"
             Color aWhite( COL_WHITE );
-            Color aBackground = Color( nBackgroundColor );
+            Color aBackground( nBackgroundColor );
             aBackground.SetRed( ( aBackground.GetRed() + aWhite.GetRed() ) / 2 );
             aBackground.SetGreen( ( aBackground.GetGreen() + aWhite.GetGreen() ) / 2 );
             aBackground.SetBlue( ( aBackground.GetBlue() + aWhite.GetBlue() ) / 2 );
@@ -132,19 +132,19 @@ namespace toolkit
             sal_Int32 nBackgroundLuminance = Color( nBackgroundColor ).GetLuminance();
             sal_Int32 nWhiteLuminance = COL_WHITE.GetLuminance();
 
-            Color aLightShadow = Color( nBackgroundColor );
+            Color aLightShadow( nBackgroundColor );
             aLightShadow.IncreaseLuminance( static_cast<sal_uInt8>( ( nWhiteLuminance - nBackgroundLuminance ) * 2 / 3 ) );
             aStyleSettings.SetLightBorderColor( aLightShadow );
 
-            Color aLight = Color( nBackgroundColor );
+            Color aLight( nBackgroundColor );
             aLight.IncreaseLuminance( static_cast<sal_uInt8>( ( nWhiteLuminance - nBackgroundLuminance ) * 1 / 3 ) );
             aStyleSettings.SetLightColor( aLight );
 
-            Color aShadow = Color( nBackgroundColor );
+            Color aShadow( nBackgroundColor );
             aShadow.DecreaseLuminance( static_cast<sal_uInt8>( nBackgroundLuminance * 1 / 3 ) );
             aStyleSettings.SetShadowColor( aShadow );
 
-            Color aDarkShadow = Color( nBackgroundColor );
+            Color aDarkShadow( nBackgroundColor );
             aDarkShadow.DecreaseLuminance( static_cast<sal_uInt8>( nBackgroundLuminance * 2 / 3 ) );
             aStyleSettings.SetDarkShadowColor( aDarkShadow );
         }

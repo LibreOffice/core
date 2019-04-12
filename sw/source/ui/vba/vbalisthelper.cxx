@@ -379,7 +379,7 @@ void SwVbaListHelper::CreateOutlineNumberForType1()
 void SwVbaListHelper::CreateOutlineNumberForType2()
 {
     sal_Int16 nParentNumbering = 0;
-    OUString sSuffix = OUString( '.' );
+    OUString sSuffix( '.' );
     uno::Sequence< beans::PropertyValue > aPropertyValues;
 
     for( sal_Int32 nLevel = 0; nLevel < LIST_LEVEL_COUNT; nLevel++ )

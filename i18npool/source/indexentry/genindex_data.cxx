@@ -48,7 +48,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     sal_Int32 i, j, k;
     sal_Int32 address[MAX_ADDRESS];
     for (i=0; i<MAX_ADDRESS; i++) address[i]=-1;
-    OUString sep=OUString('|');
+    OUString sep('|');
     OUStringBuffer result=sep;
     sal_Int32 max=0;
 

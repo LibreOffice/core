@@ -270,7 +270,7 @@ void BackingWindow::initControls()
     mpHelpButton->SetControlForeground(maButtonsTextColor);
     mpExtensionsButton->SetControlForeground(maButtonsTextColor);
 
-    const Color aButtonsBackground = Color(officecfg::Office::Common::Help::StartCenter::StartCenterBackgroundColor::get());
+    const Color aButtonsBackground(officecfg::Office::Common::Help::StartCenter::StartCenterBackgroundColor::get());
 
     mpAllButtonsBox->SetBackground(aButtonsBackground);
     mpSmallButtonsBox->SetBackground(aButtonsBackground);

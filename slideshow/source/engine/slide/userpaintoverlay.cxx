@@ -349,7 +349,7 @@ namespace slideshow
                         // render at given output position
                         pBitmap->move( aOutPosPixel );
 
-                        ::basegfx::B2DPolyPolygon aPolyPoly=::basegfx::B2DPolyPolygon(aPoly);
+                        ::basegfx::B2DPolyPolygon aPolyPoly(aPoly);
                         aViewTransform.translate(-aOutPosPixel.getX(), -aOutPosPixel.getY());
                         aPolyPoly.transform(aViewTransform);
                         // set clip so that we just redraw a part of the canvas

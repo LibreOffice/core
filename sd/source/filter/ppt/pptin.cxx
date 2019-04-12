@@ -2745,7 +2745,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportPPT(SvStream &rStream)
     bool bRet = false;
     try
     {
-        tools::SvRef<SotStorage> xStorage = tools::SvRef<SotStorage>(new SotStorage(rStream));
+        tools::SvRef<SotStorage> xStorage(new SotStorage(rStream));
         if (xStorage->GetError())
             return false;
 

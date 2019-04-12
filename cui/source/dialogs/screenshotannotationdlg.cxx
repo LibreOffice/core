@@ -58,9 +58,9 @@ namespace
 
     OUString lcl_AltDescr()
     {
-        OUString aTempl = OUString("<alt id=\"%1\">"
-                                   " " //FIXME real dialog title or something
-                                  "</alt>");
+        OUString aTempl("<alt id=\"%1\">"
+                        " " //FIXME real dialog title or something
+                        "</alt>");
         aTempl = aTempl.replaceFirst( "%1", lcl_genRandom("alt_id") );
 
         return aTempl;
@@ -68,10 +68,10 @@ namespace
 
     OUString lcl_Image( const OUString& rScreenshotId, const Size& rSize )
     {
-        OUString aTempl = OUString("<image id=\"%1\" src=\"media/screenshots/%2.png\""
-                                    " width=\"%3cm\"  height=\"%4cm\">"
-                                    "%5"
-                                   "</image>");
+        OUString aTempl("<image id=\"%1\" src=\"media/screenshots/%2.png\""
+                           " width=\"%3cm\"  height=\"%4cm\">"
+                           "%5"
+                        "</image>");
         aTempl = aTempl.replaceFirst( "%1", lcl_genRandom("img_id") );
         aTempl = aTempl.replaceFirst( "%2", rScreenshotId );
         aTempl = aTempl.replaceFirst( "%3", OUString::number( rSize.Width() ) );
@@ -83,8 +83,8 @@ namespace
 
     OUString lcl_ParagraphWithImage( const OUString& rScreenshotId, const Size& rSize )
     {
-        OUString aTempl = OUString( "<paragraph id=\"%1\" role=\"paragraph\">%2"
-                                    "</paragraph>"  SAL_NEWLINE_STRING );
+        OUString aTempl( "<paragraph id=\"%1\" role=\"paragraph\">%2"
+                         "</paragraph>"  SAL_NEWLINE_STRING );
         aTempl = aTempl.replaceFirst( "%1", lcl_genRandom("par_id") );
         aTempl = aTempl.replaceFirst( "%2", lcl_Image(rScreenshotId, rSize) );
 

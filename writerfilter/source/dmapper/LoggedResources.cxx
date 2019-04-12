@@ -185,10 +185,7 @@ void LoggedStream::utext(const sal_uInt8 * data, size_t len)
     mHelper.startElement("utext");
     mHelper.startElement("data");
 
-    OUString sText;
-    OUStringBuffer aBuffer = OUStringBuffer(sal::static_int_cast<int>(len));
-    aBuffer.append( reinterpret_cast<const sal_Unicode *>(data), len);
-    sText = aBuffer.makeStringAndClear();
+    OUString sText( reinterpret_cast<const sal_Unicode *>(data), len);
 
     LoggedResourcesHelper::chars(sText);
 

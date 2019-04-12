@@ -842,7 +842,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     std::vector<OUString> aBackupList;
                     OUString aSidebarMode;
 
-                    OUStringBuffer aPath = OUStringBuffer( "org.openoffice.Office.UI.ToolbarMode/Applications/" );
+                    OUStringBuffer aPath( "org.openoffice.Office.UI.ToolbarMode/Applications/" );
                     aPath.append( lcl_getAppName( eApp ) );
                     aPath.append( "/Modes" );
 

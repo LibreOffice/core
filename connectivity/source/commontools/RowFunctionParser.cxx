@@ -212,7 +212,7 @@ public:
         rNodeStack.pop();
 
         // create combined ExpressionNode
-        std::shared_ptr<ExpressionNode> pNode = std::shared_ptr<ExpressionNode>( new BinaryFunctionExpression( meFunct, pFirstArg, pSecondArg ) );
+        std::shared_ptr<ExpressionNode> pNode( new BinaryFunctionExpression( meFunct, pFirstArg, pSecondArg ) );
         // check for constness
         rNodeStack.push( pNode );
     }
