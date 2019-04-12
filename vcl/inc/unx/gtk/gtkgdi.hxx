@@ -384,7 +384,7 @@ protected:
     bool NWPaintGTKSlider( ControlPart nPart,
                            const tools::Rectangle& rControlRectangle,
                            ControlState nState, const ImplControlValue& aValue );
-    bool NWPaintGTKListNode(
+    bool NWPaintGTKListNode( GdkDrawable* gdkDrawable,
                             const tools::Rectangle& rControlRectangle,
                             ControlState nState, const ImplControlValue& aValue );
 };
