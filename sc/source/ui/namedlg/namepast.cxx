@@ -45,7 +45,7 @@ ScNamePasteDlg::ScNamePasteDlg(weld::Window * pParent, ScDocShell* pShell)
     std::unique_ptr<weld::TreeView> xTreeView(m_xBuilder->weld_tree_view("ctrl"));
     xTreeView->set_size_request(xTreeView->get_approximate_digit_width() * 75,
                                 xTreeView->get_height_rows(10));
-    m_xTable.reset(new RangeManagerTable(std::move(xTreeView), m_RangeMap, aPos));
+    m_xTable.reset(new ScRangeManagerTable(std::move(xTreeView), m_RangeMap, aPos));
 
     m_xBtnPaste->connect_clicked( LINK( this, ScNamePasteDlg, ButtonHdl) );
     m_xBtnPasteAll->connect_clicked( LINK( this, ScNamePasteDlg, ButtonHdl));
