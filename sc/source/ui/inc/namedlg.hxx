@@ -75,7 +75,7 @@ private:
 
     std::unique_ptr<weld::Expander> m_xExpander;
 
-    std::unique_ptr<RangeManagerTable> m_xRangeManagerTable;
+    std::unique_ptr<ScRangeManagerTable> m_xRangeManagerTable;
 
 private:
     void Init();
