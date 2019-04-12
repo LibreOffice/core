@@ -14,6 +14,10 @@
 #include <wrtsh.hxx>
 #include <redline.hxx>
 #include <ndtxt.hxx>
+#include <UndoManager.hxx>
+#include <itabenum.hxx>
+#include <fmtfsize.hxx>
+#include <fmtanchr.hxx>
 
 namespace
 {
@@ -28,13 +32,18 @@ public:
     void testRedlineInHiddenSection();
     void testTdf101534();
     void testTdf131684();
+    void testTdf109376();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
     CPPUNIT_TEST(testRedlineInHiddenSection);
     CPPUNIT_TEST(testTdf101534);
     CPPUNIT_TEST(testTdf131684);
+    CPPUNIT_TEST(testTdf109376);
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    SwDoc* createDoc(const char* pName = nullptr);
 };
 
 static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
@@ -52,6 +61,18 @@ static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xCompone
     CPPUNIT_ASSERT(xDispatchHelper.is());
 
     xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
+}
+
+SwDoc* SwUiWriterTest2::createDoc(const char* pName)
+{
+    if (!pName)
+        loadURL("private:factory/swriter", nullptr);
+    else
+        load(DATA_DIRECTORY, pName);
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    return pTextDoc->GetDocShell()->GetDoc();
 }
 
 void SwUiWriterTest2::testTdf131684()
@@ -214,6 +235,53 @@ void SwUiWriterTest2::testRedlineInHiddenSection()
     CPPUNIT_ASSERT(
         !pNode->GetNodes()[pNode->GetIndex() + 3]->GetTextNode()->getLayoutFrame(nullptr));
     CPPUNIT_ASSERT(pNode->GetNodes()[pNode->GetIndex() + 4]->IsEndNode());
+}
+
+void SwUiWriterTest2::testTdf109376()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    // need 2 paragraphs to get to the bMoveNds case
+    pWrtShell->Insert("foo");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("bar");
+    pWrtShell->SplitNode();
+    pWrtShell->StartOfSection(false);
+
+    // add AT_PARA fly at 1st to be deleted node
+    SwFormatAnchor anchor(RndStdIds::FLY_AT_PARA);
+    anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
+    SfxItemSet flySet(pDoc->GetAttrPool(),
+                      svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+    flySet.Put(anchor);
+    SwFormatFrameSize size(ATT_MIN_SIZE, 1000, 1000);
+    flySet.Put(size); // set a size, else we get 1 char per line...
+    SwFrameFormat const* pFly = pWrtShell->NewFlyFrame(flySet, /*bAnchValid=*/true);
+    CPPUNIT_ASSERT(pFly != nullptr);
+
+    pWrtShell->SttEndDoc(false);
+    SwInsertTableOptions tableOpt(SwInsertTableFlags::DefaultBorder, 0);
+    const SwTable& rTable = pWrtShell->InsertTable(tableOpt, 1, 1);
+
+    pWrtShell->StartOfSection(false);
+    SwPaM pam(*pWrtShell->GetCursor()->GetPoint());
+    pam.SetMark();
+    pam.GetPoint()->nNode = *rTable.GetTableNode();
+    pam.GetPoint()->nContent.Assign(nullptr, 0);
+    pam.Exchange(); // same selection direction as in doc compare...
+
+    // this used to assert/crash with m_pAnchoredFlys mismatch because the
+    // fly was not deleted but its anchor was moved to the SwTableNode
+    pDoc->getIDocumentContentOperations().DeleteRange(pam);
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+    rUndoManager.Redo();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
