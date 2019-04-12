@@ -42,7 +42,7 @@ OUString osl::detail::backtraceAsString(sal_uInt32 maxDepth) {
     if (maxDepth > maxInt) {
         maxDepth = static_cast<sal_uInt32>(maxInt);
     }
-    auto b1 = std::unique_ptr<void *[]>(new void *[maxDepth]);
+    auto b1 = std::make_unique<void *[]>(maxDepth);
     int n = backtrace(b1.get(), static_cast<int>(maxDepth));
     FreeGuard b2(backtrace_symbols(b1.get(), n));
     b1.reset();

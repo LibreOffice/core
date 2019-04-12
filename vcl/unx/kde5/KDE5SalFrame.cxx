@@ -194,7 +194,7 @@ void KDE5SalFrame::UpdateSettings(AllSettings& rSettings)
     style.SetCursorBlinkTime(flash_time != 0 ? flash_time / 2 : STYLE_CURSOR_NOBLINKTIME);
 
     // Menu
-    std::unique_ptr<QMenuBar> pMenuBar = std::unique_ptr<QMenuBar>(new QMenuBar());
+    std::unique_ptr<QMenuBar> pMenuBar = std::make_unique<QMenuBar>();
     aFont = toFont(pMenuBar->font(), rSettings.GetUILanguageTag().getLocale());
     style.SetMenuFont(aFont);
 

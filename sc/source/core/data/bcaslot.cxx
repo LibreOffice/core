@@ -718,7 +718,7 @@ void ScBroadcastAreaSlotMachine::StartListeningArea(
         {
             TableSlotsMap::iterator iTab( aTableSlotsMap.find( nTab));
             if (iTab == aTableSlotsMap.end())
-                iTab = aTableSlotsMap.emplace(nTab, std::unique_ptr<TableSlots>(new TableSlots)).first;
+                iTab = aTableSlotsMap.emplace(nTab, std::make_unique<TableSlots>()).first;
             ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
             SCSIZE nStart, nEnd, nRowBreak;
             ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
@@ -1029,7 +1029,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
         {
             TableSlotsMap::iterator iTab( aTableSlotsMap.find( nTab));
             if (iTab == aTableSlotsMap.end())
-                iTab = aTableSlotsMap.emplace(nTab, std::unique_ptr<TableSlots>(new TableSlots)).first;
+                iTab = aTableSlotsMap.emplace(nTab, std::make_unique<TableSlots>()).first;
             ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
             SCSIZE nStart, nEnd, nRowBreak;
             ComputeAreaPoints( aRange, nStart, nEnd, nRowBreak );

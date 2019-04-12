@@ -1205,7 +1205,7 @@ OUString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, sal
     DWORD nBins = ImplDeviceCaps( this, DC_BINNAMES, nullptr, pSetupData );
     if ( (nPaperBin < nBins) && (nBins != GDI_ERROR) )
     {
-        auto pBuffer = std::unique_ptr<sal_Unicode[]>(new sal_Unicode[nBins*24]);
+        auto pBuffer = std::make_unique<sal_Unicode[]>(nBins*24);
         DWORD nRet = ImplDeviceCaps( this, DC_BINNAMES, reinterpret_cast<BYTE*>(pBuffer.get()), pSetupData );
         if ( nRet && (nRet != GDI_ERROR) )
             aPaperBinName = OUString( pBuffer.get() + (nPaperBin*24) );

@@ -131,7 +131,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
         UINT size = DragQueryFileW( static_cast<HDROP>(medium.hGlobal), 0, nullptr, 0 );
         if ( size != 0 )
         {
-            auto buffer = std::unique_ptr<WCHAR[]>(new WCHAR[ size + 1 ]);
+            auto buffer = std::make_unique<WCHAR[]>( size + 1 );
             UINT result_size = DragQueryFileW( static_cast<HDROP>(medium.hGlobal),
                                                0, buffer.get(), size + 1 );
             if ( result_size != 0 )
