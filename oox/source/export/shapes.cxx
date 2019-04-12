@@ -338,20 +338,6 @@ uno::Reference<io::XInputStream> GetOLEObjectStream(
 
 namespace oox { namespace drawingml {
 
-URLTransformer::~URLTransformer()
-{
-}
-
-OUString URLTransformer::getTransformedString(const OUString& rString) const
-{
-    return rString;
-}
-
-bool URLTransformer::isExternalURL(const OUString& /*rURL*/) const
-{
-    return true;
-}
-
 #define GETA(propName) \
     GetProperty( rXPropSet, #propName)
 
