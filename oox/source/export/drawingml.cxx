@@ -133,6 +133,20 @@ using ::sax_fastparser::FastSerializerHelper;
 namespace oox {
 namespace drawingml {
 
+URLTransformer::~URLTransformer()
+{
+}
+
+OUString URLTransformer::getTransformedString(const OUString& rString) const
+{
+    return rString;
+}
+
+bool URLTransformer::isExternalURL(const OUString& /*rURL*/) const
+{
+    return true;
+}
+
 static css::uno::Any getLineDash( const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rDashName )
     {
         css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);

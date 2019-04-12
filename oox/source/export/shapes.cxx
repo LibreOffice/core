@@ -338,20 +338,6 @@ uno::Reference<io::XInputStream> GetOLEObjectStream(
 
 namespace oox { namespace drawingml {
 
-URLTransformer::~URLTransformer()
-{
-}
-
-OUString URLTransformer::getTransformedString(const OUString& rString) const
-{
-    return rString;
-}
-
-bool URLTransformer::isExternalURL(const OUString& /*rURL*/) const
-{
-    return true;
-}
-
 #define GETA(propName) \
     GetProperty( rXPropSet, #propName)
 
@@ -1160,13 +1146,13 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     if( !sURL.isEmpty() )
     {
         OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
-        oox::getRelationship(Relationship::HYPERLINK),
-        mpURLTransformer->getTransformedString(sURL),
-        mpURLTransformer->isExternalURL(sURL));
+                oox::getRelationship(Relationship::HYPERLINK),
+                mpURLTransformer->getTransformedString(sURL),
+                mpURLTransformer->isExternalURL(sURL));
 
         mpFS->singleElementNS( XML_a, XML_hlinkClick,
-        FSNS( XML_r,XML_id ), sRelId.toUtf8(),
-        FSEND );
+                FSNS( XML_r,XML_id ), sRelId.toUtf8(),
+                FSEND );
     }
     pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
 

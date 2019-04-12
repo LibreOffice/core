@@ -1129,30 +1129,23 @@ void transformURL(const OUString& rOldURL, OUString& rNewURL, const ScDocument* 
     rNewURL = rOldURL;
 }
 
-class ScURLTransformer : public oox::drawingml::URLTransformer
+}
+
+ScURLTransformer::ScURLTransformer(ScDocument& rDoc)
+    : mrDoc(rDoc)
 {
-public:
-    explicit ScURLTransformer(ScDocument& rDoc)
-        : mrDoc(rDoc)
-    {
-    }
+}
 
-    virtual OUString getTransformedString(const OUString& rURL) const override
-    {
-        OUString aNewURL;
-        transformURL(rURL, aNewURL, &mrDoc);
-        return aNewURL;
-    }
+OUString ScURLTransformer::getTransformedString(const OUString& rURL) const
+{
+    OUString aNewURL;
+    transformURL(rURL, aNewURL, &mrDoc);
+    return aNewURL;
+}
 
-    virtual bool isExternalURL(const OUString& rURL) const override
-    {
-        return !rURL.startsWith("#");
-    }
-
-private:
-    ScDocument& mrDoc;
-};
-
+bool ScURLTransformer::isExternalURL(const OUString& rURL) const
+{
+    return !rURL.startsWith("#");
 }
 
 void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
