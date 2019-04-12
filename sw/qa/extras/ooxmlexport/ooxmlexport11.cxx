@@ -1403,6 +1403,27 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf101122_noFillForCustomShape, "tdf1011
         "a:graphicData/wps:wsp/wps:spPr/a:custGeom/a:pathLst/a:path",
         "fill");
 }
+// The (tdf124678_no_leading_paragraph.odt, tdf124678_with_leading_paragraph.odt) documents are the same,
+// except:
+// - tdf124678_no_leading_paragraph.odt doesn't contain leading empty paragraph
+//   before the first section
+//
+DECLARE_OOXMLEXPORT_TEST(testTdf124678_case1, "tdf124678_no_leading_paragraph.odt")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("First page header text", OUString(""), parseDump("/root/page[1]/header/txt"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Second page header text", OUString("HEADER"), parseDump("/root/page[2]/header/txt"));
+}
+
+// The (tdf124678_no_leading_paragraph.odt, tdf124678_with_leading_paragraph.odt) documents are the same,
+// except:
+// - tdf124678_no_leading_paragraph.odt doesn't contain leading empty paragraph
+//   before the first section
+//
+DECLARE_OOXMLEXPORT_TEST(testTdf124678_case2, "tdf124678_with_leading_paragraph.odt")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("First page header text", OUString(""), parseDump("/root/page[1]/header/txt"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Second page header text", OUString("HEADER"), parseDump("/root/page[2]/header/txt"));
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

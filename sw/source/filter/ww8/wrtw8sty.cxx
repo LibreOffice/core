@@ -1745,9 +1745,6 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             }
         }
 
-        if( titlePage )
-            AttrOutput().SectionTitlePage();
-
         const SfxItemSet* pOldI = m_pISet;
 
         const SfxPoolItem* pItem;
@@ -1812,6 +1809,9 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
                 nBreakCode = 4;
         }
     }
+
+    if (titlePage)
+        AttrOutput().SectionTitlePage();
 
     AttrOutput().SectionType( nBreakCode );
 
