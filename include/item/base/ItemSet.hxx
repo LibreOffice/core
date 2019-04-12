@@ -212,26 +212,6 @@ namespace Item
         };
 
     private:
-        // helper class for an ImplInvalidateItem - placeholder for InvaidateState
-        // SfxItemState::DONTCARE -> IsInvalidItem -> pItem == INVALID_POOL_ITEM -> reinterpret_cast<SfxPoolItem*>(-1)
-        class ImplInvalidateItem : public ItemBase
-        {
-        private:
-            ItemControlBlock m_aItemControlBlock;
-        public:
-            ImplInvalidateItem() : ItemBase(m_aItemControlBlock), m_aItemControlBlock() {}
-        };
-
-        // helper class for a ImplDisableItem - placeholder for InvaidateState
-        // SfxItemState::DISABLED -> IsVoidItem() -> instance of SfxVoidItem, virtual bool IsVoidItem()
-        class ImplDisableItem : public ItemBase
-        {
-        private:
-            ItemControlBlock m_aItemControlBlock;
-        public:
-            ImplDisableItem() : ItemBase(m_aItemControlBlock), m_aItemControlBlock() {}
-        };
-
         // the Parent of this ItemSet
         SharedPtr m_aParent;
 
@@ -242,21 +222,13 @@ namespace Item
         // the items as content
         std::unordered_map<size_t, std::shared_ptr<const ItemBase>> m_aItems;
 
-        // single global static instance for helper class ImplInvalidateItem
-        static const std::shared_ptr<const ItemBase>& getInvalidateItem()
-        {
-            static std::shared_ptr<const ItemBase> aImplInvalidateItem(new ImplInvalidateItem());
-
-            return aImplInvalidateItem;
-        }
-
-        // single global static instance for helper class ImplDisableItem
-        static const std::shared_ptr<const ItemBase>& getDisableItem()
-        {
-            static std::shared_ptr<const ItemBase> aImplDisableItem(new ImplDisableItem());
-
-            return aImplDisableItem;
-        }
+        // helpers for reduction of template member implementations,
+        // all based on typeid(<type>).hash_code()
+        const ItemBase* implGetStateAndItem(size_t hash_code, IState& rIState, bool bSearchParent) const;
+        void implInvalidateItem(size_t hash_code);
+        void implDisableItem(size_t hash_code);
+        void implGetDefault(std::shared_ptr<const ItemBase>& rRetval) const;
+        bool implClearItem(size_t hash_code);
 
     protected:
         // constructor - protected BY DEFAULT - do NOT CHANGE (!)
@@ -278,19 +250,23 @@ namespace Item
         static SharedPtr Create(const ModelSpecificItemValues::SharedPtr& rModelSpecificIValues);
 
         const ModelSpecificItemValues::SharedPtr& GetModelSpecificIValues() const;
+        void SetItem(const std::shared_ptr<const ItemBase>& rItem);
+        void SetItems(const ItemSet& rSource, bool bDontCareToDefault = true);
+
+        // from here are all the type-specific template methods,
+        // as reduced as possible due to these being unfolded from
+        // the compiler for each class.
+        // reduction uses local immp methods wherever possible, based
+        // on the fetched TypeID
 
         template< typename TItem > void InvalidateItem()
         {
-            const size_t hash_code(typeid(TItem).hash_code());
-
-            m_aItems[hash_code] = getInvalidateItem();
+            implInvalidateItem(typeid(TItem).hash_code());
         }
 
         template< typename TItem > void DisableItem()
         {
-            const size_t hash_code(typeid(TItem).hash_code());
-
-            m_aItems[hash_code] = getDisableItem();
+            implDisableItem(typeid(TItem).hash_code());
         }
 
         template< typename TItem > std::shared_ptr<const TItem> GetDefault() const
@@ -299,64 +275,35 @@ namespace Item
             std::shared_ptr<const ItemBase> aRetval(TItem::GetStaticItemControlBlock().GetDefaultItem());
             assert(aRetval && "empty std::shared_ptr<const ItemBase> not allowed for default (!)");
 
-            if(m_aModelSpecificIValues)
-            {
-                // may use model-specific default, get from helper
-                // helper *will* fallback to ItemBase default
-                aRetval = m_aModelSpecificIValues->GetDefault(aRetval);
-            }
+            // maybe overridden by model-specific default
+            implGetDefault(aRetval);
 
             return std::static_pointer_cast<const TItem>(aRetval);
         }
 
-        void SetItem(const std::shared_ptr<const ItemBase>& rItem);
-
         template< typename TItem > StateAndItem<TItem> GetStateAndItem(bool bSearchParent = true) const
         {
-            const size_t hash_code(typeid(TItem).hash_code());
-            const auto aRetval(m_aItems.find(hash_code));
+            IState aIState(IState::DEFAULT);
+            const ItemBase* pItem(implGetStateAndItem(typeid(TItem).hash_code(), aIState, bSearchParent));
 
-            if(aRetval != m_aItems.end()) // && aRetval->second)
+            // SfxItemState::DEFAULT
+            if(IState::DEFAULT == aIState)
             {
-                assert(aRetval->second && "empty std::shared_ptr<const ItemBase> set in ItemSet (!)");
-
-                if(aRetval->second.get() == getInvalidateItem().get())
-                {
-                    // SfxItemState::DONTCARE
-                    return StateAndItem<TItem>(IState::DONTCARE, std::shared_ptr<TItem>());
-                }
-
-                if(aRetval->second.get() == getDisableItem().get())
-                {
-                    // SfxItemState::DISABLED
-                    return StateAndItem<TItem>(IState::DISABLED, std::shared_ptr<TItem>());
-                }
-
-                // SfxItemState::SET
-                return StateAndItem<TItem>(IState::SET, std::static_pointer_cast<TItem>(aRetval->second));
-            }
-
-            // not set
-            if(bSearchParent && m_aParent)
-            {
-                // continue searching in parent
-                return m_aParent->GetStateAndItem<TItem>(true);
-            }
-            else
-            {
-                // SfxItemState::DEFAULT
                 return StateAndItem<TItem>(IState::DEFAULT, GetDefault<TItem>());
             }
+
+            // SfxItemState::DONTCARE or SfxItemState::DISABLED
+            // or SfxItemState::SET when not nullptr
+            return StateAndItem<TItem>(aIState,
+                nullptr == pItem
+                    ? std::shared_ptr<TItem>()
+                    : std::static_pointer_cast<TItem>(pItem->shared_from_this()));
         }
 
         template< typename TItem > bool ClearItem()
         {
-            const size_t hash_code(typeid(TItem).hash_code());
-
-            return (0 != m_aItems.erase(hash_code));
+            return implClearItem(typeid(TItem).hash_code());
         }
-
-        void SetItems(const ItemSet& rSource, bool bDontCareToDefault = true);
     };
 } // end of namespace Item
 

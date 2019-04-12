@@ -242,7 +242,19 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 std::shared_ptr<const Item::ItemBase> aSlotItem(pType->CreateSlotItem(aArgs));
                 if(aSlotItem)
                 {
-                    rSet.slotSet().SetSlot(nWhich, aSlotItem);
+                    // I2TM To make this work, a correct typed Item
+                    // has to be defined in the corresponding *.sdi file, e.g.
+                    // for SID_BASICIDE_ARG_SBX this is
+                    //  (basctl::Item::Sbx Sbx SID_BASICIDE_ARG_SBX)
+                    // in sfx2\sdi\sfx.sdi. When all Items shall be added to
+                    // an Item::ItemSet in the long run, for each to-be-separated
+                    // Item an own Type will have to be implemented. This is the
+                    // cost for having a pure type-based Item-System.
+                    // Currently only the basctl::Item::Sbx is changed, so for
+                    // now will be safe to use Item::ItemSet
+                    //
+                    // rSet.slotSet().SetSlot(nWhich, aSlotItem);
+                    rSet.itemSet().SetItem(aSlotItem);
                 }
                 else
                 {
@@ -327,7 +339,11 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                     std::shared_ptr<const Item::ItemBase> aSlotItem(pType->CreateSlotItem(aArgs));
                     if(aSlotItem)
                     {
-                        rSet.slotSet().SetSlot(nWhich, aSlotItem);
+                        // I2TM See comment for this line above for
+                        // important more info (!)
+                        //
+                        // rSet.slotSet().SetSlot(nWhich, aSlotItem);
+                        rSet.itemSet().SetItem(aSlotItem);
                     }
                     else
                     {

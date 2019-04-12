@@ -33,7 +33,6 @@
 
 // I2TM
 #include <item/base/ItemSet.hxx>
-#include <item/base/SlotSet.hxx>
 // ~I2TM
 
 class SfxItemPool;
@@ -237,12 +236,9 @@ public:
     // I2TM Transfer phase:
 private:
     Item::ItemSet::SharedPtr        m_aItemSetSharedPtr;
-    Item::SlotSet::SharedPtr        m_aSlotSetSharedPtr;
 public:
     // - deliver Item::ItemSet for this SfxItemSet
     Item::ItemSet& itemSet() const;
-    // - deliver Item::SlotSet for this SfxItemSet
-    Item::SlotSet& slotSet() const;
     // ~I2TM
 };
 

@@ -33,7 +33,7 @@ namespace Item
         {
             static ItemControlBlock aItemControlBlock(
                 std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
-                [](){ return new MultiValueAB(MultiValueAB::GetStaticItemControlBlock()); },
+                nullptr,
                 [](){ return new MultiValueAB(MultiValueAB::GetStaticItemControlBlock()); },
                 "MultiValueAB");
 
@@ -121,7 +121,7 @@ namespace Item
         {
             static ItemControlBlock aItemControlBlock(
                 std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
-                [](){ return new MultiValueABC(MultiValueABC::GetStaticItemControlBlock()); },
+                nullptr,
                 [](){ return new MultiValueABC(MultiValueABC::GetStaticItemControlBlock()); },
                 "MultiValueABC");
 
@@ -201,7 +201,7 @@ namespace Item
         {
             static ItemControlBlock aItemControlBlock(
                 std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
-                [](){ return new MultiValueABD(MultiValueABD::GetStaticItemControlBlock()); },
+                nullptr,
                 [](){ return new MultiValueABD(MultiValueABD::GetStaticItemControlBlock()); },
                 "MultiValueABD");
 
@@ -245,7 +245,7 @@ namespace Item
         {
             static ItemControlBlock aItemControlBlock(
                 std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
-                [](){ return new MultiValueABCD(MultiValueABCD::GetStaticItemControlBlock()); },
+                nullptr,
                 [](){ return new MultiValueABCD(MultiValueABCD::GetStaticItemControlBlock()); },
                 "MultiValueABCD");
 

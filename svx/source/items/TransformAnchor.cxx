@@ -18,8 +18,8 @@ namespace Item
     ItemControlBlock& TransformAnchor::GetStaticItemControlBlock()
     {
         static ItemControlBlock aItemControlBlock(
-            CntInt16::GetStaticItemControlBlock().GetItemAdministrator(),
-            [](){ return new TransformAnchor(TransformAnchor::GetStaticItemControlBlock()); },
+            std::shared_ptr<ItemAdministrator>(new IAdministrator_set()),
+            nullptr,
             [](){ return new TransformAnchor(TransformAnchor::GetStaticItemControlBlock()); },
             "TransformAnchor");
 

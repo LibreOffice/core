@@ -14,6 +14,106 @@
 
 namespace Item
 {
+    // single global static instance for helper class ImplInvalidateItem
+    static const std::shared_ptr<const ItemBase>& getInvalidateItem()
+    {
+        // helper class for an ImplInvalidateItem - placeholder for InvaidateState
+        // SfxItemState::DONTCARE -> IsInvalidItem -> pItem == INVALID_POOL_ITEM -> reinterpret_cast<SfxPoolItem*>(-1)
+        class ImplInvalidateItem : public ItemBase
+        {
+        private:
+            ItemControlBlock m_aItemControlBlock;
+        public:
+            ImplInvalidateItem() : ItemBase(m_aItemControlBlock), m_aItemControlBlock() {}
+        };
+
+        static std::shared_ptr<const ItemBase> aImplInvalidateItem(new ImplInvalidateItem());
+
+        return aImplInvalidateItem;
+    }
+
+    // single global static instance for helper class ImplDisableItem
+    static const std::shared_ptr<const ItemBase>& getDisableItem()
+    {
+        // helper class for a ImplDisableItem - placeholder for InvaidateState
+        // SfxItemState::DISABLED -> IsVoidItem() -> instance of SfxVoidItem, virtual bool IsVoidItem()
+        class ImplDisableItem : public ItemBase
+        {
+        private:
+            ItemControlBlock m_aItemControlBlock;
+        public:
+            ImplDisableItem() : ItemBase(m_aItemControlBlock), m_aItemControlBlock() {}
+        };
+
+        static std::shared_ptr<const ItemBase> aImplDisableItem(new ImplDisableItem());
+
+        return aImplDisableItem;
+    }
+
+    const ItemBase* ItemSet::implGetStateAndItem(size_t hash_code, IState& rIState, bool bSearchParent) const
+    {
+        const auto aRetval(m_aItems.find(hash_code));
+
+        if(aRetval != m_aItems.end()) // && aRetval->second)
+        {
+            assert(aRetval->second && "empty std::shared_ptr<const ItemBase> set in ItemSet (!)");
+
+            if(aRetval->second.get() == getInvalidateItem().get())
+            {
+                // SfxItemState::DONTCARE
+                rIState = IState::DONTCARE;
+                return nullptr;
+            }
+
+            if(aRetval->second.get() == getDisableItem().get())
+            {
+                // SfxItemState::DISABLED
+                rIState = IState::DISABLED;
+                return nullptr;
+            }
+
+            // SfxItemState::SET
+            rIState = IState::SET;
+            return aRetval->second.get();
+        }
+
+        // not set
+        if(bSearchParent && m_aParent)
+        {
+            // continue searching in parent
+            return m_aParent->implGetStateAndItem(hash_code, rIState, bSearchParent);
+        }
+
+        // SfxItemState::DEFAULT
+        // already handed in as default - no need to set explicitely // rIState = IState::DEFAULT;
+        return nullptr;
+    }
+
+    void ItemSet::implInvalidateItem(size_t hash_code)
+    {
+        m_aItems[hash_code] = getInvalidateItem();
+    }
+
+    void ItemSet::implDisableItem(size_t hash_code)
+    {
+        m_aItems[hash_code] = getDisableItem();
+    }
+
+    void ItemSet::implGetDefault(std::shared_ptr<const ItemBase>& rRetval) const
+    {
+        if(m_aModelSpecificIValues)
+        {
+            // may use model-specific default, get from helper
+            // helper *will* fallback to ItemBase default
+            rRetval = m_aModelSpecificIValues->GetDefault(rRetval);
+        }
+    }
+
+    bool ItemSet::implClearItem(size_t hash_code)
+    {
+        return (0 != m_aItems.erase(hash_code));
+    }
+
     ItemSet::ItemSet(const ModelSpecificItemValues::SharedPtr& rModelSpecificIValues)
     :   std::enable_shared_from_this<ItemSet>(),
         m_aParent(),

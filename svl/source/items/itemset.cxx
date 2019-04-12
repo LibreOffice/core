@@ -185,7 +185,6 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
     , m_nCount( rASet.m_nCount )
 // I2TM copy shared ptrs - no clone
     , m_aItemSetSharedPtr(rASet.m_aItemSetSharedPtr)
-    , m_aSlotSetSharedPtr(rASet.m_aSlotSetSharedPtr)
 // ~I2TM
 {
     // Calculate the attribute count
@@ -544,7 +543,6 @@ bool SfxItemSet::Put( const SfxItemSet& rSet, bool bInvalidAsDefault )
 
 // I2TM
     itemSet().SetItems(rSet.itemSet(), bInvalidAsDefault);
-    slotSet().SetSlots(rSet.slotSet());
 // ~I2TM
 
     return bRet;
@@ -1495,16 +1493,6 @@ Item::ItemSet& SfxItemSet::itemSet() const
     }
 
     return *m_aItemSetSharedPtr;
-}
-
-Item::SlotSet& SfxItemSet::slotSet() const
-{
-    if(!m_aSlotSetSharedPtr)
-    {
-        const_cast<SfxItemSet*>(this)->m_aSlotSetSharedPtr = Item::SlotSet::Create();
-    }
-
-    return *m_aSlotSetSharedPtr;
 }
 // ~I2TM
 

@@ -26,6 +26,7 @@ namespace Item
         m_aName(rName)
     {
         assert(rItemAdministrator && "nullptr not allowed, an ItemAdministrator *is* required (!)");
+        assert(constructItem != nullptr && "nullptr not allowed, a Item-Constructor *is* required (!)");
     }
 
     ItemControlBlock::ItemControlBlock()
@@ -40,7 +41,8 @@ namespace Item
     {
         if(!m_aDefaultItem)
         {
-            const_cast<ItemControlBlock*>(this)->m_aDefaultItem.reset(m_aConstructDefaultItem());
+            const_cast<ItemControlBlock*>(this)->m_aDefaultItem.reset(
+                nullptr != m_aConstructDefaultItem ? m_aConstructDefaultItem() : m_aConstructItem());
         }
 
         return m_aDefaultItem;

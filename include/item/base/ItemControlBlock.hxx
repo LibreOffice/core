@@ -30,6 +30,8 @@ namespace Item
     class ItemAdministrator;
     class ItemBase;
 
+    // The ConstructDefaultItem may be zero, instead the
+    // ConstructItem lambda will be used
     class ITEM_DLLPUBLIC ItemControlBlock
     {
     private:

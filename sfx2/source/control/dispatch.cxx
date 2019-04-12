@@ -76,10 +76,6 @@
 #include <slotserv.hxx>
 #include <workwin.hxx>
 
-// I2TM
-#include <item/base/SlotSet.hxx>
-// ~I2TM
-
 typedef std::vector<SfxShell*> SfxShellStack_Impl;
 
 struct SfxToDo_Impl
