@@ -137,7 +137,7 @@ namespace svgio
             }
             catch(const uno::Exception& e)
             {
-                SAL_WARN( "svg", "Parse error! : " << e);
+                SAL_INFO( "svg", "Parse error: " << e);
                 return false;
             }
 
