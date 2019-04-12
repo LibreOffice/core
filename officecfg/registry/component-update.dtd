@@ -97,9 +97,7 @@
         <!-- must syntactically match xs:integer and have a value in {0, ..., 8,
              11, 12, 14, ..., 31, 65534, 65535} -->
 
-<!-- oor:items is an alternative root element to oor:component-data (in plain
-     .xcu files only; not when nested in an .xcd file), used for the user-layer
-     registrymodifications.xcu: -->
+<!-- oor:items is an alternative root element to oor:component-data: -->
 
 <!ELEMENT oor:items (item*)>
 <!ATTLIST oor:items>
