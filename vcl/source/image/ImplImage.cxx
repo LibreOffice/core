@@ -39,14 +39,16 @@
 ImplImage::ImplImage(const BitmapEx &rBitmapEx)
     : maBitmapChecksum(0)
     , maSizePixel(rBitmapEx.GetSizePixel())
+    , maPreferedSizePixel()
     , maBitmapEx(rBitmapEx)
 {
 }
 
-ImplImage::ImplImage(const OUString &aStockName)
+ImplImage::ImplImage(const OUString &aStockName, Size const & rPreferedSize)
     : maBitmapChecksum(0)
-    , maSizePixel(0,0) // defer size lookup
-    , maStockName( aStockName )
+    , maSizePixel() // defer size lookup
+    , maPreferedSizePixel(rPreferedSize)
+    , maStockName(aStockName)
 {
 }
 
@@ -60,6 +62,11 @@ bool ImplImage::loadStockAtScale(double fScale, BitmapEx &rBitmapEx)
     {
         SAL_WARN("vcl", "Failed to load scaled image from " << maStockName << " at " << fScale);
         return false;
+    }
+    if (maPreferedSizePixel != Size())
+    {
+        Size aScaleSize(maPreferedSizePixel.Width() * fScale, maPreferedSizePixel.Height() * fScale);
+        aBitmapEx.Scale(aScaleSize);
     }
     rBitmapEx = aBitmapEx;
     return true;

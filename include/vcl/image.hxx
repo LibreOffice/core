@@ -57,7 +57,7 @@ public:
     explicit Image(BitmapEx const & rBitmapEx);
     explicit Image(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
     explicit Image(OUString const & rPNGFileUrl);
-    explicit Image(StockImage , OUString const & rPNGFilePath);
+    explicit Image(StockImage, OUString const & rPNGFilePath, Size aSpecificSize = Size());
 
     Size GetSizePixel() const;
     BitmapEx GetBitmapEx() const;

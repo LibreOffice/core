@@ -686,11 +686,11 @@ static OUString GetImageNameFromList_Impl( SvImageId nImageId, bool bBig )
     return OUString();
 }
 
-static Image GetImageFromList_Impl( SvImageId nImageId, bool bBig )
+static Image GetImageFromList_Impl( SvImageId nImageId, bool bBig, Size aSize = Size())
 {
     OUString sImageName(GetImageNameFromList_Impl(nImageId, bBig));
     if (!sImageName.isEmpty())
-        return Image(StockImage::Yes, sImageName);
+        return Image(StockImage::Yes, sImageName, aSize);
     return Image();
 }
 
@@ -766,11 +766,11 @@ OUString SvFileInformationManager::GetImageId(const INetURLObject& rObject, bool
     return GetImageNameFromList_Impl(nImage, bBig);
 }
 
-Image SvFileInformationManager::GetImage( const INetURLObject& rObject, bool bBig )
+Image SvFileInformationManager::GetImage(const INetURLObject& rObject, bool bBig, Size const & rPreferredSize)
 {
     SvImageId nImage = GetImageId_Impl( rObject, true );
     DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
-    return GetImageFromList_Impl( nImage, bBig );
+    return GetImageFromList_Impl(nImage, bBig, rPreferredSize);
 }
 
 OUString SvFileInformationManager::GetFileImageId(const INetURLObject& rObject)
@@ -787,15 +787,15 @@ Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject )
     return GetImageFromList_Impl( nImage, false/*bBig*/ );
 }
 
-Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, bool bBig )
+Image SvFileInformationManager::GetImageNoDefault(const INetURLObject& rObject, bool bBig, Size const & rPreferredSize)
 {
-    SvImageId nImage = GetImageId_Impl( rObject, true );
+    SvImageId nImage = GetImageId_Impl(rObject, true);
     DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
 
     if ( nImage == SvImageId::File )
         return Image();
 
-    return GetImageFromList_Impl( nImage, bBig );
+    return GetImageFromList_Impl(nImage, bBig, rPreferredSize);
 }
 
 Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo )

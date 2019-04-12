@@ -60,7 +60,7 @@ Image::Image(const OUString & rFileUrl)
     OUString sImageName;
     if (rFileUrl.startsWith("private:graphicrepository/", &sImageName))
     {
-        mpImplData = std::make_shared<ImplImage>(sImageName);
+        mpImplData = std::make_shared<ImplImage>(sImageName, Size());
     }
     else
     {
@@ -72,8 +72,8 @@ Image::Image(const OUString & rFileUrl)
     }
 }
 
-Image::Image(StockImage, const OUString & rFileUrl)
-    : mpImplData(std::make_shared<ImplImage>(rFileUrl))
+Image::Image(StockImage, const OUString & rFileUrl, Size aSpecificSize)
+    : mpImplData(std::make_shared<ImplImage>(rFileUrl, aSpecificSize))
 {
 }
 
