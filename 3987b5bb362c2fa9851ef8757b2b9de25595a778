@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_e4caee4d",
+        "filename": "configure.ac",
+        "patchSetId": 39
+      },
+      "lineNbr": 3281,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-12T20:18:04Z",
+      "side": 1,
+      "message": "Can we use here Windows environment variables? E.g., %ProgramFiles(x86)% instead of this, in case user has D: as system drive.",
+      "range": {
+        "startLine": 3281,
+        "startChar": 16,
+        "endLine": 3281,
+        "endChar": 39
+      },
+      "revId": "3987b5bb362c2fa9851ef8757b2b9de25595a778",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
