@@ -45,6 +45,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/profilezone.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/threadpool.hxx>
@@ -4124,6 +4125,31 @@ static void preloadData()
     }
 }
 
+class ProfileZoneDumper : public AutoTimer
+{
+    static const int dumpTimeoutMS = 5000;
+public:
+    ProfileZoneDumper() : AutoTimer( "zone dumper" )
+    {
+        SetTimeout(dumpTimeoutMS);
+        Start();
+    }
+    virtual void Invoke() override
+    {
+        css::uno::Sequence<OUString> aEvents =
+            comphelper::ProfileRecording::getRecordingAndClear();
+        OStringBuffer aOutput;
+        for (auto &s : aEvents)
+        {
+            aOutput.append(OUStringToOString(s, RTL_TEXTENCODING_UTF8));
+            aOutput.append("\n");
+        }
+        OString aChunk = aOutput.makeStringAndClear();
+        if (gImpl && gImpl->mpCallback)
+            gImpl->mpCallback(LOK_CALLBACK_PROFILE_FRAME, aChunk.getStr(), gImpl->mpCallbackData);
+    }
+};
+
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfileUrl)
 {
     enum {
@@ -4134,6 +4160,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
     // Did we do a pre-initialize
     static bool bPreInited = false;
+    static bool bProfileZones = getenv("SAL_PROFILEZONE_STDOUT") != nullptr;
 
     // What stage are we at ?
     if (pThis == nullptr)
@@ -4147,6 +4174,15 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
     if (bInitialized)
         return 1;
+
+    // Turn profile zones on early
+    if (bProfileZones && eStage == SECOND_INIT)
+    {
+        comphelper::ProfileRecording::startRecording(true);
+        new ProfileZoneDumper();
+    }
+
+    comphelper::ProfileZone aZone("lok-init");
 
     if (eStage == PRE_INIT)
         rtl_alloc_preInit(true);
