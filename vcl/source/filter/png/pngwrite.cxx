@@ -281,11 +281,11 @@ bool PNGWriterImpl::Write(SvStream& rOStm)
         sal_uInt32 nCRC = rtl_crc32(0, &nType, 4);
         sal_uInt32 nDataSize = chunk.aData.size();
         if (nDataSize)
-            nCRC = rtl_crc32(nCRC, &chunk.aData[0], nDataSize);
+            nCRC = rtl_crc32(nCRC, chunk.aData.data(), nDataSize);
         rOStm.WriteUInt32(nDataSize);
         rOStm.WriteUInt32(chunk.nType);
         if (nDataSize)
-            rOStm.WriteBytes(&chunk.aData[0], nDataSize);
+            rOStm.WriteBytes(chunk.aData.data(), nDataSize);
         rOStm.WriteUInt32(nCRC);
     }
     rOStm.SetEndian(nOldMode);

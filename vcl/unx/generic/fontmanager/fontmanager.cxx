@@ -1121,7 +1121,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
         for (int i = 0; i < nGlyphs; i++)
             aGlyphIds[i] = sal_uInt16(i);
         std::unique_ptr<sal_uInt16[]> pMetrics = GetTTSimpleGlyphMetrics(pTTFont,
-                                                                 &aGlyphIds[0],
+                                                                 aGlyphIds.data(),
                                                                  nGlyphs,
                                                                  bVertical);
         if (pMetrics)
