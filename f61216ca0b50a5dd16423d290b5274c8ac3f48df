@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_e4118e55",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-12T14:23:17Z",
+      "side": 1,
+      "message": "Erm.. what? Reviewed-by:? As commit summary?",
+      "revId": "f61216ca0b50a5dd16423d290b5274c8ac3f48df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_040fda2e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-12T14:23:17Z",
+      "side": 1,
+      "message": "This all duplicates the commit message of the change in https://gerrit.libreoffice.org/68997 and also includes the change to the two files qadevOOo/objdsc/sc/com.sun.star.comp.office.ScDataPilotFieldGroupObj.csv and sc/qa/extras/scdatapilotfieldgroupobj.cxx of that already submitted commit and hence can\u0027t be merged. Apparently some rebase squash gone awry.\n\nThis is not how things are supposed to work.\n\nPlease exclude these two files from your commit and straighten the commit message.",
+      "revId": "f61216ca0b50a5dd16423d290b5274c8ac3f48df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
