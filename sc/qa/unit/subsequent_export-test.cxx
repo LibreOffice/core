@@ -213,6 +213,7 @@ public:
     void testTdf114969XLSX();
     void testTdf115192XLSX();
     void testTdf91634XLSX();
+    void testTdf123645XLSX();
 
     void testXltxExport();
 
@@ -333,6 +334,7 @@ public:
     CPPUNIT_TEST(testTdf114969XLSX);
     CPPUNIT_TEST(testTdf115192XLSX);
     CPPUNIT_TEST(testTdf91634XLSX);
+    CPPUNIT_TEST(testTdf123645XLSX);
 
     CPPUNIT_TEST(testXltxExport);
 
@@ -4201,6 +4203,22 @@ void ScExportTest::testTdf91634XLSX()
     xmlDocPtr pXmlRels = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels");
     CPPUNIT_ASSERT(pXmlRels);
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "Target", "https://www.google.com/");
+    assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
+}
+
+void ScExportTest::testTdf123645XLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("chart_hyperlink.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:graphicFrame/xdr:nvGraphicFramePr/xdr:cNvPr/a:hlinkClick", 1);
+
+    xmlDocPtr pXmlRels = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels");
+    CPPUNIT_ASSERT(pXmlRels);
+    assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "Target", "https://libreoffice.org");
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
 }
 

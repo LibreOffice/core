@@ -96,6 +96,16 @@ namespace core {
 
 namespace drawingml {
 
+class OOX_DLLPUBLIC URLTransformer
+{
+public:
+    virtual ~URLTransformer();
+
+    virtual OUString getTransformedString(const OUString& rURL) const;
+
+    virtual bool isExternalURL(const OUString& rURL) const;
+};
+
 // Our rotation is counter-clockwise and is in 100ths of a degree.
 // drawingML rotation is clockwise and is in 60000ths of a degree.
 template <typename T> T ExportRotateClockwisify(T input)

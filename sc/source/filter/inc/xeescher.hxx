@@ -294,7 +294,8 @@ public:
     explicit            XclExpChartObj(
                             XclExpObjectManager& rObjMgr,
                             css::uno::Reference< css::drawing::XShape > const & xShape,
-                            const tools::Rectangle* pChildAnchor );
+                            const tools::Rectangle* pChildAnchor,
+                            ScDocument* pDoc );
     virtual             ~XclExpChartObj() override;
 
     /** Writes the OBJ record and the entire chart substream. */
@@ -308,6 +309,7 @@ private:
     XclExpChartRef                                    mxChart;        /// The chart itself (BOF/EOF substream data).
     css::uno::Reference< css::drawing::XShape >       mxShape;
     css::uno::Reference< css::chart::XChartDocument > mxChartDoc;
+    ScDocument*                                       mpDoc;
 };
 
 /** Represents a NOTE record containing the relevant data of a cell note.

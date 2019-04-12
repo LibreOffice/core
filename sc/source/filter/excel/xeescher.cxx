@@ -1059,9 +1059,10 @@ void XclExpTbxControlObj::WriteSbs( XclExpStream& rStrm )
 
 //#endif
 
-XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape > const & xShape, const tools::Rectangle* pChildAnchor ) :
+XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape > const & xShape, const tools::Rectangle* pChildAnchor, ScDocument* pDoc ) :
     XclObj( rObjMgr, EXC_OBJTYPE_CHART ),
-    XclExpRoot( rObjMgr.GetRoot() ), mxShape( xShape )
+    XclExpRoot( rObjMgr.GetRoot() ), mxShape( xShape ),
+    mpDoc(pDoc)
 {
     // create the MSODRAWING record contents for the chart object
     mrEscherEx.OpenContainer( ESCHER_SpContainer );
@@ -1128,6 +1129,8 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
         XclObjAny::WriteFromTo( rStrm, mxShape, GetTab() );
         Reference< XModel > xModel( mxChartDoc, UNO_QUERY );
         ChartExport aChartExport(XML_xdr, pDrawing, xModel, &rStrm, drawingml::DOCUMENT_XLSX);
+        std::shared_ptr<oox::drawingml::URLTransformer> pURLTransformer(new ScURLTransformer(*mpDoc));
+        aChartExport.SetURLTranslator(pURLTransformer);
         static sal_Int32 nChartCount = 0;
         nChartCount++;
         sal_Int32 nID = rStrm.GetUniqueId();

@@ -26,6 +26,7 @@
 #include "xestring.hxx"
 #include <tabprotection.hxx>
 #include <svx/svdobj.hxx>
+#include <oox/export/drawingml.hxx>
 
 class XclObj;
 class XclExpMsoDrawing;
@@ -33,6 +34,19 @@ class SdrCaptionObj;
 class SdrTextObj;
 class XclTxo;
 class XclEscherEx;
+
+class ScURLTransformer : public oox::drawingml::URLTransformer
+{
+public:
+    explicit ScURLTransformer(ScDocument& rDoc);
+
+    virtual OUString getTransformedString(const OUString& rURL) const override;
+
+    virtual bool isExternalURL(const OUString& rURL) const override;
+
+private:
+    ScDocument& mrDoc;
+};
 
 class XclExpObjList : public ExcEmptyRec, protected XclExpRoot
 {

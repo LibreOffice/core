@@ -78,16 +78,6 @@ OOX_DLLPUBLIC css::uno::Reference<css::io::XInputStream> GetOLEObjectStream(
 
 namespace oox { namespace drawingml {
 
-class OOX_DLLPUBLIC URLTransformer
-{
-public:
-    virtual ~URLTransformer();
-
-    virtual OUString getTransformedString(const OUString& rURL) const;
-
-    virtual bool isExternalURL(const OUString& rURL) const;
-};
-
 class OOX_DLLPUBLIC ShapeExport : public DrawingML {
 
 private:

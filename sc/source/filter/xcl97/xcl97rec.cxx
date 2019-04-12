@@ -46,6 +46,7 @@
 #include <editeng/eeitem.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 
+
 #include <unotools/localedatawrapper.hxx>
 
 #include <stdio.h>
@@ -1050,8 +1051,6 @@ GetEditAs( const XclObjAny& rObj )
     return "absolute";
 }
 
-namespace {
-
 ScRefFlags parseRange(const OUString& rString, ScRange& rRange, const ScDocument* pDoc)
 {
     // start with the address convention set in the document
@@ -1129,30 +1128,21 @@ void transformURL(const OUString& rOldURL, OUString& rNewURL, const ScDocument* 
     rNewURL = rOldURL;
 }
 
-class ScURLTransformer : public oox::drawingml::URLTransformer
+ScURLTransformer::ScURLTransformer(ScDocument& rDoc)
+    : mrDoc(rDoc)
 {
-public:
-    explicit ScURLTransformer(ScDocument& rDoc)
-        : mrDoc(rDoc)
-    {
-    }
+}
 
-    virtual OUString getTransformedString(const OUString& rURL) const override
-    {
-        OUString aNewURL;
-        transformURL(rURL, aNewURL, &mrDoc);
-        return aNewURL;
-    }
+OUString ScURLTransformer::getTransformedString(const OUString& rURL) const
+{
+    OUString aNewURL;
+    transformURL(rURL, aNewURL, &mrDoc);
+    return aNewURL;
+}
 
-    virtual bool isExternalURL(const OUString& rURL) const override
-    {
-        return !rURL.startsWith("#");
-    }
-
-private:
-    ScDocument& mrDoc;
-};
-
+bool ScURLTransformer::isExternalURL(const OUString& rURL) const
+{
+    return !rURL.startsWith("#");
 }
 
 void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
