@@ -401,8 +401,11 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
             }
         }
         break;
-        case NID_DRW :
         case NID_CTRL:
+            if (!rSh.GetView().IsDesignMode())
+                rSh.GetView().GetFormShell()->SetDesignMode(true);
+            [[fallthrough]];
+        case NID_DRW:
         {
             bool bSuccess = rSh.GotoObj(bNext,
                     m_nMoveType == NID_DRW ?
