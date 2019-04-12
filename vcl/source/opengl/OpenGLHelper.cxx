@@ -125,13 +125,13 @@ namespace {
         {
             std::vector<char> ErrorMessage(InfoLogLength+1);
             if (bShaderNotProgram)
-                glGetShaderInfoLog (nId, InfoLogLength, nullptr, &ErrorMessage[0]);
+                glGetShaderInfoLog (nId, InfoLogLength, nullptr, ErrorMessage.data());
             else
-                glGetProgramInfoLog(nId, InfoLogLength, nullptr, &ErrorMessage[0]);
+                glGetProgramInfoLog(nId, InfoLogLength, nullptr, ErrorMessage.data());
             CHECK_GL_ERROR();
 
             ErrorMessage.push_back('\0');
-            SAL_WARN("vcl.opengl", rDetail << " shader " << nId << " compile for " << rName << " failed : " << &ErrorMessage[0]);
+            SAL_WARN("vcl.opengl", rDetail << " shader " << nId << " compile for " << rName << " failed : " << ErrorMessage.data());
         }
         else
             SAL_WARN("vcl.opengl", rDetail << " shader: " << rName << " compile " << nId << " failed without error log");

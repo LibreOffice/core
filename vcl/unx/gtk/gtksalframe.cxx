@@ -3137,7 +3137,7 @@ void GtkSalFrame::IMHandler::endExtTextInput( EndExtTextInputFlags /*nFlags*/ )
         if( ! aDel.isDeleted() )
         {
             // mark previous preedit state again (will e.g. be sent at focus gain)
-            m_aInputEvent.mpTextAttr = &m_aInputFlags[0];
+            m_aInputEvent.mpTextAttr = m_aInputFlags.data();
             if( m_bFocused )
             {
                 // begin preedit again
@@ -3453,7 +3453,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
     } while (pango_attr_iterator_next (iter));
     pango_attr_iterator_destroy(iter);
 
-    pThis->m_aInputEvent.mpTextAttr = &pThis->m_aInputFlags[0];
+    pThis->m_aInputEvent.mpTextAttr = pThis->m_aInputFlags.data();
 
     g_free( pText );
     pango_attr_list_unref( pAttrs );

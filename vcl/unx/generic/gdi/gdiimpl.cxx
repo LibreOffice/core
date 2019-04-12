@@ -1489,7 +1489,7 @@ bool X11SalGraphicsImpl::drawPolyPolygon(
     const int nTrapCount = aB2DTrapVector.size();
     if( !nTrapCount )
         return true;
-    const bool bDrawn = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, fTransparency );
+    const bool bDrawn = drawFilledTrapezoids( aB2DTrapVector.data(), nTrapCount, fTransparency );
     return bDrawn;
 }
 
@@ -1565,7 +1565,7 @@ bool X11SalGraphicsImpl::drawFilledTrapezoids( const basegfx::B2DTrapezoid* pB2D
     // render the trapezoids
     const XRenderPictFormat* pMaskFormat = rRenderPeer.GetStandardFormatA8();
     rRenderPeer.CompositeTrapezoids( PictOpOver,
-        rEntry.m_aPicture, aDstPic, pMaskFormat, 0, 0, &aTrapVector[0], aTrapVector.size() );
+        rEntry.m_aPicture, aDstPic, pMaskFormat, 0, 0, aTrapVector.data(), aTrapVector.size() );
 
     return true;
 }
@@ -1639,7 +1639,7 @@ bool X11SalGraphicsImpl::drawFilledTriangles(
     // render the trapezoids
     const XRenderPictFormat* pMaskFormat = rRenderPeer.GetStandardFormatA8();
     rRenderPeer.CompositeTriangles( PictOpOver,
-        rEntry.m_aPicture, aDstPic, pMaskFormat, 0, 0, &aTriVector[0], aTriVector.size() );
+        rEntry.m_aPicture, aDstPic, pMaskFormat, 0, 0, aTriVector.data(), aTriVector.size() );
 
     return true;
 }
