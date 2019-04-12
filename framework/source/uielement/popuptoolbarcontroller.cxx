@@ -785,25 +785,17 @@ void NewToolbarController::setItemImage( const OUString &rCommand )
     bool bBig = SvtMiscOptions().AreCurrentSymbolsLarge();
 
     INetURLObject aURLObj( aURL );
-    Image aImage = SvFileInformationManager::GetImageNoDefault( aURLObj, bBig );
-    if ( !aImage )
-        aImage = !!aMenuImage ?
-            aMenuImage :
-            SvFileInformationManager::GetImage( aURLObj, bBig );
-
+    Size aPreferredSize(bBig ? pToolBox->GetDefaultImageSize() : Size());
+    Image aImage = SvFileInformationManager::GetImageNoDefault(aURLObj, bBig, aPreferredSize);
+    if (!aImage)
+    {
+        aImage = !!aMenuImage ? aMenuImage : SvFileInformationManager::GetImage(aURLObj, bBig, aPreferredSize);
+    }
     // if everything failed, just use the image associated with the toolbar item command
     if ( !aImage )
         return;
 
-    Size aBigSize( pToolBox->GetDefaultImageSize() );
-    if ( bBig && aImage.GetSizePixel() != aBigSize )
-    {
-        BitmapEx aScaleBmpEx( aImage.GetBitmapEx() );
-        aScaleBmpEx.Scale( aBigSize, BmpScaleFlag::Interpolate );
-        pToolBox->SetItemImage( m_nToolBoxId, Image( aScaleBmpEx ) );
-    }
-    else
-        pToolBox->SetItemImage( m_nToolBoxId, aImage );
+    pToolBox->SetItemImage( m_nToolBoxId, aImage );
 
     m_aLastURL = aURL;
 }
