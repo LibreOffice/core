@@ -54,6 +54,7 @@ cmd/32/circle.png cmd/32/basicshapes.circle.png
 cmd/32/circlepie.png cmd/32/basicshapes.circle-pie.png
 cmd/32/closedocs.png cmd/32/closedoc.png
 cmd/32/columnoperations.png cmd/32/entirecolumn.png
+cmd/32/com.sun.star.deployment.ui.packagemanagerdialog.png cmd/32/insertplugin.png
 cmd/32/commentchange.png cmd/32/commentchangetracking.png
 cmd/32/commonalignbottom.png cmd/32/alignbottom.png
 cmd/32/commonalignhorizontalcenter.png cmd/32/alignhorizontalcenter.png
@@ -130,6 +131,7 @@ cmd/32/groupmenu.png cmd/32/formatgroup.png
 cmd/32/headerandfooter.png cmd/32/editheaderandfooter.png
 cmd/32/heading1cellstyles.png cmd/32/heading1parastyle.png
 cmd/32/heading2cellstyles.png cmd/32/heading2parastyle.png
+cmd/32/helpindex.png cmd/32/helperdialog.png
 cmd/32/hscroll.png cmd/32/hscrollbar.png
 cmd/32/hyperlinkdialog.png cmd/32/inserthyperlink.png
 cmd/32/hu/underlinesimple.png cmd/32/hu/underline.png
@@ -175,6 +177,8 @@ cmd/32/insertobjctrl.png cmd/32/insertobject.png
 cmd/32/insertobjectchart.png cmd/32/drawchart.png
 cmd/32/insertobjectstarmath.png cmd/32/insertmath.png
 cmd/32/insertpagefield.png cmd/32/insertpagenumberfield.png
+cmd/32/insertpagefooter.png cmd/32/insertfooter.png
+cmd/32/insertpageheader.png cmd/32/insertheader.png
 cmd/32/insertpagenumber.png cmd/32/insertpagenumberfield.png
 cmd/32/insertpagesfield.png cmd/32/insertpagecountfield.png
 cmd/32/insertpagetitlefield.png cmd/32/inserttitlefield.png
@@ -208,7 +212,6 @@ cmd/32/linestyle.png cmd/32/borderdialog.png
 cmd/32/linetoolbox.png cmd/32/freeline.png
 cmd/32/loadstyles.png cmd/32/open.png
 cmd/32/macrodialog.png cmd/32/scriptorganizer.png
-cmd/32/macroorganizer.png cmd/32/formproperties.png
 cmd/32/macrosmenu.png cmd/32/choosemacro.png
 cmd/32/mailmergefirstentry.png cmd/32/firstrecord.png
 cmd/32/mailmergelastentry.png cmd/32/lastrecord.png
@@ -437,6 +440,7 @@ cmd/lc_circle.png cmd/lc_basicshapes.circle.png
 cmd/lc_circlepie.png cmd/lc_basicshapes.circle-pie.png
 cmd/lc_closedocs.png cmd/lc_closedoc.png
 cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
+cmd/lc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/lc_insertplugin.png
 cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
 cmd/lc_commonalignbottom.png cmd/lc_alignbottom.png
 cmd/lc_commonalignhorizontalcenter.png cmd/lc_alignhorizontalcenter.png
@@ -512,6 +516,7 @@ cmd/lc_groupmenu.png cmd/lc_formatgroup.png
 cmd/lc_headerandfooter.png cmd/lc_editheaderandfooter.png
 cmd/lc_heading1cellstyles.png cmd/lc_heading1parastyle.png
 cmd/lc_heading2cellstyles.png cmd/lc_heading2parastyle.png
+cmd/lc_helpindex.png cmd/lc_helperdialog.png
 cmd/lc_hscroll.png cmd/lc_hscrollbar.png
 cmd/lc_hyperlinkdialog.png cmd/lc_inserthyperlink.png
 cmd/lc_importfromfile.png cmd/lc_importdialog.png
@@ -556,6 +561,8 @@ cmd/lc_insertobjctrl.png cmd/lc_insertobject.png
 cmd/lc_insertobjectchart.png cmd/lc_drawchart.png
 cmd/lc_insertobjectstarmath.png cmd/lc_insertmath.png
 cmd/lc_insertpagefield.png cmd/lc_insertpagenumberfield.png
+cmd/lc_insertpagefooter.png cmd/lc_insertfooter.png
+cmd/lc_insertpageheader.png cmd/lc_insertheader.png
 cmd/lc_insertpagenumber.png cmd/lc_insertpagenumberfield.png
 cmd/lc_insertpagesfield.png cmd/lc_insertpagecountfield.png
 cmd/lc_insertpagetitlefield.png cmd/lc_inserttitlefield.png
@@ -581,7 +588,6 @@ cmd/lc_linestyle.png cmd/lc_borderdialog.png
 cmd/lc_linetoolbox.png cmd/lc_freeline.png
 cmd/lc_loadstyles.png cmd/lc_open.png
 cmd/lc_macrodialog.png cmd/lc_scriptorganizer.png
-cmd/lc_macroorganizer.png cmd/lc_formproperties.png
 cmd/lc_macrosmenu.png cmd/lc_choosemacro.png
 cmd/lc_mailmergefirstentry.png cmd/lc_firstrecord.png
 cmd/lc_mailmergelastentry.png cmd/lc_lastrecord.png
@@ -769,6 +775,7 @@ cmd/sc_circle.png cmd/sc_basicshapes.circle.png
 cmd/sc_circlepie.png cmd/sc_basicshapes.circle-pie.png
 cmd/sc_closedocs.png cmd/sc_closedoc.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png
+cmd/sc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/sc_insertplugin.png
 cmd/sc_commentchange.png cmd/sc_commentchangetracking.png
 cmd/sc_commonalignbottom.png cmd/sc_alignbottom.png
 cmd/sc_commonalignhorizontalcenter.png cmd/sc_alignhorizontalcenter.png
@@ -844,6 +851,7 @@ cmd/sc_groupmenu.png cmd/sc_formatgroup.png
 cmd/sc_headerandfooter.png cmd/sc_editheaderandfooter.png
 cmd/sc_heading1cellstyles.png cmd/sc_heading1parastyle.png
 cmd/sc_heading2cellstyles.png cmd/sc_heading2parastyle.png
+cmd/sc_helpindex.png cmd/sc_helperdialog.png
 cmd/sc_hscroll.png cmd/sc_hscrollbar.png
 cmd/sc_hyperlinkdialog.png cmd/sc_inserthyperlink.png
 cmd/sc_importfromfile.png cmd/sc_importdialog.png
@@ -888,6 +896,8 @@ cmd/sc_insertobjctrl.png cmd/sc_insertobject.png
 cmd/sc_insertobjectchart.png cmd/sc_drawchart.png
 cmd/sc_insertobjectstarmath.png cmd/sc_insertmath.png
 cmd/sc_insertpagefield.png cmd/sc_insertpagenumberfield.png
+cmd/sc_insertpagefooter.png cmd/sc_insertfooter.png
+cmd/sc_insertpageheader.png cmd/sc_insertheader.png
 cmd/sc_insertpagenumber.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertpagesfield.png cmd/sc_insertpagecountfield.png
 cmd/sc_insertpagetitlefield.png cmd/sc_inserttitlefield.png
@@ -913,7 +923,6 @@ cmd/sc_linestyle.png cmd/sc_borderdialog.png
 cmd/sc_linetoolbox.png cmd/sc_freeline.png
 cmd/sc_loadstyles.png cmd/sc_open.png
 cmd/sc_macrodialog.png cmd/sc_scriptorganizer.png
-cmd/sc_macroorganizer.png cmd/sc_formproperties.png
 cmd/sc_macrosmenu.png cmd/sc_choosemacro.png
 cmd/sc_mailmergefirstentry.png cmd/sc_firstrecord.png
 cmd/sc_mailmergelastentry.png cmd/sc_lastrecord.png

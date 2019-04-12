@@ -1968,31 +1968,37 @@ cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
 # ===============================================
 cmd/32/authoritiesentrydialog.png cmd/32/dbviewaliases.png
 cmd/32/changesmenu.png cmd/32/accepttrackedchange.png
+cmd/32/com.sun.star.deployment.ui.packagemanagerdialog.png cmd/32/insertplugin.png
 cmd/32/commentchange.png cmd/32/commentchangetracking.png
 cmd/32/editfootnote.png cmd/32/insertfootnote.png
 cmd/32/editlinksmenu.png cmd/32/insertreferencefield.png
 cmd/32/editpastespecialmenu.png cmd/32/pastespecial.png
 cmd/32/fielddialog.png cmd/32/fields.png
+cmd/32/focustofindbar.png cmd/32/recsearch.png
 cmd/32/indexentrydialog.png cmd/32/insertindexesentry.png
 cmd/32/pastespecialmenu.png cmd/32/pastespecial.png
 
 cmd/lc_authoritiesentrydialog.png cmd/lc_dbviewaliases.png
 cmd/lc_changesmenu.png cmd/lc_accepttrackedchange.png
+cmd/lc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/lc_insertplugin.png
 cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
 cmd/lc_editfootnote.png cmd/lc_insertfootnote.png
 cmd/lc_editlinksmenu.png cmd/lc_insertreferencefield.png
 cmd/lc_editpastespecialmenu.png cmd/lc_pastespecial.png
 cmd/lc_fielddialog.png cmd/lc_fields.png
+cmd/lc_focustofindbar.png cmd/lc_recsearch.png
 cmd/lc_indexentrydialog.png cmd/lc_insertindexesentry.png
 cmd/lc_pastespecialmenu.png cmd/lc_pastespecial.png
 
 cmd/sc_authoritiesentrydialog.png cmd/sc_dbviewaliases.png
 cmd/sc_changesmenu.png cmd/sc_accepttrackedchange.png
+cmd/sc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/sc_insertplugin.png
 cmd/sc_commentchange.png cmd/sc_commentchangetracking.png
 cmd/sc_editfootnote.png cmd/sc_insertfootnote.png
 cmd/sc_editlinksmenu.png cmd/sc_insertreferencefield.png
 cmd/sc_editpastespecialmenu.png cmd/sc_pastespecial.png
 cmd/sc_fielddialog.png cmd/sc_fields.png
+cmd/sc_focustofindbar.png cmd/sc_recsearch.png
 cmd/sc_indexentrydialog.png cmd/sc_insertindexesentry.png
 cmd/sc_pastespecialmenu.png cmd/sc_pastespecial.png
 
@@ -2031,6 +2037,8 @@ cmd/32/graphicmenu.png cmd/32/avmediaplayer.png
 cmd/32/insertfootnotesmenu.png cmd/32/insertfootnote.png
 cmd/32/insertformmenu.png cmd/32/choosecontrols.png
 cmd/32/insertheaderfootermenu.png cmd/32/editheaderandfooter.png
+cmd/32/insertpagefooter.png cmd/32/insertfooter.png
+cmd/32/insertpageheader.png cmd/32/insertheader.png
 cmd/32/objectmenu.png cmd/32/insertobject.png
 cmd/32/shapeslinemenu.png cmd/32/line.png
 cmd/32/shapesmenu.png cmd/32/basicshapes.round-quadrat.png
@@ -2040,6 +2048,8 @@ cmd/lc_graphicmenu.png cmd/lc_avmediaplayer.png
 cmd/lc_insertfootnotesmenu.png cmd/lc_insertfootnote.png
 cmd/lc_insertformmenu.png cmd/lc_choosecontrols.png
 cmd/lc_insertheaderfootermenu.png cmd/lc_editheaderandfooter.png
+cmd/lc_insertpagefield.png cmd/lc_insertpagenumberfield.png
+cmd/lc_insertpagefooter.png cmd/lc_insertfooter.png
 cmd/lc_objectmenu.png cmd/lc_insertobject.png
 cmd/lc_shapeslinemenu.png cmd/lc_line.png
 cmd/lc_shapesmenu.png cmd/lc_basicshapes.round-quadrat.png
@@ -2049,6 +2059,8 @@ cmd/sc_graphicmenu.png cmd/sc_avmediaplayer.png
 cmd/sc_insertfootnotesmenu.png cmd/sc_insertfootnote.png
 cmd/sc_insertformmenu.png cmd/sc_choosecontrols.png
 cmd/sc_insertheaderfootermenu.png cmd/sc_editheaderandfooter.png
+cmd/sc_insertpagefield.png cmd/sc_insertpagenumberfield.png
+cmd/sc_insertpagefooter.png cmd/sc_insertfooter.png
 cmd/sc_objectmenu.png cmd/sc_insertobject.png
 cmd/sc_shapeslinemenu.png cmd/sc_line.png
 cmd/sc_shapesmenu.png cmd/sc_basicshapes.round-quadrat.png
@@ -2057,18 +2069,21 @@ cmd/sc_shapesmenu.png cmd/sc_basicshapes.round-quadrat.png
 # ===============================================
 cmd/32/autoformatmenu.png cmd/32/autocorrectdlg.png
 cmd/32/languagemenu.png cmd/32/managelanguage.png
+cmd/32/macroorganizer%3ftabid%3ashort=1.png cmd/32/open.png
 cmd/32/openxmlfiltersettings.png cmd/32/managexmlsource.png
 cmd/32/updatealllinks.png cmd/32/inserthyperlinkcontrol.png
 cmd/32/updatecharts.png cmd/32/drawchart.png
 
 cmd/lc_autoformatmenu.png cmd/lc_autocorrectdlg.png
 cmd/lc_languagemenu.png cmd/lc_managelanguage.png
+cmd/lc_macroorganizer%3ftabid%3ashort=1.png cmd/lc_open.png
 cmd/lc_openxmlfiltersettings.png cmd/lc_managexmlsource.png
 cmd/lc_updatealllinks.png cmd/lc_inserthyperlinkcontrol.png
 cmd/lc_updatecharts.png cmd/lc_drawchart.png
 
 cmd/sc_autoformatmenu.png cmd/sc_autocorrectdlg.png
 cmd/sc_languagemenu.png cmd/sc_managelanguage.png
+cmd/sc_macroorganizer%3ftabid%3ashort=1.png cmd/sc_open.png
 cmd/sc_openxmlfiltersettings.png cmd/sc_managexmlsource.png
 cmd/sc_updatealllinks.png cmd/sc_inserthyperlinkcontrol.png
 cmd/sc_updatecharts.png cmd/sc_drawchart.png
