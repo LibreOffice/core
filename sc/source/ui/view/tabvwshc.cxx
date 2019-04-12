@@ -249,16 +249,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
         }
         break;
 
-        case SID_OPENDLG_SOLVE:
-        {
-            ScViewData& rViewData = GetViewData();
-            ScAddress   aCurPos( rViewData.GetCurX(),
-                                 rViewData.GetCurY(),
-                                 rViewData.GetTabNo());
-            pResult = VclPtr<ScSolverDlg>::Create( pB, pCW, pParent, rViewData.GetDocument(), aCurPos );
-        }
-        break;
-
         case SID_OPENDLG_OPTSOLVER:
         {
             ScViewData& rViewData = GetViewData();
@@ -489,6 +479,15 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         case SID_DEFINE_COLROWNAMERANGES:
             xResult.reset(new ScColRowNameRangesDlg(pB, pCW, pParent, &GetViewData()));
             break;
+        case SID_OPENDLG_SOLVE:
+        {
+            ScViewData& rViewData = GetViewData();
+            ScAddress   aCurPos( rViewData.GetCurX(),
+                                 rViewData.GetCurY(),
+                                 rViewData.GetTabNo());
+            xResult.reset(new ScSolverDlg(pB, pCW, pParent, rViewData.GetDocument(), aCurPos));
+            break;
+        }
     }
 
     if (xResult)
