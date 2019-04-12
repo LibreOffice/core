@@ -111,7 +111,7 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
                 /* <*propname* xmlns="*propns*" /> */
                 aBuffer.append( "<" );
                 aBuffer.append( thePropName.name );
-                aBuffer.append( " xmlnx=\"" );
+                aBuffer.append( " xmlns=\"" );
                 aBuffer.append( thePropName.nspace );
                 aBuffer.append( "\"/>" );
             }
