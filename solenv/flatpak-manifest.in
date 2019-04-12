@@ -234,10 +234,10 @@
                     "dest-filename": "external/tarballs/libfreehand-0.1.2.tar.xz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/language-subtag-registry-2018-04-23.tar.bz2",
-                    "sha256": "14c21f4533ca74e3af9e09184d6756a750d0cd46099015ba8c595e48499aa878",
+                    "url": "https://dev-www.libreoffice.org/src/language-subtag-registry-2019-04-03.tar.bz2",
+                    "sha256": "a1d7fb901764bb8f251d4f686cdf565764f9987d0fb5d9315d54a7366a84822d",
                     "type": "file",
-                    "dest-filename": "external/tarballs/language-subtag-registry-2018-04-23.tar.bz2"
+                    "dest-filename": "external/tarballs/language-subtag-registry-2019-04-03.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/liblangtag-0.6.2.tar.bz2",
@@ -360,10 +360,10 @@
                     "dest-filename": "external/tarballs/liborcus-0.14.1.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/poppler-0.73.0.tar.xz",
-                    "sha256": "e44b5543903128884ba4538c2a97d3bcc8889e97ffacc4636112101f0238db03",
+                    "url": "https://dev-www.libreoffice.org/src/poppler-0.74.0.tar.xz",
+                    "sha256": "92e09fd3302567fd36146b36bb707db43ce436e8841219025a82ea9fb0076b2f",
                     "type": "file",
-                    "dest-filename": "external/tarballs/poppler-0.73.0.tar.xz"
+                    "dest-filename": "external/tarballs/poppler-0.74.0.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/postgresql-9.2.24.tar.bz2",
