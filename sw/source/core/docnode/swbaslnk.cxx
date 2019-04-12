@@ -53,6 +53,7 @@
 #include <cntfrm.hxx>
 #include <htmltbl.hxx>
 #include <calbck.hxx>
+#include <dialoghelp.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -149,7 +150,10 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
             sReferer = sh->GetMedium()->GetName();
         }
 
-        if( sfx2::LinkManager::GetGraphicFromAny(rMimeType, rValue, sReferer, aGrf) &&
+        // tdf#124698 if any auth dialog is needed, find what the parent window should be
+        weld::Window* pDlgParent = GetFrameWeld(pDoc);
+
+        if( sfx2::LinkManager::GetGraphicFromAny(rMimeType, rValue, sReferer, aGrf, pDlgParent) &&
             ( GraphicType::Default != aGrf.GetType() ||
               GraphicType::Default != rGrfObj.GetType() ) )
         {
