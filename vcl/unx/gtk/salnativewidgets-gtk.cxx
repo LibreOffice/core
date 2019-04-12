@@ -1018,7 +1018,7 @@ bool GtkSalGraphics::DoDrawNativeControl(
     }
     else if( (nType == ControlType::ListNode) && (nPart == ControlPart::Entire) )
     {
-        return NWPaintGTKListNode( aCtrlRect, nState, aValue );
+        return NWPaintGTKListNode( pDrawable, aCtrlRect, nState, aValue );
     }
     else if( (nType == ControlType::ListNet) && (nPart == ControlPart::Entire) )
     {
@@ -3345,7 +3345,18 @@ bool GtkSalGraphics::NWPaintGTKTooltip(
     return true;
 }
 
+namespace
+{
+void NWPaintGTKListNodeReal(SalX11Screen nXScreen, GdkDrawable* gdkDrawable, GtkStateType stateType,
+                            gint w, int h, GtkExpanderStyle eStyle)
+{
+    gtk_paint_expander(gWidgetData[nXScreen].gTreeView->style, gdkDrawable, stateType, nullptr,
+                       gWidgetData[nXScreen].gTreeView, "treeview", w / 2, h / 2, eStyle);
+}
+}
+
 bool GtkSalGraphics::NWPaintGTKListNode(
+            GdkDrawable* gdkDrawable,
             const tools::Rectangle& rControlRectangle,
             ControlState nState, const ImplControlValue& rValue )
 {
@@ -3375,16 +3386,15 @@ bool GtkSalGraphics::NWPaintGTKListNode(
             break;
     }
 
+    if (GtkSalGraphics::bNeedPixmapPaint)
+    {
+        NWPaintGTKListNodeReal(m_nXScreen, gdkDrawable, stateType, w, h, eStyle);
+        return true;
+    }
+
     BEGIN_PIXMAP_RENDER( aRect, pixDrawable )
     {
-        gtk_paint_expander( gWidgetData[m_nXScreen].gTreeView->style,
-                            pixDrawable,
-                            stateType,
-                            nullptr,
-                            gWidgetData[m_nXScreen].gTreeView,
-                            "treeview",
-                            w/2, h/2,
-                            eStyle );
+        NWPaintGTKListNodeReal(m_nXScreen, pixDrawable, stateType, w, h, eStyle);
     }
     END_PIXMAP_RENDER( aRect )
 
