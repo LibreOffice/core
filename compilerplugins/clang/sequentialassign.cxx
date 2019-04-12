@@ -162,7 +162,7 @@ private:
     const VarDecl* findSimpleAssign(Stmt const*);
     bool isSimpleRHS(Expr const*);
     Expr const* ignore(Expr const*);
-    void checkForSecondAssign(Stmt const* firstStmt, Stmt const* stmt, VarDecl const* varDecl);
+    void checkForSecondAssign(Stmt const* stmt, VarDecl const* varDecl);
 };
 
 bool SequentialAssign::VisitCompoundStmt(CompoundStmt const* compoundStmt)
@@ -186,14 +186,13 @@ bool SequentialAssign::VisitCompoundStmt(CompoundStmt const* compoundStmt)
         ++it;
         if (it == compoundStmt->body_end())
             break;
-        checkForSecondAssign(firstStmt, *it, foundVars);
+        checkForSecondAssign(*it, foundVars);
     }
 
     return true;
 }
 
-void SequentialAssign::checkForSecondAssign(Stmt const* firstStmt, Stmt const* stmt,
-                                            VarDecl const* varDecl)
+void SequentialAssign::checkForSecondAssign(Stmt const* stmt, VarDecl const* varDecl)
 {
     if (auto exprCleanup = dyn_cast<ExprWithCleanups>(stmt))
         stmt = exprCleanup->getSubExpr();
