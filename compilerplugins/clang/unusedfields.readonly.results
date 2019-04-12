@@ -158,7 +158,7 @@ cppu/source/uno/check.cxx:134
     (anonymous namespace)::Char3 c3 char
 cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
-cui/source/options/optcolor.cxx:255
+cui/source/options/optcolor.cxx:257
     ColorConfigWindow_Impl aModuleOptions class SvtModuleOptions
 cui/source/options/optpath.cxx:80
     OptPath_Impl m_aDefOpt class SvtDefaultOptions
@@ -174,7 +174,7 @@ dbaccess/source/core/inc/ContentHelper.hxx:109
     dbaccess::OContentHelper m_aErrorHelper const ::connectivity::SQLError
 dbaccess/source/filter/hsqldb/parseschema.hxx:36
     dbahsql::SchemaParser m_PrimaryKeys std::map<OUString, std::vector<OUString> >
-dbaccess/source/ui/control/tabletree.cxx:181
+dbaccess/source/ui/control/tabletree.cxx:237
     dbaui::(anonymous namespace)::OViewSetter m_aEqualFunctor ::comphelper::UStringMixEqual
 dbaccess/source/ui/dlg/advancedsettings.hxx:39
     dbaui::SpecialSettingsPage m_xIsSQL92Check std::unique_ptr<weld::CheckButton>
@@ -264,7 +264,7 @@ filter/source/graphicfilter/iras/iras.cxx:53
     RASReader mnRepCount sal_uInt8
 filter/source/graphicfilter/itga/itga.cxx:52
     TGAFileFooter nSignature sal_uInt32 [4]
-filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:144
+filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:90
     XMLFilterSettingsDialog maModuleOpt class SvtModuleOptions
 framework/inc/dispatch/dispatchprovider.hxx:81
     framework::DispatchProvider m_aProtocolHandlerCache class framework::HandlerCache
@@ -328,23 +328,23 @@ include/registry/refltype.hxx:68
     RTUik m_Data4 const sal_uInt32
 include/registry/refltype.hxx:69
     RTUik m_Data5 const sal_uInt32
-include/sfx2/charmapcontrol.hxx:45
+include/sfx2/charmapcontrol.hxx:44
     SfxCharmapCtrl m_pFavCharView VclPtr<class SvxCharViewControl> [16]
-include/sfx2/msg.hxx:98
+include/sfx2/msg.hxx:95
     SfxTypeAttrib nAID sal_uInt16
-include/sfx2/msg.hxx:99
+include/sfx2/msg.hxx:96
     SfxTypeAttrib pName const char *
-include/sfx2/msg.hxx:108
+include/sfx2/msg.hxx:105
     SfxType createSfxPoolItemFunc const std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:109
+include/sfx2/msg.hxx:106
     SfxType pType const std::type_info *
-include/sfx2/msg.hxx:110
+include/sfx2/msg.hxx:107
     SfxType nAttribs const sal_uInt16
-include/sfx2/msg.hxx:111
+include/sfx2/msg.hxx:108
     SfxType aAttrib struct SfxTypeAttrib [1]
-include/sfx2/msg.hxx:121
+include/sfx2/msg.hxx:118
     SfxType0 pType const std::type_info *
-include/sfx2/sidebar/ResourceManager.hxx:109
+include/sfx2/sidebar/ResourceManager.hxx:110
     sfx2::sidebar::ResourceManager maMiscOptions const class SvtMiscOptions
 include/svl/ondemand.hxx:55
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
@@ -396,13 +396,13 @@ include/unoidl/unoidl.hxx:453
     unoidl::ConstantValue::(anonymous) doubleValue double
 include/unotest/bootstrapfixturebase.hxx:52
     test::BootstrapFixtureBase m_directories class test::Directories
-include/vcl/opengl/OpenGLContext.hxx:51
+include/vcl/opengl/OpenGLContext.hxx:48
     OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
-include/vcl/opengl/OpenGLContext.hxx:170
+include/vcl/opengl/OpenGLContext.hxx:167
     OpenGLContext mpLastFramebuffer class OpenGLFramebuffer *
 include/vcl/ppdparser.hxx:127
     psp::PPDParser::PPDConstraint m_pKey1 const class psp::PPDKey *
-include/xmloff/nmspmap.hxx:70
+include/xmloff/nmspmap.hxx:73
     SvXMLNamespaceMap sEmpty const class rtl::OUString
 io/source/stm/odata.cxx:586
     io_stm::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n2 sal_uInt32
@@ -520,9 +520,9 @@ sc/source/ui/vba/vbaworksheet.hxx:50
     ScVbaWorksheet mxButtons ::rtl::Reference<ScVbaSheetObjectsBase> [2]
 sd/inc/Outliner.hxx:273
     SdOutliner mpFirstObj class SdrObject *
-sd/inc/sdmod.hxx:117
-    SdModule gImplImpressPropertySetInfoCache SdExtPropertySetInfoCache
 sd/inc/sdmod.hxx:118
+    SdModule gImplImpressPropertySetInfoCache SdExtPropertySetInfoCache
+sd/inc/sdmod.hxx:119
     SdModule gImplDrawPropertySetInfoCache SdExtPropertySetInfoCache
 sd/source/core/CustomAnimationCloner.cxx:71
     sd::CustomAnimationClonerImpl maSourceNodeVector std::vector<Reference<XAnimationNode> >
@@ -532,13 +532,13 @@ sd/source/ui/inc/unopage.hxx:163
     SdDrawPage maTypeSequence css::uno::Sequence<css::uno::Type>
 sd/source/ui/inc/unopage.hxx:224
     SdMasterPage maTypeSequence css::uno::Sequence<css::uno::Type>
-sd/source/ui/sidebar/MasterPageContainer.cxx:152
-    sd::sidebar::MasterPageContainer::Implementation maLargePreviewBeingCreated class Image
 sd/source/ui/sidebar/MasterPageContainer.cxx:153
+    sd::sidebar::MasterPageContainer::Implementation maLargePreviewBeingCreated class Image
+sd/source/ui/sidebar/MasterPageContainer.cxx:154
     sd::sidebar::MasterPageContainer::Implementation maSmallPreviewBeingCreated class Image
-sd/source/ui/sidebar/MasterPageContainer.cxx:158
-    sd::sidebar::MasterPageContainer::Implementation maLargePreviewNotAvailable class Image
 sd/source/ui/sidebar/MasterPageContainer.cxx:159
+    sd::sidebar::MasterPageContainer::Implementation maLargePreviewNotAvailable class Image
+sd/source/ui/sidebar/MasterPageContainer.cxx:160
     sd::sidebar::MasterPageContainer::Implementation maSmallPreviewNotAvailable class Image
 sd/source/ui/slideshow/showwindow.hxx:99
     sd::ShowWindow mbMouseCursorHidden _Bool
@@ -548,19 +548,19 @@ sd/source/ui/slidesorter/inc/controller/SlsAnimator.hxx:97
     sd::slidesorter::controller::Animator maElapsedTime const ::canvas::tools::ElapsedTime
 sd/source/ui/table/TableDesignPane.hxx:90
     sd::TableDesignWidget m_aCheckBoxes VclPtr<class CheckBox> [6]
-sdext/source/pdfimport/inc/pdfihelper.hxx:101
+sdext/source/pdfimport/inc/pdfihelper.hxx:102
     pdfi::GraphicsContext BlendMode sal_Int8
 sdext/source/pdfimport/tree/style.hxx:43
     pdfi::StyleContainer::Style Contents const class rtl::OUString
 sfx2/source/appl/lnkbase2.cxx:96
     sfx2::ImplDdeItem pLink class sfx2::SvBaseLink *
-sfx2/source/inc/versdlg.hxx:85
+sfx2/source/inc/versdlg.hxx:83
     SfxCmisVersionsDialog m_xVersionBox std::unique_ptr<weld::TreeView>
 slideshow/source/engine/slideshowimpl.cxx:156
     (anonymous namespace)::FrameSynchronization maTimer const canvas::tools::ElapsedTime
 sot/source/sdstor/ucbstorage.cxx:403
     UCBStorageStream_Impl m_aKey const class rtl::OString
-starmath/source/view.cxx:864
+starmath/source/view.cxx:867
     SmViewShell_Impl aOpts const class SvtMiscOptions
 store/source/storbios.cxx:57
     OStoreSuperBlock m_aMarked OStoreSuperBlock::L
@@ -598,13 +598,13 @@ svtools/source/table/gridtablerenderer.cxx:71
     svt::table::CachedSortIndicator m_sortDescending class BitmapEx
 svx/inc/sdr/overlay/overlayrectangle.hxx:44
     sdr::overlay::OverlayRectangle mbOverlayState _Bool
-svx/source/inc/datanavi.hxx:218
+svx/source/inc/datanavi.hxx:215
     svxform::XFormsPage m_aMethodString const class svxform::MethodString
-svx/source/inc/datanavi.hxx:219
+svx/source/inc/datanavi.hxx:216
     svxform::XFormsPage m_aReplaceString const class svxform::ReplaceString
-svx/source/inc/datanavi.hxx:529
+svx/source/inc/datanavi.hxx:526
     svxform::AddSubmissionDialog m_aMethodString const class svxform::MethodString
-svx/source/inc/datanavi.hxx:530
+svx/source/inc/datanavi.hxx:527
     svxform::AddSubmissionDialog m_aReplaceString const class svxform::ReplaceString
 svx/source/inc/gridcell.hxx:526
     DbPatternField m_pValueFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
@@ -628,13 +628,13 @@ sw/source/core/access/accfrmobjmap.hxx:100
     SwAccessibleChildMap maMap std::map<key_type, mapped_type, key_compare>
 sw/source/core/access/acchypertextdata.hxx:40
     SwAccessibleHyperTextData maMap std::map<key_type, mapped_type, key_compare>
-sw/source/core/access/accmap.cxx:101
+sw/source/core/access/accmap.cxx:102
     SwAccessibleContextMap_Impl maMap std::map<key_type, mapped_type, key_compare>
-sw/source/core/access/accmap.cxx:236
+sw/source/core/access/accmap.cxx:237
     SwAccessibleShapeMap_Impl maMap std::map<key_type, mapped_type, SwShapeFunc>
-sw/source/core/access/accmap.cxx:589
+sw/source/core/access/accmap.cxx:590
     SwAccessibleEventMap_Impl maMap std::map<key_type, mapped_type, key_compare>
-sw/source/core/access/accmap.cxx:629
+sw/source/core/access/accmap.cxx:630
     SwAccessibleSelectedParas_Impl maMap std::map<key_type, mapped_type, key_compare>
 sw/source/core/doc/swstylemanager.cxx:58
     SwStyleManager aAutoCharPool class StylePool
@@ -652,11 +652,11 @@ sw/source/ui/dbui/dbinsdlg.cxx:116
     DB_Column::(anonymous) pText class rtl::OUString *const
 sw/source/ui/dbui/dbinsdlg.cxx:118
     DB_Column::(anonymous) nFormat const sal_uInt32
-sw/source/uibase/dbui/mmconfigitem.cxx:108
+sw/source/uibase/dbui/mmconfigitem.cxx:109
     SwMailMergeConfigItem_Impl m_aFemaleGreetingLines std::vector<OUString>
-sw/source/uibase/dbui/mmconfigitem.cxx:110
+sw/source/uibase/dbui/mmconfigitem.cxx:111
     SwMailMergeConfigItem_Impl m_aMaleGreetingLines std::vector<OUString>
-sw/source/uibase/dbui/mmconfigitem.cxx:112
+sw/source/uibase/dbui/mmconfigitem.cxx:113
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:79
     SwInsertField_Data m_aDBDataSource const css::uno::Any
@@ -708,15 +708,15 @@ unotools/source/config/saveopt.cxx:77
     SvtSaveOptions_Impl bROUserAutoSave _Bool
 vcl/inc/BitmapFastScaleFilter.hxx:31
     BitmapFastScaleFilter maSize const class Size
-vcl/inc/printerinfomanager.hxx:73
+vcl/inc/printerinfomanager.hxx:75
     psp::PrinterInfoManager::SystemPrintQueue m_aComment class rtl::OUString
-vcl/inc/salwtype.hxx:154
+vcl/inc/salwtype.hxx:157
     SalWheelMouseEvent mbDeltaIsPixel _Bool
-vcl/inc/salwtype.hxx:201
+vcl/inc/salwtype.hxx:204
     SalSurroundingTextSelectionChangeEvent mnStart const sal_uLong
-vcl/inc/salwtype.hxx:202
+vcl/inc/salwtype.hxx:205
     SalSurroundingTextSelectionChangeEvent mnEnd const sal_uLong
-vcl/inc/salwtype.hxx:208
+vcl/inc/salwtype.hxx:211
     SalQueryCharPositionEvent mnCharPos sal_uLong
 vcl/inc/svdata.hxx:285
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
@@ -892,11 +892,11 @@ vcl/source/filter/jpeg/transupp.h:148
     (anonymous) crop_xoffset_set JCROP_CODE
 vcl/source/filter/jpeg/transupp.h:150
     (anonymous) crop_yoffset_set JCROP_CODE
-vcl/source/fontsubset/sft.cxx:1048
-    vcl::subHeader2 firstCode const sal_uInt16
 vcl/source/fontsubset/sft.cxx:1049
-    vcl::subHeader2 entryCount const sal_uInt16
+    vcl::subHeader2 firstCode const sal_uInt16
 vcl/source/fontsubset/sft.cxx:1050
+    vcl::subHeader2 entryCount const sal_uInt16
+vcl/source/fontsubset/sft.cxx:1051
     vcl::subHeader2 idDelta const sal_uInt16
 vcl/source/gdi/dibtools.cxx:53
     (anonymous namespace)::CIEXYZ aXyzX FXPT2DOT30
@@ -944,8 +944,8 @@ vcl/unx/gtk3/gtk3gtkinst.cxx:1167
      out gpointer *
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent const AtkObject
-vcl/unx/gtk/a11y/atkwrapper.hxx:80
-    AtkObjectWrapperClass aParentClass const AtkObjectClass
+vcl/unx/gtk/a11y/atkwrapper.hxx:78
+    AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk/gloactiongroup.cxx:30
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20

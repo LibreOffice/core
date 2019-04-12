@@ -93,9 +93,9 @@ std::unique_ptr<SdrUndoAction> OReportUndoFactory::CreateUndoObjectOrdNum( SdrOb
     return m_pUndoFactory->CreateUndoObjectOrdNum( rObject, nOldOrdNum1, nNewOrdNum1 );
 }
 
-std::unique_ptr<SdrUndoAction> OReportUndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
+std::unique_ptr<SdrUndoAction> OReportUndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject )
 {
-    return m_pUndoFactory->CreateUndoReplaceObject( rOldObject, rNewObject, bOrdNumDirect );
+    return m_pUndoFactory->CreateUndoReplaceObject( rOldObject, rNewObject );
 }
 
 std::unique_ptr<SdrUndoAction> OReportUndoFactory::CreateUndoObjectLayerChange( SdrObject& rObject, SdrLayerID aOldLayer, SdrLayerID aNewLayer )

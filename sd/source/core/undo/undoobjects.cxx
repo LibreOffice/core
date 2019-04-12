@@ -144,8 +144,8 @@ void UndoDeleteObject::Redo()
     }
 }
 
-UndoReplaceObject::UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
-: SdrUndoReplaceObj( rOldObject, rNewObject, bOrdNumDirect )
+UndoReplaceObject::UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject )
+: SdrUndoReplaceObj( rOldObject, rNewObject )
 , UndoRemovePresObjectImpl( rOldObject )
 , mxSdrObject( &rOldObject )
 {

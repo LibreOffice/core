@@ -35,7 +35,6 @@ private:
 
     ScRange         theCurArea;
     bool            bCloseFlag;
-    bool            bAutoReOpen;
     bool            bCloseOnButtonUp;
     bool            bSingleCell;
     bool            bMultiSelection;

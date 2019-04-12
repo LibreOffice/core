@@ -158,7 +158,6 @@ struct UpdateDialog::SpecificError {
 struct UpdateDialog::IgnoredUpdate {
     OUString sExtensionID;
     OUString sVersion;
-    bool     bRemoved;
 
     IgnoredUpdate( const OUString &rExtensionID, const OUString &rVersion );
 };
@@ -166,8 +165,7 @@ struct UpdateDialog::IgnoredUpdate {
 
 UpdateDialog::IgnoredUpdate::IgnoredUpdate( const OUString &rExtensionID, const OUString &rVersion ):
     sExtensionID( rExtensionID ),
-    sVersion( rVersion ),
-    bRemoved( false )
+    sVersion( rVersion )
 {}
 
 
@@ -889,8 +887,6 @@ bool UpdateDialog::isIgnoredUpdate( UpdateDialog::Index * index )
                     bIsIgnored = true;
                     index->m_bIgnored = true;
                 }
-                else // when we find another update of an ignored version, we will remove the old one to keep the ignored list small
-                    ignoredUpdate->bRemoved = true;
                 break;
             }
         }

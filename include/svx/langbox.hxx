@@ -75,10 +75,8 @@ public:
 protected:
     Image                   m_aNotCheckedImage;
     Image                   m_aCheckedImage;
-    OUString                m_aAllString;
     std::unique_ptr<css::uno::Sequence< sal_Int16 >>
                             m_pSpellUsedLang;
-    bool                    m_bHasLangNone;
     bool                    m_bWithCheckmark;
 
     SVX_DLLPRIVATE void                 ImplLanguageBoxBaseInit();
