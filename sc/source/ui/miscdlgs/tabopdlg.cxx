@@ -32,16 +32,14 @@
 
 //  class ScTabOpDlg
 
-ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
-                        ScDocument*         pDocument,
-                        const ScRefAddress& rCursorPos )
-
-    : ScAnyRefDlg(pB, pCW, pParent, "MultipleOperationsDialog",
-        "modules/scalc/ui/multipleoperationsdialog.ui")
+ScTabOpDlg::ScTabOpDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
+                       ScDocument* pDocument,
+                       const ScRefAddress& rCursorPos )
+    : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/multipleoperationsdialog.ui",
+                            "MultipleOperationsDialog")
     , theFormulaCell(rCursorPos)
     , pDoc(pDocument)
     , nCurTab(theFormulaCell.Tab())
-    , pEdActive(nullptr)
     , bDlgLostFocus(false)
     , errMsgNoFormula(ScResId(STR_NOFORMULASPECIFIED))
     , errMsgNoColRow(ScResId(STR_NOCOLROW))
@@ -49,86 +47,67 @@ ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPare
     , errMsgWrongRowCol(ScResId(STR_WRONGROWCOL))
     , errMsgNoColFormula(ScResId(STR_NOCOLFORMULA))
     , errMsgNoRowFormula(ScResId(STR_NOROWFORMULA))
+    , m_pEdActive(nullptr)
+    , m_xFtFormulaRange(m_xBuilder->weld_label("formulasft"))
+    , m_xEdFormulaRange(new formula::WeldRefEdit(m_xBuilder->weld_entry("formulas")))
+    , m_xRBFormulaRange(new formula::WeldRefButton(m_xBuilder->weld_button("formulasref")))
+    , m_xFtRowCell(m_xBuilder->weld_label("rowft"))
+    , m_xEdRowCell(new formula::WeldRefEdit(m_xBuilder->weld_entry("row")))
+    , m_xRBRowCell(new formula::WeldRefButton(m_xBuilder->weld_button("rowref")))
+    , m_xFtColCell(m_xBuilder->weld_label("colft"))
+    , m_xEdColCell(new formula::WeldRefEdit(m_xBuilder->weld_entry("col")))
+    , m_xRBColCell(new formula::WeldRefButton(m_xBuilder->weld_button("colref")))
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
+    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
 {
-    get(m_pFtFormulaRange, "formulasft");
-    get(m_pEdFormulaRange, "formulas");
-    m_pEdFormulaRange->SetReferences(this, m_pFtFormulaRange);
-    get(m_pRBFormulaRange, "formulasref");
-    m_pRBFormulaRange->SetReferences(this, m_pEdFormulaRange);
+    m_xEdFormulaRange->SetReferences(this, m_xFtFormulaRange.get());
+    m_xRBFormulaRange->SetReferences(this, m_xEdFormulaRange.get());
 
-    get(m_pFtRowCell, "rowft");
-    get(m_pEdRowCell, "row");
-    m_pEdRowCell->SetReferences(this, m_pFtRowCell);
-    get(m_pRBRowCell, "rowref");
-    m_pRBRowCell->SetReferences(this, m_pEdRowCell);
+    m_xEdRowCell->SetReferences(this, m_xFtRowCell.get());
+    m_xRBRowCell->SetReferences(this, m_xEdRowCell.get());
 
-    get(m_pFtColCell, "colft");
-    get(m_pEdColCell, "col");
-    m_pEdColCell->SetReferences(this, m_pFtColCell);
-    get(m_pRBColCell, "colref");
-    m_pRBColCell->SetReferences(this, m_pEdColCell);
-
-    get(m_pBtnOk, "ok");
-    get(m_pBtnCancel, "cancel");
+    m_xEdColCell->SetReferences(this, m_xFtColCell.get());
+    m_xRBColCell->SetReferences(this, m_xEdColCell.get());
 
     Init();
 }
 
 ScTabOpDlg::~ScTabOpDlg()
 {
-    disposeOnce();
 }
-
-void ScTabOpDlg::dispose()
-{
-    Hide();
-    m_pFtFormulaRange.clear();
-    m_pEdFormulaRange.clear();
-    m_pRBFormulaRange.clear();
-    m_pFtRowCell.clear();
-    m_pEdRowCell.clear();
-    m_pRBRowCell.clear();
-    m_pFtColCell.clear();
-    m_pEdColCell.clear();
-    m_pRBColCell.clear();
-    m_pBtnOk.clear();
-    m_pBtnCancel.clear();
-    pEdActive.clear();
-    ScAnyRefDlg::dispose();
-}
-
 
 void ScTabOpDlg::Init()
 {
-    m_pBtnOk->SetClickHdl     ( LINK( this, ScTabOpDlg, BtnHdl ) );
-    m_pBtnCancel->SetClickHdl     ( LINK( this, ScTabOpDlg, BtnHdl ) );
+    m_xBtnOk->connect_clicked( LINK( this, ScTabOpDlg, BtnHdl ) );
+    m_xBtnCancel->connect_clicked( LINK( this, ScTabOpDlg, BtnHdl ) );
 
-    Link<Control&,void> aLink = LINK( this, ScTabOpDlg, GetFocusHdl );
-    m_pEdFormulaRange->SetGetFocusHdl( aLink );
-    m_pRBFormulaRange->SetGetFocusHdl( aLink );
-    m_pEdRowCell->SetGetFocusHdl( aLink );
-    m_pRBRowCell->SetGetFocusHdl( aLink );
-    m_pEdColCell->SetGetFocusHdl( aLink );
-    m_pRBColCell->SetGetFocusHdl( aLink );
+    Link<formula::WeldRefEdit&,void> aEditLink = LINK( this, ScTabOpDlg, GetEditFocusHdl );
+    m_xEdFormulaRange->SetGetFocusHdl( aEditLink );
+    m_xEdRowCell->SetGetFocusHdl( aEditLink );
+    m_xEdColCell->SetGetFocusHdl( aEditLink );
 
-    aLink = LINK( this, ScTabOpDlg, LoseFocusHdl );
-    m_pEdFormulaRange->SetLoseFocusHdl( aLink );
-    m_pRBFormulaRange->SetLoseFocusHdl( aLink );
-    m_pEdRowCell->SetLoseFocusHdl( aLink );
-    m_pRBRowCell->SetLoseFocusHdl( aLink );
-    m_pEdColCell->SetLoseFocusHdl( aLink );
-    m_pRBColCell->SetLoseFocusHdl( aLink );
+    Link<formula::WeldRefButton&,void> aButtonLink = LINK( this, ScTabOpDlg, GetButtonFocusHdl );
+    m_xRBFormulaRange->SetGetFocusHdl( aButtonLink );
+    m_xRBRowCell->SetGetFocusHdl( aButtonLink );
+    m_xRBColCell->SetGetFocusHdl( aButtonLink );
 
-    m_pEdFormulaRange->GrabFocus();
-    pEdActive = m_pEdFormulaRange;
+    aEditLink = LINK( this, ScTabOpDlg, LoseEditFocusHdl );
+    m_xEdFormulaRange->SetLoseFocusHdl( aEditLink );
+    m_xEdRowCell->SetLoseFocusHdl( aEditLink );
+    m_xEdColCell->SetLoseFocusHdl( aEditLink );
 
-    //@BugID 54702 Enable/Disable only in the base class
-    //SFX_APPWINDOW->Enable();
+    aButtonLink = LINK( this, ScTabOpDlg, LoseButtonFocusHdl );
+    m_xRBFormulaRange->SetLoseFocusHdl( aButtonLink );
+    m_xRBRowCell->SetLoseFocusHdl( aButtonLink );
+    m_xRBColCell->SetLoseFocusHdl( aButtonLink );
+
+    m_xEdFormulaRange->GrabFocus();
+    m_pEdActive = m_xEdFormulaRange.get();
 }
 
-bool ScTabOpDlg::Close()
+void ScTabOpDlg::Close()
 {
-    return DoClose( ScTabOpDlgWrapper::GetChildWindowId() );
+    DoClose( ScTabOpDlgWrapper::GetChildWindowId() );
 }
 
 void ScTabOpDlg::SetActive()
@@ -136,94 +115,94 @@ void ScTabOpDlg::SetActive()
     if ( bDlgLostFocus )
     {
         bDlgLostFocus = false;
-        if( pEdActive )
-            pEdActive->GrabFocus();
+        if (m_pEdActive)
+            m_pEdActive->GrabFocus();
     }
     else
-        GrabFocus();
+        m_xDialog->grab_focus();
 
     RefInputDone();
 }
 
 void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    if ( pEdActive )
+    if (m_pEdActive)
     {
         ScAddress::Details aDetails(pDocP->GetAddressConvention(), 0, 0);
 
         if ( rRef.aStart != rRef.aEnd )
-            RefInputStart(pEdActive);
+            RefInputStart(m_pEdActive);
 
         OUString      aStr;
         ScRefFlags      nFmt = ( rRef.aStart.Tab() == nCurTab )
                                 ? ScRefFlags::RANGE_ABS
                                 : ScRefFlags::RANGE_ABS_3D;
 
-        if (pEdActive == m_pEdFormulaRange)
+        if (m_pEdActive == m_xEdFormulaRange.get())
         {
             theFormulaCell.Set( rRef.aStart, false, false, false);
             theFormulaEnd.Set( rRef.aEnd, false, false, false);
             aStr = rRef.Format(nFmt, pDocP, aDetails);
         }
-        else if ( pEdActive == m_pEdRowCell )
+        else if (m_pEdActive == m_xEdRowCell.get())
         {
             theRowCell.Set( rRef.aStart, false, false, false);
             aStr = rRef.aStart.Format(nFmt, pDocP, aDetails);
         }
-        else if ( pEdActive == m_pEdColCell )
+        else if (m_pEdActive == m_xEdColCell.get())
         {
             theColCell.Set( rRef.aStart, false, false, false);
             aStr = rRef.aStart.Format(nFmt, pDocP, aDetails);
         }
 
-        pEdActive->SetRefString( aStr );
+        m_pEdActive->SetRefString( aStr );
     }
 }
 
 void ScTabOpDlg::RaiseError( ScTabOpErr eError )
 {
     const OUString* pMsg = &errMsgNoFormula;
-    Edit*           pEd  = m_pEdFormulaRange;
+    formula::WeldRefEdit* pEd  = m_xEdFormulaRange.get();
 
     switch ( eError )
     {
         case TABOPERR_NOFORMULA:
             pMsg = &errMsgNoFormula;
-            pEd  = m_pEdFormulaRange;
+            pEd  = m_xEdFormulaRange.get();
             break;
 
         case TABOPERR_NOCOLROW:
             pMsg = &errMsgNoColRow;
-            pEd  = m_pEdRowCell;
+            pEd  = m_xEdRowCell.get();
             break;
 
         case TABOPERR_WRONGFORMULA:
             pMsg = &errMsgWrongFormula;
-            pEd  = m_pEdFormulaRange;
+            pEd  = m_xEdFormulaRange.get();
             break;
 
         case TABOPERR_WRONGROW:
             pMsg = &errMsgWrongRowCol;
-            pEd  = m_pEdRowCell;
+            pEd  = m_xEdRowCell.get();
             break;
 
         case TABOPERR_NOCOLFORMULA:
             pMsg = &errMsgNoColFormula;
-            pEd  = m_pEdFormulaRange;
+            pEd  = m_xEdFormulaRange.get();
             break;
 
         case TABOPERR_WRONGCOL:
             pMsg = &errMsgWrongRowCol;
-            pEd  = m_pEdColCell;
+            pEd  = m_xEdColCell.get();
             break;
 
         case TABOPERR_NOROWFORMULA:
             pMsg = &errMsgNoRowFormula;
-            pEd  = m_pEdFormulaRange;
+            pEd  = m_xEdFormulaRange.get();
             break;
     }
 
-    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                               VclMessageType::Error, VclButtonsType::OkCancel, *pMsg));
     xBox->run();
     pEd->GrabFocus();
@@ -246,9 +225,9 @@ static bool lcl_Parse( const OUString& rString, const ScDocument* pDoc, SCTAB nC
 
 // Handler:
 
-IMPL_LINK( ScTabOpDlg, BtnHdl, Button*, pBtn, void )
+IMPL_LINK(ScTabOpDlg, BtnHdl, weld::Button&, rBtn, void)
 {
-    if (pBtn == m_pBtnOk)
+    if (&rBtn == m_xBtnOk.get())
     {
         ScTabOpParam::Mode eMode = ScTabOpParam::Column;
         sal_uInt16 nError = 0;
@@ -259,34 +238,34 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, Button*, pBtn, void )
         //    or single reference if both?
         // 3. is at least one of row or column non-empty?
 
-        if (m_pEdFormulaRange->GetText().isEmpty())
+        if (m_xEdFormulaRange->GetText().isEmpty())
             nError = TABOPERR_NOFORMULA;
-        else if (m_pEdRowCell->GetText().isEmpty() &&
-                 m_pEdColCell->GetText().isEmpty())
+        else if (m_xEdRowCell->GetText().isEmpty() &&
+                 m_xEdColCell->GetText().isEmpty())
             nError = TABOPERR_NOCOLROW;
-        else if ( !lcl_Parse( m_pEdFormulaRange->GetText(), pDoc, nCurTab,
+        else if ( !lcl_Parse( m_xEdFormulaRange->GetText(), pDoc, nCurTab,
                                 theFormulaCell, theFormulaEnd ) )
             nError = TABOPERR_WRONGFORMULA;
         else
         {
             const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-            if (!m_pEdRowCell->GetText().isEmpty())
+            if (!m_xEdRowCell->GetText().isEmpty())
             {
-                if (!ConvertSingleRef( pDoc, m_pEdRowCell->GetText(), nCurTab,
+                if (!ConvertSingleRef( pDoc, m_xEdRowCell->GetText(), nCurTab,
                                        theRowCell, eConv ))
                     nError = TABOPERR_WRONGROW;
                 else
                 {
-                    if (m_pEdColCell->GetText().isEmpty() &&
+                    if (m_xEdColCell->GetText().isEmpty() &&
                         theFormulaCell.Col() != theFormulaEnd.Col())
                         nError = TABOPERR_NOCOLFORMULA;
                     else
                         eMode = ScTabOpParam::Row;
                 }
             }
-            if (!m_pEdColCell->GetText().isEmpty())
+            if (!m_xEdColCell->GetText().isEmpty())
             {
-                if (!ConvertSingleRef( pDoc, m_pEdColCell->GetText(), nCurTab,
+                if (!ConvertSingleRef( pDoc, m_xEdColCell->GetText(), nCurTab,
                                        theColCell, eConv ))
                     nError = TABOPERR_WRONGCOL;
                 else
@@ -294,7 +273,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, Button*, pBtn, void )
                     if (eMode == ScTabOpParam::Row)                         // both
                     {
                         eMode = ScTabOpParam::Both;
-                        ConvertSingleRef( pDoc, m_pEdFormulaRange->GetText(), nCurTab,
+                        ConvertSingleRef( pDoc, m_xEdFormulaRange->GetText(), nCurTab,
                                           theFormulaCell, eConv );
                     }
                     else if (theFormulaCell.Row() != theFormulaEnd.Row())
@@ -317,31 +296,51 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, Button*, pBtn, void )
             GetBindings().GetDispatcher()->ExecuteList(SID_TABOP,
                                       SfxCallMode::SLOT | SfxCallMode::RECORD,
                                       { &aOutItem });
-            Close();
+            response(RET_OK);
         }
     }
-    else if (pBtn == m_pBtnCancel)
-        Close();
+    else if (&rBtn == m_xBtnCancel.get())
+        response(RET_CANCEL);
 }
 
-IMPL_LINK( ScTabOpDlg, GetFocusHdl, Control&, rCtrl, void )
+IMPL_LINK( ScTabOpDlg, GetEditFocusHdl, formula::WeldRefEdit&, rCtrl, void )
 {
-    if( (&rCtrl == static_cast<Control*>(m_pEdFormulaRange)) || (&rCtrl == static_cast<Control*>(m_pRBFormulaRange)) )
-        pEdActive = m_pEdFormulaRange;
-    else if( (&rCtrl == static_cast<Control*>(m_pEdRowCell)) || (&rCtrl == static_cast<Control*>(m_pRBRowCell)) )
-        pEdActive = m_pEdRowCell;
-    else if( (&rCtrl == static_cast<Control*>(m_pEdColCell)) || (&rCtrl == static_cast<Control*>(m_pRBColCell)) )
-        pEdActive = m_pEdColCell;
+    if (&rCtrl == m_xEdFormulaRange.get())
+        m_pEdActive = m_xEdFormulaRange.get();
+    else if (&rCtrl == m_xEdRowCell.get())
+        m_pEdActive = m_xEdRowCell.get();
+    else if (&rCtrl == m_xEdColCell.get())
+        m_pEdActive = m_xEdColCell.get();
     else
-        pEdActive = nullptr;
+        m_pEdActive = nullptr;
 
-    if( pEdActive )
-        pEdActive->SetSelection( Selection( 0, SELECTION_MAX ) );
+    if( m_pEdActive )
+        m_pEdActive->SelectAll();
 }
 
-IMPL_LINK_NOARG(ScTabOpDlg, LoseFocusHdl, Control&, void)
+IMPL_LINK( ScTabOpDlg, GetButtonFocusHdl, formula::WeldRefButton&, rCtrl, void )
 {
-    bDlgLostFocus = !IsActive();
+    if (&rCtrl == m_xRBFormulaRange.get())
+        m_pEdActive = m_xEdFormulaRange.get();
+    else if (&rCtrl == m_xRBRowCell.get())
+        m_pEdActive = m_xEdRowCell.get();
+    else if (&rCtrl == m_xRBColCell.get())
+        m_pEdActive = m_xEdColCell.get();
+    else
+        m_pEdActive = nullptr;
+
+    if( m_pEdActive )
+        m_pEdActive->SelectAll();
+}
+
+IMPL_LINK_NOARG(ScTabOpDlg, LoseEditFocusHdl, formula::WeldRefEdit&, void)
+{
+    bDlgLostFocus = !m_xDialog->has_toplevel_focus();
+}
+
+IMPL_LINK_NOARG(ScTabOpDlg, LoseButtonFocusHdl, formula::WeldRefButton&, void)
+{
+    bDlgLostFocus = !m_xDialog->has_toplevel_focus();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
