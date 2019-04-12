@@ -205,7 +205,6 @@ void SequentialAssign::checkForSecondAssign(Stmt const* firstStmt, Stmt const* s
             if (auto declRefExprLHS = dyn_cast<DeclRefExpr>(ignore(operatorCall->getArg(0))))
                 if (declRefExprLHS->getDecl() == varDecl)
                 {
-                    firstStmt->dump();
                     report(DiagnosticsEngine::Warning,
                            "simplify by merging with the preceding assignment",
                            compat::getBeginLoc(stmt))
@@ -222,7 +221,6 @@ void SequentialAssign::checkForSecondAssign(Stmt const* firstStmt, Stmt const* s
             if (auto declRefExpr = dyn_cast<DeclRefExpr>(ignore(binaryOp->getLHS())))
                 if (declRefExpr->getDecl() == varDecl)
                 {
-                    firstStmt->dump();
                     report(DiagnosticsEngine::Warning,
                            "simplify by merging with the preceding assignment",
                            compat::getBeginLoc(stmt))
