@@ -159,7 +159,8 @@ public:
     static bool GetGraphicFromAny(const OUString& rMimeType,
                                   const css::uno::Any & rValue,
                                   const OUString& rReferer,
-                                  Graphic& rGrf);
+                                  Graphic& rGrf,
+                                  weld::Window* pParentWin);
 
 private:
                 LinkManager( const LinkManager& ) = delete;
