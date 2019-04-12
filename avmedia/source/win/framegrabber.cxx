@@ -173,7 +173,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
                 SUCCEEDED( pDet->GetBitmapBits( 0, &nSize, nullptr, nWidth, nHeight ) ) &&
                 ( nSize > 0  ) )
             {
-                auto pBuffer = std::unique_ptr<char[]>(new char[ nSize ]);
+                auto pBuffer = std::make_unique<char[]>(nSize);
 
                 try
                 {
