@@ -5870,7 +5870,7 @@ void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
         const ExtTextInputAttr nVal = ExtTextInputAttr::DottedUnderline |
                                 ExtTextInputAttr::Highlight;
         const std::vector<ExtTextInputAttr> aAttrs( nL, nVal );
-        CommandExtTextInputData aCETID( sStr, &aAttrs[0], nL,
+        CommandExtTextInputData aCETID( sStr, aAttrs.data(), nL,
                                         0, false );
 
         //fdo#33092. If the current input language is the default
