@@ -12,6 +12,7 @@
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/wmf.hxx>
 
 using namespace css;
@@ -20,12 +21,12 @@ namespace vcl
 {
 namespace graphic
 {
-Graphic loadFromURL(OUString const& rURL)
+Graphic loadFromURL(OUString const& rURL, weld::Window* pParentWin)
 {
     Graphic aGraphic;
 
-    std::unique_ptr<SvStream> pInputStream
-        = utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ);
+    std::unique_ptr<SvStream> pInputStream = utl::UcbStreamHelper::CreateStream(
+        rURL, StreamMode::READ, pParentWin ? pParentWin->GetXWindow() : nullptr);
 
     if (pInputStream)
     {
