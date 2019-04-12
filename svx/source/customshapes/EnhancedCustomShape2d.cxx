@@ -1189,8 +1189,43 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
     return bRetValue;
 }
 
+const ShapeType2AdjustCalcMap aSpecialShapeType2AdjustCalcMap(
+{
+    {"ooxml-wedgeRectCallout_0", AdjustCalc::CoordMinusCenter_WH},
+    {"ooxml-wedgeRoundRectCallout_0", AdjustCalc::CoordMinusCenter_WH},
+    {"ooxml-wedgeEllipseCallout_0", AdjustCalc::CoordMinusCenter_WH},
+    {"ooxml-rightArrow_0", AdjustCalc::CenterMinusCoord_WHd2},
+    {"ooxml-rightArrow_1", AdjustCalc::WHMinusCoord_ss},
+});
+
+static AdjustCalc lcl_getXYAdjustCalc(const OUString sShapeType, const sal_uInt32 nIndex)
+{
+    OUString sKey(sShapeType + "_" + OUString::number(nIndex));
+    ShapeType2AdjustCalcMap::const_iterator pSpecialAdjustCalc = aSpecialShapeType2AdjustCalcMap.find(sKey);
+    if (pSpecialAdjustCalc == aSpecialShapeType2AdjustCalcMap.end())
+    {
+        if (sShapeType.startsWith("ooxml"))
+            return AdjustCalc::Coord_WH; // works with all not special ooxml shapes
+        else
+            return AdjustCalc::unknown;
+    }
+    else
+        return pSpecialAdjustCalc->second;
+}
+
 bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex, const css::awt::Point& rPosition )
 {
+    OUString sShapeType;
+    const SdrCustomShapeGeometryItem& rGeometryItem(mrSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+    const Any* pAny = rGeometryItem.GetPropertyValueByName( "Type" );
+    if ( pAny )
+    {
+        *pAny >>= sShapeType;
+    }
+    else
+    {
+        sShapeType = "non-primitive"; // ODF default
+    }
     bool bRetValue = false;
     if ( nIndex < GetHdlCount() )
     {
@@ -1320,17 +1355,60 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
             }
             else
             {
-                if ( aHandle.nFlags & HandleFlags::REFX )
+                AdjustCalc eAdjustCalcMethod = lcl_getXYAdjustCalc(sShapeType, nIndex);
+                switch (eAdjustCalcMethod)
                 {
-                    nFirstAdjustmentValue = aHandle.nRefX;
-                    fPos1 *= 100000.0;
-                    fPos1 /= fWidth;
-                }
-                if ( aHandle.nFlags & HandleFlags::REFY )
-                {
-                    nSecondAdjustmentValue = aHandle.nRefY;
-                    fPos2 *= 100000.0;
-                    fPos2 /= fHeight;
+                    case AdjustCalc::Coord_WH:
+                        if ( aHandle.nFlags & HandleFlags::REFX )
+                        {
+                            nFirstAdjustmentValue = aHandle.nRefX;
+                            fPos1 *= 100000.0;
+                            fPos1 /= fWidth;
+                        }
+                        if ( aHandle.nFlags & HandleFlags::REFY )
+                        {
+                            nSecondAdjustmentValue = aHandle.nRefY;
+                            fPos2 *= 100000.0;
+                            fPos2 /= fHeight;
+                        }
+                        break;
+                    case AdjustCalc::CoordMinusCenter_WH:
+                        if ( aHandle.nFlags & HandleFlags::REFX )
+                        {
+                            nFirstAdjustmentValue = aHandle.nRefX;
+                            fPos1 = (fPos1 - fWidth/2.0) / fWidth * 100000.0;
+                        }
+                        if ( aHandle.nFlags & HandleFlags::REFY )
+                        {
+                            nSecondAdjustmentValue = aHandle.nRefY;
+                            fPos2 = (fPos2 - fHeight/2.0) / fHeight * 100000.0;
+                        }
+                        break;
+                    case AdjustCalc::CenterMinusCoord_WHd2:
+                        if ( aHandle.nFlags & HandleFlags::REFX )
+                        {
+                            nFirstAdjustmentValue = aHandle.nRefX;
+                            fPos1 = (fWidth/2.0 - fPos1) / (fWidth/2.0) * 100000.0;
+                        }
+                        if ( aHandle.nFlags & HandleFlags::REFY )
+                        {
+                            nSecondAdjustmentValue = aHandle.nRefY;
+                            fPos2 = (fHeight/2.0 - fPos2) / (fHeight/2.0) * 100000.0;
+                        }
+                        break;
+                    case AdjustCalc::WHMinusCoord_ss:
+                        if ( aHandle.nFlags & HandleFlags::REFX )
+                        {
+                            nFirstAdjustmentValue = aHandle.nRefX;
+                            fPos1 = (fWidth - fPos1) / std::min(fWidth, fHeight) * 100000.0;
+                        }
+                        if ( aHandle.nFlags & HandleFlags::REFY )
+                        {
+                            nSecondAdjustmentValue = aHandle.nRefY;
+                            fPos2 = (fHeight - fPos2) /std::min(fWidth, fHeight) * 100000.0;
+                        }
+                        break;
+                    default: break;
                 }
                 if ( nFirstAdjustmentValue >= 0 )
                 {

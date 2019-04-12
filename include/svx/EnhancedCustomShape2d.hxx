@@ -39,6 +39,7 @@
 
 #include <memory>
 #include <vector>
+#include <unordered_map>
 
 class Color;
 class SdrObject;
@@ -63,6 +64,26 @@ enum class HandleFlags
     REFANGLE               = 0x2000,
     REFR                   = 0x4000,
 };
+
+enum class AdjustCalc
+{
+    CoordMinusCenter_WH,
+    CoordMinusCenter_WHd2,
+    Coord_WH,
+    Coord_ss,
+    CenterMinusCoord_WH,
+    CenterMinusCoord_WHd2,
+    CenterMinusCoord_ss,
+    CenterMinusCoord_ssd2,
+    CenterMinusHstar5_H,
+    CenterMinusHstar7_H,
+    WHMinusCoord_ss,
+    unknown,
+};
+
+typedef std::unordered_map<OUString, AdjustCalc, OUStringHash> ShapeType2AdjustCalcMap;
+
+
 namespace o3tl
 {
     template<> struct typed_flags<HandleFlags> : is_typed_flags<HandleFlags, 0x7fef> {};
