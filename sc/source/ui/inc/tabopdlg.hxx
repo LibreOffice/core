@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_TABOPDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_TABOPDLG_HXX
 
-#include <vcl/fixed.hxx>
 #include <address.hxx>
 #include "anyrefdg.hxx"
 
@@ -35,37 +34,21 @@ enum ScTabOpErr
     TABOPERR_NOROWFORMULA
 };
 
-class ScTabOpDlg : public ScAnyRefDlg
+class ScTabOpDlg : public ScAnyRefDlgController
 {
 public:
-                    ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
-                                ScDocument*     pDocument,
-                                const ScRefAddress& rCursorPos );
-                    virtual ~ScTabOpDlg() override;
-    virtual void    dispose() override;
+    ScTabOpDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
+               ScDocument*     pDocument,
+               const ScRefAddress& rCursorPos);
+    virtual ~ScTabOpDlg() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
     virtual bool    IsRefInputMode() const override { return true; }
     virtual void    SetActive() override;
 
-    virtual bool    Close() override;
+    virtual void    Close() override;
 
 private:
-    VclPtr<FixedText> m_pFtFormulaRange;
-    VclPtr<formula::RefEdit> m_pEdFormulaRange;
-    VclPtr<formula::RefButton> m_pRBFormulaRange;
-
-    VclPtr<FixedText> m_pFtRowCell;
-    VclPtr<formula::RefEdit> m_pEdRowCell;
-    VclPtr<formula::RefButton> m_pRBRowCell;
-
-    VclPtr<FixedText> m_pFtColCell;
-    VclPtr<formula::RefEdit> m_pEdColCell;
-    VclPtr<formula::RefButton> m_pRBColCell;
-
-    VclPtr<OKButton>       m_pBtnOk;
-    VclPtr<CancelButton>   m_pBtnCancel;
-
     ScRefAddress    theFormulaCell;
     ScRefAddress    theFormulaEnd;
     ScRefAddress    theRowCell;
@@ -73,7 +56,6 @@ private:
 
     ScDocument* const         pDoc;
     const SCTAB         nCurTab;
-    VclPtr<formula::RefEdit>   pEdActive;
     bool                bDlgLostFocus;
     const OUString      errMsgNoFormula;
     const OUString      errMsgNoColRow;
@@ -82,12 +64,31 @@ private:
     const OUString      errMsgNoColFormula;
     const OUString      errMsgNoRowFormula;
 
+    formula::WeldRefEdit* m_pEdActive;
+    std::unique_ptr<weld::Label> m_xFtFormulaRange;
+    std::unique_ptr<formula::WeldRefEdit> m_xEdFormulaRange;
+    std::unique_ptr<formula::WeldRefButton> m_xRBFormulaRange;
+
+    std::unique_ptr<weld::Label> m_xFtRowCell;
+    std::unique_ptr<formula::WeldRefEdit> m_xEdRowCell;
+    std::unique_ptr<formula::WeldRefButton> m_xRBRowCell;
+
+    std::unique_ptr<weld::Label> m_xFtColCell;
+    std::unique_ptr<formula::WeldRefEdit> m_xEdColCell;
+    std::unique_ptr<formula::WeldRefButton> m_xRBColCell;
+
+    std::unique_ptr<weld::Button> m_xBtnOk;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
+
     void    Init();
     void    RaiseError( ScTabOpErr eError );
 
-    DECL_LINK( BtnHdl, Button*, void );
-    DECL_LINK( GetFocusHdl, Control&, void );
-    DECL_LINK( LoseFocusHdl, Control&, void );
+    DECL_LINK( BtnHdl, weld::Button&, void );
+    DECL_LINK( GetEditFocusHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( LoseEditFocusHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( GetButtonFocusHdl, formula::WeldRefButton&, void );
+    DECL_LINK( LoseButtonFocusHdl, formula::WeldRefButton&, void );
+
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TABOPDLG_HXX
