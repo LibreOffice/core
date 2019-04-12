@@ -1000,6 +1000,28 @@ DECLARE_OOXMLIMPORT_TEST(testTdf123054, "tdf123054.docx")
                          getProperty<OUString>(getParagraph(20), "ParaStyleName"));
 }
 
+// The (tdf124678_no_leading_paragraph.odt, tdf124678_with_leading_paragraph.odt) documents are the same,
+// except:
+// - tdf124678_no_leading_paragraph.odt doesn't contain leading empty paragraph
+//   before the first section
+//
+DECLARE_OOXMLEXPORT_TEST(testTdf124678_case1, "tdf124678_no_leading_paragraph.odt")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("First page header text", OUString(""), parseDump("/root/page[1]/header/txt"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Second page header text", OUString("HEADER"), parseDump("/root/page[2]/header/txt"));
+}
+
+// The (tdf124678_no_leading_paragraph.odt, tdf124678_with_leading_paragraph.odt) documents are the same,
+// except:
+// - tdf124678_no_leading_paragraph.odt doesn't contain leading empty paragraph
+//   before the first section
+//
+DECLARE_OOXMLEXPORT_TEST(testTdf124678_case2, "tdf124678_with_leading_paragraph.odt")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("First page header text", OUString(""), parseDump("/root/page[1]/header/txt"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Second page header text", OUString("HEADER"), parseDump("/root/page[2]/header/txt"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
