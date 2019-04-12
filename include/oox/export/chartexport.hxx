@@ -101,6 +101,7 @@ private:
     css::uno::Reference< css::frame::XModel > mxChartModel;
     css::uno::Reference< css::chart::XDiagram > mxDiagram;
     css::uno::Reference< css::chart2::XDiagram > mxNewDiagram;
+    std::shared_ptr<URLTransformer> mpURLTransformer;
 
     // members filled by InitRangeSegmentationProperties (retrieved from DataProvider)
     bool mbHasCategoryLabels; //if the categories are only automatically generated this will be false
@@ -213,6 +214,8 @@ public:
     ChartExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, css::uno::Reference< css::frame::XModel > const & xModel,
                  ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType );
     virtual ~ChartExport() {}
+
+    void SetURLTranslator(const std::shared_ptr<URLTransformer>& pTransformer);
 
     const css::uno::Reference< css::frame::XModel >& getModel(){ return mxChartModel; }
 

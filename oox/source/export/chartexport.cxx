@@ -382,6 +382,12 @@ ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< f
     , mbStacked(false)
     , mbPercent(false)
 {
+    mpURLTransformer.reset(new URLTransformer);
+}
+
+void ChartExport::SetURLTranslator(const std::shared_ptr<URLTransformer>& pTransformer)
+{
+    mpURLTransformer = pTransformer;
 }
 
 sal_Int32 ChartExport::getChartType( )
@@ -445,6 +451,8 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
 {
     FSHelperPtr pFS = GetFS();
 
+    Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
+
     pFS->startElementNS( mnXmlNamespace, XML_graphicFrame, FSEND );
 
     pFS->startElementNS( mnXmlNamespace, XML_nvGraphicFramePr, FSEND );
@@ -455,10 +463,26 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
     if (xNamed.is())
         sName = xNamed->getName();
 
-    pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
+    pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id,     I32S( nID ),
                           XML_name,   sName.toUtf8(),
                           FSEND );
+
+    OUString sURL;
+    if ( GetProperty( xShapeProps, "URL" ) )
+        mAny >>= sURL;
+    if( !sURL.isEmpty() )
+    {
+        OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
+        oox::getRelationship(Relationship::HYPERLINK),
+        mpURLTransformer->getTransformedString(sURL),
+        mpURLTransformer->isExternalURL(sURL));
+
+        mpFS->singleElementNS( XML_a, XML_hlinkClick,
+        FSNS( XML_r,XML_id ), sRelId.toUtf8(),
+        FSEND );
+    }
+    pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
 
     pFS->singleElementNS( mnXmlNamespace, XML_cNvGraphicFramePr,
                           FSEND );

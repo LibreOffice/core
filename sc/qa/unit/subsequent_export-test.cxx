@@ -214,6 +214,7 @@ public:
     void testTdf115192XLSX();
     void testTdf91634XLSX();
     void testTdf115159();
+    void testTdf123645XLSX();
 
     void testXltxExport();
 
@@ -335,6 +336,7 @@ public:
     CPPUNIT_TEST(testTdf115192XLSX);
     CPPUNIT_TEST(testTdf91634XLSX);
     CPPUNIT_TEST(testTdf115159);
+    CPPUNIT_TEST(testTdf123645XLSX);
 
     CPPUNIT_TEST(testXltxExport);
 
@@ -4223,6 +4225,28 @@ void ScExportTest::testTdf115159()
     assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName", 1);
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf123645XLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("chart_hyperlink.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:graphicFrame/xdr:nvGraphicFramePr/xdr:cNvPr/a:hlinkClick", 1);
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:graphicFrame/xdr:nvGraphicFramePr/xdr:cNvPr/a:hlinkClick", 1);
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[3]/xdr:graphicFrame/xdr:nvGraphicFramePr/xdr:cNvPr/a:hlinkClick", 1);
+
+    xmlDocPtr pXmlRels = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels");
+    CPPUNIT_ASSERT(pXmlRels);
+    assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
+    assertXPathNoAttribute(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId3']", "TargetMode");
+    assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId5']", "TargetMode", "External");
+    assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "Target", "file:///C:/Users/tothtun/Desktop/test.xlsx");
+    assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId3']", "Target", "#Sheet2!A1");
+    assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId5']", "Target", "https://bugs.documentfoundation.org/show_bug.cgi?id=123645");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
