@@ -213,7 +213,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl::getIssuerName() {
 
         // Here the cbIssuer count the last 0x00 , take care.
         if( cchIssuer != 0 ) {
-            auto issuer = std::unique_ptr<wchar_t[]>(new wchar_t[ cchIssuer ]);
+            auto issuer = std::make_unique<wchar_t[]>(cchIssuer);
 
             cchIssuer = CertNameToStrW(
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
@@ -251,7 +251,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl::getSubjectName()
 
         if( cchSubject != 0 )
         {
-            auto subject = std::unique_ptr<wchar_t[]>(new wchar_t[ cchSubject ]);
+            auto subject = std::make_unique<wchar_t[]>(cchSubject);
 
             cchSubject = CertNameToStrW(
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,

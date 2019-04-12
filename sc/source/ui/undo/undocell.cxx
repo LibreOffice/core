@@ -990,7 +990,7 @@ void ScUndoRangeNames::DoChange( bool bUndo )
 
     if ( bUndo )
     {
-        auto p = std::unique_ptr<ScRangeName>(new ScRangeName( *pOldRanges ));
+        auto p = std::make_unique<ScRangeName>(*pOldRanges);
         if (mnTab >= 0)
             rDoc.SetRangeName( mnTab, std::move(p) );
         else
@@ -998,7 +998,7 @@ void ScUndoRangeNames::DoChange( bool bUndo )
     }
     else
     {
-        auto p = std::unique_ptr<ScRangeName>(new ScRangeName( *pNewRanges ));
+        auto p = std::make_unique<ScRangeName>(*pNewRanges);
         if (mnTab >= 0)
             rDoc.SetRangeName( mnTab, std::move(p) );
         else

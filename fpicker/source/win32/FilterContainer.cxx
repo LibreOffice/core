@@ -239,7 +239,7 @@ OUString makeWinFilterBuffer( CFilterContainer& aFilterContainer )
     if ( !reqBuffSize )
         return OUString( );
 
-    auto pBuff = std::unique_ptr<sal_Unicode[]>(new sal_Unicode[reqBuffSize]);
+    auto pBuff = std::make_unique<sal_Unicode[]>(reqBuffSize);
 
     // initialize the buffer with 0
     ZeroMemory( pBuff.get(), sizeof( sal_Unicode ) * reqBuffSize );

@@ -125,7 +125,7 @@ std::wstring getShortPathName( const std::wstring& aLongName )
 
     if ( length != 0 )
     {
-        auto buffer = std::unique_ptr<WCHAR[]>(new WCHAR[ length+1 ]);
+        auto buffer = std::make_unique<WCHAR[]>( length+1 );
         length = GetShortPathNameW( aLongName.c_str(), buffer.get(), length );
         if ( length != 0 )
             shortName = std::wstring( buffer.get() );
