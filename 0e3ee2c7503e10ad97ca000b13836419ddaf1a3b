@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_817afc85",
+        "filename": "toolkit/source/awt/vclxwindow.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-12T07:20:59Z",
+      "side": 1,
+      "message": "Not at all related to your change, but it is extremely dodgy that we deliver some events immediately, and some events via some queueing mechanism.\n\nOn busy systems, that means that we might get event re-ordering. I wonder if we use this mechanism in the ui-tests, and if so, if that could affect the stability of those tests.",
+      "revId": "0e3ee2c7503e10ad97ca000b13836419ddaf1a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
