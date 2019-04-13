@@ -137,15 +137,22 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/util/XCloneable.hpp
     - com/sun/star/xml/sax/XAttributeList.hpp
-    include/comphelper/componentmodule.hxx:
+    include/comphelper/ChainablePropertySetInfo.hxx:
     # base class has to be a complete type
-    - com/sun/star/lang/XSingleServiceFactory.hpp
-    include/comphelper/configurationhelper.hxx:
-    # Needed for implicit destructor
-    - com/sun/star/uno/Any.hxx
+    - com/sun/star/beans/XPropertySetInfo.hpp
+    include/comphelper/containermultiplexer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XContainerListener.hpp
     include/comphelper/docpasswordrequest.hxx:
     # base class has to be a complete type
     - com/sun/star/task/XInteractionRequest.hpp
+    include/comphelper/enumhelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XEnumeration.hpp
+    - com/sun/star/lang/XEventListener.hpp
+    include/comphelper/evtlistenerhlp.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XEventListener.hpp
     include/comphelper/interaction.hxx:
     # base class has to be a complete type
     - com/sun/star/task/XInteractionAbort.hpp
@@ -156,6 +163,9 @@ blacklist:
     include/comphelper/SelectionMultiplex.hxx:
     # base class has to be a complete type
     - com/sun/star/view/XSelectionChangeListener.hpp
+    include/comphelper/MasterPropertySetInfo.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySetInfo.hpp
     include/comphelper/namedvaluecollection.hxx:
     # Needed for template class
     - com/sun/star/beans/PropertyValue.hpp
@@ -167,22 +177,23 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/io/XInputStream.hpp
     - com/sun/star/io/XOutputStream.hpp
+    include/comphelper/propertysetinfo.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySetInfo.hpp
     include/comphelper/propmultiplex.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertyChangeListener.hpp
     include/comphelper/propertystatecontainer.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertyState.hpp
+    include/comphelper/seekableinput.hxx:
+    # base class has to be a complete type
+    - com/sun/star/io/XInputStream.hpp
+    - com/sun/star/io/XSeekable.hpp
     include/comphelper/seqstream.hxx:
     # base class has to be a complete type
     - com/sun/star/io/XInputStream.hpp
     - com/sun/star/io/XSeekable.hpp
-    include/comphelper/sequence.hxx:
-    # Needed for implicit dtor
-    - com/sun/star/uno/Sequence.hxx
-    include/comphelper/sequenceashashmap.hxx:
-    # Needed for implicit dtor
-    - com/sun/star/uno/Sequence.hxx
     include/comphelper/servicedecl.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
@@ -190,15 +201,16 @@ blacklist:
     include/comphelper/servicehelper.hxx:
     # Needed for macro
     - rtl/instance.hxx
-    include/comphelper/simplefileaccessinteraction.hxx:
-    # base class has to be a complete type
-    - com/sun/star/task/XInteractionHandler.hpp
     include/comphelper/unique_disposing_ptr.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
     include/comphelper/uno3.hxx:
     # Needed for macro
     - comphelper/sequence.hxx
+    include/comphelper/weakeventlistener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XEventListener.hpp
+    - com/sun/star/lang/XComponent.hpp
     include/basegfx/utils/unopolypolygon.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp

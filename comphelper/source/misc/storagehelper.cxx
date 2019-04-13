@@ -20,7 +20,6 @@
 #include <config_gpgme.h>
 
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedStorage.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -36,7 +35,6 @@
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/xml/crypto/NSSInitializer.hpp>
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
-#include <com/sun/star/xml/crypto/XDigestContextSupplier.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
@@ -47,7 +45,6 @@
 #include <rtl/random.h>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include <sax/tools/converter.hxx>
 
 #include <ucbhelper/content.hxx>
 
@@ -60,7 +57,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #if HAVE_FEATURE_GPGME
-# include <gpgme.h>
 # include <context.h>
 # include <encryptionresult.h>
 # include <key.h>

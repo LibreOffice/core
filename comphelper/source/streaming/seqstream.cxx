@@ -26,8 +26,6 @@
 
 #include <osl/diagnose.h>
 
-#include <memory.h>
-
 namespace comphelper
 {
 using namespace ::com::sun::star::lang;

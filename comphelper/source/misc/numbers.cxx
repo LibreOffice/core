@@ -22,9 +22,7 @@
 #include <sal/log.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 
 
 namespace comphelper

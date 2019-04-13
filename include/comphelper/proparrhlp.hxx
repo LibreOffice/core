@@ -26,10 +26,6 @@
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 
-namespace cppu {
-    class IPropertyArrayHelper;
-}
-
 namespace comphelper
 {
 

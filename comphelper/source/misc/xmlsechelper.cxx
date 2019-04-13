@@ -20,13 +20,7 @@
 
 #include <comphelper/xmlsechelper.hxx>
 
-#include <o3tl/deleter.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/fixed.hxx>
-#include <svl/solar.hrc>
-#include <unotools/syslocale.hxx>
-#include <rtl/ustring.h>
-#include <rtl/ustrbuf.h>
+#include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <vector>
 

@@ -18,11 +18,8 @@
  */
 
 #include <comphelper/accessiblewrapper.hxx>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-
-#include <algorithm>
 
 using namespace ::comphelper;
 using namespace ::com::sun::star::accessibility;

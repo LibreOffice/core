@@ -11,7 +11,6 @@
 #include <comphelper/docpasswordhelper.hxx>
 
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <iomanip>
 
 #include <cppunit/TestFixture.h>

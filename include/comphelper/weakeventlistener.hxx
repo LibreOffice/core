@@ -24,10 +24,9 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 
-
-namespace com { namespace sun { namespace star { namespace lang { class XComponent; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XEventListener; } } } }
 namespace com { namespace sun { namespace star { namespace uno { class XWeak; } } } }
 
 namespace comphelper
