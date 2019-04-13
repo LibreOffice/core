@@ -167,10 +167,8 @@ BackingComp::BackingComp()
 
 css::uno::Any SAL_CALL BackingComp::queryInterface( /*IN*/ const css::uno::Type& aType )
 {
-    css::uno::Any aResult;
-
     // first look for own supported interfaces
-    aResult = ::cppu::queryInterface(
+    css::uno::Any aResult = ::cppu::queryInterface(
                 aType,
                 static_cast< css::lang::XTypeProvider* >(this),
                 static_cast< css::lang::XServiceInfo* >(this),
