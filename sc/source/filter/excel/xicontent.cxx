@@ -124,8 +124,7 @@ void lclAppendString32( OUString& rString, XclImpStream& rStrm, bool b16Bit )
 /** Reads 32-bit string length and ignores following 16-bit character array. */
 void lclIgnoreString32( XclImpStream& rStrm )
 {
-    sal_uInt32 nChars(0);
-    nChars = rStrm.ReaduInt32();
+    sal_uInt32 nChars = rStrm.ReaduInt32();
     nChars *= 2;
     rStrm.Ignore( nChars );
 }
@@ -241,8 +240,7 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
     XclGuid aGuid;
     rStrm >> aGuid;
     rStrm.Ignore( 4 );
-    sal_uInt32 nFlags(0);
-    nFlags = rStrm.ReaduInt32();
+    sal_uInt32 nFlags = rStrm.ReaduInt32();
 
     OSL_ENSURE( aGuid == XclTools::maGuidStdLink, "XclImpHyperlink::ReadEmbeddedData - unknown header GUID" );
 
@@ -275,14 +273,12 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
 
         if( aGuid == XclTools::maGuidFileMoniker )
         {
-            sal_uInt16 nLevel = 0; // counter for level to climb down in path
-            nLevel = rStrm.ReaduInt16();
+            sal_uInt16 nLevel = rStrm.ReaduInt16(); // counter for level to climb down in path
             xShortName.reset( new OUString );
             lclAppendString32( *xShortName, rStrm, false );
             rStrm.Ignore( 24 );
 
-            sal_uInt32 nStrLen = 0;
-            nStrLen = rStrm.ReaduInt32();
+            sal_uInt32 nStrLen = rStrm.ReaduInt32();
             if( nStrLen )
             {
                 nStrLen = rStrm.ReaduInt32();
@@ -297,8 +293,7 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
         }
         else if( aGuid == XclTools::maGuidUrlMoniker )
         {
-            sal_uInt32 nStrLen(0);
-            nStrLen = rStrm.ReaduInt32();
+            sal_uInt32 nStrLen = rStrm.ReaduInt32();
             nStrLen /= 2;       // it's byte count here...
             xLongName.reset( new OUString );
             lclAppendString32( *xLongName, rStrm, nStrLen, true );
@@ -765,8 +760,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     ExcelToSc& rFmlaConv = rRoot.GetOldFmlaConverter();
 
     // flags
-    sal_uInt32 nFlags(0);
-    nFlags = rStrm.ReaduInt32();
+    sal_uInt32 nFlags = rStrm.ReaduInt32();
 
     // message strings
     /*  Empty strings are single NUL characters in Excel (string length is 1).
@@ -982,8 +976,7 @@ void XclImpWebQuery::ReadWqstring( XclImpStream& rStrm )
 void XclImpWebQuery::ReadWqsettings( XclImpStream& rStrm )
 {
     rStrm.Ignore( 10 );
-    sal_uInt16 nFlags(0);
-    nFlags = rStrm.ReaduInt16();
+    sal_uInt16 nFlags = rStrm.ReaduInt16();
     rStrm.Ignore( 10 );
     mnRefresh = rStrm.ReaduInt16();
 
@@ -1195,8 +1188,7 @@ XclImpDecrypterRef lclReadFilepass8( XclImpStream& rStrm )
 {
     XclImpDecrypterRef xDecr;
 
-    sal_uInt16 nMode(0);
-    nMode = rStrm.ReaduInt16();
+    sal_uInt16 nMode = rStrm.ReaduInt16();
     switch( nMode )
     {
         case EXC_FILEPASS_BIFF5:
@@ -1347,15 +1339,13 @@ void XclImpSheetProtectBuffer::ReadOptions( XclImpStream& rStrm, SCTAB nTab )
     // feature data.  If -1 it depends on the feature type imported earlier.
     // For enhanced protection data, the size is always 4.  For the most xls
     // documents out there this value is almost always -1.
-    sal_Int32 nFlagSize(0);
-    nFlagSize = rStrm.ReadInt32();
+    sal_Int32 nFlagSize = rStrm.ReadInt32();
     if (nFlagSize != -1)
         return;
 
     // There are actually 4 bytes to read, but the upper 2 bytes currently
     // don't store any bits.
-    sal_uInt16 nOptions(0);
-    nOptions = rStrm.ReaduInt16();
+    sal_uInt16 nOptions = rStrm.ReaduInt16();
 
     Sheet* pSheet = GetSheetItem(nTab);
     if (pSheet)
@@ -1371,8 +1361,7 @@ void XclImpSheetProtectBuffer::AppendEnhancedProtection( const ScEnhancedProtect
 
 void XclImpSheetProtectBuffer::ReadPasswordHash( XclImpStream& rStrm, SCTAB nTab )
 {
-    sal_uInt16 nHash(0);
-    nHash = rStrm.ReaduInt16();
+    sal_uInt16 nHash = rStrm.ReaduInt16();
     Sheet* pSheet = GetSheetItem(nTab);
     if (pSheet)
         pSheet->mnPasswordHash = nHash;

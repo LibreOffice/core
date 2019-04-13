@@ -1077,8 +1077,7 @@ void ScCsvGrid::ImplDrawColumnHeader( OutputDevice& rOutDev, sal_uInt32 nColInde
 
 void ScCsvGrid::ImplDrawCellText( const Point& rPos, const OUString& rText )
 {
-    OUString aPlainText( rText );
-    aPlainText = aPlainText.replaceAll( "\t", " " );
+    OUString aPlainText = rText.replaceAll( "\t", " " );
     aPlainText = aPlainText.replaceAll( "\n", " " );
     mpEditEngine->SetPaperSize( maEdEngSize );
 

@@ -367,9 +367,8 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
             case 0x19: // Special Attribute                     [327 279]
             {
                 sal_uInt16 nData(0), nFactor(0);
-                sal_uInt8 nOpt(0);
 
-                nOpt = aIn.ReaduInt8();
+                sal_uInt8 nOpt = aIn.ReaduInt8();
                 nData = aIn.ReaduInt16();
                 nFactor = 2;
 
@@ -1009,9 +1008,8 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
             case 0x19: // Special Attribute                     [327 279]
             {
                 sal_uInt16 nData(0), nFactor(0);
-                sal_uInt8 nOpt(0);
 
-                nOpt = aIn.ReaduInt8();
+                sal_uInt8 nOpt = aIn.ReaduInt8();
                 nData = aIn.ReaduInt16();
                 nFactor = 2;
 
