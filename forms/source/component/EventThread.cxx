@@ -57,9 +57,7 @@ OComponentEventThread::~OComponentEventThread()
 
 Any SAL_CALL OComponentEventThread::queryInterface(const Type& _rType)
 {
-    Any aReturn;
-
-    aReturn = OWeakObject::queryInterface(_rType);
+    Any aReturn = OWeakObject::queryInterface(_rType);
 
     if (!aReturn.hasValue())
         aReturn = ::cppu::queryInterface(_rType,

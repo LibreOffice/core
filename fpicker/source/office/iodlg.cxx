@@ -2235,13 +2235,11 @@ bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& rFilt
             }
 
             // cut off filter
-            rFilter = aReversePath;
-            rFilter = rFilter.copy( 0, nPathTokenPos );
+            rFilter = aReversePath.copy( 0, nPathTokenPos );
             rFilter = comphelper::string::reverseString(rFilter);
 
             // determine folder
-            rPath = aReversePath;
-            rPath = rPath.copy( nPathTokenPos );
+            rPath = aReversePath.copy( nPathTokenPos );
             rPath = comphelper::string::reverseString(rPath);
         }
         else

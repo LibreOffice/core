@@ -549,8 +549,7 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
 
 void FilterCache::removeStatePropsFromItem(CacheItem& rItem)
 {
-    CacheItem::iterator pIt;
-    pIt = rItem.find(PROPNAME_FINALIZED);
+    CacheItem::iterator pIt = rItem.find(PROPNAME_FINALIZED);
     if (pIt != rItem.end())
         rItem.erase(pIt);
     pIt = rItem.find(PROPNAME_MANDATORY);
@@ -1575,8 +1574,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
             {
                 css::uno::Reference< css::beans::XMultiPropertySet >
                     xPropSet( xItem, css::uno::UNO_QUERY_THROW);
-                css::uno::Sequence< css::uno::Any > aValues;
-                aValues = xPropSet->getPropertyValues(rNames);
+                css::uno::Sequence< css::uno::Any > aValues = xPropSet->getPropertyValues(rNames);
 
                 for (sal_Int32 i = 0; i < aValues.getLength(); i++)
                     aItem[rNames[i]] = aValues[i];
@@ -1600,8 +1598,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
             {
                 css::uno::Reference< css::beans::XMultiPropertySet >
                     xPropSet( xItem, css::uno::UNO_QUERY_THROW);
-                css::uno::Sequence< css::uno::Any > aValues;
-                aValues = xPropSet->getPropertyValues(rNames);
+                css::uno::Sequence< css::uno::Any > aValues = xPropSet->getPropertyValues(rNames);
 
                 for (sal_Int32 i = 0; i < rNames.getLength(); i++)
                 {
