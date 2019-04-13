@@ -1189,8 +1189,42 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
     return bRetValue;
 }
 
+AdjustCalc::pMethod AdjustCalc::getSpecificMethod(OUString& sShapeType, sal_uInt32 nHandleIndex, bool IsForFirstAdjust)
+{
+    if (sShapeType == "ooxml-wedgeRectCallout" ||
+        sShapeType == "ooxml-wedgeRoundRectCallout" ||
+        sShapeType == "ooxml-wedgeEllipseCallout")
+            return (IsForFirstAdjust) ? &CoordMinusCenter_W : &CoordMinusCenter_H;
+
+    if (sShapeType == "ooxml-rightArrow")
+    {
+        if (nHandleIndex == 0)
+            return (IsForFirstAdjust) ? &CenterMinusCoord_Wd2 : &CenterMinusCoord_Hd2;
+        else
+            return (IsForFirstAdjust) ? &WMinusCoord_ss : &HMinusCoord_ss;
+    }
+
+    if (sShapeType.startsWith("ooxml"))
+    {
+        return (IsForFirstAdjust) ? &Coord_W : &Coord_H;
+    }
+
+    return (IsForFirstAdjust) ? &dummy1 :  &dummy2;
+}
+
 bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex, const css::awt::Point& rPosition )
 {
+    OUString sShapeType;
+    const SdrCustomShapeGeometryItem& rGeometryItem(mrSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+    const Any* pAny = rGeometryItem.GetPropertyValueByName( "Type" );
+    if ( pAny )
+    {
+        *pAny >>= sShapeType;
+    }
+    else
+    {
+        sShapeType = "non-primitive"; // ODF default
+    }
     bool bRetValue = false;
     if ( nIndex < GetHdlCount() )
     {
@@ -1320,17 +1354,18 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
             }
             else
             {
+
                 if ( aHandle.nFlags & HandleFlags::REFX )
                 {
                     nFirstAdjustmentValue = aHandle.nRefX;
-                    fPos1 *= 100000.0;
-                    fPos1 /= fWidth;
+                    AdjustCalc::pMethod pSpecificMethod = AdjustCalc::getSpecificMethod(sShapeType, nIndex, true /*IsForFirstAdjust*/);
+                    fPos1 = (*pSpecificMethod)(fWidth, fHeight, fPos1, fPos2);
                 }
                 if ( aHandle.nFlags & HandleFlags::REFY )
                 {
                     nSecondAdjustmentValue = aHandle.nRefY;
-                    fPos2 *= 100000.0;
-                    fPos2 /= fHeight;
+                    AdjustCalc::pMethod pSpecificMethod = AdjustCalc::getSpecificMethod(sShapeType, nIndex, false /*IsForFirstAdjust*/);
+                    fPos2 = (*pSpecificMethod)(fWidth, fHeight, fPos1, fPos2);
                 }
                 if ( nFirstAdjustmentValue >= 0 )
                 {

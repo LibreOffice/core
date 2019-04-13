@@ -215,6 +215,42 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
                                         EnhancedCustomShape2d::Handle& rDestinationHandle );
         SAL_DLLPRIVATE static void SwapStartAndEndArrow( SdrObject* pObj );
 };
+
+class AdjustCalc
+{
+    public:
+    typedef double(*pMethod)(double, double, double, double);
+    static double dummy1(const double/* fW */, const double /*fH*/, const double fPos1, const double /*fPos2*/) { return fPos1;}
+    static double dummy2(const double /*fW*/, const double /*fH*/, const double /*fPos1*/, const double fPos2) { return fPos2;}
+    static double Coord_W(const double fW, const double /*fH*/, const double fPos1, const double /*fPos2*/) {return fPos1 * 100000.0 / fW;}
+    static double Coord_H(const double /*fW*/, const double fH, const double /*fPos1*/, const double fPos2) {return fPos2 * 100000.0 / fH;}
+    static double CoordMinusCenter_W(const double fW, const double /*fH*/, const double fPos1, const double /*fPos2*/)
+    {
+        return (fPos1 - fW/2.0) / fW * 100000.0;
+    }
+    static double CoordMinusCenter_H(const double /*fW*/, const double fH, const double /*fPos1*/, const double fPos2)
+    {
+        return (fPos2 - fH/2.0) / fH * 100000.0;
+    }
+    static double CenterMinusCoord_Wd2(const double fW, const double /*fH*/, const double fPos1, const double /*fPos2*/)
+    {
+        return (fW/2.0 - fPos1) / (fW/2.0) * 100000.0;
+    }
+    static double CenterMinusCoord_Hd2(const double /*fW*/, const double fH, const double /*fPos1*/, const double fPos2)
+    {
+        return (fH/2.0 - fPos2) / (fH/2.0) * 100000.0;
+    }
+    static double WMinusCoord_ss(const double fW, const double fH, const double fPos1, const double /*fPos2*/)
+    {
+        return (fW - fPos1) / std::min(fW, fH) * 100000.0;
+    }
+    static double HMinusCoord_ss(const double fW, const double fH, const double /*fPos1*/, const double fPos2)
+    {
+        return (fH - fPos2) / std::min(fW, fH) * 100000.0;
+    }
+
+    static pMethod getSpecificMethod(OUString& sShapeType, sal_uInt32 nHandleIndex, bool IsForFirstAdjust = true);
+};
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
