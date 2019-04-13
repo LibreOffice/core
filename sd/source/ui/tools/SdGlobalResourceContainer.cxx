@@ -108,8 +108,7 @@ void SdGlobalResourceContainer::AddResource (
 {
     ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
-    Implementation::SharedResourceList::iterator iResource;
-    iResource = ::std::find (
+    Implementation::SharedResourceList::iterator iResource = ::std::find (
         mpImpl->maSharedResources.begin(),
         mpImpl->maSharedResources.end(),
         pResource);
@@ -126,8 +125,7 @@ void SdGlobalResourceContainer::AddResource (const Reference<XInterface>& rxReso
 {
     ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
-    Implementation::XInterfaceResourceList::iterator iResource;
-    iResource = ::std::find (
+    Implementation::XInterfaceResourceList::iterator iResource = ::std::find (
         mpImpl->maXInterfaceResources.begin(),
         mpImpl->maXInterfaceResources.end(),
         rxResource);
