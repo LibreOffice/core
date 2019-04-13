@@ -2770,15 +2770,13 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
 
 OUString EncodeSpaces_Impl( const OUString& rSource )
 {
-    OUString sRet( rSource );
-    sRet = sRet.replaceAll( " ", "%20" );
+    OUString sRet = rSource.replaceAll( " ", "%20" );
     return sRet;
 }
 
 OUString DecodeSpaces_Impl( const OUString& rSource )
 {
-    OUString sRet( rSource );
-    sRet = sRet.replaceAll( "%20", " " );
+    OUString sRet = rSource.replaceAll( "%20", " " );
     return sRet;
 }
 

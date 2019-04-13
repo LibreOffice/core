@@ -818,8 +818,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
             // Extract <sha> from ...;org.libreoffice.LibreOffice.Help=<sha>;...:
             OUString sha;
             for (sal_Int32 i = 0;;) {
-                OUString elem;
-                elem = extensions.getToken(0, ';', i);
+                OUString elem = extensions.getToken(0, ';', i);
                 if (elem.startsWith("org.libreoffice.LibreOffice.Help=", &sha)) {
                     break;
                 }

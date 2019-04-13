@@ -1667,8 +1667,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             try
             {
                 Reference< uno::XComponentContext > xORB = ::comphelper::getProcessComponentContext();
-                Reference< ui::dialogs::XExecutableDialog > xDialog;
-                xDialog = ui::dialogs::AddressBookSourcePilot::createWithParent(xORB, nullptr);
+                Reference< ui::dialogs::XExecutableDialog > xDialog = ui::dialogs::AddressBookSourcePilot::createWithParent(xORB, nullptr);
                 xDialog->execute();
             }
             catch(const css::uno::Exception&)

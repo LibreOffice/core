@@ -1964,9 +1964,7 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, css::uno::Any& rAny )
     const SfxSlot *pSlot = nullptr;
     if ( GetShellAndSlot_Impl( nSID, &pShell, &pSlot, false, true ) )
     {
-        const SfxPoolItem* pItem( nullptr );
-
-        pItem = pShell->GetSlotState( nSID );
+        const SfxPoolItem* pItem = pShell->GetSlotState( nSID );
         if ( !pItem )
             return SfxItemState::DISABLED;
         else
