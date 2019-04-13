@@ -449,10 +449,9 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
 
     ColumnMap::iterator pColIter = rCols.begin();
     RowMap& rCol1 = pColIter->second;
-    RowMap::iterator pPos1Iter;
 
     // row header
-    pPos1Iter = rCol1.begin();
+    auto pPos1Iter = rCol1.begin();
     if ( nRowAdd )
         ++pPos1Iter;
     if ( nColAdd )
