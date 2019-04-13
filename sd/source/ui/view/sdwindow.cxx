@@ -674,8 +674,7 @@ double Window::GetVisibleHeight()
 
 Point Window::GetVisibleCenter()
 {
-    Point aPos;
-    aPos = ::tools::Rectangle(aPos, GetOutputSizePixel()).Center();
+    Point aPos = ::tools::Rectangle(Point(), GetOutputSizePixel()).Center();
 
     // For LOK
     bool bMapModeWasEnabled(IsMapModeEnabled());

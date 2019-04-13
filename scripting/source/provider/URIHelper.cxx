@@ -184,8 +184,7 @@ ScriptingFrameworkURIHelper::getLanguagePart(const OUString& rStorageURI)
 OUString
 ScriptingFrameworkURIHelper::getLanguagePath(const OUString& rLanguagePart)
 {
-    OUString result;
-    result = rLanguagePart.replace('|', '/');
+    OUString result = rLanguagePart.replace('|', '/');
     return result;
 }
 
