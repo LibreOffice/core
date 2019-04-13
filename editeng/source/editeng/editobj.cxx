@@ -934,10 +934,9 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
                 continue;
 
             sal_Int32 nStart = rXAttr.GetStart(), nEnd = rXAttr.GetEnd();
-            std::vector<editeng::Section>::iterator itCurAttr = itAttr;
 
             // Find the container whose start position matches.
-            itCurAttr = std::find_if(itCurAttr, aAttrs.end(), FindBySectionStart(nPara, nStart));
+            std::vector<editeng::Section>::iterator itCurAttr = std::find_if(itAttr, aAttrs.end(), FindBySectionStart(nPara, nStart));
             if (itCurAttr == aAttrs.end())
             {
                 // This should never happen. There is a logic error somewhere...

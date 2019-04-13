@@ -3459,8 +3459,7 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     aSelection.Adjust( GetEditDoc() );
 
     EditDataObject* pDataObj = new EditDataObject;
-    uno::Reference< datatransfer::XTransferable > xDataObj;
-    xDataObj = pDataObj;
+    uno::Reference< datatransfer::XTransferable > xDataObj = pDataObj;
 
     pDataObj->GetString() = convertLineEnd(GetSelected(aSelection), GetSystemLineEnd()); // System specific
 

@@ -435,8 +435,7 @@ void SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& r
                     }
                 }
                 sal_Unicode cSave = rTxt[ nSttPos ];
-                OUString sChar( cSave );
-                sChar = rCC.lowercase( sChar );
+                OUString sChar = rCC.lowercase( OUString(cSave) );
                 if( sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar ))
                 {
                     if( ACFlags::SaveWordWrdSttLst & nFlags )
@@ -1091,8 +1090,7 @@ void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     // Ok, then replace
     sal_Unicode cSave = *pWordStt;
     nSttPos = pWordStt - rTxt.getStr();
-    OUString sChar( cSave );
-    sChar = rCC.titlecase(sChar); //see fdo#56740
+    OUString sChar = rCC.titlecase(OUString(cSave)); //see fdo#56740
     bool bRet = sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar );
 
     // Perhaps someone wants to have the word

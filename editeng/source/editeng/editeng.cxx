@@ -310,8 +310,7 @@ void EditEngine::InsertView(EditView* pEditView, size_t nIndex)
     ImpEditEngine::ViewsType& rViews = pImpEditEngine->GetEditViews();
     rViews.insert(rViews.begin()+nIndex, pEditView);
 
-    EditSelection aStartSel;
-    aStartSel = pImpEditEngine->GetEditDoc().GetStartPaM();
+    EditSelection aStartSel = pImpEditEngine->GetEditDoc().GetStartPaM();
     pEditView->pImpEditView->SetEditSelection( aStartSel );
     if ( !pImpEditEngine->GetActiveView() )
         pImpEditEngine->SetActiveView( pEditView );

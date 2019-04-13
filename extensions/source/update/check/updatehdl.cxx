@@ -790,8 +790,7 @@ void UpdateHandler::setFullVersion( OUString& rString )
     uno::Sequence< uno::Any > aArgumentList( 1 );
     aArgumentList[0] <<= aProperty;
 
-    uno::Reference< uno::XInterface > xConfigAccess;
-    xConfigAccess = xConfigurationProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess",
+    uno::Reference< uno::XInterface > xConfigAccess = xConfigurationProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess",
                                                                          aArgumentList );
 
     uno::Reference< container::XNameAccess > xNameAccess( xConfigAccess, uno::UNO_QUERY_THROW );

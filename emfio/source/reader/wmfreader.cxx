@@ -1725,9 +1725,7 @@ namespace emfio
                     case W_META_EXTTEXTOUT:
                     {
                         sal_uInt16  nLen, nOptions;
-                        Point       aPosition;
-
-                        aPosition = ReadYX();
+                        Point aPosition = ReadYX();
                         pStm->ReadUInt16( nLen ).ReadUInt16( nOptions );
                         // todo: we also have to take care of the text width
                         if( nLen )
