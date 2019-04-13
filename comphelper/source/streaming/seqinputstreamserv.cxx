@@ -19,12 +19,7 @@
 
 #include <sal/config.h>
 
-#include <comphelper_module.hxx>
-#include <comphelper_services.hxx>
-
 #include <osl/mutex.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/seqstream.hxx>
@@ -34,8 +29,8 @@
 #include <com/sun/star/io/XSeekableInputStream.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 

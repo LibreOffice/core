@@ -15,7 +15,6 @@
 
 #if USE_TLS_NSS
 #include <nss.h>
-#include <pk11pub.h>
 #include <sechash.h>
 #elif USE_TLS_OPENSSL
 #include <openssl/evp.h>

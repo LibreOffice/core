@@ -11,7 +11,7 @@
 #define INCLUDED_COMPHELPER_DISABLEINTERACTIONHELPER_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include <uno/current_context.hxx>
+#include <com/sun/star/uno/XCurrentContext.hpp>
 
 namespace comphelper
 {

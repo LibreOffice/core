@@ -12,7 +12,6 @@
 #include <sal/log.hxx>
 
 #include <iostream>
-#include <sstream>
 
 namespace comphelper
 {

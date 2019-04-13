@@ -20,7 +20,6 @@
 
 #include <comphelper/servicedecl.hxx>
 #include <rtl/string.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>

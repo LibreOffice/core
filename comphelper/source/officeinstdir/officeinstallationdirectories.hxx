@@ -24,10 +24,11 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
-#include <memory>
+
 #include <boost/optional.hpp>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace comphelper {
 

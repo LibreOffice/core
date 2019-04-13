@@ -19,12 +19,6 @@
 
 #include <comphelper/propertycontainer.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <uno/data.h>
-#include <com/sun/star/uno/genfunc.h>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <rtl/ustrbuf.hxx>
-
-#include <algorithm>
 
 
 namespace comphelper
