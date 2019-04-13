@@ -871,7 +871,6 @@ cmd/lc_setobjecttobackground.png cmd/lc_sendtoback.png
 cmd/sc_setobjecttobackground.png cmd/sc_sendtoback.png
 
 # Calc
-cmd/sc_fieldmenu.png cmd/sc_insertfieldctrl.png
 cmd/sc_numberformatmenu.png cmd/sc_numberformatstandard.png
 cmd/sc_mergecellsmenu.png cmd/sc_togglemergecells.png
 cmd/sc_printrangesmenu.png cmd/sc_defineprintarea.png
@@ -953,6 +952,7 @@ cmd/lc_setoptimalcolumnwidthdirect.png cmd/lc_setoptimalcolumnwidth.png
 cmd/sc_setoptimalcolumnwidthdirect.png cmd/sc_setoptimalcolumnwidth.png
 cmd/lc_starchartdialog.png cmd/lc_insertobjectdialog.png
 cmd/sc_starchartdialog.png cmd/sc_insertobjectdialog.png
+cmd/sc_tablemenu.png cmd/sc_inserttable.png
 
 # Help
 cmd/lc_absoluterecord.png cmd/lc_helpindex.png
@@ -1055,6 +1055,7 @@ cmd/lc_lastslide.png cmd/lc_lastrecord.png
 cmd/lc_previousslide.png cmd/lc_prevrecord.png
 cmd/lc_nextslide.png cmd/lc_nextrecord.png
 cmd/lc_slidesetup.png cmd/lc_pagesetup.png
+cmd/lc_insertpagefield.png cmd/lc_insertpagenumberfield.png
 
 cmd/sc_insertslide.png cmd/sc_insertpage.png
 cmd/sc_duplicateslide.png cmd/sc_duplicatepage.png
@@ -1077,6 +1078,7 @@ cmd/sc_insertdatefieldfix.png cmd/sc_datefield.png
 cmd/sc_insertdatefieldvar.png cmd/sc_datefield.png
 cmd/sc_inserttimefieldfix.png cmd/sc_timefield.png
 cmd/sc_inserttimefieldvar.png cmd/sc_timefield.png
+cmd/sc_insertpagefield.png cmd/sc_insertpagenumberfield.png
 
 # dbaccess
 # ==============================================
