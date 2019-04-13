@@ -146,6 +146,13 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
 (sal_Int32 Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
+    // Set xml:space value early, to allow child contexts use it when dealing with strings.
+    if (Attribs->hasAttribute(oox::NMSP_xml | oox::XML_space))
+    {
+        mbPreserveSpace = Attribs->getValue(oox::NMSP_xml | oox::XML_space) == "preserve";
+        mbPreserveSpaceSet = true;
+    }
+
     if (oox::getNamespace(Element) == NMSP_mce)
         m_bDiscardChildren = prepareMceContext(Element, Attribs);
 
@@ -883,6 +890,8 @@ bool OOXMLFastContextHandler::IsPreserveSpace() const
 {
     // xml:space attribute applies to all elements within the content of the element where it is specified,
     // unless overridden with another instance of the xml:space attribute
+    if (mbPreserveSpaceSet)
+        return mbPreserveSpace;
     if (mpParent)
         return mpParent->IsPreserveSpace();
     return false; // default value
@@ -895,9 +904,7 @@ bool OOXMLFastContextHandler::IsPreserveSpace() const
 OOXMLFastContextHandlerStream::OOXMLFastContextHandlerStream
 (OOXMLFastContextHandler * pContext)
 : OOXMLFastContextHandler(pContext),
-  mpPropertySetAttrs(new OOXMLPropertySet),
-  mbPreserveSpace(false),
-  mbPreserveSpaceSet(false)
+  mpPropertySetAttrs(new OOXMLPropertySet)
 {
 }
 
@@ -908,14 +915,7 @@ OOXMLFastContextHandlerStream::~OOXMLFastContextHandlerStream()
 void OOXMLFastContextHandlerStream::newProperty(Id nId,
                                                 const OOXMLValue::Pointer_t& pVal)
 {
-    if (nId == NS_ooxml::LN_CT_Text_space)
-    {
-        // Set <xml:space> value early, to allow
-        // child contexts use it when dealing with strings
-        mbPreserveSpace = pVal->getString() == "preserve";
-        mbPreserveSpaceSet = true;
-    }
-    else if (nId != 0x0)
+    if (nId != 0x0)
     {
         mpPropertySetAttrs->add(nId, pVal, OOXMLProperty::ATTRIBUTE);
     }
@@ -943,15 +943,6 @@ void OOXMLFastContextHandlerStream::handleHyperlink()
     OOXMLHyperlinkHandler aHyperlinkHandler(this);
     getPropertySetAttrs()->resolve(aHyperlinkHandler);
     aHyperlinkHandler.writetext();
-}
-
-bool OOXMLFastContextHandlerStream::IsPreserveSpace() const
-{
-    // xml:space attribute applies to all elements within the content of the element where it is specified,
-    // unless overridden with another instance of the xml:space attribute
-    if (mbPreserveSpaceSet)
-        return mbPreserveSpace;
-    return OOXMLFastContextHandler::IsPreserveSpace();
 }
 
 /*
