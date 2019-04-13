@@ -372,9 +372,8 @@ ConvErr ExcelToSc::Convert( std::unique_ptr<ScTokenArray>& pResult, XclImpStream
             case 0x19: // Special Attribute                     [327 279]
             {
                 sal_uInt16  nData(0), nFactor(0);
-                sal_uInt8   nOpt(0);
 
-                nOpt = aIn.ReaduInt8();
+                sal_uInt8 nOpt = aIn.ReaduInt8();
 
                 if( meBiff == EXC_BIFF2 )
                 {
@@ -957,9 +956,8 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
             case 0x19: // Special Attribute                     [327 279]
             {
                 sal_uInt16 nData(0), nFactor(0);
-                sal_uInt8 nOpt(0);
 
-                nOpt = aIn.ReaduInt8();
+                sal_uInt8 nOpt = aIn.ReaduInt8();
 
                 if( meBiff == EXC_BIFF2 )
                 {
@@ -1884,8 +1882,7 @@ void ExcelToSc::ReadExtensionNlr( XclImpStream& aIn )
 
 void ExcelToSc::ReadExtensionMemArea( XclImpStream& aIn )
 {
-    sal_uInt16 nCount(0);
-    nCount = aIn.ReaduInt16();
+    sal_uInt16 nCount = aIn.ReaduInt16();
 
     aIn.Ignore( static_cast<std::size_t>(nCount) * ((GetBiff() == EXC_BIFF8) ? 8 : 6) ); // drop the ranges
 }
