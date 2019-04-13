@@ -67,9 +67,9 @@ bool DocumentSigner::signDocument(uno::Reference<security::XCertificate> const& 
         }
         if (xMetaInf.is())
         {
-            uno::Reference<embed::XStorage> xStorage;
-            xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromStream(
-                ZIP_STORAGE_FORMAT_STRING, xInputStream);
+            uno::Reference<embed::XStorage> xStorage
+                = comphelper::OStorageHelper::GetStorageOfFormatFromStream(
+                    ZIP_STORAGE_FORMAT_STRING, xInputStream);
 
             // ODF.
             uno::Reference<io::XStream> xStream;
@@ -89,9 +89,9 @@ bool DocumentSigner::signDocument(uno::Reference<security::XCertificate> const& 
         }
         else if (xWriteableZipStore.is())
         {
-            uno::Reference<embed::XStorage> xStorage;
-            xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromStream(
-                ZIP_STORAGE_FORMAT_STRING, xInputStream);
+            uno::Reference<embed::XStorage> xStorage
+                = comphelper::OStorageHelper::GetStorageOfFormatFromStream(
+                    ZIP_STORAGE_FORMAT_STRING, xInputStream);
 
             // OOXML.
             uno::Reference<io::XStream> xStream;

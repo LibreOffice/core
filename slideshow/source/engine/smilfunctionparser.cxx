@@ -538,11 +538,9 @@ namespace slideshow
             StringIteratorT aStart( rAsciiSmilValue.getStr() );
             StringIteratorT aEnd( rAsciiSmilValue.getStr()+rAsciiSmilValue.getLength() );
 
-            ParserContextSharedPtr pContext;
-
             // static parser context, because the actual
             // Spirit parser is also a static object
-            pContext = getParserContext();
+            ParserContextSharedPtr pContext = getParserContext();
 
             pContext->maShapeBounds = rRelativeShapeBounds;
             pContext->mbParseAnimationFunction = false; // parse with '$' disabled
@@ -583,11 +581,9 @@ namespace slideshow
             StringIteratorT aStart( rAsciiSmilFunction.getStr() );
             StringIteratorT aEnd( rAsciiSmilFunction.getStr()+rAsciiSmilFunction.getLength() );
 
-            ParserContextSharedPtr pContext;
-
             // static parser context, because the actual
             // Spirit parser is also a static object
-            pContext = getParserContext();
+            ParserContextSharedPtr pContext = getParserContext();
 
             pContext->maShapeBounds = rRelativeShapeBounds;
             pContext->mbParseAnimationFunction = true; // parse with '$' enabled

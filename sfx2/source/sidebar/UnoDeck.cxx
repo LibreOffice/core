@@ -248,9 +248,7 @@ sal_Int32 SfxUnoDeck::GetMinOrderIndex(ResourceManager::DeckContextDescriptorCon
 {
     SidebarController* pSidebarController = getSidebarController();
 
-    ResourceManager::DeckContextDescriptorContainer::const_iterator iDeck;
-
-    iDeck = aDecks.begin();
+    ResourceManager::DeckContextDescriptorContainer::const_iterator iDeck = aDecks.begin();
     sal_Int32 minIndex = pSidebarController->GetResourceManager()->GetDeckDescriptor(iDeck->msId)->mnOrderIndex;
 
     for (auto const& deck : aDecks)
