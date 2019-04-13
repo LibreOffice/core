@@ -14235,8 +14235,7 @@ namespace rtl_OStringBuffer
     public:
         bool checkIfStrBufContainAtPosTheFloat(OStringBuffer const& _sStrBuf, sal_Int32 _nLen, float _nFloat)
             {
-                OString sFloatValue;
-                sFloatValue = OString::number(_nFloat);
+                OString sFloatValue = OString::number(_nFloat);
 
                 OString sBufferString(_sStrBuf.getStr());
                 sal_Int32 nPos = sBufferString.indexOf(sFloatValue);
@@ -15385,8 +15384,7 @@ namespace rtl_OStringBuffer
     public:
         bool checkIfStrBufContainAtPosTheDouble(OStringBuffer const& _sStrBuf, sal_Int32 _nLen, double _nDouble)
             {
-                OString sDoubleValue;
-                sDoubleValue = OString::number(_nDouble);
+                OString sDoubleValue = OString::number(_nDouble);
 
                 OString sBufferString(_sStrBuf.getStr());
                 sal_Int32 nPos = sBufferString.indexOf(sDoubleValue);

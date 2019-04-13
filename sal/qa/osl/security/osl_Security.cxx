@@ -36,14 +36,12 @@
 using namespace osl;
 using namespace rtl;
 
-/** print a UNI_CODE String.
+/** print a UNICODE String.
 */
 static void printUString( const OUString & str )
 {
-    OString aString;
-
     //t_print("#printUString_u# " );
-    aString = OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
+    OString aString = OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
     t_print("%s\n", aString.getStr( ) );
 }
 

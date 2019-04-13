@@ -832,9 +832,7 @@ void SAL_CALL osl_getHostnameOfHostAddr (
     const oslHostAddr   Addr,
     rtl_uString       **ustrHostname)
 {
-    const sal_Char* pHostname=nullptr;
-
-    pHostname = osl_psz_getHostnameOfHostAddr(Addr);
+    const sal_Char* pHostname = osl_psz_getHostnameOfHostAddr(Addr);
 
     rtl_uString_newFromAscii (ustrHostname, pHostname);
 }

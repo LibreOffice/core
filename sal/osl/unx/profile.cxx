@@ -491,9 +491,7 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
     sal_Char*       Line = nullptr;
     osl_TProfileSection* pSec;
     osl_TProfileImpl*    pProfile = nullptr;
-    osl_TProfileImpl*    pTmpProfile = nullptr;
-
-    pTmpProfile = static_cast<osl_TProfileImpl*>(Profile);
+    osl_TProfileImpl*    pTmpProfile = static_cast<osl_TProfileImpl*>(Profile);
 
     if ( pTmpProfile == nullptr )
     {
