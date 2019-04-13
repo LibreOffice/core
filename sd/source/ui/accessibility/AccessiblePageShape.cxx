@@ -143,8 +143,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getForeground()
         uno::Reference<beans::XPropertySet> aSet (mxPage, uno::UNO_QUERY);
         if (aSet.is())
         {
-            uno::Any aColor;
-            aColor = aSet->getPropertyValue ("LineColor");
+            uno::Any aColor = aSet->getPropertyValue ("LineColor");
             aColor >>= nColor;
         }
     }
@@ -168,8 +167,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground()
         uno::Reference<beans::XPropertySet> xSet (mxPage, uno::UNO_QUERY);
         if (xSet.is())
         {
-            uno::Any aBGSet;
-            aBGSet = xSet->getPropertyValue ("Background");
+            uno::Any aBGSet = xSet->getPropertyValue ("Background");
             Reference<beans::XPropertySet> xBGSet (aBGSet, uno::UNO_QUERY);
             if ( ! xBGSet.is())
             {
@@ -187,8 +185,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground()
             // gradients, hashes, and bitmaps.
             if (xBGSet.is())
             {
-                uno::Any aColor;
-                aColor = xBGSet->getPropertyValue ("FillColor");
+                uno::Any aColor = xBGSet->getPropertyValue ("FillColor");
                 aColor >>= nColor;
             }
             else

@@ -64,9 +64,7 @@ void SdAnimationPrmsUndoAction::Undo()
 
 void SdAnimationPrmsUndoAction::Redo()
 {
-    SdAnimationInfo* pInfo = nullptr;
-
-    pInfo = SdDrawDocument::GetShapeUserData(*pObject,true);
+    SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObject,true);
 
     pInfo->mbActive      = bNewActive;
     pInfo->meEffect      = eNewEffect;
