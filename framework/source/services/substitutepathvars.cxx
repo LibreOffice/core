@@ -353,10 +353,9 @@ OUString SubstitutePathVariables::impl_substituteVariable( const OUString& rText
             sal_Int32     nReplaceLength  = 0;
             OUString aReplacement;
             OUString aSubString      = aWorkText.copy( nPosition, nLength );
-            OUString aSubVarString;
 
             // Path variables are not case sensitive!
-            aSubVarString = aSubString.toAsciiLowerCase();
+            OUString aSubVarString = aSubString.toAsciiLowerCase();
             VarNameToIndexMap::const_iterator pNTOIIter = m_aPreDefVarMap.find( aSubVarString );
             if ( pNTOIIter != m_aPreDefVarMap.end() )
             {

@@ -288,9 +288,8 @@ void DispatchRecorder::implts_recordMacro( const OUString& aURL,
                                                           bool bAsComment, OUStringBuffer& aScriptBuffer )
 {
     OUStringBuffer aArgumentBuffer(1000);
-    OUString       sArrayName;
     // this value is used to name the arrays of aArgumentBuffer
-    sArrayName = "args" + OUString::number(m_nRecordingID);
+    OUString sArrayName = "args" + OUString::number(m_nRecordingID);
 
     aScriptBuffer.append("rem ----------------------------------------------------------------------\n");
 

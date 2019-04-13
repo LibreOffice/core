@@ -1032,9 +1032,8 @@ bool AddonsOptions_Impl::ReadStatusBarItem(
     bool bResult( false );
     OUString aURL;
     OUString aAddonStatusbarItemTreeNode( aStatusarItemNodeName + m_aPathDelimiter );
-    Sequence< Any > aStatusbarItemNodePropValues;
 
-    aStatusbarItemNodePropValues = GetProperties( GetPropertyNamesStatusbarItem( aAddonStatusbarItemTreeNode ) );
+    Sequence< Any > aStatusbarItemNodePropValues = GetProperties( GetPropertyNamesStatusbarItem( aAddonStatusbarItemTreeNode ) );
 
     // Command URL is required
     if (( aStatusbarItemNodePropValues[ OFFSET_STATUSBARITEM_URL ] >>= aURL ) && aURL.getLength() > 0 )
@@ -1063,9 +1062,8 @@ bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< 
     bool             bResult = false;
     OUString         aStrValue;
     OUString         aAddonMenuItemTreeNode( aMenuNodeName + m_aPathDelimiter );
-    Sequence< Any >     aMenuItemNodePropValues;
 
-    aMenuItemNodePropValues = GetProperties( GetPropertyNamesMenuItem( aAddonMenuItemTreeNode ) );
+    Sequence< Any >  aMenuItemNodePropValues = GetProperties( GetPropertyNamesMenuItem( aAddonMenuItemTreeNode ) );
     if (( aMenuItemNodePropValues[ OFFSET_MENUITEM_TITLE ] >>= aStrValue ) && !aStrValue.isEmpty() )
     {
         aMenuItem[ OFFSET_MENUITEM_TITLE ].Value <<= aStrValue;
@@ -1134,9 +1132,8 @@ bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequ
     bool             bResult = false;
     OUString         aStrValue;
     OUString         aAddonPopupMenuTreeNode( aPopupMenuNodeName + m_aPathDelimiter );
-    Sequence< Any >     aPopupMenuNodePropValues;
 
-    aPopupMenuNodePropValues = GetProperties( GetPropertyNamesPopupMenu( aAddonPopupMenuTreeNode ) );
+    Sequence< Any >  aPopupMenuNodePropValues = GetProperties( GetPropertyNamesPopupMenu( aAddonPopupMenuTreeNode ) );
     if (( aPopupMenuNodePropValues[ OFFSET_POPUPMENU_TITLE ] >>= aStrValue ) &&
          !aStrValue.isEmpty() )
     {
@@ -1189,9 +1186,8 @@ bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, 
     OUString         aTitle;
     OUString         aURL;
     OUString         aAddonToolBarItemTreeNode( aToolBarItemNodeName + m_aPathDelimiter );
-    Sequence< Any >     aToolBarItemNodePropValues;
 
-    aToolBarItemNodePropValues = GetProperties( GetPropertyNamesToolBarItem( aAddonToolBarItemTreeNode ) );
+    Sequence< Any >  aToolBarItemNodePropValues = GetProperties( GetPropertyNamesToolBarItem( aAddonToolBarItemTreeNode ) );
 
     // A toolbar item must have a command URL
     if (( aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_URL ] >>= aURL ) && !aURL.isEmpty() )

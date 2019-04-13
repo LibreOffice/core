@@ -164,8 +164,7 @@ bool GlobalSettings_Access::GetToolbarStateInfo( GlobalSettings::StateInfo eStat
     {
         try
         {
-            css::uno::Any a;
-            a = m_xConfigAccess->getByName( m_aNodeRefStates );
+            css::uno::Any a = m_xConfigAccess->getByName( m_aNodeRefStates );
             css::uno::Reference< css::container::XNameAccess > xNameAccess;
             if ( a >>= xNameAccess )
             {

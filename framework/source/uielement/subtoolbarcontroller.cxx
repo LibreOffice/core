@@ -200,9 +200,7 @@ css::uno::Reference< css::awt::XWindow > SubToolBarController::createPopupWindow
         // create element with factory
         static css::uno::WeakReference< css::ui::XUIElementFactoryManager > xWeakUIElementFactory;
         css::uno::Reference< css::ui::XUIElement > xUIElement;
-        css::uno::Reference< css::ui::XUIElementFactoryManager > xUIElementFactory;
-
-        xUIElementFactory = xWeakUIElementFactory;
+        css::uno::Reference< css::ui::XUIElementFactoryManager > xUIElementFactory = xWeakUIElementFactory;
         if ( !xUIElementFactory.is() )
         {
             xUIElementFactory = css::ui::theUIElementFactoryManager::get( m_xContext );

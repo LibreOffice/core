@@ -258,9 +258,7 @@ bool MenuBarMerger::RemoveMenuItems(
     const OUString&    rMergeCommandParameter )
 {
     const sal_uInt16 nParam( sal_uInt16( rMergeCommandParameter.toInt32() ));
-    sal_uInt16       nCount( 1 );
-
-    nCount = std::max( nParam, nCount );
+    sal_uInt16       nCount = std::max( nParam, sal_uInt16(1) );
 
     sal_uInt16 i = 0;
     while (( nPos < pMenu->GetItemCount() ) && ( i < nCount ))
