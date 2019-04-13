@@ -135,8 +135,7 @@ OUString const & XMLNamespaces::getNamespaceValue( const OUString& aNamespace ) 
         return m_aDefaultNamespace;
     else
     {
-        NamespaceMap::const_iterator p;
-        p = m_aNamespaceMap.find( aNamespace );
+        NamespaceMap::const_iterator p = m_aNamespaceMap.find( aNamespace );
         if ( p == m_aNamespaceMap.end() )
         {
             // namespace not defined => throw exception!

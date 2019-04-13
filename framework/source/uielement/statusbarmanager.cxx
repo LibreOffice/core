@@ -354,10 +354,8 @@ void StatusBarManager::CreateControllers()
 
         if ( !xController.is() )
         {
-            svt::StatusbarController* pController( nullptr );
-
             // 2) Old SFX2 Statusbar controllers
-            pController = CreateStatusBarController( m_xFrame, m_pStatusBar, nId, aCommandURL );
+            svt::StatusbarController* pController = CreateStatusBarController( m_xFrame, m_pStatusBar, nId, aCommandURL );
             if ( !pController )
             {
                 // 3) Is Add-on? Generic statusbar controller

@@ -279,8 +279,7 @@ Any SAL_CALL MenuBarWrapper::getByName(
     if ( pIter == m_aPopupControllerCache.end() )
         throw container::NoSuchElementException();
 
-    uno::Reference< frame::XDispatchProvider > xDispatchProvider;
-    xDispatchProvider = pIter->second.m_xDispatchProvider;
+    uno::Reference< frame::XDispatchProvider > xDispatchProvider = pIter->second.m_xDispatchProvider;
     return uno::makeAny( xDispatchProvider );
 }
 

@@ -296,9 +296,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 }
                 else
                 {
-                    ::cppu::OWeakObject* pController = nullptr;
-
-                    pController = ToolBarMerger::CreateController( m_xContext, m_xFrame, m_pToolBar, aURL, nId, nWidth, aControlType );
+                    ::cppu::OWeakObject* pController = ToolBarMerger::CreateController( m_xContext, m_xFrame, m_pToolBar, aURL, nId, nWidth, aControlType );
                     xController.set( pController, UNO_QUERY );
                 }
 

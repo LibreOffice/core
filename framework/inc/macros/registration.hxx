@@ -65,8 +65,7 @@ ________________________________________________________________________________
         {                                                                                                                               \
             /* Define variables which are used in following macros. */                                                                  \
             css::uno::Reference< css::uno::XInterface >             xFactory;                                                           \
-            css::uno::Reference< css::lang::XMultiServiceFactory >  xServiceManager;                                                    \
-            xServiceManager = static_cast< css::lang::XMultiServiceFactory* >( pServiceManager );                                       \
+            css::uno::Reference< css::lang::XMultiServiceFactory >  xServiceManager = static_cast< css::lang::XMultiServiceFactory* >( pServiceManager );                                       \
             /* These parameter will expand to      */                                                                                   \
             /* "IF_NAME_CREATECOMPONENTFACTORY(a)  */                                                                                   \
             /*  else                               */                                                                                   \
