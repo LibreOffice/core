@@ -1000,8 +1000,7 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
 
                 OUString sValue;
                 xProp->getPropertyValue(PROPERTY_HELPTEXT) >>= sValue;
-                Any aColumnDefault;
-                aColumnDefault = xProp->getPropertyValue(PROPERTY_CONTROLDEFAULT);
+                Any aColumnDefault = xProp->getPropertyValue(PROPERTY_CONTROLDEFAULT);
 
                 if ( bHidden || !sValue.isEmpty() || aColumnDefault.hasValue() || pAtt->getLength() )
                 {
