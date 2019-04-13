@@ -300,8 +300,7 @@ void TheExtensionManager::createPackageList()
         }
     }
 
-    uno::Sequence< uno::Reference< deployment::XPackage > > xNoLicPackages;
-    xNoLicPackages = m_xExtensionManager->getExtensionsWithUnacceptedLicenses( SHARED_PACKAGE_MANAGER,
+    uno::Sequence< uno::Reference< deployment::XPackage > > xNoLicPackages = m_xExtensionManager->getExtensionsWithUnacceptedLicenses( SHARED_PACKAGE_MANAGER,
                                                                                uno::Reference< ucb::XCommandEnvironment >() );
     for ( sal_Int32 i = 0; i < xNoLicPackages.getLength(); ++i )
     {

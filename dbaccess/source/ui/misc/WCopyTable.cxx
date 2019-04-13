@@ -170,9 +170,7 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
                 if ( !sFilter.isEmpty() )
                 {
                     sStatement.append(aPropertie.second);
-                    OUString sReplace = sFilter;
-                    sReplace = sReplace.replaceFirst(sSourceName,sTargetNameTemp);
-                    sFilter = sReplace;
+                    sFilter = sFilter.replaceFirst(sSourceName,sTargetNameTemp);
                     _rxObject->setPropertyValue( aPropertie.first, makeAny(sFilter) );
                     sStatement.append(sFilter);
                 }

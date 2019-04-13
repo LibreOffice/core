@@ -391,8 +391,7 @@ void OTasksWindow::ImplInitSettings()
 {
     // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    vcl::Font aFont;
-    aFont = rStyleSettings.GetFieldFont();
+    vcl::Font aFont = rStyleSettings.GetFieldFont();
     aFont.SetColor( rStyleSettings.GetWindowTextColor() );
     SetPointFont(*this, aFont);
 
@@ -571,8 +570,7 @@ void OApplicationDetailView::ImplInitSettings()
 {
     // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    vcl::Font aFont;
-    aFont = rStyleSettings.GetFieldFont();
+    vcl::Font aFont = rStyleSettings.GetFieldFont();
     aFont.SetColor( rStyleSettings.GetWindowTextColor() );
     SetPointFont(*this, aFont);
 
