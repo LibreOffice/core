@@ -24,8 +24,6 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/beans/StringPair.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>

@@ -18,10 +18,7 @@
  */
 
 
-#include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/propshlp.hxx>
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>

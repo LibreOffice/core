@@ -21,11 +21,9 @@
 #define INCLUDED_COMPHELPER_SOURCE_PROPERTY_OPROPERTYBAG_HXX
 
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/beans/XPropertyBag.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XSet.hpp>
 
 #include <cppuhelper/implbase5.hxx>

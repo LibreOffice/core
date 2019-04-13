@@ -20,20 +20,19 @@
 #ifndef INCLUDED_COMPHELPER_SOURCE_MISC_INSTANCELOCKER_HXX
 #define INCLUDED_COMPHELPER_SOURCE_MISC_INSTANCELOCKER_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/embed/XActionsApproval.hpp>
-#include <com/sun/star/embed/Actions.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
+
+namespace com::sun::star::embed { class XActionsApproval; }
+namespace comphelper { class OInterfaceContainerHelper2; }
 
 
 class OLockListener;

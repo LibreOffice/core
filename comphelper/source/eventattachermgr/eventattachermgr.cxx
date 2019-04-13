@@ -31,7 +31,6 @@
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
@@ -49,7 +48,6 @@
 
 #include <deque>
 #include <algorithm>
-#include <functional>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;

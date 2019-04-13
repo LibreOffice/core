@@ -19,7 +19,6 @@
 
 
 #include <comphelper_module.hxx>
-#include <comphelper_services.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/anycompare.hxx>
 #include <comphelper/componentbase.hxx>
@@ -36,7 +35,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/math.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <typelib/typedescription.hxx>
 
 #include <map>

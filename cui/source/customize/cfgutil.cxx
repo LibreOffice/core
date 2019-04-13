@@ -61,6 +61,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/help.hxx>
 #include <vcl/vclmedit.hxx>
+#include <uno/current_context.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -21,11 +21,12 @@
 
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace comphelper
 {

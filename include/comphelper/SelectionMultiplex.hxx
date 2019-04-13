@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <rtl/ref.hxx>
 
 namespace com { namespace sun { namespace star { namespace view { class XSelectionSupplier; } } } }
 
@@ -33,9 +32,6 @@ namespace com { namespace sun { namespace star { namespace view { class XSelecti
 
 namespace comphelper
 {
-
-
-    class OSelectionChangeMultiplexer;
 
 
     //= OSelectionChangeListener

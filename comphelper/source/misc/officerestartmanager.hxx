@@ -21,7 +21,6 @@
 #define INCLUDED_COMPHELPER_SOURCE_MISC_OFFICERESTARTMANAGER_HXX
 
 #include <com/sun/star/task/XRestartManager.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XCallback.hpp>
 

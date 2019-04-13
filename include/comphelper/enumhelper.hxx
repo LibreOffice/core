@@ -20,14 +20,14 @@
 #ifndef INCLUDED_COMPHELPER_ENUMHELPER_HXX
 #define INCLUDED_COMPHELPER_ENUMHELPER_HXX
 
-#include <vector>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/comphelperdllapi.h>
+
+namespace com::sun::star::container { class XIndexAccess; }
+namespace com::sun::star::container { class XNameAccess; }
 
 namespace comphelper
 {

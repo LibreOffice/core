@@ -26,10 +26,9 @@
 #include <boost/optional.hpp>
 #include <memory>
 
-#include <com/sun/star/logging/XLogger.hpp>
-
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::logging { class XLogger; }
 
 namespace comphelper
 {

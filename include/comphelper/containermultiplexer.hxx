@@ -22,9 +22,10 @@
 
 #include <com/sun/star/container/XContainer.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ref.hxx>
+
+namespace osl { class Mutex; }
 
 
 namespace comphelper

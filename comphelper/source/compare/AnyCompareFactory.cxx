@@ -21,15 +21,10 @@
 #include <com/sun/star/i18n/Collator.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <map>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;

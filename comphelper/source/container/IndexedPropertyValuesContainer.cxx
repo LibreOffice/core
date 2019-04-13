@@ -19,7 +19,6 @@
 
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -28,6 +27,8 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <vector>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace com::sun::star;
 
