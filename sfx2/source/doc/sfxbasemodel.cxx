@@ -3502,10 +3502,9 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
         if ( m_pData->m_pObjectShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
         {
             // Import old UI configuration from OOo 1.x
-            Reference< embed::XStorage > xOOo1ConfigStorage;
 
             // Try to open with READ
-            xOOo1ConfigStorage = getDocumentSubStorage( "Configurations", embed::ElementModes::READ );
+            Reference< embed::XStorage > xOOo1ConfigStorage = getDocumentSubStorage( "Configurations", embed::ElementModes::READ );
             if ( xOOo1ConfigStorage.is() )
             {
                 Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );

@@ -583,9 +583,7 @@ static int hash_store(struct hash* hash, const char* key, int key_len)
 
 static int file_stat(const char* name, struct stat* buffer_stat, int* rc)
 {
-    int rc_local = 0;
-
-    rc_local = stat(name, buffer_stat);
+    int rc_local = stat(name, buffer_stat);
     if (rc_local  < 0)
     {
         *rc = errno;

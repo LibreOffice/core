@@ -761,9 +761,7 @@ void SfxTemplateManagerDlg::SearchUpdate()
 
         for (TemplateItemProperties& rItem : aItems)
         {
-            OUString aFolderName;
-
-            aFolderName = mxLocalView->getRegionName(rItem.nRegionId);
+            OUString aFolderName = mxLocalView->getRegionName(rItem.nRegionId);
 
             mxSearchView->AppendItem(rItem.nId,mxLocalView->getRegionId(rItem.nRegionId),
                                      rItem.nDocId,
