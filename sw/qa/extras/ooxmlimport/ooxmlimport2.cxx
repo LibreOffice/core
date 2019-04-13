@@ -330,6 +330,16 @@ DECLARE_OOXMLIMPORT_TEST(testTdf121440, "tdf121440.docx")
         getProperty<sal_Int32>(getRun(getParagraph(1), 1), "CharEscapement"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf124670, "tdf124670.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+    // We need to take xml:space attribute into account, even in w:document element
+    uno::Reference<text::XTextRange> paragraph = getParagraph(1);
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("You won't believe, but that's how it was in markup of original      bugdoc!"),
+        paragraph->getString());
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
