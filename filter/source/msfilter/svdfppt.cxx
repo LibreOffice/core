@@ -2441,8 +2441,7 @@ bool SdrPowerPointImport::SeekToCurrentPage( DffRecordHeader* pRecHd ) const
         sal_uLong nPersist = (*pList)[ nCurrentPageNum ].aPersistAtom.nPsrReference;
         if ( nPersist > 0 && nPersist < nPersistPtrCnt )
         {
-            sal_uLong nFPos = 0;
-            nFPos = pPersistPtr[ nPersist ];
+            sal_uLong nFPos = pPersistPtr[ nPersist ];
             if ( nFPos < nStreamLen )
             {
                 rStCtrl.Seek( nFPos );

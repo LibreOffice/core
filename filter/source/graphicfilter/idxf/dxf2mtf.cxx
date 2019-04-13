@@ -224,8 +224,7 @@ void DXF2GDIMetaFile::DrawLineEntity(const DXFLineEntity & rE, const DXFTransfor
         rTransform.Transform(rE.aP0,aP0);
         rTransform.Transform(rE.aP1,aP1);
 
-        DXFLineInfo aDXFLineInfo;
-        aDXFLineInfo=GetEntityDXFLineInfo(rE);
+        DXFLineInfo aDXFLineInfo=GetEntityDXFLineInfo(rE);
         LineInfo aLineInfo;
         aLineInfo = rTransform.Transform(aDXFLineInfo);
 
