@@ -1719,10 +1719,9 @@ Reference< XUIConfigurationManager2 > const & ODatabaseDocument::getUIConfigurat
         m_xUIConfigurationManager = UIConfigurationManager::create( m_pImpl->m_aContext );
 
         OUString aUIConfigFolderName( "Configurations2" );
-        Reference< XStorage > xConfigStorage;
 
         // First try to open with READWRITE and then READ
-        xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, ElementModes::READWRITE );
+        Reference< XStorage > xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, ElementModes::READWRITE );
         if ( xConfigStorage.is() )
         {
             OUString aMediaType;

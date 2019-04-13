@@ -284,8 +284,7 @@ bool ORelationTableConnectionData::Update()
             {
                 if(!(elem->GetSourceFieldName().isEmpty() || elem->GetDestFieldName().isEmpty()))
                 {
-                    Reference<XPropertySet> xColumn;
-                    xColumn = xColumnFactory->createDataDescriptor();
+                    Reference<XPropertySet> xColumn = xColumnFactory->createDataDescriptor();
                     if ( xColumn.is() )
                     {
                         xColumn->setPropertyValue(PROPERTY_NAME,makeAny(elem->GetSourceFieldName()));
