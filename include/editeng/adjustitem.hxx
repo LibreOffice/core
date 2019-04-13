@@ -19,12 +19,10 @@
 #ifndef INCLUDED_EDITENG_ADJUSTITEM_HXX
 #define INCLUDED_EDITENG_ADJUSTITEM_HXX
 
-#include <svl/eitem.hxx>
+#include <svl/cenumitm.hxx>
+#include <svl/poolitem.hxx>
 #include <editeng/svxenum.hxx>
-#include <editeng/eeitem.hxx>
 #include <editeng/editengdllapi.h>
-
-class SvXMLUnitConverter;
 
 // class SvxAdjustItem ---------------------------------------------------
 

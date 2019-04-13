@@ -48,6 +48,7 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/brushitem.hxx>

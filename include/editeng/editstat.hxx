@@ -21,8 +21,6 @@
 #define INCLUDED_EDITENG_EDITSTAT_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
-#include <i18nlangtag/lang.h>
 #include <o3tl/typed_flags_set.hxx>
 
 enum class EEControlBits

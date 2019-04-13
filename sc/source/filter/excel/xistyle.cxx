@@ -33,6 +33,7 @@
 #include <editeng/shdditem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <svx/algitem.hxx>
+#include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <svx/rotmodit.hxx>

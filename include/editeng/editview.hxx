@@ -23,22 +23,19 @@
 #include <memory>
 #include <com/sun/star/i18n/WordType.hpp>
 
-#include <svl/style.hxx>
 #include <i18nlangtag/lang.h>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
-#include <tools/link.hxx>
-#include <vcl/cursor.hxx>
 #include <vcl/errcode.hxx>
-#include <vcl/event.hxx>
+#include <vcl/vclptr.hxx>
 #include <editeng/editstat.hxx>
 #include <svl/languageoptions.hxx>
-#include <LibreOfficeKit/LibreOfficeKitTypes.h>
 #include <editeng/editdata.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <editeng/editengdllapi.h>
 
 
+class EditTextObject;
 class EditEngine;
 class ImpEditEngine;
 class ImpEditView;
@@ -49,13 +46,11 @@ namespace vcl { class Window; }
 class KeyEvent;
 class MouseEvent;
 class CommandEvent;
-namespace tools { class Rectangle; }
-class Pair;
-class Point;
-class Range;
 class SvStream;
 class SvKeyValueIterator;
 class SfxStyleSheet;
+class SfxItemSet;
+namespace vcl { class Cursor; }
 namespace vcl { class Font; }
 class FontList;
 class OutputDevice;
@@ -73,7 +68,8 @@ namespace linguistic2 {
     class XLanguageGuessing;
 }
 }}}
-namespace basegfx { class B2DRange; }
+
+template <typename Arg, typename Ret> class Link;
 
 enum class ScrollRangeCheck
 {

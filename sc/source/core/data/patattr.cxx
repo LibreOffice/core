@@ -29,6 +29,7 @@
 #include <svtools/colorcfg.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/crossedoutitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>

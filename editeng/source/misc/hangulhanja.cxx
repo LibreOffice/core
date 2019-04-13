@@ -34,6 +34,7 @@
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <vcl/stdtext.hxx>
+#include <vcl/weld.hxx>
 #include <unotools/charclass.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>

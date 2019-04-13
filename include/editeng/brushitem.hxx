@@ -21,8 +21,6 @@
 
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
-#include <vcl/wall.hxx>
-#include <tools/link.hxx>
 #include <unotools/securityoptions.hxx>
 #include <editeng/editengdllapi.h>
 #include <memory>

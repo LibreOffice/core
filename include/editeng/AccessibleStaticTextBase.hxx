@@ -24,15 +24,14 @@
 #include <tools/gen.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 #include <editeng/editengdllapi.h>
 
+namespace com::sun::star::accessibility { class XAccessible; }
 
 class SvxEditSource;
-class SvxEditViewForwarder;
 
 namespace accessibility
 {

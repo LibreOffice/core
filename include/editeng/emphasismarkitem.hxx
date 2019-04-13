@@ -19,11 +19,9 @@
 #ifndef INCLUDED_EDITENG_EMPHASISMARKITEM_HXX
 #define INCLUDED_EDITENG_EMPHASISMARKITEM_HXX
 
-#include <vcl/vclenum.hxx>
+#include <tools/fontenum.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>
-
-class SvXMLUnitConverter;
 
 // class SvxEmphasisMarkItem ----------------------------------------------
 

@@ -21,14 +21,15 @@
 #define INCLUDED_EDITENG_ACCESSIBLEPARAMANAGER_HXX
 
 #include <vector>
-#include <algorithm>
 #include <utility>
 #include <tools/gen.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <rtl/ref.hxx>
 #include <editeng/editengdllapi.h>
+
+namespace com::sun::star::accessibility { class XAccessible; }
 
 class SvxEditSourceAdapter;
 

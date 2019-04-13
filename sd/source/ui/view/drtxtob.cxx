@@ -23,6 +23,7 @@
 #include <svx/svxids.hrc>
 
 #include <i18nlangtag/mslangid.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>

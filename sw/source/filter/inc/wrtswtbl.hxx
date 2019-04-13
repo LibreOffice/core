@@ -27,6 +27,7 @@
 
 #include <memory>
 #include <vector>
+#include <climits>
 
 class SwTableBox;
 class SwTableLine;

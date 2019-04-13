@@ -27,6 +27,7 @@
 #include <svx/sdtaaitm.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdocapt.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/outlobj.hxx>
 #include <cmdid.h>
 #include <view.hxx>

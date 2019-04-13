@@ -22,6 +22,7 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <editeng/borderline.hxx>
+#include <svl/poolitem.hxx>
 #include <swtypes.hxx>
 #include <swrect.hxx>
 #include <calbck.hxx>

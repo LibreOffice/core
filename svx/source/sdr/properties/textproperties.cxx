@@ -29,6 +29,7 @@
 #include <svx/svdoutl.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <svx/svdmodel.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/xflclit.hxx>
 #include <editeng/adjustitem.hxx>

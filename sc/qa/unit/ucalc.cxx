@@ -71,8 +71,10 @@
 #include <formula/IFunctionDescription.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 

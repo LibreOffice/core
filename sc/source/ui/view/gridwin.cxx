@@ -23,6 +23,7 @@
 #include <editeng/adjustitem.hxx>
 #include <sot/storage.hxx>
 #include <svx/algitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/flditem.hxx>

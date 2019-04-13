@@ -20,6 +20,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
@@ -49,6 +50,7 @@
 #include <DrawViewShell.hxx>
 #include <pres.hxx>
 #include <navigatr.hxx>
+#include <vcl/cursor.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/vclevent.hxx>
 

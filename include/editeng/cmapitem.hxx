@@ -23,8 +23,6 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/editengdllapi.h>
 
-class SvXMLUnitConverter;
-
 // class SvxCaseMapItem --------------------------------------------------
 
 /*  [Description]

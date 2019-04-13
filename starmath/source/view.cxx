@@ -52,6 +52,7 @@
 #include <svx/svxdlg.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>

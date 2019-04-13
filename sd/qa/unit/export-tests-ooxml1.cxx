@@ -10,6 +10,7 @@
 #include "sdmodeltestbase.hxx"
 #include <Outliner.hxx>
 #include <svl/stritem.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/ulspitem.hxx>

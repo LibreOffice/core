@@ -49,6 +49,7 @@
 
 
 class SvxBrushItem;
+class EditTextObject;
 
 // some forward declarations
 class SwWW8AttrIter;

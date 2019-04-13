@@ -19,6 +19,7 @@
 
 #include <editeng/adjustitem.hxx>
 #include <svx/fontwork.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <sfx2/bindings.hxx>

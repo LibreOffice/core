@@ -12,6 +12,7 @@
 #include <svx/ClassificationField.hxx>
 
 #include <vcl/builder.hxx>
+#include <vcl/cursor.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

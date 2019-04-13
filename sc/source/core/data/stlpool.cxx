@@ -21,6 +21,7 @@
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/editdata.hxx>

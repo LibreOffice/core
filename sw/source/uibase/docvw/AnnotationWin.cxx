@@ -33,6 +33,7 @@
 #include <unotools/syslocale.hxx>
 #include <svl/languageoptions.hxx>
 
+#include <editeng/eeitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/langitem.hxx>

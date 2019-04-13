@@ -20,12 +20,9 @@
 #define INCLUDED_EDITENG_EDTDLG_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/link.hxx>
 #include <editeng/editengdllapi.h>
 #include <i18nlangtag/lang.h>
-#include <com/sun/star/uno/Reference.hxx>
 #include <vcl/abstdlg.hxx>
-#include <vcl/weld.hxx>
 #include <editeng/hangulhanja.hxx>
 
 namespace com { namespace sun { namespace star { namespace linguistic2
@@ -34,10 +31,17 @@ namespace com { namespace sun { namespace star { namespace linguistic2
     class XHyphenator;
 } } } }
 
+template <typename Arg, typename Ret> class Link;
+
 namespace vcl { class Window; }
 class SvxSpellWrapper;
-class Button;
-class CheckBox;
+class LinkParamNone;
+
+namespace weld { class Button; }
+namespace weld { class ToggleButton; }
+namespace weld { class Window; }
+
+
 
 class AbstractThesaurusDialog : public VclAbstractDialog
 {

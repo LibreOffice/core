@@ -73,6 +73,7 @@
 #include <editeng/opaqitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/shaditem.hxx>
+#include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>

@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <hintids.hxx>
+#include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <tools/fract.hxx>

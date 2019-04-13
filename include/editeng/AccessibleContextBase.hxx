@@ -23,22 +23,15 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
-#include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
-#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <editeng/editengdllapi.h>
 
+namespace com::sun::star::accessibility { class XAccessibleStateSet; }
+namespace com::sun::star::accessibility { class XAccessibleRelationSet; }
+namespace com::sun::star::accessibility { struct AccessibleEventObject; }
 
 namespace accessibility {
 

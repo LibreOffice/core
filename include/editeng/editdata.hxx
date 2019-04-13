@@ -26,11 +26,9 @@
 #include <memory>
 #include <ostream>
 
-class SfxItemSet;
 class SfxPoolItem;
 template<typename T> class SvParser;
 class SvxFieldItem;
-class SvxRTFItemStackType;
 enum class HtmlTokenId : sal_Int16;
 
 enum class EETextFormat { Text = 0x20, Rtf, Html = 0x32, Xml };
@@ -83,13 +81,6 @@ EDITENG_DLLPUBLIC extern const size_t EE_APPEND;
 #define EDITUNDO_TRANSLITERATE      125
 
 #define EDITUNDO_USER               200
-
-class EditView;
-class EditEngine;
-class ImpEditView;
-class ImpEditEngine;
-class EditTextObject;
-class SfxStyleSheet;
 
 struct EPosition
 {

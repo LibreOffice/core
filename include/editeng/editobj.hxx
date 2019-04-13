@@ -22,8 +22,6 @@
 
 #include <svl/style.hxx>
 #include <svl/itempool.hxx>
-#include <editeng/eeitem.hxx>
-#include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/macros.hxx>
 #include <svl/languageoptions.hxx>
@@ -36,8 +34,8 @@
 class SfxItemSet;
 class SvxFieldItem;
 class SvxFieldData;
-class SvStream;
 enum class OutlinerMode;
+struct EECharAttrib;
 
 namespace editeng {
 

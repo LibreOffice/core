@@ -43,6 +43,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editrids.hrc>
+#include <editeng/unoedsrc.hxx>
 #include <svtools/colorcfg.hxx>
 
 

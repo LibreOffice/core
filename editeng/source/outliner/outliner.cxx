@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
+#include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
