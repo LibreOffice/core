@@ -2551,8 +2551,7 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 
         SetError(pMediumTmp->GetErrorCode());
 
-        bool bOpen( false );
-        bOpen = DoSaveCompleted( pMediumTmp );
+        bool bOpen = DoSaveCompleted( pMediumTmp );
 
         DBG_ASSERT(bOpen,"Error handling for DoSaveCompleted not implemented");
     }
@@ -2859,8 +2858,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
             if ( !bCopyTo )
             {
                 // reconnect to the old medium
-                bool bRet( false );
-                bRet = DoSaveCompleted( pMedium );
+                bool bRet = DoSaveCompleted( pMedium );
                 DBG_ASSERT( bRet, "Error in DoSaveCompleted, can't be handled!");
             }
 
