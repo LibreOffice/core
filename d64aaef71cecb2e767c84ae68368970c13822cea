@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_07527c68",
+        "filename": "vcl/source/control/combobox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-04-13T20:39:46Z",
+      "side": 1,
+      "message": "Is this needed?",
+      "range": {
+        "startLine": 701,
+        "startChar": 0,
+        "endLine": 701,
+        "endChar": 45
+      },
+      "revId": "d64aaef71cecb2e767c84ae68368970c13822cea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
