@@ -902,9 +902,7 @@ void BibDataManager::startQueryWith(const OUString& rQuery)
         aQueryString+=getQueryField();
         aQueryString+=aQuoteChar;
         aQueryString+=" like '";
-        OUString sQuery(rQuery);
-        sQuery = sQuery.replaceAll("?","_");
-        sQuery = sQuery.replaceAll("*","%");
+        OUString sQuery = rQuery.replaceAll("?","_").replaceAll("*","%");
         aQueryString += sQuery;
         aQueryString+="%'";
     }

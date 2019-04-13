@@ -1674,11 +1674,9 @@ bool ImpEditView::IsSelectionAtPoint( const Point& rPosPixel )
     if ( pDragAndDropInfo && pDragAndDropInfo->pField )
         return true;
 
-    Point aMousePos( rPosPixel );
-
     // Logical units ...
     const OutputDevice& rOutDev = getEditViewCallbacks() ? getEditViewCallbacks()->EditViewOutputDevice() : *GetWindow();
-    aMousePos = rOutDev.PixelToLogic(aMousePos);
+    Point aMousePos = rOutDev.PixelToLogic(rPosPixel);
 
     if ( ( !GetOutputArea().IsInside( aMousePos ) ) && !pEditEngine->pImpEditEngine->IsInSelectionMode() )
     {

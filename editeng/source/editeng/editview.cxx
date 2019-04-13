@@ -330,8 +330,7 @@ void EditView::Paint( const tools::Rectangle& rRect, OutputDevice* pTargetDevice
 void EditView::SetEditEngine( EditEngine* pEditEng )
 {
     pImpEditView->pEditEngine = pEditEng;
-    EditSelection aStartSel;
-    aStartSel = pImpEditView->pEditEngine->GetEditDoc().GetStartPaM();
+    EditSelection aStartSel = pImpEditView->pEditEngine->GetEditDoc().GetStartPaM();
     pImpEditView->SetEditSelection( aStartSel );
 }
 

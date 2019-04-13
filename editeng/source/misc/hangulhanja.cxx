@@ -442,8 +442,7 @@ namespace editeng
         if( m_eConvType == HHC::eConvHangulHanja && m_pConversionDialog )
         {
             m_bTryBothDirections = m_pConversionDialog->GetUseBothDirections();
-            HHC::ConversionDirection eDialogDirection = HHC::eHangulToHanja;
-            eDialogDirection = m_pConversionDialog->GetDirection( eDialogDirection );
+            HHC::ConversionDirection eDialogDirection = m_pConversionDialog->GetDirection( HHC::eHangulToHanja );
 
             if( !m_bTryBothDirections && eDialogDirection != m_eCurrentConversionDirection )
             {
