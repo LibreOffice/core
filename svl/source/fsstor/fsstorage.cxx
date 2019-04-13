@@ -223,8 +223,7 @@ void FSStorage::CopyContentToStorage_Impl(ucbhelper::Content& rContent,
 
 uno::Any SAL_CALL FSStorage::queryInterface( const uno::Type& rType )
 {
-    uno::Any aReturn;
-    aReturn = ::cppu::queryInterface
+    uno::Any aReturn = ::cppu::queryInterface
                 (   rType
                 ,   static_cast<lang::XTypeProvider*> ( this )
                 ,   static_cast<embed::XStorage*> ( this )

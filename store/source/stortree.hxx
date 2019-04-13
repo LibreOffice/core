@@ -142,8 +142,7 @@ struct OStoreBTreeNodeData : public store::PageData
     */
     void guard()
     {
-        sal_uInt32 nCRC32 = 0;
-        nCRC32 = rtl_crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
+        sal_uInt32 nCRC32 = rtl_crc32 (0, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
         nCRC32 = rtl_crc32 (nCRC32, m_pData, capacity());
         m_aGuard.m_nCRC32 = store::htonl(nCRC32);
     }
@@ -152,8 +151,7 @@ struct OStoreBTreeNodeData : public store::PageData
     */
     storeError verify() const
     {
-        sal_uInt32 nCRC32 = 0;
-        nCRC32 = rtl_crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
+        sal_uInt32 nCRC32 = rtl_crc32 (0, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
         nCRC32 = rtl_crc32 (nCRC32, m_pData, capacity());
         if (m_aGuard.m_nCRC32 != store::htonl(nCRC32))
             return store_E_InvalidChecksum;

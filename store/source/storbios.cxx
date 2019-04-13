@@ -117,8 +117,7 @@ struct OStoreSuperBlock
      */
     void guard()
     {
-        sal_uInt32 nCRC32 = 0;
-        nCRC32 = rtl_crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
+        sal_uInt32 nCRC32 = rtl_crc32 (0, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
         nCRC32 = rtl_crc32 (nCRC32, &m_aDescr, static_cast<sal_uInt32>(theSize - sizeof(G)));
         m_aGuard.m_nCRC32 = store::htonl(nCRC32);
     }
@@ -131,8 +130,7 @@ struct OStoreSuperBlock
         if (nMagic != STORE_MAGIC_SUPERBLOCK)
             return store_E_WrongFormat;
 
-        sal_uInt32 nCRC32 = 0;
-        nCRC32 = rtl_crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
+        sal_uInt32 nCRC32 = rtl_crc32 (0, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
         nCRC32 = rtl_crc32 (nCRC32, &m_aDescr, static_cast<sal_uInt32>(theSize - sizeof(G)));
         if (m_aGuard.m_nCRC32 != store::htonl(nCRC32))
             return store_E_InvalidChecksum;
