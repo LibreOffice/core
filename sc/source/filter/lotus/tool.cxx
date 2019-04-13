@@ -482,8 +482,7 @@ bool RangeNameBufferWK3::FindAbs( const OUString& rRef, sal_uInt16& rIndex )
 {
     if (rRef.isEmpty())
         return false;
-    OUString aTmp(rRef.copy(1));
-    StringHashEntry aRef(aTmp); // search w/o '$'!
+    StringHashEntry aRef(rRef.copy(1)); // search w/o '$'!
 
     std::vector<Entry>::iterator itr = std::find_if(maEntries.begin(), maEntries.end(),
         [&aRef](const Entry& rEntry) { return aRef == rEntry.aStrHashEntry; });

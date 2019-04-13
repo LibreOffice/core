@@ -2093,8 +2093,7 @@ void ScDrawLayer::UpdateCellAnchorFromPositionEnd( const SdrObject &rObj, ScDraw
     ScDrawObjData* pAnchor = &rAnchor;
     pAnchor->maEnd = aRange.aEnd;
 
-    tools::Rectangle aCellRect;
-    aCellRect = rDoc.GetMMRect( aRange.aEnd.Col(), aRange.aEnd.Row(),
+    tools::Rectangle aCellRect = rDoc.GetMMRect( aRange.aEnd.Col(), aRange.aEnd.Row(),
       aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aEnd.Tab() );
     pAnchor->maEndOffset.setY( aObjRect.Bottom()-aCellRect.Top() );
     if (!rDoc.IsNegativePage(nTab))
