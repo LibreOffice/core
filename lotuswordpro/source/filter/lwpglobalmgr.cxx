@@ -79,8 +79,7 @@ LwpGlobalMgr::~LwpGlobalMgr()
 LwpGlobalMgr* LwpGlobalMgr::GetInstance(LwpSvStream* pSvStream)
 {
     sal_uInt32 nThreadID = osl::Thread::getCurrentIdentifier();
-    std::map< sal_uInt32,LwpGlobalMgr* >::iterator iter;
-    iter = m_ThreadMap.find(nThreadID);
+    auto iter = m_ThreadMap.find(nThreadID);
     if (iter == m_ThreadMap.end())
     {
         LwpGlobalMgr* pInstance = new LwpGlobalMgr(pSvStream);
@@ -94,8 +93,7 @@ LwpGlobalMgr* LwpGlobalMgr::GetInstance(LwpSvStream* pSvStream)
 void LwpGlobalMgr::DeleteInstance()
 {
     sal_uInt32 nThreadID = osl::Thread::getCurrentIdentifier();
-    std::map< sal_uInt32,LwpGlobalMgr* >::iterator iter;
-    iter = m_ThreadMap.find(nThreadID);
+    auto iter = m_ThreadMap.find(nThreadID);
     if (iter != m_ThreadMap.end())
     {
         delete iter->second;

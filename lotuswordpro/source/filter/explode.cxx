@@ -177,10 +177,8 @@ sal_uInt32 Decompression::ReadBits(sal_uInt16 iCount, sal_uInt32 & nBits)
         return 1;
     }
 
-    sal_uInt32 val = 0;     /* bit accumulator */
-
     /* load at least need bits into val */
-    val = m_nCurrent4Byte;
+    sal_uInt32 val = m_nCurrent4Byte; /* bit accumulator */
     while (m_nBitsLeft < iCount)
     {
         if (m_nBytesLeft == 0)
@@ -188,7 +186,7 @@ sal_uInt32 Decompression::ReadBits(sal_uInt16 iCount, sal_uInt32 & nBits)
             m_nBytesLeft = m_pInStream->ReadBytes(m_Buffer, CHUNK);
             m_pBuffer = m_Buffer;
             if (m_nBytesLeft == 0)  return 1;
-            }
+        }
         val |= static_cast<sal_uInt32>(*m_pBuffer++) << m_nBitsLeft;       /* load eight bits */
         m_nBytesLeft --;
         m_nBitsLeft += 8;
