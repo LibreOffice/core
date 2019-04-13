@@ -1745,9 +1745,7 @@ SwTextNode::GetTextAttrAt(sal_Int32 const nIndex, sal_uInt16 const nWhich,
 
 const SwTextInputField* SwTextNode::GetOverlappingInputField( const SwTextAttr& rTextAttr ) const
 {
-    const SwTextInputField* pTextInputField = nullptr;
-
-    pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextAttrAt( rTextAttr.GetStart(), RES_TXTATR_INPUTFIELD, PARENT ));
+    const SwTextInputField* pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextAttrAt( rTextAttr.GetStart(), RES_TXTATR_INPUTFIELD, PARENT ));
 
     if ( pTextInputField == nullptr && rTextAttr.End() != nullptr )
     {
@@ -1776,9 +1774,7 @@ SwTextField* SwTextNode::GetFieldTextAttrAt(
     const sal_Int32 nIndex,
     const bool bIncludeInputFieldAtStart ) const
 {
-    SwTextField* pTextField = nullptr;
-
-    pTextField = dynamic_cast<SwTextField*>(GetTextAttrForCharAt( nIndex, RES_TXTATR_FIELD ));
+    SwTextField* pTextField = dynamic_cast<SwTextField*>(GetTextAttrForCharAt( nIndex, RES_TXTATR_FIELD ));
     if ( pTextField == nullptr )
     {
         pTextField = dynamic_cast<SwTextField*>(GetTextAttrForCharAt( nIndex, RES_TXTATR_ANNOTATION ));

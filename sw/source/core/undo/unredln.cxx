@@ -180,8 +180,7 @@ SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
 SwRewriter SwUndoRedlineDelete::GetRewriter() const
 {
     SwRewriter aResult;
-    OUString aStr = m_sRedlineText;
-    aStr = DenoteSpecialCharacters(aStr);
+    OUString aStr = DenoteSpecialCharacters(m_sRedlineText);
     aStr = ShortenString(aStr, nUndoStringLength, SwResId(STR_LDOTS));
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, aStr);

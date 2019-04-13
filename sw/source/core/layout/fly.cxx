@@ -1725,8 +1725,7 @@ void SwFlyFrame::MakeContentPos( const SwBorderAttrs &rAttrs )
     if( IsMinHeight() )
         nMinHeight = aRectFnSet.IsVert() ? aRelSize.Width() : aRelSize.Height();
 
-    Point aNewContentPos;
-    aNewContentPos = getFramePrintArea().Pos();
+    Point aNewContentPos = getFramePrintArea().Pos();
     const SdrTextVertAdjust nAdjust = GetFormat()->GetTextVertAdjust().GetValue();
 
     if( nAdjust != SDRTEXTVERTADJUST_TOP )

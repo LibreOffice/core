@@ -911,8 +911,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                 aAny = xSet->getPropertyValue( rName );
 
                 uno::Reference < script::XTypeConverter > xConverter( script::Converter::create(comphelper::getProcessComponentContext()) );
-                uno::Any aNew;
-                aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
+                uno::Any aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
                 aNew >>= sVal;
             }
             catch (uno::Exception&) {}
