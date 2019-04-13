@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_4774049a",
+        "filename": "solenv/gbuild/LinkTarget.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-04-13T09:19:21Z",
+      "side": 1,
+      "message": "Possibly gb_LINKER_DEBUGINFO_FLAGS were meant?",
+      "range": {
+        "startLine": 53,
+        "startChar": 81,
+        "endLine": 53,
+        "endChar": 99
+      },
+      "revId": "65f27f55cbb5994fbabe9716a92ea4d3f20e3e54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
