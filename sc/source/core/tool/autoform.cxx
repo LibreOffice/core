@@ -29,6 +29,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
+#include <editeng/borderline.hxx>
 #include <editeng/langitem.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/fileformat.h>

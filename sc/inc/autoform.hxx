@@ -54,6 +54,7 @@
 #include <array>
 #include <memory>
 #include <map>
+#include <climits>
 
 class ScDocument;
 

@@ -809,3 +809,70 @@ blacklist:
     include/sfx2/viewsh.hxx:
     # Needed for macro 
     - class SfxViewFactory
+    include/editeng/AccessibleContextBase.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    include/editeng/AccessibleImageBullet.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleComponent.hpp
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    include/editeng/AccessibleEditableTextPara.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleComponent.hpp
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    - com/sun/star/accessibility/XAccessibleEditableText.hpp
+    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/accessibility/XAccessibleHypertext.hpp
+    - com/sun/star/accessibility/XAccessibleMultiLineText.hpp
+    - com/sun/star/accessibility/XAccessibleTextAttributes.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    include/editeng/AccessibleStaticTextBase.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleText.hpp
+    - com/sun/star/accessibility/XAccessibleTextAttributes.hpp
+    include/editeng/editerr.hxx:
+    # Needed for macro defines
+    - vcl/errcode.hxx
+    include/editeng/eeitem.hxx:
+    # Needed for macro defines
+    - svl/typedwhich.hxx
+    - class SfxBoolItem
+    - class SfxGrabBagItem
+    - class SfxInt16Item
+    - class SvxAdjustItem
+    - class SvxAutoKernItem
+    - class SvxBackgroundColorItem
+    - class SvxCaseMapItem
+    - class SvxCharReliefItem
+    - class SvxCharScaleWidthItem
+    - class SvxColorItem
+    - class SvxContourItem
+    - class SvxCrossedOutItem
+    - class SvxEmphasisMarkItem
+    - class SvxEscapementItem
+    - class SvxFontHeightItem
+    - class SvxFontItem
+    - class SvxForbiddenRuleItem
+    - class SvxFrameDirectionItem
+    - class SvxHangingPunctuationItem
+    - class SvxKerningItem
+    - class SvxLanguageItem
+    - class SvxLineSpacingItem
+    - class SvxLRSpaceItem
+    - class SvxOverlineItem
+    - class SvxPostureItem
+    - class SvXMLAttrContainerItem
+    - class SvxScriptSpaceItem
+    - class SvxShadowedItem
+    - class SvxTabStopItem
+    - class SvxULSpaceItem
+    - class SvxUnderlineItem
+    - class SvxWeightItem
+    - class SvxWordLineModeItem

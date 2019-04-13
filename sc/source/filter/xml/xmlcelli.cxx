@@ -60,6 +60,7 @@
 #include <xmloff/xmlimppr.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/svdocapt.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/colritem.hxx>

@@ -23,8 +23,6 @@
 #include <svl/eitem.hxx>
 #include <editeng/editengdllapi.h>
 
-class SvXMLUnitConverter;
-
 // class SvxBlinkItem -------------------------------------------------
 
 /*

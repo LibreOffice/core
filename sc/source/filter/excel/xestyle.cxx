@@ -28,6 +28,7 @@
 #include <vcl/font.hxx>
 #include <svl/languageoptions.hxx>
 #include <scitems.hxx>
+#include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/brushitem.hxx>

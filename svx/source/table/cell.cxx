@@ -48,6 +48,7 @@
 #include <svx/unoshprp.hxx>
 #include <svx/unoshape.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <svx/xflbstit.hxx>

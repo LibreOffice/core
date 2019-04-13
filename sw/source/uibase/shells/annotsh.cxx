@@ -31,6 +31,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/spltitem.hxx>
 #include <editeng/lrspitem.hxx>

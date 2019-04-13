@@ -50,10 +50,13 @@
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
+#include <editeng/AccessibleImageBullet.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/unoipset.hxx>
 #include <editeng/outliner.hxx>
+#include <editeng/unoedprx.hxx>
+#include <editeng/unoedsrc.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 

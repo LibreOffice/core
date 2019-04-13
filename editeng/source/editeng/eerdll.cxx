@@ -25,6 +25,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <svl/solar.hrc>
+#include <editeng/eeitem.hxx>
 #include <editeng/eerdll.hxx>
 #include <eerdll2.hxx>
 #include <editeng/lspcitem.hxx>

@@ -22,11 +22,8 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -37,12 +34,18 @@
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 
 #include <comphelper/accessibletexthelper.hxx>
 #include <editeng/AccessibleParaManager.hxx>
-#include <editeng/AccessibleImageBullet.hxx>
-#include <editeng/unoedprx.hxx>
+#include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
+
+class SvxViewForwarder;
+class MapMode;
+class SvxAccessibleTextAdapter;
+class SvxAccessibleTextEditViewAdapter;
+namespace accessibility { class AccessibleImageBullet; }
 
 namespace accessibility
 {

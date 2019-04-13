@@ -20,22 +20,20 @@
 #ifndef INCLUDED_EDITENG_EDITENG_HXX
 #define INCLUDED_EDITENG_EDITENG_HXX
 
-#include <rtl/ref.hxx>
 #include <memory>
 #include <vector>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 
-#include <svl/style.hxx>
 #include <svl/typedwhich.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editstat.hxx>
+#include <editeng/editobj.hxx>
 #include <editeng/editengdllapi.h>
 #include <i18nlangtag/lang.h>
 
 #include <tools/lineend.hxx>
-#include <tools/link.hxx>
 
 #include <editeng/eedata.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -44,6 +42,7 @@
 #include <functional>
 
 namespace boost { template <class T> class optional; }
+template <typename Arg, typename Ret> class Link;
 
 namespace com { namespace sun { namespace star {
   namespace linguistic2 {
@@ -86,9 +85,7 @@ class Size;
 class Point;
 namespace tools { class Rectangle; }
 class SvStream;
-class OutputDevice;
 namespace vcl { class Window; }
-class SfxPoolItem;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
 class SvxNumberFormat;
@@ -101,13 +98,13 @@ class EditLine;
 class InternalEditStatus;
 class EditSelectionEngine;
 class EditDoc;
-struct PasteOrDropInfos;
 class Range;
 struct EPaM;
 class DeletedNodeInfo;
 class ParaPortionList;
 enum class CharCompressType;
 enum class TransliterationFlags;
+class LinkParamNone;
 
 /** values for:
        SfxItemSet GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs::All );
@@ -141,7 +138,6 @@ enum class SetAttribsMode {
     NONE, WholeWord, Edge
 };
 
-class SdrObject;
 class EDITENG_DLLPUBLIC EditEngine
 {
     friend class EditView;

@@ -21,6 +21,7 @@
 #include <helpids.h>
 
 #include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 
 #include <editeng/editview.hxx>

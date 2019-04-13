@@ -30,6 +30,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
 #include <tools/helpers.hxx>
 #include <svx/sdtfchim.hxx>

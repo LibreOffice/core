@@ -21,18 +21,18 @@
 #define INCLUDED_EDITENG_ACCESSIBLEIMAGEBULLET_HXX
 
 #include <tools/gen.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <editeng/AccessibleParaManager.hxx>
-#include <editeng/unoedsrc.hxx>
+
+class SvxEditSource;
+class SvxTextForwarder;
+class SvxViewForwarder;
 
 namespace accessibility
 {

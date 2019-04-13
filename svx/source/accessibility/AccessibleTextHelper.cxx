@@ -58,6 +58,7 @@
 
 #include <editeng/unoedhlp.hxx>
 #include <editeng/unopracc.hxx>
+#include <editeng/unoedprx.hxx>
 #include <editeng/AccessibleParaManager.hxx>
 #include <editeng/AccessibleEditableTextPara.hxx>
 #include <svx/svdmodel.hxx>

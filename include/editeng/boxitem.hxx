@@ -21,12 +21,13 @@
 #define INCLUDED_EDITENG_BOXITEM_HXX
 
 #include <svl/poolitem.hxx>
-#include <editeng/borderline.hxx>
 #include <editeng/editengdllapi.h>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
 
+
+namespace editeng { class SvxBorderLine; }
 
 // class SvxBoxItem ------------------------------------------------------
 

@@ -24,6 +24,7 @@
 #include <svx/clipfmtitem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/crossedoutitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/escapementitem.hxx>

@@ -23,9 +23,11 @@
 #include <com/sun/star/table/BorderLineStyle.hpp>
 
 #include <tools/color.hxx>
-#include <svl/poolitem.hxx>
+#include <tools/mapunit.hxx>
 #include <editeng/editengdllapi.h>
 #include <svtools/borderline.hxx>
+
+class IntlWrapper;
 
 // Line defaults in twips (former Writer defaults):
 

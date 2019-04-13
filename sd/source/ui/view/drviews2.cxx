@@ -33,6 +33,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/scanner/XScannerManager2.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>

@@ -21,6 +21,7 @@
 #include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
+#include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/scripttypeitem.hxx>

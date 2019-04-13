@@ -21,6 +21,7 @@
 
 #include <svx/svxids.hrc>
 
+#include <editeng/eeitem.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/unolingu.hxx>

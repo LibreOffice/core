@@ -70,6 +70,7 @@
 #include <cellvalue.hxx>
 
 #include <svl/stritem.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
 

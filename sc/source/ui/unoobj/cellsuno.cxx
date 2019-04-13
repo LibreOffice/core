@@ -23,6 +23,7 @@
 
 #include <vcl/svapp.hxx>
 #include <svx/algitem.hxx>
+#include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/editeng.hxx>

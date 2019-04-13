@@ -18,6 +18,7 @@
  */
 
 #include <scitems.hxx>
+#include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 
 #include <tabvwsh.hxx>

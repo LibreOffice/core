@@ -20,6 +20,7 @@
 #include <memory>
 #include <lotattr.hxx>
 
+#include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>

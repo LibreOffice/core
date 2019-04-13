@@ -27,6 +27,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxdlg.hxx>
+#include <vcl/cursor.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

@@ -23,8 +23,6 @@
 #include <tools/color.hxx>
 #include <editeng/editengdllapi.h>
 
-class SvXMLUnitConverter;
-
 #define VERSION_USEAUTOCOLOR    1
 
 /** SvxColorItem item describes a color.

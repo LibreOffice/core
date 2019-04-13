@@ -14,10 +14,10 @@
 #include <editeng/editengdllapi.h>
 
 #include <editeng/flditem.hxx>
-#include <editeng/eeitem.hxx>
 
 #include <com/sun/star/text/textfield/Type.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
+
+namespace com::sun::star::document { class XDocumentProperties; }
 
 
 namespace editeng

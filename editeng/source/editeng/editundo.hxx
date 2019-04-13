@@ -26,6 +26,7 @@
 #include <vector>
 #include <memory>
 
+class EditTextObject;
 class EditEngine;
 enum class SetAttribsMode;
 enum class TransliterationFlags;
