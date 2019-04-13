@@ -144,44 +144,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
 
     switch( nSlotId )
     {
-        case SID_OPENDLG_CONSOLIDATE:
-        {
-            SfxItemSet aArgSet( GetPool(),
-                                svl::Items<SCITEM_CONSOLIDATEDATA,
-                                SCITEM_CONSOLIDATEDATA>{} );
-
-            const ScConsolidateParam* pDlgData =
-                            pDoc->GetConsolidateDlgData();
-
-            if ( !pDlgData )
-            {
-                ScConsolidateParam  aConsParam;
-                SCCOL nStartCol, nEndCol;
-                SCROW nStartRow, nEndRow;
-                SCTAB nStartTab, nEndTab;
-
-                GetViewData().GetSimpleArea( nStartCol, nStartRow, nStartTab,
-                                              nEndCol,   nEndRow,   nEndTab );
-
-                PutInOrder( nStartCol, nEndCol );
-                PutInOrder( nStartRow, nEndRow );
-                PutInOrder( nStartTab, nEndTab );
-
-                aConsParam.nCol = nStartCol;
-                aConsParam.nRow = nStartRow;
-                aConsParam.nTab = nStartTab;
-
-                aArgSet.Put( ScConsolidateItem( SCITEM_CONSOLIDATEDATA,
-                                                &aConsParam ) );
-            }
-            else
-            {
-                aArgSet.Put( ScConsolidateItem( SCITEM_CONSOLIDATEDATA, pDlgData ) );
-            }
-            pResult = VclPtr<ScConsolidateDlg>::Create( pB, pCW, pParent, aArgSet );
-        }
-        break;
-
         case SID_SPECIAL_FILTER:
         {
             ScQueryParam    aQueryParam;
@@ -485,6 +447,43 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                                       rViewData.GetTabNo());
 
             xResult.reset(new ScTabOpDlg(pB, pCW, pParent, rViewData.GetDocument(), aCurPos));
+            break;
+        }
+        case SID_OPENDLG_CONSOLIDATE:
+        {
+            SfxItemSet aArgSet( GetPool(),
+                                svl::Items<SCITEM_CONSOLIDATEDATA,
+                                SCITEM_CONSOLIDATEDATA>{} );
+
+            const ScConsolidateParam* pDlgData =
+                            pDoc->GetConsolidateDlgData();
+
+            if ( !pDlgData )
+            {
+                ScConsolidateParam  aConsParam;
+                SCCOL nStartCol, nEndCol;
+                SCROW nStartRow, nEndRow;
+                SCTAB nStartTab, nEndTab;
+
+                GetViewData().GetSimpleArea( nStartCol, nStartRow, nStartTab,
+                                              nEndCol,   nEndRow,   nEndTab );
+
+                PutInOrder( nStartCol, nEndCol );
+                PutInOrder( nStartRow, nEndRow );
+                PutInOrder( nStartTab, nEndTab );
+
+                aConsParam.nCol = nStartCol;
+                aConsParam.nRow = nStartRow;
+                aConsParam.nTab = nStartTab;
+
+                aArgSet.Put( ScConsolidateItem( SCITEM_CONSOLIDATEDATA,
+                                                &aConsParam ) );
+            }
+            else
+            {
+                aArgSet.Put( ScConsolidateItem( SCITEM_CONSOLIDATEDATA, pDlgData ) );
+            }
+            xResult.reset(new ScConsolidateDlg(pB, pCW, pParent, aArgSet));
             break;
         }
     }
