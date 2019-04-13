@@ -1030,8 +1030,7 @@ void OTableController::alterColumns()
                 bAutoIncrement != pField->IsAutoIncrement())&&
                 xColumnFactory.is())
             {
-                Reference<XPropertySet> xNewColumn;
-                xNewColumn = xColumnFactory->createDataDescriptor();
+                Reference<XPropertySet> xNewColumn = xColumnFactory->createDataDescriptor();
                 ::dbaui::setColumnProperties(xNewColumn,pField);
                 // first try to alter the column
                 bool bNotOk = false;
@@ -1082,8 +1081,7 @@ void OTableController::alterColumns()
         { // we can't find the column so we could try it with the index before we drop and append a new column
             try
             {
-                Reference<XPropertySet> xNewColumn;
-                xNewColumn = xColumnFactory->createDataDescriptor();
+                Reference<XPropertySet> xNewColumn = xColumnFactory->createDataDescriptor();
                 ::dbaui::setColumnProperties(xNewColumn,pField);
                 xAlter->alterColumnByIndex(nPos,xNewColumn);
                 if(xColumns->hasByName(pField->GetName()))

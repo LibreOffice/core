@@ -427,8 +427,7 @@ namespace dbaui
             if ( m_pCollection->isFileSystemBased( m_eType ) )
             {
                 // get the two parts: prefix and file URL
-                OUString sFileURLDecoded;
-                sFileURLDecoded = sURL;
+                OUString sFileURLDecoded = sURL;
 
                 sURL = OUString();
                 if ( !sFileURLDecoded.isEmpty() )
@@ -661,10 +660,8 @@ namespace dbaui
 
     bool OConnectionHelper::commitURL()
     {
-        OUString sURL;
-        OUString sOldPath;
-        sOldPath = m_xConnectionURL->GetSavedValueNoPrefix();
-        sURL = m_xConnectionURL->GetTextNoPrefix();
+        OUString sOldPath = m_xConnectionURL->GetSavedValueNoPrefix();
+        OUString sURL = m_xConnectionURL->GetTextNoPrefix();
 
         if ( m_pCollection->isFileSystemBased(m_eType) )
         {
