@@ -51,7 +51,7 @@ public:
     virtual ~OOXMLFastContextHandler() override;
 
     // css::xml::sax::XFastContextHandler:
-    virtual void SAL_CALL startFastElement (Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
+    virtual void SAL_CALL startFastElement (Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override final;
 
     virtual void SAL_CALL startUnknownElement(const OUString & Namespace, const OUString & Name, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
@@ -224,9 +224,6 @@ protected:
     void startAction();
     void endAction();
 
-    // 2.10 of XML 1.0 specification
-    virtual bool IsPreserveSpace() const;
-
     const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() { return m_xContext;}
 
     bool inPositionV;
@@ -237,9 +234,14 @@ private:
     /// Handles AlternateContent. Returns true, if children of the current element should be ignored.
     bool prepareMceContext(Token_t nElement, const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs);
 
+    // 2.10 of XML 1.0 specification
+    bool IsPreserveSpace() const;
+
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     bool m_bDiscardChildren;
     bool m_bTookChoice; ///< Did we take the Choice or want Fallback instead?
+    bool mbPreserveSpace = false;
+    bool mbPreserveSpaceSet = false;
 
 };
 
@@ -259,13 +261,8 @@ public:
 
     void handleHyperlink();
 
-protected:
-    virtual bool IsPreserveSpace() const override;
-
 private:
     mutable OOXMLPropertySet::Pointer_t mpPropertySetAttrs;
-    bool mbPreserveSpace    : 1;
-    bool mbPreserveSpaceSet : 1;
 };
 
 class OOXMLFastContextHandlerProperties : public OOXMLFastContextHandler
