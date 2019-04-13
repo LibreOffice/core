@@ -206,9 +206,9 @@ void ScTabViewShell::Activate(bool bMDI)
                     if (pRefDlg)
                         pRefDlg->ViewShellChanged();
                 }
-                if (pChildWnd->GetController())
+                if (auto pController = pChildWnd->GetController())
                 {
-                    IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetController().get());
+                    IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pController.get());
                     if (pRefDlg)
                         pRefDlg->ViewShellChanged();
                 }
@@ -1153,8 +1153,10 @@ void ScTabViewShell::StartSimpleRefDialog(
         pWnd->SetRefString( rInitVal );
         pWnd->SetFlags( bCloseOnButtonUp, bSingleCell, bMultiSelection );
         ScSimpleRefDlgWrapper::SetAutoReOpen( false );
-        vcl::Window* pWin = pWnd->GetWindow();
-        pWin->SetText( rTitle );
+        if (vcl::Window* pWin = pWnd->GetWindow())
+            pWin->SetText( rTitle );
+        if (auto pWin = pWnd->GetController())
+            pWin->set_title(rTitle);
         pWnd->StartRefInput();
     }
 }
@@ -1167,9 +1169,13 @@ void ScTabViewShell::StopSimpleRefDialog()
     ScSimpleRefDlgWrapper* pWnd = static_cast<ScSimpleRefDlgWrapper*>(pViewFrm->GetChildWindow( nId ));
     if (pWnd)
     {
-        vcl::Window* pWin = pWnd->GetWindow();
-        if (pWin && pWin->IsSystemWindow())
-            static_cast<SystemWindow*>(pWin)->Close();     // calls abort handler
+        if (vcl::Window* pWin = pWnd->GetWindow())
+        {
+            if (pWin->IsSystemWindow())
+                static_cast<SystemWindow*>(pWin)->Close();     // calls abort handler
+        }
+        if (auto pWin = pWnd->GetController())
+            pWnd->response(RET_CLOSE);
     }
 }
 
