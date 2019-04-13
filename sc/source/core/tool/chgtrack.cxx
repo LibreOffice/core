@@ -1442,8 +1442,7 @@ void ScChangeActionContent::GetDescription(
     OUString aTmpStr;
     GetRefString(aTmpStr, pDoc);
 
-    sal_Int32 nPos = 0;
-    nPos = aRsc.indexOf("#1", nPos);
+    sal_Int32 nPos = aRsc.indexOf("#1", 0);
     if (nPos >= 0)
     {
         aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);

@@ -433,8 +433,7 @@ ScVbaWorksheets::Item(const uno::Any& Index, const uno::Any& Index2)
     if ( Index.getValueTypeClass() == uno::TypeClass_SEQUENCE )
     {
         const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter(mxContext);
-        uno::Any aConverted;
-        aConverted = xConverter->convertTo( Index, cppu::UnoType<uno::Sequence< uno::Any >>::get() );
+        uno::Any aConverted = xConverter->convertTo( Index, cppu::UnoType<uno::Sequence< uno::Any >>::get() );
         SheetMap aSheets;
         uno::Sequence< uno::Any > sIndices;
         aConverted >>= sIndices;

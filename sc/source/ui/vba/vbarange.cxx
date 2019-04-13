@@ -215,8 +215,7 @@ static double lcl_Round2DecPlaces( double nVal )
     long tmp = static_cast<long>(nVal);
     if ( ( nVal - tmp ) >= 0.5 )
         ++tmp;
-    nVal = tmp;
-    nVal = nVal/100;
+    nVal = double(tmp)/100;
     return nVal;
 }
 
@@ -3420,8 +3419,7 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
 
     if ( nOrientation == excel::XlSortOrientation::xlSortRows )
         bIsSortColumns = true;
-    sal_Int16 nHeader = 0;
-    nHeader = aSortParam.nCompatHeader;
+    sal_Int16 nHeader = aSortParam.nCompatHeader;
     bool bContainsHeader = false;
 
     if ( Header.hasValue() )
