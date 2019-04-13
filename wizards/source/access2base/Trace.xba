@@ -36,8 +36,9 @@ Dim sLineBreak As String, oTraceDialog As Object
 	sLineBreak = vbNewLine
 
 	Set oTraceDialog = CreateUnoDialog(Utils._GetDialogLib().dlgTrace)
-	oTraceDialog.Title = _GetLabel(&quot;DLGTRACE_TITLE&quot;)	&apos;	HelpText ???
-	
+	oTraceDialog.Title = _GetLabel(&quot;DLGTRACE_TITLE&quot;)
+	oTraceDialog.Model.HelpText = _GetLabel(&quot;DLGTRACE_HELP&quot;)
+
 Dim oEntries As Object, oTraceLog As Object, oClear As Object, oMinLevel As Object, oNbEntries As Object, oDump As Object
 Dim oControl As Object
 Dim i As Integer, sText As String, iOKCancel As Integer
