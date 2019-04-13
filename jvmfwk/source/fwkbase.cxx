@@ -138,8 +138,7 @@ boost::optional<VersionInfo> VendorSettings::getVersionInformation(const OUStrin
         "/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
         osVendor + OString("\"]/jf:minVersion");
 
-    CXPathObjectPtr xPathObjectMin;
-    xPathObjectMin =
+    CXPathObjectPtr xPathObjectMin =
         xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>(sExpression.getStr()),
                                m_xmlPathContextVendorSettings);
     if (xmlXPathNodeSetIsEmpty(xPathObjectMin->nodesetval))
@@ -148,8 +147,7 @@ boost::optional<VersionInfo> VendorSettings::getVersionInformation(const OUStrin
     }
     else
     {
-        CXmlCharPtr sVersion;
-        sVersion = xmlNodeListGetString(
+        CXmlCharPtr sVersion = xmlNodeListGetString(
             m_xmlDocVendorSettings,
             xPathObjectMin->nodesetval->nodeTab[0]->xmlChildrenNode, 1);
         OString osVersion(sVersion);
@@ -160,8 +158,7 @@ boost::optional<VersionInfo> VendorSettings::getVersionInformation(const OUStrin
     //Get maxVersion
     sExpression = OString("/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
         osVendor + OString("\"]/jf:maxVersion");
-    CXPathObjectPtr xPathObjectMax;
-    xPathObjectMax = xmlXPathEvalExpression(
+    CXPathObjectPtr xPathObjectMax = xmlXPathEvalExpression(
         reinterpret_cast<xmlChar const *>(sExpression.getStr()),
         m_xmlPathContextVendorSettings);
     if (xmlXPathNodeSetIsEmpty(xPathObjectMax->nodesetval))
@@ -170,8 +167,7 @@ boost::optional<VersionInfo> VendorSettings::getVersionInformation(const OUStrin
     }
     else
     {
-        CXmlCharPtr sVersion;
-        sVersion = xmlNodeListGetString(
+        CXmlCharPtr sVersion = xmlNodeListGetString(
             m_xmlDocVendorSettings,
             xPathObjectMax->nodesetval->nodeTab[0]->xmlChildrenNode, 1);
         OString osVersion(sVersion);
@@ -182,8 +178,7 @@ boost::optional<VersionInfo> VendorSettings::getVersionInformation(const OUStrin
     //Get excludeVersions
     sExpression = OString("/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
         osVendor + OString("\"]/jf:excludeVersions/jf:version");
-    CXPathObjectPtr xPathObjectVersions;
-    xPathObjectVersions =
+    CXPathObjectPtr xPathObjectVersions =
         xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>(sExpression.getStr()),
                                m_xmlPathContextVendorSettings);
     if (!xmlXPathNodeSetIsEmpty(xPathObjectVersions->nodesetval))
@@ -195,8 +190,7 @@ boost::optional<VersionInfo> VendorSettings::getVersionInformation(const OUStrin
             {
                 if (xmlStrcmp(cur->name, reinterpret_cast<xmlChar const *>("version")) == 0)
                 {
-                    CXmlCharPtr sVersion;
-                    sVersion = xmlNodeListGetString(
+                    CXmlCharPtr sVersion = xmlNodeListGetString(
                         m_xmlDocVendorSettings, cur->xmlChildrenNode, 1);
                     OString osVersion(sVersion);
                     OUString usVersion = OStringToOUString(

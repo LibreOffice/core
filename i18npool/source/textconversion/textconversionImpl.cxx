@@ -80,9 +80,7 @@ TextConversionImpl::getLocaleSpecificTextConversion(const Locale& rLocale)
         aLocale = rLocale;
 
         OUString aPrefix("com.sun.star.i18n.TextConversion_");
-        Reference < XInterface > xI;
-
-        xI = m_xContext->getServiceManager()->createInstanceWithContext(
+        Reference < XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
                 aPrefix + LocaleDataImpl::getFirstLocaleServiceName( aLocale), m_xContext);
         if (!xI.is())
         {
