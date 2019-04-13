@@ -435,8 +435,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
         ( nullptr != (pShell = SfxObjectShell::Current()) &&
                     nullptr != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
-        sal_uInt16 nHtmlMode = 0;
-        nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        sal_uInt16 nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         if (nHtmlMode & HTMLMODE_ON)
         {
             m_xCntSharedBox->hide();

@@ -1231,10 +1231,9 @@ void AccessibleShape::UpdateNameAndDescription()
     try
     {
         Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY_THROW);
-        OUString sString;
 
         // Get the accessible name.
-        sString = GetOptionalProperty(xSet, "Title");
+        OUString sString = GetOptionalProperty(xSet, "Title");
         if (!sString.isEmpty())
         {
             SetAccessibleName(sString, AccessibleContextBase::FromShape);

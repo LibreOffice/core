@@ -1852,8 +1852,7 @@ void Ruler::ImplDrag( const Point& rPos )
         {
             // reset the data
             mbDragCanceled = true;
-            ImplRulerData aTempData;
-            aTempData = *mpDragData;
+            ImplRulerData aTempData = *mpDragData;
             *mpDragData = *mpSaveData;
             mbCalc = true;
             mbFormat = true;

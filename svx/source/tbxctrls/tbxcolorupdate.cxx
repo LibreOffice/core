@@ -78,8 +78,7 @@ namespace svx
         if (!mbWideButton)
         {
             // Also show the current color as QuickHelpText
-            OUString colorSuffix = " (%1)";
-            colorSuffix = colorSuffix.replaceFirst("%1", rNamedColor.second);
+            OUString colorSuffix = OUString(" (%1)").replaceFirst("%1", rNamedColor.second);
             OUString colorHelpText = maCommandLabel + colorSuffix;
 
             mpTbx->SetQuickHelpText(mnBtnId, colorHelpText);

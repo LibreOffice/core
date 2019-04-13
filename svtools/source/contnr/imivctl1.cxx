@@ -1678,8 +1678,7 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcTextRect( SvxIconChoiceCtrlEntry* p
     if( pEntryPos )
         aBound.SetPos( *pEntryPos );
 
-    tools::Rectangle aTextRect( aMaxTextRect );
-    aTextRect = pView->GetTextRect( aTextRect, aEntryText, nCurTextDrawFlags );
+    tools::Rectangle aTextRect = pView->GetTextRect( aMaxTextRect, aEntryText, nCurTextDrawFlags );
 
     Size aTextSize( aTextRect.GetSize() );
 
