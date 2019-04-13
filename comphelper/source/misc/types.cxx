@@ -19,17 +19,12 @@
 
 #include <comphelper/types.hxx>
 #include <comphelper/extract.hxx>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <typelib/typedescription.hxx>
-
-#include <memory.h>
 
 
 namespace comphelper
@@ -38,7 +33,6 @@ namespace comphelper
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 
 sal_Int64 getINT64(const Any& _rAny)

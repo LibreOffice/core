@@ -21,10 +21,8 @@
 #include <comphelper/logging.hxx>
 
 #include <com/sun/star/logging/LoggerPool.hpp>
-#include <com/sun/star/logging/LogLevel.hpp>
 
 #include <osl/diagnose.h>
-#include <rtl/ustrbuf.hxx>
 
 
 namespace comphelper

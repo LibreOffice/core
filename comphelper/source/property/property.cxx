@@ -19,21 +19,17 @@
 
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/types.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
-    #include <rtl/strbuf.hxx>
     #include <cppuhelper/exc_hlp.hxx>
-    #include <osl/thread.h>
     #include <com/sun/star/lang/XServiceInfo.hpp>
     #include <typeinfo>
 #endif
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/genfunc.h>
 #include <rtl/ustrbuf.hxx>
 #include <algorithm>
 

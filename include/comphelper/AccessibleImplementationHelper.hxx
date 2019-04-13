@@ -20,11 +20,17 @@
 #ifndef INCLUDED_COMPHELPER_ACESSIBLEIMPLEMENTATIONHELPER_HXX
 #define INCLUDED_COMPHELPER_ACESSIBLEIMPLEMENTATIONHELPER_HXX
 
-#include <com/sun/star/awt/KeyStroke.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
-
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
+
+namespace com::sun::star::awt
+{
+struct KeyStroke;
+}
+namespace com::sun::star::uno
+{
+template <class E> class Sequence;
+}
 
 namespace comphelper
 {

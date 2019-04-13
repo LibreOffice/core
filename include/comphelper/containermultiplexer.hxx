@@ -20,11 +20,13 @@
 #ifndef INCLUDED_COMPHELPER_CONTAINERMULTIPLEXER_HXX
 #define INCLUDED_COMPHELPER_CONTAINERMULTIPLEXER_HXX
 
-#include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ref.hxx>
+
+namespace osl { class Mutex; }
+namespace com::sun::star::container { class XContainer; }
 
 
 namespace comphelper

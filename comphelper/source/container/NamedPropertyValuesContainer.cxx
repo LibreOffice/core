@@ -19,7 +19,6 @@
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -28,6 +27,7 @@
 #include <map>
 
 
+namespace com::sun::star::uno { class XComponentContext; }
 using namespace com::sun::star;
 
 typedef std::map< OUString, uno::Sequence<beans::PropertyValue> > NamedPropertyValues;

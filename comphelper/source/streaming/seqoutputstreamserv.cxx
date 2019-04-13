@@ -19,19 +19,15 @@
 
 #include <sal/config.h>
 
-#include <comphelper_module.hxx>
-#include <comphelper_services.hxx>
-
 #include <osl/mutex.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/seqstream.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XSequenceOutputStream.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 

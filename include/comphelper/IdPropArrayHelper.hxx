@@ -28,8 +28,6 @@
 #include <rtl/instance.hxx>
 #include <cppuhelper/propshlp.hxx>
 
-namespace cppu { class IPropertyArrayHelper; }
-
 namespace comphelper
 {
 
