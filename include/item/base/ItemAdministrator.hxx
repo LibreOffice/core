@@ -24,7 +24,7 @@
 #include <set>
 #include <unordered_set>
 #include <cassert>
-//#include <item/base/ItemBase.hxx>
+#include <item/base/ItemBase.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 

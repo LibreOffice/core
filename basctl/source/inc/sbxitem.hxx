@@ -24,7 +24,6 @@
 
 // I2TM
 #include <item/base/ItemBase.hxx>
-//#include <item/base/ItemBaseStaticHelper.hxx>
 // ~I2TM
 
 namespace basctl

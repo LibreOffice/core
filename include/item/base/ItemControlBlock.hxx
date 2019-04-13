@@ -21,6 +21,7 @@
 #define INCLUDED_ITEM_BASE_ITEMCONTROLBLOCK_HXX
 
 #include <functional>
+#include <item/base/ItemAdministrator.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 

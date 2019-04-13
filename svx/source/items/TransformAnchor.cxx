@@ -10,6 +10,7 @@
 #include <cassert>
 #include <svx/item/TransformAnchor.hxx>
 #include <item/base/ItemAdministrator.hxx>
+#include <item/base/ItemControlBlock.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 

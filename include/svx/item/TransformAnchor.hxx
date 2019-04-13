@@ -12,6 +12,7 @@
 
 #include <item/simple/CntInt16.hxx>
 #include <svx/swframetypes.hxx>
+#include <svx/svxdllapi.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 

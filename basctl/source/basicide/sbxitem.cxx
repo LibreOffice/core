@@ -20,6 +20,7 @@
 #include <sbxitem.hxx>
 #include <sal/log.hxx>
 #include <item/base/ItemAdministrator.hxx>
+#include <item/base/ItemControlBlock.hxx>
 
 namespace basctl
 {

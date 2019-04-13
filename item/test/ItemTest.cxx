@@ -29,7 +29,7 @@ namespace Item
     class MultiValueAB : public ItemBase
     {
     public:
-        static ItemControlBlock& MultiValueAB::GetStaticItemControlBlock()
+        static ItemControlBlock& GetStaticItemControlBlock()
         {
             static ItemControlBlock aItemControlBlock(
                 std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
@@ -117,7 +117,7 @@ namespace Item
     class MultiValueABC : public MultiValueAB
     {
     public:
-        static ItemControlBlock& MultiValueABC::GetStaticItemControlBlock()
+        static ItemControlBlock& GetStaticItemControlBlock()
         {
             static ItemControlBlock aItemControlBlock(
                 std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
@@ -197,7 +197,7 @@ namespace Item
     class MultiValueABD : public MultiValueAB
     {
     public:
-        static ItemControlBlock& MultiValueABD::GetStaticItemControlBlock()
+        static ItemControlBlock& GetStaticItemControlBlock()
         {
             static ItemControlBlock aItemControlBlock(
                 std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
@@ -241,7 +241,7 @@ namespace Item
     class MultiValueABCD : public MultiValueABC
     {
     public:
-        static ItemControlBlock& MultiValueABCD::GetStaticItemControlBlock()
+        static ItemControlBlock& GetStaticItemControlBlock()
         {
             static ItemControlBlock aItemControlBlock(
                 std::shared_ptr<ItemAdministrator>(new IAdministrator_vector()),
