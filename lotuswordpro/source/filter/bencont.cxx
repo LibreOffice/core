@@ -219,9 +219,7 @@ LtcUtBenValueStream * LtcBenContainer::FindNextValueStreamWithPropertyName(const
         return nullptr;                                            // Property not exist
 
     // Get current object
-    CBenObject * pObj = nullptr;
-
-    pObj =FindNextObjectWithProperty(pObj, pPropertyName->GetID()); // Get next object with same property name
+    CBenObject * pObj =FindNextObjectWithProperty(nullptr, pPropertyName->GetID()); // Get next object with same property name
     if (nullptr == pObj)
         return nullptr;
 

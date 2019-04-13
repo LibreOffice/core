@@ -1400,8 +1400,7 @@ XFCell* LwpTableLayout::GetCellsMap(sal_uInt16 nRow,sal_uInt8 nCol)
     std::pair<sal_uInt16,sal_uInt8> pos;
     pos.first = nRow;
     pos.second = nCol;
-    std::map<std::pair<sal_uInt16,sal_uInt8>,XFCell*>::iterator iter;
-    iter =  m_CellsMap.find(pos);
+    auto iter =  m_CellsMap.find(pos);
     if (iter == m_CellsMap.end())
         return nullptr;
     return iter->second;

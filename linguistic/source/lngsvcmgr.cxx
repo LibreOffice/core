@@ -1704,8 +1704,7 @@ bool LngSvcMgr::SaveCfgSvcs( const OUString &rServiceName )
 
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            uno::Sequence< OUString > aSvcImplNames;
-            aSvcImplNames = pDsp->GetServiceList( pLocale[i] );
+            uno::Sequence< OUString > aSvcImplNames = pDsp->GetServiceList( pLocale[i] );
 
             // build value to be written back to configuration
             uno::Any aCfgAny;

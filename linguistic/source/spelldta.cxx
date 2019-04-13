@@ -125,8 +125,7 @@ void SeqRemoveNegEntries( std::vector< OUString > &rSeq,
     {
         std::vector< OUString > aNew;
         // merge sequence without duplicates and empty strings in new empty sequence
-        aNew = MergeProposalSeqs( aNew, rSeq );
-        rSeq = aNew;
+        rSeq = MergeProposalSeqs( aNew, rSeq );
     }
 }
 
