@@ -1211,9 +1211,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
             // Ignore any loader, which makes trouble :-)
             ::comphelper::SequenceAsHashMap             lLoaderProps(xSet->nextElement());
             OUString                             sLoader     = lLoaderProps.getUnpackedValueOrDefault(PROP_NAME, OUString());
-            css::uno::Reference< css::uno::XInterface > xLoader;
-
-            xLoader = xLoaderFactory->createInstance(sLoader);
+            css::uno::Reference< css::uno::XInterface > xLoader = xLoaderFactory->createInstance(sLoader);
             if (xLoader.is())
                 return xLoader;
         }

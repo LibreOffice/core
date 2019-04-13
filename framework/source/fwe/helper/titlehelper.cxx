@@ -505,8 +505,7 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
     }
     // <- SYNCHRONIZED
 
-    css::uno::Reference< css::uno::XInterface > xComponent;
-    xComponent = xFrame->getController ();
+    css::uno::Reference< css::uno::XInterface > xComponent = xFrame->getController ();
     if ( ! xComponent.is ())
         xComponent = xFrame->getComponentWindow ();
 
