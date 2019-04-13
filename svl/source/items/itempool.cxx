@@ -637,8 +637,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
         // if is already in a pool, then it is worth checking if it is in this one.
         if ( IsPooledItem(&rItem) )
         {
-            SfxPoolItemArray_Impl::PoolItemPtrToIndexMap::const_iterator it;
-            it = pItemArr->maPtrToIndex.find(const_cast<SfxPoolItem *>(&rItem));
+            auto it = pItemArr->maPtrToIndex.find(const_cast<SfxPoolItem *>(&rItem));
 
             // 1. search for an identical pointer in the pool
             if (it != pItemArr->maPtrToIndex.cend())
