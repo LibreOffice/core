@@ -165,8 +165,7 @@ public:
                 if(currentTable == sal_Int32(7))
                     tempMap = &map7;
 
-                BorderLineMap::iterator it;
-                it = tempMap->begin();
+                BorderLineMap::iterator it = tempMap->begin();
 
                 for (sal_Int32 i = 0; i < nLength; ++i)
                 {

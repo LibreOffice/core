@@ -546,10 +546,9 @@ namespace SwLangHelper
     OUString GetTextForLanguageGuessing(EditEngine const * rEditEngine, const ESelection& rDocSelection)
     {
         // string for guessing language
-        OUString aText;
 
         // get the full text of the paragraph that the end of selection is in
-        aText = rEditEngine->GetText(rDocSelection.nEndPos);
+        OUString aText = rEditEngine->GetText(rDocSelection.nEndPos);
         if (!aText.isEmpty())
         {
             sal_Int32 nStt = 0;

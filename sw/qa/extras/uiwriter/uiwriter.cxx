@@ -6559,8 +6559,7 @@ void SwUiWriterTest::testHtmlCopyImages()
     SwDoc* pDoc = createDoc("image.odt");
 
     // Trigger the copy part of HTML copy&paste.
-    WriterRef xWrt;
-    xWrt = new SwHTMLWriter( /*rBaseURL=*/OUString() );
+    WriterRef xWrt = new SwHTMLWriter( /*rBaseURL=*/OUString() );
     CPPUNIT_ASSERT(xWrt.is());
 
     xWrt->m_bWriteClipboardDoc = true;

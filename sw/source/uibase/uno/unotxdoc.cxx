@@ -947,8 +947,7 @@ Reference< XIndexAccess >
     auto pResultCursor(FindAny(xDesc, xCursor, true, nResult, xTmp));
     if(!pResultCursor)
         throw RuntimeException("No result cursor");
-    Reference< XIndexAccess >  xRet;
-    xRet = SwXTextRanges::Create( nResult ? &(*pResultCursor) : nullptr );
+    Reference< XIndexAccess >  xRet = SwXTextRanges::Create( nResult ? &(*pResultCursor) : nullptr );
     return xRet;
 }
 

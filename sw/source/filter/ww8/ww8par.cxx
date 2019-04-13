@@ -5091,8 +5091,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
             FTNNUM_DOC, FTNNUM_CHAPTER, FTNNUM_PAGE, FTNNUM_DOC
         };
 
-        SwFootnoteInfo aInfo;
-        aInfo = m_rDoc.GetFootnoteInfo(); // Copy-Ctor private
+        SwFootnoteInfo aInfo = m_rDoc.GetFootnoteInfo(); // Copy-Ctor private
 
         aInfo.ePos = FTNPOS_PAGE;
         aInfo.eNum = eNumA[m_xWDop->rncFootnote];
@@ -5104,8 +5103,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     }
     if (m_xSBase->AreThereEndnotes())
     {
-        SwEndNoteInfo aInfo;
-        aInfo = m_rDoc.GetEndNoteInfo(); // Same as for Footnote
+        SwEndNoteInfo aInfo = m_rDoc.GetEndNoteInfo(); // Same as for Footnote
         sal_uInt16 nfcEdnRef = m_xWDop->nfcEdnRef & 0xF;
         aInfo.aFormat.SetNumberingType( eNumTA[nfcEdnRef] );
         if( m_xWDop->nEdn )

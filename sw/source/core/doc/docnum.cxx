@@ -2422,9 +2422,7 @@ sal_uInt16 SwDoc::FindNumRule( const OUString& rName ) const
 
 SwNumRule* SwDoc::FindNumRulePtr( const OUString& rName ) const
 {
-    SwNumRule * pResult = nullptr;
-
-    pResult = maNumRuleMap[rName];
+    SwNumRule * pResult = maNumRuleMap[rName];
 
     if ( !pResult )
     {

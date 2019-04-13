@@ -82,9 +82,7 @@ bool SwObjectFormatterLayFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
 
 bool SwObjectFormatterLayFrame::DoFormatObjs()
 {
-    bool bSuccess( true );
-
-    bSuccess = FormatObjsAtFrame_();
+    bool bSuccess = FormatObjsAtFrame_();
 
     if ( bSuccess && GetAnchorFrame().IsPageFrame() )
     {

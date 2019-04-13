@@ -200,8 +200,7 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
                     uno::UNO_QUERY );
                 if( !xDesktop.is() )
                     return false;
-                uno::Reference< lang::XComponent > xComp;
-                xComp = xDesktop->getCurrentComponent();
+                uno::Reference< lang::XComponent > xComp = xDesktop->getCurrentComponent();
                 if( !xComp.is() )
                     return false;
                 uno::Reference< css::document::XLinkTargetSupplier >  xLTS(xComp, uno::UNO_QUERY);

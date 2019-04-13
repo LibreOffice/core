@@ -51,9 +51,7 @@ SvXMLImportContextRef SwXMLBodyContentContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    pContext = GetSwImport().GetTextImport()->CreateTextChildContext(
+    SvXMLImportContext *pContext = GetSwImport().GetTextImport()->CreateTextChildContext(
             GetImport(), nPrefix, rLocalName, xAttrList,
                XMLTextType::Body );
     if( !pContext )

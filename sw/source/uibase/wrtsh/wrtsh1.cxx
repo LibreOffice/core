@@ -595,9 +595,8 @@ void SwWrtShell::LaunchOLEObj( long nVerb )
     {
         svt::EmbeddedObjectRef& xRef = GetOLEObject();
         OSL_ENSURE( xRef.is(), "OLE not found" );
-        SfxInPlaceClient* pCli=nullptr;
 
-        pCli = GetView().FindIPClient( xRef.GetObject(), &GetView().GetEditWin() );
+        SfxInPlaceClient* pCli = GetView().FindIPClient( xRef.GetObject(), &GetView().GetEditWin() );
         if ( !pCli )
             pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xRef );
 

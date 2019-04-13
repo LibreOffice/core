@@ -3226,8 +3226,7 @@ void AttributeOutputBase::TextFlyContent( const SwFormatFlyCnt& rFlyContent )
 {
     if ( auto pTextNd = dynamic_cast< const SwContentNode *>( GetExport().m_pOutFormatNode )  )
     {
-        Point aLayPos;
-        aLayPos = pTextNd->FindLayoutRect( false, &aLayPos ).Pos();
+        Point aLayPos = pTextNd->FindLayoutRect( false, &aLayPos ).Pos();
 
         SwPosition aPos( *pTextNd );
         ww8::Frame aFrame( *rFlyContent.GetFrameFormat(), aPos );

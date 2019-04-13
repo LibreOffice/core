@@ -6941,9 +6941,7 @@ void DocxAttributeOutput::CharCaseMap( const SvxCaseMapItem& rCaseMap )
 void DocxAttributeOutput::CharColor( const SvxColorItem& rColor )
 {
     const Color aColor( rColor.GetValue() );
-    OString aColorString;
-
-    aColorString = msfilter::util::ConvertColor( aColor );
+    OString aColorString = msfilter::util::ConvertColor( aColor );
 
     const char* pExistingValue(nullptr);
     if (m_pColorAttrList.is() && m_pColorAttrList->getAsChar(FSNS(XML_w, XML_val), pExistingValue))
