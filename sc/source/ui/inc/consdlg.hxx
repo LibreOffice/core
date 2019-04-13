@@ -30,47 +30,21 @@ class ScDocument;
 class ScRangeUtil;
 class ScAreaData;
 
-class ScConsolidateDlg : public ScAnyRefDlg
+class ScConsolidateDlg : public ScAnyRefDlgController
 {
 public:
-                    ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
-                                      const SfxItemSet& rArgSet );
-                    virtual ~ScConsolidateDlg() override;
-    virtual void    dispose() override;
+    ScConsolidateDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
+                     const SfxItemSet& rArgSet);
+    virtual ~ScConsolidateDlg() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
 
     virtual bool    IsRefInputMode() const override { return true; }
     virtual void    SetActive() override;
 
-    virtual bool    Close() override;
-
-protected:
-    virtual void    Deactivate() override;
+    virtual void    Close() override;
 
 private:
-    VclPtr<ListBox>         pLbFunc;
-    VclPtr<ListBox>         pLbConsAreas;
-
-    VclPtr<ListBox>         pLbDataArea;
-    VclPtr<formula::RefEdit>        pEdDataArea;
-    VclPtr<formula::RefButton>      pRbDataArea;
-
-    VclPtr<ListBox>         pLbDestArea;
-    VclPtr<formula::RefEdit>        pEdDestArea;
-    VclPtr<formula::RefButton>      pRbDestArea;
-
-    VclPtr<VclExpander>     pExpander;
-    VclPtr<CheckBox>        pBtnByRow;
-    VclPtr<CheckBox>        pBtnByCol;
-
-    VclPtr<CheckBox>        pBtnRefs;
-
-    VclPtr<OKButton>        pBtnOk;
-    VclPtr<CancelButton>    pBtnCancel;
-    VclPtr<PushButton>      pBtnAdd;
-    VclPtr<PushButton>      pBtnRemove;
-
     OUString const         aStrUndefined;
 
     ScConsolidateParam const  theConsData;
@@ -80,19 +54,49 @@ private:
     std::unique_ptr<ScAreaData[]> pAreaData;
     size_t              nAreaDataCount;
     sal_uInt16 const          nWhichCons;
-
-    VclPtr<formula::RefEdit>   pRefInputEdit;
     bool                bDlgLostFocus;
+
+    formula::WeldRefEdit*   m_pRefInputEdit;
+
+    std::unique_ptr<weld::ComboBox> m_xLbFunc;
+    std::unique_ptr<weld::TreeView> m_xLbConsAreas;
+
+    std::unique_ptr<weld::ComboBox> m_xLbDataArea;
+    std::unique_ptr<formula::WeldRefEdit> m_xEdDataArea;
+    std::unique_ptr<formula::WeldRefButton> m_xRbDataArea;
+
+    std::unique_ptr<weld::ComboBox> m_xLbDestArea;
+    std::unique_ptr<formula::WeldRefEdit> m_xEdDestArea;
+    std::unique_ptr<formula::WeldRefButton> m_xRbDestArea;
+
+    std::unique_ptr<weld::Expander> m_xExpander;
+    std::unique_ptr<weld::CheckButton> m_xBtnByRow;
+    std::unique_ptr<weld::CheckButton> m_xBtnByCol;
+
+    std::unique_ptr<weld::CheckButton> m_xBtnRefs;
+
+    std::unique_ptr<weld::Button> m_xBtnOk;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
+    std::unique_ptr<weld::Button> m_xBtnAdd;
+    std::unique_ptr<weld::Button> m_xBtnRemove;
+
+    std::unique_ptr<weld::Label> m_xDataFT;
+    std::unique_ptr<weld::Label> m_xDestFT;
 
     void Init               ();
     void FillAreaLists      ();
-    bool VerifyEdit         ( formula::RefEdit* pEd );
+    bool VerifyEdit(formula::WeldRefEdit* pEd);
 
-    DECL_LINK( OkHdl,    Button*, void );
-    DECL_LINK( ClickHdl, Button*, void );
-    DECL_LINK( GetFocusHdl, Control&, void );
-    DECL_LINK( ModifyHdl, Edit&, void );
-    DECL_LINK( SelectHdl, ListBox&, void );
+    DECL_LINK( OkHdl,    weld::Button&, void );
+    DECL_LINK( ClickHdl, weld::Button&, void );
+    DECL_LINK( GetFocusHdl, weld::Widget&, void );
+    DECL_LINK( LoseFocusHdl, weld::Widget&, void );
+    DECL_LINK( GetEditFocusHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( LoseEditFocusHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( LoseButtonFocusHdl, formula::WeldRefButton&, void );
+    DECL_LINK( ModifyHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( SelectTVHdl, weld::TreeView&, void );
+    DECL_LINK( SelectCBHdl, weld::ComboBox&, void );
 
     static ScSubTotalFunc  LbPosToFunc( sal_Int32 nPos );
     static sal_Int32      FuncToLbPos( ScSubTotalFunc eFunc );

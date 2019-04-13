@@ -87,14 +87,15 @@ class consolidate(UITestCase):
         xeddestarea = xDialog.getChild("eddestarea")
         xconsareas = xDialog.getChild("consareas")
         self.assertEqual(get_state_as_dict(xfunc)["SelectEntryText"], "Sum")
-        self.assertEqual(get_state_as_dict(xconsareas)["EntryCount"], "3")
+        self.assertEqual(get_state_as_dict(xconsareas)["Children"], "3")
         self.assertEqual(get_state_as_dict(xeddestarea)["Text"], "$Total.$A$2")
         self.assertEqual(get_state_as_dict(xbyrow)["Selected"], "true")
         self.assertEqual(get_state_as_dict(xbycol)["Selected"], "true")
         #delete first range
-        select_pos(xconsareas, "0")
+        xFirstEntry = xconsareas.getChild("0")
+        xFirstEntry.executeAction("SELECT", tuple())
         xdelete.executeAction("CLICK", tuple())
-        self.assertEqual(get_state_as_dict(xconsareas)["EntryCount"], "2")
+        self.assertEqual(get_state_as_dict(xconsareas)["Children"], "2")
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
 
