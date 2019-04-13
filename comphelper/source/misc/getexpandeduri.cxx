@@ -10,13 +10,13 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrlReference.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <comphelper/getexpandeduri.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/types.h>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 OUString comphelper::getExpandedUri(
     css::uno::Reference<css::uno::XComponentContext> const & context,

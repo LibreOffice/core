@@ -19,7 +19,8 @@
 
 #include <comphelper/enumhelper.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
-
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 
 namespace comphelper
 {

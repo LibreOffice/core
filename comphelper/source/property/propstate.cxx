@@ -18,7 +18,6 @@
  */
 
 #include <comphelper/propstate.hxx>
-#include <com/sun/star/uno/genfunc.h>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
 

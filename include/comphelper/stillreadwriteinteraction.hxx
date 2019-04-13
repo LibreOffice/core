@@ -22,9 +22,10 @@
 
 #include <ucbhelper/interceptedinteraction.hxx>
 
-#include <com/sun/star/task/XInteractionHandler.hpp>
-
 #include <comphelper/comphelperdllapi.h>
+
+namespace com::sun::star::task { class XInteractionHandler; }
+namespace com::sun::star::task { class XInteractionRequest; }
 
 
 namespace comphelper{

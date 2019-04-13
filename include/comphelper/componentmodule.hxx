@@ -21,7 +21,6 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <cppuhelper/factory.hxx>

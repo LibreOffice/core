@@ -21,7 +21,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <osl/diagnose.h>
 #include <cppuhelper/weakref.hxx>
 #include <comphelper/comphelperdllapi.h>
 

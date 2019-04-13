@@ -21,11 +21,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <rtl/math.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
-
-#include <algorithm>
 
 using namespace com::sun::star;
 
