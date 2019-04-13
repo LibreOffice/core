@@ -194,8 +194,6 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
     XMLElement*   pXMLElement = nullptr;
     MergeEntrys   *pEntrys    = nullptr;
 
-    pEntrys = nullptr;
-
     if( !sCur.equalsIgnoreAsciiCase("en-US") ){
         pXMLElement = (*aLangHM)[ "en-US" ];
         if( pXMLElement == nullptr )
