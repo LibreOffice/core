@@ -772,9 +772,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     sal_uInt16      nRet    = RET_OK; /// temp
                     bool        bDone   = false; /// temp
-                    Color       aTabBgColor;
 
-                    aTabBgColor = pDoc->GetTabBgColor( nCurrentTab );
+                    Color aTabBgColor = pDoc->GetTabBgColor( nCurrentTab );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     ScopedVclPtr<AbstractScTabBgColorDlg> pDlg(pFact->CreateScTabBgColorDlg(
                                                                 GetFrameWeld(),
@@ -971,8 +970,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
 
             case FID_TAB_SET_TAB_BG_COLOR:
                 {
-                    Color aColor;
-                    aColor = pDoc->GetTabBgColor( nTab );
+                    Color aColor = pDoc->GetTabBgColor( nTab );
                     rSet.Put( SvxColorItem( aColor, nWhich ) );
                 }
                 break;

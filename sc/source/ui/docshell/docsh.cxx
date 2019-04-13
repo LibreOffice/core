@@ -1855,7 +1855,7 @@ void lcl_ScDocShell_GetFixedWidthString( OUString& rStr, const ScDocument& rDoc,
             case SvxCellHorJustify::Right:
             {
                 OUStringBuffer aTmp;
-                aTmp = comphelper::string::padToLength( aTmp, nBlanks, ' ' );
+                comphelper::string::padToLength( aTmp, nBlanks, ' ' );
                 aString = aTmp.append(aString).makeStringAndClear();
             }
             break;

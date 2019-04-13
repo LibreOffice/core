@@ -1087,8 +1087,7 @@ static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,
         return nFlags;
     }
 
-    p = tmp2;
-    p = lcl_eatWhiteSpace( p+1 );   // after ':'
+    p = lcl_eatWhiteSpace( tmp2+1 );   // after ':'
     tmp1 = lcl_a1_get_col( p, &r.aEnd, &nFlags2, pErrRef);
     if( !tmp1 && aEndTabName.isEmpty() )     // Probably the aEndTabName was specified after the first range
     {
