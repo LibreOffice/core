@@ -75,9 +75,7 @@ void SAL_CALL osl_destroyMutex(oslMutex pMutex)
 
     if ( pMutex != nullptr )
     {
-        int nRet=0;
-
-        nRet = pthread_mutex_destroy(&(pMutex->mutex));
+        int nRet = pthread_mutex_destroy(&(pMutex->mutex));
         if ( nRet != 0 )
         {
             SAL_WARN("sal.osl.mutex", "pthread_mutex_destroy failed: " << UnixErrnoString(nRet));
@@ -93,9 +91,7 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutex pMutex)
 
     if ( pMutex != nullptr )
     {
-        int nRet=0;
-
-        nRet = pthread_mutex_lock(&(pMutex->mutex));
+        int nRet = pthread_mutex_lock(&(pMutex->mutex));
         if ( nRet != 0 )
         {
             SAL_WARN("sal.osl.mutex", "pthread_mutex_lock failed: " << UnixErrnoString(nRet));
@@ -116,8 +112,7 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex pMutex)
 
     if ( pMutex )
     {
-        int nRet = 0;
-        nRet = pthread_mutex_trylock(&(pMutex->mutex));
+        int nRet = pthread_mutex_trylock(&(pMutex->mutex));
         if ( nRet == 0  )
             result = true;
     }
@@ -131,8 +126,7 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutex pMutex)
 
     if ( pMutex )
     {
-        int nRet=0;
-        nRet = pthread_mutex_unlock(&(pMutex->mutex));
+        int nRet = pthread_mutex_unlock(&(pMutex->mutex));
         if ( nRet != 0 )
         {
             SAL_WARN("sal.osl.mutex", "pthread_mutex_unlock failed: " << UnixErrnoString(nRet));

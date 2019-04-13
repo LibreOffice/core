@@ -150,19 +150,15 @@ namespace rtl_DoubleLocking
                 pThread->join();
                 p2Thread->join();
 
-                sal_Int32 nValueOK = 0;
-                nValueOK = pThread->getOK();
+                sal_Int32 nValueOK = pThread->getOK();
 
-                sal_Int32 nValueOK2 = 0;
-                nValueOK2 = p2Thread->getOK();
+                sal_Int32 nValueOK2 = p2Thread->getOK();
 
                 std::cout << "Value in Thread #1 is " << nValueOK << "\n";
                 std::cout << "Value in Thread #2 is " << nValueOK2 << "\n";
-                sal_Int32 nValueFails = 0;
-                nValueFails = pThread->getFails();
+                sal_Int32 nValueFails = pThread->getFails();
 
-                sal_Int32 nValueFails2 = 0;
-                nValueFails2 = p2Thread->getFails();
+                sal_Int32 nValueFails2 = p2Thread->getFails();
 
                 delete pThread;
                 delete p2Thread;

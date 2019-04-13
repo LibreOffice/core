@@ -125,8 +125,7 @@ private:
 
     void number_double_test_impl(double _nValue)
         {
-            OUString suValue;
-            suValue = OUString::number( _nValue );
+            OUString suValue = OUString::number( _nValue );
             OString sValue;
             sValue <<= suValue;
             printf("nDouble := %.20f  sValue := %s\n", _nValue, sValue.getStr());

@@ -45,8 +45,7 @@ static void printUString( const OUString & str, const sal_Char * msg )
     {
         printf("#%s #printUString_u# ", msg );
     }
-    OString aString;
-    aString = OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
+    OString aString = OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
     printf("%s\n", aString.getStr( ) );
 }
 
