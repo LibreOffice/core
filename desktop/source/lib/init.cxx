@@ -1639,8 +1639,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         aFilterOptions[3].Value <<= nUpdateDoc;
         */
 
-        uno::Reference<lang::XComponent> xComponent;
-        xComponent = xComponentLoader->loadComponentFromURL(
+        uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL(
                                             aURL, "_blank", 0,
                                             aFilterOptions);
 
@@ -1737,9 +1736,7 @@ static int lo_runMacro(LibreOfficeKit* pThis, const char *pURL)
         uno::Reference < frame::XSynchronousDispatch > xSyncDisp( xD, uno::UNO_QUERY_THROW );
         uno::Sequence<css::beans::PropertyValue> aEmpty;
         css::beans::PropertyValue aErr;
-        uno::Any aRet;
-
-        aRet = xSyncDisp->dispatchWithReturnValue( aURL, aEmpty );
+        uno::Any aRet = xSyncDisp->dispatchWithReturnValue( aURL, aEmpty );
         aRet >>= aErr;
 
         if (aErr.Name == "ErrorCode")
@@ -1803,20 +1800,17 @@ static bool lo_signDocument(LibreOfficeKit* /*pThis*/,
     }
 
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
-    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext;
-    xSecurityContext = xSEInitializer->createSecurityContext(OUString());
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
     if (!xSecurityContext.is())
         return false;
 
-    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment;
-    xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
+    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
     uno::Reference<xml::crypto::XCertificateCreator> xCertificateCreator(xSecurityEnvironment, uno::UNO_QUERY);
 
     if (!xCertificateCreator.is())
         return false;
 
-    uno::Reference<security::XCertificate> xCertificate;
-    xCertificate = xCertificateCreator->createDERCertificateWithPrivateKey(aCertificateSequence, aPrivateKeySequence);
+    uno::Reference<security::XCertificate> xCertificate = xCertificateCreator->createDERCertificateWithPrivateKey(aCertificateSequence, aPrivateKeySequence);
 
     if (!xCertificate.is())
         return false;
@@ -4079,13 +4073,11 @@ static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
         return false;
 
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
-    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext;
-    xSecurityContext = xSEInitializer->createSecurityContext(OUString());
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
     if (!xSecurityContext.is())
         return false;
 
-    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment;
-    xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
+    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
     uno::Reference<xml::crypto::XCertificateCreator> xCertificateCreator(xSecurityEnvironment, uno::UNO_QUERY);
 
     if (!xCertificateCreator.is())
@@ -4120,8 +4112,7 @@ static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
         std::copy(pPrivateKeyBinary, pPrivateKeyBinary + nPrivateKeySize, aPrivateKeySequence.begin());
     }
 
-    uno::Reference<security::XCertificate> xCertificate;
-    xCertificate = xCertificateCreator->createDERCertificateWithPrivateKey(aCertificateSequence, aPrivateKeySequence);
+    uno::Reference<security::XCertificate> xCertificate = xCertificateCreator->createDERCertificateWithPrivateKey(aCertificateSequence, aPrivateKeySequence);
 
     if (!xCertificate.is())
         return false;
@@ -4152,13 +4143,11 @@ static bool doc_addCertificate(LibreOfficeKitDocument* pThis,
         return false;
 
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
-    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext;
-    xSecurityContext = xSEInitializer->createSecurityContext(OUString());
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
     if (!xSecurityContext.is())
         return false;
 
-    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment;
-    xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
+    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
     uno::Reference<xml::crypto::XCertificateCreator> xCertificateCreator(xSecurityEnvironment, uno::UNO_QUERY);
 
     if (!xCertificateCreator.is())
@@ -4179,8 +4168,7 @@ static bool doc_addCertificate(LibreOfficeKitDocument* pThis,
         std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.begin());
     }
 
-    uno::Reference<security::XCertificate> xCertificate;
-    xCertificate = xCertificateCreator->addDERCertificateToTheDatabase(aCertificateSequence, "TCu,Cu,Tu");
+    uno::Reference<security::XCertificate> xCertificate = xCertificateCreator->addDERCertificateToTheDatabase(aCertificateSequence, "TCu,Cu,Tu");
 
     if (!xCertificate.is())
         return false;
@@ -4464,8 +4452,7 @@ static void preloadData()
     }
     std::cerr << "\n";
 
-    css::uno::Reference< css::ui::XAcceleratorConfiguration > xGlobalCfg;
-    xGlobalCfg = css::ui::GlobalAcceleratorConfiguration::create(
+    css::uno::Reference< css::ui::XAcceleratorConfiguration > xGlobalCfg = css::ui::GlobalAcceleratorConfiguration::create(
         comphelper::getProcessComponentContext());
     xGlobalCfg->getAllKeyEvents();
 
