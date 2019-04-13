@@ -567,8 +567,7 @@ namespace svgio
                                     SvgAspectRatio aRatioDefault(Align_xMidYMid,true);
                                     const SvgAspectRatio& rRatio = getSvgAspectRatio().isSet()? getSvgAspectRatio() : aRatioDefault;
 
-                                    basegfx::B2DHomMatrix aViewBoxMapping;
-                                    aViewBoxMapping = rRatio.createMapping(aSvgCanvasRange, *pBox);
+                                    basegfx::B2DHomMatrix aViewBoxMapping = rRatio.createMapping(aSvgCanvasRange, *pBox);
                                     // no need to check ratio here for slice, the outermost Svg will
                                     // be clipped anyways (see below)
 

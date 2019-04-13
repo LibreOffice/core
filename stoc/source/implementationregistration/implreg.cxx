@@ -396,9 +396,7 @@ void prepareUserLink(const Reference < XSimpleRegistry >& xDest,
                                 const OUString& linkTarget,
                                 const OUString& implName)
 {
-    Reference < XRegistryKey > xRootKey;
-
-    xRootKey = xDest->getRootKey();
+    Reference < XRegistryKey > xRootKey = xDest->getRootKey();
 
     if (xRootKey->getKeyType(linkName) == RegistryKeyType_LINK)
     {
