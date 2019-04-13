@@ -1290,8 +1290,7 @@ ScTextWnd::ScTextWnd(ScInputBarGroup* pParent, ScTabViewShell* pViewSh)
     SetPointer(PointerStyle::Text);
     SetFont(aTextFont);
 
-    Size aBorder;
-    aBorder = CalcWindowSize(aBorder);
+    Size aBorder = CalcWindowSize(Size());
     mnBorderHeight = aBorder.Height();
 
     set_id("sc_input_window");
