@@ -682,27 +682,12 @@ void SectionPropertyMap::DontBalanceTextColumns()
     }
 }
 
-void SectionPropertyMap::ApplySectionProperties( const uno::Reference< beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl )
+void SectionPropertyMap::ApplySectionProperties( const uno::Reference< beans::XPropertySet >& xSection, DomainMapper_Impl& /*rDM_Impl*/ )
 {
     try
     {
         if ( xSection.is() )
         {
-            // Margins only valid if page style is already determined.
-            // Take some care not to create an automatic page style (with GetPageStyle) if it isn't already created.
-            if ( !m_aFollowPageStyle.is() && !m_sFollowPageStyleName.isEmpty() )
-                GetPageStyle( rDM_Impl.GetPageStyles(), rDM_Impl.GetTextFactory(), false );
-            if ( m_aFollowPageStyle.is()  )
-            {
-                sal_Int32 nPageMargin = 0;
-                m_aFollowPageStyle->getPropertyValue( getPropertyName( PROP_LEFT_MARGIN ) ) >>= nPageMargin;
-                xSection->setPropertyValue( "SectionLeftMargin",  uno::makeAny(m_nLeftMargin - nPageMargin) );
-
-                nPageMargin = 0;
-                m_aFollowPageStyle->getPropertyValue( getPropertyName( PROP_RIGHT_MARGIN ) ) >>= nPageMargin;
-                xSection->setPropertyValue( "SectionRightMargin", uno::makeAny(m_nRightMargin - nPageMargin) );
-            }
-
             boost::optional< PropertyMap::Property > pProp = getProperty( PROP_WRITING_MODE );
             if ( pProp )
                 xSection->setPropertyValue( "WritingMode", pProp->second );
@@ -1236,6 +1221,7 @@ void SectionPropertyMap::InheritOrFinalizePageStyles( DomainMapper_Impl& rDM_Imp
     // otherwise apply this section's settings to the new style.
     // Ensure that FollowPage is inherited first - otherwise GetPageStyle may auto-create a follow when checking FirstPage.
     SectionPropertyMap* pLastContext = rDM_Impl.GetLastSectionContext();
+    //tdf124637 TODO: identify and skip special sections (like footnotes/endnotes)
     if ( pLastContext && m_sFollowPageStyleName.isEmpty() )
         m_sFollowPageStyleName = pLastContext->GetPageStyleName();
     else
