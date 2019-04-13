@@ -1203,8 +1203,7 @@ void PresenterSlideSorter::Layout::SetupVisibleArea()
 
 bool PresenterSlideSorter::Layout::IsScrollBarNeeded (const sal_Int32 nSlideCount)
 {
-    geometry::RealPoint2D aBottomRight;
-    aBottomRight = GetPoint(
+    geometry::RealPoint2D aBottomRight = GetPoint(
         mnColumnCount * (GetRow(nSlideCount)+1) - 1, +1, +1);
     return aBottomRight.X > maBoundingBox.X2-maBoundingBox.X1
         || aBottomRight.Y > maBoundingBox.Y2-maBoundingBox.Y1;
@@ -1391,8 +1390,7 @@ bool PresenterSlideSorter::Layout::SetVerticalOffset (const double nOffset)
 
 void PresenterSlideSorter::Layout::UpdateScrollBars()
 {
-    sal_Int32 nTotalRowCount (0);
-    nTotalRowCount = sal_Int32(ceil(double(mnSlideCount) / double(mnColumnCount)));
+    sal_Int32 nTotalRowCount = sal_Int32(ceil(double(mnSlideCount) / double(mnColumnCount)));
 
     if (mpVerticalScrollBar.get() != nullptr)
     {

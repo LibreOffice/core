@@ -198,9 +198,7 @@ SdOutliner::SdOutliner( SdDrawDocument* pDoc, OutlinerMode nMode )
         try
         {
             const SvtLinguConfig    aLinguConfig;
-            Any                     aAny;
-
-            aAny = aLinguConfig.GetProperty( UPN_IS_SPELL_AUTO );
+            Any aAny = aLinguConfig.GetProperty( UPN_IS_SPELL_AUTO );
             aAny >>= bOnlineSpell;
         }
         catch( ... )

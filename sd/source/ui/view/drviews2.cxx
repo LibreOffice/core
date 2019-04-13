@@ -791,8 +791,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 if(rReq.GetArgs())
                 {
-                    OUString aName;
-                    aName = rReq.GetArgs()->GetItem<const SfxStringItem>(SID_RENAMEPAGE)->GetValue();
+                    OUString aName = rReq.GetArgs()->GetItem<const SfxStringItem>(SID_RENAMEPAGE)->GetValue();
 
                     bool bResult = RenameSlide( maTabControl->GetPageId(nPage), aName );
                     DBG_ASSERT( bResult, "Couldn't rename slide" );
