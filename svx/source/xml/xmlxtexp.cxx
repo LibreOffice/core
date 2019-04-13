@@ -182,8 +182,7 @@ static void createStorageStream( uno::Reference < io::XOutputStream > *xOut,
                                  rtl::Reference<SvXMLGraphicHelper>&   rxGraphicHelper,
                                  const uno::Reference < embed::XStorage >& xSubStorage )
 {
-    uno::Reference < io::XStream > xStream;
-    xStream = xSubStorage->openStreamElement(
+    uno::Reference < io::XStream > xStream = xSubStorage->openStreamElement(
                         "Content.xml",
                         embed::ElementModes::WRITE );
     rxGraphicHelper = SvXMLGraphicHelper::Create( xSubStorage, SvXMLGraphicHelperMode::Write );

@@ -230,8 +230,7 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
     {
         try
         {
-            awt::Size aSz;
-            aSz = xObj->getVisualAreaSize( rDesc.mnViewAspect );
+            awt::Size aSz = xObj->getVisualAreaSize( rDesc.mnViewAspect );
             aSize = Size( aSz.Width, aSz.Height );
         }
         catch( embed::NoVisualAreaSizeException& )

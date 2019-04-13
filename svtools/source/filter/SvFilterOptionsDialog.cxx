@@ -210,8 +210,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
         {
             OUString aStr;
             maMediaDescriptor[ j ].Value >>= aStr;
-            aInternalFilterName = aStr;
-            aInternalFilterName = aInternalFilterName.replaceFirst( "draw_", "" );
+            aInternalFilterName = aStr.replaceFirst( "draw_", "" );
             aInternalFilterName = aInternalFilterName.replaceFirst( "impress_", "" );
             aInternalFilterName = aInternalFilterName.replaceFirst( "calc_", "" );
             aInternalFilterName = aInternalFilterName.replaceFirst( "writer_", "" );

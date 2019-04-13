@@ -609,8 +609,7 @@ void TabBar::ImplInitSettings( bool bFont, bool bBackground )
 
     if (bFont)
     {
-        vcl::Font aToolFont;
-        aToolFont = rStyleSettings.GetToolFont();
+        vcl::Font aToolFont = rStyleSettings.GetToolFont();
         aToolFont.SetWeight( WEIGHT_BOLD );
         ApplyControlFont(*this, aToolFont);
 

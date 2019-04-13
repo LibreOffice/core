@@ -408,8 +408,7 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
             pInfo[ 1 ].ColumnIndex = 1;
             pInfo[ 1 ].Ascending   = true;
 
-            uno::Reference< XDynamicResultSet > xDynamicResultSet;
-            xDynamicResultSet =
+            uno::Reference< XDynamicResultSet > xDynamicResultSet =
                 xSRSFac->createSortedDynamicResultSet( xDynResultSet, aSortInfo, xCompare );
 
             if ( xDynamicResultSet.is() )
@@ -699,9 +698,7 @@ void MatchContext_Impl::ReadFolder( const OUString& rURL,
 
         try
         {
-            uno::Reference< XDynamicResultSet > xDynResultSet;
-
-            xDynResultSet = aCnt.createDynamicCursor( aProps, INCLUDE_FOLDERS_AND_DOCUMENTS );
+            uno::Reference< XDynamicResultSet > xDynResultSet = aCnt.createDynamicCursor( aProps, INCLUDE_FOLDERS_AND_DOCUMENTS );
 
             uno::Reference < XAnyCompareFactory > xCompare;
             uno::Reference < XSortedDynamicResultSetFactory > xSRSFac =
@@ -714,8 +711,7 @@ void MatchContext_Impl::ReadFolder( const OUString& rURL,
             pInfo[ 1 ].ColumnIndex = 1;
             pInfo[ 1 ].Ascending   = true;
 
-            uno::Reference< XDynamicResultSet > xDynamicResultSet;
-            xDynamicResultSet =
+            uno::Reference< XDynamicResultSet > xDynamicResultSet =
                 xSRSFac->createSortedDynamicResultSet( xDynResultSet, aSortInfo, xCompare );
 
             if ( xDynamicResultSet.is() )
@@ -1530,8 +1526,7 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
                     bool bFound = aURL.endsWith("/");
                     if ( !bFound )
                     {
-                        OUString aUpperURL( aURL );
-                        aUpperURL = aUpperURL.toAsciiUpperCase();
+                        OUString aUpperURL = aURL.toAsciiUpperCase();
 
                         bFound = ::std::any_of(pImpl->m_aFilters.begin(),
                                                pImpl->m_aFilters.end(),
@@ -2104,8 +2099,7 @@ void URLBox::UpdatePicklistForSmartProtocol_Impl()
                     bool bFound = aURL.endsWith("/");
                     if ( !bFound )
                     {
-                        OUString aUpperURL( aURL );
-                        aUpperURL = aUpperURL.toAsciiUpperCase();
+                        OUString aUpperURL = aURL.toAsciiUpperCase();
 
                         bFound = ::std::any_of(pImpl->m_aFilters.begin(),
                                                pImpl->m_aFilters.end(),
