@@ -21,11 +21,9 @@
 #include <com/sun/star/container/XHierarchicalNameReplace.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/configurationlistener.hxx>
@@ -34,6 +32,8 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace {
 

@@ -25,13 +25,15 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekableInputStream.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+//#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 
 #include <string.h>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 using ::cppu::OWeakObject;
 using ::cppu::WeakImplHelper;

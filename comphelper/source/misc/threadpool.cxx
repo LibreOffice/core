@@ -13,7 +13,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <rtl/instance.hxx>
-#include <rtl/string.hxx>
 #include <salhelper/thread.hxx>
 #include <algorithm>
 #include <memory>

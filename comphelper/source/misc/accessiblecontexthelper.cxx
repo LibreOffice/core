@@ -20,8 +20,6 @@
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/weakref.hxx>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/solarmutex.hxx>

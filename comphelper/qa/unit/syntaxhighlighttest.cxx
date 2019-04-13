@@ -14,7 +14,6 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <rtl/ustring.hxx>
 
-#include <cassert>
 #include <vector>
 
 class SyntaxHighlightTest : public CppUnit::TestFixture

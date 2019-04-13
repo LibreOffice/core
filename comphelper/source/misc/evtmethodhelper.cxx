@@ -18,7 +18,7 @@
  */
 
 #include <comphelper/evtmethodhelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Type;

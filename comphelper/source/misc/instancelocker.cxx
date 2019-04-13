@@ -19,8 +19,8 @@
 
 
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -29,9 +29,12 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/embed/Actions.hpp>
+#include <com/sun/star/embed/XActionsApproval.hpp>
 
 #include "instancelocker.hxx"
+
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 
