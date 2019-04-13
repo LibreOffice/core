@@ -189,6 +189,7 @@ public:
     void sendPropertyToParent();
     OOXMLFastContextHandler* getParent() const { return mpParent; }
     void setGridAfter(const OOXMLValue::Pointer_t& pGridAfter) { mpGridAfter = pGridAfter; }
+    void SetPreserveSpace(const OUString& sVal);
 
 protected:
     OOXMLFastContextHandler * mpParent;
@@ -225,7 +226,7 @@ protected:
     void endAction();
 
     // 2.10 of XML 1.0 specification
-    virtual bool IsPreserveSpace() const;
+    bool IsPreserveSpace() const;
 
     const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() { return m_xContext;}
 
@@ -240,6 +241,8 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     bool m_bDiscardChildren;
     bool m_bTookChoice; ///< Did we take the Choice or want Fallback instead?
+    bool mbPreserveSpace = false;
+    bool mbPreserveSpaceSet = false;
 
 };
 
@@ -259,13 +262,8 @@ public:
 
     void handleHyperlink();
 
-protected:
-    virtual bool IsPreserveSpace() const override;
-
 private:
     mutable OOXMLPropertySet::Pointer_t mpPropertySetAttrs;
-    bool mbPreserveSpace    : 1;
-    bool mbPreserveSpaceSet : 1;
 };
 
 class OOXMLFastContextHandlerProperties : public OOXMLFastContextHandler

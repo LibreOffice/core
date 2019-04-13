@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <oox/token/namespaces.hxx>
 #include <rtl/instance.hxx>
 #include <sax/fastattribs.hxx>
 #include "OOXMLFactory.hxx"
@@ -38,14 +39,21 @@ OOXMLFactory_ns::~OOXMLFactory_ns()
 void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                               const uno::Reference< xml::sax::XFastAttributeList > & xAttribs)
 {
+    sax_fastparser::FastAttributeList *pAttribs =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttribs );
+
+    // Set <xml:space> value early, to allow child contexts use it when dealing with strings
+    sal_Int32 nAttrIndex = pAttribs->getAttributeIndex(oox::NMSP_xml | oox::XML_space);
+    if (nAttrIndex != -1)
+    {
+        pHandler->SetPreserveSpace(pAttribs->getValueByIndex(nAttrIndex));
+    }
+
     Id nDefine = pHandler->getDefine();
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
 
     if (pFactory.get() == nullptr)
         return;
-
-    sax_fastparser::FastAttributeList *pAttribs =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttribs );
 
     const AttributeInfo *pAttr = pFactory->getAttributeInfoArray(nDefine);
     if (!pAttr)
@@ -54,7 +62,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
     for (; pAttr->m_nToken != -1; ++pAttr)
     {
         sal_Int32 nToken = pAttr->m_nToken;
-        sal_Int32 nAttrIndex = pAttribs->getAttributeIndex(nToken);
+        nAttrIndex = pAttribs->getAttributeIndex(nToken);
         if (nAttrIndex == -1)
             continue;
 
