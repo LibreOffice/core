@@ -602,8 +602,7 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
                 //there are many discarded duplicates in documents - no duplicates allowed in the list, so try to find the real one.
                 //if this LinkDisplayName/ChainName already exists on a different shape...
                 //  the earlier processed duplicates are thrown out unless this one can be proved as bad. (last processed duplicate usually is stored)
-                std::map<OUString,MSWordExportBase::LinkedTextboxInfo>::iterator linkFinder;
-                linkFinder = m_rExport.m_aLinkedTextboxesHelper.find(sLinkChainName);
+                auto linkFinder = m_rExport.m_aLinkedTextboxesHelper.find(sLinkChainName);
                 if( linkFinder != m_rExport.m_aLinkedTextboxesHelper.end() )
                 {
                     //If my NEXT/PREV targets have already been discovered, but don't match me, then assume I'm an abandoned remnant

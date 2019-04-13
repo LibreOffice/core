@@ -84,8 +84,7 @@ DECLARE_HTMLIMPORT_TEST(testInlinedImage, "inlined_image.html")
     uno::Reference<container::XNamed> const xNamed(xShape, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("Image1"), xNamed->getName());
 
-    uno::Reference<graphic::XGraphic> xGraphic;
-    xGraphic = getProperty< uno::Reference<graphic::XGraphic> >(xShape, "Graphic");
+    uno::Reference<graphic::XGraphic> xGraphic = getProperty< uno::Reference<graphic::XGraphic> >(xShape, "Graphic");
     CPPUNIT_ASSERT(xGraphic.is());
     CPPUNIT_ASSERT(xGraphic->getType() != graphic::GraphicType::EMPTY);
 

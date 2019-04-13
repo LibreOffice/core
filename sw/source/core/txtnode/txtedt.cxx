@@ -1846,8 +1846,7 @@ void SwTextNode::TransliterateText(
                     aChanges.push_back( aChgData );
                 }
 
-                Boundary aFirstWordBndry;
-                aFirstWordBndry = g_pBreakIt->GetBreakIter()->nextWord(
+                Boundary aFirstWordBndry = g_pBreakIt->GetBreakIter()->nextWord(
                         GetText(), nCurrentEnd,
                         g_pBreakIt->GetLocale( GetLang( nCurrentEnd ) ),
                         nWordType);

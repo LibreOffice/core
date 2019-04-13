@@ -999,8 +999,7 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     else if(rPropertyName == "TableRedlineParams")
     {
         // Get the table row properties
-        uno::Sequence<beans::PropertyValue> tableCellProperties;
-        tableCellProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
+        uno::Sequence<beans::PropertyValue> tableCellProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
         comphelper::SequenceAsHashMap aPropMap(tableCellProperties);
         OUString sRedlineType;
         if(!(aPropMap.getValue("RedlineType") >>= sRedlineType))
@@ -1297,8 +1296,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
         if  ( rPropertyName == "TableRedlineParams" )
         {
             // Get the table row properties
-            uno::Sequence< beans::PropertyValue > tableRowProperties;
-            tableRowProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
+            uno::Sequence< beans::PropertyValue > tableRowProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
             comphelper::SequenceAsHashMap aPropMap( tableRowProperties );
             OUString sRedlineType;
             if( !(aPropMap.getValue("RedlineType") >>= sRedlineType) )
