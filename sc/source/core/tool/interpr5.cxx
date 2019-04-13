@@ -2333,8 +2333,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
     else
         pMatX = nullptr;
 
-    ScMatrixRef pMatY;
-    pMatY = GetMatrix();
+    ScMatrixRef pMatY = GetMatrix();
     if (!pMatY)
     {
         PushIllegalParameter();
@@ -2859,8 +2858,7 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
     else
         pMatX = nullptr;
 
-    ScMatrixRef pMatY;
-    pMatY = GetMatrix();
+    ScMatrixRef pMatY = GetMatrix();
     if (!pMatY)
     {
         PushIllegalParameter();

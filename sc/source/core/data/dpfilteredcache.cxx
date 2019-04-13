@@ -308,8 +308,7 @@ void ScDPFilteredCache::filterTable(const vector<Criterion>& rCriteria, Sequence
     Sequence<Any> headerRow(nColSize);
     for (SCCOL  nCol = 0; nCol < nColSize; ++nCol)
     {
-        OUString str;
-        str = getFieldName( nCol);
+        OUString str = getFieldName( nCol);
         Any any;
         any <<= str;
         headerRow[nCol] = any;

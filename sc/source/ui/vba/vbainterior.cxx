@@ -321,8 +321,7 @@ ScVbaInterior::GetBackColor()
     }
     else
     {
-        uno::Any aAny;
-        aAny = OORGBToXLRGB( m_xProps->getPropertyValue( BACKCOLOR ) );
+        uno::Any aAny = OORGBToXLRGB( m_xProps->getPropertyValue( BACKCOLOR ) );
         if( aAny >>= nColor )
         {
             nColor = XLRGBToOORGB( nColor );

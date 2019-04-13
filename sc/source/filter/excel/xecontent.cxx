@@ -1710,10 +1710,9 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
 
         // formulas
         XclExpFormulaCompiler& rFmlaComp = GetFormulaCompiler();
-        std::unique_ptr< ScTokenArray > xScTokArr;
 
         // first formula
-        xScTokArr = pValData->CreateFlatCopiedTokenArray( 0 );
+        std::unique_ptr< ScTokenArray > xScTokArr = pValData->CreateFlatCopiedTokenArray( 0 );
         if (xScTokArr)
         {
             if( pValData->GetDataMode() == SC_VALID_LIST )
