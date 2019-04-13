@@ -1316,8 +1316,7 @@ void DrawingML::WriteBlipFill( const Reference< XPropertySet >& rXPropSet, const
         uno::Reference<graphic::XGraphic> xGraphic;
         if (mAny.has<uno::Reference<awt::XBitmap>>())
         {
-            uno::Reference<awt::XBitmap> xBitmap;
-            xBitmap = mAny.get<uno::Reference<awt::XBitmap>>();
+            uno::Reference<awt::XBitmap> xBitmap = mAny.get<uno::Reference<awt::XBitmap>>();
             if (xBitmap.is())
                 xGraphic.set(xBitmap, uno::UNO_QUERY);
         }

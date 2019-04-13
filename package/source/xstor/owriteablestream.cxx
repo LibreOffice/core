@@ -1267,9 +1267,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
             throw io::IOException();
         }
 
-        uno::Reference< io::XInputStream > xInStream;
-
-        xInStream = GetTempFileAsInputStream(); //TODO:
+        uno::Reference< io::XInputStream > xInStream = GetTempFileAsInputStream(); //TODO:
 
         if ( !xInStream.is() )
             throw io::IOException();
@@ -1800,10 +1798,8 @@ void OWriteStream::ModifyParentUnlockMutex_Impl(osl::ClearableMutexGuard& aGuard
 
 uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
 {
-    uno::Any aReturn;
-
     // common interfaces
-    aReturn = ::cppu::queryInterface
+    uno::Any aReturn = ::cppu::queryInterface
                 (   rType
                     ,   static_cast<lang::XTypeProvider*> ( this )
                     ,   static_cast<io::XInputStream*> ( this )

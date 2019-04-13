@@ -2303,8 +2303,7 @@ void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequen
     pFS->writeEscaped( aCellRange );
     pFS->endElement( FSNS( XML_c, XML_f ) );
 
-    ::std::vector< double > aValues;
-    aValues = lcl_getAllValuesFromSequence( xValueSeq );
+    ::std::vector< double > aValues = lcl_getAllValuesFromSequence( xValueSeq );
     sal_Int32 ptCount = aValues.size();
     pFS->startElement( FSNS( XML_c, XML_numCache ),
             FSEND );

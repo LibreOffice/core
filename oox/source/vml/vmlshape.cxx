@@ -678,8 +678,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     SdrObject* pShape = GetSdrObjectFromXShape( xShape );
     if( pShape && getShapeType() >= 0 )
     {
-        OUString aShapeType;
-        aShapeType = EnhancedCustomShapeTypeNames::Get( static_cast< MSO_SPT >(getShapeType()) );
+        OUString aShapeType = EnhancedCustomShapeTypeNames::Get( static_cast< MSO_SPT >(getShapeType()) );
         //The resize autoshape to fit text attr of FontWork/Word-Art should always be false
         //for the fallback geometry.
         if(aShapeType.startsWith("fontwork"))
