@@ -876,8 +876,7 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
 
     if(rRequest.GetArgs())
     {
-       OUString aName;
-       aName = rRequest.GetArgs()->GetItem<const SfxStringItem>(SID_RENAMEPAGE)->GetValue();
+       OUString aName = rRequest.GetArgs()->GetItem<const SfxStringItem>(SID_RENAMEPAGE)->GetValue();
 
        bool bResult =  RenameSlideFromDrawViewShell(pSelectedPage->GetPageNum()/2, aName );
        DBG_ASSERT( bResult, "Couldn't rename slide" );

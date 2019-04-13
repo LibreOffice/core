@@ -346,8 +346,7 @@ uno::Sequence<beans::PropertyValue>
 
     try {
         // create Settings/ sub storage.
-        uno::Reference< embed::XStorage > xSubStorage;
-        xSubStorage = xStorage->openStorageElement( "Settings" ,
+        uno::Reference< embed::XStorage > xSubStorage = xStorage->openStorageElement( "Settings" ,
             embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
         if( !xSubStorage.is() )
             return aRet;

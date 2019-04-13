@@ -802,8 +802,7 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
     // Insert after <nPage>
     else
     {
-        nTargetPage = nPage;
-        nTargetPage = 2 * nTargetPage + 1;    // PageKind::Standard --> absolute
+        nTargetPage = 2 * nPage + 1;    // PageKind::Standard --> absolute
 
         for (const auto& rpPage : aPageList)
         {

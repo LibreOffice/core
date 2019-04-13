@@ -210,8 +210,7 @@ SdFileDialog_Imp::~SdFileDialog_Imp()
 SdOpenSoundFileDialog::SdOpenSoundFileDialog(weld::Window *pParent)
     : mpImpl(new SdFileDialog_Imp(pParent))
 {
-    OUString aDescr;
-    aDescr = SdResId(STR_ALL_FILES);
+    OUString aDescr = SdResId(STR_ALL_FILES);
     mpImpl->AddFilter( aDescr, "*.*");
 
     // setup filter

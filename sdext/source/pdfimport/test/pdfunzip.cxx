@@ -295,8 +295,7 @@ static int write_addStreams( const char* pInFile, const char* pOutFile, PDFFile*
         if( pTrailer && pTrailer->m_pDict )
         {
             // search for AdditionalStreams entry
-            std::unordered_map<OString,PDFEntry*>::iterator add_stream;
-            add_stream = pTrailer->m_pDict->m_aMap.find( "AdditionalStreams" );
+            auto add_stream = pTrailer->m_pDict->m_aMap.find( "AdditionalStreams" );
             if( add_stream != pTrailer->m_pDict->m_aMap.end() )
             {
                 PDFArray* pStreams = dynamic_cast<PDFArray*>(add_stream->second);
