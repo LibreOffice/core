@@ -2745,9 +2745,7 @@ void SdPage::setHeaderFooterSettings( const sd::HeaderFooterSettings& rNewSettin
     if(!pMasterPage)
         return;
 
-    SdrObject* pCandidate = nullptr;
-
-    pCandidate = pMasterPage->GetPresObj( PRESOBJ_HEADER );
+    SdrObject* pCandidate = pMasterPage->GetPresObj( PRESOBJ_HEADER );
 
     if(pCandidate)
     {

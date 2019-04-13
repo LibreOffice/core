@@ -241,8 +241,7 @@ void WriterXmlEmitter::visit( PolyPolyElement& elem, const std::list< std::uniqu
      */
     for (sal_uInt32 i = 0; i< elem.PolyPoly.count(); i++)
     {
-        basegfx::B2DPolygon b2dPolygon;
-        b2dPolygon =  elem.PolyPoly.getB2DPolygon( i );
+        basegfx::B2DPolygon b2dPolygon =  elem.PolyPoly.getB2DPolygon( i );
 
         for ( sal_uInt32 j = 0; j< b2dPolygon.count(); j++ )
         {
@@ -250,8 +249,7 @@ void WriterXmlEmitter::visit( PolyPolyElement& elem, const std::list< std::uniqu
             basegfx::B2DPoint nextPoint;
             point = b2dPolygon.getB2DPoint( j );
 
-            basegfx::B2DPoint prevPoint;
-            prevPoint = b2dPolygon.getPrevControlPoint( j ) ;
+            basegfx::B2DPoint prevPoint = b2dPolygon.getPrevControlPoint( j ) ;
 
             point.setX( convPx2mmPrec2( point.getX() )*100.0 );
             point.setY( convPx2mmPrec2( point.getY() )*100.0 );

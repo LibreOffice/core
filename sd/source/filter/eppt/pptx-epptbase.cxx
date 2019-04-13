@@ -303,8 +303,7 @@ bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
             Reference< XMasterPageTarget > aXMasterPageTarget( mXDrawPage, UNO_QUERY );
             if ( aXMasterPageTarget.is() )
             {
-                Reference< XDrawPage > aXMasterDrawPage;
-                aXMasterDrawPage = aXMasterPageTarget->getMasterPage();
+                Reference< XDrawPage > aXMasterDrawPage = aXMasterPageTarget->getMasterPage();
                 if ( aXMasterDrawPage.is() )
                 {
                     Reference< XPropertySet > aXMasterPagePropSet;
