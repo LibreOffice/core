@@ -520,8 +520,7 @@ namespace svx
 
         // extract the single values from the sequence
 
-        OUString sObjectName;
-        sObjectName = _rCommand;
+        OUString sObjectName = _rCommand;
 
         // for compatibility: create a string which can be used for the SotClipboardFormatId::SBA_DATAEXCHANGE format
 

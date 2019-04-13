@@ -1129,11 +1129,9 @@ std::shared_ptr<ExpressionNode> const & FunctionParser::parseFunction( const OUS
     StringIteratorT aStart( rAsciiFunction.getStr() );
     StringIteratorT aEnd( rAsciiFunction.getStr()+rAsciiFunction.getLength() );
 
-    ParserContextSharedPtr pContext;
-
     // static parser context, because the actual
     // Spirit parser is also a static object
-    pContext = getParserContext();
+    ParserContextSharedPtr pContext = getParserContext();
     pContext->mpCustoShape = &rCustoShape;
 
     ExpressionGrammar aExpressionGrammer( pContext );

@@ -133,8 +133,7 @@ FmXModifyMultiplexer::FmXModifyMultiplexer( ::cppu::OWeakObject& rSource, ::osl:
 
 Any SAL_CALL FmXModifyMultiplexer::queryInterface(const Type& _rType)
 {
-    Any aReturn;
-    aReturn = ::cppu::queryInterface(_rType,
+    Any aReturn = ::cppu::queryInterface(_rType,
         static_cast< css::util::XModifyListener*>(this),
         static_cast< XEventListener*>(this)
     );
@@ -167,8 +166,7 @@ FmXUpdateMultiplexer::FmXUpdateMultiplexer( ::cppu::OWeakObject& rSource, ::osl:
 
 Any SAL_CALL FmXUpdateMultiplexer::queryInterface(const Type& _rType)
 {
-    Any aReturn;
-    aReturn = ::cppu::queryInterface(_rType,
+    Any aReturn = ::cppu::queryInterface(_rType,
         static_cast< XUpdateListener*>(this),
         static_cast< XEventListener*>(this)
     );
@@ -218,8 +216,7 @@ FmXSelectionMultiplexer::FmXSelectionMultiplexer( ::cppu::OWeakObject& rSource, 
 
 Any SAL_CALL FmXSelectionMultiplexer::queryInterface(const Type& _rType)
 {
-    Any aReturn;
-    aReturn = ::cppu::queryInterface(_rType,
+    Any aReturn = ::cppu::queryInterface(_rType,
         static_cast< XSelectionChangeListener*>(this),
         static_cast< XEventListener*>(this)
     );
@@ -252,8 +249,7 @@ FmXContainerMultiplexer::FmXContainerMultiplexer( ::cppu::OWeakObject& rSource, 
 
 Any SAL_CALL FmXContainerMultiplexer::queryInterface(const Type& _rType)
 {
-    Any aReturn;
-    aReturn = ::cppu::queryInterface(_rType,
+    Any aReturn = ::cppu::queryInterface(_rType,
         static_cast< XContainerListener*>(this),
         static_cast< XEventListener*>(this)
     );
@@ -301,8 +297,7 @@ FmXGridControlMultiplexer::FmXGridControlMultiplexer( ::cppu::OWeakObject& rSour
 
 Any SAL_CALL FmXGridControlMultiplexer::queryInterface(const Type& _rType)
 {
-    Any aReturn;
-    aReturn = ::cppu::queryInterface( _rType,
+    Any aReturn = ::cppu::queryInterface( _rType,
         static_cast< XGridControlListener*>(this)
     );
 

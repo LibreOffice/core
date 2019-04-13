@@ -292,8 +292,7 @@ uno::Reference<XAccessible> SvxPixelCtlAccessible::CreateChild (long nIndex,Poin
 {
     bool bPixelColorOrBG = mpPixelCtl->GetBitmapPixel(sal_uInt16(nIndex)) != 0;
     Size size(mpPixelCtl->GetWidth() / SvxPixelCtl::GetLineCount(), mpPixelCtl->GetHeight() / SvxPixelCtl::GetLineCount());
-    uno::Reference<XAccessible> xChild;
-    xChild = new SvxPixelCtlAccessibleChild(*mpPixelCtl,
+    uno::Reference<XAccessible> xChild = new SvxPixelCtlAccessibleChild(*mpPixelCtl,
                 bPixelColorOrBG,
                 tools::Rectangle(mPoint,size),
                 this,

@@ -377,8 +377,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
                 openStorageStream( &aParserInput, xGraphicHelper, xSubStorage );
             else
             {
-                css::uno::Reference< css::io::XStream > xStream;
-                xStream = comphelper::OStorageHelper::GetStreamAtPath(
+                css::uno::Reference< css::io::XStream > xStream = comphelper::OStorageHelper::GetStreamAtPath(
                         xStorage, rPath, embed::ElementModes::READ, aNasty );
                 if( !xStream.is() )
                     return false;
