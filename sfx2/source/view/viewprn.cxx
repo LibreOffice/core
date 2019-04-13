@@ -323,8 +323,7 @@ void SfxPrinterController::jobStarted()
     xDocProps->setPrintDate( now.GetUNODateTime() );
 
     SfxGetpApp()->NotifyEvent( SfxEventHint(SfxEventHintId::PrintDoc, GlobalEventConfig::GetEventName( GlobalEventId::PRINTDOC ), mpObjectShell ) );
-    uno::Sequence < beans::PropertyValue > aOpts;
-    aOpts = getJobProperties( aOpts );
+    uno::Sequence < beans::PropertyValue > aOpts = getJobProperties( aOpts );
 
     uno::Reference< frame::XController2 > xController;
     if ( mpViewShell )

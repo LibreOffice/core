@@ -1734,9 +1734,7 @@ bool getTextProperty_Impl( Content& rContent,
         }
 
         // now get the property
-        Any aAnyValue;
-
-        aAnyValue = rContent.getPropertyValue( rPropName );
+        Any aAnyValue = rContent.getPropertyValue( rPropName );
         aAnyValue >>= rPropValue;
 
         if ( SfxURLRelocator_Impl::propertyCanContainOfficeDir( rPropName ) )
