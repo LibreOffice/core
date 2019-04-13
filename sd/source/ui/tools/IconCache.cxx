@@ -51,8 +51,7 @@ IconCache* IconCache::Implementation::s_pIconCache = nullptr;
 Image IconCache::Implementation::GetIcon(const OUString& rResourceId)
 {
     Image aResult;
-    ImageContainer::iterator iImage;
-    iImage = maContainer.find(rResourceId);
+    ImageContainer::iterator iImage = maContainer.find(rResourceId);
     if (iImage == maContainer.end())
     {
         aResult = Image(StockImage::Yes, rResourceId);

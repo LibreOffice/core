@@ -751,32 +751,28 @@ void SdOOXMLExportTest1::testTableCellBorder()
     uno::Reference< beans::XPropertySet > xCellPropSet (xCell, uno::UNO_QUERY_THROW);
 
     xCellPropSet->getPropertyValue("LeftBorder") >>= aBorderLine;
-    sal_Int32 nLeftBorder = aBorderLine.LineWidth ;
 // While importing the table cell border line width, it converts EMU->Hmm then divided result by 2.
 // To get original value of LineWidth need to multiple by 2.
-    nLeftBorder = nLeftBorder * 2 ;
+    sal_Int32 nLeftBorder = aBorderLine.LineWidth * 2;
     nLeftBorder = oox::drawingml::convertHmmToEmu( nLeftBorder );
     CPPUNIT_ASSERT(nLeftBorder);
     CPPUNIT_ASSERT_EQUAL(util::Color(45296), aBorderLine.Color);
 
     xCellPropSet->getPropertyValue("RightBorder") >>= aBorderLine;
-    sal_Int32 nRightBorder = aBorderLine.LineWidth ;
-    nRightBorder = nRightBorder * 2 ;
+    sal_Int32 nRightBorder = aBorderLine.LineWidth * 2;
     nRightBorder = oox::drawingml::convertHmmToEmu( nRightBorder );
     CPPUNIT_ASSERT(nRightBorder);
     CPPUNIT_ASSERT_EQUAL(util::Color(16777215), aBorderLine.Color);
 
     xCellPropSet->getPropertyValue("TopBorder") >>= aBorderLine;
-    sal_Int32 nTopBorder = aBorderLine.LineWidth ;
-    nTopBorder = nTopBorder * 2 ;
+    sal_Int32 nTopBorder = aBorderLine.LineWidth * 2;
     nTopBorder = oox::drawingml::convertHmmToEmu( nTopBorder );
     CPPUNIT_ASSERT(nTopBorder);
     CPPUNIT_ASSERT_EQUAL(util::Color(45296), aBorderLine.Color);
 
 
     xCellPropSet->getPropertyValue("BottomBorder") >>= aBorderLine;
-    sal_Int32 nBottomBorder = aBorderLine.LineWidth ;
-    nBottomBorder = nBottomBorder * 2 ;
+    sal_Int32 nBottomBorder = aBorderLine.LineWidth * 2;
     nBottomBorder = oox::drawingml::convertHmmToEmu( nBottomBorder );
     CPPUNIT_ASSERT(nBottomBorder);
     CPPUNIT_ASSERT_EQUAL(util::Color(45296), aBorderLine.Color);
