@@ -1652,8 +1652,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                     else
                     {
                         m_bStartedTOC = true;
-                        uno::Reference< text::XTextCursor > xTOCTextCursor;
-                        xTOCTextCursor = xTextAppend->getEnd()->getText( )->createTextCursor( );
+                        uno::Reference< text::XTextCursor > xTOCTextCursor = xTextAppend->getEnd()->getText( )->createTextCursor( );
                         xTOCTextCursor->gotoEnd(false);
                         if (xTOCTextCursor.is())
                         {
@@ -4846,8 +4845,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 {
                     xFieldInterface = m_xTextFactory->createInstance("com.sun.star.text.Fieldmark");
                     const uno::Reference<text::XTextContent> xTextContent(xFieldInterface, uno::UNO_QUERY_THROW);
-                    uno::Reference< text::XTextAppend >  xTextAppend;
-                    xTextAppend = m_aTextAppendStack.top().xTextAppend;
+                    uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
                     uno::Reference< text::XTextCursor > xCrsr = xTextAppend->createTextCursorByRange(pContext->GetStartRange());
                     if (xTextContent.is())
                     {

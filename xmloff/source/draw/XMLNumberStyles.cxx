@@ -339,10 +339,8 @@ static void SdXMLExportDataStyleNumber( SdXMLExport& rExport, SdXMLDataStyleNumb
 
 static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* pStyle, const SdXMLFixedDataStyle* pStyle2 = nullptr )
 {
-    OUString sAttrValue;
-
     // name
-    sAttrValue = OUString::createFromAscii( pStyle->mpName );
+    OUString sAttrValue = OUString::createFromAscii( pStyle->mpName );
     if( pStyle2 )
         sAttrValue += OUString::createFromAscii( pStyle2->mpName );
 

@@ -2075,8 +2075,7 @@ void XMLTextParagraphExport::exportParagraph(
     }
 
     Reference < XEnumerationAccess > xEA( rTextContent, UNO_QUERY );
-    Reference < XEnumeration > xTextEnum;
-    xTextEnum = xEA->createEnumeration();
+    Reference < XEnumeration > xTextEnum = xEA->createEnumeration();
     const bool bHasPortions = xTextEnum.is();
 
     Reference < XEnumeration> xContentEnum;
