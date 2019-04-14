@@ -437,9 +437,8 @@ void ImplWindowStateFromStr(WindowStateData& rData,
 {
     WindowStateMask nValidMask = WindowStateMask::NONE;
     sal_Int32 nIndex      = 0;
-    OString aTokenStr;
 
-    aTokenStr = rStr.getToken(0, ',', nIndex);
+    OString aTokenStr = rStr.getToken(0, ',', nIndex);
     if (!aTokenStr.isEmpty())
     {
         rData.SetX(aTokenStr.toInt32());

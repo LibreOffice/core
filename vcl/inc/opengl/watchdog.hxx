@@ -45,8 +45,7 @@ public:
 
     WatchdogTimingsValues const & getWatchdogTimingsValues(WatchdogTimingMode eMode)
     {
-        size_t index = 0;
-        index = (eMode == WatchdogTimingMode::SHADER_COMPILE) ? 1 : 0;
+        size_t index = (eMode == WatchdogTimingMode::SHADER_COMPILE) ? 1 : 0;
         index = mbRelaxed ? index + 2 : index;
 
         return maTimingValues[index];

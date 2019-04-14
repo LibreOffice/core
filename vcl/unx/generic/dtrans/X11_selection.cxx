@@ -344,8 +344,7 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
         OUString aUDisplay;
         if( m_xDisplayConnection.is() )
         {
-            Any aIdentifier;
-            aIdentifier = m_xDisplayConnection->getIdentifier();
+            Any aIdentifier = m_xDisplayConnection->getIdentifier();
             aIdentifier >>= aUDisplay;
         }
 
@@ -1888,8 +1887,7 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent const & rNotify 
     // feed incrementals
     if( rNotify.state == PropertyDelete )
     {
-        std::unordered_map< ::Window, std::unordered_map< Atom, IncrementalTransfer > >::iterator it;
-        it = m_aIncrementals.find( rNotify.window );
+        auto it = m_aIncrementals.find( rNotify.window );
         if( it != m_aIncrementals.end() )
         {
             bHandled = true;
