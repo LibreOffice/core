@@ -1065,8 +1065,12 @@ void SwXMLImport::MergeListsAtDocumentInsertPosition(SwDoc *pDoc)
         if (! pListId2)
             return;
 
-        const OUString& sListId1 = dynamic_cast<const SfxStringItem*>(pListId1)->GetValue();
-        const OUString& sListId2 = dynamic_cast<const SfxStringItem*>(pListId2)->GetValue();
+        auto pStringListId1 = dynamic_cast<const SfxStringItem*>(pListId1);
+        assert(pStringListId1);
+        const OUString& sListId1 = pStringListId1->GetValue();
+        auto pStringListId2 = dynamic_cast<const SfxStringItem*>(pListId2);
+        assert(pStringListId2);
+        const OUString& sListId2 = pStringListId2->GetValue();
 
         const SwList* pList1 = pDoc->getIDocumentListsAccess().getListByName( sListId1 );
         const SwList* pList2 = pDoc->getIDocumentListsAccess().getListByName( sListId2 );

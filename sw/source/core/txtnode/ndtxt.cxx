@@ -4746,6 +4746,7 @@ namespace {
 
             const SwNumRuleItem* pNumRuleItem =
                             dynamic_cast<const SwNumRuleItem*>(pItem);
+            assert(pNumRuleItem);
             if ( !pNumRuleItem->GetValue().isEmpty() )
             {
                 mbAddTextNodeToList = true;

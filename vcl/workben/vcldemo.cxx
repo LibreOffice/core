@@ -2177,9 +2177,13 @@ public:
 
         // get some other guys to leach off this context
         VclPtrInstance<VirtualDevice> xVDev;
-        rtl::Reference<OpenGLContext> pContext = getImpl(xVDev)->GetOpenGLContext();
+        OpenGLSalGraphicsImpl* pImpl = getImpl(xVDev);
+        assert(pImpl);
+        rtl::Reference<OpenGLContext> pContext = pImpl->GetOpenGLContext();
         VclPtrInstance<VirtualDevice> xVDev2;
-        rtl::Reference<OpenGLContext> pContext2 = getImpl(xVDev)->GetOpenGLContext();
+        OpenGLSalGraphicsImpl* pImpl2 = getImpl(xVDev2);
+        assert(pImpl2);
+        rtl::Reference<OpenGLContext> pContext2 = pImpl2->GetOpenGLContext();
 
         // sharing the same off-screen context.
         assert(pContext == pContext2);
