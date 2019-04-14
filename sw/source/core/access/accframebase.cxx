@@ -68,15 +68,14 @@ void SwAccessibleFrameBase::GetStates(
 
     const SwViewShell *pVSh = GetMap()->GetShell();
     assert(pVSh);
-    bool bSelectable =  dynamic_cast<const SwFEShell*>( pVSh) !=  nullptr;
 
-    // SELECTABLE
-    if( bSelectable )
-        rStateSet.AddState( AccessibleStateType::SELECTABLE );
-
-    // FOCUSABLE
-    if( bSelectable )
-        rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+    if (dynamic_cast<const SwFEShell*>(pVSh))
+    {
+        // SELECTABLE
+        rStateSet.AddState(AccessibleStateType::SELECTABLE);
+        // FOCUSABLE
+        rStateSet.AddState(AccessibleStateType::FOCUSABLE);
+    }
 
     // SELECTED and FOCUSED
     if( IsSelected() )

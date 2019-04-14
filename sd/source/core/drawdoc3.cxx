@@ -1764,11 +1764,9 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             for (const auto& a : aCreatedStyles)
                 aUndoInsert.emplace_back(a.get(), true);
             pUndoMgr->AddUndoAction(std::make_unique<SdMoveStyleSheetsUndoAction>(this, aUndoInsert, true));
-        }
-
-        // Generate new master pages and register them with the document
-        if( bUndo )
+            // Generate new master pages and register them with the document
             BegUndo();
+        }
 
         pMaster = AllocSdPage(true);
         pMaster->SetSize(pSelectedPage->GetSize());

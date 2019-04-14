@@ -390,10 +390,11 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
         case OBJECTTYPE_AXIS:
         {
             if( m_pParameter->HasScaleProperties() )
+            {
                 AddTabPage("scale", SchResId(STR_PAGE_SCALE), ScaleTabPage::Create);
-
-            if( m_pParameter->HasScaleProperties() )//no positioning page for z axes so far as the tickmarks are not shown so far
+                //no positioning page for z axes so far as the tickmarks are not shown so far
                 AddTabPage("axispos", SchResId(STR_PAGE_POSITIONING), AxisPositionsTabPage::Create);
+            }
             AddTabPage("border", SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
             AddTabPage("axislabel", SchResId(STR_OBJECT_LABEL), SchAxisLabelTabPage::Create);
             if( m_pParameter->HasNumberProperties() )

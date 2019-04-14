@@ -224,14 +224,13 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
     SwAddPrinterItem aAddPrinterItem(*pOpt );
     pRet->Put(aAddPrinterItem);
 
-    // Options for Web background
+    // Options for Web
     if(!bTextDialog)
     {
         pRet->Put(SvxBrushItem(aViewOpt.GetRetoucheColor(), RES_BACKGROUND));
+        pRet->Put(SfxUInt16Item(SID_HTML_MODE, HTMLMODE_ON));
     }
 
-    if(!bTextDialog)
-        pRet->Put(SfxUInt16Item(SID_HTML_MODE, HTMLMODE_ON));
     return pRet;
 }
 

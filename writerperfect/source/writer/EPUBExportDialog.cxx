@@ -139,19 +139,13 @@ EPUBExportDialog::EPUBExportDialog(weld::Window* pParent,
     if (xDPS.is())
         xDP = xDPS->getDocumentProperties();
     if (xDP.is())
+    {
         m_xTitle->set_text(xDP->getTitle());
-
-    if (xDP.is())
         m_xInitialCreator->set_text(xDP->getAuthor());
 
-    if (xDP.is())
-    {
         OUString aLanguage(LanguageTag::convertToBcp47(xDP->getLanguage(), false));
         m_xLanguage->set_text(aLanguage);
-    }
 
-    if (xDP.is())
-    {
         OUStringBuffer aBuffer;
         util::DateTime aDate(xDP->getModificationDate());
         sax::Converter::convertDateTime(aBuffer, aDate, nullptr, true);

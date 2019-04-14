@@ -3562,8 +3562,7 @@ void FmXFormShell::viewDeactivated_Lock(FmFormView& _rCurrentView, bool _bDeacti
 
     // if we have an async load operation pending for the 0-th page for this view,
     // we need to cancel this
-    FmFormPage* pPage = _rCurrentView.GetCurPage();
-    if ( pPage )
+    if (FmFormPage* pPage = _rCurrentView.GetCurPage())
     {
         // move all events from our queue to a new one, omit the events for the deactivated
         // page
@@ -3582,11 +3581,8 @@ void FmXFormShell::viewDeactivated_Lock(FmFormView& _rCurrentView, bool _bDeacti
             }
         }
         m_aLoadingPages = aNewEvents;
-    }
 
-    // remove callbacks at the page
-    if ( pPage )
-    {
+        // remove callbacks at the page
         pPage->GetImpl().SetFormsCreationHdl( Link<FmFormPageImpl&,void>() );
     }
     UpdateForms_Lock(true);
