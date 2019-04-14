@@ -280,7 +280,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/lineinfo \
     vcl/source/gdi/mapmod \
     vcl/source/gdi/metaact \
-    vcl/source/gdi/octree \
     vcl/source/gdi/oldprintadaptor \
     vcl/source/gdi/pdfbuildin_fonts \
     vcl/source/gdi/pdfextoutdevdata \
@@ -344,6 +343,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/BitmapSimpleColorQuantizationFilter \
     vcl/source/bitmap/BitmapTools \
     vcl/source/bitmap/checksum \
+    vcl/source/bitmap/Octree \
     vcl/source/image/Image \
     vcl/source/image/ImageTree \
     vcl/source/image/ImageRepository \

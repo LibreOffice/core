@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_IMPOCTREE_HXX
 #define INCLUDED_VCL_INC_IMPOCTREE_HXX
 
-#include "octree.hxx"
+#include "Octree.hxx"
 
 class ImpErrorQuad
 {
