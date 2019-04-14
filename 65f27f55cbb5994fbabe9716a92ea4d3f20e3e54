@@ -22,6 +22,30 @@
       "revId": "65f27f55cbb5994fbabe9716a92ea4d3f20e3e54",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_92032c0e",
+        "filename": "solenv/gbuild/LinkTarget.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-04-14T10:59:56Z",
+      "side": 1,
+      "message": "Yes, you are right, thanks.",
+      "parentUuid": "7f96bb07_4774049a",
+      "range": {
+        "startLine": 53,
+        "startChar": 81,
+        "endLine": 53,
+        "endChar": 99
+      },
+      "revId": "65f27f55cbb5994fbabe9716a92ea4d3f20e3e54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
