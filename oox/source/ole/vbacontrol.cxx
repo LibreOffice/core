@@ -418,7 +418,7 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
             if ( pContainerModel->getControlType() == API_CONTROL_MULTIPAGE )
             {
                 AxMultiPageModel* pMultiPage = dynamic_cast< AxMultiPageModel* >( pContainerModel );
-                if ( pMultiPage )
+                assert(pMultiPage);
                 {
                     BinaryXInputStream aXStrm( rStrg.openInputStream( "x" ), true );
                     pMultiPage->importPageAndMultiPageProperties( aXStrm, maControls.size() );

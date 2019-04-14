@@ -132,8 +132,8 @@ void LwpFribSection::SetSectionName()
  */
 LwpPageLayout* LwpFribSection::GetPageLayout()
 {
-    if(GetSection())
-        return GetSection()->GetPageLayout();
+    if (LwpSection* pSection = GetSection())
+        return pSection->GetPageLayout();
     return nullptr;
 }
 

@@ -1050,7 +1050,8 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
                 aNewViewOpt.SetGridOptions( aNewGridOpt );
                 rViewData.SetOptions( aNewViewOpt );
                 rViewData.GetDocument()->SetViewOptions( aNewViewOpt );
-                pDocSh->SetDocumentModified();
+                if (pDocSh)
+                    pDocSh->SetDocumentModified();
                 bRepaint = true;
             }
         }

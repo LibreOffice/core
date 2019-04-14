@@ -793,11 +793,14 @@ IMPL_LINK_NOARG( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, void )
 
         aEdit->GrabFocus();
 
-        bool bInPlace = GetView()->GetViewFrame()->GetFrame().IsInPlace();
+        SmViewShell* pView = GetView();
+        assert(pView);
+        bool bInPlace = pView->GetViewFrame()->GetFrame().IsInPlace();
         uno::Reference< frame::XFrame > xFrame( GetBindings().GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface());
         if ( bInPlace )
         {
-            uno::Reference< container::XChild > xModel( GetView()->GetDoc()->GetModel(), uno::UNO_QUERY_THROW );
+            uno::Reference<container::XChild> xModel(pView->GetDoc()->GetModel(),
+                                                     uno::UNO_QUERY_THROW);
             uno::Reference< frame::XModel > xParent( xModel->getParent(), uno::UNO_QUERY_THROW );
             uno::Reference< frame::XController > xParentCtrler( xParent->getCurrentController() );
             uno::Reference< frame::XFramesSupplier > xParentFrame( xParentCtrler->getFrame(), uno::UNO_QUERY_THROW );

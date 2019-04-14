@@ -1777,6 +1777,7 @@ ScVbaRange::HasFormula()
     {
         uno::Reference<uno::XInterface>  xRanges( pThisRanges->queryFormulaCells( sheet::FormulaResult::ERROR | sheet::FormulaResult::VALUE | sheet::FormulaResult::STRING ), uno::UNO_QUERY_THROW );
         ScCellRangesBase* pFormulaRanges = dynamic_cast< ScCellRangesBase * > ( xRanges.get() );
+        assert(pFormulaRanges);
         // check if there are no formula cell, return false
         if ( pFormulaRanges->GetRangeList().empty() )
             return uno::makeAny(false);
