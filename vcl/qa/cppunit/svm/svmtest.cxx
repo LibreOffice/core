@@ -762,7 +762,6 @@ void SvmTest::checkBitmaps(const GDIMetaFile& rMetaFile)
 {
     xmlDocPtr pDoc = dumpMeta(rMetaFile);
 
-#ifdef LINUX
     assertXPathAttrs(pDoc, "/metafile/bmp[1]", {{"x", "1"}, {"y", "2"}, {"crc", "b8dee5da"}});
     assertXPathAttrs(pDoc, "/metafile/bmpscale[1]", {
         {"x", "1"}, {"y", "2"}, {"width", "3"}, {"height", "4"}, {"crc", "281fc589"}
@@ -772,17 +771,6 @@ void SvmTest::checkBitmaps(const GDIMetaFile& rMetaFile)
         {"srcx", "2"},  {"srcy", "1"},  {"srcwidth", "4"},  {"srcheight", "3"},
         {"crc", "5e01ddcc"}
     });
-#else
-    assertXPathAttrs(pDoc, "/metafile/bmp[1]", {{"x", "1"}, {"y", "2"}, {"crc", "b8dee5da"}});
-    assertXPathAttrs(pDoc, "/metafile/bmpscale[1]", {
-        {"x", "1"}, {"y", "2"}, {"width", "3"}, {"height", "4"}, {"crc", "281fc589"}
-    });
-    assertXPathAttrs(pDoc, "/metafile/bmpscalepart[1]", {
-        {"destx", "1"}, {"desty", "2"}, {"destwidth", "3"}, {"destheight", "4"},
-        {"srcx", "2"},  {"srcy", "1"},  {"srcwidth", "4"},  {"srcheight", "3"},
-        {"crc", "5e01ddcc"}
-    });
-#endif
 }
 
 void SvmTest::testBitmaps()
@@ -817,7 +805,6 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
 {
     xmlDocPtr pDoc = dumpMeta(rMetaFile);
 
-#ifdef LINUX
     assertXPathAttrs(pDoc, "/metafile/bmpex[1]", {
         {"x", "1"}, {"y", "2"}, {"crc", "b8dee5da"}, {"transparenttype", "bitmap"}
     });
@@ -830,20 +817,6 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
         {"srcx", "2"},  {"srcy", "1"},  {"srcwidth", "4"},  {"srcheight", "3"},
         {"crc", "5e01ddcc"}, {"transparenttype", "bitmap"}
     });
-#else
-    assertXPathAttrs(pDoc, "/metafile/bmpex[1]", {
-        {"x", "1"}, {"y", "2"}, {"crc", "b8dee5da"}, {"transparenttype", "bitmap"}
-    });
-    assertXPathAttrs(pDoc, "/metafile/bmpexscale[1]", {
-        {"x", "1"}, {"y", "2"}, {"width", "3"}, {"height", "4"},
-        {"crc", "281fc589"}, {"transparenttype", "bitmap"}
-    });
-    assertXPathAttrs(pDoc, "/metafile/bmpexscalepart[1]", {
-        {"destx", "1"}, {"desty", "2"}, {"destwidth", "3"}, {"destheight", "4"},
-        {"srcx", "2"},  {"srcy", "1"},  {"srcwidth", "4"},  {"srcheight", "3"},
-        {"crc", "5e01ddcc"}, {"transparenttype", "bitmap"}
-    });
-#endif
 }
 
 void SvmTest::testBitmapExs()
