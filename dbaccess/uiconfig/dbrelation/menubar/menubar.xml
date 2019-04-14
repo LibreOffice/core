@@ -24,14 +24,14 @@
       <menu:menuitem menu:id=".uno:RecentFileList"/>
       <menu:menuitem menu:id=".uno:CloseDoc"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
+      <menu:menuitem menu:id=".uno:AutoPilotMenu" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Save"/>
-      <menu:menuitem menu:id=".uno:SaveAll"/>
+      <menu:menuitem menu:id=".uno:SaveAll" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:CheckOut"/>
-      <menu:menuitem menu:id=".uno:CancelCheckOut"/>
-      <menu:menuitem menu:id=".uno:CheckIn"/>
+      <menu:menuitem menu:id=".uno:CheckOut" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:CancelCheckOut" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:CheckIn" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Quit"/>
     </menu:menupopup>
@@ -44,8 +44,8 @@
   </menu:menu>
   <menu:menu menu:id=".uno:ViewMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:AvailableToolbars"/>
-      <menu:menuitem menu:id=".uno:StatusBarVisible"/>
+      <menu:menuitem menu:id=".uno:AvailableToolbars" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:StatusBarVisible" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:InsertMenu">
@@ -59,17 +59,19 @@
       <menu:menu menu:id=".uno:MacrosMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:MacroRecorder"/>
-          <menu:menuitem menu:id=".uno:RunMacro"/>
+          <menu:menuitem menu:id=".uno:RunMacro"/>22222
           <menu:menuitem menu:id=".uno:BasicIDEAppear"/>
           <menu:menuitem menu:id=".uno:ScriptOrganizer"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:MacroSignature"/>
           <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
+          <menu:menuitem menu:id=".uno:ScriptOrganizer"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
-      <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
-      <menu:menuitem menu:id=".uno:ConfigureDialog"/>
+      <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ConfigureDialog" menu:style="text"/>
       <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
     </menu:menupopup>
   </menu:menu>
