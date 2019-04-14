@@ -660,6 +660,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
                         if ( pAction->GetType() == MetaActionType::BMPSCALE )
                         {
                             MetaBmpScaleAction* pScaleAction = dynamic_cast< MetaBmpScaleAction* >( pAction );
+                            assert(pScaleAction);
                             aBmpEx = pScaleAction->GetBitmap();
                             aPos = pScaleAction->GetPoint();
                             aSize = pScaleAction->GetSize();
@@ -667,6 +668,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
                         else
                         {
                             MetaBmpExScaleAction* pScaleAction = dynamic_cast< MetaBmpExScaleAction* >( pAction );
+                            assert(pScaleAction);
                             aBmpEx = pScaleAction->GetBitmapEx();
                             aPos = pScaleAction->GetPoint();
                             aSize = pScaleAction->GetSize();

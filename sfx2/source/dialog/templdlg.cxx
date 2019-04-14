@@ -1570,7 +1570,7 @@ bool SfxCommonTemplateDialog_Impl::Execute_Impl(
     if ( (nId == SID_STYLE_NEW || SID_STYLE_EDIT == nId) && (pTreeBox->IsVisible() || aFmtLb->GetSelectionCount() <= 1) )
     {
         const SfxUInt16Item *pFilterItem = dynamic_cast< const SfxUInt16Item* >(pItem);
-        OSL_ENSURE(pFilterItem, "SfxUINT16Item expected");
+        assert(pFilterItem);
         SfxStyleSearchBits nFilterFlags = static_cast<SfxStyleSearchBits>(pFilterItem->GetValue()) & ~SfxStyleSearchBits::UserDefined;
         if(nFilterFlags == SfxStyleSearchBits::Auto)       // User Template?
             nFilterFlags = static_cast<SfxStyleSearchBits>(pFilterItem->GetValue());

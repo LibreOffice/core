@@ -328,8 +328,9 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                  pCNd && pCNd->IsTextNode() &&
                  GetItemState( RES_PARATR_LIST_ID, false, &pItem ) == SfxItemState::SET )
             {
-                const OUString& sListId =
-                        dynamic_cast<const SfxStringItem*>(pItem)->GetValue();
+                auto pStrItem = dynamic_cast<const SfxStringItem*>(pItem);
+                assert(pStrItem);
+                const OUString& sListId = pStrItem->GetValue();
                 if ( !sListId.isEmpty() &&
                      !pDstDoc->getIDocumentListsAccess().getListByName( sListId ) )
                 {

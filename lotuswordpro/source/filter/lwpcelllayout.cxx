@@ -348,6 +348,7 @@ LwpPara* LwpCellLayout::GetLastParaOfPreviousStory()
     if (pPreStoryID && !(pPreStoryID->IsNull()))
     {
         LwpStory* pPreStory = dynamic_cast<LwpStory*>(pPreStoryID->obj(VO_STORY).get());
+        assert(pPreStory);
         return dynamic_cast<LwpPara*>(pPreStory->GetLastPara().obj(VO_PARA).get());
     }
     else

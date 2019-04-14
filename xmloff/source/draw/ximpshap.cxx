@@ -605,8 +605,6 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
 
         do
         {
-            XMLPropStyleContext* pDocStyle = nullptr;
-
             // set style on shape
             if(maDrawStyleName.isEmpty())
                 break;
@@ -626,10 +624,10 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
             OUString aStyleName = maDrawStyleName;
             uno::Reference< style::XStyle > xStyle;
 
-            if( dynamic_cast<const XMLShapeStyleContext*>( pStyle ) )
+            XMLPropStyleContext* pDocStyle
+                = dynamic_cast<XMLShapeStyleContext*>(const_cast<SvXMLStyleContext*>(pStyle));
+            if (pDocStyle)
             {
-                pDocStyle = const_cast<XMLShapeStyleContext*>(dynamic_cast<const XMLShapeStyleContext*>( pStyle ) );
-
                 if( pDocStyle->GetStyle().is() )
                 {
                     xStyle = pDocStyle->GetStyle();

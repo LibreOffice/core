@@ -1108,7 +1108,9 @@ static void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
         {
             // break the link of the corresponding section.
             // the link is also removed from the link manager
-            pSectLnk->GetSectNode()->GetSection().BreakLink();
+            SwSectionNode* pSectNode = pSectLnk->GetSectNode();
+            assert(pSectNode);
+            pSectNode->GetSection().BreakLink();
 
             // for robustness, because link is removed from the link manager
             if ( n > rLnks.size() )
