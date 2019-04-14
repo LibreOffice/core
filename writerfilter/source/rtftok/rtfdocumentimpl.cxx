@@ -906,8 +906,8 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
         pExtHeader = nullptr;
 
-    uno::Reference<graphic::XGraphic> xGraphic;
-    xGraphic = m_pGraphicHelper->importGraphic(xInputStream, pExtHeader);
+    uno::Reference<graphic::XGraphic> xGraphic
+        = m_pGraphicHelper->importGraphic(xInputStream, pExtHeader);
 
     if (m_aStates.top().aPicture.eStyle != RTFBmpStyle::NONE)
     {

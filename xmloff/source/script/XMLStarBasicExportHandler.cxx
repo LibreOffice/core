@@ -79,12 +79,9 @@ void XMLStarBasicExportHandler::Export(
 
     if( !sLocation.isEmpty() )
     {
-        OUStringBuffer sTmp( sLocation.getLength() + sName.getLength() + 1 );
-        sTmp = sLocation;
-        sTmp.append( ':' );
-        sTmp.append( sName );
+        OUString sTmp = sLocation + ":" + sName;
         rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_MACRO_NAME,
-                            sTmp.makeStringAndClear());
+                            sTmp);
     }
     else
     {

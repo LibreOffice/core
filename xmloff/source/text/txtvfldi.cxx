@@ -382,8 +382,7 @@ void XMLSequenceFieldImportContext::PrepareField(
     // handle reference name
     if (bRefNameOK)
     {
-        Any aAny;
-        aAny = xPropertySet->getPropertyValue("SequenceValue");
+        Any aAny = xPropertySet->getPropertyValue("SequenceValue");
         sal_Int16 nValue = 0;
         aAny >>= nValue;
         GetImportHelper().InsertSequenceID(sRefName, GetName(), nValue);
