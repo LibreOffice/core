@@ -55,10 +55,15 @@ public:
     static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName);
 
     /**
-     * The caller is responsible for allocate the memory for the RGBA buffer, before call
-     * this method. RGBA buffer size is assumed to be 4*width*height.
+     * The caller is responsible for allocating the memory for the buffer before calling
+     * this method. The buffer size is assumed to be 4*width*height and the format
+     * to be OptimalBufferFormat().
     **/
-    static BitmapEx ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffer, long nWidth, long nHeight);
+    static BitmapEx ConvertBufferToBitmapEx(const sal_uInt8* const pBuffer, long nWidth, long nHeight);
+    /**
+     * Returns the optimal buffer format for OpenGL (GL_BGRA or GL_RGBA).
+    **/
+    static GLenum OptimalBufferFormat();
     static void renderToFile(long nWidth, long nHeight, const OUString& rFileName);
 
     static const char* GLErrorString(GLenum errorCode);
