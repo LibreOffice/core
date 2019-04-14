@@ -17,6 +17,11 @@ $(eval $(call gb_CppunitTest_use_externals,vcl_svm_test,\
 	boost_headers \
     libxml2 \
 ))
+ifeq ($(DISABLE_GUI),)
+$(eval $(call gb_CppunitTest_use_externals,vcl_svm_test,\
+     epoxy \
+ ))
+endif
 
 
 $(eval $(call gb_CppunitTest_set_include,vcl_svm_test,\
