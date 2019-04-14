@@ -22,19 +22,17 @@
 
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <cppuhelper/exc_hlp.hxx>
-#include <osl/thread.h>
 
 #include <algorithm>
 #include <iterator>
 
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 

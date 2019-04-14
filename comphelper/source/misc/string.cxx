@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <cstddef>
-#include <string.h>
 #include <string_view>
 #include <vector>
 #include <algorithm>

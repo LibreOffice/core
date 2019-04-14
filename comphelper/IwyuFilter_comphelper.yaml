@@ -1,0 +1,82 @@
+---
+assumeFilename: comphelper/source/misc/solarmutex.cxx
+blacklist:
+    comphelper/source/misc/instancelocker.hxx:
+    # Base class has to be a complete type
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XCloseListener.hpp
+    - com/sun/star/frame/XTerminateListener.hpp
+    comphelper/source/property/opropertybag.hxx:
+    # Base class has to be a complete type
+    - com/sun/star/beans/XPropertyBag.hpp
+    - com/sun/star/container/XSet.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XModifiable.hpp
+    comphelper/source/officeinstdir/officeinstallationdirectories.hxx:
+    # Base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XOfficeInstallationDirectories.hpp
+    comphelper/source/container/IndexedPropertyValuesContainer.cxx:
+    # Needed for typedef
+    - com/sun/star/beans/PropertyValue.hpp
+    comphelper/source/container/NamedPropertyValuesContainer.cxx:
+    # Needed for typedef
+    - com/sun/star/beans/PropertyValue.hpp
+    comphelper/source/container/namecontainer.cxx:
+    # Needed for NameContainer_createInstance
+    - comphelper/namecontainer.hxx
+    comphelper/source/eventattachermgr/eventattachermgr.cxx:
+    # Needed for linker visibility
+    - comphelper/eventattachermgr.hxx
+    comphelper/source/misc/fileurl.cxx:
+    # Needed for linker visibility
+    - comphelper/fileurl.hxx
+    comphelper/source/misc/getexpandeduri.cxx:
+    # Needed for linker visibility
+    - comphelper/getexpandeduri.hxx
+    comphelper/source/misc/graphicmimetype.cxx:
+    # Needed for direct member access
+    - com/sun/star/io/XInputStream.hpp
+    comphelper/source/misc/hash.cxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h
+    include/comphelper/interaction.hxx:
+    # Stop warnings about include/
+    - com/sun/star/task/XInteractionApprove.hpp
+    - com/sun/star/task/XInteractionDisapprove.hpp
+    - com/sun/star/task/XInteractionAbort.hpp
+    - com/sun/star/task/XInteractionRetry.hpp
+    include/comphelper/namedvaluecollection.hxx:
+    # Stop warnings about include/
+    - com/sun/star/beans/PropertyValue.hpp
+    - com/sun/star/beans/NamedValue.hpp
+    include/comphelper/servicedecl.hxx:
+    # Stop warnings about include/
+    - com/sun/star/uno/XComponentContext.hpp
+    comphelper/source/misc/simplefileaccessinteraction.cxx:
+    # Needed for UnoType template
+    - com/sun/star/task/XInteractionAbort.hpp
+    - com/sun/star/task/XInteractionApprove.hpp
+    comphelper/source/misc/stillreadwriteinteraction.cxx:
+    # Needed for UnoType template
+    - com/sun/star/task/XInteractionAbort.hpp
+    - com/sun/star/task/XInteractionApprove.hpp
+    comphelper/source/misc/synchronousdispatch.cxx:
+    # Needed for direct member access
+    - com/sun/star/lang/XComponent.hpp
+    comphelper/source/processfactory/processfactory.cxx:
+    # Needed for linker visibility
+    - comphelper/processfactory.hxx
+    # Needed for direct member access
+    - com/sun/star/uno/XComponentContext.hpp
+    include/comphelper/MasterPropertySet.hxx:
+    # Stop warnings about include/
+    - namespace comphelper { class ChainablePropertySet; }
+    comphelper/source/property/genericpropertyset.cxx:
+    # Needed for linker visibility
+    - comphelper/genericpropertyset.hxx
+    # Needed for fw declared template
+    - rtl/ref.hxx

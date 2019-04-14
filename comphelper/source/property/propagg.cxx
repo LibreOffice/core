@@ -25,11 +25,7 @@
 #include <sal/log.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#if OSL_DEBUG_LEVEL > 0
 #include <typeinfo>
-#include <rtl/strbuf.hxx>
-#endif
-
 #include <algorithm>
 #include <set>
 #include <unordered_set>

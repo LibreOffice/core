@@ -128,15 +128,9 @@ blacklist:
     include/comphelper/ChainablePropertySetInfo.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySetInfo.hpp
-    include/comphelper/componentmodule.hxx:
-    # base class has to be a complete type
-    - com/sun/star/lang/XSingleServiceFactory.hpp
-    include/comphelper/configurationhelper.hxx:
-    # Needed for implicit destructor
-    - com/sun/star/uno/Any.hxx
     include/comphelper/containermultiplexer.hxx:
     # base class has to be a complete type
-    - com/sun/star/container/XContainer.hpp
+    - com/sun/star/container/XContainerListener.hpp
     include/comphelper/docpasswordrequest.hxx:
     # base class has to be a complete type
     - com/sun/star/task/XInteractionRequest.hpp
@@ -188,12 +182,6 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/io/XInputStream.hpp
     - com/sun/star/io/XSeekable.hpp
-    include/comphelper/sequence.hxx:
-    # Needed for implicit dtor
-    - com/sun/star/uno/Sequence.hxx
-    include/comphelper/sequenceashashmap.hxx:
-    # Needed for implicit dtor
-    - com/sun/star/uno/Sequence.hxx
     include/comphelper/servicedecl.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
@@ -201,15 +189,16 @@ blacklist:
     include/comphelper/servicehelper.hxx:
     # Needed for macro
     - rtl/instance.hxx
-    include/comphelper/simplefileaccessinteraction.hxx:
-    # base class has to be a complete type
-    - com/sun/star/task/XInteractionHandler.hpp
     include/comphelper/unique_disposing_ptr.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
     include/comphelper/uno3.hxx:
     # Needed for macro
     - comphelper/sequence.hxx
+    include/comphelper/weakeventlistener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XEventListener.hpp
+    - com/sun/star/lang/XComponent.hpp
     include/basegfx/utils/unopolypolygon.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp

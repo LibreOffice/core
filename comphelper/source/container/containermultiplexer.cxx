@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/containermultiplexer.hxx>
+#include <com/sun/star/container/XContainer.hpp>
 #include <osl/diagnose.h>
 
 namespace comphelper

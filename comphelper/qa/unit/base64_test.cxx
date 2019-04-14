@@ -17,27 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <limits>
-
 #include <sal/types.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 #include <rtl/ustrbuf.hxx>
 
-#include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/Duration.hpp>
-#include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
-#include <comphelper/sequence.hxx>
 #include <comphelper/base64.hxx>
-#include <sal/log.hxx>
 
 using namespace css;
-using namespace css::util;
 
 namespace {
 

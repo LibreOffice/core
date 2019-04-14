@@ -29,7 +29,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -38,7 +37,6 @@
 #include <string.h>
 
 #if HAVE_FEATURE_GPGME
-# include <gpgme.h>
 # include <context.h>
 # include <data.h>
 # include <decryptionresult.h>
