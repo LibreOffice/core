@@ -1450,7 +1450,7 @@ Assembly ^ TypeEmitter::type_resolve(
 //          arAny[2] = new Any(c.Type, c.Value);
 //          return (XWeak) factory.createInstanceWithArgumentsAndContext("service_specifier", arAny, ctx);
 //      }
-// Notice that a any parameter is NOT wrapped by another any. Instead the new any is created with the type and value
+// Notice that an any parameter is NOT wrapped by another any. Instead the new any is created with the type and value
 // of the parameter.
 
 //      public static XWeak constructor3(XComponentContext ctx, params Any[] c)
@@ -1853,7 +1853,7 @@ Assembly ^ TypeEmitter::type_resolve(
         }
 
 
-        //Check if the service instance was create and throw a exception if not.
+        //Check if the service instance was created and threw an exception if not
         Emit::Label label_service_created = ilGen->DefineLabel();
         ilGen->Emit(Emit::OpCodes::Ldloc, local_return_val);
         ilGen->Emit(Emit::OpCodes::Brtrue_S, label_service_created);
@@ -2010,7 +2010,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
           ::uno::Any::typeid->GetMethod("hasValue");
     ilGen->Emit(Emit::OpCodes::Call, methodHasValue);
 
-    //If not, then throw an DeploymentException
+    //If not, then throw a DeploymentException
     Emit::Label label_singleton_exists = ilGen->DefineLabel();
     ilGen->Emit(Emit::OpCodes::Brtrue_S, label_singleton_exists);
     sBuilder = gcnew ::System::Text::StringBuilder(
