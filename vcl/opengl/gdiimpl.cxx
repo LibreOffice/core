@@ -1000,15 +1000,20 @@ bool scaleTexture(const rtl::Reference< OpenGLContext > &xContext,
     OpenGLTexture aScratchTex(nNewWidth, nNewHeight);
     OpenGLFramebuffer* pFramebuffer = xContext->AcquireFramebuffer(aScratchTex);
 
+    // From OpenGLSalBitmap::ImplScaleArea().
     pProgram->SetUniform1f("xscale", ixscale);
     pProgram->SetUniform1f("yscale", iyscale);
     pProgram->SetUniform1i("swidth", nWidth);
     pProgram->SetUniform1i("sheight", nHeight);
-    // For converting between <0,nWidth-1> and <0.0,1.0> coordinate systems.
-    pProgram->SetUniform1f("xsrcconvert", 1.0 / (nWidth - 1));
-    pProgram->SetUniform1f("ysrcconvert", 1.0 / (nHeight - 1));
-    pProgram->SetUniform1f("xdestconvert", 1.0 * (nNewWidth - 1));
-    pProgram->SetUniform1f("ydestconvert", 1.0 * (nNewHeight - 1));
+    // For converting between <0,nWidth> and <0.0,1.0> coordinate systems.
+    GLfloat srcCoords[ 8 ];
+    rTexture.GetWholeCoord( srcCoords );
+    pProgram->SetUniform1f( "xoffset", srcCoords[ 0 ] );
+    pProgram->SetUniform1f( "yoffset", srcCoords[ 1 ] );
+    pProgram->SetUniform1f( "xtopixelratio", nNewWidth / ( srcCoords[ 4 ] - srcCoords[ 0 ] ));
+    pProgram->SetUniform1f( "ytopixelratio", nNewHeight / ( srcCoords[ 5 ] - srcCoords[ 1 ] ));
+    pProgram->SetUniform1f( "xfrompixelratio", ( srcCoords[ 4 ] - srcCoords[ 0 ] ) / nWidth );
+    pProgram->SetUniform1f( "yfrompixelratio", ( srcCoords[ 5 ] - srcCoords[ 1 ] ) / nHeight );
 
     pProgram->SetTexture("sampler", rTexture);
     pProgram->DrawTexture(rTexture);
@@ -1154,8 +1159,10 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
         {
             mpProgram->SetUniform1i( "xscale", ixscale );
             mpProgram->SetUniform1i( "yscale", iyscale );
-            mpProgram->SetUniform1f( "xstep", 1.0 / nWidth );
-            mpProgram->SetUniform1f( "ystep", 1.0 / nHeight );
+            GLfloat srcCoords[ 8 ];
+            aInTexture.GetWholeCoord( srcCoords );
+            mpProgram->SetUniform1f( "xstep", ( srcCoords[ 4 ] - srcCoords[ 0 ] ) / nWidth );
+            mpProgram->SetUniform1f( "ystep", ( srcCoords[ 5 ] - srcCoords[ 1 ] ) / nHeight );
             mpProgram->SetUniform1f( "ratio", 1.0 / ( ixscale * iyscale ));
         }
         else if (nHeight > 1 && nWidth > 1)
@@ -1165,10 +1172,14 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
             mpProgram->SetUniform1i( "swidth", nWidth );
             mpProgram->SetUniform1i( "sheight", nHeight );
             // For converting between <0,nWidth-1> and <0.0,1.0> coordinate systems.
-            mpProgram->SetUniform1f( "xsrcconvert", 1.0 / ( nWidth - 1 ));
-            mpProgram->SetUniform1f( "ysrcconvert", 1.0 / ( nHeight - 1 ));
-            mpProgram->SetUniform1f( "xdestconvert", 1.0 * (( nWidth / ixscale ) - 1 ));
-            mpProgram->SetUniform1f( "ydestconvert", 1.0 * (( nHeight / iyscale ) - 1 ));
+            GLfloat srcCoords[ 8 ];
+            aInTexture.GetWholeCoord( srcCoords );
+            mpProgram->SetUniform1f( "xoffset", srcCoords[ 0 ] );
+            mpProgram->SetUniform1f( "yoffset", srcCoords[ 1 ] );
+            mpProgram->SetUniform1f( "xtopixelratio", ( nWidth / ixscale ) / ( srcCoords[ 4 ] - srcCoords[ 0 ] ));
+            mpProgram->SetUniform1f( "ytopixelratio", ( nHeight / iyscale ) / ( srcCoords[ 5 ] - srcCoords[ 1 ] ));
+            mpProgram->SetUniform1f( "xfrompixelratio", ( srcCoords[ 4 ] - srcCoords[ 0 ] ) / nWidth );
+            mpProgram->SetUniform1f( "yfrompixelratio", ( srcCoords[ 5 ] - srcCoords[ 1 ] ) / nHeight );
         }
     }
 

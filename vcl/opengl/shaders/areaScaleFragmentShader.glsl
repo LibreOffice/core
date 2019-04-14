@@ -14,10 +14,12 @@ uniform int swidth;
 uniform int sheight;
 uniform float xscale;
 uniform float yscale;
-uniform float xsrcconvert;
-uniform float ysrcconvert;
-uniform float xdestconvert;
-uniform float ydestconvert;
+uniform float xoffset;
+uniform float yoffset;
+uniform float xfrompixelratio;
+uniform float yfrompixelratio;
+uniform float xtopixelratio;
+uniform float ytopixelratio;
 
 varying vec2 tex_coord;
 
@@ -28,23 +30,23 @@ varying vec2 mask_coord;
 uniform sampler2D mask;
 #endif
 
+#ifdef USE_REDUCED_REGISTER_VARIANT
+
 vec4 getTexel(int x, int y)
 {
-    vec2 offset = vec2(x * xsrcconvert, y * ysrcconvert);
-    vec4 texel = texture2D(sampler, offset);
+    vec2 pos = vec2( x * xfrompixelratio + xoffset, y * yfrompixelratio + yoffset );
+    vec4 texel = texture2D(sampler, pos);
 #ifdef MASKED
-    texel.a = 1.0 - texture2D(mask, offset).r;
+    texel.a = 1.0 - texture2D(mask, pos).r;
 #endif
     return texel;
 }
 
-#ifdef USE_REDUCED_REGISTER_VARIANT
-
 void main(void)
 {
     // Convert to pixel coordinates again.
-    int dx = int(tex_coord.s * xdestconvert);
-    int dy = int(tex_coord.t * ydestconvert);
+    int dx = int(( tex_coord.s - xoffset ) * xtopixelratio );
+    int dy = int(( tex_coord.t - yoffset ) * ytopixelratio );
 
     // Compute the range of source pixels which will make up this destination pixel.
     float fsx1 = min(dx * xscale,   float(swidth - 1));
@@ -124,8 +126,8 @@ void main(void)
 void main(void)
 {
     // Convert to pixel coordinates again.
-    int dx = int( tex_coord.s * xdestconvert );
-    int dy = int( tex_coord.t * ydestconvert );
+    int dx = int(( tex_coord.s - xoffset ) * xtopixelratio );
+    int dy = int(( tex_coord.t - yoffset ) * ytopixelratio );
 
     // How much each column/row will contribute to the resulting pixel.
     // Note: These values are always the same for the same X (or Y),
@@ -218,13 +220,13 @@ void main(void)
         xpos = 0;
         for( int x = xstart; x <= xend; ++x, ++xpos )
         {
-            vec2 offset = vec2( x * xsrcconvert, y * ysrcconvert );
+            vec2 pos = vec2( x * xfrompixelratio + xoffset, y * yfrompixelratio + yoffset );
 #ifndef MASKED
-            tmp += texture2D( sampler, offset ) * xratio[ xpos ];
+            tmp += texture2D( sampler, pos ) * xratio[ xpos ];
 #else
             vec4 texel;
-            texel = texture2D( sampler, offset );
-            texel.a = 1.0 - texture2D( mask, offset ).r;
+            texel = texture2D( sampler, pos );
+            texel.a = 1.0 - texture2D( mask, pos ).r;
             tmp += texel * xratio[ xpos ];
 #endif
         }

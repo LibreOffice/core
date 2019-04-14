@@ -254,8 +254,15 @@ bool OpenGLSalBitmap::ImplScaleArea( const rtl::Reference< OpenGLContext > &xCon
     {
         pProgram->SetUniform1i( "xscale", ixscale );
         pProgram->SetUniform1i( "yscale", iyscale );
-        pProgram->SetUniform1f( "xstep", 1.0 / mnWidth );
-        pProgram->SetUniform1f( "ystep", 1.0 / mnHeight );
+        // The shader operates on pixels in the surrounding area, so it's necessary
+        // to know the step in texture coordinates to get to the next pixel.
+        // With a texture atlas the "texture" is just a subtexture of a larger texture,
+        // so while with a normal texture we'd map between <0.0,1.0> and <0,mnWidth>,
+        // with a subtexture the texture coordinates range is smaller.
+        GLfloat srcCoords[ 8 ];
+        maTexture.GetWholeCoord( srcCoords );
+        pProgram->SetUniform1f( "xstep", ( srcCoords[ 4 ] - srcCoords[ 0 ] ) / mnWidth );
+        pProgram->SetUniform1f( "ystep", ( srcCoords[ 5 ] - srcCoords[ 1 ] ) / mnHeight );
         pProgram->SetUniform1f( "ratio", 1.0 / ( ixscale * iyscale ));
     }
     else
@@ -264,11 +271,21 @@ bool OpenGLSalBitmap::ImplScaleArea( const rtl::Reference< OpenGLContext > &xCon
         pProgram->SetUniform1f( "yscale", iyscale );
         pProgram->SetUniform1i( "swidth", mnWidth );
         pProgram->SetUniform1i( "sheight", mnHeight );
-        // For converting between <0,mnWidth-1> and <0.0,1.0> coordinate systems.
-        pProgram->SetUniform1f( "xsrcconvert", 1.0 / ( mnWidth - 1 ));
-        pProgram->SetUniform1f( "ysrcconvert", 1.0 / ( mnHeight - 1 ));
-        pProgram->SetUniform1f( "xdestconvert", 1.0 * ( nNewWidth - 1 ));
-        pProgram->SetUniform1f( "ydestconvert", 1.0 * ( nNewHeight - 1 ));
+        // The shader internally actually operates on pixel coordinates,
+        // so it needs to know how to convert to those from the texture coordinates.
+        // With a simple texture that would mean converting e.g. between
+        // <0,mnWidth-1> and <0.0,1.0> coordinates.
+        // However with a texture atlas the "texture" is just a subtexture
+        // of a larger texture, so the texture coordinates need offset and ratio
+        // conversion too.
+        GLfloat srcCoords[ 8 ];
+        maTexture.GetWholeCoord( srcCoords );
+        pProgram->SetUniform1f( "xoffset", srcCoords[ 0 ] );
+        pProgram->SetUniform1f( "yoffset", srcCoords[ 1 ] );
+        pProgram->SetUniform1f( "xtopixelratio", nNewWidth / ( srcCoords[ 4 ] - srcCoords[ 0 ] ));
+        pProgram->SetUniform1f( "ytopixelratio", nNewHeight / ( srcCoords[ 5 ] - srcCoords[ 1 ] ));
+        pProgram->SetUniform1f( "xfrompixelratio", ( srcCoords[ 4 ] - srcCoords[ 0 ] ) / mnWidth );
+        pProgram->SetUniform1f( "yfrompixelratio", ( srcCoords[ 5 ] - srcCoords[ 1 ] ) / mnHeight );
     }
 
     pProgram->SetTexture( "sampler", maTexture );
@@ -302,11 +319,15 @@ bool OpenGLSalBitmap::ImplScaleArea( const rtl::Reference< OpenGLContext > &xCon
         pProgram->SetUniform1f("yscale", iyscale);
         pProgram->SetUniform1i("swidth", mnWidth);
         pProgram->SetUniform1i("sheight", mnHeight);
-        // For converting between <0,mnWidth-1> and <0.0,1.0> coordinate systems.
-        pProgram->SetUniform1f("xsrcconvert", 1.0 / (mnWidth - 1));
-        pProgram->SetUniform1f("ysrcconvert", 1.0 / (mnHeight - 1));
-        pProgram->SetUniform1f("xdestconvert", 1.0 * (nNewWidth - 1));
-        pProgram->SetUniform1f("ydestconvert", 1.0 * (nNewHeight - 1));
+
+        GLfloat srcCoords[ 8 ];
+        aScratchTex.GetWholeCoord( srcCoords );
+        pProgram->SetUniform1f( "xoffset", srcCoords[ 0 ] );
+        pProgram->SetUniform1f( "yoffset", srcCoords[ 1 ] );
+        pProgram->SetUniform1f( "xtopixelratio", nNewWidth / ( srcCoords[ 4 ] - srcCoords[ 0 ] ));
+        pProgram->SetUniform1f( "ytopixelratio", nNewHeight / ( srcCoords[ 5 ] - srcCoords[ 1 ] ));
+        pProgram->SetUniform1f( "xfrompixelratio", ( srcCoords[ 4 ] - srcCoords[ 0 ] ) / mnWidth );
+        pProgram->SetUniform1f( "yfrompixelratio", ( srcCoords[ 5 ] - srcCoords[ 1 ] ) / mnHeight );
 
         pProgram->SetTexture("sampler", aScratchTex);
         pProgram->DrawTexture(aScratchTex);
