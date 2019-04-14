@@ -17,22 +17,32 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SALBTYPE_HXX
-#define INCLUDED_VCL_SALBTYPE_HXX
+#ifndef INCLUDED_VCL_BITMAPBUFFER_HXX
+#define INCLUDED_VCL_BITMAPBUFFER_HXX
 
-#include <vcl/Scanline.hxx>
-#include <vcl/BitmapColor.hxx>
+#include <vcl/dllapi.h>
 #include <vcl/BitmapPalette.hxx>
 #include <vcl/ColorMask.hxx>
-#include <vcl/BitmapBuffer.hxx>
+#include <vcl/Scanline.hxx>
 
-enum class BitmapAccessMode
+struct SalTwoRect;
+
+struct VCL_DLLPUBLIC BitmapBuffer
 {
-    Info,
-    Read,
-    Write
+    ScanlineFormat       mnFormat;
+    long            mnWidth;
+    long            mnHeight;
+    long            mnScanlineSize;
+    sal_uInt16      mnBitCount;
+    ColorMask       maColorMask;
+    BitmapPalette   maPalette;
+    sal_uInt8*      mpBits;
 };
 
-#endif // INCLUDED_VCL_SALBTYPE_HXX
+VCL_DLLPUBLIC std::unique_ptr<BitmapBuffer> StretchAndConvert(
+    const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
+    ScanlineFormat nDstBitmapFormat, const BitmapPalette* pDstPal = nullptr, const ColorMask* pDstMask = nullptr );
+
+#endif // INCLUDED_VCL_BITMAPBUFFER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
