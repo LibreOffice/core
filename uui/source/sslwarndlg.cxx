@@ -28,9 +28,8 @@ using namespace css;
 
 IMPL_LINK_NOARG(SSLWarnDialog, ViewCertHdl, weld::Button&, void)
 {
-    uno::Reference< css::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
-
-    xDocumentDigitalSignatures = css::security::DocumentDigitalSignatures::createDefault( m_xContext );
+    uno::Reference< css::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures
+        = css::security::DocumentDigitalSignatures::createDefault( m_xContext );
     xDocumentDigitalSignatures->setParentWindow(m_xDialog->GetXWindow());
     xDocumentDigitalSignatures->showCertificate(m_rXCert);
 }

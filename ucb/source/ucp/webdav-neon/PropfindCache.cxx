@@ -43,8 +43,7 @@ namespace webdav_ucp
     {
         // search the URL in the static map
         osl::MutexGuard aGuard( m_aMutex );
-        PropNameCache::const_iterator it;
-        it = m_aTheCache.find( rURL );
+        PropNameCache::const_iterator it = m_aTheCache.find( rURL );
         if ( it == m_aTheCache.end() )
             return false;
         else
@@ -67,8 +66,7 @@ namespace webdav_ucp
     void PropertyNamesCache::removeCachedPropertyNames( const OUString& rURL )
     {
         osl::MutexGuard aGuard( m_aMutex );
-        PropNameCache::const_iterator it;
-        it = m_aTheCache.find( rURL );
+        PropNameCache::const_iterator it = m_aTheCache.find( rURL );
         if ( it != m_aTheCache.end() )
         {
             m_aTheCache.erase( it );
