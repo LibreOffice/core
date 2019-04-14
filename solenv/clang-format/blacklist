@@ -7781,6 +7781,10 @@ include/vbahelper/vbatextframe.hxx
 include/vbahelper/vbawindowbase.hxx
 include/vcl/AccessibleBrowseBoxObjType.hxx
 include/vcl/BitmapTools.hxx
+include/vcl/BitmapBuffer.hxx
+include/vcl/BitmapColor.hxx
+include/vcl/BitmapPalette.hxx
+include/vcl/ColorMask.hxx
 include/vcl/EnumContext.hxx
 include/vcl/FilterConfigItem.hxx
 include/vcl/GraphicNativeMetadata.hxx
@@ -7795,6 +7799,7 @@ include/vcl/IconThemeScanner.hxx
 include/vcl/IconThemeSelector.hxx
 include/vcl/ImageTree.hxx
 include/vcl/NotebookbarContextControl.hxx
+include/vcl/Scanline.hxx
 include/vcl/abstdlg.hxx
 include/vcl/accel.hxx
 include/vcl/accessiblefactory.hxx
