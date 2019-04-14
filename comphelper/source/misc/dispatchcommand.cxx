@@ -30,8 +30,9 @@
 using namespace css;
 
 namespace comphelper {
-
-bool dispatchCommand(const OUString& rCommand, const uno::Reference<css::frame::XFrame>& rFrame, const css::uno::Sequence<css::beans::PropertyValue>& rArguments, const uno::Reference<css::frame::XDispatchResultListener>& rListener)
+bool dispatchCommand(const OUString& rCommand, const uno::Reference<css::frame::XFrame>& rFrame,
+                     const css::uno::Sequence<css::beans::PropertyValue>& rArguments,
+                     const uno::Reference<css::frame::XDispatchResultListener>& rListener)
 {
     uno::Reference<frame::XDispatchProvider> xDispatchProvider(rFrame, uno::UNO_QUERY);
     if (!xDispatchProvider.is())
@@ -43,21 +44,30 @@ bool dispatchCommand(const OUString& rCommand, const uno::Reference<css::frame::
     uno::Reference<util::XURLTransformer> xParser = util::URLTransformer::create(xContext);
     xParser->parseStrict(aCommandURL);
 
-    uno::Reference<frame::XDispatch> xDisp = xDispatchProvider->queryDispatch(aCommandURL, OUString(), 0);
+    uno::Reference<frame::XDispatch> xDisp
+        = xDispatchProvider->queryDispatch(aCommandURL, OUString(), 0);
     if (!xDisp.is())
         return false;
 
     // And do the work...
-    uno::Reference<frame::XNotifyingDispatch> xNotifyingDisp(xDisp, uno::UNO_QUERY);
-    if (xNotifyingDisp.is())
-        xNotifyingDisp->dispatchWithNotification(aCommandURL, rArguments, rListener);
-    else
-        xDisp->dispatch(aCommandURL, rArguments);
+    if (rListener.is())
+    {
+        uno::Reference<frame::XNotifyingDispatch> xNotifyingDisp(xDisp, uno::UNO_QUERY);
+        if (xNotifyingDisp.is())
+        {
+            xNotifyingDisp->dispatchWithNotification(aCommandURL, rArguments, rListener);
+            return true;
+        }
+    }
+
+    xDisp->dispatch(aCommandURL, rArguments);
 
     return true;
 }
 
-bool dispatchCommand(const OUString& rCommand, const css::uno::Sequence<css::beans::PropertyValue>& rArguments, const uno::Reference<css::frame::XDispatchResultListener>& rListener)
+bool dispatchCommand(const OUString& rCommand,
+                     const css::uno::Sequence<css::beans::PropertyValue>& rArguments,
+                     const uno::Reference<css::frame::XDispatchResultListener>& rListener)
 {
     // Target where we will execute the .uno: command
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
