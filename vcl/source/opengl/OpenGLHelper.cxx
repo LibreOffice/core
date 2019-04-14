@@ -545,8 +545,8 @@ void OpenGLHelper::renderToFile(long nWidth, long nHeight, const OUString& rFile
     OpenGLZone aZone;
 
     std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nWidth*nHeight*4]);
-    glReadPixels(0, 0, nWidth, nHeight, GL_BGRA, GL_UNSIGNED_BYTE, pBuffer.get());
-    BitmapEx aBitmap = ConvertBGRABufferToBitmapEx(pBuffer.get(), nWidth, nHeight);
+    glReadPixels(0, 0, nWidth, nHeight, OptimalBufferFormat(), GL_UNSIGNED_BYTE, pBuffer.get());
+    BitmapEx aBitmap = ConvertBufferToBitmapEx(pBuffer.get(), nWidth, nHeight);
     try {
         vcl::PNGWriter aWriter( aBitmap );
         SvFileStream sOutput( rFileName, StreamMode::WRITE );
@@ -559,7 +559,16 @@ void OpenGLHelper::renderToFile(long nWidth, long nHeight, const OUString& rFile
     CHECK_GL_ERROR();
 }
 
-BitmapEx OpenGLHelper::ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffer, long nWidth, long nHeight)
+GLenum OpenGLHelper::OptimalBufferFormat()
+{
+#ifdef _WIN32
+    return GL_BGRA; // OpenGLSalBitmap is internally ScanlineFormat::N24BitTcBgr
+#else
+    return GL_RGBA; // OpenGLSalBitmap is internally ScanlineFormat::N24BitTcRgb
+#endif
+}
+
+BitmapEx OpenGLHelper::ConvertBufferToBitmapEx(const sal_uInt8* const pBuffer, long nWidth, long nHeight)
 {
     assert(pBuffer);
     Bitmap aBitmap( Size(nWidth, nHeight), 24 );
@@ -568,12 +577,27 @@ BitmapEx OpenGLHelper::ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffe
     {
         BitmapScopedWriteAccess pWriteAccess( aBitmap );
         AlphaScopedWriteAccess pAlphaWriteAccess( aAlpha );
+#ifdef _WIN32
+        assert(pWriteAccess->GetScanlineFormat() == ScanlineFormat::N24BitTcBgr);
+        assert(pWriteAccess->IsTopDown());
+        assert(pAlphaWriteAccess->IsTopDown());
+#else
+        assert(pWriteAccess->GetScanlineFormat() == ScanlineFormat::N24BitTcRgb);
+        assert(!pWriteAccess->IsTopDown());
+        assert(!pAlphaWriteAccess->IsTopDown());
+#endif
+        assert(pAlphaWriteAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal);
 
         size_t nCurPos = 0;
         for( long y = 0; y < nHeight; ++y)
         {
+#ifdef _WIN32
             Scanline pScan = pWriteAccess->GetScanline(y);
             Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(y);
+#else
+            Scanline pScan = pWriteAccess->GetScanline(nHeight-1-y);
+            Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(nHeight-1-y);
+#endif
             for( long x = 0; x < nWidth; ++x )
             {
                 *pScan++ = pBuffer[nCurPos];
