@@ -24,7 +24,7 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Save"/>
       <menu:menuitem menu:id=".uno:SaveAs"/>
-      <menu:menuitem menu:id=".uno:SaveAll"/>
+      <menu:menuitem menu:id=".uno:SaveAll" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
       <menu:menuseparator/>
@@ -45,7 +45,7 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:AvailableToolbars"/>
       <menu:menuitem menu:id=".uno:StatusBarVisible"/>
-      <menu:menuitem menu:id=".uno:Sidebar"/>
+      <menu:menuitem menu:id=".uno:Sidebar" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:DiagramData"/>
     </menu:menupopup>
@@ -110,16 +110,16 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-        <menu:menuitem menu:id=".uno:DiagramWall"/>
-        <menu:menuitem menu:id=".uno:DiagramFloor"/>
-        <menu:menuitem menu:id=".uno:DiagramArea"/>
+        <menu:menuitem menu:id=".uno:DiagramWall" menu:style="text"/>
+        <menu:menuitem menu:id=".uno:DiagramFloor" menu:style="text"/>
+        <menu:menuitem menu:id=".uno:DiagramArea" menu:style="text"/>
       <menu:menuseparator/>
         <menu:menuitem menu:id=".uno:DiagramType"/>
         <menu:menuitem menu:id=".uno:DataRanges"/>
         <menu:menuitem menu:id=".uno:View3D"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:FormatSelection"/>
-      <menu:menuitem menu:id=".uno:TransformDialog"/>
+      <menu:menuitem menu:id=".uno:FormatSelection" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:TransformDialog" menu:style="text"/>
       <menu:menu menu:id=".uno:ArrangeRow">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Forward"/>
@@ -141,8 +141,8 @@
           <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
-      <menu:menuitem menu:id=".uno:ConfigureDialog"/>
+      <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ConfigureDialog" menu:style="text"/>
       <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
     </menu:menupopup>
   </menu:menu>
