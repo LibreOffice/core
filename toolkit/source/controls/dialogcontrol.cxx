@@ -1054,8 +1054,7 @@ void UnoFrameControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
         if ( pOutDev )
         {
             // Adjust Y based on height of Title
-            ::tools::Rectangle aRect;
-            aRect = pOutDev->GetTextRect( aRect, sTitle );
+            ::tools::Rectangle aRect = pOutDev->GetTextRect( aRect, sTitle );
             nY = nY + ( aRect.GetHeight() / 2 );
         }
         else

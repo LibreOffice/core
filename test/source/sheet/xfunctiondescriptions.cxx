@@ -53,8 +53,7 @@ void XFunctionDescriptions::testGetById()
     // fetch the same descriptions by its id
     sal_Int32 aId2 = 0;
     OUString aName2;
-    uno::Sequence<beans::PropertyValue> aProps2;
-    aProps2 = xFD->getById(aId1);
+    uno::Sequence<beans::PropertyValue> aProps2 = xFD->getById(aId1);
     CPPUNIT_ASSERT_MESSAGE("Received empty FunctionDescriptions from getById()",
                            aProps2.getLength());
     for (const auto& aProp : aProps2)

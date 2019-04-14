@@ -46,8 +46,7 @@ void XDatabaseRange::testDataArea()
     aCellAddress.StartRow = 2;
     aCellAddress.EndRow = 5;
     xDBRange->setDataArea(aCellAddress);
-    table::CellRangeAddress aValue;
-    aValue = xDBRange->getDataArea();
+    table::CellRangeAddress aValue = xDBRange->getDataArea();
     CPPUNIT_ASSERT_EQUAL( aCellAddress.Sheet, aValue.Sheet );
     CPPUNIT_ASSERT_EQUAL( aCellAddress.StartRow, aValue.StartRow );
     CPPUNIT_ASSERT_EQUAL( aCellAddress.EndRow, aValue.EndRow );
