@@ -47,8 +47,7 @@ void XDataPilotDescriptor::testSourceRange()
     aAddress.EndRow = 5;
     xDescr->setSourceRange(aAddress);
 
-    table::CellRangeAddress aReturn;
-    aReturn = xDescr->getSourceRange();
+    table::CellRangeAddress aReturn = xDescr->getSourceRange();
 
     CPPUNIT_ASSERT_EQUAL(aAddress.Sheet, aReturn.Sheet);
     CPPUNIT_ASSERT_EQUAL(aAddress.StartColumn, aReturn.StartColumn);
