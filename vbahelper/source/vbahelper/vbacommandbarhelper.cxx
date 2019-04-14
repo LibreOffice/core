@@ -180,10 +180,8 @@ bool VbaCommandBarHelper::hasToolbar( const OUString& sResourceUrl, const OUStri
 // return the resource url if found
 OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference< css::container::XNameAccess >& xNameAccess, const OUString& sName )
 {
-    OUString sResourceUrl;
-
     // check if it is an buildin toolbar
-    sResourceUrl = MSO2OOCommandbarHelper::getMSO2OOCommandbarHelper()->findBuildinToolbar( sName );
+    OUString sResourceUrl = MSO2OOCommandbarHelper::getMSO2OOCommandbarHelper()->findBuildinToolbar( sName );
     if( !sResourceUrl.isEmpty() )
         return sResourceUrl;
 

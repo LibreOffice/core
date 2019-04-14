@@ -137,8 +137,7 @@ void SvtOptionsDlgOptions_Impl::ReadNode( const OUString& _rNode, NodeType _eTyp
     if ( _eType != NT_Option )
         lResult[1] = sNode + sSet;
 
-    Sequence< Any > aValues;
-    aValues = GetProperties( lResult );
+    Sequence< Any > aValues = GetProperties( lResult );
     bool bHide = false;
     if ( aValues[0] >>= bHide )
         m_aOptionNodeList.emplace( sNode, bHide );
