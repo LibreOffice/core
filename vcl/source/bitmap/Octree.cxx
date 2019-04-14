@@ -25,7 +25,14 @@
 #include <bitmap/Octree.hxx>
 #include <bitmap/impoctree.hxx>
 
-static const sal_uInt8 pImplMask[8] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
+namespace
+{
+constexpr size_t OCTREE_BITS = 5;
+constexpr size_t OCTREE_BITS_1 = 10;
+
+constexpr sal_uLong gnBits = 8 - OCTREE_BITS;
+
+} // end anonymous namespace
 
 ImpNodeCache::ImpNodeCache(const sal_uLong nInitSize)
     : pActNode(nullptr)
@@ -53,35 +60,35 @@ ImpNodeCache::~ImpNodeCache()
 }
 
 Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
-    : nLeafCount(0)
-    , nLevel(0)
+    : mnLeafCount(0)
+    , mnLevel(0)
     , pTree(nullptr)
-    , pColor(nullptr)
-    , pAcc(&rReadAcc)
-    , nPalIndex(0)
+    , mpReduce(OCTREE_BITS + 1, nullptr)
+    , mpColor(nullptr)
+    , mpNodeCache(std::make_unique<ImpNodeCache>(nColors))
+    , mpAccess(&rReadAcc)
+    , mnPalIndex(0)
 {
     sal_uLong nMax(nColors);
-    pNodeCache.reset(new ImpNodeCache(nColors));
-    memset(pReduce, 0, (OCTREE_BITS + 1) * sizeof(OctreeNode*));
 
-    if (!!*pAcc)
+    if (!!*mpAccess)
     {
-        const long nWidth = pAcc->Width();
-        const long nHeight = pAcc->Height();
+        const long nWidth = mpAccess->Width();
+        const long nHeight = mpAccess->Height();
 
-        if (pAcc->HasPalette())
+        if (mpAccess->HasPalette())
         {
             for (long nY = 0; nY < nHeight; nY++)
             {
-                Scanline pScanline = pAcc->GetScanline(nY);
+                Scanline pScanline = mpAccess->GetScanline(nY);
                 for (long nX = 0; nX < nWidth; nX++)
                 {
-                    pColor = &pAcc->GetPaletteColor(pAcc->GetIndexFromData(pScanline, nX));
-                    nLevel = 0;
-                    ImplAdd(&pTree);
+                    mpColor = &mpAccess->GetPaletteColor(mpAccess->GetIndexFromData(pScanline, nX));
+                    mnLevel = 0;
+                    add(&pTree);
 
-                    while (nLeafCount > nMax)
-                        ImplReduce();
+                    while (mnLeafCount > nMax)
+                        reduce();
                 }
             }
         }
@@ -89,97 +96,94 @@ Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
         {
             BitmapColor aColor;
 
-            pColor = &aColor;
+            mpColor = &aColor;
 
             for (long nY = 0; nY < nHeight; nY++)
             {
-                Scanline pScanline = pAcc->GetScanline(nY);
+                Scanline pScanline = mpAccess->GetScanline(nY);
                 for (long nX = 0; nX < nWidth; nX++)
                 {
-                    aColor = pAcc->GetPixelFromData(pScanline, nX);
-                    nLevel = 0;
-                    ImplAdd(&pTree);
+                    aColor = mpAccess->GetPixelFromData(pScanline, nX);
+                    mnLevel = 0;
+                    add(&pTree);
 
-                    while (nLeafCount > nMax)
-                        ImplReduce();
+                    while (mnLeafCount > nMax)
+                        reduce();
                 }
             }
         }
     }
 }
 
-Octree::~Octree()
-{
-    ImplDeleteOctree(&pTree);
-    pNodeCache.reset();
-}
+Octree::~Octree() { deleteOctree(&pTree); }
 
-void Octree::ImplDeleteOctree(OctreeNode** ppNode)
+void Octree::deleteOctree(OctreeNode** ppNode)
 {
     for (OctreeNode* i : (*ppNode)->pChild)
     {
         if (i)
-            ImplDeleteOctree(&i);
+            deleteOctree(&i);
     }
 
-    pNodeCache->ImplReleaseNode(*ppNode);
+    mpNodeCache->ImplReleaseNode(*ppNode);
     *ppNode = nullptr;
 }
 
-void Octree::ImplAdd(OctreeNode** ppNode)
+void Octree::add(OctreeNode** ppNode)
 {
     // possibly generate new nodes
     if (!*ppNode)
     {
-        *ppNode = pNodeCache->ImplGetFreeNode();
-        (*ppNode)->bLeaf = (OCTREE_BITS == nLevel);
+        *ppNode = mpNodeCache->ImplGetFreeNode();
+        (*ppNode)->bLeaf = (OCTREE_BITS == mnLevel);
 
         if ((*ppNode)->bLeaf)
-            nLeafCount++;
+            mnLeafCount++;
         else
         {
-            (*ppNode)->pNext = pReduce[nLevel];
-            pReduce[nLevel] = *ppNode;
+            (*ppNode)->pNext = mpReduce[mnLevel];
+            mpReduce[mnLevel] = *ppNode;
         }
     }
 
     if ((*ppNode)->bLeaf)
     {
         (*ppNode)->nCount++;
-        (*ppNode)->nRed += pColor->GetRed();
-        (*ppNode)->nGreen += pColor->GetGreen();
-        (*ppNode)->nBlue += pColor->GetBlue();
+        (*ppNode)->nRed += mpColor->GetRed();
+        (*ppNode)->nGreen += mpColor->GetGreen();
+        (*ppNode)->nBlue += mpColor->GetBlue();
     }
     else
     {
-        const sal_uLong nShift = 7 - nLevel;
-        const sal_uInt8 cMask = pImplMask[nLevel];
-        const sal_uLong nIndex = (((pColor->GetRed() & cMask) >> nShift) << 2)
-                                 | (((pColor->GetGreen() & cMask) >> nShift) << 1)
-                                 | ((pColor->GetBlue() & cMask) >> nShift);
+        const sal_uLong nShift = 7 - mnLevel;
+        const sal_uInt8 cMask = 0x80 >> mnLevel;
+        const sal_uLong nIndex = (((mpColor->GetRed() & cMask) >> nShift) << 2)
+                                 | (((mpColor->GetGreen() & cMask) >> nShift) << 1)
+                                 | ((mpColor->GetBlue() & cMask) >> nShift);
 
-        nLevel++;
-        ImplAdd(&(*ppNode)->pChild[nIndex]);
+        mnLevel++;
+        add(&(*ppNode)->pChild[nIndex]);
     }
 }
 
-void Octree::ImplReduce()
+void Octree::reduce()
 {
-    sal_uLong i;
     OctreeNode* pNode;
     sal_uLong nRedSum = 0;
     sal_uLong nGreenSum = 0;
     sal_uLong nBlueSum = 0;
     sal_uLong nChildren = 0;
 
-    for (i = OCTREE_BITS - 1; i && !pReduce[i]; i--)
+    sal_uLong nIndex = OCTREE_BITS - 1;
+    while (nIndex > 0 && !mpReduce[nIndex])
     {
+        nIndex--;
     }
 
-    pNode = pReduce[i];
-    pReduce[i] = pNode->pNext;
+    pNode = mpReduce[nIndex];
+    mpReduce[nIndex] = pNode->pNext;
 
-    for (i = 0; i < 8; i++)
+    for (sal_uLong i = 0; i < 8; i++)
     {
         if (pNode->pChild[i])
         {
@@ -190,7 +194,7 @@ void Octree::ImplReduce()
             nBlueSum += pChild->nBlue;
             pNode->nCount += pChild->nCount;
 
-            pNodeCache->ImplReleaseNode(pNode->pChild[i]);
+            mpNodeCache->ImplReleaseNode(pNode->pChild[i]);
             pNode->pChild[i] = nullptr;
             nChildren++;
         }
@@ -200,41 +204,62 @@ void Octree::ImplReduce()
     pNode->nRed = nRedSum;
     pNode->nGreen = nGreenSum;
     pNode->nBlue = nBlueSum;
-    nLeafCount -= --nChildren;
+    mnLeafCount -= --nChildren;
 }
 
 void Octree::CreatePalette(OctreeNode* pNode)
 {
     if (pNode->bLeaf)
     {
-        pNode->nPalIndex = nPalIndex;
-        aPal[nPalIndex++] = BitmapColor(
-            static_cast<sal_uInt8>(static_cast<double>(pNode->nRed) / pNode->nCount),
-            static_cast<sal_uInt8>(static_cast<double>(pNode->nGreen) / pNode->nCount),
-            static_cast<sal_uInt8>(static_cast<double>(pNode->nBlue) / pNode->nCount));
+        pNode->nPalIndex = mnPalIndex;
+        maPalette[mnPalIndex++] = BitmapColor(sal_uInt8(double(pNode->nRed) / pNode->nCount),
+                                              sal_uInt8(double(pNode->nGreen) / pNode->nCount),
+                                              sal_uInt8(double(pNode->nBlue) / pNode->nCount));
     }
     else
+    {
         for (OctreeNode* i : pNode->pChild)
         {
             if (i)
+            {
                 CreatePalette(i);
+            }
         }
+    }
 }
 
 void Octree::GetPalIndex(OctreeNode* pNode)
 {
     if (pNode->bLeaf)
-        nPalIndex = pNode->nPalIndex;
+        mnPalIndex = pNode->nPalIndex;
     else
     {
-        const sal_uLong nShift = 7 - nLevel;
-        const sal_uInt8 cMask = pImplMask[nLevel++];
-        const sal_uLong nIndex = (((pColor->GetRed() & cMask) >> nShift) << 2)
-                                 | (((pColor->GetGreen() & cMask) >> nShift) << 1)
-                                 | ((pColor->GetBlue() & cMask) >> nShift);
+        const sal_uLong nShift = 7 - mnLevel;
+        const sal_uInt8 cMask = 0x80 >> mnLevel;
+        mnLevel++;
+        const sal_uLong nIndex = (((mpColor->GetRed() & cMask) >> nShift) << 2)
+                                 | (((mpColor->GetGreen() & cMask) >> nShift) << 1)
+                                 | ((mpColor->GetBlue() & cMask) >> nShift);
 
         GetPalIndex(pNode->pChild[nIndex]);
     }
+}
+
+const BitmapPalette& Octree::GetPalette()
+{
+    maPalette.SetEntryCount(sal_uInt16(mnLeafCount));
+    mnPalIndex = 0;
+    CreatePalette(pTree);
+    return maPalette;
+}
+
+sal_uInt16 Octree::GetBestPaletteIndex(const BitmapColor& rColor)
+{
+    mpColor = &rColor;
+    mnPalIndex = 65535;
+    mnLevel = 0;
+    GetPalIndex(pTree);
+    return mnPalIndex;
 }
 
 InverseColorMap::InverseColorMap(const BitmapPalette& rPal)
@@ -266,8 +291,8 @@ InverseColorMap::InverseColorMap(const BitmapPalette& rPal)
         const long cginc = (xsqr - (cGreen << gnBits)) << 1;
         const long cbinc = (xsqr - (cBlue << gnBits)) << 1;
 
-        sal_uLong* cdp = reinterpret_cast<sal_uLong*>(pBuffer.get());
-        sal_uInt8* crgbp = pMap.get();
+        sal_uLong* cdp = reinterpret_cast<sal_uLong*>(mpBuffer.data());
+        sal_uInt8* crgbp = mpMap.data();
 
         for (r = 0, rxx = crinc; r < nColorMax; rdist += rxx, r++, rxx += xsqr2)
         {
@@ -292,11 +317,15 @@ void InverseColorMap::ImplCreateBuffers(const sal_uLong nMax)
     const sal_uLong nCount = nMax * nMax * nMax;
     const sal_uLong nSize = nCount * sizeof(sal_uLong);
 
-    pMap.reset(new sal_uInt8[nCount]);
-    memset(pMap.get(), 0x00, nCount);
+    mpMap.resize(nCount, 0x00);
+    mpBuffer.resize(nSize, 0xff);
+}
 
-    pBuffer.reset(new sal_uInt8[nSize]);
-    memset(pBuffer.get(), 0xff, nSize);
+sal_uInt16 InverseColorMap::GetBestPaletteIndex(const BitmapColor& rColor)
+{
+    return mpMap[((static_cast<sal_uLong>(rColor.GetRed()) >> gnBits) << OCTREE_BITS_1)
+                 | ((static_cast<sal_uLong>(rColor.GetGreen()) >> gnBits) << OCTREE_BITS)
+                 | (static_cast<sal_uLong>(rColor.GetBlue()) >> gnBits)];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
