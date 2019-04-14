@@ -65,7 +65,21 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) 
     CHECK_GL_ERROR();
     if( bAllocate )
     {
+#ifdef DBG_UTIL
+        std::vector< sal_uInt8 > buffer;
+        buffer.resize( nWidth * nHeight * 4 );
+        for( size_t i = 0; i < size_t( nWidth * nHeight ); ++i )
+        {   // pre-fill the texture with deterministic garbage
+            bool odd = (i & 0x01);
+            buffer[ i * 4 ] =  odd ? 0x40 : 0xBF;
+            buffer[ i * 4 + 1 ] = 0x80;
+            buffer[ i * 4 + 2 ] = odd ? 0xBF : 0x40;
+            buffer[ i * 4 + 3 ] = 0xFF;
+        }
+        glTexImage2D( GL_TEXTURE_2D, 0, constInternalFormat, nWidth, nHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer.data());
+#else
         glTexImage2D( GL_TEXTURE_2D, 0, constInternalFormat, nWidth, nHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr );
+#endif
         CHECK_GL_ERROR();
     }
 
