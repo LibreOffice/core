@@ -356,7 +356,6 @@ cmd/lc_dbreportdelete.png cmd/lc_delete.png
 cmd/lc_dbquerydelete.png cmd/lc_delete.png
 cmd/lc_dbformdelete.png cmd/lc_delete.png
 cmd/lc_dbclearquery.png cmd/lc_delete.png
-cmd/lc_deletecell.png cmd/lc_delete.png
 cmd/sc_deleteprintarea.png cmd/sc_delete.png
 cmd/sc_deleterecord.png cmd/sc_delete.png
 cmd/sc_dbtabledelete.png cmd/sc_delete.png
@@ -364,7 +363,6 @@ cmd/sc_dbreportdelete.png cmd/sc_delete.png
 cmd/sc_dbquerydelete.png cmd/sc_delete.png
 cmd/sc_dbformdelete.png cmd/sc_delete.png
 cmd/sc_dbclearquery.png cmd/sc_delete.png
-cmd/sc_deletecell.png cmd/sc_delete.png
 
 # Folder
 cmd/lc_dbtableopen.png cmd/lc_open.png
@@ -625,8 +623,6 @@ cmd/sc_linespacing.png cmd/sc_spacepara15.png
 # calc menu entries
 cmd/lc_functionbox.png cmd/lc_dbviewfunctions.png
 cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
-cmd/sc_insertrowsmenu.png cmd/sc_insertrows.png
-cmd/sc_insertcolumnsmenu.png cmd/sc_insertcolumns.png
 cmd/sc_functiondialog.png cmd/sc_dbviewfunctions.png
 cmd/lc_functiondialog.png cmd/lc_dbviewfunctions.png
 cmd/sc_functionbox.png cmd/sc_dbviewfunctions.png
@@ -875,7 +871,6 @@ cmd/sc_numberformatmenu.png cmd/sc_numberformatstandard.png
 cmd/sc_mergecellsmenu.png cmd/sc_togglemergecells.png
 cmd/sc_printrangesmenu.png cmd/sc_defineprintarea.png
 cmd/sc_insertcell.png cmd/sc_insertcellsright.png
-cmd/sc_insertrowsmenu.png cmd/sc_insertrows.png
 
 # Reload
 cmd/lc_refresh.png cmd/lc_reload.png
