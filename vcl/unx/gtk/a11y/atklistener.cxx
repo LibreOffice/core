@@ -435,9 +435,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
 
         case accessibility::AccessibleEventId::INVALIDATE_ALL_CHILDREN:
         {
-            uno::Reference< accessibility::XAccessibleContext > xParent;
-
-            xParent = getAccessibleContextFromSource(aEvent.Source);
+            uno::Reference< accessibility::XAccessibleContext > xParent = getAccessibleContextFromSource(aEvent.Source);
             g_return_if_fail( xParent.is() );
 
             handleInvalidateChildren(xParent);
@@ -716,8 +714,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
 
         case accessibility::AccessibleEventId::ROLE_CHANGED:
         {
-            uno::Reference< accessibility::XAccessibleContext > xContext;
-            xContext = getAccessibleContextFromSource( aEvent.Source );
+            uno::Reference< accessibility::XAccessibleContext > xContext = getAccessibleContextFromSource( aEvent.Source );
             atk_object_wrapper_set_role( mpWrapper, xContext->getAccessibleRole() );
             break;
         }

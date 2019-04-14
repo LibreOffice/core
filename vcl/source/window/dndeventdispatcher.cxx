@@ -104,10 +104,8 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
             dtde.DropAction, location, dtde.SourceActions, m_aDataFlavorList );
     }
 
-    sal_Int32 nListeners = 0;
-
     // send drop event to the child window
-    nListeners = fireDropEvent( pChildWindow, dtde.Context, dtde.DropAction,
+    sal_Int32 nListeners = fireDropEvent( pChildWindow, dtde.Context, dtde.DropAction,
         location, dtde.SourceActions, dtde.Transferable );
 
     // reject drop if no listeners found

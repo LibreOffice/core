@@ -1079,8 +1079,7 @@ void DecorationView::DrawHandle(const tools::Rectangle& rRect)
 
     for (long i = 1; i <= nNumberOfPoints; i++)
     {
-        tools::Rectangle aLocation;
-        aLocation = tools::Rectangle(nHalfWidth - nRadius,
+        tools::Rectangle aLocation(nHalfWidth - nRadius,
                               round(fDistance * i) - nRadius,
                               nHalfWidth + nRadius,
                               round(fDistance * i) + nRadius);

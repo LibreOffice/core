@@ -208,8 +208,7 @@ OString MyWin::processCommand( const OString& rCommand )
         else
         {
             ssize_t nBytes = 0;
-            ssize_t fd = 0;
-            fd = write( nSocket, rCommand.getStr(), rCommand.getLength() );
+            ssize_t fd = write( nSocket, rCommand.getStr(), rCommand.getLength() );
 
             if (fd == 0)
                 SAL_WARN("vcl", "Connection closed on other end");
