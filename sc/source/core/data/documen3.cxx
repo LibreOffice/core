@@ -1503,11 +1503,15 @@ void ScDocument::GetFilterSelCount( SCCOL nCol, SCROW nRow, SCTAB nTab, SCSIZE& 
 {
     nSelected = 0;
     nTotal = 0;
+
+    if (bLoadingMedium)
+        return;
+
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
         ScDBData* pDBData = GetDBAtCursor( nCol, nRow, nTab, ScDBDataPortion::AREA );
         if( pDBData && pDBData->HasAutoFilter() )
-            pDBData->GetFilterSelCount( nSelected, nTotal );
+            pDBData->GetFilterSelCount( *this, nSelected, nTotal );
     }
 }
 

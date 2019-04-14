@@ -305,10 +305,14 @@ WorkbookGlobals::WorkbookGlobals( ExcelFilter& rFilter ) :
     // register at the filter, needed for virtual callbacks (even during construction)
     mrExcelFilter.registerWorkbookGlobals( *this );
     initialize();
+    if (mpDoc)
+        mpDoc->SetLoadingMedium(true);
 }
 
 WorkbookGlobals::~WorkbookGlobals()
 {
+    if (mpDoc)
+        mpDoc->SetLoadingMedium(false);
     finalize();
     mrExcelFilter.unregisterWorkbookGlobals();
 }

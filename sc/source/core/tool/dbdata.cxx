@@ -82,7 +82,7 @@ ScDBData::ScDBData( const OUString& rName,
     bAutoFilter (false),
     bModified   (false),
     mbTableColumnNamesDirty(true),
-    nFilteredRowCount(0)
+    nFilteredRowCount(-1)
 {
     aUpper = ScGlobal::pCharClass->uppercase(aUpper);
 }
@@ -923,19 +923,24 @@ void ScDBData::Notify( const SfxHint& rHint )
     // recalculation.
 }
 
-void ScDBData::CalcSaveFilteredCount( SCSIZE nNonFilteredRowCount )
+void ScDBData::ResetFilteredCount()
 {
-    SCSIZE nTotal = nEndRow - nStartRow + 1;
-    if ( bHasHeader )
-        nTotal -= 1;
-    nFilteredRowCount = nTotal - nNonFilteredRowCount;
+    nFilteredRowCount = -1;
 }
 
-void ScDBData::GetFilterSelCount( SCSIZE& nSelected, SCSIZE& nTotal )
+void ScDBData::GetFilterSelCount( ScDocument& rDoc, SCSIZE& nSelected, SCSIZE& nTotal )
 {
     nTotal = nEndRow - nStartRow + 1;
+
+    if (nFilteredRowCount == -1)
+    {
+        SCSIZE nNonFilteredRowCount = rDoc.CountNonFilteredRows(nStartRow, nEndRow, nTable);
+        nFilteredRowCount = nTotal - nNonFilteredRowCount;
+    }
+
     if ( bHasHeader )
         nTotal -= 1;
+
     nSelected = nTotal - nFilteredRowCount;
 }
 

@@ -810,7 +810,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
 
     //  execute filtering on the document
     SCSIZE nCount = rDoc.Query( nTab, rQueryParam, bKeepSub );
-    pDBData->CalcSaveFilteredCount( nCount );
+    pDBData->ResetFilteredCount();
     if (bCopy)
     {
         aLocalParam.nRow2 = aLocalParam.nRow1 + nCount;

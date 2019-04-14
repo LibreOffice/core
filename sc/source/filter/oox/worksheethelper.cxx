@@ -68,6 +68,7 @@
 #include <stlsheet.hxx>
 #include <stlpool.hxx>
 #include <cellvalue.hxx>
+#include <dbdata.hxx>
 
 #include <svl/stritem.hxx>
 #include <editeng/eeitem.hxx>
@@ -1249,6 +1250,22 @@ void WorksheetGlobals::convertRows( OutlineLevelVec& orRowLevels,
     {
         ScDocument& rDoc = getScDocument();
         rDoc.SetRowHidden( nStartRow, nEndRow, nTab, true );
+        // Set these hidden rows as filtered too if the rows are inside
+        // some DB with autofilter.
+        ScDBCollection* pDBCollection = rDoc.GetDBCollection();
+        if (pDBCollection)
+        {
+            ScDBData* pDBData = pDBCollection->GetDBNearCursor( 0, nStartRow, nTab );
+            if( pDBData && pDBData->HasAutoFilter() )
+            {
+                ScRange aDBRange;
+                pDBData->GetArea(aDBRange);
+                SCROW nFiltRow1 = std::max(aDBRange.aStart.Row(), nStartRow);
+                SCROW nFiltRow2 = std::min(aDBRange.aEnd.Row(), nEndRow);
+                if (nFiltRow1 <= nFiltRow2 )
+                    rDoc.SetRowFiltered( nFiltRow1, nFiltRow2, nTab, true );
+            }
+        }
     }
 
     // outline settings for this row range

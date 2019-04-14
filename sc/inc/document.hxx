@@ -2083,7 +2083,7 @@ public:
     // for broadcasting/listening
     void            SetInsertingFromOtherDoc( bool bVal ) { bInsertingFromOtherDoc = bVal; }
     bool            IsInsertingFromOtherDoc() const { return bInsertingFromOtherDoc; }
-    void            SetLoadingMedium( bool bVal );
+    SC_DLLPUBLIC void SetLoadingMedium( bool bVal );
     SC_DLLPUBLIC void SetImportingXML( bool bVal );
     bool            IsImportingXML() const { return bImportingXML; }
     bool            IsCalcingAfterLoad() const { return bCalcingAfterLoad; }
