@@ -1727,6 +1727,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
             if (pViewShell2 && pViewShell2 == this)
             {
                 ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+                assert(pTabViewShell);
                 ScInputHandler* pInputHdl = pTabViewShell->GetInputHandler();
                 if (pInputHdl && pInputHdl->IsFormulaMode())
                 {

@@ -41,7 +41,9 @@ namespace dbmm
 
     MacroMigrationDialog& MacroMigrationPage::getDialog()
     {
-        return *dynamic_cast< MacroMigrationDialog* >( GetParentDialog() );
+        auto pDialog = dynamic_cast<MacroMigrationDialog*>(GetParentDialog());
+        assert(pDialog);
+        return *pDialog;
     }
 
     // PreparationPage

@@ -111,23 +111,26 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
     double rel_x = rElem.x, rel_y = rElem.y;
 
     // find anchor type by recursing though parents
-    Element* pAnchor = rElem.Parent;
-    while( pAnchor &&
-           ! dynamic_cast<ParagraphElement*>(pAnchor) &&
-           ! dynamic_cast<PageElement*>(pAnchor) )
+    Element* pAnchor = &rElem;
+    ParagraphElement* pParaElt = nullptr;
+    PageElement* pPage = nullptr;
+    while ((pAnchor = pAnchor->Parent))
     {
-        pAnchor = pAnchor->Parent;
+        if ((pParaElt = dynamic_cast<ParagraphElement*>(pAnchor)))
+            break;
+        if ((pPage = dynamic_cast<PageElement*>(pAnchor)))
+            break;
     }
     if( pAnchor )
     {
-        if( dynamic_cast<ParagraphElement*>(pAnchor) )
+        if (pParaElt)
         {
             rProps[ "text:anchor-type" ] = rElem.isCharacter
                 ? OUString("character") : OUString("paragraph");
         }
         else
         {
-            PageElement* pPage = dynamic_cast<PageElement*>(pAnchor);
+            assert(pPage); // guaranteed by the while loop above
             rProps[ "text:anchor-type" ] = "page";
             rProps[ "text:anchor-page-number" ] = OUString::number(pPage->PageNumber);
         }

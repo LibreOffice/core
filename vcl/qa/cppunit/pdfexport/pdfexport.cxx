@@ -530,6 +530,7 @@ void PdfExportTest::testTdf109143()
 
     // Make sure it's re-compressed.
     auto pLength = dynamic_cast<vcl::filter::PDFNumberElement*>(pXObject->Lookup("Length"));
+    CPPUNIT_ASSERT(pLength);
     int nLength = pLength->GetValue();
     // This failed: cropped TIFF-in-JPEG wasn't re-compressed, so crop was
     // lost. Size was 59416, now is 11827.

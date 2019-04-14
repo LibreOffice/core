@@ -392,7 +392,9 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, weld::Button&, void)
 
             if(SfxItemState::SET == m_rOutAttrs.GetItemState(XATTR_FILLBITMAP, true, &pPoolItem))
             {
-                pEntry.reset(new XBitmapEntry(dynamic_cast<const XFillBitmapItem*>(pPoolItem)->GetGraphicObject(), aName));
+                auto pFillBmpItem = dynamic_cast<const XFillBitmapItem*>(pPoolItem);
+                assert(pFillBmpItem);
+                pEntry.reset(new XBitmapEntry(pFillBmpItem->GetGraphicObject(), aName));
             }
             else
                 assert(!"SvxPatternTabPage::ClickAddHdl_Impl(), XBitmapEntry* pEntry == nullptr ?");

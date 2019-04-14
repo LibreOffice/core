@@ -744,6 +744,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             if( meOutDevType == OUTDEV_PRINTER )
             {
                 Printer* pThis = dynamic_cast<Printer*>(this);
+                assert(pThis);
                 Point aPageOffset = pThis->GetPageOffsetPixel();
                 aPageOffset = Point( 0, 0 ) - aPageOffset;
                 Size aSize  = pThis->GetPaperSizePixel();
@@ -1107,6 +1108,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         else if( meOutDevType == OUTDEV_PRINTER )
         {
             Printer* pThis = dynamic_cast<Printer*>(this);
+            assert(pThis);
             aPageOffset = pThis->GetPageOffsetPixel();
             aPageOffset = Point( 0, 0 ) - aPageOffset;
             aTmpSize  = pThis->GetPaperSizePixel();

@@ -332,6 +332,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
         case SID_SAVEDOC:
         {
             SwDocShell* pDocShell = GetDocShell();
+            assert(pDocShell);
             SfxMedium* pMed = nullptr;
             if(pDocShell->HasName())
                 pMed = pDocShell->GetMedium();
@@ -366,7 +367,11 @@ void SwSrcView::Execute(SfxRequest& rReq)
             SetSearchItem( static_cast<const SvxSearchItem&>(rItem));
             StartSearchAndReplace( static_cast<const SvxSearchItem&>(rItem), rReq.IsAPI() );
             if(aEditWin->IsModified())
-                GetDocShell()->GetDoc()->getIDocumentState().SetModified();
+            {
+                SwDocShell* pDocShell = GetDocShell();
+                assert(pDocShell);
+                pDocShell->GetDoc()->getIDocumentState().SetModified();
+            }
         }
         break;
         case FN_REPEAT_SEARCH:
@@ -433,6 +438,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             case SID_SAVEDOC:
             {
                 SwDocShell* pDocShell = GetDocShell();
+                assert(pDocShell);
                 if(!pDocShell->IsModified())
                     rSet.DisableItem(nWhich);
             }
@@ -455,7 +461,9 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             case SID_SEARCH_OPTIONS:
             {
                 SearchOptionFlags nOpt = SRC_SEARCHOPTIONS;
-                if(GetDocShell()->IsReadOnly())
+                SwDocShell* pDocShell = GetDocShell();
+                assert(pDocShell);
+                if (pDocShell->IsReadOnly())
                     nOpt &= ~SearchOptionFlags(SearchOptionFlags::REPLACE|SearchOptionFlags::REPLACE_ALL);
 
                 rSet.Put( SfxUInt16Item( SID_SEARCH_OPTIONS,  static_cast<sal_uInt16>(nOpt) ) );
@@ -646,6 +654,7 @@ void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
 sal_uInt16 SwSrcView::SetPrinter(SfxPrinter* pNew, SfxPrinterChangeFlags nDiffFlags )
 {
     SwDocShell* pDocSh = GetDocShell();
+    assert(pDocSh);
     if ( (SfxPrinterChangeFlags::JOBSETUP | SfxPrinterChangeFlags::PRINTER) & nDiffFlags )
     {
         pDocSh->GetDoc()->getIDocumentDeviceAccess().setPrinter( pNew, true, true );
@@ -666,7 +675,9 @@ sal_uInt16 SwSrcView::SetPrinter(SfxPrinter* pNew, SfxPrinterChangeFlags nDiffFl
 
 SfxPrinter* SwSrcView::GetPrinter( bool bCreate )
 {
-    return  GetDocShell()->GetDoc()->getIDocumentDeviceAccess().getPrinter( bCreate );
+    SwDocShell* pDocSh = GetDocShell();
+    assert(pDocSh);
+    return pDocSh->GetDoc()->getIDocumentDeviceAccess().getPrinter(bCreate);
 }
 
 sal_Int32 SwSrcView::PrintSource(
@@ -749,17 +760,17 @@ sal_Int32 SwSrcView::PrintSource(
 
 void SwSrcView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SfxHintId::ModeChanged ||
-            (
-             rHint.GetId() == SfxHintId::TitleChanged &&
-             !GetDocShell()->IsReadOnly() && aEditWin->IsReadonly()
-            )
-       )
+    if (rHint.GetId() == SfxHintId::ModeChanged || rHint.GetId() == SfxHintId::TitleChanged)
     {
-        // Broadcast only comes once!
         const SwDocShell* pDocSh = GetDocShell();
-        const bool bReadonly = pDocSh->IsReadOnly();
-        aEditWin->SetReadonly(bReadonly);
+        assert(pDocSh);
+        if (!(rHint.GetId() == SfxHintId::TitleChanged
+              && (pDocSh->IsReadOnly() || !aEditWin->IsReadonly())))
+        {
+            // Broadcast only comes once!
+            const bool bReadonly = pDocSh->IsReadOnly();
+            aEditWin->SetReadonly(bReadonly);
+        }
     }
     SfxViewShell::Notify(rBC, rHint);
 }

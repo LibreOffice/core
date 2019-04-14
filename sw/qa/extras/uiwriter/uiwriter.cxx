@@ -6411,8 +6411,9 @@ void SwUiWriterTest::testTdf115013()
     // Save it as DOCX & load it again
     reload("Office Open XML Text", "mm-field.docx");
 
-    CPPUNIT_ASSERT(mxComponent.get());
-    pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get())->GetDocShell()->GetDoc();
+    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+    pDoc = pXTextDocument->GetDocShell()->GetDoc();
     CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);

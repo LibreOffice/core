@@ -3470,6 +3470,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     for(i = 0; i < SAL_N_ELEMENTS(pControl); ++i)
                     {
                         pObjs[i] = dynamic_cast<OUnoObject*>(pControl[i].get());
+                        assert(pObjs[i]);
                         uno::Reference<beans::XPropertySet> xUnoProp(pObjs[i]->GetUnoControlModel(),uno::UNO_QUERY_THROW);
                         uno::Reference< report::XReportComponent> xShapeProp(pObjs[i]->getUnoShape(),uno::UNO_QUERY_THROW);
                         xUnoProp->setPropertyValue(PROPERTY_NAME,xShapeProp->getPropertyValue(PROPERTY_NAME));
@@ -3541,6 +3542,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                         xShapePropLabel->setPosition(aPosLabel);
                     }
                     OUnoObject* pObj = dynamic_cast<OUnoObject*>(pControl[0].get());
+                    assert(pObj);
                     uno::Reference< report::XFixedText> xShapeProp(pObj->getUnoShape(),uno::UNO_QUERY_THROW);
                     xShapeProp->setName(xShapeProp->getName() + sDefaultName );
 

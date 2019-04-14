@@ -757,8 +757,8 @@ void LwpTableLayout::RegisterStyle()
 
     // the old code doesn't check if the LwpFoundry pointer is NULL,
     // so the NULL pointer cause sodc freeze. Add code to check the pointer.
-    if (GetFoundry() && GetTable())
-        PutCellVals(GetFoundry(), GetTable()->GetObjectID());
+    if (GetFoundry())
+        PutCellVals(GetFoundry(), pTable->GetObjectID());
 }
 /**
  * @short   read table layout
@@ -847,7 +847,9 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
         rtl::Reference<XFTable> const & pXFTable, sal_uInt16 nStartHeadRow, sal_uInt16 nEndHeadRow)
 {
     sal_uInt16 nContentRow;
-    sal_uInt8 nCol = static_cast<sal_uInt8>(GetTable()->GetColumn());
+    LwpTable* pTable = GetTable();
+    assert(pTable);
+    sal_uInt8 nCol = static_cast<sal_uInt8>(pTable->GetColumn());
     rtl::Reference<XFTable> pTmpTable( new XFTable );
 
     ConvertTable(pTmpTable.get(),nStartHeadRow,nEndHeadRow,0,nCol);
@@ -888,7 +890,9 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
 {
     sal_uInt16 i;
     sal_uInt16 nRowNum = pTmpTable->GetRowCount();
-    sal_uInt8 nCol = static_cast<sal_uInt8>(GetTable()->GetColumn());
+    LwpTable* pTable = GetTable();
+    assert(pTable);
+    sal_uInt8 nCol = static_cast<sal_uInt8>(pTable->GetColumn());
 
     rtl::Reference<XFRow> xXFRow(new XFRow);
 
@@ -1360,8 +1364,10 @@ void LwpTableLayout::ConvertDefaultRow(rtl::Reference<XFTable> const & pXFTable,
         rtl::Reference<XFCell> xCell;
         if (m_pDefaultCellLayout)
         {
+            LwpTable* pTable = GetTable();
+            assert(pTable);
             xCell = m_pDefaultCellLayout->DoConvertCell(
-                GetTable()->GetObjectID(),nRowID,j+nStartCol);
+                pTable->GetObjectID(),nRowID,j+nStartCol);
         }
         else
         {

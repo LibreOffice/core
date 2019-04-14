@@ -1424,6 +1424,7 @@ std::shared_ptr<MetadatableUndo> Metadatable::CreateUndo() const
         {
             XmlIdRegistryDocument * pRegDoc(
                 dynamic_cast<XmlIdRegistryDocument*>( m_pReg ) );
+            assert(pRegDoc);
             std::shared_ptr<MetadatableUndo> xUndo(
                 sfx2::XmlIdRegistryDocument::CreateUndo(*this) );
             pRegDoc->RegisterCopy(*this, *xUndo, false);

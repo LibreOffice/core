@@ -191,6 +191,7 @@ void LwpRowLayout::Read()
 void LwpRowLayout::ConvertRow(rtl::Reference<XFTable> const & pXFTable,sal_uInt8 nStartCol,sal_uInt8 nEndCol)
 {
     LwpTableLayout* pTableLayout = GetParentTableLayout();
+    assert(pTableLayout);
     LwpTable* pTable = pTableLayout->GetTable();
 
     //calculate the connected cell position
