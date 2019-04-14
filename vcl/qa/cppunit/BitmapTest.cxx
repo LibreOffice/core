@@ -28,6 +28,7 @@
 #include <vcl/BitmapMonochromeFilter.hxx>
 
 #include <BitmapSymmetryCheck.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <bitmapwriteaccess.hxx>
 
 #include <svdata.hxx>
@@ -44,6 +45,7 @@ class BitmapTest : public CppUnit::TestFixture
     void testN4Greyscale();
     void testN8Greyscale();
     void testConvert();
+    void testScaleSymmetry();
     void testScale();
     void testScale2();
     void testCRC();
@@ -60,6 +62,7 @@ class BitmapTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testConvert);
     CPPUNIT_TEST(testN4Greyscale);
     CPPUNIT_TEST(testN8Greyscale);
+    CPPUNIT_TEST(testScaleSymmetry);
     CPPUNIT_TEST(testScale);
     CPPUNIT_TEST(testScale2);
     CPPUNIT_TEST(testCRC);
@@ -411,7 +414,7 @@ void BitmapTest::testConvert()
     }
 }
 
-void BitmapTest::testScale()
+void BitmapTest::testScaleSymmetry()
 {
     const bool bExportBitmap(false);
 
@@ -455,6 +458,111 @@ void BitmapTest::testScale()
         SvFileStream aStream("~/scale_after.png", StreamMode::WRITE | StreamMode::TRUNC);
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
         rFilter.compressAsPNG(aBitmap24Bit, aStream);
+    }
+}
+
+void assertColorsAreSimilar(const BitmapColor& expected, const BitmapColor& actual, int line)
+{
+    // Check that the two colors match or are reasonably similar.
+    if (expected == actual)
+        return;
+    if (abs(expected.GetRed() - actual.GetRed()) < 3
+        && abs(expected.GetGreen() - actual.GetGreen()) < 3
+        && abs(expected.GetBlue() - actual.GetBlue()) < 3
+        && abs(expected.GetAlpha() - actual.GetAlpha()) < 3)
+    {
+        return;
+    }
+    std::stringstream stream;
+    stream << "Line: " << line;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(stream.str(), expected, actual);
+}
+
+void BitmapTest::testScale()
+{
+    const bool bExportBitmap(false);
+    using tools::Rectangle;
+
+    static const BmpScaleFlag scaleMethods[]
+        = { BmpScaleFlag::Default,     BmpScaleFlag::Fast,    BmpScaleFlag::BestQuality,
+            BmpScaleFlag::Interpolate, BmpScaleFlag::Lanczos, BmpScaleFlag::BiCubic,
+            BmpScaleFlag::BiLinear };
+    for (BmpScaleFlag scaleMethod : scaleMethods)
+    {
+        struct ScaleSize
+        {
+            Size srcSize;
+            Size destSize;
+        };
+        static const ScaleSize scaleSizes[]
+            = { // test no-op
+                { Size(16, 16), Size(16, 16) },
+                // powers of 2 (OpenGL may use texture atlas)
+                { Size(16, 16), Size(14, 14) },
+                { Size(14, 14), Size(16, 16) }, // both upscaling and downscaling
+                // "random" sizes
+                { Size(18, 18), Size(14, 14) },
+                { Size(14, 14), Size(18, 18) },
+                // different x/y ratios
+                { Size(16, 30), Size(14, 18) },
+                { Size(14, 18), Size(16, 30) },
+                // ratio larger than 16 (triggers different paths in some OpenGL algorithms)
+                { Size(18 * 20, 18 * 20), Size(14, 14) },
+                { Size(14, 14), Size(18 * 20, 18 * 20) }
+              };
+        for (const ScaleSize& scaleSize : scaleSizes)
+        {
+            OString testStr = "Testing scale (" + scaleSize.srcSize.toString() + ")->("
+                              + scaleSize.destSize.toString() + "), method "
+                              + OString::number(static_cast<int>(scaleMethod));
+            fprintf(stderr, "%s\n", testStr.getStr());
+            Bitmap bitmap(scaleSize.srcSize, 24);
+            {
+                // Fill each quarter of the source bitmap with a different color,
+                // and center with yet another color.
+                BitmapScopedWriteAccess writeAccess(bitmap);
+                const int halfW = scaleSize.srcSize.getWidth() / 2;
+                const int halfH = scaleSize.srcSize.getHeight() / 2;
+                writeAccess->SetFillColor(COL_GREEN);
+                writeAccess->FillRect(Rectangle(Point(0, 0), Size(halfW, halfH)));
+                writeAccess->SetFillColor(COL_RED);
+                writeAccess->FillRect(Rectangle(Point(0, halfH), Size(halfW, halfH)));
+                writeAccess->SetFillColor(COL_YELLOW);
+                writeAccess->FillRect(Rectangle(Point(halfW, 0), Size(halfW, halfH)));
+                writeAccess->SetFillColor(COL_BLACK);
+                writeAccess->FillRect(Rectangle(Point(halfW, halfH), Size(halfW, halfH)));
+                writeAccess->SetFillColor(COL_BLUE);
+                writeAccess->FillRect(Rectangle(Point(halfW / 2, halfH / 2), Size(halfW, halfH)));
+            }
+            if (bExportBitmap)
+            {
+                SvFileStream aStream("~/scale_before.png", StreamMode::WRITE | StreamMode::TRUNC);
+                GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+                rFilter.compressAsPNG(bitmap, aStream);
+            }
+            CPPUNIT_ASSERT(bitmap.Scale(scaleSize.destSize, scaleMethod));
+            if (bExportBitmap)
+            {
+                SvFileStream aStream("~/scale_after.png", StreamMode::WRITE | StreamMode::TRUNC);
+                GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+                rFilter.compressAsPNG(bitmap, aStream);
+            }
+            CPPUNIT_ASSERT_EQUAL(scaleSize.destSize, bitmap.GetSizePixel());
+            {
+                // Scaling should keep each quarter of the resulting bitmap have the same color,
+                // so check that color in each corner of the result bitmap is the same color,
+                // or reasonably close (some algorithms may alter the color very slightly).
+                BitmapReadAccess readAccess(bitmap);
+                const int lastW = scaleSize.destSize.getWidth() - 1;
+                const int lastH = scaleSize.destSize.getHeight() - 1;
+                assertColorsAreSimilar(COL_GREEN, readAccess.GetColor(0, 0), __LINE__);
+                assertColorsAreSimilar(COL_RED, readAccess.GetColor(lastH, 0), __LINE__);
+                assertColorsAreSimilar(COL_YELLOW, readAccess.GetColor(0, lastW), __LINE__);
+                assertColorsAreSimilar(COL_BLACK, readAccess.GetColor(lastH, lastW), __LINE__);
+                assertColorsAreSimilar(COL_BLUE, readAccess.GetColor(lastH / 2, lastW / 2),
+                                       __LINE__);
+            }
+        }
     }
 }
 
