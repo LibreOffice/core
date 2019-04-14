@@ -32,6 +32,7 @@
 
 #include <svdata.hxx>
 #include <salinst.hxx>
+#include <bitmap/Octree.hxx>
 
 namespace
 {
@@ -50,6 +51,7 @@ class BitmapTest : public CppUnit::TestFixture
     void testCustom8BitPalette();
     void testErase();
     void testBitmap32();
+    void testOctree();
 
     CPPUNIT_TEST_SUITE(BitmapTest);
     CPPUNIT_TEST(testCreation);
@@ -65,6 +67,7 @@ class BitmapTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testCustom8BitPalette);
     CPPUNIT_TEST(testErase);
     CPPUNIT_TEST(testBitmap32);
+    CPPUNIT_TEST(testOctree);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -738,6 +741,54 @@ void BitmapTest::testBitmap32()
 
         aColor = pReadAccess->GetPixel(2, 2);
         CPPUNIT_ASSERT_EQUAL(BitmapColor(0x99, 0x77, 0x66, 0x55), aColor);
+    }
+}
+
+void BitmapTest::testOctree()
+{
+    Size aSize(1000, 100);
+    Bitmap aBitmap(aSize, 24);
+    {
+        BitmapScopedWriteAccess pWriteAccess(aBitmap);
+        for (long y = 0; y < aSize.Height(); ++y)
+        {
+            for (long x = 0; x < aSize.Width(); ++x)
+            {
+                double fPercent = double(x) / double(aSize.Width());
+                pWriteAccess->SetPixel(y, x,
+                                       BitmapColor(255.0 * fPercent, 64.0 + (128.0 * fPercent),
+                                                   255.0 - 255.0 * fPercent));
+            }
+        }
+    }
+
+    {
+        // Reduce to 1 color
+        Bitmap::ScopedReadAccess pAccess(aBitmap);
+        Octree aOctree(*pAccess.get(), 1);
+        auto aBitmapPalette = aOctree.GetPalette();
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), aBitmapPalette.GetEntryCount());
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x7e, 0x7f, 0x7f), aBitmapPalette[0]);
+    }
+
+    {
+        // Reduce to 4 color
+        Bitmap::ScopedReadAccess pAccess(aBitmap);
+        Octree aOctree(*pAccess.get(), 4);
+        auto aBitmapPalette = aOctree.GetPalette();
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), aBitmapPalette.GetEntryCount());
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x7f, 0x7f, 0x7f), aBitmapPalette[0]);
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x3e, 0x5f, 0xbf), aBitmapPalette[1]);
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x7f, 0x80, 0x7f), aBitmapPalette[2]);
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0xbe, 0x9f, 0x3f), aBitmapPalette[3]);
+    }
+
+    {
+        // Reduce to 256 color
+        Bitmap::ScopedReadAccess pAccess(aBitmap);
+        Octree aOctree(*pAccess.get(), 256);
+        auto aBitmapPalette = aOctree.GetPalette();
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(74), aBitmapPalette.GetEntryCount());
     }
 }
 
