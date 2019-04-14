@@ -104,41 +104,6 @@ inline BitmapColor ImpErrorQuad::ImplGetColor()
                        std::clamp(nBlue, 0L, 8160L) >> 5);
 }
 
-class ImpNodeCache
-{
-    OctreeNode* pActNode;
-
-public:
-    ImpNodeCache(const sal_uLong nInitSize);
-    ~ImpNodeCache();
-
-    inline OctreeNode* ImplGetFreeNode();
-    inline void ImplReleaseNode(OctreeNode* pNode);
-};
-
-inline OctreeNode* ImpNodeCache::ImplGetFreeNode()
-{
-    OctreeNode* pNode;
-
-    if (!pActNode)
-    {
-        pActNode = new OctreeNode;
-        pActNode->pNextInCache = nullptr;
-    }
-
-    pNode = pActNode;
-    pActNode = pNode->pNextInCache;
-    memset(pNode, 0, sizeof(OctreeNode));
-
-    return pNode;
-}
-
-inline void ImpNodeCache::ImplReleaseNode(OctreeNode* pNode)
-{
-    pNode->pNextInCache = pActNode;
-    pActNode = pNode;
-}
-
 #endif // INCLUDED_VCL_INC_IMPOCTREE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

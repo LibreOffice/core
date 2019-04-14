@@ -23,7 +23,6 @@
 #include <vcl/bitmapaccess.hxx>
 
 #include <bitmap/Octree.hxx>
-#include <bitmap/impoctree.hxx>
 
 namespace
 {
@@ -34,30 +33,59 @@ constexpr sal_uLong gnBits = 8 - OCTREE_BITS;
 
 } // end anonymous namespace
 
-ImpNodeCache::ImpNodeCache(const sal_uLong nInitSize)
-    : pActNode(nullptr)
+class ImpNodeCache
 {
-    const sal_uLong nSize = nInitSize + 4;
+private:
+    OctreeNode* mpActNode;
 
-    for (sal_uLong i = 0; i < nSize; i++)
+public:
+    ImpNodeCache(const sal_uLong nInitSize)
+        : mpActNode(nullptr)
     {
-        OctreeNode* pNewNode = new OctreeNode;
+        const sal_uLong nSize = nInitSize + 4;
 
-        pNewNode->pNextInCache = pActNode;
-        pActNode = pNewNode;
+        for (sal_uLong i = 0; i < nSize; i++)
+        {
+            OctreeNode* pNewNode = new OctreeNode;
+
+            pNewNode->pNextInCache = mpActNode;
+            mpActNode = pNewNode;
+        }
     }
-}
 
-ImpNodeCache::~ImpNodeCache()
-{
-    while (pActNode)
+    ~ImpNodeCache()
     {
-        OctreeNode* pNode = pActNode;
+        while (mpActNode)
+        {
+            OctreeNode* pNode = mpActNode;
 
-        pActNode = pNode->pNextInCache;
-        delete pNode;
+            mpActNode = pNode->pNextInCache;
+            delete pNode;
+        }
     }
-}
+
+    OctreeNode* ImplGetFreeNode()
+    {
+        OctreeNode* pNode;
+
+        if (!mpActNode)
+        {
+            mpActNode = new OctreeNode;
+            mpActNode->pNextInCache = nullptr;
+        }
+
+        pNode = mpActNode;
+        mpActNode = pNode->pNextInCache;
+        memset(pNode, 0, sizeof(OctreeNode));
+
+        return pNode;
+    }
+    void ImplReleaseNode(OctreeNode* pNode)
+    {
+        pNode->pNextInCache = mpActNode;
+        mpActNode = pNode;
+    }
+};
 
 Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
     : mnLeafCount(0)
