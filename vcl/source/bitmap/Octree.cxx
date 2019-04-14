@@ -22,8 +22,8 @@
 #include <rtl/alloc.h>
 #include <vcl/bitmapaccess.hxx>
 
-#include <octree.hxx>
-#include <impoctree.hxx>
+#include <bitmap/Octree.hxx>
+#include <bitmap/impoctree.hxx>
 
 static const sal_uInt8 pImplMask[8] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
 

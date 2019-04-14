@@ -17331,13 +17331,13 @@ vcl/inc/impfontmetric.hxx
 vcl/inc/impfontmetricdata.hxx
 vcl/inc/impgraph.hxx
 vcl/inc/implimagetree.hxx
-vcl/inc/impoctree.hxx
 vcl/inc/ios/iosinst.hxx
 vcl/inc/ios/svsys.h
 vcl/inc/jobset.h
 vcl/inc/langboost.hxx
 vcl/inc/listbox.hxx
-vcl/inc/octree.hxx
+vcl/inc/bitmap/Octree.hxx
+vcl/inc/bitmap/impoctree.hxx
 vcl/inc/opengl/BufferObject.hxx
 vcl/inc/opengl/DeviceInfo.hxx
 vcl/inc/opengl/FixedTextureAtlas.hxx
@@ -17777,6 +17777,7 @@ vcl/source/bitmap/BitmapTools.cxx
 vcl/source/bitmap/bitmap.cxx
 vcl/source/bitmap/bitmapfilter.cxx
 vcl/source/bitmap/checksum.cxx
+vcl/source/bitmap/Octree.cxx
 vcl/source/components/dtranscomp.cxx
 vcl/source/components/factory.cxx
 vcl/source/components/fontident.cxx
@@ -17909,7 +17910,6 @@ vcl/source/gdi/lineinfo.cxx
 vcl/source/gdi/mapmod.cxx
 vcl/source/gdi/metaact.cxx
 vcl/source/gdi/mtfxmldump.cxx
-vcl/source/gdi/octree.cxx
 vcl/source/gdi/oldprintadaptor.cxx
 vcl/source/gdi/pdfextoutdevdata.cxx
 vcl/source/gdi/pdffontcache.cxx

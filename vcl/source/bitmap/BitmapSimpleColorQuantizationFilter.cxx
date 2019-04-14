@@ -14,7 +14,7 @@
 #include <vcl/BitmapSimpleColorQuantizationFilter.hxx>
 
 #include <bitmapwriteaccess.hxx>
-#include <impoctree.hxx>
+#include <bitmap/Octree.hxx>
 
 #include <cstdlib>
 
