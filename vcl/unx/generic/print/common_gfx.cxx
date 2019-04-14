@@ -984,9 +984,7 @@ void
 PrinterGfx::PSHexString (const unsigned char* pString, sal_Int16 nLen)
 {
     OStringBuffer pHexString;
-    sal_Int32 nChar = 0;
-
-    nChar = psp::appendStr ("<", pHexString);
+    sal_Int32 nChar = psp::appendStr ("<", pHexString);
     for (int i = 0; i < nLen; i++)
     {
         if (nChar >= (nMaxTextColumn - 1))

@@ -804,10 +804,9 @@ void PrintDialog::storeToSettings()
 void PrintDialog::readFromSettings()
 {
     SettingsConfigItem* pItem = SettingsConfigItem::get();
-    OUString aValue;
 
     // read last selected tab page; if it exists, activate it
-    aValue = pItem->getValue( "PrintDialog",
+    OUString aValue = pItem->getValue( "PrintDialog",
                               "LastPage" );
     sal_uInt16 nCount = mpTabCtrl->GetPageCount();
     for( sal_uInt16 i = 0; i < nCount; i++ )

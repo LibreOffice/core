@@ -141,8 +141,7 @@ component_wrapper_ref_accessible_at_point (AtkComponent *component,
 
         if( pComponent.is() )
         {
-            uno::Reference< accessibility::XAccessible > xAccessible;
-            xAccessible = pComponent->getAccessibleAtPoint(
+            uno::Reference< accessibility::XAccessible > xAccessible = pComponent->getAccessibleAtPoint(
                 translatePoint( pComponent, x, y, coord_type ) );
             return atk_object_wrapper_ref( xAccessible );
         }
