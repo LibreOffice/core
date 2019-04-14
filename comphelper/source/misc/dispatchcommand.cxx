@@ -48,11 +48,17 @@ bool dispatchCommand(const OUString& rCommand, const uno::Reference<css::frame::
         return false;
 
     // And do the work...
-    uno::Reference<frame::XNotifyingDispatch> xNotifyingDisp(xDisp, uno::UNO_QUERY);
-    if (xNotifyingDisp.is())
-        xNotifyingDisp->dispatchWithNotification(aCommandURL, rArguments, rListener);
-    else
-        xDisp->dispatch(aCommandURL, rArguments);
+    if (rListener.is())
+    {
+        uno::Reference<frame::XNotifyingDispatch> xNotifyingDisp(xDisp, uno::UNO_QUERY);
+        if (xNotifyingDisp.is())
+        {
+            xNotifyingDisp->dispatchWithNotification(aCommandURL, rArguments, rListener);
+            return true;
+        }
+    }
+
+    xDisp->dispatch(aCommandURL, rArguments);
 
     return true;
 }
