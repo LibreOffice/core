@@ -135,6 +135,10 @@ namespace {
         }
         else
             SAL_WARN("vcl.opengl", rDetail << " shader: " << rName << " compile " << nId << " failed without error log");
+
+#ifdef DBG_UTIL
+        abort();
+#endif
         return 0;
     }
 }
