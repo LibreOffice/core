@@ -74,6 +74,30 @@ class BitmapTest : public CppUnit::TestFixture
     CPPUNIT_TEST_SUITE_END();
 };
 
+void assertColorsAreSimilar(int maxDifference, const std::string& message,
+                            const BitmapColor& expected, const BitmapColor& actual)
+{
+    // Check that the two colors match or are reasonably similar.
+    if (expected == actual)
+        return;
+    if (abs(expected.GetRed() - actual.GetRed()) <= maxDifference
+        && abs(expected.GetGreen() - actual.GetGreen()) <= maxDifference
+        && abs(expected.GetBlue() - actual.GetBlue()) <= maxDifference
+        && abs(expected.GetAlpha() - actual.GetAlpha()) <= maxDifference)
+    {
+        return;
+    }
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(message, expected, actual);
+}
+
+void assertColorsAreSimilar(int maxDifference, int line, const BitmapColor& expected,
+                            const BitmapColor& actual)
+{
+    std::stringstream stream;
+    stream << "Line: " << line;
+    assertColorsAreSimilar(maxDifference, stream.str(), expected, actual);
+}
+
 void BitmapTest::testCreation()
 {
     {
@@ -317,38 +341,38 @@ void BitmapTest::testN8Greyscale()
     aBmp.Convert(BmpConversion::N8BitGreys);
     BitmapReadAccess aBmpReadAccess(aBmp);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Black pixel wrong 8-bit greyscale value", aGreyscalePalette[0],
-                                 aBmpReadAccess.GetColor(0, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Blue pixel wrong 8-bit greyscale value", aGreyscalePalette[14],
-                                 aBmpReadAccess.GetColor(0, 1));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Green pixel wrong 8-bit greyscale value", aGreyscalePalette[75],
-                                 aBmpReadAccess.GetColor(0, 2));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cyan pixel wrong 8-bit greyscale value", aGreyscalePalette[89],
-                                 aBmpReadAccess.GetColor(0, 3));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Red pixel wrong 8-bit greyscale value", aGreyscalePalette[38],
-                                 aBmpReadAccess.GetColor(1, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Magenta pixel wrong 8-bit greyscale value", aGreyscalePalette[52],
-                                 aBmpReadAccess.GetColor(1, 1));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Brown pixel wrong 8-bit greyscale value", aGreyscalePalette[114],
-                                 aBmpReadAccess.GetColor(1, 2));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Gray pixel wrong 8-bit greyscale value", aGreyscalePalette[128],
-                                 aBmpReadAccess.GetColor(1, 3));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light gray pixel wrong 8-bit greyscale value",
-                                 aGreyscalePalette[192], aBmpReadAccess.GetColor(2, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light blue pixel wrong 8-bit greyscale value",
-                                 aGreyscalePalette[27], aBmpReadAccess.GetColor(2, 1));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light green pixel wrong 8-bit greyscale value",
-                                 aGreyscalePalette[150], aBmpReadAccess.GetColor(2, 2));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light cyan pixel wrong 8-bit greyscale value",
-                                 aGreyscalePalette[178], aBmpReadAccess.GetColor(2, 3));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light red pixel wrong 8-bit greyscale value",
-                                 aGreyscalePalette[76], aBmpReadAccess.GetColor(3, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light magenta pixel wrong 8-bit greyscale value",
-                                 aGreyscalePalette[104], aBmpReadAccess.GetColor(3, 1));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Yellow pixel wrong 8-bit greyscale value", aGreyscalePalette[227],
-                                 aBmpReadAccess.GetColor(3, 2));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("White pixel wrong 8-bit greyscale value", aGreyscalePalette[255],
-                                 aBmpReadAccess.GetColor(3, 3));
+    assertColorsAreSimilar(1, "Black pixel wrong 8-bit greyscale value", aGreyscalePalette[0],
+                           aBmpReadAccess.GetColor(0, 0));
+    assertColorsAreSimilar(1, "Blue pixel wrong 8-bit greyscale value", aGreyscalePalette[14],
+                           aBmpReadAccess.GetColor(0, 1));
+    assertColorsAreSimilar(1, "Green pixel wrong 8-bit greyscale value", aGreyscalePalette[75],
+                           aBmpReadAccess.GetColor(0, 2));
+    assertColorsAreSimilar(1, "Cyan pixel wrong 8-bit greyscale value", aGreyscalePalette[89],
+                           aBmpReadAccess.GetColor(0, 3));
+    assertColorsAreSimilar(1, "Red pixel wrong 8-bit greyscale value", aGreyscalePalette[38],
+                           aBmpReadAccess.GetColor(1, 0));
+    assertColorsAreSimilar(1, "Magenta pixel wrong 8-bit greyscale value", aGreyscalePalette[52],
+                           aBmpReadAccess.GetColor(1, 1));
+    assertColorsAreSimilar(1, "Brown pixel wrong 8-bit greyscale value", aGreyscalePalette[114],
+                           aBmpReadAccess.GetColor(1, 2));
+    assertColorsAreSimilar(1, "Gray pixel wrong 8-bit greyscale value", aGreyscalePalette[128],
+                           aBmpReadAccess.GetColor(1, 3));
+    assertColorsAreSimilar(1, "Light gray pixel wrong 8-bit greyscale value",
+                           aGreyscalePalette[192], aBmpReadAccess.GetColor(2, 0));
+    assertColorsAreSimilar(1, "Light blue pixel wrong 8-bit greyscale value", aGreyscalePalette[27],
+                           aBmpReadAccess.GetColor(2, 1));
+    assertColorsAreSimilar(1, "Light green pixel wrong 8-bit greyscale value",
+                           aGreyscalePalette[150], aBmpReadAccess.GetColor(2, 2));
+    assertColorsAreSimilar(1, "Light cyan pixel wrong 8-bit greyscale value",
+                           aGreyscalePalette[178], aBmpReadAccess.GetColor(2, 3));
+    assertColorsAreSimilar(1, "Light red pixel wrong 8-bit greyscale value", aGreyscalePalette[76],
+                           aBmpReadAccess.GetColor(3, 0));
+    assertColorsAreSimilar(1, "Light magenta pixel wrong 8-bit greyscale value",
+                           aGreyscalePalette[104], aBmpReadAccess.GetColor(3, 1));
+    assertColorsAreSimilar(1, "Yellow pixel wrong 8-bit greyscale value", aGreyscalePalette[227],
+                           aBmpReadAccess.GetColor(3, 2));
+    assertColorsAreSimilar(1, "White pixel wrong 8-bit greyscale value", aGreyscalePalette[255],
+                           aBmpReadAccess.GetColor(3, 3));
 }
 
 void BitmapTest::testConvert()
@@ -461,23 +485,6 @@ void BitmapTest::testScaleSymmetry()
     }
 }
 
-void assertColorsAreSimilar(const BitmapColor& expected, const BitmapColor& actual, int line)
-{
-    // Check that the two colors match or are reasonably similar.
-    if (expected == actual)
-        return;
-    if (abs(expected.GetRed() - actual.GetRed()) < 3
-        && abs(expected.GetGreen() - actual.GetGreen()) < 3
-        && abs(expected.GetBlue() - actual.GetBlue()) < 3
-        && abs(expected.GetAlpha() - actual.GetAlpha()) < 3)
-    {
-        return;
-    }
-    std::stringstream stream;
-    stream << "Line: " << line;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(stream.str(), expected, actual);
-}
-
 void BitmapTest::testScale()
 {
     const bool bExportBitmap(false);
@@ -555,12 +562,12 @@ void BitmapTest::testScale()
                 BitmapReadAccess readAccess(bitmap);
                 const int lastW = scaleSize.destSize.getWidth() - 1;
                 const int lastH = scaleSize.destSize.getHeight() - 1;
-                assertColorsAreSimilar(COL_GREEN, readAccess.GetColor(0, 0), __LINE__);
-                assertColorsAreSimilar(COL_RED, readAccess.GetColor(lastH, 0), __LINE__);
-                assertColorsAreSimilar(COL_YELLOW, readAccess.GetColor(0, lastW), __LINE__);
-                assertColorsAreSimilar(COL_BLACK, readAccess.GetColor(lastH, lastW), __LINE__);
-                assertColorsAreSimilar(COL_BLUE, readAccess.GetColor(lastH / 2, lastW / 2),
-                                       __LINE__);
+                assertColorsAreSimilar(2, __LINE__, COL_GREEN, readAccess.GetColor(0, 0));
+                assertColorsAreSimilar(2, __LINE__, COL_RED, readAccess.GetColor(lastH, 0));
+                assertColorsAreSimilar(2, __LINE__, COL_YELLOW, readAccess.GetColor(0, lastW));
+                assertColorsAreSimilar(2, __LINE__, COL_BLACK, readAccess.GetColor(lastH, lastW));
+                assertColorsAreSimilar(2, __LINE__, COL_BLUE,
+                                       readAccess.GetColor(lastH / 2, lastW / 2));
             }
         }
     }
