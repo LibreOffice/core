@@ -23,9 +23,6 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/dllapi.h>
 
-#define OCTREE_BITS 5
-#define OCTREE_BITS_1 10
-
 struct OctreeNode
 {
     sal_uLong nCount;
@@ -48,51 +45,33 @@ private:
     void CreatePalette(OctreeNode* pNode);
     void GetPalIndex(OctreeNode* pNode);
 
-    SAL_DLLPRIVATE void ImplDeleteOctree(OctreeNode** ppNode);
-    SAL_DLLPRIVATE void ImplAdd(OctreeNode** ppNode);
-    SAL_DLLPRIVATE void ImplReduce();
+    SAL_DLLPRIVATE void deleteOctree(OctreeNode** ppNode);
+    SAL_DLLPRIVATE void add(OctreeNode** ppNode);
+    SAL_DLLPRIVATE void reduce();
 
-    BitmapPalette aPal;
-    sal_uLong nLeafCount;
-    sal_uLong nLevel;
+    BitmapPalette maPalette;
+    sal_uLong mnLeafCount;
+    sal_uLong mnLevel;
     OctreeNode* pTree;
-    OctreeNode* pReduce[OCTREE_BITS + 1];
-    BitmapColor const* pColor;
-    std::unique_ptr<ImpNodeCache> pNodeCache;
-    const BitmapReadAccess* pAcc;
-    sal_uInt16 nPalIndex;
+    std::vector<OctreeNode*> mpReduce;
+    BitmapColor const* mpColor;
+    std::unique_ptr<ImpNodeCache> mpNodeCache;
+    const BitmapReadAccess* mpAccess;
+    sal_uInt16 mnPalIndex;
 
 public:
     Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors);
     ~Octree();
 
-    inline const BitmapPalette& GetPalette();
-    inline sal_uInt16 GetBestPaletteIndex(const BitmapColor& rColor);
+    const BitmapPalette& GetPalette();
+    sal_uInt16 GetBestPaletteIndex(const BitmapColor& rColor);
 };
-
-inline const BitmapPalette& Octree::GetPalette()
-{
-    aPal.SetEntryCount(static_cast<sal_uInt16>(nLeafCount));
-    nPalIndex = 0;
-    CreatePalette(pTree);
-    return aPal;
-}
-
-inline sal_uInt16 Octree::GetBestPaletteIndex(const BitmapColor& rColor)
-{
-    pColor = &rColor;
-    nPalIndex = 65535;
-    nLevel = 0;
-    GetPalIndex(pTree);
-    return nPalIndex;
-}
 
 class VCL_PLUGIN_PUBLIC InverseColorMap
 {
 private:
-    std::unique_ptr<sal_uInt8[]> pBuffer;
-    std::unique_ptr<sal_uInt8[]> pMap;
-    static constexpr sal_uLong gnBits = 8 - OCTREE_BITS;
+    std::vector<sal_uInt8> mpBuffer;
+    std::vector<sal_uInt8> mpMap;
 
     SAL_DLLPRIVATE void ImplCreateBuffers(const sal_uLong nMax);
 
@@ -100,15 +79,8 @@ public:
     explicit InverseColorMap(const BitmapPalette& rPal);
     ~InverseColorMap();
 
-    inline sal_uInt16 GetBestPaletteIndex(const BitmapColor& rColor);
+    sal_uInt16 GetBestPaletteIndex(const BitmapColor& rColor);
 };
-
-inline sal_uInt16 InverseColorMap::GetBestPaletteIndex(const BitmapColor& rColor)
-{
-    return pMap[((static_cast<sal_uLong>(rColor.GetRed()) >> gnBits) << OCTREE_BITS_1)
-                | ((static_cast<sal_uLong>(rColor.GetGreen()) >> gnBits) << OCTREE_BITS)
-                | (static_cast<sal_uLong>(rColor.GetBlue()) >> gnBits)];
-}
 
 #endif // INCLUDED_VCL_INC_OCTREE_HXX
 
