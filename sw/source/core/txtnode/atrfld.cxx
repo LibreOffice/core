@@ -47,7 +47,6 @@
 // constructor for default item in attribute-pool
 SwFormatField::SwFormatField( sal_uInt16 nWhich )
     : SfxPoolItem( nWhich )
-    , SwModify(nullptr)
     , SfxBroadcaster()
     , mpTextField( nullptr )
 {
@@ -55,11 +54,11 @@ SwFormatField::SwFormatField( sal_uInt16 nWhich )
 
 SwFormatField::SwFormatField( const SwField &rField )
     : SfxPoolItem( RES_TXTATR_FIELD )
-    , SwModify( rField.GetTyp() )
     , SfxBroadcaster()
     , mpField( rField.CopyField() )
     , mpTextField( nullptr )
 {
+    rField.GetTyp()->Add(this);
     if ( mpField->GetTyp()->Which() == SwFieldIds::Input )
     {
         // input field in-place editing
@@ -93,7 +92,6 @@ SwFormatField::SwFormatField( const SwField &rField )
 // corrected
 SwFormatField::SwFormatField( const SwFormatField& rAttr )
     : SfxPoolItem( rAttr )
-    , SwModify(nullptr)
     , SfxBroadcaster()
     , mpTextField( nullptr )
 {
