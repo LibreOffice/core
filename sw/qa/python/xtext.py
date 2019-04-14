@@ -37,9 +37,11 @@ class TestXText(unittest.TestCase):
         # And the same once again, actually not inserted
         x_text.insertTextContent(x_cursor, x_annotation, False)
 
-        # Exception if we try to replace object by itself
-        with self.assertRaises(IllegalArgumentException):
-            x_text.insertTextContent(x_cursor, x_annotation, True)
+        # no exception if we try to replace object by itself:
+        # this did throw in the past, but only because the inserted
+        # UNO annotation had a core object assigned, but no document
+        # which insertTextContent then didnt like on another call.
+        x_text.insertTextContent(x_cursor, x_annotation, True)
 
         # We expect just one annotation actually
         self.check_annotations(["John Doe"])

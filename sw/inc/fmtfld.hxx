@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star { namespace text { class XTextFie
 // ATT_FLD
 class SW_DLLPUBLIC SwFormatField
     : public SfxPoolItem
-    , public SwModify
+    , public sw::BroadcastingModify
     , public SfxBroadcaster
 {
     friend void InitCore();
