@@ -283,8 +283,7 @@ ScVbaShape::setLeft( double _left )
     }
     catch( uno::Exception& )
     {
-        sal_Int32 nLeft = 0;
-        nLeft = Millimeter::getInHundredthsOfOneMillimeter( _left );
+        sal_Int32 nLeft = Millimeter::getInHundredthsOfOneMillimeter( _left );
         m_xPropertySet->setPropertyValue( "HoriOrientPosition" , uno::makeAny( nLeft ) );
     }
 }
@@ -315,8 +314,7 @@ ScVbaShape::setTop( double _top )
     }
     catch( uno::Exception& )
     {
-        sal_Int32 nTop = 0;
-        nTop = Millimeter::getInHundredthsOfOneMillimeter( _top );
+        sal_Int32 nTop = Millimeter::getInHundredthsOfOneMillimeter( _top );
         m_xPropertySet->setPropertyValue( "VertOrientPosition" , uno::makeAny( nTop ) );
     }
 }

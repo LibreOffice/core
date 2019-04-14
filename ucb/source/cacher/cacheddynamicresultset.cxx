@@ -227,8 +227,7 @@ Reference< XDynamicResultSet > SAL_CALL CachedDynamicResultSetFactory
           const Reference< XDynamicResultSet > & SourceStub
         , const Reference< XContentIdentifierMapping > & ContentIdentifierMapping )
 {
-    Reference< XDynamicResultSet > xRet;
-    xRet = new CachedDynamicResultSet( SourceStub, ContentIdentifierMapping, m_xContext );
+    Reference< XDynamicResultSet > xRet = new CachedDynamicResultSet( SourceStub, ContentIdentifierMapping, m_xContext );
     return xRet;
 }
 

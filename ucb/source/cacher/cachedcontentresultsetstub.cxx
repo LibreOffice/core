@@ -572,8 +572,7 @@ Reference< XResultSet > SAL_CALL CachedContentResultSetStubFactory
 {
     if( xSource.is() )
     {
-        Reference< XResultSet > xRet;
-        xRet = new CachedContentResultSetStub( xSource );
+        Reference< XResultSet > xRet = new CachedContentResultSetStub( xSource );
         return xRet;
     }
     return nullptr;
