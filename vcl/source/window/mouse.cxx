@@ -592,9 +592,7 @@ Window::PointerState Window::GetPointerState()
 
     if (mpWindowImpl->mpFrame)
     {
-        SalFrame::SalPointerState aSalPointerState;
-
-        aSalPointerState = mpWindowImpl->mpFrame->GetPointerState();
+        SalFrame::SalPointerState aSalPointerState = mpWindowImpl->mpFrame->GetPointerState();
         if( ImplIsAntiparallel() )
         {
             const OutputDevice *pOutDev = GetOutDev();
