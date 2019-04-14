@@ -30,8 +30,9 @@
 using namespace css;
 
 namespace comphelper {
-
-bool dispatchCommand(const OUString& rCommand, const css::uno::Sequence<css::beans::PropertyValue>& rArguments, const uno::Reference<css::frame::XDispatchResultListener>& aListener)
+bool dispatchCommand(const OUString& rCommand,
+                     const css::uno::Sequence<css::beans::PropertyValue>& rArguments,
+                     const uno::Reference<css::frame::XDispatchResultListener>& aListener)
 {
     // Target where we will execute the .uno: command
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
@@ -55,11 +56,17 @@ bool dispatchCommand(const OUString& rCommand, const css::uno::Sequence<css::bea
         return false;
 
     // And do the work...
-    uno::Reference<frame::XNotifyingDispatch> xNotifyingDisp(xDisp, uno::UNO_QUERY);
-    if (xNotifyingDisp.is())
-        xNotifyingDisp->dispatchWithNotification(aCommandURL, rArguments, aListener);
-    else
-        xDisp->dispatch(aCommandURL, rArguments);
+    if (aListener.is())
+    {
+        uno::Reference<frame::XNotifyingDispatch> xNotifyingDisp(xDisp, uno::UNO_QUERY);
+        if (xNotifyingDisp.is())
+        {
+            xNotifyingDisp->dispatchWithNotification(aCommandURL, rArguments, aListener);
+            return true;
+        }
+    }
+
+    xDisp->dispatch(aCommandURL, rArguments);
 
     return true;
 }
