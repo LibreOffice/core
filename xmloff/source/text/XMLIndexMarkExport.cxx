@@ -70,8 +70,7 @@ void XMLIndexMarkExport::ExportIndexMark(
     sal_Int8 nElementNo = -1;
 
     // get index mark
-    Any aAny;
-    aAny = rPropSet->getPropertyValue(gsDocumentIndexMark);
+    Any aAny = rPropSet->getPropertyValue(gsDocumentIndexMark);
     Reference<XPropertySet> xIndexMarkPropSet;
     aAny >>= xIndexMarkPropSet;
 

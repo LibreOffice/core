@@ -681,9 +681,7 @@ bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUStr
     if(xPropSet.is())
     {
         sal_uInt16 nType = sal_uInt16();
-        Any aAny;
-
-        aAny = xPropSet->getPropertyValue("Layout");
+        Any aAny = xPropSet->getPropertyValue("Layout");
         if(aAny >>= nType)
         {
             if(ImpXMLAutoLayoutInfo::IsCreateNecessary(nType))
