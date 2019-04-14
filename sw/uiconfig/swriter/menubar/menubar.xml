@@ -116,7 +116,6 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:SelectTextMode" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:ShadowCursor" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
       <menu:menuitem menu:id=".uno:SearchDialog" menu:style="text"/>
@@ -165,6 +164,7 @@
       <menu:menuitem menu:id=".uno:ObjectMenue" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ChangeDatabaseField" menu:style="text"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:ShadowCursor" menu:style="text"/>
       <menu:menuitem menu:id=".uno:EditDoc" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
