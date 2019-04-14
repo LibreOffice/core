@@ -3703,10 +3703,9 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                 }
             }
             if (!nRet)
-                DrawMarkDropObj( nullptr );
-
-            if (!nRet)
             {
+                DrawMarkDropObj(nullptr);
+
                 switch ( nMyAction )
                 {
                     case DND_ACTION_COPY:

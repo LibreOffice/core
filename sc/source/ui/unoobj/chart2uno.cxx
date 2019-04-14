@@ -1869,23 +1869,15 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                                   beans::PropertyState_DIRECT_VALUE );
     }
 
-    // DataRowSource (calculated before)
     if( bRowSourceDetected )
     {
+        // DataRowSource (calculated before)
         aResult.emplace_back( "DataRowSource", -1,
                                   uno::makeAny( eRowSource ), beans::PropertyState_DIRECT_VALUE );
-    }
-
-    // HasCategories
-    if( bRowSourceDetected )
-    {
+        // HasCategories
         aResult.emplace_back( "HasCategories", -1,
                                   uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
-    }
-
-    // FirstCellAsLabel
-    if( bRowSourceDetected )
-    {
+        // FirstCellAsLabel
         aResult.emplace_back( "FirstCellAsLabel", -1,
                                   uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
     }

@@ -226,14 +226,13 @@ void SwAccessibleParagraph::GetStates(
     // MULTILINE
     rStateSet.AddState( AccessibleStateType::MULTI_LINE );
 
-    // MULTISELECTABLE
-    SwCursorShell *pCursorSh = GetCursorShell();
-    if( pCursorSh )
-        rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
-
-    // FOCUSABLE
-    if( pCursorSh )
-        rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+    if (GetCursorShell())
+    {
+        // MULTISELECTABLE
+        rStateSet.AddState(AccessibleStateType::MULTI_SELECTABLE);
+        // FOCUSABLE
+        rStateSet.AddState(AccessibleStateType::FOCUSABLE);
+    }
 
     // FOCUSED (simulates node index of cursor)
     SwPaM* pCaret = GetCursor( false ); // #i27301# - consider adjusted method signature

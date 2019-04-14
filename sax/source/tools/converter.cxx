@@ -1565,10 +1565,7 @@ static bool lcl_parseDate(
     if (bSuccess)
     {
         ++nPos;
-    }
 
-    if (bSuccess)
-    {
         bSuccess = readDateTimeComponent(string, nPos, nMonth, 2, true);
         if (!bIgnoreInvalidOrMissingDate)
         {
@@ -1584,10 +1581,7 @@ static bool lcl_parseDate(
     if (bSuccess)
     {
         ++nPos;
-    }
 
-    if (bSuccess)
-    {
         bSuccess = readDateTimeComponent(string, nPos, nDay, 2, true);
         if (!bIgnoreInvalidOrMissingDate)
         {
@@ -1662,10 +1656,7 @@ static bool lcl_parseDateTime(
         if (bSuccess)
         {
             ++nPos;
-        }
 
-        if (bSuccess)
-        {
             bSuccess = readDateTimeComponent(string, nPos, nMinutes, 2, true);
             bSuccess &= (0 <= nMinutes) && (nMinutes < 60);
             bSuccess &= (nPos < string.getLength()); // not last token
@@ -1677,10 +1668,7 @@ static bool lcl_parseDateTime(
         if (bSuccess)
         {
             ++nPos;
-        }
 
-        if (bSuccess)
-        {
             bSuccess = readDateTimeComponent(string, nPos, nSeconds, 2, true);
             bSuccess &= (0 <= nSeconds) && (nSeconds < 60);
         }
@@ -1758,9 +1746,7 @@ static bool lcl_parseDateTime(
         if (bSuccess)
         {
             ++nPos;
-        }
-        if (bSuccess)
-        {
+
             bSuccess = readDateTimeComponent(
                         string, nPos, nTimezoneMinutes, 2, true);
             bSuccess &= (0 <= nTimezoneMinutes) && (nTimezoneMinutes < 60);

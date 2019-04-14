@@ -731,9 +731,6 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         return;
     }
 
-    if( sSym.isEmpty() )
-        return;
-
     // do not flicker
     pOLV->HideCursor();
     SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();

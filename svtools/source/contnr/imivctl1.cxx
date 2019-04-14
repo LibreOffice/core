@@ -2767,10 +2767,9 @@ void SvxIconChoiceCtrl_Impl::SetEntryPredecessor( SvxIconChoiceCtrlEntry* pEntry
         }
         else if( !nPos1 )
             return;
-    }
 
-    if( !pHead )
         InitPredecessors();
+    }
 
     if( !pPredecessor && pHead == pEntry )
         return; // is already the first one
