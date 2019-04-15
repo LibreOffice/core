@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_9866ed51",
+        "filename": "vcl/source/gdi/CommonSalLayout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-04-15T22:52:37Z",
+      "side": 1,
+      "message": "Hmm, if this is the start of the gsoc project, I\u0027d prefer isolating the rounding out into either a static method, or pushing it down into GlyphItem.\n\nnXOffet etc are already of type DeviceCoordinate, which is double, so we could keep full precision here.\n\nOtherwise no objection to this change.",
+      "revId": "4f1b8b8ae438cb413062f9202bfe36edd492cf14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
