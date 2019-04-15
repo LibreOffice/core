@@ -28,6 +28,7 @@
 #include "ndhints.hxx"
 #include "SwNumberTreeTypes.hxx"
 #include "IDocumentContentOperations.hxx"
+#include "modeltoviewhelper.hxx"
 
 #include <sfx2/Metadatable.hxx>
 
@@ -680,7 +681,7 @@ public:
                             const bool bWithNum = false,
                             const bool bAddSpaceAfterListLabelStr = false,
                             const bool bWithSpacesForLevel = false,
-                            const ExpandMode eAdditionalMode = ExpandMode(0)) const;
+                            const ExpandMode eAdditionalMode = ExpandMode::ExpandFootnote) const;
     bool CopyExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
                            sal_Int32 nIdx, sal_Int32 nLen,
                            SwRootFrame const* pLayout,

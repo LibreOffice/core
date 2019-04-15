@@ -611,7 +611,7 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
 
             if( nStart != nEnd ) // a section?
             {
-                m_sText = pTextNd->GetExpandText(pLayout, nStart, nEnd - nStart, false, false, false);
+                m_sText = pTextNd->GetExpandText(pLayout, nStart, nEnd - nStart, false, false, false, ExpandMode(0));
                 if (m_nSubType == REF_OUTLINE
                     || (m_nSubType == REF_SEQUENCEFLD && REF_CONTENT == GetFormat()))
                 {
