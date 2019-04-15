@@ -4515,7 +4515,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
     // Did we do a pre-initialize
     static bool bPreInited = false;
-    static bool bProfileZones = getenv("SAL_PROFILEZONE_STDOUT") != nullptr;
+    static bool bProfileZones = getenv("SAL_PROFILEZONE_EVENTS") != nullptr;
 
     // What stage are we at ?
     if (pThis == nullptr)
