@@ -87,6 +87,7 @@ public:
     void testTdf123923();
     void testTdf123939();
     void testTdf124651();
+    void testTdf124736();
 
     CPPUNIT_TEST_SUITE(ScPivotTableFiltersTest);
 
@@ -131,6 +132,7 @@ public:
     CPPUNIT_TEST(testTdf123923);
     CPPUNIT_TEST(testTdf123939);
     CPPUNIT_TEST(testTdf124651);
+    CPPUNIT_TEST(testTdf124736);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2480,6 +2482,36 @@ void ScPivotTableFiltersTest::testTdf124651()
     // We have to export name attribute, even though it's optional according to ECMA-376 standard,
     // because Excel (at least 2016) seems to require it.
     assertXPath(pDoc, "/x:pivotTableDefinition/x:dataFields/x:dataField", "name", "");
+}
+
+void ScPivotTableFiltersTest::testTdf124736()
+{
+    ScDocShellRef xDocSh = loadDoc("pivot-table/shared-dategroup.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(xDocSh.get(), FORMAT_XLSX);
+
+    xmlDocPtr pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory,
+        "xl/pivotCache/pivotCacheDefinition1.xml");
+    CPPUNIT_ASSERT(pTable);
+
+    // Group items must start with "<05/16/1958", then years sorted ascending, then ">06/11/2009"
+    // They used to have years in the beginning, then "<05/16/1958", then ">06/11/2009".
+    assertXPath(
+        pTable,
+        "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:fieldGroup/x:groupItems/x:s[1]",
+        "v", "<05/16/1958");
+    for (int i = 2; i <= 44; ++i)
+        assertXPath(
+            pTable,
+            "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:fieldGroup/x:groupItems/x:s["
+                + OString::number(i) + "]",
+            "v", OUString::number(1963 + i));
+    assertXPath(
+        pTable,
+        "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:fieldGroup/x:groupItems/x:s[45]",
+        "v", ">06/11/2009");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPivotTableFiltersTest);
