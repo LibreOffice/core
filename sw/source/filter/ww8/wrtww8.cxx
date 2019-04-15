@@ -34,7 +34,6 @@
 #include <drawdoc.hxx>
 
 #include <unotools/fltrcfg.hxx>
-#include <vcl/salbtype.hxx>
 #include <sot/storage.hxx>
 #include <svl/zformat.hxx>
 #include <sfx2/docinf.hxx>

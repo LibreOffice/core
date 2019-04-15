@@ -22,7 +22,6 @@
 
 #include <sal/types.h>
 #include "cgmtypes.hxx"
-#include <vcl/salbtype.hxx>
 #include <vector>
 #include <memory>
 

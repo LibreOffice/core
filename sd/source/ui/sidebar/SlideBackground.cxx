@@ -66,7 +66,6 @@
 #include <sfx2/sidebar/Panel.hxx>
 #include <algorithm>
 #include <EventMultiplexer.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/EnumContext.hxx>
 
 #include <editeng/ulspitem.hxx>

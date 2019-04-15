@@ -35,7 +35,6 @@
 #include <svx/svdmodel.hxx>
 #include <svx/xbitmap.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <vcl/salbtype.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/GraphicLoader.hxx>

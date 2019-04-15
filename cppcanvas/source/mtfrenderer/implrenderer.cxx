@@ -52,12 +52,12 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <canvas/canvastools.hxx>
 #include <vcl/canvastools.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/graphictools.hxx>
+#include <vcl/BitmapPalette.hxx>
 #include <tools/poly.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <implrenderer.hxx>
