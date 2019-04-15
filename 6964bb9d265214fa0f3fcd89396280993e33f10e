@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_d8ef95ae",
+        "filename": "extras/source/templates/presnt/Impress/styles.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2019-04-15T20:54:51Z",
+      "side": 1,
+      "message": "Fonts need to be declared here",
+      "range": {
+        "startLine": 5,
+        "startChar": 35,
+        "endLine": 5,
+        "endChar": 36
+      },
+      "revId": "6964bb9d265214fa0f3fcd89396280993e33f10e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_782a01e8",
+        "filename": "extras/source/templates/presnt/Vivid/styles.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2019-04-15T20:54:51Z",
+      "side": 1,
+      "message": "Remove unused font",
+      "range": {
+        "startLine": 7,
+        "startChar": 33,
+        "endLine": 7,
+        "endChar": 37
+      },
+      "revId": "6964bb9d265214fa0f3fcd89396280993e33f10e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
