@@ -87,6 +87,7 @@ public:
     void testTdf123923();
     void testTdf123939();
     void testTdf124651();
+    void testTdf124736();
 
     CPPUNIT_TEST_SUITE(ScPivotTableFiltersTest);
 
@@ -131,6 +132,7 @@ public:
     CPPUNIT_TEST(testTdf123923);
     CPPUNIT_TEST(testTdf123939);
     CPPUNIT_TEST(testTdf124651);
+    CPPUNIT_TEST(testTdf124736);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2480,6 +2482,59 @@ void ScPivotTableFiltersTest::testTdf124651()
     // We have to export name attribute, even though it's optional according to ECMA-376 standard,
     // because Excel (at least 2016) seems to require it.
     assertXPath(pDoc, "/x:pivotTableDefinition/x:dataFields/x:dataField", "name", "");
+}
+
+void ScPivotTableFiltersTest::testTdf124736()
+{
+    ScDocShellRef xDocSh = loadDoc("pivot-table/shared-dategroup.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(xDocSh.get(), FORMAT_XLSX);
+
+    xmlDocPtr pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory,
+                                                "xl/pivotCache/pivotCacheDefinition1.xml");
+    CPPUNIT_ASSERT(pTable);
+
+    assertXPath(pTable,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:fieldGroup/x:groupItems",
+                "count", "45");
+    // Group items must start with "<05/16/1958", then years sorted ascending, then ">06/11/2009"
+    // They used to have years in the beginning, then "<05/16/1958", then ">06/11/2009".
+    // The "<" and ">" date strings are locale-dependent, so test depends on en_US locale
+    assertXPath(
+        pTable,
+        "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:fieldGroup/x:groupItems/x:s[1]",
+        "v", "<05/16/1958");
+    for (int i = 2; i <= 44; ++i)
+        assertXPath(
+            pTable,
+            "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:fieldGroup/x:groupItems/x:s["
+                + OString::number(i) + "]",
+            "v", OUString::number(1963 + i));
+    assertXPath(
+        pTable,
+        "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:fieldGroup/x:groupItems/x:s[45]",
+        "v", ">06/11/2009");
+
+    // Now check that table references these in correct order (document-dependent, so this is how
+    // it should be in this specific testdoc which shows "<" and ">" values in the end)
+    pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
+    CPPUNIT_ASSERT(pTable);
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]/x:items", "count",
+                "46");
+    const int vals[] = { 1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15,
+                         16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+                         31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 0,  44 };
+    for (int i = 0; i < SAL_N_ELEMENTS(vals); ++i)
+    {
+        assertXPath(pTable,
+                    "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]/x:items/x:item["
+                        + OString::number(i + 1) + "]",
+                    "x", OUString::number(vals[i]));
+    }
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]/x:items/x:item[46]",
+                "t", "default");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPivotTableFiltersTest);
