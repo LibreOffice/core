@@ -40,6 +40,7 @@ TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     m_pNext->connect_clicked(LINK(this, TipOfTheDayDialog, OnNextClick));
 
     nNumberOfTips = SAL_N_ELEMENTS(TIPOFTHEDAY_STRINGARRAY);
+    srand(time(NULL));
     nCurrentTip = rand() % nNumberOfTips;
     UpdateTip();
 }
@@ -65,7 +66,7 @@ void TipOfTheDayDialog::UpdateTip()
 {
     //get string
     OUString aText;
-    aText = CuiResId(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]);
+    aText = CuiResId(TIPOFTHEDAY_STRINGARRAY[nCurrentTip].first);
     //move hyperlink into linkbutton
     sal_Int32 nPos = aText.indexOf("http");
     if (nPos > 0)
@@ -85,9 +86,9 @@ void TipOfTheDayDialog::UpdateTip()
     // import the image
     OUString aURL("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/tipoftheday/");
     rtl::Bootstrap::expandMacros(aURL);
-    OUString aName = "tipoftheday_" + OUString::number(nCurrentTip) + ".png";
+    OUString aName = TIPOFTHEDAY_STRINGARRAY[nCurrentTip].second;
     // use default image if none is available with the number
-    if (!file_exists(aURL + aName))
+    if ((aName == "") | !file_exists(aURL + aName))
         aName = "tipoftheday.png";
     // draw image
     Graphic aGraphic;
