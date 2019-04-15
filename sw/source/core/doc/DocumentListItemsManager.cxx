@@ -73,7 +73,7 @@ OUString DocumentListItemsManager::getListItemText(const SwNodeNum& rNodeNum,
 {
     SwTextNode const*const pNode(rNodeNum.GetTextNode());
     assert(pNode);
-    return sw::GetExpandTextMerged(&rLayout, *pNode, true, true, ExpandMode(0));
+    return sw::GetExpandTextMerged(&rLayout, *pNode, true, true, ExpandMode::ExpandFootnote);
 }
 
 bool DocumentListItemsManager::isNumberedInLayout(
