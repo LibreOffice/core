@@ -214,7 +214,7 @@ FilePickerIpc::FilePickerIpc(KDE5FilePicker* filePicker, QObject* parent)
     // read IPC commands and their args in a separate thread, so this does not block everything else;
     // 'commandReceived' signal is emitted every time a command and its args have been read;
     // thread will run until the filepicker process is terminated
-    m_ipcReaderThread = std::make_unique<std::thread>{ readCommands, this };
+    m_ipcReaderThread = std::make_unique<std::thread>(readCommands, this);
 }
 
 FilePickerIpc::~FilePickerIpc()
