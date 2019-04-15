@@ -87,7 +87,7 @@ public:
 
     virtual ~SwTextInputField() override;
 
-    void LockNotifyContentChange();
+    bool LockNotifyContentChange();
     void UnlockNotifyContentChange();
     virtual void NotifyContentChange( SwFormatField& rFormatField ) override;
 
