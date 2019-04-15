@@ -30,7 +30,6 @@
 #include <cppu/unotype.hxx>
 
 using namespace css;
-using namespace css::uno;
 
 namespace sc_apitest
 {
@@ -67,7 +66,6 @@ ScCellFieldsObj::ScCellFieldsObj()
 uno::Reference<uno::XInterface> ScCellFieldsObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<style::XStyleFamiliesSupplier> xSFS(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<container::XNameAccess> xNA(xSFS->getStyleFamilies(), uno::UNO_QUERY_THROW);
@@ -92,8 +90,8 @@ uno::Reference<uno::XInterface> ScCellFieldsObj::init()
 void ScCellFieldsObj::setUp()
 {
     CalcUnoApiTest::setUp();
+    // create calc document
     m_xComponent = loadFromDesktop("private:factory/scalc");
-    CPPUNIT_ASSERT_MESSAGE("no component", m_xComponent.is());
 }
 
 void ScCellFieldsObj::tearDown()
@@ -103,6 +101,7 @@ void ScCellFieldsObj::tearDown()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellFieldsObj);
+
 } // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
