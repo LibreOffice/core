@@ -295,6 +295,29 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124029_arc_position)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("shape width", static_cast<sal_uInt32>(1610),
                                  static_cast<sal_uInt32>(aFrameRect.Width));
 }
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124740_handle_path_coordsystem)
+{
+    // tdf124740 OOXML shape with handle and w and h attribute on path has wrong
+    // handle position
+    // The handle position was scaled erroneously twice.
+    const OUString sFileName("tdf124740_HandleInOOXMLUserShape.pptx");
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    // The shape has one, horizontal adjust handle. It is about 1/5 of 10cm from left
+    // shape edge, shape is 6cm from left . That results in a position
+    // of 8cm from left page edge, which is 8000 in 1/100 mm unit.
+    SdrObjCustomShape& rSdrObjCustomShape(
+        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+    EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
+    Point aPosition;
+    aCustomShape2d.GetHandlePosition(0, aPosition);
+    double fX(aPosition.X());
+    // tolerance for rounding to integer
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("handle X coordinate", 8000.0, fX, 2.0);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
