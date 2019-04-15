@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_edce5182",
+        "filename": "external/redland/Library_rasqal.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-04-15T09:34:13Z",
+      "side": 1,
+      "message": "this last line is redundant - the Library_rasqal is only used with MSVC compiler, other compilers use ExternalProject_rasqal, see Module_redland.mk",
+      "revId": "5a50d4e3ac9e95fb28b81aa3fe88e6cf83b06acb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
