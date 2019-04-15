@@ -177,6 +177,7 @@ public:
     void SetGetFocusHdl(const Link<WeldRefEdit&,void>& rLink) { maGetFocusHdl = rLink; }
     void SetLoseFocusHdl(const Link<WeldRefEdit&,void>& rLink) { maLoseFocusHdl = rLink; }
     void SetModifyHdl(const Link<WeldRefEdit&,void>& rLink) { maModifyHdl = rLink; }
+    const Link<WeldRefEdit&,void>& GetModifyHdl() const { return maModifyHdl; }
     void SetActivateHdl(const Link<weld::Widget&,bool>& rLink) { maActivateHdl = rLink; }
 };
 
