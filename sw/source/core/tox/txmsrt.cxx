@@ -388,9 +388,10 @@ void SwTOXIndex::FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16,
                             pTextMark->GetStart(),
                             *pEnd - pTextMark->GetStart(),
                             false, false, false,
-                            pLayout && pLayout->IsHideRedlines()
+                            ExpandMode::ExpandFootnote
+                            | (pLayout && pLayout->IsHideRedlines()
                                 ? ExpandMode::HideDeletions
-                                : ExpandMode(0));
+                                : ExpandMode(0)));
         if(SwTOIOptions::InitialCaps & nOpt && pTOXIntl && !aRet.sText.isEmpty())
         {
             aRet.sText = pTOXIntl->ToUpper( aRet.sText, 0 ) + aRet.sText.copy(1);
@@ -472,9 +473,10 @@ TextAndReading SwTOXContent::GetText_Impl(SwRootFrame const*const pLayout) const
                                      pTextMark->GetStart(),
                                      *pEnd - pTextMark->GetStart(),
                             false, false, false,
-                            pLayout && pLayout->IsHideRedlines()
+                            ExpandMode::ExpandFootnote
+                            | (pLayout && pLayout->IsHideRedlines()
                                 ? ExpandMode::HideDeletions
-                                : ExpandMode(0)),
+                                : ExpandMode(0))),
             pTextMark->GetTOXMark().GetTextReading());
     }
 
