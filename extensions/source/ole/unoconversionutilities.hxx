@@ -433,6 +433,8 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
                     bFail = true;
                 break;
             case TypeClass_STRING:      // UString
+                if(var.vt == VT_NULL)
+                    var = CComBSTR("");
                 if(SUCCEEDED(hr = VariantChangeType( & var, &var, 0, VT_BSTR)))
                     variantToAny( & var, rAny);
                 else if (hr == DISP_E_TYPEMISMATCH)
