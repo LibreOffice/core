@@ -33,18 +33,18 @@ using namespace css;
 
 namespace sc_apitest
 {
-class ScCellFieldsObj : public CalcUnoApiTest,
-                        public apitest::XEnumerationAccess,
-                        public apitest::XRefreshable
+class ScHeaderFieldsObj : public CalcUnoApiTest,
+                          public apitest::XEnumerationAccess,
+                          public apitest::XRefreshable
 {
 public:
-    ScCellFieldsObj();
+    ScHeaderFieldsObj();
 
     virtual uno::Reference<uno::XInterface> init() override;
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    CPPUNIT_TEST_SUITE(ScCellFieldsObj);
+    CPPUNIT_TEST_SUITE(ScHeaderFieldsObj);
 
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
@@ -58,12 +58,12 @@ private:
     uno::Reference<lang::XComponent> m_xComponent;
 };
 
-ScCellFieldsObj::ScCellFieldsObj()
+ScHeaderFieldsObj::ScHeaderFieldsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
-uno::Reference<uno::XInterface> ScCellFieldsObj::init()
+uno::Reference<uno::XInterface> ScHeaderFieldsObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
 
@@ -87,20 +87,20 @@ uno::Reference<uno::XInterface> ScCellFieldsObj::init()
     return xTFS->getTextFields();
 }
 
-void ScCellFieldsObj::setUp()
+void ScHeaderFieldsObj::setUp()
 {
     CalcUnoApiTest::setUp();
     // create calc document
     m_xComponent = loadFromDesktop("private:factory/scalc");
 }
 
-void ScCellFieldsObj::tearDown()
+void ScHeaderFieldsObj::tearDown()
 {
     closeDocument(m_xComponent);
     CalcUnoApiTest::tearDown();
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ScCellFieldsObj);
+CPPUNIT_TEST_SUITE_REGISTRATION(ScHeaderFieldsObj);
 
 } // namespace sc_apitest
 
