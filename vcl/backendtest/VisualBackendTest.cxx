@@ -186,7 +186,7 @@ public:
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestRect aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupRectangle();
+            Bitmap aBitmap = aOutDevTest.setupRectangle(false);
             assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
@@ -194,7 +194,7 @@ public:
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestPixel aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupRectangle();
+            Bitmap aBitmap = aOutDevTest.setupRectangle(false);
             assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
@@ -202,7 +202,7 @@ public:
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestLine aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupRectangle();
+            Bitmap aBitmap = aOutDevTest.setupRectangle(false);
             assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
@@ -210,7 +210,7 @@ public:
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestPolygon aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupRectangle();
+            Bitmap aBitmap = aOutDevTest.setupRectangle(false);
             assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
@@ -218,7 +218,7 @@ public:
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestPolyLine aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupRectangle();
+            Bitmap aBitmap = aOutDevTest.setupRectangle(false);
             assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
@@ -226,7 +226,7 @@ public:
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupRectangle();
+            Bitmap aBitmap = aOutDevTest.setupRectangle(false);
             assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
