@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7f96bb07_f8adb1ea",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2019-04-15T14:16:09Z",
+      "side": 1,
+      "message": "ExportTo has an icon but not the ExportToMenu",
+      "parentUuid": "7f96bb07_3808f926",
+      "range": {
+        "startLine": 51,
+        "startChar": 35,
+        "endLine": 51,
+        "endChar": 43
+      },
+      "revId": "04783a8ea0d0000501777b9f1b619208684dd5b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f96bb07_580dc535",
         "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-04-15T13:59:09Z",
       "side": 1,
       "message": "How about having icons on Record and Show?",
+      "range": {
+        "startLine": 121,
+        "startChar": 39,
+        "endLine": 121,
+        "endChar": 54
+      },
+      "revId": "04783a8ea0d0000501777b9f1b619208684dd5b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_58a945dd",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2019-04-15T14:16:09Z",
+      "side": 1,
+      "message": "see writer, there are any icons in this submenu.",
+      "parentUuid": "7f96bb07_580dc535",
       "range": {
         "startLine": 121,
         "startChar": 39,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "7f96bb07_38a47908",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2019-04-15T14:16:09Z",
+      "side": 1,
+      "message": "it\u0027s consistent between sw/sd menubars.",
+      "parentUuid": "7f96bb07_f8113155",
+      "range": {
+        "startLine": 177,
+        "startChar": 35,
+        "endLine": 177,
+        "endChar": 42
+      },
+      "revId": "04783a8ea0d0000501777b9f1b619208684dd5b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f96bb07_987a6d86",
         "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2019-04-15T13:59:09Z",
       "side": 1,
       "message": "Colibre has the same icons for this command \"Clear Cells...\" as for the \"Delete Cells...\", which looks weird now. I suggest to change one icons.",
+      "range": {
+        "startLine": 582,
+        "startChar": 35,
+        "endLine": 582,
+        "endChar": 41
+      },
+      "revId": "04783a8ea0d0000501777b9f1b619208684dd5b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_989fcdb3",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2019-04-15T14:16:09Z",
+      "side": 1,
+      "message": "true will be fixed in colibre",
+      "parentUuid": "7f96bb07_987a6d86",
       "range": {
         "startLine": 582,
         "startChar": 35,
