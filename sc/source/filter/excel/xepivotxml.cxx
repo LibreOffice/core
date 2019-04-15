@@ -197,7 +197,42 @@ OUString GetExcelFormattedDate( double fSerialDateTime, SvNumberFormatter& rForm
     ::sax::Converter::convertDateTime(sBuf, aUDateTime, nullptr, true);
     return sBuf.makeStringAndClear();
 }
+
+// Excel seems to expect different order of group item values; we need to rearrange elements
+// to output "<date1" first, then elements, then ">date2" last.
+// Since ScDPItemData::DateFirst is -1, ScDPItemData::DateLast is 10000, and other date group
+// items would fit between those in order (like 0 = Jan, 1 = Feb, etc.), we can simply sort
+// the items by value.
+std::vector<OUString> SortGroupItems(const ScDPCache& rCache, long nDim)
+{
+    struct ItemData
+    {
+        sal_Int32 nVal;
+        const ScDPItemData* pData;
+    };
+    std::vector<ItemData> aDataToSort;
+    ScfInt32Vec aGIIds;
+    rCache.GetGroupDimMemberIds(nDim, aGIIds);
+    for (sal_Int32 id : aGIIds)
+    {
+        const ScDPItemData* pGIData = rCache.GetItemDataById(nDim, id);
+        if (pGIData->GetType() == ScDPItemData::GroupValue)
+        {
+            auto aGroupVal = pGIData->GetGroupValue();
+            aDataToSort.push_back({ aGroupVal.mnValue, pGIData });
+        }
+    }
+    std::sort(aDataToSort.begin(), aDataToSort.end(),
+              [](const ItemData& a, const ItemData& b) { return a.nVal < b.nVal; });
+
+    std::vector<OUString> aSortedResult;
+    for (const auto& el : aDataToSort)
+    {
+        aSortedResult.push_back(rCache.GetFormattedString(nDim, *el.pData, false));
+    }
+    return aSortedResult;
 }
+} // namespace
 
 void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entry& rEntry, sal_Int32 nCounter )
 {
@@ -296,17 +331,11 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         pDefStrm->singleElement(XML_rangePr, pGroupAttList);
 
         // groupItems element
-        ScfInt32Vec aGIIds;
-        rCache.GetGroupDimMemberIds(i, aGIIds);
-        pDefStrm->startElement(XML_groupItems, XML_count, OString::number(aGIIds.size()), FSEND);
-        for (auto nGIId : aGIIds)
+        auto aElemVec = SortGroupItems(rCache, i);
+        pDefStrm->startElement(XML_groupItems, XML_count, OString::number(aElemVec.size()), FSEND);
+        for (const auto& sElem : aElemVec)
         {
-            const ScDPItemData* pGIData = rCache.GetItemDataById(i, nGIId);
-            if (pGIData->GetType() == ScDPItemData::GroupValue)
-            {
-                OUString sVal = rCache.GetFormattedString(i, *pGIData, false);
-                pDefStrm->singleElement(XML_s, XML_v, sVal.toUtf8(), FSEND);
-            }
+            pDefStrm->singleElement(XML_s, XML_v, sElem.toUtf8(), FSEND);
         }
         pDefStrm->endElement(XML_groupItems);
         pDefStrm->endElement(XML_fieldGroup);
@@ -894,50 +923,40 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             dpo.GetMembers(i, dpo.GetUsedHierarchy(i), aMembers);
         }
 
-        std::vector<const ScDPItemData*> rCacheFieldItems;
+        std::vector<OUString> aCacheFieldItems;
         if (i < rCache.GetFieldCount() && !rCache.GetGroupType(i))
+        {
             for (const auto& it : rCache.GetDimMemberValues(i))
-                rCacheFieldItems.push_back(&it);
+            {
+                OUString sFormattedName;
+                if (it.HasStringData() || it.IsEmpty())
+                    sFormattedName = it.GetString();
+                else
+                    sFormattedName = const_cast<ScDPObject&>(rDPObj).GetFormattedString(
+                        pDim->GetName(), it.GetValue());
+                aCacheFieldItems.push_back(sFormattedName);
+            }
+        }
         else
         {
-            ScfInt32Vec aGIIds;
-            rCache.GetGroupDimMemberIds(i, aGIIds);
-            for (const sal_Int32 id : aGIIds)
-                rCacheFieldItems.push_back(rCache.GetItemDataById(i, id));
+            aCacheFieldItems = SortGroupItems(rCache, i);
         }
-        const auto iCacheFieldItems_begin = rCacheFieldItems.begin(), iCacheFieldItems_end = rCacheFieldItems.end();
         // The pair contains the member index in cache and if it is hidden
         std::vector< std::pair<size_t, bool> > aMemberSequence;
         std::set<size_t> aUsedCachePositions;
         for (const auto & rMember : aMembers)
         {
-            for (auto it = iCacheFieldItems_begin; it != iCacheFieldItems_end; ++it)
+            auto it = std::find(aCacheFieldItems.begin(), aCacheFieldItems.end(), rMember.maName);
+            if (it != aCacheFieldItems.end())
             {
-                OUString sFormattedName;
-                if ((*it)->GetType() == ScDPItemData::GroupValue)
-                {
-                    sFormattedName = rCache.GetFormattedString(i, **it, false);
-                }
-                else if ((*it)->HasStringData() || (*it)->IsEmpty())
-                {
-                    sFormattedName = (*it)->GetString();
-                }
-                else
-                {
-                    sFormattedName = const_cast<ScDPObject&>(rDPObj).GetFormattedString(pDim->GetName(), (*it)->GetValue());
-                }
-                if (sFormattedName == rMember.maName)
-                {
-                    size_t nCachePos = it - iCacheFieldItems_begin;
-                    auto aInserted = aUsedCachePositions.insert(nCachePos);
-                    if (aInserted.second)
-                        aMemberSequence.emplace_back(std::make_pair(nCachePos, !rMember.mbVisible));
-                    break;
-                }
+                size_t nCachePos = static_cast<size_t>(std::distance(aCacheFieldItems.begin(), it));
+                auto aInserted = aUsedCachePositions.insert(nCachePos);
+                if (aInserted.second)
+                    aMemberSequence.emplace_back(std::make_pair(nCachePos, !rMember.mbVisible));
             }
         }
         // Now add all remaining cache items as hidden
-        for (size_t nItem = 0; nItem < rCacheFieldItems.size(); ++nItem)
+        for (size_t nItem = 0; nItem < aCacheFieldItems.size(); ++nItem)
         {
             if (aUsedCachePositions.find(nItem) == aUsedCachePositions.end())
                 aMemberSequence.emplace_back(nItem, true);
