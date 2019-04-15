@@ -225,10 +225,14 @@ OutputDeviceTestCommon::OutputDeviceTestCommon()
     : mpVirtualDevice(VclPtr<VirtualDevice>::Create())
 {}
 
-void OutputDeviceTestCommon::initialSetup(long nWidth, long nHeight, Color aColor)
+void OutputDeviceTestCommon::initialSetup(long nWidth, long nHeight, Color aColor, bool bEnableAA)
 {
     maVDRectangle = tools::Rectangle(Point(), Size (nWidth, nHeight));
     mpVirtualDevice->SetOutputSizePixel(maVDRectangle.GetSize());
+    if (bEnableAA)
+        mpVirtualDevice->SetAntialiasing(AntialiasingFlags::EnableB2dDraw | AntialiasingFlags::PixelSnapHairline);
+    else
+        mpVirtualDevice->SetAntialiasing(AntialiasingFlags::NONE);
     mpVirtualDevice->SetBackground(Wallpaper(aColor));
     mpVirtualDevice->Erase();
 }
@@ -244,6 +248,16 @@ TestResult OutputDeviceTestCommon::checkAALines(Bitmap& rBitmap)
 }
 
 TestResult OutputDeviceTestCommon::checkRectangle(Bitmap& aBitmap)
+{
+    std::vector<Color> aExpected
+    {
+        constBackgroundColor, constBackgroundColor, constLineColor,
+        constBackgroundColor, constBackgroundColor, constLineColor, constBackgroundColor
+    };
+    return checkRectangles(aBitmap, aExpected);
+}
+
+TestResult OutputDeviceTestCommon::checkRectangleAA(Bitmap& aBitmap)
 {
     std::vector<Color> aExpected
     {

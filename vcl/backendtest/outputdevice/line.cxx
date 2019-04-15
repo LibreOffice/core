@@ -31,9 +31,9 @@ void drawLineOffset(OutputDevice& rDevice, tools::Rectangle const & rRect, int n
 
 } // end anonymous namespace
 
-Bitmap OutputDeviceTestLine::setupRectangle()
+Bitmap OutputDeviceTestLine::setupRectangle(bool bEnableAA)
 {
-    initialSetup(13, 13, constBackgroundColor);
+    initialSetup(13, 13, constBackgroundColor, bEnableAA);
 
     mpVirtualDevice->SetLineColor(constLineColor);
     mpVirtualDevice->SetFillColor();
