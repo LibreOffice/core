@@ -15,7 +15,6 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-# i84653 -o sc.ScPageObj
 # i84554 -o sc.AccessibleEditableTextPara_PreviewNote
 # i88241 -o sc.AccessibleEditableTextPara_HeaderFooter
 -o sc.AccessibleEditableTextPara_PreviewCell
