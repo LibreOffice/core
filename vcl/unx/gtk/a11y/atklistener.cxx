@@ -31,6 +31,12 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
+#include <com/sun/star/accessibility/XAccessibleText.hpp>
+#include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
+#include <com/sun/star/accessibility/AccessibleTextType.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
+
+
 #include "atklistener.hxx"
 #include "atkwrapper.hxx"
 #include <vcl/svapp.hxx>
@@ -473,6 +479,99 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
 
             gboolean bState = eNewState != ATK_STATE_INVALID;
             AtkStateType eRealState = bState ? eNewState : eOldState;
+
+            css::uno::Reference<css::accessibility::XAccessibleText>& xAccText = mpWrapper->mpText;
+            if( eNewState == ATK_STATE_FOCUSED && xAccText.is() )
+            {
+                OUString sText = xAccText->getText();
+                sal_Int32 nLength = sText.getLength();
+                SAL_DEBUG("AtkListener::notifyEvent: mpWrapper: " << mpWrapper << ", mpText: " << xAccText.get() << ", text: " << sText);
+
+                if (nLength)
+                {
+                    css::uno::Reference<css::accessibility::XAccessibleTextAttributes>& xAccTextAttr = mpWrapper->mpTextAttributes;
+                    css::uno::Sequence< OUString > aRequestedAttributes;
+
+                    sal_Int32 nPos = 0;
+                    while (nPos < nLength)
+                    {
+                        css::accessibility::TextSegment aTextSegment = xAccText->getTextAtIndex(nPos, css::accessibility::AccessibleTextType::ATTRIBUTE_RUN);
+                        SAL_DEBUG("AtkListener::notifyEvent: text segment: '" << aTextSegment.SegmentText << "', start: " << aTextSegment.SegmentStart << ", end: " << aTextSegment.SegmentEnd);
+
+                        css::uno::Sequence< css::beans::PropertyValue > aRunAttributeList;
+                        if (xAccTextAttr.is())
+                        {
+                            aRunAttributeList = xAccTextAttr->getRunAttributes(nPos, aRequestedAttributes);
+                        }
+                        else
+                        {
+                            aRunAttributeList = xAccText->getCharacterAttributes(nPos, aRequestedAttributes);
+                        }
+
+                        sal_Int32 nSize = aRunAttributeList.getLength();
+                        SAL_DEBUG("AtkListener::notifyEvent: attribute list size: " << nSize);
+                        if (nSize)
+                        {
+                            OUString sValue;
+                            OUString sAttributes = "{ ";
+                            for (const auto& attribute: aRunAttributeList)
+                            {
+                                if (attribute.Name.isEmpty())
+                                    continue;
+
+//                                OUString sType = attribute.Value.getValueTypeName();
+//                                //attribute.Value >>= sValue;
+//                                if (sAttributes != "{ ")
+//                                    sAttributes += ", ";
+//                                sAttributes += attribute.Name + ": " + sType;
+
+                                if (attribute.Name == "CharHeight" || attribute.Name == "CharWeight")
+                                {
+                                    float fValue;
+                                    attribute.Value >>= fValue;
+                                    sValue = OUString::number(fValue);
+                                }
+                                else if (attribute.Name == "CharPosture")
+                                {
+                                    awt::FontSlant nValue;
+                                    attribute.Value >>= nValue;
+                                    sValue = OUString::number((unsigned int)(nValue));
+                                }
+                                else if (attribute.Name == "CharUnderline")
+                                {
+                                    sal_Int16 nValue;
+                                    attribute.Value >>= nValue;
+                                    sValue = OUString::number(nValue);
+                                }
+                                else if (attribute.Name == "CharFontName")
+                                {
+                                    attribute.Value >>= sValue;
+                                }
+                                else if (attribute.Name == "Rsid")
+                                {
+                                    unsigned int nValue;
+                                    attribute.Value >>= nValue;
+                                    sValue = OUString::number(nValue);
+                                }
+
+                                if (!sValue.isEmpty())
+                                {
+                                    if (sAttributes != "{ ")
+                                        sAttributes += ", ";
+                                    sAttributes += attribute.Name + ": ";
+                                    sAttributes += sValue;
+                                    sValue = "";
+                                }
+                            }
+                            sAttributes += " }";
+                            SAL_DEBUG("AtkListener::notifyEvent: attributes: " << sAttributes);
+                            SAL_DEBUG("------------------------------------------");
+                            }
+                        nPos = aTextSegment.SegmentEnd + 1;
+                    }
+                }
+            }
+
 
             atk_object_notify_state_change( atk_obj, eRealState, bState );
             break;
