@@ -22,7 +22,6 @@
 
 #include "cgm.hxx"
 
-#include <vcl/salbtype.hxx>
 #include <tools/stream.hxx>
 #include "bundles.hxx"
 #include "bitmap.hxx"

@@ -123,7 +123,6 @@
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/region.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/scrbar.hxx>

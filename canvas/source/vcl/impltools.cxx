@@ -45,7 +45,6 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/salbtype.hxx>
 
 #include <canvas/canvastools.hxx>
 

@@ -14,7 +14,7 @@
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/salbtype.hxx>
+#include <vcl/BitmapPalette.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
 #include <memory>

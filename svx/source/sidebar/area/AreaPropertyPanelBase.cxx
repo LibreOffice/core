@@ -31,7 +31,6 @@
 #include <unotools/pathoptions.hxx>
 #include <svx/svxitems.hrc>
 #include <vcl/toolbox.hxx>
-#include <vcl/salbtype.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/tbcontrl.hxx>
 #include <sfx2/opengrf.hxx>

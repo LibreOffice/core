@@ -25,7 +25,6 @@
 #include <hintids.hxx>
 
 #include <vcl/svapp.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
 
