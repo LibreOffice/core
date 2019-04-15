@@ -1924,6 +1924,8 @@ ScHorizontalCellIterator::ScHorizontalCellIterator(ScDocument* pDocument, SCTAB 
         OSL_FAIL("try to access index out of bounds, FIX IT");
 
     nEndCol = pDoc->maTabs[mnTab]->ClampToAllocatedColumns(nEndCol);
+    if (nEndCol < nStartCol) // E.g., somewhere completely outside allocated area
+        nEndCol = nStartCol - 1; // Empty
 
     maColPositions.reserve( nEndCol-nStartCol+1 );
 
