@@ -4,7 +4,6 @@
     <style:font-face style:name="Source Sans Pro Regular" svg:font-family="'Source Sans Pro Regular'" style:font-pitch="variable"/>
     <style:font-face style:name="Source Sans Pro Black" svg:font-family="'Source Sans Pro Black'" style:font-adornments="Negra" style:font-pitch="variable"/>
     <style:font-face style:name="Source Sans Pro Light" svg:font-family="'Source Sans Pro Light'" style:font-adornments="Ligera" style:font-pitch="variable"/>
-    <style:font-face style:name="Noto Sans Regular" svg:font-family="'Noto Sans Regular'" style:font-family-generic="system" style:font-pitch="variable"/>
   </office:font-face-decls>
   <office:styles>
     <draw:gradient draw:name="Gradient_20_15" draw:display-name="Gradient 15" draw:style="linear" draw:start-color="#808080" draw:end-color="#ffffff" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0" draw:border="0%"/>
