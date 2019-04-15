@@ -10,57 +10,56 @@
 
 #include <test/outputdevice.hxx>
 
-
-namespace vcl {
-namespace test {
-
+namespace vcl
+{
+namespace test
+{
 namespace
 {
-
-tools::Polygon createPolygonOffset(tools::Rectangle const & rRect, int nOffset)
+basegfx::B2DPolygon createPolygonOffset(tools::Rectangle const& rRect, int nOffset)
 {
-    tools::Polygon aPolygon(4);
-    aPolygon.SetPoint(Point(rRect.Left()  + nOffset, rRect.Top()    + nOffset), 0);
-    aPolygon.SetPoint(Point(rRect.Right() - nOffset, rRect.Top()    + nOffset), 1);
-    aPolygon.SetPoint(Point(rRect.Right() - nOffset, rRect.Bottom() - nOffset), 2);
-    aPolygon.SetPoint(Point(rRect.Left()  + nOffset, rRect.Bottom() - nOffset), 3);
-    aPolygon.Optimize(PolyOptimizeFlags::CLOSE);
+    basegfx::B2DPolygon aPolygon{
+        basegfx::B2DPoint(rRect.Left() + nOffset, rRect.Top() + nOffset),
+        basegfx::B2DPoint(rRect.Right() - nOffset, rRect.Top() + nOffset),
+        basegfx::B2DPoint(rRect.Right() - nOffset, rRect.Bottom() - nOffset),
+        basegfx::B2DPoint(rRect.Left() + nOffset, rRect.Bottom() - nOffset),
+    };
+    aPolygon.setClosed(true);
     return aPolygon;
 }
 
 } // end anonymous namespace
 
-Bitmap OutputDeviceTestPolyPolygon::setupRectangle(bool bEnableAA)
+Bitmap OutputDeviceTestPolyPolygonB2D::setupRectangle(bool bEnableAA)
 {
     initialSetup(13, 13, constBackgroundColor, bEnableAA);
 
     mpVirtualDevice->SetLineColor(constLineColor);
     mpVirtualDevice->SetFillColor();
 
-    tools::PolyPolygon aPolyPolygon(2);
-    aPolyPolygon.Insert(createPolygonOffset(maVDRectangle, 2));
-    aPolyPolygon.Insert(createPolygonOffset(maVDRectangle, 5));
+    basegfx::B2DPolyPolygon aPolyPolygon;
+    aPolyPolygon.append(createPolygonOffset(maVDRectangle, 2));
+    aPolyPolygon.append(createPolygonOffset(maVDRectangle, 5));
 
     mpVirtualDevice->DrawPolyPolygon(aPolyPolygon);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
-Bitmap OutputDeviceTestPolyPolygon::setupFilledRectangle()
+Bitmap OutputDeviceTestPolyPolygonB2D::setupFilledRectangle()
 {
     initialSetup(13, 13, constBackgroundColor);
 
     mpVirtualDevice->SetLineColor();
     mpVirtualDevice->SetFillColor(constFillColor);
 
-    tools::PolyPolygon aPolyPolygon(1);
-    aPolyPolygon.Insert(createPolygonOffset(maVDRectangle, 2));
+    basegfx::B2DPolyPolygon aPolyPolygon(createPolygonOffset(maVDRectangle, 2));
 
     mpVirtualDevice->DrawPolyPolygon(aPolyPolygon);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
-
-}} // end namespace vcl::test
+}
+} // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

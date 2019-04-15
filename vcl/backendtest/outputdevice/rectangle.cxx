@@ -27,18 +27,17 @@ Bitmap OutputDeviceTestRect::setupFilledRectangle()
 {
     initialSetup(13, 13, constBackgroundColor);
 
-    mpVirtualDevice->SetLineColor(constFillColor);
+    mpVirtualDevice->SetLineColor();
     mpVirtualDevice->SetFillColor(constFillColor);
 
     drawRectOffset(*mpVirtualDevice, maVDRectangle, 2);
-    drawRectOffset(*mpVirtualDevice, maVDRectangle, 5);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
-Bitmap OutputDeviceTestRect::setupRectangle()
+Bitmap OutputDeviceTestRect::setupRectangle(bool bEnableAA)
 {
-    initialSetup(13, 13, constBackgroundColor);
+    initialSetup(13, 13, constBackgroundColor, bEnableAA);
 
     mpVirtualDevice->SetLineColor(constLineColor);
     mpVirtualDevice->SetFillColor();
@@ -48,6 +47,7 @@ Bitmap OutputDeviceTestRect::setupRectangle()
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
+
 
 }} // end namespace vcl::test
 
