@@ -22,6 +22,7 @@
 #include <wrtsh.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>
+#include <txtfrm.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
 
@@ -2839,6 +2840,36 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrCell)
         ss << "selection rectangle " << rRect << " is not inside cell rectangle " << aCellRect;
         CPPUNIT_ASSERT_MESSAGE(ss.str(), aCellRect.IsInside(rRect));
     }
+
+    // Make sure that the correct rectangle gets repainted on scroll.
+    SwFrame* pPageFrame = pLayout->GetLower();
+    CPPUNIT_ASSERT(pPageFrame->IsPageFrame());
+
+    SwFrame* pBodyFrame = pPageFrame->GetLower();
+    CPPUNIT_ASSERT(pBodyFrame->IsBodyFrame());
+
+    SwFrame* pTabFrame = pBodyFrame->GetLower();
+    CPPUNIT_ASSERT(pTabFrame->IsTabFrame());
+
+    SwFrame* pRowFrame = pTabFrame->GetLower();
+    CPPUNIT_ASSERT(pRowFrame->IsRowFrame());
+
+    SwFrame* pCellFrame = pRowFrame->GetLower();
+    CPPUNIT_ASSERT(pCellFrame->IsCellFrame());
+
+    SwFrame* pFrame = pCellFrame->GetLower();
+    CPPUNIT_ASSERT(pFrame->IsTextFrame());
+
+    SwTextFrame* pTextFrame = static_cast<SwTextFrame*>(pFrame);
+    pTextFrame->SwapWidthAndHeight();
+    // Mimic what normally SwTextFrame::PaintSwFrame() does:
+    SwRect aRect(4207, 2273, 269, 572);
+    pTextFrame->SwitchVerticalToHorizontal(aRect);
+    // Without the accompanying fix in place, this test would have failed with:
+    // Expected: 572x269@(1691,4217)
+    // Actual  : 572x269@(2263,4217)
+    // i.e. the paint rectangle position was incorrect, text was not painted on scrolling up.
+    CPPUNIT_ASSERT_EQUAL(SwRect(1691, 4217, 572, 269), aRect);
 #endif
 }
 

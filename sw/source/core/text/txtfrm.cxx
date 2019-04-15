@@ -595,7 +595,18 @@ void SwTextFrame::SwitchVerticalToHorizontal( SwRect& rRect ) const
             nOfstX = getFrameArea().Left() + getFrameArea().Width() - ( rRect.Left() + rRect.Width() );
     }
 
-    const long nOfstY = rRect.Top() - getFrameArea().Top();
+    long nOfstY;
+    if (IsVertLRBT())
+    {
+        // Note that mbIsSwapped only affects the frame area, not rRect, so rRect.Height() is used
+        // here unconditionally.
+        if (mbIsSwapped)
+            nOfstY = getFrameArea().Top() + getFrameArea().Width() - (rRect.Top() + rRect.Height());
+        else
+            nOfstY = getFrameArea().Top() + getFrameArea().Height() - (rRect.Top() + rRect.Height());
+    }
+    else
+        nOfstY = rRect.Top() - getFrameArea().Top();
     const long nWidth = rRect.Height();
     const long nHeight = rRect.Width();
 
