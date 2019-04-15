@@ -248,7 +248,7 @@ void XMLTransGradientStyleExport::exportXML(
                 }
 
                 // Transparency start
-                Color aColor = Color(aGradient.StartColor);
+                Color aColor(aGradient.StartColor);
                 sal_Int32 aStartValue = 100 - static_cast<sal_Int32>(((aColor.GetRed() + 1) * 100) / 255);
                 ::sax::Converter::convertPercent( aOut, aStartValue );
                 aStrValue = aOut.makeStringAndClear();
