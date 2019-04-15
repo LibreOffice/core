@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_b2e3c8a4",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2188,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-04-15T02:08:22Z",
+      "side": 1,
+      "message": "SvxSearchDialogWrapper::SetSearchLabel will set both the dialog and find bar search labels.",
+      "range": {
+        "startLine": 2188,
+        "startChar": 0,
+        "endLine": 2188,
+        "endChar": 27
+      },
+      "revId": "24e98e253e2f10ad83ab18db062ca855e9c61e56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
