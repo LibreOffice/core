@@ -284,8 +284,8 @@ bool OpenGLSalBitmap::ImplScaleArea( const rtl::Reference< OpenGLContext > &xCon
         mnWidth = nNewWidth;
         mnHeight = nNewHeight;
 
-        nNewWidth = int(mnWidth * rScaleX);
-        nNewHeight = int (mnHeight * rScaleY);
+        nNewWidth = round(mnWidth * rScaleX);
+        nNewHeight = round(mnHeight * rScaleY);
 
         ixscale = 1 / rScaleX;
         iyscale = 1 / rScaleY;
