@@ -1163,7 +1163,10 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
                         aHandle.aPosition.Second = aFirst;
                     }
                 }
-                rReturnPosition = GetPoint( aHandle.aPosition );
+                if (bOOXMLShape)
+                    rReturnPosition = GetPoint(aHandle.aPosition, false /*bScale*/);
+                else
+                    rReturnPosition = GetPoint(aHandle.aPosition, true /*bScale*/);
             }
             const GeoStat aGeoStat(mrSdrObjCustomShape.GetGeoStat());
             if ( aGeoStat.nShearAngle )
