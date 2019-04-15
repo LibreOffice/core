@@ -30,9 +30,9 @@ void drawPolygonOffset(OutputDevice& rDevice, tools::Rectangle const & rRect, in
 
 } // end anonymous namespace
 
-Bitmap OutputDeviceTestPolygon::setupRectangle()
+Bitmap OutputDeviceTestPolygon::setupRectangle(bool bEnableAA)
 {
-    initialSetup(13, 13, constBackgroundColor);
+    initialSetup(13, 13, constBackgroundColor, bEnableAA);
 
     mpVirtualDevice->SetLineColor(constLineColor);
     mpVirtualDevice->SetFillColor();
@@ -47,7 +47,7 @@ Bitmap OutputDeviceTestPolygon::setupFilledRectangle()
 {
     initialSetup(13, 13, constBackgroundColor);
 
-    mpVirtualDevice->SetLineColor(constFillColor);
+    mpVirtualDevice->SetLineColor();
     mpVirtualDevice->SetFillColor(constFillColor);
     drawPolygonOffset(*mpVirtualDevice, maVDRectangle, 2);
 

@@ -30,9 +30,9 @@ void drawPolyLineOffset(OutputDevice& rDevice, tools::Rectangle const & rRect, i
 
 } // end anonymous namespace
 
-Bitmap OutputDeviceTestPolyLine::setupRectangle()
+Bitmap OutputDeviceTestPolyLine::setupRectangle(bool bEnableAA)
 {
-    initialSetup(13, 13, constBackgroundColor);
+    initialSetup(13, 13, constBackgroundColor, bEnableAA);
 
     mpVirtualDevice->SetLineColor(constLineColor);
     mpVirtualDevice->SetFillColor();

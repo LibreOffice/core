@@ -446,7 +446,9 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/backendtest/outputdevice/pixel \
     vcl/backendtest/outputdevice/polygon \
     vcl/backendtest/outputdevice/polypolygon \
+    vcl/backendtest/outputdevice/polypolygon_b2d \
     vcl/backendtest/outputdevice/polyline \
+    vcl/backendtest/outputdevice/polyline_b2d \
     vcl/backendtest/outputdevice/rectangle \
 ))
 
