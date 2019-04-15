@@ -27,6 +27,8 @@
 namespace formula
 {
     class RefButton;
+    class WeldRefButton;
+    class WeldRefEdit;
 }
 struct ScQueryParam;
 class ScDocument;
@@ -80,6 +82,56 @@ private:
     DECL_LINK( LbAreaSelHdl,        ListBox&, void );
     DECL_LINK( BtnCopyResultHdl,    CheckBox&, void );
 };
+
+class FilterOptionsMgr
+{
+public:
+    FilterOptionsMgr(ScViewData* ptrViewData,
+                     const ScQueryParam& refQueryData,
+                     weld::CheckButton*  refBtnCase,
+                     weld::CheckButton* refBtnRegExp,
+                     weld::CheckButton* refBtnHeader,
+                     weld::CheckButton* refBtnUnique,
+                     weld::CheckButton* refBtnCopyResult,
+                     weld::CheckButton* refBtnDestPers,
+                     weld::ComboBox* refLbCopyArea,
+                     formula::WeldRefEdit* refEdCopyArea,
+                     formula::WeldRefButton* refRbCopyArea,
+                     weld::Label* refFtDbAreaLabel,
+                     weld::Label* refFtDbArea,
+                     const OUString& refStrUndefined );
+    ~FilterOptionsMgr();
+    bool    VerifyPosStr ( const OUString& rPosStr ) const;
+
+private:
+    ScViewData* const     pViewData;
+    ScDocument* const     pDoc;
+
+    weld::CheckButton* pBtnCase;
+    weld::CheckButton* pBtnRegExp;
+    weld::CheckButton* pBtnHeader;
+    weld::CheckButton* pBtnUnique;
+    weld::CheckButton* pBtnCopyResult;
+    weld::CheckButton* pBtnDestPers;
+    weld::ComboBox* pLbCopyArea;
+    formula::WeldRefEdit* pEdCopyArea;
+    formula::WeldRefButton* pRbCopyArea;
+    weld::Label* pFtDbAreaLabel;
+    weld::Label* pFtDbArea;
+
+    const OUString&   rStrUndefined;
+
+    const ScQueryParam& rQueryData;
+
+private:
+    void Init();
+
+    // Handler:
+    DECL_LINK( EdAreaModifyHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( LbAreaSelHdl, weld::ComboBox&, void );
+    DECL_LINK( BtnCopyResultHdl, weld::ToggleButton&, void );
+};
+
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_FOPTMGR_HXX
 
