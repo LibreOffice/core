@@ -2284,7 +2284,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             if (nCurrentPos == 0)
                 AppendSmartTags(rNode);
 
-            bool bTextAtr = aAttrIter.IsTextAttr( nCurrentPos );
+            bool bTextAtr = aAttrIter.IsTextAttr(nCurrentPos);
             nOpenAttrWithRange += aAttrIter.OutAttrWithRange( rNode, nCurrentPos );
 
             sal_Int32 nLen = nNextAttr - nCurrentPos;
@@ -2431,6 +2431,11 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     bPostponeWritingText = false ;
                     AttrOutput().RunText( aSnippet, eChrSet );
                 }
+            }
+            else if (bTextAtr && nLen)
+            {
+                OUString aSnippet(aAttrIter.GetSnippet(aStr, nCurrentPos, nLen));
+                AttrOutput().RunText(aSnippet, eChrSet);
             }
 
             if ( aAttrIter.IsDropCap( nNextAttr ) )
