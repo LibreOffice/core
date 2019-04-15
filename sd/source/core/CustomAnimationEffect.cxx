@@ -2176,6 +2176,39 @@ void EffectSequenceHelper::insertTextRange( const css::uno::Any& aTarget )
         rebuild();
 }
 
+static bool isParagraphTargetTextEmpty( ParagraphTarget aParaTarget )
+{
+    // get paragraph
+    Reference< XText > xText ( aParaTarget.Shape, UNO_QUERY );
+    if( xText.is() )
+    {
+        Reference< XEnumerationAccess > xEA( xText, UNO_QUERY );
+        if( xEA.is() )
+        {
+            Reference< XEnumeration > xEnumeration( xEA->createEnumeration(), UNO_QUERY );
+            if( xEnumeration.is() )
+            {
+                // advance to the Nth paragraph
+                sal_Int32 nPara = aParaTarget.Paragraph;
+                while( xEnumeration->hasMoreElements() && nPara-- )
+                    xEnumeration->nextElement();
+
+                // get Nth paragraph's text and check if it's empty
+                if( xEnumeration->hasMoreElements() )
+                {
+                    Reference< XTextRange > xRange( xEnumeration->nextElement(), UNO_QUERY );
+                    if( xRange.is() )
+                    {
+                        OUString text = xRange->getString();
+                        return text.isEmpty();
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
 void EffectSequenceHelper::disposeTextRange( const css::uno::Any& aTarget )
 {
     ParagraphTarget aParaTarget;
@@ -2183,49 +2216,67 @@ void EffectSequenceHelper::disposeTextRange( const css::uno::Any& aTarget )
         return;
 
     bool bChanges = false;
-    bool bErased = false;
 
-    EffectSequence::iterator aIter( maEffects.begin() );
-    while( aIter != maEffects.end() )
+    // building list of effects for target shape; process effects not on target shape
+    EffectSequence aTargetParagraphEffects;
+    for( const auto &pEffect : maEffects )
     {
-        Any aIterTarget( (*aIter)->getTarget() );
+        Any aIterTarget( pEffect->getTarget() );
         if( aIterTarget.getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
         {
             ParagraphTarget aIterParaTarget;
             if( (aIterTarget >>= aIterParaTarget) && (aIterParaTarget.Shape == aParaTarget.Shape) )
             {
-                if( aIterParaTarget.Paragraph == aParaTarget.Paragraph )
-                {
-                    // delete this effect if it targets the disposed paragraph directly
-                    (*aIter)->setEffectSequence( nullptr );
-                    aIter = maEffects.erase( aIter );
-                    bChanges = true;
-                    bErased = true;
-                }
-                else
-                {
-                    if( aIterParaTarget.Paragraph > aParaTarget.Paragraph )
-                    {
-                        // shift all paragraphs after disposed paragraph
-                        aIterParaTarget.Paragraph--;
-                        (*aIter)->setTarget( makeAny( aIterParaTarget ) );
-                    }
-                }
+                aTargetParagraphEffects.push_back(pEffect);
             }
         }
-        else if( (*aIter)->getTargetShape() == aParaTarget.Shape )
+        else if( pEffect->getTargetShape() == aParaTarget.Shape )
         {
-            bChanges |= (*aIter)->checkForText();
+            bChanges |= pEffect->checkForText();
+        }
+    }
+
+    // select effect to delete:
+    // if paragraph before target is blank, then delete its animation effect (if any) instead
+    ParagraphTarget aPreviousParagraph = aParaTarget;
+    --aPreviousParagraph.Paragraph;
+    bool bIsPreviousParagraphEmpty = isParagraphTargetTextEmpty( aPreviousParagraph );
+    sal_Int16 anParaNumToDelete = bIsPreviousParagraphEmpty ? aPreviousParagraph.Paragraph : aParaTarget.Paragraph;
+
+    // update effects
+    for( const auto &pEffect : aTargetParagraphEffects )
+    {
+        Any aIterTarget( pEffect->getTarget() );
+
+        ParagraphTarget aIterParaTarget;
+        aIterTarget >>= aIterParaTarget;
+
+        // delete effect for target paragraph (may have effects in more than one text group)
+        if( aIterParaTarget.Paragraph == anParaNumToDelete )
+        {
+            auto aItr = find( pEffect );
+            DBG_ASSERT( aItr != maEffects.end(), "sd::EffectSequenceHelper::disposeTextRange(), Expected effect missing.");
+            if( aItr != maEffects.end() )
+            {
+                (*aItr)->setEffectSequence( nullptr );
+                maEffects.erase(aItr);
+                bChanges = true;
+            }
         }
 
-        if( bErased )
-            bErased = false;
-        else
-            ++aIter;
+        // shift all paragraphs after disposed paragraph
+        if( aIterParaTarget.Paragraph > anParaNumToDelete )
+        {
+            --aIterParaTarget.Paragraph;
+            pEffect->setTarget( makeAny( aIterParaTarget ) );
+            bChanges = true;
+        }
     }
 
     if( bChanges )
+    {
         rebuild();
+    }
 }
 
 CustomAnimationTextGroup::CustomAnimationTextGroup( const Reference< XShape >& rTarget, sal_Int32 nGroupId )
@@ -3246,7 +3297,7 @@ void EffectSequenceHelper::onTextChanged( const Reference< XShape >& xShape )
         });
 
     if( bChanges )
-        EffectSequenceHelper::implRebuild();
+        rebuild();
 }
 
 void MainSequence::rebuild()
