@@ -98,6 +98,7 @@
 
         [textContent appendString:[NSString stringWithString:runningTextContent]];
         [runningTextContent release];
+        runningTextContent = nil;
     }
     shouldReadCharacters = NO;
 }
@@ -125,9 +126,11 @@
 
     if (runningTextContent != nil) {
         [runningTextContent release];
+        runningTextContent = nil;
     }
     if (textContent != nil) {
         [textContent release];
+        textContent = nil;
     }
 }
 
@@ -137,6 +140,7 @@
     if (textContent != nil && [textContent length] > 0) {
         [mdiValues setObject:[NSString stringWithString:textContent] forKey:(NSString*)kMDItemTextContent];
         [textContent release];
+        textContent = nil;
     }
 }
 
