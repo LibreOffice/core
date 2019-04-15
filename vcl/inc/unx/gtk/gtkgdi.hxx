@@ -381,7 +381,7 @@ protected:
     bool NWPaintGTKProgress(
                             const tools::Rectangle& rControlRectangle,
                             const ImplControlValue& aValue );
-    bool NWPaintGTKSlider( ControlPart nPart,
+    bool NWPaintGTKSlider( GdkDrawable* gdkDrawable, ControlPart nPart,
                            const tools::Rectangle& rControlRectangle,
                            ControlState nState, const ImplControlValue& aValue );
     bool NWPaintGTKListNode( GdkDrawable* gdkDrawable,
