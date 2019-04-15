@@ -1275,7 +1275,9 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
                     : dynamic_cast<SwTextInputField *>(pTextField));
             if (pInputField)
             {
-                pInputField->LockNotifyContentChange();
+                bool const tmp = pInputField->LockNotifyContentChange();
+                (void) tmp;
+                assert(tmp && "should not be locked here?");
             }
             ::comphelper::ScopeGuard g([pInputField]()
                 {

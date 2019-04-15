@@ -557,10 +557,14 @@ SwTextInputField::~SwTextInputField()
 {
 }
 
-void SwTextInputField::LockNotifyContentChange()
+bool SwTextInputField::LockNotifyContentChange()
 {
-    assert(!m_bLockNotifyContentChange); // not nestable
+    if (m_bLockNotifyContentChange)
+    {
+        return false;
+    }
     m_bLockNotifyContentChange = true;
+    return true;
 }
 
 void SwTextInputField::UnlockNotifyContentChange()

@@ -1261,23 +1261,29 @@ void SwInputField::applyFieldContent( const OUString& rNewFieldContent )
         if( pUserTyp )
         {
             pUserTyp->SetContent( rNewFieldContent );
-
-            // trigger update of the corresponding User Fields and other related Input Fields
-            if ( GetFormatField() != nullptr )
+            if (!pUserTyp->IsModifyLocked())
             {
-                SwTextInputField* pTextInputField = dynamic_cast< SwTextInputField* >(GetFormatField()->GetTextField());
-                if ( pTextInputField != nullptr )
+                // trigger update of the corresponding User Fields and other
+                // related Input Fields
+                bool bUnlock(false);
+                if (GetFormatField() != nullptr)
                 {
-                    pTextInputField->LockNotifyContentChange();
+                    SwTextInputField *const pTextInputField =
+                        dynamic_cast<SwTextInputField*>(GetFormatField()->GetTextField());
+                    if (pTextInputField != nullptr)
+                    {
+                        bUnlock = pTextInputField->LockNotifyContentChange();
+                    }
                 }
-            }
-            pUserTyp->UpdateFields();
-            if ( GetFormatField() != nullptr )
-            {
-                SwTextInputField* pTextInputField = dynamic_cast< SwTextInputField* >(GetFormatField()->GetTextField());
-                if ( pTextInputField != nullptr )
+                pUserTyp->UpdateFields();
+                if (bUnlock)
                 {
-                    pTextInputField->UnlockNotifyContentChange();
+                    SwTextInputField *const pTextInputField =
+                        dynamic_cast<SwTextInputField*>(GetFormatField()->GetTextField());
+                    if (pTextInputField != nullptr)
+                    {
+                        pTextInputField->UnlockNotifyContentChange();
+                    }
                 }
             }
         }
