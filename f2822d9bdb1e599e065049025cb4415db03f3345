@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_adab6973",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-15T10:10:43Z",
+      "side": 1,
+      "message": "Would be nice to have icons for all four major UI elements/sidebars.",
+      "range": {
+        "startLine": 154,
+        "startChar": 35,
+        "endLine": 154,
+        "endChar": 42
+      },
+      "revId": "f2822d9bdb1e599e065049025cb4415db03f3345",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_cda83579",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-15T10:10:43Z",
+      "side": 1,
+      "message": "If we show the comment icon on Writer we should do here as well.",
+      "range": {
+        "startLine": 210,
+        "startChar": 35,
+        "endLine": 210,
+        "endChar": 51
+      },
+      "revId": "f2822d9bdb1e599e065049025cb4415db03f3345",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_8dbc6dbc",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-15T10:10:43Z",
+      "side": 1,
+      "message": "Not my favorite function. Consider to make this text only.",
+      "range": {
+        "startLine": 212,
+        "startChar": 35,
+        "endLine": 212,
+        "endChar": 57
+      },
+      "revId": "f2822d9bdb1e599e065049025cb4415db03f3345",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_edcad14d",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-15T10:10:43Z",
+      "side": 1,
+      "message": "These three commands are the most important- at least in Writer, and we should make them pop out with icons. Here for consistency.",
+      "range": {
+        "startLine": 360,
+        "startChar": 35,
+        "endLine": 360,
+        "endChar": 45
+      },
+      "revId": "f2822d9bdb1e599e065049025cb4415db03f3345",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_cdc11531",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-15T10:10:43Z",
+      "side": 1,
+      "message": "Don\u0027t get an icon for Split with Elementary and Colibre (didnt check the other themes). Would be nice as all below (and the one above) so have icons.",
+      "range": {
+        "startLine": 556,
+        "startChar": 35,
+        "endLine": 556,
+        "endChar": 44
+      },
+      "revId": "f2822d9bdb1e599e065049025cb4415db03f3345",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_6ddc8118",
+        "filename": "sd/uiconfig/simpress/menubar/menubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-15T10:10:43Z",
+      "side": 1,
+      "message": "Comment has an icon here unlike Draw. I\u0027d keep it in all modules.",
+      "range": {
+        "startLine": 242,
+        "startChar": 35,
+        "endLine": 242,
+        "endChar": 51
+      },
+      "revId": "f2822d9bdb1e599e065049025cb4415db03f3345",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
