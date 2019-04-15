@@ -267,15 +267,15 @@ namespace
 
 SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 nLevel) :
     SwTypeNumber(CTYPE_CTT),
-    pWrtShell(pShell),
-    sContentTypeName(SwResId(STR_CONTENT_TYPE_ARY[static_cast<int>(nType)])),
-    sSingleContentTypeName(SwResId(STR_CONTENT_TYPE_SINGLE_ARY[static_cast<int>(nType)])),
-    nMemberCount(0),
-    nContentType(nType),
-    nOutlineLevel(nLevel),
-    bDataValid(false),
-    bEdit(false),
-    bDelete(true)
+    m_pWrtShell(pShell),
+    m_sContentTypeName(SwResId(STR_CONTENT_TYPE_ARY[static_cast<int>(nType)])),
+    m_sSingleContentTypeName(SwResId(STR_CONTENT_TYPE_SINGLE_ARY[static_cast<int>(nType)])),
+    m_nMemberCount(0),
+    m_nContentType(nType),
+    m_nOutlineLevel(nLevel),
+    m_bDataValid(false),
+    m_bEdit(false),
+    m_bDelete(true)
 {
     Init();
 }
@@ -283,34 +283,34 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
 void SwContentType::Init(bool* pbInvalidateWindow)
 {
     // if the MemberCount is changing ...
-    size_t nOldMemberCount = nMemberCount;
-    nMemberCount = 0;
-    switch(nContentType)
+    size_t nOldMemberCount = m_nMemberCount;
+    m_nMemberCount = 0;
+    switch(m_nContentType)
     {
         case ContentTypeId::OUTLINE   :
         {
-            sTypeToken = "outline";
-            nMemberCount = pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
-            if (nMemberCount < MAXLEVEL)
+            m_sTypeToken = "outline";
+            m_nMemberCount = m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
+            if (m_nMemberCount < MAXLEVEL)
             {
-                const size_t nOutlineCount = nMemberCount;
+                const size_t nOutlineCount = m_nMemberCount;
                 for(size_t j = 0; j < nOutlineCount; ++j)
                 {
-                    if (pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(j) > nOutlineLevel
-                        || !pWrtShell->getIDocumentOutlineNodesAccess()->isOutlineInLayout(j, *pWrtShell->GetLayout()))
+                    if (m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(j) > m_nOutlineLevel
+                        || !m_pWrtShell->getIDocumentOutlineNodesAccess()->isOutlineInLayout(j, *m_pWrtShell->GetLayout()))
                     {
-                        nMemberCount --;
+                        m_nMemberCount --;
                     }
                 }
             }
-            bDelete = false;
+            m_bDelete = false;
         }
         break;
 
         case ContentTypeId::TABLE     :
-            sTypeToken = "table";
-            nMemberCount = pWrtShell->GetTableFrameFormatCount(true);
-            bEdit = true;
+            m_sTypeToken = "table";
+            m_nMemberCount = m_pWrtShell->GetTableFrameFormatCount(true);
+            m_bEdit = true;
         break;
 
         case ContentTypeId::FRAME     :
@@ -318,49 +318,49 @@ void SwContentType::Init(bool* pbInvalidateWindow)
         case ContentTypeId::OLE       :
         {
             FlyCntType eType = FLYCNTTYPE_FRM;
-            sTypeToken = "frame";
-            if(nContentType == ContentTypeId::OLE)
+            m_sTypeToken = "frame";
+            if(m_nContentType == ContentTypeId::OLE)
             {
                 eType = FLYCNTTYPE_OLE;
-                sTypeToken = "ole";
+                m_sTypeToken = "ole";
             }
-            else if(nContentType == ContentTypeId::GRAPHIC)
+            else if(m_nContentType == ContentTypeId::GRAPHIC)
             {
                 eType = FLYCNTTYPE_GRF;
-                sTypeToken = "graphic";
+                m_sTypeToken = "graphic";
             }
-            nMemberCount = pWrtShell->GetFlyCount(eType, /*bIgnoreTextBoxes=*/true);
-            bEdit = true;
+            m_nMemberCount = m_pWrtShell->GetFlyCount(eType, /*bIgnoreTextBoxes=*/true);
+            m_bEdit = true;
         }
         break;
         case ContentTypeId::BOOKMARK:
         {
-            IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
-            nMemberCount = count_if(
+            IDocumentMarkAccess* const pMarkAccess = m_pWrtShell->getIDocumentMarkAccess();
+            m_nMemberCount = count_if(
                 pMarkAccess->getBookmarksBegin(),
                 pMarkAccess->getBookmarksEnd(),
                 &lcl_IsUiVisibleBookmark);
-            sTypeToken.clear();
-            bEdit = true;
+            m_sTypeToken.clear();
+            m_bEdit = true;
         }
         break;
         case ContentTypeId::REGION :
         {
             std::unique_ptr<SwContentArr> pOldMember;
-            if(!pMember)
-                pMember.reset( new SwContentArr );
-            else if(!pMember->empty())
+            if(!m_pMember)
+                m_pMember.reset( new SwContentArr );
+            else if(!m_pMember->empty())
             {
-                pOldMember = std::move(pMember);
-                pMember.reset( new SwContentArr );
+                pOldMember = std::move(m_pMember);
+                m_pMember.reset( new SwContentArr );
             }
             const Point aNullPt;
-            nMemberCount = pWrtShell->GetSectionFormatCount();
-            for(size_t i = 0; i < nMemberCount; ++i)
+            m_nMemberCount = m_pWrtShell->GetSectionFormatCount();
+            for(size_t i = 0; i < m_nMemberCount; ++i)
             {
                 const SwSectionFormat* pFormat;
                 SectionType eTmpType;
-                if( (pFormat = &pWrtShell->GetSectionFormat(i))->IsInNodesArr() &&
+                if( (pFormat = &m_pWrtShell->GetSectionFormat(i))->IsInNodesArr() &&
                 (eTmpType = pFormat->GetSection()->GetType()) != TOX_CONTENT_SECTION
                 && TOX_HEADER_SECTION != eTmpType )
                 {
@@ -382,13 +382,13 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                     if( !pFormat->GetInfo( aAskItem ) &&
                         !aAskItem.pObject )     // not visible
                         pCnt->SetInvisible();
-                    pMember->insert(std::move(pCnt));
+                    m_pMember->insert(std::move(pCnt));
                 }
             }
-            nMemberCount = pMember->size();
-            sTypeToken = "region";
-            bEdit = true;
-            bDelete = false;
+            m_nMemberCount = m_pMember->size();
+            m_sTypeToken = "region";
+            m_bEdit = true;
+            m_bDelete = false;
             if(pOldMember)
             {
                 if(nullptr != pbInvalidateWindow)
@@ -399,48 +399,48 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                     // time what worked before a sorted list was used)
                     *pbInvalidateWindow = checkVisibilityChanged(
                         *pOldMember,
-                        *pMember);
+                        *m_pMember);
                 }
             }
         }
         break;
         case ContentTypeId::INDEX:
         {
-            nMemberCount = pWrtShell->GetTOXCount();
-            bEdit = true;
-            bDelete = false;
+            m_nMemberCount = m_pWrtShell->GetTOXCount();
+            m_bEdit = true;
+            m_bDelete = false;
         }
         break;
         case ContentTypeId::REFERENCE:
         {
-            nMemberCount = pWrtShell->GetRefMarks();
-            bDelete = false;
+            m_nMemberCount = m_pWrtShell->GetRefMarks();
+            m_bDelete = false;
         }
         break;
         case ContentTypeId::URLFIELD:
         {
-            nMemberCount = 0;
-            if(!pMember)
-                pMember.reset( new SwContentArr );
+            m_nMemberCount = 0;
+            if(!m_pMember)
+                m_pMember.reset( new SwContentArr );
             else
-                pMember->clear();
+                m_pMember->clear();
 
-            nMemberCount = lcl_InsertURLFieldContent(pMember.get(), pWrtShell, this);
+            m_nMemberCount = lcl_InsertURLFieldContent(m_pMember.get(), m_pWrtShell, this);
 
-            bEdit = true;
-            nOldMemberCount = nMemberCount;
-            bDelete = false;
+            m_bEdit = true;
+            nOldMemberCount = m_nMemberCount;
+            m_bDelete = false;
         }
         break;
         case ContentTypeId::POSTIT:
         {
-            nMemberCount = 0;
-            if(!pMember)
-                pMember.reset( new SwContentArr );
+            m_nMemberCount = 0;
+            if(!m_pMember)
+                m_pMember.reset( new SwContentArr );
             else
-                pMember->clear();
+                m_pMember->clear();
 
-            SwPostItMgr* aMgr = pWrtShell->GetView().GetPostItMgr();
+            SwPostItMgr* aMgr = m_pWrtShell->GetView().GetPostItMgr();
             if (aMgr)
             {
                 for(SwPostItMgr::const_iterator i = aMgr->begin(); i != aMgr->end(); ++i)
@@ -456,23 +456,23 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                                                 this,
                                                 sEntry,
                                                 pFormatField,
-                                                nMemberCount));
-                            pMember->insert(std::move(pCnt));
-                            nMemberCount++;
+                                                m_nMemberCount));
+                            m_pMember->insert(std::move(pCnt));
+                            m_nMemberCount++;
                         }
                     }
                 }
             }
-            sTypeToken.clear();
-            bEdit = true;
-            nOldMemberCount = nMemberCount;
+            m_sTypeToken.clear();
+            m_bEdit = true;
+            nOldMemberCount = m_nMemberCount;
         }
         break;
         case ContentTypeId::DRAWOBJECT:
         {
-            sTypeToken.clear();
-            nMemberCount = 0;
-            SwDrawModel* pModel = pWrtShell->getIDocumentDrawModelAccess().GetDrawModel();
+            m_sTypeToken.clear();
+            m_nMemberCount = 0;
+            SwDrawModel* pModel = m_pWrtShell->getIDocumentDrawModelAccess().GetDrawModel();
             if(pModel)
             {
                 SdrPage* pPage = pModel->GetPage(0);
@@ -482,7 +482,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                     SdrObject* pTemp = pPage->GetObj(i);
                     // #i51726# - all drawing objects can be named now
                     if (!pTemp->GetName().isEmpty())
-                        nMemberCount++;
+                        m_nMemberCount++;
                 }
             }
         }
@@ -492,8 +492,8 @@ void SwContentType::Init(bool* pbInvalidateWindow)
     // ... then, the data can also no longer be valid,
     // apart from those which have already been corrected,
     // then nOldMemberCount is nevertheless not so old.
-    if( nOldMemberCount != nMemberCount )
-        bDataValid = false;
+    if( nOldMemberCount != m_nMemberCount )
+        m_bDataValid = false;
 }
 
 SwContentType::~SwContentType()
@@ -502,19 +502,19 @@ SwContentType::~SwContentType()
 
 const SwContent* SwContentType::GetMember(size_t nIndex)
 {
-    if(!bDataValid || !pMember)
+    if(!m_bDataValid || !m_pMember)
     {
         FillMemberList();
     }
-    if(nIndex < pMember->size())
-        return (*pMember)[nIndex].get();
+    if(nIndex < m_pMember->size())
+        return (*m_pMember)[nIndex].get();
 
     return nullptr;
 }
 
 void SwContentType::Invalidate()
 {
-    bDataValid = false;
+    m_bDataValid = false;
 }
 
 void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
@@ -522,43 +522,43 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
     std::unique_ptr<SwContentArr> pOldMember;
     size_t nOldMemberCount = 0;
     SwPtrMsgPoolItem aAskItem( RES_CONTENT_VISIBLE, nullptr );
-    if(pMember && pbLevelOrVisibilityChanged)
+    if(m_pMember && pbLevelOrVisibilityChanged)
     {
-        pOldMember = std::move(pMember);
+        pOldMember = std::move(m_pMember);
         nOldMemberCount = pOldMember->size();
-        pMember.reset( new SwContentArr );
+        m_pMember.reset( new SwContentArr );
         *pbLevelOrVisibilityChanged = false;
     }
-    else if(!pMember)
-        pMember.reset( new SwContentArr );
+    else if(!m_pMember)
+        m_pMember.reset( new SwContentArr );
     else
-        pMember->clear();
-    switch(nContentType)
+        m_pMember->clear();
+    switch(m_nContentType)
     {
         case ContentTypeId::OUTLINE   :
         {
-            const size_t nOutlineCount = nMemberCount =
-                pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
+            const size_t nOutlineCount = m_nMemberCount =
+                m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
 
             size_t nPos = 0;
             for (size_t i = 0; i < nOutlineCount; ++i)
             {
-                const sal_Int8 nLevel = static_cast<sal_Int8>(pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(i));
-                if(nLevel >= nOutlineLevel )
-                    nMemberCount--;
+                const sal_Int8 nLevel = static_cast<sal_Int8>(m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(i));
+                if(nLevel >= m_nOutlineLevel )
+                    m_nMemberCount--;
                 else
                 {
-                    if (!pWrtShell->getIDocumentOutlineNodesAccess()->isOutlineInLayout(i, *pWrtShell->GetLayout()))
+                    if (!m_pWrtShell->getIDocumentOutlineNodesAccess()->isOutlineInLayout(i, *m_pWrtShell->GetLayout()))
                     {
-                        --nMemberCount;
+                        --m_nMemberCount;
                         continue; // don't hide it, just skip it
                     }
                     OUString aEntry(comphelper::string::stripStart(
-                        pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(i, pWrtShell->GetLayout()), ' '));
+                        m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(i, m_pWrtShell->GetLayout()), ' '));
                     aEntry = SwNavigationPI::CleanEntry(aEntry);
                     std::unique_ptr<SwOutlineContent> pCnt(new SwOutlineContent(this, aEntry, i, nLevel,
-                                                        pWrtShell->IsOutlineMovable( i ), nPos ));
-                    pMember->insert(std::move(pCnt));
+                                                        m_pWrtShell->IsOutlineMovable( i ), nPos ));
+                    m_pMember->insert(std::move(pCnt));
                     // with the same number and existing "pOldMember" the
                     // old one is compared with the new OutlinePos.
                     if (nOldMemberCount > nPos && static_cast<SwOutlineContent*>((*pOldMember)[nPos].get())->GetOutlineLevel() != nLevel)
@@ -573,13 +573,13 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 
         case ContentTypeId::TABLE     :
         {
-            const size_t nCount = pWrtShell->GetTableFrameFormatCount(true);
-            OSL_ENSURE(nMemberCount == nCount, "MemberCount differs");
+            const size_t nCount = m_pWrtShell->GetTableFrameFormatCount(true);
+            OSL_ENSURE(m_nMemberCount == nCount, "MemberCount differs");
             Point aNullPt;
-            nMemberCount = nCount;
-            for(size_t i = 0; i < nMemberCount; ++i)
+            m_nMemberCount = nCount;
+            for(size_t i = 0; i < m_nMemberCount; ++i)
             {
-                const SwFrameFormat& rTableFormat = pWrtShell->GetTableFrameFormat(i, true);
+                const SwFrameFormat& rTableFormat = m_pWrtShell->GetTableFrameFormat(i, true);
                 const OUString& sTableName( rTableFormat.GetName() );
 
                 SwContent* pCnt = new SwContent(this, sTableName,
@@ -588,7 +588,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     !aAskItem.pObject )     // not visible
                     pCnt->SetInvisible();
 
-                pMember->insert(std::unique_ptr<SwContent>(pCnt));
+                m_pMember->insert(std::unique_ptr<SwContent>(pCnt));
 
                 if(nOldMemberCount > i &&
                     (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible())
@@ -601,25 +601,25 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         case ContentTypeId::GRAPHIC   :
         {
             FlyCntType eType = FLYCNTTYPE_FRM;
-            if(nContentType == ContentTypeId::OLE)
+            if(m_nContentType == ContentTypeId::OLE)
                 eType = FLYCNTTYPE_OLE;
-            else if(nContentType == ContentTypeId::GRAPHIC)
+            else if(m_nContentType == ContentTypeId::GRAPHIC)
                 eType = FLYCNTTYPE_GRF;
             Point aNullPt;
-            nMemberCount = pWrtShell->GetFlyCount(eType, /*bIgnoreTextBoxes=*/true);
-            std::vector<SwFrameFormat const*> formats(pWrtShell->GetFlyFrameFormats(eType, /*bIgnoreTextBoxes=*/true));
-            SAL_WARN_IF(nMemberCount != formats.size(), "sw.ui", "MemberCount differs");
-            nMemberCount = formats.size();
-            for (size_t i = 0; i < nMemberCount; ++i)
+            m_nMemberCount = m_pWrtShell->GetFlyCount(eType, /*bIgnoreTextBoxes=*/true);
+            std::vector<SwFrameFormat const*> formats(m_pWrtShell->GetFlyFrameFormats(eType, /*bIgnoreTextBoxes=*/true));
+            SAL_WARN_IF(m_nMemberCount != formats.size(), "sw.ui", "MemberCount differs");
+            m_nMemberCount = formats.size();
+            for (size_t i = 0; i < m_nMemberCount; ++i)
             {
                 SwFrameFormat const*const pFrameFormat = formats[i];
                 const OUString sFrameName = pFrameFormat->GetName();
 
                 SwContent* pCnt;
-                if(ContentTypeId::GRAPHIC == nContentType)
+                if(ContentTypeId::GRAPHIC == m_nContentType)
                 {
                     OUString sLink;
-                    pWrtShell->GetGrfNms( &sLink, nullptr, static_cast<const SwFlyFrameFormat*>( pFrameFormat));
+                    m_pWrtShell->GetGrfNms( &sLink, nullptr, static_cast<const SwFlyFrameFormat*>( pFrameFormat));
                     pCnt = new SwGraphicContent(this, sFrameName,
                                 INetURLObject::decode( sLink,
                                            INetURLObject::DecodeMechanism::Unambiguous ),
@@ -633,7 +633,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 if( !pFrameFormat->GetInfo( aAskItem ) &&
                     !aAskItem.pObject )     // not visible
                     pCnt->SetInvisible();
-                pMember->insert(std::unique_ptr<SwContent>(pCnt));
+                m_pMember->insert(std::unique_ptr<SwContent>(pCnt));
                 if (nOldMemberCount > i &&
                     (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible())
                         *pbLevelOrVisibilityChanged = true;
@@ -642,7 +642,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         break;
         case ContentTypeId::BOOKMARK:
         {
-            IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
+            IDocumentMarkAccess* const pMarkAccess = m_pWrtShell->getIDocumentMarkAccess();
             for(IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
                 ppBookmark != pMarkAccess->getBookmarksEnd();
                 ++ppBookmark)
@@ -652,7 +652,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     const OUString& rBkmName = ppBookmark->get()->GetName();
                     //nYPos from 0 -> text::Bookmarks will be sorted alphabetically
                     std::unique_ptr<SwContent> pCnt(new SwContent(this, rBkmName, 0));
-                    pMember->insert(std::move(pCnt));
+                    m_pMember->insert(std::move(pCnt));
                 }
             }
         }
@@ -660,12 +660,12 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         case ContentTypeId::REGION    :
         {
             const Point aNullPt;
-            nMemberCount = pWrtShell->GetSectionFormatCount();
-            for(size_t i = 0; i < nMemberCount; ++i)
+            m_nMemberCount = m_pWrtShell->GetSectionFormatCount();
+            for(size_t i = 0; i < m_nMemberCount; ++i)
             {
                 const SwSectionFormat* pFormat;
                 SectionType eTmpType;
-                if( (pFormat = &pWrtShell->GetSectionFormat(i))->IsInNodesArr() &&
+                if( (pFormat = &m_pWrtShell->GetSectionFormat(i))->IsInNodesArr() &&
                 (eTmpType = pFormat->GetSection()->GetType()) != TOX_CONTENT_SECTION
                 && TOX_HEADER_SECTION != eTmpType )
                 {
@@ -685,7 +685,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     if( !pFormat->GetInfo( aAskItem ) &&
                         !aAskItem.pObject )     // not visible
                         pCnt->SetInvisible();
-                    pMember->insert(std::move(pCnt));
+                    m_pMember->insert(std::move(pCnt));
                 }
 
                 if(nullptr != pbLevelOrVisibilityChanged)
@@ -697,35 +697,35 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     // time what worked before a sorted list was used)
                     *pbLevelOrVisibilityChanged = checkVisibilityChanged(
                         *pOldMember,
-                        *pMember);
+                        *m_pMember);
                 }
             }
-            nMemberCount = pMember->size();
+            m_nMemberCount = m_pMember->size();
         }
         break;
         case ContentTypeId::REFERENCE:
         {
             std::vector<OUString> aRefMarks;
-            nMemberCount = pWrtShell->GetRefMarks( &aRefMarks );
+            m_nMemberCount = m_pWrtShell->GetRefMarks( &aRefMarks );
 
             for (const auto& rRefMark : aRefMarks)
             {
                 // References sorted alphabetically
-                pMember->insert(std::make_unique<SwContent>(this, rRefMark, 0));
+                m_pMember->insert(std::make_unique<SwContent>(this, rRefMark, 0));
             }
         }
         break;
         case ContentTypeId::URLFIELD:
-            nMemberCount = lcl_InsertURLFieldContent(pMember.get(), pWrtShell, this);
+            m_nMemberCount = lcl_InsertURLFieldContent(m_pMember.get(), m_pWrtShell, this);
         break;
         case ContentTypeId::INDEX:
         {
 
-            const sal_uInt16 nCount = pWrtShell->GetTOXCount();
-            nMemberCount = nCount;
+            const sal_uInt16 nCount = m_pWrtShell->GetTOXCount();
+            m_nMemberCount = nCount;
             for ( sal_uInt16 nTox = 0; nTox < nCount; nTox++ )
             {
-                const SwTOXBase* pBase = pWrtShell->GetTOX( nTox );
+                const SwTOXBase* pBase = m_pWrtShell->GetTOX( nTox );
                 OUString sTOXNm( pBase->GetTOXName() );
 
                 SwContent* pCnt = new SwTOXBaseContent(
@@ -735,8 +735,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     !aAskItem.pObject )     // not visible
                     pCnt->SetInvisible();
 
-                pMember->insert( std::unique_ptr<SwContent>(pCnt) );
-                const size_t nPos = pMember->size() - 1;
+                m_pMember->insert( std::unique_ptr<SwContent>(pCnt) );
+                const size_t nPos = m_pMember->size() - 1;
                 if(nOldMemberCount > nPos &&
                     (*pOldMember)[nPos]->IsInvisible()
                             != pCnt->IsInvisible())
@@ -746,9 +746,9 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         break;
         case ContentTypeId::POSTIT:
         {
-            nMemberCount = 0;
-            pMember->clear();
-            SwPostItMgr* aMgr = pWrtShell->GetView().GetPostItMgr();
+            m_nMemberCount = 0;
+            m_pMember->clear();
+            SwPostItMgr* aMgr = m_pWrtShell->GetView().GetPostItMgr();
             if (aMgr)
             {
                 for(SwPostItMgr::const_iterator i = aMgr->begin(); i != aMgr->end(); ++i)
@@ -764,9 +764,9 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                                                 this,
                                                 sEntry,
                                                 pFormatField,
-                                                nMemberCount));
-                            pMember->insert(std::move(pCnt));
-                            nMemberCount++;
+                                                m_nMemberCount));
+                            m_pMember->insert(std::move(pCnt));
+                            m_nMemberCount++;
                         }
                     }
                 }
@@ -775,10 +775,10 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         break;
         case ContentTypeId::DRAWOBJECT:
         {
-            nMemberCount = 0;
-            pMember->clear();
+            m_nMemberCount = 0;
+            m_pMember->clear();
 
-            IDocumentDrawModelAccess& rIDDMA = pWrtShell->getIDocumentDrawModelAccess();
+            IDocumentDrawModelAccess& rIDDMA = m_pWrtShell->getIDocumentDrawModelAccess();
             SwDrawModel* pModel = rIDDMA.GetDrawModel();
             if(pModel)
             {
@@ -801,8 +801,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                                             nYPos);
                         if(!rIDDMA.IsVisibleLayerId(pTemp->GetLayer()))
                             pCnt->SetInvisible();
-                        pMember->insert(std::unique_ptr<SwContent>(pCnt));
-                        nMemberCount++;
+                        m_pMember->insert(std::unique_ptr<SwContent>(pCnt));
+                        m_nMemberCount++;
                         if (nOldMemberCount > i &&
                             (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible() )
                                 *pbLevelOrVisibilityChanged = true;
@@ -813,7 +813,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         break;
         default: break;
     }
-    bDataValid = true;
+    m_bDataValid = true;
 }
 
 enum STR_CONTEXT_IDX
