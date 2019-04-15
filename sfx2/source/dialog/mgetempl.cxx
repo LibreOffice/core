@@ -282,7 +282,9 @@ void SfxManageStyleSheetPage::UpdateName_Impl( weld::ComboBox* pBox,
     {
         // it is the current entry, which name was modified
         const bool bSelect = pBox->get_active_text() == aBuf;
-        pBox->remove_text(aBuf);
+        int nOldIndex = pBox->find_text(aBuf);
+        if (nOldIndex != -1)
+            pBox->remove(nOldIndex);
         pBox->append_text(rNew);
 
         if (bSelect)
