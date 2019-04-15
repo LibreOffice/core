@@ -1029,7 +1029,7 @@ bool GtkSalGraphics::DoDrawNativeControl(
     }
     else if( nType == ControlType::Slider )
     {
-        return NWPaintGTKSlider( nPart, aCtrlRect, nState, aValue );
+        return NWPaintGTKSlider(pDrawable, nPart, aCtrlRect, nState, aValue);
     }
     else if( nType == ControlType::WindowBackground )
     {
@@ -3464,7 +3464,57 @@ bool GtkSalGraphics::NWPaintGTKProgress(
     return true;
 }
 
+namespace
+{
+void NWPaintGTKSliderReal(SalX11Screen nXScreen, GdkDrawable* gdkDrawable, ControlPart nPart,
+                          const tools::Rectangle& rControlRectangle, ControlState nState,
+                          const ImplControlValue& rValue)
+{
+    gint w, h;
+    w = rControlRectangle.GetWidth();
+    h = rControlRectangle.GetHeight();
+
+    const SliderValue* pVal = static_cast<const SliderValue*>(&rValue);
+
+    GtkWidget* pWidget = (nPart == ControlPart::TrackHorzArea)
+                             ? GTK_WIDGET(gWidgetData[nXScreen].gHScale)
+                             : GTK_WIDGET(gWidgetData[nXScreen].gVScale);
+    const gchar* pDetail = (nPart == ControlPart::TrackHorzArea) ? "hscale" : "vscale";
+    GtkOrientation eOri = (nPart == ControlPart::TrackHorzArea) ? GTK_ORIENTATION_HORIZONTAL
+                                                                : GTK_ORIENTATION_VERTICAL;
+    gint slider_width = 10;
+    gint slider_length = 10;
+    gint trough_border = 0;
+    gtk_widget_style_get(pWidget, "slider-width", &slider_width, "slider-length", &slider_length,
+                         "trough-border", &trough_border, nullptr);
+
+    GtkStateType eState
+        = (nState & ControlState::ENABLED) ? GTK_STATE_NORMAL : GTK_STATE_INSENSITIVE;
+    if (nPart == ControlPart::TrackHorzArea)
+    {
+        gtk_paint_box(pWidget->style, gdkDrawable, eState, GTK_SHADOW_IN, nullptr, pWidget,
+                      "trough", 0, (h - slider_width - 2 * trough_border) / 2, w,
+                      slider_width + 2 * trough_border);
+        gint x
+            = (w - slider_length + 1) * (pVal->mnCur - pVal->mnMin) / (pVal->mnMax - pVal->mnMin);
+        gtk_paint_slider(pWidget->style, gdkDrawable, eState, GTK_SHADOW_OUT, nullptr, pWidget,
+                         pDetail, x, (h - slider_width) / 2, slider_length, slider_width, eOri);
+    }
+    else
+    {
+        gtk_paint_box(pWidget->style, gdkDrawable, eState, GTK_SHADOW_IN, nullptr, pWidget,
+                      "trough", (w - slider_width - 2 * trough_border) / 2, 0,
+                      slider_width + 2 * trough_border, h);
+        gint y
+            = (h - slider_length + 1) * (pVal->mnCur - pVal->mnMin) / (pVal->mnMax - pVal->mnMin);
+        gtk_paint_slider(pWidget->style, gdkDrawable, eState, GTK_SHADOW_OUT, nullptr, pWidget,
+                         pDetail, (w - slider_width) / 2, y, slider_width, slider_length, eOri);
+    }
+}
+}
+
 bool GtkSalGraphics::NWPaintGTKSlider(
+            GdkDrawable* gdkDrawable,
             ControlPart nPart,
             const tools::Rectangle& rControlRectangle,
             ControlState nState, const ImplControlValue& rValue )
@@ -3472,73 +3522,15 @@ bool GtkSalGraphics::NWPaintGTKSlider(
     OSL_ASSERT( rValue.getType() == ControlType::Slider );
     NWEnsureGTKSlider( m_nXScreen );
 
-    gint            w, h;
-    w = rControlRectangle.GetWidth();
-    h = rControlRectangle.GetHeight();
-
-    const SliderValue* pVal = static_cast<const SliderValue*>(&rValue);
+    if (GtkSalGraphics::bNeedPixmapPaint)
+    {
+        NWPaintGTKSliderReal(m_nXScreen, gdkDrawable, nPart, rControlRectangle, nState, rValue);
+        return true;
+    }
 
     BEGIN_PIXMAP_RENDER( rControlRectangle, pixDrawable )
     {
-        GtkWidget* pWidget = (nPart == ControlPart::TrackHorzArea)
-                             ? GTK_WIDGET(gWidgetData[m_nXScreen].gHScale)
-                             : GTK_WIDGET(gWidgetData[m_nXScreen].gVScale);
-        const gchar* pDetail = (nPart == ControlPart::TrackHorzArea) ? "hscale" : "vscale";
-        GtkOrientation eOri = (nPart == ControlPart::TrackHorzArea) ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL;
-        gint slider_width = 10;
-        gint slider_length = 10;
-        gint trough_border = 0;
-        gtk_widget_style_get( pWidget,
-                              "slider-width", &slider_width,
-                              "slider-length", &slider_length,
-                              "trough-border", &trough_border,
-                              nullptr);
-
-        GtkStateType eState = (nState & ControlState::ENABLED) ? GTK_STATE_NORMAL : GTK_STATE_INSENSITIVE;
-        if( nPart == ControlPart::TrackHorzArea )
-        {
-            gtk_paint_box( pWidget->style,
-                           pixDrawable,
-                           eState,
-                           GTK_SHADOW_IN,
-                           nullptr,
-                           pWidget,
-                           "trough",
-                           0, (h-slider_width-2*trough_border)/2, w, slider_width + 2*trough_border);
-            gint x = (w - slider_length + 1) * (pVal->mnCur - pVal->mnMin) / (pVal->mnMax - pVal->mnMin);
-            gtk_paint_slider( pWidget->style,
-                              pixDrawable,
-                              eState,
-                              GTK_SHADOW_OUT,
-                              nullptr,
-                              pWidget,
-                              pDetail,
-                              x, (h-slider_width)/2,
-                              slider_length, slider_width,
-                              eOri );
-        }
-        else
-        {
-            gtk_paint_box( pWidget->style,
-                           pixDrawable,
-                           eState,
-                           GTK_SHADOW_IN,
-                           nullptr,
-                           pWidget,
-                           "trough",
-                           (w-slider_width-2*trough_border)/2, 0, slider_width + 2*trough_border, h);
-            gint y = (h - slider_length + 1) * (pVal->mnCur - pVal->mnMin) / (pVal->mnMax - pVal->mnMin);
-            gtk_paint_slider( pWidget->style,
-                              pixDrawable,
-                              eState,
-                              GTK_SHADOW_OUT,
-                              nullptr,
-                              pWidget,
-                              pDetail,
-                              (w-slider_width)/2, y,
-                              slider_width, slider_length,
-                              eOri );
-        }
+        NWPaintGTKSliderReal(m_nXScreen, pixDrawable, nPart, rControlRectangle, nState, rValue);
     }
     END_PIXMAP_RENDER( rControlRectangle )
 
