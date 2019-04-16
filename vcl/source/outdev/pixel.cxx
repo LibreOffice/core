@@ -32,20 +32,26 @@
 #include <outdata.hxx>
 #include <salgdi.hxx>
 
-Color OutputDevice::GetPixel( const Point& rPt ) const
+Color OutputDevice::GetPixel(const Point& rPoint) const
 {
     Color aColor;
 
-    if ( mpGraphics || AcquireGraphics() )
+    if (mpGraphics || AcquireGraphics())
     {
-        if ( mbInitClipRegion )
+        if (mbInitClipRegion)
             const_cast<OutputDevice*>(this)->InitClipRegion();
 
-        if ( !mbOutputClipped )
+        if (!mbOutputClipped)
         {
-            const long nX = ImplLogicXToDevicePixel( rPt.X() );
-            const long nY = ImplLogicYToDevicePixel( rPt.Y() );
-            aColor = mpGraphics->GetPixel( nX, nY, this );
+            const long nX = ImplLogicXToDevicePixel(rPoint.X());
+            const long nY = ImplLogicYToDevicePixel(rPoint.Y());
+            aColor = mpGraphics->GetPixel(nX, nY, this);
+
+            if (mpAlphaVDev)
+            {
+                Color aAlphaColor = mpAlphaVDev->GetPixel(rPoint);
+                aColor.SetTransparency(aAlphaColor.GetBlue());
+            }
         }
     }
     return aColor;
@@ -90,7 +96,7 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPixelAction( rPt, aColor ) );
 
-    if ( !IsDeviceOutputNecessary() || ImplIsColorTransparent( aColor ) || ImplIsRecordLayout() )
+    if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
     Point aPt = ImplLogicToDevicePixel( rPt );
@@ -106,8 +112,11 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
 
     mpGraphics->DrawPixel( aPt.X(), aPt.Y(), aColor, this );
 
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawPixel( rPt );
+    if (mpAlphaVDev)
+    {
+        Color aAlphaColor(rColor.GetTransparency(), rColor.GetTransparency(), rColor.GetTransparency());
+        mpAlphaVDev->DrawPixel(rPt, aAlphaColor);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
