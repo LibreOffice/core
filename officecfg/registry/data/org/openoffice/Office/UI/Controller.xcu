@@ -611,7 +611,7 @@
           <value>com.sun.star.comp.framework.SubToolBarController</value>
         </prop>
         <prop oor:name="Value">
-          <value>redactedexportbar;.uno:RedactedExportBlack</value>
+          <value>redactedexportbar;.uno:RedactedExportWhite</value>
         </prop>
       </node>
       <node oor:name="LineToolBox" oor:op="replace">
