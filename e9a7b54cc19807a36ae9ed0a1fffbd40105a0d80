@@ -16,6 +16,24 @@
       "revId": "e9a7b54cc19807a36ae9ed0a1fffbd40105a0d80",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_253d2dbb",
+        "filename": "external/redland/rasqal/rasqal-msvc.patch.1",
+        "patchSetId": 18
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2019-04-16T17:09:38Z",
+      "side": 1,
+      "message": "That\u0027s it! Thank you!",
+      "parentUuid": "7f96bb07_6526d5ba",
+      "revId": "e9a7b54cc19807a36ae9ed0a1fffbd40105a0d80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
