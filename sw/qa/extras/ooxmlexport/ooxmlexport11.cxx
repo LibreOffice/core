@@ -423,6 +423,33 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116371, "tdf116371.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(24188), frameRect.Width);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak, "tdf123636_newlinePageBreak.docx")
+{
+    //MS Compatibility flag: SplitPgBreakAndParaMark
+    //special case: split first empty paragraph in a section.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Paragraphs", 2, getParagraphs() );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 2, getPages() );
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak2, "tdf123636_newlinePageBreak2.docx")
+{
+    //WITHOUT SplitPgBreakAndParaMark: a following anchored shape should force a page break
+    //CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Paragraphs", 2, getParagraphs() );
+    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getParagraph(2, ""), "NumberingStyleName"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 2, getPages() );
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak4, "tdf123636_newlinePageBreak4.docx")
+{
+    //MS Compatibility flag: SplitPgBreakAndParaMark
+    //special case: an empty paragraph doesn't split (except if first paragraph).
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Paragraphs", 3, getParagraphs() );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 2, getPages() );
+
+    xmlDocPtr pDump = parseLayoutDump();
+    assertXPath(pDump, "/root/page[2]/body/txt[1]/Text", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

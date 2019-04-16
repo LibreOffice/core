@@ -2045,6 +2045,22 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
         if( pContext.get() )
         {
+            // If there is a deferred page break applied to this framed paragraph,
+            // create a dummy paragraph without extra properties,
+            // so that the anchored frame will be on the correct page (similar to shapes).
+            if (pContext->isSet(PROP_BREAK_TYPE))
+            {
+                pContext->Erase(PROP_BREAK_TYPE);
+
+                lcl_startParagraphGroup();
+                m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
+                lcl_startCharacterGroup();
+                sal_uInt8 const sBreak[] = { 0xd };
+                lcl_text(sBreak, 1);
+                lcl_endCharacterGroup();
+                lcl_endParagraphGroup();
+            }
+
             ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pContext.get() );
             if (pParaContext)
                 pParaContext->SetFrameMode();
@@ -3420,6 +3436,13 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 {
                     if (m_pImpl->GetSettingsTable()->GetSplitPgBreakAndParaMark())
                     {
+                        if ( m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun() )
+                        {
+                            m_pImpl->m_bIsSplitPara = true;
+                            m_pImpl->finishParagraph( m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) );
+                            lcl_startParagraphGroup();
+                        }
+
                         pContext->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
                         m_pImpl->clearDeferredBreaks();
                     }
