@@ -29,6 +29,8 @@
 #include "stbctrls.h"
 #include <bitmaps.hlst>
 
+#include <../sc/inc/sc.hrc>
+
 SFX_IMPL_STATUSBAR_CONTROL(SvxSelectionModeControl, SfxUInt16Item);
 
 /// Popup menu to select the selection type
@@ -43,6 +45,7 @@ public:
     OUString GetItemTextForState(sal_uInt16 nState) { return m_xMenu->GetItemText(state_to_id(nState)); }
     sal_uInt16 GetState() const { return id_to_state(m_xMenu->GetCurItemIdent()); }
     sal_uInt16 Execute(vcl::Window* pWindow, const Point& rPopupPos) { return m_xMenu->Execute(pWindow, rPopupPos); }
+    void HideSelectionMode(sal_uInt16 nState) { m_xMenu->HideItem(state_to_id(nState)); };
 };
 
 sal_uInt16 SelectionTypePopup::id_to_state(const OString& rIdent)
@@ -104,6 +107,13 @@ bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
 {
     SelectionTypePopup aPop(mnState);
     StatusBar& rStatusbar = GetStatusBar();
+
+    // Check if Calc is opened and hide block selection state if true tdf#122280
+    if ( GetSlotId() == SID_STATUS_SELMODE )
+    {
+        sal_uInt16 nState(3);
+        aPop.HideSelectionMode(nState);
+    }
 
     if (rEvt.IsMiddle() && aPop.Execute(&rStatusbar, rEvt.GetPosPixel()))
     {
