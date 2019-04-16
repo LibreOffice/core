@@ -18,6 +18,7 @@
  */
 
 #include <vcl/builder.hxx>
+#include <vcl/event.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/status.hxx>
 #include <svl/intitem.hxx>
@@ -28,6 +29,10 @@
 
 #include "stbctrls.h"
 #include <bitmaps.hlst>
+
+#include <com/sun/star/beans/PropertyValue.hpp>
+
+#include <../sc/inc/sc.hrc>
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxSelectionModeControl, SfxUInt16Item);
 
@@ -43,6 +48,7 @@ public:
     OUString GetItemTextForState(sal_uInt16 nState) { return m_xMenu->GetItemText(state_to_id(nState)); }
     sal_uInt16 GetState() const { return id_to_state(m_xMenu->GetCurItemIdent()); }
     sal_uInt16 Execute(vcl::Window* pWindow, const Point& rPopupPos) { return m_xMenu->Execute(pWindow, rPopupPos); }
+    void HideSelectionType(const OString& rIdent) { m_xMenu->HideItem(m_xMenu->GetItemId(rIdent)); }
 };
 
 sal_uInt16 SelectionTypePopup::id_to_state(const OString& rIdent)
@@ -104,6 +110,12 @@ bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
 {
     SelectionTypePopup aPop(mnState);
     StatusBar& rStatusbar = GetStatusBar();
+
+    // Check if Calc is opened and hide block selection state if true tdf#122280
+    if ( GetSlotId() == SID_STATUS_SELMODE )
+    {
+        aPop.HideSelectionType("block");
+    }
 
     if (rEvt.IsMiddle() && aPop.Execute(&rStatusbar, rEvt.GetPosPixel()))
     {
