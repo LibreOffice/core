@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_53eb66af",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2450,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-04-16T12:32:02Z",
+      "side": 1,
+      "message": "let\u0027s",
+      "range": {
+        "startLine": 2450,
+        "startChar": 7,
+        "endLine": 2450,
+        "endChar": 11
+      },
+      "revId": "8a89a36e324762d7050a593df81bd968b1f4b86b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_93e1eed3",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2451,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-04-16T12:32:02Z",
+      "side": 1,
+      "message": "AXIS_PRIMARY_X; nSortIdx \u003c\u003d AXIS_SECONDARY_Y;",
+      "range": {
+        "startLine": 2451,
+        "startChar": 31,
+        "endLine": 2451,
+        "endChar": 47
+      },
+      "revId": "8a89a36e324762d7050a593df81bd968b1f4b86b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_33e6daea",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2827,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-04-16T12:32:02Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 2827,
+        "startChar": 93,
+        "endLine": 2827,
+        "endChar": 94
+      },
+      "revId": "8a89a36e324762d7050a593df81bd968b1f4b86b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_13cdde5c",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3440,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-04-16T12:32:02Z",
+      "side": 1,
+      "message": "bPrimaryAxisExists etc.",
+      "range": {
+        "startLine": 3439,
+        "startChar": 9,
+        "endLine": 3440,
+        "endChar": 30
+      },
+      "revId": "8a89a36e324762d7050a593df81bd968b1f4b86b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_f3cf1255",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3441,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-04-16T12:32:02Z",
+      "side": 1,
+      "message": "let\u0027s",
+      "range": {
+        "startLine": 3441,
+        "startChar": 7,
+        "endLine": 3441,
+        "endChar": 11
+      },
+      "revId": "8a89a36e324762d7050a593df81bd968b1f4b86b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
