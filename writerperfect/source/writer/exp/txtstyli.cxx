@@ -290,21 +290,21 @@ rtl::Reference<XMLImportContext> XMLStyleContext::CreateChildContext(
     const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "style:paragraph-properties")
-        return new XMLParagraphPropertiesContext(mrImport, *this);
+        return new XMLParagraphPropertiesContext(GetImport(), *this);
     if (rName == "style:text-properties")
-        return new XMLTextPropertiesContext(mrImport, *this);
+        return new XMLTextPropertiesContext(GetImport(), *this);
     if (rName == "style:table-cell-properties")
-        return new XMLTableCellPropertiesContext(mrImport, *this);
+        return new XMLTableCellPropertiesContext(GetImport(), *this);
     if (rName == "style:table-column-properties")
-        return new XMLTableColumnPropertiesContext(mrImport, *this);
+        return new XMLTableColumnPropertiesContext(GetImport(), *this);
     if (rName == "style:table-row-properties")
-        return new XMLTableRowPropertiesContext(mrImport, *this);
+        return new XMLTableRowPropertiesContext(GetImport(), *this);
     if (rName == "style:table-properties")
-        return new XMLTablePropertiesContext(mrImport, *this);
+        return new XMLTablePropertiesContext(GetImport(), *this);
     if (rName == "style:graphic-properties")
-        return new XMLGraphicPropertiesContext(mrImport, *this);
+        return new XMLGraphicPropertiesContext(GetImport(), *this);
     if (rName == "style:page-layout-properties")
-        return new XMLPageLayoutPropertiesContext(mrImport, *this);
+        return new XMLPageLayoutPropertiesContext(GetImport(), *this);
     return nullptr;
 }
 

@@ -27,9 +27,9 @@ rtl::Reference<XMLImportContext> XMLTextListItemContext::CreateChildContext(
     const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "text:p" || rName == "text:h")
-        return new XMLParaContext(mrImport);
+        return new XMLParaContext(GetImport());
     if (rName == "text:list")
-        return new XMLTextListContext(mrImport);
+        return new XMLTextListContext(GetImport());
     return nullptr;
 }
 

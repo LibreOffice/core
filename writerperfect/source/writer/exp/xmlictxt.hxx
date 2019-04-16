@@ -26,6 +26,7 @@ class XMLImportContext : public cppu::WeakImplHelper<css::xml::sax::XDocumentHan
 {
 public:
     XMLImportContext(XMLImport& rImport);
+    XMLImport& GetImport() { return mrImport; }
 
     virtual rtl::Reference<XMLImportContext>
     CreateChildContext(const OUString& rName,
@@ -44,7 +45,7 @@ public:
     void SAL_CALL
     setDocumentLocator(const css::uno::Reference<css::xml::sax::XLocator>& xLocator) override;
 
-protected:
+private:
     XMLImport& mrImport;
 };
 

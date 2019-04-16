@@ -25,6 +25,7 @@ public:
 
     void SAL_CALL characters(const OUString& rChars) override;
 
+private:
     XMLMetaDocumentContext& mrMeta;
 };
 
@@ -37,8 +38,8 @@ XMLDcTitleContext::XMLDcTitleContext(XMLImport& rImport, XMLMetaDocumentContext&
 void XMLDcTitleContext::characters(const OUString& rChars)
 {
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
-    if (!mrMeta.m_aPropertyList["dc:title"])
-        mrMeta.m_aPropertyList.insert("dc:title", librevenge::RVNGString(sCharU8.getStr()));
+    if (!mrMeta.GetPropertyList()["dc:title"])
+        mrMeta.GetPropertyList().insert("dc:title", librevenge::RVNGString(sCharU8.getStr()));
 }
 
 /// Handler for <dc:language>.
@@ -49,6 +50,7 @@ public:
 
     void SAL_CALL characters(const OUString& rChars) override;
 
+private:
     XMLMetaDocumentContext& mrMeta;
 };
 
@@ -61,8 +63,8 @@ XMLDcLanguageContext::XMLDcLanguageContext(XMLImport& rImport, XMLMetaDocumentCo
 void XMLDcLanguageContext::characters(const OUString& rChars)
 {
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
-    if (!mrMeta.m_aPropertyList["dc:language"])
-        mrMeta.m_aPropertyList.insert("dc:language", librevenge::RVNGString(sCharU8.getStr()));
+    if (!mrMeta.GetPropertyList()["dc:language"])
+        mrMeta.GetPropertyList().insert("dc:language", librevenge::RVNGString(sCharU8.getStr()));
 }
 
 /// Handler for <dc:date>.
@@ -73,6 +75,7 @@ public:
 
     void SAL_CALL characters(const OUString& rChars) override;
 
+private:
     XMLMetaDocumentContext& mrMeta;
 };
 
@@ -85,8 +88,8 @@ XMLDcDateContext::XMLDcDateContext(XMLImport& rImport, XMLMetaDocumentContext& r
 void XMLDcDateContext::characters(const OUString& rChars)
 {
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
-    if (!mrMeta.m_aPropertyList["dc:date"])
-        mrMeta.m_aPropertyList.insert("dc:date", librevenge::RVNGString(sCharU8.getStr()));
+    if (!mrMeta.GetPropertyList()["dc:date"])
+        mrMeta.GetPropertyList().insert("dc:date", librevenge::RVNGString(sCharU8.getStr()));
 }
 
 /// Handler for <meta:generator>.
@@ -97,6 +100,7 @@ public:
 
     void SAL_CALL characters(const OUString& rChars) override;
 
+private:
     XMLMetaDocumentContext& mrMeta;
 };
 
@@ -109,7 +113,7 @@ XMLMetaGeneratorContext::XMLMetaGeneratorContext(XMLImport& rImport, XMLMetaDocu
 void XMLMetaGeneratorContext::characters(const OUString& rChars)
 {
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
-    mrMeta.m_aPropertyList.insert("meta:generator", librevenge::RVNGString(sCharU8.getStr()));
+    mrMeta.GetPropertyList().insert("meta:generator", librevenge::RVNGString(sCharU8.getStr()));
 }
 
 /// Handler for <meta:initial-creator>.
@@ -120,6 +124,7 @@ public:
 
     void SAL_CALL characters(const OUString& rChars) override;
 
+private:
     XMLMetaDocumentContext& mrMeta;
 };
 
@@ -133,39 +138,39 @@ XMLMetaInitialCreatorContext::XMLMetaInitialCreatorContext(XMLImport& rImport,
 void XMLMetaInitialCreatorContext::characters(const OUString& rChars)
 {
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
-    if (!mrMeta.m_aPropertyList["meta:initial-creator"])
-        mrMeta.m_aPropertyList.insert("meta:initial-creator",
-                                      librevenge::RVNGString(sCharU8.getStr()));
+    if (!mrMeta.GetPropertyList()["meta:initial-creator"])
+        mrMeta.GetPropertyList().insert("meta:initial-creator",
+                                        librevenge::RVNGString(sCharU8.getStr()));
 }
 
 XMLMetaDocumentContext::XMLMetaDocumentContext(XMLImport& rImport)
     : XMLImportContext(rImport)
 {
-    librevenge::RVNGPropertyList::Iter it(mrImport.GetMetaData());
+    librevenge::RVNGPropertyList::Iter it(GetImport().GetMetaData());
     for (it.rewind(); it.next();)
         m_aPropertyList.insert(it.key(), it()->clone());
-    m_aPropertyList.insert("librevenge:cover-images", mrImport.GetCoverImages());
+    m_aPropertyList.insert("librevenge:cover-images", GetImport().GetCoverImages());
 }
 
 rtl::Reference<XMLImportContext> XMLMetaDocumentContext::CreateChildContext(
     const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "dc:title")
-        return new XMLDcTitleContext(mrImport, *this);
+        return new XMLDcTitleContext(GetImport(), *this);
     if (rName == "dc:language")
-        return new XMLDcLanguageContext(mrImport, *this);
+        return new XMLDcLanguageContext(GetImport(), *this);
     if (rName == "dc:date")
-        return new XMLDcDateContext(mrImport, *this);
+        return new XMLDcDateContext(GetImport(), *this);
     if (rName == "meta:generator")
-        return new XMLMetaGeneratorContext(mrImport, *this);
+        return new XMLMetaGeneratorContext(GetImport(), *this);
     if (rName == "meta:initial-creator")
-        return new XMLMetaInitialCreatorContext(mrImport, *this);
+        return new XMLMetaInitialCreatorContext(GetImport(), *this);
     return nullptr;
 }
 
 void XMLMetaDocumentContext::endElement(const OUString& /*rName*/)
 {
-    mrImport.GetGenerator().setDocumentMetaData(m_aPropertyList);
+    GetImport().GetGenerator().setDocumentMetaData(m_aPropertyList);
 }
 
 XMPParser::XMPParser(librevenge::RVNGPropertyList& rMetaData)
