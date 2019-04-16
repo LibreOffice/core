@@ -2228,26 +2228,34 @@ void  ScModule::UnregisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd )
         m_mapRefWindow.erase( nSlotId );
 }
 
-void ScModule::RegisterRefController( sal_uInt16 nSlotId, SfxModelessDialogController *pWnd )
+void ScModule::RegisterRefController(sal_uInt16 nSlotId, std::shared_ptr<SfxDialogController>& rWnd, weld::Window* pWndAncestor)
 {
-    std::vector<SfxModelessDialogController*> & rlRefWindow = m_mapRefController[nSlotId];
+    std::vector<std::pair<std::shared_ptr<SfxDialogController>, weld::Window*>> & rlRefWindow = m_mapRefController[nSlotId];
 
-    if( std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd ) == rlRefWindow.end() )
+    if (std::find_if(rlRefWindow.begin(), rlRefWindow.end(),
+                         [rWnd](const std::pair<std::shared_ptr<SfxDialogController>, weld::Window*>& rCandidate)
+                         {
+                             return rCandidate.first.get() == rWnd.get();
+                         }) == rlRefWindow.end())
     {
-        rlRefWindow.emplace_back(pWnd );
+        rlRefWindow.emplace_back(rWnd, pWndAncestor);
     }
 }
 
-void  ScModule::UnregisterRefController( sal_uInt16 nSlotId, SfxModelessDialogController *pWnd )
+void  ScModule::UnregisterRefController(sal_uInt16 nSlotId, std::shared_ptr<SfxDialogController>& rWnd)
 {
     auto iSlot = m_mapRefController.find( nSlotId );
 
     if( iSlot == m_mapRefController.end() )
         return;
 
-    std::vector<SfxModelessDialogController* > & rlRefWindow = iSlot->second;
+    std::vector<std::pair<std::shared_ptr<SfxDialogController>, weld::Window*>> & rlRefWindow = iSlot->second;
 
-    auto i = std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd );
+    auto i = std::find_if(rlRefWindow.begin(), rlRefWindow.end(),
+                            [rWnd](const std::pair<std::shared_ptr<SfxDialogController>, weld::Window*>& rCandidate)
+                            {
+                                return rCandidate.first.get() == rWnd.get();
+                            });
 
     if( i == rlRefWindow.end() )
         return;
@@ -2258,23 +2266,21 @@ void  ScModule::UnregisterRefController( sal_uInt16 nSlotId, SfxModelessDialogCo
         m_mapRefController.erase( nSlotId );
 }
 
-vcl::Window *  ScModule::Find1RefWindow( sal_uInt16 nSlotId, vcl::Window *pWndAncestor )
+std::shared_ptr<SfxDialogController> ScModule::Find1RefWindow(sal_uInt16 nSlotId, weld::Window *pWndAncestor)
 {
     if (!pWndAncestor)
         return nullptr;
 
-    auto iSlot = m_mapRefWindow.find( nSlotId );
+    auto iSlot = m_mapRefController.find( nSlotId );
 
-    if( iSlot == m_mapRefWindow.end() )
+    if( iSlot == m_mapRefController.end() )
         return nullptr;
 
-    std::vector<VclPtr<vcl::Window> > & rlRefWindow = iSlot->second;
-
-    while( vcl::Window *pParent = pWndAncestor->GetParent() ) pWndAncestor = pParent;
+    std::vector<std::pair<std::shared_ptr<SfxDialogController>, weld::Window*>> & rlRefWindow = iSlot->second;
 
     for (auto const& refWindow : rlRefWindow)
-        if ( pWndAncestor->IsWindowOrChild( refWindow, refWindow->IsSystemWindow() ) )
-            return refWindow;
+        if ( refWindow.second == pWndAncestor )
+            return refWindow.first;
 
     return nullptr;
 }

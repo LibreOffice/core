@@ -879,7 +879,7 @@ ScRefHandler::ScRefHandler( vcl::Window &rWindow, SfxBindings* pB, bool bBindRef
     if( bBindRef ) EnterRefMode();
 }
 
-ScRefHandler::ScRefHandler(SfxModelessDialogController& rController, SfxBindings* pB, bool bBindRef)
+ScRefHandler::ScRefHandler(SfxDialogController& rController, SfxBindings* pB, bool bBindRef)
     : m_pController(&rController)
     , m_bInRefMode(false)
     , m_aHelper(this, pB)
@@ -959,10 +959,6 @@ bool ScRefHandler::LeaveRefMode()
 
     lcl_HideAllReferences();
 
-    if( Dialog *pDlg = dynamic_cast<Dialog*>( m_rWindow.get() ) )
-        pDlg->SetModalInputMode(false);
-    if (m_pController)
-        m_pController->getDialog()->set_modal(false);
     SetDispatcherLock( false );         //! here and in DoClose ?
 
     ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();

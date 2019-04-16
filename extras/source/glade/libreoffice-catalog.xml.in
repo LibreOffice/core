@@ -290,10 +290,6 @@
                         generic-name="Reference Button" parent="GtkButton"
                         icon-name="widget-gtk-button"/>
 
-    <glade-widget-class title="Extended Reference Button" name="scuilo-ScRefButtonEx"
-                        generic-name="Extended Reference Button" parent="foruilo-RefButton"
-                        icon-name="widget-gtk-button"/>
-
     <glade-widget-class title="Reference Edit" name="foruilo-RefEdit"
                         generic-name="Reference Edit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
