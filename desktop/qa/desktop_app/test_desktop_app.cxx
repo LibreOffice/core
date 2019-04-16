@@ -110,6 +110,29 @@ void Test::testTdf100837() {
         CPPUNIT_ASSERT_EQUAL(OUString("bar"),  vForceOpenList[0]);
         CPPUNIT_ASSERT_EQUAL(OUString("baz"), vForceOpenList[1]);
     }
+
+    {
+        // 3. Test enocded URLs
+        TestSupplier supplier{ "foo", "ms-word:ofe%7Cu%7Cbar1", "ms-word:ofv%7Cu%7Cbar2", "ms-word:nft%7Cu%7Cbar3", "baz" };
+        desktop::CommandLineArgs args(supplier);
+        auto vOpenList = args.GetOpenList();
+        auto vForceOpenList = args.GetForceOpenList();
+        auto vViewList = args.GetViewList();
+        auto vForceNewList = args.GetForceNewList();
+        // 2 documents go to Open list: foo; baz
+        CPPUNIT_ASSERT_EQUAL(decltype(vOpenList.size())(2), vOpenList.size());
+        CPPUNIT_ASSERT_EQUAL(OUString("foo"), vOpenList[0]);
+        CPPUNIT_ASSERT_EQUAL(OUString("baz"), vOpenList[1]);
+        // 1 document goes to ForceOpen list: bar1
+        CPPUNIT_ASSERT_EQUAL(decltype(vForceOpenList.size())(1), vForceOpenList.size());
+        CPPUNIT_ASSERT_EQUAL(OUString("bar1"), vForceOpenList[0]);
+        // 1 document goes to View list: bar2
+        CPPUNIT_ASSERT_EQUAL(decltype(vViewList.size())(1), vViewList.size());
+        CPPUNIT_ASSERT_EQUAL(OUString("bar2"), vViewList[0]);
+        // 1 document goes to ForceNew list: bar3
+        CPPUNIT_ASSERT_EQUAL(decltype(vForceNewList.size())(1), vForceNewList.size());
+        CPPUNIT_ASSERT_EQUAL(OUString("bar3"), vForceNewList[0]);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
