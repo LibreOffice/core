@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_131e3e0c",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-04-16T11:24:04Z",
+      "side": 1,
+      "message": "You can add this to the member initializer list using the right order, ie.\n\n, mxChartModel( xModel )\n, mpURLTransformer( new URLTransformer )",
+      "range": {
+        "startLine": 385,
+        "startChar": 4,
+        "endLine": 385,
+        "endChar": 47
+      },
+      "revId": "c501e62c5d107d6483d70b7789e12d54e9aa28f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_d31776ed",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-04-16T11:24:04Z",
+      "side": 1,
+      "message": "missing indentation",
+      "range": {
+        "startLine": 477,
+        "startChar": 8,
+        "endLine": 479,
+        "endChar": 47
+      },
+      "revId": "c501e62c5d107d6483d70b7789e12d54e9aa28f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_73d22237",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-04-16T11:24:04Z",
+      "side": 1,
+      "message": "missing indentation",
+      "range": {
+        "startLine": 482,
+        "startChar": 8,
+        "endLine": 483,
+        "endChar": 16
+      },
+      "revId": "c501e62c5d107d6483d70b7789e12d54e9aa28f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
