@@ -2498,6 +2498,11 @@ public:
         return Point(current_x, current_y);
     }
 
+    virtual void set_centered_on_parent_geometry_request() override
+    {
+        gtk_window_set_position(m_pWindow, GTK_WIN_POS_CENTER_ALWAYS);
+    }
+
     virtual bool get_resizable() const override
     {
         return gtk_window_get_resizable(m_pWindow);
