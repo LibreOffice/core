@@ -350,10 +350,8 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
         {
             /* Ensure absolute path */
             ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
-            DWORD dwResult = 0;
-
-            dwResult = SearchPath (
-                nullptr, reinterpret_cast<LPCWSTR>(ppArgs[0]->buffer), L".exe", aBuffer.getBufSizeInSymbols(), ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer), nullptr);
+            DWORD dwResult
+                = GetModuleFileNameW(nullptr, SAL_W(aBuffer), aBuffer.getBufSizeInSymbols());
             if ((0 < dwResult) && (dwResult < aBuffer.getBufSizeInSymbols()))
             {
                 /* Replace argv[0] with its absolute path */
