@@ -139,9 +139,13 @@ Gtk3KDE5FilePickerIpc::~Gtk3KDE5FilePickerIpc()
         return;
 
     sendCommand(Commands::Quit);
-    TimeValue timeValue(std::chrono::milliseconds(100));
+    TimeValue timeValue(std::chrono::milliseconds(2000));
     if (osl_joinProcessWithTimeout(m_process, &timeValue) != osl_Process_E_None)
+    {
+        SAL_WARN("vcl.gtk3_kde5",
+                 "File picker process did not finish in time and will be terminated.");
         osl_terminateProcess(m_process);
+    }
 
     if (m_inputWrite)
         osl_closeFile(m_inputWrite);
