@@ -474,7 +474,6 @@ custom_widgets = [
     'ScPivotLayoutTreeList',
     'ScPivotLayoutTreeListData',
     'ScPivotLayoutTreeListLabel',
-    'ScRefButtonEx',
     'SdPageObjsTLB',
     'SearchBox',
     'SearchResultsBox',

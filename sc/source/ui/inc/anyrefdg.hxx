@@ -98,7 +98,7 @@ public:
     static              void enableInput(bool _bInput);
 
 public:
-    static bool         CanInputStart( const formula::RefEdit *pEdit ){ return !!pEdit; }
+    static bool         CanInputStart( const formula::WeldRefEdit *pEdit ){ return !!pEdit; }
     bool                CanInputDone( bool bForced ){   return (m_pRefEdit || m_pWeldRefEdit) && (bForced || !(m_pRefBtn || m_pWeldRefBtn));   }
 };
 
@@ -160,7 +160,7 @@ public:
 public:
     bool                EnterRefMode();
     bool                LeaveRefMode();
-    static inline bool  CanInputStart( const formula::RefEdit *pEdit );
+    static inline bool  CanInputStart( const formula::WeldRefEdit *pEdit );
     inline  bool        CanInputDone( bool bForced );
 };
 
@@ -312,7 +312,7 @@ struct ScAnyRefDlgController : ::ScRefHdlrControllerImpl<ScAnyRefDlgController, 
     }
 };
 
-inline bool ScRefHandler::CanInputStart( const formula::RefEdit *pEdit )
+inline bool ScRefHandler::CanInputStart( const formula::WeldRefEdit *pEdit )
 {
     return ScFormulaReferenceHelper::CanInputStart( pEdit );
 }
