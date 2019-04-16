@@ -172,6 +172,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),-LIB) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
+		$(if $(T_SYMBOLS),$(if $(filter Executable Library CppunitTest,$(TARGETTYPE)),$(gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO)),) \
 		$(if $(filter YES,$(LIBRARY_X64)),,$(if $(filter YES,$(TARGETGUI)), -SUBSYSTEM:WINDOWS$(MSC_SUBSYSTEM_VERSION), -SUBSYSTEM:CONSOLE$(MSC_SUBSYSTEM_VERSION))) \
 		$(if $(filter YES,$(LIBRARY_X64)), -MACHINE:X64) \
 		$(if $(filter YES,$(PE_X86)), -MACHINE:X86) \
@@ -226,6 +227,9 @@ gb_Windows_PE_TARGETTYPEFLAGS := \
 	-nxcompat \
 	-dynamicbase \
 	-manifest
+
+# link.exe in -LIB mode doesn't understand -debug, use it only for EXEs and DLLs
+gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO := -debug
 
 ifeq ($(ENABLE_LTO),TRUE)
 gb_Windows_PE_TARGETTYPEFLAGS += -LTCG
