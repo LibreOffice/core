@@ -491,17 +491,15 @@ namespace
 
                     if( pCSttNd && pCEndNd )
                         rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
-                    else
-                    {
-                        rDoc.getIDocumentContentOperations().DeleteRange( aPam );
-
-                        if( pCSttNd && !pCEndNd )
+                    else if (pCSttNd && !pCEndNd)
                         {
                             aPam.GetBound().nContent.Assign( nullptr, 0 );
                             aPam.GetBound( false ).nContent.Assign( nullptr, 0 );
-                            aPam.DeleteMark();
                             rDoc.getIDocumentContentOperations().DelFullPara( aPam );
                         }
+                    else
+                    {
+                        rDoc.getIDocumentContentOperations().DeleteRange(aPam);
                     }
                     rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
                 }
@@ -605,17 +603,15 @@ namespace
 
                     if( pCSttNd && pCEndNd )
                         rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
-                    else
-                    {
-                        rDoc.getIDocumentContentOperations().DeleteRange( aPam );
-
-                        if( pCSttNd && !pCEndNd )
+                    else if (pCSttNd && !pCEndNd)
                         {
                             aPam.GetBound().nContent.Assign( nullptr, 0 );
                             aPam.GetBound( false ).nContent.Assign( nullptr, 0 );
-                            aPam.DeleteMark();
                             rDoc.getIDocumentContentOperations().DelFullPara( aPam );
                         }
+                    else
+                    {
+                        rDoc.getIDocumentContentOperations().DeleteRange(aPam);
                     }
                     rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
                 }

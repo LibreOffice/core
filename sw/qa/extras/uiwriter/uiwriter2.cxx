@@ -33,6 +33,7 @@ public:
     void testTdf101534();
     void testTdf131684();
     void testTdf132236();
+    void testTdf109376_redline();
     void testTdf109376();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
@@ -41,6 +42,7 @@ public:
     CPPUNIT_TEST(testTdf101534);
     CPPUNIT_TEST(testTdf131684);
     CPPUNIT_TEST(testTdf132236);
+    CPPUNIT_TEST(testTdf109376_redline);
     CPPUNIT_TEST(testTdf109376);
     CPPUNIT_TEST_SUITE_END();
 
@@ -261,6 +263,57 @@ void SwUiWriterTest2::testTdf132236()
     assertXPath(pXmlDoc, "/root/page[1]/body/section[1]/txt", 1);
     assertXPath(pXmlDoc, "/root/page[1]/body/section[2]/txt", 2);
     assertXPath(pXmlDoc, "/root/page[1]/body/txt", 1);
+}
+
+void SwUiWriterTest2::testTdf109376_redline()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    // need 2 paragraphs to get to the bMoveNds case
+    pWrtShell->Insert("foo");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("bar");
+    pWrtShell->SplitNode();
+    pWrtShell->StartOfSection(false);
+
+    // add AT_PARA fly at 1st to be deleted node
+    SwFormatAnchor anchor(RndStdIds::FLY_AT_PARA);
+    anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
+    SfxItemSet flySet(pDoc->GetAttrPool(),
+                      svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+    flySet.Put(anchor);
+    SwFormatFrameSize size(ATT_MIN_SIZE, 1000, 1000);
+    flySet.Put(size); // set a size, else we get 1 char per line...
+    SwFrameFormat const* pFly = pWrtShell->NewFlyFrame(flySet, /*bAnchValid=*/true);
+    CPPUNIT_ASSERT(pFly != nullptr);
+
+    pWrtShell->SttEndDoc(false);
+    SwInsertTableOptions tableOpt(SwInsertTableFlags::DefaultBorder, 0);
+    const SwTable& rTable = pWrtShell->InsertTable(tableOpt, 1, 1);
+
+    pWrtShell->StartOfSection(false);
+    SwPaM pam(*pWrtShell->GetCursor()->GetPoint());
+    pam.SetMark();
+    pam.GetPoint()->nNode = *rTable.GetTableNode();
+    pam.GetPoint()->nContent.Assign(nullptr, 0);
+    pam.Exchange(); // same selection direction as in doc compare...
+
+    IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
+    rIDRA.SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
+    rIDRA.AppendRedline(new SwRangeRedline(nsRedlineType_t::REDLINE_DELETE, pam), true);
+    // this used to assert/crash with m_pAnchoredFlys mismatch because the
+    // fly was not deleted but its anchor was moved to the SwTableNode
+    rIDRA.AcceptAllRedline(true);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+    rUndoManager.Redo();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
 }
 
 void SwUiWriterTest2::testTdf109376()
