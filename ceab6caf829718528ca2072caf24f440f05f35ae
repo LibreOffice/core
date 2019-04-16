@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_98358dfa",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4247,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2019-04-16T07:31:21Z",
+      "side": 1,
+      "message": "Could this be changed to something more neutral, like c:\\temp\\test.xlsx ?",
+      "range": {
+        "startLine": 4247,
+        "startChar": 84,
+        "endLine": 4247,
+        "endChar": 126
+      },
+      "revId": "ceab6caf829718528ca2072caf24f440f05f35ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
