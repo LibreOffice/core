@@ -20,7 +20,7 @@
 #define INCLUDED_VCL_DIBTOOLS_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/salbtype.hxx>
+#include <vcl/Scanline.hxx>
 
 // predefines
 

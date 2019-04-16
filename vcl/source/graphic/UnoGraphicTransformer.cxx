@@ -25,7 +25,6 @@
 #include <vcl/image.hxx>
 #include <vcl/metaact.hxx>
 #include <svl/solar.hrc>
-#include <vcl/salbtype.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapDuoToneFilter.hxx>

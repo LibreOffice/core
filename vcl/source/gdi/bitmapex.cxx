@@ -29,7 +29,6 @@
 #include <unotools/resmgr.hxx>
 
 #include <vcl/ImageTree.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>

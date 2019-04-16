@@ -20,8 +20,8 @@
 #ifndef INCLUDED_VCL_INC_OCTREE_HXX
 #define INCLUDED_VCL_INC_OCTREE_HXX
 
-#include <vcl/salbtype.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/BitmapColor.hxx>
 
 struct OctreeNode
 {

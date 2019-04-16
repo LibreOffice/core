@@ -27,7 +27,6 @@
 #include <tools/vcompat.hxx>
 #include <tools/fract.hxx>
 #include <vcl/metaact.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
