@@ -737,7 +737,7 @@ private:
                 Note further: it patches the info struct
                 more than ones. E.g. the new temp URL is set
                 before the file is saved. And the old URL is removed
-                only if removing of the old file was successfully.
+                only if removing of the old file was successful.
                 If this method returns without an exception - everything
                 was OK. Otherwise the info struct can be analyzed to
                 get more information, e.g. when the problem occurs.

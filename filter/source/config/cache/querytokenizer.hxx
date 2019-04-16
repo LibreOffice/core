@@ -84,7 +84,7 @@ class QueryTokenizer : public std::unordered_map< OUString, OUString >
 
 
         /** @short  can be used to check if analyzing of given query
-                    was successfully or not.
+                    was successful or not.
          */
         bool valid() const;
 };

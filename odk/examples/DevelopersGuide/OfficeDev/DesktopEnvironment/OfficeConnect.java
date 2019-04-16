@@ -71,7 +71,7 @@ public class OfficeConnect
     /**
      * ctor
      * We try to open the connection in our ctor ... transparently for user.
-     * After it was successfully you will find an internal set member
+     * After it was successful you will find an internal set member
      * m_xRemoteContext which means remote component context of the connected office.
      * The context can be used to get the remote service manager from the office.
      * We made it private to support singleton pattern of these implementation.

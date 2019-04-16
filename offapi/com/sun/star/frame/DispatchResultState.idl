@@ -31,7 +31,7 @@ published constants DispatchResultState
      */
     const short FAILURE = 0;
 
-    /** indicates: dispatch was successfully
+    /** indicates: dispatch was successful
      */
     const short SUCCESS = 1;
 

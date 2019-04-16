@@ -172,7 +172,7 @@ void SAL_CALL ServiceHandler::dispatchWithNotification( const css::util::URL&   
 
     @return     <NULL/> if requested service couldn't be created successfully;
                 a valid reference otherwise. This return value can be used to indicate,
-                if dispatch was successfully or not.
+                if dispatch was successful.
 */
 css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( const css::util::URL& aURL )
 {

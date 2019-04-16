@@ -570,7 +570,7 @@ void XFrameImpl::initListeners()
     @param      "sTargetFrameName"  , name of target frame or special value like "_self", "_blank" ...
     @param      "nSearchFlags"      , optional arguments for frame search, if target is not a special one
     @param      "lArguments"        , optional arguments for loading
-    @return     A valid component reference, if loading was successfully.
+    @return     A valid component reference, if loading was successful.
                 A null reference otherwise.
 
     @onerror    We return a null reference.

@@ -45,7 +45,7 @@ published interface XJobListener : com::sun::star::lang::XEventListener
 
             <ul>
                 <li>deregister the job</li>
-                <li>let him registered although execution was successfully(!)</li>
+                <li>let him registered although execution was successful(!)</li>
                 <li>make some job specific data persistent inside the job configuration which
                     is provided by the executor.</li>
             </ul>

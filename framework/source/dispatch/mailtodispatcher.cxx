@@ -170,7 +170,7 @@ void SAL_CALL MailToDispatcher::dispatchWithNotification( const css::util::URL& 
 
     @return     <TRUE/> if dispatch could be started successfully
                 Note: Our internal used shell executor doesn't return any state value - so we must
-                believe that call was successfully.
+                believe that call was successful.
                 <FALSE/> if necessary resource couldn't be created or an exception was thrown.
 */
 bool MailToDispatcher::implts_dispatch( const css::util::URL& aURL )
