@@ -938,6 +938,8 @@ DECLARE_OOXMLEXPORT_TEST(testExtentValue, "fdo74605.docx")
     sal_Int32 nX = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:extent", "cx").toInt32();
     // This was negative.
     CPPUNIT_ASSERT(nX >= 0);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 2, getPages() );
 }
 
 // part of tdf#93676, word gives the frame in the exported .docx a huge height,
