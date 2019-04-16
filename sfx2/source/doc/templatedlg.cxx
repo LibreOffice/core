@@ -1387,6 +1387,11 @@ SfxTemplateSelectionDlg::~SfxTemplateSelectionDlg()
 
 short SfxTemplateSelectionDlg::run()
 {
+    // tdf#124597 at startup this dialog is launched before its parent window
+    // has taken its final size. The parent size request is processed during
+    // the dialogs event loop so configure this dialog to center to
+    // the parents pending geometry request
+    m_xDialog->set_centered_on_parent_geometry_request();
     return weld::GenericDialogController::run();
 }
 
