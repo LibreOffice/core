@@ -942,6 +942,8 @@ void CallbackFlushHandler::callback(const int type, const char* payload, void* d
 
 void CallbackFlushHandler::queue(const int type, const char* data)
 {
+    comphelper::ProfileZone aZone("CallbackFlushHander::queue");
+
     CallbackData aCallbackData(type, (data ? data : "(nil)"));
     const std::string& payload = aCallbackData.PayloadString;
     SAL_INFO("lok", "Queue: " << type << " : " << payload);
@@ -1391,6 +1393,8 @@ void CallbackFlushHandler::queue(const int type, const char* data)
 
 void CallbackFlushHandler::Invoke()
 {
+    comphelper::ProfileZone aZone("CallbackFlushHander::Invoke");
+
     if (m_pCallback && !m_bEventLatch)
     {
         std::unique_lock<std::mutex> lock(m_mutex);
@@ -1475,6 +1479,8 @@ void CallbackFlushHandler::removeViewStates(int viewId)
 
 static void doc_destroy(LibreOfficeKitDocument *pThis)
 {
+    comphelper::ProfileZone aZone("doc_destroy");
+
     SolarMutexGuard aGuard;
 
     LibLODocument_Impl *pDocument = static_cast<LibLODocument_Impl*>(pThis);
@@ -1564,6 +1570,8 @@ static LibreOfficeKitDocument* lo_documentLoad(LibreOfficeKit* pThis, const char
 
 static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis, const char* pURL, const char* pOptions)
 {
+    comphelper::ProfileZone aZone("lo_documentLoadWithOptions");
+
     SolarMutexGuard aGuard;
 
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
@@ -1672,6 +1680,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
 static int lo_runMacro(LibreOfficeKit* pThis, const char *pURL)
 {
+    comphelper::ProfileZone aZone("lo_runMacro");
+
     SolarMutexGuard aGuard;
 
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
@@ -1758,12 +1768,14 @@ static int lo_runMacro(LibreOfficeKit* pThis, const char *pURL)
 }
 
 static bool lo_signDocument(LibreOfficeKit* /*pThis*/,
-                                       const char* pURL,
-                                       const unsigned char* pCertificateBinary,
-                                       const int nCertificateBinarySize,
-                                       const unsigned char* pPrivateKeyBinary,
-                                       const int nPrivateKeyBinarySize)
+                            const char* pURL,
+                            const unsigned char* pCertificateBinary,
+                            const int nCertificateBinarySize,
+                            const unsigned char* pPrivateKeyBinary,
+                            const int nPrivateKeyBinarySize)
 {
+    comphelper::ProfileZone aZone("lo_signDocument");
+
     OUString aURL(getAbsoluteURL(pURL));
     if (aURL.isEmpty())
        return false;
@@ -1838,6 +1850,8 @@ static void lo_registerCallback (LibreOfficeKit* pThis,
 
 static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
 {
+    comphelper::ProfileZone aZone("doc_saveAs");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -2137,6 +2151,8 @@ static void doc_iniUnoCommands ()
 
 static int doc_getDocumentType (LibreOfficeKitDocument* pThis)
 {
+    comphelper::ProfileZone aZone("doc_getDocumentType");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -2177,6 +2193,8 @@ static int doc_getDocumentType (LibreOfficeKitDocument* pThis)
 
 static int doc_getParts (LibreOfficeKitDocument* pThis)
 {
+    comphelper::ProfileZone aZone("doc_getParts");
+
     SolarMutexGuard aGuard;
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
@@ -2191,6 +2209,8 @@ static int doc_getParts (LibreOfficeKitDocument* pThis)
 
 static int doc_getPart (LibreOfficeKitDocument* pThis)
 {
+    comphelper::ProfileZone aZone("doc_getPart");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -2207,6 +2227,8 @@ static int doc_getPart (LibreOfficeKitDocument* pThis)
 
 static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
 {
+    comphelper::ProfileZone aZone("doc_setPart");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -2223,6 +2245,8 @@ static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
 
 static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart)
 {
+    comphelper::ProfileZone aZone("doc_getPartInfo");
+
     SolarMutexGuard aGuard;
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -2242,6 +2266,8 @@ static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart)
 
 static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
 {
+    comphelper::ProfileZone aZone("doc_getPartPageRectangles");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -2264,6 +2290,8 @@ static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
 
 static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
 {
+    comphelper::ProfileZone aZone("doc_getPartName");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -2286,6 +2314,8 @@ static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
 
 static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart)
 {
+    comphelper::ProfileZone aZone("doc_getPartHash");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -2309,6 +2339,8 @@ static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart)
 static void doc_setPartMode(LibreOfficeKitDocument* pThis,
                             int nPartMode)
 {
+    comphelper::ProfileZone aZone("doc_setPartMode");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -2357,6 +2389,8 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
                           const int nTilePosX, const int nTilePosY,
                           const int nTileWidth, const int nTileHeight)
 {
+    comphelper::ProfileZone aZone("doc_paintTile");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -2490,6 +2524,8 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               const int nTilePosX, const int nTilePosY,
                               const int nTileWidth, const int nTileHeight)
 {
+    comphelper::ProfileZone aZone("doc_paintPartTile");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -2585,6 +2621,8 @@ static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
                                 long* pWidth,
                                 long* pHeight)
 {
+    comphelper::ProfileZone aZone("doc_getDocumentSize");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -2605,6 +2643,8 @@ static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
 static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
                                        const char* pArguments)
 {
+    comphelper::ProfileZone aZone("doc_initializeForRendering");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -2721,6 +2761,8 @@ static char* getRulerState(LibreOfficeKitDocument* pThis)
 
 static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
 {
+    comphelper::ProfileZone aZone("doc_postKeyEvent");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -2737,6 +2779,8 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
 
 static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsigned nWindowId, int nType, const char* pText)
 {
+    comphelper::ProfileZone aZone("doc_postWindowExtTextInputEvent");
+
     SolarMutexGuard aGuard;
     VclPtr<vcl::Window> pWindow;
     if (nWindowId == 0)
@@ -2777,6 +2821,8 @@ static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsig
 
 static void doc_postWindowKeyEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nCharCode, int nKeyCode)
 {
+    comphelper::ProfileZone aZone("doc_postWindowKeyEvent");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -2806,6 +2852,8 @@ static void doc_postWindowKeyEvent(LibreOfficeKitDocument* /*pThis*/, unsigned n
 
 static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOutput)
 {
+    comphelper::ProfileZone aZone("doc_renderShapeSelection");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -2910,6 +2958,8 @@ public:
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
 {
+    comphelper::ProfileZone aZone("doc_postUnoCommand");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -2989,6 +3039,8 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
 
 static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
+    comphelper::ProfileZone aZone("doc_postMouseEvent");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3005,6 +3057,8 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
 
 static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
+    comphelper::ProfileZone aZone("doc_postWindowMouseEvent");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3043,6 +3097,8 @@ static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned
 
 static void doc_postWindowGestureEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, const char* pType, int nX, int nY, int nOffset)
 {
+    comphelper::ProfileZone aZone("doc_postWindowGestureEvent");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3080,6 +3136,8 @@ static void doc_postWindowGestureEvent(LibreOfficeKitDocument* /*pThis*/, unsign
 
 static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int nX, int nY)
 {
+    comphelper::ProfileZone aZone("doc_setTextSelection");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3096,6 +3154,8 @@ static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int n
 
 static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMimeType, char** pUsedMimeType)
 {
+    comphelper::ProfileZone aZone("doc_getTextSelection");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3127,6 +3187,8 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
 
 static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, const char* pData, size_t nSize)
 {
+    comphelper::ProfileZone aZone("doc_paste");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3164,6 +3226,8 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
 
 static void doc_setGraphicSelection(LibreOfficeKitDocument* pThis, int nType, int nX, int nY)
 {
+    comphelper::ProfileZone aZone("doc_setGraphicSelection");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3180,6 +3244,8 @@ static void doc_setGraphicSelection(LibreOfficeKitDocument* pThis, int nType, in
 
 static void doc_resetSelection(LibreOfficeKitDocument* pThis)
 {
+    comphelper::ProfileZone aZone("doc_resetSelection");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3564,6 +3630,8 @@ static char* getTrackedChangeAuthors(LibreOfficeKitDocument* pThis)
 
 static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCommand)
 {
+    comphelper::ProfileZone aZone("doc_getCommandValues");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3738,6 +3806,8 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
 static void doc_setClientZoom(LibreOfficeKitDocument* pThis, int nTilePixelWidth, int nTilePixelHeight,
         int nTileTwipWidth, int nTileTwipHeight)
 {
+    comphelper::ProfileZone aZone("doc_setClientZoom");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3754,6 +3824,8 @@ static void doc_setClientZoom(LibreOfficeKitDocument* pThis, int nTilePixelWidth
 
 static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int nY, int nWidth, int nHeight)
 {
+    comphelper::ProfileZone aZone("doc_setClientVisibleArea");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3771,6 +3843,8 @@ static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int 
 
 static void doc_setOutlineState(LibreOfficeKitDocument* pThis, bool bColumn, int nLevel, int nIndex, bool bHidden)
 {
+    comphelper::ProfileZone aZone("doc_setOutlineState");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3787,6 +3861,8 @@ static void doc_setOutlineState(LibreOfficeKitDocument* pThis, bool bColumn, int
 
 static int doc_createView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 {
+    comphelper::ProfileZone aZone("doc_createView");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3796,6 +3872,8 @@ static int doc_createView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/
 
 static void doc_destroyView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId)
 {
+    comphelper::ProfileZone aZone("doc_destroyView");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3805,6 +3883,8 @@ static void doc_destroyView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis
 
 static void doc_setView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId)
 {
+    comphelper::ProfileZone aZone("doc_setView");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3814,6 +3894,8 @@ static void doc_setView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, 
 
 static int doc_getView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 {
+    comphelper::ProfileZone aZone("doc_getView");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3823,6 +3905,8 @@ static int doc_getView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 
 static int doc_getViewsCount(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 {
+    comphelper::ProfileZone aZone("doc_getViewsCount");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3832,6 +3916,8 @@ static int doc_getViewsCount(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThi
 
 static bool doc_getViewIds(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int* pArray, size_t nSize)
 {
+    comphelper::ProfileZone aZone("doc_getViewsIds");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3841,6 +3927,8 @@ static bool doc_getViewIds(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*
 
 static void doc_setViewLanguage(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId, const char* language)
 {
+    comphelper::ProfileZone aZone("doc_setViewLanguage");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3849,11 +3937,13 @@ static void doc_setViewLanguage(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*p
 }
 
 unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/,
-                    const char* pFontName,
-                    const char* pChar,
-                    int* pFontWidth,
-                    int* pFontHeight)
+                              const char* pFontName,
+                              const char* pChar,
+                              int* pFontWidth,
+                              int* pFontHeight)
 {
+    comphelper::ProfileZone aZone("doc_renderFont");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -3967,6 +4057,8 @@ static void doc_paintWindowDPI(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKW
                                const int nWidth, const int nHeight,
                                const double fDPIScale)
 {
+    comphelper::ProfileZone aZone("doc_paintWindowDPI");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -4031,6 +4123,8 @@ static void doc_paintWindowDPI(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKW
 
 static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nAction)
 {
+    comphelper::ProfileZone aZone("doc_postWindow");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -4056,6 +4150,8 @@ static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
                                   const unsigned char* pCertificateBinary, const int nCertificateBinarySize,
                                   const unsigned char* pPrivateKeyBinary, const int nPrivateKeySize)
 {
+    comphelper::ProfileZone aZone("doc_insertCertificate");
+
     if (!xContext.is())
         return false;
 
@@ -4126,6 +4222,8 @@ static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
 static bool doc_addCertificate(LibreOfficeKitDocument* pThis,
                                   const unsigned char* pCertificateBinary, const int nCertificateBinarySize)
 {
+    comphelper::ProfileZone aZone("doc_addCertificate");
+
     if (!xContext.is())
         return false;
 
@@ -4181,6 +4279,8 @@ static bool doc_addCertificate(LibreOfficeKitDocument* pThis,
 
 static int doc_getSignatureState(LibreOfficeKitDocument* pThis)
 {
+    comphelper::ProfileZone aZone("doc_getSignatureState");
+
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
     if (!pDocument->mxComponent.is())
@@ -4203,6 +4303,8 @@ static int doc_getSignatureState(LibreOfficeKitDocument* pThis)
 
 static char* lo_getError (LibreOfficeKit *pThis)
 {
+    comphelper::ProfileZone aZone("lo_getError");
+
     SolarMutexGuard aGuard;
 
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
@@ -4260,6 +4362,8 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
 
 static void lo_setOptionalFeatures(LibreOfficeKit* pThis, unsigned long long const features)
 {
+    comphelper::ProfileZone aZone("lo_setOptionalFeatures");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -4279,6 +4383,8 @@ static void lo_setOptionalFeatures(LibreOfficeKit* pThis, unsigned long long con
 static void lo_setDocumentPassword(LibreOfficeKit* pThis,
         const char* pURL, const char* pPassword)
 {
+    comphelper::ProfileZone aZone("lo_setDocumentPassword");
+
     SolarMutexGuard aGuard;
     if (gImpl)
         gImpl->maLastExceptionMsg.clear();
@@ -4411,6 +4517,8 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
 /// Used only by LibreOfficeKit when used by Online to pre-initialize
 static void preloadData()
 {
+    comphelper::ProfileZone aZone("preload data");
+
     // Create user profile in the temp directory for loading the dictionaries
     OUString sUserPath;
     rtl::Bootstrap::get("UserInstallation", sUserPath);
@@ -4675,8 +4783,11 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
             if (eStage == PRE_INIT)
             {
-                std::cerr << "Init vcl\n";
-                InitVCL();
+                {
+                    comphelper::ProfileZone aInit("Init vcl");
+                    std::cerr << "Init vcl\n";
+                    InitVCL();
+                }
 
                 // pre-load all component libraries.
                 if (!xContext.is())
@@ -4696,10 +4807,15 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 // 1) defaultBootstrap_InitialComponentContext()
                 // 2) comphelper::setProcessServiceFactory(xSFactory);
                 // 3) InitVCL()
-                aService->initialize({css::uno::makeAny<OUString>("preload")});
-                // Force load some modules
-                VclBuilder::preload();
-                VclAbstractDialogFactory::Create();
+                {
+                    comphelper::ProfileZone aInit("preload");
+                    aService->initialize({css::uno::makeAny<OUString>("preload")});
+                }
+                { // Force load some modules
+                    comphelper::ProfileZone aInit("preload modules");
+                    VclBuilder::preload();
+                    VclAbstractDialogFactory::Create();
+                }
 
                 preloadData();
 
