@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_859a01c3",
+        "filename": "sfx2/source/doc/docinsert.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-16T17:52:59Z",
+      "side": 1,
+      "message": "I don\u0027t like the filter name hard coded here. I think it would be better instead of the bool bOwn \u003d false declare a\n\n const OUString* pOwnFilter \u003d nullptr\n\nand if set let it act as a switch for SfxFilterFlags::OWN and m_pFileDlg-\u003eSetCurrentFilter() and pass it there.\n\nSo SwView_Impl::StartDocumentInserter() then would do something like\n\n OUString aFilter(\"ODF Text Document\");\n m_pDocInserter-\u003eStartExecuteModal( rEndDialogHdl, \u0026aFilter );\n\nThat way not only would the semantics be kept in Writer where they belong but also if needed other places could use it as well.\n\nNitpick: aFlags should be named eFlags because it is an enum.",
+      "revId": "306f904562847bd6134222cf6391a037274f9236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
