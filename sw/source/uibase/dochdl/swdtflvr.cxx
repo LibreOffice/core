@@ -74,7 +74,9 @@
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
+#include <prewin.h>
 #include <windows.h>
+#include <postwin.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <osl/file.hxx>
 #endif
