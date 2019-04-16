@@ -33,7 +33,7 @@ class SwTextRefMark;
 
 // ATT_REFMARK
 
-class SwFormatRefMark
+class SAL_DLLPUBLIC_RTTI SwFormatRefMark
     : public SfxPoolItem
     , public SwModify
     , public sw::BroadcasterMixin

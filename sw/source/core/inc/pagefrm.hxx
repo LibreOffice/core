@@ -37,7 +37,7 @@ class SwAnchoredObject;
 
 /// A page of the document layout. Upper frame is expected to be an SwRootFrame
 /// instance. At least an SwBodyFrame lower is expected.
-class SwPageFrame: public SwFootnoteBossFrame
+class SAL_DLLPUBLIC_RTTI SwPageFrame: public SwFootnoteBossFrame
 {
     friend class SwFrame;
 

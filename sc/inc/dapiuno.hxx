@@ -128,7 +128,7 @@ public:
 };
 
 //  ScDataPilotDescriptorBase is never instantiated directly
-class ScDataPilotDescriptorBase : public css::sheet::XDataPilotDescriptor,
+class SAL_DLLPUBLIC_RTTI ScDataPilotDescriptorBase : public css::sheet::XDataPilotDescriptor,
                                   public css::beans::XPropertySet,
                                   public css::sheet::XDataPilotDataLayoutFieldSupplier,
                                   public css::lang::XServiceInfo,

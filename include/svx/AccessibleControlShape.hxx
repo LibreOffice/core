@@ -66,7 +66,7 @@ namespace accessibility {
                                 >   AccessibleControlShape_Base;
 /** @descr
 */
-class AccessibleControlShape final
+class SAL_DLLPUBLIC_RTTI AccessibleControlShape final
         :public AccessibleShape
         ,public AccessibleControlShape_Base
 {

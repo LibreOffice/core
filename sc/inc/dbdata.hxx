@@ -58,7 +58,7 @@ protected:
     ScRangeList maDirtyTableColumnNames;
 };
 
-class ScDBData : public SvtListener, public ScRefreshTimer
+class SAL_DLLPUBLIC_RTTI ScDBData : public SvtListener, public ScRefreshTimer
 {
 private:
     std::unique_ptr<ScSortParam> mpSortParam;

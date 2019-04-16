@@ -123,7 +123,7 @@ enum SwJumpEditFormat
     JE_FMT_OLE
 };
 
-class SwPageNumberFieldType : public SwFieldType
+class SAL_DLLPUBLIC_RTTI SwPageNumberFieldType : public SwFieldType
 {
     SvxNumType      m_nNumberingType;
     bool            m_bVirtual;
@@ -196,7 +196,7 @@ public:
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
-class SwFileNameFieldType : public SwFieldType
+class SAL_DLLPUBLIC_RTTI SwFileNameFieldType : public SwFieldType
 {
     SwDoc *m_pDoc;
 public:
@@ -222,7 +222,7 @@ public:
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
-class SwTemplNameFieldType : public SwFieldType
+class SAL_DLLPUBLIC_RTTI SwTemplNameFieldType : public SwFieldType
 {
     SwDoc *m_pDoc;
 public:
@@ -244,7 +244,7 @@ public:
 };
 
 // Document statistics
-class SwDocStatFieldType : public SwFieldType
+class SAL_DLLPUBLIC_RTTI SwDocStatFieldType : public SwFieldType
 {
     SwDoc*          m_pDoc;
     SvxNumType      m_nNumberingType;
@@ -276,7 +276,7 @@ public:
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
-class SwHiddenTextFieldType : public SwFieldType
+class SAL_DLLPUBLIC_RTTI SwHiddenTextFieldType : public SwFieldType
 {
     bool m_bHidden;
 public:
@@ -375,7 +375,7 @@ public:
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
-class SwMacroFieldType : public SwFieldType
+class SAL_DLLPUBLIC_RTTI SwMacroFieldType : public SwFieldType
 {
     SwDoc* const m_pDoc;
 
@@ -423,7 +423,7 @@ public:
     static bool isScriptURL( const OUString& str );
 };
 
-class SwPostItFieldType : public SwFieldType
+class SAL_DLLPUBLIC_RTTI SwPostItFieldType : public SwFieldType
 {
 private:
     SwDoc* const mpDoc;
@@ -496,7 +496,7 @@ public:
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
-class SwDocInfoFieldType : public SwValueFieldType
+class SAL_DLLPUBLIC_RTTI SwDocInfoFieldType : public SwValueFieldType
 {
 public:
     SwDocInfoFieldType(SwDoc* pDc);
@@ -573,7 +573,7 @@ protected:
 };
 
 // Relative page numbering.
-class SwRefPageSetField : public SwField
+class SAL_DLLPUBLIC_RTTI SwRefPageSetField : public SwField
 {
     short   m_nOffset;
     bool    m_bOn;
@@ -680,7 +680,7 @@ public:
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
-class SwScriptField : public SwField
+class SAL_DLLPUBLIC_RTTI SwScriptField : public SwField
 {
     OUString m_sType;  ///< Type of Code (Java/VBScript/...)
     OUString m_sCode;  /**< Code as text.
@@ -711,7 +711,7 @@ public:
 };
 
 // Combined Character Fieldtype
-class SwCombinedCharFieldType : public SwFieldType
+class SAL_DLLPUBLIC_RTTI SwCombinedCharFieldType : public SwFieldType
 {
 public:
     SwCombinedCharFieldType();

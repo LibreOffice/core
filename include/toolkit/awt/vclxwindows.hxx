@@ -175,7 +175,7 @@ protected:
 
 //  class VCLXCheckBox
 
-class VCLXCheckBox :    public css::awt::XCheckBox,
+class SAL_DLLPUBLIC_RTTI VCLXCheckBox :    public css::awt::XCheckBox,
                         public css::awt::XButton,
                         public VCLXGraphicControl
 {
@@ -233,7 +233,7 @@ public:
 
 //  class VCLXRadioButton
 
-class VCLXRadioButton : public css::awt::XRadioButton,
+class SAL_DLLPUBLIC_RTTI VCLXRadioButton : public css::awt::XRadioButton,
                         public css::awt::XButton,
                         public VCLXGraphicControl
 {
@@ -562,7 +562,7 @@ public:
 
 //  class VCLXScrollBar
 
-class VCLXScrollBar :   public css::awt::XScrollBar,
+class SAL_DLLPUBLIC_RTTI VCLXScrollBar :   public css::awt::XScrollBar,
                         public VCLXWindow
 {
 private:
@@ -874,7 +874,7 @@ public:
 
 //  class VCLXFormattedSpinField
 
-class VCLXFormattedSpinField : public VCLXSpinField
+class SAL_DLLPUBLIC_RTTI VCLXFormattedSpinField : public VCLXSpinField
 {
 private:
     FormatterBase*  mpFormatter;

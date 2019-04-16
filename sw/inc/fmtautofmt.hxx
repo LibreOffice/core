@@ -22,7 +22,7 @@
 #include <svl/poolitem.hxx>
 #include <memory>
 
-class SwFormatAutoFormat: public SfxPoolItem
+class SAL_DLLPUBLIC_RTTI SwFormatAutoFormat: public SfxPoolItem
 {
     std::shared_ptr<SfxItemSet> mpHandle;
 

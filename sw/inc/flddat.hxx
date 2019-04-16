@@ -32,7 +32,7 @@ enum SwDateSubFormat
     DATE_VAR
 };
 
-class SwDateTimeFieldType : public SwValueFieldType
+class SAL_DLLPUBLIC_RTTI SwDateTimeFieldType : public SwValueFieldType
 {
 public:
         SwDateTimeFieldType(SwDoc* pDoc);

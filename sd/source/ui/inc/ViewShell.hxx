@@ -86,7 +86,7 @@ static const DrawModeFlags OUTPUT_DRAWMODE_CONTRAST
 
     <p>This class replaces the former ViewShell class.</p>
 */
-class ViewShell
+class SAL_DLLPUBLIC_RTTI ViewShell
     : public SfxShell
 {
 public:

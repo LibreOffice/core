@@ -19,12 +19,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,librevenge, \
     external/librevenge/rpath.patch \
 ))
 
-ifeq ($(COM_IS_CLANG),TRUE)
-ifneq ($(filter -fsanitize=%,$(CC)),)
+ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,librevenge, \
     external/librevenge/ubsan-visibility.patch \
 ))
-endif
 endif
 
 ifneq ($(OS),MACOSX)

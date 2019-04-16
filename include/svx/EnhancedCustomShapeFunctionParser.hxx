@@ -134,7 +134,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
 
 SVX_DLLPUBLIC void FillEquationParameter( const css::drawing::EnhancedCustomShapeParameter&, const sal_Int32, EnhancedCustomShapeEquation& );
 
-class ExpressionNode
+class SAL_DLLPUBLIC_RTTI ExpressionNode
 {
 public:
     virtual ~ExpressionNode();
