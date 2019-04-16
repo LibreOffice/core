@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="AdvancedFilterDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="advancedfilterdialog|AdvancedFilterDialog">Advanced Filter</property>
     <property name="resizable">False</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="visible">True</property>
@@ -101,7 +105,7 @@
                     <property name="vexpand">True</property>
                     <property name="column_spacing">12</property>
                     <child>
-                      <object class="foruilo-RefButton" id="rbfilterarea">
+                      <object class="GtkButton" id="rbfilterarea">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -118,9 +122,6 @@
                       <object class="GtkComboBoxText" id="lbfilterarea">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="width_chars">20</property>
-                        <property name="entry_text_column">0</property>
-                        <property name="id_column">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -128,10 +129,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefEdit" id="edfilterarea">
+                      <object class="GtkEntry" id="edfilterarea">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                         <property name="width_chars">30</property>
                       </object>
                       <packing>
@@ -303,9 +305,6 @@
                       <object class="GtkComboBoxText" id="lbcopyarea">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="width_chars">20</property>
-                        <property name="entry_text_column">0</property>
-                        <property name="id_column">1</property>
                         <accessibility>
                           <relation type="labelled-by" target="copyresult"/>
                         </accessibility>
@@ -321,7 +320,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefEdit" id="edcopyarea">
+                      <object class="GtkEntry" id="edcopyarea">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="margin_bottom">1</property>
@@ -342,7 +341,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefButton" id="rbcopyarea">
+                      <object class="GtkButton" id="rbcopyarea">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
