@@ -34,41 +34,6 @@
 ScFilterOptionsMgr::ScFilterOptionsMgr(
                                 ScViewData*         ptrViewData,
                                 const ScQueryParam& refQueryData,
-                                CheckBox*           refBtnCase,
-                                CheckBox*           refBtnRegExp,
-                                CheckBox*           refBtnHeader,
-                                CheckBox*           refBtnUnique,
-                                CheckBox*           refBtnCopyResult,
-                                CheckBox*           refBtnDestPers,
-                                ListBox*            refLbCopyArea,
-                                Edit*               refEdCopyArea,
-                                formula::RefButton*     refRbCopyArea,
-                                FixedText*          refFtDbAreaLabel,
-                                FixedText*          refFtDbArea,
-                                const OUString&     refStrUndefined )
-
-    :   pViewData       ( ptrViewData ),
-        pDoc            ( ptrViewData ? ptrViewData->GetDocument() : nullptr ),
-        pBtnCase        ( refBtnCase ),
-        pBtnRegExp      ( refBtnRegExp ),
-        pBtnHeader      ( refBtnHeader ),
-        pBtnUnique      ( refBtnUnique ),
-        pBtnCopyResult  ( refBtnCopyResult ),
-        pBtnDestPers    ( refBtnDestPers ),
-        pLbCopyArea      ( refLbCopyArea ),
-        pEdCopyArea      ( refEdCopyArea ),
-        pRbCopyArea      ( refRbCopyArea ),
-        pFtDbAreaLabel  ( refFtDbAreaLabel ),
-        pFtDbArea       ( refFtDbArea ),
-        rStrUndefined   ( refStrUndefined ),
-        rQueryData      ( refQueryData )
-{
-    Init();
-}
-
-FilterOptionsMgr::FilterOptionsMgr(
-                                ScViewData*         ptrViewData,
-                                const ScQueryParam& refQueryData,
                                 weld::CheckButton* refBtnCase,
                                 weld::CheckButton* refBtnRegExp,
                                 weld::CheckButton* refBtnHeader,
@@ -103,14 +68,6 @@ FilterOptionsMgr::FilterOptionsMgr(
 
 ScFilterOptionsMgr::~ScFilterOptionsMgr()
 {
-    const sal_Int32 nEntries = pLbCopyArea->GetEntryCount();
-
-    for ( sal_Int32 i=2; i<nEntries; i++ )
-        delete static_cast<OUString*>(pLbCopyArea->GetEntryData( i ));
-}
-
-FilterOptionsMgr::~FilterOptionsMgr()
-{
 }
 
 void ScFilterOptionsMgr::Init()
@@ -118,128 +75,9 @@ void ScFilterOptionsMgr::Init()
 //moggi:TODO
     OSL_ENSURE( pViewData && pDoc, "Init failed :-/" );
 
-    pLbCopyArea->SetSelectHdl  ( LINK( this, ScFilterOptionsMgr, LbAreaSelHdl ) );
+    pLbCopyArea->connect_changed( LINK( this, ScFilterOptionsMgr, LbAreaSelHdl ) );
     pEdCopyArea->SetModifyHdl  ( LINK( this, ScFilterOptionsMgr, EdAreaModifyHdl ) );
-    pBtnCopyResult->SetToggleHdl ( LINK( this, ScFilterOptionsMgr, BtnCopyResultHdl ) );
-
-    pBtnCase   ->Check( rQueryData.bCaseSens );
-    pBtnHeader ->Check( rQueryData.bHasHeader );
-    pBtnRegExp ->Check( rQueryData.eSearchType == utl::SearchParam::SearchType::Regexp );
-    pBtnUnique ->Check( !rQueryData.bDuplicate );
-
-    if ( pViewData && pDoc )
-    {
-        OUString theAreaStr;
-        ScRange         theCurArea ( ScAddress( rQueryData.nCol1,
-                                                rQueryData.nRow1,
-                                                pViewData->GetTabNo() ),
-                                     ScAddress( rQueryData.nCol2,
-                                                rQueryData.nRow2,
-                                                pViewData->GetTabNo() ) );
-        ScDBCollection* pDBColl     = pDoc->GetDBCollection();
-        OUString theDbArea;
-        OUString   theDbName(STR_DB_LOCAL_NONAME);
-        const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-
-        theAreaStr = theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDoc, eConv);
-
-        // fill the target area list
-
-        pLbCopyArea->Clear();
-        pLbCopyArea->InsertEntry( rStrUndefined, 0 );
-
-        ScAreaNameIterator aIter( pDoc );
-        OUString aName;
-        ScRange aRange;
-        while ( aIter.Next( aName, aRange ) )
-        {
-            const sal_Int32 nInsert = pLbCopyArea->InsertEntry( aName );
-
-            OUString aRefStr(aRange.aStart.Format(ScRefFlags::ADDR_ABS_3D, pDoc, eConv));
-            pLbCopyArea->SetEntryData( nInsert, new OUString( aRefStr ) );
-        }
-
-        pBtnDestPers->Check();         // always on when called
-        pLbCopyArea->SelectEntryPos( 0 );
-        pEdCopyArea->SetText( EMPTY_OUSTRING );
-
-        /*
-         * Check whether the transferred area is a database area:
-         */
-
-        theDbArea = theAreaStr;
-
-        if ( pDBColl )
-        {
-            ScAddress&  rStart  = theCurArea.aStart;
-            ScAddress&  rEnd    = theCurArea.aEnd;
-            const ScDBData* pDBData = pDBColl->GetDBAtArea(
-                rStart.Tab(), rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row());
-
-            if ( pDBData )
-            {
-                pBtnHeader->Check( pDBData->HasHeader() );
-                theDbName = pDBData->GetName();
-
-                if ( theDbName == STR_DB_LOCAL_NONAME )
-                    pBtnHeader->Enable();
-                else
-                    pBtnHeader->Disable();
-            }
-        }
-
-        if ( theDbName != STR_DB_LOCAL_NONAME )
-        {
-            theDbArea += " (" + theDbName + ")";
-
-            pFtDbArea->SetText( theDbArea );
-        }
-        else
-        {
-            pFtDbAreaLabel->SetText( OUString() );
-            pFtDbArea->SetText( OUString() );
-        }
-
-        // position to copy to:
-
-        if ( !rQueryData.bInplace )
-        {
-            OUString aString =
-                ScAddress( rQueryData.nDestCol,
-                           rQueryData.nDestRow,
-                           rQueryData.nDestTab
-                         ).Format(ScRefFlags::ADDR_ABS_3D, pDoc, eConv);
-
-            pBtnCopyResult->Check();
-            pEdCopyArea->SetText( aString );
-            EdAreaModifyHdl( *pEdCopyArea );
-            pLbCopyArea->Enable();
-            pEdCopyArea->Enable();
-            pRbCopyArea->Enable();
-            pBtnDestPers->Enable();
-        }
-        else
-        {
-            pBtnCopyResult->Check( false );
-            pEdCopyArea->SetText( EMPTY_OUSTRING );
-            pLbCopyArea->Disable();
-            pEdCopyArea->Disable();
-            pRbCopyArea->Disable();
-            pBtnDestPers->Disable();
-        }
-    }
-    else
-        pEdCopyArea->SetText( EMPTY_OUSTRING );
-}
-
-void FilterOptionsMgr::Init()
-{
-//moggi:TODO
-    OSL_ENSURE( pViewData && pDoc, "Init failed :-/" );
-
-    pLbCopyArea->connect_changed( LINK( this, FilterOptionsMgr, LbAreaSelHdl ) );
-    pEdCopyArea->SetModifyHdl  ( LINK( this, FilterOptionsMgr, EdAreaModifyHdl ) );
-    pBtnCopyResult->connect_toggled( LINK( this, FilterOptionsMgr, BtnCopyResultHdl ) );
+    pBtnCopyResult->connect_toggled( LINK( this, ScFilterOptionsMgr, BtnCopyResultHdl ) );
 
     pBtnCase->set_active( rQueryData.bCaseSens );
     pBtnHeader->set_active( rQueryData.bHasHeader );
@@ -346,21 +184,7 @@ void FilterOptionsMgr::Init()
         pEdCopyArea->SetText( EMPTY_OUSTRING );
 }
 
-
 bool ScFilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
-{
-    OUString aPosStr( rPosStr );
-    sal_Int32 nColonPos = aPosStr.indexOf( ':' );
-
-    if ( -1 != nColonPos )
-        aPosStr = aPosStr.copy( 0, nColonPos );
-
-    ScRefFlags nResult = ScAddress().Parse( aPosStr, pDoc, pDoc->GetAddressConvention() );
-
-    return (nResult & ScRefFlags::VALID) == ScRefFlags::VALID;
-}
-
-bool FilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
 {
     OUString aPosStr( rPosStr );
     sal_Int32 nColonPos = aPosStr.indexOf( ':' );
@@ -375,21 +199,7 @@ bool FilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
 
 // Handler:
 
-IMPL_LINK( ScFilterOptionsMgr, LbAreaSelHdl, ListBox&, rLb, void )
-{
-    if ( &rLb == pLbCopyArea )
-    {
-        OUString aString;
-        const sal_Int32 nSelPos = pLbCopyArea->GetSelectedEntryPos();
-
-        if ( nSelPos > 0 )
-            aString = *static_cast<OUString*>(pLbCopyArea->GetEntryData( nSelPos ));
-
-        pEdCopyArea->SetText( aString );
-    }
-}
-
-IMPL_LINK( FilterOptionsMgr, LbAreaSelHdl, weld::ComboBox&, rLb, void )
+IMPL_LINK( ScFilterOptionsMgr, LbAreaSelHdl, weld::ComboBox&, rLb, void )
 {
     if ( &rLb == pLbCopyArea )
     {
@@ -403,34 +213,7 @@ IMPL_LINK( FilterOptionsMgr, LbAreaSelHdl, weld::ComboBox&, rLb, void )
     }
 }
 
-
-IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, Edit&, rEd, void )
-{
-    if ( &rEd == pEdCopyArea )
-    {
-        OUString  theCurPosStr = rEd.GetText();
-        ScRefFlags  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
-
-        if ( (nResult & ScRefFlags::VALID) == ScRefFlags::VALID)
-        {
-            const sal_Int32 nCount = pLbCopyArea->GetEntryCount();
-
-            for ( sal_Int32 i=2; i<nCount; ++i )
-            {
-                OUString* pStr = static_cast<OUString*>(pLbCopyArea->GetEntryData( i ));
-                if (theCurPosStr == *pStr)
-                {
-                    pLbCopyArea->SelectEntryPos( i );
-                    return;
-                }
-            }
-
-        }
-        pLbCopyArea->SelectEntryPos( 0 );
-    }
-}
-
-IMPL_LINK( FilterOptionsMgr, EdAreaModifyHdl, formula::WeldRefEdit&, rEd, void )
+IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, formula::WeldRefEdit&, rEd, void )
 {
     if ( &rEd == pEdCopyArea )
     {
@@ -456,29 +239,7 @@ IMPL_LINK( FilterOptionsMgr, EdAreaModifyHdl, formula::WeldRefEdit&, rEd, void )
     }
 }
 
-IMPL_LINK( ScFilterOptionsMgr, BtnCopyResultHdl, CheckBox&, rBox, void )
-{
-    if ( &rBox == pBtnCopyResult )
-    {
-        if ( rBox.IsChecked() )
-        {
-            pBtnDestPers->Enable();
-            pLbCopyArea->Enable();
-            pEdCopyArea->Enable();
-            pRbCopyArea->Enable();
-            pEdCopyArea->GrabFocus();
-        }
-        else
-        {
-            pBtnDestPers->Disable();
-            pLbCopyArea->Disable();
-            pEdCopyArea->Disable();
-            pRbCopyArea->Disable();
-        }
-    }
-}
-
-IMPL_LINK( FilterOptionsMgr, BtnCopyResultHdl, weld::ToggleButton&, rBox, void )
+IMPL_LINK( ScFilterOptionsMgr, BtnCopyResultHdl, weld::ToggleButton&, rBox, void )
 {
     if ( &rBox == pBtnCopyResult )
     {
