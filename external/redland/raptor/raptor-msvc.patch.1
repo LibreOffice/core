@@ -8,3 +8,18 @@
  void raptor_sort_r(void *base, size_t nel, size_t width, raptor_data_compare_arg_handler compar, void *user_data);
  
  
+--- raptor/src/raptor_uri.c	2016-08-26 23:45:34.543400074 +0200
++++ raptor/src/raptor_uri.c	2016-08-26 23:45:40.479399614 +0200
+@@ -51,6 +51,12 @@
+ #include <sys/stat.h>
+ #endif
+ 
++#if !defined(HAVE_ACCESS) && defined(HAVE__ACCESS)
++#define access(p,m)		_access(p,m)
++#define R_OK 4
++#define W_OK 2
++#endif
++
+ /* Raptor includes */
+ #include "raptor2.h"
+ #include "raptor_internal.h"
