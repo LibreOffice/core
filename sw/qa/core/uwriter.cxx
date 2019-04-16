@@ -8,13 +8,9 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 #include <test/bootstrapfixture.hxx>
 
 #include <com/sun/star/i18n/WordType.hpp>
-
-#include <rtl/strbuf.hxx>
-#include <osl/file.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
@@ -26,10 +22,8 @@
 #include <editeng/langitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 
-#include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
 
 #include <xmloff/odffields.hxx>
 
@@ -44,11 +38,8 @@
 #include <docstat.hxx>
 #include <docufld.hxx>
 #include <fmtanchr.hxx>
-#include <init.hxx>
 #include <ndtxt.hxx>
-#include <shellio.hxx>
 #include <shellres.hxx>
-#include <swcrsr.hxx>
 #include <swscanner.hxx>
 #include <swmodule.hxx>
 #include <swdll.hxx>
@@ -61,7 +52,6 @@
 #include <redline.hxx>
 #include <docary.hxx>
 #include <modeltoviewhelper.hxx>
-#include <scriptinfo.hxx>
 #include <IMark.hxx>
 #include <ring.hxx>
 #include <calbck.hxx>

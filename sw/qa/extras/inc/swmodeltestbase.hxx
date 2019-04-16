@@ -27,10 +27,6 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
-#include <com/sun/star/task/XJob.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdb/DatabaseContext.hpp>
-#include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
 
 #include <test/bootstrapfixture.hxx>
@@ -39,17 +35,12 @@
 #include <unotest/macros_test.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/byteseq.hxx>
 #include <sfx2/app.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <unotools/tempfile.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <dbmgr.hxx>
-#include <unoprnms.hxx>
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>

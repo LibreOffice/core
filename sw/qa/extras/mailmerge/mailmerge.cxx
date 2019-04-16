@@ -14,27 +14,21 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/style/PageStyleLayout.hpp>
-#include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
-#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/MailMergeType.hpp>
-#include <com/sun/star/sdb/XDocumentDataSource.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
+#include <com/sun/star/task/XJob.hpp>
 
 #include <tools/urlobj.hxx>
+#include <unotools/localfilehelper.hxx>
 
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
-#include <swdtflvr.hxx>
-#include <view.hxx>
-#include <edtwin.hxx>
-#include <olmenu.hxx>
-#include <cmdid.h>
 #include <pagefrm.hxx>
+#include <unoprnms.hxx>
+#include <dbmgr.hxx>
 
 /**
  * Maps database URIs to the registered database names for quick lookups

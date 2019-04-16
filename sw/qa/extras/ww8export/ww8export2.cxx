@@ -9,14 +9,12 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
-#include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
@@ -26,11 +24,9 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 
 #include <ftninfo.hxx>
-#include <pagedesc.hxx>
 #include <svx/svdpage.hxx>
 #include <drawdoc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-#include <editeng/unoprnms.hxx>
 
 class Test : public SwModelTestBase
 {

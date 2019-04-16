@@ -9,28 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/awt/XBitmap.hpp>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#include <com/sun/star/style/PageStyleLayout.hpp>
-#include <com/sun/star/table/BorderLine2.hpp>
-#include <com/sun/star/table/ShadowFormat.hpp>
-#include <com/sun/star/text/FontEmphasis.hpp>
-#include <com/sun/star/text/RelOrientation.hpp>
-#include <com/sun/star/text/TableColumnSeparator.hpp>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
-#include <com/sun/star/text/XFootnotesSupplier.hpp>
-#include <com/sun/star/text/XPageCursor.hpp>
-#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
-#include <com/sun/star/view/XViewSettingsSupplier.hpp>
-#include <com/sun/star/text/RubyAdjust.hpp>
-#include <com/sun/star/text/RubyPosition.hpp>
-#include <com/sun/star/text/XTextColumns.hpp>
-#include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 
 /**

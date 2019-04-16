@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <stdexcept>
-
 #include <sal/types.h>
 
 #include <rtl/ustring.hxx>
@@ -17,12 +15,9 @@
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 #include <test/bootstrapfixture.hxx>
 
 #include <swdll.hxx>
-#include <swtypes.hxx>
-#include <SwStyleNameMapper.hxx>
 
 using namespace sw;
 

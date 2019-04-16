@@ -10,13 +10,10 @@
 #include <memory>
 #include <swmodeltestbase.hxx>
 
-#include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-#include <rtl/byteseq.hxx>
 
 #include <swmodule.hxx>
 #include <swdll.hxx>

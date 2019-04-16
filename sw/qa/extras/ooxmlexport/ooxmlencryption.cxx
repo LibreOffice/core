@@ -8,7 +8,6 @@
  */
 
 #include <swmodeltestbase.hxx>
-#include <string>
 
 class Test : public SwModelTestBase
 {
