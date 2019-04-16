@@ -138,6 +138,8 @@ void SfxRedactionHelper::addPagesToDraw(uno::Reference<XComponent>& xComponent,
             xFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xShapeProperySet(xShape, uno::UNO_QUERY);
         xShapeProperySet->setPropertyValue("Graphic", uno::Any(xGraph));
+        xShapeProperySet->setPropertyValue("MoveProtect", uno::Any(true));
+        xShapeProperySet->setPropertyValue("SizeProtect", uno::Any(true));
 
         // Set size and position
         xShape->setSize(
