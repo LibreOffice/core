@@ -157,7 +157,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 
     // let options be initialized:
 
-    pOptionsMgr.reset( new FilterOptionsMgr(
+    pOptionsMgr.reset( new ScFilterOptionsMgr(
                             pViewData,
                             theQueryData,
                             m_xBtnCase.get(),

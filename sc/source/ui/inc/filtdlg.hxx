@@ -33,7 +33,7 @@
 #include <vector>
 #include <map>
 
-class FilterOptionsMgr;
+class ScFilterOptionsMgr;
 class ScViewData;
 class ScDocument;
 class ScQueryItem;
@@ -74,7 +74,7 @@ private:
     const OUString aStrNotEmpty;
     const OUString aStrColumn;
 
-    std::unique_ptr<FilterOptionsMgr> pOptionsMgr;
+    std::unique_ptr<ScFilterOptionsMgr> pOptionsMgr;
 
     const sal_uInt16        nWhichQuery;
     ScQueryParam        theQueryData;
@@ -174,7 +174,7 @@ public:
 private:
     const OUString aStrUndefined;
 
-    std::unique_ptr<FilterOptionsMgr> pOptionsMgr;
+    std::unique_ptr<ScFilterOptionsMgr> pOptionsMgr;
 
     const sal_uInt16    nWhichQuery;
     const ScQueryParam  theQueryData;
