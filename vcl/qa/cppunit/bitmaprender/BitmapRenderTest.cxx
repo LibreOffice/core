@@ -13,13 +13,16 @@
 #include <vcl/virdev.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmapaccess.hxx>
-#include <vcl/wrkwin.hxx>
+#include <vcl/svapp.hxx>
 
 #include <tools/stream.hxx>
 #include <vcl/pngwrite.hxx>
 
 #include <vcl/graphicfilter.hxx>
 #include <vcl/filter/PngImageReader.hxx>
+
+#include <svdata.hxx>
+#include <salinst.hxx>
 
 static OUString const gaDataUrl = "/vcl/qa/cppunit/bitmaprender/data/";
 
@@ -38,13 +41,13 @@ public:
 
     void testTdf104141();
     void testTdf113918();
-    void testDrawBitmap32();
+    void testDrawAlphaBitmapEx();
     void testTdf116888();
 
     CPPUNIT_TEST_SUITE(BitmapRenderTest);
     CPPUNIT_TEST(testTdf104141);
     CPPUNIT_TEST(testTdf113918);
-    CPPUNIT_TEST(testDrawBitmap32);
+    CPPUNIT_TEST(testDrawAlphaBitmapEx);
     CPPUNIT_TEST(testTdf116888);
 
     CPPUNIT_TEST_SUITE_END();
@@ -101,7 +104,7 @@ void BitmapRenderTest::testTdf113918()
     CPPUNIT_ASSERT(aColor.GetGreen() > 100);
 }
 
-void BitmapRenderTest::testDrawBitmap32()
+void BitmapRenderTest::testDrawAlphaBitmapEx()
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     pVDev->SetOutputSizePixel(Size(8, 8));
@@ -117,10 +120,29 @@ void BitmapRenderTest::testDrawBitmap32()
     vcl::PngImageReader aPngReader(aFileStream);
     BitmapEx aBitmapEx;
     aPngReader.read(aBitmapEx);
+
+    // Check backend capabilities, if the backend support 32-bit bitmap
+    auto pBackendCapabilities = ImplGetSVData()->mpDefInst->GetBackendCapabilities();
+    if (pBackendCapabilities->mbSupportsBitmap32)
+    {
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(32), aBitmapEx.GetBitmap().GetBitCount());
+    }
+    else
+    {
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(24), aBitmapEx.GetBitmap().GetBitCount());
+        CPPUNIT_ASSERT_EQUAL(true, aBitmapEx.IsAlpha());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), aBitmapEx.GetAlpha().GetBitCount());
+    }
+
+    // Check the bitmap has pixels we expect
+    CPPUNIT_ASSERT_EQUAL(Color(0xFF, 0x00, 0x00, 0x00), aBitmapEx.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0xFF, 0xFF, 0x00), aBitmapEx.GetPixelColor(1, 1));
+    CPPUNIT_ASSERT_EQUAL(Color(0x7F, 0x00, 0xFF, 0x00), aBitmapEx.GetPixelColor(2, 2));
+
     pVDev->DrawBitmapEx(Point(), aBitmapEx);
 
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(0, 0)));
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, pVDev->GetPixel(Point(1, 1)));
+    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0xFF, 0xFF, 0xFF), pVDev->GetPixel(Point(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0xFF, 0xFF, 0x00), pVDev->GetPixel(Point(1, 1)));
 
 // sometimes on Windows we get rounding error in blending so let's ignore this on Windows for now.
 #if !defined(_WIN32)
