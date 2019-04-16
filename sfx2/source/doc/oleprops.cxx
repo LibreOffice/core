@@ -619,7 +619,7 @@ void SfxOleThumbnailProperty::ImplSave( SvStream& rStrm )
         http://msdn.microsoft.com/library/default.asp?url=/library/en-us/stg/stg/propvariant.asp
         http://jakarta.apache.org/poi/hpsf/thumbnails.html
         http://linux.com.hk/docs/poi/org/apache/poi/hpsf/Thumbnail.html
-        http://sparks.discreet.com/knowledgebase/public/solutions/ExtractThumbnailImg.htm
+        https://web.archive.org/web/20060126202945/http://sparks.discreet.com/knowledgebase/public/solutions/ExtractThumbnailImg.htm
      */
     if( IsValid() )
     {
