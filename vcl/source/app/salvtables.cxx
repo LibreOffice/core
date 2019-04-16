@@ -970,6 +970,18 @@ public:
         return m_xWindow->GetPosPixel();
     }
 
+    virtual void set_centered_on_parent_geometry_request() override
+    {
+        if (vcl::Window* pParent = m_xWidget->GetParent())
+        {
+            Size aParentGeometry(pParent->GetSizePixel());
+            Size aGeometry(m_xWidget->get_preferred_size());
+            auto nX = (aParentGeometry.Width() - aGeometry.Width()) / 2;
+            auto nY = (aParentGeometry.Height() - aGeometry.Height()) / 2;
+            m_xWidget->SetPosPixel(Point(nX, nY));
+        }
+    }
+
     virtual bool get_resizable() const override
     {
         return m_xWindow->GetStyle() & WB_SIZEABLE;
