@@ -1473,7 +1473,7 @@ void ScModule::SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm )
     //TODO: Move reference dialog handling to view
     //      Just keep function autopilot here for references to other documents
     if ( m_nCurRefDlgId == 0 || ( nId == m_nCurRefDlgId && !bVis )
-       || ( comphelper::LibreOfficeKit::isActive() && m_nCurRefDlgId == SID_OPENDLG_FUNCTION ) )
+       || ( comphelper::LibreOfficeKit::isActive() ) )
     {
         if ( !pViewFrm )
             pViewFrm = SfxViewFrame::Current();
