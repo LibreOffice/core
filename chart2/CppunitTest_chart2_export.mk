@@ -134,4 +134,6 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,chart2_export, \
 
 $(eval $(call gb_CppunitTest_use_configuration,chart2_export))
 
+$(call gb_CppunitTest_get_target,chart2_export): $(call gb_Package_get_target,postprocess_images)
+
 # vim: set noet sw=4 ts=4:
