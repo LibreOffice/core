@@ -42,7 +42,6 @@
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <pagedesc.hxx>
-#include <postithelper.hxx>
 #include <PostItMgr.hxx>
 #include <AnnotationWin.hxx>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
@@ -51,6 +50,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <svl/itemiter.hxx>
+#include <unotools/localfilehelper.hxx>
 
 #include <editeng/eeitem.hxx>
 #include <editeng/scripttypeitem.hxx>
@@ -62,7 +62,6 @@
 #include <reffld.hxx>
 #include <dbfld.hxx>
 #include <txatbase.hxx>
-#include <ftnidx.hxx>
 #include <txtftn.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
@@ -81,10 +80,11 @@
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchAlgorithms.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/util/XPropertyReplace.hpp>
-#include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/TextMarkupType.hpp>
@@ -115,11 +115,11 @@
 #include <sfx2/watermarkitem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/htmlout.hxx>
 #include <test/htmltesttools.hxx>
 #include <fmthdft.hxx>
 #include <iodetect.hxx>
 #include <wrthtml.hxx>
+#include <dbmgr.hxx>
 
 namespace
 {

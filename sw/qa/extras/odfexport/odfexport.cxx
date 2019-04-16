@@ -11,8 +11,6 @@
 #include <swmodeltestbase.hxx>
 #include <config_features.h>
 
-#include <initializer_list>
-
 #if !defined(MACOSX)
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
@@ -26,7 +24,6 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
@@ -39,6 +36,7 @@
 #include <unotools/streamwrap.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <docufld.hxx> // for SwHiddenTextField::ParseIfFieldDefinition() method call
+#include <unoprnms.hxx>
 
 class Test : public SwModelTestBase
 {

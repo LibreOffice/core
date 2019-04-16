@@ -10,8 +10,6 @@
 #include <swmodeltestbase.hxx>
 #include <unotools/tempfile.hxx>
 #include <tools/urlobj.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
 #include <unotools/saveopt.hxx>
 
 // This file contains tests to check relative/absolute hyperlinks handling

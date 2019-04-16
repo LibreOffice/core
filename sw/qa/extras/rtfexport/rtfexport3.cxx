@@ -9,14 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/style/PageStyleLayout.hpp>
-#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
-#include <com/sun/star/text/XPageCursor.hpp>
-#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
-#include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 
 class Test : public SwModelTestBase

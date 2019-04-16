@@ -9,10 +9,17 @@
 #ifndef INCLUDED_SW_QA_EXTRAS_INC_BORDERTEST_HXX
 #define INCLUDED_SW_QA_EXTRAS_INC_BORDERTEST_HXX
 
-#include <com/sun/star/table/XCell.hpp>
+#include <cppunit/TestAssert.h>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <map>
+
+namespace com::sun::star::table { class XCell; }
 
 typedef std::map<OUString, css::table::BorderLine> BorderLineMap;
 typedef std::pair<OUString, css::table::BorderLine> StringBorderPair;

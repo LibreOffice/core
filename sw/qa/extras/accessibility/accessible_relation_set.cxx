@@ -32,7 +32,6 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
-#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;

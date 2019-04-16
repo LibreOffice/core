@@ -46,20 +46,6 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/configuration.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace graphic
-{
-class XGraphic;
-}
-}
-}
-}
-
 class Test : public SwModelTestBase
 {
 public:

@@ -12,7 +12,6 @@
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <ndtxt.hxx>
 #include <viscrs.hxx>
 #include <wrtsh.hxx>
 #include <editeng/boxitem.hxx>
