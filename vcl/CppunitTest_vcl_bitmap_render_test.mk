@@ -13,6 +13,11 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_bitmap_render_test, \
     vcl/qa/cppunit/bitmaprender/BitmapRenderTest \
 ))
 
+$(eval $(call gb_CppunitTest_set_include,vcl_bitmap_render_test,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/vcl/inc \
+))
+
 $(eval $(call gb_CppunitTest_use_libraries,vcl_bitmap_render_test, \
 	comphelper \
 	cppu \
