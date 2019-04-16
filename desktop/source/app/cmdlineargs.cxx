@@ -127,6 +127,10 @@ CommandLineEvent CheckOfficeURI(/* in,out */ OUString& arg, CommandLineEvent cur
 
     OUString rest2;
     long nURIlen = -1;
+
+    // URL might be encoded
+    rest1 = rest1.replaceAll("%7C", "|");
+
     // 2. Discriminate by command name (incl. 1st command argument descriptor)
     //    Extract URI: everything up to possible next argument
     if (rest1.startsWith("ofv|u|", &rest2))
