@@ -748,17 +748,20 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
 Color BitmapEx::GetPixelColor(sal_Int32 nX, sal_Int32 nY) const
 {
     Bitmap::ScopedReadAccess pReadAccess( const_cast<Bitmap&>(maBitmap) );
-    assert( pReadAccess );
+    assert(pReadAccess);
 
-    Color aColor = pReadAccess->GetColor( nY, nX ).GetColor();
+    Color aColor = pReadAccess->GetColor(nY, nX).GetColor();
 
-    if( IsAlpha() )
+    if (IsAlpha())
     {
-        Bitmap::ScopedReadAccess pAlphaReadAccess( const_cast<Bitmap&>(maMask).AcquireReadAccess(), const_cast<Bitmap&>(maMask) );
-        aColor.SetTransparency( pAlphaReadAccess->GetPixel( nY, nX ).GetIndex() );
+        AlphaMask aAlpha = GetAlpha();
+        AlphaMask::ScopedReadAccess pAlphaReadAccess(aAlpha);
+        aColor.SetTransparency(pAlphaReadAccess->GetPixel(nY, nX).GetIndex());
     }
-    else
-        aColor.SetTransparency( 0 );
+    else if (maBitmap.GetBitCount() != 32)
+    {
+        aColor.SetTransparency(0);
+    }
     return aColor;
 }
 
