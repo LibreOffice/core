@@ -9,6 +9,20 @@ diff -ru rasqal.orig/src/win32_rasqal_config.h rasqal/src/win32_rasqal_config.h
  #define access _access
  #define stricmp _stricmp
  #define strnicmp _strnicmp
+@@ -57,9 +56,9 @@
+ #undef HAVE_GETTIMEOFDAY
+ 
+-#include <float.h>
+-#define isnan(n) _isnan(n)
+-/* no round function available */
+-#define round(x) floor(x+0.5)
++// #include <float.h>
++// #define isnan(n) _isnan(n)
++// /* no round function available */
++// #define round(x) floor(x+0.5)
+ 
+ /* These are SPARQL token definitions */
+ #ifdef OPTIONAL
 --- rasqal/src/rasqal_ntriples.c.orig	2016-08-26 23:29:58.343472683 +0200
 +++ rasqal/src/rasqal_ntriples.c	2016-08-26 23:30:10.553471736 +0200
 @@ -25,6 +25,10 @@
