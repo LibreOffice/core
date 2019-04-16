@@ -1,4 +1,6 @@
-sc/uiconfig/scalc/ui/advancedfilterdialog.ui://foruilo-RefEdit[@id='edfilterarea'] no-labelled-by
+sc/uiconfig/scalc/ui/advancedfilterdialog.ui://GtkEntry[@id='edfilterarea'] no-labelled-by
+sc/uiconfig/scalc/ui/advancedfilterdialog.ui://GtkButton[@id='rbfilterarea'] button-no-label
+sc/uiconfig/scalc/ui/advancedfilterdialog.ui://GtkButton[@id='rbcopyarea'] button-no-label
 sc/uiconfig/scalc/ui/advancedfilterdialog.ui://GtkLabel[@id='dbarealabel'] orphan-label
 sc/uiconfig/scalc/ui/advancedfilterdialog.ui://GtkLabel[@id='dbarea'] orphan-label
 sc/uiconfig/scalc/ui/aggregatefunctionentry.ui:GtkGrid[@id='grid']/GtkBox/GtkLabel orphan-label

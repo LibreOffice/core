@@ -51,44 +51,45 @@ namespace
 
 //  class ScSpecialFilterDialog
 
-ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
+ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
                                         const SfxItemSet&   rArgSet )
 
-    :   ScAnyRefDlg ( pB, pCW, pParent, "AdvancedFilterDialog", "modules/scalc/ui/advancedfilterdialog.ui" ),
-
-        aStrUndefined   ( ScResId(SCSTR_UNDEFINED) ),
-        nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),
-        theQueryData    ( static_cast<const ScQueryItem&>(
-                           rArgSet.Get( nWhichQuery )).GetQueryData() ),
-        pViewData       ( nullptr ),
-        pDoc            ( nullptr ),
-        pRefInputEdit   ( nullptr ),
-        bRefInputMode   ( false )
+    : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/advancedfilterdialog.ui", "AdvancedFilterDialog")
+    , aStrUndefined   ( ScResId(SCSTR_UNDEFINED) )
+    , nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) )
+    , theQueryData    ( static_cast<const ScQueryItem&>(
+                           rArgSet.Get( nWhichQuery )).GetQueryData() )
+    , pViewData(nullptr)
+    , pDoc(nullptr)
+    , bRefInputMode(false)
+    , m_pRefInputEdit(nullptr)
+    , m_xLbFilterArea(m_xBuilder->weld_combo_box("lbfilterarea"))
+    , m_xEdFilterArea(new formula::WeldRefEdit(m_xBuilder->weld_entry("edfilterarea")))
+    , m_xRbFilterArea(new formula::WeldRefButton(m_xBuilder->weld_button("rbfilterarea")))
+    , m_xExpander(m_xBuilder->weld_expander("more"))
+    , m_xBtnCase(m_xBuilder->weld_check_button("case"))
+    , m_xBtnRegExp(m_xBuilder->weld_check_button("regexp"))
+    , m_xBtnHeader(m_xBuilder->weld_check_button("header"))
+    , m_xBtnUnique(m_xBuilder->weld_check_button("unique"))
+    , m_xBtnCopyResult(m_xBuilder->weld_check_button("copyresult"))
+    , m_xLbCopyArea(m_xBuilder->weld_combo_box("lbcopyarea"))
+    , m_xEdCopyArea(new formula::WeldRefEdit(m_xBuilder->weld_entry("edcopyarea")))
+    , m_xRbCopyArea(new formula::WeldRefButton(m_xBuilder->weld_button("rbcopyarea")))
+    , m_xBtnDestPers(m_xBuilder->weld_check_button("destpers"))
+    , m_xFtDbAreaLabel(m_xBuilder->weld_label("dbarealabel"))
+    , m_xFtDbArea(m_xBuilder->weld_label("dbarea"))
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
+    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
+    , m_xFilterFrame(m_xBuilder->weld_frame("filterframe"))
+    , m_xFilterLabel(m_xFilterFrame->weld_label_widget())
 {
-    get(pLbFilterArea,"lbfilterarea");
-    get(pEdFilterArea,"edfilterarea");
-    pEdFilterArea->SetReferences(this, get<VclFrame>("filterframe")->get_label_widget());
-    get(pRbFilterArea,"rbfilterarea");
-    pRbFilterArea->SetReferences(this, pEdFilterArea);
-    get(pBtnCase,"case");
-    get(pBtnRegExp,"regexp");
-    get(pBtnHeader,"header");
-    get(pBtnUnique,"unique");
-    get(pBtnCopyResult,"copyresult");
-    get(pLbCopyArea,"lbcopyarea");
-    get(pEdCopyArea,"edcopyarea");
-    pEdCopyArea->SetReferences(this, pBtnCopyResult);
-    get(pRbCopyArea,"rbcopyarea");
-    pRbCopyArea->SetReferences(this, pEdCopyArea);
-    get(pBtnDestPers,"destpers");
-    get(pFtDbAreaLabel,"dbarealabel");
-    get(pFtDbArea,"dbarea");
-    get(pBtnOk,"ok");
-    get(pBtnCancel,"cancel");
-    get(pExpander,"more");
+    m_xEdFilterArea->SetReferences(this, m_xFilterLabel.get());
+    m_xRbFilterArea->SetReferences(this, m_xEdFilterArea.get());
+    m_xEdCopyArea->SetReferences(this, m_xFtDbAreaLabel.get());
+    m_xRbCopyArea->SetReferences(this, m_xEdCopyArea.get());
 
     Init( rArgSet );
-    pEdFilterArea->GrabFocus();
+    m_xEdFilterArea->GrabFocus();
 
     // hack: control of RefInput
     pIdle.reset( new Idle("Special Filter Dialog") );
@@ -100,16 +101,6 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
 
 ScSpecialFilterDlg::~ScSpecialFilterDlg()
 {
-    disposeOnce();
-}
-
-void ScSpecialFilterDlg::dispose()
-{
-    const sal_Int32 nEntries = pLbFilterArea->GetEntryCount();
-
-    for ( sal_Int32 i=1; i<nEntries; ++i )
-        delete static_cast<OUString*>(pLbFilterArea->GetEntryData( i ));
-
     pOptionsMgr.reset();
 
     pOutItem.reset();
@@ -117,26 +108,6 @@ void ScSpecialFilterDlg::dispose()
     // hack: control of RefInput
     pIdle->Stop();
     pIdle.reset();
-
-    pLbFilterArea.clear();
-    pEdFilterArea.clear();
-    pRbFilterArea.clear();
-    pExpander.clear();
-    pBtnCase.clear();
-    pBtnRegExp.clear();
-    pBtnHeader.clear();
-    pBtnUnique.clear();
-    pBtnCopyResult.clear();
-    pLbCopyArea.clear();
-    pEdCopyArea.clear();
-    pRbCopyArea.clear();
-    pBtnDestPers.clear();
-    pFtDbAreaLabel.clear();
-    pFtDbArea.clear();
-    pBtnOk.clear();
-    pBtnCancel.clear();
-    pRefInputEdit.clear();
-    ScAnyRefDlg::dispose();
 }
 
 void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
@@ -144,33 +115,32 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
     const ScQueryItem& rQueryItem = static_cast<const ScQueryItem&>(
                                     rArgSet.Get( nWhichQuery ));
 
-    pBtnOk->SetClickHdl          ( LINK( this, ScSpecialFilterDlg, EndDlgHdl ) );
-    pBtnCancel->SetClickHdl      ( LINK( this, ScSpecialFilterDlg, EndDlgHdl ) );
-    pLbFilterArea->SetSelectHdl  ( LINK( this, ScSpecialFilterDlg, FilterAreaSelHdl ) );
-    pEdFilterArea->SetModifyHdl  ( LINK( this, ScSpecialFilterDlg, FilterAreaModHdl ) );
+    m_xBtnOk->connect_clicked( LINK( this, ScSpecialFilterDlg, EndDlgHdl ) );
+    m_xBtnCancel->connect_clicked( LINK( this, ScSpecialFilterDlg, EndDlgHdl ) );
+    m_xLbFilterArea->connect_changed( LINK( this, ScSpecialFilterDlg, FilterAreaSelHdl ) );
+    m_xEdFilterArea->SetModifyHdl  ( LINK( this, ScSpecialFilterDlg, FilterAreaModHdl ) );
 
     pViewData   = rQueryItem.GetViewData();
     pDoc        = pViewData ? pViewData->GetDocument()  : nullptr;
 
-    pEdFilterArea->SetText( EMPTY_OUSTRING );      // may be overwritten below
+    m_xEdFilterArea->SetText( EMPTY_OUSTRING );      // may be overwritten below
 
     if ( pViewData && pDoc )
     {
-        if(pDoc->GetChangeTrack()!=nullptr) pBtnCopyResult->Disable();
+        if(pDoc->GetChangeTrack()!=nullptr) m_xBtnCopyResult->set_sensitive(false);
 
         ScRangeName* pRangeNames = pDoc->GetRangeName();
-        pLbFilterArea->Clear();
-        pLbFilterArea->InsertEntry( aStrUndefined, 0 );
+        m_xLbFilterArea->clear();
+        m_xLbFilterArea->append_text(aStrUndefined);
 
         for (const auto& rEntry : *pRangeNames)
         {
             if (!rEntry.second->HasType(ScRangeData::Type::Criteria))
                 continue;
 
-            const sal_Int32 nInsert = pLbFilterArea->InsertEntry(rEntry.second->GetName());
             OUString aSymbol;
             rEntry.second->GetSymbol(aSymbol);
-            pLbFilterArea->SetEntryData(nInsert, new OUString(aSymbol));
+            m_xLbFilterArea->append(aSymbol, rEntry.second->GetName());
         }
 
         //  is there a stored source range?
@@ -179,33 +149,33 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
         if (rQueryItem.GetAdvancedQuerySource(aAdvSource))
         {
             OUString aRefStr(aAdvSource.Format(ScRefFlags::RANGE_ABS_3D, pDoc, pDoc->GetAddressConvention()));
-            pEdFilterArea->SetRefString( aRefStr );
+            m_xEdFilterArea->SetRefString( aRefStr );
         }
     }
 
-    pLbFilterArea->SelectEntryPos( 0 );
+    m_xLbFilterArea->set_active( 0 );
 
     // let options be initialized:
 
-    pOptionsMgr.reset( new ScFilterOptionsMgr(
+    pOptionsMgr.reset( new FilterOptionsMgr(
                             pViewData,
                             theQueryData,
-                            pBtnCase,
-                            pBtnRegExp,
-                            pBtnHeader,
-                            pBtnUnique,
-                            pBtnCopyResult,
-                            pBtnDestPers,
-                            pLbCopyArea,
-                            pEdCopyArea,
-                            pRbCopyArea,
-                            pFtDbAreaLabel,
-                            pFtDbArea,
+                            m_xBtnCase.get(),
+                            m_xBtnRegExp.get(),
+                            m_xBtnHeader.get(),
+                            m_xBtnUnique.get(),
+                            m_xBtnCopyResult.get(),
+                            m_xBtnDestPers.get(),
+                            m_xLbCopyArea.get(),
+                            m_xEdCopyArea.get(),
+                            m_xRbCopyArea.get(),
+                            m_xFtDbAreaLabel.get(),
+                            m_xFtDbArea.get(),
                             aStrUndefined ) );
 
     //  special filter always needs column headers
-    pBtnHeader->Check();
-    pBtnHeader->Disable();
+    m_xBtnHeader->set_active(true);
+    m_xBtnHeader->set_sensitive(false);
 
     // turn on modal mode
     // SetDispatcherLock( true );
@@ -213,12 +183,12 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
     //SFX_APPWINDOW->Disable(false);        //! general method in ScAnyRefDlg
 }
 
-bool ScSpecialFilterDlg::Close()
+void ScSpecialFilterDlg::Close()
 {
     if (pViewData)
         pViewData->GetDocShell()->CancelAutoDBRange();
 
-    return DoClose( ScSpecialFilterDlgWrapper::GetChildWindowId() );
+    DoClose( ScSpecialFilterDlgWrapper::GetChildWindowId() );
 }
 
 // Transfer of a table area selected with the mouse, which is then displayed
@@ -226,20 +196,20 @@ bool ScSpecialFilterDlg::Close()
 
 void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    if ( bRefInputMode && pRefInputEdit )       // only possible if in the reference edit mode
+    if ( bRefInputMode && m_pRefInputEdit )       // only possible if in the reference edit mode
     {
         if ( rRef.aStart != rRef.aEnd )
-            RefInputStart( pRefInputEdit );
+            RefInputStart( m_pRefInputEdit );
 
         OUString aRefStr;
         const formula::FormulaGrammar::AddressConvention eConv = pDocP->GetAddressConvention();
 
-        if ( pRefInputEdit == pEdCopyArea)
+        if (m_pRefInputEdit == m_xEdCopyArea.get())
             aRefStr = rRef.aStart.Format(ScRefFlags::ADDR_ABS_3D, pDocP, eConv);
-        else if ( pRefInputEdit == pEdFilterArea)
+        else if (m_pRefInputEdit == m_xEdFilterArea.get())
             aRefStr = rRef.Format(ScRefFlags::RANGE_ABS_3D, pDocP, eConv);
 
-        pRefInputEdit->SetRefString( aRefStr );
+        m_pRefInputEdit->SetRefString( aRefStr );
     }
 }
 
@@ -247,19 +217,19 @@ void ScSpecialFilterDlg::SetActive()
 {
     if ( bRefInputMode )
     {
-        if ( pRefInputEdit == pEdCopyArea )
+        if (m_pRefInputEdit == m_xEdCopyArea.get())
         {
-            pEdCopyArea->GrabFocus();
-            pEdCopyArea->GetModifyHdl().Call( *pEdCopyArea );
+            m_xEdCopyArea->GrabFocus();
+            m_xEdCopyArea->GetModifyHdl().Call( *m_xEdCopyArea );
         }
-        else if ( pRefInputEdit == pEdFilterArea )
+        else if (m_pRefInputEdit == m_xEdFilterArea.get())
         {
-            pEdFilterArea->GrabFocus();
-            FilterAreaModHdl( *pEdFilterArea );
+            m_xEdFilterArea->GrabFocus();
+            FilterAreaModHdl( *m_xEdFilterArea );
         }
     }
     else
-        GrabFocus();
+        m_xDialog->grab_focus();
 
     RefInputDone();
 }
@@ -279,14 +249,14 @@ bool ScSpecialFilterDlg::IsRefInputMode() const
 
 // Handler:
 
-IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
+IMPL_LINK(ScSpecialFilterDlg, EndDlgHdl, weld::Button&, rBtn, void)
 {
     OSL_ENSURE( pDoc && pViewData, "Document or ViewData not found. :-/" );
 
-    if ( (pBtn == pBtnOk) && pDoc && pViewData )
+    if (&rBtn == m_xBtnOk.get() && pDoc && pViewData)
     {
-        OUString          theCopyStr( pEdCopyArea->GetText() );
-        OUString          theAreaStr( pEdFilterArea->GetText() );
+        OUString          theCopyStr( m_xEdCopyArea->GetText() );
+        OUString          theAreaStr( m_xEdFilterArea->GetText() );
         ScQueryParam    theOutParam( theQueryData );
         ScAddress       theAdrCopy;
         bool            bEditInputOk    = true;
@@ -294,7 +264,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
         ScRange         theFilterArea;
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
-        if ( pBtnCopyResult->IsChecked() )
+        if ( m_xBtnCopyResult->get_active() )
         {
             sal_Int32 nColonPos = theCopyStr.indexOf( ':' );
 
@@ -305,11 +275,11 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
 
             if ( (nResult & ScRefFlags::VALID) == ScRefFlags::ZERO )
             {
-                if (!pExpander->get_expanded())
-                    pExpander->set_expanded(true);
+                if (!m_xExpander->get_expanded())
+                    m_xExpander->set_expanded(true);
 
-                ERRORBOX(GetFrameWeld(), STR_INVALID_TABREF);
-                pEdCopyArea->GrabFocus();
+                ERRORBOX(m_xDialog.get(), STR_INVALID_TABREF);
+                m_xEdCopyArea->GrabFocus();
                 bEditInputOk = false;
             }
         }
@@ -320,8 +290,8 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
 
             if ( (nResult & ScRefFlags::VALID) == ScRefFlags::ZERO )
             {
-                ERRORBOX(GetFrameWeld(), STR_INVALID_TABREF);
-                pEdFilterArea->GrabFocus();
+                ERRORBOX(m_xDialog.get(), STR_INVALID_TABREF);
+                m_xEdFilterArea->GrabFocus();
                 bEditInputOk = false;
             }
         }
@@ -340,7 +310,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
                 ScAddress& rStart = theFilterArea.aStart;
                 ScAddress& rEnd   = theFilterArea.aEnd;
 
-                if ( pBtnCopyResult->IsChecked() )
+                if ( m_xBtnCopyResult->get_active() )
                 {
                     theOutParam.bInplace    = false;
                     theOutParam.nDestTab    = theAdrCopy.Tab();
@@ -355,13 +325,13 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
                     theOutParam.nDestRow    = 0;
                 }
 
-                theOutParam.bHasHeader = pBtnHeader->IsChecked();
+                theOutParam.bHasHeader = m_xBtnHeader->get_active();
                 theOutParam.bByRow     = true;
-                theOutParam.bCaseSens  = pBtnCase->IsChecked();
-                theOutParam.eSearchType = pBtnRegExp->IsChecked() ? utl::SearchParam::SearchType::Regexp :
+                theOutParam.bCaseSens  = m_xBtnCase->get_active();
+                theOutParam.eSearchType = m_xBtnRegExp->get_active() ? utl::SearchParam::SearchType::Regexp :
                     utl::SearchParam::SearchType::Normal;
-                theOutParam.bDuplicate = !pBtnUnique->IsChecked();
-                theOutParam.bDestPers  = pBtnDestPers->IsChecked();
+                theOutParam.bDuplicate = !m_xBtnUnique->get_active();
+                theOutParam.bDestPers  = m_xBtnDestPers->get_active();
 
                 bQueryOk = pDoc->CreateQueryParam(ScRange(rStart,rEnd), theOutParam);
             }
@@ -374,39 +344,38 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
             GetBindings().GetDispatcher()->ExecuteList(FID_FILTER_OK,
                     SfxCallMode::SLOT | SfxCallMode::RECORD,
                     { GetOutputItem(theOutParam, theFilterArea) });
-            Close();
+            response(RET_OK);
         }
         else
         {
-            ERRORBOX(GetFrameWeld(), STR_INVALID_QUERYAREA);
-            pEdFilterArea->GrabFocus();
+            ERRORBOX(m_xDialog.get(), STR_INVALID_QUERYAREA);
+            m_xEdFilterArea->GrabFocus();
         }
     }
-    else if ( pBtn == pBtnCancel )
+    else if (&rBtn == m_xBtnCancel.get())
     {
-        Close();
+        response(RET_CANCEL);
     }
 }
 
 IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pIdle, void )
 {
     // every 50ms check whether RefInputMode is still true
-
-    if( (_pIdle == pIdle.get()) && IsActive() )
+    if (_pIdle == pIdle.get() && m_xDialog->has_toplevel_focus())
     {
-        if( pEdCopyArea->HasFocus() || pRbCopyArea->HasFocus() )
+        if( m_xEdCopyArea->GetWidget()->has_focus() || m_xRbCopyArea->GetWidget()->has_focus() )
         {
-            pRefInputEdit = pEdCopyArea;
+            m_pRefInputEdit = m_xEdCopyArea.get();
             bRefInputMode = true;
         }
-        else if( pEdFilterArea->HasFocus() || pRbFilterArea->HasFocus() )
+        else if( m_xEdFilterArea->GetWidget()->has_focus() || m_xRbFilterArea->GetWidget()->has_focus() )
         {
-            pRefInputEdit = pEdFilterArea;
+            m_pRefInputEdit = m_xEdFilterArea.get();
             bRefInputMode = true;
         }
         else if( bRefInputMode )
         {
-            pRefInputEdit = nullptr;
+            m_pRefInputEdit = nullptr;
             bRefInputMode = false;
         }
     }
@@ -414,23 +383,23 @@ IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pIdle, void )
     pIdle->Start();
 }
 
-IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox&, rLb, void )
+IMPL_LINK(ScSpecialFilterDlg, FilterAreaSelHdl, weld::ComboBox&, rLb, void)
 {
-    if ( &rLb == pLbFilterArea )
+    if (&rLb == m_xLbFilterArea.get())
     {
         OUString  aString;
-        const sal_Int32 nSelPos = pLbFilterArea->GetSelectedEntryPos();
+        const sal_Int32 nSelPos = m_xLbFilterArea->get_active();
 
         if ( nSelPos > 0 )
-            aString = *static_cast<OUString*>(pLbFilterArea->GetEntryData( nSelPos ));
+            aString = m_xLbFilterArea->get_id(nSelPos);
 
-        pEdFilterArea->SetText( aString );
+        m_xEdFilterArea->SetText( aString );
     }
 }
 
-IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, Edit&, rEd, void )
+IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::WeldRefEdit&, rEd, void )
 {
-    if ( &rEd == pEdFilterArea )
+    if (&rEd == m_xEdFilterArea.get())
     {
         if ( pDoc && pViewData )
         {
@@ -439,22 +408,21 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, Edit&, rEd, void )
 
             if ( (nResult & ScRefFlags::VALID) == ScRefFlags::VALID )
             {
-                const sal_Int32 nCount  = pLbFilterArea->GetEntryCount();
-
-                for ( sal_Int32 i=1; i<nCount; ++i )
+                const sal_Int32 nCount  = m_xLbFilterArea->get_count();
+                for (sal_Int32 i = 1; i < nCount; ++i)
                 {
-                    OUString* pStr = static_cast<OUString*>(pLbFilterArea->GetEntryData( i ));
-                    if (theCurAreaStr == *pStr)
+                    OUString aStr = m_xLbFilterArea->get_id(i);
+                    if (theCurAreaStr == aStr)
                     {
-                        pLbFilterArea->SelectEntryPos( i );
+                        m_xLbFilterArea->set_active( i );
                         return;
                     }
                 }
-                pLbFilterArea->SelectEntryPos( 0 );
+                m_xLbFilterArea->set_active( 0 );
             }
         }
         else
-            pLbFilterArea->SelectEntryPos( 0 );
+            m_xLbFilterArea->set_active( 0 );
     }
 }
 

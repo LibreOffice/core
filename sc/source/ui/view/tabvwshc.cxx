@@ -144,35 +144,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
 
     switch( nSlotId )
     {
-        case SID_SPECIAL_FILTER:
-        {
-            ScQueryParam    aQueryParam;
-            SfxItemSet      aArgSet( GetPool(),
-                                     svl::Items<SCITEM_QUERYDATA,
-                                     SCITEM_QUERYDATA>{} );
-
-            ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown);
-            pDBData->ExtendDataArea(pDoc);
-            pDBData->GetQueryParam( aQueryParam );
-
-            ScRange aArea;
-            pDBData->GetArea(aArea);
-            MarkRange(aArea, false);
-
-            ScQueryItem aItem( SCITEM_QUERYDATA, &GetViewData(), &aQueryParam );
-            ScRange aAdvSource;
-            if (pDBData->GetAdvancedQuerySource(aAdvSource))
-                aItem.SetAdvancedQuerySource( &aAdvSource );
-
-            aArgSet.Put( aItem );
-
-            // mark current sheet (due to RefInput in dialog)
-            GetViewData().SetRefTabNo( GetViewData().GetTabNo() );
-
-            pResult = VclPtr<ScSpecialFilterDlg>::Create( pB, pCW, pParent, aArgSet );
-        }
-        break;
-
         case SID_OPENDLG_OPTSOLVER:
         {
             ScViewData& rViewData = GetViewData();
@@ -483,6 +454,34 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             GetViewData().SetRefTabNo( GetViewData().GetTabNo() );
 
             xResult.reset(new ScFilterDlg(pB, pCW, pParent, aArgSet));
+            break;
+        }
+        case SID_SPECIAL_FILTER:
+        {
+            ScQueryParam    aQueryParam;
+            SfxItemSet      aArgSet( GetPool(),
+                                     svl::Items<SCITEM_QUERYDATA,
+                                     SCITEM_QUERYDATA>{} );
+
+            ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown);
+            pDBData->ExtendDataArea(pDoc);
+            pDBData->GetQueryParam( aQueryParam );
+
+            ScRange aArea;
+            pDBData->GetArea(aArea);
+            MarkRange(aArea, false);
+
+            ScQueryItem aItem( SCITEM_QUERYDATA, &GetViewData(), &aQueryParam );
+            ScRange aAdvSource;
+            if (pDBData->GetAdvancedQuerySource(aAdvSource))
+                aItem.SetAdvancedQuerySource( &aAdvSource );
+
+            aArgSet.Put( aItem );
+
+            // mark current sheet (due to RefInput in dialog)
+            GetViewData().SetRefTabNo( GetViewData().GetTabNo() );
+
+            xResult.reset(new ScSpecialFilterDlg(pB, pCW, pParent, aArgSet));
             break;
         }
     }

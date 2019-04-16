@@ -33,7 +33,6 @@
 #include <vector>
 #include <map>
 
-class ScFilterOptionsMgr;
 class FilterOptionsMgr;
 class ScViewData;
 class ScDocument;
@@ -158,44 +157,24 @@ private:
     DECL_LINK( TimeOutHdl, Timer*, void );
 };
 
-class ScSpecialFilterDlg : public ScAnyRefDlg
+class ScSpecialFilterDlg : public ScAnyRefDlgController
 {
 public:
-                    ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
-                                        const SfxItemSet&   rArgSet );
-                    virtual ~ScSpecialFilterDlg() override;
-    virtual void    dispose() override;
+    ScSpecialFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
+                       const SfxItemSet& rArgSet);
+    virtual ~ScSpecialFilterDlg() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
 
     virtual bool    IsRefInputMode() const override;
     virtual void    SetActive() override;
 
-    virtual bool    Close() override;
+    virtual void    Close() override;
 
 private:
-    VclPtr<ListBox>         pLbFilterArea;
-    VclPtr<formula::RefEdit>   pEdFilterArea;
-    VclPtr<formula::RefButton> pRbFilterArea;
-
-    VclPtr<VclExpander>     pExpander;
-    VclPtr<CheckBox>        pBtnCase;
-    VclPtr<CheckBox>        pBtnRegExp;
-    VclPtr<CheckBox>        pBtnHeader;
-    VclPtr<CheckBox>        pBtnUnique;
-    VclPtr<CheckBox>        pBtnCopyResult;
-    VclPtr<ListBox>         pLbCopyArea;
-    VclPtr<formula::RefEdit> pEdCopyArea;
-    VclPtr<formula::RefButton> pRbCopyArea;
-    VclPtr<CheckBox>        pBtnDestPers;
-    VclPtr<FixedText>       pFtDbAreaLabel;
-    VclPtr<FixedText>       pFtDbArea;
     const OUString aStrUndefined;
 
-    VclPtr<OKButton>        pBtnOk;
-    VclPtr<CancelButton>    pBtnCancel;
-
-    std::unique_ptr<ScFilterOptionsMgr> pOptionsMgr;
+    std::unique_ptr<FilterOptionsMgr> pOptionsMgr;
 
     const sal_uInt16    nWhichQuery;
     const ScQueryParam  theQueryData;
@@ -203,11 +182,35 @@ private:
     ScViewData*         pViewData;
     ScDocument*         pDoc;
 
-    VclPtr<formula::RefEdit>   pRefInputEdit;
     bool                bRefInputMode;
 
     // Hack: RefInput control
     std::unique_ptr<Idle> pIdle;
+
+    formula::WeldRefEdit* m_pRefInputEdit;
+
+    std::unique_ptr<weld::ComboBox> m_xLbFilterArea;
+    std::unique_ptr<formula::WeldRefEdit> m_xEdFilterArea;
+    std::unique_ptr<formula::WeldRefButton> m_xRbFilterArea;
+
+    std::unique_ptr<weld::Expander> m_xExpander;
+    std::unique_ptr<weld::CheckButton> m_xBtnCase;
+    std::unique_ptr<weld::CheckButton> m_xBtnRegExp;
+    std::unique_ptr<weld::CheckButton> m_xBtnHeader;
+    std::unique_ptr<weld::CheckButton> m_xBtnUnique;
+    std::unique_ptr<weld::CheckButton> m_xBtnCopyResult;
+    std::unique_ptr<weld::ComboBox> m_xLbCopyArea;
+    std::unique_ptr<formula::WeldRefEdit> m_xEdCopyArea;
+    std::unique_ptr<formula::WeldRefButton> m_xRbCopyArea;
+    std::unique_ptr<weld::CheckButton> m_xBtnDestPers;
+    std::unique_ptr<weld::Label> m_xFtDbAreaLabel;
+    std::unique_ptr<weld::Label> m_xFtDbArea;
+
+    std::unique_ptr<weld::Button> m_xBtnOk;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
+
+    std::unique_ptr<weld::Frame> m_xFilterFrame;
+    std::unique_ptr<weld::Label> m_xFilterLabel;
 
 private:
     void            Init( const SfxItemSet& rArgSet );
@@ -215,9 +218,9 @@ private:
                                     const ScRange& rSource );
 
     // Handler
-    DECL_LINK( FilterAreaSelHdl, ListBox&, void );
-    DECL_LINK( FilterAreaModHdl, Edit&, void );
-    DECL_LINK( EndDlgHdl,  Button*, void );
+    DECL_LINK( FilterAreaSelHdl, weld::ComboBox&, void );
+    DECL_LINK( FilterAreaModHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( EndDlgHdl,  weld::Button&, void );
 
     // Hack: RefInput control
     DECL_LINK( TimeOutHdl, Timer*, void );
