@@ -21,14 +21,12 @@
 #include <IDocumentContentOperations.hxx>
 #include <doc.hxx>
 #include <ndgrf.hxx>
-#include <drawdoc.hxx>
 #include <ndindex.hxx>
 #include <pam.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <xmloff/odffields.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IMark.hxx>
-#include <bookmrk.hxx>
 
 class Test : public SwModelTestBase
 {

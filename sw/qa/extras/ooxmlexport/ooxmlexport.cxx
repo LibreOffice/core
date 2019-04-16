@@ -20,8 +20,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <config_features.h>
-#include <string>
+
 class Test : public SwModelTestBase
 {
 public:

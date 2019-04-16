@@ -17,20 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/types.h>
-#include <rtl/strbuf.hxx>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 //#define TIMELOG for measuring performance
 
-#include <string.h>
-#include <stdlib.h>
-
 #include <bparr.hxx>
-#include <ndarr.hxx>
 
 using namespace std;
 

@@ -9,7 +9,6 @@
 
 #include <rtl/ustring.hxx>
 #include <chpfld.hxx>
-#include <ndtxt.hxx>
 #include <tox.hxx>
 #include <txmsrt.hxx>
 #include <ToxTextGenerator.hxx>
@@ -20,7 +19,6 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 #include <swdll.hxx>
 

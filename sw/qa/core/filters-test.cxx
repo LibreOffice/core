@@ -15,20 +15,14 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/fcontnr.hxx>
 
 #include <svl/stritem.hxx>
 #include <unotools/tempfile.hxx>
 
-#include <init.hxx>
 #include <iodetect.hxx>
-#include <swtypes.hxx>
-#include <doc.hxx>
 #include <docsh.hxx>
-#include <shellres.hxx>
-#include <docufld.hxx>
 
 typedef tools::SvRef<SwDocShell> SwDocShellRef;
 

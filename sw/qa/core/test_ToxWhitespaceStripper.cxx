@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <stdexcept>
-
 #include <sal/types.h>
 
 #include <rtl/ustring.hxx>
