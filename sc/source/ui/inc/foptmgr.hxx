@@ -37,56 +37,7 @@ class ScViewData;
 class ScFilterOptionsMgr
 {
 public:
-    ScFilterOptionsMgr( ScViewData*         ptrViewData,
-                        const ScQueryParam& refQueryData,
-                        CheckBox*           refBtnCase,
-                        CheckBox*           refBtnRegExp,
-                        CheckBox*           refBtnHeader,
-                        CheckBox*           refBtnUnique,
-                        CheckBox*           refBtnCopyResult,
-                        CheckBox*           refBtnDestPers,
-                        ListBox*            refLbCopyArea,
-                        Edit*               refEdCopyArea,
-                        formula::RefButton* refRbCopyArea,
-                        FixedText*          refFtDbAreaLabel,
-                        FixedText*          refFtDbArea,
-                        const OUString&       refStrUndefined );
-    ~ScFilterOptionsMgr();
-    bool    VerifyPosStr ( const OUString& rPosStr ) const;
-
-private:
-    ScViewData* const     pViewData;
-    ScDocument* const     pDoc;
-
-    VclPtr<CheckBox>       pBtnCase;
-    VclPtr<CheckBox>       pBtnRegExp;
-    VclPtr<CheckBox>       pBtnHeader;
-    VclPtr<CheckBox>       pBtnUnique;
-    VclPtr<CheckBox>       pBtnCopyResult;
-    VclPtr<CheckBox>       pBtnDestPers;
-    VclPtr<ListBox>        pLbCopyArea;
-    VclPtr<Edit>           pEdCopyArea;
-    VclPtr<formula::RefButton> pRbCopyArea;
-    VclPtr<FixedText>      pFtDbAreaLabel;
-    VclPtr<FixedText>      pFtDbArea;
-
-    const OUString&   rStrUndefined;
-
-    const ScQueryParam& rQueryData;
-
-private:
-    void Init();
-
-    // Handler:
-    DECL_LINK( EdAreaModifyHdl,     Edit&, void );
-    DECL_LINK( LbAreaSelHdl,        ListBox&, void );
-    DECL_LINK( BtnCopyResultHdl,    CheckBox&, void );
-};
-
-class FilterOptionsMgr
-{
-public:
-    FilterOptionsMgr(ScViewData* ptrViewData,
+    ScFilterOptionsMgr(ScViewData* ptrViewData,
                      const ScQueryParam& refQueryData,
                      weld::CheckButton*  refBtnCase,
                      weld::CheckButton* refBtnRegExp,
@@ -100,7 +51,7 @@ public:
                      weld::Label* refFtDbAreaLabel,
                      weld::Label* refFtDbArea,
                      const OUString& refStrUndefined );
-    ~FilterOptionsMgr();
+    ~ScFilterOptionsMgr();
     bool    VerifyPosStr ( const OUString& rPosStr ) const;
 
 private:

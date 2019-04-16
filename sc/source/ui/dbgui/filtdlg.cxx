@@ -177,7 +177,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     maConnLbArr.push_back(m_xLbConnect4.get());
 
     // Option initialization:
-    pOptionsMgr.reset( new FilterOptionsMgr(
+    pOptionsMgr.reset( new ScFilterOptionsMgr(
                             pViewData,
                             theQueryData,
                             m_xBtnCase.get(),
