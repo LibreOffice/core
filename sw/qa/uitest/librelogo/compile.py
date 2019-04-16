@@ -74,6 +74,7 @@ class LibreLogoCompileTest(UITestCase):
                 ("WHILE REPCOUNT < 10 [ ]", "REPCOUNT2 = 1\nwhile REPCOUNT2 < 10 :\n __checkhalt__()\n REPCOUNT = REPCOUNT2\n REPCOUNT2 += 1"),
                 # for
                 ("FOR i in [1, 2, 3] [ ]", "REPCOUNT4 = 1\nfor i in [1, 2, 3] :\n __checkhalt__()\n REPCOUNT = REPCOUNT4\n REPCOUNT4 += 1"),
+                ("FOR i IN RANGE COUNT 'letters' [ ]", "REPCOUNT6 = 1\nfor i in range(len(u'letters'),) :\n __checkhalt__()\n REPCOUNT = REPCOUNT6\n REPCOUNT6 += 1"),
                 # PROCEDURE
                 ("TO x\nLABEL 2\nEND", "global x\ndef x():\n __checkhalt__()\n %s\n label(2)\n %s" % (((self.LS),)*2)),
                 # FUNCTION
