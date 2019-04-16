@@ -49,7 +49,7 @@ published interface XController: com::sun::star::lang::XComponent
             the new model for this controller
 
         @return
-            `TRUE` If attaching was successfully
+            `TRUE` If attaching was successful
             <br>
             `FALSE` Otherwise
      */

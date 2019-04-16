@@ -297,7 +297,7 @@ class PresetHandler
             @param  bShare
                     force using of the share layer instead of the user layer.
 
-            @return An opened storage in case method was successfully - null otherwise.
+            @return An opened storage in case method was successful - null otherwise.
          */
         css::uno::Reference< css::embed::XStorage > impl_openPathIgnoringErrors(const OUString& sPath ,
                                                                                       sal_Int32        eMode ,
@@ -354,7 +354,7 @@ class PresetHandler
             @param  bAllowFallback
                     enable/disable fallback handling for locales
 
-            @return An opened storage in case method was successfully - null otherwise.
+            @return An opened storage in case method was successful - null otherwise.
          */
         css::uno::Reference< css::embed::XStorage > impl_openLocalizedPathIgnoringErrors(OUString&      sPath         ,
                                                                                          sal_Int32             eMode         ,

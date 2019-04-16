@@ -118,7 +118,7 @@ class KeyMapping
                     if this method returns sal_True!
 
             @return [boolean]
-                    sal_True if conversion was successfully.
+                    sal_True if conversion was successful.
           */
         bool impl_st_interpretIdentifierAsPureKeyCode(const OUString& sIdentifier,
                                                                 sal_uInt16&      rCode      );

@@ -176,7 +176,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper<
                     We need it to implement the CLOSE_DOC semantic.
 
             @return [boolean]
-                    sal_True if closing was successfully.
+                    sal_True if closing was successful.
          */
         bool implts_prepareFrameForClosing(const css::uno::Reference< css::frame::XFrame >& xFrame,
                                            bool                                   bCloseAllOtherViewsToo,
@@ -194,7 +194,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper<
                     frame is closed ....
 
             @return [bool]
-                    sal_True if closing was successfully.
+                    sal_True if closing was successful.
          */
         bool implts_closeFrame();
 
@@ -202,7 +202,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper<
                     as new component of our m_xCloseFrame.
 
             @return [bool]
-                    sal_True if operation was successfully.
+                    sal_True if operation was successful.
          */
         bool implts_establishBackingMode();
 

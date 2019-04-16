@@ -293,7 +293,7 @@ public:
         @descr  The timeout parameter can be used to wait some times only
                 or forever. The return value indicates if the load request
                 was finished during the specified timeout period.
-                But it indicates not, if the load request was successfully or not!
+                But it indicates not, if the load request was successful or not!
 
         @param  nTimeout
                 specify a timeout in [ms].

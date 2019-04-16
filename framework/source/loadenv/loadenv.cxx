@@ -758,7 +758,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     // SAFE ->
     osl::ResettableMutexGuard aWriteLock(m_mutex);
 
-    // detection was successfully => update the descriptor member of this class
+    // detection was successful => update the descriptor member of this class
     m_lMediaDescriptor << lDescriptor;
     m_lMediaDescriptor[utl::MediaDescriptor::PROP_TYPENAME()] <<= sType;
     // Is there an already detected (may be preselected) filter?

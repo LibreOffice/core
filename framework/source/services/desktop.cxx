@@ -598,7 +598,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getCurrentFrame()
     @param      "sTargetFrameName"  , name of target frame or special value like "_self", "_blank" ...
     @param      "nSearchFlags"      , optional arguments for frame search, if target isn't a special one
     @param      "lArguments"        , optional arguments for loading
-    @return     A valid component reference, if loading was successfully.
+    @return     A valid component reference, if loading was successful.
                 A null reference otherwise.
 
     @onerror    We return a null reference.
