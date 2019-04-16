@@ -22,7 +22,6 @@
 
 #include <cassert>
 
-#include <vcl/salbtype.hxx>
 #include <vcl/dibtools.hxx>
 #include <comphelper/fileformat.h>
 #include <tools/zcodec.hxx>

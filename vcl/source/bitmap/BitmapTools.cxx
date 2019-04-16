@@ -27,7 +27,6 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
 #if ENABLE_CAIRO_CANVAS

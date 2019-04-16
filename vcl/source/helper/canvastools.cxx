@@ -54,7 +54,6 @@
 #include <tools/diagnose_ex.h>
 #include <rtl/uuid.h>
 
-#include <vcl/salbtype.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmapex.hxx>
 

@@ -13,7 +13,7 @@
 #include <config_cairo_canvas.h>
 #include <vcl/bitmapex.hxx>
 #include <vcl/ImageTree.hxx>
-#include <vcl/salbtype.hxx>
+#include <vcl/BitmapColor.hxx>
 #if ENABLE_CAIRO_CANVAS
 #include <vcl/cairo.hxx>
 #endif

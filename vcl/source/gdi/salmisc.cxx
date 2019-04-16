@@ -18,7 +18,6 @@
  */
 
 #include <vcl/bitmapaccess.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/salgtype.hxx>
 #include <bmpfast.hxx>
 #include <o3tl/safeint.hxx>

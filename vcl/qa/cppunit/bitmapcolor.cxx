@@ -20,7 +20,7 @@
 // bootstrap stuff
 #include <test/bootstrapfixture.hxx>
 
-#include <vcl/salbtype.hxx>
+#include <vcl/BitmapColor.hxx>
 
 namespace
 {

@@ -18,7 +18,6 @@
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <config_folders.h>
-#include <vcl/salbtype.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <memory>
 #include <vcl/pngwrite.hxx>

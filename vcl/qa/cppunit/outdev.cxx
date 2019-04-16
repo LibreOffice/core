@@ -11,7 +11,6 @@
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/virdev.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/wrkwin.hxx>
 
