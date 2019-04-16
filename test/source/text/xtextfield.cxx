@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -8,24 +8,37 @@
  */
 
 #include <test/text/xtextfield.hxx>
+#include <rtl/string.hxx>
+
 #include <com/sun/star/text/XTextField.hpp>
+
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <cppunit/extensions/HelperMacros.h>
 
 using namespace css;
-using namespace css::uno;
 
 namespace apitest
 {
-
 void XTextField::testGetPresentation()
 {
-    uno::Reference< text::XTextField > xTextField(init(), UNO_QUERY_THROW);
+    uno::Reference<text::XTextField> xTextField(init(), uno::UNO_QUERY_THROW);
+
     OUString aString = xTextField->getPresentation(true);
     CPPUNIT_ASSERT(!aString.isEmpty());
     aString = xTextField->getPresentation(false);
     CPPUNIT_ASSERT(!aString.isEmpty());
 }
 
-}
+void XTextField::testGetPresentationEmptyString()
+{
+    uno::Reference<text::XTextField> xTextField(init(), uno::UNO_QUERY_THROW);
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+    OUString aString = xTextField->getPresentation(true);
+    CPPUNIT_ASSERT(aString.isEmpty());
+    aString = xTextField->getPresentation(false);
+    CPPUNIT_ASSERT(aString.isEmpty());
+}
+} // namespace apitest
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
