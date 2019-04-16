@@ -41,7 +41,7 @@ protected:
 #endif
     void            (ScRefHandlerCaller::*m_pSetReferenceHdl)( const ScRange& , const ScDocument* );
     void            (ScRefHandlerCaller::*m_pSetActiveHdl)();
-    void            (ScRefHandlerCaller::*m_pRefInputStartPreHdl)( formula::RefEdit* pEdit, const formula::RefButton* pButton );
+    void            (ScRefHandlerCaller::*m_pRefInputStartPreHdl)( formula::WeldRefEdit* pEdit, const formula::WeldRefButton* pButton );
     void            (ScRefHandlerCaller::*m_pRefInputDonePostHdl)();
 #if defined( _WIN32)
    #pragma pack(pop)
@@ -50,7 +50,7 @@ protected:
 public:
     typedef void            (ScRefHandlerCaller::*PFUNCSETREFHDLTYPE)( const ScRange& , const ScDocument* );
     typedef void            (ScRefHandlerCaller::*PCOMMONHDLTYPE)();
-    typedef void            (ScRefHandlerCaller::*PINPUTSTARTDLTYPE)(  formula::RefEdit* pEdit, const formula::RefButton* pButton );
+    typedef void            (ScRefHandlerCaller::*PINPUTSTARTDLTYPE)(  formula::WeldRefEdit* pEdit, const formula::WeldRefButton* pButton );
 
     void SetSetRefHdl(  PFUNCSETREFHDLTYPE pNewHdl )
     {
@@ -79,10 +79,10 @@ class ScTPValidationValue : public ScRefHandlerCaller, public SfxTabPage
 {
     static const sal_uInt16 pValueRanges[];
 public:
-    explicit                    ScTPValidationValue( vcl::Window* pParent, const SfxItemSet& rArgSet );
-    virtual                     ~ScTPValidationValue() override;
+    explicit                    ScTPValidationValue(TabPageParent pParent, const SfxItemSet& rArgSet);
     virtual void                dispose() override;
-    static VclPtr<SfxTabPage>          Create( TabPageParent pParent, const SfxItemSet* rArgSet );
+    virtual                     ~ScTPValidationValue() override;
+    static VclPtr<SfxTabPage>   Create( TabPageParent pParent, const SfxItemSet* rArgSet );
     static const sal_uInt16*    GetRanges() { return pValueRanges; }
 
     virtual bool                FillItemSet( SfxItemSet* rArgSet ) override;
@@ -97,22 +97,8 @@ private:
     void                        SetFirstFormula( const OUString& rFmlaStr );
     void                        SetSecondFormula( const OUString& rFmlaStr );
 
-                                DECL_LINK(SelectHdl, ListBox&, void);
-                                DECL_LINK(CheckHdl, Button*, void);
-
-    VclPtr<ListBox>                    m_pLbAllow;
-    VclPtr<CheckBox>                   m_pCbAllow;      /// Allow blank cells.
-    VclPtr<CheckBox>                   m_pCbShow;       /// Show selection list in cell.
-    VclPtr<CheckBox>                   m_pCbSort;       /// Sort selection list in cell.
-    VclPtr<FixedText>                  m_pFtValue;
-    VclPtr<ListBox>                    m_pLbValue;
-    VclPtr<FixedText>                  m_pFtMin;
-    VclPtr<VclContainer>               m_pMinGrid;
-    VclPtr<formula::RefEdit>           m_pEdMin;
-    VclPtr<VclMultiLineEdit>           m_pEdList;       /// Entries for explicit list
-    VclPtr<FixedText>                  m_pFtMax;
-    VclPtr<formula::RefEdit>           m_pEdMax;
-    VclPtr<FixedText>                  m_pFtHint;       /// Hint text for cell range validity.
+                                DECL_LINK(SelectHdl, weld::ComboBox&, void);
+                                DECL_LINK(CheckHdl, weld::Button&, void);
 
     OUString const                    maStrMin;
     OUString const                    maStrMax;
@@ -122,75 +108,65 @@ private:
     OUString const                    maStrList;
     sal_Unicode                 mcFmlaSep;      /// List separator in formulas.
 
-    DECL_LINK( EditSetFocusHdl, Control&, void );
-    DECL_LINK( KillFocusHdl, Control&, void );
-    void    OnClick( const Button *pBtn );
-    VclPtr<formula::RefEdit>           m_pRefEdit;
-public:
-    class ScRefButtonEx : public ::formula::RefButton
-    {
-        VclPtr<ScTPValidationValue> m_pPage;
-        virtual void Click() override;
-    public:
-        ScRefButtonEx(vcl::Window* pParent, WinBits nStyle)
-            : ::formula::RefButton(pParent, nStyle)
-            , m_pPage(nullptr)
-        {
-        }
-        virtual ~ScRefButtonEx() override;
-        virtual void dispose() override;
-        void SetParentPage(ScTPValidationValue *pPage)
-        {
-            m_pPage = pPage;
-        }
-        ScTPValidationValue* GetParentPage()
-        {
-            return m_pPage;
-        }
-    };
-private:
-    VclPtr<ScRefButtonEx>              m_pBtnRef;
-    VclPtr<VclContainer>               m_pRefGrid;
-    friend class ScRefButtonEx;
+    DECL_LINK( EditSetFocusHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( KillEditFocusHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( KillButtonFocusHdl, formula::WeldRefButton&, void );
+    DECL_LINK( ClickHdl, formula::WeldRefButton&, void );
+
+    formula::WeldRefEdit* m_pRefEdit;
+
+    std::unique_ptr<weld::ComboBox> m_xLbAllow;
+    std::unique_ptr<weld::CheckButton> m_xCbAllow;      /// Allow blank cells.
+    std::unique_ptr<weld::CheckButton> m_xCbShow;       /// Show selection list in cell.
+    std::unique_ptr<weld::CheckButton> m_xCbSort;       /// Sort selection list in cell.
+    std::unique_ptr<weld::Label> m_xFtValue;
+    std::unique_ptr<weld::ComboBox> m_xLbValue;
+    std::unique_ptr<weld::Label> m_xFtMin;
+    std::unique_ptr<weld::Widget> m_xMinGrid;
+    std::unique_ptr<formula::WeldRefEdit> m_xEdMin;
+    std::unique_ptr<weld::TextView> m_xEdList;       /// Entries for explicit list
+    std::unique_ptr<weld::Label> m_xFtMax;
+    std::unique_ptr<formula::WeldRefEdit> m_xEdMax;
+    std::unique_ptr<weld::Label> m_xFtHint;       /// Hint text for cell range validity.
+    std::unique_ptr<formula::WeldRefButton> m_xBtnRef;
+    std::unique_ptr<weld::Container> m_xRefGrid;
+
+    weld::Container* m_pRefEditParent;
+    weld::Container* m_pBtnRefParent;
+
     void            SetReferenceHdl( const ScRange& , const ScDocument* );
     void            SetActiveHdl();
-    void            RefInputStartPreHdl( formula::RefEdit* pEdit, const formula::RefButton* pButton );
+    void            RefInputStartPreHdl(formula::WeldRefEdit* pEdit, const formula::WeldRefButton* pButton);
     void            RefInputDonePostHdl();
     ScValidationDlg * GetValidationDlg();
 public:
     void            SetupRefDlg();
-    void            RemoveRefDlg();
+    void            RemoveRefDlg(bool bRestoreModal);
 };
 
 /** The "Validity" tab dialog. */
 class ScValidationDlg
-    : public ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false>
+    : public ScRefHdlrControllerImpl<ScValidationDlg, SfxTabDialogController, false>
     , public ScRefHandlerHelper
 {
-    typedef ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false> ScValidationDlgBase;
+    typedef ScRefHdlrControllerImpl<ScValidationDlg, SfxTabDialogController, false> ScValidationDlgBase;
 
     ScTabViewShell * const m_pTabVwSh;
-    VclPtr<VclHBox> m_pHBox;
-    sal_uInt16 m_nValuePageId;
+    OString m_sValuePageId;
     bool    m_bOwnRefHdlr:1;
     bool    m_bRefInputting:1;
+
+    std::unique_ptr<weld::Container> m_xHBox;
 
     bool    EnterRefStatus();
     bool    LeaveRefStatus();
 
 public:
-    explicit ScValidationDlg( vcl::Window* pParent, const SfxItemSet* pArgSet, ScTabViewShell * pTabViewSh );
-    virtual                     ~ScValidationDlg() override;
-    virtual void                dispose() override
+    explicit ScValidationDlg(weld::Window* pParent, const SfxItemSet* pArgSet, ScTabViewShell* pTabViewSh);
+    virtual ~ScValidationDlg() override;
+    static std::shared_ptr<SfxDialogController> Find1AliveObject(weld::Window *pAncestor)
     {
-        if( m_bOwnRefHdlr )
-            RemoveRefDlg( false );
-        m_pHBox.clear();
-        ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false>::dispose();
-    }
-    static ScValidationDlg * Find1AliveObject( vcl::Window *pAncestor )
-    {
-        return static_cast<ScValidationDlg *>( SC_MOD()->Find1RefWindow( SLOTID, pAncestor ) );
+        return SC_MOD()->Find1RefWindow(SLOTID, pAncestor);
     }
     ScTabViewShell *GetTabViewShell()
     {
@@ -198,9 +174,9 @@ public:
     }
 
     bool    SetupRefDlg();
-    bool    RemoveRefDlg( bool bRestoreModal );
+    bool    RemoveRefDlg(bool bRestoreModal);
 
-    void            SetModal( bool bModal ){ ScValidationDlgBase::SetModalInputMode( bModal ); }
+    void            SetModal(bool bModal) { m_xDialog->set_modal(bModal); }
 
     virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc ) override
     {
@@ -215,9 +191,9 @@ public:
     }
 
     bool IsRefInputting(){  return m_bRefInputting; }
-    vcl::Window*             get_refinput_shrink_parent() { return m_pHBox; }
+    weld::Container* get_refinput_shrink_parent() { return m_xHBox.get(); }
 
-    virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) override
+    virtual void        RefInputStart( formula::WeldRefEdit* pEdit, formula::WeldRefButton* pButton = nullptr ) override
     {
         if( !CanInputStart( pEdit ) )
             return;
@@ -228,7 +204,7 @@ public:
         ScValidationDlgBase::RefInputStart( pEdit, pButton );
     }
 
-    virtual void        RefInputStart( formula::WeldRefEdit* /*pEdit*/, formula::WeldRefButton* /*pButton*/ = nullptr ) override
+    virtual void        RefInputStart( formula::RefEdit* /*pEdit*/, formula::RefButton* /*pButton*/ = nullptr ) override
     {
         assert(false);
     }
@@ -249,15 +225,14 @@ public:
 
     enum { SLOTID = SID_VALIDITY_REFERENCE };
 
-    bool Close() override
+    virtual void Close() override
     {
-        if( m_bOwnRefHdlr )
+        if (m_bOwnRefHdlr)
         {
-            if (SfxTabPage* pPage = GetTabPage(m_nValuePageId))
-                static_cast<ScTPValidationValue*>(pPage)->RemoveRefDlg();
+            if (SfxTabPage* pPage = GetTabPage(m_sValuePageId))
+                static_cast<ScTPValidationValue*>(pPage)->RemoveRefDlg(false);
         }
-
-        return ScValidationDlgBase::Close();
+        ScValidationDlgBase::Close();
     }
 };
 

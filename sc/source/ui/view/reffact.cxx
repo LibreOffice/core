@@ -306,38 +306,33 @@ namespace
     }
 }
 
-ScValidityRefChildWin::ScValidityRefChildWin( vcl::Window*               pParentP,
-                                             sal_uInt16             nId,
-                                             const SfxBindings*     p,
+ScValidityRefChildWin::ScValidityRefChildWin(vcl::Window* pParentP,
+                                             sal_uInt16 nId,
+                                             const SfxBindings* p,
                                              SAL_UNUSED_PARAMETER SfxChildWinInfo* /*pInfo*/ )
-                                             : SfxChildWindow(pParentP, nId),
-                                             m_bVisibleLock( false ),
-                                             m_bFreeWindowLock( false ),
-                                             m_pSavedWndParent( nullptr )
+                                             : SfxChildWindow(pParentP, nId)
+                                             , m_bVisibleLock(false)
+                                             , m_bFreeWindowLock(false)
 {
     SetWantsFocus( false );
-    VclPtr<ScValidationDlg> pDlg = ScValidationDlg::Find1AliveObject( pParentP );
-    SetWindow(pDlg);
+    std::shared_ptr<SfxDialogController> xDlg(ScValidationDlg::Find1AliveObject(pParentP->GetFrameWeld()));
+    SetController(xDlg);
     ScTabViewShell* pViewShell;
-    if (pDlg)
-        pViewShell = static_cast<ScValidationDlg*>(GetWindow())->GetTabViewShell();
+    if (xDlg)
+        pViewShell = static_cast<ScValidationDlg*>(xDlg.get())->GetTabViewShell();
     else
         pViewShell = lcl_GetTabViewShell( p );
     if (!pViewShell)
         pViewShell = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
     OSL_ENSURE( pViewShell, "missing view shell :-(" );
-    if (pViewShell && !GetWindow())
+    if (pViewShell && !xDlg)
         pViewShell->GetViewFrame()->SetChildWindow( nId, false );
-
-    if( GetWindow() ) m_pSavedWndParent = GetWindow()->GetParent();
 }
 
 ScValidityRefChildWin::~ScValidityRefChildWin()
 {
-    if( GetWindow() ) GetWindow()->SetParent( m_pSavedWndParent );
-
-    if( m_bFreeWindowLock )
-        SetWindow(nullptr);
+    if (m_bFreeWindowLock)
+        SetController(nullptr);
 }
 
 IMPL_CHILD_CTOR( ScCondFormatDlgWrapper, WID_CONDFRMT_REF )

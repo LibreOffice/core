@@ -98,7 +98,7 @@ public:
     static              void enableInput(bool _bInput);
 
 public:
-    static bool         CanInputStart( const formula::RefEdit *pEdit ){ return !!pEdit; }
+    static bool         CanInputStart( const formula::WeldRefEdit *pEdit ){ return !!pEdit; }
     bool                CanInputDone( bool bForced ){   return (m_pRefEdit || m_pWeldRefEdit) && (bForced || !(m_pRefBtn || m_pWeldRefBtn));   }
 };
 
@@ -134,7 +134,7 @@ protected:
 
 public:
                         ScRefHandler( vcl::Window &rWindow, SfxBindings* pB, bool bBindRef );
-                        ScRefHandler( SfxModelessDialogController &rController, SfxBindings* pB, bool bBindRef );
+                        ScRefHandler( SfxDialogController &rController, SfxBindings* pB, bool bBindRef );
     virtual             ~ScRefHandler() override;
 
     virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) override = 0;
@@ -160,7 +160,7 @@ public:
 public:
     bool                EnterRefMode();
     bool                LeaveRefMode();
-    static inline bool  CanInputStart( const formula::RefEdit *pEdit );
+    static inline bool  CanInputStart( const formula::WeldRefEdit *pEdit );
     inline  bool        CanInputDone( bool bForced );
 };
 
@@ -245,74 +245,54 @@ template<  class TWindow, bool bBindRef = true >
 class ScRefHdlrControllerImplBase: public TWindow, public ScRefHandler
 {
 private:
-    template<class TBindings, class TChildWindow, class TParentWindow >
-    ScRefHdlrControllerImplBase( TBindings* pB, TChildWindow* pCW,
-        TParentWindow* pParent, const OUString& rUIXMLDescription, const OString& rID );
+    ScRefHdlrControllerImplBase(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID)
+        : TWindow(pB, pCW, pParent, rUIXMLDescription, rID)
+        , ScRefHandler(*static_cast<TWindow*>(this), pB, bBindRef)
+    {
+    }
 
-    template<class TParentWindow, class TArg>
-    ScRefHdlrControllerImplBase(TParentWindow* pParent, const OUString& rUIXMLDescription, const OString& rID, const TArg &rArg, SfxBindings *pB);
+    ScRefHdlrControllerImplBase(weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet* pArg, SfxBindings *pB)
+        : TWindow(pParent, rUIXMLDescription, rID, pArg)
+        , ScRefHandler(*static_cast<TWindow*>(this), pB, bBindRef)
+    {
+    }
 
-    virtual ~ScRefHdlrControllerImplBase() override;
+    virtual ~ScRefHdlrControllerImplBase() override
+    {
+    }
 
     template<class, class, bool> friend struct ScRefHdlrControllerImpl;
 };
 
-template<class TWindow, bool bBindRef >
-ScRefHdlrControllerImplBase<TWindow,bBindRef>::~ScRefHdlrControllerImplBase(){}
-
-template<class TWindow, bool bBindRef>
-template<class TBindings, class TChildWindow, class TParentWindow>
-ScRefHdlrControllerImplBase<TWindow, bBindRef>::ScRefHdlrControllerImplBase(TBindings* pB, TChildWindow* pCW,
-                 TParentWindow* pParent, const OUString& rUIXMLDescription, const OString& rID)
-    : TWindow(pB, pCW, pParent, rUIXMLDescription, rID)
-    , ScRefHandler( *static_cast<TWindow*>(this), pB, bBindRef )
-{
-}
-
-template<class TWindow, bool bBindRef >
-template<class TParentWindow, class TArg>
-ScRefHdlrControllerImplBase<TWindow,bBindRef>::ScRefHdlrControllerImplBase(TParentWindow* pParent, const OUString& rUIXMLDescription, const OString& rID,
-                                                                           const TArg &rArg, SfxBindings *pB)
-    : TWindow(pParent, rUIXMLDescription, rID, rArg)
-    , ScRefHandler( *static_cast<TWindow*>(this), pB, bBindRef )
-{
-}
-
 template<class TDerived, class TBase, bool bBindRef = true>
-struct ScRefHdlrControllerImpl: ScRefHdlrControllerImplBase< TBase, bBindRef >
+struct ScRefHdlrControllerImpl : ScRefHdlrControllerImplBase<TBase, bBindRef>
 {
     enum { UNKNOWN_SLOTID = 0U, SLOTID = UNKNOWN_SLOTID };
 
-    template<class T1, class T2, class T3, class T4>
-    ScRefHdlrControllerImpl( const T1 & rt1, const T2 & rt2, const T3& rt3, const T4& rt4 )
-        : ScRefHdlrControllerImplBase<TBase, bBindRef >(rt1, rt2, rt3, rt4)
-    {
-        SC_MOD()->RegisterRefController( static_cast<sal_uInt16>( TDerived::SLOTID ), this );
-    }
-
-    template<class T1, class T2, class T3, class T4, class T5>
-    ScRefHdlrControllerImpl( const T1 & rt1, const T2 & rt2, const T3& rt3, const T4& rt4, const T5& rt5 )
+    ScRefHdlrControllerImpl(weld::Window* rt1, const OUString& rt2, const OString& rt3, const SfxItemSet* rt4, SfxBindings *rt5)
         : ScRefHdlrControllerImplBase<TBase, bBindRef >(rt1, rt2, rt3, rt4, rt5)
     {
-        SC_MOD()->RegisterRefController( static_cast<sal_uInt16>( TDerived::SLOTID ), this );
+    }
+
+    ScRefHdlrControllerImpl(SfxBindings* rt1, SfxChildWindow* rt2, weld::Window* rt3, const OUString& rt4, const OString& rt5)
+        : ScRefHdlrControllerImplBase<TBase, bBindRef >(rt1, rt2, rt3, rt4, rt5)
+    {
     }
 
     ~ScRefHdlrControllerImpl()
     {
-        SC_MOD()->UnregisterRefController( static_cast<sal_uInt16>( TDerived::SLOTID ), this );
     }
 };
 
-struct ScAnyRefDlgController : ::ScRefHdlrControllerImpl<ScAnyRefDlgController, SfxModelessDialogController>
+struct ScAnyRefDlgController : ScRefHdlrControllerImpl<ScAnyRefDlgController, SfxModelessDialogController>
 {
-    template<class T1, class T2, class T3, class T4, class T5>
-    ScAnyRefDlgController( const T1 & rt1, const T2 & rt2, const T3& rt3, const T4& rt4, const T5& rt5 )
+    ScAnyRefDlgController(SfxBindings* rt1, SfxChildWindow* rt2, weld::Window* rt3, const OUString& rt4, const OString& rt5)
         : ScRefHdlrControllerImpl<ScAnyRefDlgController, SfxModelessDialogController>(rt1, rt2, rt3, rt4, rt5)
     {
     }
 };
 
-inline bool ScRefHandler::CanInputStart( const formula::RefEdit *pEdit )
+inline bool ScRefHandler::CanInputStart( const formula::WeldRefEdit *pEdit )
 {
     return ScFormulaReferenceHelper::CanInputStart( pEdit );
 }

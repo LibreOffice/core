@@ -1,96 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
-  <object class="GtkListStore" id="liststore1">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name gint1 -->
-      <column type="gint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="validationcriteriapage|liststore1">All values</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="validationcriteriapage|liststore1">Whole Numbers</col>
-        <col id="1">1</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="validationcriteriapage|liststore1">Decimal</col>
-        <col id="1">2</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="validationcriteriapage|liststore1">Date</col>
-        <col id="1">3</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="validationcriteriapage|liststore1">Time</col>
-        <col id="1">4</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="validationcriteriapage|liststore1">Cell range</col>
-        <col id="1">5</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="validationcriteriapage|liststore1">List</col>
-        <col id="1">6</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="validationcriteriapage|liststore1">Text length</col>
-        <col id="1">7</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="validationcriteriapage|liststore1">Custom</col>
-        <col id="1">8</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="liststore2">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name gint1 -->
-      <column type="gint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="validationcriteriapage|liststore2">equal</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="validationcriteriapage|liststore2">less than</col>
-        <col id="1">1</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="validationcriteriapage|liststore2">greater than</col>
-        <col id="1">2</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="validationcriteriapage|liststore2">less than or equal</col>
-        <col id="1">3</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="validationcriteriapage|liststore2">greater than or equal to</col>
-        <col id="1">4</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="validationcriteriapage|liststore2">not equal</col>
-        <col id="1">5</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="validationcriteriapage|liststore2">valid range</col>
-        <col id="1">6</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="validationcriteriapage|liststore2">invalid range</col>
-        <col id="1">7</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkGrid" id="ValidationCriteriaPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -103,10 +14,10 @@
       <object class="GtkLabel" id="label1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">0</property>
         <property name="label" translatable="yes" context="validationcriteriapage|label1">_Allow:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">allow</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -117,10 +28,10 @@
       <object class="GtkLabel" id="valueft">
         <property name="can_focus">False</property>
         <property name="no_show_all">True</property>
-        <property name="xalign">0</property>
         <property name="label" translatable="yes" context="validationcriteriapage|valueft">_Data:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">data</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -128,10 +39,20 @@
       </packing>
     </child>
     <child>
-      <object class="GtkComboBox" id="allow">
+      <object class="GtkComboBoxText" id="allow">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="model">liststore1</property>
+        <items>
+          <item id="0" translatable="yes" context="validationcriteriapage|liststore1">All values</item>
+          <item id="1" translatable="yes" context="validationcriteriapage|liststore1">Whole Numbers</item>
+          <item id="2" translatable="yes" context="validationcriteriapage|liststore1">Decimal</item>
+          <item id="3" translatable="yes" context="validationcriteriapage|liststore1">Date</item>
+          <item id="4" translatable="yes" context="validationcriteriapage|liststore1">Time</item>
+          <item id="5" translatable="yes" context="validationcriteriapage|liststore1">Cell range</item>
+          <item id="6" translatable="yes" context="validationcriteriapage|liststore1">List</item>
+          <item id="7" translatable="yes" context="validationcriteriapage|liststore1">Text length</item>
+          <item id="8" translatable="yes" context="validationcriteriapage|liststore1">Custom</item>
+        </items>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -139,10 +60,19 @@
       </packing>
     </child>
     <child>
-      <object class="GtkComboBox" id="data">
+      <object class="GtkComboBoxText" id="data">
         <property name="can_focus">False</property>
         <property name="no_show_all">True</property>
-        <property name="model">liststore2</property>
+        <items>
+          <item id="0" translatable="yes" context="validationcriteriapage|liststore2">equal</item>
+          <item id="1" translatable="yes" context="validationcriteriapage|liststore2">less than</item>
+          <item id="2" translatable="yes" context="validationcriteriapage|liststore2">greater than</item>
+          <item id="3" translatable="yes" context="validationcriteriapage|liststore2">less than or equal</item>
+          <item id="4" translatable="yes" context="validationcriteriapage|liststore2">greater than or equal to</item>
+          <item id="5" translatable="yes" context="validationcriteriapage|liststore2">not equal</item>
+          <item id="6" translatable="yes" context="validationcriteriapage|liststore2">valid range</item>
+          <item id="7" translatable="yes" context="validationcriteriapage|liststore2">invalid range</item>
+        </items>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -153,10 +83,10 @@
       <object class="GtkLabel" id="minft">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">0</property>
         <property name="label" translatable="yes" context="validationcriteriapage|minft">_Minimum:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">mingrid</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -175,10 +105,11 @@
             <property name="hexpand">True</property>
             <property name="column_spacing">12</property>
             <child>
-              <object class="foruilo-RefEdit" id="min">
+              <object class="GtkEntry" id="min">
                 <property name="can_focus">True</property>
                 <property name="no_show_all">True</property>
                 <property name="hexpand">True</property>
+                <property name="activates_default">True</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -186,7 +117,7 @@
               </packing>
             </child>
             <child>
-              <object class="sclo-ScRefButtonEx" id="validref">
+              <object class="GtkButton" id="validref">
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
@@ -212,7 +143,7 @@
             <property name="vexpand">True</property>
             <property name="shadow_type">in</property>
             <child>
-              <object class="GtkTextView" id="minlist:border">
+              <object class="GtkTextView" id="minlist">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
@@ -235,10 +166,10 @@
       <object class="GtkLabel" id="maxft">
         <property name="can_focus">False</property>
         <property name="no_show_all">True</property>
-        <property name="xalign">0</property>
         <property name="label" translatable="yes" context="validationcriteriapage|maxft">Ma_ximum:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">max</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -296,11 +227,11 @@
       <object class="GtkLabel" id="hintft">
         <property name="can_focus">False</property>
         <property name="no_show_all">True</property>
-        <property name="xalign">0</property>
-        <property name="yalign">0</property>
         <property name="label" translatable="yes" context="validationcriteriapage|hintft">A valid source can only consist of a contiguous selection of rows and columns, or a formula that results in an area or array.</property>
         <property name="wrap">True</property>
         <property name="max_width_chars">50</property>
+        <property name="xalign">0</property>
+        <property name="yalign">0</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -308,10 +239,11 @@
       </packing>
     </child>
     <child>
-      <object class="foruilo-RefEdit" id="max">
+      <object class="GtkEntry" id="max">
         <property name="can_focus">True</property>
         <property name="no_show_all">True</property>
         <property name="hexpand">True</property>
+        <property name="activates_default">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>

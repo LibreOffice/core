@@ -219,6 +219,7 @@ private:
     Link<WeldRefButton&,void> maGetFocusHdl;
     Link<WeldRefButton&,void> maLoseFocusHdl;
     Link<weld::Widget&,bool> maActivateHdl;
+    Link<WeldRefButton&,void> maClickHdl;
 
 protected:
     DECL_LINK(Click, weld::Button&, void);
@@ -240,6 +241,7 @@ public:
     void SetGetFocusHdl(const Link<WeldRefButton&,void>& rLink) { maGetFocusHdl = rLink; }
     void SetLoseFocusHdl(const Link<WeldRefButton&,void>& rLink) { maLoseFocusHdl = rLink; }
     void SetActivateHdl(const Link<weld::Widget&,bool>& rLink) { maActivateHdl = rLink; }
+    void SetClickHdl(const Link<WeldRefButton&,void>& rLink) { maClickHdl = rLink; }
 };
 
 
