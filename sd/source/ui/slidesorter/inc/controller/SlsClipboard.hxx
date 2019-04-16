@@ -52,7 +52,7 @@ namespace sd { namespace slidesorter { namespace controller {
 
 class SlideSorterController;
 
-class Clipboard
+class SAL_DLLPUBLIC_RTTI Clipboard
     : public ViewClipboard
 {
 public:

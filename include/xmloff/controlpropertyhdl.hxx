@@ -36,7 +36,7 @@ namespace xmloff
 
     //= ORotationAngleHandler
 
-    class ORotationAngleHandler : public XMLPropertyHandler
+    class SAL_DLLPUBLIC_RTTI ORotationAngleHandler : public XMLPropertyHandler
     {
     public:
         ORotationAngleHandler();
@@ -48,7 +48,7 @@ namespace xmloff
 
     //= OFontWidthHandler
 
-    class OFontWidthHandler : public XMLPropertyHandler
+    class SAL_DLLPUBLIC_RTTI OFontWidthHandler : public XMLPropertyHandler
     {
     public:
         OFontWidthHandler();
@@ -60,7 +60,7 @@ namespace xmloff
 
     //= OControlBorderHandlerBase
 
-    class OControlBorderHandler : public XMLPropertyHandler
+    class SAL_DLLPUBLIC_RTTI OControlBorderHandler : public XMLPropertyHandler
     {
     public:
         enum BorderFacet

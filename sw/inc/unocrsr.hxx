@@ -32,7 +32,7 @@ namespace sw
     };
 }
 
-class SwUnoCursor : public virtual SwCursor
+class SAL_DLLPUBLIC_RTTI SwUnoCursor : public virtual SwCursor
 {
 private:
     bool m_bRemainInSection : 1;

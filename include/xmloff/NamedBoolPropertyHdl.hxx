@@ -26,7 +26,7 @@
 /**
     PropertyHandler for a named xml bool type:
 */
-class XMLNamedBoolPropertyHdl : public XMLPropertyHandler
+class SAL_DLLPUBLIC_RTTI XMLNamedBoolPropertyHdl : public XMLPropertyHandler
 {
 private:
     const OUString maTrueStr;

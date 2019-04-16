@@ -145,7 +145,7 @@ public:
     one of the instances with the same m_nHandle is actually in the document,
     they're all cloned via CopyField()...
  */
-class SwAuthorityField : public SwField
+class SAL_DLLPUBLIC_RTTI SwAuthorityField : public SwField
 {
     rtl::Reference<SwAuthEntry>  m_xAuthEntry;
     mutable sal_IntPtr  m_nTempSequencePos;

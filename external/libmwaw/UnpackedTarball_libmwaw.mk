@@ -15,12 +15,10 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libmwaw,0))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libmwaw))
 
-ifeq ($(COM_IS_CLANG),TRUE)
-ifneq ($(filter -fsanitize=%,$(CC)),)
+ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
     external/libmwaw/ubsan-visibility.patch \
 ))
-endif
 endif
 
 ifneq ($(OS),MACOSX)

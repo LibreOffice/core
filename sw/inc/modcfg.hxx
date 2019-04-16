@@ -57,7 +57,7 @@ public:
     void Insert(InsCaptionOpt* pObj);
 };
 
-class SwRevisionConfig : public utl::ConfigItem
+class SAL_DLLPUBLIC_RTTI SwRevisionConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
@@ -90,7 +90,7 @@ enum class SwCompareMode
     ByChar
 };
 
-class SwCompareConfig : public utl::ConfigItem
+class SAL_DLLPUBLIC_RTTI SwCompareConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
@@ -114,7 +114,7 @@ public:
     using ConfigItem::SetModified;
 };
 
-class SwInsertConfig : public utl::ConfigItem
+class SAL_DLLPUBLIC_RTTI SwInsertConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
@@ -142,7 +142,7 @@ public:
     using ConfigItem::SetModified;
 };
 
-class SwTableConfig : public utl::ConfigItem
+class SAL_DLLPUBLIC_RTTI SwTableConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
@@ -170,7 +170,7 @@ public:
     using ConfigItem::SetModified;
 };
 
-class SwMiscConfig : public utl::ConfigItem
+class SAL_DLLPUBLIC_RTTI SwMiscConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 

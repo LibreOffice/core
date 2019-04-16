@@ -302,7 +302,7 @@ bool CheckControlLayer( const SdrObject *pObj );
 
 typedef std::unique_ptr< SwDrawVirtObj, SdrObjectFreeOp > SwDrawVirtObjPtr;
 
-class SwDrawContact final : public SwContact
+class SAL_DLLPUBLIC_RTTI SwDrawContact final : public SwContact
 {
     private:
         /** anchored drawing object instance for the

@@ -28,7 +28,7 @@
 /**
     Field type for dropdown boxes.
 */
-class SwDropDownFieldType : public SwFieldType
+class SAL_DLLPUBLIC_RTTI SwDropDownFieldType : public SwFieldType
 {
 public:
     /**

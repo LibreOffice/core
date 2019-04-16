@@ -82,7 +82,7 @@ public:
     const ImageMap& GetImageMap() const             { return aImageMap; }
 };
 
-class ScMacroInfo : public SdrObjUserData
+class SAL_DLLPUBLIC_RTTI ScMacroInfo : public SdrObjUserData
 {
 public:
                     ScMacroInfo();

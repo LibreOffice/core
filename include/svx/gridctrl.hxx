@@ -63,7 +63,7 @@ enum class GridRowStatus
 // DbGridRow, description of rows
 
 
-class DbGridRow : public SvRefBase
+class SAL_DLLPUBLIC_RTTI DbGridRow : public SvRefBase
 {
     css::uno::Any  m_aBookmark;        // Bookmark of the row, can be set
     ::std::vector< std::unique_ptr<::svxform::DataColumn> >

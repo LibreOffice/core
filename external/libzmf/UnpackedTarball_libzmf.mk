@@ -15,12 +15,10 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libzmf,0))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libzmf))
 
-ifeq ($(COM_IS_CLANG),TRUE)
-ifneq ($(filter -fsanitize=%,$(CC)),)
+ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,libzmf, \
     external/libzmf/ubsan-visibility.patch \
 ))
-endif
 endif
 
 $(eval $(call gb_UnpackedTarball_add_patches,libzmf, \

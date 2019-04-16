@@ -28,7 +28,7 @@ class SwDoc;
 namespace sw
 {
 
-class DocumentRedlineManager : public IDocumentRedlineAccess
+class SAL_DLLPUBLIC_RTTI DocumentRedlineManager : public IDocumentRedlineAccess
 {
 public:
     DocumentRedlineManager( SwDoc& i_rSwdoc );

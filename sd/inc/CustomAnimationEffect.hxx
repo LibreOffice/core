@@ -365,7 +365,7 @@ private:
 typedef std::shared_ptr< InteractiveSequence > InteractiveSequencePtr;
 typedef std::vector< InteractiveSequencePtr > InteractiveSequenceVector;
 
-class MainSequence : public EffectSequenceHelper, public ISequenceListener
+class SAL_DLLPUBLIC_RTTI MainSequence : public EffectSequenceHelper, public ISequenceListener
 {
     friend class UndoAnimation;
     friend class MainSequenceRebuildGuard;

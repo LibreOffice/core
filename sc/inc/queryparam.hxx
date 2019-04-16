@@ -39,7 +39,7 @@ class SharedStringPool;
 
 }
 
-struct ScQueryParamBase
+struct SAL_DLLPUBLIC_RTTI ScQueryParamBase
 {
     utl::SearchParam::SearchType eSearchType;
     bool            bHasHeader;
@@ -99,7 +99,7 @@ inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT,
     return stream;
 }
 
-struct ScQueryParamTable
+struct SAL_DLLPUBLIC_RTTI ScQueryParamTable
 {
     SCCOL           nCol1;
     SCROW           nRow1;

@@ -69,7 +69,7 @@ typedef std::map< sal_uInt32, css::uno::Sequence< css::uno::Type> > SdTypesCache
 
 */
 
-class SdModule final : public SfxModule, public SfxListener
+class SAL_DLLPUBLIC_RTTI SdModule final : public SfxModule, public SfxListener
 {
 public:
                             SFX_DECL_INTERFACE(SD_IF_SDAPP)

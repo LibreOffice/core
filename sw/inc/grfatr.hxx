@@ -77,7 +77,7 @@ public:
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
-class SwRotationGrf : public SfxUInt16Item
+class SAL_DLLPUBLIC_RTTI SwRotationGrf : public SfxUInt16Item
 {
 private:
     Size const aUnrotatedSize;

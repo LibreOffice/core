@@ -29,7 +29,7 @@ class ScDocShell;
 class ScPreviewShell;
 class FmFormView;
 
-class ScPreview : public vcl::Window
+class SAL_DLLPUBLIC_RTTI ScPreview : public vcl::Window
 {
 private:
     ScMarkData::MarkedTabsType maSelectedTabs;

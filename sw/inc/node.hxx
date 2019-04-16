@@ -520,7 +520,7 @@ private:
     SwTableNode & operator= ( const SwTableNode & rNode ) = delete;
 };
 
-class SwSectionNode
+class SAL_DLLPUBLIC_RTTI SwSectionNode
     : public SwStartNode
 {
     friend class SwNodes;

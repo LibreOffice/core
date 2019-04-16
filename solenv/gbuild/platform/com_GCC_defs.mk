@@ -121,11 +121,10 @@ endif
 
 # If CC or CXX already include -fvisibility=hidden, don't duplicate it
 ifeq (,$(filter -fvisibility=hidden,$(CC)))
-gb_VISIBILITY_FLAGS := -fvisibility=hidden
-ifeq ($(COM_IS_CLANG),TRUE)
-ifneq ($(filter -fsanitize=%,$(CC)),)
+ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
 gb_VISIBILITY_FLAGS := -fvisibility-ms-compat
-endif
+else
+gb_VISIBILITY_FLAGS := -fvisibility=hidden
 endif
 endif
 gb_VISIBILITY_FLAGS_CXX := -fvisibility-inlines-hidden
