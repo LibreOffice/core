@@ -114,6 +114,8 @@ public:
     void testMultipleAxisXLSX();
     void testSecondaryAxisXLSX();
     void testSetSeriesToSecondaryAxisXLSX();
+    void testCombinedChartSecondaryAxisXLSX();
+    void testCombinedChartSecondaryAxisODS();
     void testAxisTitleRotationXLSX();
     void testAxisCrossBetweenXSLX();
     void testPieChartDataPointExplosionXLSX();
@@ -208,6 +210,8 @@ public:
     CPPUNIT_TEST(testMultipleAxisXLSX);
     CPPUNIT_TEST(testSecondaryAxisXLSX);
     CPPUNIT_TEST(testSetSeriesToSecondaryAxisXLSX);
+    CPPUNIT_TEST(testCombinedChartSecondaryAxisXLSX);
+    CPPUNIT_TEST(testCombinedChartSecondaryAxisODS);
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
     CPPUNIT_TEST(testAxisCrossBetweenXSLX);
     CPPUNIT_TEST(testPieChartDataPointExplosionXLSX);
@@ -1780,6 +1784,46 @@ void Chart2ExportTest::testSetSeriesToSecondaryAxisXLSX()
     CPPUNIT_ASSERT(pXmlDoc);
     // Check there are only two <lineChart> tag in the XML, one for the primary and one for the secondary axis.
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart", 2);
+}
+
+void Chart2ExportTest::testCombinedChartSecondaryAxisXLSX()
+{
+    // Original file was created with MS Office
+    load("/chart2/qa/extras/data/xlsx/", "combined_chart_secondary_axis.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Collect barchart axID on secondary Axis
+    OUString XValueIdOfBarchart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:axId[1]", "val");
+    OUString YValueIdOfBarchart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:axId[2]", "val");
+    // Collect linechart axID on primary Axis
+    OUString XValueIdOfLinechart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:axId[1]", "val");
+    OUString YValueIdOfLinechart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:axId[2]", "val");
+    // Check which c:catAx and c:valAx contain the AxisId of charttypes
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx[1]/c:axId", "val", XValueIdOfLinechart);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[1]/c:axId", "val", YValueIdOfLinechart);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx[2]/c:axId", "val", XValueIdOfBarchart);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[2]/c:axId", "val", YValueIdOfBarchart);
+}
+
+void Chart2ExportTest::testCombinedChartSecondaryAxisODS()
+{
+    // Original file was created with LibreOffice
+    load("/chart2/qa/extras/data/ods/", "combined_chart_secondary_axis.ods");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Collect barchart axID on secondary Axis
+    OUString XValueIdOfBarchart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:axId[1]", "val");
+    OUString YValueIdOfBarchart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:axId[2]", "val");
+    // Collect linechart axID on primary Axis
+    OUString XValueIdOfLinechart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:axId[1]", "val");
+    OUString YValueIdOfLinechart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:axId[2]", "val");
+    // Check which c:catAx and c:valAx contain the AxisId of charttypes
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx[1]/c:axId", "val", XValueIdOfLinechart);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[1]/c:axId", "val", YValueIdOfLinechart);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx[2]/c:axId", "val", XValueIdOfBarchart);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[2]/c:axId", "val", YValueIdOfBarchart);
+    // do not need CT_crosses tag if the actual axis is deleted, so we need to make sure it is not saved
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx[2]/c:crosses", 0);
 }
 
 void Chart2ExportTest::testAxisTitleRotationXLSX()
