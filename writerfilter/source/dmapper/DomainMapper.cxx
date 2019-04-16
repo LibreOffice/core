@@ -3292,6 +3292,17 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             {
                 if (m_pImpl->isBreakDeferred(PAGE_BREAK))
                 {
+                    /* If PAGEBREAK appears in first paragraph of the section or
+                     * after first run of any paragraph then need to split paragraph
+                     * to handle it properly.
+                     */
+                    if (m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun())
+                    {
+                        m_pImpl->m_bIsSplitPara = true;
+                        m_pImpl->finishParagraph( m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) );
+                        lcl_startParagraphGroup();
+                    }
+
                     if (m_pImpl->GetSettingsTable()->GetSplitPgBreakAndParaMark())
                     {
                         pContext->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
