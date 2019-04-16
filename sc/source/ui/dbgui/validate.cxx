@@ -125,35 +125,39 @@ void ScTPValidationValue:: SetActiveHdl()
         }
 }
 
-void ScTPValidationValue::RefInputStartPreHdl( formula::RefEdit* pEdit, const formula::RefButton* pButton )
+void ScTPValidationValue::RefInputStartPreHdl( formula::WeldRefEdit* pEdit, const formula::WeldRefButton* pButton )
 {
     if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
     {
+#if 0
         vcl::Window *pNewParent = pValidationDlg->get_refinput_shrink_parent();
         if( pEdit == m_pRefEdit && m_pRefEdit->GetParent() != pNewParent )
         {
             m_pRefEdit->SetParent(pNewParent);
         }
 
-        if( pButton == m_pBtnRef && m_pBtnRef->GetParent() != pNewParent )
+        if( pButton == m_xBtnRef.get() && m_xBtnRef->GetParent() != pNewParent )
         {
-            m_pBtnRef->SetParent(pNewParent);
+            m_xBtnRef->SetParent(pNewParent);
         }
 
         pNewParent->Show();
+#endif
     }
 }
 
 void ScTPValidationValue::RefInputDonePostHdl()
 {
-    if( m_pRefEdit && m_pRefEdit->GetParent() != m_pRefGrid )
+#if 0
+    if( m_pRefEdit && m_pRefEdit->GetParent() != m_xRefGrid )
     {
-        m_pRefEdit->SetParent( m_pRefGrid );
-        m_pBtnRef->SetParent( m_pRefEdit ); //if Edit SetParent but button not, the tab order will be incorrect, need button to setparent to another window and restore parent later in order to restore the tab order
+        m_pRefEdit->SetParent( m_xRefGrid );
+        m_xBtnRef->SetParent( m_pRefEdit ); //if Edit SetParent but button not, the tab order will be incorrect, need button to setparent to another window and restore parent later in order to restore the tab order
     }
 
-    if( m_pBtnRef->GetParent() != m_pRefGrid )
-        m_pBtnRef->SetParent( m_pRefGrid );
+    if( m_xBtnRef->GetParent() != m_xRefGrid )
+        m_xBtnRef->SetParent( m_xRefGrid );
+#endif
 
     if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
     {
@@ -169,19 +173,8 @@ void ScTPValidationValue::RefInputDonePostHdl()
         }
     }
 
-    if( m_pRefEdit && !m_pRefEdit->HasFocus() )
+    if (m_pRefEdit && !m_pRefEdit->GetWidget()->has_focus())
         m_pRefEdit->GrabFocus();
-}
-
-ScTPValidationValue::ScRefButtonEx::~ScRefButtonEx()
-{
-    disposeOnce();
-}
-
-void ScTPValidationValue::ScRefButtonEx::dispose()
-{
-    m_pPage.clear();
-    ::formula::RefButton::dispose();
 }
 
 namespace {
@@ -322,9 +315,9 @@ bool lclGetStringListFromFormula( OUString& rStringList, const OUString& rFmlaSt
 
 } // namespace
 
-ScTPValidationValue::ScTPValidationValue( vcl::Window* pParent, const SfxItemSet& rArgSet )
-    : SfxTabPage( pParent, "ValidationCriteriaPage",
-        "modules/scalc/ui/validationcriteriapage.ui", &rArgSet)
+ScTPValidationValue::ScTPValidationValue(TabPageParent pParent, const SfxItemSet& rArgSet)
+    : SfxTabPage(pParent, "modules/scalc/ui/validationcriteriapage.ui",
+                 "ValidationCriteriaPage", &rArgSet)
     , maStrMin(ScResId(SCSTR_VALID_MINIMUM))
     , maStrMax(ScResId(SCSTR_VALID_MAXIMUM))
     , maStrValue(ScResId(SCSTR_VALID_VALUE))
@@ -332,33 +325,32 @@ ScTPValidationValue::ScTPValidationValue( vcl::Window* pParent, const SfxItemSet
     , maStrRange(ScResId(SCSTR_VALID_RANGE))
     , maStrList(ScResId(SCSTR_VALID_LIST))
     , m_pRefEdit(nullptr)
+    , m_xLbAllow(m_xBuilder->weld_combo_box("allow"))
+    , m_xCbAllow(m_xBuilder->weld_check_button("allowempty"))
+    , m_xCbShow(m_xBuilder->weld_check_button("showlist"))
+    , m_xCbSort(m_xBuilder->weld_check_button("sortascend"))
+    , m_xFtValue(m_xBuilder->weld_label("valueft"))
+    , m_xLbValue(m_xBuilder->weld_combo_box("data"))
+    , m_xFtMin(m_xBuilder->weld_label("minft"))
+    , m_xMinGrid(m_xBuilder->weld_widget("mingrid"))
+    , m_xEdMin(new formula::WeldRefEdit(m_xBuilder->weld_entry("min")))
+    , m_xEdList(m_xBuilder->weld_text_view("minlist"))
+    , m_xFtMax(m_xBuilder->weld_label("maxft"))
+    , m_xEdMax(new formula::WeldRefEdit(m_xBuilder->weld_entry("max")))
+    , m_xFtHint(m_xBuilder->weld_label("hintft"))
+    , m_xBtnRef(new formula::WeldRefButton(m_xBuilder->weld_button("validref")))
+    , m_xRefGrid(m_xBuilder->weld_container("refgrid"))
 {
-    get(m_pLbAllow, "allow");
-    get(m_pCbAllow, "allowempty");
-    get(m_pCbShow, "showlist");
-    get(m_pCbSort, "sortascend");
-    get(m_pFtValue, "valueft");
-    get(m_pLbValue, "data");
-    get(m_pFtMin, "minft");
-    get(m_pMinGrid, "mingrid");
-    get(m_pEdMin, "min");
-    m_pEdMin->SetReferences(nullptr, m_pFtMin);
-    get(m_pEdList, "minlist");
+    m_xEdMin->SetReferences(nullptr, m_xFtMin.get());
     Size aSize(LogicToPixel(Size(174, 105), MapMode(MapUnit::MapAppFont)));
-    m_pEdList->set_width_request(aSize.Width());
-    m_pEdList->set_height_request(aSize.Height());
-    get(m_pFtMax, "maxft");
-    get(m_pEdMax, "max");
-    m_pEdMax->SetReferences(nullptr, m_pFtMax);
-    get(m_pFtHint, "hintft");
-    get(m_pBtnRef, "validref");
-    m_pBtnRef->SetParentPage(this);
-    get(m_pRefGrid, "refgrid");
+    m_xEdList->set_size_request(aSize.Width(), aSize.Height());
+    m_xEdMax->SetReferences(nullptr, m_xFtMax.get());
+
+    m_xBtnRef->SetClickHdl(LINK(this, ScTPValidationValue, ClickHdl));
 
     //lock in the max size initial config
-    aSize = get_preferred_size();
-    set_width_request(aSize.Width());
-    set_height_request(aSize.Height());
+    aSize = m_xContainer->get_preferred_size();
+    m_xContainer->set_size_request(aSize.Width(), aSize.Height());
 
     Init();
 
@@ -366,7 +358,7 @@ ScTPValidationValue::ScTPValidationValue( vcl::Window* pParent, const SfxItemSet
     OUString aListSep = ::ScCompiler::GetNativeSymbol( ocSep );
     OSL_ENSURE( aListSep.getLength() == 1, "ScTPValidationValue::ScTPValidationValue - list separator error" );
     mcFmlaSep = aListSep.getLength() ? aListSep[0] : ';';
-    m_pBtnRef->Hide(); // cell range picker
+    m_xBtnRef->GetWidget()->hide(); // cell range picker
 }
 
 ScTPValidationValue::~ScTPValidationValue()
@@ -374,51 +366,29 @@ ScTPValidationValue::~ScTPValidationValue()
     disposeOnce();
 }
 
-void ScTPValidationValue::dispose()
-{
-    m_pLbAllow.clear();
-    m_pCbAllow.clear();
-    m_pCbShow.clear();
-    m_pCbSort.clear();
-    m_pFtValue.clear();
-    m_pLbValue.clear();
-    m_pFtMin.clear();
-    m_pMinGrid.clear();
-    m_pEdMin.clear();
-    m_pEdList.clear();
-    m_pFtMax.clear();
-    m_pEdMax.clear();
-    m_pFtHint.clear();
-    m_pRefEdit.clear();
-    m_pBtnRef.clear();
-    m_pRefGrid.clear();
-    SfxTabPage::dispose();
-}
-
-
 void ScTPValidationValue::Init()
 {
-    m_pLbAllow->SetSelectHdl( LINK( this, ScTPValidationValue, SelectHdl ) );
-    m_pLbValue->SetSelectHdl( LINK( this, ScTPValidationValue, SelectHdl ) );
-    m_pCbShow->SetClickHdl( LINK( this, ScTPValidationValue, CheckHdl ) );
+    m_xLbAllow->connect_changed( LINK( this, ScTPValidationValue, SelectHdl ) );
+    m_xLbValue->connect_changed( LINK( this, ScTPValidationValue, SelectHdl ) );
+    m_xCbShow->connect_clicked( LINK( this, ScTPValidationValue, CheckHdl ) );
 
     // cell range picker
-    m_pEdMin->SetGetFocusHdl( LINK( this, ScTPValidationValue, EditSetFocusHdl ) );
-    m_pEdMin->SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillFocusHdl ) );
-    m_pEdMax->SetGetFocusHdl( LINK( this, ScTPValidationValue, EditSetFocusHdl ) );
-    m_pBtnRef->SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillFocusHdl ) );
-    m_pEdMax->SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillFocusHdl ) );
+    m_xEdMin->SetGetFocusHdl( LINK( this, ScTPValidationValue, EditSetFocusHdl ) );
+    m_xEdMin->SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillEditFocusHdl ) );
+    m_xEdMax->SetGetFocusHdl( LINK( this, ScTPValidationValue, EditSetFocusHdl ) );
+    m_xBtnRef->SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillButtonFocusHdl ) );
+    m_xEdMax->SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillEditFocusHdl ) );
 
-    m_pLbAllow->SelectEntryPos( SC_VALIDDLG_ALLOW_ANY );
-    m_pLbValue->SelectEntryPos( SC_VALIDDLG_DATA_EQUAL );
+    m_xLbAllow->set_active( SC_VALIDDLG_ALLOW_ANY );
+    m_xLbValue->set_active( SC_VALIDDLG_DATA_EQUAL );
 
-    SelectHdl( *m_pLbAllow.get() );
-    CheckHdl( nullptr );
+    SelectHdl( *m_xLbAllow.get() );
+    CheckHdl( *m_xCbShow );
 }
 
-VclPtr<SfxTabPage> ScTPValidationValue::Create( TabPageParent pParent, const SfxItemSet* rArgSet )
+VclPtr<SfxTabPage> ScTPValidationValue::Create(TabPageParent pParent, const SfxItemSet* rArgSet)
 {
-    return VclPtr<ScTPValidationValue>::Create( pParent.pParent, *rArgSet );
+    return VclPtr<ScTPValidationValue>::Create(pParent, *rArgSet);
 }
 
 void ScTPValidationValue::Reset( const SfxItemSet* rArgSet )
@@ -429,25 +399,25 @@ void ScTPValidationValue::Reset( const SfxItemSet* rArgSet )
     if( rArgSet->GetItemState( FID_VALID_MODE, true, &pItem ) == SfxItemState::SET )
         nLbPos = lclGetPosFromValMode( static_cast< ScValidationMode >(
             static_cast< const SfxAllEnumItem* >( pItem )->GetValue() ) );
-    m_pLbAllow->SelectEntryPos( nLbPos );
+    m_xLbAllow->set_active( nLbPos );
 
     nLbPos = SC_VALIDDLG_DATA_EQUAL;
     if( rArgSet->GetItemState( FID_VALID_CONDMODE, true, &pItem ) == SfxItemState::SET )
         nLbPos = lclGetPosFromCondMode( static_cast< ScConditionMode >(
             static_cast< const SfxAllEnumItem* >( pItem )->GetValue() ) );
-    m_pLbValue->SelectEntryPos( nLbPos );
+    m_xLbValue->set_active( nLbPos );
 
     // *** check boxes ***
     bool bCheck = true;
     if( rArgSet->GetItemState( FID_VALID_BLANK, true, &pItem ) == SfxItemState::SET )
         bCheck = static_cast< const SfxBoolItem* >( pItem )->GetValue();
-    m_pCbAllow->Check( bCheck );
+    m_xCbAllow->set_active( bCheck );
 
     sal_Int32 nListType = ValidListType::UNSORTED;
     if( rArgSet->GetItemState( FID_VALID_LISTTYPE, true, &pItem ) == SfxItemState::SET )
         nListType = static_cast< const SfxInt16Item* >( pItem )->GetValue();
-    m_pCbShow->Check( nListType != ValidListType::INVISIBLE );
-    m_pCbSort->Check( nListType == ValidListType::SORTEDASCENDING );
+    m_xCbShow->set_active( nListType != ValidListType::INVISIBLE );
+    m_xCbSort->set_active( nListType == ValidListType::SORTEDASCENDING );
 
     // *** formulas ***
     OUString aFmlaStr;
@@ -460,27 +430,27 @@ void ScTPValidationValue::Reset( const SfxItemSet* rArgSet )
         aFmlaStr = static_cast< const SfxStringItem* >( pItem )->GetValue();
     SetSecondFormula( aFmlaStr );
 
-    SelectHdl( *m_pLbAllow.get() );
-    CheckHdl( nullptr );
+    SelectHdl( *m_xLbAllow.get() );
+    CheckHdl( *m_xCbShow );
 }
 
 bool ScTPValidationValue::FillItemSet( SfxItemSet* rArgSet )
 {
-    sal_Int16 nListType = m_pCbShow->IsChecked() ?
-        (m_pCbSort->IsChecked() ? ValidListType::SORTEDASCENDING : ValidListType::UNSORTED) :
+    sal_Int16 nListType = m_xCbShow->get_active() ?
+        (m_xCbSort->get_active() ? ValidListType::SORTEDASCENDING : ValidListType::UNSORTED) :
         ValidListType::INVISIBLE;
 
-    const sal_Int32 nLbPos = m_pLbAllow->GetSelectedEntryPos();
+    const sal_Int32 nLbPos = m_xLbAllow->get_active();
     bool bCustom = (nLbPos == SC_VALIDDLG_ALLOW_CUSTOM);
     ScConditionMode eCondMode = bCustom ?
-            ScConditionMode::Direct : lclGetCondModeFromPos( m_pLbValue->GetSelectedEntryPos() );
+            ScConditionMode::Direct : lclGetCondModeFromPos( m_xLbValue->get_active() );
 
     rArgSet->Put( SfxAllEnumItem( FID_VALID_MODE, sal::static_int_cast<sal_uInt16>(
                     lclGetValModeFromPos( nLbPos ) ) ) );
     rArgSet->Put( SfxAllEnumItem( FID_VALID_CONDMODE, sal::static_int_cast<sal_uInt16>( eCondMode ) ) );
     rArgSet->Put( SfxStringItem( FID_VALID_VALUE1, GetFirstFormula() ) );
     rArgSet->Put( SfxStringItem( FID_VALID_VALUE2, GetSecondFormula() ) );
-    rArgSet->Put( SfxBoolItem( FID_VALID_BLANK, m_pCbAllow->IsChecked() ) );
+    rArgSet->Put( SfxBoolItem( FID_VALID_BLANK, m_xCbAllow->get_active() ) );
     rArgSet->Put( SfxInt16Item( FID_VALID_LISTTYPE, nListType ) );
     return true;
 }
@@ -488,40 +458,40 @@ bool ScTPValidationValue::FillItemSet( SfxItemSet* rArgSet )
 OUString ScTPValidationValue::GetFirstFormula() const
 {
     OUString aFmlaStr;
-    if( m_pLbAllow->GetSelectedEntryPos() == SC_VALIDDLG_ALLOW_LIST )
-        lclGetFormulaFromStringList( aFmlaStr, m_pEdList->GetText(), mcFmlaSep );
+    if( m_xLbAllow->get_active() == SC_VALIDDLG_ALLOW_LIST )
+        lclGetFormulaFromStringList( aFmlaStr, m_xEdList->get_text(), mcFmlaSep );
     else
-        aFmlaStr = m_pEdMin->GetText();
+        aFmlaStr = m_xEdMin->GetText();
     return aFmlaStr;
 }
 
 OUString ScTPValidationValue::GetSecondFormula() const
 {
-    return m_pEdMax->GetText();
+    return m_xEdMax->GetText();
 }
 
 void ScTPValidationValue::SetFirstFormula( const OUString& rFmlaStr )
 {
     // try if formula is a string list, validation mode must already be set
     OUString aStringList;
-    if( (m_pLbAllow->GetSelectedEntryPos() == SC_VALIDDLG_ALLOW_RANGE) &&
+    if( (m_xLbAllow->get_active() == SC_VALIDDLG_ALLOW_RANGE) &&
         lclGetStringListFromFormula( aStringList, rFmlaStr, mcFmlaSep ) )
     {
-        m_pEdList->SetText( aStringList );
-        m_pEdMin->SetText( EMPTY_OUSTRING );
+        m_xEdList->set_text( aStringList );
+        m_xEdMin->SetText( EMPTY_OUSTRING );
         // change validation mode to string list
-        m_pLbAllow->SelectEntryPos( SC_VALIDDLG_ALLOW_LIST );
+        m_xLbAllow->set_active( SC_VALIDDLG_ALLOW_LIST );
     }
     else
     {
-        m_pEdMin->SetText( rFmlaStr );
-        m_pEdList->SetText( EMPTY_OUSTRING );
+        m_xEdMin->SetText( rFmlaStr );
+        m_xEdList->set_text( EMPTY_OUSTRING );
     }
 }
 
 void ScTPValidationValue::SetSecondFormula( const OUString& rFmlaStr )
 {
-    m_pEdMax->SetText( rFmlaStr );
+    m_xEdMax->SetText( rFmlaStr );
 }
 
 ScValidationDlg * ScTPValidationValue::GetValidationDlg()
@@ -546,26 +516,26 @@ void ScTPValidationValue::SetupRefDlg()
             pValidationDlg->SetRefInputStartPreHdl( static_cast<ScRefHandlerHelper::PINPUTSTARTDLTYPE>( &ScTPValidationValue::RefInputStartPreHdl ) );
             pValidationDlg->SetRefInputDonePostHdl( static_cast<ScRefHandlerHelper::PCOMMONHDLTYPE>( &ScTPValidationValue::RefInputDonePostHdl ) );
 
-            vcl::Window *pLabel = nullptr;
+            weld::Label* pLabel = nullptr;
 
-            if ( m_pEdMax->IsVisible() )
+            if (m_xEdMax->GetWidget()->get_visible())
             {
-                m_pRefEdit = m_pEdMax;
-                pLabel = m_pFtMax;
+                m_pRefEdit = m_xEdMax.get();
+                pLabel = m_xFtMax.get();
             }
-            else if ( m_pEdMin->IsVisible() )
+            else if (m_xEdMin->GetWidget()->get_visible())
             {
-                m_pRefEdit = m_pEdMin;
-                pLabel = m_pFtMin;
+                m_pRefEdit = m_xEdMin.get();
+                pLabel = m_xFtMin.get();
             }
 
-            if( m_pRefEdit && !m_pRefEdit->HasFocus() )
+            if (m_pRefEdit && !m_pRefEdit->GetWidget()->has_focus())
                 m_pRefEdit->GrabFocus();
 
             if( m_pRefEdit )
                 m_pRefEdit->SetReferences( pValidationDlg, pLabel );
 
-            m_pBtnRef->SetReferences( pValidationDlg, m_pRefEdit );
+            m_xBtnRef->SetReferences( pValidationDlg, m_pRefEdit );
         }
     }
 }
@@ -586,14 +556,14 @@ void ScTPValidationValue::RemoveRefDlg()
                 m_pRefEdit->SetReferences( nullptr, nullptr );
             m_pRefEdit = nullptr;
 
-            m_pBtnRef->SetReferences( nullptr, nullptr );
+            m_xBtnRef->SetReferences( nullptr, nullptr );
         }
     }
 }
 
-IMPL_LINK_NOARG(ScTPValidationValue, EditSetFocusHdl, Control&, void)
+IMPL_LINK_NOARG(ScTPValidationValue, EditSetFocusHdl, formula::WeldRefEdit&, void)
 {
-    const sal_Int32 nPos = m_pLbAllow->GetSelectedEntryPos();
+    const sal_Int32 nPos = m_xLbAllow->get_active();
 
     if ( nPos == SC_VALIDDLG_ALLOW_RANGE )
     {
@@ -601,87 +571,92 @@ IMPL_LINK_NOARG(ScTPValidationValue, EditSetFocusHdl, Control&, void)
     }
 }
 
-IMPL_LINK( ScTPValidationValue, KillFocusHdl, Control&, rControl, void )
+IMPL_LINK( ScTPValidationValue, KillEditFocusHdl, formula::WeldRefEdit&, rWnd, void )
 {
-    vcl::Window* pWnd = static_cast<vcl::Window*>(&rControl);
-    if( pWnd == m_pRefEdit || pWnd == m_pBtnRef )
-        if( ScValidationDlg *pValidationDlg = GetValidationDlg() )
-            if ( (pValidationDlg->IsActive() || pValidationDlg->IsChildFocus() ) && !pValidationDlg->IsRefInputting() )
-                if( ( !m_pRefEdit || !m_pRefEdit->HasFocus()) && !m_pBtnRef->HasFocus() )
-                {
-                    RemoveRefDlg();
-                }
+    if (&rWnd != m_pRefEdit)
+        return;
+    if( ScValidationDlg *pValidationDlg = GetValidationDlg() )
+        if ( (pValidationDlg->IsActive() || pValidationDlg->IsChildFocus() ) && !pValidationDlg->IsRefInputting() )
+            if( ( !m_pRefEdit || !m_pRefEdit->GetWidget()->has_focus()) && !m_xBtnRef->GetWidget()->has_focus() )
+            {
+                RemoveRefDlg();
+            }
 }
 
-IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl, ListBox&, void)
+IMPL_LINK( ScTPValidationValue, KillButtonFocusHdl, formula::WeldRefButton&, rWnd, void )
 {
-    const sal_Int32 nLbPos = m_pLbAllow->GetSelectedEntryPos();
+    if( &rWnd != m_xBtnRef.get())
+        return;
+    if( ScValidationDlg *pValidationDlg = GetValidationDlg() )
+        if ( (pValidationDlg->IsActive() || pValidationDlg->IsChildFocus() ) && !pValidationDlg->IsRefInputting() )
+            if( ( !m_pRefEdit || !m_pRefEdit->GetWidget()->has_focus()) && !m_xBtnRef->GetWidget()->has_focus() )
+            {
+                RemoveRefDlg();
+            }
+}
+
+IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl, weld::ComboBox&, void)
+{
+    const sal_Int32 nLbPos = m_xLbAllow->get_active();
     bool bEnable = (nLbPos != SC_VALIDDLG_ALLOW_ANY);
     bool bRange = (nLbPos == SC_VALIDDLG_ALLOW_RANGE);
     bool bList = (nLbPos == SC_VALIDDLG_ALLOW_LIST);
     bool bCustom = (nLbPos == SC_VALIDDLG_ALLOW_CUSTOM);
 
-    m_pCbAllow->Enable( bEnable );   // Empty cell
-    m_pFtValue->Enable( bEnable );
-    m_pLbValue->Enable( bEnable );
-    m_pFtMin->Enable( bEnable );
-    m_pEdMin->Enable( bEnable );
-    m_pEdList->Enable( bEnable );
-    m_pFtMax->Enable( bEnable );
-    m_pEdMax->Enable( bEnable );
+    m_xCbAllow->set_sensitive( bEnable );   // Empty cell
+    m_xFtValue->set_sensitive( bEnable );
+    m_xLbValue->set_sensitive( bEnable );
+    m_xFtMin->set_sensitive( bEnable );
+    m_xEdMin->GetWidget()->set_sensitive( bEnable );
+    m_xEdList->set_sensitive( bEnable );
+    m_xFtMax->set_sensitive( bEnable );
+    m_xEdMax->GetWidget()->set_sensitive( bEnable );
 
     bool bShowMax = false;
 
     if( bRange )
-        m_pFtMin->SetText( maStrRange );
+        m_xFtMin->set_label( maStrRange );
     else if( bList )
-        m_pFtMin->SetText( maStrList );
+        m_xFtMin->set_label( maStrList );
     else if( bCustom )
-        m_pFtMin->SetText( maStrFormula );
+        m_xFtMin->set_label( maStrFormula );
     else
     {
-        switch( m_pLbValue->GetSelectedEntryPos() )
+        switch( m_xLbValue->get_active() )
         {
             case SC_VALIDDLG_DATA_EQUAL:
-            case SC_VALIDDLG_DATA_NOTEQUAL:     m_pFtMin->SetText( maStrValue );  break;
+            case SC_VALIDDLG_DATA_NOTEQUAL:     m_xFtMin->set_label( maStrValue );  break;
 
             case SC_VALIDDLG_DATA_LESS:
-            case SC_VALIDDLG_DATA_EQLESS:       m_pFtMin->SetText( maStrMax );    break;
+            case SC_VALIDDLG_DATA_EQLESS:       m_xFtMin->set_label( maStrMax );    break;
 
             case SC_VALIDDLG_DATA_VALIDRANGE:
             case SC_VALIDDLG_DATA_INVALIDRANGE:   bShowMax = true;
                 [[fallthrough]];
             case SC_VALIDDLG_DATA_GREATER:
-            case SC_VALIDDLG_DATA_EQGREATER:    m_pFtMin->SetText( maStrMin );    break;
+            case SC_VALIDDLG_DATA_EQGREATER:    m_xFtMin->set_label( maStrMin );    break;
 
             default:
                 OSL_FAIL( "ScTPValidationValue::SelectHdl - unknown condition mode" );
         }
     }
 
-    m_pCbShow->Show( bRange || bList );
-    m_pCbSort->Show( bRange || bList );
-    m_pFtValue->Show( !bRange && !bList && !bCustom);
-    m_pLbValue->Show( !bRange && !bList && !bCustom );
-    m_pEdMin->Show( !bList );
-    m_pEdList->Show( bList );
-    m_pMinGrid->set_vexpand( bList );
-    WinBits nBits = m_pFtMin->GetStyle();
-    nBits &= ~(WB_TOP | WB_VCENTER | WB_BOTTOM);
-    if (bList)
-        nBits |= WB_TOP;
-    else
-        nBits |= WB_VCENTER;
-    m_pFtMin->SetStyle( nBits );
-    m_pFtMax->Show( bShowMax );
-    m_pEdMax->Show( bShowMax );
-    m_pFtHint->Show( bRange );
-    m_pBtnRef->Show( bRange );  // cell range picker
+    m_xCbShow->set_visible( bRange || bList );
+    m_xCbSort->set_visible( bRange || bList );
+    m_xFtValue->set_visible( !bRange && !bList && !bCustom);
+    m_xLbValue->set_visible( !bRange && !bList && !bCustom );
+    m_xEdMin->GetWidget()->set_visible( !bList );
+    m_xEdList->set_visible( bList );
+    m_xMinGrid->set_vexpand( bList );
+    m_xFtMax->set_visible( bShowMax );
+    m_xEdMax->GetWidget()->set_visible( bShowMax );
+    m_xFtHint->set_visible( bRange );
+    m_xBtnRef->GetWidget()->set_visible( bRange );  // cell range picker
 }
 
-IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl, Button*, void)
+IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl, weld::Button&, void)
 {
-    m_pCbSort->Enable( m_pCbShow->IsChecked() );
+    m_xCbSort->set_sensitive( m_xCbShow->get_active() );
 }
 
 // Input Help Page
@@ -911,23 +886,9 @@ bool ScValidationDlg::RemoveRefDlg( bool bRestoreModal /* = true */ )
     return true;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void makeScRefButtonEx(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
+IMPL_LINK_NOARG(ScTPValidationValue, ClickHdl, formula::WeldRefButton&, void)
 {
-    rRet = VclPtr<ScTPValidationValue::ScRefButtonEx>::Create(pParent, 0);
-}
-
-void ScTPValidationValue::ScRefButtonEx::Click()
-{
-    if( ScTPValidationValue *pParent = GetParentPage() )
-        pParent->OnClick( this );
-
-    formula::RefButton::Click();
-}
-
-void ScTPValidationValue::OnClick( const Button *pBtn )
-{
-    if( pBtn == m_pBtnRef )
-        SetupRefDlg();
+    SetupRefDlg();
 }
 
 bool ScValidationDlg::IsChildFocus()
