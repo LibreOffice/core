@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SALBTYPE_HXX
-#define INCLUDED_VCL_SALBTYPE_HXX
+#ifndef INCLUDED_VCL_BITMAPACCESSMODE_HXX
+#define INCLUDED_VCL_BITMAPACCESSMODE_HXX
 
-#include <vcl/Scanline.hxx>
-#include <vcl/BitmapColor.hxx>
-#include <vcl/BitmapPalette.hxx>
-#include <vcl/ColorMask.hxx>
-#include <vcl/BitmapBuffer.hxx>
-#include <vcl/BitmapAccessMode.hxx>
+enum class BitmapAccessMode
+{
+    Info,
+    Read,
+    Write
+};
 
-#endif // INCLUDED_VCL_SALBTYPE_HXX
+#endif // INCLUDED_VCL_BITMAPACCESSMODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
