@@ -1032,13 +1032,13 @@ void Edit::ImplPaintBorder(vcl::RenderContext const & rRenderContext)
                     aClipRgn.Move(xNew - aBounds.Left(), 0);
 
                     // move offset of border window
-                    Point aBorderOffs = pBorder->ScreenToOutputPixel(OutputToScreenPixel(aBorderOffs));
+                    Point aBorderOffs = pBorder->ScreenToOutputPixel(OutputToScreenPixel(Point()));
                     aClipRgn.Move(aBorderOffs.X(), aBorderOffs.Y());
                 }
                 else
                 {
                     // normal case
-                    Point aBorderOffs = pBorder->ScreenToOutputPixel(OutputToScreenPixel(aBorderOffs));
+                    Point aBorderOffs = pBorder->ScreenToOutputPixel(OutputToScreenPixel(Point()));
                     aClipRgn.Move(aBorderOffs.X(), aBorderOffs.Y());
                 }
 
