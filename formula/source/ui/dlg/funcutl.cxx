@@ -733,6 +733,7 @@ void WeldRefButton::SetReferences( IControlReferenceHandler* pDlg, WeldRefEdit* 
 
 IMPL_LINK_NOARG(WeldRefButton, Click, weld::Button&, void)
 {
+    maClickHdl.Call(*this);
     if( pAnyRefDlg )
         pAnyRefDlg->ToggleCollapsed( pRefEdit, this );
 }

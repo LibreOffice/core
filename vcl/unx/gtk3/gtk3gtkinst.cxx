@@ -2666,11 +2666,13 @@ struct DialogRunner
     gint m_nResponseId;
     GMainLoop *m_pLoop;
     VclPtr<vcl::Window> m_xFrameWindow;
+    int m_nModalDepth;
 
     DialogRunner(GtkDialog* pDialog)
        : m_pDialog(pDialog)
        , m_nResponseId(GTK_RESPONSE_NONE)
        , m_pLoop(nullptr)
+       , m_nModalDepth(0)
     {
         GtkWindow* pParent = gtk_window_get_transient_for(GTK_WINDOW(m_pDialog));
         GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(pParent) : nullptr;
@@ -2711,13 +2713,19 @@ struct DialogRunner
     void inc_modal_count()
     {
         if (m_xFrameWindow)
+        {
             m_xFrameWindow->IncModalCount();
+            ++m_nModalDepth;
+        }
     }
 
     void dec_modal_count()
     {
         if (m_xFrameWindow)
+        {
             m_xFrameWindow->DecModalCount();
+            --m_nModalDepth;
+        }
     }
 
     // same as gtk_dialog_run except that unmap doesn't auto-respond
@@ -2763,6 +2771,18 @@ struct DialogRunner
         g_object_unref(m_pDialog);
 
         return m_nResponseId;
+    }
+
+    ~DialogRunner()
+    {
+        if (m_xFrameWindow)
+        {
+            // if, like the calc validation dialog does, the modality was
+            // toggled off during execution ensure that on cleanup the parent
+            // is left in the state it was found
+            while (m_nModalDepth++ < 0)
+                m_xFrameWindow->IncModalCount();
+        }
     }
 };
 
@@ -2952,6 +2972,22 @@ public:
         // see hide comment
         if (m_aDialogRun.loop_is_running())
             m_aDialogRun.inc_modal_count();
+    }
+
+    virtual void set_modal(bool bModal) override
+    {
+        if (get_modal() == bModal)
+            return;
+        GtkInstanceWindow::set_modal(bModal);
+        // see hide comment, but the modality-change example
+        // is the validity dialog in calc
+        if (m_aDialogRun.loop_is_running())
+        {
+            if (bModal)
+                m_aDialogRun.inc_modal_count();
+            else
+                m_aDialogRun.dec_modal_count();
+        }
     }
 
     static int VclToGtk(int nResponse)

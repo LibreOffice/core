@@ -210,6 +210,26 @@ static bool lcl_GetSortParam( const ScViewData* pData, const ScSortParam& rSortP
     return bSort;
 }
 
+namespace
+{
+    // this registers the dialog which Find1RefWindow search for
+    class ScValidationRegisteredDlg
+    {
+        std::shared_ptr<SfxDialogController> m_xDlg;
+    public:
+        ScValidationRegisteredDlg(weld::Window* pParent, std::shared_ptr<SfxDialogController>& rDlg)
+            : m_xDlg(rDlg)
+        {
+            SC_MOD()->RegisterRefController(static_cast<sal_uInt16>(ScValidationDlg::SLOTID), m_xDlg, pParent);
+        }
+        ~ScValidationRegisteredDlg()
+        {
+            m_xDlg->Close();
+            SC_MOD()->UnregisterRefController(static_cast<sal_uInt16>(ScValidationDlg::SLOTID), m_xDlg);
+        }
+    };
+}
+
 void ScCellShell::ExecuteDB( SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
@@ -870,12 +890,15 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     }
 
                     // cell range picker
-                    ScopedVclPtrInstance<ScValidationDlg> pDlg(GetViewData()->GetActiveWin(), &aArgSet, pTabViewShell);
+                    vcl::Window* pWin = GetViewData()->GetActiveWin();
+                    weld::Window* pParentWin = pWin ? pWin->GetFrameWeld() : nullptr;
+                    std::shared_ptr<SfxDialogController> xDlg(new ScValidationDlg(pParentWin, &aArgSet, pTabViewShell));
+                    ScValidationRegisteredDlg aRegisterThatDlgExists(pParentWin, xDlg);
 
-                    short nResult = pDlg->Execute();
+                    short nResult = xDlg->run();
                     if ( nResult == RET_OK )
                     {
-                        const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+                        const SfxItemSet* pOutSet = static_cast<ScValidationDlg*>(xDlg.get())->GetOutputItemSet();
 
                         if ( pOutSet->GetItemState( FID_VALID_MODE, true, &pItem ) == SfxItemState::SET )
                             eMode = static_cast<ScValidationMode>(static_cast<const SfxAllEnumItem*>(pItem)->GetValue());
