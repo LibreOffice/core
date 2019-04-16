@@ -8,31 +8,26 @@
  */
 
 #include <swmodeltestbase.hxx>
-#include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <i18nlangtag/languagetag.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdview.hxx>
 #include <vcl/scheduler.hxx>
-#include <dcontact.hxx>
-#include <drawdoc.hxx>
+#include <vcl/settings.hxx>
 #include <ndtxt.hxx>
 #include <swdtflvr.hxx>
 #include <wrtsh.hxx>
-#include <redline.hxx>
-#include <flyfrms.hxx>
+#include <IDocumentRedlineAccess.hxx>
+#include <flyfrm.hxx>
+#include <fmtanchr.hxx>
 #include <UndoManager.hxx>
-#include <edtwin.hxx>
-#include <view.hxx>
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
-#include <swtypes.hxx>
+//#include <swtypes.hxx>
 #include <itabenum.hxx>
 #include <fmtfsize.hxx>
-#include <fmtornt.hxx>
+//#include <fmtornt.hxx>
 #include <xmloff/odffields.hxx>
 #include <txtfrm.hxx>
 

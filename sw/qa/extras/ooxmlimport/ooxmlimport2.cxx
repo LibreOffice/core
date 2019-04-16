@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <memory>
-
 #ifdef MACOSX
 #define __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES 0
 #include <premac.h>
@@ -18,7 +16,6 @@
 
 #include <swmodeltestbase.hxx>
 #include <wrtsh.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 

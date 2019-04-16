@@ -12,14 +12,11 @@
 #include <IDocumentSettingAccess.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/XFormField.hpp>
-#include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
-
-#include <drawdoc.hxx>
-#include <svx/xfillit0.hxx>
 
 class Test : public SwModelTestBase
 {

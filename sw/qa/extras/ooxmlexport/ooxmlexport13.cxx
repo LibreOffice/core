@@ -9,18 +9,11 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
-#include <com/sun/star/text/XTextFrame.hpp>
-#include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <IDocumentSettingAccess.hxx>
-
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
-#include <svx/xfillit0.hxx>
 
 #include <editsh.hxx>
 

@@ -13,13 +13,7 @@
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
-#include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/io/XActiveDataStreamer.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
 #include <tools/datetime.hxx>
-#include <unotools/datetime.hxx>
-#include <vcl/GraphicNativeTransform.hxx>
 #include <sfx2/linkmgr.hxx>
 
 #include <docsh.hxx>

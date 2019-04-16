@@ -9,12 +9,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <swmodule.hxx>
-#include <swdll.hxx>
-#include <usrpref.hxx>
-
-#include <test/xmltesttools.hxx>
-
 class DocbookExportTest : public SwModelTestBase
 {
 public:
