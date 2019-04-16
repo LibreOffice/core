@@ -120,7 +120,7 @@ private:
     {
     }
 
-    bool enabled_;
+    std::map<OUString, css::beans::Optional<css::uno::Any>> m_KDESettings;
 };
 
 OString getDisplayArg()
@@ -148,10 +148,28 @@ OString getExecutable()
     return OUStringToOString(aBin, osl_getThreadTextEncoding());
 }
 
+void readKDESettings(std::map<OUString, css::beans::Optional<css::uno::Any>>& rSettings)
+{
+    const std::vector<OUString> aKeys
+        = { "EnableATToolSupport",  "ExternalMailer",       "SourceViewFontHeight",
+            "SourceViewFontName",   "WorkPathVariable",     "ooInetFTPProxyName",
+            "ooInetFTPProxyPort",   "ooInetHTTPProxyName",  "ooInetHTTPProxyPort",
+            "ooInetHTTPSProxyName", "ooInetHTTPSProxyPort", "ooInetNoProxy",
+            "ooInetProxyType" };
+
+    for (const OUString& aKey : aKeys)
+    {
+        css::beans::Optional<css::uno::Any> aValue = kde5access::getValue(aKey);
+        std::pair<OUString, css::beans::Optional<css::uno::Any>> elem
+            = std::make_pair(aKey, aValue);
+        rSettings.insert(elem);
+    }
+}
+
 // init the QApplication when we load the kde5backend into a non-Qt vclplug (e.g. Gtk3KDE5)
 // TODO: use a helper process to read these values without linking to Qt directly?
 // TODO: share this code somehow with Qt5Instance.cxx?
-void initQApp()
+void initQApp(std::map<OUString, css::beans::Optional<css::uno::Any>>& rSettings)
 {
     const auto aDisplay = getDisplayArg();
     int nFakeArgc = aDisplay.isEmpty() ? 2 : 3;
@@ -169,12 +187,14 @@ void initQApp()
         unsetenv("SESSION_MANAGER");
     }
 
-    auto app = new QApplication(nFakeArgc, pFakeArgv);
-    QObject::connect(app, &QObject::destroyed, app, [nFakeArgc, pFakeArgv]() {
+    std::unique_ptr<QApplication> app(new QApplication(nFakeArgc, pFakeArgv));
+    QObject::connect(app.get(), &QObject::destroyed, app.get(), [nFakeArgc, pFakeArgv]() {
         for (int i = 0; i < nFakeArgc; ++i)
             delete pFakeArgv[i];
         delete[] pFakeArgv;
     });
+
+    readKDESettings(rSettings);
 
     if (session_manager != nullptr)
     {
@@ -182,23 +202,27 @@ void initQApp()
         setenv("SESSION_MANAGER", session_manager, 1);
         free(session_manager);
     }
-
-    QApplication::setQuitOnLastWindowClosed(false);
 }
 
 Service::Service()
-    : enabled_(false)
 {
     css::uno::Reference<css::uno::XCurrentContext> context(css::uno::getCurrentContext());
     if (context.is())
     {
-        if (!qApp)
-        {
-            initQApp();
-        }
         OUString desktop;
         context->getValueByName("system.desktop-environment") >>= desktop;
-        enabled_ = desktop == "KDE5" && qApp != nullptr;
+
+        if (desktop == "KDE5")
+        {
+            if (!qApp) // no qt event loop yet
+            {
+                // so we start one and read KDE settings
+                initQApp(m_KDESettings);
+            }
+            else // someone else (most likely kde/qt vclplug) has started qt event loop
+                // all that is left to do is to read KDE settings
+                readKDESettings(m_KDESettings);
+        }
     }
 }
 
@@ -218,8 +242,12 @@ css::uno::Any Service::getPropertyValue(OUString const& PropertyName)
         || PropertyName == "ooInetHTTPSProxyPort" || PropertyName == "ooInetNoProxy"
         || PropertyName == "ooInetProxyType")
     {
-        return css::uno::makeAny(enabled_ ? kde5access::getValue(PropertyName)
-                                          : css::beans::Optional<css::uno::Any>());
+        std::map<OUString, css::beans::Optional<css::uno::Any>>::iterator it
+            = m_KDESettings.find(PropertyName);
+        if (it != m_KDESettings.end())
+            return css::uno::makeAny(it->second);
+        else
+            return css::uno::makeAny(css::beans::Optional<css::uno::Any>());
     }
     else if (PropertyName == "givenname" || PropertyName == "sn"
              || PropertyName == "TemplatePathVariable")
