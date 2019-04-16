@@ -11,6 +11,7 @@
 #include <test/beans/xpropertyset.hxx>
 #include <test/text/textcontent.hxx>
 #include <test/text/xtextcontent.hxx>
+#include <test/text/xtextfield.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -38,7 +39,8 @@ namespace sc_apitest
 class ScEditFieldObj_Header : public CalcUnoApiTest,
                               public apitest::TextContent,
                               public apitest::XPropertySet,
-                              public apitest::XTextContent
+                              public apitest::XTextContent,
+                              public apitest::XTextField
 {
 public:
     ScEditFieldObj_Header();
@@ -65,6 +67,9 @@ public:
     // XTextContent
     CPPUNIT_TEST(testGetAnchor);
     CPPUNIT_TEST(testAttach);
+
+    // XTextField
+    CPPUNIT_TEST(testGetPresentationEmptyString);
 
     CPPUNIT_TEST_SUITE_END();
 
