@@ -111,6 +111,7 @@ public:
     void testSplitNodeRedlineCallback();
     void testDeleteNodeRedlineCallback();
     void testVisCursorInvalidation();
+    void testDeselectCustomShape();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -167,6 +168,7 @@ public:
     CPPUNIT_TEST(testSplitNodeRedlineCallback);
     CPPUNIT_TEST(testDeleteNodeRedlineCallback);
     CPPUNIT_TEST(testVisCursorInvalidation);
+    CPPUNIT_TEST(testDeselectCustomShape);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2397,6 +2399,25 @@ void SwTiledRenderingTest::testVisCursorInvalidation()
 
     mxComponent->dispose();
     mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testDeselectCustomShape()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    comphelper::dispatchCommand(".uno:BasicShapes.hexagon", uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pWrtShell->GetDrawView()->GetMarkedObjectList().GetMarkCount());
+
+    Point aPoint(0, 0);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aPoint.getX(), aPoint.getY(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aPoint.getX(), aPoint.getY(), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pWrtShell->GetDrawView()->GetMarkedObjectList().GetMarkCount());
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 
