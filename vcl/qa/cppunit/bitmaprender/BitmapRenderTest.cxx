@@ -42,12 +42,14 @@ public:
     void testTdf104141();
     void testTdf113918();
     void testDrawAlphaBitmapEx();
+    void testAlphaVirtualDevice();
     void testTdf116888();
 
     CPPUNIT_TEST_SUITE(BitmapRenderTest);
     CPPUNIT_TEST(testTdf104141);
     CPPUNIT_TEST(testTdf113918);
     CPPUNIT_TEST(testDrawAlphaBitmapEx);
+    CPPUNIT_TEST(testAlphaVirtualDevice);
     CPPUNIT_TEST(testTdf116888);
 
     CPPUNIT_TEST_SUITE_END();
@@ -148,6 +150,50 @@ void BitmapRenderTest::testDrawAlphaBitmapEx()
 #if !defined(_WIN32)
     CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x7F, 0xFF, 0x7F), pVDev->GetPixel(Point(2, 2)));
 #endif
+}
+
+void BitmapRenderTest::testAlphaVirtualDevice()
+{
+    // Create an alpha virtual device
+    ScopedVclPtr<VirtualDevice> pAlphaVirtualDevice(VclPtr<VirtualDevice>::Create(
+        *Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT));
+
+    // Set it up
+    pAlphaVirtualDevice->SetOutputSizePixel(Size(8, 8));
+    pAlphaVirtualDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    pAlphaVirtualDevice->Erase();
+
+    // Get a BitmapEx from the VirDev -> Colors should have alpha
+    BitmapEx aBitmap = pAlphaVirtualDevice->GetBitmapEx(Point(), Size(8, 8));
+    Color aColor = aBitmap.GetPixelColor(1, 1);
+    CPPUNIT_ASSERT_EQUAL(Color(0xff, 0xff, 0xff, 0xff), aColor);
+
+    // Draw an opaque pixel to the VirDev
+    pAlphaVirtualDevice->DrawPixel(Point(1, 1), Color(0x00, 0x22, 0xff, 0x55));
+
+    // Read back the opaque pixel
+#ifdef MACOSX
+    // Oh no.. what we input is not the same as what we get out!
+    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x2C, 0xff, 0x44), pAlphaVirtualDevice->GetPixel(Point(1, 1)));
+#else
+    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x22, 0xff, 0x55), pAlphaVirtualDevice->GetPixel(Point(1, 1)));
+#endif
+
+    // Read back the BitmapEx and check the opaque pixel
+    aBitmap = pAlphaVirtualDevice->GetBitmapEx(Point(), Size(8, 8));
+    aColor = aBitmap.GetPixelColor(1, 1);
+    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x22, 0xff, 0x55), aColor);
+
+    // Draw an semi-transparent pixel
+    pAlphaVirtualDevice->DrawPixel(Point(0, 0), Color(0x44, 0x22, 0xff, 0x55));
+
+    // Read back the semi-transparent pixel
+    CPPUNIT_ASSERT_EQUAL(Color(0x44, 0x22, 0xFF, 0x55), pAlphaVirtualDevice->GetPixel(Point(0, 0)));
+
+    // Read back the BitmapEx and check the semi-transparent pixel
+    aBitmap = pAlphaVirtualDevice->GetBitmapEx(Point(), Size(8, 8));
+    aColor = aBitmap.GetPixelColor(0, 0);
+    CPPUNIT_ASSERT_EQUAL(Color(0x44, 0x22, 0xFF, 0x55), aColor);
 }
 
 void BitmapRenderTest::testTdf116888()
