@@ -2447,9 +2447,14 @@ void ChartExport::InitPlotArea( )
 void ChartExport::exportAxes( )
 {
     sal_Int32 nSize = maAxes.size();
-    for( sal_Int32 nIdx = 0; nIdx < nSize; nIdx++ )
+    // lets export the axis types in the right order
+    for ( sal_Int32 nSortIdx = 1; nSortIdx < 6; nSortIdx++ )
     {
-        exportAxis( maAxes[nIdx] );
+        for ( sal_Int32 nIdx = 0; nIdx < nSize; nIdx++ )
+        {
+            if (nSortIdx == maAxes[nIdx].nAxisType)
+                exportAxis( maAxes[nIdx] );
+        }
     }
 }
 
@@ -2819,7 +2824,8 @@ void ChartExport::_exportAxis(
     // crosses & crossesAt
     bool bCrossesValue = false;
     const char* sCrosses = nullptr;
-    if(GetProperty( xAxisProp, "CrossoverPosition" ) )
+    // do not export the CrossoverPosition/CrossoverValue, if the axis is deleted and not visable
+    if( GetProperty( xAxisProp, "CrossoverPosition" ) && !bDeleted && bVisible )
     {
         css::chart::ChartAxisPosition ePosition( css::chart::ChartAxisPosition_ZERO );
         mAny >>= ePosition;
@@ -2850,9 +2856,12 @@ void ChartExport::_exportAxis(
     }
     else
     {
-        pFS->singleElement( FSNS( XML_c, XML_crosses ),
-            XML_val, sCrosses,
-            FSEND );
+        if(sCrosses)
+        {
+            pFS->singleElement(FSNS(XML_c, XML_crosses),
+                XML_val, sCrosses,
+                FSEND);
+        }
     }
 
     if( ( nAxisType == XML_catAx )
@@ -3427,8 +3436,16 @@ void ChartExport::exportDataPoints(
 void ChartExport::exportAxesId(bool bPrimaryAxes, bool bCheckCombinedAxes)
 {
     sal_Int32 nAxisIdx, nAxisIdy;
+    bool isPrimaryAxisExists = false;
+    bool isSecondaryAxisExists = false;
+    // lets check which axis already exists and which axis is attached to the actual dataseries
+    if (maAxes.size() >= 2)
+    {
+        isPrimaryAxisExists = bPrimaryAxes && maAxes[1].nAxisType == AXIS_PRIMARY_Y;
+        isSecondaryAxisExists = !bPrimaryAxes && maAxes[1].nAxisType == AXIS_SECONDARY_Y;
+    }
     // tdf#114181 keep axes of combined charts
-    if ( bCheckCombinedAxes && bPrimaryAxes && maAxes.size() == 2 )
+    if ( bCheckCombinedAxes && ( isPrimaryAxisExists || isSecondaryAxisExists ) )
     {
         nAxisIdx = maAxes[0].nAxisId;
         nAxisIdy = maAxes[1].nAxisId;
