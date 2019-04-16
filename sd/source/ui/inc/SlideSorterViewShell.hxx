@@ -35,7 +35,7 @@ namespace sd { namespace slidesorter {
 
 class SlideSorter;
 
-class SlideSorterViewShell
+class SAL_DLLPUBLIC_RTTI SlideSorterViewShell
     : public ViewShell
 {
     friend class controller::SlotManager;

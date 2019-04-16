@@ -67,7 +67,7 @@ public:
     void Clear() { maData.clear(); }
 };
 
-class SwGetExpFieldType : public SwValueFieldType
+class SAL_DLLPUBLIC_RTTI SwGetExpFieldType : public SwValueFieldType
 {
 public:
     SwGetExpFieldType(SwDoc* pDoc);
@@ -268,7 +268,7 @@ inline bool SwSetExpField::GetInputFlag() const
 inline bool SwSetExpField::IsSequenceField() const
     { return 0 != (nsSwGetSetExpType::GSE_SEQ & static_cast<SwSetExpFieldType*>(GetTyp())->GetType()); }
 
-class SwInputFieldType : public SwFieldType
+class SAL_DLLPUBLIC_RTTI SwInputFieldType : public SwFieldType
 {
     SwDoc* const mpDoc;
 public:

@@ -33,7 +33,7 @@ class SwView;
 
 namespace sw {
 
-class UndoManager
+class SAL_DLLPUBLIC_RTTI UndoManager
     : public IDocumentUndoRedo
     , public SdrUndoManager
 {

@@ -35,7 +35,7 @@ namespace sd {
     ViewShell that turns off some of the features for GraphicViewShell
     instances.</p>
 */
-class GraphicViewShell final
+class SAL_DLLPUBLIC_RTTI GraphicViewShell final
     : public DrawViewShell
 {
 public:

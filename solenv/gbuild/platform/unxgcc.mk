@@ -76,10 +76,8 @@ endif
 
 ifneq ($(HAVE_LD_BSYMBOLIC_FUNCTIONS),)
 gb_LinkTarget_LDFLAGS += -Wl,-Bsymbolic-functions
-ifeq ($(COM_IS_CLANG),TRUE)
-ifneq ($(filter -fsanitize=%,$(CC)),)
+ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
 gb_LinkTarget_LDFLAGS += -Wl,--dynamic-list-cpp-typeinfo
-endif
 endif
 endif
 

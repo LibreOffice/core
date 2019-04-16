@@ -31,7 +31,7 @@ namespace sd {
  */
 class DrawViewShell;
 
-class LayerTabBar final
+class SAL_DLLPUBLIC_RTTI LayerTabBar final
     : public TabBar,
       public DropTargetHelper
 {

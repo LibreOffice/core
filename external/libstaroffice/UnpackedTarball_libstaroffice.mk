@@ -15,12 +15,10 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libstaroffice,0))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libstaroffice))
 
-ifeq ($(COM_IS_CLANG),TRUE)
-ifneq ($(filter -fsanitize=%,$(CC)),)
+ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,libstaroffice, \
     external/libstaroffice/ubsan-visibility.patch \
 ))
-endif
 endif
 
 ifneq ($(OS),MACOSX)

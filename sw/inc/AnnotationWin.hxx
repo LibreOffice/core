@@ -56,7 +56,7 @@ namespace sw { namespace sidebarwindows {
 
 namespace sw { namespace annotation {
 
-class SwAnnotationWin : public vcl::Window
+class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
 {
     public:
         SwAnnotationWin( SwEditWin& rEditWin,

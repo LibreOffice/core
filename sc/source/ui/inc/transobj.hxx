@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-class ScTransferObj : public TransferableHelper
+class SAL_DLLPUBLIC_RTTI ScTransferObj : public TransferableHelper
 {
 private:
     ScDocumentUniquePtr             m_pDoc;

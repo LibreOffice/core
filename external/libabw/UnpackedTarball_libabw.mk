@@ -19,12 +19,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,libabw, \
     external/libabw/libabw-msvc.patch.1 \
 ))
 
-ifeq ($(COM_IS_CLANG),TRUE)
-ifneq ($(filter -fsanitize=%,$(CC)),)
+ifeq ($(NEED_CLANG_LINUX_UBSAN_RTTI_VISIBILITY),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,libabw, \
     external/libabw/ubsan-visibility.patch \
 ))
-endif
 endif
 
 # vim: set noet sw=4 ts=4:

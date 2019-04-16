@@ -124,7 +124,7 @@ class SwNoteProps: public utl::ConfigItem
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
-class SwPostItMgr: public SfxListener
+class SAL_DLLPUBLIC_RTTI SwPostItMgr: public SfxListener
 {
     private:
         SwView*                         mpView;

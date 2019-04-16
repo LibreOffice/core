@@ -132,7 +132,7 @@ namespace vcl {
     typedef OutputDevice RenderContext;
 };
 
-class SwAttrPool : public SfxItemPool
+class SAL_DLLPUBLIC_RTTI SwAttrPool : public SfxItemPool
 {
 private:
     // helpers to add/rmove DrawingLayer ItemPool, used in constructor

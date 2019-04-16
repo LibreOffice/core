@@ -65,7 +65,7 @@ class ViewOverlayManager;
     overview over several slides or a textual
     overview over the text in an Impress document (OutlineViewShell).
 */
-class DrawViewShell
+class SAL_DLLPUBLIC_RTTI DrawViewShell
     : public ViewShell,
       public SfxListener,
       public utl::ConfigurationListener

@@ -28,7 +28,7 @@
 class SwPaM;
 class SwTextNode;
 
-class SwTextField : public virtual SwTextAttr
+class SAL_DLLPUBLIC_RTTI SwTextField : public virtual SwTextAttr
 {
     mutable OUString m_aExpand; // only used to determine, if field content is changing in <ExpandTextField()>
     SwTextNode * m_pTextNode;
