@@ -16,6 +16,24 @@
       "revId": "4f1b8b8ae438cb413062f9202bfe36edd492cf14",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_78620119",
+        "filename": "vcl/source/gdi/CommonSalLayout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-04-16T06:51:34Z",
+      "side": 1,
+      "message": "Note that DeviceCoordinate is only double if VCL_FLOAT_DEVICE_PIXEL is enabled (and it currently is never enabled)",
+      "parentUuid": "7f96bb07_9866ed51",
+      "revId": "4f1b8b8ae438cb413062f9202bfe36edd492cf14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
