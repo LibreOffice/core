@@ -93,3 +93,32 @@
  
  /* Building 3store storage */
  /*#undef STORAGE_TSTORE*/
+@@ -288,11 +288,11 @@
+ #include <io.h>
+ #include <memory.h>
+ 
+-/* get _isnan() since it is not in math.h */
+-#include <float.h>
+-#ifndef isnan
+-#define isnan(d) (_isnan(d))
+-#endif
++// /* get _isnan() since it is not in math.h */
++// #include <float.h>
++// #ifndef isnan
++// #define isnan(d) (_isnan(d))
++// #endif
+ 
+ #ifdef __cplusplus
+ }
+--- redland.orig/src/rdf_init.c	2015-09-02 23:12:12.894126138 +0200
++++ redland/src/rdf_init.c	2015-09-02 23:23:54.600173246 +0200
+@@ -42,6 +42,8 @@
+ #endif
+ #ifdef HAVE_UNISTD_H
+ #include <unistd.h> /* for getpid() */
++#else
++#include <process.h>
+ #endif
+ 
+ /* for gettimeofday */
+ 
