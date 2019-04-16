@@ -3294,6 +3294,13 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 {
                     if (m_pImpl->GetSettingsTable()->GetSplitPgBreakAndParaMark())
                     {
+                        if ( m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun() )
+                        {
+                            m_pImpl->m_bIsSplitPara = true;
+                            m_pImpl->finishParagraph( m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) );
+                            lcl_startParagraphGroup();
+                        }
+
                         pContext->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
                         m_pImpl->clearDeferredBreaks();
                     }

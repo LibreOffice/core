@@ -75,6 +75,43 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124637_sectionMargin, "tdf124637_sectionMargin.d
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Section Left Margin", sal_Int32(0), getProperty<sal_Int32>(xSect, "SectionLeftMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak, "tdf123636_newlinePageBreak.docx")
+{
+    //MS Compatibility flag: SplitPgBreakAndParaMark
+    //special case: split first empty paragraph in a section.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Paragraphs", 2, getParagraphs() );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 2, getPages() );
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak2, "tdf123636_newlinePageBreak2.docx")
+{
+    //WITHOUT SplitPgBreakAndParaMark: a following anchored shape should force a page break
+    //CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Paragraphs", 2, getParagraphs() );
+    //CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 2, getPages() );
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak3, "tdf123636_newlinePageBreak3.docx")
+{
+    //MS Compatibility flag: SplitPgBreakAndParaMark
+    //proof case: split any non-empty paragraphs, not just the first paragraph of a section.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Paragraphs", 5, getParagraphs() );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 2, getPages() );
+
+    xmlDocPtr pDump = parseLayoutDump();
+    assertXPath(pDump, "/root/page[1]/body/txt[3]", "Last line on page 1");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak4, "tdf123636_newlinePageBreak4.docx")
+{
+    //MS Compatibility flag: SplitPgBreakAndParaMark
+    //special case: an empty paragraph doesn't split (except if first paragraph).
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Paragraphs", 3, getParagraphs() );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 2, getPages() );
+
+    xmlDocPtr pDump = parseLayoutDump();
+    assertXPath(pDump, "/root/page[2]/body/txt[1]", "");
+}
+
 DECLARE_OOXMLEXPORT_TEST(tdf123912_protectedForm, "tdf123912_protectedForm.odt")
 {
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
