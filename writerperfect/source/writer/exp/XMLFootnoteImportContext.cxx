@@ -81,19 +81,19 @@ XMLFootnoteBodyImportContext::XMLFootnoteBodyImportContext(
 rtl::Reference<XMLImportContext> XMLFootnoteBodyImportContext::CreateChildContext(
     const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
-    return CreateTextChildContext(mrImport, rName);
+    return CreateTextChildContext(GetImport(), rName);
 }
 
 void XMLFootnoteBodyImportContext::startElement(
     const OUString& /*rName*/,
     const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
-    mrImport.GetGenerator().openFootnote(m_rProperties);
+    GetImport().GetGenerator().openFootnote(m_rProperties);
 }
 
 void XMLFootnoteBodyImportContext::endElement(const OUString& /*rName*/)
 {
-    mrImport.GetGenerator().closeFootnote();
+    GetImport().GetGenerator().closeFootnote();
 }
 
 XMLFootnoteImportContext::XMLFootnoteImportContext(XMLImport& rImport)
@@ -105,9 +105,9 @@ rtl::Reference<XMLImportContext> XMLFootnoteImportContext::CreateChildContext(
     const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "text:note-citation")
-        return new XMLTextNoteCitationContext(mrImport, m_aProperties);
+        return new XMLTextNoteCitationContext(GetImport(), m_aProperties);
     if (rName == "text:note-body")
-        return new XMLFootnoteBodyImportContext(mrImport, m_aProperties);
+        return new XMLFootnoteBodyImportContext(GetImport(), m_aProperties);
     SAL_WARN("writerperfect", "XMLFootnoteImportContext::CreateChildContext: unhandled " << rName);
     return nullptr;
 }

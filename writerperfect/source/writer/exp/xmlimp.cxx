@@ -227,7 +227,7 @@ XMLBodyContext::CreateChildContext(const OUString& rName,
                                    const uno::Reference<xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "office:text")
-        return new XMLBodyContentContext(mrImport);
+        return new XMLBodyContentContext(GetImport());
     return nullptr;
 }
 
@@ -254,24 +254,24 @@ rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(
     const OUString& rName, const uno::Reference<xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "office:meta")
-        return new XMLMetaDocumentContext(mrImport);
+        return new XMLMetaDocumentContext(GetImport());
     if (rName == "office:automatic-styles")
-        return new XMLStylesContext(mrImport, XMLStylesContext::StyleType_AUTOMATIC);
+        return new XMLStylesContext(GetImport(), XMLStylesContext::StyleType_AUTOMATIC);
     if (rName == "office:styles")
-        return new XMLStylesContext(mrImport, XMLStylesContext::StyleType_NONE);
+        return new XMLStylesContext(GetImport(), XMLStylesContext::StyleType_NONE);
     if (rName == "office:master-styles")
-        return new XMLStylesContext(mrImport, XMLStylesContext::StyleType_NONE);
+        return new XMLStylesContext(GetImport(), XMLStylesContext::StyleType_NONE);
     if (rName == "office:font-face-decls")
-        return new XMLFontFaceDeclsContext(mrImport);
+        return new XMLFontFaceDeclsContext(GetImport());
     if (rName == "office:body")
     {
-        if (mrImport.GetPageMetafiles().empty())
-            return new XMLBodyContext(mrImport);
+        if (GetImport().GetPageMetafiles().empty())
+            return new XMLBodyContext(GetImport());
 
         // Ignore text from doc model in the fixed layout case, instead
         // insert the page metafiles.
         bool bFirst = true;
-        for (const auto& rPage : mrImport.GetPageMetafiles())
+        for (const auto& rPage : GetImport().GetPageMetafiles())
         {
             HandleFixedLayoutPage(rPage, bFirst);
             if (bFirst)
@@ -283,7 +283,7 @@ rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(
 
 void XMLOfficeDocContext::HandleFixedLayoutPage(const FixedLayoutPage& rPage, bool bFirst)
 {
-    uno::Reference<uno::XComponentContext> xCtx = mrImport.GetComponentContext();
+    uno::Reference<uno::XComponentContext> xCtx = GetImport().GetComponentContext();
     uno::Reference<xml::sax::XWriter> xSaxWriter = xml::sax::Writer::create(xCtx);
     if (!xSaxWriter.is())
         return;
@@ -325,22 +325,22 @@ void XMLOfficeDocContext::HandleFixedLayoutPage(const FixedLayoutPage& rPage, bo
         aPageProperties.insert("librevenge:chapter-names", aChapterNames);
     }
 
-    mrImport.GetGenerator().openPageSpan(aPageProperties);
+    GetImport().GetGenerator().openPageSpan(aPageProperties);
     librevenge::RVNGPropertyList aParagraphProperties;
     if (!bFirst)
         // All pages except the first one needs a page break before the page
         // metafile.
         aParagraphProperties.insert("fo:break-before", "page");
-    mrImport.GetGenerator().openParagraph(aParagraphProperties);
+    GetImport().GetGenerator().openParagraph(aParagraphProperties);
     librevenge::RVNGPropertyList aImageProperties;
     aImageProperties.insert("librevenge:mime-type", "image/svg+xml");
     librevenge::RVNGBinaryData aBinaryData;
     aBinaryData.append(static_cast<const unsigned char*>(aMemoryStream.GetData()),
                        aMemoryStream.GetSize());
     aImageProperties.insert("office:binary-data", aBinaryData);
-    mrImport.GetGenerator().insertBinaryObject(aImageProperties);
-    mrImport.GetGenerator().closeParagraph();
-    mrImport.GetGenerator().closePageSpan();
+    GetImport().GetGenerator().insertBinaryObject(aImageProperties);
+    GetImport().GetGenerator().closeParagraph();
+    GetImport().GetGenerator().closePageSpan();
 }
 
 XMLImport::XMLImport(const uno::Reference<uno::XComponentContext>& xContext,

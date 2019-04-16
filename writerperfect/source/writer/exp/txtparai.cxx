@@ -78,12 +78,12 @@ XMLTextSequenceContext::XMLTextSequenceContext(XMLImport& rImport,
 
 void XMLTextSequenceContext::characters(const OUString& rChars)
 {
-    mrImport.GetGenerator().openSpan(m_aPropertyList);
+    GetImport().GetGenerator().openSpan(m_aPropertyList);
 
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
-    mrImport.GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
+    GetImport().GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
 
-    mrImport.GetGenerator().closeSpan();
+    GetImport().GetGenerator().closeSpan();
 }
 
 /// Handler for <text:span>.
@@ -118,7 +118,7 @@ XMLSpanContext::XMLSpanContext(XMLImport& rImport,
 rtl::Reference<XMLImportContext> XMLSpanContext::CreateChildContext(
     const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
-    return CreateParagraphOrSpanChildContext(mrImport, rName, m_aPropertyList);
+    return CreateParagraphOrSpanChildContext(GetImport(), rName, m_aPropertyList);
 }
 
 void XMLSpanContext::startElement(
@@ -129,8 +129,8 @@ void XMLSpanContext::startElement(
         const OUString& rAttributeName = xAttribs->getNameByIndex(i);
         const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
         if (rAttributeName == "text:style-name")
-            FillStyles(rAttributeValue, mrImport.GetAutomaticTextStyles(), mrImport.GetTextStyles(),
-                       m_aPropertyList);
+            FillStyles(rAttributeValue, GetImport().GetAutomaticTextStyles(),
+                       GetImport().GetTextStyles(), m_aPropertyList);
         else
         {
             OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
@@ -142,12 +142,12 @@ void XMLSpanContext::startElement(
 
 void XMLSpanContext::characters(const OUString& rChars)
 {
-    mrImport.GetGenerator().openSpan(m_aPropertyList);
+    GetImport().GetGenerator().openSpan(m_aPropertyList);
 
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
-    mrImport.GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
+    GetImport().GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
 
-    mrImport.GetGenerator().closeSpan();
+    GetImport().GetGenerator().closeSpan();
 }
 
 /// Handler for <text:ruby>.
@@ -162,10 +162,13 @@ public:
 
     void SAL_CALL endElement(const OUString& rName) override;
 
-    OUString m_sRubyText;
-    OUString m_sRubyBase;
+    void SetRubyText(const OUString& rRubyText) { m_sRubyText = rRubyText; }
+
+    OUString& GetRubyBase() { return m_sRubyBase; }
 
 private:
+    OUString m_sRubyText;
+    OUString m_sRubyBase;
     librevenge::RVNGPropertyList m_aPropertyList;
 };
 
@@ -179,7 +182,7 @@ public:
     {
     }
 
-    void SAL_CALL characters(const OUString& rChars) override { m_rParent.m_sRubyText = rChars; }
+    void SAL_CALL characters(const OUString& rChars) override { m_rParent.SetRubyText(rChars); }
 
 private:
     XMLRubyContext& m_rParent;
@@ -195,7 +198,7 @@ public:
     {
     }
 
-    void SAL_CALL characters(const OUString& rChars) override { m_rParent.m_sRubyBase += rChars; }
+    void SAL_CALL characters(const OUString& rChars) override { m_rParent.GetRubyBase() += rChars; }
 
 private:
     XMLRubyContext& m_rParent;
@@ -215,9 +218,9 @@ rtl::Reference<XMLImportContext> XMLRubyContext::CreateChildContext(
     const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "text:ruby-base")
-        return new XMLRubyBaseContext(mrImport, *this);
+        return new XMLRubyBaseContext(GetImport(), *this);
     if (rName == "text:ruby-text")
-        return new XMLRubyTextContext(mrImport, *this);
+        return new XMLRubyTextContext(GetImport(), *this);
     return nullptr;
 }
 
@@ -227,9 +230,9 @@ void XMLRubyContext::endElement(const OUString& /*rName*/)
     OString sRubyBase = OUStringToOString(m_sRubyBase, RTL_TEXTENCODING_UTF8);
     if (sRubyText.getLength())
         m_aPropertyList.insert("text:ruby-text", sRubyText.getStr());
-    mrImport.GetGenerator().openSpan(m_aPropertyList);
-    mrImport.GetGenerator().insertText(sRubyBase.getStr());
-    mrImport.GetGenerator().closeSpan();
+    GetImport().GetGenerator().openSpan(m_aPropertyList);
+    GetImport().GetGenerator().insertText(sRubyBase.getStr());
+    GetImport().GetGenerator().closeSpan();
 }
 
 /// Base class for contexts that represent a single character only.
@@ -238,7 +241,9 @@ class XMLCharContext : public XMLImportContext
 public:
     XMLCharContext(XMLImport& rImport, const librevenge::RVNGPropertyList& rPropertyList);
 
-protected:
+    const librevenge::RVNGPropertyList& GetPropertyList() const { return m_aPropertyList; }
+
+private:
     librevenge::RVNGPropertyList m_aPropertyList;
 };
 
@@ -273,9 +278,9 @@ void XMLLineBreakContext::startElement(
     const OUString& /*rName*/,
     const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
-    mrImport.GetGenerator().openSpan(m_aPropertyList);
-    mrImport.GetGenerator().insertLineBreak();
-    mrImport.GetGenerator().closeSpan();
+    GetImport().GetGenerator().openSpan(GetPropertyList());
+    GetImport().GetGenerator().insertLineBreak();
+    GetImport().GetGenerator().closeSpan();
 }
 
 /// Handler for <text:s>.
@@ -299,9 +304,9 @@ void XMLSpaceContext::startElement(
     const OUString& /*rName*/,
     const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
-    mrImport.GetGenerator().openSpan(m_aPropertyList);
-    mrImport.GetGenerator().insertSpace();
-    mrImport.GetGenerator().closeSpan();
+    GetImport().GetGenerator().openSpan(GetPropertyList());
+    GetImport().GetGenerator().insertSpace();
+    GetImport().GetGenerator().closeSpan();
 }
 
 /// Handler for <text:tab>.
@@ -324,9 +329,9 @@ void XMLTabContext::startElement(
     const OUString& /*rName*/,
     const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
-    mrImport.GetGenerator().openSpan(m_aPropertyList);
-    mrImport.GetGenerator().insertTab();
-    mrImport.GetGenerator().closeSpan();
+    GetImport().GetGenerator().openSpan(GetPropertyList());
+    GetImport().GetGenerator().insertTab();
+    GetImport().GetGenerator().closeSpan();
 }
 
 /// Handler for <draw:a>.
@@ -363,7 +368,7 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
 rtl::Reference<XMLImportContext> XMLTextFrameHyperlinkContext::CreateChildContext(
     const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
-    return CreateParagraphOrSpanChildContext(mrImport, rName, m_aPropertyList);
+    return CreateParagraphOrSpanChildContext(GetImport(), rName, m_aPropertyList);
 }
 
 void XMLTextFrameHyperlinkContext::startElement(
@@ -376,13 +381,13 @@ void XMLTextFrameHyperlinkContext::startElement(
         const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
         if (rAttributeName == "text:style-name")
             // This affects the nested span's properties.
-            FillStyles(rAttributeValue, mrImport.GetAutomaticTextStyles(), mrImport.GetTextStyles(),
-                       m_aPropertyList);
+            FillStyles(rAttributeValue, GetImport().GetAutomaticTextStyles(),
+                       GetImport().GetTextStyles(), m_aPropertyList);
         else
         {
             if (rAttributeName == "xlink:href")
             {
-                m_ePopupState = mrImport.FillPopupData(rAttributeValue, aPropertyList);
+                m_ePopupState = GetImport().FillPopupData(rAttributeValue, aPropertyList);
                 if (m_ePopupState != PopupState::NotConsumed)
                     continue;
             }
@@ -395,23 +400,23 @@ void XMLTextFrameHyperlinkContext::startElement(
     }
 
     if (m_ePopupState != PopupState::Ignore)
-        mrImport.GetGenerator().openLink(aPropertyList);
+        GetImport().GetGenerator().openLink(aPropertyList);
 }
 
 void XMLTextFrameHyperlinkContext::endElement(const OUString& /*rName*/)
 {
     if (m_ePopupState != PopupState::Ignore)
-        mrImport.GetGenerator().closeLink();
+        GetImport().GetGenerator().closeLink();
 }
 
 void XMLTextFrameHyperlinkContext::characters(const OUString& rChars)
 {
-    mrImport.GetGenerator().openSpan(m_aPropertyList);
+    GetImport().GetGenerator().openSpan(m_aPropertyList);
 
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
-    mrImport.GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
+    GetImport().GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
 
-    mrImport.GetGenerator().closeSpan();
+    GetImport().GetGenerator().closeSpan();
 }
 
 /// Handler for <text:a>.
@@ -447,7 +452,7 @@ XMLHyperlinkContext::XMLHyperlinkContext(XMLImport& rImport,
 rtl::Reference<XMLImportContext> XMLHyperlinkContext::CreateChildContext(
     const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
-    return CreateParagraphOrSpanChildContext(mrImport, rName, m_aPropertyList);
+    return CreateParagraphOrSpanChildContext(GetImport(), rName, m_aPropertyList);
 }
 
 void XMLHyperlinkContext::startElement(
@@ -460,13 +465,13 @@ void XMLHyperlinkContext::startElement(
         const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
         if (rAttributeName == "text:style-name")
             // This affects the nested span's properties.
-            FillStyles(rAttributeValue, mrImport.GetAutomaticTextStyles(), mrImport.GetTextStyles(),
-                       m_aPropertyList);
+            FillStyles(rAttributeValue, GetImport().GetAutomaticTextStyles(),
+                       GetImport().GetTextStyles(), m_aPropertyList);
         else
         {
             if (rAttributeName == "xlink:href")
             {
-                m_ePopupState = mrImport.FillPopupData(rAttributeValue, aPropertyList);
+                m_ePopupState = GetImport().FillPopupData(rAttributeValue, aPropertyList);
                 if (m_ePopupState != PopupState::NotConsumed)
                     continue;
             }
@@ -479,23 +484,23 @@ void XMLHyperlinkContext::startElement(
     }
 
     if (m_ePopupState != PopupState::Ignore)
-        mrImport.GetGenerator().openLink(aPropertyList);
+        GetImport().GetGenerator().openLink(aPropertyList);
 }
 
 void XMLHyperlinkContext::endElement(const OUString& /*rName*/)
 {
     if (m_ePopupState != PopupState::Ignore)
-        mrImport.GetGenerator().closeLink();
+        GetImport().GetGenerator().closeLink();
 }
 
 void XMLHyperlinkContext::characters(const OUString& rChars)
 {
-    mrImport.GetGenerator().openSpan(m_aPropertyList);
+    GetImport().GetGenerator().openSpan(m_aPropertyList);
 
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
-    mrImport.GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
+    GetImport().GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
 
-    mrImport.GetGenerator().closeSpan();
+    GetImport().GetGenerator().closeSpan();
 }
 
 XMLParaContext::XMLParaContext(XMLImport& rImport)
@@ -507,12 +512,12 @@ rtl::Reference<XMLImportContext> XMLParaContext::CreateChildContext(
     const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "text:a")
-        return new XMLHyperlinkContext(mrImport, m_aTextPropertyList);
+        return new XMLHyperlinkContext(GetImport(), m_aTextPropertyList);
     if (rName == "draw:a")
-        return new XMLTextFrameHyperlinkContext(mrImport, m_aTextPropertyList);
+        return new XMLTextFrameHyperlinkContext(GetImport(), m_aTextPropertyList);
     if (rName == "text:ruby")
-        return new XMLRubyContext(mrImport, m_aTextPropertyList);
-    return CreateParagraphOrSpanChildContext(mrImport, rName, m_aTextPropertyList);
+        return new XMLRubyContext(GetImport(), m_aTextPropertyList);
+    return CreateParagraphOrSpanChildContext(GetImport(), rName, m_aTextPropertyList);
 }
 
 void XMLParaContext::startElement(
@@ -526,11 +531,11 @@ void XMLParaContext::startElement(
         if (rAttributeName == "text:style-name")
         {
             m_aStyleName = rAttributeValue;
-            FillStyles(m_aStyleName, mrImport.GetAutomaticParagraphStyles(),
-                       mrImport.GetParagraphStyles(), aPropertyList);
-            FillStyles(m_aStyleName, mrImport.GetAutomaticTextStyles(), mrImport.GetTextStyles(),
-                       m_aTextPropertyList);
-            mrImport.HandlePageSpan(aPropertyList);
+            FillStyles(m_aStyleName, GetImport().GetAutomaticParagraphStyles(),
+                       GetImport().GetParagraphStyles(), aPropertyList);
+            FillStyles(m_aStyleName, GetImport().GetAutomaticTextStyles(),
+                       GetImport().GetTextStyles(), m_aTextPropertyList);
+            GetImport().HandlePageSpan(aPropertyList);
         }
         else
         {
@@ -540,26 +545,26 @@ void XMLParaContext::startElement(
         }
     }
 
-    mrImport.GetGenerator().openParagraph(aPropertyList);
+    GetImport().GetGenerator().openParagraph(aPropertyList);
 }
 
 void XMLParaContext::endElement(const OUString& /*rName*/)
 {
-    mrImport.GetGenerator().closeParagraph();
+    GetImport().GetGenerator().closeParagraph();
 }
 
 void XMLParaContext::characters(const OUString& rChars)
 {
     librevenge::RVNGPropertyList aPropertyList;
     if (!m_aStyleName.isEmpty())
-        FillStyles(m_aStyleName, mrImport.GetAutomaticTextStyles(), mrImport.GetTextStyles(),
+        FillStyles(m_aStyleName, GetImport().GetAutomaticTextStyles(), GetImport().GetTextStyles(),
                    aPropertyList);
-    mrImport.GetGenerator().openSpan(aPropertyList);
+    GetImport().GetGenerator().openSpan(aPropertyList);
 
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
-    mrImport.GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
+    GetImport().GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
 
-    mrImport.GetGenerator().closeSpan();
+    GetImport().GetGenerator().closeSpan();
 }
 
 rtl::Reference<XMLImportContext>

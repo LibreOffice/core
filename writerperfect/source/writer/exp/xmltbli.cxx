@@ -70,7 +70,7 @@ XMLTableCellContext::XMLTableCellContext(XMLImport& rImport, XMLTableRowContext&
 rtl::Reference<XMLImportContext> XMLTableCellContext::CreateChildContext(
     const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
-    return CreateTextChildContext(mrImport, rName);
+    return CreateTextChildContext(GetImport(), rName);
 }
 
 void XMLTableCellContext::startElement(
@@ -83,8 +83,8 @@ void XMLTableCellContext::startElement(
         const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
 
         if (rAttributeName == "table:style-name")
-            FillStyles(rAttributeValue, mrImport.GetAutomaticCellStyles(), mrImport.GetCellStyles(),
-                       aPropertyList);
+            FillStyles(rAttributeValue, GetImport().GetAutomaticCellStyles(),
+                       GetImport().GetCellStyles(), aPropertyList);
         else
         {
             OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
@@ -93,13 +93,13 @@ void XMLTableCellContext::startElement(
         }
     }
     aPropertyList.insert("librevenge:column", m_rRow.GetColumn());
-    mrImport.GetGenerator().openTableCell(aPropertyList);
+    GetImport().GetGenerator().openTableCell(aPropertyList);
     m_rRow.SetColumn(m_rRow.GetColumn() + 1);
 }
 
 void XMLTableCellContext::endElement(const OUString& /*rName*/)
 {
-    mrImport.GetGenerator().closeTableCell();
+    GetImport().GetGenerator().closeTableCell();
 }
 
 /// Handler for <table:table-column>.
@@ -133,8 +133,8 @@ void XMLTableColumnContext::startElement(
         const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
 
         if (rAttributeName == "table:style-name")
-            FillStyles(rAttributeValue, mrImport.GetAutomaticColumnStyles(),
-                       mrImport.GetColumnStyles(), aPropertyList);
+            FillStyles(rAttributeValue, GetImport().GetAutomaticColumnStyles(),
+                       GetImport().GetColumnStyles(), aPropertyList);
     }
     m_rColumns.append(aPropertyList);
 }
@@ -148,11 +148,11 @@ rtl::Reference<XMLImportContext> XMLTableRowContext::CreateChildContext(
     const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "table:table-cell")
-        return new XMLTableCellContext(mrImport, *this);
+        return new XMLTableCellContext(GetImport(), *this);
     if (rName == "table:covered-table-cell")
     {
         ++m_nColumn;
-        mrImport.GetGenerator().insertCoveredTableCell(librevenge::RVNGPropertyList());
+        GetImport().GetGenerator().insertCoveredTableCell(librevenge::RVNGPropertyList());
     }
     else
         SAL_WARN("writerperfect", "XMLTableRowContext::CreateChildContext: unhandled " << rName);
@@ -169,15 +169,15 @@ void XMLTableRowContext::startElement(
         const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
 
         if (rAttributeName == "table:style-name")
-            FillStyles(rAttributeValue, mrImport.GetAutomaticRowStyles(), mrImport.GetRowStyles(),
-                       aPropertyList);
+            FillStyles(rAttributeValue, GetImport().GetAutomaticRowStyles(),
+                       GetImport().GetRowStyles(), aPropertyList);
     }
-    mrImport.GetGenerator().openTableRow(aPropertyList);
+    GetImport().GetGenerator().openTableRow(aPropertyList);
 }
 
 void XMLTableRowContext::endElement(const OUString& /*rName*/)
 {
-    mrImport.GetGenerator().closeTableRow();
+    GetImport().GetGenerator().closeTableRow();
 }
 
 int XMLTableRowContext::GetColumn() const { return m_nColumn; }
@@ -194,18 +194,18 @@ rtl::Reference<XMLImportContext> XMLTableContext::CreateChildContext(
 {
     if (rName == "table:table-column")
         // Make sure columns are parsed before we open the table.
-        return new XMLTableColumnContext(mrImport, m_aColumns);
+        return new XMLTableColumnContext(GetImport(), m_aColumns);
 
     if (!m_bTableOpened)
     {
         if (!m_aColumns.empty())
             m_aPropertyList.insert("librevenge:table-columns", m_aColumns);
-        mrImport.GetGenerator().openTable(m_aPropertyList);
+        GetImport().GetGenerator().openTable(m_aPropertyList);
         m_bTableOpened = true;
     }
 
     if (rName == "table:table-row")
-        return new XMLTableRowContext(mrImport);
+        return new XMLTableRowContext(GetImport());
 
     SAL_WARN("writerperfect", "XMLTableContext::CreateChildContext: unhandled " << rName);
 
@@ -222,9 +222,9 @@ void XMLTableContext::startElement(
 
         if (rAttributeName == "table:style-name")
         {
-            FillStyles(rAttributeValue, mrImport.GetAutomaticTableStyles(),
-                       mrImport.GetTableStyles(), m_aPropertyList);
-            mrImport.HandlePageSpan(m_aPropertyList);
+            FillStyles(rAttributeValue, GetImport().GetAutomaticTableStyles(),
+                       GetImport().GetTableStyles(), m_aPropertyList);
+            GetImport().HandlePageSpan(m_aPropertyList);
         }
         else
         {
@@ -237,7 +237,7 @@ void XMLTableContext::startElement(
 
 void XMLTableContext::endElement(const OUString& /*rName*/)
 {
-    mrImport.GetGenerator().closeTable();
+    GetImport().GetGenerator().closeTable();
 }
 
 } // namespace exp

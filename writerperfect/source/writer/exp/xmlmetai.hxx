@@ -24,12 +24,15 @@ class XMLMetaDocumentContext : public XMLImportContext
 public:
     XMLMetaDocumentContext(XMLImport& rImport);
 
+    librevenge::RVNGPropertyList& GetPropertyList() { return m_aPropertyList; }
+
     rtl::Reference<XMLImportContext>
     CreateChildContext(const OUString& rName,
                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
     void SAL_CALL endElement(const OUString& rName) override;
 
+private:
     librevenge::RVNGPropertyList m_aPropertyList;
 };
 

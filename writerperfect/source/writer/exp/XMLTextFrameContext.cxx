@@ -46,19 +46,19 @@ XMLTextBoxContext::XMLTextBoxContext(XMLImport& rImport)
 rtl::Reference<XMLImportContext> XMLTextBoxContext::CreateChildContext(
     const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
-    return CreateTextChildContext(mrImport, rName);
+    return CreateTextChildContext(GetImport(), rName);
 }
 
 void XMLTextBoxContext::startElement(
     const OUString& /*rName*/,
     const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
-    mrImport.GetGenerator().openTextBox(librevenge::RVNGPropertyList());
+    GetImport().GetGenerator().openTextBox(librevenge::RVNGPropertyList());
 }
 
 void XMLTextBoxContext::endElement(const OUString& /*rName*/)
 {
-    mrImport.GetGenerator().closeTextBox();
+    GetImport().GetGenerator().closeTextBox();
 }
 
 /// Handler for <draw:image>.
@@ -91,7 +91,7 @@ rtl::Reference<XMLImportContext> XMLTextImageContext::CreateChildContext(
 {
     if (rName == "office:binary-data")
     {
-        m_xBinaryData = new XMLBase64ImportContext(mrImport);
+        m_xBinaryData = new XMLBase64ImportContext(GetImport());
         return m_xBinaryData.get();
     }
     return nullptr;
@@ -116,7 +116,7 @@ void XMLTextImageContext::endElement(const OUString& /*rName*/)
     if (m_xBinaryData.is())
         aPropertyList.insert("office:binary-data", m_xBinaryData->getBinaryData());
 
-    mrImport.GetGenerator().insertBinaryObject(aPropertyList);
+    GetImport().GetGenerator().insertBinaryObject(aPropertyList);
 }
 
 XMLTextFrameContext::XMLTextFrameContext(XMLImport& rImport)
@@ -128,9 +128,9 @@ rtl::Reference<XMLImportContext> XMLTextFrameContext::CreateChildContext(
     const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "draw:image")
-        return new XMLTextImageContext(mrImport);
+        return new XMLTextImageContext(GetImport());
     if (rName == "draw:text-box")
-        return new XMLTextBoxContext(mrImport);
+        return new XMLTextBoxContext(GetImport());
     SAL_WARN("writerperfect", "XMLTextFrameContext::CreateChildContext: unhandled " << rName);
     return nullptr;
 }
@@ -145,8 +145,8 @@ void XMLTextFrameContext::startElement(
         const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
 
         if (rAttributeName == "draw:style-name")
-            FillStyles(rAttributeValue, mrImport.GetAutomaticGraphicStyles(),
-                       mrImport.GetGraphicStyles(), aPropertyList);
+            FillStyles(rAttributeValue, GetImport().GetAutomaticGraphicStyles(),
+                       GetImport().GetGraphicStyles(), aPropertyList);
         else
         {
             OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
@@ -154,12 +154,12 @@ void XMLTextFrameContext::startElement(
             aPropertyList.insert(sName.getStr(), sValue.getStr());
         }
     }
-    mrImport.GetGenerator().openFrame(aPropertyList);
+    GetImport().GetGenerator().openFrame(aPropertyList);
 }
 
 void XMLTextFrameContext::endElement(const OUString& /*rName*/)
 {
-    mrImport.GetGenerator().closeFrame();
+    GetImport().GetGenerator().closeFrame();
 }
 
 } // namespace exp

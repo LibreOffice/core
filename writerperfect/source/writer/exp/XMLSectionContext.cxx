@@ -26,19 +26,19 @@ XMLSectionContext::XMLSectionContext(XMLImport& rImport)
 rtl::Reference<XMLImportContext> XMLSectionContext::CreateChildContext(
     const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
-    return CreateTextChildContext(mrImport, rName);
+    return CreateTextChildContext(GetImport(), rName);
 }
 
 void XMLSectionContext::startElement(
     const OUString& /*rName*/,
     const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
-    mrImport.GetGenerator().openSection(librevenge::RVNGPropertyList());
+    GetImport().GetGenerator().openSection(librevenge::RVNGPropertyList());
 }
 
 void XMLSectionContext::endElement(const OUString& /*rName*/)
 {
-    mrImport.GetGenerator().closeSection();
+    GetImport().GetGenerator().closeSection();
 }
 
 } // namespace exp

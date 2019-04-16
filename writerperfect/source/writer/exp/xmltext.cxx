@@ -28,14 +28,14 @@ XMLBodyContentContext::XMLBodyContentContext(XMLImport& rImport)
 
 void XMLBodyContentContext::endElement(const OUString& /*rName*/)
 {
-    if (mrImport.GetIsInPageSpan())
-        mrImport.GetGenerator().closePageSpan();
+    if (GetImport().GetIsInPageSpan())
+        GetImport().GetGenerator().closePageSpan();
 }
 
 rtl::Reference<XMLImportContext> XMLBodyContentContext::CreateChildContext(
     const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
-    return CreateTextChildContext(mrImport, rName);
+    return CreateTextChildContext(GetImport(), rName);
 }
 
 rtl::Reference<XMLImportContext> CreateTextChildContext(XMLImport& rImport, const OUString& rName)
