@@ -131,7 +131,7 @@ CommandLineEvent CheckOfficeURI(/* in,out */ OUString& arg, CommandLineEvent cur
     long nURIlen = -1;
 
     // URL might be encoded
-    rest1 = rest1.replaceAll("%7C", "|");
+    rest1 = rest1.replaceAll("%7C", "|").replaceAll("%7c", "|");
 
     // 2. Discriminate by command name (incl. 1st command argument descriptor)
     //    Extract URI: everything up to possible next argument
@@ -165,7 +165,7 @@ CommandLineEvent CheckOfficeURI(/* in,out */ OUString& arg, CommandLineEvent cur
         // override only in default mode
         if (curEvt == CommandLineEvent::Open)
             curEvt = CommandLineEvent::View;
-        rest2 = rest1;
+        return curEvt; // do not modify argument
     }
     if (nURIlen < 0)
         nURIlen = rest2.getLength();
