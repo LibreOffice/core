@@ -177,7 +177,7 @@ void SAL_CALL Gtk3KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nContr
     }
     else
     {
-        OSL_TRACE("set value of unhandled type %d", controlId);
+        SAL_INFO("vcl.gtkkde5", "set value of unhandled type " << controlId);
     }
 }
 
@@ -403,7 +403,7 @@ void SAL_CALL Gtk3KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args
             break;
 
         default:
-            OSL_TRACE("Unknown templates %d", templateId);
+            SAL_INFO("vcl.gtkkde5", "unknown templates " << templateId);
             return;
     }
 
@@ -446,7 +446,7 @@ void Gtk3KDE5FilePicker::filterChanged()
 {
     FilePickerEvent aEvent;
     aEvent.ElementId = LISTBOX_FILTER;
-    OSL_TRACE("filter changed");
+    SAL_INFO("vcl.gtkkde5", "filter changed");
     if (m_xListener.is())
         m_xListener->controlStateChanged(aEvent);
 }
@@ -454,7 +454,7 @@ void Gtk3KDE5FilePicker::filterChanged()
 void Gtk3KDE5FilePicker::selectionChanged()
 {
     FilePickerEvent aEvent;
-    OSL_TRACE("file selection changed");
+    SAL_INFO("vcl.gtkkde5", "file selection changed");
     if (m_xListener.is())
         m_xListener->fileSelectionChanged(aEvent);
 }
