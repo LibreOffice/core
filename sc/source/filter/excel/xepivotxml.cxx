@@ -15,16 +15,21 @@
 #include <dputil.hxx>
 #include <document.hxx>
 #include <generalfunction.hxx>
+#include <unonames.hxx>
+#include <xestyle.hxx>
+#include <xeroot.hxx>
 
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
 #include <sax/tools/converter.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
+#include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 
 #include <o3tl/make_unique.hxx>
 
@@ -1082,6 +1087,10 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
 
     if (!aDataFields.empty())
     {
+        css::uno::Reference<css::container::XNameAccess> xDimsByName;
+        if (auto xDimSupplier = const_cast<ScDPObject&>(rDPObj).GetSource())
+            xDimsByName = xDimSupplier->getDimensions();
+
         pPivotStrm->startElement(XML_dataFields,
             XML_count, OString::number(static_cast<long>(aDataFields.size())),
             FSEND);
@@ -1097,17 +1106,32 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             // Excel (at least 2016) seems to insist on the presence of "name" attribute in
             // dataField element, even if empty
             const OString sName = pName ? XclXmlUtils::ToOString(*pName) : "";
-            pPivotStrm->write("<")->writeId(XML_dataField);
-            rStrm.WriteAttributes(XML_name, sName, FSEND);
-
-            rStrm.WriteAttributes(XML_fld, OString::number(nDimIdx).getStr(), FSEND);
-
-            ScGeneralFunction eFunc = rDim.GetFunction();
-            const char* pSubtotal = toOOXMLSubtotalType(eFunc);
+            auto pItemAttList = sax_fastparser::FastSerializerHelper::createAttrList();
+            pItemAttList->add(XML_name, sName);
+            pItemAttList->add(XML_fld, OString::number(nDimIdx));
+            const char* pSubtotal = toOOXMLSubtotalType(rDim.GetFunction());
             if (pSubtotal)
-                rStrm.WriteAttributes(XML_subtotal, pSubtotal, FSEND);
-
-            pPivotStrm->write("/>");
+                pItemAttList->add(XML_subtotal, pSubtotal);
+            if (xDimsByName)
+            {
+                try
+                {
+                    css::uno::Reference<css::beans::XPropertySet> xDimProps(
+                        xDimsByName->getByName(rDim.GetName()), uno::UNO_QUERY_THROW);
+                    css::uno::Any aVal = xDimProps->getPropertyValue(SC_UNONAME_NUMFMT);
+                    sal_uInt32 nScNumFmt = aVal.get<sal_uInt32>();
+                    sal_uInt16 nXclNumFmt = GetRoot().GetNumFmtBuffer().Insert(nScNumFmt);
+                    pItemAttList->add(XML_numFmtId, OString::number(nXclNumFmt));
+                }
+                catch (uno::Exception&)
+                {
+                    SAL_WARN("sc.filter",
+                             "Couldn't get number format for data field " << rDim.GetName());
+                    // Just skip exporting number format
+                }
+            }
+            sax_fastparser::XFastAttributeListRef xItemAttributeList(pItemAttList);
+            pPivotStrm->singleElement(XML_dataField, xItemAttributeList);
         }
 
         pPivotStrm->endElement(XML_dataFields);
