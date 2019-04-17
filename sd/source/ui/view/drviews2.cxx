@@ -1449,6 +1449,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_NUMBERING_AND_POSITION:
+        {
+            SetCurrentFunction( FuBulletAndPosition::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+
         case FN_INSERT_SOFT_HYPHEN:
         case FN_INSERT_HARDHYPHEN:
         case FN_INSERT_HARD_SPACE:

@@ -31,6 +31,10 @@
 #include <svx/svxdllapi.h>
 #include <vector>
 
+namespace sd {
+    class View;
+}
+
 namespace com{namespace sun{namespace star{
 namespace linguistic2{
     class XDictionary;
@@ -200,6 +204,16 @@ protected:
 public:
     virtual void GetTitle(OUString& rTitle) = 0;
     virtual void GetDescription(OUString& rDescription) = 0;
+};
+
+class AbstractSvxBulletAndPositionDlg :public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractSvxBulletAndPositionDlg() override = default;
+public:
+    virtual const SfxItemSet*   GetOutputItemSet( SfxItemSet* pSet) const = 0 ;
+    virtual bool IsApplyToMaster() = 0;
+    virtual bool IsSlideScope() = 0;
 };
 
 class AbstractSvxMessDialog :public VclAbstractDialog
@@ -391,7 +405,6 @@ public:
     // #i68101#
     virtual VclPtr<AbstractSvxObjectNameDialog> CreateSvxObjectNameDialog(weld::Window* pParent, const OUString& rName) = 0;
     virtual VclPtr<AbstractSvxObjectTitleDescDialog> CreateSvxObjectTitleDescDialog(weld::Window* pParent, const OUString& rTitle, const OUString& rDescription) = 0;
-
     virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxMultiPathDialog(weld::Window* pParent) = 0 ;
     virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxPathSelectDialog(weld::Window* pParent) = 0 ;
     virtual VclPtr<AbstractSvxHpLinkDlg>  CreateSvxHpLinkDlg(vcl::Window* pParent, SfxBindings* pBindings)=0;
