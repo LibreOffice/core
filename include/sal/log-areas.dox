@@ -470,6 +470,7 @@ certain functionality.
 @li @c vcl.gdi.fontmetric
 @li @c vcl.gtk - Gtk+ 2/3 plugin
 @li @c vcl.gtk3
+@li @c vcl.gtkkde5
 @li @c vcl.harfbuzz - HarfBuzz text layout
 @li @c vcl.headless - bitmap-based backend
 @li @c vcl.helper
