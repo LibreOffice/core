@@ -184,9 +184,6 @@ private:
 
     bool                bRefInputMode;
 
-    // Hack: RefInput control
-    std::unique_ptr<Idle> pIdle;
-
     formula::WeldRefEdit* m_pRefInputEdit;
 
     std::unique_ptr<weld::ComboBox> m_xLbFilterArea;
@@ -222,8 +219,10 @@ private:
     DECL_LINK( FilterAreaModHdl, formula::WeldRefEdit&, void );
     DECL_LINK( EndDlgHdl,  weld::Button&, void );
 
-    // Hack: RefInput control
-    DECL_LINK( TimeOutHdl, Timer*, void );
+    // RefInput control
+    DECL_LINK( RefInputEditHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( RefInputButtonHdl, formula::WeldRefButton&, void );
+    void RefInputHdl();
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_FILTDLG_HXX
