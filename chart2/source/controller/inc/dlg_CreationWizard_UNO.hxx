@@ -26,10 +26,11 @@
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/dialog.hxx>
 #include "dlg_CreationWizard.hxx"
 
 namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
@@ -43,7 +44,7 @@ namespace chart
 
 class CreationWizardUnoDlg : public MutexContainer
                             , public ::cppu::OComponentHelper
-                            , public css::ui::dialogs::XExecutableDialog
+                            , public css::ui::dialogs::XAsynchronousExecutableDialog
                             , public css::lang::XServiceInfo
                             , public css::lang::XInitialization
                             , public css::frame::XTerminateListener
@@ -70,9 +71,9 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    // XExecutableDialog
-    virtual void SAL_CALL setTitle( const OUString& aTitle ) override;
-    virtual sal_Int16 SAL_CALL execute(  ) override;
+    // XAsynchronousExecutableDialog
+    virtual void SAL_CALL setDialogTitle( const OUString& aTitle ) override;
+    virtual void SAL_CALL startExecuteModal( const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener ) override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
@@ -104,8 +105,10 @@ private:
     css::uno::Reference< css::frame::XModel >            m_xChartModel;
     css::uno::Reference< css::uno::XComponentContext>    m_xCC;
     css::uno::Reference< css::awt::XWindow >             m_xParentWindow;
+    css::uno::Reference< css::ui::dialogs::XDialogClosedListener > m_xDlgClosedListener;
 
-    std::unique_ptr<CreationWizard> m_xDialog;
+    std::shared_ptr<CreationWizard> m_xDialog;
+
     bool            m_bUnlockControllersOnExecute;
 };
 
