@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cuicharmap.hxx>
+#include <cui/cuicharmap.hxx>
 
 // hook to call special character dialog for edits
 // caution: needs C-Linkage since dynamically loaded via symbol name
