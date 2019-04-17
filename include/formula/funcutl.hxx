@@ -86,8 +86,10 @@ public:
 
 class FORMULA_DLLPUBLIC WeldRefEdit
 {
-private:
+protected:
     std::unique_ptr<weld::Entry> xEntry;
+
+private:
     Idle aIdle;
     IControlReferenceHandler* pAnyRefDlg; // parent dialog
     weld::Label* pLabelWidget;

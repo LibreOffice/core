@@ -40,6 +40,7 @@
 #include <vcl/i18nhelp.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/pngwrite.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
@@ -2099,6 +2100,17 @@ GdkPixbuf* load_icon_by_name(const OUString& rIconName)
 
 namespace
 {
+    GdkPixbuf* getPixbuf(const css::uno::Reference<css::graphic::XGraphic>& rImage)
+    {
+        Image aImage(rImage);
+
+        std::unique_ptr<SvMemoryStream> xMemStm(new SvMemoryStream);
+        vcl::PNGWriter aWriter(aImage.GetBitmapEx());
+        aWriter.Write(*xMemStm);
+
+        return load_icon_from_stream(*xMemStm);
+    }
+
     GdkPixbuf* getPixbuf(const VirtualDevice& rDevice)
     {
         Size aSize(rDevice.GetOutputSizePixel());
@@ -4321,8 +4333,6 @@ public:
     }
 };
 
-#include <vcl/pngwrite.hxx>
-
 class GtkInstanceButton : public GtkInstanceContainer, public virtual weld::Button
 {
 private:
@@ -4364,9 +4374,24 @@ public:
     {
         GdkPixbuf* pixbuf = load_icon_by_name(rIconName);
         if (!pixbuf)
-            return;
-        gtk_button_set_image(m_pButton, gtk_image_new_from_pixbuf(pixbuf));
-        g_object_unref(pixbuf);
+            gtk_button_set_image(m_pButton, nullptr);
+        else
+        {
+            gtk_button_set_image(m_pButton, gtk_image_new_from_pixbuf(pixbuf));
+            g_object_unref(pixbuf);
+        }
+    }
+
+    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
+    {
+        GdkPixbuf* pixbuf = getPixbuf(rImage);
+        if (!pixbuf)
+            gtk_button_set_image(m_pButton, nullptr);
+        else
+        {
+            gtk_button_set_image(m_pButton, gtk_image_new_from_pixbuf(pixbuf));
+            g_object_unref(pixbuf);
+        }
     }
 
     virtual OUString get_label() const override
@@ -4677,6 +4702,20 @@ private:
         return false;
     }
 
+    void ensure_image_widget()
+    {
+        if (!m_pImage)
+        {
+            m_pImage = GTK_IMAGE(gtk_image_new());
+            GtkStyleContext *pContext = gtk_widget_get_style_context(GTK_WIDGET(m_pMenuButton));
+            gint nImageSpacing(0);
+            gtk_style_context_get_style(pContext, "image-spacing", &nImageSpacing, nullptr);
+            gtk_box_pack_start(m_pBox, GTK_WIDGET(m_pImage), false, false, nImageSpacing);
+            gtk_box_reorder_child(m_pBox, GTK_WIDGET(m_pImage), 0);
+            gtk_widget_show(GTK_WIDGET(m_pImage));
+        }
+    }
+
 public:
     GtkInstanceMenuButton(GtkMenuButton* pMenuButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceToggleButton(GTK_TOGGLE_BUTTON(pMenuButton), pBuilder, bTakeOwnership)
@@ -4720,16 +4759,7 @@ public:
 
     virtual void set_image(VirtualDevice* pDevice) override
     {
-        if (!m_pImage)
-        {
-            m_pImage = GTK_IMAGE(gtk_image_new());
-            GtkStyleContext *pContext = gtk_widget_get_style_context(GTK_WIDGET(m_pMenuButton));
-            gint nImageSpacing(0);
-            gtk_style_context_get_style(pContext, "image-spacing", &nImageSpacing, nullptr);
-            gtk_box_pack_start(m_pBox, GTK_WIDGET(m_pImage), false, false, nImageSpacing);
-            gtk_box_reorder_child(m_pBox, GTK_WIDGET(m_pImage), 0);
-            gtk_widget_show(GTK_WIDGET(m_pImage));
-        }
+        ensure_image_widget();
         if (pDevice)
         {
             if (gtk_check_version(3, 20, 0) == nullptr)
@@ -4740,6 +4770,19 @@ public:
                 gtk_image_set_from_pixbuf(m_pImage, pixbuf);
                 g_object_unref(pixbuf);
             }
+        }
+        else
+            gtk_image_set_from_surface(m_pImage, nullptr);
+    }
+
+    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
+    {
+        ensure_image_widget();
+        GdkPixbuf* pixbuf = getPixbuf(rImage);
+        if (pixbuf)
+        {
+            gtk_image_set_from_pixbuf(m_pImage, pixbuf);
+            g_object_unref(pixbuf);
         }
         else
             gtk_image_set_from_surface(m_pImage, nullptr);
@@ -5683,17 +5726,6 @@ namespace
         }
 
         return pixbuf;
-    }
-
-    GdkPixbuf* getPixbuf(const css::uno::Reference<css::graphic::XGraphic>& rImage)
-    {
-        Image aImage(rImage);
-
-        std::unique_ptr<SvMemoryStream> xMemStm(new SvMemoryStream);
-        vcl::PNGWriter aWriter(aImage.GetBitmapEx());
-        aWriter.Write(*xMemStm);
-
-        return load_icon_from_stream(*xMemStm);
     }
 
     void insert_row(GtkListStore* pListStore, GtkTreeIter& iter, int pos, const OUString* pId, const OUString& rText, const OUString* pIconName, const VirtualDevice* pDevice)
