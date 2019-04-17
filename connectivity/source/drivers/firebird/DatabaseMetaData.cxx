@@ -976,7 +976,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[12] = new ORowSetValueDecorator(false); // Autoincrement
         aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
-        aResults.push_back(aRow);
+        tmp.push_back(aRow);
 
         // SQL_TYPE_DATE
         aRow[1] = new ORowSetValueDecorator(OUString("DATE"));
