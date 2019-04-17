@@ -57,8 +57,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
         pViewData       ( nullptr ),
         pDoc            ( nullptr ),
         pRefInputEdit   ( nullptr ),
-        bRefInputMode   ( false ),
-        pIdle          ( nullptr )
+        bRefInputMode   ( false )
 {
         get(pLbFilterArea,"lbfilterarea");
         get(pEdFilterArea,"edfilterarea");
@@ -83,14 +82,18 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
         get(pExpander,"more");
 
     Init( rArgSet );
-    pEdFilterArea->GrabFocus();
 
-    // hack: control of RefInput
-    pIdle = new Idle("Special Filter Dialog");
-    // FIXME: this is an abomination
-    pIdle->SetPriority( TaskPriority::LOWEST );
-    pIdle->SetInvokeHandler( LINK( this, ScSpecialFilterDlg, TimeOutHdl ) );
-    pIdle->Start();
+    Link<Control&, void> aLink = LINK(this, ScSpecialFilterDlg, RefInputControlHdl);
+    pEdCopyArea->SetGetFocusHdl(aLink);
+    pRbCopyArea->SetGetFocusHdl(aLink);
+    pEdFilterArea->SetGetFocusHdl(aLink);
+    pRbFilterArea->SetGetFocusHdl(aLink);
+    pEdCopyArea->SetLoseFocusHdl(aLink);
+    pRbCopyArea->SetLoseFocusHdl(aLink);
+    pEdFilterArea->SetLoseFocusHdl(aLink);
+    pRbFilterArea->SetLoseFocusHdl(aLink);
+
+    pEdFilterArea->GrabFocus();
 }
 
 ScSpecialFilterDlg::~ScSpecialFilterDlg()
@@ -108,10 +111,6 @@ void ScSpecialFilterDlg::dispose()
     delete pOptionsMgr;
 
     delete pOutItem;
-
-    // hack: control of RefInput
-    pIdle->Stop();
-    delete pIdle;
 
     pLbFilterArea.clear();
     pEdFilterArea.clear();
@@ -389,11 +388,9 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pIdle, void )
+IMPL_LINK_NOARG(ScSpecialFilterDlg, RefInputControlHdl, Control&, void)
 {
-    // every 50ms check whether RefInputMode is still true
-
-    if( (_pIdle == pIdle) && IsActive() )
+    if (IsActive())
     {
         if( pEdCopyArea->HasFocus() || pRbCopyArea->HasFocus() )
         {
@@ -411,8 +408,6 @@ IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pIdle, void )
             bRefInputMode = false;
         }
     }
-
-    pIdle->Start();
 }
 
 IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox&, rLb, void )
