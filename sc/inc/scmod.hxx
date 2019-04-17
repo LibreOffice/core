@@ -108,7 +108,6 @@ class ScModule: public SfxModule, public SfxListener, public utl::ConfigurationL
     bool                m_bIsInSharedDocLoading:1;
     bool                m_bIsInSharedDocSaving:1;
 
-    std::map<sal_uInt16, std::vector<VclPtr<vcl::Window> > > m_mapRefWindow;
     // a way to find existing Dialogs for a given parent Window of the slot type
     std::map<sal_uInt16, std::vector<std::pair<std::shared_ptr<SfxDialogController>, weld::Window*>>> m_mapRefController;
 
@@ -248,9 +247,6 @@ public:
     bool                IsInSharedDocLoading() const        { return m_bIsInSharedDocLoading; }
     void                SetInSharedDocSaving( bool bNew )   { m_bIsInSharedDocSaving = bNew; }
     bool                IsInSharedDocSaving() const         { return m_bIsInSharedDocSaving; }
-
-    SC_DLLPUBLIC void   RegisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
-    SC_DLLPUBLIC void   UnregisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
 
     SC_DLLPUBLIC void   RegisterRefController(sal_uInt16 nSlotId, std::shared_ptr<SfxDialogController>& rWnd, weld::Window* pWndAncestor);
     SC_DLLPUBLIC void   UnregisterRefController(sal_uInt16 nSlotId, std::shared_ptr<SfxDialogController>& rWnd);
