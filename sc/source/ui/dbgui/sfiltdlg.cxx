@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/dispatch.hxx>
-#include <vcl/idle.hxx>
 
 #include <uiitems.hxx>
 #include <rangenam.hxx>
@@ -89,14 +88,18 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
         get(pExpander,"more");
 
     Init( rArgSet );
-    pEdFilterArea->GrabFocus();
 
-    // hack: control of RefInput
-    pIdle.reset( new Idle("Special Filter Dialog") );
-    // FIXME: this is an abomination
-    pIdle->SetPriority( TaskPriority::LOWEST );
-    pIdle->SetInvokeHandler( LINK( this, ScSpecialFilterDlg, TimeOutHdl ) );
-    pIdle->Start();
+    Link<Control&, void> aLink = LINK(this, ScSpecialFilterDlg, RefInputControlHdl);
+    pEdCopyArea->SetGetFocusHdl(aLink);
+    pRbCopyArea->SetGetFocusHdl(aLink);
+    pEdFilterArea->SetGetFocusHdl(aLink);
+    pRbFilterArea->SetGetFocusHdl(aLink);
+    pEdCopyArea->SetLoseFocusHdl(aLink);
+    pRbCopyArea->SetLoseFocusHdl(aLink);
+    pEdFilterArea->SetLoseFocusHdl(aLink);
+    pRbFilterArea->SetLoseFocusHdl(aLink);
+
+    pEdFilterArea->GrabFocus();
 }
 
 ScSpecialFilterDlg::~ScSpecialFilterDlg()
@@ -114,10 +117,6 @@ void ScSpecialFilterDlg::dispose()
     pOptionsMgr.reset();
 
     pOutItem.reset();
-
-    // hack: control of RefInput
-    pIdle->Stop();
-    pIdle.reset();
 
     pLbFilterArea.clear();
     pEdFilterArea.clear();
@@ -393,11 +392,9 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pIdle, void )
+IMPL_LINK_NOARG(ScSpecialFilterDlg, RefInputControlHdl, Control&, void)
 {
-    // every 50ms check whether RefInputMode is still true
-
-    if( (_pIdle == pIdle.get()) && IsActive() )
+    if (IsActive())
     {
         if( pEdCopyArea->HasFocus() || pRbCopyArea->HasFocus() )
         {
@@ -415,8 +412,6 @@ IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pIdle, void )
             bRefInputMode = false;
         }
     }
-
-    pIdle->Start();
 }
 
 IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox&, rLb, void )
