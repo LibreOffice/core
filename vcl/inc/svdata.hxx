@@ -28,6 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/task.hxx>
+#include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
@@ -378,6 +379,11 @@ struct ImplSVData
     css::uno::Reference<css::i18n::XCharacterClassification> m_xCharClass;
 
     Link<LinkParamNone*,void> maDeInitHook;
+
+    // LOK & headless backend specific hooks
+    LibreOfficeKitPollCallback mpPollCallback = nullptr;
+    LibreOfficeKitWakeCallback mpWakeCallback = nullptr;
+    void *mpPollClosure = nullptr;
 };
 
 css::uno::Reference<css::i18n::XCharacterClassification> const& ImplGetCharClass();

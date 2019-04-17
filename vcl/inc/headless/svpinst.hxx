@@ -93,7 +93,6 @@ public:
     virtual ~SvpSalYieldMutex() override;
 
     virtual bool IsCurrentThread() const override;
-
 };
 
 SalInstance* svp_create_SalInstance();
@@ -109,7 +108,6 @@ class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance, public SalUserEv
 
     virtual void            TriggerUserEventProcessing() override;
     virtual void            ProcessEvent( SalUserEvent aEvent ) override;
-    void                    Wakeup(SvpRequest request = SvpRequest::NONE);
 
 public:
     static SvpSalInstance*  s_pDefaultInstance;
@@ -119,6 +117,7 @@ public:
 
     void                    CloseWakeupPipe(bool log);
     void                    CreateWakeupPipe(bool log);
+    void                    Wakeup(SvpRequest request = SvpRequest::NONE);
 
     void                    StartTimer( sal_uLong nMS );
     void                    StopTimer();
