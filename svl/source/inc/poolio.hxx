@@ -45,10 +45,13 @@ private:
 public:
     std::unordered_set<SfxPoolItem*>::iterator begin() { return maPoolItemSet.begin(); }
     std::unordered_set<SfxPoolItem*>::iterator end() { return maPoolItemSet.end(); }
+    std::unordered_set<SfxPoolItem*>::const_iterator begin() const { return maPoolItemSet.begin(); }
+    std::unordered_set<SfxPoolItem*>::const_iterator end() const { return maPoolItemSet.end(); }
     /// clear array of PoolItem variants after all PoolItems are deleted
     /// or all ref counts are decreased
     void clear();
     size_t size() const {return maPoolItemSet.size();}
+    bool empty() const {return maPoolItemSet.empty();}
     void emplace(SfxPoolItem* pItem) { maPoolItemSet.emplace(pItem); }
     std::unordered_set<SfxPoolItem*>::iterator find(SfxPoolItem* pItem) { return maPoolItemSet.find(pItem); }
     std::unordered_set<SfxPoolItem*>::iterator erase(std::unordered_set<SfxPoolItem*>::iterator it) { return maPoolItemSet.erase(it); }
@@ -57,7 +60,7 @@ public:
 struct SfxItemPool_Impl
 {
     SfxBroadcaster                  aBC;
-    std::vector<std::unique_ptr<SfxPoolItemArray_Impl>> maPoolItems;
+    std::vector<SfxPoolItemArray_Impl> maPoolItemArrays;
     std::vector<SfxItemPoolUser*>   maSfxItemPoolUsers; /// ObjectUser section
     OUString                        aName;
     std::vector<SfxPoolItem*>       maPoolDefaults;
@@ -70,7 +73,7 @@ struct SfxItemPool_Impl
     MapUnit                         eDefMetric;
 
     SfxItemPool_Impl( SfxItemPool* pMaster, const OUString& rName, sal_uInt16 nStart, sal_uInt16 nEnd )
-        : maPoolItems(nEnd - nStart + 1)
+        : maPoolItemArrays(nEnd - nStart + 1)
         , aName(rName)
         , maPoolDefaults(nEnd - nStart + 1)
         , mpStaticDefaults(nullptr)
@@ -90,7 +93,7 @@ struct SfxItemPool_Impl
 
     void DeleteItems()
     {
-        maPoolItems.clear();
+        maPoolItemArrays.clear();
         maPoolDefaults.clear();
         mpPoolRanges.reset();
     }
