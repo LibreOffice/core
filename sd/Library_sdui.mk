@@ -60,6 +60,7 @@ $(eval $(call gb_Library_use_libraries,sdui,\
     tl \
     utl \
     vcl \
+    cui \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sdui,\
@@ -91,6 +92,7 @@ $(eval $(call gb_Library_add_exception_objects,sdui,\
     sd/source/ui/dlg/tpoption \
     sd/source/ui/dlg/vectdlg \
     sd/source/ui/dlg/PhotoAlbumDialog \
+    sd/source/ui/dlg/BulletAndPositionDlg \
 ))
 
 # $(WORKDIR)/inc/sd/sddll0.hxx :

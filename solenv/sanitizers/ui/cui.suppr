@@ -466,3 +466,6 @@ cui/uiconfig/ui/twolinespage.ui://GtkTreeView[@id='endbracket'] no-labelled-by
 cui/uiconfig/ui/wordcompletionpage.ui://GtkTreeView[@id='entries'] no-labelled-by
 cui/uiconfig/ui/wordcompletionpage.ui://GtkSpinButton[@id='maxentries'] duplicate-mnemonic
 cui/uiconfig/ui/wordcompletionpage.ui://GtkSpinButton[@id='minwordlen'] no-labelled-by
+cui/uiconfig/ui/bulletandposition.ui://GtkToggleButton[@id='left'] button-no-label
+cui/uiconfig/ui/bulletandposition.ui://GtkToggleButton[@id='center'] button-no-label
+cui/uiconfig/ui/bulletandposition.ui://GtkToggleButton[@id='right'] button-no-label
