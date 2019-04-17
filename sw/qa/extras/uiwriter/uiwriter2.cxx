@@ -46,70 +46,6 @@ char const FLOATING_TABLE_DATA_DIRECTORY[] = "/sw/qa/extras/uiwriter/data/floati
 class SwUiWriterTest2 : public SwModelTestBase
 {
 public:
-    void testRedlineMoveInsertInDelete();
-    void testRedlineInHiddenSection();
-    void testTdf47471_paraStyleBackground();
-    void testTdf101534();
-    void testTdf54819();
-    void testTdf109376_redline();
-    void testTdf109376();
-    void testTdf64242_optimizeTable();
-    void testTdf108687_tabstop();
-    void testTdf119571();
-    void testTdf119019();
-    void testTdf119824();
-    void testTdf105413();
-    void testUnfloatButtonSmallTable();
-    void testUnfloatButton();
-    void testUnfloatButtonReadOnlyMode();
-    void testUnfloating();
-    void testRTLparaStyle_LocaleArabic();
-    void testTdf122893();
-    void testTdf122901();
-    void testTdf122942();
-    void testTdf52391();
-    void testTdf101873();
-    void testTableWidth();
-    void testTextFormFieldInsertion();
-    void testCheckboxFormFieldInsertion();
-    void testDropDownFormFieldInsertion();
-    void testMixedFormFieldInsertion();
-    void testTdf124261();
-    void testDocxAttributeTableExport();
-
-    CPPUNIT_TEST_SUITE(SwUiWriterTest2);
-    CPPUNIT_TEST(testRedlineMoveInsertInDelete);
-    CPPUNIT_TEST(testRedlineInHiddenSection);
-    CPPUNIT_TEST(testTdf47471_paraStyleBackground);
-    CPPUNIT_TEST(testTdf101534);
-    CPPUNIT_TEST(testTdf54819);
-    CPPUNIT_TEST(testTdf109376_redline);
-    CPPUNIT_TEST(testTdf109376);
-    CPPUNIT_TEST(testTdf64242_optimizeTable);
-    CPPUNIT_TEST(testTdf108687_tabstop);
-    CPPUNIT_TEST(testTdf119571);
-    CPPUNIT_TEST(testTdf119019);
-    CPPUNIT_TEST(testTdf119824);
-    CPPUNIT_TEST(testTdf105413);
-    CPPUNIT_TEST(testUnfloatButtonSmallTable);
-    CPPUNIT_TEST(testUnfloatButton);
-    CPPUNIT_TEST(testUnfloatButtonReadOnlyMode);
-    CPPUNIT_TEST(testUnfloating);
-    CPPUNIT_TEST(testRTLparaStyle_LocaleArabic);
-    CPPUNIT_TEST(testTdf122893);
-    CPPUNIT_TEST(testTdf122901);
-    CPPUNIT_TEST(testTdf122942);
-    CPPUNIT_TEST(testTdf52391);
-    CPPUNIT_TEST(testTdf101873);
-    CPPUNIT_TEST(testTableWidth);
-    CPPUNIT_TEST(testTextFormFieldInsertion);
-    CPPUNIT_TEST(testCheckboxFormFieldInsertion);
-    CPPUNIT_TEST(testDropDownFormFieldInsertion);
-    CPPUNIT_TEST(testMixedFormFieldInsertion);
-    CPPUNIT_TEST(testTdf124261);
-    CPPUNIT_TEST(testDocxAttributeTableExport);
-    CPPUNIT_TEST_SUITE_END();
-
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
         m_aSavedSettings = Application::GetSettings();
@@ -127,8 +63,6 @@ public:
 
 protected:
     AllSettings m_aSavedSettings;
-
-private:
     SwDoc* createDoc(const char* pName = nullptr);
 };
 
@@ -161,7 +95,7 @@ SwDoc* SwUiWriterTest2::createDoc(const char* pName)
     return pTextDoc->GetDocShell()->GetDoc();
 }
 
-void SwUiWriterTest2::testTdf47471_paraStyleBackground()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf47471_paraStyleBackground)
 {
     SwDoc* pDoc = createDoc("tdf47471_paraStyleBackground.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -194,7 +128,7 @@ void SwUiWriterTest2::testTdf47471_paraStyleBackground()
                          getProperty<OUString>(getParagraph(3), "ParaStyleName"));
 }
 
-void SwUiWriterTest2::testTdf101534()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101534)
 {
     // Copy the first paragraph of the document.
     load(DATA_DIRECTORY, "tdf101534.fodt");
@@ -222,7 +156,7 @@ void SwUiWriterTest2::testTdf101534()
     CPPUNIT_ASSERT(aSet.HasItem(RES_LR_SPACE));
 }
 
-void SwUiWriterTest2::testRedlineMoveInsertInDelete()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineMoveInsertInDelete)
 {
     loadURL("private:factory/swriter", nullptr);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -258,7 +192,7 @@ void SwUiWriterTest2::testRedlineMoveInsertInDelete()
         pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
 }
 
-void SwUiWriterTest2::testRedlineInHiddenSection()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineInHiddenSection)
 {
     loadURL("private:factory/swriter", nullptr);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -316,7 +250,7 @@ void SwUiWriterTest2::testRedlineInHiddenSection()
     CPPUNIT_ASSERT(pNode->GetNodes()[pNode->GetIndex() + 4]->IsEndNode());
 }
 
-void SwUiWriterTest2::testTdf54819()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819)
 {
     load(DATA_DIRECTORY, "tdf54819.fodt");
 
@@ -349,7 +283,7 @@ void SwUiWriterTest2::testTdf54819()
                          getProperty<OUString>(getParagraph(1), "ParaStyleName"));
 }
 
-void SwUiWriterTest2::testTdf109376_redline()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376_redline)
 {
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -400,7 +334,7 @@ void SwUiWriterTest2::testTdf109376_redline()
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
 }
 
-void SwUiWriterTest2::testTdf109376()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376)
 {
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -447,7 +381,7 @@ void SwUiWriterTest2::testTdf109376()
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
 }
 
-void SwUiWriterTest2::testTdf64242_optimizeTable()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf64242_optimizeTable)
 {
     SwDoc* pDoc = createDoc("tdf64242_optimizeTable.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -489,7 +423,7 @@ void SwUiWriterTest2::testTdf64242_optimizeTable()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Row set to auto-height", double(0), minimalRowHeight);
 }
 
-void SwUiWriterTest2::testTdf108687_tabstop()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf108687_tabstop)
 {
     SwDoc* pDoc = createDoc("tdf108687_tabstop.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -506,7 +440,7 @@ void SwUiWriterTest2::testTdf108687_tabstop()
     //CPPUNIT_ASSERT_EQUAL(sal_Int32(11), nEndIndex);
 }
 
-void SwUiWriterTest2::testTdf119571()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571)
 {
     load(DATA_DIRECTORY, "tdf54819.fodt");
 
@@ -543,7 +477,7 @@ void SwUiWriterTest2::testTdf119571()
                          getProperty<OUString>(getParagraph(2), "ParaStyleName"));
 }
 
-void SwUiWriterTest2::testTdf119019()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119019)
 {
     // check handling of overlapping redlines
     load(DATA_DIRECTORY, "tdf119019.docx");
@@ -577,7 +511,7 @@ void SwUiWriterTest2::testTdf119019()
     CPPUNIT_ASSERT(!hasProperty(getRun(getParagraph(2), 1), "RedlineType"));
 }
 
-void SwUiWriterTest2::testTdf119824()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119824)
 {
     // check handling of overlapping redlines with Redo
     SwDoc* pDoc = createDoc("tdf119019.docx");
@@ -641,7 +575,7 @@ void SwUiWriterTest2::testTdf119824()
     CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(3), 6), "RedlineType"));
 }
 
-void SwUiWriterTest2::testTdf105413()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf105413)
 {
     load(DATA_DIRECTORY, "tdf105413.fodt");
 
@@ -689,7 +623,7 @@ void SwUiWriterTest2::testTdf105413()
                          getProperty<OUString>(getParagraph(1), "ParaStyleName"));
 }
 
-void SwUiWriterTest2::testUnfloatButtonSmallTable()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButtonSmallTable)
 {
     // The floating table in the test document is too small, so we don't provide an unfloat button
     load(FLOATING_TABLE_DATA_DIRECTORY, "small_floating_table.odt");
@@ -714,7 +648,7 @@ void SwUiWriterTest2::testUnfloatButtonSmallTable()
     CPPUNIT_ASSERT(!pFlyFrame->IsShowUnfloatButton(pWrtShell));
 }
 
-void SwUiWriterTest2::testUnfloatButton()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButton)
 {
     // Different use cases where unfloat button should be visible
     const std::vector<OUString> aTestFiles = {
@@ -763,7 +697,7 @@ void SwUiWriterTest2::testUnfloatButton()
     }
 }
 
-void SwUiWriterTest2::testUnfloatButtonReadOnlyMode()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButtonReadOnlyMode)
 {
     // In read only mode we don't show the unfloat button even if we have a multipage floating table
     load(FLOATING_TABLE_DATA_DIRECTORY, "unfloatable_floating_table.odt");
@@ -789,7 +723,7 @@ void SwUiWriterTest2::testUnfloatButtonReadOnlyMode()
     CPPUNIT_ASSERT(!pFlyFrame->IsShowUnfloatButton(pWrtShell));
 }
 
-void SwUiWriterTest2::testUnfloating()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloating)
 {
     // Test unfloating with tables imported from different file formats
     const std::vector<OUString> aTestFiles = {
@@ -857,7 +791,7 @@ void SwUiWriterTest2::testUnfloating()
     }
 }
 
-void SwUiWriterTest2::testRTLparaStyle_LocaleArabic()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRTLparaStyle_LocaleArabic)
 {
     // New documents, created in RTL locales, were not round-tripping the paragraph style as RTL.
     // Set the locale to "ar" for this test - see preTest() at the top of this file.
@@ -875,7 +809,7 @@ void SwUiWriterTest2::testRTLparaStyle_LocaleArabic()
                                  getProperty<sal_Int32>(xPageStyle, "WritingMode"));
 }
 
-void SwUiWriterTest2::testTdf122893()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122893)
 {
     load(DATA_DIRECTORY, "tdf105413.fodt");
 
@@ -927,7 +861,7 @@ void SwUiWriterTest2::testTdf122893()
         sal_Int16(200), getProperty<style::LineSpacing>(getParagraph(1), "ParaLineSpacing").Height);
 }
 
-void SwUiWriterTest2::testTdf122901()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122901)
 {
     load(DATA_DIRECTORY, "tdf105413.fodt");
 
@@ -976,7 +910,7 @@ void SwUiWriterTest2::testTdf122901()
                          getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
 }
 
-void SwUiWriterTest2::testTdf122942()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122942)
 {
     load(DATA_DIRECTORY, "tdf122942.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -1018,7 +952,7 @@ void SwUiWriterTest2::testTdf122942()
     CPPUNIT_ASSERT(rOutRect2.Top() > rOutRect1.Top() && rOutRect2.Top() < rOutRect1.Bottom());
 }
 
-void SwUiWriterTest2::testTdf52391()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf52391)
 {
     load(DATA_DIRECTORY, "tdf52391.fodt");
 
@@ -1034,7 +968,7 @@ void SwUiWriterTest2::testTdf52391()
     CPPUNIT_ASSERT_EQUAL(OUString("Portion1Portion2"), xRun->getString());
 }
 
-void SwUiWriterTest2::testTdf101873()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101873)
 {
     SwDoc* pDoc = createDoc();
     CPPUNIT_ASSERT(pDoc);
@@ -1068,7 +1002,7 @@ void SwUiWriterTest2::testTdf101873()
     CPPUNIT_ASSERT_EQUAL(OUString("something"), pShellCursor->GetText());
 }
 
-void SwUiWriterTest2::testTableWidth()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTableWidth)
 {
     load(DATA_DIRECTORY, "frame_size_export.docx");
 
@@ -1085,7 +1019,7 @@ void SwUiWriterTest2::testTableWidth()
                          getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
 }
 
-void SwUiWriterTest2::testTextFormFieldInsertion()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTextFormFieldInsertion)
 {
     load(DATA_DIRECTORY, "frame_size_export.docx");
     SwDoc* pDoc = createDoc();
@@ -1123,7 +1057,7 @@ void SwUiWriterTest2::testTextFormFieldInsertion()
     CPPUNIT_ASSERT_EQUAL(OUString(vEnSpaces, 5), xPara->getString());
 }
 
-void SwUiWriterTest2::testCheckboxFormFieldInsertion()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testCheckboxFormFieldInsertion)
 {
     SwDoc* pDoc = createDoc();
     CPPUNIT_ASSERT(pDoc);
@@ -1162,7 +1096,7 @@ void SwUiWriterTest2::testCheckboxFormFieldInsertion()
     CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMCHECKBOX), pFieldmark->GetFieldname());
 }
 
-void SwUiWriterTest2::testDropDownFormFieldInsertion()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDropDownFormFieldInsertion)
 {
     SwDoc* pDoc = createDoc();
     CPPUNIT_ASSERT(pDoc);
@@ -1202,7 +1136,7 @@ void SwUiWriterTest2::testDropDownFormFieldInsertion()
     CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDROPDOWN), pFieldmark->GetFieldname());
 }
 
-void SwUiWriterTest2::testMixedFormFieldInsertion()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testMixedFormFieldInsertion)
 {
     SwDoc* pDoc = createDoc();
     CPPUNIT_ASSERT(pDoc);
@@ -1230,7 +1164,7 @@ void SwUiWriterTest2::testMixedFormFieldInsertion()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pMarkAccess->getAllMarksCount());
 }
 
-void SwUiWriterTest2::testTdf124261()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf124261)
 {
 #if !defined(WNT)
     // Make sure that pressing a key in a btlr cell frame causes an immediate, correct repaint.
@@ -1264,7 +1198,7 @@ void SwUiWriterTest2::testTdf124261()
 #endif
 }
 
-void SwUiWriterTest2::testDocxAttributeTableExport()
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDocxAttributeTableExport)
 {
     createDoc("floating-table-position.docx");
 
@@ -1302,7 +1236,5 @@ void SwUiWriterTest2::testDocxAttributeTableExport()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(8), getProperty<sal_Int16>(xShape, "VertOrientRelation"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
