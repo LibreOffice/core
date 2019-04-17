@@ -829,7 +829,6 @@ ScCellIterator::ScCellIterator( ScDocument* pDoc, const ScRange& rRange, Subtota
     maEndPos(rRange.aEnd),
     mnSubTotalFlags(nSubTotalFlags)
 {
-    maEndPos.SetCol( pDoc->ClampToAllocatedColumns(maStartPos.Tab(), maEndPos.Col()) );
     init();
 }
 
@@ -914,7 +913,8 @@ bool ScCellIterator::getCurrent()
             do
             {
                 maCurPos.IncCol();
-                if (maCurPos.Col() > maEndPos.Col())
+                if (maCurPos.Col() >= mpDoc->GetAllocatedColumnsCount(maCurPos.Tab())
+                    || maCurPos.Col() > maEndPos.Col())
                 {
                     maCurPos.SetCol(maStartPos.Col());
                     maCurPos.IncTab();

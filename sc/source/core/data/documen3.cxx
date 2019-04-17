@@ -2103,4 +2103,9 @@ SCCOL ScDocument::ClampToAllocatedColumns(SCTAB nTab, SCCOL nCol) const
     return maTabs[nTab]->ClampToAllocatedColumns(nCol);
 }
 
+SCCOL ScDocument::GetAllocatedColumnsCount(SCTAB nTab) const
+{
+    return maTabs[nTab]->GetAllocatedColumnsCount();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
