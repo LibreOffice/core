@@ -7,6 +7,7 @@
 from uitest.framework import UITestCase
 import unittest
 import unohelper
+import time
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.awt import XMouseListener
 from com.sun.star.awt import XToolkitRobot
@@ -31,26 +32,24 @@ class XMouseListenerExtended(unohelper.Base, XMouseListener):
     def mousePressed(self, xMouseEvent):
         global mouseEventsIntercepted
         mouseEventsIntercepted += 1
-        return super(XMouseListenerExtended, self).mousePressed(xMouseEvent)
 
     # is invoked when a mouse button has been released on a window.
     @classmethod
     def mouseReleased(self, xMouseEvent):
         global mouseEventsIntercepted
         mouseEventsIntercepted += 1
-        return super(XMouseListenerExtended, self).mouseReleased(xMouseEvent)
 
     # is invoked when the mouse enters a window.
     @classmethod
     def mouseEntered(self, xMouseEvent):
-        # doesn't work in UI tests
-        return super(XMouseListenerExtended, self).mouseEntered(xMouseEvent)
+        global mouseEventsIntercepted
+        mouseEventsIntercepted += 1
 
     # is invoked when the mouse exits a window.
     @classmethod
     def mouseExited(self, xMouseEvent):
-        # doesn't work in UI tests
-        return super(XMouseListenerExtended, self).mouseExited(xMouseEvent)
+        global mouseEventsIntercepted
+        mouseEventsIntercepted += 1
 
 
 class XKeyListenerExtended(unohelper.Base, XKeyListener):
@@ -135,13 +134,16 @@ class XWindow(UITestCase):
         xWindow.removeKeyListener(xKeyListener)
         del xKeyListener
 
+        # Wait for async events to be processed
+        time.sleep(1)
+
         global keymouseEventsIntercepted
         # Not expected 2 interceptions
         self.assertEqual(0, keymouseEventsIntercepted)
 
         global mouseEventsIntercepted
         # mousePressed, mouseReleased and mouseEntered should be triggered
-        self.assertEqual(2, mouseEventsIntercepted)
+        self.assertEqual(3, mouseEventsIntercepted)
 
         # close document
         self.ui_test.close_doc()
