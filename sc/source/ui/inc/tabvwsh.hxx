@@ -59,6 +59,7 @@ class ScPageBreakShell;
 class ScDPObject;
 class ScNavigatorSettings;
 class ScRangeName;
+class FuInsertChart;
 
 struct ScHeaderFieldData;
 
@@ -97,6 +98,7 @@ private:
     sal_uInt16              nDrawSfxId;
     sal_uInt16              nFormSfxId;
     OUString                sDrawCustom;                // current custom shape type
+
     std::unique_ptr<ScDrawShell>         pDrawShell;
     std::unique_ptr<ScDrawTextObjectBar> pDrawTextShell;
     std::unique_ptr<ScEditShell>         pEditShell;
@@ -111,8 +113,8 @@ private:
     std::unique_ptr<ScPageBreakShell>    pPageBreakShell;
     std::unique_ptr<svx::ExtrusionBar>   pExtrusionBarShell;
     std::unique_ptr<svx::FontworkBar>    pFontworkBarShell;
-
-    std::unique_ptr<FmFormShell> pFormShell;
+    std::unique_ptr<FuInsertChart>       pFuInsertChart;
+    std::unique_ptr<FmFormShell>         pFormShell;
 
     std::unique_ptr<ScFormEditData> mpFormEditData;
     std::unique_ptr<ScInputHandler, o3tl::default_delete<ScInputHandler>> mpInputHandler;              // for OLE input cell
