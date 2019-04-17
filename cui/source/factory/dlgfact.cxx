@@ -32,7 +32,7 @@
 #include <dstribut.hxx>
 #include <cuiimapwnd.hxx>
 #include <hlmarkwn.hxx>
-#include <cuicharmap.hxx>
+#include <cui/cuicharmap.hxx>
 #include <srchxtra.hxx>
 #include <textanim.hxx>
 #include <autocdlg.hxx>
