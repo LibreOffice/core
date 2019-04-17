@@ -113,7 +113,7 @@ void Test::testTdf100837() {
 
     {
         // 3. Test enocded URLs
-        TestSupplier supplier{ "foo", "ms-word:ofe%7Cu%7Cbar1", "ms-word:ofv%7Cu%7Cbar2", "ms-word:nft%7Cu%7Cbar3", "baz" };
+        TestSupplier supplier{ "foo", "ms-word:ofe%7Cu%7cbar1", "ms-word:ofv%7cu%7Cbar2", "ms-word:nft%7Cu%7cbar3", "baz" };
         desktop::CommandLineArgs args(supplier);
         auto vOpenList = args.GetOpenList();
         auto vForceOpenList = args.GetForceOpenList();
