@@ -22,11 +22,13 @@
 
 #include "basesh.hxx"
 #include <unotools/caserotate.hxx>
+#include <com/sun/star/ui/dialogs/DialogClosedEvent.hpp>
 
 class AbstractSvxPostItDialog;
 class SwFieldMgr;
 class SwFlyFrameAttrMgr;
 class SvxHyperlinkItem;
+class SwInsertChart;
 
 class SW_DLLPUBLIC SwTextShell: public SwBaseShell
 {
@@ -46,6 +48,7 @@ private:
 public:
     DECL_LINK( RedlineNextHdl, AbstractSvxPostItDialog&, void );
     DECL_LINK( RedlinePrevHdl, AbstractSvxPostItDialog&, void );
+    DECL_STATIC_LINK( SwTextShell, DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
 
     void    Execute(SfxRequest &);
     void    GetState(SfxItemSet &);
