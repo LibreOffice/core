@@ -1088,11 +1088,17 @@ namespace vcl
     {
         if ( isTravelingSuspended() )
             return;
-        WizardTravelSuspension aTravelGuard( *this );
-        if (!prepareLeaveCurrentState(WizardTypes::eFinish))
+
+        // prevent WizardTravelSuspension from using this instance
+        // after will be destructed due to onFinish and async response call
         {
-            return;
+            WizardTravelSuspension aTravelGuard( *this );
+            if (!prepareLeaveCurrentState(WizardTypes::eFinish))
+            {
+                return;
+            }
         }
+
         onFinish();
     }
 
@@ -1387,6 +1393,9 @@ namespace vcl
 
     void WizardMachine::resumeTraveling( AccessGuard )
     {
+        if (!m_pImpl)
+            return;
+
         DBG_ASSERT( m_pImpl->m_bTravelingSuspended, "WizardMachine::resumeTraveling: nothing to resume!" );
         m_pImpl->m_bTravelingSuspended = false;
     }
