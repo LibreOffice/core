@@ -163,6 +163,8 @@ void vcl::Cursor::ImplDraw()
 void vcl::Cursor::DrawToDevice(OutputDevice& rRenderContext)
 {
     ImplCursorData aData;
+    aData.mnStyle = 0;
+    aData.mbCurVisible = false;
     // calculate output area
     if (ImplPrepForDraw(&rRenderContext, aData))
     {
