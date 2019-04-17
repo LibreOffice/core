@@ -53,10 +53,12 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <cppuhelper/bootstrap.hxx>
+#include <svtools/dialogclosedlistener.hxx>
 
 #include <PivotTableDataProvider.hxx>
 #include <chart2uno.hxx>
@@ -399,7 +401,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
 }
 
 FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-           SdrModel* pDoc, SfxRequest& rReq)
+                             SdrModel* pDoc, SfxRequest& rReq, const Link<css::ui::dialogs::DialogClosedEvent*, void>& rLink)
     : FuPoor(rViewSh, pWin, pViewP, pDoc, rReq)
 {
     const SfxItemSet* pReqArgs = rReq.GetArgs();
@@ -597,11 +599,10 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
 //        pView->InsertObjectAtView(pObj, *pPV);//this call leads to an immediate redraw and asks the chart for a visual representation
 
     // use the page instead of the view to insert, so no undo action is created yet
-    SdrPage* pInsPage = pPV->GetPage();
-    pInsPage->InsertObject( pObj );
+    SdrPage* pPage = pPV->GetPage();
+    pPage->InsertObject( pObj );
     pView->UnmarkAllObj();
     pView->MarkObj( pObj, pPV );
-    bool bAddUndo = true;               // add undo action later, unless the dialog is canceled
 
     if (rReq.IsAPI())
     {
@@ -625,7 +626,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
             uno::Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
             if(xMCF.is())
             {
-                uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
+                css::uno::Reference<css::ui::dialogs::XAsynchronousExecutableDialog> xDialog(
                     xMCF->createInstanceWithContext(
                         "com.sun.star.comp.chart2.WizardDialog"
                         , xContext), uno::UNO_QUERY);
@@ -670,62 +671,22 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                         }
                     }
 
-                    sal_Int16 nDialogRet = xDialog->execute();
-                    if( nDialogRet == ui::dialogs::ExecutableDialogResults::CANCEL )
-                    {
-                        // leave OLE inplace mode and unmark
-                        OSL_ASSERT( pView );
-                        rViewShell.DeactivateOle();
-                        pView->UnmarkAll();
+                    pView->AddUndo(std::make_unique<SdrUndoNewObj>(*pObj));
+                    ::svt::DialogClosedListener* pListener = new ::svt::DialogClosedListener();
+                    pListener->SetDialogClosedLink( rLink );
+                    css::uno::Reference<css::ui::dialogs::XDialogClosedListener> xListener( pListener );
 
-                        // old page view pointer is invalid after switching sheets
-                        pPV = pView->GetSdrPageView();
-
-                        // remove the chart
-                        OSL_ASSERT( pPV );
-                        SdrPage * pPage( pPV->GetPage());
-                        OSL_ASSERT( pPage );
-                        OSL_ASSERT( pObj );
-                        if( pPage )
-                        {
-                            // Remove the OLE2 object from the sdr page.
-                            SdrObject* pRemoved = pPage->RemoveObject(pObj->GetOrdNum());
-                            OSL_ASSERT(pRemoved == pObj);
-                            SdrObject::Free(pRemoved); // Don't forget to free it.
-                        }
-
-                        bAddUndo = false;       // don't create the undo action for inserting
-
-                        // leave the draw shell
-                        rViewShell.SetDrawShell( false );
-
-                        // reset marked cell area
-
-                        rViewSh.GetViewData().GetViewShell()->SetMarkData(aMark);
-                    }
-                    else
-                    {
-                        OSL_ASSERT( nDialogRet == ui::dialogs::ExecutableDialogResults::OK );
-                        //@todo maybe move chart to different table
-                    }
+                    xDialog->startExecuteModal( xListener );
                 }
-                uno::Reference< lang::XComponent > xComponent( xDialog, uno::UNO_QUERY );
-                if( xComponent.is())
-                    xComponent->dispose();
+                else
+                {
+                    uno::Reference< lang::XComponent > xComponent( xDialog, uno::UNO_QUERY );
+                    if( xComponent.is())
+                        xComponent->dispose();
+                }
             }
         }
     }
-    else if( xChartModel.is() )
-        xChartModel->unlockControllers();
-
-    if ( bAddUndo )
-    {
-        // add undo action the same way as in SdrEditView::InsertObjectAtView
-        // (using UndoActionHdl etc.)
-        pView->AddUndo(std::make_unique<SdrUndoNewObj>(*pObj));
-    }
-
-    // BM/IHA --
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
