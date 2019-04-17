@@ -43,6 +43,7 @@ public:
     virtual void    SetActive() override;
 
     virtual void    Close() override;
+    virtual void    Deactivate() override;
 
 private:
     OUString const         aStrUndefined;
@@ -90,10 +91,7 @@ private:
     DECL_LINK( OkHdl,    weld::Button&, void );
     DECL_LINK( ClickHdl, weld::Button&, void );
     DECL_LINK( GetFocusHdl, weld::Widget&, void );
-    DECL_LINK( LoseFocusHdl, weld::Widget&, void );
     DECL_LINK( GetEditFocusHdl, formula::WeldRefEdit&, void );
-    DECL_LINK( LoseEditFocusHdl, formula::WeldRefEdit&, void );
-    DECL_LINK( LoseButtonFocusHdl, formula::WeldRefButton&, void );
     DECL_LINK( ModifyHdl, formula::WeldRefEdit&, void );
     DECL_LINK( SelectTVHdl, weld::TreeView&, void );
     DECL_LINK( SelectCBHdl, weld::ComboBox&, void );

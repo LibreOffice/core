@@ -122,14 +122,8 @@ void ScConsolidateDlg::Init()
 
     m_xEdDataArea->SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetEditFocusHdl ) );
     m_xEdDestArea->SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetEditFocusHdl ) );
-    m_xEdDataArea->SetLoseFocusHdl( LINK( this, ScConsolidateDlg, LoseEditFocusHdl ) );
-    m_xEdDestArea->SetLoseFocusHdl( LINK( this, ScConsolidateDlg, LoseEditFocusHdl ) );
-    m_xRbDataArea->SetLoseFocusHdl( LINK( this, ScConsolidateDlg, LoseButtonFocusHdl ) );
-    m_xRbDestArea->SetLoseFocusHdl( LINK( this, ScConsolidateDlg, LoseButtonFocusHdl ) );
     m_xLbDataArea->connect_focus_in( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
     m_xLbDestArea->connect_focus_in( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
-    m_xLbDataArea->connect_focus_out( LINK( this, ScConsolidateDlg, LoseFocusHdl ) );
-    m_xLbDestArea->connect_focus_out( LINK( this, ScConsolidateDlg, LoseFocusHdl ) );
     m_xEdDataArea->SetModifyHdl( LINK( this, ScConsolidateDlg, ModifyHdl ) );
     m_xEdDestArea->SetModifyHdl( LINK( this, ScConsolidateDlg, ModifyHdl ) );
     m_xLbConsAreas->connect_changed( LINK( this, ScConsolidateDlg, SelectTVHdl ) );
@@ -284,19 +278,9 @@ void ScConsolidateDlg::SetActive()
     RefInputDone();
 }
 
-IMPL_LINK_NOARG(ScConsolidateDlg, LoseFocusHdl, weld::Widget&, void)
+void ScConsolidateDlg::Deactivate()
 {
-    bDlgLostFocus = !m_xDialog->has_toplevel_focus();
-}
-
-IMPL_LINK_NOARG(ScConsolidateDlg, LoseEditFocusHdl, formula::WeldRefEdit&, void)
-{
-    bDlgLostFocus = !m_xDialog->has_toplevel_focus();
-}
-
-IMPL_LINK_NOARG(ScConsolidateDlg, LoseButtonFocusHdl, formula::WeldRefButton&, void)
-{
-    bDlgLostFocus = !m_xDialog->has_toplevel_focus();
+    bDlgLostFocus = true;
 }
 
 bool ScConsolidateDlg::VerifyEdit( formula::WeldRefEdit* pEd )

@@ -110,7 +110,7 @@ public:
     // dialog gets focus
     virtual void Activate() {}
     // dialog loses focus
-    virtual void DeActivate() {}
+    virtual void Deactivate() {}
 
     // when the dialog has an associated SfxChildWin, typically for Modeless interaction
     virtual void ChildWinDispose() {} // called from the associated SfxChildWin dtor
@@ -141,7 +141,7 @@ public:
     virtual void            Close() override;
     virtual void            EndDialog() override;
     virtual void            Activate() override;
-    virtual void            DeActivate() override;
+    virtual void            Deactivate() override;
     virtual void            ChildWinDispose() override;
     SfxBindings&            GetBindings() { return *m_pBindings; }
 };

@@ -425,10 +425,10 @@ void SfxModelessDialogController::Activate()
 
 IMPL_LINK_NOARG(SfxDialogController, FocusOutHdl, weld::Widget&, void)
 {
-    DeActivate();
+    Deactivate();
 }
 
-void SfxModelessDialogController::DeActivate()
+void SfxModelessDialogController::Deactivate()
 {
     if (!m_xImpl)
         return;
