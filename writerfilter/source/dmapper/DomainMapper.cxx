@@ -3292,14 +3292,13 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             {
                 if (m_pImpl->isBreakDeferred(PAGE_BREAK))
                 {
-                    /* If PAGEBREAK appears in first paragraph of the section or
-                     * after first run of any paragraph then need to split paragraph
-                     * to handle it properly.
+                    /* If PAGE_BREAK appears in the first paragraph of a section
+                     * then the paragraph needs to split to handle it properly.
                      */
-                    if (m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun())
+                    if (m_pImpl->GetIsFirstParagraphInSection())
                     {
                         m_pImpl->m_bIsSplitPara = true;
-                        m_pImpl->finishParagraph( m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) );
+                        m_pImpl->finishParagraph( pContext );
                         lcl_startParagraphGroup();
                     }
 
@@ -3311,10 +3310,10 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 }
                 else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
                 {
-                    if ( m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun() )
+                    if (m_pImpl->GetIsFirstParagraphInSection())
                     {
                         mbIsSplitPara = true;
-                        m_pImpl->finishParagraph( m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) );
+                        m_pImpl->finishParagraph( pContext );
                         lcl_startParagraphGroup();
                     }
 
