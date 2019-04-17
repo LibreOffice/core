@@ -79,24 +79,17 @@ void PoolItemTest::testPool()
         CPPUNIT_ASSERT(&rVal2 != &rVal);
     }
 
-    // Test rehash
-    for (auto & pSlice : pImpl->maPoolItems)
-    {
-        if (pSlice)
-            pSlice->ReHash();
-    }
-
     // Test removal.
     SfxVoidItem aRemoveFour(4);
     SfxVoidItem aNotherFour(4);
     const SfxPoolItem &rKeyFour = pPool->Put(aRemoveFour);
     pPool->Put(aNotherFour);
     CPPUNIT_ASSERT(pImpl->maPoolItems[3]->size() > 0);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pImpl->maPoolItems[3]->maFree.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pImpl->maPoolItems[3]->size());
     pPool->Remove(rKeyFour);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pImpl->maPoolItems[3]->maFree.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pImpl->maPoolItems[3]->size());
     pPool->Put(aNotherFour);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pImpl->maPoolItems[3]->maFree.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pImpl->maPoolItems[3]->size());
 }
 
 
