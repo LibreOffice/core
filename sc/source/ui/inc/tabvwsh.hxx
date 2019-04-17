@@ -32,6 +32,7 @@
 #include "target.hxx"
 #include <shellids.hxx>
 #include <tabprotection.hxx>
+#include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 
 #include <memory>
 #include <map>
@@ -180,6 +181,7 @@ private:
     DECL_LINK( SimpleRefAborted, const OUString&, void );
     DECL_LINK( SimpleRefChange, const OUString&, void );
     DECL_LINK( FormControlActivated, LinkParamNone*, void );
+    DECL_LINK( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
 
 protected:
     virtual void    Activate(bool bMDI) override;
