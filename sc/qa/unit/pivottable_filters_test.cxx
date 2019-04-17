@@ -88,6 +88,7 @@ public:
     void testTdf123939();
     void testTdf124651();
     void testTdf124736();
+    void tesTtdf124772NumFmt();
 
     CPPUNIT_TEST_SUITE(ScPivotTableFiltersTest);
 
@@ -133,6 +134,7 @@ public:
     CPPUNIT_TEST(testTdf123939);
     CPPUNIT_TEST(testTdf124651);
     CPPUNIT_TEST(testTdf124736);
+    CPPUNIT_TEST(tesTtdf124772NumFmt);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2536,6 +2538,31 @@ void ScPivotTableFiltersTest::testTdf124736()
     }
     assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]/x:items/x:item[46]",
                 "t", "default");
+}
+
+void ScPivotTableFiltersTest::tesTtdf124772NumFmt()
+{
+    ScDocShellRef xDocSh = loadDoc("pivot-table-num-fmt.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(xDocSh.get(), FORMAT_XLSX);
+    xDocSh->DoClose();
+
+    xmlDocPtr pTable
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
+    CPPUNIT_ASSERT(pTable);
+
+    // This asserts that numFmtId attribute is present
+    const OUString sXclNumFmt
+        = getXPath(pTable, "/x:pivotTableDefinition/x:dataFields/x:dataField", "numFmtId");
+
+    pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
+    CPPUNIT_ASSERT(pTable);
+
+    // Check that we refer to correct format
+    assertXPath(pTable, "/x:styleSheet/x:numFmts/x:numFmt[@numFmtId='" + sXclNumFmt.toUtf8() + "']",
+                "formatCode", "\\$#,##0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPivotTableFiltersTest);
