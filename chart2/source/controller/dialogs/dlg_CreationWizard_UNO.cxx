@@ -32,6 +32,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/lok.hxx>
 
 namespace chart
 {
@@ -83,9 +84,9 @@ void SAL_CALL CreationWizardUnoDlg::release() throw ()
 }
 uno::Any SAL_CALL CreationWizardUnoDlg::queryAggregation( uno::Type const & rType )
 {
-    if (rType == cppu::UnoType<ui::dialogs::XExecutableDialog>::get())
+    if (rType == cppu::UnoType<ui::dialogs::XAsynchronousExecutableDialog>::get())
     {
-        void * p = static_cast< ui::dialogs::XExecutableDialog * >( this );
+        void * p = static_cast< ui::dialogs::XAsynchronousExecutableDialog * >( this );
         return uno::Any( &p, rType );
     }
     else if (rType == cppu::UnoType<lang::XServiceInfo>::get())
@@ -120,9 +121,8 @@ uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes()
                                                cppu::UnoType<lang::XServiceInfo>::get(),
                                                cppu::UnoType<lang::XInitialization>::get(),
                                                cppu::UnoType<frame::XTerminateListener>::get(),
-                                               cppu::UnoType<ui::dialogs::XExecutableDialog>::get(),
+                                               cppu::UnoType<ui::dialogs::XAsynchronousExecutableDialog>::get(),
                                                cppu::UnoType<beans::XPropertySet>::get() };
-
     return aTypeList;
 }
 
@@ -147,7 +147,7 @@ void SAL_CALL CreationWizardUnoDlg::disposing( const lang::EventObject& /*Source
     //Listener should deregister himself and release all references to the closing object.
 }
 
-void SAL_CALL CreationWizardUnoDlg::setTitle( const OUString& /*rTitle*/ )
+void SAL_CALL CreationWizardUnoDlg::setDialogTitle( const OUString& /*rTitle*/ )
 {
 }
 void CreationWizardUnoDlg::createDialogOnDemand()
@@ -176,32 +176,32 @@ void CreationWizardUnoDlg::createDialogOnDemand()
         }
         uno::Reference< XComponent > xComp( this );
         if( m_xChartModel.is() )
-        {
             m_pDialog = VclPtr<CreationWizard>::Create( pParent, m_xChartModel, m_xCC );
-            m_pDialog->AddEventListener( LINK( this, CreationWizardUnoDlg, DialogEventHdl ) );
-        }
     }
-}
-IMPL_LINK( CreationWizardUnoDlg, DialogEventHdl, VclWindowEvent&, rEvent, void )
-{
-    if(rEvent.GetId() == VclEventId::ObjectDying)
-        m_pDialog = nullptr;//avoid duplicate destruction of m_pDialog
 }
 
-sal_Int16 SAL_CALL CreationWizardUnoDlg::execute(  )
+void SAL_CALL CreationWizardUnoDlg::startExecuteModal( const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener )
 {
-    sal_Int16 nRet = RET_CANCEL;
-    {
-        SolarMutexGuard aSolarGuard;
-        createDialogOnDemand();
-        if( !m_pDialog )
-            return nRet;
-        TimerTriggeredControllerLock aTimerTriggeredControllerLock( m_xChartModel );
-        if( m_bUnlockControllersOnExecute && m_xChartModel.is() )
-            m_xChartModel->unlockControllers();
-        nRet = m_pDialog->Execute();
-    }
-    return nRet;
+    SolarMutexGuard aSolarGuard;
+    m_xDlgClosedListener = xListener;
+    createDialogOnDemand();
+
+    if( !m_pDialog )
+        return;
+
+    TimerTriggeredControllerLock aTimerTriggeredControllerLock( m_xChartModel );
+    if( m_bUnlockControllersOnExecute && m_xChartModel.is() )
+        m_xChartModel->unlockControllers();
+
+    m_pDialog->StartExecuteAsync([this](sal_Int32 nResult){
+            if( m_xDlgClosedListener.is() )
+            {
+                // Notify UNO listener to perform correct action depending on the result
+                css::ui::dialogs::DialogClosedEvent aEvent( *this, nResult );
+                m_xDlgClosedListener->dialogClosed( aEvent );
+                m_xDlgClosedListener.clear();
+            }
+        });
 }
 
 void SAL_CALL CreationWizardUnoDlg::initialize( const uno::Sequence< uno::Any >& aArguments )
