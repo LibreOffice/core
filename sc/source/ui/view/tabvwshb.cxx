@@ -57,6 +57,8 @@
 #include <drawview.hxx>
 #include <ChartRangeSelectionListener.hxx>
 #include <gridwin.hxx>
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <svx/svdpagv.hxx>
 
 #include <comphelper/lok.hxx>
 
@@ -296,6 +298,37 @@ void ScTabViewShell::DeactivateOle()
         pClient->DeactivateObject();
 }
 
+IMPL_LINK( ScTabViewShell, DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, pEvent, void )
+{
+    if( pEvent->DialogResult == ui::dialogs::ExecutableDialogResults::CANCEL )
+    {
+        ScTabView* pTabView = GetViewData().GetView();
+        ScDrawView* pView = pTabView->GetScDrawView();
+        ScViewData& rData = GetViewData();
+        ScDocShell* pScDocSh = rData.GetDocShell();
+        ScDocument& rScDoc = pScDocSh->GetDocument();
+        // leave OLE inplace mode and unmark
+        OSL_ASSERT( pView );
+        DeactivateOle();
+        pView->UnMarkAll();
+
+        rScDoc.GetUndoManager()->Undo();
+        rScDoc.GetUndoManager()->ClearRedo();
+
+        // leave the draw shell
+        SetDrawShell( false );
+
+        // reset marked cell area
+        ScMarkData aMark = GetViewData().GetMarkData();
+        GetViewData().GetViewShell()->SetMarkData(aMark);
+    }
+    else
+    {
+        OSL_ASSERT( pEvent->DialogResult == ui::dialogs::ExecutableDialogResults::OK );
+        //@todo maybe move chart to different table
+    }
+}
+
 void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 {
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -333,7 +366,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
             break;
 
         case SID_INSERT_DIAGRAM:
-            FuInsertChart(*this, pWin, pView, pDrModel, rReq);
+            FuInsertChart(*this, pWin, pView, pDrModel, rReq, LINK( this, ScTabViewShell, DialogClosedHdl ));
             if (comphelper::LibreOfficeKit::isActive())
                 pDocSh->SetModified();
             break;
