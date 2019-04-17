@@ -33,32 +33,44 @@ using namespace osl;
 namespace comphelper
 {
 
-/*
-    This function preserves only that the xProcessFactory variable will not be create when
-    the library is loaded.
-*/
-static Reference< XMultiServiceFactory > localProcessFactory( const Reference< XMultiServiceFactory >& xSMgr, bool bSet )
-{
-    Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
+namespace {
 
-    static Reference< XMultiServiceFactory > xProcessFactory;
-    if ( bSet )
+class LocalProcessFactory {
+public:
+    void set( const Reference< XMultiServiceFactory >& xSMgr )
     {
+        Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
+
         xProcessFactory = xSMgr;
     }
 
-    return xProcessFactory;
-}
+    Reference< XMultiServiceFactory > get()
+    {
+        Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
 
+        return xProcessFactory;
+    }
+
+private:
+    Reference< XMultiServiceFactory > xProcessFactory;
+};
+
+/*
+    This var preserves only that the above xProcessFactory variable will not be create when
+    the library is loaded.
+*/
+LocalProcessFactory localProcessFactory;
+
+}
 
 void setProcessServiceFactory(const Reference< XMultiServiceFactory >& xSMgr)
 {
-    localProcessFactory( xSMgr, true );
+    localProcessFactory.set( xSMgr );
 }
 
 Reference< XMultiServiceFactory > getProcessServiceFactory()
 {
-    Reference< XMultiServiceFactory> xReturn = localProcessFactory( xReturn, false );
+    Reference< XMultiServiceFactory> xReturn = localProcessFactory.get();
     if ( !xReturn.is() )
     {
         throw DeploymentException( "null process service factory" );
