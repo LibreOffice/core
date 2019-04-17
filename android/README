@@ -200,8 +200,8 @@ Debugging
 ---------
 
 First of all, you need to configure the build with --enable-debug or
---enable-dbgutil.  You may want to provide --enable-selective-debuginfo too,
-like --enable-selective-debuginfo="sw/" or so, in order to fit into the memory
+--enable-dbgutil.  You may want to provide --enable-symbols to limit debuginfo,
+like --enable-symbols="sw/" or so, in order to fit into the memory
 during linking.
 
 Building with all symbols is also possible but the linking is currently
@@ -291,7 +291,11 @@ SAL_INFO from cppuhelper/source/shlib.cxx in logcat and therefore identify
 what services are missing. To do so, you may want add the following
 when configuring the build.
 
-    --enable-selective-debuginfo="cppuhelper/ sal/"
+    --enable-symbols="cppuhelper/ sal/"
+
+[TODO: This is nonsense. --enable-symbols enables the -g option, not SAL_INFO.
+Perhaps this was a misunderstanding of meaning of --enable-selective-debuginfo,
+the old name for the option.]
 
 Which services are combined in the android lib is determined by
 
