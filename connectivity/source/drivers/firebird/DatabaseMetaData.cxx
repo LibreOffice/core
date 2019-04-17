@@ -805,7 +805,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
     ODatabaseMetaDataResultSet* pResultSet =
             new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
     uno::Reference< XResultSet > xResultSet = pResultSet;
-    static ODatabaseMetaDataResultSet::ORows aResults = [&]()
+    static ODatabaseMetaDataResultSet::ORows aResults = []()
     {
         ODatabaseMetaDataResultSet::ORows tmp;
         ODatabaseMetaDataResultSet::ORow aRow(19);
