@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_a893544f",
+        "filename": "sfx2/source/doc/docinsert.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-04-17T13:26:32Z",
+      "side": 1,
+      "message": "No idea how to access the _first element_ in the actual filter set defined by eFlags.",
+      "range": {
+        "startLine": 99,
+        "startChar": 73,
+        "endLine": 99,
+        "endChar": 92
+      },
+      "revId": "6075d06a7f7384f45bb73dfb7b26b20d90d32acf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
