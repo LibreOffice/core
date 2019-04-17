@@ -32,17 +32,17 @@ namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
 } } }
 
-class ScCursorRefEdit : public formula::RefEdit
+class ScCursorRefEdit : public formula::WeldRefEdit
 {
     Link<ScCursorRefEdit&,void>  maCursorUpLink;
     Link<ScCursorRefEdit&,void>  maCursorDownLink;
 
 public:
-            ScCursorRefEdit( vcl::Window* pParent, vcl::Window *pLabel );
+    ScCursorRefEdit(std::unique_ptr<weld::Entry> xEntry);
     void    SetCursorLinks( const Link<ScCursorRefEdit&,void>& rUp, const Link<ScCursorRefEdit&,void>& rDown );
 
 protected:
-    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 };
 
 /// The dialog's content for a row, not yet parsed
@@ -88,87 +88,26 @@ public:
                                             { return maProperties; }
 };
 
-class ScOptSolverDlg : public ScAnyRefDlg
+class ScOptSolverDlg : public ScAnyRefDlgController
 {
 public:
-                    ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
-                                 ScDocShell* pDocSh, const ScAddress& aCursorPos );
-                    virtual ~ScOptSolverDlg() override;
-    virtual void    dispose() override;
+    ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
+                 ScDocShell* pDocSh, const ScAddress& aCursorPos );
+    virtual ~ScOptSolverDlg() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
     virtual bool    IsRefInputMode() const override;
     virtual void    SetActive() override;
-    virtual bool    Close() override;
+    virtual void    Close() override;
 
 private:
-    VclPtr<FixedText>       m_pFtObjectiveCell;
-    VclPtr<formula::RefEdit>    m_pEdObjectiveCell;
-    VclPtr<formula::RefButton>  m_pRBObjectiveCell;
-
-    VclPtr<RadioButton>     m_pRbMax;
-    VclPtr<RadioButton>     m_pRbMin;
-    VclPtr<RadioButton>     m_pRbValue;
-    VclPtr<formula::RefEdit>   m_pEdTargetValue;
-    VclPtr<formula::RefButton> m_pRBTargetValue;
-
-    VclPtr<FixedText>       m_pFtVariableCells;
-    VclPtr<formula::RefEdit>   m_pEdVariableCells;
-    VclPtr<formula::RefButton> m_pRBVariableCells;
-
-    VclPtr<FixedText>       m_pFtCellRef; // labels are together with controls for the first row
-    VclPtr<ScCursorRefEdit> m_pEdLeft1;
-    VclPtr<formula::RefButton> m_pRBLeft1;
-    VclPtr<FixedText>       m_pFtOperator;
-    VclPtr<ListBox>         m_pLbOp1;
-    VclPtr<FixedText>       m_pFtConstraint;
-    VclPtr<ScCursorRefEdit> m_pEdRight1;
-    VclPtr<formula::RefButton> m_pRBRight1;
-    VclPtr<PushButton>      m_pBtnDel1;
-
-    VclPtr<ScCursorRefEdit> m_pEdLeft2;
-    VclPtr<formula::RefButton> m_pRBLeft2;
-    VclPtr<ListBox>         m_pLbOp2;
-    VclPtr<ScCursorRefEdit> m_pEdRight2;
-    VclPtr<formula::RefButton> m_pRBRight2;
-    VclPtr<PushButton>      m_pBtnDel2;
-
-    VclPtr<ScCursorRefEdit> m_pEdLeft3;
-    VclPtr<formula::RefButton> m_pRBLeft3;
-    VclPtr<ListBox>         m_pLbOp3;
-    VclPtr<ScCursorRefEdit> m_pEdRight3;
-    VclPtr<formula::RefButton> m_pRBRight3;
-    VclPtr<PushButton>      m_pBtnDel3;
-
-    VclPtr<ScCursorRefEdit> m_pEdLeft4;
-    VclPtr<formula::RefButton> m_pRBLeft4;
-    VclPtr<ListBox>         m_pLbOp4;
-    VclPtr<ScCursorRefEdit> m_pEdRight4;
-    VclPtr<formula::RefButton> m_pRBRight4;
-    VclPtr<PushButton>      m_pBtnDel4;
-
-    VclPtr<ScrollBar>       m_pScrollBar;
-
-    VclPtr<PushButton>      m_pBtnOpt;
-    VclPtr<PushButton>      m_pBtnCancel;
-    VclPtr<PushButton>      m_pBtnSolve;
-
     OUString const        maInputError;
     OUString const        maConditionError;
 
     ScDocShell*     mpDocShell;
     ScDocument&     mrDoc;
     const SCTAB     mnCurTab;
-    VclPtr<formula::RefEdit>      mpEdActive;
     bool            mbDlgLostFocus;
-
-    static const sal_uInt16 EDIT_ROW_COUNT = 4;
-    VclPtr<ScCursorRefEdit>        mpLeftEdit[EDIT_ROW_COUNT];
-    VclPtr<formula::RefButton>     mpLeftButton[EDIT_ROW_COUNT];
-    VclPtr<ScCursorRefEdit>        mpRightEdit[EDIT_ROW_COUNT];
-    VclPtr<formula::RefButton>     mpRightButton[EDIT_ROW_COUNT];
-    VclPtr<ListBox>                mpOperator[EDIT_ROW_COUNT];
-    VclPtr<PushButton>             mpDelButton[EDIT_ROW_COUNT];
 
     std::vector<ScOptConditionRow> maConditions;
     long            nScrollPos;
@@ -178,6 +117,70 @@ private:
     OUString        maEngine;
     css::uno::Sequence<css::beans::PropertyValue> maProperties;
 
+    static const sal_uInt16 EDIT_ROW_COUNT = 4;
+    ScCursorRefEdit* mpLeftEdit[EDIT_ROW_COUNT];
+    formula::WeldRefButton* mpLeftButton[EDIT_ROW_COUNT];
+    ScCursorRefEdit* mpRightEdit[EDIT_ROW_COUNT];
+    formula::WeldRefButton* mpRightButton[EDIT_ROW_COUNT];
+    weld::ComboBox* mpOperator[EDIT_ROW_COUNT];
+    weld::Button* mpDelButton[EDIT_ROW_COUNT];
+
+    formula::WeldRefEdit* mpEdActive;
+
+    std::unique_ptr<weld::Label> m_xFtObjectiveCell;
+    std::unique_ptr<formula::WeldRefEdit>    m_xEdObjectiveCell;
+    std::unique_ptr<formula::WeldRefButton>  m_xRBObjectiveCell;
+
+    std::unique_ptr<weld::RadioButton> m_xRbMax;
+    std::unique_ptr<weld::RadioButton> m_xRbMin;
+    std::unique_ptr<weld::RadioButton> m_xRbValue;
+    std::unique_ptr<formula::WeldRefEdit>   m_xEdTargetValue;
+    std::unique_ptr<formula::WeldRefButton> m_xRBTargetValue;
+
+    std::unique_ptr<weld::Label> m_xFtVariableCells;
+    std::unique_ptr<formula::WeldRefEdit>   m_xEdVariableCells;
+    std::unique_ptr<formula::WeldRefButton> m_xRBVariableCells;
+
+    std::unique_ptr<weld::Label> m_xFtCellRef; // labels are together with controls for the first row
+    std::unique_ptr<ScCursorRefEdit> m_xEdLeft1;
+    std::unique_ptr<formula::WeldRefButton> m_xRBLeft1;
+    std::unique_ptr<weld::Label> m_xFtOperator;
+    std::unique_ptr<weld::ComboBox> m_xLbOp1;
+    std::unique_ptr<weld::Label> m_xFtConstraint;
+    std::unique_ptr<ScCursorRefEdit> m_xEdRight1;
+    std::unique_ptr<formula::WeldRefButton> m_xRBRight1;
+    std::unique_ptr<weld::Button> m_xBtnDel1;
+
+    std::unique_ptr<ScCursorRefEdit> m_xEdLeft2;
+    std::unique_ptr<formula::WeldRefButton> m_xRBLeft2;
+    std::unique_ptr<weld::ComboBox> m_xLbOp2;
+    std::unique_ptr<ScCursorRefEdit> m_xEdRight2;
+    std::unique_ptr<formula::WeldRefButton> m_xRBRight2;
+    std::unique_ptr<weld::Button> m_xBtnDel2;
+
+    std::unique_ptr<ScCursorRefEdit> m_xEdLeft3;
+    std::unique_ptr<formula::WeldRefButton> m_xRBLeft3;
+    std::unique_ptr<weld::ComboBox> m_xLbOp3;
+    std::unique_ptr<ScCursorRefEdit> m_xEdRight3;
+    std::unique_ptr<formula::WeldRefButton> m_xRBRight3;
+    std::unique_ptr<weld::Button> m_xBtnDel3;
+
+    std::unique_ptr<ScCursorRefEdit> m_xEdLeft4;
+    std::unique_ptr<formula::WeldRefButton> m_xRBLeft4;
+    std::unique_ptr<weld::ComboBox> m_xLbOp4;
+    std::unique_ptr<ScCursorRefEdit> m_xEdRight4;
+    std::unique_ptr<formula::WeldRefButton> m_xRBRight4;
+    std::unique_ptr<weld::Button> m_xBtnDel4;
+
+    std::unique_ptr<weld::ScrolledWindow> m_xScrollBar;
+
+    std::unique_ptr<weld::Button> m_xBtnOpt;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
+    std::unique_ptr<weld::Button> m_xBtnSolve;
+
+    std::unique_ptr<weld::Label> m_xResultFT;
+    std::unique_ptr<weld::Widget> m_xContents;
+
     void    Init(const ScAddress& rCursorPos);
     bool    CallSolver();
     void    ReadConditions();
@@ -185,18 +188,21 @@ private:
     void    EnableButtons();
     bool    ParseRef( ScRange& rRange, const OUString& rInput, bool bAllowRange );
     bool    FindTimeout( sal_Int32& rTimeout );
-    void    ShowError( bool bCondition, formula::RefEdit* pFocus );
+    void    ShowError( bool bCondition, formula::WeldRefEdit* pFocus );
 
-    DECL_LINK( BtnHdl, Button*, void );
-    DECL_LINK( DelBtnHdl, Button*, void );
-    DECL_LINK( GetFocusHdl, Control&, void );
-    DECL_LINK( LoseFocusHdl, Control&, void );
-    DECL_LINK( ScrollHdl, ScrollBar*, void);
+    DECL_LINK( BtnHdl, weld::Button&, void );
+    DECL_LINK( DelBtnHdl, weld::Button&, void );
+    DECL_LINK( GetEditFocusHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( GetButtonFocusHdl, formula::WeldRefButton&, void );
+    DECL_LINK( GetFocusHdl, weld::Widget&, void );
+    DECL_LINK( LoseEditFocusHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( LoseButtonFocusHdl, formula::WeldRefButton&, void );
+    DECL_LINK( ScrollHdl, weld::ScrolledWindow&, void);
     DECL_LINK( CursorUpHdl, ScCursorRefEdit&, void );
     DECL_LINK( CursorDownHdl, ScCursorRefEdit&, void );
-    DECL_LINK( CondModifyHdl, Edit&, void );
-    DECL_LINK( TargetModifyHdl, Edit&, void );
-    DECL_LINK( SelectHdl, ListBox&, void );
+    DECL_LINK( CondModifyHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( TargetModifyHdl, formula::WeldRefEdit&, void );
+    DECL_LINK( SelectHdl, weld::ComboBox&, void );
 };
 
 class ScSolverProgressDialog : public weld::GenericDialogController

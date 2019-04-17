@@ -468,7 +468,6 @@ custom_widgets = [
     'SameContentListBox',
     'ScCondFormatList',
     'ScCsvTableBox',
-    'ScCursorRefEdit',
     'ScDataTableView',
     'ScDoubleField',
     'ScPivotLayoutTreeList',

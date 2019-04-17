@@ -46,7 +46,7 @@ class solver(UITestCase):
         xop2list.executeAction("SELECT", actionProps)
 
         xval2edit.executeAction("TYPE", mkPropertyValues({"TEXT":"0"}))
-        xOKBtn = xDialog.getChild("solve")
+        xOKBtn = xDialog.getChild("ok")
         def handle_OK_dlg(dialog):
             #('SolverSuccessDialog', 'cancel', 'dialog-action_area1', 'dialog-vbox1', 'grid1', 'label1', 'label2', 'ok', 'result')
             xYesButn = dialog.getChild("ok")

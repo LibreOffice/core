@@ -66,6 +66,11 @@ namespace vcl { namespace CommandInfoProvider {
     VCL_DLLPUBLIC OUString GetRealCommandForCommand( const OUString& rCommandName,
                                                      const OUString& rsModuleName );
 
+    VCL_DLLPUBLIC css::uno::Reference<css::graphic::XGraphic> GetXGraphicForCommand(
+        const OUString& rsCommandName,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        vcl::ImageType eImageType = vcl::ImageType::Small);
+
     VCL_DLLPUBLIC Image GetImageForCommand(
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
