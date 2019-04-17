@@ -1615,16 +1615,20 @@ public:
     {
         m_xButton->SetImageAlign(ImageAlign::Left);
         if (pDevice)
-        {
             m_xButton->SetModeImage(createImage(*pDevice));
-        }
         else
             m_xButton->SetModeImage(Image());
     }
 
+    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
+    {
+        m_xButton->SetImageAlign(ImageAlign::Left);
+        m_xButton->SetModeImage(Image(rImage));
+    }
+
     virtual void set_from_icon_name(const OUString& rIconName) override
     {
-        m_xButton->SetModeImage(::Image(StockImage::Yes, rIconName));
+        m_xButton->SetModeImage(Image(StockImage::Yes, rIconName));
     }
 
     virtual void set_label_line_wrap(bool wrap) override
@@ -1881,9 +1885,15 @@ public:
             m_xRadioButton->SetModeImage(Image());
     }
 
+    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
+    {
+        m_xRadioButton->SetImageAlign(ImageAlign::Center);
+        m_xRadioButton->SetModeImage(Image(rImage));
+    }
+
     virtual void set_from_icon_name(const OUString& rIconName) override
     {
-        m_xRadioButton->SetModeRadioImage(::Image(StockImage::Yes, rIconName));
+        m_xRadioButton->SetModeRadioImage(Image(StockImage::Yes, rIconName));
     }
 
     virtual void set_inconsistent(bool /*inconsistent*/) override

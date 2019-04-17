@@ -793,6 +793,7 @@ public:
     virtual void set_label(const OUString& rText) = 0;
     // pDevice, the image for the button, or nullptr to unset
     virtual void set_image(VirtualDevice* pDevice) = 0;
+    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) = 0;
     virtual void set_from_icon_name(const OUString& rIconName) = 0;
     virtual OUString get_label() const = 0;
     virtual void set_label_line_wrap(bool wrap) = 0;
