@@ -94,7 +94,6 @@
 #include <officecfg/Office/Common.hxx>
 
 #include <vcl/FilterConfigItem.hxx>
-#include <vcl/threadex.hxx>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
@@ -266,8 +265,6 @@ class ModelData_Impl
     ::comphelper::SequenceAsHashMap m_aMediaDescrHM;
 
     bool m_bRecommendReadOnly;
-
-    bool solar_execute(uno::Reference< ui::dialogs::XExecutableDialog > xFilterDialog);
 
 public:
     ModelData_Impl( SfxStoringHelper& aOwner,
@@ -561,10 +558,6 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl(
     return aFilterProps;
 }
 
-bool ModelData_Impl::solar_execute( uno::Reference<ui::dialogs::XExecutableDialog> xFilterDialog)
-{
-    return xFilterDialog->execute();
-}
 
 bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
 {
@@ -601,9 +594,7 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
                             GetMediaDescr() >> aPropsForDialog;
                             xFilterProperties->setPropertyValues( aPropsForDialog );
 
-                            bool bRet = vcl::solarthread::syncExecute(std::bind(&ModelData_Impl::solar_execute, this, xFilterDialog));
-
-                            if( bRet )
+                            if( xFilterDialog->execute() )
                             {
                                 uno::Sequence< beans::PropertyValue > aPropsFromDialog =
                                                                             xFilterProperties->getPropertyValues();
