@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,xslt,\
 	external/libxslt/libxslt-msvc.patch.2 \
 	external/libxslt/libxslt-1.1.26-memdump.patch \
 	external/libxslt/rpath.patch.0 \
+	external/libxslt/e03553605b45c88f0b4b2980adfbbb8f6fca2fd6.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
