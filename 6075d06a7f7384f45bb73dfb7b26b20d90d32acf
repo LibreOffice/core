@@ -22,6 +22,30 @@
       "revId": "6075d06a7f7384f45bb73dfb7b26b20d90d32acf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_3b21d0a0",
+        "filename": "sfx2/source/doc/docinsert.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-04-17T17:48:18Z",
+      "side": 1,
+      "message": "Erm.. what? I don\u0027t understand.",
+      "parentUuid": "7f96bb07_a893544f",
+      "range": {
+        "startLine": 99,
+        "startChar": 73,
+        "endLine": 99,
+        "endChar": 92
+      },
+      "revId": "6075d06a7f7384f45bb73dfb7b26b20d90d32acf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
