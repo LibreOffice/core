@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_25852dae",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-17T07:57:54Z",
+      "side": 1,
+      "message": "What if \"%7c\" is used as encoding instead?  Would it maybe make more sense to fully decode all percent encodings in rest1 here?  Or does a suffix of rest1 follow a syntax that should be extracted here (via rest2 and then storing back into arg) with percent encodings still intact (and the comment \"Abbreviated scheme: \u003cscheme-name\u003e:URI\" appears to indeed imply that a full URI can be part of that suffix)?",
+      "revId": "2317ad572cc330c4c2de95065ef275f58a9c83a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
