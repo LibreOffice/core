@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_083b68d1",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 3294,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-04-17T09:27:10Z",
+      "side": 1,
+      "message": "just a little nit - it would be good to have a comment here that this is known not to work with 2019, so it can eventually be removed",
+      "revId": "84bdb5db8fc884366401add1b27b6665d145f51c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
