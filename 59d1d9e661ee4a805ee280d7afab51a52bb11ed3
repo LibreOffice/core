@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_05b11190",
+        "filename": "shell/source/backends/kde5be/kde5backend.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-04-17T08:34:37Z",
+      "side": 0,
+      "message": "where do we check that we\u0027re running on KDE5 now? is this service created if we\u0027re running on other desktops? sounds wrong to apply KDE settings to them...",
+      "revId": "59d1d9e661ee4a805ee280d7afab51a52bb11ed3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
