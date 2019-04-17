@@ -3086,10 +3086,9 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
 
 void MSWordExportBase::CollectOutlineBookmarks(const SwDoc &rDoc)
 {
-    sal_uInt32 nMaxItems = rDoc.GetAttrPool().GetItemCount2(RES_TXTATR_INETFMT);
-    for (sal_uInt32 n = 0; n < nMaxItems; ++n)
+    for (const SfxPoolItem* pItem : rDoc.GetAttrPool().GetItemSurrogates(RES_TXTATR_INETFMT))
     {
-        const SwFormatINetFormat* pINetFormat = rDoc.GetAttrPool().GetItem2(RES_TXTATR_INETFMT, n);
+        auto pINetFormat = dynamic_cast<const SwFormatINetFormat*>(pItem);
         if (!pINetFormat)
             continue;
 
@@ -3107,10 +3106,9 @@ void MSWordExportBase::CollectOutlineBookmarks(const SwDoc &rDoc)
         AddLinkTarget( pINetFormat->GetValue() );
     }
 
-    nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_URL );
-    for (sal_uInt32 n = 0; n < nMaxItems; ++n)
+    for (const SfxPoolItem* pItem : rDoc.GetAttrPool().GetItemSurrogates(RES_URL))
     {
-        const SwFormatURL *pURL = rDoc.GetAttrPool().GetItem2(RES_URL, n);
+        auto pURL = dynamic_cast<const SwFormatURL*>(pItem);
         if (!pURL)
             continue;
 

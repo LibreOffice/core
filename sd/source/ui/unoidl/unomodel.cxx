@@ -1370,7 +1370,6 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
                                                EE_CHAR_FONTINFO_CTL };
 
                 const SfxItemPool& rPool = mpDoc->GetPool();
-                const SfxPoolItem* pItem;
 
                 for(sal_uInt16 nWhichId : aWhichIds)
                 {
@@ -1378,18 +1377,15 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
 
                     aSeq.realloc( aSeq.getLength() + nItems*5 + 5 );
 
-                    for( sal_uInt32 j = 0; j < nItems; ++j )
+                    for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(nWhichId))
                     {
-                        if( nullptr != (pItem = rPool.GetItem2( nWhichId, j ) ) )
-                        {
-                            const SvxFontItem *pFont = static_cast<const SvxFontItem *>(pItem);
+                        const SvxFontItem *pFont = static_cast<const SvxFontItem *>(pItem);
 
-                            aSeq[nSeqIndex++] <<= pFont->GetFamilyName();
-                            aSeq[nSeqIndex++] <<= pFont->GetStyleName();
-                            aSeq[nSeqIndex++] <<= sal_Int16(pFont->GetFamily());
-                            aSeq[nSeqIndex++] <<= sal_Int16(pFont->GetPitch());
-                            aSeq[nSeqIndex++] <<= sal_Int16(pFont->GetCharSet());
-                        }
+                        aSeq[nSeqIndex++] <<= pFont->GetFamilyName();
+                        aSeq[nSeqIndex++] <<= pFont->GetStyleName();
+                        aSeq[nSeqIndex++] <<= sal_Int16(pFont->GetFamily());
+                        aSeq[nSeqIndex++] <<= sal_Int16(pFont->GetPitch());
+                        aSeq[nSeqIndex++] <<= sal_Int16(pFont->GetCharSet());
                     }
 
                     const SvxFontItem& rFont = static_cast<const SvxFontItem&>(rPool.GetDefaultItem( nWhichId ));

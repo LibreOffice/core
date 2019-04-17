@@ -140,12 +140,10 @@ sal_uInt16 SwDoc::CallEvent( SvMacroItemId nEvent, const SwCallMouseEvent& rCall
     case EVENT_OBJECT_INETATTR:
         if( bCheckPtr  )
         {
-            sal_uInt32 n, nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
-            for( n = 0; n < nMaxItems; ++n )
+            for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(RES_TXTATR_INETFMT))
             {
-                const SfxPoolItem* pItem;
-                if( nullptr != (pItem = GetAttrPool().GetItem2( RES_TXTATR_INETFMT, n ) )
-                    && rCallEvent.PTR.pINetAttr == pItem )
+                auto pFormatItem = dynamic_cast<const SwFormatINetFormat*>(pItem);
+                if( pFormatItem && rCallEvent.PTR.pINetAttr == pFormatItem )
                 {
                     bCheckPtr = false;       // misuse as a flag
                     break;

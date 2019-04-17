@@ -644,11 +644,13 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
                     nOldWidth = aOld.Get(RES_PARATR_TABSTOP)[ 0 ].GetTabPos();
 
             bool bChg = false;
-            sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_PARATR_TABSTOP );
-            for( sal_uInt32 n = 0; n < nMaxItems; ++n )
-                if( nullptr != (pTmpItem = GetAttrPool().GetItem2( RES_PARATR_TABSTOP, n ) ))
+            for (const SfxPoolItem* pItem2 : GetAttrPool().GetItemSurrogates(RES_PARATR_TABSTOP))
+            {
+                auto pTabStopItem = dynamic_cast<const SvxTabStopItem*>(pItem2);
+                if(pTabStopItem)
                     bChg |= lcl_SetNewDefTabStops( nOldWidth, nNewWidth,
-                                                   *const_cast<SvxTabStopItem*>(static_cast<const SvxTabStopItem*>(pTmpItem)) );
+                                                   *const_cast<SvxTabStopItem*>(pTabStopItem) );
+            }
 
             aNew.ClearItem( RES_PARATR_TABSTOP );
             aOld.ClearItem( RES_PARATR_TABSTOP );
@@ -2005,13 +2007,10 @@ std::set<Color> SwDoc::GetDocColors()
     const sal_uInt16 pAttribs[] = {RES_CHRATR_COLOR, RES_CHRATR_HIGHLIGHT, RES_BACKGROUND};
     for (sal_uInt16 nAttrib : pAttribs)
     {
-        const sal_uInt32 nCount = rPool.GetItemCount2(nAttrib);
-        for (sal_uInt32 j=0; j<nCount; j++)
+        for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(nAttrib))
         {
-            const SvxColorItem *pItem = static_cast<const SvxColorItem*>(rPool.GetItem2(nAttrib, j));
-            if (pItem == nullptr)
-                continue;
-            Color aColor( pItem->GetValue() );
+            auto pColorItem = static_cast<const SvxColorItem*>(pItem);
+            Color aColor( pColorItem->GetValue() );
             if (COL_AUTO != aColor)
                 aDocColors.insert(aColor);
         }

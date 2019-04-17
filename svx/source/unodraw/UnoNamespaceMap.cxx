@@ -93,8 +93,8 @@ namespace svx
 
         sal_uInt16* mpWhichId;
 
-        sal_uInt32 mnItemCount;
-        sal_uInt32 mnItem;
+        std::vector<const SvXMLAttrContainerItem*> mvItems;
+        sal_Int32 mnItem;
 
         const SvXMLAttrContainerItem* mpCurrentAttr;
         sal_uInt16 mnCurrentAttr;
@@ -118,8 +118,13 @@ NamespaceIteratorImpl::NamespaceIteratorImpl( sal_uInt16* pWhichIds, SfxItemPool
 
     mpWhichId = pWhichIds;
 
-    mnItem = 0;
-    mnItemCount = (mpWhichId && (0 != *mpWhichId) && mpPool) ? mpPool->GetItemCount2( *mpWhichId ) : 0;
+    mnItem = -1;
+    if (mpWhichId && (0 != *mpWhichId) && mpPool)
+    {
+        mvItems.reserve(mpPool->GetItemCount2( *mpWhichId ));
+        for (const SfxPoolItem* pItem : mpPool->GetItemSurrogates( *mpWhichId ))
+            mvItems.push_back(static_cast<const SvXMLAttrContainerItem*>(pItem));
+    }
 }
 
 bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
@@ -136,43 +141,36 @@ bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
 
     // we need the next namespace item
     mpCurrentAttr = nullptr;
-
-    const SfxPoolItem* pItem = nullptr;
-    // look for the next available item in the current pool
-    while( (mnItem < mnItemCount) && ( nullptr == (pItem = mpPool->GetItem2( *mpWhichId, mnItem ) ) ) )
-        mnItem++;
+    mnItem++;
 
     // are we finished with the current whichid?
-    if( mnItem == mnItemCount )
+    if( mnItem == static_cast<sal_Int32>(mvItems.size()) )
     {
         mpWhichId++;
 
         // are we finished with the current pool?
-        if( 0 != *mpWhichId )
+        if( 0 == *mpWhichId )
+            return false;
+
+        mnItem = -1;
+        mvItems.clear();
+        if (mpPool)
         {
-            mnItem = 0;
-            mnItemCount = mpPool ? mpPool->GetItemCount2( *mpWhichId ) : 0;
-            return next( rPrefix, rURL );
-        }
-
-        pItem = nullptr;
-    }
-
-    if( pItem )
-    {
-        mnItem++;
-
-        // get that item and see if there namespaces inside
-        const SvXMLAttrContainerItem *pUnknown = static_cast<const SvXMLAttrContainerItem *>(pItem);
-        if( pUnknown->GetAttrCount() > 0 )
-        {
-            mpCurrentAttr = pUnknown;
-            mnCurrentAttr = pUnknown->GetFirstNamespaceIndex();
+            mvItems.reserve(mpPool->GetItemCount2( *mpWhichId ));
+            for (const SfxPoolItem* pItem2 : mpPool->GetItemSurrogates( *mpWhichId ))
+                mvItems.push_back(static_cast<const SvXMLAttrContainerItem*>(pItem2));
         }
         return next( rPrefix, rURL );
     }
 
-    return false;
+    auto pItem = mvItems[mnItem];
+    // get that item and see if there namespaces inside
+    if( pItem->GetAttrCount() > 0 )
+    {
+        mpCurrentAttr = pItem;
+        mnCurrentAttr = pItem->GetFirstNamespaceIndex();
+    }
+    return next( rPrefix, rURL );
 }
 
 

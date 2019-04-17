@@ -47,26 +47,21 @@ void ScXMLFontAutoStylePool_Impl::AddFontItems(const sal_uInt16* pWhichIds, sal_
 {
     for( sal_uInt16 i=0; i < nIdCount; ++i )
     {
-        const SfxPoolItem* pItem;
         sal_uInt16 nWhichId(pWhichIds[i]);
         if (bExportDefaults)
         {
-            pItem = &pItemPool->GetDefaultItem(nWhichId);
+            const SfxPoolItem* pItem = &pItemPool->GetDefaultItem(nWhichId);
             const SvxFontItem *pFont(static_cast<const SvxFontItem *>(pItem));
             Add( pFont->GetFamilyName(), pFont->GetStyleName(),
                     pFont->GetFamily(), pFont->GetPitch(),
                     pFont->GetCharSet() );
         }
-        sal_uInt32 nItems(pItemPool->GetItemCount2( nWhichId ));
-        for( sal_uInt32 j = 0; j < nItems; ++j )
+        for (const SfxPoolItem* pItem : pItemPool->GetItemSurrogates( nWhichId ))
         {
-            if( nullptr != (pItem = pItemPool->GetItem2( nWhichId, j ) ) )
-            {
-                const SvxFontItem *pFont(static_cast<const SvxFontItem *>(pItem));
-                Add( pFont->GetFamilyName(), pFont->GetStyleName(),
-                     pFont->GetFamily(), pFont->GetPitch(),
-                     pFont->GetCharSet() );
-            }
+            const SvxFontItem *pFont(static_cast<const SvxFontItem *>(pItem));
+            Add( pFont->GetFamilyName(), pFont->GetStyleName(),
+                 pFont->GetFamily(), pFont->GetPitch(),
+                 pFont->GetCharSet() );
         }
     }
 }
@@ -111,30 +106,26 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, 
 
                 for (sal_uInt16 nPageWhichId : aPageWhichIds)
                 {
-                    sal_uInt32 nPageHFItems(rPagePool.GetItemCount2(nPageWhichId));
-                    for (sal_uInt32 k = 0; k < nPageHFItems; ++k)
+                    for (const SfxPoolItem* pItem : rPagePool.GetItemSurrogates( nPageWhichId ))
                     {
-                        const ScPageHFItem* pPageItem;
-                        if (nullptr != (pPageItem = static_cast<const ScPageHFItem*>(rPagePool.GetItem2(nPageWhichId, k))))
+                        const ScPageHFItem* pPageItem = static_cast<const ScPageHFItem*>(pItem);
+                        const EditTextObject* pLeftArea(pPageItem->GetLeftArea());
+                        if (pLeftArea)
                         {
-                            const EditTextObject* pLeftArea(pPageItem->GetLeftArea());
-                            if (pLeftArea)
-                            {
-                                aEditEngine.SetText(*pLeftArea);
-                                AddFontItems(aEditWhichIds, 3, mpEditEnginePool, false);
-                            }
-                            const EditTextObject* pCenterArea(pPageItem->GetCenterArea());
-                            if (pCenterArea)
-                            {
-                                aEditEngine.SetText(*pCenterArea);
-                                AddFontItems(aEditWhichIds, 3, mpEditEnginePool, false);
-                            }
-                            const EditTextObject* pRightArea(pPageItem->GetRightArea());
-                            if (pRightArea)
-                            {
-                                aEditEngine.SetText(*pRightArea);
-                                AddFontItems(aEditWhichIds, 3, mpEditEnginePool, false);
-                            }
+                            aEditEngine.SetText(*pLeftArea);
+                            AddFontItems(aEditWhichIds, 3, mpEditEnginePool, false);
+                        }
+                        const EditTextObject* pCenterArea(pPageItem->GetCenterArea());
+                        if (pCenterArea)
+                        {
+                            aEditEngine.SetText(*pCenterArea);
+                            AddFontItems(aEditWhichIds, 3, mpEditEnginePool, false);
+                        }
+                        const EditTextObject* pRightArea(pPageItem->GetRightArea());
+                        if (pRightArea)
+                        {
+                            aEditEngine.SetText(*pRightArea);
+                            AddFontItems(aEditWhichIds, 3, mpEditEnginePool, false);
                         }
                     }
                 }

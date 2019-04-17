@@ -5186,29 +5186,24 @@ XMLNumberFormatAttributesExportHelper* ScXMLExport::GetNumberFormatAttributesExp
 
 void ScXMLExport::CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uInt16 nAttrib)
 {
-    sal_uInt32 nItems(pPool->GetItemCount2( nAttrib ));
-    for( sal_uInt32 i = 0; i < nItems; ++i )
+    for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(nAttrib))
     {
-        const SfxPoolItem* pItem;
-        if( nullptr != (pItem = pPool->GetItem2( nAttrib, i ) ) )
+        const SvXMLAttrContainerItem *pUnknown(static_cast<const SvXMLAttrContainerItem *>(pItem));
+        if( pUnknown->GetAttrCount() > 0 )
         {
-            const SvXMLAttrContainerItem *pUnknown(static_cast<const SvXMLAttrContainerItem *>(pItem));
-            if( pUnknown->GetAttrCount() > 0 )
+            sal_uInt16 nIdx(pUnknown->GetFirstNamespaceIndex());
+            while( USHRT_MAX != nIdx )
             {
-                sal_uInt16 nIdx(pUnknown->GetFirstNamespaceIndex());
-                while( USHRT_MAX != nIdx )
+                if( (XML_NAMESPACE_UNKNOWN_FLAG & nIdx) != 0 )
                 {
-                    if( (XML_NAMESPACE_UNKNOWN_FLAG & nIdx) != 0 )
-                    {
-                        const OUString& rPrefix = pUnknown->GetPrefix( nIdx );
-                        // Add namespace declaration for unknown attributes if
-                        // there aren't existing ones for the prefix used by the
-                        // attributes
-                        GetNamespaceMap_().Add( rPrefix,
-                                                pUnknown->GetNamespace( nIdx ) );
-                    }
-                    nIdx = pUnknown->GetNextNamespaceIndex( nIdx );
+                    const OUString& rPrefix = pUnknown->GetPrefix( nIdx );
+                    // Add namespace declaration for unknown attributes if
+                    // there aren't existing ones for the prefix used by the
+                    // attributes
+                    GetNamespaceMap_().Add( rPrefix,
+                                            pUnknown->GetNamespace( nIdx ) );
                 }
+                nIdx = pUnknown->GetNextNamespaceIndex( nIdx );
             }
         }
     }

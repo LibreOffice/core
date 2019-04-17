@@ -2096,15 +2096,14 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
 
 void SwHTMLWriter::CollectLinkTargets()
 {
-    const SwFormatINetFormat* pINetFormat;
     const SwTextINetFormat* pTextAttr;
 
-    sal_uInt32 n, nMaxItems = m_pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
-    for( n = 0; n < nMaxItems; ++n )
+    for (const SfxPoolItem* pItem : m_pDoc->GetAttrPool().GetItemSurrogates(RES_TXTATR_INETFMT))
     {
+        auto pINetFormat = dynamic_cast<const SwFormatINetFormat*>(pItem);
         const SwTextNode* pTextNd;
 
-        if( nullptr != ( pINetFormat = m_pDoc->GetAttrPool().GetItem2( RES_TXTATR_INETFMT, n ) ) &&
+        if( pINetFormat &&
             nullptr != ( pTextAttr = pINetFormat->GetTextINetFormat()) &&
             nullptr != ( pTextNd = pTextAttr->GetpTextNode() ) &&
             pTextNd->GetNodes().IsDocNodes() )
@@ -2113,12 +2112,10 @@ void SwHTMLWriter::CollectLinkTargets()
         }
     }
 
-    const SwFormatURL *pURL;
-    nMaxItems = m_pDoc->GetAttrPool().GetItemCount2( RES_URL );
-    for( n = 0; n < nMaxItems; ++n )
+    for (const SfxPoolItem* pItem : m_pDoc->GetAttrPool().GetItemSurrogates(RES_URL))
     {
-        if( nullptr != (pURL = m_pDoc->GetAttrPool().GetItem2(
-            RES_URL, n ) ) )
+        auto pURL = dynamic_cast<const SwFormatURL*>(pItem);
+        if( pURL )
         {
             AddLinkTarget( pURL->GetURL() );
             const ImageMap *pIMap = pURL->GetMap();
