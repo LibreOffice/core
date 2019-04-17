@@ -5181,20 +5181,15 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
 
         bool bAnyItem = false;
-        sal_uInt32 nRotCount = pPool->GetItemCount2( ATTR_ROTATE_VALUE );
-        for (sal_uInt32 nItem=0; nItem<nRotCount; nItem++)
+        for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(ATTR_ROTATE_VALUE))
         {
-            const SfxPoolItem* pItem = pPool->GetItem2( ATTR_ROTATE_VALUE, nItem );
-            if ( pItem )
+            // 90 or 270 degrees is former SvxOrientationItem - only look for other values
+            // (see ScPatternAttr::GetCellOrientation)
+            sal_Int32 nAngle = static_cast<const SfxInt32Item*>(pItem)->GetValue();
+            if ( nAngle != 0 && nAngle != 9000 && nAngle != 27000 )
             {
-                // 90 or 270 degrees is former SvxOrientationItem - only look for other values
-                // (see ScPatternAttr::GetCellOrientation)
-                sal_Int32 nAngle = static_cast<const SfxInt32Item*>(pItem)->GetValue();
-                if ( nAngle != 0 && nAngle != 9000 && nAngle != 27000 )
-                {
-                    bAnyItem = true;
-                    break;
-                }
+                bAnyItem = true;
+                break;
             }
         }
         if (!bAnyItem)
@@ -6108,10 +6103,9 @@ void ScDocument::UpdStlShtPtrsFrmNms()
 {
     ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
 
-    sal_uInt32 nCount = pPool->GetItemCount2(ATTR_PATTERN);
-    for (sal_uInt32 i=0; i<nCount; i++)
+    for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(ATTR_PATTERN))
     {
-        ScPatternAttr* pPattern = const_cast<ScPatternAttr*>(pPool->GetItem2(ATTR_PATTERN, i));
+        auto pPattern = const_cast<ScPatternAttr*>(dynamic_cast<const ScPatternAttr*>(pItem));
         if (pPattern)
             pPattern->UpdateStyleSheet(this);
     }
@@ -6122,10 +6116,9 @@ void ScDocument::StylesToNames()
 {
     ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
 
-    sal_uInt32 nCount = pPool->GetItemCount2(ATTR_PATTERN);
-    for (sal_uInt32 i=0; i<nCount; i++)
+    for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(ATTR_PATTERN))
     {
-        ScPatternAttr* pPattern = const_cast<ScPatternAttr*>(pPool->GetItem2(ATTR_PATTERN, i));
+        auto pPattern = const_cast<ScPatternAttr*>(dynamic_cast<const ScPatternAttr*>(pItem));
         if (pPattern)
             pPattern->StyleToName();
     }

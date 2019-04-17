@@ -409,9 +409,8 @@ void Writer::AddFontItems_( SfxItemPool& rPool, sal_uInt16 nW )
     if( nullptr != ( pFont = static_cast<const SvxFontItem*>(rPool.GetPoolDefaultItem( nW ))) )
         AddFontItem( rPool, *pFont );
 
-    sal_uInt32 nMaxItem = rPool.GetItemCount2( nW );
-    for( sal_uInt32 nGet = 0; nGet < nMaxItem; ++nGet )
-        if( nullptr != (pFont = static_cast<const SvxFontItem*>(rPool.GetItem2( nW, nGet ))) )
+    for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(nW))
+        if( nullptr != (pFont = static_cast<const SvxFontItem*>(pItem)) )
             AddFontItem( rPool, *pFont );
 }
 

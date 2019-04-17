@@ -25,8 +25,7 @@
 #include <tools/debug.hxx>
 #include <deque>
 #include <memory>
-#include <unordered_map>
-#include <vector>
+#include <o3tl/sorted_vector.hxx>
 
 class SfxPoolItem;
 class SfxItemPoolUser;
@@ -41,27 +40,18 @@ static const sal_uInt32 SFX_ITEMS_DEFAULT = 0xfffffffe;
  */
 struct SfxPoolItemArray_Impl
 {
-    typedef std::unordered_map<SfxPoolItem*,sal_uInt32> PoolItemPtrToIndexMap;
 private:
-    std::vector<SfxPoolItem*> maPoolItemVector;
+    o3tl::sorted_vector<SfxPoolItem*> maPoolItemSet;
 public:
-    /// Track list of indices into our array that contain an empty slot
-    std::vector<sal_uInt32> maFree;
-    /// Hash of SfxPoolItem pointer to index into our array that contains that slot
-    PoolItemPtrToIndexMap     maPtrToIndex;
-
-    SfxPoolItemArray_Impl () {}
-    SfxPoolItem*& operator[](size_t n) {return maPoolItemVector[n];}
-    std::vector<SfxPoolItem*>::iterator begin() {return maPoolItemVector.begin();}
-    std::vector<SfxPoolItem*>::iterator end() {return maPoolItemVector.end();}
+    o3tl::sorted_vector<SfxPoolItem*>::const_iterator begin() { return maPoolItemSet.begin(); }
+    o3tl::sorted_vector<SfxPoolItem*>::const_iterator end() { return maPoolItemSet.end(); }
     /// clear array of PoolItem variants after all PoolItems are deleted
     /// or all ref counts are decreased
     void clear();
-    size_t size() const {return maPoolItemVector.size();}
-    void push_back(SfxPoolItem* pItem) {maPoolItemVector.push_back(pItem);}
-
-    /// re-build the list of free slots and hash from clean
-    void SVL_DLLPUBLIC ReHash();
+    size_t size() const {return maPoolItemSet.size();}
+    void insert(SfxPoolItem* pItem) { maPoolItemSet.insert(pItem); }
+    o3tl::sorted_vector<SfxPoolItem*>::const_iterator find(SfxPoolItem* pItem) { return maPoolItemSet.find(pItem); }
+    void erase(o3tl::sorted_vector<SfxPoolItem*>::const_iterator it) { return maPoolItemSet.erase(it); }
 };
 
 struct SfxItemPool_Impl

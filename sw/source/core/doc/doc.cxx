@@ -1069,14 +1069,12 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
 /// @return the reference in the doc for the name
 const SwFormatRefMark* SwDoc::GetRefMark( const OUString& rName ) const
 {
-    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
-    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+    for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK))
     {
-        const SfxPoolItem* pItem;
-        if( nullptr == (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n ) ))
+        auto pFormatRef = dynamic_cast<const SwFormatRefMark*>(pItem);
+        if(!pFormatRef)
             continue;
 
-        const SwFormatRefMark* pFormatRef = static_cast<const SwFormatRefMark*>(pItem);
         const SwTextRefMark* pTextRef = pFormatRef->GetTextRefMark();
         if( pTextRef && &pTextRef->GetTextNode().GetNodes() == &GetNodes() &&
             rName == pFormatRef->GetRefName() )
@@ -1091,19 +1089,18 @@ const SwFormatRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
     const SwTextRefMark* pTextRef;
     const SwFormatRefMark* pRet = nullptr;
 
-    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
     sal_uInt32 nCount = 0;
-    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+    for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK))
     {
-        const SfxPoolItem* pItem;
+        auto pRefMark = dynamic_cast<const SwFormatRefMark*>(pItem);
 
-        if( nullptr != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
-            nullptr != (pTextRef = static_cast<const SwFormatRefMark*>(pItem)->GetTextRefMark()) &&
+        if( pRefMark &&
+            nullptr != (pTextRef = pRefMark->GetTextRefMark()) &&
             &pTextRef->GetTextNode().GetNodes() == &GetNodes() )
         {
             if(nCount == nIndex)
             {
-                pRet = static_cast<const SwFormatRefMark*>(pItem);
+                pRet = pRefMark;
                 break;
             }
             nCount++;
@@ -1119,19 +1116,18 @@ sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
 {
     const SwTextRefMark* pTextRef;
 
-    const sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
     sal_uInt16 nCount = 0;
-    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+    for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK))
     {
-        const SfxPoolItem* pItem;
+        auto pRefMark = dynamic_cast<const SwFormatRefMark*>(pItem);
 
-        if( nullptr != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
-            nullptr != (pTextRef = static_cast<const SwFormatRefMark*>(pItem)->GetTextRefMark()) &&
+        if( pRefMark &&
+            nullptr != (pTextRef = pRefMark->GetTextRefMark()) &&
             &pTextRef->GetTextNode().GetNodes() == &GetNodes() )
         {
             if( pNames )
             {
-                OUString aTmp(static_cast<const SwFormatRefMark*>(pItem)->GetRefName());
+                OUString aTmp(pRefMark->GetRefName());
                 pNames->insert(pNames->begin() + nCount, aTmp);
             }
             ++nCount;
@@ -1233,20 +1229,18 @@ void SwDoc::InvalidateAutoCompleteFlag()
 
 const SwFormatINetFormat* SwDoc::FindINetAttr( const OUString& rName ) const
 {
-    const SwFormatINetFormat* pItem;
     const SwTextINetFormat* pTextAttr;
     const SwTextNode* pTextNd;
-    sal_uInt32 n, nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
-    for( n = 0; n < nMaxItems; ++n )
+    for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(RES_TXTATR_INETFMT))
     {
-        pItem = GetAttrPool().GetItem2( RES_TXTATR_INETFMT, n );
-        if( nullptr != pItem &&
-            pItem->GetName() == rName &&
-            nullptr != ( pTextAttr = pItem->GetTextINetFormat()) &&
+        auto pFormatItem = dynamic_cast<const SwFormatINetFormat*>(pItem);
+        if( pFormatItem &&
+            pFormatItem->GetName() == rName &&
+            nullptr != ( pTextAttr = pFormatItem->GetTextINetFormat()) &&
             nullptr != ( pTextNd = pTextAttr->GetpTextNode() ) &&
             &pTextNd->GetNodes() == &GetNodes() )
         {
-            return pItem;
+            return pFormatItem;
         }
     }
     return nullptr;

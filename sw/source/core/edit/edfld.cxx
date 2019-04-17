@@ -179,15 +179,12 @@ static SwTextField* lcl_FindInputField( SwDoc* pDoc, SwField& rField )
             && (static_cast<SwSetExpFieldType*>(rField.GetTyp())->GetType()
                 & nsSwGetSetExpType::GSE_STRING)))
     {
-        const sal_uInt32 nMaxItems =
-            pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INPUTFIELD );
-        for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+        for (const SfxPoolItem* pItem : pDoc->GetAttrPool().GetItemSurrogates(RES_TXTATR_INPUTFIELD))
         {
-            const SfxPoolItem* pItem = nullptr;
-            if( nullptr != (pItem = pDoc->GetAttrPool().GetItem2( RES_TXTATR_INPUTFIELD, n ) )
-                && static_cast<const SwFormatField*>(pItem)->GetField() == &rField )
+            auto pFormatField = dynamic_cast<const SwFormatField*>(pItem);
+            if( pFormatField && pFormatField->GetField() == &rField )
             {
-                pTField = const_cast<SwFormatField*>(static_cast<const SwFormatField*>(pItem))->GetTextField();
+                pTField = const_cast<SwFormatField*>(pFormatField)->GetTextField();
                 break;
             }
         }
@@ -195,15 +192,12 @@ static SwTextField* lcl_FindInputField( SwDoc* pDoc, SwField& rField )
     else if( SwFieldIds::SetExp == rField.Which()
         && static_cast<SwSetExpField&>(rField).GetInputFlag() )
     {
-        const sal_uInt32 nMaxItems =
-            pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
-        for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+        for (const SfxPoolItem* pItem : pDoc->GetAttrPool().GetItemSurrogates(RES_TXTATR_FIELD))
         {
-            const SfxPoolItem* pItem = nullptr;
-            if( nullptr != (pItem = pDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) )
-                && static_cast<const SwFormatField*>(pItem)->GetField() == &rField )
+            auto pFormatField = dynamic_cast<const SwFormatField*>(pItem);
+            if( pFormatField && pFormatField->GetField() == &rField )
             {
-                pTField = const_cast<SwFormatField*>(static_cast<const SwFormatField*>(pItem))->GetTextField();
+                pTField = const_cast<SwFormatField*>(pFormatField)->GetTextField();
                 break;
             }
         }
