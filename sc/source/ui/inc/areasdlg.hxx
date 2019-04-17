@@ -40,6 +40,7 @@ public:
     virtual bool    IsTableLocked() const override;
 
     virtual void    SetActive() override;
+    virtual void    Deactivate() override;
     virtual void    Close() override;
 
 private:
@@ -83,8 +84,6 @@ private:
     DECL_LINK( Impl_ModifyHdl, formula::WeldRefEdit&, void  );
     DECL_LINK( Impl_BtnHdl,    weld::Button&, void );
     DECL_LINK( Impl_GetEditFocusHdl, formula::WeldRefEdit&, void );
-    DECL_LINK( Impl_LoseEditFocusHdl, formula::WeldRefEdit&, void );
-    DECL_LINK( Impl_LoseButtonFocusHdl, formula::WeldRefButton&, void );
     DECL_LINK( Impl_GetFocusHdl, weld::Widget&, void );
 };
 

@@ -210,14 +210,9 @@ void ScPrintAreasDlg::AddRefEntry()
     }
 }
 
-IMPL_LINK_NOARG(ScPrintAreasDlg, Impl_LoseEditFocusHdl, formula::WeldRefEdit&, void)
+void ScPrintAreasDlg::Deactivate()
 {
-    bDlgLostFocus = !m_xDialog->has_toplevel_focus();
-}
-
-IMPL_LINK_NOARG(ScPrintAreasDlg, Impl_LoseButtonFocusHdl, formula::WeldRefButton&, void)
-{
-    bDlgLostFocus = !m_xDialog->has_toplevel_focus();
+    bDlgLostFocus = true;
 }
 
 void ScPrintAreasDlg::SetActive()
@@ -250,12 +245,6 @@ void ScPrintAreasDlg::Impl_Reset()
     m_xEdPrintArea->SetGetFocusHdl( HDL(Impl_GetEditFocusHdl) );
     m_xEdRepeatRow->SetGetFocusHdl( HDL(Impl_GetEditFocusHdl) );
     m_xEdRepeatCol->SetGetFocusHdl( HDL(Impl_GetEditFocusHdl) );
-    m_xEdPrintArea->SetLoseFocusHdl( HDL(Impl_LoseEditFocusHdl) );
-    m_xEdRepeatRow->SetLoseFocusHdl( HDL(Impl_LoseEditFocusHdl) );
-    m_xEdRepeatCol->SetLoseFocusHdl( HDL(Impl_LoseEditFocusHdl) );
-    m_xRbPrintArea->SetLoseFocusHdl( HDL(Impl_LoseButtonFocusHdl) );
-    m_xRbRepeatRow->SetLoseFocusHdl( HDL(Impl_LoseButtonFocusHdl) );
-    m_xRbRepeatCol->SetLoseFocusHdl( HDL(Impl_LoseButtonFocusHdl) );
     m_xLbPrintArea->connect_focus_in( HDL(Impl_GetFocusHdl) );
     m_xLbRepeatRow->connect_focus_in( HDL(Impl_GetFocusHdl) );
     m_xLbRepeatCol->connect_focus_in( HDL(Impl_GetFocusHdl) );
