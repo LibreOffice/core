@@ -669,16 +669,17 @@ namespace svt
     void OWizardMachine::suspendTraveling( AccessGuard )
     {
         DBG_ASSERT( !m_pImpl->m_bTravelingSuspended, "OWizardMachine::suspendTraveling: already suspended!" );
-       m_pImpl->m_bTravelingSuspended = true;
+        m_pImpl->m_bTravelingSuspended = true;
     }
-
 
     void OWizardMachine::resumeTraveling( AccessGuard )
     {
-        DBG_ASSERT( m_pImpl->m_bTravelingSuspended, "OWizardMachine::resumeTraveling: nothing to resume!" );
-       m_pImpl->m_bTravelingSuspended = false;
-    }
+        if (!m_pImpl)
+            return;
 
+        DBG_ASSERT( m_pImpl->m_bTravelingSuspended, "OWizardMachine::resumeTraveling: nothing to resume!" );
+        m_pImpl->m_bTravelingSuspended = false;
+    }
 
 }   // namespace svt
 
