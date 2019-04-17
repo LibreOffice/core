@@ -35,6 +35,7 @@
 
 #include <sal/log.hxx>
 #include <vcl/errinf.hxx>
+#include <vcl/lok.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
@@ -1520,6 +1521,11 @@ static bool lo_signDocument(LibreOfficeKit* pThis,
                                    const unsigned char* pPrivateKeyBinary,
                                    const int nPrivateKeyBinarySize);
 
+static void lo_runLoop(LibreOfficeKit* pThis,
+                       LibreOfficeKitPollCallback pPollCallback,
+                       LibreOfficeKitWakeCallback pWakeCallback,
+                       void* pData);
+
 LibLibreOffice_Impl::LibLibreOffice_Impl()
     : m_pOfficeClass( gOfficeClass.lock() )
     , maThread(nullptr)
@@ -1543,6 +1549,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->getVersionInfo = lo_getVersionInfo;
         m_pOfficeClass->runMacro = lo_runMacro;
         m_pOfficeClass->signDocument = lo_signDocument;
+        m_pOfficeClass->runLoop = lo_runLoop;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -4475,6 +4482,16 @@ static void lo_startmain(void*)
     Application::ReleaseSolarMutex();
 }
 
+static void lo_runLoop(LibreOfficeKit* /*pThis*/,
+                       LibreOfficeKitPollCallback pPollCallback,
+                       LibreOfficeKitWakeCallback pWakeCallback,
+                       void* pData)
+{
+    SolarMutexGuard aGuard;
+    vcl::lok::registerPollCallbacks(pPollCallback, pWakeCallback, pData);
+    lo_startmain(nullptr);
+}
+
 static bool bInitialized = false;
 
 static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit::statusIndicatorCallbackType type, int percent)
@@ -4623,7 +4640,24 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
     // Did we do a pre-initialize
     static bool bPreInited = false;
-    static bool bProfileZones = getenv("SAL_PROFILEZONE_EVENTS") != nullptr;
+    static bool bUnipoll = false;
+    static bool bProfileZones = false;
+
+    { // cf. string lifetime for preinit
+        std::vector<OUString> aOpts;
+
+        // ':' delimited options - avoiding ABI change for new parameters
+        const char *pOptions = getenv("SAL_LOK_OPTIONS");
+        if (pOptions)
+            aOpts = comphelper::string::split(OUString(pOptions, strlen(pOptions), RTL_TEXTENCODING_UTF8), ':');
+        for (auto &it : aOpts)
+        {
+            if (it == "unipoll")
+                bUnipoll = true;
+            else if (it == "profile_events")
+                bProfileZones = true;
+        }
+    }
 
     // What stage are we at ?
     if (pThis == nullptr)
@@ -4839,10 +4873,14 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             RequestHandler::Enable(false);
             SAL_INFO("lok", "Starting soffice_main");
             RequestHandler::SetReady(false);
-            pLib->maThread = osl_createThread(lo_startmain, nullptr);
-            SAL_INFO("lok", "Waiting for RequestHandler");
-            RequestHandler::WaitForReady();
-            SAL_INFO("lok", "RequestHandler ready -- continuing");
+            if (!bUnipoll)
+            {
+                // Start the main thread only in non-unipoll mode (i.e. multithreaded).
+                pLib->maThread = osl_createThread(lo_startmain, nullptr);
+                SAL_INFO("lok", "Waiting for RequestHandler");
+                RequestHandler::WaitForReady();
+                SAL_INFO("lok", "RequestHandler ready -- continuing");
+            }
         }
 
         if (eStage != SECOND_INIT)
