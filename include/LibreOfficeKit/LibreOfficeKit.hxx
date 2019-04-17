@@ -644,7 +644,6 @@ public:
     {
         return mpDoc->pClass->postWindowGestureEvent(mpDoc, nWindowId, pType, nX, nY, nOffset);
     }
-
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
@@ -818,6 +817,24 @@ public:
         return mpThis->pClass->signDocument(mpThis, pURL,
                                             pCertificateBinary, nCertificateBinarySize,
                                             pPrivateKeyBinary, nPrivateKeyBinarySize);
+    }
+
+    /**
+     * Runs the main-loop in the current thread. To trigger this
+     * mode you need to putenv a SAL_LOK_OPTIONS containing 'unipoll'.
+     * The @pPollCallback is called to poll for events from the Kit client
+     * and the @pWakeCallback can be called by internal LibreOfficeKit threads
+     * to wake the caller of 'runLoop' ie. the main thread.
+     *
+     * it is expected that runLoop does not return until Kit exit.
+     *
+     * @pData is a context/closure passed to both methods.
+     */
+    void runLoop(LibreOfficeKitPollCallback pPollCallback,
+                 LibreOfficeKitWakeCallback pWakeCallback,
+                 void* pData)
+    {
+        mpThis->pClass->runLoop(mpThis, pPollCallback, pWakeCallback, pData);
     }
 };
 
