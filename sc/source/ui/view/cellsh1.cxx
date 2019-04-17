@@ -1921,17 +1921,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 bool        bManaged    = false;
 
                 // Get the pool item stored by Conditional Format Manager Dialog.
-                sal_uInt32 nItems(pTabViewShell->GetPool().GetItemCount2( SCITEM_CONDFORMATDLGDATA ));
-                for( sal_uInt32 nIter = 0; nIter < nItems; ++nIter )
+                auto itemsRange = pTabViewShell->GetPool().GetItemSurrogates(SCITEM_CONDFORMATDLGDATA);
+                if (itemsRange.begin() != itemsRange.end())
                 {
-                    const SfxPoolItem* pItem = pTabViewShell->GetPool().GetItem2( SCITEM_CONDFORMATDLGDATA, nIter );
-                    if( pItem != nullptr )
-                    {
-                        const ScCondFormatDlgItem* pDlgItem = static_cast<const ScCondFormatDlgItem*>(pItem);
-                        nIndex = pDlgItem->GetIndex();
-                        bManaged = true;
-                        break;
-                    }
+                    const ScCondFormatDlgItem* pDlgItem = static_cast<const ScCondFormatDlgItem*>(*itemsRange.begin());
+                    nIndex = pDlgItem->GetIndex();
+                    bManaged = true;
                 }
 
                 // Check if the Conditional Manager Dialog is editing or adding
@@ -2534,17 +2529,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 ScConditionalFormatList* pList = nullptr;
 
-                sal_uInt32 nItems(pTabViewShell->GetPool().GetItemCount2( SCITEM_CONDFORMATDLGDATA ));
                 const ScCondFormatDlgItem* pDlgItem = nullptr;
-                for( sal_uInt32 nIter = 0; nIter < nItems; ++nIter )
+                auto itemsRange = pTabViewShell->GetPool().GetItemSurrogates(SCITEM_CONDFORMATDLGDATA);
+                if (itemsRange.begin() != itemsRange.end())
                 {
-                    const SfxPoolItem* pItem = pTabViewShell->GetPool().GetItem2( SCITEM_CONDFORMATDLGDATA, nIter );
-                    if( pItem != nullptr )
-                    {
-                        pDlgItem= static_cast<const ScCondFormatDlgItem*>(pItem);
-                        pList = const_cast<ScCondFormatDlgItem*>(pDlgItem)->GetConditionalFormatList();
-                        break;
-                    }
+                    pDlgItem= static_cast<const ScCondFormatDlgItem*>(*itemsRange.begin());
+                    pList = const_cast<ScCondFormatDlgItem*>(pDlgItem)->GetConditionalFormatList();
                 }
 
                 if (!pList)

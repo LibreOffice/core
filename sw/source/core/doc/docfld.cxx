@@ -452,13 +452,8 @@ void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
 
     for (sal_uInt16 const nWhichHint : { RES_TXTATR_FIELD, RES_TXTATR_INPUTFIELD })
     {
-        sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2(nWhichHint);
-        for (sal_uInt32 n = 0; n < nMaxItems; ++n)
+        for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(nWhichHint))
         {
-            const SfxPoolItem *const pItem(GetAttrPool().GetItem2(nWhichHint, n));
-            if (nullptr == pItem)
-                continue;
-
             const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
             const SwTextField* pTextField = pFormatField->GetTextField();
             if (!pTextField || !pTextField->GetTextNode().GetNodes().IsDocNodes())
@@ -613,14 +608,8 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
 
     for (sal_uInt16 const nWhichHint : { RES_TXTATR_FIELD, RES_TXTATR_INPUTFIELD })
     {
-        sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2(nWhichHint);
-
-        for (sal_uInt32 n = 0; n < nMaxItems; ++n)
+        for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(nWhichHint))
         {
-            const SfxPoolItem* pItem = GetAttrPool().GetItem2(nWhichHint, n);
-            if (!pItem)
-                continue;
-
             SwFormatField* pFormatField = const_cast<SwFormatField*>(static_cast<const SwFormatField*>(pItem));
             SwTextField* pTextField = pFormatField->GetTextField();
             if (!pTextField || !pTextField->GetTextNode().GetNodes().IsDocNodes())
@@ -899,13 +888,8 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
 
     for (sal_uInt16 const nWhichHint : { RES_TXTATR_FIELD, RES_TXTATR_INPUTFIELD })
     {
-        const sal_uInt32 nMaxItems = rDoc.GetAttrPool().GetItemCount2(nWhichHint);
-        for (sal_uInt32 n = 0; n < nMaxItems; ++n)
+        for (const SfxPoolItem* pItem : rDoc.GetAttrPool().GetItemSurrogates(nWhichHint))
         {
-            const SfxPoolItem* pItem = rDoc.GetAttrPool().GetItem2(nWhichHint, n);
-            if (!pItem)
-                continue;
-
             const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
             const SwTextField* pTextField = pFormatField->GetTextField();
             if (!pTextField || !pTextField->GetTextNode().GetNodes().IsDocNodes())

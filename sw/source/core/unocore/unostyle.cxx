@@ -3739,20 +3739,23 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAut
     {
         std::set< std::pair< sal_uInt16, text::RubyAdjust > > aRubyMap;
         SwAttrPool& rAttrPool = pDoc->GetAttrPool();
-        sal_uInt32 nCount = rAttrPool.GetItemCount2( RES_TXTATR_CJK_RUBY );
 
-        for ( sal_uInt32 nI = 0; nI < nCount; ++nI )
+        // do this in two phases otherwise we invalidate the iterators when we insert into the pool
+        std::vector<const SwFormatRuby*> vRubyItems;
+        for (const SfxPoolItem* pItem : rAttrPool.GetItemSurrogates(RES_TXTATR_CJK_RUBY))
         {
-            const SwFormatRuby* pItem = rAttrPool.GetItem2( RES_TXTATR_CJK_RUBY, nI );
-            if ( pItem && pItem->GetTextRuby() )
+            auto pRubyItem = dynamic_cast<const SwFormatRuby*>(pItem);
+            if ( pRubyItem && pRubyItem->GetTextRuby() )
+                vRubyItems.push_back(pRubyItem);
+        }
+        for (const SwFormatRuby* pRubyItem : vRubyItems)
+        {
+            std::pair< sal_uInt16, text::RubyAdjust > aPair( pRubyItem->GetPosition(), pRubyItem->GetAdjustment() );
+            if ( aRubyMap.insert( aPair ).second )
             {
-                std::pair< sal_uInt16, text::RubyAdjust > aPair( pItem->GetPosition(), pItem->GetAdjustment() );
-                if ( aRubyMap.insert( aPair ).second )
-                {
-                    std::shared_ptr<SfxItemSet> pItemSet( new SfxItemSet( rAttrPool, svl::Items<RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY>{} ) );
-                    pItemSet->Put( *pItem );
-                    mAutoStyles.push_back( pItemSet );
-                }
+                std::shared_ptr<SfxItemSet> pItemSet( new SfxItemSet( rAttrPool, svl::Items<RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY>{} ) );
+                pItemSet->Put( *pRubyItem );
+                mAutoStyles.push_back( pItemSet );
             }
         }
     }
