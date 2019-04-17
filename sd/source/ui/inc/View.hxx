@@ -79,7 +79,7 @@ public:
     void                    CompleteRedraw( OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
 
     virtual void            GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr = false ) const;
-    virtual bool            SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false);
+    virtual bool            SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false, bool bMaster = false);
     virtual void            MarkListHasChanged() override;
     void                    SelectAll();
     void                    DoCut();

@@ -38,7 +38,7 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
-#include <cuicharmap.hxx>
+#include <cui/cuicharmap.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/xtable.hxx>
