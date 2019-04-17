@@ -329,6 +329,7 @@ void Edit::ImplInit(vcl::Window* pParent, WinBits nStyle)
     SetCursor( new vcl::Cursor );
 
     SetPointer( PointerStyle::Text );
+    ApplySettings(*this);
 
     uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mxDnDListener, uno::UNO_QUERY );
     uno::Reference< datatransfer::dnd::XDragGestureRecognizer > xDGR = GetDragGestureRecognizer();
@@ -382,7 +383,7 @@ void Edit::ApplySettings(vcl::RenderContext& rRenderContext)
     Color aTextColor = rStyleSettings.GetFieldTextColor();
     ApplyControlForeground(rRenderContext, aTextColor);
 
-    if (ImplUseNativeBorder(rRenderContext, GetStyle()) || IsPaintTransparent())
+    if (ImplUseNativeBorder(rRenderContext, GetStyle()))
     {
         // Transparent background
         rRenderContext.SetBackground();
