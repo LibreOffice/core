@@ -255,7 +255,7 @@ void ChartController::executeDispatch_Paste()
     {
         Graphic aGraphic;
         // paste location: center of window
-        Point aPos = pChartWindow->PixelToLogic( tools::Rectangle( aPos, pChartWindow->GetSizePixel()).Center());
+        Point aPos = pChartWindow->PixelToLogic( tools::Rectangle( {}, pChartWindow->GetSizePixel()).Center());
 
         // handle different formats
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pChartWindow ));
