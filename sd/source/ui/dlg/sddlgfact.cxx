@@ -46,9 +46,19 @@
 
 IMPL_ABSTDLG_BASE(SdVclAbstractDialog_Impl);
 
+short AbstractSvxBulletAndPositionDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 short SdAbstractGenericDialog_Impl::Execute()
 {
     return m_xDlg->run();
+}
+
+const SfxItemSet* AbstractSvxBulletAndPositionDlg_Impl::GetOutputItemSet( SfxItemSet* pSet ) const
+{
+    return m_xDlg->GetOutputItemSet( pSet );
 }
 
 short AbstractCopyDlg_Impl::Execute()
@@ -361,6 +371,11 @@ void AbstractSdPublishingDlg_Impl::GetParameterSequence( css::uno::Sequence< css
 }
 
 //-------------- SdAbstractDialogFactory implementation--------------
+
+VclPtr<AbstractSvxBulletAndPositionDlg> SdAbstractDialogFactory_Impl::CreateSvxBulletAndPositionDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView)
+{
+    return VclPtr<AbstractSvxBulletAndPositionDlg_Impl>::Create(std::make_unique<SvxBulletAndPositionDlg>(pParent, *pAttr, pView));
+}
 
 VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateBreakDlg(
                                             weld::Window* pParent,

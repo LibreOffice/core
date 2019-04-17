@@ -105,6 +105,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/movemenu \
 	cui/uiconfig/ui/multipathdialog \
 	cui/uiconfig/ui/namedialog \
+	cui/uiconfig/ui/new \
 	cui/uiconfig/ui/newlibdialog \
 	cui/uiconfig/ui/newtabledialog \
 	cui/uiconfig/ui/newtoolbardialog \

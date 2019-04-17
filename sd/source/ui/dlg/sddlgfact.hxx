@@ -22,6 +22,7 @@
 #include <sdabstdlg.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/sfxdlg.hxx>
+#include <svx/svxdlg.hxx>
 
 #include <morphdlg.hxx>
 #include <copydlg.hxx>
@@ -38,6 +39,7 @@
 #include <dlgsnap.hxx>
 #include <present.hxx>
 #include <vectdlg.hxx>
+#include <BulletAndPositionDlg.hxx>
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)            \
     ScopedVclPtr<DialogClass> pDlg;                     \
@@ -78,6 +80,21 @@ bool Class::StartExecuteAsync(AsyncContext &ctx) \
 //    class HeaderFooterDialog;
 //    class MasterLayoutDialog;
 //}
+
+class SvxBulletAndPositionDlg;
+
+class AbstractSvxBulletAndPositionDlg_Impl :public AbstractSvxBulletAndPositionDlg
+{
+    std::unique_ptr<SvxBulletAndPositionDlg> m_xDlg;
+public:
+    explicit AbstractSvxBulletAndPositionDlg_Impl(std::unique_ptr<SvxBulletAndPositionDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual const SfxItemSet*   GetOutputItemSet( SfxItemSet* ) const override ;
+};
+
 
 class SdVclAbstractDialog_Impl : public VclAbstractDialog
 {
@@ -343,6 +360,7 @@ class SdAbstractDialogFactory_Impl : public SdAbstractDialogFactory
 public:
     virtual ~SdAbstractDialogFactory_Impl() {}
 
+    virtual VclPtr<AbstractSvxBulletAndPositionDlg> CreateSvxBulletAndPositionDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView) override;
     virtual VclPtr<VclAbstractDialog>          CreateBreakDlg(weld::Window* pWindow, ::sd::DrawView* pDrView, ::sd::DrawDocShell* pShell, sal_uLong nSumActionCount, sal_uLong nObjCount) override;
     virtual VclPtr<AbstractCopyDlg>            CreateCopyDlg(weld::Window* pParent, const SfxItemSet& rInAttrs, ::sd::View* pView) override;
     virtual VclPtr<AbstractSdCustomShowDlg>    CreateSdCustomShowDlg(weld::Window* pParent, SdDrawDocument& rDrawDoc) override;
