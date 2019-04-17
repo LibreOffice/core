@@ -38,6 +38,7 @@
 #include <unotools/syslocaleoptions.hxx>
 
 #include <vcl/dialog.hxx>
+#include <vcl/lok.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/keycod.hxx>
@@ -1657,5 +1658,23 @@ void Application::setDeInitHook(Link<LinkParamNone*,void> const & hook) {
     // postprocess/CppunitTest_services.mk:
     pSVData->maAppData.mbInAppMain = true;
 }
+
+namespace vcl { namespace lok {
+
+void registerPollCallbacks(
+    LibreOfficeKitPollCallback pPollCallback,
+    LibreOfficeKitWakeCallback pWakeCallback,
+    void *pData) {
+
+    ImplSVData * pSVData = ImplGetSVData();
+    if (pSVData)
+    {
+        pSVData->mpPollCallback = pPollCallback;
+        pSVData->mpWakeCallback = pWakeCallback;
+        pSVData->mpPollClosure = pData;
+    }
+}
+
+} } // namespace lok, namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -51,6 +51,7 @@
 #include <unx/gendata.hxx>
 // FIXME: remove when we re-work the svp mainloop
 #include <unx/salunxtime.h>
+#include <comphelper/lok.hxx>
 
 SvpSalInstance* SvpSalInstance::s_pDefaultInstance = nullptr;
 
@@ -175,12 +176,15 @@ void SvpSalInstance::Wakeup(SvpRequest const request)
 #ifdef IOS
     (void)request;
 #else
+    ImplSVData* pSVData = ImplGetSVData();
+
+    if (pSVData->mpWakeCallback)
+        pSVData->mpWakeCallback(pSVData->mpPollClosure);
+
     SvpSalYieldMutex *const pMutex(static_cast<SvpSalYieldMutex*>(GetYieldMutex()));
     std::unique_lock<std::mutex> g(pMutex->m_WakeUpMainMutex);
     if (request != SvpRequest::NONE)
-    {
         pMutex->m_Request = request;
-    }
     pMutex->m_wakeUpMain = true;
     pMutex->m_WakeUpMainCond.notify_one();
 #endif
@@ -373,11 +377,8 @@ sal_uInt32 SvpSalYieldMutex::doRelease(bool const bUnlockAll)
         // read m_nCount before doRelease
         bool const isReleased(bUnlockAll || m_nCount == 1);
         nCount = comphelper::SolarMutex::doRelease( bUnlockAll );
-        if (isReleased) {
-            std::unique_lock<std::mutex> g(m_WakeUpMainMutex);
-            m_wakeUpMain = true;
-            m_WakeUpMainCond.notify_one();
-        }
+        if (isReleased && pInst)
+            pInst->Wakeup(SvpRequest::NONE);
     }
     return nCount;
 }
@@ -420,8 +421,8 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 #endif
 
     // first, process current user events
-    bool bEvent = DispatchUserEvents( bHandleAllCurrentEvents );
-    if ( !bHandleAllCurrentEvents && bEvent )
+    bool bEvent = DispatchUserEvents(bHandleAllCurrentEvents);
+    if (!bHandleAllCurrentEvents && bEvent)
         return true;
 
     bEvent = CheckTimeout() || bEvent;
@@ -450,7 +451,20 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
             else
                 nTimeoutMS = -1; // wait until something happens
 
+            ImplSVData* pSVData = ImplGetSVData();
             sal_uInt32 nAcquireCount = ReleaseYieldMutexAll();
+
+            if (pSVData->mpPollCallback)
+            {
+                // Poll for events from the LOK client.
+                if (nTimeoutMS < 0)
+                    nTimeoutMS = 5000;
+
+                // External poll.
+                if (pSVData->mpPollCallback(pSVData->mpPollClosure, nTimeoutMS * 1000 /* us */) < 0)
+                    pSVData->maAppData.mbAppQuit = true;
+            }
+            else
             {
                 std::unique_lock<std::mutex> g(pMutex->m_WakeUpMainMutex);
                 // wait for doRelease() or Wakeup() to set the condition
