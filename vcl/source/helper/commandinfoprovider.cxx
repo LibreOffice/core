@@ -295,13 +295,12 @@ OUString GetRealCommandForCommand(const OUString& rCommandName,
     return GetCommandProperty("TargetURL", rCommandName, rsModuleName);
 }
 
-static BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
-                             const Reference<frame::XFrame>& rxFrame,
-                             vcl::ImageType eImageType)
+Reference<graphic::XGraphic> GetXGraphicForCommand(const OUString& rsCommandName,
+                                                   const Reference<frame::XFrame>& rxFrame,
+                                                   vcl::ImageType eImageType)
 {
-
     if (rsCommandName.isEmpty())
-        return BitmapEx();
+        return nullptr;
 
     sal_Int16 nImageType(ui::ImageType::COLOR_NORMAL | ui::ImageType::SIZE_DEFAULT);
 
@@ -324,11 +323,8 @@ static BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
 
             aGraphicSeq = xDocImgMgr->getImages( nImageType, aImageCmdSeq );
             Reference<graphic::XGraphic> xGraphic = aGraphicSeq[0];
-            const Graphic aGraphic(xGraphic);
-            BitmapEx aBitmap(aGraphic.GetBitmapEx());
-
-            if (!!aBitmap)
-                return aBitmap;
+            if (xGraphic.is())
+                return xGraphic;
         }
     }
     catch (Exception&)
@@ -348,15 +344,22 @@ static BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
 
         Reference<graphic::XGraphic> xGraphic(aGraphicSeq[0]);
 
-        const Graphic aGraphic(xGraphic);
-
-        return aGraphic.GetBitmapEx();
+        return xGraphic;
     }
     catch (Exception&)
     {
     }
 
-    return BitmapEx();
+    return nullptr;
+}
+
+static BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
+                             const Reference<frame::XFrame>& rxFrame,
+                             vcl::ImageType eImageType)
+{
+    const Graphic aGraphic(GetXGraphicForCommand(rsCommandName, rxFrame, eImageType));
+    BitmapEx aBitmap(aGraphic.GetBitmapEx());
+    return aBitmap;
 }
 
 Image GetImageForCommand(const OUString& rsCommandName,

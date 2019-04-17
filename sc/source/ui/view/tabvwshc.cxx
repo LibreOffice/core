@@ -144,14 +144,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
 
     switch( nSlotId )
     {
-        case SID_OPENDLG_OPTSOLVER:
-        {
-            ScViewData& rViewData = GetViewData();
-            ScAddress aCurPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
-            pResult = VclPtr<ScOptSolverDlg>::Create( pB, pCW, pParent, rViewData.GetDocShell(), aCurPos );
-        }
-        break;
-
         case SID_OPENDLG_PIVOTTABLE:
         {
             // all settings must be in pDialogDPObject
@@ -482,6 +474,13 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             GetViewData().SetRefTabNo( GetViewData().GetTabNo() );
 
             xResult.reset(new ScSpecialFilterDlg(pB, pCW, pParent, aArgSet));
+            break;
+        }
+        case SID_OPENDLG_OPTSOLVER:
+        {
+            ScViewData& rViewData = GetViewData();
+            ScAddress aCurPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
+            xResult.reset(new ScOptSolverDlg(pB, pCW, pParent, rViewData.GetDocShell(), aCurPos));
             break;
         }
     }

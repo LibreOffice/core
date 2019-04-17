@@ -103,12 +103,12 @@ IMPL_LINK(ScSolverSuccessDialog, ClickHdl, weld::Button&, rBtn, void)
         m_xDialog->response(RET_CANCEL);
 }
 
-ScCursorRefEdit::ScCursorRefEdit( vcl::Window* pParent, vcl::Window *pLabel )
-    : formula::RefEdit( pParent, pLabel )
+ScCursorRefEdit::ScCursorRefEdit(std::unique_ptr<weld::Entry> xControl)
+    : formula::WeldRefEdit(std::move(xControl))
 {
+    xEntry->connect_key_press(Link<const KeyEvent&, bool>()); //acknowledge we first remove the old one
+    xEntry->connect_key_press(LINK(this, ScCursorRefEdit, KeyInputHdl));
 }
-
-VCL_BUILDER_FACTORY_ARGS(ScCursorRefEdit, nullptr)
 
 void ScCursorRefEdit::SetCursorLinks( const Link<ScCursorRefEdit&,void>& rUp, const Link<ScCursorRefEdit&,void>& rDown )
 {
@@ -116,7 +116,7 @@ void ScCursorRefEdit::SetCursorLinks( const Link<ScCursorRefEdit&,void>& rUp, co
     maCursorDownLink = rDown;
 }
 
-void ScCursorRefEdit::KeyInput( const KeyEvent& rKEvt )
+IMPL_LINK(ScCursorRefEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
     vcl::KeyCode aCode = rKEvt.GetKeyCode();
     bool bUp = (aCode.GetCode() == KEY_UP);
@@ -127,9 +127,9 @@ void ScCursorRefEdit::KeyInput( const KeyEvent& rKEvt )
             maCursorUpLink.Call( *this );
         else
             maCursorDownLink.Call( *this );
+        return true;
     }
-    else
-        formula::RefEdit::KeyInput( rKEvt );
+    return formula::WeldRefEdit::KeyInput(rKEvt);
 }
 
 ScOptSolverSave::ScOptSolverSave( const OUString& rObjective, bool bMax, bool bMin, bool bValue,
@@ -151,243 +151,188 @@ ScOptSolverSave::ScOptSolverSave( const OUString& rObjective, bool bMax, bool bM
 
 //  class ScOptSolverDlg
 
-ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
-                          ScDocShell* pDocSh, const ScAddress& aCursorPos )
-
-    : ScAnyRefDlg(pB, pCW, pParent, "SolverDialog", "modules/scalc/ui/solverdlg.ui")
+ScOptSolverDlg::ScOptSolverDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
+                               ScDocShell* pDocSh, const ScAddress& aCursorPos)
+    : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/solverdlg.ui", "SolverDialog")
     , maInputError(ScResId(STR_INVALIDINPUT))
     , maConditionError(ScResId(STR_INVALIDCONDITION))
 
     , mpDocShell(pDocSh)
     , mrDoc(pDocSh->GetDocument())
     , mnCurTab(aCursorPos.Tab())
-    , mpEdActive(nullptr)
     , mbDlgLostFocus(false)
     , nScrollPos(0)
+    , mpEdActive(nullptr)
+    , m_xFtObjectiveCell(m_xBuilder->weld_label("targetlabel"))
+    , m_xEdObjectiveCell(new formula::WeldRefEdit(m_xBuilder->weld_entry("targetedit")))
+    , m_xRBObjectiveCell(new formula::WeldRefButton(m_xBuilder->weld_button("targetbutton")))
+    , m_xRbMax(m_xBuilder->weld_radio_button("max"))
+    , m_xRbMin(m_xBuilder->weld_radio_button("min"))
+    , m_xRbValue(m_xBuilder->weld_radio_button("value"))
+    , m_xEdTargetValue(new formula::WeldRefEdit(m_xBuilder->weld_entry("valueedit")))
+    , m_xRBTargetValue(new formula::WeldRefButton(m_xBuilder->weld_button("valuebutton")))
+    , m_xFtVariableCells(m_xBuilder->weld_label("changelabel"))
+    , m_xEdVariableCells(new formula::WeldRefEdit(m_xBuilder->weld_entry("changeedit")))
+    , m_xRBVariableCells(new formula::WeldRefButton(m_xBuilder->weld_button("changebutton")))
+    , m_xFtCellRef(m_xBuilder->weld_label("cellreflabel"))
+    , m_xEdLeft1(new ScCursorRefEdit(m_xBuilder->weld_entry("ref1edit")))
+    , m_xRBLeft1(new formula::WeldRefButton(m_xBuilder->weld_button("ref1button")))
+    , m_xFtOperator(m_xBuilder->weld_label("oplabel"))
+    , m_xLbOp1(m_xBuilder->weld_combo_box("op1list"))
+    , m_xFtConstraint(m_xBuilder->weld_label("constraintlabel"))
+    , m_xEdRight1(new ScCursorRefEdit(m_xBuilder->weld_entry("val1edit")))
+    , m_xRBRight1(new formula::WeldRefButton(m_xBuilder->weld_button("val1button")))
+    , m_xBtnDel1(m_xBuilder->weld_button("del1"))
+    , m_xEdLeft2(new ScCursorRefEdit(m_xBuilder->weld_entry("ref2edit")))
+    , m_xRBLeft2(new formula::WeldRefButton(m_xBuilder->weld_button("ref2button")))
+    , m_xLbOp2(m_xBuilder->weld_combo_box("op2list"))
+    , m_xEdRight2(new ScCursorRefEdit(m_xBuilder->weld_entry("val2edit")))
+    , m_xRBRight2(new formula::WeldRefButton(m_xBuilder->weld_button("val2button")))
+    , m_xBtnDel2(m_xBuilder->weld_button("del2"))
+    , m_xEdLeft3(new ScCursorRefEdit(m_xBuilder->weld_entry("ref3edit")))
+    , m_xRBLeft3(new formula::WeldRefButton(m_xBuilder->weld_button("ref3button")))
+    , m_xLbOp3(m_xBuilder->weld_combo_box("op3list"))
+    , m_xEdRight3(new ScCursorRefEdit(m_xBuilder->weld_entry("val3edit")))
+    , m_xRBRight3(new formula::WeldRefButton(m_xBuilder->weld_button("val3button")))
+    , m_xBtnDel3(m_xBuilder->weld_button("del3"))
+    , m_xEdLeft4(new ScCursorRefEdit(m_xBuilder->weld_entry("ref4edit")))
+    , m_xRBLeft4(new formula::WeldRefButton(m_xBuilder->weld_button("ref4button")))
+    , m_xLbOp4(m_xBuilder->weld_combo_box("op4list"))
+    , m_xEdRight4(new ScCursorRefEdit(m_xBuilder->weld_entry("val4edit")))
+    , m_xRBRight4(new formula::WeldRefButton(m_xBuilder->weld_button("val4button")))
+    , m_xBtnDel4(m_xBuilder->weld_button("del4"))
+    , m_xScrollBar(m_xBuilder->weld_scrolled_window("scrollbar"))
+    , m_xBtnOpt(m_xBuilder->weld_button("options"))
+    , m_xBtnCancel(m_xBuilder->weld_button("close"))
+    , m_xBtnSolve(m_xBuilder->weld_button("ok"))
+    , m_xResultFT(m_xBuilder->weld_label("result"))
+    , m_xContents(m_xBuilder->weld_widget("grid"))
 {
-    get(m_pFtObjectiveCell, "targetlabel");
-    get(m_pEdObjectiveCell, "targetedit");
-    m_pEdObjectiveCell->SetReferences(this, m_pFtObjectiveCell);
-    get(m_pRBObjectiveCell, "targetbutton");
-    m_pRBObjectiveCell->SetReferences(this, m_pEdObjectiveCell);
-    get(m_pRbMax, "max");
-    get(m_pRbMin, "min");
-    get(m_pRbValue, "value");
-    get(m_pEdTargetValue, "valueedit");
-    m_pEdTargetValue->SetReferences(this, get<FixedText>("result"));
-    get(m_pRBTargetValue, "valuebutton");
-    m_pRBTargetValue->SetReferences(this, m_pEdTargetValue);
-    get(m_pFtVariableCells, "changelabel");
-    get(m_pEdVariableCells, "changeedit");
-    m_pEdVariableCells->SetReferences(this, m_pFtVariableCells);
-    get(m_pRBVariableCells, "changebutton");
-    m_pRBVariableCells->SetReferences(this, m_pEdVariableCells);
-    get(m_pFtCellRef, "cellreflabel");
-    get(m_pEdLeft1, "ref1edit");
-    m_pEdLeft1->SetReferences(this, m_pFtCellRef);
-    get(m_pRBLeft1, "ref1button");
-    m_pRBLeft1->SetReferences(this, m_pEdLeft1);
-    get(m_pFtOperator, "oplabel");
-    get(m_pLbOp1, "op1list");
-    get(m_pFtConstraint, "constraintlabel");
-    get(m_pEdRight1, "val1edit");
-    m_pEdRight1->SetReferences(this, m_pFtConstraint);
-    get(m_pRBRight1, "val1button");
-    m_pRBRight1->SetReferences(this, m_pEdRight1);
-    get(m_pBtnDel1, "del1");
-    get(m_pEdLeft2, "ref2edit");
-    m_pEdLeft2->SetReferences(this, m_pFtCellRef);
-    get(m_pRBLeft2, "ref2button");
-    m_pRBLeft2->SetReferences(this, m_pEdLeft2);
-    get(m_pLbOp2, "op2list");
-    get(m_pEdRight2, "val2edit");
-    m_pEdRight2->SetReferences(this, m_pFtConstraint);
-    get(m_pRBRight2, "val2button");
-    m_pRBRight2->SetReferences(this, m_pEdRight2);
-    get(m_pBtnDel2, "del2");
-    get(m_pEdLeft3, "ref3edit");
-    m_pEdLeft3->SetReferences(this, m_pFtCellRef);
-    get(m_pRBLeft3, "ref3button");
-    m_pRBLeft3->SetReferences(this, m_pEdLeft3);
-    get(m_pLbOp3, "op3list");
-    get(m_pEdRight3, "val3edit");
-    m_pEdRight3->SetReferences(this, m_pFtConstraint);
-    get(m_pRBRight3, "val3button");
-    m_pRBRight3->SetReferences(this, m_pEdRight3);
-    get(m_pBtnDel3, "del3");
-    get(m_pEdLeft4, "ref4edit");
-    m_pEdLeft4->SetReferences(this, m_pFtCellRef);
-    get(m_pRBLeft4, "ref4button");
-    m_pRBLeft4->SetReferences(this, m_pEdLeft4);
-    get(m_pLbOp4, "op4list");
-    get(m_pEdRight4, "val4edit");
-    m_pEdRight4->SetReferences(this, m_pFtConstraint);
-    get(m_pRBRight4, "val4button");
-    m_pRBRight4->SetReferences(this, m_pEdRight4);
-    get(m_pBtnDel4, "del4");
-    get(m_pScrollBar, "scrollbar");
-    get(m_pBtnOpt, "options");
-    get(m_pBtnCancel, "close");
-    get(m_pBtnSolve, "solve");
+    m_xEdObjectiveCell->SetReferences(this, m_xFtObjectiveCell.get());
+    m_xRBObjectiveCell->SetReferences(this, m_xEdObjectiveCell.get());
+    m_xEdTargetValue->SetReferences(this, m_xResultFT.get());
+    m_xRBTargetValue->SetReferences(this, m_xEdTargetValue.get());
+    m_xEdVariableCells->SetReferences(this, m_xFtVariableCells.get());
+    m_xRBVariableCells->SetReferences(this, m_xEdVariableCells.get());
+    m_xEdLeft1->SetReferences(this, m_xFtCellRef.get());
+    m_xRBLeft1->SetReferences(this, m_xEdLeft1.get());
+    m_xEdRight1->SetReferences(this, m_xFtConstraint.get());
+    m_xRBRight1->SetReferences(this, m_xEdRight1.get());
+    m_xEdLeft2->SetReferences(this, m_xFtCellRef.get());
+    m_xRBLeft2->SetReferences(this, m_xEdLeft2.get());
+    m_xEdRight2->SetReferences(this, m_xFtConstraint.get());
+    m_xRBRight2->SetReferences(this, m_xEdRight2.get());
+    m_xEdLeft3->SetReferences(this, m_xFtCellRef.get());
+    m_xRBLeft3->SetReferences(this, m_xEdLeft3.get());
+    m_xEdRight3->SetReferences(this, m_xFtConstraint.get());
+    m_xRBRight3->SetReferences(this, m_xEdRight3.get());
+    m_xEdLeft4->SetReferences(this, m_xFtCellRef.get());
+    m_xRBLeft4->SetReferences(this, m_xEdLeft4.get());
+    m_xEdRight4->SetReferences(this, m_xFtConstraint.get());
+    m_xRBRight4->SetReferences(this, m_xEdRight4.get());
 
-    mpLeftEdit[0]    = m_pEdLeft1;
-    mpLeftButton[0]  = m_pRBLeft1;
-    mpRightEdit[0]   = m_pEdRight1;
-    mpRightButton[0] = m_pRBRight1;
-    mpOperator[0]    = m_pLbOp1;
-    mpDelButton[0]   = m_pBtnDel1;
+    mpLeftEdit[0]    = m_xEdLeft1.get();
+    mpLeftButton[0]  = m_xRBLeft1.get();
+    mpRightEdit[0]   = m_xEdRight1.get();
+    mpRightButton[0] = m_xRBRight1.get();
+    mpOperator[0]    = m_xLbOp1.get();
+    mpDelButton[0]   = m_xBtnDel1.get();
 
-    mpLeftEdit[1]    = m_pEdLeft2;
-    mpLeftButton[1]  = m_pRBLeft2;
-    mpRightEdit[1]   = m_pEdRight2;
-    mpRightButton[1] = m_pRBRight2;
-    mpOperator[1]    = m_pLbOp2;
-    mpDelButton[1]   = m_pBtnDel2;
+    mpLeftEdit[1]    = m_xEdLeft2.get();
+    mpLeftButton[1]  = m_xRBLeft2.get();
+    mpRightEdit[1]   = m_xEdRight2.get();
+    mpRightButton[1] = m_xRBRight2.get();
+    mpOperator[1]    = m_xLbOp2.get();
+    mpDelButton[1]   = m_xBtnDel2.get();
 
-    mpLeftEdit[2]    = m_pEdLeft3;
-    mpLeftButton[2]  = m_pRBLeft3;
-    mpRightEdit[2]   = m_pEdRight3;
-    mpRightButton[2] = m_pRBRight3;
-    mpOperator[2]    = m_pLbOp3;
-    mpDelButton[2]   = m_pBtnDel3;
+    mpLeftEdit[2]    = m_xEdLeft3.get();
+    mpLeftButton[2]  = m_xRBLeft3.get();
+    mpRightEdit[2]   = m_xEdRight3.get();
+    mpRightButton[2] = m_xRBRight3.get();
+    mpOperator[2]    = m_xLbOp3.get();
+    mpDelButton[2]   = m_xBtnDel3.get();
 
-    mpLeftEdit[3]    = m_pEdLeft4;
-    mpLeftButton[3]  = m_pRBLeft4;
-    mpRightEdit[3]   = m_pEdRight4;
-    mpRightButton[3] = m_pRBRight4;
-    mpOperator[3]    = m_pLbOp4;
-    mpDelButton[3]   = m_pBtnDel4;
+    mpLeftEdit[3]    = m_xEdLeft4.get();
+    mpLeftButton[3]  = m_xRBLeft4.get();
+    mpRightEdit[3]   = m_xEdRight4.get();
+    mpRightButton[3] = m_xRBRight4.get();
+    mpOperator[3]    = m_xLbOp4.get();
+    mpDelButton[3]   = m_xBtnDel4.get();
 
     Init( aCursorPos );
 }
 
 ScOptSolverDlg::~ScOptSolverDlg()
 {
-    disposeOnce();
-}
-
-void ScOptSolverDlg::dispose()
-{
-    m_pFtObjectiveCell.clear();
-    m_pEdObjectiveCell.clear();
-    m_pRBObjectiveCell.clear();
-    m_pRbMax.clear();
-    m_pRbMin.clear();
-    m_pRbValue.clear();
-    m_pEdTargetValue.clear();
-    m_pRBTargetValue.clear();
-    m_pFtVariableCells.clear();
-    m_pEdVariableCells.clear();
-    m_pRBVariableCells.clear();
-    m_pFtCellRef.clear();
-    m_pEdLeft1.clear();
-    m_pRBLeft1.clear();
-    m_pFtOperator.clear();
-    m_pLbOp1.clear();
-    m_pFtConstraint.clear();
-    m_pEdRight1.clear();
-    m_pRBRight1.clear();
-    m_pBtnDel1.clear();
-    m_pEdLeft2.clear();
-    m_pRBLeft2.clear();
-    m_pLbOp2.clear();
-    m_pEdRight2.clear();
-    m_pRBRight2.clear();
-    m_pBtnDel2.clear();
-    m_pEdLeft3.clear();
-    m_pRBLeft3.clear();
-    m_pLbOp3.clear();
-    m_pEdRight3.clear();
-    m_pRBRight3.clear();
-    m_pBtnDel3.clear();
-    m_pEdLeft4.clear();
-    m_pRBLeft4.clear();
-    m_pLbOp4.clear();
-    m_pEdRight4.clear();
-    m_pRBRight4.clear();
-    m_pBtnDel4.clear();
-    m_pScrollBar.clear();
-    m_pBtnOpt.clear();
-    m_pBtnCancel.clear();
-    m_pBtnSolve.clear();
-    mpEdActive.clear();
-    for (auto& p : mpLeftButton)
-        p.clear();
-    for (auto& p : mpRightButton)
-        p.clear();
-    for (auto& p : mpOperator)
-        p.clear();
-    for (auto& p : mpDelButton)
-        p.clear();
-    ScAnyRefDlg::dispose();
 }
 
 void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
 {
     uno::Reference<frame::XFrame> xFrame = GetBindings().GetActiveFrame();
-    Image aDelNm = vcl::CommandInfoProvider::GetImageForCommand(".uno:DeleteRows", xFrame);
+    auto xDelNm = vcl::CommandInfoProvider::GetXGraphicForCommand(".uno:DeleteRows", xFrame);
+    for (weld::Button* pButton : mpDelButton)
+        pButton->set_image(xDelNm);
 
-    for (VclPtr<PushButton> & pButton : mpDelButton)
-    {
-        pButton->SetModeImage( aDelNm );
-    }
+    m_xBtnOpt->connect_clicked( LINK( this, ScOptSolverDlg, BtnHdl ) );
+    m_xBtnCancel->connect_clicked( LINK( this, ScOptSolverDlg, BtnHdl ) );
+    m_xBtnSolve->connect_clicked( LINK( this, ScOptSolverDlg, BtnHdl ) );
 
-    m_pBtnOpt->SetClickHdl( LINK( this, ScOptSolverDlg, BtnHdl ) );
-    m_pBtnCancel->SetClickHdl( LINK( this, ScOptSolverDlg, BtnHdl ) );
-    m_pBtnSolve->SetClickHdl( LINK( this, ScOptSolverDlg, BtnHdl ) );
-
-    Link<Control&,void> aLink = LINK( this, ScOptSolverDlg, GetFocusHdl );
-    m_pEdObjectiveCell->SetGetFocusHdl( aLink );
-    m_pRBObjectiveCell->SetGetFocusHdl( aLink );
-    m_pEdTargetValue->SetGetFocusHdl( aLink );
-    m_pRBTargetValue->SetGetFocusHdl( aLink );
-    m_pEdVariableCells->SetGetFocusHdl( aLink );
-    m_pRBVariableCells->SetGetFocusHdl( aLink );
-    m_pRbValue->SetGetFocusHdl( aLink );
+    Link<formula::WeldRefEdit&,void> aEditLink = LINK( this, ScOptSolverDlg, GetEditFocusHdl );
+    Link<formula::WeldRefButton&,void> aButtonLink = LINK( this, ScOptSolverDlg, GetButtonFocusHdl );
+    m_xEdObjectiveCell->SetGetFocusHdl( aEditLink );
+    m_xRBObjectiveCell->SetGetFocusHdl( aButtonLink );
+    m_xEdTargetValue->SetGetFocusHdl( aEditLink );
+    m_xRBTargetValue->SetGetFocusHdl( aButtonLink );
+    m_xEdVariableCells->SetGetFocusHdl( aEditLink );
+    m_xRBVariableCells->SetGetFocusHdl( aButtonLink );
+    Link<weld::Widget&,void> aLink = LINK(this, ScOptSolverDlg, GetFocusHdl);
+    m_xRbValue->connect_focus_in(aLink);
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
-        mpLeftEdit[nRow]->SetGetFocusHdl( aLink );
-        mpLeftButton[nRow]->SetGetFocusHdl( aLink );
-        mpRightEdit[nRow]->SetGetFocusHdl( aLink );
-        mpRightButton[nRow]->SetGetFocusHdl( aLink );
-        mpOperator[nRow]->SetGetFocusHdl( aLink );
+        mpLeftEdit[nRow]->SetGetFocusHdl( aEditLink );
+        mpLeftButton[nRow]->SetGetFocusHdl( aButtonLink );
+        mpRightEdit[nRow]->SetGetFocusHdl( aEditLink );
+        mpRightButton[nRow]->SetGetFocusHdl( aButtonLink );
+        mpOperator[nRow]->connect_focus_in(aLink);
     }
 
-    aLink = LINK( this, ScOptSolverDlg, LoseFocusHdl );
-    m_pEdObjectiveCell->SetLoseFocusHdl( aLink );
-    m_pRBObjectiveCell->SetLoseFocusHdl( aLink );
-    m_pEdTargetValue->SetLoseFocusHdl( aLink );
-    m_pRBTargetValue-> SetLoseFocusHdl( aLink );
-    m_pEdVariableCells->SetLoseFocusHdl( aLink );
-    m_pRBVariableCells->SetLoseFocusHdl( aLink );
+    aEditLink = LINK( this, ScOptSolverDlg, LoseEditFocusHdl );
+    aButtonLink = LINK( this, ScOptSolverDlg, LoseButtonFocusHdl );
+    m_xEdObjectiveCell->SetLoseFocusHdl( aEditLink );
+    m_xRBObjectiveCell->SetLoseFocusHdl( aButtonLink );
+    m_xEdTargetValue->SetLoseFocusHdl( aEditLink );
+    m_xRBTargetValue-> SetLoseFocusHdl( aButtonLink );
+    m_xEdVariableCells->SetLoseFocusHdl( aEditLink );
+    m_xRBVariableCells->SetLoseFocusHdl( aButtonLink );
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
-        mpLeftEdit[nRow]->SetLoseFocusHdl( aLink );
-        mpLeftButton[nRow]->SetLoseFocusHdl( aLink );
-        mpRightEdit[nRow]->SetLoseFocusHdl( aLink );
-        mpRightButton[nRow]->SetLoseFocusHdl( aLink );
+        mpLeftEdit[nRow]->SetLoseFocusHdl( aEditLink );
+        mpLeftButton[nRow]->SetLoseFocusHdl( aButtonLink );
+        mpRightEdit[nRow]->SetLoseFocusHdl( aEditLink );
+        mpRightButton[nRow]->SetLoseFocusHdl( aButtonLink );
     }
 
     Link<ScCursorRefEdit&,void> aCursorUp = LINK( this, ScOptSolverDlg, CursorUpHdl );
     Link<ScCursorRefEdit&,void> aCursorDown = LINK( this, ScOptSolverDlg, CursorDownHdl );
-    Link<Edit&,void> aCondModify = LINK( this, ScOptSolverDlg, CondModifyHdl );
+    Link<formula::WeldRefEdit&,void> aCondModify = LINK( this, ScOptSolverDlg, CondModifyHdl );
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
         mpLeftEdit[nRow]->SetCursorLinks( aCursorUp, aCursorDown );
         mpRightEdit[nRow]->SetCursorLinks( aCursorUp, aCursorDown );
         mpLeftEdit[nRow]->SetModifyHdl( aCondModify );
         mpRightEdit[nRow]->SetModifyHdl( aCondModify );
-        mpDelButton[nRow]->SetClickHdl( LINK( this, ScOptSolverDlg, DelBtnHdl ) );
-        mpOperator[nRow]->SetSelectHdl( LINK( this, ScOptSolverDlg, SelectHdl ) );
+        mpDelButton[nRow]->connect_clicked( LINK( this, ScOptSolverDlg, DelBtnHdl ) );
+        mpOperator[nRow]->connect_changed( LINK( this, ScOptSolverDlg, SelectHdl ) );
     }
-    m_pEdTargetValue->SetModifyHdl( LINK( this, ScOptSolverDlg, TargetModifyHdl ) );
+    m_xEdTargetValue->SetModifyHdl( LINK( this, ScOptSolverDlg, TargetModifyHdl ) );
 
-    m_pScrollBar->SetEndScrollHdl( LINK( this, ScOptSolverDlg, ScrollHdl ) );
-    m_pScrollBar->SetScrollHdl( LINK( this, ScOptSolverDlg, ScrollHdl ) );
+    m_xScrollBar->set_user_managed_scrolling();
+    Size aSize(m_xContents->get_preferred_size());
+    m_xContents->set_size_request(aSize.Width(), aSize.Height());
+    m_xScrollBar->connect_vadjustment_changed( LINK( this, ScOptSolverDlg, ScrollHdl ) );
 
-    m_pScrollBar->SetPageSize( EDIT_ROW_COUNT );
-    m_pScrollBar->SetVisibleSize( EDIT_ROW_COUNT );
-    m_pScrollBar->SetLineSize( 1 );
+    m_xScrollBar->vadjustment_set_page_increment( EDIT_ROW_COUNT );
+    m_xScrollBar->vadjustment_set_page_size( EDIT_ROW_COUNT );
     // Range is set in ShowConditions
 
     // get available solver implementations
@@ -398,30 +343,30 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     const ScOptSolverSave* pOldData = mpDocShell->GetSolverSaveData();
     if ( pOldData )
     {
-        m_pEdObjectiveCell->SetRefString( pOldData->GetObjective() );
-        m_pRbMax->Check( pOldData->GetMax() );
-        m_pRbMin->Check( pOldData->GetMin() );
-        m_pRbValue->Check( pOldData->GetValue() );
-        m_pEdTargetValue->SetRefString( pOldData->GetTarget() );
-        m_pEdVariableCells->SetRefString( pOldData->GetVariable() );
+        m_xEdObjectiveCell->SetRefString( pOldData->GetObjective() );
+        m_xRbMax->set_active( pOldData->GetMax() );
+        m_xRbMin->set_active( pOldData->GetMin() );
+        m_xRbValue->set_active( pOldData->GetValue() );
+        m_xEdTargetValue->SetRefString( pOldData->GetTarget() );
+        m_xEdVariableCells->SetRefString( pOldData->GetVariable() );
         maConditions = pOldData->GetConditions();
         maEngine = pOldData->GetEngine();
         maProperties = pOldData->GetProperties();
     }
     else
     {
-        m_pRbMax->Check();
+        m_xRbMax->set_active(true);
         OUString aCursorStr;
         if ( !mrDoc.GetRangeAtBlock( ScRange(rCursorPos), &aCursorStr ) )
             aCursorStr = rCursorPos.Format(ScRefFlags::ADDR_ABS, nullptr, mrDoc.GetAddressConvention());
-        m_pEdObjectiveCell->SetRefString( aCursorStr );
+        m_xEdObjectiveCell->SetRefString( aCursorStr );
         if ( nImplCount > 0 )
             maEngine = maImplNames[0];  // use first implementation
     }
     ShowConditions();
 
-    m_pEdObjectiveCell->GrabFocus();
-    mpEdActive = m_pEdObjectiveCell;
+    m_xEdObjectiveCell->GrabFocus();
+    mpEdActive = m_xEdObjectiveCell.get();
 }
 
 void ScOptSolverDlg::ReadConditions()
@@ -431,7 +376,7 @@ void ScOptSolverDlg::ReadConditions()
         ScOptConditionRow aRowEntry;
         aRowEntry.aLeftStr = mpLeftEdit[nRow]->GetText();
         aRowEntry.aRightStr = mpRightEdit[nRow]->GetText();
-        aRowEntry.nOperator = mpOperator[nRow]->GetSelectedEntryPos();
+        aRowEntry.nOperator = mpOperator[nRow]->get_active();
 
         long nVecPos = nScrollPos + nRow;
         if ( nVecPos >= static_cast<long>(maConditions.size()) && !aRowEntry.IsDefault() )
@@ -460,14 +405,14 @@ void ScOptSolverDlg::ShowConditions()
 
         mpLeftEdit[nRow]->SetRefString( aRowEntry.aLeftStr );
         mpRightEdit[nRow]->SetRefString( aRowEntry.aRightStr );
-        mpOperator[nRow]->SelectEntryPos( aRowEntry.nOperator );
+        mpOperator[nRow]->set_active( aRowEntry.nOperator );
     }
 
     // allow to scroll one page behind the visible or stored rows
     long nVisible = nScrollPos + EDIT_ROW_COUNT;
     long nMax = std::max( nVisible, static_cast<long>(maConditions.size()) );
-    m_pScrollBar->SetRange( Range( 0, nMax + EDIT_ROW_COUNT ) );
-    m_pScrollBar->SetThumbPos( nScrollPos );
+    m_xScrollBar->vadjustment_configure(nScrollPos, 0, nMax + EDIT_ROW_COUNT, 1,
+                                        EDIT_ROW_COUNT - 1, EDIT_ROW_COUNT);
 
     EnableButtons();
 }
@@ -477,13 +422,13 @@ void ScOptSolverDlg::EnableButtons()
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
         long nVecPos = nScrollPos + nRow;
-        mpDelButton[nRow]->Enable( nVecPos < static_cast<long>(maConditions.size()) );
+        mpDelButton[nRow]->set_sensitive(nVecPos < static_cast<long>(maConditions.size()));
     }
 }
 
-bool ScOptSolverDlg::Close()
+void ScOptSolverDlg::Close()
 {
-    return DoClose( ScOptSolverDlgWrapper::GetChildWindowId() );
+    DoClose( ScOptSolverDlgWrapper::GetChildWindowId() );
 }
 
 void ScOptSolverDlg::SetActive()
@@ -496,7 +441,7 @@ void ScOptSolverDlg::SetActive()
     }
     else
     {
-        GrabFocus();
+        m_xDialog->grab_focus();
     }
     RefInputDone();
 }
@@ -509,7 +454,7 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             RefInputStart(mpEdActive);
 
         // "target"/"value": single cell
-        bool bSingle = ( mpEdActive == m_pEdObjectiveCell || mpEdActive == m_pEdTargetValue );
+        bool bSingle = ( mpEdActive == m_xEdObjectiveCell.get() || mpEdActive == m_xEdTargetValue.get() );
 
         OUString aStr;
         ScAddress aAdr = rRef.aStart;
@@ -530,7 +475,7 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         }
 
         // variable cells can be several ranges, so only the selection is replaced
-        if ( mpEdActive == m_pEdVariableCells )
+        if ( mpEdActive == m_xEdVariableCells.get() )
         {
             OUString aVal = mpEdActive->GetText();
             Selection aSel = mpEdActive->GetSelection();
@@ -547,8 +492,8 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         EnableButtons();
 
         // select "Value of" if a ref is input into "target" edit
-        if ( mpEdActive == m_pEdTargetValue )
-            m_pRbValue->Check();
+        if ( mpEdActive == m_xEdTargetValue.get() )
+            m_xRbValue->set_active(true);
     }
 }
 
@@ -559,11 +504,11 @@ bool ScOptSolverDlg::IsRefInputMode() const
 
 // Handler:
 
-IMPL_LINK( ScOptSolverDlg, BtnHdl, Button*, pBtn, void )
+IMPL_LINK(ScOptSolverDlg, BtnHdl, weld::Button&, rBtn, void)
 {
-    if ( pBtn == m_pBtnSolve || pBtn == m_pBtnCancel )
+    if (&rBtn == m_xBtnSolve.get() || &rBtn == m_xBtnCancel.get())
     {
-        bool bSolve = ( pBtn == m_pBtnSolve );
+        bool bSolve = ( &rBtn == m_xBtnSolve.get() );
 
         SetDispatcherLock( false );
         SwitchToDocument();
@@ -577,10 +522,10 @@ IMPL_LINK( ScOptSolverDlg, BtnHdl, Button*, pBtn, void )
             // Close: write dialog settings to DocShell for subsequent calls
             ReadConditions();
             std::unique_ptr<ScOptSolverSave> pSave( new ScOptSolverSave(
-                m_pEdObjectiveCell->GetText(), m_pRbMax->IsChecked(), m_pRbMin->IsChecked(), m_pRbValue->IsChecked(),
-                m_pEdTargetValue->GetText(), m_pEdVariableCells->GetText(), maConditions, maEngine, maProperties ) );
+                m_xEdObjectiveCell->GetText(), m_xRbMax->get_active(), m_xRbMin->get_active(), m_xRbValue->get_active(),
+                m_xEdTargetValue->GetText(), m_xEdVariableCells->GetText(), maConditions, maEngine, maProperties ) );
             mpDocShell->SetSolverSaveData( std::move(pSave) );
-            Close();
+            response(RET_CLOSE);
         }
         else
         {
@@ -588,10 +533,10 @@ IMPL_LINK( ScOptSolverDlg, BtnHdl, Button*, pBtn, void )
             SetDispatcherLock( true );
         }
     }
-    else if ( pBtn == m_pBtnOpt )
+    else if (&rBtn == m_xBtnOpt.get())
     {
         //! move options dialog to UI lib?
-        ScSolverOptionsDialog aOptDlg(GetFrameWeld(), maImplNames, maDescriptions, maEngine, maProperties);
+        ScSolverOptionsDialog aOptDlg(m_xDialog.get(), maImplNames, maDescriptions, maEngine, maProperties);
         if (aOptDlg.run() == RET_OK)
         {
             maEngine = aOptDlg.GetEngine();
@@ -600,44 +545,83 @@ IMPL_LINK( ScOptSolverDlg, BtnHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK( ScOptSolverDlg, GetFocusHdl, Control&, rCtrl, void )
+IMPL_LINK( ScOptSolverDlg, GetEditFocusHdl, formula::WeldRefEdit&, rCtrl, void )
 {
-    Edit* pEdit = nullptr;
+    formula::WeldRefEdit* pEdit = nullptr;
     mpEdActive = nullptr;
 
-    if( &rCtrl == m_pEdObjectiveCell || &rCtrl == m_pRBObjectiveCell )
-        pEdit = mpEdActive = m_pEdObjectiveCell;
-    else if( &rCtrl == m_pEdTargetValue || &rCtrl == m_pRBTargetValue )
-        pEdit = mpEdActive = m_pEdTargetValue;
-    else if( &rCtrl == m_pEdVariableCells || &rCtrl == m_pRBVariableCells )
-        pEdit = mpEdActive = m_pEdVariableCells;
+    if( &rCtrl == m_xEdObjectiveCell.get() )
+        pEdit = mpEdActive = m_xEdObjectiveCell.get();
+    else if( &rCtrl == m_xEdTargetValue.get() )
+        pEdit = mpEdActive = m_xEdTargetValue.get();
+    else if( &rCtrl == m_xEdVariableCells.get() )
+        pEdit = mpEdActive = m_xEdVariableCells.get();
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
-        if( &rCtrl == mpLeftEdit[nRow] || &rCtrl == mpLeftButton[nRow] )
-            pEdit = mpEdActive = mpLeftEdit[nRow].get();
-        else if( &rCtrl == mpRightEdit[nRow] || &rCtrl == mpRightButton[nRow] )
-            pEdit = mpEdActive = mpRightEdit[nRow].get();
-        else if( &rCtrl == mpOperator[nRow] )    // focus on "operator" list box
-            mpEdActive = mpRightEdit[nRow].get();     // use right edit for ref input, but don't change selection
+        if( &rCtrl == mpLeftEdit[nRow]  )
+            pEdit = mpEdActive = mpLeftEdit[nRow];
+        else if( &rCtrl == mpRightEdit[nRow]  )
+            pEdit = mpEdActive = mpRightEdit[nRow];
     }
-    if( &rCtrl == m_pRbValue )                   // focus on "Value of" radio button
-        mpEdActive = m_pEdTargetValue;          // use value edit for ref input, but don't change selection
 
     if( pEdit )
-        pEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
+        pEdit->SelectAll();
 }
 
-IMPL_LINK_NOARG(ScOptSolverDlg, LoseFocusHdl, Control&, void)
+IMPL_LINK( ScOptSolverDlg, GetButtonFocusHdl, formula::WeldRefButton&, rCtrl, void )
 {
-    mbDlgLostFocus = !IsActive();
+    formula::WeldRefEdit* pEdit = nullptr;
+    mpEdActive = nullptr;
+
+    if( &rCtrl == m_xRBObjectiveCell.get() )
+        pEdit = mpEdActive = m_xEdObjectiveCell.get();
+    else if( &rCtrl == m_xRBTargetValue.get() )
+        pEdit = mpEdActive = m_xEdTargetValue.get();
+    else if( &rCtrl == m_xRBVariableCells.get() )
+        pEdit = mpEdActive = m_xEdVariableCells.get();
+    for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
+    {
+        if( &rCtrl == mpLeftButton[nRow] )
+            pEdit = mpEdActive = mpLeftEdit[nRow];
+        else if( &rCtrl == mpRightButton[nRow] )
+            pEdit = mpEdActive = mpRightEdit[nRow];
+    }
+
+    if( pEdit )
+        pEdit->SelectAll();
 }
 
-IMPL_LINK( ScOptSolverDlg, DelBtnHdl, Button*, pBtn, void )
+
+IMPL_LINK(ScOptSolverDlg, GetFocusHdl, weld::Widget&, rCtrl, void)
+{
+    if( &rCtrl == m_xRbValue.get() )                   // focus on "Value of" radio button
+        mpEdActive = m_xEdTargetValue.get();          // use value edit for ref input, but don't change selection
+    else
+    {
+        for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
+        {
+            if( &rCtrl == mpOperator[nRow] )    // focus on "operator" list box
+                mpEdActive = mpRightEdit[nRow];     // use right edit for ref input, but don't change selection
+        }
+    }
+}
+
+IMPL_LINK_NOARG(ScOptSolverDlg, LoseEditFocusHdl, formula::WeldRefEdit&, void)
+{
+    mbDlgLostFocus = !m_xDialog->has_toplevel_focus();
+}
+
+IMPL_LINK_NOARG(ScOptSolverDlg, LoseButtonFocusHdl, formula::WeldRefButton&, void)
+{
+    mbDlgLostFocus = !m_xDialog->has_toplevel_focus();
+}
+
+IMPL_LINK(ScOptSolverDlg, DelBtnHdl, weld::Button&, rBtn, void)
 {
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
-        if( pBtn == mpDelButton[nRow] )
+        if (&rBtn == mpDelButton[nRow])
         {
-            bool bHadFocus = pBtn->HasFocus();
+            bool bHadFocus = rBtn.has_focus();
 
             ReadConditions();
             long nVecPos = nScrollPos + nRow;
@@ -646,47 +630,47 @@ IMPL_LINK( ScOptSolverDlg, DelBtnHdl, Button*, pBtn, void )
                 maConditions.erase( maConditions.begin() + nVecPos );
                 ShowConditions();
 
-                if ( bHadFocus && !pBtn->IsEnabled() )
+                if ( bHadFocus && !rBtn.get_sensitive() )
                 {
                     // If the button is disabled, focus would normally move to the next control,
                     // (left edit of the next row). Move it to left edit of this row instead.
 
-                    mpEdActive = mpLeftEdit[nRow].get();
+                    mpEdActive = mpLeftEdit[nRow];
                     mpEdActive->GrabFocus();
                 }
             }
         }
 }
 
-IMPL_LINK_NOARG(ScOptSolverDlg, TargetModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(ScOptSolverDlg, TargetModifyHdl, formula::WeldRefEdit&, void)
 {
     // modify handler for the target edit:
     //  select "Value of" if something is input into the edit
-    if ( !m_pEdTargetValue->GetText().isEmpty() )
-        m_pRbValue->Check();
+    if ( !m_xEdTargetValue->GetText().isEmpty() )
+        m_xRbValue->set_active(true);
 }
 
-IMPL_LINK_NOARG(ScOptSolverDlg, CondModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(ScOptSolverDlg, CondModifyHdl, formula::WeldRefEdit&, void)
 {
     // modify handler for the condition edits, just to enable/disable "delete" buttons
     ReadConditions();
     EnableButtons();
 }
 
-IMPL_LINK_NOARG(ScOptSolverDlg, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScOptSolverDlg, SelectHdl, weld::ComboBox&, void)
 {
     // select handler for operator list boxes, just to enable/disable "delete" buttons
     ReadConditions();
     EnableButtons();
 }
 
-IMPL_LINK_NOARG(ScOptSolverDlg, ScrollHdl, ScrollBar*, void)
+IMPL_LINK_NOARG(ScOptSolverDlg, ScrollHdl, weld::ScrolledWindow&, void)
 {
     ReadConditions();
-    nScrollPos = m_pScrollBar->GetThumbPos();
+    nScrollPos = m_xScrollBar->vadjustment_get_value();
     ShowConditions();
     if( mpEdActive )
-        mpEdActive->SetSelection( Selection( 0, SELECTION_MAX ) );
+        mpEdActive->SelectAll();
 }
 
 IMPL_LINK( ScOptSolverDlg, CursorUpHdl, ScCursorRefEdit&, rEdit, void )
@@ -699,12 +683,12 @@ IMPL_LINK( ScOptSolverDlg, CursorUpHdl, ScCursorRefEdit&, rEdit, void )
             --nScrollPos;
             ShowConditions();
             if( mpEdActive )
-                mpEdActive->SetSelection( Selection( 0, SELECTION_MAX ) );
+                mpEdActive->SelectAll();
         }
     }
     else
     {
-        formula::RefEdit* pFocus = nullptr;
+        formula::WeldRefEdit* pFocus = nullptr;
         for ( sal_uInt16 nRow = 1; nRow < EDIT_ROW_COUNT; ++nRow )      // second row or below: move focus
         {
             if ( &rEdit == mpLeftEdit[nRow] )
@@ -729,11 +713,11 @@ IMPL_LINK( ScOptSolverDlg, CursorDownHdl, ScCursorRefEdit&, rEdit, void )
         ++nScrollPos;
         ShowConditions();
         if( mpEdActive )
-            mpEdActive->SetSelection( Selection( 0, SELECTION_MAX ) );
+            mpEdActive->SelectAll();
     }
     else
     {
-        formula::RefEdit* pFocus = nullptr;
+        formula::WeldRefEdit* pFocus = nullptr;
         for ( sal_uInt16 nRow = 0; nRow+1 < EDIT_ROW_COUNT; ++nRow )      // before last row: move focus
         {
             if ( &rEdit == mpLeftEdit[nRow] )
@@ -749,10 +733,10 @@ IMPL_LINK( ScOptSolverDlg, CursorDownHdl, ScCursorRefEdit&, rEdit, void )
     }
 }
 
-void ScOptSolverDlg::ShowError( bool bCondition, formula::RefEdit* pFocus )
+void ScOptSolverDlg::ShowError( bool bCondition, formula::WeldRefEdit* pFocus )
 {
     OUString aMessage = bCondition ? maConditionError : maInputError;
-    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                               VclMessageType::Warning, VclButtonsType::Ok,
                                               aMessage));
     xBox->run();
@@ -803,7 +787,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
 {
     // show progress dialog
 
-    std::shared_ptr<ScSolverProgressDialog> xProgress(new ScSolverProgressDialog(GetFrameWeld()));
+    std::shared_ptr<ScSolverProgressDialog> xProgress(new ScSolverProgressDialog(m_xDialog.get()));
     sal_Int32 nTimeout = 0;
     if ( FindTimeout( nTimeout ) )
         xProgress->SetTimeLimit( nTimeout );
@@ -822,18 +806,18 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     uno::Reference<sheet::XSpreadsheetDocument> xDocument( mpDocShell->GetModel(), uno::UNO_QUERY );
 
     ScRange aObjRange;
-    if ( !ParseRef( aObjRange, m_pEdObjectiveCell->GetText(), false ) )
+    if ( !ParseRef( aObjRange, m_xEdObjectiveCell->GetText(), false ) )
     {
-        ShowError( false, m_pEdObjectiveCell );
+        ShowError( false, m_xEdObjectiveCell.get() );
         return false;
     }
     table::CellAddress aObjective( aObjRange.aStart.Tab(), aObjRange.aStart.Col(), aObjRange.aStart.Row() );
 
     // "changing cells" can be several ranges
     ScRangeList aVarRanges;
-    if ( !ParseWithNames( aVarRanges, m_pEdVariableCells->GetText(), &mrDoc ) )
+    if ( !ParseWithNames( aVarRanges, m_xEdVariableCells->GetText(), &mrDoc ) )
     {
-        ShowError( false, m_pEdVariableCells );
+        ShowError( false, m_xEdVariableCells.get() );
         return false;
     }
     uno::Sequence<table::CellAddress> aVariables;
@@ -923,8 +907,8 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         }
     }
 
-    bool bMaximize = m_pRbMax->IsChecked();
-    if ( m_pRbValue->IsChecked() )
+    bool bMaximize = m_xRbMax->get_active();
+    if ( m_xRbValue->get_active() )
     {
         // handle "value of" with an additional constraint (and then minimize)
 
@@ -932,7 +916,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         aConstraint.Left     = aObjective;
         aConstraint.Operator = sheet::SolverConstraintOperator_EQUAL;
 
-        OUString aValStr = m_pEdTargetValue->GetText();
+        OUString aValStr = m_xEdTargetValue->GetText();
         ScRange aRightRange;
         if ( ParseRef( aRightRange, aValStr, false ) )
             aConstraint.Right <<= table::CellAddress( aRightRange.aStart.Tab(),
@@ -945,7 +929,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
                 aConstraint.Right <<= fValue;
             else
             {
-                ShowError( false, m_pEdTargetValue );
+                ShowError( false, m_xEdTargetValue.get() );
                 return false;
             }
         }
@@ -1028,7 +1012,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             static_cast<SCCOL>(aObjective.Column), static_cast<SCROW>(aObjective.Row),
             static_cast<SCTAB>(aObjective.Sheet));
 
-        ScSolverSuccessDialog aDialog(GetFrameWeld(), aResultStr);
+        ScSolverSuccessDialog aDialog(m_xDialog.get(), aResultStr);
         if (aDialog.run() == RET_OK)
         {
             // keep results and close dialog
@@ -1042,7 +1026,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         uno::Reference<sheet::XSolverDescription> xDesc( xSolver, uno::UNO_QUERY );
         if ( xDesc.is() )
             aError = xDesc->getStatusDescription();         // error description from component
-        ScSolverNoSolutionDialog aDialog(GetFrameWeld(), aError);
+        ScSolverNoSolutionDialog aDialog(m_xDialog.get(), aError);
         aDialog.run();
     }
 
