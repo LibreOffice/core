@@ -2197,37 +2197,6 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void )
     }
 }
 
-void ScModule::RegisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd )
-{
-    std::vector<VclPtr<vcl::Window> > & rlRefWindow = m_mapRefWindow[nSlotId];
-
-    if( std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd ) == rlRefWindow.end() )
-    {
-        rlRefWindow.emplace_back(pWnd );
-    }
-
-}
-
-void  ScModule::UnregisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd )
-{
-    auto iSlot = m_mapRefWindow.find( nSlotId );
-
-    if( iSlot == m_mapRefWindow.end() )
-        return;
-
-    std::vector<VclPtr<vcl::Window> > & rlRefWindow = iSlot->second;
-
-    auto i = std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd );
-
-    if( i == rlRefWindow.end() )
-        return;
-
-    rlRefWindow.erase( i );
-
-    if( rlRefWindow.empty() )
-        m_mapRefWindow.erase( nSlotId );
-}
-
 void ScModule::RegisterRefController(sal_uInt16 nSlotId, std::shared_ptr<SfxDialogController>& rWnd, weld::Window* pWndAncestor)
 {
     std::vector<std::pair<std::shared_ptr<SfxDialogController>, weld::Window*>> & rlRefWindow = m_mapRefController[nSlotId];
