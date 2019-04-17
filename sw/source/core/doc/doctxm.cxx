@@ -1301,7 +1301,7 @@ void SwTOXBaseSection::UpdateSequence(const SwTextNode* pOwnChapterNode,
         const SwTextField* pTextField = pFormatField->GetTextField();
         if(!pTextField)
             continue;
-        const SwTextNode& rTextNode = pTextField->GetTextNode();
+        SwTextNode& rTextNode = pTextField->GetTextNode();
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
         if (rTextNode.GetText().getLength() &&

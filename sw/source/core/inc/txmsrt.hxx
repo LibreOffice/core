@@ -240,7 +240,9 @@ private:
 
 struct SwTOXPara : public SwTOXSortTabBase
 {
-    SwTOXPara( const SwContentNode&, SwTOXElement, sal_uInt16 nLevel = FORM_ALPHA_DELIMITTER, const OUString& sSeqName = OUString() );
+    SwTOXPara(SwContentNode&, SwTOXElement,
+              sal_uInt16 nLevel = FORM_ALPHA_DELIMITTER,
+              const OUString& sSeqName = OUString());
 
     void    SetStartIndex(sal_Int32 nSet)    { nStartIndex = nSet; }
     void    SetEndIndex(sal_Int32 nSet)      { nEndIndex = nSet; }
