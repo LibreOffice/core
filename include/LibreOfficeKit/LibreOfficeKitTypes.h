@@ -22,6 +22,12 @@ extern "C"
  */
 typedef void (*LibreOfficeKitCallback)(int nType, const char* pPayload, void* pData);
 
+/** @see lok::Office::runLoop().
+    @since LibreOffice 6.3
+ */
+typedef int (*LibreOfficeKitPollCallback)(void* pData, int timeoutUs);
+typedef void (*LibreOfficeKitWakeCallback)(void* pData);
+
 #ifdef __cplusplus
 }
 #endif
