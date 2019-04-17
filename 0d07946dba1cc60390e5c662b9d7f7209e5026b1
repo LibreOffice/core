@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_48dc1046",
+        "filename": "sw/qa/uitest/writer_tests5/xwindow.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-04-17T12:47:12Z",
+      "side": 1,
+      "message": "Why don\u0027t use process all events instead of sleeping? See toolkit/source/awt/vclxtoolkit.cxx:2182, processEventsToIdle(). (Which is an UNO thing, you can call it from this python test.)",
+      "revId": "0d07946dba1cc60390e5c662b9d7f7209e5026b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
