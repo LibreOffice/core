@@ -449,7 +449,7 @@ void B3dCamera::CalcFocalLength()
     double fWidth = GetDeviceRectangleWidth();
 
     // Adjust focal length based on given position
-    basegfx::B3DPoint aOldPosition = WorldToEyeCoor(aOldPosition);
+    basegfx::B3DPoint aOldPosition = WorldToEyeCoor({});
     if(fWidth != 0.0)
         fFocalLength = aOldPosition.getZ() / fWidth * 35.0;
     if(fFocalLength < 5.0)

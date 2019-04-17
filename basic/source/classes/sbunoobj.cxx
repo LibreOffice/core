@@ -3328,7 +3328,7 @@ SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
             {
                 try
                 {
-                    Any aAny = xField->get( aAny );
+                    Any aAny = xField->get( {} ); //TODO: does this make sense?
 
                     // Convert to Sbx
                     pRes = new SbxVariable( SbxVARIANT );
