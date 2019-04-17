@@ -89,14 +89,19 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, we
     m_xRbCopyArea->SetReferences(this, m_xEdCopyArea.get());
 
     Init( rArgSet );
-    m_xEdFilterArea->GrabFocus();
 
-    // hack: control of RefInput
-    pIdle.reset( new Idle("Special Filter Dialog") );
-    // FIXME: this is an abomination
-    pIdle->SetPriority( TaskPriority::LOWEST );
-    pIdle->SetInvokeHandler( LINK( this, ScSpecialFilterDlg, TimeOutHdl ) );
-    pIdle->Start();
+    Link<formula::WeldRefEdit&, void> aLinkEdit = LINK(this, ScSpecialFilterDlg, RefInputEditHdl);
+    Link<formula::WeldRefButton&, void> aLinkButton = LINK(this, ScSpecialFilterDlg, RefInputButtonHdl);
+    m_xEdCopyArea->SetGetFocusHdl(aLinkEdit);
+    m_xRbCopyArea->SetGetFocusHdl(aLinkButton);
+    m_xEdFilterArea->SetGetFocusHdl(aLinkEdit);
+    m_xRbFilterArea->SetGetFocusHdl(aLinkButton);
+    m_xEdCopyArea->SetLoseFocusHdl(aLinkEdit);
+    m_xRbCopyArea->SetLoseFocusHdl(aLinkButton);
+    m_xEdFilterArea->SetLoseFocusHdl(aLinkEdit);
+    m_xRbFilterArea->SetLoseFocusHdl(aLinkButton);
+
+    m_xEdFilterArea->GrabFocus();
 }
 
 ScSpecialFilterDlg::~ScSpecialFilterDlg()
@@ -104,10 +109,6 @@ ScSpecialFilterDlg::~ScSpecialFilterDlg()
     pOptionsMgr.reset();
 
     pOutItem.reset();
-
-    // hack: control of RefInput
-    pIdle->Stop();
-    pIdle.reset();
 }
 
 void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
@@ -358,10 +359,19 @@ IMPL_LINK(ScSpecialFilterDlg, EndDlgHdl, weld::Button&, rBtn, void)
     }
 }
 
-IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pIdle, void )
+IMPL_LINK_NOARG(ScSpecialFilterDlg, RefInputEditHdl, formula::WeldRefEdit&, void)
 {
-    // every 50ms check whether RefInputMode is still true
-    if (_pIdle == pIdle.get() && m_xDialog->has_toplevel_focus())
+    RefInputHdl();
+}
+
+IMPL_LINK_NOARG(ScSpecialFilterDlg, RefInputButtonHdl, formula::WeldRefButton&, void)
+{
+    RefInputHdl();
+}
+
+void ScSpecialFilterDlg::RefInputHdl()
+{
+    if (m_xDialog->has_toplevel_focus())
     {
         if( m_xEdCopyArea->GetWidget()->has_focus() || m_xRbCopyArea->GetWidget()->has_focus() )
         {
@@ -379,8 +389,6 @@ IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pIdle, void )
             bRefInputMode = false;
         }
     }
-
-    pIdle->Start();
 }
 
 IMPL_LINK(ScSpecialFilterDlg, FilterAreaSelHdl, weld::ComboBox&, rLb, void)
