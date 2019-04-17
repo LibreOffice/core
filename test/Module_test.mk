@@ -19,6 +19,10 @@ $(eval $(call gb_Module_add_targets,test,\
     Package_unittest \
 ))
 
+$(eval $(call gb_Module_add_check_targets,test,\
+    CppunitTest_test_xpath \
+))
+
 endif
 
 # vim: set noet sw=4 ts=4:
