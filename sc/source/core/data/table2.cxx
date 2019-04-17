@@ -1643,7 +1643,8 @@ void ScTable::GetNotesInRange( const ScRange& rRange, std::vector<sc::NoteEntry>
 {
     SCROW nStartRow = rRange.aStart.Row();
     SCROW nEndRow = rRange.aEnd.Row();
-    for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+    SCCOL nEndCol = ClampToAllocatedColumns(rRange.aEnd.Col());
+    for (SCCOL nCol = rRange.aStart.Col(); nCol <= nEndCol; ++nCol)
     {
         aCol[nCol].GetNotesInRange(nStartRow, nEndRow, rNotes);
     }
