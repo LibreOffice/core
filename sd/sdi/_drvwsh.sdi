@@ -710,6 +710,12 @@ interface DrawView
         StateMethod = GetMenuState ;
         MenuConfig = TRUE;
     ]
+    SID_NUMBERING_AND_POSITION // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+        MenuConfig = TRUE;
+    ]
     FN_SVX_SET_BULLET
     [
         ExecMethod = FuTemporary ;
