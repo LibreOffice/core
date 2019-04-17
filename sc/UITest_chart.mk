@@ -9,9 +9,9 @@
 
 $(eval $(call gb_UITest_UITest,chart))
 
-#$(eval $(call gb_UITest_add_modules,chart,$(SRCDIR)/sc/qa/uitest,\
-#	chart/ \
-#))
+$(eval $(call gb_UITest_add_modules,chart,$(SRCDIR)/sc/qa/uitest,\
+	chart/ \
+))
 
 $(eval $(call gb_UITest_set_defs,chart, \
     TDOC="$(SRCDIR)/sc/qa/uitest/calc_tests/data" \

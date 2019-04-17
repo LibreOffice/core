@@ -167,7 +167,7 @@ void CreationWizardUnoDlg::createDialogOnDemand()
                     m_xParentWindow = xFrame->getContainerWindow();
             }
         }
-        uno::Reference< XComponent > xComp( this );
+        uno::Reference< XComponent > xKeepAlive( this );
         if( m_xChartModel.is() )
         {
             m_xDialog = std::make_shared<CreationWizard>(Application::GetFrameWeld(m_xParentWindow), m_xChartModel, m_xCC);
@@ -195,7 +195,8 @@ void SAL_CALL CreationWizardUnoDlg::startExecuteModal( const css::uno::Reference
     if( m_bUnlockControllersOnExecute && m_xChartModel.is() )
         m_xChartModel->unlockControllers();
 
-    weld::DialogController::runAsync(m_xDialog, [xListener](sal_Int32 nResult){
+    CreationWizardUnoDlg* xThat = this;
+    weld::DialogController::runAsync(m_xDialog, [xListener, xThat](sal_Int32 nResult){
             if( xListener.is() )
             {
                 ::css::uno::Reference< ::css::uno::XInterface > xSource;
@@ -203,6 +204,7 @@ void SAL_CALL CreationWizardUnoDlg::startExecuteModal( const css::uno::Reference
                 css::ui::dialogs::DialogClosedEvent aEvent( xSource, nResult );
                 xListener->dialogClosed( aEvent );
             }
+            xThat->m_xDialog.reset();
         });
 }
 

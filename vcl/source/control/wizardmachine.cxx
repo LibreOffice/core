@@ -1153,11 +1153,17 @@ namespace vcl
     {
         if ( isTravelingSuspended() )
             return;
-        WizardTravelSuspension aTravelGuard( *this );
-        if (!prepareLeaveCurrentState(WizardTypes::eFinish))
+
+        // prevent WizardTravelSuspension from using this instance
+        // after will be destructed due to onFinish and async response call
         {
-            return;
+            WizardTravelSuspension aTravelGuard( *this );
+            if (!prepareLeaveCurrentState(WizardTypes::eFinish))
+            {
+                return;
+            }
         }
+
         onFinish();
     }
 
