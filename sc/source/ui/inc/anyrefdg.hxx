@@ -241,49 +241,28 @@ struct ScAnyRefDlg : ::ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>
     }
 };
 
-template<  class TWindow, bool bBindRef = true >
-class ScRefHdlrControllerImplBase: public TWindow, public ScRefHandler
-{
-private:
-    ScRefHdlrControllerImplBase(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID)
-        : TWindow(pB, pCW, pParent, rUIXMLDescription, rID)
-        , ScRefHandler(*static_cast<TWindow*>(this), pB, bBindRef)
-    {
-    }
-
-    ScRefHdlrControllerImplBase(weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet* pArg, SfxBindings *pB)
-        : TWindow(pParent, rUIXMLDescription, rID, pArg)
-        , ScRefHandler(*static_cast<TWindow*>(this), pB, bBindRef)
-    {
-    }
-
-    virtual ~ScRefHdlrControllerImplBase() override
-    {
-    }
-
-    template<class, class, bool> friend struct ScRefHdlrControllerImpl;
-};
-
-template<class TDerived, class TBase, bool bBindRef = true>
-struct ScRefHdlrControllerImpl : ScRefHdlrControllerImplBase<TBase, bBindRef>
+template<class TBase, bool bBindRef = true>
+struct ScRefHdlrControllerImpl : public TBase, public ScRefHandler
 {
     enum { UNKNOWN_SLOTID = 0U, SLOTID = UNKNOWN_SLOTID };
 
-    ScRefHdlrControllerImpl(weld::Window* rt1, const OUString& rt2, const OString& rt3, const SfxItemSet* rt4, SfxBindings *rt5)
-        : ScRefHdlrControllerImplBase<TBase, bBindRef >(rt1, rt2, rt3, rt4, rt5)
+    ScRefHdlrControllerImpl(weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet* pArg, SfxBindings *pB)
+        : TBase(pParent, rUIXMLDescription, rID, pArg)
+        , ScRefHandler(*static_cast<TBase*>(this), pB, bBindRef)
     {
     }
 
-    ScRefHdlrControllerImpl(SfxBindings* rt1, SfxChildWindow* rt2, weld::Window* rt3, const OUString& rt4, const OString& rt5)
-        : ScRefHdlrControllerImplBase<TBase, bBindRef >(rt1, rt2, rt3, rt4, rt5)
+    ScRefHdlrControllerImpl(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID)
+        : TBase(pB, pCW, pParent, rUIXMLDescription, rID)
+        , ScRefHandler(*static_cast<TBase*>(this), pB, bBindRef)
     {
     }
 };
 
-struct ScAnyRefDlgController : ScRefHdlrControllerImpl<ScAnyRefDlgController, SfxModelessDialogController>
+struct ScAnyRefDlgController : ScRefHdlrControllerImpl<SfxModelessDialogController>
 {
     ScAnyRefDlgController(SfxBindings* rt1, SfxChildWindow* rt2, weld::Window* rt3, const OUString& rt4, const OString& rt5)
-        : ScRefHdlrControllerImpl<ScAnyRefDlgController, SfxModelessDialogController>(rt1, rt2, rt3, rt4, rt5)
+        : ScRefHdlrControllerImpl<SfxModelessDialogController>(rt1, rt2, rt3, rt4, rt5)
     {
     }
 };

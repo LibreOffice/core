@@ -146,10 +146,10 @@ public:
 
 /** The "Validity" tab dialog. */
 class ScValidationDlg
-    : public ScRefHdlrControllerImpl<ScValidationDlg, SfxTabDialogController, false>
+    : public ScRefHdlrControllerImpl<SfxTabDialogController, false>
     , public ScRefHandlerHelper
 {
-    typedef ScRefHdlrControllerImpl<ScValidationDlg, SfxTabDialogController, false> ScValidationDlgBase;
+    typedef ScRefHdlrControllerImpl<SfxTabDialogController, false> ScValidationDlgBase;
 
     ScTabViewShell * const m_pTabVwSh;
     OString m_sValuePageId;
