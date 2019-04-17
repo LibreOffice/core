@@ -509,7 +509,7 @@ sal_uInt16 SwTOXContent::GetLevel() const
 // TOX assembled from paragraphs
 // Watch out for OLE/graphics when sorting!
 // The position must not come from the document, but from the "anchor"!
-SwTOXPara::SwTOXPara( const SwContentNode& rNd, SwTOXElement eT, sal_uInt16 nLevel, const OUString& sSeqName )
+SwTOXPara::SwTOXPara(SwContentNode& rNd, SwTOXElement eT, sal_uInt16 nLevel, const OUString& sSeqName)
     : SwTOXSortTabBase( TOX_SORT_PARA, &rNd, nullptr, nullptr ),
     eType( eT ),
     m_nLevel(nLevel),
@@ -517,6 +517,18 @@ SwTOXPara::SwTOXPara( const SwContentNode& rNd, SwTOXElement eT, sal_uInt16 nLev
     nEndIndex(-1),
     m_sSequenceName( sSeqName )
 {
+    // tdf#123313 create any missing bookmarks *before* generating ToX nodes!
+    switch (eType)
+    {
+    case SwTOXElement::Template:
+    case SwTOXElement::OutlineLevel:
+        assert(rNd.IsTextNode());
+        rNd.GetDoc()->getIDocumentMarkAccess()->getMarkForTextNode(
+            *rNd.GetTextNode(), IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
+        break;
+    default:
+        break;
+    }
 }
 
 TextAndReading SwTOXPara::GetText_Impl(SwRootFrame const*const pLayout) const
@@ -652,6 +664,8 @@ OUString SwTOXPara::GetURL() const
             const SwTextNode * pTextNd = pNd->GetTextNode();
 
             SwDoc* pDoc = const_cast<SwDoc*>( pTextNd->GetDoc() );
+            // tdf#123313: this *must not* create a bookmark, its Undo would
+            // be screwed! create it as preparatory step, in ctor!
             ::sw::mark::IMark const * const pMark = pDoc->getIDocumentMarkAccess()->getMarkForTextNode(
                                 *pTextNd,
                                 IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
