@@ -22,6 +22,9 @@
 
 #include "fupoor.hxx"
 #include <scdllapi.h>
+#include <svx/svdoole2.hxx>
+#include <com/sun/star/ui/dialogs/DialogClosedEvent.hpp>
+#include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 
 class FuInsertGraphic : public FuPoor
 {
@@ -40,9 +43,10 @@ public:
 
 class FuInsertChart : public FuPoor
 {
-public:
-    FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
-           SdrModel* pDoc, SfxRequest& rReq);
+ public:
+    FuInsertChart( ScTabViewShell& pViewSh, vcl::Window* pWin, ScDrawView* pView,
+                   SdrModel* pDoc, SfxRequest& rReq,
+                   const Link<css::ui::dialogs::DialogClosedEvent*, void>& rLink);
 };
 
 class FuInsertMedia : public FuPoor

@@ -41,11 +41,12 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <svtools/dialogclosedlistener.hxx>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 using namespace ::com::sun::star;
@@ -122,7 +123,7 @@ Point SwGetChartDialogPos( const vcl::Window *pParentWin, const Size& rDialogSiz
     return aRet;
 }
 
-void SwInsertChart()
+SwInsertChart::SwInsertChart( const Link<css::ui::dialogs::DialogClosedEvent*, void>& rLink )
 {
     SwView *pView = ::GetActiveView();
 
@@ -162,7 +163,7 @@ void SwInsertChart()
         uno::Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
         if(xMCF.is())
         {
-            uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
+            uno::Reference< ui::dialogs::XAsynchronousExecutableDialog > xDialog(
                 xMCF->createInstanceWithContext(
                     "com.sun.star.comp.chart2.WizardDialog", xContext),
                 uno::UNO_QUERY);
@@ -208,21 +209,18 @@ void SwInsertChart()
                     }
                 }
 
-                sal_Int16 nDialogRet = xDialog->execute();
-                if( nDialogRet == ui::dialogs::ExecutableDialogResults::CANCEL )
-                {
-                    rWrtShell.Undo();
-                    rWrtShell.GetIDocumentUndoRedo().ClearRedo();
-                }
-                else
-                {
-                    OSL_ENSURE( nDialogRet == ui::dialogs::ExecutableDialogResults::OK,
-                        "dialog execution failed" );
-                }
+                ::svt::DialogClosedListener* pListener = new ::svt::DialogClosedListener();
+                pListener->SetDialogClosedLink( rLink );
+                css::uno::Reference<css::ui::dialogs::XDialogClosedListener> xListener( pListener );
+
+                xDialog->startExecuteModal( xListener );
             }
-            uno::Reference< lang::XComponent > xComponent( xDialog, uno::UNO_QUERY );
-            if( xComponent.is())
-                xComponent->dispose();
+            else
+            {
+                uno::Reference< lang::XComponent > xComponent( xDialog, uno::UNO_QUERY );
+                if( xComponent.is())
+                    xComponent->dispose();
+            }
         }
     }
 }
