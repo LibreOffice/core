@@ -110,7 +110,7 @@ public:
     void              PrepareClose();
 
     virtual void    GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr = false ) const override;
-    virtual bool    SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false) override;
+    virtual bool    SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false, bool bMaster = false) override;
 
     void               FillOutliner();
     void               SetLinks();

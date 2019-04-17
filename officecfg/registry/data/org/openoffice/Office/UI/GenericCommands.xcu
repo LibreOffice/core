@@ -2879,6 +2879,14 @@
           <value>7</value>
         </prop>
       </node>
+      <node oor:name=".uno:NumberingAndPosition" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Numbering and Position...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>7</value>
+        </prop>
+      </node>
       <node oor:name=".uno:EditDoc" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">E~dit Mode</value>

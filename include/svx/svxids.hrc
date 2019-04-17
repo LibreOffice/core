@@ -287,6 +287,7 @@ class SfxStringItem;
 #define SID_PRESENTATION                                ( SID_SVX_START + 157 )
 #define SID_PRESENTATION_CURRENT_SLIDE                  ( SID_SVX_START + 158 )
 #define SID_REHEARSE_TIMINGS                            ( SID_SVX_START + 159 )
+#define SID_NUMBERING_AND_POSITION                      ( SID_SVX_START + 160 )
 #define SID_HIDE_SLIDE                                  ( SID_SVX_START + 161 )
 #define SID_ATTR_FILL_STYLE                             ( SID_SVX_START + 164 )
 #define SID_ATTR_FILL_COLOR                             ( SID_SVX_START + 165 )

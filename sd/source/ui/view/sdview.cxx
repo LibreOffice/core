@@ -498,7 +498,7 @@ void View::MarkListHasChanged()
         maSmartTags.deselect();
 }
 
-bool View::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
+bool View::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll, bool /*bMaster*/)
 {
     bool bOk = FmFormView::SetAttributes(rSet, bReplaceAll);
     return bOk;
