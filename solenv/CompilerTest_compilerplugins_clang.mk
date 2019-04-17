@@ -51,6 +51,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/salcall \
     compilerplugins/clang/test/sallogareas \
     compilerplugins/clang/test/salunicodeliteral \
+    compilerplugins/clang/test/selfinit \
     compilerplugins/clang/test/sequentialassign \
     compilerplugins/clang/test/shouldreturnbool \
     compilerplugins/clang/test/simplifybool \
