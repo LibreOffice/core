@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_bb496061",
+        "filename": "sc/source/ui/view/viewfun2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2019-04-17T19:06:50Z",
+      "side": 1,
+      "message": "Here the number 9 is hard-coded assuming opcode is ocSum. See the syntax of SUBTOTAL() formula by searching here :- https://help.libreoffice.org It also shows the codes to be used for the different opcodes. Lets put the code needed to map from opcode to \"function index\" in a suitably named static function in this file and simply call that here.",
+      "range": {
+        "startLine": 765,
+        "startChar": 26,
+        "endLine": 765,
+        "endChar": 27
+      },
+      "revId": "7f7d12d2f2aca326772dcfadbcbfd17f115b8e9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_db46ac50",
+        "filename": "sc/uiconfig/scalc/ui/autosum.ui",
+        "patchSetId": 7
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2019-04-17T19:06:50Z",
+      "side": 1,
+      "message": "This should be sc instead to indicate calc module. sw means writer module.",
+      "range": {
+        "startLine": 3,
+        "startChar": 19,
+        "endLine": 3,
+        "endChar": 21
+      },
+      "revId": "7f7d12d2f2aca326772dcfadbcbfd17f115b8e9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
