@@ -204,9 +204,6 @@ private:
     VclPtr<formula::RefEdit>   pRefInputEdit;
     bool                bRefInputMode;
 
-    // Hack: RefInput control
-    std::unique_ptr<Idle> pIdle;
-
 private:
     void            Init( const SfxItemSet& rArgSet );
     ScQueryItem*    GetOutputItem( const ScQueryParam& rParam,
@@ -217,8 +214,8 @@ private:
     DECL_LINK( FilterAreaModHdl, Edit&, void );
     DECL_LINK( EndDlgHdl,  Button*, void );
 
-    // Hack: RefInput control
-    DECL_LINK( TimeOutHdl, Timer*, void );
+    // RefInput control
+    DECL_LINK( RefInputControlHdl, Control&, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_FILTDLG_HXX
