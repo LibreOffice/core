@@ -131,25 +131,25 @@ CommandLineEvent CheckOfficeURI(/* in,out */ OUString& arg, CommandLineEvent cur
     long nURIlen = -1;
 
     // URL might be encoded
-    rest1 = rest1.replaceAll("%7C", "|");
+    OUString decoded_rest = rest1.replaceAll("%7C", "|").replaceAll("%7c", "|");
 
     // 2. Discriminate by command name (incl. 1st command argument descriptor)
     //    Extract URI: everything up to possible next argument
-    if (rest1.startsWith("ofv|u|", &rest2))
+    if (decoded_rest.startsWith("ofv|u|", &rest2))
     {
         // Open for view - override only in default mode
         if (curEvt == CommandLineEvent::Open)
             curEvt = CommandLineEvent::View;
         nURIlen = rest2.indexOf("|");
     }
-    else if (rest1.startsWith("ofe|u|", &rest2))
+    else if (decoded_rest.startsWith("ofe|u|", &rest2))
     {
         // Open for editing - override only in default mode
         if (curEvt == CommandLineEvent::Open)
             curEvt = CommandLineEvent::ForceOpen;
         nURIlen = rest2.indexOf("|");
     }
-    else if (rest1.startsWith("nft|u|", &rest2))
+    else if (decoded_rest.startsWith("nft|u|", &rest2))
     {
         // New from template - override only in default mode
         if (curEvt == CommandLineEvent::Open)
