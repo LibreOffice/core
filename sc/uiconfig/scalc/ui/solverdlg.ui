@@ -2,7 +2,6 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="SolverDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -50,7 +49,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="solve">
+              <object class="GtkButton" id="ok">
                 <property name="label" translatable="yes" context="solverdlg|solve">_Solve</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -151,7 +150,7 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">value</property>
+                    <property name="group">max</property>
                     <accessibility>
                       <relation type="member-of" target="result"/>
                     </accessibility>
@@ -188,10 +187,11 @@
                     <property name="hexpand">True</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="foruilo-RefEdit" id="changeedit">
+                      <object class="GtkEntry" id="changeedit">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                         <property name="width_chars">32</property>
                       </object>
                       <packing>
@@ -201,7 +201,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefButton" id="changebutton">
+                      <object class="GtkButton" id="changebutton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -225,7 +225,7 @@
                     <property name="hexpand">True</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="foruilo-RefEdit" id="targetedit">
+                      <object class="GtkEntry" id="targetedit">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
@@ -238,7 +238,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="foruilo-RefButton" id="targetbutton">
+                      <object class="GtkButton" id="targetbutton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -288,10 +288,11 @@
                         <property name="hexpand">True</property>
                         <property name="spacing">6</property>
                         <child>
-                          <object class="foruilo-RefEdit" id="valueedit">
+                          <object class="GtkEntry" id="valueedit">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -300,7 +301,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="foruilo-RefButton" id="valuebutton">
+                          <object class="GtkButton" id="valuebutton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -404,10 +405,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sclo-ScCursorRefEdit" id="ref1edit">
+                          <object class="GtkEntry" id="ref1edit">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                             <property name="width_chars">20</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="ref1edit-atkobject">
@@ -421,10 +423,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sclo-ScCursorRefEdit" id="ref2edit">
+                          <object class="GtkEntry" id="ref2edit">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                             <property name="width_chars">20</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="ref2edit-atkobject">
@@ -438,10 +441,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sclo-ScCursorRefEdit" id="ref3edit">
+                          <object class="GtkEntry" id="ref3edit">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                             <property name="width_chars">20</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="ref3edit-atkobject">
@@ -455,10 +459,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sclo-ScCursorRefEdit" id="ref4edit">
+                          <object class="GtkEntry" id="ref4edit">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                             <property name="width_chars">20</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="ref4edit-atkobject">
@@ -472,7 +477,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="foruilo-RefButton" id="ref1button">
+                          <object class="GtkButton" id="ref1button">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -483,7 +488,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="foruilo-RefButton" id="ref2button">
+                          <object class="GtkButton" id="ref2button">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -494,7 +499,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="foruilo-RefButton" id="ref3button">
+                          <object class="GtkButton" id="ref3button">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -505,7 +510,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="foruilo-RefButton" id="ref4button">
+                          <object class="GtkButton" id="ref4button">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -604,11 +609,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sclo-ScCursorRefEdit" id="val1edit">
+                          <object class="GtkEntry" id="val1edit">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="margin_left">6</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                             <property name="width_chars">15</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="val1edit-atkobject">
@@ -622,11 +628,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sclo-ScCursorRefEdit" id="val2edit">
+                          <object class="GtkEntry" id="val2edit">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="margin_left">6</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                             <property name="width_chars">15</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="val2edit-atkobject">
@@ -640,11 +647,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sclo-ScCursorRefEdit" id="val3edit">
+                          <object class="GtkEntry" id="val3edit">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="margin_left">6</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                             <property name="width_chars">15</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="val3edit-atkobject">
@@ -658,11 +666,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sclo-ScCursorRefEdit" id="val4edit">
+                          <object class="GtkEntry" id="val4edit">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="margin_left">6</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                             <property name="width_chars">15</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="val4edit-atkobject">
@@ -676,7 +685,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="foruilo-RefButton" id="val1button">
+                          <object class="GtkButton" id="val1button">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -687,7 +696,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="foruilo-RefButton" id="val2button">
+                          <object class="GtkButton" id="val2button">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -698,7 +707,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="foruilo-RefButton" id="val3button">
+                          <object class="GtkButton" id="val3button">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -709,7 +718,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="foruilo-RefButton" id="val4button">
+                          <object class="GtkButton" id="val4button">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -815,9 +824,9 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">options</action-widget>
+      <action-widget response="101">options</action-widget>
       <action-widget response="-11">help</action-widget>
-      <action-widget response="0">solve</action-widget>
+      <action-widget response="-5">ok</action-widget>
       <action-widget response="-7">close</action-widget>
     </action-widgets>
   </object>
