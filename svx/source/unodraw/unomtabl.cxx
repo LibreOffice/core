@@ -231,30 +231,29 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
     // if it is not in our own sets, modify the pool!
     bool bFound = false;
 
-    sal_uInt32 nSurrogate;
-    const sal_uInt32 nStartCount = mpModelPool ? mpModelPool->GetItemCount2( XATTR_LINESTART ) : 0;
-    for( nSurrogate = 0; nSurrogate < nStartCount; nSurrogate++ )
-    {
-        NameOrIndex *pItem = const_cast<NameOrIndex*>(static_cast<const NameOrIndex*>(mpModelPool->GetItem2( XATTR_LINESTART, nSurrogate)));
-        if( pItem && pItem->GetName() == aName )
+    if (mpModelPool)
+        for (const SfxPoolItem* p : mpModelPool->GetItemSurrogates(XATTR_LINESTART))
         {
-            pItem->PutValue( aElement, 0 );
-            bFound = true;
-            break;
+            NameOrIndex *pItem = const_cast<NameOrIndex*>(static_cast<const NameOrIndex*>(p));
+            if( pItem && pItem->GetName() == aName )
+            {
+                pItem->PutValue( aElement, 0 );
+                bFound = true;
+                break;
+            }
         }
-    }
 
-    const sal_uInt32 nEndCount = mpModelPool ? mpModelPool->GetItemCount2( XATTR_LINEEND ) : 0;
-    for( nSurrogate = 0; nSurrogate < nEndCount; nSurrogate++ )
-    {
-        NameOrIndex *pItem = const_cast<NameOrIndex*>(static_cast<const NameOrIndex*>(mpModelPool->GetItem2( XATTR_LINEEND, nSurrogate)));
-        if( pItem && pItem->GetName() == aName )
+    if (mpModelPool)
+        for (const SfxPoolItem* p : mpModelPool->GetItemSurrogates(XATTR_LINEEND))
         {
-            pItem->PutValue( aElement, 0 );
-            bFound = true;
-            break;
+            NameOrIndex *pItem = const_cast<NameOrIndex*>(static_cast<const NameOrIndex*>(p));
+            if( pItem && pItem->GetName() == aName )
+            {
+                pItem->PutValue( aElement, 0 );
+                bFound = true;
+                break;
+            }
         }
-    }
 
     if( !bFound )
         throw container::NoSuchElementException();
@@ -264,17 +263,17 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
 
 static bool getByNameFromPool( const OUString& rSearchName, SfxItemPool const * pPool, sal_uInt16 nWhich, uno::Any& rAny )
 {
-    const sal_uInt32 nSurrogateCount = pPool ? pPool->GetItemCount2( nWhich ) : 0;
-    for( sal_uInt32 nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
-    {
-        const NameOrIndex *pItem = static_cast<const NameOrIndex*>(pPool->GetItem2( nWhich, nSurrogate ));
-
-        if( pItem && pItem->GetName() == rSearchName )
+    if (pPool)
+        for (const SfxPoolItem* p : pPool->GetItemSurrogates(nWhich))
         {
-            pItem->QueryValue( rAny );
-            return true;
+            const NameOrIndex *pItem = static_cast<const NameOrIndex*>(p);
+
+            if( pItem && pItem->GetName() == rSearchName )
+            {
+                pItem->QueryValue( rAny );
+                return true;
+            }
         }
-    }
 
     return false;
 }
@@ -308,11 +307,9 @@ uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const OUString& aApiName )
 
 static void createNamesForPool( SfxItemPool const * pPool, sal_uInt16 nWhich, std::set< OUString >& rNameSet )
 {
-    const sal_uInt32 nSuroCount = pPool->GetItemCount2( nWhich );
-
-    for(sal_uInt32 nSurrogate = 0; nSurrogate < nSuroCount; ++nSurrogate)
+    for (const SfxPoolItem* p : pPool->GetItemSurrogates(nWhich))
     {
-        const NameOrIndex* pItem = static_cast<const NameOrIndex*>(pPool->GetItem2( nWhich, nSurrogate ));
+        const NameOrIndex* pItem = static_cast<const NameOrIndex*>(p);
 
         if( pItem == nullptr || pItem->GetName().isEmpty() )
             continue;
@@ -349,23 +346,22 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
     const NameOrIndex *pItem;
 
     aSearchName = SvxUnogetInternalNameForItem(XATTR_LINESTART, aName);
-    sal_uInt32 nStartCount = mpModelPool ? mpModelPool->GetItemCount2( XATTR_LINESTART ) : 0;
-    sal_uInt32 nSurrogate;
-    for( nSurrogate = 0; nSurrogate < nStartCount; nSurrogate++ )
-    {
-        pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( XATTR_LINESTART, nSurrogate));
-        if( pItem && pItem->GetName() == aSearchName )
-            return true;
-    }
+    if (mpModelPool)
+        for (const SfxPoolItem* p : mpModelPool->GetItemSurrogates(XATTR_LINESTART))
+        {
+            pItem = static_cast<const NameOrIndex*>(p);
+            if( pItem && pItem->GetName() == aSearchName )
+                return true;
+        }
 
     aSearchName = SvxUnogetInternalNameForItem(XATTR_LINEEND, aName);
-    sal_uInt32 nEndCount = mpModelPool ? mpModelPool->GetItemCount2( XATTR_LINEEND ) : 0;
-    for( nSurrogate = 0; nSurrogate < nEndCount; nSurrogate++ )
-    {
-        pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( XATTR_LINEEND, nSurrogate));
-        if( pItem && pItem->GetName() == aSearchName )
-            return true;
-    }
+    if (mpModelPool)
+        for (const SfxPoolItem* p : mpModelPool->GetItemSurrogates(XATTR_LINEEND))
+        {
+            pItem = static_cast<const NameOrIndex*>(p);
+            if( pItem && pItem->GetName() == aSearchName )
+                return true;
+        }
 
     return false;
 }
@@ -382,22 +378,21 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasElements(  )
 
     const NameOrIndex *pItem;
 
-    const sal_uInt32 nStartCount = mpModelPool ? mpModelPool->GetItemCount2( XATTR_LINESTART ) : 0;
-    sal_uInt32 nSurrogate;
-    for( nSurrogate = 0; nSurrogate < nStartCount; nSurrogate++ )
-    {
-        pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( XATTR_LINESTART, nSurrogate));
-        if( pItem && !pItem->GetName().isEmpty() )
-            return true;
-    }
+    if (mpModelPool)
+        for (const SfxPoolItem* p : mpModelPool->GetItemSurrogates(XATTR_LINESTART))
+        {
+            pItem = static_cast<const NameOrIndex*>(p);
+            if( pItem && !pItem->GetName().isEmpty() )
+                return true;
+        }
 
-    const sal_uInt32 nEndCount = mpModelPool ? mpModelPool->GetItemCount2( XATTR_LINEEND ) : 0;
-    for( nSurrogate = 0; nSurrogate < nEndCount; nSurrogate++ )
-    {
-        pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( XATTR_LINEEND, nSurrogate));
-        if( pItem && !pItem->GetName().isEmpty() )
-            return true;
-    }
+    if (mpModelPool)
+        for (const SfxPoolItem* p : mpModelPool->GetItemSurrogates(XATTR_LINEEND))
+        {
+            pItem = static_cast<const NameOrIndex*>(p);
+            if( pItem && !pItem->GetName().isEmpty() )
+                return true;
+        }
 
     return false;
 }

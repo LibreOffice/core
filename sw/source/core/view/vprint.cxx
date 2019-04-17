@@ -632,13 +632,11 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
 /// Check if the DocNodesArray contains fields.
 bool SwViewShell::IsAnyFieldInDoc() const
 {
-    const SfxPoolItem* pItem;
-    sal_uInt32 nMaxItems = mxDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
-    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+    for (const SfxPoolItem* pItem : mxDoc->GetAttrPool().GetItemSurrogates(RES_TXTATR_FIELD))
     {
-        if( nullptr != (pItem = mxDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n )))
+        auto pFormatField = dynamic_cast<const SwFormatField*>(pItem);
+        if(pFormatField)
         {
-            const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
             const SwTextField* pTextField = pFormatField->GetTextField();
             if( pTextField && pTextField->GetTextNode().GetNodes().IsDocNodes() )
             {
@@ -647,12 +645,11 @@ bool SwViewShell::IsAnyFieldInDoc() const
         }
     }
 
-    nMaxItems = mxDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INPUTFIELD );
-    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+    for (const SfxPoolItem* pItem : mxDoc->GetAttrPool().GetItemSurrogates(RES_TXTATR_INPUTFIELD))
     {
-        if( nullptr != (pItem = mxDoc->GetAttrPool().GetItem2( RES_TXTATR_INPUTFIELD, n )))
+        const SwFormatField* pFormatField = dynamic_cast<const SwFormatField*>(pItem);
+        if(pFormatField)
         {
-            const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
             const SwTextField* pTextField = pFormatField->GetTextField();
             if( pTextField && pTextField->GetTextNode().GetNodes().IsDocNodes() )
             {

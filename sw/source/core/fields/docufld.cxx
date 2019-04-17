@@ -143,12 +143,10 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
     {
         // check the flag since the layout NEVER sets it back
         const SfxItemPool &rPool = pDoc->GetAttrPool();
-        sal_uInt32 nMaxItems = rPool.GetItemCount2( RES_PAGEDESC );
-        for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+        for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(RES_PAGEDESC))
         {
-            const SwFormatPageDesc *pDesc;
-            if( nullptr != (pDesc = rPool.GetItem2( RES_PAGEDESC, n ) )
-                && pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
+            auto pDesc = dynamic_cast<const SwFormatPageDesc*>(pItem);
+            if( pDesc && pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
             {
                 const SwContentNode* pNd = dynamic_cast<const SwContentNode*>( pDesc->GetDefinedIn()  );
                 if( pNd )

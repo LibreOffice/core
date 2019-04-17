@@ -670,14 +670,12 @@ const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
         {
             SwFindNearestNode aInfo( *pNd );
             // Over all Nodes of all PageDescs
-            sal_uInt32 i, nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_PAGEDESC );
-            for( i = 0; i < nMaxItems; ++i )
+            for (const SfxPoolItem* pItem : pDoc->GetAttrPool().GetItemSurrogates(RES_PAGEDESC))
             {
-                const SfxPoolItem* pItem;
-                if( nullptr != (pItem = pDoc->GetAttrPool().GetItem2( RES_PAGEDESC, i ) ) &&
-                    static_cast<const SwFormatPageDesc*>(pItem)->GetDefinedIn() )
+                auto pPageDescItem = dynamic_cast<const SwFormatPageDesc*>(pItem);
+                if( pPageDescItem && pPageDescItem->GetDefinedIn() )
                 {
-                    const SwModify* pMod = static_cast<const SwFormatPageDesc*>(pItem)->GetDefinedIn();
+                    const SwModify* pMod = pPageDescItem->GetDefinedIn();
                     if( auto pContentNode = dynamic_cast<const SwContentNode*>( pMod) )
                         aInfo.CheckNode( *pContentNode );
                     else if( auto pFormat = dynamic_cast<const SwFormat*>( pMod) )

@@ -56,14 +56,13 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
             sBkmk = "#" + pIURL->GetMark();
 
         bool bAction = false, bUnLockView = false;
-        sal_uInt32 nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
-        for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+        for (const SfxPoolItem* pItem : pDoc->GetAttrPool().GetItemSurrogates(RES_TXTATR_INETFMT))
         {
-            const SwFormatINetFormat* pItem = pDoc->GetAttrPool().GetItem2(RES_TXTATR_INETFMT, n );
-            if( pItem != nullptr &&
-                ( pItem->GetValue() == sURL || ( !sBkmk.isEmpty() && pItem->GetValue() == sBkmk )))
+            const SwFormatINetFormat* pFormatItem = dynamic_cast<const SwFormatINetFormat*>(pItem);
+            if( pFormatItem != nullptr &&
+                ( pFormatItem->GetValue() == sURL || ( !sBkmk.isEmpty() && pFormatItem->GetValue() == sBkmk )))
             {
-                const SwTextINetFormat* pTextAttr = pItem->GetTextINetFormat();
+                const SwTextINetFormat* pTextAttr = pFormatItem->GetTextINetFormat();
                 if (pTextAttr != nullptr)
                 {
                     const SwTextNode* pTextNd = pTextAttr->GetpTextNode();

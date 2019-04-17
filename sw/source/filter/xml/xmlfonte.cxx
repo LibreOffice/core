@@ -43,7 +43,6 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(SwXMLExport& _rExport, 
                                       RES_CHRATR_CTL_FONT };
 
     const SfxItemPool& rPool = _rExport.getDoc()->GetAttrPool();
-    const SfxPoolItem* pItem;
     for(sal_uInt16 nWhichId : aWhichIds)
     {
         const SvxFontItem& rFont =
@@ -51,17 +50,12 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(SwXMLExport& _rExport, 
         Add( rFont.GetFamilyName(), rFont.GetStyleName(),
              rFont.GetFamily(), rFont.GetPitch(),
              rFont.GetCharSet() );
-        sal_uInt32 nItems = rPool.GetItemCount2( nWhichId );
-        for( sal_uInt32 j = 0; j < nItems; ++j )
+        for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(nWhichId))
         {
-            if( nullptr != (pItem = rPool.GetItem2( nWhichId, j ) ) )
-            {
-                const SvxFontItem *pFont =
-                            static_cast<const SvxFontItem *>(pItem);
-                Add( pFont->GetFamilyName(), pFont->GetStyleName(),
-                     pFont->GetFamily(), pFont->GetPitch(),
-                     pFont->GetCharSet() );
-            }
+            auto pFont = static_cast<const SvxFontItem *>(pItem);
+            Add( pFont->GetFamilyName(), pFont->GetStyleName(),
+                 pFont->GetFamily(), pFont->GetPitch(),
+                 pFont->GetCharSet() );
         }
     }
     auto const & pDocument = _rExport.getDoc();
