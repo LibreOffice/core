@@ -32,6 +32,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/borderareatransparencydialog \
 	cui/uiconfig/ui/borderbackgrounddialog \
 	cui/uiconfig/ui/borderpage \
+	cui/uiconfig/ui/bulletandposition \
 	cui/uiconfig/ui/breaknumberoption \
 	cui/uiconfig/ui/calloutdialog \
 	cui/uiconfig/ui/calloutpage \

@@ -27,6 +27,7 @@
 #include <editeng/numdef.hxx>
 #include <editeng/svxenum.hxx>
 #include <svtools/ctrlbox.hxx>
+#include <cui/numberingpreview.hxx>
 
 #define MN_GALLERY_ENTRY 100
 
@@ -36,27 +37,6 @@ class SvxNumRule;
 class SvxBmpNumValueSet;
 class SvxBrushItem;
 class ValueSet;
-
-class SvxNumberingPreview : public weld::CustomWidgetController
-{
-    const SvxNumRule*   pActNum;
-    vcl::Font           aStdFont;
-    bool                bPosition;
-    sal_uInt16          nActLevel;
-
-protected:
-    virtual void  Paint( vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect ) override;
-
-public:
-    SvxNumberingPreview();
-
-    void    SetNumRule(const SvxNumRule* pNum)
-                {pActNum = pNum; Invalidate();};
-    void    SetPositionMode()
-                    { bPosition = true;}
-    void    SetLevel(sal_uInt16 nSet) {nActLevel = nSet;}
-
-};
 
 struct SvxNumSettings_Impl
 {
