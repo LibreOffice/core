@@ -21,7 +21,6 @@
 #include <svtools/svtools.hrc>
 #include <svtools/svtresid.hxx>
 #include <vcl/print.hxx>
-#include <vcl/threadex.hxx>
 
 
 void ImplFillPrnDlgListBox( const Printer* pPrinter,
@@ -332,10 +331,6 @@ void PrinterSetupDialog::DataChanged( const DataChangedEvent& rDCEvt )
     ModalDialog::DataChanged( rDCEvt );
 }
 
-short PrinterSetupDialog::solar_execute()
-{
-    return ModalDialog::Execute();
-}
 
 short PrinterSetupDialog::Execute()
 {
@@ -352,7 +347,7 @@ short PrinterSetupDialog::Execute()
     maStatusTimer.Start();
 
     // start dialog
-    short nRet = vcl::solarthread::syncExecute(std::bind(&PrinterSetupDialog::solar_execute, this));
+    short nRet = ModalDialog::Execute();
 
     // update data if the dialog was terminated with OK
     if ( nRet == RET_OK )
