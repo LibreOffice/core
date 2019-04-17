@@ -445,7 +445,6 @@ namespace slideshow
                             mpMediaWindow->SetBackground( COL_BLACK );
                             mpMediaWindow->SetParentClipMode( ParentClipMode::NoClip );
                             mpMediaWindow->EnableEraseBackground( false );
-                            mpMediaWindow->EnablePaint( false );
                             mpMediaWindow->SetForwardKey( true );
                             mpMediaWindow->SetMouseTransparent( true );
                             mpMediaWindow->Show();
