@@ -32,6 +32,7 @@
 #include "target.hxx"
 #include <shellids.hxx>
 #include <tabprotection.hxx>
+#include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 
 #include <memory>
 #include <map>
@@ -59,6 +60,7 @@ class ScPageBreakShell;
 class ScDPObject;
 class ScNavigatorSettings;
 class ScRangeName;
+class FuInsertChart;
 
 struct ScHeaderFieldData;
 
@@ -97,6 +99,7 @@ private:
     sal_uInt16              nDrawSfxId;
     sal_uInt16              nFormSfxId;
     OUString                sDrawCustom;                // current custom shape type
+
     std::unique_ptr<ScDrawShell>         pDrawShell;
     std::unique_ptr<ScDrawTextObjectBar> pDrawTextShell;
     std::unique_ptr<ScEditShell>         pEditShell;
@@ -180,6 +183,7 @@ private:
     DECL_LINK( SimpleRefAborted, const OUString&, void );
     DECL_LINK( SimpleRefChange, const OUString&, void );
     DECL_LINK( FormControlActivated, LinkParamNone*, void );
+    DECL_LINK( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
 
 protected:
     virtual void    Activate(bool bMDI) override;
