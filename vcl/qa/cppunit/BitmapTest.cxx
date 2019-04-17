@@ -28,7 +28,6 @@
 #include <vcl/BitmapMonochromeFilter.hxx>
 
 #include <BitmapSymmetryCheck.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <bitmapwriteaccess.hxx>
 
 #include <svdata.hxx>
