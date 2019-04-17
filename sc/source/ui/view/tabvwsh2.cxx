@@ -87,7 +87,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if ( nNewId == SID_DRAW_CHART )
     {
         // #i71254# directly insert a chart instead of drawing its output rectangle
-        FuInsertChart(*this, pWin, pView, pDoc, rReq);
+        FuInsertChart(*this, pWin, pView, pDoc, rReq, LINK( this, ScTabViewShell, DialogClosedHdl ));
         return;
     }
 
