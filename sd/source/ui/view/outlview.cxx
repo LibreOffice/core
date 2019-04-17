@@ -980,7 +980,7 @@ void OutlineView::PrepareClose()
 /**
  * Set attributes of the selected text
  */
-bool OutlineView::SetAttributes(const SfxItemSet& rSet, bool )
+bool OutlineView::SetAttributes(const SfxItemSet& rSet, bool /*bReplaceAll*/, bool /*bMaster*/)
 {
     bool bOk = false;
 

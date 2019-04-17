@@ -37,7 +37,7 @@
 #include <comphelper/dispatchcommand.hxx>
 
 #include <dialmgr.hxx>
-#include <cuicharmap.hxx>
+#include <cui/cuicharmap.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/app.hxx>
