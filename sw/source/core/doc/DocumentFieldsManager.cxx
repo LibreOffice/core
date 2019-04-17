@@ -700,14 +700,12 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
     }
 
     // process all table box formulas
-    const SfxPoolItem* pItem;
-    sal_uInt32 nMaxItems = m_rDoc.GetAttrPool().GetItemCount2( RES_BOXATR_FORMULA );
-    for (sal_uInt32 i = 0; i < nMaxItems; ++i)
+    for (const SfxPoolItem* pItem : m_rDoc.GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
     {
-        if( nullptr != (pItem = m_rDoc.GetAttrPool().GetItem2( RES_BOXATR_FORMULA, i ) ) &&
-            static_cast<const SwTableBoxFormula*>(pItem)->GetDefinedIn() )
+        auto pBoxFormula = dynamic_cast<const SwTableBoxFormula*>(pItem);
+        if( pBoxFormula && pBoxFormula->GetDefinedIn() )
         {
-            const_cast<SwTableBoxFormula*>(static_cast<const SwTableBoxFormula*>(pItem))->ChangeState( pHt );
+            const_cast<SwTableBoxFormula*>(pBoxFormula)->ChangeState( pHt );
         }
     }
 
@@ -807,13 +805,11 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
     }
 
     // calculate the formula at the boxes
-    for (sal_uInt32 i = 0; i < nMaxItems; ++i )
+    for (const SfxPoolItem* pItem : m_rDoc.GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
     {
-        if( nullptr != (pItem = m_rDoc.GetAttrPool().GetItem2( RES_BOXATR_FORMULA, i ) ) &&
-            static_cast<const SwTableBoxFormula*>(pItem)->GetDefinedIn() &&
-            !static_cast<const SwTableBoxFormula*>(pItem)->IsValid() )
+        auto pFormula = const_cast<SwTableBoxFormula*>(dynamic_cast<const SwTableBoxFormula*>(pItem));
+        if( pFormula && pFormula->GetDefinedIn() && !pFormula->IsValid() )
         {
-            SwTableBoxFormula* pFormula = const_cast<SwTableBoxFormula*>(static_cast<const SwTableBoxFormula*>(pItem));
             SwTableBox* pBox = pFormula->GetTableBox();
             if( pBox && pBox->GetSttNd() &&
                 pBox->GetSttNd()->GetNodes().IsDocNodes() )

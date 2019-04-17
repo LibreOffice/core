@@ -449,23 +449,22 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
                                 &rPos, &tmp) );
     }
     {
-        sal_uInt32 n, nMaxItems = GetDoc()->GetAttrPool().GetItemCount2( RES_BOXATR_FORMULA );
+        sal_uInt32 nMaxItems = GetDoc()->GetAttrPool().GetItemCount2( RES_BOXATR_FORMULA );
 
         if( nMaxItems > 0 )
         {
             sal_uInt8 nMaxDo = 2;
             do {
-                for( n = 0; n < nMaxItems; ++n )
+                for (const SfxPoolItem* pItem : GetDoc()->GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
                 {
                     const SwTableBox* pTBox;
-                    const SfxPoolItem* pItem;
-                    if( nullptr != (pItem = GetDoc()->GetAttrPool().GetItem2(
-                                        RES_BOXATR_FORMULA, n ) ) &&
-                            nullptr != (pTBox = static_cast<const SwTableBoxFormula*>(pItem)->GetTableBox() ) &&
+                    auto pFormulaItem = dynamic_cast<const SwTableBoxFormula*>(pItem);
+                    if( pFormulaItem &&
+                            nullptr != (pTBox = pFormulaItem->GetTableBox() ) &&
                             pTBox->GetSttNd() &&
                             pTBox->GetSttNd()->GetNodes().IsDocNodes() &&
                             ( !bOnlyErrors ||
-                              !static_cast<const SwTableBoxFormula*>(pItem)->HasValidBoxes() ) )
+                              !pFormulaItem->HasValidBoxes() ) )
                     {
                         const SwContentFrame* pCFrame;
                         SwNodeIndex aIdx( *pTBox->GetSttNd() );
@@ -556,20 +555,19 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
     {
         const SwTextNode* pTextNd;
         const SwTextTOXMark* pTextTOX;
-        sal_uInt32 n, nMaxItems = GetDoc()->GetAttrPool().GetItemCount2( RES_TXTATR_TOXMARK );
+        sal_uInt32 nMaxItems = GetDoc()->GetAttrPool().GetItemCount2( RES_TXTATR_TOXMARK );
 
         if( nMaxItems > 0 )
         {
             do {
-                for( n = 0; n < nMaxItems; ++n )
+                for (const SfxPoolItem* pItem : GetDoc()->GetAttrPool().GetItemSurrogates(RES_TXTATR_TOXMARK))
                 {
-                    const SfxPoolItem* pItem;
+                    auto pToxMarkItem = dynamic_cast<const SwTOXMark*>(pItem);
                     const SwContentFrame* pCFrame;
 
                     std::pair<Point, bool> const tmp(aPt, false);
-                    if( nullptr != (pItem = GetDoc()->GetAttrPool().GetItem2(
-                                                RES_TXTATR_TOXMARK, n ) ) &&
-                        nullptr != (pTextTOX = static_cast<const SwTOXMark*>(pItem)->GetTextTOXMark() ) &&
+                    if( pToxMarkItem &&
+                        nullptr != (pTextTOX = pToxMarkItem->GetTextTOXMark() ) &&
                         ( pTextNd = &pTextTOX->GetTextNode())->GetNodes().IsDocNodes() &&
                         nullptr != (pCFrame = pTextNd->getLayoutFrame(GetLayout(), nullptr, &tmp)) &&
                         ( IsReadOnlyAvailable() || !pCFrame->IsProtected() ))

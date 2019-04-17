@@ -310,15 +310,9 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         else if ( nScriptType == 2 )
             nWhich = EE_CHAR_FONTINFO_CTL;
 
-        auto const nFonts(aEditDoc.GetItemPool().GetItemCount2(nWhich));
-        for (sal_uInt32 i = 0; i < nFonts; ++i)
+        for (const SfxPoolItem* pItem : aEditDoc.GetItemPool().GetItemSurrogates(nWhich))
         {
-            SvxFontItem const*const pFontItem = static_cast<const SvxFontItem*>(
-                    aEditDoc.GetItemPool().GetItem2(nWhich, i));
-            if (!pFontItem)
-            {
-                continue;
-            }
+            SvxFontItem const*const pFontItem = static_cast<const SvxFontItem*>(pItem);
             bool bAlreadyExist = false;
             sal_uLong nTestMax = nScriptType ? aFontTable.size() : 1;
             for ( sal_uLong nTest = 0; !bAlreadyExist && ( nTest < nTestMax ); nTest++ )
@@ -390,10 +384,9 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     {
         aColorList.push_back(rDefault.GetValue());
     }
-    auto const nColors(aEditDoc.GetItemPool().GetItemCount2(EE_CHAR_COLOR));
-    for (sal_uInt32 i = 0; i < nColors; ++i)
+    for (const SfxPoolItem* pItem : aEditDoc.GetItemPool().GetItemSurrogates(EE_CHAR_COLOR))
     {
-        SvxColorItem const*const pColorItem(aEditDoc.GetItemPool().GetItem2(EE_CHAR_COLOR, i));
+        auto pColorItem(dynamic_cast<SvxColorItem const*>(pItem));
         if (pColorItem && pColorItem->GetValue() != COL_AUTO) // may be null!
         {
             aColorList.push_back(pColorItem->GetValue());

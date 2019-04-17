@@ -25,6 +25,7 @@
 #include <svl/typedwhich.hxx>
 #include <memory>
 #include <vector>
+#include <o3tl/sorted_vector.hxx>
 
 class SfxBroadcaster;
 struct SfxItemPool_Impl;
@@ -154,15 +155,19 @@ public:
 
     bool                            CheckItemInPool(const SfxPoolItem *) const;
 
-    const SfxPoolItem *             GetItem2(sal_uInt16 nWhich, sal_uInt32 nSurrogate) const;
-    template<class T> const T*      GetItem2( TypedWhichId<T> nWhich, sal_uInt32 nSurrogate ) const
-    { return dynamic_cast<const T*>(GetItem2(sal_uInt16(nWhich), nSurrogate)); }
-
+    struct Item2Range
+    {
+        o3tl::sorted_vector<SfxPoolItem*>::const_iterator m_begin;
+        o3tl::sorted_vector<SfxPoolItem*>::const_iterator m_end;
+        o3tl::sorted_vector<SfxPoolItem*>::const_iterator begin() { return m_begin; }
+        o3tl::sorted_vector<SfxPoolItem*>::const_iterator end() { return m_end; }
+    };
     const SfxPoolItem *             GetItem2Default(sal_uInt16 nWhich) const;
     template<class T> const T*      GetItem2Default( TypedWhichId<T> nWhich ) const
     { return static_cast<const T*>(GetItem2Default(sal_uInt16(nWhich))); }
 
     sal_uInt32                      GetItemCount2(sal_uInt16 nWhich) const;
+    Item2Range                      GetItemSurrogates(sal_uInt16 nWhich) const;
 
     sal_uInt16                      GetFirstWhich() const;
     sal_uInt16                      GetLastWhich() const;

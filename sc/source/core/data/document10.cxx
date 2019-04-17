@@ -185,13 +185,10 @@ std::set<Color> ScDocument::GetDocColors()
     const sal_uInt16 pAttribs[] = {ATTR_BACKGROUND, ATTR_FONT_COLOR};
     for (sal_uInt16 nAttrib : pAttribs)
     {
-        const sal_uInt32 nCount = pPool->GetItemCount2(nAttrib);
-        for (sal_uInt32 j=0; j<nCount; j++)
+        for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(nAttrib))
         {
-            const SvxColorItem *pItem = static_cast<const SvxColorItem*>(pPool->GetItem2(nAttrib, j));
-            if (pItem == nullptr)
-                continue;
-            Color aColor( pItem->GetValue() );
+            const SvxColorItem *pColorItem = static_cast<const SvxColorItem*>(pItem);
+            Color aColor( pColorItem->GetValue() );
             if (COL_AUTO != aColor)
                 aDocColors.insert(aColor);
         }

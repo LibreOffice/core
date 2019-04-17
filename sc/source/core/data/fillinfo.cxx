@@ -181,16 +181,7 @@ public:
 
 bool isRotateItemUsed(const ScDocumentPool *pPool)
 {
-    sal_uInt32 nRotCount = pPool->GetItemCount2( ATTR_ROTATE_VALUE );
-    for (sal_uInt32 nItem=0; nItem<nRotCount; nItem++)
-    {
-        if (pPool->GetItem2( ATTR_ROTATE_VALUE, nItem ))
-        {
-            return true;
-        }
-    }
-
-    return false;
+    return pPool->GetItemCount2( ATTR_ROTATE_VALUE ) > 0;
 }
 
 void initRowInfo(const ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow,

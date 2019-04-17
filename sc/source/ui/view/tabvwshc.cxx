@@ -187,15 +187,12 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
             const ScCondFormatDlgItem* pDlgItem = nullptr;
             // Get the pool item stored by Conditional Format Manager Dialog.
             const SfxPoolItem* pItem = nullptr;
-            sal_uInt32 nItems(GetPool().GetItemCount2( SCITEM_CONDFORMATDLGDATA ));
-            for( sal_uInt32 nIter = 0; nIter < nItems; ++nIter )
+            auto itemsRange = GetPool().GetItemSurrogates(SCITEM_CONDFORMATDLGDATA);
+            if (itemsRange.begin() != itemsRange.end())
             {
-                if( nullptr != (pItem = GetPool().GetItem2( SCITEM_CONDFORMATDLGDATA, nIter ) ) )
-                {
-                    pDlgItem = static_cast<const ScCondFormatDlgItem*>(pItem);
-                    bFound = true;
-                    break;
-                }
+                pItem = *itemsRange.begin();
+                pDlgItem = static_cast<const ScCondFormatDlgItem*>(pItem);
+                bFound = true;
             }
 
             ScViewData& rViewData = GetViewData();
