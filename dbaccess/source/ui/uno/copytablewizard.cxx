@@ -262,7 +262,7 @@ namespace dbaui
         void    impl_checkForUnsupportedSettings_throw(
             const Reference< XPropertySet >& _rxSourceDescriptor ) const;
 
-        /** obtaines the connection described by the given data access descriptor
+        /** obtains the connection described by the given data access descriptor
 
             If needed and possible, the method will ask the user, using the interaction
             handler associated with the database described by the descriptor.
