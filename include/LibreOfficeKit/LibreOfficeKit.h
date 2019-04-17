@@ -104,6 +104,12 @@ struct _LibreOfficeKitClass
                            const int nCertificateBinarySize,
                            const unsigned char* pPrivateKeyBinary,
                            const int nPrivateKeyBinarySize);
+
+    /// @see lok::Office::runLoop()
+    void (*runLoop) (LibreOfficeKit* pThis,
+                     LibreOfficeKitPollCallback pPollCallback,
+                     LibreOfficeKitWakeCallback pWakeCallback,
+                     void* pData);
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
