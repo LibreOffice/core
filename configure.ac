@@ -3291,6 +3291,25 @@ find_msvc()
         fi
     done
 
+    # This fallback is needed on *some* (but not all) VS 2017 installations, where vswhere fails for unclear reason
+    # This does not work for VS 2019 anyway, so should be removed when upgrading baseline.
+    if ! test -n "$vctest"; then
+        for ver in $vsversions; do
+            reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver.0/Setup/VC/ProductDir
+            if test -n "$regvalue"; then
+                vctest=$regvalue
+                break
+            fi
+            reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/SxS/VS7/$ver.0
+            if test -n "$regvalue"; then
+                AC_MSG_RESULT([found: $regvalue])
+                PathFormat "$regvalue"
+                vctest=$formatted_path
+                break
+            fi
+        done
+    fi
+
     if test -n "$vctest"; then
         vcnumwithdot="$ver.0"
         case "$vcnumwithdot" in
