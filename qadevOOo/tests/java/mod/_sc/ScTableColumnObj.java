@@ -84,7 +84,7 @@ public class ScTableColumnObj extends TestCase {
     /**
     * Creating a TestEnvironment for the interfaces to be tested.
     * Retrieves a collection of spreadsheets from the document and takes one of
-    * them. Obtaines the collection of columns in the range using the interface
+    * them. Obtains the collection of columns in the range using the interface
     * <code>XColumnRowRange</code>. Retrieves the column with index 10 that is
     * the instance of the service <code>com.sun.star.table.TableColumn</code>.
     * Object relations created :
