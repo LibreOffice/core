@@ -55,7 +55,7 @@
 #include <svx/dlgutil.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
-#include <cuicharmap.hxx>
+#include <cui/cuicharmap.hxx>
 #include "chardlg.h"
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/charreliefitem.hxx>
