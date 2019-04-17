@@ -916,6 +916,15 @@ std::unique_ptr<sc::ColumnIterator> ScDocument::GetColumnIterator( SCTAB nTab, S
     return pTab->GetColumnIterator(nCol, nRow1, nRow2);
 }
 
+void ScDocument::CreateColumnIfNotExists( SCTAB nTab, SCCOL nCol )
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return;
+
+    pTab->CreateColumnIfNotExists(nCol);
+}
+
 bool ScDocument::EnsureFormulaCellResults( const ScRange& rRange, bool bSkipRunning )
 {
     bool bAnyDirty = false;

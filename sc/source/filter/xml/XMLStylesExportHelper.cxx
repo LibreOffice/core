@@ -455,6 +455,7 @@ void ScMyDefaultStyles::FillDefaultStyles(const sal_Int32 nTable,
         return ;
 
     SCTAB nTab = static_cast<SCTAB>(nTable);
+    pDoc->CreateColumnIfNotExists(nTab, nLastCol);
     sal_Int32 nPos;
     ScMyDefaultStyleList* pDefaults = &maColDefaults;
     bool bPrevAutoStyle(false);

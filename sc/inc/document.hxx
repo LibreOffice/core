@@ -2454,6 +2454,7 @@ public:
     void                    DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, const ScAddress& rTopPos, SCROW nLength );
 
     std::unique_ptr<sc::ColumnIterator> GetColumnIterator( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
+    void CreateColumnIfNotExists( SCTAB nTab, SCCOL nCol );
 
     SC_DLLPUBLIC void StoreTabToCache(SCTAB nTab, SvStream& rStrm) const;
     SC_DLLPUBLIC void RestoreTabFromCache(SCTAB nTab, SvStream& rStream);
