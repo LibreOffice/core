@@ -41,6 +41,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/unoapi_test \
 	test/source/calc_unoapi_test \
 	test/source/beans/xpropertyset \
+	test/source/chart/xchartdata \
 	test/source/container/xchild \
 	test/source/container/xelementaccess \
 	test/source/container/xenumeration \
