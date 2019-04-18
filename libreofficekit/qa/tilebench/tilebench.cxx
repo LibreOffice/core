@@ -278,7 +278,7 @@ void testDialog( Document *pDocument, const char *uno_cmd )
     }
 
     aTimes.emplace_back("post close dialog");
-    pDocument->postWindow(nDialogId, LOK_WINDOW_CLOSE);
+    pDocument->postWindow(nDialogId, LOK_WINDOW_CLOSE, nullptr);
     aTimes.emplace_back();
 
     pDocument->destroyView(view);

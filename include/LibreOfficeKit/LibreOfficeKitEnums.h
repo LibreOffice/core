@@ -42,7 +42,8 @@ LibreOfficeKitTileMode;
 
 typedef enum
 {
-    LOK_WINDOW_CLOSE
+    LOK_WINDOW_CLOSE,
+    LOK_WINDOW_PASTE
 }
 LibreOfficeKitWindowAction;
 
