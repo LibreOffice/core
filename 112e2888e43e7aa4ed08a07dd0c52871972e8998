@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_1e73a2e9",
+        "filename": "sd/source/core/CustomAnimationEffect.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2246,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-04-18T22:42:15Z",
+      "side": 1,
+      "message": "I couldn\u0027t find use for this.",
+      "range": {
+        "startLine": 2246,
+        "startChar": 4,
+        "endLine": 2246,
+        "endChar": 45
+      },
+      "revId": "112e2888e43e7aa4ed08a07dd0c52871972e8998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
