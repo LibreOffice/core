@@ -18,8 +18,9 @@
 #include <tools/datetime.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/base64.hxx>
-#include <comphelper/random.hxx>
 #include <comphelper/hash.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <filter/msfilter/mscodec.hxx>
@@ -54,6 +55,13 @@
 #endif
 
 #if HAVE_FEATURE_NSS
+
+#include <com/sun/star/xml/crypto/XDigestContext.hpp>
+#include <com/sun/star/xml/crypto/XDigestContextSupplier.hpp>
+#include <com/sun/star/xml/crypto/DigestID.hpp>
+#include <com/sun/star/xml/crypto/NSSInitializer.hpp>
+#include <mutex>
+
 // Is this length truly the maximum possible, or just a number that
 // seemed large enough when the author tested this (with some type of
 // certificates)? I suspect the latter.
@@ -1962,15 +1970,34 @@ OUString GetSubjectName(PCCERT_CONTEXT pCertContext)
 #endif
 }
 
+#ifdef SVL_CRYPTO_NSS
+namespace
+{
+    void ensureNssInit()
+    {
+        // e.g. tdf#122599 ensure NSS library is initialized for NSS_CMSMessage_CreateFromDER
+        css::uno::Reference<css::xml::crypto::XNSSInitializer>
+            xNSSInitializer = css::xml::crypto::NSSInitializer::create(comphelper::getProcessComponentContext());
+
+        // this calls NSS_Init
+        css::uno::Reference<css::xml::crypto::XDigestContext> xDigestContext(
+                xNSSInitializer->getDigestContext(css::xml::crypto::DigestID::SHA256,
+                                                  uno::Sequence<beans::NamedValue>()));
+    }
+}
+#endif
+
 bool Signing::Verify(const std::vector<unsigned char>& aData,
                      const bool bNonDetached,
                      const std::vector<unsigned char>& aSignature,
                      SignatureInformation& rInformation)
 {
 #ifdef SVL_CRYPTO_NSS
-    // Validate the signature. No need to call NSS_Init() here, assume that the
-    // caller did that already.
+    // ensure NSS_Init() is called before using NSS_CMSMessage_CreateFromDER
+    static std::once_flag aInitOnce;
+    std::call_once(aInitOnce, ensureNssInit);
 
+    // Validate the signature.
     SECItem aSignatureItem;
     aSignatureItem.data = const_cast<unsigned char*>(aSignature.data());
     aSignatureItem.len = aSignature.size();
