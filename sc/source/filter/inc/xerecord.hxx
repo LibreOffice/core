@@ -214,9 +214,7 @@ void XclExpValueRecord< Type >::SaveXml( XclExpXmlStream& rStrm )
 {
     if( mnAttribute == -1 )
         return;
-    rStrm.WriteAttributes(
-        mnAttribute,    OString::number( maValue ).getStr(),
-        FSEND );
+    rStrm.WriteAttributes(mnAttribute, OUString::number(maValue));
 }
 
 template<>

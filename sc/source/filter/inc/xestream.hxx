@@ -286,16 +286,13 @@ public:
 
     sax_fastparser::FSHelperPtr     GetStreamForPath( const OUString& rPath );
 
-    template <typename Str> void WriteAttributes(sal_Int32 nAttribute, const Str& value, FSEND_t)
-    {
-        WriteAttribute(nAttribute, value);
-    }
     template <typename Str, typename... Args>
     void WriteAttributes(sal_Int32 nAttribute, const Str& value, Args... rest)
     {
         WriteAttribute(nAttribute, value);
         WriteAttributes(rest...);
     }
+    static void WriteAttributes() {}
 
     sax_fastparser::FSHelperPtr     CreateOutputStream (
                                         const OUString& sFullStream,

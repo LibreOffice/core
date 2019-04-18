@@ -823,15 +823,14 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     pPivotStrm->write("<")->writeId(XML_location);
     rStrm.WriteAttributes(XML_ref,
         XclXmlUtils::ToOString(aOutRange),
-        XML_firstHeaderRow, OString::number(nFirstHeaderRow).getStr(),
-        XML_firstDataRow, OString::number(nFirstDataRow).getStr(),
-        XML_firstDataCol, OString::number(nFirstDataCol).getStr(),
-        FSEND);
+        XML_firstHeaderRow, OUString::number(nFirstHeaderRow),
+        XML_firstDataRow, OUString::number(nFirstDataRow),
+        XML_firstDataCol, OUString::number(nFirstDataCol));
 
     if (!aPageFields.empty())
     {
-        rStrm.WriteAttributes(XML_rowPageCount, OString::number(static_cast<long>(aPageFields.size())).getStr(), FSEND);
-        rStrm.WriteAttributes(XML_colPageCount, OString::number(1).getStr(), FSEND);
+        rStrm.WriteAttributes(XML_rowPageCount, OUString::number(static_cast<long>(aPageFields.size())));
+        rStrm.WriteAttributes(XML_colPageCount, OUString::number(1));
     }
 
     pPivotStrm->write("/>");

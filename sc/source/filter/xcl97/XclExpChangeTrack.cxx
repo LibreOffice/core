@@ -352,7 +352,7 @@ void XclExpChTrHeader::SaveXml( XclExpXmlStream& rRevisionHeadersStrm )
 {
     sax_fastparser::FSHelperPtr pHeaders = rRevisionHeadersStrm.GetCurrentStream();
     rRevisionHeadersStrm.WriteAttributes(
-            XML_guid,               lcl_GuidToOString( aGUID ).getStr(),
+            XML_guid,               lcl_GuidToOString(aGUID),
             XML_lastGuid,           nullptr,   // OOXTODO
             XML_shared,             nullptr,   // OOXTODO
             XML_diskRevisions,      nullptr,   // OOXTODO
@@ -363,8 +363,7 @@ void XclExpChTrHeader::SaveXml( XclExpXmlStream& rRevisionHeadersStrm )
             XML_version,            nullptr,   // OOXTODO
             XML_keepChangeHistory,  nullptr,   // OOXTODO
             XML_protected,          nullptr,   // OOXTODO
-            XML_preserveHistory,    nullptr,   // OOXTODO
-            FSEND );
+            XML_preserveHistory,    nullptr);  // OOXTODO
     pHeaders->write( ">" );
 }
 
@@ -380,9 +379,9 @@ void XclExpXmlChTrHeaders::SaveXml( XclExpXmlStream& rStrm )
     pHeaders->write("<")->writeId(XML_headers);
 
     rStrm.WriteAttributes(
-        XML_xmlns,              rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8().getStr(),
-        FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)).toUtf8().getStr(),
-        XML_guid,               lcl_GuidToOString(maGUID).getStr(),
+        XML_xmlns,              rStrm.getNamespaceURL(OOX_NS(xls)),
+        FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)),
+        XML_guid,               lcl_GuidToOString(maGUID),
         XML_lastGuid,           nullptr,   // OOXTODO
         XML_shared,             nullptr,   // OOXTODO
         XML_diskRevisions,      nullptr,   // OOXTODO
@@ -393,8 +392,7 @@ void XclExpXmlChTrHeaders::SaveXml( XclExpXmlStream& rStrm )
         XML_version,            nullptr,   // OOXTODO
         XML_keepChangeHistory,  nullptr,   // OOXTODO
         XML_protected,          nullptr,   // OOXTODO
-        XML_preserveHistory,    nullptr,   // OOXTODO
-        FSEND);
+        XML_preserveHistory,    nullptr);  // OOXTODO
 
     pHeaders->write(">");
 }
@@ -429,21 +427,20 @@ void XclExpXmlChTrHeader::SaveXml( XclExpXmlStream& rStrm )
             &aRelId);
 
     rStrm.WriteAttributes(
-        XML_guid, lcl_GuidToOString(maGUID).getStr(),
-        XML_dateTime, lcl_DateTimeToOString(maDateTime).getStr(),
-        XML_userName, maUserName.toUtf8(),
-        FSNS(XML_r, XML_id), aRelId.toUtf8(),
-        FSEND);
+        XML_guid, lcl_GuidToOString(maGUID),
+        XML_dateTime, lcl_DateTimeToOString(maDateTime),
+        XML_userName, maUserName,
+        FSNS(XML_r, XML_id), aRelId);
 
     if (mnMinAction)
-        rStrm.WriteAttributes(XML_minRId, OString::number(mnMinAction).getStr(), FSEND);
+        rStrm.WriteAttributes(XML_minRId, OUString::number(mnMinAction));
 
     if (mnMaxAction)
-        rStrm.WriteAttributes(XML_maxRId, OString::number(mnMaxAction).getStr(), FSEND);
+        rStrm.WriteAttributes(XML_maxRId, OUString::number(mnMaxAction));
 
     if (!maTabBuffer.empty())
         // next available sheet index.
-        rStrm.WriteAttributes(XML_maxSheetId, OString::number(maTabBuffer.back()+1).getStr(), FSEND);
+        rStrm.WriteAttributes(XML_maxSheetId, OUString::number(maTabBuffer.back()+1));
 
     pHeader->write(">");
 
@@ -473,9 +470,8 @@ void XclExpXmlChTrHeader::SaveXml( XclExpXmlStream& rStrm )
     pRevLogStrm->write("<")->writeId(XML_revisions);
 
     rStrm.WriteAttributes(
-        XML_xmlns,              rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
-        FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)).toUtf8(),
-        FSEND);
+        XML_xmlns,              rStrm.getNamespaceURL(OOX_NS(xls)),
+        FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)));
 
     pRevLogStrm->write(">");
 
