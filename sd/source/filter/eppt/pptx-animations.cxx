@@ -95,8 +95,8 @@ void WriteAnimationProperty(const FSHelperPtr& pFS, const Any& rAny, sal_Int32 n
                 x += 1.0;
                 y += 1.0;
             }
-            pFS->singleElementNS(XML_p, nToken, XML_x, OString::number(x * 100000).getStr(), XML_y,
-                                 OString::number(y * 100000).getStr(), FSEND);
+            pFS->singleElementNS(XML_p, nToken, XML_x, OString::number(x * 100000), XML_y,
+                                 OString::number(y * 100000));
         }
         return;
     }
@@ -110,21 +110,21 @@ void WriteAnimationProperty(const FSHelperPtr& pFS, const Any& rAny, sal_Int32 n
           && (aClass == TypeClass_LONG || aClass == TypeClass_DOUBLE || aClass == TypeClass_STRING);
 
     if (bWriteToken)
-        pFS->startElementNS(XML_p, nToken, FSEND);
+        pFS->startElementNS(XML_p, nToken);
 
     switch (rAny.getValueType().getTypeClass())
     {
         case TypeClass_LONG:
             rAny >>= nRgb;
-            pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(nRgb), FSEND);
+            pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(nRgb));
             break;
         case TypeClass_DOUBLE:
             rAny >>= fDouble;
-            pFS->singleElementNS(XML_p, XML_fltVal, XML_val, DS(fDouble), FSEND);
+            pFS->singleElementNS(XML_p, XML_fltVal, XML_val, OString::number(fDouble));
             break;
         case TypeClass_STRING:
             pFS->singleElementNS(XML_p, XML_strVal, XML_val,
-                                 (*o3tl::doAccess<OUString>(rAny)).toUtf8(), FSEND);
+                                 (*o3tl::doAccess<OUString>(rAny)).toUtf8());
             break;
         default:
             break;
@@ -142,7 +142,7 @@ void WriteAnimateColorColor(const FSHelperPtr& pFS, const Any& rAny, sal_Int32 n
     sal_Int32 nColor = 0;
     if (rAny >>= nColor)
     {
-        pFS->startElementNS(XML_p, nToken, FSEND);
+        pFS->startElementNS(XML_p, nToken);
 
         if (nToken == XML_by)
         {
@@ -152,7 +152,7 @@ void WriteAnimateColorColor(const FSHelperPtr& pFS, const Any& rAny, sal_Int32 n
         else
         {
             // CT_Color
-            pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(nColor), FSEND);
+            pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(nColor));
         }
 
         pFS->endElementNS(XML_p, nToken);
@@ -162,13 +162,14 @@ void WriteAnimateColorColor(const FSHelperPtr& pFS, const Any& rAny, sal_Int32 n
     if (!(rAny >>= aHSL))
         return;
 
-    pFS->startElementNS(XML_p, nToken, FSEND);
+    pFS->startElementNS(XML_p, nToken);
 
     if (nToken == XML_by)
     {
         // CT_TLByHslColorTransform
-        pFS->singleElementNS(XML_p, XML_hsl, XML_h, I32S(aHSL[0] * 60000), // ST_Angel
-                             XML_s, I32S(aHSL[1] * 100000), XML_l, I32S(aHSL[2] * 100000), FSEND);
+        pFS->singleElementNS(XML_p, XML_hsl, XML_h, OString::number(aHSL[0] * 60000), // ST_Angel
+                             XML_s, OString::number(aHSL[1] * 100000), XML_l,
+                             OString::number(aHSL[2] * 100000));
     }
     else
     {
@@ -201,7 +202,7 @@ void WriteAnimateValues(const FSHelperPtr& pFS, const Reference<XAnimate>& rXAni
 
     SAL_INFO("sd.eppt", "animate values, formula: " << sFormula.toUtf8());
 
-    pFS->startElementNS(XML_p, XML_tavLst, FSEND);
+    pFS->startElementNS(XML_p, XML_tavLst);
 
     for (int i = 0; i < aKeyTimes.getLength(); i++)
     {
@@ -210,8 +211,8 @@ void WriteAnimateValues(const FSHelperPtr& pFS, const Reference<XAnimate>& rXAni
         {
             pFS->startElementNS(XML_p, XML_tav, XML_fmla,
                                 sFormula.isEmpty() ? nullptr : sFormula.toUtf8().getStr(), XML_tm,
-                                I32S(static_cast<sal_Int32>(aKeyTimes[i] * 100000.0)), FSEND);
-            pFS->startElementNS(XML_p, XML_val, FSEND);
+                                OString::number(static_cast<sal_Int32>(aKeyTimes[i] * 100000.0)));
+            pFS->startElementNS(XML_p, XML_val);
             ValuePair aPair;
             if (aValues[i] >>= aPair)
             {
@@ -237,10 +238,10 @@ void WriteAnimationCondListForSeq(const FSHelperPtr& pFS, sal_Int32 nToken)
 {
     const char* pEvent = (nToken == XML_prevCondLst) ? "onPrev" : "onNext";
 
-    pFS->startElementNS(XML_p, nToken, FSEND);
-    pFS->startElementNS(XML_p, XML_cond, XML_evt, pEvent, FSEND);
-    pFS->startElementNS(XML_p, XML_tgtEl, FSEND);
-    pFS->singleElementNS(XML_p, XML_sldTgt, FSEND);
+    pFS->startElementNS(XML_p, nToken);
+    pFS->startElementNS(XML_p, XML_cond, XML_evt, pEvent);
+    pFS->startElementNS(XML_p, XML_tgtEl);
+    pFS->singleElementNS(XML_p, XML_sldTgt);
     pFS->endElementNS(XML_p, XML_tgtEl);
     pFS->endElementNS(XML_p, XML_cond);
     pFS->endElementNS(XML_p, nToken);
@@ -293,17 +294,17 @@ void WriteAnimationAttributeName(const FSHelperPtr& pFS, const OUString& rAttrib
     if (rAttributeName.isEmpty())
         return;
 
-    pFS->startElementNS(XML_p, XML_attrNameLst, FSEND);
+    pFS->startElementNS(XML_p, XML_attrNameLst);
 
     SAL_INFO("sd.eppt", "write attribute name: " << rAttributeName.toUtf8());
 
     if (rAttributeName == "X;Y")
     {
-        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->startElementNS(XML_p, XML_attrName);
         pFS->writeEscaped("ppt_x");
         pFS->endElementNS(XML_p, XML_attrName);
 
-        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->startElementNS(XML_p, XML_attrName);
         pFS->writeEscaped("ppt_y");
         pFS->endElementNS(XML_p, XML_attrName);
     }
@@ -325,7 +326,7 @@ void WriteAnimationAttributeName(const FSHelperPtr& pFS, const OUString& rAttrib
 
         if (pAttribute)
         {
-            pFS->startElementNS(XML_p, XML_attrName, FSEND);
+            pFS->startElementNS(XML_p, XML_attrName);
             pFS->writeEscaped(pAttribute);
             pFS->endElementNS(XML_p, XML_attrName);
         }
@@ -698,13 +699,13 @@ void PPTXAnimationExport::WriteAnimationTarget(const Any& rTarget)
 
     sal_Int32 nShapeID = mrPowerPointExport.GetShapeID(rXShape);
 
-    mpFS->startElementNS(XML_p, XML_tgtEl, FSEND);
-    mpFS->startElementNS(XML_p, XML_spTgt, XML_spid, I32S(nShapeID), FSEND);
+    mpFS->startElementNS(XML_p, XML_tgtEl);
+    mpFS->startElementNS(XML_p, XML_spTgt, XML_spid, OString::number(nShapeID));
     if (bParagraphTarget)
     {
-        mpFS->startElementNS(XML_p, XML_txEl, FSEND);
-        mpFS->singleElementNS(XML_p, XML_pRg, XML_st, I32S(nParagraph), XML_end, I32S(nParagraph),
-                              FSEND);
+        mpFS->startElementNS(XML_p, XML_txEl);
+        mpFS->singleElementNS(XML_p, XML_pRg, XML_st, OString::number(nParagraph), XML_end,
+                              OString::number(nParagraph));
         mpFS->endElementNS(XML_p, XML_txEl);
     }
     mpFS->endElementNS(XML_p, XML_spTgt);
@@ -739,7 +740,7 @@ void PPTXAnimationExport::WriteAnimationCondList(const Any& rAny, sal_Int32 nTok
 
     if (aList.size() > 0)
     {
-        mpFS->startElementNS(XML_p, nToken, FSEND);
+        mpFS->startElementNS(XML_p, nToken);
 
         for (const Cond& rCond : aList)
             WriteAnimationCond(rCond);
@@ -755,18 +756,18 @@ void PPTXAnimationExport::WriteAnimationCond(const Cond& rCond)
         if (rCond.mxShape.is())
         {
             mpFS->startElementNS(XML_p, XML_cond, XML_delay, rCond.getDelay(), XML_evt,
-                                 rCond.mpEvent, FSEND);
+                                 rCond.mpEvent);
             WriteAnimationTarget(makeAny(rCond.mxShape));
             mpFS->endElementNS(XML_p, XML_cond);
         }
         else
         {
             mpFS->singleElementNS(XML_p, XML_cond, XML_delay, rCond.getDelay(), XML_evt,
-                                  rCond.mpEvent, FSEND);
+                                  rCond.mpEvent);
         }
     }
     else
-        mpFS->singleElementNS(XML_p, XML_cond, XML_delay, rCond.getDelay(), FSEND);
+        mpFS->singleElementNS(XML_p, XML_cond, XML_delay, rCond.getDelay());
 }
 
 void PPTXAnimationExport::WriteAnimationNodeAnimate(sal_Int32 nXmlNodeType)
@@ -819,8 +820,7 @@ void PPTXAnimationExport::WriteAnimationNodeAnimate(sal_Int32 nXmlNodeType)
                 aPath = ::basegfx::utils::exportToSvgD(aPolyPoly, false, false, true, true);
         }
 
-        mpFS->startElementNS(XML_p, nXmlNodeType, XML_origin, "layout", XML_path,
-                             OUStringToOString(aPath, RTL_TEXTENCODING_UTF8), FSEND);
+        mpFS->startElementNS(XML_p, nXmlNodeType, XML_origin, "layout", XML_path, aPath.toUtf8());
     }
     else if (nXmlNodeType == XML_animRot)
     {
@@ -853,7 +853,7 @@ void PPTXAnimationExport::WriteAnimationNodeAnimate(sal_Int32 nXmlNodeType)
             }
         }
 
-        mpFS->startElementNS(XML_p, nXmlNodeType, XML_by, pBy, XML_from, pFrom, XML_to, pTo, FSEND);
+        mpFS->startElementNS(XML_p, nXmlNodeType, XML_by, pBy, XML_from, pFrom, XML_to, pTo);
     }
     else if (nXmlNodeType == XML_animClr)
     {
@@ -867,7 +867,7 @@ void PPTXAnimationExport::WriteAnimationNodeAnimate(sal_Int32 nXmlNodeType)
             pDirection = xColor->getDirection() ? "cw" : "ccw";
         }
         mpFS->startElementNS(XML_p, nXmlNodeType, XML_clrSpc, pColorSpace, XML_dir, pDirection,
-                             XML_calcmode, pCalcMode, XML_valueType, pValueType, FSEND);
+                             XML_calcmode, pCalcMode, XML_valueType, pValueType);
     }
     else
     {
@@ -888,7 +888,7 @@ void PPTXAnimationExport::WriteAnimationNodeAnimate(sal_Int32 nXmlNodeType)
                              pValueType, XML_from,
                              sFrom.isEmpty() ? nullptr : sFrom.toUtf8().getStr(), XML_to,
                              sTo.isEmpty() ? nullptr : sTo.toUtf8().getStr(), XML_by,
-                             sBy.isEmpty() ? nullptr : sBy.toUtf8().getStr(), FSEND);
+                             sBy.isEmpty() ? nullptr : sBy.toUtf8().getStr());
         bTo = sTo.isEmpty() && sFrom.isEmpty() && sBy.isEmpty();
     }
 
@@ -927,7 +927,7 @@ void PPTXAnimationExport::WriteAnimationNodeAnimateInside(bool bSimple, bool bWr
         }
     }
 
-    mpFS->startElementNS(XML_p, XML_cBhvr, XML_additive, pAdditive, FSEND);
+    mpFS->startElementNS(XML_p, XML_cBhvr, XML_additive, pAdditive);
     WriteAnimationNodeCommonPropsStart();
 
     Reference<XIterateContainer> xIterate(rXNode->getParent(), UNO_QUERY);
@@ -1041,11 +1041,13 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
     bool bAutoReverse = rXNode->getAutoReverse();
 
     mpFS->startElementNS(
-        XML_p, XML_cTn, XML_id, I64S(mrPowerPointExport.GetNextAnimationNodeID()), XML_dur,
-        fDuration != 0 ? I32S(static_cast<sal_Int32>(fDuration * 1000.0)) : pDuration, XML_autoRev,
-        bAutoReverse ? "1" : nullptr, XML_restart, pRestart, XML_nodeType, pNodeType, XML_fill,
-        pFill, XML_presetClass, pPresetClass, XML_presetID, bPresetId ? I64S(nPresetId) : nullptr,
-        XML_presetSubtype, bPresetSubType ? I64S(nPresetSubType) : nullptr, FSEND);
+        XML_p, XML_cTn, XML_id, OString::number(mrPowerPointExport.GetNextAnimationNodeID()),
+        XML_dur,
+        fDuration != 0 ? OString::number(static_cast<sal_Int32>(fDuration * 1000.0)) : pDuration,
+        XML_autoRev, bAutoReverse ? "1" : nullptr, XML_restart, pRestart, XML_nodeType, pNodeType,
+        XML_fill, pFill, XML_presetClass, pPresetClass, XML_presetID,
+        bPresetId ? OString::number(nPresetId).getStr() : nullptr, XML_presetSubtype,
+        bPresetSubType ? OString::number(nPresetSubType).getStr() : nullptr);
 
     WriteAnimationCondList(mpContext->getCondition(true), XML_stCondLst);
     WriteAnimationCondList(mpContext->getCondition(false), XML_endCondLst);
@@ -1057,9 +1059,9 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
         {
             const char* sType = convertTextAnimationType(xIterate->getIterateType());
 
-            mpFS->startElementNS(XML_p, XML_iterate, XML_type, sType, FSEND);
+            mpFS->startElementNS(XML_p, XML_iterate, XML_type, sType);
             mpFS->singleElementNS(XML_p, XML_tmAbs, XML_val,
-                                  I32S(xIterate->getIterateInterval() * 1000), FSEND);
+                                  OString::number(xIterate->getIterateInterval() * 1000));
             mpFS->endElementNS(XML_p, XML_iterate);
         }
     }
@@ -1067,7 +1069,7 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
     const std::vector<NodeContextPtr>& aChildNodes = mpContext->getChildNodes();
     if (!aChildNodes.empty())
     {
-        mpFS->startElementNS(XML_p, XML_childTnLst, FSEND);
+        mpFS->startElementNS(XML_p, XML_childTnLst);
         for (const NodeContextPtr& pChildContext : aChildNodes)
         {
             if (pChildContext->isValid())
@@ -1082,7 +1084,7 @@ void PPTXAnimationExport::WriteAnimationNodeSeq()
 {
     SAL_INFO("sd.eppt", "write animation node SEQ");
 
-    mpFS->startElementNS(XML_p, XML_seq, FSEND);
+    mpFS->startElementNS(XML_p, XML_seq);
 
     WriteAnimationNodeCommonPropsStart();
 
@@ -1101,8 +1103,7 @@ void PPTXAnimationExport::WriteAnimationNodeEffect()
         const char* pFilter = ::ppt::AnimationExporter::FindTransitionName(
             xFilter->getTransition(), xFilter->getSubtype(), xFilter->getDirection());
         const char* pMode = xFilter->getMode() ? "in" : "out";
-        mpFS->startElementNS(XML_p, XML_animEffect, XML_filter, pFilter, XML_transition, pMode,
-                             FSEND);
+        mpFS->startElementNS(XML_p, XML_animEffect, XML_filter, pFilter, XML_transition, pMode);
 
         WriteAnimationNodeAnimateInside(false);
 
@@ -1139,10 +1140,10 @@ void PPTXAnimationExport::WriteAnimationNodeCommand()
             break;
     }
 
-    mpFS->startElementNS(XML_p, XML_cmd, XML_type, pType, XML_cmd, pCommand, FSEND);
+    mpFS->startElementNS(XML_p, XML_cmd, XML_type, pType, XML_cmd, pCommand);
 
     WriteAnimationNodeAnimateInside(false);
-    mpFS->startElementNS(XML_p, XML_cBhvr, FSEND);
+    mpFS->startElementNS(XML_p, XML_cBhvr);
     WriteAnimationNodeCommonPropsStart();
     WriteAnimationTarget(xCommand->getTarget());
     mpFS->endElementNS(XML_p, XML_cBhvr);
@@ -1165,18 +1166,18 @@ void PPTXAnimationExport::WriteAnimationNodeAudio()
 
     mrPowerPointExport.embedEffectAudio(mpFS, sUrl, sRelId, sName);
 
-    mpFS->startElementNS(XML_p, XML_audio, FSEND);
-    mpFS->startElementNS(XML_p, XML_cMediaNode, FSEND);
+    mpFS->startElementNS(XML_p, XML_audio);
+    mpFS->startElementNS(XML_p, XML_cMediaNode);
 
-    mpFS->startElementNS(XML_p, XML_cTn, FSEND);
+    mpFS->startElementNS(XML_p, XML_cTn);
     WriteAnimationCondList(mpContext->getCondition(true), XML_stCondLst);
     WriteAnimationCondList(mpContext->getCondition(false), XML_endCondLst);
     mpFS->endElementNS(XML_p, XML_cTn);
 
-    mpFS->startElementNS(XML_p, XML_tgtEl, FSEND);
+    mpFS->startElementNS(XML_p, XML_tgtEl);
     mpFS->singleElementNS(XML_p, XML_sndTgt, FSNS(XML_r, XML_embed),
                           sRelId.isEmpty() ? nullptr : sRelId.toUtf8().getStr(), XML_name,
-                          sUrl.isEmpty() ? nullptr : sName.toUtf8().getStr(), FSEND);
+                          sUrl.isEmpty() ? nullptr : sName.toUtf8().getStr());
     mpFS->endElementNS(XML_p, XML_tgtEl);
 
     mpFS->endElementNS(XML_p, XML_cMediaNode);
@@ -1196,7 +1197,7 @@ void PPTXAnimationExport::WriteAnimationNode(const NodeContextPtr& pContext)
     switch (xmlNodeType)
     {
         case XML_par:
-            mpFS->startElementNS(XML_p, xmlNodeType, FSEND);
+            mpFS->startElementNS(XML_p, xmlNodeType);
             WriteAnimationNodeCommonPropsStart();
             mpFS->endElementNS(XML_p, xmlNodeType);
             break;
@@ -1249,8 +1250,8 @@ void PPTXAnimationExport::WriteAnimations(const Reference<XDrawPage>& rXDrawPage
     auto pNodeContext = std::make_unique<NodeContext>(xNode, false, false);
     if (pNodeContext->isValid())
     {
-        mpFS->startElementNS(XML_p, XML_timing, FSEND);
-        mpFS->startElementNS(XML_p, XML_tnLst, FSEND);
+        mpFS->startElementNS(XML_p, XML_timing);
+        mpFS->startElementNS(XML_p, XML_tnLst);
 
         WriteAnimationNode(pNodeContext);
 

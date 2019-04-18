@@ -31,13 +31,6 @@ namespace com { namespace sun { namespace star { namespace io { class XOutputStr
 namespace sax_fastparser { class FastAttributeList; }
 
 #define FSNS(namespc, element) ((namespc << 16) | element)
-// Backwards compatibility for code that used FSEND to terminate the vararg.
-// As soon as no supported LO version has the varargs code, this can be removed entirely
-// (otherwise backports might break silently if people didn't add FSEND).
-// Ctor is there to get an error when trying to pass it to a vararg by accident.
-struct FSEND_t { FSEND_t() {}; };
-static const FSEND_t FSEND = FSEND_t();
-const sal_Int32 FSEND_internal = -1; // same as XML_TOKEN_INVALID
 
 namespace sax_fastparser {
 
@@ -69,7 +62,7 @@ public:
         pushAttributeValue(attribute, value);
         startElement(elementTokenId, std::forward<Args>(args)...);
     }
-    void startElement(sal_Int32 elementTokenId, FSEND_t);
+    void startElement(sal_Int32 elementTokenId);
 
     /// Start an element. After the first two arguments there can be a number of (attribute, value) pairs.
     template<typename... Args>
@@ -85,9 +78,9 @@ public:
         pushAttributeValue(attribute, value);
         startElementNS(namespaceTokenId, elementTokenId, std::forward<Args>(args)...);
     }
-    void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, FSEND_t)
+    void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId)
     {
-        startElement(FSNS(namespaceTokenId, elementTokenId), FSEND);
+        startElement(FSNS(namespaceTokenId, elementTokenId));
     }
 
     /// Create a single element. After the first argument there can be a number of (attribute, value) pairs.
@@ -104,7 +97,7 @@ public:
         pushAttributeValue(attribute, value);
         singleElement(elementTokenId, std::forward<Args>(args)...);
     }
-    void singleElement(sal_Int32 elementTokenId, FSEND_t);
+    void singleElement(sal_Int32 elementTokenId);
 
     /// Create a single element. After the first two arguments there can be a number of (attribute, value) pairs.
     template<typename... Args>
@@ -120,9 +113,9 @@ public:
         pushAttributeValue(attribute, value);
         singleElementNS(namespaceTokenId, elementTokenId, std::forward<Args>(args)...);
     }
-    void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, FSEND_t)
+    void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId)
     {
-        singleElement(FSNS(namespaceTokenId, elementTokenId), FSEND);
+        singleElement(FSNS(namespaceTokenId, elementTokenId));
     }
 
     void endElement(sal_Int32 elementTokenId);
