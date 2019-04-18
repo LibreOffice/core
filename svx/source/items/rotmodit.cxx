@@ -56,13 +56,6 @@ SvxRotateModeItem::~SvxRotateModeItem()
 {
 }
 
-SfxPoolItem* SvxRotateModeItem::Create( SvStream& rStream, sal_uInt16 ) const
-{
-    sal_uInt16 nVal;
-    rStream.ReadUInt16( nVal );
-    return new SvxRotateModeItem( static_cast<SvxRotateMode>(nVal),Which() );
-}
-
 bool SvxRotateModeItem::GetPresentation(
                                 SfxItemPresentation ePres,
                                 MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
@@ -94,11 +87,6 @@ sal_uInt16 SvxRotateModeItem::GetValueCount() const
 SfxPoolItem* SvxRotateModeItem::Clone( SfxItemPool* ) const
 {
     return new SvxRotateModeItem( *this );
-}
-
-sal_uInt16 SvxRotateModeItem::GetVersion( sal_uInt16 /*nFileVersion*/ ) const
-{
-    return 0;
 }
 
 bool SvxRotateModeItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const

@@ -229,27 +229,30 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)
         sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_FRMSIZE );
         FieldUnit eUnit = MapToFieldUnit( rSet->GetPool()->GetMetric( nW ));
 
-        SvxSizeItem aSz( nW );
+        std::shared_ptr<SvxSizeItem> aSz(std::make_shared<SvxSizeItem>(nW));
 
         // size could already have been set from another page
         const SfxItemSet* pExSet = GetDialogExampleSet();
         const SfxPoolItem* pItem = nullptr;
-        if( pExSet && SfxItemState::SET ==
-                pExSet->GetItemState( nW, false, &pItem ) )
-            aSz = *static_cast<const SvxSizeItem*>(pItem);
+        if( pExSet && SfxItemState::SET ==pExSet->GetItemState( nW, false, &pItem ) )
+        {
+            aSz.reset(static_cast< SvxSizeItem*>(pItem->Clone()));
+        }
         else
-            aSz = static_cast<const SvxSizeItem&>(GetItemSet().Get( nW ));
+        {
+            aSz.reset(static_cast< SvxSizeItem*>(GetItemSet().Get(nW).Clone()));
+        }
 
-        Size aTmpSz( aSz.GetSize() );
+        Size aTmpSz( aSz->GetSize() );
         if( m_xWidthMF->get_value_changed_from_saved() )
             aTmpSz.setWidth( lcl_GetValue( *m_xWidthMF, eUnit ) );
         if( m_xHeightMF->get_value_changed_from_saved() )
             aTmpSz.setHeight( lcl_GetValue( *m_xHeightMF, eUnit ) );
-        aSz.SetSize( aTmpSz );
+        aSz->SetSize( aTmpSz );
         m_xWidthMF->save_value();
         m_xHeightMF->save_value();
 
-        bModified |= nullptr != rSet->Put( aSz );
+        bModified |= nullptr != rSet->Put( *aSz );
 
         if( bSetOrigSize )
         {

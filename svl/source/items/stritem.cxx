@@ -25,27 +25,6 @@
 
 
 // virtual
-SfxStringItem::SfxStringItem(sal_uInt16 which, SvStream & rStream):
-    CntUnencodedStringItem(which)
-{
-    SetValue(readByteString(rStream));
-}
-
-
-// virtual
-SfxPoolItem * SfxStringItem::Create(SvStream & rStream, sal_uInt16) const
-{
-    return new SfxStringItem(Which(), rStream);
-}
-
-// virtual
-SvStream & SfxStringItem::Store(SvStream & rStream, sal_uInt16) const
-{
-    writeByteString(rStream, GetValue());
-    return rStream;
-}
-
-// virtual
 SfxPoolItem * SfxStringItem::Clone(SfxItemPool *) const
 {
     return new SfxStringItem(*this);

@@ -125,7 +125,6 @@ public:
                                   OUString &rText,
                                   const IntlWrapper& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const override;
 
     const SvxMacroTableDtor& GetMacroTable() const { return aMacroTable;}
     void SetMacroTable( const SvxMacroTableDtor& rTbl ) { aMacroTable = rTbl; }

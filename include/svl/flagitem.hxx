@@ -36,8 +36,6 @@ public:
     virtual sal_uInt8        GetFlagCount() const;
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16 nVersion) const override;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const override;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,

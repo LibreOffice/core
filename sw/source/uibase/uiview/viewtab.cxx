@@ -721,25 +721,24 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 if ( i >= rTabStops.Count() )
                 {
                     // No DefTab
-                    SvxTabStopItem aTabStops( RES_PARATR_TABSTOP );
-                    aTabStops = rTabStops;
+                    std::shared_ptr<SvxTabStopItem> aTabStops(static_cast<SvxTabStopItem*>(rTabStops.Clone()));
 
-                    ::lcl_EraseDefTabs(aTabStops);
+                    ::lcl_EraseDefTabs(*aTabStops);
 
                     SvxTabStop aSwTabStop( 0, SvxTabAdjust::Default );
-                    aTabStops.Insert(aSwTabStop);
+                    aTabStops->Insert(aSwTabStop);
 
                     const SvxTabStopItem& rDefTabs = rSh.GetDefault(RES_PARATR_TABSTOP);
-                    ::MakeDefTabs( ::GetTabDist(rDefTabs), aTabStops );
+                    ::MakeDefTabs( ::GetTabDist(rDefTabs), *aTabStops );
 
                     if( pColl && pColl->IsAutoUpdateFormat())
                     {
                         SfxItemSet aSetTmp(GetPool(), svl::Items<RES_PARATR_TABSTOP, RES_PARATR_TABSTOP>{});
-                        aSetTmp.Put(aTabStops);
+                        aSetTmp.Put(*aTabStops);
                         rSh.AutoUpdatePara( pColl, aSetTmp );
                     }
                     else
-                        rSh.SetAttrItem( aTabStops );
+                        rSh.SetAttrItem( *aTabStops );
                 }
             }
         }
@@ -1453,15 +1452,15 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             }
             else
             {
-                SvxLRSpaceItem aLR( RES_LR_SPACE );
+                std::shared_ptr<SvxLRSpaceItem> aLR(std::make_shared<SvxLRSpaceItem>(RES_LR_SPACE));
                 if ( !IsTabColFromDoc() )
                 {
-                    aLR = aCoreSet.Get(RES_LR_SPACE);
+                    aLR.reset(static_cast<SvxLRSpaceItem*>(aCoreSet.Get(RES_LR_SPACE).Clone()));
 
                     // #i23726#
                     if (m_pNumRuleNodeFromDoc)
                     {
-                        short nOffset = static_cast< short >(aLR.GetTextLeft() +
+                        short nOffset = static_cast< short >(aLR->GetTextLeft() +
                                         // #i42922# Mouse move of numbering label
                                         // has to consider the left indent of the paragraph
                                         m_pNumRuleNodeFromDoc->GetLeftMarginWithNum( true ) );
@@ -1469,11 +1468,11 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         short nFLOffset;
                         m_pNumRuleNodeFromDoc->GetFirstLineOfsWithNum( nFLOffset );
 
-                        aLR.SetLeft( nOffset + nFLOffset );
+                        aLR->SetLeft( nOffset + nFLOffset );
                     }
                 }
-                aLR.SetWhich(nWhich);
-                rSet.Put(aLR);
+                aLR->SetWhich(nWhich);
+                rSet.Put(*aLR);
             }
             break;
         }
