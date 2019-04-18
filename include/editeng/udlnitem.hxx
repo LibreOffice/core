@@ -42,8 +42,6 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const override;
     virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const;
     virtual sal_uInt16      GetValueCount() const override;
 
@@ -56,14 +54,6 @@ public:
     virtual void            SetBoolValue( bool bVal ) override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-
-    SvxTextLineItem& operator=(const SvxTextLineItem& rTextLine)
-        {
-            SetValue( rTextLine.GetValue() );
-            SetColor( rTextLine.GetColor() );
-            return *this;
-        }
-    SvxTextLineItem(SvxTextLineItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // enum cast
     FontLineStyle           GetLineStyle() const
@@ -88,7 +78,6 @@ public:
                       const sal_uInt16 nId );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
     virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const override;
 };
 
@@ -105,7 +94,6 @@ public:
                      const sal_uInt16 nId );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
     virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const override;
 };
 

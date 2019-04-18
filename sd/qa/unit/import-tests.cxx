@@ -1201,7 +1201,7 @@ void SdImportTest::testPDFImport()
 void SdImportTest::testPDFImportSkipImages()
 {
     SfxAllItemSet *pParams = new SfxAllItemSet( SfxGetpApp()->GetPool() );
-    pParams->Put( SfxStringItem ( SID_FILE_FILTEROPTIONS, OUString("SkipImages") ) );
+    pParams->Put( SfxStringItem ( SID_FILE_FILTEROPTIONS, "SkipImages" ) );
 
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pdf/txtpic.pdf"), PDF, pParams);
     SdDrawDocument *pDoc = xDocShRef->GetDoc();

@@ -617,7 +617,7 @@ namespace dbaui
 
         if ( m_pRB_CreateDatabase->IsChecked() )
         {
-            _rCoreAttrs->Put( SfxStringItem( DSID_CONNECTURL, OUString( "sdbc:dbase:" ) ) );
+            _rCoreAttrs->Put( SfxStringItem( DSID_CONNECTURL, "sdbc:dbase:" ) );
             bChangedSomething = true;
             bCommitTypeSelection = false;
         }

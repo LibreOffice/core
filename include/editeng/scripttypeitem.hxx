@@ -29,7 +29,6 @@ public:
     SvxScriptSetItem( sal_uInt16 nSlotId, SfxItemPool& rPool );
 
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem* Create( SvStream &, sal_uInt16 nVersion ) const override;
 
     static const SfxPoolItem* GetItemOfScriptSet( const SfxItemSet& rSet,
                                                     sal_uInt16 nWhich );

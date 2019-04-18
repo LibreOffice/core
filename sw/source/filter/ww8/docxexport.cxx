@@ -944,7 +944,7 @@ void DocxExport::WriteSettings()
     }
 
     // Display Background Shape
-    if (boost::optional<SvxBrushItem> oBrush = getBackground())
+    if (std::shared_ptr<SvxBrushItem> oBrush = getBackground(); oBrush)
     {
         // Turn on the 'displayBackgroundShape'
         pFS->singleElementNS(XML_w, XML_displayBackgroundShape);
@@ -1456,7 +1456,7 @@ void DocxExport::WriteMainText()
     m_aLinkedTextboxesHelper.clear();
 
     // Write background page color
-    if (boost::optional<SvxBrushItem> oBrush = getBackground())
+    if (std::shared_ptr<SvxBrushItem> oBrush = getBackground(); oBrush)
     {
         Color backgroundColor = oBrush->GetColor();
         OString aBackgroundColorStr = msfilter::util::ConvertColor(backgroundColor);

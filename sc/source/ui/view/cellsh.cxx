@@ -806,7 +806,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
                     // In interpreter may happen via rescheduled Basic
                     if ( pDoc->IsInInterpreter() )
-                        rSet.Put( SfxStringItem( nWhich, OUString("...") ) );
+                        rSet.Put( SfxStringItem( nWhich, "..." ) );
                     else
                     {
                         FormulaError nErrCode = FormulaError::NONE;
