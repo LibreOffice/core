@@ -1385,6 +1385,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Align Top to Anchor</value>
         </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Top to Anchor</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -1393,6 +1396,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Align Bottom to Anchor</value>
         </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Bottom to Anchor</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -1400,6 +1406,9 @@
       <node oor:name=".uno:AlignVerticalCenter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Align Middle to Anchor</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Middle to Anchor</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
