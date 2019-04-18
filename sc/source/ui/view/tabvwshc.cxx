@@ -173,14 +173,6 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
         }
         break;
 
-        case FID_CHG_SHOW:
-        {
-            // dialog checks, what is in the cell
-
-            pResult = VclPtr<ScHighlightChgDlg>::Create( pB, pCW, pParent, &GetViewData() );
-        }
-        break;
-
         case WID_CONDFRMT_REF:
         {
             bool        bFound      = false;
@@ -478,6 +470,12 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             ScViewData& rViewData = GetViewData();
             ScAddress aCurPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
             xResult.reset(new ScOptSolverDlg(pB, pCW, pParent, rViewData.GetDocShell(), aCurPos));
+            break;
+        }
+        case FID_CHG_SHOW:
+        {
+            // dialog checks, what is in the cell
+            xResult.reset(new ScHighlightChgDlg(pB, pCW, pParent, &GetViewData()));
             break;
         }
     }
