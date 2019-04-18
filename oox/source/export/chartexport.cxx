@@ -453,9 +453,9 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
 
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
 
-    pFS->startElementNS( mnXmlNamespace, XML_graphicFrame, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_graphicFrame );
 
-    pFS->startElementNS( mnXmlNamespace, XML_nvGraphicFramePr, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_nvGraphicFramePr );
 
     // TODO: get the correct chart name chart id
     OUString sName = "Object 1";
@@ -465,8 +465,7 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
 
     pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id,     I32S( nID ),
-                          XML_name,   sName.toUtf8(),
-                          FSEND );
+                          XML_name,   sName.toUtf8() );
 
     OUString sURL;
     if ( GetProperty( xShapeProps, "URL" ) )
@@ -479,27 +478,23 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
                 mpURLTransformer->isExternalURL(sURL));
 
         mpFS->singleElementNS( XML_a, XML_hlinkClick,
-                FSNS( XML_r,XML_id ), sRelId.toUtf8(),
-                FSEND );
+                FSNS( XML_r,XML_id ), sRelId.toUtf8() );
     }
     pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
 
-    pFS->singleElementNS( mnXmlNamespace, XML_cNvGraphicFramePr,
-                          FSEND );
+    pFS->singleElementNS( mnXmlNamespace, XML_cNvGraphicFramePr );
 
     if( GetDocumentType() == DOCUMENT_PPTX )
-        pFS->singleElementNS( mnXmlNamespace, XML_nvPr,
-                          FSEND );
+        pFS->singleElementNS( mnXmlNamespace, XML_nvPr );
     pFS->endElementNS( mnXmlNamespace, XML_nvGraphicFramePr );
 
     // visual chart properties
     WriteShapeTransformation( xShape, mnXmlNamespace );
 
     // writer chart object
-    pFS->startElement( FSNS( XML_a, XML_graphic ), FSEND );
+    pFS->startElement( FSNS( XML_a, XML_graphic ) );
     pFS->startElement( FSNS( XML_a, XML_graphicData ),
-                       XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/chart",
-                       FSEND );
+                       XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/chart" );
     OUString sId;
     const char* sFullPath = nullptr;
     const char* sRelativePath = nullptr;
@@ -552,8 +547,7 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
     pFS->singleElement(  FSNS( XML_c, XML_chart ),
             FSNS(XML_xmlns, XML_c), pFB->getNamespaceURL(OOX_NS(dmlChart)).toUtf8(),
             FSNS(XML_xmlns, XML_r), pFB->getNamespaceURL(OOX_NS(officeRel)).toUtf8(),
-            FSNS(XML_r, XML_id), sId.toUtf8(),
-            FSEND );
+            FSNS(XML_r, XML_id), sId.toUtf8() );
 
     pFS->endElement( FSNS( XML_a, XML_graphicData ) );
     pFS->endElement( FSNS( XML_a, XML_graphic ) );
@@ -628,16 +622,13 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
     pFS->startElement( FSNS( XML_c, XML_chartSpace ),
             FSNS( XML_xmlns, XML_c ), OUStringToOString(pFB->getNamespaceURL(OOX_NS(dmlChart)), RTL_TEXTENCODING_UTF8).getStr(),
             FSNS( XML_xmlns, XML_a ), OUStringToOString(pFB->getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSNS( XML_xmlns, XML_r ), OUStringToOString(pFB->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSEND );
+            FSNS( XML_xmlns, XML_r ), OUStringToOString(pFB->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr() );
     // TODO: get the correct editing language
     pFS->singleElement( FSNS( XML_c, XML_lang ),
-            XML_val, "en-US",
-            FSEND );
+            XML_val, "en-US" );
 
     pFS->singleElement(FSNS( XML_c, XML_roundedCorners),
-            XML_val, "0",
-            FSEND);
+            XML_val, "0");
 
     if( !bIncludeTable )
     {
@@ -704,8 +695,7 @@ void ChartExport::exportExternalData( const Reference< css::chart::XChartDocumen
                         type,
                         relationPath);
         pFS->singleElementNS( XML_c, XML_externalData,
-                FSNS(XML_r, XML_id), OUStringToOString(sRelId, RTL_TEXTENCODING_UTF8),
-                FSEND);
+                FSNS(XML_r, XML_id), OUStringToOString(sRelId, RTL_TEXTENCODING_UTF8));
     }
 }
 
@@ -741,8 +731,7 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
     // chart element
 
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, XML_chart ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_chart ) );
 
     // title
     if( bHasMainTitle )
@@ -752,8 +741,7 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
         {
             exportTitle( xShape );
             pFS->singleElement( FSNS(XML_c, XML_autoTitleDeleted),
-                    XML_val, "0",
-                    FSEND);
+                    XML_val, "0");
         }
     }
     InitPlotArea( );
@@ -765,8 +753,7 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
         Reference< beans::XPropertySet > xFloor( mxNewDiagram->getFloor(), uno::UNO_QUERY );
         if( xFloor.is() )
         {
-            pFS->startElement( FSNS( XML_c, XML_floor ),
-                FSEND );
+            pFS->startElement( FSNS( XML_c, XML_floor ) );
             exportShapeProps( xFloor );
             pFS->endElement( FSNS( XML_c, XML_floor ) );
         }
@@ -777,14 +764,12 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
         if( xWall.is() )
         {
             // sideWall
-            pFS->startElement( FSNS( XML_c, XML_sideWall ),
-                FSEND );
+            pFS->startElement( FSNS( XML_c, XML_sideWall ) );
             exportShapeProps( xWall );
             pFS->endElement( FSNS( XML_c, XML_sideWall ) );
 
             // backWall
-            pFS->startElement( FSNS( XML_c, XML_backWall ),
-                FSEND );
+            pFS->startElement( FSNS( XML_c, XML_backWall ) );
             exportShapeProps( xWall );
             pFS->endElement( FSNS( XML_c, XML_backWall ) );
         }
@@ -801,8 +786,7 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
     bool bIncludeHiddenCells = false;
     aPlotVisOnly >>= bIncludeHiddenCells;
     pFS->singleElement( FSNS( XML_c, XML_plotVisOnly ),
-            XML_val, ToPsz10(!bIncludeHiddenCells),
-            FSEND );
+            XML_val, ToPsz10(!bIncludeHiddenCells) );
 
     exportMissingValueTreatment(Reference<beans::XPropertySet>(mxDiagram, uno::UNO_QUERY));
 
@@ -838,15 +822,13 @@ void ChartExport::exportMissingValueTreatment(const uno::Reference<beans::XPrope
 
     FSHelperPtr pFS = GetFS();
     pFS->singleElement( FSNS(XML_c, XML_dispBlanksAs),
-            XML_val, pVal,
-            FSEND);
+            XML_val, pVal);
 }
 
 void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& xChartDoc )
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, XML_legend ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_legend ) );
 
     Reference< beans::XPropertySet > xProp( xChartDoc->getLegend(), uno::UNO_QUERY );
     if( xProp.is() )
@@ -887,33 +869,28 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
         if( strPos != nullptr )
         {
             pFS->singleElement( FSNS( XML_c, XML_legendPos ),
-                XML_val, strPos,
-                FSEND );
+                XML_val, strPos );
         }
 
         uno::Any aRelativePos = xProp->getPropertyValue("RelativePosition");
         if (aRelativePos.hasValue())
         {
-            pFS->startElement(FSNS(XML_c, XML_layout), FSEND);
-            pFS->startElement(FSNS(XML_c, XML_manualLayout), FSEND);
+            pFS->startElement(FSNS(XML_c, XML_layout));
+            pFS->startElement(FSNS(XML_c, XML_manualLayout));
 
             pFS->singleElement(FSNS(XML_c, XML_xMode),
-                    XML_val, "edge",
-                    FSEND);
+                    XML_val, "edge");
             pFS->singleElement(FSNS(XML_c, XML_yMode),
-                    XML_val, "edge",
-                    FSEND);
+                    XML_val, "edge");
             chart2::RelativePosition aPos = aRelativePos.get<chart2::RelativePosition>();
 
             const double x = aPos.Primary;
             const double y = aPos.Secondary;
 
             pFS->singleElement(FSNS(XML_c, XML_x),
-                    XML_val, IS(x),
-                    FSEND);
+                    XML_val, IS(x));
             pFS->singleElement(FSNS(XML_c, XML_y),
-                    XML_val, IS(y),
-                    FSEND);
+                    XML_val, IS(y));
 
             uno::Any aRelativeSize = xProp->getPropertyValue("RelativeSize");
             if (aRelativeSize.hasValue())
@@ -924,12 +901,10 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
                 const double h = aSize.Secondary;
 
                 pFS->singleElement(FSNS(XML_c, XML_w),
-                        XML_val, IS(w),
-                        FSEND);
+                        XML_val, IS(w));
 
                 pFS->singleElement(FSNS(XML_c, XML_h),
-                        XML_val, IS(h),
-                        FSEND);
+                        XML_val, IS(h));
             }
 
             SAL_WARN_IF(aPos.Anchor != css::drawing::Alignment_TOP_LEFT, "oox", "unsupported anchor position");
@@ -941,8 +916,7 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
         if (strPos != nullptr)
         {
             pFS->singleElement( FSNS( XML_c, XML_overlay ),
-                    XML_val, "0",
-                    FSEND );
+                    XML_val, "0" );
         }
 
         // shape properties
@@ -969,13 +943,10 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape )
         return;
 
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, XML_title ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_title ) );
 
-    pFS->startElement( FSNS( XML_c, XML_tx ),
-            FSEND );
-    pFS->startElement( FSNS( XML_c, XML_rich ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_tx ) );
+    pFS->startElement( FSNS( XML_c, XML_rich ) );
 
     // TODO: bodyPr
     const char* sWritingMode = nullptr;
@@ -989,17 +960,13 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape )
 
     pFS->singleElement( FSNS( XML_a, XML_bodyPr ),
             XML_vert, sWritingMode,
-            XML_rot, oox::drawingml::calcRotationValue(nRotation).getStr(),
-            FSEND );
+            XML_rot, oox::drawingml::calcRotationValue(nRotation).getStr() );
     // TODO: lstStyle
-    pFS->singleElement( FSNS( XML_a, XML_lstStyle ),
-            FSEND );
+    pFS->singleElement( FSNS( XML_a, XML_lstStyle ) );
     // FIXME: handle multiple paragraphs to parse aText
-    pFS->startElement( FSNS( XML_a, XML_p ),
-            FSEND );
+    pFS->startElement( FSNS( XML_a, XML_p ) );
 
-    pFS->startElement( FSNS( XML_a, XML_pPr ),
-            FSEND );
+    pFS->startElement( FSNS( XML_a, XML_pPr ) );
 
     bool bDummy = false;
     sal_Int32 nDummy;
@@ -1007,12 +974,10 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape )
 
     pFS->endElement( FSNS( XML_a, XML_pPr ) );
 
-    pFS->startElement( FSNS( XML_a, XML_r ),
-            FSEND );
+    pFS->startElement( FSNS( XML_a, XML_r ) );
     bDummy = false;
     WriteRunProperties( xPropSet, false, XML_rPr, true, bDummy, nDummy );
-    pFS->startElement( FSNS( XML_a, XML_t ),
-            FSEND );
+    pFS->startElement( FSNS( XML_a, XML_t ) );
     pFS->writeEscaped( sText );
     pFS->endElement( FSNS( XML_a, XML_t ) );
     pFS->endElement( FSNS( XML_a, XML_r ) );
@@ -1025,14 +990,12 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape )
     uno::Any aManualLayout = xPropSet->getPropertyValue("RelativePosition");
     if (aManualLayout.hasValue())
     {
-        pFS->startElement(FSNS( XML_c, XML_layout ), FSEND);
-        pFS->startElement(FSNS(XML_c, XML_manualLayout), FSEND);
+        pFS->startElement(FSNS( XML_c, XML_layout ));
+        pFS->startElement(FSNS(XML_c, XML_manualLayout));
         pFS->singleElement(FSNS(XML_c, XML_xMode),
-                XML_val, "edge",
-                FSEND);
+                XML_val, "edge");
         pFS->singleElement(FSNS(XML_c, XML_yMode),
-                XML_val, "edge",
-                FSEND);
+                XML_val, "edge");
 
         Reference<embed::XVisualObject> xVisObject(mxChartModel, uno::UNO_QUERY);
         awt::Size aPageSize = xVisObject->getVisualAreaSize(embed::Aspects::MSOLE_CONTENT);
@@ -1043,33 +1006,26 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape )
         double y = static_cast<double>(aPos2.Y) / static_cast<double>(aPageSize.Height);
         /*
         pFS->singleElement(FSNS(XML_c, XML_wMode),
-                XML_val, "edge",
-                FSEND);
+                XML_val, "edge");
         pFS->singleElement(FSNS(XML_c, XML_hMode),
-                XML_val, "edge",
-                FSEND);
+                XML_val, "edge");
                 */
         pFS->singleElement(FSNS(XML_c, XML_x),
-                XML_val, IS(x),
-                FSEND);
+                XML_val, IS(x));
         pFS->singleElement(FSNS(XML_c, XML_y),
-                XML_val, IS(y),
-                FSEND);
+                XML_val, IS(y));
         /*
         pFS->singleElement(FSNS(XML_c, XML_w),
-                XML_val, "",
-                FSEND);
+                XML_val, "");
         pFS->singleElement(FSNS(XML_c, XML_h),
-                XML_val, "",
-                FSEND);
+                XML_val, "");
                 */
         pFS->endElement(FSNS(XML_c, XML_manualLayout));
         pFS->endElement(FSNS(XML_c, XML_layout));
     }
 
     pFS->singleElement( FSNS(XML_c, XML_overlay),
-            XML_val, "0",
-            FSEND);
+            XML_val, "0");
 
     // shape properties
     if( xPropSet.is() )
@@ -1089,8 +1045,7 @@ void ChartExport::exportPlotArea( const Reference< css::chart::XChartDocument >&
     // plot-area element
 
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, XML_plotArea ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_plotArea ) );
 
     Reference<beans::XPropertySet> xWall(mxNewDiagram, uno::UNO_QUERY);
     if( xWall.is() )
@@ -1233,22 +1188,19 @@ void ChartExport::exportManualLayout(const css::chart2::RelativePosition& rPos,
                                      const bool bIsExcludingDiagramPositioning)
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElement(FSNS(XML_c, XML_layout), FSEND);
-    pFS->startElement(FSNS(XML_c, XML_manualLayout), FSEND);
+    pFS->startElement(FSNS(XML_c, XML_layout));
+    pFS->startElement(FSNS(XML_c, XML_manualLayout));
 
     // By default layoutTarget is set to "outer" and we shouldn't save it in that case
     if ( bIsExcludingDiagramPositioning )
     {
         pFS->singleElement(FSNS(XML_c, XML_layoutTarget),
-                XML_val, "inner",
-                FSEND);
+                XML_val, "inner");
     }
     pFS->singleElement(FSNS(XML_c, XML_xMode),
-            XML_val, "edge",
-            FSEND);
+            XML_val, "edge");
     pFS->singleElement(FSNS(XML_c, XML_yMode),
-            XML_val, "edge",
-            FSEND);
+            XML_val, "edge");
 
     double x = rPos.Primary;
     double y = rPos.Secondary;
@@ -1291,20 +1243,16 @@ void ChartExport::exportManualLayout(const css::chart2::RelativePosition& rPos,
     }
 
     pFS->singleElement(FSNS(XML_c, XML_x),
-            XML_val, IS(x),
-            FSEND);
+            XML_val, IS(x));
 
     pFS->singleElement(FSNS(XML_c, XML_y),
-            XML_val, IS(y),
-            FSEND);
+            XML_val, IS(y));
 
     pFS->singleElement(FSNS(XML_c, XML_w),
-            XML_val, IS(w),
-            FSEND);
+            XML_val, IS(w));
 
     pFS->singleElement(FSNS(XML_c, XML_h),
-            XML_val, IS(h),
-            FSEND);
+            XML_val, IS(h));
 
     pFS->endElement(FSNS(XML_c, XML_manualLayout));
     pFS->endElement(FSNS(XML_c, XML_layout));
@@ -1395,7 +1343,7 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
             uno::Any rValue = xGradient->getByName( sFillGradientName );
             if( rValue >>= aGradient )
             {
-                mpFS->startElementNS( XML_a, XML_gradFill, FSEND );
+                mpFS->startElementNS( XML_a, XML_gradFill );
                 WriteGradientFill( aGradient );
                 mpFS->endElementNS( XML_a, XML_gradFill );
             }
@@ -1427,20 +1375,16 @@ void ChartExport::exportDataTable( )
 
     if (bShowVBorder || bShowHBorder || bShowOutline)
     {
-        pFS->startElement( FSNS( XML_c, XML_dTable),
-                FSEND );
+        pFS->startElement( FSNS( XML_c, XML_dTable) );
         if (bShowHBorder)
             pFS->singleElement( FSNS( XML_c, XML_showHorzBorder ),
-                            XML_val, "1",
-                            FSEND );
+                            XML_val, "1" );
         if (bShowVBorder)
             pFS->singleElement( FSNS( XML_c, XML_showVertBorder ),
-                            XML_val, "1",
-                            FSEND );
+                            XML_val, "1" );
         if (bShowOutline)
             pFS->singleElement( FSNS( XML_c, XML_showOutline ),
-                            XML_val, "1",
-                            FSEND );
+                            XML_val, "1" );
 
         pFS->endElement(  FSNS( XML_c, XML_dTable));
     }
@@ -1452,8 +1396,7 @@ void ChartExport::exportAreaChart( const Reference< chart2::XChartType >& xChart
     sal_Int32 nTypeId = XML_areaChart;
     if( mbIs3DChart )
         nTypeId = XML_area3DChart;
-    pFS->startElement( FSNS( XML_c, nTypeId ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, nTypeId ) );
 
     exportGrouping( );
     bool bPrimaryAxes = true;
@@ -1469,8 +1412,7 @@ void ChartExport::exportBarChart( const Reference< chart2::XChartType >& xChartT
     if( mbIs3DChart )
         nTypeId = XML_bar3DChart;
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, nTypeId ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, nTypeId ) );
     // bar direction
     bool bVertical = false;
     Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
@@ -1479,8 +1421,7 @@ void ChartExport::exportBarChart( const Reference< chart2::XChartType >& xChartT
 
     const char* bardir = bVertical? "bar":"col";
     pFS->singleElement( FSNS( XML_c, XML_barDir ),
-            XML_val, bardir,
-            FSEND );
+            XML_val, bardir );
 
     exportGrouping( true );
 
@@ -1499,8 +1440,7 @@ void ChartExport::exportBarChart( const Reference< chart2::XChartType >& xChartT
         {
             sal_Int32 nGapWidth = aBarPositionSequence[0];
             pFS->singleElement( FSNS( XML_c, XML_gapWidth ),
-                XML_val, I32S( nGapWidth ),
-                FSEND );
+                XML_val, I32S( nGapWidth ) );
         }
     }
 
@@ -1528,8 +1468,7 @@ void ChartExport::exportBarChart( const Reference< chart2::XChartType >& xChartT
                 break;
         }
         pFS->singleElement( FSNS( XML_c, XML_shape ),
-            XML_val, sShapeType,
-            FSEND );
+            XML_val, sShapeType );
     }
 
     //overlap
@@ -1549,14 +1488,12 @@ void ChartExport::exportBarChart( const Reference< chart2::XChartType >& xChartT
             {
                 nOverlap = 100;
                 pFS->singleElement( FSNS( XML_c, XML_overlap ),
-                    XML_val, I32S( nOverlap ),
-                    FSEND );
+                    XML_val, I32S( nOverlap ) );
             }
             else // Normal bar chart
             {
                 pFS->singleElement( FSNS( XML_c, XML_overlap ),
-                    XML_val, I32S( nOverlap ),
-                    FSEND );
+                    XML_val, I32S( nOverlap ) );
             }
         }
     }
@@ -1569,8 +1506,7 @@ void ChartExport::exportBarChart( const Reference< chart2::XChartType >& xChartT
 void ChartExport::exportBubbleChart( const Reference< chart2::XChartType >& xChartType )
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, XML_bubbleChart ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_bubbleChart ) );
 
     exportVaryColors(xChartType);
 
@@ -1578,8 +1514,7 @@ void ChartExport::exportBubbleChart( const Reference< chart2::XChartType >& xCha
     exportAllSeries(xChartType, bPrimaryAxes);
 
     pFS->singleElement(FSNS(XML_c, XML_bubble3D),
-            XML_val, "0",
-            FSEND);
+            XML_val, "0");
 
     exportAxesId(bPrimaryAxes);
 
@@ -1589,8 +1524,7 @@ void ChartExport::exportBubbleChart( const Reference< chart2::XChartType >& xCha
 void ChartExport::exportDoughnutChart( const Reference< chart2::XChartType >& xChartType )
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, XML_doughnutChart ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_doughnutChart ) );
 
     exportVaryColors(xChartType);
 
@@ -1600,8 +1534,7 @@ void ChartExport::exportDoughnutChart( const Reference< chart2::XChartType >& xC
     exportFirstSliceAng( );
     //FIXME: holeSize
     pFS->singleElement( FSNS( XML_c, XML_holeSize ),
-            XML_val, I32S( 50 ),
-            FSEND );
+            XML_val, I32S( 50 ) );
 
     pFS->endElement( FSNS( XML_c, XML_doughnutChart ) );
 }
@@ -1676,8 +1609,7 @@ void ChartExport::exportLineChart( const Reference< chart2::XChartType >& xChart
         sal_Int32 nTypeId = XML_lineChart;
         if( mbIs3DChart )
             nTypeId = XML_line3DChart;
-        pFS->startElement( FSNS( XML_c, nTypeId ),
-                FSEND );
+        pFS->startElement( FSNS( XML_c, nTypeId ) );
 
         exportGrouping( );
 
@@ -1698,8 +1630,7 @@ void ChartExport::exportLineChart( const Reference< chart2::XChartType >& xChart
             exportUpDownBars(xChartType);
             const char* marker = nSymbolType == css::chart::ChartSymbolType::NONE? "0":"1";
             pFS->singleElement( FSNS( XML_c, XML_marker ),
-                    XML_val, marker,
-                    FSEND );
+                    XML_val, marker );
         }
 
         exportAxesId(bPrimaryAxes, true);
@@ -1720,8 +1651,7 @@ void ChartExport::exportPieChart( const Reference< chart2::XChartType >& xChartT
     sal_Int32 nTypeId = XML_pieChart;
     if( mbIs3DChart )
         nTypeId = XML_pie3DChart;
-    pFS->startElement( FSNS( XML_c, nTypeId ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, nTypeId ) );
 
     exportVaryColors(xChartType);
 
@@ -1740,8 +1670,7 @@ void ChartExport::exportPieChart( const Reference< chart2::XChartType >& xChartT
 void ChartExport::exportRadarChart( const Reference< chart2::XChartType >& xChartType)
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, XML_radarChart ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_radarChart ) );
 
     // radarStyle
     sal_Int32 eChartType = getChartType( );
@@ -1751,8 +1680,7 @@ void ChartExport::exportRadarChart( const Reference< chart2::XChartType >& xChar
     else
         radarStyle = "marker";
     pFS->singleElement( FSNS( XML_c, XML_radarStyle ),
-            XML_val, radarStyle,
-            FSEND );
+            XML_val, radarStyle );
 
     exportVaryColors(xChartType);
     bool bPrimaryAxes = true;
@@ -1766,8 +1694,7 @@ void ChartExport::exportScatterChartSeries( const Reference< chart2::XChartType 
         css::uno::Sequence<css::uno::Reference<chart2::XDataSeries>>* pSeries)
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, XML_scatterChart ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_scatterChart ) );
     // TODO:scatterStyle
 
     sal_Int32 nSymbolType = css::chart::ChartSymbolType::NONE;
@@ -1782,8 +1709,7 @@ void ChartExport::exportScatterChartSeries( const Reference< chart2::XChartType 
     }
 
     pFS->singleElement( FSNS( XML_c, XML_scatterStyle ),
-            XML_val, scatterStyle,
-            FSEND );
+            XML_val, scatterStyle );
 
     exportVaryColors(xChartType);
     // FIXME: should export xVal and yVal
@@ -1815,8 +1741,7 @@ void ChartExport::exportScatterChart( const Reference< chart2::XChartType >& xCh
 void ChartExport::exportStockChart( const Reference< chart2::XChartType >& xChartType )
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, XML_stockChart ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_stockChart ) );
 
     bool bPrimaryAxes = true;
     Reference< chart2::XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY );
@@ -1849,8 +1774,7 @@ void ChartExport::exportHiLowLines()
     if( !xStockPropSet.is() )
         return;
 
-    pFS->startElement( FSNS( XML_c, XML_hiLowLines ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_hiLowLines ) );
     exportShapeProps( xStockPropSet );
     pFS->endElement( FSNS( XML_c, XML_hiLowLines ) );
 }
@@ -1866,18 +1790,15 @@ void ChartExport::exportUpDownBars( const Reference< chart2::XChartType >& xChar
     if(xChartPropProvider.is())
     {
         //  updownbar
-        pFS->startElement( FSNS( XML_c, XML_upDownBars ),
-                FSEND );
+        pFS->startElement( FSNS( XML_c, XML_upDownBars ) );
         // TODO: gapWidth
         pFS->singleElement( FSNS( XML_c, XML_gapWidth ),
-                XML_val, I32S( 150 ),
-                    FSEND );
+                XML_val, I32S( 150 ) );
 
         Reference< beans::XPropertySet > xChartPropSet = xChartPropProvider->getUpBar();
         if( xChartPropSet.is() )
         {
-            pFS->startElement( FSNS( XML_c, XML_upBars ),
-                    FSEND );
+            pFS->startElement( FSNS( XML_c, XML_upBars ) );
             // For Linechart with UpDownBars, spPr is not getting imported
             // so no need to call the exportShapeProps() for LineChart
             if(xChartType->getChartType() == "com.sun.star.chart2.CandleStickChartType")
@@ -1889,8 +1810,7 @@ void ChartExport::exportUpDownBars( const Reference< chart2::XChartType >& xChar
         xChartPropSet = xChartPropProvider->getDownBar();
         if( xChartPropSet.is() )
         {
-            pFS->startElement( FSNS( XML_c, XML_downBars ),
-                    FSEND );
+            pFS->startElement( FSNS( XML_c, XML_downBars ) );
             if(xChartType->getChartType() == "com.sun.star.chart2.CandleStickChartType")
             {
                 exportShapeProps(xChartPropSet);
@@ -1907,8 +1827,7 @@ void ChartExport::exportSurfaceChart( const Reference< chart2::XChartType >& xCh
     sal_Int32 nTypeId = XML_surfaceChart;
     if( mbIs3DChart )
         nTypeId = XML_surface3DChart;
-    pFS->startElement( FSNS( XML_c, nTypeId ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, nTypeId ) );
     exportVaryColors(xChartType);
     bool bPrimaryAxes = true;
     exportAllSeries(xChartType, bPrimaryAxes);
@@ -1959,14 +1878,12 @@ void ChartExport::exportVaryColors(const Reference<chart2::XChartType>& xChartTy
         bool bVaryColors = false;
         aAnyVaryColors >>= bVaryColors;
         pFS->singleElement(FSNS(XML_c, XML_varyColors),
-                XML_val, bVaryColors ? "1": "0",
-                FSEND);
+                XML_val, bVaryColors ? "1": "0");
     }
     catch (...)
     {
         pFS->singleElement(FSNS(XML_c, XML_varyColors),
-                XML_val, "0",
-                FSEND);
+                XML_val, "0");
     }
 }
 
@@ -2020,16 +1937,13 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                 {
                     FSHelperPtr pFS = GetFS();
 
-                    pFS->startElement( FSNS( XML_c, XML_ser ),
-                        FSEND );
+                    pFS->startElement( FSNS( XML_c, XML_ser ) );
 
                     // TODO: idx and order
                     pFS->singleElement( FSNS( XML_c, XML_idx ),
-                        XML_val, I32S(mnSeriesCount),
-                        FSEND );
+                        XML_val, I32S(mnSeriesCount) );
                     pFS->singleElement( FSNS( XML_c, XML_order ),
-                        XML_val, I32S(mnSeriesCount++),
-                        FSEND );
+                        XML_val, I32S(mnSeriesCount++) );
 
                     // export label
                     if( xLabelSeq.is() )
@@ -2058,8 +1972,7 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                         case chart::TYPEID_BAR:
                         {
                             pFS->singleElement(FSNS(XML_c, XML_invertIfNegative),
-                                        XML_val, "0",
-                                        FSEND);
+                                        XML_val, "0");
                         }
                         break;
                         case chart::TYPEID_LINE:
@@ -2075,8 +1988,7 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                                 sal_Int32 nOffset = 0;
                                 mAny >>= nOffset;
                                 pFS->singleElement( FSNS( XML_c, XML_explosion ),
-                                    XML_val, I32S( nOffset ),
-                                    FSEND );
+                                    XML_val, I32S( nOffset ) );
                             }
                             break;
                         }
@@ -2199,17 +2111,14 @@ void ChartExport::exportCandleStickSeries(
                     Reference< chart2::data::XDataSequence > xValueSeq( xLabeledSeq->getValues());
                     {
                         FSHelperPtr pFS = GetFS();
-                        pFS->startElement( FSNS( XML_c, XML_ser ),
-                                FSEND );
+                        pFS->startElement( FSNS( XML_c, XML_ser ) );
 
                         // TODO: idx and order
                         // idx attribute should start from 1 and not from 0.
                         pFS->singleElement( FSNS( XML_c, XML_idx ),
-                                XML_val, I32S(idx+1),
-                                FSEND );
+                                XML_val, I32S(idx+1) );
                         pFS->singleElement( FSNS( XML_c, XML_order ),
-                                XML_val, I32S(idx+1),
-                                FSEND );
+                                XML_val, I32S(idx+1) );
 
                         // export label
                         if( xLabelSeq.is() )
@@ -2236,30 +2145,23 @@ void ChartExport::exportCandleStickSeries(
 void ChartExport::exportSeriesText( const Reference< chart2::data::XDataSequence > & xValueSeq )
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, XML_tx ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_tx ) );
 
     OUString aCellRange =  xValueSeq->getSourceRangeRepresentation();
     aCellRange = parseFormula( aCellRange );
-    pFS->startElement( FSNS( XML_c, XML_strRef ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_strRef ) );
 
-    pFS->startElement( FSNS( XML_c, XML_f ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_f ) );
     pFS->writeEscaped( aCellRange );
     pFS->endElement( FSNS( XML_c, XML_f ) );
 
     OUString aLabelString = lcl_getLabelString( xValueSeq );
-    pFS->startElement( FSNS( XML_c, XML_strCache ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_strCache ) );
     pFS->singleElement( FSNS( XML_c, XML_ptCount ),
-            XML_val, "1",
-            FSEND );
+            XML_val, "1" );
     pFS->startElement( FSNS( XML_c, XML_pt ),
-            XML_idx, "0",
-            FSEND );
-    pFS->startElement( FSNS( XML_c, XML_v ),
-            FSEND );
+            XML_idx, "0" );
+    pFS->startElement( FSNS( XML_c, XML_v ) );
     pFS->writeEscaped( aLabelString );
     pFS->endElement( FSNS( XML_c, XML_v ) );
     pFS->endElement( FSNS( XML_c, XML_pt ) );
@@ -2271,35 +2173,28 @@ void ChartExport::exportSeriesText( const Reference< chart2::data::XDataSequence
 void ChartExport::exportSeriesCategory( const Reference< chart2::data::XDataSequence > & xValueSeq )
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, XML_cat ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_cat ) );
 
     OUString aCellRange = xValueSeq.is() ? xValueSeq->getSourceRangeRepresentation() : OUString();
     aCellRange = parseFormula( aCellRange );
     // TODO: need to handle XML_multiLvlStrRef according to aCellRange
-    pFS->startElement( FSNS( XML_c, XML_strRef ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_strRef ) );
 
-    pFS->startElement( FSNS( XML_c, XML_f ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_f ) );
     pFS->writeEscaped( aCellRange );
     pFS->endElement( FSNS( XML_c, XML_f ) );
 
     ::std::vector< OUString > aCategories;
     lcl_fillCategoriesIntoStringVector( xValueSeq, aCategories );
     sal_Int32 ptCount = aCategories.size();
-    pFS->startElement( FSNS( XML_c, XML_strCache ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_strCache ) );
     pFS->singleElement( FSNS( XML_c, XML_ptCount ),
-            XML_val, I32S( ptCount ),
-            FSEND );
+            XML_val, I32S( ptCount ) );
     for( sal_Int32 i = 0; i < ptCount; i++ )
     {
         pFS->startElement( FSNS( XML_c, XML_pt ),
-            XML_idx, I32S( i ),
-            FSEND );
-        pFS->startElement( FSNS( XML_c, XML_v ),
-            FSEND );
+            XML_idx, I32S( i ) );
+        pFS->startElement( FSNS( XML_c, XML_v ) );
         pFS->writeEscaped( aCategories[i] );
         pFS->endElement( FSNS( XML_c, XML_v ) );
         pFS->endElement( FSNS( XML_c, XML_pt ) );
@@ -2313,32 +2208,26 @@ void ChartExport::exportSeriesCategory( const Reference< chart2::data::XDataSequ
 void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequence > & xValueSeq, sal_Int32 nValueType )
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, nValueType ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, nValueType ) );
 
     OUString aCellRange = xValueSeq.is() ? xValueSeq->getSourceRangeRepresentation() : OUString();
     aCellRange = parseFormula( aCellRange );
     // TODO: need to handle XML_multiLvlStrRef according to aCellRange
-    pFS->startElement( FSNS( XML_c, XML_numRef ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_numRef ) );
 
-    pFS->startElement( FSNS( XML_c, XML_f ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_f ) );
     pFS->writeEscaped( aCellRange );
     pFS->endElement( FSNS( XML_c, XML_f ) );
 
     ::std::vector< double > aValues = lcl_getAllValuesFromSequence( xValueSeq );
     sal_Int32 ptCount = aValues.size();
-    pFS->startElement( FSNS( XML_c, XML_numCache ),
-            FSEND );
-    pFS->startElement( FSNS( XML_c, XML_formatCode ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_numCache ) );
+    pFS->startElement( FSNS( XML_c, XML_formatCode ) );
     // TODO: what format code?
     pFS->writeEscaped( "General" );
     pFS->endElement( FSNS( XML_c, XML_formatCode ) );
     pFS->singleElement( FSNS( XML_c, XML_ptCount ),
-            XML_val, I32S( ptCount ),
-            FSEND );
+            XML_val, I32S( ptCount ) );
 
     bool bIsNumberValue = true;
     bool bXSeriesValue = false;
@@ -2350,10 +2239,8 @@ void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequen
     for( sal_Int32 i = 0; i < ptCount; i++ )
     {
         pFS->startElement( FSNS( XML_c, XML_pt ),
-            XML_idx, I32S( i ),
-            FSEND );
-        pFS->startElement( FSNS( XML_c, XML_v ),
-            FSEND );
+            XML_idx, I32S( i ) );
+        pFS->startElement( FSNS( XML_c, XML_v ) );
         if (bIsNumberValue && !rtl::math::isNan(aValues[i]))
             pFS->write( aValues[i] );
         else if(bXSeriesValue)
@@ -2375,8 +2262,7 @@ void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequen
 void ChartExport::exportShapeProps( const Reference< XPropertySet >& xPropSet )
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, XML_spPr ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_spPr ) );
 
     exportFill( xPropSet );
     WriteOutline( xPropSet, getModel() );
@@ -2387,7 +2273,7 @@ void ChartExport::exportShapeProps( const Reference< XPropertySet >& xPropSet )
 void ChartExport::exportTextProps(const Reference<XPropertySet>& xPropSet)
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElement(FSNS(XML_c, XML_txPr), FSEND);
+    pFS->startElement(FSNS(XML_c, XML_txPr));
 
     sal_Int32 nRotation = 0;
     if (auto xServiceInfo = uno::Reference<lang::XServiceInfo>(xPropSet, uno::UNO_QUERY))
@@ -2425,14 +2311,14 @@ void ChartExport::exportTextProps(const Reference<XPropertySet>& xPropSet)
     }
 
     if (nRotation)
-        pFS->singleElement(FSNS(XML_a, XML_bodyPr), XML_rot, I32S(nRotation), FSEND);
+        pFS->singleElement(FSNS(XML_a, XML_bodyPr), XML_rot, I32S(nRotation));
     else
-        pFS->singleElement(FSNS(XML_a, XML_bodyPr), FSEND);
+        pFS->singleElement(FSNS(XML_a, XML_bodyPr));
 
-    pFS->singleElement( FSNS( XML_a, XML_lstStyle ), FSEND );
+    pFS->singleElement( FSNS( XML_a, XML_lstStyle ) );
 
-    pFS->startElement(FSNS(XML_a, XML_p), FSEND);
-    pFS->startElement(FSNS(XML_a, XML_pPr), FSEND);
+    pFS->startElement(FSNS(XML_a, XML_p));
+    pFS->startElement(FSNS(XML_a, XML_pPr));
 
     WriteRunProperties(xPropSet, false, XML_defRPr, true, o3tl::temporary(false),
                        o3tl::temporary(sal_Int32()));
@@ -2642,14 +2528,11 @@ void ChartExport::_exportAxis(
     const AxisIdPair& rAxisIdPair )
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, nAxisType ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, nAxisType ) );
     pFS->singleElement( FSNS( XML_c, XML_axId ),
-            XML_val, I32S( rAxisIdPair.nAxisId ),
-            FSEND );
+            XML_val, I32S( rAxisIdPair.nAxisId ) );
 
-    pFS->startElement( FSNS( XML_c, XML_scaling ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_scaling ) );
 
     // logBase, min, max
     if(GetProperty( xAxisProp, "Logarithmic" ) )
@@ -2660,8 +2543,7 @@ void ChartExport::_exportAxis(
         {
             // default value is 10?
             pFS->singleElement( FSNS( XML_c, XML_logBase ),
-                XML_val, I32S( 10 ),
-                FSEND );
+                XML_val, I32S( 10 ) );
         }
     }
 
@@ -2672,8 +2554,7 @@ void ChartExport::_exportAxis(
 
     const char* orientation = bReverseDirection ? "maxMin":"minMax";
     pFS->singleElement( FSNS( XML_c, XML_orientation ),
-            XML_val, orientation,
-            FSEND );
+            XML_val, orientation );
 
     bool bAutoMax = false;
     if(GetProperty( xAxisProp, "AutoMax" ) )
@@ -2684,8 +2565,7 @@ void ChartExport::_exportAxis(
         double dMax = 0;
         mAny >>= dMax;
         pFS->singleElement( FSNS( XML_c, XML_max ),
-            XML_val, IS( dMax ),
-            FSEND );
+            XML_val, IS( dMax ) );
     }
 
     bool bAutoMin = false;
@@ -2697,8 +2577,7 @@ void ChartExport::_exportAxis(
         double dMin = 0;
         mAny >>= dMin;
         pFS->singleElement( FSNS( XML_c, XML_min ),
-            XML_val, IS( dMin ),
-            FSEND );
+            XML_val, IS( dMin ) );
     }
 
     pFS->endElement( FSNS( XML_c, XML_scaling ) );
@@ -2716,18 +2595,15 @@ void ChartExport::_exportAxis(
         maExportedAxis.insert(rAxisIdPair.nAxisType);
 
     pFS->singleElement( FSNS( XML_c, XML_delete ),
-            XML_val, !bDeleted && bVisible ? "0" : "1",
-            FSEND );
+            XML_val, !bDeleted && bVisible ? "0" : "1" );
 
     // FIXME: axPos, need to check the property "ReverseDirection"
     pFS->singleElement( FSNS( XML_c, XML_axPos ),
-            XML_val, sAxisPos,
-            FSEND );
+            XML_val, sAxisPos );
     // major grid line
     if( xMajorGrid.is())
     {
-        pFS->startElement( FSNS( XML_c, XML_majorGridlines ),
-            FSEND );
+        pFS->startElement( FSNS( XML_c, XML_majorGridlines ) );
         exportShapeProps( xMajorGrid );
         pFS->endElement( FSNS( XML_c, XML_majorGridlines ) );
     }
@@ -2735,8 +2611,7 @@ void ChartExport::_exportAxis(
     // minor grid line
     if( xMinorGrid.is())
     {
-        pFS->startElement( FSNS( XML_c, XML_minorGridlines ),
-            FSEND );
+        pFS->startElement( FSNS( XML_c, XML_minorGridlines ) );
         exportShapeProps( xMinorGrid );
         pFS->endElement( FSNS( XML_c, XML_minorGridlines ) );
     }
@@ -2760,8 +2635,7 @@ void ChartExport::_exportAxis(
     OString sNumberFormatString = OUStringToOString(aNumberFormatString, RTL_TEXTENCODING_UTF8);
     pFS->singleElement(FSNS(XML_c, XML_numFmt),
             XML_formatCode, sNumberFormatString.getStr(),
-            XML_sourceLinked, bLinkedNumFmt ? "1" : "0",
-            FSEND);
+            XML_sourceLinked, bLinkedNumFmt ? "1" : "0");
 
     // majorTickMark
     sal_Int32 nValue = 0;
@@ -2780,8 +2654,7 @@ void ChartExport::_exportAxis(
         else
             majorTickMark = "none";
         pFS->singleElement( FSNS( XML_c, XML_majorTickMark ),
-            XML_val, majorTickMark,
-            FSEND );
+            XML_val, majorTickMark );
     }
     // minorTickMark
     if(GetProperty( xAxisProp, "HelpMarks" ) )
@@ -2799,8 +2672,7 @@ void ChartExport::_exportAxis(
         else
             minorTickMark = "none";
         pFS->singleElement( FSNS( XML_c, XML_minorTickMark ),
-            XML_val, minorTickMark,
-            FSEND );
+            XML_val, minorTickMark );
     }
     // tickLblPos
     const char* sTickLblPos = nullptr;
@@ -2833,8 +2705,7 @@ void ChartExport::_exportAxis(
         sTickLblPos = "none";
     }
     pFS->singleElement( FSNS( XML_c, XML_tickLblPos ),
-            XML_val, sTickLblPos,
-            FSEND );
+            XML_val, sTickLblPos );
 
     // shape properties
     exportShapeProps( xAxisProp );
@@ -2842,8 +2713,7 @@ void ChartExport::_exportAxis(
     exportTextProps(xAxisProp);
 
     pFS->singleElement( FSNS( XML_c, XML_crossAx ),
-            XML_val, I32S( rAxisIdPair.nCrossAx ),
-            FSEND );
+            XML_val, I32S( rAxisIdPair.nCrossAx ) );
 
     // crosses & crossesAt
     bool bCrossesValue = false;
@@ -2875,16 +2745,14 @@ void ChartExport::_exportAxis(
         double dValue = 0;
         mAny >>= dValue;
         pFS->singleElement( FSNS( XML_c, XML_crossesAt ),
-            XML_val, IS( dValue ),
-            FSEND );
+            XML_val, IS( dValue ) );
     }
     else
     {
         if(sCrosses)
         {
             pFS->singleElement(FSNS(XML_c, XML_crosses),
-                XML_val, sCrosses,
-                FSEND);
+                XML_val, sCrosses);
         }
     }
 
@@ -2894,22 +2762,19 @@ void ChartExport::_exportAxis(
         // FIXME: seems not support? use default value,
         const char* const isAuto = "1";
         pFS->singleElement( FSNS( XML_c, XML_auto ),
-            XML_val, isAuto,
-            FSEND );
+            XML_val, isAuto );
 
         if( nAxisType == XML_catAx )
         {
             // FIXME: seems not support? lblAlgn
             const char* const sLblAlgn = "ctr";
             pFS->singleElement( FSNS( XML_c, XML_lblAlgn ),
-                    XML_val, sLblAlgn,
-                    FSEND );
+                    XML_val, sLblAlgn );
         }
 
         // FIXME: seems not support? lblOffset
         pFS->singleElement( FSNS( XML_c, XML_lblOffset ),
-            XML_val, I32S( 100 ),
-            FSEND );
+            XML_val, I32S( 100 ) );
     }
 
     // TODO: MSO does not support random axis cross position for
@@ -2920,8 +2785,7 @@ void ChartExport::_exportAxis(
     if (nAxisType == XML_valAx && (nChartType == chart::TYPEID_LINE || nChartType == chart::TYPEID_SCATTER))
     {
         pFS->singleElement( FSNS( XML_c, XML_crossBetween ),
-                XML_val, "midCat",
-                FSEND );
+                XML_val, "midCat" );
     }
 
     // majorUnit
@@ -2934,8 +2798,7 @@ void ChartExport::_exportAxis(
         double dMajorUnit = 0;
         mAny >>= dMajorUnit;
         pFS->singleElement( FSNS( XML_c, XML_majorUnit ),
-            XML_val, IS( dMajorUnit ),
-            FSEND );
+            XML_val, IS( dMajorUnit ) );
     }
     // minorUnit
     bool bAutoStepHelp = false;
@@ -2956,8 +2819,7 @@ void ChartExport::_exportAxis(
             if( dMinorUnitCount != 5 )
             {
                 pFS->singleElement( FSNS( XML_c, XML_minorUnit ),
-                    XML_val, IS( dMinorUnit ),
-                    FSEND );
+                    XML_val, IS( dMinorUnit ) );
             }
         }
     }
@@ -2974,15 +2836,13 @@ void ChartExport::_exportAxis(
                 mAny >>= aVal;
                 if(!aVal.isEmpty())
                 {
-                    pFS->startElement( FSNS( XML_c, XML_dispUnits ),
-                            FSEND );
+                    pFS->startElement( FSNS( XML_c, XML_dispUnits ) );
 
                     OString aBuiltInUnit = OUStringToOString(aVal, RTL_TEXTENCODING_UTF8);
                     pFS->singleElement( FSNS( XML_c, XML_builtInUnit ),
-                            XML_val, aBuiltInUnit.getStr(),
-                            FSEND );
+                            XML_val, aBuiltInUnit.getStr() );
 
-                    pFS->singleElement(FSNS( XML_c, XML_dispUnitsLbl ),FSEND);
+                    pFS->singleElement(FSNS( XML_c, XML_dispUnitsLbl ));
                     pFS->endElement( FSNS( XML_c, XML_dispUnits ) );
                 }
              }
@@ -3071,14 +2931,14 @@ void writeRunProperties( ChartExport* pChartExport, Reference<XPropertySet> cons
 void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,
                        const Sequence<Reference<chart2::XDataPointCustomLabelField>>& rCustomLabelFields )
 {
-    pFS->startElement(FSNS(XML_c, XML_tx), FSEND);
-    pFS->startElement(FSNS(XML_c, XML_rich), FSEND);
+    pFS->startElement(FSNS(XML_c, XML_tx));
+    pFS->startElement(FSNS(XML_c, XML_rich));
 
     // TODO: body properties?
-    pFS->singleElement(FSNS(XML_a, XML_bodyPr), FSEND);
+    pFS->singleElement(FSNS(XML_a, XML_bodyPr));
 
     OUString sFieldType;
-    pFS->startElement(FSNS(XML_a, XML_p), FSEND);
+    pFS->startElement(FSNS(XML_a, XML_p));
 
     for (auto& rField : rCustomLabelFields)
     {
@@ -3095,17 +2955,17 @@ void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,
         if (bNewParagraph)
         {
             pFS->endElement(FSNS(XML_a, XML_p));
-            pFS->startElement(FSNS(XML_a, XML_p), FSEND);
+            pFS->startElement(FSNS(XML_a, XML_p));
             continue;
         }
 
         if (sFieldType.isEmpty())
         {
             // Normal text run
-            pFS->startElement(FSNS(XML_a, XML_r), FSEND);
+            pFS->startElement(FSNS(XML_a, XML_r));
             writeRunProperties(pChartExport, xPropertySet);
 
-            pFS->startElement(FSNS(XML_a, XML_t), FSEND);
+            pFS->startElement(FSNS(XML_a, XML_t));
             pFS->writeEscaped(rField->getString());
             pFS->endElement(FSNS(XML_a, XML_t));
 
@@ -3115,10 +2975,10 @@ void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,
         {
             // Field
             pFS->startElement(FSNS(XML_a, XML_fld), XML_id, rField->getGuid().toUtf8(), XML_type,
-                              sFieldType.toUtf8(), FSEND);
+                              sFieldType.toUtf8());
             writeRunProperties(pChartExport, xPropertySet);
 
-            pFS->startElement(FSNS(XML_a, XML_t), FSEND);
+            pFS->startElement(FSNS(XML_a, XML_t));
             pFS->writeEscaped(rField->getString());
             pFS->endElement(FSNS(XML_a, XML_t));
 
@@ -3149,14 +3009,14 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
 
     if (nLabelBorderWidth > 0)
     {
-        pFS->startElement(FSNS(XML_c, XML_spPr), FSEND);
-        pFS->startElement(FSNS(XML_a, XML_ln), XML_w, IS(convertHmmToEmu(nLabelBorderWidth)), FSEND);
+        pFS->startElement(FSNS(XML_c, XML_spPr));
+        pFS->startElement(FSNS(XML_a, XML_ln), XML_w, IS(convertHmmToEmu(nLabelBorderWidth)));
         if (nLabelBorderColor != -1)
         {
-            pFS->startElement(FSNS(XML_a, XML_solidFill), FSEND);
+            pFS->startElement(FSNS(XML_a, XML_solidFill));
 
             OString aStr = OString::number(nLabelBorderColor, 16).toAsciiUpperCase();
-            pFS->singleElement(FSNS(XML_a, XML_srgbClr), XML_val, aStr.getStr(), FSEND);
+            pFS->singleElement(FSNS(XML_a, XML_srgbClr), XML_val, aStr.getStr());
 
             pFS->endElement(FSNS(XML_a, XML_solidFill));
         }
@@ -3174,15 +3034,15 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
         {
             if (!rLabelParam.maAllowedValues.count(nLabelPlacement))
                 nLabelPlacement = rLabelParam.meDefault;
-            pFS->singleElement(FSNS(XML_c, XML_dLblPos), XML_val, toOOXMLPlacement(nLabelPlacement), FSEND);
+            pFS->singleElement(FSNS(XML_c, XML_dLblPos), XML_val, toOOXMLPlacement(nLabelPlacement));
         }
     }
 
-    pFS->singleElement(FSNS(XML_c, XML_showLegendKey), XML_val, ToPsz10(aLabel.ShowLegendSymbol), FSEND);
-    pFS->singleElement(FSNS(XML_c, XML_showVal), XML_val, ToPsz10(aLabel.ShowNumber), FSEND);
-    pFS->singleElement(FSNS(XML_c, XML_showCatName), XML_val, ToPsz10(aLabel.ShowCategoryName), FSEND);
-    pFS->singleElement(FSNS(XML_c, XML_showSerName), XML_val, ToPsz10(false), FSEND);
-    pFS->singleElement(FSNS(XML_c, XML_showPercent), XML_val, ToPsz10(aLabel.ShowNumberInPercent), FSEND);
+    pFS->singleElement(FSNS(XML_c, XML_showLegendKey), XML_val, ToPsz10(aLabel.ShowLegendSymbol));
+    pFS->singleElement(FSNS(XML_c, XML_showVal), XML_val, ToPsz10(aLabel.ShowNumber));
+    pFS->singleElement(FSNS(XML_c, XML_showCatName), XML_val, ToPsz10(aLabel.ShowCategoryName));
+    pFS->singleElement(FSNS(XML_c, XML_showSerName), XML_val, ToPsz10(false));
+    pFS->singleElement(FSNS(XML_c, XML_showPercent), XML_val, ToPsz10(aLabel.ShowNumberInPercent));
 
     // Export the text "separator" if exists
     uno::Any aAny = xPropSet->getPropertyValue("LabelSeparator");
@@ -3190,7 +3050,7 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
     {
         OUString nLabelSeparator;
         aAny >>= nLabelSeparator;
-        pFS->startElement( FSNS( XML_c, XML_separator ), FSEND );
+        pFS->startElement( FSNS( XML_c, XML_separator ) );
         pFS->writeEscaped( nLabelSeparator );
         pFS->endElement( FSNS( XML_c, XML_separator ) );
     }
@@ -3209,7 +3069,7 @@ void ChartExport::exportDataLabels(
         return;
 
     FSHelperPtr pFS = GetFS();
-    pFS->startElement(FSNS(XML_c, XML_dLbls), FSEND);
+    pFS->startElement(FSNS(XML_c, XML_dLbls));
 
     bool bLinkedNumFmt = true;
     if (GetProperty(xPropSet, "LinkNumberFormatToSource"))
@@ -3225,8 +3085,7 @@ void ChartExport::exportDataLabels(
 
         pFS->singleElement(FSNS(XML_c, XML_numFmt),
             XML_formatCode, sNumberFormatString.getStr(),
-            XML_sourceLinked, bLinkedNumFmt ? "1" : "0",
-            FSEND);
+            XML_sourceLinked, bLinkedNumFmt ? "1" : "0");
     }
 
     uno::Sequence<sal_Int32> aAttrLabelIndices;
@@ -3291,8 +3150,8 @@ void ChartExport::exportDataLabels(
         if (!xLabelPropSet.is())
             continue;
 
-        pFS->startElement(FSNS(XML_c, XML_dLbl), FSEND);
-        pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, I32S(nIdx), FSEND);
+        pFS->startElement(FSNS(XML_c, XML_dLbl));
+        pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, I32S(nIdx));
 
         if (GetProperty(xLabelPropSet, "NumberFormat") || GetProperty(xLabelPropSet, "PercentageNumberFormat"))
         {
@@ -3303,7 +3162,7 @@ void ChartExport::exportDataLabels(
             OString sNumberFormatString = OUStringToOString(aNumberFormatString, RTL_TEXTENCODING_UTF8);
 
             pFS->singleElement(FSNS(XML_c, XML_numFmt), XML_formatCode, sNumberFormatString.getStr(),
-                               XML_sourceLinked, bLinkedNumFmt ? "1" : "0", FSEND);
+                               XML_sourceLinked, bLinkedNumFmt ? "1" : "0");
         }
 
         // Individual label property that overwrites the baseline.
@@ -3317,8 +3176,7 @@ void ChartExport::exportDataLabels(
     writeLabelProperties(pFS, this, xPropSet, aParam);
 
     pFS->singleElement(FSNS(XML_c, XML_showLeaderLines),
-            XML_val, "0",
-            FSEND);
+            XML_val, "0");
 
     pFS->endElement(FSNS(XML_c, XML_dLbls));
 }
@@ -3373,11 +3231,9 @@ void ChartExport::exportDataPoints(
             if( xPropSet.is() )
             {
                 FSHelperPtr pFS = GetFS();
-                pFS->startElement( FSNS( XML_c, XML_dPt ),
-                    FSEND );
+                pFS->startElement( FSNS( XML_c, XML_dPt ) );
                 pFS->singleElement( FSNS( XML_c, XML_idx ),
-                    XML_val, I32S(nElement),
-                    FSEND );
+                    XML_val, I32S(nElement) );
 
                 switch (eChartType)
                 {
@@ -3390,8 +3246,7 @@ void ChartExport::exportDataPoints(
                             mAny >>= nOffset;
                             if (nOffset)
                                 pFS->singleElement( FSNS( XML_c, XML_explosion ),
-                                        XML_val, I32S( nOffset ),
-                                        FSEND );
+                                        XML_val, I32S( nOffset ) );
                         }
                         break;
                     }
@@ -3431,11 +3286,9 @@ void ChartExport::exportDataPoints(
             if( xPropSet.is() )
             {
                 FSHelperPtr pFS = GetFS();
-                pFS->startElement( FSNS( XML_c, XML_dPt ),
-                    FSEND );
+                pFS->startElement( FSNS( XML_c, XML_dPt ) );
                 pFS->singleElement( FSNS( XML_c, XML_idx ),
-                    XML_val, I32S(nElement),
-                    FSEND );
+                    XML_val, I32S(nElement) );
 
                 switch( eChartType )
                 {
@@ -3444,8 +3297,7 @@ void ChartExport::exportDataPoints(
                     case chart::TYPEID_BAR:
                     {
                         pFS->singleElement(FSNS(XML_c, XML_invertIfNegative),
-                                    XML_val, "0",
-                                    FSEND);
+                                    XML_val, "0");
                     }
                     break;
                 }
@@ -3485,11 +3337,9 @@ void ChartExport::exportAxesId(bool bPrimaryAxes, bool bCheckCombinedAxes)
     }
     FSHelperPtr pFS = GetFS();
     pFS->singleElement( FSNS( XML_c, XML_axId ),
-            XML_val, I32S( nAxisIdx ),
-            FSEND );
+            XML_val, I32S( nAxisIdx ) );
     pFS->singleElement( FSNS( XML_c, XML_axId ),
-            XML_val, I32S( nAxisIdy ),
-            FSEND );
+            XML_val, I32S( nAxisIdy ) );
     if (mbHasZAxis)
     {
         sal_Int32 nAxisIdz = 0;
@@ -3499,8 +3349,7 @@ void ChartExport::exportAxesId(bool bPrimaryAxes, bool bCheckCombinedAxes)
             maAxes.emplace_back( AXIS_PRIMARY_Z, nAxisIdz, nAxisIdy );
         }
         pFS->singleElement( FSNS( XML_c, XML_axId ),
-            XML_val, I32S( nAxisIdz ),
-            FSEND );
+            XML_val, I32S( nAxisIdz ) );
     }
 }
 
@@ -3529,8 +3378,7 @@ void ChartExport::exportGrouping( bool isBar )
             grouping = "standard";
     }
     pFS->singleElement( FSNS( XML_c, XML_grouping ),
-            XML_val, grouping,
-            FSEND );
+            XML_val, grouping );
 }
 
 void ChartExport::exportTrendlines( const Reference< chart2::XDataSeries >& xSeries )
@@ -3565,13 +3413,13 @@ void ChartExport::exportTrendlines( const Reference< chart2::XDataSeries >& xSer
                     aService != "com.sun.star.chart2.MovingAverageRegressionCurve")
                 continue;
 
-            pFS->startElement( FSNS( XML_c, XML_trendline ), FSEND );
+            pFS->startElement( FSNS( XML_c, XML_trendline ) );
 
             OUString aName;
             xProperties->getPropertyValue("CurveName") >>= aName;
             if(!aName.isEmpty())
             {
-                pFS->startElement( FSNS( XML_c, XML_name), FSEND);
+                pFS->startElement( FSNS( XML_c, XML_name));
                 pFS->writeEscaped(aName);
                 pFS->endElement( FSNS( XML_c, XML_name) );
             }
@@ -3581,51 +3429,43 @@ void ChartExport::exportTrendlines( const Reference< chart2::XDataSeries >& xSer
             if( aService == "com.sun.star.chart2.LinearRegressionCurve" )
             {
                 pFS->singleElement( FSNS( XML_c, XML_trendlineType ),
-                    XML_val, "linear",
-                    FSEND );
+                    XML_val, "linear" );
             }
             else if( aService == "com.sun.star.chart2.ExponentialRegressionCurve" )
             {
                 pFS->singleElement( FSNS( XML_c, XML_trendlineType ),
-                    XML_val, "exp",
-                    FSEND );
+                    XML_val, "exp" );
             }
             else if( aService == "com.sun.star.chart2.LogarithmicRegressionCurve" )
             {
                 pFS->singleElement( FSNS( XML_c, XML_trendlineType ),
-                    XML_val, "log",
-                    FSEND );
+                    XML_val, "log" );
             }
             else if( aService == "com.sun.star.chart2.PotentialRegressionCurve" )
             {
                 pFS->singleElement( FSNS( XML_c, XML_trendlineType ),
-                    XML_val, "power",
-                    FSEND );
+                    XML_val, "power" );
             }
             else if( aService == "com.sun.star.chart2.PolynomialRegressionCurve" )
             {
                 pFS->singleElement( FSNS( XML_c, XML_trendlineType ),
-                    XML_val, "poly",
-                    FSEND );
+                    XML_val, "poly" );
 
                 sal_Int32 aDegree = 2;
                 xProperties->getPropertyValue( "PolynomialDegree") >>= aDegree;
                 pFS->singleElement( FSNS( XML_c, XML_order ),
-                    XML_val, I32S(aDegree),
-                    FSEND );
+                    XML_val, I32S(aDegree) );
             }
             else if( aService == "com.sun.star.chart2.MovingAverageRegressionCurve" )
             {
                 pFS->singleElement( FSNS( XML_c, XML_trendlineType ),
-                    XML_val, "movingAvg",
-                    FSEND );
+                    XML_val, "movingAvg" );
 
                 sal_Int32 aPeriod = 2;
                 xProperties->getPropertyValue( "MovingAveragePeriod") >>= aPeriod;
 
                 pFS->singleElement( FSNS( XML_c, XML_period ),
-                    XML_val, I32S(aPeriod),
-                    FSEND );
+                    XML_val, I32S(aPeriod) );
             }
             else
             {
@@ -3641,12 +3481,10 @@ void ChartExport::exportTrendlines( const Reference< chart2::XDataSeries >& xSer
             xProperties->getPropertyValue("ExtrapolateBackward") >>= fExtrapolateBackward;
 
             pFS->singleElement( FSNS( XML_c, XML_forward ),
-                    XML_val, OString::number(fExtrapolateForward).getStr(),
-                    FSEND );
+                    XML_val, OString::number(fExtrapolateForward).getStr() );
 
             pFS->singleElement( FSNS( XML_c, XML_backward ),
-                    XML_val, OString::number(fExtrapolateBackward).getStr(),
-                    FSEND );
+                    XML_val, OString::number(fExtrapolateBackward).getStr() );
 
             bool bForceIntercept = false;
             xProperties->getPropertyValue("ForceIntercept") >>= bForceIntercept;
@@ -3657,8 +3495,7 @@ void ChartExport::exportTrendlines( const Reference< chart2::XDataSeries >& xSer
                 xProperties->getPropertyValue("InterceptValue") >>= fInterceptValue;
 
                 pFS->singleElement( FSNS( XML_c, XML_intercept ),
-                    XML_val, OString::number(fInterceptValue).getStr(),
-                    FSEND );
+                    XML_val, OString::number(fInterceptValue).getStr() );
             }
 
             // Equation properties
@@ -3673,12 +3510,10 @@ void ChartExport::exportTrendlines( const Reference< chart2::XDataSeries >& xSer
             xEquationProperties->getPropertyValue("ShowCorrelationCoefficient") >>= bShowCorrelationCoefficient;
 
             pFS->singleElement( FSNS( XML_c, XML_dispRSqr ),
-                    XML_val, bShowCorrelationCoefficient ? "1" : "0",
-                    FSEND );
+                    XML_val, bShowCorrelationCoefficient ? "1" : "0" );
 
             pFS->singleElement( FSNS( XML_c, XML_dispEq ),
-                    XML_val, bShowEquation ? "1" : "0",
-                    FSEND );
+                    XML_val, bShowEquation ? "1" : "0" );
 
             pFS->endElement( FSNS( XML_c, XML_trendline ) );
         }
@@ -3696,8 +3531,7 @@ void ChartExport::exportMarker(const Reference< chart2::XDataSeries >& xSeries)
         return;
 
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, XML_marker ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_marker ) );
 
     sal_Int32 nSymbol = aSymbol.StandardSymbol;
     // TODO: more properties support for marker
@@ -3744,7 +3578,7 @@ void ChartExport::exportMarker(const Reference< chart2::XDataSeries >& xSeries)
         pSymbolType = "none";
     }
 
-    pFS->singleElement(FSNS(XML_c, XML_symbol), XML_val, pSymbolType, FSEND);
+    pFS->singleElement(FSNS(XML_c, XML_symbol), XML_val, pSymbolType);
 
     if (!bSkipFormatting)
     {
@@ -3755,11 +3589,9 @@ void ChartExport::exportMarker(const Reference< chart2::XDataSeries >& xSeries)
         //the value is always 1 less than the actual value.
         nSize = std::min<sal_Int32>( 72, std::max<sal_Int32>( 2, nSize ) );
         pFS->singleElement( FSNS( XML_c, XML_size),
-                XML_val, I32S(nSize),
-                FSEND );
+                XML_val, I32S(nSize) );
 
-        pFS->startElement( FSNS( XML_c, XML_spPr ),
-                FSEND );
+        pFS->startElement( FSNS( XML_c, XML_spPr ) );
 
         util::Color aColor = aSymbol.FillColor;
         if (GetProperty(xPropSet, "Color"))
@@ -3767,7 +3599,7 @@ void ChartExport::exportMarker(const Reference< chart2::XDataSeries >& xSeries)
 
         if (aColor == -1)
         {
-            pFS->singleElement(FSNS(XML_a, XML_noFill), FSEND);
+            pFS->singleElement(FSNS(XML_a, XML_noFill));
         }
         else
             WriteSolidFill(::Color(aColor));
@@ -3787,8 +3619,7 @@ void ChartExport::exportSmooth()
         mAny >>= nSplineType;
     const char* pVal = nSplineType != 0 ? "1" : "0";
     pFS->singleElement( FSNS( XML_c, XML_smooth ),
-            XML_val, pVal,
-            FSEND );
+            XML_val, pVal );
 }
 
 void ChartExport::exportFirstSliceAng( )
@@ -3802,8 +3633,7 @@ void ChartExport::exportFirstSliceAng( )
     // convert to ooxml angle
     nStartingAngle = (450 - nStartingAngle ) % 360;
     pFS->singleElement( FSNS( XML_c, XML_firstSliceAng ),
-            XML_val, I32S( nStartingAngle ),
-            FSEND );
+            XML_val, I32S( nStartingAngle ) );
 }
 
 namespace {
@@ -3873,11 +3703,9 @@ void ChartExport::exportErrorBar(const Reference< XPropertySet>& xErrorBarProps,
         return;
 
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, XML_errBars ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_errBars ) );
     pFS->singleElement( FSNS( XML_c, XML_errDir ),
-            XML_val, bYError ? "y" : "x",
-            FSEND );
+            XML_val, bYError ? "y" : "x" );
     bool bPositive = false, bNegative = false;
     xErrorBarProps->getPropertyValue("ShowPositiveError") >>= bPositive;
     xErrorBarProps->getPropertyValue("ShowNegativeError") >>= bNegative;
@@ -3895,14 +3723,11 @@ void ChartExport::exportErrorBar(const Reference< XPropertySet>& xErrorBarProps,
         pErrBarType = "both";
     }
     pFS->singleElement( FSNS( XML_c, XML_errBarType ),
-            XML_val, pErrBarType,
-            FSEND );
+            XML_val, pErrBarType );
     pFS->singleElement( FSNS( XML_c, XML_errValType ),
-            XML_val, pErrorBarStyle,
-            FSEND );
+            XML_val, pErrorBarStyle );
     pFS->singleElement( FSNS( XML_c, XML_noEndCap ),
-            XML_val, "0",
-            FSEND );
+            XML_val, "0" );
     if(nErrorBarStyle == cssc::ErrorBarStyle::FROM_DATA)
     {
         uno::Reference< chart2::data::XDataSource > xDataSource(xErrorBarProps, uno::UNO_QUERY);
@@ -3937,8 +3762,7 @@ void ChartExport::exportErrorBar(const Reference< XPropertySet>& xErrorBarProps,
         OString aVal = OString::number(nVal);
 
         pFS->singleElement( FSNS( XML_c, XML_val ),
-                XML_val, aVal.getStr(),
-                FSEND );
+                XML_val, aVal.getStr() );
     }
 
     exportShapeProps( xErrorBarProps );
@@ -3952,8 +3776,7 @@ void ChartExport::exportView3D()
     if( !xPropSet.is() )
         return;
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, XML_view3D ),
-            FSEND );
+    pFS->startElement( FSNS( XML_c, XML_view3D ) );
     sal_Int32 eChartType = getChartType( );
     // rotX
     if( GetProperty( xPropSet, "RotationHorizontal" ) )
@@ -3973,8 +3796,7 @@ void ChartExport::exportView3D()
                 nRotationX += 360; // X rotation (map Chart2 [-179,180] to OOXML [-90..90])
         }
         pFS->singleElement( FSNS( XML_c, XML_rotX ),
-            XML_val, I32S( nRotationX ),
-            FSEND );
+            XML_val, I32S( nRotationX ) );
     }
     // rotY
     if( GetProperty( xPropSet, "RotationVertical" ) )
@@ -3988,8 +3810,7 @@ void ChartExport::exportView3D()
             // convert to ooxml angle
             nStartingAngle = (450 - nStartingAngle ) % 360;
             pFS->singleElement( FSNS( XML_c, XML_rotY ),
-                           XML_val, I32S( nStartingAngle ),
-                           FSEND );
+                           XML_val, I32S( nStartingAngle ) );
         }
         else
         {
@@ -3999,8 +3820,7 @@ void ChartExport::exportView3D()
             if( nRotationY < 0 )
                 nRotationY += 360;
             pFS->singleElement( FSNS( XML_c, XML_rotY ),
-                            XML_val, I32S( nRotationY ),
-                            FSEND );
+                            XML_val, I32S( nRotationY ) );
         }
     }
     // rAngAx
@@ -4010,8 +3830,7 @@ void ChartExport::exportView3D()
         mAny >>= bRightAngled;
         const char* sRightAngled = bRightAngled ? "1":"0";
         pFS->singleElement( FSNS( XML_c, XML_rAngAx ),
-            XML_val, sRightAngled,
-            FSEND );
+            XML_val, sRightAngled );
     }
     // perspective
     if( GetProperty( xPropSet, "Perspective" ) )
@@ -4021,8 +3840,7 @@ void ChartExport::exportView3D()
         // map Chart2 [0,100] to OOXML [0..200]
         nPerspective *= 2;
         pFS->singleElement( FSNS( XML_c, XML_perspective ),
-            XML_val, I32S( nPerspective ),
-            FSEND );
+            XML_val, I32S( nPerspective ) );
     }
     pFS->endElement( FSNS( XML_c, XML_view3D ) );
 }

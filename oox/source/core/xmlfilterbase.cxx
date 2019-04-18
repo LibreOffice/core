@@ -545,7 +545,7 @@ OUString XmlFilterBase::addRelation( const Reference< XOutputStream >& rOutputSt
 static void
 writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const OUString& sValue )
 {
-    pDoc->startElement( nXmlElement, FSEND );
+    pDoc->startElement( nXmlElement );
     pDoc->writeEscaped( sValue );
     pDoc->endElement( nXmlElement );
 }
@@ -553,7 +553,7 @@ writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const OUString& sV
 static void
 writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const sal_Int32 nValue )
 {
-    pDoc->startElement( nXmlElement, FSEND );
+    pDoc->startElement( nXmlElement );
     pDoc->write( nValue );
     pDoc->endElement( nXmlElement );
 }
@@ -565,11 +565,10 @@ writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const util::DateTi
         return;
 
     if ( ( nXmlElement >> 16 ) != XML_dcterms )
-        pDoc->startElement( nXmlElement, FSEND );
+        pDoc->startElement( nXmlElement );
     else
         pDoc->startElement( nXmlElement,
-                FSNS( XML_xsi, XML_type ), "dcterms:W3CDTF",
-                FSEND );
+                FSNS( XML_xsi, XML_type ), "dcterms:W3CDTF" );
 
     char pStr[200];
     snprintf( pStr, sizeof( pStr ), "%d-%02d-%02dT%02d:%02d:%02dZ",
@@ -626,8 +625,7 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
             FSNS( XML_xmlns, XML_dc ),          OUStringToOString(rSelf.getNamespaceURL(OOX_NS(dc)), RTL_TEXTENCODING_UTF8).getStr(),
             FSNS( XML_xmlns, XML_dcterms ),     OUStringToOString(rSelf.getNamespaceURL(OOX_NS(dcTerms)), RTL_TEXTENCODING_UTF8).getStr(),
             FSNS( XML_xmlns, XML_dcmitype ),    OUStringToOString(rSelf.getNamespaceURL(OOX_NS(dcmiType)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSNS( XML_xmlns, XML_xsi ),         OUStringToOString(rSelf.getNamespaceURL(OOX_NS(xsi)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSEND );
+            FSNS( XML_xmlns, XML_xsi ),         OUStringToOString(rSelf.getNamespaceURL(OOX_NS(xsi)), RTL_TEXTENCODING_UTF8).getStr() );
 
 #ifdef OOXTODO
     writeElement( pCoreProps, FSNS( XML_cp, XML_category ),         "category" );
@@ -666,8 +664,7 @@ writeAppProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >
             "application/vnd.openxmlformats-officedocument.extended-properties+xml" );
     pAppProps->startElement( XML_Properties,
             XML_xmlns,                  OUStringToOString(rSelf.getNamespaceURL(OOX_NS(officeExtPr)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSNS( XML_xmlns, XML_vt ),  OUStringToOString(rSelf.getNamespaceURL(OOX_NS(officeDocPropsVT)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSEND );
+            FSNS( XML_xmlns, XML_vt ),  OUStringToOString(rSelf.getNamespaceURL(OOX_NS(officeDocPropsVT)), RTL_TEXTENCODING_UTF8).getStr() );
 
     writeElement( pAppProps, XML_Template,              xProperties->getTemplateName() );
 #ifdef OOXTODO
@@ -779,8 +776,7 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
             "application/vnd.openxmlformats-officedocument.custom-properties+xml" );
     pAppProps->startElement( XML_Properties,
             XML_xmlns,                  OUStringToOString(rSelf.getNamespaceURL(OOX_NS(officeCustomPr)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSNS( XML_xmlns, XML_vt ),  OUStringToOString(rSelf.getNamespaceURL(OOX_NS(officeDocPropsVT)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSEND );
+            FSNS( XML_xmlns, XML_vt ),  OUStringToOString(rSelf.getNamespaceURL(OOX_NS(officeDocPropsVT)), RTL_TEXTENCODING_UTF8).getStr() );
 
     size_t nIndex = 0;
     for (const auto& rProp : aprop)
@@ -792,8 +788,7 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
             pAppProps->startElement( XML_property ,
                 XML_fmtid,  "{D5CDD505-2E9C-101B-9397-08002B2CF9AE}",
                 XML_pid,    OString::number(nIndex + 2),
-                XML_name,   aName,
-                FSEND);
+                XML_name,   aName);
 
             switch ( rProp.Value.getValueTypeClass() )
             {

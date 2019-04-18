@@ -31,7 +31,7 @@ void SmOoxmlExport::ConvertFromStarMath( const ::sax_fastparser::FSHelperPtr& se
         return;
     m_pSerializer = serializer;
     m_pSerializer->startElementNS( XML_m, XML_oMath,
-        FSNS( XML_xmlns, XML_m ), "http://schemas.openxmlformats.org/officeDocument/2006/math", FSEND );
+        FSNS( XML_xmlns, XML_m ), "http://schemas.openxmlformats.org/officeDocument/2006/math" );
     HandleNode( m_pTree, 0 );
     m_pSerializer->endElementNS( XML_m, XML_oMath );
 }
@@ -41,13 +41,13 @@ void SmOoxmlExport::ConvertFromStarMath( const ::sax_fastparser::FSHelperPtr& se
 
 void SmOoxmlExport::HandleVerticalStack( const SmNode* pNode, int nLevel )
 {
-    m_pSerializer->startElementNS( XML_m, XML_eqArr, FSEND );
+    m_pSerializer->startElementNS( XML_m, XML_eqArr );
     int size = pNode->GetNumSubNodes();
     for( int i = 0;
          i < size;
          ++i )
     {
-        m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_e );
         HandleNode( pNode->GetSubNode( i ), nLevel + 1 );
         m_pSerializer->endElementNS( XML_m, XML_e );
     }
@@ -56,23 +56,23 @@ void SmOoxmlExport::HandleVerticalStack( const SmNode* pNode, int nLevel )
 
 void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
 {
-    m_pSerializer->startElementNS( XML_m, XML_r, FSEND );
+    m_pSerializer->startElementNS( XML_m, XML_r );
 
     if( pNode->GetToken().eType == TTEXT ) // literal text (in quotes)
     {
-        m_pSerializer->startElementNS( XML_m, XML_rPr, FSEND );
-        m_pSerializer->singleElementNS( XML_m, XML_lit, FSEND );
-        m_pSerializer->singleElementNS( XML_m, XML_nor, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_rPr );
+        m_pSerializer->singleElementNS( XML_m, XML_lit );
+        m_pSerializer->singleElementNS( XML_m, XML_nor );
         m_pSerializer->endElementNS( XML_m, XML_rPr );
     }
     if (drawingml::DOCUMENT_DOCX == m_DocumentType && ECMA_DIALECT == version)
     { // HACK: MSOffice2007 does not import characters properly unless this font is explicitly given
-        m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
+        m_pSerializer->startElementNS( XML_w, XML_rPr );
         m_pSerializer->singleElementNS( XML_w, XML_rFonts, FSNS( XML_w, XML_ascii ), "Cambria Math",
-            FSNS( XML_w, XML_hAnsi ), "Cambria Math", FSEND );
+            FSNS( XML_w, XML_hAnsi ), "Cambria Math" );
         m_pSerializer->endElementNS( XML_w, XML_rPr );
     }
-    m_pSerializer->startElementNS( XML_m, XML_t, FSNS( XML_xml, XML_space ), "preserve", FSEND );
+    m_pSerializer->startElementNS( XML_m, XML_t, FSNS( XML_xml, XML_space ), "preserve" );
     const SmTextNode* pTemp = static_cast<const SmTextNode* >(pNode);
     SAL_INFO( "starmath.ooxml", "Text:" << pTemp->GetText());
     OUStringBuffer buf(pTemp->GetText());
@@ -133,18 +133,18 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
 
 void SmOoxmlExport::HandleFractions( const SmNode* pNode, int nLevel, const char* type )
 {
-    m_pSerializer->startElementNS( XML_m, XML_f, FSEND );
+    m_pSerializer->startElementNS( XML_m, XML_f );
     if( type != nullptr )
     {
-        m_pSerializer->startElementNS( XML_m, XML_fPr, FSEND );
-        m_pSerializer->singleElementNS( XML_m, XML_type, FSNS( XML_m, XML_val ), type, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_fPr );
+        m_pSerializer->singleElementNS( XML_m, XML_type, FSNS( XML_m, XML_val ), type );
         m_pSerializer->endElementNS( XML_m, XML_fPr );
     }
     assert( pNode->GetNumSubNodes() == 3 );
-    m_pSerializer->startElementNS( XML_m, XML_num, FSEND );
+    m_pSerializer->startElementNS( XML_m, XML_num );
     HandleNode( pNode->GetSubNode( 0 ), nLevel + 1 );
     m_pSerializer->endElementNS( XML_m, XML_num );
-    m_pSerializer->startElementNS( XML_m, XML_den, FSEND );
+    m_pSerializer->startElementNS( XML_m, XML_den );
     HandleNode( pNode->GetSubNode( 2 ), nLevel + 1 );
     m_pSerializer->endElementNS( XML_m, XML_den );
     m_pSerializer->endElementNS( XML_m, XML_f );
@@ -170,13 +170,13 @@ void SmOoxmlExport::HandleAttribute( const SmAttributNode* pNode, int nLevel )
         case TWIDEVEC:
         case TBAR:
         {
-            m_pSerializer->startElementNS( XML_m, XML_acc, FSEND );
-            m_pSerializer->startElementNS( XML_m, XML_accPr, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_acc );
+            m_pSerializer->startElementNS( XML_m, XML_accPr );
             OString value = OUStringToOString(
                 OUString( pNode->Attribute()->GetToken().cMathChar ), RTL_TEXTENCODING_UTF8 );
-            m_pSerializer->singleElementNS( XML_m, XML_chr, FSNS( XML_m, XML_val ), value.getStr(), FSEND );
+            m_pSerializer->singleElementNS( XML_m, XML_chr, FSNS( XML_m, XML_val ), value.getStr() );
             m_pSerializer->endElementNS( XML_m, XML_accPr );
-            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_e );
             HandleNode( pNode->Body(), nLevel + 1 );
             m_pSerializer->endElementNS( XML_m, XML_e );
             m_pSerializer->endElementNS( XML_m, XML_acc );
@@ -184,26 +184,26 @@ void SmOoxmlExport::HandleAttribute( const SmAttributNode* pNode, int nLevel )
         }
         case TOVERLINE:
         case TUNDERLINE:
-            m_pSerializer->startElementNS( XML_m, XML_bar, FSEND );
-            m_pSerializer->startElementNS( XML_m, XML_barPr, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_bar );
+            m_pSerializer->startElementNS( XML_m, XML_barPr );
             m_pSerializer->singleElementNS( XML_m, XML_pos, FSNS( XML_m, XML_val ),
-                ( pNode->Attribute()->GetToken().eType == TUNDERLINE ) ? "bot" : "top", FSEND );
+                ( pNode->Attribute()->GetToken().eType == TUNDERLINE ) ? "bot" : "top" );
             m_pSerializer->endElementNS( XML_m, XML_barPr );
-            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_e );
             HandleNode( pNode->Body(), nLevel + 1 );
             m_pSerializer->endElementNS( XML_m, XML_e );
             m_pSerializer->endElementNS( XML_m, XML_bar );
             break;
         case TOVERSTRIKE:
-            m_pSerializer->startElementNS( XML_m, XML_borderBox, FSEND );
-            m_pSerializer->startElementNS( XML_m, XML_borderBoxPr, FSEND );
-            m_pSerializer->singleElementNS( XML_m, XML_hideTop, FSNS( XML_m, XML_val ), "1", FSEND );
-            m_pSerializer->singleElementNS( XML_m, XML_hideBot, FSNS( XML_m, XML_val ), "1", FSEND );
-            m_pSerializer->singleElementNS( XML_m, XML_hideLeft, FSNS( XML_m, XML_val ), "1", FSEND );
-            m_pSerializer->singleElementNS( XML_m, XML_hideRight, FSNS( XML_m, XML_val ), "1", FSEND );
-            m_pSerializer->singleElementNS( XML_m, XML_strikeH, FSNS( XML_m, XML_val ), "1", FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_borderBox );
+            m_pSerializer->startElementNS( XML_m, XML_borderBoxPr );
+            m_pSerializer->singleElementNS( XML_m, XML_hideTop, FSNS( XML_m, XML_val ), "1" );
+            m_pSerializer->singleElementNS( XML_m, XML_hideBot, FSNS( XML_m, XML_val ), "1" );
+            m_pSerializer->singleElementNS( XML_m, XML_hideLeft, FSNS( XML_m, XML_val ), "1" );
+            m_pSerializer->singleElementNS( XML_m, XML_hideRight, FSNS( XML_m, XML_val ), "1" );
+            m_pSerializer->singleElementNS( XML_m, XML_strikeH, FSNS( XML_m, XML_val ), "1" );
             m_pSerializer->endElementNS( XML_m, XML_borderBoxPr );
-            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_e );
             HandleNode( pNode->Body(), nLevel + 1 );
             m_pSerializer->endElementNS( XML_m, XML_e );
             m_pSerializer->endElementNS( XML_m, XML_borderBox );
@@ -216,21 +216,21 @@ void SmOoxmlExport::HandleAttribute( const SmAttributNode* pNode, int nLevel )
 
 void SmOoxmlExport::HandleRoot( const SmRootNode* pNode, int nLevel )
 {
-    m_pSerializer->startElementNS( XML_m, XML_rad, FSEND );
+    m_pSerializer->startElementNS( XML_m, XML_rad );
     if( const SmNode* argument = pNode->Argument())
     {
-        m_pSerializer->startElementNS( XML_m, XML_deg, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_deg );
         HandleNode( argument, nLevel + 1 );
         m_pSerializer->endElementNS( XML_m, XML_deg );
     }
     else
     {
-        m_pSerializer->startElementNS( XML_m, XML_radPr, FSEND );
-        m_pSerializer->singleElementNS( XML_m, XML_degHide, FSNS( XML_m, XML_val ), "1", FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_radPr );
+        m_pSerializer->singleElementNS( XML_m, XML_degHide, FSNS( XML_m, XML_val ), "1" );
         m_pSerializer->endElementNS( XML_m, XML_radPr );
-        m_pSerializer->singleElementNS( XML_m, XML_deg, FSEND ); // empty but present
+        m_pSerializer->singleElementNS( XML_m, XML_deg ); // empty but present
     }
-    m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+    m_pSerializer->startElementNS( XML_m, XML_e );
     HandleNode( pNode->Body(), nLevel + 1 );
     m_pSerializer->endElementNS( XML_m, XML_e );
     m_pSerializer->endElementNS( XML_m, XML_rad );
@@ -264,45 +264,45 @@ void SmOoxmlExport::HandleOperator( const SmOperNode* pNode, int nLevel )
             const SmSubSupNode* subsup = pNode->GetSubNode( 0 )->GetType() == SmNodeType::SubSup
                 ? static_cast< const SmSubSupNode* >( pNode->GetSubNode( 0 )) : nullptr;
             const SmNode* operation = subsup != nullptr ? subsup->GetBody() : pNode->GetSubNode( 0 );
-            m_pSerializer->startElementNS( XML_m, XML_nary, FSEND );
-            m_pSerializer->startElementNS( XML_m, XML_naryPr, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_nary );
+            m_pSerializer->startElementNS( XML_m, XML_naryPr );
             m_pSerializer->singleElementNS( XML_m, XML_chr,
-                FSNS( XML_m, XML_val ), mathSymbolToString( operation ).getStr(), FSEND );
+                FSNS( XML_m, XML_val ), mathSymbolToString( operation ).getStr() );
             if( subsup == nullptr || subsup->GetSubSup( CSUB ) == nullptr )
-                m_pSerializer->singleElementNS( XML_m, XML_subHide, FSNS( XML_m, XML_val ), "1", FSEND );
+                m_pSerializer->singleElementNS( XML_m, XML_subHide, FSNS( XML_m, XML_val ), "1" );
             if( subsup == nullptr || subsup->GetSubSup( CSUP ) == nullptr )
-                m_pSerializer->singleElementNS( XML_m, XML_supHide, FSNS( XML_m, XML_val ), "1", FSEND );
+                m_pSerializer->singleElementNS( XML_m, XML_supHide, FSNS( XML_m, XML_val ), "1" );
             m_pSerializer->endElementNS( XML_m, XML_naryPr );
             if( subsup == nullptr || subsup->GetSubSup( CSUB ) == nullptr )
-                m_pSerializer->singleElementNS( XML_m, XML_sub, FSEND );
+                m_pSerializer->singleElementNS( XML_m, XML_sub );
             else
             {
-                m_pSerializer->startElementNS( XML_m, XML_sub, FSEND );
+                m_pSerializer->startElementNS( XML_m, XML_sub );
                 HandleNode( subsup->GetSubSup( CSUB ), nLevel + 1 );
                 m_pSerializer->endElementNS( XML_m, XML_sub );
             }
             if( subsup == nullptr || subsup->GetSubSup( CSUP ) == nullptr )
-                m_pSerializer->singleElementNS( XML_m, XML_sup, FSEND );
+                m_pSerializer->singleElementNS( XML_m, XML_sup );
             else
             {
-                m_pSerializer->startElementNS( XML_m, XML_sup, FSEND );
+                m_pSerializer->startElementNS( XML_m, XML_sup );
                 HandleNode( subsup->GetSubSup( CSUP ), nLevel + 1 );
                 m_pSerializer->endElementNS( XML_m, XML_sup );
             }
-            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_e );
             HandleNode( pNode->GetSubNode( 1 ), nLevel + 1 ); // body
             m_pSerializer->endElementNS( XML_m, XML_e );
             m_pSerializer->endElementNS( XML_m, XML_nary );
             break;
         }
         case TLIM:
-            m_pSerializer->startElementNS( XML_m, XML_func, FSEND );
-            m_pSerializer->startElementNS( XML_m, XML_fName, FSEND );
-            m_pSerializer->startElementNS( XML_m, XML_limLow, FSEND );
-            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_func );
+            m_pSerializer->startElementNS( XML_m, XML_fName );
+            m_pSerializer->startElementNS( XML_m, XML_limLow );
+            m_pSerializer->startElementNS( XML_m, XML_e );
             HandleNode( pNode->GetSymbol(), nLevel + 1 );
             m_pSerializer->endElementNS( XML_m, XML_e );
-            m_pSerializer->startElementNS( XML_m, XML_lim, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_lim );
             if( const SmSubSupNode* subsup = pNode->GetSubNode( 0 )->GetType() == SmNodeType::SubSup
                 ? static_cast< const SmSubSupNode* >( pNode->GetSubNode( 0 )) : nullptr )
             {
@@ -312,7 +312,7 @@ void SmOoxmlExport::HandleOperator( const SmOperNode* pNode, int nLevel )
             m_pSerializer->endElementNS( XML_m, XML_lim );
             m_pSerializer->endElementNS( XML_m, XML_limLow );
             m_pSerializer->endElementNS( XML_m, XML_fName );
-            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_e );
             HandleNode( pNode->GetSubNode( 1 ), nLevel + 1 ); // body
             m_pSerializer->endElementNS( XML_m, XML_e );
             m_pSerializer->endElementNS( XML_m, XML_func );
@@ -332,62 +332,62 @@ void SmOoxmlExport::HandleSubSupScriptInternal( const SmSubSupNode* pNode, int n
         return;
     if(( flags & ( 1 << RSUP | 1 << RSUB )) == ( 1 << RSUP | 1 << RSUB ))
     { // m:sSubSup
-        m_pSerializer->startElementNS( XML_m, XML_sSubSup, FSEND );
-        m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_sSubSup );
+        m_pSerializer->startElementNS( XML_m, XML_e );
         flags &= ~( 1 << RSUP | 1 << RSUB );
         if( flags == 0 )
             HandleNode( pNode->GetBody(), nLevel + 1 );
         else
             HandleSubSupScriptInternal( pNode, nLevel, flags );
         m_pSerializer->endElementNS( XML_m, XML_e );
-        m_pSerializer->startElementNS( XML_m, XML_sub, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_sub );
         HandleNode( pNode->GetSubSup( RSUB ), nLevel + 1 );
         m_pSerializer->endElementNS( XML_m, XML_sub );
-        m_pSerializer->startElementNS( XML_m, XML_sup, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_sup );
         HandleNode( pNode->GetSubSup( RSUP ), nLevel + 1 );
         m_pSerializer->endElementNS( XML_m, XML_sup );
         m_pSerializer->endElementNS( XML_m, XML_sSubSup );
     }
     else if(( flags & ( 1 << RSUB )) == 1 << RSUB )
     { // m:sSub
-        m_pSerializer->startElementNS( XML_m, XML_sSub, FSEND );
-        m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_sSub );
+        m_pSerializer->startElementNS( XML_m, XML_e );
         flags &= ~( 1 << RSUB );
         if( flags == 0 )
             HandleNode( pNode->GetBody(), nLevel + 1 );
         else
             HandleSubSupScriptInternal( pNode, nLevel, flags );
         m_pSerializer->endElementNS( XML_m, XML_e );
-        m_pSerializer->startElementNS( XML_m, XML_sub, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_sub );
         HandleNode( pNode->GetSubSup( RSUB ), nLevel + 1 );
         m_pSerializer->endElementNS( XML_m, XML_sub );
         m_pSerializer->endElementNS( XML_m, XML_sSub );
     }
     else if(( flags & ( 1 << RSUP )) == 1 << RSUP )
     { // m:sSup
-        m_pSerializer->startElementNS( XML_m, XML_sSup, FSEND );
-        m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_sSup );
+        m_pSerializer->startElementNS( XML_m, XML_e );
         flags &= ~( 1 << RSUP );
         if( flags == 0 )
             HandleNode( pNode->GetBody(), nLevel + 1 );
         else
             HandleSubSupScriptInternal( pNode, nLevel, flags );
         m_pSerializer->endElementNS( XML_m, XML_e );
-        m_pSerializer->startElementNS( XML_m, XML_sup, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_sup );
         HandleNode( pNode->GetSubSup( RSUP ), nLevel + 1 );
         m_pSerializer->endElementNS( XML_m, XML_sup );
         m_pSerializer->endElementNS( XML_m, XML_sSup );
     }
     else if(( flags & ( 1 << LSUP | 1 << LSUB )) == ( 1 << LSUP | 1 << LSUB ))
     { // m:sPre
-        m_pSerializer->startElementNS( XML_m, XML_sPre, FSEND );
-        m_pSerializer->startElementNS( XML_m, XML_sub, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_sPre );
+        m_pSerializer->startElementNS( XML_m, XML_sub );
         HandleNode( pNode->GetSubSup( LSUB ), nLevel + 1 );
         m_pSerializer->endElementNS( XML_m, XML_sub );
-        m_pSerializer->startElementNS( XML_m, XML_sup, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_sup );
         HandleNode( pNode->GetSubSup( LSUP ), nLevel + 1 );
         m_pSerializer->endElementNS( XML_m, XML_sup );
-        m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_e );
         flags &= ~( 1 << LSUP | 1 << LSUB );
         if( flags == 0 )
             HandleNode( pNode->GetBody(), nLevel + 1 );
@@ -398,30 +398,30 @@ void SmOoxmlExport::HandleSubSupScriptInternal( const SmSubSupNode* pNode, int n
     }
     else if(( flags & ( 1 << CSUB )) == ( 1 << CSUB ))
     { // m:limLow looks like a good element for central superscript
-        m_pSerializer->startElementNS( XML_m, XML_limLow, FSEND );
-        m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_limLow );
+        m_pSerializer->startElementNS( XML_m, XML_e );
         flags &= ~( 1 << CSUB );
         if( flags == 0 )
             HandleNode( pNode->GetBody(), nLevel + 1 );
         else
             HandleSubSupScriptInternal( pNode, nLevel, flags );
         m_pSerializer->endElementNS( XML_m, XML_e );
-        m_pSerializer->startElementNS( XML_m, XML_lim, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_lim );
         HandleNode( pNode->GetSubSup( CSUB ), nLevel + 1 );
         m_pSerializer->endElementNS( XML_m, XML_lim );
         m_pSerializer->endElementNS( XML_m, XML_limLow );
     }
     else if(( flags & ( 1 << CSUP )) == ( 1 << CSUP ))
     { // m:limUpp looks like a good element for central superscript
-        m_pSerializer->startElementNS( XML_m, XML_limUpp, FSEND );
-        m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_limUpp );
+        m_pSerializer->startElementNS( XML_m, XML_e );
         flags &= ~( 1 << CSUP );
         if( flags == 0 )
             HandleNode( pNode->GetBody(), nLevel + 1 );
         else
             HandleSubSupScriptInternal( pNode, nLevel, flags );
         m_pSerializer->endElementNS( XML_m, XML_e );
-        m_pSerializer->startElementNS( XML_m, XML_lim, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_lim );
         HandleNode( pNode->GetSubSup( CSUP ), nLevel + 1 );
         m_pSerializer->endElementNS( XML_m, XML_lim );
         m_pSerializer->endElementNS( XML_m, XML_limUpp );
@@ -436,13 +436,13 @@ void SmOoxmlExport::HandleSubSupScriptInternal( const SmSubSupNode* pNode, int n
 
 void SmOoxmlExport::HandleMatrix( const SmMatrixNode* pNode, int nLevel )
 {
-    m_pSerializer->startElementNS( XML_m, XML_m, FSEND );
+    m_pSerializer->startElementNS( XML_m, XML_m );
     for (size_t row = 0; row < pNode->GetNumRows(); ++row)
     {
-        m_pSerializer->startElementNS( XML_m, XML_mr, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_mr );
         for (size_t col = 0; col < pNode->GetNumCols(); ++col)
         {
-            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_e );
             if( const SmNode* node = pNode->GetSubNode( row * pNode->GetNumCols() + col ))
                 HandleNode( node, nLevel + 1 );
             m_pSerializer->endElementNS( XML_m, XML_e );
@@ -454,16 +454,16 @@ void SmOoxmlExport::HandleMatrix( const SmMatrixNode* pNode, int nLevel )
 
 void SmOoxmlExport::HandleBrace( const SmBraceNode* pNode, int nLevel )
 {
-    m_pSerializer->startElementNS( XML_m, XML_d, FSEND );
-    m_pSerializer->startElementNS( XML_m, XML_dPr, FSEND );
+    m_pSerializer->startElementNS( XML_m, XML_d );
+    m_pSerializer->startElementNS( XML_m, XML_dPr );
 
     //check if the node has an opening brace
     if( TNONE == pNode->OpeningBrace()->GetToken().eType )
         m_pSerializer->singleElementNS( XML_m, XML_begChr,
-            FSNS( XML_m, XML_val ), "", FSEND );
+            FSNS( XML_m, XML_val ), "" );
     else
         m_pSerializer->singleElementNS( XML_m, XML_begChr,
-            FSNS( XML_m, XML_val ), mathSymbolToString( pNode->OpeningBrace()).getStr(), FSEND );
+            FSNS( XML_m, XML_val ), mathSymbolToString( pNode->OpeningBrace()).getStr() );
 
     std::vector< const SmNode* > subnodes;
     if( pNode->Body()->GetType() == SmNodeType::Bracebody )
@@ -479,7 +479,7 @@ void SmOoxmlExport::HandleBrace( const SmBraceNode* pNode, int nLevel )
                 if( !separatorWritten )
                 {
                     m_pSerializer->singleElementNS( XML_m, XML_sepChr,
-                        FSNS( XML_m, XML_val ), mathSymbolToString( math ).getStr(), FSEND );
+                        FSNS( XML_m, XML_val ), mathSymbolToString( math ).getStr() );
                     separatorWritten = true;
                 }
             }
@@ -492,15 +492,15 @@ void SmOoxmlExport::HandleBrace( const SmBraceNode* pNode, int nLevel )
 
     if( TNONE == pNode->ClosingBrace()->GetToken().eType )
         m_pSerializer->singleElementNS( XML_m, XML_endChr,
-            FSNS( XML_m, XML_val ), "", FSEND );
+            FSNS( XML_m, XML_val ), "" );
     else
         m_pSerializer->singleElementNS( XML_m, XML_endChr,
-            FSNS( XML_m, XML_val ), mathSymbolToString( pNode->ClosingBrace()).getStr(), FSEND );
+            FSNS( XML_m, XML_val ), mathSymbolToString( pNode->ClosingBrace()).getStr() );
 
     m_pSerializer->endElementNS( XML_m, XML_dPr );
     for(const SmNode* subnode : subnodes)
     {
-        m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_e );
         HandleNode( subnode, nLevel + 1 );
         m_pSerializer->endElementNS( XML_m, XML_e );
     }
@@ -516,23 +516,23 @@ void SmOoxmlExport::HandleVerticalBrace( const SmVerticalBraceNode* pNode, int n
         case TUNDERBRACE:
         {
             bool top = ( pNode->GetToken().eType == TOVERBRACE );
-            m_pSerializer->startElementNS( XML_m, top ? XML_limUpp : XML_limLow, FSEND );
-            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
-            m_pSerializer->startElementNS( XML_m, XML_groupChr, FSEND );
-            m_pSerializer->startElementNS( XML_m, XML_groupChrPr, FSEND );
+            m_pSerializer->startElementNS( XML_m, top ? XML_limUpp : XML_limLow );
+            m_pSerializer->startElementNS( XML_m, XML_e );
+            m_pSerializer->startElementNS( XML_m, XML_groupChr );
+            m_pSerializer->startElementNS( XML_m, XML_groupChrPr );
             m_pSerializer->singleElementNS( XML_m, XML_chr,
-                FSNS( XML_m, XML_val ), mathSymbolToString( pNode->Brace()).getStr(), FSEND );
+                FSNS( XML_m, XML_val ), mathSymbolToString( pNode->Brace()).getStr() );
             // TODO not sure if pos and vertJc are correct
             m_pSerializer->singleElementNS( XML_m, XML_pos,
-                FSNS( XML_m, XML_val ), top ? "top" : "bot", FSEND );
-            m_pSerializer->singleElementNS( XML_m, XML_vertJc, FSNS( XML_m, XML_val ), top ? "bot" : "top", FSEND );
+                FSNS( XML_m, XML_val ), top ? "top" : "bot" );
+            m_pSerializer->singleElementNS( XML_m, XML_vertJc, FSNS( XML_m, XML_val ), top ? "bot" : "top" );
             m_pSerializer->endElementNS( XML_m, XML_groupChrPr );
-            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_e );
             HandleNode( pNode->Body(), nLevel + 1 );
             m_pSerializer->endElementNS( XML_m, XML_e );
             m_pSerializer->endElementNS( XML_m, XML_groupChr );
             m_pSerializer->endElementNS( XML_m, XML_e );
-            m_pSerializer->startElementNS( XML_m, XML_lim, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_lim );
             HandleNode( pNode->Script(), nLevel + 1 );
             m_pSerializer->endElementNS( XML_m, XML_lim );
             m_pSerializer->endElementNS( XML_m, top ? XML_limUpp : XML_limLow );
@@ -547,8 +547,8 @@ void SmOoxmlExport::HandleVerticalBrace( const SmVerticalBraceNode* pNode, int n
 
 void SmOoxmlExport::HandleBlank()
 {
-    m_pSerializer->startElementNS( XML_m, XML_r, FSEND );
-    m_pSerializer->startElementNS( XML_m, XML_t, FSNS( XML_xml, XML_space ), "preserve", FSEND );
+    m_pSerializer->startElementNS( XML_m, XML_r );
+    m_pSerializer->startElementNS( XML_m, XML_t, FSNS( XML_xml, XML_space ), "preserve" );
     m_pSerializer->write( " " );
     m_pSerializer->endElementNS( XML_m, XML_t );
     m_pSerializer->endElementNS( XML_m, XML_r );

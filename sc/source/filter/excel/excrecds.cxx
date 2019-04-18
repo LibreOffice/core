@@ -376,9 +376,9 @@ void XclExpXmlSheetPr::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_transitionEntry,
             // OOXTODO: XML_published,
             // OOXTODO: XML_codeName,
-            XML_filterMode, mpManager ? ToPsz( mpManager->HasFilterMode( mnScTab ) ) : nullptr,
-            // OOXTODO: XML_enableFormatConditionsCalculation,
-            FSEND );
+            XML_filterMode, mpManager ? ToPsz( mpManager->HasFilterMode( mnScTab ) ) : nullptr
+            // OOXTODO: XML_enableFormatConditionsCalculation
+    );
 
     // Note : the order of child elements is significant. Don't change the order.
 
@@ -386,11 +386,11 @@ void XclExpXmlSheetPr::SaveXml( XclExpXmlStream& rStrm )
 
     if (maTabColor != COL_AUTO)
         rWorksheet->singleElement(
-            XML_tabColor, XML_rgb, XclXmlUtils::ToOString(maTabColor).getStr(), FSEND);
+            XML_tabColor, XML_rgb, XclXmlUtils::ToOString(maTabColor).getStr());
 
     rWorksheet->singleElement(XML_pageSetUpPr,
             // OOXTODO: XML_autoPageBreaks,
-        XML_fitToPage,  ToPsz(mbFitToPage), FSEND);
+        XML_fitToPage,  ToPsz(mbFitToPage));
 
     rWorksheet->endElement( XML_sheetPr );
 }
@@ -463,13 +463,12 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
             XML_sort, pTabProtect->isOptionEnabled( ScTableProtection::SORT ) ? ToPsz( false ) : nullptr,
             XML_autoFilter, pTabProtect->isOptionEnabled( ScTableProtection::AUTOFILTER ) ? ToPsz( false ) : nullptr,
             XML_pivotTables, pTabProtect->isOptionEnabled( ScTableProtection::PIVOT_TABLES ) ? ToPsz( false ) : nullptr,
-            XML_selectUnlockedCells, pTabProtect->isOptionEnabled( ScTableProtection::SELECT_UNLOCKED_CELLS ) ? nullptr : ToPsz( true ),
-            FSEND );
+            XML_selectUnlockedCells, pTabProtect->isOptionEnabled( ScTableProtection::SELECT_UNLOCKED_CELLS ) ? nullptr : ToPsz( true ) );
 
         const ::std::vector<ScEnhancedProtection>& rProts( pTabProtect->getEnhancedProtection());
         if (!rProts.empty())
         {
-            rWorksheet->startElement( XML_protectedRanges, FSEND);
+            rWorksheet->startElement( XML_protectedRanges);
             for (const auto& rProt : rProts)
             {
                 SAL_WARN_IF( rProt.maSecurityDescriptorXML.isEmpty() && !rProt.maSecurityDescriptor.empty(),
@@ -486,8 +485,7 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
                         XML_hashValue, rProt.maPasswordHash.maHashValue.isEmpty() ? nullptr : rProt.maPasswordHash.maHashValue.toUtf8().getStr(),
                         XML_saltValue, rProt.maPasswordHash.maSaltValue.isEmpty() ? nullptr : rProt.maPasswordHash.maSaltValue.toUtf8().getStr(),
                         XML_spinCount, rProt.maPasswordHash.mnSpinCount ? OString::number( rProt.maPasswordHash.mnSpinCount).getStr() : nullptr,
-                        XML_sqref, rProt.maRangeList.is() ? XclXmlUtils::ToOString( *rProt.maRangeList).getStr() : nullptr,
-                        FSEND);
+                        XML_sqref, rProt.maRangeList.is() ? XclXmlUtils::ToOString( *rProt.maRangeList).getStr() : nullptr);
             }
             rWorksheet->endElement( XML_protectedRanges);
         }
@@ -602,8 +600,7 @@ void ExcFilterCondition::SaveXml( XclExpXmlStream& rStrm )
 
     rStrm.GetCurrentStream()->singleElement( XML_customFilter,
             XML_operator,   lcl_GetOperator( nOper ),
-            XML_val,        lcl_GetValue( nType, fVal, pText.get() ).getStr(),
-            FSEND );
+            XML_val,        lcl_GetValue( nType, fVal, pText.get() ).getStr() );
 }
 
 void ExcFilterCondition::SaveText( XclExpStream& rStrm )
@@ -793,10 +790,10 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
 
     rWorksheet->startElement( XML_filterColumn,
-            XML_colId,          OString::number(  nCol ).getStr(),
+            XML_colId,          OString::number(  nCol ).getStr()
             // OOXTODO: XML_hiddenButton,   AutoFilter12 fHideArrow?
-            // OOXTODO: XML_showButton,
-            FSEND );
+            // OOXTODO: XML_showButton
+    );
 
     switch (meType)
     {
@@ -807,14 +804,13 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
                 rWorksheet->singleElement( XML_top10,
                         XML_top,        ToPsz( get_flag( nFlags, EXC_AFFLAG_TOP10TOP ) ),
                         XML_percent,    ToPsz( get_flag( nFlags, EXC_AFFLAG_TOP10PERC ) ),
-                        XML_val,        OString::number(  (nFlags >> 7 ) ).getStr(),
-                        // OOXTODO: XML_filterVal,
-                        FSEND );
+                        XML_val,        OString::number(  (nFlags >> 7 ) ).getStr()
+                        // OOXTODO: XML_filterVal
+                );
             }
 
             rWorksheet->startElement( XML_customFilters,
-                    XML_and,    ToPsz( (nFlags & EXC_AFFLAG_ANDORMASK) == EXC_AFFLAG_AND ),
-                    FSEND );
+                    XML_and,    ToPsz( (nFlags & EXC_AFFLAG_ANDORMASK) == EXC_AFFLAG_AND ) );
             aCond[ 0 ].SaveXml( rStrm );
             aCond[ 1 ].SaveXml( rStrm );
             rWorksheet->endElement( XML_customFilters );
@@ -824,12 +820,12 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
         break;
         case MultiValue:
         {
-            rWorksheet->startElement(XML_filters, FSEND);
+            rWorksheet->startElement(XML_filters);
             for (const auto& rMultiValue : maMultiValues)
             {
                 OString aStr = OUStringToOString(rMultiValue, RTL_TEXTENCODING_UTF8);
                 const char* pz = aStr.getStr();
-                rWorksheet->singleElement(XML_filter, XML_val, pz, FSEND);
+                rWorksheet->singleElement(XML_filter, XML_val, pz);
             }
             rWorksheet->endElement(XML_filters);
         }
@@ -992,8 +988,7 @@ void ExcAutoFilterRecs::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_autoFilter,
-            XML_ref,    XclXmlUtils::ToOString( maRef ).getStr(),
-            FSEND );
+            XML_ref,    XclXmlUtils::ToOString( maRef ).getStr() );
     // OOXTODO: XML_extLst, XML_sortState
     if( !maFilterList.IsEmpty() )
         maFilterList.SaveXml( rStrm );
