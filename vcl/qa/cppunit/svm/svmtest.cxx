@@ -14,6 +14,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <bitmapwriteaccess.hxx>
+#include <vcl/pngwrite.hxx>
 
 #include <config_features.h>
 #if HAVE_FEATURE_OPENGL
@@ -30,6 +31,8 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     {
         return m_directories.getURLFromSrc(maDataUrl) + sFileName;
     }*/
+
+    void checkRendering(ScopedVclPtrInstance<VirtualDevice> const & pVirtualDev, const GDIMetaFile& rMetaFile);
 
     xmlDocPtr dumpMeta(const GDIMetaFile& rMetaFile);
 
@@ -153,6 +156,34 @@ static void setupBaseVirtualDevice(VirtualDevice& rDevice, GDIMetaFile& rMeta)
     rDevice.SetOutputSizePixel(aVDSize);
     rDevice.SetBackground(Wallpaper(COL_LIGHTRED));
     rDevice.Erase();
+}
+
+void SvmTest::checkRendering(ScopedVclPtrInstance<VirtualDevice> const & pVirtualDev, const GDIMetaFile& rMetaFile)
+{
+    BitmapEx aSourceBitmapEx = pVirtualDev->GetBitmapEx(Point(), Size(10, 10));
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDevResult;
+    const_cast<GDIMetaFile&>(rMetaFile).Play(pVirtualDevResult.get());
+    BitmapEx aResultBitmapEx = pVirtualDev->GetBitmapEx(Point(), Size(10, 10));
+
+    const bool bWriteCompareBitmap = false;
+
+    if (bWriteCompareBitmap)
+    {
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+
+        {
+            SvFileStream aStream(aTempFile.GetURL() + ".source.png", StreamMode::WRITE | StreamMode::TRUNC);
+            vcl::PNGWriter aPNGWriter(aSourceBitmapEx);
+            aPNGWriter.Write(aStream);
+        }
+        {
+            SvFileStream aStream(aTempFile.GetURL() + ".result.png", StreamMode::WRITE | StreamMode::TRUNC);
+            vcl::PNGWriter aPNGWriter(aResultBitmapEx);
+            aPNGWriter.Write(aStream);
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(aSourceBitmapEx.GetChecksum(), aResultBitmapEx.GetChecksum());
 }
 
 static GDIMetaFile readMetafile(const OUString& rUrl)
@@ -823,29 +854,55 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
 {
     xmlDocPtr pDoc = dumpMeta(rMetaFile);
 
-    OUString crc1 = "b8dee5da";
-    OUString crc2 = "281fc589";
-    OUString crc3 = "5e01ddcc";
-#if HAVE_FEATURE_OPENGL
-    if (OpenGLHelper::isVCLOpenGLEnabled())
-    {
-        crc1 = "5e01ddcc";
-        crc2 = "281fc589";
-        crc3 = "b8dee5da";
-    }
+    std::vector<OUString> aExpectedCRC {
+#if !HAVE_FEATURE_OPENGL
+    "d8377d4f",
+    "281fc589",
+    "5e01ddcc",
+    "4df0e464",
+    "34434a50",
+    "d1736327",
+    "b37875c2",
+    "a85d44b8",
+#else
+    "08feb5d3",
+    "281fc589",
+    "b8dee5da",
+    "4df0e464",
+    "7d3a8da3",
+    "1426653b",
+    "4fd547df",
+    "71efc447",
 #endif
+    };
 
     assertXPathAttrs(pDoc, "/metafile/bmpex[1]", {
-        {"x", "1"}, {"y", "2"}, {"crc", crc1}, {"transparenttype", "bitmap"}
+        {"x", "1"}, {"y", "1"}, {"crc", aExpectedCRC[0]}, {"transparenttype", "bitmap"}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpexscale[1]", {
-        {"x", "1"}, {"y", "2"}, {"width", "3"}, {"height", "4"},
-        {"crc", crc2}, {"transparenttype", "bitmap"}
+        {"x", "5"}, {"y", "0"}, {"width", "2"}, {"height", "3"},
+        {"crc", aExpectedCRC[1]}, {"transparenttype", "bitmap"}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpexscalepart[1]", {
-        {"destx", "1"}, {"desty", "2"}, {"destwidth", "3"}, {"destheight", "4"},
-        {"srcx", "2"},  {"srcy", "1"},  {"srcwidth", "4"},  {"srcheight", "3"},
-        {"crc", crc3}, {"transparenttype", "bitmap"}
+        {"destx", "7"}, {"desty", "1"}, {"destwidth", "2"}, {"destheight", "2"},
+        {"srcx", "0"},  {"srcy", "0"},  {"srcwidth", "3"},  {"srcheight", "4"},
+        {"crc", aExpectedCRC[2]}, {"transparenttype", "bitmap"}
+    });
+
+    assertXPathAttrs(pDoc, "/metafile/bmpex[2]", {
+        {"x", "6"}, {"y", "6"}, {"crc", aExpectedCRC[3]}, {"transparenttype", "bitmap"}
+    });
+    assertXPathAttrs(pDoc, "/metafile/bmpex[3]", {
+        {"x", "0"}, {"y", "6"}, {"crc", aExpectedCRC[4]}, {"transparenttype", "bitmap"}
+    });
+    assertXPathAttrs(pDoc, "/metafile/bmpex[4]", {
+        {"x", "2"}, {"y", "6"}, {"crc", aExpectedCRC[5]}, {"transparenttype", "bitmap"}
+    });
+    assertXPathAttrs(pDoc, "/metafile/bmpex[5]", {
+        {"x", "0"}, {"y", "8"}, {"crc", aExpectedCRC[6]}, {"transparenttype", "bitmap"}
+    });
+    assertXPathAttrs(pDoc, "/metafile/bmpex[6]", {
+        {"x", "2"}, {"y", "8"}, {"crc", aExpectedCRC[7]}, {"transparenttype", "bitmap"}
     });
 }
 
@@ -855,32 +912,98 @@ void SvmTest::testBitmapExs()
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
-    Bitmap aBitmap1(Size(4,4), 24);
+    // DrawBitmapEx
     {
-        BitmapScopedWriteAccess pAccess(aBitmap1);
-        pAccess->Erase(COL_RED);
-    }
-    BitmapEx aBitmapEx1(aBitmap1, COL_YELLOW);
+        Bitmap aBitmap(Size(4,4), 24);
+        {
+            BitmapScopedWriteAccess pAccess(aBitmap);
+            pAccess->Erase(COL_YELLOW);
+        }
 
-    Bitmap aBitmap2(Size(4,4), 24);
+        pVirtualDev->DrawBitmapEx(Point(1, 1), BitmapEx(aBitmap, COL_WHITE));
+    }
+
+    // DrawBitmapEx - Scale
     {
-        BitmapScopedWriteAccess pAccess(aBitmap2);
-        pAccess->Erase(COL_GREEN);
+        Bitmap aBitmap(Size(4,4), 24);
+        {
+            BitmapScopedWriteAccess pAccess(aBitmap);
+            pAccess->Erase(COL_GREEN);
+        }
+        pVirtualDev->DrawBitmapEx(Point(5, 0), Size(2, 3), BitmapEx(aBitmap, COL_WHITE));
     }
-    BitmapEx aBitmapEx2(aBitmap2, COL_YELLOW);
 
-    Bitmap aBitmap3(Size(4,4), 24);
+    // DrawBitmapEx - Scale - Part
     {
-        BitmapScopedWriteAccess pAccess(aBitmap3);
-        pAccess->Erase(COL_BLUE);
+        Bitmap aBitmap(Size(4,4), 24);
+        {
+            BitmapScopedWriteAccess pAccess(aBitmap);
+            pAccess->Erase(COL_BLUE);
+        }
+        pVirtualDev->DrawBitmapEx(Point(7, 1), Size(2, 2), Point(0, 0), Size(3, 4), BitmapEx(aBitmap, COL_WHITE));
     }
-    BitmapEx aBitmapEx3(aBitmap3, COL_YELLOW);
 
-    pVirtualDev->DrawBitmapEx(Point(1, 2), aBitmapEx1);
-    pVirtualDev->DrawBitmapEx(Point(1, 2), Size(3, 4), aBitmapEx2);
-    pVirtualDev->DrawBitmapEx(Point(1, 2), Size(3, 4), Point(2, 1), Size(4, 3), aBitmapEx3);
+    // DrawBitmapEx - 50% transparent
+    {
+        Bitmap aBitmap(Size(4, 4), 24);
+        AlphaMask aAlpha(Size(4, 4));
+        {
+            BitmapScopedWriteAccess pAccess(aBitmap);
+            pAccess->Erase(COL_MAGENTA);
 
-    checkBitmapExs(writeAndRead(aGDIMetaFile, "bitmapexs.svm"));
+            AlphaScopedWriteAccess pAlphaAccess(aAlpha);
+            pAlphaAccess->Erase(Color(128, 128, 128));
+        }
+        pVirtualDev->DrawBitmapEx(Point(6, 6), BitmapEx(aBitmap, aAlpha));
+    }
+
+    // DrawBitmapEx - 1-bit
+    {
+        Bitmap aBitmap(Size(2, 2), 24);
+        {
+            BitmapScopedWriteAccess pAccess(aBitmap);
+            pAccess->Erase(COL_MAGENTA);
+        }
+        aBitmap.Convert(BmpConversion::N1BitThreshold);
+        pVirtualDev->DrawBitmapEx(Point(0, 6), BitmapEx(aBitmap, COL_WHITE));
+    }
+
+    // DrawBitmapEx - 4-bit
+    {
+        Bitmap aBitmap(Size(2, 2), 24);
+        {
+            BitmapScopedWriteAccess pAccess(aBitmap);
+            pAccess->Erase(COL_MAGENTA);
+        }
+        aBitmap.Convert(BmpConversion::N4BitColors);
+        pVirtualDev->DrawBitmapEx(Point(2, 6), BitmapEx(aBitmap, COL_WHITE));
+    }
+
+    // DrawBitmapEx - 8-bit Color
+    {
+        Bitmap aBitmap(Size(2, 2), 24);
+        {
+            BitmapScopedWriteAccess pAccess(aBitmap);
+            pAccess->Erase(COL_MAGENTA);
+        }
+        aBitmap.Convert(BmpConversion::N8BitColors);
+        pVirtualDev->DrawBitmapEx(Point(0, 8), BitmapEx(aBitmap, COL_WHITE));
+    }
+
+    // DrawBitmapEx - 8-bit Grey
+    {
+        Bitmap aBitmap(Size(2, 2), 24);
+        {
+            BitmapScopedWriteAccess pAccess(aBitmap);
+            pAccess->Erase(COL_MAGENTA);
+        }
+        aBitmap.Convert(BmpConversion::N8BitGreys);
+        pVirtualDev->DrawBitmapEx(Point(2, 8), BitmapEx(aBitmap, COL_WHITE));
+    }
+
+    GDIMetaFile aReloadedGDIMetaFile = writeAndRead(aGDIMetaFile, "bitmapexs.svm");
+    checkBitmapExs(aReloadedGDIMetaFile);
+    checkRendering(pVirtualDev, aReloadedGDIMetaFile);
 }
 
 void SvmTest::checkMasks(const GDIMetaFile& rMetaFile)
