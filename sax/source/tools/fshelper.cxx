@@ -40,7 +40,7 @@ FastSerializerHelper::~FastSerializerHelper()
     delete mpSerializer;
 }
 
-void FastSerializerHelper::startElement(sal_Int32 elementTokenId, FSEND_t)
+void FastSerializerHelper::startElement(sal_Int32 elementTokenId)
 {
     mpSerializer->startFastElement(elementTokenId);
 }
@@ -52,7 +52,7 @@ void FastSerializerHelper::pushAttributeValue(sal_Int32 attribute, const OString
 {
     mpSerializer->getTokenValueList().emplace_back(attribute, value.getStr());
 }
-void FastSerializerHelper::singleElement(sal_Int32 elementTokenId, FSEND_t)
+void FastSerializerHelper::singleElement(sal_Int32 elementTokenId)
 {
     mpSerializer->singleFastElement(elementTokenId);
 }
