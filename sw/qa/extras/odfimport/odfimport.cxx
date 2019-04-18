@@ -28,6 +28,7 @@
 #include <view.hxx>
 #include <edtwin.hxx>
 #include <olmenu.hxx>
+#include <hintids.hxx>
 
 typedef std::map<OUString, css::uno::Sequence< css::table::BorderLine> > AllBordersMap;
 typedef std::pair<OUString, css::uno::Sequence< css::table::BorderLine> > StringSequencePair;
@@ -930,6 +931,22 @@ DECLARE_ODFIMPORT_TEST(testTdf113289, "tdf113289.odt")
                          getProperty<sal_Int8>(aPageStyle, "FootnoteLineStyle"));
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf123968, "tdf123968.odt")
+{
+    // The test doc is special in that it starts with a table and it also has a header.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+
+    pWrtShell->SelAll();
+    SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCursor->Start()->nNode.GetNode());
+
+    // The field is now editable like any text, thus the field content "New value" shows up for the cursor.
+    CPPUNIT_ASSERT_EQUAL(OUString("inputfield: " + OUStringLiteral1(CH_TXT_ATR_INPUTFIELDSTART)
+                                  + "New value" + OUStringLiteral1(CH_TXT_ATR_INPUTFIELDEND)),
+                         rStart.GetText());
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
