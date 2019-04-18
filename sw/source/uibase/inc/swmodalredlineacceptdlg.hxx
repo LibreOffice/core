@@ -23,14 +23,14 @@
 
 class SwRedlineAcceptDlg;
 
-class SwModalRedlineAcceptDlg : public SfxModalDialog
+class SwModalRedlineAcceptDlg : public SfxDialogController
 {
-    std::unique_ptr<SwRedlineAcceptDlg> pImplDlg;
+    std::unique_ptr<weld::Container> m_xContentArea;
+    std::unique_ptr<SwRedlineAcceptDlg> m_xImplDlg;
 
 public:
-    SwModalRedlineAcceptDlg(vcl::Window *pParent);
+    SwModalRedlineAcceptDlg(weld::Window *pParent);
     virtual ~SwModalRedlineAcceptDlg() override;
-    virtual void    dispose() override;
 
     void            AcceptAll( bool bAccept );
     virtual void    Activate() override;
