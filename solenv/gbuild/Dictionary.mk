@@ -60,18 +60,18 @@ gb_PropertiesTranslateTarget_DEPS := $(call gb_Executable_get_runtime_dependenci
 define gb_PropertiesTranslateTarget__command
 $(call gb_Output_announce,$(2),$(true),PRP,1)
 $(call gb_Helper_abbreviate_dirs, \
-	$(if $(filter-out qtz,$(LANG)), \
+	$(if $(filter-out qtz,$(LANGUAGE)), \
 		MERGEINPUT=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILE)) && \
 		$(gb_PropertiesTranslateTarget_COMMAND) \
 			-i $(PROPERTIES_FILE) \
-			-l $(LANG) \
+			-l $(LANGUAGE) \
 			-m $${MERGEINPUT} \
 			-o $(1) && \
 		rm -f $${MERGEINPUT} \
 		, \
 		$(gb_PropertiesTranslateTarget_COMMAND) \
 			-i $(PROPERTIES_FILE) \
-			-l $(LANG) \
+			-l $(LANGUAGE) \
 			-m \
 			-o $(1) \
 	) \
@@ -94,7 +94,7 @@ $(call gb_PropertiesTranslateTarget_get_clean_target,%) :
 
 # gb_PropertiesTranslateTarget_PropertiesTranslateTarget target source lang
 define gb_PropertiesTranslateTarget_PropertiesTranslateTarget
-$(call gb_PropertiesTranslateTarget_get_target,$(1)) : LANG := $(3)
+$(call gb_PropertiesTranslateTarget_get_target,$(1)) : LANGUAGE := $(3)
 $(call gb_PropertiesTranslateTarget_get_target,$(1)) : POFILE := $(gb_POLOCATION)/$(3)/$(patsubst %/,%,$(dir $(2))).po
 $(call gb_PropertiesTranslateTarget_get_target,$(1)) : PROPERTIES_FILE := $(SRCDIR)/$(2)
 

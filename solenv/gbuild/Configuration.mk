@@ -190,7 +190,7 @@ define gb_XcuLangpackTarget__command
 $(call gb_Output_announce,$(2),$(true),XCL,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	sed -e "s/__LANGUAGE__/$(LANG)/" -f $(gb_XcuLangpackTarget_SED_delcomment)\
+	sed -e "s/__LANGUAGE__/$(LANGUAGE)/" -f $(gb_XcuLangpackTarget_SED_delcomment)\
 	    $(3) > $(1))
 endef
 
@@ -384,7 +384,7 @@ $(call gb_Configuration_get_target,$(1)) : \
 	$(call gb_XcuLangpackTarget__get_target_with_lang,$(3),$(4))
 $(call gb_XcuLangpackTarget__get_target_with_lang,$(3),$(4)) : \
 	$(SRCDIR)/$(2)/$(3).tmpl
-$(call gb_XcuLangpackTarget__get_target_with_lang,$(3),$(4)) : LANG := $(4)
+$(call gb_XcuLangpackTarget__get_target_with_lang,$(3),$(4)) : LANGUAGE := $(4)
 
 endef
 
