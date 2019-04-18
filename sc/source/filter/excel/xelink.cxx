@@ -1059,8 +1059,7 @@ void XclExpExtName::SaveXml(XclExpXmlStream& rStrm)
     pExternalLink->startElement(XML_definedName,
             XML_name, maName.toUtf8(),
             XML_refersTo, nullptr,
-            XML_sheetId, nullptr,
-            FSEND);
+            XML_sheetId, nullptr);
 
     pExternalLink->endElement(XML_definedName);
 }
@@ -1219,9 +1218,7 @@ void XclExpCrn::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr pFS = rStrm.GetCurrentStream();
 
-    pFS->startElement( XML_row,
-            XML_r,  OString::number( mnScRow + 1 ).getStr(),
-            FSEND);
+    pFS->startElement(XML_row, XML_r, OString::number(mnScRow + 1));
 
     ScAddress aAdr( mnScCol, mnScRow, 0);   // Tab number doesn't matter
     for( const auto& rValue : maValues )
@@ -1232,38 +1229,27 @@ void XclExpCrn::SaveXml( XclExpXmlStream& rStrm )
             if (rtl::math::isFinite( fVal))
             {
                 // t='n' is omitted
-                pFS->startElement( XML_cell,
-                        XML_r,      XclXmlUtils::ToOString( aAdr),
-                        FSEND);
-                pFS->startElement( XML_v, FSEND );
+                pFS->startElement(XML_cell, XML_r, XclXmlUtils::ToOString(aAdr));
+                pFS->startElement(XML_v);
                 pFS->write( fVal );
             }
             else
             {
-                pFS->startElement( XML_cell,
-                        XML_r,      XclXmlUtils::ToOString( aAdr),
-                        XML_t,      "e",
-                        FSEND);
-                pFS->startElement( XML_v, FSEND );
+                pFS->startElement(XML_cell, XML_r, XclXmlUtils::ToOString(aAdr), XML_t, "e");
+                pFS->startElement(XML_v);
                 pFS->write( "#VALUE!" );    // OOXTODO: support other error values
             }
         }
         else if( rValue.has< OUString >() )
         {
-            pFS->startElement( XML_cell,
-                    XML_r,      XclXmlUtils::ToOString( aAdr),
-                    XML_t,      "str",
-                    FSEND);
-            pFS->startElement( XML_v, FSEND );
+            pFS->startElement(XML_cell, XML_r, XclXmlUtils::ToOString(aAdr), XML_t, "str");
+            pFS->startElement(XML_v);
             pFS->write( rValue.get< OUString >() );
         }
         else if( rValue.has< bool >() )
         {
-            pFS->startElement( XML_cell,
-                    XML_r,      XclXmlUtils::ToOString( aAdr),
-                    XML_t,      "b",
-                    FSEND);
-            pFS->startElement( XML_v, FSEND );
+            pFS->startElement(XML_cell, XML_r, XclXmlUtils::ToOString(aAdr), XML_t, "b");
+            pFS->startElement(XML_v);
             pFS->write( rValue.get< bool >() ? "1" : "0" );
         }
         // OOXTODO: error type cell t='e'
@@ -1418,9 +1404,7 @@ void XclExpXct::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr pFS = rStrm.GetCurrentStream();
 
     bool bValid = BuildCrnList( aCrnRecs);
-    pFS->startElement( XML_sheetData,
-            XML_sheetId, OString::number( mnSBTab).getStr(),
-            FSEND);
+    pFS->startElement(XML_sheetData, XML_sheetId, OString::number(mnSBTab));
     if (bValid)
     {
         // row elements
@@ -1690,22 +1674,19 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
             true );
 
     pExternalLink->startElement( XML_externalLink,
-            XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
-            FSEND);
+            XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8());
 
     pExternalLink->startElement( XML_externalBook,
             FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)).toUtf8(),
-            FSNS(XML_r, XML_id),    sId.toUtf8(),
-            FSEND);
+            FSNS(XML_r, XML_id),    sId.toUtf8());
 
     if (!maXctList.IsEmpty())
     {
-        pExternalLink->startElement( XML_sheetNames, FSEND);
+        pExternalLink->startElement(XML_sheetNames);
         for (size_t nPos = 0, nSize = maXctList.GetSize(); nPos < nSize; ++nPos)
         {
-            pExternalLink->singleElement( XML_sheetName,
-                    XML_val,    XclXmlUtils::ToOString( maXctList.GetRecord( nPos )->GetTabName()).getStr(),
-                    FSEND);
+            pExternalLink->singleElement(XML_sheetName,
+                XML_val, XclXmlUtils::ToOString(maXctList.GetRecord(nPos)->GetTabName()));
         }
         pExternalLink->endElement( XML_sheetNames);
 
@@ -1713,7 +1694,7 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
 
     if (mxExtNameBfr)
     {
-        pExternalLink->startElement(XML_definedNames, FSEND);
+        pExternalLink->startElement(XML_definedNames);
         // externalName elements
         WriteExtNameBufferXml( rStrm );
         pExternalLink->endElement(XML_definedNames);
@@ -1721,7 +1702,7 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
 
     if (!maXctList.IsEmpty())
     {
-        pExternalLink->startElement( XML_sheetDataSet, FSEND);
+        pExternalLink->startElement(XML_sheetDataSet);
 
         // sheetData elements
         maXctList.SaveXml( rStrm );
@@ -2114,8 +2095,7 @@ void XclExpSupbookBuffer::SaveXml( XclExpXmlStream& rStrm )
 
         // externalReference entry in workbook externalReferences
         rStrm.GetCurrentStream()->singleElement( XML_externalReference,
-                FSNS(XML_r, XML_id), sId.toUtf8(),
-                FSEND );
+                FSNS(XML_r, XML_id), sId.toUtf8() );
 
         // Each externalBook in a separate stream.
         rStrm.PushStream( pExternalLink );
@@ -2501,7 +2481,7 @@ void XclExpLinkManagerImpl8::SaveXml( XclExpXmlStream& rStrm )
     if (maSBBuffer.HasExternalReferences())
     {
         sax_fastparser::FSHelperPtr pWorkbook = rStrm.GetCurrentStream();
-        pWorkbook->startElement( XML_externalReferences, FSEND);
+        pWorkbook->startElement(XML_externalReferences);
 
         // externalLink, externalBook, sheetNames, sheetDataSet, externalName
         maSBBuffer.SaveXml( rStrm );

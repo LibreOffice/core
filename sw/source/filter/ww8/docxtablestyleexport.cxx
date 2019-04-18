@@ -167,7 +167,7 @@ void DocxTableStyleExport::Impl::tableStyleTableCellMar(
     if (!rTableCellMar.hasElements())
         return;
 
-    m_pSerializer->startElementNS(XML_w, nType, FSEND);
+    m_pSerializer->startElementNS(XML_w, nType);
     for (sal_Int32 i = 0; i < rTableCellMar.getLength(); ++i)
     {
         if (sal_Int32 nToken = DocxStringGetToken(aTableCellMarTokens, rTableCellMar[i].Name))
@@ -176,7 +176,7 @@ void DocxTableStyleExport::Impl::tableStyleTableCellMar(
                 rTableCellMar[i].Value.get<uno::Sequence<beans::PropertyValue>>());
             m_pSerializer->singleElementNS(
                 XML_w, nToken, FSNS(XML_w, XML_w), OString::number(aMap["w"].get<sal_Int32>()),
-                FSNS(XML_w, XML_type), aMap["type"].get<OUString>().toUtf8(), FSEND);
+                FSNS(XML_w, XML_type), aMap["type"].get<OUString>().toUtf8());
         }
     }
     m_pSerializer->endElementNS(XML_w, nType);
@@ -225,7 +225,7 @@ void DocxTableStyleExport::Impl::tableStyleTcBorders(
     if (!rTcBorders.hasElements())
         return;
 
-    m_pSerializer->startElementNS(XML_w, nToken, FSEND);
+    m_pSerializer->startElementNS(XML_w, nToken);
     for (sal_Int32 i = 0; i < rTcBorders.getLength(); ++i)
         if (sal_Int32 nSubToken = DocxStringGetToken(aTcBordersTokens, rTcBorders[i].Name))
             tableStyleTcBorder(nSubToken,
@@ -423,7 +423,7 @@ void DocxTableStyleExport::Impl::tableStyleRPr(uno::Sequence<beans::PropertyValu
     if (!rRPr.hasElements())
         return;
 
-    m_pSerializer->startElementNS(XML_w, XML_rPr, FSEND);
+    m_pSerializer->startElementNS(XML_w, XML_rPr);
 
     uno::Sequence<beans::PropertyValue> aRFonts;
     uno::Sequence<beans::PropertyValue> aLang;
@@ -484,16 +484,14 @@ void DocxTableStyleExport::Impl::tableStyleRPr(uno::Sequence<beans::PropertyValu
     if (bSequenceFlag)
     {
         m_pSerializer->singleElementNS(XML_w, XML_spacing, FSNS(XML_w, XML_val),
-                                       aSpacingSequence[0].Value.get<OUString>().toUtf8(), FSEND);
+                                       aSpacingSequence[0].Value.get<OUString>().toUtf8());
     }
     if (!aSpacing.isEmpty())
-        m_pSerializer->singleElementNS(XML_w, XML_spacing, FSNS(XML_w, XML_val), aSpacing.toUtf8(),
-                                       FSEND);
+        m_pSerializer->singleElementNS(XML_w, XML_spacing, FSNS(XML_w, XML_val), aSpacing.toUtf8());
     if (!aSz.isEmpty())
-        m_pSerializer->singleElementNS(XML_w, XML_sz, FSNS(XML_w, XML_val), aSz.toUtf8(), FSEND);
+        m_pSerializer->singleElementNS(XML_w, XML_sz, FSNS(XML_w, XML_val), aSz.toUtf8());
     if (!aSzCs.isEmpty())
-        m_pSerializer->singleElementNS(XML_w, XML_szCs, FSNS(XML_w, XML_val), aSzCs.toUtf8(),
-                                       FSEND);
+        m_pSerializer->singleElementNS(XML_w, XML_szCs, FSNS(XML_w, XML_val), aSzCs.toUtf8());
 
     m_pSerializer->endElementNS(XML_w, XML_rPr);
 }
@@ -503,7 +501,7 @@ void DocxTableStyleExport::Impl::tableStylePPr(uno::Sequence<beans::PropertyValu
     if (!rPPr.hasElements())
         return;
 
-    m_pSerializer->startElementNS(XML_w, XML_pPr, FSEND);
+    m_pSerializer->startElementNS(XML_w, XML_pPr);
 
     uno::Sequence<beans::PropertyValue> aSpacing;
     uno::Sequence<beans::PropertyValue> aInd;
@@ -524,12 +522,12 @@ void DocxTableStyleExport::Impl::tableStylePPr(uno::Sequence<beans::PropertyValu
             aSnapToGrid = rPPr[i].Value.get<OUString>();
     }
     if (bWordWrap)
-        m_pSerializer->singleElementNS(XML_w, XML_wordWrap, FSEND);
+        m_pSerializer->singleElementNS(XML_w, XML_wordWrap);
     tableStylePInd(aInd);
     handleBoolean(aSnapToGrid, XML_snapToGrid);
     tableStylePSpacing(aSpacing);
     if (!aJc.isEmpty())
-        m_pSerializer->singleElementNS(XML_w, XML_jc, FSNS(XML_w, XML_val), aJc.toUtf8(), FSEND);
+        m_pSerializer->singleElementNS(XML_w, XML_jc, FSNS(XML_w, XML_val), aJc.toUtf8());
 
     m_pSerializer->endElementNS(XML_w, XML_pPr);
 }
@@ -539,7 +537,7 @@ void DocxTableStyleExport::Impl::tableStyleTablePr(uno::Sequence<beans::Property
     if (!rTablePr.hasElements())
         return;
 
-    m_pSerializer->startElementNS(XML_w, XML_tblPr, FSEND);
+    m_pSerializer->startElementNS(XML_w, XML_tblPr);
 
     uno::Sequence<beans::PropertyValue> aTableInd;
     uno::Sequence<beans::PropertyValue> aTableBorders;
@@ -561,10 +559,10 @@ void DocxTableStyleExport::Impl::tableStyleTablePr(uno::Sequence<beans::Property
     }
     if (oTableStyleRowBandSize)
         m_pSerializer->singleElementNS(XML_w, XML_tblStyleRowBandSize, FSNS(XML_w, XML_val),
-                                       OString::number(oTableStyleRowBandSize.get()), FSEND);
+                                       OString::number(oTableStyleRowBandSize.get()));
     if (oTableStyleColBandSize)
         m_pSerializer->singleElementNS(XML_w, XML_tblStyleColBandSize, FSNS(XML_w, XML_val),
-                                       OString::number(oTableStyleColBandSize.get()), FSEND);
+                                       OString::number(oTableStyleColBandSize.get()));
     tableStyleTableInd(aTableInd);
     tableStyleTcBorders(aTableBorders, XML_tblBorders);
     tableStyleTableCellMar(aTableCellMar);
@@ -577,7 +575,7 @@ void DocxTableStyleExport::Impl::tableStyleTcPr(uno::Sequence<beans::PropertyVal
     if (!rTcPr.hasElements())
         return;
 
-    m_pSerializer->startElementNS(XML_w, XML_tcPr, FSEND);
+    m_pSerializer->startElementNS(XML_w, XML_tcPr);
 
     uno::Sequence<beans::PropertyValue> aShd;
     uno::Sequence<beans::PropertyValue> aTcBorders;
@@ -598,8 +596,7 @@ void DocxTableStyleExport::Impl::tableStyleTcPr(uno::Sequence<beans::PropertyVal
     tableStyleTableCellMar(aTcMar, XML_tcMar);
     tableStyleShd(aShd);
     if (!aVAlign.isEmpty())
-        m_pSerializer->singleElementNS(XML_w, XML_vAlign, FSNS(XML_w, XML_val), aVAlign.toUtf8(),
-                                       FSEND);
+        m_pSerializer->singleElementNS(XML_w, XML_vAlign, FSNS(XML_w, XML_val), aVAlign.toUtf8());
 
     m_pSerializer->endElementNS(XML_w, XML_tcPr);
 }
@@ -629,8 +626,7 @@ void DocxTableStyleExport::Impl::tableStyleTableStylePr(
             aTcPr = rTableStylePr[i].Value.get<uno::Sequence<beans::PropertyValue>>();
     }
 
-    m_pSerializer->startElementNS(XML_w, XML_tblStylePr, FSNS(XML_w, XML_type), aType.toUtf8(),
-                                  FSEND);
+    m_pSerializer->startElementNS(XML_w, XML_tblStylePr, FSNS(XML_w, XML_type), aType.toUtf8());
 
     tableStylePPr(aPPr);
     tableStyleRPr(aRPr);
@@ -639,7 +635,7 @@ void DocxTableStyleExport::Impl::tableStyleTableStylePr(
     else
     {
         // Even if we have an empty container, write it out, as Word does.
-        m_pSerializer->singleElementNS(XML_w, XML_tblPr, FSEND);
+        m_pSerializer->singleElementNS(XML_w, XML_tblPr);
     }
     tableStyleTcPr(aTcPr);
 
@@ -709,22 +705,20 @@ void DocxTableStyleExport::Impl::TableStyle(uno::Sequence<beans::PropertyValue>&
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->startElementNS(XML_w, XML_style, xAttributeList);
 
-    m_pSerializer->singleElementNS(XML_w, XML_name, FSNS(XML_w, XML_val), aName.toUtf8(), FSEND);
+    m_pSerializer->singleElementNS(XML_w, XML_name, FSNS(XML_w, XML_val), aName.toUtf8());
     if (!aBasedOn.isEmpty())
-        m_pSerializer->singleElementNS(XML_w, XML_basedOn, FSNS(XML_w, XML_val), aBasedOn.toUtf8(),
-                                       FSEND);
+        m_pSerializer->singleElementNS(XML_w, XML_basedOn, FSNS(XML_w, XML_val), aBasedOn.toUtf8());
     if (!aUiPriority.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_uiPriority, FSNS(XML_w, XML_val),
-                                       aUiPriority.toUtf8(), FSEND);
+                                       aUiPriority.toUtf8());
     if (bSemiHidden)
-        m_pSerializer->singleElementNS(XML_w, XML_semiHidden, FSEND);
+        m_pSerializer->singleElementNS(XML_w, XML_semiHidden);
     if (bUnhideWhenUsed)
-        m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed, FSEND);
+        m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed);
     if (bQFormat)
-        m_pSerializer->singleElementNS(XML_w, XML_qFormat, FSEND);
+        m_pSerializer->singleElementNS(XML_w, XML_qFormat);
     if (!aRsid.isEmpty())
-        m_pSerializer->singleElementNS(XML_w, XML_rsid, FSNS(XML_w, XML_val), aRsid.toUtf8(),
-                                       FSEND);
+        m_pSerializer->singleElementNS(XML_w, XML_rsid, FSNS(XML_w, XML_val), aRsid.toUtf8());
 
     tableStylePPr(aPPr);
     tableStyleRPr(aRPr);
