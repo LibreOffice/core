@@ -2648,7 +2648,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
         m_xFtNote->set_label(SvxConfigPageHelper::replaceSixteen(m_xFtNote->get_label(), m_nExpectedSize));
     }
 
-    m_xTbSymbol->SetStyle(m_xTbSymbol->GetStyle() | WB_VSCROLL);
+    m_xTbSymbol->SetStyle(m_xTbSymbol->GetStyle() | WB_ITEMBORDER | WB_VSCROLL);
     m_xTbSymbol->SetColCount(11);
     m_xTbSymbol->SetLineCount(5);
     m_xTbSymbol->SetItemWidth(m_nExpectedSize);
