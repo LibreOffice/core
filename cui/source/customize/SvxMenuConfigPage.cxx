@@ -166,9 +166,23 @@ IMPL_LINK(SvxMenuConfigPage, MenuEntriesSizeAllocHdl, const Size&, rSize, void)
 {
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
     std::vector<int> aWidths;
-    int nImageColWidth = rTreeView.get_checkbox_column_width();
+
+    int nExpectedSize = 16;
+
+    int nStandardImageColWidth = rTreeView.get_checkbox_column_width();
+    int nMargin = nStandardImageColWidth - nExpectedSize;
+    if (nMargin < 16)
+        nMargin = 16;
+
+    if (SvxConfigPageHelper::GetImageType() & css::ui::ImageType::SIZE_LARGE)
+        nExpectedSize = 24;
+    else if (SvxConfigPageHelper::GetImageType() & css::ui::ImageType::SIZE_32)
+        nExpectedSize = 32;
+
+    int nImageColWidth = nExpectedSize + nMargin;
+
     aWidths.push_back(nImageColWidth);
-    aWidths.push_back(rSize.Width() - 2 * nImageColWidth);
+    aWidths.push_back(rSize.Width() - (nImageColWidth + nStandardImageColWidth));
     rTreeView.set_column_fixed_widths(aWidths);
 }
 
