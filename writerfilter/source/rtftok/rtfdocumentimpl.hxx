@@ -712,6 +712,8 @@ private:
     bool m_bFirstRunException;
     /// If paragraph properties should be emitted on next run.
     bool m_bNeedPap;
+    /// If there is a need for a page break after a table
+    bool m_bNeedTableBreak;
     /// If we need to emit a CR at the end of substream.
     bool m_bNeedCr;
     /// Original value of m_bNeedCr -- saved/restored before/after textframes.

@@ -845,6 +845,11 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
         case RTF_CELLX:
         {
+            if (m_bNeedTableBreak && !m_bFirstRun)
+                dispatchSymbol(RTF_PAR);
+
+            m_bNeedTableBreak = false;
+
             int& rCurrentCellX((Destination::NESTEDTABLEPROPERTIES == m_aStates.top().eDestination)
                                    ? m_nNestedCurrentCellX
                                    : m_nTopLevelCurrentCellX);
