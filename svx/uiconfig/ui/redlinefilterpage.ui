@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">19851231</property>
-    <property name="upper">20501231</property>
-    <property name="value">19851231</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="upper">86400000</property>
+    <property name="step_increment">1000</property>
+    <property name="page_increment">60000</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="upper">86400000</property>
+    <property name="step_increment">1000</property>
+    <property name="page_increment">60000</property>
   </object>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/sc_timefield.png</property>
+    <property name="icon_name">cmd/sc_timefield.png</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/sc_timefield.png</property>
+    <property name="icon_name">cmd/sc_timefield.png</property>
   </object>
   <object class="GtkGrid" id="RedlineFilterPage">
     <property name="visible">True</property>
@@ -81,6 +84,7 @@
         <property name="can_focus">True</property>
         <property name="margin_left">24</property>
         <property name="hexpand">True</property>
+        <property name="activates_default">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="commentedit-atkobject">
             <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|commentedit-atkobject">Comment</property>
@@ -176,6 +180,7 @@
             <property name="sensitive">False</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
+            <property name="activates_default">True</property>
             <accessibility>
               <relation type="labelled-by" target="range"/>
             </accessibility>
@@ -272,15 +277,17 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="startdate:yy:mm:dd">
-                <property name="width_request">120</property>
+              <object class="GtkMenuButton" id="startdate">
                 <property name="visible">True</property>
-                <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="adjustment">adjustment1</property>
+                <property name="receives_default">False</property>
+                <property name="draw_indicator">True</property>
+                <property name="label" translatable="no"></property>
+                <child>
+                  <placeholder/>
+                </child>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="startdate:yy:mm:dd-atkobject">
+                  <object class="AtkObject" id="startdate-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|startdate-atkobject">Start Date</property>
                   </object>
                 </child>
@@ -291,14 +298,16 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="starttime:hh:mm">
+              <object class="GtkSpinButton" id="starttime">
                 <property name="width_request">70</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="activates_default">True</property>
+                <property name="adjustment">adjustment1</property>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="starttime:hh:mm-atkobject">
+                  <object class="AtkObject" id="starttime-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|starttime-atkobject">Start Time</property>
                   </object>
                 </child>
@@ -324,15 +333,17 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="enddate:yy:mm:dd">
-                <property name="width_request">120</property>
+              <object class="GtkMenuButton" id="enddate">
                 <property name="visible">True</property>
-                <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="adjustment">adjustment1</property>
+                <property name="receives_default">False</property>
+                <property name="draw_indicator">True</property>
+                <property name="label" translatable="no"></property>
+                <child>
+                  <placeholder/>
+                </child>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="enddate:yy:mm:dd-atkobject">
+                  <object class="AtkObject" id="enddate-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|enddate-atkobject">End Date</property>
                   </object>
                 </child>
@@ -343,14 +354,16 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="endtime:hh:mm">
+              <object class="GtkSpinButton" id="endtime">
                 <property name="width_request">75</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="activates_default">True</property>
+                <property name="adjustment">adjustment2</property>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="endtime:hh:mm-atkobject">
+                  <object class="AtkObject" id="endtime-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|endtime-atkobject">End Time</property>
                   </object>
                 </child>
