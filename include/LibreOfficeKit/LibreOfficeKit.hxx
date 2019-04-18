@@ -188,9 +188,9 @@ public:
      *
      * @param nWindowid
      */
-    void postWindow(unsigned nWindowId, int nAction)
+    void postWindow(unsigned nWindowId, int nAction, const char* pData)
     {
-        return mpDoc->pClass->postWindow(mpDoc, nWindowId, nAction);
+        return mpDoc->pClass->postWindow(mpDoc, nWindowId, nAction, pData);
     }
 
     /**
