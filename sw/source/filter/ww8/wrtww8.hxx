@@ -878,7 +878,7 @@ protected:
     void SetCurPam(sal_uLong nStt, sal_uLong nEnd);
 
     /// Get background color of the document, if there is one.
-    boost::optional<SvxBrushItem> getBackground();
+    std::shared_ptr<SvxBrushItem> getBackground();
     /// Populates m_vecBulletPic with all the bullet graphics used by numberings.
     int CollectGrfsOfBullets();
     /// Write the numbering picture bullets.
@@ -1033,7 +1033,7 @@ public:
     void WriteFootnoteBegin( const SwFormatFootnote& rFootnote, ww::bytes* pO = nullptr );
     void WritePostItBegin( ww::bytes* pO = nullptr );
     const SvxBrushItem* GetCurrentPageBgBrush() const;
-    SvxBrushItem TrueFrameBgBrush(const SwFrameFormat &rFlyFormat) const;
+    std::shared_ptr<SvxBrushItem> TrueFrameBgBrush(const SwFrameFormat &rFlyFormat) const;
 
     void AppendFlyInFlys(const ww8::Frame& rFrameFormat, const Point& rNdTopLeft);
     void WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp);

@@ -98,29 +98,29 @@ std::unique_ptr<SfxItemSet> lcl_CreateEmptyItemSet( SelectionType nSelectionType
 
 void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
 {
-    SvxBrushItem aBrush( RES_BACKGROUND );
+    std::shared_ptr<SvxBrushItem> aBrush(std::make_shared<SvxBrushItem>(RES_BACKGROUND));
     rSh.GetBoxBackground(aBrush);
-    rSet.Put( aBrush );
+    rSet.Put( *aBrush );
     if(rSh.GetRowBackground(aBrush))
     {
-        aBrush.SetWhich(SID_ATTR_BRUSH_ROW);
-        rSet.Put( aBrush );
+        aBrush->SetWhich(SID_ATTR_BRUSH_ROW);
+        rSet.Put( *aBrush );
     }
     else
         rSet.InvalidateItem(SID_ATTR_BRUSH_ROW);
     rSh.GetTabBackground(aBrush);
-    aBrush.SetWhich(SID_ATTR_BRUSH_TABLE);
-    rSet.Put( aBrush );
+    aBrush->SetWhich(SID_ATTR_BRUSH_TABLE);
+    rSet.Put( *aBrush );
 
     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
     rSet.Put(aBoxInfo);
     rSh.GetTabBorders( rSet );
 
-    SvxFrameDirectionItem aBoxDirection( SvxFrameDirection::Environment, RES_FRAMEDIR );
+    std::shared_ptr<SvxFrameDirectionItem> aBoxDirection(std::make_shared<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR));
     if(rSh.GetBoxDirection( aBoxDirection ))
     {
-        aBoxDirection.SetWhich(FN_TABLE_BOX_TEXTORIENTATION);
-        rSet.Put(aBoxDirection);
+        aBoxDirection->SetWhich(FN_TABLE_BOX_TEXTORIENTATION);
+        rSet.Put(*aBoxDirection);
     }
 
     rSet.Put(SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, rSh.GetBoxAlign()));
@@ -159,15 +159,15 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
             rSh.SetBoxBackground( *static_cast<const SvxBrushItem*>(pItem) );
         if(pRowItem)
         {
-            SvxBrushItem aBrush(*static_cast<const SvxBrushItem*>(pRowItem));
-            aBrush.SetWhich(RES_BACKGROUND);
-            rSh.SetRowBackground(aBrush);
+            std::shared_ptr<SvxBrushItem> aBrush(static_cast<SvxBrushItem*>(pRowItem->Clone()));
+            aBrush->SetWhich(RES_BACKGROUND);
+            rSh.SetRowBackground(*aBrush);
         }
         if(pTableItem)
         {
-            SvxBrushItem aBrush(*static_cast<const SvxBrushItem*>(pTableItem));
-            aBrush.SetWhich(RES_BACKGROUND);
-            rSh.SetTabBackground( aBrush );
+            std::shared_ptr<SvxBrushItem> aBrush(static_cast<SvxBrushItem*>(pTableItem->Clone()));
+            aBrush->SetWhich(RES_BACKGROUND);
+            rSh.SetTabBackground(*aBrush);
         }
     }
     if(bBorder)

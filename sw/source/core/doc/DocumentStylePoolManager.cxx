@@ -1317,10 +1317,9 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                 aLR.SetLeft( GetMetricVal( CM_1 ));
                 aLR.SetRight( GetMetricVal( CM_1 ));
                 aSet.Put( aLR );
-                SvxULSpaceItem aUL( RES_UL_SPACE );
-                aUL = pNewColl->GetULSpace();
-                aUL.SetLower( HTML_PARSPACE );
-                aSet.Put( aUL);
+                std::shared_ptr<SvxULSpaceItem> aUL(static_cast<SvxULSpaceItem*>(pNewColl->GetULSpace().Clone()));
+                aUL->SetLower( HTML_PARSPACE );
+                aSet.Put(*aUL);
             }
             break;
 
@@ -1333,10 +1332,9 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
 
                 // The lower paragraph distance is set explicitly (makes
                 // assigning hard attributes easier)
-                SvxULSpaceItem aULSpaceItem( RES_UL_SPACE );
-                aULSpaceItem = pNewColl->GetULSpace();
-                aULSpaceItem.SetLower( 0 );
-                aSet.Put( aULSpaceItem );
+                std::shared_ptr<SvxULSpaceItem> aULSpaceItem(static_cast<SvxULSpaceItem*>(pNewColl->GetULSpace().Clone()));
+                aULSpaceItem->SetLower( 0 );
+                aSet.Put(*aULSpaceItem);
             }
             break;
 
@@ -1351,13 +1349,13 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                 aSet.Put( SwParaConnectBorderItem( false ) );
                 SetAllScriptItem( aSet, SvxFontHeightItem(120, 100, RES_CHRATR_FONTSIZE) );
 
-                SvxULSpaceItem aUL( RES_UL_SPACE );
+                std::shared_ptr<SvxULSpaceItem> aUL;
                 {
                     pNewColl->SetNextTextFormatColl( *GetTextCollFromPool( RES_POOLCOLL_TEXT ));
-                    aUL = pNewColl->GetULSpace();
+                    aUL.reset(static_cast<SvxULSpaceItem*>(pNewColl->GetULSpace().Clone()));
                 }
-                aUL.SetLower( HTML_PARSPACE );
-                aSet.Put( aUL);
+                aUL->SetLower( HTML_PARSPACE );
+                aSet.Put(*aUL);
                 SwFormatLineNumber aLN;
                 aLN.SetCountLines( false );
                 aSet.Put( aLN );
@@ -1366,23 +1364,22 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
 
         case RES_POOLCOLL_HTML_DD:
             {
-                SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR = pNewColl->GetLRSpace();
+                std::shared_ptr<SvxLRSpaceItem> aLR(static_cast<SvxLRSpaceItem*>(pNewColl->GetLRSpace().Clone()));
                 // We indent by 1 cm. The IDs are always 2 away from each other!
-                aLR.SetLeft( GetMetricVal( CM_1 ));
-                aSet.Put( aLR );
+                aLR->SetLeft( GetMetricVal( CM_1 ));
+                aSet.Put(*aLR);
             }
             break;
         case RES_POOLCOLL_HTML_DT:
             {
-                SvxLRSpaceItem aLR( RES_LR_SPACE );
+                std::shared_ptr<SvxLRSpaceItem> aLR;
                 {
                     pNewColl->SetNextTextFormatColl( *GetTextCollFromPool( RES_POOLCOLL_HTML_DD ));
-                    aLR = pNewColl->GetLRSpace();
+                    aLR.reset(static_cast<SvxLRSpaceItem*>(pNewColl->GetLRSpace().Clone()));
                 }
                 // We indent by 0 cm. The IDs are always 2 away from each other!
-                aLR.SetLeft( 0 );
-                aSet.Put( aLR );
+                aLR->SetLeft( 0 );
+                aSet.Put( *aLR );
             }
             break;
         }

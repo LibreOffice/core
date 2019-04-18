@@ -1138,8 +1138,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
 #endif
         case SID_OPEN_CALC:
         {
-            SfxStringItem aApp(SID_DOC_SERVICE, OUString("com.sun.star.sheet.SpreadsheetDocument"));
-            SfxStringItem aTarget(SID_TARGETNAME, OUString("_blank"));
+            SfxStringItem aApp(SID_DOC_SERVICE, "com.sun.star.sheet.SpreadsheetDocument");
+            SfxStringItem aTarget(SID_TARGETNAME, "_blank");
             GetViewData()->GetDispatcher().ExecuteList(
                 SID_OPENDOC, SfxCallMode::API|SfxCallMode::SYNCHRON,
                 { &aApp, &aTarget });

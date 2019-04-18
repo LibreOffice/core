@@ -303,7 +303,6 @@ public:
     virtual ~SvxNumBulletItem() override;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    sal_uInt16  GetVersion( sal_uInt16 nFileVersion ) const override;
     virtual bool             operator==( const SfxPoolItem& ) const override;
 
     SvxNumRule*             GetNumRule() const {return pNumRule.get();}

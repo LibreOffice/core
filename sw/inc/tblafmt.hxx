@@ -49,6 +49,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/shaditem.hxx>
 #include <svx/rotmodit.hxx>
+#include <svx/autoformathelper.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/lineitem.hxx>
 #include "fmtpdsc.hxx"
@@ -60,124 +61,48 @@ struct SwAfVersions;
 class SvNumberFormatter;
 class SwTable;
 
-class SwBoxAutoFormat
+class SwBoxAutoFormat : public AutoFormatBase
 {
-    // common attributes of Calc and Writer
-    // --- from 641 on: CJK and CTL font settings
-    SvxFontItem         m_aFont;
-    SvxFontHeightItem   m_aHeight;
-    SvxWeightItem       m_aWeight;
-    SvxPostureItem      m_aPosture;
-
-    SvxFontItem         m_aCJKFont;
-    SvxFontHeightItem   m_aCJKHeight;
-    SvxWeightItem       m_aCJKWeight;
-    SvxPostureItem      m_aCJKPosture;
-
-    SvxFontItem         m_aCTLFont;
-    SvxFontHeightItem   m_aCTLHeight;
-    SvxWeightItem       m_aCTLWeight;
-    SvxPostureItem      m_aCTLPosture;
-
-    SvxUnderlineItem    m_aUnderline;
-    SvxOverlineItem     m_aOverline;
-    SvxCrossedOutItem   m_aCrossedOut;
-    SvxContourItem      m_aContour;
-    SvxShadowedItem     m_aShadowed;
-    SvxColorItem        m_aColor;
-    SvxBoxItem          m_aBox;
-    SvxLineItem         m_aTLBR;
-    SvxLineItem         m_aBLTR;
-    SvxBrushItem        m_aBackground;
-
     // Writer specific
-    SvxAdjustItem       m_aAdjust;
-    SvxFrameDirectionItem m_aTextOrientation;
-    SwFormatVertOrient m_aVerticalAlignment;
-
-    // Calc specific
-    SvxHorJustifyItem   m_aHorJustify;
-    SvxVerJustifyItem   m_aVerJustify;
-    SfxBoolItem         m_aStacked;
-    SvxMarginItem       m_aMargin;
-    SfxBoolItem         m_aLinebreak;
-    SfxInt32Item        m_aRotateAngle;
-    SvxRotateModeItem   m_aRotateMode;
+    std::shared_ptr<SvxFrameDirectionItem>  m_aTextOrientation;
+    std::shared_ptr<SwFormatVertOrient>     m_aVerticalAlignment;
 
     // number format
-    OUString            m_sNumFormatString;
-    LanguageType        m_eSysLanguage, m_eNumFormatLanguage;
+    OUString                                m_sNumFormatString;
+    LanguageType                            m_eSysLanguage;
+    LanguageType                            m_eNumFormatLanguage;
 
     css::uno::WeakReference<css::uno::XInterface> m_wXObject;
-    friend class SwDocTest;
 
 public:
     SwBoxAutoFormat();
     SwBoxAutoFormat( const SwBoxAutoFormat& rNew );
     ~SwBoxAutoFormat();
 
-    SwBoxAutoFormat& operator=( const SwBoxAutoFormat& rNew );
     /// Comparing based of boxes backgrounds.
     bool operator==(const SwBoxAutoFormat& rRight);
 
     // The get-methods.
-    const SvxFontItem       &GetFont() const        { return m_aFont; }
-    const SvxFontHeightItem &GetHeight() const      { return m_aHeight; }
-    const SvxWeightItem     &GetWeight() const      { return m_aWeight; }
-    const SvxPostureItem    &GetPosture() const     { return m_aPosture; }
-    const SvxFontItem       &GetCJKFont() const     { return m_aCJKFont; }
-    const SvxFontHeightItem &GetCJKHeight() const   { return m_aCJKHeight; }
-    const SvxWeightItem     &GetCJKWeight() const   { return m_aCJKWeight; }
-    const SvxPostureItem    &GetCJKPosture() const  { return m_aCJKPosture; }
-    const SvxFontItem       &GetCTLFont() const     { return m_aCTLFont; }
-    const SvxFontHeightItem &GetCTLHeight() const   { return m_aCTLHeight; }
-    const SvxWeightItem     &GetCTLWeight() const   { return m_aCTLWeight; }
-    const SvxPostureItem    &GetCTLPosture() const  { return m_aCTLPosture; }
-    const SvxUnderlineItem  &GetUnderline() const   { return m_aUnderline; }
-    const SvxOverlineItem   &GetOverline() const    { return m_aOverline; }
-    const SvxCrossedOutItem &GetCrossedOut() const  { return m_aCrossedOut; }
-    const SvxContourItem    &GetContour() const     { return m_aContour; }
-    const SvxShadowedItem   &GetShadowed() const    { return m_aShadowed; }
-    const SvxColorItem      &GetColor() const       { return m_aColor; }
-    const SvxAdjustItem     &GetAdjust() const      { return m_aAdjust; }
-    const SvxFrameDirectionItem& GetTextOrientation() const { return m_aTextOrientation; }
-    const SwFormatVertOrient& GetVerticalAlignment() const { return m_aVerticalAlignment; }
-    const SvxBoxItem        &GetBox() const         { return m_aBox; }
-    const SvxBrushItem      &GetBackground() const  { return m_aBackground; }
+    const SvxFrameDirectionItem& GetTextOrientation() const { return *m_aTextOrientation; }
+    const SwFormatVertOrient& GetVerticalAlignment() const { return *m_aVerticalAlignment; }
+
     void GetValueFormat( OUString& rFormat, LanguageType& rLng, LanguageType& rSys ) const
         { rFormat = m_sNumFormatString; rLng = m_eNumFormatLanguage; rSys = m_eSysLanguage; }
 
+    const OUString& GetNumFormatString() const { return m_sNumFormatString; }
+    const LanguageType& GetSysLanguage() const { return m_eSysLanguage; }
+    const LanguageType& GetNumFormatLanguage() const { return m_eNumFormatLanguage; }
+
     // The set-methods.
-    void SetFont( const SvxFontItem& rNew )             { m_aFont = rNew; }
-    void SetHeight( const SvxFontHeightItem& rNew )     { m_aHeight = rNew; }
-    void SetWeight( const SvxWeightItem& rNew )         { m_aWeight = rNew; }
-    void SetPosture( const SvxPostureItem& rNew )       { m_aPosture = rNew; }
-    void SetCJKFont( const SvxFontItem& rNew )          { m_aCJKFont = rNew; }
-    void SetCJKHeight( const SvxFontHeightItem& rNew )  { m_aCJKHeight = rNew; }
-    void SetCJKWeight( const SvxWeightItem& rNew )      { m_aCJKWeight = rNew; }
-    void SetCJKPosture( const SvxPostureItem& rNew )    { m_aCJKPosture = rNew; }
-    void SetCTLFont( const SvxFontItem& rNew )          { m_aCTLFont = rNew; }
-    void SetCTLHeight( const SvxFontHeightItem& rNew )  { m_aCTLHeight = rNew; }
-    void SetCTLWeight( const SvxWeightItem& rNew )      { m_aCTLWeight = rNew; }
-    void SetCTLPosture( const SvxPostureItem& rNew )    { m_aCTLPosture = rNew; }
-    void SetUnderline( const SvxUnderlineItem& rNew )   { m_aUnderline = rNew; }
-    void SetOverline( const SvxOverlineItem& rNew )     { m_aOverline = rNew; }
-    void SetCrossedOut( const SvxCrossedOutItem& rNew ) { m_aCrossedOut = rNew; }
-    void SetContour( const SvxContourItem& rNew )       { m_aContour = rNew; }
-    void SetShadowed( const SvxShadowedItem& rNew )     { m_aShadowed = rNew; }
-    void SetColor( const SvxColorItem& rNew )           { m_aColor = rNew; }
-    void SetAdjust( const SvxAdjustItem& rNew )
-        {
-            m_aAdjust.SetAdjust( rNew.GetAdjust() );
-            m_aAdjust.SetOneWord( rNew.GetOneWord() );
-            m_aAdjust.SetLastBlock( rNew.GetLastBlock() );
-        }
-    void SetTextOrientation(const SvxFrameDirectionItem& rNew) { m_aTextOrientation = rNew; }
-    void SetVerticalAlignment(const SwFormatVertOrient& rNew) { m_aVerticalAlignment = rNew; }
-    void SetBox( const SvxBoxItem& rNew )               { m_aBox = rNew; }
-    void SetBackground( const SvxBrushItem& rNew )      { m_aBackground = rNew; }
+    void SetTextOrientation( const SvxFrameDirectionItem& rNew ) { m_aTextOrientation.reset(static_cast<SvxFrameDirectionItem*>(rNew.Clone())); }
+    void SetVerticalAlignment( const SwFormatVertOrient& rNew ) { m_aVerticalAlignment.reset(static_cast<SwFormatVertOrient*>(rNew.Clone())); }
+
     void SetValueFormat( const OUString& rFormat, LanguageType eLng, LanguageType eSys )
         { m_sNumFormatString = rFormat; m_eNumFormatLanguage = eLng; m_eSysLanguage = eSys; }
+
+    void SetNumFormatString(const OUString& rNew) { m_sNumFormatString = rNew; }
+    void SetSysLanguage(const LanguageType& rNew) { m_eSysLanguage = rNew; }
+    void SetNumFormatLanguage(const LanguageType& rNew) { m_eNumFormatLanguage = rNew; }
 
     css::uno::WeakReference<css::uno::XInterface> const& GetXObject() const
         { return m_wXObject; }
@@ -186,7 +111,6 @@ public:
 
     bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
     bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
-    void SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const;
 };
 
 enum class SwTableAutoFormatUpdateFlags { Char = 1, Box = 2 };
@@ -262,14 +186,14 @@ class SW_DLLPUBLIC SwTableAutoFormat
     SwBoxAutoFormat* m_aBoxAutoFormat[ 16 ];
 
     // Writer-specific options
-    SvxFormatBreakItem m_aBreak;
+    std::shared_ptr<SvxFormatBreakItem> m_aBreak;
     SwFormatPageDesc m_aPageDesc;
-    SvxFormatKeepItem m_aKeepWithNextPara;
+    std::shared_ptr<SvxFormatKeepItem> m_aKeepWithNextPara;
     sal_uInt16 m_aRepeatHeading;
     bool m_bLayoutSplit;
     bool m_bRowSplit;
     bool m_bCollapsingBorders;
-    SvxShadowItem m_aShadow;
+    std::shared_ptr<SvxShadowItem> m_aShadow;
 
     bool m_bHidden;
     bool m_bUserDefined;
@@ -279,6 +203,14 @@ public:
     ~SwTableAutoFormat();
 
     SwTableAutoFormat& operator=( const SwTableAutoFormat& rNew );
+
+    const SvxFormatBreakItem& GetBreak() const { return *m_aBreak; }
+    const SvxFormatKeepItem& GetKeepWithNextPara() const { return *m_aKeepWithNextPara; }
+    const SvxShadowItem& GetShadow() const { return *m_aShadow; }
+
+    void SetBreak(const SvxFormatBreakItem& rNew) { m_aBreak.reset(static_cast<SvxFormatBreakItem*>(rNew.Clone())); }
+    void SetKeepWithNextPara(const SvxFormatKeepItem& rNew) { m_aKeepWithNextPara.reset(static_cast<SvxFormatKeepItem*>(rNew.Clone())); }
+    void SetShadow(const SvxShadowItem& rNew) { m_aShadow.reset(static_cast<SvxShadowItem*>(rNew.Clone())); }
 
     void SetBoxFormat( const SwBoxAutoFormat& rNew, sal_uInt8 nPos );
     const SwBoxAutoFormat& GetBoxFormat( sal_uInt8 nPos ) const;

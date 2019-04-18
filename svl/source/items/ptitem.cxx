@@ -73,21 +73,6 @@ SfxPoolItem* SfxPointItem::Clone(SfxItemPool *) const
 }
 
 
-SfxPoolItem* SfxPointItem::Create(SvStream &rStream, sal_uInt16 ) const
-{
-    Point aStr;
-    ReadPair( rStream, aStr );
-    return new SfxPointItem(Which(), aStr);
-}
-
-
-SvStream& SfxPointItem::Store(SvStream &rStream, sal_uInt16 ) const
-{
-    WritePair( rStream, aVal );
-    return rStream;
-}
-
-
 bool SfxPointItem::QueryValue( uno::Any& rVal,
                                sal_uInt8 nMemberId ) const
 {

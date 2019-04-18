@@ -35,7 +35,6 @@ public:
                             static SfxPoolItem* CreateDefault();
                             XLineJointItem( css::drawing::LineJoint eLineJoint = css::drawing::LineJoint_ROUND );
 
-    virtual sal_uInt16      GetVersion( sal_uInt16 nFileFormatVersion ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
