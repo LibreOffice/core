@@ -160,8 +160,10 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/txenctab \
     svx/source/engine3d/float3d \
     svx/source/items/algitem \
+    svx/source/items/autoformathelper \
     svx/source/items/hlnkitem \
     svx/source/items/numfmtsh \
+    svx/source/items/legacyitem \
     svx/source/items/numinf \
     svx/source/items/ofaitem \
     svx/source/items/pageitem \

@@ -26,9 +26,6 @@
 #include <tools/debug.hxx>
 #include <vcl/dibtools.hxx>
 
-#define BULITEM_VERSION     (sal_uInt16(2))
-
-
 SvxBulletItem::SvxBulletItem( sal_uInt16 _nWhich )
     : SfxPoolItem(_nWhich)
     , aFont(OutputDevice::GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_SYSTEM, GetDefaultFontFlags::NONE ))
@@ -66,12 +63,6 @@ SvxBulletItem::~SvxBulletItem()
 SfxPoolItem* SvxBulletItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SvxBulletItem( *this );
-}
-
-
-sal_uInt16 SvxBulletItem::GetVersion( sal_uInt16 /*nVersion*/ ) const
-{
-    return BULITEM_VERSION;
 }
 
 

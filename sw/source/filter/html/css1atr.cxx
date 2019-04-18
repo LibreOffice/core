@@ -2153,7 +2153,7 @@ static bool OutCSS1_FrameFormatBrush( SwHTMLWriter& rWrt,
 void SwHTMLWriter::OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFormat )
 {
     // If the frame itself has a background, then export.
-    if( OutCSS1_FrameFormatBrush( *this, rFrameFormat.makeBackgroundBrushItem() ) )
+    if( OutCSS1_FrameFormatBrush( *this, *rFrameFormat.makeBackgroundBrushItem() ) )
         return;
 
     // If the frame is not linked to a page, we use the background of the anchor.
@@ -2181,7 +2181,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFor
 
                 // If the box has a background, we take it.
                 if( OutCSS1_FrameFormatBrush( *this,
-                        pBox->GetFrameFormat()->makeBackgroundBrushItem() ) )
+                        *pBox->GetFrameFormat()->makeBackgroundBrushItem() ) )
                     return;
 
                 // Otherwise we use that of the lines
@@ -2189,7 +2189,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFor
                 while( pLine )
                 {
                     if( OutCSS1_FrameFormatBrush( *this,
-                            pLine->GetFrameFormat()->makeBackgroundBrushItem() ) )
+                            *pLine->GetFrameFormat()->makeBackgroundBrushItem() ) )
                         return;
                     pBox = pLine->GetUpper();
                     pLine = pBox ? pBox->GetUpper() : nullptr;
@@ -2197,7 +2197,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFor
 
                 // If there was none either, we use the background of the table.
                 if( OutCSS1_FrameFormatBrush( *this,
-                        pTableNd->GetTable().GetFrameFormat()->makeBackgroundBrushItem() ) )
+                        *pTableNd->GetTable().GetFrameFormat()->makeBackgroundBrushItem() ) )
                     return;
             }
 
@@ -2216,7 +2216,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFor
     // the value of the Config.
     OSL_ENSURE( m_pCurrPageDesc, "no page template found" );
     if( !OutCSS1_FrameFormatBrush( *this,
-                              m_pCurrPageDesc->GetMaster().makeBackgroundBrushItem() ) )
+                              *m_pCurrPageDesc->GetMaster().makeBackgroundBrushItem() ) )
     {
         Color aColor( COL_WHITE );
 

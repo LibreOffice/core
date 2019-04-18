@@ -587,25 +587,25 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
     if( !bChg )
         return;
 
-    SvxBoxItem aBoxItem( aItemIds.nBox );
+    std::shared_ptr<SvxBoxItem> aBoxItem(std::make_shared<SvxBoxItem>(aItemIds.nBox));
     if( pDfltItem )
-        aBoxItem = *pDfltItem;
+        aBoxItem.reset(static_cast<SvxBoxItem*>(pDfltItem->Clone()));
 
     SvxCSS1BorderInfo *pInfo = GetBorderInfo( SvxBoxItemLine::TOP, false );
     if( pInfo )
-        pInfo->SetBorderLine( SvxBoxItemLine::TOP, aBoxItem );
+        pInfo->SetBorderLine( SvxBoxItemLine::TOP, *aBoxItem );
 
     pInfo = GetBorderInfo( SvxBoxItemLine::BOTTOM, false );
     if( pInfo )
-        pInfo->SetBorderLine( SvxBoxItemLine::BOTTOM, aBoxItem );
+        pInfo->SetBorderLine( SvxBoxItemLine::BOTTOM, *aBoxItem );
 
     pInfo = GetBorderInfo( SvxBoxItemLine::LEFT, false );
     if( pInfo )
-        pInfo->SetBorderLine( SvxBoxItemLine::LEFT, aBoxItem );
+        pInfo->SetBorderLine( SvxBoxItemLine::LEFT, *aBoxItem );
 
     pInfo = GetBorderInfo( SvxBoxItemLine::RIGHT, false );
     if( pInfo )
-        pInfo->SetBorderLine( SvxBoxItemLine::RIGHT, aBoxItem );
+        pInfo->SetBorderLine( SvxBoxItemLine::RIGHT, *aBoxItem );
 
     for( size_t i=0; i<m_aBorderInfos.size(); ++i )
     {
@@ -631,10 +631,10 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
                 break;
         }
 
-        if( aBoxItem.GetLine( nLine ) )
+        if( aBoxItem->GetLine( nLine ) )
         {
             if( UNSET_BORDER_DISTANCE == nDist )
-                nDist = aBoxItem.GetDistance( nLine );
+                nDist = aBoxItem->GetDistance( nLine );
 
             if( nDist < nMinBorderDist )
                 nDist = nMinBorderDist;
@@ -644,10 +644,10 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
             nDist = 0U;
         }
 
-        aBoxItem.SetDistance( nDist, nLine );
+        aBoxItem->SetDistance( nDist, nLine );
     }
 
-    rItemSet.Put( aBoxItem );
+    rItemSet.Put( *aBoxItem );
 
     DestroyBorderInfos();
 }

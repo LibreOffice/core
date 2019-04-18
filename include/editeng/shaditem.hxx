@@ -45,9 +45,6 @@ public:
                  const Color *pColor = nullptr, const sal_uInt16 nWidth = 100 /*5pt*/,
                  const SvxShadowLocation eLoc = SvxShadowLocation::NONE );
 
-    inline SvxShadowItem& operator=( const SvxShadowItem& rFmtShadow );
-    SvxShadowItem(SvxShadowItem const &) = default; // SfxPoolItem copy function dichotomy
-
     // "pure virtual Methods" from SfxPoolItem
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -59,8 +56,6 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const override;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const override;
     virtual void             ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool             HasMetrics() const override;
 
@@ -81,14 +76,6 @@ public:
     virtual void            SetEnumValue( sal_uInt16 nNewVal ) override;
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
-
-inline SvxShadowItem &SvxShadowItem::operator=( const SvxShadowItem& rFmtShadow )
-{
-    aShadowColor = rFmtShadow.aShadowColor;
-    nWidth = rFmtShadow.GetWidth();
-    eLocation = rFmtShadow.GetLocation();
-    return *this;
-}
 
 #endif // INCLUDED_EDITENG_SHADITEM_HXX
 

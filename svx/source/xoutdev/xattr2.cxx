@@ -78,11 +78,6 @@ XLineJointItem::XLineJointItem( css::drawing::LineJoint eLineJoint ) :
 {
 }
 
-sal_uInt16 XLineJointItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
-{
-    return 1;
-}
-
 SfxPoolItem* XLineJointItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineJointItem( *this );
@@ -238,11 +233,6 @@ SfxPoolItem* XLineCapItem::CreateDefault() { return new XLineCapItem; }
 XLineCapItem::XLineCapItem(css::drawing::LineCap eLineCap)
 :   SfxEnumItem(XATTR_LINECAP, eLineCap)
 {
-}
-
-sal_uInt16 XLineCapItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
-{
-    return 1;
 }
 
 SfxPoolItem* XLineCapItem::Clone(SfxItemPool* /*pPool*/) const
