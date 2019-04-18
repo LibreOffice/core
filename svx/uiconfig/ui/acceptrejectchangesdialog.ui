@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="AcceptRejectChangesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="acceptrejectchangesdialog|AcceptRejectChangesDialog">Manage Changes</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -121,11 +126,11 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">accept</action-widget>
-      <action-widget response="0">reject</action-widget>
-      <action-widget response="0">acceptall</action-widget>
-      <action-widget response="0">rejectall</action-widget>
-      <action-widget response="0">undo</action-widget>
+      <action-widget response="105">accept</action-widget>
+      <action-widget response="104">reject</action-widget>
+      <action-widget response="103">acceptall</action-widget>
+      <action-widget response="102">rejectall</action-widget>
+      <action-widget response="101">undo</action-widget>
       <action-widget response="-7">close</action-widget>
     </action-widgets>
   </object>
