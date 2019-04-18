@@ -645,6 +645,22 @@ public:
         return mpDoc->pClass->postWindowGestureEvent(mpDoc, nWindowId, pType, nX, nY, nOffset);
     }
 
+    /**
+     * Pastes content to the window with given id.
+     *
+     * @param nWindowId
+     * @param pMimeType format of pData, for example text/plain;charset=utf-8.
+     * @param pData the actual data to be pasted.
+     * @return if the supplied data was pasted successfully.
+     */
+    bool postWindowPaste(unsigned nWindowId,
+                        const char* pMimeType,
+                        const char* pData,
+                        size_t nSize)
+    {
+        return mpDoc->pClass->postWindowPaste(mpDoc, nWindowId, pMimeType, pData, nSize);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

@@ -369,6 +369,13 @@ struct _LibreOfficeKitDocumentClass
                                   int nY,
                                   int nOffset);
 
+    /// @see lok::Document::postWindowPaste().
+    bool (*postWindowPaste) (LibreOfficeKitDocument* pThis,
+                                unsigned nWindowId,
+                                const char* pMimeType,
+                                const char* pData,
+                                size_t nSize);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
