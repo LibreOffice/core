@@ -33,8 +33,7 @@ XclExpExtNegativeColor::XclExpExtNegativeColor( const Color& rColor ):
 void XclExpExtNegativeColor::SaveXml( XclExpXmlStream& rStrm )
 {
     rStrm.GetCurrentStream()->singleElementNS( XML_x14, XML_negativeFillColor,
-                                                XML_rgb, XclXmlUtils::ToOString( maColor ).getStr(),
-                                                FSEND );
+                                               XML_rgb, XclXmlUtils::ToOString(maColor) );
 }
 
 XclExpExtAxisColor::XclExpExtAxisColor( const Color& rColor ):
@@ -45,8 +44,7 @@ XclExpExtAxisColor::XclExpExtAxisColor( const Color& rColor ):
 void XclExpExtAxisColor::SaveXml( XclExpXmlStream& rStrm )
 {
     rStrm.GetCurrentStream()->singleElementNS( XML_x14, XML_axisColor,
-                                                XML_rgb, XclXmlUtils::ToOString( maAxisColor ).getStr(),
-                                                FSEND );
+                                               XML_rgb, XclXmlUtils::ToOString(maAxisColor) );
 }
 
 XclExpExtIcon::XclExpExtIcon(const XclExpRoot& rRoot, const std::pair<ScIconSetType, sal_Int32>& rCustomEntry):
@@ -68,8 +66,7 @@ void XclExpExtIcon::SaveXml(XclExpXmlStream& rStrm)
 
     rWorksheet->singleElementNS(XML_x14, XML_cfIcon,
             XML_iconSet, pIconSetName,
-            XML_iconId, OString::number(nIndex).getStr(),
-            FSEND);
+            XML_iconId, OString::number(nIndex));
 }
 
 XclExpExtCfvo::XclExpExtCfvo( const XclExpRoot& rRoot, const ScColorScaleEntry& rEntry, const ScAddress& rSrcPos, bool bFirst ):
@@ -123,16 +120,14 @@ const char* getColorScaleType( ScColorScaleEntryType eType, bool bFirst )
 void XclExpExtCfvo::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
-    rWorksheet->startElementNS( XML_x14, XML_cfvo,
-                                XML_type, getColorScaleType(meType, mbFirst),
-                                FSEND );
+    rWorksheet->startElementNS(XML_x14, XML_cfvo, XML_type, getColorScaleType(meType, mbFirst));
 
     if (meType == COLORSCALE_FORMULA ||
             meType == COLORSCALE_PERCENT ||
             meType == COLORSCALE_PERCENTILE ||
             meType == COLORSCALE_VALUE)
     {
-        rWorksheet->startElementNS(XML_xm, XML_f, FSEND);
+        rWorksheet->startElementNS(XML_xm, XML_f);
         rWorksheet->writeEscaped(maValue.getStr());
         rWorksheet->endElementNS(XML_xm, XML_f);
     }
@@ -180,11 +175,10 @@ void XclExpExtDataBar::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElementNS( XML_x14, XML_dataBar,
-                                XML_minLength, OString::number(mnMinLength).getStr(),
-                                XML_maxLength, OString::number(mnMaxLength).getStr(),
+                                XML_minLength, OString::number(mnMinLength),
+                                XML_maxLength, OString::number(mnMaxLength),
                                 XML_axisPosition, getAxisPosition(meAxisPosition),
-                                XML_gradient, ToPsz(mbGradient),
-                                FSEND );
+                                XML_gradient, ToPsz(mbGradient) );
 
     mpLowerLimit->SaveXml( rStrm );
     mpUpperLimit->SaveXml( rStrm );
@@ -224,8 +218,7 @@ void XclExpExtIconSet::SaveXml(XclExpXmlStream& rStrm)
             XML_iconSet, mpIconSetName,
             XML_custom, mbCustom ? ToPsz10(mbCustom) : nullptr,
             XML_reverse, ToPsz10(mbReverse),
-            XML_showValue, ToPsz10(mbShowValue),
-            FSEND);
+            XML_showValue, ToPsz10(mbShowValue));
 
     maCfvos.SaveXml(rStrm);
 
@@ -273,8 +266,7 @@ void XclExpExtCfRule::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->startElementNS( XML_x14, XML_cfRule,
                                 XML_type, pType,
                                 XML_priority, mnPriority == -1 ? nullptr : OString::number(mnPriority).getStr(),
-                                XML_id, maId.getStr(),
-                                FSEND );
+                                XML_id, maId );
 
     mxEntry->SaveXml( rStrm );
 
@@ -332,11 +324,10 @@ void XclExpExtConditionalFormatting::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElementNS( XML_x14, XML_conditionalFormatting,
-                                FSNS( XML_xmlns, XML_xm ), rStrm.getNamespaceURL(OOX_NS(xm)).toUtf8(),
-                                FSEND );
+                                FSNS( XML_xmlns, XML_xm ), rStrm.getNamespaceURL(OOX_NS(xm)).toUtf8() );
 
     maCfRules.SaveXml( rStrm );
-    rWorksheet->startElementNS( XML_xm, XML_sqref, FSEND );
+    rWorksheet->startElementNS(XML_xm, XML_sqref);
     rWorksheet->write(XclXmlUtils::ToOString(maRange).getStr());
 
     rWorksheet->endElementNS( XML_xm, XML_sqref );
@@ -378,12 +369,9 @@ void XclExpExtCalcPr::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_ext,
                                 FSNS(XML_xmlns, XML_loext), rStrm.getNamespaceURL(OOX_NS(loext)).toUtf8(),
-                                XML_uri, maURI.getStr(),
-                                FSEND );
+                                XML_uri, maURI );
 
-    rWorksheet->singleElementNS( XML_loext, XML_extCalcPr,
-                                 XML_stringRefSyntax, maSyntax.getStr(),
-                                 FSEND );
+    rWorksheet->singleElementNS(XML_loext, XML_extCalcPr, XML_stringRefSyntax, maSyntax);
 
     rWorksheet->endElement( XML_ext );
 }
@@ -399,11 +387,9 @@ void XclExpExtCondFormat::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_ext,
                                 FSNS(XML_xmlns, XML_x14), rStrm.getNamespaceURL(OOX_NS(xls14Lst)).toUtf8(),
-                                XML_uri, maURI.getStr(),
-                                FSEND );
+                                XML_uri, maURI );
 
-    rWorksheet->startElementNS( XML_x14, XML_conditionalFormattings,
-                                FSEND );
+    rWorksheet->startElementNS(XML_x14, XML_conditionalFormattings);
 
     maCF.SaveXml( rStrm );
 
@@ -422,8 +408,7 @@ void XclExtLst::SaveXml( XclExpXmlStream& rStrm )
         return;
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
-    rWorksheet->startElement( XML_extLst,
-                                FSEND );
+    rWorksheet->startElement(XML_extLst);
 
     maExtEntries.SaveXml(rStrm);
 

@@ -398,16 +398,15 @@ static sal_uInt16 lcl_WriteRun( XclExpXmlStream& rStrm, const ScfUInt16Vec& rBuf
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
 
-    rWorksheet->startElement( XML_r, FSEND );
+    rWorksheet->startElement(XML_r);
     if( pFont )
     {
         const XclFontData& rFontData = pFont->GetFontData();
-        rWorksheet->startElement( XML_rPr, FSEND );
+        rWorksheet->startElement(XML_rPr);
         XclXmlUtils::WriteFontData( rWorksheet, rFontData, XML_rFont );
         rWorksheet->endElement( XML_rPr );
     }
-    rWorksheet->startElement( XML_t,
-                FSNS(XML_xml, XML_space), "preserve", FSEND );
+    rWorksheet->startElement(XML_t, FSNS(XML_xml, XML_space), "preserve");
     rWorksheet->writeEscaped( XclXmlUtils::ToOUString( rBuffer, nStart, nLength ) );
     rWorksheet->endElement( XML_t );
     rWorksheet->endElement( XML_r );
@@ -420,8 +419,7 @@ void XclExpString::WriteXml( XclExpXmlStream& rStrm ) const
 
     if( !IsWriteFormats() )
     {
-        rWorksheet->startElement( XML_t,
-                FSNS(XML_xml, XML_space), "preserve", FSEND );
+        rWorksheet->startElement(XML_t, FSNS(XML_xml, XML_space), "preserve");
         rWorksheet->writeEscaped( XclXmlUtils::ToOUString( *this ) );
         rWorksheet->endElement( XML_t );
     }
