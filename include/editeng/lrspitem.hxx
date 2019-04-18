@@ -68,7 +68,6 @@ public:
     SvxLRSpaceItem( const long nLeft, const long nRight,
                     const long nTLeft /*= 0*/, const short nOfset /*= 0*/,
                     const sal_uInt16 nId  );
-    inline SvxLRSpaceItem& operator=( const SvxLRSpaceItem &rCpy );
     SvxLRSpaceItem(SvxLRSpaceItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
@@ -83,7 +82,6 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const override;
     virtual void                 ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool                 HasMetrics() const override;
 
@@ -120,21 +118,6 @@ public:
                     { nFirstLineOfst = nValue; }
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
-
-inline SvxLRSpaceItem &SvxLRSpaceItem::operator=( const SvxLRSpaceItem &rCpy )
-{
-    nFirstLineOfst = rCpy.nFirstLineOfst;
-    nTxtLeft = rCpy.nTxtLeft;
-    nLeftMargin = rCpy.nLeftMargin;
-    nRightMargin = rCpy.nRightMargin;
-    nPropFirstLineOfst = rCpy.nPropFirstLineOfst;
-    nPropLeftMargin = rCpy.nPropLeftMargin;
-    nPropRightMargin = rCpy.nPropRightMargin;
-    bAutoFirst = rCpy.bAutoFirst;
-    bExplicitZeroMarginValRight = rCpy.bExplicitZeroMarginValRight;
-    bExplicitZeroMarginValLeft = rCpy.bExplicitZeroMarginValLeft;
-    return *this;
-}
 
 inline void SvxLRSpaceItem::SetLeft( const long nL, const sal_uInt16 nProp )
 {

@@ -777,24 +777,30 @@ ATTR_SETUNDERLINE:
             case RTF_ULC:
                 if( aPlainMap.nUnderline )
                 {
-                    SvxUnderlineItem aUL( LINESTYLE_SINGLE, aPlainMap.nUnderline );
-                    const SfxPoolItem* pItem;
-                    if( SfxItemState::SET == pSet->GetItemState(
-                        aPlainMap.nUnderline, false, &pItem ) )
+                    std::unique_ptr<SvxUnderlineItem> aUL(std::make_unique<SvxUnderlineItem>(LINESTYLE_SINGLE, aPlainMap.nUnderline));
+                    const SfxPoolItem* pItem(nullptr);
+
+                    if( SfxItemState::SET == pSet->GetItemState(aPlainMap.nUnderline, false, &pItem ) )
                     {
                         // is switched off ?
-                        if( LINESTYLE_NONE ==
-                            static_cast<const SvxUnderlineItem*>(pItem)->GetLineStyle() )
+                        if( LINESTYLE_NONE == static_cast<const SvxUnderlineItem*>(pItem)->GetLineStyle() )
                             break;
-                        aUL = *static_cast<const SvxUnderlineItem*>(pItem);
+
+                        aUL.reset(static_cast<SvxUnderlineItem*>(pItem->Clone()));
                     }
                     else
-                        aUL = static_cast<const SvxUnderlineItem&>(pSet->Get( aPlainMap.nUnderline, false ));
+                    {
+                        aUL.reset(static_cast<SvxUnderlineItem*>(pSet->Get( aPlainMap.nUnderline, false).Clone()));
+                    }
 
-                    if( LINESTYLE_NONE == aUL.GetLineStyle() )
-                        aUL.SetLineStyle( LINESTYLE_SINGLE );
-                    aUL.SetColor( GetColor( sal_uInt16(nTokenValue) ));
-                    pSet->Put( aUL );
+                    if(LINESTYLE_NONE == aUL->GetLineStyle())
+                    {
+                        aUL->SetLineStyle(LINESTYLE_SINGLE);
+                    }
+
+                    aUL->SetColor(GetColor(sal_uInt16(nTokenValue)));
+
+                    pSet->Put(*aUL.get());
                 }
                 break;
 
@@ -872,24 +878,30 @@ ATTR_SETOVERLINE:
             case RTF_OLC:
                 if( aPlainMap.nOverline )
                 {
-                    SvxOverlineItem aOL( LINESTYLE_SINGLE, aPlainMap.nOverline );
-                    const SfxPoolItem* pItem;
-                    if( SfxItemState::SET == pSet->GetItemState(
-                        aPlainMap.nOverline, false, &pItem ) )
+                    std::unique_ptr<SvxOverlineItem> aOL(std::make_unique<SvxOverlineItem>(LINESTYLE_SINGLE, aPlainMap.nOverline));
+                    const SfxPoolItem* pItem(nullptr);
+
+                    if( SfxItemState::SET == pSet->GetItemState(aPlainMap.nOverline, false, &pItem ) )
                     {
                         // is switched off ?
-                        if( LINESTYLE_NONE ==
-                            static_cast<const SvxOverlineItem*>(pItem)->GetLineStyle() )
+                        if( LINESTYLE_NONE == static_cast<const SvxOverlineItem*>(pItem)->GetLineStyle() )
                             break;
-                        aOL = *static_cast<const SvxOverlineItem*>(pItem);
+
+                        aOL.reset(static_cast<SvxOverlineItem*>(pItem->Clone()));
                     }
                     else
-                        aOL = static_cast<const SvxOverlineItem&>(pSet->Get( aPlainMap.nOverline, false ));
+                    {
+                        aOL.reset(static_cast<SvxOverlineItem*>(pSet->Get( aPlainMap.nOverline, false).Clone()));
+                    }
 
-                    if( LINESTYLE_NONE == aOL.GetLineStyle() )
-                        aOL.SetLineStyle( LINESTYLE_SINGLE );
-                    aOL.SetColor( GetColor( sal_uInt16(nTokenValue) ));
-                    pSet->Put( aOL );
+                    if(LINESTYLE_NONE == aOL->GetLineStyle())
+                    {
+                        aOL->SetLineStyle(LINESTYLE_SINGLE);
+                    }
+
+                    aOL->SetColor(GetColor(sal_uInt16(nTokenValue)));
+
+                    pSet->Put(*aOL.get());
                 }
                 break;
 
@@ -1371,10 +1383,13 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
                                    bool bTableDef )
 {
     // then read the border attribute
-    SvxBoxItem aAttr( aPardMap.nBox );
-    const SfxPoolItem* pItem;
+    std::unique_ptr<SvxBoxItem> aAttr(std::make_unique<SvxBoxItem>(aPardMap.nBox));
+    const SfxPoolItem* pItem(nullptr);
+
     if( SfxItemState::SET == rSet.GetItemState( aPardMap.nBox, false, &pItem ) )
-        aAttr = *static_cast<const SvxBoxItem*>(pItem);
+    {
+        aAttr.reset(static_cast<SvxBoxItem*>(pItem->Clone()));
+    }
 
     SvxBorderLine aBrd( nullptr, DEF_LINE_WIDTH_0 );  // Simple plain line
     bool bContinue = true;
@@ -1399,7 +1414,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
                 if( bTableDef )
                 {
                     if (nBorderTyp != 0)
-                        SetBorderLine( nBorderTyp, aAttr, aBrd );
+                        SetBorderLine( nBorderTyp, *aAttr.get(), aBrd );
                     nBorderTyp = RTF_BRDRT;
                 }
                 break;
@@ -1409,7 +1424,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
                 if( bTableDef )
                 {
                     if (nBorderTyp != 0)
-                        SetBorderLine( nBorderTyp, aAttr, aBrd );
+                        SetBorderLine( nBorderTyp, *aAttr.get(), aBrd );
                     nBorderTyp = RTF_BRDRB;
                 }
                 break;
@@ -1419,7 +1434,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
                 if( bTableDef )
                 {
                     if (nBorderTyp != 0)
-                        SetBorderLine( nBorderTyp, aAttr, aBrd );
+                        SetBorderLine( nBorderTyp, *aAttr.get(), aBrd );
                     nBorderTyp = RTF_BRDRL;
                 }
                 break;
@@ -1429,7 +1444,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
                 if( bTableDef )
                 {
                     if (nBorderTyp != 0)
-                        SetBorderLine( nBorderTyp, aAttr, aBrd );
+                        SetBorderLine( nBorderTyp, *aAttr.get(), aBrd );
                     nBorderTyp = RTF_BRDRR;
                 }
                 break;
@@ -1505,23 +1520,23 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
                 switch( nBorderTyp )
                 {
                 case RTF_BRDRB:
-                    aAttr.SetDistance( static_cast<sal_uInt16>(nTokenValue), SvxBoxItemLine::BOTTOM );
+                    aAttr->SetDistance( static_cast<sal_uInt16>(nTokenValue), SvxBoxItemLine::BOTTOM );
                     break;
 
                 case RTF_BRDRT:
-                    aAttr.SetDistance( static_cast<sal_uInt16>(nTokenValue), SvxBoxItemLine::TOP );
+                    aAttr->SetDistance( static_cast<sal_uInt16>(nTokenValue), SvxBoxItemLine::TOP );
                     break;
 
                 case RTF_BRDRL:
-                    aAttr.SetDistance( static_cast<sal_uInt16>(nTokenValue), SvxBoxItemLine::LEFT );
+                    aAttr->SetDistance( static_cast<sal_uInt16>(nTokenValue), SvxBoxItemLine::LEFT );
                     break;
 
                 case RTF_BRDRR:
-                    aAttr.SetDistance( static_cast<sal_uInt16>(nTokenValue), SvxBoxItemLine::RIGHT );
+                    aAttr->SetDistance( static_cast<sal_uInt16>(nTokenValue), SvxBoxItemLine::RIGHT );
                     break;
 
                 case RTF_BOX:
-                    aAttr.SetAllDistances( static_cast<sal_uInt16>(nTokenValue) );
+                    aAttr->SetAllDistances( static_cast<sal_uInt16>(nTokenValue) );
                     break;
                 }
             }
@@ -1543,9 +1558,9 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
     if ( bDoubleWidth ) nWidth *= 2;
     aBrd.SetWidth( nWidth );
 
-    SetBorderLine( nBorderTyp, aAttr, aBrd );
+    SetBorderLine( nBorderTyp, *aAttr.get(), aBrd );
 
-    rSet.Put( aAttr );
+    rSet.Put( *aAttr.get() );
     SkipToken();
 }
 

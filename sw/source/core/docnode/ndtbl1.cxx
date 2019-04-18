@@ -498,7 +498,7 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
     }
 }
 
-bool SwDoc::GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill )
+bool SwDoc::GetRowBackground( const SwCursor& rCursor, std::shared_ptr<SvxBrushItem>& rToFill )
 {
     bool bRet = false;
     SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
@@ -513,11 +513,15 @@ bool SwDoc::GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill )
 
             bRet = true;
             for ( std::vector<SwTableLine*>::size_type i = 1; i < aRowArr.size(); ++i )
-                if ( rToFill != aRowArr[i]->GetFrameFormat()->makeBackgroundBrushItem() )
+            {
+                std::shared_ptr<SvxBrushItem> aAlternative(aRowArr[i]->GetFrameFormat()->makeBackgroundBrushItem());
+
+                if ( rToFill != aAlternative && rToFill && aAlternative && *rToFill != *aAlternative )
                 {
                     bRet = false;
                     break;
                 }
+            }
         }
     }
     return bRet;
@@ -875,26 +879,28 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
 
                 const_cast<SwTableBox*>(pCell->GetTabBox())->ClaimFrameFormat();
                 SwFrameFormat *pFormat = pCell->GetFormat();
-                SvxBoxItem aBox( pFormat->GetBox() );
+                std::shared_ptr<SvxBoxItem> aBox(static_cast<SvxBoxItem*>(pFormat->GetBox().Clone()));
 
                 if ( !pBorderLine && bSetLine )
-                    aBox = *::GetDfltAttr( RES_BOX );
+                {
+                    aBox.reset(static_cast<SvxBoxItem*>(::GetDfltAttr(RES_BOX)->Clone()));
+                }
                 else
                 {
-                    if ( aBox.GetTop() )
-                        ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox.GetTop()),
+                    if ( aBox->GetTop() )
+                        ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox->GetTop()),
                                         pColor, pBorderLine );
-                    if ( aBox.GetBottom() )
-                        ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox.GetBottom()),
+                    if ( aBox->GetBottom() )
+                        ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox->GetBottom()),
                                         pColor, pBorderLine );
-                    if ( aBox.GetLeft() )
-                        ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox.GetLeft()),
+                    if ( aBox->GetLeft() )
+                        ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox->GetLeft()),
                                         pColor, pBorderLine );
-                    if ( aBox.GetRight() )
-                        ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox.GetRight()),
+                    if ( aBox->GetRight() )
+                        ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox->GetRight()),
                                         pColor, pBorderLine );
                 }
-                pFormat->SetFormatAttr( aBox );
+                pFormat->SetFormatAttr( *aBox );
             }
         }
 
@@ -1178,7 +1184,7 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
     }
 }
 
-bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill )
+bool SwDoc::GetBoxAttr( const SwCursor& rCursor, std::shared_ptr<SfxPoolItem>& rToFill )
 {
     bool bRet = false;
     SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
@@ -1187,18 +1193,18 @@ bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill )
     {
         bRet = true;
         bool bOneFound = false;
-        const sal_uInt16 nWhich = rToFill.Which();
+        const sal_uInt16 nWhich = rToFill->Which();
         for (size_t i = 0; i < aBoxes.size(); ++i)
         {
             switch ( nWhich )
             {
                 case RES_BACKGROUND:
                 {
-                    SvxBrushItem aBack =
+                    std::shared_ptr<SvxBrushItem> aBack =
                         aBoxes[i]->GetFrameFormat()->makeBackgroundBrushItem();
                     if( !bOneFound )
                     {
-                        static_cast<SvxBrushItem&>(rToFill) = aBack;
+                        rToFill.reset(aBack->Clone());
                         bOneFound = true;
                     }
                     else if( rToFill != aBack )
@@ -1212,10 +1218,10 @@ bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill )
                                     aBoxes[i]->GetFrameFormat()->GetFrameDir();
                     if( !bOneFound )
                     {
-                        static_cast<SvxFrameDirectionItem&>(rToFill) = rDir;
+                        rToFill.reset(rDir.Clone());
                         bOneFound = true;
                     }
-                    else if( rToFill != rDir )
+                    else if( rToFill && *rToFill != rDir )
                         bRet = false;
                 }
                 break;
@@ -1225,10 +1231,10 @@ bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill )
                                     aBoxes[i]->GetFrameFormat()->GetVertOrient();
                     if( !bOneFound )
                     {
-                        static_cast<SwFormatVertOrient&>(rToFill) = rOrient;
+                        rToFill.reset(rOrient.Clone());
                         bOneFound = true;
                     }
-                    else if( rToFill != rOrient )
+                    else if( rToFill && *rToFill != rOrient )
                         bRet = false;
                 }
                 break;

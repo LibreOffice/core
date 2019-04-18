@@ -138,8 +138,6 @@ public:
     SwNumRuleItem( const OUString& rRuleName )
         : SfxStringItem( RES_PARATR_NUMRULE, rRuleName ) {}
 
-    SwNumRuleItem& operator=( const SwNumRuleItem& rCpy )
-    { SetValue( rCpy.GetValue() ); return *this; }
     SwNumRuleItem(SwNumRuleItem const &) = default; // SfxPoolItem copy function dichotomy
 
     /// "pure virtual methods" of SfxPoolItem

@@ -258,13 +258,12 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
     const SwFormatSurround& rOldSur = GetItemSet().Get(RES_SURROUND);
     SwFormatSurround aSur( rOldSur );
 
-    SvxOpaqueItem aOp( RES_OPAQUE);
+    std::shared_ptr<SvxOpaqueItem> aOp(std::make_shared<SvxOpaqueItem>(RES_OPAQUE));
 
     if (!m_bDrawMode)
     {
-        const SvxOpaqueItem& rOpaque = GetItemSet().Get(RES_OPAQUE);
-        aOp = rOpaque;
-        aOp.SetValue(true);
+        aOp.reset(static_cast<SvxOpaqueItem*>(GetItemSet().Get(RES_OPAQUE).Clone()));
+        aOp->SetValue(true);
     }
 
     if (m_xNoWrapRB->get_active())
@@ -279,7 +278,7 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
     {
         aSur.SetSurround(css::text::WrapTextMode_THROUGH);
         if (m_xWrapTransparentCB->get_active() && !m_bDrawMode)
-            aOp.SetValue(false);
+            aOp->SetValue(false);
     }
     else if (m_xIdealWrapRB->get_active())
         aSur.SetSurround(css::text::WrapTextMode_DYNAMIC);
@@ -301,9 +300,9 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
     if (!m_bDrawMode)
     {
         if(nullptr == (pOldItem = GetOldItem( *rSet, FN_OPAQUE )) ||
-                    aOp != *pOldItem )
+                    *aOp != *pOldItem )
         {
-            rSet->Put(aOp);
+            rSet->Put(*aOp);
             bModified = true;
         }
     }

@@ -30,7 +30,6 @@ class SVL_DLLPUBLIC SfxLockBytesItem : public SfxPoolItem
 public:
                             static SfxPoolItem* CreateDefault();
                             SfxLockBytesItem();
-                            SfxLockBytesItem( sal_uInt16 nWhich, SvStream & );
                             virtual ~SfxLockBytesItem() override;
 
     SfxLockBytesItem(SfxLockBytesItem const &) = default;
@@ -40,8 +39,6 @@ public:
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nItemVersion) const override;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const override;
 
     SvLockBytes*            GetValue() const { return _xVal.get(); }
 

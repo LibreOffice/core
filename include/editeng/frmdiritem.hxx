@@ -35,8 +35,6 @@ public:
     virtual ~SvxFrameDirectionItem() override;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
-    virtual sal_uInt16      GetVersion( sal_uInt16 nFileVersion ) const override;
 
     virtual bool            GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
@@ -51,12 +49,7 @@ public:
     {
         return sal_uInt16(SvxFrameDirection::Environment) + 1;
     }
-    SvxFrameDirectionItem& operator=( const SvxFrameDirectionItem& rItem )
-    {
-        SetValue( rItem.GetValue() );
-        return *this;
-    }
-    SvxFrameDirectionItem(SvxFrameDirectionItem const &) = default;
+
         // SfxPoolItem copy function dichotomy
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

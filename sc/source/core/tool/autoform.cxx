@@ -42,6 +42,10 @@
 #include <scresid.hxx>
 #include <document.hxx>
 
+#include <svl/legacyitem.hxx>
+#include <editeng/legacyitem.hxx>
+#include <svx/legacyitem.hxx>
+
 /*
  * XXX: BIG RED NOTICE! Changes MUST be binary file format compatible and MUST
  * be synchronized with Writer's SwTableAutoFmtTbl sw/source/core/doc/tblafmt.cxx
@@ -180,102 +184,119 @@ void ScAfVersions::Load( SvStream& rStream, sal_uInt16 nVer )
 
 void ScAfVersions::Write(SvStream& rStream, sal_uInt16 fileVersion)
 {
-    rStream.WriteUInt16( SvxFontItem(ATTR_FONT).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxFontHeightItem(240, 100, ATTR_FONT_HEIGHT).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxWeightItem(WEIGHT_NORMAL, ATTR_FONT_WEIGHT).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxPostureItem(ITALIC_NONE, ATTR_FONT_POSTURE).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxUnderlineItem(LINESTYLE_NONE, ATTR_FONT_UNDERLINE).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxOverlineItem(LINESTYLE_NONE, ATTR_FONT_OVERLINE).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxCrossedOutItem(STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxContourItem(false, ATTR_FONT_CONTOUR).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxShadowedItem(false, ATTR_FONT_SHADOWED).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxColorItem(ATTR_FONT_COLOR).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxBoxItem(ATTR_BORDER).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxLineItem(SID_FRAME_LINESTYLE).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxBrushItem(ATTR_BACKGROUND).GetVersion(fileVersion) );
+    rStream.WriteUInt16(legacy::SvxFont::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::SvxFontHeight::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::SvxWeight::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::SvxPosture::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::SvxTextLine::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::SvxTextLine::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::SvxCrossedOut::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::SfxBool::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::SfxBool::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::SvxColor::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::SvxBox::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::SvxLine::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::SvxBrush::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::SvxAdjust::GetVersion(fileVersion));
 
-    rStream.WriteUInt16( SvxAdjustItem(SvxAdjust::Left, 0).GetVersion(fileVersion) );
     if (fileVersion >= SOFFICE_FILEFORMAT_50)
+    {
         WriteAutoFormatSwBlob( rStream, swVersions );
+    }
 
-    rStream.WriteUInt16( SvxHorJustifyItem(SvxCellHorJustify::Standard, ATTR_HOR_JUSTIFY).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxVerJustifyItem(SvxCellVerJustify::Standard, ATTR_VER_JUSTIFY).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxOrientationItem(SvxCellOrientation::Standard, 0).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxMarginItem(ATTR_MARGIN).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SfxBoolItem(ATTR_LINEBREAK).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SfxInt32Item(ATTR_ROTATE_VALUE).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD,0).GetVersion(fileVersion) );
+    rStream.WriteUInt16(legacy::SvxHorJustify::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::SvxVerJustify::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::SvxOrientation::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::SvxMargin::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::SfxBool::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::CntInt32::GetVersion(fileVersion));
+    rStream.WriteUInt16(legacy::SvxRotateMode::GetVersion(fileVersion));
 
     rStream.WriteUInt16( 0 );       // Num-Format
 }
 
 ScAutoFormatDataField::ScAutoFormatDataField() :
-    aFont( ATTR_FONT ),
-    aHeight( 240, 100, ATTR_FONT_HEIGHT ),
-    aWeight( WEIGHT_NORMAL, ATTR_FONT_WEIGHT ),
-    aPosture( ITALIC_NONE, ATTR_FONT_POSTURE ),
+    aFont(std::make_shared<SvxFontItem>(ATTR_FONT)),
+    aHeight(std::make_shared<SvxFontHeightItem>(240, 100, ATTR_FONT_HEIGHT)),
+    aWeight(std::make_shared<SvxWeightItem>(WEIGHT_NORMAL, ATTR_FONT_WEIGHT)),
+    aPosture(std::make_shared<SvxPostureItem>(ITALIC_NONE, ATTR_FONT_POSTURE)),
 
-    aCJKFont( ATTR_CJK_FONT ),
-    aCJKHeight( 240, 100, ATTR_CJK_FONT_HEIGHT ),
-    aCJKWeight( WEIGHT_NORMAL, ATTR_CJK_FONT_WEIGHT ),
-    aCJKPosture( ITALIC_NONE, ATTR_CJK_FONT_POSTURE ),
+    aCJKFont(std::make_shared<SvxFontItem>(ATTR_CJK_FONT)),
+    aCJKHeight(std::make_shared<SvxFontHeightItem>(240, 100, ATTR_CJK_FONT_HEIGHT)),
+    aCJKWeight(std::make_shared<SvxWeightItem>(WEIGHT_NORMAL, ATTR_CJK_FONT_WEIGHT)),
+    aCJKPosture(std::make_shared<SvxPostureItem>(ITALIC_NONE, ATTR_CJK_FONT_POSTURE)),
 
-    aCTLFont( ATTR_CTL_FONT ),
-    aCTLHeight( 240, 100, ATTR_CTL_FONT_HEIGHT ),
-    aCTLWeight( WEIGHT_NORMAL, ATTR_CTL_FONT_WEIGHT ),
-    aCTLPosture( ITALIC_NONE, ATTR_CTL_FONT_POSTURE ),
+    aCTLFont(std::make_shared<SvxFontItem>(ATTR_CTL_FONT)),
+    aCTLHeight(std::make_shared<SvxFontHeightItem>(240, 100, ATTR_CTL_FONT_HEIGHT)),
+    aCTLWeight(std::make_shared<SvxWeightItem>(WEIGHT_NORMAL, ATTR_CTL_FONT_WEIGHT)),
+    aCTLPosture(std::make_shared<SvxPostureItem>(ITALIC_NONE, ATTR_CTL_FONT_POSTURE)),
 
-    aUnderline( LINESTYLE_NONE,ATTR_FONT_UNDERLINE ),
-    aOverline( LINESTYLE_NONE,ATTR_FONT_OVERLINE ),
-    aCrossedOut( STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT ),
-    aContour( false, ATTR_FONT_CONTOUR ),
-    aShadowed( false, ATTR_FONT_SHADOWED ),
-    aColor( ATTR_FONT_COLOR ),
-    aBox( ATTR_BORDER ),
-    aTLBR( ATTR_BORDER_TLBR ),
-    aBLTR( ATTR_BORDER_BLTR ),
-    aBackground( ATTR_BACKGROUND ),
-    aAdjust( SvxAdjust::Left, 0 ),
-    aHorJustify( SvxCellHorJustify::Standard, ATTR_HOR_JUSTIFY ),
-    aVerJustify( SvxCellVerJustify::Standard, ATTR_VER_JUSTIFY ),
-    aMargin( ATTR_MARGIN ),
-    aLinebreak( ATTR_LINEBREAK ),
-    aRotateAngle( ATTR_ROTATE_VALUE ),
-    aRotateMode( SVX_ROTATE_MODE_STANDARD, ATTR_ROTATE_MODE )
+    aUnderline(std::make_shared<SvxUnderlineItem>(LINESTYLE_NONE,ATTR_FONT_UNDERLINE)),
+    aOverline(std::make_shared<SvxOverlineItem>(LINESTYLE_NONE,ATTR_FONT_OVERLINE)),
+    aCrossedOut(std::make_shared<SvxCrossedOutItem>(STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT)),
+    aContour(std::make_shared<SvxContourItem>(false, ATTR_FONT_CONTOUR)),
+    aShadowed(std::make_shared<SvxShadowedItem>(false, ATTR_FONT_SHADOWED)),
+    aColor(std::make_shared<SvxColorItem>(ATTR_FONT_COLOR)),
+    aBox(std::make_shared<SvxBoxItem>(ATTR_BORDER)),
+    aTLBR(std::make_shared<SvxLineItem>(ATTR_BORDER_TLBR)),
+    aBLTR(std::make_shared<SvxLineItem>(ATTR_BORDER_BLTR)),
+    aBackground(std::make_shared<SvxBrushItem>(ATTR_BACKGROUND)),
+
+    aAdjust(std::make_shared<SvxAdjustItem>(SvxAdjust::Left, 0)),
+    m_swFields(),
+
+    aHorJustify(std::make_shared<SvxHorJustifyItem>(SvxCellHorJustify::Standard, ATTR_HOR_JUSTIFY)),
+    aVerJustify(std::make_shared<SvxVerJustifyItem>(SvxCellVerJustify::Standard, ATTR_VER_JUSTIFY)),
+    aStacked(std::make_shared<SfxBoolItem>()),
+    aMargin(std::make_shared<SvxMarginItem>(ATTR_MARGIN)),
+    aLinebreak(std::make_shared<SfxBoolItem>(ATTR_LINEBREAK)),
+
+    aRotateAngle(std::make_shared<SfxInt32Item>(ATTR_ROTATE_VALUE)),
+    aRotateMode(std::make_shared<SvxRotateModeItem>(SVX_ROTATE_MODE_STANDARD, ATTR_ROTATE_MODE)),
+
+    aNumFormat()
 {
 }
 
 ScAutoFormatDataField::ScAutoFormatDataField( const ScAutoFormatDataField& rCopy ) :
-    aFont( rCopy.aFont ),
-    aHeight( rCopy.aHeight ),
-    aWeight( rCopy.aWeight ),
-    aPosture( rCopy.aPosture ),
-    aCJKFont( rCopy.aCJKFont ),
-    aCJKHeight( rCopy.aCJKHeight ),
-    aCJKWeight( rCopy.aCJKWeight ),
-    aCJKPosture( rCopy.aCJKPosture ),
-    aCTLFont( rCopy.aCTLFont ),
-    aCTLHeight( rCopy.aCTLHeight ),
-    aCTLWeight( rCopy.aCTLWeight ),
-    aCTLPosture( rCopy.aCTLPosture ),
-    aUnderline( rCopy.aUnderline ),
-    aOverline( rCopy.aOverline ),
-    aCrossedOut( rCopy.aCrossedOut ),
-    aContour( rCopy.aContour ),
-    aShadowed( rCopy.aShadowed ),
-    aColor( rCopy.aColor ),
-    aBox( rCopy.aBox ),
-    aTLBR( rCopy.aTLBR ),
-    aBLTR( rCopy.aBLTR ),
-    aBackground( rCopy.aBackground ),
-    aAdjust( rCopy.aAdjust ),
-    aHorJustify( rCopy.aHorJustify ),
-    aVerJustify( rCopy.aVerJustify ),
-    aStacked( rCopy.aStacked ),
-    aMargin( rCopy.aMargin ),
-    aLinebreak( rCopy.aLinebreak ),
-    aRotateAngle( rCopy.aRotateAngle ),
-    aRotateMode( rCopy.aRotateMode ),
+    aFont(static_cast<SvxFontItem*>(rCopy.aFont->Clone())),
+    aHeight(static_cast<SvxFontHeightItem*>(rCopy.aHeight->Clone())),
+    aWeight(static_cast<SvxWeightItem*>(rCopy.aWeight->Clone())),
+    aPosture(static_cast<SvxPostureItem*>(rCopy.aPosture->Clone())),
+
+    aCJKFont(static_cast<SvxFontItem*>(rCopy.aCJKFont->Clone())),
+    aCJKHeight(static_cast<SvxFontHeightItem*>(rCopy.aCJKHeight->Clone())),
+    aCJKWeight(static_cast<SvxWeightItem*>(rCopy.aCJKWeight->Clone())),
+    aCJKPosture(static_cast<SvxPostureItem*>(rCopy.aCJKPosture->Clone())),
+
+    aCTLFont(static_cast<SvxFontItem*>(rCopy.aCTLFont->Clone())),
+    aCTLHeight(static_cast<SvxFontHeightItem*>(rCopy.aCTLHeight->Clone())),
+    aCTLWeight(static_cast<SvxWeightItem*>(rCopy.aCTLWeight->Clone())),
+    aCTLPosture(static_cast<SvxPostureItem*>(rCopy.aCTLPosture->Clone())),
+
+    aUnderline(static_cast<SvxUnderlineItem*>(rCopy.aUnderline->Clone())),
+    aOverline(static_cast<SvxOverlineItem*>(rCopy.aOverline->Clone())),
+    aCrossedOut(static_cast<SvxCrossedOutItem*>(rCopy.aCrossedOut->Clone())),
+    aContour(static_cast<SvxContourItem*>(rCopy.aContour->Clone())),
+    aShadowed(static_cast<SvxShadowedItem*>(rCopy.aShadowed->Clone())),
+    aColor(static_cast<SvxColorItem*>(rCopy.aColor->Clone())),
+    aBox(static_cast<SvxBoxItem*>(rCopy.aBox->Clone())),
+    aTLBR(static_cast<SvxLineItem*>(rCopy.aTLBR->Clone())),
+    aBLTR(static_cast<SvxLineItem*>(rCopy.aBLTR->Clone())),
+    aBackground(static_cast<SvxBrushItem*>(rCopy.aBackground->Clone())),
+
+    aAdjust(static_cast<SvxAdjustItem*>(rCopy.aAdjust->Clone())),
+    m_swFields(),
+
+    aHorJustify(static_cast<SvxHorJustifyItem*>(rCopy.aHorJustify->Clone())),
+    aVerJustify(static_cast<SvxVerJustifyItem*>(rCopy.aVerJustify->Clone())),
+    aStacked(static_cast<SfxBoolItem*>(rCopy.aStacked->Clone())),
+    aMargin(static_cast<SvxMarginItem*>(rCopy.aMargin->Clone())),
+    aLinebreak(static_cast<SfxBoolItem*>(rCopy.aLinebreak->Clone())),
+
+    aRotateAngle(static_cast<SfxInt32Item*>(rCopy.aRotateAngle->Clone())),
+    aRotateMode(static_cast<SvxRotateModeItem*>(rCopy.aRotateMode->Clone())),
+
     aNumFormat( rCopy.aNumFormat )
 {
 }
@@ -284,83 +305,68 @@ ScAutoFormatDataField::~ScAutoFormatDataField()
 {
 }
 
-void ScAutoFormatDataField::SetAdjust( const SvxAdjustItem& rAdjust )
-{
-    aAdjust.SetAdjust( rAdjust.GetAdjust() );
-    aAdjust.SetOneWord( rAdjust.GetOneWord() );
-    aAdjust.SetLastBlock( rAdjust.GetLastBlock() );
-}
-
-#define READ( aItem, ItemType, nVers )      \
-    pNew = aItem.Create( rStream, nVers );  \
-    aItem = *static_cast<ItemType*>(pNew);  \
-    delete pNew;
-
 bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersions, sal_uInt16 nVer )
 {
     SfxPoolItem* pNew;
     SvxOrientationItem aOrientation( SvxCellOrientation::Standard, 0 );
 
-    READ( aFont,        SvxFontItem,        rVersions.nFontVersion)
-    READ( aHeight,      SvxFontHeightItem,  rVersions.nFontHeightVersion)
-    READ( aWeight,      SvxWeightItem,      rVersions.nWeightVersion)
-    READ( aPosture,     SvxPostureItem,     rVersions.nPostureVersion)
+    legacy::SvxFont::Create(*aFont, rStream, rVersions.nFontVersion);
+    legacy::SvxFontHeight::Create(*aHeight, rStream, rVersions.nFontHeightVersion);
+    legacy::SvxWeight::Create(*aWeight, rStream, rVersions.nWeightVersion);
+    legacy::SvxPosture::Create(*aPosture, rStream, rVersions.nPostureVersion);
+
     // --- from 641 on: CJK and CTL font settings
     if( AUTOFORMAT_DATA_ID_641 <= nVer )
     {
-        READ( aCJKFont,     SvxFontItem,        rVersions.nFontVersion)
-        READ( aCJKHeight,   SvxFontHeightItem,  rVersions.nFontHeightVersion)
-        READ( aCJKWeight,   SvxWeightItem,      rVersions.nWeightVersion)
-        READ( aCJKPosture,  SvxPostureItem,     rVersions.nPostureVersion)
-        READ( aCTLFont,     SvxFontItem,        rVersions.nFontVersion)
-        READ( aCTLHeight,   SvxFontHeightItem,  rVersions.nFontHeightVersion)
-        READ( aCTLWeight,   SvxWeightItem,      rVersions.nWeightVersion)
-        READ( aCTLPosture,  SvxPostureItem,     rVersions.nPostureVersion)
+        legacy::SvxFont::Create(*aCJKFont, rStream, rVersions.nFontVersion);
+        legacy::SvxFontHeight::Create(*aCJKHeight, rStream, rVersions.nFontHeightVersion);
+        legacy::SvxWeight::Create(*aCJKWeight, rStream, rVersions.nWeightVersion);
+        legacy::SvxPosture::Create(*aCJKPosture, rStream, rVersions.nPostureVersion);
+
+        legacy::SvxFont::Create(*aCTLFont, rStream, rVersions.nFontVersion);
+        legacy::SvxFontHeight::Create(*aCTLHeight, rStream, rVersions.nFontHeightVersion);
+        legacy::SvxWeight::Create(*aCTLWeight, rStream, rVersions.nWeightVersion);
+        legacy::SvxPosture::Create(*aCTLPosture, rStream, rVersions.nPostureVersion);
     }
-    READ( aUnderline,   SvxUnderlineItem,   rVersions.nUnderlineVersion)
+
+    legacy::SvxTextLine::Create(*aUnderline, rStream, rVersions.nUnderlineVersion);
+
     if ( nVer >= AUTOFORMAT_DATA_ID_300OVRLN )
     {
-        READ( aOverline,    SvxOverlineItem,    rVersions.nOverlineVersion)
+        legacy::SvxTextLine::Create(*aOverline, rStream, rVersions.nOverlineVersion);
     }
-    READ( aCrossedOut,  SvxCrossedOutItem,  rVersions.nCrossedOutVersion)
-    READ( aContour,     SvxContourItem,     rVersions.nContourVersion)
-    READ( aShadowed,    SvxShadowedItem,    rVersions.nShadowedVersion)
-    READ( aColor,       SvxColorItem,       rVersions.nColorVersion)
-    READ( aBox,         SvxBoxItem,         rVersions.nBoxVersion)
+
+    legacy::SvxCrossedOut::Create(*aCrossedOut, rStream, rVersions.nCrossedOutVersion);
+    legacy::SfxBool::Create(*aContour, rStream, rVersions.nContourVersion);
+    legacy::SfxBool::Create(*aShadowed, rStream, rVersions.nShadowedVersion);
+    legacy::SvxColor::Create(*aColor, rStream, rVersions.nColorVersion);
+    legacy::SvxBox::Create(*aBox, rStream, rVersions.nBoxVersion);
 
     // --- from 680/dr14 on: diagonal frame lines
     if( AUTOFORMAT_DATA_ID_680DR14 <= nVer )
     {
-        READ( aTLBR, SvxLineItem, rVersions.nLineVersion)
-        READ( aBLTR, SvxLineItem, rVersions.nLineVersion)
+        legacy::SvxLine::Create(*aTLBR, rStream, rVersions.nLineVersion);
+        legacy::SvxLine::Create(*aBLTR, rStream, rVersions.nLineVersion);
     }
 
-    READ( aBackground,  SvxBrushItem,       rVersions.nBrushVersion)
-
-    pNew = aAdjust.Create( rStream, rVersions.nAdjustVersion );
-    SetAdjust( *static_cast<SvxAdjustItem*>(pNew) );
-    delete pNew;
+    legacy::SvxBrush::Create(*aBackground, rStream, rVersions.nBrushVersion);
+    legacy::SvxAdjust::Create(*aAdjust, rStream, rVersions.nAdjustVersion);
 
     if (nVer >= AUTOFORMAT_DATA_ID_31005)
+    {
         rStream >> m_swFields;
+    }
 
-    READ( aHorJustify,   SvxHorJustifyItem,  rVersions.nHorJustifyVersion)
-    READ( aVerJustify,   SvxVerJustifyItem,  rVersions.nVerJustifyVersion)
-    READ( aOrientation,  SvxOrientationItem, rVersions.nOrientationVersion)
-    READ( aMargin,       SvxMarginItem,      rVersions.nMarginVersion)
-
-    pNew = aLinebreak.Create( rStream, rVersions.nBoolVersion );
-    SetLinebreak( *static_cast<SfxBoolItem*>(pNew) );
-    delete pNew;
+    legacy::SvxHorJustify::Create(*aHorJustify, rStream, rVersions.nHorJustifyVersion);
+    legacy::SvxVerJustify::Create(*aVerJustify, rStream, rVersions.nVerJustifyVersion);
+    legacy::SvxOrientation::Create(aOrientation, rStream, rVersions.nOrientationVersion);
+    legacy::SvxMargin::Create(*aMargin, rStream, rVersions.nMarginVersion);
+    legacy::SfxBool::Create(*aLinebreak, rStream, rVersions.nBoolVersion);
 
     if ( nVer >= AUTOFORMAT_DATA_ID_504 )
     {
-        pNew = aRotateAngle.Create( rStream, rVersions.nInt32Version );
-        SetRotateAngle( *static_cast<SfxInt32Item*>(pNew) );
-        delete pNew;
-        pNew = aRotateMode.Create( rStream, rVersions.nRotateModeVersion );
-        SetRotateMode( *static_cast<SvxRotateModeItem*>(pNew) );
-        delete pNew;
+        legacy::CntInt32::Create(*aRotateAngle, rStream, rVersions.nInt32Version);
+        legacy::SvxRotateMode::Create(*aRotateMode, rStream, rVersions.nRotateModeVersion);
     }
 
     if( 0 == rVersions.nNumFmtVersion )
@@ -373,60 +379,66 @@ bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersio
     //  adjust charset in font
     rtl_TextEncoding eSysSet = osl_getThreadTextEncoding();
     rtl_TextEncoding eSrcSet = rStream.GetStreamCharSet();
-    if( eSrcSet != eSysSet && aFont.GetCharSet() == eSrcSet )
-        aFont.SetCharSet(eSysSet);
+    if( eSrcSet != eSysSet && aFont->GetCharSet() == eSrcSet )
+        aFont->SetCharSet(eSysSet);
 
-    aStacked.SetValue( aOrientation.IsStacked() );
-    aRotateAngle.SetValue( aOrientation.GetRotation( aRotateAngle.GetValue() ) );
+    aStacked->SetValue( aOrientation.IsStacked() );
+    // aRotateAngle is contained twice ?!? see above...
+    aRotateAngle->SetValue( aOrientation.GetRotation( aRotateAngle->GetValue() ) );
 
     return (rStream.GetError() == ERRCODE_NONE);
 }
 
 bool ScAutoFormatDataField::Save( SvStream& rStream, sal_uInt16 fileVersion )
 {
-    SvxOrientationItem aOrientation( aRotateAngle.GetValue(), aStacked.GetValue(), 0 );
+    SvxOrientationItem aOrientation( aRotateAngle->GetValue(), aStacked->GetValue(), 0 );
 
-    aFont.Store         ( rStream, aFont.GetVersion( fileVersion ) );
-    aHeight.Store       ( rStream, aHeight.GetVersion( fileVersion ) );
-    aWeight.Store       ( rStream, aWeight.GetVersion( fileVersion ) );
-    aPosture.Store      ( rStream, aPosture.GetVersion( fileVersion ) );
+    legacy::SvxFont::Store(*aFont, rStream, legacy::SvxFont::GetVersion(fileVersion));
+    legacy::SvxFontHeight::Store(*aHeight, rStream, legacy::SvxFontHeight::GetVersion(fileVersion));
+    legacy::SvxWeight::Store(*aWeight, rStream, legacy::SvxWeight::GetVersion(fileVersion));
+    legacy::SvxPosture::Store(*aPosture, rStream, legacy::SvxPosture::GetVersion(fileVersion));
+
     // --- from 641 on: CJK and CTL font settings
-    aCJKFont.Store      ( rStream, aCJKFont.GetVersion( fileVersion ) );
-    aCJKHeight.Store    ( rStream, aCJKHeight.GetVersion( fileVersion ) );
-    aCJKWeight.Store    ( rStream, aCJKWeight.GetVersion( fileVersion ) );
-    aCJKPosture.Store   ( rStream, aCJKPosture.GetVersion( fileVersion ) );
-    aCTLFont.Store      ( rStream, aCTLFont.GetVersion( fileVersion ) );
-    aCTLHeight.Store    ( rStream, aCTLHeight.GetVersion( fileVersion ) );
-    aCTLWeight.Store    ( rStream, aCTLWeight.GetVersion( fileVersion ) );
-    aCTLPosture.Store   ( rStream, aCTLPosture.GetVersion( fileVersion ) );
+    legacy::SvxFont::Store(*aCJKFont, rStream, legacy::SvxFont::GetVersion(fileVersion));
+    legacy::SvxFontHeight::Store(*aCJKHeight, rStream, legacy::SvxFontHeight::GetVersion(fileVersion));
+    legacy::SvxWeight::Store(*aCJKWeight, rStream, legacy::SvxWeight::GetVersion(fileVersion));
+    legacy::SvxPosture::Store(*aCJKPosture, rStream, legacy::SvxPosture::GetVersion(fileVersion));
 
-    aUnderline.Store    ( rStream, aUnderline.GetVersion( fileVersion ) );
+    legacy::SvxFont::Store(*aCTLFont, rStream, legacy::SvxFont::GetVersion(fileVersion));
+    legacy::SvxFontHeight::Store(*aCTLHeight, rStream, legacy::SvxFontHeight::GetVersion(fileVersion));
+    legacy::SvxWeight::Store(*aCTLWeight, rStream, legacy::SvxWeight::GetVersion(fileVersion));
+    legacy::SvxPosture::Store(*aCTLPosture, rStream, legacy::SvxPosture::GetVersion(fileVersion));
+
+    legacy::SvxTextLine::Store(*aUnderline, rStream, legacy::SvxTextLine::GetVersion(fileVersion));
+
     // --- from DEV300/overline2 on: overline support
-    aOverline.Store     ( rStream, aOverline.GetVersion( fileVersion ) );
-    aCrossedOut.Store   ( rStream, aCrossedOut.GetVersion( fileVersion ) );
-    aContour.Store      ( rStream, aContour.GetVersion( fileVersion ) );
-    aShadowed.Store     ( rStream, aShadowed.GetVersion( fileVersion ) );
-    aColor.Store        ( rStream, aColor.GetVersion( fileVersion ) );
-    aBox.Store          ( rStream, aBox.GetVersion( fileVersion ) );
+    legacy::SvxTextLine::Store(*aOverline, rStream, legacy::SvxTextLine::GetVersion(fileVersion));
+    legacy::SvxCrossedOut::Store(*aCrossedOut, rStream, legacy::SvxCrossedOut::GetVersion(fileVersion));
+    legacy::SfxBool::Store(*aContour, rStream, legacy::SfxBool::GetVersion(fileVersion));
+    legacy::SfxBool::Store(*aShadowed, rStream, legacy::SfxBool::GetVersion(fileVersion));
+    legacy::SvxColor::Store(*aColor, rStream, legacy::SvxColor::GetVersion(fileVersion));
+    legacy::SvxBox::Store(*aBox, rStream, legacy::SvxBox::GetVersion(fileVersion));
 
     // --- from 680/dr14 on: diagonal frame lines
-    aTLBR.Store         ( rStream, aTLBR.GetVersion( fileVersion ) );
-    aBLTR.Store         ( rStream, aBLTR.GetVersion( fileVersion ) );
+    legacy::SvxLine::Store(*aTLBR, rStream, legacy::SvxLine::GetVersion(fileVersion));
+    legacy::SvxLine::Store(*aBLTR, rStream, legacy::SvxLine::GetVersion(fileVersion));
+    legacy::SvxBrush::Store(*aBackground, rStream, legacy::SvxBrush::GetVersion(fileVersion));
+    legacy::SvxAdjust::Store(*aAdjust, rStream, legacy::SvxAdjust::GetVersion(fileVersion));
 
-    aBackground.Store   ( rStream, aBackground.GetVersion( fileVersion ) );
-
-    aAdjust.Store       ( rStream, aAdjust.GetVersion( fileVersion ) );
     if (fileVersion >= SOFFICE_FILEFORMAT_50)
+    {
         WriteAutoFormatSwBlob( rStream, m_swFields );
+    }
 
-    aHorJustify.Store   ( rStream, aHorJustify.GetVersion( fileVersion ) );
-    aVerJustify.Store   ( rStream, aVerJustify.GetVersion( fileVersion ) );
-    aOrientation.Store  ( rStream, aOrientation.GetVersion( fileVersion ) );
-    aMargin.Store       ( rStream, aMargin.GetVersion( fileVersion ) );
-    aLinebreak.Store    ( rStream, aLinebreak.GetVersion( fileVersion ) );
+    legacy::SvxHorJustify::Store(*aHorJustify, rStream, legacy::SvxHorJustify::GetVersion(fileVersion));
+    legacy::SvxVerJustify::Store(*aVerJustify, rStream, legacy::SvxVerJustify::GetVersion(fileVersion));
+    legacy::SvxOrientation::Store(aOrientation, rStream, legacy::SvxOrientation::GetVersion(fileVersion));
+    legacy::SvxMargin::Store(*aMargin, rStream, legacy::SvxMargin::GetVersion(fileVersion));
+    legacy::SfxBool::Store(*aLinebreak, rStream, legacy::SfxBool::GetVersion(fileVersion));
+
     // rotation from SO5 on
-    aRotateAngle.Store  ( rStream, aRotateAngle.GetVersion( fileVersion ) );
-    aRotateMode.Store   ( rStream, aRotateMode.GetVersion( fileVersion ) );
+    legacy::CntInt32::Store(*aRotateAngle, rStream, legacy::CntInt32::GetVersion(fileVersion));
+    legacy::SvxRotateMode::Store(*aRotateMode, rStream, legacy::SvxRotateMode::GetVersion(fileVersion));
 
     // --- from 680/dr25 on: store strings as UTF-8
     aNumFormat.Save( rStream, RTL_TEXTENCODING_UTF8 );

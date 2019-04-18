@@ -29,7 +29,6 @@
 
 class IntlWrapper;
 class SfxItemPool;
-class SvStream;
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxOrientationItem: public SfxEnumItem<SvxCellOrientation>
 {
@@ -53,14 +52,6 @@ public:
     virtual sal_uInt16      GetValueCount() const override;
     static OUString         GetValueText( SvxCellOrientation nVal );
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const override;
-
-    SvxOrientationItem& operator=(const SvxOrientationItem& rOrientation)
-            {
-                SetValue( rOrientation.GetValue() );
-                return *this;
-            }
-    SvxOrientationItem(SvxOrientationItem const &) = default; // SfxPoolItem copy function dichotomy
 
     /** Returns sal_True, if the item represents STACKED state. */
     bool                    IsStacked() const;
@@ -88,8 +79,6 @@ public:
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*     Create( SvStream& rStream, sal_uInt16 nVer ) const override;
-    virtual SvStream&        Store( SvStream&, sal_uInt16 nItemVersion ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
@@ -102,16 +91,6 @@ public:
             void            SetRightMargin(sal_Int16 nRight);
             sal_Int16       GetBottomMargin() const {return nBottomMargin; }
             void            SetBottomMargin(sal_Int16 nBottom);
-
-    SvxMarginItem& operator=(const SvxMarginItem& rMargin)
-            {
-                nLeftMargin = rMargin.nLeftMargin;
-                nTopMargin = rMargin.nTopMargin;
-                nRightMargin = rMargin.nRightMargin;
-                nBottomMargin = rMargin.nBottomMargin;
-                return *this;
-            }
-    SvxMarginItem(SvxMarginItem const &) = default; // SfxPoolItem copy function dichotomy
 };
 
 #endif

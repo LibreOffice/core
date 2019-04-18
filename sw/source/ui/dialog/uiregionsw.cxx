@@ -146,12 +146,12 @@ class SectRepr
 private:
     SwSectionData           m_SectionData;
     SwFormatCol                m_Col;
-    SvxBrushItem            m_Brush;
+    std::shared_ptr<SvxBrushItem>            m_Brush;
     SwFormatFootnoteAtTextEnd        m_FootnoteNtAtEnd;
     SwFormatEndAtTextEnd        m_EndNtAtEnd;
     SwFormatNoBalancedColumns  m_Balance;
-    SvxFrameDirectionItem   m_FrameDirItem;
-    SvxLRSpaceItem          m_LRSpaceItem;
+    std::shared_ptr<SvxFrameDirectionItem>   m_FrameDirItem;
+    std::shared_ptr<SvxLRSpaceItem>          m_LRSpaceItem;
     const size_t            m_nArrPos;
     // shows, if maybe textcontent is in the region
     bool                    m_bContent  : 1;
@@ -164,12 +164,12 @@ public:
 
     SwSectionData &     GetSectionData()        { return m_SectionData; }
     SwFormatCol&               GetCol()            { return m_Col; }
-    SvxBrushItem&           GetBackground()     { return m_Brush; }
+    std::shared_ptr<SvxBrushItem>&           GetBackground()     { return m_Brush; }
     SwFormatFootnoteAtTextEnd&       GetFootnoteNtAtEnd()     { return m_FootnoteNtAtEnd; }
     SwFormatEndAtTextEnd&       GetEndNtAtEnd()     { return m_EndNtAtEnd; }
     SwFormatNoBalancedColumns& GetBalance()        { return m_Balance; }
-    SvxFrameDirectionItem&  GetFrameDir()         { return m_FrameDirItem; }
-    SvxLRSpaceItem&         GetLRSpace()        { return m_LRSpaceItem; }
+    std::shared_ptr<SvxFrameDirectionItem>&  GetFrameDir()         { return m_FrameDirItem; }
+    std::shared_ptr<SvxLRSpaceItem>&         GetLRSpace()        { return m_LRSpaceItem; }
 
     size_t              GetArrPos() const { return m_nArrPos; }
     OUString            GetFile() const;
@@ -191,9 +191,9 @@ public:
 
 SectRepr::SectRepr( size_t nPos, SwSection& rSect )
     : m_SectionData( rSect )
-    , m_Brush( RES_BACKGROUND )
-    , m_FrameDirItem( SvxFrameDirection::Environment, RES_FRAMEDIR )
-    , m_LRSpaceItem( RES_LR_SPACE )
+    , m_Brush(std::make_shared<SvxBrushItem>(RES_BACKGROUND))
+    , m_FrameDirItem(std::make_shared<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR))
+    , m_LRSpaceItem(std::make_shared<SvxLRSpaceItem>(RES_LR_SPACE))
     , m_nArrPos(nPos)
     , m_bContent(m_SectionData.GetLinkFileName().isEmpty())
     , m_bSelected(false)
@@ -206,8 +206,8 @@ SectRepr::SectRepr( size_t nPos, SwSection& rSect )
         m_FootnoteNtAtEnd = pFormat->GetFootnoteAtTextEnd();
         m_EndNtAtEnd = pFormat->GetEndAtTextEnd();
         m_Balance.SetValue(pFormat->GetBalancedColumns().GetValue());
-        m_FrameDirItem = pFormat->GetFrameDir();
-        m_LRSpaceItem = pFormat->GetLRSpace();
+        m_FrameDirItem.reset(static_cast<SvxFrameDirectionItem*>(pFormat->GetFrameDir().Clone()));
+        m_LRSpaceItem.reset(static_cast<SvxLRSpaceItem*>(pFormat->GetLRSpace().Clone()));
     }
 }
 
@@ -779,9 +779,9 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, weld::Button&, void)
                 if( pFormat->GetCol() != pRepr->GetCol() )
                     pSet->Put( pRepr->GetCol() );
 
-                SvxBrushItem aBrush(pFormat->makeBackgroundBrushItem(false));
-                if( aBrush != pRepr->GetBackground() )
-                    pSet->Put( pRepr->GetBackground() );
+                std::shared_ptr<SvxBrushItem> aBrush(pFormat->makeBackgroundBrushItem(false));
+                if( aBrush != pRepr->GetBackground() || (aBrush && pRepr->GetBackground() && *aBrush != *pRepr->GetBackground()))
+                    pSet->Put( *pRepr->GetBackground() );
 
                 if( pFormat->GetFootnoteAtTextEnd(false) != pRepr->GetFootnoteNtAtEnd() )
                     pSet->Put( pRepr->GetFootnoteNtAtEnd() );
@@ -792,11 +792,11 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, weld::Button&, void)
                 if( pFormat->GetBalancedColumns() != pRepr->GetBalance() )
                     pSet->Put( pRepr->GetBalance() );
 
-                if( pFormat->GetFrameDir() != pRepr->GetFrameDir() )
-                    pSet->Put( pRepr->GetFrameDir() );
+                if( pFormat->GetFrameDir() != *pRepr->GetFrameDir() )
+                    pSet->Put( *pRepr->GetFrameDir() );
 
-                if( pFormat->GetLRSpace() != pRepr->GetLRSpace())
-                    pSet->Put( pRepr->GetLRSpace());
+                if( pFormat->GetLRSpace() != *pRepr->GetLRSpace())
+                    pSet->Put( *pRepr->GetLRSpace());
 
                 rSh.UpdateSection( nNewPos, pRepr->GetSectionData(),
                                    pSet->Count() ? pSet.get() : nullptr );
@@ -1029,12 +1029,12 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, weld::Button&, void)
             SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
 
     aSet.Put( pSectRepr->GetCol() );
-    aSet.Put( pSectRepr->GetBackground() );
+    aSet.Put( *pSectRepr->GetBackground() );
     aSet.Put( pSectRepr->GetFootnoteNtAtEnd() );
     aSet.Put( pSectRepr->GetEndNtAtEnd() );
     aSet.Put( pSectRepr->GetBalance() );
-    aSet.Put( pSectRepr->GetFrameDir() );
-    aSet.Put( pSectRepr->GetLRSpace() );
+    aSet.Put( *pSectRepr->GetFrameDir() );
+    aSet.Put( *pSectRepr->GetLRSpace() );
 
     const SwSectionFormats& rDocFormats = rSh.GetDoc()->GetSections();
     SwSectionFormats aOrigArray(rDocFormats);
@@ -1085,7 +1085,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, weld::Button&, void)
                     if( SfxItemState::SET == eColState )
                         pRepr->GetCol() = *static_cast<const SwFormatCol*>(pColItem);
                     if( SfxItemState::SET == eBrushState )
-                        pRepr->GetBackground() = *static_cast<const SvxBrushItem*>(pBrushItem);
+                        pRepr->GetBackground().reset(static_cast<SvxBrushItem*>(pBrushItem->Clone()));
                     if( SfxItemState::SET == eFootnoteState )
                         pRepr->GetFootnoteNtAtEnd() = *static_cast<const SwFormatFootnoteAtTextEnd*>(pFootnoteItem);
                     if( SfxItemState::SET == eEndState )
@@ -1093,9 +1093,9 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, weld::Button&, void)
                     if( SfxItemState::SET == eBalanceState )
                         pRepr->GetBalance().SetValue(static_cast<const SwFormatNoBalancedColumns*>(pBalanceItem)->GetValue());
                     if( SfxItemState::SET == eFrameDirState )
-                        pRepr->GetFrameDir().SetValue(static_cast<const SvxFrameDirectionItem*>(pFrameDirItem)->GetValue());
+                        pRepr->GetFrameDir()->SetValue(static_cast<const SvxFrameDirectionItem*>(pFrameDirItem)->GetValue());
                     if( SfxItemState::SET == eLRState )
-                        pRepr->GetLRSpace() = *static_cast<const SvxLRSpaceItem*>(pLRSpaceItem);
+                        pRepr->GetLRSpace().reset(static_cast<SvxLRSpaceItem*>(pLRSpaceItem->Clone()));
                     return false;
                 });
             }

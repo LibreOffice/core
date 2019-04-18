@@ -42,7 +42,6 @@ public:
     static SfxPoolItem* CreateDefault();
 
     explicit inline SvxProtectItem( const sal_uInt16 nId  );
-    inline SvxProtectItem &operator=( const SvxProtectItem &rCpy );
     SvxProtectItem(SvxProtectItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
@@ -73,15 +72,6 @@ inline SvxProtectItem::SvxProtectItem( const sal_uInt16 nId )
 {
     bCntnt = bSize = bPos = false;
 }
-
-inline SvxProtectItem &SvxProtectItem::operator=( const SvxProtectItem &rCpy )
-{
-    bCntnt = rCpy.IsContentProtected();
-    bSize  = rCpy.IsSizeProtected();
-    bPos   = rCpy.IsPosProtected();
-    return *this;
-}
-
 
 #endif
 

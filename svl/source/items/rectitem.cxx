@@ -73,21 +73,6 @@ SfxPoolItem* SfxRectangleItem::Clone(SfxItemPool *) const
 }
 
 
-SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, sal_uInt16 ) const
-{
-    tools::Rectangle aStr;
-    ReadRectangle( rStream, aStr );
-    return new SfxRectangleItem(Which(), aStr);
-}
-
-
-SvStream& SfxRectangleItem::Store(SvStream &rStream, sal_uInt16 ) const
-{
-    WriteRectangle( rStream, aVal );
-    return rStream;
-}
-
-
 bool SfxRectangleItem::QueryValue( css::uno::Any& rVal,
                                    sal_uInt8 nMemberId) const
 {

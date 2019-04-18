@@ -47,10 +47,6 @@ public:
     virtual bool PutValue(const css::uno::Any& rVal,
                           sal_uInt8 nMemberId) override;
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override;
-
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override;
-
     virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 
     sal_uInt8 GetValue() const { return m_nValue; }
@@ -74,8 +70,6 @@ public:
         SfxPoolItem(which), m_nValue(nTheValue)
     {}
 
-    CntUInt16Item(sal_uInt16 which, SvStream & rStream);
-
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
@@ -89,10 +83,6 @@ public:
 
     virtual bool PutValue(const css::uno::Any& rVal,
                           sal_uInt8 nMemberId) override;
-
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override;
-
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 
@@ -117,8 +107,6 @@ public:
         SfxPoolItem(which), m_nValue(nTheValue)
     {}
 
-    CntInt32Item(sal_uInt16 which, SvStream & rStream);
-
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
@@ -132,10 +120,6 @@ public:
 
     virtual bool PutValue(const css::uno::Any& rVal,
                           sal_uInt8 nMemberId) override;
-
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override;
-
-    virtual SvStream & Store(SvStream &, sal_uInt16) const override;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 
@@ -160,8 +144,6 @@ public:
         SfxPoolItem(which), m_nValue(nTheValue)
     {}
 
-    CntUInt32Item(sal_uInt16 nWhich, SvStream & rStream);
-
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
@@ -175,10 +157,6 @@ public:
 
     virtual bool PutValue(const css::uno::Any& rVal,
                           sal_uInt8 nMemberId) override;
-
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override;
-
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 

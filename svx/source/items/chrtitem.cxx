@@ -162,13 +162,6 @@ SfxPoolItem* SvxChartKindErrorItem::Clone(SfxItemPool* /*pPool*/) const
 }
 
 
-sal_uInt16 SvxChartKindErrorItem::GetVersion (sal_uInt16 nFileFormatVersion) const
-{
-    return (nFileFormatVersion == SOFFICE_FILEFORMAT_31)
-               ? USHRT_MAX
-               : 0;
-}
-
 SvxChartIndicateItem::SvxChartIndicateItem(SvxChartIndicate eOrient,
                                                sal_uInt16 nId) :
     SfxEnumItem(nId, eOrient)
@@ -182,13 +175,6 @@ SfxPoolItem* SvxChartIndicateItem::Clone(SfxItemPool* /*pPool*/) const
 }
 
 
-sal_uInt16 SvxChartIndicateItem::GetVersion (sal_uInt16 nFileFormatVersion) const
-{
-    return (nFileFormatVersion == SOFFICE_FILEFORMAT_31)
-               ? USHRT_MAX
-               : 0;
-}
-
 SvxChartRegressItem::SvxChartRegressItem(SvxChartRegress eOrient,
                                                sal_uInt16 nId) :
     SfxEnumItem(nId, eOrient)
@@ -199,14 +185,6 @@ SvxChartRegressItem::SvxChartRegressItem(SvxChartRegress eOrient,
 SfxPoolItem* SvxChartRegressItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxChartRegressItem(*this);
-}
-
-
-sal_uInt16 SvxChartRegressItem::GetVersion (sal_uInt16 nFileFormatVersion) const
-{
-    return (nFileFormatVersion == SOFFICE_FILEFORMAT_31)
-               ? USHRT_MAX
-               : 0;
 }
 
 

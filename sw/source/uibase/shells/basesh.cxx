@@ -2202,7 +2202,7 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich(aIter.FirstWhich());
     SelectionType nSelType(rSh.GetSelectionType());
-    SvxBrushItem aBrushItem(RES_BACKGROUND);
+    std::shared_ptr<SvxBrushItem> aBrushItem(std::make_shared<SvxBrushItem>(RES_BACKGROUND));
 
     if( nWhich == SID_TABLE_CELL_BACKGROUND_COLOR )
     {
@@ -2234,15 +2234,18 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
             case SID_BACKGROUND_COLOR:
             case SID_TABLE_CELL_BACKGROUND_COLOR:
             {
-                SvxColorItem aColorItem(aBrushItem.GetColor(),SID_BACKGROUND_COLOR);
+                SvxColorItem aColorItem(aBrushItem->GetColor(),SID_BACKGROUND_COLOR);
                 rSet.Put(aColorItem);
                 break;
             }
             case SID_ATTR_BRUSH:
             case RES_BACKGROUND:
             {
-                std::unique_ptr<SfxPoolItem> pNewItem(aBrushItem.CloneSetWhich(GetPool().GetWhich(nWhich)));
-                rSet.Put(*pNewItem);
+                // if this was intended to have a independent copy of the Item to be set
+                // this is not needed due to the ItemSet/Pool cloning Items which get set anyways.
+                // Keeping code as reference - it may have had other reasons I do notz see (?!?)
+                // std::unique_ptr<SfxPoolItem> pNewItem(aBrushItem.CloneSetWhich(GetPool().GetWhich(nWhich)));
+                rSet.Put(*aBrushItem);
                 break;
             }
         }
@@ -2263,7 +2266,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         return;
     }
 
-    SvxBrushItem aBrushItem(RES_BACKGROUND);
+    std::shared_ptr<SvxBrushItem> aBrushItem(std::make_shared<SvxBrushItem>(RES_BACKGROUND));
 
     if ( nSlot == SID_TABLE_CELL_BACKGROUND_COLOR )
     {
@@ -2293,18 +2296,18 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         case SID_BACKGROUND_COLOR:
         case SID_TABLE_CELL_BACKGROUND_COLOR:
         {
-            aBrushItem.SetGraphicPos(GPOS_NONE);
+            aBrushItem->SetGraphicPos(GPOS_NONE);
 
             if(pArgs)
             {
                 const SvxColorItem& rNewColorItem = pArgs->Get(nSlot == SID_BACKGROUND_COLOR ? SID_BACKGROUND_COLOR : SID_TABLE_CELL_BACKGROUND_COLOR );
                 const Color& rNewColor = rNewColorItem.GetValue();
-                aBrushItem.SetColor(rNewColor);
+                aBrushItem->SetColor(rNewColor);
                 GetView().GetViewFrame()->GetBindings().SetState(rNewColorItem);
             }
             else
             {
-                aBrushItem.SetColor(COL_TRANSPARENT);
+                aBrushItem->SetColor(COL_TRANSPARENT);
                 rReq.AppendItem(SvxColorItem(COL_TRANSPARENT,nSlot));
             }
             break;
@@ -2314,8 +2317,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         case RES_BACKGROUND:
         {
             assert(pArgs && "only SID_BACKGROUND_COLOR can have !pArgs, checked at entry");
-            const SvxBrushItem& rNewBrushItem = static_cast<const SvxBrushItem&>(pArgs->Get(GetPool().GetWhich(nSlot)));
-            aBrushItem = rNewBrushItem;
+            aBrushItem.reset(static_cast<SvxBrushItem*>(pArgs->Get(GetPool().GetWhich(nSlot)).Clone()));
             break;
         }
         default:
@@ -2328,7 +2330,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
 
     if ( nSlot == SID_TABLE_CELL_BACKGROUND_COLOR )
     {
-        rSh.SetBoxBackground( aBrushItem );
+        rSh.SetBoxBackground( *aBrushItem );
     }
     else
     {
@@ -2336,7 +2338,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         SfxItemSet aCoreSet(GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
         aCoreSet.SetParent(&GetView().GetDocShell()->GetDoc()->GetDfltFrameFormat()->GetAttrSet());
-        setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, aCoreSet);
+        setSvxBrushItemAsFillAttributesToTargetSet(*aBrushItem, aCoreSet);
 
         if((SelectionType::Frame & nSelType) || (SelectionType::Graphic & nSelType))
         {
@@ -2526,10 +2528,10 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             if ( rSh.IsTableMode() )
             {
                 // Get background attributes of the table and put it in the set
-                SvxBrushItem aBrush(RES_BACKGROUND);
+                std::shared_ptr<SvxBrushItem> aBrush;
                 rSh.GetBoxBackground( aBrush );
                 pDlg.disposeAndReset(pFact->CreateSwBackgroundDialog(pMDI, aSet));
-                aSet.Put( aBrush );
+                aSet.Put( *aBrush );
                 if ( pDlg->Execute() == RET_OK )
                 {
 

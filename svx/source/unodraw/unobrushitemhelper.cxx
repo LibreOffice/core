@@ -172,7 +172,7 @@ static sal_uInt16 getTransparenceForSvxBrushItem(const SfxItemSet& rSourceSet, b
     return nFillTransparence;
 }
 
-static SvxBrushItem getSvxBrushItemForSolid(const SfxItemSet& rSourceSet, bool bSearchInParents, sal_uInt16 nBackgroundID)
+static std::shared_ptr<SvxBrushItem> getSvxBrushItemForSolid(const SfxItemSet& rSourceSet, bool bSearchInParents, sal_uInt16 nBackgroundID)
 {
     Color aFillColor(rSourceSet.Get(XATTR_FILLCOLOR, bSearchInParents).GetColorValue());
 
@@ -189,10 +189,10 @@ static SvxBrushItem getSvxBrushItemForSolid(const SfxItemSet& rSourceSet, bool b
         aFillColor.SetTransparency(aTargetTrans);
     }
 
-    return SvxBrushItem(aFillColor, nBackgroundID);
+    return std::shared_ptr<SvxBrushItem>(new SvxBrushItem(aFillColor, nBackgroundID));
 }
 
-SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt16 nBackgroundID, bool bSearchInParents, bool bXMLImportHack)
+std::shared_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt16 nBackgroundID, bool bSearchInParents, bool bXMLImportHack)
 {
     const XFillStyleItem* pXFillStyleItem(rSourceSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE, bSearchInParents));
 
@@ -207,10 +207,10 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
 
         aFillColor.SetTransparency(0xff);
 
-        return SvxBrushItem(aFillColor, nBackgroundID);
+        return std::shared_ptr<SvxBrushItem>(new SvxBrushItem(aFillColor, nBackgroundID));
     }
 
-    SvxBrushItem aRetval(nBackgroundID);
+    std::shared_ptr<SvxBrushItem> aRetval(new SvxBrushItem(nBackgroundID));
 
     switch(pXFillStyleItem->GetValue())
     {
@@ -249,7 +249,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
                 aMixedColor.SetTransparency(aTargetTrans);
             }
 
-            aRetval = SvxBrushItem(aMixedColor, nBackgroundID);
+            aRetval = std::shared_ptr<SvxBrushItem>(new SvxBrushItem(aMixedColor, nBackgroundID));
             break;
         }
         case drawing::FillStyle_HATCH:
@@ -281,7 +281,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
                 const sal_uInt8 aTargetTrans(std::min(sal_uInt8(0xfe), static_cast< sal_uInt8 >((nFillTransparence * 254) / 100)));
 
                 aHatchColor.SetTransparency(aTargetTrans);
-                aRetval = SvxBrushItem(aHatchColor, nBackgroundID);
+                aRetval = std::shared_ptr<SvxBrushItem>(new SvxBrushItem(aHatchColor, nBackgroundID));
             }
 
             break;
@@ -324,7 +324,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
             }
 
             // create with given graphic and position
-            aRetval = SvxBrushItem(aGraphic, aSvxGraphicPosition, nBackgroundID);
+            aRetval = std::shared_ptr<SvxBrushItem>(new SvxBrushItem(aGraphic, aSvxGraphicPosition, nBackgroundID));
 
             // get evtl. mixed transparence
             const sal_uInt16 nFillTransparence(getTransparenceForSvxBrushItem(rSourceSet, bSearchInParents));
@@ -332,7 +332,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
             if(0 != nFillTransparence)
             {
                 // #i125189# nFillTransparence is in range [0..100] and needs to be in [0..100] signed
-                aRetval.setGraphicTransparency(static_cast< sal_Int8 >(nFillTransparence));
+                aRetval->setGraphicTransparency(static_cast< sal_Int8 >(nFillTransparence));
             }
 
             break;

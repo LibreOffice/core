@@ -37,13 +37,10 @@ public:
 
     inline SvxFormatKeepItem( const bool bKeep /*= false*/,
                            const sal_uInt16 _nWhich  );
-    inline SvxFormatKeepItem& operator=( const SvxFormatKeepItem& rSplit );
     SvxFormatKeepItem(SvxFormatKeepItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 ) const override;
-    virtual SvStream&       Store( SvStream& , sal_uInt16 nItemVersion ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
@@ -54,12 +51,6 @@ public:
 inline SvxFormatKeepItem::SvxFormatKeepItem( const bool bKeep, const sal_uInt16 _nWhich ) :
     SfxBoolItem( _nWhich, bKeep )
 {}
-
-inline SvxFormatKeepItem& SvxFormatKeepItem::operator=( const SvxFormatKeepItem& rKeep )
-{
-    SetValue( rKeep.GetValue() );
-    return *this;
-}
 
 #endif
 

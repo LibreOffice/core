@@ -905,21 +905,26 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     rSh.GetCurAttr( aSet );
     SvtScriptType nScript = rSh.GetScriptType();
 
-    SvxFontItem aFont( RES_CHRATR_FONT );
+    std::shared_ptr<SvxFontItem> aFont(std::make_shared<SvxFontItem>(RES_CHRATR_FONT));
     {
         SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
         aSetItem.GetItemSet().Put( aSet, false );
         const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
         if( pI )
-            aFont = *static_cast<const SvxFontItem*>(pI);
+        {
+            aFont.reset(static_cast<SvxFontItem*>(pI->Clone()));
+        }
         else
-            aFont = static_cast<const SvxFontItem&>(
+        {
+            aFont.reset(static_cast<SvxFontItem*>(
                         aSet.Get(
                             GetWhichOfScript(
                                 RES_CHRATR_FONT,
-                                SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) )));
+                                SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) )).Clone()));
+        }
+
         if (aFontName.isEmpty())
-            aFontName = aFont.GetFamilyName();
+            aFontName = aFont->GetFamilyName();
     }
 
     vcl::Font aNewFont(aFontName, Size(1,1)); // Size only because CTOR.
@@ -934,7 +939,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         if( aFontName.isEmpty() && !sSymbolFont.isEmpty() )
             aAllSet.Put( SfxStringItem( SID_FONT_NAME, sSymbolFont ) );
         else
-            aAllSet.Put( SfxStringItem( SID_FONT_NAME, aFont.GetFamilyName() ) );
+            aAllSet.Put( SfxStringItem( SID_FONT_NAME, aFont->GetFamilyName() ) );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(GetView().GetFrameWeld(), aAllSet, true));
@@ -961,11 +966,15 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             aSetItem.GetItemSet().Put( aSet, false );
             const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
             if( pI )
-                aFont = *static_cast<const SvxFontItem*>(pI);
+            {
+                aFont.reset(static_cast<SvxFontItem*>(pI->Clone()));
+            }
             else
-                aFont = static_cast<const SvxFontItem&>(aSet.Get( GetWhichOfScript(
+            {
+                aFont.reset(static_cast<SvxFontItem*>(aSet.Get( GetWhichOfScript(
                             RES_CHRATR_FONT,
-                            SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) )));
+                            SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) )).Clone()));
+            }
         }
 
         // Insert character.
@@ -974,11 +983,11 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         // #108876# a font attribute has to be set always due to a guessed script type
         if( !aNewFont.GetFamilyName().isEmpty() )
         {
-            SvxFontItem aNewFontItem( aFont );
-            aNewFontItem.SetFamilyName( aNewFont.GetFamilyName() );
-            aNewFontItem.SetFamily(  aNewFont.GetFamilyType());
-            aNewFontItem.SetPitch(   aNewFont.GetPitch());
-            aNewFontItem.SetCharSet( aNewFont.GetCharSet() );
+            std::shared_ptr<SvxFontItem> aNewFontItem(static_cast<SvxFontItem*>(aFont->Clone()));
+            aNewFontItem->SetFamilyName( aNewFont.GetFamilyName() );
+            aNewFontItem->SetFamily(  aNewFont.GetFamilyType());
+            aNewFontItem->SetPitch(   aNewFont.GetPitch());
+            aNewFontItem->SetCharSet( aNewFont.GetCharSet() );
 
             SfxItemSet aRestoreSet( GetPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT,
                                                RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
@@ -988,20 +997,20 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             if( SvtScriptType::LATIN & nScript )
             {
                 aRestoreSet.Put( aSet.Get( RES_CHRATR_FONT ) );
-                aNewFontItem.SetWhich(RES_CHRATR_FONT);
-                aSet.Put( aNewFontItem );
+                aNewFontItem->SetWhich(RES_CHRATR_FONT);
+                aSet.Put( *aNewFontItem );
             }
             if( SvtScriptType::ASIAN & nScript )
             {
                 aRestoreSet.Put( aSet.Get( RES_CHRATR_CJK_FONT ) );
-                aNewFontItem.SetWhich(RES_CHRATR_CJK_FONT);
-                aSet.Put( aNewFontItem );
+                aNewFontItem->SetWhich(RES_CHRATR_CJK_FONT);
+                aSet.Put( *aNewFontItem );
             }
             if( SvtScriptType::COMPLEX & nScript )
             {
                 aRestoreSet.Put( aSet.Get( RES_CHRATR_CTL_FONT ) );
-                aNewFontItem.SetWhich(RES_CHRATR_CTL_FONT);
-                aSet.Put( aNewFontItem );
+                aNewFontItem->SetWhich(RES_CHRATR_CTL_FONT);
+                aSet.Put( *aNewFontItem );
             }
 
             rSh.SetMark();
@@ -1020,7 +1029,10 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             rSh.ClearMark();
 
             rSh.UpdateAttr();
-            aFont = aNewFontItem;
+
+            // Why was this done? aFont is not used anymore below, we are not
+            // in a loop and it's a local variable...?
+            // aFont = aNewFontItem;
         }
 
         rSh.EndAllAction();

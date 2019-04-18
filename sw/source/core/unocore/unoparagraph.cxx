@@ -450,9 +450,9 @@ void SwXParagraph::Impl::GetSinglePropertyValue_Impl(
     {
         case RES_BACKGROUND:
         {
-            const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
+            const std::shared_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
 
-            if(!aOriginalBrushItem.QueryValue(rAny, rEntry.nMemberId))
+            if(!aOriginalBrushItem->QueryValue(rAny, rEntry.nMemberId))
             {
                 OSL_ENSURE(false, "Error getting attribute from RES_BACKGROUND (!)");
             }

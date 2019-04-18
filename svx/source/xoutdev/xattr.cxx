@@ -1870,11 +1870,6 @@ SfxPoolItem* XSecondaryFillColorItem::Clone(SfxItemPool* /*pPool*/) const
     return new XSecondaryFillColorItem(*this);
 }
 
-sal_uInt16 XSecondaryFillColorItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/ ) const
-{
-    return 2;
-}
-
 bool XSecondaryFillColorItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
@@ -1980,14 +1975,6 @@ const XGradient& XFillGradientItem::GetGradientValue() const // GetValue -> GetG
     // ToDo: This should fail. We never called this code with a table so this should always
     // have failed. Thus, I'm thinking that XFillGradientItem can't be an Index.
     return aGradient;
-}
-
-sal_uInt16 XFillGradientItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
-{
-    // !!! this version number also represents the version number of superclasses
-    // !!! (e.g. XFillFloatTransparenceItem); if you make any changes here,
-    // !!! the superclass is also affected
-    return 1;
 }
 
 bool XFillGradientItem::GetPresentation
@@ -2281,13 +2268,6 @@ bool XFillFloatTransparenceItem::operator==( const SfxPoolItem& rItem ) const
 SfxPoolItem* XFillFloatTransparenceItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillFloatTransparenceItem( *this );
-}
-
-sal_uInt16 XFillFloatTransparenceItem::GetVersion( sal_uInt16 nFileFormatVersion ) const
-{
-    // !!! if version number of this object must be increased, please   !!!
-    // !!! increase version number of base class XFillGradientItem      !!!
-    return XFillGradientItem::GetVersion( nFileFormatVersion );
 }
 
 bool XFillFloatTransparenceItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const

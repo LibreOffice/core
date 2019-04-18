@@ -784,9 +784,9 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 pNewSet->Put( pOldFormat->GetAnchor() );
 
                 // The new one should be changeable in its height.
-                SwFormatFrameSize aFrameSize( pOldFormat->GetFrameSize() );
-                aFrameSize.SetHeightSizeType( ATT_MIN_SIZE );
-                pNewSet->Put( aFrameSize );
+                std::shared_ptr<SwFormatFrameSize> aFrameSize(static_cast<SwFormatFrameSize*>(pOldFormat->GetFrameSize().Clone()));
+                aFrameSize->SetHeightSizeType( ATT_MIN_SIZE );
+                pNewSet->Put( *aFrameSize );
 
                 SwStartNode* pSttNd = rDoc.GetNodes().MakeTextSection(
                             SwNodeIndex( rDoc.GetNodes().GetEndOfAutotext() ),
@@ -833,7 +833,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 pNewSet->Put( SwFormatVertOrient( 0, eVert ) );
                 pNewSet->Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER ) );
 
-                aFrameSize = pOldFormat->GetFrameSize();
+                aFrameSize.reset(static_cast<SwFormatFrameSize*>(pOldFormat->GetFrameSize().Clone()));
 
                 SwOLENode* pOleNode = rDoc.GetNodes()[nNdIdx + 1]->GetOLENode();
                 bool isMath = false;
@@ -846,9 +846,9 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                         isMath = ( SotExchange::IsMath( aCLSID ) != 0 );
                     }
                 }
-                aFrameSize.SetWidthPercent(isMath ? 0 : 100);
-                aFrameSize.SetHeightPercent(SwFormatFrameSize::SYNCED);
-                pNewSet->Put( aFrameSize );
+                aFrameSize->SetWidthPercent(isMath ? 0 : 100);
+                aFrameSize->SetHeightPercent(SwFormatFrameSize::SYNCED);
+                pNewSet->Put( *aFrameSize );
 
                 // Hard-set the attributes, because they could come from the Template
                 // and then size calculations could not be correct anymore.

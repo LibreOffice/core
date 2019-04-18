@@ -1230,7 +1230,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                         else
                         {
                             std::unique_ptr<SfxPoolItem> pNew(rX.GetItem()->Clone());
-                            ConvertItem( *pNew, eSourceUnit, eDestUnit );
+                            ConvertItem( pNew, eSourceUnit, eDestUnit );
                             pAttr = MakeCharAttrib( aEditDoc.GetItemPool(), *pNew, rX.GetStart()+nStartPos, rX.GetEnd()+nStartPos );
                         }
                         DBG_ASSERT( pAttr->GetEnd() <= aPaM.GetNode()->Len(), "InsertBinTextObject: Attribute does not fit! (1)" );

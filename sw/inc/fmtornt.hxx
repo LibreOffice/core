@@ -38,7 +38,6 @@ class SW_DLLPUBLIC SwFormatVertOrient: public SfxPoolItem
 public:
     SwFormatVertOrient( SwTwips nY = 0, sal_Int16 eVert = css::text::VertOrientation::NONE,
                      sal_Int16 eRel = css::text::RelOrientation::PRINT_AREA );
-    inline SwFormatVertOrient &operator=( const SwFormatVertOrient &rCpy );
     SwFormatVertOrient(SwFormatVertOrient const &) = default; // SfxPoolItem copy function dichotomy
 
     /// "Pure virtual methods" of SfxPoolItem.
@@ -51,9 +50,6 @@ public:
                                     const IntlWrapper& rIntl ) const override;
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-
-    SvStream& Store(SvStream &rStream, sal_uInt16 itemVersion) const override;
-    SfxPoolItem* Create(SvStream &rStream, sal_uInt16 itemVersion) const override;
 
     sal_Int16 GetVertOrient() const { return m_eOrient; }
     sal_Int16 GetRelationOrient() const { return m_eRelation; }
@@ -75,7 +71,6 @@ class SW_DLLPUBLIC SwFormatHoriOrient: public SfxPoolItem
 public:
     SwFormatHoriOrient( SwTwips nX = 0, sal_Int16 eHori = css::text::HoriOrientation::NONE,
         sal_Int16 eRel = css::text::RelOrientation::PRINT_AREA, bool bPos = false );
-    inline SwFormatHoriOrient &operator=( const SwFormatHoriOrient &rCpy );
     SwFormatHoriOrient(SwFormatHoriOrient const &) = default; // SfxPoolItem copy function dichotomy
 
     /// "Pure virtual methods" of SfxPoolItem.
@@ -102,22 +97,6 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
-
-inline SwFormatVertOrient &SwFormatVertOrient::operator=( const SwFormatVertOrient &rCpy )
-{
-    m_nYPos = rCpy.GetPos();
-    m_eOrient = rCpy.GetVertOrient();
-    m_eRelation = rCpy.GetRelationOrient();
-    return *this;
-}
-inline SwFormatHoriOrient &SwFormatHoriOrient::operator=( const SwFormatHoriOrient &rCpy )
-{
-    m_nXPos = rCpy.GetPos();
-    m_eOrient = rCpy.GetHoriOrient();
-    m_eRelation = rCpy.GetRelationOrient();
-    m_bPosToggle = rCpy.IsPosToggle();
-    return *this;
-}
 
 inline const SwFormatVertOrient &SwAttrSet::GetVertOrient(bool bInP) const
     { return Get( RES_VERT_ORIENT,bInP); }

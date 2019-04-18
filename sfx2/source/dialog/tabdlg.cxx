@@ -103,12 +103,6 @@ SfxPoolItem* SfxTabDialogItem::Clone(SfxItemPool* pToPool) const
     return new SfxTabDialogItem( *this, pToPool );
 }
 
-SfxPoolItem* SfxTabDialogItem::Create(SvStream& /*rStream*/, sal_uInt16 /*nVersion*/) const
-{
-    OSL_FAIL( "Use it only in UI!" );
-    return nullptr;
-}
-
 typedef std::vector<Data_Impl*> SfxTabDlgData_Impl;
 
 struct TabDlg_Impl

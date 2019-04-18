@@ -391,7 +391,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             pTableView->GetAttribs().Get(nFontWhich));
 
                 OUString aString;
-                SvxFontItem aNewItem( EE_CHAR_FONTINFO );
+                std::shared_ptr<SvxFontItem> aNewItem(std::make_shared<SvxFontItem>(EE_CHAR_FONTINFO));
 
                 const SfxItemSet *pArgs = rReq.GetArgs();
                 const SfxPoolItem* pItem = nullptr;
@@ -408,12 +408,15 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     {
                         const OUString& aFontName(pFontItem->GetValue());
                         vcl::Font aFont(aFontName, Size(1,1)); // Size just because CTOR
-                        aNewItem = SvxFontItem( aFont.GetFamilyType(), aFont.GetFamilyName(),
-                                    aFont.GetStyleName(), aFont.GetPitch(),
-                                    aFont.GetCharSet(), ATTR_FONT  );
+                        aNewItem = std::make_shared<SvxFontItem>(
+                            aFont.GetFamilyType(), aFont.GetFamilyName(),
+                            aFont.GetStyleName(), aFont.GetPitch(),
+                            aFont.GetCharSet(), ATTR_FONT);
                     }
                     else
-                        aNewItem = rItem;
+                    {
+                        aNewItem.reset(static_cast<SvxFontItem*>(rItem.Clone()));
+                    }
                 }
                 else
                 {
@@ -436,7 +439,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                     SfxItemSet aSet( pTableView->GetEmptyItemSet() );
                     SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, GetPool() );
-                    aSetItem.PutItemForScriptType( nSetScript, aNewItem );
+                    aSetItem.PutItemForScriptType( nSetScript, *aNewItem );
                     aSet.Put( aSetItem.GetItemSet(), false );
 
                     // SetAttribs on the View selects a word, when nothing is selected
@@ -446,7 +449,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         pTopView->InsertText(aString);
 
                     SfxStringItem aStringItem( SID_CHARMAP, aString );
-                    SfxStringItem aFontItem( SID_ATTR_SPECIALCHAR, aNewItem.GetFamilyName() );
+                    SfxStringItem aFontItem( SID_ATTR_SPECIALCHAR, aNewItem->GetFamilyName() );
                     rReq.AppendItem( aFontItem );
                     rReq.AppendItem( aStringItem );
                     rReq.Done();

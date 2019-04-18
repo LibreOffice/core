@@ -36,8 +36,6 @@ class EDITENG_DLLPUBLIC SvxOpaqueItem : public SfxBoolItem
 {
 public:
     explicit SvxOpaqueItem( const sal_uInt16 nId , const bool bOpa = true );
-    inline SvxOpaqueItem &operator=( const SvxOpaqueItem &rCpy );
-    SvxOpaqueItem(SvxOpaqueItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -51,13 +49,6 @@ public:
 inline SvxOpaqueItem::SvxOpaqueItem( const sal_uInt16 nId, const bool bOpa )
     : SfxBoolItem( nId, bOpa )
 {}
-
-inline SvxOpaqueItem &SvxOpaqueItem::operator=( const SvxOpaqueItem &rCpy )
-{
-    SetValue( rCpy.GetValue() );
-    return *this;
-}
-
 
 #endif
 

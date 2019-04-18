@@ -1265,48 +1265,6 @@ void SwFormatSurround::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-SvStream& SwFormatVertOrient::Store(SvStream &rStream, sal_uInt16 /*version*/) const
-{
-#if SAL_TYPES_SIZEOFLONG == 8
-    rStream.WriteInt64(m_nYPos);
-#else
-    rStream.WriteInt32(m_nYPos);
-#endif
-    rStream.WriteInt16( m_eOrient ).WriteInt16( m_eRelation );
-    return rStream;
-}
-
-SfxPoolItem* SwFormatVertOrient::Create(SvStream &rStream, sal_uInt16 nVersionAbusedAsSize) const
-{
-    SwTwips yPos(0);
-    sal_Int16 orient(0);
-    sal_Int16 relation(0);
-    switch (nVersionAbusedAsSize)
-    {
-        // compatibility hack for Table Auto Format: SwTwips is "long" :(
-        // (this means that the file format is platform dependent)
-    case 14:
-        {
-            sal_Int64 n(0);
-            rStream.ReadInt64(n);
-            yPos = n;
-        }
-        break;
-    case 10:
-        {
-            sal_Int32 n(0);
-            rStream.ReadInt32(n);
-            yPos = n;
-        }
-        break;
-    default:
-        SAL_WARN("sw.core", "SwFormatVertOrient::Create: unknown size");
-    }
-    rStream.ReadInt16( orient ).ReadInt16( relation );
-
-    return new SwFormatVertOrient(yPos, orient, relation);
-}
-
 // Partially implemented inline in hxx
 SwFormatVertOrient::SwFormatVertOrient( SwTwips nY, sal_Int16 eVert,
                                   sal_Int16 eRel )
@@ -3210,16 +3168,17 @@ bool SwFlyFrameFormat::IsBackgroundTransparent() const
     // NOTE: If background color is "no fill"/"auto fill" (COL_TRANSPARENT)
     //     and there is no background graphic, it "inherites" the background
     //     from its anchor.
-    SvxBrushItem aBackground(makeBackgroundBrushItem());
-    if ( (aBackground.GetColor().GetTransparency() != 0) &&
-         (aBackground.GetColor() != COL_TRANSPARENT)
+    std::shared_ptr<SvxBrushItem> aBackground(makeBackgroundBrushItem());
+    if ( (aBackground) &&
+         (aBackground->GetColor().GetTransparency() != 0) &&
+         (aBackground->GetColor() != COL_TRANSPARENT)
        )
     {
         return true;
     }
     else
     {
-        const GraphicObject *pTmpGrf = aBackground.GetGraphicObject();
+        const GraphicObject *pTmpGrf = aBackground->GetGraphicObject();
         if ( pTmpGrf &&
              (pTmpGrf->GetAttr().GetTransparency() != 0)
            )
@@ -3249,9 +3208,10 @@ bool SwFlyFrameFormat::IsBackgroundBrushInherited() const
     }
     else
     {
-        SvxBrushItem aBackground(makeBackgroundBrushItem());
-        if ( (aBackground.GetColor() == COL_TRANSPARENT) &&
-             !(aBackground.GetGraphicObject()) )
+        std::shared_ptr<SvxBrushItem> aBackground(makeBackgroundBrushItem());
+        if ( (aBackground) &&
+             (aBackground->GetColor() == COL_TRANSPARENT) &&
+             !(aBackground->GetGraphicObject()) )
         {
             return true;
         }

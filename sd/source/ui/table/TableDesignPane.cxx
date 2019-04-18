@@ -429,13 +429,13 @@ struct CellInfo
 {
     Color maCellColor;
     Color maTextColor;
-    SvxBoxItem maBorder;
+    std::shared_ptr<SvxBoxItem> maBorder;
 
     explicit CellInfo( const Reference< XStyle >& xStyle );
 };
 
 CellInfo::CellInfo( const Reference< XStyle >& xStyle )
-: maBorder(SDRATTR_TABLE_BORDER)
+: maBorder(std::make_shared<SvxBoxItem>(SDRATTR_TABLE_BORDER))
 {
     SfxStyleSheet* pStyleSheet = SfxUnoStyleSheet::getUnoStyleSheet( xStyle );
     if( !pStyleSheet )
@@ -457,7 +457,7 @@ CellInfo::CellInfo( const Reference< XStyle >& xStyle )
     // get border
     const SvxBoxItem* pBoxItem = rSet.GetItem( SDRATTR_TABLE_BORDER );
     if( pBoxItem )
-        maBorder = *pBoxItem;
+        maBorder.reset(static_cast<SvxBoxItem*>(pBoxItem->Clone()));
 }
 
 typedef std::vector< std::shared_ptr< CellInfo > > CellInfoVector;
@@ -659,7 +659,7 @@ static const BitmapEx CreateDesignPreview( const Reference< XIndexAccess >& xTab
                 // draw top border
                 for( SvxBoxItemLine nLine : o3tl::enumrange<SvxBoxItemLine>() )
                 {
-                    const ::editeng::SvxBorderLine* pBorderLine = xCellInfo->maBorder.GetLine(nLine);
+                    const ::editeng::SvxBorderLine* pBorderLine = xCellInfo->maBorder->GetLine(nLine);
                     if( !pBorderLine || ((pBorderLine->GetOutWidth() == 0) && (pBorderLine->GetInWidth()==0)) )
                         continue;
 
@@ -671,7 +671,7 @@ static const BitmapEx CreateDesignPreview( const Reference< XIndexAccess >& xTab
                         std::shared_ptr< CellInfo > xBorderInfo(aMatrix[(nBorderCol * nPreviewColumns) + nBorderRow]);
                         if( xBorderInfo.get() )
                         {
-                            const ::editeng::SvxBorderLine* pBorderLine2 = xBorderInfo->maBorder.GetLine(static_cast<SvxBoxItemLine>(static_cast<int>(nLine)^1));
+                            const ::editeng::SvxBorderLine* pBorderLine2 = xBorderInfo->maBorder->GetLine(static_cast<SvxBoxItemLine>(static_cast<int>(nLine)^1));
                             if( pBorderLine2 && pBorderLine2->HasPriority(*pBorderLine) )
                                 continue; // other border line wins
                         }

@@ -35,26 +35,10 @@ SfxPoolItem* SfxByteItem::CreateDefault()
     return new SfxByteItem();
 };
 
-// virtual
-SfxPoolItem * SfxByteItem::Create(SvStream & rStream, sal_uInt16) const
-{
-    short nValue = 0;
-    rStream.ReadInt16( nValue );
-    return new SfxByteItem(Which(), sal_uInt8(nValue));
-}
-
 SfxPoolItem* SfxInt16Item::CreateDefault()
 {
     return new SfxInt16Item();
 };
-
-SfxInt16Item::SfxInt16Item(sal_uInt16 which, SvStream & rStream):
-    SfxPoolItem(which)
-{
-    short nTheValue = 0;
-    rStream.ReadInt16( nTheValue );
-    m_nValue = nTheValue;
-}
 
 // virtual
 bool SfxInt16Item::operator ==(const SfxPoolItem & rItem) const
@@ -95,19 +79,6 @@ bool SfxInt16Item::PutValue(const css::uno::Any& rVal, sal_uInt8 )
 
     OSL_FAIL( "SfxInt16Item::PutValue - Wrong type!" );
     return false;
-}
-
-// virtual
-SfxPoolItem * SfxInt16Item::Create(SvStream & rStream, sal_uInt16) const
-{
-    return new SfxInt16Item(Which(), rStream);
-}
-
-// virtual
-SvStream & SfxInt16Item::Store(SvStream & rStream, sal_uInt16) const
-{
-    rStream.WriteInt16( short(m_nValue) );
-    return rStream;
 }
 
 SfxPoolItem * SfxInt16Item::Clone(SfxItemPool *) const

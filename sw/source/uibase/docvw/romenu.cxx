@@ -106,7 +106,7 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
     , m_nReadonlyFullscreen(m_xMenu->GetItemId("fullscreen"))
     , m_nReadonlyCopy(m_xMenu->GetItemId("copy"))
     , m_rView(rV)
-    , m_aBrushItem(RES_BACKGROUND)
+    , m_aBrushItem(std::make_shared<SvxBrushItem>(RES_BACKGROUND))
 {
     m_bGrfToGalleryAsLnk = SW_MOD()->GetModuleConfig()->IsGrfToGalleryAsLnk();
     SwWrtShell &rSh = m_rView.GetWrtShell();
@@ -159,10 +159,10 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
     bool bEnableBackGallery = false,
          bEnableBack = false;
 
-    if ( GPOS_NONE != m_aBrushItem.GetGraphicPos() )
+    if ( m_aBrushItem && GPOS_NONE != m_aBrushItem->GetGraphicPos() )
     {
         bEnableBack = true;
-        if ( !m_aBrushItem.GetGraphicLink().isEmpty() )
+        if ( !m_aBrushItem->GetGraphicLink().isEmpty() )
         {
             if ( m_aThemeList.empty() )
                 GalleryExplorer::FillThemeList( m_aThemeList );
@@ -240,11 +240,11 @@ void SwReadOnlyPopup::Execute( vcl::Window* pWin, sal_uInt16 nId )
     {
         OUString sTmp;
         sal_uInt16 nSaveId;
-        if (nId >= MN_READONLY_BACKGROUNDTOGALLERY)
+        if (m_aBrushItem && nId >= MN_READONLY_BACKGROUNDTOGALLERY)
         {
             nId -= MN_READONLY_BACKGROUNDTOGALLERY;
             nSaveId = m_nReadonlySaveBackground;
-            sTmp = m_aBrushItem.GetGraphicLink();
+            sTmp = m_aBrushItem->GetGraphicLink();
         }
         else
         {
@@ -331,14 +331,14 @@ OUString SwReadOnlyPopup::SaveGraphic(sal_uInt16 nId)
     // fish out the graphic's name
     if (nId == m_nReadonlySaveBackground)
     {
-        if ( !m_aBrushItem.GetGraphicLink().isEmpty() )
-            m_sGrfName = m_aBrushItem.GetGraphicLink();
-        const Graphic *pGrf = m_aBrushItem.GetGraphic();
+        if ( m_aBrushItem && !m_aBrushItem->GetGraphicLink().isEmpty() )
+            m_sGrfName = m_aBrushItem->GetGraphicLink();
+        const Graphic *pGrf = m_aBrushItem ? m_aBrushItem->GetGraphic() : nullptr;
         if ( pGrf )
         {
             m_aGraphic = *pGrf;
-            if ( !m_aBrushItem.GetGraphicLink().isEmpty() )
-                m_sGrfName = m_aBrushItem.GetGraphicLink();
+            if ( !m_aBrushItem->GetGraphicLink().isEmpty() )
+                m_sGrfName = m_aBrushItem->GetGraphicLink();
         }
         else
             return OUString();

@@ -35,11 +35,6 @@ Svx3DReducedLineGeometryItem::Svx3DReducedLineGeometryItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY, bVal)
 {}
 
-sal_uInt16 Svx3DReducedLineGeometryItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
-{
-    return 1;
-}
-
 SfxPoolItem * Svx3DReducedLineGeometryItem::Clone(SfxItemPool *) const
 {
     return new Svx3DReducedLineGeometryItem(*this);
@@ -78,11 +73,6 @@ Svx3DSmoothNormalsItem::Svx3DSmoothNormalsItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_NORMALS, bVal)
 {}
 
-sal_uInt16 Svx3DSmoothNormalsItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
-{
-    return 1;
-}
-
 SfxPoolItem * Svx3DSmoothNormalsItem::Clone(SfxItemPool *) const
 {
     return new Svx3DSmoothNormalsItem(*this);
@@ -92,11 +82,6 @@ SfxPoolItem * Svx3DSmoothNormalsItem::Clone(SfxItemPool *) const
 Svx3DSmoothLidsItem::Svx3DSmoothLidsItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_LIDS, bVal)
 {}
-
-sal_uInt16 Svx3DSmoothLidsItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
-{
-    return 1;
-}
 
 SfxPoolItem * Svx3DSmoothLidsItem::Clone(SfxItemPool *) const
 {
@@ -108,11 +93,6 @@ Svx3DCharacterModeItem::Svx3DCharacterModeItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CHARACTER_MODE, bVal)
 {}
 
-sal_uInt16 Svx3DCharacterModeItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
-{
-    return 1;
-}
-
 SfxPoolItem * Svx3DCharacterModeItem::Clone(SfxItemPool *) const
 {
     return new Svx3DCharacterModeItem(*this);
@@ -123,11 +103,6 @@ Svx3DCloseFrontItem::Svx3DCloseFrontItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CLOSE_FRONT, bVal)
 {}
 
-sal_uInt16 Svx3DCloseFrontItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
-{
-    return 1;
-}
-
 SfxPoolItem * Svx3DCloseFrontItem::Clone(SfxItemPool *) const
 {
     return new Svx3DCloseFrontItem(*this);
@@ -137,11 +112,6 @@ SfxPoolItem * Svx3DCloseFrontItem::Clone(SfxItemPool *) const
 Svx3DCloseBackItem::Svx3DCloseBackItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CLOSE_BACK, bVal)
 {}
-
-sal_uInt16 Svx3DCloseBackItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
-{
-    return 1;
-}
 
 SfxPoolItem * Svx3DCloseBackItem::Clone(SfxItemPool *) const
 {

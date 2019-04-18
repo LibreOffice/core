@@ -281,7 +281,7 @@ class SwBorderAttrs : public SwCacheObj
     const SwAttrSet      &m_rAttrSet;
     const SvxULSpaceItem &m_rUL;
     // #i96772#
-    SvxLRSpaceItem m_rLR;
+    std::shared_ptr<SvxLRSpaceItem> m_rLR;
     const SvxBoxItem     &m_rBox;
     const SvxShadowItem  &m_rShadow;
     const Size            m_aFrameSize;

@@ -696,19 +696,19 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 
     SfxItemSet aSet(pOLV->GetAttribs());
     SvtScriptType nScript = pOLV->GetSelectedScriptType();
-    SvxFontItem aSetDlgFont( RES_CHRATR_FONT );
+    std::shared_ptr<SvxFontItem> aSetDlgFont(std::make_shared<SvxFontItem>(RES_CHRATR_FONT));
     {
         SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
         aSetItem.GetItemSet().Put( aSet, false );
         const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
         if( pI )
-            aSetDlgFont = *static_cast<const SvxFontItem*>(pI);
+            aSetDlgFont.reset(static_cast<SvxFontItem*>(pI->Clone()));
         else
-            aSetDlgFont = static_cast<const SvxFontItem&>(aSet.Get( GetWhichOfScript(
+            aSetDlgFont.reset(static_cast<SvxFontItem*>(aSet.Get( GetWhichOfScript(
                         SID_ATTR_CHAR_FONT,
-                        SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) )));
+                        SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) )).Clone()));
         if (sFontName.isEmpty())
-            sFontName = aSetDlgFont.GetFamilyName();
+            sFontName = aSetDlgFont->GetFamilyName();
     }
 
     vcl::Font aFont(sFontName, Size(1,1));
@@ -722,7 +722,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         if( !sSymbolFont.isEmpty() )
             aAllSet.Put( SfxStringItem( SID_FONT_NAME, sSymbolFont ) );
         else
-            aAllSet.Put( SfxStringItem( SID_FONT_NAME, aSetDlgFont.GetFamilyName() ) );
+            aAllSet.Put( SfxStringItem( SID_FONT_NAME, aSetDlgFont->GetFamilyName() ) );
 
         // If character is selected, it can be shown
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

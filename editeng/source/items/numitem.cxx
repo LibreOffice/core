@@ -52,6 +52,7 @@
 #include <editeng/unonrule.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <editeng/legacyitem.hxx>
 
 #define DEF_WRITER_LSPACE   500     //Standard Indentation
 #define DEF_DRAW_LSPACE     800     //Standard Indentation
@@ -216,8 +217,8 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     rStream.ReadUInt16( hasGraphicBrush );
     if ( hasGraphicBrush )
     {
-        std::unique_ptr<SvxBrushItem> pTmp( new SvxBrushItem( SID_ATTR_BRUSH ) );
-        pGraphicBrush.reset( static_cast<SvxBrushItem*>(pTmp->Create( rStream, BRUSH_GRAPHIC_VERSION )) );
+        pGraphicBrush.reset(new SvxBrushItem(SID_ATTR_BRUSH));
+        legacy::SvxBrush::Create(*pGraphicBrush.get(), rStream, sal_uInt16 BRUSH_GRAPHIC_VERSION);
     }
     else pGraphicBrush = nullptr;
     rStream.ReadUInt16( nTmp16 ); eVertOrient = nTmp16;
@@ -289,7 +290,7 @@ void SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverte
             pGraphicBrush->SetGraphicLink("");
         }
 
-        pGraphicBrush->Store(rStream, BRUSH_GRAPHIC_VERSION);
+        legacy::SvxBrush::Store(*pGraphicBrush, rStream, BRUSH_GRAPHIC_VERSION);
     }
     else
         rStream.WriteUInt16( 0 );
@@ -936,11 +937,6 @@ bool SvxNumBulletItem::operator==( const SfxPoolItem& rCopy) const
 SfxPoolItem*  SvxNumBulletItem::Clone( SfxItemPool * ) const
 {
     return new SvxNumBulletItem(*this);
-}
-
-sal_uInt16  SvxNumBulletItem::GetVersion( sal_uInt16 /*nFileVersion*/ ) const
-{
-    return NUMITEM_VERSION_03;
 }
 
 bool SvxNumBulletItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const

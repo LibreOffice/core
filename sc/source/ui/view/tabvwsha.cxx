@@ -475,8 +475,8 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
 {
     ScDocument*             pDoc    = GetViewData().GetDocument();
 
-    SvxBoxItem              aLineOuter( ATTR_BORDER );
-    SvxBoxInfoItem          aLineInner( ATTR_BORDER_INNER );
+    std::shared_ptr<SvxBoxItem> aLineOuter(std::make_shared<SvxBoxItem>(ATTR_BORDER));
+    std::shared_ptr<SvxBoxInfoItem> aLineInner(std::make_shared<SvxBoxInfoItem>(ATTR_BORDER_INNER));
 
     const ScPatternAttr*    pOldAttrs       = GetSelectionPattern();
 
@@ -506,26 +506,29 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
 
     // Get border items and put them in the set:
     GetSelectionFrame( aLineOuter, aLineInner );
+
     //Fix border incorrect for RTL fdo#62399
     if( pDoc->IsLayoutRTL( GetViewData().GetTabNo() ) )
     {
-        SvxBoxItem     aNewFrame( aLineOuter );
-        SvxBoxInfoItem aTempInfo( aLineInner );
+        std::shared_ptr<SvxBoxItem> aNewFrame(static_cast<SvxBoxItem*>(aLineOuter->Clone()));
+        std::shared_ptr<SvxBoxInfoItem> aTempInfo(static_cast<SvxBoxInfoItem*>(aLineInner->Clone()));
 
-        if ( aLineInner.IsValid(SvxBoxInfoItemValidFlags::LEFT) )
-            aNewFrame.SetLine( aLineOuter.GetLeft(), SvxBoxItemLine::RIGHT );
-        if ( aLineInner.IsValid(SvxBoxInfoItemValidFlags::RIGHT) )
-            aNewFrame.SetLine( aLineOuter.GetRight(), SvxBoxItemLine::LEFT );
+        if ( aLineInner->IsValid(SvxBoxInfoItemValidFlags::LEFT) )
+            aNewFrame->SetLine( aLineOuter->GetLeft(), SvxBoxItemLine::RIGHT );
+        if ( aLineInner->IsValid(SvxBoxInfoItemValidFlags::RIGHT) )
+            aNewFrame->SetLine( aLineOuter->GetRight(), SvxBoxItemLine::LEFT );
 
-        aLineInner.SetValid( SvxBoxInfoItemValidFlags::LEFT, aTempInfo.IsValid(SvxBoxInfoItemValidFlags::RIGHT));
-        aLineInner.SetValid( SvxBoxInfoItemValidFlags::RIGHT, aTempInfo.IsValid(SvxBoxInfoItemValidFlags::LEFT));
+        aLineInner->SetValid( SvxBoxInfoItemValidFlags::LEFT, aTempInfo->IsValid(SvxBoxInfoItemValidFlags::RIGHT));
+        aLineInner->SetValid( SvxBoxInfoItemValidFlags::RIGHT, aTempInfo->IsValid(SvxBoxInfoItemValidFlags::LEFT));
 
-        pOldSet->Put( aNewFrame );
+        pOldSet->Put( *aNewFrame );
     }
     else
-        pOldSet->Put( aLineOuter );
+    {
+        pOldSet->Put( *aLineOuter );
+    }
 
-    pOldSet->Put( aLineInner );
+    pOldSet->Put( *aLineInner );
 
     // Generate NumberFormat Value from Value and Language and box it.
     pOldSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT,

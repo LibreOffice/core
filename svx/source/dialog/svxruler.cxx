@@ -131,7 +131,7 @@ struct SvxRuler_Impl {
     long   lMaxRightLogic;
     long   lLastLMargin;
     long   lLastRMargin;
-    SvxProtectItem aProtectItem;
+    std::unique_ptr<SvxProtectItem> aProtectItem;
     std::unique_ptr<SfxBoolItem> pTextRTLItem;
     sal_uInt16 nControlerItems;
     sal_uInt16 nIdx;
@@ -148,7 +148,8 @@ struct SvxRuler_Impl {
     SvxRuler_Impl() :
         nPercSize(0), nTotalDist(0),
         lOldWinPos(0), lMaxLeftLogic(0), lMaxRightLogic(0),
-        lLastLMargin(0), lLastRMargin(0), aProtectItem(SID_RULER_PROTECT),
+        lLastLMargin(0), lLastRMargin(0),
+        aProtectItem(std::make_unique<SvxProtectItem>(SID_RULER_PROTECT)),
         nControlerItems(0), nIdx(0),
         nColLeftPix(0), nColRightPix(0),
         bIsTableRows(false),
@@ -498,8 +499,8 @@ inline sal_uInt16 SvxRuler::GetObjectBordersOff(sal_uInt16 nIdx) const
 void SvxRuler::UpdateFrame()
 {
     const RulerMarginStyle nMarginStyle =
-        ( mxRulerImpl->aProtectItem.IsSizeProtected() ||
-          mxRulerImpl->aProtectItem.IsPosProtected() ) ?
+        ( mxRulerImpl->aProtectItem->IsSizeProtected() ||
+          mxRulerImpl->aProtectItem->IsPosProtected() ) ?
         RulerMarginStyle::NONE : RulerMarginStyle::Sizeable;
 
     if(mxLRSpaceItem.get() && mxPagePosItem.get())
@@ -745,7 +746,7 @@ void SvxRuler::UpdateFrame(const SvxLongULSpaceItem *pItem) // new value
 void SvxRuler::Update( const SvxProtectItem* pItem )
 {
     if( pItem )
-        mxRulerImpl->aProtectItem = *pItem;
+        mxRulerImpl->aProtectItem.reset(static_cast<SvxProtectItem*>(pItem->Clone()));
 }
 
 void SvxRuler::UpdateTextRTL(const SfxBoolItem* pItem)
@@ -800,8 +801,8 @@ void SvxRuler::UpdateColumns()
         RulerBorderStyle nStyleFlags = RulerBorderStyle::Variable;
 
         bool bProtectColumns =
-                    mxRulerImpl->aProtectItem.IsSizeProtected() ||
-                    mxRulerImpl->aProtectItem.IsPosProtected();
+                    mxRulerImpl->aProtectItem->IsSizeProtected() ||
+                    mxRulerImpl->aProtectItem->IsPosProtected();
 
         if( !bProtectColumns )
         {
@@ -1392,8 +1393,8 @@ void SvxRuler::AdjustMargin1(long lInputDiff)
     const long lDragPos = lInputDiff;
 
     bool bProtectColumns =
-        mxRulerImpl->aProtectItem.IsSizeProtected() ||
-        mxRulerImpl->aProtectItem.IsPosProtected();
+        mxRulerImpl->aProtectItem->IsSizeProtected() ||
+        mxRulerImpl->aProtectItem->IsPosProtected();
 
     const RulerMarginStyle nMarginStyle =
         bProtectColumns ? RulerMarginStyle::NONE : RulerMarginStyle::Sizeable;
@@ -1524,8 +1525,8 @@ void SvxRuler::DragMargin2()
     }
 
     bool bProtectColumns =
-        mxRulerImpl->aProtectItem.IsSizeProtected() ||
-        mxRulerImpl->aProtectItem.IsPosProtected();
+        mxRulerImpl->aProtectItem->IsSizeProtected() ||
+        mxRulerImpl->aProtectItem->IsPosProtected();
 
     const RulerMarginStyle nMarginStyle = bProtectColumns ? RulerMarginStyle::NONE : RulerMarginStyle::Sizeable;
 
@@ -2549,7 +2550,7 @@ void SvxRuler::Click()
     if(mxTabStopItem.get() &&
        (nFlags & SvxRulerSupportFlags::TABS) == SvxRulerSupportFlags::TABS)
     {
-        bool bContentProtected = mxRulerImpl->aProtectItem.IsContentProtected();
+        bool bContentProtected = mxRulerImpl->aProtectItem->IsContentProtected();
         if( bContentProtected ) return;
         const long lPos = GetClickPos();
         if((bRTL && lPos < std::min(GetFirstLineIndent(), GetLeftIndent()) && lPos > GetRightIndent()) ||
@@ -2613,7 +2614,7 @@ void SvxRuler::CalcMinMax()
             {
                 //top border is not moveable when table rows are displayed
                 // protection of content means the margin is not moveable
-                if(bHorz && !mxRulerImpl->aProtectItem.IsContentProtected())
+                if(bHorz && !mxRulerImpl->aProtectItem->IsContentProtected())
                 {
                     nMaxLeft = mpBorders[0].nMinPos + lNullPix;
                     if(nDragType & SvxRulerDragFlags::OBJECT_SIZE_PROPORTIONAL)
@@ -2701,7 +2702,7 @@ void SvxRuler::CalcMinMax()
             {
                 // get the bottom move range from the last border position - only available for rows!
                 // protection of content means the margin is not moveable
-                if(bHorz || mxRulerImpl->aProtectItem.IsContentProtected())
+                if(bHorz || mxRulerImpl->aProtectItem->IsContentProtected())
                 {
                     nMaxLeft = nMaxRight = mpBorders[mxColumnItem->Count() - 1].nMaxPos + lNullPix;
                 }
@@ -3109,7 +3110,7 @@ bool SvxRuler::StartDrag()
        <SvxRuler::CalcMinMax()>
        <SvxRuler::EndDrag()>
     */
-    bool bContentProtected = mxRulerImpl->aProtectItem.IsContentProtected();
+    bool bContentProtected = mxRulerImpl->aProtectItem->IsContentProtected();
 
     if(!bValid)
         return false;

@@ -48,8 +48,6 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const override;
     static OUString         GetValueTextByPos( sal_uInt16 nPos );
     virtual sal_uInt16      GetValueCount() const override;
 
@@ -59,12 +57,6 @@ public:
     virtual bool            HasBoolValue() const override;
     virtual bool            GetBoolValue() const override;
     virtual void            SetBoolValue( bool bVal ) override;
-
-    SvxWeightItem& operator=(const SvxWeightItem& rWeight) {
-            SetValue( rWeight.GetValue() );
-            return *this;
-        }
-    SvxWeightItem(SvxWeightItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // enum cast
     FontWeight              GetWeight() const { return GetValue(); }

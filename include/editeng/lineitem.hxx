@@ -44,7 +44,6 @@ public:
     explicit SvxLineItem( const sal_uInt16 nId );
     SvxLineItem( const SvxLineItem& rCpy );
     virtual ~SvxLineItem() override;
-    SvxLineItem &operator=( const SvxLineItem& rLine );
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
@@ -55,8 +54,6 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const override;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const override;
     virtual void             ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool             HasMetrics() const override;
 

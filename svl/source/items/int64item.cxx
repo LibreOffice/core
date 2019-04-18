@@ -15,12 +15,6 @@ SfxInt64Item::SfxInt64Item( sal_uInt16 nWhich, sal_Int64 nVal ) :
 {
 }
 
-SfxInt64Item::SfxInt64Item( sal_uInt16 nWhich, SvStream& rStream ) :
-    SfxPoolItem(nWhich), mnValue(0)
-{
-    rStream.ReadInt64(mnValue);
-}
-
 SfxInt64Item::~SfxInt64Item() {}
 
 bool SfxInt64Item::operator== ( const SfxPoolItem& rItem ) const
@@ -55,16 +49,6 @@ bool SfxInt64Item::PutValue(
     }
 
     return false;
-}
-
-SfxPoolItem* SfxInt64Item::Create( SvStream& rStream, sal_uInt16 /*nItemVersion*/ ) const
-{
-    return new SfxInt64Item(Which(), rStream);
-}
-
-SvStream& SfxInt64Item::Store( SvStream& rStream, sal_uInt16 /*nItemVersion*/ ) const
-{
-    return rStream.WriteInt64(mnValue);
 }
 
 SfxPoolItem* SfxInt64Item::Clone( SfxItemPool* /*pOther*/ ) const

@@ -765,7 +765,7 @@ SwGrfNumPortion::SwGrfNumPortion(
     m_bReplace = false;
     if( pGrfBrush )
     {
-        *pBrush = *pGrfBrush;
+        pBrush.reset(static_cast<SvxBrushItem*>(pGrfBrush->Clone()));
         const Graphic* pGraph = pGrfBrush->GetGraphic();
         if( pGraph )
             SetAnimated( pGraph->IsAnimated() );

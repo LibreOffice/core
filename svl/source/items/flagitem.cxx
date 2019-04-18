@@ -31,13 +31,6 @@ SfxFlagItem::SfxFlagItem( sal_uInt16 nW, sal_uInt16 nV ) :
 }
 
 
-SvStream& SfxFlagItem::Store(SvStream &rStream, sal_uInt16) const
-{
-    rStream.WriteUInt16( nVal );
-    return rStream;
-}
-
-
 bool SfxFlagItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,
@@ -58,13 +51,6 @@ sal_uInt8 SfxFlagItem::GetFlagCount() const
 {
     SAL_INFO("svl", "calling GetValueText(sal_uInt16) on SfxFlagItem -- override!");
     return 0;
-}
-
-
-SfxPoolItem* SfxFlagItem::Create(SvStream &, sal_uInt16) const
-{
-    SAL_INFO("svl", "calling Create() on SfxFlagItem -- override!");
-    return nullptr;
 }
 
 

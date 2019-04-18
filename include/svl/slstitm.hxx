@@ -36,7 +36,6 @@ public:
 
     SfxStringListItem();
     SfxStringListItem( sal_uInt16 nWhich, const std::vector<OUString> *pList=nullptr );
-    SfxStringListItem( sal_uInt16 nWhich, SvStream& rStream );
     virtual ~SfxStringListItem() override;
 
     SfxStringListItem(SfxStringListItem const &) = default;
@@ -62,8 +61,6 @@ public:
                                              OUString &rText,
                                              const IntlWrapper& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create( SvStream &, sal_uInt16 nVersion ) const override;
-    virtual SvStream&       Store( SvStream &, sal_uInt16 nItemVersion ) const override;
 
     virtual bool            PutValue  ( const css::uno::Any& rVal,
                                          sal_uInt8 nMemberId ) override;

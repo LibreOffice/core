@@ -486,7 +486,7 @@ public:
 
     SwTwips GetAdditionalIndentForStartingNewList() const;
 
-    void ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpaceItem ) const;
+    void ClearLRSpaceItemDueToListLevelIndents( std::shared_ptr<SvxLRSpaceItem>& o_rLRSpaceItem ) const;
 
     /** return left margin for tab stop position calculation
 

@@ -377,12 +377,12 @@ void SwCSS1Parser::SetTableTextColl( bool bHeader )
 void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
                                      SfxItemSet *pItemSet2 )
 {
-    SvxBrushItem aBrushItem( RES_BACKGROUND );
-    SvxBoxItem aBoxItem( RES_BOX );
-    SvxFrameDirectionItem aFrameDirItem(SvxFrameDirection::Environment, RES_FRAMEDIR);
+    std::shared_ptr<SvxBrushItem> aBrushItem(std::make_shared<SvxBrushItem>(RES_BACKGROUND));
+    std::shared_ptr<SvxBoxItem> aBoxItem(std::make_shared<SvxBoxItem>(RES_BOX));
+    std::shared_ptr<SvxFrameDirectionItem> aFrameDirItem(std::make_shared<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR));
     bool bSetBrush = pBrush!=nullptr, bSetBox = false, bSetFrameDir = false;
     if( pBrush )
-        aBrushItem = *pBrush;
+        aBrushItem.reset(static_cast<SvxBrushItem*>(pBrush->Clone()));
 
     if( pItemSet2 )
     {
@@ -391,7 +391,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
                                                    &pItem ) )
         {
             // set a background
-            aBrushItem = *static_cast<const SvxBrushItem *>(pItem);
+            aBrushItem.reset(static_cast<SvxBrushItem*>(pItem->Clone()));
             pItemSet2->ClearItem( RES_BACKGROUND );
             bSetBrush = true;
         }
@@ -399,7 +399,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
         if( SfxItemState::SET == pItemSet2->GetItemState( RES_BOX, false, &pItem ) )
         {
             // set a border
-            aBoxItem = *static_cast<const SvxBoxItem *>(pItem);
+            aBoxItem.reset(static_cast<SvxBoxItem*>(pItem->Clone()));
             pItemSet2->ClearItem( RES_BOX );
             bSetBox = true;
         }
@@ -407,7 +407,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
         if( SfxItemState::SET == pItemSet2->GetItemState( RES_FRAMEDIR, false, &pItem ) )
         {
             // set a frame
-            aFrameDirItem = *static_cast< const SvxFrameDirectionItem *>( pItem );
+            aFrameDirItem.reset(static_cast<SvxFrameDirectionItem*>(pItem->Clone()));
             pItemSet2->ClearItem( RES_FRAMEDIR );
             bSetFrameDir = true;
         }
@@ -425,11 +425,11 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
                 SwPageDesc aNewPageDesc( *pPageDesc );
                 SwFrameFormat &rMaster = aNewPageDesc.GetMaster();
                 if( bSetBrush )
-                    rMaster.SetFormatAttr( aBrushItem );
+                    rMaster.SetFormatAttr( *aBrushItem );
                 if( bSetBox )
-                    rMaster.SetFormatAttr( aBoxItem );
+                    rMaster.SetFormatAttr( *aBoxItem );
                 if( bSetFrameDir )
-                    rMaster.SetFormatAttr( aFrameDirItem );
+                    rMaster.SetFormatAttr( *aFrameDirItem );
 
                 ChgPageDesc( pPageDesc, aNewPageDesc );
             }
@@ -546,7 +546,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
         ChgPageDesc( pPageDesc, aNewPageDesc );
 }
 
-SvxBrushItem SwCSS1Parser::makePageDescBackground() const
+std::shared_ptr<SvxBrushItem> SwCSS1Parser::makePageDescBackground() const
 {
     return m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false )
         ->GetMaster().makeBackgroundBrushItem();

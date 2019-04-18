@@ -41,9 +41,6 @@ public:
     explicit SvxSizeItem( const sal_uInt16 nId );
     SvxSizeItem( const sal_uInt16 nId, const Size& rSize);
 
-    inline SvxSizeItem& operator=( const SvxSizeItem &rCpy );
-    SvxSizeItem(SvxSizeItem const &) = default; // SfxPoolItem copy function dichotomy
-
     // "pure virtual Methods" from SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -66,12 +63,6 @@ public:
     void SetWidth(long n) { m_aSize.setWidth(n); }
     void SetHeight(long n) { m_aSize.setHeight(n); }
 };
-
-inline SvxSizeItem& SvxSizeItem::operator=( const SvxSizeItem &rCpy )
-{
-    m_aSize = rCpy.m_aSize;
-    return *this;
-}
 
 #endif
 

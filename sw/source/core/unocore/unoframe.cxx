@@ -355,7 +355,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     if(bXFillStyleItemUsed)
     {
         XFillStyleItem aXFillStyleItem;
-        SvxBrushItem aBrush(RES_BACKGROUND);
+        std::shared_ptr<SvxBrushItem> aBrush(std::make_shared<SvxBrushItem>(RES_BACKGROUND));
 
         if(pXFillStyleItem)
         {
@@ -379,10 +379,10 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             // Fill style is set to solid, but no fill color is given.
             // On the other hand, we have a BackColor, so use that.
             if (pCol)
-                aBrush.PutValue(*pCol, MID_BACK_COLOR);
+                aBrush->PutValue(*pCol, MID_BACK_COLOR);
             else
-                aBrush.PutValue(*pRGBCol, MID_BACK_COLOR_R_G_B);
-            setSvxBrushItemAsFillAttributesToTargetSet(aBrush, rToSet);
+                aBrush->PutValue(*pRGBCol, MID_BACK_COLOR_R_G_B);
+            setSvxBrushItemAsFillAttributesToTargetSet(*aBrush, rToSet);
         }
 
         if(pXFillGradientItem || pXFillGradientNameItem)
@@ -490,8 +490,8 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             }
             if (aXFillStyleItem.GetValue() == drawing::FillStyle_SOLID)
             {
-                aBrush.PutValue(*pColTrans, MID_BACK_COLOR_TRANSPARENCY);
-                setSvxBrushItemAsFillAttributesToTargetSet(aBrush, rToSet);
+                aBrush->PutValue(*pColTrans, MID_BACK_COLOR_TRANSPARENCY);
+                setSvxBrushItemAsFillAttributesToTargetSet(*aBrush, rToSet);
             }
         }
 
@@ -1767,14 +1767,14 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             if(RES_BACKGROUND == pEntry->nWID)
             {
                 const SwAttrSet& rSet = pFormat->GetAttrSet();
-                const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND, true, pDoc->IsInXMLImport()));
-                SvxBrushItem aChangedBrushItem(aOriginalBrushItem);
+                const std::shared_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND, true, pDoc->IsInXMLImport()));
+                std::shared_ptr<SvxBrushItem> aChangedBrushItem(static_cast<SvxBrushItem*>(aOriginalBrushItem->Clone()));
 
-                aChangedBrushItem.PutValue(aValue, nMemberId);
+                aChangedBrushItem->PutValue(aValue, nMemberId);
 
-                if(aChangedBrushItem != aOriginalBrushItem)
+                if(*aChangedBrushItem != *aOriginalBrushItem)
                 {
-                    setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, aSet);
+                    setSvxBrushItemAsFillAttributesToTargetSet(*aChangedBrushItem, aSet);
                     pFormat->GetDoc()->SetFlyFrameAttr( *pFormat, aSet );
                 }
 
@@ -2217,9 +2217,9 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
 
             if(RES_BACKGROUND == pEntry->nWID)
             {
-                const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
+                const std::shared_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
 
-                if(!aOriginalBrushItem.QueryValue(aAny, nMemberId))
+                if(!aOriginalBrushItem->QueryValue(aAny, nMemberId))
                 {
                     OSL_ENSURE(false, "Error getting attribute from RES_BACKGROUND (!)");
                 }

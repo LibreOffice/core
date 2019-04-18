@@ -38,14 +38,6 @@ protected:
 
     SfxEnumItem(const SfxEnumItem &) = default;
 
-    SfxEnumItem(sal_uInt16 const nWhich, SvStream & rStream)
-        : SfxEnumItemInterface(nWhich)
-    {
-        sal_uInt16 nTmp = 0;
-        rStream.ReadUInt16( nTmp );
-        m_nValue = static_cast<EnumT>(nTmp);
-    }
-
 public:
 
     EnumT GetValue() const { return m_nValue; }
@@ -54,12 +46,6 @@ public:
     {
         assert(GetRefCount() == 0 && "SfxEnumItem::SetValue(): Pooled item");
         m_nValue = nTheValue;
-    }
-
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override
-    {
-        rStream.WriteUInt16( static_cast<sal_uInt16>(m_nValue) );
-        return rStream;
     }
 
     virtual sal_uInt16 GetEnumValue() const override
@@ -113,11 +99,6 @@ public:
 
     virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8) override;
 
-
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const
-        override;
-
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 

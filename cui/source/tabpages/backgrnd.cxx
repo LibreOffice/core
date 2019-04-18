@@ -396,12 +396,14 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
     if (USHRT_MAX == nDestValue && m_xTblLBox->get_visible())
         nDestValue = 0;
     sal_uInt16 nWhich = GetWhich(nSlot);
-    SvxBrushItem aBgdAttr(nWhich);
+    std::shared_ptr<SvxBrushItem> aBgdAttr(std::make_shared<SvxBrushItem>(nWhich));
 
     if (rSet->GetItemState( nWhich, false ) >= SfxItemState::DEFAULT)
     {
         if (!bCharBackColor)
-            aBgdAttr = static_cast<const SvxBrushItem&>(rSet->Get(nWhich));
+        {
+            aBgdAttr.reset(static_cast<SvxBrushItem*>(rSet->Get(nWhich).Clone()));
+        }
         else
         {
             // EE_CHAR_BKGCOLOR is SvxBackgroundColorItem, but char background tabpage
@@ -409,7 +411,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
             // extract Color out of SvxBackColorItem
             Color aBackColor = static_cast<const SvxBackgroundColorItem&>(rSet->Get(nWhich)).GetValue();
             // make new SvxBrushItem with this Color
-            aBgdAttr = SvxBrushItem(aBackColor, SID_ATTR_BRUSH_CHAR);
+            aBgdAttr = std::make_shared<SvxBrushItem>(aBackColor, SID_ATTR_BRUSH_CHAR);
         }
         bBrushItemSet = true;
     }
@@ -418,8 +420,8 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
 
     if (bBrushItemSet)
     {
-        FillControls_Impl(aBgdAttr, aUserData);
-        aBgdColor = aBgdAttr.GetColor();
+        FillControls_Impl(*aBgdAttr, aUserData);
+        aBgdColor = aBgdAttr->GetColor();
     }
     else
     {
@@ -446,22 +448,19 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
             nWhich = GetWhich( SID_ATTR_BRUSH );
             if ( rSet->GetItemState( nWhich, false ) >= SfxItemState::DEFAULT )
             {
-                aBgdAttr = static_cast<const SvxBrushItem&>(rSet->Get(nWhich));
-                m_pCellBrush.reset(new SvxBrushItem(aBgdAttr));
+                m_pCellBrush.reset(static_cast<SvxBrushItem*>(rSet->Get(nWhich).Clone()));
             }
             m_nCellWhich = nWhich;
 
             if ( rSet->GetItemState( SID_ATTR_BRUSH_ROW, false ) >= SfxItemState::DEFAULT )
             {
-                aBgdAttr = static_cast<const SvxBrushItem&>(rSet->Get(SID_ATTR_BRUSH_ROW));
-                m_pRowBrush.reset(new SvxBrushItem(aBgdAttr));
+                m_pRowBrush.reset(static_cast<SvxBrushItem*>(rSet->Get(SID_ATTR_BRUSH_ROW).Clone()));
             }
             m_nRowWhich = SID_ATTR_BRUSH_ROW;
 
             if ( rSet->GetItemState( SID_ATTR_BRUSH_TABLE, false ) >= SfxItemState::DEFAULT )
             {
-                aBgdAttr = static_cast<const SvxBrushItem&>(rSet->Get(SID_ATTR_BRUSH_TABLE));
-                m_pTableBrush.reset(new SvxBrushItem(aBgdAttr));
+                m_pTableBrush.reset(static_cast<SvxBrushItem*>(rSet->Get(SID_ATTR_BRUSH_TABLE).Clone()));
             }
             m_nTableWhich = SID_ATTR_BRUSH_TABLE;
 
@@ -473,8 +472,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
             nWhich = GetWhich( SID_ATTR_BRUSH_CHAR );
             if ( rSet->GetItemState( nWhich, false ) >= SfxItemState::DEFAULT )
             {
-                aBgdAttr = static_cast<const SvxBrushItem&>(rSet->Get(nWhich));
-                pHighlighting.reset(new SvxBrushItem(aBgdAttr));
+                pHighlighting.reset(static_cast<SvxBrushItem*>(rSet->Get(nWhich).Clone()));
             }
         }
         else if( bCharBackColor )
@@ -487,8 +485,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
                 // extract Color out of SvxBackColorItem
                 Color aBackColor = static_cast<const SvxBackgroundColorItem&>(rSet->Get(nWhich)).GetValue();
                 // make new SvxBrushItem with this Color
-                aBgdAttr = SvxBrushItem(aBackColor, SID_ATTR_BRUSH_CHAR);
-                pHighlighting.reset(new SvxBrushItem(aBgdAttr));
+                pHighlighting = std::make_unique<SvxBrushItem>(aBackColor, SID_ATTR_BRUSH_CHAR);
             }
         }
     }
@@ -596,21 +593,23 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
                 if (bModifyBrush)
                 {
                     bModified = true;
+                    std::unique_ptr<SvxBrushItem> aTmpBrush;
 
-                    SvxBrushItem aTmpBrush(nWhich);
                     if ( bIsLink )
                     {
-                        aTmpBrush = SvxBrushItem( aBgdGraphicPath,
+                        aTmpBrush.reset(new SvxBrushItem( aBgdGraphicPath,
                                                 aBgdGraphicFilter,
                                                 eNewPos,
-                                                nWhich );
+                                                nWhich ));
                     }
                     else
-                        aTmpBrush = SvxBrushItem( aBgdGraphic,
+                    {
+                        aTmpBrush.reset(new SvxBrushItem( aBgdGraphic,
                                         eNewPos,
-                                        nWhich );
+                                        nWhich ));
+                    }
 
-                    rCoreSet->Put(aTmpBrush);
+                    rCoreSet->Put(*aTmpBrush);
                 }
                 else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
                     rCoreSet->ClearItem( nWhich );
@@ -1133,20 +1132,20 @@ IMPL_LINK(SvxBackgroundTabPage, TblDestinationHdl_Impl, weld::ComboBox&, rBox, v
     if( m_nActPos != nSelPos)
     {
         std::unique_ptr<SvxBrushItem> xItemHolder;
-        SvxBrushItem* pActItem = nullptr;
+        std::unique_ptr<SvxBrushItem>* pActItem = nullptr;
         sal_uInt16 nWhich = 0;
         switch(m_nActPos)
         {
         case TBL_DEST_CELL:
-            pActItem = m_pCellBrush.get();
+            pActItem = &m_pCellBrush;
             nWhich = m_nCellWhich;
             break;
         case TBL_DEST_ROW:
-            pActItem = m_pRowBrush.get();
+            pActItem = &m_pRowBrush;
             nWhich = m_nRowWhich;
             break;
         case TBL_DEST_TBL:
-            pActItem = m_pTableBrush.get();
+            pActItem = &m_pTableBrush;
             nWhich = m_nTableWhich;
             break;
         default:
@@ -1157,11 +1156,11 @@ IMPL_LINK(SvxBackgroundTabPage, TblDestinationHdl_Impl, weld::ComboBox&, rBox, v
         if(!pActItem)
         {
             xItemHolder.reset(new SvxBrushItem(nWhich));
-            pActItem = xItemHolder.get();
+            pActItem = &xItemHolder;
         }
         if(drawing::FillStyle_SOLID == lcl_getFillStyle(*m_xLbSelect))  // brush selected
         {
-            *pActItem = SvxBrushItem( aBgdColor, nWhich );
+            *pActItem = std::make_unique<SvxBrushItem>(aBgdColor, nWhich);
         }
         else
         {
@@ -1172,28 +1171,32 @@ IMPL_LINK(SvxBackgroundTabPage, TblDestinationHdl_Impl, weld::ComboBox&, rBox, v
                 bIsGraphicValid = LoadLinkedGraphic_Impl();
 
             if ( bIsLink )
-                *pActItem = SvxBrushItem( aBgdGraphicPath,
+            {
+                *pActItem = std::make_unique<SvxBrushItem>( aBgdGraphicPath,
                                             aBgdGraphicFilter,
                                             eNewPos,
-                                            pActItem->Which() );
+                                            (*pActItem)->Which() );
+            }
             else
-                *pActItem = SvxBrushItem( aBgdGraphic,
+            {
+                *pActItem = std::make_unique<SvxBrushItem>( aBgdGraphic,
                                             eNewPos,
-                                            pActItem->Which() );
+                                            (*pActItem)->Which() );
+            }
         }
         switch(nSelPos)
         {
         case TBL_DEST_CELL:
-            pActItem = m_pCellBrush.get();
+            pActItem = &m_pCellBrush;
             m_xLbSelect->set_sensitive(true);
             nWhich = m_nCellWhich;
             break;
         case TBL_DEST_ROW:
-            pActItem = m_pRowBrush.get();
+            pActItem = &m_pRowBrush;
             nWhich = m_nRowWhich;
             break;
         case TBL_DEST_TBL:
-            pActItem = m_pTableBrush.get();
+            pActItem = &m_pTableBrush;
             m_xLbSelect->set_sensitive(true);
             nWhich = m_nTableWhich;
             break;
@@ -1208,9 +1211,9 @@ IMPL_LINK(SvxBackgroundTabPage, TblDestinationHdl_Impl, weld::ComboBox&, rBox, v
         if (!pActItem)
         {
             xItemHolder.reset(new SvxBrushItem(nWhich));
-            pActItem = xItemHolder.get();
+            pActItem = &xItemHolder;
         }
-        FillControls_Impl(*pActItem, aUserData);
+        FillControls_Impl(**pActItem, aUserData);
     }
 }
 
@@ -1492,9 +1495,9 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
         }
         case drawing::FillStyle_BITMAP:
         {
-            SvxBrushItem aBrushItem( getSvxBrushItemFromSourceSet( maSet, nWhich ) );
-            if ( GraphicType::NONE != aBrushItem.GetGraphicObject()->GetType() )
-                rCoreSet->Put( aBrushItem );
+            std::shared_ptr<SvxBrushItem> aBrushItem( getSvxBrushItemFromSourceSet( maSet, nWhich ) );
+            if ( GraphicType::NONE != aBrushItem->GetGraphicObject()->GetType() )
+                rCoreSet->Put( *aBrushItem );
             break;
         }
         default:
@@ -1597,7 +1600,7 @@ IMPL_LINK(SvxBkgTabPage, TblDestinationHdl_Impl, weld::ComboBox&, rBox, void)
         // fill local item set with XATTR_FILL settings gathered from tab page
         // and convert to SvxBrushItem and store in table destination slot Which
         SvxAreaTabPage::FillItemSet(&maSet);
-        maSet.Put(getSvxBrushItemFromSourceSet(maSet, maSet.GetPool()->GetWhich(lcl_GetTableDestSlot(m_nActPos))));
+        maSet.Put(*getSvxBrushItemFromSourceSet(maSet, maSet.GetPool()->GetWhich(lcl_GetTableDestSlot(m_nActPos))));
     }
 
     sal_Int32 nSelPos = rBox.get_active();

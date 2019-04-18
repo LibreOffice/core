@@ -701,8 +701,8 @@ const SwFrameFormat *SwFEShell::NewFlyFrame( const SfxItemSet& rSet, bool bAnchV
         GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::INSLAYFMT, nullptr );
         std::unique_ptr<SwFormatAnchor> pOldAnchor;
         bool bHOriChgd = false, bVOriChgd = false;
-        SwFormatVertOrient aOldV;
-        SwFormatHoriOrient aOldH;
+        std::shared_ptr<SwFormatVertOrient> aOldV;
+        std::shared_ptr<SwFormatHoriOrient> aOldH;
 
         if ( RndStdIds::FLY_AT_PAGE != eRndId )
         {
@@ -718,14 +718,14 @@ const SwFrameFormat *SwFEShell::NewFlyFrame( const SfxItemSet& rSet, bool bAnchV
                 && text::HoriOrientation::NONE == static_cast<const SwFormatHoriOrient*>(pItem)->GetHoriOrient() )
             {
                 bHOriChgd = true;
-                aOldH = *static_cast<const SwFormatHoriOrient*>(pItem);
+                aOldH.reset(static_cast<SwFormatHoriOrient*>(pItem->Clone()));
                 const_cast<SfxItemSet&>(rSet).Put( SwFormatHoriOrient( 0, text::HoriOrientation::LEFT ) );
             }
             if( SfxItemState::SET == rSet.GetItemState( RES_VERT_ORIENT, false, &pItem )
                 && text::VertOrientation::NONE == static_cast<const SwFormatVertOrient*>(pItem)->GetVertOrient() )
             {
                 bVOriChgd = true;
-                aOldV = *static_cast<const SwFormatVertOrient*>(pItem);
+                aOldV.reset(static_cast<SwFormatVertOrient*>(pItem->Clone()));
                 const_cast<SfxItemSet&>(rSet).Put( SwFormatVertOrient( 0, text::VertOrientation::TOP ) );
             }
         }
@@ -773,9 +773,9 @@ const SwFrameFormat *SwFEShell::NewFlyFrame( const SfxItemSet& rSet, bool bAnchV
                 const_cast<SfxItemSet&>(rSet).Put( *pOldAnchor );
 
                 if( bHOriChgd )
-                    const_cast<SfxItemSet&>(rSet).Put( aOldH );
+                    const_cast<SfxItemSet&>(rSet).Put( *aOldH );
                 if( bVOriChgd )
-                    const_cast<SfxItemSet&>(rSet).Put( aOldV );
+                    const_cast<SfxItemSet&>(rSet).Put( *aOldV );
 
                 GetDoc()->SetFlyFrameAttr( *pRet, const_cast<SfxItemSet&>(rSet) );
                 GetDoc()->GetIDocumentUndoRedo().DoUndo(bDoesUndo);

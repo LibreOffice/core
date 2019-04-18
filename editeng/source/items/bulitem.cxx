@@ -69,12 +69,6 @@ SfxPoolItem* SvxBulletItem::Clone( SfxItemPool * /*pPool*/ ) const
 }
 
 
-sal_uInt16 SvxBulletItem::GetVersion( sal_uInt16 /*nVersion*/ ) const
-{
-    return BULITEM_VERSION;
-}
-
-
 void SvxBulletItem::CopyValidProperties( const SvxBulletItem& rCopyFrom )
 {
     vcl::Font _aFont = GetFont();

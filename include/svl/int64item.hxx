@@ -19,7 +19,6 @@ class SVL_DLLPUBLIC SfxInt64Item : public SfxPoolItem
 
 public:
     SfxInt64Item( sal_uInt16 nWhich, sal_Int64 nVal );
-    SfxInt64Item( sal_uInt16 nWhich, SvStream & rStream );
 
     virtual ~SfxInt64Item() override;
 
@@ -39,10 +38,6 @@ public:
 
     virtual bool PutValue(
         const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-
-    virtual SfxPoolItem* Create( SvStream& rStream, sal_uInt16 nItemVersion ) const override;
-
-    virtual SvStream& Store( SvStream& rStream, sal_uInt16 nItemVersion ) const override;
 
     virtual SfxPoolItem* Clone( SfxItemPool* pOther = nullptr ) const override;
 

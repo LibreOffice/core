@@ -143,19 +143,6 @@ bool SfxBoolItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * SfxBoolItem::Create(SvStream & rStream, sal_uInt16) const
-{
-    return new SfxBoolItem(Which(), rStream);
-}
-
-// virtual
-SvStream & SfxBoolItem::Store(SvStream & rStream, sal_uInt16) const
-{
-    rStream.WriteBool( m_bValue ); // not bool for serialization!
-    return rStream;
-}
-
-// virtual
 SfxPoolItem * SfxBoolItem::Clone(SfxItemPool *) const
 {
     return new SfxBoolItem(*this);
