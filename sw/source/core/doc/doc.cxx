@@ -1467,7 +1467,7 @@ bool SwDoc::RemoveInvisibleContent()
 
     {
         // Delete/empty all hidden areas
-        SwSectionFormats aSectFormats;
+        o3tl::sorted_vector<SwSectionFormat*> aSectFormats;
         SwSectionFormats& rSectFormats = GetSections();
 
         for( SwSectionFormats::size_type n = rSectFormats.size(); n; )
@@ -1487,10 +1487,7 @@ bool SwDoc::RemoveInvisibleContent()
                     pParent = pTmp;
                 }
 
-                SwSectionFormats::iterator it = std::find(
-                        aSectFormats.begin(), aSectFormats.end(), pSect->GetFormat() );
-                if (it == aSectFormats.end())
-                    aSectFormats.insert( aSectFormats.begin(), pSect->GetFormat() );
+                aSectFormats.insert( pSect->GetFormat() );
             }
             if( !pSect->GetCondition().isEmpty() )
             {
@@ -1501,7 +1498,7 @@ bool SwDoc::RemoveInvisibleContent()
             }
         }
 
-        SwSectionFormats::size_type n = aSectFormats.size();
+        auto n = aSectFormats.size();
 
         if( 0 != n )
         {
@@ -1541,7 +1538,6 @@ bool SwDoc::RemoveInvisibleContent()
 
                 }
             }
-            aSectFormats.clear();
         }
     }
 
