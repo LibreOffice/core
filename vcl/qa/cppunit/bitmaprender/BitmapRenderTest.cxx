@@ -151,6 +151,15 @@ void BitmapRenderTest::testDrawAlphaBitmapEx()
 #endif
 }
 
+int deltaColor(BitmapColor aColor1, BitmapColor aColor2)
+{
+    int deltaR = std::abs(aColor1.GetRed() - aColor2.GetRed());
+    int deltaG = std::abs(aColor1.GetGreen() - aColor2.GetGreen());
+    int deltaB = std::abs(aColor1.GetBlue() - aColor2.GetBlue());
+
+    return std::max(std::max(deltaR, deltaG), deltaB);
+}
+
 void BitmapRenderTest::testAlphaVirtualDevice()
 {
     // Create an alpha virtual device
@@ -167,17 +176,19 @@ void BitmapRenderTest::testAlphaVirtualDevice()
     CPPUNIT_ASSERT_EQUAL(long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(long(4), aBitmap.GetSizePixel().Height());
     Color aColor = aBitmap.GetPixelColor(1, 1);
-    CPPUNIT_ASSERT_EQUAL(Color(0xff, 0xff, 0xff, 0xff), aColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0xffffffff), aColor);
 
     // Draw an opaque pixel to the VirDev
-    pAlphaVirtualDevice->DrawPixel(Point(1, 1), Color(0x00, 0x22, 0xff, 0x55));
+    pAlphaVirtualDevice->DrawPixel(Point(1, 1), Color(0x0022ff55));
 
     // Read back the opaque pixel
 #ifdef MACOSX
     // Oh no.. what we input is not the same as what we get out!
-    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x2C, 0xff, 0x44), pAlphaVirtualDevice->GetPixel(Point(1, 1)));
+    CPPUNIT_ASSERT_EQUAL(Color(0x002Cff44), pAlphaVirtualDevice->GetPixel(Point(1, 1)));
+#elifdef _WIN32
+    CPPUNIT_ASSERT(1 > deltaColor(Color(0x0022ff55), aColor));
 #else
-    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x22, 0xff, 0x55), pAlphaVirtualDevice->GetPixel(Point(1, 1)));
+    CPPUNIT_ASSERT_EQUAL(Color(0x0022ff55), pAlphaVirtualDevice->GetPixel(Point(1, 1)));
 #endif
 
     // Read back the BitmapEx and check the opaque pixel
@@ -188,9 +199,11 @@ void BitmapRenderTest::testAlphaVirtualDevice()
     aColor = aBitmap.GetPixelColor(1, 1);
 #ifdef MACOSX
     // Oh no.. what we input is not the same as what we get out!
-    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x2C, 0xff, 0x44), aColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x002Cff44), aColor);
+#elifdef _WIN32
+    CPPUNIT_ASSERT(1 > deltaColor(Color(0x0022ff55), aColor));
 #else
-    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x22, 0xff, 0x55), aColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x0022ff55), aColor);
 #endif
 
     // Draw an semi-transparent pixel
@@ -199,9 +212,11 @@ void BitmapRenderTest::testAlphaVirtualDevice()
     // Read back the semi-transparent pixel
 #ifdef MACOSX
     // Oh no.. what we input is not the same as what we get out!
-    CPPUNIT_ASSERT_EQUAL(Color(0x34, 0x2C, 0xFF, 0x44), pAlphaVirtualDevice->GetPixel(Point(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(Color(0x342CFF44), pAlphaVirtualDevice->GetPixel(Point(0, 0)));
+#elifdef _WIN32
+    CPPUNIT_ASSERT(1 > deltaColor(Color(0x4422FF55), aColor));
 #else
-    CPPUNIT_ASSERT_EQUAL(Color(0x44, 0x22, 0xFF, 0x55), pAlphaVirtualDevice->GetPixel(Point(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(Color(0x4422FF55), pAlphaVirtualDevice->GetPixel(Point(0, 0)));
 #endif
 
     // Read back the BitmapEx and check the semi-transparent pixel
@@ -212,9 +227,11 @@ void BitmapRenderTest::testAlphaVirtualDevice()
     aColor = aBitmap.GetPixelColor(0, 0);
 #ifdef MACOSX
     // Oh no.. what we input is not the same as what we get out!
-    CPPUNIT_ASSERT_EQUAL(Color(0x34, 0x2C, 0xFF, 0x44), aColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x342CFF44), aColor);
+#elifdef _WIN32
+    CPPUNIT_ASSERT(1 > deltaColor(Color(0x4422FF55), aColor));
 #else
-    CPPUNIT_ASSERT_EQUAL(Color(0x44, 0x22, 0xFF, 0x55), aColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x4422FF55), aColor);
 #endif
 }
 
