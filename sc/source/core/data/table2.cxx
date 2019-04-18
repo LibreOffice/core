@@ -1852,6 +1852,7 @@ bool ScTable::BroadcastBroadcasters( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
     bool bBroadcasted = false;
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
     rHint.GetAddress().SetTab(nTab);
+    nCol2 = ClampToAllocatedColumns(nCol2);
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         bBroadcasted |= aCol[nCol].BroadcastBroadcasters( nRow1, nRow2, rHint);
     return bBroadcasted;
