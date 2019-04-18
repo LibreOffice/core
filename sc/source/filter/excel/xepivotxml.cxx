@@ -49,12 +49,11 @@ void savePivotCacheRecordsXml( XclExpXmlStream& rStrm, const ScDPCache& rCache )
     pRecStrm->startElement(XML_pivotCacheRecords,
         XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
         FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)).toUtf8(),
-        XML_count, OString::number(static_cast<long>(nCount)).getStr(),
-        FSEND);
+        XML_count, OString::number(static_cast<long>(nCount)));
 
     for (SCROW i = 0; i < nCount; ++i)
     {
-        pRecStrm->startElement(XML_r, FSEND);
+        pRecStrm->startElement(XML_r);
         for (size_t nField = 0; nField < nFieldCount; ++nField)
         {
             const ScDPCache::IndexArrayType* pArray = rCache.GetFieldIndexArray(nField);
@@ -63,7 +62,7 @@ void savePivotCacheRecordsXml( XclExpXmlStream& rStrm, const ScDPCache& rCache )
 
             // We are using XML_x reference (like: <x v="0"/>), instead of values here (eg: <s v="No Discount"/>).
             // That's why in SavePivotCacheXml method, we need to list all items.
-            pRecStrm->singleElement(XML_x, XML_v, OString::number((*pArray)[i]), FSEND);
+            pRecStrm->singleElement(XML_x, XML_v, OString::number((*pArray)[i]));
         }
         pRecStrm->endElement(XML_r);
     }
@@ -131,7 +130,7 @@ XclExpXmlPivotCaches::XclExpXmlPivotCaches( const XclExpRoot& rRoot ) :
 void XclExpXmlPivotCaches::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& pWorkbookStrm = rStrm.GetCurrentStream();
-    pWorkbookStrm->startElement(XML_pivotCaches, FSEND);
+    pWorkbookStrm->startElement(XML_pivotCaches);
 
     for (size_t i = 0, n = maCaches.size(); i < n; ++i)
     {
@@ -148,9 +147,8 @@ void XclExpXmlPivotCaches::SaveXml( XclExpXmlStream& rStrm )
             &aRelId);
 
         pWorkbookStrm->singleElement(XML_pivotCache,
-            XML_cacheId, OString::number(nCacheId).getStr(),
-            FSNS(XML_r, XML_id), aRelId.toUtf8(),
-            FSEND);
+            XML_cacheId, OString::number(nCacheId),
+            FSNS(XML_r, XML_id), aRelId.toUtf8());
 
         rStrm.PushStream(pPCStrm);
         SavePivotCacheXml(rStrm, rEntry, nCacheId);
@@ -263,28 +261,23 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
         FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)).toUtf8(),
         FSNS(XML_r, XML_id), aRelId.toUtf8(),
-        XML_recordCount, OString::number(rEntry.mpCache->GetDataSize()).getStr(),
-        XML_createdVersion, "3", // MS Excel 2007, tdf#112936: setting version number makes MSO to handle the pivot table differently
-        FSEND);
+        XML_recordCount, OString::number(rEntry.mpCache->GetDataSize()),
+        XML_createdVersion, "3"); // MS Excel 2007, tdf#112936: setting version number makes MSO to handle the pivot table differently
 
-    pDefStrm->startElement(XML_cacheSource,
-        XML_type, "worksheet",
-        FSEND);
+    pDefStrm->startElement(XML_cacheSource, XML_type, "worksheet");
 
     OUString aSheetName;
     GetDoc().GetName(rEntry.maSrcRange.aStart.Tab(), aSheetName);
     pDefStrm->singleElement(XML_worksheetSource,
-        XML_ref, XclXmlUtils::ToOString(rEntry.maSrcRange).getStr(),
-        XML_sheet, aSheetName.toUtf8(),
-        FSEND);
+        XML_ref, XclXmlUtils::ToOString(rEntry.maSrcRange),
+        XML_sheet, aSheetName.toUtf8());
 
     pDefStrm->endElement(XML_cacheSource);
 
     size_t nCount = rCache.GetFieldCount();
     const size_t nGroupFieldCount = rCache.GetGroupFieldCount();
     pDefStrm->startElement(XML_cacheFields,
-        XML_count, OString::number(static_cast<long>(nCount + nGroupFieldCount)).getStr(),
-        FSEND);
+        XML_count, OString::number(static_cast<long>(nCount + nGroupFieldCount)));
 
     auto WriteFieldGroup = [this, &rCache, pDefStrm](size_t i, size_t base) {
         const sal_Int32 nDatePart = rCache.GetGroupType(i);
@@ -317,7 +310,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         }
 
         // fieldGroup element
-        pDefStrm->startElement(XML_fieldGroup, XML_base, OString::number(base), FSEND);
+        pDefStrm->startElement(XML_fieldGroup, XML_base, OString::number(base));
 
         SvNumberFormatter& rFormatter = GetFormatter();
 
@@ -334,10 +327,10 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
 
         // groupItems element
         auto aElemVec = SortGroupItems(rCache, i);
-        pDefStrm->startElement(XML_groupItems, XML_count, OString::number(aElemVec.size()), FSEND);
+        pDefStrm->startElement(XML_groupItems, XML_count, OString::number(aElemVec.size()));
         for (const auto& sElem : aElemVec)
         {
-            pDefStrm->singleElement(XML_s, XML_v, sElem.toUtf8(), FSEND);
+            pDefStrm->singleElement(XML_s, XML_v, sElem.toUtf8());
         }
         pDefStrm->endElement(XML_groupItems);
         pDefStrm->endElement(XML_fieldGroup);
@@ -349,8 +342,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
 
         pDefStrm->startElement(XML_cacheField,
             XML_name, aName.toUtf8(),
-            XML_numFmtId, OString::number(0).getStr(),
-            FSEND);
+            XML_numFmtId, OString::number(0));
 
         const ScDPCache::ScDPItemDataVec& rFieldItems = rCache.GetDimMemberValues(i);
 
@@ -463,34 +455,29 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
                 switch (rItem.GetType())
                 {
                     case ScDPItemData::String:
-                        pDefStrm->singleElement(XML_s,
-                            XML_v, rItem.GetString().toUtf8(),
-                            FSEND);
+                        pDefStrm->singleElement(XML_s, XML_v, rItem.GetString().toUtf8());
                     break;
                     case ScDPItemData::Value:
                         if (isContainsDate)
                         {
                             pDefStrm->singleElement(XML_d,
-                                XML_v, GetExcelFormattedDate(rItem.GetValue(), GetFormatter()).toUtf8(),
-                                FSEND);
+                                XML_v, GetExcelFormattedDate(rItem.GetValue(), GetFormatter()).toUtf8());
                         }
                         else
                             pDefStrm->singleElement(XML_n,
-                                XML_v, OString::number(rItem.GetValue()),
-                                FSEND);
+                                XML_v, OString::number(rItem.GetValue()));
                     break;
                     case ScDPItemData::Empty:
-                        pDefStrm->singleElement(XML_m, FSEND);
+                        pDefStrm->singleElement(XML_m);
                     break;
                     case ScDPItemData::Error:
                         pDefStrm->singleElement(XML_e,
-                            XML_v, rItem.GetString().toUtf8(),
-                            FSEND);
+                            XML_v, rItem.GetString().toUtf8());
                     break;
                     case ScDPItemData::GroupValue: // Should not happen here!
                     case ScDPItemData::RangeStart:
                         // TODO : What do we do with these types?
-                        pDefStrm->singleElement(XML_m, FSEND);
+                        pDefStrm->singleElement(XML_m);
                     break;
                     default:
                         ;
@@ -518,8 +505,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         const size_t nBase = rCache.GetDimensionIndex(pDim->GetSourceDimName());
 
         pDefStrm->startElement(XML_cacheField, XML_name, aName.toUtf8(), XML_numFmtId,
-                               OString::number(0).getStr(), XML_databaseField, ToPsz10(false),
-                               FSEND);
+                               OString::number(0), XML_databaseField, ToPsz10(false));
         WriteFieldGroup(i, nBase);
         pDefStrm->endElement(XML_cacheField);
     }
@@ -786,7 +772,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     pPivotStrm->startElement(XML_pivotTableDefinition,
         XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
         XML_name, rDPObj.GetName().toUtf8(),
-        XML_cacheId, OString::number(nCacheId).getStr(),
+        XML_cacheId, OString::number(nCacheId),
         XML_applyNumberFormats, ToPsz10(false),
         XML_applyBorderFormats, ToPsz10(false),
         XML_applyFontFormats, ToPsz10(false),
@@ -800,8 +786,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         XML_outline, ToPsz10(!bTabularMode),
         XML_outlineData, ToPsz10(!bTabularMode),
         XML_compact, ToPsz10(false),
-        XML_compactData, ToPsz10(false),
-        FSEND);
+        XML_compactData, ToPsz10(false));
 
     // NB: Excel's range does not include page field area (if any).
     ScRange aOutRange = rDPObj.GetOutputRangeByType(sheet::DataPilotOutputRangeType::TABLE);
@@ -840,8 +825,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     // they appear in the cache.
 
     pPivotStrm->startElement(XML_pivotFields,
-        XML_count, OString::number(static_cast<long>(aCachedDims.size())).getStr(),
-        FSEND);
+        XML_count, OString::number(static_cast<long>(aCachedDims.size())));
 
     for (size_t i = 0; i < nFieldCount; ++i)
     {
@@ -850,8 +834,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         {
             pPivotStrm->singleElement(XML_pivotField,
                 XML_showAll, ToPsz10(false),
-                XML_compact, ToPsz10(false),
-                FSEND);
+                XML_compact, ToPsz10(false));
             continue;
         }
 
@@ -868,15 +851,13 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
                 pPivotStrm->singleElement(XML_pivotField,
                     XML_showAll, ToPsz10(false),
                     XML_compact, ToPsz10(false),
-                    XML_outline, ToPsz10(false),
-                    FSEND);
+                    XML_outline, ToPsz10(false));
             }
             else
             {
                 pPivotStrm->singleElement(XML_pivotField,
                     XML_showAll, ToPsz10(false),
-                    XML_compact, ToPsz10(false),
-                    FSEND);
+                    XML_compact, ToPsz10(false));
             }
             continue;
         }
@@ -889,16 +870,14 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
                     XML_dataField, ToPsz10(true),
                     XML_showAll, ToPsz10(false),
                     XML_compact, ToPsz10(false),
-                    XML_outline, ToPsz10(false),
-                    FSEND);
+                    XML_outline, ToPsz10(false));
             }
             else
             {
                 pPivotStrm->singleElement(XML_pivotField,
                     XML_dataField, ToPsz10(true),
                     XML_showAll, ToPsz10(false),
-                    XML_compact, ToPsz10(false),
-                    FSEND);
+                    XML_compact, ToPsz10(false));
             }
             continue;
         }
@@ -978,8 +957,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         pPivotStrm->startElement(XML_pivotField, xAttributeList);
 
         pPivotStrm->startElement(XML_items,
-            XML_count, OString::number(static_cast<long>(aMemberSequence.size() + aSubtotalSequence.size())),
-            FSEND);
+            XML_count, OString::number(static_cast<long>(aMemberSequence.size() + aSubtotalSequence.size())));
 
         for (const auto & nMember : aMemberSequence)
         {
@@ -993,9 +971,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
 
         for (const OString& sSubtotal : aSubtotalSequence)
         {
-            pPivotStrm->singleElement(XML_item,
-                XML_t, sSubtotal,
-                FSEND);
+            pPivotStrm->singleElement(XML_item, XML_t, sSubtotal);
         }
 
         pPivotStrm->endElement(XML_items);
@@ -1009,14 +985,11 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     if (!aRowFields.empty())
     {
         pPivotStrm->startElement(XML_rowFields,
-            XML_count, OString::number(static_cast<long>(aRowFields.size())),
-            FSEND);
+            XML_count, OString::number(static_cast<long>(aRowFields.size())));
 
         for (const auto& rRowField : aRowFields)
         {
-            pPivotStrm->singleElement(XML_field,
-                XML_x, OString::number(rRowField),
-                FSEND);
+            pPivotStrm->singleElement(XML_field, XML_x, OString::number(rRowField));
         }
 
         pPivotStrm->endElement(XML_rowFields);
@@ -1029,14 +1002,11 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     if (!aColFields.empty())
     {
         pPivotStrm->startElement(XML_colFields,
-            XML_count, OString::number(static_cast<long>(aColFields.size())),
-            FSEND);
+            XML_count, OString::number(static_cast<long>(aColFields.size())));
 
         for (const auto& rColField : aColFields)
         {
-            pPivotStrm->singleElement(XML_field,
-                XML_x, OString::number(rColField),
-                FSEND);
+            pPivotStrm->singleElement(XML_field, XML_x, OString::number(rColField));
         }
 
         pPivotStrm->endElement(XML_colFields);
@@ -1049,15 +1019,13 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     if (!aPageFields.empty())
     {
         pPivotStrm->startElement(XML_pageFields,
-            XML_count, OString::number(static_cast<long>(aPageFields.size())),
-            FSEND);
+            XML_count, OString::number(static_cast<long>(aPageFields.size())));
 
         for (const auto& rPageField : aPageFields)
         {
             pPivotStrm->singleElement(XML_pageField,
                 XML_fld, OString::number(rPageField),
-                XML_hier, OString::number(-1), // TODO : handle this correctly.
-                FSEND);
+                XML_hier, OString::number(-1)); // TODO : handle this correctly.
         }
 
         pPivotStrm->endElement(XML_pageFields);
@@ -1072,8 +1040,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             xDimsByName = xDimSupplier->getDimensions();
 
         pPivotStrm->startElement(XML_dataFields,
-            XML_count, OString::number(static_cast<long>(aDataFields.size())),
-            FSEND);
+            XML_count, OString::number(static_cast<long>(aDataFields.size())));
 
         for (const auto& rDataField : aDataFields)
         {
