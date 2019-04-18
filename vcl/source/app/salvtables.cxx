@@ -2389,6 +2389,10 @@ struct SalInstanceTreeIter : public weld::TreeIter
         : iter(pOrig ? pOrig->iter : nullptr)
     {
     }
+    SalInstanceTreeIter(SvTreeListEntry* pIter)
+        : iter(pIter)
+    {
+    }
     virtual bool equal(const TreeIter& rOther) const override
     {
         return iter == static_cast<const SalInstanceTreeIter&>(rOther).iter;
@@ -2623,6 +2627,12 @@ public:
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
         pEntry->SetTextColor(rColor);
+    }
+
+    virtual void set_font_color(const weld::TreeIter& rIter, const Color& rColor) const override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        rVclIter.iter->SetTextColor(rColor);
     }
 
     virtual void remove(int pos) override
@@ -3237,10 +3247,20 @@ public:
         m_xTreeView->SetSelectionMode(eMode);
     }
 
+    virtual void all_foreach(const std::function<bool(weld::TreeIter&)>& func) override
+    {
+        SalInstanceTreeIter aVclIter(m_xTreeView->First());
+        while (aVclIter.iter)
+        {
+            if (func(aVclIter))
+                return;
+            aVclIter.iter = m_xTreeView->Next(aVclIter.iter);
+        }
+    }
+
     virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override
     {
-        SalInstanceTreeIter aVclIter(nullptr);
-        aVclIter.iter = m_xTreeView->FirstSelected();
+        SalInstanceTreeIter aVclIter(m_xTreeView->FirstSelected());
         while (aVclIter.iter)
         {
             if (func(aVclIter))
@@ -3251,8 +3271,7 @@ public:
 
     virtual void visible_foreach(const std::function<bool(weld::TreeIter&)>& func) override
     {
-        SalInstanceTreeIter aVclIter(nullptr);
-        aVclIter.iter = m_xTreeView->GetFirstEntryInView();
+        SalInstanceTreeIter aVclIter(m_xTreeView->GetFirstEntryInView());
         while (aVclIter.iter)
         {
             if (func(aVclIter))
@@ -3301,6 +3320,13 @@ public:
         m_xTreeView->SetStyle(m_xTreeView->GetStyle() | WB_SORT);
         m_xTreeView->GetModel()->SetCompareHdl(LINK(this, SalInstanceTreeView, CompareHdl));
         set_sort_order(true);
+    }
+
+    virtual void set_sort_func(const std::function<int(const weld::TreeIter&, const weld::TreeIter&)>& func) override
+    {
+        weld::TreeView::set_sort_func(func);
+        SvTreeList* pListModel = m_xTreeView->GetModel();
+        pListModel->Resort();
     }
 
     virtual void make_unsorted() override
@@ -3409,6 +3435,10 @@ IMPL_LINK(SalInstanceTreeView, CompareHdl, const SvSortData&, rSortData, sal_Int
     const SvTreeListEntry* pLHS = rSortData.pLeft;
     const SvTreeListEntry* pRHS = rSortData.pRight;
     assert(pLHS && pRHS);
+
+    if (m_aCustomSort)
+        return m_aCustomSort(SalInstanceTreeIter(const_cast<SvTreeListEntry*>(pLHS)),
+                             SalInstanceTreeIter(const_cast<SvTreeListEntry*>(pRHS)));
 
     const SvLBoxString* pLeftTextItem;
     const SvLBoxString* pRightTextItem;
@@ -3551,8 +3581,7 @@ IMPL_LINK_NOARG(SalInstanceTreeView, ExpandingHdl, SvTreeListBox*, bool)
         }
     }
 
-    SalInstanceTreeIter aIter(nullptr);
-    aIter.iter = pEntry;
+    SalInstanceTreeIter aIter(pEntry);
     bool bRet = signal_expanding(aIter);
 
     //expand disallowed, restore placeholder
