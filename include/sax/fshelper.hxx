@@ -39,30 +39,6 @@ struct FSEND_t { FSEND_t() {}; };
 static const FSEND_t FSEND = FSEND_t();
 const sal_Int32 FSEND_internal = -1; // same as XML_TOKEN_INVALID
 
-#define SAX_ARGS_ARG( arg1, arg2, convert, num ) arg1##num, arg2##num convert
-#define SAX_ARGS_ARG1( arg1, arg2, convert ) SAX_ARGS_ARG( arg1, arg2, convert, 1 )
-#define SAX_ARGS_ARG2( arg1, arg2, convert ) SAX_ARGS_ARG1( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 2 )
-#define SAX_ARGS_ARG3( arg1, arg2, convert ) SAX_ARGS_ARG2( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 3 )
-#define SAX_ARGS_ARG4( arg1, arg2, convert ) SAX_ARGS_ARG3( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 4 )
-#define SAX_ARGS_ARG5( arg1, arg2, convert ) SAX_ARGS_ARG4( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 5 )
-#define SAX_ARGS_ARG6( arg1, arg2, convert ) SAX_ARGS_ARG5( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 6 )
-#define SAX_ARGS_ARG7( arg1, arg2, convert ) SAX_ARGS_ARG6( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 7 )
-#define SAX_ARGS_ARG8( arg1, arg2, convert ) SAX_ARGS_ARG7( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 8 )
-#define SAX_ARGS_ARG9( arg1, arg2, convert ) SAX_ARGS_ARG8( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 9 )
-#define SAX_ARGS_ARG10( arg1, arg2, convert ) SAX_ARGS_ARG9( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 10 )
-#define SAX_ARGS_ARG11( arg1, arg2, convert ) SAX_ARGS_ARG10( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 11 )
-#define SAX_ARGS_ARG12( arg1, arg2, convert ) SAX_ARGS_ARG11( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 12 )
-#define SAX_ARGS_ARG13( arg1, arg2, convert ) SAX_ARGS_ARG12( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 13 )
-#define SAX_ARGS_ARG14( arg1, arg2, convert ) SAX_ARGS_ARG13( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 14 )
-#define SAX_ARGS_ARG15( arg1, arg2, convert ) SAX_ARGS_ARG14( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 15 )
-#define SAX_ARGS_ARG16( arg1, arg2, convert ) SAX_ARGS_ARG15( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 16 )
-#define SAX_ARGS_ARG17( arg1, arg2, convert ) SAX_ARGS_ARG16( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 17 )
-#define SAX_ARGS_ARG18( arg1, arg2, convert ) SAX_ARGS_ARG17( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 18 )
-#define SAX_ARGS_ARG19( arg1, arg2, convert ) SAX_ARGS_ARG18( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 19 )
-#define SAX_ARGS_ARG20( arg1, arg2, convert ) SAX_ARGS_ARG19( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 20 )
-#define SAX_ARGS_ARG21( arg1, arg2, convert ) SAX_ARGS_ARG20( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 21 )
-#define SAX_ARGS_ARG22( arg1, arg2, convert ) SAX_ARGS_ARG21( arg1, arg2, convert ), SAX_ARGS_ARG( arg1, arg2, convert, 22 )
-
 namespace sax_fastparser {
 
 enum class MergeMarks { APPEND = 0, PREPEND = 1, POSTPONE = 2};
