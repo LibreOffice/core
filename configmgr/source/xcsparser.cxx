@@ -267,24 +267,18 @@ void XcsParser::endElement(xmlreader::XmlReader const & reader) {
                 switch (state_) {
                 case STATE_TEMPLATES:
                     {
-                        NodeMap::iterator i(data_.templates.find(top.name));
-                        if (i == data_.templates.end()) {
-                            data_.templates.insert(
-                                NodeMap::value_type(top.name, top.node));
-                        } else {
-                            merge(i->second, top.node);
+                        auto itPair = data_.templates.insert({top.name, top.node});
+                        if (!itPair.second) {
+                            merge(itPair.first->second, top.node);
                         }
                     }
                     break;
                 case STATE_COMPONENT:
                     {
                         NodeMap & components = data_.getComponents();
-                        NodeMap::iterator i(components.find(top.name));
-                        if (i == components.end()) {
-                            components.insert(
-                                NodeMap::value_type(top.name, top.node));
-                        } else {
-                            merge(i->second, top.node);
+                        auto itPair = components.insert({top.name, top.node});
+                        if (!itPair.second) {
+                            merge(itPair.first->second, top.node);
                         }
                         state_ = STATE_COMPONENT_DONE;
                     }

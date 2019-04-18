@@ -1065,8 +1065,7 @@ void ZipFile::recover()
                                     aEntry.nSize = 0;
                                 }
 
-                                if ( aEntries.find( aEntry.sPath ) == aEntries.end() )
-                                    aEntries[aEntry.sPath] = aEntry;
+                                aEntries.emplace( aEntry.sPath, aEntry );
                             }
                         }
                     }

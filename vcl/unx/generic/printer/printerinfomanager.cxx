@@ -818,12 +818,11 @@ static void standardSysQueueTokenHandler(
                 // get the queue name between fore and aft tokens
                 OUString aSysQueue( OStringToOUString( line.copy( nPos, nAftPos - nPos ), aEncoding ) );
                 // do not insert duplicates (e.g. lpstat tends to produce such lines)
-                if( aUniqueSet.find( aSysQueue ) == aUniqueSet.end() )
+                if( aUniqueSet.insert( aSysQueue ).second )
                 {
                     o_rQueues.emplace_back( );
                     o_rQueues.back().m_aQueue = aSysQueue;
                     o_rQueues.back().m_aLocation = aSysQueue;
-                    aUniqueSet.insert( aSysQueue );
                 }
             }
         }

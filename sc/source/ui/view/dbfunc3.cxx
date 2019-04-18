@@ -1793,9 +1793,8 @@ bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
                 pDPObj->GetHeaderPositionData( ScAddress( nCol, nRow, rSource.aStart.Tab() ), aSourceData );
                 if ( aSourceData.Dimension == aDestData.Dimension && !aSourceData.MemberName.isEmpty() )
                 {
-                    if ( aMembersSet.find( aSourceData.MemberName ) == aMembersSet.end() )
+                    if ( aMembersSet.insert( aSourceData.MemberName ).second )
                     {
-                        aMembersSet.insert( aSourceData.MemberName );
                         aMembersVector.push_back( aSourceData.MemberName );
                     }
                     // duplicates are ignored

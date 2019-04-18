@@ -1083,16 +1083,10 @@ void SvXMLNumFmtElementContext::AddEmbeddedElement( sal_Int32 nFormatPos, const 
     if (rContent.isEmpty())
         return;
 
-    auto const iter(aNumInfo.m_EmbeddedElements.find(nFormatPos));
-    if (iter == aNumInfo.m_EmbeddedElements.end())
-    {
-        aNumInfo.m_EmbeddedElements.insert(std::make_pair(nFormatPos, rContent));
-    }
-    else
-    {
+    auto iterPair = aNumInfo.m_EmbeddedElements.emplace(nFormatPos, rContent);
+    if (!iterPair.second)
         // there's already an element at this position - append text to existing element
-        iter->second += rContent;
-    }
+        iterPair.first->second += rContent;
 }
 
 void SvXMLNumFmtElementContext::EndElement()

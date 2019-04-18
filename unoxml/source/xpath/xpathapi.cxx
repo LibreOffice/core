@@ -149,10 +149,7 @@ namespace XPath
                 const xmlChar* pPre = curDef->prefix;
                 OUString aPrefix(reinterpret_cast<char const *>(pPre), strlen(reinterpret_cast<char const *>(pPre)), RTL_TEXTENCODING_UTF8);
                 // we could already have this prefix from a child node
-                if (rNamespaces.find(aPrefix) == rNamespaces.end())
-                {
-                    rNamespaces.insert(::std::make_pair(aPrefix, aURI));
-                }
+                rNamespaces.emplace(aPrefix, aURI);
                 curDef = curDef->next;
             }
             pNode = pNode->parent;

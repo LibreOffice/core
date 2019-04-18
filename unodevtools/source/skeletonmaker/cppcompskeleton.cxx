@@ -1101,9 +1101,7 @@ void generateCalcAddin(ProgramOptions const & options,
         // special case for the optional XLocalization interface. It should be
         // implemented always. But it is parent of the XAddIn and we need it only
         // if backwardcompatible is false.
-        if (interfaces.find("com.sun.star.lang.XLocalizable") == interfaces.end()) {
-            interfaces.insert("com.sun.star.lang.XLocalizable");
-        }
+        interfaces.insert("com.sun.star.lang.XLocalizable");
     }
 
     OUString propertyhelper = checkPropertyHelper(

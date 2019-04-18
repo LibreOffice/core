@@ -491,17 +491,11 @@ uno::Sequence< beans::Property > Content::getProperties(
     // Add cached properties, if present and still missing.
     if (xCachedProps)
     {
-        const std::set< OUString >::const_iterator set_end
-            = aPropSet.end();
-
         const std::unique_ptr< PropertyValueMap > & xProps
             = xCachedProps->getProperties();
 
         for ( const auto& rEntry : *xProps )
-        {
-            if ( aPropSet.find( rEntry.first ) == set_end )
-                aPropSet.insert( rEntry.first );
-        }
+            aPropSet.insert( rEntry.first );
     }
 
     // std::set -> uno::Sequence

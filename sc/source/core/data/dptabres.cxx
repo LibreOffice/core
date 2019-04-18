@@ -3896,9 +3896,7 @@ void ScDPResultVisibilityData::addVisibleMember(const OUString& rDimName, const 
         itr = r.first;
     }
     VisibleMemberType& rMem = itr->second;
-    VisibleMemberType::iterator itrMem = rMem.find(rMemberItem);
-    if (itrMem == rMem.end())
-        rMem.insert(rMemberItem);
+    rMem.insert(rMemberItem);
 }
 
 void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPFilteredCache::Criterion>& rFilters) const
@@ -3962,8 +3960,7 @@ ScDPResultMember* ScDPResultDimension::AddMember(const ScDPParentDimData &aData 
     SCROW   nDataIndex = pMember->GetDataId();
     maMemberArray.emplace_back( pMember );
 
-    if ( maMemberHash.end() == maMemberHash.find( nDataIndex ) )
-        maMemberHash.insert( std::pair< SCROW, ScDPResultMember *>( nDataIndex, pMember ) );
+    maMemberHash.emplace( nDataIndex, pMember );
     return pMember;
 }
 
@@ -3976,8 +3973,7 @@ ScDPResultMember* ScDPResultDimension::InsertMember(const ScDPParentDimData *pMe
         maMemberArray.emplace( maMemberArray.begin()+nInsert, pNew );
 
         SCROW   nDataIndex = pMemberData->mpMemberDesc->GetItemDataId();
-        if ( maMemberHash.end() == maMemberHash.find( nDataIndex ) )
-            maMemberHash.insert( std::pair< SCROW, ScDPResultMember *>( nDataIndex, pNew ) );
+        maMemberHash.emplace( nDataIndex, pNew );
         return pNew;
     }
     return maMemberArray[ nInsert ].get();

@@ -124,11 +124,10 @@ namespace basctl { namespace docs {
                         // those
                         continue;
 
-                    if ( aEncounteredModels.find( xModel ) != aEncounteredModels.end() )
+                    if ( !aEncounteredModels.insert( xModel ).second )
                         // there might be multiple frames for the same model
                         // handle it only once
                         continue;
-                    aEncounteredModels.insert( xModel );
 
                     // create a DocumentDescriptor
                     DocumentDescriptor aDescriptor;

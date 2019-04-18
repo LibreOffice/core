@@ -127,9 +127,8 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
 
         // Use the name of the master page to avoid duplicate entries.
         OUString sName (pMasterPage->GetName());
-        if (aMasterPageNames.find(sName)!=aMasterPageNames.end())
+        if (!aMasterPageNames.insert(sName).second)
             continue;
-        aMasterPageNames.insert (sName);
 
         // Look up the master page in the container and, when it is not yet
         // in it, insert it.

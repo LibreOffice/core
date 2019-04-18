@@ -2224,8 +2224,7 @@ TaskManager::load( const ContentMap::iterator& it, bool create )
                                      xS->getPropertyValue( seq[i].Name ),
                                      beans::PropertyState_DIRECT_VALUE,
                                      seq[i].Attributes );
-                if( properties.find( readProp ) == properties.end() )
-                    properties.insert( readProp );
+                properties.insert( readProp );
             }
         }
         else if( create )

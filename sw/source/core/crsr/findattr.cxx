@@ -990,9 +990,8 @@ bool FindAttrImpl(SwPaM & rSearchPam,
         if( !pNode->HasSwAttrSet() )
         {
             SwFormat* pTmpFormat = pNode->GetFormatColl();
-            if( aFormatArr.find( pTmpFormat ) != aFormatArr.end() )
+            if( !aFormatArr.insert( pTmpFormat ).second )
                 continue; // collection was requested earlier
-            aFormatArr.insert( pTmpFormat );
         }
 
         if( SfxItemState::SET == pNode->GetSwAttrSet().GetItemState( nWhich,
@@ -1165,9 +1164,8 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
         if (!rPropsNode.HasSwAttrSet())
         {
             SwFormat* pTmpFormat = rPropsNode.GetFormatColl();
-            if( aFormatArr.find( pTmpFormat ) != aFormatArr.end() )
+            if( !aFormatArr.insert( pTmpFormat ).second )
                 continue; // collection was requested earlier
-            aFormatArr.insert( pTmpFormat );
         }
 
         if (lcl_Search(rPropsNode, aOtherSet, bNoColls))

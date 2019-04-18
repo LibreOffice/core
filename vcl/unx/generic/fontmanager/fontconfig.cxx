@@ -1041,9 +1041,8 @@ void PrintFontManager::Substitute(FontSelectPattern &rPattern, OUString& rMissin
                         {
                             LanguageTag aOurTag(getExemplarLangTagForCodePoint(pRemainingCodes[i]));
                             OString sTag = OUStringToOString(aOurTag.getBcp47(), RTL_TEXTENCODING_UTF8);
-                            if (m_aPreviousLangSupportRequests.find(sTag) != m_aPreviousLangSupportRequests.end())
+                            if (!m_aPreviousLangSupportRequests.insert(sTag).second)
                                 continue;
-                            m_aPreviousLangSupportRequests.insert(sTag);
                             sTag = mapToFontConfigLangTag(aOurTag);
                             if (!sTag.isEmpty() && m_aPreviousLangSupportRequests.find(sTag) == m_aPreviousLangSupportRequests.end())
                             {

@@ -71,9 +71,8 @@ void FontFeaturesDialog::initialize()
     for (vcl::font::Feature const& rFontFeature : rFontFeatures)
     {
         sal_uInt32 nFontFeatureCode = rFontFeature.m_aID.m_aFeatureCode;
-        if (aDoneFeatures.find(nFontFeatureCode) != aDoneFeatures.end())
+        if (!aDoneFeatures.insert(nFontFeatureCode).second)
             continue;
-        aDoneFeatures.insert(nFontFeatureCode);
         rFilteredFontFeatures.push_back(rFontFeature);
     }
 

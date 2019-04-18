@@ -603,8 +603,7 @@ bool CStyleCast::rewriteArithmeticCast(CStyleCastExpr const * expr, char const *
         secondBegin = l;
         ++secondLen;
     }
-    if (rewritten_.find(firstBegin) == rewritten_.end()) {
-        rewritten_.insert(firstBegin);
+    if (rewritten_.insert(firstBegin).second) {
         if (!replaceText(firstBegin, firstLen, functional ? "" : "static_cast<")) {
             if (isDebugMode()) {
                 report(
@@ -630,8 +629,7 @@ bool CStyleCast::rewriteArithmeticCast(CStyleCastExpr const * expr, char const *
         }
     }
     if (third.isValid()) {
-        if (rewritten_.find(third) == rewritten_.end()) {
-            rewritten_.insert(third);
+        if (rewritten_.insert(third).second) {
             if (!insertTextBefore(third, "(")) {
                 //TODO: roll back
                 if (isDebugMode()) {

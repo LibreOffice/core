@@ -1042,16 +1042,14 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     // Fill command map. It stores all our commands and from what
                     // image manager we got our image. So we can decide if we have to use an
                     // image from a notification message.
-                    CommandToInfoMap::iterator pIter = m_aCommandMap.find( aCommandURL );
-                    if ( pIter == m_aCommandMap.end())
+                    auto pIter = m_aCommandMap.emplace( aCommandURL, aCmdInfo );
+                    if ( pIter.second )
                     {
                         aCmdInfo.nId = nId;
-                        const CommandToInfoMap::value_type aValue( aCommandURL, aCmdInfo );
-                        m_aCommandMap.insert( aValue );
                     }
                     else
                     {
-                        pIter->second.aIds.push_back( nId );
+                        pIter.first->second.aIds.push_back( nId );
                     }
 
                     if ( !bIsVisible )
@@ -1197,16 +1195,15 @@ void ToolBarManager::FillOverflowToolbar( ToolBox const * pParent )
             // Fill command map. It stores all our commands and from what
             // image manager we got our image. So we can decide if we have to use an
             // image from a notification message.
-            CommandToInfoMap::iterator pIter = m_aCommandMap.find( aCommandURL );
-            if ( pIter == m_aCommandMap.end())
+            auto pIter = m_aCommandMap.emplace( aCommandURL, aCmdInfo );
+            if ( pIter.second )
             {
                 aCmdInfo.nId = nId;
                 const CommandToInfoMap::value_type aValue( aCommandURL, aCmdInfo );
-                m_aCommandMap.insert( aValue );
             }
             else
             {
-                pIter->second.aIds.push_back( nId );
+                pIter.first->second.aIds.push_back( nId );
             }
         }
         else
