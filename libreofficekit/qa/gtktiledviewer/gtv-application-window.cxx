@@ -431,7 +431,7 @@ gtv_application_window_unregister_child_window(GtvApplicationWindow* window, Gtk
         LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
         guint dialogId = 0;
         g_object_get(G_OBJECT(pChildWin), "dialogid", &dialogId, nullptr);
-        pDocument->pClass->postWindow(pDocument, dialogId, LOK_WINDOW_CLOSE);
+        pDocument->pClass->postWindow(pDocument, dialogId, LOK_WINDOW_CLOSE, nullptr);
     }
 }
 
