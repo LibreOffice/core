@@ -265,16 +265,12 @@ void Exc1904::SaveXml( XclExpXmlStream& rStrm )
 
     if( bISOIEC )
     {
-        rStrm.WriteAttributes(
-            XML_dateCompatibility, ToPsz( bDateCompatibility ),
-            FSEND );
+        rStrm.WriteAttributes(XML_dateCompatibility, ToPsz(bDateCompatibility));
     }
 
     if( !bISOIEC || bDateCompatibility )
     {
-        rStrm.WriteAttributes(
-            XML_date1904, ToPsz( bVal ),
-            FSEND );
+        rStrm.WriteAttributes(XML_date1904, ToPsz(bVal));
     }
 }
 
@@ -408,9 +404,7 @@ XclExpWindowProtection::XclExpWindowProtection(bool bValue) :
 
 void XclExpWindowProtection::SaveXml( XclExpXmlStream& rStrm )
 {
-    rStrm.WriteAttributes(
-            XML_lockWindows, ToPsz( GetBool() ),
-            FSEND );
+    rStrm.WriteAttributes(XML_lockWindows, ToPsz(GetBool()));
 }
 
 // XclExpDocProtection ===============================================================
