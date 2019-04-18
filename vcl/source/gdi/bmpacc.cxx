@@ -221,8 +221,8 @@ BitmapColor BitmapReadAccess::GetInterpolatedColorWithFallback( double fY, doubl
     // double values, e.g. static_cast< sal_Int32 >(-0.25) is 0, not -1, but *has* to be outside (!)
     if(mpBuffer && fX >= 0.0 && fY >= 0.0)
     {
-        const sal_Int32 nX(static_cast< sal_Int32 >(fX));
-        const sal_Int32 nY(static_cast< sal_Int32 >(fY));
+        const sal_Int64 nX(static_cast<sal_Int64>(fX));
+        const sal_Int64 nY(static_cast<sal_Int64>(fY));
 
         if(nX < mpBuffer->mnWidth && nY < mpBuffer->mnHeight)
         {
