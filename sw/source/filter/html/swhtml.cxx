@@ -5150,7 +5150,7 @@ void SwHTMLParser::InsertLineBreak()
     }
 
     // parse styles
-    SvxFormatBreakItem aBreakItem( SvxBreak::NONE, RES_BREAK );
+    std::shared_ptr<SvxFormatBreakItem> aBreakItem(std::make_shared<SvxFormatBreakItem>(SvxBreak::NONE, RES_BREAK));
     bool bBreakItem = false;
     if( HasStyleOptions( aStyle, aId, aClass ) )
     {
@@ -5161,7 +5161,7 @@ void SwHTMLParser::InsertLineBreak()
         {
             if( m_pCSS1Parser->SetFormatBreak( aItemSet, aPropInfo ) )
             {
-                aBreakItem = aItemSet.Get( RES_BREAK );
+                aBreakItem.reset(static_cast<SvxFormatBreakItem*>(aItemSet.Get(RES_BREAK).Clone()));
                 bBreakItem = true;
             }
             if( !aPropInfo.m_aId.isEmpty() )
@@ -5169,9 +5169,9 @@ void SwHTMLParser::InsertLineBreak()
         }
     }
 
-    if( bBreakItem && SvxBreak::PageAfter==aBreakItem.GetBreak() )
+    if( bBreakItem && SvxBreak::PageAfter == aBreakItem->GetBreak() )
     {
-        NewAttr(m_xAttrTab, &m_xAttrTab->pBreak, aBreakItem);
+        NewAttr(m_xAttrTab, &m_xAttrTab->pBreak, *aBreakItem);
         EndAttr( m_xAttrTab->pBreak, false );
     }
 
@@ -5190,9 +5190,9 @@ void SwHTMLParser::InsertLineBreak()
         // (>Netscape). That's why we don't do it.
         AppendTextNode( AM_NOSPACE );
     }
-    if( bBreakItem && SvxBreak::PageBefore==aBreakItem.GetBreak() )
+    if( bBreakItem && SvxBreak::PageBefore == aBreakItem->GetBreak() )
     {
-        NewAttr(m_xAttrTab, &m_xAttrTab->pBreak, aBreakItem);
+        NewAttr(m_xAttrTab, &m_xAttrTab->pBreak, *aBreakItem);
         EndAttr( m_xAttrTab->pBreak, false );
     }
 }

@@ -239,7 +239,7 @@ public:
 
     sal_uInt16  m_n81Flags;           // for bold, italic, ...
     sal_uInt16  m_n81BiDiFlags;       // for bold, italic, ...
-    SvxLRSpaceItem maWordLR;
+    std::shared_ptr<SvxLRSpaceItem> maWordLR;
     bool m_bValid;            // empty of valid
     bool m_bImported;         // for recursive imports
     bool m_bColl;             // true-> pFormat is SwTextFormatColl
@@ -271,7 +271,7 @@ public:
         mnWW8OutlineLevel( MAXLEVEL ),
         m_n81Flags( 0 ),
         m_n81BiDiFlags(0),
-        maWordLR( RES_LR_SPACE ),
+        maWordLR(std::make_shared<SvxLRSpaceItem>(RES_LR_SPACE)),
         m_bValid(false),
         m_bImported(false),
         m_bColl(false),

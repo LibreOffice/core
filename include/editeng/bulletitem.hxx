@@ -79,7 +79,6 @@ public:
     void                SetFont( const vcl::Font& rNew) { aFont = rNew; }
     void                SetScale( sal_uInt16 nNew ) { nScale = nNew; }
 
-    virtual sal_uInt16  GetVersion(sal_uInt16 nFileVersion) const override;
     virtual bool        operator==( const SfxPoolItem& ) const override;
     virtual bool        GetPresentation( SfxItemPresentation ePres,
                                     MapUnit eCoreMetric,

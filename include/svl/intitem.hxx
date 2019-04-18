@@ -32,8 +32,6 @@ public:
     explicit SfxByteItem(sal_uInt16 which = 0, sal_uInt8 nValue = 0):
         CntByteItem(which, nValue) {}
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override;
-
     virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override
     { return new SfxByteItem(*this); }
 };
@@ -49,8 +47,6 @@ public:
         SfxPoolItem(which), m_nValue(nTheValue)
     {}
 
-    SfxInt16Item(sal_uInt16 nWhich, SvStream & rStream);
-
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
@@ -64,10 +60,6 @@ public:
 
     virtual bool PutValue( const css::uno::Any& rVal,
                            sal_uInt8 nMemberId ) override;
-
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override;
-
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 
@@ -91,12 +83,6 @@ public:
     explicit SfxUInt16Item(sal_uInt16 which = 0, sal_uInt16 nValue = 0):
         CntUInt16Item(which, nValue) {}
 
-    SfxUInt16Item(sal_uInt16 which, SvStream & rStream):
-        CntUInt16Item(which, rStream) {}
-
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override
-    { return new SfxUInt16Item(Which(), rStream); }
-
     virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override
     { return new SfxUInt16Item(*this); }
 
@@ -112,12 +98,6 @@ public:
     explicit SfxInt32Item(sal_uInt16 which = 0, sal_Int32 nValue = 0):
         CntInt32Item(which, nValue) {}
 
-    SfxInt32Item(sal_uInt16 which, SvStream & rStream):
-        CntInt32Item(which, rStream) {}
-
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override
-    { return new SfxInt32Item(Which(), rStream); }
-
     virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override
     { return new SfxInt32Item(*this); }
 
@@ -132,12 +112,6 @@ public:
 
     explicit SfxUInt32Item(sal_uInt16 which = 0, sal_uInt32 nValue = 0):
         CntUInt32Item(which, nValue) {}
-
-    SfxUInt32Item(sal_uInt16 which, SvStream & rStream):
-        CntUInt32Item(which, rStream) {}
-
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override
-    { return new SfxUInt32Item(Which(), rStream); }
 
     virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override
     { return new SfxUInt32Item(*this); }

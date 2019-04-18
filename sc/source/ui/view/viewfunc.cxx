@@ -851,14 +851,17 @@ const ScPatternAttr* ScViewFunc::GetSelectionPattern()
     }
 }
 
-void ScViewFunc::GetSelectionFrame( SvxBoxItem&     rLineOuter,
-                                    SvxBoxInfoItem& rLineInner )
+void ScViewFunc::GetSelectionFrame(
+    std::shared_ptr<SvxBoxItem>& rLineOuter,
+    std::shared_ptr<SvxBoxInfoItem>& rLineInner )
 {
     ScDocument* pDoc = GetViewData().GetDocument();
     const ScMarkData& rMark = GetViewData().GetMarkData();
 
     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
-        pDoc->GetSelectionFrame( rMark, rLineOuter, rLineInner );
+    {
+        pDoc->GetSelectionFrame( rMark, *rLineOuter, *rLineInner );
+    }
     else
     {
         const ScPatternAttr* pAttrs =
@@ -866,11 +869,12 @@ void ScViewFunc::GetSelectionFrame( SvxBoxItem&     rLineOuter,
                                       GetViewData().GetCurY(),
                                       GetViewData().GetTabNo() );
 
-        rLineOuter = pAttrs->GetItem( ATTR_BORDER );
-        rLineInner = pAttrs->GetItem( ATTR_BORDER_INNER );
-        rLineInner.SetTable(false);
-        rLineInner.SetDist(true);
-        rLineInner.SetMinDist(false);
+        rLineOuter.reset(static_cast<SvxBoxItem*>(pAttrs->GetItem(ATTR_BORDER).Clone()));
+        rLineInner.reset(static_cast<SvxBoxInfoItem*>(pAttrs->GetItem(ATTR_BORDER_INNER).Clone()));
+
+        rLineInner->SetTable(false);
+        rLineInner->SetDist(true);
+        rLineInner->SetMinDist(false);
     }
 }
 

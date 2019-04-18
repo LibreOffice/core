@@ -1279,49 +1279,47 @@ void SwDocTest::testTableAutoFormats()
     SvxBrushItem aBackground( Color(0xFF11FF), RES_BACKGROUND );
     aBoxAF.SetBackground( aBackground );
     //Set m_aTLBR
-    aBoxAF.m_aTLBR.ScaleMetrics( 11,12 );
-    SvxLineItem aTLBRLine = aBoxAF.m_aTLBR;
+    SvxLineItem aTLBRLine(0); aTLBRLine.ScaleMetrics( 11,12 );
+    aBoxAF.SetTLBR(aTLBRLine);
     //Set m_aBLTR
-    aBoxAF.m_aBLTR.ScaleMetrics( 13,14 );
-    SvxLineItem aBLTRLine = aBoxAF.m_aBLTR;
+    SvxLineItem aBLTRLine(0); aBLTRLine.ScaleMetrics( 13,14 );
+    aBoxAF.SetBLTR(aBLTRLine);
     //Set m_aHorJustify
     SvxHorJustifyItem aHJustify( SvxCellHorJustify::Center, 0 );
-    aBoxAF.m_aHorJustify = aHJustify;
+    aBoxAF.SetHorJustify(aHJustify);
     //Set m_aVerJustify
     SvxVerJustifyItem aVJustify( SvxCellVerJustify::Center , 0 );
-    aBoxAF.m_aVerJustify = aVJustify;
+    aBoxAF.SetVerJustify(aVJustify);
     //Set m_aStacked
-    aBoxAF.m_aStacked.SetValue( true );
-    SfxBoolItem aStacked = aBoxAF.m_aStacked;
+    SfxBoolItem aStacked(0, true);
+    aBoxAF.SetStacked(aStacked);
     //Set m_aMargin
-    aBoxAF.m_aMargin.SetLeftMargin( sal_Int16(4) );
-    aBoxAF.m_aMargin.SetRightMargin( sal_Int16(3) );
-    aBoxAF.m_aMargin.SetTopMargin( sal_Int16(2) );
-    aBoxAF.m_aMargin.SetBottomMargin( sal_Int16(3) );
-    SvxMarginItem aMargin = aBoxAF.m_aMargin;
+    SvxMarginItem aSvxMarginItem(sal_Int16(4), sal_Int16(2), sal_Int16(3), sal_Int16(3), 0);
+    aBoxAF.SetMargin(aSvxMarginItem);
     //Set m_aLinebreak
-    aBoxAF.m_aLinebreak.SetValue( true );
-    SfxBoolItem aLBreak = aBoxAF.m_aLinebreak;
+    SfxBoolItem aLBreak(0, true);
+    aBoxAF.SetLinebreak(aLBreak);
     //Set m_aRotateAngle
-    aBoxAF.m_aRotateAngle.SetValue( sal_Int32(5) );
-    SfxInt32Item aRAngle = aBoxAF.m_aRotateAngle;
+    SfxInt32Item aRAngle(sal_Int32(5));
+    aBoxAF.SetRotateAngle(aRAngle);
     //Set m_aRotateMode
-    aBoxAF.m_aRotateMode.SetValue( SVX_ROTATE_MODE_CENTER );
+    SvxRotateModeItem aSvxRotateModeItem(SVX_ROTATE_MODE_CENTER, 0);
+    aBoxAF.SetRotateMode(aSvxRotateModeItem);
     //Set m_sNumFormatString
     OUString aNFString = "UnitTestFormat";
-    aBoxAF.m_sNumFormatString = aNFString;
+    aBoxAF.SetNumFormatString(aNFString);
     //Set m_eSysLanguage
     LanguageType aSLang( LANGUAGE_ENGLISH_INDIA );
-    aBoxAF.m_eSysLanguage = aSLang;
+    aBoxAF.SetSysLanguage(aSLang);
     //Set m_eNumFormatLanguage
     LanguageType aNFLang( LANGUAGE_GERMAN );
-    aBoxAF.m_eNumFormatLanguage = aNFLang;
+    aBoxAF.SetNumFormatLanguage(aNFLang);
     //Set m_aBreak
     SvxFormatBreakItem aBreak( SvxBreak::PageBefore, 0 );
-    aTableAF.m_aBreak = aBreak;
+    aTableAF.SetBreak(aBreak);
     //Set m_aKeepWithNextPara
     SvxFormatKeepItem aKWNPara( true, 0 );
-    aTableAF.m_aKeepWithNextPara = aKWNPara;
+    aTableAF.SetKeepWithNextPara(aKWNPara);
     //Set m_aPageDesc
     SwFormatPageDesc aPDesc;
     uno::Any aPDAny( sal_uInt16(3) );
@@ -1341,7 +1339,7 @@ void SwDocTest::testTableAutoFormats()
     aTableAF.m_bCollapsingBorders = aCBorders;
     //Set m_aShadow
     SvxShadowItem aShadow( 0, nullptr, 103, SvxShadowLocation::BottomLeft );
-    aTableAF.m_aShadow = aShadow;
+    aTableAF.SetShadow(aShadow);
     //Set bInclFont
     bool aIFont = false;
     aTableAF.m_bInclFont = aIFont;
@@ -1434,21 +1432,21 @@ void SwDocTest::testTableAutoFormats()
     //GetBackground
     CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetBackground() == aBackground ) );
     //Get m_aTLBR
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_aTLBR == aTLBRLine ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetTLBR() == aTLBRLine ) );
     //Get m_aBLTR
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_aBLTR == aBLTRLine ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetBLTR() == aBLTRLine ) );
     //Get m_aHorJustify
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_aHorJustify == aHJustify ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetHorJustify() == aHJustify ) );
     //Get m_aVerJustify
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_aVerJustify == aVJustify ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetVerJustify() == aVJustify ) );
     //Get m_aStacked
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_aStacked == aStacked ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetStacked() == aStacked ) );
     //Get m_aMargin
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_aMargin == aMargin ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetMargin() == aSvxMarginItem ) );
     //Get m_aLinebreak
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_aLinebreak == aLBreak ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetLinebreak() == aLBreak ) );
     //Get m_aRotateAngle
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_aRotateAngle == aRAngle ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetRotateAngle() == aRAngle ) );
 #if !((defined(__clang__) && __clang_major__ == 4 && __clang_minor__ == 0) \
       || (defined __APPLE__ && defined __clang__ \
           && defined __apple_build_version__ \
@@ -1456,19 +1454,19 @@ void SwDocTest::testTableAutoFormats()
           && __apple_build_version__ <= 9000099))
         // Temporary fix for mysterious problem with Clang in F26 and Xcode 9
     //Get m_aRotateMode
-    SvxRotateModeItem aRMode = aBoxAF.m_aRotateMode;
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_aRotateMode == aRMode ) );
+    //SvxRotateModeItem aRMode = aBoxAF.m_aRotateMode;GetRotateMode
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetRotateMode() == aSvxRotateModeItem ) );
 #endif
     //Get m_sNumFormatString
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_sNumFormatString == aNFString ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetNumFormatString() == aNFString ) );
     //Get m_eSysLanguage
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_eSysLanguage == aSLang ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetSysLanguage() == aSLang ) );
     //Get m_eNumFormatLanguage
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_eNumFormatLanguage == aNFLang ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetNumFormatLanguage() == aNFLang ) );
     //Get m_aBreak
-    CPPUNIT_ASSERT( bool( pLoadAF->m_aBreak == aBreak ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBreak() == aBreak ) );
     //Get m_aKeepWithNextPara
-    CPPUNIT_ASSERT( bool( pLoadAF->m_aKeepWithNextPara == aKWNPara ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->GetKeepWithNextPara() == aKWNPara ) );
     //Get m_aPageDesc
     CPPUNIT_ASSERT( bool( pLoadAF->m_aPageDesc == aPDesc ) );
     //Get m_aRepeatHeading
@@ -1480,7 +1478,7 @@ void SwDocTest::testTableAutoFormats()
     //Get m_bCollapsingBorders
     CPPUNIT_ASSERT( bool( pLoadAF->m_bCollapsingBorders == aCBorders ) );
     //Get m_aShadow
-    CPPUNIT_ASSERT( bool( pLoadAF->m_aShadow == aShadow ) );
+    CPPUNIT_ASSERT( bool( pLoadAF->GetShadow() == aShadow ) );
     //Get bInclFont
     CPPUNIT_ASSERT( bool( pLoadAF->m_bInclFont == aIFont ) );
     //Get bInclJustify

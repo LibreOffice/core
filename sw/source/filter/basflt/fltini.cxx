@@ -308,9 +308,9 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
     if( SfxItemState::SET != rFlySet.GetItemState( RES_FRM_SIZE, true, &pItem ) ||
             MINFLY > static_cast<const SwFormatFrameSize*>(pItem)->GetWidth() )
     {
-        SwFormatFrameSize aSz(rFlySet.Get(RES_FRM_SIZE));
+        std::shared_ptr<SwFormatFrameSize> aSz(static_cast<SwFormatFrameSize*>(rFlySet.Get(RES_FRM_SIZE).Clone()));
         if (pItem)
-            aSz = static_cast<const SwFormatFrameSize&>(*pItem);
+            aSz.reset(static_cast<SwFormatFrameSize*>(pItem->Clone()));
 
         SwTwips nWidth;
         // determine the width; if there is a table use the width of the table;
@@ -397,16 +397,16 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
         if( MINFLY > nWidth )
             nWidth = MINFLY;
 
-        aSz.SetWidth( nWidth );
-        if( MINFLY > aSz.GetHeight() )
-            aSz.SetHeight( MINFLY );
-        rFlySet.Put( aSz );
+        aSz->SetWidth( nWidth );
+        if( MINFLY > aSz->GetHeight() )
+            aSz->SetHeight( MINFLY );
+        rFlySet.Put( *aSz );
     }
     else if( MINFLY > static_cast<const SwFormatFrameSize*>(pItem)->GetHeight() )
     {
-        SwFormatFrameSize aSz( *static_cast<const SwFormatFrameSize*>(pItem) );
-        aSz.SetHeight( MINFLY );
-        rFlySet.Put( aSz );
+        std::shared_ptr<SwFormatFrameSize> aSz(static_cast<SwFormatFrameSize*>(pItem->Clone()));
+        aSz->SetHeight( MINFLY );
+        rFlySet.Put( *aSz );
     }
 }
 

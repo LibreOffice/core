@@ -309,8 +309,8 @@ IMPL_STATIC_LINK(SvxHyperlinkNewDocTp, DispatchDocument, void*, p, void)
 
         // create items
         SfxStringItem aName( SID_FILE_NAME, xExecuteInfo->aStrDocName );
-        SfxStringItem aReferer( SID_REFERER, OUString("private:user") );
-        SfxStringItem aFrame( SID_TARGETNAME, OUString("_blank") );
+        SfxStringItem aReferer( SID_REFERER, "private:user" );
+        SfxStringItem aFrame( SID_TARGETNAME, "_blank");
 
         OUString aStrFlags('S');
         if (xExecuteInfo->bRbtEditLater)
