@@ -1627,7 +1627,7 @@ void ScFiltersTest::testPassword_Impl(const OUString& aFileNameBase)
     ScDocShellRef xDocSh = new ScDocShell;
     SfxMedium* pMedium = new SfxMedium(aFileName, StreamMode::STD_READWRITE);
     SfxItemSet* pSet = pMedium->GetItemSet();
-    pSet->Put(SfxStringItem(SID_PASSWORD, OUString("test")));
+    pSet->Put(SfxStringItem(SID_PASSWORD, "test"));
     pMedium->SetFilter(pFilter);
     if (!xDocSh->DoLoad(pMedium))
     {

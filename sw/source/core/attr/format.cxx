@@ -382,14 +382,14 @@ const SfxPoolItem& SwFormat::GetFormatAttr( sal_uInt16 nWhich, bool bInParents )
     {
         // FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes or makeBackgroundBrushItem (simple fallback is in place and used)");
-        static SvxBrushItem aSvxBrushItem(RES_BACKGROUND);
+        static std::shared_ptr<SvxBrushItem> aSvxBrushItem; //(std::make_shared<SvxBrushItem>(RES_BACKGROUND));
 
         // fill the local static SvxBrushItem from the current ItemSet so that
         // the fill attributes [XATTR_FILL_FIRST .. XATTR_FILL_LAST] are used
         // as good as possible to create a fallback representation and return that
         aSvxBrushItem = getSvxBrushItemFromSourceSet(m_aSet, RES_BACKGROUND, bInParents);
 
-        return aSvxBrushItem;
+        return *aSvxBrushItem;
     }
 
     return m_aSet.Get( nWhich, bInParents );
@@ -409,12 +409,11 @@ SfxItemState SwFormat::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, cons
             // if yes, fill the local SvxBrushItem using the new fill attributes
             // as good as possible to have an instance for the pointer to point
             // to and return as state that it is set
-
-            static SvxBrushItem aSvxBrushItem(RES_BACKGROUND);
+            static std::shared_ptr<SvxBrushItem> aSvxBrushItem; //(RES_BACKGROUND);
 
             aSvxBrushItem = getSvxBrushItemFromSourceSet(m_aSet, RES_BACKGROUND, bSrchInParent);
             if( ppItem )
-                *ppItem = &aSvxBrushItem;
+                *ppItem = aSvxBrushItem.get();
 
             return SfxItemState::SET;
         }
@@ -430,7 +429,7 @@ SfxItemState SwFormat::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, cons
     return m_aSet.GetItemState( nWhich, bSrchInParent, ppItem );
 }
 
-SfxItemState SwFormat::GetBackgroundState(SvxBrushItem &rItem) const
+SfxItemState SwFormat::GetBackgroundState(std::shared_ptr<SvxBrushItem>& rItem) const
 {
     if (supportsFullDrawingLayerFillAttributeSet())
     {
@@ -454,7 +453,7 @@ SfxItemState SwFormat::GetBackgroundState(SvxBrushItem &rItem) const
     const SfxPoolItem* pItem = nullptr;
     SfxItemState eRet = m_aSet.GetItemState(RES_BACKGROUND, true, &pItem);
     if (pItem)
-        rItem = *static_cast<const SvxBrushItem*>(pItem);
+        rItem.reset(static_cast<SvxBrushItem*>(pItem->Clone()));
     return eRet;
 }
 
@@ -782,7 +781,7 @@ void SwFormat::SetGrabBagItem(const uno::Any& rVal)
     m_pGrabBagItem->PutValue(rVal, 0);
 }
 
-SvxBrushItem SwFormat::makeBackgroundBrushItem(bool bInP) const
+std::shared_ptr<SvxBrushItem> SwFormat::makeBackgroundBrushItem(bool bInP) const
 {
     if (supportsFullDrawingLayerFillAttributeSet())
     {
@@ -795,7 +794,7 @@ SvxBrushItem SwFormat::makeBackgroundBrushItem(bool bInP) const
         return getSvxBrushItemFromSourceSet(m_aSet, RES_BACKGROUND, bInP);
     }
 
-    return m_aSet.GetBackground(bInP);
+    return std::shared_ptr<SvxBrushItem>(static_cast<SvxBrushItem*>(m_aSet.GetBackground(bInP).Clone()));
 }
 
 drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFormat::getSdrAllFillAttributesHelper() const

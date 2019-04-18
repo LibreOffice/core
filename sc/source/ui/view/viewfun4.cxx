@@ -619,7 +619,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
             SfxStringItem aFileNameItem( SID_FILE_NAME, aStrURL );
             SfxStringItem aFilterItem( SID_FILTER_NAME, pFlt->GetName() );
             // #i69524# add target, as in SfxApplication when the Open dialog is used
-            SfxStringItem aTargetItem( SID_TARGETNAME, OUString("_default") );
+            SfxStringItem aTargetItem( SID_TARGETNAME, "_default" );
 
             // Open Asynchronously, because it can also happen from D&D
             // and that is not so good for the MAC...

@@ -44,8 +44,6 @@ public:
     explicit SvxULSpaceItem( const sal_uInt16 nId  );
     SvxULSpaceItem( const sal_uInt16 nUp, const sal_uInt16 nLow,
                     const sal_uInt16 nId  );
-    inline SvxULSpaceItem& operator=( const SvxULSpaceItem &rCpy );
-    SvxULSpaceItem(SvxULSpaceItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
@@ -59,7 +57,6 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const override;
     virtual void                 ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool                 HasMetrics() const override;
 
@@ -79,16 +76,6 @@ public:
     sal_uInt16 GetPropLower() const { return nPropLower; }
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
-
-inline SvxULSpaceItem &SvxULSpaceItem::operator=( const SvxULSpaceItem &rCpy )
-{
-    nUpper = rCpy.GetUpper();
-    nLower = rCpy.GetLower();
-    bContext = rCpy.GetContext();
-    nPropUpper = rCpy.GetPropUpper();
-    nPropLower = rCpy.GetPropLower();
-    return *this;
-}
 
 inline void SvxULSpaceItem::SetUpper( const sal_uInt16 nU, const sal_uInt16 nProp )
 {

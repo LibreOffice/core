@@ -294,7 +294,7 @@ void ODbAdminDialog::createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, SfxItemP
     *pCounter++ = new SfxStringItem(DSID_TEXTDELIMITER, OUString('"'));
     *pCounter++ = new SfxStringItem(DSID_DECIMALDELIMITER, OUString('.'));
     *pCounter++ = new SfxStringItem(DSID_THOUSANDSDELIMITER, OUString());
-    *pCounter++ = new SfxStringItem(DSID_TEXTFILEEXTENSION, OUString("txt"));
+    *pCounter++ = new SfxStringItem(DSID_TEXTFILEEXTENSION, "txt");
     *pCounter++ = new SfxBoolItem(DSID_TEXTFILEHEADER, true);
     *pCounter++ = new SfxBoolItem(DSID_PARAMETERNAMESUBST, false);
     *pCounter++ = new SfxInt32Item(DSID_CONN_PORTNUMBER, 8100);
