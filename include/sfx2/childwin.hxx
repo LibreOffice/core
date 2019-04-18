@@ -163,6 +163,7 @@ public:
     void                SetController(std::shared_ptr<SfxDialogController> controller) { xController = controller; }
     void                ClearController() { xController.reset(); }
     std::shared_ptr<SfxDialogController>& GetController() { return xController; }
+    const std::shared_ptr<SfxDialogController>& GetController() const { return xController; }
     vcl::Window*        GetParent() const
                         { return pParent; }
     SfxChildAlignment   GetAlignment() const
@@ -297,6 +298,13 @@ public:
             static_cast<SfxModelessDialog*>(GetWindow())->FillInfo( aInfo );  \
             return aInfo; }
 
+#define SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(Class, MyID)    \
+        SFX_IMPL_CHILDWINDOW_WITHID(Class, MyID)       \
+        SfxChildWinInfo Class::GetInfo() const \
+        {                                       \
+            SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
+            static_cast<const SfxModelessDialogController*>(GetController().get())->FillInfo( aInfo );  \
+            return aInfo; }
 
 #define SFX_IMPL_DOCKINGWINDOW(Class, MyID) \
         SFX_IMPL_CHILDWINDOW(Class, MyID)       \
