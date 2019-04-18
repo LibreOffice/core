@@ -2676,12 +2676,10 @@ const SwCellFrame * SwTableCellInfo::Impl::getNextTableBoxsCellFrame(const SwFra
     {
         const SwCellFrame * pCellFrame = static_cast<const SwCellFrame *>(pFrame);
         const SwTableBox * pTabBox = pCellFrame->GetTabBox();
-        TableBoxes_t::const_iterator aIt = m_HandledTableBoxes.find(pTabBox);
-
-        if (aIt == m_HandledTableBoxes.end())
+        auto aIt = m_HandledTableBoxes.insert(pTabBox);
+        if (aIt.second)
         {
             pResult = pCellFrame;
-            m_HandledTableBoxes.insert(pTabBox);
             break;
         }
     }

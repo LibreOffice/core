@@ -576,9 +576,8 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
     }
     else
     {
-        if( g_aWindowList.list.find(pWindow) == g_aWindowList.list.end() )
+        if( g_aWindowList.list.insert(pWindow).second )
         {
-            g_aWindowList.list.insert(pWindow);
             try
             {
                 rDocumentFocusListener.attachRecursive(xAccessible, xContext, xStateSet);

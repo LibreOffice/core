@@ -863,11 +863,9 @@ void FontSubstConfiguration::fillSubstVector( const css::uno::Reference< XNameAc
                     OUString aSubst( pLine->getToken( 0, ';', nIndex ) );
                     if( !aSubst.isEmpty() )
                     {
-                        UniqueSubstHash::iterator aEntry = maSubstHash.find( aSubst );
-                        if (aEntry != maSubstHash.end())
-                            aSubst = *aEntry;
-                        else
-                            maSubstHash.insert( aSubst );
+                        auto itPair = maSubstHash.insert( aSubst );
+                        if (!itPair.second)
+                            aSubst = *itPair.first;
                         rSubstVector.push_back( aSubst );
                     }
                 }

@@ -1109,11 +1109,8 @@ static sal_uInt32 checkTypeReaders(RegistryTypeReader const & reader1,
     }
     for (sal_uInt32 i=0 ; i < reader2.getFieldCount(); i++)
     {
-        if (nameSet.find(reader2.getFieldName(i)) == nameSet.end())
-        {
-            nameSet.insert(reader2.getFieldName(i));
+        if (nameSet.insert(reader2.getFieldName(i)).second)
             count++;
-        }
     }
     return count;
 }

@@ -35,12 +35,7 @@ SwMovedFwdFramesByObjPos::~SwMovedFwdFramesByObjPos()
 void SwMovedFwdFramesByObjPos::Insert( const SwTextFrame& _rMovedFwdFrameByObjPos,
                                      const sal_uInt32 _nToPageNum )
 {
-    if ( maMovedFwdFrames.end() ==
-         maMovedFwdFrames.find(_rMovedFwdFrameByObjPos.GetTextNodeFirst()) )
-    {
-        const NodeMapEntry aEntry(_rMovedFwdFrameByObjPos.GetTextNodeFirst(), _nToPageNum);
-        maMovedFwdFrames.insert( aEntry );
-    }
+    maMovedFwdFrames.emplace(_rMovedFwdFrameByObjPos.GetTextNodeFirst(), _nToPageNum);
 }
 
 void SwMovedFwdFramesByObjPos::Remove( const SwTextFrame& _rTextFrame )

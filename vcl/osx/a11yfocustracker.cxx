@@ -248,11 +248,8 @@ void AquaA11yFocusTracker::window_got_focus(vcl::Window *pWindow)
     }
     else
     {
-        if( m_aDocumentWindowList.find(pWindow) == m_aDocumentWindowList.end() )
-        {
-            m_aDocumentWindowList.insert(pWindow);
+        if( m_aDocumentWindowList.insert(pWindow).second )
             m_xDocumentFocusListener->attachRecursive(xAccessible, xContext, xStateSet);
-        }
     }
 }
 

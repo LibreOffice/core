@@ -418,12 +418,8 @@ void XMLRedlineImportHelper::Add(
     pInfo->bMergeLastParagraph = bMergeLastPara;
 
     // ad 3)
-    if (aRedlineMap.end() == aRedlineMap.find(rId))
-    {
-        // 3a) insert into map
-        aRedlineMap[rId] = pInfo;
-    }
-    else
+    auto itPair = aRedlineMap.emplace(rId, pInfo);
+    if (!itPair.second)
     {
         // 3b) we already have a redline with this name: hierarchical redlines
         // insert pInfo as last element in the chain.
@@ -431,7 +427,7 @@ void XMLRedlineImportHelper::Add(
 
         // find last element
         RedlineInfo* pInfoChain;
-        for( pInfoChain = aRedlineMap[rId];
+        for( pInfoChain = itPair.first->second;
             nullptr != pInfoChain->pNextRedline;
             pInfoChain = pInfoChain->pNextRedline) ; // empty loop
 

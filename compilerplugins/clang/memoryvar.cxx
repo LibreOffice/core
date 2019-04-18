@@ -130,8 +130,7 @@ bool MemoryVar::VisitCXXDeleteExpr(const CXXDeleteExpr *deleteExpr)
 
     SourceLocation loc = varDecl->getLocation();
 
-    if (maVarUsesSet.find(loc) == maVarUsesSet.end()) {
-        maVarUsesSet.insert(loc);
+    if (maVarUsesSet.insert(loc).second) {
         maVarDeclSourceRangeMap[loc] = varDecl->getSourceRange();
         maVarDeleteSourceRangeMap[loc] = declRefExpr->getSourceRange();
     }

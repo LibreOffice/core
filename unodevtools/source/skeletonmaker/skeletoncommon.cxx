@@ -183,19 +183,15 @@ void checkType(rtl::Reference< TypeManager > const & manager,
         if ( name == "com.sun.star.lang.XTypeProvider" ||
              name == "com.sun.star.uno.XWeak" )
             return;
-        if (interfaceTypes.find(name) == interfaceTypes.end()) {
-            interfaceTypes.insert(name);
-        }
+        interfaceTypes.insert(name);
         break;
     case codemaker::UnoType::Sort::SingleInterfaceBasedService:
-        if (serviceTypes.find(name) == serviceTypes.end()) {
-            serviceTypes.insert(name);
+        if (serviceTypes.insert(name).second) {
             rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > ent2(
                 dynamic_cast< unoidl::SingleInterfaceBasedServiceEntity * >(
                     ent.get()));
             assert(ent2.is());
-            if (interfaceTypes.find(ent2->getBase()) == interfaceTypes.end()) {
-                interfaceTypes.insert(ent2->getBase());
+            if (interfaceTypes.insert(ent2->getBase()).second) {
                 // check if constructors are specified, if yes automatically
                 // support of XInitialization. We will take care of the default
                 // constructor because in this case XInitialization is not
@@ -204,16 +200,13 @@ void checkType(rtl::Reference< TypeManager > const & manager,
                     (ent2->getConstructors().size() == 1 &&
                      !ent2->getConstructors()[0].defaultConstructor))
                 {
-                    OUString s("com.sun.star.lang.XInitialization");
-                    if (interfaceTypes.find(s) == interfaceTypes.end())
-                        interfaceTypes.insert(s);
+                    interfaceTypes.insert(OUString("com.sun.star.lang.XInitialization"));
                 }
             }
         }
         break;
     case codemaker::UnoType::Sort::AccumulationBasedService:
-        if ( serviceTypes.find(name) == serviceTypes.end() ) {
-            serviceTypes.insert(name);
+        if ( serviceTypes.insert(name).second ) {
             rtl::Reference< unoidl::AccumulationBasedServiceEntity > ent2(
                 dynamic_cast< unoidl::AccumulationBasedServiceEntity * >(
                     ent.get()));
@@ -249,8 +242,7 @@ void checkDefaultInterfaces(
     if ( services.empty() ) {
         interfaces.erase("com.sun.star.lang.XServiceInfo");
     } else {
-        if (interfaces.find("com.sun.star.lang.XServiceInfo") == interfaces.end())
-            interfaces.insert("com.sun.star.lang.XServiceInfo");
+        interfaces.insert("com.sun.star.lang.XServiceInfo");
     }
 
     if ( propertyhelper == "_" ) {

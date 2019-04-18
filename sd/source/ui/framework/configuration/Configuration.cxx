@@ -100,11 +100,10 @@ void SAL_CALL Configuration::addResource (const Reference<XResourceId>& rxResour
     if ( ! rxResourceId.is() || rxResourceId->getResourceURL().isEmpty())
         throw css::lang::IllegalArgumentException();
 
-    if (mpResourceContainer->find(rxResourceId) == mpResourceContainer->end())
+    if (mpResourceContainer->insert(rxResourceId).second)
     {
         SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": Configuration::addResource() " <<
                 FrameworkHelper::ResourceIdToString(rxResourceId));
-        mpResourceContainer->insert(rxResourceId);
         PostEvent(rxResourceId, true);
     }
 }

@@ -353,18 +353,16 @@ void MSWordStyles::BuildStyleIds()
         OString aLower(aStyleId.toAsciiLowerCase());
 
         // check for uniqueness & construct something unique if we have to
-        if (aUsed.find(aLower) == aUsed.end())
+        if (aUsed.insert(aLower).second)
         {
-            aUsed.insert(aLower);
             m_aStyleIds.push_back(aStyleId);
         }
         else
         {
             int nFree = 1;
-            while (aUsed.find(aLower + OString::number(nFree)) != aUsed.end())
+            while (!aUsed.insert(aLower + OString::number(nFree)).second)
                 ++nFree;
 
-            aUsed.insert(aLower + OString::number(nFree));
             m_aStyleIds.emplace_back(aStyleId + OString::number(nFree));
         }
     }

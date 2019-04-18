@@ -116,18 +116,8 @@ void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, const boost::optio
     ScMyCurrencyStyle aStyle;
     if (pCurrency)
         aStyle.sCurrency = *pCurrency;
-    ScMyCurrencyStylesSet::iterator aItr(pCurrencyList->find(aStyle));
-    if (aItr == pCurrencyList->end())
-    {
-        std::pair<ScMyCurrencyStylesSet::iterator, bool> aPair(pCurrencyList->insert(aStyle));
-        if (aPair.second)
-        {
-            aItr = aPair.first;
-            aItr->mpRanges->addRange(rRange);
-        }
-    }
-    else
-        aItr->mpRanges->addRange(rRange);
+    auto itPair = pCurrencyList->insert(aStyle);
+    itPair.first->mpRanges->addRange(rRange);
 }
 
 void ScMyStyleRanges::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab)
@@ -257,19 +247,8 @@ ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const boost::optiona
     {
         OSL_FAIL("here is no stylename given");
     }
-    ScMyStylesSet::iterator aItr(aCellStyles.find(aStyle));
-    if (aItr == aCellStyles.end())
-    {
-        std::pair<ScMyStylesSet::iterator, bool> aPair(aCellStyles.insert(aStyle));
-        if (aPair.second)
-            aItr = aPair.first;
-        else
-        {
-            OSL_FAIL("not possible to insert style");
-            return aCellStyles.end();
-        }
-    }
-    return aItr;
+    auto itPair = aCellStyles.insert(aStyle);
+    return itPair.first;
 }
 
 void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)

@@ -1373,11 +1373,7 @@ void makeTableCellRedline( SwTableBox& rTableBox,
 void SwAnyMapHelper::SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& rAny )
 {
     sal_uInt32 nKey = (nWhichId << 16) + nMemberId;
-    auto aIt = m_Map.find( nKey );
-    if (aIt != m_Map.end())
-        aIt->second = rAny;
-    else
-        m_Map.insert(std::make_pair(nKey, rAny));
+    m_Map[nKey] = rAny;
 }
 
 bool    SwAnyMapHelper::FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& pAny )

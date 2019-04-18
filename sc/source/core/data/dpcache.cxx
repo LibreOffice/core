@@ -120,13 +120,7 @@ private:
 
 rtl_uString* internString( ScDPCache::StringSetType& rPool, const OUString& rStr )
 {
-    ScDPCache::StringSetType::iterator it = rPool.find(rStr);
-    if (it != rPool.end())
-        // In the pool.
-        return (*it).pData;
-
-    std::pair<ScDPCache::StringSetType::iterator, bool> r = rPool.insert(rStr);
-    return r.second ? (*r.first).pData : nullptr;
+    return rPool.insert(rStr).first->pData;
 }
 
 OUString createLabelString( const ScDocument* pDoc, SCCOL nCol, const ScRefCellValue& rCell )
