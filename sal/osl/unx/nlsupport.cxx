@@ -835,12 +835,6 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
 
     /* return the locale */
     *ppLocale = parse_locale( locale.getStr() );
-
-#ifndef IOS
-    setenv( "LC_ALL", locale.getStr(), 1);
-    setenv("LC_CTYPE", locale.getStr(), 1 );
-    setenv("LANG", locale.getStr(), 1 );
-#endif
 }
 #else
 /*****************************************************************************
