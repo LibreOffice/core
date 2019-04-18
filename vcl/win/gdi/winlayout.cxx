@@ -458,12 +458,12 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 
     const WinFontInstance* pWinFont = static_cast<const WinFontInstance*>(&rLayout.GetFont());
     const HFONT hLayoutFont = pWinFont->GetHFONT();
+    bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter;
 
     // Our DirectWrite renderer is incomplete, skip it for non-horizontal or
     // stretched text.
-    bool bForceGDI = rLayout.GetOrientation() || pWinFont->hasHScale();
+    bool bForceGDI = rLayout.GetOrientation() || (pWinFont->hasHScale() && !bUseOpenGL);
 
-    bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter;
     if (!bUseOpenGL)
     {
         // no OpenGL, just classic rendering
