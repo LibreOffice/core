@@ -104,9 +104,7 @@ cmd/sc_insertformradio.png cmd/sc_radiobutton.png
 cmd/sc_insertformspin.png cmd/sc_spinbutton.png
 cmd/sc_insertformula.png cmd/sc_dbviewfunctions.png
 cmd/sc_insertformvscroll.png cmd/sc_scrollbar.png
-cmd/sc_scrollbarmenu.png cmd/sc_scrollbar.png
 cmd/sc_insertframeinteract.png cmd/sc_insertframe.png
-cmd/sc_insertframemenu.png cmd/sc_insertframe.png
 cmd/sc_insertframeinteractnocolumns.png cmd/sc_insertframe.png
 cmd/sc_insertimagecontrol.png cmd/sc_insertgraphic.png
 cmd/sc_insertobjectchart.png cmd/sc_drawchart.png
@@ -567,8 +565,6 @@ cmd/sc_fillcolor.png cmd/sc_formatarea.png
 # Notebookbar
 cmd/lc_headerandfooter.png cmd/lc_editheaderandfooter.png
 cmd/sc_headerandfooter.png cmd/sc_editheaderandfooter.png
-cmd/lc_insertheaderfootermenu.png cmd/lc_editheaderandfooter.png
-cmd/sc_insertheaderfootermenu.png cmd/sc_editheaderandfooter.png
 cmd/lc_recalcpivottable.png cmd/lc_calculate.png
 cmd/sc_recalcpivottable.png cmd/sc_calculate.png
 cmd/lc_datafilterhideautofilter.png cmd/lc_removefiltersort.png
@@ -650,7 +646,6 @@ cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
 # Grid
 cmd/lc_gridvisible.png cmd/lc_grid.png
 cmd/sc_gridvisible.png cmd/sc_grid.png
-cmd/sc_gridmenu.png cmd/sc_grid.png
 cmd/sc_insertgridcontrol.png cmd/sc_grid.png
 cmd/lc_insertgridcontrol.png cmd/lc_grid.png
 
@@ -681,9 +676,6 @@ cmd/sc_loadstyles.png cmd/sc_open.png
 # Outline
 cmd/lc_outlineright.png cmd/lc_decrementlevel.png
 cmd/lc_outlineleft.png cmd/lc_decrementindent.png
-
-# Index
-cmd/sc_insertfootnotesmenu.png cmd/sc_insertfootnote.png
 
 # Mirror
 cmd/lc_fliphorizontal.png cmd/lc_mirror.png
@@ -1745,7 +1737,6 @@ cmd/sc_convertmenu.png cmd/sc_bezierconvert.png
 # calc menubar icons
 # ===============================================
 cmd/sc_chartmenu.png cmd/sc_drawchart.png
-cmd/sc_objectmenu.png cmd/sc_insertframe.png
 
 # writer
 # ===============================================
