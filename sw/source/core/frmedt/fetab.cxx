@@ -754,7 +754,7 @@ void SwFEShell::SetRowBackground( const SvxBrushItem &rNew )
     EndAllActionAndCall();
 }
 
-bool SwFEShell::GetRowBackground( SvxBrushItem &rToFill ) const
+bool SwFEShell::GetRowBackground( std::shared_ptr<SvxBrushItem>& rToFill ) const
 {
     return SwDoc::GetRowBackground( *getShellCursor( false ), rToFill );
 }
@@ -790,9 +790,12 @@ void SwFEShell::SetBoxBackground( const SvxBrushItem &rNew )
     EndAllActionAndCall();
 }
 
-bool SwFEShell::GetBoxBackground( SvxBrushItem &rToFill ) const
+bool SwFEShell::GetBoxBackground( std::shared_ptr<SvxBrushItem>& rToFill ) const
 {
-    return SwDoc::GetBoxAttr( *getShellCursor( false ), rToFill );
+    std::shared_ptr<SfxPoolItem> aTemp(rToFill);
+    bool bRetval(SwDoc::GetBoxAttr(*getShellCursor( false ), aTemp));
+    rToFill = std::static_pointer_cast<SvxBrushItem>(aTemp);
+    return bRetval;
 }
 
 void SwFEShell::SetBoxDirection( const SvxFrameDirectionItem& rNew )
@@ -803,9 +806,12 @@ void SwFEShell::SetBoxDirection( const SvxFrameDirectionItem& rNew )
     EndAllActionAndCall();
 }
 
-bool SwFEShell::GetBoxDirection( SvxFrameDirectionItem&  rToFill ) const
+bool SwFEShell::GetBoxDirection( std::shared_ptr<SvxFrameDirectionItem>& rToFill ) const
 {
-    return SwDoc::GetBoxAttr( *getShellCursor( false ), rToFill );
+    std::shared_ptr<SfxPoolItem> aTemp(rToFill);
+    bool bRetval(SwDoc::GetBoxAttr(*getShellCursor( false ), aTemp));
+    rToFill = std::static_pointer_cast<SvxFrameDirectionItem>(aTemp);
+    return bRetval;
 }
 
 void SwFEShell::SetBoxAlign( sal_uInt16 nAlign )
@@ -834,7 +840,7 @@ void SwFEShell::SetTabBackground( const SvxBrushItem &rNew )
     GetDoc()->getIDocumentState().SetModified();
 }
 
-void SwFEShell::GetTabBackground( SvxBrushItem &rToFill ) const
+void SwFEShell::GetTabBackground( std::shared_ptr<SvxBrushItem>& rToFill ) const
 {
     SwFrame *pFrame = GetCurrFrame();
     if( pFrame && pFrame->IsInTab() )

@@ -50,11 +50,6 @@ SfxPoolItem* SvxWritingModeItem::Clone( SfxItemPool * ) const
     return new SvxWritingModeItem( *this );
 }
 
-sal_uInt16 SvxWritingModeItem::GetVersion( sal_uInt16 /*nFVer*/ ) const
-{
-    return USHRT_MAX;
-}
-
 bool SvxWritingModeItem::GetPresentation( SfxItemPresentation /*ePres*/,
         MapUnit /*eCoreMetric*/,
         MapUnit /*ePresMetric*/,

@@ -62,34 +62,11 @@ bool CntByteItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * CntByteItem::Create(SvStream & rStream, sal_uInt16) const
-{
-    short nTheValue = 0;
-    rStream.ReadInt16( nTheValue );
-    return new CntByteItem(Which(), sal_uInt8(nTheValue));
-}
-
-// virtual
-SvStream & CntByteItem::Store(SvStream & rStream, sal_uInt16) const
-{
-    rStream.WriteInt16( short(m_nValue) );
-    return rStream;
-}
-
-// virtual
 SfxPoolItem * CntByteItem::Clone(SfxItemPool *) const
 {
     return new CntByteItem(*this);
 }
 
-
-CntUInt16Item::CntUInt16Item(sal_uInt16 which, SvStream & rStream) :
-    SfxPoolItem(which)
-{
-    sal_uInt16 nTheValue = 0;
-    rStream.ReadUInt16( nTheValue );
-    m_nValue = nTheValue;
-}
 
 // virtual
 bool CntUInt16Item::operator ==(const SfxPoolItem & rItem) const
@@ -133,31 +110,11 @@ bool CntUInt16Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * CntUInt16Item::Create(SvStream & rStream, sal_uInt16) const
-{
-    return new CntUInt16Item(Which(), rStream);
-}
-
-// virtual
-SvStream & CntUInt16Item::Store(SvStream &rStream, sal_uInt16) const
-{
-    rStream.WriteUInt16( m_nValue );
-    return rStream;
-}
-
-// virtual
 SfxPoolItem * CntUInt16Item::Clone(SfxItemPool *) const
 {
     return new CntUInt16Item(*this);
 }
 
-
-CntInt32Item::CntInt32Item(sal_uInt16 which, SvStream & rStream)
-    : SfxPoolItem(which)
-    , m_nValue(0)
-{
-    rStream.ReadInt32( m_nValue );
-}
 
 // virtual
 bool CntInt32Item::operator ==(const SfxPoolItem & rItem) const
@@ -199,32 +156,11 @@ bool CntInt32Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * CntInt32Item::Create(SvStream & rStream, sal_uInt16) const
-{
-    return new CntInt32Item(Which(), rStream);
-}
-
-// virtual
-SvStream & CntInt32Item::Store(SvStream &rStream, sal_uInt16) const
-{
-    rStream.WriteInt32( m_nValue );
-    return rStream;
-}
-
-// virtual
 SfxPoolItem * CntInt32Item::Clone(SfxItemPool *) const
 {
     return new CntInt32Item(*this);
 }
 
-
-CntUInt32Item::CntUInt32Item(sal_uInt16 which, SvStream & rStream) :
-    SfxPoolItem(which)
-{
-    sal_uInt32 nTheValue = 0;
-    rStream.ReadUInt32( nTheValue );
-    m_nValue = nTheValue;
-}
 
 // virtual
 bool CntUInt32Item::operator ==(const SfxPoolItem & rItem) const
@@ -266,19 +202,6 @@ bool CntUInt32Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
 
     SAL_WARN("svl.items", "CntUInt32Item::PutValue - Wrong type!");
     return false;
-}
-
-// virtual
-SfxPoolItem * CntUInt32Item::Create(SvStream & rStream, sal_uInt16) const
-{
-    return new CntUInt32Item(Which(), rStream);
-}
-
-// virtual
-SvStream & CntUInt32Item::Store(SvStream &rStream, sal_uInt16) const
-{
-    rStream.WriteUInt32( m_nValue );
-    return rStream;
 }
 
 // virtual

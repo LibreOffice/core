@@ -133,14 +133,6 @@ SfxPoolItem* SvxOrientationItem::Clone( SfxItemPool* ) const
 }
 
 
-SfxPoolItem* SvxOrientationItem::Create( SvStream& rStream, sal_uInt16 ) const
-{
-    sal_uInt16 nVal;
-    rStream.ReadUInt16( nVal );
-    return new SvxOrientationItem( static_cast<SvxCellOrientation>(nVal), Which() );
-}
-
-
 sal_uInt16 SvxOrientationItem::GetValueCount() const
 {
     return static_cast<sal_uInt16>(SvxCellOrientation::Stacked) + 1; // last enum value + 1
@@ -253,30 +245,6 @@ bool SvxMarginItem::operator==( const SfxPoolItem& rItem ) const
 SfxPoolItem* SvxMarginItem::Clone( SfxItemPool* ) const
 {
     return new SvxMarginItem(*this);
-}
-
-
-SfxPoolItem* SvxMarginItem::Create( SvStream& rStream, sal_uInt16 ) const
-{
-    sal_Int16   nLeft;
-    sal_Int16   nTop;
-    sal_Int16   nRight;
-    sal_Int16   nBottom;
-    rStream.ReadInt16( nLeft );
-    rStream.ReadInt16( nTop );
-    rStream.ReadInt16( nRight );
-    rStream.ReadInt16( nBottom );
-    return new SvxMarginItem( nLeft, nTop, nRight, nBottom, Which() );
-}
-
-
-SvStream& SvxMarginItem::Store( SvStream &rStream, sal_uInt16 /*nItemVersion*/) const
-{
-    rStream.WriteInt16( nLeftMargin );
-    rStream.WriteInt16( nTopMargin );
-    rStream.WriteInt16( nRightMargin );
-    rStream.WriteInt16( nBottomMargin );
-    return rStream;
 }
 
 

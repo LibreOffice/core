@@ -95,12 +95,6 @@ SfxPoolItem* SfxEventNamesItem::Clone( SfxItemPool *) const
     return new SfxEventNamesItem(*this);
 }
 
-sal_uInt16 SfxEventNamesItem::GetVersion( sal_uInt16 ) const
-{
-    OSL_FAIL("not streamable!");
-    return 0;
-}
-
 void SfxEventNamesItem::AddEvent( const OUString& rName, const OUString& rUIName, SvMacroItemId nID )
 {
     aEventsList.push_back( SfxEventName( nID, rName, !rUIName.isEmpty() ? rUIName : rName ) );
