@@ -28,6 +28,7 @@
 #include <fmtfsize.hxx>
 #include <xmloff/odffields.hxx>
 #include <txtfrm.hxx>
+#include <redline.hxx>
 
 namespace
 {
