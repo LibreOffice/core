@@ -1660,10 +1660,14 @@ void EnhancedCustomShape2d::CreateSubPath(
                             // The following implementation generates such rendering. It is only for rendering legacy
                             // MS shapes and independent of the meaning of commands U and T in ODF specification.
 
-                            // Convert from fixedfloat to double
-                            double fSwingAngle;
-                            fStartAngle /= 65536.0;
-                            fSwingAngle = fEndAngle / 65536.0;
+                            // The WordArt shape 'RingOutside' has already angles in degree, all other need
+                            // convertion from fixed-point number.
+                            double fSwingAngle = fEndAngle;
+                            if (sShpType != "mso-spt143")
+                            {
+                                fStartAngle /= 65536.0;
+                                fSwingAngle = fEndAngle / 65536.0;
+                            }
                             // Convert orientation
                             fStartAngle = -fStartAngle;
                             fSwingAngle = -fSwingAngle;

@@ -6499,20 +6499,17 @@ static const mso_CustomShape msoTextRingInside =
     const_cast<SvxMSDffHandle*>(mso_sptTextRingInsideHandle), SAL_N_ELEMENTS( mso_sptTextRingInsideHandle )
 };
 //mso_sptTextRingOutside
-//path = U 10800 ?f0 21600 ?f2 180 539 N U 10800 ?f1 21600 ?f2 180 539 N
+//path = U 10800 ?f0 10800 ?f2 180 539 N U 10800 ?f1 10800 ?f2 180 539 N
+// MSO binary format has swing angle, not end angle, therefore 359 instead of 539.
 static const SvxMSDffVertPair mso_sptTextRingOutsideVert[] =
 {
-    { 10800, 0 MSO_I }, { 21600, 2 MSO_I }, { 180, 539},//U
-    { 10800, 1 MSO_I }, { 21600, 2 MSO_I }, { 180, 539 }//U
-    //{ 10800, 0 MSO_I }, { 10800, 0 MSO_I }, { 180, 359 },
-    //{ 10800, 1 MSO_I }, { 10800, 0 MSO_I }, { 180, 359 }
+    { 10800, 0 MSO_I }, { 10800, 0 MSO_I }, { 180, 359 },
+    { 10800, 1 MSO_I }, { 10800, 0 MSO_I }, { 180, 359 }
 };
 static const SvxMSDffCalculationData mso_sptTextRingOutsideCalc[] = // adjustment1 : 6629 - 14971
 {
     { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
-    { 0x8000, { 21600, 0, 0x400 } },
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, //$0
-    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }//21600-$0
+    { 0x8000, { 21600, 0, 0x400 } }
 };
 static const sal_uInt16 mso_sptTextRingOutsideSegm[] =
 {
@@ -6521,7 +6518,7 @@ static const sal_uInt16 mso_sptTextRingOutsideSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextRingOutsideHandle[] =
 {
-    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL,
+    {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 10800, 21600 }
 };
 static const mso_CustomShape msoTextRingOutside =
