@@ -9,4 +9,5 @@
 <item oor:path="/org.openoffice.Setup/L10N"><prop oor:name="ooSetupSystemLocale" oor:op="fuse"><value>en-US</value></prop></item>
 <item oor:path="/org.openoffice.Setup/L10N"><prop oor:name="ooLocale" oor:op="fuse"><value>en</value></prop></item>
 <item oor:path="/org.openoffice.Office.Linguistic/General"><prop oor:name="UILocale" oor:op="fuse"><value>en-US</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/Filter/PDF/Export"><prop oor:name="ViewPDFAfterExport" oor:op="fuse"><value>false</value></prop></item>
 </oor:items>

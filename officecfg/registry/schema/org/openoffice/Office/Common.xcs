@@ -4676,7 +4676,7 @@
             <info>
               <desc>Specifies if PDF automatically opens after export.</desc>
             </info>
-            <value>false</value>
+            <value>true</value>
           </prop>
           <prop oor:name="ExportBookmarks" oor:type="xs:boolean" oor:nillable="false">
             <info>
