@@ -4139,10 +4139,10 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
 
     short nPara = SVBT16ToUInt16( pData );
 
-    SvxLRSpaceItem aLR( RES_LR_SPACE );
+    std::shared_ptr<SvxLRSpaceItem> aLR(std::make_shared<SvxLRSpaceItem>(RES_LR_SPACE));
     const SfxPoolItem* pLR = GetFormatAttr(RES_LR_SPACE);
     if( pLR )
-        aLR = *static_cast<const SvxLRSpaceItem*>(pLR);
+        aLR.reset(static_cast<SvxLRSpaceItem*>(pLR->Clone()));
 
     // Fix the regression issue: #i99822#: Discussion?
     // Since the list level formatting doesn't apply into paragraph style
@@ -4159,10 +4159,10 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             const SwNumFormat* pFormat = pNumRule->GetNumFormat( nLvl );
             if ( pFormat && pFormat->GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
-                aLR.SetTextLeft( pFormat->GetIndentAt() );
-                aLR.SetTextFirstLineOfst( static_cast<short>(pFormat->GetFirstLineIndent()) );
+                aLR->SetTextLeft( pFormat->GetIndentAt() );
+                aLR->SetTextFirstLineOfst( static_cast<short>(pFormat->GetFirstLineIndent()) );
                 // make paragraph have hard-set indent attributes
-                pTextNode->SetAttr( aLR );
+                pTextNode->SetAttr( *aLR );
             }
         }
     }
@@ -4202,7 +4202,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         case NS_sprm::v6::sprmPDxaLeft:
         case NS_sprm::sprmPDxaLeft80:
         case NS_sprm::sprmPDxaLeft:
-            aLR.SetTextLeft( nPara );
+            aLR->SetTextLeft( nPara );
             if (m_pCurrentColl && m_nCurrentColl < m_vColl.size())
             {
                 m_vColl[m_nCurrentColl].m_bListReleventIndentSet = true;
@@ -4236,7 +4236,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
                 }
             }
 
-            aLR.SetTextFirstLineOfst(nPara);
+            aLR->SetTextFirstLineOfst(nPara);
 
             if (!m_pCurrentColl)
             {
@@ -4246,7 +4246,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
                     {
                         if (!lcl_HasExplicitLeft(m_xPlcxMan.get(), m_bVer67))
                         {
-                            aLR.SetTextLeft(pNumFormat->GetIndentAt());
+                            aLR->SetTextLeft(pNumFormat->GetIndentAt());
 
                             // If have not explicit left, set number format list tab position is doc default tab
                             const SvxTabStopItem *pDefaultStopItem = m_rDoc.GetAttrPool().GetPoolDefaultItem(RES_PARATR_TABSTOP);
@@ -4266,13 +4266,13 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         case NS_sprm::v6::sprmPDxaRight:
         case NS_sprm::sprmPDxaRight80:
         case NS_sprm::sprmPDxaRight:
-            aLR.SetRight( nPara );
+            aLR->SetRight( nPara );
             break;
         default:
             return;
     }
 
-    NewAttr( aLR, bFirstLinOfstSet, bLeftIndentSet ); // #i103711#, #i105414#
+    NewAttr( *aLR, bFirstLinOfstSet, bLeftIndentSet ); // #i103711#, #i105414#
 }
 
 // Sprm 20
@@ -4982,29 +4982,29 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
                 // otherwise it's not possible to turn of the style attribute hard.
                 const SvxBoxItem* pBox
                     = static_cast<const SvxBoxItem*>(GetFormatAttr( RES_BOX ));
-                SvxBoxItem aBox(RES_BOX);
+                std::shared_ptr<SvxBoxItem> aBox(std::make_shared<SvxBoxItem>(RES_BOX));
                 if (pBox)
-                    aBox = *pBox;
+                    aBox.reset(static_cast<SvxBoxItem*>(pBox->Clone()));
                 short aSizeArray[5]={0};
 
-                SetBorder(aBox, aBrcs, &aSizeArray[0], nBorder);
+                SetBorder(*aBox, aBrcs, &aSizeArray[0], nBorder);
 
                 tools::Rectangle aInnerDist;
                 GetBorderDistance( aBrcs, aInnerDist );
 
                 if (nBorder & (1 << WW8_LEFT))
-                    aBox.SetDistance( static_cast<sal_uInt16>(aInnerDist.Left()), SvxBoxItemLine::LEFT );
+                    aBox->SetDistance( static_cast<sal_uInt16>(aInnerDist.Left()), SvxBoxItemLine::LEFT );
 
                 if (nBorder & (1 << WW8_TOP))
-                    aBox.SetDistance( static_cast<sal_uInt16>(aInnerDist.Top()), SvxBoxItemLine::TOP );
+                    aBox->SetDistance( static_cast<sal_uInt16>(aInnerDist.Top()), SvxBoxItemLine::TOP );
 
                 if (nBorder & (1 << WW8_RIGHT))
-                    aBox.SetDistance( static_cast<sal_uInt16>(aInnerDist.Right()), SvxBoxItemLine::RIGHT );
+                    aBox->SetDistance( static_cast<sal_uInt16>(aInnerDist.Right()), SvxBoxItemLine::RIGHT );
 
                 if (nBorder & (1 << WW8_BOT))
-                    aBox.SetDistance( static_cast<sal_uInt16>(aInnerDist.Bottom()), SvxBoxItemLine::BOTTOM );
+                    aBox->SetDistance( static_cast<sal_uInt16>(aInnerDist.Bottom()), SvxBoxItemLine::BOTTOM );
 
-                NewAttr( aBox );
+                NewAttr( *aBox );
 
                 SvxShadowItem aS(RES_SHADOW);
                 if( SetShadow( aS, &aSizeArray[0], aBrcs[WW8_RIGHT] ) )
@@ -5031,8 +5031,7 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, sh
             = static_cast<const SvxBoxItem*>(GetFormatAttr( RES_CHRATR_BOX ));
         if( pBox )
         {
-            SvxBoxItem aBoxItem(RES_CHRATR_BOX);
-            aBoxItem = *pBox;
+            std::shared_ptr<SvxBoxItem> aBoxItem(static_cast<SvxBoxItem*>(pBox->Clone()));
             WW8_BRCVer9 aBrc;
             int nBrcVer = (nId == NS_sprm::sprmCBrc) ? 9 : (m_bVer67 ? 6 : 8);
 
@@ -5041,11 +5040,11 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, sh
             // Border style is none -> no border, no shadow
             if( editeng::ConvertBorderStyleFromWord(aBrc.brcType()) != SvxBorderLineStyle::NONE )
             {
-                Set1Border(aBoxItem, aBrc, SvxBoxItemLine::TOP, 0, nullptr, true);
-                Set1Border(aBoxItem, aBrc, SvxBoxItemLine::BOTTOM, 0, nullptr, true);
-                Set1Border(aBoxItem, aBrc, SvxBoxItemLine::LEFT, 0, nullptr, true);
-                Set1Border(aBoxItem, aBrc, SvxBoxItemLine::RIGHT, 0, nullptr, true);
-                NewAttr( aBoxItem );
+                Set1Border(*aBoxItem, aBrc, SvxBoxItemLine::TOP, 0, nullptr, true);
+                Set1Border(*aBoxItem, aBrc, SvxBoxItemLine::BOTTOM, 0, nullptr, true);
+                Set1Border(*aBoxItem, aBrc, SvxBoxItemLine::LEFT, 0, nullptr, true);
+                Set1Border(*aBoxItem, aBrc, SvxBoxItemLine::RIGHT, 0, nullptr, true);
+                NewAttr( *aBoxItem );
 
                 short aSizeArray[WW8_RIGHT+1]={0}; aSizeArray[WW8_RIGHT] = 1;
                 SvxShadowItem aShadowItem(RES_CHRATR_SHADOW);

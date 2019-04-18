@@ -419,7 +419,7 @@ void RtfExport::WriteMainText()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
 
-    if (boost::optional<SvxBrushItem> oBrush = getBackground())
+    if (std::shared_ptr<SvxBrushItem> oBrush = getBackground(); oBrush)
     {
         Strm().WriteCharPtr(LO_STRING_SVTOOLS_RTF_VIEWBKSP).WriteChar('1');
         Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_BACKGROUND);

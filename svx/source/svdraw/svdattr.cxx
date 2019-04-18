@@ -1335,10 +1335,7 @@ SfxPoolItem* SdrTextFixedCellHeightItem::Clone( SfxItemPool * /*pPool*/) const
 {
     return new SdrTextFixedCellHeightItem( GetValue() );
 }
-sal_uInt16 SdrTextFixedCellHeightItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
-{
-    return 1;
-}
+
 bool SdrTextFixedCellHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     bool bValue = GetValue();
@@ -1938,11 +1935,6 @@ SfxPoolItem* SdrGrafCropItem::Clone( SfxItemPool* /*pPool*/) const
     return new SdrGrafCropItem( *this );
 }
 
-sal_uInt16 SdrGrafCropItem::GetVersion( sal_uInt16 /*nFileVersion*/) const
-{
-    // GRFCROP_VERSION_MOVETOSVX is 1
-    return GRFCROP_VERSION_MOVETOSVX;
-}
 SdrTextAniStartInsideItem::~SdrTextAniStartInsideItem()
 {
 }

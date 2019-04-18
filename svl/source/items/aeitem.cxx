@@ -39,12 +39,6 @@ SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which, sal_uInt16 nVal):
     InsertValue( nVal );
 }
 
-SfxAllEnumItem::SfxAllEnumItem( sal_uInt16 which, SvStream &rStream ):
-    SfxAllEnumItem_Base(which, rStream)
-{
-    InsertValue( GetValue() );
-}
-
 SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which):
     SfxAllEnumItem_Base(which, 0)
 {
@@ -81,11 +75,6 @@ sal_uInt16 SfxAllEnumItem::GetValueByPos( sal_uInt16 nPos ) const
 SfxPoolItem* SfxAllEnumItem::Clone( SfxItemPool * ) const
 {
     return new SfxAllEnumItem(*this);
-}
-
-SfxPoolItem* SfxAllEnumItem::Create( SvStream & rStream, sal_uInt16 ) const
-{
-    return new SfxAllEnumItem( Which(), rStream );
 }
 
 /**

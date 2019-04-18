@@ -558,11 +558,6 @@ SfxPoolItem* ScViewObjectModeItem::Clone( SfxItemPool* ) const
     return new ScViewObjectModeItem( *this );
 }
 
-sal_uInt16 ScViewObjectModeItem::GetVersion( sal_uInt16 /* nFileVersion */ ) const
-{
-    return 1;
-}
-
 ScPageScaleToItem::ScPageScaleToItem() :
     SfxPoolItem( ATTR_PAGE_SCALETO ),
     mnWidth( 0 ),

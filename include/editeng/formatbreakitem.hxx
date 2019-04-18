@@ -40,7 +40,6 @@ public:
 
     inline SvxFormatBreakItem( const SvxBreak eBrk /*= SvxBreak::NONE*/,
                             const sal_uInt16 nWhich );
-    inline SvxFormatBreakItem& operator=( const SvxFormatBreakItem& rCpy );
     SvxFormatBreakItem(SvxFormatBreakItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
@@ -55,9 +54,6 @@ public:
     static OUString          GetValueTextByPos( sal_uInt16 nPos );
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const override;
-    virtual sal_uInt16       GetVersion( sal_uInt16 nFileVersion ) const override;
-    virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 ) const override;
     virtual sal_uInt16       GetValueCount() const override;
 
     SvxBreak                 GetBreak() const { return GetValue(); }
@@ -69,13 +65,6 @@ inline SvxFormatBreakItem::SvxFormatBreakItem( const SvxBreak eBreak,
     SfxEnumItem( _nWhich, eBreak )
 {}
 
-
-inline SvxFormatBreakItem& SvxFormatBreakItem::operator=(
-    const SvxFormatBreakItem& rBreak )
-{
-    SetValue( rBreak.GetBreak() );
-    return *this;
-}
 
 #endif
 
