@@ -286,11 +286,16 @@ public:
 
     sax_fastparser::FSHelperPtr     GetStreamForPath( const OUString& rPath );
 
-    // FIXME: if written through this cannot be checked for well-formedness
-    sax_fastparser::FSHelperPtr&    WriteAttributes( sal_Int32 nAttribute, const char* value, FSEND_t )
-        { return WriteAttributesInternal( nAttribute, value, FSEND_internal ); }
-    sax_fastparser::FSHelperPtr&    WriteAttributes( sal_Int32 nAttribute, const OString& value, FSEND_t )
-        { return WriteAttributesInternal( nAttribute, value.getStr(), FSEND_internal ); }
+    template <typename Str> void WriteAttributes(sal_Int32 nAttribute, const Str& value, FSEND_t)
+    {
+        WriteAttribute(nAttribute, value);
+    }
+    template <typename Str, typename... Args>
+    void WriteAttributes(sal_Int32 nAttribute, const Str& value, Args... rest)
+    {
+        WriteAttribute(nAttribute, value);
+        WriteAttributes(rest...);
+    }
 
     sax_fastparser::FSHelperPtr     CreateOutputStream (
                                         const OUString& sFullStream,
@@ -310,40 +315,20 @@ public:
     virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() override;
     virtual oox::drawingml::chart::ChartConverter* getChartConverter() override;
 
-    /*
-      Now create all the overloads in a typesafe way (i.e. without varargs) by creating a number of overloads
-      up to a certain reasonable limit (feel free to raise it). This would be a lot easier with C++11 vararg templates.
-    */
-    // now overloads for 2 and more pairs
-    #define SAX_ARGS_FUNC_DECL( argsdecl, argsuse ) \
-        sax_fastparser::FSHelperPtr&    WriteAttributes( argsdecl, FSEND_t ) \
-            { return WriteAttributesInternal( argsuse, FSEND_internal ); }
-    #define SAX_ARGS_FUNC_NUM( decl1, decl2, use1, use2, convert, num ) \
-        SAX_ARGS_FUNC_DECL( SAX_ARGS_ARG##num( decl1, decl2, ), SAX_ARGS_ARG##num( use1, use2, convert ))
-    #define SAX_ARGS_FUNC_SUBST( type, convert, num ) \
-        SAX_ARGS_FUNC_NUM( sal_Int32 attribute, type value, attribute, value, convert, num )
-    #define SAX_ARGS_FUNC( arg, convert ) SAX_ARGS_FUNC_SUBST( arg, convert, 2 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 3 ) SAX_ARGS_FUNC_SUBST( arg, convert, 4 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 5 ) SAX_ARGS_FUNC_SUBST( arg, convert, 6 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 7 ) SAX_ARGS_FUNC_SUBST( arg, convert, 8 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 9 ) SAX_ARGS_FUNC_SUBST( arg, convert, 10 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 11 ) SAX_ARGS_FUNC_SUBST( arg, convert, 12 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 13 ) SAX_ARGS_FUNC_SUBST( arg, convert, 14 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 15 ) SAX_ARGS_FUNC_SUBST( arg, convert, 16 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 17 ) SAX_ARGS_FUNC_SUBST( arg, convert, 18 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 19 ) SAX_ARGS_FUNC_SUBST( arg, convert, 20 )
-    SAX_ARGS_FUNC( const char*, )
-    SAX_ARGS_FUNC( const OString&, .getStr() )
-    #undef SAX_ARGS_FUNC_DECL
-    #undef SAX_ARGS_FUNC_NUM
-    #undef SAX_ARGS_FUNC_SUBST
-    #undef SAX_ARGS_FUNC
-
 private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
     virtual OUString SAL_CALL getImplementationName() override;
     ScDocShell *getDocShell();
-    sax_fastparser::FSHelperPtr&    WriteAttributesInternal( sal_Int32 nAttribute, ... );
+    void WriteAttribute(sal_Int32 nAttr, const OUString& sVal);
+    void WriteAttribute(sal_Int32 nAttr, const OString& sVal)
+    {
+        WriteAttribute(nAttr, OStringToOUString(sVal, RTL_TEXTENCODING_UTF8));
+    }
+    void WriteAttribute(sal_Int32 nAttr, const char* sVal)
+    {
+        if (sVal)
+            WriteAttribute(nAttr, OUString(sVal, strlen(sVal), RTL_TEXTENCODING_UTF8));
+    }
 
     typedef std::map< OUString,
         std::pair< OUString,
