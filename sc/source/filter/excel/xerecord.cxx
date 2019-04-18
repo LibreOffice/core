@@ -160,9 +160,7 @@ void XclExpValueRecord<double>::SaveXml( XclExpXmlStream& rStrm )
 {
     if( mnAttribute == -1 )
         return;
-    rStrm.WriteAttributes(
-        mnAttribute,    OString::number( maValue ).getStr(),
-        FSEND );
+    rStrm.WriteAttributes(mnAttribute, OUString::number(maValue));
 }
 
 void XclExpBoolRecord::WriteBody( XclExpStream& rStrm )
@@ -177,8 +175,7 @@ void XclExpBoolRecord::SaveXml( XclExpXmlStream& rStrm )
 
     rStrm.WriteAttributes(
             // HACK: HIDEOBJ (excdoc.cxx) should be its own object to handle XML_showObjects
-            mnAttribute, mnAttribute == XML_showObjects ? "all" : ToPsz( mbValue ),
-            FSEND );
+            mnAttribute, mnAttribute == XML_showObjects ? "all" : ToPsz( mbValue ));
 }
 
 XclExpDummyRecord::XclExpDummyRecord( sal_uInt16 nRecId, const void* pRecData, std::size_t nRecSize ) :

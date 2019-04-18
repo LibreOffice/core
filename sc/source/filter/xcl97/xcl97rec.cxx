@@ -1642,9 +1642,7 @@ std::size_t XclCalccount::GetLen() const
 
 void XclCalccount::SaveXml( XclExpXmlStream& rStrm )
 {
-    rStrm.WriteAttributes(
-            XML_iterateCount, OString::number( nCount ).getStr(),
-            FSEND );
+    rStrm.WriteAttributes(XML_iterateCount, OUString::number(nCount));
 }
 
 void XclIteration::SaveCont( XclExpStream& rStrm )
@@ -1669,9 +1667,7 @@ std::size_t XclIteration::GetLen() const
 
 void XclIteration::SaveXml( XclExpXmlStream& rStrm )
 {
-    rStrm.WriteAttributes(
-            XML_iterate, ToPsz( nIter == 1 ),
-            FSEND );
+    rStrm.WriteAttributes(XML_iterate, ToPsz(nIter == 1));
 }
 
 void XclDelta::SaveCont( XclExpStream& rStrm )
@@ -1696,9 +1692,7 @@ std::size_t XclDelta::GetLen() const
 
 void XclDelta::SaveXml( XclExpXmlStream& rStrm )
 {
-    rStrm.WriteAttributes(
-            XML_iterateDelta, OString::number( fDelta ).getStr(),
-            FSEND );
+    rStrm.WriteAttributes(XML_iterateDelta, OUString::number(fDelta));
 }
 
 XclExpFileEncryption::XclExpFileEncryption( const XclExpRoot& rRoot ) :
@@ -1867,9 +1861,7 @@ XclRefmode::XclRefmode( const ScDocument& rDoc ) :
 
 void XclRefmode::SaveXml( XclExpXmlStream& rStrm )
 {
-    rStrm.WriteAttributes(
-            XML_refMode, GetBool() ? "A1" : "R1C1",
-            FSEND );
+    rStrm.WriteAttributes(XML_refMode, GetBool() ? "A1" : "R1C1");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
