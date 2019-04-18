@@ -358,6 +358,15 @@ std::vector<beans::PropertyValue> desktop::jsonToPropertyValuesVector(const char
                 aValue.Value <<= static_cast<sal_Int16>(OString(rValue.c_str()).toInt32());
             else if (rType == "unsigned short")
                 aValue.Value <<= static_cast<sal_uInt16>(OString(rValue.c_str()).toUInt32());
+            else if (rType == "[]byte")
+            {
+                aNodeValue = rPair.second.get_child("value", aNodeNull);
+                if (aNodeValue != aNodeNull && aNodeValue.size() == 0)
+                {
+                    uno::Sequence< sal_Int8 > aSeqByte(reinterpret_cast<const sal_Int8*>(rValue.c_str()), rValue.size());
+                    aValue.Value <<= aSeqByte;
+                }
+            }
             else if (rType == "[]any")
             {
                 aNodeValue = rPair.second.get_child("value", aNodeNull);
@@ -808,7 +817,7 @@ static void doc_paintWindowDPI(LibreOfficeKitDocument* pThis, unsigned nLOKWindo
                                const int nWidth, const int nHeight,
                                const double fDPIScale);
 
-static void doc_postWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, int nAction);
+static void doc_postWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, int nAction, const char* pData);
 
 static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart);
 
@@ -4119,7 +4128,7 @@ static void doc_paintWindowDPI(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKW
 #endif
 }
 
-static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nAction)
+static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nAction, const char* pData)
 {
     comphelper::ProfileZone aZone("doc_postWindow");
 
@@ -4139,6 +4148,30 @@ static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindo
             pDialog->Close();
         else if (FloatingWindow* pFloatWin = dynamic_cast<FloatingWindow*>(pWindow.get()))
             pFloatWin->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
+    }
+    else if (nAction == LOK_WINDOW_PASTE)
+    {
+        OUString aMimeType;
+        css::uno::Sequence<sal_Int8> aData;
+        std::vector<beans::PropertyValue> aArgs(jsonToPropertyValuesVector(pData));
+        {
+            aArgs.size() == 2 &&
+            aArgs[0].Name == "MimeType" && (aArgs[0].Value >>= aMimeType) &&
+            aArgs[1].Name == "Data" && (aArgs[1].Value >>= aData);
+        }
+
+        if (!aMimeType.isEmpty() && aData.getLength() > 0)
+        {
+            uno::Reference<datatransfer::XTransferable> xTransferable(new LOKTransferable(aMimeType, aData));
+            uno::Reference<datatransfer::clipboard::XClipboard> xClipboard(new LOKClipboard);
+            xClipboard->setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
+            pWindow->SetClipboard(xClipboard);
+
+            KeyEvent aEvent(0, KEY_PASTE, 0);
+            Application::PostKeyEvent(VclEventId::WindowKeyInput, pWindow, &aEvent);
+        }
+        else
+            gImpl->maLastExceptionMsg = "Window command 'paste': wrong parameters.";
     }
 }
 

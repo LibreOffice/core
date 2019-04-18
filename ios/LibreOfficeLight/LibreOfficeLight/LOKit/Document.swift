@@ -170,9 +170,9 @@ open class Document
      *
      * @param nWindowid
      */
-    public func postWindow( nWindowId: UInt32, nAction: Int32)
+    public func postWindow( nWindowId: UInt32, nAction: Int32, data: String)
     {
-        return docClass.postWindow(pDoc, nWindowId, nAction);
+        return docClass.postWindow(pDoc, nWindowId, nAction, data);
     }
 
     /**
@@ -536,13 +536,13 @@ open class Document
     {
         docClass.setViewLanguage(pDoc, id, language);
     }
-    
+
     public func invokeHandlers()
     {
         // The app seems to work even without this? Or maybe I
         // just didn't test hard enough?
         // temporaryHackToInvokeCallbackHandlers(pDoc)
-        
+
     }
 
 }

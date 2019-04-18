@@ -29,8 +29,14 @@ OUString SAL_CALL LOKClipboard::getName()
 }
 
 LOKTransferable::LOKTransferable(const char* pMimeType, const char* pData, std::size_t nSize)
-    : m_aMimeType(pMimeType),
+    : m_aMimeType(OUString::fromUtf8(pMimeType)),
       m_aSequence(reinterpret_cast<const sal_Int8*>(pData), nSize)
+{
+}
+
+LOKTransferable::LOKTransferable(const OUString& sMimeType, const css::uno::Sequence<sal_Int8>& aSequence)
+        : m_aMimeType(sMimeType),
+          m_aSequence(aSequence)
 {
 }
 
@@ -51,7 +57,7 @@ std::vector<datatransfer::DataFlavor> LOKTransferable::getTransferDataFlavorsAsV
 {
     std::vector<datatransfer::DataFlavor> aRet;
     datatransfer::DataFlavor aFlavor;
-    aFlavor.MimeType = OUString::fromUtf8(m_aMimeType.getStr());
+    aFlavor.MimeType = m_aMimeType;
     aFlavor.DataType = cppu::UnoType< uno::Sequence<sal_Int8> >::get();
 
     sal_Int32 nIndex(0);
