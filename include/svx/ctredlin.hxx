@@ -24,6 +24,7 @@
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 #include <svtools/simptabl.hxx>
+#include <svtools/ctrlbox.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/svtabbx.hxx>
 #include <vcl/treelistbox.hxx>
@@ -108,11 +109,10 @@ public:
     virtual std::unique_ptr<SvLBoxItem> Clone(SvLBoxItem const * pSource) const override;
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRedlinTable : public SvSimpleTable
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRedlinTable
 {
-    using SvTabListBox::InsertEntry;
-
 private:
+    std::unique_ptr<weld::TreeView> xTreeView;
 
     sal_uInt16      nDatePos;
     bool            bAuthor;
@@ -130,16 +130,19 @@ private:
     std::unique_ptr<utl::TextSearch> pCommentSearcher;
     Link<const SvSortData*,sal_Int32>  aColCompareLink;
 
+#if 0
 protected:
 
     virtual sal_Int32       ColCompare(SvTreeListEntry*,SvTreeListEntry*) override;
     virtual void            InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind) override;
+#endif
 
 public:
+    SvxRedlinTable(std::unique_ptr<weld::TreeView> xControl);
 
-    SvxRedlinTable(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
-    virtual ~SvxRedlinTable() override;
-    virtual void    dispose() override;
+    weld::TreeView& GetWidget() { return *xTreeView; }
+
+    ~SvxRedlinTable();
 
     // For FilterPage only {
     void            SetFilterDate(bool bFlag);
@@ -162,6 +165,7 @@ public:
     bool            IsValidEntry(const OUString &rAuthor, const DateTime &rDateTime);
     bool            IsValidComment(const OUString &rComment);
 
+#if 0
     /** Insert a redline entry.
 
         The rStr contains the entire redline entry; the columns are delimited by '\t'.
@@ -187,50 +191,65 @@ public:
     virtual SvTreeListEntry* CreateEntry() const override;
 
     void            SetColCompareHdl(const Link<const SvSortData*,sal_Int32>& rLink ) { aColCompareLink = rLink; }
+#endif
+};
+
+class SvxTPage
+{
+protected:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xContainer;
+public:
+    SvxTPage(weld::Container* pParent, const OUString& rUIXMLDescription, const OString& rID);
+    virtual ~SvxTPage();
+    virtual void ActivatePage();
+    virtual void DeactivatePage();
+    void Show() { m_xContainer->show(); }
 };
 
 /// Tabpage with the filter text entries etc.
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPFilter final : public TabPage
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPFilter final : public SvxTPage
 {
     Link<SvxTPFilter*,void>  aReadyLink;
     Link<SvxTPFilter*,void>  aRefLink;
 
-    VclPtr<SvxRedlinTable> pRedlinTable;
-    VclPtr<CheckBox>       m_pCbDate;
-    VclPtr<ListBox>        m_pLbDate;
-    VclPtr<DateField>      m_pDfDate;
-    VclPtr<TimeField>      m_pTfDate;
-    VclPtr<PushButton>     m_pIbClock;
-    VclPtr<FixedText>      m_pFtDate2;
-    VclPtr<DateField>      m_pDfDate2;
-    VclPtr<TimeField>      m_pTfDate2;
-    VclPtr<PushButton>     m_pIbClock2;
-    VclPtr<CheckBox>       m_pCbAuthor;
-    VclPtr<ListBox>        m_pLbAuthor;
-    VclPtr<CheckBox>       m_pCbRange;
-    VclPtr<Edit>           m_pEdRange;
-    VclPtr<PushButton>     m_pBtnRange;
-    VclPtr<CheckBox>       m_pCbAction;
-    VclPtr<ListBox>        m_pLbAction;
-    VclPtr<CheckBox>       m_pCbComment;
-    VclPtr<Edit>           m_pEdComment;
     bool                   bModified;
 
-    DECL_LINK( SelDateHdl, ListBox&, void );
-    DECL_LINK( RowEnableHdl, Button*, void );
-    DECL_LINK( TimeHdl, Button*, void );
-    DECL_LINK( ModifyHdl, Edit&, void );
-    DECL_LINK( ModifyListBoxHdl, ListBox&, void );
-    DECL_LINK( ModifyDate, Edit&, void );
-    DECL_LINK( RefHandle, Button*, void );
+    SvxRedlinTable* m_pRedlinTable;
+    std::unique_ptr<weld::CheckButton> m_xCbDate;
+    std::unique_ptr<weld::ComboBox> m_xLbDate;
+    std::unique_ptr<SvtCalendarBox> m_xDfDate;
+    std::unique_ptr<weld::TimeSpinButton> m_xTfDate;
+    std::unique_ptr<weld::Button> m_xIbClock;
+    std::unique_ptr<weld::Label> m_xFtDate2;
+    std::unique_ptr<SvtCalendarBox> m_xDfDate2;
+    std::unique_ptr<weld::TimeSpinButton> m_xTfDate2;
+    std::unique_ptr<weld::Button> m_xIbClock2;
+    std::unique_ptr<weld::CheckButton> m_xCbAuthor;
+    std::unique_ptr<weld::ComboBox> m_xLbAuthor;
+    std::unique_ptr<weld::CheckButton> m_xCbRange;
+    std::unique_ptr<weld::Entry> m_xEdRange;
+    std::unique_ptr<weld::Button> m_xBtnRange;
+    std::unique_ptr<weld::CheckButton> m_xCbAction;
+    std::unique_ptr<weld::ComboBox> m_xLbAction;
+    std::unique_ptr<weld::CheckButton> m_xCbComment;
+    std::unique_ptr<weld::Entry> m_xEdComment;
+
+    DECL_LINK( SelDateHdl, weld::ComboBox&, void );
+    DECL_LINK( RowEnableHdl, weld::Button&, void );
+    DECL_LINK( TimeHdl, weld::Button&, void );
+    DECL_LINK( ModifyHdl, weld::Entry&, void );
+    DECL_LINK( ModifyListBoxHdl, weld::ComboBox&, void );
+    DECL_LINK( ModifyDate, SvtCalendarBox&, void );
+    DECL_LINK( ModifyTime, weld::TimeSpinButton&, void );
+    DECL_LINK( RefHandle, weld::Button&, void );
 
     void            EnableDateLine1(bool bFlag);
     void            EnableDateLine2(bool bFlag);
 
 public:
-                    SvxTPFilter( vcl::Window * pParent);
-    virtual         ~SvxTPFilter() override;
-    virtual void    dispose() override;
+    SvxTPFilter(weld::Container* pParent);
+    virtual ~SvxTPFilter() override;
 
     virtual void    DeactivatePage() override;
     void            SetRedlinTable(SvxRedlinTable*);
@@ -277,7 +296,7 @@ public:
     void            CheckAction(bool bFlag);
     void            CheckComment(bool bFlag);
 
-    ListBox*        GetLbAction() { return m_pLbAction;}
+    weld::ComboBox* GetLbAction() { return m_xLbAction.get(); }
 
     void            SetReadyHdl( const Link<SvxTPFilter*,void>& rLink ) { aReadyLink= rLink; }
 
@@ -291,7 +310,7 @@ public:
 };
 
 /// Tabpage with the redlining entries.
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPView : public TabPage
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPView : public SvxTPage
 {
 private:
 
@@ -301,35 +320,34 @@ private:
     Link<SvxTPView*,void>          RejectAllClickLk;
     Link<SvxTPView*,void>          UndoClickLk;
 
-    VclPtr<SvxRedlinTable> m_pViewData;
-    VclPtr<PushButton>     m_pAccept;
-    VclPtr<PushButton>     m_pReject;
-    VclPtr<PushButton>     m_pAcceptAll;
-    VclPtr<PushButton>     m_pRejectAll;
-    VclPtr<PushButton>     m_pUndo;
-
     bool bEnableAccept;
     bool bEnableAcceptAll;
     bool bEnableReject;
     bool bEnableRejectAll;
     bool bEnableUndo;
 
-    DECL_LINK( PbClickHdl, Button*, void );
+    std::unique_ptr<weld::Button> m_xAccept;
+    std::unique_ptr<weld::Button> m_xReject;
+    std::unique_ptr<weld::Button> m_xAcceptAll;
+    std::unique_ptr<weld::Button> m_xRejectAll;
+    std::unique_ptr<weld::Button> m_xUndo;
+    std::unique_ptr<SvxRedlinTable> m_xViewData;
+
+    DECL_LINK( PbClickHdl, weld::Button&, void );
 
 public:
-    SvxTPView(vcl::Window * pParent, VclBuilderContainer *pTopLevel);
+    SvxTPView(weld::Container* pParent, weld::Builder* pTopLevel);
     virtual ~SvxTPView() override;
-    virtual void    dispose() override;
 
     void            InsertWriterHeader();
     void            InsertCalcHeader();
-    SvxRedlinTable* GetTableControl() { return m_pViewData;}
+    SvxRedlinTable* GetTableControl() { return m_xViewData.get(); }
 
     void            EnableAccept(bool bFlag);
     void            EnableAcceptAll(bool bFlag);
     void            EnableReject(bool bFlag);
     void            EnableRejectAll(bool bFlag);
-    static void     EnableClearFormatButton(VclPtr<PushButton>, bool bFlag);
+    static void     EnableClearFormatButton(weld::Button&, bool bFlag);
     void            EnableClearFormat(bool bFlag);
     void            EnableClearFormatAll(bool bFlag);
     void            EnableUndo(bool bFlag=true);
@@ -350,29 +368,29 @@ public:
     virtual void    DeactivatePage() override;
 };
 
-
 //  Redlining - Control (Accept- Changes)
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxAcceptChgCtr
-    : public TabControl
-    , public VclBuilderContainer
 {
 private:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Notebook> m_xTabCtrl;
 
-    VclPtr<SvxTPFilter>    pTPFilter;
-    VclPtr<SvxTPView>      pTPView;
+    std::unique_ptr<SvxTPFilter> m_xTPFilter;
+    std::unique_ptr<SvxTPView> m_xTPView;
 
-    sal_uInt16      m_nFilterPageId;
+    DECL_DLLPRIVATE_LINK(ActivatePageHdl, const OString&, void);
+    DECL_DLLPRIVATE_LINK(DeactivatePageHdl, const OString&, bool);
 
 public:
-                    SvxAcceptChgCtr(vcl::Window* pParent, VclBuilderContainer* pTopLevel);
-
-                    virtual ~SvxAcceptChgCtr() override;
-    virtual void    dispose() override;
+    SvxAcceptChgCtr(weld::Container* pParent, weld::Builder* pTopLevel);
+    ~SvxAcceptChgCtr();
 
     void            ShowFilterPage();
 
-    SvxTPFilter*    GetFilterPage() { return pTPFilter;}
-    SvxTPView*      GetViewPage() { return pTPView;}
+    SvxTPFilter*    GetFilterPage() { return m_xTPFilter.get(); }
+    SvxTPView*      GetViewPage() { return m_xTPView.get(); }
+
+    void set_help_id(const OString& rId) { m_xTabCtrl->set_help_id(rId); }
 };
 
 #endif // INCLUDED_SVX_CTREDLIN_HXX

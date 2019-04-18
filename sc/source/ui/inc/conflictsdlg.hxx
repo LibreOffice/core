@@ -111,23 +111,16 @@ public:
 
 // class ScConflictsDlg
 
-class ScConflictsDlg : public ModalDialog
+class ScConflictsDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<SvSimpleTableContainer> m_pLbConflictsContainer;
-    VclPtr<SvxRedlinTable>      m_pLbConflicts;
-    VclPtr<PushButton>          m_pBtnKeepMine;
-    VclPtr<PushButton>          m_pBtnKeepOther;
-    VclPtr<PushButton>          m_pBtnKeepAllMine;
-    VclPtr<PushButton>          m_pBtnKeepAllOthers;
+    OUString const      maStrTitleConflict;
+    OUString const      maStrUnknownUser;
 
-    OUString const            maStrTitleConflict;
-    OUString const            maStrUnknownUser;
-
-    ScViewData* const         mpViewData;
+    ScViewData* const   mpViewData;
     ScDocument*         mpOwnDoc;
     ScChangeTrack*      mpOwnTrack;
-    ScDocument* const         mpSharedDoc;
+    ScDocument* const   mpSharedDoc;
     ScChangeTrack*      mpSharedTrack;
     ScConflictsList&    mrConflictsList;
 
@@ -135,26 +128,31 @@ private:
     bool                mbInSelectHdl;
     bool                mbInDeselectHdl;
 
+    std::unique_ptr<weld::Button> m_xBtnKeepMine;
+    std::unique_ptr<weld::Button> m_xBtnKeepOther;
+    std::unique_ptr<weld::Button> m_xBtnKeepAllMine;
+    std::unique_ptr<weld::Button> m_xBtnKeepAllOthers;
+    std::unique_ptr<SvxRedlinTable> m_xLbConflicts;
+
     OUString            GetConflictString( const ScConflictsListEntry& rConflictEntry );
     OUString            GetActionString( const ScChangeAction* pAction, ScDocument* pDoc );
     void                HandleListBoxSelection( bool bSelectHandle );
 
-    static void         SetConflictAction( const SvTreeListEntry* pRootEntry, ScConflictAction eConflictAction );
+    void                SetConflictAction(const weld::TreeIter& rRootEntry, ScConflictAction eConflictAction);
     void                KeepHandler( bool bMine );
     void                KeepAllHandler( bool bMine );
 
-    DECL_LINK( SelectHandle, SvTreeListBox*, void );
-    DECL_LINK( DeselectHandle, SvTreeListBox*, void );
+    DECL_LINK( SelectHandle, weld::TreeView&, void );
+    DECL_LINK( DeselectHandle, weld::TreeView&, void );
     DECL_LINK( UpdateSelectionHdl, Timer*, void );
-    DECL_LINK( KeepMineHandle, Button*, void );
-    DECL_LINK( KeepOtherHandle, Button*, void );
-    DECL_LINK( KeepAllMineHandle, Button*, void );
-    DECL_LINK( KeepAllOthersHandle, Button*, void );
+    DECL_LINK( KeepMineHandle, weld::Button&, void );
+    DECL_LINK( KeepOtherHandle, weld::Button&, void );
+    DECL_LINK( KeepAllMineHandle, weld::Button&, void );
+    DECL_LINK( KeepAllOthersHandle, weld::Button&, void );
 
 public:
-                        ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList );
-                        virtual ~ScConflictsDlg() override;
-    virtual void        dispose() override;
+    ScConflictsDlg(weld::Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList);
+    virtual ~ScConflictsDlg() override;
 
     void                UpdateView();
 };

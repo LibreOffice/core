@@ -300,9 +300,14 @@ public:
     void set_date(const Date& rDate);
     Date get_date() const { return m_xCalendar->get_date(); }
 
+    void set_label(const OUString& rLabel) { m_xControl->set_label(rLabel); }
+    OUString get_label() const { return m_xControl->get_label(); }
+
     void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
     bool get_sensitive() const { return m_xControl->get_sensitive(); }
     void grab_focus() { m_xControl->grab_focus(); }
+
+    void connect_selected(const Link<SvtCalendarBox&, void>& rSelectHdl) { m_aSelectHdl = rSelectHdl; }
 private:
     DECL_LINK(SelectHdl, weld::Calendar&, void);
     DECL_LINK(ActivateHdl, weld::Calendar&, void);
@@ -311,6 +316,10 @@ private:
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Widget> m_xTopLevel;
     std::unique_ptr<weld::Calendar> m_xCalendar;
+
+    Link<SvtCalendarBox&, void> m_aSelectHdl;
+
+    void set_label_from_date();
 };
 
 class SVT_DLLPUBLIC FontNameBox : public ComboBox

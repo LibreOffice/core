@@ -66,9 +66,9 @@ SwRedlineAcceptChild::SwRedlineAcceptChild( vcl::Window* _pParent,
                                             SfxChildWinInfo const * pInfo ) :
     SwChildWinWrapper( _pParent, nId )
 {
-    SetWindow( VclPtr<SwModelessRedlineAcceptDlg>::Create( pBindings, this, _pParent) );
+    SetController(std::make_shared<SwModelessRedlineAcceptDlg>(pBindings, this, _pParent->GetFrameWeld()));
 
-    static_cast<SwModelessRedlineAcceptDlg *>(GetWindow())->Initialize(pInfo);
+    static_cast<SwModelessRedlineAcceptDlg*>(GetController().get())->Initialize(pInfo);
 }
 
 // newly initialise dialog after document switch
@@ -76,18 +76,19 @@ bool SwRedlineAcceptChild::ReInitDlg(SwDocShell *pDocSh)
 {
     bool bRet = SwChildWinWrapper::ReInitDlg(pDocSh);
     if (bRet)  // update immediately, doc switch!
-        static_cast<SwModelessRedlineAcceptDlg*>(GetWindow())->Activate();
+        static_cast<SwModelessRedlineAcceptDlg*>(GetController().get())->Activate();
 
     return bRet;
 }
 
 SwModelessRedlineAcceptDlg::SwModelessRedlineAcceptDlg(
-    SfxBindings* _pBindings, SwChildWinWrapper* pChild, vcl::Window *_pParent)
-    : SfxModelessDialog(_pBindings, pChild, _pParent,
-        "AcceptRejectChangesDialog", "svx/ui/acceptrejectchangesdialog.ui")
-    , pChildWin       (pChild)
+    SfxBindings* _pBindings, SwChildWinWrapper* pChild, weld::Window *pParent)
+    : SfxModelessDialogController(_pBindings, pChild, pParent,
+        "svx/ui/acceptrejectchangesdialog.ui", "AcceptRejectChangesDialog")
+    , m_xContentArea(m_xDialog->weld_content_area())
+    , pChildWin(pChild)
 {
-    pImplDlg.reset(new SwRedlineAcceptDlg(this, this, get_content_area()));
+    m_xImplDlg.reset(new SwRedlineAcceptDlg(m_xDialog.get(), m_xBuilder.get(), m_xContentArea.get()));
 }
 
 void SwModelessRedlineAcceptDlg::Activate()
@@ -112,46 +113,31 @@ void SwModelessRedlineAcceptDlg::Activate()
             { &aShow });
         if (!bMod)
             pSh->ResetModified();
-        pImplDlg->Init();
-        SfxModelessDialog::Activate();
+        m_xImplDlg->Init();
+        SfxModelessDialogController::Activate();
 
         return;
     }
 
-    SfxModelessDialog::Activate();
-    pImplDlg->Activate();
+    SfxModelessDialogController::Activate();
+    m_xImplDlg->Activate();
 }
 
 void SwModelessRedlineAcceptDlg::Initialize(SfxChildWinInfo const *pInfo)
 {
     if (pInfo != nullptr)
-        pImplDlg->Initialize(pInfo->aExtraString);
+        m_xImplDlg->Initialize(pInfo->aExtraString);
 
-    SfxModelessDialog::Initialize(pInfo);
-}
-
-void SwModelessRedlineAcceptDlg::FillInfo(SfxChildWinInfo& rInfo) const
-{
-    SfxModelessDialog::FillInfo(rInfo);
-    pImplDlg->FillInfo(rInfo.aExtraString);
+    SfxModelessDialogController::Initialize(pInfo);
 }
 
 SwModelessRedlineAcceptDlg::~SwModelessRedlineAcceptDlg()
 {
-    disposeOnce();
 }
 
-void SwModelessRedlineAcceptDlg::dispose()
-{
-    pImplDlg.reset();
-    SfxModelessDialog::dispose();
-}
-
-SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer *pBuilder,
-                                       vcl::Window *pContentArea, bool bAutoFormat)
+SwRedlineAcceptDlg::SwRedlineAcceptDlg(weld::Window *pParent, weld::Builder *pBuilder,
+                                       weld::Container *pContentArea, bool bAutoFormat)
     : m_pParentDlg(pParent)
-    , m_aTabPagesCTRL(VclPtr<SvxAcceptChgCtr>::Create(pContentArea, pBuilder))
-    , m_xPopup(pBuilder->get_menu("writermenu"))
     , m_sInserted(SwResId(STR_REDLINE_INSERTED))
     , m_sDeleted(SwResId(STR_REDLINE_DELETED))
     , m_sFormated(SwResId(STR_REDLINE_FORMATTED))
@@ -161,14 +147,11 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
     , m_bOnlyFormatedRedlines(false)
     , m_bRedlnAutoFormat(bAutoFormat)
     , m_bInhibitActivate(false)
-    , m_aInserted(StockImage::Yes, BMP_REDLINE_INSERTED)
-    , m_aDeleted(StockImage::Yes, BMP_REDLINE_DELETED)
-    , m_aFormated(StockImage::Yes, BMP_REDLINE_FORMATTED)
-    , m_aTableChgd(StockImage::Yes, BMP_REDLINE_TABLECHG)
-    , m_aFormatCollSet(StockImage::Yes, BMP_REDLINE_FMTCOLLSET)
+    , m_xTabPagesCTRL(new SvxAcceptChgCtr(pContentArea, pBuilder))
+    , m_xPopup(pBuilder->weld_menu("writermenu"))
 {
-    m_aTabPagesCTRL->SetHelpId(HID_REDLINE_CTRL);
-    m_pTPView = m_aTabPagesCTRL->GetViewPage();
+    m_xTabPagesCTRL->set_help_id(HID_REDLINE_CTRL);
+    m_pTPView = m_xTabPagesCTRL->GetViewPage();
 
     m_pTable = m_pTPView->GetTableControl();
 
@@ -184,36 +167,35 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
     m_pTPView->EnableAcceptAll(false);
     m_pTPView->EnableRejectAll(false);
 
-    m_aTabPagesCTRL->GetFilterPage()->SetReadyHdl(LINK(this, SwRedlineAcceptDlg, FilterChangedHdl));
+    m_xTabPagesCTRL->GetFilterPage()->SetReadyHdl(LINK(this, SwRedlineAcceptDlg, FilterChangedHdl));
 
-    ListBox *pActLB = m_aTabPagesCTRL->GetFilterPage()->GetLbAction();
-    pActLB->InsertEntry(m_sInserted);
-    pActLB->InsertEntry(m_sDeleted);
-    pActLB->InsertEntry(m_sFormated);
-    pActLB->InsertEntry(m_sTableChgd);
+    weld::ComboBox* pActLB = m_xTabPagesCTRL->GetFilterPage()->GetLbAction();
+    pActLB->append_text(m_sInserted);
+    pActLB->append_text(m_sDeleted);
+    pActLB->append_text(m_sFormated);
+    pActLB->append_text(m_sTableChgd);
 
     if (HasRedlineAutoFormat())
     {
-        pActLB->InsertEntry(m_sFormatCollSet);
-        pActLB->InsertEntry(m_sAutoFormat);
+        pActLB->append_text(m_sFormatCollSet);
+        pActLB->append_text(m_sAutoFormat);
         m_pTPView->ShowUndo();
         m_pTPView->DisableUndo();     // no UNDO events yet
     }
 
-    pActLB->SelectEntryPos(0);
+    pActLB->set_active(0);
 
-    m_pTable->SetStyle(m_pTable->GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
-    m_pTable->SetNodeDefaultImages();
-    m_pTable->SetSelectionMode(SelectionMode::Multiple);
-    m_pTable->SetHighlightRange(1);
+    weld::TreeView& rTreeView = m_pTable->GetWidget();
+//TODO    m_pTable->SetStyle(m_pTable->GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
+    rTreeView.set_selection_mode(SelectionMode::Multiple);
 
-    m_pTable->SortByCol(nSortMode, bSortDir);
+//TODO    m_pTable->SortByCol(nSortMode, bSortDir);
 
-    m_aOldSelectHdl = m_pTable->GetSelectHdl();
-    m_aOldDeselectHdl = m_pTable->GetDeselectHdl();
-    m_pTable->SetSelectHdl(LINK(this, SwRedlineAcceptDlg, SelectHdl));
-    m_pTable->SetDeselectHdl(LINK(this, SwRedlineAcceptDlg, DeselectHdl));
-    m_pTable->SetCommandHdl(LINK(this, SwRedlineAcceptDlg, CommandHdl));
+//TODO    m_aOldSelectHdl = m_pTable->GetSelectHdl();
+//TODO    m_aOldDeselectHdl = m_pTable->GetDeselectHdl();
+    rTreeView.connect_changed(LINK(this, SwRedlineAcceptDlg, SelectHdl));
+//TODO    m_pTable->SetDeselectHdl(LINK(this, SwRedlineAcceptDlg, DeselectHdl));
+//TODO    m_pTable->SetCommandHdl(LINK(this, SwRedlineAcceptDlg, CommandHdl));
 
     // avoid flickering of buttons:
     m_aDeselectTimer.SetTimeout(100);
@@ -226,20 +208,20 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
 
 SwRedlineAcceptDlg::~SwRedlineAcceptDlg()
 {
-    m_aTabPagesCTRL.disposeAndClear();
 }
 
 void SwRedlineAcceptDlg::Init(SwRedlineTable::size_type nStart)
 {
     SwWait aWait( *::GetActiveView()->GetDocShell(), false );
-    m_pTable->SetUpdateMode(false);
+    weld::TreeView& rTreeView = m_pTable->GetWidget();
+    rTreeView.freeze();
     m_aUsedSeqNo.clear();
 
     if (nStart)
         RemoveParents(nStart, m_RedlineParents.size() - 1);
     else
     {
-        m_pTable->Clear();
+        rTreeView.clear();
         m_RedlineChildren.clear();
         m_RedlineParents.erase(m_RedlineParents.begin() + nStart, m_RedlineParents.end());
     }
@@ -248,21 +230,22 @@ void SwRedlineAcceptDlg::Init(SwRedlineTable::size_type nStart)
     InsertParents(nStart);
     InitAuthors();
 
-    m_pTable->SetUpdateMode(true);
+    rTreeView.thaw();
+
     // #i69618# this moves the list box to the right position, visually
-    SvTreeListEntry* pSelEntry = m_pTable->FirstSelected();
-    if( pSelEntry )
-        m_pTable->MakeVisible( pSelEntry, true ); //#i70937#, force the scroll
+    std::unique_ptr<weld::TreeIter> xSelEntry(rTreeView.make_iterator());
+    if (rTreeView.get_selected(xSelEntry.get()))
+        rTreeView.scroll_to_row(*xSelEntry); //#i70937#, force the scroll
 }
 
 void SwRedlineAcceptDlg::InitAuthors()
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
 
-    if (!m_aTabPagesCTRL)
+    if (!m_xTabPagesCTRL)
         return;
 
-    SvxTPFilter *pFilterPage = m_aTabPagesCTRL->GetFilterPage();
+    SvxTPFilter *pFilterPage = m_xTabPagesCTRL->GetFilterPage();
 
     std::vector<OUString> aStrings;
     OUString sOldAuthor(pFilterPage->GetSelectedAuthor());
@@ -298,23 +281,22 @@ void SwRedlineAcceptDlg::InitAuthors()
     if (pFilterPage->SelectAuthor(sOldAuthor) == LISTBOX_ENTRY_NOTFOUND && !aStrings.empty())
         pFilterPage->SelectAuthor(aStrings[0]);
 
-    bool bEnable = m_pTable->GetEntryCount() != 0 && !pSh->getIDocumentRedlineAccess().GetRedlinePassword().getLength();
-    bool bSel = m_pTable->FirstSelected() != nullptr;
+    weld::TreeView& rTreeView = m_pTable->GetWidget();
+    bool bEnable = rTreeView.n_children() != 0 && !pSh->getIDocumentRedlineAccess().GetRedlinePassword().getLength();
+    bool bSel = rTreeView.get_selected(nullptr);
 
-    SvTreeListEntry* pSelEntry = m_pTable->FirstSelected();
-    while (pSelEntry)
-    {
+    rTreeView.selected_foreach([this, pSh, &bIsNotFormated](weld::TreeIter& rEntry){
         // find the selected redline
         // (fdo#57874: ignore, if the redline is already gone)
-        SwRedlineTable::size_type nPos = GetRedlinePos(*pSelEntry);
+        SwRedlineTable::size_type nPos = GetRedlinePos(rEntry);
         if( nPos != SwRedlineTable::npos )
         {
             const SwRangeRedline& rRedln = pSh->GetRedline( nPos );
 
             bIsNotFormated |= nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType();
         }
-        pSelEntry = m_pTable->NextSelected(pSelEntry);
-    }
+        return false;
+    });
 
     m_pTPView->EnableAccept( bEnable && bSel );
     m_pTPView->EnableReject( bEnable && bSel );
@@ -341,19 +323,19 @@ OUString SwRedlineAcceptDlg::GetRedlineText(const SwRangeRedline& rRedln, DateTi
     return sEntry;
 }
 
-Image SwRedlineAcceptDlg::GetActionImage(const SwRangeRedline& rRedln, sal_uInt16 nStack)
+OUString SwRedlineAcceptDlg::GetActionImage(const SwRangeRedline& rRedln, sal_uInt16 nStack)
 {
     switch (rRedln.GetType(nStack))
     {
-        case nsRedlineType_t::REDLINE_INSERT:  return m_aInserted;
-        case nsRedlineType_t::REDLINE_DELETE:  return m_aDeleted;
-        case nsRedlineType_t::REDLINE_FORMAT:  return m_aFormated;
-        case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT: return m_aFormated;
-        case nsRedlineType_t::REDLINE_TABLE:   return m_aTableChgd;
-        case nsRedlineType_t::REDLINE_FMTCOLL: return m_aFormatCollSet;
+        case nsRedlineType_t::REDLINE_INSERT:  return BMP_REDLINE_INSERTED;
+        case nsRedlineType_t::REDLINE_DELETE:  return BMP_REDLINE_DELETED;
+        case nsRedlineType_t::REDLINE_FORMAT:  return BMP_REDLINE_FORMATTED;
+        case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT: return BMP_REDLINE_FORMATTED;
+        case nsRedlineType_t::REDLINE_TABLE:   return BMP_REDLINE_TABLECHG;
+        case nsRedlineType_t::REDLINE_FMTCOLL: return BMP_REDLINE_FMTCOLLSET;
     }
 
-    return Image();
+    return OUString();
 }
 
 OUString SwRedlineAcceptDlg::GetActionText(const SwRangeRedline& rRedln, sal_uInt16 nStack)
@@ -453,6 +435,7 @@ void SwRedlineAcceptDlg::Activate()
     }
 
     // check comment
+    weld::TreeView& rTreeView = m_pTable->GetWidget();
     for (SwRedlineTable::size_type i = 0; i < nCount; i++)
     {
         const SwRangeRedline& rRedln = pSh->GetRedline(i);
@@ -460,11 +443,11 @@ void SwRedlineAcceptDlg::Activate()
 
         if(rRedln.GetComment() != pParent->sComment)
         {
-            if (pParent->pTLBParent)
+            if (pParent->xTLBParent)
             {
                 // update only comment
                 const OUString& sComment(rRedln.GetComment());
-                m_pTable->SetEntryText(sComment.replace('\n', ' '), pParent->pTLBParent, 3);
+                rTreeView.set_text(*pParent->xTLBParent, sComment.replace('\n', ' '), 3);
             }
             pParent->sComment = rRedln.GetComment();
         }
@@ -481,7 +464,8 @@ SwRedlineTable::size_type SwRedlineAcceptDlg::CalcDiff(SwRedlineTable::size_type
         return SwRedlineTable::npos;
     }
 
-    m_pTable->SetUpdateMode(false);
+    weld::TreeView& rTreeView = m_pTable->GetWidget();
+    rTreeView.freeze();
     SwView *pView   = ::GetActiveView();
     SwWrtShell* pSh = pView->GetWrtShellPtr();
     sal_uInt16 nAutoFormat = HasRedlineAutoFormat() ? nsRedlineType_t::REDLINE_FORM_AUTOFMT : 0;
@@ -497,8 +481,8 @@ SwRedlineTable::size_type SwRedlineAcceptDlg::CalcDiff(SwRedlineTable::size_type
         while (pBackupData)
         {
             pNext = const_cast<SwRedlineDataChild*>(pBackupData->pNext);
-            if (pBackupData->pTLBChild)
-                m_pTable->RemoveEntry(pBackupData->pTLBChild);
+            if (pBackupData->xTLBChild)
+                rTreeView.remove(*pBackupData->xTLBChild);
 
             auto it = std::find_if(m_RedlineChildren.begin(), m_RedlineChildren.end(),
                 [&pBackupData](const std::unique_ptr<SwRedlineDataChild>& rChildPtr) { return rChildPtr.get() == pBackupData; });
@@ -512,7 +496,7 @@ SwRedlineTable::size_type SwRedlineAcceptDlg::CalcDiff(SwRedlineTable::size_type
         // insert new children
         InsertChildren(pParent, rRedln, nAutoFormat);
 
-        m_pTable->SetUpdateMode(true);
+        rTreeView.thaw();
         return nStart;
     }
 
@@ -524,7 +508,7 @@ SwRedlineTable::size_type SwRedlineAcceptDlg::CalcDiff(SwRedlineTable::size_type
         {
             // remove entries from nStart to i-1
             RemoveParents(nStart, i - 1);
-            m_pTable->SetUpdateMode(true);
+            rTreeView.thaw();
             return nStart - 1;
         }
     }
@@ -539,12 +523,12 @@ SwRedlineTable::size_type SwRedlineAcceptDlg::CalcDiff(SwRedlineTable::size_type
         {
             // insert entries from nStart to i-1
             InsertParents(nStart, i - 1);
-            m_pTable->SetUpdateMode(true);
+            rTreeView.thaw();
             return nStart - 1;
         }
     }
 
-    m_pTable->SetUpdateMode(true);
+    rTreeView.thaw();
     Init(nStart);   // adjust all entries until the end
     return SwRedlineTable::npos;
 }
@@ -555,6 +539,8 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
     SwRedlineDataChild *pLastRedlineChild = nullptr;
     const SwRedlineData *pRedlineData = &rRedln.GetRedlineData();
     bool bAutoFormat = (rRedln.GetRealType() & nAutoFormat) != 0;
+
+    weld::TreeView& rTreeView = m_pTable->GetWidget();
 
     OUString sAction = GetActionText(rRedln);
     bool bValidParent = m_sFilterAction.isEmpty() || m_sFilterAction == sAction;
@@ -568,12 +554,11 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
                 = m_aUsedSeqNo.insert(pParent);
             if (ret.second) // already there
             {
-                if (pParent->pTLBParent)
+                if (pParent->xTLBParent)
                 {
-                    m_pTable->SetEntryText(
-                            m_sAutoFormat, (*ret.first)->pTLBParent, 0);
-                    m_pTable->RemoveEntry(pParent->pTLBParent);
-                    pParent->pTLBParent = nullptr;
+                    rTreeView.set_text(*(*ret.first)->xTLBParent, m_sAutoFormat, 0);
+                    rTreeView.remove(*pParent->xTLBParent);
+                    pParent->xTLBParent.reset();
                 }
                 return;
             }
@@ -609,15 +594,17 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
             pData->bDisabled = true;
             sChild = GetRedlineText(rRedln, pData->aDateTime, nStack);
 
-            SvTreeListEntry* pChild = m_pTable->InsertEntry(GetActionImage(rRedln, nStack),
-                    sChild, std::move(pData), pParent->pTLBParent);
-
-            pRedlineChild->pTLBChild = pChild;
+            std::unique_ptr<weld::TreeIter> xChild(rTreeView.make_iterator());
+            OUString sImage(GetActionImage(rRedln, nStack));
+            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pData.release())));
+            rTreeView.insert(pParent->xTLBParent.get(), -1, &sChild, &sId, nullptr, nullptr,
+                             &sImage, false, xChild.get());
+            pRedlineChild->xTLBChild = std::move(xChild);
             if (!bValidParent)
-                m_pTable->Expand(pParent->pTLBParent);
+                rTreeView.expand_row(*pParent->xTLBParent);
         }
         else
-            pRedlineChild->pTLBChild = nullptr;
+            pRedlineChild->xTLBChild.reset();
 
         pLastRedlineChild = pRedlineChild;
     }
@@ -625,10 +612,10 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
     if (pLastRedlineChild)
         pLastRedlineChild->pNext = nullptr;
 
-    if (!bValidTree && pParent->pTLBParent)
+    if (!bValidTree && pParent->xTLBParent)
     {
-        m_pTable->RemoveEntry(pParent->pTLBParent);
-        pParent->pTLBParent = nullptr;
+        rTreeView.remove(*pParent->xTLBParent);
+        pParent->xTLBParent.reset();
         if (nAutoFormat)
             m_aUsedSeqNo.erase(pParent);
     }
@@ -639,27 +626,30 @@ void SwRedlineAcceptDlg::RemoveParents(SwRedlineTable::size_type nStart, SwRedli
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
     SwRedlineTable::size_type nCount = pSh->GetRedlineCount();
 
-    std::vector<SvTreeListEntry*> aLBoxArr;
+    std::vector<weld::TreeIter*> aLBoxArr;
+
+    weld::TreeView& rTreeView = m_pTable->GetWidget();
 
     // because of Bug of TLB that ALWAYS calls the SelectHandler at Remove:
-    m_pTable->SetSelectHdl(m_aOldSelectHdl);
-    m_pTable->SetDeselectHdl(m_aOldDeselectHdl);
+    rTreeView.connect_changed(m_aOldSelectHdl);
+//TODO    m_pTable->SetDeselectHdl(m_aOldDeselectHdl);
     bool bChildrenRemoved = false;
-    m_pTable->SelectAll(false);
+    rTreeView.unselect_all();
 
     // set the cursor after the last entry because otherwise performance problem in TLB.
     // TLB would otherwise reset the cursor at every Remove (expensive)
     SwRedlineTable::size_type nPos = std::min(nCount, m_RedlineParents.size());
-    SvTreeListEntry *pCurEntry = nullptr;
+    weld::TreeIter *pCurEntry = nullptr;
     while( ( pCurEntry == nullptr ) && ( nPos > 0 ) )
     {
         --nPos;
-        pCurEntry = m_RedlineParents[nPos]->pTLBParent;
+        pCurEntry = m_RedlineParents[nPos]->xTLBParent.get();
     }
 
     if (pCurEntry)
-        m_pTable->SetCurEntry(pCurEntry);
+        rTreeView.set_cursor(*pCurEntry);
 
+#if 0 //TODO
     SvTreeList* pModel = m_pTable->GetModel();
 
     for (SwRedlineTable::size_type i = nStart; i <= nEnd; i++)
@@ -683,7 +673,7 @@ void SwRedlineAcceptDlg::RemoveParents(SwRedlineTable::size_type nStart, SwRedli
                 bChildrenRemoved = true;
             }
         }
-        SvTreeListEntry *const pEntry = m_RedlineParents[i]->pTLBParent;
+        weld::TreeIter *const pEntry = m_RedlineParents[i]->xTLBParent.get();
         if (pEntry)
         {
             long nIdx = aLBoxArr.size() - 1;
@@ -694,16 +684,17 @@ void SwRedlineAcceptDlg::RemoveParents(SwRedlineTable::size_type nStart, SwRedli
             aLBoxArr.insert( aLBoxArr.begin() + static_cast< sal_uInt16 >(++nIdx) , pEntry);
         }
     }
+#endif
 
     // clear TLB from behind
     long nIdx = static_cast<long>(aLBoxArr.size()) - 1;
     while (nIdx >= 0)
-        m_pTable->RemoveEntry(aLBoxArr[ static_cast< sal_uInt16 >(nIdx--) ]);
+        rTreeView.remove(*aLBoxArr[static_cast<sal_uInt16>(nIdx--)]);
 
-    m_pTable->SetSelectHdl(LINK(this, SwRedlineAcceptDlg, SelectHdl));
-    m_pTable->SetDeselectHdl(LINK(this, SwRedlineAcceptDlg, DeselectHdl));
+    rTreeView.connect_changed(LINK(this, SwRedlineAcceptDlg, SelectHdl));
+//TODO    m_pTable->SetDeselectHdl(LINK(this, SwRedlineAcceptDlg, DeselectHdl));
     // unfortunately by Remove it was selected from the TLB always again ...
-    m_pTable->SelectAll(false);
+    rTreeView.unselect_all();
 
     m_RedlineParents.erase(m_RedlineParents.begin() + nStart, m_RedlineParents.begin() + nEnd + 1);
 }
@@ -721,10 +712,11 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
     if (nEnd == SwRedlineTable::npos)
         return;     // no redlines in the document
 
-    SvTreeListEntry *pParent;
+    weld::TreeView& rTreeView = m_pTable->GetWidget();
+
     SwRedlineDataParent* pRedlineParent;
     const SwRangeRedline* pCurrRedline;
-    if( !nStart && !m_pTable->FirstSelected() )
+    if (!nStart && !rTreeView.get_selected(nullptr))
     {
         pCurrRedline = pSh->GetCurrRedline();
         if( !pCurrRedline )
@@ -756,7 +748,7 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
         pData->bDisabled = false;
 
         sParent = GetRedlineText(rRedln, pData->aDateTime);
-        pParent = m_pTable->InsertEntry(GetActionImage(rRedln), sParent, std::move(pData), nullptr, i);
+        SvTreeListEntry *pParent = m_pTable->InsertEntry(GetActionImage(rRedln), sParent, std::move(pData), nullptr, i);
         if( pCurrRedline == &rRedln )
         {
             m_pTable->SetCurEntry( pParent );
@@ -764,7 +756,7 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
             m_pTable->MakeVisible( pParent );
         }
 
-        pRedlineParent->pTLBParent = pParent;
+        pRedlineParent->xTLBParent = pParent;
 
         InsertChildren(pRedlineParent, rRedln, nAutoFormat);
     }
@@ -879,11 +871,12 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
     m_pTPView->EnableUndo();
 }
 
-SwRedlineTable::size_type SwRedlineAcceptDlg::GetRedlinePos( const SvTreeListEntry& rEntry )
+SwRedlineTable::size_type SwRedlineAcceptDlg::GetRedlinePos(const weld::TreeIter& rEntry)
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
-    return pSh->FindRedlineOfData( *static_cast<SwRedlineDataParent*>(static_cast<RedlinData *>(
-                                    rEntry.GetUserData())->pData)->pData );
+    weld::TreeView& rTreeView = m_pTable->GetWidget();
+    return pSh->FindRedlineOfData( *static_cast<SwRedlineDataParent*>(reinterpret_cast<RedlinData*>(
+                                    rTreeView->get_id(rEntry).toInt64())->pData)->pData );
 }
 
 IMPL_LINK_NOARG(SwRedlineAcceptDlg, AcceptHdl, SvxTPView*, void)
@@ -918,23 +911,23 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, UndoHdl, SvxTPView*, void)
 
 IMPL_LINK_NOARG(SwRedlineAcceptDlg, FilterChangedHdl, SvxTPFilter*, void)
 {
-    SvxTPFilter *pFilterTP = m_aTabPagesCTRL->GetFilterPage();
+    SvxTPFilter *pFilterTP = m_xTabPagesCTRL->GetFilterPage();
 
     if (pFilterTP->IsAction())
-        m_sFilterAction = pFilterTP->GetLbAction()->GetSelectedEntry();
+        m_sFilterAction = pFilterTP->GetLbAction()->get_active();
     else
         m_sFilterAction.clear();
 
     Init();
 }
 
-IMPL_LINK_NOARG(SwRedlineAcceptDlg, DeselectHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, DeselectHdl, weld::TreeView&, void)
 {
     // avoid flickering of buttons:
     m_aDeselectTimer.Start();
 }
 
-IMPL_LINK_NOARG(SwRedlineAcceptDlg, SelectHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, SelectHdl, weld::TreeView&, void)
 {
     SelectTimerHdl(nullptr);
 }
@@ -959,7 +952,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
     //         may the focus.
     SvTreeListEntry* pSelEntry = nullptr;
 
-    if (m_pParentDlg->HasChildPathFocus())
+    if (m_pParentDlg->has_toplevel_focus())
         pSelEntry = m_pTable->FirstSelected();
 
     if( pSelEntry )
@@ -1096,7 +1089,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
                         rRedline.GetRedlineData().GetTimeStamp() ),
                         SID_ATTR_POSTIT_DATE ));
 
-            ScopedVclPtr<AbstractSvxPostItDialog> pDlg(pFact->CreateSvxPostItDialog(m_pParentDlg->GetFrameWeld(), aSet));
+            ScopedVclPtr<AbstractSvxPostItDialog> pDlg(pFact->CreateSvxPostItDialog(m_pParentDlg, aSet));
 
             pDlg->HideAuthor();
 
@@ -1145,7 +1138,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
         bSortDir = true;
         if (nRet - nActionId == 4 && m_pTable->GetSortedCol() == 0xffff)
             return;  // we already have it
-
+#if 0
         nSortMode = nRet - nActionId;
         if (nSortMode == 4)
             nSortMode = 0xffff; // unsorted / sorted by position
@@ -1157,11 +1150,13 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
         m_pTable->SortByCol(nSortMode, bSortDir);
         if (nSortMode == 0xffff)
             Init();             // newly fill everything
+#endif
     }
 }
 
 void SwRedlineAcceptDlg::Initialize(const OUString& rExtraData)
 {
+#if 0
     if (!rExtraData.isEmpty())
     {
         sal_Int32 nPos = rExtraData.indexOf("AcceptChgDat:");
@@ -1195,10 +1190,12 @@ void SwRedlineAcceptDlg::Initialize(const OUString& rExtraData)
             }
         }
     }
+#endif
 }
 
 void SwRedlineAcceptDlg::FillInfo(OUString &rExtraData) const
 {
+#if 0
     rExtraData += "AcceptChgDat:(";
 
     sal_uInt16  nCount = m_pTable->TabCount();
@@ -1211,12 +1208,14 @@ void SwRedlineAcceptDlg::FillInfo(OUString &rExtraData) const
         rExtraData += ";";
     }
     rExtraData += ")";
+#endif
 }
 
 SwRedlineAcceptPanel::SwRedlineAcceptPanel(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame)
     : PanelLayout(pParent, "ManageChangesPanel", "modules/swriter/ui/managechangessidebar.ui", rFrame)
 {
-    mpImplDlg.reset(new SwRedlineAcceptDlg(this, this, get<VclGrid>("content_area")));
+//TODO    mpImplDlg.reset(new SwRedlineAcceptDlg(this, this, get<VclGrid>("content_area")));
+    mpImplDlg.reset(new SwRedlineAcceptDlg(nullptr, nullptr, nullptr));
 
     mpImplDlg->Init();
 

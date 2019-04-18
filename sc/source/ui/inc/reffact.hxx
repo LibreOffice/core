@@ -58,7 +58,7 @@ DECL_WRAPPER_WITHID_CONTROLLER(ScConsolidateDlgWrapper)
 DECL_WRAPPER_WITHID_CONTROLLER(ScPrintAreasDlgWrapper)
 DECL_WRAPPER_WITHID_CONTROLLER(ScColRowNameRangesDlgWrapper)
 DECL_WRAPPER_WITHID(ScFormulaDlgWrapper)
-DECL_WRAPPER_WITHID(ScHighlightChgDlgWrapper)
+DECL_WRAPPER_WITHID_CONTROLLER(ScHighlightChgDlgWrapper)
 DECL_WRAPPER_WITHID(ScCondFormatDlgWrapper)
 
 class ScDescriptiveStatisticsDialogWrapper :

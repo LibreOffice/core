@@ -45,17 +45,12 @@ public:
     bool            bIsAcceptable;
 };
 
-class ScAcceptChgDlg final : public SfxModelessDialog
+class ScAcceptChgDlg final : public SfxModelessDialogController
 {
     Idle                    aSelectionIdle;
     Idle                    aReOpenIdle;
-    VclPtr<PopupMenu>       m_xPopup;
-    VclPtr<SvxAcceptChgCtr> m_pAcceptChgCtr;
     ScViewData*             pViewData;
     ScDocument*             pDoc;
-    VclPtr<SvxTPFilter>     pTPFilter;
-    VclPtr<SvxTPView>       pTPView;
-    VclPtr<SvxRedlinTable>  pTheView; // #i48648 now SvHeaderTabListBox
     ScRangeList             aRangeList;
     ScChangeViewSettings    aChangeViewSet;
     OUString           aStrInsertCols;
@@ -82,6 +77,14 @@ class ScAcceptChgDlg final : public SfxModelessDialog
     bool                    bHasFilterEntry:1;
     bool                    bUseColor:1;
 
+    SvxTPFilter* pTPFilter;
+    SvxTPView* pTPView;
+    SvxRedlinTable* pTheView; // #i48648 now SvHeaderTabListBox
+
+    std::unique_ptr<weld::Container> m_xContentArea;
+    std::unique_ptr<weld::Menu> m_xPopup;
+    std::unique_ptr<SvxAcceptChgCtr> m_xAcceptChgCtr;
+
     void            Init();
 
     DECL_LINK( FilterHandle, SvxTPFilter*, void );
@@ -90,13 +93,13 @@ class ScAcceptChgDlg final : public SfxModelessDialog
     DECL_LINK( AcceptHandle, SvxTPView*, void );
     DECL_LINK( RejectAllHandle, SvxTPView*, void );
     DECL_LINK( AcceptAllHandle, SvxTPView*, void );
-    DECL_LINK( ExpandingHandle, SvTreeListBox*, bool );
-    DECL_LINK( SelectHandle, SvTreeListBox*, void );
+    DECL_LINK( ExpandingHandle, const weld::TreeIter&, bool );
+    DECL_LINK( SelectHandle, weld::TreeView&, void );
     DECL_LINK( RefInfoHandle, const OUString*, void );
 
     DECL_LINK( UpdateSelectionHdl, Timer*, void );
     DECL_LINK( ChgTrackModHdl, ScChangeTrack&, void );
-    DECL_LINK( CommandHdl, SvSimpleTable*, void );
+    DECL_LINK( CommandHdl, CommandEvent&, void );
     DECL_LINK( ReOpenTimerHdl, Timer*, void );
     DECL_LINK( ColCompareHdl, const SvSortData*, sal_Int32 );
 
@@ -107,9 +110,9 @@ class ScAcceptChgDlg final : public SfxModelessDialog
 
     OUString* MakeTypeString(ScChangeActionType eType);
 
-    SvTreeListEntry* AppendChangeAction(
+    std::unique_ptr<weld::TreeIter> AppendChangeAction(
         const ScChangeAction* pScChangeAction,
-        SvTreeListEntry* pParent=nullptr,bool bDelMaster = false,
+        weld::TreeIter* pParent=nullptr,bool bDelMaster = false,
         bool bDisabled = false);
 
     SvTreeListEntry* AppendFilteredAction(
@@ -145,16 +148,13 @@ class ScAcceptChgDlg final : public SfxModelessDialog
                            SvTreeListEntry* pEntry, bool bFilter = false);
 
 public:
-                    ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
-                               ScViewData*      ptrViewData);
-
-                    virtual ~ScAcceptChgDlg() override;
-    virtual void    dispose() override;
+    ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
+                   ScViewData* ptrViewData);
+    virtual ~ScAcceptChgDlg() override;
 
     void            ReInit(ScViewData* ptrViewData);
 
     void            Initialize (SfxChildWinInfo* pInfo);
-    virtual void    FillInfo(SfxChildWinInfo&) const override;
 
 };
 
