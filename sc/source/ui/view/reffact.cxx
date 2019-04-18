@@ -47,7 +47,7 @@ SFX_IMPL_CHILDWINDOW_WITHID(ScPrintAreasDlgWrapper, SID_OPENDLG_EDIT_PRINTAREA )
 SFX_IMPL_CHILDWINDOW_WITHID(ScColRowNameRangesDlgWrapper, SID_DEFINE_COLROWNAMERANGES )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScFormulaDlgWrapper, SID_OPENDLG_FUNCTION )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScAcceptChgDlgWrapper, FID_CHG_ACCEPT )
-SFX_IMPL_MODELESSDIALOG_WITHID(ScHighlightChgDlgWrapper, FID_CHG_SHOW )
+SFX_IMPL_CHILDWINDOW_WITHID(ScHighlightChgDlgWrapper, FID_CHG_SHOW )
 SFX_IMPL_CHILDWINDOW_WITHID(ScSimpleRefDlgWrapper, WID_SIMPLE_REF )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScCondFormatDlgWrapper, WID_CONDFRMT_REF )
 
@@ -256,24 +256,24 @@ void ScSimpleRefDlgWrapper::StartRefInput()
 
 // ScAcceptChgDlgWrapper //FIXME: should be moved into ViewShell
 
-ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   vcl::Window* pParentP,
+ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(vcl::Window* pParentP,
                                             sal_uInt16 nId,
                                             SfxBindings* pBindings,
                                             SfxChildWinInfo* pInfo ) :
                                             SfxChildWindow( pParentP, nId )
 {
-        ScTabViewShell* pViewShell =
-            dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
-        OSL_ENSURE( pViewShell, "missing view shell :-(" );
-        if (pViewShell)
-        {
-            SetWindow( VclPtr<ScAcceptChgDlg>::Create( pBindings, this, pParentP, &pViewShell->GetViewData() ) );
-            static_cast<ScAcceptChgDlg*>(GetWindow())->Initialize( pInfo );
-        }
-        else
-            SetWindow( nullptr );
-        if (pViewShell && !GetWindow())
-            pViewShell->GetViewFrame()->SetChildWindow( nId, false );
+    ScTabViewShell* pViewShell =
+        dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
+    OSL_ENSURE( pViewShell, "missing view shell :-(" );
+    if (pViewShell)
+    {
+        SetController(std::make_shared<ScAcceptChgDlg>(pBindings, this, pParentP->GetFrameWeld(), &pViewShell->GetViewData()));
+        static_cast<ScAcceptChgDlg*>(GetController().get())->Initialize( pInfo );
+    }
+    else
+        SetController( nullptr );
+    if (pViewShell && !GetController())
+        pViewShell->GetViewFrame()->SetChildWindow( nId, false );
 }
 
 void ScAcceptChgDlgWrapper::ReInitDlg()
@@ -282,15 +282,15 @@ void ScAcceptChgDlgWrapper::ReInitDlg()
         dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
     OSL_ENSURE( pViewShell, "missing view shell :-(" );
 
-    if(GetWindow() && pViewShell)
+    if (GetController() && pViewShell)
     {
-        static_cast<ScAcceptChgDlg*>(GetWindow())->ReInit(&pViewShell->GetViewData());
+        static_cast<ScAcceptChgDlg*>(GetController().get())->ReInit(&pViewShell->GetViewData());
     }
 }
 
 // ScHighlightChgDlgWrapper
 
-IMPL_CHILD_CTOR( ScHighlightChgDlgWrapper, FID_CHG_SHOW )
+IMPL_CONTROLLER_CHILD_CTOR(ScHighlightChgDlgWrapper, FID_CHG_SHOW)
 
 namespace
 {

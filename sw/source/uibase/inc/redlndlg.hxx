@@ -40,14 +40,14 @@ struct SwRedlineDataChild
 {
     const SwRedlineData*        pChild;     // link to original stacked data
     const SwRedlineDataChild*   pNext;      // link to stacked data
-    SvTreeListEntry*                pTLBChild;  // corresponding TreeListBox entry
+    std::unique_ptr<weld::TreeIter> xTLBChild; // corresponding TreeListBox entry
 };
 
 struct SwRedlineDataParent
 {
     const SwRedlineData*        pData;      // RedlineDataPtr
     const SwRedlineDataChild*   pNext;      // link to stacked data
-    SvTreeListEntry*            pTLBParent; // corresponding TreeListBox entry
+    std::unique_ptr<weld::TreeIter> xTLBParent; // corresponding TreeListBox entry
     OUString                    sComment;   // redline comment
 
     bool operator< ( const SwRedlineDataParent& rObj ) const
@@ -60,12 +60,10 @@ typedef std::vector<std::unique_ptr<SwRedlineDataChild>> SwRedlineDataChildArr;
 
 class SW_DLLPUBLIC SwRedlineAcceptDlg final
 {
-    VclPtr<vcl::Window>     m_pParentDlg;
+    weld::Window*     m_pParentDlg;
     std::vector<std::unique_ptr<SwRedlineDataParent>> m_RedlineParents;
     SwRedlineDataChildArr   m_RedlineChildren;
     SwRedlineDataParentSortArr m_aUsedSeqNo;
-    VclPtr<SvxAcceptChgCtr>    m_aTabPagesCTRL;
-    VclPtr<PopupMenu>       m_xPopup;
     Timer                   m_aDeselectTimer;
     Timer                   m_aSelectTimer;
     OUString const          m_sInserted;
@@ -75,29 +73,26 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg final
     OUString const          m_sFormatCollSet;
     OUString                m_sFilterAction;
     OUString const          m_sAutoFormat;
-    VclPtr<SvxTPView>       m_pTPView;
-    VclPtr<SvxRedlinTable>  m_pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
-    Link<SvTreeListBox*,void> m_aOldSelectHdl;
-    Link<SvTreeListBox*,void> m_aOldDeselectHdl;
+    Link<weld::TreeView&,void> m_aOldSelectHdl;
+    Link<weld::TreeView&,void> m_aOldDeselectHdl;
     bool                    m_bOnlyFormatedRedlines;
     bool const              m_bRedlnAutoFormat;
 
     // prevent update dialog data during longer operations (cf #102657#)
     bool                    m_bInhibitActivate;
 
-    Image const             m_aInserted;
-    Image const             m_aDeleted;
-    Image const             m_aFormated;
-    Image const             m_aTableChgd;
-    Image const             m_aFormatCollSet;
+    std::unique_ptr<SvxAcceptChgCtr> m_xTabPagesCTRL;
+    std::unique_ptr<weld::Menu> m_xPopup;
+    SvxTPView* m_pTPView;
+    SvxRedlinTable* m_pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
 
     DECL_DLLPRIVATE_LINK( AcceptHdl,     SvxTPView*, void );
     DECL_DLLPRIVATE_LINK( AcceptAllHdl,  SvxTPView*, void );
     DECL_DLLPRIVATE_LINK( RejectHdl,     SvxTPView*, void );
     DECL_DLLPRIVATE_LINK( RejectAllHdl,  SvxTPView*, void );
     DECL_DLLPRIVATE_LINK( UndoHdl,       SvxTPView*, void );
-    DECL_DLLPRIVATE_LINK( DeselectHdl, SvTreeListBox*, void );
-    DECL_DLLPRIVATE_LINK( SelectHdl,   SvTreeListBox*, void );
+    DECL_DLLPRIVATE_LINK( DeselectHdl, weld::TreeView&, void );
+    DECL_DLLPRIVATE_LINK( SelectHdl,   weld::TreeView&, void );
     DECL_DLLPRIVATE_LINK( SelectTimerHdl, Timer*, void );
     DECL_DLLPRIVATE_LINK( GotoHdl, Timer*, void );
     DECL_DLLPRIVATE_LINK( CommandHdl, SvSimpleTable*, void );
@@ -109,20 +104,20 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg final
     SAL_DLLPRIVATE void          InitAuthors();
 
     SAL_DLLPRIVATE static OUString GetRedlineText(const SwRangeRedline& rRedln, DateTime &rDateTime, sal_uInt16 nStack = 0);
-    SAL_DLLPRIVATE Image         GetActionImage(const SwRangeRedline& rRedln, sal_uInt16 nStack = 0);
+    SAL_DLLPRIVATE OUString      GetActionImage(const SwRangeRedline& rRedln, sal_uInt16 nStack = 0);
     SAL_DLLPRIVATE OUString      GetActionText(const SwRangeRedline& rRedln, sal_uInt16 nStack = 0);
-    SAL_DLLPRIVATE static SwRedlineTable::size_type GetRedlinePos( const SvTreeListEntry& rEntry);
+    SAL_DLLPRIVATE SwRedlineTable::size_type GetRedlinePos(const weld::TreeIter& rEntry);
 
     SwRedlineAcceptDlg(SwRedlineAcceptDlg const&) = delete;
     SwRedlineAcceptDlg& operator=(SwRedlineAcceptDlg const&) = delete;
 
 public:
-    SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer *pBuilder, vcl::Window *pContentArea, bool bAutoFormat = false);
+    SwRedlineAcceptDlg(weld::Window *pParent, weld::Builder *pBuilder, weld::Container *pContentArea, bool bAutoFormat = false);
     ~SwRedlineAcceptDlg();
 
     DECL_LINK( FilterChangedHdl, SvxTPFilter*, void );
 
-    SvxAcceptChgCtr& GetChgCtrl()        { return *m_aTabPagesCTRL.get(); }
+    SvxAcceptChgCtr& GetChgCtrl()        { return *m_xTabPagesCTRL.get(); }
     bool     HasRedlineAutoFormat() const   { return m_bRedlnAutoFormat; }
 
     void            Init(SwRedlineTable::size_type nStart = 0);
@@ -134,18 +129,17 @@ public:
     void            Activate();
 };
 
-class SwModelessRedlineAcceptDlg : public SfxModelessDialog
+class SwModelessRedlineAcceptDlg : public SfxModelessDialogController
 {
-    std::unique_ptr<SwRedlineAcceptDlg> pImplDlg;
+    std::unique_ptr<weld::Container> m_xContentArea;
+    std::unique_ptr<SwRedlineAcceptDlg> m_xImplDlg;
     SwChildWinWrapper*      pChildWin;
 
 public:
-    SwModelessRedlineAcceptDlg(SfxBindings*, SwChildWinWrapper*, vcl::Window *pParent);
+    SwModelessRedlineAcceptDlg(SfxBindings*, SwChildWinWrapper*, weld::Window *pParent);
     virtual ~SwModelessRedlineAcceptDlg() override;
-    virtual void dispose() override;
 
     virtual void    Activate() override;
-    virtual void    FillInfo(SfxChildWinInfo&) const override;
     void            Initialize (SfxChildWinInfo const * pInfo);
 };
 

@@ -1434,6 +1434,8 @@ public:
         return m_xSpinButton->get_value_changed_from_saved();
     }
     void set_position(int nCursorPos) { m_xSpinButton->set_position(nCursorPos); }
+    void set_text(const OUString& rText) { m_xSpinButton->set_text(rText); }
+    OUString get_text() const { return m_xSpinButton->get_text(); }
     weld::SpinButton& get_widget() { return *m_xSpinButton; }
 };
 
