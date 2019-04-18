@@ -17,6 +17,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/weld.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -24,6 +25,10 @@
 /// This class is the base for the Widget Layout-based sidebar panels.
 class SVX_DLLPUBLIC PanelLayout : public Control, public VclBuilderContainer
 {
+protected:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xContainer;
+
 private:
     Idle m_aPanelLayoutIdle;
     bool m_bInClose;
@@ -33,7 +38,7 @@ private:
 
 public:
     PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
-            const css::uno::Reference<css::frame::XFrame> &rFrame);
+            const css::uno::Reference<css::frame::XFrame> &rFrame, bool bInterimBuilder = false);
     virtual ~PanelLayout() override;
     virtual void dispose() override;
 

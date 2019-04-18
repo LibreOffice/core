@@ -552,6 +552,8 @@ protected:
     Link<const TreeIter&, bool> m_aExpandingHdl;
     Link<TreeView&, void> m_aVisibleRangeChangedHdl;
     Link<TreeView&, void> m_aModelChangedHdl;
+    Link<const CommandEvent&, bool> m_aPopupMenuHdl;
+    std::function<int(const weld::TreeIter&, const weld::TreeIter&)> m_aCustomSort;
 
     std::vector<int> m_aRadioIndexes;
 
@@ -673,6 +675,7 @@ public:
     virtual OUString get_id(int pos) const = 0;
     virtual int find_id(const OUString& rId) const = 0;
     void select_id(const OUString& rId) { select(find_id(rId)); }
+    void remove_id(const OUString& rText) { remove(find_id(rText)); }
 
     //via iter
     virtual std::unique_ptr<TreeIter> make_iterator(const TreeIter* pOrig = nullptr) const = 0;
@@ -702,6 +705,11 @@ public:
     virtual bool iter_parent(TreeIter& rIter) const = 0;
     virtual int get_iter_depth(const TreeIter& rIter) const = 0;
     virtual int get_iter_index_in_parent(const TreeIter& rIter) const = 0;
+    /* Compares two paths. If a appears before b in a tree, then -1 is returned.
+       If b appears before a , then 1 is returned. If the two nodes are equal,
+       then 0 is returned.
+    */
+    virtual int iter_compare(const TreeIter& a, const TreeIter& b) const = 0;
     virtual bool iter_has_child(const TreeIter& rIter) const = 0;
     virtual void remove(const TreeIter& rIter) = 0;
     virtual void select(const TreeIter& rIter) = 0;
@@ -721,12 +729,15 @@ public:
     virtual void set_image(const TreeIter& rIter,
                            const css::uno::Reference<css::graphic::XGraphic>& rImage, int col)
         = 0;
+    virtual void set_font_color(const TreeIter& rIter, const Color& rColor) const = 0;
     virtual void scroll_to_row(const TreeIter& rIter) = 0;
     virtual bool is_selected(const TreeIter& rIter) const = 0;
 
     virtual void move_subtree(TreeIter& rNode, const TreeIter* pNewParent, int nIndexInNewParent)
         = 0;
 
+    //calling func on each element until func returns true or we run out of elements
+    virtual void all_foreach(const std::function<bool(TreeIter&)>& func) = 0;
     //calling func on each selected element until func returns true or we run out of elements
     virtual void selected_foreach(const std::function<bool(TreeIter&)>& func) = 0;
     //calling func on each visible element until func returns true or we run out of elements
@@ -738,6 +749,11 @@ public:
     {
         assert(!m_aVisibleRangeChangedHdl.IsSet() || !rLink.IsSet());
         m_aVisibleRangeChangedHdl = rLink;
+    }
+
+    virtual void connect_popup_menu(const Link<const CommandEvent&, bool>& rLink)
+    {
+        m_aPopupMenuHdl = rLink;
     }
 
     //all of them
@@ -758,6 +774,12 @@ public:
 
     virtual int get_sort_column() const = 0;
     virtual void set_sort_column(int nColumn) = 0;
+
+    virtual void
+    set_sort_func(const std::function<int(const weld::TreeIter&, const weld::TreeIter&)>& func)
+    {
+        m_aCustomSort = func;
+    }
 
     virtual void clear() = 0;
     virtual int get_height_rows(int nRows) const = 0;
@@ -1434,6 +1456,8 @@ public:
         return m_xSpinButton->get_value_changed_from_saved();
     }
     void set_position(int nCursorPos) { m_xSpinButton->set_position(nCursorPos); }
+    void set_text(const OUString& rText) { m_xSpinButton->set_text(rText); }
+    OUString get_text() const { return m_xSpinButton->get_text(); }
     weld::SpinButton& get_widget() { return *m_xSpinButton; }
 };
 

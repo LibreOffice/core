@@ -24,6 +24,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/ctredlin.hxx>
 #include <svx/postattr.hxx>
+#include <unotools/viewoptions.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
@@ -39,28 +40,34 @@
 
 #include <unomid.h>
 
-SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(vcl::Window *pParent)
-    : SfxModalDialog(pParent,
-        "AcceptRejectChangesDialog", "svx/ui/acceptrejectchangesdialog.ui")
+SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(weld::Window *pParent)
+    : SfxDialogController(pParent, "svx/ui/acceptrejectchangesdialog.ui",
+                          "AcceptRejectChangesDialog")
+    , m_xContentArea(m_xDialog->weld_content_area())
 {
-    pImplDlg.reset( new SwRedlineAcceptDlg(this, this, get_content_area(), true) );
+    m_xDialog->set_modal(true);
 
-    pImplDlg->Initialize(GetExtraData());
-    pImplDlg->Activate();   // for data's initialisation
+    m_xImplDlg.reset(new SwRedlineAcceptDlg(m_xDialog, m_xBuilder.get(), m_xContentArea.get(), true));
+
+    SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+    if (aDlgOpt.Exists())
+    {
+        css::uno::Any aUserItem = aDlgOpt.GetUserItem("UserItem");
+        OUString sExtraData;
+        aUserItem >>= sExtraData;
+        m_xImplDlg->Initialize(sExtraData);
+    }
+    m_xImplDlg->Activate();   // for data's initialisation
 }
 
 SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
 {
-    disposeOnce();
-}
-
-void SwModalRedlineAcceptDlg::dispose()
-{
     AcceptAll(false);   // refuse everything remaining
-    pImplDlg->FillInfo(GetExtraData());
 
-    pImplDlg.reset();
-    SfxModalDialog::dispose();
+    OUString sExtraData;
+    m_xImplDlg->FillInfo(sExtraData);
+    SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+    aDlgOpt.SetUserItem("UserItem", css::uno::makeAny(sExtraData));
 }
 
 void SwModalRedlineAcceptDlg::Activate()
@@ -69,7 +76,7 @@ void SwModalRedlineAcceptDlg::Activate()
 
 void SwModalRedlineAcceptDlg::AcceptAll( bool bAccept )
 {
-    SvxTPFilter* pFilterTP = pImplDlg->GetChgCtrl().GetFilterPage();
+    SvxTPFilter* pFilterTP = m_xImplDlg->GetChgCtrl().GetFilterPage();
 
     if (pFilterTP->IsDate() || pFilterTP->IsAuthor() ||
         pFilterTP->IsRange() || pFilterTP->IsAction())
@@ -78,10 +85,10 @@ void SwModalRedlineAcceptDlg::AcceptAll( bool bAccept )
         pFilterTP->CheckAuthor(false);
         pFilterTP->CheckRange(false);
         pFilterTP->CheckAction(false);
-        pImplDlg->FilterChangedHdl(nullptr);
+        m_xImplDlg->FilterChangedHdl(nullptr);
     }
 
-    pImplDlg->CallAcceptReject( false, bAccept );
+    m_xImplDlg->CallAcceptReject( false, bAccept );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

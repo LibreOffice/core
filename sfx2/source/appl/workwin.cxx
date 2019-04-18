@@ -586,8 +586,14 @@ void SfxWorkWindow::DeleteControllers_Impl()
             // SplitWindow, cancel it at the workwindow.
             // After TH a cancellation on the SplitWindow is not necessary
             // since this window is also destroyed (see below).
-            if (pCW->pCli && pChild->GetWindow())
-                ReleaseChild_Impl(*pChild->GetWindow());
+            if (pCW->pCli)
+            {
+                if (pChild->GetController())
+                    ReleaseChild_Impl(*pChild->GetController());
+                else
+                    ReleaseChild_Impl(*pChild->GetWindow());
+            }
+
             pCW->pWin = nullptr;
             pWorkWin->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( pChild->GetWindow() );
             pChild->Destroy();
