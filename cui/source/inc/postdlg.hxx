@@ -37,8 +37,8 @@
 class SvxPostItDialog : public SfxDialogController
 {
 public:
-    SvxPostItDialog(weld::Window* pParent, const SfxItemSet& rCoreSet,
-                     bool bPrevNext);
+    SvxPostItDialog(weld::Widget* pParent, const SfxItemSet& rCoreSet,
+                    bool bPrevNext);
     virtual ~SvxPostItDialog() override;
 
     static const sal_uInt16*      GetRanges();

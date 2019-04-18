@@ -804,9 +804,9 @@ public:
                                                                  SdrModel* pModel,
                                                                  const SdrObject* pObj,
                                                                  bool bHasObj ) override;
-    virtual VclPtr<AbstractSvxPostItDialog>        CreateSvxPostItDialog( weld::Window* pParent,
-                                                                        const SfxItemSet& rCoreSet,
-                                                                        bool bPrevNext = false ) override;
+    virtual VclPtr<AbstractSvxPostItDialog>        CreateSvxPostItDialog(weld::Widget* pParent,
+                                                                         const SfxItemSet& rCoreSet,
+                                                                         bool bPrevNext = false) override;
 
     // For TabPage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) override;

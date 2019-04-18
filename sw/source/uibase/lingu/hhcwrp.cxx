@@ -114,7 +114,7 @@ SwHHCWrapper::~SwHHCWrapper()
 {
     m_pConvArgs.reset();
 
-    SwViewShell::SetCareWin( nullptr );
+    SwViewShell::SetCareDialog(nullptr);
 
     // check for existence of a draw view which means that there are
     // (or previously were) draw objects present in the document.

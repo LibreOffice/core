@@ -17,7 +17,8 @@
 
 using namespace sfx2::sidebar;
 
-PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
+PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+                         const css::uno::Reference<css::frame::XFrame> &rFrame, bool bInterimBuilder)
     : Control(pParent)
     , m_bInClose(false)
     , mxFrame(rFrame)
@@ -28,7 +29,10 @@ PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUStrin
     m_aPanelLayoutIdle.SetDebugName("svx::PanelLayout m_aPanelLayoutIdle");
 
     // VclBuilder will trigger resize and start Idle
-    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame));
+    if (!bInterimBuilder)
+        m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame));
+    else
+        m_xBuilder.reset(Application::CreateInterimBuilder(this, rUIXMLDescription));
     if (GetSettings().GetStyleSettings().GetAutoMnemonic())
        Accelerator::GenerateAutoMnemonicsOnHierarchy(this);
 }
@@ -42,6 +46,7 @@ void PanelLayout::dispose()
 {
     m_bInClose = true;
     m_aPanelLayoutIdle.Stop();
+    m_xBuilder.reset();
     disposeBuilder();
     Control::dispose();
 }
