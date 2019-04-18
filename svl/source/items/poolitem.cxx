@@ -48,25 +48,6 @@ bool SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
 }
 
 
-SfxPoolItem* SfxPoolItem::Create(SvStream &, sal_uInt16) const
-{
-    assert(!"this item is not serialisable");
-    return Clone();
-}
-
-
-sal_uInt16 SfxPoolItem::GetVersion( sal_uInt16 ) const
-{
-    return 0;
-}
-
-
-SvStream& SfxPoolItem::Store(SvStream &rStream, sal_uInt16 ) const
-{
-    assert(!"this item is not serialisable");
-    return rStream;
-}
-
 /**
  * This virtual method allows to get a textual representation of the value
  * for the SfxPoolItem subclasses. It should be overridden by all UI-relevant

@@ -2413,21 +2413,15 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
         const SfxPoolItem* pItem;
         if ( mpPreviewFontSet->GetItemState( ATTR_FONT, true, &pItem ) == SfxItemState::SET )
         {
-            SvxFontItem aFontItem(EE_CHAR_FONTINFO);
-            aFontItem = static_cast<const SvxFontItem&>(*pItem);
-            pSet->Put( aFontItem );
+            pSet->Put(*pItem);
         }
         if ( mpPreviewFontSet->GetItemState( ATTR_CJK_FONT, true, &pItem ) == SfxItemState::SET )
         {
-            SvxFontItem aCjkFontItem(EE_CHAR_FONTINFO_CJK);
-            aCjkFontItem = static_cast<const SvxFontItem&>(*pItem);
-            pSet->Put( aCjkFontItem );
+            pSet->Put(*pItem);
         }
         if ( mpPreviewFontSet->GetItemState( ATTR_CTL_FONT, true, &pItem ) == SfxItemState::SET )
         {
-            SvxFontItem aCtlFontItem(EE_CHAR_FONTINFO_CTL);
-            aCtlFontItem = static_cast<const SvxFontItem&>(*pItem);
-            pSet->Put( aCtlFontItem );
+            pSet->Put(*pItem);
         }
     }
     mpEngine->SetDefaults( pSet );

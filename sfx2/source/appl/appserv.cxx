@@ -224,9 +224,9 @@ namespace
 
         try // fdo#48775
         {
-            SfxStringItem aURL(SID_FILE_NAME, OUString(".component:Bibliography/View1"));
-            SfxStringItem aRef(SID_REFERER, OUString("private:user"));
-            SfxStringItem aTarget(SID_TARGETNAME, OUString("_blank"));
+            SfxStringItem aURL(SID_FILE_NAME, ".component:Bibliography/View1");
+            SfxStringItem aRef(SID_REFERER, "private:user");
+            SfxStringItem aTarget(SID_TARGETNAME, "_blank");
             SfxViewFrame::Current()->GetDispatcher()->ExecuteList(SID_OPENDOC,
                 SfxCallMode::ASYNCHRON, { &aURL, &aRef, &aTarget });
         }
@@ -402,7 +402,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         return;
                 }
 
-                SfxStringItem aNameItem( SID_FILE_NAME, OUString("vnd.sun.star.cmd:logout") );
+                SfxStringItem aNameItem( SID_FILE_NAME, "vnd.sun.star.cmd:logout" );
                 SfxStringItem aReferer( SID_REFERER, "private/user" );
                 pImpl->pAppDispat->ExecuteList(SID_OPENDOC,
                         SfxCallMode::SLOT, { &aNameItem, &aReferer });

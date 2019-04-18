@@ -71,8 +71,9 @@ public:
                     ~ScViewFunc();
 
     SC_DLLPUBLIC const ScPatternAttr*    GetSelectionPattern ();
-    void                    GetSelectionFrame   ( SvxBoxItem&       rLineOuter,
-                                                  SvxBoxInfoItem&   rLineInner );
+    void GetSelectionFrame(
+        std::shared_ptr<SvxBoxItem>& rLineOuter,
+        std::shared_ptr<SvxBoxInfoItem>& rLineInner );
 
     SvtScriptType   GetSelectionScriptType();
 

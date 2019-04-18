@@ -59,21 +59,4 @@ SfxPoolItem* SfxRangeItem::Clone(SfxItemPool *) const
     return new SfxRangeItem( Which(), nFrom, nTo );
 }
 
-
-SfxPoolItem* SfxRangeItem::Create(SvStream &rStream, sal_uInt16) const
-{
-    sal_uInt16 nVon(0), nBis(0);
-    rStream.ReadUInt16( nVon );
-    rStream.ReadUInt16( nBis );
-    return new SfxRangeItem( Which(), nVon, nBis );
-}
-
-
-SvStream& SfxRangeItem::Store(SvStream &rStream, sal_uInt16) const
-{
-    rStream.WriteUInt16( nFrom );
-    rStream.WriteUInt16( nTo );
-    return rStream;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
