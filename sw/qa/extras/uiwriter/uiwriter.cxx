@@ -206,6 +206,7 @@ public:
     void testXFlatParagraph();
     void testTdf81995();
     void testForcepoint3();
+    void testForcepoint79();
     void testExportToPicture();
     void testTdf77340();
     void testTdf79236();
@@ -410,6 +411,7 @@ public:
     CPPUNIT_TEST(testXFlatParagraph);
     CPPUNIT_TEST(testTdf81995);
     CPPUNIT_TEST(testForcepoint3);
+    CPPUNIT_TEST(testForcepoint79);
     CPPUNIT_TEST(testExportToPicture);
     CPPUNIT_TEST(testTdf77340);
     CPPUNIT_TEST(testTdf79236);
@@ -2018,6 +2020,20 @@ void SwUiWriterTest::testForcepoint3()
     xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
     aTempFile.EnableKillingFile();
 }
+
+void SwUiWriterTest::testForcepoint79()
+{
+    createDoc("forcepoint79-1.doc");
+    uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
+    }));
+    utl::TempFile aTempFile;
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    // printing asserted in SwCellFrame::FindStartEndOfRowSpanCell
+    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
+    aTempFile.EnableKillingFile();
+}
+
 
 void SwUiWriterTest::testExportToPicture()
 {

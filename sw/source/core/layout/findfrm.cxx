@@ -1668,8 +1668,6 @@ SwCellFrame* SwCellFrame::GetPreviousCell() const
 // --> NEW TABLES
 const SwCellFrame& SwCellFrame::FindStartEndOfRowSpanCell( bool bStart ) const
 {
-    const SwCellFrame* pRet = nullptr;
-
     const SwTabFrame* pTableFrame = dynamic_cast<const SwTabFrame*>(GetUpper()->GetUpper());
 
     if ( !bStart && pTableFrame && pTableFrame->IsFollow() && pTableFrame->IsInHeadline( *this ) )
@@ -1726,17 +1724,17 @@ const SwCellFrame& SwCellFrame::FindStartEndOfRowSpanCell( bool bStart ) const
 
                 if ( pMasterTable == pTableFrame )
                 {
-                    pRet = pMasterCell;
-                    break;
+                    return *pMasterCell;
                 }
             }
         }
     }
 
-    assert(pRet && "SwCellFrame::FindStartRowSpanCell: No result");
+    SAL_WARN("sw.core", "SwCellFrame::FindStartRowSpanCell: No result");
 
-    return *pRet;
+    return *this;
 }
+
 // <-- NEW TABLES
 
 const SwRowFrame* SwFrame::IsInSplitTableRow() const
