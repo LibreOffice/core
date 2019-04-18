@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_de50dad7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-04-18T13:14:09Z",
+      "side": 1,
+      "message": "Do we tell extensions to do that anywhere?  Because, I don\u0027t find any documentation for OnMainThread, but at least if we want to treat it as something other than an implementation detail, it should probably not be removed from the \"check that only acceptable parameters are provided here\" list in SfxBaseModel::storeSelf (sfx2/source/doc/sfxbasemodel.cxx).",
+      "revId": "2669581e12f03070bedbd69510871e315fe0308b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
