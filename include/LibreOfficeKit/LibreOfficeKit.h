@@ -294,7 +294,7 @@ struct _LibreOfficeKitDocumentClass
                          const int width, const int height);
 
     /// @see lok::Document::postWindow().
-    void (*postWindow) (LibreOfficeKitDocument* pThis, unsigned nWindowId, int nAction);
+    void (*postWindow) (LibreOfficeKitDocument* pThis, unsigned nWindowId, int nAction, const char* pData);
 
     /// @see lok::Document::postWindowKeyEvent().
     void (*postWindowKeyEvent) (LibreOfficeKitDocument* pThis,
