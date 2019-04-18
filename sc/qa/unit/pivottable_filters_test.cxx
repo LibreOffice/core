@@ -89,6 +89,7 @@ public:
     void testTdf124651();
     void testTdf124736();
     void tesTtdf124772NumFmt();
+    void testTdf124810();
 
     CPPUNIT_TEST_SUITE(ScPivotTableFiltersTest);
 
@@ -135,6 +136,7 @@ public:
     CPPUNIT_TEST(testTdf124651);
     CPPUNIT_TEST(testTdf124736);
     CPPUNIT_TEST(tesTtdf124772NumFmt);
+    CPPUNIT_TEST(testTdf124810);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2563,6 +2565,51 @@ void ScPivotTableFiltersTest::tesTtdf124772NumFmt()
     // Check that we refer to correct format
     assertXPath(pTable, "/x:styleSheet/x:numFmts/x:numFmt[@numFmtId='" + sXclNumFmt.toUtf8() + "']",
                 "formatCode", "\\$#,##0");
+}
+
+void ScPivotTableFiltersTest::testTdf124810()
+{
+    {
+        // First, test that we roundtrip existing pivot table style information from XLSX.
+        ScDocShellRef xDocSh = loadDoc("pivot_dark1.", FORMAT_XLSX);
+        CPPUNIT_ASSERT(xDocSh.is());
+
+        xmlDocPtr pTable = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+            "xl/pivotTables/pivotTable1.xml", FORMAT_XLSX);
+        xDocSh->DoClose();
+        CPPUNIT_ASSERT(pTable);
+
+        // All attributes must have been roundtripped correctly (testdoc uses some non-default values)
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "name",
+                    "PivotStyleDark1");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showRowHeaders", "1");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showColHeaders", "1");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showRowStripes", "1");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showColStripes", "0");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showLastColumn", "0");
+    }
+
+    {
+        // Now check that we export default style information when there's no such information in
+        // original document. Just use some ODS as source. This might be changed when we start
+        // exporting better pivot table style information.
+        ScDocShellRef xDocSh = loadDoc("tdf124651_simplePivotTable.", FORMAT_ODS);
+        CPPUNIT_ASSERT(xDocSh.is());
+
+        xmlDocPtr pTable = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+            "xl/pivotTables/pivotTable1.xml", FORMAT_XLSX);
+        xDocSh->DoClose();
+        CPPUNIT_ASSERT(pTable);
+
+        // The default style for pivot tables in Excel 2007 through 2016 is PivotStyleLight16
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "name",
+                    "PivotStyleLight16");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showRowHeaders", "1");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showColHeaders", "1");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showRowStripes", "0");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showColStripes", "0");
+        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showLastColumn", "1");
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPivotTableFiltersTest);
