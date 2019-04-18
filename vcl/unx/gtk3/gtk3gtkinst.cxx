@@ -4757,6 +4757,11 @@ public:
         ::set_label(GTK_LABEL(m_pLabel), rText);
     }
 
+    virtual OUString get_label() const override
+    {
+        return ::get_label(GTK_LABEL(m_pLabel));
+    }
+
     virtual void set_image(VirtualDevice* pDevice) override
     {
         ensure_image_widget();
@@ -5366,8 +5371,10 @@ public:
 
     virtual void set_date(const Date& rDate) override
     {
+        disable_notify_events();
         gtk_calendar_select_month(m_pCalendar, rDate.GetMonth() - 1, rDate.GetYear());
         gtk_calendar_select_day(m_pCalendar, rDate.GetDay());
+        enable_notify_events();
     }
 
     virtual Date get_date() const override
@@ -5780,7 +5787,7 @@ namespace
 
 namespace
 {
-    gint sort_func(GtkTreeModel* pModel, GtkTreeIter* a, GtkTreeIter* b, gpointer data)
+    gint default_sort_func(GtkTreeModel* pModel, GtkTreeIter* a, GtkTreeIter* b, gpointer data)
     {
         comphelper::string::NaturalStringSorter* pSorter = static_cast<comphelper::string::NaturalStringSorter*>(data);
         gchar* pName1;
@@ -5829,6 +5836,10 @@ struct GtkInstanceTreeIter : public weld::TreeIter
             iter = pOrig->iter;
         else
             memset(&iter, 0, sizeof(iter));
+    }
+    GtkInstanceTreeIter(const GtkTreeIter& rOrig)
+    {
+        memcpy(&iter, &rOrig, sizeof(iter));
     }
     virtual bool equal(const TreeIter& rOther) const override
     {
@@ -6132,6 +6143,19 @@ private:
         pThis->signal_model_changed();
     }
 
+    static gint sortFunc(GtkTreeModel* pModel, GtkTreeIter* a, GtkTreeIter* b, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        return pThis->sort_func(pModel, a, b);
+    }
+
+    gint sort_func(GtkTreeModel* pModel, GtkTreeIter* a, GtkTreeIter* b)
+    {
+        if (m_aCustomSort)
+            return m_aCustomSort(GtkInstanceTreeIter(*a), GtkInstanceTreeIter(*b));
+        return default_sort_func(pModel, a, b, m_xSorter.get());
+    }
+
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), pBuilder, bTakeOwnership)
@@ -6219,7 +6243,7 @@ public:
     {
         GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, nColumn));
         assert(pColumn && "wrong count");
-        return gtk_tree_view_column_get_fixed_width(pColumn) - gtk_tree_view_column_get_spacing(pColumn);
+        return gtk_tree_view_column_get_width(pColumn);
     }
 
     virtual OUString get_column_title(int nColumn) const override
@@ -6260,12 +6284,23 @@ public:
         enable_notify_events();
     }
 
+    void set_font_color(const GtkTreeIter& iter, const Color& rColor) const
+    {
+        GdkRGBA aColor{rColor.GetRed()/255.0, rColor.GetGreen()/255.0, rColor.GetBlue()/255.0, 0};
+        gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), m_nIdCol + 1, &aColor, -1);
+    }
+
     virtual void set_font_color(int pos, const Color& rColor) const override
     {
         GtkTreeIter iter;
         gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_pTreeStore), &iter, nullptr, pos);
-        GdkRGBA aColor{rColor.GetRed()/255.0, rColor.GetGreen()/255.0, rColor.GetBlue()/255.0, 0};
-        gtk_tree_store_set(m_pTreeStore, &iter, m_nIdCol + 1, &aColor, -1);
+        set_font_color(iter, rColor);
+    }
+
+    virtual void set_font_color(const weld::TreeIter& rIter, const Color& rColor) const override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        set_font_color(rGtkIter.iter, rColor);
     }
 
     virtual void remove(int pos) override
@@ -6346,6 +6381,7 @@ public:
                             ::comphelper::getProcessComponentContext(),
                             Application::GetSettings().GetUILanguageTag().getLocale()));
         GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
+        gtk_tree_sortable_set_sort_func(pSortable, m_nTextCol, sortFunc, this, nullptr);
         gtk_tree_sortable_set_sort_column_id(pSortable, m_nTextCol, GTK_SORT_ASCENDING);
     }
 
@@ -6420,7 +6456,16 @@ public:
         GtkSortType eSortType;
         GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
         gtk_tree_sortable_get_sort_column_id(pSortable, nullptr, &eSortType);
-        gtk_tree_sortable_set_sort_column_id(pSortable, get_model_col(nColumn), eSortType);
+        int nSortCol = get_model_col(nColumn);
+        gtk_tree_sortable_set_sort_func(pSortable, nSortCol, sortFunc, this, nullptr);
+        gtk_tree_sortable_set_sort_column_id(pSortable, nSortCol, eSortType);
+    }
+
+    virtual void set_sort_func(const std::function<int(const weld::TreeIter&, const weld::TreeIter&)>& func) override
+    {
+        weld::TreeView::set_sort_func(func);
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
+        gtk_tree_sortable_sort_column_changed(pSortable);
     }
 
     virtual int n_children() const override
@@ -6498,6 +6543,19 @@ public:
         g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
 
         return aRows;
+    }
+
+    virtual void all_foreach(const std::function<bool(weld::TreeIter&)>& func) override
+    {
+        GtkInstanceTreeIter aGtkIter(nullptr);
+        if (get_iter_first(aGtkIter))
+        {
+            do
+            {
+                if (func(aGtkIter))
+                    break;
+            } while (iter_next(aGtkIter));
+        }
     }
 
     virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override
@@ -6723,6 +6781,23 @@ public:
         int nRet = indices[depth-1];
 
         gtk_tree_path_free(path);
+
+        return nRet;
+    }
+
+    virtual int iter_compare(const weld::TreeIter& a, const weld::TreeIter& b) const override
+    {
+        const GtkInstanceTreeIter& rGtkIterA = static_cast<const GtkInstanceTreeIter&>(a);
+        const GtkInstanceTreeIter& rGtkIterB = static_cast<const GtkInstanceTreeIter&>(b);
+
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreePath* pathA = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIterA.iter));
+        GtkTreePath* pathB = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIterB.iter));
+
+        int nRet = gtk_tree_path_compare(pathA, pathB);
+
+        gtk_tree_path_free(pathB);
+        gtk_tree_path_free(pathA);
 
         return nRet;
     }
@@ -8664,7 +8739,7 @@ public:
                             Application::GetSettings().GetUILanguageTag().getLocale()));
         GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
         gtk_tree_sortable_set_sort_column_id(pSortable, 0, GTK_SORT_ASCENDING);
-        gtk_tree_sortable_set_sort_func(pSortable, 0, sort_func, m_xSorter.get(), nullptr);
+        gtk_tree_sortable_set_sort_func(pSortable, 0, default_sort_func, m_xSorter.get(), nullptr);
     }
 
     virtual bool has_entry() const override

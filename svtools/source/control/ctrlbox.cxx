@@ -1746,19 +1746,25 @@ SvtCalendarBox::SvtCalendarBox(std::unique_ptr<weld::MenuButton> pControl)
 void SvtCalendarBox::set_date(const Date& rDate)
 {
     m_xCalendar->set_date(rDate);
-    SelectHdl(*m_xCalendar);
+    set_label_from_date();
 }
 
-IMPL_LINK(SvtCalendarBox, SelectHdl, weld::Calendar&, rCalendar, void)
+void SvtCalendarBox::set_label_from_date()
 {
     const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
-    m_xControl->set_label(rLocaleData.getDate(rCalendar.get_date()));
+    m_xControl->set_label(rLocaleData.getDate(m_xCalendar->get_date()));
+}
+
+IMPL_LINK_NOARG(SvtCalendarBox, SelectHdl, weld::Calendar&, void)
+{
+    set_label_from_date();
 }
 
 IMPL_LINK_NOARG(SvtCalendarBox, ActivateHdl, weld::Calendar&, void)
 {
     if (m_xControl->get_active())
         m_xControl->set_active(false);
+    m_aActivatedHdl.Call(*this);
 }
 
 SvtCalendarBox::~SvtCalendarBox()
