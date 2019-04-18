@@ -103,7 +103,6 @@
 #include <unotools/optionsdlg.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/help.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>

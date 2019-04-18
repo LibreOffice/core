@@ -25,9 +25,7 @@
 #include <svx/checklbx.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/langbox.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/button.hxx>
 #include <memory>
 
 // forward ---------------------------------------------------------------

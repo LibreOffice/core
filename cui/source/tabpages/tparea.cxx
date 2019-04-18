@@ -38,7 +38,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/opengrf.hxx>
-#include <vcl/layout.hxx>
 
 using namespace com::sun::star;
 
