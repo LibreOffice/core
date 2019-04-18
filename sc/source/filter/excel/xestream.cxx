@@ -943,31 +943,11 @@ sax_fastparser::FSHelperPtr XclExpXmlStream::GetStreamForPath( const OUString& s
     return maOpenedStreamMap[ sPath ].second;
 }
 
-sax_fastparser::FSHelperPtr& XclExpXmlStream::WriteAttributesInternal( sal_Int32 nAttribute, ... )
+void XclExpXmlStream::WriteAttributeInternal(sal_Int32 nAttr, const OUString& sVal)
 {
-    sax_fastparser::FSHelperPtr& rStream = GetCurrentStream();
-
-    va_list args;
-    va_start( args, nAttribute );
-    do {
-        const char* pValue = va_arg( args, const char* );
-        if( pValue )
-        {
-            rStream->write( " " )
-                ->writeId( nAttribute )
-                ->write( "=\"" )
-                ->writeEscaped( OUString(pValue, strlen(pValue), RTL_TEXTENCODING_UTF8) )
-                ->write( "\"" );
-        }
-
-        nAttribute = va_arg( args, sal_Int32 );
-        if( nAttribute == FSEND_internal )
-            break;
-    } while( true );
-    va_end( args );
-
-    return rStream;
+    GetCurrentStream()->write(" ")->writeId(nAttr)->write("=\"")->writeEscaped(sVal)->write("\"");
 }
+
 sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (
     const OUString& sFullStream,
     const OUString& sRelativeStream,
