@@ -22,7 +22,11 @@
 
 #include <com/sun/star/frame/XStorable.hpp>
 
+#include <vcl/combobox.hxx>
 #include <vcl/scheduler.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/syswin.hxx>
+#include <vcl/window.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/uri.hxx>
 #include <sfx2/app.hxx>
@@ -130,6 +134,7 @@ public:
     void testInsertCertificate_PEM_DOCX();
     void testSignDocument_PEM_PDF();
     void testTextSelectionHandles();
+    void testDialogPaste();
     void testABI();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
@@ -180,6 +185,7 @@ public:
     CPPUNIT_TEST(testInsertCertificate_PEM_DOCX);
     CPPUNIT_TEST(testSignDocument_PEM_PDF);
     CPPUNIT_TEST(testTextSelectionHandles);
+    CPPUNIT_TEST(testDialogPaste);
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
 
@@ -206,6 +212,23 @@ public:
     boost::property_tree::ptree m_aContextMenuResult;
 
 };
+
+static Control* GetFocusControl(vcl::Window const * pParent)
+{
+    sal_uInt16 nChildren = pParent->GetChildCount();
+    for (sal_uInt16 nChild = 0; nChild < nChildren; ++nChild)
+    {
+        vcl::Window* pChild = pParent->GetChild( nChild );
+        Control* pCtrl = dynamic_cast<Control*>(pChild);
+        if (pCtrl && pCtrl->HasControlFocus())
+            return pCtrl;
+
+        Control* pSubCtrl = GetFocusControl( pChild );
+        if (pSubCtrl)
+            return pSubCtrl;
+    }
+    return nullptr;
+}
 
 LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, LibreOfficeKitDocumentType eType)
 {
@@ -2616,6 +2639,36 @@ void DesktopLOKTest::testTextSelectionHandles()
     comphelper::LibreOfficeKit::setActive(false);
 }
 
+void DesktopLOKTest::testDialogPaste()
+{
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:HyperlinkDialog", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    pViewShell->GetViewFrame()->GetBindings().Update();
+
+    VclPtr<vcl::Window> pWindow(Application::GetActiveTopWindow());
+    CPPUNIT_ASSERT(pWindow);
+
+    OString aText("www.softwarelibre.org.bo");
+    CPPUNIT_ASSERT(pDocument->pClass->postWindowPaste(pDocument, pWindow->GetLOKWindowId(), "text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
+    Scheduler::ProcessEventsToIdle();
+
+    Control* pCtrlFocused = GetFocusControl(pWindow.get());
+    CPPUNIT_ASSERT(pCtrlFocused);
+    ComboBox* pCtrlURL = dynamic_cast<ComboBox*>(pCtrlFocused);
+    CPPUNIT_ASSERT(pCtrlURL);
+
+    OString aComboText = pCtrlURL->GetText().toUtf8();
+    CPPUNIT_ASSERT_EQUAL(aText, aComboText);
+
+    static_cast<SystemWindow*>(pWindow.get())->Close();
+    Scheduler::ProcessEventsToIdle();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
 namespace {
 
 constexpr size_t classOffset(int i)
@@ -2699,9 +2752,10 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(45), offsetof(struct _LibreOfficeKitDocumentClass, getSignatureState));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(46), offsetof(struct _LibreOfficeKitDocumentClass, renderShapeSelection));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(47), offsetof(struct _LibreOfficeKitDocumentClass, postWindowGestureEvent));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(48), offsetof(struct _LibreOfficeKitDocumentClass, postWindowPaste));
     // Extending is fine, update this, and add new assert for the offsetof the
     // new method
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(48), sizeof(struct _LibreOfficeKitDocumentClass));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(49), sizeof(struct _LibreOfficeKitDocumentClass));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);

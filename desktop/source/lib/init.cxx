@@ -753,6 +753,11 @@ static void doc_postWindowGestureEvent(LibreOfficeKitDocument* pThis,
                                       int nX,
                                       int nY,
                                       int nOffset);
+static bool doc_postWindowPaste(LibreOfficeKitDocument* pThis,
+                                unsigned nLOKWindowId,
+                                const char* pMimeType,
+                                const char* pData,
+                                size_t nSize);
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis,
                                const char* pCommand,
                                const char* pArguments,
@@ -889,6 +894,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
 
         m_pDocumentClass->renderShapeSelection = doc_renderShapeSelection;
         m_pDocumentClass->postWindowGestureEvent = doc_postWindowGestureEvent;
+        m_pDocumentClass->postWindowPaste = doc_postWindowPaste;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -3220,6 +3226,30 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
         gImpl->maLastExceptionMsg = "Failed to dispatch the .uno: command";
         return false;
     }
+
+    return true;
+}
+
+static bool doc_postWindowPaste(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, const char* pMimeType, const char* pData, size_t nSize)
+{
+    SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
+
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
+    if (!pWindow)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
+        return false;
+    }
+
+    uno::Reference<datatransfer::XTransferable> xTransferable(new LOKTransferable(pMimeType, pData, nSize));
+    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard(new LOKClipboard);
+    xClipboard->setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
+    pWindow->SetClipboard(xClipboard);
+
+    KeyEvent aEvent(0, KEY_PASTE, 0);
+    Application::PostKeyEvent(VclEventId::WindowKeyInput, pWindow, &aEvent);
 
     return true;
 }
