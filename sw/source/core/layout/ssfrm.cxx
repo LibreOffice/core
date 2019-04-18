@@ -482,6 +482,7 @@ void SwLayoutFrame::DestroyImpl()
 
     if( GetFormat() && !GetFormat()->GetDoc()->IsInDtor() )
     {
+        bool bFatalError = false;
         while ( pFrame )
         {
             //First delete the Objs of the Frame because they can't unregister
@@ -520,12 +521,19 @@ void SwLayoutFrame::DestroyImpl()
                 }
             }
             pFrame->RemoveFromLayout();
-            //forcepoint#74, testcase swanchoredobject_considerobjwrapinfluenceonobjpos
+            // see testForcepoint80
             if (pFrame->IsDeleteForbidden())
-                throw std::logic_error("DeleteForbidden");
+            {
+                pFrame->AllowDelete();
+                bFatalError = true;
+            }
             SwFrame::DestroyFrame(pFrame);
             pFrame = m_pLower;
         }
+
+        if (bFatalError)
+            throw std::logic_error("DeleteForbidden");
+
         //Delete the Flys, the last one also deletes the array.
         while ( GetDrawObjs() && GetDrawObjs()->size() )
         {
