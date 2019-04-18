@@ -104,9 +104,25 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(TabPageParent pParent, const SfxItemS
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
     Size aSize(m_xFunctions->get_size_request());
     rTreeView.set_size_request(aSize.Width(), aSize.Height());
-    aWidths.push_back(rTreeView.get_checkbox_column_width());
-    aWidths.push_back(rTreeView.get_checkbox_column_width());
+
+    int nExpectedSize = 16;
+
+    int nStandardImageColWidth = rTreeView.get_checkbox_column_width();
+    int nMargin = nStandardImageColWidth - nExpectedSize;
+    if (nMargin < 16)
+        nMargin = 16;
+
+    if (SvxConfigPageHelper::GetImageType() & css::ui::ImageType::SIZE_LARGE)
+        nExpectedSize = 24;
+    else if (SvxConfigPageHelper::GetImageType() & css::ui::ImageType::SIZE_32)
+        nExpectedSize = 32;
+
+    int nImageColWidth = nExpectedSize + nMargin;
+
+    aWidths.push_back(nStandardImageColWidth);
+    aWidths.push_back(nImageColWidth);
     rTreeView.set_column_fixed_widths(aWidths);
+
     rTreeView.set_hexpand(true);
     rTreeView.set_vexpand(true);
     rTreeView.set_help_id( HID_SVX_CONFIG_TOOLBAR_CONTENTS );
