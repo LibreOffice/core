@@ -1692,7 +1692,8 @@ bool ScTable::ContainsNotesInRange( const ScRange& rRange ) const
 {
     SCROW nStartRow = rRange.aStart.Row();
     SCROW nEndRow = rRange.aEnd.Row();
-    for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+    SCCOL nEndCol = ClampToAllocatedColumns(rRange.aEnd.Col());
+    for (SCCOL nCol = rRange.aStart.Col(); nCol <= nEndCol; ++nCol)
     {
         bool bContainsNote = !aCol[nCol].IsNotesEmptyBlock(nStartRow, nEndRow);
         if(bContainsNote)
