@@ -55,9 +55,6 @@ class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
     mutable bool        bLoadAgain;
 
     void        ApplyGraphicTransparency_Impl();
-    // only used by Create
-    SvxBrushItem( SvStream& rStrm,
-                  sal_uInt16 nVersion, sal_uInt16 nWhich  );
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -90,9 +87,6 @@ public:
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 nVersion ) const override;
-    virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const override;
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const override;
 
     const Color&    GetColor() const                { return aColor; }
     Color&          GetColor()                      { return aColor; }
@@ -115,9 +109,6 @@ public:
     void                SetGraphicObject( const GraphicObject& rNewObj );
     void                SetGraphicLink( const OUString& rNew );
     void                SetGraphicFilter( const OUString& rNew );
-
-    SvxBrushItem&       operator=(const SvxBrushItem& rItem);
-    SvxBrushItem&       operator=(SvxBrushItem&& rItem);
 
     static sal_Int8             TransparencyToPercent(sal_Int32 nTrans);
 

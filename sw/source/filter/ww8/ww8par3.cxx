@@ -1757,8 +1757,7 @@ void SwWW8ImplReader::RegisterNumFormatOnStyle(sal_uInt16 nStyle)
     if (rStyleInf.m_bValid && rStyleInf.m_pFormat)
     {
         //Save old pre-list modified indent, which are the word indent values
-        rStyleInf.maWordLR =
-            ItemGet<SvxLRSpaceItem>(*rStyleInf.m_pFormat, RES_LR_SPACE);
+        rStyleInf.maWordLR.reset(static_cast<SvxLRSpaceItem*>(ItemGet<SvxLRSpaceItem>(*rStyleInf.m_pFormat, RES_LR_SPACE).Clone()));
 
         // Phase 2: refresh StyleDef after reading all Lists
         SwNumRule* pNmRule = nullptr;
@@ -1991,19 +1990,19 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                 pTextNode->SetAttr( aEmptyRule );
 
                 // create an empty SvxLRSpaceItem
-                SvxLRSpaceItem aLR( RES_LR_SPACE );
+                std::shared_ptr<SvxLRSpaceItem> aLR(std::make_shared<SvxLRSpaceItem>(RES_LR_SPACE));
 
                 // replace it with the one of the current node if it exist
                 const SfxPoolItem* pLR = GetFormatAttr(RES_LR_SPACE);
                 if( pLR )
-                    aLR = *static_cast<const SvxLRSpaceItem*>(pLR);
+                    aLR.reset(static_cast<SvxLRSpaceItem*>(pLR->Clone()));
 
                 // reset/blank the left indent (and only the left)
-                aLR.SetTextLeft(0);
-                aLR.SetTextFirstLineOfst(0);
+                aLR->SetTextLeft(0);
+                aLR->SetTextFirstLineOfst(0);
 
                 // apply the modified SvxLRSpaceItem to the current paragraph
-                pTextNode->SetAttr( aLR );
+                pTextNode->SetAttr( *aLR );
             }
 
             m_nLFOPosition = USHRT_MAX;

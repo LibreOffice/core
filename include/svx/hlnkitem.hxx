@@ -69,8 +69,6 @@ public:
                                     HyperDialogEvent nEvents,
                                     SvxMacroTableDtor const *pMacroTbl );
 
-    inline SvxHyperlinkItem& operator=( const SvxHyperlinkItem &rItem );
-
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

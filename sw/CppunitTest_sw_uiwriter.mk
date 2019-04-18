@@ -36,6 +36,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uiwriter, \
     vcl \
     tl \
     utl \
+    svx \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_uiwriter,\

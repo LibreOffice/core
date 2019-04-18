@@ -38,20 +38,11 @@ public:
 
     // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
-
-    SvxContourItem& operator=(const SvxContourItem& rCont)
-    {
-        SetValue(rCont.GetValue());
-        return *this;
-    }
-    SvxContourItem(SvxContourItem const &) = default; // SfxPoolItem copy function dichotomy
 };
 
 #endif

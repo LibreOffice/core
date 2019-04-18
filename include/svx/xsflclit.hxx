@@ -36,9 +36,6 @@ public:
                                     MapUnit eCoreMetric,
                                     MapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper& ) const override;
-
-    SVX_DLLPRIVATE virtual sal_uInt16 GetVersion( sal_uInt16 nFileFormatVersion ) const override;
-
 };
 
 #endif

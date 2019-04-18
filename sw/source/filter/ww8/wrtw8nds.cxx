@@ -1623,7 +1623,7 @@ const SvxBrushItem* WW8Export::GetCurrentPageBgBrush() const
     return pRet;
 }
 
-SvxBrushItem WW8Export::TrueFrameBgBrush(const SwFrameFormat &rFlyFormat) const
+std::shared_ptr<SvxBrushItem> WW8Export::TrueFrameBgBrush(const SwFrameFormat &rFlyFormat) const
 {
     const SwFrameFormat *pFlyFormat = &rFlyFormat;
     const SvxBrushItem* pRet = nullptr;
@@ -1657,9 +1657,12 @@ SvxBrushItem WW8Export::TrueFrameBgBrush(const SwFrameFormat &rFlyFormat) const
         pRet = GetCurrentPageBgBrush();
 
     const Color aTmpColor( COL_WHITE );
-    SvxBrushItem aRet( aTmpColor, RES_BACKGROUND );
+    std::shared_ptr<SvxBrushItem> aRet(std::make_shared<SvxBrushItem>(aTmpColor, RES_BACKGROUND));
+
     if (pRet && (pRet->GetGraphic() ||( pRet->GetColor() != COL_TRANSPARENT)))
-        aRet = *pRet;
+    {
+        aRet.reset(static_cast<SvxBrushItem*>(pRet->Clone()));
+    }
 
     return aRet;
 }
