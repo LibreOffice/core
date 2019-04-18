@@ -37,8 +37,4 @@ $(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
 ))
 endif
 
-$(eval $(call gb_UnpackedTarball_add_patches,libmwaw,\
-	external/libmwaw/0001-ssize_t-is-not-std-type.patch.1 \
-))
-
 # vim: set noet sw=4 ts=4:

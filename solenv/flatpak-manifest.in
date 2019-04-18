@@ -263,10 +263,10 @@
                     "dest-filename": "external/tarballs/libmspub-0.1.4.tar.xz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libmwaw-0.3.14.tar.xz",
-                    "sha256": "aca8bf1ce55ed83adbea82c70d4c8bebe8139f334b3481bf5a6e407f91f33ce9",
+                    "url": "https://dev-www.libreoffice.org/src/libmwaw-0.3.15.tar.xz",
+                    "sha256": "0440bb09f05e3419423d8dfa36ee847056ebfd837f9cbc091fdb5b057daab0b1",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libmwaw-0.3.14.tar.xz"
+                    "dest-filename": "external/tarballs/libmwaw-0.3.15.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libodfgen-0.1.6.tar.bz2",

@@ -57,6 +57,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/ClarisWksStyleManager \
 	UnpackedTarball/libmwaw/src/lib/ClarisWksTable \
 	UnpackedTarball/libmwaw/src/lib/ClarisWksText \
+	UnpackedTarball/libmwaw/src/lib/CorelPainterParser \
 	UnpackedTarball/libmwaw/src/lib/CricketDrawParser \
 	UnpackedTarball/libmwaw/src/lib/DocMkrParser \
 	UnpackedTarball/libmwaw/src/lib/DocMkrText \
