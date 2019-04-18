@@ -320,6 +320,7 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
     aTableTag( r.aTableTag ),
     aOutRange( r.aOutRange ),
     mpTableData(static_cast<ScDPTableData*>(nullptr)),
+    maInteropGrabBag(r.maInteropGrabBag),
     nHeaderRows( r.nHeaderRows ),
     mbHeaderLayout( r.mbHeaderLayout ),
     bAllowMove(false),
@@ -352,6 +353,7 @@ ScDPObject& ScDPObject::operator= (const ScDPObject& r)
         aTableName = r.aTableName;
         aTableTag = r.aTableTag;
         aOutRange = r.aOutRange;
+        maInteropGrabBag = r.maInteropGrabBag;
         nHeaderRows = r.nHeaderRows;
         mbHeaderLayout = r.mbHeaderLayout;
         bAllowMove = false;
@@ -792,6 +794,7 @@ void ScDPObject::Clear()
     pImpDesc.reset();
     pServDesc.reset();
     ClearTableData();
+    maInteropGrabBag.clear();
 }
 
 void ScDPObject::ClearTableData()

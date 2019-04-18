@@ -37,6 +37,7 @@
 #include <com/sun/star/sheet/XDataPilotDataLayoutFieldSupplier.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #include <com/sun/star/sheet/XSheetOperation.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <oox/helper/binaryinputstream.hxx>
@@ -1038,6 +1039,17 @@ void PivotTable::importDataField( const AttributeList& rAttribs )
     maDataFields.push_back( aModel );
 }
 
+void PivotTable::putToInteropGrabBag(const OUString& sName, const AttributeList& rAttribs)
+{
+    if (auto xFastAttributeList = rAttribs.getFastAttributeList())
+    {
+        css::uno::Sequence<css::xml::FastAttribute> aFast = xFastAttributeList->getFastAttributes();
+        css::uno::Sequence<css::xml::Attribute> aUnk = xFastAttributeList->getUnknownAttributes();
+        css::uno::Sequence<css::uno::Any> aVal{ css::uno::Any(aFast), css::uno::Any(aUnk) };
+        maInteropGrabBag[sName] = css::uno::Any(aVal);
+    }
+}
+
 void PivotTable::importPTDefinition( SequenceInputStream& rStrm )
 {
     sal_uInt32 nFlags1, nFlags2, nFlags3;
@@ -1282,6 +1294,8 @@ void PivotTable::finalizeImport()
                     area (they are excluded in Excel). Add an extra blank row. */
                 if( !maPageFields.empty() )
                     aPos.Row = ::std::max< sal_Int32 >( static_cast< sal_Int32 >( aPos.Row - maPageFields.size() - 1 ), 0 );
+
+                mpDPObject->PutInteropGrabBag(std::move(maInteropGrabBag));
 
                 // insert the DataPilot table into the sheet
                 xDPTables->insertNewByName( maDefModel.maName, aPos, mxDPDescriptor );
