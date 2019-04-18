@@ -35,6 +35,7 @@ private:
 
     ScRange         theCurArea;
     bool            bCloseFlag;
+    bool            bAutoReOpen;
     bool            bCloseOnButtonUp;
     bool            bSingleCell;
     bool            bMultiSelection;
@@ -67,6 +68,7 @@ public:
     void            StartRefInput();
 
     void            SetRefString(const OUString &rStr);
+    virtual void    FillInfo(SfxChildWinInfo&) const override;
 
     void            SetCloseHdl( const Link<const OUString*,void>& rLink );
     void            SetUnoLinks( const Link<const OUString&,void>& rDone, const Link<const OUString&,void>& rAbort,
