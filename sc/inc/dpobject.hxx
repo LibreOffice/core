@@ -95,6 +95,11 @@ private:
                                             // cached data
     css::uno::Reference<css::sheet::XDimensionsSupplier> xSource;
     std::unique_ptr<ScDPOutput> pOutput;
+
+    // name -> sequence of sequences of css::xml::FastAttribute or css::xml::Attribute
+    // see PivotTable::putToInteropGrabBag in sc/source/filter/oox/pivottablebuffer.cxx for details
+    std::map<OUString, css::uno::Any> maInteropGrabBag;
+
     long                    nHeaderRows;    // page fields plus filter button
     bool                    mbHeaderLayout:1;  // true : grid, false : standard
     bool                    bAllowMove:1;
@@ -252,6 +257,18 @@ public:
         const ScPivotFieldVector* pRefPageFields = nullptr );
 
     static bool         IsOrientationAllowed( css::sheet::DataPilotFieldOrientation nOrient, sal_Int32 nDimFlags );
+
+    void PutInteropGrabBag(std::map<OUString, css::uno::Any>&& val)
+    {
+        maInteropGrabBag = std::move(val);
+    }
+    std::pair<bool, css::uno::Any> GetInteropGrabBagValue(const OUString& sName) const
+    {
+        if (const auto it = maInteropGrabBag.find(sName); it != maInteropGrabBag.end())
+            return { true, it->second };
+
+        return { false, css::uno::Any() };
+    }
 
 #if DUMP_PIVOT_TABLE
     void Dump() const;
