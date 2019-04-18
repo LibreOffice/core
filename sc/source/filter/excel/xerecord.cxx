@@ -81,7 +81,7 @@ void XclExpXmlStartElementRecord::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rStream = rStrm.GetCurrentStream();
     // TODO: no generic way to add attributes here, but it appears to
     // not be needed yet
-    rStream->startElement( mnElement, FSEND );
+    rStream->startElement(mnElement);
 }
 
 XclExpXmlEndElementRecord::XclExpXmlEndElementRecord( sal_Int32 nElement )
