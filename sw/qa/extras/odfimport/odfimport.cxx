@@ -30,6 +30,7 @@
 #include <edtwin.hxx>
 #include <olmenu.hxx>
 #include <cmdid.h>
+#include <hintids.hxx>
 
 typedef std::map<OUString, css::uno::Sequence< css::table::BorderLine> > AllBordersMap;
 typedef std::pair<OUString, css::uno::Sequence< css::table::BorderLine> > StringSequencePair;
@@ -924,6 +925,23 @@ DECLARE_ODFIMPORT_TEST(testTdf123829, "tdf123829.odt")
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Compatibility: collapse cell paras should not be set", false,
         pDoc->getIDocumentSettingAccess().get(DocumentSettingId::COLLAPSE_EMPTY_CELL_PARA));
+}
+
+DECLARE_ODFIMPORT_TEST(testTdf123968, "tdf123968.odt")
+{
+    // The test doc is special in that it starts with a table and it also has a header.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+
+    pWrtShell->SelAll();
+    SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCursor->Start()->nNode.GetNode());
+
+    // The field is now editable like any text, thus the field content "New value" shows up for the cursor.
+    CPPUNIT_ASSERT_EQUAL(OUString("inputfield: " + OUStringLiteral1(CH_TXT_ATR_INPUTFIELDSTART)
+                                  + "New value" + OUStringLiteral1(CH_TXT_ATR_INPUTFIELDEND)),
+                         rStart.GetText());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
