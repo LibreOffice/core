@@ -29,42 +29,44 @@ class ScViewData;
 class ScDocument;
 
 
-class ScHighlightChgDlg : public ScAnyRefDlg
+class ScHighlightChgDlg : public ScAnyRefDlgController
 {
 private:
-    VclPtr<CheckBox>               m_pHighlightBox;
-    VclPtr<SvxTPFilter>            m_pFilterCtr;
-    VclPtr<CheckBox>               m_pCbAccept;
-    VclPtr<CheckBox>               m_pCbReject;
-    VclPtr<OKButton>               m_pOkButton;
-
-    VclPtr<formula::RefEdit>       m_pEdAssign;
-    VclPtr<formula::RefButton>     m_pRbAssign;
-
     ScViewData*             pViewData;
     ScDocument*             pDoc;
     ScChangeViewSettings    aChangeViewSet;
 
+    std::unique_ptr<weld::CheckButton> m_xHighlightBox;
+    std::unique_ptr<weld::CheckButton> m_xCbAccept;
+    std::unique_ptr<weld::CheckButton> m_xCbReject;
+    std::unique_ptr<weld::Button> m_xOkButton;
+
+    std::unique_ptr<formula::WeldRefEdit> m_xEdAssign;
+    std::unique_ptr<formula::WeldRefButton> m_xRbAssign;
+
+    std::unique_ptr<weld::Container> m_xBox;
+
+    std::unique_ptr<SvxTPFilter> m_xFilterCtr;
+
     void                    Init();
 
     DECL_LINK( RefHandle, SvxTPFilter*, void );
-    DECL_LINK( HighlightHandle, Button*, void );
-    DECL_LINK( OKBtnHdl, Button*, void );
+    DECL_LINK( HighlightHandle, weld::Button&, void );
+    DECL_LINK( OKBtnHdl, weld::Button&, void );
 
 protected:
 
     virtual void    RefInputDone( bool bForced = false ) override;
 
 public:
-                    ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
-                               ScViewData*      ptrViewData);
+    ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
+               ScViewData*      ptrViewData);
 
-                    virtual ~ScHighlightChgDlg() override;
-    virtual void    dispose() override;
+    virtual ~ScHighlightChgDlg() override;
 
     virtual void    SetActive() override;
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
-    virtual bool    Close() override;
+    virtual void    Close() override;
     virtual bool    IsRefInputMode() const override;
 
 };

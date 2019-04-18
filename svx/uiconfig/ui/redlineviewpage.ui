@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name text2 -->
+      <column type="gchararray"/>
+      <!-- column-name text3 -->
+      <column type="gchararray"/>
+      <!-- column-name text4 -->
+      <column type="gchararray"/>
+      <!-- column-name text5 -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkBox" id="RedlineViewPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -10,90 +25,96 @@
     <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <child>
-      <object class="GtkBox" id="box3">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
-        <property name="homogeneous">True</property>
-        <child>
-          <object class="GtkLabel" id="action">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="redlineviewpage|action">Action</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="position">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="redlineviewpage|position">Position</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="author">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="redlineviewpage|author">Author</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="date">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="redlineviewpage|date">Date</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="comment">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="redlineviewpage|comment">Comment</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="svtlo-SvSimpleTableContainer" id="changes">
+      <object class="GtkScrolledWindow">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
+        <property name="shadow_type">in</property>
+        <child>
+          <object class="GtkTreeView" id="changes">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="model">liststore1</property>
+            <property name="search_column">0</property>
+            <property name="show_expanders">True</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn0">
+                <property name="resizable">True</property>
+                <property name="spacing">6</property>
+                <property name="title" translatable="yes" context="redlineviewpage|action">Action</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderer0"/>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                <property name="resizable">True</property>
+                <property name="spacing">6</property>
+                <property name="title" translatable="yes" context="redlineviewpage|position">Position</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderer1"/>
+                  <attributes>
+                    <attribute name="text">1</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                <property name="resizable">True</property>
+                <property name="spacing">6</property>
+                <property name="title" translatable="yes" context="redlineviewpage|author">Author</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderer2"/>
+                  <attributes>
+                    <attribute name="text">2</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                <property name="resizable">True</property>
+                <property name="spacing">6</property>
+                <property name="title" translatable="yes" context="redlineviewpage|date">Date</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderer3"/>
+                  <attributes>
+                    <attribute name="text">3</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                <property name="resizable">True</property>
+                <property name="spacing">6</property>
+                <property name="title" translatable="yes" context="redlineviewpage|comment">Comment</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderer4"/>
+                  <attributes>
+                    <attribute name="text">4</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
         <child internal-child="accessible">
           <object class="AtkObject" id="changes-atkobject">
             <property name="AtkObject::accessible-name" translatable="yes" context="redlineviewpage|changes-atkobject">Changes</property>
           </object>
-        </child>
-        <child internal-child="selection">
-          <object class="GtkTreeSelection" id="Simple Table Container-selection"/>
         </child>
       </object>
       <packing>

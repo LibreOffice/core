@@ -92,7 +92,6 @@
 
 bool SwViewShell::mbLstAct = false;
 ShellResource *SwViewShell::mpShellRes = nullptr;
-vcl::DeleteOnDeinit< VclPtr<vcl::Window> > SwViewShell::mpCareWindow(new VclPtr<vcl::Window>);
 vcl::DeleteOnDeinit<std::shared_ptr<weld::Window>> SwViewShell::mpCareDialog(new std::shared_ptr<weld::Window>);
 
 static bool bInSizeNotify = false;
@@ -577,7 +576,7 @@ const SwRect& SwViewShell::VisArea() const
 
 void SwViewShell::MakeVisible( const SwRect &rRect )
 {
-    if ( !VisArea().IsInside( rRect ) || IsScrollMDI( this, rRect ) || GetCareWin() || GetCareDialog(*this) )
+    if ( !VisArea().IsInside( rRect ) || IsScrollMDI( this, rRect ) || GetCareDialog(*this) )
     {
         if ( !IsViewLocked() )
         {
@@ -2493,11 +2492,6 @@ void SwViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions const & rAcce
 ShellResource* SwViewShell::GetShellRes()
 {
     return mpShellRes;
-}
-
-void SwViewShell::SetCareWin( vcl::Window* pNew )
-{
-    (*mpCareWindow.get()) = pNew;
 }
 
 void SwViewShell::SetCareDialog(const std::shared_ptr<weld::Window>& rNew)

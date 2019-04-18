@@ -673,6 +673,7 @@ public:
     virtual OUString get_id(int pos) const = 0;
     virtual int find_id(const OUString& rId) const = 0;
     void select_id(const OUString& rId) { select(find_id(rId)); }
+    void remove_id(const OUString& rText) { remove(find_id(rText)); }
 
     //via iter
     virtual std::unique_ptr<TreeIter> make_iterator(const TreeIter* pOrig = nullptr) const = 0;
@@ -1434,6 +1435,8 @@ public:
         return m_xSpinButton->get_value_changed_from_saved();
     }
     void set_position(int nCursorPos) { m_xSpinButton->set_position(nCursorPos); }
+    void set_text(const OUString& rText) { m_xSpinButton->set_text(rText); }
+    OUString get_text() const { return m_xSpinButton->get_text(); }
     weld::SpinButton& get_widget() { return *m_xSpinButton; }
 };
 

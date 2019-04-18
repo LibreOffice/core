@@ -436,9 +436,6 @@ public:
     static void           SetShellRes( ShellResource* pRes ) { mpShellRes = pRes; }
     static ShellResource* GetShellRes();
 
-    static void           SetCareWin( vcl::Window* pNew );
-    static vcl::Window*   GetCareWin()
-                          { return (*mpCareWindow.get()) ? mpCareWindow.get()->get() : nullptr; }
     static weld::Window*   CareChildWin(SwViewShell const & rVSh);
     static void           SetCareDialog(const std::shared_ptr<weld::Window>& rNew);
     static weld::Window*  GetCareDialog(SwViewShell const & rVSh)
