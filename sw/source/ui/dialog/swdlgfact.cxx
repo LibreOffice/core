@@ -206,7 +206,11 @@ short AbstractSwRenameXNamedDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractSwModalRedlineAcceptDlg_Impl);
+short AbstractSwModalRedlineAcceptDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractGlossaryDlg_Impl);
 
 short AbstractFieldInputDlg_Impl::Execute()
@@ -514,9 +518,9 @@ void    AbstractSwRenameXNamedDlg_Impl::SetAlternativeAccess(
     m_xDlg->SetAlternativeAccess( xSecond, xThird);
 }
 
-void    AbstractSwModalRedlineAcceptDlg_Impl::AcceptAll( bool bAccept )
+void AbstractSwModalRedlineAcceptDlg_Impl::AcceptAll( bool bAccept )
 {
-    pDlg->AcceptAll( bAccept);
+    m_xDlg->AcceptAll( bAccept);
 }
 
 OUString AbstractGlossaryDlg_Impl::GetCurrGrpName() const
@@ -956,10 +960,9 @@ VclPtr<AbstractSwRenameXNamedDlg> SwAbstractDialogFactory_Impl::CreateSwRenameXN
     return VclPtr<AbstractSwRenameXNamedDlg_Impl>::Create(std::make_unique<SwRenameXNamedDlg>(pParent,xNamed, xNameAccess));
 }
 
-VclPtr<AbstractSwModalRedlineAcceptDlg> SwAbstractDialogFactory_Impl::CreateSwModalRedlineAcceptDlg(vcl::Window *pParent)
+VclPtr<AbstractSwModalRedlineAcceptDlg> SwAbstractDialogFactory_Impl::CreateSwModalRedlineAcceptDlg(weld::Window *pParent)
 {
-    VclPtr<SwModalRedlineAcceptDlg> pDlg = VclPtr<SwModalRedlineAcceptDlg>::Create( pParent );
-    return VclPtr<AbstractSwModalRedlineAcceptDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractSwModalRedlineAcceptDlg_Impl>::Create(std::make_unique<SwModalRedlineAcceptDlg>(pParent));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateTableMergeDialog(weld::Window* pParent, bool& rWithPrev)

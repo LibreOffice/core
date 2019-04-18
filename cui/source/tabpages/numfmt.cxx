@@ -831,7 +831,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
                 OUString aPreviewString( GetExpColorString( pPreviewColor, aEntry, aPrivCat ) );
                 m_xLbFormat->append_text(aPreviewString);
                 if (pPreviewColor)
-                    m_xLbFormat->set_font_color(m_xLbFormat->n_children() -1, *pPreviewColor);
+                    m_xLbFormat->set_font_color(m_xLbFormat->n_children() - 1, *pPreviewColor);
             }
             else
             {
