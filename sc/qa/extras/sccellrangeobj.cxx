@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/chart/xchartdata.hxx>
 #include <test/sheet/cellproperties.hxx>
 #include <test/sheet/sheetcellrange.hxx>
 #include <test/sheet/xarrayformularange.hxx>
@@ -30,60 +31,62 @@
 #include <test/util/xmergeable.hxx>
 #include <test/util/xreplaceable.hxx>
 #include <test/util/xsearchable.hxx>
-
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/util/XSortable.hpp>
-#include <com/sun/star/util/SortField.hpp>
 #include <comphelper/propertysequence.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/FilterOperator.hpp>
 #include <com/sun/star/sheet/TableFilterField.hpp>
-#include <com/sun/star/sheet/XSheetFilterable.hpp>
 #include <com/sun/star/sheet/XSheetFilterDescriptor.hpp>
+#include <com/sun/star/sheet/XSheetFilterable.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
+#include <com/sun/star/util/SortField.hpp>
+#include <com/sun/star/util/XSortable.hpp>
+
+#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 using namespace css;
-using namespace css::uno;
 
-namespace sc_apitest {
-
-class ScCellRangeObj : public CalcUnoApiTest, public apitest::CellProperties,
-                                              public apitest::SheetCellRange,
-                                              public apitest::XArrayFormulaRange,
-                                              public apitest::XCellFormatRangesSupplier,
-                                              public apitest::XCellRangeAddressable,
-                                              public apitest::XCellRangeData,
-                                              public apitest::XCellRangeFormula,
-                                              public apitest::XCellRangesQuery,
-                                              public apitest::XCellSeries,
-                                              public apitest::XColumnRowRange,
-                                              public apitest::XFormulaQuery,
-                                              public apitest::XIndent,
-                                              public apitest::XMergeable,
-                                              public apitest::XMultipleOperation,
-                                              public apitest::XReplaceable,
-                                              public apitest::XSearchable,
-                                              public apitest::XSheetCellRange,
-                                              public apitest::XSheetFilterable,
-                                              public apitest::XSheetFilterableEx,
-                                              public apitest::XSheetOperation,
-                                              public apitest::XSubTotalCalculatable,
-                                              public apitest::XUniqueCellFormatRangesSupplier
+namespace sc_apitest
+{
+class ScCellRangeObj : public CalcUnoApiTest,
+                       public apitest::CellProperties,
+                       public apitest::SheetCellRange,
+                       public apitest::XArrayFormulaRange,
+                       public apitest::XCellFormatRangesSupplier,
+                       public apitest::XCellRangeAddressable,
+                       public apitest::XCellRangeData,
+                       public apitest::XCellRangeFormula,
+                       public apitest::XCellRangesQuery,
+                       public apitest::XCellSeries,
+                       public apitest::XChartData,
+                       public apitest::XColumnRowRange,
+                       public apitest::XFormulaQuery,
+                       public apitest::XIndent,
+                       public apitest::XMergeable,
+                       public apitest::XMultipleOperation,
+                       public apitest::XReplaceable,
+                       public apitest::XSearchable,
+                       public apitest::XSheetCellRange,
+                       public apitest::XSheetFilterable,
+                       public apitest::XSheetFilterableEx,
+                       public apitest::XSheetOperation,
+                       public apitest::XSubTotalCalculatable,
+                       public apitest::XUniqueCellFormatRangesSupplier
 {
 public:
     ScCellRangeObj();
 
     virtual void setUp() override;
     virtual void tearDown() override;
-    virtual uno::Reference< uno::XInterface > init() override;
-    virtual uno::Reference< uno::XInterface > getXCellRangeData() override;
-    virtual uno::Reference< uno::XInterface > getXSpreadsheet() override;
+    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<uno::XInterface> getXCellRangeData() override;
+    virtual uno::Reference<uno::XInterface> getXSpreadsheet() override;
     void testSortOOB();
 
     CPPUNIT_TEST_SUITE(ScCellRangeObj);
@@ -123,6 +126,11 @@ public:
     // XCellSeries
     CPPUNIT_TEST(testFillAuto);
     CPPUNIT_TEST(testFillSeries);
+
+    // XChartData
+    CPPUNIT_TEST(testGetNotANumber);
+    CPPUNIT_TEST(testIsNotANumber);
+    CPPUNIT_TEST(testChartDataChangeEventListener);
 
     // XColumnRowRange
     CPPUNIT_TEST(testGetColumns);
@@ -176,57 +184,60 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference<lang::XComponent> mxComponent;
 };
 
-ScCellRangeObj::ScCellRangeObj():
-        CalcUnoApiTest("/sc/qa/extras/testdocuments"),
-        apitest::XCellSeries(2, 1),
-        apitest::XFormulaQuery(table::CellRangeAddress(0, 15, 15, 15, 15), table::CellRangeAddress(0, 0, 15, 0, 15)),
-        apitest::XReplaceable("15", "35"),
-        apitest::XSearchable("15", 1)
+ScCellRangeObj::ScCellRangeObj()
+    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XCellSeries(2, 1)
+    , XFormulaQuery(table::CellRangeAddress(0, 15, 15, 15, 15),
+                    table::CellRangeAddress(0, 0, 15, 0, 15))
+    , XReplaceable("15", "35")
+    , XSearchable("15", 1)
 {
 }
 
-uno::Reference< uno::XInterface > ScCellRangeObj::init()
+uno::Reference<uno::XInterface> ScCellRangeObj::init()
 {
-    uno::Reference< sheet::XSpreadsheetDocument> xDoc (mxComponent, UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    uno::Reference<table::XCellRange> xReturn(xSheet->getCellRangeByPosition(0,0,4,4), UNO_QUERY_THROW);
+    uno::Reference<table::XCellRange> xReturn(xSheet->getCellRangeByPosition(0, 0, 4, 4),
+                                              uno::UNO_QUERY_THROW);
 
     return xReturn;
 }
 
-uno::Reference< uno::XInterface > ScCellRangeObj::getXSpreadsheet()
+uno::Reference<uno::XInterface> ScCellRangeObj::getXSpreadsheet()
 {
-    uno::Reference< sheet::XSpreadsheetDocument> xDoc (mxComponent, UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
     setXCell(xSheet->getCellByPosition(15, 15));
 
     return xSheet;
 }
 
-uno::Reference< uno::XInterface > ScCellRangeObj::getXCellRangeData()
+uno::Reference<uno::XInterface> ScCellRangeObj::getXCellRangeData()
 {
-    uno::Reference< sheet::XSpreadsheetDocument> xDoc (mxComponent, UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(1), UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(1), uno::UNO_QUERY_THROW);
 
-    uno::Reference<table::XCellRange> xReturn(xSheet->getCellRangeByPosition(0,0,3,3), UNO_QUERY_THROW);
+    uno::Reference<table::XCellRange> xReturn(xSheet->getCellRangeByPosition(0, 0, 3, 3),
+                                              uno::UNO_QUERY_THROW);
 
     return xReturn;
 }
 
 void ScCellRangeObj::testSortOOB()
 {
-    uno::Reference<util::XSortable> xSortable(init(),UNO_QUERY_THROW);
+    uno::Reference<util::XSortable> xSortable(init(), uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aEmptyDescriptor;
     xSortable->sort(aEmptyDescriptor);
 
@@ -234,9 +245,8 @@ void ScCellRangeObj::testSortOOB()
     aSort[0].Field = 0xffffff;
     aSort[0].SortAscending = true;
 
-    uno::Sequence<beans::PropertyValue> aProps( comphelper::InitPropertySequence({
-            { "SortFields", Any(aSort) }
-        }));
+    uno::Sequence<beans::PropertyValue> aProps(
+        comphelper::InitPropertySequence({ { "SortFields", uno::Any(aSort) } }));
 
     xSortable->sort(aProps);
 }
@@ -259,7 +269,7 @@ void ScCellRangeObj::tearDown()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellRangeObj);
 
-}
+} // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
