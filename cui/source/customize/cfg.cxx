@@ -26,6 +26,8 @@
 #include <typeinfo>
 
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/edit.hxx>
+#include <vcl/event.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

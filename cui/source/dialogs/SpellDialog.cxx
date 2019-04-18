@@ -21,9 +21,9 @@
 #include <vcl/weld.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include "SpellAttrib.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>

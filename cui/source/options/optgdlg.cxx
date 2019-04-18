@@ -28,7 +28,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/configsettings.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/mnemonic.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>

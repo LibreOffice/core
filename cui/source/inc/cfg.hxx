@@ -19,10 +19,6 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_CFG_HXX
 #define INCLUDED_CUI_SOURCE_INC_CFG_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/menubtn.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/imgdef.hxx>
 #include <svtools/miscopt.hxx>

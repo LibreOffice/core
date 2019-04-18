@@ -26,11 +26,13 @@
 #include <typeinfo>
 
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/event.hxx>
 #include <vcl/help.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/sfxdlg.hxx>

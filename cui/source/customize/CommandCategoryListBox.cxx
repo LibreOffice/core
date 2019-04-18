@@ -29,6 +29,8 @@
 #include <com/sun/star/script/browse/theBrowseNodeFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 // include search util
 #include <com/sun/star/util/SearchFlags.hpp>
