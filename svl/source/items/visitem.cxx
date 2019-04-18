@@ -23,14 +23,6 @@
 #include <tools/stream.hxx>
 
 
-SfxVisibilityItem::SfxVisibilityItem(sal_uInt16 which, SvStream & rStream):
-    SfxPoolItem(which)
-{
-    bool bValue = false;
-    rStream.ReadCharAsBool( bValue );
-    m_nValue.bVisible = bValue;
-}
-
 // virtual
 bool SfxVisibilityItem::operator ==(const SfxPoolItem & rItem) const
 {
@@ -65,19 +57,6 @@ bool SfxVisibilityItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
 
     OSL_FAIL( "SfxInt16Item::PutValue - Wrong type!" );
     return false;
-}
-
-// virtual
-SfxPoolItem * SfxVisibilityItem::Create(SvStream & rStream, sal_uInt16) const
-{
-    return new SfxVisibilityItem(Which(), rStream);
-}
-
-// virtual
-SvStream & SfxVisibilityItem::Store(SvStream & rStream, sal_uInt16) const
-{
-    rStream.WriteUChar( m_nValue.bVisible );
-    return rStream;
 }
 
 // virtual

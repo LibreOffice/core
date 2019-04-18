@@ -155,24 +155,24 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
 
     const sal_uInt16  nBackgroundDestination = rSh.GetViewOptions()->GetTableDest();
     rSet.Put(SfxUInt16Item(SID_BACKGRND_DESTINATION, nBackgroundDestination ));
-    SvxBrushItem aBrush( RES_BACKGROUND );
+    std::shared_ptr<SvxBrushItem> aBrush(std::make_shared<SvxBrushItem>(RES_BACKGROUND));
     if(rSh.GetRowBackground(aBrush))
     {
-        aBrush.SetWhich(SID_ATTR_BRUSH_ROW);
-        rSet.Put( aBrush );
+        aBrush->SetWhich(SID_ATTR_BRUSH_ROW);
+        rSet.Put( *aBrush );
     }
     else
         rSet.InvalidateItem(SID_ATTR_BRUSH_ROW);
     rSh.GetTabBackground(aBrush);
-    aBrush.SetWhich(SID_ATTR_BRUSH_TABLE);
-    rSet.Put( aBrush );
+    aBrush->SetWhich(SID_ATTR_BRUSH_TABLE);
+    rSet.Put( *aBrush );
 
     // text direction in boxes
-    SvxFrameDirectionItem aBoxDirection( SvxFrameDirection::Environment, RES_FRAMEDIR );
+    std::shared_ptr<SvxFrameDirectionItem> aBoxDirection(std::make_shared<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR));
     if(rSh.GetBoxDirection( aBoxDirection ))
     {
-        aBoxDirection.SetWhich(FN_TABLE_BOX_TEXTORIENTATION);
-        rSet.Put(aBoxDirection);
+        aBoxDirection->SetWhich(FN_TABLE_BOX_TEXTORIENTATION);
+        rSet.Put(*aBoxDirection);
     }
 
     bool bSelectAll = rSh.StartsWithTable() && rSh.ExtendedSelectedAll();
@@ -310,15 +310,15 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
                 rSh.SetBoxBackground( *static_cast<const SvxBrushItem*>(pItem) );
             if(pRowItem)
             {
-                SvxBrushItem aBrush(*static_cast<const SvxBrushItem*>(pRowItem));
-                aBrush.SetWhich(RES_BACKGROUND);
-                rSh.SetRowBackground(aBrush);
+                std::shared_ptr<SvxBrushItem> aBrush(static_cast<SvxBrushItem*>(pRowItem->Clone()));
+                aBrush->SetWhich(RES_BACKGROUND);
+                rSh.SetRowBackground(*aBrush);
             }
             if(pTableItem)
             {
-                SvxBrushItem aBrush(*static_cast<const SvxBrushItem*>(pTableItem));
-                aBrush.SetWhich(RES_BACKGROUND);
-                rSh.SetTabBackground( aBrush );
+                std::shared_ptr<SvxBrushItem> aBrush(static_cast<SvxBrushItem*>(pTableItem->Clone()));
+                aBrush->SetWhich(RES_BACKGROUND);
+                rSh.SetTabBackground( *aBrush );
             }
         }
 
@@ -469,7 +469,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if(!pArgs)
                 break;
             // Create items, because we have to rework anyway.
-            SvxBoxItem     aBox( RES_BOX );
+            std::shared_ptr<SvxBoxItem> aBox(std::make_shared<SvxBoxItem>(RES_BOX));
             SfxItemSet aCoreSet( GetPool(),
                             svl::Items<RES_BOX, RES_BOX,
                             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>{});
@@ -480,31 +480,33 @@ void SwTableShell::Execute(SfxRequest &rReq)
             const SfxPoolItem *pBoxItem = nullptr;
             if ( pArgs->GetItemState(RES_BOX, true, &pBoxItem) == SfxItemState::SET )
             {
-                aBox = *static_cast<const SvxBoxItem*>(pBoxItem);
+                aBox.reset(static_cast<SvxBoxItem*>(pBoxItem->Clone()));
                 sal_uInt16 nDefValue = MIN_BORDER_DIST;
                 if ( !rReq.IsAPI() )
                     nDefValue = 55;
-                if (!rReq.IsAPI() || aBox.GetSmallestDistance() < MIN_BORDER_DIST)
+                if (!rReq.IsAPI() || aBox->GetSmallestDistance() < MIN_BORDER_DIST)
                 {
                     for( SvxBoxItemLine k : o3tl::enumrange<SvxBoxItemLine>() )
-                        aBox.SetDistance( std::max(rCoreBox.GetDistance(k), nDefValue) , k );
+                        aBox->SetDistance( std::max(rCoreBox.GetDistance(k), nDefValue) , k );
                 }
             }
             else
                 OSL_ENSURE( false, "where is BoxItem?" );
 
             //since the drawing layer also supports borders the which id might be a different one
-            SvxBoxInfoItem aInfo( SID_ATTR_BORDER_INNER );
+            std::shared_ptr<SvxBoxInfoItem> aInfo(std::make_shared<SvxBoxInfoItem>(SID_ATTR_BORDER_INNER));
             if (pArgs->GetItemState(SID_ATTR_BORDER_INNER, true, &pBoxItem) == SfxItemState::SET)
-                aInfo = *static_cast<const SvxBoxInfoItem*>(pBoxItem);
+            {
+                aInfo.reset(static_cast<SvxBoxInfoItem*>(pBoxItem->Clone()));
+            }
             else if( pArgs->GetItemState(SDRATTR_TABLE_BORDER_INNER, true, &pBoxItem) == SfxItemState::SET )
             {
-                aInfo = *static_cast<const SvxBoxInfoItem*>(pBoxItem);
-                aInfo.SetWhich(SID_ATTR_BORDER_INNER);
+                aInfo.reset(static_cast<SvxBoxInfoItem*>(pBoxItem->Clone()));
+                aInfo->SetWhich(SID_ATTR_BORDER_INNER);
             }
 
-            aInfo.SetTable( true );
-            aInfo.SetValid( SvxBoxInfoItemValidFlags::DISABLE, false );
+            aInfo->SetTable( true );
+            aInfo->SetValid( SvxBoxInfoItemValidFlags::DISABLE, false );
 
 // The attributes of all lines will be read and the strongest wins.
             const SvxBorderLine* pBorderLine;
@@ -528,40 +530,40 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 aBorderLine.SetWidth( DEF_LINE_WIDTH_5 );
             }
 
-            if( aBox.GetTop() != nullptr )
+            if( aBox->GetTop() != nullptr )
             {
-                aBox.SetLine(&aBorderLine, SvxBoxItemLine::TOP);
+                aBox->SetLine(&aBorderLine, SvxBoxItemLine::TOP);
             }
-            if( aBox.GetBottom() != nullptr )
+            if( aBox->GetBottom() != nullptr )
             {
-                aBox.SetLine(&aBorderLine, SvxBoxItemLine::BOTTOM);
+                aBox->SetLine(&aBorderLine, SvxBoxItemLine::BOTTOM);
             }
-            if( aBox.GetLeft() != nullptr )
+            if( aBox->GetLeft() != nullptr )
             {
-                aBox.SetLine(&aBorderLine, SvxBoxItemLine::LEFT);
+                aBox->SetLine(&aBorderLine, SvxBoxItemLine::LEFT);
             }
-            if( aBox.GetRight() != nullptr )
+            if( aBox->GetRight() != nullptr )
             {
-                aBox.SetLine(&aBorderLine, SvxBoxItemLine::RIGHT);
+                aBox->SetLine(&aBorderLine, SvxBoxItemLine::RIGHT);
             }
-            if( aInfo.GetHori() != nullptr )
+            if( aInfo->GetHori() != nullptr )
             {
-                aInfo.SetLine(&aBorderLine, SvxBoxInfoItemLine::HORI);
+                aInfo->SetLine(&aBorderLine, SvxBoxInfoItemLine::HORI);
             }
-            if( aInfo.GetVert() != nullptr )
+            if( aInfo->GetVert() != nullptr )
             {
-                aInfo.SetLine(&aBorderLine, SvxBoxInfoItemLine::VERT);
+                aInfo->SetLine(&aBorderLine, SvxBoxInfoItemLine::VERT);
             }
 
-            aCoreSet.Put( aBox  );
-            aCoreSet.Put( aInfo );
+            aCoreSet.Put( *aBox  );
+            aCoreSet.Put( *aInfo );
             rSh.SetTabBorders( aCoreSet );
 
             // we must record the "real" values because otherwise the lines can't be reconstructed on playtime
             // the coding style of the controller (setting lines with width 0) is not transportable via Query/PutValue in
             // the SvxBoxItem
-            rReq.AppendItem( aBox );
-            rReq.AppendItem( aInfo );
+            rReq.AppendItem( *aBox );
+            rReq.AppendItem( *aInfo );
             bCallDone = true;
             break;
         }
@@ -582,9 +584,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
             rSh.GetTableAttr(aCoreSet);
             // GetTableAttr overwrites the background!
-            SvxBrushItem aBrush( RES_BACKGROUND );
+            std::shared_ptr<SvxBrushItem> aBrush(std::make_shared<SvxBrushItem>(RES_BACKGROUND));
             if(rSh.GetBoxBackground(aBrush))
-                aCoreSet.Put( aBrush );
+                aCoreSet.Put( *aBrush );
             else
                 aCoreSet.InvalidateItem( RES_BACKGROUND );
 

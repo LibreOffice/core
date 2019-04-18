@@ -34,17 +34,6 @@ SfxLockBytesItem::SfxLockBytesItem()
 }
 
 
-SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
-:   SfxPoolItem( nW )
-{
-    rStream.Seek( 0 );
-    _xVal = new SvLockBytes( new SvMemoryStream(), true );
-
-    SvStream aLockBytesStream( _xVal.get() );
-    rStream.ReadStream( aLockBytesStream );
-}
-
-
 SfxLockBytesItem::~SfxLockBytesItem()
 {
 }
@@ -61,42 +50,6 @@ SfxPoolItem* SfxLockBytesItem::Clone(SfxItemPool *) const
     return new SfxLockBytesItem( *this );
 }
 
-
-#define MAX_BUF 32000
-
-SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, sal_uInt16 ) const
-{
-    sal_uInt32 nSize = 0;
-    sal_uLong nActRead = 0;
-    sal_Char cTmpBuf[MAX_BUF];
-    SvMemoryStream aNewStream;
-    rStream.ReadUInt32( nSize );
-
-    do {
-        sal_uLong nToRead;
-        if( (nSize - nActRead) > MAX_BUF )
-            nToRead = MAX_BUF;
-        else
-            nToRead = nSize - nActRead;
-        nActRead += rStream.ReadBytes( cTmpBuf, nToRead );
-        aNewStream.WriteBytes( cTmpBuf, nToRead );
-    } while( nSize > nActRead );
-
-    return new SfxLockBytesItem( Which(), aNewStream );
-}
-
-
-SvStream& SfxLockBytesItem::Store(SvStream &rStream, sal_uInt16 ) const
-{
-    SvStream aLockBytesStream( _xVal.get() );
-    sal_uInt32 nSize = aLockBytesStream.Seek( STREAM_SEEK_TO_END );
-    aLockBytesStream.Seek( 0 );
-
-    rStream.WriteUInt32( nSize );
-    rStream.WriteStream( aLockBytesStream );
-
-    return rStream;
-}
 
 // virtual
 bool SfxLockBytesItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
