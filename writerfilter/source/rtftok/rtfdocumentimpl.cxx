@@ -264,6 +264,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     , m_bNeedCrOrig(false)
     , m_bNeedPar(true)
     , m_bNeedFinalPar(false)
+    , m_bNeedTableBreak(false)
     , m_nNestedCells(0)
     , m_nTopLevelCells(0)
     , m_nInheritingCells(0)
@@ -700,6 +701,8 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
     }
     m_bNeedPar = false;
     m_bNeedSect = false;
+
+    m_bNeedTableBreak = true;
 }
 
 Color RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
