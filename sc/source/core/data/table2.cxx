@@ -1501,7 +1501,7 @@ bool ScTable::SetFormulaCells( SCCOL nCol, SCROW nRow, std::vector<ScFormulaCell
     if (!ValidCol(nCol))
         return false;
 
-    return aCol[nCol].SetFormulaCells(nRow, rCells);
+    return CreateColumnIfNotExists(nCol).SetFormulaCells(nRow, rCells);
 }
 
 svl::SharedString ScTable::GetSharedString( SCCOL nCol, SCROW nRow ) const
