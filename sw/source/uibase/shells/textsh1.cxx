@@ -719,13 +719,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 pVFrame->ToggleChildWindow(FN_REDLINE_ACCEPT);
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractSwModalRedlineAcceptDlg> pDlg(pFact->CreateSwModalRedlineAcceptDlg(&GetView().GetEditWin()));
+            ScopedVclPtr<AbstractSwModalRedlineAcceptDlg> xDlg(pFact->CreateSwModalRedlineAcceptDlg(GetView().GetEditWin().GetFrameWeld()));
 
             switch (lcl_AskRedlineFlags(GetView().GetFrameWeld()))
             {
                 case RET_OK:
                 {
-                    pDlg->AcceptAll(true);
+                    xDlg->AcceptAll(true);
                     SfxRequest aReq( pVFrame, FN_AUTOFORMAT_APPLY );
                     aReq.Done();
                     rReq.Ignore();
@@ -733,12 +733,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
 
                 case RET_CANCEL:
-                    pDlg->AcceptAll(false);
+                    xDlg->AcceptAll(false);
                     rReq.Ignore();
                     break;
 
                 case 2:
-                    pDlg->Execute();
+                    xDlg->Execute();
                     rReq.Done();
                     break;
             }

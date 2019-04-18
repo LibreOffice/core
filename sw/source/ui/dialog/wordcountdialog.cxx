@@ -33,7 +33,7 @@
 
 SwWordCountFloatDlg::~SwWordCountFloatDlg()
 {
-    SwViewShell::SetCareWin( nullptr );
+    SwViewShell::SetCareDialog(nullptr);
 }
 
 namespace

@@ -58,7 +58,7 @@ DECL_WRAPPER_WITHID_CONTROLLER(ScConsolidateDlgWrapper)
 DECL_WRAPPER_WITHID_CONTROLLER(ScPrintAreasDlgWrapper)
 DECL_WRAPPER_WITHID_CONTROLLER(ScColRowNameRangesDlgWrapper)
 DECL_WRAPPER_WITHID(ScFormulaDlgWrapper)
-DECL_WRAPPER_WITHID(ScHighlightChgDlgWrapper)
+DECL_WRAPPER_WITHID_CONTROLLER(ScHighlightChgDlgWrapper)
 DECL_WRAPPER_WITHID(ScCondFormatDlgWrapper)
 
 class ScDescriptiveStatisticsDialogWrapper :
@@ -161,15 +161,18 @@ private:
 
 class ScAcceptChgDlgWrapper: public SfxChildWindow
 {
-    public:
-        ScAcceptChgDlgWrapper(  vcl::Window*,
-                                sal_uInt16,
-                                SfxBindings*,
-                                SfxChildWinInfo* );
+public:
+    ScAcceptChgDlgWrapper( vcl::Window*,
+                           sal_uInt16,
+                           SfxBindings*,
+                           SfxChildWinInfo* );
 
-        SFX_DECL_CHILDWINDOW_WITHID(Class);
+    static  std::unique_ptr<SfxChildWindow> CreateImpl(vcl::Window *pParent, sal_uInt16 nId,
+                                                       SfxBindings *pBindings, SfxChildWinInfo* pInfo );
+    static  void RegisterChildWindow(bool bVisible=false, SfxModule *pMod=nullptr, SfxChildWindowFlags nFlags=SfxChildWindowFlags::NONE);
+    static  sal_uInt16 GetChildWindowId();
 
-        void ReInitDlg();
+    void ReInitDlg();
 };
 
 class ScSimpleRefDlgWrapper: public SfxChildWindow

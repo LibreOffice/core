@@ -1154,10 +1154,8 @@ void ScTabViewShell::StartSimpleRefDialog(
         pWnd->SetRefString( rInitVal );
         pWnd->SetFlags( bCloseOnButtonUp, bSingleCell, bMultiSelection );
         ScSimpleRefDlgWrapper::SetAutoReOpen( false );
-        if (vcl::Window* pWin = pWnd->GetWindow())
-            pWin->SetText( rTitle );
-        if (auto pWin = pWnd->GetController())
-            pWin->set_title(rTitle);
+        if (auto xWin = pWnd->GetController())
+            xWin->set_title(rTitle);
         pWnd->StartRefInput();
     }
 }
@@ -1170,11 +1168,6 @@ void ScTabViewShell::StopSimpleRefDialog()
     ScSimpleRefDlgWrapper* pWnd = static_cast<ScSimpleRefDlgWrapper*>(pViewFrm->GetChildWindow( nId ));
     if (pWnd)
     {
-        if (vcl::Window* pWin = pWnd->GetWindow())
-        {
-            if (pWin->IsSystemWindow())
-                static_cast<SystemWindow*>(pWin)->Close();     // calls abort handler
-        }
         if (auto pWin = pWnd->GetController())
             pWin->response(RET_CLOSE);
     }

@@ -4757,6 +4757,11 @@ public:
         ::set_label(GTK_LABEL(m_pLabel), rText);
     }
 
+    virtual OUString get_label() const override
+    {
+        return ::get_label(GTK_LABEL(m_pLabel));
+    }
+
     virtual void set_image(VirtualDevice* pDevice) override
     {
         ensure_image_widget();
@@ -5366,8 +5371,10 @@ public:
 
     virtual void set_date(const Date& rDate) override
     {
+        disable_notify_events();
         gtk_calendar_select_month(m_pCalendar, rDate.GetMonth() - 1, rDate.GetYear());
         gtk_calendar_select_day(m_pCalendar, rDate.GetDay());
+        enable_notify_events();
     }
 
     virtual Date get_date() const override
