@@ -41,6 +41,9 @@ PasswordDialog::PasswordDialog(weld::Window* pParent,
     , aPasswdMismatch(Translate::get(STR_PASSWORD_MISMATCH, rLocale))
     , rResLocale(rLocale)
 {
+    // tdf#115964 we can be launched before the parent has resized to its final size
+    m_xDialog->set_centered_on_parent_geometry_request();
+
     if( nDialogMode == task::PasswordRequestMode_PASSWORD_REENTER )
     {
         const char* pOpenToModifyErrStrId = bOpenToModify ? STR_ERROR_PASSWORD_TO_MODIFY_WRONG : STR_ERROR_PASSWORD_TO_OPEN_WRONG;
