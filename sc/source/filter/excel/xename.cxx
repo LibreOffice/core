@@ -310,10 +310,10 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_publishToServer, "",
             // OOXTODO: XML_shortcutKey, "",
             // OOXTODO: XML_statusBar, "",
-            XML_vbProcedure, ToPsz( ::get_flag( mnFlags, EXC_NAME_VB ) ),
+            XML_vbProcedure, ToPsz( ::get_flag( mnFlags, EXC_NAME_VB ) )
             // OOXTODO: XML_workbookParameter, "",
-            // OOXTODO: XML_xlm, "",
-            FSEND );
+            // OOXTODO: XML_xlm, ""
+    );
     rWorkbook->writeEscaped( msSymbol );
     rWorkbook->endElement( XML_definedName );
 }
@@ -510,7 +510,7 @@ void XclExpNameManagerImpl::SaveXml( XclExpXmlStream& rStrm )
     if( maNameList.IsEmpty() )
         return;
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
-    rWorkbook->startElement( XML_definedNames, FSEND );
+    rWorkbook->startElement(XML_definedNames);
     maNameList.SaveXml( rStrm );
     rWorkbook->endElement( XML_definedNames );
 }
