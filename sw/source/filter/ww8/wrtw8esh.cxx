@@ -1608,11 +1608,11 @@ void SwBasicEscherEx::WriteGrfBullet(const Graphic& rGrf)
     aPropOpt.AddOpt( ESCHER_Prop_dxTextLeft, 0 );
     aPropOpt.AddOpt( ESCHER_Prop_dxTextRight, 0 );
     const Color aTmpColor( COL_WHITE );
-    SvxBrushItem aBrush( aTmpColor, RES_BACKGROUND );
-    const SvxBrushItem *pRet = rWrt.GetCurrentPageBgBrush();
+    std::shared_ptr<SvxBrushItem> aBrush(std::make_shared<SvxBrushItem>(aTmpColor, RES_BACKGROUND));
+    const SvxBrushItem* pRet = rWrt.GetCurrentPageBgBrush();
     if (pRet && (pRet->GetGraphic() ||( pRet->GetColor() != COL_TRANSPARENT)))
-        aBrush = *pRet;
-    WriteBrushAttr(aBrush, aPropOpt);
+        aBrush.reset(static_cast<SvxBrushItem*>(pRet->Clone()));
+    WriteBrushAttr(*aBrush, aPropOpt);
 
     aPropOpt.AddOpt( ESCHER_Prop_pictureActive, 0 );
     aPropOpt.Commit( GetStream() );
@@ -2080,13 +2080,21 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
 
     if (bIsInHeader)
     {
-        SvxBrushItem aBrush(rFormat.makeBackgroundBrushItem());
-        WriteBrushAttr(aBrush, rPropOpt);
+        std::shared_ptr<SvxBrushItem> aBrush(rFormat.makeBackgroundBrushItem());
+
+        if(aBrush)
+        {
+            WriteBrushAttr(*aBrush, rPropOpt);
+        }
     }
     else
     {
-        SvxBrushItem aBrush(rWrt.TrueFrameBgBrush(rFormat));
-        WriteBrushAttr(aBrush, rPropOpt);
+        std::shared_ptr<SvxBrushItem> aBrush(rWrt.TrueFrameBgBrush(rFormat));
+
+        if(aBrush)
+        {
+            WriteBrushAttr(*aBrush, rPropOpt);
+        }
     }
 
     const SdrObject* pObj = rFormat.FindRealSdrObject();

@@ -171,15 +171,6 @@ SfxPoolItem* SvxHorJustifyItem::Clone( SfxItemPool* ) const
     return new SvxHorJustifyItem( *this );
 }
 
-
-SfxPoolItem* SvxHorJustifyItem::Create( SvStream& rStream, sal_uInt16 ) const
-{
-    sal_uInt16 nVal;
-    rStream.ReadUInt16( nVal );
-    return new SvxHorJustifyItem( static_cast<SvxCellHorJustify>(nVal), Which() );
-}
-
-
 sal_uInt16 SvxHorJustifyItem::GetValueCount() const
 {
     return sal_uInt16(SvxCellHorJustify::Repeat) + 1;  // Last Enum value + 1
@@ -305,14 +296,6 @@ OUString SvxVerJustifyItem::GetValueText( SvxCellVerJustify nVal )
 SfxPoolItem* SvxVerJustifyItem::Clone( SfxItemPool* ) const
 {
     return new SvxVerJustifyItem( *this );
-}
-
-
-SfxPoolItem* SvxVerJustifyItem::Create( SvStream& rStream, sal_uInt16 ) const
-{
-    sal_uInt16 nVal;
-    rStream.ReadUInt16( nVal );
-    return new SvxVerJustifyItem( static_cast<SvxCellVerJustify>(nVal), Which() );
 }
 
 
