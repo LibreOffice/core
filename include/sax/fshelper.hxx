@@ -63,22 +63,11 @@ public:
             pushAttributeValue(attribute, value);
         startElement(elementTokenId, std::forward<Args>(args)...);
     }
-    void startElement(sal_Int32 elementTokenId, sal_Int32 attribute, const char* value, FSEND_t)
-    {
-        if (value)
-            pushAttributeValue(attribute, value);
-        startElement(elementTokenId, FSEND);
-    }
     template<typename... Args>
     void startElement(sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, Args &&... args)
     {
         pushAttributeValue(attribute, value);
         startElement(elementTokenId, std::forward<Args>(args)...);
-    }
-    void startElement(sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, FSEND_t)
-    {
-        pushAttributeValue(attribute, value);
-        startElement(elementTokenId, FSEND);
     }
     void startElement(sal_Int32 elementTokenId, FSEND_t);
 
@@ -90,22 +79,11 @@ public:
             pushAttributeValue(attribute, value);
         startElementNS(namespaceTokenId, elementTokenId, std::forward<Args>(args)...);
     }
-    void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const char* value, FSEND_t)
-    {
-        if (value)
-            pushAttributeValue(attribute, value);
-        startElementNS(namespaceTokenId, elementTokenId, FSEND);
-    }
     template<typename... Args>
     void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, Args &&... args)
     {
         pushAttributeValue(attribute, value);
         startElementNS(namespaceTokenId, elementTokenId, std::forward<Args>(args)...);
-    }
-    void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, FSEND_t)
-    {
-        pushAttributeValue(attribute, value);
-        startElementNS(namespaceTokenId, elementTokenId, FSEND);
     }
     void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, FSEND_t)
     {
@@ -120,22 +98,11 @@ public:
             pushAttributeValue(attribute, value);
         singleElement(elementTokenId, std::forward<Args>(args)...);
     }
-    void singleElement(sal_Int32 elementTokenId, sal_Int32 attribute, const char* value, FSEND_t)
-    {
-        if (value)
-            pushAttributeValue(attribute, value);
-        singleElement(elementTokenId, FSEND);
-    }
     template<typename... Args>
     void singleElement(sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, Args &&... args)
     {
         pushAttributeValue(attribute, value);
         singleElement(elementTokenId, std::forward<Args>(args)...);
-    }
-    void singleElement(sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, FSEND_t)
-    {
-        pushAttributeValue(attribute, value);
-        singleElement(elementTokenId, FSEND);
     }
     void singleElement(sal_Int32 elementTokenId, FSEND_t);
 
@@ -147,22 +114,11 @@ public:
             pushAttributeValue(attribute, value);
         singleElementNS(namespaceTokenId, elementTokenId, std::forward<Args>(args)...);
     }
-    void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const char* value, FSEND_t)
-    {
-        if (value)
-            pushAttributeValue(attribute, value);
-        singleElementNS(namespaceTokenId, elementTokenId, FSEND);
-    }
     template<typename... Args>
     void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, Args &&... args)
     {
         pushAttributeValue(attribute, value);
         singleElementNS(namespaceTokenId, elementTokenId, std::forward<Args>(args)...);
-    }
-    void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, FSEND_t)
-    {
-        pushAttributeValue(attribute, value);
-        singleElementNS(namespaceTokenId, elementTokenId, FSEND);
     }
     void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, FSEND_t)
     {
