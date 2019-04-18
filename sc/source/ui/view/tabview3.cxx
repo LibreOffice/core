@@ -848,19 +848,19 @@ void ScTabView::RemoveHintWindow()
 }
 
 // find window that should not be over the cursor
-static vcl::Window* lcl_GetCareWin(SfxViewFrame* pViewFrm)
+static weld::Window* lcl_GetCareWin(SfxViewFrame* pViewFrm)
 {
     //! also spelling ??? (then set the member variables when calling)
 
     // search & replace
-    if ( pViewFrm->HasChildWindow(SID_SEARCH_DLG) )
+    if (pViewFrm->HasChildWindow(SID_SEARCH_DLG))
     {
         SfxChildWindow* pChild = pViewFrm->GetChildWindow(SID_SEARCH_DLG);
         if (pChild)
         {
-            vcl::Window* pWin = pChild->GetWindow();
-            if (pWin && pWin->IsVisible())
-                return pWin;
+            auto xDlgController = pChild->GetController();
+            if (xDlgController && xDlgController->getDialog()->get_visible())
+                return xDlgController->getDialog();
         }
     }
 
@@ -870,9 +870,9 @@ static vcl::Window* lcl_GetCareWin(SfxViewFrame* pViewFrm)
         SfxChildWindow* pChild = pViewFrm->GetChildWindow(FID_CHG_ACCEPT);
         if (pChild)
         {
-            vcl::Window* pWin = pChild->GetWindow();
-            if (pWin && pWin->IsVisible())
-                return pWin;
+            auto xDlgController = pChild->GetController();
+            if (xDlgController && xDlgController->getDialog()->get_visible())
+                return xDlgController->getDialog();
         }
     }
 
@@ -940,16 +940,18 @@ void ScTabView::AlignToCursor( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
 
         if ( eMode == SC_FOLLOW_JUMP )
         {
-            vcl::Window* pCare = lcl_GetCareWin( aViewData.GetViewShell()->GetViewFrame() );
+            weld::Window* pCare = lcl_GetCareWin( aViewData.GetViewShell()->GetViewFrame() );
             if (pCare)
             {
                 bool bLimit = false;
                 tools::Rectangle aDlgPixel;
                 Size aWinSize;
                 vcl::Window* pWin = GetActiveWin();
-                if (pWin)
+                weld::Window* pFrame = pWin ? pWin->GetFrameWeld() : nullptr;
+                int x, y, width, height;
+                if (pFrame && pCare->get_extents_relative_to(*pFrame, x, y, width, height))
                 {
-                    aDlgPixel = pCare->GetWindowExtentsRelative( pWin );
+                    aDlgPixel = tools::Rectangle(Point(x, y), Size(width, height));
                     aWinSize = pWin->GetOutputSizePixel();
                     // dos the dialog cover the GridWin?
                     if ( aDlgPixel.Right() >= 0 && aDlgPixel.Left() < aWinSize.Width() )

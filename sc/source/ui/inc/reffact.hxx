@@ -33,30 +33,19 @@
         SFX_DECL_CHILDWINDOW_WITHID(Class);                                     \
     };
 
-#define DECL_WRAPPER_WITHID_CONTROLLER(Class) \
-    class Class : public SfxChildWindow                                         \
-    {                                                                           \
-    public:                                                                     \
-        Class( vcl::Window*, sal_uInt16, SfxBindings*, const SfxChildWinInfo* ); \
-        static  std::unique_ptr<SfxChildWindow> CreateImpl(vcl::Window *pParent, sal_uInt16 nId, \
-                    SfxBindings *pBindings, SfxChildWinInfo* pInfo ); \
-        static  void RegisterChildWindow (bool bVisible=false, SfxModule *pMod=nullptr, SfxChildWindowFlags nFlags=SfxChildWindowFlags::NONE); \
-        static  sal_uInt16 GetChildWindowId ();\
-    };
-
-DECL_WRAPPER_WITHID_CONTROLLER(ScNameDlgWrapper)
-DECL_WRAPPER_WITHID_CONTROLLER(ScNameDefDlgWrapper)
-DECL_WRAPPER_WITHID_CONTROLLER(ScSolverDlgWrapper)
-DECL_WRAPPER_WITHID_CONTROLLER(ScOptSolverDlgWrapper)
+DECL_WRAPPER_WITHID(ScNameDlgWrapper)
+DECL_WRAPPER_WITHID(ScNameDefDlgWrapper)
+DECL_WRAPPER_WITHID(ScSolverDlgWrapper)
+DECL_WRAPPER_WITHID(ScOptSolverDlgWrapper)
 DECL_WRAPPER_WITHID(ScXMLSourceDlgWrapper)
 DECL_WRAPPER_WITHID(ScPivotLayoutWrapper)
-DECL_WRAPPER_WITHID_CONTROLLER(ScTabOpDlgWrapper)
-DECL_WRAPPER_WITHID_CONTROLLER(ScFilterDlgWrapper)
-DECL_WRAPPER_WITHID_CONTROLLER(ScSpecialFilterDlgWrapper)
-DECL_WRAPPER_WITHID_CONTROLLER(ScDbNameDlgWrapper)
-DECL_WRAPPER_WITHID_CONTROLLER(ScConsolidateDlgWrapper)
-DECL_WRAPPER_WITHID_CONTROLLER(ScPrintAreasDlgWrapper)
-DECL_WRAPPER_WITHID_CONTROLLER(ScColRowNameRangesDlgWrapper)
+DECL_WRAPPER_WITHID(ScTabOpDlgWrapper)
+DECL_WRAPPER_WITHID(ScFilterDlgWrapper)
+DECL_WRAPPER_WITHID(ScSpecialFilterDlgWrapper)
+DECL_WRAPPER_WITHID(ScDbNameDlgWrapper)
+DECL_WRAPPER_WITHID(ScConsolidateDlgWrapper)
+DECL_WRAPPER_WITHID(ScPrintAreasDlgWrapper)
+DECL_WRAPPER_WITHID(ScColRowNameRangesDlgWrapper)
 DECL_WRAPPER_WITHID(ScFormulaDlgWrapper)
 DECL_WRAPPER_WITHID(ScHighlightChgDlgWrapper)
 DECL_WRAPPER_WITHID(ScCondFormatDlgWrapper)
@@ -159,41 +148,38 @@ private:
     ScFourierAnalysisDialogWrapper() = delete;
 };
 
-class ScAcceptChgDlgWrapper: public SfxChildWindow
+class ScAcceptChgDlgWrapper : public SfxChildWindow
 {
-    public:
-        ScAcceptChgDlgWrapper(  vcl::Window*,
-                                sal_uInt16,
-                                SfxBindings*,
-                                SfxChildWinInfo* );
+public:
+    ScAcceptChgDlgWrapper( vcl::Window*,
+                           sal_uInt16,
+                           SfxBindings*,
+                           SfxChildWinInfo* );
 
-        SFX_DECL_CHILDWINDOW_WITHID(Class);
+    SFX_DECL_CHILDWINDOW_WITHID(Class);
 
-        void ReInitDlg();
+    void ReInitDlg();
 };
 
 class ScSimpleRefDlgWrapper: public SfxChildWindow
 {
-    public:
-        ScSimpleRefDlgWrapper(  vcl::Window*,
-                                sal_uInt16,
-                                SfxBindings*,
-                                SfxChildWinInfo* );
+public:
+    ScSimpleRefDlgWrapper(vcl::Window*,
+                          sal_uInt16,
+                          SfxBindings*,
+                          SfxChildWinInfo*);
 
-        static std::unique_ptr<SfxChildWindow> CreateImpl(vcl::Window *pParent, sal_uInt16 nId,
-                                                          SfxBindings *pBindings, SfxChildWinInfo* pInfo);
-        static void     RegisterChildWindow(bool bVisible=false, SfxModule *pMod=nullptr, SfxChildWindowFlags nFlags=SfxChildWindowFlags::NONE);
-        static          sal_uInt16 GetChildWindowId();
+    SFX_DECL_CHILDWINDOW_WITHID(Class);
 
-        static void     SetDefaultPosSize(Point aPos, Size aSize);
-        void            SetRefString(const OUString& rStr);
-        void            SetCloseHdl( const Link<const OUString*,void>& rLink );
-        void            SetUnoLinks( const Link<const OUString&,void>& rDone, const Link<const OUString&,void>& rAbort,
-                                        const Link<const OUString&,void>& rChange );
-        void            SetFlags( bool bCloseOnButtonUp, bool bSingleCell, bool bMultiSelection );
-        static void     SetAutoReOpen(bool bFlag);
+    static void     SetDefaultPosSize(Point aPos, Size aSize);
+    void            SetRefString(const OUString& rStr);
+    void            SetCloseHdl( const Link<const OUString*,void>& rLink );
+    void            SetUnoLinks( const Link<const OUString&,void>& rDone, const Link<const OUString&,void>& rAbort,
+                                    const Link<const OUString&,void>& rChange );
+    void            SetFlags( bool bCloseOnButtonUp, bool bSingleCell, bool bMultiSelection );
+    static void     SetAutoReOpen(bool bFlag);
 
-        void            StartRefInput();
+    void            StartRefInput();
 };
 
 class SC_DLLPUBLIC ScValidityRefChildWin : public SfxChildWindow
