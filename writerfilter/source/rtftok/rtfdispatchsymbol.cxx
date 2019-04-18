@@ -100,6 +100,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         {
             if (m_aStates.top().eDestination == Destination::FOOTNOTESEPARATOR)
                 break; // just ignore it - only thing we read in here is CHFTNSEP
+            m_bNeedTableBreak = false;
             checkFirstRun();
             bool bNeedPap = m_bNeedPap;
             checkNeedPap();
