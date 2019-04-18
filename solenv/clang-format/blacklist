@@ -4067,6 +4067,7 @@ editeng/source/items/frmitems.cxx
 editeng/source/items/itemtype.cxx
 editeng/source/items/justifyitem.cxx
 editeng/source/items/numitem.cxx
+editeng/source/items/legacyitems.cxx
 editeng/source/items/optitems.cxx
 editeng/source/items/paperinf.cxx
 editeng/source/items/paraitem.cxx
@@ -6261,6 +6262,7 @@ include/editeng/justifyitem.hxx
 include/editeng/keepitem.hxx
 include/editeng/kernitem.hxx
 include/editeng/langitem.hxx
+include/editeng/legacyitem.hxx
 include/editeng/lineitem.hxx
 include/editeng/lrspitem.hxx
 include/editeng/lspcitem.hxx
@@ -6877,6 +6879,7 @@ include/svl/itemprop.hxx
 include/svl/itemset.hxx
 include/svl/languageoptions.hxx
 include/svl/lckbitem.hxx
+include/svl/legacyitem.hxx
 include/svl/listener.hxx
 include/svl/lngmisc.hxx
 include/svl/lockfilecommon.hxx
@@ -7168,6 +7171,7 @@ include/svx/langbox.hxx
 include/svx/lathe3d.hxx
 include/svx/layctrl.hxx
 include/svx/lboxctrl.hxx
+include/svx/legacyitem.hxx
 include/svx/linectrl.hxx
 include/svx/linkwarn.hxx
 include/svx/measctrl.hxx
@@ -13621,6 +13625,7 @@ svl/source/items/itemiter.cxx
 svl/source/items/itempool.cxx
 svl/source/items/itemprop.cxx
 svl/source/items/itemset.cxx
+svl/source/items/legacyitem.cxx
 svl/source/items/lckbitem.cxx
 svl/source/items/macitem.cxx
 svl/source/items/poolcach.cxx
@@ -14242,6 +14247,7 @@ svx/source/items/e3ditem.cxx
 svx/source/items/galleryitem.cxx
 svx/source/items/grfitem.cxx
 svx/source/items/hlnkitem.cxx
+svx/source/items/legacyitem.cxx
 svx/source/items/numfmtsh.cxx
 svx/source/items/numinf.cxx
 svx/source/items/ofaitem.cxx
@@ -14656,6 +14662,7 @@ sw/inc/IDocumentUndoRedo.hxx
 sw/inc/IGrammarContact.hxx
 sw/inc/IMark.hxx
 sw/inc/IShellCursorSupplier.hxx
+sw/inc/legacyitem.hxx
 sw/inc/PageColumnPopup.hxx
 sw/inc/PageMarginPopup.hxx
 sw/inc/PageOrientationPopup.hxx
@@ -15352,6 +15359,7 @@ sw/source/core/layout/layact.cxx
 sw/source/core/layout/laycache.cxx
 sw/source/core/layout/layhelp.hxx
 sw/source/core/layout/layouter.cxx
+sw/source/core/layout/legacyitem.cxx
 sw/source/core/layout/movedfwdfrmsbyobjpos.cxx
 sw/source/core/layout/newfrm.cxx
 sw/source/core/layout/objectformatter.cxx

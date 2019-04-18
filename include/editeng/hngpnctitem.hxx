@@ -35,7 +35,6 @@ public:
     SvxHangingPunctuationItem( bool bOn /*= false*/, const sal_uInt16 nId  );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

@@ -1647,20 +1647,20 @@ template<>
 void SwXStyle::SetPropertyValue<sal_uInt16(RES_BACKGROUND)>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
-    const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rStyleSet, RES_BACKGROUND, true, m_pDoc->IsInXMLImport()));
-    SvxBrushItem aChangedBrushItem(aOriginalBrushItem);
+    const std::shared_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(rStyleSet, RES_BACKGROUND, true, m_pDoc->IsInXMLImport()));
+    std::shared_ptr<SvxBrushItem> aChangedBrushItem(static_cast<SvxBrushItem*>(aOriginalBrushItem->Clone()));
 
     uno::Any aValue(rValue);
     const auto nMemberId(lcl_TranslateMetric(rEntry, m_pDoc, aValue));
-    aChangedBrushItem.PutValue(aValue, nMemberId);
+    aChangedBrushItem->PutValue(aValue, nMemberId);
 
     // 0xff is already the default - but if BackTransparent is set
     // to true, it must be applied in the item set on ODF import
     // to potentially override parent style, which is unknown yet
-    if(aChangedBrushItem == aOriginalBrushItem && (MID_GRAPHIC_TRANSPARENT != nMemberId || !aValue.has<bool>() || !aValue.get<bool>()))
+    if(*aChangedBrushItem == *aOriginalBrushItem && (MID_GRAPHIC_TRANSPARENT != nMemberId || !aValue.has<bool>() || !aValue.get<bool>()))
         return;
 
-    setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, rStyleSet);
+    setSvxBrushItemAsFillAttributesToTargetSet(*aChangedBrushItem, rStyleSet);
 }
 template<>
 void SwXStyle::SetPropertyValue<OWN_ATTR_FILLBMP_MODE>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
@@ -2281,9 +2281,9 @@ uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_BACKGROUND)>(const SfxItemPro
 {
     PrepareStyleBase(rBase);
     const SfxItemSet& rSet = rBase.GetItemSet();
-    const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
+    const std::shared_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
     uno::Any aResult;
-    if(!aOriginalBrushItem.QueryValue(aResult, rEntry.nMemberId))
+    if(!aOriginalBrushItem->QueryValue(aResult, rEntry.nMemberId))
         SAL_WARN("sw.uno", "error getting attribute from RES_BACKGROUND.");
     return aResult;
 }
@@ -2682,7 +2682,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault()
         pPageFormat->SetFormatAttr(aLR);
         pPageFormat->SetFormatAttr(aUL);
         SwPageDesc* pStdPgDsc = m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD);
-        SwFormatFrameSize aFrameSz(ATT_FIX_SIZE);
+        std::shared_ptr<SwFormatFrameSize> aFrameSz(std::make_shared<SwFormatFrameSize>(ATT_FIX_SIZE));
 
         if(RES_POOLPAGE_STANDARD == rPageDesc.GetPoolFormatId())
         {
@@ -2690,27 +2690,27 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault()
             {
                 const Size aPhysSize( SvxPaperInfo::GetPaperSize(
                     static_cast<Printer*>(m_pDoc->getIDocumentDeviceAccess().getPrinter(false))));
-                aFrameSz.SetSize(aPhysSize);
+                aFrameSz->SetSize(aPhysSize);
             }
             else
             {
-                aFrameSz.SetSize(SvxPaperInfo::GetDefaultPaperSize());
+                aFrameSz->SetSize(SvxPaperInfo::GetDefaultPaperSize());
             }
 
         }
         else
         {
-            aFrameSz = pStdPgDsc->GetMaster().GetFrameSize();
+            aFrameSz.reset(static_cast<SwFormatFrameSize*>(pStdPgDsc->GetMaster().GetFrameSize().Clone()));
         }
 
         if(pStdPgDsc->GetLandscape())
         {
-            SwTwips nTmp = aFrameSz.GetHeight();
-            aFrameSz.SetHeight(aFrameSz.GetWidth());
-            aFrameSz.SetWidth(nTmp);
+            SwTwips nTmp = aFrameSz->GetHeight();
+            aFrameSz->SetHeight(aFrameSz->GetWidth());
+            aFrameSz->SetWidth(nTmp);
         }
 
-        pPageFormat->SetFormatAttr(aFrameSz);
+        pPageFormat->SetFormatAttr(*aFrameSz);
         m_pDoc->ChgPageDesc(nPgDscPos, m_pDoc->GetPageDesc(nPgDscPos));
         return;
     }
@@ -3641,14 +3641,14 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
                 }
                 case RES_BACKGROUND:
                 {
-                    const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, true, m_pDocShell->GetDoc()->IsInXMLImport()));
-                    SvxBrushItem aChangedBrushItem(aOriginalBrushItem);
+                    const std::shared_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, true, m_pDocShell->GetDoc()->IsInXMLImport()));
+                    std::shared_ptr<SvxBrushItem> aChangedBrushItem(static_cast<SvxBrushItem*>(aOriginalBrushItem->Clone()));
 
-                    aChangedBrushItem.PutValue(aValue, nMemberId);
+                    aChangedBrushItem->PutValue(aValue, nMemberId);
 
-                    if(aChangedBrushItem != aOriginalBrushItem)
+                    if(*aChangedBrushItem != *aOriginalBrushItem)
                     {
-                        setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, aSet);
+                        setSvxBrushItemAsFillAttributesToTargetSet(*aChangedBrushItem, aSet);
                     }
 
                     bDone = true;
@@ -3969,9 +3969,9 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
             {
                 case RES_BACKGROUND:
                 {
-                    const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(*mpSet, RES_BACKGROUND));
+                    const std::shared_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(*mpSet, RES_BACKGROUND));
 
-                    if(!aOriginalBrushItem.QueryValue(aTarget, pEntry->nMemberId))
+                    if(!aOriginalBrushItem->QueryValue(aTarget, pEntry->nMemberId))
                     {
                         OSL_ENSURE(false, "Error getting attribute from RES_BACKGROUND (!)");
                     }

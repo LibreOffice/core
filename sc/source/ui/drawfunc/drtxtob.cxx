@@ -204,7 +204,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 const SvxFontItem& rItem = pOutView->GetAttribs().Get(EE_CHAR_FONTINFO);
 
                 OUString aString;
-                SvxFontItem aNewItem( EE_CHAR_FONTINFO );
+                std::shared_ptr<SvxFontItem> aNewItem(std::make_shared<SvxFontItem>(EE_CHAR_FONTINFO));
 
                 const SfxItemSet *pArgs = rReq.GetArgs();
                 const SfxPoolItem* pItem = nullptr;
@@ -221,12 +221,15 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     {
                         const OUString& aFontName(pFontItem->GetValue());
                         vcl::Font aFont(aFontName, Size(1,1)); // Size only because of CTOR
-                        aNewItem = SvxFontItem( aFont.GetFamilyType(), aFont.GetFamilyName(),
-                                    aFont.GetStyleName(), aFont.GetPitch(),
-                                    aFont.GetCharSet(), ATTR_FONT  );
+                        aNewItem = std::make_shared<SvxFontItem>(
+                            aFont.GetFamilyType(), aFont.GetFamilyName(),
+                            aFont.GetStyleName(), aFont.GetPitch(),
+                            aFont.GetCharSet(), ATTR_FONT);
                     }
                     else
-                        aNewItem = rItem;
+                    {
+                        aNewItem.reset(static_cast<SvxFontItem*>(rItem.Clone()));
+                    }
                 }
                 else
                     ScViewUtil::ExecuteCharMap( rItem, *pViewData->GetViewShell()->GetViewFrame() );
@@ -234,7 +237,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 if ( !aString.isEmpty() )
                 {
                     SfxItemSet aSet( pOutliner->GetEmptyItemSet() );
-                    aSet.Put( aNewItem );
+                    aSet.Put( *aNewItem );
                     //  If nothing is selected, then SetAttribs of the View selects a word
                     pOutView->GetOutliner()->QuickSetAttribs( aSet, pOutView->GetSelection() );
                     pOutView->InsertText(aString);

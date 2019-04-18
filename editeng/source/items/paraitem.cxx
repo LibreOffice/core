@@ -400,47 +400,6 @@ void SvxAdjustItem::SetEnumValue( sal_uInt16 nVal )
 }
 
 
-sal_uInt16 SvxAdjustItem::GetVersion( sal_uInt16 nFileVersion ) const
-{
-    return (nFileVersion == SOFFICE_FILEFORMAT_31)
-               ? 0 : ADJUST_LASTBLOCK_VERSION;
-}
-
-
-SfxPoolItem* SvxAdjustItem::Create(SvStream& rStrm, sal_uInt16 nVersion) const
-{
-    char eAdjustment;
-    rStrm.ReadChar( eAdjustment );
-    SvxAdjustItem *pRet = new SvxAdjustItem( static_cast<SvxAdjust>(eAdjustment), Which() );
-    if( nVersion >= ADJUST_LASTBLOCK_VERSION )
-    {
-        sal_Int8 nFlags;
-        rStrm.ReadSChar( nFlags );
-        pRet->bOneBlock = 0 != (nFlags & 0x0001);
-        pRet->bLastCenter = 0 != (nFlags & 0x0002);
-        pRet->bLastBlock = 0 != (nFlags & 0x0004);
-    }
-    return pRet;
-}
-
-
-SvStream& SvxAdjustItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) const
-{
-    rStrm.WriteChar( static_cast<char>(GetAdjust()) );
-    if ( nItemVersion >= ADJUST_LASTBLOCK_VERSION )
-    {
-        sal_Int8 nFlags = 0;
-        if ( bOneBlock )
-            nFlags |= 0x0001;
-        if ( bLastCenter )
-            nFlags |= 0x0002;
-        if ( bLastBlock )
-            nFlags |= 0x0004;
-        rStrm.WriteSChar( nFlags );
-    }
-    return rStrm;
-}
-
 // class SvxWidowsItem ---------------------------------------------------
 
 SvxWidowsItem::SvxWidowsItem(const sal_uInt8 nL, const sal_uInt16 nId ) :
@@ -750,12 +709,6 @@ sal_uInt16 SvxTabStopItem::GetPos( const sal_Int32 nPos ) const
     return it != maTabStops.end() ? it - maTabStops.begin() : SVX_TAB_NOTFOUND;
 }
 
-
-SvxTabStopItem& SvxTabStopItem::operator=( const SvxTabStopItem& rTSI )
-{
-    maTabStops = rTSI.maTabStops;
-    return *this;
-}
 
 bool SvxTabStopItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
@@ -1089,16 +1042,6 @@ SfxPoolItem* SvxScriptSpaceItem::Clone( SfxItemPool * ) const
     return new SvxScriptSpaceItem( *this );
 }
 
-sal_uInt16  SvxScriptSpaceItem::GetVersion( sal_uInt16 nFFVer ) const
-{
-    DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
-            SOFFICE_FILEFORMAT_40==nFFVer ||
-            SOFFICE_FILEFORMAT_50==nFFVer,
-            "SvxTwoLinesItem: Is there a new file format? ");
-
-    return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
-}
-
 bool SvxScriptSpaceItem::GetPresentation(
         SfxItemPresentation /*ePres*/,
         MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
@@ -1122,16 +1065,6 @@ SfxPoolItem* SvxHangingPunctuationItem::Clone( SfxItemPool * ) const
     return new SvxHangingPunctuationItem( *this );
 }
 
-sal_uInt16 SvxHangingPunctuationItem::GetVersion( sal_uInt16 nFFVer ) const
-{
-    DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
-            SOFFICE_FILEFORMAT_40==nFFVer ||
-            SOFFICE_FILEFORMAT_50==nFFVer,
-            "SvxHangingPunctuationItem: Is there a new file format? ");
-
-    return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
-}
-
 bool SvxHangingPunctuationItem::GetPresentation(
         SfxItemPresentation /*ePres*/,
         MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
@@ -1153,16 +1086,6 @@ SvxForbiddenRuleItem::SvxForbiddenRuleItem(
 SfxPoolItem* SvxForbiddenRuleItem::Clone( SfxItemPool * ) const
 {
     return new SvxForbiddenRuleItem( *this );
-}
-
-sal_uInt16 SvxForbiddenRuleItem::GetVersion( sal_uInt16 nFFVer ) const
-{
-    DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
-            SOFFICE_FILEFORMAT_40==nFFVer ||
-            SOFFICE_FILEFORMAT_50==nFFVer,
-            "SvxForbiddenRuleItem: Is there a new file format? ");
-
-    return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
 
 bool SvxForbiddenRuleItem::GetPresentation(
@@ -1189,11 +1112,6 @@ SvxParaVertAlignItem::SvxParaVertAlignItem( Align nValue,
 SfxPoolItem* SvxParaVertAlignItem::Clone( SfxItemPool* ) const
 {
     return new SvxParaVertAlignItem( *this );
-}
-
-sal_uInt16 SvxParaVertAlignItem::GetVersion( sal_uInt16 nFFVer ) const
-{
-    return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
 
 bool SvxParaVertAlignItem::GetPresentation(
@@ -1249,16 +1167,6 @@ SvxParaGridItem::SvxParaGridItem( bool bOn, const sal_uInt16 nId )
 SfxPoolItem* SvxParaGridItem::Clone( SfxItemPool * ) const
 {
     return new SvxParaGridItem( *this );
-}
-
-sal_uInt16  SvxParaGridItem::GetVersion( sal_uInt16 nFFVer ) const
-{
-    DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
-            SOFFICE_FILEFORMAT_40==nFFVer ||
-            SOFFICE_FILEFORMAT_50==nFFVer,
-            "SvxParaGridItem: Is there a new file format? ");
-
-    return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
 
 bool SvxParaGridItem::GetPresentation(

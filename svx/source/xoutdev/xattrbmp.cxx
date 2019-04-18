@@ -167,11 +167,6 @@ bool XFillBitmapItem::isPattern() const
     return vcl::bitmap::isHistorical8x8(GetGraphicObject().GetGraphic().GetBitmapEx(), aBack, aFront);
 }
 
-sal_uInt16 XFillBitmapItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
-{
-    return 2;
-}
-
 bool XFillBitmapItem::GetPresentation(
     SfxItemPresentation /*ePres*/,
     MapUnit /*eCoreUnit*/,
