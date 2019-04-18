@@ -587,15 +587,9 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL XFrameImpl::loadComponentF
     css::uno::Reference< css::frame::XComponentLoader > xThis(static_cast< css::frame::XComponentLoader* >(this), css::uno::UNO_QUERY);
 
     utl::MediaDescriptor aDescriptor(lArguments);
-    bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
-
-    if (bOnMainThread)
-        return vcl::solarthread::syncExecute(std::bind(&LoadEnv::loadComponentFromURL, xThis,
-                                                       m_xContext, sURL, sTargetFrameName,
-                                                       nSearchFlags, lArguments));
-    else
-        return LoadEnv::loadComponentFromURL(xThis, m_xContext, sURL, sTargetFrameName,
-                                             nSearchFlags, lArguments);
+    return vcl::solarthread::syncExecute(std::bind(&LoadEnv::loadComponentFromURL, xThis,
+                                                   m_xContext, sURL, sTargetFrameName, nSearchFlags,
+                                                   lArguments));
 }
 
 /*-****************************************************************************************************

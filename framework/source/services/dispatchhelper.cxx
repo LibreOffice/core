@@ -98,15 +98,9 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     css::uno::Reference<css::frame::XDispatch> xDispatch
         = xDispatchProvider->queryDispatch(aURL, sTargetFrameName, nSearchFlags);
 
-    utl::MediaDescriptor aDescriptor(lArguments);
-    bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
-
-    if (bOnMainThread)
-        return vcl::solarthread::syncExecute([this, &xDispatch, &aURL, &lArguments]() {
-            return executeDispatch(xDispatch, aURL, true, lArguments);
-        });
-    else
+    return vcl::solarthread::syncExecute([this, &xDispatch, &aURL, &lArguments]() {
         return executeDispatch(xDispatch, aURL, true, lArguments);
+    });
 }
 
 css::uno::Any

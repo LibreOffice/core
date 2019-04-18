@@ -1517,7 +1517,6 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
     SfxSaveGuard aSaveGuard(this, m_pData.get());
 
     bool bCheckIn = false;
-    bool bOnMainThread = false;
     for ( sal_Int32 nInd = 0; nInd < aSeqArgs.getLength(); nInd++ )
     {
         // check that only acceptable parameters are provided here
@@ -1527,8 +1526,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
           && aSeqArgs[nInd].Name != "VersionMajor"
           && aSeqArgs[nInd].Name != "FailOnWarning"
           && aSeqArgs[nInd].Name != "CheckIn"
-          && aSeqArgs[nInd].Name != "NoFileSync"
-          && aSeqArgs[nInd].Name != "OnMainThread" )
+          && aSeqArgs[nInd].Name != "NoFileSync" )
         {
             const OUString aMessage( "Unexpected MediaDescriptor parameter: " + aSeqArgs[nInd].Name );
             throw lang::IllegalArgumentException( aMessage, Reference< XInterface >(), 1 );
@@ -1536,10 +1534,6 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
         else if ( aSeqArgs[nInd].Name == "CheckIn" )
         {
             aSeqArgs[nInd].Value >>= bCheckIn;
-        }
-        else if (aSeqArgs[nInd].Name == "OnMainThread")
-        {
-            aSeqArgs[nInd].Value >>= bOnMainThread;
         }
     }
 
@@ -1592,11 +1586,8 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
     {
         // Tell the SfxMedium if we are in checkin instead of normal save
         m_pData->m_pObjectShell->GetMedium( )->SetInCheckIn( nSlotId == SID_CHECKIN );
-        if (bOnMainThread)
-            bRet = vcl::solarthread::syncExecute(
-                [this, &pParams] { return m_pData->m_pObjectShell->Save_Impl(pParams.get()); });
-        else
-            bRet = m_pData->m_pObjectShell->Save_Impl(pParams.get());
+        bRet = vcl::solarthread::syncExecute(
+            [this, &pParams] { return m_pData->m_pObjectShell->Save_Impl(pParams.get()); });
         m_pData->m_pObjectShell->GetMedium( )->SetInCheckIn( nSlotId != SID_CHECKIN );
     }
 
@@ -1689,12 +1680,7 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUString&                   rURL
 
     SfxSaveGuard aSaveGuard(this, m_pData.get());
     try {
-        utl::MediaDescriptor aDescriptor(rArgs);
-        bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
-        if (bOnMainThread)
-            vcl::solarthread::syncExecute([this, rURL, rArgs]() { impl_store(rURL, rArgs, true); });
-        else
-            impl_store(rURL, rArgs, true);
+        vcl::solarthread::syncExecute([this, rURL, rArgs]() { impl_store(rURL, rArgs, true); });
     }
     catch (const uno::Exception &e)
     {
