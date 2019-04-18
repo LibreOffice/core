@@ -103,9 +103,7 @@ cmd/sc_insertformradio.png cmd/sc_radiobutton.png
 cmd/sc_insertformspin.png cmd/sc_spinbutton.png
 cmd/sc_insertformula.png cmd/sc_dbviewfunctions.png
 cmd/sc_insertformvscroll.png cmd/sc_scrollbar.png
-cmd/sc_scrollbarmenu.png cmd/sc_scrollbar.png
 cmd/sc_insertframeinteract.png cmd/sc_insertframe.png
-cmd/sc_insertframemenu.png cmd/sc_insertframe.png
 cmd/sc_insertframeinteractnocolumns.png cmd/sc_insertframe.png
 cmd/sc_insertgraphic.png cmd/sc_gallery.png
 cmd/sc_insertimagecontrol.png cmd/sc_drawchart.png
@@ -125,9 +123,9 @@ cmd/sc_inserttimefield.png cmd/sc_timefield.png
 cmd/sc_showtrackedchanges.png cmd/sc_addwatch.png
 cmd/lc_showtrackedchanges.png cmd/lc_addwatch.png
 cmd/sc_tracechangemode.png cmd/sc_trackchanges.png
+cmd/sc_changesmenu.png cmd/sc_trackchangesbar.png
+cmd/sc_viewtrackchanges.png cmd/sc_addwatch.png
 cmd/lc_tracechangemode.png cmd/lc_trackchanges.png
-cmd/sc_shapesmenu.png cmd/sc_polygon_diagonal_unfilled.png
-cmd/sc_shapesmenu.png cmd/sc_basicshapes.round-quadrat.png
 cmd/sc_charactermenu.png cmd/sc_fontdialog.png
 cmd/sc_paragraphmenu.png cmd/sc_paragraphdialog.png
 cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png
@@ -228,9 +226,6 @@ cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
 cmd/sc_deleteallnotes.png cmd/sc_deleteallannotation.png
 cmd/lc_deleteallnotes.png cmd/lc_deleteallannotation.png
 cmd/sc_formatallnotes.png cmd/sc_editannotation.png
-
-# Template Menu
-cmd/sc_templatemenu.png cmd/sc_adddirect.png
 
 # Animation
 cmd/lc_customanimation.png cmd/lc_animationobjects.png
@@ -666,7 +661,6 @@ cmd/sc_numberformatdate.png cmd/sc_datefield.png
 # Notebookbar
 cmd/lc_headerandfooter.png cmd/lc_editheaderandfooter.png
 cmd/sc_headerandfooter.png cmd/sc_editheaderandfooter.png
-cmd/sc_insertheaderfootermenu.png cmd/sc_editheaderandfooter.png
 cmd/lc_recalcpivottable.png cmd/lc_calculate.png
 cmd/sc_recalcpivottable.png cmd/sc_calculate.png
 cmd/lc_dataproviderrefresh.png cmd/lc_calculate.png
@@ -769,7 +763,6 @@ cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
 # Grid
 cmd/lc_gridvisible.png cmd/lc_grid.png
 cmd/sc_gridvisible.png cmd/sc_grid.png
-cmd/sc_gridmenu.png cmd/sc_grid.png
 cmd/sc_insertgridcontrol.png cmd/sc_grid.png
 cmd/lc_insertgridcontrol.png cmd/lc_grid.png
 
@@ -837,10 +830,6 @@ cmd/sc_outlineright.png cmd/sc_decrementlevel.png
 cmd/sc_outlineleft.png cmd/sc_decrementindent.png
 cmd/sc_incrementlevel.png cmd/sc_decrementindent.png
 cmd/sc_incrementindent.png cmd/sc_decrementlevel.png
-
-# Index
-cmd/sc_indexesmenu.png cmd/sc_insertindexesentry.png
-cmd/sc_insertfootnotesmenu.png cmd/sc_insertfootnote.png
 
 # Mirror
 cmd/lc_fliphorizontal.png cmd/lc_mirror.png
