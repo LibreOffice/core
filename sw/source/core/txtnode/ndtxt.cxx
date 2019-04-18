@@ -3289,7 +3289,7 @@ SwTwips SwTextNode::GetAdditionalIndentForStartingNewList() const
 }
 
 // #i96772#
-void SwTextNode::ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpaceItem ) const
+void SwTextNode::ClearLRSpaceItemDueToListLevelIndents( std::shared_ptr<SvxLRSpaceItem>& o_rLRSpaceItem ) const
 {
     if ( AreListLevelIndentsApplicable() )
     {
@@ -3299,8 +3299,7 @@ void SwTextNode::ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpa
             const SwNumFormat& rFormat = pRule->Get(lcl_BoundListLevel(GetActualListLevel()));
             if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
-                SvxLRSpaceItem aLR( RES_LR_SPACE );
-                o_rLRSpaceItem = aLR;
+                o_rLRSpaceItem = std::make_shared<SvxLRSpaceItem>(RES_LR_SPACE);
             }
         }
     }

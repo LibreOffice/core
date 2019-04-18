@@ -1225,7 +1225,7 @@ inline vcl::Cursor* ImpEditView::GetCursor()
     return pCursor.get();
 }
 
-void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit );
+void ConvertItem( std::unique_ptr<SfxPoolItem>& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit );
 void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const MapUnit* pSourceUnit = nullptr, const MapUnit* pDestUnit = nullptr );
 AsianCompressionFlags GetCharTypeForCompression( sal_Unicode cChar );
 Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin );

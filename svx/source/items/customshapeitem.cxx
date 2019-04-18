@@ -265,15 +265,12 @@ SfxPoolItem* SdrCustomShapeGeometryItem::Clone( SfxItemPool * /*pPool*/ ) const
     return new SdrCustomShapeGeometryItem( aPropSeq );
 }
 
-sal_uInt16 SdrCustomShapeGeometryItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/ ) const
-{
-    return 1;
-}
 bool SdrCustomShapeGeometryItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= aPropSeq;
     return true;
 }
+
 bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     if ( ! ( rVal >>= aPropSeq ) )

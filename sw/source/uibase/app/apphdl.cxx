@@ -309,7 +309,7 @@ SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
     if(!rURL.isEmpty())
     {
         SfxStringItem aURL(SID_FILE_NAME, rURL);
-        SfxStringItem aTargetFrameName( SID_TARGETNAME, OUString("_blank") );
+        SfxStringItem aTargetFrameName( SID_TARGETNAME, "_blank" );
         SfxBoolItem aHidden( SID_HIDDEN, true );
         SfxStringItem aReferer(SID_REFERER, pView->GetDocShell()->GetTitle());
         const SfxObjectItem* pItem = static_cast<const SfxObjectItem*>(

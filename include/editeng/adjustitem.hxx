@@ -65,9 +65,6 @@ public:
     virtual sal_uInt16       GetEnumValue() const override;
     virtual void             SetEnumValue( sal_uInt16 nNewVal ) override;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const override;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const override;
-    virtual sal_uInt16       GetVersion( sal_uInt16 nFileVersion ) const override;
 
     void SetOneWord( const SvxAdjust eType )
     {
@@ -119,6 +116,25 @@ public:
         else if ( bBlock )
             eRet = SvxAdjust::Block;
         return eRet;
+    }
+
+    sal_Int8 GetAsFlags() const
+    {
+        sal_Int8 nFlags = 0;
+        if ( bOneBlock )
+            nFlags |= 0x0001;
+        if ( bLastCenter )
+            nFlags |= 0x0002;
+        if ( bLastBlock )
+            nFlags |= 0x0004;
+        return nFlags;
+    }
+
+    void SetAsFlags(sal_Int8 nFlags)
+    {
+        bOneBlock = 0 != (nFlags & 0x0001);
+        bLastCenter = 0 != (nFlags & 0x0002);
+        bLastBlock = 0 != (nFlags & 0x0004);
     }
 };
 

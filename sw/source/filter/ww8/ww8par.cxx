@@ -1487,7 +1487,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFormatAttr(const SwPosition& rPos,
                 if (const SfxItemSet *pSet = pNd->GetpSwAttrSet())
                     eState = pSet->GetItemState(RES_LR_SPACE, false);
                 if (eState != SfxItemState::SET && rReader.m_nCurrentColl < rReader.m_vColl.size())
-                    pItem = &(rReader.m_vColl[rReader.m_nCurrentColl].maWordLR);
+                    pItem = rReader.m_vColl[rReader.m_nCurrentColl].maWordLR.get();
             }
 
             /*
@@ -1660,7 +1660,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
 
     WW8_TBD const * pTyp = reinterpret_cast<WW8_TBD const *>(pData + 2*nDel + 2*nIns + 2); // Type Array
 
-    SvxTabStopItem aAttr(0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP);
+    std::shared_ptr<SvxTabStopItem> aAttr(std::make_shared<SvxTabStopItem>(0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP));
 
     const SwFormat * pSty = nullptr;
     sal_uInt16 nTabBase;
@@ -1686,7 +1686,9 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
         bFound = pSty->GetAttrSet().GetItemState(RES_PARATR_TABSTOP, false,
             &pTabs) == SfxItemState::SET;
         if( bFound )
-            aAttr = *static_cast<const SvxTabStopItem*>(pTabs);
+        {
+            aAttr.reset(static_cast<SvxTabStopItem*>(pTabs->Clone()));
+        }
         else
         {
             sal_uInt16 nOldTabBase = nTabBase;
@@ -1719,9 +1721,9 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
     SvxTabStop aTabStop;
     for (short i=0; i < nDel; ++i)
     {
-        sal_uInt16 nPos = aAttr.GetPos(SVBT16ToUInt16(pDel + i*2));
+        sal_uInt16 nPos = aAttr->GetPos(SVBT16ToUInt16(pDel + i*2));
         if( nPos != SVX_TAB_NOTFOUND )
-            aAttr.Remove( nPos );
+            aAttr->Remove( nPos );
     }
 
     for (short i=0; i < nIns; ++i)
@@ -1763,14 +1765,14 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
                 break;
         }
 
-        sal_uInt16 nPos2 = aAttr.GetPos( nPos );
+        sal_uInt16 nPos2 = aAttr->GetPos( nPos );
         if (nPos2 != SVX_TAB_NOTFOUND)
-            aAttr.Remove(nPos2); // Or else Insert() refuses
-        aAttr.Insert(aTabStop);
+            aAttr->Remove(nPos2); // Or else Insert() refuses
+        aAttr->Insert(aTabStop);
     }
 
     if (nIns || nDel)
-        NewAttr(aAttr);
+        NewAttr(*aAttr);
     else
     {
         // Here we have a tab definition which inserts no extra tabs, or deletes

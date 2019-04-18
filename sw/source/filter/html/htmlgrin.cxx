@@ -1003,23 +1003,23 @@ void SwHTMLParser::InsertBodyOptions()
 
     // Prepare the items for the page style (background, frame)
     // If BrushItem already set values must remain!
-    SvxBrushItem aBrushItem( m_pCSS1Parser->makePageDescBackground() );
+    std::shared_ptr<SvxBrushItem> aBrushItem( m_pCSS1Parser->makePageDescBackground() );
     bool bSetBrush = false;
 
     if( bBGColor && !m_pCSS1Parser->IsBodyBGColorSet() )
     {
         // background colour from "BGCOLOR"
         OUString aLink;
-        if( !aBrushItem.GetGraphicLink().isEmpty() )
-            aLink = aBrushItem.GetGraphicLink();
-        SvxGraphicPosition ePos = aBrushItem.GetGraphicPos();
+        if( !aBrushItem->GetGraphicLink().isEmpty() )
+            aLink = aBrushItem->GetGraphicLink();
+        SvxGraphicPosition ePos = aBrushItem->GetGraphicPos();
 
-        aBrushItem.SetColor( aBGColor );
+        aBrushItem->SetColor( aBGColor );
 
         if( !aLink.isEmpty() )
         {
-            aBrushItem.SetGraphicLink( aLink );
-            aBrushItem.SetGraphicPos( ePos );
+            aBrushItem->SetGraphicLink( aLink );
+            aBrushItem->SetGraphicPos( ePos );
         }
         bSetBrush = true;
         m_pCSS1Parser->SetBodyBGColorSet();
@@ -1028,8 +1028,8 @@ void SwHTMLParser::InsertBodyOptions()
     if( !aBackGround.isEmpty() && !m_pCSS1Parser->IsBodyBackgroundSet() )
     {
         // background graphic from "BACKGROUND"
-        aBrushItem.SetGraphicLink( INetURLObject::GetAbsURL( m_sBaseURL, aBackGround ) );
-        aBrushItem.SetGraphicPos( GPOS_TILED );
+        aBrushItem->SetGraphicLink( INetURLObject::GetAbsURL( m_sBaseURL, aBackGround ) );
+        aBrushItem->SetGraphicPos( GPOS_TILED );
         bSetBrush = true;
         m_pCSS1Parser->SetBodyBackgroundSet();
     }
@@ -1043,7 +1043,7 @@ void SwHTMLParser::InsertBodyOptions()
 
         // Some attributes have to set on the page style, in fact the ones
         // which aren't inherited
-        m_pCSS1Parser->SetPageDescAttrs( bSetBrush ? &aBrushItem : nullptr,
+        m_pCSS1Parser->SetPageDescAttrs( bSetBrush ? aBrushItem.get() : nullptr,
                                        &aItemSet );
 
         const SfxPoolItem *pItem;
@@ -1070,7 +1070,7 @@ void SwHTMLParser::InsertBodyOptions()
     }
     else if( bSetBrush )
     {
-        m_pCSS1Parser->SetPageDescAttrs( &aBrushItem );
+        m_pCSS1Parser->SetPageDescAttrs( aBrushItem.get() );
     }
 
     if( bLinkColor && !m_pCSS1Parser->IsBodyLinkSet() )
