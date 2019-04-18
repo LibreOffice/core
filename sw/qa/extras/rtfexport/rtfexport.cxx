@@ -358,7 +358,7 @@ DECLARE_RTFEXPORT_TEST(testMathVerticalstacks, "math-vertical-stacks.rtf")
 
 DECLARE_RTFEXPORT_TEST(testTdf49073, "tdf49073.rtf")
 {
-    // test case for Asisan phontic guide ( ruby text.)
+    // test case for Asian phontic guide (ruby text.)
     sal_Unicode aRuby[3] = { 0x304D, 0x3082, 0x3093 };
     OUString sRuby = OUString(aRuby, SAL_N_ELEMENTS(aRuby));
     CPPUNIT_ASSERT_EQUAL(sRuby, getProperty<OUString>(getParagraph(1)->getStart(), "RubyText"));
