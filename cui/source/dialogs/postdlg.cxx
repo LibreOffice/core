@@ -33,7 +33,7 @@
 
 // class SvxPostItDialog -------------------------------------------------
 
-SvxPostItDialog::SvxPostItDialog(weld::Window* pParent, const SfxItemSet& rCoreSet,
+SvxPostItDialog::SvxPostItDialog(weld::Widget* pParent, const SfxItemSet& rCoreSet,
     bool bPrevNext)
     : SfxDialogController(pParent, "cui/ui/comment.ui", "CommentDialog")
     , m_rSet(rCoreSet)

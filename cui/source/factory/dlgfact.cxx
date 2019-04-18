@@ -1315,9 +1315,9 @@ VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog(weld::Wind
     return nullptr;
 }
 
-VclPtr<AbstractSvxPostItDialog> AbstractDialogFactory_Impl::CreateSvxPostItDialog( weld::Window* pParent,
-                                                                        const SfxItemSet& rCoreSet,
-                                                                        bool bPrevNext )
+VclPtr<AbstractSvxPostItDialog> AbstractDialogFactory_Impl::CreateSvxPostItDialog(weld::Widget* pParent,
+                                                                                  const SfxItemSet& rCoreSet,
+                                                                                  bool bPrevNext)
 {
     return VclPtr<AbstractSvxPostItDialog_Impl>::Create(std::make_unique<SvxPostItDialog>(pParent, rCoreSet, bPrevNext));
 }

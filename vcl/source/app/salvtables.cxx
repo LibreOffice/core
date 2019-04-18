@@ -2389,6 +2389,10 @@ struct SalInstanceTreeIter : public weld::TreeIter
         : iter(pOrig ? pOrig->iter : nullptr)
     {
     }
+    SalInstanceTreeIter(SvTreeListEntry* pIter)
+        : iter(pIter)
+    {
+    }
     virtual bool equal(const TreeIter& rOther) const override
     {
         return iter == static_cast<const SalInstanceTreeIter&>(rOther).iter;
@@ -2448,6 +2452,8 @@ private:
     DECL_LINK(ModelChangedHdl, SvTreeListBox*, void);
     DECL_LINK(VisibleRangeChangedHdl, SvTreeListBox*, void);
     DECL_LINK(CompareHdl, const SvSortData&, sal_Int32);
+    DECL_LINK(PopupMenuHdl, const CommandEvent&, bool);
+
 public:
     SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : SalInstanceContainer(pTreeView, pBuilder, bTakeOwnership)
@@ -2462,6 +2468,7 @@ public:
         m_xTreeView->SetDeselectHdl(LINK(this, SalInstanceTreeView, DeSelectHdl));
         m_xTreeView->SetDoubleClickHdl(LINK(this, SalInstanceTreeView, DoubleClickHdl));
         m_xTreeView->SetExpandingHdl(LINK(this, SalInstanceTreeView, ExpandingHdl));
+        m_xTreeView->SetPopupMenuHdl(LINK(this, SalInstanceTreeView, PopupMenuHdl));
         const long aTabPositions[] = { 0 };
         m_xTreeView->SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions);
         LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
@@ -2548,21 +2555,15 @@ public:
 
     virtual void show() override
     {
-        LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
-        if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
-        {
-            pHeaderBar->Show();
-        }
+        if (LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get()))
+            pHeaderBox->GetParent()->Show();
         SalInstanceContainer::show();
     }
 
     virtual void hide() override
     {
-        LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
-        if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
-        {
-            pHeaderBar->Hide();
-        }
+        if (LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get()))
+            pHeaderBox->GetParent()->Hide();
         SalInstanceContainer::hide();
     }
 
@@ -2623,6 +2624,12 @@ public:
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
         pEntry->SetTextColor(rColor);
+    }
+
+    virtual void set_font_color(const weld::TreeIter& rIter, const Color& rColor) const override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        rVclIter.iter->SetTextColor(rColor);
     }
 
     virtual void remove(int pos) override
@@ -3237,10 +3244,20 @@ public:
         m_xTreeView->SetSelectionMode(eMode);
     }
 
+    virtual void all_foreach(const std::function<bool(weld::TreeIter&)>& func) override
+    {
+        SalInstanceTreeIter aVclIter(m_xTreeView->First());
+        while (aVclIter.iter)
+        {
+            if (func(aVclIter))
+                return;
+            aVclIter.iter = m_xTreeView->Next(aVclIter.iter);
+        }
+    }
+
     virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override
     {
-        SalInstanceTreeIter aVclIter(nullptr);
-        aVclIter.iter = m_xTreeView->FirstSelected();
+        SalInstanceTreeIter aVclIter(m_xTreeView->FirstSelected());
         while (aVclIter.iter)
         {
             if (func(aVclIter))
@@ -3251,8 +3268,7 @@ public:
 
     virtual void visible_foreach(const std::function<bool(weld::TreeIter&)>& func) override
     {
-        SalInstanceTreeIter aVclIter(nullptr);
-        aVclIter.iter = m_xTreeView->GetFirstEntryInView();
+        SalInstanceTreeIter aVclIter(m_xTreeView->GetFirstEntryInView());
         while (aVclIter.iter)
         {
             if (func(aVclIter))
@@ -3279,6 +3295,20 @@ public:
         return SvTreeList::GetRelPos(rVclIter.iter);
     }
 
+    virtual int iter_compare(const weld::TreeIter& a, const weld::TreeIter& b) const override
+    {
+        const SalInstanceTreeIter& rVclIterA = static_cast<const SalInstanceTreeIter&>(a);
+        const SalInstanceTreeIter& rVclIterB = static_cast<const SalInstanceTreeIter&>(b);
+        const SvTreeList* pModel = m_xTreeView->GetModel();
+        auto nAbsPosA = pModel->GetAbsPos(rVclIterA.iter);
+        auto nAbsPosB = pModel->GetAbsPos(rVclIterB.iter);
+        if (nAbsPosA < nAbsPosB)
+            return -1;
+        if (nAbsPosA > nAbsPosB)
+            return 1;
+        return 0;
+    }
+
     virtual void move_subtree(weld::TreeIter& rNode, const weld::TreeIter* pNewParent, int nIndexInNewParent) override
     {
         SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rNode);
@@ -3301,6 +3331,13 @@ public:
         m_xTreeView->SetStyle(m_xTreeView->GetStyle() | WB_SORT);
         m_xTreeView->GetModel()->SetCompareHdl(LINK(this, SalInstanceTreeView, CompareHdl));
         set_sort_order(true);
+    }
+
+    virtual void set_sort_func(const std::function<int(const weld::TreeIter&, const weld::TreeIter&)>& func) override
+    {
+        weld::TreeView::set_sort_func(func);
+        SvTreeList* pListModel = m_xTreeView->GetModel();
+        pListModel->Resort();
     }
 
     virtual void make_unsorted() override
@@ -3369,6 +3406,13 @@ public:
 
     virtual void set_sort_column(int nColumn) override
     {
+        if (nColumn == -1)
+        {
+            make_unsorted();
+            m_nSortColumn = -1;
+            return;
+        }
+
         if (nColumn != m_nSortColumn)
         {
             m_nSortColumn = nColumn;
@@ -3396,6 +3440,7 @@ public:
         {
             static_cast<LclTabListBox&>(*m_xTreeView).SetModelChangedHdl(Link<SvTreeListBox*, void>());
         }
+        m_xTreeView->SetPopupMenuHdl(Link<const CommandEvent&, bool>());
         m_xTreeView->SetExpandingHdl(Link<SvTreeListBox*, bool>());
         m_xTreeView->SetDoubleClickHdl(Link<SvTreeListBox*, bool>());
         m_xTreeView->SetSelectHdl(Link<SvTreeListBox*, void>());
@@ -3409,6 +3454,10 @@ IMPL_LINK(SalInstanceTreeView, CompareHdl, const SvSortData&, rSortData, sal_Int
     const SvTreeListEntry* pLHS = rSortData.pLeft;
     const SvTreeListEntry* pRHS = rSortData.pRight;
     assert(pLHS && pRHS);
+
+    if (m_aCustomSort)
+        return m_aCustomSort(SalInstanceTreeIter(const_cast<SvTreeListEntry*>(pLHS)),
+                             SalInstanceTreeIter(const_cast<SvTreeListEntry*>(pRHS)));
 
     const SvLBoxString* pLeftTextItem;
     const SvLBoxString* pRightTextItem;
@@ -3551,8 +3600,7 @@ IMPL_LINK_NOARG(SalInstanceTreeView, ExpandingHdl, SvTreeListBox*, bool)
         }
     }
 
-    SalInstanceTreeIter aIter(nullptr);
-    aIter.iter = pEntry;
+    SalInstanceTreeIter aIter(pEntry);
     bool bRet = signal_expanding(aIter);
 
     //expand disallowed, restore placeholder
@@ -3562,6 +3610,11 @@ IMPL_LINK_NOARG(SalInstanceTreeView, ExpandingHdl, SvTreeListBox*, bool)
     }
 
     return bRet;
+}
+
+IMPL_LINK(SalInstanceTreeView, PopupMenuHdl, const CommandEvent&, rEvent, bool)
+{
+    return m_aPopupMenuHdl.Call(rEvent);
 }
 
 class SalInstanceSpinButton : public SalInstanceEntry, public virtual weld::SpinButton

@@ -1199,10 +1199,10 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
                 while ( bLoop )
                 {
                     bLoop = false;
-                    ScopedVclPtrInstance< ScConflictsDlg > aDlg( GetActiveDialogParent(), GetViewData(), &rSharedDoc, aConflictsList );
-                    if ( aDlg->Execute() == RET_CANCEL )
+                    vcl::Window* pWin = GetActiveDialogParent();
+                    ScConflictsDlg aDlg(pWin ? pWin->GetFrameWeld() : nullptr, GetViewData(), &rSharedDoc, aConflictsList);
+                    if (aDlg.run() == RET_CANCEL)
                     {
-                        vcl::Window* pWin = GetActiveDialogParent();
                         std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                        VclMessageType::Question, VclButtonsType::YesNo,
                                                                        ScResId(STR_DOC_WILLNOTBESAVED)));

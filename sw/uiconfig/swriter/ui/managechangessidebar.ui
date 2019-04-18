@@ -170,7 +170,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkRadioMenuItem" id="writeraction">
+              <object class="GtkRadioMenuItem" id="writersort0">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="managechangessidebar|writeraction">Action</property>
@@ -178,7 +178,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkRadioMenuItem" id="writerauthor">
+              <object class="GtkRadioMenuItem" id="writersort1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="managechangessidebar|writerauthor">Author</property>
@@ -186,7 +186,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkRadioMenuItem" id="writerdate">
+              <object class="GtkRadioMenuItem" id="writersort2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="managechangessidebar|writerdate">Date</property>
@@ -194,7 +194,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkRadioMenuItem" id="writerdesc">
+              <object class="GtkRadioMenuItem" id="writersort3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="managechangessidebar|writerdesc">Comment</property>
@@ -202,7 +202,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkRadioMenuItem" id="writerposition">
+              <object class="GtkRadioMenuItem" id="writersort4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="managechangessidebar|writerposition">Document Position</property>
