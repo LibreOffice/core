@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_EDITENG_FIELDUPDATER_HXX
-#define INCLUDED_EDITENG_FIELDUPDATER_HXX
+#pragma once
 
 #include <editeng/editengdllapi.h>
 #include <memory>
@@ -42,6 +41,5 @@ public:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

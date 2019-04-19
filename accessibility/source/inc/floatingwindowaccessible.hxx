@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_ACCESSIBILITY_SOURCE_INC_FLOATINGWINDOWACCESSIBLE_HXX
-#define INCLUDED_ACCESSIBILITY_SOURCE_INC_FLOATINGWINDOWACCESSIBLE_HXX
+#pragma once
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
@@ -30,6 +29,5 @@ public:
     virtual void FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet ) override;
 };
 
-#endif // INCLUDED_ACCESSIBILITY_SOURCE_INC_FLOATINGWINDOWACCESSIBLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

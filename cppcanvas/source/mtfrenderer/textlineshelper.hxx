@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_TEXTLINESHELPER_HXX
-#define INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_TEXTLINESHELPER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -83,5 +82,4 @@ public:
 };
 }
 }
-#endif // INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_TEXTLINESHELPER_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

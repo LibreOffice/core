@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_FILTER_HXX
-#define INCLUDED_SC_INC_FILTER_HXX
+#pragma once
 
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
@@ -103,6 +102,5 @@ struct LotusContext;
 
 ErrCode ScImportLotus123old(LotusContext& rContext, SvStream&, ScDocument*, rtl_TextEncoding eSrc);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

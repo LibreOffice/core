@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_CUSTOMANIMATIONPANEL_HXX
-#define INCLUDED_SD_SOURCE_UI_SIDEBAR_CUSTOMANIMATIONPANEL_HXX
+#pragma once
 
 #include "PanelBase.hxx"
 
@@ -49,6 +48,5 @@ private:
 
 } } // end of namespace sd::sidebar
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

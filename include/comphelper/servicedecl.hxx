@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_COMPHELPER_SERVICEDECL_HXX
-#define INCLUDED_COMPHELPER_SERVICEDECL_HXX
+#pragma once
 
 #include <comphelper/comphelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
@@ -332,6 +331,5 @@ void* component_getFactoryHelper( const sal_Char* pImplName,
 } // namespace comphelper
 
 
-#endif //  ! defined( INCLUDED_COMPHELPER_SERVICEDECL_HXX)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

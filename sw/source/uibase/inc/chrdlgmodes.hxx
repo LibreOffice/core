@@ -7,14 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_CHRDLGMODES_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_CHRDLGMODES_HXX
+#pragma once
 
 // DialogModes for SwCharDlg
 enum class SwCharDlgMode {
     Std, Draw, Env, Ann
 };
 
-#endif // INCLUDED_SW_SOURCE_UIBASE_INC_CHRDLGMODES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

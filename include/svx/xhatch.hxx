@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XHATCH_HXX
-#define INCLUDED_SVX_XHATCH_HXX
+#pragma once
 
 #include <tools/color.hxx>
 #include <svx/svxdllapi.h>
@@ -53,6 +52,5 @@ public:
     long            GetAngle() const { return nAngle; }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

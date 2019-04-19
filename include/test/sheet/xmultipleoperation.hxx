@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_SHEET_XMULTIPLEOPERATION_HXX
-#define INCLUDED_TEST_SHEET_XMULTIPLEOPERATION_HXX
+#pragma once
 
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -33,7 +32,5 @@ private:
     static void fillCells(css::uno::Reference<css::sheet::XSpreadsheet> const&);
 };
 }
-
-#endif // INCLUDED_TEST_SHEET_XMULTIPLEOPERATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

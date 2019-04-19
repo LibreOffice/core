@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLINDEXBODYCONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLINDEXBODYCONTEXT_HXX
+#pragma once
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -65,6 +64,5 @@ inline bool XMLIndexBodyContext::HasContent()
     return bHasContent;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

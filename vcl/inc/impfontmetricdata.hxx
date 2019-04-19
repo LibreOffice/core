@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_IMPFONTMETRICDATA_HXX
-#define INCLUDED_VCL_INC_IMPFONTMETRICDATA_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <tools/ref.hxx>
@@ -145,6 +144,5 @@ private:
 
 };
 
-#endif // INCLUDED_VCL_INC_IMPFONTMETRICDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

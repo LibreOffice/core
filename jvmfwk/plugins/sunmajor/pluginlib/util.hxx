@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_UTIL_HXX
-#define INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_UTIL_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <rtl/bootstrap.hxx>
@@ -114,6 +113,5 @@ void bubbleSortVersion(std::vector<rtl::Reference<VendorBase> >& vec);
 rtl::Bootstrap* getBootstrap();
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

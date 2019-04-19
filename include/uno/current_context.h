@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UNO_CURRENT_CONTEXT_H
-#define INCLUDED_UNO_CURRENT_CONTEXT_H
+#pragma once
 
 #include "cppu/cppudllapi.h"
 #include "rtl/ustring.h"
@@ -58,6 +57,5 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_setCurrentContext(
 }
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

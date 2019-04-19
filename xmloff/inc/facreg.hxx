@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_INC_FACREG_HXX
-#define INCLUDED_XMLOFF_INC_FACREG_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -291,6 +290,5 @@ css::uno::Sequence<OUString> XMLAutoTextEventExportOOO_getSupportedServiceNames(
 css::uno::Reference<css::uno::XInterface> XMLAutoTextEventExportOOO_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

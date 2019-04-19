@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_RTL_USTRBUF_H
-#define INCLUDED_RTL_USTRBUF_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -209,6 +208,5 @@ SAL_DLLPUBLIC rtl_uString * SAL_CALL rtl_uStringBuffer_refReturn( rtl_uString *p
 }
 #endif
 
-#endif // INCLUDED_RTL_USTRBUF_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

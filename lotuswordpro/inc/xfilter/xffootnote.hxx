@@ -57,8 +57,7 @@
  * @file
  * Foot note object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFOOTNOTE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFOOTNOTE_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xfcontent.hxx>
@@ -112,6 +111,5 @@ inline void XFFootNote::ToXml(IXFStream *pStrm)
     pStrm->EndElement( "text:footnote" );
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

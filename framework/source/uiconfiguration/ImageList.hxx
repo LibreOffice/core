@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FRAMEWORK_SOURCE_UICONFIGURATION_IMAGELIST_HXX
-#define FRAMEWORK_SOURCE_UICONFIGURATION_IMAGELIST_HXX
+#pragma once
 
 struct ImplImageList;
 
@@ -60,6 +59,5 @@ private:
     sal_uInt16  ImplGetImageId( const OUString& rImageName ) const;
 };
 
-#endif // INCLUDED_VCL_IMAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

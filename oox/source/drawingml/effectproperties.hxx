@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_EFFECTPROPERTIES_HXX
-#define INCLUDED_OOX_DRAWINGML_EFFECTPROPERTIES_HXX
+#pragma once
 
 #include <oox/drawingml/color.hxx>
 #include <oox/helper/propertymap.hxx>
@@ -64,6 +63,5 @@ struct EffectProperties
 } // namespace drawingml
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

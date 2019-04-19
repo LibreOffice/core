@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_DOUBLECHECKEDINIT_HXX
-#define INCLUDED_COMPHELPER_DOUBLECHECKEDINIT_HXX
+#pragma once
 
 #include <osl/getglobalmutex.hxx>
 
@@ -58,7 +57,5 @@ static inline Type* doubleCheckedInit(std::atomic<Type*>& pointer, Function func
 }
 
 } // namespace
-
-#endif // INCLUDED_COMPHELPER_DOUBLECHECKEDINIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

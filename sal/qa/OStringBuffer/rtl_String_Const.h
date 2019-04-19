@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_QA_OSTRINGBUFFER_RTL_STRING_CONST_H
-#define INCLUDED_SAL_QA_OSTRINGBUFFER_RTL_STRING_CONST_H
+#pragma once
 
 #include <limits.h>
 #include <sal/types.h>
@@ -463,6 +462,5 @@ static const sal_Int32 kNonSInt16Max = SHRT_MIN;
 }
 #endif
 
-#endif // INCLUDED_SAL_QA_OSTRINGBUFFER_RTL_STRING_CONST_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

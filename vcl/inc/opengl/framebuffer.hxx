@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_OPENGL_FRAMEBUFFER_H
-#define INCLUDED_VCL_INC_OPENGL_FRAMEBUFFER_H
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -43,6 +42,5 @@ public:
     OpenGLFramebuffer* mpPrevFramebuffer;
 };
 
-#endif // INCLUDED_VCL_INC_OPENGL_FRAMEBUFFER_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_CHART_PLOTAREAMODEL_HXX
-#define INCLUDED_OOX_DRAWINGML_CHART_PLOTAREAMODEL_HXX
+#pragma once
 
 #include <oox/drawingml/shape.hxx>
 #include <drawingml/chart/axismodel.hxx>
@@ -85,6 +84,5 @@ struct PlotAreaModel
 } // namespace drawingml
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

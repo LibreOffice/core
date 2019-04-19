@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLS_LINK_HXX
-#define INCLUDED_TOOLS_LINK_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -125,6 +124,5 @@ Link<Arg, Ret> makeLink(void * instance, Ret (* function)(void *, Arg)) {
 
 } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

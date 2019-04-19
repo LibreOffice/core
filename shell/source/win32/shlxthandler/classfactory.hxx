@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_CLASSFACTORY_HXX
-#define INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_CLASSFACTORY_HXX
+#pragma once
 
 #include <objidl.h>
 
@@ -60,6 +59,5 @@ private:
     static long  s_ServerLocks;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

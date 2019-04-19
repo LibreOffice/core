@@ -33,8 +33,7 @@
  *
  *************************************************************************/
 
-#ifndef INCLUDED_EXAMPLES_DATABASE_DRIVERSKELETON_SRESULTSETMETADATA_HXX
-#define INCLUDED_EXAMPLES_DATABASE_DRIVERSKELETON_SRESULTSETMETADATA_HXX
+#pragma once
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -86,6 +85,5 @@ namespace connectivity
     }
 }
 
-#endif // INCLUDED_EXAMPLES_DATABASE_DRIVERSKELETON_SRESULTSETMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

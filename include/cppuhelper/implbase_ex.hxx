@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CPPUHELPER_IMPLBASE_EX_HXX
-#define INCLUDED_CPPUHELPER_IMPLBASE_EX_HXX
+#pragma once
 
 #include "com/sun/star/uno/Any.h"
 #include "com/sun/star/uno/Sequence.h"
@@ -158,6 +157,5 @@ SAL_CALL WeakAggImplHelper_getTypes(
 
 /// @endcond
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

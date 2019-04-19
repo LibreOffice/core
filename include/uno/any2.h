@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UNO_ANY2_H
-#define INCLUDED_UNO_ANY2_H
+#pragma once
 
 #include "cppu/cppudllapi.h"
 #include "uno/data.h"
@@ -165,6 +164,5 @@ CPPU_DLLPUBLIC void SAL_CALL uno_any_clear(
 }
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,8 +25,7 @@
 
 #include <vector>
 
-#ifndef INCLUDED_SFX2_NOTEBOOKBAR_PRIORITYHBOX_HXX
-#define INCLUDED_SFX2_NOTEBOOKBAR_PRIORITYHBOX_HXX
+#pragma once
 
 /*
  * PriorityHBox is a VclHBox which hides its own children if there is no sufficient space.
@@ -61,7 +60,5 @@ public:
 
     void GetChildrenWithPriorities();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

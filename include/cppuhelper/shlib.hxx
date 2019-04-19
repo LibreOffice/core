@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CPPUHELPER_SHLIB_HXX
-#define INCLUDED_CPPUHELPER_SHLIB_HXX
+#pragma once
 
 #include "cppuhelper/cppuhelperdllapi.h"
 #include "com/sun/star/uno/Reference.h"
@@ -78,6 +77,5 @@ SAL_CALL writeSharedLibComponentInfo(
 
 } // end namespace cppu
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

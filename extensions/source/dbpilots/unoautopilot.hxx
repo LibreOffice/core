@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_UNOAUTOPILOT_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_UNOAUTOPILOT_HXX
+#pragma once
 
 #include <svtools/genericunodialog.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -127,6 +126,5 @@ namespace dbp
 }   // namespace dbp
 
 
-#endif // INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_UNOAUTOPILOT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

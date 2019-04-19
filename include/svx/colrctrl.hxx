@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_COLRCTRL_HXX
-#define INCLUDED_SVX_COLRCTRL_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <sfx2/dockwin.hxx>
@@ -115,6 +114,5 @@ public:
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

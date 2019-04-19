@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_TEXTEFFECTSCONTEXT_HXX
-#define INCLUDED_OOX_DRAWINGML_TEXTEFFECTSCONTEXT_HXX
+#pragma once
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -44,6 +43,5 @@ private:
 
 } }
 
-#endif // INCLUDED_OOX_DRAWINGML_TEXTEFFECTSCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

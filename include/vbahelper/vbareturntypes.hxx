@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VBAHELPER_VBARETURNTYPES_HXX
-#define INCLUDED_VBAHELPER_VBARETURNTYPES_HXX
+#pragma once
 
 #include <com/sun/star/script/XDefaultProperty.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -52,6 +51,5 @@ namespace ooo
     } // vba
 } // ooo
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

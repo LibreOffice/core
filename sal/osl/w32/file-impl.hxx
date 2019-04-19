@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_OSL_W32_FILE_IMPL_HXX
-#define INCLUDED_SAL_OSL_W32_FILE_IMPL_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -21,6 +20,5 @@
 extern "C" oslFileHandle osl_createFileHandleFromOSHandle(
     HANDLE hFile, sal_uInt32 uFlags);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

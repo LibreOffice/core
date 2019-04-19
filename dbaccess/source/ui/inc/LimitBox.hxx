@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_LIMITBOX_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_LIMITBOX_HXX
+#pragma once
 
 #include <vcl/field.hxx>
 #include <rtl/ustring.hxx>
@@ -38,6 +37,5 @@ class LimitBox: public NumericBox
 
 } ///dbaui namespace
 
-#endif /// INCLUDED_DBACCESS_SOURCE_UI_INC_LIMITBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

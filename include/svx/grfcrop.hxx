@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_GRFCROP_HXX
-#define INCLUDED_SVX_GRFCROP_HXX
+#pragma once
 
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
@@ -64,6 +63,5 @@ public:
     sal_Int32 GetBottom() const         { return nBottom; }
 };
 
-#endif  // INCLUDED_SVX_GRFCROP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

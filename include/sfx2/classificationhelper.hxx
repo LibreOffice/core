@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_CLASSIFICATIONHELPER_HXX
-#define INCLUDED_SFX2_CLASSIFICATIONHELPER_HXX
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -222,6 +221,5 @@ SFX2_DLLPUBLIC sfx::ClassificationCreationOrigin getCreationOriginProperty(
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

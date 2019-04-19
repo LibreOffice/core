@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_ACCEL_H
-#define INCLUDED_VCL_INC_ACCEL_H
+#pragma once
 
 #include <vcl/keycod.hxx>
 
@@ -36,6 +35,5 @@ public:
 
 bool ImplGetKeyCode( KeyFuncType eFunc, sal_uInt16& rCode1, sal_uInt16& rCode2, sal_uInt16& rCode3, sal_uInt16& rCode4 );
 
-#endif // INCLUDED_VCL_INC_ACCEL_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

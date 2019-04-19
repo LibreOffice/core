@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_SOURCE_EDITENG_EEOBJ_HXX
-#define INCLUDED_EDITENG_SOURCE_EDITENG_EEOBJ_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
@@ -48,6 +47,5 @@ public:
     sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
 };
 
-#endif // INCLUDED_EDITENG_SOURCE_EDITENG_EEOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

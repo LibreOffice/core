@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_CUSTOMWELD_HXX
-#define INCLUDED_VCL_CUSTOMWELD_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -129,6 +128,5 @@ public:
     int get_grid_left_attach() const { return m_xDrawingArea->get_grid_left_attach(); }
 };
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVL_INT64ITEM_HXX
-#define INCLUDED_SVL_INT64ITEM_HXX
+#pragma once
 
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
@@ -51,6 +50,5 @@ public:
 };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

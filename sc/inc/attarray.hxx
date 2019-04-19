@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_ATTARRAY_HXX
-#define INCLUDED_SC_INC_ATTARRAY_HXX
+#pragma once
 
 #include "global.hxx"
 #include "attrib.hxx"
@@ -301,6 +300,5 @@ inline const ScPatternAttr* ScAttrIterator::Resync( SCROW nRowP, SCROW& rTop, SC
     return Next( rTop, rBottom);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

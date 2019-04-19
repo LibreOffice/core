@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OSX_A11YROLEHELPER_H
-#define INCLUDED_VCL_OSX_A11YROLEHELPER_H
+#pragma once
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
@@ -30,6 +29,5 @@
 +(id)getRoleDescriptionFrom: (NSString *) role with: (NSString *) subRole;
 @end
 
-#endif // INCLUDED_VCL_OSX_A11YROLEHELPER_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

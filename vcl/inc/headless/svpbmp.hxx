@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_HEADLESS_SVPBMP_HXX
-#define INCLUDED_VCL_INC_HEADLESS_SVPBMP_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <tools/solar.h>
@@ -61,6 +60,5 @@ public:
     virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol ) override;
 };
 
-#endif // INCLUDED_VCL_INC_HEADLESS_SVPBMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

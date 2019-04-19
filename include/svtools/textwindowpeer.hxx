@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_TEXTWINDOWPEER_HXX
-#define INCLUDED_SVTOOLS_TEXTWINDOWPEER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -37,6 +36,5 @@ css::uno::Reference<css::awt::XWindowPeer> SVT_DLLPUBLIC createTextWindowPeer(
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

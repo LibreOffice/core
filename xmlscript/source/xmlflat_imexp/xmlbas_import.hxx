@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSCRIPT_SOURCE_XMLFLAT_IMEXP_XMLBAS_IMPORT_HXX
-#define INCLUDED_XMLSCRIPT_SOURCE_XMLFLAT_IMEXP_XMLBAS_IMPORT_HXX
+#pragma once
 
 #include <com/sun/star/document/XXMLOasisBasicImporter.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -267,6 +266,5 @@ namespace xmlscript
 
 }   // namespace xmlscript
 
-#endif // INCLUDED_XMLSCRIPT_SOURCE_XMLFLAT_IMEXP_XMLBAS_IMPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_GALBRWS2_HXX
-#define INCLUDED_SVX_INC_GALBRWS2_HXX
+#pragma once
 
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
@@ -167,6 +166,5 @@ public:
     DECL_STATIC_LINK( GalleryBrowser2, AsyncDispatch_Impl, void*, void );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

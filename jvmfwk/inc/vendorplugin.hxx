@@ -18,8 +18,7 @@
  */
 
 /** @HTML */
-#ifndef INCLUDED_JVMFWK_INC_VENDORPLUGIN_HXX
-#define INCLUDED_JVMFWK_INC_VENDORPLUGIN_HXX
+#pragma once
 
 #include <jvmfwk/framework.hxx>
 #include <rtl/ref.hxx>
@@ -238,6 +237,5 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
  */
 javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, bool *exist);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_SOURCE_CUSTOMIZE_MACROPG_IMPL_HXX
-#define INCLUDED_CUI_SOURCE_CUSTOMIZE_MACROPG_IMPL_HXX
+#pragma once
 
 class SvxMacroTabPage_Impl
 {
@@ -50,6 +49,5 @@ public:
     const OUString& getURL() const { return maURL; }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

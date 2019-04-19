@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_HELPER_LISTENERMULTIPLEXER_HXX
-#define INCLUDED_TOOLKIT_HELPER_LISTENERMULTIPLEXER_HXX
+#pragma once
 
 #include <toolkit/dllapi.h>
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -257,6 +256,5 @@ DECL_LISTENERMULTIPLEXER_START_DLLPUB( TabPageListenerMultiplexer, css::awt::tab
     void SAL_CALL tabPageActivated( const css::awt::tab::TabPageActivatedEvent& aEvent ) override;
 DECL_LISTENERMULTIPLEXER_END
 
-#endif // INCLUDED_TOOLKIT_HELPER_LISTENERMULTIPLEXER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_GALLERYITEM_HXX
-#define INCLUDED_SVX_GALLERYITEM_HXX
+#pragma once
 
 #include <svx/svxdllapi.h>
 #include <svl/poolitem.hxx>
@@ -62,6 +61,5 @@ public:
     virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

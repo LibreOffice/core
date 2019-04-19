@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SOURCE_APPL_SHUTDOWNICON_HXX
-#define INCLUDED_SFX2_SOURCE_APPL_SHUTDOWNICON_HXX
+#pragma once
 
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
@@ -159,6 +158,5 @@ extern "C" {
 #  endif
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

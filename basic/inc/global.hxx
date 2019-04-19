@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_BASIC_INC_GLOBAL_HXX
-#define INCLUDED_BASIC_INC_GLOBAL_HXX
+#pragma once
 
 namespace utl {
     class TransliterationWrapper;
@@ -20,6 +19,5 @@ public:
     static utl::TransliterationWrapper& GetTransliteration();
 };
 
-#endif // INCLUDED_BASIC_INC_GLOBAL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

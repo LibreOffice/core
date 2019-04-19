@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_SHAPEMANAGERIMPL_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_SHAPEMANAGERIMPL_HXX
+#pragma once
 
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/presentation/XShapeEventListener.hpp>
@@ -183,6 +182,5 @@ private:
 } // namespace internal
 } // namespace presentation
 
-#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_SHAPEMANAGERIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

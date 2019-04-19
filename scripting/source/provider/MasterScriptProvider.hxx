@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SCRIPTING_SOURCE_PROVIDER_MASTERSCRIPTPROVIDER_HXX
-#define INCLUDED_SCRIPTING_SOURCE_PROVIDER_MASTERSCRIPTPROVIDER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -140,6 +139,5 @@ css::uno::Reference< css::uno::XInterface > bnf_create( css::uno::Reference< css
 css::uno::Sequence< OUString > bnf_getSupportedServiceNames();
 }
 
-#endif // INCLUDED_SCRIPTING_SOURCE_PROVIDER_MASTERSCRIPTPROVIDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

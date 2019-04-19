@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_DIRECTX_DX_SURFACEBITMAP_HXX
-#define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_SURFACEBITMAP_HXX
+#pragma once
 
 #include <canvas/rendering/isurfaceproxy.hxx>
 #include <canvas/rendering/isurfaceproxymanager.hxx>
@@ -133,6 +132,5 @@ namespace dxcanvas
     typedef std::shared_ptr< DXSurfaceBitmap > DXSurfaceBitmapSharedPtr;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

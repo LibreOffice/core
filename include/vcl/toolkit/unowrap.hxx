@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNOWRAP_HXX
-#define INCLUDED_VCL_UNOWRAP_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.h>
 #include <vcl/dllapi.h>
@@ -90,6 +89,5 @@ protected:
     ~UnoWrapperBase() {}
 };
 
-#endif // INCLUDED_VCL_UNOWRAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

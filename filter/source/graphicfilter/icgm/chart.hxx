@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_CHART_HXX
-#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_CHART_HXX
+#pragma once
 
 /* FILE TYPE CONSTANTS: */
 #define BULCHART        32      /* Bullet chart file.       */
@@ -77,6 +76,5 @@ class CGMChart final
         bool                    IsAnnotation();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

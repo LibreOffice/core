@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DOCPOOL_HXX
-#define INCLUDED_SC_INC_DOCPOOL_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <svl/itempool.hxx>
@@ -51,6 +50,5 @@ public:
                                   const IntlWrapper& rIntl ) const override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_IDL_INC_OBJECT_HXX
-#define INCLUDED_IDL_INC_OBJECT_HXX
+#pragma once
 
 #include "types.hxx"
 #include "slot.hxx"
@@ -83,6 +82,5 @@ public:
     virtual void            WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm ) override;
 };
 
-#endif // INCLUDED_IDL_INC_OBJECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

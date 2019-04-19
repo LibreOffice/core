@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_FRMDIR_HXX
-#define INCLUDED_EDITENG_FRMDIR_HXX
+#pragma once
 
 #include <com/sun/star/text/WritingMode2.hpp>
 
@@ -56,7 +55,6 @@ enum class SvxFrameDirection
 
 const char* getFrmDirResId(size_t nIndex);
 
-#endif // INCLUDED_EDITENG_FRMDIR_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

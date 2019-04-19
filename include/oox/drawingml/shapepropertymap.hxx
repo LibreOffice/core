@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_SHAPEPROPERTYMAP_HXX
-#define INCLUDED_OOX_DRAWINGML_SHAPEPROPERTYMAP_HXX
+#pragma once
 
 #include <cstddef>
 #include <vector>
@@ -164,6 +163,5 @@ private:
 } // namespace drawingml
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

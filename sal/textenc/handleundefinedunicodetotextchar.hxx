@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_TEXTENC_HANDLEUNDEFINEDUNICODETOTEXTCHAR_HXX
-#define INCLUDED_SAL_TEXTENC_HANDLEUNDEFINEDUNICODETOTEXTCHAR_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -27,4 +26,3 @@ bool SAL_DLLPUBLIC handleUndefinedUnicodeToTextChar(
 
 } } }
 
-#endif

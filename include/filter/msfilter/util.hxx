@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_FILTER_MSFILTER_UTIL_HXX
-#define INCLUDED_FILTER_MSFILTER_UTIL_HXX
+#pragma once
 
 #include <filter/msfilter/msfilterdllapi.h>
 #include <svx/msdffdef.hxx>
@@ -139,6 +138,5 @@ MSFILTER_DLLPUBLIC sal_uInt8 TransColToIco( const Color& rCol );
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

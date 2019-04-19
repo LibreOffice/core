@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OSL_SOCKET_H
-#define INCLUDED_OSL_SOCKET_H
+#pragma once
 
 #include "rtl/ustring.h"
 #include "osl/time.h"
@@ -915,6 +914,5 @@ SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **strLoc
 }
 #endif
 
-#endif // INCLUDED_OSL_SOCKET_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

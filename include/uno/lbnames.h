@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UNO_LBNAMES_H
-#define INCLUDED_UNO_LBNAMES_H
+#pragma once
 
 /* I assume "LB" means "Language Binding" */
 
@@ -48,6 +47,5 @@ provoking error here, because PP ignores #error
 /** Environment type name for CLI (Common Language Infrastructure). */
 #define UNO_LB_CLI "cli"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

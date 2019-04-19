@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPILERPLUGINS_CLANG_CHECK_HXX
-#define INCLUDED_COMPILERPLUGINS_CLANG_CHECK_HXX
+#pragma once
 
 #include <cstddef>
 
@@ -276,6 +275,5 @@ bool isOkToRemoveArithmeticCast(
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,8 +21,7 @@
  *  XML export of all text fields
  */
 
-#ifndef INCLUDED_XMLOFF_INC_TXTFLDE_HXX
-#define INCLUDED_XMLOFF_INC_TXTFLDE_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.h>
 #include <xmloff/xmlnmspe.hxx>
@@ -412,6 +411,5 @@ private:
 };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

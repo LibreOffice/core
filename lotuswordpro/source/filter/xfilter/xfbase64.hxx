@@ -57,8 +57,7 @@
  * @file
  * Base64 tool.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFBASE64_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFBASE64_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 
@@ -78,5 +77,4 @@ public:
     static OUString    Encode(sal_uInt8 const *buf, sal_Int32 len);
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

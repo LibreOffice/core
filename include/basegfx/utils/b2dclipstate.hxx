@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_UTILS_B2DCLIPSTATE_HXX
-#define INCLUDED_BASEGFX_UTILS_B2DCLIPSTATE_HXX
+#pragma once
 
 #include <o3tl/cow_wrapper.hxx>
 #include <basegfx/basegfxdllapi.h>
@@ -90,6 +89,5 @@ namespace basegfx
     }
 }
 
-#endif // INCLUDED_BASEGFX_UTILS_B2DCLIPSTATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

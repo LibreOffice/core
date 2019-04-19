@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXAMPLES_CUSTOMPANEL_CTP_PANEL_HXX
-#define INCLUDED_EXAMPLES_CUSTOMPANEL_CTP_PANEL_HXX
+#pragma once
 
 #include <com/sun/star/ui/XToolPanel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -103,6 +102,5 @@ namespace sd { namespace colortoolpanel
 } } // namespace sd::colortoolpanel
 
 
-#endif // INCLUDED_EXAMPLES_CUSTOMPANEL_CTP_PANEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

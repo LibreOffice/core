@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMS_SOURCE_XFORMS_XPATHLIB_XPATHLIB_HXX
-#define INCLUDED_FORMS_SOURCE_XFORMS_XPATHLIB_XPATHLIB_HXX
+#pragma once
 
 #include <libxml/tree.h>
 #include <libxml/xpath.h>
@@ -74,6 +73,5 @@ xmlXPathFunction xforms_lookupFunc(void *ctxt, const xmlChar *name, const xmlCha
 
 }
 
-#endif // INCLUDED_FORMS_SOURCE_XFORMS_XPATHLIB_XPATHLIB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

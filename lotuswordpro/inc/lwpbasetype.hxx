@@ -59,8 +59,7 @@
  *  PanoseNumber, Point
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPBASETYPE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPBASETYPE_HXX
+#pragma once
 
 #include "lwpobjstrm.hxx"
 #include "lwpheader.hxx"
@@ -119,6 +118,5 @@ private:
 void LwpPoint::SetX(sal_Int32 nX){m_nX = nX;}
 void LwpPoint::SetY(sal_Int32 nY){m_nY = nY;}
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

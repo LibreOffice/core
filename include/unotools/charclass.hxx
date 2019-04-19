@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_CHARCLASS_HXX
-#define INCLUDED_UNOTOOLS_CHARCLASS_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 #include <i18nlangtag/languagetag.hxx>
@@ -186,6 +185,5 @@ private:
     const css::lang::Locale &  getMyLocale() const;
 };
 
-#endif // INCLUDED_UNOTOOLS_CHARCLASS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

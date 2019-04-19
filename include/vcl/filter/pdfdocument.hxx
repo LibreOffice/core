@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_FILTER_PDFDOCUMENT_HXX
-#define INCLUDED_VCL_FILTER_PDFDOCUMENT_HXX
+#pragma once
 
 #include <memory>
 #include <map>
@@ -431,7 +430,5 @@ public:
 
 } // namespace pdfio
 } // namespace xmlsecurity
-
-#endif // INCLUDED_VCL_FILTER_PDFDOCUMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

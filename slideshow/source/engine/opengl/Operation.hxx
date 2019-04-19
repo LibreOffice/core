@@ -25,8 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef INCLUDED_OGLTRANS_OPERATIONS_HXX_
-#define INCLUDED_OGLTRANS_OPERATIONS_HXX_
+#pragma once
 
 #include <config_lgpl.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -261,6 +260,5 @@ private:
 std::shared_ptr<RotateAndScaleDepthByHeight>
 makeRotateAndScaleDepthByHeight(const glm::vec3& Axis,const glm::vec3& Origin,double Angle, bool bScale, bool bInter, double T0, double T1);
 
-#endif // INCLUDED_SLIDESHOW_OPERATIONS_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

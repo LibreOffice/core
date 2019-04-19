@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FPICKER_SOURCE_AQUA_FPSERVICEINFO_HXX
-#define INCLUDED_FPICKER_SOURCE_AQUA_FPSERVICEINFO_HXX
+#pragma once
 
 // the service names
 #define FILE_PICKER_SERVICE_NAME "com.sun.star.ui.dialogs.AquaFilePicker"
@@ -28,6 +27,5 @@
 #define FILE_PICKER_IMPL_NAME    "com.sun.star.ui.dialogs.SalAquaFilePicker"
 #define FOLDER_PICKER_IMPL_NAME    "com.sun.star.ui.dialogs.SalAquaFolderPicker"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_DISABLEINTERACTIONHELPER_HXX
-#define INCLUDED_COMPHELPER_DISABLEINTERACTIONHELPER_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <uno/current_context.hxx>
@@ -43,7 +42,5 @@ private:
 };
 
 } // namespace comphelper
-
-#endif // INCLUDED_COMPHELPER_DISABLEINTERACTIONHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

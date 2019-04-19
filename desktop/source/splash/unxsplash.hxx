@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_SPLASH_UNXSPLASH_HXX
-#define INCLUDED_DESKTOP_SOURCE_SPLASH_UNXSPLASH_HXX
+#pragma once
 
 #include <stdio.h>
 
@@ -69,6 +68,5 @@ css::uno::Reference< css::uno::XInterface > UnxSplash_createInstance(const css::
 OUString UnxSplash_getImplementationName();
 css::uno::Sequence< OUString > UnxSplash_getSupportedServiceNames() throw ();
 
-#endif // INCLUDED_DESKTOP_SOURCE_SPLASH_UNXSPLASH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

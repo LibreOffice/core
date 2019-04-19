@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOCONTROLS_SOURCE_INC_PROGRESSMONITOR_HXX
-#define INCLUDED_UNOCONTROLS_SOURCE_INC_PROGRESSMONITOR_HXX
+#pragma once
 
 #include <com/sun/star/awt/XFileDialog.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
@@ -292,6 +291,5 @@ private:
 
 }
 
-#endif // INCLUDED_UNOCONTROLS_SOURCE_INC_PROGRESSMONITOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

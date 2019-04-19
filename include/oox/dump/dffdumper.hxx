@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DUMP_DFFDUMPER_HXX
-#define INCLUDED_OOX_DUMP_DFFDUMPER_HXX
+#pragma once
 
 #include <oox/dump/dumperbase.hxx>
 #include <sal/types.h>
@@ -60,7 +59,6 @@ private:
 } // namespace dump
 } // namespace oox
 
-#endif
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

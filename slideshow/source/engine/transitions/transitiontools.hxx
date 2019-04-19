@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_TRANSITIONTOOLS_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_TRANSITIONTOOLS_HXX
+#pragma once
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -44,6 +43,5 @@ namespace internal {
 }
 }
 
-#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_TRANSITIONTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

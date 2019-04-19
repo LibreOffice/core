@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_OBJFACE_HXX
-#define INCLUDED_SFX2_OBJFACE_HXX
+#pragma once
 
 #include <memory>
 #include <rtl/ustring.hxx>
@@ -116,6 +115,5 @@ inline sal_uInt16 SfxInterface::Count() const
     return nCount;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

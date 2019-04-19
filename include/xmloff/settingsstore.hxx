@@ -9,8 +9,7 @@
 
 // Simple interface to allow serialization of document settings
 
-#ifndef INCLUDED_XMLOFF_SETTINGSSTORE_HXX
-#define INCLUDED_XMLOFF_SETTINGSSTORE_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -38,6 +37,5 @@ protected:
     ~DocumentSettingsSerializer() {}
 };
 
-#endif // INCLUDED_XMLOFF_SETTINGSSTORE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

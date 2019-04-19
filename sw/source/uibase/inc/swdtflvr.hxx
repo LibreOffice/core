@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_SWDTFLVR_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_SWDTFLVR_HXX
+#pragma once
 
 #include <sfx2/objsh.hxx>
 
@@ -216,6 +215,5 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

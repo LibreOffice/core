@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_GTK_ATKBRIDGE_HXX
-#define INCLUDED_VCL_INC_UNX_GTK_ATKBRIDGE_HXX
+#pragma once
 
 #include <vclpluginapi.h>
 
 bool VCLPLUG_GTK_PUBLIC InitAtkBridge();
 void VCLPLUG_GTK_PUBLIC DeInitAtkBridge();
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

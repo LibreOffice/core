@@ -59,8 +59,7 @@
  * Styles for paragraph may include many style,include font,indent,margin,
  * shadow,line height,and so on.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPARASTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPARASTYLE_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -298,5 +297,4 @@ inline void XFDefaultParaStyle::SetTabDistance(double len)
     m_fTabDistance = len;
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

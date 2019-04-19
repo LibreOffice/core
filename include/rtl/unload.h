@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_RTL_UNLOAD_H
-#define INCLUDED_RTL_UNLOAD_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -87,6 +86,5 @@ SAL_DLLPUBLIC sal_Bool rtl_moduleCount_canUnload( rtl_StandardModuleCount * that
 #endif
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

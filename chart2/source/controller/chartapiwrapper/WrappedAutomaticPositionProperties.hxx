@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDAUTOMATICPOSITIONPROPERTIES_HXX
-#define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDAUTOMATICPOSITIONPROPERTIES_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <memory>
@@ -41,6 +40,5 @@ public:
 
 } //namespace wrapper
 } //namespace chart
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

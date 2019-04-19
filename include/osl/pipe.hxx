@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_OSL_PIPE_HXX
-#define INCLUDED_OSL_PIPE_HXX
+#pragma once
 
 #include "sal/config.h"
 
@@ -215,6 +214,5 @@ namespace osl
     }
 
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_RETRIEVEDINPUTSTREAMDATA_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_RETRIEVEDINPUTSTREAMDATA_HXX
+#pragma once
 
 #include <tools/link.hxx>
 #include <sal/types.h>
@@ -84,6 +83,5 @@ class SwRetrievedInputStreamDataManager
 
         std::map< tDataKey, tData > maInputStreamData;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

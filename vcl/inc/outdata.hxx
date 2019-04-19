@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OUTDATA_HXX
-#define INCLUDED_VCL_INC_OUTDATA_HXX
+#pragma once
 
 #include <tools/color.hxx>
 #include <vcl/salgtype.hxx>
@@ -28,6 +27,5 @@ inline bool ImplIsColorTransparent( Color aColor )
     return aColor.GetTransparency() != 0;
 }
 
-#endif // INCLUDED_VCL_INC_OUTDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

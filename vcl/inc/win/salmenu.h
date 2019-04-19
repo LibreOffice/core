@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_WIN_SALMENU_H
-#define INCLUDED_VCL_INC_WIN_SALMENU_H
+#pragma once
 
 #include <vcl/bitmap.hxx>
 #include <salmenu.hxx>
@@ -63,6 +62,5 @@ public:
     WinSalMenu*  mpSalMenu;    // the menu where this item is inserted
 };
 
-#endif // INCLUDED_VCL_INC_WIN_SALMENU_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

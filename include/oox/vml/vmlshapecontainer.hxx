@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_VML_VMLSHAPECONTAINER_HXX
-#define INCLUDED_OOX_VML_VMLSHAPECONTAINER_HXX
+#pragma once
 
 #include <cstddef>
 #include <functional>
@@ -140,6 +139,5 @@ const ShapeBase* ShapeContainer::findShape( const Functor& rFunctor ) const
 } // namespace vml
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

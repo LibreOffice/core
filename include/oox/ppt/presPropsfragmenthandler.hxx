@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OOX_PPT_PRESPROPSFRAGMENTHANDLER_HXX
-#define INCLUDED_OOX_PPT_PRESPROPSFRAGMENTHANDLER_HXX
+#pragma once
 
 #include <oox/core/fragmenthandler2.hxx>
 
@@ -35,7 +34,5 @@ private:
 };
 } // namespace ppt
 } // namespace oox
-
-#endif // INCLUDED_OOX_PPT_PRESPROPSFRAGMENTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

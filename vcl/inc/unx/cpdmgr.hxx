@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_CPDMGR_HXX
-#define INCLUDED_VCL_INC_UNX_CPDMGR_HXX
+#pragma once
 
 #include <config_dbus.h>
 #include <config_gio.h>
@@ -120,7 +119,6 @@ public:
 
 } // namespace psp
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

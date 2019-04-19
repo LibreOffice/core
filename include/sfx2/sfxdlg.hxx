@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_SFXDLG_HXX
-#define INCLUDED_SFX2_SFXDLG_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
@@ -142,6 +141,5 @@ public:
         vcl::Window* pParent, const OUString& rExtensionId ) = 0;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

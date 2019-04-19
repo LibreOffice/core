@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_RTL_DIGEST_H
-#define INCLUDED_RTL_DIGEST_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -635,6 +634,5 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_PBKDF2 (
 }
 #endif
 
-#endif // INCLUDED_RTL_DIGEST_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

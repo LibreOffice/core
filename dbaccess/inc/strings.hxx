@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DBACCESS_INC_STRINGS_HXX
-#define INCLUDED_DBACCESS_INC_STRINGS_HXX
+#pragma once
 
 // property names
 
@@ -278,6 +277,5 @@
 
 #define STR_AUTOTEXTSEPARATORLIST "\"\t34\t'\t39"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

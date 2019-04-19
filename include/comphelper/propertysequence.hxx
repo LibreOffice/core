@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_PROPERTYSEQUENCE_HXX
-#define INCLUDED_COMPHELPER_PROPERTYSEQUENCE_HXX
+#pragma once
 
 #include <utility>
 #include <initializer_list>
@@ -54,6 +53,5 @@ namespace comphelper
 }   // namespace comphelper
 
 
-#endif // INCLUDED_COMPHELPER_PROPERTYSEQUENCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

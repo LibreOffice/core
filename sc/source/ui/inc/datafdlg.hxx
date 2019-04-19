@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_DATAFDLG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_DATAFDLG_HXX
+#pragma once
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
@@ -72,6 +71,5 @@ private:
     DECL_LINK(Impl_ScrollHdl, ScrollBar*, void);
     DECL_LINK(Impl_DataModifyHdl, Edit&, void);
 };
-#endif // INCLUDED_SC_SOURCE_UI_INC_DATAFDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

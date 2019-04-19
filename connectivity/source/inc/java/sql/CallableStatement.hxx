@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CALLABLESTATEMENT_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CALLABLESTATEMENT_HXX
+#pragma once
 
 #include <java/sql/PreparedStatement.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -79,6 +78,5 @@ namespace connectivity
         virtual void SAL_CALL registerNumericOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, sal_Int32 scale ) override;
     };
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CALLABLESTATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

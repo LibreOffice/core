@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_OSL_PROCESS_H
-#define INCLUDED_OSL_PROCESS_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -417,6 +416,5 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_setProcessLocale(
 }
 #endif
 
-#endif // INCLUDED_OSL_PROCESS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

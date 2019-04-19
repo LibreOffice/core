@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_XMLTEXTMASTERSTYLESCONTEXT_HXX
-#define INCLUDED_XMLOFF_XMLTEXTMASTERSTYLESCONTEXT_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
@@ -47,6 +46,5 @@ public:
     virtual ~XMLTextMasterStylesContext() override;
 };
 
-#endif  //  _XMLOFF_XMLTEXTMASTERSTYLECONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

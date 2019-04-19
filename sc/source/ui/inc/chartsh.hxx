@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CHARTSH_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CHARTSH_HXX
+#pragma once
 
 #include <sfx2/shell.hxx>
 #include <shellids.hxx>
@@ -45,6 +44,5 @@ public:
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

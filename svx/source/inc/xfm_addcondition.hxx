@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_INC_XFM_ADDCONDITION_HXX
-#define INCLUDED_SVX_SOURCE_INC_XFM_ADDCONDITION_HXX
+#pragma once
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xforms/XModel.hpp>
@@ -71,6 +70,5 @@ namespace svxform
 }
 
 
-#endif // INCLUDED_SVX_SOURCE_INC_XFM_ADDCONDITION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

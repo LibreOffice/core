@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_FLASH_IMPSWFDIALOG_HXX
-#define INCLUDED_FILTER_SOURCE_FLASH_IMPSWFDIALOG_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -49,6 +48,5 @@ public:
     css::uno::Sequence< css::beans::PropertyValue > GetFilterData();
 };
 
-#endif // INCLUDED_FILTER_SOURCE_FLASH_IMPSWFDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

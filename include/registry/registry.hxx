@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_REGISTRY_HXX
-#define INCLUDED_REGISTRY_REGISTRY_HXX
+#pragma once
 
 #include <registry/regdllapi.h>
 #include <registry/regtype.h>
@@ -1056,6 +1055,5 @@ inline RegError Registry::mergeKey(RegistryKey& rKey,
     {  return m_pApi->mergeKey(m_hImpl, rKey.m_hImpl, keyName.pData, regFileName.pData, false/*bWarnings*/, bReport); }
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

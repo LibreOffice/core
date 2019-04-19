@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CPPUHELPER_COMPBASE_EX_HXX
-#define INCLUDED_CPPUHELPER_COMPBASE_EX_HXX
+#pragma once
 
 #include "cppuhelper/interfacecontainer.h"
 #include "com/sun/star/lang/XComponent.hpp"
@@ -153,6 +152,5 @@ CPPUHELPER_DLLPUBLIC css::uno::Sequence< css::uno::Type > SAL_CALL WeakAggCompon
 
 /// @endcond
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

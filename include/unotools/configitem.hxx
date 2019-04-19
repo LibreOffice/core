@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_CONFIGITEM_HXX
-#define INCLUDED_UNOTOOLS_CONFIGITEM_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -180,6 +179,5 @@ namespace utl
             ConfigItemMode GetMode() const { return m_nMode;}
     };
 }//namespace utl
-#endif // INCLUDED_UNOTOOLS_CONFIGITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

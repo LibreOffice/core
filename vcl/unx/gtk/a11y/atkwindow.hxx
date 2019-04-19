@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GTK_A11Y_ATKWINDOW_HXX
-#define INCLUDED_VCL_UNX_GTK_A11Y_ATKWINDOW_HXX
+#pragma once
 
 #include <atk/atk.h>
 
 GType ooo_window_wrapper_get_type();
 void restore_gail_window_vtable();
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

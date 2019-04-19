@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WRTWW8_HXX
-#define INCLUDED_SW_SOURCE_FILTER_WW8_WRTWW8_HXX
+#pragma once
 
 #include <sot/storage.hxx>
 #include <tools/solar.h>
@@ -1611,6 +1610,5 @@ public:
     void setCvBack(sal_uInt32 cvBack) { m_cvBack = cvBack; }
 };
 
-#endif // INCLUDED_SW_SOURCE_FILTER_WW8_WRTWW8_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

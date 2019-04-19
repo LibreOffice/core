@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SQLERROR_HXX
-#define INCLUDED_CONNECTIVITY_SQLERROR_HXX
+#pragma once
 
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <connectivity/dbtoolsdllapi.hxx>
@@ -253,6 +252,5 @@ namespace connectivity
 } // namespace connectivity
 
 
-#endif // INCLUDED_CONNECTIVITY_SQLERROR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_UNOTEST_MACROS_TEST_HXX
-#define INCLUDED_UNOTEST_MACROS_TEST_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <unotest/detail/unotestdllapi.hxx>
@@ -36,6 +35,5 @@ protected:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

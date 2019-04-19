@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_ENVIRONMENTOFANCHOREDOBJECT_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_ENVIRONMENTOFANCHOREDOBJECT_HXX
+#pragma once
 
 class SwFrame;
 class SwLayoutFrame;
@@ -98,6 +97,5 @@ namespace objectpositioning
     };
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

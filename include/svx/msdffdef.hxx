@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_MSDFFDEF_HXX
-#define INCLUDED_SVX_MSDFFDEF_HXX
+#pragma once
 
 #include <limits.h>
 #include <sal/types.h>
@@ -857,6 +856,5 @@ enum MSO_TextGeometryProperties {
 //ALT_TXT_MSINTEROP
 #define MSPROP_DESCRIPTION_MAX_LEN  4096
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

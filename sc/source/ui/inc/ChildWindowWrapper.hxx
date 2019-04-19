@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CHILDWINDOWWRAPPER_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CHILDWINDOWWRAPPER_HXX
+#pragma once
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/dispatch.hxx>
@@ -149,6 +148,5 @@ private:
     }
 };
 
-#endif // INCLUDED_SC_SOURCE_UI_INC_CHILDWINDOWWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

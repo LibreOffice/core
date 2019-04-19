@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_PACKAGE_SOURCE_MANIFEST_MANIFESTDEFINES_HXX
-#define INCLUDED_PACKAGE_SOURCE_MANIFEST_MANIFESTDEFINES_HXX
+#pragma once
 
 #include <PackageConstants.hxx>
 
@@ -93,6 +92,5 @@
 #define PGP_NAME "PGP"
 #define PBKDF2_URL "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#pbkdf2"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

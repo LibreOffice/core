@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SALHELPER_TEST_RTTI_SAMPLELIBRTTI_HXX
-#define INCLUDED_SALHELPER_TEST_RTTI_SAMPLELIBRTTI_HXX
+#pragma once
 
 class MyClassA
 {
@@ -39,6 +38,5 @@ protected:
     virtual void  funcC();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

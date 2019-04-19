@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_GALMISC_HXX
-#define INCLUDED_SVX_GALMISC_HXX
+#pragma once
 
 #include <sot/formats.hxx>
 #include <tools/urlobj.hxx>
@@ -194,5 +193,4 @@ public:
     void*            GetData1() const { return mnData1; }
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

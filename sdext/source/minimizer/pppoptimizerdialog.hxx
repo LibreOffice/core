@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZERDIALOG_HXX
-#define INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZERDIALOG_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/document/XExporter.hpp>
@@ -86,6 +85,5 @@ css::uno::Sequence< OUString > PPPOptimizerDialog_getSupportedServiceNames();
 css::uno::Reference< css::uno::XInterface > PPPOptimizerDialog_createInstance( const css::uno::Reference< css::uno::XComponentContext > & rSMgr );
 
 
-#endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZERDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

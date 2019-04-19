@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UNO_DISPATCHER_H
-#define INCLUDED_UNO_DISPATCHER_H
+#pragma once
 
 #include "sal/types.h"
 #include "uno/any2.h"
@@ -83,6 +82,5 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_Interface
 }
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

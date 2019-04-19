@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_SOURCE_CONTROLS_TREE_TREECONTROL_HXX
-#define INCLUDED_TOOLKIT_SOURCE_CONTROLS_TREE_TREECONTROL_HXX
+#pragma once
 
 #include <toolkit/controls/unocontrols.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
@@ -62,6 +61,5 @@ public:
 
 } // toolkit
 
-#endif // _ INCLUDED_TOOLKIT_SOURCE_CONTROLS_TREE_TREECONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

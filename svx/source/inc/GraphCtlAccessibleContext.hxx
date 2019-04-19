@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_SVX_SOURCE_INC_GRAPHCTLACCESSIBLECONTEXT_HXX
-#define INCLUDED_SVX_SOURCE_INC_GRAPHCTLACCESSIBLECONTEXT_HXX
+#pragma once
 
 #include <cppuhelper/compbase7.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -214,6 +213,5 @@ private:
     bool mbDisposed;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_OPENGL_RENDERLIST_H
-#define INCLUDED_VCL_INC_OPENGL_RENDERLIST_H
+#pragma once
 
 #include <unordered_map>
 
@@ -168,6 +167,5 @@ public:
                          Color nLineColor, bool bUseAA);
 };
 
-#endif // INCLUDED_VCL_INC_OPENGL_RENDERLIST_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

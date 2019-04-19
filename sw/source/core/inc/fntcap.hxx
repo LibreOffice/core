@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_FNTCAP_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_FNTCAP_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include "TextFrameIndex.hxx"
@@ -32,6 +31,5 @@ TextFrameIndex sw_CalcCaseMap( const SwFont& rFnt,
                           TextFrameIndex nIdx );
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

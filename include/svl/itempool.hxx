@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_ITEMPOOL_HXX
-#define INCLUDED_SVL_ITEMPOOL_HXX
+#pragma once
 
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
@@ -215,6 +214,5 @@ inline sal_uInt32 SfxItemPool::ReleaseRef(const SfxPoolItem& rItem, sal_uInt32 n
     return rItem.ReleaseRef(n);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPCANVAS_POLYPOLYGON_HXX
-#define INCLUDED_CPPCANVAS_POLYPOLYGON_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppcanvas/canvasgraphic.hxx>
@@ -71,6 +70,5 @@ namespace cppcanvas
     typedef std::shared_ptr< ::cppcanvas::PolyPolygon > PolyPolygonSharedPtr;
 }
 
-#endif // INCLUDED_CPPCANVAS_POLYPOLYGON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

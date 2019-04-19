@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_GENERIC_GENPSPGRAPHICS_H
-#define INCLUDED_VCL_INC_GENERIC_GENPSPGRAPHICS_H
+#pragma once
 
 #include <vcl/vclenum.hxx>
 #include <config_cairo_canvas.h>
@@ -207,6 +206,5 @@ public:
 #endif // ENABLE_CAIRO_CANVAS
 };
 
-#endif // INCLUDED_VCL_INC_GENERIC_GENPSPGRAPHICS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

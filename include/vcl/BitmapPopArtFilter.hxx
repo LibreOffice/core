@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPPOPARTILTER_HXX
-#define INCLUDED_VCL_BITMAPPOPARTILTER_HXX
+#pragma once
 
 #include <vcl/BitmapFilter.hxx>
 
@@ -27,7 +26,5 @@ private:
         sal_uInt32 mnCount;
     };
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

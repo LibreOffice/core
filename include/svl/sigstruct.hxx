@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_SIGSTRUCT_HXX
-#define INCLUDED_XMLSECURITY_INC_SIGSTRUCT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/util/DateTime.hpp>
@@ -155,6 +154,5 @@ struct SignatureInformation
 
 typedef ::std::vector< SignatureInformation > SignatureInformations;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

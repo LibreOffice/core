@@ -8,8 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_DLLAPI_H
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_DLLAPI_H
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -20,6 +19,5 @@
 #define LO_DLLPUBLIC_MORK SAL_DLLPUBLIC_IMPORT
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

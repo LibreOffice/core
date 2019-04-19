@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_CHARHIDDENITEM_HXX
-#define INCLUDED_EDITENG_CHARHIDDENITEM_HXX
+#pragma once
 
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
@@ -41,6 +40,5 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

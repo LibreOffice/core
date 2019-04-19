@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SVXCOLORVALUESET_HXX
-#define INCLUDED_SVX_SVXCOLORVALUESET_HXX
+#pragma once
 
 #include <svtools/valueset.hxx>
 #include <svx/svxdllapi.h>
@@ -55,6 +54,5 @@ public:
     Size layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntryCount);
 };
 
-#endif // INCLUDED_SVX_SVXCOLORVALUESET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

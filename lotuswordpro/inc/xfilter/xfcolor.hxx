@@ -57,8 +57,7 @@
  * @file
  * Color object to serial to xml filter.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCOLOR_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCOLOR_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 
@@ -109,6 +108,5 @@ private:
     bool    m_bValid;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

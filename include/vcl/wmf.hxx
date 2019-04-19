@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_WMF_HXX
-#define INCLUDED_VCL_WMF_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -34,6 +33,5 @@ bool ConvertGDIMetaFileToEMF(const GDIMetaFile & rMTF, SvStream & rTargetStream)
 
 VCL_DLLPUBLIC bool WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

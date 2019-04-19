@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_EDATABASEMETADATA_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_EDATABASEMETADATA_HXX
+#pragma once
 
 #include <file/FDatabaseMetaData.hxx>
 
@@ -43,6 +42,5 @@ namespace connectivity
         };
     }
 }
-#endif // _CONNECTIVITY_FLAT_ODATABASEMETADATA_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

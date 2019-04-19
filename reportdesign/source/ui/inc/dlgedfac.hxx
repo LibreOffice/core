@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDFAC_HXX
-#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDFAC_HXX
+#pragma once
 
 
 #include <svx/svdobj.hxx>
@@ -38,6 +37,5 @@ public:
     DECL_STATIC_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, SdrObject* );
 };
 }
-#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDFAC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

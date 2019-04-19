@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_FTNFRM_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_FTNFRM_HXX
+#pragma once
 
 #include "layfrm.hxx"
 
@@ -145,6 +144,5 @@ public:
     SwContentFrame* FindLastContent();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

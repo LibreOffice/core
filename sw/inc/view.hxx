@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_VIEW_HXX
-#define INCLUDED_SW_INC_VIEW_HXX
+#pragma once
 
 #include <vcl/timer.hxx>
 #include <sfx2/viewsh.hxx>
@@ -693,6 +692,5 @@ VclPtr<SfxTabPage> CreatePrintOptionsPage(TabPageParent pParent,
 
 extern bool bDocSzUpdated;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

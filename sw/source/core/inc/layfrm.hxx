@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_LAYFRM_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_LAYFRM_HXX
+#pragma once
 
 #include "frame.hxx"
 #include <swdllapi.h>
@@ -221,6 +220,5 @@ inline SwFrame* SwLayoutFrame::GetLastLower()
     return const_cast<SwFrame*>(static_cast<const SwLayoutFrame*>(this)->GetLastLower());
 }
 
-#endif // INCLUDED_SW_SOURCE_CORE_INC_LAYFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

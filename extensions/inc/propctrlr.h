@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_PROPCTRLR_H
-#define EXTENSIONS_PROPCTRLR_H
+#pragma once
 
 #define UID_PROP_DLG_FONT_TYPE                          "EXTENSIONS_UID_PROP_DLG_FONT_TYPE"
 #define UID_PROP_DLG_IMAGE_URL                          "EXTENSIONS_UID_PROP_DLG_IMAGE_URL"
@@ -79,6 +78,5 @@
 #define UID_BRWEVT_ERROROCCURRED                        "EXTENSIONS_UID_BRWEVT_ERROROCCURRED"
 #define UID_BRWEVT_ADJUSTMENTVALUECHANGED               "EXTENSIONS_UID_BRWEVT_ADJUSTMENTVALUECHANGED"
 
-#endif // EXTENSIONS_PROPCTRLR_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

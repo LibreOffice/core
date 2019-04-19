@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UI_FLDUI_FLDPAGE_HXX
-#define INCLUDED_SW_SOURCE_UI_FLDUI_FLDPAGE_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 #include <fldmgr.hxx>
@@ -86,6 +85,5 @@ public:
     virtual sal_uInt16      GetGroup() = 0;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,8 +19,7 @@
 
 /** @HTML */
 
-#ifndef INCLUDED_JVMFWK_FRAMEWORK_HXX
-#define INCLUDED_JVMFWK_FRAMEWORK_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -715,6 +714,5 @@ JVMFWK_DLLPUBLIC void jfw_lock();
 */
 JVMFWK_DLLPUBLIC void jfw_unlock();
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

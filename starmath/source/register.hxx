@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STARMATH_SOURCE_REGISTER_HXX
-#define INCLUDED_STARMATH_SOURCE_REGISTER_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sfx2/sfxmodelfactory.hxx>
@@ -32,6 +31,5 @@ OUString
 css::uno::Reference< css::uno::XInterface >
         SmDocument_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr, SfxModelFlags _nCreationFlags);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

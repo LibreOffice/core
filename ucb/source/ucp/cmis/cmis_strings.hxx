@@ -10,8 +10,7 @@
  *
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_CMIS_CMIS_STRINGS_HXX
-#define INCLUDED_UCB_SOURCE_UCP_CMIS_CMIS_STRINGS_HXX
+#pragma once
 
 #define CMIS_TYPE_STRING      "String"
 #define CMIS_TYPE_INTEGER     "Integer"
@@ -19,5 +18,4 @@
 #define CMIS_TYPE_DATETIME    "Datetime"
 #define CMIS_TYPE_BOOL        "Bool"
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

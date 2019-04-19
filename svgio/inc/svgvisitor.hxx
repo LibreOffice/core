@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SVGIO_INC_SVGVISITOR_HXX
-#define INCLUDED_SVGIO_INC_SVGVISITOR_HXX
+#pragma once
 
 #include <basegfx/DrawCommands.hxx>
 #include <memory>
@@ -35,7 +34,5 @@ public:
 };
 }
 }
-
-#endif // INCLUDED_SVGIO_INC_SVGVISITOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_INC_DOCRECOVERY_HXX
-#define INCLUDED_SVX_SOURCE_INC_DOCRECOVERY_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -502,6 +501,5 @@ private:
     }
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

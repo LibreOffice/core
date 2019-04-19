@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_FIELDDESCCONTROL_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_FIELDDESCCONTROL_HXX
+#pragma once
 
 #include <vcl/tabpage.hxx>
 #include "QEnumTypes.hxx"
@@ -207,6 +206,5 @@ namespace dbaui
         void setEditWidth(sal_Int32 _nWidth) { m_nWidth = _nWidth; }
     };
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,8 +57,7 @@
  * @file
  * Tool for sax writer.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSAXSTREAM_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSAXSTREAM_HXX
+#pragma once
 
 #include <xfilter/ixfstream.hxx>
 #include <memory>
@@ -120,6 +119,5 @@ private:
     std::unique_ptr<XFSaxAttrList>                       m_pAttrList;
 };
 
-#endif //XFSAXSTREAM_INC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

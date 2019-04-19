@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVX_SOURCE_DIALOG_SAFEMODEDIALOG_HXX
-#define INCLUDED_SVX_SOURCE_DIALOG_SAFEMODEDIALOG_HXX
+#pragma once
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
@@ -73,6 +72,5 @@ private:
     DECL_LINK(DialogBtnHdl, Button*, void);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

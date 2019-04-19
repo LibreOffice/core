@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OSX_A11YSELECTIONWRAPPER_H
-#define INCLUDED_VCL_OSX_A11YSELECTIONWRAPPER_H
+#pragma once
 
 #include <osx/osxvcltypes.h>
 #include <osx/a11ywrapper.h>
@@ -32,6 +31,5 @@
 +(void)setSelectedChildrenAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value;
 @end
 
-#endif // INCLUDED_VCL_OSX_A11YSELECTIONWRAPPER_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

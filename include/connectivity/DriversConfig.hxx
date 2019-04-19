@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_DRIVERSCONFIG_HXX
-#define INCLUDED_CONNECTIVITY_DRIVERSCONFIG_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -76,6 +75,5 @@ namespace connectivity
         css::uno::Reference< css::uno::XComponentContext > m_xORB;
     };
 }
-#endif // INCLUDED_CONNECTIVITY_DRIVERSCONFIG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

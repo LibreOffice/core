@@ -57,8 +57,7 @@
  * @file
  * Table style.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTABLESTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTABLESTYLE_HXX
+#pragma once
 
 #include <xfilter/xfstyle.hxx>
 #include <xfilter/xfmargins.hxx>
@@ -129,6 +128,5 @@ inline void XFTableStyle::SetBackColor(XFColor const & color)
     m_aBackColor = color;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

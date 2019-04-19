@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPPEN_HXX
-#define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPPEN_HXX
+#pragma once
 
 #include "emfpbrush.hxx"
 #include <vector>
@@ -74,6 +73,5 @@ namespace emfplushelper
     };
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

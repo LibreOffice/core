@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_GEOMETRYHANDLER_HXX
-#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_GEOMETRYHANDLER_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -310,6 +309,5 @@ namespace rptui
 } // namespace rptui
 
 
-#endif // RPT_GeometryHandler_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -54,8 +54,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWFILELOADER_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWFILELOADER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -82,6 +81,5 @@ public:
     void CreateDrawObjects(std::vector< rtl::Reference<XFFrame> >* pDrawObjVector);
 };
 
-#endif // INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWFILELOADER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_RTL_BOOTSTRAP_H
-#define INCLUDED_RTL_BOOTSTRAP_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -215,6 +214,5 @@ SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_encode(
 }
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

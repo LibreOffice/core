@@ -57,8 +57,7 @@
  * @file
  * Master page object which was used to apply a layout to the pages.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFMASTERPAGE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFMASTERPAGE_HXX
+#pragma once
 
 #include <xfilter/xfstyle.hxx>
 #include <xfilter/xfcontentcontainer.hxx>
@@ -84,6 +83,5 @@ private:
     rtl::Reference<XFFooter> m_xFooter;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

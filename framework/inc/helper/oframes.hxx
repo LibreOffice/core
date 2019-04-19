@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_HELPER_OFRAMES_HXX
-#define INCLUDED_FRAMEWORK_INC_HELPER_OFRAMES_HXX
+#pragma once
 
 #include <classes/framecontainer.hxx>
 #include <general.h>
@@ -190,6 +189,5 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

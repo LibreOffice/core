@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_UNX_FILE_URL_HXX
-#define INCLUDED_SAL_OSL_UNX_FILE_URL_HXX
+#pragma once
 
 #include <osl/file.h>
 
@@ -38,6 +37,5 @@ bool find_in_PATH(const rtl::OUString& file_path, rtl::OUString& result);
 
 } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

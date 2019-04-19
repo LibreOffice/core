@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_QA_EXTRAS_INC_SWMODELTESTBASE_HXX
-#define INCLUDED_SW_QA_EXTRAS_INC_SWMODELTESTBASE_HXX
+#pragma once
 
 #include <memory>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
@@ -1035,6 +1034,5 @@ inline std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
     return rStrm;
 }
 
-#endif // INCLUDED_SW_QA_EXTRAS_INC_SWMODELTESTBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

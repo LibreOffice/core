@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_BRUSHITEM_HXX
-#define INCLUDED_EDITENG_BRUSHITEM_HXX
+#pragma once
 
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
@@ -126,6 +125,5 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
-#endif // INCLUDED_EDITENG_BRUSHITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

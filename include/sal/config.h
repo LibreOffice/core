@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_CONFIG_H
-#define INCLUDED_SAL_CONFIG_H
+#pragma once
 
 #if defined LIBO_INTERNAL_ONLY && defined ANDROID && defined __cplusplus
 #include <android/compatibility.hxx>
@@ -96,6 +95,5 @@
 #endif
 #endif
 
-#endif // INCLUDED_SAL_CONFIG_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

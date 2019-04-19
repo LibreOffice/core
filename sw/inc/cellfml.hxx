@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_CELLFML_HXX
-#define INCLUDED_SW_INC_CELLFML_HXX
+#pragma once
 
 #include <memory>
 #include <rtl/ustring.hxx>
@@ -145,6 +144,5 @@ public:
     bool HasValidBoxes() const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_FMTPDSC_HXX
-#define INCLUDED_SW_INC_FMTPDSC_HXX
+#pragma once
 
 #include <svl/poolitem.hxx>
 #include "swdllapi.h"
@@ -79,6 +78,5 @@ inline const SwFormatPageDesc &SwAttrSet::GetPageDesc(bool bInP) const
 inline const SwFormatPageDesc &SwFormat::GetPageDesc(bool bInP) const
     { return m_aSet.GetPageDesc(bInP); }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

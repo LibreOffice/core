@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_INC_BACKTRACEASSTRING_HXX
-#define INCLUDED_SAL_INC_BACKTRACEASSTRING_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -22,5 +21,4 @@ OUString backtraceAsString(sal_uInt32 maxDepth);
 
 } }
 
-#endif // INCLUDED_SAL_INC_INTERNAL_MISC_H
 

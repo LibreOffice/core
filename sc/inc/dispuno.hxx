@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DISPUNO_HXX
-#define INCLUDED_SC_INC_DISPUNO_HXX
+#pragma once
 
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
@@ -111,6 +110,5 @@ public:
     virtual void SAL_CALL   disposing( const css::lang::EventObject& Source ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

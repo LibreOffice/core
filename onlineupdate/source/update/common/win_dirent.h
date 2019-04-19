@@ -4,8 +4,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef WINDIRENT_H__
-#define WINDIRENT_H__
+#pragma once
 #ifdef _WIN32
 #include <windows.h>
 
@@ -28,4 +27,3 @@ int closedir(DIR* dir);
 dirent* readdir(DIR* dir);
 
 #endif  // WNT
-#endif  // WINDIRENT_H__

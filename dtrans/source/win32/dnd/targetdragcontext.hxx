@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DND_TARGETDRAGCONTEXT_HXX
-#define INCLUDED_DTRANS_SOURCE_WIN32_DND_TARGETDRAGCONTEXT_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
@@ -47,6 +46,5 @@ public:
     virtual void SAL_CALL rejectDrag(  ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

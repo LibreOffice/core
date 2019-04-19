@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_HELPER_MACROS_HXX
-#define INCLUDED_TOOLKIT_HELPER_MACROS_HXX
+#pragma once
 
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -179,6 +178,5 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
                                 return aNames; \
                             } \
 
-#endif // INCLUDED_TOOLKIT_HELPER_MACROS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

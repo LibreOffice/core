@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_OVERLAY_OVERLAYBITMAPEX_HXX
-#define INCLUDED_SVX_SDR_OVERLAY_OVERLAYBITMAPEX_HXX
+#pragma once
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <vcl/bitmapex.hxx>
@@ -68,6 +67,5 @@ namespace sdr
 } // end of namespace sdr
 
 
-#endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYBITMAPEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

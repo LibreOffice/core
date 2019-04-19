@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCBHELPER_REGISTERUCB_HXX
-#define INCLUDED_UCBHELPER_REGISTERUCB_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <vector>
@@ -92,6 +91,5 @@ UCBHELPER_DLLPUBLIC bool registerAtUcb(
     OUString const & rTemplate);
 
 }
-#endif // INCLUDED_UCBHELPER_REGISTERUCB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6,8 +6,7 @@
 
 /* Implementations of runtime and static assertion macros for C and C++. */
 
-#ifndef mozilla_Assertions_h
-#define mozilla_Assertions_h
+#pragma once
 
 #if defined(MOZILLA_INTERNAL_API) && defined(__cplusplus)
 #define MOZ_DUMP_ASSERTION_STACK
@@ -500,4 +499,3 @@ struct AssertionConditionType
 
 #undef MOZ_DUMP_ASSERTION_STACK
 
-#endif /* mozilla_Assertions_h */

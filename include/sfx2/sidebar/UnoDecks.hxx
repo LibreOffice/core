@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SFX2_SIDEBAR_DECKS_HXX
-#define INCLUDED_SFX2_SIDEBAR_DECKS_HXX
+#pragma once
 
 
 #include <com/sun/star/ui/XDecks.hpp>
@@ -53,6 +52,5 @@ private:
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

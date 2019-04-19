@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_PKGCHK_UNOPKG_UNOPKG_MAIN_H
-#define INCLUDED_DESKTOP_SOURCE_PKGCHK_UNOPKG_UNOPKG_MAIN_H
+#pragma once
 
 #include <desktop/dllapi.h>
 
@@ -32,6 +31,5 @@ DESKTOP_DLLPUBLIC int unopkg_main(void);
 }
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XFLFTRIT_HXX
-#define INCLUDED_SVX_XFLFTRIT_HXX
+#pragma once
 
 #include <svx/xflgrit.hxx>
 #include <svx/svxdllapi.h>
@@ -57,6 +56,5 @@ public:
     std::unique_ptr<XFillFloatTransparenceItem> checkForUniqueItem( SdrModel* pModel ) const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WINACCESSIBILITY_INC_ACCWINDOWEVENTLISTENER_HXX
-#define INCLUDED_WINACCESSIBILITY_INC_ACCWINDOWEVENTLISTENER_HXX
+#pragma once
 
 #include <stdio.h>
 #include "AccEventListener.hxx"
@@ -50,6 +49,5 @@ public:
 
 };
 
-#endif // INCLUDED_WINACCESSIBILITY_INC_ACCWINDOWEVENTLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

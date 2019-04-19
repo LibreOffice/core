@@ -58,8 +58,7 @@
  *  the class for section frib and process section and page layout
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBSECTION_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBSECTION_HXX
+#pragma once
 
 #include <lwpfrib.hxx>
 #include "lwppara.hxx"
@@ -120,6 +119,5 @@ private:
     LwpObjectID m_Section;
     std::unique_ptr<LwpMasterPage> m_pMasterPage;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_DRAWFONT_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_DRAWFONT_HXX
+#pragma once
 
 #include <osl/diagnose.h>
 #include <vcl/vclptr.hxx>
@@ -592,6 +591,5 @@ public:
     bool ApplyAutoColor( vcl::Font* pFnt = nullptr );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

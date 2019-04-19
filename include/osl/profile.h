@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OSL_PROFILE_H
-#define INCLUDED_OSL_PROFILE_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -142,6 +141,5 @@ SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getProfileSections(
 }
 #endif
 
-#endif // INCLUDED_OSL_PROFILE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

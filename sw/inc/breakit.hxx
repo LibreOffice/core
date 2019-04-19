@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_BREAKIT_HXX
-#define INCLUDED_SW_INC_BREAKIT_HXX
+#pragma once
 
 #include <memory>
 #include <com/sun/star/uno/Reference.h>
@@ -123,6 +122,5 @@ public:
 // @@@ backward compatibility @@@
 SW_DLLPUBLIC extern SwBreakIt* g_pBreakIt;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

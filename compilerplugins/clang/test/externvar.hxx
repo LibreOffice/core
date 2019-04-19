@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INClUDED_COMPILERPLUGINS_CLANG_TEST_EXTERNVAR_HXX
-#define INClUDED_COMPILERPLUGINS_CLANG_TEST_EXTERNVAR_HXX
+#pragma once
 
 extern int v1;
 
@@ -22,6 +21,5 @@ struct S;
 
 int f(int a);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

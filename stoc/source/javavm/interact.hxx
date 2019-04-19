@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STOC_SOURCE_JAVAVM_INTERACT_HXX
-#define INCLUDED_STOC_SOURCE_JAVAVM_INTERACT_HXX
+#pragma once
 
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -63,6 +62,5 @@ private:
 
 }
 
-#endif // INCLUDED_STOC_SOURCE_JAVAVM_INTERACT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_ODFFIELDS_HXX
-#define INCLUDED_XMLOFF_ODFFIELDS_HXX
+#pragma once
 
 
 #define ODF_FORMTEXT "vnd.oasis.opendocument.field.FORMTEXT"
@@ -44,6 +43,5 @@
 #define ODF_ID_PARAM "vnd.oasis.opendocument.field.id"
 #define ODF_CODE_PARAM "vnd.oasis.opendocument.field.code"
 
-#endif // INCLUDED_XMLOFF_ODFFIELDS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

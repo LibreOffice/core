@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_W32_SOCKIMPL_HXX
-#define INCLUDED_SAL_OSL_W32_SOCKIMPL_HXX
+#pragma once
 
 #include <osl/socket.h>
 #include <osl/interlck.h>
@@ -40,6 +39,5 @@ struct oslSocketAddrImpl
 oslSocket osl_createSocketImpl_(SOCKET Socket);
 void osl_destroySocketImpl_(oslSocket pImpl);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

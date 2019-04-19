@@ -13,8 +13,7 @@
 //    ARCH_CPU_X86 / ARCH_CPU_X86_64 / ARCH_CPU_X86_FAMILY (X86 or X86_64)
 //    ARCH_CPU_32_BITS / ARCH_CPU_64_BITS
 
-#ifndef BUILD_BUILD_CONFIG_H_
-#define BUILD_BUILD_CONFIG_H_
+#pragma once
 
 // A set of macros to use for platform detection.
 #if defined(ANDROID)
@@ -128,5 +127,3 @@
 #else
 #define WCHAR_T_IS_UTF32
 #endif
-
-#endif // BUILD_BUILD_CONFIG_H_

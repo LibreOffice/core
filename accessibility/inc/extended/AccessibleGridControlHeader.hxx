@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEGRIDCONTROLHEADER_HXX
-#define INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEGRIDCONTROLHEADER_HXX
+#pragma once
 
 #include <extended/AccessibleGridControlHeaderCell.hxx>
 #include <extended/AccessibleGridControlTableBase.hxx>
@@ -153,6 +152,5 @@ inline bool AccessibleGridControlHeader::isColumnBar() const
 } // namespace accessibility
 
 
-#endif // ACCESSIBILITY_EXT_ACCESSIBILEGRIDCONTROLHEADER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

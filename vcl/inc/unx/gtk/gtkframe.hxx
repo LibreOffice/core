@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_GTK_GTKFRAME_HXX
-#define INCLUDED_VCL_INC_UNX_GTK_GTKFRAME_HXX
+#pragma once
 
 #include <cairo.h>
 #include <gdk/gdk.h>
@@ -570,6 +569,5 @@ AtkObject* ooo_fixed_get_accessible(GtkWidget *obj);
 
 } // extern "C"
 
-#endif // INCLUDED_VCL_INC_UNX_GTK_GTKFRAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

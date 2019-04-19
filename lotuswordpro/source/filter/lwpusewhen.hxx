@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPUSEWHEN_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPUSEWHEN_HXX
+#pragma once
 
 #include <lwpheader.hxx>
 
@@ -163,6 +162,5 @@ inline sal_uInt16 LwpUseWhen::GetUsePage()
     return m_nUsePage;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

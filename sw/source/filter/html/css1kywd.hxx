@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_HTML_CSS1KYWD_HXX
-#define INCLUDED_SW_SOURCE_FILTER_HTML_CSS1KYWD_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -243,6 +242,5 @@ extern const sal_Char* sCSS1_PV_inherit;
 
 extern const sal_Char* sCSS1_P_display;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

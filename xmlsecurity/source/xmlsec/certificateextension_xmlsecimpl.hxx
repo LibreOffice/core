@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_CERTIFICATEEXTENSION_XMLSECIMPL_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_CERTIFICATEEXTENSION_XMLSECIMPL_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
@@ -58,6 +57,5 @@ class CertificateExtension_XmlSecImpl : public ::cppu::WeakImplHelper<
         }
 };
 
-#endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_CERTIFICATEEXTENSION_XMLSECIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

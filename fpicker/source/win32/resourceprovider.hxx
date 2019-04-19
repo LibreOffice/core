@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_FPICKER_SOURCE_WIN32_MISC_RESOURCEPROVIDER_HXX
-#define INCLUDED_FPICKER_SOURCE_WIN32_MISC_RESOURCEPROVIDER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -34,6 +33,5 @@ namespace CResourceProvider
     OUString getResString(sal_Int16 aId);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_ACCESSIBLEEDITABLETEXTPARA_HXX
-#define INCLUDED_EDITENG_ACCESSIBLEEDITABLETEXTPARA_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
@@ -376,6 +375,5 @@ private:
 
 } // end of namespace accessibility
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

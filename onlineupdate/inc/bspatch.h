@@ -29,8 +29,7 @@
  *                --Benjamin Smedberg <benjamin@smedbergs.us>
  */
 
-#ifndef bspatch_h__
-#define bspatch_h__
+#pragma once
 
 #include <stdint.h>
 #include <stdio.h>
@@ -92,4 +91,3 @@ typedef struct MBSPatchTriple_
     int32_t  z; /* seek forwards in oldfile by z bytes */
 } MBSPatchTriple;
 
-#endif  // bspatch_h__

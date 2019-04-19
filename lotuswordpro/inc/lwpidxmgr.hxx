@@ -58,8 +58,7 @@
  *  index manager, to maintain the map between object id and offset
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPIDXMGR_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPIDXMGR_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include "lwpobjhdr.hxx"
@@ -108,6 +107,5 @@ public:
     sal_uInt32 GetObjOffset( LwpObjectID objid );
     sal_uInt32 GetObjTime( sal_uInt16 index ) { return m_TimeTable.at(index-1); }
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

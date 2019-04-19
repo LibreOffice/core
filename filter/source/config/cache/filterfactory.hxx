@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_FILTERFACTORY_HXX
-#define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_FILTERFACTORY_HXX
+#pragma once
 
 #include "basecontainer.hxx"
 #include "querytokenizer.hxx"
@@ -177,6 +176,5 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
     } // namespace config
 } // namespace filter
 
-#endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_FILTERFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

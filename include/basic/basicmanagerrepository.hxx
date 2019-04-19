@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_BASICMANAGERREPOSITORY_HXX
-#define INCLUDED_BASIC_BASICMANAGERREPOSITORY_HXX
+#pragma once
 
 #include <basic/basicdllapi.h>
 
@@ -133,6 +132,5 @@ namespace basic
 } // namespace basic
 
 
-#endif // INCLUDED_BASIC_BASICMANAGERREPOSITORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

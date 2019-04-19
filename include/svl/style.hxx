@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_STYLE_HXX
-#define INCLUDED_SVL_STYLE_HXX
+#pragma once
 
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -362,6 +361,5 @@ private:
     static const css::uno::Sequence< ::sal_Int8 >& getIdentifier();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

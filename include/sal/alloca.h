@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_ALLOCA_H
-#define INCLUDED_SAL_ALLOCA_H
+#pragma once
 
 #if defined (__sun) || defined (LINUX) || defined(AIX) || defined(ANDROID) || defined(HAIKU)
 
@@ -61,6 +60,5 @@
 
 #endif
 
-#endif  /* INCLUDED_SAL_ALLOCA_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

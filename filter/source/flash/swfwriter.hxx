@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_FLASH_SWFWRITER_HXX
-#define INCLUDED_FILTER_SOURCE_FLASH_SWFWRITER_HXX
+#pragma once
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -401,6 +400,5 @@ private:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

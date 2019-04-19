@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDGCPITM_HXX
-#define INCLUDED_SVX_SDGCPITM_HXX
+#pragma once
 
 #include <svx/grfcrop.hxx>
 #include <svx/svddef.hxx>
@@ -40,6 +39,5 @@ public:
     virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const override;
 };
 
-#endif // INCLUDED_SVX_SDGCPITM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

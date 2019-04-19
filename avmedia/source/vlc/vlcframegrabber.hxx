@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_VLCFRAMEGRABBER_HXX
-#define INCLUDED_AVMEDIA_SOURCE_VLC_VLCFRAMEGRABBER_HXX
+#pragma once
 
 #include <com/sun/star/media/XFrameGrabber.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -50,6 +49,5 @@ public:
 }
 }
 
-#endif // INCLUDED_AVMEDIA_SOURCE_VLC_VLCFRAMEGRABBER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

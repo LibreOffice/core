@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_SDR_ATTRIBUTE_SDRFORMTEXTOUTLINEATTRIBUTE_HXX
-#define INCLUDED_SVX_INC_SDR_ATTRIBUTE_SDRFORMTEXTOUTLINEATTRIBUTE_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>
@@ -71,6 +70,5 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 
-#endif // INCLUDED_SVX_INC_SDR_ATTRIBUTE_SDRFORMTEXTOUTLINEATTRIBUTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

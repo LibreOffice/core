@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_PPT_PPTIMPORT_HXX
-#define INCLUDED_OOX_PPT_PPTIMPORT_HXX
+#pragma once
 
 #include <exception>
 #include <map>
@@ -103,6 +102,5 @@ private:
 
 } }
 
-#endif // INCLUDED_OOX_PPT_PPTIMPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

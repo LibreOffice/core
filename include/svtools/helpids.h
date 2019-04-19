@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_HELPIDS_H
-#define INCLUDED_SVTOOLS_HELPIDS_H
+#pragma once
 
 #define HID_FILEDLG_LINK_CB                                    "SVT_HID_FILEDLG_LINK_CB"
 #define HID_FILEDLG_PREVIEW_CB                                 "SVT_HID_FILEDLG_PREVIEW_CB"
@@ -48,6 +47,5 @@
 #define HID_WIZARD_NEXT                                        "SVT_HID_WIZARD_NEXT"
 #define HID_WIZARD_PREVIOUS                                    "SVT_HID_WIZARD_PREVIOUS"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

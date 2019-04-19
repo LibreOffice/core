@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_WELD_HXX
-#define INCLUDED_VCL_WELD_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
@@ -1724,6 +1723,5 @@ public:
     void set_default_response(int nResponse) { m_xDialog->set_default_response(nResponse); }
 };
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

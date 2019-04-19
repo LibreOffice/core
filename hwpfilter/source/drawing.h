@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_DRAWING_H
-#define INCLUDED_HWPFILTER_SOURCE_DRAWING_H
+#pragma once
 
 #include "precompile.h"
 
@@ -693,6 +692,5 @@ HWPDrawingObject::~HWPDrawingObject()
 
     HWPDOFunc(this, OBJFUNC_FREE, nullptr, 0);
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

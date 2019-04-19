@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MDRIVER_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MDRIVER_HXX
+#pragma once
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/DriverPropertyInfo.hpp>
@@ -74,6 +73,5 @@ private:
 
 } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,8 +58,7 @@
  * Table cell.
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCELL_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCELL_HXX
+#pragma once
 
 #include <xfilter/xfcontent.hxx>
 #include <xfilter/xfcontentcontainer.hxx>
@@ -191,5 +190,4 @@ inline sal_Int32 XFCell::GetColSpaned()
     return m_nColSpaned;
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

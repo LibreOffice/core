@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPARROWSTYLES_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPARROWSTYLES_HXX
+#pragma once
 
 #include <xfilter/xfarrowstyle.hxx>
 #include <xfilter/xfstylemanager.hxx>
@@ -99,5 +98,4 @@ void    RegisteArrowStyles()
     pXFStyleManager->AddStyle(std::move(pArrowStyle3));
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_REPORTDESIGN_INC_RPTPAGE_HXX
-#define INCLUDED_REPORTDESIGN_INC_RPTPAGE_HXX
+#pragma once
 
 #include "dllapi.h"
 #include <svx/svdpage.hxx>
@@ -83,6 +82,5 @@ public:
     const css::uno::Reference< css::report::XSection >& getSection() const { return m_xSection;}
 };
 }
-#endif // INCLUDED_REPORTDESIGN_INC_RPTPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

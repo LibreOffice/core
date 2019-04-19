@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_METADATA_HXX
-#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_METADATA_HXX
+#pragma once
 
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
@@ -140,6 +139,5 @@ namespace rptui
 } // namespace rptui
 
 
-#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_METADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

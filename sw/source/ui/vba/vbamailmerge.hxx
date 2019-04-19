@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_SW_SOURCE_UI_VBA_VBAMAILMERGE_HXX
-#define INCLUDED_SW_SOURCE_UI_VBA_VBAMAILMERGE_HXX
+#pragma once
 
 #include <ooo/vba/word/XMailMerge.hpp>
 #include <rtl/ref.hxx>
@@ -49,7 +48,5 @@ public:
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 };
-
-#endif // INCLUDED_SW_SOURCE_UI_VBA_VBAMAILMERGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

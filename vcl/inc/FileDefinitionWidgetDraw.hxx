@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_FILEDEFINITIONWIDGETDRAW_HXX
-#define INCLUDED_VCL_INC_FILEDEFINITIONWIDGETDRAW_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include "widgetdraw/WidgetDefinitionReader.hxx"
@@ -51,7 +50,5 @@ public:
 };
 
 } // end vcl namespace
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

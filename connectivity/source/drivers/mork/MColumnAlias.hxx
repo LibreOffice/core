@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MCOLUMNALIAS_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MCOLUMNALIAS_HXX
+#pragma once
 
 #include <unotools/confignode.hxx>
 
@@ -68,6 +67,5 @@ namespace connectivity
         };
     }
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MCOLUMNALIAS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

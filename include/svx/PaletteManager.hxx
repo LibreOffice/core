@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_PALETTEMANAGER_HXX
-#define INCLUDED_SVX_PALETTEMANAGER_HXX
+#pragma once
 
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/Palette.hxx>
@@ -77,6 +76,5 @@ public:
     static void DispatchColorCommand(const OUString& aCommand, const NamedColor& rColor);
 };
 
-#endif // INCLUDED_SVX_PALETTEMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_OSL_DIAGNOSE_H
-#define INCLUDED_OSL_DIAGNOSE_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -135,6 +134,5 @@
 #define OSL_THIS_FUNC ""
 #endif
 
-#endif // INCLUDED_OSL_DIAGNOSE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

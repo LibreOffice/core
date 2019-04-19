@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_IDOCUMENTDEVICEACCESS_HXX
-#define INCLUDED_SW_INC_IDOCUMENTDEVICEACCESS_HXX
+#pragma once
 
 class SfxPrinter;
 class JobSetup;
@@ -131,6 +130,5 @@ protected:
     virtual ~IDocumentDeviceAccess() {};
 };
 
-#endif // INCLUDED_SW_INC_IDOCUMENTDEVICEACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

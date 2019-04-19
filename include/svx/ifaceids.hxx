@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_IFACEIDS_HXX
-#define INCLUDED_SVX_IFACEIDS_HXX
+#pragma once
 
 
 #include <sfx2/shell.hxx>
@@ -30,7 +29,6 @@
 
 #define SVX_INTERFACE_FORM_SH           (SFX_INTERFACE_IDE_END + SfxInterfaceId(1))
 
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

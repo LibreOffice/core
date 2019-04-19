@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_DIALOG_HXX
-#define INCLUDED_VCL_DIALOG_HXX
+#pragma once
 
 #include <memory>
 #include <vcl/dllapi.h>
@@ -207,6 +206,5 @@ private:
     SAL_DLLPRIVATE         ModalDialog & operator= (const ModalDialog &) = delete;
 };
 
-#endif // INCLUDED_VCL_DIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

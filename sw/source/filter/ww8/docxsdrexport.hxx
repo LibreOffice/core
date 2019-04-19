@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX
-#define INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX
+#pragma once
 
 #include <memory>
 
@@ -108,6 +107,5 @@ public:
     void writeBoxItemLine(const SvxBoxItem& rBox);
 };
 
-#endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

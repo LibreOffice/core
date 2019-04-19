@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_INC_EMOJICONTROL_HXX
-#define INCLUDED_SFX2_INC_EMOJICONTROL_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
@@ -46,6 +45,5 @@ private:
     VclPtr<EmojiView>    mpEmojiView;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

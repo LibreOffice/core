@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_CROSSREFBOOKMARK_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_CROSSREFBOOKMARK_HXX
+#pragma once
 
 #include "bookmrk.hxx"
 #include <rtl/ustring.hxx>
@@ -81,6 +80,5 @@ namespace sw {
     }
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

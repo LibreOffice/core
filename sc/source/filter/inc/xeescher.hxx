@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XEESCHER_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XEESCHER_HXX
+#pragma once
 
 #include <vcl/graph.hxx>
 #include <filter/msfilter/escherex.hxx>
@@ -440,6 +439,5 @@ private:
     sal_Int32 const           mnScaleY;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

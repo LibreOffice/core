@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VCL_INC_UNX_I18N_CB_HXX
-#define INCLUDED_VCL_INC_UNX_I18N_CB_HXX
+#pragma once
 
 #include <salwtype.hxx>
 #include <vector>
@@ -84,6 +83,5 @@ struct preedit_data_t
     }
 };
 
-#endif // INCLUDED_VCL_INC_UNX_I18N_CB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

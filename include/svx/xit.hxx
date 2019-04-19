@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XIT_HXX
-#define INCLUDED_SVX_XIT_HXX
+#pragma once
 
 #include <svl/stritem.hxx>
 #include <svx/xtable.hxx>
@@ -65,6 +64,5 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDSERV_SOURCE_INC_DOCHOLDER_HXX
-#define INCLUDED_EMBEDSERV_SOURCE_INC_DOCHOLDER_HXX
+#pragma once
 
 #include "common.h"
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -248,6 +247,5 @@ public:
     ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

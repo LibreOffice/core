@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_INC_TARGETSTATECONTROL_HXX
-#define INCLUDED_EMBEDDEDOBJ_SOURCE_INC_TARGETSTATECONTROL_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <osl/diagnose.h>
@@ -40,6 +39,5 @@ public:
     }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

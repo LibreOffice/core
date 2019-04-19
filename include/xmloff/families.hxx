@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XMLOFF_FAMILIES_HXX
-#define INCLUDED_XMLOFF_FAMILIES_HXX
+#pragma once
 
 /** These defines determine the unique ids for XML style-families
     used in the SvXMLAutoStylePoolP.
@@ -103,6 +102,5 @@
 #define XML_STYLE_FAMILY_CONTROL_ID             600
 #define XML_STYLE_FAMILY_CONTROL_PREFIX         "ctrl"
 
-#endif // INCLUDED_XMLOFF_FAMILIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

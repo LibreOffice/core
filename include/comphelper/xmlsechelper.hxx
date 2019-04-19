@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_XMLSECHELPER_HXX
-#define INCLUDED_COMPHELPER_XMLSECHELPER_HXX
+#pragma once
 
 #include <comphelper/comphelperdllapi.h>
 
@@ -42,6 +41,5 @@ COMPHELPER_DLLPUBLIC OUString GetHexString(const css::uno::Sequence<sal_Int8>& _
                                            const char* _pSep, sal_uInt16 _nLineBreak = 0xFFFF);
 }
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
