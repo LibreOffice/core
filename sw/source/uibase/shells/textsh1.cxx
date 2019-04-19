@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/linguistic2/XThesaurus.hpp>
 
 #include <hintids.hxx>
 #include <cmdid.h>

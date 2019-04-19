@@ -23,6 +23,7 @@
 #include <map>
 
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>

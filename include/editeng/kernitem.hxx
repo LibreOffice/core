@@ -22,8 +22,6 @@
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>
 
-class SvXMLUnitConverter;
-
 // class SvxKerningItem --------------------------------------------------
 
 // Note: Twips value

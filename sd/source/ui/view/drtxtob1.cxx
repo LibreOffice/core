@@ -29,6 +29,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/numitem.hxx>
 #include <vcl/vclenum.hxx>
 #include <sfx2/app.hxx>
 #include <svl/whiter.hxx>

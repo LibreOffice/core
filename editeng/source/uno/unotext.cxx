@@ -22,6 +22,9 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/TextRangeSelection.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>

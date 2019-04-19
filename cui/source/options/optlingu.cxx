@@ -42,6 +42,9 @@
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
+#include <com/sun/star/linguistic2/XDictionary.hpp>
+#include <com/sun/star/linguistic2/XDictionaryList.hpp>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/lang/XServiceDisplayName.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>

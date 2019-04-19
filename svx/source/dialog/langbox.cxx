@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <linguistic/misc.hxx>
 #include <rtl/ustring.hxx>

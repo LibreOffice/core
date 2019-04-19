@@ -22,7 +22,7 @@
 // forward ---------------------------------------------------------------
 #include <rtl/ustring.hxx>
 #include <tools/bigint.hxx>
-#include <svl/poolitem.hxx>
+#include <tools/mapunit.hxx>
 #include <editeng/editengdllapi.h>
 
 class Color;

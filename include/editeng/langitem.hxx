@@ -23,8 +23,6 @@
 #include <i18nlangtag/lang.h>
 #include <editeng/editengdllapi.h>
 
-class SvXMLUnitConverter;
-
 // class SvxLanguageItem -------------------------------------------------
 
 /*  [Description]

@@ -20,11 +20,11 @@
 #ifndef INCLUDED_EDITENG_UNOFDESC_HXX
 #define INCLUDED_EDITENG_UNOFDESC_HXX
 
-#include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <svl/itemset.hxx>
-#include <vcl/font.hxx>
 #include <editeng/editengdllapi.h>
+
+namespace com::sun::star::awt { struct FontDescriptor; }
+namespace vcl { class Font; }
 
 class EDITENG_DLLPUBLIC SvxUnoFontDescriptor
 {

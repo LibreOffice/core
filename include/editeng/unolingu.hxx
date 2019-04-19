@@ -20,17 +20,17 @@
 #ifndef INCLUDED_EDITENG_UNOLINGU_HXX
 #define INCLUDED_EDITENG_UNOLINGU_HXX
 
-#include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/util/Language.hpp>
-#include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>
-#include <com/sun/star/linguistic2/XLinguProperties.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
-#include <com/sun/star/linguistic2/XHyphenator.hpp>
-#include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <editeng/editengdllapi.h>
+
+namespace com::sun::star::linguistic2 { class XDictionary; }
+namespace com::sun::star::linguistic2 { class XHyphenator; }
+namespace com::sun::star::linguistic2 { class XLinguProperties; }
+namespace com::sun::star::linguistic2 { class XLinguServiceManager2; }
+namespace com::sun::star::linguistic2 { class XSearchableDictionaryList; }
+namespace com::sun::star::linguistic2 { class XSpellChecker1; }
+namespace com::sun::star::linguistic2 { class XThesaurus; }
 
 class LinguMgrExitLstnr;
 

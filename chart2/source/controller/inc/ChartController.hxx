@@ -27,6 +27,7 @@
 #include <vcl/timer.hxx>
 
 #include <cppuhelper/implbase.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/ui/XContextMenuInterception.hpp>

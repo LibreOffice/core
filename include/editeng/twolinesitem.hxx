@@ -23,8 +23,6 @@
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
 
-class SvXMLUnitConverter;
-
 class EDITENG_DLLPUBLIC SvxTwoLinesItem : public SfxPoolItem
 {
     sal_Unicode cStartBracket, cEndBracket;

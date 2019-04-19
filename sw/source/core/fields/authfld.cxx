@@ -45,6 +45,8 @@
 #include <calbck.hxx>
 #include <unomid.h>
 
+#include <com/sun/star/beans/PropertyValues.hpp>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;

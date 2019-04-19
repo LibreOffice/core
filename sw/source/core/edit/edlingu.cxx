@@ -19,8 +19,11 @@
 
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
+#include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/text/XFlatParagraph.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <o3tl/any.hxx>
 
 #include <unoflatpara.hxx>

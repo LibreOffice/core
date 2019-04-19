@@ -21,15 +21,15 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <vcl/print.hxx>
-#include <vcl/mapmod.hxx>
-#include <editeng/svxenum.hxx>
+#include <rtl/ustring.hxx>
+#include <tools/mapunit.hxx>
+#include <i18nutil/paper.hxx>
+#include <tools/gen.hxx>
 #include <editeng/editengdllapi.h>
 
 // forward ---------------------------------------------------------------
 
 class Printer;
-class Size;
 
 // class SvxPaperInfo -----------------------------------------------------
 

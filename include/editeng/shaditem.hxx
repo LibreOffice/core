@@ -20,7 +20,9 @@
 #define INCLUDED_EDITENG_SHADITEM_HXX
 
 #include <tools/color.hxx>
-#include <svl/eitem.hxx>
+#include <tools/mapunit.hxx>
+#include <svl/cenumitm.hxx>
+
 #include <editeng/svxenum.hxx>
 #include <editeng/editengdllapi.h>
 

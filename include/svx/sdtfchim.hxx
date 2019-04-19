@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_SDTFCHIM_HXX
 #define INCLUDED_SVX_SDTFCHIM_HXX
 
+#include <svl/eitem.hxx>
 #include <svx/svddef.hxx>
 
 class SVX_DLLPUBLIC SdrTextFixedCellHeightItem : public SfxBoolItem

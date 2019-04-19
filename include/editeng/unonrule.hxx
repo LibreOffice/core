@@ -29,7 +29,8 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <editeng/numitem.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
+
+namespace com::sun::star::beans { struct PropertyValue; }
 
 EDITENG_DLLPUBLIC css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(const SvxNumRule* pRule);
 EDITENG_DLLPUBLIC css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule();

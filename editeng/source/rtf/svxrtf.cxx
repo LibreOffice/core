@@ -35,6 +35,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/svxrtf.hxx>
 #include <editeng/editids.hrc>
+#include <vcl/font.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

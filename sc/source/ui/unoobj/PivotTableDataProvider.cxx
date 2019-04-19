@@ -44,6 +44,7 @@
 #include <com/sun/star/sheet/XMembersSupplier.hpp>
 
 #include <com/sun/star/chart/ChartDataChangeEvent.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 
 #include <unordered_map>
 

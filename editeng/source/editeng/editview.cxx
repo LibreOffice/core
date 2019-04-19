@@ -59,6 +59,8 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/linguistic2/XDictionary.hpp>
+#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <linguistic/lngprops.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

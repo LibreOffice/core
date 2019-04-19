@@ -28,6 +28,7 @@
 #include <com/sun/star/linguistic2/DictionaryList.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/LinguProperties.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_EDITENG_OVERFLOWINGTXT_HXX
 #define INCLUDED_EDITENG_OVERFLOWINGTXT_HXX
 
-#include <editeng/macros.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/editdata.hxx>
 
@@ -38,7 +37,6 @@ using ::rtl::OUString;
 
 
 class OutlinerParaObject;
-class EditTextObject;
 class Outliner;
 
 

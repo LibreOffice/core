@@ -31,6 +31,7 @@
 #include <editeng/unolingu.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/linguistic2/XDictionary.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;

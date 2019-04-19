@@ -82,6 +82,7 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/numitem.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <svx/svditer.hxx>

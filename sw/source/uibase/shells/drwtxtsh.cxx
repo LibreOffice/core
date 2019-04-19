@@ -45,6 +45,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <swtypes.hxx>
 #include <view.hxx>

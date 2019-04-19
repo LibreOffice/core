@@ -74,6 +74,7 @@
 #include <svl/itempool.hxx>
 #include <svl/itemiter.hxx>
 #include <sal/log.hxx>
+#include <vcl/font.hxx>
 
 #include <editeng/svxrtf.hxx>
 #include <editeng/editids.hrc>

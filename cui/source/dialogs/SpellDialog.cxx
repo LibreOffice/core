@@ -42,6 +42,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceDisplayName.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/linguistic2/XDictionary.hpp>
+#include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
+#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <sfx2/app.hxx>
 #include <vcl/help.hxx>
 #include <vcl/graph.hxx>

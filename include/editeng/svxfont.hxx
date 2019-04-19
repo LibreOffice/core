@@ -19,9 +19,7 @@
 #ifndef INCLUDED_EDITENG_SVXFONT_HXX
 #define INCLUDED_EDITENG_SVXFONT_HXX
 
-#include <limits.h>
 #include <editeng/svxenum.hxx>
-#include <i18nlangtag/lang.h>
 #include <vcl/font.hxx>
 #include <editeng/editengdllapi.h>
 

@@ -21,6 +21,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sot/exchange.hxx>

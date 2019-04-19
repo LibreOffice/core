@@ -29,6 +29,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <com/sun/star/embed/Aspects.hpp>
 

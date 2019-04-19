@@ -24,8 +24,6 @@
 #include <editeng/editengdllapi.h>
 #include <memory>
 
-class SvXMLNamespaceMap;
-
 
 class SvXMLAttrContainerData;
 

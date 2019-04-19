@@ -48,6 +48,7 @@
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <svx/sdrpaintwindow.hxx>
 
 #include <svx/svxdlg.hxx>

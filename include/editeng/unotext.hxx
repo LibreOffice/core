@@ -21,16 +21,13 @@
 #define INCLUDED_EDITENG_UNOTEXT_HXX
 
 #include <memory>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/text/XTextRangeMover.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -38,7 +35,6 @@
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
 #include <com/sun/star/text/XTextCopy.hpp>
-#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -51,8 +47,6 @@
 #include <osl/diagnose.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <tools/link.hxx>
-#include <svl/itemprop.hxx>
 #include <svl/itemset.hxx>
 #include <svl/solar.hrc>
 #include <editeng/editdata.hxx>
@@ -62,6 +56,8 @@
 #include <editeng/memberids.h>
 
 class SvxItemPropertySet;
+struct SfxItemPropertyMapEntry;
+struct SfxItemPropertySimpleEntry;
 
 #define WID_FONTDESC                OWN_ATTR_VALUE_START
 #define WID_NUMLEVEL                OWN_ATTR_VALUE_START+1
@@ -151,12 +147,8 @@ class SvxItemPropertySet;
     {OUString(UNO_NAME_EDIT_PARA_IS_FORBIDDEN_RULES),    EE_PARA_FORBIDDENRULES,     cppu::UnoType<bool>::get(),                0 ,0 },\
     {OUString("WritingMode"),                   EE_PARA_WRITINGDIR, ::cppu::UnoType<sal_Int16>::get(),            0, 0 }
 
-class SvxEditSource;
-class SvxTextForwarder;
 class SvxFieldItem;
-class SvxTextEditSource;
 class SvxFieldData;
-struct ESelection;
 
 EDITENG_DLLPUBLIC void GetSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarder ) throw();
 EDITENG_DLLPUBLIC void CheckSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarder ) throw();

@@ -22,15 +22,15 @@
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/text/XTextField.hpp>
-#include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/component.hxx>
 #include <editeng/editengdllapi.h>
 
 #include <editeng/mutxhelp.hxx>
 #include <memory>
+
+namespace com::sun::star::beans { class XPropertySetInfo; }
 
 class SvxUnoFieldData_Impl;
 class SfxItemPropertySet;
