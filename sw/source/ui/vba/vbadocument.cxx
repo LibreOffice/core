@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include "service.hxx"
+#include "vbafilterpropsfromformat.hxx"
 #include "vbadocument.hxx"
 #include "vbarange.hxx"
 #include "vbarangehelper.hxx"
@@ -454,53 +455,6 @@ SwVbaDocument::Frames( const uno::Any& index )
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
     return uno::makeAny( xCol );
-}
-
-namespace {
-
-bool setFilterPropsFromFormat( sal_Int32 nFormat, uno::Sequence< beans::PropertyValue >& rProps )
-{
-    bool bRes = false;
-    for ( sal_Int32 index = 0; index < rProps.getLength(); ++index )
-    {
-        if ( rProps[ index ].Name == "FilterName" )
-        {
-            switch( nFormat )
-            {
-                case word::WdSaveFormat::wdFormatDocument:
-                    rProps[ index ].Value <<= OUString("MS Word 97");
-                    break;
-                // Just save all the text formats as "Text"
-                case word::WdSaveFormat::wdFormatDOSText:
-                case word::WdSaveFormat::wdFormatDOSTextLineBreaks:
-                case word::WdSaveFormat::wdFormatEncodedText:
-                case word::WdSaveFormat::wdFormatText:
-                case word::WdSaveFormat::wdFormatTextLineBreaks:
-                    rProps[ index ].Value <<= OUString("Text");
-                    break;
-                case word::WdSaveFormat::wdFormatFilteredHTML:
-                case word::WdSaveFormat::wdFormatHTML:
-                    rProps[ index ].Value <<= OUString("HTML");
-                    break;
-                case word::WdSaveFormat::wdFormatRTF:
-                    rProps[ index ].Value <<= OUString("Rich Text Format");
-                    break;
-                case word::WdSaveFormat::wdFormatTemplate:
-                    rProps[ index ].Value <<= OUString("MS Word 97 Vorlage");
-                    break;
-
-                // Default to "MS Word 97"
-                default:
-                    rProps[ index ].Value <<= OUString("MS Word 97");
-                    break;
-            }
-            bRes = true;
-            break;
-        }
-    }
-    return bRes;
-}
-
 }
 
 void SAL_CALL
