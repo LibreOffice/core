@@ -579,6 +579,8 @@ SwWordBasic::FileSaveAs( const css::uno::Any& Name,
                          const css::uno::Any& /*FormsData*/,
                          const css::uno::Any& /*SaveAsAOCELetter*/ )
 {
+    SAL_INFO("sw.vba", "WordBasic.FileSaveAs(Name:=" << Name << ",Format:=" << Format << ")");
+
     uno::Reference< frame::XModel > xModel( mpApp->getCurrentDocument(), uno::UNO_SET_THROW );
 
     // Based on SwVbaDocument::SaveAs2000.
