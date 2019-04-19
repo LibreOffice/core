@@ -84,6 +84,7 @@ void ExtCfRuleContext::onStartElement( const AttributeList& rAttribs )
 ExtConditionalFormattingContext::ExtConditionalFormattingContext(WorksheetContextBase& rFragment):
     WorksheetContextBase(rFragment)
 {
+    nPriority = -1;
     isPreviousElementF = false;
 }
 
@@ -104,6 +105,7 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
     {
         OUString aType = rAttribs.getString(XML_type, OUString());
         OUString aId = rAttribs.getString(XML_id, OUString());
+        nPriority = rAttribs.getInteger( XML_priority, -1 );
 
         if (aType == "dataBar")
         {
@@ -179,6 +181,7 @@ void ExtConditionalFormattingContext::onEndElement()
         case XM_TOKEN(f):
         {
             rFormulas.push_back(aChars);
+            maPriorities.push_back(nPriority);
         }
         break;
         case XLS14_TOKEN( cfRule ):
@@ -201,9 +204,9 @@ void ExtConditionalFormattingContext::onEndElement()
                 aRange[i].aEnd.SetTab(nTab);
             }
 
-            if(isPreviousElementF) // sqref can be alone in some cases.
+            if (isPreviousElementF) // sqref can be alone in some cases.
             {
-                for(const OUString& rFormula : rFormulas)
+                for (const OUString& rFormula : rFormulas)
                 {
                     ScAddress rPos = aRange.GetTopLeftCorner();
                     rStyle = getStyles().createExtDxfStyle(rStyleIdx);
@@ -215,11 +218,17 @@ void ExtConditionalFormattingContext::onEndElement()
                     maEntries.push_back(std::unique_ptr<ScFormatEntry>(pEntry));
                     rStyleIdx++;
                 }
+
+                assert(rFormulas.size() == maPriorities.size());
                 rFormulas.clear();
             }
 
             std::vector< std::unique_ptr<ExtCfCondFormat> >& rExtFormats =  getCondFormats().importExtCondFormat();
-            rExtFormats.push_back(std::make_unique<ExtCfCondFormat>(aRange, maEntries));
+            rExtFormats.push_back(std::make_unique<ExtCfCondFormat>(aRange, maEntries, &maPriorities));
+
+            if (isPreviousElementF)
+                maPriorities.clear();
+
             isPreviousElementF = false;
         }
         break;
