@@ -52,7 +52,7 @@ void XclExpWindow1::SaveXml( XclExpXmlStream& rStrm )
     const XclExpTabInfo& rTabInfo = rStrm.GetRoot().GetTabInfo();
 
     rStrm.GetCurrentStream()->singleElement( XML_workbookView,
-            // OOXTODO: XML_visibility, // ST_visibilty
+            // OOXTODO: XML_visibility, // ST_visibility
             // OOXTODO: XML_minimized,  // bool
             XML_showHorizontalScroll,   ToPsz( ::get_flag( mnFlags, EXC_WIN1_HOR_SCROLLBAR ) ),
             XML_showVerticalScroll,     ToPsz( ::get_flag( mnFlags, EXC_WIN1_VER_SCROLLBAR ) ),
