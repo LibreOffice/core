@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_OPTDLG_CALCOPTIONSDLG_HXX
-#define INCLUDED_SC_SOURCE_UI_OPTDLG_CALCOPTIONSDLG_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 #include <calcconfig.hxx>
@@ -40,7 +39,5 @@ private:
     std::unique_ptr<weld::CheckButton> mxCurrentDocOnly;
     std::unique_ptr<weld::ComboBox> mxSyntax;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

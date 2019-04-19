@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
-#define INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
@@ -132,7 +131,5 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
 
         std::shared_ptr<SvtOptionsDrawinglayer_Impl>     m_pImpl;
 };
-
-#endif  // #ifndef INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

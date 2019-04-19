@@ -57,8 +57,7 @@
  * @file
  * Line Arrow.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFARROWSTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFARROWSTYLE_HXX
+#pragma once
 
 #include <xfilter/xfstyle.hxx>
 
@@ -123,6 +122,4 @@ inline void XFArrowStyle::ToXml(IXFStream *pStrm)
     pStrm->StartElement("draw:marker");
     pStrm->EndElement("draw:marker");
 }
-
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

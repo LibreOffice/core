@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_IMAGE_H
-#define INCLUDED_VCL_INC_IMAGE_H
+#pragma once
 
 #include <vcl/bitmapex.hxx>
 
@@ -64,7 +63,5 @@ public:
         return maSizePixel == Size();
     }
 };
-
-#endif // INCLUDED_VCL_INC_IMAGE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

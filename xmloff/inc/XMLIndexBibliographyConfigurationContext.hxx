@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_INC_XMLINDEXBIBLIOGRAPHYCONFIGURATIONCONTEXT_HXX
-#define INCLUDED_XMLOFF_INC_XMLINDEXBIBLIOGRAPHYCONFIGURATIONCONTEXT_HXX
+#pragma once
 
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/languagetagodf.hxx>
@@ -80,7 +79,5 @@ private:
         const OUString& sLocalName,
         const OUString& sValue);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,8 +57,7 @@
  * @file
  * Style manager for the filter.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSTYLEMANAGER_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSTYLEMANAGER_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xffontdecl.hxx>
@@ -136,7 +135,5 @@ private:
     std::unique_ptr<IXFStyle> s_pOutlineStyle;
     XFStyleContainer s_aRubyStyles;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

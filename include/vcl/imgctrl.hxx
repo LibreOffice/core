@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_IMGCTRL_HXX
-#define INCLUDED_VCL_IMGCTRL_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -46,7 +45,5 @@ public:
 protected:
     void    ImplDraw( OutputDevice& rDev, const Point& rPos, const Size& rSize ) const;
 };
-
-#endif // INCLUDED_VCL_IMGCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

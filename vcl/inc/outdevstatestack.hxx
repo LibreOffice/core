@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_OUTDEVSTATESTACK_HXX
-#define INCLUDED_VCL_OUTDEVSTATESTACK_HXX
+#pragma once
 
 #include <vcl/outdevstate.hxx>
 #include <memory>
@@ -25,7 +24,5 @@ public:
     void pop_back();
     OutDevState& back();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

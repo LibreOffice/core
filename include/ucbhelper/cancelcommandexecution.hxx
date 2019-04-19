@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCBHELPER_CANCELCOMMANDEXECUTION_HXX
-#define INCLUDED_UCBHELPER_CANCELCOMMANDEXECUTION_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
@@ -94,7 +93,5 @@ UCBHELPER_DLLPUBLIC void cancelCommandExecution( const css::ucb::IOErrorCode eEr
                              const OUString & rMessage = OUString(),
                              const css::uno::Reference< css::ucb::XCommandProcessor > & xContext = nullptr );
 }
-
-#endif // INCLUDED_UCBHELPER_CANCELCOMMANDEXECUTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

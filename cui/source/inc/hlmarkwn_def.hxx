@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_SOURCE_INC_HLMARKWN_DEF_HXX
-#define INCLUDED_CUI_SOURCE_INC_HLMARKWN_DEF_HXX
+#pragma once
 
 #define LERR_NOERROR        0
 #define LERR_NOENTRIES      1
 #define LERR_DOCNOTOPEN     2
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

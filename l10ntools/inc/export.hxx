@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_L10NTOOLS_INC_EXPORT_HXX
-#define INCLUDED_L10NTOOLS_INC_EXPORT_HXX
+#pragma once
 
 #include <sal/config.h>
 #include "po.hxx"
@@ -151,7 +150,5 @@ class MergeDataFile
             const OString& rLID, const OString& rFilename, bool bCaseSensitive);
 };
 
-
-#endif // INCLUDED_L10NTOOLS_INC_EXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

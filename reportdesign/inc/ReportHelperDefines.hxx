@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_REPORTDESIGN_INC_REPORTHELPERDEFINES_HXX
-#define INCLUDED_REPORTDESIGN_INC_REPORTHELPERDEFINES_HXX
+#pragma once
 
 #define REPORTCONTROLMODEL_HEADER()  \
     virtual OUString SAL_CALL getDataField() override; \
@@ -181,7 +180,5 @@
     virtual css::lang::Locale SAL_CALL getCharLocaleComplex() override;\
     virtual void SAL_CALL setCharLocaleComplex( const css::lang::Locale& _charlocalecomplex ) override;
 
-
-#endif // INCLUDED_REPORTDESIGN_INC_REPORTHELPERDEFINES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

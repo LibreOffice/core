@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPU_SOURCE_THREADPOOL_JOBQUEUE_HXX
-#define INCLUDED_CPPU_SOURCE_THREADPOOL_JOBQUEUE_HXX
+#pragma once
 
 #include <deque>
 #include <memory>
@@ -67,7 +66,5 @@ namespace cppu_threadpool
         DisposedCallerAdminHolder m_DisposedCallerAdmin;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

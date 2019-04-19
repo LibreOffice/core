@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDOCIRC_HXX
-#define INCLUDED_SVX_SVDOCIRC_HXX
+#pragma once
 
 #include <svx/svdorect.hxx>
 #include <svx/svxdllapi.h>
@@ -139,7 +138,5 @@ public:
     long GetEndAngle() const { return nEndAngle; }
 
 };
-
-#endif // INCLUDED_SVX_SVDOCIRC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

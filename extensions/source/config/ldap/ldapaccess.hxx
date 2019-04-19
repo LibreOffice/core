@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_CONFIG_LDAP_LDAPACCESS_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_CONFIG_LDAP_LDAPACCESS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -131,7 +130,5 @@ private:
 
 
 }} }
-
-#endif // EXTENSIONS_CONFIG_LDAP_LDAPUSERPROFILE_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

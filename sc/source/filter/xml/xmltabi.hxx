@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLTABI_HXX
-#define INCLUDED_SC_SOURCE_FILTER_XML_XMLTABI_HXX
+#pragma once
 
 #include <externalrefmgr.hxx>
 #include "importcontext.hxx"
@@ -75,7 +74,5 @@ public:
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

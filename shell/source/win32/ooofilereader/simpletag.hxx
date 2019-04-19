@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_SHELL_SOURCE_WIN32_OOOFILEREADER_SIMPLETAG_HXX
-#define INCLUDED_SHELL_SOURCE_WIN32_OOOFILEREADER_SIMPLETAG_HXX
+#pragma once
 
 #include "itag.hxx"
 
@@ -46,7 +45,5 @@ class CSimpleTag : public ITag
         std::wstring       m_SimpleContent;
         XmlTagAttributes_t m_SimpleAttributes;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

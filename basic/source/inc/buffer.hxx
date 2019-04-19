@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_BUFFER_HXX
-#define INCLUDED_BASIC_SOURCE_INC_BUFFER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <memory>
@@ -47,7 +46,5 @@ public:
     char*  GetBuffer();             // give out buffer (delete yourself!)
     sal_uInt32 GetSize()                { return nOff; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

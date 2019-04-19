@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SCADDINS_SOURCE_ANALYSIS_DEFFUNCTIONNAME_HXX
-#define INCLUDED_SCADDINS_SOURCE_ANALYSIS_DEFFUNCTIONNAME_HXX
+#pragma once
 
 static const char* ANALYSIS_DEFFUNCNAME_Workday[2] =
 {
@@ -625,7 +624,5 @@ static const char* ANALYSIS_DEFFUNCNAME_Factdouble[2] =
     reinterpret_cast<char const *>(u8"ZWEIFAKULTÄT"),
     reinterpret_cast<char const *>(u8"FACTDOUBLE")
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

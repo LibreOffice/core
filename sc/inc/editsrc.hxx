@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_EDITSRC_HXX
-#define INCLUDED_SC_INC_EDITSRC_HXX
+#pragma once
 
 #include "address.hxx"
 #include <editeng/unoedsrc.hxx>
@@ -146,7 +145,5 @@ public:
     virtual void                UpdateData() override;
     virtual SfxBroadcaster&     GetBroadcaster() const override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

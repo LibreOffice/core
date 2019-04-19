@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_FMDMOD_HXX
-#define INCLUDED_SVX_FMDMOD_HXX
+#pragma once
 
 #include <svx/unomod.hxx>
 #include <svx/svxdllapi.h>
@@ -33,7 +32,5 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance(const OUString& ServiceSpecifier) override;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 };
-
-#endif // INCLUDED_SVX_FMDMOD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

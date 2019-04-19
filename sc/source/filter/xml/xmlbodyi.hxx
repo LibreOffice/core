@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLBODYI_HXX
-#define INCLUDED_SC_SOURCE_FILTER_XML_XMLBODYI_HXX
+#pragma once
 
 #include "importcontext.hxx"
 
@@ -53,7 +52,5 @@ public:
 
     virtual void SAL_CALL characters(const OUString & aChars) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

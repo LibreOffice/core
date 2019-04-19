@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_STOC_SOURCE_JAVAVM_JVMARGS_HXX
-#define INCLUDED_STOC_SOURCE_JAVAVM_JVMARGS_HXX
+#pragma once
 
 
 #include <vector>
@@ -46,7 +45,5 @@ namespace stoc_javavm {
         const ::std::vector< OUString> & getProperties() const { return _props;}
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

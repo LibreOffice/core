@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDTEXT_HXX
-#define INCLUDED_SVX_SVDTEXT_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
@@ -78,7 +77,5 @@ private:
     SdrTextObj& mrObject;
     bool mbPortionInfoChecked;
 };
-
-#endif // INCLUDED_SVX_SVDTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

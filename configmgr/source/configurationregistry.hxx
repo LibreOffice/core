@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_CONFIGURATIONREGISTRY_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_CONFIGURATIONREGISTRY_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -46,7 +45,5 @@ css::uno::Sequence< OUString >
 getSupportedServiceNames();
 
 } }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

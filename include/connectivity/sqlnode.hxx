@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_SQLNODE_HXX
-#define INCLUDED_CONNECTIVITY_SQLNODE_HXX
+#pragma once
 
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/dbmetadata.hxx>
@@ -454,7 +453,5 @@ namespace connectivity
     #define SQL_ISTOKENOR3(pParseNode, tok0, tok1, tok2) ((pParseNode)->isToken() && ( (pParseNode)->getTokenID() == SQL_TOKEN_##tok0 || (pParseNode)->getTokenID() == SQL_TOKEN_##tok1 || (pParseNode)->getTokenID() == SQL_TOKEN_##tok2 ))
     #define SQL_ISPUNCTUATION(pParseNode, aString) ((pParseNode)->getNodeType() == SQLNodeType::Punctuation && (pParseNode)->getTokenValue() == (aString))
 }
-
-#endif // INCLUDED_CONNECTIVITY_SQLNODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

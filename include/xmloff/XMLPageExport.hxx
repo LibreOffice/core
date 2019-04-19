@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_XMLPAGEEXPORT_HXX
-#define INCLUDED_XMLOFF_XMLPAGEEXPORT_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
@@ -90,7 +89,5 @@ public:
     //text grid enhancement for better CJK support
     void exportDefaultStyle();
 };
-
-#endif // INCLUDED_XMLOFF_XMLPAGEEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

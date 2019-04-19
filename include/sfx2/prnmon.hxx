@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_PRNMON_HXX
-#define INCLUDED_SFX2_PRNMON_HXX
+#pragma once
 
 #include <memory>
 #include <sal/config.h>
@@ -52,7 +51,5 @@ public:
     const SfxItemSet&       GetOptions() const { return *pOptions; }
     void                    DisableHelp();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

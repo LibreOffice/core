@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_TOKEN_HXX
-#define INCLUDED_BASIC_SOURCE_INC_TOKEN_HXX
+#pragma once
 
 #include "scanner.hxx"
 #include <basic/sbdef.hxx>
@@ -135,7 +134,5 @@ public:
     static OUString GetKeywordCase( const OUString& sKeyword );
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

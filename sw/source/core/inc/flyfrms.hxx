@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_FLYFRMS_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_FLYFRMS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -235,7 +234,5 @@ public:
     // position is calculated during the format of the anchor frame
     virtual void ActionOnInvalidation( const InvalidationType _nInvalid ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

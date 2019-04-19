@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_SOURCE_NUMBERS_SUPSERVS_HXX
-#define INCLUDED_SVL_SOURCE_NUMBERS_SUPSERVS_HXX
+#pragma once
 
 #include <svl/numuno.hxx>
 #include <svl/zforlist.hxx>
@@ -74,7 +73,5 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 };
 
-
-#endif // INCLUDED_SVL_SOURCE_NUMBERS_SUPSERVS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

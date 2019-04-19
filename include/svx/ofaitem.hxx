@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_OFAITEM_HXX
-#define INCLUDED_SVX_OFAITEM_HXX
+#pragma once
 
 #include <svl/poolitem.hxx>
 #include <rtl/ref.hxx>
@@ -55,7 +54,5 @@ public:
         return new OfaRefItem( *this );
     }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

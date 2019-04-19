@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_INC_SVDOUTLINERCACHE_HXX
-#define INCLUDED_SVX_SOURCE_INC_SVDOUTLINERCACHE_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <memory>
@@ -45,8 +44,6 @@ public:
     void disposeOutliner( std::unique_ptr<SdrOutliner> pOutliner );
     std::vector< SdrOutliner* > GetActiveOutliners() const;
 };
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_SVDRAW_SVDFMTF_HXX
-#define INCLUDED_SVX_SOURCE_SVDRAW_SVDFMTF_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -167,7 +166,5 @@ public:
         size_t nInsPos,
         SvdProgressInfo* pProgrInfo = nullptr);
 };
-
-#endif // INCLUDED_SVX_SOURCE_SVDRAW_SVDFMTF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

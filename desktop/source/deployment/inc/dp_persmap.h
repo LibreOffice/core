@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_PERSMAP_H
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_PERSMAP_H
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
@@ -60,7 +59,5 @@ private:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

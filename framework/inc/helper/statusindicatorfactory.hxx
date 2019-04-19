@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_HELPER_STATUSINDICATORFACTORY_HXX
-#define INCLUDED_FRAMEWORK_INC_HELPER_STATUSINDICATORFACTORY_HXX
+#pragma once
 
 // Attention: stl headers must(!) be included at first. Otherwise it can make trouble
 // with solaris headers ...
@@ -283,7 +282,5 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper<
 }; // class StatusIndicatorFactory
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_HELPER_STATUSINDICATORFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

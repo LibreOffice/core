@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_PIVOTTABLEDATAPROVIDER_HXX
-#define INCLUDED_SC_INC_PIVOTTABLEDATAPROVIDER_HXX
+#pragma once
 
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
@@ -180,7 +179,5 @@ private:
 };
 
 }
-
-#endif // INCLUDED_SC_INC_PIVOTTABLEDATAPROVIDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

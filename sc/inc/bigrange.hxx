@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_BIGRANGE_HXX
-#define INCLUDED_SC_INC_BIGRANGE_HXX
+#pragma once
 
 #include "address.hxx"
 #include <algorithm>
@@ -175,7 +174,5 @@ inline bool ScBigRange::Intersects( const ScBigRange& r ) const
      || std::min( aEnd.Tab(), r.aEnd.Tab() ) < std::max( aStart.Tab(), r.aStart.Tab() )
         );
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

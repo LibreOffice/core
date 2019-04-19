@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_BASCTL_SOURCE_INC_DOCSIGNATURE_HXX
-#define INCLUDED_BASCTL_SOURCE_INC_DOCSIGNATURE_HXX
+#pragma once
 
 #include <sfx2/signaturestate.hxx>
 #include <vcl/weld.hxx>
@@ -72,7 +71,5 @@ namespace basctl
 
 } // namespace basctl
 
-
-#endif // INCLUDED_BASCTL_SOURCE_INC_DOCSIGNATURE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

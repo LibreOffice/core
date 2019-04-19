@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_ICONTEXT_HXX
-#define INCLUDED_VCL_ICONTEXT_HXX
+#pragma once
 
 #include <vcl/EnumContext.hxx>
 #include <vector>
@@ -44,6 +43,5 @@ private:
 
 } // namespace vcl
 
-#endif // INCLUDED_VCL_ICONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

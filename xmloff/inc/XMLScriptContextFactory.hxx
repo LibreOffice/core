@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_INC_XMLSCRIPTCONTEXTFACTORY_HXX
-#define INCLUDED_XMLOFF_INC_XMLSCRIPTCONTEXTFACTORY_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <xmloff/xmlevent.hxx>
@@ -49,7 +48,5 @@ public:
                   /// the event type name (as registered)
                   const OUString & rLanguage) override;
 };
-
-#endif // INCLUDED_XMLOFF_INC_XMLSCRIPTCONTEXTFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

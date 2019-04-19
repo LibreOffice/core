@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SAMECONTENTLISTBOXHELPER_HXX
-#define INCLUDED_SVX_SAMECONTENTLISTBOXHELPER_HXX
+#pragma once
 
 #include <svx/svxdllapi.h>
 #include <vcl/lstbox.hxx>
@@ -30,6 +29,3 @@ public:
     SameContentListBox( vcl::Window* pParent );
     Size GetOptimalSize() const override;
 };
-
-#endif
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

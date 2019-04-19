@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_GDIMTF_HXX
-#define INCLUDED_VCL_GDIMTF_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
@@ -201,7 +200,5 @@ public:
     /// Dumps the meta actions as XML in metafile.xml.
     void dumpAsXml(const char* pFileName = nullptr) const;
 };
-
-#endif // INCLUDED_VCL_GDIMTF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

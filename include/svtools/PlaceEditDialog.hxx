@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVTOOLS_PLACEEDITDIALOG_HXX
-#define INCLUDED_SVTOOLS_PLACEEDITDIALOG_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <vcl/weld.hxx>
@@ -98,6 +97,4 @@ private:
     DECL_LINK ( EditUsernameHdl, weld::Entry&, void );
 
 };
-
-#endif // INCLUDED_SVTOOLS_PLACEEDITDIALOG_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_RUNINMAIN_HXX
-#define INCLUDED_VCL_INC_OSX_RUNINMAIN_HXX
+#pragma once
 
 /**
  * Runs a command in the main thread.
@@ -169,7 +168,5 @@ union RuninmainResult
 
 #define OSX_SALDATA_RUNINMAIN_UNION( command, member ) \
     OSX_RUNINMAIN_UNION( GetSalData()->mpInstance, command, member )
-
-#endif // INCLUDED_VCL_INC_OSX_RUNINMAIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

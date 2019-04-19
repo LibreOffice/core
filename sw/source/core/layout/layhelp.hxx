@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_LAYOUT_LAYHELP_HXX
-#define INCLUDED_SW_SOURCE_CORE_LAYOUT_LAYHELP_HXX
+#pragma once
 
 #include <swrect.hxx>
 
@@ -208,7 +207,5 @@ public:
     SwFlyCache( sal_uInt16 nP, sal_uLong nO, long nXL, long nYL, long nWL, long nHL ) :
         SwRect( nXL, nYL, nWL, nHL ), nOrdNum( nO ), nPageNum( nP ){}
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

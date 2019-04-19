@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SFX2_SIDEBAR_SIDEBAR_HXX
-#define INCLUDED_SFX2_SIDEBAR_SIDEBAR_HXX
+#pragma once
 
 #include <com/sun/star/ui/XSidebarProvider.hpp>
 
@@ -48,7 +47,5 @@ public:
     virtual css::uno::Reference<css::ui::XSidebar> SAL_CALL getSidebar() override;
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

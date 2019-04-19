@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_PACKAGE_SOURCE_XSTOR_SELFTERMINATEFILESTREAM_HXX
-#define INCLUDED_PACKAGE_SOURCE_XSTOR_SELFTERMINATEFILESTREAM_HXX
+#pragma once
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -57,7 +56,5 @@ public:
     virtual sal_Int64 SAL_CALL getLength() override;
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

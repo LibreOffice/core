@@ -57,8 +57,7 @@
  * @file
  * ruby style.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFRUBYSTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFRUBYSTYLE_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xfstyle.hxx>
@@ -139,6 +138,4 @@ void XFRubyStyle::ToXml(IXFStream *pStrm)
     pStrm->EndElement("style:properties");
     pStrm->EndElement("style:style");
 }
-
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

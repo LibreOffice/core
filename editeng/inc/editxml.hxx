@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_INC_EDITXML_HXX
-#define INCLUDED_EDITENG_INC_EDITXML_HXX
+#pragma once
 
 class EditEngine;
 class SvStream;
@@ -30,8 +29,6 @@ extern void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESele
 
 /** this function imports xml from the stream into the selected of an edit engine */
 extern EditPaM SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& rSel );
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

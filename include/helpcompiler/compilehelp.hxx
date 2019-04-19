@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HELPCOMPILER_COMPILEHELP_HXX
-#define INCLUDED_HELPCOMPILER_COMPILEHELP_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -64,7 +63,5 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
     const OUString& aDestination,
     HelpProcessingErrorInfo& o_rHelpProcessingErrorInfo
 );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

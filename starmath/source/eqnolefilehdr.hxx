@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STARMATH_SOURCE_EQNOLEFILEHDR_HXX
-#define INCLUDED_STARMATH_SOURCE_EQNOLEFILEHDR_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <tools/stream.hxx>
@@ -71,7 +70,5 @@ public:
 };
 
 bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

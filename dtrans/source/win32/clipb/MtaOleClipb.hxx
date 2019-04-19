@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DTRANS_SOURCE_WIN32_CLIPB_MTAOLECLIPB_HXX
-#define INCLUDED_DTRANS_SOURCE_WIN32_CLIPB_MTAOLECLIPB_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <osl/mutex.hxx>
@@ -111,7 +110,5 @@ private:
 
     friend LRESULT CALLBACK mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

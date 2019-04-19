@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_STRING_HXX
-#define INCLUDED_COMPHELPER_STRING_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -376,7 +375,5 @@ COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const OString &rString);
 COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const OUString &rString);
 
 } }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

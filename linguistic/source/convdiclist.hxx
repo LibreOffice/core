@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUISTIC_SOURCE_CONVDICLIST_HXX
-#define INCLUDED_LINGUISTIC_SOURCE_CONVDICLIST_HXX
+#pragma once
 
 #include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -97,7 +96,5 @@ inline OUString ConvDicList::getImplementationName_Static() throw()
     return OUString( "com.sun.star.lingu2.ConvDicList" );
 }
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_IMAGEITM_HXX
-#define INCLUDED_SVL_IMAGEITM_HXX
+#pragma once
 
 #include <svl/svldllapi.h>
 #include <svl/intitem.hxx>
@@ -44,7 +43,5 @@ public:
     void                    SetMirrored( bool bSet );
     bool                    IsMirrored() const;
 };
-
-#endif // _SFX_IMAGEITM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

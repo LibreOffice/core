@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_UNOTOOLS_INC_UNOTOOLSSERVICES_HXX
-#define INCLUDED_UNOTOOLS_INC_UNOTOOLSSERVICES_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -17,6 +16,5 @@ namespace comphelper { namespace service_decl { class ServiceDecl; } }
 extern comphelper::service_decl::ServiceDecl const OTempFileServiceDecl;
 extern comphelper::service_decl::ServiceDecl const ServiceDocumenterDecl;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

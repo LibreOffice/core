@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_SWBASLNK_HXX
-#define INCLUDED_SW_INC_SWBASLNK_HXX
+#pragma once
 
 #include <sfx2/lnkbase.hxx>
 
@@ -59,7 +58,5 @@ public:
     bool ChkNoDataFlag() { const bool bRet = m_bNoDataFlag; m_bNoDataFlag = false; return bRet; }
     bool IsNoDataFlag() const { return m_bNoDataFlag; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

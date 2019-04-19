@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_TABBAR_HXX
-#define INCLUDED_SVTOOLS_TABBAR_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <tools/link.hxx>
@@ -499,7 +498,5 @@ public:
     // accessibility
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 };
-
-#endif // INCLUDED_SVTOOLS_TABBAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

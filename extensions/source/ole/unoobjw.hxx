@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_UNOOBJW_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_OLE_UNOOBJW_HXX
+#pragma once
 
 #include <com/sun/star/bridge/XBridgeSupplier2.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
@@ -266,7 +265,5 @@ protected:
 
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_UNOFDESC_HXX
-#define INCLUDED_EDITENG_UNOFDESC_HXX
+#pragma once
 
 #include <svl/itemset.hxx>
 #include <editeng/editengdllapi.h>
@@ -40,7 +39,5 @@ public:
 
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

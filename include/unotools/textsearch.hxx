@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLS_TEXTSEARCH_HXX
-#define INCLUDED_UNOTOOLS_TEXTSEARCH_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 #include <i18nlangtag/lang.h>
@@ -228,7 +227,5 @@ public:
 };
 
 }   // namespace utl
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

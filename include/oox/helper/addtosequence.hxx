@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_HELPER_ADDTOSEQUENCE_HXX
-#define INCLUDED_OOX_HELPER_ADDTOSEQUENCE_HXX
+#pragma once
 
 #include <com/sun/star/uno/Any.hxx>
 #include <oox/dllapi.h>
@@ -35,7 +34,5 @@ namespace oox
 OOX_DLLPUBLIC css::uno::Any addToSequence( const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
 
 } // namespace oox
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

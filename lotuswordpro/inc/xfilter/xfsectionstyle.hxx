@@ -57,8 +57,7 @@
  * @file
  * Section style,whose family is "section"
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSECTIONSTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSECTIONSTYLE_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xfstyle.hxx>
@@ -95,7 +94,5 @@ private:
     XFColor     m_aBackColor;
     std::unique_ptr<XFColumns>  m_pColumns;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

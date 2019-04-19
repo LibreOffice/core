@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_MTVCELLFUNC_HXX
-#define INCLUDED_SC_INC_MTVCELLFUNC_HXX
+#pragma once
 
 #include "mtvelements.hxx"
 #include "mtvfunctions.hxx"
@@ -178,7 +177,5 @@ ProcessBroadcaster(
 }
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

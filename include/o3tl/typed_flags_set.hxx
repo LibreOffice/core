@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_O3TL_TYPED_FLAGS_SET_HXX
-#define INCLUDED_O3TL_TYPED_FLAGS_SET_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -320,7 +319,5 @@ inline typename o3tl::typed_flags<E>::Self operator ^=(
     lhs = lhs ^ rhs;
     return lhs;
 }
-
-#endif /* INCLUDED_O3TL_TYPED_FLAGS_SET_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

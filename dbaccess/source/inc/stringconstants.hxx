@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_INC_STRINGCONSTANTS_HRC
-#define INCLUDED_DBACCESS_SOURCE_INC_STRINGCONSTANTS_HRC
+#pragma once
 
 // property ids
 
@@ -167,7 +166,5 @@
 #define PROPERTY_ID_CURRENT_QUERY_DESIGN    144
 #define PROPERTY_ID_SINGLESELECTQUERYCOMPOSER   145
 #define PROPERTY_ID_PROPCHANGE_NOTIFY       146
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

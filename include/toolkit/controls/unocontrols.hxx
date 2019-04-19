@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLS_HXX
-#define INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLS_HXX
+#pragma once
 
 #include <toolkit/dllapi.h>
 #include <com/sun/star/awt/XTextComponent.hpp>
@@ -1538,7 +1537,5 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
-
-#endif // INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

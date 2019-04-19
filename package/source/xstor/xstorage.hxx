@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_PACKAGE_SOURCE_XSTOR_XSTORAGE_HXX
-#define INCLUDED_PACKAGE_SOURCE_XSTOR_XSTORAGE_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/embed/XStorage2.hpp>
@@ -538,7 +537,5 @@ StorageHolder_Impl::StorageHolder_Impl( OStorage* pStorage )
 , m_xWeakRef( css::uno::Reference< css::embed::XStorage >( pStorage ) )
 {
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

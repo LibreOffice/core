@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_EXPR_HXX
-#define INCLUDED_BASIC_SOURCE_INC_EXPR_HXX
+#pragma once
 
 #include <memory>
 
@@ -224,7 +223,5 @@ public:
     void  Gen( SbiCodeGen& rGen);                    // code generation
     void addExpression( std::unique_ptr<SbiExpression>&& pExpr  );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

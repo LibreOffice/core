@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_CUBE3D_HXX
-#define INCLUDED_SVX_CUBE3D_HXX
+#pragma once
 
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/vector/b3dvector.hxx>
@@ -90,7 +89,5 @@ public:
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 };
-
-#endif // INCLUDED_SVX_CUBE3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

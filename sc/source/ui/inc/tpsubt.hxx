@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_TPSUBT_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_TPSUBT_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/checklbx.hxx>
@@ -154,7 +153,5 @@ private:
     std::unique_ptr<weld::CheckButton> m_xBtnUserDef;
     std::unique_ptr<weld::ComboBox> m_xLbUserDef;
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_TPSUBT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

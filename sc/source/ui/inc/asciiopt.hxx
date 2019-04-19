@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_ASCIIOPT_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_ASCIIOPT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/lang.h>
@@ -102,7 +101,5 @@ enum ScImportAsciiCall {
         SC_IMPORTFILE,           // with File > Open: Text - CSV
         SC_PASTETEXT,            // with Paste > Unformatted Text
         SC_TEXTTOCOLUMNS };      // with Data > Text to Columns
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

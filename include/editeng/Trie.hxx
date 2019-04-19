@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_EDITENG_TRIE_HXX
-#define INCLUDED_EDITENG_TRIE_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <editeng/editengdllapi.h>
@@ -35,7 +34,5 @@ public:
 };
 
 }
-
-#endif // INCLUDED_EDITENG_TRIE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

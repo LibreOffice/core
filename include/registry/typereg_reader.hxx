@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_READER_H
-#define INCLUDED_REGISTRY_READER_H
+#pragma once
 
 #include <registry/regdllapi.h>
 #include <registry/types.hxx>
@@ -559,7 +558,5 @@ REG_DLLPUBLIC RTReferenceType typereg_reader_getReferenceSort(
  */
 REG_DLLPUBLIC void typereg_reader_getReferenceTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 index);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

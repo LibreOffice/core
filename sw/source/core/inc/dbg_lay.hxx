@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_DBG_LAY_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_DBG_LAY_HXX
+#pragma once
 
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
@@ -97,8 +96,6 @@ public:
 #define PROTOCOL_INIT
 #define PROTOCOL_STOP
 #define PROTOCOL_ENTER( pFrame, nFunc, nAct, pPar )
-
-#endif
 
 #endif
 

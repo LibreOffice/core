@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_INC_INETTBC_HXX
-#define INCLUDED_SFX2_INC_INETTBC_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <sfx2/tbxctrl.hxx>
@@ -56,7 +55,5 @@ public:
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) override;
     virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

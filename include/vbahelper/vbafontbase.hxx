@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VBAHELPER_VBAFONTBASE_HXX
-#define INCLUDED_VBAHELPER_VBAFONTBASE_HXX
+#pragma once
 
 #include <exception>
 
@@ -106,7 +105,5 @@ public:
     virtual css::uno::Any SAL_CALL getColor() override ;
     virtual void SAL_CALL setColor( const css::uno::Any& _color ) override ;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

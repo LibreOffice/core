@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_FORBIDDENCHARACTERSTABLE_HXX
-#define INCLUDED_EDITENG_FORBIDDENCHARACTERSTABLE_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
@@ -51,7 +50,5 @@ public:
     void    SetForbiddenCharacters(  LanguageType nLanguage , const css::i18n::ForbiddenCharacters& );
     void    ClearForbiddenCharacters( LanguageType nLanguage );
 };
-
-#endif // INCLUDED_EDITENG_FORBIDDENCHARACTERSTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
