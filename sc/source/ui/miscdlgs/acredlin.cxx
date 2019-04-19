@@ -975,6 +975,7 @@ IMPL_LINK( ScAcceptChgDlg, AcceptHandle, SvxTPView*, pRef, void )
         ClearView();
         UpdateView();
     }
+    SetPointer(PointerStyle::Arrow);
     bIgnoreMsg=false;
 }
 
