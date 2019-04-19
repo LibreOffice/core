@@ -46,6 +46,7 @@
 #include <swdll.hxx>
 #include <swmodule.hxx>
 #include "vbalistgalleries.hxx"
+#include <tools/urlobj.hxx>
 
 using namespace ::ooo;
 using namespace ::ooo::vba;
