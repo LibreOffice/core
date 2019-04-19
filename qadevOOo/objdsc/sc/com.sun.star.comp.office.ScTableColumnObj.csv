@@ -1,6 +1,3 @@
-"ScTableColumnObj";"com::sun::star::table::XCellRange";"getCellByPosition()"
-"ScTableColumnObj";"com::sun::star::table::XCellRange";"getCellRangeByPosition()"
-"ScTableColumnObj";"com::sun::star::table::XCellRange";"getCellRangeByName()"
 "ScTableColumnObj";"com::sun::star::container::XNamed";"getName()"
 "ScTableColumnObj";"com::sun::star::container::XNamed";"setName()"
 "ScTableColumnObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
