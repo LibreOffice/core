@@ -1051,7 +1051,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         bIgnoreVisibility = false;
     }
 
-    /** Helper method to set tool bar visibilty.
+    /** Helper method to set tool bar visibility.
 
          @param bNewValue
             If false, the tool bar is disabled,
@@ -1159,7 +1159,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         return bMenuBarVisible;
     }
 
-    /** Sets the main function bar visibilty.
+    /** Sets the main function bar visibility.
 
         Initially the standard bar is visible.
 
@@ -1207,7 +1207,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         return bStandardBarVisible;
     }
 
-    /** Sets the tool function bar visibilty.
+    /** Sets the tool function bar visibility.
 
         Initially the tool bar is visible.
 
@@ -1255,7 +1255,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         return bToolBarVisible;
     }
 
-    /** Sets the status function bar visibilty.
+    /** Sets the status function bar visibility.
 
         Initially the status bar is visible.
 
