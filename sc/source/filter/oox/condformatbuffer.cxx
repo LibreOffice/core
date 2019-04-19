@@ -18,6 +18,8 @@
  */
 
 #include <memory>
+#include <unordered_set>
+#include <unordered_map>
 #include <condformatbuffer.hxx>
 #include <formulaparser.hxx>
 
@@ -432,7 +434,8 @@ void CondFormatRuleModel::setBiff12TextType( sal_Int32 nOperator )
 CondFormatRule::CondFormatRule( const CondFormat& rCondFormat, ScConditionalFormat* pFormat ) :
     WorksheetHelper( rCondFormat ),
     mrCondFormat( rCondFormat ),
-    mpFormat(pFormat)
+    mpFormat(pFormat),
+    mpFormatEntry(nullptr)
 {
 }
 
@@ -706,8 +709,20 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
     }
 }
 
+void CondFormatRule::setFormatEntry(sal_Int32 nPriority, ScFormatEntry* pEntry)
+{
+    maModel.mnPriority = nPriority;
+    mpFormatEntry = pEntry;
+}
+
 void CondFormatRule::finalizeImport()
 {
+    if (mpFormatEntry)
+    {
+        mpFormat->AddEntry(mpFormatEntry);
+        return;
+    }
+
     ScConditionMode eOperator = ScConditionMode::NONE;
 
     /*  Replacement formula for unsupported rule types (text comparison rules,
@@ -1099,10 +1114,63 @@ ScConditionalFormat* findFormatByRange(const ScRangeList& rRange, const ScDocume
     return nullptr;
 }
 
+class ScRangeListHasher
+{
+public:
+  size_t operator() (ScRangeList const& rRanges) const
+  {
+      size_t nHash = 0;
+      for (size_t nIdx = 0; nIdx < rRanges.size(); ++nIdx)
+          nHash += rRanges[nIdx].hashArea();
+      return nHash;
+  }
+};
+
 }
 
 void CondFormatBuffer::finalizeImport()
 {
+    std::unordered_set<size_t> aDoneExtCFs;
+    typedef std::unordered_map<ScRangeList, CondFormat*, ScRangeListHasher> RangeMap;
+    typedef std::vector<std::unique_ptr<ScFormatEntry>> FormatEntries;
+    RangeMap aRangeMap;
+    for (auto& rxCondFormat : maCondFormats)
+    {
+        if (aRangeMap.find(rxCondFormat->getRanges()) != aRangeMap.end())
+            continue;
+        aRangeMap[rxCondFormat->getRanges()] = rxCondFormat.get();
+    }
+
+    size_t nExtCFIndex = 0;
+    for (const auto& rxExtCondFormat : maExtCondFormats)
+    {
+        ScDocument* pDoc = &getScDocument();
+        const ScRangeList& rRange = rxExtCondFormat->getRange();
+        RangeMap::iterator it = aRangeMap.find(rRange);
+        if (it != aRangeMap.end())
+        {
+            CondFormat& rCondFormat = *it->second;
+            const FormatEntries& rEntries = rxExtCondFormat->getEntries();
+            const std::vector<sal_Int32>& rPriorities = rxExtCondFormat->getPriorities();
+            size_t nEntryIdx = 0;
+            for (const auto& rxEntry : rEntries)
+            {
+                CondFormatRuleRef xRule = rCondFormat.createRule();
+                ScFormatEntry* pNewEntry = rxEntry->Clone(pDoc);
+                sal_Int32 nPriority = rPriorities[nEntryIdx];
+                if (nPriority == -1)
+                    nPriority = mnNonPrioritizedRuleNextPriority++;
+                xRule->setFormatEntry(nPriority, pNewEntry);
+                rCondFormat.insertRule(xRule);
+                ++nEntryIdx;
+            }
+
+            aDoneExtCFs.insert(nExtCFIndex);
+        }
+
+        ++nExtCFIndex;
+    }
+
     CondFormatVec::iterator it = maCondFormats.begin();
     CondFormatVec::iterator it_end = maCondFormats.end();
     for( ; it != it_end; ++it )
@@ -1118,11 +1186,17 @@ void CondFormatBuffer::finalizeImport()
             (*ext_it).get()->finalizeImport();
     }
 
-    for (auto itr = maExtCondFormats.begin(); itr != maExtCondFormats.end(); ++itr)
+    nExtCFIndex = 0;
+    for (const auto& rxExtCondFormat : maExtCondFormats)
     {
-        ScDocument* pDoc = &getScDocument();
+        if (aDoneExtCFs.count(nExtCFIndex))
+        {
+            ++nExtCFIndex;
+            continue;
+        }
 
-        const ScRangeList& rRange = (*itr)->getRange();
+        ScDocument* pDoc = &getScDocument();
+        const ScRangeList& rRange = rxExtCondFormat->getRange();
         SCTAB nTab = rRange.front().aStart.Tab();
         ScConditionalFormat* pFormat = findFormatByRange(rRange, pDoc, nTab);
         if (!pFormat)
@@ -1134,11 +1208,13 @@ void CondFormatBuffer::finalizeImport()
             pDoc->AddCondFormatData(rRange, nTab, nKey);
         }
 
-        const std::vector< std::unique_ptr<ScFormatEntry> >& rEntries = (*itr)->getEntries();
+        const std::vector< std::unique_ptr<ScFormatEntry> >& rEntries = rxExtCondFormat->getEntries();
         for (auto i = rEntries.begin(); i != rEntries.end(); ++i)
         {
             pFormat->AddEntry((*i)->Clone(pDoc));
         }
+
+        ++nExtCFIndex;
     }
 
     rStyleIdx = 0; // Resets <extlst> <cfRule> style index.
@@ -1305,10 +1381,15 @@ void ExtCfDataBarRule::importCfvo( const AttributeList& rAttribs )
     maModel.maColorScaleType = rAttribs.getString( XML_type, OUString() );
 }
 
-ExtCfCondFormat::ExtCfCondFormat(const ScRangeList& rRange, std::vector< std::unique_ptr<ScFormatEntry> >& rEntries):
+ExtCfCondFormat::ExtCfCondFormat(const ScRangeList& rRange, std::vector< std::unique_ptr<ScFormatEntry> >& rEntries,
+                                 std::vector<sal_Int32>* pPriorities):
     maRange(rRange)
 {
     maEntries.swap(rEntries);
+    if (pPriorities)
+        maPriorities = *pPriorities;
+    else
+        maPriorities.resize(maEntries.size(), -1);
 }
 
 ExtCfCondFormat::~ExtCfCondFormat()

@@ -408,7 +408,7 @@ void XclExpExtCfRule::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElementNS( XML_x14, XML_cfRule,
                                 XML_type, pType,
-                                XML_priority, mnPriority == -1 ? nullptr : OString::number(mnPriority).getStr(),
+                                XML_priority, mnPriority == -1 ? nullptr : OString::number(mnPriority + 1).getStr(),
                                 XML_operator, mOperator,
                                 XML_id, maId.getStr(),
                                 FSEND );

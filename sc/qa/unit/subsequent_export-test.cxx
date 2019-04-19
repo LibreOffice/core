@@ -112,6 +112,7 @@ public:
     void testDataBarExportXLSX();
     void testConditionalFormatRangeListXLSX();
     void testConditionalFormatContainsTextXLSX();
+    void testConditionalFormatPriorityCheckXLSX();
     void testMiscRowHeightExport();
     void testNamedRangeBugfdo62729();
     void testBuiltinRangesXLSX();
@@ -242,6 +243,7 @@ public:
     CPPUNIT_TEST(testDataBarExportXLSX);
     CPPUNIT_TEST(testConditionalFormatRangeListXLSX);
     CPPUNIT_TEST(testConditionalFormatContainsTextXLSX);
+    CPPUNIT_TEST(testConditionalFormatPriorityCheckXLSX);
     CPPUNIT_TEST(testMiscRowHeightExport);
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
     CPPUNIT_TEST(testBuiltinRangesXLSX);
@@ -373,6 +375,8 @@ void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
         { BAD_CAST("r"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/relationships") },
         { BAD_CAST("number"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0") },
         { BAD_CAST("loext"), BAD_CAST("urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0") },
+        { BAD_CAST("x14"), BAD_CAST("http://schemas.microsoft.com/office/spreadsheetml/2009/9/main") },
+        { BAD_CAST("xm"), BAD_CAST("http://schemas.microsoft.com/office/excel/2006/main") },
     };
     for(size_t i = 0; i < SAL_N_ELEMENTS(aNamespaces); ++i)
     {
@@ -3996,6 +4000,50 @@ void ScExportTest::testConditionalFormatContainsTextXLSX()
     CPPUNIT_ASSERT(pDoc);
 
     assertXPathContent(pDoc, "//x:conditionalFormatting/x:cfRule/x:formula", "NOT(ISERROR(SEARCH(\"test\",A1)))");
+}
+
+void ScExportTest::testConditionalFormatPriorityCheckXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("conditional_fmt_checkpriority.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    constexpr bool bHighPriorityExtensionA1 = true;  // Should A1's extension cfRule has higher priority than normal cfRule ?
+    constexpr bool bHighPriorityExtensionA3 = false; // Should A3's extension cfRule has higher priority than normal cfRule ?
+
+    size_t nA1NormalPriority = 0;
+    size_t nA1ExtPriority = 0;
+    size_t nA3NormalPriority = 0;
+    size_t nA3ExtPriority = 0;
+
+    for (size_t nIdx = 1; nIdx <= 2; ++nIdx)
+    {
+        OString aIdx = OString::number(nIdx);
+        OUString aCellAddr = getXPath(pDoc, "//x:conditionalFormatting[" + aIdx + "]", "sqref");
+        OUString aPriority = getXPath(pDoc, "//x:conditionalFormatting[" + aIdx + "]/x:cfRule", "priority");;
+
+        CPPUNIT_ASSERT_MESSAGE("conditionalFormatting sqref must be either A1 or A3", aCellAddr == "A1" || aCellAddr == "A3");
+
+        if (aCellAddr == "A1")
+            nA1NormalPriority = aPriority.toUInt32();
+        else
+            nA3NormalPriority = aPriority.toUInt32();
+
+        aCellAddr = getXPathContent(pDoc, "//x:extLst/x:ext[1]/x14:conditionalFormattings/x14:conditionalFormatting[" + aIdx + "]/xm:sqref");
+        aPriority = getXPath(pDoc, "//x:extLst/x:ext[1]/x14:conditionalFormattings/x14:conditionalFormatting[" + aIdx + "]/x14:cfRule", "priority");
+
+        CPPUNIT_ASSERT_MESSAGE("x14:conditionalFormatting sqref must be either A1 or A3", aCellAddr == "A1" || aCellAddr == "A3");
+
+        if (aCellAddr == "A1")
+            nA1ExtPriority = aPriority.toUInt32();
+        else
+            nA3ExtPriority = aPriority.toUInt32();
+    }
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong priorities for A1", bHighPriorityExtensionA1, nA1ExtPriority < nA1NormalPriority);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong priorities for A3", bHighPriorityExtensionA3, nA3ExtPriority < nA3NormalPriority);
 }
 
 void ScExportTest::testEscapeCharInNumberFormatXLSX()
