@@ -31,6 +31,7 @@
 #include <svx/Palette.hxx>
 #include <svx/PaletteManager.hxx>
 #include <svx/svdview.hxx>
+#include <vcl/weld.hxx>
 
 #define NO_BUTTON_SELECTED -1
 
@@ -54,6 +55,7 @@ class ButtonBox
             }
             mnCurrentButton = nPos;
             maButtonList[mnCurrentButton]->set_active(true);
+            maButtonList[mnCurrentButton]->WoW_focus();
         };
     public:
         ButtonBox()

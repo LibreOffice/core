@@ -604,6 +604,8 @@ public:
     virtual void set_active(bool active) = 0;
     virtual bool get_active() const = 0;
 
+    virtual void WoW_focus() = 0;
+
     virtual void set_inconsistent(bool inconsistent) = 0;
     virtual bool get_inconsistent() const = 0;
 
