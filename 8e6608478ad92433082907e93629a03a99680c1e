@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f96bb07_d9e314a4",
+        "filename": "cui/source/inc/cuitabarea.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-04-19T14:27:19Z",
+      "side": 1,
+      "message": "you probably are looking for the already existing \"grab_focus()\" here, which then negates the need to add the (strangely named) WoW_focus thing",
+      "revId": "8e6608478ad92433082907e93629a03a99680c1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
